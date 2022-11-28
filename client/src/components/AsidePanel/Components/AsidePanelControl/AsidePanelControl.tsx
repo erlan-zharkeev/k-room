@@ -1,0 +1,44 @@
+import { UserOutlined, WechatOutlined, SettingOutlined } from '@ant-design/icons'
+import { Radio, RadioChangeEvent, Tooltip } from 'antd'
+import { useDispatch } from 'react-redux'
+import useTypedSelector from '../../../../hooks/useTypedSelector'
+import { AppDispatch } from '../../../../store'
+import { changeAsideTab } from '../../../../store/systemSlice'
+
+const AsidePanelControl = () => {
+  const { asideTab, showTooltips } = useTypedSelector((state) => state.persist.system)
+  const dispatch = useDispatch<AppDispatch>()
+
+  const changTab = (e: RadioChangeEvent) => {
+    dispatch(changeAsideTab(e.target.value))
+  }
+
+  const buttons = [
+    { title: 'Contacts', value: 'users', icon: () => <UserOutlined /> },
+    { title: 'Chat rooms', value: 'chatList', icon: () => <WechatOutlined /> },
+    { title: 'User settings', value: 'settings', icon: () => <SettingOutlined /> }
+  ]
+
+  const ButtonWrapper = (value: string, Icon: any) => (
+    <Radio.Button value={value} className="transitionless">
+      <Icon />
+    </Radio.Button>
+  )
+
+  return (
+    <div className="aside-panel-control">
+      <Radio.Group value={asideTab} onChange={changTab}>
+        {buttons.map((button) => {
+          return showTooltips ? (
+            <Tooltip key={button.value} placement="topLeft" title={button.title}>
+              {ButtonWrapper(button.value, button.icon)}
+            </Tooltip>
+          ) : (
+            <div key={button.value}>{ButtonWrapper(button.value, button.icon)}</div>
+          )
+        })}
+      </Radio.Group>
+    </div>
+  )
+}
+export default AsidePanelControl

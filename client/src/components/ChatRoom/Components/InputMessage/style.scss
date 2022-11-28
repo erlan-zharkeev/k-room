@@ -1,0 +1,16 @@
+.input-message {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: $input-message-height;
+
+  form {
+    display: flex;
+    align-items: center;
+
+    > *:not(:last-child) {
+      margin-right: .5rem;
+    }
+  }
+}

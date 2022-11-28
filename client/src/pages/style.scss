@@ -1,0 +1,33 @@
+@import './SignIn/style.scss';
+
+@import './SignUp/style.scss';
+
+@import './WaitEmailConfirm/style';
+
+@import './EmailConfirm/style';
+
+@import './Main/style';
+
+.page {
+  position: relative;
+  height: 100vh;
+}
+
+.sign-in,
+.sign-up,
+.wait-confirm-email,
+.confirmed-email {
+  &__wrapper {
+    @include absolute-center;
+  }
+
+  &__body {
+    width: $container-sm;
+    height: 200px;
+  }
+
+  form {
+    position: absolute;
+    top: 50px;
+  }
+}

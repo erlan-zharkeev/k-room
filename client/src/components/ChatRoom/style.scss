@@ -1,0 +1,65 @@
+@import './Components/EmojiDropdown/style';
+
+@import './Components/InputMessage/style';
+
+@import './Components/MessageBody/style';
+
+@import './Components/RoomHeader/style';
+
+.chat-room {
+  position: relative;
+  width: calc(100% - var(--chat-room-list-width));
+  height: 100%;
+  margin-left: var(--chat-room-list-width);
+  padding: 1rem;
+  transition: all 0.2s ease-in-out;
+
+  @include max-width-576 {
+    margin-left: 100%;
+  }
+
+  &__wrapper {
+    position: relative;
+    height: 100%;
+  }
+
+  &__body {
+    position: absolute;
+    top: $room-header-height;
+    width: 100%;
+    height: calc(100% - $room-header-height - $input-message-height - 10px);
+    overflow: hidden;
+
+    .ant-list-empty-text {
+      @include absolute-center;
+
+      white-space: nowrap;
+    }
+
+    .ant-list-items {
+      padding-right: 10px;
+      overflow-y: scroll;
+    }
+
+    .ant-list,
+    .ant-spin-nested-loading,
+    .ant-spin-container,
+    .ant-list-items {
+      height: 100%;
+    }
+
+    .ant-list-item {
+      border: none;
+    }
+  }
+
+  &__stub {
+    height: 100%;
+
+    @include flex-total-center;
+
+    .paragraph-text {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+.header-text {
+  color: var(--main-text);
+  font-size: 14px;
+  line-height: 1;
+
+  &--secondary {
+    color: var(--secondary-text);
+  }
+
+  &--accent {
+    color: var(--accent-color);
+  }
+
+  &--bold {
+    font-weight: bold;
+  }
+
+  &--sm {
+    font-size: 16px;
+  }
+
+  &--md {
+    font-size: 20px;
+  }
+
+  &--lr {
+    font-size: 24px;
+  }
+
+  &--xl {
+    font-size: 32;
+  }
+
+  &--xxl {
+    font-size: 40px;
+  }
+}
+
+.paragraph-text {
+  color: var(--main-text);
+  font-size: 12px;
+
+  &--bold {
+    font-weight: bold;
+  }
+
+  &--accent {
+    color: var(--accent-color);
+  }
+
+  &--secondary {
+    color: var(--secondary-text);
+  }
+
+  &--sm {
+    font-size: 10px;
+  }
+}

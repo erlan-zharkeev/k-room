@@ -1,0 +1,11 @@
+.auth-nav {
+  a {
+    margin-right: $gutter-l;
+    padding-bottom: .4rem;
+
+    &.active {
+      border-color: var(--accent-color);
+      border-bottom: $border;
+    }
+  }
+}

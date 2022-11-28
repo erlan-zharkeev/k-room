@@ -1,0 +1,22 @@
+export enum Messages {
+  registrationCommonError = 'Registration failed, try register later',
+  loginCommonError = 'Login failed, try register later',
+  userDataUpdateFailedCommonError = 'Failed to update user data',
+  userExist = 'The user with the current email address is already registered',
+  userCreated = 'User successfully created, checkout your email address for email confirmation',
+  passHashFailed = 'Password hashing failed',
+  sendConfirmEmailFailed = 'Failed to send confirmation email',
+  exhaustedConfirmationAttempts = 'Attempts to send confirmation the link ended =(',
+  confirmEmail = 'Check your email for confirmation link',
+  loginSuccess = 'Login successfully',
+  userNotFound = 'User not found',
+  wrongPass = 'Invalid password',
+  emailConfirmFailed = 'Email confirm failed',
+  emailConfirmed = 'Email confirmed',
+  emailNotConfirm = 'Please, confirm email',
+  emailConfirmationLinkSended = 'Confirmation link sent to email',
+  userDataSuccess = 'User data updated',
+  usersFindFailed = 'Error while finding user(s)',
+  noFilesExist = 'No files exist',
+  notImage = 'File is not an image'
+}

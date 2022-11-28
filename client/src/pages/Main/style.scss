@@ -1,0 +1,23 @@
+.main-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: calc(100% - $top-panel-height);
+  }
+
+  &.move-aside {
+    .aside-panel {
+      left: -100%;
+    }
+
+    .chat-room {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+}

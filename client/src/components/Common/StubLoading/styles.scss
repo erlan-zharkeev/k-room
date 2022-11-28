@@ -1,0 +1,40 @@
+.stub-loading {
+  position: absolute;
+  z-index: 3;
+  backdrop-filter: blur(3px);
+
+  @include wh-100;
+
+  &__update-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--accent-color);
+
+    span {
+      margin-bottom: $gutter-l;
+    }
+  }
+
+  .ant-progress-outer {
+    height: 4px;
+    padding: 0;
+  }
+
+  .ant-progress-text {
+    display: none;
+  }
+
+  .ant-progress-inner {
+    position: absolute;
+    top: 0;
+    height: 4px;
+    border-radius: 0;
+  }
+
+  .ant-progress-bg {
+    border-radius: 0;
+  }
+}

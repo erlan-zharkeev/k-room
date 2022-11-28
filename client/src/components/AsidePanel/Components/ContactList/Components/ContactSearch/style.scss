@@ -1,0 +1,17 @@
+.contact-search {
+  .ant-select {
+    width: 100%;
+  }
+
+  &__search-type {
+    display: flex;
+    align-items: center;
+    margin-bottom: $gutter-md;
+  }
+
+  .ant-radio-button-wrapper {
+    margin-right: $gutter-md;
+    padding: 0;
+    border: none !important;
+  }
+}

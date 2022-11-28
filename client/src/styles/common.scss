@@ -1,0 +1,67 @@
+html {
+  background-color: var(--main-bg);
+}
+
+#root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--main-text);
+  background-color: var(--main-bg);
+}
+
+form {
+  width: 100%;
+}
+
+.d-none {
+  display: none;
+}
+
+.borderless {
+  border: none;
+}
+
+.blink-me {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.transitionless {
+  transition: all 0s linear;
+}
+
+::-webkit-scrollbar {
+  width: 4px; /* ширина для вертикального скролла */
+  height: 7px; /* высота для горизонтального скролла */
+  background-color: transparent;
+}
+
+/* ползунок скроллбара */
+::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-text);
+  border-radius: $sm-radius;
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: var(--secondary-text) !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    box-shadow: 0 0 0 30px var(--main-bg) inset !important;
+  }
+}
+
+.custom-avatar {
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: cover !important;
+}

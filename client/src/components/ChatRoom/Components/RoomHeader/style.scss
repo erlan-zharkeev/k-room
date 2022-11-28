@@ -1,0 +1,63 @@
+.room-header {
+  position: absolute;
+  top: 0;
+  left: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% + 2rem);
+  padding: 0 1rem 1rem 1rem;
+  height: $room-header-height;
+  background-color: var(--main-bg);
+  z-index: 1;
+  @include max-width-576 {
+    margin-top: $gutter-md;
+  }
+
+  &__back-button {
+    display: none;
+
+    @include max-width-576 {
+      display: block;
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    @include max-width-576 {
+      justify-content: center;
+    }
+  }
+
+  &__name {
+    margin-left: 1rem;
+    color: var(--secondary-text);
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+
+    > * {
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    vertical-align: center;
+    cursor: pointer;
+  }
+
+  .is-typing {
+    margin-left: 1rem;
+  }
+}

@@ -1,0 +1,77 @@
+.user-settings {
+  position: relative;
+  height: 100%;
+  padding: $gutter-xl $aside-panel-padding $aside-panel-padding $aside-panel-padding;
+
+  &__id {
+    text-align: center;
+  }
+
+  &__user-card {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    .ant-card-body {
+      padding: $gutter-md;
+    }
+
+    .ant-card-meta-avatar {
+      margin-bottom: $gutter-md;
+      padding: 0;
+    }
+
+    .ant-card-meta-detail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      & > div:not(:last-child) {
+        margin-bottom: 0;
+      }
+    }
+
+    .ant-card-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: $gutter-sm;
+    }
+
+    .ant-card-meta-title {
+      color: var(--main-text);
+    }
+
+    .ant-card-meta-description {
+      overflow: hidden;
+      color: var(--secondary-text);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__theme-switch,
+  &__sound-switch,
+  &__tooltip-switch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: $gutter-xl;
+  }
+
+  &__title {
+    margin-bottom: $gutter-md;
+  }
+
+  &__info {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: $gutter-xxl;
+    transform: translateX(-50%);
+  }
+}

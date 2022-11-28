@@ -1,0 +1,28 @@
+.chat-room-list {
+  &__body {
+    .ant-list-item-meta-description {
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+    }
+    .ant-list-item {
+      padding: $aside-panel-padding;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s linear all;
+
+      &:first-child {
+        margin-top: 1px;
+      }
+      &.active {
+        border-left: 5px solid var(--accent-color) !important;
+        @include max-width-576 {
+          border: none !important;
+          box-shadow: none;
+        }
+      }
+    }
+    .ant-list-item-meta {
+      align-items: center;
+    }
+  }
+}

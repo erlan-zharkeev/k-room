@@ -1,0 +1,14 @@
+.wait-confirm-email {
+  .header-text {
+    margin-bottom: $gutter-md;
+  }
+  &__not-received {
+    margin-top: $gutter-md;
+    margin-bottom: $gutter-l;
+  }
+  &__attempts {
+    margin-top: $gutter-md;
+    display: flex;
+    align-items: center;
+  }
+}

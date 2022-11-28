@@ -1,0 +1,21 @@
+$aside-panel-padding: 1rem;
+$room-header-height: 35px;
+$top-panel-height: 50px;
+$input-message-height: 35px;
+$container-sm: 300px;
+$sm-radius: 4px;
+$md-radius: 8px;
+$border: 1px var(--secondary-text) solid;
+$gutter-sm: 4px;
+$gutter-md: 8px;
+$gutter-l: 16px;
+$gutter-xl: 32px;
+$gutter-xxl: 46px;
+
+html {
+  --chat-room-list-width: 35%;
+
+  @include max-width-768 {
+    --chat-room-list-width: 40%;
+  }
+}

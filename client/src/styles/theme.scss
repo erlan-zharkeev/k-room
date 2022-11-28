@@ -1,0 +1,15 @@
+html {
+  --accent-color: rgb(65 139 237);
+  --secondary-text: rgb(177 177 177 / 84.7%);
+  --error-text: rgb(255 47 0);
+
+  &[theme="dark"] {
+    --main-bg: #212529;
+    --main-text: #fff;
+  }
+
+  &[theme="light"] {
+    --main-bg: #fff;
+    --main-text: #000;
+  }
+}

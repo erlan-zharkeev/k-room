@@ -1,0 +1,25 @@
+.top-panel {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: $top-panel-height;
+  min-height: $top-panel-height;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--secondary-text);
+
+  &__content {
+    display: flex;
+  }
+
+  &__userdata {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: $gutter-md;
+  }
+
+  &__username {
+    margin: 0 $gutter-md;
+  }
+}
