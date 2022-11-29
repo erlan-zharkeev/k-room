@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./",
+    "module": "CommonJS",
+    "target": "ES2015",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "declaration": true
+  },
+  "include": ["src/index.ts"],
+  "exclude": ["node_modules", "Makefile", "readme.md", "yarn-error", "yarn-lock"]
+}
