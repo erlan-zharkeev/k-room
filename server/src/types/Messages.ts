@@ -18,5 +18,7 @@ export enum Messages {
   userDataSuccess = 'User data updated',
   usersFindFailed = 'Error while finding user(s)',
   noFilesExist = 'No files exist',
-  notImage = 'File is not an image'
+  notImage = 'File is not an image',
+  userAddedToContacts = 'User added to contacts',
+  userRemovedFromContacts = 'User removed from contacts',
 }

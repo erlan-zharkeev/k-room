@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer'
 import letters, { LettersType } from './letters'
 import { UserModel } from '../../models/user.model'
 import getTimeNextRequest from '../../utils/getNextTimeRequest'
-import { RouteNames } from './../../types/common-types'
+import { RouteNames } from './../../../../types/'
 
 const mailTransport = nodemailer.createTransport({
   service: 'gmail',
@@ -27,7 +27,7 @@ export const sendEmailConfirmationLink = async (email: string) => {
   const user = await UserModel.findOneAndUpdate({ email }, { $inc: { confirmAttempts: -1 } })
   await mailer(email, 'confirmation', {
     appName: ENV?.APP_NAME,
-    link: `http://${ENV?.DEV_HOST_NAME}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`
+    link: `http://${ENV?.HOST_NAME}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`
   })
   const hasAttempts = user?.confirmAttempts && user.confirmAttempts >= 0
   if (!hasAttempts) return

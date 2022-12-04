@@ -1,5 +1,5 @@
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { SocketActions, ChatRoom, User, UserShort, Message, MessageStatus } from './types/common-types'
+import { SocketActions, ChatRoom, User, UserShort, Message, MessageStatus } from './../../types/'
 import { Socket } from 'socket.io'
 import { io } from './server'
 import { UserModel } from './models/user.model'
@@ -7,6 +7,7 @@ import transformUsersToContacts from './utils/transformUsersToContacts'
 import { ChatRoomModel } from './models/chatRoom.model'
 import { SearchTypeMap } from './types/SearchTypeMap'
 import { transformUsersData } from './utils/transformUserData'
+import { Messages } from './types/Messages'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
@@ -66,7 +67,7 @@ const pushMessage = async (data: { roomId: string; message: Message }) => {
 }
 
 const changeMessageStatus = async (roomId: string, messageId: string, status: MessageStatus) => {
-  const message = await ChatRoomModel.findOneAndUpdate(
+  await ChatRoomModel.findOneAndUpdate(
     {
       _id: roomId,
       messages: {
@@ -112,11 +113,11 @@ const emitUserStatusToAll = async (userId: string | typeof ObjectIdType, status:
   })
 }
 
-const emitContacts = async (userId: string) => {
+const emitContacts = async (userId: string, message?: string) => {
   const userData = await getUserById(userId)
   const matchedUsers = await UserModel.find({ _id: { $in: userData?.contacts } })
   const transformedContacts = transformUsersToContacts(matchedUsers)
-  if (userData?.socketId) io.to(userData.socketId).emit(SocketActions.GET_CONTACTS, transformedContacts)
+  if (userData?.socketId) io.to(userData.socketId).emit(SocketActions.GET_CONTACTS, transformedContacts, message)
 }
 
 const emitSearchedContacts = (socketId: string, contacts: Array<User>) => {
@@ -231,13 +232,13 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   socket.on(SocketActions.SAVE_CONTACT, async (data: { userId: string; interlocutorId: string }) => {
     const { userId, interlocutorId } = data
     await UserModel.updateOne({ _id: userId }, { $addToSet: { contacts: interlocutorId } })
-    emitContacts(userId)
+    emitContacts(userId, Messages.userAddedToContacts)
   })
 
   socket.on(SocketActions.DELETE_CONTACT, async (data: { currentUserId: string; deletingUserId: string }) => {
     const { currentUserId, deletingUserId } = data
     await UserModel.updateOne({ _id: currentUserId }, { $pull: { contacts: deletingUserId } })
-    emitContacts(currentUserId)
+    emitContacts(currentUserId, Messages.userRemovedFromContacts)
   })
 
   socket.on(SocketActions.CREATE_ROOM, async (chatRoomData: ChatRoom) => {

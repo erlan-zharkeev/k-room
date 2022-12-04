@@ -1,7 +1,6 @@
 export interface EnvVariables {
   PORT: string
-  DEV_HOST_NAME: string
-  PROD_HOST_NAME: string
+  HOST_NAME: string
   APP_NAME: string
   MAIL_APP: string
   MAIL_PASS: string

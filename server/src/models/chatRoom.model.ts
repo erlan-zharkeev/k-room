@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { ChatRoom } from './../types/common-types'
+import { ChatRoom } from './../../../types/'
 
 export const chatRoomModel = new Schema<ChatRoom>({
   chatName: {

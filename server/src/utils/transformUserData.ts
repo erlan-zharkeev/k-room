@@ -1,4 +1,4 @@
-import { User } from './../types/common-types'
+import { User } from './../../../types/'
 import { IUserSchema } from '../models/user.model'
 
 const transformUserData = (user: IUserSchema): User => {

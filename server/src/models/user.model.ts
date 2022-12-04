@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { User } from './../types/common-types'
+import { User } from './../../../types/'
 
 export interface IUserSchema extends User {
   socketId: string

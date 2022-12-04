@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import ENV from './ENV'
 const clc = require('cli-color')
-
 const db = mongoose
 
 async function initDataBase() {
