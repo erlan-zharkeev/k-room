@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "lint:fix-es": "eslint **/*.{ts,tsx,js} --fix",
+    "wProd": "webpack build",
     "serve": "cross-env NODE_ENV=development nodemon ./src/index.ts",
     "serve.prod": "cross-env NODE_ENV=production nodemon ./src/index.ts",
     "debug": "nodemon --inspect ./src/index.js",
@@ -38,6 +39,7 @@
     "multer": "^1.4.5-lts.1",
     "multer-gridfs-storage": "^5.0.2",
     "openssl": "^2.0.0",
+    "ts-loader": "^9.4.2",
     "uniqid": "^5.4.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"

@@ -43,6 +43,10 @@ server.listen(PORT, () => {
   console.log(clc.green.bgWhite(`-Server listening on port ${PORT}`))
 })
 
+app.get('/', (req: any, res: any) => {
+  res.send('Server running!')
+})
+
 export const io = new Server(server, {
   path: '/app/'
 })
