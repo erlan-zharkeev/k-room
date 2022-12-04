@@ -1,4 +1,4 @@
-import { RouteNames } from 'k-room.types'
+import { RouteNames } from './../../../types'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import useTypedSelector from '../hooks/useTypedSelector'
 import { IRoute } from './@types/IRoute'

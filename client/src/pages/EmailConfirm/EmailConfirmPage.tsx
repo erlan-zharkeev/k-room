@@ -5,10 +5,9 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { logOut, sendEmailConfirm } from '../../store/authSlice'
-import { RouteNames, Status } from 'k-room.types'
+import { RouteNames, Status } from './../../../../types'
 import { AxiosResponse } from 'axios'
 import useQuery from '../../hooks/useQuery'
-import useTypedSelector from '../../hooks/useTypedSelector'
 import { socket } from '../../socket/socket'
 
 export const EmailConfirmPage = () => {

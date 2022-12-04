@@ -1,23 +1,3 @@
-// {
-//   "compilerOptions": {
-//     "target": "esnext",
-//     "lib": ["dom", "dom.iterable", "esnext"],
-//     "allowJs": true,
-//     "skipLibCheck": true,
-//     "esModuleInterop": true,
-//     "allowSyntheticDefaultImports": true,
-//     "strict": true,
-//     "forceConsistentCasingInFileNames": true,
-//     "noFallthroughCasesInSwitch": true,
-//     "module": "esnext",
-//     "moduleResolution": "node",
-//     "resolveJsonModule": true,
-//     "isolatedModules": true,
-//     "jsx": "react-jsx"
-//     // "noEmit": true
-//   },
-//   "include": ["src"]
-// }
 {
   "compilerOptions": {
     "outDir": "./dist/",
@@ -29,6 +9,16 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "baseUrl": "./../",
+    "paths": {
+      "src/*": ["client/src/*"],
+      "common-types": ["types"]
+    }
+  },
+  "references": [
+    {
+      "path": "./../types/"
+    }
+  ]
 }

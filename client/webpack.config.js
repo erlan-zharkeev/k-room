@@ -1,23 +1,24 @@
 const path = require('path');
 const package = require('./package.json')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const fs = require('fs')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const reportMode = process.env.npm_lifecycle_event === 'build-stat' ? 'server' : 'disabled'
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
+const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[fullhash].${ext}`)
 
 module.exports = {
   entry: path.resolve(__dirname, 'src', 'index.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: filename('js'),
     clean: true,
   },
 
   mode: process.env.NODE_ENV,
-  devtool: isDev ? 'source-map' : 'hidden-source-map',
+  devtool: isDev ? 'source-map' : false,
 
   devServer: {
     client: {
@@ -112,12 +113,28 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      'src': path.resolve(__dirname, 'src'),
+      'common-types': path.resolve(__dirname, './../types')
+    },
   },
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'all',
-  //   },
-  // },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 100000,
+      maxSize: 250000,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  performance: {
+    hints: false
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: package.name,
@@ -126,6 +143,7 @@ module.exports = {
         collapseWhitespace: isProd,
       },
     }),
-    // new ReactRefreshWebpackPlugin()
+    new BundleAnalyzerPlugin({ analyzerMode: reportMode })
   ]
 }
+

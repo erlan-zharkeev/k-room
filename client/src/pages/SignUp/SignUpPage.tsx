@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd'
-import { RouteNames, Status } from 'k-room.types'
+import { RouteNames, Status } from './../../../../types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'

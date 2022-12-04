@@ -10,7 +10,7 @@ import auth, { AuthAction } from './authSlice'
 import chatRooms from './chatRoomsSlice'
 import contacts from './contactsSlice'
 import { sound, Sounds } from '../sound'
-// import { socket } from '../socket/socket'
+import { socket } from './../socket/socket'
 
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
@@ -34,20 +34,11 @@ const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
       break
     case 'auth/logOut':
       storage.removeItem('persist:root')
-      // socket.disconnect()
+      socket.disconnect()
       break
   }
   next(action)
 }
-
-// const rootReducer = (state: any, action: any) => {
-//   if (action.type === 'auth/logOut') {
-//     storage.removeItem('persist:root')
-//     socket.disconnect()
-//     return reducers(undefined, action)
-//   }
-//   return reducers(state, action)
-// }
 
 export const store = configureStore({
   reducer: reducers,

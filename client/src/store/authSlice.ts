@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthState } from './@types/AuthState'
-import { AuthEndPoints, RouteNames, Status, User } from 'k-room.types'
+import { AuthEndPoints, RouteNames, Status, User } from './../../../types'
 import { apiService } from '../services/apiService'
 import axios, { AxiosResponse } from 'axios'
 

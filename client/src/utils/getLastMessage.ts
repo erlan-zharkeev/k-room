@@ -1,4 +1,4 @@
-import { Message } from 'k-room.types'
+import { Message } from './../../../types'
 
 const getLastMessage = (messages: Array<Message>): string => {
   if (!messages) return ''

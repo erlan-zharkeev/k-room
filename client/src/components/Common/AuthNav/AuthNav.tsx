@@ -1,4 +1,4 @@
-import { RouteNames } from 'k-room.types'
+import { RouteNames } from './../../../../../types'
 import { Link, useLocation } from 'react-router-dom'
 
 export const AuthNav = () => {

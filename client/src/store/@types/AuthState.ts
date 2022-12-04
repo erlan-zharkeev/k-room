@@ -1,4 +1,4 @@
-import { User } from 'k-room.types'
+import { User } from './../../../../types'
 
 export interface AuthState {
   isAuth: boolean

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../store'
 import { sendConfirmationLink } from '../../store/authSlice'
 import { AxiosResponse } from 'axios'
-import { RouteNames, Status } from 'k-room.types'
+import { RouteNames, Status } from './../../../../types'
 import useQuery from '../../hooks/useQuery'
 
 const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000

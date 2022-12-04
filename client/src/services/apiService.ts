@@ -6,7 +6,7 @@ import { RootActions } from '../store'
 import { AuthAction, setUserData } from '../store/authSlice'
 
 import { createBrowserHistory } from 'history'
-import { User, AuthEndPoints, Status, RouteNames } from 'k-room.types'
+import { User, AuthEndPoints, Status, RouteNames } from './../../../types'
 import { useNavigate } from 'react-router-dom'
 import { showNotification } from '../store/systemSlice'
 

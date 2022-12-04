@@ -4,7 +4,7 @@ import MainPage from '../pages/Main/MainPage'
 import WaitConfirmPage from '../pages/WaitEmailConfirm/WaitEmailConfirmPage'
 import ConfirmedPage from '../pages/EmailConfirm/EmailConfirmPage'
 import { IRoute } from './@types/IRoute'
-import { RouteNames } from 'k-room.types'
+import { RouteNames } from './../../../types'
 // import NotFoundPage from "../pages/NotFound/NotFoundPage";
 
 export const publicRoutes: Array<IRoute> = [

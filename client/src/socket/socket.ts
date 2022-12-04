@@ -4,8 +4,8 @@ export const socket = io('/', {
   forceNew: true,
   path: '/app/',
   reconnection: true,
-  reconnectionDelay: 10000,
-  reconnectionDelayMax: 10000,
+  reconnectionDelay: 1000000,
+  reconnectionDelayMax: 1000000,
   reconnectionAttempts: Infinity
 })
 

@@ -1,27 +1,27 @@
 import { useCallback, useEffect } from 'react'
-import ChatRoom from '../../components/ChatRoom/ChatRoom'
+import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
-import useTypedSelector from '../../hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 import {
   loadChatRooms,
   updateChatMessage,
   updateChatUsersStatus,
   updateMessageStatus,
   useSelectedRoom
-} from '../../store/chatRoomsSlice'
-import AsidePanel from '../../components/AsidePanel/AsidePanel'
+} from 'src/store/chatRoomsSlice'
+import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 
-import TopPanel from '../../components/TopPanel/TopPanel'
-import Popup from '../../components/Common/Popup/Popup'
-import StubLoading from '../../components/Common/StubLoading/StubLoading'
+import TopPanel from 'src/components/TopPanel/TopPanel'
+import Popup from 'src/components/Common/Popup/Popup'
+// import StubLoading from '../../components/Common/StubLoading/StubLoading'
 import _debounce from 'lodash/debounce'
 
-import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'k-room.types'
+import { updateContactsStatus, loadContacts } from 'src/store/contactsSlice'
+import { showNotification, socketConnect, socketDisconnect } from 'src/store/systemSlice'
+import { socket } from 'src/socket/socket'
 
-import { updateContactsStatus, loadContacts } from '../../store/contactsSlice'
-import { showNotification, socketConnect, socketDisconnect } from '../../store/systemSlice'
-import { socket } from '../../socket/socket'
+import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'common-types'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -89,7 +89,8 @@ export const MainPage = () => {
       }
     )
 
-    socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>) => {
+    socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>, message?: string) => {
+      if (message) dispatch(showNotification({ messageType: 'info', message }))
       dispatch(loadContacts(contacts))
     })
   }, [])

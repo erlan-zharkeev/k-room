@@ -6,7 +6,7 @@ import { setChatRoom } from '../../../../store/chatRoomsSlice'
 import { UserOutlined, SettingOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { socket } from '../../../../socket/socket'
-import { SocketActions } from 'k-room.types'
+import { SocketActions } from './../../../../../../types'
 
 export const RoomHeader = () => {
   const { selectedChatRoomId, chatRooms } = useTypedSelector((state) => state.persist.chatRooms)

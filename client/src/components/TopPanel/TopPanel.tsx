@@ -4,7 +4,7 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { logOut } from '../../store/authSlice'
-import { RouteNames } from 'k-room.types'
+import { RouteNames } from './../../../../types'
 import { useNavigate } from 'react-router-dom'
 
 const TopPanel = () => {

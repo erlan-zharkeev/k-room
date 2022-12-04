@@ -5,8 +5,11 @@
     "target": "ES2015",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "declaration": true
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "moduleResolution": "node"
   },
-  "include": ["src/index.ts"],
+  "include": ["index.ts"],
   "exclude": ["node_modules", "Makefile", "readme.md", "yarn-error", "yarn-lock"]
 }

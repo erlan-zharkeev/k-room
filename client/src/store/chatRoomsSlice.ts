@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import useTypedSelector from '../hooks/useTypedSelector'
 import { ChatRoomsState } from './@types/ChatRoomsState'
-import { ChatRoom, UserShort } from 'k-room.types'
+import { ChatRoom, UserShort } from './../../../types'
 
 const initialState: ChatRoomsState = {
   chatRooms: [],

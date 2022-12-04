@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import _debounce from 'lodash/debounce'
 import useTypedSelector from '../../../../../../hooks/useTypedSelector'
-import { User, SocketActions } from 'k-room.types'
+import { User, SocketActions } from './../../../../../../../../types'
 import { socket } from '../../../../../../socket/socket'
 
 const ContactSearch = () => {

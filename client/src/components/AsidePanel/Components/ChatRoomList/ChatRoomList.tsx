@@ -5,7 +5,7 @@ import { AppDispatch } from '../../../../store'
 import { removeSelectedChat, setChatRoom } from '../../../../store/chatRoomsSlice'
 import getLastMessage from '../../../../utils/getLastMessage'
 import { UserOutlined } from '@ant-design/icons'
-import { ChatRoom, SocketActions } from 'k-room.types'
+import { ChatRoom, SocketActions } from './../../../../../../types'
 import { PlusOutlined } from '@ant-design/icons'
 import { socket } from '../../../../socket/socket'
 
@@ -36,7 +36,7 @@ export const ChatRoomList = () => {
     const hasUserInContacts = !!contacts.find((element: any) => element.id === user.id)
     if (hasUserInContacts) return
     return showTooltips ? (
-      <Tooltip placement="topLeft" title="Add contact">
+      <Tooltip placement="topLeft" title="Add to contact">
         <Button size="small" icon={<PlusOutlined />} onClick={() => addUser(user.id)} />
       </Tooltip>
     ) : (

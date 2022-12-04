@@ -1,4 +1,4 @@
-import { Message } from 'k-room.types'
+import { Message } from './../../../../../../../types'
 
 export interface MessageBodyProps {
   message: Message
