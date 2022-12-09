@@ -17,7 +17,7 @@ import useDynamicRefs from 'use-dynamic-refs'
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
 
-  const { id, username } = useTypedSelector((state) => state.persist.auth.userData)
+  const { id, username } = useTypedSelector((state) => state.auth.userData)
   const [getRef, setRef] = useDynamicRefs() as any
 
   const dispatch = useDispatch<AppDispatch>()

@@ -11,7 +11,7 @@ import { useSelectedRoom } from '../../../../store/chatRoomsSlice'
 
 export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   const [message, setMessage] = useState('')
-  const { id } = useTypedSelector((state) => state.persist.auth.userData)
+  const { id } = useTypedSelector((state) => state.auth.userData)
   const selectedChatRoom = useSelectedRoom()
 
   const sendUserTypingStatus = (status: boolean) =>

@@ -10,7 +10,7 @@ import useTypedSelector from '../../../../../hooks/useTypedSelector'
 import { showNotification, closeModal } from '../../../../../store/systemSlice'
 
 const UserDataSettingsPopup = () => {
-  const { avatar, username, id } = useTypedSelector((state) => state.persist.auth.userData)
+  const { avatar, username, id } = useTypedSelector((state) => state.auth.userData)
 
   const [newAvatar, setNewAvatar] = useState<string | undefined>()
 

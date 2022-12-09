@@ -26,9 +26,9 @@ import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'com
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
 
-  const userId = useTypedSelector((state) => state.persist.auth.userData.id)
+  const userId = useTypedSelector((state) => state.auth.userData.id)
   const { viewPort, socketConnected } = useTypedSelector((state) => state.persist.system)
-  const { isAuth } = useTypedSelector((state) => state.persist.auth)
+  const { isAuth } = useTypedSelector((state) => state.auth)
 
   const dispatch = useDispatch<AppDispatch>()
 

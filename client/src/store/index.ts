@@ -21,10 +21,10 @@ const persistedReducer = persistReducer(
     key: 'root',
     storage
   },
-  combineReducers({ auth, chatRooms, contacts, system })
+  combineReducers({ system })
 )
 
-const reducers = combineReducers({ persist: persistedReducer })
+const reducers = combineReducers({ persist: persistedReducer, auth, chatRooms, contacts })
 
 const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
   switch (action.type) {
@@ -33,7 +33,7 @@ const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
       if (isSelf === false) sound(Sounds.messageDelivered).play()
       break
     case 'auth/logOut':
-      storage.removeItem('persist:root')
+      // storage.removeItem('persist:root')
       socket.disconnect()
       break
   }

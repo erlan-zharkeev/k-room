@@ -10,7 +10,7 @@ const initialState: ChatRoomsState = {
 
 export const useSelectedRoom = () => {
   return useTypedSelector((state) => {
-    const { selectedChatRoomId, chatRooms } = state.persist.chatRooms
+    const { selectedChatRoomId, chatRooms } = state.chatRooms
     return chatRooms.find((room: ChatRoom) => room.roomId === selectedChatRoomId)
   })
 }

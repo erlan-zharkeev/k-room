@@ -1,19 +1,19 @@
-./client/node_modules
-./client/yarn-error.log
-./client/yarn.lock
-./client/bundle
-./client/eslintcache
+client/node_modules
+client/yarn-error.log
+client/yarn.lock
+client/bundle
+client/eslintcache
 
-./server/node_modules
-./server/yarn-error.log
-./server/yarn.lock
-./server/bundle
-./server/eslintcache
+server/node_modules
+server/yarn-error.log
+server/yarn.lock
+server/bundle
+server/eslintcache
 
-./types/node_modules
-./types/yarn-error.log
-./types/yarn.lock
-./types/dist
-./types/eslintcache
+types/node_modules
+types/yarn-error.log
+types/yarn.lock
+types/dist
+types/eslintcache
 
-./db/mongo-init.js
+db/mongo-init.js

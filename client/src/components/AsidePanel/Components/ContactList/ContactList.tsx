@@ -12,9 +12,9 @@ import { setChatRoom } from '../../../../store/chatRoomsSlice'
 import { socket } from './../../../../socket/socket'
 
 const ContactList = () => {
-  const { contacts } = useTypedSelector((state) => state.persist.contacts)
-  const { chatRooms } = useTypedSelector((state) => state.persist.chatRooms)
-  const { id, username } = useTypedSelector((state) => state.persist.auth.userData)
+  const { contacts } = useTypedSelector((state) => state.contacts)
+  const { chatRooms } = useTypedSelector((state) => state.chatRooms)
+  const { id, username } = useTypedSelector((state) => state.auth.userData)
   const { showTooltips } = useTypedSelector((state) => state.persist.system)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
@@ -95,7 +95,11 @@ const ContactList = () => {
             <List.Item.Meta
               avatar={
                 <Badge dot={user.online} color="green">
-                  {user.avatar ? <Image src={user.avatar} className="custom-avatar" /> : <UserOutlined />}
+                  {user.avatar ? (
+                    <Image src={user.avatar} className="custom-avatar" />
+                  ) : (
+                    <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
+                  )}
                 </Badge>
               }
               title={<span>{user.username}</span>}

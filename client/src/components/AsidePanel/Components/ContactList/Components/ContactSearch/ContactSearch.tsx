@@ -12,8 +12,8 @@ const ContactSearch = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [searchType, changeSearchType] = useState('name')
 
-  const { id } = useTypedSelector((state) => state.persist.auth.userData)
-  const { contacts } = useTypedSelector((state) => state.persist.contacts)
+  const { id } = useTypedSelector((state) => state.auth.userData)
+  const { contacts } = useTypedSelector((state) => state.contacts)
   const { showTooltips } = useTypedSelector((state) => state.persist.system)
 
   useEffect(() => {

@@ -8,14 +8,14 @@ import { RouteNames } from '../../../../types'
 const mailTransport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: ENV?.MAIL_APP,
-    pass: ENV?.MAIL_PASS
+    user: ENV.MAIL_APP,
+    pass: ENV.MAIL_PASS
   }
 })
 
 const mailer = async (to: string, letterType: LettersType, payload: any) => {
   return await mailTransport.sendMail({
-    from: ENV?.MAIL_APP,
+    from: ENV.MAIL_APP,
     to,
     subject: 'Email confirmation',
     text: 'Email confirm',
@@ -26,8 +26,8 @@ const mailer = async (to: string, letterType: LettersType, payload: any) => {
 export const sendEmailConfirmationLink = async (email: string) => {
   const user = await UserModel.findOneAndUpdate({ email }, { $inc: { confirmAttempts: -1 } })
   await mailer(email, 'confirmation', {
-    appName: ENV?.APP_NAME,
-    link: `http://${ENV?.HOST_NAME}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`
+    appName: ENV.APP_NAME,
+    link: `${ENV.HOST}:${ENV.CLIENT_PORT}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`
   })
   const hasAttempts = user?.confirmAttempts && user.confirmAttempts >= 0
   if (!hasAttempts) return

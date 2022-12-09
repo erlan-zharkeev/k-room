@@ -1,4 +1,4 @@
-import { Image, Badge, Button, Tooltip } from 'antd'
+import { Image, Badge, Button, Tooltip, Avatar } from 'antd'
 import useTypedSelector from '../../hooks/useTypedSelector'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
@@ -8,7 +8,7 @@ import { RouteNames } from './../../../../types'
 import { useNavigate } from 'react-router-dom'
 
 const TopPanel = () => {
-  const { username, email, avatar } = useTypedSelector((state) => state.persist.auth.userData)
+  const { username, email, avatar } = useTypedSelector((state) => state.auth.userData)
   const { showTooltips, socketConnected } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -32,8 +32,11 @@ const TopPanel = () => {
         <div className="top-panel__userdata">
           <div className="top-panel__avatar">
             <Badge dot color={socketConnected ? 'green' : 'red'}>
-              {/* <Avatar size="small" src={avatar} icon={<UserOutlined />} /> */}
-              {avatar ? <Image src={avatar} className="custom-avatar" /> : <UserOutlined />}
+              {avatar ? (
+                <Image src={avatar} className="custom-avatar" />
+              ) : (
+                <Avatar size="small" src={avatar} icon={<UserOutlined />} />
+              )}
             </Badge>
           </div>
           <div className="paragraph-text top-panel__username">{username}</div>
