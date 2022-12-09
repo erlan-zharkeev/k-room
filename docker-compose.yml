@@ -12,14 +12,18 @@ services:
   client:
     container_name: 'k-room-client'
     restart: always
-    build: ./client/
+    build:
+      context: ./
+      dockerfile: ./client/Dockerfile
     ports:
-      - '3001:3001'
+      - '${CLIENT_PORT}:${CLIENT_PORT}'
   server:
     container_name: 'k-room-server'
     restart: always
-    build: ./server/
+    build:
+      context: ./
+      dockerfile: ./server/Dockerfile
     ports:
-      - '3000:3000'
+      - '${SERVER_PORT}:${SERVER_PORT}'
     links:
-      - 'k-room-db'
+      - 'db'

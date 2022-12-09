@@ -1,14 +1,14 @@
 import { UserModel } from '../models/user.model'
 import { Request, Response } from 'express'
 import throwError from '../utils/throwError'
-import { sendEmailConfirmationLink } from './../services/mail'
+import { sendEmailConfirmationLink } from '../services/mail'
 import setAccessToken from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
 const bcrypt = require('bcryptjs')
 const Grid = require('gridfs-stream')
 
-import db from './../database'
+import db from '../database'
 import mongoose from 'mongoose'
 
 const connection = db.connection

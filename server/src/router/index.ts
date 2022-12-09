@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AuthEndPoints } from './../../../types/'
+import { AuthEndPoints } from '../../../types'
 import authController from '../controllers/authController'
 import upload from '../filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'

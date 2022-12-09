@@ -1,13 +1,13 @@
 ./client/node_modules
 ./client/yarn-error.log
 ./client/yarn.lock
-./client/dist
+./client/bundle
 ./client/eslintcache
 
 ./server/node_modules
 ./server/yarn-error.log
 ./server/yarn.lock
-./server/dist
+./server/bundle
 ./server/eslintcache
 
 ./types/node_modules

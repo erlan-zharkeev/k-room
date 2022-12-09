@@ -1,2 +1,5 @@
 node_modules
 npm-debug.log
+stats.json
+yarn.lock
+yarn-error.log

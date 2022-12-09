@@ -1,2 +1,13 @@
 ## Development
   - run "make -j dev"
+
+## If smthng went wrong
+- Make shure that node-env is installed: (<https://www.npmjs.com/package/win-node-env>)
+- Set frontend app to recommended node version: 14.20.0
+
+## Commit convention
+  - branch name should be of the form type-dd/mm(e.g. develop-20/08)
+  - to commit changes call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
+
+## Avoid
+  - Do not edit nested .env files(edit only in root)

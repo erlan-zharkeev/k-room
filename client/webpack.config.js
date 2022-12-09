@@ -1,25 +1,29 @@
 const path = require('path');
+const dotenv = require('dotenv')
 const package = require('./package.json')
+const webpack = require('webpack')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { NODE_ENV, npm_lifecycle_event } = process.env
 
-const reportMode = process.env.npm_lifecycle_event === 'build-stat' ? 'server' : 'disabled'
-const isDev = process.env.NODE_ENV === 'development'
-const isProd = !isDev
+const ENV = dotenv.config({ path: `.env.${NODE_ENV}` }).parsed
+
+const isDev = NODE_ENV === 'development'
+const reportMode = npm_lifecycle_event === 'build-stat' ? 'server' : 'disabled'
 
 const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[fullhash].${ext}`)
 
 module.exports = {
+  mode: NODE_ENV,
+  devtool: isDev ? 'source-map' : false,
   entry: path.resolve(__dirname, 'src', 'index.tsx'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'bundle'),
     filename: filename('js'),
-    clean: true,
+    clean: true
   },
-
-  mode: process.env.NODE_ENV,
-  devtool: isDev ? 'source-map' : false,
-
+  // target: 'node',
   devServer: {
     client: {
       logging: 'error'
@@ -28,7 +32,7 @@ module.exports = {
     proxy: [
       {
         context: ['/api'],
-        target: 'http://localhost:3000',
+        target: `http://localhost:${ENV.SERVER_PORT}`,
         headers: {
             "Connection": "keep-alive"
         },
@@ -38,7 +42,7 @@ module.exports = {
       },
       {
         context: ['/app/'],
-        target: 'http://localhost:3000',
+        target: `http://localhost:${ENV.SERVER_PORT}`,
         headers: {
             "Connection": "keep-alive"
         },
@@ -50,12 +54,58 @@ module.exports = {
 
     historyApiFallback: true,
 
-    port: "3001",
+    port: ENV.CLIENT_PORT,
     open: true,
     hot: true ,
     liveReload: true
   },
-
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      'src': path.resolve(__dirname, 'src'),
+      'common-types': path.resolve(__dirname, './../types')
+    },
+    fallback: {
+      "fs": false,
+      "os": false,
+      "tls": false,
+      "net": false,
+      "path": false,
+      "zlib": false,
+      "http": false,
+      "https": false,
+      "stream": false,
+      "crypto": false
+    }
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 100000,
+      maxSize: 250000,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: package.name,
+      template: './public/index.html',
+      minify: {
+        collapseWhitespace: !isDev,
+      },
+    }),
+    new BundleAnalyzerPlugin({ analyzerMode: reportMode }),
+    new webpack.DefinePlugin({
+      SERVER_PORT: JSON.stringify(ENV.SERVER_PORT),
+      HOST: JSON.stringify(ENV.HOST),
+    })
+  ],
   module: {
     rules: [
       {
@@ -106,44 +156,10 @@ module.exports = {
         test: /\.(woff(2)?|ttf|eot|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[path][name].[ext]',
-        },
-      },
-    ]
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    alias: {
-      'src': path.resolve(__dirname, 'src'),
-      'common-types': path.resolve(__dirname, './../types')
-    },
-  },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      minSize: 100000,
-      maxSize: 250000,
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
+          name: '[path][name].[ext]'
         }
       }
-    }
-  },
-  performance: {
-    hints: false
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: package.name,
-      template: './public/index.html',
-      minify: {
-        collapseWhitespace: isProd,
-      },
-    }),
-    new BundleAnalyzerPlugin({ analyzerMode: reportMode })
-  ]
+    ]
+  }
 }
 

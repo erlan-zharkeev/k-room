@@ -1,6 +1,6 @@
 {
   "name": "k-room.types",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "main": "index.ts",
   "types": "index.d.ts",
   "files": [

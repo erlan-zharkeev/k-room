@@ -1,5 +1,5 @@
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { SocketActions, ChatRoom, User, UserShort, Message, MessageStatus } from './../../types/'
+import { SocketActions, ChatRoom, User, UserShort, Message, MessageStatus } from '../../types'
 import { Socket } from 'socket.io'
 import { io } from './server'
 import { UserModel } from './models/user.model'

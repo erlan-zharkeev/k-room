@@ -1,15 +1,21 @@
-FROM node
+FROM node:14.20.0
 
-WORKDIR /app
+RUN mkdir types
 
-COPY package*.json .
+COPY types types
+
+RUN mkdir server
+
+COPY server/ server
+
+WORKDIR /server
 
 RUN yarn
 
-COPY . .
+RUN yarn build
 
-ENV PORT $PORT
+ENV PORT $SERVER_PORT
 
-EXPOSE $PORT
+EXPOSE $SERVER_PORT
 
-CMD [ "yarn", "serve"]
+CMD [ "yarn", "server-run" ]

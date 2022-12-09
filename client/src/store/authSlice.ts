@@ -3,9 +3,12 @@ import { AuthState } from './@types/AuthState'
 import { AuthEndPoints, RouteNames, Status, User } from './../../../types'
 import { apiService } from '../services/apiService'
 import axios, { AxiosResponse } from 'axios'
-
 import { createBrowserHistory } from 'history'
 import { showNotification } from './systemSlice'
+import ENV from 'src/ENV'
+
+axios.defaults.proxy = true
+axios.defaults.baseURL = `http://localhost:${ENV.SERVER_PORT}`
 
 export enum AuthAction {
   REGISTRATION = 'REGISTRATION',
