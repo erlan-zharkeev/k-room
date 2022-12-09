@@ -1,4 +1,4 @@
-import { List, Image, Badge, Tooltip, Button } from 'antd'
+import { List, Image, Badge, Tooltip, Button, Avatar } from 'antd'
 import useTypedSelector from '../../../../hooks/useTypedSelector'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../../store'
@@ -8,11 +8,12 @@ import { UserOutlined } from '@ant-design/icons'
 import { ChatRoom, SocketActions } from './../../../../../../types'
 import { PlusOutlined } from '@ant-design/icons'
 import { socket } from '../../../../socket/socket'
+import avatar from 'antd/lib/avatar'
 
 export const ChatRoomList = () => {
-  const { chatRooms, selectedChatRoomId } = useTypedSelector((state) => state.persist.chatRooms)
-  const { contacts } = useTypedSelector((state) => state.persist.contacts)
-  const { id } = useTypedSelector((state) => state.persist.auth.userData)
+  const { chatRooms, selectedChatRoomId } = useTypedSelector((state) => state.chatRooms)
+  const { contacts } = useTypedSelector((state) => state.contacts)
+  const { id } = useTypedSelector((state) => state.auth.userData)
   const { showTooltips } = useTypedSelector((state) => state.persist.system)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -62,8 +63,11 @@ export const ChatRoomList = () => {
               <List.Item.Meta
                 avatar={
                   <Badge dot={chatRoom.hasOnline} color="green">
-                    {chatRoom.avatar ? <Image src={chatRoom.avatar} className="custom-avatar" /> : <UserOutlined />}
-                    {/* <Avatar src={chatRoom.avatar} icon={<UserOutlined />} /> */}
+                    {chatRoom.avatar ? (
+                      <Image src={chatRoom.avatar} className="custom-avatar" />
+                    ) : (
+                      <Avatar size="small" src={chatRoom.avatar} icon={<UserOutlined />} />
+                    )}
                   </Badge>
                 }
                 title={<span>{chatRoom.chatName}</span>}

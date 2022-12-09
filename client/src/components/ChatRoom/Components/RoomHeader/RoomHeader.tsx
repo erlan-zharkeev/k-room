@@ -1,4 +1,4 @@
-import { Image, Badge, Button, Dropdown, Menu } from 'antd'
+import { Image, Badge, Button, Dropdown, Menu, Avatar } from 'antd'
 import useTypedSelector from '../../../../hooks/useTypedSelector'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../../store'
@@ -9,7 +9,7 @@ import { socket } from '../../../../socket/socket'
 import { SocketActions } from './../../../../../../types'
 
 export const RoomHeader = () => {
-  const { selectedChatRoomId, chatRooms } = useTypedSelector((state) => state.persist.chatRooms)
+  const { selectedChatRoomId, chatRooms } = useTypedSelector((state) => state.chatRooms)
   const chatRoomData = chatRooms.find((room: any) => room.roomId === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
@@ -37,8 +37,11 @@ export const RoomHeader = () => {
       </Button>
       <div className="room-header__info">
         <Badge dot={chatRoomData?.hasOnline} color="green">
-          {/* <Avatar src={chatRoomData?.avatar} icon={<UserOutlined />} /> */}
-          {chatRoomData?.avatar ? <Image src={chatRoomData?.avatar} className="custom-avatar" /> : <UserOutlined />}
+          {chatRoomData?.avatar ? (
+            <Image src={chatRoomData?.avatar} className="custom-avatar" />
+          ) : (
+            <Avatar size="small" src={chatRoomData.avatar} icon={<UserOutlined />} />
+          )}
         </Badge>
         <h3 className="room-header__name">{chatRoomData?.chatName}</h3>
         {isTyping && (

@@ -8,7 +8,7 @@ import appData from '../../../../../package.json'
 import { showModal, changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from '../../../../store/systemSlice'
 
 const UserSettings = () => {
-  const { username, email, id, avatar } = useTypedSelector((state) => state.persist.auth.userData)
+  const { username, email, id, avatar } = useTypedSelector((state) => state.auth.userData)
   const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
 

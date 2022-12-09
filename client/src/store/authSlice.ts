@@ -2,13 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthState } from './@types/AuthState'
 import { AuthEndPoints, RouteNames, Status, User } from './../../../types'
 import { apiService } from '../services/apiService'
-import axios, { AxiosResponse } from 'axios'
 import { createBrowserHistory } from 'history'
 import { showNotification } from './systemSlice'
-import ENV from 'src/ENV'
-
-axios.defaults.proxy = true
-axios.defaults.baseURL = `http://localhost:${ENV.SERVER_PORT}`
+import { AxiosResponse } from 'axios'
+import $api from 'src/services/api'
 
 export enum AuthAction {
   REGISTRATION = 'REGISTRATION',
@@ -44,7 +41,7 @@ const requestHandler = async (
 ): Promise<AxiosResponse<any, any>> => {
   let response: AxiosResponse | null = null
   try {
-    response = await axios[type](endpoint, payload, {
+    response = await $api[type](endpoint, payload, {
       headers: {
         'Content-Type': contentType
       }
