@@ -8,7 +8,6 @@ import { logOut, sendEmailConfirm } from '../../store/authSlice'
 import { RouteNames, Status } from './../../../../types'
 import { AxiosResponse } from 'axios'
 import useQuery from '../../hooks/useQuery'
-import { socket } from '../../socket/socket'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -25,10 +24,6 @@ export const EmailConfirmPage = () => {
     setEmail(data.userData.email)
     setIsLoading(false)
     dispatch(logOut())
-    socket.disconnect()
-    // setTimeout(() => {
-    //   navigate(RouteNames.SIGN_IN)
-    // }, 5000)
   }
 
   useEffect(() => {

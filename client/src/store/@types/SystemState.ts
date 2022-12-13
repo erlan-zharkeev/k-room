@@ -16,6 +16,7 @@ export interface ViewPort {
 
 export interface SystemStore {
   socketConnected: boolean
+  ableToShowNotification: boolean
   showModal: boolean
   modalData: {
     title: string
@@ -23,7 +24,6 @@ export interface SystemStore {
     okText: string
     width: string
   }
-  ableToShowNotification: boolean
   notificationData: NotificationStore
   theme: theme
   showTooltips: boolean

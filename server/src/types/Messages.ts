@@ -1,6 +1,9 @@
 export enum Messages {
   registrationCommonError = 'Registration failed, try register later',
   loginCommonError = 'Login failed, try register later',
+  tokensPairUpdated = 'Tokens pair updated',
+  nonAuthorized = 'User not authorized',
+  haventAccessRights = 'User have not access rights',
   userDataUpdateFailedCommonError = 'Failed to update user data',
   userExist = 'The user with the current email address is already registered',
   userCreated = 'User successfully created, checkout your email address for email confirmation',
@@ -20,5 +23,5 @@ export enum Messages {
   noFilesExist = 'No files exist',
   notImage = 'File is not an image',
   userAddedToContacts = 'User added to contacts',
-  userRemovedFromContacts = 'User removed from contacts',
+  userRemovedFromContacts = 'User removed from contacts'
 }

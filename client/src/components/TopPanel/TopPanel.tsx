@@ -4,14 +4,11 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { logOut } from '../../store/authSlice'
-import { RouteNames } from './../../../../types'
-import { useNavigate } from 'react-router-dom'
 
 const TopPanel = () => {
-  const { username, email, avatar } = useTypedSelector((state) => state.auth.userData)
+  const { id, username, email, avatar } = useTypedSelector((state) => state.auth.userData)
   const { showTooltips, socketConnected } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
 
   const ButtonWrapper = (
     <Button
@@ -19,7 +16,6 @@ const TopPanel = () => {
       ghost
       onClick={() => {
         dispatch(logOut())
-        // navigate(RouteNames.SIGN_IN)
       }}
       icon={<LogoutOutlined />}
     />

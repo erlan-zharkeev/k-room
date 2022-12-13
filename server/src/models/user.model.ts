@@ -5,6 +5,7 @@ export interface IUserSchema extends User {
   socketId: string
   confirmed: Boolean
   confirmAttempts: number
+  refreshToken: string
   _id: string
 }
 
@@ -22,6 +23,11 @@ export const userSchema = new Schema<IUserSchema>({
     type: String,
     unique: true,
     required: true
+  },
+  refreshToken: {
+    type: String,
+    unique: true,
+    required: false
   },
   confirmed: {
     type: Boolean,

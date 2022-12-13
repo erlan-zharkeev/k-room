@@ -2,7 +2,7 @@ import { UserModel } from '../models/user.model'
 import { Request, Response } from 'express'
 import throwError from '../utils/throwError'
 import { sendEmailConfirmationLink } from '../services/mail'
-import setAccessToken from '../services/jwt'
+import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
 const bcrypt = require('bcryptjs')
@@ -10,6 +10,7 @@ const Grid = require('gridfs-stream')
 
 import db from '../database'
 import mongoose from 'mongoose'
+import { Status } from '../../../types'
 
 const connection = db.connection
 
@@ -24,7 +25,24 @@ connection.once('open', () => {
   gfs = Grid(connection.db, mongoose.mongo)
   gfs.collection('uploads')
 })
+
 class AuthController {
+  async updateTokensPair(req: Request, res: Response) {
+    const { id } = req.body.decoded
+    await updateTokens(id, res)
+    res.json({ message: Messages.tokensPairUpdated })
+  }
+
+  async getUserData(req: Request, res: Response) {
+    const { id } = req.body.decoded
+    const user = await UserModel.findOne({ _id: id })
+    if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
+    return res.json({
+      userData: { username: user.username, email: user.email, id: user._id, avatar: user.avatar },
+      message: Messages.loginSuccess
+    })
+  }
+
   async registration(req: Request, res: Response) {
     try {
       authValidator(req, res)
@@ -32,11 +50,11 @@ class AuthController {
       const { username, email, password } = req.body
       const candidate = await UserModel.findOne({ email })
 
-      if (candidate) return throwError(400, res, Messages.userExist)
+      if (candidate) return throwError(Status.BAD_REQUEST, res, Messages.userExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
-      if (!hashedPassword) return throwError(400, res, Messages.passHashFailed)
+      if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
 
       const user = new UserModel({ username, email, password: hashedPassword, socketId: '' })
       await user.save()
@@ -44,7 +62,7 @@ class AuthController {
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
       return res.json(confirmEmailData)
     } catch (e) {
-      throwError(400, res, Messages.registrationCommonError)
+      throwError(Status.BAD_REQUEST, res, Messages.registrationCommonError)
     }
   }
 
@@ -54,7 +72,7 @@ class AuthController {
       const confirmEmailData = await sendEmailConfirmationLink(email)
       return res.json(confirmEmailData)
     } catch {
-      throwError(503, res, Messages.sendConfirmEmailFailed)
+      throwError(Status.UNREACHABLE, res, Messages.sendConfirmEmailFailed)
     }
   }
 
@@ -68,7 +86,7 @@ class AuthController {
         message: Messages.emailConfirmed
       })
     } catch {
-      throwError(400, res, Messages.emailConfirmFailed)
+      throwError(Status.BAD_REQUEST, res, Messages.emailConfirmFailed)
     }
   }
 
@@ -76,20 +94,20 @@ class AuthController {
     try {
       const { email, password } = req.body
       const user = await UserModel.findOne({ email })
-      if (!user) return throwError(400, res, Messages.userNotFound)
-      if (!user.confirmed) return throwError(400, res, Messages.emailNotConfirm)
+      if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
+      if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, Messages.emailNotConfirm)
 
       const validPassword = bcrypt.compareSync(password, user.password)
-      if (!validPassword) return throwError(400, res, Messages.wrongPass)
+      if (!validPassword) return throwError(Status.BAD_REQUEST, res, Messages.wrongPass)
 
-      setAccessToken(user._id, res)
+      await updateTokens(user._id, res)
 
       return res.json({
         userData: { username: user.username, email, id: user._id, avatar: user.avatar },
         message: Messages.loginSuccess
       })
     } catch (e: any) {
-      throwError(400, res, Messages.loginCommonError)
+      throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
     }
   }
 
@@ -102,7 +120,7 @@ class AuthController {
         { username, avatar: `api/image/${filename}` },
         { new: true }
       )
-      if (!updateUserDataResponse) return throwError(400, res, Messages.usersFindFailed)
+      if (!updateUserDataResponse) return throwError(Status.BAD_REQUEST, res, Messages.usersFindFailed)
       return res.json({
         userData: {
           username: updateUserDataResponse.username,
@@ -111,17 +129,17 @@ class AuthController {
         message: Messages.userDataSuccess
       })
     } catch (e: any) {
-      throwError(400, res, Messages.userDataUpdateFailedCommonError)
+      throwError(Status.BAD_REQUEST, res, Messages.userDataUpdateFailedCommonError)
     }
   }
 
   async showFiles(req: Request, res: Response) {
     gfs.files.findOne({ filename: req.params.filename }, (_: any, file: any) => {
-      if (!file || file.length === 0) return throwError(404, res, Messages.noFilesExist)
+      if (!file || file.length === 0) return throwError(Status.NOT_FOUND, res, Messages.noFilesExist)
       if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
         const readstream = gridfsBucket.openDownloadStream(file._id)
         readstream.pipe(res)
-      } else throwError(404, res, Messages.notImage)
+      } else throwError(Status.NOT_FOUND, res, Messages.notImage)
     })
   }
 }

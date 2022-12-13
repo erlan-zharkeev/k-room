@@ -7,6 +7,7 @@ const html = document.querySelector('html')
 
 const initialState: SystemStore = {
   socketConnected: false,
+  ableToShowNotification: true,
   showModal: false,
   modalData: {
     title: '',
@@ -14,7 +15,6 @@ const initialState: SystemStore = {
     okText: 'ok',
     width: '320px'
   },
-  ableToShowNotification: false,
   notificationData: {
     key: '',
     message: '',

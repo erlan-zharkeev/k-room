@@ -7,14 +7,14 @@ const http = require('http')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const clc = require('cli-color')
+const cookieParser = require('cookie-parser')
 
 const app = express()
 
+app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-
 app.use('/', router)
-
 app.use(
   cors({
     origin: '*'
@@ -24,6 +24,7 @@ app.use(
 const server = http.createServer(app)
 
 const PORT = ENV.SERVER_PORT
+
 server.listen(PORT, () => {
   console.log(clc.green.bgWhite(`-Server listening on port ${PORT}`))
 })

@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ..
-cd ./server && yarn serve
+cd ./server && yarn && yarn serve

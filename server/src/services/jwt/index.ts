@@ -1,20 +1,22 @@
 import { Response } from 'express'
 import ENV from '../../ENV'
+import { UserModel } from '../../models/user.model'
 
-const config = {
-  secret: 'SECRET_KEY_RANDOM'
-}
+export const jwt = require('jsonwebtoken')
 
-const jwt = require('jsonwebtoken')
-
-export const generateAccessToken = (id: string) => {
+const generateToken = (id: string, secret: string, expiresIn: number | string) => {
   const payload = { id }
-  return jwt.sign(payload, config.secret, { expiresIn: ENV?.JWT_ACCESS_EXPIRES_INTERVAL })
+  return jwt.sign(payload, secret, { expiresIn })
 }
 
-export const setAccessToken = (id: unknown, res: Response) => {
-  const accessToken = generateAccessToken(String(id))
-  res.cookie('jwt', accessToken)
+const setToken = (res: Response, tokenName: string, id: string, secret: string, expiresIn: number | string): string => {
+  const token = generateToken(id, secret, expiresIn)
+  res.cookie(tokenName, token)
+  return token
 }
 
-export default setAccessToken
+export const updateTokens = async (id: string, res: Response) => {
+  setToken(res, 'jwt', id, ENV?.JWT_ACCESS_TOKEN_SECRET, '60s')
+  const refreshToken = setToken(res, 'refresh-jwt', id, ENV?.JWT_REFRESH_TOKEN_SECRET, '1d')
+  return await UserModel.updateOne({ _id: id }, { refreshToken })
+}

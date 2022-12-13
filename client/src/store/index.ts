@@ -1,5 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { useDispatch } from 'react-redux'
+import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
 
 import system from './systemSlice'
 
@@ -10,9 +9,8 @@ import auth, { AuthAction } from './authSlice'
 import chatRooms from './chatRoomsSlice'
 import contacts from './contactsSlice'
 import { sound, Sounds } from '../sound'
-import { socket } from './../socket/socket'
 
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>
 export type RootActions = AuthAction
 
@@ -32,10 +30,6 @@ const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
       const { isSelf } = action.payload.message
       if (isSelf === false) sound(Sounds.messageDelivered).play()
       break
-    case 'auth/logOut':
-      // storage.removeItem('persist:root')
-      socket.disconnect()
-      break
   }
   next(action)
 }
@@ -48,6 +42,6 @@ export const store = configureStore({
     }).concat(SystemMiddleware)
 })
 
-export const useAppDispatch = () => useDispatch<AppDispatch>()
+// export const useAppDispatch = () => useDispatch<AppDispatch>()
 
-export default store
+// export default store

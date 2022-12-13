@@ -1,13 +1,15 @@
 export interface EnvVariables {
-  SERVER_PORT: string
-  CLIENT_PORT: string
-  MONGO_HOST: string
-  HOST: string
-  JWT_ACCESS_EXPIRES_INTERVAL: string
-  APP_NAME: string
-  MAIL_APP: string
-  MAIL_PASS: string
-  REGISTRATION_RESEND_INTERVAL_MINUTES: string
+  SERVER_PORT: string;
+  CLIENT_PORT: string;
+  MONGO_HOST: string;
+  HOST: string;
+  JWT_ACCESS_EXPIRES_INTERVAL: string;
+  APP_NAME: string;
+  MAIL_APP: string;
+  MAIL_PASS: string;
+  REGISTRATION_RESEND_INTERVAL_MINUTES: string;
+  JWT_ACCESS_TOKEN_SECRET: string;
+  JWT_REFRESH_TOKEN_SECRET: string;
 }
 
 export enum AuthEndPoints {
@@ -17,6 +19,9 @@ export enum AuthEndPoints {
   LOGIN = "/api/auth/login",
   UPDATE_USER_DATA = "/api/auth/user-data/update",
   GET_FILES = "/api/image/:filename",
+  LOGOUT = "/api/auth/logout",
+  GET_USER_DATA = "/api/auth/get-user-data",
+  UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair",
 }
 
 export enum SocketActions {
@@ -94,5 +99,9 @@ export interface User extends UserCredential {
 
 export enum Status {
   SUCCESS = 200,
+  BAD_REQUEST = 400,
   NOT_AUTH = 401,
+  TOKEN_EXPIRED = 403,
+  NOT_FOUND = 404,
+  UNREACHABLE = 503,
 }

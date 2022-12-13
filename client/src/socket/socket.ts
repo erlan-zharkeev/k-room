@@ -10,7 +10,6 @@ export const socket = io('/', {
 })
 
 socket.io.on('reconnect', (attempt: any) => {
-  console.log(attempt)
   socket.connect()
 })
 

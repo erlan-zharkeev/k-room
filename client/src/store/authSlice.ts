@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { AuthState } from './@types/AuthState'
-import { AuthEndPoints, RouteNames, Status, User } from './../../../types'
-import { apiService } from '../services/apiService'
+import { AuthEndPoints, RouteNames, User } from 'common-types'
 import { createBrowserHistory } from 'history'
-import { showNotification } from './systemSlice'
-import { AxiosResponse } from 'axios'
 import $api from 'src/services/api'
+import { socket } from 'src/socket/socket'
+import { AuthState } from './@types/AuthState'
 
 export enum AuthAction {
   REGISTRATION = 'REGISTRATION',
@@ -13,87 +11,46 @@ export enum AuthAction {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   UPDATE = 'UPDATE',
-  EMAIL_CONFIRM = 'EMAIL_CONFIRM'
+  EMAIL_CONFIRM = 'EMAIL_CONFIRM',
+  GET_USER_DATA = 'GET_USER_DATA',
+  UPDATE_TOKENS_PAIR = 'UPDATE_TOKENS_PAIR'
 }
-
-type RequestTypes = 'post' | 'get'
 
 const customHistory = createBrowserHistory()
 
-const responseErrorHandler = (e: any, dispatch: any): void => {
-  const message = e.response.data.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  dispatch(showNotification({ message, messageType: 'error' }))
-}
+export const getUserData = createAsyncThunk(AuthAction.GET_USER_DATA, async (_: unknown, { dispatch }) => {
+  const response = await $api('get', AuthEndPoints.GET_USER_DATA, dispatch)
+  dispatch(setUserData(response.data.userData))
+  customHistory.push(RouteNames.MAIN)
+})
 
-const responseMessageHandler = (response: AxiosResponse, dispatch: any) => {
-  if (!response) return
-  const message = response.data.message
-  const isSuccess = response.status === Status.SUCCESS
-  if (message) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
-}
-
-const requestHandler = async (
-  type: RequestTypes,
-  endpoint: string,
-  payload: any,
-  dispatch: any,
-  contentType: string = 'application/json'
-): Promise<AxiosResponse<any, any>> => {
-  let response: AxiosResponse | null = null
-  try {
-    response = await $api[type](endpoint, payload, {
-      headers: {
-        'Content-Type': contentType
-      }
-    })
-  } catch (e: unknown) {
-    responseErrorHandler(e, dispatch)
-  } finally {
-    return response
-  }
-}
-
-export const registration = createAsyncThunk(
-  AuthAction.REGISTRATION,
-  async (credential: User, { dispatch }) =>
-    await requestHandler('post', AuthEndPoints.REGISTRATION, credential, dispatch)
-)
+export const registration = createAsyncThunk(AuthAction.REGISTRATION, async (payload: User, { dispatch }) => {
+  return await $api('post', AuthEndPoints.REGISTRATION, dispatch, payload)
+})
 
 export const sendConfirmationLink = createAsyncThunk(
   AuthAction.SEND_EMAIL_CONFIRMATION_LINK,
-  async (email: string, { dispatch }) =>
-    await requestHandler('post', AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, { email }, dispatch)
+  async (email: string, { dispatch }) => {
+    const payload = { email }
+    return await $api('post', AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, dispatch, payload)
+  }
 )
 
-export const sendEmailConfirm = createAsyncThunk(
-  AuthAction.EMAIL_CONFIRM,
-  async (userId: string, { dispatch }) =>
-    await requestHandler('post', AuthEndPoints.SEND_EMAIL_CONFIRMATION, { userId }, dispatch)
-)
+export const sendEmailConfirm = createAsyncThunk(AuthAction.EMAIL_CONFIRM, async (userId: string, { dispatch }) => {
+  const payload = { userId }
+  return await $api('post', AuthEndPoints.SEND_EMAIL_CONFIRMATION, dispatch, payload)
+})
 
-export const login = createAsyncThunk(AuthAction.LOGIN, async (credential: User, { dispatch }) => {
-  const response = await requestHandler('post', AuthEndPoints.LOGIN, credential, dispatch)
+export const login = createAsyncThunk(AuthAction.LOGIN, async (payload: User, { dispatch }) => {
+  const response = await $api('post', AuthEndPoints.LOGIN, dispatch, payload)
   dispatch(setUserData(response.data.userData))
   customHistory.push(RouteNames.MAIN)
-  responseMessageHandler(response, dispatch)
 })
 
-export const updateUserData = createAsyncThunk(AuthAction.UPDATE, async (credential: User, { dispatch }) => {
-  const response = await requestHandler(
-    'post',
-    AuthEndPoints.UPDATE_USER_DATA,
-    credential,
-    { dispatch },
-    'multipart/form-data'
-  )
+export const updateUserData = createAsyncThunk(AuthAction.UPDATE, async (payload: User, { dispatch }) => {
+  const response = await $api('post', AuthEndPoints.UPDATE_USER_DATA, dispatch, payload, 'multipart/form-data')
   dispatch(setUserData(response.data.userData))
-  responseMessageHandler(response, dispatch)
 })
-
-export const signOut = createAsyncThunk(
-  AuthAction.LOGOUT,
-  async (_, { dispatch }) => await apiService(dispatch, AuthAction.LOGOUT)
-)
 
 const initialState: AuthState = {
   isAuth: false,
@@ -120,7 +77,9 @@ const authSlice = createSlice({
       }
     },
     logOut: (state) => {
+      document.cookie = ''
       state.isAuth = false
+      socket.disconnect()
     }
   }
 })

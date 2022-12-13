@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from './store'
 import { ViewPort } from './store/@types/SystemState'
 import { setViewPort } from './store/systemSlice'
+import { getUserData } from './store/authSlice'
+import getCookie from './utils/getCookie'
 
 function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>()
@@ -31,9 +33,13 @@ function App(): JSX.Element {
     }
   }
 
+  const fetchUser = async () => await dispatch(getUserData({} as any))
+
   const handleResize = () => dispatch(setViewPort(getViewPort()))
 
   useEffect(() => {
+    const accessToken = getCookie('jwt')
+    if (accessToken) fetchUser()
     setTheme(theme)
     const root = document.querySelector('body')
     root?.addEventListener('keydown', onKeyDown)
@@ -45,7 +51,7 @@ function App(): JSX.Element {
       root?.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('resize', handleResize)
     }
-  })
+  }, [])
 
   return <AppRouter />
 }

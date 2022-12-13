@@ -1,29 +1,16 @@
-
 module.exports = {
   env: {
     es2021: true,
     browser: true
   },
-  extends: [
-    'plugin:react/recommended',
-    'standard-with-typescript'
-  ],
+  extends: ['plugin:react/recommended', 'standard-with-typescript'],
   parserOptions: {
-    project: [
-      './tsconfig.json'
-    ],
-    files: [
-      '*.ts',
-      '*.tsx',
-      '*.js'
-    ],
+    project: ['./tsconfig.json'],
+    files: ['*.ts', '*.tsx', '*.js'],
     ecmaVersion: 8,
     sourceType: 'module'
   },
-  plugins: [
-    'react',
-    '@typescript-eslint'
-  ],
+  plugins: ['react', '@typescript-eslint'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/space-before-function-paren': 'off',
@@ -39,7 +26,8 @@ module.exports = {
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/member-delimiter-style': 'off',
-    '@typescript-eslint/no-unused-vars': 'off'
+    '@typescript-eslint/no-unused-vars': 'off',
+    'circular-dependecy-issue': 'off'
   },
   settings: {
     react: {
