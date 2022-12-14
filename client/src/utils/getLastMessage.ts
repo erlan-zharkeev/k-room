@@ -1,4 +1,4 @@
-import { Message } from './../../../types'
+import { Message } from 'common-types'
 
 const getLastMessage = (messages: Array<Message>): string => {
   if (!messages) return ''

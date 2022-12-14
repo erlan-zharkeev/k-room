@@ -34,11 +34,11 @@ export const MainPage = () => {
 
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
-      console.log('%cSocket Connected ', 'background: #222; color: green')
+      console.log('%cSocket connected ', 'background: #222; color: green')
       dispatch(showNotification({ messageType: 'success', message: 'Server socket connected!' }))
       return
     }
-    console.log('%cSocket Disconnected ', 'background: #222; color: red')
+    console.log('%cSocket disconnected ', 'background: #222; color: red')
     if (isAuth) dispatch(showNotification({ messageType: 'error', message: 'Server socket disconnected!' }))
   }
 

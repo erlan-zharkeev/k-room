@@ -1,13 +1,13 @@
 import { Button, Form, Input } from 'antd'
-import { RouteNames, Status } from './../../../../types'
+import { Status, RouteNames } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AuthNav } from '../../components/Common/AuthNav/AuthNav'
-import useValidate from '../../hooks/useValidate'
-import { AppDispatch } from '../../store'
-import { registration } from '../../store/authSlice'
-import validateRules from '../../utils/validateRules'
+import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
+import useValidate from 'src/hooks/useValidate'
+import { AppDispatch } from 'src/store'
+import { registration } from 'src/store/authSlice'
+import validateRules from 'src/utils/validateRules'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()

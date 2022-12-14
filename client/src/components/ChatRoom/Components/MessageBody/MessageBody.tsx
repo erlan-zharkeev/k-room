@@ -1,5 +1,5 @@
-import { MessageBodyProps } from './@types/MessageBodyProps'
 import moment from 'moment'
+import { MessageBodyProps } from './@types/MessageBodyProps'
 
 export const MessageBody = ({ message }: MessageBodyProps) => {
   return (

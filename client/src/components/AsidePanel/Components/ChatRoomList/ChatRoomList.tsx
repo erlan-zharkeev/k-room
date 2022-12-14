@@ -1,14 +1,12 @@
 import { List, Image, Badge, Tooltip, Button, Avatar } from 'antd'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
+import { PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { SocketActions, ChatRoom } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../../store'
-import { removeSelectedChat, setChatRoom } from '../../../../store/chatRoomsSlice'
-import getLastMessage from '../../../../utils/getLastMessage'
-import { UserOutlined } from '@ant-design/icons'
-import { ChatRoom, SocketActions } from './../../../../../../types'
-import { PlusOutlined } from '@ant-design/icons'
-import { socket } from '../../../../socket/socket'
-import avatar from 'antd/lib/avatar'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { socket } from 'src/socket/socket'
+import { AppDispatch } from 'src/store'
+import { setChatRoom, removeSelectedChat } from 'src/store/chatRoomsSlice'
+import getLastMessage from 'src/utils/getLastMessage'
 
 export const ChatRoomList = () => {
   const { chatRooms, selectedChatRoomId } = useTypedSelector((state) => state.chatRooms)

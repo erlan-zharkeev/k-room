@@ -1,8 +1,8 @@
-import useTypedSelector from '../../hooks/useTypedSelector'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanelControl from './Components/AsidePanelControl/AsidePanelControl'
-import UserSettings from './Components/UserSettings/UserSettings'
 import ChatRoomList from './Components/ChatRoomList/ChatRoomList'
 import ContactList from './Components/ContactList/ContactList'
+import UserSettings from './Components/UserSettings/UserSettings'
 
 const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.system)

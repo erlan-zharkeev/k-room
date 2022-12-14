@@ -1,15 +1,15 @@
 import { List, Badge, Avatar, Button, Tooltip, Image } from 'antd'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
-import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { UserOutlined, MessageOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons'
-import { User, SocketActions } from './../../../../../../types'
-import { ReactElement, useState } from 'react'
+import { User, SocketActions } from 'common-types'
 import moment from 'moment'
+import { useState, ReactElement } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../../store'
-import { changeAsideTab } from '../../../../store/systemSlice'
-import { setChatRoom } from '../../../../store/chatRoomsSlice'
-import { socket } from './../../../../socket/socket'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { socket } from 'src/socket/socket'
+import { AppDispatch } from 'src/store'
+import { setChatRoom } from 'src/store/chatRoomsSlice'
+import { changeAsideTab } from 'src/store/systemSlice'
+import ContactSearch from './Components/ContactSearch/ContactSearch'
 
 const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)

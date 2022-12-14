@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
-import { logOut, sendEmailConfirm } from '../../store/authSlice'
-import { RouteNames, Status } from './../../../../types'
 import { AxiosResponse } from 'axios'
-import useQuery from '../../hooks/useQuery'
+import { Status, RouteNames } from 'common-types'
+import useQuery from 'src/hooks/useQuery'
+import { AppDispatch } from 'src/store'
+import { sendEmailConfirm, logOut } from 'src/store/authSlice'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()

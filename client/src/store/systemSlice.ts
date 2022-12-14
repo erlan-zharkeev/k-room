@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
-import setTheme from '../utils/setTheme'
+import setTheme from 'src/utils/setTheme'
 import { SystemStore } from './@types/SystemState'
 
 const html = document.querySelector('html')

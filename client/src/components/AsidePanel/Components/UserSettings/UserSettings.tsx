@@ -1,11 +1,17 @@
 import { Avatar, Switch, Tooltip } from 'antd'
-import Meta from 'antd/lib/card/Meta'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
 import { UserOutlined } from '@ant-design/icons'
+import Meta from 'antd/lib/card/Meta'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../../store'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import {
+  showModal,
+  changeTheme,
+  setSoundValue,
+  setTooltipsValue,
+  setAbleToShowNotification
+} from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
-import { showModal, changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from '../../../../store/systemSlice'
 
 const UserSettings = () => {
   const { username, email, id, avatar } = useTypedSelector((state) => state.auth.userData)

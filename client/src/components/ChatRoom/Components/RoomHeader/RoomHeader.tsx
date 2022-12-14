@@ -1,12 +1,12 @@
-import { Image, Badge, Button, Dropdown, Menu, Avatar } from 'antd'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
+import { Image, Badge, Button, Avatar } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
+import { SocketActions } from 'common-types'
+import { useState, useEffect } from 'react'
+import { socket } from 'src/socket/socket'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../../store'
-import { setChatRoom } from '../../../../store/chatRoomsSlice'
-import { UserOutlined, SettingOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
-import { socket } from '../../../../socket/socket'
-import { SocketActions } from './../../../../../../types'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import { setChatRoom } from 'src/store/chatRoomsSlice'
 
 export const RoomHeader = () => {
   const { selectedChatRoomId, chatRooms } = useTypedSelector((state) => state.chatRooms)

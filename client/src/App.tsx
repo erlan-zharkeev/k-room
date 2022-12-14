@@ -1,14 +1,15 @@
+
 import './styles/App.scss'
-import AppRouter from './router/AppRouter'
 import { useEffect } from 'react'
-import setTheme from './utils/setTheme'
-import useTypedSelector from './hooks/useTypedSelector'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from './store'
-import { ViewPort } from './store/@types/SystemState'
-import { setViewPort } from './store/systemSlice'
-import { getUserData } from './store/authSlice'
-import getCookie from './utils/getCookie'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import AppRouter from 'src/router/AppRouter'
+import { AppDispatch } from 'src/store'
+import { ViewPort } from 'src/store/@types/SystemState'
+import { getUserData } from 'src/store/authSlice'
+import { setViewPort } from 'src/store/systemSlice'
+import getCookie from 'src/utils/getCookie'
+import setTheme from 'src/utils/setTheme'
 
 function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>()

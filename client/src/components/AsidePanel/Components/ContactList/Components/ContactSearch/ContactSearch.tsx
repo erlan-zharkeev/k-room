@@ -3,9 +3,9 @@ import { SearchOutlined, LoadingOutlined, PlusOutlined, UserOutlined } from '@an
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import _debounce from 'lodash/debounce'
-import useTypedSelector from '../../../../../../hooks/useTypedSelector'
-import { User, SocketActions } from './../../../../../../../../types'
-import { socket } from '../../../../../../socket/socket'
+import { User, SocketActions } from 'common-types'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { socket } from 'src/socket/socket'
 
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)

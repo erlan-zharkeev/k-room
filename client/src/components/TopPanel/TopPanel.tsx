@@ -1,9 +1,9 @@
 import { Image, Badge, Button, Tooltip, Avatar } from 'antd'
-import useTypedSelector from '../../hooks/useTypedSelector'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
-import { logOut } from '../../store/authSlice'
+import { AppDispatch } from 'src/store'
+import { logOut } from 'src/store/authSlice'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 
 const TopPanel = () => {
   const { id, username, email, avatar } = useTypedSelector((state) => state.auth.userData)

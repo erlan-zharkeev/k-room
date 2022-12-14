@@ -1,12 +1,12 @@
 import { Button } from 'antd'
+import { AxiosResponse } from 'axios'
+import { Status, RouteNames } from 'common-types'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AppDispatch } from '../../store'
-import { sendConfirmationLink } from '../../store/authSlice'
-import { AxiosResponse } from 'axios'
-import { RouteNames, Status } from './../../../../types'
-import useQuery from '../../hooks/useQuery'
+import useQuery from 'src/hooks/useQuery'
+import { AppDispatch } from 'src/store'
+import { sendConfirmationLink } from 'src/store/authSlice'
 
 const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000
 
