@@ -6,10 +6,12 @@ import { socket } from 'src/socket/socket'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import { setChatRoom } from 'src/store/chatRoomsSlice'
+import { selectChatRoom } from 'src/store/systemSlice'
 
 export const RoomHeader = () => {
-  const { selectedChatRoomId, chatRooms } = useTypedSelector((state) => state.chatRooms)
+  const { chatRooms } = useTypedSelector((state) => state.chatRooms)
+  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.system)
+
   const chatRoomData = chatRooms.find((room: any) => room.roomId === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
@@ -32,7 +34,7 @@ export const RoomHeader = () => {
 
   return (
     <div className="room-header">
-      <Button className="borderless room-header__back-button" type="primary" onClick={() => dispatch(setChatRoom(''))}>
+      <Button className="borderless room-header__back-button" type="primary" onClick={() => dispatch(selectChatRoom(''))}>
         Back
       </Button>
       <div className="room-header__info">

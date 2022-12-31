@@ -27,6 +27,7 @@ const initialState: SystemStore = {
   soundOn: true,
   showTooltips: false,
   asideTab: 'users',
+  selectedChatRoomId: '',
   viewPort: {
     width: 0,
     height: 0
@@ -42,6 +43,12 @@ const systemSlice = createSlice({
     },
     socketDisconnect(state) {
       state.socketConnected = false
+    },
+    selectChatRoom(state, action) {
+      state.selectedChatRoomId = action.payload
+    },
+    deselectChatRoom(state) {
+      state.selectedChatRoomId = ''
     },
     changeAsideTab(state, action) {
       state.asideTab = action.payload
@@ -88,6 +95,7 @@ export const {
   socketConnect,
   showNotification,
   socketDisconnect,
+  deselectChatRoom,
   showModal,
   closeModal,
   changeAsideTab,
@@ -95,6 +103,7 @@ export const {
   setSoundValue,
   setTooltipsValue,
   setViewPort,
+  selectChatRoom,
   setAbleToShowNotification
 } = systemSlice.actions
 

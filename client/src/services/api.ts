@@ -4,6 +4,7 @@ import ENV from 'src/ENV'
 import { AppDispatch } from 'src/store'
 import { getUserData } from 'src/store/authSlice'
 import { showNotification } from 'src/store/systemSlice'
+import $clg from './clg'
 
 axios.defaults.proxy = {
   host: ENV.HOST,
@@ -20,10 +21,10 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const isTokenExpired = e.response.status === Status.TOKEN_EXPIRED
   if (isTokenExpired) {
-    console.log('%cAccess token is expired ', 'background: #222; color: red')
+    $clg('error', 'Access token is expired')
     const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
     const isTokensPairUpdated = updateTokenResponse.status === Status.SUCCESS
-    console.log('%cTokens pair are updated', 'background: #222; color: green')
+    $clg('success', 'Tokens pair are updated')
     if (isTokensPairUpdated) dispatch(getUserData(null))
     return
   }

@@ -9,7 +9,7 @@ export enum Sounds {
 }
 
 const soundSrc: SoundSources = {
-  messageDelivered: '@/src/assets/sounds/ding.mp3'
+  messageDelivered: 'src/assets/sounds/ding.mp3'
 }
 
 export const sound = (sound: Sounds) => {

@@ -12,7 +12,7 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab } from 'src/store/systemSlice'
 import scrollToBottom from 'src/utils/scrollToBottom'
-import { useSelectedRoom, pushTemporaryMessage } from 'src/store/chatRoomsSlice'
+import { useSelectedRoom, pushTemporaryMessage } from 'src/store/roomsSlice'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -35,6 +35,7 @@ export const ChatRoom = () => {
     const observer = new IntersectionObserver(observerCallback, { threshold: 1 })
 
     selectedChatRoom.messages.forEach((message) => {
+      /** Use only strict validation without type casting */
       if (message.isSelf === true || message.isSelf === undefined) return
       const el = getRef(message.id)
       el.current.setAttribute('id', message.id)

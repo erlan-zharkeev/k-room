@@ -3,9 +3,9 @@ import system from './systemSlice'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import auth, { AuthAction } from './authSlice'
-import chatRooms from './chatRoomsSlice'
+import chatRooms from './roomsSlice'
 import contacts from './contactsSlice'
-import { sound, Sounds } from 'src/sound'
+import { sound, Sounds } from 'src/services/sound'
 
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>

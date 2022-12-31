@@ -1,5 +1,5 @@
 import { Button, Image, Form, Input, Avatar } from 'antd'
-import { useState } from 'react'
+import { ChangeEvent, ChangeEventHandler, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UserOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
@@ -30,7 +30,7 @@ const UserDataSettingsPopup = () => {
     imageToBase64(file)
   }
 
-  const imageToBase64 = (file: any) => {
+  const imageToBase64 = (file: File) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     const warnings = []

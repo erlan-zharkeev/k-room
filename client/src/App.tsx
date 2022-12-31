@@ -34,7 +34,7 @@ function App(): JSX.Element {
     }
   }
 
-  const fetchUser = async () => await dispatch(getUserData({} as any))
+  const fetchUser = async () => await dispatch(getUserData({}))
 
   const handleResize = () => dispatch(setViewPort(getViewPort()))
 

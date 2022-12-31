@@ -7,8 +7,7 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { setChatRoom } from 'src/store/chatRoomsSlice'
-import { changeAsideTab } from 'src/store/systemSlice'
+import { changeAsideTab, selectChatRoom } from 'src/store/systemSlice'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 
 const ContactList = () => {
@@ -36,7 +35,7 @@ const ContactList = () => {
       const user = room.users.find((user) => user.id === value.id)
       if (user.id) {
         dispatch(changeAsideTab('chatList'))
-        dispatch(setChatRoom(room.roomId))
+        dispatch(selectChatRoom(room.roomId))
       }
       return Boolean(user)
     })

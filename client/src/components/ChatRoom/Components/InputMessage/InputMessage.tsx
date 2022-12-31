@@ -5,7 +5,7 @@ import _debounce from 'lodash/debounce'
 import { SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
-import { useSelectedRoom } from 'src/store/chatRoomsSlice'
+import { useSelectedRoom } from 'src/store/roomsSlice'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import InputMessageProps from './@types/InputMessageProps'
 

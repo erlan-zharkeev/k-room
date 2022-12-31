@@ -38,12 +38,11 @@ form {
 }
 
 ::-webkit-scrollbar {
-  width: 4px; /* ширина для вертикального скролла */
-  height: 7px; /* высота для горизонтального скролла */
+  width: 4px; /* Y scroll width */
+  height: 7px; /* Y scroll height */
   background-color: transparent;
 }
 
-/* ползунок скроллбара */
 ::-webkit-scrollbar-thumb {
   background-color: var(--secondary-text);
   border-radius: $sm-radius;

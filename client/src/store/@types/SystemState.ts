@@ -29,5 +29,6 @@ export interface SystemStore {
   showTooltips: boolean
   soundOn: boolean
   asideTab: string
+  selectedChatRoomId: string
   viewPort: ViewPort
 }

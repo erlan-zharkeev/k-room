@@ -18,7 +18,7 @@ export const WaitEmailConfirmPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
 
-  const refTimer = useRef(null) as any
+  const refTimer = useRef(null)
   const [nextReqInterval, setNextReqInterval] = useState(1)
   const [remainingAttempts, setRemainingAttempts] = useState(0)
 

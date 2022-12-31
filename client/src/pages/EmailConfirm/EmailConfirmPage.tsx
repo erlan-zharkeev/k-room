@@ -35,7 +35,7 @@ export const EmailConfirmPage = () => {
   return (
     <div className="page confirmed-email">
       <div className="confirmed-email__wrapper">
-        <div className="header-text header-text--md header-text--accent">Email confirmation</div>
+        <div className="header-text header-text--md header-text--secondary header-text--left">Congratulations</div>
         {isLoading ? (
           <div className="confirmed-email__loader">
             <LoadingOutlined style={{ fontSize: '40px', color: 'rgb(65 139 237)', marginLeft: '12px' }} />

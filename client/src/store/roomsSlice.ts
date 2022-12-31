@@ -1,29 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ChatRoom, UserShort } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { ChatRoomsState } from './@types/ChatRoomsState'
+import { RoomsState } from './@types/RoomsState'
 
-const initialState: ChatRoomsState = {
-  chatRooms: [],
-  selectedChatRoomId: ''
+const initialState: RoomsState = {
+  chatRooms: []
 }
 
 export const useSelectedRoom = () => {
   return useTypedSelector((state) => {
-    const { selectedChatRoomId, chatRooms } = state.chatRooms
+    const { chatRooms } = state.chatRooms
+    const { selectedChatRoomId } = state.persist.system
     return chatRooms.find((room: ChatRoom) => room.roomId === selectedChatRoomId)
   })
 }
 
-const chatRoomsSlice = createSlice({
-  name: 'chatRooms',
+const roomsSlice = createSlice({
+  name: 'rooms',
   initialState,
   reducers: {
     loadChatRooms(state, action) {
       state.chatRooms = action.payload
-    },
-    setChatRoom(state, action) {
-      state.selectedChatRoomId = action.payload
     },
     updateChatMessage(state, action) {
       const { roomId, message } = action.payload
@@ -45,9 +42,6 @@ const chatRoomsSlice = createSlice({
       const room = state.chatRooms.find((room) => room.roomId === roomId)
       room.messages.push(message)
     },
-    removeSelectedChat(state) {
-      state.selectedChatRoomId = ''
-    },
     updateChatUsersStatus(state, action) {
       const { userId, status } = action.payload
       const hasUser = (users: Array<UserShort>): boolean => {
@@ -60,14 +54,7 @@ const chatRoomsSlice = createSlice({
   }
 })
 
-export const {
-  setChatRoom,
-  loadChatRooms,
-  updateChatUsersStatus,
-  removeSelectedChat,
-  updateChatMessage,
-  pushTemporaryMessage,
-  updateMessageStatus
-} = chatRoomsSlice.actions
+export const { loadChatRooms, updateChatUsersStatus, updateChatMessage, pushTemporaryMessage, updateMessageStatus } =
+  roomsSlice.actions
 
-export default chatRoomsSlice.reducer
+export default roomsSlice.reducer
