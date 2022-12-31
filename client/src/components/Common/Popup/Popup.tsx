@@ -1,8 +1,8 @@
 import { Modal } from 'antd'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from '../../../hooks/useTypedSelector'
-import { AppDispatch } from '../../../store'
-import { closeModal } from '../../../store/systemSlice'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import { closeModal } from 'src/store/systemSlice'
 import UserDataSettingsPopup from './Components/UserDataSettingsPopup/UserDataSettingsPopup'
 
 const Popup = () => {

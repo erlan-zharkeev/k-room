@@ -1,12 +1,13 @@
 import { Image, Badge, Button, Tooltip, Avatar } from 'antd'
-import useTypedSelector from '../../hooks/useTypedSelector'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
-import { logOut } from '../../store/authSlice'
+import { AppDispatch } from 'src/store'
+import { logOut } from 'src/store/authSlice'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { selectChatRoom } from 'src/store/systemSlice'
 
 const TopPanel = () => {
-  const { id, username, email, avatar } = useTypedSelector((state) => state.auth.userData)
+  const { username, email, avatar } = useTypedSelector((state) => state.auth.userData)
   const { showTooltips, socketConnected } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -21,8 +22,12 @@ const TopPanel = () => {
     />
   )
 
+  const resetChat = () => {
+    dispatch(selectChatRoom(''))
+  }
+
   return (
-    <div className="top-panel">
+    <div className="top-panel" onClick={resetChat}>
       <div className="top-panel__logo"></div>
       <div className="top-panel__content">
         <div className="top-panel__userdata">

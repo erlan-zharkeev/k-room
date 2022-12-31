@@ -1,17 +1,17 @@
-import useTypedSelector from '../../hooks/useTypedSelector'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanelControl from './Components/AsidePanelControl/AsidePanelControl'
-import UserSettings from './Components/UserSettings/UserSettings'
 import ChatRoomList from './Components/ChatRoomList/ChatRoomList'
 import ContactList from './Components/ContactList/ContactList'
+import UserSettings from './Components/UserSettings/UserSettings'
+import { ReactElement } from 'react'
 
 const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.system)
-  const TabComponents = {
+  const TabComponents: { [key: string]: ReactElement }= {
     users: <ContactList />,
-    // calls: <span>calls</span>,
     chatList: <ChatRoomList />,
     settings: <UserSettings />
-  } as any
+  }
 
   return (
     <div className="aside-panel">

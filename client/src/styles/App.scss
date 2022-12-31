@@ -1,21 +1,21 @@
 @import "antd/dist/antd.css";
 
-@import "./mediaQueries";
+@import "src/styles/mediaQueries";
 
-@import "./theme";
+@import "src/styles/theme";
 
-@import "./variables";
+@import "src/styles/variables";
 
-@import "./nullstyle";
+@import "src/styles/nullstyle";
 
-@import "./mixins";
+@import "src/styles/mixins";
 
-@import "./typography";
+@import "src/styles/typography";
 
-@import "./common";
+@import "src/styles/common";
 
-@import "./overwriteAntd";
+@import "src/styles/overwriteAntd";
 
-@import "./../components/style";
+@import "src/components/style";
 
-@import "./../pages/style";
+@import "src/pages/style";

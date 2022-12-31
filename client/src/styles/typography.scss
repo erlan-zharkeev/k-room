@@ -2,13 +2,17 @@
   color: var(--main-text);
   font-size: 14px;
   line-height: 1;
-
+  
   &--secondary {
     color: var(--secondary-text);
   }
 
   &--accent {
     color: var(--accent-color);
+  }
+
+  &--left {
+    margin-right: auto;
   }
 
   &--bold {

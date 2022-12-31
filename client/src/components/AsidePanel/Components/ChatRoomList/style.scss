@@ -9,7 +9,9 @@
       border: none;
       cursor: pointer;
       transition: 0.2s linear all;
-
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
       &:first-child {
         margin-top: 1px;
       }
@@ -23,6 +25,15 @@
     }
     .ant-list-item-meta {
       align-items: center;
+      min-width: 60%;
+      margin-bottom: $gutter-sm;
     }
+  }
+  &__controls {
+    // margin-left: $gutter-md;
+    // width: 40%;
+  }
+  &__unread-messages {
+    margin-left: $gutter-md;
   }
 }

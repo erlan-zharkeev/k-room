@@ -9,7 +9,7 @@ import {
   updateChatUsersStatus,
   updateMessageStatus,
   useSelectedRoom
-} from 'src/store/chatRoomsSlice'
+} from 'src/store/roomsSlice'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 
 import TopPanel from 'src/components/TopPanel/TopPanel'
@@ -22,6 +22,7 @@ import { showNotification, socketConnect, socketDisconnect } from 'src/store/sys
 import { socket } from 'src/socket/socket'
 
 import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'common-types'
+import $clg from 'src/services/clg'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -34,11 +35,11 @@ export const MainPage = () => {
 
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
-      console.log('%cSocket Connected ', 'background: #222; color: green')
+      $clg('success', 'Socket connected')
       dispatch(showNotification({ messageType: 'success', message: 'Server socket connected!' }))
       return
     }
-    console.log('%cSocket Disconnected ', 'background: #222; color: red')
+    $clg('error', 'Socket disconnected')
     if (isAuth) dispatch(showNotification({ messageType: 'error', message: 'Server socket disconnected!' }))
   }
 
@@ -54,11 +55,6 @@ export const MainPage = () => {
     socket.on(SocketActions.DISCONNECT, () => {
       dispatch(socketDisconnect())
       debouncedStatusNotification(false)
-      // if (socket.disconnected) {
-      //   console.log('%c reconnection... ', 'background: #222; color: orange')
-      //   // socket.connect()
-      //   socket.connect()
-      // }
     })
 
     socket.on(SocketActions.STATUS_CONTACT, (userData: { userId: string; status: boolean }) => {

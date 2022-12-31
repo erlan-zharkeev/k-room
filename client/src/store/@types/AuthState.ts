@@ -1,4 +1,4 @@
-import { User } from './../../../../types'
+import { User } from 'common-types'
 
 export interface AuthState {
   isAuth: boolean

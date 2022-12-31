@@ -21,7 +21,7 @@ export enum AuthEndPoints {
   GET_FILES = "/api/image/:filename",
   LOGOUT = "/api/auth/logout",
   GET_USER_DATA = "/api/auth/get-user-data",
-  UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair",
+  UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair"
 }
 
 export enum SocketActions {

@@ -7,7 +7,21 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "module": "commonjs"
+    "module": "commonjs",
+
+    "noImplicitAny": true,
+    // "module": "es6",
+    // "target": "es6",
+
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    "baseUrl": "./../",
+    "paths": {
+      "src/*": ["server/src/*"],
+      "common-types": ["types"]
+    }
   },
   "references": [
     {

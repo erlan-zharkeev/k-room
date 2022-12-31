@@ -1,7 +1,7 @@
 import { Button, Progress } from 'antd'
 import { useEffect, useState } from 'react'
+import getRandomNumber from 'src/utils/getRandomNumber'
 import { StubLoadingProps } from './@types/StubLoadingProps'
-import getRandomNumber from '../../../utils/getRandomNumber'
 
 const StubLoading = ({ isLoading, reconnect }: StubLoadingProps) => {
   const [percent, setPercent] = useState(0)

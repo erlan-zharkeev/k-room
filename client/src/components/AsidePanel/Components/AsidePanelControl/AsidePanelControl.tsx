@@ -1,9 +1,10 @@
 import { UserOutlined, WechatOutlined, SettingOutlined } from '@ant-design/icons'
 import { Radio, RadioChangeEvent, Tooltip } from 'antd'
+import { ReactElement } from 'react'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
-import { AppDispatch } from '../../../../store'
-import { changeAsideTab } from '../../../../store/systemSlice'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import { changeAsideTab } from 'src/store/systemSlice'
 
 const AsidePanelControl = () => {
   const { asideTab, showTooltips } = useTypedSelector((state) => state.persist.system)

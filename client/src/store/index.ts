@@ -1,14 +1,11 @@
 import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
-
 import system from './systemSlice'
-
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-
 import auth, { AuthAction } from './authSlice'
-import chatRooms from './chatRoomsSlice'
+import chatRooms from './roomsSlice'
 import contacts from './contactsSlice'
-import { sound, Sounds } from '../sound'
+import { sound, Sounds } from 'src/services/sound'
 
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>
@@ -41,7 +38,3 @@ export const store = configureStore({
       serializableCheck: false
     }).concat(SystemMiddleware)
 })
-
-// export const useAppDispatch = () => useDispatch<AppDispatch>()
-
-// export default store

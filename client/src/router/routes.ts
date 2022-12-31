@@ -1,10 +1,10 @@
-import LoginPage from '../pages/SignIn/SignInPage'
-import RegisterPage from '../pages/SignUp/SignUpPage'
-import MainPage from '../pages/Main/MainPage'
-import WaitConfirmPage from '../pages/WaitEmailConfirm/WaitEmailConfirmPage'
-import ConfirmedPage from '../pages/EmailConfirm/EmailConfirmPage'
+import LoginPage from 'src/pages/SignIn/SignInPage'
+import RegisterPage from 'src/pages/SignUp/SignUpPage'
+import MainPage from 'src/pages/Main/MainPage'
+import WaitConfirmPage from 'src/pages/WaitEmailConfirm/WaitEmailConfirmPage'
+import ConfirmedPage from 'src/pages/EmailConfirm/EmailConfirmPage'
 import { IRoute } from './@types/IRoute'
-import { RouteNames } from './../../../types'
+import { RouteNames } from 'common-types'
 // import NotFoundPage from "../pages/NotFound/NotFoundPage";
 
 export const publicRoutes: Array<IRoute> = [

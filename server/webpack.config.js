@@ -16,8 +16,26 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    alias: {
+      'src': path.resolve(__dirname, 'src'),
+      'common-types': path.resolve(__dirname, './../types')
+    }
   },
   externals: [ nodeExternals() ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 100000,
+      maxSize: 250000,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   module: {
     rules: [
       {

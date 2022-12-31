@@ -1,6 +1,6 @@
-import { RouteNames } from './../../../types'
+import { RouteNames } from 'common-types'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import useTypedSelector from '../hooks/useTypedSelector'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 import { IRoute } from './@types/IRoute'
 import { privateRoutes, publicRoutes } from './routes'
 

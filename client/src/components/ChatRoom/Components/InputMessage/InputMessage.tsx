@@ -1,13 +1,13 @@
 import { Button, Form, Input } from 'antd'
 import { SendOutlined } from '@ant-design/icons'
 import { FormEvent, useCallback, useState } from 'react'
+import _debounce from 'lodash/debounce'
+import { SocketActions } from 'common-types'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { socket } from 'src/socket/socket'
+import { useSelectedRoom } from 'src/store/roomsSlice'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import InputMessageProps from './@types/InputMessageProps'
-import { socket } from '../../../../socket/socket'
-import { SocketActions } from './../../../../../../types'
-import _debounce from 'lodash/debounce'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
-import { useSelectedRoom } from '../../../../store/chatRoomsSlice'
 
 export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   const [message, setMessage] = useState('')

@@ -1,11 +1,11 @@
 import { Button, Form, Input } from 'antd'
 import { useState } from 'react'
-import { AuthNav } from '../../components/Common/AuthNav/AuthNav'
 import { useDispatch } from 'react-redux'
-import validateRules from '../../utils/validateRules'
-import { AppDispatch } from '../../store'
-import useValidate from '../../hooks/useValidate'
-import { login } from '../../store/authSlice'
+import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
+import useValidate from 'src/hooks/useValidate'
+import { AppDispatch } from 'src/store'
+import { login } from 'src/store/authSlice'
+import validateRules from 'src/utils/validateRules'
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)

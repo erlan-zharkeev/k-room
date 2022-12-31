@@ -23,7 +23,6 @@ module.exports = {
     filename: filename('js'),
     clean: true
   },
-  // target: 'node',
   devServer: {
     client: {
       logging: 'error'
@@ -32,28 +31,14 @@ module.exports = {
     proxy: [
       {
         context: ['/api'],
-        target: `http://localhost:${ENV.SERVER_PORT}`,
-        headers: {
-            "Connection": "keep-alive"
-        },
-        ws: false,
-        changeOrigin: true,
-        secure: false
+        target: `http://localhost:${ENV.SERVER_PORT}`
       },
       {
         context: ['/app/'],
-        target: `http://localhost:${ENV.SERVER_PORT}`,
-        headers: {
-            "Connection": "keep-alive"
-        },
-        changeOrigin: true,
-        ws: false,
-        secure: false
+        target: `http://localhost:${ENV.SERVER_PORT}`
       }
     ],
-
     historyApiFallback: true,
-
     port: ENV.CLIENT_PORT,
     open: true,
     hot: true ,

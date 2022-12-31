@@ -1,4 +1,4 @@
-import { theme } from '../store/@types/SystemState'
+import { theme } from 'src/store/@types/SystemState'
 
 const setTheme = (theme: theme) => {
   const html = document.querySelector('html')

@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
-import { logOut, sendEmailConfirm } from '../../store/authSlice'
-import { RouteNames, Status } from './../../../../types'
 import { AxiosResponse } from 'axios'
-import useQuery from '../../hooks/useQuery'
+import { Status, RouteNames } from 'common-types'
+import useQuery from 'src/hooks/useQuery'
+import { AppDispatch } from 'src/store'
+import { sendEmailConfirm, logOut } from 'src/store/authSlice'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -35,7 +35,7 @@ export const EmailConfirmPage = () => {
   return (
     <div className="page confirmed-email">
       <div className="confirmed-email__wrapper">
-        <div className="header-text header-text--md header-text--accent">Email confirmation</div>
+        <div className="header-text header-text--md header-text--secondary header-text--left">Congratulations</div>
         {isLoading ? (
           <div className="confirmed-email__loader">
             <LoadingOutlined style={{ fontSize: '40px', color: 'rgb(65 139 237)', marginLeft: '12px' }} />

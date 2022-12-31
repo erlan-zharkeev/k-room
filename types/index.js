@@ -9,6 +9,9 @@ var AuthEndPoints;
     AuthEndPoints["LOGIN"] = "/api/auth/login";
     AuthEndPoints["UPDATE_USER_DATA"] = "/api/auth/user-data/update";
     AuthEndPoints["GET_FILES"] = "/api/image/:filename";
+    AuthEndPoints["LOGOUT"] = "/api/auth/logout";
+    AuthEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
+    AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/api/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
 var SocketActions;
 (function (SocketActions) {
@@ -42,5 +45,9 @@ var RouteNames;
 var Status;
 (function (Status) {
     Status[Status["SUCCESS"] = 200] = "SUCCESS";
+    Status[Status["BAD_REQUEST"] = 400] = "BAD_REQUEST";
     Status[Status["NOT_AUTH"] = 401] = "NOT_AUTH";
+    Status[Status["TOKEN_EXPIRED"] = 403] = "TOKEN_EXPIRED";
+    Status[Status["NOT_FOUND"] = 404] = "NOT_FOUND";
+    Status[Status["UNREACHABLE"] = 503] = "UNREACHABLE";
 })(Status = exports.Status || (exports.Status = {}));

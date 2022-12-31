@@ -2,7 +2,9 @@
   position: relative;
   height: 100%;
   padding: $gutter-xl $aside-panel-padding $aside-panel-padding $aside-panel-padding;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   &__id {
     text-align: center;
   }
@@ -65,15 +67,11 @@
   }
 
   &__info {
-    // position: absolute;
-    // bottom: 0;
-    // left: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-top: $gutter-xxl;
-    // transform: translateX(-50%);
+    margin-top: $gutter-sm;
   }
 }

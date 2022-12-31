@@ -1,11 +1,17 @@
 import { Avatar, Switch, Tooltip } from 'antd'
-import Meta from 'antd/lib/card/Meta'
-import useTypedSelector from '../../../../hooks/useTypedSelector'
 import { UserOutlined } from '@ant-design/icons'
+import Meta from 'antd/lib/card/Meta'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../../store'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import {
+  showModal,
+  changeTheme,
+  setSoundValue,
+  setTooltipsValue,
+  setAbleToShowNotification
+} from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
-import { showModal, changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from '../../../../store/systemSlice'
 
 const UserSettings = () => {
   const { username, email, id, avatar } = useTypedSelector((state) => state.auth.userData)
@@ -29,48 +35,50 @@ const UserSettings = () => {
 
   return (
     <div className="user-settings">
-      {showTooltips ? (
-        <Tooltip placement="bottom" title="Change Settings">
-          {SettingsElement}
-        </Tooltip>
-      ) : (
-        SettingsElement
-      )}
-      <div className="user-settings__theme-switch">
-        <div className="user-settings__title header-text header-text--sm header-text--secondary">Theme</div>
-        <Switch
-          checkedChildren={'Dark'}
-          unCheckedChildren={'Light'}
-          defaultChecked={theme === 'dark'}
-          onChange={(value) => dispatch(changeTheme(value))}
-        />
-      </div>
-      <div className="user-settings__sound-switch">
-        <div className="user-settings__title header-text header-text--sm header-text--secondary">Sound</div>
-        <Switch
-          checkedChildren={'On'}
-          unCheckedChildren={'Off'}
-          defaultChecked={soundOn}
-          onChange={(value) => dispatch(setSoundValue(value))}
-        />
-      </div>
-      <div className="user-settings__tooltip-switch">
-        <div className="user-settings__title header-text header-text--sm header-text--secondary">Tooltips</div>
-        <Switch
-          checkedChildren={'Show'}
-          unCheckedChildren={'Hide'}
-          defaultChecked={showTooltips}
-          onChange={(value) => dispatch(setTooltipsValue(value))}
-        />
-      </div>
-      <div className="user-settings__tooltip-switch">
-        <div className="user-settings__title header-text header-text--sm header-text--secondary">Notification</div>
-        <Switch
-          checkedChildren={'Show'}
-          unCheckedChildren={'Hide'}
-          defaultChecked={ableToShowNotification}
-          onChange={(value) => dispatch(setAbleToShowNotification(value))}
-        />
+      <div className="user-settings__body">
+        {showTooltips ? (
+          <Tooltip placement="bottom" title="Change Settings">
+            {SettingsElement}
+          </Tooltip>
+        ) : (
+          SettingsElement
+        )}
+        <div className="user-settings__theme-switch">
+          <div className="user-settings__title header-text header-text--sm header-text--secondary">Theme</div>
+          <Switch
+            checkedChildren={'Dark'}
+            unCheckedChildren={'Light'}
+            defaultChecked={theme === 'dark'}
+            onChange={(value) => dispatch(changeTheme(value))}
+          />
+        </div>
+        <div className="user-settings__sound-switch">
+          <div className="user-settings__title header-text header-text--sm header-text--secondary">Sound</div>
+          <Switch
+            checkedChildren={'On'}
+            unCheckedChildren={'Off'}
+            defaultChecked={soundOn}
+            onChange={(value) => dispatch(setSoundValue(value))}
+          />
+        </div>
+        <div className="user-settings__tooltip-switch">
+          <div className="user-settings__title header-text header-text--sm header-text--secondary">Tooltips</div>
+          <Switch
+            checkedChildren={'Show'}
+            unCheckedChildren={'Hide'}
+            defaultChecked={showTooltips}
+            onChange={(value) => dispatch(setTooltipsValue(value))}
+          />
+        </div>
+        <div className="user-settings__tooltip-switch">
+          <div className="user-settings__title header-text header-text--sm header-text--secondary">Notification</div>
+          <Switch
+            checkedChildren={'Show'}
+            unCheckedChildren={'Hide'}
+            defaultChecked={ableToShowNotification}
+            onChange={(value) => dispatch(setAbleToShowNotification(value))}
+          />
+        </div>
       </div>
       <div className="user-settings__info">
         <div className="user-settings__app-name paragraph-text paragraph-text-sm paragraph-text--secondary">
