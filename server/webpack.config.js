@@ -1,12 +1,8 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 
-const { NODE_ENV } = process.env
-
-const isDev = NODE_ENV === 'development'
-
 module.exports = {
-  mode: NODE_ENV,
+  mode: 'production',
   entry: './src/index.ts',
   watch: isDev,
   target: 'node',
@@ -15,11 +11,7 @@ module.exports = {
     filename: 'index.js'
   },
   resolve: {
-    extensions: ['.ts', '.js'],
-    alias: {
-      src: path.resolve(__dirname, 'src'),
-      'common-types': path.resolve(__dirname, './../types')
-    }
+    extensions: ['.ts', '.js']
   },
   externals: [nodeExternals()],
   optimization: {
