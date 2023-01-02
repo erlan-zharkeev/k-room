@@ -112,7 +112,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(gif|png|jpe?g|svg|mp3)$/i,
+        test: /\.(gif|png|jpe?g|mp3)$/i,
         exclude: /node_modules/,
         use: [
           {
@@ -134,15 +134,19 @@ module.exports = {
                 speed: 4,
               },
             },
-          },
+          }
         ],
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]'
-        }
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              limit: 10000,
+            },
+          },
+        ],
       }
     ]
   }

@@ -28,9 +28,11 @@
     "bufferutil": "^4.0.7",
     "dotenv": "^16.0.2",
     "howler": "^2.2.3",
+    "image-webpack-loader": "^8.1.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "socket.io-client": "^4.5.1",
+    "svg-url-loader": "^8.0.0",
     "utf-8-validate": "^5.0.10",
     "uuid": "^8.3.2"
   },

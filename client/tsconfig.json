@@ -10,7 +10,7 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    
+
     "baseUrl": "./../",
     "paths": {
       "src/*": ["client/src/*"],

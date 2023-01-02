@@ -10,6 +10,7 @@ export interface EnvVariables {
     REGISTRATION_RESEND_INTERVAL_MINUTES: string;
     JWT_ACCESS_TOKEN_SECRET: string;
     JWT_REFRESH_TOKEN_SECRET: string;
+    IS_DEV: boolean
 }
 export declare enum AuthEndPoints {
     REGISTRATION = "/api/auth/registration",

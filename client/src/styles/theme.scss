@@ -1,15 +1,16 @@
 html {
-  --accent-color: rgb(65 139 237);
-  --secondary-text: rgb(177 177 177 / 84.7%);
-  --error-text: rgb(255 47 0);
+  --accent-color: #418FDE;
+  --error-text: #863347;
 
   &[theme="dark"] {
-    --main-bg: #212529;
-    --main-text: #fff;
+    --main-bg: #1C1C1C;
+    --main-text: #ffffff;
+    --secondary-text: rgb(177 177 177 / 84.7%);
   }
 
   &[theme="light"] {
-    --main-bg: #fff;
-    --main-text: #000;
+    --main-bg: #ffffff;
+    --main-text: #000000;
+    --secondary-text: rgba(94, 94, 94, 0.847);
   }
 }
