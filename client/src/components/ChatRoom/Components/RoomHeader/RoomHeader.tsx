@@ -17,7 +17,7 @@ export const RoomHeader = () => {
   const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
-    let dotsCounter = setInterval(() => {
+    const dotsCounter = setInterval(() => {
       setTypingDotsQuantity((typingDotsQuantity) => {
         return typingDotsQuantity < 3 ? typingDotsQuantity + 1 : 0
       })

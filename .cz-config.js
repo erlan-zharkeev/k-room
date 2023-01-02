@@ -2,7 +2,7 @@ module.exports = {
   types: [
     {
       value: ':pen: develop',
-      name: '🖊️ develop               Develop',
+      name: '🖊️  develop               Develop',
     },
     {
       value: ':sparkles: new feature',

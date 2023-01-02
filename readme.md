@@ -13,6 +13,7 @@
 
 ## Commit convention
 
+- to use husky run yarn prepare
 - branch name should be of the form type-dd/mm(e.g. develop-20/08)
 - to commit changes call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
 

@@ -1,10 +1,11 @@
 .user-settings {
   position: relative;
-  height: 100%;
-  padding: $gutter-xl $aside-panel-padding $aside-panel-padding $aside-panel-padding;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
+  padding: $gutter-xl $aside-panel-padding $aside-panel-padding $aside-panel-padding;
+
   &__id {
     text-align: center;
   }

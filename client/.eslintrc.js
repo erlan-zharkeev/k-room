@@ -11,23 +11,28 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['react', '@typescript-eslint'],
+  ignorePatterns: ['**/*.js'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/space-before-function-paren': 'off',
     '@typescript-eslint/array-type': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'multiline-ternary': 'off',
-    'no-useless-escape': 'off',
-    'react/jsx-key': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-base-to-string': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
-    'circular-dependecy-issue': 'off'
+    '@typescript-eslint/consistent-type-assertions': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-key': 'off',
+    'react/no-unknown-property': 'off',
+    'multiline-ternary': 'off',
+    'no-useless-escape': 'off',
+    'circular-dependecy-issue': 'off',
+    'no-case-declarations': 'off',
+    'array-callback-return': 'off',
   },
   settings: {
     react: {

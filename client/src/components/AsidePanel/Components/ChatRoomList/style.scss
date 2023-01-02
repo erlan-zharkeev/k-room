@@ -4,17 +4,20 @@
       -webkit-line-clamp: 1;
       overflow: hidden;
     }
+
     .ant-list-item {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
       padding: $aside-panel-padding;
       border: none;
       cursor: pointer;
       transition: 0.2s linear all;
-      display: flex;
-      flex-wrap: wrap;
-      width: 100%;
+
       &:first-child {
         margin-top: 1px;
       }
+
       &.active {
         border-left: 5px solid var(--accent-color) !important;
         @include max-width-576 {
@@ -23,16 +26,19 @@
         }
       }
     }
+
     .ant-list-item-meta {
       align-items: center;
       min-width: 60%;
       margin-bottom: $gutter-sm;
     }
   }
+
   &__controls {
     // margin-left: $gutter-md;
     // width: 40%;
   }
+
   &__unread-messages {
     margin-left: $gutter-md;
   }

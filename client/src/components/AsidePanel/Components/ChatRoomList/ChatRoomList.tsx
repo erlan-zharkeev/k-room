@@ -42,17 +42,17 @@ export const ChatRoomList = () => {
     if (hasUserInContacts) return
     return showTooltips ? (
       <Tooltip placement="topLeft" title="Add to contact">
-        <Button size="small" icon={<PlusOutlined />} onClick={(e) => addUser(e, user.id)} />
+        <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
       </Tooltip>
     ) : (
-      <Button size="small" icon={<PlusOutlined />} onClick={(e) => addUser(e, user.id)} />
+      <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
     )
   }
 
   const UnreadMessagesWrapper = (chatRoom: ChatRoom) => {
     return unreadMessages(chatRoom) ? (
       <Button type="primary" shape="default" size="small" className="chat-room-list__unread-messages">
-        {unreadMessages(chatRoom)} unread message{unreadMessages(chatRoom) > 1 && "s"}
+        {unreadMessages(chatRoom)} unread message{unreadMessages(chatRoom) > 1 && 's'}
       </Button>
     ) : (
       <></>

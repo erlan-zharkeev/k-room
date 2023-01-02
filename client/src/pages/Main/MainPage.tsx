@@ -74,8 +74,7 @@ export const MainPage = () => {
           <p>{roomData.message.body}</p>
         </>
       )
-      if (!roomData.message.isSelf)
-        dispatch(showNotification({ message: convertedMessageToHtml, messageType: 'info', placement: 'bottomRight' }))
+      if (!roomData.message.isSelf) { dispatch(showNotification({ message: convertedMessageToHtml, messageType: 'info', placement: 'bottomRight' })) }
     })
 
     socket.on(

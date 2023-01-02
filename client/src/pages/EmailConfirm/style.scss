@@ -4,12 +4,15 @@
     flex-direction: column;
     align-items: center;
   }
+
   .header-text {
     margin-bottom: $gutter-md;
   }
+
   .paragraph-text {
     margin-bottom: $gutter-l;
   }
+
   &__loader {
     margin-top: $gutter-l;
   }

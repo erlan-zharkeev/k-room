@@ -22,6 +22,7 @@ module.exports = {
   plugins: [
     '@typescript-eslint'
   ],
+  ignorePatterns: ['**/*.js'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/space-before-function-paren': 'off',
@@ -34,6 +35,8 @@ module.exports = {
     '@typescript-eslint/no-base-to-string': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
-    '@typescript-eslint/member-delimiter-style': 'off'
+    '@typescript-eslint/member-delimiter-style': 'off',
+    'array-callback-return': 'off',
+    '@typescript-eslint/restrict-plus-operands': 'off'
   }
 }

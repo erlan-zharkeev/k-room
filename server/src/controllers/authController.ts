@@ -5,12 +5,12 @@ import { sendEmailConfirmationLink } from '../services/mail'
 import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
-const bcrypt = require('bcryptjs')
-const Grid = require('gridfs-stream')
 
 import db from '../database'
 import mongoose from 'mongoose'
 import { Status } from '../../../types'
+const bcrypt = require('bcryptjs')
+const Grid = require('gridfs-stream')
 
 const connection = db.connection
 
