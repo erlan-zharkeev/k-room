@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthEndPoints, RouteNames, User } from 'common-types'
 import { createBrowserHistory } from 'history'
 import $api from 'src/services/api'
-import { socket } from 'src/socket/socket'
 import clearCookie from 'src/utils/clearCookie'
 import { AuthState } from './@types/AuthState'
 
@@ -80,7 +79,6 @@ const authSlice = createSlice({
     logOut: (state) => {
       clearCookie()
       state.isAuth = false
-      socket.disconnect()
     }
   }
 })
