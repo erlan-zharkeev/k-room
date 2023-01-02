@@ -3,5 +3,6 @@
 
 cd ./client
 yarn lint:fix-style && yarn lint:fix-es
-cd ./server
+
+cd ../server
 yarn lint:fix-es

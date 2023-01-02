@@ -12,13 +12,13 @@
 
   &[theme="dark"] {
     --main-bg: #1C1C1C;
-    --main-text: #ffffff;
+    --main-text: #fff;
     --secondary-text: rgb(177 177 177 / 84.7%);
   }
 
   &[theme="light"] {
-    --main-bg: #ffffff;
-    --main-text: #000000;
+    --main-bg: #fff;
+    --main-text: #000;
     --secondary-text: rgb(94 94 94 / 84.7%);
   }
 }
