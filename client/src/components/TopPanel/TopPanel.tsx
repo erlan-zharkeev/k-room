@@ -5,6 +5,7 @@ import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/authSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { selectChatRoom } from 'src/store/systemSlice'
+const Logo = require('src/assets/images/Logo.svg') as string
 
 const TopPanel = () => {
   const { username, email, avatar } = useTypedSelector((state) => state.auth.userData)
@@ -28,7 +29,9 @@ const TopPanel = () => {
 
   return (
     <div className="top-panel" onClick={resetChat}>
-      <div className="top-panel__logo"></div>
+      <div className="top-panel__logo">
+        <img className="logo" src={Logo}></img>
+      </div>
       <div className="top-panel__content">
         <div className="top-panel__userdata">
           <div className="top-panel__avatar">

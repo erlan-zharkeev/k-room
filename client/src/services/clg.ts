@@ -9,7 +9,7 @@ interface ConsoleTypes {
 
 type ConsoleType = 'error' | 'success' | 'warn'
 
-const consoleColorMap = {
+const consoleColorMap: ConsoleTypes = {
   error: {
     bg: '#000000',
     text: 'red'
@@ -22,7 +22,7 @@ const consoleColorMap = {
     bg: '#000000',
     text: 'orange'
   }
-} as ConsoleTypes
+}
 
 export const $clg = (type: ConsoleType, message: string) => {
   console.log(`%c ${message} `, `background: ${consoleColorMap[type].bg}; color: ${consoleColorMap[type].text}`)

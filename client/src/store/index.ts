@@ -27,6 +27,8 @@ const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
       const { isSelf } = action.payload.message
       if (isSelf === false) sound(Sounds.messageDelivered).play()
       break
+    default:
+      break
   }
   next(action)
 }

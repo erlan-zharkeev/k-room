@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ..
-cp ./.env.development ./client && cp ./.env.development ./server && cp ./.env.production ./client && cp ./.env.production ./server
+cp ./.env.development ./client/_env && cp ./.env.development ./server/_env && cp ./.env.production ./client/_env && cp ./.env.production ./server/_env

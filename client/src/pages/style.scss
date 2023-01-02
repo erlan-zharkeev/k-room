@@ -1,6 +1,6 @@
-@import './SignIn/style.scss';
+@import './SignIn/style';
 
-@import './SignUp/style.scss';
+@import './SignUp/style';
 
 @import './WaitEmailConfirm/style';
 
@@ -17,6 +17,17 @@
 .sign-up,
 .wait-confirm-email,
 .confirmed-email {
+  &__logo {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+
+    .logo {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+
   &__wrapper {
     @include absolute-center;
   }

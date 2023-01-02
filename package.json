@@ -1,0 +1,14 @@
+{
+  "name": "k-room",
+  "version": "1.0.0",
+  "repository": "git@gitlab.com:k-room/k-room.git",
+  "author": "Zharkeyev <zharkeev.post@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "cz-customizable": "^7.0.0",
+    "husky": "^8.0.2"
+  }
+}

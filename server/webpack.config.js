@@ -17,11 +17,11 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      'src': path.resolve(__dirname, 'src'),
+      src: path.resolve(__dirname, 'src'),
       'common-types': path.resolve(__dirname, './../types')
     }
   },
-  externals: [ nodeExternals() ],
+  externals: [nodeExternals()],
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -41,7 +41,7 @@ module.exports = {
       {
         test: /\.ts$/,
         use: [
-          'ts-loader',
+          'ts-loader'
         ]
       }
     ]

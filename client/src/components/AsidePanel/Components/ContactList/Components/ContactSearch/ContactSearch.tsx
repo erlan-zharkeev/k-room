@@ -55,10 +55,10 @@ const ContactSearch = () => {
   const ButtonWrapper = (user: User) => {
     return showTooltips ? (
       <Tooltip placement="topLeft" title="Add contact">
-        <Button size="small" icon={<PlusOutlined />} onClick={() => addUser(user.id)} />
+        <Button size="small" icon={<PlusOutlined />} onClick={async () => await addUser(user.id)} />
       </Tooltip>
     ) : (
-      <Button size="small" icon={<PlusOutlined />} onClick={() => addUser(user.id)} />
+      <Button size="small" icon={<PlusOutlined />} onClick={async () => await addUser(user.id)} />
     )
   }
 

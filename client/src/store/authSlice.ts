@@ -3,6 +3,7 @@ import { AuthEndPoints, RouteNames, User } from 'common-types'
 import { createBrowserHistory } from 'history'
 import $api from 'src/services/api'
 import { socket } from 'src/socket/socket'
+import clearCookie from 'src/utils/clearCookie'
 import { AuthState } from './@types/AuthState'
 
 export enum AuthAction {
@@ -77,7 +78,7 @@ const authSlice = createSlice({
       }
     },
     logOut: (state) => {
-      document.cookie = ''
+      clearCookie()
       state.isAuth = false
       socket.disconnect()
     }

@@ -2,5 +2,6 @@
 
 cd ..
 cd ./types
+yarn
 
 npx tsc

@@ -1,15 +1,24 @@
-html {
-  --accent-color: rgb(65 139 237);
-  --secondary-text: rgb(177 177 177 / 84.7%);
-  --error-text: rgb(255 47 0);
+:root {
+  --accent-color: #418FDE;
+  --error-text: #863347;
+  --success: 44, 186, 136;
+  --error: 191, 86, 110;
+  --warn: 255, 213, 79;
+  --success-bg: rgb(var(--success) 0.2);
+  --error-bg: rgb(var(--error) 0.2);
+  --warn-bg: rgb(var(--warn) 0.2);
+  --info-bg: rgb(255 255 255 / 20%);
+  --modal-overflow-color: rgb(0 0 0 / 75%);
 
   &[theme="dark"] {
-    --main-bg: #212529;
+    --main-bg: #1C1C1C;
     --main-text: #fff;
+    --secondary-text: rgb(177 177 177 / 84.7%);
   }
 
   &[theme="light"] {
     --main-bg: #fff;
     --main-text: #000;
+    --secondary-text: rgb(94 94 94 / 84.7%);
   }
 }

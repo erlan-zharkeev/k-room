@@ -2,12 +2,13 @@ const path = require('path');
 const dotenv = require('dotenv')
 const package = require('./package.json')
 const webpack = require('webpack')
+const CopyPlugin = require("copy-webpack-plugin");
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { NODE_ENV, npm_lifecycle_event } = process.env
 
-const ENV = dotenv.config({ path: `.env.${NODE_ENV}` }).parsed
+const ENV = dotenv.config({ path: `./_env/.env.${NODE_ENV}` }).parsed
 
 const isDev = NODE_ENV === 'development'
 const reportMode = npm_lifecycle_event === 'build-stat' ? 'server' : 'disabled'
@@ -88,8 +89,14 @@ module.exports = {
     new BundleAnalyzerPlugin({ analyzerMode: reportMode }),
     new webpack.DefinePlugin({
       SERVER_PORT: JSON.stringify(ENV.SERVER_PORT),
-      HOST: JSON.stringify(ENV.HOST),
-    })
+      HOST: JSON.stringify(ENV.HOST)
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "./public/meta", to: "./meta" },
+        { from: "./public/additional-files", to: "./" }
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -112,37 +119,27 @@ module.exports = {
         ],
       },
       {
-        test: /\.(gif|png|jpe?g|svg|mp3)$/i,
+        test: /\.(gif|png|jpe?g|mp3)$/i,
         exclude: /node_modules/,
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
-            },
-          },
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              disable: isDev,
-              mozjpeg: {
-                progressive: true,
-                quality: 70,
-              },
-              pngquant: {
-                quality: [0.35, 0.8],
-                speed: 4,
-              },
-            },
-          },
+              name: '[path][name].[ext]'
+            }
+          }
         ],
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]'
-        }
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              limit: 10000,
+            },
+          },
+        ],
       }
     ]
   }

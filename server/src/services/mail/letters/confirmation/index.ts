@@ -81,7 +81,7 @@ export default (payload: { appName: string; link: string }): string => `
     border-collapse: collapse !important;
   }
   a {
-    color: #1a82e2;
+    color: #418FDE;
   }
   img {
     height: auto;
@@ -110,9 +110,11 @@ export default (payload: { appName: string; link: string }): string => `
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="center" valign="top" style="padding: 36px 24px;">
-              <a href="https://www.blogdesire.com" target="_blank" style="display: inline-block;">
-                <img src="https://www.blogdesire.com/wp-content/uploads/2019/07/blogdesire-1.png" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
-              </a>
+              <svg width="48" height="44" viewBox="0 0 44 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M167 165.5L41.75 289.775L41.75 41.2254L167 165.5Z" fill="#418FDE"/>
+                <path d="M166.5 165L290.775 289.5H42.2254L166.5 165Z" fill="#3B75B1"/>
+                <path d="M166.5 166L42.2253 41.5L290.775 41.5L166.5 166Z" fill="#74B3F3"/>
+              </svg>
             </td>
           </tr>
         </table>
@@ -171,7 +173,7 @@ export default (payload: { appName: string; link: string }): string => `
                   <td align="center" bgcolor="#ffffff" style="padding: 12px;">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
+                        <td align="center" bgcolor="#418FDE" style="border-radius: 6px;">
                           <a href=${payload.link} target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Confirm email</a>
                         </td>
                       </tr>

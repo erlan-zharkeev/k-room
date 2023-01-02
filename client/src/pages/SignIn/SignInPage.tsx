@@ -6,6 +6,7 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { login } from 'src/store/authSlice'
 import validateRules from 'src/utils/validateRules'
+const Logo = require('src/assets/images/Logo.svg') as string
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,6 +23,9 @@ export const SignInPage = () => {
 
   return (
     <div className="page sign-in">
+      <div className="sign-in__logo">
+        <img className="logo" src={Logo}></img>
+      </div>
       <div className="sign-in__wrapper">
         <div className="sign-in__body">
           <AuthNav />

@@ -25,10 +25,10 @@
 
 // button
 .ant-btn {
-  transition: background 0s;
   color: var(--secondary-text) !important;
   background: var(--main-bg) !important;
   border-color: var(--secondary-text) !important;
+  transition: background 0s;
 
   &:hover {
     color: var(--accent-color) !important;
@@ -60,6 +60,10 @@
 .ant-modal-header {
   background: var(--main-bg) !important;
   border-bottom: none;
+}
+
+.ant-modal-content {
+  padding: .5rem 0;
 }
 
 .ant-modal-title {
@@ -137,9 +141,30 @@ input {
 }
 
 // modal
+.ant-modal-mask {
+  background-color: var(--modal-overflow-color);
+}
+
 .ant-notification-notice {
-  background: var(--main-bg) !important;
+  border: 1px solid var(--main-bg);
+  border-radius: $sm-radius;
   box-shadow: 0 3px 6px -4px rgb(0 0 0 / 100%), 0 6px 16px 0 rgb(0 0 0 / 25%), 0 9px 28px 8px rgb(0 0 0 / 15%) !important;
+
+  &-success {
+    background: var(--success-bg);
+  }
+
+  &-error {
+    background: var(--error-bg);
+  }
+
+  &-info {
+    background: var(--info-bg);
+  }
+
+  &-warn {
+    background: var(--warn-bg);
+  }
 }
 
 .ant-notification-notice-message {
@@ -234,19 +259,23 @@ html[tooltips='false'] {
   &-menu {
     padding: 0;
   }
+
   ul {
     background-color: var(--main-bg) !important;
     border-radius: $sm-radius;
-    box-shadow: 0px 0px 7px var(--secondary-text) !important;
+    box-shadow: 0 0 7px var(--secondary-text) !important;
+
     li {
       color: var(--secondary-text) !important;
+
       &:first-child {
         border-top-left-radius: $sm-radius !important;
         border-top-right-radius: $sm-radius !important;
       }
+
       &:last-child {
-        border-bottom-left-radius: $sm-radius !important;
         border-bottom-right-radius: $sm-radius !important;
+        border-bottom-left-radius: $sm-radius !important;
       }
     }
   }
@@ -254,15 +283,17 @@ html[tooltips='false'] {
 
 .ant-image-preview-img-wrapper {
   display: flex !important;
-  justify-content: center !important;
   align-items: center !important;
+  justify-content: center !important;
 }
 
 .ant-image-mask {
   border-radius: 50%;
+
   span {
     margin-right: 0 !important;
   }
+
   &-info {
     font-size: 0;
   }

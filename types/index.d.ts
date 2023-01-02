@@ -10,6 +10,7 @@ export interface EnvVariables {
     REGISTRATION_RESEND_INTERVAL_MINUTES: string;
     JWT_ACCESS_TOKEN_SECRET: string;
     JWT_REFRESH_TOKEN_SECRET: string;
+    IS_DEV: boolean;
 }
 export declare enum AuthEndPoints {
     REGISTRATION = "/api/auth/registration",
@@ -58,7 +59,7 @@ export interface Message {
     isSelf?: boolean;
     status?: MessageStatus;
 }
-export declare type MessageStatus = "sending" | "undelivered" | "delivered" | "read";
+export type MessageStatus = "sending" | "undelivered" | "delivered" | "read";
 export interface ChatRoom {
     _id?: string;
     roomId: string;
@@ -70,7 +71,7 @@ export interface ChatRoom {
     multiple: boolean;
     hasOnline: boolean;
 }
-export declare type ChatRooms = Array<ChatRoom>;
+export type ChatRooms = Array<ChatRoom>;
 export interface UserShort {
     id: string;
     username: string;

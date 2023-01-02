@@ -147,7 +147,7 @@ const roomForSaveToUser = async (userId: string, room: ChatRoom) => {
     avatar: userData?.avatar,
     hasOnline: false,
     multiple: room.multiple,
-    users: users,
+    users,
     messages: []
   }
   return result

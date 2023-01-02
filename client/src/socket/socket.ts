@@ -9,11 +9,11 @@ export const socket = io('/', {
   reconnectionAttempts: Infinity
 })
 
-socket.io.on('reconnect', (attempt: any) => {
-  console.log('reconnection');
-  socket.connect()
-})
+// socket.io.on('reconnect', (attempt: any) => {
+//   console.log('reconnection')
+//   socket.connect()
+// })
 
-socket.io.on('reconnect_attempt', (attempt: any) => {
-  console.log('reconnection' + attempt)
-})
+// socket.io.on('reconnect_attempt', (attempt: any) => {
+//   console.log('reconnection' + attempt)
+// })

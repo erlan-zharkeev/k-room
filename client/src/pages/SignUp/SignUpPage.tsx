@@ -8,6 +8,7 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { registration } from 'src/store/authSlice'
 import validateRules from 'src/utils/validateRules'
+const Logo = require('src/assets/images/Logo.svg') as string
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -35,6 +36,9 @@ export const SignUpPage = () => {
 
   return (
     <div className="page sign-up">
+      <div className="sign-in__logo">
+        <img className="logo" src={Logo}></img>
+      </div>
       <div className="sign-up__wrapper">
         <div className="sign-up__body">
           <AuthNav />
