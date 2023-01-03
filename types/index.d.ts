@@ -41,7 +41,8 @@ export declare enum SocketActions {
     USER_TYPING = "user-typing",
     GET_USER_TYPING_STATUS = "get-user-typing-status",
     CHANGE_MESSAGE_STATUS = "change-message-status",
-    UPDATE_MESSAGE_STATUS = "update-message-status"
+    UPDATE_MESSAGE_STATUS = "update-message-status",
+    CHANGE_CONTACTS_DATA = "change-contacts-data"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",

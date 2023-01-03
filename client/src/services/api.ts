@@ -24,7 +24,7 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
     $clg('error', 'Access token is expired')
     const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
     const isTokensPairUpdated = updateTokenResponse.status === Status.SUCCESS
-    $clg('success', 'Tokens pair are updated')
+    $clg('success', 'Tokens pair has been updated')
     if (isTokensPairUpdated) dispatch(getUserData(null))
     return
   }

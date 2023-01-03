@@ -10,7 +10,7 @@ export interface EnvVariables {
   REGISTRATION_RESEND_INTERVAL_MINUTES: string;
   JWT_ACCESS_TOKEN_SECRET: string;
   JWT_REFRESH_TOKEN_SECRET: string;
-  IS_DEV: boolean
+  IS_DEV: boolean;
 }
 
 export enum AuthEndPoints {
@@ -22,7 +22,7 @@ export enum AuthEndPoints {
   GET_FILES = "/api/image/:filename",
   LOGOUT = "/api/auth/logout",
   GET_USER_DATA = "/api/auth/get-user-data",
-  UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair"
+  UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair",
 }
 
 export enum SocketActions {
@@ -44,6 +44,7 @@ export enum SocketActions {
   GET_USER_TYPING_STATUS = "get-user-typing-status",
   CHANGE_MESSAGE_STATUS = "change-message-status",
   UPDATE_MESSAGE_STATUS = "update-message-status",
+  CHANGE_CONTACTS_DATA = "change-contacts-data",
 }
 
 export enum RouteNames {

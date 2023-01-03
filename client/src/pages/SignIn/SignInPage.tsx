@@ -23,7 +23,7 @@ export const SignInPage = () => {
   }
 
   useEffect(() => {
-    socket.disconnect()
+    // socket.disconnect()
   }, [])
 
   return (

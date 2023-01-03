@@ -33,6 +33,7 @@ var SocketActions;
     SocketActions["GET_USER_TYPING_STATUS"] = "get-user-typing-status";
     SocketActions["CHANGE_MESSAGE_STATUS"] = "change-message-status";
     SocketActions["UPDATE_MESSAGE_STATUS"] = "update-message-status";
+    SocketActions["CHANGE_CONTACTS_DATA"] = "change-contacts-data";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {
