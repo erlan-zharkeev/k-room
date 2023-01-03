@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import {
+  changeChatName,
   loadChatRooms,
   updateChatMessage,
   updateChatUsersStatus,
@@ -17,7 +18,7 @@ import Popup from 'src/components/Common/Popup/Popup'
 // import StubLoading from '../../components/Common/StubLoading/StubLoading'
 import _debounce from 'lodash/debounce'
 
-import { updateContactsStatus, loadContacts } from 'src/store/contactsSlice'
+import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
 import { showNotification, socketConnect, socketDisconnect } from 'src/store/systemSlice'
 import { socket } from 'src/socket/socket'
 
@@ -74,7 +75,9 @@ export const MainPage = () => {
           <p>{roomData.message.body}</p>
         </>
       )
-      if (!roomData.message.isSelf) { dispatch(showNotification({ message: convertedMessageToHtml, messageType: 'info', placement: 'bottomRight' })) }
+      if (!roomData.message.isSelf) {
+        dispatch(showNotification({ message: convertedMessageToHtml, messageType: 'info', placement: 'bottomRight' }))
+      }
     })
 
     socket.on(
@@ -87,6 +90,11 @@ export const MainPage = () => {
     socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>, message?: string) => {
       if (message) dispatch(showNotification({ messageType: 'info', message }))
       dispatch(loadContacts(contacts))
+    })
+
+    socket.on(SocketActions.CHANGE_CONTACTS_DATA, (updatedUserData: User) => {
+      dispatch(updateContactData(updatedUserData))
+      dispatch(changeChatName(updatedUserData))
     })
   }, [])
 

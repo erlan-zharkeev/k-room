@@ -11,6 +11,10 @@ import { Messages } from './types/Messages'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
+export const socketHandler = (action: string) => {
+  console.log(action)
+}
+
 const setSocketId = async (userId: string, socketId: string) => {
   await UserModel.updateOne({ _id: userId }, { $set: { socketId } })
 }
@@ -36,7 +40,7 @@ const getOnlineUsersByIdsArray = async (users: Array<UserShort>) => {
   return result
 }
 
-const getSocketsByUsersArray = async (usersIds: Array<String>) => {
+export const getSocketsByUsersArray = async (usersIds: Array<String>) => {
   const users = await UserModel.find({ _id: { $in: usersIds } })
   return users.map((user) => user.socketId)
 }
@@ -45,7 +49,7 @@ const getUserBySocketId = async (socketId: string) => await UserModel.findOne({ 
 
 const getRoomsByHasContact = async (contactId: string) => await ChatRoomModel.find({ 'users.id': contactId })
 
-const getUsersByHasContactId = async (contactId: string) => await UserModel.find({ contacts: contactId })
+export const getUsersByHasContactId = async (contactId: string) => await UserModel.find({ contacts: contactId })
 
 const pushMessage = async (data: { roomId: string; message: Message }) => {
   const message = { ...data.message, status: 'delivered' }

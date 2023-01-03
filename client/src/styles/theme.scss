@@ -1,13 +1,12 @@
 :root {
   --accent-color: #418FDE;
   --error-text: #863347;
-  --success: rgb(44, 186, 136);
-  --error: rgb(191, 86, 110);
-  --warn: rgb(255, 213, 79);
-
-  --success-bg: rgba(44, 186, 136, 0.2);
-  --error-bg: rgba(191, 86, 110, 0.2);
-  --warn-bg: rgba(255, 213, 79, 0.2);
+  --success: rgb(44 186 136);
+  --error: rgb(191 86 110);
+  --warn: rgb(255 213 79);
+  --success-bg: rgb(44 186 136 / 20%);
+  --error-bg: rgb(191 86 110 / 20%);
+  --warn-bg: rgb(255 213 79 / 20%);
   --info-bg: rgba(255 255 255 / 20%);
   --modal-overflow-color: rgb(0 0 0 / 75%);
 

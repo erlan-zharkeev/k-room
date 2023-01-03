@@ -37,6 +37,8 @@
   &__controls {
     // margin-left: $gutter-md;
     // width: 40%;
+    display: flex;
+    align-items: center;
   }
 
   &__unread-messages {

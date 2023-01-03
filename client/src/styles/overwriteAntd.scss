@@ -63,7 +63,7 @@
 }
 
 .ant-modal-content {
-  padding: .5rem 0;
+  padding: 0.5rem 0;
 }
 
 .ant-modal-title {
@@ -162,7 +162,7 @@ input {
     background: var(--info-bg);
   }
 
-  &-warn {
+  &-warning {
     background: var(--warn-bg);
   }
 }

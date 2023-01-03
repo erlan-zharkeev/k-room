@@ -5,10 +5,12 @@ import { sendEmailConfirmationLink } from '../services/mail'
 import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
-
 import db from '../database'
 import mongoose from 'mongoose'
-import { Status } from '../../../types'
+import { SocketActions, Status } from '../../../types'
+import { getSocketsByUsersArray, getUsersByHasContactId } from '../socket'
+
+import { io } from '../server'
 const bcrypt = require('bcryptjs')
 const Grid = require('gridfs-stream')
 
@@ -113,22 +115,42 @@ class AuthController {
 
   async updateUserData(req: any, res: Response) {
     try {
-      const filename = req.file.filename
       const { userId, username } = req.body
-      const updateUserDataResponse = await UserModel.findOneAndUpdate(
-        { _id: userId },
-        { username, avatar: `api/image/${filename}` },
-        { new: true }
-      )
+
+      const filename = req.file?.filename ?? null
+
+      const newUserData: any = {
+        username
+      }
+
+      if (filename) newUserData.avatar = `api/image/${filename}`
+
+      const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
+
       if (!updateUserDataResponse) return throwError(Status.BAD_REQUEST, res, Messages.usersFindFailed)
+
+      const usersHasCurrentContact = await getUsersByHasContactId(userId)
+      const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
+      const sockets = await getSocketsByUsersArray(usersIdsFromUsers)
+
+      const updatedUserData = {
+        username: updateUserDataResponse.username,
+        avatar: updateUserDataResponse.avatar
+      }
+
+      sockets.forEach((socketId: string) => {
+        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, {
+          id: userId,
+          ...updatedUserData
+        })
+      })
+
       return res.json({
-        userData: {
-          username: updateUserDataResponse.username,
-          avatar: updateUserDataResponse.avatar
-        },
+        userData: updatedUserData,
         message: Messages.userDataSuccess
       })
     } catch (e: any) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.userDataUpdateFailedCommonError)
     }
   }

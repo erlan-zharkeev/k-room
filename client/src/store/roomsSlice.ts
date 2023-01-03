@@ -50,11 +50,27 @@ const roomsSlice = createSlice({
       state.chatRooms.forEach((room) => {
         if (hasUser(room.users)) room.hasOnline = status
       })
+    },
+    changeChatName(state, action) {
+      const { id, username, avatar } = action.payload
+      state.chatRooms.forEach((room) => {
+        const roomHasContact = Boolean(room.users.find((user) => user.id === id))
+        if (!roomHasContact) return
+        if (room.multiple) return
+        room.chatName = username
+        room.avatar = avatar
+      })
     }
   }
 })
 
-export const { loadChatRooms, updateChatUsersStatus, updateChatMessage, pushTemporaryMessage, updateMessageStatus } =
-  roomsSlice.actions
+export const {
+  loadChatRooms,
+  updateChatUsersStatus,
+  updateChatMessage,
+  pushTemporaryMessage,
+  updateMessageStatus,
+  changeChatName
+} = roomsSlice.actions
 
 export default roomsSlice.reducer
