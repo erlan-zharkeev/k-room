@@ -6,8 +6,7 @@
     "lint:fix-style": "stylelint **/*.scss --fix",
     "lint:fix-es": "eslint **/*.{ts,tsx,js} --fix",
     "serve": "webpack serve --node-env=development",
-    "build": "yarn lint:fix-style && yarn lint:fix-es && webpack build --node-env=production",
-    "temp:build": "webpack build --node-env=production",
+    "build": "webpack build --node-env=production",
     "stat:build": "webpack build --node-env=production",
     "serve:build": "node prod-server.js"
   },

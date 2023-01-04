@@ -2,9 +2,16 @@ import axios, { AxiosResponse } from 'axios'
 import { Status, AuthEndPoints } from 'common-types'
 import ENV from 'src/ENV'
 import { AppDispatch } from 'src/store'
-import { getUserData } from 'src/store/authSlice'
+import { changeIsAppLoading, getUserData } from 'src/store/authSlice'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from './clg'
+
+axios.defaults.proxy = {
+  host: ENV.HOST,
+  port: Number(ENV.SERVER_PORT)
+}
+
+const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:${ENV.SERVER_PORT}`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
@@ -16,14 +23,18 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const isTokenExpired = e.response.status === Status.TOKEN_EXPIRED
   if (isTokenExpired) {
+    dispatch(changeIsAppLoading(true))
     $clg('error', 'Access token is expired')
     const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
-    const isTokensPairUpdated = updateTokenResponse.status === Status.SUCCESS
+    const isTokensPairUpdated = updateTokenResponse?.status === Status.SUCCESS
+    if (!isTokensPairUpdated) return
+    dispatch(changeIsAppLoading(false))
     $clg('success', 'Tokens pair has been updated')
-    if (isTokensPairUpdated) dispatch(getUserData(null))
+    dispatch(getUserData(null))
     return
   }
-  const message = e.response.data.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
+  if (e.response?.data?.status && e.response.data.status === Status.NOT_AUTH) return
+  const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
   dispatch(showNotification({ message, messageType: 'error' }))
 }
 
@@ -38,7 +49,7 @@ export const $api = async (
 ): Promise<AxiosResponse<any, any>> => {
   const options = { headers: { 'Content-Type': contentType } }
   try {
-    const response = await axios[type](`${ENV.HOST}:${ENV.SERVER_PORT}${endpoint}`, payload, options)
+    const response = await axios[type](`${endpointHost}${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
   } catch (e: any) {

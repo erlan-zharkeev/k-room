@@ -11,6 +11,7 @@ import { SocketActions, Status } from '../../../types'
 import { getSocketsByUsersArray, getUsersByHasContactId } from '../socket'
 
 import { io } from '../server'
+import ENV from '../ENV'
 const bcrypt = require('bcryptjs')
 const Grid = require('gridfs-stream')
 
@@ -123,7 +124,7 @@ class AuthController {
         username
       }
 
-      if (filename) newUserData.avatar = `api/image/${filename}`
+      if (filename) newUserData.avatar = `${ENV.HOST}:${ENV.SERVER_PORT}/api/image/${filename}`
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
 

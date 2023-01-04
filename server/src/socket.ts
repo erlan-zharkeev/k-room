@@ -11,10 +11,6 @@ import { Messages } from './types/Messages'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
-export const socketHandler = (action: string) => {
-  console.log(action)
-}
-
 const setSocketId = async (userId: string, socketId: string) => {
   await UserModel.updateOne({ _id: userId }, { $set: { socketId } })
 }

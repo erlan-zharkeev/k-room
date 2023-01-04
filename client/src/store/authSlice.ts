@@ -53,7 +53,8 @@ export const updateUserData = createAsyncThunk(AuthAction.UPDATE, async (payload
 })
 
 const initialState: AuthState = {
-  isAuth: false,
+  isAppLoading: true,
+  isAuth: null,
   userData: {
     id: '',
     email: '',
@@ -69,7 +70,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    changeIsAppLoading: (state, { payload }) => {
+      state.isAppLoading = payload
+    },
     setUserData: (state, { payload }) => {
+      state.isAppLoading = false
       state.isAuth = true
       state.userData = {
         ...state.userData,
@@ -83,6 +88,6 @@ const authSlice = createSlice({
   }
 })
 
-export const { setUserData, logOut } = authSlice.actions
+export const { setUserData, logOut, changeIsAppLoading } = authSlice.actions
 
 export default authSlice.reducer

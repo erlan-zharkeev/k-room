@@ -28,5 +28,9 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 export const io = new Server(server, {
-  path: '/app/'
+  path: '/app/',
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
 })
