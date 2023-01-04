@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
-import cors from 'cors'
 import router from './router'
 import ENV from './ENV'
 const http = require('http')
@@ -15,11 +14,6 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use('/', router)
-app.use(
-  cors({
-    origin: '*'
-  })
-)
 
 const server = http.createServer(app)
 

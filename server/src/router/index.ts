@@ -5,8 +5,18 @@ import upload from '../filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'
 import accessTokenValidator from '../middlewares/accessTokenValidator'
 import refreshTokenValidator from '../middlewares/refreshTokenValidator'
+import cors from 'cors'
+import ENV from '../ENV'
 
 const router = Router()
+
+const corsOptions = {
+  origin: `${ENV.HOST}:${ENV.CLIENT_PORT}`,
+  preflightContinue: false,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+router.use(cors(corsOptions))
 
 router.post(AuthEndPoints.REGISTRATION, validationRules.registration, authController.registration)
 router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, authController.sendConfirmationLink)

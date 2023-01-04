@@ -6,11 +6,6 @@ import { getUserData } from 'src/store/authSlice'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from './clg'
 
-axios.defaults.proxy = {
-  host: ENV.HOST,
-  port: Number(ENV.SERVER_PORT)
-}
-
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
   const message = response.data.message
@@ -43,7 +38,7 @@ export const $api = async (
 ): Promise<AxiosResponse<any, any>> => {
   const options = { headers: { 'Content-Type': contentType } }
   try {
-    const response = await axios[type](endpoint, payload, options)
+    const response = await axios[type](`${ENV.HOST}:${ENV.SERVER_PORT}${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
   } catch (e: any) {
