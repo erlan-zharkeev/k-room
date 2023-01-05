@@ -1,5 +1,4 @@
-export type theme = 'dark' | 'light'
-
+import { UserSettings } from 'common-types'
 export interface NotificationStore {
   key: string
   message: string
@@ -16,7 +15,6 @@ export interface ViewPort {
 
 export interface SystemStore {
   socketConnected: boolean
-  ableToShowNotification: boolean
   showModal: boolean
   modalData: {
     title: string
@@ -25,10 +23,8 @@ export interface SystemStore {
     width: string
   }
   notificationData: NotificationStore
-  theme: theme
-  showTooltips: boolean
-  soundOn: boolean
+  viewPort: ViewPort
   asideTab: string
   selectedChatRoomId: string
-  viewPort: ViewPort
+  settings: UserSettings
 }

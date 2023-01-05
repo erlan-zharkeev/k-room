@@ -22,10 +22,6 @@ export const SignInPage = () => {
     setIsLoading(false)
   }
 
-  useEffect(() => {
-    // socket.disconnect()
-  }, [])
-
   return (
     <div className="page sign-in">
       <div className="sign-in__logo">

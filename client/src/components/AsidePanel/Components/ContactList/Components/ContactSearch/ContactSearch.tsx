@@ -14,7 +14,7 @@ const ContactSearch = () => {
 
   const { id } = useTypedSelector((state) => state.auth.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const { showTooltips } = useTypedSelector((state) => state.persist.system)
+  const { settings } = useTypedSelector((state) => state.persist.system)
 
   useEffect(() => {
     socket.on(SocketActions.GET_SEARCHED_CONTACTS, (contacts: Array<User>) => {
@@ -53,7 +53,7 @@ const ContactSearch = () => {
   ]
 
   const ButtonWrapper = (user: User) => {
-    return showTooltips ? (
+    return settings.showTooltips ? (
       <Tooltip placement="topLeft" title="Add contact">
         <Button size="small" icon={<PlusOutlined />} onClick={async () => await addUser(user.id)} />
       </Tooltip>

@@ -1,4 +1,4 @@
-import { theme } from 'src/store/@types/SystemState'
+import { theme } from 'common-types'
 
 const setTheme = (theme: theme) => {
   const html = document.querySelector('html')

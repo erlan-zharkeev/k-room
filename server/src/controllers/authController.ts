@@ -30,6 +30,21 @@ connection.once('open', () => {
 })
 
 class AuthController {
+  async updateUserSettings(req: Request, res: Response) {
+    try {
+      const { userId, type, value } = req.body
+
+      let query = {} as any
+      query['settings.' + type] = value
+
+      await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
+
+      return res.json()
+    } catch (e) {
+      throwError(Status.BAD_REQUEST, res, Messages.updateSettings)
+    }
+  }
+
   async updateTokensPair(req: Request, res: Response) {
     const { id } = req.body.decoded
     await updateTokens(id, res)
@@ -41,8 +56,12 @@ class AuthController {
     const user = await UserModel.findOne({ _id: id })
     if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
     return res.json({
-      userData: { username: user.username, email: user.email, id: user._id, avatar: user.avatar },
-      message: Messages.loginSuccess
+      userData: {
+        username: user.username,
+        email: user.email,
+        id: user._id,
+        avatar: user.avatar
+      }
     })
   }
 
@@ -107,6 +126,7 @@ class AuthController {
 
       return res.json({
         userData: { username: user.username, email, id: user._id, avatar: user.avatar },
+        settings: user.settings,
         message: Messages.loginSuccess
       })
     } catch (e: any) {

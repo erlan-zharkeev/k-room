@@ -23,12 +23,12 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const isTokenExpired = e.response.status === Status.TOKEN_EXPIRED
   if (isTokenExpired) {
-    dispatch(changeIsAppLoading(true))
     $clg('error', 'Access token is expired')
+    dispatch(changeIsAppLoading(true))
     const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
+    dispatch(changeIsAppLoading(false))
     const isTokensPairUpdated = updateTokenResponse?.status === Status.SUCCESS
     if (!isTokensPairUpdated) return
-    dispatch(changeIsAppLoading(false))
     $clg('success', 'Tokens pair has been updated')
     dispatch(getUserData(null))
     return

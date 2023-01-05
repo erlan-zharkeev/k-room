@@ -12,7 +12,7 @@ export const ChatRoomList = () => {
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.system)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { id } = useTypedSelector((state) => state.auth.userData)
-  const { showTooltips } = useTypedSelector((state) => state.persist.system)
+  const { settings } = useTypedSelector((state) => state.persist.system)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -40,7 +40,7 @@ export const ChatRoomList = () => {
     const user = chatRoom.users[0]
     const hasUserInContacts = !!contacts.find((element: any) => element.id === user.id)
     if (hasUserInContacts) return
-    return showTooltips ? (
+    return settings.showTooltips ? (
       <Tooltip placement="topLeft" title="Add to contact">
         <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
       </Tooltip>

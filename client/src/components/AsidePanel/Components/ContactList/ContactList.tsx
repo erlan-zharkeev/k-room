@@ -14,7 +14,7 @@ const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username } = useTypedSelector((state) => state.auth.userData)
-  const { showTooltips } = useTypedSelector((state) => state.persist.system)
+  const { settings } = useTypedSelector((state) => state.persist.system)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -66,7 +66,7 @@ const ContactList = () => {
     clickEventPayload: User,
     title: string
   ) => {
-    return showTooltips ? (
+    return settings.showTooltips ? (
       <Tooltip placement="topLeft" title={title}>
         {CustomButton(clickEvent, icon, clickEventPayload)}
       </Tooltip>

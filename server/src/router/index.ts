@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AuthEndPoints } from '../../../types'
+import { AuthEndPoints, SystemEndPoints } from '../../../types'
 import authController from '../controllers/authController'
 import upload from '../filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'
@@ -27,5 +27,7 @@ router.post(AuthEndPoints.UPDATE_USER_DATA, upload.single('file'), authControlle
 router.get(AuthEndPoints.GET_FILES, authController.showFiles)
 router.get(AuthEndPoints.GET_USER_DATA, accessTokenValidator, authController.getUserData)
 router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, authController.updateTokensPair)
+
+router.post(SystemEndPoints.UPDATE_USER_SETTINGS, authController.updateUserSettings)
 
 export default router
