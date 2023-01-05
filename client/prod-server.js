@@ -14,5 +14,3 @@ const routes = ['/', '/app', '/app/', '/sign-in', '/sign-up', '/wait-email-confi
 routes.forEach(route =>{
   app.get(route, (_, res) => res.sendFile(path.join(__dirname, './bundle/index.html')))
 })
-
-

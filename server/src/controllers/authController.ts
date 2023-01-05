@@ -34,7 +34,7 @@ class AuthController {
     try {
       const { userId, type, value } = req.body
 
-      let query = {} as any
+      const query = {} as any
       query['settings.' + type] = value
 
       await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })

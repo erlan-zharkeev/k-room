@@ -11,6 +11,8 @@ axios.defaults.proxy = {
   port: Number(ENV.SERVER_PORT)
 }
 
+axios.defaults.withCredentials = true
+
 const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:${ENV.SERVER_PORT}`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {

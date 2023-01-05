@@ -82,7 +82,7 @@ const UserSettings = () => {
             checkedChildren={'Dark'}
             unCheckedChildren={'Light'}
             defaultChecked={theme === 'dark'}
-            onChange={(value) => changeSettings('theme', value)}
+            onChange={async (value) => await changeSettings('theme', value)}
           />
         </div>
         <div className="user-settings__sound-switch">
@@ -91,7 +91,7 @@ const UserSettings = () => {
             checkedChildren={'On'}
             unCheckedChildren={'Off'}
             defaultChecked={soundOn}
-            onChange={(value) => changeSettings('sound', value)}
+            onChange={async (value) => await changeSettings('sound', value)}
           />
         </div>
         <div className="user-settings__tooltip-switch">
@@ -100,7 +100,7 @@ const UserSettings = () => {
             checkedChildren={'Show'}
             unCheckedChildren={'Hide'}
             defaultChecked={showTooltips}
-            onChange={(value) => changeSettings('tooltip', value)}
+            onChange={async (value) => await changeSettings('tooltip', value)}
           />
         </div>
         <div className="user-settings__tooltip-switch">
@@ -109,7 +109,7 @@ const UserSettings = () => {
             checkedChildren={'Show'}
             unCheckedChildren={'Hide'}
             defaultChecked={ableToShowNotification}
-            onChange={(value) => changeSettings('notification', value)}
+            onChange={async (value) => await changeSettings('notification', value)}
           />
         </div>
       </div>
