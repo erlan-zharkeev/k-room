@@ -7,8 +7,10 @@ const app = express()
 
 app.listen(ENV.CLIENT_PORT)
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, './bundle/index.html'))
-})
+app.use(express.static(path.join(__dirname + '/bundle/')))
 
-app.use('/', express.static(path.join(__dirname, './bundle/')))
+/** app.get(*) - doesn't work!!! */
+const routes = ['/', '/app', '/app/', '/sign-in', '/sign-up', '/wait-email-confirm', '/confirm-email']
+routes.forEach(route =>{
+  app.get(route, (_, res) => res.sendFile(path.join(__dirname, './bundle/index.html')))
+})

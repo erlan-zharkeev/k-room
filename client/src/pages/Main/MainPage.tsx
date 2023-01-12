@@ -24,6 +24,7 @@ import { socket } from 'src/socket/socket'
 
 import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'common-types'
 import $clg from 'src/services/clg'
+import { sound, Sounds } from 'src/services/sound'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -69,6 +70,8 @@ export const MainPage = () => {
 
     socket.on(SocketActions.MESSAGE_DELIVERED, (roomData: { roomId: string; message: Message }) => {
       dispatch(updateChatMessage(roomData))
+      const { isSelf } = roomData.message
+      if (!isSelf) sound(Sounds.messageDelivered).play()
       const convertedMessageToHtml = (
         <>
           <p>{roomData.message.authorName}</p>

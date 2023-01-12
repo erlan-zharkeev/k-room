@@ -9,13 +9,16 @@ import {
   changeTheme,
   setSoundValue,
   setTooltipsValue,
-  setAbleToShowNotification
+  setAbleToShowNotification,
+  updateUserSettings
 } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
 
 const UserSettings = () => {
   const { username, email, id, avatar } = useTypedSelector((state) => state.auth.userData)
-  const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector((state) => state.persist.system)
+  const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector(
+    (state) => state.persist.system.settings
+  )
   const dispatch = useDispatch<AppDispatch>()
 
   const changeUserData = () => {
@@ -33,6 +36,36 @@ const UserSettings = () => {
     </div>
   )
 
+  const changeSettings = async (type: string, value: boolean) => {
+    let convertedValue: boolean | string = value
+    let action = null
+    switch (type) {
+      case 'theme':
+        action = changeTheme(value)
+        convertedValue = value ? 'dark' : 'light'
+        break
+      case 'sound':
+        action = setSoundValue(value)
+        break
+      case 'tooltip':
+        action = setTooltipsValue(value)
+        break
+      case 'notification':
+        action = setAbleToShowNotification(value)
+        break
+      default:
+        break
+    }
+    dispatch(action)
+    await dispatch(
+      updateUserSettings({
+        userId: id,
+        type,
+        value: convertedValue
+      })
+    )
+  }
+
   return (
     <div className="user-settings">
       <div className="user-settings__body">
@@ -49,7 +82,7 @@ const UserSettings = () => {
             checkedChildren={'Dark'}
             unCheckedChildren={'Light'}
             defaultChecked={theme === 'dark'}
-            onChange={(value) => dispatch(changeTheme(value))}
+            onChange={async (value) => await changeSettings('theme', value)}
           />
         </div>
         <div className="user-settings__sound-switch">
@@ -58,7 +91,7 @@ const UserSettings = () => {
             checkedChildren={'On'}
             unCheckedChildren={'Off'}
             defaultChecked={soundOn}
-            onChange={(value) => dispatch(setSoundValue(value))}
+            onChange={async (value) => await changeSettings('sound', value)}
           />
         </div>
         <div className="user-settings__tooltip-switch">
@@ -67,7 +100,7 @@ const UserSettings = () => {
             checkedChildren={'Show'}
             unCheckedChildren={'Hide'}
             defaultChecked={showTooltips}
-            onChange={(value) => dispatch(setTooltipsValue(value))}
+            onChange={async (value) => await changeSettings('tooltip', value)}
           />
         </div>
         <div className="user-settings__tooltip-switch">
@@ -76,7 +109,7 @@ const UserSettings = () => {
             checkedChildren={'Show'}
             unCheckedChildren={'Hide'}
             defaultChecked={ableToShowNotification}
-            onChange={(value) => dispatch(setAbleToShowNotification(value))}
+            onChange={async (value) => await changeSettings('notification', value)}
           />
         </div>
       </div>

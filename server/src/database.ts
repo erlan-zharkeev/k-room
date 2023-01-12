@@ -9,7 +9,6 @@ async function initDataBase() {
   try {
     await db.connect(ENV.MONGO_HOST)
     console.log(clc.green.bgWhite('-Connected to DB'))
-    if (!ENV.IS_DEV) return
     await loadUsersFixtures()
     console.log(clc.green.bgWhite('-Fixtures loaded'))
   } catch (e) {

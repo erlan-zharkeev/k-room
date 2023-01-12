@@ -22,7 +22,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'bundle'),
     filename: filename('js'),
-    clean: true
+    clean: true,
+    publicPath: '/'
   },
   devServer: {
     client: {
@@ -89,12 +90,14 @@ module.exports = {
     new BundleAnalyzerPlugin({ analyzerMode: reportMode }),
     new webpack.DefinePlugin({
       SERVER_PORT: JSON.stringify(ENV.SERVER_PORT),
-      HOST: JSON.stringify(ENV.HOST)
+      HOST: JSON.stringify(ENV.HOST),
+      IS_DEV: JSON.stringify(isDev)
     }),
     new CopyPlugin({
       patterns: [
         { from: "./public/meta", to: "./meta" },
-        { from: "./public/additional-files", to: "./" }
+        { from: "./public/additional-files", to: "./" },
+        { from: "./public/sounds", to: "./sounds" },
       ],
     }),
   ],

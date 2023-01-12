@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AuthEndPoints } from '../../../types'
+import { AuthEndPoints, SystemEndPoints } from '../../../types'
 import authController from '../controllers/authController'
 import upload from '../filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'
@@ -11,9 +11,9 @@ import ENV from '../ENV'
 const router = Router()
 
 const corsOptions = {
-  origin: `${ENV.HOST}:${ENV.CLIENT_PORT}`,
-  preflightContinue: false,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: `${ENV.HOST}`,
+  optionsSuccessStatus: 200,
+  credentials: true
 }
 
 router.use(cors(corsOptions))
@@ -26,5 +26,7 @@ router.post(AuthEndPoints.UPDATE_USER_DATA, upload.single('file'), authControlle
 router.get(AuthEndPoints.GET_FILES, authController.showFiles)
 router.get(AuthEndPoints.GET_USER_DATA, accessTokenValidator, authController.getUserData)
 router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, authController.updateTokensPair)
+
+router.post(SystemEndPoints.UPDATE_USER_SETTINGS, authController.updateUserSettings)
 
 export default router

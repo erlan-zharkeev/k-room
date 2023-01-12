@@ -1,13 +1,12 @@
 import { UserOutlined, WechatOutlined, SettingOutlined } from '@ant-design/icons'
 import { Radio, RadioChangeEvent, Tooltip } from 'antd'
-import { ReactElement } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab } from 'src/store/systemSlice'
 
 const AsidePanelControl = () => {
-  const { asideTab, showTooltips } = useTypedSelector((state) => state.persist.system)
+  const { asideTab, settings } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
 
   const changTab = (e: RadioChangeEvent) => {
@@ -30,7 +29,7 @@ const AsidePanelControl = () => {
     <div className="aside-panel-control">
       <Radio.Group value={asideTab} onChange={changTab}>
         {buttons.map((button) => {
-          return showTooltips ? (
+          return settings.showTooltips ? (
             <Tooltip key={button.value} placement="topLeft" title={button.title}>
               {ButtonWrapper(button.value, button.icon)}
             </Tooltip>

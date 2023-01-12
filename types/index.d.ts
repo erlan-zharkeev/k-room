@@ -23,6 +23,9 @@ export declare enum AuthEndPoints {
     GET_USER_DATA = "/api/auth/get-user-data",
     UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair"
 }
+export declare enum SystemEndPoints {
+    UPDATE_USER_SETTINGS = "/api/user/update-user-settings"
+}
 export declare enum SocketActions {
     CONNECTION = "connection",
     INITIALIZE = "initialize",
@@ -87,6 +90,13 @@ export interface User extends UserCredential {
     lastSeen?: string;
     contacts?: Array<User>;
     avatar?: string;
+}
+export type theme = "dark" | "light";
+export interface UserSettings {
+    ableToShowNotification: boolean;
+    theme: theme;
+    showTooltips: boolean;
+    soundOn: boolean;
 }
 export declare enum Status {
     SUCCESS = 200,

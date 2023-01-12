@@ -1,4 +1,3 @@
-
 import './styles/App.scss'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -24,7 +23,7 @@ function App(): JSX.Element {
       console.log('ls cleared')
     }
   }
-  const { theme } = useTypedSelector((state) => state.persist.system)
+  const { settings } = useTypedSelector((state) => state.persist.system)
 
   function getViewPort(): ViewPort {
     const { innerWidth: width, innerHeight: height } = window
@@ -41,7 +40,7 @@ function App(): JSX.Element {
   useEffect(() => {
     const accessToken = getCookie('jwt')
     if (accessToken) fetchUser()
-    setTheme(theme)
+    setTheme(settings.theme)
     const root = document.querySelector('body')
     root?.addEventListener('keydown', onKeyDown)
 

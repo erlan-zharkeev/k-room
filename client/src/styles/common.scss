@@ -64,3 +64,25 @@ input:-webkit-autofill {
   object-fit: cover !important;
   border-radius: 50% !important;
 }
+
+.app-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      margin-bottom: $gutter-xl;
+      color: var(--accent-color);
+      font-size: 60px;
+      stroke-width: 25;
+    }
+  }
+}

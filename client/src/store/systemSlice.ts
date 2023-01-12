@@ -1,13 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
+import { SystemEndPoints } from 'common-types'
+import $api from 'src/services/api'
 import setTheme from 'src/utils/setTheme'
 import { SystemStore } from './@types/SystemState'
 
 const html = document.querySelector('html')
 
+export enum SystemAction {
+  UPDATE_USER_SETTINGS = 'UPDATE_USER_SETTINGS'
+}
+
+export const updateUserSettings = createAsyncThunk(
+  SystemAction.UPDATE_USER_SETTINGS,
+  async (payload: { userId: string; type: string; value: string | boolean }, { dispatch }) => {
+    const response = await $api('post', SystemEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
+    dispatch(updateSettings(response.data))
+  }
+)
+
 const initialState: SystemStore = {
   socketConnected: false,
-  ableToShowNotification: true,
   showModal: false,
   modalData: {
     title: '',
@@ -23,14 +36,17 @@ const initialState: SystemStore = {
     duration: 3,
     placement: 'top'
   },
-  theme: 'dark',
-  soundOn: true,
-  showTooltips: false,
   asideTab: 'users',
   selectedChatRoomId: '',
   viewPort: {
     width: 0,
     height: 0
+  },
+  settings: {
+    theme: 'dark',
+    soundOn: true,
+    showTooltips: false,
+    ableToShowNotification: true
   }
 }
 
@@ -61,10 +77,10 @@ const systemSlice = createSlice({
       state.showModal = false
     },
     setAbleToShowNotification(state, action) {
-      state.ableToShowNotification = action.payload
+      state.settings.ableToShowNotification = action.payload
     },
     showNotification(state, action) {
-      if (!state.ableToShowNotification) return
+      if (!state.settings.ableToShowNotification) return
       state.notificationData = {
         ...state.notificationData,
         ...action.payload
@@ -73,20 +89,28 @@ const systemSlice = createSlice({
       state.notificationData = initialState.notificationData
     },
     changeTheme(state, action) {
-      state.theme = action.payload ? 'dark' : 'light'
-      setTheme(state.theme)
+      state.settings.theme = action.payload ? 'dark' : 'light'
+      setTheme(state.settings.theme)
     },
     setSoundValue(state, action) {
-      state.soundOn = action.payload
+      state.settings.soundOn = action.payload
     },
     setTooltipsValue(state, action) {
-      state.showTooltips = action.payload
+      state.settings.showTooltips = action.payload
     },
     setViewPort(state, action) {
       state.viewPort = action.payload
       const viewPortWidth = state.viewPort.width
       const viewPortType = viewPortWidth <= 576 ? 'mobile' : 'desktop'
       html?.setAttribute('view-port', viewPortType)
+    },
+    updateSettings(state, action) {
+      const currentSettings = state.settings
+      const updatedSettings = action.payload
+      state.settings = {
+        ...currentSettings,
+        ...updatedSettings
+      }
     }
   }
 })
@@ -104,7 +128,8 @@ export const {
   setTooltipsValue,
   setViewPort,
   selectChatRoom,
-  setAbleToShowNotification
+  setAbleToShowNotification,
+  updateSettings
 } = systemSlice.actions
 
 export default systemSlice.reducer

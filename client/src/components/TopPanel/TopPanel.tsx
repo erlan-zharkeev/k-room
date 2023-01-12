@@ -9,7 +9,7 @@ const Logo = require('src/assets/images/Logo.svg') as string
 
 const TopPanel = () => {
   const { username, email, avatar } = useTypedSelector((state) => state.auth.userData)
-  const { showTooltips, socketConnected } = useTypedSelector((state) => state.persist.system)
+  const { settings, socketConnected } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
 
   const ButtonWrapper = (
@@ -47,7 +47,7 @@ const TopPanel = () => {
           <div className="paragraph-text paragraph-text--secondary">{email}</div>
         </div>
         <div className="log-out">
-          {showTooltips ? (
+          {settings.showTooltips ? (
             <Tooltip placement="bottomLeft" title="Log out">
               {ButtonWrapper}
             </Tooltip>

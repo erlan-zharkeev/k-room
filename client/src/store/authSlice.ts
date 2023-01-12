@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { AuthEndPoints, RouteNames, User } from 'common-types'
+import { AuthEndPoints, RouteNames, User, UserSettings } from 'common-types'
 import { createBrowserHistory } from 'history'
 import $api from 'src/services/api'
 import clearCookie from 'src/utils/clearCookie'
+import { store } from '.'
 import { AuthState } from './@types/AuthState'
+import { updateSettings } from './systemSlice'
 
 export enum AuthAction {
   REGISTRATION = 'REGISTRATION',
@@ -44,6 +46,7 @@ export const sendEmailConfirm = createAsyncThunk(AuthAction.EMAIL_CONFIRM, async
 export const login = createAsyncThunk(AuthAction.LOGIN, async (payload: User, { dispatch }) => {
   const response = await $api('post', AuthEndPoints.LOGIN, dispatch, payload)
   dispatch(setUserData(response.data.userData))
+  dispatch(updateSettings(response.data.settings))
   customHistory.push(RouteNames.MAIN)
 })
 
@@ -53,6 +56,7 @@ export const updateUserData = createAsyncThunk(AuthAction.UPDATE, async (payload
 })
 
 const initialState: AuthState = {
+  isAppLoading: true,
   isAuth: false,
   userData: {
     id: '',
@@ -69,7 +73,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    changeIsAppLoading: (state, { payload }) => {
+      state.isAppLoading = payload
+    },
     setUserData: (state, { payload }) => {
+      state.isAppLoading = false
       state.isAuth = true
       state.userData = {
         ...state.userData,
@@ -83,6 +91,6 @@ const authSlice = createSlice({
   }
 })
 
-export const { setUserData, logOut } = authSlice.actions
+export const { setUserData, logOut, changeIsAppLoading } = authSlice.actions
 
 export default authSlice.reducer

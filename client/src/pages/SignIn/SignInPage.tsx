@@ -1,9 +1,8 @@
 import { Button, Form, Input } from 'antd'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
 import useValidate from 'src/hooks/useValidate'
-import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { login } from 'src/store/authSlice'
 import validateRules from 'src/utils/validateRules'
@@ -21,10 +20,6 @@ export const SignInPage = () => {
     await dispatch(login(fields as any))
     setIsLoading(false)
   }
-
-  useEffect(() => {
-    // socket.disconnect()
-  }, [])
 
   return (
     <div className="page sign-in">

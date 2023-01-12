@@ -1,11 +1,12 @@
 import { Schema, model } from 'mongoose'
-import { User } from '../../../types'
+import { User, UserSettings } from '../../../types'
 
 export interface IUserSchema extends User {
   socketId: string
   confirmed: Boolean
   confirmAttempts: number
   refreshToken: string
+  settings: UserSettings
   _id: string
 }
 
@@ -62,6 +63,10 @@ export const userSchema = new Schema<IUserSchema>({
   },
   chatRooms: {
     type: [],
+    required: false
+  },
+  settings: {
+    type: {},
     required: false
   }
 })

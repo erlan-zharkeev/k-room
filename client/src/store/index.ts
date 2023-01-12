@@ -22,14 +22,15 @@ const persistedReducer = persistReducer(
 const reducers = combineReducers({ persist: persistedReducer, auth, chatRooms, contacts })
 
 const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
-  switch (action.type) {
-    case 'chatRooms/updateChatMessage':
-      const { isSelf } = action.payload.message
-      if (isSelf === false) sound(Sounds.messageDelivered).play()
-      break
-    default:
-      break
-  }
+  // switch (action.type) {
+  //   case 'chatRooms/updateChatMessage':
+  //     // const { isSelf } = action.payload.message
+  //     // console.log(isSelf === false)
+  //     // if (isSelf === false) sound(Sounds.messageDelivered).play()
+  //     break
+  //   default:
+  //     break
+  // }
   next(action)
 }
 

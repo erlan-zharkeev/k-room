@@ -1,12 +1,20 @@
+import ENV from '../ENV'
 import { UserModel } from './../models/user.model'
 const bcrypt = require('bcryptjs')
 
-const users = ['erlan', 'anton']
+const users = ENV.IS_DEV ? ['erlan', 'anton'] : ['erlan', 'ivan']
 
 export default async () => {
   const createUser = async (username: string) => {
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
-    const user = new UserModel({ username: username.toUpperCase(), email: `${username}@gmail.com`, password: hashedPassword, socketId: '', refreshToken: username, confirmed: true })
+    const user = new UserModel({
+      username: username.toUpperCase(),
+      email: `${username}@gmail.com`,
+      password: hashedPassword,
+      socketId: '',
+      refreshToken: username,
+      confirmed: true
+    })
     await user.save()
   }
 
