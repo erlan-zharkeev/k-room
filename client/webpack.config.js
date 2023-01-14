@@ -65,20 +65,20 @@ module.exports = {
       "crypto": false
     }
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      minSize: 100000,
-      maxSize: 250000,
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
-  },
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all',
+  //     minSize: 100000,
+  //     maxSize: 250000,
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'all'
+  //       }
+  //     }
+  //   }
+  // },
   plugins: [
     new HtmlWebpackPlugin({
       title: package.name,
