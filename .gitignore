@@ -3,13 +3,13 @@ node_modules
 client/node_modules
 client/yarn-error.log
 client/yarn.lock
-client/bundle
+# client/bundle
 client/eslintcache
 
 server/node_modules
 server/yarn-error.log
 server/yarn.lock
-server/build
+# server/build
 server/eslintcache
 
 types/node_modules

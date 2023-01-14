@@ -5,7 +5,7 @@
   "scripts": {
     "lint:fix-style": "stylelint **/*.scss --fix",
     "lint:fix-es": "eslint **/*.{ts,tsx,js} --fix",
-    "serve": "webpack serve --node-env=development",
+    "serve": "NODE_OPTIONS=--max_old_space_size=4096 webpack serve --node-env=development",
     "build": "NODE_OPTIONS=--max_old_space_size=4096 webpack build --node-env=production",
     "stat:build": "webpack build --node-env=production",
     "serve:build": "NODE_OPTIONS=--max_old_space_size=4096 node prod-server.js"
