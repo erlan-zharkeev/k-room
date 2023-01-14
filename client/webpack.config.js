@@ -23,8 +23,7 @@ module.exports = {
     path: path.resolve(__dirname, 'bundle'),
     filename: filename('js'),
     clean: true,
-    publicPath: '/',
-    pathinfo: false
+    publicPath: '/'
   },
   devServer: {
     client: {
@@ -116,10 +115,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
-        options: {
-          transpileOnly: true,
-        },
+        exclude: /node_modules/
       },
       {
         test: /\.s[ac]ss$/i,
