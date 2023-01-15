@@ -65,20 +65,21 @@ module.exports = {
       "crypto": false
     }
   },
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'all',
-  //     minSize: 100000,
-  //     maxSize: 250000,
-  //     cacheGroups: {
-  //       vendor: {
-  //         test: /[\\/]node_modules[\\/]/,
-  //         name: 'vendors',
-  //         chunks: 'all'
-  //       }
-  //     }
-  //   }
-  // },
+  optimization: {
+    removeEmptyChunks: false,
+    splitChunks: {
+      chunks: 'all',
+      minSize: 100000,
+      maxSize: 250000,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: package.name,
@@ -111,7 +112,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
         test: /\.s[ac]ss$/i,
