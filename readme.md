@@ -2,7 +2,7 @@
 
 - run cd ./scripts && bash dev.sh
 
-## Deplay
+## Deploy
 
 - run cd ./script && bash prod-build.sh
 
@@ -23,8 +23,25 @@
 - Do not edit nested .env files(edit only in root)
 
 ## Docker hints
+
 - Remove all images - docker system prune -a
 
 ## Server Ubuntu hints
+
 - Turn to super user - sudo -s
--
+- Check ram - free -m
+- Check disk space - df -h
+- Delete dir - rm -r ${dir}
+
+## Server prepare
+
+- Install docker and docker-compose
+- Make that ports are open
+- If low ram increase it by use swap file
+    mkdir -p /var/swapmemory
+    cd /var/swapmemory
+    #Here, 1M * 2000 ~= 2GB of swap memory
+    dd if=/dev/zero of=swapfile bs=1M count=2000
+    mkswap swapfile
+    swapon swapfile
+    chmod 600 swapfile
