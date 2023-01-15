@@ -9,14 +9,14 @@ services:
       - 27017:27017
     volumes:
       - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-  client:
-    container_name: 'k-room-client'
-    restart: always
-    build:
-      context: ./
-      dockerfile: ./client/Dockerfile
-    ports:
-      - '${CLIENT_PORT}:${CLIENT_PORT}'
+  # client:
+  #   container_name: 'k-room-client'
+  #   restart: always
+  #   build:
+  #     context: ./
+  #     dockerfile: ./client/Dockerfile
+  #   ports:
+  #     - '${CLIENT_PORT}:${CLIENT_PORT}'
   server:
     container_name: 'k-room-server'
     restart: always
