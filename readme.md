@@ -24,7 +24,7 @@
 
 ## Docker hints
 
-- Remove all images - docker system prune -a
+- Remove all images - docker rmi $(docker images -a -q)
 
 ## Server Ubuntu hints
 
