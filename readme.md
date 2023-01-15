@@ -36,6 +36,18 @@
 ## Server prepare
 
 - Install docker and docker-compose
+  sudo apt-get update
+  sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+  sudo mkdir -p /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 - Make that ports are open
 - If low ram increase it by use swap file
     mkdir -p /var/swapmemory
