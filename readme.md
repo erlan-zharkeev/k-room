@@ -21,3 +21,10 @@
 
 - Add or edit types only in ./types/index.ts file it will autocompile to index.d.ts
 - Do not edit nested .env files(edit only in root)
+
+## Docker hints
+- Remove all images - docker system prune -a
+
+## Server Ubuntu hints
+- Turn to super user - sudo -s
+-

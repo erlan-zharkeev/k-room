@@ -66,22 +66,19 @@ module.exports = {
     }
   },
   optimization: {
-    runtimeChunk: true,
-    removeAvailableModules: false,
     removeEmptyChunks: false,
-    splitChunks: false
-    // splitChunks: {
-    //   chunks: 'all',
-    //   minSize: 100000,
-    //   maxSize: 250000,
-    //   cacheGroups: {
-    //     vendor: {
-    //       test: /[\\/]node_modules[\\/]/,
-    //       name: 'vendors',
-    //       chunks: 'all'
-    //     }
-    //   }
-    // }
+    splitChunks: {
+      chunks: 'all',
+      minSize: 100000,
+      maxSize: 250000,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
