@@ -36,6 +36,7 @@
 ## Server prepare
 
 - Install docker and docker-compose
+
   sudo apt-get update
   sudo apt-get install \
     ca-certificates \
@@ -51,12 +52,13 @@
   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
   sudo apt install docker-compose
 
-- Make that ports are open
 - If low ram increase it by use swap file
+
     mkdir -p /var/swapmemory
     cd /var/swapmemory
-    #Here, 1M * 2000 ~= 2GB of swap memory
-    dd if=/dev/zero of=swapfile bs=1M count=2000
+    dd if=/dev/zero of=swapfile bs=1M count=4000
     mkswap swapfile
     swapon swapfile
     chmod 600 swapfile
+
+- Make ports open
