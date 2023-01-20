@@ -21,21 +21,25 @@
 
 - Add or edit types only in ./types/index.ts file it will autocompile to index.d.ts
 - Do not edit nested .env files(edit only in root)
+- Do not use merge from git web interface
 
 ## Docker hints
 
 - Remove all images - docker rmi $(docker images -a -q)
+- Remove all unused images - docker image prune --filter="dangling=true" -f
+- docker build -t test -f server/Dockerfile .
 
 ## Server Ubuntu hints
 
 - Turn to super user - sudo -s
 - Check ram - free -m
 - Check disk space - df -h
-- Delete dir - rm -r ${dir}
+- Delete dir - rm -r dirname
 
 ## Server prepare
 
 - Install docker and docker-compose
+
   sudo apt-get update
   sudo apt-get install \
     ca-certificates \
@@ -47,13 +51,17 @@
   echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  sudo apt install docker-compose
 
-- Make that ports are open
 - If low ram increase it by use swap file
+
     mkdir -p /var/swapmemory
     cd /var/swapmemory
-    #Here, 1M * 2000 ~= 2GB of swap memory
-    dd if=/dev/zero of=swapfile bs=1M count=2000
+    dd if=/dev/zero of=swapfile bs=1M count=4000
     mkswap swapfile
     swapon swapfile
     chmod 600 swapfile
+
+- Make ports open
