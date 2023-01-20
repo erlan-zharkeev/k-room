@@ -6,3 +6,6 @@ yarn lint:fix-style && yarn lint:fix-es
 
 cd ../server
 yarn lint:fix-es
+
+# cd ../scripts
+# source update-envs.sh
