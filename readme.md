@@ -21,17 +21,20 @@
 
 - Add or edit types only in ./types/index.ts file it will autocompile to index.d.ts
 - Do not edit nested .env files(edit only in root)
+- Do not use merge from git web interface
 
 ## Docker hints
 
 - Remove all images - docker rmi $(docker images -a -q)
+- Remove all unused images - docker image prune --filter="dangling=true" -f
+- docker build -t test -f server/Dockerfile .
 
 ## Server Ubuntu hints
 
 - Turn to super user - sudo -s
 - Check ram - free -m
 - Check disk space - df -h
-- Delete dir - rm -r ${dir}
+- Delete dir - rm -r dirname
 
 ## Server prepare
 
