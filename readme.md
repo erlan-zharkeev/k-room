@@ -13,21 +13,20 @@
 
 ## Commit convention
 
-- to use husky run yarn prepare
-- branch name should be of the form type-dd/mm(e.g. develop-20/08)
-- to commit changes call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
+- To use husky run yarn prepare
+- Branch name should be of the form type-dd.mm.yy(e.g. development-22.01.23)
+- To commit changes add changes then call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
 
 ## Avoid
 
 - Add or edit types only in ./types/index.ts file it will autocompile to index.d.ts
-- Do not edit nested .env files(edit only in root)
-- Do not use merge from git web interface
+  Do not edit nested .env files(edit only in root)
 
 ## Docker hints
 
 - Remove all images - docker rmi $(docker images -a -q)
 - Remove all unused images - docker image prune --filter="dangling=true" -f
-- docker build -t test -f server/Dockerfile .
+- docker build -t branchName -f server/Dockerfile .
 
 ## Server Ubuntu hints
 
