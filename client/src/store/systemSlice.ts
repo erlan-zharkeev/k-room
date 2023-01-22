@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
 import { UserEndPoints } from 'common-types'
+import ENV from 'src/ENV'
 import $api from 'src/services/api'
 import setTheme from 'src/utils/setTheme'
 import { SystemStore } from './@types/SystemState'
@@ -21,6 +22,7 @@ export const updateUserSettings = createAsyncThunk(
 
 const initialState: SystemStore = {
   socketConnected: false,
+  reconnectAttempts: ENV.MAX_RECONNECT_ATTEMPTS,
   showModal: false,
   modalData: {
     title: '',
@@ -56,6 +58,11 @@ const systemSlice = createSlice({
   reducers: {
     socketConnect(state) {
       state.socketConnected = true
+      state.reconnectAttempts = ENV.MAX_RECONNECT_ATTEMPTS
+    },
+    setReconnectionAttempts(state) {
+      state.reconnectAttempts = state.reconnectAttempts - 1
+      console.log(state.reconnectAttempts)
     },
     socketDisconnect(state) {
       state.socketConnected = false
@@ -117,6 +124,7 @@ const systemSlice = createSlice({
 
 export const {
   socketConnect,
+  setReconnectionAttempts,
   showNotification,
   socketDisconnect,
   deselectChatRoom,

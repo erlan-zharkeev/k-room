@@ -12,6 +12,7 @@ export interface EnvVariables {
   JWT_REFRESH_TOKEN_SECRET: string;
   IS_DEV: boolean;
   SERVER_ASSETS_PATH: string;
+  MAX_RECONNECT_ATTEMPTS: number;
 }
 
 export enum AuthEndPoints {
@@ -36,6 +37,8 @@ export enum CommonEndPoints {
 
 export enum SocketActions {
   CONNECTION = "connection",
+  RECONNECTION = "reconnect",
+  RECONNECT_ATTEMPT = "reconnect_attempt",
   INITIALIZE = "initialize",
   DISCONNECT = "disconnect",
   GET_ROOMS = "get-rooms",

@@ -1,38 +1,28 @@
-import { Button, Progress } from 'antd'
-import { useEffect, useState } from 'react'
-import getRandomNumber from 'src/utils/getRandomNumber'
 import { StubLoadingProps } from './@types/StubLoadingProps'
+import { LoadingOutlined } from '@ant-design/icons'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+import { Button } from 'antd'
+import { update } from 'lodash'
+import { logOut } from 'src/store/userSlice'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
 
-const StubLoading = ({ isLoading, reconnect }: StubLoadingProps) => {
-  const [percent, setPercent] = useState(0)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (percent >= 100) return
-      setPercent((percent) => {
-        const newPercentValue = isLoading ? percent + getRandomNumber(5, 10) : 100
-        return newPercentValue
-      })
-      return () => {
-        clearTimeout(timer)
-      }
-    }, getRandomNumber(100, 300))
-  }, [percent])
-
-  const update = () => {
-    setPercent(0)
-    reconnect()
-  }
+const StubLoading = ({ isLoading }: StubLoadingProps) => {
+  const { reconnectAttempts } = useTypedSelector((state) => state.persist.system)
+  const dispatch = useDispatch<AppDispatch>()
 
   return isLoading ? (
     <div className="stub-loading">
-      {percent >= 100 ? (
-        <div className="stub-loading__update-block">
-          <span>Connection failed</span>
-          <Button onClick={update}>Update</Button>
+      {reconnectAttempts > 1 ? (
+        <div className="stub-loading__circle">
+          <LoadingOutlined />
+          <p className="header-text header-text__secondary">Socket reconnecting</p>
         </div>
       ) : (
-        <Progress className="stub-loading__progress" percent={percent} status="normal" />
+        <div className="stub-loading__update-block">
+          <span>Connection failed</span>
+          <Button onClick={() => dispatch(logOut)}>Reload page</Button>
+        </div>
       )}
     </div>
   ) : (

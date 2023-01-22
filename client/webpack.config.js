@@ -92,7 +92,8 @@ module.exports = {
     new webpack.DefinePlugin({
       SERVER_PORT: JSON.stringify(ENV.SERVER_PORT),
       HOST: JSON.stringify(ENV.HOST),
-      IS_DEV: JSON.stringify(isDev)
+      IS_DEV: JSON.stringify(isDev),
+      MAX_RECONNECT_ATTEMPTS: JSON.stringify(ENV.MAX_RECONNECT_ATTEMPTS)
     }),
     new CopyPlugin({
       patterns: [
