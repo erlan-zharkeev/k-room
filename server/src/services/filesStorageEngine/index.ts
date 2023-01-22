@@ -1,5 +1,5 @@
 import multer from 'multer'
-import ENV from './ENV'
+import ENV from './../../ENV'
 
 const path = require('path')
 const crypto = require('crypto')

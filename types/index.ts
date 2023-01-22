@@ -19,19 +19,19 @@ export enum AuthEndPoints {
   SEND_EMAIL_CONFIRMATION_LINK = "/api/auth/send-email-confirmation-link",
   SEND_EMAIL_CONFIRMATION = "/api/auth/send-email-confirmation",
   LOGIN = "/api/auth/login",
-  UPDATE_USER_DATA = "/api/auth/user-data/update",
-  GET_FILES = "/api/image/:filename",
   LOGOUT = "/api/auth/logout",
-  GET_USER_DATA = "/api/auth/get-user-data",
   UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair",
+}
+
+export enum UserEndPoints {
+  GET_USER_DATA = "/api/auth/get-user-data",
+  UPDATE_USER_DATA = "/api/auth/user-data/update",
+  UPDATE_USER_SETTINGS = "/api/user/update-user-settings",
 }
 
 export enum CommonEndPoints {
   COMMON_IMAGES = "/api/common-images",
-}
-
-export enum SystemEndPoints {
-  UPDATE_USER_SETTINGS = "/api/user/update-user-settings",
+  GET_FILES = "/api/image/:filename",
 }
 
 export enum SocketActions {

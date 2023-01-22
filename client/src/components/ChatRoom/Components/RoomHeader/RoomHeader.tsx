@@ -34,7 +34,11 @@ export const RoomHeader = () => {
 
   return (
     <div className="room-header">
-      <Button className="borderless room-header__back-button" type="primary" onClick={() => dispatch(selectChatRoom(''))}>
+      <Button
+        className="borderless room-header__back-button"
+        type="primary"
+        onClick={() => dispatch(selectChatRoom(''))}
+      >
         Back
       </Button>
       <div className="room-header__info">

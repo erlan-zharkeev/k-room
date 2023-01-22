@@ -1,6 +1,6 @@
 import { User } from 'common-types'
 
-export interface AuthState {
+export interface UserState {
   isAppLoading: boolean
   isAuth: boolean
   userData: User

@@ -5,7 +5,7 @@ import { UserOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { updateUserData } from 'src/store/authSlice'
+import { updateUserData } from 'src/store/userSlice'
 import { showNotification, closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
 

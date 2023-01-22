@@ -2,7 +2,7 @@ import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@redu
 import system, { showNotification } from './systemSlice'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import auth, { AuthAction } from './authSlice'
+import auth, { UserAction } from './userSlice'
 import chatRooms from './roomsSlice'
 import contacts from './contactsSlice'
 import { sound, Sounds } from 'src/services/sound'
@@ -10,7 +10,7 @@ import { MessageNotification } from 'src/components/Common/MessageNotification/M
 
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>
-export type RootActions = AuthAction
+export type RootActions = UserAction
 
 const persistedReducer = persistReducer(
   {
