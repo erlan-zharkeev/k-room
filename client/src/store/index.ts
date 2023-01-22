@@ -1,11 +1,12 @@
 import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
-import system from './systemSlice'
+import system, { showNotification } from './systemSlice'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import auth, { AuthAction } from './authSlice'
 import chatRooms from './roomsSlice'
 import contacts from './contactsSlice'
 import { sound, Sounds } from 'src/services/sound'
+import { MessageNotification } from 'src/components/Common/MessageNotification/MessageNotification'
 
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>
@@ -22,15 +23,21 @@ const persistedReducer = persistReducer(
 const reducers = combineReducers({ persist: persistedReducer, auth, chatRooms, contacts })
 
 const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
-  // switch (action.type) {
-  //   case 'chatRooms/updateChatMessage':
-  //     // const { isSelf } = action.payload.message
-  //     // console.log(isSelf === false)
-  //     // if (isSelf === false) sound(Sounds.messageDelivered).play()
-  //     break
-  //   default:
-  //     break
-  // }
+  switch (action.type) {
+    case 'rooms/updateChatMessage':
+      const { soundOn } = store.getState().persist.system.settings
+      const { message } = action.payload
+      const dispatch = store.dispatch
+      if (!message.isSelf) {
+        dispatch(
+          showNotification({ message: MessageNotification(message), messageType: 'info', placement: 'bottomRight' })
+        )
+        if (soundOn) sound(Sounds.messageDelivered).play()
+      }
+      break
+    default:
+      break
+  }
   next(action)
 }
 
