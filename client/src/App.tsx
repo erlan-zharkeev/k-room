@@ -16,7 +16,7 @@ import {
 import getCookie from 'src/utils/getCookie'
 import setTheme from 'src/utils/setTheme'
 import { socket } from './socket/socket'
-import { SocketActions, Message, User } from 'common-types'
+import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'common-types'
 import $clg from './services/clg'
 import { updateContactsStatus, loadContacts, updateContactData } from './store/contactsSlice'
 import {
@@ -27,7 +27,6 @@ import {
   changeChatName
 } from './store/roomsSlice'
 import _debounce from 'lodash/debounce'
-import { ChatRoom as ChatRoomInterface } from 'common-types'
 import clearLocalStorageOnKeyDown from './utils/clearLocalStorageOnKeyDown'
 import getViewPort from './utils/getViewPort'
 
