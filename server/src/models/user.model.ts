@@ -27,7 +27,7 @@ export const userSchema = new Schema<IUserSchema>({
   },
   refreshToken: {
     type: String,
-    unique: true,
+    unique: false,
     required: false
   },
   confirmed: {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Status = exports.RouteNames = exports.SocketActions = exports.SystemEndPoints = exports.AuthEndPoints = void 0;
+exports.Status = exports.RouteNames = exports.SocketActions = exports.SystemEndPoints = exports.CommonEndPoints = exports.AuthEndPoints = void 0;
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/api/auth/registration";
@@ -13,6 +13,10 @@ var AuthEndPoints;
     AuthEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
     AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/api/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
+var CommonEndPoints;
+(function (CommonEndPoints) {
+    CommonEndPoints["COMMON_IMAGES"] = "/api/common-images";
+})(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var SystemEndPoints;
 (function (SystemEndPoints) {
     SystemEndPoints["UPDATE_USER_SETTINGS"] = "/api/user/update-user-settings";

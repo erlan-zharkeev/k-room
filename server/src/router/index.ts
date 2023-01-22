@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AuthEndPoints, SystemEndPoints } from '../../../types'
+import { AuthEndPoints, CommonEndPoints, SystemEndPoints } from '../../../types'
 import authController from '../controllers/authController'
 import upload from '../filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'
@@ -7,6 +7,7 @@ import accessTokenValidator from '../middlewares/accessTokenValidator'
 import refreshTokenValidator from '../middlewares/refreshTokenValidator'
 import cors from 'cors'
 import ENV from '../ENV'
+import commonController from '../controllers/commonController'
 
 const router = Router()
 
@@ -28,5 +29,7 @@ router.get(AuthEndPoints.GET_USER_DATA, accessTokenValidator, authController.get
 router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, authController.updateTokensPair)
 
 router.post(SystemEndPoints.UPDATE_USER_SETTINGS, authController.updateUserSettings)
+
+router.get(CommonEndPoints.COMMON_IMAGES, commonController.imagesHandler)
 
 export default router

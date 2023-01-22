@@ -1,5 +1,8 @@
+// Only production'
+
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: 'production',
@@ -7,7 +10,8 @@ module.exports = {
   target: 'node',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'index.js'
+    filename: 'index.js',
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.ts', '.js']
@@ -27,6 +31,13 @@ module.exports = {
       }
     }
   },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: "src/assets", to: "./assets" },
+      ],
+    }),
+  ],
   module: {
     rules: [
       {
