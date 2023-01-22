@@ -11,6 +11,7 @@ export interface EnvVariables {
   JWT_ACCESS_TOKEN_SECRET: string;
   JWT_REFRESH_TOKEN_SECRET: string;
   IS_DEV: boolean;
+  SERVER_ASSETS_PATH: string;
 }
 
 export enum AuthEndPoints {
@@ -23,6 +24,10 @@ export enum AuthEndPoints {
   LOGOUT = "/api/auth/logout",
   GET_USER_DATA = "/api/auth/get-user-data",
   UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair",
+}
+
+export enum CommonEndPoints {
+  COMMON_IMAGES = "/api/common-images",
 }
 
 export enum SystemEndPoints {

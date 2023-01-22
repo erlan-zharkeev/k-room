@@ -9,7 +9,6 @@ import db from '../database'
 import mongoose from 'mongoose'
 import { SocketActions, Status } from '../../../types'
 import { getSocketsByUsersArray, getUsersByHasContactId } from '../socket'
-
 import { io } from '../server'
 import ENV from '../ENV'
 const bcrypt = require('bcryptjs')
@@ -71,19 +70,22 @@ class AuthController {
 
       const { username, email, password } = req.body
       const candidate = await UserModel.findOne({ email })
-
+      console.log(candidate)
       if (candidate) return throwError(Status.BAD_REQUEST, res, Messages.userExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
       if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
-
+      // console.log(has)
       const user = new UserModel({ username, email, password: hashedPassword, socketId: '' })
       await user.save()
-
+      console.log('object')
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
+      if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, Messages.failedToSendConfirmationLink)
+      console.log(confirmEmailData)
       return res.json(confirmEmailData)
     } catch (e) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.registrationCommonError)
     }
   }

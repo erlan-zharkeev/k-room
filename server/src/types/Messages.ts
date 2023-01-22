@@ -18,6 +18,7 @@ export enum Messages {
   emailConfirmed = 'Email confirmed',
   emailNotConfirm = 'Please, confirm email',
   emailConfirmationLinkSended = 'Confirmation link sent to email',
+  failedToSendConfirmationLink = 'Failed to send confirmation link, please try later',
   userDataSuccess = 'User data updated',
   usersFindFailed = 'Error while finding user(s)',
   noFilesExist = 'No files exist',
