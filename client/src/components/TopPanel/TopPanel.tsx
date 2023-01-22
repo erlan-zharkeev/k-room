@@ -2,7 +2,7 @@ import { Image, Badge, Button, Tooltip, Avatar } from 'antd'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { logOut } from 'src/store/authSlice'
+import { logOut } from 'src/store/userSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { selectChatRoom } from 'src/store/systemSlice'
 const Logo = require('src/assets/images/Logo.svg') as string

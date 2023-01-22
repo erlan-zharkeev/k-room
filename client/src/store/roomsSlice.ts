@@ -1,18 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ChatRoom, UserShort } from 'common-types'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { UserShort } from 'common-types'
 import { RoomsState } from './@types/RoomsState'
 
 const initialState: RoomsState = {
   chatRooms: []
-}
-
-export const useSelectedRoom = () => {
-  return useTypedSelector((state) => {
-    const { chatRooms } = state.chatRooms
-    const { selectedChatRoomId } = state.persist.system
-    return chatRooms.find((room: ChatRoom) => room.roomId === selectedChatRoomId)
-  })
 }
 
 const roomsSlice = createSlice({

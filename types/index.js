@@ -1,26 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Status = exports.RouteNames = exports.SocketActions = exports.SystemEndPoints = exports.CommonEndPoints = exports.AuthEndPoints = void 0;
+exports.Status = exports.RouteNames = exports.SocketActions = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/api/auth/registration";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/api/auth/send-email-confirmation-link";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/api/auth/send-email-confirmation";
     AuthEndPoints["LOGIN"] = "/api/auth/login";
-    AuthEndPoints["UPDATE_USER_DATA"] = "/api/auth/user-data/update";
-    AuthEndPoints["GET_FILES"] = "/api/image/:filename";
     AuthEndPoints["LOGOUT"] = "/api/auth/logout";
-    AuthEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
     AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/api/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
+var UserEndPoints;
+(function (UserEndPoints) {
+    UserEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
+    UserEndPoints["UPDATE_USER_DATA"] = "/api/auth/user-data/update";
+    UserEndPoints["UPDATE_USER_SETTINGS"] = "/api/user/update-user-settings";
+})(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
 var CommonEndPoints;
 (function (CommonEndPoints) {
     CommonEndPoints["COMMON_IMAGES"] = "/api/common-images";
+    CommonEndPoints["GET_FILES"] = "/api/image/:filename";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
-var SystemEndPoints;
-(function (SystemEndPoints) {
-    SystemEndPoints["UPDATE_USER_SETTINGS"] = "/api/user/update-user-settings";
-})(SystemEndPoints = exports.SystemEndPoints || (exports.SystemEndPoints = {}));
 var SocketActions;
 (function (SocketActions) {
     SocketActions["CONNECTION"] = "connection";

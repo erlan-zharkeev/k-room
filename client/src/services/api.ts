@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import { Status, AuthEndPoints } from 'common-types'
 import ENV from 'src/ENV'
 import { AppDispatch } from 'src/store'
-import { changeIsAppLoading, getUserData } from 'src/store/authSlice'
+import { changeIsAppLoading, getUserData } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from './clg'
 

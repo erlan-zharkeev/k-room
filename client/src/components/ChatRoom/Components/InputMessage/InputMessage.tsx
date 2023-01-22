@@ -5,9 +5,9 @@ import _debounce from 'lodash/debounce'
 import { SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
-import { useSelectedRoom } from 'src/store/roomsSlice'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import InputMessageProps from './@types/InputMessageProps'
+import useSelectedRoom from 'src/hooks/useSelectedRoom'
 
 export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   const [message, setMessage] = useState('')

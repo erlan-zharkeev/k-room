@@ -7,7 +7,8 @@ import { AxiosResponse } from 'axios'
 import { Status, RouteNames } from 'common-types'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
-import { sendEmailConfirm, logOut } from 'src/store/authSlice'
+import { logOut } from 'src/store/userSlice'
+import { sendEmailConfirm } from 'src/store/authSlice'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
-import { SystemEndPoints } from 'common-types'
+import { UserEndPoints } from 'common-types'
 import $api from 'src/services/api'
 import setTheme from 'src/utils/setTheme'
 import { SystemStore } from './@types/SystemState'
@@ -14,7 +14,7 @@ export enum SystemAction {
 export const updateUserSettings = createAsyncThunk(
   SystemAction.UPDATE_USER_SETTINGS,
   async (payload: { userId: string; type: string; value: string | boolean }, { dispatch }) => {
-    const response = await $api('post', SystemEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
+    const response = await $api('post', UserEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
     dispatch(updateSettings(response.data))
   }
 )

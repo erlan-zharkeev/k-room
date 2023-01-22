@@ -5,10 +5,11 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import AppRouter from 'src/router/AppRouter'
 import { AppDispatch } from 'src/store'
 import { ViewPort } from 'src/store/@types/SystemState'
-import { getUserData } from 'src/store/authSlice'
+import { getUserData } from 'src/store/userSlice'
 import { setViewPort } from 'src/store/systemSlice'
 import getCookie from 'src/utils/getCookie'
 import setTheme from 'src/utils/setTheme'
+import { useSocketListener } from './socket/socket'
 
 function App(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>()
@@ -36,7 +37,7 @@ function App(): JSX.Element {
   const fetchUser = async () => await dispatch(getUserData({}))
 
   const handleResize = () => dispatch(setViewPort(getViewPort()))
-
+  useSocketListener()
   useEffect(() => {
     const accessToken = getCookie('jwt')
     if (accessToken) fetchUser()

@@ -12,7 +12,8 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab } from 'src/store/systemSlice'
 import scrollToBottom from 'src/utils/scrollToBottom'
-import { useSelectedRoom, pushTemporaryMessage } from 'src/store/roomsSlice'
+import { pushTemporaryMessage } from 'src/store/roomsSlice'
+import useSelectedRoom from 'src/hooks/useSelectedRoom'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()

@@ -16,6 +16,7 @@ const ContactList = () => {
   const { id, username } = useTypedSelector((state) => state.auth.userData)
   const { settings } = useTypedSelector((state) => state.persist.system)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
+
   const dispatch = useDispatch<AppDispatch>()
 
   const createUser = (id: string, username: string) => {
