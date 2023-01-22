@@ -24,6 +24,8 @@ var CommonEndPoints;
 var SocketActions;
 (function (SocketActions) {
     SocketActions["CONNECTION"] = "connection";
+    SocketActions["RECONNECTION"] = "reconnect";
+    SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
     SocketActions["INITIALIZE"] = "initialize";
     SocketActions["DISCONNECT"] = "disconnect";
     SocketActions["GET_ROOMS"] = "get-rooms";

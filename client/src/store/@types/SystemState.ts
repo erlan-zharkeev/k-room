@@ -15,6 +15,7 @@ export interface ViewPort {
 
 export interface SystemStore {
   socketConnected: boolean
+  reconnectAttempts: number
   showModal: boolean
   modalData: {
     title: string

@@ -2,15 +2,13 @@ import { useEffect } from 'react'
 import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
-
 import TopPanel from 'src/components/TopPanel/TopPanel'
 import Popup from 'src/components/Common/Popup/Popup'
-// import StubLoading from '../../components/Common/StubLoading/StubLoading'
 import _debounce from 'lodash/debounce'
 import { socket } from 'src/socket/socket'
-
-import { SocketActions, Message, User, ChatRoom as ChatRoomInterface } from 'common-types'
+import { SocketActions } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
+import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -24,7 +22,7 @@ export const MainPage = () => {
 
   return (
     <div className={'main-page page ' + (selectedChatRoom && viewPort.width <= 576 ? 'move-aside' : '')}>
-      {/* <StubLoading isLoading={!socketConnected} reconnect={reconnect} /> */}
+      <StubLoading isLoading={!socketConnected} />
       <Popup />
       <TopPanel />
       <div className="main-page__content">
