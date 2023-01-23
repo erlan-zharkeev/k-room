@@ -52,6 +52,7 @@ var RouteNames;
     RouteNames["WAIT_EMAIL_CONFIRM"] = "/wait-email-confirm";
     RouteNames["EMAIL_CONFIRM"] = "/confirm-email";
     RouteNames["MAIN"] = "/app";
+    RouteNames["NOT_FOUND"] = "/not-found";
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var Status;
 (function (Status) {
@@ -61,4 +62,5 @@ var Status;
     Status[Status["TOKEN_EXPIRED"] = 403] = "TOKEN_EXPIRED";
     Status[Status["NOT_FOUND"] = 404] = "NOT_FOUND";
     Status[Status["UNREACHABLE"] = 503] = "UNREACHABLE";
+    Status[Status["BAD_GATEAWAY"] = 504] = "BAD_GATEAWAY";
 })(Status = exports.Status || (exports.Status = {}));

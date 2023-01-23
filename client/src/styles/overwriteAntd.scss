@@ -34,6 +34,10 @@
     color: var(--accent-color) !important;
     border-color: var(--accent-color) !important;
   }
+  &--md {
+    width: 100px !important;
+    max-width: 100px !important;
+  }
 }
 
 .ant-btn-primary {

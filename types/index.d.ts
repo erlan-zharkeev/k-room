@@ -59,7 +59,8 @@ export declare enum RouteNames {
     SIGN_UP = "/sign-up",
     WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
     EMAIL_CONFIRM = "/confirm-email",
-    MAIN = "/app"
+    MAIN = "/app",
+    NOT_FOUND = "/not-found"
 }
 export interface Message {
     id: string;
@@ -111,5 +112,6 @@ export declare enum Status {
     NOT_AUTH = 401,
     TOKEN_EXPIRED = 403,
     NOT_FOUND = 404,
-    UNREACHABLE = 503
+    UNREACHABLE = 503,
+    BAD_GATEAWAY = 504
 }

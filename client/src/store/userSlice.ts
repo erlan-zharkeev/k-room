@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthEndPoints, UserEndPoints, RouteNames, User } from 'common-types'
-import { createBrowserHistory } from 'history'
+import $router from 'src/services/$router'
 import $api from 'src/services/api'
 import clearCookie from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
@@ -13,13 +13,11 @@ export enum UserAction {
   GET_USER_DATA = 'GET_USER_DATA'
 }
 
-const customHistory = createBrowserHistory()
-
 export const login = createAsyncThunk(UserAction.LOGIN, async (payload: User, { dispatch }) => {
   const response = await $api('post', AuthEndPoints.LOGIN, dispatch, payload)
   dispatch(setUserData(response.data.userData))
   dispatch(updateSettings(response.data.settings))
-  customHistory.push(RouteNames.MAIN)
+  $router.push(RouteNames.MAIN)
 })
 
 export const updateUserData = createAsyncThunk(UserAction.UPDATE_USER_DATA, async (payload: User, { dispatch }) => {
@@ -30,7 +28,7 @@ export const updateUserData = createAsyncThunk(UserAction.UPDATE_USER_DATA, asyn
 export const getUserData = createAsyncThunk(UserAction.GET_USER_DATA, async (_: unknown, { dispatch }) => {
   const response = await $api('get', UserEndPoints.GET_USER_DATA, dispatch)
   dispatch(setUserData(response.data.userData))
-  customHistory.push(RouteNames.MAIN)
+  $router.push(RouteNames.MAIN)
 })
 
 const initialState: UserState = {
@@ -65,6 +63,7 @@ const userSlice = createSlice({
     logOut: (state) => {
       clearCookie()
       state.isAuth = false
+      $router.push(RouteNames.SIGN_IN)
     }
   }
 })

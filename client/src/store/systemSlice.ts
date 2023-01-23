@@ -58,11 +58,16 @@ const systemSlice = createSlice({
   reducers: {
     socketConnect(state) {
       state.socketConnected = true
+    },
+    refreshReconnectionAttempts(state) {
       state.reconnectAttempts = ENV.MAX_RECONNECT_ATTEMPTS
     },
     setReconnectionAttempts(state) {
+      if (state.reconnectAttempts < 0) {
+        state.reconnectAttempts = ENV.MAX_RECONNECT_ATTEMPTS
+        return
+      }
       state.reconnectAttempts = state.reconnectAttempts - 1
-      console.log(state.reconnectAttempts)
     },
     socketDisconnect(state) {
       state.socketConnected = false
@@ -124,6 +129,7 @@ const systemSlice = createSlice({
 
 export const {
   socketConnect,
+  refreshReconnectionAttempts,
   setReconnectionAttempts,
   showNotification,
   socketDisconnect,

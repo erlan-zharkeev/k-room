@@ -3,9 +3,9 @@ import RegisterPage from 'src/pages/SignUp/SignUpPage'
 import MainPage from 'src/pages/Main/MainPage'
 import WaitConfirmPage from 'src/pages/WaitEmailConfirm/WaitEmailConfirmPage'
 import ConfirmedPage from 'src/pages/EmailConfirm/EmailConfirmPage'
+import NotFoundPage from '../pages/NotFound/NotFoundPage'
 import { IRoute } from './@types/IRoute'
 import { RouteNames } from 'common-types'
-// import NotFoundPage from "../pages/NotFound/NotFoundPage";
 
 export const publicRoutes: Array<IRoute> = [
   {
@@ -23,6 +23,10 @@ export const publicRoutes: Array<IRoute> = [
   {
     path: RouteNames.WAIT_EMAIL_CONFIRM,
     component: WaitConfirmPage
+  },
+  {
+    path: RouteNames.NOT_FOUND,
+    component: NotFoundPage
   }
 ]
 
@@ -35,16 +39,9 @@ export const privateRoutes: Array<IRoute> = [
     path: RouteNames.MAIN,
     component: MainPage,
     exact: true
-  }
-]
-
-export const commonRoutes: Array<IRoute> = [
+  },
   {
-    path: RouteNames.EMAIL_CONFIRM,
-    component: ConfirmedPage
+    path: RouteNames.NOT_FOUND,
+    component: NotFoundPage
   }
-  // {
-  //   path: RouteNames.NOTFOUND,
-  //   component: NotFoundPage,
-  // },
 ]
