@@ -23,7 +23,11 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
-  const isTokenExpired = e.response.status === Status.TOKEN_EXPIRED
+  const { status } = e.response
+  if (status === Status.BAD_GATEAWAY) {
+    dispatch(changeIsAppLoading(false))
+  }
+  const isTokenExpired = status === Status.TOKEN_EXPIRED
   if (isTokenExpired) {
     $clg('error', 'Access token is expired')
     dispatch(changeIsAppLoading(true))

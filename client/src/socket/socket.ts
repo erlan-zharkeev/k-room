@@ -3,7 +3,7 @@ import ENV from 'src/ENV'
 import _debounce from 'lodash/debounce'
 
 export const socket = io(`:${ENV.SERVER_PORT}/`, {
-  forceNew: true,
+  forceNew: false,
   path: '/app/',
   reconnection: true,
   reconnectionDelay: 1000,

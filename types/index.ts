@@ -65,6 +65,7 @@ export enum RouteNames {
   WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
   EMAIL_CONFIRM = "/confirm-email",
   MAIN = "/app",
+  NOT_FOUND = "/not-found",
 }
 
 export interface Message {
@@ -126,4 +127,5 @@ export enum Status {
   TOKEN_EXPIRED = 403,
   NOT_FOUND = 404,
   UNREACHABLE = 503,
+  BAD_GATEAWAY = 504,
 }
