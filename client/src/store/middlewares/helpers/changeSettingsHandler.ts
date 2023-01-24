@@ -1,4 +1,4 @@
-import { updateUserSettings } from "src/store/settingsSlice"
+import { updateUserSettings } from 'src/store/settingsSlice'
 
 export const changeSettingsHandler = (action: any, store: any, dispatch: any) => {
   const isChangeSettingAction = action.type.includes('settings/') && action.type !== 'settings/updateSettings'
@@ -33,7 +33,7 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
       default:
         break
     }
-    dispatch(updateUserSettings({userId, type, value }))
+    dispatch(updateUserSettings({ userId, type, value }))
   }
 }
 

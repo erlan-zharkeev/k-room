@@ -1,4 +1,4 @@
-import { theme } from "common-types";
+import { theme } from 'common-types'
 
 export interface SettingsState {
   asideTab: string

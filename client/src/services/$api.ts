@@ -17,7 +17,7 @@ const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:${ENV.SERVER_PORT}`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
-  const {message, silent } = response.data
+  const { message, silent } = response.data
   const isSuccess = response.status === Status.SUCCESS
   if (message && !silent) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
 }

@@ -22,7 +22,6 @@ const persistedReducer = persistReducer(
 
 const reducers = combineReducers({ persist: persistedReducer, user, chatRooms, contacts, system })
 
-
 export const store = configureStore({
   reducer: reducers,
   middleware: (getDefaultMiddleware) =>

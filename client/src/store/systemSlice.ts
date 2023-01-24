@@ -66,7 +66,7 @@ export const {
   showNotification,
   showModal,
   closeModal,
-  setViewPort,
+  setViewPort
 } = systemSlice.actions
 
 export default systemSlice.reducer
