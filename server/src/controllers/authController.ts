@@ -13,7 +13,7 @@ class AuthController {
   async updateTokensPair(req: Request, res: Response) {
     const { id } = req.body.decoded
     await updateTokens(id, res)
-    res.json({ message: Messages.tokensPairUpdated })
+    res.json({ message: Messages.tokensPairUpdated, silent: true })
   }
 
   async registration(req: Request, res: Response) {

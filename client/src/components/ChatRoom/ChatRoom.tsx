@@ -10,15 +10,15 @@ import RoomHeader from './Components/RoomHeader/RoomHeader'
 import { useEffect } from 'react'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { changeAsideTab } from 'src/store/systemSlice'
 import scrollToBottom from 'src/utils/scrollToBottom'
 import { pushTemporaryMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
+import { changeAsideTab } from 'src/store/settingsSlice'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
 
-  const { id, username } = useTypedSelector((state) => state.auth.userData)
+  const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
 
   const dispatch = useDispatch<AppDispatch>()

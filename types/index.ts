@@ -39,6 +39,7 @@ export enum SocketActions {
   CONNECTION = "connection",
   RECONNECTION = "reconnect",
   RECONNECT_ATTEMPT = "reconnect_attempt",
+  RECONNECT_FAILED = "reconnect_failed",
   INITIALIZE = "initialize",
   DISCONNECT = "disconnect",
   GET_ROOMS = "get-rooms",
@@ -113,7 +114,10 @@ export interface User extends UserCredential {
 }
 
 export type theme = "dark" | "light";
+
 export interface UserSettings {
+  asideTab: string
+  selectedChatRoomId: string
   ableToShowNotification: boolean;
   theme: theme;
   showTooltips: boolean;

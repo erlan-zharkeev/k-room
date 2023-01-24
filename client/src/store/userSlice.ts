@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthEndPoints, UserEndPoints, RouteNames, User } from 'common-types'
 import $router from 'src/services/$router'
-import $api from 'src/services/api'
+import $api from 'src/services/$api'
 import clearCookie from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
-import { updateSettings } from './systemSlice'
+import { updateSettings } from './settingsSlice'
 
 export enum UserAction {
   LOGIN = 'LOGIN',
@@ -46,7 +46,7 @@ const initialState: UserState = {
 }
 
 const userSlice = createSlice({
-  name: 'auth',
+  name: 'user',
   initialState,
   reducers: {
     changeIsAppLoading: (state, { payload }) => {

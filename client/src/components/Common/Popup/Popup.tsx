@@ -6,7 +6,7 @@ import { closeModal } from 'src/store/systemSlice'
 import UserDataSettingsPopup from './Components/UserDataSettingsPopup/UserDataSettingsPopup'
 
 const Popup = () => {
-  const { showModal, modalData } = useTypedSelector((state) => state.persist.system)
+  const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
   const popups: { [key: string]: JSX.Element } = {
     UserDataSettingsPopup: <UserDataSettingsPopup />

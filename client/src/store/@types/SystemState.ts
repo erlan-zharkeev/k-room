@@ -1,4 +1,3 @@
-import { UserSettings } from 'common-types'
 export interface NotificationStore {
   key: string
   message: string
@@ -14,8 +13,7 @@ export interface ViewPort {
 }
 
 export interface SystemStore {
-  socketConnected: boolean
-  reconnectAttempts: number
+  reconnecting: boolean
   showModal: boolean
   modalData: {
     title: string
@@ -25,7 +23,4 @@ export interface SystemStore {
   }
   notificationData: NotificationStore
   viewPort: ViewPort
-  asideTab: string
-  selectedChatRoomId: string
-  settings: UserSettings
 }

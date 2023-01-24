@@ -6,7 +6,7 @@ import UserSettings from './Components/UserSettings/UserSettings'
 import { ReactElement } from 'react'
 
 const AsidePanel = () => {
-  const { asideTab } = useTypedSelector((state) => state.persist.system)
+  const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const TabComponents: { [key: string]: ReactElement } = {
     users: <ContactList />,
     chatList: <ChatRoomList />,
