@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { User, AuthEndPoints } from 'common-types'
-import $api from 'src/services/api'
+import $api from 'src/services/$api'
 
 export enum AuthAction {
   REGISTRATION = 'REGISTRATION',

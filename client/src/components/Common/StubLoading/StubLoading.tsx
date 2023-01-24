@@ -1,23 +1,21 @@
 import { StubLoadingProps } from './@types/StubLoadingProps'
 import { LoadingOutlined } from '@ant-design/icons'
-import useTypedSelector from 'src/hooks/useTypedSelector'
 import { Button } from 'antd'
 import { logOut } from 'src/store/userSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { socket } from 'src/socket/socket'
-import { refreshReconnectionAttempts } from 'src/store/systemSlice'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 
 const StubLoading = ({ isLoading }: StubLoadingProps) => {
-  const { reconnectAttempts } = useTypedSelector((state) => state.persist.system)
   const dispatch = useDispatch<AppDispatch>()
+  const { reconnecting } = useTypedSelector((state) => state.system)
   const reconnect = () => {
-    dispatch(refreshReconnectionAttempts())
     socket.connect()
   }
   return isLoading ? (
     <div className="stub-loading">
-      {reconnectAttempts > 0 ? (
+      {reconnecting ? (
         <div className="stub-loading__circle">
           <LoadingOutlined />
           <p className="header-text header-text__secondary">Socket reconnecting</p>

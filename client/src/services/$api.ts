@@ -4,7 +4,7 @@ import ENV from 'src/ENV'
 import { AppDispatch } from 'src/store'
 import { changeIsAppLoading, getUserData } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
-import $clg from './clg'
+import $clg from './$clg'
 
 axios.defaults.proxy = {
   host: ENV.HOST,
@@ -17,9 +17,9 @@ const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:${ENV.SERVER_PORT}`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
-  const message = response.data.message
+  const {message, silent } = response.data
   const isSuccess = response.status === Status.SUCCESS
-  if (message) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
+  if (message && !silent) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {

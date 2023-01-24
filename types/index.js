@@ -26,6 +26,7 @@ var SocketActions;
     SocketActions["CONNECTION"] = "connection";
     SocketActions["RECONNECTION"] = "reconnect";
     SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
+    SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
     SocketActions["INITIALIZE"] = "initialize";
     SocketActions["DISCONNECT"] = "disconnect";
     SocketActions["GET_ROOMS"] = "get-rooms";

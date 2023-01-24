@@ -12,7 +12,7 @@ const soundSrc: SoundSources = {
   messageDelivered: './sounds/ding.mp3'
 }
 
-export const sound = (sound: Sounds) => {
+export const $sound = (sound: Sounds) => {
   return new Howl({
     src: [soundSrc[sound]],
     volume: 0.2

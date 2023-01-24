@@ -4,6 +4,8 @@ import { socket } from 'src/socket/socket'
 
 export const $router = createBrowserHistory()
 
+export default $router
+
 $router.listen(({ action, location }) => {
   const path = location.pathname
   const isRoutePublic = Boolean(publicRoutes.find((route) => route.path === path))
@@ -12,5 +14,3 @@ $router.listen(({ action, location }) => {
     socket.disconnect()
   }, 0)
 })
-
-export default $router

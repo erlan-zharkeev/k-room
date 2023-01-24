@@ -1,4 +1,4 @@
-import $clg from 'src/services/clg'
+import $clg from 'src/services/$clg'
 /**
  * Shorthand for clear persisted store cmd + enter
  * @param e KeyBoardEvent

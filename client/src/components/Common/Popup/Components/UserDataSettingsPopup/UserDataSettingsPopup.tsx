@@ -10,7 +10,7 @@ import { showNotification, closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
 
 const UserDataSettingsPopup = () => {
-  const { avatar, username, id } = useTypedSelector((state) => state.auth.userData)
+  const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
 
   const [newAvatar, setNewAvatar] = useState<string | undefined>()
 

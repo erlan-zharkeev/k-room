@@ -7,14 +7,14 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { changeAsideTab, selectChatRoom } from 'src/store/systemSlice'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
+import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 
 const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { id, username } = useTypedSelector((state) => state.auth.userData)
-  const { settings } = useTypedSelector((state) => state.persist.system)
+  const { id, username } = useTypedSelector((state) => state.user.userData)
+  const { settings } = useTypedSelector((state) => state.persist)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -57,7 +57,7 @@ const ContactList = () => {
     })
   }
 
-  const CustomButton = (clickEvent: (value: User) => void, icon: ReactElement, clickEventPayload: any) => (
+  const CustomButton = (clickEvent: (value: User) => void, icon: ReactElement, clickEventPayload: User) => (
     <Button icon={icon} onClick={() => clickEvent(clickEventPayload)} size="large" className="borderless" type="text" />
   )
 
@@ -90,7 +90,7 @@ const ContactList = () => {
         locale={{
           emptyText: <div className="paragraph-text paragraph-text--secondary">There are no contacts yet</div>
         }}
-        renderItem={(user: any) => (
+        renderItem={(user) => (
           <List.Item>
             <List.Item.Meta
               avatar={

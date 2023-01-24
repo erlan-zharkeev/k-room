@@ -1,16 +1,15 @@
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopPanel from 'src/components/TopPanel/TopPanel'
 import Popup from 'src/components/Common/Popup/Popup'
-import _debounce from 'lodash/debounce'
 import { socket } from 'src/socket/socket'
 import { Message, SocketActions, User, ChatRoom as ChatRoomInterface } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
-import $clg from 'src/services/clg'
-import { setReconnectionAttempts, showNotification, socketConnect, socketDisconnect } from 'src/store/systemSlice'
+import $clg from 'src/services/$clg'
+import { setReconnectingStatus, showNotification } from 'src/store/systemSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
@@ -21,13 +20,14 @@ import {
   updateMessageStatus,
   changeChatName
 } from 'src/store/roomsSlice'
+import useDebounce from 'src/hooks/useDebounce'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
 
-  const userId = useTypedSelector((state) => state.auth.userData.id)
-  const { viewPort, socketConnected } = useTypedSelector((state) => state.persist.system)
-  const { isAuth } = useTypedSelector((state) => state.auth)
+  const userId = useTypedSelector((state) => state.user.userData.id)
+  const { viewPort } = useTypedSelector((state) => state.system)
+  const { isAuth } = useTypedSelector((state) => state.user)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -41,7 +41,7 @@ export const MainPage = () => {
     if (isAuth) dispatch(showNotification({ messageType: 'error', message: 'Socket disconnected' }))
   }
 
-  const debouncedStatusNotification = useCallback(_debounce(statusNotification, 1000), [])
+  const debouncedStatusNotification = useDebounce(statusNotification, 1000)
 
   useEffect(() => {
     socket.connect()
@@ -50,17 +50,20 @@ export const MainPage = () => {
     socket.io.on(SocketActions.RECONNECTION, (attempt) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
       socket.emit(SocketActions.INITIALIZE, userId)
+      dispatch(setReconnectingStatus(false))
     })
     socket.io.on(SocketActions.RECONNECT_ATTEMPT, (attempt) => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
-      dispatch(setReconnectionAttempts())
+      dispatch(setReconnectingStatus(true))
     })
+    socket.io.on(SocketActions.RECONNECT_FAILED, () => {
+      dispatch(setReconnectingStatus(false))
+    })
+
     socket.on(SocketActions.DISCONNECT, () => {
-      dispatch(socketDisconnect())
       debouncedStatusNotification(false)
     })
     socket.on(SocketActions.CONNECTION, () => {
-      dispatch(socketConnect())
       debouncedStatusNotification(true)
     })
     socket.on(SocketActions.STATUS_CONTACT, (userData: { userId: string; status: boolean }) => {
@@ -94,7 +97,7 @@ export const MainPage = () => {
 
   return (
     <div className={'main-page page ' + (selectedChatRoom && viewPort.width <= 576 ? 'move-aside' : '')}>
-      <StubLoading isLoading={!socketConnected} />
+      <StubLoading isLoading={socket.disconnected} />
       <Popup />
       <TopPanel />
       <div className="main-page__content">
