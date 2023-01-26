@@ -11,8 +11,7 @@ export enum SettingsAction {
 export const updateUserSettings = createAsyncThunk(
   SettingsAction.UPDATE_USER_SETTINGS,
   async (payload: { userId: string; type: string; value: string | boolean }, { dispatch }) => {
-    const response = await $api('post', UserEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
-    dispatch(updateSettings(response.data))
+    await $api('post', UserEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
   }
 )
 
@@ -29,35 +28,37 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    updateSettings(state, action) {
-      const currentState = state
-      const updatedSettings = action.payload
-      state = {
-        ...currentState,
-        ...updatedSettings
-      }
+    updateSettings(state, { payload }) {
+      const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification } = payload
+      state.asideTab = asideTab
+      state.selectedChatRoomId = selectedChatRoomId
+      state.theme = theme
+      setTheme(state.theme)
+      state.soundOn = soundOn
+      state.showTooltips = showTooltips
+      state.ableToShowNotification = ableToShowNotification
     },
-    selectChatRoom(state, action) {
-      state.selectedChatRoomId = action.payload
+    selectChatRoom(state, { payload }) {
+      state.selectedChatRoomId = payload
     },
     deselectChatRoom(state) {
       state.selectedChatRoomId = ''
     },
-    changeAsideTab(state, action) {
-      state.asideTab = action.payload
+    changeAsideTab(state, { payload }) {
+      state.asideTab = payload
     },
-    setAbleToShowNotification(state, action) {
-      state.ableToShowNotification = action.payload
+    setAbleToShowNotification(state, { payload }) {
+      state.ableToShowNotification = payload
     },
-    changeTheme(state, action) {
-      state.theme = action.payload ? 'dark' : 'light'
+    changeTheme(state, { payload }) {
+      state.theme = payload ? 'dark' : 'light'
       setTheme(state.theme)
     },
-    setSoundValue(state, action) {
-      state.soundOn = action.payload
+    setSoundValue(state, { payload }) {
+      state.soundOn = payload
     },
-    setTooltipsValue(state, action) {
-      state.showTooltips = action.payload
+    setTooltipsValue(state, { payload }) {
+      state.showTooltips = payload
     }
   }
 })

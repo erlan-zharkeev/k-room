@@ -6,8 +6,10 @@ import $clg from 'src/services/$clg'
 export const clearLocalStorageOnKeyDown = (e: KeyboardEvent): void => {
   if (e.ctrlKey && e.key === 'Enter') {
     localStorage.clear()
-    window.location.reload()
-    $clg('success', 'ls cleared')
+    $clg('success', 'local storage cleared')
+    setTimeout(() => {
+      window.location.reload()
+    }, 1000)
   }
 }
 

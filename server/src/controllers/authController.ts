@@ -27,11 +27,18 @@ class AuthController {
       const hashedPassword = await bcrypt.hash(password, 6)
 
       if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
-      const user = new UserModel({ username, email, password: hashedPassword, socketId: '' })
+      const settings = {
+        asideTab: 'users',
+        selectedChatRoomId: '',
+        ableToShowNotification: true,
+        theme: 'light',
+        showTooltips: false,
+        soundOn: true
+      }
+      const user = new UserModel({ username, email, password: hashedPassword, socketId: '', settings })
       await user.save()
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
       if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, Messages.failedToSendConfirmationLink)
-      console.log(confirmEmailData)
       return res.json(confirmEmailData)
     } catch (e) {
       console.log(e)

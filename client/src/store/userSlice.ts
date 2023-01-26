@@ -28,6 +28,7 @@ export const updateUserData = createAsyncThunk(UserAction.UPDATE_USER_DATA, asyn
 export const getUserData = createAsyncThunk(UserAction.GET_USER_DATA, async (_: unknown, { dispatch }) => {
   const response = await $api('get', UserEndPoints.GET_USER_DATA, dispatch)
   dispatch(setUserData(response.data.userData))
+  dispatch(updateSettings(response.data.settings))
   $router.push(RouteNames.MAIN)
 })
 

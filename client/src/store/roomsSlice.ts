@@ -10,31 +10,31 @@ const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
-    loadChatRooms(state, action) {
-      state.chatRooms = action.payload
+    loadChatRooms(state, { payload }) {
+      state.chatRooms = payload
     },
-    updateChatMessage(state, action) {
-      const { roomId, message } = action.payload
+    updateChatMessage(state, { payload }) {
+      const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
       room.messages.forEach((roomMessage, idx) => {
         if (roomMessage.id === message.id) room.messages.splice(idx, 1)
       })
       room.messages.push(message)
     },
-    updateMessageStatus(state, action) {
-      const { roomId, messageId, status } = action.payload
+    updateMessageStatus(state, { payload }) {
+      const { roomId, messageId, status } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
       room.messages.forEach((roomMessage) => {
         if (roomMessage.id === messageId) roomMessage.status = status
       })
     },
-    pushTemporaryMessage(state, action) {
-      const { roomId, message } = action.payload
+    pushTemporaryMessage(state, { payload }) {
+      const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
       room.messages.push(message)
     },
-    updateChatUsersStatus(state, action) {
-      const { userId, status } = action.payload
+    updateChatUsersStatus(state, { payload }) {
+      const { userId, status } = payload
       const hasUser = (users: Array<UserShort>): boolean => {
         return users.some((user) => user.id === userId)
       }
@@ -42,8 +42,8 @@ const roomsSlice = createSlice({
         if (hasUser(room.users)) room.hasOnline = status
       })
     },
-    changeChatName(state, action) {
-      const { id, username, avatar } = action.payload
+    changeChatName(state, { payload }) {
+      const { id, username, avatar } = payload
       state.chatRooms.forEach((room) => {
         const roomHasContact = Boolean(room.users.find((user) => user.id === id))
         if (!roomHasContact) return

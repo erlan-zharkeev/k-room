@@ -6,7 +6,7 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
     const value = action.payload
     let convertedValue = value
     const userId = store.getState().user.userData.id
-    let type = null
+    let type = ''
     switch (action.type) {
       case 'settings/changeTheme':
         convertedValue = value ? 'dark' : 'light'
@@ -33,7 +33,7 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
       default:
         break
     }
-    dispatch(updateUserSettings({ userId, type, value }))
+    dispatch(updateUserSettings({ userId, type, value: convertedValue }))
   }
 }
 

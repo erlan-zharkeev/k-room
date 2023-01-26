@@ -31,29 +31,29 @@ const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    setReconnectingStatus(state, action) {
-      state.reconnecting = action.payload
+    setReconnectingStatus(state, { payload }) {
+      state.reconnecting = payload
     },
-    showModal(state, action) {
-      state.modalData = action.payload
+    showModal(state, { payload }) {
+      state.modalData = payload
       state.showModal = true
     },
     closeModal(state) {
       state.showModal = false
     },
-    showNotification(state, action) {
-      const ableToShowNotification = action.payload.ableToShowNotification
+    showNotification(state, { payload }) {
+      const ableToShowNotification = payload.ableToShowNotification
       if (!ableToShowNotification) return
-      delete action.payload.ableToShowNotification
+      delete payload.ableToShowNotification
       state.notificationData = {
         ...state.notificationData,
-        ...action.payload
+        ...payload
       }
       if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
       state.notificationData = initialState.notificationData
     },
-    setViewPort(state, action) {
-      state.viewPort = action.payload
+    setViewPort(state, { payload }) {
+      state.viewPort = payload
       const viewPortWidth = state.viewPort.width
       const viewPortType = viewPortWidth <= 576 ? 'mobile' : 'desktop'
       html?.setAttribute('view-port', viewPortType)
@@ -61,12 +61,6 @@ const systemSlice = createSlice({
   }
 })
 
-export const {
-  setReconnectingStatus,
-  showNotification,
-  showModal,
-  closeModal,
-  setViewPort
-} = systemSlice.actions
+export const { setReconnectingStatus, showNotification, showModal, closeModal, setViewPort } = systemSlice.actions
 
 export default systemSlice.reducer
