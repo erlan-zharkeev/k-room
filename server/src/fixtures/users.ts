@@ -15,7 +15,15 @@ export default async () => {
       password: hashedPassword,
       socketId: '',
       refreshToken: username,
-      confirmed: true
+      confirmed: true,
+      settings: {
+        asideTab: 'users',
+        selectedChatRoomId: '',
+        ableToShowNotification: true,
+        theme: 'light',
+        showTooltips: false,
+        soundOn: true
+      }
     })
     await user.save()
   }
