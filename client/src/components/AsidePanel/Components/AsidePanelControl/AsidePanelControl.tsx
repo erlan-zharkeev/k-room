@@ -1,4 +1,4 @@
-import { UserOutlined, WechatOutlined, SettingOutlined } from '@ant-design/icons'
+import { UserOutlined, WechatOutlined, SettingOutlined, PhoneOutlined } from '@ant-design/icons'
 import { Radio, RadioChangeEvent, Tooltip } from 'antd'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
@@ -16,6 +16,7 @@ const AsidePanelControl = () => {
   const buttons = [
     { title: 'Contacts', value: 'users', icon: () => <UserOutlined /> },
     { title: 'Chat rooms', value: 'chatList', icon: () => <WechatOutlined /> },
+    { title: 'Calls', value: 'calls', icon: () => <PhoneOutlined /> },
     { title: 'User settings', value: 'settings', icon: () => <SettingOutlined /> }
   ]
 

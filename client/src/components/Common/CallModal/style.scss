@@ -1,0 +1,15 @@
+@import './Components/CallModalBody/style.scss';
+@import './Components/CallModalVideo/style.scss';
+
+.react-draggable {
+  z-index: 5;
+}
+.draggable-resizable-modal {
+  opacity: 1;
+  transition: opacity 0.1s linear;
+  z-index: 5;
+  &--collapse {
+    opacity: 0;
+    transition: opacity 0.1s linear;
+  }
+}

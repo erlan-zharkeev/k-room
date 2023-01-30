@@ -116,12 +116,26 @@ export interface User extends UserCredential {
 export type theme = "dark" | "light";
 
 export interface UserSettings {
-  asideTab: string
-  selectedChatRoomId: string
+  asideTab: string;
+  selectedChatRoomId: string;
   ableToShowNotification: boolean;
   theme: theme;
   showTooltips: boolean;
   soundOn: boolean;
+}
+
+export type CallStatus = "in-progress" | "finished";
+
+export type CallType = "incoming" | "outgoing" | "missed";
+export interface Call {
+  startedAt: number;
+  finishedAt?: number;
+  length?: number;
+  interlocutorId: string;
+  interlocutorName: string;
+  status?: CallStatus;
+  type: CallType;
+  video: boolean;
 }
 
 export enum Status {

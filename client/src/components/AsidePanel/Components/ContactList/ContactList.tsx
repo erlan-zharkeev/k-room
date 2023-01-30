@@ -1,21 +1,29 @@
-import { List, Badge, Avatar, Button, Tooltip, Image } from 'antd'
-import { UserOutlined, MessageOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons'
+import { List, Badge, Avatar, Image, Button, Tooltip } from 'antd'
+import {
+  UserOutlined,
+  MessageOutlined,
+  CloseCircleOutlined,
+  LoadingOutlined,
+  PhoneOutlined,
+  VideoCameraOutlined
+} from '@ant-design/icons'
 import { User, SocketActions } from 'common-types'
 import moment from 'moment'
-import { useState, ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
+import { initCall, initVideoCall } from 'src/store/callsSlice'
 
 const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username } = useTypedSelector((state) => state.user.userData)
-  const { settings } = useTypedSelector((state) => state.persist)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
+  const { settings } = useTypedSelector((state) => state.persist)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -57,12 +65,12 @@ const ContactList = () => {
     })
   }
 
-  const CustomButton = (clickEvent: (value: User) => void, icon: ReactElement, clickEventPayload: User) => (
+  const CustomButton = (clickEvent: (value: User) => void, icon: ReactElement, clickEventPayload: any) => (
     <Button icon={icon} onClick={() => clickEvent(clickEventPayload)} size="large" className="borderless" type="text" />
   )
 
   const ButtonWrapper = (
-    clickEvent: (value: User) => void,
+    clickEvent: (value: any) => void,
     icon: ReactElement,
     clickEventPayload: User,
     title: string
@@ -108,6 +116,20 @@ const ContactList = () => {
                   {user.online ? 'online' : lastSeen(user.lastSeen)}
                 </span>
               }
+            />
+            <Button
+              icon={<PhoneOutlined />}
+              onClick={() => dispatch(initCall())}
+              size="large"
+              className="borderless"
+              type="text"
+            />
+            <Button
+              icon={<VideoCameraOutlined />}
+              onClick={() => dispatch(initVideoCall())}
+              size="large"
+              className="borderless"
+              type="text"
             />
             {ButtonWrapper(createChat, roomCreateLoader ? <LoadingOutlined /> : <MessageOutlined />, user, 'Open chat')}
             {ButtonWrapper(deleteUser, <CloseCircleOutlined />, user, 'Delete contact')}
