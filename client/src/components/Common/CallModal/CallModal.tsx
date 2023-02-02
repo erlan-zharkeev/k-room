@@ -1,10 +1,5 @@
-import { UserOutlined, VideoCameraOutlined, PhoneOutlined, AudioOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { closeCallModal, setMinify } from 'src/store/callsSlice'
-import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import { AppDispatch } from 'src/store'
-import { Avatar, Button } from 'antd'
 import { Rnd } from 'react-rnd'
 import { ModalOptions } from './@types'
 import CallModalBody from './Components/CallModalBody/CallModalBody'
@@ -13,14 +8,13 @@ const initialSize = {
   width: 500,
   height: 500,
   minWidth: 300,
-  minHeight: 400
+  minHeight: 450
 }
 
 export const CallModal = () => {
   const viewPortWidth = useTypedSelector((state) => state.system.viewPort.width)
   const viewPortHeight = useTypedSelector((state) => state.system.viewPort.height)
   const { isMinified, showCallModal } = useTypedSelector((state) => state.calls)
-  const [callLength, setCallLength] = useState('09:07')
   const [modalWidth, setModalWidth] = useState(initialSize.width)
   const [modalHeight, setModalHeight] = useState(initialSize.height)
   const initialPosition = {
@@ -29,8 +23,6 @@ export const CallModal = () => {
   }
   const [modalPositionX, setModalPositionX] = useState(initialPosition.x)
   const [modalPositionY, setModalPositionY] = useState(initialPosition.y)
-
-  const dispatch = useDispatch<AppDispatch>()
 
   const setModalOptions = ({ width, height, x, y }: ModalOptions) => {
     setModalWidth(width)

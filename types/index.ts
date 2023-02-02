@@ -58,6 +58,9 @@ export enum SocketActions {
   CHANGE_MESSAGE_STATUS = "change-message-status",
   UPDATE_MESSAGE_STATUS = "update-message-status",
   CHANGE_CONTACTS_DATA = "change-contacts-data",
+  CALL_USER = "call-user",
+  ANSWER_CALL = "answer-call",
+  CALL_ACCEPTED = "call-accepted",
 }
 
 export enum RouteNames {
@@ -124,16 +127,19 @@ export interface UserSettings {
   soundOn: boolean;
 }
 
-export type CallStatus = "in-progress" | "finished";
+export type CallStatus = "calling" | "in-progress" | "finished";
 
 export type CallType = "incoming" | "outgoing" | "missed";
 export interface Call {
+  authorId: string;
+  authorName: string;
   startedAt: number;
   finishedAt?: number;
   length?: number;
   interlocutorId: string;
   interlocutorName: string;
-  status?: CallStatus;
+  interlocutorAvatar?: string;
+  status: CallStatus;
   type: CallType;
   video: boolean;
 }

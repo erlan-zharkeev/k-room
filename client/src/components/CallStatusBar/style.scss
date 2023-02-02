@@ -4,6 +4,8 @@
   cursor: pointer;
   transition: height 0.1s ease-in;
 
+  $self: &;
+
   &__wrapper {
     display: flex;
     align-items: center;
@@ -17,7 +19,7 @@
     height: 0;
     transition: height 0.1s ease-in;
 
-    .call-status-bar__wrapper {
+    #{ $self }__wrapper {
       display: none;
     }
   }

@@ -9,7 +9,7 @@
     video {
       @include wh-100;
 
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 
@@ -22,7 +22,7 @@
     video {
       @include wh-100;
 
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 

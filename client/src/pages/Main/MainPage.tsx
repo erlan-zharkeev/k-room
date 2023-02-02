@@ -23,6 +23,8 @@ import {
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
+import { setCurrentCallAccepted, setShowCallModal } from 'src/store/callsSlice'
+import call from 'src/call/call'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -93,6 +95,13 @@ export const MainPage = () => {
       dispatch(updateContactData(updatedUserData))
       dispatch(changeChatName(updatedUserData))
     })
+
+    socket.on(SocketActions.CALL_USER, (data) => {
+      dispatch(setShowCallModal(data))
+      call.setCallerId(data.from)
+      call.setCallerSignal(data.signal)
+    })
+
     return () => {
       socket.removeAllListeners()
     }

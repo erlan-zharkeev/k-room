@@ -1,5 +1,5 @@
 import { Image, Badge, Button, Avatar } from 'antd'
-import { UserOutlined, VideoCameraOutlined, PhoneOutlined } from '@ant-design/icons'
+import { UserOutlined, PhoneOutlined } from '@ant-design/icons'
 import { SocketActions } from 'common-types'
 import { useState, useEffect } from 'react'
 import { socket } from 'src/socket/socket'
@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
-import { initCall, initVideoCall } from 'src/store/callsSlice'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -56,20 +55,13 @@ export const RoomHeader = () => {
         )}
       </div>
       <div className="room-header__controls">
-        <Button
+        {/* <Button
           size="large"
           className="borderless"
           type="text"
           icon={<PhoneOutlined />}
           onClick={() => dispatch(initCall())}
-        />
-        <Button
-          size="large"
-          className="borderless"
-          type="text"
-          icon={<VideoCameraOutlined />}
-          onClick={() => dispatch(initVideoCall())}
-        />
+        /> */}
         {/* <Dropdown
           overlay={
             <Menu

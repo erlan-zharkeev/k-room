@@ -35,10 +35,10 @@ module.exports = {
         context: ['/api'],
         target: `http://localhost:${ENV.SERVER_PORT}`
       },
-      {
-        context: ['/app/'],
-        target: `http://localhost:${ENV.SERVER_PORT}`
-      }
+      // {
+      //   context: ['/app/'],
+      //   target: `http://localhost:${ENV.SERVER_PORT}`
+      // }
     ],
     historyApiFallback: true,
     port: ENV.CLIENT_PORT,

@@ -9,21 +9,24 @@ import {
 } from '@ant-design/icons'
 import { User, SocketActions } from 'common-types'
 import moment from 'moment'
-import { ReactElement, useState } from 'react'
+import { ReactElement, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { initCall, initVideoCall } from 'src/store/callsSlice'
+import { initModalToCall, setCurrentCallAccepted } from 'src/store/callsSlice'
+import call from 'src/call/call'
 
 const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { id, username } = useTypedSelector((state) => state.user.userData)
+  const { id, username, avatar } = useTypedSelector((state) => state.user.userData)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
   const { settings } = useTypedSelector((state) => state.persist)
+  const [selfStream, setSelfStream] = useState(null)
+  const connectionRef = useRef()
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -88,6 +91,11 @@ const ContactList = () => {
     return timeStamp ? `last seen ${moment(Number(timeStamp)).startOf('minutes').fromNow()}` : ''
   }
 
+  const initCall = async (interlocutorData: User) => {
+    await call.setStream()
+    call.initCall(interlocutorData, id, avatar)
+  }
+
   return (
     <div className="contact-list">
       <ContactSearch />
@@ -119,14 +127,7 @@ const ContactList = () => {
             />
             <Button
               icon={<PhoneOutlined />}
-              onClick={() => dispatch(initCall())}
-              size="large"
-              className="borderless"
-              type="text"
-            />
-            <Button
-              icon={<VideoCameraOutlined />}
-              onClick={() => dispatch(initVideoCall())}
+              onClick={async () => await initCall(user)}
               size="large"
               className="borderless"
               type="text"

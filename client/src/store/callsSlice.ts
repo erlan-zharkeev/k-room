@@ -1,21 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { stat } from 'fs'
+import { SocketActions } from 'common-types'
+import { useState, useEffect } from 'react'
+import { $sound, Sounds } from 'src/services/$sound'
+import { socket } from 'src/socket/socket'
 import { CallsState } from './@types/CallsState'
 
 const initialState: CallsState = {
-  showCallModal: true,
+  showCallModal: false,
   isMinified: false,
   videoEnabled: false,
   userVideoPositionRelative: false,
   currentCall: {
+    authorId: '',
+    authorName: '',
     startedAt: 1674784901,
     interlocutorName: 'Ivan',
     interlocutorId: '0',
+    interlocutorAvatar: '',
     type: 'incoming',
-    video: false
+    video: false,
+    status: 'calling'
   },
   list: [
     {
+      authorId: '',
+      authorName: '',
       startedAt: 1674784901,
       finishedAt: 1674784901,
       length: 36,
@@ -26,6 +35,8 @@ const initialState: CallsState = {
       video: true
     },
     {
+      authorId: '',
+      authorName: '',
       startedAt: 1674784901,
       finishedAt: 1674784901,
       length: 156,
@@ -36,6 +47,8 @@ const initialState: CallsState = {
       video: false
     },
     {
+      authorId: '',
+      authorName: '',
       startedAt: 1674784901,
       finishedAt: 1674784901,
       length: 342,
@@ -55,14 +68,37 @@ const callsSlice = createSlice({
     updateAllList(state, { payload }) {
       state.list = payload
     },
-    initCall(state) {
+    initModalToCall(state, { payload }) {
       state.showCallModal = true
+      const { id, avatar, username, stream } = payload
+      state.currentCall.interlocutorId = id
+      state.currentCall.interlocutorAvatar = avatar
+      state.currentCall.interlocutorName = username
+      state.currentCall.status = 'calling'
+      state.currentCall.type = 'outgoing'
     },
-    initVideoCall(state) {
+    setCurrentCallAccepted(state) {
+      state.currentCall.status = 'in-progress'
+    },
+    setShowCallModal(state, { payload }) {
       state.showCallModal = true
+      state.currentCall.interlocutorName = payload.from
+      state.currentCall.interlocutorAvatar = payload.avatar
+      state.currentCall.type = 'incoming'
     },
     closeCallModal(state) {
       state.showCallModal = false
+      state.currentCall = {
+        authorId: '',
+        authorName: '',
+        startedAt: 0,
+        interlocutorName: '',
+        interlocutorId: '',
+        interlocutorAvatar: '',
+        type: 'incoming',
+        video: false,
+        status: 'calling'
+      }
     },
     setMinify(state) {
       state.isMinified = true
@@ -76,7 +112,15 @@ const callsSlice = createSlice({
   }
 })
 
-export const { updateAllList, initCall, initVideoCall, closeCallModal, setMinify, unsetMinify, toggleEnableVideo } =
-  callsSlice.actions
+export const {
+  updateAllList,
+  setCurrentCallAccepted,
+  initModalToCall,
+  closeCallModal,
+  setMinify,
+  unsetMinify,
+  toggleEnableVideo,
+  setShowCallModal
+} = callsSlice.actions
 
 export default callsSlice.reducer

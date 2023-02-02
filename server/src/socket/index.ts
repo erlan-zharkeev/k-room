@@ -23,6 +23,22 @@ import setUserStatus from './helpers/setUserStatus'
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
+  socket.on(SocketActions.CALL_USER, async (data: any) => {
+    const interlocutor = await getUserById(data.userToCall)
+    if (!interlocutor) return
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_USER, {
+      signal: data.signalData,
+      from: data.from,
+      avatar: data.avatar
+    })
+  })
+
+  socket.on(SocketActions.ANSWER_CALL, async (data) => {
+    const interlocutor = await getUserById(data.to)
+    if (!interlocutor) return
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_ACCEPTED, data.signal)
+  })
+
   socket.on(SocketActions.INITIALIZE, async (userId: string) => {
     io.to(socket.id).emit(SocketActions.CONNECTION)
     await setSocketId(userId, socket.id)

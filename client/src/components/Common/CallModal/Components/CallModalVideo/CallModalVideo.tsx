@@ -1,26 +1,23 @@
-import { Dropdown, Menu, Button } from 'antd'
+import { Dropdown, Menu } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { SettingOutlined } from '@ant-design/icons'
-import { useEffect, useRef } from 'react'
 
-export const CallModalVideo = ({ getUserVideoRef }: any) => {
-  const { videoEnabled } = useTypedSelector((state) => state.calls)
-  const userVideo = useRef(null)
-  useEffect(() => {
-    getUserVideoRef(userVideo.current)
-    console.log(userVideo.current)
-  }, [])
+export const CallModalVideo = () => {
+  const { videoEnabled, currentCall } = useTypedSelector((state) => state.calls)
 
   return (
-    <div className="call-modal-video" ref={userVideo}>
+    <div
+      className="call-modal-video"
+      style={{
+        display: currentCall.status === 'calling' ? 'none' : 'flex'
+      }}
+    >
       <div className="call-modal-video__interlocutor-video">
-        <video src="./video/test.mp4" autoPlay loop />
+        <video autoPlay id="interlocutor-video" />
       </div>
-      {videoEnabled && (
-        <div className="call-modal-video__user-video">
-          <video autoPlay id="user-video" />
-        </div>
-      )}
+      <div className="call-modal-video__user-video">
+        <video autoPlay muted id="self-video" />
+      </div>
       <div className="call-modal-video__settings">
         <Dropdown
           overlay={
