@@ -19,7 +19,7 @@ export const CallModalVideo = () => {
         <video autoPlay muted id="self-video" />
       </div>
       <div className="call-modal-video__settings">
-        <Dropdown
+        {/* <Dropdown
           overlay={
             <Menu
               items={[
@@ -31,7 +31,7 @@ export const CallModalVideo = () => {
           placement="topLeft"
         >
           <SettingOutlined />
-        </Dropdown>
+        </Dropdown> */}
       </div>
     </div>
   )

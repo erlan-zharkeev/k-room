@@ -25,8 +25,7 @@ const ContactList = () => {
   const { id, username, avatar } = useTypedSelector((state) => state.user.userData)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
   const { settings } = useTypedSelector((state) => state.persist)
-  const [selfStream, setSelfStream] = useState(null)
-  const connectionRef = useRef()
+  const [isStreamIsLoading, setIsStreamIsLoading] = useState(false)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -92,8 +91,10 @@ const ContactList = () => {
   }
 
   const initCall = async (interlocutorData: User) => {
-    await call.setStream()
-    call.initCall(interlocutorData, id, avatar)
+    setIsStreamIsLoading(true)
+    const gotStream = await call.setStream()
+    setIsStreamIsLoading(false)
+    if (gotStream) call.initCall(interlocutorData, id, avatar, username)
   }
 
   return (
@@ -125,13 +126,17 @@ const ContactList = () => {
                 </span>
               }
             />
-            <Button
-              icon={<PhoneOutlined />}
-              onClick={async () => await initCall(user)}
-              size="large"
-              className="borderless"
-              type="text"
-            />
+            {isStreamIsLoading ? (
+              <Button icon={<LoadingOutlined />} size="large" className="borderless" type="text" />
+            ) : (
+              <Button
+                icon={<PhoneOutlined />}
+                onClick={async () => await initCall(user)}
+                size="large"
+                className="borderless"
+                type="text"
+              />
+            )}
             {ButtonWrapper(createChat, roomCreateLoader ? <LoadingOutlined /> : <MessageOutlined />, user, 'Open chat')}
             {ButtonWrapper(deleteUser, <CloseCircleOutlined />, user, 'Delete contact')}
           </List.Item>

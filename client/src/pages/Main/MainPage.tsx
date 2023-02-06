@@ -98,8 +98,12 @@ export const MainPage = () => {
 
     socket.on(SocketActions.CALL_USER, (data) => {
       dispatch(setShowCallModal(data))
-      call.setCallerId(data.from)
-      call.setCallerSignal(data.signal)
+      const { from, signal } = data
+      call.calling(from, signal)
+    })
+
+    socket.on(SocketActions.CALL_ENDED, () => {
+      call.leaveCall()
     })
 
     return () => {

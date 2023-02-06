@@ -56,7 +56,8 @@ export declare enum SocketActions {
     CHANGE_CONTACTS_DATA = "change-contacts-data",
     CALL_USER = "call-user",
     ANSWER_CALL = "answer-call",
-    CALL_ACCEPTED = "call-accepted"
+    CALL_ACCEPTED = "call-accepted",
+    CALL_ENDED = "call-ended"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",

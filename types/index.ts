@@ -61,6 +61,7 @@ export enum SocketActions {
   CALL_USER = "call-user",
   ANSWER_CALL = "answer-call",
   CALL_ACCEPTED = "call-accepted",
+  CALL_ENDED = "call-ended"
 }
 
 export enum RouteNames {

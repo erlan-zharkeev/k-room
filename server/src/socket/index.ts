@@ -7,14 +7,14 @@ import { ChatRoomModel } from './../models/chatRoom.model'
 import { SearchTypeMap } from './../types/SearchTypeMap'
 import { transformUsersData } from './../utils/transformUserData'
 import { Messages } from './../types/Messages'
-import setSocketId from './helpers/setSocketId'
-import setMessageStatus from './helpers/setMessageStatus'
 import emitContacts from './helpers/emitContacts'
 import emitRoomsByUserId from './helpers/emitRoomsByUserId'
 import emitSearchedContacts from './helpers/emitSearchedContacts'
 import getSocketsByUsersArray from './helpers/getSocketsByUsersArray'
 import getUserById from './helpers/getUserById'
 import getUserBySocketId from './helpers/getUserBySocketId'
+import setSocketId from './helpers/setSocketId'
+import setMessageStatus from './helpers/setMessageStatus'
 import setMessage from './helpers/setMessage'
 import setRoomToUsers from './helpers/setRoomToUsers'
 import setLastSeenData from './helpers/setLastSeenData'
@@ -29,7 +29,8 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_USER, {
       signal: data.signalData,
       from: data.from,
-      avatar: data.avatar
+      avatar: data.avatar,
+      callerName: data.callerName
     })
   })
 
@@ -37,6 +38,12 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
     const interlocutor = await getUserById(data.to)
     if (!interlocutor) return
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_ACCEPTED, data.signal)
+  })
+
+  socket.on(SocketActions.CALL_ENDED, async (callerId: any) => {
+    const interlocutor = await getUserById(callerId)
+    if (!interlocutor) return
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_ENDED)
   })
 
   socket.on(SocketActions.INITIALIZE, async (userId: string) => {

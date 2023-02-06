@@ -82,7 +82,7 @@ const callsSlice = createSlice({
     },
     setShowCallModal(state, { payload }) {
       state.showCallModal = true
-      state.currentCall.interlocutorName = payload.from
+      state.currentCall.interlocutorName = payload.callerName
       state.currentCall.interlocutorAvatar = payload.avatar
       state.currentCall.type = 'incoming'
     },

@@ -40,6 +40,8 @@
   }
 
   &__controls {
+    position: absolute;
+    bottom: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,13 +51,14 @@
 
     &-elements {
       display: flex;
+      justify-content: space-evenly;
+      width: 50%;
+      max-width: 300px;
       margin-top: 1rem;
     }
 
     &-element {
-      &:nth-child(even) {
-        margin: 0 $gutter-xl;
-      }
+      margin: 0 5px;
 
       &--phone {
         transform: rotate(-138deg);
@@ -79,7 +82,7 @@
   }
 
   &__interlocutor-name {
-    margin-top: $gutter-md;
+    margin-top: $gutter-xl;
   }
 
   &__window-controls {
