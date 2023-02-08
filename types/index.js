@@ -49,6 +49,8 @@ var SocketActions;
     SocketActions["ANSWER_CALL"] = "answer-call";
     SocketActions["CALL_ACCEPTED"] = "call-accepted";
     SocketActions["CALL_ENDED"] = "call-ended";
+    SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
+    SocketActions["CALL_STARTED_AT"] = "call-started-at";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {

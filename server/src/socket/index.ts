@@ -30,14 +30,28 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
       signal: data.signalData,
       from: data.from,
       avatar: data.avatar,
-      callerName: data.callerName
+      callerName: data.callerName,
+      settings: data.settings
+    })
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+      io.to(interlocutor?.socketId).emit(SocketActions.CHANGE_CALL_SETTINGS, data)
     })
   })
 
   socket.on(SocketActions.ANSWER_CALL, async (data) => {
     const interlocutor = await getUserById(data.to)
     if (!interlocutor) return
-    io.to(interlocutor?.socketId).emit(SocketActions.CALL_ACCEPTED, data.signal)
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_ACCEPTED, {
+      signal: data.signal,
+      settings: data.settings
+    })
+    const sockets = [interlocutor.socketId, data.selfSocketId]
+    sockets.forEach((socketId) => {
+      io.to(socketId).emit(SocketActions.CALL_STARTED_AT, Date.now())
+    })
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+      io.to(interlocutor?.socketId).emit(SocketActions.CHANGE_CALL_SETTINGS, data)
+    })
   })
 
   socket.on(SocketActions.CALL_ENDED, async (callerId: any) => {

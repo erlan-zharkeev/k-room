@@ -5,7 +5,12 @@ import $clg from 'src/services/$clg'
 import { $sound, Sounds } from 'src/services/$sound'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { closeCallModal, initModalToCall, setCurrentCallAccepted } from 'src/store/callsSlice'
+import {
+  closeCallModal,
+  initModalToCall,
+  setCurrentCallAccepted,
+  updateInterlocutorSettings
+} from 'src/store/callsSlice'
 import { store } from 'src/store/index'
 import { showNotification } from 'src/store/systemSlice'
 
@@ -13,8 +18,10 @@ class Call {
   selfId: string
   dispatch: AppDispatch
   selfStream: MediaStream
+  interlocutorStream: MediaStream
   connection: Peer.Instance
   callerId: string
+  selfSocketId: string
   callerSignal: SignalData
   callToId: string
   soundConnection: Howl
@@ -23,6 +30,7 @@ class Call {
     this.dispatch = store.dispatch
     this.soundConnection = $sound(Sounds.connection, true)
     this.soundCalling = $sound(Sounds.ring, true)
+    this.selfSocketId = socket.id
   }
 
   async listenConnectionError() {
@@ -42,20 +50,21 @@ class Call {
       stream: this.selfStream
     })
     peer.on('signal', (data: SignalData) => {
-      console.log(data)
+      const settings = store.getState().calls.settings
       socket.emit(SocketActions.CALL_USER, {
         userToCall: interlocutorData.id,
         signalData: data,
         from: selfId,
         avatar: selfAvatarPath,
-        callerName
+        callerName,
+        settings
       })
     })
     peer.on('stream', (interlocutorStream: MediaStream) => {
+      this.interlocutorStream = interlocutorStream
       const interlocutorVideo = document.getElementById('interlocutor-video') as HTMLVideoElement
       interlocutorVideo.srcObject = interlocutorStream
     })
-
     peer.on('close', () => {
       this.dispatch(
         showNotification({
@@ -64,12 +73,14 @@ class Call {
         })
       )
     })
-    socket.on(SocketActions.CALL_ACCEPTED, (signal: SignalData) => {
+    socket.on(SocketActions.CALL_ACCEPTED, (data) => {
       this.soundConnection.stop()
       this.dispatch(setCurrentCallAccepted())
-      peer.signal(signal)
+      this.dispatch(updateInterlocutorSettings(data.settings))
+      peer.signal(data.signal)
     })
     this.connection = peer
+
     this.listenConnectionError()
   }
 
@@ -82,22 +93,41 @@ class Call {
       stream: this.selfStream
     })
     peer.on('signal', (data: any) => {
-      socket.emit(SocketActions.ANSWER_CALL, { signal: data, to: this.callerId })
+      const settings = store.getState().calls.settings
+      socket.emit(SocketActions.ANSWER_CALL, {
+        signal: data,
+        to: this.callerId,
+        settings,
+        selfSocketId: this.selfSocketId
+      })
     })
-    peer.on('stream', (stream: MediaStream) => {
+    peer.on('stream', (interlocutorStream: MediaStream) => {
+      this.interlocutorStream = interlocutorStream
       const interlocutorVideo = document.getElementById('interlocutor-video') as HTMLVideoElement
-      interlocutorVideo.srcObject = stream
+      interlocutorVideo.srcObject = interlocutorStream
+    })
+    peer.on('close', () => {
+      this.dispatch(
+        showNotification({
+          message: 'Call completed',
+          messageType: 'info'
+        })
+      )
     })
     peer.signal(this.callerSignal)
     this.connection = peer
     this.listenConnectionError()
   }
 
-  async setStream(video?: boolean) {
+  async setStream() {
     const selfVideo = document.getElementById('self-video') as HTMLVideoElement
+    const { audio, video } = store.getState().calls.settings
     try {
-      this.selfStream = await navigator.mediaDevices.getUserMedia({ audio: true, video })
+      this.selfStream = await navigator.mediaDevices.getUserMedia({ audio, video })
       selfVideo.srcObject = this.selfStream
+      this.selfStream.addEventListener('removetrack', (e) => {
+        console.log(e)
+      })
     } catch (error) {
       $clg('error', 'Failed to get device cause ' + String(error))
       this.dispatch(
@@ -116,16 +146,16 @@ class Call {
     this.callerSignal = callerSignal
   }
 
-  toggleVideo(value: boolean) {
-    if (!value && this.selfStream.getVideoTracks().length === 0) {
-      this.setStream(true)
-      return
-    }
-    this.selfStream.getVideoTracks().forEach((track) => (track.enabled = value))
+  toggleVideo() {
+    const { audio, video } = store.getState().calls.settings
+    this.selfStream.getVideoTracks().forEach((track) => (track.enabled = video))
+    socket.emit(SocketActions.CHANGE_CALL_SETTINGS, { audio, video })
   }
 
-  toggleAudio(value: boolean) {
-    this.selfStream.getAudioTracks().forEach((track) => (track.enabled = value))
+  toggleAudio() {
+    const { audio, video } = store.getState().calls.settings
+    this.selfStream.getAudioTracks().forEach((track) => (track.enabled = audio))
+    socket.emit(SocketActions.CHANGE_CALL_SETTINGS, { audio, video })
   }
 
   leaveCall() {

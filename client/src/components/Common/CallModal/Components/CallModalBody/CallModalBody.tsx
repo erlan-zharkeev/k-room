@@ -10,39 +10,47 @@ import {
 import { CallModalBodyProps } from '../../@types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { closeCallModal, setCurrentCallAccepted, setMinify, toggleEnableVideo } from 'src/store/callsSlice'
+import { setMinify, toggleCallAudio, toggleCallVideo } from 'src/store/callsSlice'
 import CallModalVideo from '../CallModalVideo/CallModalVideo'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { useEffect, useState } from 'react'
-import { showNotification } from 'src/store/systemSlice'
 import CallDots from '../CallDots/CallDots'
-import { socket } from 'src/socket/socket'
-import { SocketActions } from 'common-types'
 import call from 'src/call/call'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
+import { timeStamp } from 'console'
+import moment from 'moment'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { currentCall } = useTypedSelector((state) => state.calls)
+  const { settings, currentCall } = useTypedSelector((state) => state.calls)
+  const { startedAt } = useTypedSelector((state) => state.calls.currentCall)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
-  const [audioMuted, setAudioMuted] = useState(false)
-  const [videoEnabled, setVideoEnabled] = useState(false)
+  const [length, setLength] = useState(Date.now() - startedAt)
 
-  const answerCall = async (video?: boolean) => {
+  // useEffect(() => {
+  //   // setInterval(() => {
+  //   //   // call.connection.
+  //   //   // setLength((length) => {
+  //   //   //   return (length = length + 1)
+  //   //   // })
+  //   // }, 1000)
+  // }, [startedAt])
+
+  const answerCall = async () => {
     setIsAnswerLoading(true)
-    const gotStream = await call.setStream(video)
+    const gotStream = await call.setStream()
     setIsAnswerLoading(false)
     if (gotStream) call.answerCall()
   }
 
   const toggleAudio = () => {
-    setAudioMuted(!audioMuted)
-    call.toggleAudio(audioMuted)
+    dispatch(toggleCallAudio())
+    call.toggleAudio()
   }
 
   const toggleVideo = async () => {
-    setVideoEnabled(!videoEnabled)
-    call.toggleVideo(videoEnabled)
+    dispatch(toggleCallVideo())
+    call.toggleVideo()
   }
 
   return (
@@ -77,7 +85,9 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
           <div className="call-modal__controls">
             {currentCall.status === 'in-progress' && (
-              <div className="call-modal__length header-text header-text--secondary header-text--sm">09:07</div>
+              <div className="call-modal__length header-text header-text--secondary header-text--sm">
+                {moment.utc(length * 1000).format('HH:mm:ss')}
+              </div>
             )}
             <div className="call-modal__controls-elements">
               {currentCall.type === 'incoming' && currentCall.status === 'calling' && (
@@ -86,7 +96,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                     icon={isAnswerLoading ? <LoadingOutlined /> : <PhoneOutlined />}
                     size="large"
                     shape="circle"
-                    onClick={async () => await answerCall(false)}
+                    onClick={answerCall}
                   />
                 </div>
               )}
@@ -96,15 +106,13 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                     icon={isAnswerLoading ? <LoadingOutlined /> : <VideoCameraOutlined />}
                     size="large"
                     shape="circle"
-                    onClick={async () => await answerCall(true)}
+                    onClick={answerCall}
                   />
                 )}
                 {currentCall.status === 'in-progress' && (
                   <Button
                     icon={<VideoCameraOutlined />}
-                    style={{
-                      color: videoEnabled ? 'red' : 'green'
-                    }}
+                    className={!settings.video && 'call-modal__controls-element--video-block'}
                     size="large"
                     shape="circle"
                     onClick={toggleVideo}
@@ -116,7 +124,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
               </div>
               <div className="call-modal__controls-element">
                 <Button
-                  icon={audioMuted ? <AudioOutlined /> : <AudioMutedOutlined />}
+                  icon={settings.audio ? <AudioMutedOutlined /> : <AudioOutlined />}
                   size="large"
                   shape="circle"
                   onClick={toggleAudio}

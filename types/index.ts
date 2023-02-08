@@ -61,7 +61,9 @@ export enum SocketActions {
   CALL_USER = "call-user",
   ANSWER_CALL = "answer-call",
   CALL_ACCEPTED = "call-accepted",
-  CALL_ENDED = "call-ended"
+  CALL_ENDED = "call-ended",
+  CHANGE_CALL_SETTINGS = "change-call-settings",
+  CALL_STARTED_AT = "call-started-at",
 }
 
 export enum RouteNames {
@@ -131,6 +133,12 @@ export interface UserSettings {
 export type CallStatus = "calling" | "in-progress" | "finished";
 
 export type CallType = "incoming" | "outgoing" | "missed";
+
+export interface StreamSettings {
+  audio: boolean;
+  video: boolean;
+}
+
 export interface Call {
   authorId: string;
   authorName: string;
@@ -143,6 +151,7 @@ export interface Call {
   status: CallStatus;
   type: CallType;
   video: boolean;
+  interlocutorSettings?: StreamSettings;
 }
 
 export enum Status {

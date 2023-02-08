@@ -23,7 +23,12 @@ import {
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
-import { setCurrentCallAccepted, setShowCallModal } from 'src/store/callsSlice'
+import {
+  seCallStartedAt,
+  setCurrentCallAccepted,
+  setShowCallModal,
+  updateInterlocutorSettings
+} from 'src/store/callsSlice'
 import call from 'src/call/call'
 
 export const MainPage = () => {
@@ -104,6 +109,14 @@ export const MainPage = () => {
 
     socket.on(SocketActions.CALL_ENDED, () => {
       call.leaveCall()
+    })
+
+    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
+      dispatch(seCallStartedAt(timeStamp))
+    })
+
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+      dispatch(updateInterlocutorSettings(data))
     })
 
     return () => {

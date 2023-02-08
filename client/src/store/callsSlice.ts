@@ -1,15 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { SocketActions } from 'common-types'
-import { useState, useEffect } from 'react'
-import { $sound, Sounds } from 'src/services/$sound'
-import { socket } from 'src/socket/socket'
 import { CallsState } from './@types/CallsState'
 
 const initialState: CallsState = {
   showCallModal: false,
   isMinified: false,
-  videoEnabled: false,
-  userVideoPositionRelative: false,
+  settings: {
+    audio: true,
+    video: true
+  },
   currentCall: {
     authorId: '',
     authorName: '',
@@ -19,7 +17,11 @@ const initialState: CallsState = {
     interlocutorAvatar: '',
     type: 'incoming',
     video: false,
-    status: 'calling'
+    status: 'calling',
+    interlocutorSettings: {
+      audio: true,
+      video: true
+    }
   },
   list: [
     {
@@ -77,6 +79,11 @@ const callsSlice = createSlice({
       state.currentCall.status = 'calling'
       state.currentCall.type = 'outgoing'
     },
+    updateInterlocutorSettings(state, { payload }) {
+      const { audio, video } = payload
+      state.currentCall.interlocutorSettings.audio = audio
+      state.currentCall.interlocutorSettings.video = video
+    },
     setCurrentCallAccepted(state) {
       state.currentCall.status = 'in-progress'
     },
@@ -85,6 +92,11 @@ const callsSlice = createSlice({
       state.currentCall.interlocutorName = payload.callerName
       state.currentCall.interlocutorAvatar = payload.avatar
       state.currentCall.type = 'incoming'
+      state.currentCall.interlocutorSettings.audio = payload.settings.audio
+      state.currentCall.interlocutorSettings.audio = payload.settings.video
+    },
+    seCallStartedAt(state, { payload }) {
+      state.currentCall.startedAt = payload
     },
     closeCallModal(state) {
       state.showCallModal = false
@@ -97,7 +109,11 @@ const callsSlice = createSlice({
         interlocutorAvatar: '',
         type: 'incoming',
         video: false,
-        status: 'calling'
+        status: 'calling',
+        interlocutorSettings: {
+          audio: false,
+          video: false
+        }
       }
     },
     setMinify(state) {
@@ -106,8 +122,11 @@ const callsSlice = createSlice({
     unsetMinify(state) {
       state.isMinified = false
     },
-    toggleEnableVideo(state, { payload }) {
-      state.videoEnabled = payload
+    toggleCallVideo(state) {
+      state.settings.video = !state.settings.video
+    },
+    toggleCallAudio(state) {
+      state.settings.audio = !state.settings.audio
     }
   }
 })
@@ -119,7 +138,10 @@ export const {
   closeCallModal,
   setMinify,
   unsetMinify,
-  toggleEnableVideo,
+  toggleCallVideo,
+  toggleCallAudio,
+  updateInterlocutorSettings,
+  seCallStartedAt,
   setShowCallModal
 } = callsSlice.actions
 
