@@ -39,6 +39,11 @@
     padding-top: 1.5rem;
   }
 
+  &__length {
+    padding: 0.5rem;
+    background-color: rgb(0 0 0 / 20%);
+  }
+
   &__controls {
     position: absolute;
     bottom: 10px;

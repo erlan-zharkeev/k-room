@@ -135,6 +135,7 @@ export type CallStatus = "calling" | "in-progress" | "finished";
 export type CallType = "incoming" | "outgoing" | "missed";
 
 export interface StreamSettings {
+  streamLoading: boolean;
   audio: boolean;
   video: boolean;
 }

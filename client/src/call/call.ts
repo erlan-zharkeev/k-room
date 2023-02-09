@@ -30,7 +30,6 @@ class Call {
     this.dispatch = store.dispatch
     this.soundConnection = $sound(Sounds.connection, true)
     this.soundCalling = $sound(Sounds.ring, true)
-    this.selfSocketId = socket.id
   }
 
   async listenConnectionError() {
@@ -98,7 +97,7 @@ class Call {
         signal: data,
         to: this.callerId,
         settings,
-        selfSocketId: this.selfSocketId
+        selfSocketId: socket.id
       })
     })
     peer.on('stream', (interlocutorStream: MediaStream) => {
@@ -125,9 +124,6 @@ class Call {
     try {
       this.selfStream = await navigator.mediaDevices.getUserMedia({ audio, video })
       selfVideo.srcObject = this.selfStream
-      this.selfStream.addEventListener('removetrack', (e) => {
-        console.log(e)
-      })
     } catch (error) {
       $clg('error', 'Failed to get device cause ' + String(error))
       this.dispatch(

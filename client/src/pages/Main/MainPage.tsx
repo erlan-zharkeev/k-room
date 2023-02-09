@@ -23,13 +23,7 @@ import {
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
-import {
-  seCallStartedAt,
-  setCurrentCallAccepted,
-  setShowCallModal,
-  updateInterlocutorSettings
-} from 'src/store/callsSlice'
-import call from 'src/call/call'
+import { createCallInstance, setShowCallModal, updateInterlocutorSettings } from 'src/store/callsSlice'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -99,24 +93,6 @@ export const MainPage = () => {
     socket.on(SocketActions.CHANGE_CONTACTS_DATA, (updatedUserData: User) => {
       dispatch(updateContactData(updatedUserData))
       dispatch(changeChatName(updatedUserData))
-    })
-
-    socket.on(SocketActions.CALL_USER, (data) => {
-      dispatch(setShowCallModal(data))
-      const { from, signal } = data
-      call.calling(from, signal)
-    })
-
-    socket.on(SocketActions.CALL_ENDED, () => {
-      call.leaveCall()
-    })
-
-    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
-      dispatch(seCallStartedAt(timeStamp))
-    })
-
-    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
-      dispatch(updateInterlocutorSettings(data))
     })
 
     return () => {

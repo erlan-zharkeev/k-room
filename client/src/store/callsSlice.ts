@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
+import Call from 'src/call/call'
 import { CallsState } from './@types/CallsState'
 
 const initialState: CallsState = {
   showCallModal: false,
   isMinified: false,
   settings: {
+    streamLoading: false,
     audio: true,
     video: true
   },
+  call: null,
   currentCall: {
     authorId: '',
     authorName: '',
@@ -19,6 +22,7 @@ const initialState: CallsState = {
     video: false,
     status: 'calling',
     interlocutorSettings: {
+      streamLoading: false,
       audio: true,
       video: true
     }
@@ -67,6 +71,9 @@ const callsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
+    createCallInstance(state, { payload }) {
+      state.call = payload
+    },
     updateAllList(state, { payload }) {
       state.list = payload
     },
@@ -84,6 +91,9 @@ const callsSlice = createSlice({
       state.currentCall.interlocutorSettings.audio = audio
       state.currentCall.interlocutorSettings.video = video
     },
+    toggleSelfStreamIsLoading(state, { payload }) {
+      state.settings.streamLoading = payload
+    },
     setCurrentCallAccepted(state) {
       state.currentCall.status = 'in-progress'
     },
@@ -95,7 +105,7 @@ const callsSlice = createSlice({
       state.currentCall.interlocutorSettings.audio = payload.settings.audio
       state.currentCall.interlocutorSettings.audio = payload.settings.video
     },
-    seCallStartedAt(state, { payload }) {
+    setCallStartedAt(state, { payload }) {
       state.currentCall.startedAt = payload
     },
     closeCallModal(state) {
@@ -111,6 +121,7 @@ const callsSlice = createSlice({
         video: false,
         status: 'calling',
         interlocutorSettings: {
+          streamLoading: false,
           audio: false,
           video: false
         }
@@ -141,7 +152,9 @@ export const {
   toggleCallVideo,
   toggleCallAudio,
   updateInterlocutorSettings,
-  seCallStartedAt,
+  setCallStartedAt,
+  toggleSelfStreamIsLoading,
+  createCallInstance,
   setShowCallModal
 } = callsSlice.actions
 

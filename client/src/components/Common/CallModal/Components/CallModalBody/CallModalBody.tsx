@@ -10,31 +10,71 @@ import {
 import { CallModalBodyProps } from '../../@types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { setMinify, toggleCallAudio, toggleCallVideo } from 'src/store/callsSlice'
+import {
+  initModalToCall,
+  setCallStartedAt,
+  setMinify,
+  setShowCallModal,
+  toggleCallAudio,
+  toggleCallVideo,
+  toggleSelfStreamIsLoading,
+  updateInterlocutorSettings
+} from 'src/store/callsSlice'
 import CallModalVideo from '../CallModalVideo/CallModalVideo'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
-import call from 'src/call/call'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
-import { timeStamp } from 'console'
 import moment from 'moment'
+import { SocketActions, User } from 'common-types'
+import { socket } from 'src/socket/socket'
+import call from 'src/call/call'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
-  const { startedAt } = useTypedSelector((state) => state.calls.currentCall)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
-  const [length, setLength] = useState(Date.now() - startedAt)
+  const [length, setLength] = useState(0)
 
-  // useEffect(() => {
-  //   // setInterval(() => {
-  //   //   // call.connection.
-  //   //   // setLength((length) => {
-  //   //   //   return (length = length + 1)
-  //   //   // })
-  //   // }, 1000)
-  // }, [startedAt])
+  let timerId: any
+
+  const lengthCounter = () => {
+    setLength((length) => {
+      return length + 1
+    })
+  }
+
+  const startTimer = () => {
+    if (timerId) clearTimeout(timerId)
+    timerId = setInterval(lengthCounter, 1000)
+  }
+
+  const stopTimer = () => clearTimeout(timerId)
+
+  useEffect(() => {
+    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
+      dispatch(setCallStartedAt(timeStamp))
+      startTimer()
+    })
+    socket.on(SocketActions.CALL_USER, (data) => {
+      dispatch(setShowCallModal(data))
+      const { from, signal } = data
+      call.calling(from, signal)
+    })
+
+    socket.on(SocketActions.CALL_ENDED, () => {
+      call.leaveCall()
+    })
+
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+      dispatch(updateInterlocutorSettings(data))
+    })
+  }, [])
+
+  const endCall = () => {
+    call.leaveCall()
+    stopTimer()
+  }
 
   const answerCall = async () => {
     setIsAnswerLoading(true)
@@ -63,7 +103,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
           <div className="call-modal__window-controls">
             <div className="call-modal__rollup" onClick={() => dispatch(setMinify())} />
             <div className="call-modal__expand" onClick={toggleExpandModal} />
-            <div className="call-modal__close" onClick={() => call.leaveCall()} />
+            <div className="call-modal__close" onClick={endCall} />
           </div>
         </div>
         <div className="call-modal__body">
@@ -85,7 +125,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
           <div className="call-modal__controls">
             {currentCall.status === 'in-progress' && (
-              <div className="call-modal__length header-text header-text--secondary header-text--sm">
+              <div className="call-modal__length header-text header-text--sm">
                 {moment.utc(length * 1000).format('HH:mm:ss')}
               </div>
             )}
@@ -120,7 +160,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 )}
               </div>
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <Button icon={<PhoneOutlined />} size="large" shape="circle" onClick={() => call.leaveCall()} />
+                <Button icon={<PhoneOutlined />} size="large" shape="circle" onClick={endCall} />
               </div>
               <div className="call-modal__controls-element">
                 <Button

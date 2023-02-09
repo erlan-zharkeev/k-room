@@ -1,10 +1,12 @@
 import { Avatar, Dropdown, Menu } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { SettingOutlined, UserOutlined, AudioMutedOutlined } from '@ant-design/icons'
+import { useEffect } from 'react'
 
 export const CallModalVideo = () => {
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const { avatar } = useTypedSelector((state) => state.user.userData)
+
   return (
     <div
       className="call-modal-video"
