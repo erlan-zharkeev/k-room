@@ -5,6 +5,7 @@ client/yarn-error.log
 client/yarn.lock
 client/bundle
 client/eslintcache
+client/package-lock.json
 
 server/node_modules
 server/yarn-error.log
