@@ -58,6 +58,12 @@ export enum SocketActions {
   CHANGE_MESSAGE_STATUS = "change-message-status",
   UPDATE_MESSAGE_STATUS = "update-message-status",
   CHANGE_CONTACTS_DATA = "change-contacts-data",
+  CALL_USER = "call-user",
+  ANSWER_CALL = "answer-call",
+  CALL_ACCEPTED = "call-accepted",
+  CALL_ENDED = "call-ended",
+  CHANGE_CALL_SETTINGS = "change-call-settings",
+  CALL_STARTED_AT = "call-started-at",
 }
 
 export enum RouteNames {
@@ -116,12 +122,37 @@ export interface User extends UserCredential {
 export type theme = "dark" | "light";
 
 export interface UserSettings {
-  asideTab: string
-  selectedChatRoomId: string
+  asideTab: string;
+  selectedChatRoomId: string;
   ableToShowNotification: boolean;
   theme: theme;
   showTooltips: boolean;
   soundOn: boolean;
+}
+
+export type CallStatus = "calling" | "in-progress" | "finished";
+
+export type CallType = "incoming" | "outgoing" | "missed";
+
+export interface StreamSettings {
+  streamLoading: boolean;
+  audio: boolean;
+  video: boolean;
+}
+
+export interface Call {
+  authorId: string;
+  authorName: string;
+  startedAt: number;
+  finishedAt?: number;
+  length?: number;
+  interlocutorId: string;
+  interlocutorName: string;
+  interlocutorAvatar?: string;
+  status: CallStatus;
+  type: CallType;
+  video: boolean;
+  interlocutorSettings?: StreamSettings;
 }
 
 export enum Status {

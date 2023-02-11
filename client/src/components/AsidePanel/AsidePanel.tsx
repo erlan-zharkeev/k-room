@@ -3,6 +3,7 @@ import AsidePanelControl from './Components/AsidePanelControl/AsidePanelControl'
 import ChatRoomList from './Components/ChatRoomList/ChatRoomList'
 import ContactList from './Components/ContactList/ContactList'
 import UserSettings from './Components/UserSettings/UserSettings'
+import Calls from './Components/Calls/Calls'
 import { ReactElement } from 'react'
 
 const AsidePanel = () => {
@@ -10,6 +11,7 @@ const AsidePanel = () => {
   const TabComponents: { [key: string]: ReactElement } = {
     users: <ContactList />,
     chatList: <ChatRoomList />,
+    calls: <Calls />,
     settings: <UserSettings />
   }
 

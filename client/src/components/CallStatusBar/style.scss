@@ -1,0 +1,39 @@
+.call-status-bar {
+  height: 40px;
+  background: var(--success);
+  cursor: pointer;
+  transition: height 0.1s ease-in;
+
+  $self: &;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  &--hide {
+    height: 0;
+    transition: height 0.1s ease-in;
+
+    #{ $self }__wrapper {
+      display: none;
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+  }
+
+  &__avatar {
+    margin-right: 0.5rem;
+  }
+
+  &__interlocutor-name {
+    margin-right: 1rem;
+  }
+}

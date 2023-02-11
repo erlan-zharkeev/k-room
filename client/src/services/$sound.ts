@@ -5,16 +5,25 @@ type SoundSources = {
 }
 
 export enum Sounds {
-  messageDelivered = 'messageDelivered'
+  messageDelivered = 'messageDelivered',
+  calling = 'calling',
+  busy = 'busy',
+  connection = 'connection',
+  ring = 'ring'
 }
 
 const soundSrc: SoundSources = {
-  messageDelivered: './sounds/ding.mp3'
+  messageDelivered: './sounds/ding.mp3',
+  calling: './sounds/calling.mp3',
+  busy: './sounds/busy.mp3',
+  connection: './sounds/connection.mp3',
+  ring: './sounds/ring.mp3'
 }
 
-export const $sound = (sound: Sounds) => {
+export const $sound = (sound: Sounds, loop?: boolean) => {
   return new Howl({
     src: [soundSrc[sound]],
-    volume: 0.2
+    volume: 0.2,
+    loop
   })
 }

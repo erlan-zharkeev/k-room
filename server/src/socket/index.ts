@@ -7,14 +7,14 @@ import { ChatRoomModel } from './../models/chatRoom.model'
 import { SearchTypeMap } from './../types/SearchTypeMap'
 import { transformUsersData } from './../utils/transformUserData'
 import { Messages } from './../types/Messages'
-import setSocketId from './helpers/setSocketId'
-import setMessageStatus from './helpers/setMessageStatus'
 import emitContacts from './helpers/emitContacts'
 import emitRoomsByUserId from './helpers/emitRoomsByUserId'
 import emitSearchedContacts from './helpers/emitSearchedContacts'
 import getSocketsByUsersArray from './helpers/getSocketsByUsersArray'
 import getUserById from './helpers/getUserById'
 import getUserBySocketId from './helpers/getUserBySocketId'
+import setSocketId from './helpers/setSocketId'
+import setMessageStatus from './helpers/setMessageStatus'
 import setMessage from './helpers/setMessage'
 import setRoomToUsers from './helpers/setRoomToUsers'
 import setLastSeenData from './helpers/setLastSeenData'
@@ -23,6 +23,43 @@ import setUserStatus from './helpers/setUserStatus'
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
+  socket.on(SocketActions.CALL_USER, async (data: any) => {
+    const interlocutor = await getUserById(data.userToCall)
+    if (!interlocutor) return
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_USER, {
+      signal: data.signalData,
+      from: data.from,
+      avatar: data.avatar,
+      callerName: data.callerName,
+      settings: data.settings
+    })
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+      io.to(interlocutor?.socketId).emit(SocketActions.CHANGE_CALL_SETTINGS, data)
+    })
+  })
+
+  socket.on(SocketActions.ANSWER_CALL, async (data) => {
+    const interlocutor = await getUserById(data.to)
+    if (!interlocutor) return
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_ACCEPTED, {
+      signal: data.signal,
+      settings: data.settings
+    })
+    const sockets = [interlocutor.socketId, data.selfSocketId]
+    sockets.forEach((socketId) => {
+      io.to(socketId).emit(SocketActions.CALL_STARTED_AT, Date.now())
+    })
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+      io.to(interlocutor?.socketId).emit(SocketActions.CHANGE_CALL_SETTINGS, data)
+    })
+  })
+
+  socket.on(SocketActions.CALL_ENDED, async (callerId: any) => {
+    const interlocutor = await getUserById(callerId)
+    if (!interlocutor) return
+    io.to(interlocutor?.socketId).emit(SocketActions.CALL_ENDED)
+  })
+
   socket.on(SocketActions.INITIALIZE, async (userId: string) => {
     io.to(socket.id).emit(SocketActions.CONNECTION)
     await setSocketId(userId, socket.id)

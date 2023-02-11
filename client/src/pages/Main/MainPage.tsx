@@ -9,7 +9,7 @@ import { Message, SocketActions, User, ChatRoom as ChatRoomInterface } from 'com
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
-import { setReconnectingStatus, showNotification } from 'src/store/systemSlice'
+import { setReconnectingStatus, showModal, showNotification } from 'src/store/systemSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
@@ -21,6 +21,10 @@ import {
   changeChatName
 } from 'src/store/roomsSlice'
 import useDebounce from 'src/hooks/useDebounce'
+import CallModal from 'src/components/Common/CallModal/CallModal'
+import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
+import { setShowCallModal, updateInterlocutorSettings } from 'src/store/callsSlice'
+import Call from 'src/call/call'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -28,6 +32,7 @@ export const MainPage = () => {
   const userId = useTypedSelector((state) => state.user.userData.id)
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
+  const { showCallModal, isMinified } = useTypedSelector((state) => state.calls)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -90,6 +95,7 @@ export const MainPage = () => {
       dispatch(updateContactData(updatedUserData))
       dispatch(changeChatName(updatedUserData))
     })
+
     return () => {
       socket.removeAllListeners()
     }
@@ -99,6 +105,8 @@ export const MainPage = () => {
     <div className={'main-page page ' + (selectedChatRoom && viewPort.width <= 576 ? 'move-aside' : '')}>
       <StubLoading isLoading={socket.disconnected} />
       <Popup />
+      <CallModal />
+      <CallStatusBar />
       <TopPanel />
       <div className="main-page__content">
         <AsidePanel />

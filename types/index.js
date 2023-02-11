@@ -45,6 +45,12 @@ var SocketActions;
     SocketActions["CHANGE_MESSAGE_STATUS"] = "change-message-status";
     SocketActions["UPDATE_MESSAGE_STATUS"] = "update-message-status";
     SocketActions["CHANGE_CONTACTS_DATA"] = "change-contacts-data";
+    SocketActions["CALL_USER"] = "call-user";
+    SocketActions["ANSWER_CALL"] = "answer-call";
+    SocketActions["CALL_ACCEPTED"] = "call-accepted";
+    SocketActions["CALL_ENDED"] = "call-ended";
+    SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
+    SocketActions["CALL_STARTED_AT"] = "call-started-at";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {

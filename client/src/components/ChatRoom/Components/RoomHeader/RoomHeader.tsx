@@ -1,5 +1,5 @@
 import { Image, Badge, Button, Avatar } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import { UserOutlined, PhoneOutlined } from '@ant-design/icons'
 import { SocketActions } from 'common-types'
 import { useState, useEffect } from 'react'
 import { socket } from 'src/socket/socket'
@@ -11,7 +11,6 @@ import { selectChatRoom } from 'src/store/settingsSlice'
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
-
   const chatRoomData = chatRooms.find((room) => room.roomId === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
@@ -56,6 +55,13 @@ export const RoomHeader = () => {
         )}
       </div>
       <div className="room-header__controls">
+        {/* <Button
+          size="large"
+          className="borderless"
+          type="text"
+          icon={<PhoneOutlined />}
+          onClick={() => dispatch(initCall())}
+        /> */}
         {/* <Dropdown
           overlay={
             <Menu
