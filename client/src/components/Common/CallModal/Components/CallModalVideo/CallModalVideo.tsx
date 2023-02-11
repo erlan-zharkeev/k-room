@@ -18,12 +18,12 @@ export const CallModalVideo = () => {
         {!currentCall.interlocutorSettings.audio && (
           <div className="call-modal-video__interlocutor-audio-status">
             <AudioMutedOutlined />
+            <div className="paragraph-text paragraph-text--sm">The interlocutor turned off the sound</div>
           </div>
         )}
 
         <video autoPlay id="interlocutor-video" className={!currentCall.interlocutorSettings.video ? 'd-none' : ''} />
         <Avatar
-          size="small"
           src={currentCall.interlocutorAvatar}
           icon={<UserOutlined />}
           className={currentCall.interlocutorSettings.video ? 'd-none' : ''}

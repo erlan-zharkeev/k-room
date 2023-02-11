@@ -10,7 +10,7 @@ const initialState: CallsState = {
     audio: true,
     video: true
   },
-  call: null,
+  connection: null,
   currentCall: {
     authorId: '',
     authorName: '',
@@ -71,8 +71,8 @@ const callsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    createCallInstance(state, { payload }) {
-      state.call = payload
+    setConnection(state, { payload }) {
+      state.connection = payload
     },
     updateAllList(state, { payload }) {
       state.list = payload
@@ -154,7 +154,7 @@ export const {
   updateInterlocutorSettings,
   setCallStartedAt,
   toggleSelfStreamIsLoading,
-  createCallInstance,
+  setConnection,
   setShowCallModal
 } = callsSlice.actions
 

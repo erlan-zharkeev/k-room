@@ -23,7 +23,8 @@ import {
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
-import { createCallInstance, setShowCallModal, updateInterlocutorSettings } from 'src/store/callsSlice'
+import { setShowCallModal, updateInterlocutorSettings } from 'src/store/callsSlice'
+import Call from 'src/call/call'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()

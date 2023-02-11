@@ -46,7 +46,6 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
       settings: data.settings
     })
     const sockets = [interlocutor.socketId, data.selfSocketId]
-    console.log(sockets)
     sockets.forEach((socketId) => {
       io.to(socketId).emit(SocketActions.CALL_STARTED_AT, Date.now())
     })

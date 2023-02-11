@@ -17,7 +17,7 @@ import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { initModalToCall, setCurrentCallAccepted } from 'src/store/callsSlice'
-import call from 'src/call/call'
+import call from './../../../../call/call'
 
 const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
@@ -26,6 +26,7 @@ const ContactList = () => {
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
   const { settings } = useTypedSelector((state) => state.persist)
   const [isStreamIsLoading, setIsStreamIsLoading] = useState(false)
+  // const { call } = useTypedSelector((state) => state.calls)
 
   const dispatch = useDispatch<AppDispatch>()
 

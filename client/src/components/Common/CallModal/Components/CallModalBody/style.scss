@@ -86,7 +86,8 @@
 
       &--video {
         &-block {
-          background: var(--error-text) !important;
+          color: var(--accent-color) !important;
+          border-color: var(--accent-color) !important;
         }
       }
     }

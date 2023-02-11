@@ -28,6 +28,7 @@ import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import { SocketActions, User } from 'common-types'
 import { socket } from 'src/socket/socket'
+// import useCall from 'src/hooks/useCall'
 import call from 'src/call/call'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
@@ -49,31 +50,35 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     timerId = setInterval(lengthCounter, 1000)
   }
 
-  const stopTimer = () => clearTimeout(timerId)
+  const stopTimer = () => {
+    setLength(0)
+    return clearTimeout(timerId)
+  }
 
   useEffect(() => {
     socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
       dispatch(setCallStartedAt(timeStamp))
+      stopTimer()
       startTimer()
     })
     socket.on(SocketActions.CALL_USER, (data) => {
       dispatch(setShowCallModal(data))
-      const { from, signal } = data
+      const { from, signal, settings } = data
       call.calling(from, signal)
+      dispatch(updateInterlocutorSettings(settings))
     })
-
     socket.on(SocketActions.CALL_ENDED, () => {
       call.leaveCall()
     })
-
     socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
       dispatch(updateInterlocutorSettings(data))
     })
   }, [])
 
   const endCall = () => {
-    call.leaveCall()
     stopTimer()
+    socket.emit(SocketActions.CALL_ENDED, call.callerId ?? call.callToId)
+    call.leaveCall()
   }
 
   const answerCall = async () => {
