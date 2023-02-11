@@ -2,6 +2,9 @@
 
 - run cd ./scripts && bash dev.sh
 
+  chrome://flags/#unsafely-treat-insecure-origin-as-secure
+  http://k-room.space
+
 ## Deploy
 
 - run cd ./script && bash prod-build.sh
