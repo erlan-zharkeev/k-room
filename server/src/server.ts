@@ -9,13 +9,18 @@ const clc = require('cli-color')
 const cookieParser = require('cookie-parser')
 
 const app = express()
+const server = http.createServer(app)
+
+const { ExpressPeerServer } = require('peer')
+const peerServer = ExpressPeerServer(server, {
+  debug: true
+})
+app.use('/peerjs', peerServer)
 
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use('/', router)
-
-const server = http.createServer(app)
 
 const PORT = ENV.SERVER_PORT
 

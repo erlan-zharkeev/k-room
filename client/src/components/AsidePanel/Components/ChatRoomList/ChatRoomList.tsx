@@ -5,14 +5,13 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { deselectChatRoom, selectChatRoom } from 'src/store/systemSlice'
+import { deselectChatRoom, selectChatRoom } from 'src/store/settingsSlice'
 
 export const ChatRoomList = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.system)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const { id } = useTypedSelector((state) => state.auth.userData)
-  const { settings } = useTypedSelector((state) => state.persist.system)
+  const { id } = useTypedSelector((state) => state.user.userData)
+  const { selectedChatRoomId, showTooltips } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -38,9 +37,9 @@ export const ChatRoomList = () => {
     if (chatRoom.multiple) return
     if (chatRoom.users.length !== 1) return
     const user = chatRoom.users[0]
-    const hasUserInContacts = !!contacts.find((element: any) => element.id === user.id)
+    const hasUserInContacts = !!contacts.find((element) => element.id === user.id)
     if (hasUserInContacts) return
-    return settings.showTooltips ? (
+    return showTooltips ? (
       <Tooltip placement="topLeft" title="Add to contact">
         <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
       </Tooltip>
@@ -68,9 +67,9 @@ export const ChatRoomList = () => {
           locale={{
             emptyText: <div className="paragraph-text paragraph-text--secondary">There are no chats yet</div>
           }}
-          renderItem={(chatRoom: any) => (
+          renderItem={(chatRoom) => (
             <List.Item
-              onClick={(e: any) => setChat(e, chatRoom.roomId)}
+              onClick={(e) => setChat(e, chatRoom.roomId)}
               key={chatRoom.roomId}
               className={selectedChatRoomId === chatRoom.roomId ? 'active' : ''}
             >

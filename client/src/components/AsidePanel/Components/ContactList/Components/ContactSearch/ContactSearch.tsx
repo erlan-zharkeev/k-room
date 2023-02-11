@@ -1,20 +1,20 @@
 import { Avatar, Button, Input, List, Radio, Tooltip } from 'antd'
 import { SearchOutlined, LoadingOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
-import _debounce from 'lodash/debounce'
 import { User, SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
+import useDebounce from 'src/hooks/useDebounce'
 
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
   const [isLoading, setIsLoading] = useState(false)
   const [searchType, changeSearchType] = useState('name')
 
-  const { id } = useTypedSelector((state) => state.auth.userData)
+  const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const { settings } = useTypedSelector((state) => state.persist.system)
+  const { settings } = useTypedSelector((state) => state.persist)
 
   useEffect(() => {
     socket.on(SocketActions.GET_SEARCHED_CONTACTS, (contacts: Array<User>) => {
@@ -29,7 +29,7 @@ const ContactSearch = () => {
     socket.emit(SocketActions.SEARCH_CONTACT, searchData)
   }
 
-  const debouncedSearch = useCallback(_debounce(fetchUsers, 500), [])
+  const debouncedSearch = useDebounce(fetchUsers, 500)
 
   const search = async (value: string) => {
     if (value.trim() === '') {
@@ -93,7 +93,7 @@ const ContactSearch = () => {
                   title={<span>{user.username}</span>}
                   description={<span>{user.email}</span>}
                 />
-                {!contacts.find((element: any) => element.id === user.id) && ButtonWrapper(user)}
+                {!contacts.find((element) => element.id === user.id) && ButtonWrapper(user)}
               </List.Item>
             )}
           />

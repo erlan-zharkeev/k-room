@@ -5,12 +5,12 @@ import { UserOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { updateUserData } from 'src/store/authSlice'
+import { updateUserData } from 'src/store/userSlice'
 import { showNotification, closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
 
 const UserDataSettingsPopup = () => {
-  const { avatar, username, id } = useTypedSelector((state) => state.auth.userData)
+  const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
 
   const [newAvatar, setNewAvatar] = useState<string | undefined>()
 

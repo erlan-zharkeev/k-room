@@ -7,7 +7,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import getCookie from 'src/utils/getCookie'
 
 const AppRouter = () => {
-  const { isAuth, isAppLoading } = useTypedSelector((state) => state.auth)
+  const { isAuth, isAppLoading } = useTypedSelector((state) => state.user)
   const hasJwt = getCookie('jwt')
   const showLoader = isAppLoading && hasJwt
   const convertedRouteProps = (

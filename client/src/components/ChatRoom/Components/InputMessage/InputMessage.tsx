@@ -1,23 +1,23 @@
 import { Button, Form, Input } from 'antd'
 import { SendOutlined } from '@ant-design/icons'
-import { FormEvent, useCallback, useState } from 'react'
-import _debounce from 'lodash/debounce'
+import { FormEvent, useState } from 'react'
 import { SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
-import { useSelectedRoom } from 'src/store/roomsSlice'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import InputMessageProps from './@types/InputMessageProps'
+import useSelectedRoom from 'src/hooks/useSelectedRoom'
+import useDebounce from 'src/hooks/useDebounce'
 
 export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   const [message, setMessage] = useState('')
-  const { id } = useTypedSelector((state) => state.auth.userData)
+  const { id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
 
   const sendUserTypingStatus = (status: boolean) =>
     socket.emit(SocketActions.USER_TYPING, { userIdFrom: id, usersTo: selectedChatRoom.users, status })
 
-  const debouncedInput = useCallback(_debounce(sendUserTypingStatus, 2000), [])
+  const debouncedInput = useDebounce(sendUserTypingStatus, 2000)
 
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)

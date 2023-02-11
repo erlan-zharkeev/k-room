@@ -5,6 +5,21 @@
 
   @include wh-100;
 
+  &__circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    span {
+      margin-bottom: $gutter-xl;
+      color: var(--accent-color);
+      font-size: 60px;
+      stroke-width: 25;
+    }
+  }
+
   &__update-block {
     display: flex;
     flex-direction: column;
@@ -13,28 +28,8 @@
     height: 100%;
     color: var(--accent-color);
 
-    span {
-      margin-bottom: $gutter-l;
+    button {
+      margin-top: $gutter-md;
     }
-  }
-
-  .ant-progress-outer {
-    height: 4px;
-    padding: 0;
-  }
-
-  .ant-progress-text {
-    display: none;
-  }
-
-  .ant-progress-inner {
-    position: absolute;
-    top: 0;
-    height: 4px;
-    border-radius: 0;
-  }
-
-  .ant-progress-bg {
-    border-radius: 0;
   }
 }

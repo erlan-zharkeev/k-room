@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { login } from 'src/store/authSlice'
+import { login } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
 const Logo = require('src/assets/images/Logo.svg') as string
 

@@ -10,7 +10,7 @@ export const useValidate = (): [boolean, (form: ValidationForm) => void] => {
   const validate = (form: ValidationForm) => {
     setTimeout(() => {
       const errors = [] as Array<Boolean>
-      form.getFieldsError().forEach((field: any) => {
+      form.getFieldsError().forEach((field) => {
         errors.push(!!field.errors.length)
       })
       const hasError = errors.some((error) => Boolean(error))

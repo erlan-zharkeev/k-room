@@ -1,4 +1,4 @@
-export default (payload: { appName: string; link: string }): string => `
+export default (payload: { appName: string; link: string; logoSrc: string; host: string }): string => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,7 +98,6 @@ export default (payload: { appName: string; link: string }): string => `
   <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
     Email confirmation
   </div>
-
   <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <td align="center" bgcolor="#e9ecef">
@@ -109,11 +108,9 @@ export default (payload: { appName: string; link: string }): string => `
         <![endif]-->
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
-            <td align="center" valign="top" style="padding: 36px 24px;">
-              <svg width="48" height="44" viewBox="0 0 44 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M167 165.5L41.75 289.775L41.75 41.2254L167 165.5Z" fill="#418FDE"/>
-                <path d="M166.5 165L290.775 289.5H42.2254L166.5 165Z" fill="#3B75B1"/>
-                <path d="M166.5 166L42.2253 41.5L290.775 41.5L166.5 166Z" fill="#74B3F3"/>
+            <td align="center" align="top">
+              <svg height="210" width="500">
+                <polygon points="200,10 250,190 160,210" style="fill:lime;stroke:purple;stroke-width:1" />
               </svg>
             </td>
           </tr>
@@ -137,6 +134,13 @@ export default (payload: { appName: string; link: string }): string => `
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
               <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Confirm Your Email Address</h1>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" bgcolor="#ffffff" valign="top" style="padding: 36px 24px;">
+              <a href="${payload.host}" target="_blank" style="display: inline-block;">
+                <img src="${payload.logoSrc}" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
+              </a>
             </td>
           </tr>
         </table>

@@ -1,19 +1,30 @@
+import { CommonEndPoints } from './../../../types'
 import ENV from '../ENV'
 import { UserModel } from './../models/user.model'
+import firstCharUpperCase from '../utils/firstCharUpperCase'
 const bcrypt = require('bcryptjs')
 
-const users = ENV.IS_DEV ? ['erlan', 'anton'] : ['erlan', 'ivan']
+const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik'] : ['erlan']
 
 export default async () => {
   const createUser = async (username: string) => {
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
-      username: username.toUpperCase(),
+      username: firstCharUpperCase(username),
+      avatar: `${ENV.HOST}:${ENV.SERVER_PORT}${CommonEndPoints.COMMON_IMAGES}?img=${username}.jpg`,
       email: `${username}@gmail.com`,
       password: hashedPassword,
       socketId: '',
       refreshToken: username,
-      confirmed: true
+      confirmed: true,
+      settings: {
+        asideTab: 'users',
+        selectedChatRoomId: '',
+        ableToShowNotification: true,
+        theme: 'dark',
+        showTooltips: false,
+        soundOn: true
+      }
     })
     await user.save()
   }

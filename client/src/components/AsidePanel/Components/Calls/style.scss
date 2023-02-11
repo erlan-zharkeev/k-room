@@ -1,0 +1,51 @@
+.call-list {
+  &__item {
+    height: 70px;
+    transition: height 0.4s ease-in-out;
+
+    &--expand {
+      height: 120px;
+      transition: height 0.4s ease-in-out;
+    }
+  }
+
+  &__body {
+    .ant-list-item {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 1rem;
+      overflow: hidden;
+    }
+  }
+
+  &__additional-info {
+    width: 100%;
+    padding: $gutter-sm;
+
+    &-button {
+      margin-right: 0.5rem;
+
+      button {
+        border: none;
+
+        svg {
+          color: var(--accent-color);
+        }
+      }
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-left: $gutter-sm;
+    }
+
+    &--missed {
+      color: var(--error);
+    }
+  }
+}

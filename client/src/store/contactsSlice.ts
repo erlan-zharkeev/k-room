@@ -9,17 +9,17 @@ const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    loadContacts(state, action) {
-      state.contacts = action.payload
+    loadContacts(state, { payload }) {
+      state.contacts = payload
     },
-    updateContactsStatus(state, action) {
-      const { userId, status } = action.payload
+    updateContactsStatus(state, { payload }) {
+      const { userId, status } = payload
       state.contacts.forEach((user) => {
         if (user.id === userId) user.online = status
       })
     },
-    updateContactData(state, action) {
-      const { id, username, avatar } = action.payload
+    updateContactData(state, { payload }) {
+      const { id, username, avatar } = payload
       state.contacts.forEach((user) => {
         if (user.id !== id) return
         user.username = username

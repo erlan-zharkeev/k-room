@@ -1,38 +1,36 @@
-import { Button, Progress } from 'antd'
-import { useEffect, useState } from 'react'
-import getRandomNumber from 'src/utils/getRandomNumber'
 import { StubLoadingProps } from './@types/StubLoadingProps'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
+import { logOut } from 'src/store/userSlice'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { socket } from 'src/socket/socket'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 
-const StubLoading = ({ isLoading, reconnect }: StubLoadingProps) => {
-  const [percent, setPercent] = useState(0)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (percent >= 100) return
-      setPercent((percent) => {
-        const newPercentValue = isLoading ? percent + getRandomNumber(5, 10) : 100
-        return newPercentValue
-      })
-      return () => {
-        clearTimeout(timer)
-      }
-    }, getRandomNumber(100, 300))
-  }, [percent])
-
-  const update = () => {
-    setPercent(0)
-    reconnect()
+const StubLoading = ({ isLoading }: StubLoadingProps) => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { reconnecting } = useTypedSelector((state) => state.system)
+  const reconnect = () => {
+    socket.connect()
   }
-
   return isLoading ? (
     <div className="stub-loading">
-      {percent >= 100 ? (
-        <div className="stub-loading__update-block">
-          <span>Connection failed</span>
-          <Button onClick={update}>Update</Button>
+      {reconnecting ? (
+        <div className="stub-loading__circle">
+          <LoadingOutlined />
+          <p className="header-text header-text__secondary">Socket reconnecting</p>
         </div>
       ) : (
-        <Progress className="stub-loading__progress" percent={percent} status="normal" />
+        <div className="stub-loading__update-block">
+          <p>Connection failed</p>
+          <p>Try again later</p>
+          <Button className="ant-btn--md" onClick={reconnect}>
+            Reconnect
+          </Button>
+          <Button className="ant-btn--md" onClick={() => dispatch(logOut())}>
+            Logout
+          </Button>
+        </div>
       )}
     </div>
   ) : (

@@ -1,18 +1,17 @@
 import { Image, Badge, Button, Avatar } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import { UserOutlined, PhoneOutlined } from '@ant-design/icons'
 import { SocketActions } from 'common-types'
 import { useState, useEffect } from 'react'
 import { socket } from 'src/socket/socket'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import { selectChatRoom } from 'src/store/systemSlice'
+import { selectChatRoom } from 'src/store/settingsSlice'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.system)
-
-  const chatRoomData = chatRooms.find((room: any) => room.roomId === selectedChatRoomId)
+  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
+  const chatRoomData = chatRooms.find((room) => room.roomId === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
 
@@ -22,7 +21,6 @@ export const RoomHeader = () => {
         return typingDotsQuantity < 3 ? typingDotsQuantity + 1 : 0
       })
     }, 1000)
-    // if (!isTyping) dotsCounter = null
   }, [isTyping])
 
   const dispatch = useDispatch<AppDispatch>()
@@ -34,7 +32,11 @@ export const RoomHeader = () => {
 
   return (
     <div className="room-header">
-      <Button className="borderless room-header__back-button" type="primary" onClick={() => dispatch(selectChatRoom(''))}>
+      <Button
+        className="borderless room-header__back-button"
+        type="primary"
+        onClick={() => dispatch(selectChatRoom(''))}
+      >
         Back
       </Button>
       <div className="room-header__info">
@@ -53,6 +55,13 @@ export const RoomHeader = () => {
         )}
       </div>
       <div className="room-header__controls">
+        {/* <Button
+          size="large"
+          className="borderless"
+          type="text"
+          icon={<PhoneOutlined />}
+          onClick={() => dispatch(initCall())}
+        /> */}
         {/* <Dropdown
           overlay={
             <Menu

@@ -11,23 +11,31 @@ export interface EnvVariables {
     JWT_ACCESS_TOKEN_SECRET: string;
     JWT_REFRESH_TOKEN_SECRET: string;
     IS_DEV: boolean;
+    SERVER_ASSETS_PATH: string;
+    MAX_RECONNECT_ATTEMPTS: number;
 }
 export declare enum AuthEndPoints {
     REGISTRATION = "/api/auth/registration",
     SEND_EMAIL_CONFIRMATION_LINK = "/api/auth/send-email-confirmation-link",
     SEND_EMAIL_CONFIRMATION = "/api/auth/send-email-confirmation",
     LOGIN = "/api/auth/login",
-    UPDATE_USER_DATA = "/api/auth/user-data/update",
-    GET_FILES = "/api/image/:filename",
     LOGOUT = "/api/auth/logout",
-    GET_USER_DATA = "/api/auth/get-user-data",
     UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair"
 }
-export declare enum SystemEndPoints {
+export declare enum UserEndPoints {
+    GET_USER_DATA = "/api/auth/get-user-data",
+    UPDATE_USER_DATA = "/api/auth/user-data/update",
     UPDATE_USER_SETTINGS = "/api/user/update-user-settings"
+}
+export declare enum CommonEndPoints {
+    COMMON_IMAGES = "/api/common-images",
+    GET_FILES = "/api/image/:filename"
 }
 export declare enum SocketActions {
     CONNECTION = "connection",
+    RECONNECTION = "reconnect",
+    RECONNECT_ATTEMPT = "reconnect_attempt",
+    RECONNECT_FAILED = "reconnect_failed",
     INITIALIZE = "initialize",
     DISCONNECT = "disconnect",
     GET_ROOMS = "get-rooms",
@@ -45,14 +53,21 @@ export declare enum SocketActions {
     GET_USER_TYPING_STATUS = "get-user-typing-status",
     CHANGE_MESSAGE_STATUS = "change-message-status",
     UPDATE_MESSAGE_STATUS = "update-message-status",
-    CHANGE_CONTACTS_DATA = "change-contacts-data"
+    CHANGE_CONTACTS_DATA = "change-contacts-data",
+    CALL_USER = "call-user",
+    ANSWER_CALL = "answer-call",
+    CALL_ACCEPTED = "call-accepted",
+    CALL_ENDED = "call-ended",
+    CHANGE_CALL_SETTINGS = "change-call-settings",
+    CALL_STARTED_AT = "call-started-at"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",
     SIGN_UP = "/sign-up",
     WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
     EMAIL_CONFIRM = "/confirm-email",
-    MAIN = "/app"
+    MAIN = "/app",
+    NOT_FOUND = "/not-found"
 }
 export interface Message {
     id: string;
@@ -93,10 +108,33 @@ export interface User extends UserCredential {
 }
 export type theme = "dark" | "light";
 export interface UserSettings {
+    asideTab: string;
+    selectedChatRoomId: string;
     ableToShowNotification: boolean;
     theme: theme;
     showTooltips: boolean;
     soundOn: boolean;
+}
+export type CallStatus = "calling" | "in-progress" | "finished";
+export type CallType = "incoming" | "outgoing" | "missed";
+export interface StreamSettings {
+    streamLoading: boolean;
+    audio: boolean;
+    video: boolean;
+}
+export interface Call {
+    authorId: string;
+    authorName: string;
+    startedAt: number;
+    finishedAt?: number;
+    length?: number;
+    interlocutorId: string;
+    interlocutorName: string;
+    interlocutorAvatar?: string;
+    status: CallStatus;
+    type: CallType;
+    video: boolean;
+    interlocutorSettings?: StreamSettings;
 }
 export declare enum Status {
     SUCCESS = 200,
@@ -104,5 +142,6 @@ export declare enum Status {
     NOT_AUTH = 401,
     TOKEN_EXPIRED = 403,
     NOT_FOUND = 404,
-    UNREACHABLE = 503
+    UNREACHABLE = 503,
+    BAD_GATEAWAY = 504
 }

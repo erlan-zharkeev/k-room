@@ -1,25 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Status = exports.RouteNames = exports.SocketActions = exports.SystemEndPoints = exports.AuthEndPoints = void 0;
+exports.Status = exports.RouteNames = exports.SocketActions = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/api/auth/registration";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/api/auth/send-email-confirmation-link";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/api/auth/send-email-confirmation";
     AuthEndPoints["LOGIN"] = "/api/auth/login";
-    AuthEndPoints["UPDATE_USER_DATA"] = "/api/auth/user-data/update";
-    AuthEndPoints["GET_FILES"] = "/api/image/:filename";
     AuthEndPoints["LOGOUT"] = "/api/auth/logout";
-    AuthEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
     AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/api/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
-var SystemEndPoints;
-(function (SystemEndPoints) {
-    SystemEndPoints["UPDATE_USER_SETTINGS"] = "/api/user/update-user-settings";
-})(SystemEndPoints = exports.SystemEndPoints || (exports.SystemEndPoints = {}));
+var UserEndPoints;
+(function (UserEndPoints) {
+    UserEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
+    UserEndPoints["UPDATE_USER_DATA"] = "/api/auth/user-data/update";
+    UserEndPoints["UPDATE_USER_SETTINGS"] = "/api/user/update-user-settings";
+})(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
+var CommonEndPoints;
+(function (CommonEndPoints) {
+    CommonEndPoints["COMMON_IMAGES"] = "/api/common-images";
+    CommonEndPoints["GET_FILES"] = "/api/image/:filename";
+})(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var SocketActions;
 (function (SocketActions) {
     SocketActions["CONNECTION"] = "connection";
+    SocketActions["RECONNECTION"] = "reconnect";
+    SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
+    SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
     SocketActions["INITIALIZE"] = "initialize";
     SocketActions["DISCONNECT"] = "disconnect";
     SocketActions["GET_ROOMS"] = "get-rooms";
@@ -38,6 +45,12 @@ var SocketActions;
     SocketActions["CHANGE_MESSAGE_STATUS"] = "change-message-status";
     SocketActions["UPDATE_MESSAGE_STATUS"] = "update-message-status";
     SocketActions["CHANGE_CONTACTS_DATA"] = "change-contacts-data";
+    SocketActions["CALL_USER"] = "call-user";
+    SocketActions["ANSWER_CALL"] = "answer-call";
+    SocketActions["CALL_ACCEPTED"] = "call-accepted";
+    SocketActions["CALL_ENDED"] = "call-ended";
+    SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
+    SocketActions["CALL_STARTED_AT"] = "call-started-at";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {
@@ -46,6 +59,7 @@ var RouteNames;
     RouteNames["WAIT_EMAIL_CONFIRM"] = "/wait-email-confirm";
     RouteNames["EMAIL_CONFIRM"] = "/confirm-email";
     RouteNames["MAIN"] = "/app";
+    RouteNames["NOT_FOUND"] = "/not-found";
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var Status;
 (function (Status) {
@@ -55,4 +69,5 @@ var Status;
     Status[Status["TOKEN_EXPIRED"] = 403] = "TOKEN_EXPIRED";
     Status[Status["NOT_FOUND"] = 404] = "NOT_FOUND";
     Status[Status["UNREACHABLE"] = 503] = "UNREACHABLE";
+    Status[Status["BAD_GATEAWAY"] = 504] = "BAD_GATEAWAY";
 })(Status = exports.Status || (exports.Status = {}));

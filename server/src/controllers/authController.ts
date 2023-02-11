@@ -5,64 +5,15 @@ import { sendEmailConfirmationLink } from '../services/mail'
 import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
-import db from '../database'
-import mongoose from 'mongoose'
-import { SocketActions, Status } from '../../../types'
-import { getSocketsByUsersArray, getUsersByHasContactId } from '../socket'
 
-import { io } from '../server'
-import ENV from '../ENV'
+import { Status } from '../../../types'
 const bcrypt = require('bcryptjs')
-const Grid = require('gridfs-stream')
-
-const connection = db.connection
-
-let gfs = null as any
-let gridfsBucket = null as any
-
-connection.once('open', () => {
-  gridfsBucket = new mongoose.mongo.GridFSBucket(connection.db, {
-    bucketName: 'uploads'
-  })
-
-  gfs = Grid(connection.db, mongoose.mongo)
-  gfs.collection('uploads')
-})
 
 class AuthController {
-  async updateUserSettings(req: Request, res: Response) {
-    try {
-      const { userId, type, value } = req.body
-
-      const query = {} as any
-      query['settings.' + type] = value
-
-      await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
-
-      return res.json()
-    } catch (e) {
-      throwError(Status.BAD_REQUEST, res, Messages.updateSettings)
-    }
-  }
-
   async updateTokensPair(req: Request, res: Response) {
     const { id } = req.body.decoded
     await updateTokens(id, res)
-    res.json({ message: Messages.tokensPairUpdated })
-  }
-
-  async getUserData(req: Request, res: Response) {
-    const { id } = req.body.decoded
-    const user = await UserModel.findOne({ _id: id })
-    if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
-    return res.json({
-      userData: {
-        username: user.username,
-        email: user.email,
-        id: user._id,
-        avatar: user.avatar
-      }
-    })
+    res.json({ message: Messages.tokensPairUpdated, silent: true })
   }
 
   async registration(req: Request, res: Response) {
@@ -71,19 +22,26 @@ class AuthController {
 
       const { username, email, password } = req.body
       const candidate = await UserModel.findOne({ email })
-
       if (candidate) return throwError(Status.BAD_REQUEST, res, Messages.userExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
       if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
-
-      const user = new UserModel({ username, email, password: hashedPassword, socketId: '' })
+      const settings = {
+        asideTab: 'users',
+        selectedChatRoomId: '',
+        ableToShowNotification: true,
+        theme: 'light',
+        showTooltips: false,
+        soundOn: true
+      }
+      const user = new UserModel({ username, email, password: hashedPassword, socketId: '', settings })
       await user.save()
-
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
+      if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, Messages.failedToSendConfirmationLink)
       return res.json(confirmEmailData)
     } catch (e) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.registrationCommonError)
     }
   }
@@ -132,58 +90,6 @@ class AuthController {
     } catch (e: any) {
       throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
     }
-  }
-
-  async updateUserData(req: any, res: Response) {
-    try {
-      const { userId, username } = req.body
-
-      const filename = req.file?.filename ?? null
-
-      const newUserData: any = {
-        username
-      }
-
-      if (filename) newUserData.avatar = `${ENV.HOST}:${ENV.SERVER_PORT}/api/image/${filename}`
-
-      const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
-
-      if (!updateUserDataResponse) return throwError(Status.BAD_REQUEST, res, Messages.usersFindFailed)
-
-      const usersHasCurrentContact = await getUsersByHasContactId(userId)
-      const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
-      const sockets = await getSocketsByUsersArray(usersIdsFromUsers)
-
-      const updatedUserData = {
-        username: updateUserDataResponse.username,
-        avatar: updateUserDataResponse.avatar
-      }
-
-      sockets.forEach((socketId: string) => {
-        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, {
-          id: userId,
-          ...updatedUserData
-        })
-      })
-
-      return res.json({
-        userData: updatedUserData,
-        message: Messages.userDataSuccess
-      })
-    } catch (e: any) {
-      console.log(e)
-      throwError(Status.BAD_REQUEST, res, Messages.userDataUpdateFailedCommonError)
-    }
-  }
-
-  async showFiles(req: Request, res: Response) {
-    gfs.files.findOne({ filename: req.params.filename }, (_: any, file: any) => {
-      if (!file || file.length === 0) return throwError(Status.NOT_FOUND, res, Messages.noFilesExist)
-      if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-        const readstream = gridfsBucket.openDownloadStream(file._id)
-        readstream.pipe(res)
-      } else throwError(Status.NOT_FOUND, res, Messages.notImage)
-    })
   }
 }
 

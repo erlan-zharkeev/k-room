@@ -5,20 +5,14 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import {
-  showModal,
-  changeTheme,
-  setSoundValue,
-  setTooltipsValue,
-  setAbleToShowNotification,
-  updateUserSettings
+  showModal
 } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
+import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
 
 const UserSettings = () => {
-  const { username, email, id, avatar } = useTypedSelector((state) => state.auth.userData)
-  const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector(
-    (state) => state.persist.system.settings
-  )
+  const { username, email, id, avatar } = useTypedSelector((state) => state.user.userData)
+  const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
 
   const changeUserData = () => {
@@ -36,36 +30,6 @@ const UserSettings = () => {
     </div>
   )
 
-  const changeSettings = async (type: string, value: boolean) => {
-    let convertedValue: boolean | string = value
-    let action = null
-    switch (type) {
-      case 'theme':
-        action = changeTheme(value)
-        convertedValue = value ? 'dark' : 'light'
-        break
-      case 'sound':
-        action = setSoundValue(value)
-        break
-      case 'tooltip':
-        action = setTooltipsValue(value)
-        break
-      case 'notification':
-        action = setAbleToShowNotification(value)
-        break
-      default:
-        break
-    }
-    dispatch(action)
-    await dispatch(
-      updateUserSettings({
-        userId: id,
-        type,
-        value: convertedValue
-      })
-    )
-  }
-
   return (
     <div className="user-settings">
       <div className="user-settings__body">
@@ -82,7 +46,7 @@ const UserSettings = () => {
             checkedChildren={'Dark'}
             unCheckedChildren={'Light'}
             defaultChecked={theme === 'dark'}
-            onChange={async (value) => await changeSettings('theme', value)}
+            onChange={(value) => dispatch(changeTheme(value))}
           />
         </div>
         <div className="user-settings__sound-switch">
@@ -91,7 +55,7 @@ const UserSettings = () => {
             checkedChildren={'On'}
             unCheckedChildren={'Off'}
             defaultChecked={soundOn}
-            onChange={async (value) => await changeSettings('sound', value)}
+            onChange={(value) => dispatch(setSoundValue(value))}
           />
         </div>
         <div className="user-settings__tooltip-switch">
@@ -100,7 +64,7 @@ const UserSettings = () => {
             checkedChildren={'Show'}
             unCheckedChildren={'Hide'}
             defaultChecked={showTooltips}
-            onChange={async (value) => await changeSettings('tooltip', value)}
+            onChange={(value) => dispatch(setTooltipsValue(value))}
           />
         </div>
         <div className="user-settings__tooltip-switch">
@@ -109,7 +73,7 @@ const UserSettings = () => {
             checkedChildren={'Show'}
             unCheckedChildren={'Hide'}
             defaultChecked={ableToShowNotification}
-            onChange={async (value) => await changeSettings('notification', value)}
+            onChange={(value) => dispatch(setAbleToShowNotification(value))}
           />
         </div>
       </div>
