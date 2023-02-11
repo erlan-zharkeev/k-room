@@ -2,6 +2,35 @@
   position: absolute;
   display: flex;
   @include wh-100;
+  &__interlocutor-audio-status {
+    span {
+      margin-right: 0.3rem;
+      font-size: 1rem;
+    }
+
+    position: absolute;
+    top: -1px;
+    left: 0;
+    display: flex;
+    width: 100%;
+    padding: 0.7rem;
+    background-color: var(--secondary-text);
+  }
+
+  &__settings {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+
+    span {
+      font-size: 1.5rem;
+    }
+
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
   &__user-video {
     video {
       @include wh-100;
@@ -39,6 +68,7 @@
     height: 100px;
     overflow: hidden;
   }
+
   &__interlocutor-video {
     position: absolute;
     width: 100%;
@@ -69,36 +99,6 @@
         align-items: center;
         justify-content: center;
       }
-    }
-  }
-
-  &__interlocutor-audio-status {
-    span {
-      margin-right: 0.3rem;
-      font-size: 1rem;
-    }
-
-    position: absolute;
-    top: -1px;
-    left: 0;
-    display: flex;
-    width: 100%;
-    padding: 0.7rem;
-    background-color: var(--secondary-text);
-  }
-
-  &__settings {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    cursor: pointer;
-
-    span {
-      font-size: 1.5rem;
-    }
-
-    &:hover {
-      color: var(--accent-color);
     }
   }
 }
