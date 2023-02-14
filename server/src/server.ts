@@ -8,7 +8,9 @@ const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const clc = require('cli-color')
 const cookieParser = require('cookie-parser')
-const fs = require('express')
+import fs from 'fs'
+import path from 'path'
+
 const app = express()
 
 app.use(cookieParser())
@@ -20,17 +22,11 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Server running')
 })
 
-// Certificate
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/k-room.space/privkey.pem', 'utf8')
-const certificate = fs.readFileSync('/etc/letsencrypt/live/k-room.space/cert.pem', 'utf8')
-const ca = fs.readFileSync('/etc/letsencrypt/live/k-room.space/chain.pem', 'utf8')
-
-const credentials = {
-	key: privateKey,
-	cert: certificate,
-	ca: ca
+const credentials ={
+  key: fs.readFileSync(path.join(__dirname, 'certs/key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'certs/cert.pem'))
 }
-
+// console.log(fs, path)
 const server = ENV.IS_DEV ? http.createServer(app) : https.createServer(credentials, app)
 
 const PORT = ENV.SERVER_PORT
