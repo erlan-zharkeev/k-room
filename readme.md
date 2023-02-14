@@ -1,9 +1,9 @@
 ## Development
 
+- run docker
 - run cd ./scripts && bash dev.sh
-
-  chrome://flags/#unsafely-treat-insecure-origin-as-secure
-  http://k-room.space
+- run in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put there
+  http://localhost:3001
 
 ## Deploy
 
