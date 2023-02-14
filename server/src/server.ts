@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import router from './router'
 import ENV from './ENV'
 import fs from 'fs'
-import path from 'path'
+// import path from 'path'
 const http = require('http')
 const https = require('https')
 const methodOverride = require('method-override')
@@ -22,11 +22,21 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Server running')
 })
 
+// const credentials = {
+//   key: fs.readFileSync(path.join(__dirname, './certs/key.pem')),
+//   cert: fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
+// }
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/k-room.space/privkey.pem', 'utf8')
+const certificate = fs.readFileSync('/etc/letsencrypt/live/k-room.space/cert.pem', 'utf8')
+const ca = fs.readFileSync('/etc/letsencrypt/live/k-room.space/chain.pem', 'utf8')
+
 const credentials = {
-  key: fs.readFileSync(path.join(__dirname, './certs/key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, './certs/cert.pem'))
+  key: privateKey,
+  cert: certificate,
+  ca
 }
-// console.log(fs, path)
+
 const server = ENV.IS_DEV ? http.createServer(app) : https.createServer(credentials, app)
 
 const PORT = ENV.SERVER_PORT
