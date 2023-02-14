@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const https = require('https')
 const ENV = dotenv.config({ path: './_env/.env.production' }).parsed
 const app = express()
+const fs = require('fs')
 
 app.use(express.static(path.join(__dirname + '/bundle/')))
 
