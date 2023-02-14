@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
 import router from './router'
 import ENV from './ENV'
-import fs from 'fs'
+const fs = require('fs')
 // import path from 'path'
 const http = require('http')
 const https = require('https')
