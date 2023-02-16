@@ -27,29 +27,27 @@ services:
   #     dockerfile: ./client/Dockerfile
   #   ports:
   #     - '${CLIENT_PORT}:${CLIENT_PORT}'
-  # client:
-  #   container_name: 'k-room-client'
-  #   restart: always
-  #   build:
-  #     context: ./
-  #     dockerfile: ./client/Dockerfile
-  #   ports:
-  #     - '3001:3001'
-  webserver:
+  client:
+    container_name: 'k-room-client'
     restart: always
     build:
-        context: ./nginx
+      context: ./
+      dockerfile: ./client/Dockerfile
     ports:
-        - "80:80"
-        - "443:443"
+      - '3001:3001'
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    image: nginx
+    ports:
+        - 80:80
+        - 443:443
     volumes:
-      # - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
   certbot:
-    links:
-      - 'webserver'
-    image: certbot/certbot:latest
+    image: certbot/certbot
+    container_name: certbot
     volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email {email} -d {domain} --agree-tos
