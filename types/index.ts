@@ -16,23 +16,23 @@ export interface EnvVariables {
 }
 
 export enum AuthEndPoints {
-  REGISTRATION = "/api/auth/registration",
-  SEND_EMAIL_CONFIRMATION_LINK = "/api/auth/send-email-confirmation-link",
-  SEND_EMAIL_CONFIRMATION = "/api/auth/send-email-confirmation",
-  LOGIN = "/api/auth/login",
-  LOGOUT = "/api/auth/logout",
-  UPDATE_TOKENS_PAIR = "/api/auth/update-tokens-pair",
+  REGISTRATION = "/auth/registration",
+  SEND_EMAIL_CONFIRMATION_LINK = "/auth/send-email-confirmation-link",
+  SEND_EMAIL_CONFIRMATION = "/auth/send-email-confirmation",
+  LOGIN = "/auth/login",
+  LOGOUT = "/auth/logout",
+  UPDATE_TOKENS_PAIR = "/auth/update-tokens-pair",
 }
 
 export enum UserEndPoints {
-  GET_USER_DATA = "/api/auth/get-user-data",
-  UPDATE_USER_DATA = "/api/auth/user-data/update",
-  UPDATE_USER_SETTINGS = "/api/user/update-user-settings",
+  GET_USER_DATA = "/auth/get-user-data",
+  UPDATE_USER_DATA = "/auth/user-data/update",
+  UPDATE_USER_SETTINGS = "/user/update-user-settings",
 }
 
 export enum CommonEndPoints {
-  COMMON_IMAGES = "/api/common-images",
-  GET_FILES = "/api/image/:filename",
+  COMMON_IMAGES = "/common-images",
+  GET_FILES = "/image/:filename",
 }
 
 export enum SocketActions {

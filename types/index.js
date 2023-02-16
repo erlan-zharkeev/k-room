@@ -3,23 +3,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Status = exports.RouteNames = exports.SocketActions = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
 var AuthEndPoints;
 (function (AuthEndPoints) {
-    AuthEndPoints["REGISTRATION"] = "/api/auth/registration";
-    AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/api/auth/send-email-confirmation-link";
-    AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/api/auth/send-email-confirmation";
-    AuthEndPoints["LOGIN"] = "/api/auth/login";
-    AuthEndPoints["LOGOUT"] = "/api/auth/logout";
-    AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/api/auth/update-tokens-pair";
+    AuthEndPoints["REGISTRATION"] = "/auth/registration";
+    AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/auth/send-email-confirmation-link";
+    AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/auth/send-email-confirmation";
+    AuthEndPoints["LOGIN"] = "/auth/login";
+    AuthEndPoints["LOGOUT"] = "/auth/logout";
+    AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
 var UserEndPoints;
 (function (UserEndPoints) {
-    UserEndPoints["GET_USER_DATA"] = "/api/auth/get-user-data";
-    UserEndPoints["UPDATE_USER_DATA"] = "/api/auth/user-data/update";
-    UserEndPoints["UPDATE_USER_SETTINGS"] = "/api/user/update-user-settings";
+    UserEndPoints["GET_USER_DATA"] = "/auth/get-user-data";
+    UserEndPoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
+    UserEndPoints["UPDATE_USER_SETTINGS"] = "/user/update-user-settings";
 })(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
 var CommonEndPoints;
 (function (CommonEndPoints) {
-    CommonEndPoints["COMMON_IMAGES"] = "/api/common-images";
-    CommonEndPoints["GET_FILES"] = "/api/image/:filename";
+    CommonEndPoints["COMMON_IMAGES"] = "/common-images";
+    CommonEndPoints["GET_FILES"] = "/image/:filename";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var SocketActions;
 (function (SocketActions) {

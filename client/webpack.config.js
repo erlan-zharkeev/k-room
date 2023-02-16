@@ -32,13 +32,9 @@ module.exports = {
     allowedHosts: 'all',
     proxy: [
       {
-        context: ['/api'],
+        context: ['/api/'],
         target: `http://localhost:${ENV.SERVER_PORT}`
-      },
-      // {
-      //   context: ['/app/'],
-      //   target: `http://localhost:${ENV.SERVER_PORT}`
-      // }
+      }
     ],
     historyApiFallback: true,
     port: ENV.CLIENT_PORT,
@@ -100,6 +96,7 @@ module.exports = {
         { from: "./public/meta", to: "./meta" },
         { from: "./public/additional-files", to: "./" },
         { from: "./public/sounds", to: "./sounds" },
+        { from: "./public/certs", to: "./certs" },
       ],
     }),
   ],
