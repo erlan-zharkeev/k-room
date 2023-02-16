@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const dotenv = require('dotenv')
-// const https = require('https')
+const https = require('https')
 const http = require('http')
 const ENV = dotenv.config({ path: './_env/.env.production' }).parsed
 const app = express()
@@ -14,8 +14,11 @@ app.use(express.static(path.join(__dirname + '/bundle/')))
 //   cert: fs.readFileSync(path.join(__dirname, './bundle/certs/cert.pem'))
 // }
 
-const server = http.createServer(app)
-server.listen(ENV.CLIENT_PORT)
+const httpServer = http.createServer(app)
+// const httpsServer = https.createServer(app)
+
+httpServer.listen(3001)
+// httpsServer.listen(ENV.CLIENT_PORT)
 
 const routes = ['/', '/app', '/app/', '/sign-in', '/sign-up', '/wait-email-confirm', '/confirm-email']
 routes.forEach(route =>{
