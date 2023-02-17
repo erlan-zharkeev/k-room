@@ -67,3 +67,28 @@
     chmod 600 swapfile
 
 - Make ports open
+
+- Proposals
+  make https
+  serve front on back
+  clean up
+  Redisign
+  develop call list
+  develop add photo
+  develop add files
+  develop add video
+  develop add audio
+  Make username unique
+  develop forward and reply
+  develop reactions
+  make multiple chat
+  make multiple video chat
+  make notifications from chat
+  make update button(webworkers)
+  check token works
+  make google/facebook authorization
+  make cookie checker
+  make gif how to use
+  share geolocation
+  delayed messages
+  find out how to deploy project for MOBILE and WINDOWS
