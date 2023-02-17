@@ -30,7 +30,7 @@
 - Remove all images - docker rmi $(docker images -a -q)
 - Remove all unused images - docker image prune --filter="dangling=true" -f
 - docker build -t branchName -f server/Dockerfile .
-
+- delete all volumes docker volume rm $(docker volume ls -q)
 ## Server Ubuntu hints
 
 - Turn to super user - sudo -s

@@ -28,14 +28,14 @@ services:
   #   ports:
   #     - '${CLIENT_PORT}:${CLIENT_PORT}'
   # docker-compose up -d zharkeev.post@gmail.com k-room.space certbot
-  # client:
-  #   container_name: 'k-room-client'
-  #   restart: always
-  #   build:
-  #     context: ./
-  #     dockerfile: ./client/Dockerfile
-  #   ports:
-  #     - '3001:3001'
+  client:
+    container_name: 'k-room-client'
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./client/Dockerfile
+    ports:
+      - '3001:3001'
   webserver:
     image: nginx:latest
     ports:
