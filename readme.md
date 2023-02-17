@@ -67,6 +67,7 @@
     chmod 600 swapfile
 
 - Make ports open
+- Update certificate via "docker compose run --rm certbot renew"
 
 - Proposals
   make https
