@@ -45,7 +45,7 @@ services:
       context: ./
       dockerfile: ./client/Dockerfile
     ports:
-      - '3001:3001'
+      - '80:80'
   certbot:
     image: certbot/certbot:latest
     volumes:
