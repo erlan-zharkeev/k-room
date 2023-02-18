@@ -101,9 +101,14 @@
 - delayed messages
 - find out how to deploy project for MOBILE and WINDOWS
 - setup cors to specific host and port
+- logo in email
+- types any and unknown
+- not found page
+- скомпоновать сообщения на бэке
+- восстановление пароля
+- auto upgrade version
 
 
-
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
+<!-- docker stop $(docker ps -aq)
+docker rm $(docker ps -aq) -->
 <!-- docker-compose --env-file .env.production up -d webserver -->
