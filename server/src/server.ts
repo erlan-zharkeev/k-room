@@ -4,7 +4,7 @@ import router from './router'
 import ENV from './ENV'
 
 const http = require('http')
-const https = require('https')
+// const https = require('https')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const clc = require('cli-color')
@@ -21,7 +21,7 @@ app.get('/api/', (req: Request, res: Response) => {
   res.send('Server running')
 })
 
-const server = ENV.IS_DEV ? http.createServer(app) : https.createServer(app)
+const server = http.createServer(app)
 
 const PORT = ENV.SERVER_PORT
 
