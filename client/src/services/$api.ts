@@ -73,7 +73,7 @@ export const $api = async (
 ): Promise<AxiosResponse<any, any>> => {
   const options = { headers: { 'Content-Type': contentType } }
   try {
-    const response = await axios[type](`${endpointHost}/api/${endpoint}`, payload, options)
+    const response = await axios[type](`${endpointHost}/api${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
   } catch (e: any) {
