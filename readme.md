@@ -101,3 +101,9 @@
 - delayed messages
 - find out how to deploy project for MOBILE and WINDOWS
 - setup cors to specific host and port
+
+
+
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+<!-- docker-compose --env-file .env.production up -d webserver -->
