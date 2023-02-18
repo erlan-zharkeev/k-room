@@ -14,12 +14,8 @@ RUN yarn
 
 RUN yarn build
 
-# ENV PORT $CLIENT_PORT
+ENV PORT $CLIENT_PORT
 
-# EXPOSE $CLIENT_PORT
-
-ENV PORT 3001
-
-EXPOSE 3001
+EXPOSE $CLIENT_PORT
 
 CMD [ "yarn", "serve:build"]

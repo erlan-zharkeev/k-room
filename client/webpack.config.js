@@ -95,8 +95,7 @@ module.exports = {
       patterns: [
         { from: "./public/meta", to: "./meta" },
         { from: "./public/additional-files", to: "./" },
-        { from: "./public/sounds", to: "./sounds" },
-        { from: "./public/certs", to: "./certs" },
+        { from: "./public/sounds", to: "./sounds" }
       ],
     }),
   ],
