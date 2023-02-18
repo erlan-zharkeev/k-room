@@ -109,6 +109,6 @@
 - auto upgrade version
 
 
-<!-- docker stop $(docker ps -aq)
-docker rm $(docker ps -aq) -->
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
 <!-- docker-compose --env-file .env.production up -d webserver -->
