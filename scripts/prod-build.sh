@@ -1,8 +1,6 @@
 #!/bin/bash
 
 cd ..
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
 git restore .
 git checkout development-enable-https
 git pull
@@ -11,5 +9,6 @@ source update-envs.sh
 docker image prune --filter="dangling=true" -f
 docker-compose --env-file .env.production up --build
 
-
+# docker stop $(docker ps -aq)
+# docker rm $(docker ps -aq)
 # docker-compose --env-file .env.production up -d webserver

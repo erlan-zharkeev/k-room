@@ -100,3 +100,4 @@
 - share geolocation
 - delayed messages
 - find out how to deploy project for MOBILE and WINDOWS
+- setup cors to specific host and port
