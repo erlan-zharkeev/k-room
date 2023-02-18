@@ -13,7 +13,7 @@ axios.defaults.proxy = {
 
 axios.defaults.withCredentials = true
 
-const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}`
+const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:443`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
