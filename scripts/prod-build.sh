@@ -1,7 +1,10 @@
 #!/bin/bash
 
 cd ..
-git checkout main
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+git restore .
+git checkout development-enable-https
 git pull
 cd scripts
 source update-envs.sh
