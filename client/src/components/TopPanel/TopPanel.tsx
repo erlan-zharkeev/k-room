@@ -6,7 +6,7 @@ import { logOut } from 'src/store/userSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { selectChatRoom } from 'src/store/settingsSlice'
-const Logo = require('src/assets/images/Logo.svg') as string
+const Logo = require('src/assets/img/Logo.svg') as string
 
 const TopPanel = () => {
   const { username, email, avatar } = useTypedSelector((state) => state.user.userData)

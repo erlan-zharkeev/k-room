@@ -6,7 +6,7 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { login } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
-const Logo = require('src/assets/images/Logo.svg') as string
+const Logo = require('src/assets/img/Logo.svg') as string
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)

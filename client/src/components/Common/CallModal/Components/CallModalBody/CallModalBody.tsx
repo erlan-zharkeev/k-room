@@ -37,7 +37,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const [length, setLength] = useState(0)
 
-  let timerId: any
+  let timerId: string | number | NodeJS.Timeout = null
 
   const lengthCounter = () => {
     setLength((length) => {
@@ -90,12 +90,12 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const toggleAudio = () => {
     dispatch(toggleCallAudio())
-    call.toggleAudio()
+    call.toggleSetting('audio')
   }
 
   const toggleVideo = async () => {
     dispatch(toggleCallVideo())
-    call.toggleVideo()
+    call.toggleSetting('video')
   }
 
   return (

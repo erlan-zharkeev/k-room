@@ -9,7 +9,6 @@ import { AppDispatch } from 'src/store'
 import {
   closeCallModal,
   initModalToCall,
-  setConnection,
   setCurrentCallAccepted,
   updateInterlocutorSettings
 } from 'src/store/callsSlice'
@@ -29,18 +28,19 @@ class Call {
   soundConnection: Howl
   soundCalling: Howl
   socket: Socket
-  connectionOptions: any
+  selfVideoDom: HTMLVideoElement
+  selfInterlocutorDom: HTMLVideoElement
   constructor() {
     this.dispatch = store.dispatch
     this.soundConnection = $sound(Sounds.connection, true)
     this.soundCalling = $sound(Sounds.ring, true)
     this.socket = socket
+    this.selfVideoDom = document.getElementById('self-video') as HTMLVideoElement
+    this.selfInterlocutorDom = document.getElementById('interlocutor-video') as HTMLVideoElement
   }
 
-  async listenConnectionError() {
-    this.connection.on('error', (e: any) => {
-      console.log(e)
-    })
+  initConnection(options: any) {
+    this.connection = new Peer(options)
   }
 
   async initCall(interlocutorData: User, selfId: string, selfAvatarPath: string, callerName: string) {
@@ -66,8 +66,7 @@ class Call {
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
-      const interlocutorVideo = document.getElementById('interlocutor-video') as HTMLVideoElement
-      interlocutorVideo.srcObject = interlocutorStream
+      this.selfInterlocutorDom.srcObject = interlocutorStream
     })
     this.connection.on('close', () => {
       this.dispatch(
@@ -87,10 +86,6 @@ class Call {
     this.listenConnectionError()
   }
 
-  initConnection(options: any) {
-    this.connection = new Peer(options)
-  }
-
   answerCall() {
     this.soundCalling.stop()
     this.dispatch(setCurrentCallAccepted())
@@ -99,7 +94,7 @@ class Call {
       trickle: false,
       stream: this.selfStream
     })
-    this.connection.on('signal', (data: any) => {
+    this.connection.on('signal', (data) => {
       const settings = store.getState().calls.settings
       this.socket.emit(SocketActions.ANSWER_CALL, {
         signal: data,
@@ -110,8 +105,7 @@ class Call {
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
-      const interlocutorVideo = document.getElementById('interlocutor-video') as HTMLVideoElement
-      interlocutorVideo.srcObject = interlocutorStream
+      this.selfInterlocutorDom.srcObject = interlocutorStream
     })
     this.connection.on('close', () => {
       this.dispatch(
@@ -127,11 +121,10 @@ class Call {
   }
 
   async setStream() {
-    const selfVideo = document.getElementById('self-video') as HTMLVideoElement
     const { audio, video } = store.getState().calls.settings
     try {
       this.selfStream = await navigator.mediaDevices.getUserMedia({ audio, video })
-      selfVideo.srcObject = this.selfStream
+      this.selfVideoDom.srcObject = this.selfStream
     } catch (error) {
       $clg('error', 'Failed to get device cause ' + String(error))
       this.dispatch(
@@ -150,15 +143,11 @@ class Call {
     this.callerSignal = callerSignal
   }
 
-  toggleVideo() {
+  toggleSetting(type: string) {
     const { audio, video } = store.getState().calls.settings
-    this.selfStream.getVideoTracks().forEach((track) => (track.enabled = video))
-    this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, { audio, video })
-  }
-
-  toggleAudio() {
-    const { audio, video } = store.getState().calls.settings
-    this.selfStream.getAudioTracks().forEach((track) => (track.enabled = audio))
+    const isVideo = type === 'video'
+    const tracks = isVideo ? 'getVideoTracks' : 'getAudioTracks'
+    this.selfStream[tracks]().forEach((track) => (track.enabled = isVideo ? video : audio))
     this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, { audio, video })
   }
 
@@ -172,6 +161,12 @@ class Call {
     })
     this.socket = socket
     if (this.connection) this.connection.destroy()
+  }
+
+  listenConnectionError() {
+    this.connection.on('error', (e: any) => {
+      console.log(e)
+    })
   }
 }
 

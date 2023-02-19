@@ -45,21 +45,6 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
   dispatch(showNotification({ message, messageType: 'error' }))
-  // const isTokenExpired = status === Status.TOKEN_EXPIRED
-  // if (isTokenExpired) {
-  //   $clg('error', 'Access token is expired')
-  //   dispatch(changeIsAppLoading(true))
-  //   const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
-  //   dispatch(changeIsAppLoading(false))
-  //   const isTokensPairUpdated = updateTokenResponse?.status === Status.SUCCESS
-  //   if (!isTokensPairUpdated) return
-  //   $clg('success', 'Tokens pair has been updated')
-  //   dispatch(getUserData(null))
-  //   return
-  // }
-  // if (e.response?.data?.status && e.response.data.status === Status.NOT_AUTH) return
-  // const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  // dispatch(showNotification({ message, messageType: 'error' }))
 }
 
 type RequestTypes = 'post' | 'get' | 'patch'

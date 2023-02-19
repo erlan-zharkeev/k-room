@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./bundle/",
+    "outDir": "./build/",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "es6",
