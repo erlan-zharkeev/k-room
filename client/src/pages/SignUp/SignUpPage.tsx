@@ -37,7 +37,7 @@ export const SignUpPage = () => {
   return (
     <div className="page sign-up">
       <div className="sign-in__logo">
-        <img className="logo" src={Logo}></img>
+        <img className="logo" src={Logo} alt="logo"></img>
       </div>
       <div className="sign-up__wrapper">
         <div className="sign-up__body">

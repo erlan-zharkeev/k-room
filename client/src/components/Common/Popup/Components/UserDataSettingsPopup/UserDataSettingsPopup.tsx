@@ -81,9 +81,9 @@ const UserDataSettingsPopup = () => {
       >
         <div className="user-data-settings-popup__avatar">
           {avatar || newAvatar ? (
-            <Image preview={false} src={newAvatar ?? avatar} />
+            <Image preview={false} src={newAvatar ?? avatar} alt="avatar" />
           ) : (
-            <Avatar size="large" icon={<UserOutlined />} />
+            <Avatar size="large" icon={<UserOutlined />} alt="avatar" />
           )}
           <input type="file" onChange={normFile} />
         </div>
