@@ -1,6 +1,7 @@
 node_modules
 db/mongo-init.js
 .vscode
+.yarn.lock
 
 client/node_modules
 client/yarn-error.log

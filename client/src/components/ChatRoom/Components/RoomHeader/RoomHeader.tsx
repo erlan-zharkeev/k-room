@@ -42,9 +42,9 @@ export const RoomHeader = () => {
       <div className="room-header__info">
         <Badge dot={chatRoomData?.hasOnline} color="green">
           {chatRoomData?.avatar ? (
-            <Image src={chatRoomData?.avatar} className="custom-avatar" />
+            <Image src={chatRoomData?.avatar} className="custom-avatar" alt="avatar" />
           ) : (
-            <Avatar size="small" src={chatRoomData.avatar} icon={<UserOutlined />} />
+            <Avatar size="small" src={chatRoomData.avatar} icon={<UserOutlined />} alt="avatar" />
           )}
         </Badge>
         <h3 className="room-header__name">{chatRoomData?.chatName}</h3>

@@ -26,9 +26,9 @@ const Calls = () => {
               <List.Item.Meta
                 avatar={
                   call.interlocutorId ? (
-                    <Image src={call.interlocutorId} className="custom-avatar" />
+                    <Image src={call.interlocutorId} className="custom-avatar" alt="avatar" />
                   ) : (
-                    <Avatar size="small" src={call.interlocutorId} icon={<UserOutlined />} />
+                    <Avatar size="small" src={call.interlocutorId} icon={<UserOutlined />} alt="avatar" />
                   )
                 }
                 title={<span>{call.interlocutorName}</span>}

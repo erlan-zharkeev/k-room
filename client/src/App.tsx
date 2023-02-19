@@ -1,3 +1,4 @@
+import 'antd/dist/antd.css'
 import './styles/App.scss'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'

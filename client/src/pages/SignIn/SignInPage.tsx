@@ -24,7 +24,7 @@ export const SignInPage = () => {
   return (
     <div className="page sign-in">
       <div className="sign-in__logo">
-        <img className="logo" src={Logo}></img>
+        <img className="logo" src={Logo} alt="logo"></img>
       </div>
       <div className="sign-in__wrapper">
         <div className="sign-in__body">

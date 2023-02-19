@@ -114,9 +114,9 @@ const ContactList = () => {
               avatar={
                 <Badge dot={user.online} color="green">
                   {user.avatar ? (
-                    <Image src={user.avatar} className="custom-avatar" />
+                    <Image src={user.avatar} className="custom-avatar" alt="avatar" />
                   ) : (
-                    <Avatar size="small" src={user.avatar} icon={<UserOutlined />} />
+                    <Avatar size="small" src={user.avatar} icon={<UserOutlined />} alt="avatar" />
                   )}
                 </Badge>
               }

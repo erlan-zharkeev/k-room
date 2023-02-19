@@ -30,11 +30,6 @@ class CommonController {
       const filename = req.query.img as string
       const resolution = filename.split('.')[1]
       const path = `${ENV.SERVER_ASSETS_PATH}/img/${filename}`
-      console.log(path, 'path')
-      fs.readdir('./', (err: any, files: any) => {
-        if (err) throw err // не прочитать содержимое папки
-        console.log('В папке находятся файлы:' + files)
-      })
       if (!fs.existsSync(path)) return throwError(Status.NOT_FOUND, res, Messages.noFilesExist)
       res.writeHead(200, { 'content-type': `image/${resolution}` })
       fs.createReadStream(path).pipe(res)
