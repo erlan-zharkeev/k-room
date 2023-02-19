@@ -2,6 +2,7 @@ export interface EnvVariables {
   SERVER_PORT: string;
   CLIENT_PORT: string;
   SERVER_URL: string;
+  CLIENT_URL: string;
   MONGO_HOST: string;
   HOST: string;
   JWT_ACCESS_EXPIRES_INTERVAL: string;
