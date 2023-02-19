@@ -48,7 +48,7 @@ class UserController {
         username
       }
 
-      if (filename) newUserData.avatar = `${ENV.HOST}:${ENV.SERVER_PORT}/api/image/${filename}`
+      if (filename) newUserData.avatar = `${ENV.SERVER_URL}/image/${filename}`
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
 

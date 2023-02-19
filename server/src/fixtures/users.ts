@@ -11,7 +11,7 @@ export default async () => {
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
       username: firstCharUpperCase(username),
-      avatar: `${ENV.HOST}:${ENV.SERVER_PORT}${CommonEndPoints.COMMON_IMAGES}?img=${username}.jpg`,
+      avatar: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=${username}.jpg`,
       email: `${username}@gmail.com`,
       password: hashedPassword,
       socketId: '',
