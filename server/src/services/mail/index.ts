@@ -27,9 +27,9 @@ export const sendEmailConfirmationLink = async (email: string) => {
   const user = await UserModel.findOneAndUpdate({ email }, { $inc: { confirmAttempts: -1 } })
   await mailer(email, 'confirmation', {
     appName: ENV.APP_NAME,
-    link: `${ENV.HOST}:${ENV.CLIENT_PORT}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`,
-    logoSrc: `${ENV.HOST}:${ENV.SERVER_PORT}${CommonEndPoints.COMMON_IMAGES}/logo(70x70).png`,
-    host: `${ENV.HOST}/sign-in`
+    link: `${ENV.CLIENT_URL}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`,
+    logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
+    host: `${ENV.CLIENT_URL}/sign-in`
   })
   const hasAttempts = user?.confirmAttempts && user.confirmAttempts >= 0
   return hasAttempts ? { email, timeNextRequest: getTimeNextRequest(), attempts: user?.confirmAttempts } : null

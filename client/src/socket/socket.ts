@@ -1,9 +1,11 @@
 import { io } from 'socket.io-client'
 import ENV from 'src/ENV'
 
-export const socket = io(`:${ENV.SERVER_PORT}/`, {
+const initConnectionPath = ENV.IS_DEV ? `:${ENV.SERVER_PORT}` : ''
+
+export const socket = io(`${initConnectionPath}/`, {
   forceNew: false,
-  path: '/app/',
+  path: '/socket/',
   reconnection: true,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,
