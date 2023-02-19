@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "cz-customizable": "^7.0.0",
-    "husky": "^8.0.2"
+    "husky": "^8.0.2",
+    "mini-css-extract-plugin": "^2.7.2"
   }
 }

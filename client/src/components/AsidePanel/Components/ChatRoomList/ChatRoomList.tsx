@@ -77,9 +77,9 @@ export const ChatRoomList = () => {
                 avatar={
                   <Badge dot={chatRoom.hasOnline} color="green">
                     {chatRoom.avatar ? (
-                      <Image src={chatRoom.avatar} className="custom-avatar" />
+                      <Image src={chatRoom.avatar} className="custom-avatar" alt="avatar" />
                     ) : (
-                      <Avatar size="small" src={chatRoom.avatar} icon={<UserOutlined />} />
+                      <Avatar size="small" src={chatRoom.avatar} icon={<UserOutlined />} alt="avatar" />
                     )}
                   </Badge>
                 }

@@ -1,9 +1,10 @@
 const path = require('path');
 const dotenv = require('dotenv')
 const package = require('./package.json')
+const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack')
-const CopyPlugin = require("copy-webpack-plugin");
-
+const CopyPlugin = require("copy-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { NODE_ENV, npm_lifecycle_event } = process.env
@@ -11,7 +12,7 @@ const { NODE_ENV, npm_lifecycle_event } = process.env
 const ENV = dotenv.config({ path: `./_env/.env.${NODE_ENV}` }).parsed
 
 const isDev = NODE_ENV === 'development'
-const reportMode = npm_lifecycle_event === 'build-stat' ? 'server' : 'disabled'
+const reportMode = npm_lifecycle_event === 'stat:build' ? 'server' : 'disabled'
 
 const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[fullhash].${ext}`)
 
@@ -66,7 +67,7 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       minSize: 100000,
-      maxSize: 250000,
+      maxSize: 200000,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
@@ -77,6 +78,10 @@ module.exports = {
     }
   },
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: filename('css'),
+      chunkFilename: filename('css')
+    }),
     new HtmlWebpackPlugin({
       title: package.name,
       template: './public/index.html',
@@ -112,9 +117,9 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.s?css$/,
         use: [
-          "style-loader",
+          MiniCssExtractPlugin.loader,
           "css-loader",
           "sass-loader",
         ],

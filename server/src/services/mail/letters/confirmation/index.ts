@@ -139,7 +139,7 @@ export default (payload: { appName: string; link: string; logoSrc: string; host:
           <tr>
             <td align="center" bgcolor="#ffffff" valign="top" style="padding: 36px 24px;">
               <a href="${payload.host}" target="_blank" style="max-width: 150px; max-height: 150px;">
-                <img src="${payload.logoSrc}" border="0" style="display: block; width: 150px">
+                <img src="${payload.logoSrc}" alt='logo' border="0" style="display: block; width: 150px">
               </a>
             </td>
           </tr>

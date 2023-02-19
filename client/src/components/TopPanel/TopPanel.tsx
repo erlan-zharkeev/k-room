@@ -31,16 +31,16 @@ const TopPanel = () => {
   return (
     <div className="top-panel" onClick={resetChat}>
       <div className="top-panel__logo">
-        <img className="logo" src={Logo}></img>
+        <img className="logo" src={Logo} alt="logo"></img>
       </div>
       <div className="top-panel__content">
         <div className="top-panel__userdata">
           <div className="top-panel__avatar">
             <Badge dot color={socket.connected ? 'green' : 'red'}>
               {avatar ? (
-                <Image src={avatar} className="custom-avatar" />
+                <Image src={avatar} className="custom-avatar" alt="avatar" />
               ) : (
-                <Avatar size="small" src={avatar} icon={<UserOutlined />} />
+                <Avatar size="small" src={avatar} icon={<UserOutlined />} alt="avatar" />
               )}
             </Badge>
           </div>
