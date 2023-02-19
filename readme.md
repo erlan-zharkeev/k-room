@@ -109,6 +109,7 @@
 - auto upgrade version
 - уменьшить базовые изображения и удаление не нужных
 - добавить компрессию файлов
+- remove hints
 
 
 docker stop $(docker ps -aq)

@@ -1,12 +1,12 @@
 node_modules
 db/mongo-init.js
 .vscode
-.yarn.lock
+yarn.lock
 
 client/node_modules
 client/yarn-error.log
 client/yarn.lock
-client/bundle
+client/build
 client/eslintcache
 client/package-lock.json
 

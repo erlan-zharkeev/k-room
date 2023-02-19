@@ -1,7 +1,6 @@
 const path = require('path');
 const dotenv = require('dotenv')
 const package = require('./package.json')
-const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack')
 const CopyPlugin = require("copy-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
@@ -21,7 +20,7 @@ module.exports = {
   devtool: isDev ? 'source-map' : false,
   entry: path.resolve(__dirname, 'src', 'index.tsx'),
   output: {
-    path: path.resolve(__dirname, 'bundle'),
+    path: path.resolve(__dirname, 'build'),
     filename: filename('js'),
     clean: true,
     publicPath: '/'
