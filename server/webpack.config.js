@@ -1,4 +1,4 @@
-// Only production'
+// Works only in production build
 
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
@@ -34,9 +34,7 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: "src/assets", to: "./assets" },
-        { from: "src/certs", to: "./certs" },
-        { from: ".well-known/acme-challenge", to: "./.well-known/acme-challenge" }
+        { from: "src/assets", to: "./assets" }
       ],
     }),
   ],

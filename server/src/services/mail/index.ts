@@ -28,7 +28,7 @@ export const sendEmailConfirmationLink = async (email: string) => {
   await mailer(email, 'confirmation', {
     appName: ENV.APP_NAME,
     link: `${ENV.HOST}:${ENV.CLIENT_PORT}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`,
-    logoSrc: `${ENV.HOST}:${ENV.SERVER_PORT}${CommonEndPoints.COMMON_IMAGES}/logo(70x70).png`,
+    logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}/logo(70x70).png`,
     host: `${ENV.HOST}/sign-in`
   })
   const hasAttempts = user?.confirmAttempts && user.confirmAttempts >= 0

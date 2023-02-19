@@ -2,7 +2,6 @@ version: '3'
 
 services:
   db:
-    container_name: k-room-db
     restart: always
     build: ./db/
     ports:
@@ -10,7 +9,6 @@ services:
     volumes:
       - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   server:
-    container_name: 'k-room-server'
     restart: always
     build:
       context: ./
@@ -20,11 +18,27 @@ services:
     links:
       - 'db'
   client:
-    container_name: 'k-room-client'
     restart: always
     build:
       context: ./
       dockerfile: ./client/Dockerfile
     ports:
       - '${CLIENT_PORT}:${CLIENT_PORT}'
-
+  webserver:
+    links:
+      - 'client'
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+  # uncomment for generate ssl cert
+  # certbot:
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/www/:/var/www/certbot/:rw
+  #     - ./certbot/conf/:/etc/letsencrypt/:rw

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ..
-git checkout main
+git restore .
 git pull
 cd scripts
 source update-envs.sh

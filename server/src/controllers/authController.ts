@@ -78,16 +78,17 @@ class AuthController {
       if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, Messages.emailNotConfirm)
 
       const validPassword = bcrypt.compareSync(password, user.password)
+
       if (!validPassword) return throwError(Status.BAD_REQUEST, res, Messages.wrongPass)
 
       await updateTokens(user._id, res)
-
       return res.json({
         userData: { username: user.username, email, id: user._id, avatar: user.avatar },
         settings: user.settings,
         message: Messages.loginSuccess
       })
     } catch (e: any) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
     }
   }
