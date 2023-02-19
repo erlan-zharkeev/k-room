@@ -73,21 +73,25 @@ class AuthController {
   async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body
+      console.log(email, password, 'req body')
       const user = await UserModel.findOne({ email })
+      console.log(user, 'user getted from db')
       if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
       if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, Messages.emailNotConfirm)
 
       const validPassword = bcrypt.compareSync(password, user.password)
+      console.log(validPassword, 'valid password')
       if (!validPassword) return throwError(Status.BAD_REQUEST, res, Messages.wrongPass)
 
       await updateTokens(user._id, res)
-
+      console.log('token updated')
       return res.json({
         userData: { username: user.username, email, id: user._id, avatar: user.avatar },
         settings: user.settings,
         message: Messages.loginSuccess
       })
     } catch (e: any) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
     }
   }
