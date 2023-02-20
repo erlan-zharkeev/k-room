@@ -6,14 +6,7 @@ import { changeIsAppLoading, getUserData } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from './$clg'
 
-axios.defaults.proxy = {
-  host: ENV.HOST,
-  port: Number(ENV.SERVER_PORT)
-}
-
 axios.defaults.withCredentials = true
-
-const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:443`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
@@ -49,6 +42,8 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
 
 type RequestTypes = 'post' | 'get' | 'patch'
 
+const serverHost = ENV.IS_DEV ? '' : `${ENV.HOST}`
+
 export const $api = async (
   type: RequestTypes,
   endpoint: string,
@@ -58,7 +53,7 @@ export const $api = async (
 ): Promise<AxiosResponse<any, any>> => {
   const options = { headers: { 'Content-Type': contentType } }
   try {
-    const response = await axios[type](`${endpointHost}/api${endpoint}`, payload, options)
+    const response = await axios[type](`${serverHost}/api${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
   } catch (e: any) {
