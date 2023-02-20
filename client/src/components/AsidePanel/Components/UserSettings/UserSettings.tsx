@@ -9,6 +9,8 @@ import {
 } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
 import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
+// import { FaBeer } from 'react-icons/fa';
+// <FaBeer color="red"/>
 
 const UserSettings = () => {
   const { username, email, id, avatar } = useTypedSelector((state) => state.user.userData)
