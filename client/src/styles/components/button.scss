@@ -1,16 +1,19 @@
 .ant-btn {
-  transition: background 0s;
   color: var(--secondary-text) !important;
   background: var(--main-bg) !important;
   border-color: var(--secondary-text) !important;
+  transition: background 0s;
+
   &:hover {
     color: var(--accent-color) !important;
     border-color: var(--accent-color) !important;
   }
+
   &--valid {
     color: var(--accent-color) !important;
     border-color: var(--accent-color) !important;
   }
+
   &--md {
     width: 100px !important;
     max-width: 100px !important;

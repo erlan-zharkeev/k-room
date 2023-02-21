@@ -5,9 +5,10 @@
   justify-content: space-between;
   height: $top-panel-height;
   min-height: $top-panel-height;
-  padding: 0 1rem;
   margin-bottom: $gutter-l;
+  padding: 0 1rem;
   @include nm-outset-element;
+
   &__content {
     display: flex;
   }
