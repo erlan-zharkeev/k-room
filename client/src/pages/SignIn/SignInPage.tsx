@@ -37,15 +37,15 @@ export const SignInPage = () => {
             onInput={() => validate(form)}
           >
             <Form.Item name="email" rules={validateRules.email}>
-              <Input placeholder="Email" />
+              <Input placeholder="Email" size='large' />
             </Form.Item>
 
             <Form.Item name="password" rules={validateRules.password}>
-              <Input.Password placeholder="Password" autoComplete="on" />
+              <Input.Password placeholder="Password" autoComplete="on" size='large' />
             </Form.Item>
 
             <Form.Item className="sign-in__controls">
-              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
+              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading} className={isValid ? 'ant-btn--valid': ''}>
                 Submit
               </Button>
             </Form.Item>

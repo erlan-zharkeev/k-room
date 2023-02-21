@@ -1,5 +1,5 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import AsidePanelControl from './Components/AsidePanelControl/AsidePanelControl'
+// import AsidePanelControl from './Components/AsidePanelControl/AsidePanelControl'
 import ChatRoomList from './Components/ChatRoomList/ChatRoomList'
 import ContactList from './Components/ContactList/ContactList'
 import UserSettings from './Components/UserSettings/UserSettings'
@@ -18,7 +18,6 @@ const AsidePanel = () => {
   return (
     <div className="aside-panel">
       <div className="aside-panel__content">{TabComponents[asideTab]}</div>
-      <AsidePanelControl />
     </div>
   )
 }

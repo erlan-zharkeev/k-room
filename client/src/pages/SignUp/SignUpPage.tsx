@@ -51,15 +51,15 @@ export const SignUpPage = () => {
             onInput={() => validate(form)}
           >
             <Form.Item name="username" rules={validateRules.required}>
-              <Input placeholder="Username" />
+              <Input placeholder="Username" size='large' />
             </Form.Item>
 
             <Form.Item name="email" rules={validateRules.email}>
-              <Input placeholder="Email" />
+              <Input placeholder="Email" size='large' />
             </Form.Item>
 
             <Form.Item name="password" rules={validateRules.password}>
-              <Input.Password placeholder="Password" />
+              <Input.Password placeholder="Password" size='large'/>
             </Form.Item>
 
             <Form.Item className="sign-up__controls">

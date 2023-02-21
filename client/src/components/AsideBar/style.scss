@@ -1,0 +1,14 @@
+.aside-bar {
+  padding: $gutter-sm;
+  display: flex;
+  align-items: center;
+  @include nm-outset-element;
+  .ant-radio-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    max-width: $container-sm;
+    margin: 0 auto;
+    height: 30%;
+  }
+}

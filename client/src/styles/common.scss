@@ -7,8 +7,21 @@ html {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  color: var(--main-text);
   background-color: var(--main-bg);
+}
+
+* {
+  font-family: 'Montserrat';
+  font-weight: 400;
+
+}
+
+h1, h2, h3, h4, h5, p {
+  color: var(--main-text);
+}
+
+::placeholder {
+  opacity: 0.4;
 }
 
 form {
@@ -31,10 +44,6 @@ form {
   50% {
     opacity: 0;
   }
-}
-
-.transitionless {
-  transition: all 0s linear;
 }
 
 ::-webkit-scrollbar {
@@ -85,4 +94,8 @@ input:-webkit-autofill {
       stroke-width: 25;
     }
   }
+}
+
+.nm-outset-shadow {
+  @include nm-outset-shadow;
 }

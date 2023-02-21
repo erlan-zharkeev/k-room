@@ -25,6 +25,7 @@ import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import { setShowCallModal, updateInterlocutorSettings } from 'src/store/callsSlice'
 import Call from 'src/call/call'
+import AsideBar from 'src/components/AsideBar/AsideBar'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -107,11 +108,14 @@ export const MainPage = () => {
       <Popup />
       <CallModal />
       <CallStatusBar />
-      <TopPanel />
-      <div className="main-page__content">
-        <AsidePanel />
-        <ChatRoom />
-      </div>
+      <AsideBar />
+      {/* <div className="main-page__wrapper">
+        <TopPanel />
+        <div className="main-page__content">
+          <AsidePanel />
+          <ChatRoom />
+        </div>
+      </div> */}
     </div>
   )
 }

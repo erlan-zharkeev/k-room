@@ -1,0 +1,39 @@
+.ant-input {
+  transition: background 0s;
+  @include nm-inset-element;
+}
+
+.ant-input-password {
+  &.ant-input-affix-wrapper-lg {
+    padding: 0 !important;
+    .ant-input-suffix {
+      padding-left: 2px;
+      padding-right: 8px;
+    }
+  }
+  @include nm-inset-element;
+  input {
+    padding: 6px 11px !important;
+    @include nm-inset-shadow-compensation;
+  }
+  .ant-input-password-icon {
+    color: var(--secondary-text) !important;
+  }
+}
+
+.ant-input-affix-wrapper > .ant-input:focus {
+  @include nm-inset-shadow-compensation;
+}
+
+input {
+  color: var(--main-text) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+    @include nm-inset-shadow-compensation;
+}

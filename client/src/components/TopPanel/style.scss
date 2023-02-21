@@ -6,8 +6,8 @@
   height: $top-panel-height;
   min-height: $top-panel-height;
   padding: 0 1rem;
-  border-bottom: 1px solid var(--secondary-text);
-
+  margin-bottom: $gutter-l;
+  @include nm-outset-element;
   &__content {
     display: flex;
   }
