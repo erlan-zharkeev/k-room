@@ -1,5 +1,5 @@
 import { Button, Image, Form, Input, Avatar } from 'antd'
-import { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UserOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
@@ -80,7 +80,7 @@ const UserDataSettingsPopup = () => {
         onInput={() => validate(form)}
       >
         <div className="user-data-settings-popup__avatar">
-          {avatar || newAvatar ? (
+          {avatar ?? newAvatar ? (
             <Image preview={false} src={newAvatar ?? avatar} alt="avatar" />
           ) : (
             <Avatar size="large" icon={<UserOutlined />} alt="avatar" />

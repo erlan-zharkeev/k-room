@@ -3,13 +3,13 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab } from 'src/store/settingsSlice'
-import { IoIosContacts } from 'react-icons/io';
+import { IoIosContacts } from 'react-icons/io'
 import { IoChatboxEllipsesSharp } from 'react-icons/io5'
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
 
 const AsideBar = () => {
-  const { asideTab, showTooltips } = useTypedSelector((state) => state.persist.settings)
+  const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
 
   const changTab = (e: RadioChangeEvent) => {

@@ -7,15 +7,6 @@ input {
   color: var(--main-text) !important;
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: #fff !important;
-    @include nm-inset-shadow-compensation;
-}
-
 .ant-input-password {
   &.ant-input-affix-wrapper-lg {
     padding: 0 !important;
@@ -35,6 +26,15 @@ input:-webkit-autofill:active {
   .ant-input-password-icon {
     color: var(--secondary-text) !important;
   }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+    @include nm-inset-shadow-compensation;
 }
 
 .ant-input-affix-wrapper > .ant-input:focus {

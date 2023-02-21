@@ -37,7 +37,7 @@ export const ChatRoom = () => {
 
     selectedChatRoom.messages.forEach((message) => {
       /** Use only strict validation without type casting */
-      if (message.isSelf || message.isSelf === undefined) return
+      if (message.isSelf ?? message.isSelf === undefined) return
       const el = getRef(message.id)
       el.current.setAttribute('id', message.id)
       observer.observe(el.current)

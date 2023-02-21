@@ -45,7 +45,7 @@ export const SignInPage = () => {
             </Form.Item>
 
             <Form.Item className="sign-in__controls">
-              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading} className={isValid ? 'ant-btn--valid': ''}>
+              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading} className={isValid ? 'ant-btn--valid' : ''}>
                 Submit
               </Button>
             </Form.Item>
