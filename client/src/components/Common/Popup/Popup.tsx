@@ -21,7 +21,7 @@ const Popup = () => {
       <Modal
         centered
         title={modalData.title}
-        visible={showModal}
+        open={showModal}
         footer={null}
         onCancel={() => dispatch(closeModal())}
         style={{ maxWidth: '320px' }}

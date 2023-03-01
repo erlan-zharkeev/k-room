@@ -1,5 +1,3 @@
-import { Image, Badge, Button, Avatar } from 'antd'
-import { UserOutlined, PhoneOutlined } from '@ant-design/icons'
 import { SocketActions } from 'common-types'
 import { useState, useEffect } from 'react'
 import { socket } from 'src/socket/socket'
@@ -7,6 +5,8 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
+import UIAvatar from 'ui/UIAvatar'
+import UIButton from 'ui/UIButton'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -16,7 +16,7 @@ export const RoomHeader = () => {
   const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
-    const dotsCounter = setInterval(() => {
+    setInterval(() => {
       setTypingDotsQuantity((typingDotsQuantity) => {
         return typingDotsQuantity < 3 ? typingDotsQuantity + 1 : 0
       })
@@ -30,23 +30,18 @@ export const RoomHeader = () => {
     if (hasTypingInterlocutor) setIsTyping(data.status)
   })
 
+  function deselectChat() {
+    dispatch(selectChatRoom(''))
+  }
+
   return (
     <div className="room-header">
-      <Button
-        className="borderless room-header__back-button"
-        type="primary"
-        onClick={() => dispatch(selectChatRoom(''))}
-      >
-        Back
-      </Button>
+      <div className="room-header__back-button">
+        <UIButton iconName="arrow-left" onClick={deselectChat} />
+      </div>
+
       <div className="room-header__info">
-        <Badge dot={chatRoomData?.hasOnline} color="green">
-          {chatRoomData?.avatar ? (
-            <Image src={chatRoomData?.avatar} className="custom-avatar" alt="avatar" />
-          ) : (
-            <Avatar size="small" src={chatRoomData.avatar} icon={<UserOutlined />} alt="avatar" />
-          )}
-        </Badge>
+        <UIAvatar online={chatRoomData?.hasOnline} src={chatRoomData?.avatar} />
         <h3 className="room-header__name">{chatRoomData?.chatName}</h3>
         {isTyping && (
           <div className="is-typing blink-me paragraph-text paragraph-text--accent">

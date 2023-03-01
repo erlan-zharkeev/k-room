@@ -1,9 +1,11 @@
-import { Button, Form, Input } from 'antd'
+import { Form, Input } from 'antd'
 import { Status, RouteNames } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
+import UIButton from 'ui/UIButton'
+import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { registration } from 'src/store/authSlice'
@@ -51,21 +53,26 @@ export const SignUpPage = () => {
             onInput={() => validate(form)}
           >
             <Form.Item name="username" rules={validateRules.required}>
-              <Input placeholder="Username" size='large' />
+              <UIInput placeholder="Username" size="large" autoComplete="on" />
             </Form.Item>
 
             <Form.Item name="email" rules={validateRules.email}>
-              <Input placeholder="Email" size='large' />
+              <UIInput placeholder="Email" size="large" autoComplete="on" />
             </Form.Item>
 
             <Form.Item name="password" rules={validateRules.password}>
-              <Input.Password placeholder="Password" size='large'/>
+              <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
             </Form.Item>
 
             <Form.Item className="sign-up__controls">
-              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
-                Submit
-              </Button>
+              <UIButton
+                text="Submit"
+                borderless={false}
+                color="accent"
+                htmlType="submit"
+                loading={isLoading}
+                disabled={!isValid}
+              />
             </Form.Item>
           </Form>
         </div>

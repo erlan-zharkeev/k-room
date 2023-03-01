@@ -24,9 +24,6 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
       case 'settings/selectChatRoom':
         type = 'selectedChatRoomId'
         break
-      case 'settings/deselectChatRoom':
-        type = 'selectedChatRoomId'
-        break
       case 'settings/changeAsideTab':
         type = 'asideTab'
         break

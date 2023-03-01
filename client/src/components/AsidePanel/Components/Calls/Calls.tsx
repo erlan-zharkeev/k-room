@@ -1,9 +1,11 @@
-import { List, Image, Avatar, Button } from 'antd'
+import { List } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UserOutlined, PhoneOutlined, VideoCameraOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import useDynamicRefs from 'use-dynamic-refs'
+import UIAvatar from 'ui/UIAvatar'
+import UIIcon from 'ui/UIIcon'
+import UIButton from 'ui/UIButton'
 
 const Calls = () => {
   const { list } = useTypedSelector((state) => state.calls)
@@ -24,23 +26,19 @@ const Calls = () => {
           renderItem={(call) => (
             <List.Item className="call-list__item" ref={setRef(call.interlocutorId)}>
               <List.Item.Meta
-                avatar={
-                  call.interlocutorId ? (
-                    <Image src={call.interlocutorId} className="custom-avatar" alt="avatar" />
-                  ) : (
-                    <Avatar size="small" src={call.interlocutorId} icon={<UserOutlined />} alt="avatar" />
-                  )
-                }
+                avatar={<UIAvatar src={call.interlocutorAvatar} showBadge={false} />}
                 title={<span>{call.interlocutorName}</span>}
                 description={
-                  <div className={`call-list__info call-list__info--${call.type}`}>
-                    {call.video ? <VideoCameraOutlined /> : <PhoneOutlined />}
-                    <p>{firstCharUpperCase(call.type)}</p>
+                  <div
+                    className={`call-list__info call-list__info--${call.type} paragraph-text paragraph-text--secondary`}
+                  >
+                    <UIIcon name={call.video ? 'video-call' : 'phone-call'} />
+                    <p className="paragraph-text paragraph-text--secondary">{firstCharUpperCase(call.type)}</p>
                   </div>
                 }
               />
               <div className="call-list__additional-info-button">
-                <Button icon={<InfoCircleOutlined />} onClick={() => itemClickHandler(call.interlocutorId)}></Button>
+                <UIButton iconName="info" onClick={() => itemClickHandler(call.interlocutorId)} />
               </div>
               <div className="call-list__length">
                 <p className="paragraph-text paragraph-text--secondary">

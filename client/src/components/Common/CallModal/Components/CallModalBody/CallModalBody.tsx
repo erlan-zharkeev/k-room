@@ -1,23 +1,12 @@
-import { Avatar, Button } from 'antd'
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-  PhoneOutlined,
-  AudioOutlined,
-  LoadingOutlined,
-  AudioMutedOutlined
-} from '@ant-design/icons'
 import { CallModalBodyProps } from '../../@types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import {
-  initModalToCall,
   setCallStartedAt,
   setMinify,
   setShowCallModal,
   toggleCallAudio,
   toggleCallVideo,
-  toggleSelfStreamIsLoading,
   updateInterlocutorSettings
 } from 'src/store/callsSlice'
 import CallModalVideo from '../CallModalVideo/CallModalVideo'
@@ -26,10 +15,11 @@ import { useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
-import { SocketActions, User } from 'common-types'
+import { SocketActions } from 'common-types'
 import { socket } from 'src/socket/socket'
-// import useCall from 'src/hooks/useCall'
-import call from 'src/call/call'
+import call from 'src/services/$call'
+import UIAvatar from 'ui/UIAvatar'
+import UIButton from 'ui/UIButton'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
@@ -98,17 +88,48 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     call.toggleSetting('video')
   }
 
+  const minifyModal = () => {
+    dispatch(setMinify())
+  }
+
   return (
     <div className="call-modal">
       <div className="call-modal__wrapper">
         <div className="call-modal__header">
-          <div className="call-modal__title header-text header-text--sm">
-            {firstCharUpperCase(currentCall.type)} call
-          </div>
           <div className="call-modal__window-controls">
-            <div className="call-modal__rollup" onClick={() => dispatch(setMinify())} />
-            <div className="call-modal__expand" onClick={toggleExpandModal} />
-            <div className="call-modal__close" onClick={endCall} />
+            <div className="call-modal__window-controls-element">
+              <UIButton
+                iconName="cross-2"
+                onClick={endCall}
+                borderless={false}
+                shape="circle"
+                size="small"
+                noHover={true}
+              />
+            </div>
+            <div className="call-modal__window-controls-element">
+              <UIButton
+                iconName="dash"
+                onClick={minifyModal}
+                borderless={false}
+                shape="circle"
+                size="small"
+                noHover={true}
+              />
+            </div>
+            <div className="call-modal__window-controls-element">
+              <UIButton
+                iconName="expand"
+                onClick={toggleExpandModal}
+                borderless={false}
+                shape="circle"
+                size="small"
+                noHover={true}
+              />
+            </div>
+          </div>
+          <div className="call-modal__title header-text header-text--sm header-text--secondary">
+            {firstCharUpperCase(currentCall.type)} call
           </div>
         </div>
         <div className="call-modal__body">
@@ -119,7 +140,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             }}
           >
             <div className="call-modal__avatar">
-              <Avatar size={150} src={currentCall.interlocutorAvatar} icon={<UserOutlined />} />
+              <UIAvatar size="large" src={currentCall.interlocutorAvatar} showBadge={false} />
             </div>
             <div className="call-modal__interlocutor-name header-text header-text--secondary header-text--bold header-text--md">
               {currentCall.interlocutorName} {currentCall.type === 'incoming' && <span>is calling</span>}
@@ -137,43 +158,27 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <div className="call-modal__controls-elements">
               {currentCall.type === 'incoming' && currentCall.status === 'calling' && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
-                  <Button
-                    icon={isAnswerLoading ? <LoadingOutlined /> : <PhoneOutlined />}
-                    size="large"
-                    shape="circle"
-                    onClick={answerCall}
-                  />
+                  <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} />
                 </div>
               )}
               <div className="call-modal__controls-element">
                 {currentCall.status === 'calling' && (
-                  <Button
-                    icon={isAnswerLoading ? <LoadingOutlined /> : <VideoCameraOutlined />}
-                    size="large"
-                    shape="circle"
-                    onClick={answerCall}
-                  />
+                  <UIButton iconName={isAnswerLoading ? 'loader' : 'video-call'} onClick={answerCall} />
                 )}
                 {currentCall.status === 'in-progress' && (
-                  <Button
-                    icon={<VideoCameraOutlined />}
+                  <UIButton
+                    iconName={settings.video ? 'video-call' : 'video-drop'}
+                    color={settings.video ? 'success' : 'error'}
                     className={!settings.video && 'call-modal__controls-element--video-block'}
-                    size="large"
-                    shape="circle"
                     onClick={toggleVideo}
                   />
                 )}
               </div>
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <Button icon={<PhoneOutlined />} size="large" shape="circle" onClick={endCall} />
+                <UIButton iconName="phone-drop" color="error" onClick={endCall} />
               </div>
               <div className="call-modal__controls-element">
-                <Button
-                  icon={settings.audio ? <AudioMutedOutlined /> : <AudioOutlined />}
-                  size="large"
-                  shape="circle"
-                  onClick={toggleAudio}
-                />
+                <UIButton iconName={settings.audio ? 'mic-muted' : 'mic'} onClick={toggleAudio} />
               </div>
             </div>
           </div>

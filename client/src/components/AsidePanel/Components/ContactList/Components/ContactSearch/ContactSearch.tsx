@@ -1,11 +1,13 @@
-import { Avatar, Button, Input, List, Radio, Tooltip } from 'antd'
-import { SearchOutlined, LoadingOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
-import { ChangeEvent, useEffect, useState } from 'react'
-
+import { List } from 'antd'
+import { useEffect, useState } from 'react'
 import { User, SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import useDebounce from 'src/hooks/useDebounce'
+import UIInput from 'ui/UIInput'
+import UIIcon from 'ui/UIIcon'
+import UIAvatar from 'ui/UIAvatar'
+import UIButton from 'ui/UIButton'
 
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
@@ -14,7 +16,6 @@ const ContactSearch = () => {
 
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const { settings } = useTypedSelector((state) => state.persist)
 
   useEffect(() => {
     socket.on(SocketActions.GET_SEARCHED_CONTACTS, (contacts: Array<User>) => {
@@ -46,25 +47,15 @@ const ContactSearch = () => {
     socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
   }
 
-  const searchTypes = [
-    { label: 'Name', value: 'name' },
-    { label: 'Email', value: 'email' },
-    { label: 'Id', value: 'id', checked: true }
-  ]
-
-  const ButtonWrapper = (user: User) => {
-    return settings.showTooltips ? (
-      <Tooltip placement="topLeft" title="Add contact">
-        <Button size="small" icon={<PlusOutlined />} onClick={async () => await addUser(user.id)} />
-      </Tooltip>
-    ) : (
-      <Button size="small" icon={<PlusOutlined />} onClick={async () => await addUser(user.id)} />
-    )
-  }
+  // const searchTypes = [
+  //   { label: 'Name', value: 'name' },
+  //   { label: 'Email', value: 'email' },
+  //   { label: 'Id', value: 'id', checked: true }
+  // ]
 
   return (
     <div className="contact-search">
-      <div className="contact-search__search-type">
+      {/* <div className="contact-search__search-type">
         <Radio.Group
           className="contact-search__search-type-element"
           options={searchTypes}
@@ -74,11 +65,12 @@ const ContactSearch = () => {
           buttonStyle="outline"
           size="small"
         />
-      </div>
-      <Input
+      </div> */}
+      <UIInput
+        size="small"
         placeholder={`Search user by ${searchType}`}
-        suffix={isLoading ? <LoadingOutlined /> : <SearchOutlined />}
-        onChange={async (e: ChangeEvent<HTMLInputElement>) => await search(e.target.value)}
+        suffix={<UIIcon name={isLoading ? 'loader' : 'search'} color={isLoading ? 'accent' : 'default'} />}
+        onChange={(e) => search(e.target.value)}
       />
       {users.length > 0 && (
         <div className="contact-search__global-search">
@@ -89,11 +81,13 @@ const ContactSearch = () => {
             renderItem={(user) => (
               <List.Item key={user.id}>
                 <List.Item.Meta
-                  avatar={<Avatar src={user.avatar} icon={<UserOutlined />} />}
+                  avatar={<UIAvatar src={user.avatar} />}
                   title={<span>{user.username}</span>}
                   description={<span>{user.email}</span>}
                 />
-                {!contacts.find((element) => element.id === user.id) && ButtonWrapper(user)}
+                {!contacts.find((element) => element.id === user.id) && (
+                  <UIButton iconName="plus" color="accent" onClick={() => addUser(user.id)} />
+                )}
               </List.Item>
             )}
           />

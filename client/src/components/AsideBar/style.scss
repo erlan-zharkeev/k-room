@@ -1,15 +1,41 @@
 .aside-bar {
   display: flex;
   align-items: center;
-  padding: $gutter-sm;
+  padding: $gutter-md $gutter-sm;
+  flex-direction: column;
+  justify-content: space-between;
   @include nm-outset-element;
-
+  width: $aside-bar-width;
+  min-width: $aside-bar-width;
+  margin-right: $gutter-lg;
+  @include max-width-768 {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: $aside-bar-width;
+    min-height: $aside-bar-width;
+    margin-top: $gutter-lg;
+  }
+  &__logo {
+    width: 2rem;
+    height: 2rem;
+  }
   .ant-radio-group {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     max-width: $container-sm;
-    height: 30%;
-    margin: 0 auto;
+    @include max-width-768 {
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      svg {
+        margin-top: 6px;
+      }
+    }
+    .ant-radio-button-wrapper {
+      margin: $gutter-lg 0;
+    }
   }
 }

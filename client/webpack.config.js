@@ -46,7 +46,8 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       'src': path.resolve(__dirname, 'src'),
-      'common-types': path.resolve(__dirname, './../types')
+      'common-types': path.resolve(__dirname, './../types'),
+      'ui': path.resolve(__dirname, 'src/components/UI')
     },
     fallback: {
       "fs": false,

@@ -18,7 +18,7 @@ export default async () => {
       refreshToken: username,
       confirmed: true,
       settings: {
-        asideTab: 'users',
+        asideTab: 'contacts',
         selectedChatRoomId: '',
         ableToShowNotification: true,
         theme: 'dark',

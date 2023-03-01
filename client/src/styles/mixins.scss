@@ -17,33 +17,44 @@
 }
 
 @mixin nm-inset-shadow-compensation {
-  box-shadow: inset 0 10px 10px #161616,
-            inset -10px -10px 10px #202020 !important;
+  box-shadow: inset 0 10px 10px var(--shadow-inset-start), inset -10px -10px 10px var(--shadow-inset-end) !important;
 }
 
 @mixin nm-inset-shadow {
-  box-shadow: inset 10px 10px 10px #161616,
-            inset -10px -10px 10px #202020 !important;
+  box-shadow: inset 10px 10px 10px var(--shadow-inset-start), inset -10px -10px 10px var(--shadow-inset-end) !important;
 }
 
 @mixin nm-inset-element {
   @include nm-inset-shadow;
-
-  background: var(--main-bg) !important;
+  background-color: var(--main-bg) !important;
   border: none;
-  border-radius: $md-radius;
+  border-radius: $radius-md;
 }
 
 @mixin nm-outset-shadow {
-  background: var(--main-bg) !important;
-  box-shadow:  5px 5px 23px #0f0f0f,
-            -5px -5px 23px #292929;
+  background-color: var(--main-bg) !important;
+  box-shadow: 5px 5px 23px var(--shadow-outset-start), -5px -5px 23px var(--shadow-outset-end);
 }
 
 @mixin nm-outset-element {
   @include nm-outset-shadow;
-
-  background: var(--main-bg) !important;
+  background-color: var(--main-bg) !important;
   border: none;
-  border-radius: $md-radius;
+  border-radius: $radius-md;
+}
+
+@mixin nm-outset-shadow-sharpen {
+  background-color: var(--main-bg) !important;
+  box-shadow: 5px 5px 8px var(--shadow-outset-start), -5px -5px 8px var(--shadow-outset-end);
+}
+
+@mixin nm-outset-element-sharpen {
+  @include nm-outset-shadow-sharpen;
+  background-color: var(--main-bg) !important;
+  border: none;
+  border-radius: $radius-md;
+}
+
+@mixin glow {
+  box-shadow: 1px 1px 10px var(--accent);
 }

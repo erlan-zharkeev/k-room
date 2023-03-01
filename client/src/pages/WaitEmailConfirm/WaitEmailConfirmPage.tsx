@@ -1,9 +1,9 @@
-import { Button } from 'antd'
 import { AxiosResponse } from 'axios'
 import { Status, RouteNames } from 'common-types'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import UIButton from 'ui/UIButton'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import { sendConfirmationLink } from 'src/store/authSlice'
@@ -90,9 +90,7 @@ export const WaitEmailConfirmPage = () => {
         )}
 
         {nextReqInterval <= 0 && remainingAttempts > 0 && (
-          <Button type="primary" block onClick={sendLink} loading={isLoading}>
-            Send confirmation link
-          </Button>
+          <UIButton borderless={false} text="Send confirmation link" onClick={sendLink} loading={isLoading} />
         )}
       </div>
     </div>

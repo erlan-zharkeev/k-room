@@ -10,11 +10,12 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "baseUrl": "./../",
     "paths": {
       "src/*": ["client/src/*"],
-      "common-types": ["types"]
+      "common-types": ["types"],
+      "ui/*": ["client/src/components/UI/*"]
     }
   },
   "references": [

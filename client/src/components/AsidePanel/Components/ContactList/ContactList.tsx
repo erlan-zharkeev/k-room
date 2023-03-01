@@ -1,32 +1,23 @@
-import { List, Badge, Avatar, Image, Button, Tooltip } from 'antd'
-import {
-  UserOutlined,
-  MessageOutlined,
-  CloseCircleOutlined,
-  LoadingOutlined,
-  PhoneOutlined,
-  VideoCameraOutlined
-} from '@ant-design/icons'
+import { List } from 'antd'
 import { User, SocketActions } from 'common-types'
 import moment from 'moment'
-import { ReactElement, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { initModalToCall, setCurrentCallAccepted } from 'src/store/callsSlice'
-import call from './../../../../call/call'
+import call from 'src/services/$call'
+import UIAvatar from 'ui/UIAvatar'
+import UIButton from 'ui/UIButton'
 
 const ContactList = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username, avatar } = useTypedSelector((state) => state.user.userData)
   const [roomCreateLoader, setRoomCreateLoader] = useState(false)
-  const { settings } = useTypedSelector((state) => state.persist)
   const [isStreamIsLoading, setIsStreamIsLoading] = useState(false)
-  // const { call } = useTypedSelector((state) => state.calls)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -42,6 +33,7 @@ const ContactList = () => {
   }
 
   const createChat = (value: User) => {
+    if (roomCreateLoader) return
     const hasChatWithContact = chatRooms.some((room) => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
@@ -68,30 +60,12 @@ const ContactList = () => {
     })
   }
 
-  const CustomButton = (clickEvent: (value: User) => void, icon: ReactElement, clickEventPayload: any) => (
-    <Button icon={icon} onClick={() => clickEvent(clickEventPayload)} size="large" className="borderless" type="text" />
-  )
-
-  const ButtonWrapper = (
-    clickEvent: (value: any) => void,
-    icon: ReactElement,
-    clickEventPayload: User,
-    title: string
-  ) => {
-    return settings.showTooltips ? (
-      <Tooltip placement="topLeft" title={title}>
-        {CustomButton(clickEvent, icon, clickEventPayload)}
-      </Tooltip>
-    ) : (
-      <>{CustomButton(clickEvent, icon, clickEventPayload)}</>
-    )
-  }
-
   const lastSeen = (timeStamp: string | undefined) => {
     return timeStamp ? `last seen ${moment(Number(timeStamp)).startOf('minutes').fromNow()}` : ''
   }
 
   const initCall = async (interlocutorData: User) => {
+    if (isStreamIsLoading) return
     setIsStreamIsLoading(true)
     const gotStream = await call.setStream()
     setIsStreamIsLoading(false)
@@ -111,15 +85,7 @@ const ContactList = () => {
         renderItem={(user) => (
           <List.Item>
             <List.Item.Meta
-              avatar={
-                <Badge dot={user.online} color="green">
-                  {user.avatar ? (
-                    <Image src={user.avatar} className="custom-avatar" alt="avatar" />
-                  ) : (
-                    <Avatar size="small" src={user.avatar} icon={<UserOutlined />} alt="avatar" />
-                  )}
-                </Badge>
-              }
+              avatar={<UIAvatar online={user.online} src={user.avatar} />}
               title={<span>{user.username}</span>}
               description={
                 <span className="paragraph-text paragraph-text--secondary">
@@ -127,19 +93,19 @@ const ContactList = () => {
                 </span>
               }
             />
-            {isStreamIsLoading ? (
-              <Button icon={<LoadingOutlined />} size="large" className="borderless" type="text" />
-            ) : (
-              <Button
-                icon={<PhoneOutlined />}
-                onClick={async () => await initCall(user)}
-                size="large"
-                className="borderless"
-                type="text"
+            <div className="contact-list__controls">
+              <UIButton
+                iconName={isStreamIsLoading ? 'loader' : 'call'}
+                color={isStreamIsLoading ? 'accent' : 'success'}
+                onClick={async () => initCall(user)}
               />
-            )}
-            {ButtonWrapper(createChat, roomCreateLoader ? <LoadingOutlined /> : <MessageOutlined />, user, 'Open chat')}
-            {ButtonWrapper(deleteUser, <CloseCircleOutlined />, user, 'Delete contact')}
+              <UIButton
+                iconName={roomCreateLoader ? 'loader' : 'chats'}
+                color={roomCreateLoader ? 'accent' : 'default'}
+                onClick={() => createChat(user)}
+              />
+              <UIButton iconName="cross" onClick={() => deleteUser(user)} />
+            </div>
           </List.Item>
         )}
       />

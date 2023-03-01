@@ -16,7 +16,7 @@ export const updateUserSettings = createAsyncThunk(
 )
 
 const initialState: SettingsState = {
-  asideTab: 'users',
+  asideTab: 'contacts',
   selectedChatRoomId: '',
   theme: 'dark',
   soundOn: true,
@@ -41,9 +41,6 @@ const settingsSlice = createSlice({
     selectChatRoom(state, { payload }) {
       state.selectedChatRoomId = payload
     },
-    deselectChatRoom(state) {
-      state.selectedChatRoomId = ''
-    },
     changeAsideTab(state, { payload }) {
       state.asideTab = payload
     },
@@ -66,7 +63,6 @@ const settingsSlice = createSlice({
 export const {
   changeAsideTab,
   changeTheme,
-  deselectChatRoom,
   setSoundValue,
   setTooltipsValue,
   selectChatRoom,

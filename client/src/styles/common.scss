@@ -12,10 +12,20 @@ html {
 
 * {
   font-weight: 400;
-  font-family: "Montserrat, Helvetica", sans-serif;
+  font-family: 'Montserrat, Helvetica', sans-serif;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -ms-user-select: none;
 }
 
-h1, h2, h3, h4, h5, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
   color: var(--main-text);
 }
 
@@ -25,14 +35,6 @@ h1, h2, h3, h4, h5, p {
 
 form {
   width: 100%;
-}
-
-.d-none {
-  display: none;
-}
-
-.borderless {
-  border: none;
 }
 
 .blink-me {
@@ -46,14 +48,14 @@ form {
 }
 
 ::-webkit-scrollbar {
-  width: 4px; /* Y scroll width */
-  height: 7px; /* Y scroll height */
+  width: 4px;
+  height: 7px;
   background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--secondary-text);
-  border-radius: $sm-radius;
+  border-radius: $radius-sm;
 }
 
 input:-webkit-autofill {
@@ -64,13 +66,6 @@ input:-webkit-autofill {
   &:active {
     box-shadow: 0 0 0 30px var(--main-bg) inset !important;
   }
-}
-
-.custom-avatar {
-  width: 32px !important;
-  height: 32px !important;
-  object-fit: cover !important;
-  border-radius: 50% !important;
 }
 
 .app-loader {
@@ -88,7 +83,7 @@ input:-webkit-autofill {
 
     span {
       margin-bottom: $gutter-xl;
-      color: var(--accent-color);
+      color: var(--accent);
       font-size: 60px;
       stroke-width: 25;
     }

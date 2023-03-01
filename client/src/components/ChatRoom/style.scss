@@ -8,12 +8,10 @@
 
 .chat-room {
   position: relative;
-  width: calc(100% - var(--chat-room-list-width));
-  height: 100%;
-  margin-left: var(--chat-room-list-width);
+  @include wh-100;
+  margin-left: 24px;
   padding: 1rem;
-  transition: all 0.2s ease-in-out;
-
+  @include nm-outset-element;
   @include max-width-576 {
     margin-left: 100%;
   }

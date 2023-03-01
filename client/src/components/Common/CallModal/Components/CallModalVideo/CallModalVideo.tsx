@@ -1,7 +1,6 @@
 import { Avatar, Dropdown, Menu } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { SettingOutlined, UserOutlined, AudioMutedOutlined } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { UserOutlined, AudioMutedOutlined } from '@ant-design/icons'
 
 export const CallModalVideo = () => {
   const { settings, currentCall } = useTypedSelector((state) => state.calls)

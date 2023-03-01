@@ -3,8 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { IRoute } from './@types/IRoute'
 import { privateRoutes, publicRoutes } from './routes'
-import { LoadingOutlined } from '@ant-design/icons'
 import getCookie from 'src/utils/getCookie'
+import UIIcon from 'ui/UIIcon'
 
 const AppRouter = () => {
   const { isAuth, isAppLoading } = useTypedSelector((state) => state.user)
@@ -19,7 +19,7 @@ const AppRouter = () => {
   return showLoader ? (
     <div className="app-loader">
       <div className="app-loader__content">
-        <LoadingOutlined />
+        <UIIcon name="loader" color="accent" size="large" />
         <h3 className="header-text header-text--md">Loading</h3>
       </div>
     </div>

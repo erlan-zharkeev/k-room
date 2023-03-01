@@ -6,7 +6,7 @@
 }
 
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
   border-color: var(--accent-text) !important;
 }
 
@@ -19,27 +19,20 @@
 }
 
 // switch
-.ant-switch-checked {
-  background: var(--accent-color) !important;
-}
-
-.ant-btn-primary {
-  color: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
-}
-
-.ant-btn-primary[disabled] {
-  color: var(--secondary-text) !important;
-  border-color: var(--secondary-text) !important;
-  opacity: 0.3;
-}
-
-.ant-btn-loading {
-  opacity: 0.7;
-}
-
-.ant-btn::before {
-  background: transparent;
+.ant-switch {
+  background-color: var(--main-bg);
+  @include nm-inset-shadow;
+  // padding: 2px;
+  &-checked {
+    @include nm-inset-shadow;
+  }
+  &-handle {
+    // padding: 2px;
+    @include nm-outset-shadow;
+  }
+  &-inner {
+    color: var(--secondary-text);
+  }
 }
 
 // modal
@@ -87,7 +80,7 @@
 
 .ant-notification-notice {
   border: 1px solid var(--main-bg);
-  border-radius: $sm-radius;
+  border-radius: $radius-sm;
   box-shadow: 0 3px 6px -4px rgb(0 0 0 / 100%), 0 6px 16px 0 rgb(0 0 0 / 25%), 0 9px 28px 8px rgb(0 0 0 / 15%) !important;
 
   &-success {
@@ -152,7 +145,7 @@
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
 }
 
 .ant-tabs-top > .ant-tabs-nav::before,
@@ -198,24 +191,21 @@ html[tooltips='false'] {
 .ant-dropdown {
   &-menu {
     padding: 0;
+    &-title-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   ul {
-    background-color: var(--main-bg) !important;
-    border-radius: $sm-radius;
-    box-shadow: 0 0 7px var(--secondary-text) !important;
-
+    border-radius: $radius-sm;
+    background: transparent;
+    border: 1px solid var(--secondary-text);
     li {
       color: var(--secondary-text) !important;
-
-      &:first-child {
-        border-top-left-radius: $sm-radius !important;
-        border-top-right-radius: $sm-radius !important;
-      }
-
-      &:last-child {
-        border-bottom-right-radius: $sm-radius !important;
-        border-bottom-left-radius: $sm-radius !important;
+      &:hover {
+        background-color: var(--secondary-text);
       }
     }
   }

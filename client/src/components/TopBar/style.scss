@@ -1,0 +1,49 @@
+.top-bar {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: $bar-height;
+  min-height: $bar-height;
+  margin-bottom: $gutter-lg;
+  padding: 0 1rem;
+  @include nm-outset-element;
+
+  &__content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__userdata {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: $gutter-md;
+  }
+
+  &__credential {
+    display: flex;
+    flex-direction: column;
+    margin-left: $gutter-lg;
+  }
+
+  &__logo {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    .ui-button:first-child {
+      margin-right: 1rem;
+    }
+  }
+}

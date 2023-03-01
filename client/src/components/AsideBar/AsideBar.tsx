@@ -2,41 +2,56 @@ import { Radio, RadioChangeEvent } from 'antd'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import { changeAsideTab } from 'src/store/settingsSlice'
-import { IoIosContacts } from 'react-icons/io'
-import { IoChatboxEllipsesSharp } from 'react-icons/io5'
-import { TbPhoneCall } from 'react-icons/tb'
-import { FiSettings } from 'react-icons/fi'
+import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
+import ButtonsListElement from './@types/ButtonsListElement'
+import UIButton from 'ui/UIButton'
+
+const Logo = require('src/assets/img/Logo.svg') as string
 
 const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
+  const { viewPort } = useTypedSelector((state) => state.system)
 
   const changTab = (e: RadioChangeEvent) => {
-    dispatch(changeAsideTab(e.target.value))
+    const currentTabName = e.target.value
+    dispatch(changeAsideTab(currentTabName))
   }
 
-  const buttons = [
-    { title: 'Contacts', value: 'users', icon: () => <IoIosContacts /> },
-    { title: 'Chat rooms', value: 'chatList', icon: () => <IoChatboxEllipsesSharp /> },
-    { title: 'Calls', value: 'calls', icon: () => <TbPhoneCall /> },
-    { title: 'User settings', value: 'settings', icon: () => <FiSettings /> }
-  ]
+  const changeTabClickHandler = () => {
+    if (viewPort.width <= 769) dispatch(selectChatRoom(''))
+  }
 
-  const ButtonWrapper = (value: string, Icon: any) => (
-    <Radio.Button value={value} className="transitionless borderless">
-      <Icon />
-    </Radio.Button>
-  )
+  const buttons: Array<ButtonsListElement> = [
+    { value: 'contacts', iconName: 'contacts' },
+    { value: 'chatList', iconName: 'chats' },
+    { value: 'calls', iconName: 'calls' },
+    { value: 'settings', iconName: 'settings-cog' }
+  ]
 
   return (
     <div className="aside-bar">
-      <Radio.Group size='large' value={asideTab} onChange={changTab}>
+      {viewPort.width >= 769 && (
+        <div className="aside-bar__logo">
+          <img className="logo" src={Logo} alt="logo" />
+        </div>
+      )}
+      <Radio.Group value={asideTab} onChange={changTab}>
         {buttons.map((button) => {
-          return <div key={button.value}>{ButtonWrapper(button.value, button.icon)}</div>
+          return (
+            <UIButton
+              type="radio"
+              key={button.value}
+              onClick={changeTabClickHandler}
+              value={button.value}
+              iconName={button.iconName}
+            />
+          )
         })}
       </Radio.Group>
+      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" />}
     </div>
   )
 }
+
 export default AsideBar

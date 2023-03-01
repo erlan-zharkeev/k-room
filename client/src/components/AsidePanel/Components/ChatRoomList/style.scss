@@ -19,8 +19,11 @@
       }
 
       &.active {
-        border-left: 5px solid var(--accent-color) !important;
-        @include max-width-576 {
+        border-left: 5px solid var(--accent) !important;
+        &:first-child {
+          border-top-left-radius: $radius-md;
+        }
+        @include max-width-768 {
           border: none !important;
           box-shadow: none;
         }
@@ -40,6 +43,6 @@
   }
 
   &__unread-messages {
-    margin-left: $gutter-md;
+    margin-right: $gutter-md;
   }
 }

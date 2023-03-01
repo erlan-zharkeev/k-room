@@ -1,0 +1,106 @@
+.ui-button {
+  &--hoverless {
+    border-color: var(--secondary-text);
+    svg {
+      color: var(--secondary-text);
+    }
+    .ant-btn:hover {
+      border-color: var(--secondary-text);
+      svg {
+        color: var(--secondary-text);
+      }
+    }
+  }
+  .ant-btn {
+    background-color: transparent;
+    color: var(--secondary-text);
+    border-color: var(--secondary-text);
+    &:disabled {
+      color: var(--secondary-text);
+      border-color: var(--secondary-text);
+      opacity: 0.4;
+      background-color: transparent;
+      &:hover {
+        color: var(--secondary-text);
+        border-color: var(--secondary-text);
+      }
+    }
+    .ant-radio-button-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    &:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+  svg {
+    font-size: 1.2rem;
+  }
+  &--small {
+    svg {
+      font-size: 0.6rem;
+    }
+    .ant-btn {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      min-height: 20px;
+      &:hover {
+        border-color: var(--secondary-text);
+      }
+    }
+  }
+  &--large {
+    svg {
+      font-size: 1.5rem;
+    }
+  }
+  &--accent {
+    .ant-btn {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+  }
+  &--default {
+    .ant-btn {
+      color: var(--secondary-text);
+      border-color: var(--secondary-text);
+      svg {
+        color: var(--secondary-text);
+        border-color: var(--secondary-text);
+      }
+      &:hover {
+        svg {
+          color: var(--accent);
+          border-color: var(--accent);
+        }
+      }
+    }
+  }
+  &--white {
+    .ant-btn,
+    .ant-btn:hover {
+      border-color: #fff;
+    }
+    svg {
+      color: #fff;
+    }
+  }
+  &--success {
+    .ant-btn,
+    .ant-btn:hover {
+      color: var(--success);
+      border-color: var(--success);
+    }
+  }
+  &--borderless {
+    .ant-btn {
+      border: none !important;
+      padding: 0;
+    }
+    .ant-radio-button-wrapper {
+      border: none !important;
+    }
+  }
+}

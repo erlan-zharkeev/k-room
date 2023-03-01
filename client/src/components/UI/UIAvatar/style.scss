@@ -1,0 +1,50 @@
+.ui-avatar {
+  $self: &;
+  &--small {
+    #{ $self }__image {
+      $size: 32px;
+
+      width: $size !important;
+      min-width: $size;
+      min-height: $size;
+      height: $size !important;
+    }
+  }
+  &--medium {
+    #{ $self }__image {
+      $size: 64px;
+
+      width: $size !important;
+      min-width: $size;
+      min-height: $size;
+      height: $size !important;
+    }
+  }
+  &--large {
+    #{ $self }__image {
+      $size: 100px;
+
+      width: $size !important;
+      min-width: $size;
+      min-height: $size;
+      height: $size !important;
+    }
+  }
+  &__image {
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    background: var(--main-bg) !important;
+    border: solid 1px var(--secondary-text);
+    padding: 1px;
+  }
+  .ui-icon--user-stub {
+    @include wh-100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      font-size: 2rem;
+      color: var(--secondary-text);
+    }
+  }
+}
