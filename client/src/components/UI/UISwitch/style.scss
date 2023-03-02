@@ -32,10 +32,9 @@
     width: $switcher-width;
     height: $switcher-height;
     text-indent: -9999px;
-    background: grey;
-    border-radius: 100px;
     cursor: pointer;
     @include nm-inset-element;
+    border-radius: 100px;
   }
 
   label::after {
@@ -45,10 +44,10 @@
     z-index: 2;
     width: $toggler-width;
     height: $toggler-width;
-    border-radius: $toggler-width;
     transition: $transition;
     content: '';
     @include nm-outset-element-sharpen;
+    border-radius: 50%;
   }
 
   &[data-checked='true'] {

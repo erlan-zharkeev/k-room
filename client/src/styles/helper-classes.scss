@@ -14,3 +14,7 @@
 .glow {
   @include glow;
 }
+
+.link {
+  color: var(--accent);
+}

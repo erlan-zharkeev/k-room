@@ -4,7 +4,7 @@ import IconList from './IconList'
 
 export const UIIcon = ({ name, color, size = 'small' }: IconProps) => {
   const Icon = IconList.find((IconElement) => IconElement.name === name).Icon
-  const className = modifiersHandler({ rootClass: 'ui-icon', modifiers: [size, color] })
+  const className = modifiersHandler({ rootClass: 'ui-icon', modifiers: [size, color, name] })
 
   return (
     <div className={className}>

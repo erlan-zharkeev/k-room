@@ -6,7 +6,7 @@
   flex-direction: column;
   padding: $gutter-sm $gutter-md;
   overflow: hidden;
-  border: $border;
+  border: 1px var(--secondary-text) solid;
   border-radius: $radius-md;
 
   &__text {

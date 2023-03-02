@@ -9,7 +9,7 @@ export default interface UIButtonProps {
   text?: string
   iconName?: IconName
   className?: string
-  border?: 'borderless' | ''
+  border?: 'borderless' | 'default'
   color?: ColorModifiers
   loading?: boolean
   disabled?: boolean

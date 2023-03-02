@@ -21,4 +21,4 @@ types/yarn-error.log
 types/yarn.lock
 types/dist
 types/eslintcache
-
+types/tsconfig.tsbuildinfo

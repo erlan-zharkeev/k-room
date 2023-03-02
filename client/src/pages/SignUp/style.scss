@@ -1,1 +1,13 @@
-// fill after
+.sign-up {
+  &__privacy-policy {
+    display: flex;
+    align-items: center;
+    margin-bottom: $gutter-lg;
+    .ui-switch {
+      margin-right: $gutter-md;
+      &__value-text {
+        left: 34px;
+      }
+    }
+  }
+}

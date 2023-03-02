@@ -1,4 +1,5 @@
 import { Input } from 'antd'
+import modifiersHandler from 'src/utils/modifiersHandler'
 import UIInputProps from 'ui/UIInput/@types/UIInputProps'
 
 const inputTypes = [
@@ -9,8 +10,9 @@ const inputTypes = [
 export const UIInput = ({ type, placeholder, size, value, suffix, autoComplete, onChange }: UIInputProps) => {
   const inputType = type ?? 'common'
   const InputComponent = inputTypes.find((input) => input.name === inputType).component
+  const className = modifiersHandler({rootClass: 'ui-input', modifiers: [size]})
   return (
-    <div className="ui-input">
+    <div className={className}>
       <InputComponent
         size={size}
         autoComplete={autoComplete}

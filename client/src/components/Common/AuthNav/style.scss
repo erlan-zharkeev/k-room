@@ -4,8 +4,7 @@
     padding-bottom: 0.4rem;
 
     &.active {
-      border-color: var(--accent);
-      border-bottom: $border;
+      border: none;
     }
   }
 }

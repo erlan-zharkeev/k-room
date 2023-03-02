@@ -2,8 +2,8 @@
   @include wh-100;
 
   overflow: hidden;
-  background-color: var(--main-bg);
-  border: 2px solid var(--secondary-text);
+  background-color: var(--dark-gray);
+  border: 2px solid var(--dark-gray);
   border-radius: $radius-md;
 
   $header-title: 35px;
@@ -40,7 +40,7 @@
     justify-content: space-between;
     height: $header-title;
     padding: 0 $gutter-lg 0 $gutter-sm;
-    background-color: var(--dark-gray);
+    background-color: var(--main-bg);
   }
 
   &__controls {

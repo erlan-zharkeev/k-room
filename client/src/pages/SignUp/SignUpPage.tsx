@@ -10,6 +10,7 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { registration } from 'src/store/authSlice'
 import validateRules from 'src/utils/validateRules'
+import UISwitch from 'ui/UISwitch'
 const Logo = require('src/assets/img/Logo.svg') as string
 
 export const SignUpPage = () => {
@@ -63,11 +64,16 @@ export const SignUpPage = () => {
             <Form.Item name="password" rules={validateRules.password}>
               <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
             </Form.Item>
+            
+            <div className="sign-up__privacy-policy">
+              <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread"/>
+              <div className="paragraph-text paragraph-text--secondary">I have read and agree <a className="link">privacy policy</a></div>
+            </div>
 
             <Form.Item className="sign-up__controls">
               <UIButton
-                text="Submit"
-                border="borderless"
+                text="Register"
+                border="default"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}
