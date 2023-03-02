@@ -22,14 +22,17 @@
 .ant-switch {
   background-color: var(--main-bg);
   @include nm-inset-shadow;
+
   // padding: 2px;
   &-checked {
     @include nm-inset-shadow;
   }
+
   &-handle {
     // padding: 2px;
     @include nm-outset-shadow;
   }
+
   &-inner {
     color: var(--secondary-text);
   }
@@ -191,19 +194,22 @@ html[tooltips='false'] {
 .ant-dropdown {
   &-menu {
     padding: 0;
+
     &-title-content {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
     }
   }
 
   ul {
-    border-radius: $radius-sm;
     background: transparent;
     border: 1px solid var(--secondary-text);
+    border-radius: $radius-sm;
+
     li {
       color: var(--secondary-text) !important;
+
       &:hover {
         background-color: var(--secondary-text);
       }

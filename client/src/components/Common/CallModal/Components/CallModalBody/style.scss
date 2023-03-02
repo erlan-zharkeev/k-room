@@ -1,5 +1,6 @@
 .call-modal {
   @include wh-100;
+
   overflow: hidden;
   background-color: var(--main-bg);
   border: 2px solid var(--secondary-text);
@@ -73,6 +74,7 @@
     z-index: 1;
     display: flex;
     border-color: var(--main-text);
+
     &-element {
       margin: 0 $gutter-sm;
     }

@@ -9,12 +9,12 @@ export default interface UIButtonProps {
   text?: string
   iconName?: IconName
   className?: string
-  borderless?: boolean
+  border?: 'borderless' | ''
   color?: ColorModifiers
   loading?: boolean
   disabled?: boolean
   size?: SizeModifiers
   shape?: 'default' | 'circle' | 'round'
-  noHover?: boolean
+  hover?: 'hoverless' | ''
   onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => Promise<void> | void
 }

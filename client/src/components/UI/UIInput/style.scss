@@ -1,9 +1,11 @@
 .ui-input {
   width: 100%;
+
   .ant-input {
     transition: background 0s;
 
     @include nm-inset-element;
+
     &-lg {
       &::placeholder {
         font-size: 14px;

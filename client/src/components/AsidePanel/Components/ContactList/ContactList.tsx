@@ -97,7 +97,7 @@ const ContactList = () => {
               <UIButton
                 iconName={isStreamIsLoading ? 'loader' : 'call'}
                 color={isStreamIsLoading ? 'accent' : 'success'}
-                onClick={async () => initCall(user)}
+                onClick={async () => await initCall(user)}
               />
               <UIButton
                 iconName={roomCreateLoader ? 'loader' : 'chats'}

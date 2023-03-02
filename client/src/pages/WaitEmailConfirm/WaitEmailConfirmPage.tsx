@@ -90,7 +90,7 @@ export const WaitEmailConfirmPage = () => {
         )}
 
         {nextReqInterval <= 0 && remainingAttempts > 0 && (
-          <UIButton borderless={false} text="Send confirmation link" onClick={sendLink} loading={isLoading} />
+          <UIButton border="borderless" text="Send confirmation link" onClick={sendLink} loading={isLoading} />
         )}
       </div>
     </div>

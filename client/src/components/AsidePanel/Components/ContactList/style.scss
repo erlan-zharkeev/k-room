@@ -14,8 +14,10 @@
       height: 30px;
     }
   }
+
   &__controls {
     display: flex;
+
     .ui-button {
       margin: 0 $gutter-md;
     }

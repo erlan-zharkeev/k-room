@@ -11,6 +11,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+
     p {
       margin-top: 24px;
     }
@@ -22,18 +23,22 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+
     button {
       margin-top: $gutter-md;
     }
   }
+
   &__controls {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+
     .ui-button {
       width: 100%;
     }
+
     button {
       width: 100%;
     }

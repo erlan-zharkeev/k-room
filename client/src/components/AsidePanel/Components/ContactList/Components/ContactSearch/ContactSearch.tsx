@@ -70,7 +70,7 @@ const ContactSearch = () => {
         size="small"
         placeholder={`Search user by ${searchType}`}
         suffix={<UIIcon name={isLoading ? 'loader' : 'search'} color={isLoading ? 'accent' : 'default'} />}
-        onChange={(e) => search(e.target.value)}
+        onChange={async (e) => await search(e.target.value)}
       />
       {users.length > 0 && (
         <div className="contact-search__global-search">
@@ -86,7 +86,7 @@ const ContactSearch = () => {
                   description={<span>{user.email}</span>}
                 />
                 {!contacts.find((element) => element.id === user.id) && (
-                  <UIButton iconName="plus" color="accent" onClick={() => addUser(user.id)} />
+                  <UIButton iconName="plus" color="accent" onClick={async () => await addUser(user.id)} />
                 )}
               </List.Item>
             )}

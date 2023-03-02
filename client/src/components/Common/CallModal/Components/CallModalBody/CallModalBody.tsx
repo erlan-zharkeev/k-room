@@ -101,30 +101,30 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
               <UIButton
                 iconName="cross-2"
                 onClick={endCall}
-                borderless={false}
+                border="borderless"
                 shape="circle"
                 size="small"
-                noHover={true}
+                hover="hoverless"
               />
             </div>
             <div className="call-modal__window-controls-element">
               <UIButton
                 iconName="dash"
                 onClick={minifyModal}
-                borderless={false}
+                border="borderless"
                 shape="circle"
                 size="small"
-                noHover={true}
+                hover="hoverless"
               />
             </div>
             <div className="call-modal__window-controls-element">
               <UIButton
                 iconName="expand"
                 onClick={toggleExpandModal}
-                borderless={false}
+                border="borderless"
                 shape="circle"
                 size="small"
-                noHover={true}
+                hover="hoverless"
               />
             </div>
           </div>

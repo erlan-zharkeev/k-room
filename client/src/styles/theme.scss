@@ -18,7 +18,7 @@
     --shadow-outset-end: #292929;
     --shadow-inset-start: #161616;
     --shadow-inset-end: #202020;
-    --dark-gray: rgb(59, 59, 59);
+    --dark-gray: rgb(59 59 59);
   }
 
   &[theme='light'] {
@@ -29,6 +29,6 @@
     --shadow-outset-end: #e8e8e8;
     --shadow-inset-start: #b6b6b6;
     --shadow-inset-end: #e8e8e8;
-    --dark-gray: rgb(189, 189, 189);
+    --dark-gray: rgb(189 189 189);
   }
 }

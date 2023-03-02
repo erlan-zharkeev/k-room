@@ -3,60 +3,66 @@
   $switcher-width: 80px;
   $switcher-height: 32px;
   $transition: left ease-in-out 0.2s;
-  --compensation: 4px;
+  $compensation: 4px;
+
   position: relative;
+
   &__value-text {
     position: absolute;
     top: 7px;
     left: $toggler-width + 20px;
-    font-size: 11px;
-    transition: $transition;
     z-index: 1;
     color: var(--secondary-text);
+    font-size: 11px;
+    transition: $transition;
   }
+
   input[type='checkbox'] {
-    height: 0;
-    width: 0;
-    visibility: hidden;
     position: absolute;
     top: 0;
     left: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
   }
 
   label {
-    cursor: pointer;
-    text-indent: -9999px;
+    position: relative;
+    display: block;
     width: $switcher-width;
     height: $switcher-height;
+    text-indent: -9999px;
     background: grey;
-    display: block;
-    position: relative;
-    @include nm-inset-element;
     border-radius: 100px;
+    cursor: pointer;
+    @include nm-inset-element;
   }
 
-  label:after {
-    content: '';
+  label::after {
     position: absolute;
-    top: var(--compensation);
-    left: var(--compensation);
+    top: $compensation;
+    left: $compensation;
+    z-index: 2;
     width: $toggler-width;
     height: $toggler-width;
-    transition: $transition;
-    @include nm-outset-element-sharpen;
     border-radius: $toggler-width;
-    z-index: 2;
+    transition: $transition;
+    content: '';
+    @include nm-outset-element-sharpen;
   }
+
   &[data-checked='true'] {
-    .ui-switch__value-text {
-      left: $toggler-width - 12px;
-      transition: $transition;
-      color: var(--success);
+    .ui-switch {
+      &__value-text {
+        left: $toggler-width - 12px;
+        color: var(--success);
+        transition: $transition;
+      }
     }
   }
 
-  input:checked + label:after {
-    left: calc(100% - var(--compensation));
+  input:checked + label::after {
+    left: calc(100% - $compensation);
     transform: translateX(-100%);
   }
 }

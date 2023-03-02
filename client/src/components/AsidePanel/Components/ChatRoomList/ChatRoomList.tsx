@@ -71,7 +71,7 @@ export const ChatRoomList = () => {
                   <UIButton
                     iconName="plus"
                     size="small"
-                    onClick={(e) => addUser(e, getFirstUserIdInChatRoom(chatRoom))}
+                    onClick={async (e) => await addUser(e, getFirstUserIdInChatRoom(chatRoom))}
                   />
                 )}
               </div>

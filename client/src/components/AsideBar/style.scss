@@ -1,13 +1,13 @@
 .aside-bar {
   display: flex;
-  align-items: center;
-  padding: $gutter-md $gutter-sm;
   flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  @include nm-outset-element;
   width: $aside-bar-width;
   min-width: $aside-bar-width;
   margin-right: $gutter-lg;
+  padding: $gutter-md $gutter-sm;
+  @include nm-outset-element;
   @include max-width-768 {
     flex-direction: row;
     align-items: center;
@@ -16,10 +16,12 @@
     min-height: $aside-bar-width;
     margin-top: $gutter-lg;
   }
+
   &__logo {
     width: 2rem;
     height: 2rem;
   }
+
   .ant-radio-group {
     display: flex;
     flex-direction: column;
@@ -30,10 +32,12 @@
       align-items: center;
       width: 100%;
       max-width: 100%;
+
       svg {
         margin-top: 6px;
       }
     }
+
     .ant-radio-button-wrapper {
       margin: $gutter-lg 0;
     }

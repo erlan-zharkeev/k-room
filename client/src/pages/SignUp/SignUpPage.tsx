@@ -67,7 +67,7 @@ export const SignUpPage = () => {
             <Form.Item className="sign-up__controls">
               <UIButton
                 text="Submit"
-                borderless={false}
+                border="borderless"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}

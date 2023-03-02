@@ -13,11 +13,8 @@ html {
 * {
   font-weight: 400;
   font-family: 'Montserrat, Helvetica', sans-serif;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   -webkit-touch-callout: none;
-  -ms-user-select: none;
+  user-select: none;
 }
 
 h1,

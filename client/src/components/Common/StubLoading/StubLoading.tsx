@@ -29,8 +29,8 @@ const StubLoading = ({ isLoading }: StubLoadingProps) => {
             <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Connection failed</p>
             <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Try again later</p>
             <div className="stub-loading__controls">
-              <UIButton borderless={false} text="Reconnect" onClick={reconnect} />
-              <UIButton borderless={false} text="Logout" onClick={exit} />
+              <UIButton border="borderless" text="Reconnect" onClick={reconnect} />
+              <UIButton border="borderless" text="Logout" onClick={exit} />
             </div>
           </div>
         )}

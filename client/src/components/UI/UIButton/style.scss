@@ -1,106 +1,90 @@
 .ui-button {
+  @mixin btn-style($color) {
+    .ant-btn,
+    .ant-btn:hover {
+      color: $color;
+      border-color: $color;
+    }
+  }
+
+  &--accent {
+    @include btn-style(var(--accent));
+  }
+
+  &--success {
+    @include btn-style(var(--success));
+  }
+
+  &--default {
+    @include btn-style(var(--secondary-text));
+  }
+
+  &--small {
+    .ant-btn {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+    }
+  }
+
+  // &--large {
+  // }
+
   &--hoverless {
-    border-color: var(--secondary-text);
     svg {
       color: var(--secondary-text);
     }
-    .ant-btn:hover {
+
+    &:hover {
       border-color: var(--secondary-text);
+
       svg {
         color: var(--secondary-text);
       }
     }
   }
-  .ant-btn {
-    background-color: transparent;
-    color: var(--secondary-text);
-    border-color: var(--secondary-text);
-    &:disabled {
-      color: var(--secondary-text);
-      border-color: var(--secondary-text);
-      opacity: 0.4;
-      background-color: transparent;
-      &:hover {
-        color: var(--secondary-text);
-        border-color: var(--secondary-text);
+
+  &--borderless {
+    .ant {
+      &-btn {
+        padding: 0;
+        border: none !important;
+      }
+
+      &-radio-button-wrapper {
+        border: none !important;
       }
     }
-    .ant-radio-button-wrapper {
-      display: flex;
-      align-items: center;
-    }
+  }
+
+  .ant-btn {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-text);
+    background-color: transparent;
+    border-color: var(--secondary-text);
+
     &:hover {
       color: var(--accent);
       border-color: var(--accent);
     }
-  }
-  svg {
-    font-size: 1.2rem;
-  }
-  &--small {
-    svg {
-      font-size: 0.6rem;
-    }
-    .ant-btn {
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      min-height: 20px;
-      &:hover {
-        border-color: var(--secondary-text);
-      }
-    }
-  }
-  &--large {
-    svg {
-      font-size: 1.5rem;
-    }
-  }
-  &--accent {
-    .ant-btn {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-  }
-  &--default {
-    .ant-btn {
+
+    &:disabled {
       color: var(--secondary-text);
+      background-color: transparent;
       border-color: var(--secondary-text);
-      svg {
+      opacity: 0.4;
+
+      &:hover {
         color: var(--secondary-text);
         border-color: var(--secondary-text);
       }
-      &:hover {
-        svg {
-          color: var(--accent);
-          border-color: var(--accent);
-        }
-      }
     }
-  }
-  &--white {
-    .ant-btn,
-    .ant-btn:hover {
-      border-color: #fff;
-    }
-    svg {
-      color: #fff;
-    }
-  }
-  &--success {
-    .ant-btn,
-    .ant-btn:hover {
-      color: var(--success);
-      border-color: var(--success);
-    }
-  }
-  &--borderless {
-    .ant-btn {
-      border: none !important;
-      padding: 0;
-    }
+
     .ant-radio-button-wrapper {
-      border: none !important;
+      display: flex;
+      align-items: center;
     }
   }
 }

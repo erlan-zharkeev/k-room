@@ -1,6 +1,7 @@
 import { Button, Radio, Tooltip } from 'antd'
 import DropdownButton from 'antd/lib/dropdown/dropdown-button'
 import useTypedSelector from 'src/hooks/useTypedSelector'
+import modifiersHandler from 'src/utils/modifiersHandler'
 import UIIcon from 'ui/UIIcon'
 import UIButtonProps from './@types/UIButtonProps'
 
@@ -16,19 +17,19 @@ export const UIButton = ({
   tooltip,
   text,
   iconName,
-  className,
-  borderless = true,
+  className = '',
+  border = 'borderless',
   color,
   loading,
   disabled,
   htmlType,
   size,
   shape,
-  noHover,
+  hover,
   onClick
 }: UIButtonProps) => {
   const { showTooltips } = useTypedSelector((state) => state.persist.settings)
-  const buttonType = type ? type : 'common'
+  const buttonType = type || 'common'
   const ButtonComponent = buttons.find((button) => button.name === buttonType).component
   const ButtonBody = () => (
     <ButtonComponent
@@ -40,15 +41,12 @@ export const UIButton = ({
       htmlType={htmlType}
     >
       {text}
-      {iconName && <UIIcon name={iconName} color={color} />}
+      {iconName && <UIIcon name={iconName} color={color} size={size} />}
     </ButtonComponent>
   )
+  const modifiers = modifiersHandler({ rootClass: 'ui-button', modifiers: [border, color, size, hover] })
   return (
-    <div
-      className={`ui-button ${borderless ? 'ui-button--borderless' : ''} ${color ? `ui-button--${color}` : ''} ${
-        size ? `ui-button--${size}` : ''
-      } ${className ?? ''} ${noHover ? 'ui-button--hoverless' : ''}`}
-    >
+    <div className={modifiers + ' ' + className}>
       {showTooltips && tooltip ? (
         <Tooltip placement="bottom" title={tooltip}>
           <ButtonBody />

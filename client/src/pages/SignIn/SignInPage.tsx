@@ -49,7 +49,7 @@ export const SignInPage = () => {
             <Form.Item className="sign-in__controls">
               <UIButton
                 text="Submit"
-                borderless={false}
+                border="borderless"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}

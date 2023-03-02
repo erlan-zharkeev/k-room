@@ -48,7 +48,12 @@ export const EmailConfirmPage = () => {
               <span className="header-text header-text--sm header-text--accent"> {email} </span>
               confirmed
             </div>
-            <UIButton color="accent" borderless={false} text="Go to app" onClick={() => navigate(RouteNames.SIGN_IN)} />
+            <UIButton
+              color="accent"
+              border="borderless"
+              text="Go to app"
+              onClick={() => navigate(RouteNames.SIGN_IN)}
+            />
           </>
         )}
       </div>

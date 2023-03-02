@@ -2,23 +2,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  // color: var(--secondary-text);
+  font-size: 1.2rem;
+
   &--accent {
     color: var(--accent);
   }
+
   &--default {
     color: var(--secondary-text);
   }
+
   &--large {
     svg {
       font-size: 7rem !important;
     }
   }
+
   &--success {
     svg {
       color: var(--success);
     }
   }
+
   &--error {
     svg {
       color: var(--error);
@@ -26,19 +31,22 @@
   }
 
   &--loader {
-    animation: rotation 1s infinite linear;
     font-size: 1.4rem;
+    animation: rotation 1s infinite linear;
   }
+
   &--call {
     svg {
       font-size: 1.1rem;
     }
   }
+
   &--mic {
     svg {
       font-size: 1.1rem;
     }
   }
+
   &--mic-muted {
     svg {
       font-size: 1.1rem;
@@ -50,6 +58,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(359deg);
   }

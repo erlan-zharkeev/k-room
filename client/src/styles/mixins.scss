@@ -26,6 +26,7 @@
 
 @mixin nm-inset-element {
   @include nm-inset-shadow;
+
   background-color: var(--main-bg) !important;
   border: none;
   border-radius: $radius-md;
@@ -38,6 +39,7 @@
 
 @mixin nm-outset-element {
   @include nm-outset-shadow;
+
   background-color: var(--main-bg) !important;
   border: none;
   border-radius: $radius-md;
@@ -50,6 +52,7 @@
 
 @mixin nm-outset-element-sharpen {
   @include nm-outset-shadow-sharpen;
+
   background-color: var(--main-bg) !important;
   border: none;
   border-radius: $radius-md;

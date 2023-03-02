@@ -11,8 +11,8 @@
   padding: 0 1rem 1rem;
   background-color: var(--main-bg);
   @include max-width-768 {
-    margin-top: $gutter-sm;
     justify-content: space-between;
+    margin-top: $gutter-sm;
   }
 
   &__back-button {
