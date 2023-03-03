@@ -1,3 +1,13 @@
+.emoji-dropdown {
+  li {
+    width: 42px !important;
+  }
+
+  .ant-btn-icon-only {
+    display: none !important;
+  }
+}
+
 ul#emoji-menu {
   display: flex;
   flex-wrap: wrap;
@@ -6,11 +16,5 @@ ul#emoji-menu {
     width: 33.333%;
     padding: 1rem;
     text-align: center;
-  }
-
-  .emoji-dropdown {
-    &__icon {
-      font-size: 1.2rem;
-    }
   }
 }

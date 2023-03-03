@@ -1,12 +1,14 @@
-import { Button, Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
+import UIButton from 'ui/UIButton'
+import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { login } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
-const Logo = require('src/assets/img/Logo.svg') as string
+const Logo: string = require('src/assets/img/Logo.svg')
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -37,17 +39,38 @@ export const SignInPage = () => {
             onInput={() => validate(form)}
           >
             <Form.Item name="email" rules={validateRules.email}>
-              <Input placeholder="Email" />
+              <UIInput placeholder="Email" size="large" autoComplete="on" />
             </Form.Item>
 
             <Form.Item name="password" rules={validateRules.password}>
-              <Input.Password placeholder="Password" autoComplete="on" />
+              <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
             </Form.Item>
 
+            <div className="sign-in__additional__links">
+              <UIButton iconName="google" text="Sign in with Google" border="default" fill={true} hover="hoverless" />
+              <UIButton
+                iconName="facebook"
+                text="Sign in with Facebook"
+                border="default"
+                fill={true}
+                hover="hoverless"
+              />
+              <div className="sign-in__forgot-password">
+                <a className="paragraph-text link" href="">
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+
             <Form.Item className="sign-in__controls">
-              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
-                Submit
-              </Button>
+              <UIButton
+                text="Sign in"
+                border="default"
+                color="accent"
+                htmlType="submit"
+                loading={isLoading}
+                disabled={!isValid}
+              />
             </Form.Item>
           </Form>
         </div>

@@ -1,7 +1,5 @@
-import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LoadingOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { AxiosResponse } from 'axios'
 import { Status, RouteNames } from 'common-types'
@@ -9,6 +7,8 @@ import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/userSlice'
 import { sendEmailConfirm } from 'src/store/authSlice'
+import UIButton from 'ui/UIButton'
+import UIIcon from 'ui/UIIcon'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -39,7 +39,7 @@ export const EmailConfirmPage = () => {
         <div className="header-text header-text--md header-text--secondary header-text--left">Congratulations</div>
         {isLoading ? (
           <div className="confirmed-email__loader">
-            <LoadingOutlined style={{ fontSize: '40px', color: 'rgb(65 139 237)', marginLeft: '12px' }} />
+            <UIIcon color="accent" size="large" name="loader" />
           </div>
         ) : (
           <>
@@ -48,9 +48,12 @@ export const EmailConfirmPage = () => {
               <span className="header-text header-text--sm header-text--accent"> {email} </span>
               confirmed
             </div>
-            <Button type="primary" block onClick={() => navigate(RouteNames.SIGN_IN)}>
-              Go to app
-            </Button>
+            <UIButton
+              color="accent"
+              border="borderless"
+              text="Go to app"
+              onClick={() => navigate(RouteNames.SIGN_IN)}
+            />
           </>
         )}
       </div>

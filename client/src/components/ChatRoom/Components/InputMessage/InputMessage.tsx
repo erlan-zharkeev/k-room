@@ -1,5 +1,4 @@
-import { Button, Form, Input } from 'antd'
-import { SendOutlined } from '@ant-design/icons'
+import { Form } from 'antd'
 import { FormEvent, useState } from 'react'
 import { SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
@@ -8,6 +7,8 @@ import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import InputMessageProps from './@types/InputMessageProps'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
+import UIInput from 'ui/UIInput'
+import UIButton from 'ui/UIButton'
 
 export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   const [message, setMessage] = useState('')
@@ -35,16 +36,10 @@ export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   return (
     <div className="input-message">
       <Form onFinish={send}>
-        <Input onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
+        <UIButton iconName="paper-clip" />
+        <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropDown setEmoji={setEmoji} />
-        <Button
-          ghost
-          type="primary"
-          htmlType="submit"
-          disabled={!message}
-          icon={<SendOutlined />}
-          onClick={send}
-        ></Button>
+        <UIButton htmlType="submit" disabled={!message} iconName="send" onClick={send} />
       </Form>
     </div>
   )

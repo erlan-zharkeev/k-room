@@ -1,13 +1,15 @@
-import { Button, Image, Form, Input, Avatar } from 'antd'
-import { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import { Button, Form, Input } from 'antd'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { UserOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { updateUserData } from 'src/store/userSlice'
 import { showNotification, closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
+import UIAvatar from 'ui/UIAvatar'
+import UIInput from 'ui/UIInput'
+import UIButton from 'ui/UIButton'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
@@ -80,22 +82,23 @@ const UserDataSettingsPopup = () => {
         onInput={() => validate(form)}
       >
         <div className="user-data-settings-popup__avatar">
-          {avatar || newAvatar ? (
-            <Image preview={false} src={newAvatar ?? avatar} alt="avatar" />
-          ) : (
-            <Avatar size="large" icon={<UserOutlined />} alt="avatar" />
-          )}
+          <UIAvatar src={newAvatar ?? avatar} showBadge={false} size="large" />
           <input type="file" onChange={normFile} />
         </div>
 
         <Form.Item name="username" rules={validateRules.required} initialValue={username}>
-          <Input placeholder="Username" />
+          <UIInput placeholder="Username" />
         </Form.Item>
 
         <Form.Item className="user-data-settings-popup__controls">
-          <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
-            Update
-          </Button>
+          <UIButton
+            text="Update"
+            border="borderless"
+            htmlType="submit"
+            color="accent"
+            disabled={!isValid}
+            loading={isLoading}
+          />
         </Form.Item>
       </Form>
     </div>

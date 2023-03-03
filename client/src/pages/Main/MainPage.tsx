@@ -2,14 +2,14 @@ import { useEffect } from 'react'
 import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
-import TopPanel from 'src/components/TopPanel/TopPanel'
+import TopBar from 'src/components/TopBar/TopBar'
 import Popup from 'src/components/Common/Popup/Popup'
 import { socket } from 'src/socket/socket'
 import { Message, SocketActions, User, ChatRoom as ChatRoomInterface } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
-import { setReconnectingStatus, showModal, showNotification } from 'src/store/systemSlice'
+import { setReconnectingStatus, showNotification } from 'src/store/systemSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
@@ -23,8 +23,7 @@ import {
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
-import { setShowCallModal, updateInterlocutorSettings } from 'src/store/callsSlice'
-import Call from 'src/call/call'
+import AsideBar from 'src/components/AsideBar/AsideBar'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -32,7 +31,8 @@ export const MainPage = () => {
   const userId = useTypedSelector((state) => state.user.userData.id)
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
-  const { showCallModal, isMinified } = useTypedSelector((state) => state.calls)
+
+  const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -47,6 +47,8 @@ export const MainPage = () => {
   }
 
   const debouncedStatusNotification = useDebounce(statusNotification, 1000)
+
+  const hideAside = () => selectedChatRoom && viewPort.width <= 769
 
   useEffect(() => {
     socket.connect()
@@ -102,15 +104,21 @@ export const MainPage = () => {
   }, [])
 
   return (
-    <div className={'main-page page ' + (selectedChatRoom && viewPort.width <= 576 ? 'move-aside' : '')}>
+    <div className={'main-page page' + (hideAside() ? ' move-aside' : '')}>
       <StubLoading isLoading={socket.disconnected} />
       <Popup />
       <CallModal />
-      <CallStatusBar />
-      <TopPanel />
-      <div className="main-page__content">
-        <AsidePanel />
-        <ChatRoom />
+      <div className="main-page__wrapper">
+        {viewPort.width >= 769 && <AsideBar />}
+        <div className="main-page__content">
+          <CallStatusBar />
+          <TopBar />
+          <div className={`main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`}>
+            <AsidePanel />
+            <ChatRoom />
+          </div>
+          {viewPort.width <= 768 && <AsideBar />}
+        </div>
       </div>
     </div>
   )

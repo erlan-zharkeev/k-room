@@ -6,7 +6,7 @@
 }
 
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
   border-color: var(--accent-text) !important;
 }
 
@@ -19,45 +19,23 @@
 }
 
 // switch
-.ant-switch-checked {
-  background: var(--accent-color) !important;
-}
+.ant-switch {
+  background-color: var(--main-bg);
+  @include nm-inset-shadow;
 
-// button
-.ant-btn {
-  color: var(--secondary-text) !important;
-  background: var(--main-bg) !important;
-  border-color: var(--secondary-text) !important;
-  transition: background 0s;
-
-  &:hover {
-    color: var(--accent-color) !important;
-    border-color: var(--accent-color) !important;
+  // padding: 2px;
+  &-checked {
+    @include nm-inset-shadow;
   }
 
-  &--md {
-    width: 100px !important;
-    max-width: 100px !important;
+  &-handle {
+    // padding: 2px;
+    @include nm-outset-shadow;
   }
-}
 
-.ant-btn-primary {
-  color: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
-}
-
-.ant-btn-primary[disabled] {
-  color: var(--secondary-text) !important;
-  border-color: var(--secondary-text) !important;
-  opacity: 0.3;
-}
-
-.ant-btn-loading {
-  opacity: 0.7;
-}
-
-.ant-btn::before {
-  background: transparent;
+  &-inner {
+    color: var(--secondary-text);
+  }
 }
 
 // modal
@@ -77,53 +55,6 @@
 
 .ant-modal-close-x {
   color: var(--main-text) !important;
-}
-
-// input
-.ant-input {
-  transition: background 0s;
-}
-
-input {
-  color: var(--main-text) !important;
-  background: var(--main-bg) !important;
-  border-color: var(--secondary-text) !important;
-}
-
-.ant-input-affix-wrapper {
-  color: var(--main-text) !important;
-  background-color: var(--main-bg) !important;
-  border-color: var(--secondary-text) !important;
-}
-
-.ant-input-suffix span {
-  color: var(--secondary-text) !important;
-}
-
-::placeholder {
-  opacity: 0.4;
-}
-
-.ant-input:focus,
-.ant-input-focused {
-  border-color: var(--accent-color) !important;
-}
-
-.ant-input-status-error:not(.ant-input-disabled, .ant-input-borderless).ant-input {
-  &-focused,
-  &:focus,
-  &:hover {
-    border-color: var(--error-text) !important;
-  }
-}
-
-.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled, .ant-input-affix-wrapper-borderless).ant-input-affix-wrapper {
-  border-color: var(--error-text) !important;
-}
-
-.ant-input-affix-wrapper:focus,
-.ant-input-affix-wrapper-focused {
-  border-color: var(--accent-color) !important;
 }
 
 // select
@@ -152,7 +83,7 @@ input {
 
 .ant-notification-notice {
   border: 1px solid var(--main-bg);
-  border-radius: $sm-radius;
+  border-radius: $radius-sm;
   box-shadow: 0 3px 6px -4px rgb(0 0 0 / 100%), 0 6px 16px 0 rgb(0 0 0 / 25%), 0 9px 28px 8px rgb(0 0 0 / 15%) !important;
 
   &-success {
@@ -217,7 +148,7 @@ input {
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: var(--accent-color) !important;
+  color: var(--accent) !important;
 }
 
 .ant-tabs-top > .ant-tabs-nav::before,
@@ -263,24 +194,24 @@ html[tooltips='false'] {
 .ant-dropdown {
   &-menu {
     padding: 0;
+
+    &-title-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   ul {
-    background-color: var(--main-bg) !important;
-    border-radius: $sm-radius;
-    box-shadow: 0 0 7px var(--secondary-text) !important;
+    background: transparent;
+    border: 1px solid var(--secondary-text);
+    border-radius: $radius-sm;
 
     li {
       color: var(--secondary-text) !important;
 
-      &:first-child {
-        border-top-left-radius: $sm-radius !important;
-        border-top-right-radius: $sm-radius !important;
-      }
-
-      &:last-child {
-        border-bottom-right-radius: $sm-radius !important;
-        border-bottom-left-radius: $sm-radius !important;
+      &:hover {
+        background-color: var(--secondary-text);
       }
     }
   }

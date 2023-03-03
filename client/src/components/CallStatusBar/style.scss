@@ -1,6 +1,8 @@
 .call-status-bar {
-  height: 40px;
+  height: $call-bar-height;
+  margin-bottom: $gutter-lg;
   background: var(--success);
+  border-radius: $radius-md;
   cursor: pointer;
   transition: height 0.1s ease-in;
 
@@ -17,8 +19,8 @@
 
   &--hide {
     height: 0;
+    margin-bottom: 0;
     transition: height 0.1s ease-in;
-
     #{ $self }__wrapper {
       display: none;
     }

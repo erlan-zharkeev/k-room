@@ -1,1 +1,12 @@
-// Fill after
+.sign-in {
+  &__forgot-password {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: $gutter-md;
+  }
+  &__additional__links {
+    .ui-button {
+      margin-bottom: $gutter-md;
+    }
+  }
+}

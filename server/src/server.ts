@@ -4,7 +4,6 @@ import router from './router'
 import ENV from './ENV'
 
 const http = require('http')
-// const https = require('https')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const clc = require('cli-color')

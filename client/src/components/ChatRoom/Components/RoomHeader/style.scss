@@ -10,15 +10,17 @@
   height: $room-header-height;
   padding: 0 1rem 1rem;
   background-color: var(--main-bg);
-  @include max-width-576 {
-    margin-top: $gutter-md;
+  @include max-width-768 {
+    justify-content: space-between;
+    margin-top: $gutter-sm;
   }
 
   &__back-button {
     display: none;
 
-    @include max-width-576 {
+    @include max-width-768 {
       display: block;
+      margin-right: $gutter-lg;
     }
   }
 

@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import Call from 'src/call/call'
 import { CallsState } from './@types/CallsState'
 
 const initialState: CallsState = {
-  showCallModal: false,
+  showCallModal: true,
   isMinified: false,
   settings: {
     streamLoading: false,
@@ -35,6 +34,7 @@ const initialState: CallsState = {
       length: 36,
       interlocutorName: 'Ivan',
       interlocutorId: '0',
+      interlocutorAvatar: '',
       status: 'finished',
       type: 'incoming',
       video: true
@@ -47,6 +47,7 @@ const initialState: CallsState = {
       length: 156,
       interlocutorName: 'Anton',
       interlocutorId: '1',
+      interlocutorAvatar: '',
       status: 'in-progress',
       type: 'outgoing',
       video: false
@@ -59,6 +60,7 @@ const initialState: CallsState = {
       length: 342,
       interlocutorName: 'Norbik',
       interlocutorId: '2',
+      interlocutorAvatar: '',
       status: 'finished',
       type: 'outgoing',
       video: false

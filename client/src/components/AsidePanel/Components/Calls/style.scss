@@ -1,6 +1,6 @@
 .call-list {
   &__item {
-    height: 70px;
+    height: 68px;
     transition: height 0.4s ease-in-out;
 
     &--expand {
@@ -16,6 +16,11 @@
       width: 100%;
       padding: 1rem;
       overflow: hidden;
+
+      &-meta {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 
@@ -30,7 +35,7 @@
         border: none;
 
         svg {
-          color: var(--accent-color);
+          color: var(--accent);
         }
       }
     }

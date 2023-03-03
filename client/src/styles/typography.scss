@@ -2,13 +2,13 @@
   color: var(--main-text);
   font-size: 14px;
   line-height: 1;
-  
+
   &--secondary {
     color: var(--secondary-text);
   }
 
   &--accent {
-    color: var(--accent-color);
+    color: var(--accent);
   }
 
   &--left {
@@ -27,7 +27,7 @@
     font-size: 20px;
   }
 
-  &--lr {
+  &--lg {
     font-size: 24px;
   }
 
@@ -37,6 +37,10 @@
 
   &--xxl {
     font-size: 40px;
+  }
+
+  &--tribal {
+    font-family: 'Rajdhani, Helvetica', sans-serif;
   }
 }
 
@@ -49,7 +53,7 @@
   }
 
   &--accent {
-    color: var(--accent-color);
+    color: var(--accent);
   }
 
   &--secondary {
@@ -58,5 +62,9 @@
 
   &--sm {
     font-size: 10px;
+  }
+
+  &--md {
+    font-size: 14px;
   }
 }

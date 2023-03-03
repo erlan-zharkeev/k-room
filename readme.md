@@ -77,10 +77,6 @@
 
 ## Backlog
 
-- make https
-- serve front on back
-- clean up
-- Redesign
 - develop call list
 - develop add photo
 - develop add files
@@ -109,7 +105,9 @@
 - auto upgrade version
 - уменьшить базовые изображения и удаление не нужных
 - добавить компрессию файлов
-- remove hints
+- add hints to buttons
+- Сделать доступным поиск автоматическим
+- Убрать дергание switcher
 
 
 docker stop $(docker ps -aq)

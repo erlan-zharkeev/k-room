@@ -11,6 +11,7 @@
 .page {
   position: relative;
   height: 100vh;
+  padding: $gutter-lg;
 }
 
 .sign-in,
@@ -34,7 +35,7 @@
 
   &__body {
     width: $container-sm;
-    height: 200px;
+    height: 250px;
   }
 
   form {

@@ -1,5 +1,5 @@
 :root {
-  --accent-color: #418FDE;
+  --accent: #418fde;
   --error-text: #863347;
   --success: rgb(44 186 136);
   --error: rgb(191 86 110);
@@ -10,15 +10,25 @@
   --info-bg: rgba(255 255 255 / 20%);
   --modal-overflow-color: rgb(0 0 0 / 75%);
 
-  &[theme="dark"] {
-    --main-bg: #1C1C1C;
+  &[theme='dark'] {
+    --main-bg: #1c1c1c;
     --main-text: #fff;
     --secondary-text: rgb(177 177 177 / 84.7%);
+    --shadow-outset-start: #0f0f0f;
+    --shadow-outset-end: #292929;
+    --shadow-inset-start: #161616;
+    --shadow-inset-end: #202020;
+    --dark-gray: rgb(59 59 59);
   }
 
-  &[theme="light"] {
-    --main-bg: #fff;
+  &[theme='light'] {
+    --main-bg: #cfcfcf;
     --main-text: #000;
     --secondary-text: rgb(94 94 94 / 84.7%);
+    --shadow-outset-start: #b6b6b6;
+    --shadow-outset-end: #e8e8e8;
+    --shadow-inset-start: #b6b6b6;
+    --shadow-inset-end: #e8e8e8;
+    --dark-gray: rgb(189 189 189);
   }
 }

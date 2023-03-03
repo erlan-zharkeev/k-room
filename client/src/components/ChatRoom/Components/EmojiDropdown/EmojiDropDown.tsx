@@ -1,10 +1,10 @@
-import { Dropdown, Button, Menu } from 'antd'
-import { SmileOutlined } from '@ant-design/icons'
+import { Button, Dropdown, MenuProps } from 'antd'
 import emojiSource from './emojis'
 import { EmojiDropdownProps } from './@types/EmojiDropdownProps'
+import UIButton from 'ui/UIButton'
 
 export const EmojiDropDown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
-  const emojis = emojiSource.map((el) => {
+  const items: MenuProps['items'] = emojiSource.map((el) => {
     return {
       key: el.key,
       label: (
@@ -17,8 +17,18 @@ export const EmojiDropDown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
 
   return (
     <div className="emoji-dropdown">
-      <Dropdown overlay={<Menu id="emoji-menu" items={emojis}></Menu>} placement="topLeft">
-        <Button ghost icon={<SmileOutlined />}></Button>
+      <Dropdown
+        menu={{
+          items,
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 50px)'
+          }
+        }}
+        placement="topLeft"
+        trigger={['click']}
+      >
+        <UIButton type="dropdown" iconName="emoji" />
       </Dropdown>
     </div>
   )

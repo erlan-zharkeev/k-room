@@ -1,14 +1,20 @@
-import { Avatar, Switch, Tooltip } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
 import Meta from 'antd/lib/card/Meta'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import {
-  showModal
-} from 'src/store/systemSlice'
+import { showModal } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
 import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
+import UISwitch from 'ui/UISwitch'
+import UserSettingElement from './@types/UserSettingElement'
+import UIAvatar from 'ui/UIAvatar'
+
+const methods: Array<UserSettingElement> = [
+  { name: 'theme', method: changeTheme },
+  { name: 'sound', method: setSoundValue },
+  { name: 'tooltips', method: setTooltipsValue },
+  { name: 'notification', method: setAbleToShowNotification }
+]
 
 const UserSettings = () => {
   const { username, email, id, avatar } = useTypedSelector((state) => state.user.userData)
@@ -19,61 +25,42 @@ const UserSettings = () => {
     dispatch(showModal({ title: 'Update User Data', modalContentComponentName: 'UserDataSettingsPopup' }))
   }
 
-  const SettingsElement = (
-    <div className="user-settings__user-card" onClick={changeUserData}>
-      <Meta
-        avatar={<Avatar size="large" src={avatar} icon={<UserOutlined />} />}
-        title={username}
-        description={email}
-      />
-      <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">{id}</span>
-    </div>
-  )
+  const changeSetting = (value: boolean, id: string) => {
+    const method = methods.find((method) => method.name === id).method
+    dispatch(method(value))
+  }
 
   return (
     <div className="user-settings">
       <div className="user-settings__body">
-        {showTooltips ? (
-          <Tooltip placement="bottom" title="Change Settings">
-            {SettingsElement}
-          </Tooltip>
-        ) : (
-          SettingsElement
-        )}
+        <div className="user-settings__user-card" onClick={changeUserData}>
+          <Meta
+            avatar={<UIAvatar size="medium" showBadge={false} src={avatar} />}
+            title={username}
+            description={email}
+          />
+          <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">{id}</span>
+        </div>
         <div className="user-settings__theme-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Theme</div>
-          <Switch
-            checkedChildren={'Dark'}
-            unCheckedChildren={'Light'}
-            defaultChecked={theme === 'dark'}
-            onChange={(value) => dispatch(changeTheme(value))}
-          />
+          <UISwitch onText="Dark" id="theme" offText="Light" initValue={theme === 'dark'} onChange={changeSetting} />
         </div>
         <div className="user-settings__sound-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Sound</div>
-          <Switch
-            checkedChildren={'On'}
-            unCheckedChildren={'Off'}
-            defaultChecked={soundOn}
-            onChange={(value) => dispatch(setSoundValue(value))}
-          />
+          <UISwitch initValue={soundOn} id="sound" onChange={changeSetting} />
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Tooltips</div>
-          <Switch
-            checkedChildren={'Show'}
-            unCheckedChildren={'Hide'}
-            defaultChecked={showTooltips}
-            onChange={(value) => dispatch(setTooltipsValue(value))}
-          />
+          <UISwitch initValue={showTooltips} id="tooltips" onText="Show" offText="Hide" onChange={changeSetting} />
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Notification</div>
-          <Switch
-            checkedChildren={'Show'}
-            unCheckedChildren={'Hide'}
-            defaultChecked={ableToShowNotification}
-            onChange={(value) => dispatch(setAbleToShowNotification(value))}
+          <UISwitch
+            initValue={ableToShowNotification}
+            id="notification"
+            onText="Show"
+            offText="Hide"
+            onChange={changeSetting}
           />
         </div>
       </div>

@@ -1,17 +1,18 @@
-import { List, Image, Badge, Tooltip, Button, Avatar } from 'antd'
-import { PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { Badge, List } from 'antd'
 import { SocketActions, ChatRoom, Message } from 'common-types'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { deselectChatRoom, selectChatRoom } from 'src/store/settingsSlice'
+import { selectChatRoom } from 'src/store/settingsSlice'
+import UIAvatar from 'ui/UIAvatar'
+import UIButton from 'ui/UIButton'
 
 export const ChatRoomList = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { id } = useTypedSelector((state) => state.user.userData)
-  const { selectedChatRoomId, showTooltips } = useTypedSelector((state) => state.persist.settings)
+  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -33,33 +34,17 @@ export const ChatRoomList = () => {
   const unreadMessages = (room: ChatRoom) =>
     room.messages.filter((message) => !message.isSelf && message.status === 'delivered').length
 
-  const AddUserButtonWrapper = (chatRoom: ChatRoom) => {
-    if (chatRoom.multiple) return
-    if (chatRoom.users.length !== 1) return
-    const user = chatRoom.users[0]
-    const hasUserInContacts = !!contacts.find((element) => element.id === user.id)
-    if (hasUserInContacts) return
-    return showTooltips ? (
-      <Tooltip placement="topLeft" title="Add to contact">
-        <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
-      </Tooltip>
-    ) : (
-      <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
-    )
-  }
+  const getFirstUserIdInChatRoom = (chatRoom: ChatRoom) => chatRoom.users[0].id
 
-  const UnreadMessagesWrapper = (chatRoom: ChatRoom) => {
-    return unreadMessages(chatRoom) ? (
-      <Button type="primary" shape="default" size="small" className="chat-room-list__unread-messages">
-        {unreadMessages(chatRoom)} unread message{unreadMessages(chatRoom) > 1 && 's'}
-      </Button>
-    ) : (
-      <></>
-    )
+  const showAddUserButton = (chatRoom: ChatRoom) => {
+    const userId = getFirstUserIdInChatRoom(chatRoom)
+    const hasUserInContacts = !!contacts.find((element) => element.id === userId)
+    const isChatMultiple = chatRoom.multiple || chatRoom.users.length !== 1
+    return !hasUserInContacts && !isChatMultiple
   }
 
   return (
-    <div className="chat-room-list" onClick={() => dispatch(deselectChatRoom())}>
+    <div className="chat-room-list" onClick={() => dispatch(selectChatRoom(''))}>
       <div className="chat-room-list__body">
         <List
           itemLayout="horizontal"
@@ -74,21 +59,21 @@ export const ChatRoomList = () => {
               className={selectedChatRoomId === chatRoom.roomId ? 'active' : ''}
             >
               <List.Item.Meta
-                avatar={
-                  <Badge dot={chatRoom.hasOnline} color="green">
-                    {chatRoom.avatar ? (
-                      <Image src={chatRoom.avatar} className="custom-avatar" alt="avatar" />
-                    ) : (
-                      <Avatar size="small" src={chatRoom.avatar} icon={<UserOutlined />} alt="avatar" />
-                    )}
-                  </Badge>
-                }
+                avatar={<UIAvatar online={chatRoom.hasOnline} src={chatRoom.avatar} />}
                 title={<span>{chatRoom.chatName}</span>}
                 description={getLastMessage(chatRoom.messages)}
               />
               <div className="chat-room-list__controls">
-                {AddUserButtonWrapper(chatRoom)}
-                {UnreadMessagesWrapper(chatRoom)}
+                {Boolean(unreadMessages(chatRoom)) && (
+                  <Badge className="chat-room-list__unread-messages" count={unreadMessages(chatRoom)} />
+                )}
+                {showAddUserButton(chatRoom) && (
+                  <UIButton
+                    iconName="plus"
+                    size="small"
+                    onClick={async (e) => await addUser(e, getFirstUserIdInChatRoom(chatRoom))}
+                  />
+                )}
               </div>
             </List.Item>
           )}
