@@ -61,7 +61,6 @@
   }
 
   input:checked + label::after {
-    left: calc(100% - $compensation);
-    transform: translateX(-100%);
+    left: calc(100% - 27px);
   }
 }

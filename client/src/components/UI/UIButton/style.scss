@@ -7,6 +7,12 @@
     }
   }
 
+  &--fill {
+    button {
+      width: 100%;
+    }
+  }
+
   &--accent {
     @include btn-style(var(--accent));
   }
@@ -30,14 +36,20 @@
 
   &--hoverless {
     svg {
-      color: var(--secondary-text);
+      color: var(--secondary-text) !important;
     }
-
-    &:hover {
-      border-color: var(--secondary-text);
+    span {
+      color: var(--secondary-text) !important;
+    }
+    button:hover {
+      border-color: var(--secondary-text) !important;
 
       svg {
-        color: var(--secondary-text);
+        color: var(--secondary-text) !important;
+      }
+
+      span {
+        color: var(--secondary-text) !important;
       }
     }
   }
@@ -58,6 +70,7 @@
   .ant-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     color: var(--secondary-text);
     background-color: transparent;
     border-color: var(--secondary-text);

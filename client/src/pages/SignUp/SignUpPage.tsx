@@ -64,10 +64,14 @@ export const SignUpPage = () => {
             <Form.Item name="password" rules={validateRules.password}>
               <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
             </Form.Item>
-            
+
             <div className="sign-up__privacy-policy">
-              <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread"/>
-              <div className="paragraph-text paragraph-text--secondary">I have read and agree <a className="link">privacy policy</a></div>
+              <Form.Item name="policy" rules={validateRules.policy}>
+                <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" />
+              </Form.Item>
+              <div className="sign-up__privacy-policy-text paragraph-text paragraph-text--secondary">
+                I have read and agree <a className="link">privacy policy</a>
+              </div>
             </div>
 
             <Form.Item className="sign-up__controls">

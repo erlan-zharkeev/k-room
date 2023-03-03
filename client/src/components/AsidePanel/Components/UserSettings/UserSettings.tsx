@@ -43,15 +43,15 @@ const UserSettings = () => {
         </div>
         <div className="user-settings__theme-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Theme</div>
-          <UISwitch onText="Dark" id="theme" offText="Light" initValue={theme === 'dark'} change={changeSetting} />
+          <UISwitch onText="Dark" id="theme" offText="Light" initValue={theme === 'dark'} onChange={changeSetting} />
         </div>
         <div className="user-settings__sound-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Sound</div>
-          <UISwitch initValue={soundOn} id="sound" change={changeSetting} />
+          <UISwitch initValue={soundOn} id="sound" onChange={changeSetting} />
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Tooltips</div>
-          <UISwitch initValue={showTooltips} id="tooltips" onText="Show" offText="Hide" change={changeSetting} />
+          <UISwitch initValue={showTooltips} id="tooltips" onText="Show" offText="Hide" onChange={changeSetting} />
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title header-text header-text--sm header-text--secondary">Notification</div>
@@ -60,7 +60,7 @@ const UserSettings = () => {
             id="notification"
             onText="Show"
             offText="Hide"
-            change={changeSetting}
+            onChange={changeSetting}
           />
         </div>
       </div>

@@ -27,3 +27,5 @@ export type IconName =
   | 'cross-2'
   | 'dash'
   | 'expand'
+  | 'google'
+  | 'facebook'

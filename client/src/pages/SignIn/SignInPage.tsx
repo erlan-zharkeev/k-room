@@ -46,9 +46,25 @@ export const SignInPage = () => {
               <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
             </Form.Item>
 
+            <div className="sign-in__additional__links">
+              <UIButton iconName="google" text="Sign in with Google" border="default" fill={true} hover="hoverless" />
+              <UIButton
+                iconName="facebook"
+                text="Sign in with Facebook"
+                border="default"
+                fill={true}
+                hover="hoverless"
+              />
+              <div className="sign-in__forgot-password">
+                <a className="paragraph-text link" href="">
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+
             <Form.Item className="sign-in__controls">
               <UIButton
-                text="Submit"
+                text="Sign in"
                 border="default"
                 color="accent"
                 htmlType="submit"

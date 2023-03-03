@@ -1,12 +1,12 @@
 import { ChangeEvent, useState } from 'react'
 import UISwitchProps from './@types/UISwitchProps'
 
-export const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', change }: UISwitchProps) => {
+export const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', onChange }: UISwitchProps) => {
   const [value, setValue] = useState(initValue)
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.checked
     setValue(!!updatedValue)
-    change(updatedValue, id)
+    onChange(updatedValue, id)
   }
   return (
     <div className="ui-switch" data-checked={value}>

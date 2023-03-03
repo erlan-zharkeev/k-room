@@ -26,11 +26,14 @@ export const UIButton = ({
   size,
   shape,
   hover,
+  fill = false,
   onClick
 }: UIButtonProps) => {
   const { showTooltips } = useTypedSelector((state) => state.persist.settings)
   const buttonType = type || 'common'
   const ButtonComponent = buttons.find((button) => button.name === buttonType).component
+  const hasIconAndText = iconName && text
+
   const ButtonBody = () => (
     <ButtonComponent
       shape={shape}
@@ -40,11 +43,14 @@ export const UIButton = ({
       disabled={disabled}
       htmlType={htmlType}
     >
-      {text}
       {iconName && <UIIcon name={iconName} color={color} size={size} />}
+      <span style={{ marginLeft: hasIconAndText ? '4px' : '0' }}>{text}</span>
     </ButtonComponent>
   )
-  const modifiers = modifiersHandler({ rootClass: 'ui-button', modifiers: [border, color, size, hover] })
+  const modifiers = modifiersHandler({
+    rootClass: 'ui-button',
+    modifiers: [border, color, size, hover, fill && 'fill']
+  })
   return (
     <div className={modifiers + ' ' + className}>
       {showTooltips && tooltip ? (

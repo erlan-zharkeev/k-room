@@ -15,12 +15,14 @@ import {
   BsMicFill,
   BsCameraVideoFill,
   BsCameraVideoOffFill,
-  BsDashLg
+  BsDashLg,
+  BsFacebook
 } from 'react-icons/bs'
 import { AiOutlineSend } from 'react-icons/ai'
 import { HiOutlinePaperClip } from 'react-icons/hi'
 import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
+import { FcGoogle } from 'react-icons/fc'
 
 export const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },
@@ -50,7 +52,9 @@ export const IconList: Array<IconListElement> = [
   { name: 'mic-muted', Icon: BsMicMuteFill },
   { name: 'cross-2', Icon: RxCross2 },
   { name: 'dash', Icon: BsDashLg },
-  { name: 'expand', Icon: CgArrowsExpandLeft }
+  { name: 'expand', Icon: CgArrowsExpandLeft },
+  { name: 'google', Icon: FcGoogle },
+  { name: 'facebook', Icon: BsFacebook }
 ]
 
 export default IconList

@@ -3,5 +3,5 @@ export default interface UISwitchProps {
   onText?: string
   offText?: string
   id: string
-  change?: (value: boolean, id: string) => void
+  onChange?: (value: boolean, id: string) => void
 }

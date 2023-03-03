@@ -8,7 +8,6 @@ export const useValidate = (): [boolean, (form: ValidationForm) => void] => {
   const [isValid, setIsValid] = useState(false)
 
   const validate = (form: ValidationForm) => {
-    console.log(form.getFieldsValue())
     setTimeout(() => {
       const errors = [] as Array<Boolean>
       form.getFieldsError().forEach((field) => {
