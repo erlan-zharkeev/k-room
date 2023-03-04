@@ -7,6 +7,8 @@ var AuthEndPoints;
     AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/auth/send-email-confirmation-link";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/auth/send-email-confirmation";
     AuthEndPoints["LOGIN"] = "/auth/login";
+    AuthEndPoints["GOOGLE_LOGIN"] = "/auth/google-login";
+    AuthEndPoints["PROVIDER_LOGIN"] = "/auth/provider-login";
     AuthEndPoints["LOGOUT"] = "/auth/logout";
     AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));

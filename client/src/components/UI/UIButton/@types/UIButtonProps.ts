@@ -17,5 +17,5 @@ export default interface UIButtonProps {
   shape?: 'default' | 'circle' | 'round'
   hover?: 'hoverless' | ''
   fill?: boolean
-  onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => Promise<void> | void
+  onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => Promise<void> | void | any
 }

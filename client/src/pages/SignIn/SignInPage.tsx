@@ -6,12 +6,16 @@ import UIButton from 'ui/UIButton'
 import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { login } from 'src/store/userSlice'
+import { login, signInWithProvider } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
+import firebase, { ProviderType } from 'src/services/$firebase'
+
 const Logo: string = require('src/assets/img/Logo.svg')
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
+  const [fbBtnLoading, setFbBtnLoading] = useState(false)
 
   const dispatch = useDispatch<AppDispatch>()
   const [form] = Form.useForm()
@@ -21,6 +25,23 @@ export const SignInPage = () => {
     setIsLoading(true)
     await dispatch(login(fields as any))
     setIsLoading(false)
+  }
+
+  const providerSignIn = async (providerName: ProviderType, loaderMethod: (value: boolean) => void) => {
+    loaderMethod(true)
+    const result = await firebase.signIn(providerName)
+    if (!result) return loaderMethod(false)
+    const { displayName, email, photoURL, uid } = result.user
+    const { providerId } = result
+    const credential = {
+      id: uid,
+      username: displayName,
+      email,
+      avatar: photoURL,
+      providerId
+    }
+    await dispatch(signInWithProvider(credential))
+    loaderMethod(false)
   }
 
   return (
@@ -47,13 +68,23 @@ export const SignInPage = () => {
             </Form.Item>
 
             <div className="sign-in__additional__links">
-              <UIButton iconName="google" text="Sign in with Google" border="default" fill={true} hover="hoverless" />
               <UIButton
-                iconName="facebook"
-                text="Sign in with Facebook"
+                iconName="google"
+                text="Sign in with Google"
                 border="default"
                 fill={true}
                 hover="hoverless"
+                onClick={() => providerSignIn('google', setGoogleBtnLoading)}
+                loading={googleBtnLoading}
+              />
+              <UIButton
+                iconName="facebook"
+                text="Sign in with Facebook"
+                onClick={() => providerSignIn('facebook', setFbBtnLoading)}
+                border="default"
+                fill={true}
+                hover="hoverless"
+                loading={fbBtnLoading}
               />
               <div className="sign-in__forgot-password">
                 <a className="paragraph-text link" href="">

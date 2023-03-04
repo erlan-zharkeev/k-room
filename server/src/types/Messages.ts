@@ -12,6 +12,7 @@ export enum Messages {
   exhaustedConfirmationAttempts = 'Attempts to send confirmation the link ended =(',
   confirmEmail = 'Check your email for confirmation link',
   loginSuccess = 'Login successfully',
+  loginAndRegisterSuccess = 'Login and register successfully',
   userNotFound = 'User not found',
   wrongPass = 'Invalid password',
   emailConfirmFailed = 'Email confirm failed',
@@ -25,5 +26,6 @@ export enum Messages {
   notImage = 'File is not an image',
   updateSettings = 'Failed to save user settings',
   userAddedToContacts = 'User added to contacts',
-  userRemovedFromContacts = 'User removed from contacts'
+  userRemovedFromContacts = 'User removed from contacts',
+  emailLinkedToAnotherMethod = 'This email is already linked to another login method'
 }

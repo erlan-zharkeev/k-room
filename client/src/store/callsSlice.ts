@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { CallsState } from './@types/CallsState'
 
 const initialState: CallsState = {
-  showCallModal: true,
+  showCallModal: false,
   isMinified: false,
   settings: {
     streamLoading: false,

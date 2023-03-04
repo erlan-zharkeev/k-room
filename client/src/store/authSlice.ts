@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { User, AuthEndPoints } from 'common-types'
+import { AuthEndPoints, UserCredential } from 'common-types'
 import $api from 'src/services/$api'
 
 export enum AuthAction {
@@ -9,7 +9,7 @@ export enum AuthAction {
   UPDATE_TOKENS_PAIR = 'UPDATE_TOKENS_PAIR'
 }
 
-export const registration = createAsyncThunk(AuthAction.REGISTRATION, async (payload: User, { dispatch }) => {
+export const registration = createAsyncThunk(AuthAction.REGISTRATION, async (payload: UserCredential, { dispatch }) => {
   return await $api('post', AuthEndPoints.REGISTRATION, dispatch, payload)
 })
 

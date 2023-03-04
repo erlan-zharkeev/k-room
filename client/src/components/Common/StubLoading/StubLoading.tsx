@@ -28,9 +28,10 @@ const StubLoading = ({ isLoading }: StubLoadingProps) => {
           <div className="stub-loading__update-block">
             <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Connection failed</p>
             <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Try again later</p>
+
             <div className="stub-loading__controls">
-              <UIButton border="borderless" text="Reconnect" onClick={reconnect} />
-              <UIButton border="borderless" text="Logout" onClick={exit} />
+              <UIButton border="default" text="Reconnect" onClick={reconnect} />
+              <UIButton border="default" text="Logout" onClick={exit} />
             </div>
           </div>
         )}

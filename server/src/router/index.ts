@@ -23,6 +23,7 @@ router.use(cors(corsOptions))
 router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, authController.updateTokensPair)
 router.post(AuthEndPoints.REGISTRATION, validationRules.registration, authController.registration)
 router.post(AuthEndPoints.LOGIN, authController.login)
+router.post(AuthEndPoints.PROVIDER_LOGIN, authController.signInWithProvider)
 router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, authController.sendConfirmationLink)
 router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION, authController.confirmEmail)
 

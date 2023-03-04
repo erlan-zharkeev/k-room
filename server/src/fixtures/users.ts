@@ -2,6 +2,7 @@ import { CommonEndPoints } from './../../../types'
 import ENV from '../ENV'
 import { UserModel } from './../models/user.model'
 import firstCharUpperCase from '../utils/firstCharUpperCase'
+import initUserSettings from './initUserSettings'
 const bcrypt = require('bcryptjs')
 
 const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik'] : ['erlan']
@@ -17,14 +18,7 @@ export default async () => {
       socketId: '',
       refreshToken: username,
       confirmed: true,
-      settings: {
-        asideTab: 'contacts',
-        selectedChatRoomId: '',
-        ableToShowNotification: true,
-        theme: 'dark',
-        showTooltips: false,
-        soundOn: true
-      }
+      settings: initUserSettings
     })
     await user.save()
   }

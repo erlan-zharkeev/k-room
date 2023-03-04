@@ -5,8 +5,9 @@ import { sendEmailConfirmationLink } from '../services/mail'
 import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
-
-import { Status } from '../../../types'
+import { Status, UserCredential } from '../../../types'
+import { uniqueId } from 'lodash'
+import initUserSettings from '../fixtures/initUserSettings'
 const bcrypt = require('bcryptjs')
 
 class AuthController {
@@ -19,26 +20,28 @@ class AuthController {
   async registration(req: Request, res: Response) {
     try {
       authValidator(req, res)
+      let { username, email, password } = req.body
 
-      const { username, email, password } = req.body
       const candidate = await UserModel.findOne({ email })
       if (candidate) return throwError(Status.BAD_REQUEST, res, Messages.userExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
       if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
-      const settings = {
-        asideTab: 'users',
-        selectedChatRoomId: '',
-        ableToShowNotification: true,
-        theme: 'light',
-        showTooltips: false,
-        soundOn: true
-      }
-      const user = new UserModel({ username, email, password: hashedPassword, socketId: '', settings })
+
+      const user = new UserModel({
+        username,
+        email,
+        password: hashedPassword,
+        socketId: '',
+        settings: initUserSettings
+      })
+
       await user.save()
+
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
       if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, Messages.failedToSendConfirmationLink)
+
       return res.json(confirmEmailData)
     } catch (e) {
       console.log(e)
@@ -72,7 +75,8 @@ class AuthController {
 
   async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body
+      let { email, password } = req.body
+
       const user = await UserModel.findOne({ email })
       if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
       if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, Messages.emailNotConfirm)
@@ -89,6 +93,59 @@ class AuthController {
       })
     } catch (e: any) {
       console.log(e)
+      throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
+    }
+  }
+  async signInWithProvider(req: Request, res: Response) {
+    try {
+      const { id, username, email, avatar, providerId }: UserCredential = req.body
+      const providerCandidate = await UserModel.findOne({ providerId: id })
+
+      if (providerCandidate) {
+        await updateTokens(providerCandidate._id, res)
+        return res.json({
+          userData: {
+            username: providerCandidate.username,
+            email,
+            id: providerCandidate._id,
+            avatar: providerCandidate.avatar
+          },
+          settings: providerCandidate.settings,
+          message: Messages.loginSuccess
+        })
+      }
+
+      const emailAlreadyInUse = await UserModel.findOne({ email })
+
+      if (!providerCandidate && emailAlreadyInUse) {
+        return throwError(Status.BAD_REQUEST, res, Messages.emailLinkedToAnotherMethod)
+      }
+
+      const user = new UserModel({
+        providerUserId: id,
+        username,
+        email,
+        avatar,
+        providerId,
+        password: uniqueId(),
+        socketId: '',
+        settings: initUserSettings
+      })
+
+      const newUser = await user.save()
+
+      await updateTokens(newUser._id, res)
+      return res.json({
+        userData: {
+          username: newUser.username,
+          email,
+          id: newUser._id,
+          avatar: newUser.avatar
+        },
+        settings: newUser.settings,
+        message: Messages.loginAndRegisterSuccess
+      })
+    } catch (e: any) {
       throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
     }
   }
