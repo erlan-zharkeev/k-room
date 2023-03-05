@@ -9,8 +9,9 @@ import { AppDispatch } from 'src/store'
 import { login, signInWithProvider } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
 import firebase, { ProviderType } from 'src/services/$firebase'
-
-const Logo: string = require('src/assets/img/Logo.svg')
+import { RouteNames } from 'common-types'
+import $router from 'src/services/$router'
+import { Logo } from 'src/components/Common/Logo/Logo'
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -44,11 +45,13 @@ export const SignInPage = () => {
     loaderMethod(false)
   }
 
+  const initRecovery = () => {
+    $router.push(RouteNames.PASSWORD_RECOVERY)
+  }
+
   return (
     <div className="page sign-in">
-      <div className="sign-in__logo">
-        <img className="logo" src={Logo} alt="logo"></img>
-      </div>
+      <Logo />
       <div className="sign-in__wrapper">
         <div className="sign-in__body">
           <AuthNav />
@@ -87,7 +90,7 @@ export const SignInPage = () => {
                 loading={fbBtnLoading}
               />
               <div className="sign-in__forgot-password">
-                <a className="paragraph-text link" href="">
+                <a className="paragraph-text link" onClick={initRecovery}>
                   Forgot password?
                 </a>
               </div>

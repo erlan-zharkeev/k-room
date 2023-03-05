@@ -44,6 +44,9 @@ export declare enum CommonEndPoints {
     COMMON_IMAGES = "/common-images",
     GET_FILES = "/image/:filename"
 }
+export declare enum CodesEndPoints {
+    SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery"
+}
 export declare enum SocketActions {
     CONNECTION = "connection",
     RECONNECTION = "reconnect",
@@ -80,7 +83,8 @@ export declare enum RouteNames {
     WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
     EMAIL_CONFIRM = "/confirm-email",
     MAIN = "/app",
-    NOT_FOUND = "/not-found"
+    NOT_FOUND = "/not-found",
+    PASSWORD_RECOVERY = "/password-recovery"
 }
 export interface Message {
     id: string;
@@ -157,6 +161,12 @@ export interface Call {
     type: CallType;
     video: boolean;
     interlocutorSettings?: StreamSettings;
+}
+export interface Codes {
+    passwordRecovery: {
+        email: string;
+        sms: string;
+    };
 }
 export declare enum Status {
     SUCCESS = 200,

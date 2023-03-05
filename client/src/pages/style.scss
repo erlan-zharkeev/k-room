@@ -6,6 +6,8 @@
 
 @import './EmailConfirm/style';
 
+@import './PasswordRecovery/style';
+
 @import './Main/style';
 
 .page {
@@ -17,18 +19,8 @@
 .sign-in,
 .sign-up,
 .wait-confirm-email,
-.confirmed-email {
-  &__logo {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-
-    .logo {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  }
-
+.confirmed-email,
+.password-recovery {
   &__wrapper {
     @include absolute-center;
   }

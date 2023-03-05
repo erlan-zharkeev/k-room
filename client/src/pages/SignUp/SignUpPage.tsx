@@ -11,7 +11,7 @@ import { AppDispatch } from 'src/store'
 import { registration } from 'src/store/authSlice'
 import validateRules from 'src/utils/validateRules'
 import UISwitch from 'ui/UISwitch'
-const Logo = require('src/assets/img/Logo.svg') as string
+import { Logo } from 'src/components/Common/Logo/Logo'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -39,9 +39,7 @@ export const SignUpPage = () => {
 
   return (
     <div className="page sign-up">
-      <div className="sign-in__logo">
-        <img className="logo" src={Logo} alt="logo"></img>
-      </div>
+      <Logo />
       <div className="sign-up__wrapper">
         <div className="sign-up__body">
           <AuthNav />

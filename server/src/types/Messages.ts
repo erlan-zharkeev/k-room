@@ -27,5 +27,7 @@ export enum Messages {
   updateSettings = 'Failed to save user settings',
   userAddedToContacts = 'User added to contacts',
   userRemovedFromContacts = 'User removed from contacts',
-  emailLinkedToAnotherMethod = 'This email is already linked to another login method'
+  emailLinkedToAnotherMethod = 'This email is already linked to another login method',
+  coudntFindEmail = 'Couldn`t find the current email address',
+  checkEmailForCode = 'Check your email, we have sent you a code'
 }

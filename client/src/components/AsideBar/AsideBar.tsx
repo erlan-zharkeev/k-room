@@ -5,8 +5,7 @@ import { AppDispatch } from 'src/store'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import ButtonsListElement from './@types/ButtonsListElement'
 import UIButton from 'ui/UIButton'
-
-const Logo = require('src/assets/img/Logo.svg') as string
+import { Logo } from '../Common/Logo/Logo'
 
 const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -32,9 +31,10 @@ const AsideBar = () => {
   return (
     <div className="aside-bar">
       {viewPort.width >= 769 && (
-        <div className="aside-bar__logo">
-          <img className="logo" src={Logo} alt="logo" />
-        </div>
+        // <div className="aside-bar__logo">
+        //   <img className="logo" src={Logo} alt="logo" />
+        // </div>
+        <Logo />
       )}
       <Radio.Group value={asideTab} onChange={changTab}>
         {buttons.map((button) => {

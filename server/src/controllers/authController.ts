@@ -6,8 +6,9 @@ import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
 import { Messages } from '../types/Messages'
 import { Status, UserCredential } from '../../../types'
-import { uniqueId } from 'lodash'
 import initUserSettings from '../fixtures/initUserSettings'
+import { v4 as uuidv4 } from 'uuid'
+import { initUserCodes } from '../fixtures/initUserCodes'
 const bcrypt = require('bcryptjs')
 
 class AuthController {
@@ -34,7 +35,8 @@ class AuthController {
         email,
         password: hashedPassword,
         socketId: '',
-        settings: initUserSettings
+        settings: initUserSettings,
+        codes: initUserCodes
       })
 
       await user.save()
@@ -127,9 +129,10 @@ class AuthController {
         email,
         avatar,
         providerId,
-        password: uniqueId(),
+        password: uuidv4(),
         socketId: '',
-        settings: initUserSettings
+        settings: initUserSettings,
+        codes: initUserCodes
       })
 
       const newUser = await user.save()

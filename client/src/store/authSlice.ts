@@ -5,8 +5,7 @@ import $api from 'src/services/$api'
 export enum AuthAction {
   REGISTRATION = 'REGISTRATION',
   SEND_EMAIL_CONFIRMATION_LINK = 'SEND_EMAIL_CONFIRMATION_LINK',
-  EMAIL_CONFIRM = 'EMAIL_CONFIRM',
-  UPDATE_TOKENS_PAIR = 'UPDATE_TOKENS_PAIR'
+  EMAIL_CONFIRM = 'EMAIL_CONFIRM'
 }
 
 export const registration = createAsyncThunk(AuthAction.REGISTRATION, async (payload: UserCredential, { dispatch }) => {

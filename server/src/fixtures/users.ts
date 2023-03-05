@@ -3,9 +3,10 @@ import ENV from '../ENV'
 import { UserModel } from './../models/user.model'
 import firstCharUpperCase from '../utils/firstCharUpperCase'
 import initUserSettings from './initUserSettings'
+import { initUserCodes } from './initUserCodes'
 const bcrypt = require('bcryptjs')
 
-const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik'] : ['erlan']
+const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik', 'zharkeev.post'] : ['erlan']
 
 export default async () => {
   const createUser = async (username: string) => {
@@ -18,7 +19,8 @@ export default async () => {
       socketId: '',
       refreshToken: username,
       confirmed: true,
-      settings: initUserSettings
+      settings: initUserSettings,
+      codes: initUserCodes
     })
     await user.save()
   }
