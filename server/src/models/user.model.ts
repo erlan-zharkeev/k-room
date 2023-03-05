@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { User, UserSettings } from '../../../types'
+import { Codes, User, UserSettings } from '../../../types'
 
 export interface IUserSchema extends User {
   socketId: string
@@ -7,10 +7,16 @@ export interface IUserSchema extends User {
   confirmAttempts: number
   refreshToken: string
   settings: UserSettings
+  codes: Codes
   _id: string
 }
 
 export const userSchema = new Schema<IUserSchema>({
+  providerUserId: {
+    type: String,
+    unique: true,
+    required: false
+  },
   socketId: {
     type: String,
     unique: false,
@@ -66,6 +72,10 @@ export const userSchema = new Schema<IUserSchema>({
     required: false
   },
   settings: {
+    type: {},
+    required: false
+  },
+  codes: {
     type: {},
     required: false
   }

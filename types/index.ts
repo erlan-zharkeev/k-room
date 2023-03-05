@@ -15,6 +15,15 @@ export interface EnvVariables {
   IS_DEV: boolean;
   SERVER_ASSETS_PATH: string;
   MAX_RECONNECT_ATTEMPTS: number;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  FIREBASE_API_KEY: string;
+  FIREBASE_AUTH_DOMAIN: string;
+  FIREBASE_PROJECT_ID: string;
+  FIREBASE_STORAGE_BUCKET: string;
+  FIREBASE_MESSAGING_SENDER_ID: string;
+  FIREBASE_APP_ID: string;
+  FIREBASE_MEASUREMENT_ID: string;
 }
 
 export enum AuthEndPoints {
@@ -22,6 +31,8 @@ export enum AuthEndPoints {
   SEND_EMAIL_CONFIRMATION_LINK = "/auth/send-email-confirmation-link",
   SEND_EMAIL_CONFIRMATION = "/auth/send-email-confirmation",
   LOGIN = "/auth/login",
+  GOOGLE_LOGIN = "/auth/google-login",
+  PROVIDER_LOGIN = "/auth/provider-login",
   LOGOUT = "/auth/logout",
   UPDATE_TOKENS_PAIR = "/auth/update-tokens-pair",
 }
@@ -35,6 +46,10 @@ export enum UserEndPoints {
 export enum CommonEndPoints {
   COMMON_IMAGES = "/common-images",
   GET_FILES = "/image/:filename",
+}
+
+export enum CodesEndPoints {
+  SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
 }
 
 export enum SocketActions {
@@ -75,6 +90,7 @@ export enum RouteNames {
   EMAIL_CONFIRM = "/confirm-email",
   MAIN = "/app",
   NOT_FOUND = "/not-found",
+  PASSWORD_RECOVERY = "/password-recovery",
 }
 
 export interface Message {
@@ -111,14 +127,24 @@ export interface UserShort {
 export interface UserCredential extends UserShort {
   email?: string;
   password?: string;
+  avatar?: string;
+  providerId?: string;
 }
 
 export interface User extends UserCredential {
+  providerUserId?: string;
   online: boolean;
   chatRooms: ChatRooms;
   lastSeen?: string;
   contacts?: Array<User>;
-  avatar?: string;
+}
+
+export interface FirebaseUser {
+  firebaseUid: string;
+  username: string;
+  email: string;
+  avatar: string;
+  providerId: string;
 }
 
 export type theme = "dark" | "light";
@@ -155,6 +181,13 @@ export interface Call {
   type: CallType;
   video: boolean;
   interlocutorSettings?: StreamSettings;
+}
+
+export interface Codes {
+  passwordRecovery: {
+    email: string;
+    sms: string;
+  };
 }
 
 export enum Status {

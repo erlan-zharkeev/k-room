@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Status = exports.RouteNames = exports.SocketActions = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
+exports.Status = exports.RouteNames = exports.SocketActions = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/auth/registration";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/auth/send-email-confirmation-link";
     AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/auth/send-email-confirmation";
     AuthEndPoints["LOGIN"] = "/auth/login";
+    AuthEndPoints["GOOGLE_LOGIN"] = "/auth/google-login";
+    AuthEndPoints["PROVIDER_LOGIN"] = "/auth/provider-login";
     AuthEndPoints["LOGOUT"] = "/auth/logout";
     AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/auth/update-tokens-pair";
 })(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
@@ -21,6 +23,10 @@ var CommonEndPoints;
     CommonEndPoints["COMMON_IMAGES"] = "/common-images";
     CommonEndPoints["GET_FILES"] = "/image/:filename";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
+var CodesEndPoints;
+(function (CodesEndPoints) {
+    CodesEndPoints["SEND_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/password-recovery";
+})(CodesEndPoints = exports.CodesEndPoints || (exports.CodesEndPoints = {}));
 var SocketActions;
 (function (SocketActions) {
     SocketActions["CONNECTION"] = "connection";
@@ -60,6 +66,7 @@ var RouteNames;
     RouteNames["EMAIL_CONFIRM"] = "/confirm-email";
     RouteNames["MAIN"] = "/app";
     RouteNames["NOT_FOUND"] = "/not-found";
+    RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var Status;
 (function (Status) {

@@ -93,7 +93,7 @@ const UserDataSettingsPopup = () => {
         <Form.Item className="user-data-settings-popup__controls">
           <UIButton
             text="Update"
-            border="borderless"
+            border="default"
             htmlType="submit"
             color="accent"
             disabled={!isValid}

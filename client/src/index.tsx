@@ -1,3 +1,4 @@
+import 'src/firebase-register/firebase-register.ts'
 import { createRoot } from 'react-dom/client'
 import App from 'src/App'
 import { Provider } from 'react-redux'
