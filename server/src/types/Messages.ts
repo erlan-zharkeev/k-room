@@ -29,5 +29,7 @@ export enum Messages {
   userRemovedFromContacts = 'User removed from contacts',
   emailLinkedToAnotherMethod = 'This email is already linked to another login method',
   coudntFindEmail = 'Couldn`t find the current email address',
-  checkEmailForCode = 'Check your email, we have sent you a code'
+  checkEmailForCode = 'Check your email, we have sent you a code',
+  nextTimeRequestNotPossible = 'The code can be obtained only later',
+  commonServerError = 'Server error, the operation could not be performed. Try later'
 }

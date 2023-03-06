@@ -5,6 +5,7 @@ import upload from './../services/filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'
 import accessTokenValidator from '../middlewares/accessTokenValidator'
 import refreshTokenValidator from '../middlewares/refreshTokenValidator'
+import codesRequestValidator from '../middlewares/codesRequestValidator'
 import cors from 'cors'
 import ENV from '../ENV'
 import commonController from '../controllers/commonController'
@@ -35,6 +36,10 @@ router.post(UserEndPoints.UPDATE_USER_SETTINGS, userController.updateUserSetting
 router.get(CommonEndPoints.COMMON_IMAGES, commonController.imagesHandler)
 router.get(CommonEndPoints.GET_FILES, commonController.showFiles)
 
-router.post(CodesEndPoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY, codesController.emailPasswordRecovery)
+router.post(
+  CodesEndPoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY,
+  codesRequestValidator,
+  codesController.emailPasswordRecovery
+)
 
 export default router

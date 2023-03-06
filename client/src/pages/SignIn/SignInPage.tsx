@@ -12,11 +12,13 @@ import firebase, { ProviderType } from 'src/services/$firebase'
 import { RouteNames } from 'common-types'
 import $router from 'src/services/$router'
 import { Logo } from 'src/components/Common/Logo/Logo'
+import { useNavigate } from 'react-router-dom'
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
   const [fbBtnLoading, setFbBtnLoading] = useState(false)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
   const [form] = Form.useForm()
@@ -43,10 +45,6 @@ export const SignInPage = () => {
     }
     await dispatch(signInWithProvider(credential))
     loaderMethod(false)
-  }
-
-  const initRecovery = () => {
-    $router.push(RouteNames.PASSWORD_RECOVERY)
   }
 
   return (
@@ -90,7 +88,7 @@ export const SignInPage = () => {
                 loading={fbBtnLoading}
               />
               <div className="sign-in__forgot-password">
-                <a className="paragraph-text link" onClick={initRecovery}>
+                <a className="paragraph-text link" onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}>
                   Forgot password?
                 </a>
               </div>

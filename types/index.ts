@@ -24,6 +24,7 @@ export interface EnvVariables {
   FIREBASE_MESSAGING_SENDER_ID: string;
   FIREBASE_APP_ID: string;
   FIREBASE_MEASUREMENT_ID: string;
+  NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
 }
 
 export enum AuthEndPoints {
@@ -188,6 +189,7 @@ export interface Codes {
     email: string;
     sms: string;
   };
+  nextRequestPossibleAt: string;
 }
 
 export enum Status {

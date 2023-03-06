@@ -5,6 +5,7 @@ import notAccuratePinRandomGenerator from '../utils/notAccuratePinRandomGenerato
 import { Messages } from '../types/Messages'
 import { Status } from './../../../types'
 import { sendEmailCodePasswordRecovery } from '../services/mail'
+import { getNextTimeCodeRequest } from '../utils/getNextTimeCodeRequest'
 
 class CodesController {
   async emailPasswordRecovery(req: Request, res: Response) {
@@ -12,15 +13,16 @@ class CodesController {
       const { email } = req.body
 
       const code = notAccuratePinRandomGenerator()
-      const candidate = await UserModel.findOneAndUpdate(
+      const nextTimeRequest = getNextTimeCodeRequest()
+      await UserModel.findOneAndUpdate(
         { email },
-        { $set: { 'codes.passwordRecovery.email': code } },
+        { $set: { 'codes.passwordRecovery.email': code, 'codes.nextRequestPossibleAt': nextTimeRequest } },
         { new: true }
       )
-      if (!candidate) throwError(Status.BAD_REQUEST, res, Messages.coudntFindEmail)
+
       await sendEmailCodePasswordRecovery(email, code)
 
-      return res.json({ message: Messages.checkEmailForCode })
+      return res.json({ message: Messages.checkEmailForCode, nextTimeRequest })
     } catch (e) {
       console.log(e)
       // throwError(Status.BAD_REQUEST, res, Messages.updateSettings)
