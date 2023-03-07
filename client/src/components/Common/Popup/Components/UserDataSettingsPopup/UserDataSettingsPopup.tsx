@@ -91,14 +91,7 @@ const UserDataSettingsPopup = () => {
         </Form.Item>
 
         <Form.Item className="user-data-settings-popup__controls">
-          <UIButton
-            text="Update"
-            border="default"
-            htmlType="submit"
-            color="accent"
-            disabled={!isValid}
-            loading={isLoading}
-          />
+          <UIButton text="Update" border="border-default" htmlType="submit" disabled={!isValid} loading={isLoading} />
         </Form.Item>
       </Form>
     </div>

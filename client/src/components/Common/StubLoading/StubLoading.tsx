@@ -30,8 +30,8 @@ const StubLoading = ({ isLoading }: StubLoadingProps) => {
             <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Try again later</p>
 
             <div className="stub-loading__controls">
-              <UIButton border="default" text="Reconnect" onClick={reconnect} />
-              <UIButton border="default" text="Logout" onClick={exit} />
+              <UIButton border="border-default" text="Reconnect" onClick={reconnect} />
+              <UIButton border="border-default" text="Logout" onClick={exit} />
             </div>
           </div>
         )}

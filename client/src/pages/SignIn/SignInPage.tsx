@@ -72,7 +72,7 @@ export const SignInPage = () => {
               <UIButton
                 iconName="google"
                 text="Sign in with Google"
-                border="default"
+                border="border-default"
                 fill={true}
                 hover="hoverless"
                 onClick={() => providerSignIn('google', setGoogleBtnLoading)}
@@ -82,7 +82,7 @@ export const SignInPage = () => {
                 iconName="facebook"
                 text="Sign in with Facebook"
                 onClick={() => providerSignIn('facebook', setFbBtnLoading)}
-                border="default"
+                border="border-default"
                 fill={true}
                 hover="hoverless"
                 loading={fbBtnLoading}
@@ -97,7 +97,7 @@ export const SignInPage = () => {
             <Form.Item className="sign-in__controls">
               <UIButton
                 text="Sign in"
-                border="default"
+                border="border-default"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}

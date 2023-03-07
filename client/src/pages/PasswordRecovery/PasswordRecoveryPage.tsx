@@ -12,21 +12,40 @@ import getNextReqInterval from 'src/utils/getNextReqInterval'
 import UseCounter from 'src/hooks/useCounter'
 
 export const PasswordRecoveryPage = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isValid, validate] = useValidate()
-  const [form] = Form.useForm()
+  const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
+  const [codeValidationIsLoading, setCodeValidationIsLoading] = useState(false)
+
+  const [isEmailValid, validateEmailConfirm] = useValidate()
+  const [isCodeValid, validateCode] = useValidate()
+
+  const [codeSent, setCodeAsSent] = useState(false)
+
+  const [emailConfirmForm] = Form.useForm()
+  const [codeConfirmForm] = Form.useForm()
   const dispatch = useDispatch<AppDispatch>()
   const [counterValue, setCounterValue, startCounter, stopCounter] = UseCounter(-1)
 
-  const onFinish = async (fields: FormData) => {
+  const onFinishEmailConfirm = async (fields: FormData) => {
     stopCounter()
-    setIsLoading(true)
+    setEmailSendCodeIsLoading(true)
     const response = await dispatch(sendEmailCodePasswordRecovery(fields))
     if (!response) return
+    setCodeAsSent(true)
     const { nextTimeRequest } = response.payload
     setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
     startCounter()
-    setIsLoading(false)
+    setEmailSendCodeIsLoading(false)
+  }
+
+  const onFinishCodeConfirm = async (fields: FormData) => {
+    // stopCounter()
+    // setIsLoading(true)
+    // const response = await dispatch(sendEmailCodePasswordRecovery(fields))
+    // if (!response) return
+    // const { nextTimeRequest } = response.payload
+    // setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
+    // startCounter()
+    // setIsLoading(false)
   }
 
   return (
@@ -34,36 +53,67 @@ export const PasswordRecoveryPage = () => {
       <Logo />
       <div className="password-recovery__wrapper">
         <div className="password-recovery__body">
-          <div className="header-text header-text--md">Password recovery</div>
+          <div className="header-text header-text--md header-text--accent">Password recovery</div>
           <div className="password-recovery__content">
             <Form
+              className="password-recovery__email-confirm"
               name="password-recovery"
               initialValues={{ remember: true }}
-              onFinish={onFinish}
-              form={form}
-              onInput={() => validate(form)}
+              onFinish={onFinishEmailConfirm}
+              form={emailConfirmForm}
+              onInput={() => validateEmailConfirm(emailConfirmForm)}
             >
-              <Form.Item name="email" rules={validateRules.email}>
-                <UIInput placeholder="Enter email address" size="large" autoComplete="on" disabled={isLoading} />
+              <Form.Item name="email" className="password-recovery__email-field" rules={validateRules.email}>
+                <UIInput
+                  placeholder="Enter email address"
+                  size="large"
+                  autoComplete="on"
+                  disabled={emailSendCodeIsLoading}
+                />
               </Form.Item>
 
               {counterValue > 0 && (
-                <span className="paragraph-text paragraph-text--secondary">
+                <span className="paragraph-text paragraph-text--secondary password-recovery__next-request">
                   The next request is possible in {counterValue} sec.
                 </span>
               )}
-
-              <Form.Item className="password-recovery__controls">
+              <Form.Item className="password-recovery__email-submit">
                 <UIButton
+                  fill={true}
                   text="Send code"
-                  border="default"
+                  border="border-default"
                   color="accent"
                   htmlType="submit"
-                  loading={isLoading}
-                  disabled={!isValid || counterValue > 0}
+                  loading={emailSendCodeIsLoading}
+                  disabled={!isEmailValid || counterValue > 0}
                 />
               </Form.Item>
             </Form>
+            {codeSent && (
+              <Form
+                className="password-recovery__code-validation"
+                name="password-recovery"
+                onFinish={onFinishCodeConfirm}
+                form={codeConfirmForm}
+                onInput={() => validateCode(codeConfirmForm)}
+              >
+                <Form.Item name="code" className="password-recovery__code-field" rules={validateRules.emailCode}>
+                  <UIInput placeholder="Enter code" size="large" autoComplete="on" disabled={codeValidationIsLoading} />
+                </Form.Item>
+
+                <Form.Item className="password-recovery__code-submit">
+                  <UIButton
+                    fill={true}
+                    text="Validate"
+                    border="border-default"
+                    color="success"
+                    htmlType="submit"
+                    loading={codeValidationIsLoading}
+                    disabled={!isCodeValid}
+                  />
+                </Form.Item>
+              </Form>
+            )}
           </div>
         </div>
       </div>

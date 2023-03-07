@@ -19,8 +19,7 @@
 .sign-in,
 .sign-up,
 .wait-confirm-email,
-.confirmed-email,
-.password-recovery {
+.confirmed-email {
   &__wrapper {
     @include absolute-center;
   }

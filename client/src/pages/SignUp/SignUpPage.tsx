@@ -75,7 +75,7 @@ export const SignUpPage = () => {
             <Form.Item className="sign-up__controls">
               <UIButton
                 text="Register"
-                border="default"
+                border="border-default"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}
