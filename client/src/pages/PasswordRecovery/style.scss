@@ -2,4 +2,10 @@
   &__content {
     margin-top: $gutter-lg;
   }
+  .ant-form-item {
+    margin-bottom: $gutter-md;
+  }
+  &__controls {
+    margin-top: $gutter-lg;
+  }
 }

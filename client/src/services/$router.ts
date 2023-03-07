@@ -12,5 +12,5 @@ $router.listen(({ action, location }) => {
   if (!isRoutePublic) return
   setTimeout(() => {
     socket.disconnect()
-  }, 0)
+  })
 })

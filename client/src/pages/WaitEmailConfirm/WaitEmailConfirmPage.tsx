@@ -7,8 +7,8 @@ import UIButton from 'ui/UIButton'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import { sendConfirmationLink } from 'src/store/authSlice'
-
-const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000
+import getNextReqInterval from 'src/utils/getNextReqInterval'
+import useCounter from 'src/hooks/useCounter'
 
 export const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
@@ -19,19 +19,23 @@ export const WaitEmailConfirmPage = () => {
   const [email, setEmail] = useState('')
 
   const refTimer = useRef(null)
-  const [nextReqInterval, setNextReqInterval] = useState(1)
+  // const [nextReqInterval, setNextReqInterval] = useState(1)
   const [remainingAttempts, setRemainingAttempts] = useState(0)
 
   const [_, refresh] = useState(0)
 
+  const [counter, setCounter, startCounter, stopCounter] = useCounter(0)
+
   const counterHandler = () => {
     const nextRequestTimestamp = Number(query.get('nextRequestTime'))
-    setNextReqInterval(getNextReqInterval(nextRequestTimestamp))
-    if (refTimer.current) clearInterval(refTimer.current)
-    const id = setInterval(() => {
-      setNextReqInterval(getNextReqInterval(nextRequestTimestamp))
-    }, 1000)
-    refTimer.current = id
+    setCounter(getNextReqInterval(nextRequestTimestamp))
+    startCounter()
+    // setNextReqInterval(getNextReqInterval(nextRequestTimestamp))
+    // if (refTimer.current) clearInterval(refTimer.current)
+    // const id = setInterval(() => {
+    //   setNextReqInterval(getNextReqInterval(nextRequestTimestamp))
+    // }, 1000)
+    // refTimer.current = id
   }
 
   useEffect(() => {
@@ -83,14 +87,20 @@ export const WaitEmailConfirmPage = () => {
           </>
         )}
 
-        {nextReqInterval > 0 && (
+        {counter > 0 && (
           <div className="paragraph-text paragraph-text--secondary">
-            You can send a confirmation email in {nextReqInterval.toFixed()} seconds
+            You can send a confirmation email in {Math.round(counter)} seconds
           </div>
         )}
 
-        {nextReqInterval <= 0 && remainingAttempts > 0 && (
-          <UIButton border="borderless" text="Send confirmation link" onClick={sendLink} loading={isLoading} />
+        {counter <= 0 && remainingAttempts > 0 && (
+          <UIButton
+            border="default"
+            color="accent"
+            text="Send confirmation link"
+            onClick={sendLink}
+            loading={isLoading}
+          />
         )}
       </div>
     </div>

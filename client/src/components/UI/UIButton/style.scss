@@ -1,7 +1,8 @@
 .ui-button {
   @mixin btn-style($color) {
     .ant-btn,
-    .ant-btn:hover {
+    .ant-btn:hover,
+    span {
       color: $color;
       border-color: $color;
     }

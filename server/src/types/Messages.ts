@@ -31,5 +31,6 @@ export enum Messages {
   coudntFindEmail = 'Couldn`t find the current email address',
   checkEmailForCode = 'Check your email, we have sent you a code',
   nextTimeRequestNotPossible = 'The code can be obtained only later',
-  commonServerError = 'Server error, the operation could not be performed. Try later'
+  commonServerError = 'Server error, the operation could not be performed. Try later',
+  codeSendFailed = 'Code send failed'
 }

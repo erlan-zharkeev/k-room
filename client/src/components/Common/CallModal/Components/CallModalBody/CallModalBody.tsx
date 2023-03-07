@@ -20,36 +20,39 @@ import { socket } from 'src/socket/socket'
 import call from 'src/services/$call'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
+import UseCounter from 'src/hooks/useCounter'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
-  const [length, setLength] = useState(0)
+  const [counterValue, _, startCounter, stopCounter] = UseCounter(0)
 
-  let timerId: string | number | NodeJS.Timeout = null
+  // const [length, setLength] = useState(0)
 
-  const lengthCounter = () => {
-    setLength((length) => {
-      return length + 1
-    })
-  }
+  // let timerId: string | number | NodeJS.Timeout = null
 
-  const startTimer = () => {
-    if (timerId) clearTimeout(timerId)
-    timerId = setInterval(lengthCounter, 1000)
-  }
+  // const lengthCounter = () => {
+  //   setLength((length) => {
+  //     return length + 1
+  //   })
+  // }
 
-  const stopTimer = () => {
-    setLength(0)
-    return clearTimeout(timerId)
-  }
+  // const startTimer = () => {
+  //   if (timerId) clearTimeout(timerId)
+  //   timerId = setInterval(lengthCounter, 1000)
+  // }
+
+  // const stopTimer = () => {
+  //   setLength(0)
+  //   return clearTimeout(timerId)
+  // }
 
   useEffect(() => {
     socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
       dispatch(setCallStartedAt(timeStamp))
-      stopTimer()
-      startTimer()
+      stopCounter()
+      startCounter()
     })
     socket.on(SocketActions.CALL_USER, (data) => {
       dispatch(setShowCallModal(data))
@@ -66,7 +69,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   }, [])
 
   const endCall = () => {
-    stopTimer()
+    stopCounter()
     socket.emit(SocketActions.CALL_ENDED, call.callerId ?? call.callToId)
     call.leaveCall()
   }
@@ -152,7 +155,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
           <div className="call-modal__controls">
             {currentCall.status === 'in-progress' && (
               <div className="call-modal__length header-text header-text--sm">
-                {moment.utc(length * 1000).format('HH:mm:ss')}
+                {moment.utc(counterValue * 1000).format('HH:mm:ss')}
               </div>
             )}
             <div className="call-modal__controls-elements">

@@ -25,7 +25,7 @@ class CodesController {
       return res.json({ message: Messages.checkEmailForCode, nextTimeRequest })
     } catch (e) {
       console.log(e)
-      // throwError(Status.BAD_REQUEST, res, Messages.updateSettings)
+      throwError(Status.BAD_REQUEST, res, Messages.codeSendFailed)
     }
   }
 }

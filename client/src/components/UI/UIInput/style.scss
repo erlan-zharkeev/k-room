@@ -10,6 +10,11 @@
       max-height: 36px;
     }
   }
+
+  .ant-input[disabled] {
+    opacity: 0.4;
+  }
+
   .ant-input {
     transition: background 0s;
 

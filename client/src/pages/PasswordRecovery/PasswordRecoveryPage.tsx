@@ -8,16 +8,24 @@ import useValidate from 'src/hooks/useValidate'
 import { sendEmailCodePasswordRecovery } from 'src/services/api-methods/sendCodes'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
+import getNextReqInterval from 'src/utils/getNextReqInterval'
+import UseCounter from 'src/hooks/useCounter'
 
 export const PasswordRecoveryPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isValid, validate] = useValidate()
   const [form] = Form.useForm()
   const dispatch = useDispatch<AppDispatch>()
+  const [counterValue, setCounterValue, startCounter, stopCounter] = UseCounter(-1)
 
   const onFinish = async (fields: FormData) => {
+    stopCounter()
     setIsLoading(true)
-    await dispatch(sendEmailCodePasswordRecovery(fields))
+    const response = await dispatch(sendEmailCodePasswordRecovery(fields))
+    if (!response) return
+    const { nextTimeRequest } = response.payload
+    setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
+    startCounter()
     setIsLoading(false)
   }
 
@@ -36,17 +44,23 @@ export const PasswordRecoveryPage = () => {
               onInput={() => validate(form)}
             >
               <Form.Item name="email" rules={validateRules.email}>
-                <UIInput placeholder="Enter email address" size="large" autoComplete="on" />
+                <UIInput placeholder="Enter email address" size="large" autoComplete="on" disabled={isLoading} />
               </Form.Item>
 
-              <Form.Item className="sign-in__controls">
+              {counterValue > 0 && (
+                <span className="paragraph-text paragraph-text--secondary">
+                  The next request is possible in {counterValue} sec.
+                </span>
+              )}
+
+              <Form.Item className="password-recovery__controls">
                 <UIButton
                   text="Send code"
                   border="default"
                   color="accent"
                   htmlType="submit"
                   loading={isLoading}
-                  disabled={!isValid}
+                  disabled={!isValid || counterValue > 0}
                 />
               </Form.Item>
             </Form>
