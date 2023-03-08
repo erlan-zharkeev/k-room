@@ -51,6 +51,7 @@ export enum CommonEndPoints {
 
 export enum CodesEndPoints {
   SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
+  VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery",
 }
 
 export enum SocketActions {
@@ -92,6 +93,7 @@ export enum RouteNames {
   MAIN = "/app",
   NOT_FOUND = "/not-found",
   PASSWORD_RECOVERY = "/password-recovery",
+  CREATE_NEW_PASSWORD = "/create-new-password",
 }
 
 export interface Message {
@@ -186,10 +188,16 @@ export interface Call {
 
 export interface Codes {
   passwordRecovery: {
+    query: string;
     email: string;
     sms: string;
   };
   nextRequestPossibleAt: string;
+}
+
+export interface CodeValidationPayload {
+  email: string;
+  code: string;
 }
 
 export enum Status {

@@ -46,7 +46,8 @@ export declare enum CommonEndPoints {
     GET_FILES = "/image/:filename"
 }
 export declare enum CodesEndPoints {
-    SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery"
+    SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
+    VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery"
 }
 export declare enum SocketActions {
     CONNECTION = "connection",
@@ -85,7 +86,8 @@ export declare enum RouteNames {
     EMAIL_CONFIRM = "/confirm-email",
     MAIN = "/app",
     NOT_FOUND = "/not-found",
-    PASSWORD_RECOVERY = "/password-recovery"
+    PASSWORD_RECOVERY = "/password-recovery",
+    CREATE_NEW_PASSWORD = "/create-new-password"
 }
 export interface Message {
     id: string;
@@ -165,10 +167,15 @@ export interface Call {
 }
 export interface Codes {
     passwordRecovery: {
+        query: string;
         email: string;
         sms: string;
     };
     nextRequestPossibleAt: string;
+}
+export interface CodeValidationPayload {
+    email: string;
+    code: string;
 }
 export declare enum Status {
     SUCCESS = 200,

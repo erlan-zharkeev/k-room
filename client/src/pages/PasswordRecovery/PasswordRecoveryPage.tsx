@@ -5,11 +5,13 @@ import { Logo } from 'src/components/Common/Logo/Logo'
 import UIButton from 'src/components/UI/UIButton'
 import UIInput from 'src/components/UI/UIInput'
 import useValidate from 'src/hooks/useValidate'
-import { sendEmailCodePasswordRecovery } from 'src/services/api-methods/sendCodes'
+import { sendEmailCodePasswordRecovery, validateEmailCodePasswordRecovery } from 'src/services/api-methods/sendCodes'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
 import getNextReqInterval from 'src/utils/getNextReqInterval'
 import UseCounter from 'src/hooks/useCounter'
+import { CodeValidationPayload, RouteNames } from 'common-types'
+import { useNavigate } from 'react-router-dom'
 
 export const PasswordRecoveryPage = () => {
   const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
@@ -25,6 +27,8 @@ export const PasswordRecoveryPage = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [counterValue, setCounterValue, startCounter, stopCounter] = UseCounter(-1)
 
+  const navigate = useNavigate()
+
   const onFinishEmailConfirm = async (fields: FormData) => {
     stopCounter()
     setEmailSendCodeIsLoading(true)
@@ -37,15 +41,17 @@ export const PasswordRecoveryPage = () => {
     setEmailSendCodeIsLoading(false)
   }
 
-  const onFinishCodeConfirm = async (fields: FormData) => {
-    // stopCounter()
-    // setIsLoading(true)
-    // const response = await dispatch(sendEmailCodePasswordRecovery(fields))
-    // if (!response) return
-    // const { nextTimeRequest } = response.payload
-    // setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
-    // startCounter()
-    // setIsLoading(false)
+  const onFinishCodeConfirm = async (fields: { code: string }) => {
+    setCodeValidationIsLoading(true)
+    const payload: CodeValidationPayload = {
+      email: emailConfirmForm.getFieldValue('email'),
+      code: fields.code
+    }
+    const response = await dispatch(validateEmailCodePasswordRecovery(payload))
+    if (!response) return
+    const { query } = response.payload
+    setCodeValidationIsLoading(false)
+    navigate({ pathname: RouteNames.CREATE_NEW_PASSWORD, search: `?password-restore=${query}` })
   }
 
   return (

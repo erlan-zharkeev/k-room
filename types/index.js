@@ -26,6 +26,7 @@ var CommonEndPoints;
 var CodesEndPoints;
 (function (CodesEndPoints) {
     CodesEndPoints["SEND_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/password-recovery";
+    CodesEndPoints["VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/validate-email-code-password-recovery";
 })(CodesEndPoints = exports.CodesEndPoints || (exports.CodesEndPoints = {}));
 var SocketActions;
 (function (SocketActions) {
@@ -67,6 +68,7 @@ var RouteNames;
     RouteNames["MAIN"] = "/app";
     RouteNames["NOT_FOUND"] = "/not-found";
     RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
+    RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var Status;
 (function (Status) {

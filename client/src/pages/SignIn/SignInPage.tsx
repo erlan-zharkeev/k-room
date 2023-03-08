@@ -10,7 +10,6 @@ import { login, signInWithProvider } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
 import firebase, { ProviderType } from 'src/services/$firebase'
 import { RouteNames } from 'common-types'
-import $router from 'src/services/$router'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import { useNavigate } from 'react-router-dom'
 

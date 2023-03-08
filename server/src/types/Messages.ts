@@ -32,5 +32,7 @@ export enum Messages {
   checkEmailForCode = 'Check your email, we have sent you a code',
   nextTimeRequestNotPossible = 'The code can be obtained only later',
   commonServerError = 'Server error, the operation could not be performed. Try later',
-  codeSendFailed = 'Code send failed'
+  codeSendFailed = 'Code send failed',
+  invalidConfirmCode = 'Invalid confirmation code',
+  success = 'Success'
 }

@@ -5,6 +5,7 @@ import WaitConfirmPage from 'src/pages/WaitEmailConfirm/WaitEmailConfirmPage'
 import ConfirmedPage from 'src/pages/EmailConfirm/EmailConfirmPage'
 import NotFoundPage from 'src/pages/NotFound/NotFoundPage'
 import PasswordRecoveryPage from 'src/pages/PasswordRecovery/PasswordRecoveryPage'
+import CreateNewPassword from 'src/pages/CreateNewPassword/CreateNewPassword'
 
 import { IRoute } from './@types/IRoute'
 import { RouteNames } from 'common-types'
@@ -21,6 +22,10 @@ const commonRoutes = [
   {
     path: RouteNames.PASSWORD_RECOVERY,
     component: PasswordRecoveryPage
+  },
+  {
+    path: RouteNames.CREATE_NEW_PASSWORD,
+    component: CreateNewPassword
   }
 ]
 

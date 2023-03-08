@@ -41,5 +41,6 @@ router.post(
   codesRequestValidator,
   codesController.emailPasswordRecovery
 )
+router.post(CodesEndPoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY, codesController.validateEmailCodePasswordRecovery)
 
 export default router
