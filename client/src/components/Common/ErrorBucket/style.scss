@@ -1,0 +1,25 @@
+.error-bucket {
+  border: solid 1px var(--error);
+  border-radius: $radius-sm;
+  color: var(--secondary-text);
+  background-color: var(--error-transparent);
+  padding: $gutter-md;
+  margin-bottom: $gutter-lg;
+  &__el {
+    position: relative;
+    &:before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      position: absolute;
+      top: 10px;
+      left: 2px;
+      background-color: var(--secondary-text);
+      border-radius: 50%;
+    }
+    span {
+      margin-left: $gutter-lg;
+      margin-bottom: 2px;
+    }
+  }
+}

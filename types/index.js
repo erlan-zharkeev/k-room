@@ -22,6 +22,7 @@ var CommonEndPoints;
 (function (CommonEndPoints) {
     CommonEndPoints["COMMON_IMAGES"] = "/common-images";
     CommonEndPoints["GET_FILES"] = "/image/:filename";
+    CommonEndPoints["RESET_PASSWORD"] = "/reset-password";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var CodesEndPoints;
 (function (CodesEndPoints) {

@@ -34,5 +34,7 @@ export enum Messages {
   commonServerError = 'Server error, the operation could not be performed. Try later',
   codeSendFailed = 'Code send failed',
   invalidConfirmCode = 'Invalid confirmation code',
-  success = 'Success'
+  success = 'Success',
+  passwordResetSuccess = 'Password changed successfully',
+  failedToResetPassword = 'Failed to change password'
 }

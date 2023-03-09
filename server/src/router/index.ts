@@ -35,6 +35,7 @@ router.post(UserEndPoints.UPDATE_USER_SETTINGS, userController.updateUserSetting
 
 router.get(CommonEndPoints.COMMON_IMAGES, commonController.imagesHandler)
 router.get(CommonEndPoints.GET_FILES, commonController.showFiles)
+router.post(CommonEndPoints.RESET_PASSWORD, commonController.resetPassword)
 
 router.post(
   CodesEndPoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY,

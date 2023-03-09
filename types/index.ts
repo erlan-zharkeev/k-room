@@ -47,6 +47,7 @@ export enum UserEndPoints {
 export enum CommonEndPoints {
   COMMON_IMAGES = "/common-images",
   GET_FILES = "/image/:filename",
+  RESET_PASSWORD = "/reset-password",
 }
 
 export enum CodesEndPoints {

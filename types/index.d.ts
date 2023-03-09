@@ -43,7 +43,8 @@ export declare enum UserEndPoints {
 }
 export declare enum CommonEndPoints {
     COMMON_IMAGES = "/common-images",
-    GET_FILES = "/image/:filename"
+    GET_FILES = "/image/:filename",
+    RESET_PASSWORD = "/reset-password"
 }
 export declare enum CodesEndPoints {
     SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",

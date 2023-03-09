@@ -1,11 +1,15 @@
 import { Form } from 'antd'
-import { RouteNames } from 'common-types'
+import { RouteNames, Status } from 'common-types'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import ErrorBucket from 'src/components/Common/ErrorBucket/ErrorBucket'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import UIButton from 'src/components/UI/UIButton'
 import UIInput from 'src/components/UI/UIInput'
 import useValidate from 'src/hooks/useValidate'
+import { resetPassword } from 'src/services/api-methods/common'
+import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
 
 export const CreateNewPassword = () => {
@@ -14,17 +18,39 @@ export const CreateNewPassword = () => {
   const [isValid, validate] = useValidate()
   const [searchParams] = useSearchParams()
   const [passwordRestoreQuery, setPasswordRestoreQuery] = useState('')
+  const [additionalErrors, setAdditionalErrors] = useState([])
+  const [isPasswordEqual, setIsPasswordEqual] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    setPasswordRestoreQuery(searchParams.get('password-restore'))
+    const passwordRestoreQuery = searchParams.get('password-restore')
     if (!passwordRestoreQuery) navigate(RouteNames.MAIN)
+    setPasswordRestoreQuery(passwordRestoreQuery)
   })
 
-  const onFinish = () => {
+  const onFinish = async () => {
     setIsLoading(true)
-    //
+    const payload = {
+      password: form.getFieldsValue()['password-first'],
+      query: passwordRestoreQuery
+    }
+    const response = await dispatch(resetPassword(payload))
     setIsLoading(false)
+    const { status } = response.payload
+    if (status === Status.SUCCESS) navigate(RouteNames.MAIN)
+  }
+
+  const formChangeHandler = () => {
+    setIsPasswordEqual(false)
+    validate(form)
+    if (!isValid) return
+    const passwordFirst = form.getFieldsValue()['password-first']
+    const passwordSecond = form.getFieldsValue()['password-second']
+    const isFieldsEqual = passwordFirst === passwordSecond
+    setIsPasswordEqual(isFieldsEqual)
+    const errors = isFieldsEqual ? [] : ['Password don`t match']
+    setAdditionalErrors(errors)
   }
 
   return (
@@ -38,15 +64,17 @@ export const CreateNewPassword = () => {
             initialValues={{ remember: true }}
             onFinish={onFinish}
             form={form}
-            onInput={() => validate(form)}
+            onChange={formChangeHandler}
           >
             <Form.Item name="password-first" rules={validateRules.password}>
-              <UIInput placeholder="Password" size="large" />
+              <UIInput placeholder="Password" type="password" size="large" />
             </Form.Item>
 
             <Form.Item name="password-second" rules={validateRules.password}>
               <UIInput placeholder="Confirm password" type="password" size="large" />
             </Form.Item>
+
+            <ErrorBucket errors={additionalErrors} />
 
             <Form.Item className="sign-in__controls">
               <UIButton
@@ -55,7 +83,7 @@ export const CreateNewPassword = () => {
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}
-                disabled={!isValid}
+                disabled={!isValid || !isPasswordEqual}
               />
             </Form.Item>
           </Form>

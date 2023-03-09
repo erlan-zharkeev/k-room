@@ -36,7 +36,10 @@ class CodesController {
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
       if (!isCodeEqual) throwError(Status.BAD_REQUEST, res, Messages.invalidConfirmCode)
       const query = uuidv4()
-      user?.updateOne({ $set: { 'codes.passwordRecovery.query': query } })
+      const nextTimeRequest = getNextTimeCodeRequest()
+      await user?.updateOne({
+        $set: { 'codes.passwordRecovery.query': query, 'codes.nextRequestPossibleAt': nextTimeRequest }
+      })
       return res.json({ message: Messages.success, query })
     } catch (e: any) {
       throwError(Status.BAD_REQUEST, res, Messages.commonServerError)
