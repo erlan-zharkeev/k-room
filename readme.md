@@ -105,6 +105,8 @@
 - lazy load сообщений
 - privacy policy create and to facebook dev
 - добавить настройки громкости и чекаем видео
+- Инвайты и не допускать сообщения без добаления в контакты
+
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 <!-- docker-compose --env-file .env.production up -d webserver -->
