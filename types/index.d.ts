@@ -25,6 +25,7 @@ export interface EnvVariables {
     FIREBASE_APP_ID: string;
     FIREBASE_MEASUREMENT_ID: string;
     NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
+    PASSWORD_RECOVERY_LINK_LIFE: number;
 }
 export declare enum AuthEndPoints {
     REGISTRATION = "/auth/registration",
@@ -39,12 +40,12 @@ export declare enum AuthEndPoints {
 export declare enum UserEndPoints {
     GET_USER_DATA = "/auth/get-user-data",
     UPDATE_USER_DATA = "/auth/user-data/update",
-    UPDATE_USER_SETTINGS = "/user/update-user-settings"
+    UPDATE_USER_SETTINGS = "/user/update-user-settings",
+    RESET_PASSWORD = "/user/reset-password"
 }
 export declare enum CommonEndPoints {
     COMMON_IMAGES = "/common-images",
-    GET_FILES = "/image/:filename",
-    RESET_PASSWORD = "/reset-password"
+    GET_FILES = "/image/:filename"
 }
 export declare enum CodesEndPoints {
     SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
@@ -120,7 +121,7 @@ export interface UserCredential extends UserShort {
     email?: string;
     password?: string;
     avatar?: string;
-    providerId?: string;
+    providerName?: string;
 }
 export interface User extends UserCredential {
     providerUserId?: string;
@@ -168,7 +169,10 @@ export interface Call {
 }
 export interface Codes {
     passwordRecovery: {
-        query: string;
+        query: {
+            value: string;
+            expiresIn: string;
+        };
         email: string;
         sms: string;
     };

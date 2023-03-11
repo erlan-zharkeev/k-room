@@ -17,12 +17,12 @@ var UserEndPoints;
     UserEndPoints["GET_USER_DATA"] = "/auth/get-user-data";
     UserEndPoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
     UserEndPoints["UPDATE_USER_SETTINGS"] = "/user/update-user-settings";
+    UserEndPoints["RESET_PASSWORD"] = "/user/reset-password";
 })(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
 var CommonEndPoints;
 (function (CommonEndPoints) {
     CommonEndPoints["COMMON_IMAGES"] = "/common-images";
     CommonEndPoints["GET_FILES"] = "/image/:filename";
-    CommonEndPoints["RESET_PASSWORD"] = "/reset-password";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var CodesEndPoints;
 (function (CodesEndPoints) {

@@ -25,6 +25,7 @@ export interface EnvVariables {
   FIREBASE_APP_ID: string;
   FIREBASE_MEASUREMENT_ID: string;
   NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
+  PASSWORD_RECOVERY_LINK_LIFE: number;
 }
 
 export enum AuthEndPoints {
@@ -42,12 +43,12 @@ export enum UserEndPoints {
   GET_USER_DATA = "/auth/get-user-data",
   UPDATE_USER_DATA = "/auth/user-data/update",
   UPDATE_USER_SETTINGS = "/user/update-user-settings",
+  RESET_PASSWORD = "/user/reset-password",
 }
 
 export enum CommonEndPoints {
   COMMON_IMAGES = "/common-images",
   GET_FILES = "/image/:filename",
-  RESET_PASSWORD = "/reset-password",
 }
 
 export enum CodesEndPoints {
@@ -132,7 +133,7 @@ export interface UserCredential extends UserShort {
   email?: string;
   password?: string;
   avatar?: string;
-  providerId?: string;
+  providerName?: string;
 }
 
 export interface User extends UserCredential {
@@ -189,7 +190,10 @@ export interface Call {
 
 export interface Codes {
   passwordRecovery: {
-    query: string;
+    query: {
+      value: string;
+      expiresIn: string;
+    };
     email: string;
     sms: string;
   };

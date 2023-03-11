@@ -30,12 +30,7 @@ const AsideBar = () => {
 
   return (
     <div className="aside-bar">
-      {viewPort.width >= 769 && (
-        // <div className="aside-bar__logo">
-        //   <img className="logo" src={Logo} alt="logo" />
-        // </div>
-        <Logo />
-      )}
+      {viewPort.width >= 769 && <Logo />}
       <Radio.Group value={asideTab} onChange={changTab}>
         {buttons.map((button) => {
           return (

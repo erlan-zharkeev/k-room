@@ -2,14 +2,10 @@ import { Request, Response } from 'express'
 import mongoose from 'mongoose'
 import { Status } from '../../../types'
 import ENV from '../ENV'
-import { UserModel } from '../models/user.model'
 import { Messages } from '../types/Messages'
 import throwError from '../utils/throwError'
 import db from './../services/database'
-const bcrypt = require('bcryptjs')
-
 const fs = require('fs')
-
 const Grid = require('gridfs-stream')
 
 const connection = db.connection
@@ -48,26 +44,6 @@ class CommonController {
         readstream.pipe(res)
       } else throwError(Status.NOT_FOUND, res, Messages.notImage)
     })
-  }
-
-  async resetPassword(req: Request, res: Response) {
-    try {
-      const { query, password } = req.body
-      const hashedPassword = await bcrypt.hash(password, 6)
-      if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
-
-      const user = await UserModel.findOne({ 'codes.passwordRecovery.query': query })
-      if (!user) throwError(Status.BAD_REQUEST, res, Messages.failedToResetPassword)
-
-      await user?.updateOne({
-        $set: { 'codes.passwordRecovery.query': null, 'codes.nextRequestPossibleAt': null, password: hashedPassword }
-      })
-
-      return res.json({ message: Messages.passwordResetSuccess })
-    } catch (e: any) {
-      console.log(e)
-      return throwError(Status.BAD_REQUEST, res, Messages.commonServerError)
-    }
   }
 }
 

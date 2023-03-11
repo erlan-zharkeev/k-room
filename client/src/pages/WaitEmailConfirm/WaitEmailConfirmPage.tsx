@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import UIButton from 'ui/UIButton'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
-import { sendConfirmationLink } from 'src/store/authSlice'
 import getNextReqInterval from 'src/utils/getNextReqInterval'
 import useCounter from 'src/hooks/useCounter'
+import { sendConfirmationLink } from 'src/services/api-methods/auth'
+import { AsyncThunkResponseWrapper } from 'src/@types'
 
 export const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
@@ -38,9 +39,9 @@ export const WaitEmailConfirmPage = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = await dispatch(sendConfirmationLink(email))
+    const response = (await dispatch(sendConfirmationLink(email))) as AsyncThunkResponseWrapper
     setIsLoading(false)
-    const { data, status } = response.payload as AxiosResponse
+    const { data, status } = response.payload
     if (status !== Status.SUCCESS) return
     const updatedPath = `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })

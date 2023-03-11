@@ -1,4 +1,4 @@
-import { updateUserSettings } from 'src/store/settingsSlice'
+import apiMethods from 'src/services/api-methods'
 
 export const changeSettingsHandler = (action: any, store: any, dispatch: any) => {
   const isChangeSettingAction = action.type.includes('settings/') && action.type !== 'settings/updateSettings'
@@ -30,7 +30,7 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
       default:
         break
     }
-    dispatch(updateUserSettings({ userId, type, value: convertedValue }))
+    dispatch(apiMethods.user.updateUserSettings({ userId, type, value: convertedValue }))
   }
 }
 

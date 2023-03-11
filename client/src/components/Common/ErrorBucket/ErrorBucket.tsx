@@ -6,7 +6,7 @@ export const ErrorBucket = ({ errors }: ErrorBucketProps) => {
       <div className="error-bucket">
         {errors &&
           errors.map((error: string) => (
-            <p className="error-bucket__el">
+            <p className="error-bucket__el" key={error}>
               <span>{error}</span>
             </p>
           ))}

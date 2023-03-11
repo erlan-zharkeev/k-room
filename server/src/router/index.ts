@@ -32,10 +32,10 @@ router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION, authController.confirmEmail)
 router.get(UserEndPoints.GET_USER_DATA, accessTokenValidator, userController.getUserData)
 router.post(UserEndPoints.UPDATE_USER_DATA, upload.single('file'), userController.updateUserData)
 router.post(UserEndPoints.UPDATE_USER_SETTINGS, userController.updateUserSettings)
+router.post(UserEndPoints.RESET_PASSWORD, userController.resetPassword)
 
 router.get(CommonEndPoints.COMMON_IMAGES, commonController.imagesHandler)
 router.get(CommonEndPoints.GET_FILES, commonController.showFiles)
-router.post(CommonEndPoints.RESET_PASSWORD, commonController.resetPassword)
 
 router.post(
   CodesEndPoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY,

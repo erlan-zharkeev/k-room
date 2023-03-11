@@ -17,7 +17,7 @@ import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import { SocketActions } from 'common-types'
 import { socket } from 'src/socket/socket'
-import call from 'src/services/$call'
+import $call from 'src/services/$call'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
 import UseCounter from 'src/hooks/useCounter'
@@ -28,26 +28,6 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const [counterValue, _, startCounter, stopCounter] = UseCounter(0)
 
-  // const [length, setLength] = useState(0)
-
-  // let timerId: string | number | NodeJS.Timeout = null
-
-  // const lengthCounter = () => {
-  //   setLength((length) => {
-  //     return length + 1
-  //   })
-  // }
-
-  // const startTimer = () => {
-  //   if (timerId) clearTimeout(timerId)
-  //   timerId = setInterval(lengthCounter, 1000)
-  // }
-
-  // const stopTimer = () => {
-  //   setLength(0)
-  //   return clearTimeout(timerId)
-  // }
-
   useEffect(() => {
     socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
       dispatch(setCallStartedAt(timeStamp))
@@ -57,11 +37,11 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     socket.on(SocketActions.CALL_USER, (data) => {
       dispatch(setShowCallModal(data))
       const { from, signal, settings } = data
-      call.calling(from, signal)
+      $call.calling(from, signal)
       dispatch(updateInterlocutorSettings(settings))
     })
     socket.on(SocketActions.CALL_ENDED, () => {
-      call.leaveCall()
+      $call.leaveCall()
     })
     socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
       dispatch(updateInterlocutorSettings(data))
@@ -70,25 +50,25 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const endCall = () => {
     stopCounter()
-    socket.emit(SocketActions.CALL_ENDED, call.callerId ?? call.callToId)
-    call.leaveCall()
+    socket.emit(SocketActions.CALL_ENDED, $call.callerId ?? $call.callToId)
+    $call.leaveCall()
   }
 
   const answerCall = async () => {
     setIsAnswerLoading(true)
-    const gotStream = await call.setStream()
+    const gotStream = await $call.setStream()
     setIsAnswerLoading(false)
-    if (gotStream) call.answerCall()
+    if (gotStream) $call.answerCall()
   }
 
   const toggleAudio = () => {
     dispatch(toggleCallAudio())
-    call.toggleSetting('audio')
+    $call.toggleSetting('audio')
   }
 
   const toggleVideo = async () => {
     dispatch(toggleCallVideo())
-    call.toggleSetting('video')
+    $call.toggleSetting('video')
   }
 
   const minifyModal = () => {

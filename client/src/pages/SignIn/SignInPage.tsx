@@ -6,12 +6,14 @@ import UIButton from 'ui/UIButton'
 import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { login, signInWithProvider } from 'src/store/userSlice'
+import { commonSetUserDataHandler } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
-import firebase, { ProviderType } from 'src/services/$firebase'
-import { RouteNames } from 'common-types'
+import $firebase, { ProviderType } from 'src/services/$firebase'
+import { RouteNames, UserCredential } from 'common-types'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import { useNavigate } from 'react-router-dom'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import apiMethods from 'src/services/api-methods'
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -23,15 +25,18 @@ export const SignInPage = () => {
   const [form] = Form.useForm()
 
   const [isValid, validate] = useValidate()
-  const onFinish = async (fields: FormData) => {
+  const onFinish = async (fields: UserCredential) => {
     setIsLoading(true)
-    await dispatch(login(fields as any))
+    const response = (await dispatch(apiMethods.auth.login(fields))) as AsyncThunkResponseWrapper
+    const { userData, settings } = response.payload.data
+    commonSetUserDataHandler(dispatch, { userData, settings })
+
     setIsLoading(false)
   }
 
   const providerSignIn = async (providerName: ProviderType, loaderMethod: (value: boolean) => void) => {
     loaderMethod(true)
-    const result = await firebase.signIn(providerName)
+    const result = await $firebase.signIn(providerName)
     if (!result) return loaderMethod(false)
     const { displayName, email, photoURL, uid } = result.user
     const { providerId } = result
@@ -40,10 +45,12 @@ export const SignInPage = () => {
       username: displayName,
       email,
       avatar: photoURL,
-      providerId
+      providerName: providerId
     }
-    await dispatch(signInWithProvider(credential))
+    const response = (await dispatch(apiMethods.auth.signInWithProvider(credential))) as AsyncThunkResponseWrapper
     loaderMethod(false)
+    const { userData, settings } = response.payload.data
+    commonSetUserDataHandler(dispatch, { userData, settings })
   }
 
   return (

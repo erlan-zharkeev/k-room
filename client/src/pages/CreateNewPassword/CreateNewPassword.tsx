@@ -3,12 +3,13 @@ import { RouteNames, Status } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { AsyncThunkResponseWrapper } from 'src/@types'
 import ErrorBucket from 'src/components/Common/ErrorBucket/ErrorBucket'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import UIButton from 'src/components/UI/UIButton'
 import UIInput from 'src/components/UI/UIInput'
 import useValidate from 'src/hooks/useValidate'
-import { resetPassword } from 'src/services/api-methods/common'
+import apiMethods from 'src/services/api-methods'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
 
@@ -24,7 +25,7 @@ export const CreateNewPassword = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    const passwordRestoreQuery = searchParams.get('password-restore')
+    const passwordRestoreQuery = searchParams.get('password-recovery')
     if (!passwordRestoreQuery) navigate(RouteNames.MAIN)
     setPasswordRestoreQuery(passwordRestoreQuery)
   })
@@ -35,10 +36,10 @@ export const CreateNewPassword = () => {
       password: form.getFieldsValue()['password-first'],
       query: passwordRestoreQuery
     }
-    const response = await dispatch(resetPassword(payload))
+    const response = (await dispatch(apiMethods.user.resetPassword(payload))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     const { status } = response.payload
-    if (status === Status.SUCCESS) navigate(RouteNames.MAIN)
+    if (status === Status.SUCCESS) navigate(RouteNames.SIGN_IN)
   }
 
   const formChangeHandler = () => {

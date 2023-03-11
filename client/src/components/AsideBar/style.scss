@@ -17,9 +17,10 @@
     margin-top: $gutter-lg;
   }
 
-  &__logo {
-    width: 2rem;
-    height: 2rem;
+  .logo {
+    position: relative;
+    top: 0;
+    left: 0;
   }
 
   .ant-radio-group {

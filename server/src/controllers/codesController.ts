@@ -7,6 +7,7 @@ import { Status } from './../../../types'
 import { sendEmailCodePasswordRecovery } from '../services/mail'
 import { getNextTimeCodeRequest } from '../utils/getNextTimeCodeRequest'
 import { v4 as uuidv4 } from 'uuid'
+import ENV from '../ENV'
 
 class CodesController {
   async emailPasswordRecovery(req: Request, res: Response) {
@@ -14,7 +15,7 @@ class CodesController {
       const { email } = req.body
 
       const code = notAccuratePinRandomGenerator()
-      const nextTimeRequest = getNextTimeCodeRequest()
+      const nextTimeRequest = getNextTimeCodeRequest(ENV.NEXT_CODE_REQUEST_INTERVAL_SECONDS)
       await UserModel.findOneAndUpdate(
         { email },
         { $set: { 'codes.passwordRecovery.email': code, 'codes.nextRequestPossibleAt': nextTimeRequest } },
@@ -35,12 +36,14 @@ class CodesController {
       const user = await UserModel.findOne({ email })
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
       if (!isCodeEqual) throwError(Status.BAD_REQUEST, res, Messages.invalidConfirmCode)
-      const query = uuidv4()
-      const nextTimeRequest = getNextTimeCodeRequest()
+      const passwordResetQuery = uuidv4()
       await user?.updateOne({
-        $set: { 'codes.passwordRecovery.query': query, 'codes.nextRequestPossibleAt': nextTimeRequest }
+        $set: {
+          'codes.passwordRecovery.query.value': passwordResetQuery,
+          'codes.passwordRecovery.query.expiresIn': getNextTimeCodeRequest(ENV.PASSWORD_RECOVERY_LINK_LIFE)
+        }
       })
-      return res.json({ message: Messages.success, query })
+      return res.json({ message: Messages.success, query: passwordResetQuery, silent: true })
     } catch (e: any) {
       throwError(Status.BAD_REQUEST, res, Messages.commonServerError)
     }
