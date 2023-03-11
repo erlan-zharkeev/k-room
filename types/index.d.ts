@@ -24,6 +24,8 @@ export interface EnvVariables {
     FIREBASE_MESSAGING_SENDER_ID: string;
     FIREBASE_APP_ID: string;
     FIREBASE_MEASUREMENT_ID: string;
+    NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
+    PASSWORD_RECOVERY_LINK_LIFE: number;
 }
 export declare enum AuthEndPoints {
     REGISTRATION = "/auth/registration",
@@ -38,14 +40,16 @@ export declare enum AuthEndPoints {
 export declare enum UserEndPoints {
     GET_USER_DATA = "/auth/get-user-data",
     UPDATE_USER_DATA = "/auth/user-data/update",
-    UPDATE_USER_SETTINGS = "/user/update-user-settings"
+    UPDATE_USER_SETTINGS = "/user/update-user-settings",
+    RESET_PASSWORD = "/user/reset-password"
 }
 export declare enum CommonEndPoints {
     COMMON_IMAGES = "/common-images",
     GET_FILES = "/image/:filename"
 }
 export declare enum CodesEndPoints {
-    SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery"
+    SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
+    VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery"
 }
 export declare enum SocketActions {
     CONNECTION = "connection",
@@ -84,7 +88,8 @@ export declare enum RouteNames {
     EMAIL_CONFIRM = "/confirm-email",
     MAIN = "/app",
     NOT_FOUND = "/not-found",
-    PASSWORD_RECOVERY = "/password-recovery"
+    PASSWORD_RECOVERY = "/password-recovery",
+    CREATE_NEW_PASSWORD = "/create-new-password"
 }
 export interface Message {
     id: string;
@@ -116,7 +121,7 @@ export interface UserCredential extends UserShort {
     email?: string;
     password?: string;
     avatar?: string;
-    providerId?: string;
+    providerName?: string;
 }
 export interface User extends UserCredential {
     providerUserId?: string;
@@ -164,9 +169,18 @@ export interface Call {
 }
 export interface Codes {
     passwordRecovery: {
+        query: {
+            value: string;
+            expiresIn: string;
+        };
         email: string;
         sms: string;
     };
+    nextRequestPossibleAt: string;
+}
+export interface CodeValidationPayload {
+    email: string;
+    code: string;
 }
 export declare enum Status {
     SUCCESS = 200,

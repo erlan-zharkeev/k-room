@@ -1,5 +1,5 @@
-import { Form, Input } from 'antd'
-import { Status, RouteNames } from 'common-types'
+import { Form } from 'antd'
+import { Status, RouteNames, UserCredential } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -8,10 +8,11 @@ import UIButton from 'ui/UIButton'
 import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { registration } from 'src/store/authSlice'
 import validateRules from 'src/utils/validateRules'
 import UISwitch from 'ui/UISwitch'
 import { Logo } from 'src/components/Common/Logo/Logo'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import apiMethods from 'src/services/api-methods'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -22,12 +23,12 @@ export const SignUpPage = () => {
 
   const [isValid, validate] = useValidate()
 
-  const onFinish = async (values: FormData) => {
+  const onFinish = async (values: UserCredential) => {
     setIsLoading(true)
-    const response = await dispatch(registration(values as any))
+    const response = (await dispatch(apiMethods.auth.registration(values))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     if (!response.payload) return
-    const { data, status } = response.payload as any
+    const { data, status } = response.payload
     if (status !== Status.SUCCESS) return
     navigate(
       `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`,
@@ -75,7 +76,7 @@ export const SignUpPage = () => {
             <Form.Item className="sign-up__controls">
               <UIButton
                 text="Register"
-                border="default"
+                border="border-default"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}

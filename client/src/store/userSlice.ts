@@ -1,49 +1,12 @@
-import { AnyAction, createAsyncThunk, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
-import { AuthEndPoints, UserEndPoints, RouteNames, User, UserCredential } from 'common-types'
+import { AnyAction, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
+import { RouteNames, User } from 'common-types'
 import $router from 'src/services/$router'
-import $api from 'src/services/$api'
 import clearCookie from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
 import { updateSettings } from './settingsSlice'
 import { SettingsState } from './@types/SettingsState'
 
-export enum UserAction {
-  HAS_USER = 'HAS_USER',
-  GOOGLE_LOGIN = 'GOOGLE_LOGIN',
-  PROVIDER_LOGIN = 'PROVIDER_LOGIN',
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-  UPDATE_USER_DATA = 'UPDATE_USER_DATA',
-  GET_USER_DATA = 'GET_USER_DATA'
-}
-
-export const login = createAsyncThunk(UserAction.LOGIN, async (payload: UserCredential, { dispatch }) => {
-  const response = await $api('post', AuthEndPoints.LOGIN, dispatch, payload)
-  const { userData, settings } = response.data
-  commonSetUserDataHandler(dispatch, { userData, settings })
-})
-
-export const signInWithProvider = createAsyncThunk(
-  UserAction.PROVIDER_LOGIN,
-  async (payload: UserCredential, { dispatch }) => {
-    const response = await $api('post', AuthEndPoints.PROVIDER_LOGIN, dispatch, payload)
-    const { userData, settings } = response.data
-    commonSetUserDataHandler(dispatch, { userData, settings })
-  }
-)
-
-export const updateUserData = createAsyncThunk(UserAction.UPDATE_USER_DATA, async (payload: User, { dispatch }) => {
-  const response = await $api('post', UserEndPoints.UPDATE_USER_DATA, dispatch, payload, 'multipart/form-data')
-  dispatch(setUserData(response.data.userData))
-})
-
-export const getUserData = createAsyncThunk(UserAction.GET_USER_DATA, async (_: unknown, { dispatch }) => {
-  const response = await $api('get', UserEndPoints.GET_USER_DATA, dispatch)
-  const { userData, settings } = response.data
-  commonSetUserDataHandler(dispatch, { userData, settings })
-})
-
-const commonSetUserDataHandler = (
+export const commonSetUserDataHandler = (
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
   data: { userData: User; settings: SettingsState }
 ) => {
@@ -62,7 +25,8 @@ const initialState: UserState = {
     online: false,
     chatRooms: [],
     contacts: [],
-    avatar: ''
+    avatar: '',
+    providerName: ''
   }
 }
 

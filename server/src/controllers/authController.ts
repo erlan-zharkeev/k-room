@@ -46,7 +46,6 @@ class AuthController {
 
       return res.json(confirmEmailData)
     } catch (e) {
-      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.registrationCommonError)
     }
   }
@@ -94,58 +93,41 @@ class AuthController {
         message: Messages.loginSuccess
       })
     } catch (e: any) {
-      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
     }
   }
   async signInWithProvider(req: Request, res: Response) {
     try {
-      const { id, username, email, avatar, providerId }: UserCredential = req.body
-      const providerCandidate = await UserModel.findOne({ providerId: id })
+      const { username, email, avatar, providerName }: UserCredential = req.body
 
-      if (providerCandidate) {
-        await updateTokens(providerCandidate._id, res)
-        return res.json({
-          userData: {
-            username: providerCandidate.username,
-            email,
-            id: providerCandidate._id,
-            avatar: providerCandidate.avatar
-          },
-          settings: providerCandidate.settings,
-          message: Messages.loginSuccess
+      let user = await UserModel.findOne({ email })
+
+      if (!user) {
+        const hashedPassword = await bcrypt.hash(uuidv4(), 6)
+        user = new UserModel({
+          username,
+          email,
+          avatar,
+          providerName,
+          password: hashedPassword,
+          socketId: '',
+          confirmed: true,
+          settings: initUserSettings,
+          codes: initUserCodes
         })
+        await user.save()
       }
 
-      const emailAlreadyInUse = await UserModel.findOne({ email })
+      await updateTokens(user._id, res)
 
-      if (!providerCandidate && emailAlreadyInUse) {
-        return throwError(Status.BAD_REQUEST, res, Messages.emailLinkedToAnotherMethod)
-      }
-
-      const user = new UserModel({
-        providerUserId: id,
-        username,
-        email,
-        avatar,
-        providerId,
-        password: uuidv4(),
-        socketId: '',
-        settings: initUserSettings,
-        codes: initUserCodes
-      })
-
-      const newUser = await user.save()
-
-      await updateTokens(newUser._id, res)
       return res.json({
         userData: {
-          username: newUser.username,
+          username: user.username ?? username,
           email,
-          id: newUser._id,
-          avatar: newUser.avatar
+          id: user?._id,
+          avatar: user.avatar ?? avatar
         },
-        settings: newUser.settings,
+        settings: user.settings,
         message: Messages.loginAndRegisterSuccess
       })
     } catch (e: any) {

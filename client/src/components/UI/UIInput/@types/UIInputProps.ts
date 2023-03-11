@@ -7,6 +7,7 @@ export default interface UIInputProps {
   suffix?: ReactNode
   autoComplete?: 'on' | 'off'
   value?: string
+  disabled?: boolean
   onChange?: (e: ChangeEvent<HTMLInputElement>) => Promise<void>
   onBlur?: () => void
 }

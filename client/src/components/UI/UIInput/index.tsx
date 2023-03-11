@@ -7,13 +7,14 @@ const inputTypes = [
   { name: 'password', component: Input.Password }
 ]
 
-export const UIInput = ({ type, placeholder, size, value, suffix, autoComplete, onChange }: UIInputProps) => {
+export const UIInput = ({ type, placeholder, size, value, suffix, autoComplete, disabled, onChange }: UIInputProps) => {
   const inputType = type ?? 'common'
   const InputComponent = inputTypes.find((input) => input.name === inputType).component
-  const className = modifiersHandler({rootClass: 'ui-input', modifiers: [size]})
+  const className = modifiersHandler({ rootClass: 'ui-input', modifiers: [size] })
   return (
     <div className={className}>
       <InputComponent
+        disabled={disabled}
         size={size}
         autoComplete={autoComplete}
         placeholder={placeholder}

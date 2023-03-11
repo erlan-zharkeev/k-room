@@ -1,14 +1,15 @@
 import { AxiosResponse } from 'axios'
 import { Status, RouteNames } from 'common-types'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UIButton from 'ui/UIButton'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
-import { sendConfirmationLink } from 'src/store/authSlice'
-
-const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000
+import getNextReqInterval from 'src/utils/getNextReqInterval'
+import useCounter from 'src/hooks/useCounter'
+import { sendConfirmationLink } from 'src/services/api-methods/auth'
+import { AsyncThunkResponseWrapper } from 'src/@types'
 
 export const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
@@ -18,20 +19,16 @@ export const WaitEmailConfirmPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
 
-  const refTimer = useRef(null)
-  const [nextReqInterval, setNextReqInterval] = useState(1)
   const [remainingAttempts, setRemainingAttempts] = useState(0)
 
   const [_, refresh] = useState(0)
 
+  const [counter, setCounter, startCounter] = useCounter(0)
+
   const counterHandler = () => {
     const nextRequestTimestamp = Number(query.get('nextRequestTime'))
-    setNextReqInterval(getNextReqInterval(nextRequestTimestamp))
-    if (refTimer.current) clearInterval(refTimer.current)
-    const id = setInterval(() => {
-      setNextReqInterval(getNextReqInterval(nextRequestTimestamp))
-    }, 1000)
-    refTimer.current = id
+    setCounter(getNextReqInterval(nextRequestTimestamp))
+    startCounter()
   }
 
   useEffect(() => {
@@ -42,9 +39,9 @@ export const WaitEmailConfirmPage = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = await dispatch(sendConfirmationLink(email))
+    const response = (await dispatch(sendConfirmationLink(email))) as AsyncThunkResponseWrapper
     setIsLoading(false)
-    const { data, status } = response.payload as AxiosResponse
+    const { data, status } = response.payload
     if (status !== Status.SUCCESS) return
     const updatedPath = `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })
@@ -55,23 +52,23 @@ export const WaitEmailConfirmPage = () => {
     <div className="page wait-email-confirm">
       <div className="wait-confirm-email__wrapper">
         <div className="header-text header-text--md header-text--accent">Email confirmation</div>
-        <div className="paragraph-text paragraph-text--secondary">
-          <p>
-            A confirmation was sent to the email
-            <span className="header-text header-text--sm header-text--accent"> {email}</span>
-          </p>
-          <p>In order to complete the registration, follow the link provided in the email.</p>
-        </div>
+        <p className="paragraph-text paragraph-text--secondary">
+          A confirmation was sent to the email
+          <span className="header-text header-text--sm header-text--accent"> {email}</span>
+        </p>
+        <p className="paragraph-text paragraph-text--secondary">
+          In order to complete the registration, follow the link provided in the email.
+        </p>
 
         {remainingAttempts <= 0 ? (
-          <div className="wait-confirm-email__attempts">
+          <div className="wait-email-confirm__attempts">
             <div className="paragraph-text paragraph-text--secondary paragraph-text--bold">
               You have exhausted all attempts. Try again later
             </div>
           </div>
         ) : (
           <>
-            <div className="wait-confirm-email__attempts">
+            <div className="wait-email-confirm__attempts">
               <div className="paragraph-text paragraph-text--secondary paragraph-text--bold">Attempts left:</div>
               <div className="paragraph-text paragraph-text--accent paragraph-text--bold">
                 &nbsp;{remainingAttempts}
@@ -83,14 +80,20 @@ export const WaitEmailConfirmPage = () => {
           </>
         )}
 
-        {nextReqInterval > 0 && (
-          <div className="paragraph-text paragraph-text--secondary">
-            You can send a confirmation email in {nextReqInterval.toFixed()} seconds
+        {counter > 0 && (
+          <div className="paragraph-text paragraph-text--secondary wait-email-confirm__counter">
+            You can send a confirmation email in {Math.round(counter)} seconds
           </div>
         )}
 
-        {nextReqInterval <= 0 && remainingAttempts > 0 && (
-          <UIButton border="borderless" text="Send confirmation link" onClick={sendLink} loading={isLoading} />
+        {counter <= 0 && remainingAttempts > 0 && (
+          <UIButton
+            border="border-default"
+            text="Send confirmation link"
+            color="accent"
+            onClick={sendLink}
+            loading={isLoading}
+          />
         )}
       </div>
     </div>

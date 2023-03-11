@@ -1,22 +1,26 @@
-import { Button, Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { updateUserData } from 'src/store/userSlice'
 import { showNotification, closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
 import UIAvatar from 'ui/UIAvatar'
 import UIInput from 'ui/UIInput'
 import UIButton from 'ui/UIButton'
+import apiMethods from 'src/services/api-methods'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import { setUserData } from 'src/store/userSlice'
+import { User } from 'common-types'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
-
+  const [hasNewAvatar, setHasNewAvatarValue] = useState(false)
   const [newAvatar, setNewAvatar] = useState<string | undefined>()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isUsernameEqualNewName, setIsUsernameEqualNewName] = useState(false)
 
   const [avatarFile, setFile] = useState()
 
@@ -51,6 +55,7 @@ const UserDataSettingsPopup = () => {
 
     reader.onload = () => {
       setNewAvatar(String(reader.result))
+      setHasNewAvatarValue(true)
     }
 
     reader.onerror = (error) => {
@@ -60,16 +65,22 @@ const UserDataSettingsPopup = () => {
     }
   }
 
-  const onFinish = async (values: FormData) => {
+  const onFinish = async (values: User) => {
     const updatedUserData = {
       ...values,
       userId: id,
       file: avatarFile
     }
     setIsLoading(true)
-    await dispatch(updateUserData(updatedUserData as any))
+    const response = (await dispatch(apiMethods.user.updateUserData(updatedUserData))) as AsyncThunkResponseWrapper
+    dispatch(setUserData(response.payload.data.userData))
     setIsLoading(false)
     dispatch(closeModal())
+  }
+
+  const changeFormHandler = () => {
+    validate(form)
+    setIsUsernameEqualNewName(form.getFieldValue('username') === username)
   }
 
   return (
@@ -79,7 +90,7 @@ const UserDataSettingsPopup = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         form={form}
-        onInput={() => validate(form)}
+        onChange={changeFormHandler}
       >
         <div className="user-data-settings-popup__avatar">
           <UIAvatar src={newAvatar ?? avatar} showBadge={false} size="large" />
@@ -89,14 +100,12 @@ const UserDataSettingsPopup = () => {
         <Form.Item name="username" rules={validateRules.required} initialValue={username}>
           <UIInput placeholder="Username" />
         </Form.Item>
-
         <Form.Item className="user-data-settings-popup__controls">
           <UIButton
             text="Update"
-            border="default"
+            border="border-default"
             htmlType="submit"
-            color="accent"
-            disabled={!isValid}
+            disabled={!isValid || (isUsernameEqualNewName && !hasNewAvatar)}
             loading={isLoading}
           />
         </Form.Item>

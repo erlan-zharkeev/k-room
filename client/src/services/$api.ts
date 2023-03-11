@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from 'axios'
-import { Status, AuthEndPoints } from 'common-types'
+import { Status } from 'common-types'
 import ENV from 'src/ENV'
 import { AppDispatch } from 'src/store'
-import { changeIsAppLoading, getUserData } from 'src/store/userSlice'
+import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
-import $clg from './$clg'
+import $clg from 'src/services/$clg'
+import apiMethods from './api-methods'
+import { AsyncThunkResponseWrapper } from 'src/@types'
 
 axios.defaults.withCredentials = true
 
@@ -24,12 +26,14 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
     case Status.TOKEN_EXPIRED:
       $clg('error', 'Access token is expired')
       dispatch(changeIsAppLoading(true))
-      const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
+      const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
       dispatch(changeIsAppLoading(false))
-      const isTokensPairUpdated = updateTokenResponse?.status === Status.SUCCESS
+      const isTokensPairUpdated = updateTokenResponse?.payload.status === Status.SUCCESS
       if (!isTokensPairUpdated) return
       $clg('success', 'Tokens pair has been updated')
-      dispatch(getUserData(null))
+      const response = (await dispatch(apiMethods.user.getUserData(null))) as AsyncThunkResponseWrapper
+      const { userData, settings } = response.payload.data
+      commonSetUserDataHandler(dispatch, { userData, settings })
       return
     case Status.NOT_AUTH:
       return

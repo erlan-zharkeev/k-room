@@ -108,6 +108,7 @@
 - add hints to buttons
 - Сделать доступным поиск автоматическим
 - Убрать дергание switcher
+- lazy load сообщений
 
 
 docker stop $(docker ps -aq)

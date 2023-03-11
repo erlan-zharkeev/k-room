@@ -8,7 +8,7 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import call from 'src/services/$call'
+import $call from 'src/services/$call'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
 
@@ -67,9 +67,9 @@ const ContactList = () => {
   const initCall = async (interlocutorData: User) => {
     if (isStreamIsLoading) return
     setIsStreamIsLoading(true)
-    const gotStream = await call.setStream()
+    const gotStream = await $call.setStream()
     setIsStreamIsLoading(false)
-    if (gotStream) call.initCall(interlocutorData, id, avatar, username)
+    if (gotStream) $call.initCall(interlocutorData, id, avatar, username)
   }
 
   return (

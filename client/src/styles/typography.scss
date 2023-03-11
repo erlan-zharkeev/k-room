@@ -56,6 +56,10 @@
     color: var(--accent);
   }
 
+  &--error {
+    color: var(--error);
+  }
+
   &--secondary {
     color: var(--secondary-text);
   }

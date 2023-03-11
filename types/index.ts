@@ -24,6 +24,8 @@ export interface EnvVariables {
   FIREBASE_MESSAGING_SENDER_ID: string;
   FIREBASE_APP_ID: string;
   FIREBASE_MEASUREMENT_ID: string;
+  NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
+  PASSWORD_RECOVERY_LINK_LIFE: number;
 }
 
 export enum AuthEndPoints {
@@ -41,6 +43,7 @@ export enum UserEndPoints {
   GET_USER_DATA = "/auth/get-user-data",
   UPDATE_USER_DATA = "/auth/user-data/update",
   UPDATE_USER_SETTINGS = "/user/update-user-settings",
+  RESET_PASSWORD = "/user/reset-password",
 }
 
 export enum CommonEndPoints {
@@ -50,6 +53,7 @@ export enum CommonEndPoints {
 
 export enum CodesEndPoints {
   SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
+  VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery",
 }
 
 export enum SocketActions {
@@ -91,6 +95,7 @@ export enum RouteNames {
   MAIN = "/app",
   NOT_FOUND = "/not-found",
   PASSWORD_RECOVERY = "/password-recovery",
+  CREATE_NEW_PASSWORD = "/create-new-password",
 }
 
 export interface Message {
@@ -128,7 +133,7 @@ export interface UserCredential extends UserShort {
   email?: string;
   password?: string;
   avatar?: string;
-  providerId?: string;
+  providerName?: string;
 }
 
 export interface User extends UserCredential {
@@ -185,9 +190,19 @@ export interface Call {
 
 export interface Codes {
   passwordRecovery: {
+    query: {
+      value: string;
+      expiresIn: string;
+    };
     email: string;
     sms: string;
   };
+  nextRequestPossibleAt: string;
+}
+
+export interface CodeValidationPayload {
+  email: string;
+  code: string;
 }
 
 export enum Status {

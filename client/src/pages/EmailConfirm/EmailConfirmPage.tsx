@@ -6,9 +6,11 @@ import { Status, RouteNames } from 'common-types'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/userSlice'
-import { sendEmailConfirm } from 'src/store/authSlice'
 import UIButton from 'ui/UIButton'
 import UIIcon from 'ui/UIIcon'
+import { emailConfirm } from 'src/services/api-methods/auth'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import apiMethods from 'src/services/api-methods'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,8 +21,8 @@ export const EmailConfirmPage = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const sendEmailConfirmation = async (id: string) => {
-    const response = await dispatch(sendEmailConfirm(id))
-    const { status, data } = response.payload as AxiosResponse
+    const response = (await dispatch(apiMethods.auth.emailConfirm(id))) as AsyncThunkResponseWrapper
+    const { status, data } = response.payload
     if (status !== Status.SUCCESS) return navigate(RouteNames.SIGN_IN)
     setEmail(data.userData.email)
     setIsLoading(false)

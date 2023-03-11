@@ -1,5 +1,41 @@
 .password-recovery {
+  .header-text {
+    margin-bottom: $gutter-lg;
+  }
+  &__wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &__body {
+    display: flex;
+    width: $container-sm;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .ant-form {
+    top: 40px;
+  }
   &__content {
+    margin-top: $gutter-sm;
+  }
+  &__email-field {
+    width: 100%;
+  }
+  &__code-field {
+    width: 100%;
+  }
+  &__code-validation {
+    display: flex;
     margin-top: $gutter-lg;
+  }
+  &__email-submit {
+    margin-top: $gutter-lg;
+  }
+  &__code-submit {
+    margin-left: $gutter-md;
+  }
+  .ant-form-item {
+    margin-bottom: $gutter-md;
   }
 }

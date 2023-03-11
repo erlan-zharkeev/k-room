@@ -6,31 +6,37 @@ import UIButton from 'ui/UIButton'
 import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { login, signInWithProvider } from 'src/store/userSlice'
+import { commonSetUserDataHandler } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
-import firebase, { ProviderType } from 'src/services/$firebase'
-import { RouteNames } from 'common-types'
-import $router from 'src/services/$router'
+import $firebase, { ProviderType } from 'src/services/$firebase'
+import { RouteNames, UserCredential } from 'common-types'
 import { Logo } from 'src/components/Common/Logo/Logo'
+import { useNavigate } from 'react-router-dom'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import apiMethods from 'src/services/api-methods'
 
 export const SignInPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
   const [fbBtnLoading, setFbBtnLoading] = useState(false)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
   const [form] = Form.useForm()
 
   const [isValid, validate] = useValidate()
-  const onFinish = async (fields: FormData) => {
+  const onFinish = async (fields: UserCredential) => {
     setIsLoading(true)
-    await dispatch(login(fields as any))
+    const response = (await dispatch(apiMethods.auth.login(fields))) as AsyncThunkResponseWrapper
+    const { userData, settings } = response.payload.data
+    commonSetUserDataHandler(dispatch, { userData, settings })
+
     setIsLoading(false)
   }
 
   const providerSignIn = async (providerName: ProviderType, loaderMethod: (value: boolean) => void) => {
     loaderMethod(true)
-    const result = await firebase.signIn(providerName)
+    const result = await $firebase.signIn(providerName)
     if (!result) return loaderMethod(false)
     const { displayName, email, photoURL, uid } = result.user
     const { providerId } = result
@@ -39,14 +45,12 @@ export const SignInPage = () => {
       username: displayName,
       email,
       avatar: photoURL,
-      providerId
+      providerName: providerId
     }
-    await dispatch(signInWithProvider(credential))
+    const response = (await dispatch(apiMethods.auth.signInWithProvider(credential))) as AsyncThunkResponseWrapper
     loaderMethod(false)
-  }
-
-  const initRecovery = () => {
-    $router.push(RouteNames.PASSWORD_RECOVERY)
+    const { userData, settings } = response.payload.data
+    commonSetUserDataHandler(dispatch, { userData, settings })
   }
 
   return (
@@ -74,7 +78,7 @@ export const SignInPage = () => {
               <UIButton
                 iconName="google"
                 text="Sign in with Google"
-                border="default"
+                border="border-default"
                 fill={true}
                 hover="hoverless"
                 onClick={() => providerSignIn('google', setGoogleBtnLoading)}
@@ -84,13 +88,13 @@ export const SignInPage = () => {
                 iconName="facebook"
                 text="Sign in with Facebook"
                 onClick={() => providerSignIn('facebook', setFbBtnLoading)}
-                border="default"
+                border="border-default"
                 fill={true}
                 hover="hoverless"
                 loading={fbBtnLoading}
               />
               <div className="sign-in__forgot-password">
-                <a className="paragraph-text link" onClick={initRecovery}>
+                <a className="paragraph-text link" onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}>
                   Forgot password?
                 </a>
               </div>
@@ -99,7 +103,7 @@ export const SignInPage = () => {
             <Form.Item className="sign-in__controls">
               <UIButton
                 text="Sign in"
-                border="default"
+                border="border-default"
                 color="accent"
                 htmlType="submit"
                 loading={isLoading}

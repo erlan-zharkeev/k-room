@@ -42,9 +42,6 @@ const systemSlice = createSlice({
       state.showModal = false
     },
     showNotification(state, { payload }) {
-      const ableToShowNotification = payload.ableToShowNotification
-      if (!ableToShowNotification) return
-      delete payload.ableToShowNotification
       state.notificationData = {
         ...state.notificationData,
         ...payload

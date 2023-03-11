@@ -1,13 +1,12 @@
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, Auth } from 'firebase/auth'
 import { AppDispatch, store } from 'src/store'
 import { showNotification } from 'src/store/systemSlice'
-import $clg from './$clg'
+import $clg from 'src/services/$clg'
 
 export type ProviderType = 'google' | 'facebook'
 
 const commonErrors = {
-  'Firebase: Error (auth/account-exists-with-different-credential).':
-    'Log in using the current data, the user`s data is linked to another login method'
+  'Firebase: Error (auth/account-exists-with-different-credential).': 'Account exists with different credential'
 } as { [key: string]: string }
 
 export class Firebase {

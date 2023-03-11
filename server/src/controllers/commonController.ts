@@ -1,13 +1,11 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import { Status } from '../../../types'
+import ENV from '../ENV'
 import { Messages } from '../types/Messages'
 import throwError from '../utils/throwError'
-import ENV from '../ENV'
 import db from './../services/database'
-import mongoose from 'mongoose'
-
 const fs = require('fs')
-
 const Grid = require('gridfs-stream')
 
 const connection = db.connection

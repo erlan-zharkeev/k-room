@@ -7,6 +7,7 @@ import { io } from '../server'
 import ENV from '../ENV'
 import getSocketsByUsersArray from '../socket/helpers/getSocketsByUsersArray'
 import getUsersByHasContactId from '../socket/helpers/getUsersByHasContactId'
+const bcrypt = require('bcryptjs')
 
 class UserController {
   async updateUserSettings(req: Request, res: Response) {
@@ -24,18 +25,22 @@ class UserController {
   }
 
   async getUserData(req: Request, res: Response) {
-    const { id } = req.body.decoded
-    const user = await UserModel.findOne({ _id: id })
-    if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
-    return res.json({
-      userData: {
-        username: user.username,
-        email: user.email,
-        id: user._id,
-        avatar: user.avatar
-      },
-      settings: user.settings
-    })
+    try {
+      const { id } = req.body.decoded
+      const user = await UserModel.findOne({ _id: id })
+      if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
+      return res.json({
+        userData: {
+          username: user.username,
+          email: user.email,
+          id: user._id,
+          avatar: user.avatar
+        },
+        settings: user.settings
+      })
+    } catch (e: any) {
+      throwError(Status.BAD_REQUEST, res, Messages.failedToGetUserData)
+    }
   }
 
   async updateUserData(req: any, res: Response) {
@@ -77,6 +82,30 @@ class UserController {
     } catch (e: any) {
       console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.userDataUpdateFailedCommonError)
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { query, password } = req.body
+      const hashedPassword = await bcrypt.hash(password, 6)
+      if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
+
+      const user = await UserModel.findOne({ 'codes.passwordRecovery.query.value': query })
+      if (!user) throwError(Status.BAD_REQUEST, res, Messages.failedToResetPassword)
+
+      await user?.updateOne({
+        $set: {
+          'codes.passwordRecovery.query.value': null,
+          'codes.nextRequestPossibleAt': null,
+          password: hashedPassword
+        }
+      })
+
+      return res.json({ message: Messages.passwordResetSuccess })
+    } catch (e: any) {
+      console.log(e)
+      return throwError(Status.BAD_REQUEST, res, Messages.commonServerError)
     }
   }
 }

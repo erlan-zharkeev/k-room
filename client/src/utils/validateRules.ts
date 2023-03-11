@@ -5,6 +5,10 @@ interface ValidateRules {
 
 const validateRules: ValidateRules = {
   required: [{ required: true, message: 'Field is required' }],
+  emailCode: [
+    { required: true, message: 'Field is required' },
+    { len: 4, message: 'Field must contain 4 symbols' }
+  ],
   email: [
     {
       validator: async (_: unknown, value: string) => {

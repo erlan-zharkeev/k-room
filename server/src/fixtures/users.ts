@@ -6,7 +6,7 @@ import initUserSettings from './initUserSettings'
 import { initUserCodes } from './initUserCodes'
 const bcrypt = require('bcryptjs')
 
-const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik', 'zharkeev.post'] : ['erlan']
+const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik'] : ['erlan']
 
 export default async () => {
   const createUser = async (username: string) => {

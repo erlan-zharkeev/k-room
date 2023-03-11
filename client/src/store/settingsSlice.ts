@@ -1,19 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { UserEndPoints } from 'common-types'
-import $api from 'src/services/$api'
+import { createSlice } from '@reduxjs/toolkit'
 import setTheme from 'src/utils/setTheme'
 import { SettingsState } from './@types/SettingsState'
-
-export enum SettingsAction {
-  UPDATE_USER_SETTINGS = 'UPDATE_USER_SETTINGS'
-}
-
-export const updateUserSettings = createAsyncThunk(
-  SettingsAction.UPDATE_USER_SETTINGS,
-  async (payload: { userId: string; type: string; value: string | boolean }, { dispatch }) => {
-    await $api('post', UserEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
-  }
-)
 
 const initialState: SettingsState = {
   asideTab: 'contacts',
