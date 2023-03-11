@@ -90,27 +90,21 @@
 - make notifications from chat
 - make update button(webWorkers)
 - check token works
-- make google/facebook authorization
-- make cookie checker
 - make gif how to use
 - share geolocation
 - delayed messages
 - find out how to deploy project for MOBILE and WINDOWS
 - setup cors to specific host and port
-- logo in email
-- types any and unknown
 - not found page
 - скомпоновать сообщения на бэке
-- восстановление пароля
 - auto upgrade version
 - уменьшить базовые изображения и удаление не нужных
 - добавить компрессию файлов
 - add hints to buttons
 - Сделать доступным поиск автоматическим
-- Убрать дергание switcher
 - lazy load сообщений
-
-
+- privacy policy create and to facebook dev
+- добавить настройки громкости и чекаем видео
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 <!-- docker-compose --env-file .env.production up -d webserver -->
