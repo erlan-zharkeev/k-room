@@ -42,7 +42,12 @@
   &__buttons {
     display: flex;
     align-items: center;
-
+    .ant-badge-count,
+    .ant-badge-dot,
+    .ant-badge .ant-scroll-number-custom-component {
+      left: 8px;
+      width: 30px;
+    }
     .ui-button:first-child {
       margin-right: 1rem;
     }

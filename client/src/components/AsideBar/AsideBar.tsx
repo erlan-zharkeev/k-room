@@ -6,6 +6,7 @@ import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import ButtonsListElement from './@types/ButtonsListElement'
 import UIButton from 'ui/UIButton'
 import { Logo } from '../Common/Logo/Logo'
+import { showModal } from 'src/store/systemSlice'
 
 const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -28,6 +29,10 @@ const AsideBar = () => {
     { value: 'settings', iconName: 'settings-cog' }
   ]
 
+  const openTechSettings = () => {
+    dispatch(showModal({ title: 'Settings', modalContentComponentName: 'TechSettingsPopup' }))
+  }
+
   return (
     <div className="aside-bar">
       {viewPort.width >= 769 && <Logo />}
@@ -44,7 +49,7 @@ const AsideBar = () => {
           )
         })}
       </Radio.Group>
-      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" />}
+      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} />}
     </div>
   )
 }

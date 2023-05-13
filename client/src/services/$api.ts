@@ -28,7 +28,7 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       dispatch(changeIsAppLoading(true))
       const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
       dispatch(changeIsAppLoading(false))
-      const isTokensPairUpdated = updateTokenResponse?.payload.status === Status.SUCCESS
+      const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.SUCCESS
       if (!isTokensPairUpdated) return
       $clg('success', 'Tokens pair has been updated')
       const response = (await dispatch(apiMethods.user.getUserData(null))) as AsyncThunkResponseWrapper

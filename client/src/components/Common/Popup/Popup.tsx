@@ -3,13 +3,15 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
+import TechSettingsPopup from './Components/TechSettingsPopup/TechSettingsPopup'
 import UserDataSettingsPopup from './Components/UserDataSettingsPopup/UserDataSettingsPopup'
 
 const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
   const popups: { [key: string]: JSX.Element } = {
-    UserDataSettingsPopup: <UserDataSettingsPopup />
+    UserDataSettingsPopup: <UserDataSettingsPopup />,
+    TechSettingsPopup: <TechSettingsPopup />
   }
 
   const Content = () => {
@@ -24,7 +26,6 @@ const Popup = () => {
         open={showModal}
         footer={null}
         onCancel={() => dispatch(closeModal())}
-        style={{ maxWidth: '320px' }}
       >
         <Content />
       </Modal>

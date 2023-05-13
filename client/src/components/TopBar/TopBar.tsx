@@ -6,9 +6,12 @@ import { socket } from 'src/socket/socket'
 import { selectChatRoom } from 'src/store/settingsSlice'
 import UIButton from 'ui/UIButton'
 import UIAvatar from 'ui/UIAvatar'
+import { Badge } from 'antd'
+import { Dropdown } from 'antd'
 
 const TopBar = () => {
   const { username, email, avatar } = useTypedSelector((state) => state.user.userData)
+  const { infoItems } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
 
   const resetChat = () => {
@@ -18,6 +21,8 @@ const TopBar = () => {
   const exit = () => {
     dispatch(logOut())
   }
+
+  const unreadInfoQuantity = () => infoItems.filter((item) => item.read === 'read').length
 
   return (
     <div className="top-bar" onClick={resetChat}>
@@ -32,7 +37,11 @@ const TopBar = () => {
           </div>
         </div>
         <div className="top-bar__buttons">
-          <UIButton iconName="notification-bell" />
+          <Badge count={unreadInfoQuantity()}>
+            <Dropdown menu={{ items: infoItems }} trigger={['click']} placement="bottom">
+              <UIButton iconName="notification-bell" />
+            </Dropdown>
+          </Badge>
           <UIButton iconName="exit" onClick={() => exit()} />
         </div>
       </div>

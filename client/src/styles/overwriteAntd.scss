@@ -38,7 +38,55 @@
   }
 }
 
+// select
+.ant-select {
+  &-selector {
+    color: var(--secondary-text) !important;
+    background: var(--main-bg) !important;
+    border-color: var(--secondary-text) !important;
+  }
+  &-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    box-shadow: 0px 0px 8px var(--secondary-text) !important;
+  }
+  &-arrow {
+    z-index: 1;
+    color: var(--secondary-text) !important;
+  }
+  &-dropdown {
+    background: var(--main-bg) !important;
+    padding: 0 !important;
+    box-shadow: 0px 0px 8px var(--secondary-text) !important;
+  }
+  &-item {
+    background: var(--main-bg) !important;
+    color: var(--secondary-text) !important;
+    &:hover {
+      background-color: var(--secondary-text) !important;
+      color: var(--main-text) !important;
+      cursor: pointer;
+    }
+  }
+}
+
+// error
+.ant-form-item-explain-error {
+  color: var(--error-text);
+  font-size: 12px;
+}
+
 // modal
+.ant-modal-mask {
+  background-color: var(--modal-overflow-color);
+}
+
+div[role='dialog'] {
+  width: auto !important;
+}
+
+.ant-modal-body {
+  padding-top: 0;
+}
+
 .ant-modal-content,
 .ant-modal-header {
   background: var(--main-bg) !important;
@@ -57,30 +105,7 @@
   color: var(--main-text) !important;
 }
 
-// select
-.ant-select-selector {
-  color: var(--main-text) !important;
-  background: var(--main-bg) !important;
-  border-color: var(--secondary-text) !important;
-}
-
-.ant-select-selection-placeholder,
-.ant-select-arrow {
-  z-index: 1;
-  color: var(--secondary-text) !important;
-}
-
-// error
-.ant-form-item-explain-error {
-  color: var(--error-text);
-  font-size: 12px;
-}
-
-// modal
-.ant-modal-mask {
-  background-color: var(--modal-overflow-color);
-}
-
+// notification
 .ant-notification-notice {
   border: 1px solid var(--main-bg);
   border-radius: $radius-sm;
@@ -162,6 +187,9 @@
   padding-top: 0;
 }
 
+
+
+
 // tooltip
 html[tooltips='false'] {
   .ant-tooltip {
@@ -205,13 +233,23 @@ html[tooltips='false'] {
   ul {
     background: transparent;
     border: 1px solid var(--secondary-text);
-    border-radius: $radius-sm;
 
     li {
       color: var(--secondary-text) !important;
-
+      position: relative;
+      &[read='unread']:before {
+        content: '';
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        top: 5px;
+        right: 4px;
+        border-radius: 50%;
+        background-color: var(--error);
+      }
       &:hover {
         background-color: var(--secondary-text);
+        color: var(--main-bg) !important;
       }
     }
   }
