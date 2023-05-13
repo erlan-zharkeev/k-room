@@ -1,3 +1,5 @@
+import { InfoItem } from 'common-types'
+
 export interface NotificationStore {
   key: string
   message: string
@@ -23,4 +25,5 @@ export interface SystemStore {
   }
   notificationData: NotificationStore
   viewPort: ViewPort
+  infoItems: Array<InfoItem>
 }

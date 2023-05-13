@@ -1,22 +1,77 @@
-import { useEffect } from 'react'
-import AudioVisualiser, { MediaStreamProvider, useMediaStream } from 'react-mic-waver'
+import { Select } from 'antd'
+import { useEffect, useState } from 'react'
 
 const TechSettingsPopup = () => {
-  const { stream, start, stop } = useMediaStream()
-  console.log(stream)
-  // const toggleMic = () => (stream ? stop() : start())
-  useEffect(() => {})
+  const [audioInputDevices, setAudioInputDevices] = useState([] as MediaDeviceInfo[])
+  const [selectedAudioInputDeviceValue, setSelectedAudioInputDeviceValue] = useState('default')
+
+  const [videoInputDevices, setVideoInputDevices] = useState([])
+  const [selectedVideoInputDeviceValue, setSelectedVideoInputDeviceValue] = useState('default')
+
+  const [audioOutputDevices, setAudioOutputDevices] = useState([])
+  const [selectedAudioOutputDevicesValue, setSelectedAudioOutputDeviceValue] = useState('default')
+
+  const getAvailableAudioDevices = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    const availableInputAudioDevices = devices.filter((device) => device.kind === 'audioinput')
+    setAudioInputDevices((oldArray) => [...oldArray, ...availableInputAudioDevices])
+
+    const availableVideoInputDevices = devices.filter((device) => device.kind === 'videoinput')
+    setVideoInputDevices((oldArray) => [...oldArray, ...availableVideoInputDevices])
+    setSelectedVideoInputDeviceValue(availableVideoInputDevices[0].deviceId)
+
+    const availableAudioOutputDevices = devices.filter((device) => device.kind === 'audiooutput')
+    setAudioOutputDevices((oldArray) => [...oldArray, ...availableAudioOutputDevices])
+  }
+
+  useEffect(() => {
+    getAvailableAudioDevices()
+  }, [])
+
+  const onAudioInputDeviceChange = (value: string) => {
+    setSelectedAudioInputDeviceValue(value)
+  }
+
+  const onVideoInputDeviceChange = (value: string) => {
+    setSelectedVideoInputDeviceValue(value)
+  }
+
+  const onAudioOutputDeviceChange = (value: string) => {
+    setSelectedAudioOutputDeviceValue(value)
+  }
+
   return (
     <div className="tech-settings-popup">
-      {/* <MediaStreamProvider video={false} audio={true}>
-        <div style={{ width: '300px', height: '200px', background: '#fff' }}>
-          <button className="App-btn" onClick={toggleMic}>
-            {stream ? 'Close Microphone' : 'Open Microphone'}
-          </button>
-          <AudioVisualiser stream={stream} onRender={() => console.log('Render!')} style={{ background: 'red' }} />
-        </div>
-      </MediaStreamProvider> */}
-      {/* <AudioVisualiser stream={stream} onRender={() => console.log('Render!')} style={{ background: 'red' }} /> */}
+      <div className="tech-settings-popup__select">
+        <div className="paragraph-text paragraph-text--secondary">Audio input device</div>
+        <Select
+          style={{ width: '100%' }}
+          loading={audioInputDevices.length < 0}
+          value={selectedAudioInputDeviceValue}
+          onChange={onAudioInputDeviceChange}
+          options={audioInputDevices.map((device) => ({ label: device.label, value: device.deviceId }))}
+        />
+      </div>
+      <div className="tech-settings-popup__select">
+        <div className="paragraph-text paragraph-text--secondary">Video input device</div>
+        <Select
+          style={{ width: '100%' }}
+          loading={videoInputDevices.length < 0}
+          value={selectedVideoInputDeviceValue}
+          onChange={onVideoInputDeviceChange}
+          options={videoInputDevices.map((device) => ({ label: device.label, value: device.deviceId }))}
+        />
+      </div>
+      <div className="tech-settings-popup__select">
+        <div className="paragraph-text paragraph-text--secondary">Audio output device</div>
+        <Select
+          style={{ width: '100%' }}
+          loading={audioOutputDevices.length < 0}
+          value={selectedAudioOutputDevicesValue}
+          onChange={onAudioOutputDeviceChange}
+          options={audioOutputDevices.map((device) => ({ label: device.label, value: device.deviceId }))}
+        />
+      </div>
     </div>
   )
 }

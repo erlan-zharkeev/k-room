@@ -182,6 +182,12 @@ export interface CodeValidationPayload {
     email: string;
     code: string;
 }
+export interface InfoItem {
+    key: string;
+    label: string;
+    content?: string;
+    read: "read" | "unread";
+}
 export declare enum Status {
     SUCCESS = 200,
     BAD_REQUEST = 400,

@@ -26,7 +26,6 @@ const Popup = () => {
         open={showModal}
         footer={null}
         onCancel={() => dispatch(closeModal())}
-        style={{ maxWidth: '320px' }}
       >
         <Content />
       </Modal>
