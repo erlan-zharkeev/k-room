@@ -5,13 +5,15 @@ import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import TechSettingsPopup from './Components/TechSettingsPopup/TechSettingsPopup'
 import UserDataSettingsPopup from './Components/UserDataSettingsPopup/UserDataSettingsPopup'
+import ForwardMessagePopup from './Components/ForwardMessagePopup/ForwardMessagePopup'
 
 const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
   const popups: { [key: string]: JSX.Element } = {
     UserDataSettingsPopup: <UserDataSettingsPopup />,
-    TechSettingsPopup: <TechSettingsPopup />
+    TechSettingsPopup: <TechSettingsPopup />,
+    ForwardMessagePopup: <ForwardMessagePopup />
   }
 
   const Content = () => {

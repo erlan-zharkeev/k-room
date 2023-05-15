@@ -1,0 +1,33 @@
+@import './Components/MessageContextMenu/style.scss';
+@import './Components/Reactions/style.scss';
+
+.context-menu {
+  &__body {
+    width: auto;
+    max-width: 300px;
+    min-width: 150px;
+    height: auto;
+    background-color: var(--dark-gray);
+    position: absolute;
+    top: 500px;
+    left: 500px;
+    border-radius: $radius-sm;
+    color: var(--secondary-text);
+    transition: opacity 0.2s ease-in-out;
+  }
+  &__element {
+    &:first-child {
+      border-top-right-radius: $radius-sm;
+      border-top-left-radius: $radius-sm;
+    }
+    &:last-child {
+      border-bottom-right-radius: $radius-sm;
+      border-bottom-left-radius: $radius-sm;
+    }
+    &:hover {
+      background-color: var(--secondary-text);
+      color: var(--main-bg);
+      cursor: pointer;
+    }
+  }
+}

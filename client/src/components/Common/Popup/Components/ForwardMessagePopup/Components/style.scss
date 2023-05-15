@@ -1,0 +1,19 @@
+.short-contacts-list {
+  padding: $gutter-lg $gutter-sm;
+  &__item {
+    display: flex;
+    align-items: center;
+    border-radius: $radius-sm;
+    padding: $gutter-md;
+    &:hover {
+      cursor: pointer;
+      background-color: var(--dark-gray-transparent);
+    }
+    .ant-image {
+      margin-top: 4px;
+    }
+  }
+  &__name {
+    margin-left: $gutter-md;
+  }
+}

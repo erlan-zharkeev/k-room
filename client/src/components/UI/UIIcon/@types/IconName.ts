@@ -29,3 +29,5 @@ export type IconName =
   | 'expand'
   | 'google'
   | 'facebook'
+  | 'reply'
+  | 'forward'

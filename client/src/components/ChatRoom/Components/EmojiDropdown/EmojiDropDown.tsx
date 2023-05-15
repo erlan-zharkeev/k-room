@@ -1,4 +1,4 @@
-import { Button, Dropdown, MenuProps } from 'antd'
+import { Dropdown, MenuProps } from 'antd'
 import emojiSource from './emojis'
 import { EmojiDropdownProps } from './@types/EmojiDropdownProps'
 import UIButton from 'ui/UIButton'

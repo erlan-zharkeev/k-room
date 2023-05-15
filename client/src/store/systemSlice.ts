@@ -1,12 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
 import { SystemStore } from './@types/SystemState'
+import constants from 'src/constants'
 
 const html = document.querySelector('html')
+
+const clickedObjectInitialState = {
+  message: {
+    id: '',
+    authorName: '',
+    author: '',
+    body: ''
+  }
+}
 
 const initialState: SystemStore = {
   reconnecting: false,
   showModal: false,
+  contextMenu: {
+    slotName: '',
+    coord: {
+      x: 0,
+      y: 0
+    },
+    contextClickedObject: clickedObjectInitialState
+  },
   modalData: {
     title: '',
     modalContentComponentName: '',
@@ -71,10 +89,43 @@ const systemSlice = createSlice({
       const viewPortWidth = state.viewPort.width
       const viewPortType = viewPortWidth <= 576 ? 'mobile' : 'desktop'
       html?.setAttribute('view-port', viewPortType)
+    },
+    setContextMenu(state, { payload }) {
+      const { event, type, contextClickedObject } = payload
+      if (constants.blockNativeContextMenu && event) event.preventDefault()
+      state.contextMenu.slotName = type
+      if (!event) return
+      const currentClickedObject = state.contextMenu.contextClickedObject
+      state.contextMenu.contextClickedObject = { ...currentClickedObject, ...contextClickedObject }
+      const viewportWidth = state.viewPort.width
+      const viewportHeight = state.viewPort.width
+      let x = event.pageX
+      let y = event.pageY
+      const defaultPadding = 4
+      const menuDomElement = document.querySelector<HTMLElement>('.context-menu__body')
+      const menuWidth = menuDomElement.offsetWidth
+      const menuHeight = menuDomElement.offsetHeight
+      if (menuWidth + x > viewportWidth) x = viewportWidth - menuWidth - defaultPadding
+      if (menuHeight + y > viewportHeight) y = viewportHeight - menuHeight - defaultPadding
+      state.contextMenu.coord = {
+        x,
+        y
+      }
+    },
+    resetContextClickedObject(state) {
+      state.contextMenu.contextClickedObject = clickedObjectInitialState
     }
   }
 })
 
-export const { setReconnectingStatus, showNotification, showModal, closeModal, setViewPort } = systemSlice.actions
+export const {
+  setReconnectingStatus,
+  showNotification,
+  showModal,
+  closeModal,
+  setViewPort,
+  setContextMenu,
+  resetContextClickedObject
+} = systemSlice.actions
 
 export default systemSlice.reducer

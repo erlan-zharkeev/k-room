@@ -10,10 +10,16 @@ const AppRouter = () => {
   const { isAuth, isAppLoading } = useTypedSelector((state) => state.user)
   const hasJwt = getCookie('jwt')
   const showLoader = isAppLoading && hasJwt
+
   const convertedRouteProps = (
     route: IRoute
   ): { key: string; path: string; element: React.ReactElement; exact: boolean } => {
-    return { key: route.path, element: <route.component />, path: route.path, exact: true }
+    return {
+      key: route.path,
+      element: <route.component />,
+      path: route.path,
+      exact: true
+    }
   }
 
   return showLoader ? (
@@ -29,7 +35,6 @@ const AppRouter = () => {
       {privateRoutes.map((route: IRoute) => (
         <Route {...convertedRouteProps(route)} />
       ))}
-
     </Routes>
   ) : (
     <Routes>

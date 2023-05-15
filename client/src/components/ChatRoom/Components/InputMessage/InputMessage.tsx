@@ -9,8 +9,11 @@ import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
 import UIInput from 'ui/UIInput'
 import UIButton from 'ui/UIButton'
+import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
 
-export const InputMessage = ({ sendMessage }: InputMessageProps) => {
+export const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
+  // const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
+
   const [message, setMessage] = useState('')
   const { id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
@@ -34,7 +37,13 @@ export const InputMessage = ({ sendMessage }: InputMessageProps) => {
   }
 
   return (
-    <div className="input-message">
+    <div
+      className="input-message"
+      style={{
+        height: `${height}px`
+      }}
+    >
+      <ReplyMessage />
       <Form onFinish={send}>
         <UIButton iconName="paper-clip" />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />

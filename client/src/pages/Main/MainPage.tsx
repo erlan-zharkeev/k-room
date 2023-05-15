@@ -9,7 +9,7 @@ import { Message, SocketActions, User, ChatRoom as ChatRoomInterface } from 'com
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
-import { setReconnectingStatus, showNotification } from 'src/store/systemSlice'
+import { setContextMenu, setReconnectingStatus, showNotification } from 'src/store/systemSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
@@ -49,6 +49,10 @@ export const MainPage = () => {
   const debouncedStatusNotification = useDebounce(statusNotification, 1000)
 
   const hideAside = () => selectedChatRoom && viewPort.width <= 769
+
+  const clickHandler = () => {
+    dispatch(setContextMenu({ event: null, type: '' }))
+  }
 
   useEffect(() => {
     socket.connect()
@@ -104,7 +108,7 @@ export const MainPage = () => {
   }, [])
 
   return (
-    <div className={'main-page page' + (hideAside() ? ' move-aside' : '')}>
+    <div className={'main-page page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
       <StubLoading isLoading={socket.disconnected} />
       <Popup />
       <CallModal />

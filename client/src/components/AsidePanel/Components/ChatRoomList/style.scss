@@ -13,7 +13,6 @@
       border: none;
       cursor: pointer;
       transition: 0.2s linear all;
-
       &:first-child {
         margin-top: 1px;
       }
@@ -35,6 +34,12 @@
       align-items: center;
       min-width: 60%;
       margin-bottom: $gutter-sm;
+      &-description {
+        height: 18px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
   }
 

@@ -24,11 +24,9 @@
 
   &__body {
     position: absolute;
-    top: $room-header-height;
     width: 100%;
-    height: calc(100% - $room-header-height - $input-message-height - 10px);
     overflow: hidden;
-
+    transition: 0.1s height ease-in-out;
     .ant-list-empty-text {
       @include absolute-center;
 

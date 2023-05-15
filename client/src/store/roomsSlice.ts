@@ -2,8 +2,16 @@ import { createSlice } from '@reduxjs/toolkit'
 import { UserShort } from 'common-types'
 import { RoomsState } from './@types/RoomsState'
 
+const initialRepliedMessageData = {
+  id: '',
+  authorName: '',
+  author: '',
+  body: ''
+}
+
 const initialState: RoomsState = {
-  chatRooms: []
+  chatRooms: [],
+  repliedMessageData: initialRepliedMessageData
 }
 
 const roomsSlice = createSlice({
@@ -51,6 +59,12 @@ const roomsSlice = createSlice({
         room.chatName = username
         room.avatar = avatar
       })
+    },
+    setRepliedMessage(state, { payload }) {
+      state.repliedMessageData = payload
+    },
+    resetRepliedMessage(state) {
+      state.repliedMessageData = initialRepliedMessageData
     }
   }
 })
@@ -61,7 +75,9 @@ export const {
   updateChatMessage,
   pushTemporaryMessage,
   updateMessageStatus,
-  changeChatName
+  changeChatName,
+  setRepliedMessage,
+  resetRepliedMessage
 } = roomsSlice.actions
 
 export default roomsSlice.reducer
