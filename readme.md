@@ -77,36 +77,36 @@
 
 ## Backlog
 
-- develop call list(7)
+- develop call list(4)
 - develop add photo(5)
-- develop add files(5)
+<!-- - develop add files(5) -->
 <!-- - develop add video -->
 <!-- - develop add audio -->
 - Make username unique(3)
-- develop forward and reply(10)
-- develop reactions(5)
+- develop forward and reply(5)
+- develop reactions(2)
 <!-- - make multiple chat() -->
 <!-- - make multiple video chat -->
 - make notifications from chat(5)
 <!-- - make update button(webWorkers) -->
 - check token works(1)
-- share geolocation
+<!-- - share geolocation -->
 <!-- - delayed messages -->
 <!-- - find out how to deploy project for MOBILE and WINDOWS -->
-- setup cors to specific host and port(5)
+- setup cors to specific host and port
 - not found page(3)
 - скомпоновать сообщения на бэке(2)
 <!-- - auto upgrade version -->
-- уменьшить базовые изображения и удаление не нужных(1)
-- добавить компрессию файлов(3)
-- add hints to buttons(3)
-- Сделать доступным поиск автоматическим
-- lazy load сообщений(5)
+- уменьшить базовые изображения и удаление не нужных(2)
+<!-- - добавить компрессию файлов(3) -->
+- add hints to buttons(2)
+- Сделать доступным поиск автоматическим(2)
+<!-- - lazy load сообщений(5) -->
 - добавить настройки громкости и чекаем видео(5)
 - Инвайты и не допускать сообщения без добаления в контакты(3)
 - privacy policy create and to facebook dev
-- make gif how to use(2)
--
+<!-- - make gif how to use(2) -->
+
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 <!-- docker-compose --env-file .env.production up -d webserver -->

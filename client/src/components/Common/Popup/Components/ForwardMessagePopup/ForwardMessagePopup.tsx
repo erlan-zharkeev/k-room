@@ -1,14 +1,23 @@
-import ShortContactsList from './Components/ShortContactsList'
+import ShortChatList from './Components/ShortChatList/ShortChatList'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import UIIcon from 'src/components/UI/UIIcon'
 import UIInput from 'src/components/UI/UIInput'
 import useTypedSelector from 'src/hooks/useTypedSelector'
+import { AppDispatch } from 'src/store'
+import { setRepliedMessage } from 'src/store/roomsSlice'
+import { selectChatRoom } from 'src/store/settingsSlice'
+import { closeModal } from 'src/store/systemSlice'
 
 const ForwardMessagePopup = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const [searchString, setSearchString] = useState('')
   const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)
-  const clickContactHandler = (userId: string) => {
-    console.log(message, userId)
+
+  const clickChatHandler = (roomId: string) => {
+    dispatch(selectChatRoom(roomId))
+    dispatch(setRepliedMessage(message))
+    dispatch(closeModal())
   }
   return (
     <div className="forward-message-popup">
@@ -18,7 +27,7 @@ const ForwardMessagePopup = () => {
           suffix={<UIIcon name={'search'} color={'default'} />}
           onChange={async (e) => setSearchString(e.target.value)}
         />
-        <ShortContactsList searchString={searchString} clickContact={clickContactHandler} />
+        <ShortChatList searchString={searchString} clickChat={clickChatHandler} />
       </div>
     </div>
   )

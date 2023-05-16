@@ -37,7 +37,7 @@ const ContactList = () => {
     const hasChatWithContact = chatRooms.some((room) => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
-      if (user.id) {
+      if (user?.id) {
         dispatch(changeAsideTab('chatList'))
         dispatch(selectChatRoom(room.roomId))
       }
