@@ -45,7 +45,8 @@ export declare enum UserEndPoints {
 }
 export declare enum CommonEndPoints {
     COMMON_IMAGES = "/common-images",
-    GET_FILES = "/image/:filename"
+    GET_FILES = "/image/:filename",
+    GET_INFO = "/notification"
 }
 export declare enum CodesEndPoints {
     SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
@@ -89,7 +90,8 @@ export declare enum RouteNames {
     MAIN = "/app",
     NOT_FOUND = "/not-found",
     PASSWORD_RECOVERY = "/password-recovery",
-    CREATE_NEW_PASSWORD = "/create-new-password"
+    CREATE_NEW_PASSWORD = "/create-new-password",
+    NOTIFICATION = "/notification"
 }
 export interface Message {
     id: string;
@@ -129,6 +131,7 @@ export interface User extends UserCredential {
     chatRooms: ChatRooms;
     lastSeen?: string;
     contacts?: Array<User>;
+    infoItems?: Array<InfoItem>;
 }
 export interface FirebaseUser {
     firebaseUid: string;
@@ -145,6 +148,7 @@ export interface UserSettings {
     theme: theme;
     showTooltips: boolean;
     soundOn: boolean;
+    currentInfoId: string;
 }
 export type CallStatus = "calling" | "in-progress" | "finished";
 export type CallType = "incoming" | "outgoing" | "missed";
@@ -183,10 +187,11 @@ export interface CodeValidationPayload {
     code: string;
 }
 export interface InfoItem {
-    key: string;
+    id: string;
     label: string;
-    content?: string;
+    content: string;
     read: "read" | "unread";
+    contentComponent?: () => string;
 }
 export declare enum Status {
     SUCCESS = 200,

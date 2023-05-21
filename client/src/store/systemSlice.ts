@@ -42,30 +42,13 @@ const initialState: SystemStore = {
   viewPort: {
     width: 0,
     height: 0
-  },
-  infoItems: [
-    {
-      key: '1',
-      label: 'Welcome to K-Room',
-      content: `<p>We are happy that you choose our app</p>`,
-      read: 'unread'
-    },
-    {
-      key: '2',
-      label: 'New update',
-      content: `<p>Checkout new update</p>`,
-      read: 'read'
-    }
-  ]
+  }
 }
 
 const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    setInfoItems(state, { payload }) {
-      state.infoItems = payload
-    },
     setReconnectingStatus(state, { payload }) {
       state.reconnecting = payload
     },

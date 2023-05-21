@@ -9,6 +9,8 @@ import { Status, UserCredential } from '../../../types'
 import initUserSettings from '../fixtures/initUserSettings'
 import { v4 as uuidv4 } from 'uuid'
 import { initUserCodes } from '../fixtures/initUserCodes'
+import { getInfo } from '../services/info/getInfo'
+
 const bcrypt = require('bcryptjs')
 
 class AuthController {
@@ -29,14 +31,15 @@ class AuthController {
       const hashedPassword = await bcrypt.hash(password, 6)
 
       if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
-
+      const welcomeInfoItem = getInfo('1')
       const user = new UserModel({
         username,
         email,
         password: hashedPassword,
         socketId: '',
         settings: initUserSettings,
-        codes: initUserCodes
+        codes: initUserCodes,
+        infoItems: [welcomeInfoItem]
       })
 
       await user.save()
@@ -88,7 +91,7 @@ class AuthController {
 
       await updateTokens(user._id, res)
       return res.json({
-        userData: { username: user.username, email, id: user._id, avatar: user.avatar },
+        userData: { username: user.username, email, id: user._id, avatar: user.avatar, infoItems: user.infoItems },
         settings: user.settings,
         message: Messages.loginSuccess
       })

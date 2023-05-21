@@ -90,3 +90,13 @@ input:-webkit-autofill {
 .nm-outset-shadow {
   @include nm-outset-shadow;
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.divider {
+  width: 100%;
+  background-color: var(--dark-gray);
+  height: 1px;
+}

@@ -187,9 +187,6 @@ div[role='dialog'] {
   padding-top: 0;
 }
 
-
-
-
 // tooltip
 html[tooltips='false'] {
   .ant-tooltip {
@@ -231,9 +228,9 @@ html[tooltips='false'] {
   }
 
   ul {
-    background: transparent;
-    border: 1px solid var(--secondary-text);
-
+    background: var(--dark-gray);
+    border-radius: $radius-sm;
+    overflow: hidden;
     li {
       color: var(--secondary-text) !important;
       position: relative;
@@ -250,6 +247,7 @@ html[tooltips='false'] {
       &:hover {
         background-color: var(--secondary-text);
         color: var(--main-bg) !important;
+        // border-radius: $radius-sm;
       }
     }
   }
@@ -275,4 +273,19 @@ html[tooltips='false'] {
 
 .ant-image-preview-operations-operation {
   display: none !important;
+}
+
+// Collapse
+.ant-collapse {
+  background-color: transparent;
+  border: transparent;
+  span {
+    color: var(--secondary-text) !important;
+  }
+  &-item {
+    border: none !important;
+    background-color: var(--dark-gray);
+    border-radius: $radius-sm !important;
+    margin-bottom: $gutter-md;
+  }
 }

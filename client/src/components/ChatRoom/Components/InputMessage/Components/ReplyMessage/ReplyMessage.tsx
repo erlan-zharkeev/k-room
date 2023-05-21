@@ -13,7 +13,7 @@ export const ReplyMessage = () => {
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const updatedHeight = repliedMessageData.id ? (constants.fullInputMessage - constants.shortInputMessage - 8) : 0
+    const updatedHeight = repliedMessageData.id ? constants.fullInputMessage - constants.shortInputMessage - 8 : 0
     setHeight(updatedHeight)
   }, [repliedMessageData])
 
@@ -23,10 +23,13 @@ export const ReplyMessage = () => {
     dispatch(resetRepliedMessage())
   }
   return (
-    <div className="reply-message" style={{
-      height: `${height}px`,
-      display: height ? 'flex' : 'none'
-    }}>
+    <div
+      className="reply-message"
+      style={{
+        height: `${height}px`,
+        display: height ? 'flex' : 'none'
+      }}
+    >
       <div className="reply-message__icon">
         <UIIcon name="reply" color="accent" />
       </div>

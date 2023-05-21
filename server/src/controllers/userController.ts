@@ -16,10 +16,10 @@ class UserController {
 
       const query = {} as any
       query['settings.' + type] = value
-
       await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
       return res.json()
     } catch (e) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, Messages.updateSettings)
     }
   }
@@ -34,7 +34,8 @@ class UserController {
           username: user.username,
           email: user.email,
           id: user._id,
-          avatar: user.avatar
+          avatar: user.avatar,
+          infoItems: user.infoItems
         },
         settings: user.settings
       })

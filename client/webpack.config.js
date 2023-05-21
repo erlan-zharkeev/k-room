@@ -38,9 +38,7 @@ module.exports = {
     ],
     historyApiFallback: true,
     port: ENV.CLIENT_PORT,
-    open: true,
-    hot: true ,
-    liveReload: true
+    open: true
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -78,6 +76,7 @@ module.exports = {
     }
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new MiniCssExtractPlugin({
       filename: filename('css'),
       chunkFilename: filename('css')

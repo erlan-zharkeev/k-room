@@ -13,7 +13,7 @@ const AsideBar = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { viewPort } = useTypedSelector((state) => state.system)
 
-  const changTab = (e: RadioChangeEvent) => {
+  const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
     dispatch(changeAsideTab(currentTabName))
   }
@@ -36,7 +36,7 @@ const AsideBar = () => {
   return (
     <div className="aside-bar">
       {viewPort.width >= 769 && <Logo />}
-      <Radio.Group value={asideTab} onChange={changTab}>
+      <Radio.Group value={asideTab} onChange={changeTab}>
         {buttons.map((button) => {
           return (
             <UIButton

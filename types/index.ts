@@ -49,6 +49,7 @@ export enum UserEndPoints {
 export enum CommonEndPoints {
   COMMON_IMAGES = "/common-images",
   GET_FILES = "/image/:filename",
+  GET_INFO = "/notification",
 }
 
 export enum CodesEndPoints {
@@ -96,6 +97,7 @@ export enum RouteNames {
   NOT_FOUND = "/not-found",
   PASSWORD_RECOVERY = "/password-recovery",
   CREATE_NEW_PASSWORD = "/create-new-password",
+  NOTIFICATION = "/notification",
 }
 
 export interface Message {
@@ -142,6 +144,7 @@ export interface User extends UserCredential {
   chatRooms: ChatRooms;
   lastSeen?: string;
   contacts?: Array<User>;
+  infoItems?: Array<InfoItem>;
 }
 
 export interface FirebaseUser {
@@ -161,6 +164,7 @@ export interface UserSettings {
   theme: theme;
   showTooltips: boolean;
   soundOn: boolean;
+  currentInfoId: string;
 }
 
 export type CallStatus = "calling" | "in-progress" | "finished";
@@ -206,10 +210,11 @@ export interface CodeValidationPayload {
 }
 
 export interface InfoItem {
-  key: string;
+  id: string;
   label: string;
-  content?: string;
+  content: string;
   read: "read" | "unread";
+  contentComponent?: () => string;
 }
 
 export enum Status {

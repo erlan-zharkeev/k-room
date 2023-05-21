@@ -7,7 +7,6 @@
   align-items: center;
   justify-content: space-between;
   width: calc(100% + 2rem);
-  height: $room-header-height;
   padding: 0 1rem 1rem;
   background-color: var(--main-bg);
   @include max-width-768 {

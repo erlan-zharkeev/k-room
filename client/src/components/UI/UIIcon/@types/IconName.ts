@@ -31,3 +31,5 @@ export type IconName =
   | 'facebook'
   | 'reply'
   | 'forward'
+  | 'exclamation'
+  | 'image'

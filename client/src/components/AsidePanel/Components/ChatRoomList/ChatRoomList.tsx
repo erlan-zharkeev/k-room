@@ -5,6 +5,7 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
+import { showModal } from 'src/store/systemSlice'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
 
@@ -43,8 +44,17 @@ export const ChatRoomList = () => {
     return !hasUserInContacts && !isChatMultiple
   }
 
+  const createMultipleChat = () => {
+    dispatch(showModal({ title: 'Create New Chat Room', modalContentComponentName: 'CreateMultipleChatPopup' }))
+  }
+
   return (
     <div className="chat-room-list" onClick={() => dispatch(selectChatRoom(''))}>
+      <div className="chat-room-list__create-chat">
+        <UIButton text="Create chat" iconName="plus" border="border-default" fill={true} onClick={createMultipleChat} />
+        <div className="divider" />
+      </div>
+
       <div className="chat-room-list__body">
         <List
           itemLayout="horizontal"

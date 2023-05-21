@@ -28,10 +28,9 @@ export const SignInPage = () => {
   const onFinish = async (fields: UserCredential) => {
     setIsLoading(true)
     const response = (await dispatch(apiMethods.auth.login(fields))) as AsyncThunkResponseWrapper
+    setIsLoading(false)
     const { userData, settings } = response.payload.data
     commonSetUserDataHandler(dispatch, { userData, settings })
-
-    setIsLoading(false)
   }
 
   const providerSignIn = async (providerName: ProviderType, loaderMethod: (value: boolean) => void) => {

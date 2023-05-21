@@ -31,7 +31,7 @@ const AppRouter = () => {
     </div>
   ) : isAuth ? (
     <Routes>
-      <Route path="*" element={<Navigate to={RouteNames.MAIN} replace />} />
+      <Route path="*" element={<Navigate to={RouteNames.MAIN} replace />} />§
       {privateRoutes.map((route: IRoute) => (
         <Route {...convertedRouteProps(route)} />
       ))}

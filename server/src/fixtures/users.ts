@@ -4,12 +4,13 @@ import { UserModel } from './../models/user.model'
 import firstCharUpperCase from '../utils/firstCharUpperCase'
 import initUserSettings from './initUserSettings'
 import { initUserCodes } from './initUserCodes'
+import { getInfo } from '../services/info/getInfo'
 const bcrypt = require('bcryptjs')
-
-const users = ENV.IS_DEV ? ['erlan', 'ivan', 'tolik'] : ['erlan']
 
 export default async () => {
   const createUser = async (username: string) => {
+    const candidate = await UserModel.findOne({ email: `${username}@gmail.com` })
+    if (candidate) return
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
       username: firstCharUpperCase(username),
@@ -20,14 +21,12 @@ export default async () => {
       refreshToken: username,
       confirmed: true,
       settings: initUserSettings,
-      codes: initUserCodes
+      codes: initUserCodes,
+      infoItems: [getInfo('1')]
     })
     await user.save()
   }
-
-  users.forEach(async (user) => {
-    try {
-      await createUser(user)
-    } catch (e: any) {}
-  })
+  const users = ENV.IS_DEV ? ['tolik', 'ivan', 'erlan'] : ['erlan']
+  const promises = users.map(createUser)
+  return await Promise.all(promises)
 }

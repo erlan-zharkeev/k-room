@@ -37,5 +37,4 @@ export interface SystemStore {
   }
   notificationData: NotificationStore
   viewPort: ViewPort
-  infoItems: Array<InfoItem>
 }

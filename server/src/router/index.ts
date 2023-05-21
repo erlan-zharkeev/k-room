@@ -34,6 +34,7 @@ router.post(UserEndPoints.UPDATE_USER_DATA, upload.single('file'), userControlle
 router.post(UserEndPoints.UPDATE_USER_SETTINGS, userController.updateUserSettings)
 router.post(UserEndPoints.RESET_PASSWORD, userController.resetPassword)
 
+router.post(CommonEndPoints.GET_INFO, commonController.readInfoHandler)
 router.get(CommonEndPoints.COMMON_IMAGES, commonController.imagesHandler)
 router.get(CommonEndPoints.GET_FILES, commonController.showFiles)
 

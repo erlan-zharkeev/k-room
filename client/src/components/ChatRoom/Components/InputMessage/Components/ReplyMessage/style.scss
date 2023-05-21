@@ -7,7 +7,7 @@
   border-radius: $radius-sm;
   position: relative;
   margin: 4px 0;
-  transition: .2s ease-in-out height;
+  height: 0;
   &__icon {
     border-right: 1px solid var(--secondary-text);
     padding-right: $gutter-sm;

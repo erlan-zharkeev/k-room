@@ -21,6 +21,8 @@ export const ChatRoom = () => {
 
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
 
+  const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
+
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
 
@@ -100,7 +102,7 @@ export const ChatRoom = () => {
                 id="message-list"
                 itemLayout="horizontal"
                 dataSource={selectedChatRoom.messages ?? []}
-                locale={{ emptyText: 'There are no messages, write first' }}
+                locale={{ emptyText: ' ' }}
                 renderItem={(item: Message) => (
                   <List.Item className={isMessageSelf(item.author)} ref={setRef(item.id)}>
                     <MessageBody message={item} />
@@ -108,15 +110,20 @@ export const ChatRoom = () => {
                 )}
               />
             </div>
+            {selectedChatRoom.messages.length === 0 && (
+              <div className="chat-room__empty-text paragraph-text paragraph-text--secondary">
+                There are no messages, write first
+              </div>
+            )}
             <InputMessage sendMessage={sendMessage} height={inputMessageHeight} />
           </>
         ) : (
-          <div className="chat-room__stub">
+          <div className={`chat-room__stub ${haveAnyChatRoom ? 'pointer' : ''}`}>
             <div
               onClick={() => dispatch(changeAsideTab('chatList'))}
               className="paragraph-text paragraph-text--secondary"
             >
-              Choose chat room
+              Choose or create chat
             </div>
           </div>
         )}

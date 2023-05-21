@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { AuthEndPoints, UserCredential } from 'common-types'
+import { AuthEndPoints, CommonEndPoints, UserCredential } from 'common-types'
 import $api from 'src/services/$api'
 
 export const updateTokensPair = createAsyncThunk(

@@ -5,6 +5,8 @@ import ENV from '../ENV'
 import { Messages } from '../types/Messages'
 import throwError from '../utils/throwError'
 import db from './../services/database'
+import { UserModel } from '../models/user.model'
+
 const fs = require('fs')
 const Grid = require('gridfs-stream')
 
@@ -44,6 +46,34 @@ class CommonController {
         readstream.pipe(res)
       } else throwError(Status.NOT_FOUND, res, Messages.notImage)
     })
+  }
+
+  async readInfoHandler(req: Request, res: Response) {
+    try {
+      const { currentInfoId, userId } = req.body
+      await UserModel.findOneAndUpdate(
+        {
+          _id: userId,
+          infoItems: {
+            $elemMatch: {
+              id: currentInfoId
+            }
+          }
+        },
+        {
+          $set: {
+            'infoItems.$[outer].read': 'read'
+          }
+        },
+        {
+          new: true,
+          arrayFilters: [{ 'outer.id': currentInfoId }]
+        }
+      )
+      return res.json({ message: Messages.success, silent: true })
+    } catch (e) {
+      throwError(Status.NOT_FOUND, res, Messages.notImage)
+    }
   }
 }
 

@@ -110,3 +110,7 @@
 docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 <!-- docker-compose --env-file .env.production up -d webserver -->
+
+
+удалить функцию getInfo
+убрать видимость singinpage при перезагрузке

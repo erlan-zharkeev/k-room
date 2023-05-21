@@ -5,8 +5,6 @@ import { setRepliedMessage } from 'src/store/roomsSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
-import { selectChatRoom } from 'src/store/settingsSlice'
-import { getSingleChatIdByUserName } from 'src/utils/chatsHelper'
 
 export const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()

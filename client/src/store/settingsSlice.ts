@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import setTheme from 'src/utils/setTheme'
-import { SettingsState } from './@types/SettingsState'
+import { UserSettings } from 'common-types'
 
-const initialState: SettingsState = {
+const initialState: UserSettings = {
   asideTab: 'contacts',
+  currentInfoId: '1',
   selectedChatRoomId: '',
   theme: 'dark',
   soundOn: true,
@@ -15,14 +16,19 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
+    setCurrentInfoItem(state, { payload }) {
+      state.currentInfoId = payload
+    },
     updateSettings(state, { payload }) {
-      const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification } = payload
+      const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification, currentInfoId } =
+        payload
       state.asideTab = asideTab
       state.selectedChatRoomId = selectedChatRoomId
       state.theme = theme
       setTheme(state.theme)
       state.soundOn = soundOn
       state.showTooltips = showTooltips
+      state.currentInfoId = currentInfoId
       state.ableToShowNotification = ableToShowNotification
     },
     selectChatRoom(state, { payload }) {
@@ -54,7 +60,8 @@ export const {
   setTooltipsValue,
   selectChatRoom,
   setAbleToShowNotification,
-  updateSettings
+  updateSettings,
+  setCurrentInfoItem
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

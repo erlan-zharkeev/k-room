@@ -66,7 +66,9 @@ export const PasswordRecoveryPage = () => {
       email: emailConfirmForm.getFieldValue('email'),
       code: fields.code
     }
-    const response = (await dispatch(validateEmailCodePasswordRecovery(payload))) as AsyncThunkResponseWrapper
+    const response = (await dispatch(
+      apiMethods.codes.validateEmailCodePasswordRecovery(payload)
+    )) as AsyncThunkResponseWrapper
     if (!response) return
     const { query } = response.payload.data
     setCodeValidationIsLoading(false)

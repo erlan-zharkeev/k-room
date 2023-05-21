@@ -24,6 +24,7 @@ import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
+import InfoList from 'src/components/InfoList/InfoList'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -31,6 +32,7 @@ export const MainPage = () => {
   const userId = useTypedSelector((state) => state.user.userData.id)
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
+  const { asideTab } = useTypedSelector((state) => state.persist.settings)
 
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
 
@@ -53,6 +55,8 @@ export const MainPage = () => {
   const clickHandler = () => {
     dispatch(setContextMenu({ event: null, type: '' }))
   }
+
+  const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   useEffect(() => {
     socket.connect()
@@ -117,10 +121,16 @@ export const MainPage = () => {
         <div className="main-page__content">
           <CallStatusBar />
           <TopBar />
-          <div className={`main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`}>
-            <AsidePanel />
-            <ChatRoom />
-          </div>
+          {asideTab === 'info' ? (
+            <div className={mainBodyClassNames()}>
+              <InfoList />
+            </div>
+          ) : (
+            <div className={mainBodyClassNames()}>
+              <AsidePanel />
+              <ChatRoom />
+            </div>
+          )}
           {viewPort.width <= 768 && <AsideBar />}
         </div>
       </div>

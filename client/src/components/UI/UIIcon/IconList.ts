@@ -1,11 +1,11 @@
-import { ImUsers } from 'react-icons/im'
+import { ImUsers, ImNotification } from 'react-icons/im'
 import { IoChatboxEllipsesSharp, IoNotificationsSharp, IoCallSharp, IoInformationCircleOutline } from 'react-icons/io5'
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
 import { GoSettings, GoSearch } from 'react-icons/go'
 import IconListElement from './@types/IconList'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
-import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
+import { FaUserCircle, FaPhoneSlash, FaPhotoVideo } from 'react-icons/fa'
 import { RiLoader5Fill, RiShareForwardFill } from 'react-icons/ri'
 import { RxCrossCircled, RxCross2 } from 'react-icons/rx'
 import {
@@ -57,7 +57,9 @@ export const IconList: Array<IconListElement> = [
   { name: 'google', Icon: FcGoogle },
   { name: 'facebook', Icon: BsFacebook },
   { name: 'reply', Icon: BsFillReplyFill },
-  { name: 'forward', Icon: RiShareForwardFill }
+  { name: 'forward', Icon: RiShareForwardFill },
+  { name: 'exclamation', Icon: ImNotification },
+  { name: 'image', Icon: FaPhotoVideo }
 ]
 
 export default IconList
