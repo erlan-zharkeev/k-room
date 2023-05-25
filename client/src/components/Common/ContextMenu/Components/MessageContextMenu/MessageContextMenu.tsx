@@ -19,6 +19,10 @@ export const MessageContextMenu = () => {
     dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'ForwardMessagePopup' }))
   }
 
+  const deleteHandler = () => {
+    console.log('delete')
+  }
+
   return (
     <div className="message-context-menu">
       <div className="message-context-menu__element">
@@ -34,6 +38,10 @@ export const MessageContextMenu = () => {
       <div className="message-context-menu__element context-menu__element forward-icon" onClick={forwardHandler}>
         <UIIcon name="reply" />
         <span>Forward</span>
+      </div>
+      <div className="message-context-menu__element context-menu__element delete-icon" onClick={deleteHandler}>
+        <UIIcon name="trash" />
+        <span>Delete</span>
       </div>
     </div>
   )

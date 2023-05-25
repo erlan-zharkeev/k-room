@@ -33,3 +33,4 @@ export type IconName =
   | 'forward'
   | 'exclamation'
   | 'image'
+  | 'trash'

@@ -75,6 +75,7 @@ const ContactList = () => {
   return (
     <div className="contact-list">
       <ContactSearch />
+      <div className="divider" />
       <List
         header={<div>Contacts</div>}
         itemLayout="horizontal"

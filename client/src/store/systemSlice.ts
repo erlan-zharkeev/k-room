@@ -27,7 +27,7 @@ const initialState: SystemStore = {
   },
   modalData: {
     title: '',
-    modalContentComponentName: '',
+    modalContentComponentName: 'CreateMultipleChatPopup',
     okText: 'ok',
     width: '320px'
   },

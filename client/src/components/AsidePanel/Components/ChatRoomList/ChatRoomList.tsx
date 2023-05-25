@@ -51,7 +51,7 @@ export const ChatRoomList = () => {
   return (
     <div className="chat-room-list" onClick={() => dispatch(selectChatRoom(''))}>
       <div className="chat-room-list__create-chat">
-        <UIButton text="Create chat" iconName="plus" border="border-default" fill={true} onClick={createMultipleChat} />
+        <UIButton text="Create group" iconName="plus" border="border-default" fill={true} onClick={createMultipleChat} />
         <div className="divider" />
       </div>
 

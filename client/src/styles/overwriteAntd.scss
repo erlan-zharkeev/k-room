@@ -40,31 +40,57 @@
 
 // select
 .ant-select {
-  &-selector {
-    color: var(--secondary-text) !important;
-    background: var(--main-bg) !important;
-    border-color: var(--secondary-text) !important;
+  color: var(--secondary-text);
+  &-multiple {
+    .ant-select-selection-placeholder {
+      color: var(--select-placeholder) !important;
+    }
+    .ant-select-selection-item {
+      background: var(--dark-gray-transparent);
+      border-color: var(--dark-gray-transparent);
+      border-radius: $radius-md !important;
+      &-remove {
+        svg {
+          color: var(--secondary-text);
+        }
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .ant-select-selector {
+      border-radius: $radius-md !important;
+    }
   }
-  &-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    box-shadow: 0px 0px 8px var(--secondary-text) !important;
+  &-selector {
+    @include nm-inset-element;
+    border: none !important;
   }
   &-arrow {
     z-index: 1;
     color: var(--secondary-text) !important;
   }
   &-dropdown {
-    background: var(--main-bg) !important;
+    background: var(--dark-gray) !important;
     padding: 0 !important;
-    box-shadow: 0px 0px 8px var(--secondary-text) !important;
   }
   &-item {
-    background: var(--main-bg) !important;
+    background: var(--dark-gray) !important;
     color: var(--secondary-text) !important;
     &:hover {
       background-color: var(--secondary-text) !important;
       color: var(--main-text) !important;
       cursor: pointer;
     }
+  }
+}
+
+.ant-select-item-option-state {
+  svg {
+    background: var(--dark-gray);
+    border-radius: 50%;
+    padding: 2px;
+    color: var(--success) !important;
   }
 }
 
@@ -288,4 +314,10 @@ html[tooltips='false'] {
     border-radius: $radius-sm !important;
     margin-bottom: $gutter-md;
   }
+}
+
+// Badge
+.ant-badge {
+  display: flex;
+  align-items: center;
 }

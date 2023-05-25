@@ -9,6 +9,7 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
+import MultipleUserSelect from './Components/MultipleUserSelect/MultipleUserSelect'
 
 export const CreateMultipleChatPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -17,6 +18,7 @@ export const CreateMultipleChatPopup = () => {
   const [image, setNewImage] = useState(null)
   const [form] = Form.useForm()
   const [imageFile, setImageFile] = useState()
+  const [members, setMembers] = useState([])
 
   const onFinish = async (values: User) => {
     setIsLoading(true)
@@ -44,6 +46,7 @@ export const CreateMultipleChatPopup = () => {
         <Form.Item name="chat-name" rules={validateRules.required}>
           <UIInput placeholder="Enter chat name" />
         </Form.Item>
+        <MultipleUserSelect setMembers={setMembers} />
         <Form.Item className="create-multiple-chat-popup__controls">
           <UIButton text="Create" border="border-default" htmlType="submit" disabled={!isValid} loading={isLoading} />
         </Form.Item>

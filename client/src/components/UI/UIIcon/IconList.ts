@@ -5,7 +5,7 @@ import { FiSettings } from 'react-icons/fi'
 import { GoSettings, GoSearch } from 'react-icons/go'
 import IconListElement from './@types/IconList'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
-import { FaUserCircle, FaPhoneSlash, FaPhotoVideo } from 'react-icons/fa'
+import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
 import { RiLoader5Fill, RiShareForwardFill } from 'react-icons/ri'
 import { RxCrossCircled, RxCross2 } from 'react-icons/rx'
 import {
@@ -17,7 +17,9 @@ import {
   BsCameraVideoOffFill,
   BsDashLg,
   BsFacebook,
-  BsFillReplyFill
+  BsFillReplyFill,
+  BsTrash,
+  BsCardImage
 } from 'react-icons/bs'
 import { AiOutlineSend } from 'react-icons/ai'
 import { HiOutlinePaperClip } from 'react-icons/hi'
@@ -59,7 +61,8 @@ export const IconList: Array<IconListElement> = [
   { name: 'reply', Icon: BsFillReplyFill },
   { name: 'forward', Icon: RiShareForwardFill },
   { name: 'exclamation', Icon: ImNotification },
-  { name: 'image', Icon: FaPhotoVideo }
+  { name: 'image', Icon: BsCardImage },
+  { name: 'trash', Icon: BsTrash }
 ]
 
 export default IconList
