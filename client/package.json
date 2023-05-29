@@ -1,7 +1,7 @@
 {
-  "name": "k-room",
+  "name": "k-room-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -10,30 +10,26 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-oauth/google": "^0.8.0",
-    "@vitejs/plugin-react": "^4.0.0",
     "antd": "^4.20.7",
     "axios": "^0.27.2",
-    "bufferutil": "^4.0.7",
     "dotenv": "^16.0.2",
     "firebase": "^9.17.2",
     "howler": "^2.2.3",
-    "html-react-parser": "^3.0.16",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "process": "^0.11.10",
-    "react-hot-loader": "^4.13.1",
     "react-icons": "^4.7.1",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.5.1",
-    "svg-url-loader": "^8.0.0",
-    "utf-8-validate": "^5.0.10",
     "uuid": "^8.3.2",
-    "vite": "^4.3.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "vite": "^4.3.8",
+    "html-react-parser": "^3.0.16",
+    "@react-oauth/google": "^0.8.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "@babel/core": "^7.19.1",
     "@babel/preset-env": "^7.19.1",
     "@babel/preset-react": "^7.18.6",
@@ -82,7 +78,6 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "typescript": "^5.0.2"
   }
 }

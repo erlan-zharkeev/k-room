@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cd ..
 yarn
 cd ./scripts/
 source types-watch.sh &
