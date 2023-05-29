@@ -2,7 +2,7 @@ const express = require('express')
 const path = require('path')
 const dotenv = require('dotenv')
 const http = require('http')
-const ENV = dotenv.config({ path: './_env/.env.production' }).parsed
+const ENV = dotenv.config({ path: '.env.production' }).parsed
 const app = express()
 
 app.use(express.static(path.join(__dirname + '/build/')))

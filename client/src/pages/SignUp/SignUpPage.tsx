@@ -66,7 +66,7 @@ export const SignUpPage = () => {
 
             <div className="sign-up__privacy-policy">
               <Form.Item name="policy" rules={validateRules.policy}>
-                <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" />
+                <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" onChange={() => {}} />
               </Form.Item>
               <div className="sign-up__privacy-policy-text paragraph-text paragraph-text--secondary">
                 I have read and agree <a className="link">privacy policy</a>
@@ -78,7 +78,6 @@ export const SignUpPage = () => {
                 text="Register"
                 border="border-default"
                 color="accent"
-                htmlType="submit"
                 loading={isLoading}
                 disabled={!isValid}
               />

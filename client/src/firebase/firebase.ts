@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import ENV from 'src/ENV'
+const { VITE_FIREBASE_API_KEY } = import.meta.env
 
 const firebaseConfig = {
-  apiKey: ENV.FIREBASE_API_KEY,
-  authDomain: ENV.FIREBASE_AUTH_DOMAIN,
-  projectId: ENV.FIREBASE_PROJECT_ID,
-  storageBucket: ENV.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: ENV.FIREBASE_MESSAGING_SENDER_ID,
-  appId: ENV.FIREBASE_APP_ID,
-  measurementId: ENV.FIREBASE_MEASUREMENT_ID
+  apiKey: VITE_FIREBASE_API_KEY,
+  authDomain: 'k-room-3a49a.firebaseapp.com',
+  projectId: 'k-room-3a49a',
+  storageBucket: 'k-room-3a49a.appspot.com',
+  messagingSenderId: '199419640502',
+  appId: '1:199419640502:web:71eb090633e8593d704417',
+  measurementId: 'G-81GNPVFH7E'
 }
 
 export const app = initializeApp(firebaseConfig)

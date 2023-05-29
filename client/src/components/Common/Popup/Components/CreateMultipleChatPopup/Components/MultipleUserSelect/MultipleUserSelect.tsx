@@ -2,7 +2,7 @@ import { SelectProps, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
-const MultipleUserSelect = ({ setMembers }: { setMembers?: (ids: Array<string>) => void }) => {
+const MultipleUserSelect = ({ setMembers }: { setMembers: (ids: Array<string>) => void }) => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const [users, setUsers] = useState([] as SelectProps['options'])
 

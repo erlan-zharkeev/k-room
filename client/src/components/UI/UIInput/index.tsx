@@ -9,19 +9,21 @@ const inputTypes = [
 
 export const UIInput = ({ type, placeholder, size, value, suffix, autoComplete, disabled, onChange }: UIInputProps) => {
   const inputType = type ?? 'common'
-  const InputComponent = inputTypes.find((input) => input.name === inputType).component
+  const InputComponent = inputTypes.find((input) => input.name === inputType)?.component
   const className = modifiersHandler({ rootClass: 'ui-input', modifiers: [size] })
   return (
     <div className={className}>
-      <InputComponent
-        disabled={disabled}
-        size={size}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        suffix={suffix}
-        onChange={onChange}
-        value={value}
-      />
+      {InputComponent && (
+        <InputComponent
+          disabled={disabled}
+          size={size}
+          autoComplete={autoComplete}
+          placeholder={placeholder}
+          suffix={suffix}
+          onChange={onChange}
+          value={value}
+        />
+      )}
     </div>
   )
 }

@@ -86,6 +86,7 @@ const systemSlice = createSlice({
       let y = event.pageY
       const defaultPadding = 4
       const menuDomElement = document.querySelector<HTMLElement>('.context-menu__body')
+      if (!menuDomElement) return
       const menuWidth = menuDomElement.offsetWidth
       const menuHeight = menuDomElement.offsetHeight
       if (menuWidth + x > viewportWidth) x = viewportWidth - menuWidth - defaultPadding

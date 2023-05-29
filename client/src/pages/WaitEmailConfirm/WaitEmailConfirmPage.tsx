@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios'
 import { Status, RouteNames } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'

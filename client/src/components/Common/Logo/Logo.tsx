@@ -1,7 +1,6 @@
 import { RouteNames } from 'common-types'
 import { useNavigate } from 'react-router-dom'
-
-const LogoImage: string = require('src/assets/img/Logo.svg')
+import LogoImage from 'src/assets/img/Logo.svg'
 
 export const Logo = () => {
   const navigate = useNavigate()

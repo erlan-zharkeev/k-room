@@ -2,8 +2,9 @@ version: '3'
 
 services:
   db:
+    image: mongo:latest
+    container_name: db
     restart: always
-    build: ./db/
     ports:
       - 27017:27017
     volumes:

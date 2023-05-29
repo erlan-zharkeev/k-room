@@ -1,13 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
 import { Status } from 'common-types'
-import ENV from 'src/ENV'
 import { AppDispatch } from 'src/store'
 import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from 'src/services/$clg'
 import apiMethods from './api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-
 axios.defaults.withCredentials = true
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
@@ -46,18 +44,16 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
 
 type RequestTypes = 'post' | 'get' | 'patch'
 
-const serverHost = ENV.IS_DEV ? '' : `${ENV.HOST}`
-
 export const $api = async (
   type: RequestTypes,
   endpoint: string,
   dispatch: AppDispatch,
   payload: any = null,
   contentType: string = 'application/json'
-): Promise<AxiosResponse<any, any>> => {
+) => {
   const options = { headers: { 'Content-Type': contentType } }
   try {
-    const response = await axios[type](`${serverHost}/api${endpoint}`, payload, options)
+    const response = await axios[type](`/api${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
   } catch (e: any) {

@@ -27,6 +27,7 @@ export const RoomHeader = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   socket.on(SocketActions.GET_USER_TYPING_STATUS, (data: { userIdFrom: string; status: boolean }) => {
+    if (!chatRoomData) return
     const hasTypingInterlocutor = chatRoomData.users.find((user) => user.id === data.userIdFrom)
     if (hasTypingInterlocutor) setIsTyping(data.status)
   })

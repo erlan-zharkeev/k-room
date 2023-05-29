@@ -1,5 +1,5 @@
 import { Form } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
 import UIButton from 'ui/UIButton'
@@ -8,14 +8,16 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { commonSetUserDataHandler } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
-import $firebase, { ProviderType } from 'src/services/$firebase'
+import { ProviderType } from 'src/services/$firebase'
 import { RouteNames, UserCredential } from 'common-types'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
+import { ServiceContext } from 'src/main'
 
 export const SignInPage = () => {
+  const { $firebase } = useContext(ServiceContext)
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
   const [fbBtnLoading, setFbBtnLoading] = useState(false)
@@ -39,7 +41,8 @@ export const SignInPage = () => {
     if (!result) return loaderMethod(false)
     const { displayName, email, photoURL, uid } = result.user
     const { providerId } = result
-    const credential = {
+    if (!displayName || !email || !photoURL || !uid || !providerId) return
+    const credential: UserCredential = {
       id: uid,
       username: displayName,
       email,
@@ -104,7 +107,7 @@ export const SignInPage = () => {
                 text="Sign in"
                 border="border-default"
                 color="accent"
-                htmlType="submit"
+                htmltype="submit"
                 loading={isLoading}
                 disabled={!isValid}
               />

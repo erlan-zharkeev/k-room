@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import UIAvatar from 'src/components/UI/UIAvatar'
+import UIAvatar from 'ui/UIAvatar'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { ShortChatListProps } from './@types'
 

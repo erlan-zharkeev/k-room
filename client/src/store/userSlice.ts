@@ -39,6 +39,7 @@ const userSlice = createSlice({
     },
     markInfoItemAsRead(state, { payload }) {
       const { id } = payload
+      if (!state.userData.infoItems) return
       const index = state.userData.infoItems.findIndex((item) => item.id === id)
       state.userData.infoItems[index].read = 'read'
     },

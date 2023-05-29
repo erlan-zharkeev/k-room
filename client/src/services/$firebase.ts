@@ -10,12 +10,12 @@ const commonErrors = {
 } as { [key: string]: string }
 
 export class Firebase {
-  providerName: ProviderType
+  providerName: ProviderType = 'google'
   auth: Auth
   providers: {
     [key: string]: typeof GoogleAuthProvider | typeof FacebookAuthProvider
   }
-  provider: GoogleAuthProvider | FacebookAuthProvider
+  provider: GoogleAuthProvider | FacebookAuthProvider | null = null
   dispatch: AppDispatch
   constructor() {
     this.auth = getAuth()

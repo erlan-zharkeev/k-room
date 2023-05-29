@@ -40,20 +40,24 @@ const Calls = () => {
               <div className="call-list__additional-info-button">
                 <UIButton iconName="info" onClick={() => itemClickHandler(call.interlocutorId)} />
               </div>
-              <div className="call-list__length">
-                <p className="paragraph-text paragraph-text--secondary">
-                  {moment.utc(call.length * 1000).format('mm:ss')}
-                </p>
-              </div>
+              {call.length && (
+                <div className="call-list__length">
+                  <p className="paragraph-text paragraph-text--secondary">
+                    {moment.utc(call.length * 1000).format('mm:ss')}
+                  </p>
+                </div>
+              )}
               <div className="call-list__additional-info">
                 <p className="paragraph-text paragraph-text--secondary">
                   <span>Started at: </span>
                   <span>{moment.unix(call.startedAt).format('hh.mm MM.DD.YYYY')}</span>
                 </p>
-                <p className="paragraph-text paragraph-text--secondary">
-                  <span>Finished at: </span>
-                  <span>{moment.unix(call.finishedAt).format('hh.mm MM.DD.YYYY')}</span>
-                </p>
+                {call.finishedAt && (
+                  <p className="paragraph-text paragraph-text--secondary">
+                    <span>Finished at: </span>
+                    <span>{moment.unix(call.finishedAt).format('hh.mm MM.DD.YYYY')}</span>
+                  </p>
+                )}
               </div>
             </List.Item>
           )}

@@ -5,11 +5,11 @@ import modifiersHandler from 'src/utils/modifiersHandler'
 import UIIcon from 'ui/UIIcon'
 import UIButtonProps from './@types/UIButtonProps'
 
-const buttons = [
-  { name: 'common', component: Button },
-  { name: 'radio', component: Radio.Button },
-  { name: 'dropdown', component: DropdownButton }
-]
+const buttons = {
+  common: Button,
+  radio: Radio.Button,
+  dropdown: DropdownButton
+}
 
 export const UIButton = ({
   type,
@@ -22,7 +22,7 @@ export const UIButton = ({
   color,
   loading,
   disabled,
-  htmlType,
+  htmltype,
   size,
   shape,
   hover,
@@ -31,7 +31,7 @@ export const UIButton = ({
 }: UIButtonProps) => {
   const { showTooltips } = useTypedSelector((state) => state.persist.settings)
   const buttonType = type || 'common'
-  const ButtonComponent = buttons.find((button) => button.name === buttonType).component
+  const ButtonComponent = buttons[buttonType]
   const hasIconAndText = iconName && text
 
   const ButtonBody = () => (
@@ -41,7 +41,7 @@ export const UIButton = ({
       onClick={onClick}
       loading={loading}
       disabled={disabled}
-      htmlType={htmlType}
+      htmlType={htmltype}
     >
       {iconName && <UIIcon name={iconName} color={color} size={size} />}
       <span style={{ marginLeft: hasIconAndText ? '4px' : '0' }}>{text}</span>
@@ -49,7 +49,7 @@ export const UIButton = ({
   )
   const modifiers = modifiersHandler({
     rootClass: 'ui-button',
-    modifiers: [border, color, size, hover, fill && 'fill']
+    modifiers: [border, color, size, hover, fill === true ? 'fill' : '']
   })
   return (
     <div className={modifiers + ' ' + className}>

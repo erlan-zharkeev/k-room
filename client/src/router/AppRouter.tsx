@@ -12,7 +12,7 @@ const AppRouter = () => {
   const showLoader = isAppLoading && hasJwt
 
   const convertedRouteProps = (
-    route: IRoute
+    route: any
   ): { key: string; path: string; element: React.ReactElement; exact: boolean } => {
     return {
       key: route.path,
@@ -31,7 +31,7 @@ const AppRouter = () => {
     </div>
   ) : isAuth ? (
     <Routes>
-      <Route path="*" element={<Navigate to={RouteNames.MAIN} replace />} />§
+      <Route path="*" element={<Navigate to={RouteNames.MAIN} />} />§
       {privateRoutes.map((route: IRoute) => (
         <Route {...convertedRouteProps(route)} />
       ))}

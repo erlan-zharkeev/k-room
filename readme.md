@@ -83,7 +83,7 @@
 <!-- - develop add video -->
 <!-- - develop add audio -->
 - Make username unique(3)
-- develop forward and reply(5)
+- develop forward and reply(3)
 - develop reactions(2)
 <!-- - make multiple chat() -->
 <!-- - make multiple video chat -->
@@ -94,12 +94,12 @@
 <!-- - delayed messages -->
 <!-- - find out how to deploy project for MOBILE and WINDOWS -->
 - setup cors to specific host and port
-- not found page(3)
+- not found page(2)
 - скомпоновать сообщения на бэке(2)
 <!-- - auto upgrade version -->
 - уменьшить базовые изображения и удаление не нужных(2)
 <!-- - добавить компрессию файлов(3) -->
-- add hints to buttons(2)
+- add hints to buttons(1)
 - Сделать доступным поиск автоматическим(2)
 <!-- - lazy load сообщений(5) -->
 - добавить настройки громкости и чекаем видео(5)
@@ -114,3 +114,4 @@ docker rm $(docker ps -aq)
 
 удалить функцию getInfo
 убрать видимость singinpage при перезагрузке
+сброс фото не обновляет на без фото

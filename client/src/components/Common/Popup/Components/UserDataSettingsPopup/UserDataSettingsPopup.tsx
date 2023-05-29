@@ -12,7 +12,7 @@ import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/userSlice'
 import { User } from 'common-types'
-import UIImageLoader from 'src/components/UI/UIImageLoader'
+import UIImageLoader from 'ui/UIImageLoader'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
@@ -74,7 +74,7 @@ const UserDataSettingsPopup = () => {
           <UIButton
             text="Update"
             border="border-default"
-            htmlType="submit"
+            htmltype="submit"
             disabled={!isValid || (isUsernameEqualNewName && !imageChanged)}
             loading={isLoading}
           />

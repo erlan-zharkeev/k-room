@@ -12,7 +12,7 @@ import UIButton from 'ui/UIButton'
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
   const [isLoading, setIsLoading] = useState(false)
-  const [searchType, changeSearchType] = useState('name')
+  const [searchType] = useState('name')
 
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
@@ -44,6 +44,7 @@ const ContactSearch = () => {
   const addUser = async (interlocutorId: string | undefined) => {
     if (!interlocutorId) return
     const interlocutorData = users.find((user) => user.id === interlocutorId)
+    if (!interlocutorData) return
     socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
   }
 

@@ -37,7 +37,7 @@ const InfoList = () => {
     <div className="info-list">
       <div className="info-list__header header-text header-text--md header-text--secondary">Notifications</div>
       <Collapse activeKey={currentInfoId} onChange={onChange} bordered={false} accordion={true}>
-        {infoItems.map((item) => {
+        {infoItems?.map((item) => {
           return (
             <Collapse.Panel
               header={item.label}

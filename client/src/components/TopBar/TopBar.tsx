@@ -14,19 +14,20 @@ const TopBar = () => {
   const { username, email, avatar } = useTypedSelector((state) => state.user.userData)
   const { infoItems } = useTypedSelector((state) => state.user.userData)
 
-  const [transformedIInfoItems, setTransformedInfoItems] = useState([])
+  const [transformedIInfoItems, setTransformedInfoItems] = useState([] as MenuProps['items'])
 
   useEffect(() => {
-    const updatedItems = infoItems.map((item) => {
+    const updatedItems = infoItems?.map((item) => {
       const updatedItem = { ...item, key: item.id }
       return updatedItem
     })
+    if (!updatedItems) return
     setTransformedInfoItems(updatedItems)
   }, [infoItems])
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const resetChat = (e: any) => {
+  const resetChat = () => {
     // dispatch(selectChatRoom(''))
   }
 
@@ -34,7 +35,7 @@ const TopBar = () => {
     dispatch(logOut())
   }
 
-  const unreadInfoQuantity = () => infoItems.filter((item) => item.read === 'unread').length
+  const unreadInfoQuantity = () => infoItems?.filter((item) => item.read === 'unread').length
 
   const infoItemClickHandler: MenuProps['onClick'] = ({ key }) => {
     const infoId = key

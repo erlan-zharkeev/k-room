@@ -80,7 +80,6 @@ class AuthController {
   async login(req: Request, res: Response) {
     try {
       let { email, password } = req.body
-
       const user = await UserModel.findOne({ email })
       if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
       if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, Messages.emailNotConfirm)

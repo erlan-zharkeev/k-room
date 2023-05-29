@@ -20,6 +20,7 @@ const settingsSlice = createSlice({
       state.currentInfoId = payload
     },
     updateSettings(state, { payload }) {
+      if (!payload) return
       const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification, currentInfoId } =
         payload
       state.asideTab = asideTab

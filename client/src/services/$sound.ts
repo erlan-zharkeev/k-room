@@ -27,3 +27,5 @@ export const $sound = (sound: Sounds, loop?: boolean) => {
     loop
   })
 }
+
+export default $sound

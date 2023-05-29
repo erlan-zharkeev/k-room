@@ -5,7 +5,7 @@ export const getSingleChatIdByUserName = (rooms: ChatRooms, userId: string): str
   rooms.forEach((room) => {
     if (room.multiple) return
     room.users.forEach((user) => {
-      if (user.id === userId) roomId = room._id
+      if (room._id && user.id === userId) roomId = room._id
     })
   })
   return roomId

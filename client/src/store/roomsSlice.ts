@@ -24,6 +24,7 @@ const roomsSlice = createSlice({
     updateChatMessage(state, { payload }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
+      if (!room) return
       room.messages.forEach((roomMessage, idx) => {
         if (roomMessage.id === message.id) room.messages.splice(idx, 1)
       })
@@ -32,6 +33,7 @@ const roomsSlice = createSlice({
     updateMessageStatus(state, { payload }) {
       const { roomId, messageId, status } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
+      if (!room) return
       room.messages.forEach((roomMessage) => {
         if (roomMessage.id === messageId) roomMessage.status = status
       })
@@ -39,6 +41,7 @@ const roomsSlice = createSlice({
     pushTemporaryMessage(state, { payload }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
+      if (!room) return
       room.messages.push(message)
     },
     updateChatUsersStatus(state, { payload }) {

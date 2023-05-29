@@ -29,6 +29,7 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
         break
       case 'settings/setCurrentInfoItem':
         type = 'currentInfoId'
+        break
       default:
         break
     }

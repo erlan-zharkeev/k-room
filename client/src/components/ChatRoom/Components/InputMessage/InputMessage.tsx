@@ -18,8 +18,10 @@ export const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
   const { id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
 
-  const sendUserTypingStatus = (status: boolean) =>
+  const sendUserTypingStatus = (status: boolean) => {
+    if (!selectedChatRoom) return
     socket.emit(SocketActions.USER_TYPING, { userIdFrom: id, usersTo: selectedChatRoom.users, status })
+  }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)
 
@@ -48,7 +50,7 @@ export const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
         <UIButton iconName="paper-clip" />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropDown setEmoji={setEmoji} />
-        <UIButton htmlType="submit" disabled={!message} iconName="send" onClick={send} />
+        <UIButton htmltype="submit" disabled={!message} iconName="send" onClick={send} />
       </Form>
     </div>
   )

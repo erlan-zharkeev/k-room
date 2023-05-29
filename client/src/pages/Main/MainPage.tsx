@@ -113,7 +113,7 @@ export const MainPage = () => {
 
   return (
     <div className={'main-page page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
-      <StubLoading isLoading={socket.disconnected} />
+      {socket.disconnected && <StubLoading />}
       <Popup />
       <CallModal />
       <div className="main-page__wrapper">

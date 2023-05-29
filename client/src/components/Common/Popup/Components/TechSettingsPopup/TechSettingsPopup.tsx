@@ -5,10 +5,10 @@ const TechSettingsPopup = () => {
   const [audioInputDevices, setAudioInputDevices] = useState([] as MediaDeviceInfo[])
   const [selectedAudioInputDeviceValue, setSelectedAudioInputDeviceValue] = useState('default')
 
-  const [videoInputDevices, setVideoInputDevices] = useState([])
+  const [videoInputDevices, setVideoInputDevices] = useState([] as MediaDeviceInfo[])
   const [selectedVideoInputDeviceValue, setSelectedVideoInputDeviceValue] = useState('default')
 
-  const [audioOutputDevices, setAudioOutputDevices] = useState([])
+  const [audioOutputDevices, setAudioOutputDevices] = useState([] as MediaDeviceInfo[])
   const [selectedAudioOutputDevicesValue, setSelectedAudioOutputDeviceValue] = useState('default')
 
   const getAvailableAudioDevices = async () => {

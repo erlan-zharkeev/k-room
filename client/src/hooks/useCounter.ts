@@ -3,7 +3,7 @@ import { useState } from 'react'
 export const UseCounter = (initValue: number): any => {
   const [value, setValue] = useState(initValue)
 
-  let timerId: string | number | NodeJS.Timeout = null
+  let timerId: string | number | NodeJS.Timeout = -1
 
   const counter = () => {
     setValue((seconds) => {

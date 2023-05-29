@@ -1,4 +1,4 @@
-import { InfoItem, Message } from 'common-types'
+import { Message } from 'common-types'
 
 export interface NotificationStore {
   key: string

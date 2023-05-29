@@ -11,18 +11,19 @@ import {
 } from 'src/store/callsSlice'
 import CallModalVideo from '../CallModalVideo/CallModalVideo'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import { SocketActions } from 'common-types'
 import { socket } from 'src/socket/socket'
-import $call from 'src/services/$call'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
 import UseCounter from 'src/hooks/useCounter'
+import { ServiceContext } from 'src/main'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
+  const { $call } = useContext(ServiceContext)
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
@@ -152,7 +153,6 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                   <UIButton
                     iconName={settings.video ? 'video-call' : 'video-drop'}
                     color={settings.video ? 'success' : 'error'}
-                    className={!settings.video && 'call-modal__controls-element--video-block'}
                     onClick={toggleVideo}
                   />
                 )}

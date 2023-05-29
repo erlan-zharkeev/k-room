@@ -1,4 +1,4 @@
-import UIIcon from 'src/components/UI/UIIcon'
+import UIIcon from 'ui/UIIcon'
 import Reactions from '../Reactions/Reactions'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { setRepliedMessage } from 'src/store/roomsSlice'

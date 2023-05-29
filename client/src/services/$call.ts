@@ -16,15 +16,15 @@ import { store } from 'src/store/index'
 import { showNotification } from 'src/store/systemSlice'
 
 class Call {
-  selfId: string
+  selfId!: string
   dispatch: AppDispatch
-  selfStream: MediaStream
-  interlocutorStream: MediaStream
-  connection: Peer.Instance
-  callerId: string
-  selfSocketId: string
-  callerSignal: SignalData
-  callToId: string
+  selfStream!: MediaStream
+  interlocutorStream!: MediaStream
+  connection!: Peer.Instance
+  callerId!: string
+  selfSocketId!: string
+  callerSignal!: SignalData
+  callToId!: string
   soundConnection: Howl
   soundCalling: Howl
   socket: Socket
