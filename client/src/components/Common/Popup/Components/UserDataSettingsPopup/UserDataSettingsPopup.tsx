@@ -20,7 +20,7 @@ const UserDataSettingsPopup = () => {
   const [newAvatar, setNewAvatar] = useState<string | undefined>()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [isUsernameEqualNewName, setIsUsernameEqualNewName] = useState(false)
+  const [isUsernameEqualNewName, setIsUsernameEqualNewName] = useState(true)
 
   const [avatarFile, setFile] = useState()
 
@@ -55,6 +55,10 @@ const UserDataSettingsPopup = () => {
     setIsUsernameEqualNewName(form.getFieldValue('username') === username)
   }
 
+  const isUpdateButtonAvailable = () => {
+    const isTextFieldValid = isValid && !isUsernameEqualNewName
+    return imageChanged || isTextFieldValid
+  }
   return (
     <div className="user-data-settings-popup">
       <Form
@@ -75,7 +79,7 @@ const UserDataSettingsPopup = () => {
             text="Update"
             border="border-default"
             htmltype="submit"
-            disabled={!isValid || (isUsernameEqualNewName && !imageChanged)}
+            disabled={!isUpdateButtonAvailable()}
             loading={isLoading}
           />
         </Form.Item>

@@ -89,6 +89,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 shape="circle"
                 size="small"
                 hover="hoverless"
+                tooltip="Leave Call"
               />
             </div>
             <div className="call-modal__window-controls-element">
@@ -99,6 +100,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 shape="circle"
                 size="small"
                 hover="hoverless"
+                tooltip="Minify Modal Call"
               />
             </div>
             <div className="call-modal__window-controls-element">
@@ -109,6 +111,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 shape="circle"
                 size="small"
                 hover="hoverless"
+                tooltip="Expand Modal Call"
               />
             </div>
           </div>
@@ -142,26 +145,35 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <div className="call-modal__controls-elements">
               {currentCall.type === 'incoming' && currentCall.status === 'calling' && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
-                  <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} />
+                  <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} tooltip="Answer" />
                 </div>
               )}
               <div className="call-modal__controls-element">
                 {currentCall.status === 'calling' && (
-                  <UIButton iconName={isAnswerLoading ? 'loader' : 'video-call'} onClick={answerCall} />
+                  <UIButton
+                    iconName={isAnswerLoading ? 'loader' : 'video-call'}
+                    onClick={answerCall}
+                    tooltip="Answer Via Video"
+                  />
                 )}
                 {currentCall.status === 'in-progress' && (
                   <UIButton
                     iconName={settings.video ? 'video-call' : 'video-drop'}
                     color={settings.video ? 'success' : 'error'}
                     onClick={toggleVideo}
+                    tooltip="Toggle Call Type"
                   />
                 )}
               </div>
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <UIButton iconName="phone-drop" color="error" onClick={endCall} />
+                <UIButton iconName="phone-drop" color="error" onClick={endCall} tooltip="End Call" />
               </div>
               <div className="call-modal__controls-element">
-                <UIButton iconName={settings.audio ? 'mic-muted' : 'mic'} onClick={toggleAudio} />
+                <UIButton
+                  iconName={settings.audio ? 'mic-muted' : 'mic'}
+                  onClick={toggleAudio}
+                  tooltip="Toggle Audio Type"
+                />
               </div>
             </div>
           </div>

@@ -1,12 +1,12 @@
 import { Form } from 'antd'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
 import UIButton from 'ui/UIButton'
 import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { commonSetUserDataHandler } from 'src/store/userSlice'
+import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
 import validateRules from 'src/utils/validateRules'
 import { ProviderType } from 'src/services/$firebase'
 import { RouteNames, UserCredential } from 'common-types'
@@ -15,12 +15,16 @@ import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
 import { ServiceContext } from 'src/main'
+import getCookie from 'src/utils/getCookie'
+import UIIcon from 'src/components/UI/UIIcon'
+import useTypedSelector from 'src/hooks/useTypedSelector'
 
 export const SignInPage = () => {
   const { $firebase } = useContext(ServiceContext)
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
   const [fbBtnLoading, setFbBtnLoading] = useState(false)
+
   const navigate = useNavigate()
 
   const dispatch = useDispatch<AppDispatch>()
@@ -41,7 +45,8 @@ export const SignInPage = () => {
     if (!result) return loaderMethod(false)
     const { displayName, email, photoURL, uid } = result.user
     const { providerId } = result
-    if (!displayName || !email || !photoURL || !uid || !providerId) return
+    const haveFullData = displayName && email && photoURL && uid && providerId
+    if (!haveFullData) return
     const credential: UserCredential = {
       id: uid,
       username: displayName,
@@ -55,66 +60,84 @@ export const SignInPage = () => {
     commonSetUserDataHandler(dispatch, { userData, settings })
   }
 
+  const { isAppLoading } = useTypedSelector((state) => state.user)
+
+  useEffect(() => {
+    const hasJwt = getCookie('jwt')
+    dispatch(changeIsAppLoading(hasJwt))
+  })
+
   return (
     <div className="page sign-in">
-      <Logo />
-      <div className="sign-in__wrapper">
-        <div className="sign-in__body">
-          <AuthNav />
-          <Form
-            name="sign-in"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            form={form}
-            onInput={() => validate(form)}
-          >
-            <Form.Item name="email" rules={validateRules.email}>
-              <UIInput placeholder="Email" size="large" autoComplete="on" />
-            </Form.Item>
-
-            <Form.Item name="password" rules={validateRules.password}>
-              <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
-            </Form.Item>
-
-            <div className="sign-in__additional__links">
-              <UIButton
-                iconName="google"
-                text="Sign in with Google"
-                border="border-default"
-                fill={true}
-                hover="hoverless"
-                onClick={() => providerSignIn('google', setGoogleBtnLoading)}
-                loading={googleBtnLoading}
-              />
-              <UIButton
-                iconName="facebook"
-                text="Sign in with Facebook"
-                onClick={() => providerSignIn('facebook', setFbBtnLoading)}
-                border="border-default"
-                fill={true}
-                hover="hoverless"
-                loading={fbBtnLoading}
-              />
-              <div className="sign-in__forgot-password">
-                <a className="paragraph-text link" onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}>
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-
-            <Form.Item className="sign-in__controls">
-              <UIButton
-                text="Sign in"
-                border="border-default"
-                color="accent"
-                htmltype="submit"
-                loading={isLoading}
-                disabled={!isValid}
-              />
-            </Form.Item>
-          </Form>
+      {isAppLoading ? (
+        <div className="sign-in__loader">
+          <div className="sign-in__content">
+            <UIIcon name="loader" color="accent" size="large" />
+            <h3 className="header-text header-text--md">Loading</h3>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <Logo />
+          <div className="sign-in__wrapper">
+            <div className="sign-in__body">
+              <AuthNav />
+              <Form
+                name="sign-in"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                form={form}
+                onInput={() => validate(form)}
+              >
+                <Form.Item name="email" rules={validateRules.email}>
+                  <UIInput placeholder="Email" size="large" autoComplete="on" />
+                </Form.Item>
+
+                <Form.Item name="password" rules={validateRules.password}>
+                  <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
+                </Form.Item>
+
+                <div className="sign-in__additional__links">
+                  <UIButton
+                    iconName="google"
+                    text="Sign in with Google"
+                    border="border-default"
+                    fill={true}
+                    hover="hoverless"
+                    onClick={() => providerSignIn('google', setGoogleBtnLoading)}
+                    loading={googleBtnLoading}
+                  />
+                  <UIButton
+                    iconName="facebook"
+                    text="Sign in with Facebook"
+                    onClick={() => providerSignIn('facebook', setFbBtnLoading)}
+                    border="border-default"
+                    fill={true}
+                    hover="hoverless"
+                    loading={fbBtnLoading}
+                  />
+                  <div className="sign-in__forgot-password">
+                    <a className="paragraph-text link" onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}>
+                      Forgot password?
+                    </a>
+                  </div>
+                </div>
+
+                <Form.Item className="sign-in__controls">
+                  <UIButton
+                    text="Sign in"
+                    border="border-default"
+                    color="accent"
+                    htmltype="submit"
+                    loading={isLoading}
+                    disabled={!isValid}
+                  />
+                </Form.Item>
+              </Form>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

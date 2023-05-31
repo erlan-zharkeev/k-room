@@ -23,10 +23,10 @@ const AsideBar = () => {
   }
 
   const buttons: Array<ButtonsListElement> = [
-    { value: 'contacts', iconName: 'contacts' },
-    { value: 'chatList', iconName: 'chats' },
-    { value: 'calls', iconName: 'calls' },
-    { value: 'settings', iconName: 'settings-cog' }
+    { value: 'contacts', iconName: 'contacts', tooltip: 'Contacts' },
+    { value: 'chatList', iconName: 'chats', tooltip: 'Chats' },
+    { value: 'calls', iconName: 'calls', tooltip: 'Calls' },
+    { value: 'settings', iconName: 'settings-cog', tooltip: 'Settings' }
   ]
 
   const openTechSettings = () => {
@@ -45,11 +45,12 @@ const AsideBar = () => {
               onClick={changeTabClickHandler}
               value={button.value}
               iconName={button.iconName}
+              tooltip={button.tooltip}
             />
           )
         })}
       </Radio.Group>
-      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} />}
+      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />}
     </div>
   )
 }

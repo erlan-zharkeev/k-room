@@ -87,7 +87,12 @@ const ContactSearch = () => {
                   description={<span>{user.email}</span>}
                 />
                 {!contacts.find((element) => element.id === user.id) && (
-                  <UIButton iconName="plus" color="accent" onClick={async () => await addUser(user.id)} />
+                  <UIButton
+                    iconName="plus"
+                    color="accent"
+                    onClick={async () => await addUser(user.id)}
+                    tooltip="Add User"
+                  />
                 )}
               </List.Item>
             )}

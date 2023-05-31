@@ -15,6 +15,11 @@ const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName }: UIIm
     imageToBase64(file)
   }
 
+  const resetImage = () => {
+    setImage(null)
+    if (updated) updated()
+  }
+
   const imageToBase64 = (file: File) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -48,7 +53,7 @@ const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName }: UIIm
         <UIAvatar src={image} showBadge={false} size="large" stubIconName={stubIconName} />
         <input type="file" onChange={normFile} />
         {image && (
-          <div className="ui-image-loader__clear-button" onClick={() => setImage(null)}>
+          <div className="ui-image-loader__clear-button" onClick={resetImage}>
             <UIIcon name="cross" color="accent" />
           </div>
         )}

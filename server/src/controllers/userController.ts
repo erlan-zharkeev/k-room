@@ -51,10 +51,9 @@ class UserController {
       const filename = req.file?.filename ?? null
 
       const newUserData: any = {
-        username
+        username,
+        avatar: filename ? `${ENV.SERVER_URL}/image/${filename}` : ''
       }
-
-      if (filename) newUserData.avatar = `${ENV.SERVER_URL}/image/${filename}`
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
 

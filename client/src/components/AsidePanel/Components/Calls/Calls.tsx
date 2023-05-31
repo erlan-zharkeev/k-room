@@ -38,7 +38,7 @@ const Calls = () => {
                 }
               />
               <div className="call-list__additional-info-button">
-                <UIButton iconName="info" onClick={() => itemClickHandler(call.interlocutorId)} />
+                <UIButton iconName="info" onClick={() => itemClickHandler(call.interlocutorId)} tooltip="info" />
               </div>
               {call.length && (
                 <div className="call-list__length">

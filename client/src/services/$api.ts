@@ -25,11 +25,11 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       $clg('error', 'Access token is expired')
       dispatch(changeIsAppLoading(true))
       const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
-      dispatch(changeIsAppLoading(false))
       const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.SUCCESS
       if (!isTokensPairUpdated) return
       $clg('success', 'Tokens pair has been updated')
       const response = (await dispatch(apiMethods.user.getUserData(null))) as AsyncThunkResponseWrapper
+      dispatch(changeIsAppLoading(false))
       const { userData, settings } = response.payload.data
       commonSetUserDataHandler(dispatch, { userData, settings })
       return

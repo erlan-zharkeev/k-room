@@ -65,7 +65,7 @@ const TopBar = () => {
               <UIButton iconName="notification-bell" />
             </Dropdown>
           </Badge>
-          <UIButton iconName="exit" onClick={() => exit()} />
+          <UIButton tooltip="Logout" iconName="exit" onClick={() => exit()} />
         </div>
       </div>
     </div>

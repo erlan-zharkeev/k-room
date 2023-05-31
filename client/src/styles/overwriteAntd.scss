@@ -219,6 +219,14 @@ html[tooltips='false'] {
     display: none;
   }
 }
+.ant-tooltip-inner {
+  background-color: var(--dark-gray-transparent) !important;
+  font-size: 12px;
+  color: var(--secondary-text);
+}
+.ant-tooltip-arrow-content {
+  opacity: 0;
+}
 
 // table
 .ant-table-wrapper,

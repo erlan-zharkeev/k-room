@@ -101,13 +101,15 @@ const ContactList = () => {
                 iconName={isStreamIsLoading ? 'loader' : 'call'}
                 color={isStreamIsLoading ? 'accent' : 'success'}
                 onClick={async () => await initCall(user)}
+                tooltip="Call"
               />
               <UIButton
                 iconName={roomCreateLoader ? 'loader' : 'chats'}
                 color={roomCreateLoader ? 'accent' : 'default'}
                 onClick={() => createChat(user)}
+                tooltip="Create Chat"
               />
-              <UIButton iconName="cross" onClick={() => deleteUser(user)} />
+              <UIButton iconName="cross" onClick={() => deleteUser(user)} tooltip="Delete User" />
             </div>
           </List.Item>
         )}

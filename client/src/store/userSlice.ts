@@ -15,7 +15,7 @@ export const commonSetUserDataHandler = (
 }
 
 const initialState: UserState = {
-  isAppLoading: true,
+  isAppLoading: false,
   isAuth: false,
   userData: {
     id: '',
@@ -47,12 +47,12 @@ const userSlice = createSlice({
       state.isAppLoading = payload
     },
     setUserData: (state, { payload }) => {
-      state.isAppLoading = false
-      state.isAuth = true
       state.userData = {
         ...state.userData,
         ...payload
       }
+      state.isAuth = true
+      state.isAppLoading = false
     },
     logOut: (state) => {
       clearCookie()

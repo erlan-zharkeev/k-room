@@ -75,24 +75,19 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-- удалить функцию getInfo
-- убрать видимость singinpage при перезагрузке
-- сброс фото не обновляет на без фото
-- develop call list(4)
-- develop add photo(5)
+- add hints to buttons(1)
+- скомпоновать сообщения на бэке(2)
+- уменьшить добавить компрессию базовые изображения и удаление не нужных(2)
 - Make username unique(3)
+- Сделать доступным поиск автоматическим(2)
+- Инвайты и не допускать сообщения без добаления в контакты(3)
+- make multiple chat()
+- develop add photo(5)
 - develop forward and reply(3)
 - develop reactions(2)
-- make multiple chat()
-- check token works(1)
-- setup cors to specific host and port
-- not found page(2)
-- скомпоновать сообщения на бэке(2)
-- уменьшить базовые изображения и удаление не нужных(2)
-- добавить компрессию файлов(3)
-- add hints to buttons(1)
-- Сделать доступным поиск автоматическим(2)
 - добавить настройки громкости и чекаем видео(5)
-- Инвайты и не допускать сообщения без добаления в контакты(3)
+- develop call list(4)
+- setup cors to specific host and port
+- check token works(1)
 - privacy policy create and to facebook dev
 <!-- - lazy load сообщений(5) -->

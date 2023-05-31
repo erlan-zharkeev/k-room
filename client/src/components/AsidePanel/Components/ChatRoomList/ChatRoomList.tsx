@@ -87,6 +87,7 @@ export const ChatRoomList = () => {
                   <UIButton
                     iconName="plus"
                     size="small"
+                    tooltip="Add User"
                     onClick={async (e) => await addUser(e, getFirstUserIdInChatRoom(chatRoom))}
                   />
                 )}
