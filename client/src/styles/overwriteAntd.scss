@@ -3,6 +3,8 @@
   color: var(--secondary-text) !important;
   background: var(--main-bg) !important;
   border: 1px solid var(--secondary-text) !important;
+  display: flex;
+  align-items: center;
 }
 
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
@@ -214,18 +216,13 @@ div[role='dialog'] {
 }
 
 // tooltip
-html[tooltips='false'] {
-  .ant-tooltip {
-    display: none;
-  }
+.ant-tooltip {
+  padding: 0;
 }
 .ant-tooltip-inner {
-  background-color: var(--dark-gray-transparent) !important;
+  background-color: var(--dark-gray) !important;
   font-size: 12px;
   color: var(--secondary-text);
-}
-.ant-tooltip-arrow-content {
-  opacity: 0;
 }
 
 // table
