@@ -13,19 +13,19 @@ import { RouteNames } from 'common-types'
 const commonRoutes = [
   {
     path: RouteNames.EMAIL_CONFIRM,
-    component: ConfirmedPage
+    component: () => ConfirmedPage()
   },
   {
     path: RouteNames.NOT_FOUND,
-    component: NotFoundPage
+    component: () => NotFoundPage()
   },
   {
     path: RouteNames.PASSWORD_RECOVERY,
-    component: PasswordRecoveryPage
+    component: () => PasswordRecoveryPage()
   },
   {
     path: RouteNames.CREATE_NEW_PASSWORD,
-    component: CreateNewPassword
+    component: () => CreateNewPassword()
   }
 ]
 
@@ -33,19 +33,19 @@ export const publicRoutes: Array<IRoute> = [
   ...commonRoutes,
   {
     path: RouteNames.SIGN_IN,
-    component: LoginPage
+    component: () => LoginPage()
   },
   {
     path: RouteNames.SIGN_UP,
-    component: RegisterPage
+    component: () => RegisterPage()
   },
   {
     path: RouteNames.WAIT_EMAIL_CONFIRM,
-    component: WaitConfirmPage
+    component: () => WaitConfirmPage()
   },
   {
     path: RouteNames.PASSWORD_RECOVERY,
-    component: PasswordRecoveryPage
+    component: () => PasswordRecoveryPage()
   }
 ]
 
@@ -53,7 +53,7 @@ export const privateRoutes: Array<IRoute> = [
   ...commonRoutes,
   {
     path: RouteNames.MAIN,
-    component: MainPage,
+    component: () => MainPage(),
     exact: true
   }
 ]

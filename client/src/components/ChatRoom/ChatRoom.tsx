@@ -7,21 +7,32 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import InputMessage from './Components/InputMessage/InputMessage'
 import MessageBody from './Components/MessageBody/MessageBody'
 import RoomHeader from './Components/RoomHeader/RoomHeader'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import scrollToBottom from 'src/utils/scrollToBottom'
 import { pushTemporaryMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { changeAsideTab } from 'src/store/settingsSlice'
+import constants from 'src/constants'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
 
+  const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
+
+  const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
+
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
 
+  const [inputMessageHeight, setInputMessageHeight] = useState(constants.shortInputMessage)
+
+  const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0, height: 0 })
+
   const dispatch = useDispatch<AppDispatch>()
+
+  const roomDomEl = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!selectedChatRoom) return
@@ -42,7 +53,21 @@ export const ChatRoom = () => {
       el.current.setAttribute('id', message.id)
       observer.observe(el.current)
     })
-  })
+  }, [selectedChatRoom])
+
+  useEffect(() => {
+    const roomEl = roomDomEl.current
+    if (roomEl) {
+      const inputHeight = haveMessageToReply ? constants.fullInputMessage : constants.shortInputMessage
+      setInputMessageHeight(inputHeight)
+      const chatRoomBodyHeight = roomEl.offsetHeight - constants.chatRoomHeaderHeight - inputHeight
+      const position = {
+        top: constants.chatRoomHeaderHeight,
+        height: chatRoomBodyHeight
+      }
+      setChatRoomPosition(position)
+    }
+  }, [haveMessageToReply])
 
   const sendMessage = (messageText: string) => {
     const roomId = selectedChatRoom?.roomId
@@ -62,16 +87,22 @@ export const ChatRoom = () => {
 
   return (
     <div className="chat-room">
-      <div className="chat-room__wrapper">
+      <div className="chat-room__wrapper" ref={roomDomEl}>
         {selectedChatRoom ? (
           <>
             <RoomHeader />
-            <div className="chat-room__body">
+            <div
+              className="chat-room__body"
+              style={{
+                top: `${chatRoomPosition.top}px`,
+                height: `${chatRoomPosition.height}px`
+              }}
+            >
               <List
                 id="message-list"
                 itemLayout="horizontal"
                 dataSource={selectedChatRoom.messages ?? []}
-                locale={{ emptyText: 'There are no messages, write first' }}
+                locale={{ emptyText: ' ' }}
                 renderItem={(item: Message) => (
                   <List.Item className={isMessageSelf(item.author)} ref={setRef(item.id)}>
                     <MessageBody message={item} />
@@ -79,15 +110,20 @@ export const ChatRoom = () => {
                 )}
               />
             </div>
-            <InputMessage sendMessage={sendMessage} />
+            {selectedChatRoom.messages.length === 0 && (
+              <div className="chat-room__empty-text paragraph-text paragraph-text--secondary">
+                There are no messages, write first
+              </div>
+            )}
+            <InputMessage sendMessage={sendMessage} height={inputMessageHeight} />
           </>
         ) : (
-          <div className="chat-room__stub">
+          <div className={`chat-room__stub ${haveAnyChatRoom ? 'pointer' : ''}`}>
             <div
               onClick={() => dispatch(changeAsideTab('chatList'))}
               className="paragraph-text paragraph-text--secondary"
             >
-              Choose chat room
+              Choose or create chat
             </div>
           </div>
         )}

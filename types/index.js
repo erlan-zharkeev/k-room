@@ -23,6 +23,7 @@ var CommonEndPoints;
 (function (CommonEndPoints) {
     CommonEndPoints["COMMON_IMAGES"] = "/common-images";
     CommonEndPoints["GET_FILES"] = "/image/:filename";
+    CommonEndPoints["GET_INFO"] = "/notification";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var CodesEndPoints;
 (function (CodesEndPoints) {
@@ -70,6 +71,7 @@ var RouteNames;
     RouteNames["NOT_FOUND"] = "/not-found";
     RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
     RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
+    RouteNames["NOTIFICATION"] = "/notification";
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var Status;
 (function (Status) {

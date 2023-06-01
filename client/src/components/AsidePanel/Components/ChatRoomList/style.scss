@@ -1,29 +1,36 @@
 .chat-room-list {
+  &__create-chat {
+    padding: $gutter-lg;
+  }
+  .divider {
+    margin-top: $gutter-lg;
+  }
   &__body {
+    margin-left: 1px;
     .ant-list-item-meta-description {
       -webkit-line-clamp: 1;
       overflow: hidden;
     }
 
     .ant-list-item {
+      // height: 62px;
       display: flex;
       flex-wrap: wrap;
       width: 100%;
-      padding: $aside-panel-padding;
+      padding: $gutter-md $gutter-lg;
       border: none;
       cursor: pointer;
       transition: 0.2s linear all;
-
-      &:first-child {
-        margin-top: 1px;
-      }
+      // &:first-child {
+      //   margin-top: 1px;
+      // }
 
       &.active {
-        border-left: 5px solid var(--accent) !important;
+        border-left: 3px solid var(--accent) !important;
 
-        &:first-child {
-          border-top-left-radius: $radius-md;
-        }
+        // &:first-child {
+        //   border-top-left-radius: $radius-md;
+        // }
         @include max-width-768 {
           border: none !important;
           box-shadow: none;
@@ -32,9 +39,15 @@
     }
 
     .ant-list-item-meta {
+      display: flex;
       align-items: center;
       min-width: 60%;
-      margin-bottom: $gutter-sm;
+    }
+    .ant-list-item-meta-description {
+      height: 18px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 

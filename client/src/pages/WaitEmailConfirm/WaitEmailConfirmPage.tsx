@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios'
 import { Status, RouteNames } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -8,8 +7,8 @@ import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import getNextReqInterval from 'src/utils/getNextReqInterval'
 import useCounter from 'src/hooks/useCounter'
-import { sendConfirmationLink } from 'src/services/api-methods/auth'
 import { AsyncThunkResponseWrapper } from 'src/@types'
+import apiMethods from 'src/services/api-methods'
 
 export const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
@@ -39,7 +38,7 @@ export const WaitEmailConfirmPage = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = (await dispatch(sendConfirmationLink(email))) as AsyncThunkResponseWrapper
+    const response = (await dispatch(apiMethods.auth.sendConfirmationLink(email))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     const { data, status } = response.payload
     if (status !== Status.SUCCESS) return

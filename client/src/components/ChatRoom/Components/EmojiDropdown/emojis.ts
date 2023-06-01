@@ -1,15 +1,18 @@
 export default [
   {
     key: 'xd',
-    glyph: '😆'
+    glyph: '😆',
+    reactions: true
   },
   {
     key: 'heart',
-    glyph: '❤️'
+    glyph: '❤️',
+    reactions: true
   },
   {
     key: 'flame',
-    glyph: '🔥'
+    glyph: '🔥',
+    reactions: true
   },
   {
     key: 'skull',
@@ -21,11 +24,13 @@ export default [
   },
   {
     key: 'dog dirt',
-    glyph: '💩'
+    glyph: '💩',
+    reactions: true
   },
   {
     key: 'cry',
-    glyph: '😭'
+    glyph: '😭',
+    reactions: true
   },
   {
     key: 'fuc*',
@@ -37,7 +42,8 @@ export default [
   },
   {
     key: 'think',
-    glyph: '🤔'
+    glyph: '🤔',
+    reactions: true
   },
   {
     key: 'demon',
@@ -45,11 +51,13 @@ export default [
   },
   {
     key: 'good',
-    glyph: '👍'
+    glyph: '👍',
+    reactions: true
   },
   {
     key: 'thanks',
-    glyph: '🙏'
+    glyph: '🙏',
+    reactions: true
   },
   {
     key: 'muscle',

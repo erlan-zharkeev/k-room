@@ -27,6 +27,9 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
       case 'settings/changeAsideTab':
         type = 'asideTab'
         break
+      case 'settings/setCurrentInfoItem':
+        type = 'currentInfoId'
+        break
       default:
         break
     }

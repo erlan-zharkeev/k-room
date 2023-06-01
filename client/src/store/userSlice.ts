@@ -1,14 +1,13 @@
 import { AnyAction, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
-import { RouteNames, User } from 'common-types'
+import { RouteNames, User, UserSettings } from 'common-types'
 import $router from 'src/services/$router'
 import clearCookie from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
 import { updateSettings } from './settingsSlice'
-import { SettingsState } from './@types/SettingsState'
 
 export const commonSetUserDataHandler = (
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  data: { userData: User; settings: SettingsState }
+  data: { userData: User; settings: UserSettings }
 ) => {
   dispatch(setUserData(data.userData))
   dispatch(updateSettings(data.settings))
@@ -16,7 +15,7 @@ export const commonSetUserDataHandler = (
 }
 
 const initialState: UserState = {
-  isAppLoading: true,
+  isAppLoading: false,
   isAuth: false,
   userData: {
     id: '',
@@ -26,7 +25,8 @@ const initialState: UserState = {
     chatRooms: [],
     contacts: [],
     avatar: '',
-    providerName: ''
+    providerName: '',
+    infoItems: []
   }
 }
 
@@ -34,16 +34,25 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setInfoItems(state, { payload }) {
+      state.userData.infoItems = payload
+    },
+    markInfoItemAsRead(state, { payload }) {
+      const { id } = payload
+      if (!state.userData.infoItems) return
+      const index = state.userData.infoItems.findIndex((item) => item.id === id)
+      state.userData.infoItems[index].read = 'read'
+    },
     changeIsAppLoading: (state, { payload }) => {
       state.isAppLoading = payload
     },
     setUserData: (state, { payload }) => {
-      state.isAppLoading = false
-      state.isAuth = true
       state.userData = {
         ...state.userData,
         ...payload
       }
+      state.isAuth = true
+      state.isAppLoading = false
     },
     logOut: (state) => {
       clearCookie()
@@ -53,6 +62,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUserData, logOut, changeIsAppLoading } = userSlice.actions
+export const { setUserData, logOut, changeIsAppLoading, setInfoItems, markInfoItemAsRead } = userSlice.actions
 
 export default userSlice.reducer

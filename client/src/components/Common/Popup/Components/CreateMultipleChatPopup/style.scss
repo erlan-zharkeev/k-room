@@ -1,0 +1,20 @@
+@import './Components/MultipleUserSelect/style.scss';
+
+.create-multiple-chat-popup {
+  width: 300px;
+  max-height: 450px;
+  &__controls {
+    margin-bottom: 0;
+  }
+  .ui-icon--image {
+    svg {
+      transform: scale(0.7);
+    }
+  }
+  .ui-image-loader {
+    margin-bottom: $gutter-lg;
+    .ant-avatar {
+      background: var(--dark-gray) !important;
+    }
+  }
+}

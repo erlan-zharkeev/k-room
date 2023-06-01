@@ -1,18 +1,19 @@
 import { List } from 'antd'
 import { User, SocketActions } from 'common-types'
 import moment from 'moment'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import $call from 'src/services/$call'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
+import { ServiceContext } from 'src/main'
 
 const ContactList = () => {
+  const { $call } = useContext(ServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username, avatar } = useTypedSelector((state) => state.user.userData)
@@ -37,7 +38,7 @@ const ContactList = () => {
     const hasChatWithContact = chatRooms.some((room) => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
-      if (user.id) {
+      if (user?.id) {
         dispatch(changeAsideTab('chatList'))
         dispatch(selectChatRoom(room.roomId))
       }
@@ -69,12 +70,14 @@ const ContactList = () => {
     setIsStreamIsLoading(true)
     const gotStream = await $call.setStream()
     setIsStreamIsLoading(false)
+    if (!avatar) return
     if (gotStream) $call.initCall(interlocutorData, id, avatar, username)
   }
 
   return (
     <div className="contact-list">
       <ContactSearch />
+      <div className="divider" />
       <List
         header={<div>Contacts</div>}
         itemLayout="horizontal"
@@ -98,13 +101,15 @@ const ContactList = () => {
                 iconName={isStreamIsLoading ? 'loader' : 'call'}
                 color={isStreamIsLoading ? 'accent' : 'success'}
                 onClick={async () => await initCall(user)}
+                tooltip="Call"
               />
               <UIButton
                 iconName={roomCreateLoader ? 'loader' : 'chats'}
                 color={roomCreateLoader ? 'accent' : 'default'}
                 onClick={() => createChat(user)}
+                tooltip="Create Chat"
               />
-              <UIButton iconName="cross" onClick={() => deleteUser(user)} />
+              <UIButton iconName="cross" onClick={() => deleteUser(user)} tooltip="Delete User" />
             </div>
           </List.Item>
         )}

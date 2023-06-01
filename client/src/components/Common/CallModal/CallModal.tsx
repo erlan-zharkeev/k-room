@@ -53,11 +53,11 @@ export const CallModal = () => {
         minWidth={initialSize.minWidth}
         minHeight={initialSize.minHeight}
         position={{ x: modalPositionX, y: modalPositionY }}
-        onDragStop={(e, d) => {
+        onDragStop={(_e, d) => {
           setModalPositionX(d.x)
           setModalPositionY(d.y)
         }}
-        onResizeStop={(e, direction, ref, delta, position) => {
+        onResizeStop={(_e, _direction, ref, _delta, position) => {
           setModalOptions({
             width: ref.offsetWidth,
             height: ref.offsetHeight,

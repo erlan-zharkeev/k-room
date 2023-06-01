@@ -1,6 +1,4 @@
-$aside-panel-padding: 1rem;
 $aside-bar-width: 50px;
-$room-header-height: 55px;
 $bar-height: 50px;
 $call-bar-height: 35px;
 $input-message-height: 35px;
@@ -12,6 +10,7 @@ $gutter-md: 8px;
 $gutter-lg: 16px;
 $gutter-xl: 32px;
 $gutter-xxl: 46px;
+$aside-panel-padding: $gutter-lg;
 
 html {
   --chat-room-list-width: 35%;

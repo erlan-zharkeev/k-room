@@ -10,6 +10,7 @@
   --warn-bg: rgb(255 213 79 / 20%);
   --info-bg: rgba(255 255 255 / 20%);
   --modal-overflow-color: rgb(0 0 0 / 75%);
+  --select-placeholder: #5d5d5d;
 
   &[theme='dark'] {
     --main-bg: #1c1c1c;
@@ -20,6 +21,7 @@
     --shadow-inset-start: #161616;
     --shadow-inset-end: #202020;
     --dark-gray: rgb(59 59 59);
+    --dark-gray-transparent: rgba(59 59 59 / 30%);
   }
 
   &[theme='light'] {
@@ -31,5 +33,6 @@
     --shadow-inset-start: #b6b6b6;
     --shadow-inset-end: #e8e8e8;
     --dark-gray: rgb(189 189 189);
+    --dark-gray-transparent: rgba(189 189 189 / 30%);
   }
 }

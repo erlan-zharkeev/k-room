@@ -29,7 +29,8 @@ const UserSettings = () => {
   }
 
   const changeSetting = (value: boolean, id: string) => {
-    const method = methods.find((method) => method.name === id).method
+    const method = methods.find((method) => method.name === id)?.method
+    if (!method) return
     dispatch(method(value))
   }
 

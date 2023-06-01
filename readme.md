@@ -3,12 +3,12 @@
 ## Development
 
 - run docker
-- run cd ./scripts && bash dev.sh
-- run in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
+- run bash dev.sh
+- set in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
 
 ## Deploy
 
-- run cd ./script && bash prod-build.sh
+- run bash prod.sh
 
 ## If smthng went wrong
 
@@ -18,13 +18,12 @@
 ## Commit convention
 
 - To use husky run yarn prepare
-- Branch name should be of the form type-dd.mm.yy(e.g. development-22.01.23)
+- Branch name should be of the form feat-dd.mm.yy(e.g. create-chat-signature-22.01.23)
 - To commit changes add changes then call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
 
-## Avoid
+## Other
 
 - Add or edit types only in ./types/index.ts file it will autocompile to index.d.ts
-  Do not edit nested .env files(edit only in root)
 
 ## Server works
 
@@ -76,37 +75,19 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-
-- develop call list(7)
-- develop add photo(5)
-- develop add files(5)
-<!-- - develop add video -->
-<!-- - develop add audio -->
-- Make username unique(3)
-- develop forward and reply(10)
-- develop reactions(5)
-<!-- - make multiple chat() -->
-<!-- - make multiple video chat -->
-- make notifications from chat(5)
-<!-- - make update button(webWorkers) -->
-- check token works(1)
-- share geolocation
-<!-- - delayed messages -->
-<!-- - find out how to deploy project for MOBILE and WINDOWS -->
-- setup cors to specific host and port(5)
-- not found page(3)
+- add hints to buttons(1)
 - скомпоновать сообщения на бэке(2)
-<!-- - auto upgrade version -->
-- уменьшить базовые изображения и удаление не нужных(1)
-- добавить компрессию файлов(3)
-- add hints to buttons(3)
-- Сделать доступным поиск автоматическим
-- lazy load сообщений(5)
-- добавить настройки громкости и чекаем видео(5)
+- уменьшить добавить компрессию базовые изображения и удаление не нужных(2)
+- Make username unique(3)
+- Сделать доступным поиск автоматическим(2)
 - Инвайты и не допускать сообщения без добаления в контакты(3)
+- make multiple chat()
+- develop add photo(5)
+- develop forward and reply(3)
+- develop reactions(2)
+- добавить настройки громкости и чекаем видео(5)
+- develop call list(4)
+- setup cors to specific host and port
+- check token works(1)
 - privacy policy create and to facebook dev
-- make gif how to use(2)
--
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
-<!-- docker-compose --env-file .env.production up -d webserver -->
+<!-- - lazy load сообщений(5) -->

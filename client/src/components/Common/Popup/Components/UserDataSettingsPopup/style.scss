@@ -4,21 +4,9 @@
   align-items: center;
   width: $container-sm;
   margin-top: $gutter-lg;
-  &__avatar {
-    position: relative;
-    width: 100px;
-    margin: 0 auto $gutter-xl auto;
-
-    input {
-      position: absolute;
-      z-index: 3;
-      cursor: pointer;
-      opacity: 0;
-      @include absolute-center;
-      @include wh-100;
-    }
+  &__image {
+    margin-bottom: $gutter-xl;
   }
-
   &__controls {
     .ant-form-item-control-input-content {
       display: flex;

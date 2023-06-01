@@ -77,7 +77,7 @@ const callsSlice = createSlice({
     },
     initModalToCall(state, { payload }) {
       state.showCallModal = true
-      const { id, avatar, username, stream } = payload
+      const { id, avatar, username } = payload
       state.currentCall.interlocutorId = id
       state.currentCall.interlocutorAvatar = avatar
       state.currentCall.interlocutorName = username
@@ -85,6 +85,7 @@ const callsSlice = createSlice({
       state.currentCall.type = 'outgoing'
     },
     updateInterlocutorSettings(state, { payload }) {
+      if (!state.currentCall.interlocutorSettings) return
       const { audio, video } = payload
       state.currentCall.interlocutorSettings.audio = audio
       state.currentCall.interlocutorSettings.video = video
@@ -100,6 +101,7 @@ const callsSlice = createSlice({
       state.currentCall.interlocutorName = payload.callerName
       state.currentCall.interlocutorAvatar = payload.avatar
       state.currentCall.type = 'incoming'
+      if (!state.currentCall.interlocutorSettings) return
       state.currentCall.interlocutorSettings.audio = payload.settings.audio
       state.currentCall.interlocutorSettings.audio = payload.settings.video
     },

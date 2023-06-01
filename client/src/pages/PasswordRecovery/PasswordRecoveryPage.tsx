@@ -2,8 +2,8 @@ import { Form } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Logo } from 'src/components/Common/Logo/Logo'
-import UIButton from 'src/components/UI/UIButton'
-import UIInput from 'src/components/UI/UIInput'
+import UIButton from 'ui/UIButton'
+import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
@@ -13,7 +13,6 @@ import { CodeValidationPayload, RouteNames } from 'common-types'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import { validateEmailCodePasswordRecovery } from 'src/services/api-methods/codes'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
 export const PasswordRecoveryPage = () => {
@@ -66,7 +65,9 @@ export const PasswordRecoveryPage = () => {
       email: emailConfirmForm.getFieldValue('email'),
       code: fields.code
     }
-    const response = (await dispatch(validateEmailCodePasswordRecovery(payload))) as AsyncThunkResponseWrapper
+    const response = (await dispatch(
+      apiMethods.codes.validateEmailCodePasswordRecovery(payload)
+    )) as AsyncThunkResponseWrapper
     if (!response) return
     const { query } = response.payload.data
     setCodeValidationIsLoading(false)
@@ -113,7 +114,7 @@ export const PasswordRecoveryPage = () => {
                   text="Send code"
                   border="border-default"
                   color="accent"
-                  htmlType="submit"
+                  htmltype="submit"
                   loading={emailSendCodeIsLoading}
                   disabled={!isEmailValid || counterValue > 0}
                 />
@@ -137,7 +138,7 @@ export const PasswordRecoveryPage = () => {
                     text="Validate"
                     border="border-default"
                     color="success"
-                    htmlType="submit"
+                    htmltype="submit"
                     loading={codeValidationIsLoading}
                     disabled={!isCodeValid}
                   />

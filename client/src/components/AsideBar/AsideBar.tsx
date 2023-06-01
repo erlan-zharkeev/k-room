@@ -13,7 +13,7 @@ const AsideBar = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { viewPort } = useTypedSelector((state) => state.system)
 
-  const changTab = (e: RadioChangeEvent) => {
+  const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
     dispatch(changeAsideTab(currentTabName))
   }
@@ -23,10 +23,10 @@ const AsideBar = () => {
   }
 
   const buttons: Array<ButtonsListElement> = [
-    { value: 'contacts', iconName: 'contacts' },
-    { value: 'chatList', iconName: 'chats' },
-    { value: 'calls', iconName: 'calls' },
-    { value: 'settings', iconName: 'settings-cog' }
+    { value: 'contacts', iconName: 'contacts', tooltip: 'Contacts' },
+    { value: 'chatList', iconName: 'chats', tooltip: 'Chats' },
+    { value: 'calls', iconName: 'calls', tooltip: 'Calls' },
+    { value: 'settings', iconName: 'settings-cog', tooltip: 'Settings' }
   ]
 
   const openTechSettings = () => {
@@ -36,7 +36,7 @@ const AsideBar = () => {
   return (
     <div className="aside-bar">
       {viewPort.width >= 769 && <Logo />}
-      <Radio.Group value={asideTab} onChange={changTab}>
+      <Radio.Group value={asideTab} onChange={changeTab}>
         {buttons.map((button) => {
           return (
             <UIButton
@@ -45,11 +45,12 @@ const AsideBar = () => {
               onClick={changeTabClickHandler}
               value={button.value}
               iconName={button.iconName}
+              tooltip={button.tooltip}
             />
           )
         })}
       </Radio.Group>
-      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} />}
+      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />}
     </div>
   )
 }

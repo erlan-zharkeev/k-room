@@ -1,4 +1,25 @@
 .sign-in {
+  &__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    &__content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        margin-bottom: $gutter-xl;
+        color: var(--accent);
+        font-size: 60px;
+        stroke-width: 25;
+      }
+    }
+  }
   &__forgot-password {
     display: flex;
     justify-content: flex-end;

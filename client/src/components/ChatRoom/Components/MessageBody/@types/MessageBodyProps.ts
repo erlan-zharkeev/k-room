@@ -1,4 +1,4 @@
-import { Message } from './../../../../../../../types'
+import { Message } from '../../../../../../../types'
 
 export interface MessageBodyProps {
   message: Message

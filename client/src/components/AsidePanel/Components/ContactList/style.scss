@@ -2,7 +2,9 @@
 
 .contact-list {
   padding: $aside-panel-padding;
-
+  .divider {
+    margin-top: $gutter-lg;
+  }
   .ant-list-item-meta {
     display: flex;
     align-items: center;

@@ -11,18 +11,19 @@ import {
 } from 'src/store/callsSlice'
 import CallModalVideo from '../CallModalVideo/CallModalVideo'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import { SocketActions } from 'common-types'
 import { socket } from 'src/socket/socket'
-import $call from 'src/services/$call'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
 import UseCounter from 'src/hooks/useCounter'
+import { ServiceContext } from 'src/main'
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
+  const { $call } = useContext(ServiceContext)
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
@@ -88,6 +89,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 shape="circle"
                 size="small"
                 hover="hoverless"
+                tooltip="Leave Call"
               />
             </div>
             <div className="call-modal__window-controls-element">
@@ -98,6 +100,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 shape="circle"
                 size="small"
                 hover="hoverless"
+                tooltip="Minify Modal Call"
               />
             </div>
             <div className="call-modal__window-controls-element">
@@ -108,6 +111,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 shape="circle"
                 size="small"
                 hover="hoverless"
+                tooltip="Expand Modal Call"
               />
             </div>
           </div>
@@ -141,27 +145,35 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <div className="call-modal__controls-elements">
               {currentCall.type === 'incoming' && currentCall.status === 'calling' && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
-                  <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} />
+                  <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} tooltip="Answer" />
                 </div>
               )}
               <div className="call-modal__controls-element">
                 {currentCall.status === 'calling' && (
-                  <UIButton iconName={isAnswerLoading ? 'loader' : 'video-call'} onClick={answerCall} />
+                  <UIButton
+                    iconName={isAnswerLoading ? 'loader' : 'video-call'}
+                    onClick={answerCall}
+                    tooltip="Answer Via Video"
+                  />
                 )}
                 {currentCall.status === 'in-progress' && (
                   <UIButton
                     iconName={settings.video ? 'video-call' : 'video-drop'}
                     color={settings.video ? 'success' : 'error'}
-                    className={!settings.video && 'call-modal__controls-element--video-block'}
                     onClick={toggleVideo}
+                    tooltip="Toggle Call Type"
                   />
                 )}
               </div>
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <UIButton iconName="phone-drop" color="error" onClick={endCall} />
+                <UIButton iconName="phone-drop" color="error" onClick={endCall} tooltip="End Call" />
               </div>
               <div className="call-modal__controls-element">
-                <UIButton iconName={settings.audio ? 'mic-muted' : 'mic'} onClick={toggleAudio} />
+                <UIButton
+                  iconName={settings.audio ? 'mic-muted' : 'mic'}
+                  onClick={toggleAudio}
+                  tooltip="Toggle Audio Type"
+                />
               </div>
             </div>
           </div>

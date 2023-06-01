@@ -1,32 +1,17 @@
 {
   "name": "k-room-client",
-  "version": "1.0.0",
   "private": true,
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "lint:fix-style": "stylelint **/*.scss --fix",
-    "lint:fix-es": "eslint **/*.{ts,tsx,js} --fix",
-    "serve": "webpack serve --node-env=development",
-    "build": "NODE_OPTIONS=--max-old-space-size=2048 webpack build --node-env=production",
-    "stat:build": "webpack build --node-env=production",
-    "serve:build": "node prod-server.js"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite --host",
+    "build": "tsc && vite build",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@react-oauth/google": "^0.8.0",
     "antd": "^4.20.7",
     "axios": "^0.27.2",
-    "bufferutil": "^4.0.7",
     "dotenv": "^16.0.2",
     "firebase": "^9.17.2",
     "howler": "^2.2.3",
@@ -36,11 +21,15 @@
     "react-icons": "^4.7.1",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.5.1",
-    "svg-url-loader": "^8.0.0",
-    "utf-8-validate": "^5.0.10",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "vite": "^4.3.8",
+    "html-react-parser": "^3.0.16",
+    "@react-oauth/google": "^0.8.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "@babel/core": "^7.19.1",
     "@babel/preset-env": "^7.19.1",
     "@babel/preset-react": "^7.18.6",
@@ -50,19 +39,13 @@
     "@types/lodash": "^4.14.182",
     "@types/moment": "^2.13.0",
     "@types/node": "^16.11.36",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.5",
     "@types/react-loader": "^2.4.5",
     "@types/react-redux": "^7.1.24",
     "@types/react-router-dom": "^5.3.3",
     "@types/simple-peer": "^9.11.5",
     "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.35.1",
     "babel-loader": "^8.2.5",
-    "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^11.0.0",
     "crypto-browserify": "^3.12.0",
-    "eslint": "7.11.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.6.0",
@@ -72,8 +55,6 @@
     "postcss": "^8.4.16",
     "postcss-sorting": "^7.0.1",
     "prettier": "^2.7.1",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
     "react-error-overlay": "6.0.9",
     "react-mic-waver": "^1.0.0",
     "react-redux": "^8.0.2",
@@ -88,11 +69,15 @@
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard-scss": "3.0.0",
     "ts-loader": "^9.3.1",
-    "typescript": "^4.7.4",
     "use-dynamic-refs": "^1.0.0",
-    "webpack": "^5.74.0",
-    "webpack-bundle-analyzer": "^4.7.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-node-externals": "^3.0.0"
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vitejs/plugin-react-swc": "^3.0.0",
+    "eslint": "^8.38.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "typescript": "^5.0.2"
   }
 }

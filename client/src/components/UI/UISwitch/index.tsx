@@ -6,6 +6,7 @@ export const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', onChan
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.checked
     setValue(!!updatedValue)
+    if (!onChange) return
     onChange(updatedValue, id)
   }
   return (

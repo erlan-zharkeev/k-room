@@ -7,6 +7,7 @@ import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
+import constants from 'src/constants'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -26,6 +27,7 @@ export const RoomHeader = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   socket.on(SocketActions.GET_USER_TYPING_STATUS, (data: { userIdFrom: string; status: boolean }) => {
+    if (!chatRoomData) return
     const hasTypingInterlocutor = chatRoomData.users.find((user) => user.id === data.userIdFrom)
     if (hasTypingInterlocutor) setIsTyping(data.status)
   })
@@ -35,7 +37,7 @@ export const RoomHeader = () => {
   }
 
   return (
-    <div className="room-header">
+    <div className="room-header" style={{ height: constants.roomHeader }}>
       <div className="room-header__back-button">
         <UIButton iconName="arrow-left" onClick={deselectChat} />
       </div>

@@ -1,7 +1,0 @@
-FROM mongo:latest
-
-COPY . .
-
-ENV 27017 27017
-
-EXPOSE 27017

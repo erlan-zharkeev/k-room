@@ -9,7 +9,7 @@ import { Message, SocketActions, User, ChatRoom as ChatRoomInterface } from 'com
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
-import { setReconnectingStatus, showNotification } from 'src/store/systemSlice'
+import { setContextMenu, setReconnectingStatus, showNotification } from 'src/store/systemSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
@@ -24,6 +24,7 @@ import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
+import InfoList from 'src/components/InfoList/InfoList'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -31,6 +32,7 @@ export const MainPage = () => {
   const userId = useTypedSelector((state) => state.user.userData.id)
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
+  const { asideTab } = useTypedSelector((state) => state.persist.settings)
 
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
 
@@ -49,6 +51,12 @@ export const MainPage = () => {
   const debouncedStatusNotification = useDebounce(statusNotification, 1000)
 
   const hideAside = () => selectedChatRoom && viewPort.width <= 769
+
+  const clickHandler = () => {
+    dispatch(setContextMenu({ event: null, type: '' }))
+  }
+
+  const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   useEffect(() => {
     socket.connect()
@@ -104,8 +112,8 @@ export const MainPage = () => {
   }, [])
 
   return (
-    <div className={'main-page page' + (hideAside() ? ' move-aside' : '')}>
-      <StubLoading isLoading={socket.disconnected} />
+    <div className={'main-page page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
+      {socket.disconnected && <StubLoading />}
       <Popup />
       <CallModal />
       <div className="main-page__wrapper">
@@ -113,10 +121,16 @@ export const MainPage = () => {
         <div className="main-page__content">
           <CallStatusBar />
           <TopBar />
-          <div className={`main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`}>
-            <AsidePanel />
-            <ChatRoom />
-          </div>
+          {asideTab === 'info' ? (
+            <div className={mainBodyClassNames()}>
+              <InfoList />
+            </div>
+          ) : (
+            <div className={mainBodyClassNames()}>
+              <AsidePanel />
+              <ChatRoom />
+            </div>
+          )}
           {viewPort.width <= 768 && <AsideBar />}
         </div>
       </div>

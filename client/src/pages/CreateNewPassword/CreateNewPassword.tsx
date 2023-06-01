@@ -6,8 +6,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import ErrorBucket from 'src/components/Common/ErrorBucket/ErrorBucket'
 import { Logo } from 'src/components/Common/Logo/Logo'
-import UIButton from 'src/components/UI/UIButton'
-import UIInput from 'src/components/UI/UIInput'
+import UIButton from 'ui/UIButton'
+import UIInput from 'ui/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import apiMethods from 'src/services/api-methods'
 import { AppDispatch } from 'src/store'
@@ -19,14 +19,14 @@ export const CreateNewPassword = () => {
   const [isValid, validate] = useValidate()
   const [searchParams] = useSearchParams()
   const [passwordRestoreQuery, setPasswordRestoreQuery] = useState('')
-  const [additionalErrors, setAdditionalErrors] = useState([])
+  const [additionalErrors, setAdditionalErrors] = useState([] as Array<string>)
   const [isPasswordEqual, setIsPasswordEqual] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
     const passwordRestoreQuery = searchParams.get('password-recovery')
-    if (!passwordRestoreQuery) navigate(RouteNames.MAIN)
+    if (!passwordRestoreQuery) return navigate(RouteNames.MAIN)
     setPasswordRestoreQuery(passwordRestoreQuery)
   })
 
@@ -75,14 +75,14 @@ export const CreateNewPassword = () => {
               <UIInput placeholder="Confirm password" type="password" size="large" />
             </Form.Item>
 
-            <ErrorBucket errors={additionalErrors} />
+            {additionalErrors && <ErrorBucket errors={additionalErrors} />}
 
             <Form.Item className="sign-in__controls">
               <UIButton
                 text="Change password"
                 border="border-default"
                 color="accent"
-                htmlType="submit"
+                htmltype="submit"
                 loading={isLoading}
                 disabled={!isValid || !isPasswordEqual}
               />

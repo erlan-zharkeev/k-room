@@ -13,6 +13,7 @@ import getViewPort from './utils/getViewPort'
 import apiMethods from './services/api-methods'
 import { commonSetUserDataHandler } from './store/userSlice'
 import { AsyncThunkResponseWrapper } from './@types'
+import ContextMenu from 'src/components/Common/ContextMenu/ContextMenu'
 
 function App() {
   const { theme } = useTypedSelector((state) => state.persist.settings)
@@ -42,7 +43,12 @@ function App() {
     }
   }, [])
 
-  return <AppRouter />
+  return (
+    <>
+      <AppRouter />
+      <ContextMenu />
+    </>
+  )
 }
 
 export default App
