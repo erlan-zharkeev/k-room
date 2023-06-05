@@ -54,9 +54,10 @@ export const UIButton = ({
   return (
     <div className={modifiers + ' ' + className}>
       {showTooltips && tooltip ? (
-        <Tooltip title={tooltip}>
-          <></>
-          <ButtonBody />
+        <Tooltip title={tooltip} showArrow={false} destroyTooltipOnHide={true} placement="top">
+          <div className="tooltip-content">
+            <ButtonBody />
+          </div>
         </Tooltip>
       ) : (
         <ButtonBody />

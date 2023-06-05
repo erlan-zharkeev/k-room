@@ -6,6 +6,9 @@ const ENV = dotenv.config({ path: `.env.${process.env.NODE_ENV}` }).parsed
 
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ['js-big-decimal']
+  },
   build: {
     outDir: './build'
   },

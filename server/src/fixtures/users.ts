@@ -1,10 +1,10 @@
-import { CommonEndPoints } from './../../../types'
 import ENV from '../ENV'
 import { UserModel } from './../models/user.model'
 import firstCharUpperCase from '../utils/firstCharUpperCase'
 import initUserSettings from './initUserSettings'
 import { initUserCodes } from './initUserCodes'
 import { getInfo } from '../services/info/getInfo'
+import { getRequestStringToImg } from '../utils/getRequestStringToImg'
 const bcrypt = require('bcryptjs')
 
 export default async () => {
@@ -14,7 +14,7 @@ export default async () => {
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
       username: firstCharUpperCase(username),
-      avatar: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=${username}.jpg`,
+      avatar: getRequestStringToImg(username),
       email: `${username}@gmail.com`,
       password: hashedPassword,
       socketId: '',
@@ -26,7 +26,7 @@ export default async () => {
     })
     await user.save()
   }
-  const users = ENV.IS_DEV ? ['tolik', 'ivan', 'erlan'] : ['erlan']
+  const users = ENV.IS_DEV ? ['erlan'] : ['erlan']
   const promises = users.map(createUser)
   return await Promise.all(promises)
 }

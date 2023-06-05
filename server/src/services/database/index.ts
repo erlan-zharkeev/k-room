@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import ENV from './../../ENV'
 import loadUsersFixtures from './../../fixtures/users'
-
 const clc = require('cli-color')
+
 const db = mongoose
 
 async function initDataBase() {

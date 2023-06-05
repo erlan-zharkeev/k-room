@@ -13,6 +13,7 @@ import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/userSlice'
 import { User } from 'common-types'
 import UIImageLoader from 'ui/UIImageLoader'
+import { v4 as uuidv4 } from 'uuid'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
@@ -41,6 +42,7 @@ const UserDataSettingsPopup = () => {
     const updatedUserData = {
       ...values,
       userId: id,
+      oldFilename: avatar?.split('?img=')[1],
       file: avatarFile
     }
     setIsLoading(true)

@@ -1,6 +1,7 @@
 import { Badge, Avatar, Image } from 'antd'
 import UIIcon from 'ui/UIIcon'
 import UIAvatarProps from 'ui/UIAvatar/@types/UIAvatarProps'
+import { useState } from 'react'
 
 export const UIAvatar = ({
   online,
@@ -9,9 +10,11 @@ export const UIAvatar = ({
   showBadge = true,
   stubIconName = 'user-stub'
 }: UIAvatarProps) => {
+  const [showImage, setShowImage] = useState(Boolean(src))
+
   const AvatarBody = () =>
-    src ? (
-      <Image src={src} className="ui-avatar__image" alt="avatar" />
+    showImage ? (
+      <Image src={src} className="ui-avatar__image" alt="avatar" onError={() => setShowImage(false)} />
     ) : (
       <Avatar src={src} className="ui-avatar__image" icon={<UIIcon name={stubIconName} size={size} />} alt="avatar" />
     )
