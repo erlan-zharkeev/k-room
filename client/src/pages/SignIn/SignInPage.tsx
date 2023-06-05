@@ -71,7 +71,7 @@ export const SignInPage = () => {
     <div className="page sign-in">
       {isAppLoading ? (
         <div className="sign-in__loader">
-          <div className="sign-in__content">
+          <div className="sign-in__loader-content">
             <UIIcon name="loader" color="accent" size="large" />
             <h3 className="header-text header-text--md">Loading</h3>
           </div>

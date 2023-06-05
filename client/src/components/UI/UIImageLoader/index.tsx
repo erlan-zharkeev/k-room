@@ -8,7 +8,7 @@ import { UIImageLoaderProps } from './@types'
 const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName }: UIImageLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
-  const normFile = (e: any) => {
+  const normFile = async (e: any) => {
     const file = e.target.files[0]
     setFile(file)
     if (!file) return
@@ -28,7 +28,7 @@ const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName }: UIIm
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
     if (!isJpgOrPng) warnings.push('image resolution must be png or jpg')
     const isLt2M = file.size / 1024 / 1024 < 2
-    if (!isLt2M) warnings.push('image resolution must be less than 2mb')
+    if (!isLt2M) warnings.push('image size must be less than 2mb')
 
     if (warnings.length) {
       warnings.forEach((warning) => {

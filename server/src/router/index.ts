@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import { AuthEndPoints, CodesEndPoints, CommonEndPoints, UserEndPoints } from '../../../types'
 import authController from '../controllers/authController'
-import upload from './../services/filesStorageEngine'
 import validationRules from '../middlewares/authValidator/rules'
 import accessTokenValidator from '../middlewares/accessTokenValidator'
 import refreshTokenValidator from '../middlewares/refreshTokenValidator'
@@ -11,6 +10,7 @@ import ENV from '../ENV'
 import commonController from '../controllers/commonController'
 import userController from '../controllers/userController'
 import codesController from '../controllers/codesController'
+import upload from '../services/filesStorageEngine'
 
 const router = Router()
 

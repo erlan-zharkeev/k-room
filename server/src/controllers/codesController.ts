@@ -2,7 +2,7 @@ import { UserModel } from '../models/user.model'
 import { Request, Response } from 'express'
 import throwError from '../utils/throwError'
 import notAccuratePinRandomGenerator from '../utils/notAccuratePinRandomGenerator'
-import { Messages } from '../types/Messages'
+import { ErrorMessages, SuccessMessages } from '../types/Messages'
 import { Status } from './../../../types'
 import { sendEmailCodePasswordRecovery } from '../services/mail'
 import { getNextTimeCodeRequest } from '../utils/getNextTimeCodeRequest'
@@ -24,10 +24,9 @@ class CodesController {
 
       await sendEmailCodePasswordRecovery(email, code)
 
-      return res.json({ message: Messages.checkEmailForCode, nextTimeRequest })
-    } catch (e) {
-      console.log(e)
-      throwError(Status.BAD_REQUEST, res, Messages.codeSendFailed)
+      return res.json({ message: SuccessMessages.checkEmailForCode, nextTimeRequest })
+    } catch {
+      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedCodeSend)
     }
   }
   async validateEmailCodePasswordRecovery(req: Request, res: Response) {
@@ -35,7 +34,7 @@ class CodesController {
       const { email, code } = req.body
       const user = await UserModel.findOne({ email })
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
-      if (!isCodeEqual) throwError(Status.BAD_REQUEST, res, Messages.invalidConfirmCode)
+      if (!isCodeEqual) throwError(Status.BAD_REQUEST, res, ErrorMessages.invalidConfirmCode)
       const passwordResetQuery = uuidv4()
       await user?.updateOne({
         $set: {
@@ -43,9 +42,9 @@ class CodesController {
           'codes.passwordRecovery.query.expiresIn': getNextTimeCodeRequest(ENV.PASSWORD_RECOVERY_LINK_LIFE)
         }
       })
-      return res.json({ message: Messages.success, query: passwordResetQuery, silent: true })
-    } catch (e: any) {
-      throwError(Status.BAD_REQUEST, res, Messages.commonServerError)
+      return res.json({ message: SuccessMessages.success, query: passwordResetQuery, silent: true })
+    } catch {
+      throwError(Status.BAD_REQUEST, res, ErrorMessages.commonServerError)
     }
   }
 }

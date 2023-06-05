@@ -6,7 +6,7 @@ import { UserModel } from './../models/user.model'
 import { ChatRoomModel } from './../models/chatRoom.model'
 import { SearchTypeMap } from './../types/SearchTypeMap'
 import { transformUsersData } from './../utils/transformUserData'
-import { Messages } from './../types/Messages'
+import { SuccessMessages } from '../types/Messages'
 import emitContacts from './helpers/emitContacts'
 import emitRoomsByUserId from './helpers/emitRoomsByUserId'
 import emitSearchedContacts from './helpers/emitSearchedContacts'
@@ -112,13 +112,13 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   socket.on(SocketActions.SAVE_CONTACT, async (data: { userId: string; interlocutorId: string }) => {
     const { userId, interlocutorId } = data
     await UserModel.updateOne({ _id: userId }, { $addToSet: { contacts: interlocutorId } })
-    emitContacts(userId, Messages.userAddedToContacts)
+    emitContacts(userId, SuccessMessages.userAddedToContacts)
   })
 
   socket.on(SocketActions.DELETE_CONTACT, async (data: { currentUserId: string; deletingUserId: string }) => {
     const { currentUserId, deletingUserId } = data
     await UserModel.updateOne({ _id: currentUserId }, { $pull: { contacts: deletingUserId } })
-    emitContacts(currentUserId, Messages.userRemovedFromContacts)
+    emitContacts(currentUserId, SuccessMessages.userRemovedFromContacts)
   })
 
   socket.on(SocketActions.CREATE_ROOM, async (chatRoomData: ChatRoom) => {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserModel } from './../../models/user.model'
-import { Messages } from './../../types/Messages'
+import { ErrorMessages } from './../../types/Messages'
 import throwError from './../../utils/throwError'
 import { Status } from './../../../../types'
 
@@ -9,7 +9,7 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
     const { email } = req.body
     const candidate = await UserModel.findOne({ email })
 
-    if (!candidate) throwError(Status.BAD_REQUEST, res, Messages.coudntFindEmail)
+    if (!candidate) throwError(Status.BAD_REQUEST, res, ErrorMessages.coudntFindEmail)
     const currentDate = Date.now()
 
     const ableToSendCode = currentDate > Number(candidate?.codes.nextRequestPossibleAt)
@@ -17,10 +17,9 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
       next()
       return
     }
-    throwError(Status.BAD_REQUEST, res, Messages.nextTimeRequestNotPossible)
-  } catch (e: any) {
-    console.log(e)
-    throwError(Status.BAD_REQUEST, res, Messages.commonServerError)
+    throwError(Status.BAD_REQUEST, res, ErrorMessages.nextTimeRequestNotPossible)
+  } catch {
+    throwError(Status.BAD_REQUEST, res, ErrorMessages.commonServerError)
   }
 }
 

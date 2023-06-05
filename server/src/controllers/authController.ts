@@ -4,7 +4,7 @@ import throwError from '../utils/throwError'
 import { sendEmailConfirmationLink } from '../services/mail'
 import { updateTokens } from '../services/jwt'
 import authValidator from '../middlewares/authValidator'
-import { Messages } from '../types/Messages'
+import { ErrorMessages, SuccessMessages } from '../types/Messages'
 import { Status, UserCredential } from '../../../types'
 import initUserSettings from '../fixtures/initUserSettings'
 import { v4 as uuidv4 } from 'uuid'
@@ -17,7 +17,7 @@ class AuthController {
   async updateTokensPair(req: Request, res: Response) {
     const { id } = req.body.decoded
     await updateTokens(id, res)
-    res.json({ message: Messages.tokensPairUpdated, silent: true })
+    res.json({ message: SuccessMessages.tokensPairUpdated, silent: true })
   }
 
   async registration(req: Request, res: Response) {
@@ -26,11 +26,11 @@ class AuthController {
       let { username, email, password } = req.body
 
       const candidate = await UserModel.findOne({ email })
-      if (candidate) return throwError(Status.BAD_REQUEST, res, Messages.userExist)
+      if (candidate) return throwError(Status.BAD_REQUEST, res, ErrorMessages.userAlreadyExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
-      if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, Messages.passHashFailed)
+      if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, ErrorMessages.failedPassHash)
       const welcomeInfoItem = getInfo('1')
       const user = new UserModel({
         username,
@@ -45,11 +45,11 @@ class AuthController {
       await user.save()
 
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
-      if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, Messages.failedToSendConfirmationLink)
+      if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, ErrorMessages.failedSendConfirmationLink)
 
       return res.json(confirmEmailData)
-    } catch (e) {
-      throwError(Status.BAD_REQUEST, res, Messages.registrationCommonError)
+    } catch {
+      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedRegistration)
     }
   }
 
@@ -59,7 +59,7 @@ class AuthController {
       const confirmEmailData = await sendEmailConfirmationLink(email)
       return res.json(confirmEmailData)
     } catch {
-      throwError(Status.UNREACHABLE, res, Messages.sendConfirmEmailFailed)
+      throwError(Status.UNREACHABLE, res, ErrorMessages.failedSendConfirmEmail)
     }
   }
 
@@ -70,10 +70,10 @@ class AuthController {
       if (!user) return
       return res.json({
         userData: { username: user.username, email: user.email, id: user._id, avatar: user.avatar },
-        message: Messages.emailConfirmed
+        message: SuccessMessages.emailConfirmed
       })
     } catch {
-      throwError(Status.BAD_REQUEST, res, Messages.emailConfirmFailed)
+      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedEmailConfirm)
     }
   }
 
@@ -81,21 +81,21 @@ class AuthController {
     try {
       let { email, password } = req.body
       const user = await UserModel.findOne({ email })
-      if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
-      if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, Messages.emailNotConfirm)
+      if (!user) return throwError(Status.BAD_REQUEST, res, ErrorMessages.userNotFound)
+      if (!user.confirmed) return throwError(Status.BAD_REQUEST, res, ErrorMessages.emailNotConfirm)
 
       const validPassword = bcrypt.compareSync(password, user.password)
 
-      if (!validPassword) return throwError(Status.BAD_REQUEST, res, Messages.wrongPass)
+      if (!validPassword) return throwError(Status.BAD_REQUEST, res, ErrorMessages.wrongPass)
 
       await updateTokens(user._id, res)
       return res.json({
         userData: { username: user.username, email, id: user._id, avatar: user.avatar, infoItems: user.infoItems },
         settings: user.settings,
-        message: Messages.loginSuccess
+        message: SuccessMessages.loginSuccess
       })
-    } catch (e: any) {
-      throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
+    } catch {
+      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedLogin)
     }
   }
   async signInWithProvider(req: Request, res: Response) {
@@ -130,10 +130,10 @@ class AuthController {
           avatar: user.avatar ?? avatar
         },
         settings: user.settings,
-        message: Messages.loginAndRegisterSuccess
+        message: SuccessMessages.loginAndRegister
       })
-    } catch (e: any) {
-      throwError(Status.BAD_REQUEST, res, Messages.loginCommonError)
+    } catch {
+      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedLogin)
     }
   }
 }

@@ -26,7 +26,7 @@ export default async () => {
     })
     await user.save()
   }
-  const users = ENV.IS_DEV ? ['tolik', 'ivan', 'erlan'] : ['erlan']
+  const users = ENV.IS_DEV ? ['erlan'] : ['erlan']
   const promises = users.map(createUser)
   return await Promise.all(promises)
 }
