@@ -48,7 +48,6 @@ export enum UserEndPoints {
 
 export enum CommonEndPoints {
   COMMON_IMAGES = "/common-images",
-  GET_FILES = "/image/:filename",
   GET_INFO = "/notification",
 }
 

@@ -15,6 +15,7 @@ server/yarn-error.log
 server/yarn.lock
 server/build
 server/eslintcache
+server/src/assets/img
 
 types/node_modules
 types/yarn-error.log

@@ -4,23 +4,41 @@ import throwError from '../utils/throwError'
 import { ErrorMessages, SuccessMessages } from '../types/Messages'
 import { SocketActions, Status } from '../../../types'
 import { io } from '../server'
-import ENV from '../ENV'
 import getSocketsByUsersArray from '../socket/helpers/getSocketsByUsersArray'
 import getUsersByHasContactId from '../socket/helpers/getUsersByHasContactId'
+import sharp from 'sharp'
+import constants from './../constants'
+import { getRequestStringToImg } from '../utils/getRequestStringToImg'
+import { getPathToImg } from '../utils/getPathToImg'
+import fs from 'fs'
+import { v4 as uuidv4 } from 'uuid'
 
 const bcrypt = require('bcryptjs')
 
 class UserController {
   async updateUserData(req: any, res: Response) {
     try {
-      const { userId, username } = req.body
+      const { userId, username, oldFilename } = req.body
 
-      const filename = req.file?.filename ?? null
-      const imagePath = filename ? `${ENV.SERVER_URL}/image/${filename}` : ''
+      const oldPathFilename = getPathToImg(oldFilename)
+      const isImageExist = fs.existsSync(oldPathFilename)
+      const isFileStatic = oldPathFilename.includes('static')
+      if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
+
+      const newFileName = `${uuidv4()}.jpg`
+      const { dimensions, quality } = constants.sharp.avatar
+      const pathToSave = getPathToImg(newFileName)
+
+      await sharp(req.file.buffer)
+        .resize(dimensions.x, dimensions.y)
+        .jpeg({
+          quality
+        })
+        .toFile(`${pathToSave}`)
 
       const newUserData: any = {
         username,
-        avatar: imagePath
+        avatar: getRequestStringToImg(newFileName)
       }
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
@@ -47,8 +65,7 @@ class UserController {
         userData: updatedUserData,
         message: SuccessMessages.userDataUpdated
       })
-    } catch (e: any) {
-      console.log(e)
+    } catch {
       throwError(Status.BAD_REQUEST, res, ErrorMessages.failedUserDataUpdate)
     }
   }

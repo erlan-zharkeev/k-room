@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import { Status } from '../../../types'
-import ENV from '../ENV'
 import { ErrorMessages, SuccessMessages } from '../types/Messages'
 import throwError from '../utils/throwError'
-import { gfs, gridfsBucket } from './../services/database'
 import { UserModel } from '../models/user.model'
+import { getPathToImg } from '../utils/getPathToImg'
 const fs = require('fs')
 
 class CommonController {
@@ -12,23 +11,13 @@ class CommonController {
     try {
       const filename = req.query.img as string
       const resolution = filename.split('.')[1]
-      const path = `${ENV.SERVER_ASSETS_PATH}/img/${filename}`
+      const path = getPathToImg(filename)
       if (!fs.existsSync(path)) return throwError(Status.NOT_FOUND, res, ErrorMessages.noFilesExist)
       res.writeHead(200, { 'content-type': `image/${resolution}` })
       fs.createReadStream(path).pipe(res)
     } catch {
       return throwError(Status.NOT_FOUND, res, ErrorMessages.noFilesExist)
     }
-  }
-
-  async showFiles(req: Request, res: Response) {
-    gfs.files.findOne({ filename: req.params.filename }, (_: any, file: any) => {
-      if (!file || file.length === 0) return throwError(Status.NOT_FOUND, res, ErrorMessages.noFilesExist)
-      if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-        const readstream = gridfsBucket.openDownloadStream(file._id)
-        readstream.pipe(res)
-      } else throwError(Status.NOT_FOUND, res, ErrorMessages.notImage)
-    })
   }
 
   async readInfoHandler(req: Request, res: Response) {

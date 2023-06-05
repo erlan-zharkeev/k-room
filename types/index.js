@@ -22,7 +22,6 @@ var UserEndPoints;
 var CommonEndPoints;
 (function (CommonEndPoints) {
     CommonEndPoints["COMMON_IMAGES"] = "/common-images";
-    CommonEndPoints["GET_FILES"] = "/image/:filename";
     CommonEndPoints["GET_INFO"] = "/notification";
 })(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
 var CodesEndPoints;
