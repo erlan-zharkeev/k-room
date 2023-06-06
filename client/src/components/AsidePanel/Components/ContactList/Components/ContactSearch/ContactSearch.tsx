@@ -12,7 +12,6 @@ import UIButton from 'ui/UIButton'
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
   const [isLoading, setIsLoading] = useState(false)
-  const [searchType] = useState('name')
 
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
@@ -25,9 +24,8 @@ const ContactSearch = () => {
     })
   }, [])
 
-  const fetchUsers = async (type: string, value: string) => {
-    const searchData = { type, value }
-    socket.emit(SocketActions.SEARCH_CONTACT, searchData)
+  const fetchUsers = async (value: string) => {
+    socket.emit(SocketActions.SEARCH_CONTACT, { value })
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
@@ -38,7 +36,7 @@ const ContactSearch = () => {
       return
     }
     setIsLoading(true)
-    await debouncedSearch(searchType, value)
+    await debouncedSearch(value)
   }
 
   const addUser = async (interlocutorId: string | undefined) => {
@@ -48,28 +46,11 @@ const ContactSearch = () => {
     socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
   }
 
-  // const searchTypes = [
-  //   { label: 'Name', value: 'name' },
-  //   { label: 'Email', value: 'email' },
-  //   { label: 'Id', value: 'id', checked: true }
-  // ]
-
   return (
     <div className="contact-search">
-      {/* <div className="contact-search__search-type">
-        <Radio.Group
-          className="contact-search__search-type-element"
-          options={searchTypes}
-          onChange={(e) => changeSearchType(e.target.value)}
-          value={searchType}
-          optionType="button"
-          buttonStyle="outline"
-          size="small"
-        />
-      </div> */}
       <UIInput
         size="small"
-        placeholder={`Search user by ${searchType}`}
+        placeholder="Search user"
         suffix={<UIIcon name={isLoading ? 'loader' : 'search'} color={isLoading ? 'accent' : 'default'} />}
         onChange={async (e) => await search(e.target.value)}
       />

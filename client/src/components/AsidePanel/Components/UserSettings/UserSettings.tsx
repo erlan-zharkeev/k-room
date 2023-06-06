@@ -43,7 +43,7 @@ const UserSettings = () => {
             title={username}
             description={email}
           />
-          <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">{id}</span>
+          <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">#{id}</span>
         </div>
         <div className="link paragraph-text" onClick={() => navigate({ pathname: RouteNames.PASSWORD_RECOVERY })}>
           Password recovery

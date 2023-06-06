@@ -1,5 +1,5 @@
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { SocketActions, ChatRoom, UserShort, Message, MessageStatus } from '../../../types'
+import { SocketActions, ChatRoom, UserShort, Message, MessageStatus, User } from '../../../types'
 import { Socket } from 'socket.io'
 import { io } from './../server'
 import { UserModel } from './../models/user.model'
@@ -62,10 +62,10 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
 
   socket.on(SocketActions.INITIALIZE, async (userId: string) => {
     io.to(socket.id).emit(SocketActions.CONNECTION)
-    await setSocketId(userId, socket.id)
-    await emitContacts(userId)
-    await emitRoomsByUserId(userId)
-    await setUserStatus(userId, true)
+    setSocketId(userId, socket.id)
+    emitContacts(userId)
+    emitRoomsByUserId(userId)
+    setUserStatus(userId, true)
   })
 
   socket.on(SocketActions.DISCONNECT, async () => {
@@ -88,9 +88,21 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   )
 
   socket.on(SocketActions.SEARCH_CONTACT, async (data: { type: string; value: string }) => {
-    const { type, value } = { ...data }
+    let { value } = data
+    let type = 'name'
     let validSearch = true
-    if (type === 'id' && !ObjectIdType.isValid(value)) validSearch = false
+
+    if (value.includes('#')) {
+      value = value.substring(1)
+      ObjectIdType.isValid(value) ? (type = 'id') : (validSearch = false)
+    }
+
+    if (value.includes('@')) {
+      type = 'email'
+      value = value.split('@')[0]
+    }
+
+    if (!value) validSearch = false
 
     const $regex = new RegExp(value, 'i')
 
@@ -104,9 +116,14 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
 
     if (!searchType) validSearch = false
 
-    const users = await UserModel.find(searchType)
-    const transformedUsers = transformUsersData(users)
-    emitSearchedContacts(socket.id, validSearch ? transformedUsers : [])
+    let searchedUsers: User[] = []
+
+    if (validSearch) {
+      const users = await UserModel.find(searchType)
+      searchedUsers = transformUsersData(users)
+    }
+
+    emitSearchedContacts(socket.id, searchedUsers)
   })
 
   socket.on(SocketActions.SAVE_CONTACT, async (data: { userId: string; interlocutorId: string }) => {
@@ -142,7 +159,7 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   socket.on(
     SocketActions.CHANGE_MESSAGE_STATUS,
     async (data: { roomId: string; messageId: string; status: MessageStatus }) => {
-      const { roomId, messageId, status } = { ...data }
+      const { roomId, messageId, status } = data
       await setMessageStatus(roomId, messageId, status)
     }
   )

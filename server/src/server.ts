@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
 import router from './router'
 import ENV from './ENV'
-
+const fs = require('fs')
+const path = require('path')
 const http = require('http')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
@@ -27,6 +28,8 @@ const PORT = ENV.SERVER_PORT
 server.listen(PORT, () => {
   console.log(clc.green.bgWhite(`-Server listening on port ${PORT}`))
 })
+
+if (!fs.existsSync(path.join(__dirname, 'assets/img/'))) fs.mkdir(path.join(__dirname, 'assets/img/'))
 
 export const io = new Server(server, {
   path: '/socket/',

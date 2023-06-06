@@ -52,7 +52,7 @@ export const SignUpPage = () => {
             form={form}
             onInput={() => validate(form)}
           >
-            <Form.Item name="username" rules={validateRules.required}>
+            <Form.Item name="username" rules={validateRules.username}>
               <UIInput placeholder="Username" size="large" autoComplete="on" />
             </Form.Item>
 
@@ -78,6 +78,7 @@ export const SignUpPage = () => {
                 text="Register"
                 border="border-default"
                 color="accent"
+                htmltype="submit"
                 loading={isLoading}
                 disabled={!isValid}
               />

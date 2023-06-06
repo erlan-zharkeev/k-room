@@ -6,6 +6,7 @@ import { showNotification } from 'src/store/systemSlice'
 import $clg from 'src/services/$clg'
 import apiMethods from './api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
+import constants from 'src/constants'
 axios.defaults.withCredentials = true
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
@@ -39,7 +40,7 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       break
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  dispatch(showNotification({ message, messageType: 'error' }))
+  dispatch(showNotification({ message, messageType: 'error', duration: constants.errorNotificationDuration }))
 }
 
 type RequestTypes = 'post' | 'get' | 'patch'

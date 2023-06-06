@@ -5,6 +5,16 @@ interface ValidateRules {
 
 const validateRules: ValidateRules = {
   required: [{ required: true, message: 'Field is required' }],
+  username: [
+    {
+      validator: async (_: unknown, value: string) => {
+        let error = ''
+        if (!value) error = 'Field is required'
+        else if (value.includes('#') || value.includes('@')) error = 'Username must not contain @ # $ symbols'
+        return error ? await Promise.reject(error) : await Promise.resolve()
+      }
+    }
+  ],
   emailCode: [
     { required: true, message: 'Field is required' },
     { len: 4, message: 'Field must contain 4 symbols' }

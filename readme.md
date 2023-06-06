@@ -75,13 +75,11 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-- Make username unique(3)
-- Сделать доступным поиск автоматическим(2)
 - Инвайты и не допускать сообщения без добаления в контакты(3)
 - make multiple chat(5)
+- develop reactions(2)
 - develop add photo(5)
 - develop forward and reply(3)
-- develop reactions(2)
 - добавить настройки громкости и чекаем видео(5)
 - develop call list(4)
 - setup cors to specific host and port

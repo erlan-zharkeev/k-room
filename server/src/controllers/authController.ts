@@ -25,8 +25,13 @@ class AuthController {
       authValidator(req, res)
       let { username, email, password } = req.body
 
-      const candidate = await UserModel.findOne({ email })
-      if (candidate) return throwError(Status.BAD_REQUEST, res, ErrorMessages.userAlreadyExist)
+      const userNameCandidate = await UserModel.findOne({ username })
+
+      if (userNameCandidate) return throwError(Status.BAD_REQUEST, res, ErrorMessages.userWithCurrentNameAlreadyExist)
+
+      const emailCandidate = await UserModel.findOne({ email })
+
+      if (emailCandidate) return throwError(Status.BAD_REQUEST, res, ErrorMessages.userWithCurrentEmailAlreadyExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
@@ -48,7 +53,8 @@ class AuthController {
       if (!confirmEmailData) return throwError(Status.UNREACHABLE, res, ErrorMessages.failedSendConfirmationLink)
 
       return res.json(confirmEmailData)
-    } catch {
+    } catch (e: any) {
+      console.log(e)
       throwError(Status.BAD_REQUEST, res, ErrorMessages.failedRegistration)
     }
   }

@@ -13,7 +13,6 @@ import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/userSlice'
 import { User } from 'common-types'
 import UIImageLoader from 'ui/UIImageLoader'
-import { v4 as uuidv4 } from 'uuid'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
@@ -73,7 +72,7 @@ const UserDataSettingsPopup = () => {
         <div className="user-data-settings-popup__image">
           <UIImageLoader image={newAvatar} setImage={setNewAvatar} setFile={setFile} updated={imageUpdated} />
         </div>
-        <Form.Item name="username" rules={validateRules.required} initialValue={username}>
+        <Form.Item name="username" rules={validateRules.username} initialValue={username}>
           <UIInput placeholder="Username" />
         </Form.Item>
         <Form.Item className="user-data-settings-popup__controls">
