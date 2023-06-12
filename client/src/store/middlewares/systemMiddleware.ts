@@ -5,7 +5,7 @@ import changeSettingsHandler from './helpers/changeSettingsHandler'
 
 export const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
   const dispatch = store.dispatch
-  changeSettingsHandler(action, store, dispatch)
+  changeSettingsHandler(action, store)
   switch (action.type) {
     case 'rooms/updateChatMessage':
       const { soundOn } = store.getState().persist.settings

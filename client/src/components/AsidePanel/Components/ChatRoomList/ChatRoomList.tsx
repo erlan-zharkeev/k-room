@@ -44,7 +44,8 @@ export const ChatRoomList = () => {
     return !hasUserInContacts && !isChatMultiple
   }
 
-  const createMultipleChat = () => {
+  const createMultipleChat = (e: any) => {
+    e.stopPropagation()
     dispatch(showModal({ title: 'Create New Chat Room', modalContentComponentName: 'CreateMultipleChatPopup' }))
   }
 
@@ -75,7 +76,7 @@ export const ChatRoomList = () => {
               className={selectedChatRoomId === chatRoom.roomId ? 'active' : ''}
             >
               <List.Item.Meta
-                avatar={<UIAvatar online={chatRoom.hasOnline} src={chatRoom.avatar} />}
+                avatar={<UIAvatar ribbon={chatRoom.multiple} online={chatRoom.hasOnline} src={chatRoom.avatar} />}
                 title={<span>{chatRoom.chatName}</span>}
                 description={getLastMessage(chatRoom.messages)}
               />

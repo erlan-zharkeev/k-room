@@ -1,0 +1,19 @@
+.informer {
+  width: 100%;
+  height: auto;
+  padding: $gutter-md;
+  display: flex;
+  border-radius: $radius-sm;
+  &__icon {
+    margin-right: $gutter-md;
+  }
+  &--warn {
+    background: var(--warn-bg);
+  }
+  &--success {
+    background: var(--success-bg);
+  }
+  &--error {
+    background: var(--error-bg);
+  }
+}

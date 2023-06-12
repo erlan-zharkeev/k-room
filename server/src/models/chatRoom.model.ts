@@ -19,7 +19,7 @@ export const chatRoomModel = new Schema<ChatRoom>({
     required: false
   },
   users: {
-    type: [{ id: String, username: String }],
+    type: [{ id: String, username: String, avatar: String }],
     required: true,
     default: []
   },

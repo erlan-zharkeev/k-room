@@ -4,6 +4,8 @@ export type ColorModifiers = 'accent' | 'success' | 'error' | 'warn' | 'default'
 
 export type SizeModifiers = 'large' | 'medium' | 'small'
 
+export type ShapeModifiers = 'round' | 'square'
+
 export interface AsyncThunkResponseWrapper {
   payload: AxiosResponse
 }

@@ -5,7 +5,7 @@ import UIAvatar from 'ui/UIAvatar'
 import UIIcon from '../UIIcon'
 import { UIImageLoaderProps } from './@types'
 
-const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName }: UIImageLoaderProps) => {
+const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName, shape = 'round' }: UIImageLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const normFile = async (e: any) => {
@@ -48,9 +48,9 @@ const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName }: UIIm
   }
 
   return (
-    <div className="ui-image-loader">
+    <div className={`ui-image-loader ui-image-loader--${shape}`}>
       <div className="ui-image-loader__body">
-        <UIAvatar src={image} showBadge={false} size="large" stubIconName={stubIconName} />
+        <UIAvatar src={image} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
         <input type="file" onChange={normFile} />
         {image && (
           <div className="ui-image-loader__clear-button" onClick={resetImage}>

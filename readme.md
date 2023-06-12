@@ -75,14 +75,18 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-- Инвайты и не допускать сообщения без добаления в контакты(3)
 - make multiple chat(5)
 - develop reactions(2)
 - develop add photo(5)
-- develop forward and reply(3)
+- develop forward and reply and delete(5)
 - добавить настройки громкости и чекаем видео(5)
 - develop call list(4)
 - setup cors to specific host and port
 - check token works(1)
 - privacy policy create and to facebook dev
+
+- button fill
+- import default ?
+- naming index.ts
+- dispatch выделить в отдельный файл
 <!-- - lazy load сообщений(5) -->

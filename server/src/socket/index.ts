@@ -19,10 +19,19 @@ import setMessage from './helpers/setMessage'
 import setRoomToUsers from './helpers/setRoomToUsers'
 import setLastSeenData from './helpers/setLastSeenData'
 import setUserStatus from './helpers/setUserStatus'
+import { v4 as uuidv4 } from 'uuid'
+import constants from './../constants'
+import saveAndGetImagePath from '../utils/saveAndGetImagePath'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
+  socket.on(SocketActions.UPDATE_USER_SETTINGS, async (data: any) => {
+    const { userId, type, value } = data
+    const query = {} as any
+    query['settings.' + type] = value
+    await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
+  })
   socket.on(SocketActions.CALL_USER, async (data: any) => {
     const interlocutor = await getUserById(data.userToCall)
     if (!interlocutor) return
@@ -62,10 +71,10 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
 
   socket.on(SocketActions.INITIALIZE, async (userId: string) => {
     io.to(socket.id).emit(SocketActions.CONNECTION)
-    setSocketId(userId, socket.id)
-    emitContacts(userId)
-    emitRoomsByUserId(userId)
-    setUserStatus(userId, true)
+    await setSocketId(userId, socket.id)
+    await emitContacts(userId)
+    await emitRoomsByUserId(userId)
+    await setUserStatus(userId, true)
   })
 
   socket.on(SocketActions.DISCONNECT, async () => {
@@ -139,17 +148,31 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   })
 
   socket.on(SocketActions.CREATE_ROOM, async (chatRoomData: ChatRoom) => {
+    const avatar = await saveAndGetImagePath(chatRoomData.avatarFile)
+    const { multiple } = chatRoomData
+
+    const inviteMessage = {
+      id: uuidv4(),
+      status: 'none',
+      author: 'system',
+      body: multiple ? constants.multipleInviteMessage : constants.singleInviteMessage,
+      createdAt: ''
+    }
     const room = new ChatRoomModel({
+      avatar,
+      multiple,
+      messages: [inviteMessage],
+      chatName: chatRoomData.chatName,
       users: chatRoomData.users,
-      authorId: chatRoomData.authorId,
-      multiple: chatRoomData.users.length > 2
+      authorId: chatRoomData.authorId
     })
-    await room.save()
-    await setRoomToUsers(room)
+    const savedRoom = await room.save()
+    const blockedFor = multiple ? '' : chatRoomData.authorId
+    await setRoomToUsers({ room, blockedFor })
     await Promise.all(room.users.map(async (user) => await emitRoomsByUserId(user.id)))
     const userData = await getUserById(chatRoomData.authorId)
     if (!userData?.socketId) return
-    io.to(userData.socketId).emit(SocketActions.ROOM_CREATED)
+    io.to(userData.socketId).emit(SocketActions.ROOM_CREATED, { roomId: savedRoom.id })
   })
 
   socket.on(SocketActions.SEND_MESSAGE, async (data: { roomId: string; message: Message }) => {

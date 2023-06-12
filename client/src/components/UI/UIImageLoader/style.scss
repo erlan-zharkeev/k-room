@@ -1,4 +1,6 @@
 .ui-image-loader {
+  $self: &;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +24,12 @@
         border-radius: 50%;
         border: 1px;
       }
+    }
+  }
+  &--square {
+    #{$self}__clear-button {
+      top: -12px;
+      right: -12px;
     }
   }
   &__clear-button {

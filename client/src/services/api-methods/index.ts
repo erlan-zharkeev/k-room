@@ -1,5 +1,5 @@
 import { updateTokensPair, registration, sendConfirmationLink, emailConfirm, signInWithProvider, login } from './auth'
-import { resetPassword, updateUserData, getUserData, updateUserSettings } from './user'
+import { resetPassword, updateUserData, getUserData } from './user'
 import { sendEmailCodePasswordRecovery, validateEmailCodePasswordRecovery } from './codes'
 import { markInfoAsRead } from './common'
 
@@ -12,7 +12,7 @@ export const apiMethods = {
     signInWithProvider,
     login
   },
-  user: { resetPassword, updateUserData, getUserData, updateUserSettings, markInfoAsRead },
+  user: { resetPassword, updateUserData, getUserData, markInfoAsRead },
   codes: { sendEmailCodePasswordRecovery, validateEmailCodePasswordRecovery },
   common: { markInfoAsRead }
 }

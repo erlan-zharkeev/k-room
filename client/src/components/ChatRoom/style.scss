@@ -17,6 +17,27 @@
     margin-left: 100%;
   }
 
+  &__message {
+    &--self {
+      justify-content: flex-end;
+      .message__text {
+        text-align: right;
+      }
+    }
+
+    &--system {
+      justify-content: center;
+      margin-left: $gutter-lg;
+      .message {
+        width: 100%;
+        border-radius: $radius-sm;
+      }
+      .message__text {
+        margin: 0 auto;
+      }
+    }
+  }
+
   &__wrapper {
     position: relative;
     height: 100%;
@@ -60,5 +81,10 @@
   &__stub {
     height: 100%;
     @include flex-total-center;
+  }
+
+  .informer {
+    position: absolute;
+    bottom: 0;
   }
 }

@@ -1,5 +1,6 @@
 export type IconName =
   | 'contacts'
+  | 'chat'
   | 'chats'
   | 'calls'
   | 'settings-cog'
@@ -34,3 +35,4 @@ export type IconName =
   | 'exclamation'
   | 'image'
   | 'trash'
+  | 'warn'

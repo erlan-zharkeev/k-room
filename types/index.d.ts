@@ -40,7 +40,6 @@ export declare enum AuthEndPoints {
 export declare enum UserEndPoints {
     GET_USER_DATA = "/auth/get-user-data",
     UPDATE_USER_DATA = "/auth/user-data/update",
-    UPDATE_USER_SETTINGS = "/user/update-user-settings",
     RESET_PASSWORD = "/user/reset-password"
 }
 export declare enum CommonEndPoints {
@@ -79,7 +78,8 @@ export declare enum SocketActions {
     CALL_ACCEPTED = "call-accepted",
     CALL_ENDED = "call-ended",
     CHANGE_CALL_SETTINGS = "change-call-settings",
-    CALL_STARTED_AT = "call-started-at"
+    CALL_STARTED_AT = "call-started-at",
+    UPDATE_USER_SETTINGS = "update-user-settings"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",
@@ -101,7 +101,7 @@ export interface Message {
     isSelf?: boolean;
     status?: MessageStatus;
 }
-export type MessageStatus = "sending" | "undelivered" | "delivered" | "read";
+export type MessageStatus = "sending" | "undelivered" | "delivered" | "read" | "none";
 export interface ChatRoom {
     _id?: string;
     roomId: string;
@@ -112,11 +112,14 @@ export interface ChatRoom {
     messages: Array<Message>;
     multiple: boolean;
     hasOnline: boolean;
+    blocked?: boolean;
+    avatarFile?: any;
 }
 export type ChatRooms = Array<ChatRoom>;
 export interface UserShort {
     id: string;
     username: string;
+    avatar?: string;
 }
 export interface UserCredential extends UserShort {
     email?: string;

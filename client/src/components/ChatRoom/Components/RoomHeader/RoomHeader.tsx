@@ -8,6 +8,7 @@ import { selectChatRoom } from 'src/store/settingsSlice'
 import UIAvatar from 'ui/UIAvatar'
 import UIButton from 'ui/UIButton'
 import constants from 'src/constants'
+import { showModal } from 'src/store/systemSlice'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -17,7 +18,7 @@ export const RoomHeader = () => {
   const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
-    setInterval(() => {
+    setTimeout(() => {
       setTypingDotsQuantity((typingDotsQuantity) => {
         return typingDotsQuantity < 3 ? typingDotsQuantity + 1 : 0
       })
@@ -32,48 +33,28 @@ export const RoomHeader = () => {
     if (hasTypingInterlocutor) setIsTyping(data.status)
   })
 
-  function deselectChat() {
-    dispatch(selectChatRoom(''))
+  const openChatMembers = () => {
+    dispatch(showModal({ title: 'Chat Info', modalContentComponentName: 'ChatRoomSettingsPopup' }))
   }
 
   return (
     <div className="room-header" style={{ height: constants.roomHeader }}>
       <div className="room-header__back-button">
-        <UIButton iconName="arrow-left" onClick={deselectChat} />
+        <UIButton iconName="arrow-left" onClick={() => dispatch(selectChatRoom(''))} />
       </div>
-
       <div className="room-header__info">
-        <UIAvatar online={chatRoomData?.hasOnline} src={chatRoomData?.avatar} />
-        <h3 className="room-header__name">{chatRoomData?.chatName}</h3>
+        <UIAvatar ribbon={chatRoomData?.multiple} online={chatRoomData?.hasOnline} src={chatRoomData?.avatar} />
+        <h3 onClick={openChatMembers} className={`room-header__name ${chatRoomData?.multiple && 'pointer'}`}>
+          {chatRoomData?.chatName}
+        </h3>
         {isTyping && (
           <div className="is-typing blink-me paragraph-text paragraph-text--accent">
             Typing {Array.from('.'.repeat(typingDotsQuantity)).join(' ')}
           </div>
         )}
       </div>
-      <div className="room-header__controls">
-        {/* <Button
-          size="large"
-          className="borderless"
-          type="text"
-          icon={<PhoneOutlined />}
-          onClick={() => dispatch(initCall())}
-        /> */}
-        {/* <Dropdown
-          overlay={
-            <Menu
-              items={[
-                { key: '1', label: 'setting1' },
-                { key: '2', label: 'setting2' }
-              ]}
-            ></Menu>
-          }
-          placement="topLeft"
-        >
-          <Button className="borderless" shape="circle" type="text" icon={<SettingOutlined />} size="large"></Button>
-        </Dropdown> */}
-      </div>
     </div>
   )
 }
+
 export default RoomHeader

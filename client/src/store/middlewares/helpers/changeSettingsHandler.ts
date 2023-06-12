@@ -1,6 +1,7 @@
-import apiMethods from 'src/services/api-methods'
+import { SocketActions } from 'common-types'
+import { socket } from 'src/socket/socket'
 
-export const changeSettingsHandler = (action: any, store: any, dispatch: any) => {
+export const changeSettingsHandler = (action: any, store: any) => {
   const isChangeSettingAction = action.type.includes('settings/') && action.type !== 'settings/updateSettings'
   if (isChangeSettingAction) {
     const value = action.payload
@@ -33,7 +34,7 @@ export const changeSettingsHandler = (action: any, store: any, dispatch: any) =>
       default:
         break
     }
-    dispatch(apiMethods.user.updateUserSettings({ userId, type, value: convertedValue }))
+    socket.emit(SocketActions.UPDATE_USER_SETTINGS, { userId, type, value: convertedValue })
   }
 }
 

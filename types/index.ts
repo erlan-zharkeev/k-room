@@ -42,7 +42,7 @@ export enum AuthEndPoints {
 export enum UserEndPoints {
   GET_USER_DATA = "/auth/get-user-data",
   UPDATE_USER_DATA = "/auth/user-data/update",
-  UPDATE_USER_SETTINGS = "/user/update-user-settings",
+  // UPDATE_USER_SETTINGS = "/user/update-user-settings",
   RESET_PASSWORD = "/user/reset-password",
 }
 
@@ -85,6 +85,7 @@ export enum SocketActions {
   CALL_ENDED = "call-ended",
   CHANGE_CALL_SETTINGS = "change-call-settings",
   CALL_STARTED_AT = "call-started-at",
+  UPDATE_USER_SETTINGS = "update-user-settings",
 }
 
 export enum RouteNames {
@@ -109,7 +110,12 @@ export interface Message {
   status?: MessageStatus;
 }
 
-export type MessageStatus = "sending" | "undelivered" | "delivered" | "read";
+export type MessageStatus =
+  | "sending"
+  | "undelivered"
+  | "delivered"
+  | "read"
+  | "none";
 
 export interface ChatRoom {
   _id?: string;
@@ -121,6 +127,8 @@ export interface ChatRoom {
   messages: Array<Message>;
   multiple: boolean;
   hasOnline: boolean;
+  blocked?: boolean;
+  avatarFile?: any;
 }
 
 export type ChatRooms = Array<ChatRoom>;
@@ -128,6 +136,7 @@ export type ChatRooms = Array<ChatRoom>;
 export interface UserShort {
   id: string;
   username: string;
+  avatar?: string;
 }
 
 export interface UserCredential extends UserShort {

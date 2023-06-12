@@ -9,6 +9,12 @@
     display: flex;
     align-items: center;
   }
+  .ant-list-item-meta-title {
+    margin-bottom: 0;
+  }
+  .ant-list-item-meta-avatar {
+    margin-right: 10px;
+  }
 
   .ant-btn-icon-only.ant-btn-lg {
     @include max-width-768 {
@@ -19,9 +25,9 @@
 
   &__controls {
     display: flex;
-
-    .ui-button {
-      margin: 0 $gutter-md;
+    margin-top: 4px;
+    .ui-icon--chat {
+      transform: scale(0.9);
     }
   }
 }

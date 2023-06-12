@@ -22,6 +22,7 @@ export default async () => {
       confirmed: true,
       settings: initUserSettings,
       codes: initUserCodes,
+      online: false,
       infoItems: [getInfo('1')]
     })
     await user.save()

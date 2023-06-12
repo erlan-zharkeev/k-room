@@ -24,11 +24,13 @@ const roomsSlice = createSlice({
     updateChatMessage(state, { payload }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
+
       if (!room) return
       room.messages.forEach((roomMessage, idx) => {
         if (roomMessage.id === message.id) room.messages.splice(idx, 1)
       })
       room.messages.push(message)
+      if (room?.messages.length > 1) room.blocked = false
     },
     updateMessageStatus(state, { payload }) {
       const { roomId, messageId, status } = payload

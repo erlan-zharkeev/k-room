@@ -15,6 +15,7 @@ import { pushTemporaryMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { changeAsideTab } from 'src/store/settingsSlice'
 import constants from 'src/constants'
+import Informer from '../Common/Informer/Informer'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -22,6 +23,8 @@ export const ChatRoom = () => {
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
 
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
+
+  const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === 'chatList'
 
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
@@ -83,13 +86,16 @@ export const ChatRoom = () => {
     dispatch(pushTemporaryMessage({ roomId, message }))
   }
 
-  const isMessageSelf = (author: string) => (author === id ? 'message--self' : '')
+  const locationModifier = (author: string): string => {
+    if (author === 'system') return 'system'
+    else return author === id ? 'self' : ''
+  }
 
   return (
     <div className="chat-room">
       <div className="chat-room__wrapper" ref={roomDomEl}>
         {selectedChatRoom ? (
-          <>
+          <div>
             <RoomHeader />
             <div
               className="chat-room__body"
@@ -104,7 +110,7 @@ export const ChatRoom = () => {
                 dataSource={selectedChatRoom.messages ?? []}
                 locale={{ emptyText: ' ' }}
                 renderItem={(item: Message) => (
-                  <List.Item className={isMessageSelf(item.author)} ref={setRef(item.id)}>
+                  <List.Item className={`chat-room__message--${locationModifier(item.author)}`} ref={setRef(item.id)}>
                     <MessageBody message={item} />
                   </List.Item>
                 )}
@@ -115,10 +121,14 @@ export const ChatRoom = () => {
                 There are no messages, write first
               </div>
             )}
-            <InputMessage sendMessage={sendMessage} height={inputMessageHeight} />
-          </>
+            {selectedChatRoom.blocked ? (
+              <Informer type="warn" text="You need to wait for a response from the interlocutor to start a dialogue." />
+            ) : (
+              <InputMessage sendMessage={sendMessage} height={inputMessageHeight} />
+            )}
+          </div>
         ) : (
-          <div className={`chat-room__stub ${haveAnyChatRoom ? 'pointer' : ''}`}>
+          <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
             <div
               onClick={() => dispatch(changeAsideTab('chatList'))}
               className="paragraph-text paragraph-text--secondary"

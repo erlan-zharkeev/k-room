@@ -15,9 +15,11 @@ export const MessageBody = ({ message }: MessageBodyProps) => {
       <div className="message__text">{message.body}</div>
       <div className="message__system-info">
         {message.isSelf && <div className="message__status" />}
-        <div className="paragraph-text paragraph-text--secondary paragraph-text--sm">
-          {moment(Number(message.createdAt)).format('HH:mm')}
-        </div>
+        {message.createdAt && (
+          <div className="paragraph-text paragraph-text--secondary paragraph-text--sm">
+            {moment(Number(message.createdAt)).format('HH:mm')}
+          </div>
+        )}
       </div>
     </div>
   )

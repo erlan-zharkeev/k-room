@@ -1,3 +1,4 @@
+import { ShapeModifiers } from 'src/@types'
 import { IconName } from '../../UIIcon/@types/IconName'
 
 export interface UIImageLoaderProps {
@@ -6,4 +7,5 @@ export interface UIImageLoaderProps {
   setFile: React.Dispatch<(prevState: undefined) => undefined>
   updated?: () => void
   stubIconName?: IconName
+  shape?: ShapeModifiers
 }

@@ -6,17 +6,14 @@ import { SocketActions, Status } from '../../../types'
 import { io } from '../server'
 import getSocketsByUsersArray from '../socket/helpers/getSocketsByUsersArray'
 import getUsersByHasContactId from '../socket/helpers/getUsersByHasContactId'
-import sharp from 'sharp'
-import constants from './../constants'
-import { getRequestStringToImg } from '../utils/getRequestStringToImg'
 import { getPathToImg } from '../utils/getPathToImg'
 import fs from 'fs'
-import { v4 as uuidv4 } from 'uuid'
+import saveAndGetImagePath from '../utils/saveAndGetImagePath'
 
 const bcrypt = require('bcryptjs')
 
 class UserController {
-  async updateUserData(req: any, res: Response) {
+  async updateUserData(req: Request, res: Response) {
     try {
       const { userId, username, oldFilename } = req.body
 
@@ -25,20 +22,11 @@ class UserController {
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
 
-      const newFileName = `${uuidv4()}.jpg`
-      const { dimensions, quality } = constants.sharp.avatar
-      const pathToSave = getPathToImg(newFileName)
-
-      await sharp(req.file.buffer)
-        .resize(dimensions.x, dimensions.y)
-        .jpeg({
-          quality
-        })
-        .toFile(`${pathToSave}`)
+      const avatar = saveAndGetImagePath(req.file)
 
       const newUserData: any = {
         username,
-        avatar: getRequestStringToImg(newFileName)
+        avatar
       }
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
@@ -67,19 +55,6 @@ class UserController {
       })
     } catch {
       throwError(Status.BAD_REQUEST, res, ErrorMessages.failedUserDataUpdate)
-    }
-  }
-
-  async updateUserSettings(req: Request, res: Response) {
-    try {
-      const { userId, type, value } = req.body
-
-      const query = {} as any
-      query['settings.' + type] = value
-      await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
-      return res.json()
-    } catch {
-      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedUpdateSettings)
     }
   }
 

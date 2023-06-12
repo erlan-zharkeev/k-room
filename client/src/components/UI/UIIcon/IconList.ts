@@ -1,12 +1,18 @@
 import { ImUsers, ImNotification } from 'react-icons/im'
-import { IoChatboxEllipsesSharp, IoNotificationsSharp, IoCallSharp, IoInformationCircleOutline } from 'react-icons/io5'
+import {
+  IoChatboxEllipsesSharp,
+  IoNotificationsSharp,
+  IoCallSharp,
+  IoInformationCircleOutline,
+  IoWarning
+} from 'react-icons/io5'
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
 import { GoSettings, GoSearch } from 'react-icons/go'
 import IconListElement from './@types/IconList'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
 import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
-import { RiLoader5Fill, RiShareForwardFill } from 'react-icons/ri'
+import { RiLoader5Fill, RiShareForwardFill, RiImage2Fill } from 'react-icons/ri'
 import { RxCrossCircled, RxCross2 } from 'react-icons/rx'
 import {
   BsPlusCircle,
@@ -19,7 +25,7 @@ import {
   BsFacebook,
   BsFillReplyFill,
   BsTrash,
-  BsCardImage
+  BsChatSquareText
 } from 'react-icons/bs'
 import { AiOutlineSend } from 'react-icons/ai'
 import { HiOutlinePaperClip } from 'react-icons/hi'
@@ -29,6 +35,7 @@ import { FcGoogle } from 'react-icons/fc'
 
 export const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },
+  { name: 'chat', Icon: BsChatSquareText },
   { name: 'chats', Icon: IoChatboxEllipsesSharp },
   { name: 'calls', Icon: TbPhoneCall },
   { name: 'settings-cog', Icon: FiSettings },
@@ -61,8 +68,9 @@ export const IconList: Array<IconListElement> = [
   { name: 'reply', Icon: BsFillReplyFill },
   { name: 'forward', Icon: RiShareForwardFill },
   { name: 'exclamation', Icon: ImNotification },
-  { name: 'image', Icon: BsCardImage },
-  { name: 'trash', Icon: BsTrash }
+  { name: 'image', Icon: RiImage2Fill },
+  { name: 'trash', Icon: BsTrash },
+  { name: 'warn', Icon: IoWarning }
 ]
 
 export default IconList

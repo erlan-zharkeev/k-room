@@ -29,12 +29,18 @@
   }
 
   &--large {
-    @include icon-size-compensation(7rem)
+    @include icon-size-compensation(7rem);
   }
 
   &--success {
     svg {
       color: var(--success);
+    }
+  }
+
+  &--warn {
+    svg {
+      color: var(--warn);
     }
   }
 
@@ -50,27 +56,26 @@
   }
 
   &--call {
-    @include icon-size-compensation(1.1rem)
+    @include icon-size-compensation(1.1rem);
   }
 
   &--mic {
-    @include icon-size-compensation(1.1rem)
+    @include icon-size-compensation(1.1rem);
   }
 
   &--mic-muted {
-    @include icon-size-compensation(1.1rem)
+    @include icon-size-compensation(1.1rem);
   }
 
   &--dash {
-    @include icon-size-compensation(1rem)
+    @include icon-size-compensation(1rem);
   }
 
   &--expand {
-    @include icon-size-compensation(1rem)
+    @include icon-size-compensation(1rem);
   }
 
   &--search {
-    @include icon-size-compensation(1rem)
+    @include icon-size-compensation(1rem);
   }
 }
-

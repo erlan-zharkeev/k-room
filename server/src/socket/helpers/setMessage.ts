@@ -16,7 +16,7 @@ export const setMessage = async (data: { roomId: string; message: Message }) => 
     }
     await UserModel.updateOne(
       { _id: user.id, 'chatRooms.roomId': data.roomId },
-      { $push: { 'chatRooms.$.messages': message } }
+      { $push: { 'chatRooms.$.messages': message }, $set: { 'chatRooms.$.blocked': false } }
     )
     io.to(user.socketId).emit(SocketActions.MESSAGE_DELIVERED, { roomId: data.roomId, message: updatedMessage })
   })
