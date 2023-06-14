@@ -4,17 +4,17 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
-import UIButton from 'ui/UIButton'
-import UIInput from 'ui/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
-import UISwitch from 'ui/UISwitch'
+import UISwitch from 'src/components/UI/UISwitch/UISwitch'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
 
-export const SignUpPage = () => {
+const SignUpPage = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 

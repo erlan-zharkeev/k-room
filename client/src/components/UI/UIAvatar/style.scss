@@ -13,7 +13,12 @@
 
   &--square {
     #{ $self }__image {
-      border-radius: $radius-md !important;
+      border-radius: $radius-sm !important;
+      .ui-icon {
+        svg {
+          transform: scale(1.5);
+        }
+      }
     }
   }
 
@@ -69,7 +74,7 @@
     padding: 0 4px;
     display: flex;
     justify-content: center;
-    line-height: 15px;
+    line-height: 16px;
   }
   .ant-ribbon-corner {
     display: none;

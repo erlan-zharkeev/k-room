@@ -1,5 +1,5 @@
 import modifiersHandler from 'src/utils/modifiersHandler'
-import IconProps from './@types/IconProps'
+import { IconProps } from './@types/IconProps'
 import IconList from './IconList'
 
 export const UIIcon = ({ name, color, size = 'small' }: IconProps) => {

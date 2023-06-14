@@ -1,11 +1,11 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { showNotification } from 'src/store/systemSlice'
-import UIAvatar from 'ui/UIAvatar'
-import UIIcon from '../UIIcon'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIIcon from '../UIIcon/UIIcon'
 import { UIImageLoaderProps } from './@types'
 
-const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName, shape = 'round' }: UIImageLoaderProps) => {
+const UIImageLoader = ({ path, setImage, setFile, updated, stubIconName, shape = 'round' }: UIImageLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const normFile = async (e: any) => {
@@ -50,9 +50,9 @@ const UIImageLoader = ({ image, setImage, setFile, updated, stubIconName, shape 
   return (
     <div className={`ui-image-loader ui-image-loader--${shape}`}>
       <div className="ui-image-loader__body">
-        <UIAvatar src={image} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
+        <UIAvatar src={path} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
         <input type="file" onChange={normFile} />
-        {image && (
+        {path && (
           <div className="ui-image-loader__clear-button" onClick={resetImage}>
             <UIIcon name="cross" color="accent" />
           </div>

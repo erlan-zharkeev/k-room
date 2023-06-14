@@ -4,10 +4,10 @@ import { User, SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import useDebounce from 'src/hooks/useDebounce'
-import UIInput from 'ui/UIInput'
-import UIIcon from 'ui/UIIcon'
-import UIAvatar from 'ui/UIAvatar'
-import UIButton from 'ui/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)

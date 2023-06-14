@@ -5,12 +5,12 @@ import { Status, RouteNames } from 'common-types'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/userSlice'
-import UIButton from 'ui/UIButton'
-import UIIcon from 'ui/UIIcon'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
 
-export const EmailConfirmPage = () => {
+const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const query = useQuery()

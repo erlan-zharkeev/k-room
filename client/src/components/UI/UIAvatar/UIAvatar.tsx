@@ -1,8 +1,9 @@
 import { Badge, Image } from 'antd'
-import UIIcon from 'ui/UIIcon'
-import UIAvatarProps from 'ui/UIAvatar/@types/UIAvatarProps'
+import { useEffect, useState } from 'react'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
+import { UIAvatarProps } from 'ui/UIAvatar/@types/UIAvatarProps'
 
-export const UIAvatar = ({
+const UIAvatar = ({
   online,
   src,
   size = 'small',
@@ -11,15 +12,19 @@ export const UIAvatar = ({
   ribbon = false,
   shape = 'round'
 }: UIAvatarProps) => {
-  const haveSource = Boolean(src)
+  const [haveSource, setHaveSource] = useState(false)
+
+  useEffect(() => {
+    setHaveSource(Boolean(src))
+  }, [src])
 
   const AvatarBody = () => {
-    return haveSource ? (
-      <Image src={src} className="ui-avatar__image" alt="avatar" />
-    ) : (
+    return !haveSource ? (
       <div className="ui-avatar__image">
         <UIIcon name={stubIconName} size={size} />
       </div>
+    ) : (
+      <Image src={src} className="ui-avatar__image" alt="avatar" onError={() => setHaveSource(false)} />
     )
   }
 

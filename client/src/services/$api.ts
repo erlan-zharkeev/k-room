@@ -45,7 +45,7 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
 
 type RequestTypes = 'post' | 'get' | 'patch'
 
-export const $api = async (
+const $api = async (
   type: RequestTypes,
   endpoint: string,
   dispatch: AppDispatch,

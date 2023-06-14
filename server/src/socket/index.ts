@@ -19,9 +19,10 @@ import setMessage from './helpers/setMessage'
 import setRoomToUsers from './helpers/setRoomToUsers'
 import setLastSeenData from './helpers/setLastSeenData'
 import setUserStatus from './helpers/setUserStatus'
-import { v4 as uuidv4 } from 'uuid'
-import constants from './../constants'
 import saveAndGetImagePath from '../utils/saveAndGetImagePath'
+import updateRoomToUsers from './helpers/updateRoomToUsers'
+import { getPathToImg } from '../utils/getPathToImg'
+import fs from 'fs'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
@@ -151,17 +152,10 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
     const avatar = await saveAndGetImagePath(chatRoomData.avatarFile)
     const { multiple } = chatRoomData
 
-    const inviteMessage = {
-      id: uuidv4(),
-      status: 'none',
-      author: 'system',
-      body: multiple ? constants.multipleInviteMessage : constants.singleInviteMessage,
-      createdAt: ''
-    }
     const room = new ChatRoomModel({
       avatar,
       multiple,
-      messages: [inviteMessage],
+      messages: [],
       chatName: chatRoomData.chatName,
       users: chatRoomData.users,
       authorId: chatRoomData.authorId
@@ -173,6 +167,20 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
     const userData = await getUserById(chatRoomData.authorId)
     if (!userData?.socketId) return
     io.to(userData.socketId).emit(SocketActions.ROOM_CREATED, { roomId: savedRoom.id })
+  })
+
+  socket.on(SocketActions.UPDATE_CHAT_ROOM, async (chatRoomData: ChatRoom) => {
+    const { roomId, chatName, avatar, avatarFile } = chatRoomData
+    const isImageExist = fs.existsSync(avatar ?? '')
+    if (isImageExist) fs.unlinkSync(getPathToImg(avatar))
+    const updatedAvatar = await saveAndGetImagePath(avatarFile)
+    await ChatRoomModel.updateOne({ _id: roomId }, { avatar: updatedAvatar, chatName })
+    await updateRoomToUsers({ room: chatRoomData })
+    await Promise.all(chatRoomData.users.map(async (user) => await emitRoomsByUserId(user.id)))
+
+    const userData = await getUserById(chatRoomData.authorId)
+    if (!userData?.socketId) return
+    io.to(userData?.socketId).emit(SocketActions.ROOM_DATA_UPDATED)
   })
 
   socket.on(SocketActions.SEND_MESSAGE, async (data: { roomId: string; message: Message }) => {

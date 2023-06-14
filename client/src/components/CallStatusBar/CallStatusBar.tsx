@@ -2,9 +2,9 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { unsetMinify } from 'src/store/callsSlice'
-import UIAvatar from 'ui/UIAvatar'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
 
-export const CallStatusBar = () => {
+const CallStatusBar = () => {
   const { isMinified } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
 

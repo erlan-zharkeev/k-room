@@ -8,8 +8,8 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import UIAvatar from 'ui/UIAvatar'
-import UIButton from 'ui/UIButton'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import { ServiceContext } from 'src/main'
 
 const ContactList = () => {

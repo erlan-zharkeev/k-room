@@ -1,7 +1,7 @@
 import { ChatRoom } from 'common-types'
 import useTypedSelector from './useTypedSelector'
 
-export const useSelectedRoom = () => {
+const useSelectedRoom = () => {
   return useTypedSelector((state) => {
     const { chatRooms } = state.chatRooms
     const { selectedChatRoomId } = state.persist.settings

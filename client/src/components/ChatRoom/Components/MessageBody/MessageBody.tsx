@@ -4,7 +4,7 @@ import { setContextMenu } from 'src/store/systemSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 
-export const MessageBody = ({ message }: MessageBodyProps) => {
+const MessageBody = ({ message }: MessageBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   return (
     <div

@@ -17,7 +17,7 @@ import { changeAsideTab } from 'src/store/settingsSlice'
 import constants from 'src/constants'
 import Informer from '../Common/Informer/Informer'
 
-export const ChatRoom = () => {
+const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
 
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
@@ -40,7 +40,7 @@ export const ChatRoom = () => {
   useEffect(() => {
     if (!selectedChatRoom) return
     scrollToBottom()
-    const observerCallback = function (entries: any) {
+    const observerCallback = (entries: any) => {
       entries.forEach((entry: any) => {
         if (!entry.isIntersecting) return
         const messageId = entry.target.getAttribute('id')

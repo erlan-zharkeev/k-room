@@ -1,4 +1,4 @@
-export default interface UISwitchProps {
+export interface UISwitchProps {
   initValue: boolean
   onText?: string
   offText?: string

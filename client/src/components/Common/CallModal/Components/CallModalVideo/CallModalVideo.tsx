@@ -2,7 +2,7 @@ import { Avatar } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { UserOutlined, AudioMutedOutlined } from '@ant-design/icons'
 
-export const CallModalVideo = () => {
+const CallModalVideo = () => {
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const { avatar } = useTypedSelector((state) => state.user.userData)
 

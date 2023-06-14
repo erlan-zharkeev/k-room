@@ -1,4 +1,4 @@
-import UIIcon from 'ui/UIIcon'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import Reactions from '../Reactions/Reactions'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { setRepliedMessage } from 'src/store/roomsSlice'
@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 
-export const MessageContextMenu = () => {
+const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)

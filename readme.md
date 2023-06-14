@@ -85,8 +85,5 @@
 - check token works(1)
 - privacy policy create and to facebook dev
 
-- button fill
-- import default ?
-- naming index.ts
-- dispatch выделить в отдельный файл
+<!-- - dispatch выделить в отдельный файл -->
 <!-- - lazy load сообщений(5) -->

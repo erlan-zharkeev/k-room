@@ -9,6 +9,7 @@ export const constants = {
     }
   },
   singleInviteMessage: 'Hi, this is an automatically created message, reply to start a conversation',
+  multipleChatCreatedAuthorMessage: 'You have created the chat',
   multipleInviteMessage: 'You have been added to the chat'
 }
 

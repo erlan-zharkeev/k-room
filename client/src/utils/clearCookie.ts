@@ -1,4 +1,4 @@
 export default () =>
-  document.cookie.split(';').forEach(function (cookie) {
+  document.cookie.split(';').forEach((cookie) => {
     document.cookie = cookie.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/')
   })

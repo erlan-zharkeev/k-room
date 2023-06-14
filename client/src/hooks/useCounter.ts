@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const UseCounter = (initValue: number): any => {
+const UseCounter = (initValue: number): any => {
   const [value, setValue] = useState(initValue)
 
   let timerId: string | number | NodeJS.Timeout = -1

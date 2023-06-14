@@ -26,7 +26,7 @@ import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
 
-export const MainPage = () => {
+const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
 
   const userId = useTypedSelector((state) => state.user.userData.id)

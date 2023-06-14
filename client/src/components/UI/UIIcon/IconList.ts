@@ -9,7 +9,7 @@ import {
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
 import { GoSettings, GoSearch } from 'react-icons/go'
-import IconListElement from './@types/IconList'
+import { IconListElement } from './@types/IconList'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
 import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
 import { RiLoader5Fill, RiShareForwardFill, RiImage2Fill } from 'react-icons/ri'
@@ -33,7 +33,7 @@ import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
 import { FcGoogle } from 'react-icons/fc'
 
-export const IconList: Array<IconListElement> = [
+const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },
   { name: 'chat', Icon: BsChatSquareText },
   { name: 'chats', Icon: IoChatboxEllipsesSharp },
@@ -68,7 +68,7 @@ export const IconList: Array<IconListElement> = [
   { name: 'reply', Icon: BsFillReplyFill },
   { name: 'forward', Icon: RiShareForwardFill },
   { name: 'exclamation', Icon: ImNotification },
-  { name: 'image', Icon: RiImage2Fill },
+  { name: 'image-stub', Icon: RiImage2Fill },
   { name: 'trash', Icon: BsTrash },
   { name: 'warn', Icon: IoWarning }
 ]

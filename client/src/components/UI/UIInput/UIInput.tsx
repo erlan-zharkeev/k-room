@@ -1,13 +1,13 @@
 import { Input } from 'antd'
 import modifiersHandler from 'src/utils/modifiersHandler'
-import UIInputProps from 'ui/UIInput/@types/UIInputProps'
+import { UIInputProps } from 'ui/UIInput/@types/UIInputProps'
 
 const inputTypes = [
   { name: 'common', component: Input },
   { name: 'password', component: Input.Password }
 ]
 
-export const UIInput = ({ type, placeholder, size, value, suffix, autoComplete, disabled, onChange }: UIInputProps) => {
+const UIInput = ({ type, placeholder, size, value, suffix, autoComplete, disabled, onChange }: UIInputProps) => {
   const inputType = type ?? 'common'
   const InputComponent = inputTypes.find((input) => input.name === inputType)?.component
   const className = modifiersHandler({ rootClass: 'ui-input', modifiers: [size] })

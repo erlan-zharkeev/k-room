@@ -17,12 +17,12 @@ import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import { SocketActions } from 'common-types'
 import { socket } from 'src/socket/socket'
-import UIAvatar from 'ui/UIAvatar'
-import UIButton from 'ui/UIButton'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import UseCounter from 'src/hooks/useCounter'
 import { ServiceContext } from 'src/main'
 
-export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
+const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const { $call } = useContext(ServiceContext)
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)

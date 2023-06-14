@@ -5,12 +5,12 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
-import UIAvatar from 'ui/UIAvatar'
-import UIButton from 'ui/UIButton'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import constants from 'src/constants'
 import { showModal } from 'src/store/systemSlice'
 
-export const RoomHeader = () => {
+const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
   const chatRoomData = chatRooms.find((room) => room.roomId === selectedChatRoomId)
@@ -34,7 +34,7 @@ export const RoomHeader = () => {
   })
 
   const openChatMembers = () => {
-    dispatch(showModal({ title: 'Chat Info', modalContentComponentName: 'ChatRoomSettingsPopup' }))
+    dispatch(showModal({ title: 'Group Chat Info', modalContentComponentName: 'ChatRoomSettingsPopup' }))
   }
 
   return (
@@ -43,7 +43,13 @@ export const RoomHeader = () => {
         <UIButton iconName="arrow-left" onClick={() => dispatch(selectChatRoom(''))} />
       </div>
       <div className="room-header__info">
-        <UIAvatar ribbon={chatRoomData?.multiple} online={chatRoomData?.hasOnline} src={chatRoomData?.avatar} />
+        <UIAvatar
+          ribbon={chatRoomData?.multiple}
+          stubIconName={chatRoomData?.multiple ? 'image-stub' : 'user-stub'}
+          online={chatRoomData?.hasOnline}
+          src={chatRoomData?.avatar}
+          shape="square"
+        />
         <h3 onClick={openChatMembers} className={`room-header__name ${chatRoomData?.multiple && 'pointer'}`}>
           {chatRoomData?.chatName}
         </h3>

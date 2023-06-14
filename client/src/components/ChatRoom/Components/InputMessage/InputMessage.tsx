@@ -4,14 +4,14 @@ import { SocketActions } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
-import InputMessageProps from './@types/InputMessageProps'
+import { InputMessageProps } from './@types/InputMessageProps'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
-import UIInput from 'ui/UIInput'
-import UIButton from 'ui/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
 
-export const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
+const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
   // const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
 
   const [message, setMessage] = useState('')

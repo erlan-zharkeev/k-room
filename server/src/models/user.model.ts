@@ -13,11 +13,6 @@ export interface IUserSchema extends User {
 }
 
 export const userSchema = new Schema<IUserSchema>({
-  providerUserId: {
-    type: String,
-    unique: true,
-    required: false
-  },
   socketId: {
     type: String,
     unique: false,

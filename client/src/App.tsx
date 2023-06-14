@@ -15,7 +15,7 @@ import { commonSetUserDataHandler } from './store/userSlice'
 import { AsyncThunkResponseWrapper } from './@types'
 import ContextMenu from 'src/components/Common/ContextMenu/ContextMenu'
 
-function App() {
+const App = () => {
   const { theme } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()

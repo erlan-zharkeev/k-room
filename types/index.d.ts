@@ -79,7 +79,9 @@ export declare enum SocketActions {
     CALL_ENDED = "call-ended",
     CHANGE_CALL_SETTINGS = "change-call-settings",
     CALL_STARTED_AT = "call-started-at",
-    UPDATE_USER_SETTINGS = "update-user-settings"
+    UPDATE_USER_SETTINGS = "update-user-settings",
+    UPDATE_CHAT_ROOM = "update-chat-room",
+    ROOM_DATA_UPDATED = "room-data-updated"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",
@@ -128,7 +130,6 @@ export interface UserCredential extends UserShort {
     providerName?: string;
 }
 export interface User extends UserCredential {
-    providerUserId?: string;
     online: boolean;
     chatRooms: ChatRooms;
     lastSeen?: string;

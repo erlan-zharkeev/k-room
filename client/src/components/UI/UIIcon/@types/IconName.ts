@@ -33,6 +33,6 @@ export type IconName =
   | 'reply'
   | 'forward'
   | 'exclamation'
-  | 'image'
+  | 'image-stub'
   | 'trash'
   | 'warn'

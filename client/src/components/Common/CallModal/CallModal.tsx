@@ -11,7 +11,7 @@ const initialSize = {
   minHeight: 450
 }
 
-export const CallModal = () => {
+const CallModal = () => {
   const viewPortWidth = useTypedSelector((state) => state.system.viewPort.width)
   const viewPortHeight = useTypedSelector((state) => state.system.viewPort.height)
   const { isMinified, showCallModal } = useTypedSelector((state) => state.calls)

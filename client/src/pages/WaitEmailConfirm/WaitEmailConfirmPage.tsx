@@ -2,7 +2,7 @@ import { Status, RouteNames } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import UIButton from 'ui/UIButton'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import getNextReqInterval from 'src/utils/getNextReqInterval'
@@ -10,7 +10,7 @@ import useCounter from 'src/hooks/useCounter'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
 
-export const WaitEmailConfirmPage = () => {
+const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
   const query = useQuery()
   const dispatch = useDispatch<AppDispatch>()

@@ -60,6 +60,8 @@ var SocketActions;
     SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
     SocketActions["CALL_STARTED_AT"] = "call-started-at";
     SocketActions["UPDATE_USER_SETTINGS"] = "update-user-settings";
+    SocketActions["UPDATE_CHAT_ROOM"] = "update-chat-room";
+    SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {

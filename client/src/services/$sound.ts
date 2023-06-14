@@ -20,7 +20,7 @@ const soundSrc: SoundSources = {
   ring: './sounds/ring.mp3'
 }
 
-export const $sound = (sound: Sounds, loop?: boolean) => {
+const $sound = (sound: Sounds, loop?: boolean) => {
   return new Howl({
     src: [soundSrc[sound]],
     volume: 0.2,

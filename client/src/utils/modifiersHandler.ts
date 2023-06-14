@@ -1,4 +1,4 @@
-export const modifiersHandler = ({
+const modifiersHandler = ({
   rootClass,
   modifiers
 }: {

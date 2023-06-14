@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import UIIcon from 'ui/UIIcon'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { resetRepliedMessage } from 'src/store/roomsSlice'

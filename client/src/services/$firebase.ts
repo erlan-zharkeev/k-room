@@ -9,7 +9,7 @@ const commonErrors = {
   'Firebase: Error (auth/account-exists-with-different-credential).': 'Account exists with different credential'
 } as { [key: string]: string }
 
-export class Firebase {
+class Firebase {
   providerName: ProviderType = 'google'
   auth: Auth
   providers: {

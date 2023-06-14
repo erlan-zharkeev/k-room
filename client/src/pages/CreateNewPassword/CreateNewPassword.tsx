@@ -6,14 +6,14 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import ErrorBucket from 'src/components/Common/ErrorBucket/ErrorBucket'
 import { Logo } from 'src/components/Common/Logo/Logo'
-import UIButton from 'ui/UIButton'
-import UIInput from 'ui/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import apiMethods from 'src/services/api-methods'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
 
-export const CreateNewPassword = () => {
+const CreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [form] = Form.useForm()
   const [isValid, validate] = useValidate()

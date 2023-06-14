@@ -1,9 +1,9 @@
 import { Form } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import UIButton from 'ui/UIButton'
-import UIImageLoader from 'ui/UIImageLoader'
-import UIInput from 'ui/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import UIImageLoader from 'src/components/UI/UIImageLoader/UIImageLoader'
+import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
@@ -14,14 +14,14 @@ import { socket } from 'src/socket/socket'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 
-export const CreateMultipleChatPopup = () => {
+const CreateMultipleChatPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
 
   const dispatch = useDispatch<AppDispatch>()
   const [isValid, validate] = useValidate()
-  const [image, setNewImage] = useState<string | undefined>()
+  const [imagePath, setNewImagePath] = useState<string | undefined>()
   const [avatarFile, setFile] = useState()
 
   const [form] = Form.useForm()
@@ -72,7 +72,13 @@ export const CreateMultipleChatPopup = () => {
         onChange={changeFormHandler}
       >
         <div className="create-multiple-chat-popup__image">
-          <UIImageLoader image={image} setImage={setNewImage} setFile={setFile} stubIconName="image" shape="square" />
+          <UIImageLoader
+            path={imagePath}
+            setImage={setNewImagePath}
+            setFile={setFile}
+            stubIconName="image-stub"
+            shape="square"
+          />
         </div>
         <Form.Item name="chat-name" rules={validateRules.required}>
           <UIInput placeholder="Enter chat name" />

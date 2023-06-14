@@ -2,8 +2,8 @@ import { Form } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
-import UIButton from 'ui/UIButton'
-import UIInput from 'ui/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
@@ -16,10 +16,10 @@ import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
 import { ServiceContext } from 'src/main'
 import getCookie from 'src/utils/getCookie'
-import UIIcon from 'src/components/UI/UIIcon'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
-export const SignInPage = () => {
+const SignInPage = () => {
   const { $firebase } = useContext(ServiceContext)
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)

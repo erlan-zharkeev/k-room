@@ -3,7 +3,7 @@ import { resetPassword, updateUserData, getUserData } from './user'
 import { sendEmailCodePasswordRecovery, validateEmailCodePasswordRecovery } from './codes'
 import { markInfoAsRead } from './common'
 
-export const apiMethods = {
+const apiMethods = {
   auth: {
     updateTokensPair,
     registration,
