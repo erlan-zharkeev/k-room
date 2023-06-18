@@ -1,6 +1,5 @@
 import { List } from 'antd'
 import { useDispatch } from 'react-redux'
-import { v4 as uuidv4 } from 'uuid'
 import useDynamicRefs from 'use-dynamic-refs'
 import { SocketActions, Message } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
@@ -11,11 +10,14 @@ import { useEffect, useRef, useState } from 'react'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import scrollToBottom from 'src/utils/scrollToBottom'
-import { pushTemporaryMessage } from 'src/store/roomsSlice'
+import { updatedAttachedFilesMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { changeAsideTab } from 'src/store/settingsSlice'
 import constants from 'src/constants'
 import Informer from '../Common/Informer/Informer'
+import { ImageObject } from '../UI/UIFileLoader/@types'
+import { showModal } from 'src/store/systemSlice'
+import sendMessage from 'src/utils/sendMessage'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -29,7 +31,7 @@ const ChatRoom = () => {
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
 
-  const [inputMessageHeight, setInputMessageHeight] = useState(constants.shortInputMessage)
+  const [inputMessageHeight, setInputMessageHeight] = useState(constants.dimensions.shortInputMessage)
 
   const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0, height: 0 })
 
@@ -44,7 +46,13 @@ const ChatRoom = () => {
       entries.forEach((entry: any) => {
         if (!entry.isIntersecting) return
         const messageId = entry.target.getAttribute('id')
-        socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, { roomId: selectedChatRoom.roomId, messageId, status: 'read' })
+        socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, {
+          roomId: selectedChatRoom.roomId,
+          messageId,
+          status: 'read',
+          userId: id,
+          multiple: selectedChatRoom.multiple
+        })
       })
     }
     const observer = new IntersectionObserver(observerCallback, { threshold: 1 })
@@ -61,29 +69,27 @@ const ChatRoom = () => {
   useEffect(() => {
     const roomEl = roomDomEl.current
     if (roomEl) {
-      const inputHeight = haveMessageToReply ? constants.fullInputMessage : constants.shortInputMessage
+      const { fullInputMessage, shortInputMessage, chatRoomHeaderHeight } = constants.dimensions
+      const inputHeight = haveMessageToReply ? fullInputMessage : shortInputMessage
+
       setInputMessageHeight(inputHeight)
-      const chatRoomBodyHeight = roomEl.offsetHeight - constants.chatRoomHeaderHeight - inputHeight
+      const chatRoomBodyHeight = roomEl.offsetHeight - chatRoomHeaderHeight - inputHeight
       const position = {
-        top: constants.chatRoomHeaderHeight,
+        top: chatRoomHeaderHeight,
         height: chatRoomBodyHeight
       }
       setChatRoomPosition(position)
     }
   }, [haveMessageToReply])
 
-  const sendMessage = (messageText: string) => {
-    const roomId = selectedChatRoom?.roomId
-    const message: Message = {
-      id: uuidv4(),
-      status: 'sending',
-      authorName: username,
-      author: id,
-      body: messageText,
-      createdAt: String(Date.now())
-    }
-    socket.emit(SocketActions.SEND_MESSAGE, { roomId, message })
-    dispatch(pushTemporaryMessage({ roomId, message }))
+  const uploadFileHandler = ({ message, files }: { message: string; files: Array<ImageObject> }) => {
+    dispatch(
+      updatedAttachedFilesMessage({
+        body: message,
+        files
+      })
+    )
+    dispatch(showModal({ title: 'Send Message', modalContentComponentName: 'MessageWithBindDataPopup' }))
   }
 
   const locationModifier = (author: string): string => {
@@ -111,7 +117,7 @@ const ChatRoom = () => {
                 locale={{ emptyText: ' ' }}
                 renderItem={(item: Message) => (
                   <List.Item className={`chat-room__message--${locationModifier(item.author)}`} ref={setRef(item.id)}>
-                    <MessageBody message={item} />
+                    <MessageBody message={item} isChatMultiple={selectedChatRoom.multiple} />
                   </List.Item>
                 )}
               />
@@ -124,7 +130,19 @@ const ChatRoom = () => {
             {selectedChatRoom.blocked ? (
               <Informer type="warn" text="You need to wait for a response from the interlocutor to start a dialogue." />
             ) : (
-              <InputMessage sendMessage={sendMessage} height={inputMessageHeight} />
+              <InputMessage
+                sendMessage={(message) =>
+                  sendMessage({
+                    authorId: id,
+                    roomId: selectedChatRoom?.roomId,
+                    username,
+                    messageText: message,
+                    dispatch
+                  })
+                }
+                uploadFileHandler={uploadFileHandler}
+                height={inputMessageHeight}
+              />
             )}
           </div>
         ) : (

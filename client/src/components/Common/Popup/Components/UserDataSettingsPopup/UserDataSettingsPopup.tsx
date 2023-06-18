@@ -12,7 +12,7 @@ import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/userSlice'
 import { User } from 'common-types'
-import UIImageLoader from 'src/components/UI/UIImageLoader/UIImageLoader'
+import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
@@ -70,7 +70,7 @@ const UserDataSettingsPopup = () => {
         onChange={changeFormHandler}
       >
         <div className="user-data-settings-popup__image">
-          <UIImageLoader path={newAvatar} setImage={setNewAvatar} setFile={setFile} updated={imageUpdated} />
+          <UIAvatarLoader path={newAvatar} setImage={setNewAvatar} setFile={setFile} updated={imageUpdated} />
         </div>
         <Form.Item name="username" rules={validateRules.username} initialValue={username}>
           <UIInput placeholder="Username" />

@@ -2,7 +2,7 @@ import { Form } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIImageLoader from 'src/components/UI/UIImageLoader/UIImageLoader'
+import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
 import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
@@ -72,7 +72,7 @@ const CreateMultipleChatPopup = () => {
         onChange={changeFormHandler}
       >
         <div className="create-multiple-chat-popup__image">
-          <UIImageLoader
+          <UIAvatarLoader
             path={imagePath}
             setImage={setNewImagePath}
             setFile={setFile}

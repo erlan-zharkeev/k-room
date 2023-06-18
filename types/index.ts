@@ -42,7 +42,6 @@ export enum AuthEndPoints {
 export enum UserEndPoints {
   GET_USER_DATA = "/auth/get-user-data",
   UPDATE_USER_DATA = "/auth/user-data/update",
-  // UPDATE_USER_SETTINGS = "/user/update-user-settings",
   RESET_PASSWORD = "/user/reset-password",
 }
 
@@ -88,6 +87,8 @@ export enum SocketActions {
   UPDATE_USER_SETTINGS = "update-user-settings",
   UPDATE_CHAT_ROOM = "update-chat-room",
   ROOM_DATA_UPDATED = "room-data-updated",
+  ADD_REACTION = "add-reaction",
+  UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
 }
 
 export enum RouteNames {
@@ -102,6 +103,12 @@ export enum RouteNames {
   NOTIFICATION = "/notification",
 }
 
+export interface Reaction {
+  username: string;
+  authorId: string;
+  glyphKey: string;
+}
+
 export interface Message {
   id: string;
   authorName: string;
@@ -110,6 +117,9 @@ export interface Message {
   createdAt?: string;
   isSelf?: boolean;
   status?: MessageStatus;
+  reactions?: Array<Reaction>;
+  files?: Array<any>;
+  filesCompression?: boolean;
 }
 
 export type MessageStatus =

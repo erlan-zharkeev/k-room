@@ -13,7 +13,8 @@ export const ReplyMessage = () => {
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const updatedHeight = repliedMessageData.id ? constants.fullInputMessage - constants.shortInputMessage - 8 : 0
+    const { fullInputMessage, shortInputMessage } = constants.dimensions
+    const updatedHeight = repliedMessageData.id ? fullInputMessage - shortInputMessage - 8 : 0
     setHeight(updatedHeight)
   }, [repliedMessageData])
 

@@ -10,10 +10,10 @@ import useDebounce from 'src/hooks/useDebounce'
 import UIInput from 'src/components/UI/UIInput/UIInput'
 import UIButton from 'src/components/UI/UIButton/UIButton'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
+import UIFileLoader from 'src/components/UI/UIFileLoader/UIFileLoader'
+import { ImageObject } from 'src/components/UI/UIFileLoader/@types'
 
-const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
-  // const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
-
+const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')
   const { id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
@@ -38,6 +38,10 @@ const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
     setMessage('')
   }
 
+  const setImagesHandler = (files: Array<ImageObject>) => {
+    uploadFileHandler({ message, files })
+  }
+
   return (
     <div
       className="input-message"
@@ -47,7 +51,7 @@ const InputMessage = ({ sendMessage, height }: InputMessageProps) => {
     >
       <ReplyMessage />
       <Form onFinish={send}>
-        <UIButton iconName="paper-clip" />
+        <UIFileLoader multiple={true} setImages={setImagesHandler} />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropDown setEmoji={setEmoji} />
         <UIButton htmltype="submit" disabled={!message} iconName="send" onClick={send} />

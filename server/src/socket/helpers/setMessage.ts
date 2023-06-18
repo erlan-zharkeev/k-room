@@ -11,6 +11,7 @@ export const setMessage = async (data: { roomId: string; message: Message }) => 
   const users = await UserModel.find({ 'chatRooms.roomId': data.roomId }, 'socketId')
   users.forEach(async (user) => {
     const updatedMessage = {
+      reactions: [],
       ...message,
       isSelf: user.id === data.message.author
     }

@@ -19,8 +19,9 @@ export const getRoomForSaveToUser = async (userId: string, room: ChatRoom, block
   const { multipleChatCreatedAuthorMessage, multipleInviteMessage, singleInviteMessage } = constants
 
   let messageBody = singleInviteMessage
+
   if (multiple) {
-    messageBody = blocked ? multipleChatCreatedAuthorMessage : multipleInviteMessage
+    messageBody = room.authorId === userId ? multipleChatCreatedAuthorMessage : multipleInviteMessage
   }
 
   const inviteMessage = {

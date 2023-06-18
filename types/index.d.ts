@@ -81,7 +81,9 @@ export declare enum SocketActions {
     CALL_STARTED_AT = "call-started-at",
     UPDATE_USER_SETTINGS = "update-user-settings",
     UPDATE_CHAT_ROOM = "update-chat-room",
-    ROOM_DATA_UPDATED = "room-data-updated"
+    ROOM_DATA_UPDATED = "room-data-updated",
+    ADD_REACTION = "add-reaction",
+    UPDATE_MESSAGE_REACTIONS = "update-message-reactions"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",
@@ -94,6 +96,11 @@ export declare enum RouteNames {
     CREATE_NEW_PASSWORD = "/create-new-password",
     NOTIFICATION = "/notification"
 }
+export interface Reaction {
+    username: string;
+    authorId: string;
+    glyphKey: string;
+}
 export interface Message {
     id: string;
     authorName: string;
@@ -102,6 +109,9 @@ export interface Message {
     createdAt?: string;
     isSelf?: boolean;
     status?: MessageStatus;
+    reactions?: Array<Reaction>;
+    files?: Array<any>;
+    filesCompression?: boolean;
 }
 export type MessageStatus = "sending" | "undelivered" | "delivered" | "read" | "none";
 export interface ChatRoom {

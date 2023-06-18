@@ -16,7 +16,6 @@ var UserEndPoints;
 (function (UserEndPoints) {
     UserEndPoints["GET_USER_DATA"] = "/auth/get-user-data";
     UserEndPoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
-    // UPDATE_USER_SETTINGS = "/user/update-user-settings",
     UserEndPoints["RESET_PASSWORD"] = "/user/reset-password";
 })(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
 var CommonEndPoints;
@@ -62,6 +61,8 @@ var SocketActions;
     SocketActions["UPDATE_USER_SETTINGS"] = "update-user-settings";
     SocketActions["UPDATE_CHAT_ROOM"] = "update-chat-room";
     SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
+    SocketActions["ADD_REACTION"] = "add-reaction";
+    SocketActions["UPDATE_MESSAGE_REACTIONS"] = "update-message-reactions";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {

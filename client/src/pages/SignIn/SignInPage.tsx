@@ -63,7 +63,7 @@ const SignInPage = () => {
   const { isAppLoading } = useTypedSelector((state) => state.user)
 
   useEffect(() => {
-    const hasJwt = getCookie('jwt')
+    const hasJwt = Boolean(getCookie('jwt'))
     dispatch(changeIsAppLoading(hasJwt))
   })
 

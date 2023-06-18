@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
 import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIImageLoader from 'src/components/UI/UIImageLoader/UIImageLoader'
+import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
 import UIInput from 'src/components/UI/UIInput/UIInput'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
@@ -83,7 +83,7 @@ const ChatRoomSettingsPopup = () => {
             onChange={changeFormHandler}
           >
             <div className="chat-room-settings-popup__image">
-              <UIImageLoader
+              <UIAvatarLoader
                 path={imagePath}
                 setImage={setNewImagePath}
                 setFile={setFile}

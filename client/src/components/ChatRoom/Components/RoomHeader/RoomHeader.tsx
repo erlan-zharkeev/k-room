@@ -38,7 +38,7 @@ const RoomHeader = () => {
   }
 
   return (
-    <div className="room-header" style={{ height: constants.roomHeader }}>
+    <div className="room-header" style={{ height: constants.dimensions.roomHeader }}>
       <div className="room-header__back-button">
         <UIButton iconName="arrow-left" onClick={() => dispatch(selectChatRoom(''))} />
       </div>

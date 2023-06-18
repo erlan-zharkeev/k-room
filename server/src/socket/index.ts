@@ -1,5 +1,5 @@
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { SocketActions, ChatRoom, UserShort, Message, MessageStatus, User } from '../../../types'
+import { SocketActions, ChatRoom, UserShort, Message, MessageStatus, User, Reaction } from '../../../types'
 import { Socket } from 'socket.io'
 import { io } from './../server'
 import { UserModel } from './../models/user.model'
@@ -27,13 +27,37 @@ import fs from 'fs'
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
-  socket.on(SocketActions.UPDATE_USER_SETTINGS, async (data: any) => {
+  socket.on(SocketActions.ADD_REACTION, async (data) => {
+    const { glyphKey, messageId, roomId, authorId, username } = data
+
+    const users = await UserModel.find({ 'chatRooms.roomId': roomId }, 'socketId')
+
+    const reaction: Reaction = {
+      glyphKey,
+      authorId,
+      username
+    }
+
+    users.forEach(async (user) => {
+      await UserModel.findOneAndUpdate(
+        { _id: user.id, 'chatRooms.roomId': roomId },
+        { $push: { 'chatRooms.$.messages.$[outer].reactions': reaction } },
+        {
+          arrayFilters: [{ 'outer.id': messageId }]
+        }
+      )
+      io.to(user.socketId).emit(SocketActions.UPDATE_MESSAGE_REACTIONS, { roomId, messageId, reaction })
+    })
+  })
+
+  socket.on(SocketActions.UPDATE_USER_SETTINGS, async (data) => {
     const { userId, type, value } = data
     const query = {} as any
     query['settings.' + type] = value
     await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
   })
-  socket.on(SocketActions.CALL_USER, async (data: any) => {
+
+  socket.on(SocketActions.CALL_USER, async (data) => {
     const interlocutor = await getUserById(data.userToCall)
     if (!interlocutor) return
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_USER, {
@@ -189,9 +213,9 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
 
   socket.on(
     SocketActions.CHANGE_MESSAGE_STATUS,
-    async (data: { roomId: string; messageId: string; status: MessageStatus }) => {
-      const { roomId, messageId, status } = data
-      await setMessageStatus(roomId, messageId, status)
+    async (data: { roomId: string; messageId: string; status: MessageStatus; userId: string; multiple: boolean }) => {
+      const { roomId, messageId, status, userId, multiple } = data
+      await setMessageStatus(roomId, messageId, status, userId, multiple)
     }
   )
 })

@@ -3,7 +3,39 @@ import { UserModel } from '../../models/user.model'
 import { io } from '../../server'
 import { MessageStatus, SocketActions } from '../../../../types'
 
-export const setMessageStatus = async (roomId: string, messageId: string, status: MessageStatus) => {
+const updateMessageStatus = async (
+  roomId: string,
+  userId: string,
+  socketId: string,
+  messageId: string,
+  status: string
+) => {
+  await UserModel.findOneAndUpdate(
+    { _id: userId, 'chatRooms.roomId': roomId },
+    { $set: { 'chatRooms.$.messages.$[outer].status': status } },
+    {
+      arrayFilters: [{ 'outer.id': messageId }]
+    }
+  )
+  io.to(socketId).emit(SocketActions.UPDATE_MESSAGE_STATUS, { roomId, messageId, status })
+}
+
+export const setMessageStatus = async (
+  roomId: string,
+  messageId: string,
+  status: MessageStatus,
+  userId: string,
+  multiple: boolean
+) => {
+  const users = await UserModel.find({ 'chatRooms.roomId': roomId }, 'socketId')
+
+  if (multiple) {
+    const user = users.find((user) => user.id === userId)
+    if (!user) return
+    updateMessageStatus(roomId, user.id, user.socketId, messageId, status)
+    return
+  }
+
   await ChatRoomModel.findOneAndUpdate(
     {
       _id: roomId,
@@ -23,16 +55,9 @@ export const setMessageStatus = async (roomId: string, messageId: string, status
       arrayFilters: [{ 'outer.id': messageId }]
     }
   )
-  const users = await UserModel.find({ 'chatRooms.roomId': roomId }, 'socketId')
-  users.forEach(async (user) => {
-    await UserModel.findOneAndUpdate(
-      { _id: user.id, 'chatRooms.roomId': roomId },
-      { $set: { 'chatRooms.$.messages.$[outer].status': status } },
-      {
-        arrayFilters: [{ 'outer.id': messageId }]
-      }
-    )
-    io.to(user.socketId).emit(SocketActions.UPDATE_MESSAGE_STATUS, { roomId, messageId, status })
+
+  users.forEach((user) => {
+    updateMessageStatus(roomId, user.id, user.socketId, messageId, status)
   })
 }
 
