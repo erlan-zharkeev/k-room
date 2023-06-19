@@ -31,7 +31,6 @@ router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION, authController.confirmEmail)
 
 router.get(UserEndPoints.GET_USER_DATA, accessTokenValidator, userController.getUserData)
 router.post(UserEndPoints.UPDATE_USER_DATA, fileUploader.single('file'), userController.updateUserData)
-router.post(UserEndPoints.UPDATE_USER_SETTINGS, userController.updateUserSettings)
 router.post(UserEndPoints.RESET_PASSWORD, userController.resetPassword)
 
 router.post(CommonEndPoints.GET_INFO, commonController.readInfoHandler)

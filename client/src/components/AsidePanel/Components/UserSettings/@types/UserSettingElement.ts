@@ -1,7 +1,7 @@
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 import { UserSettingName } from './UserSettingName'
 
-export default interface UserSettingElement {
+export interface UserSettingElement {
   name: UserSettingName
   method: ActionCreatorWithPayload<
   any,

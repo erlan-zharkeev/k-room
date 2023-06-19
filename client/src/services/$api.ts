@@ -1,11 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
-import { Status } from 'common-types'
+import { RouteNames, Status } from 'common-types'
 import { AppDispatch } from 'src/store'
 import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from 'src/services/$clg'
 import apiMethods from './api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
+import constants from 'src/constants'
+import $router from './$router'
 axios.defaults.withCredentials = true
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
@@ -26,7 +28,11 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       dispatch(changeIsAppLoading(true))
       const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
       const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.SUCCESS
-      if (!isTokensPairUpdated) return
+      if (!isTokensPairUpdated) {
+        $router.push(RouteNames.SIGN_IN)
+        dispatch(changeIsAppLoading(false))
+        return
+      }
       $clg('success', 'Tokens pair has been updated')
       const response = (await dispatch(apiMethods.user.getUserData(null))) as AsyncThunkResponseWrapper
       dispatch(changeIsAppLoading(false))
@@ -39,12 +45,12 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       break
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  dispatch(showNotification({ message, messageType: 'error' }))
+  dispatch(showNotification({ message, messageType: 'error', duration: constants.errorNotificationDuration }))
 }
 
 type RequestTypes = 'post' | 'get' | 'patch'
 
-export const $api = async (
+const $api = async (
   type: RequestTypes,
   endpoint: string,
   dispatch: AppDispatch,

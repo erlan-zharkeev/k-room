@@ -14,7 +14,7 @@ export default async () => {
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
       username: firstCharUpperCase(username),
-      avatar: getRequestStringToImg(username),
+      avatar: `${getRequestStringToImg(username)}.jpg`,
       email: `${username}@gmail.com`,
       password: hashedPassword,
       socketId: '',
@@ -22,11 +22,12 @@ export default async () => {
       confirmed: true,
       settings: initUserSettings,
       codes: initUserCodes,
+      online: false,
       infoItems: [getInfo('1')]
     })
     await user.save()
   }
-  const users = ENV.IS_DEV ? ['erlan'] : ['erlan']
+  const users = ENV.IS_DEV ? ['erlan', 'tolik', 'ivan'] : ['erlan']
   const promises = users.map(createUser)
   return await Promise.all(promises)
 }

@@ -5,9 +5,9 @@ import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
 import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
-import UISwitch from 'ui/UISwitch'
-import UserSettingElement from './@types/UserSettingElement'
-import UIAvatar from 'ui/UIAvatar'
+import UISwitch from 'src/components/UI/UISwitch/UISwitch'
+import { UserSettingElement } from './@types/UserSettingElement'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
 import { useNavigate } from 'react-router-dom'
 import { RouteNames } from 'common-types'
 
@@ -43,7 +43,7 @@ const UserSettings = () => {
             title={username}
             description={email}
           />
-          <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">{id}</span>
+          <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">#{id}</span>
         </div>
         <div className="link paragraph-text" onClick={() => navigate({ pathname: RouteNames.PASSWORD_RECOVERY })}>
           Password recovery

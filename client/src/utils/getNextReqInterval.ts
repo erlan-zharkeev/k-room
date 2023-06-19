@@ -1,2 +1,2 @@
-export const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000
+const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000
 export default getNextReqInterval

@@ -1,8 +1,8 @@
 import ShortChatList from './Components/ShortChatList/ShortChatList'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import UIIcon from 'ui/UIIcon'
-import UIInput from 'ui/UIInput'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
+import UIInput from 'src/components/UI/UIInput/UIInput'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { setRepliedMessage } from 'src/store/roomsSlice'
@@ -25,7 +25,7 @@ const ForwardMessagePopup = () => {
         <UIInput
           size="small"
           suffix={<UIIcon name={'search'} color={'default'} />}
-          onChange={async (e) => setSearchString(e.target.value)}
+          onChange={(e) => setSearchString(e.target.value)}
         />
         <ShortChatList searchString={searchString} clickChat={clickChatHandler} />
       </div>

@@ -1,11 +1,11 @@
 import { MessageNotification } from 'src/components/Common/MessageNotification/MessageNotification'
-import { $sound, Sounds } from 'src/services/$sound'
+import $sound, { Sounds } from 'src/services/$sound'
 import { showNotification } from '../systemSlice'
 import changeSettingsHandler from './helpers/changeSettingsHandler'
 
-export const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
+const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
   const dispatch = store.dispatch
-  changeSettingsHandler(action, store, dispatch)
+  changeSettingsHandler(action, store)
   switch (action.type) {
     case 'rooms/updateChatMessage':
       const { soundOn } = store.getState().persist.settings

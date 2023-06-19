@@ -1,10 +1,10 @@
 import { Dropdown, MenuProps } from 'antd'
-import emojiSource from './emojis'
 import { EmojiDropdownProps } from './@types/EmojiDropdownProps'
-import UIButton from 'ui/UIButton'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import constants from 'src/constants'
 
-export const EmojiDropDown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
-  const items: MenuProps['items'] = emojiSource.map((el) => {
+const EmojiDropDown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
+  const items: MenuProps['items'] = constants.emojis.map((el) => {
     return {
       key: el.key,
       label: (

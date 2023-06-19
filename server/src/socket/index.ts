@@ -1,5 +1,5 @@
 import { DefaultEventsMap } from 'socket.io/dist/typed-events'
-import { SocketActions, ChatRoom, UserShort, Message, MessageStatus } from '../../../types'
+import { SocketActions, ChatRoom, UserShort, Message, MessageStatus, User, Reaction } from '../../../types'
 import { Socket } from 'socket.io'
 import { io } from './../server'
 import { UserModel } from './../models/user.model'
@@ -19,11 +19,46 @@ import setMessage from './helpers/setMessage'
 import setRoomToUsers from './helpers/setRoomToUsers'
 import setLastSeenData from './helpers/setLastSeenData'
 import setUserStatus from './helpers/setUserStatus'
+import saveAndGetImagePath from '../utils/saveAndGetImagePath'
+import updateRoomToUsers from './helpers/updateRoomToUsers'
+import { getPathToImg } from '../utils/getPathToImg'
+import fs from 'fs'
+import { SharpKey } from '../types/Constants'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
-  socket.on(SocketActions.CALL_USER, async (data: any) => {
+  socket.on(SocketActions.ADD_REACTION, async (data) => {
+    const { glyphKey, messageId, roomId, authorId, username } = data
+
+    const users = await UserModel.find({ 'chatRooms.roomId': roomId }, 'socketId')
+
+    const reaction: Reaction = {
+      glyphKey,
+      authorId,
+      username
+    }
+
+    users.forEach(async (user) => {
+      await UserModel.findOneAndUpdate(
+        { _id: user.id, 'chatRooms.roomId': roomId },
+        { $push: { 'chatRooms.$.messages.$[outer].reactions': reaction } },
+        {
+          arrayFilters: [{ 'outer.id': messageId }]
+        }
+      )
+      io.to(user.socketId).emit(SocketActions.UPDATE_MESSAGE_REACTIONS, { roomId, messageId, reaction })
+    })
+  })
+
+  socket.on(SocketActions.UPDATE_USER_SETTINGS, async (data) => {
+    const { userId, type, value } = data
+    const query = {} as any
+    query['settings.' + type] = value
+    await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
+  })
+
+  socket.on(SocketActions.CALL_USER, async (data) => {
     const interlocutor = await getUserById(data.userToCall)
     if (!interlocutor) return
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_USER, {
@@ -88,9 +123,21 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   )
 
   socket.on(SocketActions.SEARCH_CONTACT, async (data: { type: string; value: string }) => {
-    const { type, value } = { ...data }
+    let { value } = data
+    let type = 'name'
     let validSearch = true
-    if (type === 'id' && !ObjectIdType.isValid(value)) validSearch = false
+
+    if (value.includes('#')) {
+      value = value.substring(1)
+      ObjectIdType.isValid(value) ? (type = 'id') : (validSearch = false)
+    }
+
+    if (value.includes('@')) {
+      type = 'email'
+      value = value.split('@')[0]
+    }
+
+    if (!value) validSearch = false
 
     const $regex = new RegExp(value, 'i')
 
@@ -104,9 +151,14 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
 
     if (!searchType) validSearch = false
 
-    const users = await UserModel.find(searchType)
-    const transformedUsers = transformUsersData(users)
-    emitSearchedContacts(socket.id, validSearch ? transformedUsers : [])
+    let searchedUsers: User[] = []
+
+    if (validSearch) {
+      const users = await UserModel.find(searchType)
+      searchedUsers = transformUsersData(users)
+    }
+
+    emitSearchedContacts(socket.id, searchedUsers)
   })
 
   socket.on(SocketActions.SAVE_CONTACT, async (data: { userId: string; interlocutorId: string }) => {
@@ -122,17 +174,38 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   })
 
   socket.on(SocketActions.CREATE_ROOM, async (chatRoomData: ChatRoom) => {
+    const avatar = await saveAndGetImagePath(chatRoomData.avatarFile.buffer, SharpKey.avatar)
+    const { multiple } = chatRoomData
+
     const room = new ChatRoomModel({
+      avatar,
+      multiple,
+      messages: [],
+      chatName: chatRoomData.chatName,
       users: chatRoomData.users,
-      authorId: chatRoomData.authorId,
-      multiple: chatRoomData.users.length > 2
+      authorId: chatRoomData.authorId
     })
-    await room.save()
-    await setRoomToUsers(room)
+    const savedRoom = await room.save()
+    const blockedFor = multiple ? '' : chatRoomData.authorId
+    await setRoomToUsers({ room, blockedFor })
     await Promise.all(room.users.map(async (user) => await emitRoomsByUserId(user.id)))
     const userData = await getUserById(chatRoomData.authorId)
     if (!userData?.socketId) return
-    io.to(userData.socketId).emit(SocketActions.ROOM_CREATED)
+    io.to(userData.socketId).emit(SocketActions.ROOM_CREATED, { roomId: savedRoom.id })
+  })
+
+  socket.on(SocketActions.UPDATE_CHAT_ROOM, async (chatRoomData: ChatRoom) => {
+    const { roomId, chatName, avatar, avatarFile } = chatRoomData
+    const isImageExist = fs.existsSync(avatar ?? '')
+    if (isImageExist) fs.unlinkSync(getPathToImg(avatar))
+    const updatedAvatar = await saveAndGetImagePath(avatarFile.buffer, SharpKey.avatar)
+    await ChatRoomModel.updateOne({ _id: roomId }, { avatar: updatedAvatar, chatName })
+    await updateRoomToUsers({ room: chatRoomData })
+    await Promise.all(chatRoomData.users.map(async (user) => await emitRoomsByUserId(user.id)))
+
+    const userData = await getUserById(chatRoomData.authorId)
+    if (!userData?.socketId) return
+    io.to(userData?.socketId).emit(SocketActions.ROOM_DATA_UPDATED)
   })
 
   socket.on(SocketActions.SEND_MESSAGE, async (data: { roomId: string; message: Message }) => {
@@ -141,9 +214,9 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
 
   socket.on(
     SocketActions.CHANGE_MESSAGE_STATUS,
-    async (data: { roomId: string; messageId: string; status: MessageStatus }) => {
-      const { roomId, messageId, status } = { ...data }
-      await setMessageStatus(roomId, messageId, status)
+    async (data: { roomId: string; messageId: string; status: MessageStatus; userId: string; multiple: boolean }) => {
+      const { roomId, messageId, status, userId, multiple } = data
+      await setMessageStatus(roomId, messageId, status, userId, multiple)
     }
   )
 })

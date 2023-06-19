@@ -6,19 +6,18 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
-import UIInput from 'ui/UIInput'
-import UIButton from 'ui/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/userSlice'
 import { User } from 'common-types'
-import UIImageLoader from 'ui/UIImageLoader'
-import { v4 as uuidv4 } from 'uuid'
+import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
 
 const UserDataSettingsPopup = () => {
   const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
   const [imageChanged, setImageChanged] = useState(false)
-  const [newAvatar, setNewAvatar] = useState<string | undefined>()
+  const [newAvatar, setNewAvatar] = useState<string | undefined>(avatar)
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUsernameEqualNewName, setIsUsernameEqualNewName] = useState(true)
@@ -71,9 +70,9 @@ const UserDataSettingsPopup = () => {
         onChange={changeFormHandler}
       >
         <div className="user-data-settings-popup__image">
-          <UIImageLoader image={newAvatar} setImage={setNewAvatar} setFile={setFile} updated={imageUpdated} />
+          <UIAvatarLoader path={newAvatar} setImage={setNewAvatar} setFile={setFile} updated={imageUpdated} />
         </div>
-        <Form.Item name="username" rules={validateRules.required} initialValue={username}>
+        <Form.Item name="username" rules={validateRules.username} initialValue={username}>
           <UIInput placeholder="Username" />
         </Form.Item>
         <Form.Item className="user-data-settings-popup__controls">

@@ -42,7 +42,6 @@ export enum AuthEndPoints {
 export enum UserEndPoints {
   GET_USER_DATA = "/auth/get-user-data",
   UPDATE_USER_DATA = "/auth/user-data/update",
-  UPDATE_USER_SETTINGS = "/user/update-user-settings",
   RESET_PASSWORD = "/user/reset-password",
 }
 
@@ -85,6 +84,11 @@ export enum SocketActions {
   CALL_ENDED = "call-ended",
   CHANGE_CALL_SETTINGS = "change-call-settings",
   CALL_STARTED_AT = "call-started-at",
+  UPDATE_USER_SETTINGS = "update-user-settings",
+  UPDATE_CHAT_ROOM = "update-chat-room",
+  ROOM_DATA_UPDATED = "room-data-updated",
+  ADD_REACTION = "add-reaction",
+  UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
 }
 
 export enum RouteNames {
@@ -97,6 +101,15 @@ export enum RouteNames {
   PASSWORD_RECOVERY = "/password-recovery",
   CREATE_NEW_PASSWORD = "/create-new-password",
   NOTIFICATION = "/notification",
+  // Don't forget to change path below in nginx manually
+  SOCKET = "/socket/",
+  API = "/api/",
+}
+
+export interface Reaction {
+  username: string;
+  authorId: string;
+  glyphKey: string;
 }
 
 export interface Message {
@@ -107,9 +120,17 @@ export interface Message {
   createdAt?: string;
   isSelf?: boolean;
   status?: MessageStatus;
+  reactions?: Array<Reaction>;
+  files?: Array<any>;
+  filesCompression?: boolean;
 }
 
-export type MessageStatus = "sending" | "undelivered" | "delivered" | "read";
+export type MessageStatus =
+  | "sending"
+  | "undelivered"
+  | "delivered"
+  | "read"
+  | "none";
 
 export interface ChatRoom {
   _id?: string;
@@ -121,6 +142,8 @@ export interface ChatRoom {
   messages: Array<Message>;
   multiple: boolean;
   hasOnline: boolean;
+  blocked?: boolean;
+  avatarFile?: any;
 }
 
 export type ChatRooms = Array<ChatRoom>;
@@ -128,6 +151,7 @@ export type ChatRooms = Array<ChatRoom>;
 export interface UserShort {
   id: string;
   username: string;
+  avatar?: string;
 }
 
 export interface UserCredential extends UserShort {
@@ -138,7 +162,6 @@ export interface UserCredential extends UserShort {
 }
 
 export interface User extends UserCredential {
-  providerUserId?: string;
   online: boolean;
   chatRooms: ChatRooms;
   lastSeen?: string;
@@ -155,6 +178,12 @@ export interface FirebaseUser {
 }
 
 export type theme = "dark" | "light";
+
+export interface ImageObject {
+  name: string;
+  src?: string | ArrayBuffer | null;
+  fileBuffer?: File | ArrayBuffer;
+}
 
 export interface UserSettings {
   asideTab: string;

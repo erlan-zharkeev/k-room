@@ -1,31 +1,47 @@
 import { ChatRoom } from '../../../../types'
 import getUserById from './getUserById'
+import { v4 as uuidv4 } from 'uuid'
+import constants from './../../constants'
 
-export const getRoomForSaveToUser = async (userId: string, room: ChatRoom) => {
-  const chatUserNames = room.users.map((user) => {
-    if (user.id !== userId) return user.username
-  })
-  const chatName = chatUserNames.join(`${chatUserNames.length > 2 ? '/' : ''}`)
-  let interlocutorId = ''
-  room.users.forEach(async (user) => {
-    if (user.username === chatName) interlocutorId = user.id
-  })
-  const userData = await getUserById(interlocutorId)
+export const getRoomForSaveToUser = async (userId: string, room: ChatRoom, blocked?: boolean) => {
+  let { chatName, users, avatar, multiple, authorId, _id } = room
 
-  const users = room.users
-    .map((user) => {
-      return { id: user.id, username: user.username }
-    })
-    .filter((user) => user.id !== userId)
+  if (!chatName) chatName = users.find((user) => user.id !== userId)?.username ?? ''
+
+  if (!multiple) {
+    const interlocutorId = users.find((user) => user.username === chatName)?.id ?? ''
+    const userData = await getUserById(interlocutorId)
+    avatar = userData?.avatar
+  }
+
+  const filteredUsers = users.filter((user) => user.id !== userId)
+
+  const { multipleChatCreatedAuthorMessage, multipleInviteMessage, singleInviteMessage } = constants
+
+  let messageBody = singleInviteMessage
+
+  if (multiple) {
+    messageBody = room.authorId === userId ? multipleChatCreatedAuthorMessage : multipleInviteMessage
+  }
+
+  const inviteMessage = {
+    id: uuidv4(),
+    status: 'none',
+    author: 'system',
+    body: messageBody,
+    createdAt: ''
+  }
 
   const result = {
-    roomId: String(room._id),
+    authorId,
+    roomId: String(_id),
     chatName,
-    avatar: userData?.avatar,
+    avatar,
     hasOnline: false,
-    multiple: room.multiple,
-    users,
-    messages: []
+    multiple: multiple,
+    users: filteredUsers,
+    messages: [inviteMessage],
+    blocked: blocked ?? false
   }
   return result
 }

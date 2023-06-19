@@ -9,26 +9,38 @@ const initialRepliedMessageData = {
   body: ''
 }
 
+const initialAttachedFilesMessage = {
+  body: '',
+  files: [],
+  filesCompression: true
+}
+
 const initialState: RoomsState = {
   chatRooms: [],
-  repliedMessageData: initialRepliedMessageData
+  repliedMessageData: initialRepliedMessageData,
+  attachedFilesMessage: initialAttachedFilesMessage
 }
 
 const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
+    updatedAttachedFilesMessage(state, { payload }) {
+      state.attachedFilesMessage = { ...state.attachedFilesMessage, ...payload }
+    },
     loadChatRooms(state, { payload }) {
       state.chatRooms = payload
     },
     updateChatMessage(state, { payload }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.roomId === roomId)
+
       if (!room) return
       room.messages.forEach((roomMessage, idx) => {
         if (roomMessage.id === message.id) room.messages.splice(idx, 1)
       })
       room.messages.push(message)
+      if (room?.messages.length > 1) room.blocked = false
     },
     updateMessageStatus(state, { payload }) {
       const { roomId, messageId, status } = payload
@@ -36,6 +48,14 @@ const roomsSlice = createSlice({
       if (!room) return
       room.messages.forEach((roomMessage) => {
         if (roomMessage.id === messageId) roomMessage.status = status
+      })
+    },
+    updateMessageReactions(state, { payload }) {
+      const { roomId, messageId, reaction } = payload
+      const room = state.chatRooms.find((room) => room.roomId === roomId)
+      if (!room) return
+      room.messages.forEach((roomMessage) => {
+        if (roomMessage.id === messageId) roomMessage.reactions = [...(roomMessage.reactions ?? []), reaction]
       })
     },
     pushTemporaryMessage(state, { payload }) {
@@ -77,10 +97,12 @@ export const {
   updateChatUsersStatus,
   updateChatMessage,
   pushTemporaryMessage,
+  updateMessageReactions,
   updateMessageStatus,
   changeChatName,
   setRepliedMessage,
-  resetRepliedMessage
+  resetRepliedMessage,
+  updatedAttachedFilesMessage
 } = roomsSlice.actions
 
 export default roomsSlice.reducer

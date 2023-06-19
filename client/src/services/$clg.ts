@@ -24,7 +24,7 @@ const consoleColorMap: ConsoleTypes = {
   }
 }
 
-export const $clg = (type: ConsoleType, message: string) => {
+const $clg = (type: ConsoleType, message: string) => {
   console.log(`%c ${message} `, `background: ${consoleColorMap[type].bg}; color: ${consoleColorMap[type].text}`)
 }
 

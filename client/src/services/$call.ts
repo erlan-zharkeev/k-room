@@ -3,7 +3,7 @@ import { Howl } from 'howler'
 import Peer, { SignalData } from 'simple-peer'
 import { Socket } from 'socket.io-client'
 import $clg from 'src/services/$clg'
-import { $sound, Sounds } from 'src/services/$sound'
+import $sound, { Sounds } from 'src/services/$sound'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import {

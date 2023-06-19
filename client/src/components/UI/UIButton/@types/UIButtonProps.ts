@@ -1,7 +1,7 @@
 import { ColorModifiers, SizeModifiers } from 'src/@types'
 import { IconName } from '../../UIIcon/@types/IconName'
 
-export default interface UIButtonProps {
+export interface UIButtonProps {
   htmltype?: 'submit'
   value?: string
   type?: 'radio' | 'dropdown' | 'common'

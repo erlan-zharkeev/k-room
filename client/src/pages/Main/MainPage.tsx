@@ -5,7 +5,7 @@ import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
 import Popup from 'src/components/Common/Popup/Popup'
 import { socket } from 'src/socket/socket'
-import { Message, SocketActions, User, ChatRoom as ChatRoomInterface } from 'common-types'
+import { Message, SocketActions, User, ChatRoom as ChatRoomInterface, Reaction } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
@@ -18,7 +18,8 @@ import {
   loadChatRooms,
   updateChatMessage,
   updateMessageStatus,
-  changeChatName
+  changeChatName,
+  updateMessageReactions
 } from 'src/store/roomsSlice'
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
@@ -26,7 +27,7 @@ import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
 
-export const MainPage = () => {
+const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
 
   const userId = useTypedSelector((state) => state.user.userData.id)
@@ -95,6 +96,12 @@ export const MainPage = () => {
       SocketActions.UPDATE_MESSAGE_STATUS,
       (roomData: { roomId: string; messageId: string; status: string }) => {
         dispatch(updateMessageStatus(roomData))
+      }
+    )
+    socket.on(
+      SocketActions.UPDATE_MESSAGE_REACTIONS,
+      (data: { roomId: string; messageId: string; reaction: Reaction }) => {
+        dispatch(updateMessageReactions(data))
       }
     )
     socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>, message?: string) => {

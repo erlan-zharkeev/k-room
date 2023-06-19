@@ -2,8 +2,8 @@ import { Form } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Logo } from 'src/components/Common/Logo/Logo'
-import UIButton from 'ui/UIButton'
-import UIInput from 'ui/UIInput'
+import UIButton from 'src/components/UI/UIButton/UIButton'
+import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
@@ -15,7 +15,7 @@ import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
-export const PasswordRecoveryPage = () => {
+const PasswordRecoveryPage = () => {
   const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
   const [codeValidationIsLoading, setCodeValidationIsLoading] = useState(false)
   const { email } = useTypedSelector((state) => state.user.userData)

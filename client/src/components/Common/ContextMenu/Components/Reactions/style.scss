@@ -13,5 +13,9 @@
       cursor: pointer;
       background-color: var(--secondary-text);
     }
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.2;
+    }
   }
 }

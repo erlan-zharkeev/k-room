@@ -1,10 +1,10 @@
-import { Radio, RadioChangeEvent } from 'antd'
+import { Badge, Radio, RadioChangeEvent } from 'antd'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import ButtonsListElement from './@types/ButtonsListElement'
-import UIButton from 'ui/UIButton'
+import { ButtonsListElement } from './@types/ButtonsListElement'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 import { Logo } from '../Common/Logo/Logo'
 import { showModal } from 'src/store/systemSlice'
 
@@ -12,6 +12,7 @@ const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
   const { viewPort } = useTypedSelector((state) => state.system)
+  const { chatRooms } = useTypedSelector((state) => state.chatRooms)
 
   const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
@@ -33,20 +34,37 @@ const AsideBar = () => {
     dispatch(showModal({ title: 'Settings', modalContentComponentName: 'TechSettingsPopup' }))
   }
 
+  const getButtonComponent = (button: ButtonsListElement) => (
+    <UIButton
+      type="radio"
+      onClick={changeTabClickHandler}
+      value={button.value}
+      iconName={button.iconName}
+      tooltip={button.tooltip}
+    />
+  )
+
+  const unreadMessagesCount = () => {
+    let result = 0
+    chatRooms.forEach((room) =>
+      room.messages.forEach((message) => {
+        if (message.status === 'delivered' && !message.isSelf) result += 1
+      })
+    )
+    return result
+  }
+
   return (
     <div className="aside-bar">
       {viewPort.width >= 769 && <Logo />}
       <Radio.Group value={asideTab} onChange={changeTab}>
         {buttons.map((button) => {
-          return (
-            <UIButton
-              type="radio"
-              key={button.value}
-              onClick={changeTabClickHandler}
-              value={button.value}
-              iconName={button.iconName}
-              tooltip={button.tooltip}
-            />
+          return button.value === 'chatList' ? (
+            <Badge count={unreadMessagesCount()} key={button.value} size="small">
+              {getButtonComponent(button)}
+            </Badge>
+          ) : (
+            <div key={button.value}>{getButtonComponent(button)}</div>
           )
         })}
       </Radio.Group>

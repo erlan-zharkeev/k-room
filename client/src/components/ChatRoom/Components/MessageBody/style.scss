@@ -6,19 +6,24 @@
   flex-direction: column;
   padding: $gutter-sm $gutter-md;
   overflow: hidden;
-  // border: 1px var(--secondary-text) solid;
   border-radius: $radius-md;
   background-color: var(--dark-gray-transparent);
 
-  &__text {
-    color: var(--secondary-text);
+  .ant-image-mask {
+    border-radius: 0;
   }
 
-  &--self {
-    justify-content: flex-end;
-    #{$self}__text {
-      text-align: right;
-    }
+  &__images {
+    display: flex;
+    max-width: 310px;
+  }
+
+  &__image {
+    max-width: 150px;
+  }
+
+  &__text {
+    color: var(--secondary-text);
   }
 
   &__system-info {
@@ -32,6 +37,14 @@
     height: 5px;
     margin-right: 5px;
     border-radius: 50%;
+  }
+
+  &__reactions {
+    display: flex;
+  }
+
+  &__reaction {
+    margin: 0 4px;
   }
 
   &--sending {

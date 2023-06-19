@@ -8,10 +8,10 @@
   }
   .ui-icon--image {
     svg {
-      transform: scale(0.7);
+      transform: scale(1.6);
     }
   }
-  .ui-image-loader {
+  .ui-avatar-loader {
     margin-bottom: $gutter-lg;
     .ant-avatar {
       background: var(--dark-gray) !important;

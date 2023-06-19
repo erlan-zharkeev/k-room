@@ -2,8 +2,8 @@ import { Button, Radio, Tooltip } from 'antd'
 import DropdownButton from 'antd/lib/dropdown/dropdown-button'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import modifiersHandler from 'src/utils/modifiersHandler'
-import UIIcon from 'ui/UIIcon'
-import UIButtonProps from './@types/UIButtonProps'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
+import { UIButtonProps } from './@types/UIButtonProps'
 
 const buttons = {
   common: Button,
@@ -11,7 +11,7 @@ const buttons = {
   dropdown: DropdownButton
 }
 
-export const UIButton = ({
+const UIButton = ({
   type,
   value,
   tooltip,

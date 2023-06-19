@@ -6,10 +6,10 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
 import { showModal } from 'src/store/systemSlice'
-import UIAvatar from 'ui/UIAvatar'
-import UIButton from 'ui/UIButton'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 
-export const ChatRoomList = () => {
+const ChatRoomList = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { id } = useTypedSelector((state) => state.user.userData)
@@ -44,7 +44,8 @@ export const ChatRoomList = () => {
     return !hasUserInContacts && !isChatMultiple
   }
 
-  const createMultipleChat = () => {
+  const createMultipleChat = (e: any) => {
+    e.stopPropagation()
     dispatch(showModal({ title: 'Create New Chat Room', modalContentComponentName: 'CreateMultipleChatPopup' }))
   }
 
@@ -75,7 +76,15 @@ export const ChatRoomList = () => {
               className={selectedChatRoomId === chatRoom.roomId ? 'active' : ''}
             >
               <List.Item.Meta
-                avatar={<UIAvatar online={chatRoom.hasOnline} src={chatRoom.avatar} />}
+                avatar={
+                  <UIAvatar
+                    ribbon={chatRoom.multiple}
+                    online={chatRoom.hasOnline}
+                    stubIconName={chatRoom.multiple ? 'image-stub' : 'user-stub'}
+                    src={chatRoom.avatar}
+                    shape="square"
+                  />
+                }
                 title={<span>{chatRoom.chatName}</span>}
                 description={getLastMessage(chatRoom.messages)}
               />

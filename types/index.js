@@ -16,7 +16,6 @@ var UserEndPoints;
 (function (UserEndPoints) {
     UserEndPoints["GET_USER_DATA"] = "/auth/get-user-data";
     UserEndPoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
-    UserEndPoints["UPDATE_USER_SETTINGS"] = "/user/update-user-settings";
     UserEndPoints["RESET_PASSWORD"] = "/user/reset-password";
 })(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
 var CommonEndPoints;
@@ -59,6 +58,11 @@ var SocketActions;
     SocketActions["CALL_ENDED"] = "call-ended";
     SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
     SocketActions["CALL_STARTED_AT"] = "call-started-at";
+    SocketActions["UPDATE_USER_SETTINGS"] = "update-user-settings";
+    SocketActions["UPDATE_CHAT_ROOM"] = "update-chat-room";
+    SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
+    SocketActions["ADD_REACTION"] = "add-reaction";
+    SocketActions["UPDATE_MESSAGE_REACTIONS"] = "update-message-reactions";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {
@@ -71,6 +75,9 @@ var RouteNames;
     RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
     RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
     RouteNames["NOTIFICATION"] = "/notification";
+    // Don't forget to change path below in nginx manually
+    RouteNames["SOCKET"] = "/socket/";
+    RouteNames["API"] = "/api/";
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var Status;
 (function (Status) {

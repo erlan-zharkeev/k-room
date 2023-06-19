@@ -3,9 +3,9 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import useDynamicRefs from 'use-dynamic-refs'
-import UIAvatar from 'ui/UIAvatar'
-import UIIcon from 'ui/UIIcon'
-import UIButton from 'ui/UIButton'
+import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
+import UIIcon from 'src/components/UI/UIIcon/UIIcon'
+import UIButton from 'src/components/UI/UIButton/UIButton'
 
 const Calls = () => {
   const { list } = useTypedSelector((state) => state.calls)

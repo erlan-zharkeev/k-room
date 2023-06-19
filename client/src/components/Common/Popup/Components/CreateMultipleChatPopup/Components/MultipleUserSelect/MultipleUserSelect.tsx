@@ -1,8 +1,9 @@
 import { SelectProps, Select } from 'antd'
+import { UserShort } from 'common-types'
 import { useEffect, useState } from 'react'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
-const MultipleUserSelect = ({ setMembers }: { setMembers: (ids: Array<string>) => void }) => {
+const MultipleUserSelect = ({ setMembers }: { setMembers: React.Dispatch<React.SetStateAction<Array<UserShort>>> }) => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const [users, setUsers] = useState([] as SelectProps['options'])
 
@@ -14,7 +15,13 @@ const MultipleUserSelect = ({ setMembers }: { setMembers: (ids: Array<string>) =
   }, [])
 
   const handleChange = (ids: string[]) => {
-    setMembers(ids)
+    const members = ids?.map((id) => {
+      return {
+        id,
+        username: contacts.find((contact) => contact.id === id)?.username ?? ''
+      }
+    })
+    setMembers(members)
   }
   return (
     <div className="multiple-user-select">

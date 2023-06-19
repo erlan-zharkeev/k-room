@@ -2,7 +2,11 @@ import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
 import router from './router'
 import ENV from './ENV'
+import constants from './constants'
+import { RouteNames } from './../../types'
 
+const fs = require('fs')
+const path = require('path')
 const http = require('http')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
@@ -14,9 +18,9 @@ const app = express()
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use('/api/', router)
+app.use(RouteNames.API, router)
 
-app.get('/api/', (req: Request, res: Response) => {
+app.get(RouteNames.API, (req: Request, res: Response) => {
   res.send('Server running')
 })
 
@@ -28,8 +32,11 @@ server.listen(PORT, () => {
   console.log(clc.green.bgWhite(`-Server listening on port ${PORT}`))
 })
 
+if (!fs.existsSync(path.join(__dirname, 'assets/img/'))) fs.mkdir(path.join(__dirname, 'assets/img/'))
+
 export const io = new Server(server, {
-  path: '/socket/',
+  path: RouteNames.SOCKET,
+  maxHttpBufferSize: constants.maxMbQuantityTransfer * 1000000,
   cors: {
     origin: '*',
     methods: ['GET', 'POST']

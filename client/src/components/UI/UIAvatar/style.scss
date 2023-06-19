@@ -1,12 +1,25 @@
 .ui-avatar {
   $self: &;
-
+  display: flex;
+  align-items: center;
   &__image {
     padding: 1px;
     object-fit: cover !important;
     background: var(--main-bg) !important;
     border: solid 1px var(--secondary-text);
     border-radius: 50% !important;
+    overflow: hidden;
+  }
+
+  &--square {
+    #{ $self }__image {
+      border-radius: $radius-sm !important;
+      .ui-icon {
+        svg {
+          transform: scale(1.5);
+        }
+      }
+    }
   }
 
   &--small {
@@ -53,5 +66,17 @@
       color: var(--secondary-text);
       font-size: 4rem;
     }
+  }
+  .ant-ribbon {
+    top: -10px;
+    font-size: 10px;
+    height: 14px;
+    padding: 0 4px;
+    display: flex;
+    justify-content: center;
+    line-height: 16px;
+  }
+  .ant-ribbon-corner {
+    display: none;
   }
 }

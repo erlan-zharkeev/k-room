@@ -7,6 +7,8 @@ import TechSettingsPopup from './Components/TechSettingsPopup/TechSettingsPopup'
 import UserDataSettingsPopup from './Components/UserDataSettingsPopup/UserDataSettingsPopup'
 import ForwardMessagePopup from './Components/ForwardMessagePopup/ForwardMessagePopup'
 import CreateMultipleChatPopup from './Components/CreateMultipleChatPopup/CreateMultipleChatPopup'
+import ChatRoomSettingsPopup from './Components/ChatRoomSettingsPopup/ChatRoomSettingsPopup'
+import MessageWithBindDataPopup from './Components/MessageWithBindDataPopup/MessageWithBindDataPopup'
 
 const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
@@ -15,7 +17,9 @@ const Popup = () => {
     UserDataSettingsPopup: <UserDataSettingsPopup />,
     TechSettingsPopup: <TechSettingsPopup />,
     ForwardMessagePopup: <ForwardMessagePopup />,
-    CreateMultipleChatPopup: <CreateMultipleChatPopup />
+    CreateMultipleChatPopup: <CreateMultipleChatPopup />,
+    ChatRoomSettingsPopup: <ChatRoomSettingsPopup />,
+    MessageWithBindDataPopup: <MessageWithBindDataPopup />
   }
 
   const Content = () => {
