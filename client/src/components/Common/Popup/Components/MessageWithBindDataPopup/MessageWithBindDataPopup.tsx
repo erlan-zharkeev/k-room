@@ -23,13 +23,19 @@ const MessageWithBindDataPopup = () => {
   const onFinish = async (values: { message: string }) => {
     const messageText = values.message
     setIsLoading(true)
+    const transformedFiles = files.map((file) => {
+      return {
+        ...file,
+        src: ''
+      }
+    })
     if (selectedChatRoom?.roomId) {
       const messageData = {
         authorId: id,
         roomId: selectedChatRoom.roomId,
         username,
         messageText,
-        files,
+        files: transformedFiles,
         filesCompression: compress,
         dispatch
       }
@@ -50,7 +56,7 @@ const MessageWithBindDataPopup = () => {
             </div>
             <div className="message-with-bind-data-popup__images-wrapper">
               {files.map((file) => (
-                <div className="message-with-bind-data-popup__image">
+                <div key={file.name} className="message-with-bind-data-popup__image">
                   <Image src={file.src} />
                 </div>
               ))}

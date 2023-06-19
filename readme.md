@@ -75,14 +75,12 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-- develop add photo(5)
 - develop forward and reply and delete(5)
 - добавить настройки громкости и чекаем видео(5)
 - develop call list(4)
 - setup cors to specific host and port
 - check token works(1)
-- privacy policy create and to facebook dev
+- text to support
 - create info items(welcome, what is next)
-
-<!-- - dispatch выделить в отдельный файл -->
+- privacy policy create and to facebook dev
 <!-- - lazy load сообщений(5) -->

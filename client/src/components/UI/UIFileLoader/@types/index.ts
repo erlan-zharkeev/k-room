@@ -1,9 +1,4 @@
-export interface ImageObject {
-  name: any
-  src: string | ArrayBuffer | null
-  file: File
-}
-
+import { ImageObject } from 'common-types'
 export interface UIFileLoaderProps {
   multiple?: boolean
   allowedResolutions?: Array<string>

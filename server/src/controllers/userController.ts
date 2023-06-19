@@ -9,6 +9,7 @@ import getUsersByHasContactId from '../socket/helpers/getUsersByHasContactId'
 import { getPathToImg } from '../utils/getPathToImg'
 import fs from 'fs'
 import saveAndGetImagePath from '../utils/saveAndGetImagePath'
+import { SharpKey } from '../types/Constants'
 
 const bcrypt = require('bcryptjs')
 
@@ -22,7 +23,7 @@ class UserController {
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
 
-      const avatar = saveAndGetImagePath(req.file)
+      const avatar = saveAndGetImagePath(req.file?.buffer, SharpKey.avatar)
 
       const newUserData: any = {
         username,

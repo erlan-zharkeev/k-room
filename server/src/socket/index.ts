@@ -23,6 +23,7 @@ import saveAndGetImagePath from '../utils/saveAndGetImagePath'
 import updateRoomToUsers from './helpers/updateRoomToUsers'
 import { getPathToImg } from '../utils/getPathToImg'
 import fs from 'fs'
+import { SharpKey } from '../types/Constants'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
@@ -173,7 +174,7 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
   })
 
   socket.on(SocketActions.CREATE_ROOM, async (chatRoomData: ChatRoom) => {
-    const avatar = await saveAndGetImagePath(chatRoomData.avatarFile)
+    const avatar = await saveAndGetImagePath(chatRoomData.avatarFile.buffer, SharpKey.avatar)
     const { multiple } = chatRoomData
 
     const room = new ChatRoomModel({
@@ -197,7 +198,7 @@ io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
     const { roomId, chatName, avatar, avatarFile } = chatRoomData
     const isImageExist = fs.existsSync(avatar ?? '')
     if (isImageExist) fs.unlinkSync(getPathToImg(avatar))
-    const updatedAvatar = await saveAndGetImagePath(avatarFile)
+    const updatedAvatar = await saveAndGetImagePath(avatarFile.buffer, SharpKey.avatar)
     await ChatRoomModel.updateOne({ _id: roomId }, { avatar: updatedAvatar, chatName })
     await updateRoomToUsers({ room: chatRoomData })
     await Promise.all(chatRoomData.users.map(async (user) => await emitRoomsByUserId(user.id)))

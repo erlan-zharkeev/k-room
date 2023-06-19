@@ -11,7 +11,7 @@ import UIInput from 'src/components/UI/UIInput/UIInput'
 import UIButton from 'src/components/UI/UIButton/UIButton'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
 import UIFileLoader from 'src/components/UI/UIFileLoader/UIFileLoader'
-import { ImageObject } from 'src/components/UI/UIFileLoader/@types'
+import { ImageObject } from 'common-types'
 
 const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')

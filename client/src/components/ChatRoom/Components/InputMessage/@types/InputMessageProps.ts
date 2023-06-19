@@ -1,4 +1,4 @@
-import { ImageObject } from 'src/components/UI/UIFileLoader/@types'
+import { ImageObject } from 'common-types'
 
 export interface InputMessageProps {
   sendMessage: (message: string) => void

@@ -101,6 +101,9 @@ export enum RouteNames {
   PASSWORD_RECOVERY = "/password-recovery",
   CREATE_NEW_PASSWORD = "/create-new-password",
   NOTIFICATION = "/notification",
+  // Don't forget to change path below in nginx manually
+  SOCKET = "/socket/",
+  API = "/api/",
 }
 
 export interface Reaction {
@@ -175,6 +178,12 @@ export interface FirebaseUser {
 }
 
 export type theme = "dark" | "light";
+
+export interface ImageObject {
+  name: string;
+  src?: string | ArrayBuffer | null;
+  fileBuffer?: File | ArrayBuffer;
+}
 
 export interface UserSettings {
   asideTab: string;

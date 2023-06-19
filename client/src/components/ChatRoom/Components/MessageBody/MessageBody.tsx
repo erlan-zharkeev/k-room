@@ -49,7 +49,7 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
       <div className="message__images">
         {message.files &&
           message.files.map((file) => (
-            <div className="message__image">
+            <div key={file.name} className="message__image">
               <Image src={file.src} />
             </div>
           ))}

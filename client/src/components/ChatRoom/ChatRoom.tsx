@@ -15,7 +15,7 @@ import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { changeAsideTab } from 'src/store/settingsSlice'
 import constants from 'src/constants'
 import Informer from '../Common/Informer/Informer'
-import { ImageObject } from '../UI/UIFileLoader/@types'
+import { ImageObject } from 'common-types'
 import { showModal } from 'src/store/systemSlice'
 import sendMessage from 'src/utils/sendMessage'
 

@@ -1,11 +1,13 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import UIIcon from '../UIIcon/UIIcon'
-import { ImageObject, UIFileLoaderProps } from './@types'
+import { UIFileLoaderProps } from './@types'
+import { ImageObject } from 'common-types'
 import imageToBase64 from 'src/utils/imageToBase64'
 import { showNotification } from 'src/store/systemSlice'
 import constants from 'src/constants'
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 const UIFileLoader = ({
   multiple = false,
@@ -35,7 +37,7 @@ const UIFileLoader = ({
         return
       }
       reader.onload = () => {
-        updatedImages = [...updatedImages, { name: file.name, src: String(reader.result), file }]
+        updatedImages = [...updatedImages, { name: uuidv4(), src: String(reader.result), fileBuffer: file }]
         if (files.length < idx + 1) return
         setImages(updatedImages)
         setIsLoading(false)

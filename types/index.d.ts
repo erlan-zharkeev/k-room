@@ -94,7 +94,9 @@ export declare enum RouteNames {
     NOT_FOUND = "/not-found",
     PASSWORD_RECOVERY = "/password-recovery",
     CREATE_NEW_PASSWORD = "/create-new-password",
-    NOTIFICATION = "/notification"
+    NOTIFICATION = "/notification",
+    SOCKET = "/socket/",
+    API = "/api/"
 }
 export interface Reaction {
     username: string;
@@ -154,6 +156,11 @@ export interface FirebaseUser {
     providerId: string;
 }
 export type theme = "dark" | "light";
+export interface ImageObject {
+    name: string;
+    src?: string | ArrayBuffer | null;
+    fileBuffer?: File | ArrayBuffer;
+}
 export interface UserSettings {
     asideTab: string;
     selectedChatRoomId: string;

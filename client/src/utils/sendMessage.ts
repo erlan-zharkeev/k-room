@@ -1,5 +1,5 @@
 import { Message, SocketActions } from 'common-types'
-import { ImageObject } from 'src/components/UI/UIFileLoader/@types'
+import { ImageObject } from 'common-types'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { pushTemporaryMessage } from 'src/store/roomsSlice'
