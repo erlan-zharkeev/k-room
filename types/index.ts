@@ -89,6 +89,7 @@ export enum SocketActions {
   ROOM_DATA_UPDATED = "room-data-updated",
   ADD_REACTION = "add-reaction",
   UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
+  DELETE_MESSAGE = "delete-message",
 }
 
 export enum RouteNames {

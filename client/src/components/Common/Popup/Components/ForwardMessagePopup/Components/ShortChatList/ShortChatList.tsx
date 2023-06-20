@@ -21,7 +21,13 @@ const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
     <div className="short-contacts-list">
       {filteredRooms.map((room) => (
         <div className="short-contacts-list__item" key={room.roomId} onClick={() => clickChat(room.roomId)}>
-          <UIAvatar stubIconName={room.multiple ? 'image-stub' : 'user-stub'} showBadge={false} src={room.avatar} />
+          <UIAvatar
+            stubIconName={room.multiple ? 'image-stub' : 'user-stub'}
+            shape={room.multiple ? 'square' : 'round'}
+            showBadge={false}
+            src={room.avatar}
+            ribbon={true}
+          />
           <span className="paragraph-text paragraph-text--secondary short-contacts-list__name">{room.chatName}</span>
         </div>
       ))}

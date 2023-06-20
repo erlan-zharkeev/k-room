@@ -83,7 +83,8 @@ export declare enum SocketActions {
     UPDATE_CHAT_ROOM = "update-chat-room",
     ROOM_DATA_UPDATED = "room-data-updated",
     ADD_REACTION = "add-reaction",
-    UPDATE_MESSAGE_REACTIONS = "update-message-reactions"
+    UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
+    DELETE_MESSAGE = "delete-message"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",

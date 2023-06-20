@@ -35,7 +35,10 @@ const MessageContextMenu = () => {
   }
 
   const deleteHandler = () => {
-    console.log('delete')
+    socket.emit(SocketActions.DELETE_MESSAGE, {
+      roomId: selectedChatRoom?.roomId,
+      messageId: message.id
+    })
   }
 
   return (

@@ -63,6 +63,7 @@ var SocketActions;
     SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
     SocketActions["ADD_REACTION"] = "add-reaction";
     SocketActions["UPDATE_MESSAGE_REACTIONS"] = "update-message-reactions";
+    SocketActions["DELETE_MESSAGE"] = "delete-message";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var RouteNames;
 (function (RouteNames) {

@@ -28,6 +28,13 @@ import { SharpKey } from '../types/Constants'
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 io.on(SocketActions.CONNECTION, (socket: Socket<DefaultEventsMap>) => {
+  socket.on(SocketActions.DELETE_MESSAGE, async (data) => {
+    // const { messageId, roomId } = data
+    // const x = await UserModel.updateMany(
+    //   { 'chatRooms.roomId': roomId },
+    //   { $pull: { 'chatRooms.$.messages': messageId } }
+    // )
+  })
   socket.on(SocketActions.ADD_REACTION, async (data) => {
     const { glyphKey, messageId, roomId, authorId, username } = data
 
