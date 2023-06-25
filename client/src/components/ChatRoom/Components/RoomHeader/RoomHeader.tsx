@@ -5,15 +5,15 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIButton from 'src/components/UI/UIButton/UIButton'
+
 import constants from 'src/constants'
 import { showModal } from 'src/store/systemSlice'
+import { UIButton, UIAvatar } from 'src/components/UI'
 
 const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
-  const chatRoomData = chatRooms.find((room) => room.roomId === selectedChatRoomId)
+  const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
 
@@ -27,9 +27,9 @@ const RoomHeader = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  socket.on(SocketActions.GET_USER_TYPING_STATUS, (data: { userIdFrom: string; status: boolean }) => {
+  socket.on(SocketActions['get-user-typing-status'], (data: { userIdFrom: string; status: boolean }) => {
     if (!chatRoomData) return
-    const hasTypingInterlocutor = chatRoomData.users.find((user) => user.id === data.userIdFrom)
+    const hasTypingInterlocutor = chatRoomData?.users?.find((user) => user.id === data.userIdFrom)
     if (hasTypingInterlocutor) setIsTyping(data.status)
   })
 
@@ -47,8 +47,8 @@ const RoomHeader = () => {
           ribbon={chatRoomData?.multiple}
           stubIconName={chatRoomData?.multiple ? 'image-stub' : 'user-stub'}
           online={chatRoomData?.hasOnline}
-          src={chatRoomData?.avatar}
-          shape="square"
+          src={chatRoomData?.avatarPath}
+          shape={chatRoomData?.multiple ? 'square' : 'round'}
         />
         <h3 onClick={openChatMembers} className={`room-header__name ${chatRoomData?.multiple && 'pointer'}`}>
           {chatRoomData?.chatName}

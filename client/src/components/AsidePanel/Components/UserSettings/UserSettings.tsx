@@ -5,11 +5,10 @@ import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
 import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
-import UISwitch from 'src/components/UI/UISwitch/UISwitch'
 import { UserSettingElement } from './@types/UserSettingElement'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
 import { useNavigate } from 'react-router-dom'
-import { RouteNames } from 'common-types'
+import { RouteNames, Theme } from 'common-types'
+import { UIAvatar, UISwitch } from 'src/components/UI'
 
 const methods: Array<UserSettingElement> = [
   { name: 'theme', method: changeTheme },
@@ -19,7 +18,7 @@ const methods: Array<UserSettingElement> = [
 ]
 
 const UserSettings = () => {
-  const { username, email, id, avatar } = useTypedSelector((state) => state.user.userData)
+  const { username, email, id, avatarPath } = useTypedSelector((state) => state.user.userData)
   const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -39,7 +38,7 @@ const UserSettings = () => {
       <div className="user-settings__body">
         <div className="user-settings__user-card" onClick={changeUserData}>
           <Meta
-            avatar={<UIAvatar size="medium" showBadge={false} src={avatar} />}
+            avatar={<UIAvatar size="medium" showBadge={false} src={avatarPath} />}
             title={username}
             description={email}
           />
@@ -50,7 +49,13 @@ const UserSettings = () => {
         </div>
         <div className="user-settings__theme-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Theme</div>
-          <UISwitch onText="Dark" id="theme" offText="Light" initValue={theme === 'dark'} onChange={changeSetting} />
+          <UISwitch
+            onText="Dark"
+            id="theme"
+            offText="Light"
+            initValue={theme === Theme.dark}
+            onChange={changeSetting}
+          />
         </div>
         <div className="user-settings__sound-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Sound</div>

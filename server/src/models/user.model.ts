@@ -46,7 +46,7 @@ export const userSchema = new Schema<IUserSchema>({
     type: String,
     required: true
   },
-  avatar: {
+  avatarPath: {
     type: String,
     required: false
   },

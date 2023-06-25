@@ -1,7 +1,7 @@
 import { Badge, Image } from 'antd'
 import { useEffect, useState } from 'react'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import { UIAvatarProps } from 'ui/UIAvatar/@types/UIAvatarProps'
+import { UIIcon } from '..'
 
 const UIAvatar = ({
   online,

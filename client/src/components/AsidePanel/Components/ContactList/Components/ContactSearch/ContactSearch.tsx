@@ -1,13 +1,10 @@
 import { List } from 'antd'
 import { useEffect, useState } from 'react'
-import { User, SocketActions } from 'common-types'
+import { User, SocketActions, SocketActionsPayload } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import useDebounce from 'src/hooks/useDebounce'
-import UIInput from 'src/components/UI/UIInput/UIInput'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIButton from 'src/components/UI/UIButton/UIButton'
+import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components/UI'
 
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
@@ -17,7 +14,7 @@ const ContactSearch = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
 
   useEffect(() => {
-    socket.on(SocketActions.GET_SEARCHED_CONTACTS, (contacts: Array<User>) => {
+    socket.on(SocketActions['get-searched-contact'], (contacts: Array<User>) => {
       const userFilteredSelf = contacts.filter((user: User) => user.id !== id)
       setUsers(userFilteredSelf)
       setIsLoading(false)
@@ -25,7 +22,8 @@ const ContactSearch = () => {
   }, [])
 
   const fetchUsers = async (value: string) => {
-    socket.emit(SocketActions.SEARCH_CONTACT, { value })
+    const searchPayload: SocketActionsPayload['search-contact'] = { value }
+    socket.emit(SocketActions['search-contact'], searchPayload)
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
@@ -43,7 +41,7 @@ const ContactSearch = () => {
     if (!interlocutorId) return
     const interlocutorData = users.find((user) => user.id === interlocutorId)
     if (!interlocutorData) return
-    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
+    socket.emit(SocketActions['save-contact'], { userId: id, interlocutorId: interlocutorData.id })
   }
 
   return (
@@ -63,7 +61,7 @@ const ContactSearch = () => {
             renderItem={(user) => (
               <List.Item key={user.id}>
                 <List.Item.Meta
-                  avatar={<UIAvatar src={user.avatar} />}
+                  avatar={<UIAvatar src={user.avatarPath} />}
                   title={<span>{user.username}</span>}
                   description={<span>{user.email}</span>}
                 />

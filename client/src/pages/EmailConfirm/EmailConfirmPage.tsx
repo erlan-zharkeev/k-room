@@ -5,10 +5,9 @@ import { Status, RouteNames } from 'common-types'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/userSlice'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
+import { UIIcon, UIButton } from 'src/components/UI'
 
 const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -21,7 +20,7 @@ const EmailConfirmPage = () => {
   const sendEmailConfirmation = async (id: string) => {
     const response = (await dispatch(apiMethods.auth.emailConfirm(id))) as AsyncThunkResponseWrapper
     const { status, data } = response.payload
-    if (status !== Status.SUCCESS) return navigate(RouteNames.SIGN_IN)
+    if (status !== Status['success']) return navigate(RouteNames.SIGN_IN)
     setEmail(data.userData.email)
     setIsLoading(false)
     dispatch(logOut())

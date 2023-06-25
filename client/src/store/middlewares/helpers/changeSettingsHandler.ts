@@ -1,4 +1,4 @@
-import { SocketActions } from 'common-types'
+import { SocketActions, Theme } from 'common-types'
 import { socket } from 'src/socket/socket'
 
 export const changeSettingsHandler = (action: any, store: any) => {
@@ -10,7 +10,7 @@ export const changeSettingsHandler = (action: any, store: any) => {
     let type = ''
     switch (action.type) {
       case 'settings/changeTheme':
-        convertedValue = value ? 'dark' : 'light'
+        convertedValue = value ? Theme.dark : Theme.light
         type = 'theme'
         break
       case 'settings/setSoundValue':
@@ -34,7 +34,7 @@ export const changeSettingsHandler = (action: any, store: any) => {
       default:
         break
     }
-    socket.emit(SocketActions.UPDATE_USER_SETTINGS, { userId, type, value: convertedValue })
+    socket.emit(SocketActions['update-user-settings'], { userId, type, value: convertedValue })
   }
 }
 

@@ -2,8 +2,6 @@ import { Form } from 'antd'
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
@@ -16,8 +14,8 @@ import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
 import { ServiceContext } from 'src/main'
 import getCookie from 'src/utils/getCookie'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import useTypedSelector from 'src/hooks/useTypedSelector'
+import { UIIcon, UIInput, UIButton } from 'src/components/UI'
 
 const SignInPage = () => {
   const { $firebase } = useContext(ServiceContext)
@@ -51,7 +49,7 @@ const SignInPage = () => {
       id: uid,
       username: displayName,
       email,
-      avatar: photoURL,
+      avatarPath: photoURL,
       providerName: providerId
     }
     const response = (await dispatch(apiMethods.auth.signInWithProvider(credential))) as AsyncThunkResponseWrapper
@@ -61,11 +59,6 @@ const SignInPage = () => {
   }
 
   const { isAppLoading } = useTypedSelector((state) => state.user)
-
-  useEffect(() => {
-    const hasJwt = Boolean(getCookie('jwt'))
-    dispatch(changeIsAppLoading(hasJwt))
-  })
 
   return (
     <div className="page sign-in">
@@ -128,7 +121,7 @@ const SignInPage = () => {
                     text="Sign in"
                     border="border-default"
                     color="accent"
-                    htmltype="submit"
+                    htmltype={'submit'}
                     loading={isLoading}
                     disabled={!isValid}
                   />

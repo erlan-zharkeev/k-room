@@ -1,13 +1,12 @@
 import { Badge, List } from 'antd'
-import { SocketActions, ChatRoom, Message } from 'common-types'
+import { SocketActions, ChatRoom, Message, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
+import { UIButton, UIAvatar } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
 import { showModal } from 'src/store/systemSlice'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 
 const ChatRoomList = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -29,11 +28,11 @@ const ChatRoomList = () => {
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
     e.stopPropagation()
-    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId })
+    socket.emit(SocketActions['save-contact'], { userId: id, interlocutorId })
   }
 
   const unreadMessages = (room: ChatRoom) =>
-    room.messages.filter((message) => !message.isSelf && message.status === 'delivered').length
+    room.messages.filter((message) => !message.isSelf && message.status === MessageStatus.delivered).length
 
   const getFirstUserIdInChatRoom = (chatRoom: ChatRoom) => chatRoom.users[0].id
 
@@ -71,9 +70,9 @@ const ChatRoomList = () => {
           }}
           renderItem={(chatRoom) => (
             <List.Item
-              onClick={(e) => setChat(e, chatRoom.roomId)}
-              key={chatRoom.roomId}
-              className={selectedChatRoomId === chatRoom.roomId ? 'active' : ''}
+              onClick={(e) => setChat(e, chatRoom.id)}
+              key={chatRoom.id}
+              className={selectedChatRoomId === chatRoom.id ? 'active' : ''}
             >
               <List.Item.Meta
                 avatar={
@@ -81,8 +80,8 @@ const ChatRoomList = () => {
                     ribbon={chatRoom.multiple}
                     online={chatRoom.hasOnline}
                     stubIconName={chatRoom.multiple ? 'image-stub' : 'user-stub'}
-                    src={chatRoom.avatar}
-                    shape="square"
+                    src={chatRoom.avatarPath}
+                    shape={chatRoom.multiple ? 'square' : 'round'}
                   />
                 }
                 title={<span>{chatRoom.chatName}</span>}

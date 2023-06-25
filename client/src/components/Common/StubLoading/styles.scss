@@ -2,7 +2,8 @@
   position: absolute;
   z-index: 3;
   backdrop-filter: blur(3px);
-
+  top: 0;
+  left: 0;
   @include wh-100;
 
   &__circle {

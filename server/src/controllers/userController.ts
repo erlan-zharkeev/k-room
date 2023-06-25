@@ -4,12 +4,12 @@ import throwError from '../utils/throwError'
 import { ErrorMessages, SuccessMessages } from '../types/Messages'
 import { SocketActions, Status } from '../../../types'
 import { io } from '../server'
-import getSocketsByUsersArray from '../socket/helpers/getSocketsByUsersArray'
-import getUsersByHasContactId from '../socket/helpers/getUsersByHasContactId'
+import getSocketsByUserIds from '../socket/helpers/getters/getSocketsByUserIds'
+import { getUsersByHasContactId } from '../socket/helpers/getters/getUsersByHasContactId'
 import { getPathToImg } from '../utils/getPathToImg'
 import fs from 'fs'
-import saveAndGetImagePath from '../utils/saveAndGetImagePath'
-import { SharpKey } from '../types/Constants'
+import saveImageAndGetPath from '../utils/saveImageAndGetPath'
+import { SharpSettingsKey } from '../types/Constants'
 
 const bcrypt = require('bcryptjs')
 
@@ -23,7 +23,7 @@ class UserController {
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
 
-      const avatar = saveAndGetImagePath(req.file?.buffer, SharpKey.avatar)
+      const avatar = saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar)
 
       const newUserData: any = {
         username,
@@ -32,19 +32,19 @@ class UserController {
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
 
-      if (!updateUserDataResponse) return throwError(Status.BAD_REQUEST, res, ErrorMessages.usersFind)
+      if (!updateUserDataResponse) return throwError(Status['bad-request'], res, ErrorMessages.usersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
       const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
-      const sockets = await getSocketsByUsersArray(usersIdsFromUsers)
+      const sockets = await getSocketsByUserIds(usersIdsFromUsers)
 
       const updatedUserData = {
         username: updateUserDataResponse.username,
-        avatar: updateUserDataResponse.avatar
+        avatarPath: updateUserDataResponse.avatarPath
       }
 
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, {
+        io.to(socketId).emit(SocketActions['change-contacts-data'], {
           id: userId,
           ...updatedUserData
         })
@@ -55,7 +55,7 @@ class UserController {
         message: SuccessMessages.userDataUpdated
       })
     } catch {
-      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedUserDataUpdate)
+      throwError(Status['bad-request'], res, ErrorMessages.failedUserDataUpdate)
     }
   }
 
@@ -63,19 +63,19 @@ class UserController {
     try {
       const { id } = req.body.decoded
       const user = await UserModel.findOne({ _id: id })
-      if (!user) return throwError(Status.BAD_REQUEST, res, ErrorMessages.userNotFound)
+      if (!user) return throwError(Status['bad-request'], res, ErrorMessages.userNotFound)
       return res.json({
         userData: {
           username: user.username,
           email: user.email,
           id: user._id,
-          avatar: user.avatar,
+          avatarPath: user.avatarPath,
           infoItems: user.infoItems
         },
         settings: user.settings
       })
     } catch {
-      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedGetUserData)
+      throwError(Status['bad-request'], res, ErrorMessages.failedGetUserData)
     }
   }
 
@@ -83,10 +83,10 @@ class UserController {
     try {
       const { query, password } = req.body
       const hashedPassword = await bcrypt.hash(password, 6)
-      if (!hashedPassword) return throwError(Status.BAD_REQUEST, res, ErrorMessages.failedPassHash)
+      if (!hashedPassword) return throwError(Status['bad-request'], res, ErrorMessages.failedPassHash)
 
       const user = await UserModel.findOne({ 'codes.passwordRecovery.query.value': query })
-      if (!user) throwError(Status.BAD_REQUEST, res, ErrorMessages.failedResetPassword)
+      if (!user) throwError(Status['bad-request'], res, ErrorMessages.failedResetPassword)
 
       await user?.updateOne({
         $set: {
@@ -98,7 +98,7 @@ class UserController {
 
       return res.json({ message: SuccessMessages.passwordReset })
     } catch {
-      return throwError(Status.BAD_REQUEST, res, ErrorMessages.commonServerError)
+      return throwError(Status['bad-request'], res, ErrorMessages.commonServerError)
     }
   }
 }

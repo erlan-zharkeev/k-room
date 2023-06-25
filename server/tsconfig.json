@@ -11,9 +11,16 @@
     "noImplicitAny": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./../"
+    "resolveJsonModule": true
+    // "baseUrl": "./../"
+    // "paths": {
+    //   "src/*": ["./../server/src/*"],
+    //   "models/*": ["./../server/src/models/*"]
+    //   // "common-types": ["types/*"]
+    // }
   },
+  "include": ["src"],
+  // "references": [{ "path": "./tsconfig.node.json" }],
   "references": [
     {
       "path": "./../types/"

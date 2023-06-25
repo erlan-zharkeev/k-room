@@ -1,7 +1,7 @@
 import { List } from 'antd'
 import { useDispatch } from 'react-redux'
 import useDynamicRefs from 'use-dynamic-refs'
-import { SocketActions, Message } from 'common-types'
+import { SocketActions, Message, SocketActionsPayload, MessageStatus } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import InputMessage from './Components/InputMessage/InputMessage'
 import MessageBody from './Components/MessageBody/MessageBody'
@@ -46,13 +46,14 @@ const ChatRoom = () => {
       entries.forEach((entry: any) => {
         if (!entry.isIntersecting) return
         const messageId = entry.target.getAttribute('id')
-        socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, {
-          roomId: selectedChatRoom.roomId,
+        const payload: SocketActionsPayload['change-message-status'] = {
+          roomId: selectedChatRoom.id,
           messageId,
-          status: 'read',
+          status: MessageStatus.read,
           userId: id,
           multiple: selectedChatRoom.multiple
-        })
+        }
+        socket.emit(SocketActions['change-message-status'], payload)
       })
     }
     const observer = new IntersectionObserver(observerCallback, { threshold: 1 })
@@ -116,7 +117,7 @@ const ChatRoom = () => {
                 dataSource={selectedChatRoom.messages ?? []}
                 locale={{ emptyText: ' ' }}
                 renderItem={(item: Message) => (
-                  <List.Item className={`chat-room__message--${locationModifier(item.author)}`} ref={setRef(item.id)}>
+                  <List.Item className={`chat-room__message--${locationModifier(item.authorId)}`} ref={setRef(item.id)}>
                     <MessageBody message={item} isChatMultiple={selectedChatRoom.multiple} />
                   </List.Item>
                 )}
@@ -134,7 +135,7 @@ const ChatRoom = () => {
                 sendMessage={(message) =>
                   sendMessage({
                     authorId: id,
-                    roomId: selectedChatRoom?.roomId,
+                    roomId: selectedChatRoom?.id,
                     username,
                     messageText: message,
                     dispatch

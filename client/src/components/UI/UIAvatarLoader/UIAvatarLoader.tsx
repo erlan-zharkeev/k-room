@@ -1,9 +1,8 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIIcon from '../UIIcon/UIIcon'
 import { UIAvatarLoaderProps } from './@types'
 import imageToBase64 from 'src/utils/imageToBase64'
+import { UIAvatar, UIIcon } from '..'
 
 const UIAvatarLoader = ({ path, setImage, setFile, updated, stubIconName, shape = 'round' }: UIAvatarLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()

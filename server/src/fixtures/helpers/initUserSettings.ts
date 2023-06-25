@@ -1,10 +1,10 @@
-import { UserSettings } from 'types'
+import { UserSettings, Theme } from '../../../../types'
 
 export const initUserSettings: UserSettings = {
   asideTab: 'contacts',
   selectedChatRoomId: '',
   ableToShowNotification: true,
-  theme: 'dark',
+  theme: Theme.dark,
   showTooltips: false,
   soundOn: true,
   currentInfoId: ''

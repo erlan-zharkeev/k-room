@@ -1,17 +1,15 @@
 import { Form } from 'antd'
 import { FormEvent, useState } from 'react'
-import { SocketActions } from 'common-types'
+import { SocketActions, SocketActionsPayload } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import { InputMessageProps } from './@types/InputMessageProps'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
-import UIInput from 'src/components/UI/UIInput/UIInput'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
-import UIFileLoader from 'src/components/UI/UIFileLoader/UIFileLoader'
 import { ImageObject } from 'common-types'
+import { UIFileLoader, UIInput, UIButton } from 'src/components/UI'
 
 const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')
@@ -20,7 +18,12 @@ const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessagePr
 
   const sendUserTypingStatus = (status: boolean) => {
     if (!selectedChatRoom) return
-    socket.emit(SocketActions.USER_TYPING, { userIdFrom: id, usersTo: selectedChatRoom.users, status })
+    const payload: SocketActionsPayload['user-typing'] = {
+      userIdFrom: id,
+      usersTo: selectedChatRoom.users,
+      status
+    }
+    socket.emit(SocketActions['user-typing'], payload)
   }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)
@@ -32,8 +35,7 @@ const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessagePr
   }
   const setEmoji = (value: string) => setMessage(`${message} ${value} `)
 
-  const send = (e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLElement>) => {
-    e.preventDefault()
+  const send = () => {
     sendMessage(message)
     setMessage('')
   }

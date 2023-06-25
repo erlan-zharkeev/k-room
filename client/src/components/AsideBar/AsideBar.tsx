@@ -4,9 +4,10 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { ButtonsListElement } from './@types/ButtonsListElement'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import { Logo } from '../Common/Logo/Logo'
 import { showModal } from 'src/store/systemSlice'
+import { MessageStatus } from 'common-types'
+import { UIButton } from '../UI'
 
 const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -48,7 +49,7 @@ const AsideBar = () => {
     let result = 0
     chatRooms.forEach((room) =>
       room.messages.forEach((message) => {
-        if (message.status === 'delivered' && !message.isSelf) result += 1
+        if (message.status === MessageStatus.delivered && !message.isSelf) result += 1
       })
     )
     return result

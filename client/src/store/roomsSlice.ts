@@ -5,14 +5,14 @@ import { RoomsState } from './@types/RoomsState'
 const initialRepliedMessageData = {
   id: '',
   authorName: '',
-  author: '',
+  authorId: '',
   body: ''
 }
 
 const initialAttachedFilesMessage = {
   body: '',
-  files: [],
-  filesCompression: true
+  images: [],
+  imageCompression: true
 }
 
 const initialState: RoomsState = {
@@ -33,18 +33,17 @@ const roomsSlice = createSlice({
     },
     updateChatMessage(state, { payload }) {
       const { roomId, message } = payload
-      const room = state.chatRooms.find((room) => room.roomId === roomId)
-
+      const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
       room.messages.forEach((roomMessage, idx) => {
-        if (roomMessage.id === message.id) room.messages.splice(idx, 1)
+        if (roomMessage.tempId === message.tempId) room.messages.splice(idx, 1)
       })
       room.messages.push(message)
       if (room?.messages.length > 1) room.blocked = false
     },
     updateMessageStatus(state, { payload }) {
       const { roomId, messageId, status } = payload
-      const room = state.chatRooms.find((room) => room.roomId === roomId)
+      const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
       room.messages.forEach((roomMessage) => {
         if (roomMessage.id === messageId) roomMessage.status = status
@@ -52,7 +51,7 @@ const roomsSlice = createSlice({
     },
     updateMessageReactions(state, { payload }) {
       const { roomId, messageId, reaction } = payload
-      const room = state.chatRooms.find((room) => room.roomId === roomId)
+      const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
       room.messages.forEach((roomMessage) => {
         if (roomMessage.id === messageId) roomMessage.reactions = [...(roomMessage.reactions ?? []), reaction]
@@ -60,7 +59,7 @@ const roomsSlice = createSlice({
     },
     pushTemporaryMessage(state, { payload }) {
       const { roomId, message } = payload
-      const room = state.chatRooms.find((room) => room.roomId === roomId)
+      const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
       room.messages.push(message)
     },
@@ -70,17 +69,17 @@ const roomsSlice = createSlice({
         return users.some((user) => user.id === userId)
       }
       state.chatRooms.forEach((room) => {
-        if (hasUser(room.users)) room.hasOnline = status
+        if (hasUser(room.users ?? [])) room.hasOnline = status
       })
     },
     changeChatName(state, { payload }) {
-      const { id, username, avatar } = payload
+      const { id, username, avatarPath } = payload
       state.chatRooms.forEach((room) => {
-        const roomHasContact = Boolean(room.users.find((user) => user.id === id))
+        const roomHasContact = Boolean(room.users?.find((user) => user.id === id))
         if (!roomHasContact) return
         if (room.multiple) return
         room.chatName = username
-        room.avatar = avatar
+        room.avatarPath = avatarPath
       })
     },
     setRepliedMessage(state, { payload }) {

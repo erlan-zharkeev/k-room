@@ -2,13 +2,13 @@ import { Status, RouteNames } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import useQuery from 'src/hooks/useQuery'
 import { AppDispatch } from 'src/store'
 import getNextReqInterval from 'src/utils/getNextReqInterval'
 import useCounter from 'src/hooks/useCounter'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
+import { UIButton } from 'src/components/UI'
 
 const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
@@ -41,7 +41,7 @@ const WaitEmailConfirmPage = () => {
     const response = (await dispatch(apiMethods.auth.sendConfirmationLink(email))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     const { data, status } = response.payload
-    if (status !== Status.SUCCESS) return
+    if (status !== Status['success']) return
     const updatedPath = `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })
     refresh(_ + 1)

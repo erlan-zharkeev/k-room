@@ -1,4 +1,4 @@
-import { InfoItem } from 'types'
+import { InfoItem } from '../../../../types'
 import welcome from './items/welcome'
 
 const infoMap = {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { ShortChatListProps } from './@types'
+import { UIAvatar } from 'src/components/UI'
 
 const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -20,12 +20,12 @@ const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
   return (
     <div className="short-contacts-list">
       {filteredRooms.map((room) => (
-        <div className="short-contacts-list__item" key={room.roomId} onClick={() => clickChat(room.roomId)}>
+        <div className="short-contacts-list__item" key={room.id} onClick={() => clickChat(room.id)}>
           <UIAvatar
             stubIconName={room.multiple ? 'image-stub' : 'user-stub'}
             shape={room.multiple ? 'square' : 'round'}
             showBadge={false}
-            src={room.avatar}
+            src={room.avatarPath}
             ribbon={true}
           />
           <span className="paragraph-text paragraph-text--secondary short-contacts-list__name">{room.chatName}</span>

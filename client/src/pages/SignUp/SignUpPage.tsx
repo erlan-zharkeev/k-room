@@ -4,15 +4,13 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import validateRules from 'src/utils/validateRules'
-import UISwitch from 'src/components/UI/UISwitch/UISwitch'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
+import { UIInput, UISwitch, UIButton } from 'src/components/UI'
 
 const SignUpPage = () => {
   const navigate = useNavigate()
@@ -29,7 +27,7 @@ const SignUpPage = () => {
     setIsLoading(false)
     if (!response.payload) return
     const { data, status } = response.payload
-    if (status !== Status.SUCCESS) return
+    if (status !== Status['success']) return
     navigate(
       `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`,
       {
@@ -78,7 +76,7 @@ const SignUpPage = () => {
                 text="Register"
                 border="border-default"
                 color="accent"
-                htmltype="submit"
+                htmltype={'submit'}
                 loading={isLoading}
                 disabled={!isValid}
               />

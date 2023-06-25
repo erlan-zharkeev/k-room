@@ -1,14 +1,12 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { Form, Image } from 'antd'
-import UIInput from 'src/components/UI/UIInput/UIInput'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import sendMessage from 'src/utils/sendMessage'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import UISwitch from 'src/components/UI/UISwitch/UISwitch'
+import { UISwitch, UIInput, UIButton } from 'src/components/UI'
 
 const MessageWithBindDataPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -29,14 +27,14 @@ const MessageWithBindDataPopup = () => {
         src: ''
       }
     })
-    if (selectedChatRoom?.roomId) {
+    if (selectedChatRoom?.id) {
       const messageData = {
         authorId: id,
-        roomId: selectedChatRoom.roomId,
+        roomId: selectedChatRoom.id,
         username,
         messageText,
         files: transformedFiles,
-        filesCompression: compress,
+        imageCompression: compress,
         dispatch
       }
       sendMessage(messageData)
@@ -70,7 +68,7 @@ const MessageWithBindDataPopup = () => {
           <UIButton
             text="Send Message"
             border="border-default"
-            htmltype="submit"
+            htmltype={'submit'}
             disabled={!files?.length && !body}
             loading={isLoading}
           />

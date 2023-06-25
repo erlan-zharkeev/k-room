@@ -1,20 +1,21 @@
 import ENV from '../ENV'
 import { UserModel } from './../models/user.model'
 import firstCharUpperCase from '../utils/firstCharUpperCase'
-import initUserSettings from './initUserSettings'
-import { initUserCodes } from './initUserCodes'
+
+import { initUserCodes } from './helpers/initUserCodes'
 import { getInfo } from '../services/info/getInfo'
 import { getRequestStringToImg } from '../utils/getRequestStringToImg'
+import initUserSettings from './helpers/initUserSettings'
 const bcrypt = require('bcryptjs')
 
-export default async () => {
+export const loadUsersFixtures = async () => {
   const createUser = async (username: string) => {
     const candidate = await UserModel.findOne({ email: `${username}@gmail.com` })
     if (candidate) return
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
       username: firstCharUpperCase(username),
-      avatar: `${getRequestStringToImg(username)}.jpg`,
+      avatarPath: `${getRequestStringToImg(username)}.jpg`,
       email: `${username}@gmail.com`,
       password: hashedPassword,
       socketId: '',

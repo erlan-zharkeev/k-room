@@ -4,6 +4,9 @@
   padding: $gutter-md;
   display: flex;
   border-radius: $radius-sm;
+  &__text {
+    margin-top: 1px;
+  }
   &__icon {
     margin-right: $gutter-md;
   }

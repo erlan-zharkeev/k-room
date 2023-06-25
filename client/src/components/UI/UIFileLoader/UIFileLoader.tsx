@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import UIIcon from '../UIIcon/UIIcon'
 import { UIFileLoaderProps } from './@types'
 import { ImageObject } from 'common-types'
 import imageToBase64 from 'src/utils/imageToBase64'
@@ -8,6 +7,7 @@ import { showNotification } from 'src/store/systemSlice'
 import constants from 'src/constants'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { UIIcon } from '..'
 
 const UIFileLoader = ({
   multiple = false,

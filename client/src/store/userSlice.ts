@@ -24,7 +24,7 @@ const initialState: UserState = {
     online: false,
     chatRooms: [],
     contacts: [],
-    avatar: '',
+    avatarPath: '',
     providerName: '',
     infoItems: []
   }

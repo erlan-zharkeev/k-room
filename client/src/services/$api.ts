@@ -13,21 +13,21 @@ axios.defaults.withCredentials = true
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
   const { message, silent } = response.data
-  const isSuccess = response.status === Status.SUCCESS
+  const isSuccess = response.status === Status['success']
   if (message && !silent) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const { status } = e.response ?? e.response?.data?.status
   switch (status) {
-    case Status.BAD_GATEAWAY:
+    case Status['bad-gateaway']:
       dispatch(changeIsAppLoading(false))
       break
-    case Status.TOKEN_EXPIRED:
+    case Status['token-expired']:
       $clg('error', 'Access token is expired')
       dispatch(changeIsAppLoading(true))
       const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
-      const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.SUCCESS
+      const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status['success']
       if (!isTokensPairUpdated) {
         $router.push(RouteNames.SIGN_IN)
         dispatch(changeIsAppLoading(false))
@@ -39,9 +39,9 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       const { userData, settings } = response.payload.data
       commonSetUserDataHandler(dispatch, { userData, settings })
       return
-    case Status.NOT_AUTH:
+    case Status['not-auth']:
       return
-    case Status.BAD_REQUEST:
+    case Status['bad-request']:
       break
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`

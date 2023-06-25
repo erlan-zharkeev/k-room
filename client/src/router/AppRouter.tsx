@@ -7,11 +7,8 @@ import { privateRoutes, publicRoutes } from './routes'
 const AppRouter = () => {
   const { isAuth } = useTypedSelector((state) => state.user)
 
-  const convertedRouteProps = (
-    route: any
-  ): { key: string; path: string; element: React.ReactElement; exact: boolean } => {
+  const convertedRouteProps = (route: any): { path: string; element: React.ReactElement; exact: boolean } => {
     return {
-      key: route.path,
       element: <route.component />,
       path: route.path,
       exact: true
@@ -21,15 +18,15 @@ const AppRouter = () => {
   return isAuth ? (
     <Routes>
       <Route path="*" element={<Navigate to={RouteNames.MAIN} />} />
-      {privateRoutes.map((route: IRoute) => (
-        <Route {...convertedRouteProps(route)} />
+      {privateRoutes.map((route: IRoute, idx) => (
+        <Route {...convertedRouteProps(route)} key={idx} />
       ))}
     </Routes>
   ) : (
     <Routes>
       <Route path="*" element={<Navigate to={RouteNames.SIGN_IN} replace />} />
-      {publicRoutes.map((route: IRoute) => (
-        <Route {...convertedRouteProps(route)} />
+      {publicRoutes.map((route: IRoute, idx) => (
+        <Route {...convertedRouteProps(route)} key={idx} />
       ))}
     </Routes>
   )

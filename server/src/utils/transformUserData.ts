@@ -5,7 +5,7 @@ const transformUserData = (user: IUserSchema): User => {
   return {
     id: user._id,
     username: user.username,
-    avatar: user.avatar,
+    avatarPath: user.avatarPath,
     email: user.email,
     online: user.online ?? false,
     chatRooms: user.chatRooms ?? []

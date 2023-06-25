@@ -19,11 +19,11 @@ const contactsSlice = createSlice({
       })
     },
     updateContactData(state, { payload }) {
-      const { id, username, avatar } = payload
+      const { id, username, avatarPath } = payload
       state.contacts.forEach((user) => {
         if (user.id !== id) return
         user.username = username
-        user.avatar = avatar
+        user.avatarPath = avatarPath
       })
     }
   }

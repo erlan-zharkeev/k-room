@@ -32,7 +32,9 @@ server.listen(PORT, () => {
   console.log(clc.green.bgWhite(`-Server listening on port ${PORT}`))
 })
 
-if (!fs.existsSync(path.join(__dirname, 'assets/img/'))) fs.mkdir(path.join(__dirname, 'assets/img/'))
+// Create path for images
+const imagesPath = 'assets/img/'
+if (!fs.existsSync(path.join(__dirname, imagesPath))) fs.mkdir(path.join(__dirname, imagesPath))
 
 export const io = new Server(server, {
   path: RouteNames.SOCKET,

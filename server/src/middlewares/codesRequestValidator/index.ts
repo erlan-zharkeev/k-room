@@ -9,7 +9,7 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
     const { email } = req.body
     const candidate = await UserModel.findOne({ email })
 
-    if (!candidate) throwError(Status.BAD_REQUEST, res, ErrorMessages.coudntFindEmail)
+    if (!candidate) throwError(Status['bad-request'], res, ErrorMessages.coudntFindEmail)
     const currentDate = Date.now()
 
     const ableToSendCode = currentDate > Number(candidate?.codes.nextRequestPossibleAt)
@@ -17,9 +17,9 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
       next()
       return
     }
-    throwError(Status.BAD_REQUEST, res, ErrorMessages.nextTimeRequestNotPossible)
+    throwError(Status['bad-request'], res, ErrorMessages.nextTimeRequestNotPossible)
   } catch {
-    throwError(Status.BAD_REQUEST, res, ErrorMessages.commonServerError)
+    throwError(Status['bad-request'], res, ErrorMessages.commonServerError)
   }
 }
 

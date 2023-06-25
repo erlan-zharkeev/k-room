@@ -1,4 +1,4 @@
-import { Message, SocketActions } from 'common-types'
+import { Message, MessageStatus, SocketActions, SocketActionsPayload } from 'common-types'
 import { ImageObject } from 'common-types'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
@@ -11,28 +11,33 @@ const sendMessage = ({
   roomId,
   username,
   dispatch,
-  files = [],
-  filesCompression = true
+  images = [],
+  imageCompression = true
 }: {
   authorId: string
   messageText: string
   roomId: string
   username: string
   dispatch: AppDispatch
-  files?: Array<ImageObject>
-  filesCompression?: boolean
+  images?: Array<ImageObject>
+  imageCompression?: boolean
 }) => {
   const message: Message = {
-    id: uuidv4(),
-    status: 'sending',
+    id: '',
+    tempId: uuidv4(),
+    status: MessageStatus.sending,
     authorName: username,
-    author: authorId,
+    authorId,
     body: messageText,
-    files,
-    filesCompression,
+    images,
+    imageCompression,
     createdAt: String(Date.now())
   }
-  socket.emit(SocketActions.SEND_MESSAGE, { roomId, message })
+  const payload: SocketActionsPayload['send-message'] = {
+    roomId,
+    message
+  }
+  socket.emit(SocketActions['send-message'], payload)
   dispatch(pushTemporaryMessage({ roomId, message }))
 }
 

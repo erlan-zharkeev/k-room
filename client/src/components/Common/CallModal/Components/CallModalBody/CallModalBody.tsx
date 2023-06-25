@@ -15,12 +15,11 @@ import { useContext, useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
 import firstCharUpperCase from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
-import { SocketActions } from 'common-types'
+import { SocketActions, SocketActionsPayload } from 'common-types'
 import { socket } from 'src/socket/socket'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import UseCounter from 'src/hooks/useCounter'
 import { ServiceContext } from 'src/main'
+import { UIButton, UIAvatar } from 'src/components/UI'
 
 const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const { $call } = useContext(ServiceContext)
@@ -30,28 +29,29 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const [counterValue, _, startCounter, stopCounter] = UseCounter(0)
 
   useEffect(() => {
-    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
+    socket.on(SocketActions['call-started-at'], (timeStamp: number) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
     })
-    socket.on(SocketActions.CALL_USER, (data) => {
+    socket.on(SocketActions['call-user'], (data: SocketActionsPayload['call-user']) => {
       dispatch(setShowCallModal(data))
       const { from, signal, settings } = data
       $call.calling(from, signal)
       dispatch(updateInterlocutorSettings(settings))
     })
-    socket.on(SocketActions.CALL_ENDED, () => {
+    socket.on(SocketActions['call-ended'], () => {
       $call.leaveCall()
     })
-    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+    socket.on(SocketActions['change-call-settings'], (data) => {
       dispatch(updateInterlocutorSettings(data))
     })
   }, [])
 
   const endCall = () => {
     stopCounter()
-    socket.emit(SocketActions.CALL_ENDED, $call.callerId ?? $call.callToId)
+    const payload: SocketActionsPayload['call-ended'] = { callerId: $call.callerId ?? $call.callToId }
+    socket.emit(SocketActions['call-ended'], payload)
     $call.leaveCall()
   }
 
@@ -127,7 +127,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             }}
           >
             <div className="call-modal__avatar">
-              <UIAvatar size="large" src={currentCall.interlocutorAvatar} showBadge={false} />
+              <UIAvatar size="large" src={currentCall.interlocutorAvatarPath} showBadge={false} />
             </div>
             <div className="call-modal__interlocutor-name header-text header-text--secondary header-text--bold header-text--md">
               {currentCall.interlocutorName} {currentCall.type === 'incoming' && <span>is calling</span>}

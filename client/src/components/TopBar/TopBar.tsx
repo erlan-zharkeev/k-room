@@ -4,14 +4,13 @@ import { logOut } from 'src/store/userSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { changeAsideTab, setCurrentInfoItem } from 'src/store/settingsSlice'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
 import { Badge, MenuProps } from 'antd'
 import { Dropdown } from 'antd'
 import { useEffect, useState } from 'react'
+import { UIAvatar, UIButton } from '../UI'
 
 const TopBar = () => {
-  const { username, email, avatar } = useTypedSelector((state) => state.user.userData)
+  const { username, email, avatarPath } = useTypedSelector((state) => state.user.userData)
   const { infoItems } = useTypedSelector((state) => state.user.userData)
 
   const [transformedIInfoItems, setTransformedInfoItems] = useState([] as MenuProps['items'])
@@ -46,9 +45,9 @@ const TopBar = () => {
   return (
     <div className="top-bar" onClick={resetChat}>
       <div className="top-bar__content">
-        <div className="top-bar__userdata">
+        <div className="top-bar__user-data">
           <div className="top-bar__avatar">
-            <UIAvatar online={socket.connected} src={avatar} />
+            <UIAvatar online={socket.connected} src={avatarPath} />
           </div>
           <div className="top-bar__credential">
             <div className="paragraph-text top-bar__username">{username}</div>

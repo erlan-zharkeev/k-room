@@ -55,43 +55,6 @@ export enum CodesEndPoints {
   VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery",
 }
 
-export enum SocketActions {
-  CONNECTION = "connection",
-  RECONNECTION = "reconnect",
-  RECONNECT_ATTEMPT = "reconnect_attempt",
-  RECONNECT_FAILED = "reconnect_failed",
-  INITIALIZE = "initialize",
-  DISCONNECT = "disconnect",
-  GET_ROOMS = "get-rooms",
-  CREATE_ROOM = "create-room",
-  SEND_MESSAGE = "send-message",
-  MESSAGE_DELIVERED = "message-delivered",
-  ROOM_CREATED = "room-created",
-  SEARCH_CONTACT = "search-contact",
-  GET_SEARCHED_CONTACTS = "get-searched-contact",
-  STATUS_CONTACT = "status-contact",
-  GET_CONTACTS = "get-contacts",
-  SAVE_CONTACT = "save-contact",
-  DELETE_CONTACT = "delete-contact",
-  USER_TYPING = "user-typing",
-  GET_USER_TYPING_STATUS = "get-user-typing-status",
-  CHANGE_MESSAGE_STATUS = "change-message-status",
-  UPDATE_MESSAGE_STATUS = "update-message-status",
-  CHANGE_CONTACTS_DATA = "change-contacts-data",
-  CALL_USER = "call-user",
-  ANSWER_CALL = "answer-call",
-  CALL_ACCEPTED = "call-accepted",
-  CALL_ENDED = "call-ended",
-  CHANGE_CALL_SETTINGS = "change-call-settings",
-  CALL_STARTED_AT = "call-started-at",
-  UPDATE_USER_SETTINGS = "update-user-settings",
-  UPDATE_CHAT_ROOM = "update-chat-room",
-  ROOM_DATA_UPDATED = "room-data-updated",
-  ADD_REACTION = "add-reaction",
-  UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
-  DELETE_MESSAGE = "delete-message",
-}
-
 export enum RouteNames {
   SIGN_IN = "/sign-in",
   SIGN_UP = "/sign-up",
@@ -107,6 +70,142 @@ export enum RouteNames {
   API = "/api/",
 }
 
+export enum SocketActions {
+  "connection" = "connection",
+  "reconnect" = "reconnect",
+  "reconnect-attempt" = "reconnect_attempt",
+  "reconnect-failed" = "reconnect_failed",
+  "initialize" = "initialize",
+  "disconnect" = "disconnect",
+  "get-rooms" = "get-rooms",
+  "create-room" = "create-room",
+  "send-message" = "send-message",
+  "message-delivered" = "message-delivered",
+  "room-created" = "room-created",
+  "search-contact" = "search-contact",
+  "get-searched-contact" = "get-searched-contact",
+  "status-contact" = "status-contact",
+  "get-contacts" = "get-contacts",
+  "save-contact" = "save-contact",
+  "delete-contact" = "delete-contact",
+  "user-typing" = "user-typing",
+  "get-user-typing-status" = "get-user-typing-status",
+  "change-message-status" = "change-message-status",
+  "update-message-status" = "update-message-status",
+  "change-contacts-data" = "change-contacts-data",
+  "call-user" = "call-user",
+  "answer-call" = "answer-call",
+  "call-accepted" = "call-accepted",
+  "call-ended" = "call-ended",
+  "change-call-settings" = "change-call-settings",
+  "call-started-at" = "call-started-at",
+  "update-user-settings" = "update-user-settings",
+  "update-chat-room" = "update-chat-room",
+  "room-data-updated" = "room-data-updated",
+  "add-reaction" = "add-reaction",
+  "update-message-reactions" = "update-message-reactions",
+  "delete-message" = "delete-message",
+}
+
+export enum Status {
+  "success" = 200,
+  "bad-request" = 400,
+  "not-auth" = 401,
+  "token-expired" = 403,
+  "not-found" = 404,
+  "unreachable" = 503,
+  "bad-gateaway" = 504,
+}
+
+export interface SocketActionsPayload {
+  ["initialize"]: {
+    userId: string;
+  };
+  "save-contact": {
+    userId: string;
+    interlocutorId: string;
+  };
+  "delete-contact": {
+    currentUserId: string;
+    deletingUserId: string;
+  };
+  "search-contact": {
+    value: string;
+  };
+  "update-user-settings": {
+    userId: string;
+    type: keyof UserSettings;
+    value: string | boolean;
+  };
+  "create-room": {
+    users: Array<string>;
+    authorId: string;
+    multiple: boolean;
+    avatarFile?: {
+      buffer: ArrayBuffer;
+    };
+    chatName?: string;
+  };
+  "update-chat-room": {
+    users: Array<string>;
+    roomId: string;
+    chatName: string;
+    avatarPath: string;
+    avatarFile:
+      | {
+          buffer: ArrayBuffer;
+        }
+      | undefined;
+  };
+  "user-typing": {
+    userIdFrom: string;
+    usersTo: Array<UserShort>;
+    status: boolean;
+  };
+  "send-message": { roomId: string; message: Message };
+  "change-message-status": {
+    roomId: string;
+    messageId: string;
+    status: MessageStatus;
+    userId: string;
+    multiple: boolean;
+  };
+  "delete-message": {
+    messageId: string;
+    roomId: string;
+  };
+  "add-reaction": {
+    glyphKey: string;
+    messageId: string;
+    roomId: string;
+    authorId: string;
+    username: string;
+  };
+  "call-user": {
+    userToCall?: string;
+    signal: any;
+    from: string;
+    avatarPath: string;
+    callerName: string;
+    settings: StreamSettings;
+  };
+  "change-call-settings": BasicStreamSettings;
+  "call-accepted": {
+    signal: any;
+    settings: StreamSettings;
+  };
+  "answer-call": {
+    to: string;
+    signal: any;
+    settings: StreamSettings;
+    selfSocketId: string;
+  };
+  "call-started-at": number;
+  "call-ended": {
+    callerId: string;
+  };
+}
+
 export interface Reaction {
   username: string;
   authorId: string;
@@ -115,36 +214,46 @@ export interface Reaction {
 
 export interface Message {
   id: string;
+  tempId?: string;
   authorName: string;
-  author: string;
+  authorId: string;
   body: string;
   createdAt?: string;
   isSelf?: boolean;
   status?: MessageStatus;
   reactions?: Array<Reaction>;
-  files?: Array<any>;
-  filesCompression?: boolean;
+  images?: Array<any>;
+  imageCompression?: boolean;
 }
 
-export type MessageStatus =
-  | "sending"
-  | "undelivered"
-  | "delivered"
-  | "read"
-  | "none";
+export enum MessageStatus {
+  sending = "sending",
+  undelivered = "undelivered",
+  delivered = "delivered",
+  read = "read",
+  none = "none",
+}
 
 export interface ChatRoom {
-  _id?: string;
-  roomId: string;
+  id: string;
   authorId: string;
   chatName: string;
-  avatar?: string;
+  avatarPath?: string;
   users: Array<UserShort>;
   messages: Array<Message>;
   multiple: boolean;
   hasOnline: boolean;
   blocked?: boolean;
-  avatarFile?: any;
+}
+
+export interface DBChatRoom extends Omit<ChatRoom, "users" | "messages"> {
+  _id: string;
+  users: Array<string>;
+  messages: Array<string>;
+}
+
+export interface DBMessage extends Message {
+  _id: string;
 }
 
 export type ChatRooms = Array<ChatRoom>;
@@ -152,13 +261,13 @@ export type ChatRooms = Array<ChatRoom>;
 export interface UserShort {
   id: string;
   username: string;
-  avatar?: string;
+  avatarPath?: string;
 }
 
 export interface UserCredential extends UserShort {
   email?: string;
   password?: string;
-  avatar?: string;
+  avatarPath?: string;
   providerName?: string;
 }
 
@@ -178,7 +287,10 @@ export interface FirebaseUser {
   providerId: string;
 }
 
-export type theme = "dark" | "light";
+export enum Theme {
+  dark = "dark",
+  light = "light",
+}
 
 export interface ImageObject {
   name: string;
@@ -190,18 +302,29 @@ export interface UserSettings {
   asideTab: string;
   selectedChatRoomId: string;
   ableToShowNotification: boolean;
-  theme: theme;
+  theme: Theme;
   showTooltips: boolean;
   soundOn: boolean;
   currentInfoId: string;
 }
 
-export type CallStatus = "calling" | "in-progress" | "finished";
+export enum CallStatus {
+  calling = "calling",
+  "in-progress" = "in-progress",
+  finished = "finished",
+}
 
-export type CallType = "incoming" | "outgoing" | "missed";
+export enum CallType {
+  incoming = "incoming",
+  outgoing = "outgoing",
+  missed = "missed",
+}
 
-export interface StreamSettings {
+export interface StreamSettings extends BasicStreamSettings {
   streamLoading: boolean;
+}
+
+export interface BasicStreamSettings {
   audio: boolean;
   video: boolean;
 }
@@ -214,7 +337,7 @@ export interface Call {
   length?: number;
   interlocutorId: string;
   interlocutorName: string;
-  interlocutorAvatar?: string;
+  interlocutorAvatarPath?: string;
   status: CallStatus;
   type: CallType;
   video: boolean;
@@ -244,14 +367,4 @@ export interface InfoItem {
   content: string;
   read: "read" | "unread";
   contentComponent?: () => string;
-}
-
-export enum Status {
-  SUCCESS = 200,
-  BAD_REQUEST = 400,
-  NOT_AUTH = 401,
-  TOKEN_EXPIRED = 403,
-  NOT_FOUND = 404,
-  UNREACHABLE = 503,
-  BAD_GATEAWAY = 504,
 }

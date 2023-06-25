@@ -1,23 +1,20 @@
 import { Form } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
-import UIInput from 'src/components/UI/UIInput/UIInput'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import validateRules from 'src/utils/validateRules'
 import MultipleUserSelect from './Components/MultipleUserSelect/MultipleUserSelect'
-import { SocketActions, UserShort } from 'common-types'
+import { SocketActions, SocketActionsPayload, UserShort } from 'common-types'
 import { socket } from 'src/socket/socket'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
+import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 
 const CreateMultipleChatPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { id } = useTypedSelector((state) => state.user.userData)
-  const { contacts } = useTypedSelector((state) => state.contacts)
 
   const dispatch = useDispatch<AppDispatch>()
   const [isValid, validate] = useValidate()
@@ -27,28 +24,20 @@ const CreateMultipleChatPopup = () => {
   const [form] = Form.useForm()
   const [members, setMembers] = useState([] as Array<UserShort>)
 
-  const prepareUsersArray = (ids: Array<string>) => {
-    return ids.reduce((acc, id) => {
-      const user = contacts.find((contact) => contact.id === id)
-      const transformedUserObject = {
-        id,
-        username: user?.username ?? '',
-        avatar: user?.avatar ?? ''
-      }
-      acc.push(transformedUserObject)
-      return acc
-    }, [] as Array<UserShort>)
-  }
-
   const onFinish = async (values: { 'chat-name': string }) => {
     const chatName = values['chat-name']
     setIsLoading(true)
     const membersIds = members.map((member) => member.id)
-    const users = prepareUsersArray([id, ...membersIds])
+    const payload: SocketActionsPayload['create-room'] = {
+      users: [id, ...membersIds],
+      authorId: id,
+      chatName,
+      avatarFile,
+      multiple: true
+    }
+    socket.emit(SocketActions['create-room'], payload)
 
-    socket.emit(SocketActions.CREATE_ROOM, { users, authorId: id, chatName, avatarFile, multiple: true })
-
-    socket.on(SocketActions.ROOM_CREATED, (data) => {
+    socket.on(SocketActions['room-created'], (data) => {
       dispatch(changeAsideTab('chatList'))
       setTimeout(() => {
         dispatch(selectChatRoom(data.roomId))
@@ -85,7 +74,7 @@ const CreateMultipleChatPopup = () => {
         </Form.Item>
         <MultipleUserSelect setMembers={setMembers} />
         <Form.Item className="create-multiple-chat-popup__controls">
-          <UIButton text="Create" border="border-default" htmltype="submit" disabled={!isValid} loading={isLoading} />
+          <UIButton text="Create" border="border-default" htmltype={'submit'} disabled={!isValid} loading={isLoading} />
         </Form.Item>
       </Form>
     </div>

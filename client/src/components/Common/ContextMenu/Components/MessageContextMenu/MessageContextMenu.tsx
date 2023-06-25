@@ -1,13 +1,13 @@
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import Reactions from '../Reactions/Reactions'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { setRepliedMessage } from 'src/store/roomsSlice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
-import { SocketActions } from 'common-types'
+import { SocketActions, SocketActionsPayload } from 'common-types'
 import { socket } from 'src/socket/socket'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
+import { UIIcon } from 'src/components/UI'
 
 const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -21,13 +21,14 @@ const MessageContextMenu = () => {
     message.reactions?.filter((reaction) => reaction.authorId === id).map((reaction) => reaction.glyphKey) ?? []
 
   const reactionHandler = (key: string) => {
-    socket.emit(SocketActions.ADD_REACTION, {
+    const payload: SocketActionsPayload['add-reaction'] = {
       glyphKey: key,
       messageId: message.id,
-      roomId: selectedChatRoom?.roomId,
+      roomId: selectedChatRoom?.id ?? '',
       authorId: id,
       username
-    })
+    }
+    socket.emit(SocketActions['add-reaction'], payload)
   }
 
   const forwardHandler = () => {
@@ -35,10 +36,11 @@ const MessageContextMenu = () => {
   }
 
   const deleteHandler = () => {
-    socket.emit(SocketActions.DELETE_MESSAGE, {
-      roomId: selectedChatRoom?.roomId,
+    const payload: SocketActionsPayload['delete-message'] = {
+      roomId: selectedChatRoom?.id ?? '',
       messageId: message.id
-    })
+    }
+    socket.emit(SocketActions['delete-message'], payload)
   }
 
   return (

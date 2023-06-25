@@ -1,14 +1,13 @@
-import { Button, Radio, Tooltip } from 'antd'
-import DropdownButton from 'antd/lib/dropdown/dropdown-button'
+import { Button, Dropdown, Radio, Tooltip } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import modifiersHandler from 'src/utils/modifiersHandler'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import { UIButtonProps } from './@types/UIButtonProps'
+import { UIIcon } from '..'
 
 const buttons = {
   common: Button,
   radio: Radio.Button,
-  dropdown: DropdownButton
+  dropdown: Dropdown.Button
 }
 
 const UIButton = ({
@@ -33,15 +32,15 @@ const UIButton = ({
   const buttonType = type || 'common'
   const ButtonComponent = buttons[buttonType]
   const hasIconAndText = iconName && text
-
+  const htmlPropAntdErrorFix = { htmltype }
   const ButtonBody = () => (
     <ButtonComponent
+      {...htmlPropAntdErrorFix}
       shape={shape}
       value={value}
       onClick={onClick}
       loading={loading}
       disabled={disabled}
-      htmlType={htmltype}
     >
       {iconName && <UIIcon name={iconName} color={color} size={size} />}
       <span style={{ marginLeft: hasIconAndText ? '4px' : '0' }}>{text}</span>

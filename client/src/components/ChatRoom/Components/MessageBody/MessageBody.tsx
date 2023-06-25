@@ -18,6 +18,8 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
     return authors.map((author: any) => author.username).join(', ')
   }
 
+  const showCreatedAt = message.createdAt && message.authorId !== 'system'
+
   useEffect(() => {
     let reactionMap = {} as any
     message.reactions?.forEach((reaction) => {
@@ -37,7 +39,7 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   }, [message])
 
   const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (message.author === 'system') return
+    if (message.authorId === 'system') return
     dispatch(setContextMenu({ event: e, type: 'message', contextClickedObject: { message } }))
   }
 
@@ -47,10 +49,10 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
         <div className="message__author paragraph-text paragraph-text--sm">{message.authorName}</div>
       )}
       <div className="message__images">
-        {message.files &&
-          message.files.map((file) => (
-            <div key={file.name} className="message__image">
-              <Image src={file.src} />
+        {message.images &&
+          message.images.map((image) => (
+            <div key={image.name} className="message__image">
+              <Image src={image.src} />
             </div>
           ))}
       </div>
@@ -72,7 +74,7 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
               </div>
             ))}
         </div>
-        {message.createdAt && (
+        {showCreatedAt && (
           <div className="paragraph-text paragraph-text--secondary paragraph-text--sm">
             {moment(Number(message.createdAt)).format('HH:mm')}
           </div>
