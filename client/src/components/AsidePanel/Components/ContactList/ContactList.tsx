@@ -18,8 +18,8 @@ const ContactList = () => {
   const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)
 
   const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
-    room: { [key: string]: boolean }
-    stream: { [key: string]: boolean }
+    room: Record<string, boolean>
+    stream: Record<string, boolean>
   })
 
   useEffect(() => {
@@ -55,6 +55,7 @@ const ContactList = () => {
     if (!hasUsersData) return
 
     loaderStateChangeHandler(true, 'room', value.id)
+    debugger
     const socketPayload: SocketActionsPayload['create-room'] = {
       users: [id, contactId],
       authorId: id,

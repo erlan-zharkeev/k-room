@@ -1,5 +1,5 @@
 import { Form } from 'antd'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { SocketActions, SocketActionsPayload } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
@@ -9,9 +9,9 @@ import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
 import { ImageObject } from 'common-types'
-import { UIFileLoader, UIInput, UIButton } from 'src/components/UI'
+import { UIImageLoader, UIInput, UIButton } from 'src/components/UI'
 
-const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessageProps) => {
+const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')
   const { id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
@@ -40,8 +40,8 @@ const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessagePr
     setMessage('')
   }
 
-  const setImagesHandler = (files: Array<ImageObject>) => {
-    uploadFileHandler({ message, files })
+  const setImagesHandler = (images: Array<ImageObject>) => {
+    uploadImageHandler({ message, images })
   }
 
   return (
@@ -53,7 +53,7 @@ const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessagePr
     >
       <ReplyMessage />
       <Form onFinish={send}>
-        <UIFileLoader multiple={true} setImages={setImagesHandler} />
+        <UIImageLoader multiple={true} setImages={setImagesHandler} />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropDown setEmoji={setEmoji} />
         <UIButton htmltype="submit" disabled={!message} iconName="send" onClick={send} />

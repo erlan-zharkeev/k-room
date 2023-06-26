@@ -1,15 +1,11 @@
 interface ConsoleColorElement {
-  bg: string,
+  bg: string
   text: string
-}
-
-interface ConsoleTypes {
-  [key: string]: ConsoleColorElement
 }
 
 type ConsoleType = 'error' | 'success' | 'warn'
 
-const consoleColorMap: ConsoleTypes = {
+const consoleColorMap: Record<string, ConsoleColorElement> = {
   error: {
     bg: '#000000',
     text: 'red'

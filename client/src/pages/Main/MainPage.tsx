@@ -67,7 +67,7 @@ const MainPage = () => {
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   useEffect(() => {
-    socket.connect()
+    if (socket.disconnected) socket.connect()
 
     const initializePayload: SocketActionsPayload['initialize'] = { userId }
     socket.emit(SocketActions['initialize'], initializePayload)

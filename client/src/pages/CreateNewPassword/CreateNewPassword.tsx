@@ -10,7 +10,7 @@ import { UIInput, UIButton } from 'src/components/UI'
 import useValidate from 'src/hooks/useValidate'
 import apiMethods from 'src/services/api-methods'
 import { AppDispatch } from 'src/store'
-import validateRules from 'src/utils/validateRules'
+import { validateRules } from 'src/utils/validateRules'
 
 const CreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)

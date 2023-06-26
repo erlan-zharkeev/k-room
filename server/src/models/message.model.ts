@@ -33,7 +33,7 @@ export const messageSchema = new Schema({
     default: true
   },
   usersMetaData: {
-    type: Array<{ _id: String; status: MessageStatus }>,
+    type: Array<{ id: String; status: MessageStatus }>,
     required: false,
     default: []
   }

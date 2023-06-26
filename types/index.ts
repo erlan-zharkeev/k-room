@@ -66,7 +66,7 @@ export enum RouteNames {
   CREATE_NEW_PASSWORD = "/create-new-password",
   NOTIFICATION = "/notification",
   // Don't forget to change path below in nginx manually
-  SOCKET = "/socket/",
+  SOCKET_PATH = "/app-socket/",
   API = "/api/",
 }
 
@@ -168,7 +168,6 @@ export interface SocketActionsPayload {
     messageId: string;
     status: MessageStatus;
     userId: string;
-    multiple: boolean;
   };
   "delete-message": {
     messageId: string;
@@ -254,6 +253,7 @@ export interface DBChatRoom extends Omit<ChatRoom, "users" | "messages"> {
 
 export interface DBMessage extends Message {
   _id: string;
+  usersMetaData: Array<{ id: string; status: MessageStatus }>;
 }
 
 export type ChatRooms = Array<ChatRoom>;

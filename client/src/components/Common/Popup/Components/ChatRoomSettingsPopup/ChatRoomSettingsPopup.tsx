@@ -8,7 +8,7 @@ import useValidate from 'src/hooks/useValidate'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
-import validateRules from 'src/utils/validateRules'
+import { validateRules } from 'src/utils/validateRules'
 
 const ChatRoomSettingsPopup = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)

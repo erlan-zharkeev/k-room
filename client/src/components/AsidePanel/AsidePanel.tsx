@@ -7,7 +7,7 @@ import { ReactElement } from 'react'
 
 const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
-  const TabComponents: { [key: string]: ReactElement } = {
+  const TabComponents: Record<string, ReactElement> = {
     contacts: <ContactList />,
     chatList: <ChatRoomList />,
     calls: <Calls />,

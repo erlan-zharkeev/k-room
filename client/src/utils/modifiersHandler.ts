@@ -1,4 +1,4 @@
-const modifiersHandler = ({
+export const modifiersHandler = ({
   rootClass,
   modifiers
 }: {
@@ -10,5 +10,3 @@ const modifiersHandler = ({
   result.unshift(rootClass)
   return result.join(' ')
 }
-
-export default modifiersHandler

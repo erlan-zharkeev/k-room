@@ -26,7 +26,7 @@ export const commonSlice = (socket: SocketInstanceType) => {
   socket.on(
     SocketActions['update-user-settings'],
     async ({ userId, type, value }: SocketActionsPayload['update-user-settings']) => {
-      const query: { [key: string]: string | boolean } = {}
+      const query: Record<string, string | boolean> = {}
       query['settings.' + type] = value
       await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
     }

@@ -1,7 +1,7 @@
 import { InfoItem } from '../../../../types'
 import welcome from './items/welcome'
 
-const infoMap = {
+const infoMap: Record<string, InfoItem> = {
   '1': {
     id: '1',
     label: 'Welcome to K-Room',
@@ -9,8 +9,6 @@ const infoMap = {
     content: '',
     contentComponent: welcome
   }
-} as {
-  [key: string]: InfoItem
 }
 
 export const getInfo = (id: string) => {

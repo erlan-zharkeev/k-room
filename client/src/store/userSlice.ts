@@ -1,7 +1,7 @@
 import { AnyAction, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
 import { RouteNames, User, UserSettings } from 'common-types'
 import $router from 'src/services/$router'
-import clearCookie from 'src/utils/clearCookie'
+import { clearCookie } from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
 import { updateSettings } from './settingsSlice'
 
@@ -11,7 +11,6 @@ export const commonSetUserDataHandler = (
 ) => {
   dispatch(setUserData(data.userData))
   dispatch(updateSettings(data.settings))
-  $router.push(RouteNames.MAIN)
 }
 
 const initialState: UserState = {

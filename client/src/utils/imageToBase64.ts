@@ -2,22 +2,22 @@ import constants from 'src/constants'
 import { AppDispatch } from 'src/store'
 import { showNotification } from 'src/store/systemSlice'
 
-const imageToBase64 = ({
-  file,
+export const imageToBase64 = ({
+  image,
   allowedResolutions = constants.imageResolutions,
   dispatch
 }: {
-  file: File
+  image: File
   dispatch: AppDispatch
   allowedResolutions?: Array<string>
 }) => {
   const reader = new FileReader()
-  reader.readAsDataURL(file)
+  reader.readAsDataURL(image)
 
   const warnings = []
-  const resolutionNotAllowed = !allowedResolutions.includes(file.type)
+  const resolutionNotAllowed = !allowedResolutions.includes(image.type)
   if (resolutionNotAllowed) warnings.push('Image resolution not allowed')
-  const isGreaterThanAllowed = file.size / 1024 / 1024 > constants.maxImageWeightMb
+  const isGreaterThanAllowed = image.size / 1024 / 1024 > constants.maxImageWeightMb
   if (isGreaterThanAllowed) warnings.push(`Image size must be less than ${constants.maxImageWeightMb}mb`)
 
   if (warnings.length) {
@@ -28,5 +28,3 @@ const imageToBase64 = ({
   }
   return reader
 }
-
-export default imageToBase64

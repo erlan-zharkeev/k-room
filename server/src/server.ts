@@ -37,7 +37,7 @@ const imagesPath = 'assets/img/'
 if (!fs.existsSync(path.join(__dirname, imagesPath))) fs.mkdir(path.join(__dirname, imagesPath))
 
 export const io = new Server(server, {
-  path: RouteNames.SOCKET,
+  path: RouteNames.SOCKET_PATH,
   maxHttpBufferSize: constants.maxMbQuantityTransfer * 1000000,
   cors: {
     origin: '*',

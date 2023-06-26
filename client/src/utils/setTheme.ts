@@ -1,8 +1,6 @@
-import { theme } from 'common-types'
+import { Theme } from 'common-types'
 
-const setTheme = (theme: theme) => {
+export const setTheme = (theme: Theme) => {
   const html = document.querySelector('html')
   html?.setAttribute('theme', theme)
 }
-
-export default setTheme

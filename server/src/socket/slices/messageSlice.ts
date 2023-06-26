@@ -12,7 +12,7 @@ export const messageSlice = (socket: SocketInstanceType) => {
 
   socket.on(
     SocketActions['change-message-status'],
-    async ({ messageId, status, userId, roomId, multiple }: SocketActionsPayload['change-message-status']) => {
+    async ({ messageId, status, userId, roomId }: SocketActionsPayload['change-message-status']) => {
       setMessageStatus(messageId, status, userId, roomId)
     }
   )

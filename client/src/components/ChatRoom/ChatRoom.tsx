@@ -9,7 +9,7 @@ import RoomHeader from './Components/RoomHeader/RoomHeader'
 import { useEffect, useRef, useState } from 'react'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import scrollToBottom from 'src/utils/scrollToBottom'
+import { scrollToBottom } from 'src/utils/scrollToBottom'
 import { updatedAttachedFilesMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { changeAsideTab } from 'src/store/settingsSlice'
@@ -17,26 +17,18 @@ import constants from 'src/constants'
 import Informer from '../Common/Informer/Informer'
 import { ImageObject } from 'common-types'
 import { showModal } from 'src/store/systemSlice'
-import sendMessage from 'src/utils/sendMessage'
+import { sendMessage } from 'src/utils/sendMessage'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
-
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
-
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
-
   const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === 'chatList'
-
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
-
   const [inputMessageHeight, setInputMessageHeight] = useState(constants.dimensions.shortInputMessage)
-
   const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0, height: 0 })
-
   const dispatch = useDispatch<AppDispatch>()
-
   const roomDomEl = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,8 +42,7 @@ const ChatRoom = () => {
           roomId: selectedChatRoom.id,
           messageId,
           status: MessageStatus.read,
-          userId: id,
-          multiple: selectedChatRoom.multiple
+          userId: id
         }
         socket.emit(SocketActions['change-message-status'], payload)
       })
@@ -83,11 +74,11 @@ const ChatRoom = () => {
     }
   }, [haveMessageToReply])
 
-  const uploadFileHandler = ({ message, files }: { message: string; files: Array<ImageObject> }) => {
+  const uploadImageHandler = ({ message, images }: { message: string; images: Array<ImageObject> }) => {
     dispatch(
       updatedAttachedFilesMessage({
         body: message,
-        files
+        images
       })
     )
     dispatch(showModal({ title: 'Send Message', modalContentComponentName: 'MessageWithBindDataPopup' }))
@@ -141,7 +132,7 @@ const ChatRoom = () => {
                     dispatch
                   })
                 }
-                uploadFileHandler={uploadFileHandler}
+                uploadImageHandler={uploadImageHandler}
                 height={inputMessageHeight}
               />
             )}

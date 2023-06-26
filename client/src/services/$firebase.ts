@@ -7,14 +7,12 @@ export type ProviderType = 'google' | 'facebook'
 
 const commonErrors = {
   'Firebase: Error (auth/account-exists-with-different-credential).': 'Account exists with different credential'
-} as { [key: string]: string }
+} as Record<string, string>
 
 class Firebase {
   providerName: ProviderType = 'google'
   auth: Auth
-  providers: {
-    [key: string]: typeof GoogleAuthProvider | typeof FacebookAuthProvider
-  }
+  providers: Record<string, typeof GoogleAuthProvider | typeof FacebookAuthProvider>
   provider: GoogleAuthProvider | FacebookAuthProvider | null = null
   dispatch: AppDispatch
   constructor() {

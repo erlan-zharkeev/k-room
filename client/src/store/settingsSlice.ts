@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import setTheme from 'src/utils/setTheme'
+import { setTheme } from 'src/utils/setTheme'
 import { Theme, UserSettings } from 'common-types'
 
 const initialState: UserSettings = {

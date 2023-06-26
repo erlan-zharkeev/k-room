@@ -29,13 +29,14 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
   await ChatRoomModel.updateOne({ id: roomId }, { $push: { messages: newDbMessage.id } })
   room?.users.forEach(async (userId) => {
     await MessageModel.findOneAndUpdate(
-      { _id: newDbMessage.id, 'usersMetaData._id': userId },
+      { _id: newDbMessage.id, 'usersMetaData.id': userId },
       { $set: { 'usersMetaData.$.status': MessageStatus.delivered } }
     )
     const user = await getUserById(userId)
     if (!user?.socketId) return
     const messageForUser = {
       ...message,
+      images,
       id: newDbMessage._id,
       isSelf: user?.id === message.authorId,
       status: MessageStatus.delivered

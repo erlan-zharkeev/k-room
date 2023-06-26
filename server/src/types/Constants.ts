@@ -12,10 +12,6 @@ interface SharpConfig {
   }
 }
 
-type Sharp = {
-  [key in SharpSettingsKey]: SharpConfig
-}
-
 export enum SystemMessages {
   'invite-message' = 'invite-message',
   'author-created-chat' = 'author-created-chat',
@@ -30,7 +26,7 @@ export interface SystemMessage {
 }
 
 export interface Constants {
-  sharp: Sharp
+  sharp: Record<SharpSettingsKey, SharpConfig>
   maxMbQuantityTransfer: number
   messages: {
     system: Array<SystemMessage>

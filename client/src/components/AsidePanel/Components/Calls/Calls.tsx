@@ -1,6 +1,6 @@
 import { List } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import firstCharUpperCase from 'src/utils/firstCharUpperCase'
+import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import useDynamicRefs from 'use-dynamic-refs'
 import { UIAvatar, UIIcon, UIButton } from 'src/components/UI'

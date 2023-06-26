@@ -1,6 +1,6 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import MessageContextMenu from './Components/MessageContextMenu/MessageContextMenu'
-import firstCharUpperCase from 'src/utils/firstCharUpperCase'
+import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { setContextMenu } from 'src/store/systemSlice'
@@ -10,7 +10,7 @@ export const ContextMenu = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const menus: { [key: string]: JSX.Element } = {
+  const menus: Record<string, JSX.Element> = {
     Message: <MessageContextMenu />
   }
 

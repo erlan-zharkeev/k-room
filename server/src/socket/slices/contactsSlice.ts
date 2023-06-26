@@ -1,6 +1,5 @@
 import { UserModel } from '../../models/user.model'
 import { SuccessMessages } from '../../types/Messages'
-import { SearchTypeMap } from '../../types/SearchTypeMap'
 import { transformUsersData } from '../../utils/transformUserData'
 import { SocketActions, SocketActionsPayload, User } from '../../../../types'
 import { emitSearchedContacts, emitContactsToUser } from '../helpers/emitters'
@@ -22,7 +21,16 @@ export const contactsSlice = (socket: SocketInstanceType) => {
     }
     if (!value) validSearch = false
     const $regex = new RegExp(value, 'i')
-    const searchTypeMap: SearchTypeMap = {
+    const searchTypeMap: Record<
+      string,
+      Record<
+        string,
+        | {
+            $regex: RegExp
+          }
+        | string
+      >
+    > = {
       name: { username: { $regex } },
       email: { email: { $regex } },
       id: { _id: value }

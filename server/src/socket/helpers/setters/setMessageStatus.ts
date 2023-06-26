@@ -9,7 +9,7 @@ export const setMessageStatus = async (messageId: string, status: MessageStatus,
   const user = await getUserById(userId)
   if (!user) return
   await MessageModel.findOneAndUpdate(
-    { _id: messageId, 'usersMetaData._id': userId },
+    { _id: messageId, 'usersMetaData.id': userId },
     { $set: { 'usersMetaData.$.status': status } }
   )
   const room = await ChatRoomModel.findOne({ _id: roomId })

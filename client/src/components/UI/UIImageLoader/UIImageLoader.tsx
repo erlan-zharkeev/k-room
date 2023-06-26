@@ -2,14 +2,14 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { UIFileLoaderProps } from './@types'
 import { ImageObject } from 'common-types'
-import imageToBase64 from 'src/utils/imageToBase64'
+import { imageToBase64 } from 'src/utils/imageToBase64'
 import { showNotification } from 'src/store/systemSlice'
 import constants from 'src/constants'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { UIIcon } from '..'
 
-const UIFileLoader = ({
+const UIImageLoader = ({
   multiple = false,
   allowedResolutions = constants.imageResolutions,
   setImages
@@ -18,9 +18,9 @@ const UIFileLoader = ({
   const [isLoading, setIsLoading] = useState(false)
   const normFile = async (e: { target: { files: Array<File> | any } }) => {
     setIsLoading(true)
-    const files = e.target.files
+    const images = e.target.files
     const { maxQuantityBindImages } = constants
-    if (files.length > maxQuantityBindImages) {
+    if (images.length > maxQuantityBindImages) {
       dispatch(
         showNotification({
           message: `The maximum number of attached images should not exceed ${maxQuantityBindImages}`,
@@ -28,17 +28,17 @@ const UIFileLoader = ({
         })
       )
     }
-    if (!files) return
+    if (!images) return
     let updatedImages: Array<ImageObject> = []
-    ;[...files].forEach((file, idx) => {
-      const reader = imageToBase64({ file, allowedResolutions, dispatch })
+    ;[...images].forEach((image, idx) => {
+      const reader = imageToBase64({ image, allowedResolutions, dispatch })
       if (!reader) {
         setIsLoading(false)
         return
       }
       reader.onload = () => {
-        updatedImages = [...updatedImages, { name: uuidv4(), src: String(reader.result), fileBuffer: file }]
-        if (files.length < idx + 1) return
+        updatedImages = [...updatedImages, { name: uuidv4(), src: String(reader.result), fileBuffer: image }]
+        if (images.length < idx + 1) return
         setImages(updatedImages)
         setIsLoading(false)
       }
@@ -61,4 +61,4 @@ const UIFileLoader = ({
   )
 }
 
-export default UIFileLoader
+export default UIImageLoader

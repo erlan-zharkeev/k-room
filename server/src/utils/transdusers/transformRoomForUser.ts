@@ -1,4 +1,4 @@
-import { ChatRoom, DBChatRoom, DBMessage } from '../../../../types'
+import { ChatRoom, DBChatRoom, DBMessage, MessageStatus } from '../../../../types'
 import { getUserById } from '../../socket/helpers/getters/getUserById'
 import constants from '../../constants'
 import { MessageModel } from '../../models/message.model'
@@ -17,6 +17,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
     avatarPath = userData?.avatarPath
     hasOnline = Boolean(userData?.online)
   }
+
   users?.splice(users?.indexOf(userId), 1)
   const userList = await UserModel.find({ _id: { $in: users } })
   const shortUserList = userList.map((user) => {
@@ -26,13 +27,14 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
       avatarPath: user.avatarPath
     }
   })
+
   const setInviteMessage = messages.length < 1
   if (setInviteMessage) {
     const systemMessagesMap = constants.messages.system.reduce((acc, message) => {
       const name = message.name
       acc[name] = message.id
       return acc
-    }, {} as { [key in SystemMessages]: string })
+    }, {} as Record<SystemMessages, string>)
 
     const isUserAuthor = room.authorId === userId
 
@@ -42,6 +44,11 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
         ? systemMessagesMap['author-created-group-chat']
         : systemMessagesMap['invite-group-chat']
     }
+
+    const status = isUserAuthor ? MessageStatus.none : MessageStatus.delivered
+
+    await MessageModel.updateOne({ _id: systemMessageId }, { $set: { usersMetaData: { id: userId, status } } })
+
     messages?.push(systemMessageId)
   }
 

@@ -55,7 +55,6 @@ class AuthController {
 
       return res.json(confirmEmailData)
     } catch (e: any) {
-      console.log(e)
       throwError(Status['bad-request'], res, ErrorMessages.failedRegistration)
     }
   }
@@ -97,7 +96,13 @@ class AuthController {
 
       await updateTokens(user._id, res)
       return res.json({
-        userData: { username: user.username, email, id: user._id, avatar: user.avatarPath, infoItems: user.infoItems },
+        userData: {
+          username: user.username,
+          email,
+          id: user._id,
+          avatarPath: user.avatarPath,
+          infoItems: user.infoItems
+        },
         settings: user.settings,
         message: SuccessMessages.loginSuccess
       })
@@ -105,12 +110,11 @@ class AuthController {
       throwError(Status['bad-request'], res, ErrorMessages.failedLogin)
     }
   }
+
   async signInWithProvider(req: Request, res: Response) {
     try {
       const { username, email, avatarPath, providerName }: UserCredential = req.body
-
       let user = await UserModel.findOne({ email })
-
       if (!user) {
         const hashedPassword = await bcrypt.hash(uuidv4(), 6)
         user = new UserModel({

@@ -1,4 +1,4 @@
-import { SocketActions, UserShort, SocketActionsPayload, DBChatRoom } from '../../../../types'
+import { SocketActions, SocketActionsPayload, DBChatRoom } from '../../../../types'
 import { ChatRoomModel } from '../../models/chatRoom.model'
 import { io } from '../../server'
 import { SharpSettingsKey } from '../../types/Constants'

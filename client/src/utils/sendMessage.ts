@@ -5,7 +5,7 @@ import { AppDispatch } from 'src/store'
 import { pushTemporaryMessage } from 'src/store/roomsSlice'
 import { v4 as uuidv4 } from 'uuid'
 
-const sendMessage = ({
+export const sendMessage = ({
   authorId,
   messageText,
   roomId,
@@ -40,5 +40,3 @@ const sendMessage = ({
   socket.emit(SocketActions['send-message'], payload)
   dispatch(pushTemporaryMessage({ roomId, message }))
 }
-
-export default sendMessage

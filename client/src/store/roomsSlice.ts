@@ -16,6 +16,7 @@ const initialAttachedFilesMessage = {
 }
 
 const initialState: RoomsState = {
+  loading: true,
   chatRooms: [],
   repliedMessageData: initialRepliedMessageData,
   attachedFilesMessage: initialAttachedFilesMessage

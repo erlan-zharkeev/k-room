@@ -60,7 +60,7 @@ export declare enum RouteNames {
     PASSWORD_RECOVERY = "/password-recovery",
     CREATE_NEW_PASSWORD = "/create-new-password",
     NOTIFICATION = "/notification",
-    SOCKET = "/socket/",
+    SOCKET_PATH = "/app-socket/",
     API = "/api/"
 }
 export declare enum SocketActions {
@@ -160,7 +160,6 @@ export interface SocketActionsPayload {
         messageId: string;
         status: MessageStatus;
         userId: string;
-        multiple: boolean;
     };
     "delete-message": {
         messageId: string;
@@ -240,6 +239,10 @@ export interface DBChatRoom extends Omit<ChatRoom, "users" | "messages"> {
 }
 export interface DBMessage extends Message {
     _id: string;
+    usersMetaData: Array<{
+        id: string;
+        status: MessageStatus;
+    }>;
 }
 export type ChatRooms = Array<ChatRoom>;
 export interface UserShort {

@@ -1,6 +1,6 @@
 import { Button, Dropdown, Radio, Tooltip } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import modifiersHandler from 'src/utils/modifiersHandler'
+import { modifiersHandler } from 'src/utils/modifiersHandler'
 import { UIButtonProps } from './@types/UIButtonProps'
 import { UIIcon } from '..'
 
@@ -32,7 +32,7 @@ const UIButton = ({
   const buttonType = type || 'common'
   const ButtonComponent = buttons[buttonType]
   const hasIconAndText = iconName && text
-  const htmlPropAntdErrorFix = { htmltype }
+  const htmlPropAntdErrorFix = { htmlType: htmltype }
   const ButtonBody = () => (
     <ButtonComponent
       {...htmlPropAntdErrorFix}

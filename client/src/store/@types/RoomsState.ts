@@ -7,6 +7,7 @@ export interface AttachedFilesMessage {
 }
 
 export interface RoomsState {
+  loading: boolean
   chatRooms: Array<ChatRoom>
   repliedMessageData: Message
   attachedFilesMessage: AttachedFilesMessage
