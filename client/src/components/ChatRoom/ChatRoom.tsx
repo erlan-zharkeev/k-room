@@ -18,6 +18,7 @@ import Informer from '../Common/Informer/Informer'
 import { ImageObject } from 'common-types'
 import { showModal } from 'src/store/systemSlice'
 import { sendMessage } from 'src/utils/sendMessage'
+import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -30,6 +31,8 @@ const ChatRoom = () => {
   const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0, height: 0 })
   const dispatch = useDispatch<AppDispatch>()
   const roomDomEl = useRef<HTMLDivElement>(null)
+  const [showWidgetLoader, setShowWidgetLoader] = useState(true)
+  const { isLoading } = useTypedSelector((state) => state.chatRooms)
 
   useEffect(() => {
     if (!selectedChatRoom) return
@@ -89,8 +92,15 @@ const ChatRoom = () => {
     else return author === id ? 'self' : ''
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowWidgetLoader(!isLoading)
+    }, constants.chatRoomLoaderMinDuration)
+  })
+
   return (
     <div className="chat-room">
+      <WidgetLoader hide={!showWidgetLoader} />
       <div className="chat-room__wrapper" ref={roomDomEl}>
         {selectedChatRoom ? (
           <div>

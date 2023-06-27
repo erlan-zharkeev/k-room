@@ -61,17 +61,7 @@
       filter: blur(1px);
     }
     &::after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      background: linear-gradient(-90deg, rgb(100 135 182 / 50%), var(--accent), rgb(100 135 182 / 50%), var(--accent));
-      background-size: 400% 400%;
-      opacity: 0.9;
-      animation: gradient 3s ease infinite;
-      content: '';
-      transform: scale(1.1);
-      transition: transform ease-in-out 0.4s;
-      @include wh-100;
+      @include bg-gradient-loader(0.9);
     }
   }
 

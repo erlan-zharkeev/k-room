@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { ContactsState } from './@types/ContactsState'
 
 const initialState: ContactsState = {
+  isLoading: true,
   contacts: []
 }
 
@@ -11,6 +12,7 @@ const contactsSlice = createSlice({
   reducers: {
     loadContacts(state, { payload }) {
       state.contacts = payload
+      state.isLoading = false
     },
     updateContactsStatus(state, { payload }) {
       const { userId, status } = payload

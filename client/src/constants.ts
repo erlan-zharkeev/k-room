@@ -1,6 +1,8 @@
 export default {
   blockNativeContextMenu: true,
   errorNotificationDuration: 10000,
+  asidePanelLoaderMinDuration: 2000,
+  chatRoomLoaderMinDuration: 2500,
   maxImageWeightMb: 2,
   maxQuantityBindImages: 4,
   maxGroupChatMembersQuantity: 5,

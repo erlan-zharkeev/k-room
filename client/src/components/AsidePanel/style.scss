@@ -11,6 +11,8 @@
   width: 30%;
   min-width: 300px;
   height: 100%;
+  overflow: hidden;
+  position: relative;
   @include nm-outset-element;
   @include max-width-768 {
     width: 100%;

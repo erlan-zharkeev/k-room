@@ -91,13 +91,24 @@ const MainPage = () => {
     socket.on(SocketActions['connection'], () => {
       debouncedStatusNotification(true)
     })
+
+    socket.on(SocketActions['get-contacts'], (contacts: Array<User>, message?: string) => {
+      if (message) dispatch(showNotification({ messageType: 'info', message }))
+      dispatch(loadContacts(contacts))
+    })
     socket.on(SocketActions['status-contact'], (userData: { userId: string; status: boolean }) => {
       dispatch(updateContactsStatus(userData))
       dispatch(updateChatUsersStatus(userData))
     })
+    socket.on(SocketActions['change-contacts-data'], (updatedUserData: User) => {
+      dispatch(updateContactData(updatedUserData))
+      dispatch(changeChatName(updatedUserData))
+    })
+
     socket.on(SocketActions['get-rooms'], (chatRooms: Array<ChatRoomInterface>) => {
       dispatch(loadChatRooms(chatRooms))
     })
+
     socket.on(SocketActions['message-delivered'], (roomData: { roomId: string; message: Message }) => {
       dispatch(updateChatMessage(roomData))
     })
@@ -113,14 +124,6 @@ const MainPage = () => {
         dispatch(updateMessageReactions(data))
       }
     )
-    socket.on(SocketActions['get-contacts'], (contacts: Array<User>, message?: string) => {
-      if (message) dispatch(showNotification({ messageType: 'info', message }))
-      dispatch(loadContacts(contacts))
-    })
-    socket.on(SocketActions['change-contacts-data'], (updatedUserData: User) => {
-      dispatch(updateContactData(updatedUserData))
-      dispatch(changeChatName(updatedUserData))
-    })
 
     return () => {
       socket.removeAllListeners()

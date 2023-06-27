@@ -1,13 +1,13 @@
-import { ChatRoom, Message } from 'common-types'
+import { ChatRoom, ImageObject, Message } from 'common-types'
 
 export interface AttachedFilesMessage {
   body: string
-  images: Array<any>
+  images: Array<ImageObject>
   imageCompression: boolean
 }
 
 export interface RoomsState {
-  loading: boolean
+  isLoading: boolean
   chatRooms: Array<ChatRoom>
   repliedMessageData: Message
   attachedFilesMessage: AttachedFilesMessage

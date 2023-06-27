@@ -9,10 +9,10 @@
 .chat-room {
   position: relative;
   @include wh-100;
-
   margin-left: 24px;
   padding: 1rem;
   @include nm-outset-element;
+  overflow: hidden;
   @include max-width-576 {
     margin-left: 100%;
   }
