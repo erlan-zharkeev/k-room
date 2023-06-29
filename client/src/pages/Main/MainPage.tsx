@@ -72,17 +72,20 @@ const MainPage = () => {
     const initializePayload: SocketActionsPayload['initialize'] = { userId }
     socket.emit(SocketActions['initialize'], initializePayload)
 
-    socket.io.on(SocketActions['reconnect'], (attempt) => {
+    socket.on(SocketActions['reconnect'], (attempt) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
       socket.emit(SocketActions['initialize'], userId)
       dispatch(setReconnectingStatus(false))
     })
-    socket.io.on(SocketActions['reconnect-attempt'], (attempt) => {
+    socket.on(SocketActions['reconnect-attempt'], (attempt) => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
-    socket.io.on(SocketActions['reconnect-failed'], () => {
+    socket.on(SocketActions['reconnect-failed'], () => {
       dispatch(setReconnectingStatus(false))
+    })
+    socket.on(SocketActions['error-message'], ({ message }: SocketActionsPayload['error-message']) => {
+      dispatch(showNotification({ messageType: 'error', message }))
     })
 
     socket.on(SocketActions['disconnect'], () => {

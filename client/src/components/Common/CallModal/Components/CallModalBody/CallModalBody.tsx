@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
 import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
-import { SocketActions, SocketActionsPayload } from 'common-types'
+import { CallStatus, CallType, SocketActions, SocketActionsPayload } from 'common-types'
 import { socket } from 'src/socket/socket'
 import UseCounter from 'src/hooks/useCounter'
 import { ServiceContext } from 'src/main'
@@ -130,7 +130,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
               <UIAvatar size="large" src={currentCall.interlocutorAvatarPath} showBadge={false} />
             </div>
             <div className="call-modal__interlocutor-name header-text header-text--secondary header-text--bold header-text--md">
-              {currentCall.interlocutorName} {currentCall.type === 'incoming' && <span>is calling</span>}
+              {currentCall.interlocutorName} {currentCall.type === CallType.incoming && <span>is calling</span>}
             </div>
             <CallDots />
           </div>
@@ -143,20 +143,20 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
               </div>
             )}
             <div className="call-modal__controls-elements">
-              {currentCall.type === 'incoming' && currentCall.status === 'calling' && (
+              {currentCall.type === CallType.incoming && currentCall.status === CallStatus.calling && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
                   <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} tooltip="Answer" />
                 </div>
               )}
               <div className="call-modal__controls-element">
-                {currentCall.status === 'calling' && (
+                {currentCall.status === CallStatus.calling && (
                   <UIButton
                     iconName={isAnswerLoading ? 'loader' : 'video-call'}
                     onClick={answerCall}
                     tooltip="Answer Via Video"
                   />
                 )}
-                {currentCall.status === 'in-progress' && (
+                {currentCall.status === CallStatus['in-progress'] && (
                   <UIButton
                     iconName={settings.video ? 'video-call' : 'video-drop'}
                     color={settings.video ? 'success' : 'error'}

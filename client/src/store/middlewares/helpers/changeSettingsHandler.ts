@@ -1,4 +1,5 @@
-import { SocketActions, Theme } from 'common-types'
+import { SocketActions, Theme, UserSettingKey } from 'common-types'
+import { UserSettingStoreActionPayload } from 'src/components/AsidePanel/Components/UserSettings/@types/UserSettingElement'
 import { socket } from 'src/socket/socket'
 
 export const changeSettingsHandler = (action: any, store: any) => {
@@ -9,27 +10,27 @@ export const changeSettingsHandler = (action: any, store: any) => {
     const userId = store.getState().user.userData.id
     let type = ''
     switch (action.type) {
-      case 'settings/changeTheme':
+      case UserSettingStoreActionPayload.changeTheme:
         convertedValue = value ? Theme.dark : Theme.light
-        type = 'theme'
+        type = UserSettingKey.theme
         break
-      case 'settings/setSoundValue':
-        type = 'soundOn'
+      case UserSettingStoreActionPayload.setSoundValue:
+        type = UserSettingKey.soundOn
         break
-      case 'settings/setTooltipsValue':
-        type = 'showTooltips'
+      case UserSettingStoreActionPayload.setTooltipsValue:
+        type = UserSettingKey.showTooltips
         break
-      case 'settings/setAbleToShowNotification':
-        type = 'ableToShowNotification'
+      case UserSettingStoreActionPayload.setAbleToShowNotification:
+        type = UserSettingKey.ableToShowNotification
         break
-      case 'settings/selectChatRoom':
-        type = 'selectedChatRoomId'
+      case UserSettingStoreActionPayload.selectChatRoom:
+        type = UserSettingKey.selectedChatRoomId
         break
-      case 'settings/changeAsideTab':
-        type = 'asideTab'
+      case UserSettingStoreActionPayload.changeAsideTab:
+        type = UserSettingKey.asideTab
         break
-      case 'settings/setCurrentInfoItem':
-        type = 'currentInfoId'
+      case UserSettingStoreActionPayload.setCurrentInfoItem:
+        type = UserSettingKey.currentInfoId
         break
       default:
         break

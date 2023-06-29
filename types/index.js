@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CallType = exports.CallStatus = exports.Theme = exports.MessageStatus = exports.Status = exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
+exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Status = exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/auth/registration";
@@ -79,6 +79,7 @@ var SocketActions;
     SocketActions["add-reaction"] = "add-reaction";
     SocketActions["update-message-reactions"] = "update-message-reactions";
     SocketActions["delete-message"] = "delete-message";
+    SocketActions["error-message"] = "error-message";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var Status;
 (function (Status) {
@@ -103,6 +104,16 @@ var Theme;
     Theme["dark"] = "dark";
     Theme["light"] = "light";
 })(Theme = exports.Theme || (exports.Theme = {}));
+var UserSettingKey;
+(function (UserSettingKey) {
+    UserSettingKey["theme"] = "theme";
+    UserSettingKey["soundOn"] = "soundOn";
+    UserSettingKey["showTooltips"] = "showTooltips";
+    UserSettingKey["ableToShowNotification"] = "ableToShowNotification";
+    UserSettingKey["selectedChatRoomId"] = "selectedChatRoomId";
+    UserSettingKey["asideTab"] = "asideTab";
+    UserSettingKey["currentInfoId"] = "currentInfoId";
+})(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
 var CallStatus;
 (function (CallStatus) {
     CallStatus["calling"] = "calling";

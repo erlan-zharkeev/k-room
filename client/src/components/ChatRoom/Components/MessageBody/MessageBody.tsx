@@ -39,7 +39,7 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   }, [message])
 
   const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (message.authorId === 'system') return
+    if (message.authorId === 'system' || message.authorId === 'time') return
     dispatch(setContextMenu({ event: e, type: 'message', contextClickedObject: { message } }))
   }
 

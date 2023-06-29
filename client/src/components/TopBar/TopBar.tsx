@@ -4,7 +4,7 @@ import { logOut } from 'src/store/userSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import { changeAsideTab, setCurrentInfoItem } from 'src/store/settingsSlice'
-import { Badge, MenuProps } from 'antd'
+import { MenuProps } from 'antd'
 import { Dropdown } from 'antd'
 import { useEffect, useState } from 'react'
 import { UIAvatar, UIButton } from '../UI'
@@ -34,7 +34,7 @@ const TopBar = () => {
     dispatch(logOut())
   }
 
-  const unreadInfoQuantity = () => infoItems?.filter((item) => item.read === 'unread').length
+  const unreadInfoQuantity = () => Number(infoItems?.filter((item) => item.read === 'unread').length)
 
   const infoItemClickHandler: MenuProps['onClick'] = ({ key }) => {
     const infoId = key
@@ -55,7 +55,7 @@ const TopBar = () => {
           </div>
         </div>
         <div className="top-bar__buttons">
-          <Badge count={unreadInfoQuantity()}>
+          <div className="top-bar__info">
             <Dropdown
               menu={{ items: transformedIInfoItems, onClick: infoItemClickHandler }}
               trigger={['click']}
@@ -63,7 +63,8 @@ const TopBar = () => {
             >
               <UIButton iconName="notification-bell" />
             </Dropdown>
-          </Badge>
+            {unreadInfoQuantity() > 0 && <div className="custom-badge custom-badge--error">{unreadInfoQuantity()}</div>}
+          </div>
           <UIButton tooltip="Logout" iconName="exit" onClick={() => exit()} />
         </div>
       </div>

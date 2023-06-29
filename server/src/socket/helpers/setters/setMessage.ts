@@ -10,9 +10,11 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
   let images: { src: string; name: string }[] = []
   if (message.images) {
     const compressionType = message.imageCompression
-      ? SharpSettingsKey.commonCompressed
-      : SharpSettingsKey.commonUncompressed
-    const filesPromises = message.images?.map((image) => saveImageAndGetPath(image.fileBuffer, compressionType))
+      ? SharpSettingsKey['common-compressed']
+      : SharpSettingsKey['common-uncompressed']
+    const filesPromises = message.images?.map((image) =>
+      saveImageAndGetPath(image.fileBuffer, compressionType, message.authorId)
+    )
     const links = await Promise.all(filesPromises)
     images = links.map((value) => {
       return { src: value, name: value.split('img=')[1] }

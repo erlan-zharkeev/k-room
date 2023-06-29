@@ -2,6 +2,9 @@
   $self: &;
   display: flex;
   align-items: center;
+  .ant-image-mask {
+    border-radius: 50%;
+  }
   &__image {
     padding: 1px;
     object-fit: cover !important;
@@ -12,6 +15,9 @@
   }
 
   &--square {
+    .ant-image-mask {
+      border-radius: 0;
+    }
     #{ $self }__image {
       border-radius: $radius-sm !important;
       .ui-icon {
@@ -78,5 +84,16 @@
   }
   .ant-ribbon-corner {
     display: none;
+  }
+  &--ribbon-down {
+    .ant-ribbon {
+      top: 22px;
+    }
+  }
+  &--dot-down {
+    .ant-badge-dot.ant-scroll-number {
+      top: 28px;
+      left: 23px;
+    }
   }
 }

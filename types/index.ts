@@ -105,6 +105,7 @@ export enum SocketActions {
   "add-reaction" = "add-reaction",
   "update-message-reactions" = "update-message-reactions",
   "delete-message" = "delete-message",
+  "error-message" = "error-message",
 }
 
 export enum Status {
@@ -156,10 +157,19 @@ export interface SocketActionsPayload {
           buffer: ArrayBuffer;
         }
       | undefined;
+    authorId: string;
   };
   "user-typing": {
-    userIdFrom: string;
+    authorId: string;
+    authorName: string;
     usersTo: Array<UserShort>;
+    status: boolean;
+  };
+  "get-user-typing-status": {
+    authorData: {
+      authorName: string;
+      authorId: string;
+    };
     status: boolean;
   };
   "send-message": { roomId: string; message: Message };
@@ -202,6 +212,9 @@ export interface SocketActionsPayload {
   "call-started-at": number;
   "call-ended": {
     callerId: string;
+  };
+  "error-message": {
+    message: string;
   };
 }
 
@@ -298,14 +311,24 @@ export interface ImageObject {
   fileBuffer?: File | ArrayBuffer;
 }
 
+export enum UserSettingKey {
+  theme = "theme",
+  soundOn = "soundOn",
+  showTooltips = "showTooltips",
+  ableToShowNotification = "ableToShowNotification",
+  selectedChatRoomId = "selectedChatRoomId",
+  asideTab = "asideTab",
+  currentInfoId = "currentInfoId",
+}
+
 export interface UserSettings {
-  asideTab: string;
-  selectedChatRoomId: string;
-  ableToShowNotification: boolean;
-  theme: Theme;
-  showTooltips: boolean;
-  soundOn: boolean;
-  currentInfoId: string;
+  [UserSettingKey.asideTab]: string;
+  [UserSettingKey.selectedChatRoomId]: string;
+  [UserSettingKey.ableToShowNotification]: boolean;
+  [UserSettingKey.theme]: Theme;
+  [UserSettingKey.showTooltips]: boolean;
+  [UserSettingKey.soundOn]: boolean;
+  [UserSettingKey.currentInfoId]: string;
 }
 
 export enum CallStatus {

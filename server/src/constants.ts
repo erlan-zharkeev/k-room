@@ -40,12 +40,12 @@ export const constants: Constants = {
       {
         id: '56cb91bdc3464f14678934cc',
         name: SystemMessages['invite-group-chat'],
-        text: 'You have been added to group the chat'
+        text: 'You have been added to the group chat'
       },
       {
         id: '56cb91bdc3464f14678934cd',
         name: SystemMessages['author-created-group-chat'],
-        text: 'You have created group the chat'
+        text: 'You have created the group chat'
       }
     ]
   }

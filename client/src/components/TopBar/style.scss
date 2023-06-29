@@ -42,14 +42,13 @@
   &__buttons {
     display: flex;
     align-items: center;
-    .ant-badge-count,
-    .ant-badge-dot,
-    .ant-badge .ant-scroll-number-custom-component {
-      left: 5px;
-      width: 25px;
-    }
-    .ui-button:first-child {
-      margin-right: 1rem;
+  }
+  .top-bar__info {
+    position: relative;
+    margin-right: 1rem;
+    .custom-badge {
+      top: -5px;
+      right: -5px;
     }
   }
 }

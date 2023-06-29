@@ -36,11 +36,17 @@
         text-align: center;
       }
     }
+    &--time {
+      justify-content: center;
+      opacity: 0.6;
+      font-size: 10px;
+    }
   }
 
   &__wrapper {
     position: relative;
     height: 100%;
+    overflow: hidden;
   }
 
   &__body {

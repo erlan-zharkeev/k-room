@@ -55,7 +55,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
   const fullBodyMessages: Array<DBMessage> = await MessageModel.find({ _id: { $in: messages } })
 
   const transformedMessages = fullBodyMessages.map((message) => transformMessageForUsers(message, userId))
-  const blocked = authorId === userId && room.messages?.length < 2
+  const blocked = authorId === userId && room.messages?.length < 2 && !room.multiple
   const result: ChatRoom = {
     id: String(_id),
     authorId,

@@ -1,7 +1,7 @@
 export enum SharpSettingsKey {
   avatar = 'avatar',
-  commonCompressed = 'common-compressed',
-  commonUncompressed = 'common-uncompressed'
+  'common-compressed' = 'common-compressed',
+  'common-uncompressed' = 'common-uncompressed'
 }
 
 interface SharpConfig {

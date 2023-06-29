@@ -19,6 +19,8 @@ import { ImageObject } from 'common-types'
 import { showModal } from 'src/store/systemSlice'
 import { sendMessage } from 'src/utils/sendMessage'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
+import moment from 'moment'
+import { v4 as uuidv4 } from 'uuid'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -33,14 +35,17 @@ const ChatRoom = () => {
   const roomDomEl = useRef<HTMLDivElement>(null)
   const [showWidgetLoader, setShowWidgetLoader] = useState(true)
   const { isLoading } = useTypedSelector((state) => state.chatRooms)
+  const [messages, setMessages] = useState([] as Array<Message>)
 
   useEffect(() => {
+    injectDateToMessages()
     if (!selectedChatRoom) return
     scrollToBottom()
     const observerCallback = (entries: any) => {
       entries.forEach((entry: any) => {
         if (!entry.isIntersecting) return
         const messageId = entry.target.getAttribute('id')
+        if (messageId.includes('time')) return
         const payload: SocketActionsPayload['change-message-status'] = {
           roomId: selectedChatRoom.id,
           messageId,
@@ -52,7 +57,7 @@ const ChatRoom = () => {
     }
     const observer = new IntersectionObserver(observerCallback, { threshold: 1 })
 
-    selectedChatRoom.messages.forEach((message) => {
+    messages.forEach((message) => {
       /** Use only strict validation without type casting */
       if (message.isSelf ?? message.isSelf === undefined) return
       const el = getRef(message.id)
@@ -88,7 +93,7 @@ const ChatRoom = () => {
   }
 
   const locationModifier = (author: string): string => {
-    if (author === 'system') return 'system'
+    if (author === 'system' || author === 'time') return author
     else return author === id ? 'self' : ''
   }
 
@@ -97,6 +102,28 @@ const ChatRoom = () => {
       setShowWidgetLoader(!isLoading)
     }, constants.chatRoomLoaderMinDuration)
   })
+
+  const injectDateToMessages = () => {
+    let lastDate = ''
+    const updatedMessagesWithDates: Array<Message> = []
+    selectedChatRoom?.messages.forEach((message) => {
+      const messageDate = moment(Number(message.createdAt)).format('LL').split(',')[0]
+      if (messageDate !== lastDate) {
+        lastDate = messageDate
+        const dateMessage: Message = {
+          id: `${uuidv4()}-time`,
+          authorName: 'time',
+          authorId: 'time',
+          body: lastDate,
+          status: MessageStatus.none
+        }
+        updatedMessagesWithDates.push(dateMessage)
+      }
+      updatedMessagesWithDates.push(message)
+    })
+    setMessages(updatedMessagesWithDates)
+    console.log(updatedMessagesWithDates)
+  }
 
   return (
     <div className="chat-room">
@@ -115,7 +142,7 @@ const ChatRoom = () => {
               <List
                 id="message-list"
                 itemLayout="horizontal"
-                dataSource={selectedChatRoom.messages ?? []}
+                dataSource={messages ?? []}
                 locale={{ emptyText: ' ' }}
                 renderItem={(item: Message) => (
                   <List.Item className={`chat-room__message--${locationModifier(item.authorId)}`} ref={setRef(item.id)}>
@@ -124,7 +151,7 @@ const ChatRoom = () => {
                 )}
               />
             </div>
-            {selectedChatRoom.messages.length === 0 && (
+            {messages.length === 0 && (
               <div className="chat-room__empty-text paragraph-text paragraph-text--secondary">
                 There are no messages, write first
               </div>

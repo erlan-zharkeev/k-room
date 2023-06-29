@@ -1,6 +1,6 @@
 import { Badge, Image } from 'antd'
 import { useEffect, useState } from 'react'
-import { UIAvatarProps } from 'ui/UIAvatar/@types/UIAvatarProps'
+import { BadgePlacement, UIAvatarProps } from 'src/components/UI/UIAvatar/@types/UIAvatarProps'
 import { UIIcon } from '..'
 
 const UIAvatar = ({
@@ -10,6 +10,8 @@ const UIAvatar = ({
   showBadge = true,
   stubIconName = 'user-stub',
   ribbon = false,
+  ribbonPlacement = BadgePlacement.up,
+  dotPlacement = BadgePlacement.up,
   shape = 'round'
 }: UIAvatarProps) => {
   const [haveSource, setHaveSource] = useState(false)
@@ -30,7 +32,7 @@ const UIAvatar = ({
 
   const BadgeWrapper = () =>
     ribbon ? (
-      <Badge.Ribbon text="G" placement="start">
+      <Badge.Ribbon text="G" placement={ribbonPlacement === 'up' ? 'start' : 'end'}>
         <AvatarBody />
       </Badge.Ribbon>
     ) : (
@@ -42,7 +44,9 @@ const UIAvatar = ({
   const AvatarWrapper = () => (showBadge ? <BadgeWrapper /> : <AvatarBody />)
 
   return (
-    <div className={`ui-avatar ui-avatar--${size} ui-avatar--${shape}`}>
+    <div
+      className={`ui-avatar ui-avatar--${size} ui-avatar--${shape} ui-avatar--ribbon-${ribbonPlacement} ui-avatar--dot-${dotPlacement}`}
+    >
       <AvatarWrapper />
     </div>
   )

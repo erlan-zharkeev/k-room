@@ -55,7 +55,6 @@ const ContactList = () => {
     if (!hasUsersData) return
 
     loaderStateChangeHandler(true, 'room', value.id)
-    debugger
     const socketPayload: SocketActionsPayload['create-room'] = {
       users: [id, contactId],
       authorId: id,

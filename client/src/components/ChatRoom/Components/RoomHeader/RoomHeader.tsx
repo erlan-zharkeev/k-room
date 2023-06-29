@@ -1,14 +1,14 @@
-import { SocketActions } from 'common-types'
+import { SocketActions, SocketActionsPayload } from 'common-types'
 import { useState, useEffect } from 'react'
 import { socket } from 'src/socket/socket'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { selectChatRoom } from 'src/store/settingsSlice'
-
 import constants from 'src/constants'
 import { showModal } from 'src/store/systemSlice'
 import { UIButton, UIAvatar } from 'src/components/UI'
+import { BadgePlacement } from 'src/components/UI/UIAvatar/@types/UIAvatarProps'
 
 const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -16,6 +16,7 @@ const RoomHeader = () => {
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
+  const [typingAuthors, setTypingAuthors] = useState([] as Array<{ authorId: string; authorName: string }>)
 
   useEffect(() => {
     setTimeout(() => {
@@ -27,14 +28,33 @@ const RoomHeader = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  socket.on(SocketActions['get-user-typing-status'], (data: { userIdFrom: string; status: boolean }) => {
-    if (!chatRoomData) return
-    const hasTypingInterlocutor = chatRoomData?.users?.find((user) => user.id === data.userIdFrom)
-    if (hasTypingInterlocutor) setIsTyping(data.status)
-  })
+  socket.on(
+    SocketActions['get-user-typing-status'],
+    ({ authorData, status }: SocketActionsPayload['get-user-typing-status']) => {
+      if (!chatRoomData) return
+      setIsTyping(status)
+      let newArrayOfTypingAuthors = [...typingAuthors]
+      if (status) {
+        const authorCandidate = newArrayOfTypingAuthors.find((author) => author.authorId === authorData.authorId)
+        if (!authorCandidate) newArrayOfTypingAuthors.push(authorData)
+      } else {
+        newArrayOfTypingAuthors = newArrayOfTypingAuthors.filter((author) => author.authorId === authorData.authorId)
+      }
+      setTypingAuthors(newArrayOfTypingAuthors)
+    }
+  )
 
   const openChatMembers = () => {
     dispatch(showModal({ title: 'Group Chat Info', modalContentComponentName: 'ChatRoomSettingsPopup' }))
+  }
+
+  const whoIsTyping = () => {
+    if (chatRoomData?.multiple) {
+      return `${typingAuthors.map((author) => author.authorName).join(', ')} ${
+        typingAuthors.length > 1 ? 'are typing' : 'is typing'
+      }`
+    }
+    return ` Typing ${Array.from('.'.repeat(typingDotsQuantity)).join(' ')}`
   }
 
   return (
@@ -45,19 +65,19 @@ const RoomHeader = () => {
       <div className="room-header__info">
         <UIAvatar
           ribbon={chatRoomData?.multiple}
+          ribbonPlacement={BadgePlacement.down}
+          dotPlacement={BadgePlacement.down}
           stubIconName={chatRoomData?.multiple ? 'image-stub' : 'user-stub'}
           online={chatRoomData?.hasOnline}
           src={chatRoomData?.avatarPath}
           shape={chatRoomData?.multiple ? 'square' : 'round'}
         />
-        <h3 onClick={openChatMembers} className={`room-header__name ${chatRoomData?.multiple && 'pointer'}`}>
-          {chatRoomData?.chatName}
-        </h3>
-        {isTyping && (
-          <div className="is-typing blink-me paragraph-text paragraph-text--accent">
-            Typing {Array.from('.'.repeat(typingDotsQuantity)).join(' ')}
-          </div>
+        {chatRoomData?.multiple ? (
+          <UIButton className="room-header__name" text={chatRoomData?.chatName} onClick={openChatMembers} />
+        ) : (
+          <h3 className="room-header__name">{chatRoomData?.chatName}</h3>
         )}
+        {isTyping && <div className="is-typing blink-me paragraph-text paragraph-text--accent">{whoIsTyping()}</div>}
       </div>
     </div>
   )

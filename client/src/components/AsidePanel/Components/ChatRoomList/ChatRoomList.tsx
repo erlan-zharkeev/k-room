@@ -88,9 +88,7 @@ const ChatRoomList = () => {
                 description={getLastMessage(chatRoom.messages)}
               />
               <div className="chat-room-list__controls">
-                {Boolean(unreadMessages(chatRoom)) && (
-                  <Badge className="chat-room-list__unread-messages" count={unreadMessages(chatRoom)} />
-                )}
+                {Boolean(unreadMessages(chatRoom)) && <div className="custom-badge">{unreadMessages(chatRoom)}</div>}
                 {showAddUserButton(chatRoom) && (
                   <UIButton
                     iconName="plus"

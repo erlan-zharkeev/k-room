@@ -59,15 +59,14 @@ const AsideBar = () => {
     <div className="aside-bar">
       {viewPort.width >= 769 && <Logo />}
       <Radio.Group value={asideTab} onChange={changeTab}>
-        {buttons.map((button) => {
-          return button.value === 'chatList' ? (
-            <Badge count={unreadMessagesCount()} key={button.value} size="small">
-              {getButtonComponent(button)}
-            </Badge>
-          ) : (
-            <div key={button.value}>{getButtonComponent(button)}</div>
-          )
-        })}
+        {buttons.map((button) => (
+          <div key={button.value} className="aside-bar__button-el">
+            {getButtonComponent(button)}
+            {button.value === 'chatList' && unreadMessagesCount() > 0 && (
+              <div className="custom-badge">{unreadMessagesCount()}</div>
+            )}
+          </div>
+        ))}
       </Radio.Group>
       {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />}
     </div>

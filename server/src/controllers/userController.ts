@@ -23,7 +23,7 @@ class UserController {
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
 
-      const avatar = saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar)
+      const avatar = saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar, userId)
 
       const newUserData: any = {
         username,

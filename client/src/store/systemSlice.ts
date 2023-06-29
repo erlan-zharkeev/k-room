@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
 import { SystemStore } from './@types/SystemState'
 import constants from 'src/constants'
+import { duration } from 'moment'
 
 const html = document.querySelector('html')
 
@@ -10,7 +11,8 @@ const clickedObjectInitialState = {
     id: '',
     authorName: '',
     author: '',
-    body: ''
+    body: '',
+    authorId: ''
   }
 }
 
@@ -60,9 +62,11 @@ const systemSlice = createSlice({
       state.showModal = false
     },
     showNotification(state, { payload }) {
+      const isError = state.notificationData.messageType === 'error'
       state.notificationData = {
         ...state.notificationData,
-        ...payload
+        ...payload,
+        duration: isError ? constants.errorNotificationDuration : initialState.notificationData.duration
       }
       if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
       state.notificationData = initialState.notificationData

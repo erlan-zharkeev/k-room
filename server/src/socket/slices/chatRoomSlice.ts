@@ -16,7 +16,7 @@ export const chatRoomSlice = (socket: SocketInstanceType) => {
     SocketActions['create-room'],
     async ({ users, authorId, multiple, avatarFile, chatName = '' }: SocketActionsPayload['create-room']) => {
       let avatarPath = ''
-      if (avatarFile) avatarPath = await saveImageAndGetPath(avatarFile.buffer, SharpSettingsKey.avatar)
+      if (avatarFile) avatarPath = await saveImageAndGetPath(avatarFile.buffer, SharpSettingsKey.avatar, authorId)
       const room = new ChatRoomModel({
         avatarPath,
         multiple,
@@ -36,21 +36,22 @@ export const chatRoomSlice = (socket: SocketInstanceType) => {
 
   socket.on(
     SocketActions['user-typing'],
-    async ({ userIdFrom, usersTo, status }: SocketActionsPayload['user-typing']) => {
+    async ({ authorName, authorId, usersTo, status }: SocketActionsPayload['user-typing']) => {
       const userIds = usersTo.map((user) => user.id)
       const sockets = await getSocketsByUserIds(userIds)
       sockets.forEach((socketId) => {
-        io.to(socketId).emit(SocketActions['get-user-typing-status'], { userIdFrom, status })
+        const payload: SocketActionsPayload['get-user-typing-status'] = { authorData: { authorName, authorId }, status }
+        io.to(socketId).emit(SocketActions['get-user-typing-status'], payload)
       })
     }
   )
 
   socket.on(
     SocketActions['update-chat-room'],
-    async ({ roomId, chatName, avatarPath, avatarFile }: SocketActionsPayload['update-chat-room']) => {
+    async ({ roomId, chatName, avatarPath, avatarFile, authorId }: SocketActionsPayload['update-chat-room']) => {
       const isImageExist = fs.existsSync(avatarPath ?? '')
       if (isImageExist) fs.unlinkSync(getPathToImg(avatarPath))
-      const updatedAvatar = await saveImageAndGetPath(avatarFile?.buffer, SharpSettingsKey.avatar)
+      const updatedAvatar = await saveImageAndGetPath(avatarFile?.buffer, SharpSettingsKey.avatar, authorId)
       const room = (await ChatRoomModel.findOneAndUpdate(
         { _id: roomId },
         { avatar: updatedAvatar, chatName }

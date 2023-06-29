@@ -46,6 +46,13 @@
   &__controls {
     display: flex;
     align-items: center;
+    .custom-badge {
+      position: relative;
+      right: 0;
+      top: 0;
+      margin-right: $gutter-md;
+      padding: 10px 10px 9px 10px;
+    }
   }
 
   &__unread-messages {

@@ -13,13 +13,14 @@ import { UIImageLoader, UIInput, UIButton } from 'src/components/UI'
 
 const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')
-  const { id } = useTypedSelector((state) => state.user.userData)
+  const { username, id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
 
   const sendUserTypingStatus = (status: boolean) => {
     if (!selectedChatRoom) return
     const payload: SocketActionsPayload['user-typing'] = {
-      userIdFrom: id,
+      authorName: username,
+      authorId: id,
       usersTo: selectedChatRoom.users,
       status
     }

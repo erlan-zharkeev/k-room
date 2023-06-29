@@ -29,7 +29,7 @@ const UIButton = ({
   onClick
 }: UIButtonProps) => {
   const { showTooltips } = useTypedSelector((state) => state.persist.settings)
-  const buttonType = type || 'common'
+  const buttonType = type ?? 'common'
   const ButtonComponent = buttons[buttonType]
   const hasIconAndText = iconName && text
   const htmlPropAntdErrorFix = { htmlType: htmltype }

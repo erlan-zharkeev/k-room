@@ -42,5 +42,6 @@ export enum ErrorMessages {
   noFilesExist = 'No files exist',
   notImage = 'File is not an image',
   failedSendConfirmationLink = 'Failed to send confirmation link, please try later',
-  coudntFindEmail = 'Couldn`t find the current email address'
+  coudntFindEmail = 'Couldn`t find the current email address',
+  imageConverterError = 'Server could not process the image, please choose another image file'
 }

@@ -9,12 +9,13 @@ import { UserSettingElement } from './@types/UserSettingElement'
 import { useNavigate } from 'react-router-dom'
 import { RouteNames, Theme } from 'common-types'
 import { UIAvatar, UISwitch } from 'src/components/UI'
+import { UserSettingName } from './@types/UserSettingName'
 
 const methods: Array<UserSettingElement> = [
-  { name: 'theme', method: changeTheme },
-  { name: 'sound', method: setSoundValue },
-  { name: 'tooltips', method: setTooltipsValue },
-  { name: 'notification', method: setAbleToShowNotification }
+  { name: UserSettingName.theme, method: changeTheme },
+  { name: UserSettingName.sound, method: setSoundValue },
+  { name: UserSettingName.tooltips, method: setTooltipsValue },
+  { name: UserSettingName.notification, method: setAbleToShowNotification }
 ]
 
 const UserSettings = () => {
