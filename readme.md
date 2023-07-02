@@ -79,6 +79,5 @@
 - develop call list(4)
 - setup cors to specific host and port
 - check token works(1)
-- text to support
 - create info items(welcome, what is next)
 - privacy policy create and to facebook dev

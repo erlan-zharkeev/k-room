@@ -1,5 +1,5 @@
-import { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 import { UserSettingName } from './UserSettingName'
+import { ActionCreatorWithPayload } from '@reduxjs/toolkit'
 
 export enum UserSettingStoreActionPayload {
   changeTheme = 'settings/changeTheme',
@@ -13,5 +13,5 @@ export enum UserSettingStoreActionPayload {
 
 export interface UserSettingElement {
   name: UserSettingName
-  method: ActionCreatorWithPayload<any, UserSettingStoreActionPayload>
+  method: ActionCreatorWithPayload<any, string>
 }
