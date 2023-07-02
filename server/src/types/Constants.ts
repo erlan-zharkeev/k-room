@@ -1,7 +1,7 @@
 export enum SharpSettingsKey {
   avatar = 'avatar',
-  'common-compressed' = 'common-compressed',
-  'common-uncompressed' = 'common-uncompressed'
+  commonCompressed = 'common-compressed',
+  commonUncompressed = 'common-uncompressed'
 }
 
 interface SharpConfig {
@@ -13,10 +13,10 @@ interface SharpConfig {
 }
 
 export enum SystemMessages {
-  'invite-message' = 'invite-message',
-  'author-created-chat' = 'author-created-chat',
-  'author-created-group-chat' = 'author-created-group-chat',
-  'invite-group-chat' = 'invite-group-chat'
+  inviteMessage = 'invite-message',
+  authorCreatedChat = 'author-created-chat',
+  authorCreatedGroupChat = 'author-created-group-chat',
+  inviteGroupChat = 'invite-group-chat'
 }
 
 export interface SystemMessage {

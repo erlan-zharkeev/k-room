@@ -4,12 +4,13 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
-import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
 import { UserSettingElement } from './@types/UserSettingElement'
 import { useNavigate } from 'react-router-dom'
 import { RouteNames, Theme } from 'common-types'
 import { UIAvatar, UISwitch } from 'src/components/UI'
 import { UserSettingName } from './@types/UserSettingName'
+import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
+const { VITE_MAIL_APP } = import.meta.env
 
 const methods: Array<UserSettingElement> = [
   { name: UserSettingName.theme, method: changeTheme },
@@ -84,6 +85,9 @@ const UserSettings = () => {
         <div className="user-settings__version paragraph-text paragraph-text-sm paragraph-text--secondary">
           v.{appData.version}
         </div>
+        <a className="link paragraph-text" href={`mailto:${VITE_MAIL_APP}?subject=Support%20Request(${id})`}>
+          Tech support
+        </a>
       </div>
     </div>
   )
