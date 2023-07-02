@@ -55,7 +55,7 @@ class Call {
     })
     this.connection.on('signal', (data: SignalData) => {
       const settings = store.getState().calls.settings
-      const payload: SocketActionsPayload['call-user'] = {
+      const payload: SocketActionsPayload['callUser'] = {
         userToCall: interlocutorData.id,
         signal: data,
         from: selfId,
@@ -63,7 +63,7 @@ class Call {
         callerName,
         settings
       }
-      this.socket.emit(SocketActions['call-user'], payload)
+      this.socket.emit(SocketActions.CALL_USER, payload)
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
@@ -76,9 +76,9 @@ class Call {
           messageType: 'info'
         })
       )
-      this.socket.off(SocketActions['call-accepted'])
+      this.socket.off(SocketActions.CALL_ACCEPTED)
     })
-    this.socket.on(SocketActions['call-accepted'], (data) => {
+    this.socket.on(SocketActions.CALL_ACCEPTED, (data) => {
       this.soundConnection.stop()
       this.dispatch(setCurrentCallAccepted())
       this.dispatch(updateInterlocutorSettings(data.settings))
@@ -97,7 +97,7 @@ class Call {
     })
     this.connection.on('signal', (data) => {
       const settings = store.getState().calls.settings
-      this.socket.emit(SocketActions['answer-call'], {
+      this.socket.emit(SocketActions.ANSWER_CALL, {
         signal: data,
         to: this.callerId,
         settings,
@@ -115,7 +115,7 @@ class Call {
           messageType: 'info'
         })
       )
-      this.socket.off(SocketActions['answer-call'])
+      this.socket.off(SocketActions.ANSWER_CALL)
     })
     this.connection.signal(this.callerSignal)
     this.listenConnectionError()
@@ -149,8 +149,8 @@ class Call {
     const isVideo = type === 'video'
     const tracks = isVideo ? 'getVideoTracks' : 'getAudioTracks'
     this.selfStream[tracks]().forEach((track) => (track.enabled = isVideo ? video : audio))
-    const payload: SocketActionsPayload['change-call-settings'] = { audio, video }
-    this.socket.emit(SocketActions['change-call-settings'], payload)
+    const payload: SocketActionsPayload['changeCallSettings'] = { audio, video }
+    this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, payload)
   }
 
   leaveCall() {

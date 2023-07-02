@@ -35,7 +35,7 @@ export const changeSettingsHandler = (action: any, store: any) => {
       default:
         break
     }
-    socket.emit(SocketActions['update-user-settings'], { userId, type, value: convertedValue })
+    socket.emit(SocketActions.UPDATE_USER_SETTINGS, { userId, type, value: convertedValue })
   }
 }
 

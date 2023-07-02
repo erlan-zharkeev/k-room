@@ -27,7 +27,7 @@ const SignUpPage = () => {
     setIsLoading(false)
     if (!response.payload) return
     const { data, status } = response.payload
-    if (status !== Status['success']) return
+    if (status !== Status.success) return
     navigate(
       `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`,
       {

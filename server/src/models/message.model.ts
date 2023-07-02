@@ -1,8 +1,12 @@
 import { Schema, model } from 'mongoose'
-import { MessageStatus } from '../../../types'
 
 export const messageSchema = new Schema({
   authorId: {
+    type: String,
+    unique: false,
+    required: true
+  },
+  authorName: {
     type: String,
     unique: false,
     required: true
@@ -33,9 +37,14 @@ export const messageSchema = new Schema({
     default: true
   },
   usersMetaData: {
-    type: Array<{ id: String; status: MessageStatus }>,
+    type: [],
     required: false,
     default: []
+  },
+  repliedMessage: {
+    type: {},
+    required: false,
+    default: null
   }
 })
 

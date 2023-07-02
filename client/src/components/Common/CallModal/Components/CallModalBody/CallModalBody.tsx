@@ -29,29 +29,29 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const [counterValue, _, startCounter, stopCounter] = UseCounter(0)
 
   useEffect(() => {
-    socket.on(SocketActions['call-started-at'], (timeStamp: number) => {
+    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
     })
-    socket.on(SocketActions['call-user'], (data: SocketActionsPayload['call-user']) => {
+    socket.on(SocketActions.CALL_USER, (data: SocketActionsPayload['callUser']) => {
       dispatch(setShowCallModal(data))
       const { from, signal, settings } = data
       $call.calling(from, signal)
       dispatch(updateInterlocutorSettings(settings))
     })
-    socket.on(SocketActions['call-ended'], () => {
+    socket.on(SocketActions.CALL_ENDED, () => {
       $call.leaveCall()
     })
-    socket.on(SocketActions['change-call-settings'], (data) => {
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
       dispatch(updateInterlocutorSettings(data))
     })
   }, [])
 
   const endCall = () => {
     stopCounter()
-    const payload: SocketActionsPayload['call-ended'] = { callerId: $call.callerId ?? $call.callToId }
-    socket.emit(SocketActions['call-ended'], payload)
+    const payload: SocketActionsPayload['callEnded'] = { callerId: $call.callerId ?? $call.callToId }
+    socket.emit(SocketActions.CALL_ENDED, payload)
     $call.leaveCall()
   }
 
@@ -137,7 +137,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
           <CallModalVideo />
 
           <div className="call-modal__controls">
-            {currentCall.status === 'in-progress' && (
+            {currentCall.status === CallStatus.inProgress && (
               <div className="call-modal__length header-text header-text--sm">
                 {moment.utc(counterValue * 1000).format('HH:mm:ss')}
               </div>
@@ -156,7 +156,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                     tooltip="Answer Via Video"
                   />
                 )}
-                {currentCall.status === CallStatus['in-progress'] && (
+                {currentCall.status === CallStatus.inProgress && (
                   <UIButton
                     iconName={settings.video ? 'video-call' : 'video-drop'}
                     color={settings.video ? 'success' : 'error'}

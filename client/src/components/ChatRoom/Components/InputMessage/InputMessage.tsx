@@ -15,16 +15,18 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
   const [message, setMessage] = useState('')
   const { username, id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
+  const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
+  const haveRepliedMessage = () => Boolean(repliedMessageData.id)
 
   const sendUserTypingStatus = (status: boolean) => {
     if (!selectedChatRoom) return
-    const payload: SocketActionsPayload['user-typing'] = {
+    const payload: SocketActionsPayload['userTyping'] = {
       authorName: username,
       authorId: id,
       usersTo: selectedChatRoom.users,
       status
     }
-    socket.emit(SocketActions['user-typing'], payload)
+    socket.emit(SocketActions.USER_TYPING, payload)
   }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)
@@ -45,6 +47,10 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
     uploadImageHandler({ message, images })
   }
 
+  const isButtonDisabled = () => {
+    return !haveRepliedMessage() && !Boolean(message)
+  }
+
   return (
     <div
       className="input-message"
@@ -57,7 +63,7 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
         <UIImageLoader multiple={true} setImages={setImagesHandler} />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropDown setEmoji={setEmoji} />
-        <UIButton htmltype="submit" disabled={!message} iconName="send" onClick={send} />
+        <UIButton htmltype="submit" disabled={isButtonDisabled()} iconName="send" onClick={send} />
       </Form>
     </div>
   )

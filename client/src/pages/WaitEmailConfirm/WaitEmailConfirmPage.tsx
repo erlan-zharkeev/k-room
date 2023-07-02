@@ -41,7 +41,7 @@ const WaitEmailConfirmPage = () => {
     const response = (await dispatch(apiMethods.auth.sendConfirmationLink(email))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     const { data, status } = response.payload
-    if (status !== Status['success']) return
+    if (status !== Status.success) return
     const updatedPath = `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })
     refresh(_ + 1)

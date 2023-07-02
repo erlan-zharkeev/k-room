@@ -12,11 +12,11 @@ class CommonController {
       const filename = req.query.img as string
       const resolution = filename.split('.')[1]
       const path = getPathToImg(filename)
-      if (!fs.existsSync(path)) return throwError(Status['not-found'], res, ErrorMessages.noFilesExist)
+      if (!fs.existsSync(path)) return throwError(Status.notFound, res, ErrorMessages.noFilesExist)
       res.writeHead(200, { 'content-type': `image/${resolution}` })
       fs.createReadStream(path).pipe(res)
     } catch {
-      return throwError(Status['not-found'], res, ErrorMessages.noFilesExist)
+      return throwError(Status.notFound, res, ErrorMessages.noFilesExist)
     }
   }
 
@@ -44,7 +44,7 @@ class CommonController {
       )
       return res.json({ message: SuccessMessages.success, silent: true })
     } catch {
-      throwError(Status['not-found'], res, ErrorMessages.notImage)
+      throwError(Status.notFound, res, ErrorMessages.notImage)
     }
   }
 }

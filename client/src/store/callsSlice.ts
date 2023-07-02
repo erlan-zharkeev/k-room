@@ -49,7 +49,7 @@ const initialState: CallsState = {
       interlocutorName: 'Anton',
       interlocutorId: '1',
       interlocutorAvatarPath: '',
-      status: CallStatus['in-progress'],
+      status: CallStatus.inProgress,
       type: CallType.outgoing,
       video: false
     },
@@ -95,7 +95,7 @@ const callsSlice = createSlice({
       state.settings.streamLoading = payload
     },
     setCurrentCallAccepted(state) {
-      state.currentCall.status = CallStatus['in-progress']
+      state.currentCall.status = CallStatus.inProgress
     },
     setShowCallModal(state, { payload }) {
       state.showCallModal = true

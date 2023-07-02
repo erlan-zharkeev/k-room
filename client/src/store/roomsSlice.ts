@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { UserShort } from 'common-types'
+import { RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
 import { RoomsState } from './@types/RoomsState'
 
 const initialRepliedMessageData = {
   id: '',
   authorName: '',
   authorId: '',
-  body: ''
+  body: '',
+  forward: false
 }
 
 const initialAttachedFilesMessage = {
@@ -32,6 +33,9 @@ const roomsSlice = createSlice({
     loadChatRooms(state, { payload }) {
       state.chatRooms = payload
     },
+    repliedMessageSetAsForward(state) {
+      state.repliedMessageData.forward = true
+    },
     updateChatMessage(state, { payload }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
@@ -42,7 +46,7 @@ const roomsSlice = createSlice({
       room.messages.push(message)
       if (room?.messages.length > 1) room.blocked = false
     },
-    updateMessageStatus(state, { payload }) {
+    updateMessageStatus(state, { payload }: { payload: SocketActionsPayload['updateMessageStatus'] }) {
       const { roomId, messageId, status } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -50,7 +54,7 @@ const roomsSlice = createSlice({
         if (roomMessage.id === messageId) roomMessage.status = status
       })
     },
-    updateMessageReactions(state, { payload }) {
+    updateMessageReactions(state, { payload }: { payload: SocketActionsPayload['updatedMessageReactions'] }) {
       const { roomId, messageId, reaction } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -83,11 +87,22 @@ const roomsSlice = createSlice({
         room.avatarPath = avatarPath
       })
     },
-    setRepliedMessage(state, { payload }) {
-      state.repliedMessageData = payload
+    setRepliedMessage(state, { payload }: { payload: RepliedMessage }) {
+      state.repliedMessageData = {
+        ...state.repliedMessageData,
+        ...payload
+      }
     },
     resetRepliedMessage(state) {
       state.repliedMessageData = initialRepliedMessageData
+    },
+    deleteMessage(state, { payload }: { payload: SocketActionsPayload['deleteMessage'] }) {
+      const { roomId, messageId } = payload
+      state.chatRooms.forEach((room) => {
+        if (room.id !== roomId) return
+        const messageIndex = room.messages.findIndex((message) => message.id === messageId)
+        room.messages.splice(messageIndex, 1)
+      })
     }
   }
 })
@@ -101,8 +116,10 @@ export const {
   updateMessageStatus,
   changeChatName,
   setRepliedMessage,
+  repliedMessageSetAsForward,
   resetRepliedMessage,
-  updatedAttachedFilesMessage
+  updatedAttachedFilesMessage,
+  deleteMessage
 } = roomsSlice.actions
 
 export default roomsSlice.reducer

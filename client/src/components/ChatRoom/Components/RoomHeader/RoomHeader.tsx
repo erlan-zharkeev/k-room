@@ -23,14 +23,14 @@ const RoomHeader = () => {
       setTypingDotsQuantity((typingDotsQuantity) => {
         return typingDotsQuantity < 3 ? typingDotsQuantity + 1 : 0
       })
-    }, 1000)
+    }, constants.commonTimeoutDuration)
   }, [isTyping])
 
   const dispatch = useDispatch<AppDispatch>()
 
   socket.on(
-    SocketActions['get-user-typing-status'],
-    ({ authorData, status }: SocketActionsPayload['get-user-typing-status']) => {
+    SocketActions.GET_USER_TYPING_STATUS,
+    ({ authorData, status }: SocketActionsPayload['getUserTypingStatus']) => {
       if (!chatRoomData) return
       setIsTyping(status)
       let newArrayOfTypingAuthors = [...typingAuthors]

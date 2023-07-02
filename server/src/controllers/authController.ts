@@ -27,16 +27,15 @@ class AuthController {
 
       const userNameCandidate = await UserModel.findOne({ username })
 
-      if (userNameCandidate)
-        return throwError(Status['bad-request'], res, ErrorMessages.userWithCurrentNameAlreadyExist)
+      if (userNameCandidate) return throwError(Status.badRequest, res, ErrorMessages.userWithCurrentNameAlreadyExist)
 
       const emailCandidate = await UserModel.findOne({ email })
 
-      if (emailCandidate) return throwError(Status['bad-request'], res, ErrorMessages.userWithCurrentEmailAlreadyExist)
+      if (emailCandidate) return throwError(Status.badRequest, res, ErrorMessages.userWithCurrentEmailAlreadyExist)
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
-      if (!hashedPassword) return throwError(Status['bad-request'], res, ErrorMessages.failedPassHash)
+      if (!hashedPassword) return throwError(Status.badRequest, res, ErrorMessages.failedPassHash)
       const welcomeInfoItem = getInfo('1')
       const user = new UserModel({
         username,
@@ -55,7 +54,7 @@ class AuthController {
 
       return res.json(confirmEmailData)
     } catch (e: any) {
-      throwError(Status['bad-request'], res, ErrorMessages.failedRegistration)
+      throwError(Status.badRequest, res, ErrorMessages.failedRegistration)
     }
   }
 
@@ -79,7 +78,7 @@ class AuthController {
         message: SuccessMessages.emailConfirmed
       })
     } catch {
-      throwError(Status['bad-request'], res, ErrorMessages.failedEmailConfirm)
+      throwError(Status.badRequest, res, ErrorMessages.failedEmailConfirm)
     }
   }
 
@@ -87,12 +86,12 @@ class AuthController {
     try {
       let { email, password } = req.body
       const user = await UserModel.findOne({ email })
-      if (!user) return throwError(Status['bad-request'], res, ErrorMessages.userNotFound)
-      if (!user.confirmed) return throwError(Status['bad-request'], res, ErrorMessages.emailNotConfirm)
+      if (!user) return throwError(Status.badRequest, res, ErrorMessages.userNotFound)
+      if (!user.confirmed) return throwError(Status.badRequest, res, ErrorMessages.emailNotConfirm)
 
       const validPassword = bcrypt.compareSync(password, user.password)
 
-      if (!validPassword) return throwError(Status['bad-request'], res, ErrorMessages.wrongPass)
+      if (!validPassword) return throwError(Status.badRequest, res, ErrorMessages.wrongPass)
 
       await updateTokens(user._id, res)
       return res.json({
@@ -107,7 +106,7 @@ class AuthController {
         message: SuccessMessages.loginSuccess
       })
     } catch {
-      throwError(Status['bad-request'], res, ErrorMessages.failedLogin)
+      throwError(Status.badRequest, res, ErrorMessages.failedLogin)
     }
   }
 
@@ -144,7 +143,7 @@ class AuthController {
         message: SuccessMessages.loginAndRegister
       })
     } catch {
-      throwError(Status['bad-request'], res, ErrorMessages.failedLogin)
+      throwError(Status.badRequest, res, ErrorMessages.failedLogin)
     }
   }
 }

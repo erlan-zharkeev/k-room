@@ -1,7 +1,7 @@
 import { List } from 'antd'
 import { useDispatch } from 'react-redux'
 import useDynamicRefs from 'use-dynamic-refs'
-import { SocketActions, Message, SocketActionsPayload, MessageStatus } from 'common-types'
+import { SocketActions, Message, SocketActionsPayload, MessageStatus, Author } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import InputMessage from './Components/InputMessage/InputMessage'
 import MessageBody from './Components/MessageBody/MessageBody'
@@ -21,12 +21,13 @@ import { sendMessage } from 'src/utils/sendMessage'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
+import { AsideBarButtonName } from '../AsideBar/@types/ButtonsListElement'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
-  const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === 'chatList'
+  const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === AsideBarButtonName.chatList
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
   const [inputMessageHeight, setInputMessageHeight] = useState(constants.dimensions.shortInputMessage)
@@ -36,35 +37,44 @@ const ChatRoom = () => {
   const [showWidgetLoader, setShowWidgetLoader] = useState(true)
   const { isLoading } = useTypedSelector((state) => state.chatRooms)
   const [messages, setMessages] = useState([] as Array<Message>)
+  const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
 
-  useEffect(() => {
-    injectDateToMessages()
-    if (!selectedChatRoom) return
-    scrollToBottom()
-    const observerCallback = (entries: any) => {
-      entries.forEach((entry: any) => {
-        if (!entry.isIntersecting) return
-        const messageId = entry.target.getAttribute('id')
-        if (messageId.includes('time')) return
-        const payload: SocketActionsPayload['change-message-status'] = {
-          roomId: selectedChatRoom.id,
-          messageId,
-          status: MessageStatus.read,
-          userId: id
-        }
-        socket.emit(SocketActions['change-message-status'], payload)
-      })
-    }
-    const observer = new IntersectionObserver(observerCallback, { threshold: 1 })
+  const observerCallback = (entries: any) => {
+    entries.forEach((entry: any) => {
+      if (!entry.isIntersecting || !selectedChatRoom) return
+      const messageId = entry.target.getAttribute('id')
+      const messageRead = Boolean(entry.target.querySelector('.message--read'))
+      if (messageId.includes(Author.time) || messageRead) return
+      const payload: SocketActionsPayload['changeMessageStatus'] = {
+        roomId: selectedChatRoom.id,
+        messageId,
+        status: MessageStatus.read,
+        userId: id
+      }
+      socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, payload)
+    })
+  }
 
-    messages.forEach((message) => {
+  const observer = new IntersectionObserver(observerCallback, { threshold: 0.5 })
+
+  const setRefToMessages = () => {
+    selectedChatRoom?.messages.forEach((message) => {
       /** Use only strict validation without type casting */
       if (message.isSelf ?? message.isSelf === undefined) return
       const el = getRef(message.id)
+      if (!el) return
       el.current.setAttribute('id', message.id)
       observer.observe(el.current)
     })
-  }, [selectedChatRoom])
+  }
+
+  useEffect(() => {
+    injectDateToMessages()
+    scrollToBottom()
+    setTimeout(() => {
+      setRefToMessages()
+    }, constants.commonTimeoutDuration)
+  }, [selectedChatRoom, showWidgetLoader])
 
   useEffect(() => {
     const roomEl = roomDomEl.current
@@ -93,7 +103,7 @@ const ChatRoom = () => {
   }
 
   const locationModifier = (author: string): string => {
-    if (author === 'system' || author === 'time') return author
+    if (author === Author.system || author === Author.time) return author
     else return author === id ? 'self' : ''
   }
 
@@ -112,8 +122,8 @@ const ChatRoom = () => {
         lastDate = messageDate
         const dateMessage: Message = {
           id: `${uuidv4()}-time`,
-          authorName: 'time',
-          authorId: 'time',
+          authorName: Author.time,
+          authorId: Author.time,
           body: lastDate,
           status: MessageStatus.none
         }
@@ -122,7 +132,6 @@ const ChatRoom = () => {
       updatedMessagesWithDates.push(message)
     })
     setMessages(updatedMessagesWithDates)
-    console.log(updatedMessagesWithDates)
   }
 
   return (
@@ -166,6 +175,7 @@ const ChatRoom = () => {
                     roomId: selectedChatRoom?.id,
                     username,
                     messageText: message,
+                    repliedMessage: repliedMessageData,
                     dispatch
                   })
                 }
@@ -177,7 +187,7 @@ const ChatRoom = () => {
         ) : (
           <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
             <div
-              onClick={() => dispatch(changeAsideTab('chatList'))}
+              onClick={() => dispatch(changeAsideTab(AsideBarButtonName.chatList))}
               className="paragraph-text paragraph-text--secondary"
             >
               Choose or create chat

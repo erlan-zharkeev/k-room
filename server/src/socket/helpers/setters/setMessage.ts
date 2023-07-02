@@ -28,11 +28,11 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
     usersMetaData: []
   }
   const newDbMessage = await new MessageModel(messageForDb).save()
-  await ChatRoomModel.updateOne({ id: roomId }, { $push: { messages: newDbMessage.id } })
+  await ChatRoomModel.updateOne({ _id: roomId }, { $push: { messages: newDbMessage.id }, $set: { blocked: false } })
   room?.users.forEach(async (userId) => {
-    await MessageModel.findOneAndUpdate(
-      { _id: newDbMessage.id, 'usersMetaData.id': userId },
-      { $set: { 'usersMetaData.$.status': MessageStatus.delivered } }
+    await MessageModel.updateOne(
+      { _id: newDbMessage.id },
+      { $push: { usersMetaData: { id: userId, status: MessageStatus.delivered } } }
     )
     const user = await getUserById(userId)
     if (!user?.socketId) return
@@ -43,7 +43,7 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
       isSelf: user?.id === message.authorId,
       status: MessageStatus.delivered
     }
-    io.to(user?.socketId).emit(SocketActions['message-delivered'], {
+    io.to(user?.socketId).emit(SocketActions.MESSAGE_DELIVERED, {
       roomId,
       message: messageForUser
     })

@@ -27,6 +27,11 @@ export const chatRoomModel = new Schema<DBChatRoom>({
     type: [String],
     required: false,
     default: []
+  },
+  blocked: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 

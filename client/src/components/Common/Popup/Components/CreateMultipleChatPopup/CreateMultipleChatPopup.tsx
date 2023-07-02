@@ -11,6 +11,7 @@ import { socket } from 'src/socket/socket'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
+import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
 
 const CreateMultipleChatPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -28,17 +29,17 @@ const CreateMultipleChatPopup = () => {
     const chatName = values['chat-name']
     setIsLoading(true)
     const membersIds = members.map((member) => member.id)
-    const payload: SocketActionsPayload['create-room'] = {
+    const payload: SocketActionsPayload['createRoom'] = {
       users: [id, ...membersIds],
       authorId: id,
       chatName,
       avatarFile,
       multiple: true
     }
-    socket.emit(SocketActions['create-room'], payload)
+    socket.emit(SocketActions.CREATE_ROOM, payload)
 
-    socket.on(SocketActions['room-created'], (data) => {
-      dispatch(changeAsideTab('chatList'))
+    socket.on(SocketActions.ROOM_CREATED, (data) => {
+      dispatch(changeAsideTab(AsideBarButtonName.chatList))
       setTimeout(() => {
         dispatch(selectChatRoom(data.roomId))
       })

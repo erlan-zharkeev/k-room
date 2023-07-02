@@ -10,6 +10,7 @@ import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { ServiceContext } from 'src/main'
 import { UIAvatar, UIButton } from 'src/components/UI'
+import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
 
 const ContactList = () => {
   const { $call } = useContext(ServiceContext)
@@ -32,8 +33,7 @@ const ContactList = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const deleteUser = (userData: User) => {
-    if (userData.id && id)
-      socket.emit(SocketActions['delete-contact'], { currentUserId: id, deletingUserId: userData.id })
+    if (userData.id && id) socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
   }
 
   const createChat = (value: User) => {
@@ -42,7 +42,7 @@ const ContactList = () => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
       if (user?.id) {
-        dispatch(changeAsideTab('chatList'))
+        dispatch(changeAsideTab(AsideBarButtonName.chatList))
         dispatch(selectChatRoom(room.id))
       }
       return Boolean(user)
@@ -55,16 +55,17 @@ const ContactList = () => {
     if (!hasUsersData) return
 
     loaderStateChangeHandler(true, 'room', value.id)
-    const socketPayload: SocketActionsPayload['create-room'] = {
+    const socketPayload: SocketActionsPayload['createRoom'] = {
+      chatName: contactName,
       users: [id, contactId],
       authorId: id,
       multiple: false
     }
-    socket.emit(SocketActions['create-room'], socketPayload)
+    socket.emit(SocketActions.CREATE_ROOM, socketPayload)
 
-    socket.on(SocketActions['room-created'], (data) => {
+    socket.on(SocketActions.ROOM_CREATED, (data) => {
       loaderStateChangeHandler(false, 'room', value.id)
-      dispatch(changeAsideTab('chatList'))
+      dispatch(changeAsideTab(AsideBarButtonName.chatList))
 
       setTimeout(() => {
         dispatch(selectChatRoom(data.roomId))

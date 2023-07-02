@@ -7,7 +7,7 @@ import { transformMessageForUsers } from './transformMessageForUsers'
 import { SystemMessages } from '../../types/Constants'
 
 export const transformRoomForUser = async ({ userId, room }: { userId: string; room: DBChatRoom }) => {
-  let { chatName, users, avatarPath, multiple, authorId, _id, messages } = room
+  let { chatName, users, avatarPath, multiple, authorId, _id, messages, blocked } = room
   let hasOnline = false
 
   if (!multiple) {
@@ -46,7 +46,6 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
     }
 
     const status = isUserAuthor ? MessageStatus.none : MessageStatus.delivered
-
     await MessageModel.updateOne({ _id: systemMessageId }, { $set: { usersMetaData: { id: userId, status } } })
 
     messages?.push(systemMessageId)
@@ -55,14 +54,14 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
   const fullBodyMessages: Array<DBMessage> = await MessageModel.find({ _id: { $in: messages } })
 
   const transformedMessages = fullBodyMessages.map((message) => transformMessageForUsers(message, userId))
-  const blocked = authorId === userId && room.messages?.length < 2 && !room.multiple
+  const isRoomBlocked = authorId === userId && blocked
   const result: ChatRoom = {
     id: String(_id),
     authorId,
     chatName,
     avatarPath,
     hasOnline,
-    blocked,
+    blocked: isRoomBlocked,
     users: shortUserList,
     messages: transformedMessages,
     multiple

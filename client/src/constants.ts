@@ -3,6 +3,7 @@ export default {
   errorNotificationDuration: 10000,
   asidePanelLoaderMinDuration: 2000,
   chatRoomLoaderMinDuration: 2500,
+  commonTimeoutDuration: 1000,
   maxImageWeightMb: 2,
   maxQuantityBindImages: 4,
   maxGroupChatMembersQuantity: 5,
@@ -93,6 +94,8 @@ export default {
     chatRoomHeaderHeight: 55,
     shortInputMessage: 35,
     fullInputMessage: 100,
-    roomHeader: 55
+    roomHeader: 55,
+    contextMenuWidth: 150,
+    contextMenuHeight: 150
   }
 }

@@ -5,9 +5,9 @@ import { ErrorMessages } from '../types/Messages'
 
 export const throwErrorViaSocket = async (userId: string) => {
   const userData = await getUserById(userId)
-  const payload: SocketActionsPayload['error-message'] = {
+  const payload: SocketActionsPayload['errorMessage'] = {
     message: ErrorMessages.imageConverterError
   }
   if (!userData?.socketId) return
-  io.to(userData?.socketId).emit(SocketActions['error-message'], payload)
+  io.to(userData?.socketId).emit(SocketActions.ERROR_MESSAGE, payload)
 }

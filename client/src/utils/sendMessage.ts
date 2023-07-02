@@ -1,8 +1,8 @@
-import { Message, MessageStatus, SocketActions, SocketActionsPayload } from 'common-types'
+import { Message, MessageStatus, RepliedMessage, SocketActions, SocketActionsPayload } from 'common-types'
 import { ImageObject } from 'common-types'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { pushTemporaryMessage } from 'src/store/roomsSlice'
+import { pushTemporaryMessage, resetRepliedMessage } from 'src/store/roomsSlice'
 import { v4 as uuidv4 } from 'uuid'
 
 export const sendMessage = ({
@@ -12,7 +12,8 @@ export const sendMessage = ({
   username,
   dispatch,
   images = [],
-  imageCompression = true
+  imageCompression = true,
+  repliedMessage = null
 }: {
   authorId: string
   messageText: string
@@ -21,6 +22,7 @@ export const sendMessage = ({
   dispatch: AppDispatch
   images?: Array<ImageObject>
   imageCompression?: boolean
+  repliedMessage?: RepliedMessage | null
 }) => {
   const message: Message = {
     id: '',
@@ -31,12 +33,14 @@ export const sendMessage = ({
     body: messageText,
     images,
     imageCompression,
-    createdAt: String(Date.now())
+    createdAt: String(Date.now()),
+    repliedMessage
   }
-  const payload: SocketActionsPayload['send-message'] = {
+  const payload: SocketActionsPayload['sendMessage'] = {
     roomId,
     message
   }
-  socket.emit(SocketActions['send-message'], payload)
+  socket.emit(SocketActions.SEND_MESSAGE, payload)
+  dispatch(resetRepliedMessage())
   dispatch(pushTemporaryMessage({ roomId, message }))
 }

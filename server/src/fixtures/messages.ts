@@ -1,4 +1,4 @@
-import { MessageStatus } from '../../../types'
+import { Author, MessageStatus } from '../../../types'
 import { MessageModel } from '../models/message.model'
 import constants from '../constants'
 import mongoose from 'mongoose'
@@ -11,8 +11,8 @@ export const loadMessageFixtures = async () => {
       if (messageCandidate) return
       const message = new MessageModel({
         _id,
-        authorId: 'system',
-        authorName: 'system',
+        authorId: Author.system,
+        authorName: Author.system,
         status: MessageStatus.none,
         body: systemMessage.text,
         createdAt: Date.now(),

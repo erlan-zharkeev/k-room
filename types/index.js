@@ -1,6 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Status = exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
+exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.InfoItemStatus = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+// BASIC
+var Status;
+(function (Status) {
+    Status[Status["success"] = 200] = "success";
+    Status[Status["badRequest"] = 400] = "badRequest";
+    Status[Status["notAuth"] = 401] = "notAuth";
+    Status[Status["tokenExpired"] = 403] = "tokenExpired";
+    Status[Status["notFound"] = 404] = "notFound";
+    Status[Status["unreachable"] = 503] = "unreachable";
+    Status[Status["badGateaway"] = 504] = "badGateaway";
+})(Status = exports.Status || (exports.Status = {}));
+var Author;
+(function (Author) {
+    Author["system"] = "system";
+    Author["time"] = "time";
+})(Author = exports.Author || (exports.Author = {}));
+var MessageStatus;
+(function (MessageStatus) {
+    MessageStatus["sending"] = "sending";
+    MessageStatus["undelivered"] = "undelivered";
+    MessageStatus["delivered"] = "delivered";
+    MessageStatus["read"] = "read";
+    MessageStatus["none"] = "none";
+})(MessageStatus = exports.MessageStatus || (exports.MessageStatus = {}));
+var Theme;
+(function (Theme) {
+    Theme["dark"] = "dark";
+    Theme["light"] = "light";
+})(Theme = exports.Theme || (exports.Theme = {}));
+var UserSettingKey;
+(function (UserSettingKey) {
+    UserSettingKey["theme"] = "theme";
+    UserSettingKey["soundOn"] = "soundOn";
+    UserSettingKey["showTooltips"] = "showTooltips";
+    UserSettingKey["ableToShowNotification"] = "ableToShowNotification";
+    UserSettingKey["selectedChatRoomId"] = "selectedChatRoomId";
+    UserSettingKey["asideTab"] = "asideTab";
+    UserSettingKey["currentInfoId"] = "currentInfoId";
+})(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
+var CallStatus;
+(function (CallStatus) {
+    CallStatus["calling"] = "calling";
+    CallStatus["inProgress"] = "in-progress";
+    CallStatus["finished"] = "finished";
+})(CallStatus = exports.CallStatus || (exports.CallStatus = {}));
+var CallType;
+(function (CallType) {
+    CallType["incoming"] = "incoming";
+    CallType["outgoing"] = "outgoing";
+    CallType["missed"] = "missed";
+})(CallType = exports.CallType || (exports.CallType = {}));
+var InfoItemStatus;
+(function (InfoItemStatus) {
+    InfoItemStatus["read"] = "read";
+    InfoItemStatus["unread"] = "unread";
+})(InfoItemStatus = exports.InfoItemStatus || (exports.InfoItemStatus = {}));
+// ENDPOINTS (!for every endpoints use upper snake case)
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/auth/registration";
@@ -45,84 +102,40 @@ var RouteNames;
 })(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var SocketActions;
 (function (SocketActions) {
-    SocketActions["connection"] = "connection";
-    SocketActions["reconnect"] = "reconnect";
-    SocketActions["reconnect-attempt"] = "reconnect_attempt";
-    SocketActions["reconnect-failed"] = "reconnect_failed";
-    SocketActions["initialize"] = "initialize";
-    SocketActions["disconnect"] = "disconnect";
-    SocketActions["get-rooms"] = "get-rooms";
-    SocketActions["create-room"] = "create-room";
-    SocketActions["send-message"] = "send-message";
-    SocketActions["message-delivered"] = "message-delivered";
-    SocketActions["room-created"] = "room-created";
-    SocketActions["search-contact"] = "search-contact";
-    SocketActions["get-searched-contact"] = "get-searched-contact";
-    SocketActions["status-contact"] = "status-contact";
-    SocketActions["get-contacts"] = "get-contacts";
-    SocketActions["save-contact"] = "save-contact";
-    SocketActions["delete-contact"] = "delete-contact";
-    SocketActions["user-typing"] = "user-typing";
-    SocketActions["get-user-typing-status"] = "get-user-typing-status";
-    SocketActions["change-message-status"] = "change-message-status";
-    SocketActions["update-message-status"] = "update-message-status";
-    SocketActions["change-contacts-data"] = "change-contacts-data";
-    SocketActions["call-user"] = "call-user";
-    SocketActions["answer-call"] = "answer-call";
-    SocketActions["call-accepted"] = "call-accepted";
-    SocketActions["call-ended"] = "call-ended";
-    SocketActions["change-call-settings"] = "change-call-settings";
-    SocketActions["call-started-at"] = "call-started-at";
-    SocketActions["update-user-settings"] = "update-user-settings";
-    SocketActions["update-chat-room"] = "update-chat-room";
-    SocketActions["room-data-updated"] = "room-data-updated";
-    SocketActions["add-reaction"] = "add-reaction";
-    SocketActions["update-message-reactions"] = "update-message-reactions";
-    SocketActions["delete-message"] = "delete-message";
-    SocketActions["error-message"] = "error-message";
+    SocketActions["CONNECTION"] = "connection";
+    SocketActions["RECONNECT"] = "reconnect";
+    SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
+    SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
+    SocketActions["INITIALIZE"] = "initialize";
+    SocketActions["DISCONNECT"] = "disconnect";
+    SocketActions["GET_ROOMS"] = "get-rooms";
+    SocketActions["CREATE_ROOM"] = "create-room";
+    SocketActions["SEND_MESSAGE"] = "send-message";
+    SocketActions["MESSAGE_DELIVERED"] = "message-delivered";
+    SocketActions["ROOM_CREATED"] = "room-created";
+    SocketActions["SEARCH_CONTACT"] = "search-contact";
+    SocketActions["GET_SEARCHED_CONTACT"] = "get-searched-contact";
+    SocketActions["STATUS_CONTACT"] = "status-contact";
+    SocketActions["GET_CONTACTS"] = "get-contacts";
+    SocketActions["SAVE_CONTACT"] = "save-contact";
+    SocketActions["DELETE_CONTACT"] = "delete-contact";
+    SocketActions["USER_TYPING"] = "user-typing";
+    SocketActions["GET_USER_TYPING_STATUS"] = "get-user-typing-status";
+    SocketActions["CHANGE_MESSAGE_STATUS"] = "change-message-status";
+    SocketActions["UPDATE_MESSAGE_STATUS"] = "update-message-status";
+    SocketActions["CHANGE_CONTACTS_DATA"] = "change-contacts-data";
+    SocketActions["CALL_USER"] = "call-user";
+    SocketActions["ANSWER_CALL"] = "answer-call";
+    SocketActions["CALL_ACCEPTED"] = "call-accepted";
+    SocketActions["CALL_ENDED"] = "call-ended";
+    SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
+    SocketActions["CALL_STARTED_AT"] = "call-started-at";
+    SocketActions["UPDATE_USER_SETTINGS"] = "update-user-settings";
+    SocketActions["UPDATE_CHAT_ROOM"] = "update-chat-room";
+    SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
+    SocketActions["ADD_REACTION"] = "add-reaction";
+    SocketActions["UPDATE_MESSAGE_REACTIONS"] = "update-message-reactions";
+    SocketActions["DELETE_MESSAGE"] = "delete-message";
+    SocketActions["MESSAGE_DELETED"] = "message-deleted";
+    SocketActions["ERROR_MESSAGE"] = "error-message";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
-var Status;
-(function (Status) {
-    Status[Status["success"] = 200] = "success";
-    Status[Status["bad-request"] = 400] = "bad-request";
-    Status[Status["not-auth"] = 401] = "not-auth";
-    Status[Status["token-expired"] = 403] = "token-expired";
-    Status[Status["not-found"] = 404] = "not-found";
-    Status[Status["unreachable"] = 503] = "unreachable";
-    Status[Status["bad-gateaway"] = 504] = "bad-gateaway";
-})(Status = exports.Status || (exports.Status = {}));
-var MessageStatus;
-(function (MessageStatus) {
-    MessageStatus["sending"] = "sending";
-    MessageStatus["undelivered"] = "undelivered";
-    MessageStatus["delivered"] = "delivered";
-    MessageStatus["read"] = "read";
-    MessageStatus["none"] = "none";
-})(MessageStatus = exports.MessageStatus || (exports.MessageStatus = {}));
-var Theme;
-(function (Theme) {
-    Theme["dark"] = "dark";
-    Theme["light"] = "light";
-})(Theme = exports.Theme || (exports.Theme = {}));
-var UserSettingKey;
-(function (UserSettingKey) {
-    UserSettingKey["theme"] = "theme";
-    UserSettingKey["soundOn"] = "soundOn";
-    UserSettingKey["showTooltips"] = "showTooltips";
-    UserSettingKey["ableToShowNotification"] = "ableToShowNotification";
-    UserSettingKey["selectedChatRoomId"] = "selectedChatRoomId";
-    UserSettingKey["asideTab"] = "asideTab";
-    UserSettingKey["currentInfoId"] = "currentInfoId";
-})(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
-var CallStatus;
-(function (CallStatus) {
-    CallStatus["calling"] = "calling";
-    CallStatus["in-progress"] = "in-progress";
-    CallStatus["finished"] = "finished";
-})(CallStatus = exports.CallStatus || (exports.CallStatus = {}));
-var CallType;
-(function (CallType) {
-    CallType["incoming"] = "incoming";
-    CallType["outgoing"] = "outgoing";
-    CallType["missed"] = "missed";
-})(CallType = exports.CallType || (exports.CallType = {}));

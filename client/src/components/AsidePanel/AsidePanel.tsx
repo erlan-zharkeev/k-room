@@ -6,6 +6,7 @@ import Calls from './Components/Calls/Calls'
 import { ReactElement, useEffect, useState } from 'react'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 import constants from 'src/constants'
+import { AsideBarButtonName } from '../AsideBar/@types/ButtonsListElement'
 
 const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -21,8 +22,8 @@ const AsidePanel = () => {
   }
 
   useEffect(() => {
-    const contactsLoading = asideTab === 'contacts' && contactListLoading
-    const roomsIsLoading = asideTab === 'chatList' && roomListIsLoading
+    const contactsLoading = asideTab === AsideBarButtonName.contacts && contactListLoading
+    const roomsIsLoading = asideTab === AsideBarButtonName.chatList && roomListIsLoading
     setTimeout(() => {
       setIsLoading(contactsLoading && roomsIsLoading)
     }, constants.asidePanelLoaderMinDuration)

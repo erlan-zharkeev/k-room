@@ -9,7 +9,7 @@ export const emitContacts = async (userId: string, message: string = '') => {
   const matchedUsers = await UserModel.find({ _id: { $in: userData?.contacts } })
   const transformedContacts = transformUsersToContacts(matchedUsers)
   if (!userData?.socketId) return
-  io.to(userData.socketId).emit(SocketActions['get-contacts'], transformedContacts, message)
+  io.to(userData.socketId).emit(SocketActions.GET_CONTACTS, transformedContacts, message)
 }
 
 export default emitContacts

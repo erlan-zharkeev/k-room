@@ -9,6 +9,30 @@
   border-radius: $radius-md;
   background-color: var(--dark-gray-transparent);
 
+  &__replied-message-type {
+    color: var(--accent);
+    font-size: 10px;
+  }
+
+  &__replied-message-images {
+    display: flex;
+    max-width: 200px;
+  }
+
+  &__replied-message-image {
+    width: 100px;
+  }
+
+  &__replied-message-wrapper {
+    border-left: 1px solid var(--secondary-text);
+    padding-left: $gutter-sm;
+    margin: $gutter-md;
+    position: relative;
+    p {
+      color: var(--secondary-text);
+    }
+  }
+
   &__images {
     display: flex;
     max-width: 310px;
@@ -83,19 +107,5 @@
     #{$self}__status {
       background-color: var(--accent);
     }
-  }
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
   }
 }

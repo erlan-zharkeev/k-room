@@ -38,7 +38,7 @@ const CreateNewPassword = () => {
     const response = (await dispatch(apiMethods.user.resetPassword(payload))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     const { status } = response.payload
-    if (status === Status['success']) navigate(RouteNames.SIGN_IN)
+    if (status === Status.success) navigate(RouteNames.SIGN_IN)
   }
 
   const formChangeHandler = () => {

@@ -21,7 +21,7 @@ const InfoList = () => {
     const response = (await dispatch(
       apiMethods.common.markInfoAsRead({ currentInfoId, userId: id })
     )) as AsyncThunkResponseWrapper
-    if (response.payload.status !== Status['success']) return
+    if (response.payload.status !== Status.success) return
     dispatch(markInfoItemAsRead({ id: currentInfoId }))
   }
 

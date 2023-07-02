@@ -9,7 +9,7 @@ export const emitUserStatusToAll = async (userId: string, status: boolean) => {
   const sockets = await getSocketsByUserIds(userIds)
 
   sockets.forEach((socketId: string) => {
-    io.to(socketId).emit(SocketActions['status-contact'], { userId, status })
+    io.to(socketId).emit(SocketActions.STATUS_CONTACT, { userId, status })
   })
 }
 

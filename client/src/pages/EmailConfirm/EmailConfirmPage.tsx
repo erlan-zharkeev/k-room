@@ -20,7 +20,7 @@ const EmailConfirmPage = () => {
   const sendEmailConfirmation = async (id: string) => {
     const response = (await dispatch(apiMethods.auth.emailConfirm(id))) as AsyncThunkResponseWrapper
     const { status, data } = response.payload
-    if (status !== Status['success']) return navigate(RouteNames.SIGN_IN)
+    if (status !== Status.success) return navigate(RouteNames.SIGN_IN)
     setEmail(data.userData.email)
     setIsLoading(false)
     dispatch(logOut())

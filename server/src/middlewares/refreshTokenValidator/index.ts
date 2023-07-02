@@ -6,11 +6,11 @@ import ENV from '../../ENV'
 import { UserModel } from '../../models/user.model'
 import { Status } from '../../../../types'
 
-const haventRightsError = (res: Response) => throwError(Status['not-auth'], res, ErrorMessages.nonAuthorized)
+const haventRightsError = (res: Response) => throwError(Status.notAuth, res, ErrorMessages.nonAuthorized)
 
 export const refreshTokenValidator = async (req: Request, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']
-  if (!refreshToken) return throwError(Status['not-auth'], res, ErrorMessages.nonAuthorized)
+  if (!refreshToken) return throwError(Status.notAuth, res, ErrorMessages.nonAuthorized)
   jwt.verify(refreshToken, ENV?.JWT_REFRESH_TOKEN_SECRET, async (error: any, decoded: any) => {
     if (error) return haventRightsError(res)
     const id = decoded.id

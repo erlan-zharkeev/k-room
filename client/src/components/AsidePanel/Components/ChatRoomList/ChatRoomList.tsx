@@ -1,4 +1,4 @@
-import { Badge, List } from 'antd'
+import { List } from 'antd'
 import { SocketActions, ChatRoom, Message, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { UIButton, UIAvatar } from 'src/components/UI'
@@ -28,7 +28,7 @@ const ChatRoomList = () => {
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
     e.stopPropagation()
-    socket.emit(SocketActions['save-contact'], { userId: id, interlocutorId })
+    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId })
   }
 
   const unreadMessages = (room: ChatRoom) =>

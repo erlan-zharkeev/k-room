@@ -26,7 +26,7 @@ const ChatRoomSettingsPopup = () => {
 
   const onFinish = async (values: { 'chat-name': string }) => {
     const userIds = chatRoomData?.users.map((user) => user.id) ?? []
-    const updatedValues: SocketActionsPayload['update-chat-room'] = {
+    const updatedValues: SocketActionsPayload['updateChatRoom'] = {
       roomId: selectedChatRoomId,
       users: [id, ...userIds],
       chatName: values['chat-name'],
@@ -36,8 +36,8 @@ const ChatRoomSettingsPopup = () => {
     }
     setIsLoading(true)
 
-    socket.emit(SocketActions['update-chat-room'], updatedValues)
-    socket.on(SocketActions['room-data-updated'], () => {
+    socket.emit(SocketActions.UPDATE_CHAT_ROOM, updatedValues)
+    socket.on(SocketActions.ROOM_DATA_UPDATED, () => {
       setIsLoading(false)
       dispatch(closeModal())
     })

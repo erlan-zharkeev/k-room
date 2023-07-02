@@ -13,6 +13,7 @@ const MessageWithBindDataPopup = () => {
   const { body, images } = useTypedSelector((state) => state.chatRooms.attachedFilesMessage)
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [compress, setCompress] = useState(true)
+  const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
   const [form] = Form.useForm()
 
   const dispatch = useDispatch<AppDispatch>()
@@ -29,6 +30,7 @@ const MessageWithBindDataPopup = () => {
         messageText,
         images,
         imageCompression: compress,
+        repliedMessage: repliedMessageData,
         dispatch
       }
       sendMessage(messageData)

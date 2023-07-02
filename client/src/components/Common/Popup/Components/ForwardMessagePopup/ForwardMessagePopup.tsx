@@ -18,12 +18,14 @@ const ForwardMessagePopup = () => {
     dispatch(setRepliedMessage(message))
     dispatch(closeModal())
   }
+
   return (
     <div className="forward-message-popup">
-      <div className="tech-settings-popup__select">
+      <div className="forward-message-popup__select">
         <UIInput
           size="small"
           suffix={<UIIcon name={'search'} color={'default'} />}
+          placeholder="Find room"
           onChange={(e) => setSearchString(e.target.value)}
         />
         <ShortChatList searchString={searchString} clickChat={clickChatHandler} />

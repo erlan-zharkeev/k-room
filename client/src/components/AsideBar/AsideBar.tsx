@@ -1,9 +1,9 @@
-import { Badge, Radio, RadioChangeEvent } from 'antd'
+import { Radio, RadioChangeEvent } from 'antd'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { ButtonsListElement } from './@types/ButtonsListElement'
+import { AsideBarButtonName, ButtonsListElement } from './@types/ButtonsListElement'
 import { Logo } from '../Common/Logo/Logo'
 import { showModal } from 'src/store/systemSlice'
 import { MessageStatus } from 'common-types'
@@ -25,10 +25,10 @@ const AsideBar = () => {
   }
 
   const buttons: Array<ButtonsListElement> = [
-    { value: 'contacts', iconName: 'contacts', tooltip: 'Contacts' },
-    { value: 'chatList', iconName: 'chats', tooltip: 'Chats' },
-    { value: 'calls', iconName: 'calls', tooltip: 'Calls' },
-    { value: 'settings', iconName: 'settings-cog', tooltip: 'Settings' }
+    { value: AsideBarButtonName.contacts, iconName: 'contacts', tooltip: 'Contacts' },
+    { value: AsideBarButtonName.chatList, iconName: 'chats', tooltip: 'Chats' },
+    { value: AsideBarButtonName.calls, iconName: 'calls', tooltip: 'Calls' },
+    { value: AsideBarButtonName.settings, iconName: 'settings-cog', tooltip: 'Settings' }
   ]
 
   const openTechSettings = () => {
@@ -62,7 +62,7 @@ const AsideBar = () => {
         {buttons.map((button) => (
           <div key={button.value} className="aside-bar__button-el">
             {getButtonComponent(button)}
-            {button.value === 'chatList' && unreadMessagesCount() > 0 && (
+            {button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 && (
               <div className="custom-badge">{unreadMessagesCount()}</div>
             )}
           </div>

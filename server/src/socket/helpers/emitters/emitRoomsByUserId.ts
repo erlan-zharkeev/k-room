@@ -9,7 +9,7 @@ export const emitRoomsByUserId = async (userId: string) => {
   if (!userData?.socketId) return
   const rooms: Array<DBChatRoom> = await ChatRoomModel.find({ _id: { $in: userData.chatRooms } })
   const transformedRooms = await Promise.all(rooms.map(async (room) => await transformRoomForUser({ userId, room })))
-  io.to(userData.socketId).emit(SocketActions['get-rooms'], transformedRooms)
+  io.to(userData.socketId).emit(SocketActions.GET_ROOMS, transformedRooms)
 }
 
 export default emitRoomsByUserId

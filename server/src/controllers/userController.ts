@@ -32,7 +32,7 @@ class UserController {
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
 
-      if (!updateUserDataResponse) return throwError(Status['bad-request'], res, ErrorMessages.usersFind)
+      if (!updateUserDataResponse) return throwError(Status.badRequest, res, ErrorMessages.usersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
       const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
@@ -44,7 +44,7 @@ class UserController {
       }
 
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit(SocketActions['change-contacts-data'], {
+        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, {
           id: userId,
           ...updatedUserData
         })
@@ -55,7 +55,7 @@ class UserController {
         message: SuccessMessages.userDataUpdated
       })
     } catch {
-      throwError(Status['bad-request'], res, ErrorMessages.failedUserDataUpdate)
+      throwError(Status.badRequest, res, ErrorMessages.failedUserDataUpdate)
     }
   }
 
@@ -63,7 +63,7 @@ class UserController {
     try {
       const { id } = req.body.decoded
       const user = await UserModel.findOne({ _id: id })
-      if (!user) return throwError(Status['bad-request'], res, ErrorMessages.userNotFound)
+      if (!user) return throwError(Status.badRequest, res, ErrorMessages.userNotFound)
       return res.json({
         userData: {
           username: user.username,
@@ -75,7 +75,7 @@ class UserController {
         settings: user.settings
       })
     } catch {
-      throwError(Status['bad-request'], res, ErrorMessages.failedGetUserData)
+      throwError(Status.badRequest, res, ErrorMessages.failedGetUserData)
     }
   }
 
@@ -83,10 +83,10 @@ class UserController {
     try {
       const { query, password } = req.body
       const hashedPassword = await bcrypt.hash(password, 6)
-      if (!hashedPassword) return throwError(Status['bad-request'], res, ErrorMessages.failedPassHash)
+      if (!hashedPassword) return throwError(Status.badRequest, res, ErrorMessages.failedPassHash)
 
       const user = await UserModel.findOne({ 'codes.passwordRecovery.query.value': query })
-      if (!user) throwError(Status['bad-request'], res, ErrorMessages.failedResetPassword)
+      if (!user) throwError(Status.badRequest, res, ErrorMessages.failedResetPassword)
 
       await user?.updateOne({
         $set: {
@@ -98,7 +98,7 @@ class UserController {
 
       return res.json({ message: SuccessMessages.passwordReset })
     } catch {
-      return throwError(Status['bad-request'], res, ErrorMessages.commonServerError)
+      return throwError(Status.badRequest, res, ErrorMessages.commonServerError)
     }
   }
 }

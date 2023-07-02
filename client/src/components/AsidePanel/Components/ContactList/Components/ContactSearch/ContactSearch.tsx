@@ -14,7 +14,7 @@ const ContactSearch = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
 
   useEffect(() => {
-    socket.on(SocketActions['get-searched-contact'], (contacts: Array<User>) => {
+    socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<User>) => {
       const userFilteredSelf = contacts.filter((user: User) => user.id !== id)
       setUsers(userFilteredSelf)
       setIsLoading(false)
@@ -22,8 +22,8 @@ const ContactSearch = () => {
   }, [])
 
   const fetchUsers = async (value: string) => {
-    const searchPayload: SocketActionsPayload['search-contact'] = { value }
-    socket.emit(SocketActions['search-contact'], searchPayload)
+    const searchPayload: SocketActionsPayload['searchContact'] = { value }
+    socket.emit(SocketActions.SEARCH_CONTACT, searchPayload)
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
@@ -41,7 +41,7 @@ const ContactSearch = () => {
     if (!interlocutorId) return
     const interlocutorData = users.find((user) => user.id === interlocutorId)
     if (!interlocutorData) return
-    socket.emit(SocketActions['save-contact'], { userId: id, interlocutorId: interlocutorData.id })
+    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
   }
 
   return (

@@ -8,7 +8,7 @@ import { SocketInstanceType } from '../../types/SocketInstanceType'
 const ObjectIdType = require('mongoose').Types.ObjectId
 
 export const contactsSlice = (socket: SocketInstanceType) => {
-  socket.on(SocketActions['search-contact'], async ({ value }: SocketActionsPayload['search-contact']) => {
+  socket.on(SocketActions.SEARCH_CONTACT, async ({ value }: SocketActionsPayload['searchContact']) => {
     let type = 'name'
     let validSearch = true
     if (value.includes('#')) {
@@ -45,14 +45,14 @@ export const contactsSlice = (socket: SocketInstanceType) => {
     emitSearchedContacts(socket.id, searchedUsers)
   })
 
-  socket.on(SocketActions['save-contact'], async ({ userId, interlocutorId }: SocketActionsPayload['save-contact']) => {
+  socket.on(SocketActions.SAVE_CONTACT, async ({ userId, interlocutorId }: SocketActionsPayload['saveContact']) => {
     await UserModel.updateOne({ _id: userId }, { $addToSet: { contacts: interlocutorId } })
     emitContactsToUser(userId, SuccessMessages.userAddedToContacts)
   })
 
   socket.on(
-    SocketActions['delete-contact'],
-    async ({ currentUserId, deletingUserId }: SocketActionsPayload['delete-contact']) => {
+    SocketActions.DELETE_CONTACT,
+    async ({ currentUserId, deletingUserId }: SocketActionsPayload['deleteContact']) => {
       await UserModel.updateOne({ _id: currentUserId }, { $pull: { contacts: deletingUserId } })
       emitContactsToUser(currentUserId, SuccessMessages.userRemovedFromContacts)
     }
