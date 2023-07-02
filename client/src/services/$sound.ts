@@ -1,9 +1,5 @@
 import { Howl } from 'howler'
 
-type SoundSources = {
-  [key in Sounds]: string
-}
-
 export enum Sounds {
   messageDelivered = 'messageDelivered',
   calling = 'calling',
@@ -12,7 +8,7 @@ export enum Sounds {
   ring = 'ring'
 }
 
-const soundSrc: SoundSources = {
+const soundSrc: Record<Sounds, string> = {
   messageDelivered: './sounds/ding.mp3',
   calling: './sounds/calling.mp3',
   busy: './sounds/busy.mp3',

@@ -4,7 +4,7 @@ import { IconName } from '../../UIIcon/@types/IconName'
 export interface UIAvatarLoaderProps {
   path: string | undefined
   setImage: React.Dispatch<any>
-  setFile: React.Dispatch<(prevState: undefined) => undefined>
+  setFile: React.Dispatch<(prevState: undefined | undefined) => undefined>
   updated?: () => void
   stubIconName?: IconName
   shape?: ShapeModifiers

@@ -1,11 +1,9 @@
 import { List } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import firstCharUpperCase from 'src/utils/firstCharUpperCase'
+import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import useDynamicRefs from 'use-dynamic-refs'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
-import UIButton from 'src/components/UI/UIButton/UIButton'
+import { UIAvatar, UIIcon, UIButton } from 'src/components/UI'
 
 const Calls = () => {
   const { list } = useTypedSelector((state) => state.calls)
@@ -26,7 +24,7 @@ const Calls = () => {
           renderItem={(call) => (
             <List.Item className="call-list__item" ref={setRef(call.interlocutorId)}>
               <List.Item.Meta
-                avatar={<UIAvatar src={call.interlocutorAvatar} showBadge={false} />}
+                avatar={<UIAvatar src={call.interlocutorAvatarPath} showBadge={false} />}
                 title={<span>{call.interlocutorName}</span>}
                 description={
                   <div

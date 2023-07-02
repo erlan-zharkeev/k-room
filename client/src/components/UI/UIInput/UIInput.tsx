@@ -1,5 +1,5 @@
 import { Input } from 'antd'
-import modifiersHandler from 'src/utils/modifiersHandler'
+import { modifiersHandler } from 'src/utils/modifiersHandler'
 import { UIInputProps } from 'ui/UIInput/@types/UIInputProps'
 
 const inputTypes = [

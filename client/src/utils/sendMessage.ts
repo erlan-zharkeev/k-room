@@ -1,39 +1,46 @@
-import { Message, SocketActions } from 'common-types'
+import { Message, MessageStatus, RepliedMessage, SocketActions, SocketActionsPayload } from 'common-types'
 import { ImageObject } from 'common-types'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
-import { pushTemporaryMessage } from 'src/store/roomsSlice'
+import { pushTemporaryMessage, resetRepliedMessage } from 'src/store/roomsSlice'
 import { v4 as uuidv4 } from 'uuid'
 
-const sendMessage = ({
+export const sendMessage = ({
   authorId,
   messageText,
   roomId,
   username,
   dispatch,
-  files = [],
-  filesCompression = true
+  images = [],
+  imageCompression = true,
+  repliedMessage = null
 }: {
   authorId: string
   messageText: string
   roomId: string
   username: string
   dispatch: AppDispatch
-  files?: Array<ImageObject>
-  filesCompression?: boolean
+  images?: Array<ImageObject>
+  imageCompression?: boolean
+  repliedMessage?: RepliedMessage | null
 }) => {
   const message: Message = {
-    id: uuidv4(),
-    status: 'sending',
+    id: '',
+    tempId: uuidv4(),
+    status: MessageStatus.sending,
     authorName: username,
-    author: authorId,
+    authorId,
     body: messageText,
-    files,
-    filesCompression,
-    createdAt: String(Date.now())
+    images,
+    imageCompression,
+    createdAt: String(Date.now()),
+    repliedMessage
   }
-  socket.emit(SocketActions.SEND_MESSAGE, { roomId, message })
+  const payload: SocketActionsPayload['sendMessage'] = {
+    roomId,
+    message
+  }
+  socket.emit(SocketActions.SEND_MESSAGE, payload)
+  dispatch(resetRepliedMessage())
   dispatch(pushTemporaryMessage({ roomId, message }))
 }
-
-export default sendMessage

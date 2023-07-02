@@ -3,8 +3,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { socket } from 'src/socket/socket'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
+import { UIIcon, UIButton } from 'src/components/UI'
 
 const StubLoading = () => {
   const dispatch = useDispatch<AppDispatch>()

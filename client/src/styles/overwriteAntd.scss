@@ -25,13 +25,11 @@
   background-color: var(--main-bg);
   @include nm-inset-shadow;
 
-  // padding: 2px;
   &-checked {
     @include nm-inset-shadow;
   }
 
   &-handle {
-    // padding: 2px;
     @include nm-outset-shadow;
   }
 
@@ -279,7 +277,6 @@ div[role='dialog'] {
       &:hover {
         background-color: var(--secondary-text);
         color: var(--main-bg) !important;
-        // border-radius: $radius-sm;
       }
     }
   }
@@ -292,8 +289,6 @@ div[role='dialog'] {
 }
 
 .ant-image-mask {
-  border-radius: 50%;
-
   span {
     margin-right: 0 !important;
   }
@@ -323,7 +318,10 @@ div[role='dialog'] {
 }
 
 // Badge
-.ant-badge {
-  display: flex;
-  align-items: center;
-}
+// .ant-badge {
+//   display: flex;
+//   align-items: center;
+// }
+// .ant-badge-count {
+//   min-width: none !important;
+// }

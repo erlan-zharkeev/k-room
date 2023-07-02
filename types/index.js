@@ -1,6 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Status = exports.RouteNames = exports.SocketActions = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = void 0;
+exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.InfoItemStatus = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+// BASIC
+var Status;
+(function (Status) {
+    Status[Status["success"] = 200] = "success";
+    Status[Status["badRequest"] = 400] = "badRequest";
+    Status[Status["notAuth"] = 401] = "notAuth";
+    Status[Status["tokenExpired"] = 403] = "tokenExpired";
+    Status[Status["notFound"] = 404] = "notFound";
+    Status[Status["unreachable"] = 503] = "unreachable";
+    Status[Status["badGateaway"] = 504] = "badGateaway";
+})(Status = exports.Status || (exports.Status = {}));
+var Author;
+(function (Author) {
+    Author["system"] = "system";
+    Author["time"] = "time";
+})(Author = exports.Author || (exports.Author = {}));
+var MessageStatus;
+(function (MessageStatus) {
+    MessageStatus["sending"] = "sending";
+    MessageStatus["undelivered"] = "undelivered";
+    MessageStatus["delivered"] = "delivered";
+    MessageStatus["read"] = "read";
+    MessageStatus["none"] = "none";
+})(MessageStatus = exports.MessageStatus || (exports.MessageStatus = {}));
+var Theme;
+(function (Theme) {
+    Theme["dark"] = "dark";
+    Theme["light"] = "light";
+})(Theme = exports.Theme || (exports.Theme = {}));
+var UserSettingKey;
+(function (UserSettingKey) {
+    UserSettingKey["theme"] = "theme";
+    UserSettingKey["soundOn"] = "soundOn";
+    UserSettingKey["showTooltips"] = "showTooltips";
+    UserSettingKey["ableToShowNotification"] = "ableToShowNotification";
+    UserSettingKey["selectedChatRoomId"] = "selectedChatRoomId";
+    UserSettingKey["asideTab"] = "asideTab";
+    UserSettingKey["currentInfoId"] = "currentInfoId";
+})(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
+var CallStatus;
+(function (CallStatus) {
+    CallStatus["calling"] = "calling";
+    CallStatus["inProgress"] = "in-progress";
+    CallStatus["finished"] = "finished";
+})(CallStatus = exports.CallStatus || (exports.CallStatus = {}));
+var CallType;
+(function (CallType) {
+    CallType["incoming"] = "incoming";
+    CallType["outgoing"] = "outgoing";
+    CallType["missed"] = "missed";
+})(CallType = exports.CallType || (exports.CallType = {}));
+var InfoItemStatus;
+(function (InfoItemStatus) {
+    InfoItemStatus["read"] = "read";
+    InfoItemStatus["unread"] = "unread";
+})(InfoItemStatus = exports.InfoItemStatus || (exports.InfoItemStatus = {}));
+// ENDPOINTS (!for every endpoints use upper snake case)
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/auth/registration";
@@ -28,10 +85,25 @@ var CodesEndPoints;
     CodesEndPoints["SEND_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/password-recovery";
     CodesEndPoints["VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/validate-email-code-password-recovery";
 })(CodesEndPoints = exports.CodesEndPoints || (exports.CodesEndPoints = {}));
+var RouteNames;
+(function (RouteNames) {
+    RouteNames["SIGN_IN"] = "/sign-in";
+    RouteNames["SIGN_UP"] = "/sign-up";
+    RouteNames["WAIT_EMAIL_CONFIRM"] = "/wait-email-confirm";
+    RouteNames["EMAIL_CONFIRM"] = "/confirm-email";
+    RouteNames["MAIN"] = "/app";
+    RouteNames["NOT_FOUND"] = "/not-found";
+    RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
+    RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
+    RouteNames["NOTIFICATION"] = "/notification";
+    // Don't forget to change path below in nginx manually
+    RouteNames["SOCKET_PATH"] = "/app-socket/";
+    RouteNames["API"] = "/api/";
+})(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
 var SocketActions;
 (function (SocketActions) {
     SocketActions["CONNECTION"] = "connection";
-    SocketActions["RECONNECTION"] = "reconnect";
+    SocketActions["RECONNECT"] = "reconnect";
     SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
     SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
     SocketActions["INITIALIZE"] = "initialize";
@@ -42,7 +114,7 @@ var SocketActions;
     SocketActions["MESSAGE_DELIVERED"] = "message-delivered";
     SocketActions["ROOM_CREATED"] = "room-created";
     SocketActions["SEARCH_CONTACT"] = "search-contact";
-    SocketActions["GET_SEARCHED_CONTACTS"] = "get-searched-contact";
+    SocketActions["GET_SEARCHED_CONTACT"] = "get-searched-contact";
     SocketActions["STATUS_CONTACT"] = "status-contact";
     SocketActions["GET_CONTACTS"] = "get-contacts";
     SocketActions["SAVE_CONTACT"] = "save-contact";
@@ -63,29 +135,7 @@ var SocketActions;
     SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
     SocketActions["ADD_REACTION"] = "add-reaction";
     SocketActions["UPDATE_MESSAGE_REACTIONS"] = "update-message-reactions";
+    SocketActions["DELETE_MESSAGE"] = "delete-message";
+    SocketActions["MESSAGE_DELETED"] = "message-deleted";
+    SocketActions["ERROR_MESSAGE"] = "error-message";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
-var RouteNames;
-(function (RouteNames) {
-    RouteNames["SIGN_IN"] = "/sign-in";
-    RouteNames["SIGN_UP"] = "/sign-up";
-    RouteNames["WAIT_EMAIL_CONFIRM"] = "/wait-email-confirm";
-    RouteNames["EMAIL_CONFIRM"] = "/confirm-email";
-    RouteNames["MAIN"] = "/app";
-    RouteNames["NOT_FOUND"] = "/not-found";
-    RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
-    RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
-    RouteNames["NOTIFICATION"] = "/notification";
-    // Don't forget to change path below in nginx manually
-    RouteNames["SOCKET"] = "/socket/";
-    RouteNames["API"] = "/api/";
-})(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
-var Status;
-(function (Status) {
-    Status[Status["SUCCESS"] = 200] = "SUCCESS";
-    Status[Status["BAD_REQUEST"] = 400] = "BAD_REQUEST";
-    Status[Status["NOT_AUTH"] = 401] = "NOT_AUTH";
-    Status[Status["TOKEN_EXPIRED"] = 403] = "TOKEN_EXPIRED";
-    Status[Status["NOT_FOUND"] = 404] = "NOT_FOUND";
-    Status[Status["UNREACHABLE"] = 503] = "UNREACHABLE";
-    Status[Status["BAD_GATEAWAY"] = 504] = "BAD_GATEAWAY";
-})(Status = exports.Status || (exports.Status = {}));

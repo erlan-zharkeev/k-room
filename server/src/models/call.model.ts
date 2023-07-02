@@ -26,7 +26,7 @@ export const callModel = new Schema<Call>({
     type: String,
     required: true
   },
-  interlocutorAvatar: {
+  interlocutorAvatarPath: {
     type: String,
     required: false
   },

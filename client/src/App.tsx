@@ -6,12 +6,12 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import AppRouter from 'src/router/AppRouter'
 import { AppDispatch } from 'src/store'
 import { setViewPort } from 'src/store/systemSlice'
-import getCookie from 'src/utils/getCookie'
-import setTheme from 'src/utils/setTheme'
-import clearLocalStorageOnKeyDown from './utils/clearLocalStorageOnKeyDown'
-import getViewPort from './utils/getViewPort'
+import { getCookie } from 'src/utils/getCookie'
+import { setTheme } from 'src/utils/setTheme'
+import { clearLocalStorageOnKeyDown } from './utils/clearLocalStorageOnKeyDown'
+import { getViewPort } from './utils/getViewPort'
 import apiMethods from './services/api-methods'
-import { commonSetUserDataHandler } from './store/userSlice'
+import { changeIsAppLoading, commonSetUserDataHandler } from './store/userSlice'
 import { AsyncThunkResponseWrapper } from './@types'
 import ContextMenu from 'src/components/Common/ContextMenu/ContextMenu'
 
@@ -24,18 +24,21 @@ const App = () => {
     if (!response.payload) return
     const { userData, settings } = response.payload?.data
     if (userData && settings) commonSetUserDataHandler(dispatch, { userData, settings })
+    dispatch(changeIsAppLoading(false))
   }
   const handleResize = () => dispatch(setViewPort(getViewPort()))
 
   useEffect(() => {
-    const accessToken = getCookie('jwt')
-    if (accessToken) fetchUser()
     setTheme(theme)
     const root = document.querySelector('body')
     root?.addEventListener('keydown', clearLocalStorageOnKeyDown)
 
     window.addEventListener('load', handleResize)
     window.addEventListener('resize', handleResize)
+
+    const hasJwt = Boolean(getCookie('jwt'))
+    dispatch(changeIsAppLoading(hasJwt))
+    if (hasJwt) fetchUser()
 
     return () => {
       root?.removeEventListener('keydown', clearLocalStorageOnKeyDown)

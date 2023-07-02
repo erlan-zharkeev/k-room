@@ -1,5 +1,5 @@
 import { List } from 'antd'
-import { User, SocketActions } from 'common-types'
+import { User, SocketActions, SocketActionsPayload } from 'common-types'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -8,19 +8,19 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import { ServiceContext } from 'src/main'
+import { UIAvatar, UIButton } from 'src/components/UI'
+import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
 
 const ContactList = () => {
   const { $call } = useContext(ServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { id, username, avatar } = useTypedSelector((state) => state.user.userData)
+  const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)
 
   const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
-    room: { [key: string]: boolean }
-    stream: { [key: string]: boolean }
+    room: Record<string, boolean>
+    stream: Record<string, boolean>
   })
 
   useEffect(() => {
@@ -32,15 +32,6 @@ const ContactList = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const createUser = (id: string, username: string) => {
-    const avatar = contacts.find((contact) => contact.id === id)?.avatar ?? ''
-    return {
-      id,
-      username: username ?? '',
-      avatar
-    }
-  }
-
   const deleteUser = (userData: User) => {
     if (userData.id && id) socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
   }
@@ -51,8 +42,8 @@ const ContactList = () => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
       if (user?.id) {
-        dispatch(changeAsideTab('chatList'))
-        dispatch(selectChatRoom(room.roomId))
+        dispatch(changeAsideTab(AsideBarButtonName.chatList))
+        dispatch(selectChatRoom(room.id))
       }
       return Boolean(user)
     })
@@ -62,14 +53,19 @@ const ContactList = () => {
 
     const hasUsersData = contactId && contactName && id && username
     if (!hasUsersData) return
-    const users = [createUser(id, username), createUser(contactId, contactName)]
 
     loaderStateChangeHandler(true, 'room', value.id)
-    socket.emit(SocketActions.CREATE_ROOM, { users, authorId: id, multiple: false })
+    const socketPayload: SocketActionsPayload['createRoom'] = {
+      chatName: contactName,
+      users: [id, contactId],
+      authorId: id,
+      multiple: false
+    }
+    socket.emit(SocketActions.CREATE_ROOM, socketPayload)
 
     socket.on(SocketActions.ROOM_CREATED, (data) => {
       loaderStateChangeHandler(false, 'room', value.id)
-      dispatch(changeAsideTab('chatList'))
+      dispatch(changeAsideTab(AsideBarButtonName.chatList))
 
       setTimeout(() => {
         dispatch(selectChatRoom(data.roomId))
@@ -92,8 +88,8 @@ const ContactList = () => {
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
     const gotStream = await $call.setStream()
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
-    if (!avatar) return
-    if (gotStream) $call.initCall(interlocutorData, id, avatar, username)
+    if (!avatarPath) return
+    if (gotStream) $call.initCall(interlocutorData, id, avatarPath, username)
   }
 
   return (
@@ -110,7 +106,7 @@ const ContactList = () => {
         renderItem={(user) => (
           <List.Item>
             <List.Item.Meta
-              avatar={<UIAvatar online={user.online} src={user.avatar} />}
+              avatar={<UIAvatar online={user.online} src={user.avatarPath} />}
               title={<span>{user.username}</span>}
               description={
                 <span className="paragraph-text paragraph-text--sm paragraph-text--secondary">

@@ -11,9 +11,9 @@
     "noImplicitAny": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./../"
+    "resolveJsonModule": true
   },
+  "include": ["src"],
   "references": [
     {
       "path": "./../types/"

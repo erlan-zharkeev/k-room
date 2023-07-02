@@ -1,4 +1,4 @@
-import modifiersHandler from 'src/utils/modifiersHandler'
+import { modifiersHandler } from 'src/utils/modifiersHandler'
 import { IconProps } from './@types/IconProps'
 import IconList from './IconList'
 

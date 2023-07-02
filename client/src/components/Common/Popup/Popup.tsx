@@ -13,7 +13,7 @@ import MessageWithBindDataPopup from './Components/MessageWithBindDataPopup/Mess
 const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
-  const popups: { [key: string]: JSX.Element } = {
+  const popups: Record<string, JSX.Element> = {
     UserDataSettingsPopup: <UserDataSettingsPopup />,
     TechSettingsPopup: <TechSettingsPopup />,
     ForwardMessagePopup: <ForwardMessagePopup />,

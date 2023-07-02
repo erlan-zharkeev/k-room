@@ -1,6 +1,10 @@
 import { ShapeModifiers, SizeModifiers } from 'src/@types'
 import { IconName } from '../../UIIcon/@types/IconName'
 
+export enum BadgePlacement {
+  up = 'up',
+  down = 'down'
+}
 export interface UIAvatarProps {
   online?: boolean
   src?: string
@@ -8,5 +12,7 @@ export interface UIAvatarProps {
   showBadge?: boolean
   stubIconName?: IconName
   ribbon?: boolean
+  ribbonPlacement?: BadgePlacement
+  dotPlacement?: BadgePlacement
   shape?: ShapeModifiers
 }

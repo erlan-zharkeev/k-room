@@ -5,7 +5,7 @@ const initConnectionPath = DEV ? `:${VITE_SERVER_PORT}` : ''
 
 export const socket = io(`${initConnectionPath}/`, {
   forceNew: false,
-  path: RouteNames.SOCKET,
+  path: RouteNames.SOCKET_PATH,
   reconnection: true,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,

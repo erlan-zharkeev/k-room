@@ -4,7 +4,7 @@ import { UserOutlined, AudioMutedOutlined } from '@ant-design/icons'
 
 const CallModalVideo = () => {
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
-  const { avatar } = useTypedSelector((state) => state.user.userData)
+  const { avatarPath } = useTypedSelector((state) => state.user.userData)
 
   return (
     <div
@@ -23,14 +23,14 @@ const CallModalVideo = () => {
 
         <video autoPlay id="interlocutor-video" className={!currentCall?.interlocutorSettings?.video ? 'd-none' : ''} />
         <Avatar
-          src={currentCall.interlocutorAvatar}
+          src={currentCall.interlocutorAvatarPath}
           icon={<UserOutlined />}
           className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
         />
       </div>
       <div className="call-modal-video__user-video">
         <video autoPlay muted id="self-video" className={!settings.video ? 'd-none' : ''} />
-        <Avatar size="small" src={avatar} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
+        <Avatar size="small" src={avatarPath} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
       </div>
       <div className="call-modal-video__settings">
         {/* <Dropdown

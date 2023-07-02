@@ -6,12 +6,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import ErrorBucket from 'src/components/Common/ErrorBucket/ErrorBucket'
 import { Logo } from 'src/components/Common/Logo/Logo'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIInput from 'src/components/UI/UIInput/UIInput'
+import { UIInput, UIButton } from 'src/components/UI'
 import useValidate from 'src/hooks/useValidate'
 import apiMethods from 'src/services/api-methods'
 import { AppDispatch } from 'src/store'
-import validateRules from 'src/utils/validateRules'
+import { validateRules } from 'src/utils/validateRules'
 
 const CreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -39,7 +38,7 @@ const CreateNewPassword = () => {
     const response = (await dispatch(apiMethods.user.resetPassword(payload))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     const { status } = response.payload
-    if (status === Status.SUCCESS) navigate(RouteNames.SIGN_IN)
+    if (status === Status.success) navigate(RouteNames.SIGN_IN)
   }
 
   const formChangeHandler = () => {
@@ -82,7 +81,7 @@ const CreateNewPassword = () => {
                 text="Change password"
                 border="border-default"
                 color="accent"
-                htmltype="submit"
+                htmltype={'submit'}
                 loading={isLoading}
                 disabled={!isValid || !isPasswordEqual}
               />

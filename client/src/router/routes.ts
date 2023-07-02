@@ -16,7 +16,7 @@ const commonRoutes = [
     component: () => ConfirmedPage()
   },
   {
-    path: RouteNames.NOT_FOUND,
+    path: RouteNames['not-found'],
     component: () => NotFoundPage()
   },
   {

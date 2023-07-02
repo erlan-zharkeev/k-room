@@ -10,7 +10,8 @@ const clickedObjectInitialState = {
     id: '',
     authorName: '',
     author: '',
-    body: ''
+    body: '',
+    authorId: ''
   }
 }
 
@@ -60,9 +61,11 @@ const systemSlice = createSlice({
       state.showModal = false
     },
     showNotification(state, { payload }) {
+      const isError = state.notificationData.messageType === 'error'
       state.notificationData = {
         ...state.notificationData,
-        ...payload
+        ...payload,
+        duration: isError ? constants.errorNotificationDuration : initialState.notificationData.duration
       }
       if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
       state.notificationData = initialState.notificationData
@@ -81,14 +84,12 @@ const systemSlice = createSlice({
       const currentClickedObject = state.contextMenu.contextClickedObject
       state.contextMenu.contextClickedObject = { ...currentClickedObject, ...contextClickedObject }
       const viewportWidth = state.viewPort.width
-      const viewportHeight = state.viewPort.width
+      const viewportHeight = state.viewPort.height
       let x = event.pageX
       let y = event.pageY
       const defaultPadding = 4
-      const menuDomElement = document.querySelector<HTMLElement>('.context-menu__body')
-      if (!menuDomElement) return
-      const menuWidth = menuDomElement.offsetWidth
-      const menuHeight = menuDomElement.offsetHeight
+      const menuWidth = constants.dimensions.contextMenuWidth
+      const menuHeight = constants.dimensions.contextMenuHeight
       if (menuWidth + x > viewportWidth) x = viewportWidth - menuWidth - defaultPadding
       if (menuHeight + y > viewportHeight) y = viewportHeight - menuHeight - defaultPadding
       state.contextMenu.coord = {

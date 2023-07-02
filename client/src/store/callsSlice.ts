@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { CallsState } from './@types/CallsState'
+import { CallStatus, CallType } from 'common-types'
 
 const initialState: CallsState = {
   showCallModal: false,
@@ -15,10 +16,10 @@ const initialState: CallsState = {
     startedAt: 1674784901,
     interlocutorName: 'Ivan',
     interlocutorId: '0',
-    interlocutorAvatar: '',
-    type: 'incoming',
+    interlocutorAvatarPath: '',
+    type: CallType.incoming,
     video: false,
-    status: 'calling',
+    status: CallStatus.calling,
     interlocutorSettings: {
       streamLoading: false,
       audio: true,
@@ -34,9 +35,9 @@ const initialState: CallsState = {
       length: 36,
       interlocutorName: 'Ivan',
       interlocutorId: '0',
-      interlocutorAvatar: '',
-      status: 'finished',
-      type: 'incoming',
+      interlocutorAvatarPath: '',
+      status: CallStatus.finished,
+      type: CallType.incoming,
       video: true
     },
     {
@@ -47,9 +48,9 @@ const initialState: CallsState = {
       length: 156,
       interlocutorName: 'Anton',
       interlocutorId: '1',
-      interlocutorAvatar: '',
-      status: 'in-progress',
-      type: 'outgoing',
+      interlocutorAvatarPath: '',
+      status: CallStatus.inProgress,
+      type: CallType.outgoing,
       video: false
     },
     {
@@ -60,9 +61,9 @@ const initialState: CallsState = {
       length: 342,
       interlocutorName: 'Norbik',
       interlocutorId: '2',
-      interlocutorAvatar: '',
-      status: 'finished',
-      type: 'outgoing',
+      interlocutorAvatarPath: '',
+      status: CallStatus.finished,
+      type: CallType.outgoing,
       video: false
     }
   ]
@@ -77,12 +78,12 @@ const callsSlice = createSlice({
     },
     initModalToCall(state, { payload }) {
       state.showCallModal = true
-      const { id, avatar, username } = payload
+      const { id, avatarPath, username } = payload
       state.currentCall.interlocutorId = id
-      state.currentCall.interlocutorAvatar = avatar
+      state.currentCall.interlocutorAvatarPath = avatarPath
       state.currentCall.interlocutorName = username
-      state.currentCall.status = 'calling'
-      state.currentCall.type = 'outgoing'
+      state.currentCall.status = CallStatus.calling
+      state.currentCall.type = CallType.outgoing
     },
     updateInterlocutorSettings(state, { payload }) {
       if (!state.currentCall.interlocutorSettings) return
@@ -94,13 +95,13 @@ const callsSlice = createSlice({
       state.settings.streamLoading = payload
     },
     setCurrentCallAccepted(state) {
-      state.currentCall.status = 'in-progress'
+      state.currentCall.status = CallStatus.inProgress
     },
     setShowCallModal(state, { payload }) {
       state.showCallModal = true
       state.currentCall.interlocutorName = payload.callerName
-      state.currentCall.interlocutorAvatar = payload.avatar
-      state.currentCall.type = 'incoming'
+      state.currentCall.interlocutorAvatarPath = payload.avatarPath
+      state.currentCall.type = CallType.incoming
       if (!state.currentCall.interlocutorSettings) return
       state.currentCall.interlocutorSettings.audio = payload.settings.audio
       state.currentCall.interlocutorSettings.audio = payload.settings.video
@@ -116,10 +117,10 @@ const callsSlice = createSlice({
         startedAt: 0,
         interlocutorName: '',
         interlocutorId: '',
-        interlocutorAvatar: '',
-        type: 'incoming',
+        interlocutorAvatarPath: '',
+        type: CallType.incoming,
         video: false,
-        status: 'calling',
+        status: CallStatus.calling,
         interlocutorSettings: {
           streamLoading: false,
           audio: false,

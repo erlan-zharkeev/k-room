@@ -1,7 +1,7 @@
-export enum SharpKey {
+export enum SharpSettingsKey {
   avatar = 'avatar',
-  commonCompressed = 'common-compressed',
-  commonUncompressed = 'common-uncompressed'
+  'common-compressed' = 'common-compressed',
+  'common-uncompressed' = 'common-uncompressed'
 }
 
 interface SharpConfig {
@@ -12,14 +12,23 @@ interface SharpConfig {
   }
 }
 
-type Sharp = {
-  [key in SharpKey]: SharpConfig
+export enum SystemMessages {
+  'invite-message' = 'invite-message',
+  'author-created-chat' = 'author-created-chat',
+  'author-created-group-chat' = 'author-created-group-chat',
+  'invite-group-chat' = 'invite-group-chat'
+}
+
+export interface SystemMessage {
+  id: string
+  name: SystemMessages
+  text: string
 }
 
 export interface Constants {
-  sharp: Sharp
-  singleInviteMessage: string
-  multipleChatCreatedAuthorMessage: string
-  multipleInviteMessage: string
+  sharp: Record<SharpSettingsKey, SharpConfig>
   maxMbQuantityTransfer: number
+  messages: {
+    system: Array<SystemMessage>
+  }
 }

@@ -75,7 +75,6 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-- develop forward and reply and delete(5)
 - добавить настройки громкости и чекаем видео(5)
 - develop call list(4)
 - setup cors to specific host and port
@@ -83,4 +82,3 @@
 - text to support
 - create info items(welcome, what is next)
 - privacy policy create and to facebook dev
-<!-- - lazy load сообщений(5) -->

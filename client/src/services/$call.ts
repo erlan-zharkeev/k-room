@@ -1,4 +1,4 @@
-import { User, SocketActions } from 'common-types'
+import { User, SocketActions, SocketActionsPayload } from 'common-types'
 import { Howl } from 'howler'
 import Peer, { SignalData } from 'simple-peer'
 import { Socket } from 'socket.io-client'
@@ -55,14 +55,15 @@ class Call {
     })
     this.connection.on('signal', (data: SignalData) => {
       const settings = store.getState().calls.settings
-      this.socket.emit(SocketActions.CALL_USER, {
+      const payload: SocketActionsPayload['callUser'] = {
         userToCall: interlocutorData.id,
-        signalData: data,
+        signal: data,
         from: selfId,
-        avatar: selfAvatarPath,
+        avatarPath: selfAvatarPath,
         callerName,
         settings
-      })
+      }
+      this.socket.emit(SocketActions.CALL_USER, payload)
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
@@ -148,7 +149,8 @@ class Call {
     const isVideo = type === 'video'
     const tracks = isVideo ? 'getVideoTracks' : 'getAudioTracks'
     this.selfStream[tracks]().forEach((track) => (track.enabled = isVideo ? video : audio))
-    this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, { audio, video })
+    const payload: SocketActionsPayload['changeCallSettings'] = { audio, video }
+    this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, payload)
   }
 
   leaveCall() {

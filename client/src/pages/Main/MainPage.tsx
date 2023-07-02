@@ -5,7 +5,7 @@ import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
 import Popup from 'src/components/Common/Popup/Popup'
 import { socket } from 'src/socket/socket'
-import { Message, SocketActions, User, ChatRoom as ChatRoomInterface, Reaction } from 'common-types'
+import { Message, SocketActions, User, ChatRoom as ChatRoomInterface, SocketActionsPayload } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
@@ -19,7 +19,8 @@ import {
   updateChatMessage,
   updateMessageStatus,
   changeChatName,
-  updateMessageReactions
+  updateMessageReactions,
+  deleteMessage
 } from 'src/store/roomsSlice'
 import useDebounce from 'src/hooks/useDebounce'
 import CallModal from 'src/components/Common/CallModal/CallModal'
@@ -60,31 +61,41 @@ const MainPage = () => {
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   useEffect(() => {
-    socket.connect()
-    socket.emit(SocketActions.INITIALIZE, userId)
-
-    socket.io.on(SocketActions.RECONNECTION, (attempt) => {
+    if (socket.disconnected) socket.connect()
+    const initializePayload: SocketActionsPayload['initialize'] = { userId }
+    socket.emit(SocketActions.INITIALIZE, initializePayload)
+    socket.on(SocketActions.RECONNECT, (attempt) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
       socket.emit(SocketActions.INITIALIZE, userId)
       dispatch(setReconnectingStatus(false))
     })
-    socket.io.on(SocketActions.RECONNECT_ATTEMPT, (attempt) => {
+    socket.on(SocketActions.RECONNECT_ATTEMPT, (attempt) => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
-    socket.io.on(SocketActions.RECONNECT_FAILED, () => {
+    socket.on(SocketActions.RECONNECT_FAILED, () => {
       dispatch(setReconnectingStatus(false))
     })
-
+    socket.on(SocketActions.ERROR_MESSAGE, ({ message }: SocketActionsPayload['errorMessage']) => {
+      dispatch(showNotification({ messageType: 'error', message }))
+    })
     socket.on(SocketActions.DISCONNECT, () => {
       debouncedStatusNotification(false)
     })
     socket.on(SocketActions.CONNECTION, () => {
       debouncedStatusNotification(true)
     })
+    socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>, message?: string) => {
+      if (message) dispatch(showNotification({ messageType: 'info', message }))
+      dispatch(loadContacts(contacts))
+    })
     socket.on(SocketActions.STATUS_CONTACT, (userData: { userId: string; status: boolean }) => {
       dispatch(updateContactsStatus(userData))
       dispatch(updateChatUsersStatus(userData))
+    })
+    socket.on(SocketActions.CHANGE_CONTACTS_DATA, (updatedUserData: User) => {
+      dispatch(updateContactData(updatedUserData))
+      dispatch(changeChatName(updatedUserData))
     })
     socket.on(SocketActions.GET_ROOMS, (chatRooms: Array<ChatRoomInterface>) => {
       dispatch(loadChatRooms(chatRooms))
@@ -92,27 +103,15 @@ const MainPage = () => {
     socket.on(SocketActions.MESSAGE_DELIVERED, (roomData: { roomId: string; message: Message }) => {
       dispatch(updateChatMessage(roomData))
     })
-    socket.on(
-      SocketActions.UPDATE_MESSAGE_STATUS,
-      (roomData: { roomId: string; messageId: string; status: string }) => {
-        dispatch(updateMessageStatus(roomData))
-      }
-    )
-    socket.on(
-      SocketActions.UPDATE_MESSAGE_REACTIONS,
-      (data: { roomId: string; messageId: string; reaction: Reaction }) => {
-        dispatch(updateMessageReactions(data))
-      }
-    )
-    socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>, message?: string) => {
-      if (message) dispatch(showNotification({ messageType: 'info', message }))
-      dispatch(loadContacts(contacts))
+    socket.on(SocketActions.UPDATE_MESSAGE_STATUS, (roomData: SocketActionsPayload['updateMessageStatus']) => {
+      dispatch(updateMessageStatus(roomData))
     })
-    socket.on(SocketActions.CHANGE_CONTACTS_DATA, (updatedUserData: User) => {
-      dispatch(updateContactData(updatedUserData))
-      dispatch(changeChatName(updatedUserData))
+    socket.on(SocketActions.MESSAGE_DELETED, (messageData: SocketActionsPayload['messageDeleted']) => {
+      dispatch(deleteMessage(messageData))
     })
-
+    socket.on(SocketActions.UPDATE_MESSAGE_REACTIONS, (data: SocketActionsPayload['updatedMessageReactions']) => {
+      dispatch(updateMessageReactions(data))
+    })
     return () => {
       socket.removeAllListeners()
     }

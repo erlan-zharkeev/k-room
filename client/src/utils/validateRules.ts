@@ -1,9 +1,6 @@
 import { Rule } from 'antd/lib/form'
-interface ValidateRules {
-  [key: string]: Rule[]
-}
 
-const validateRules: ValidateRules = {
+export const validateRules: Record<string, Rule[]> = {
   required: [{ required: true, message: 'Field is required' }],
   username: [
     {
@@ -54,5 +51,3 @@ const validateRules: ValidateRules = {
     }
   ]
 }
-
-export default validateRules

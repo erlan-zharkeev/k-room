@@ -1,16 +1,15 @@
 import $clg from 'src/services/$clg'
+import constants from 'src/constants'
 /**
  * Shorthand for clear persisted store cmd + enter
  * @param e KeyBoardEvent
  */
-const clearLocalStorageOnKeyDown = (e: KeyboardEvent): void => {
+export const clearLocalStorageOnKeyDown = (e: KeyboardEvent): void => {
   if (e.ctrlKey && e.key === 'Enter') {
     localStorage.clear()
     $clg('success', 'local storage cleared')
     setTimeout(() => {
       window.location.reload()
-    }, 1000)
+    }, constants.commonTimeoutDuration)
   }
 }
-
-export default clearLocalStorageOnKeyDown

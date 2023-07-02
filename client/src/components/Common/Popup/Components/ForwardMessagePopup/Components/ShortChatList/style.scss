@@ -1,5 +1,6 @@
-.short-contacts-list {
-  padding: $gutter-lg $gutter-sm;
+.short-chat-list {
+  padding: $gutter-lg $gutter-sm $gutter-sm $gutter-sm;
+  max-height: 200px;
   &__item {
     display: flex;
     align-items: center;

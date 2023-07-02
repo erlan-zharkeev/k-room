@@ -23,6 +23,13 @@
     left: 0;
   }
 
+  &__button-el {
+    position: relative;
+    .custom-badge {
+      padding: 8px 10px;
+    }
+  }
+
   .ant-radio-group {
     display: flex;
     flex-direction: column;
@@ -42,9 +49,5 @@
     .ant-radio-button-wrapper {
       margin: $gutter-lg 0;
     }
-  }
-  .ant-badge-count, .ant-badge-dot, .ant-badge .ant-scroll-number-custom-component {
-    top: 20px;
-    right: 10px
   }
 }

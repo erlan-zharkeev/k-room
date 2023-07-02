@@ -1,8 +1,7 @@
 import ShortChatList from './Components/ShortChatList/ShortChatList'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
-import UIInput from 'src/components/UI/UIInput/UIInput'
+import { UIInput, UIIcon } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { setRepliedMessage } from 'src/store/roomsSlice'
@@ -19,12 +18,14 @@ const ForwardMessagePopup = () => {
     dispatch(setRepliedMessage(message))
     dispatch(closeModal())
   }
+
   return (
     <div className="forward-message-popup">
-      <div className="tech-settings-popup__select">
+      <div className="forward-message-popup__select">
         <UIInput
           size="small"
           suffix={<UIIcon name={'search'} color={'default'} />}
+          placeholder="Find room"
           onChange={(e) => setSearchString(e.target.value)}
         />
         <ShortChatList searchString={searchString} clickChat={clickChatHandler} />

@@ -6,28 +6,27 @@ import { showNotification } from 'src/store/systemSlice'
 import $clg from 'src/services/$clg'
 import apiMethods from './api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import constants from 'src/constants'
 import $router from './$router'
 axios.defaults.withCredentials = true
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
   const { message, silent } = response.data
-  const isSuccess = response.status === Status.SUCCESS
+  const isSuccess = response.status === Status.success
   if (message && !silent) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const { status } = e.response ?? e.response?.data?.status
   switch (status) {
-    case Status.BAD_GATEAWAY:
+    case Status.badGateaway:
       dispatch(changeIsAppLoading(false))
       break
-    case Status.TOKEN_EXPIRED:
+    case Status.tokenExpired:
       $clg('error', 'Access token is expired')
       dispatch(changeIsAppLoading(true))
       const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
-      const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.SUCCESS
+      const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.success
       if (!isTokensPairUpdated) {
         $router.push(RouteNames.SIGN_IN)
         dispatch(changeIsAppLoading(false))
@@ -39,16 +38,16 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       const { userData, settings } = response.payload.data
       commonSetUserDataHandler(dispatch, { userData, settings })
       return
-    case Status.NOT_AUTH:
+    case Status.notAuth:
       return
-    case Status.BAD_REQUEST:
+    case Status.badRequest:
       break
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  dispatch(showNotification({ message, messageType: 'error', duration: constants.errorNotificationDuration }))
+  dispatch(showNotification({ message, messageType: 'error' }))
 }
 
-type RequestTypes = 'post' | 'get' | 'patch'
+type RequestTypes = 'post' | 'get' | 'patch' | 'put'
 
 const $api = async (
   type: RequestTypes,

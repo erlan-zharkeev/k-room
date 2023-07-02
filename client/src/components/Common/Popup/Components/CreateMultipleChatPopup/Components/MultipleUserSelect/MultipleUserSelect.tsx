@@ -9,7 +9,7 @@ const MultipleUserSelect = ({ setMembers }: { setMembers: React.Dispatch<React.S
 
   useEffect(() => {
     const transformedContacts = contacts.map((contact) => {
-      return { value: contact.id, label: contact.username }
+      return { value: `${contact.username}/${contact.id}`, label: contact.username }
     })
     setUsers(transformedContacts)
   }, [])
@@ -17,7 +17,7 @@ const MultipleUserSelect = ({ setMembers }: { setMembers: React.Dispatch<React.S
   const handleChange = (ids: string[]) => {
     const members = ids?.map((id) => {
       return {
-        id,
+        id: id.split('/')[1],
         username: contacts.find((contact) => contact.id === id)?.username ?? ''
       }
     })

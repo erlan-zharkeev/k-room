@@ -9,10 +9,10 @@
 .chat-room {
   position: relative;
   @include wh-100;
-
   margin-left: 24px;
   padding: 1rem;
   @include nm-outset-element;
+  overflow: hidden;
   @include max-width-576 {
     margin-left: 100%;
   }
@@ -33,14 +33,20 @@
         border-radius: $radius-sm;
       }
       .message__text {
-        margin: 0 auto;
+        text-align: center;
       }
+    }
+    &--time {
+      justify-content: center;
+      opacity: 0.6;
+      font-size: 10px;
     }
   }
 
   &__wrapper {
     position: relative;
     height: 100%;
+    overflow: hidden;
   }
 
   &__body {

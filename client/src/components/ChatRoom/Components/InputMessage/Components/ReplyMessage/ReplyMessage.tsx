@@ -1,11 +1,11 @@
 import { useDispatch } from 'react-redux'
-import UIIcon from 'src/components/UI/UIIcon/UIIcon'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { resetRepliedMessage } from 'src/store/roomsSlice'
 import { resetContextClickedObject } from 'src/store/systemSlice'
 import constants from 'src/constants'
 import { useEffect, useState } from 'react'
+import { UIIcon } from 'src/components/UI'
 
 export const ReplyMessage = () => {
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)

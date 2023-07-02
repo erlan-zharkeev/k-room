@@ -1,12 +1,13 @@
-import { Badge, Radio, RadioChangeEvent } from 'antd'
+import { Radio, RadioChangeEvent } from 'antd'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { ButtonsListElement } from './@types/ButtonsListElement'
-import UIButton from 'src/components/UI/UIButton/UIButton'
+import { AsideBarButtonName, ButtonsListElement } from './@types/ButtonsListElement'
 import { Logo } from '../Common/Logo/Logo'
 import { showModal } from 'src/store/systemSlice'
+import { MessageStatus } from 'common-types'
+import { UIButton } from '../UI'
 
 const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -24,10 +25,10 @@ const AsideBar = () => {
   }
 
   const buttons: Array<ButtonsListElement> = [
-    { value: 'contacts', iconName: 'contacts', tooltip: 'Contacts' },
-    { value: 'chatList', iconName: 'chats', tooltip: 'Chats' },
-    { value: 'calls', iconName: 'calls', tooltip: 'Calls' },
-    { value: 'settings', iconName: 'settings-cog', tooltip: 'Settings' }
+    { value: AsideBarButtonName.contacts, iconName: 'contacts', tooltip: 'Contacts' },
+    { value: AsideBarButtonName.chatList, iconName: 'chats', tooltip: 'Chats' },
+    { value: AsideBarButtonName.calls, iconName: 'calls', tooltip: 'Calls' },
+    { value: AsideBarButtonName.settings, iconName: 'settings-cog', tooltip: 'Settings' }
   ]
 
   const openTechSettings = () => {
@@ -48,7 +49,7 @@ const AsideBar = () => {
     let result = 0
     chatRooms.forEach((room) =>
       room.messages.forEach((message) => {
-        if (message.status === 'delivered' && !message.isSelf) result += 1
+        if (message.status === MessageStatus.delivered && !message.isSelf) result += 1
       })
     )
     return result
@@ -58,15 +59,14 @@ const AsideBar = () => {
     <div className="aside-bar">
       {viewPort.width >= 769 && <Logo />}
       <Radio.Group value={asideTab} onChange={changeTab}>
-        {buttons.map((button) => {
-          return button.value === 'chatList' ? (
-            <Badge count={unreadMessagesCount()} key={button.value} size="small">
-              {getButtonComponent(button)}
-            </Badge>
-          ) : (
-            <div key={button.value}>{getButtonComponent(button)}</div>
-          )
-        })}
+        {buttons.map((button) => (
+          <div key={button.value} className="aside-bar__button-el">
+            {getButtonComponent(button)}
+            {button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 && (
+              <div className="custom-badge">{unreadMessagesCount()}</div>
+            )}
+          </div>
+        ))}
       </Radio.Group>
       {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />}
     </div>

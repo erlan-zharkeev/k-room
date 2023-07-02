@@ -5,19 +5,17 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
-import validateRules from 'src/utils/validateRules'
-import UIInput from 'src/components/UI/UIInput/UIInput'
-import UIButton from 'src/components/UI/UIButton/UIButton'
+import { validateRules } from 'src/utils/validateRules'
 import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/userSlice'
 import { User } from 'common-types'
-import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
+import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 
 const UserDataSettingsPopup = () => {
-  const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
+  const { avatarPath, username, id } = useTypedSelector((state) => state.user.userData)
   const [imageChanged, setImageChanged] = useState(false)
-  const [newAvatar, setNewAvatar] = useState<string | undefined>(avatar)
+  const [newAvatar, setNewAvatar] = useState<string | undefined>(avatarPath)
 
   const [isLoading, setIsLoading] = useState(false)
   const [isUsernameEqualNewName, setIsUsernameEqualNewName] = useState(true)
@@ -34,14 +32,14 @@ const UserDataSettingsPopup = () => {
   }
 
   useEffect(() => {
-    setNewAvatar(avatar)
+    setNewAvatar(avatarPath)
   }, [])
 
   const onFinish = async (values: User) => {
     const updatedUserData = {
       ...values,
       userId: id,
-      oldFilename: avatar?.split('?img=')[1],
+      oldFilename: avatarPath?.split('?img=')[1],
       file: avatarFile
     }
     setIsLoading(true)
@@ -79,7 +77,7 @@ const UserDataSettingsPopup = () => {
           <UIButton
             text="Update"
             border="border-default"
-            htmltype="submit"
+            htmltype={'submit'}
             disabled={!isUpdateButtonAvailable()}
             loading={isLoading}
           />

@@ -3,13 +3,13 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import UIIcon from '../UI/UIIcon/UIIcon'
 import parse from 'html-react-parser'
 import { setCurrentInfoItem } from 'src/store/settingsSlice'
 import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { Status } from 'common-types'
 import { markInfoItemAsRead } from 'src/store/userSlice'
+import { UIIcon } from '../UI'
 
 const InfoList = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -21,7 +21,7 @@ const InfoList = () => {
     const response = (await dispatch(
       apiMethods.common.markInfoAsRead({ currentInfoId, userId: id })
     )) as AsyncThunkResponseWrapper
-    if (response.payload.status !== Status.SUCCESS) return
+    if (response.payload.status !== Status.success) return
     dispatch(markInfoItemAsRead({ id: currentInfoId }))
   }
 

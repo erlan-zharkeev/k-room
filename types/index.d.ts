@@ -1,3 +1,301 @@
+export declare enum Status {
+    success = 200,
+    badRequest = 400,
+    notAuth = 401,
+    tokenExpired = 403,
+    notFound = 404,
+    unreachable = 503,
+    badGateaway = 504
+}
+export interface MessageMetaData {
+    id: string;
+    status: Record<MessageStatus, string>;
+}
+export declare enum Author {
+    system = "system",
+    time = "time"
+}
+export interface Reaction {
+    username: string;
+    authorId: string;
+    glyphKey: string;
+}
+export interface Message {
+    id: string;
+    tempId?: string;
+    authorName: string;
+    authorId: string;
+    body: string;
+    createdAt?: string;
+    isSelf?: boolean;
+    status?: MessageStatus;
+    reactions?: Array<Reaction>;
+    images?: Array<any>;
+    imageCompression?: boolean;
+    repliedMessage?: RepliedMessage | null;
+}
+export interface RepliedMessage {
+    id: string;
+    authorName: string;
+    authorId: string;
+    body: string;
+    images?: Array<any>;
+    forward?: boolean;
+}
+export declare enum MessageStatus {
+    sending = "sending",
+    undelivered = "undelivered",
+    delivered = "delivered",
+    read = "read",
+    none = "none"
+}
+export interface ChatRoom {
+    id: string;
+    authorId: string;
+    chatName: string;
+    avatarPath?: string;
+    users: Array<UserShort>;
+    messages: Array<Message>;
+    multiple: boolean;
+    hasOnline: boolean;
+    blocked?: boolean;
+}
+export interface DBChatRoom extends Omit<ChatRoom, "users" | "messages"> {
+    _id: string;
+    users: Array<string>;
+    messages: Array<string>;
+}
+export interface DBMessage extends Message {
+    _id: string;
+    usersMetaData: Array<{
+        id: string;
+        status: MessageStatus;
+    }>;
+}
+export type ChatRooms = Array<ChatRoom>;
+export interface UserShort {
+    id: string;
+    username: string;
+    avatarPath?: string;
+}
+export interface UserCredential extends UserShort {
+    email?: string;
+    password?: string;
+    avatarPath?: string;
+    providerName?: string;
+}
+export interface User extends UserCredential {
+    online: boolean;
+    chatRooms: ChatRooms;
+    lastSeen?: string;
+    contacts?: Array<User>;
+    infoItems?: Array<InfoItem>;
+}
+export interface FirebaseUser {
+    firebaseUid: string;
+    username: string;
+    email: string;
+    avatar: string;
+    providerId: string;
+}
+export declare enum Theme {
+    dark = "dark",
+    light = "light"
+}
+export interface ImageObject {
+    name: string;
+    src?: string;
+    fileBuffer?: File | ArrayBuffer;
+}
+export declare enum UserSettingKey {
+    theme = "theme",
+    soundOn = "soundOn",
+    showTooltips = "showTooltips",
+    ableToShowNotification = "ableToShowNotification",
+    selectedChatRoomId = "selectedChatRoomId",
+    asideTab = "asideTab",
+    currentInfoId = "currentInfoId"
+}
+export interface UserSettings {
+    [UserSettingKey.asideTab]: string;
+    [UserSettingKey.selectedChatRoomId]: string;
+    [UserSettingKey.ableToShowNotification]: boolean;
+    [UserSettingKey.theme]: Theme;
+    [UserSettingKey.showTooltips]: boolean;
+    [UserSettingKey.soundOn]: boolean;
+    [UserSettingKey.currentInfoId]: string;
+}
+export declare enum CallStatus {
+    calling = "calling",
+    inProgress = "in-progress",
+    finished = "finished"
+}
+export declare enum CallType {
+    incoming = "incoming",
+    outgoing = "outgoing",
+    missed = "missed"
+}
+export interface StreamSettings extends BasicStreamSettings {
+    streamLoading: boolean;
+}
+export interface BasicStreamSettings {
+    audio: boolean;
+    video: boolean;
+}
+export interface Call {
+    authorId: string;
+    authorName: string;
+    startedAt: number;
+    finishedAt?: number;
+    length?: number;
+    interlocutorId: string;
+    interlocutorName: string;
+    interlocutorAvatarPath?: string;
+    status: CallStatus;
+    type: CallType;
+    video: boolean;
+    interlocutorSettings?: StreamSettings;
+}
+export interface Codes {
+    passwordRecovery: {
+        query: {
+            value: string;
+            expiresIn: string;
+        };
+        email: string;
+        sms: string;
+    };
+    nextRequestPossibleAt: string;
+}
+export interface CodeValidationPayload {
+    email: string;
+    code: string;
+}
+export declare enum InfoItemStatus {
+    read = "read",
+    unread = "unread"
+}
+export interface InfoItem {
+    id: string;
+    label: string;
+    content: string;
+    read: InfoItemStatus;
+    contentComponent?: () => string;
+}
+export interface SocketActionsPayload {
+    initialize: {
+        userId: string;
+    };
+    saveContact: {
+        userId: string;
+        interlocutorId: string;
+    };
+    deleteContact: {
+        currentUserId: string;
+        deletingUserId: string;
+    };
+    searchContact: {
+        value: string;
+    };
+    updateUserSettings: {
+        userId: string;
+        type: keyof UserSettings;
+        value: string | boolean;
+    };
+    createRoom: {
+        users: Array<string>;
+        authorId: string;
+        multiple: boolean;
+        avatarFile?: {
+            buffer: ArrayBuffer;
+        };
+        chatName?: string;
+    };
+    updateChatRoom: {
+        users: Array<string>;
+        roomId: string;
+        chatName: string;
+        avatarPath: string;
+        avatarFile: {
+            buffer: ArrayBuffer;
+        } | undefined;
+        authorId: string;
+    };
+    userTyping: {
+        authorId: string;
+        authorName: string;
+        usersTo: Array<UserShort>;
+        status: boolean;
+    };
+    getUserTypingStatus: {
+        authorData: {
+            authorName: string;
+            authorId: string;
+        };
+        status: boolean;
+    };
+    sendMessage: {
+        roomId: string;
+        message: Message;
+    };
+    updateMessageStatus: {
+        roomId: string;
+        messageId: string;
+        status: MessageStatus;
+    };
+    changeMessageStatus: {
+        roomId: string;
+        messageId: string;
+        status: MessageStatus;
+        userId: string;
+    };
+    deleteMessage: {
+        messageId: string;
+        roomId: string;
+    };
+    addReaction: {
+        glyphKey: string;
+        messageId: string;
+        roomId: string;
+        authorId: string;
+        username: string;
+    };
+    callUser: {
+        userToCall?: string;
+        signal: any;
+        from: string;
+        avatarPath: string;
+        callerName: string;
+        settings: StreamSettings;
+    };
+    changeCallSettings: BasicStreamSettings;
+    callAccepted: {
+        signal: any;
+        settings: StreamSettings;
+    };
+    answerCall: {
+        to: string;
+        signal: any;
+        settings: StreamSettings;
+        selfSocketId: string;
+    };
+    callStartedAt: number;
+    callEnded: {
+        callerId: string;
+    };
+    errorMessage: {
+        message: string;
+    };
+    messageDeleted: {
+        messageId: string;
+        roomId: string;
+    };
+    updatedMessageReactions: {
+        roomId: string;
+        messageId: string;
+        reaction: Reaction;
+    };
+}
 export interface EnvVariables {
     SERVER_PORT: string;
     CLIENT_PORT: string;
@@ -50,9 +348,22 @@ export declare enum CodesEndPoints {
     SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
     VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery"
 }
+export declare enum RouteNames {
+    SIGN_IN = "/sign-in",
+    SIGN_UP = "/sign-up",
+    WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
+    EMAIL_CONFIRM = "/confirm-email",
+    MAIN = "/app",
+    NOT_FOUND = "/not-found",
+    PASSWORD_RECOVERY = "/password-recovery",
+    CREATE_NEW_PASSWORD = "/create-new-password",
+    NOTIFICATION = "/notification",
+    SOCKET_PATH = "/app-socket/",
+    API = "/api/"
+}
 export declare enum SocketActions {
     CONNECTION = "connection",
-    RECONNECTION = "reconnect",
+    RECONNECT = "reconnect",
     RECONNECT_ATTEMPT = "reconnect_attempt",
     RECONNECT_FAILED = "reconnect_failed",
     INITIALIZE = "initialize",
@@ -63,7 +374,7 @@ export declare enum SocketActions {
     MESSAGE_DELIVERED = "message-delivered",
     ROOM_CREATED = "room-created",
     SEARCH_CONTACT = "search-contact",
-    GET_SEARCHED_CONTACTS = "get-searched-contact",
+    GET_SEARCHED_CONTACT = "get-searched-contact",
     STATUS_CONTACT = "status-contact",
     GET_CONTACTS = "get-contacts",
     SAVE_CONTACT = "save-contact",
@@ -83,142 +394,8 @@ export declare enum SocketActions {
     UPDATE_CHAT_ROOM = "update-chat-room",
     ROOM_DATA_UPDATED = "room-data-updated",
     ADD_REACTION = "add-reaction",
-    UPDATE_MESSAGE_REACTIONS = "update-message-reactions"
-}
-export declare enum RouteNames {
-    SIGN_IN = "/sign-in",
-    SIGN_UP = "/sign-up",
-    WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
-    EMAIL_CONFIRM = "/confirm-email",
-    MAIN = "/app",
-    NOT_FOUND = "/not-found",
-    PASSWORD_RECOVERY = "/password-recovery",
-    CREATE_NEW_PASSWORD = "/create-new-password",
-    NOTIFICATION = "/notification",
-    SOCKET = "/socket/",
-    API = "/api/"
-}
-export interface Reaction {
-    username: string;
-    authorId: string;
-    glyphKey: string;
-}
-export interface Message {
-    id: string;
-    authorName: string;
-    author: string;
-    body: string;
-    createdAt?: string;
-    isSelf?: boolean;
-    status?: MessageStatus;
-    reactions?: Array<Reaction>;
-    files?: Array<any>;
-    filesCompression?: boolean;
-}
-export type MessageStatus = "sending" | "undelivered" | "delivered" | "read" | "none";
-export interface ChatRoom {
-    _id?: string;
-    roomId: string;
-    authorId: string;
-    chatName: string;
-    avatar?: string;
-    users: Array<UserShort>;
-    messages: Array<Message>;
-    multiple: boolean;
-    hasOnline: boolean;
-    blocked?: boolean;
-    avatarFile?: any;
-}
-export type ChatRooms = Array<ChatRoom>;
-export interface UserShort {
-    id: string;
-    username: string;
-    avatar?: string;
-}
-export interface UserCredential extends UserShort {
-    email?: string;
-    password?: string;
-    avatar?: string;
-    providerName?: string;
-}
-export interface User extends UserCredential {
-    online: boolean;
-    chatRooms: ChatRooms;
-    lastSeen?: string;
-    contacts?: Array<User>;
-    infoItems?: Array<InfoItem>;
-}
-export interface FirebaseUser {
-    firebaseUid: string;
-    username: string;
-    email: string;
-    avatar: string;
-    providerId: string;
-}
-export type theme = "dark" | "light";
-export interface ImageObject {
-    name: string;
-    src?: string | ArrayBuffer | null;
-    fileBuffer?: File | ArrayBuffer;
-}
-export interface UserSettings {
-    asideTab: string;
-    selectedChatRoomId: string;
-    ableToShowNotification: boolean;
-    theme: theme;
-    showTooltips: boolean;
-    soundOn: boolean;
-    currentInfoId: string;
-}
-export type CallStatus = "calling" | "in-progress" | "finished";
-export type CallType = "incoming" | "outgoing" | "missed";
-export interface StreamSettings {
-    streamLoading: boolean;
-    audio: boolean;
-    video: boolean;
-}
-export interface Call {
-    authorId: string;
-    authorName: string;
-    startedAt: number;
-    finishedAt?: number;
-    length?: number;
-    interlocutorId: string;
-    interlocutorName: string;
-    interlocutorAvatar?: string;
-    status: CallStatus;
-    type: CallType;
-    video: boolean;
-    interlocutorSettings?: StreamSettings;
-}
-export interface Codes {
-    passwordRecovery: {
-        query: {
-            value: string;
-            expiresIn: string;
-        };
-        email: string;
-        sms: string;
-    };
-    nextRequestPossibleAt: string;
-}
-export interface CodeValidationPayload {
-    email: string;
-    code: string;
-}
-export interface InfoItem {
-    id: string;
-    label: string;
-    content: string;
-    read: "read" | "unread";
-    contentComponent?: () => string;
-}
-export declare enum Status {
-    SUCCESS = 200,
-    BAD_REQUEST = 400,
-    NOT_AUTH = 401,
-    TOKEN_EXPIRED = 403,
-    NOT_FOUND = 404,
-    UNREACHABLE = 503,
-    BAD_GATEAWAY = 504
+    UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
+    DELETE_MESSAGE = "delete-message",
+    MESSAGE_DELETED = "message-deleted",
+    ERROR_MESSAGE = "error-message"
 }

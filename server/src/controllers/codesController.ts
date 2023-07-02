@@ -26,7 +26,7 @@ class CodesController {
 
       return res.json({ message: SuccessMessages.checkEmailForCode, nextTimeRequest })
     } catch {
-      throwError(Status.BAD_REQUEST, res, ErrorMessages.failedCodeSend)
+      throwError(Status.badRequest, res, ErrorMessages.failedCodeSend)
     }
   }
   async validateEmailCodePasswordRecovery(req: Request, res: Response) {
@@ -34,7 +34,7 @@ class CodesController {
       const { email, code } = req.body
       const user = await UserModel.findOne({ email })
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
-      if (!isCodeEqual) throwError(Status.BAD_REQUEST, res, ErrorMessages.invalidConfirmCode)
+      if (!isCodeEqual) throwError(Status.badRequest, res, ErrorMessages.invalidConfirmCode)
       const passwordResetQuery = uuidv4()
       await user?.updateOne({
         $set: {
@@ -44,7 +44,7 @@ class CodesController {
       })
       return res.json({ message: SuccessMessages.success, query: passwordResetQuery, silent: true })
     } catch {
-      throwError(Status.BAD_REQUEST, res, ErrorMessages.commonServerError)
+      throwError(Status.badRequest, res, ErrorMessages.commonServerError)
     }
   }
 }

@@ -1,24 +1,21 @@
 import { Form } from 'antd'
-import { SocketActions, UserShort } from 'common-types'
+import { SocketActions, SocketActionsPayload } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import UIAvatar from 'src/components/UI/UIAvatar/UIAvatar'
-import UIButton from 'src/components/UI/UIButton/UIButton'
-import UIAvatarLoader from 'src/components/UI/UIAvatarLoader/UIAvatarLoader'
-import UIInput from 'src/components/UI/UIInput/UIInput'
+import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
-import validateRules from 'src/utils/validateRules'
+import { validateRules } from 'src/utils/validateRules'
 
 const ChatRoomSettingsPopup = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
-  const chatRoomData = chatRooms.find((room) => room.roomId === selectedChatRoomId)
+  const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const { id } = useTypedSelector((state) => state.user.userData)
-  const [imagePath, setNewImagePath] = useState<string | undefined>(chatRoomData?.avatar)
+  const [imagePath, setNewImagePath] = useState<string | undefined>(chatRoomData?.avatarPath)
   const [avatarFile, setFile] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const isUserAuthor = chatRoomData?.authorId === id
@@ -28,15 +25,17 @@ const ChatRoomSettingsPopup = () => {
   const [isValid, validate] = useValidate()
 
   const onFinish = async (values: { 'chat-name': string }) => {
-    const updatedValues = {
-      authorId: id,
+    const userIds = chatRoomData?.users.map((user) => user.id) ?? []
+    const updatedValues: SocketActionsPayload['updateChatRoom'] = {
       roomId: selectedChatRoomId,
-      users: [...(chatRoomData?.users as Array<UserShort>), { id }],
+      users: [id, ...userIds],
       chatName: values['chat-name'],
-      avatar: imagePath,
-      avatarFile
+      avatarPath: imagePath ?? '',
+      avatarFile: avatarFile,
+      authorId: id
     }
     setIsLoading(true)
+
     socket.emit(SocketActions.UPDATE_CHAT_ROOM, updatedValues)
     socket.on(SocketActions.ROOM_DATA_UPDATED, () => {
       setIsLoading(false)
@@ -57,9 +56,9 @@ const ChatRoomSettingsPopup = () => {
       <div className="chat-room-settings-popup__members">
         <span className="paragraph-text paragraph-text--secondary">Members:</span>
         <div className="chat-room-settings-popup__members-list">
-          {chatRoomData?.users.map((user) => (
+          {chatRoomData?.users?.map((user) => (
             <div className="chat-room-settings-popup__member">
-              <UIAvatar src={user.avatar} showBadge={false} />
+              <UIAvatar src={user.avatarPath} showBadge={false} />
               <span className="paragraph-text paragraph-text--secondary">{user.username}</span>
             </div>
           ))}
@@ -97,14 +96,14 @@ const ChatRoomSettingsPopup = () => {
               </Form.Item>
             </div>
             <Members />
-            <UIButton text="Update" border="border-default" htmltype="submit" disabled={!isValid} />
+            <UIButton text="Update" border="border-default" htmltype={'submit'} disabled={!isValid} />
           </Form>
         </div>
       ) : (
         <div className="chat-room-settings-popup__wrapper">
           <div className="chat-room-settings-popup__image">
             <UIAvatar
-              src={chatRoomData?.avatar}
+              src={chatRoomData?.avatarPath}
               stubIconName="image-stub"
               showBadge={false}
               size="large"

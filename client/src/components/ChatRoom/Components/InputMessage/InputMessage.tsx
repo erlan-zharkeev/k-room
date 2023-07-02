@@ -1,26 +1,32 @@
 import { Form } from 'antd'
-import { FormEvent, useState } from 'react'
-import { SocketActions } from 'common-types'
+import { useState } from 'react'
+import { SocketActions, SocketActionsPayload } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import { InputMessageProps } from './@types/InputMessageProps'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
-import UIInput from 'src/components/UI/UIInput/UIInput'
-import UIButton from 'src/components/UI/UIButton/UIButton'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
-import UIFileLoader from 'src/components/UI/UIFileLoader/UIFileLoader'
 import { ImageObject } from 'common-types'
+import { UIImageLoader, UIInput, UIButton } from 'src/components/UI'
 
-const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessageProps) => {
+const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')
-  const { id } = useTypedSelector((state) => state.user.userData)
+  const { username, id } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
+  const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
+  const haveRepliedMessage = () => Boolean(repliedMessageData.id)
 
   const sendUserTypingStatus = (status: boolean) => {
     if (!selectedChatRoom) return
-    socket.emit(SocketActions.USER_TYPING, { userIdFrom: id, usersTo: selectedChatRoom.users, status })
+    const payload: SocketActionsPayload['userTyping'] = {
+      authorName: username,
+      authorId: id,
+      usersTo: selectedChatRoom.users,
+      status
+    }
+    socket.emit(SocketActions.USER_TYPING, payload)
   }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)
@@ -32,14 +38,17 @@ const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessagePr
   }
   const setEmoji = (value: string) => setMessage(`${message} ${value} `)
 
-  const send = (e: FormEvent<HTMLFormElement> | React.MouseEvent<HTMLElement>) => {
-    e.preventDefault()
+  const send = () => {
     sendMessage(message)
     setMessage('')
   }
 
-  const setImagesHandler = (files: Array<ImageObject>) => {
-    uploadFileHandler({ message, files })
+  const setImagesHandler = (images: Array<ImageObject>) => {
+    uploadImageHandler({ message, images })
+  }
+
+  const isButtonDisabled = () => {
+    return !haveRepliedMessage() && !Boolean(message)
   }
 
   return (
@@ -51,10 +60,10 @@ const InputMessage = ({ sendMessage, uploadFileHandler, height }: InputMessagePr
     >
       <ReplyMessage />
       <Form onFinish={send}>
-        <UIFileLoader multiple={true} setImages={setImagesHandler} />
+        <UIImageLoader multiple={true} setImages={setImagesHandler} />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropDown setEmoji={setEmoji} />
-        <UIButton htmltype="submit" disabled={!message} iconName="send" onClick={send} />
+        <UIButton htmltype="submit" disabled={isButtonDisabled()} iconName="send" onClick={send} />
       </Form>
     </div>
   )
