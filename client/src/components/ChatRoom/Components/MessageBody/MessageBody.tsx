@@ -62,7 +62,7 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
             <div className="message__replied-message-images">
               {message.repliedMessage?.images &&
                 message.repliedMessage.images.map((image) => (
-                  <div className="message__replied-message-image">
+                  <div key={image.src} className="message__replied-message-image">
                     <Image src={image.src} />
                   </div>
                 ))}

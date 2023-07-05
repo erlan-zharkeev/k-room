@@ -18,6 +18,7 @@ export type IconName =
   | 'paper-clip'
   | 'mail'
   | 'video-call'
+  | 'video-call-thin'
   | 'phone-call'
   | 'info'
   | 'arrow-left'

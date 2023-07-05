@@ -1,6 +1,7 @@
 import { Avatar } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UserOutlined, AudioMutedOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
+import { UIIcon } from 'src/components/UI'
 
 const CallModalVideo = () => {
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
@@ -16,7 +17,7 @@ const CallModalVideo = () => {
       <div className="call-modal-video__interlocutor-video">
         {!currentCall?.interlocutorSettings?.audio && (
           <div className="call-modal-video__interlocutor-audio-status">
-            <AudioMutedOutlined />
+            <UIIcon name="mic-muted" color="white" />
             <div className="paragraph-text paragraph-text--sm">The interlocutor turned off the sound</div>
           </div>
         )}
@@ -32,21 +33,7 @@ const CallModalVideo = () => {
         <video autoPlay muted id="self-video" className={!settings.video ? 'd-none' : ''} />
         <Avatar size="small" src={avatarPath} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
       </div>
-      <div className="call-modal-video__settings">
-        {/* <Dropdown
-          overlay={
-            <Menu
-              items={[
-                { key: '1', label: 'setting1' },
-                { key: '2', label: 'setting2' }
-              ]}
-            ></Menu>
-          }
-          placement="topLeft"
-        >
-          <SettingOutlined />
-        </Dropdown> */}
-      </div>
+      <div className="call-modal-video__settings"></div>
     </div>
   )
 }

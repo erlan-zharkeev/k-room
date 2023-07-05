@@ -1,22 +1,11 @@
 .call-list {
-  &__item {
-    height: 68px;
-    transition: height 0.4s ease-in-out;
-
-    &--expand {
-      height: 120px;
-      transition: height 0.4s ease-in-out;
-    }
-  }
-
   &__body {
     .ant-list-item {
       display: flex;
       flex-wrap: wrap;
       width: 100%;
-      padding: 1rem;
+      padding: 0.5rem 1rem;
       overflow: hidden;
-
       &-meta {
         display: flex;
         align-items: center;
@@ -24,21 +13,31 @@
     }
   }
 
-  &__additional-info {
-    width: 100%;
-    padding: $gutter-sm;
-
-    &-button {
-      margin-right: 0.5rem;
-
-      button {
-        border: none;
-
-        svg {
-          color: var(--accent);
-        }
-      }
+  &__item {
+    &--missed {
+      background-color: var(--error-bg);
     }
+  }
+
+  &__type {
+    display: flex;
+  }
+
+  &__finished-at {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    p {
+      color: var(--accent);
+      font-size: 10px;
+    }
+  }
+
+  &__additional-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   &__info {

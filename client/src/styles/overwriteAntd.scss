@@ -302,7 +302,7 @@ div[role='dialog'] {
   display: none !important;
 }
 
-// Collapse
+// collapse
 .ant-collapse {
   background-color: transparent;
   border: transparent;
@@ -317,11 +317,8 @@ div[role='dialog'] {
   }
 }
 
-// Badge
-// .ant-badge {
-//   display: flex;
-//   align-items: center;
-// }
-// .ant-badge-count {
-//   min-width: none !important;
-// }
+// badge
+.ant-badge {
+  display: flex;
+  align-items: center;
+}

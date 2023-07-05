@@ -2,7 +2,7 @@
   @include wh-100;
 
   overflow: hidden;
-  background-color: var(--dark-gray);
+  background-color: var(--dark-gray-transparent-2);
   border: 2px solid var(--dark-gray);
   border-radius: $radius-md;
 
@@ -77,6 +77,17 @@
 
     &-element {
       margin: 0 $gutter-sm;
+    }
+  }
+
+  .ui-icon--video-call-thin {
+    svg {
+      transform: scale(1.4);
+    }
+  }
+  .ui-icon--video-drop {
+    svg {
+      transform: scale(1.3);
     }
   }
 }

@@ -55,6 +55,12 @@
     animation: rotation 1s infinite linear;
   }
 
+  &--white {
+    svg {
+      color: var(--white);
+    }
+  }
+
   &--call {
     @include icon-size-compensation(1.1rem);
   }
