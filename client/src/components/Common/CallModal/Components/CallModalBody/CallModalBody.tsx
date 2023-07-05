@@ -151,14 +151,14 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
               <div className="call-modal__controls-element">
                 {currentCall.status === CallStatus.calling && (
                   <UIButton
-                    iconName={isAnswerLoading ? 'loader' : 'video-call'}
+                    iconName={isAnswerLoading ? 'loader' : 'video-call-thin'}
                     onClick={answerCall}
                     tooltip="Answer Via Video"
                   />
                 )}
                 {currentCall.status === CallStatus.inProgress && (
                   <UIButton
-                    iconName={settings.video ? 'video-call' : 'video-drop'}
+                    iconName={settings.video ? 'video-call-thin' : 'video-drop'}
                     color={settings.video ? 'success' : 'error'}
                     onClick={toggleVideo}
                     tooltip="Toggle Call Type"

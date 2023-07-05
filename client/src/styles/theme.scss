@@ -22,6 +22,7 @@
     --shadow-inset-end: #202020;
     --dark-gray: rgb(59 59 59);
     --dark-gray-transparent: rgba(59 59 59 / 30%);
+    --dark-gray-transparent-2: rgba(59 59 59 / 80%);
   }
 
   &[theme='light'] {
@@ -34,5 +35,6 @@
     --shadow-inset-end: #e8e8e8;
     --dark-gray: rgb(189 189 189);
     --dark-gray-transparent: rgba(189 189 189 / 30%);
+    --dark-gray-transparent-2: rgba(59 59 59 / 80%);
   }
 }

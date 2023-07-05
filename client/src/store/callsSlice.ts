@@ -2,6 +2,23 @@ import { createSlice } from '@reduxjs/toolkit'
 import { CallsState } from './@types/CallsState'
 import { CallStatus, CallType } from 'common-types'
 
+const initialCurrentCall = {
+  authorId: '',
+  authorName: '',
+  startedAt: 0,
+  interlocutorName: '',
+  interlocutorId: '',
+  interlocutorAvatarPath: '',
+  type: CallType.incoming,
+  video: false,
+  status: CallStatus.calling,
+  interlocutorSettings: {
+    streamLoading: false,
+    audio: false,
+    video: false
+  }
+}
+
 const initialState: CallsState = {
   showCallModal: false,
   isMinified: false,
@@ -10,22 +27,7 @@ const initialState: CallsState = {
     audio: true,
     video: true
   },
-  currentCall: {
-    authorId: '',
-    authorName: '',
-    startedAt: 1674784901,
-    interlocutorName: 'Ivan',
-    interlocutorId: '0',
-    interlocutorAvatarPath: '',
-    type: CallType.incoming,
-    video: false,
-    status: CallStatus.calling,
-    interlocutorSettings: {
-      streamLoading: false,
-      audio: true,
-      video: true
-    }
-  },
+  currentCall: initialCurrentCall,
   list: [
     {
       authorId: '',
@@ -63,7 +65,7 @@ const initialState: CallsState = {
       interlocutorId: '2',
       interlocutorAvatarPath: '',
       status: CallStatus.finished,
-      type: CallType.outgoing,
+      type: CallType.missed,
       video: false
     }
   ]
@@ -111,22 +113,7 @@ const callsSlice = createSlice({
     },
     closeCallModal(state) {
       state.showCallModal = false
-      state.currentCall = {
-        authorId: '',
-        authorName: '',
-        startedAt: 0,
-        interlocutorName: '',
-        interlocutorId: '',
-        interlocutorAvatarPath: '',
-        type: CallType.incoming,
-        video: false,
-        status: CallStatus.calling,
-        interlocutorSettings: {
-          streamLoading: false,
-          audio: false,
-          video: false
-        }
-      }
+      state.currentCall = initialCurrentCall
     },
     setMinify(state) {
       state.isMinified = true

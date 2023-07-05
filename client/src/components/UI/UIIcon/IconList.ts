@@ -20,7 +20,6 @@ import {
   BsMicMuteFill,
   BsMicFill,
   BsCameraVideoFill,
-  BsCameraVideoOffFill,
   BsDashLg,
   BsFacebook,
   BsFillReplyFill,
@@ -32,6 +31,9 @@ import { HiOutlinePaperClip } from 'react-icons/hi'
 import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
 import { FcGoogle } from 'react-icons/fc'
+import { VscDeviceCameraVideo } from 'react-icons/vsc'
+// import { PiVideoCameraSlashThin } from 'react-icons/'
+import { IoVideocamOffOutline } from 'react-icons/io5'
 
 const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },
@@ -53,7 +55,8 @@ const IconList: Array<IconListElement> = [
   { name: 'paper-clip', Icon: HiOutlinePaperClip },
   { name: 'mail', Icon: IoMdMail },
   { name: 'video-call', Icon: BsCameraVideoFill },
-  { name: 'video-drop', Icon: BsCameraVideoOffFill },
+  { name: 'video-call-thin', Icon: VscDeviceCameraVideo },
+  { name: 'video-drop', Icon: IoVideocamOffOutline },
   { name: 'phone-call', Icon: IoIosCall },
   { name: 'info', Icon: IoInformationCircleOutline },
   { name: 'arrow-left', Icon: MdOutlineArrowBackIos },

@@ -3,4 +3,24 @@
   &__select {
     margin-bottom: $gutter-lg;
   }
+  &__video-select {
+    .ant-select {
+      width: 65%;
+    }
+    display: flex;
+    justify-content: space-between;
+  }
+  &__video {
+    .ant-btn > .ant-btn-loading-icon .anticon {
+      padding: 0;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      border-radius: $radius-md;
+    }
+    &--hide {
+      height: 0;
+    }
+  }
 }
