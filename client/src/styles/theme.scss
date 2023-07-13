@@ -1,6 +1,7 @@
 :root {
   --accent: #418fde;
   --error-text: #863347;
+  --dark-green: rgb(0, 43, 29);
   --success: rgb(44 186 136);
   --error: rgb(191 86 110);
   --error-transparent: rgba(191, 86, 110, 0.3);
@@ -11,7 +12,7 @@
   --info-bg: rgba(255 255 255 / 20%);
   --modal-overflow-color: rgb(0 0 0 / 75%);
   --select-placeholder: #5d5d5d;
-
+  --white: #fff;
   &[theme='dark'] {
     --main-bg: #1c1c1c;
     --main-text: #fff;

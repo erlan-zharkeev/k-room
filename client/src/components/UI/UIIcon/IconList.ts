@@ -26,13 +26,12 @@ import {
   BsTrash,
   BsChatSquareText
 } from 'react-icons/bs'
-import { AiOutlineSend } from 'react-icons/ai'
+import { AiOutlineSend, AiTwotoneThunderbolt } from 'react-icons/ai'
 import { HiOutlinePaperClip } from 'react-icons/hi'
 import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
 import { FcGoogle } from 'react-icons/fc'
 import { VscDeviceCameraVideo } from 'react-icons/vsc'
-// import { PiVideoCameraSlashThin } from 'react-icons/'
 import { IoVideocamOffOutline } from 'react-icons/io5'
 
 const IconList: Array<IconListElement> = [
@@ -73,7 +72,8 @@ const IconList: Array<IconListElement> = [
   { name: 'exclamation', Icon: ImNotification },
   { name: 'image-stub', Icon: RiImage2Fill },
   { name: 'trash', Icon: BsTrash },
-  { name: 'warn', Icon: IoWarning }
+  { name: 'warn', Icon: IoWarning },
+  { name: 'thunder', Icon: AiTwotoneThunderbolt }
 ]
 
 export default IconList

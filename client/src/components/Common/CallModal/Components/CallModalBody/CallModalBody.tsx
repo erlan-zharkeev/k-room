@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from 'react'
 import CallDots from '../CallDots/CallDots'
 import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
-import { CallStatus, CallType, SocketActions, SocketActionsPayload } from 'common-types'
+import { CallStatus, CallType, SocketActions, SocketActionsPayload, UserMediaType } from 'common-types'
 import { socket } from 'src/socket/socket'
 import UseCounter from 'src/hooks/useCounter'
 import { ServiceContext } from 'src/main'
@@ -64,12 +64,12 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const toggleAudio = () => {
     dispatch(toggleCallAudio())
-    $call.toggleSetting('audio')
+    $call.toggleSetting(UserMediaType.audio)
   }
 
   const toggleVideo = async () => {
     dispatch(toggleCallVideo())
-    $call.toggleSetting('video')
+    $call.toggleSetting(UserMediaType.video)
   }
 
   const minifyModal = () => {
@@ -135,7 +135,6 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <CallDots />
           </div>
           <CallModalVideo />
-
           <div className="call-modal__controls">
             {currentCall.status === CallStatus.inProgress && (
               <div className="call-modal__length header-text header-text--sm">

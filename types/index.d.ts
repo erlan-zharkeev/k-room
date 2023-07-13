@@ -135,6 +135,11 @@ export declare enum CallType {
     outgoing = "outgoing",
     missed = "missed"
 }
+export declare enum UserMediaType {
+    audio = "audio",
+    video = "video",
+    both = "both"
+}
 export interface StreamSettings extends BasicStreamSettings {
     streamLoading: boolean;
 }

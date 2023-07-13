@@ -4,8 +4,13 @@
   @include wh-100;
 
   &__interlocutor-audio-status {
+    display: flex;
+    align-items: center;
+    .ui-icon {
+      margin-right: $gutter-sm;
+    }
     span {
-      margin-right: 0.3rem;
+      margin-right: 1.3rem;
       font-size: 1rem;
     }
 

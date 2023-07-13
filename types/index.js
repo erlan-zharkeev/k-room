@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.InfoItemStatus = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
 // BASIC
 var Status;
 (function (Status) {
@@ -52,6 +52,12 @@ var CallType;
     CallType["outgoing"] = "outgoing";
     CallType["missed"] = "missed";
 })(CallType = exports.CallType || (exports.CallType = {}));
+var UserMediaType;
+(function (UserMediaType) {
+    UserMediaType["audio"] = "audio";
+    UserMediaType["video"] = "video";
+    UserMediaType["both"] = "both";
+})(UserMediaType = exports.UserMediaType || (exports.UserMediaType = {}));
 var InfoItemStatus;
 (function (InfoItemStatus) {
     InfoItemStatus["read"] = "read";

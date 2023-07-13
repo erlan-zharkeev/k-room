@@ -22,14 +22,12 @@ const Popup = () => {
     MessageWithBindDataPopup: <MessageWithBindDataPopup />
   }
 
-  const Content = () => {
-    return popups[modalData.modalContentComponentName] ? popups[modalData.modalContentComponentName] : null
-  }
+  const ComponentContent = () => popups[modalData.modalContentComponentName]
 
   return (
     <div className="modal">
       <Modal centered title={modalData.title} open={showModal} footer={null} onCancel={() => dispatch(closeModal())}>
-        <Content />
+        <ComponentContent />
       </Modal>
     </div>
   )

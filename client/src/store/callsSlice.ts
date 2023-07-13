@@ -25,7 +25,7 @@ const initialState: CallsState = {
   settings: {
     streamLoading: false,
     audio: true,
-    video: true
+    video: false
   },
   currentCall: initialCurrentCall,
   list: [

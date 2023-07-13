@@ -152,6 +152,12 @@ export enum CallType {
   missed = "missed",
 }
 
+export enum UserMediaType {
+  audio = "audio",
+  video = "video",
+  both = "both",
+}
+
 export interface StreamSettings extends BasicStreamSettings {
   streamLoading: boolean;
 }

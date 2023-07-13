@@ -14,6 +14,8 @@ import apiMethods from './services/api-methods'
 import { changeIsAppLoading, commonSetUserDataHandler } from './store/userSlice'
 import { AsyncThunkResponseWrapper } from './@types'
 import ContextMenu from 'src/components/Common/ContextMenu/ContextMenu'
+import Popup from './components/Common/Popup/Popup'
+import CallModal from './components/Common/CallModal/CallModal'
 
 const App = () => {
   const { theme } = useTypedSelector((state) => state.persist.settings)
@@ -48,6 +50,8 @@ const App = () => {
 
   return (
     <>
+      <Popup />
+      <CallModal />
       <AppRouter />
       <ContextMenu />
     </>

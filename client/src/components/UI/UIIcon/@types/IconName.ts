@@ -37,3 +37,4 @@ export type IconName =
   | 'image-stub'
   | 'trash'
   | 'warn'
+  | 'thunder'
