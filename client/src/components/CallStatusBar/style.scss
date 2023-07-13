@@ -7,7 +7,7 @@
   transition: height 0.1s ease-in;
 
   $self: &;
-
+  overflow: hidden;
   &__wrapper {
     display: flex;
     align-items: center;

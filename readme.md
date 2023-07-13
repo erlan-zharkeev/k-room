@@ -75,7 +75,6 @@
 - Delete dir - rm -r dirname
 
 ## Backlog
-- добавить настройки громкости и чекаем видео(5)
 - develop call list(4)
 - setup cors to specific host and port
 - check token works(1)

@@ -1,5 +1,5 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { ModalOptions } from './@types'
 import CallModalBody from './Components/CallModalBody/CallModalBody'
@@ -23,6 +23,11 @@ const CallModal = () => {
   }
   const [modalPositionX, setModalPositionX] = useState(initialPosition.x)
   const [modalPositionY, setModalPositionY] = useState(initialPosition.y)
+
+  useEffect(() => {
+    setModalPositionX(initialPosition.x)
+    setModalPositionY(initialPosition.y)
+  }, [showCallModal])
 
   const setModalOptions = ({ width, height, x, y }: ModalOptions) => {
     setModalWidth(width)

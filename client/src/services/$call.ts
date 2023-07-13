@@ -1,4 +1,4 @@
-import { User, SocketActions, SocketActionsPayload } from 'common-types'
+import { User, SocketActions, SocketActionsPayload, UserMediaType, BasicStreamSettings } from 'common-types'
 import { Howl } from 'howler'
 import Peer, { SignalData } from 'simple-peer'
 import { Socket } from 'socket.io-client'
@@ -28,15 +28,11 @@ class Call {
   soundConnection: Howl
   soundCalling: Howl
   socket: Socket
-  selfVideoDom: HTMLVideoElement
-  selfInterlocutorDom: HTMLVideoElement
   constructor() {
     this.dispatch = store.dispatch
     this.soundConnection = $sound(Sounds.connection, true)
     this.soundCalling = $sound(Sounds.ring, true)
     this.socket = socket
-    this.selfVideoDom = document.getElementById('self-video') as HTMLVideoElement
-    this.selfInterlocutorDom = document.getElementById('interlocutor-video') as HTMLVideoElement
   }
 
   initConnection(options: any) {
@@ -67,7 +63,8 @@ class Call {
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
-      this.selfInterlocutorDom.srcObject = interlocutorStream
+      const selfInterlocutorDom = document.getElementById('interlocutor-video') as HTMLVideoElement
+      selfInterlocutorDom.srcObject = interlocutorStream
     })
     this.connection.on('close', () => {
       this.dispatch(
@@ -106,7 +103,8 @@ class Call {
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
-      this.selfInterlocutorDom.srcObject = interlocutorStream
+      const selfInterlocutorDom = document.getElementById('interlocutor-video') as HTMLVideoElement
+      selfInterlocutorDom.srcObject = interlocutorStream
     })
     this.connection.on('close', () => {
       this.dispatch(
@@ -125,7 +123,8 @@ class Call {
     const { audio, video } = store.getState().calls.settings
     try {
       this.selfStream = await navigator.mediaDevices.getUserMedia({ audio, video })
-      this.selfVideoDom.srcObject = this.selfStream
+      const selfVideoDom = document.getElementById('self-video') as HTMLVideoElement
+      selfVideoDom.srcObject = this.selfStream
     } catch (error) {
       $clg('error', 'Failed to get device cause ' + String(error))
       this.dispatch(
@@ -144,11 +143,13 @@ class Call {
     this.callerSignal = callerSignal
   }
 
-  toggleSetting(type: string) {
+  toggleSetting(type: UserMediaType) {
     const { audio, video } = store.getState().calls.settings
-    const isVideo = type === 'video'
+    const isVideo = type === UserMediaType.video
     const tracks = isVideo ? 'getVideoTracks' : 'getAudioTracks'
-    this.selfStream[tracks]().forEach((track) => (track.enabled = isVideo ? video : audio))
+    this.selfStream[tracks]().forEach((track) => {
+      track.enabled = isVideo ? video : audio
+    })
     const payload: SocketActionsPayload['changeCallSettings'] = { audio, video }
     this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, payload)
   }

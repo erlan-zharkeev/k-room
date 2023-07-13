@@ -3,7 +3,6 @@ import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
-import Popup from 'src/components/Common/Popup/Popup'
 import { socket } from 'src/socket/socket'
 import { Message, SocketActions, User, ChatRoom as ChatRoomInterface, SocketActionsPayload } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
@@ -120,8 +119,6 @@ const MainPage = () => {
   return (
     <div className={'main-page page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
       {socket.disconnected && <StubLoading />}
-      <Popup />
-      <CallModal />
       <div className="main-page__wrapper">
         {viewPort.width >= 769 && <AsideBar />}
         <div className="main-page__content">

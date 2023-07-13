@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs')
 
 export const loadUsersFixtures = async () => {
   const createUser = async (username: string) => {
-    const candidate = await UserModel.findOne({ email: `${username}@gmail.com` })
+    const candidate = await UserModel.findOneAndUpdate({ email: `${username}@gmail.com` }, { online: false })
     if (candidate) return
     const hashedPassword = await bcrypt.hash('Asdf1234', 6)
     const user = new UserModel({
