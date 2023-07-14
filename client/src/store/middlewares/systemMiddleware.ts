@@ -4,6 +4,7 @@ import { showNotification } from '../systemSlice'
 import changeSettingsHandler from './helpers/changeSettingsHandler'
 
 const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
+  if (!action) return
   const dispatch = store.dispatch
   changeSettingsHandler(action, store)
   switch (action.type) {

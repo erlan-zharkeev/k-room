@@ -133,7 +133,8 @@ export declare enum CallStatus {
 export declare enum CallType {
     incoming = "incoming",
     outgoing = "outgoing",
-    missed = "missed"
+    missed = "missed",
+    notAnswered = "not-answered"
 }
 export declare enum UserMediaType {
     audio = "audio",
@@ -148,6 +149,8 @@ export interface BasicStreamSettings {
     video: boolean;
 }
 export interface Call {
+    id: string;
+    calledAt?: number;
     authorId: string;
     authorName: string;
     startedAt: number;
@@ -156,10 +159,20 @@ export interface Call {
     interlocutorId: string;
     interlocutorName: string;
     interlocutorAvatarPath?: string;
-    status: CallStatus;
+    status?: CallStatus;
     type: CallType;
     video: boolean;
     interlocutorSettings?: StreamSettings;
+}
+export interface CallDB {
+    _id: any;
+    calledAt: number;
+    startedAt: number;
+    finishedAt: number;
+    authorId: string;
+    interlocutors: Array<string>;
+    answered: boolean;
+    video: boolean;
 }
 export interface Codes {
     passwordRecovery: {
@@ -188,6 +201,8 @@ export interface InfoItem {
     contentComponent?: () => string;
 }
 export interface SocketActionsPayload {
+    callUpdated: Call;
+    callsUpdated: Array<Call>;
     initialize: {
         userId: string;
     };
@@ -266,6 +281,7 @@ export interface SocketActionsPayload {
         username: string;
     };
     callUser: {
+        callId?: string;
         userToCall?: string;
         signal: any;
         from: string;
@@ -279,6 +295,7 @@ export interface SocketActionsPayload {
         settings: StreamSettings;
     };
     answerCall: {
+        callId: string;
         to: string;
         signal: any;
         settings: StreamSettings;
@@ -286,6 +303,7 @@ export interface SocketActionsPayload {
     };
     callStartedAt: number;
     callEnded: {
+        callId: string;
         callerId: string;
     };
     errorMessage: {
@@ -402,5 +420,7 @@ export declare enum SocketActions {
     UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
     DELETE_MESSAGE = "delete-message",
     MESSAGE_DELETED = "message-deleted",
-    ERROR_MESSAGE = "error-message"
+    ERROR_MESSAGE = "error-message",
+    CALLS_UPDATED = "calls-updated",
+    CALL_UPDATED = "call-updated"
 }

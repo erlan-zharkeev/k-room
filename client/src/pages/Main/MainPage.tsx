@@ -26,6 +26,7 @@ import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
+import { updateCall, updateCalls } from 'src/store/callsSlice'
 
 const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -110,6 +111,12 @@ const MainPage = () => {
     })
     socket.on(SocketActions.UPDATE_MESSAGE_REACTIONS, (data: SocketActionsPayload['updatedMessageReactions']) => {
       dispatch(updateMessageReactions(data))
+    })
+    socket.on(SocketActions.CALLS_UPDATED, (callsData: SocketActionsPayload['callsUpdated']) => {
+      dispatch(updateCalls(callsData))
+    })
+    socket.on(SocketActions.CALL_UPDATED, (callData: SocketActionsPayload['callUpdated']) => {
+      dispatch(updateCall(callData))
     })
     return () => {
       socket.removeAllListeners()

@@ -1,4 +1,4 @@
-import { User, SocketActions, SocketActionsPayload, UserMediaType, BasicStreamSettings } from 'common-types'
+import { User, SocketActions, SocketActionsPayload, UserMediaType } from 'common-types'
 import { Howl } from 'howler'
 import Peer, { SignalData } from 'simple-peer'
 import { Socket } from 'socket.io-client'
@@ -84,7 +84,7 @@ class Call {
     this.listenConnectionError()
   }
 
-  answerCall() {
+  answerCall(callId: string) {
     this.soundCalling.stop()
     this.dispatch(setCurrentCallAccepted())
     this.initConnection({
@@ -94,12 +94,14 @@ class Call {
     })
     this.connection.on('signal', (data) => {
       const settings = store.getState().calls.settings
-      this.socket.emit(SocketActions.ANSWER_CALL, {
+      const payload: SocketActionsPayload['answerCall'] = {
         signal: data,
         to: this.callerId,
         settings,
-        selfSocketId: this.socket.id
-      })
+        selfSocketId: this.socket.id,
+        callId
+      }
+      this.socket.emit(SocketActions.ANSWER_CALL, payload)
     })
     this.connection.on('stream', (interlocutorStream: MediaStream) => {
       this.interlocutorStream = interlocutorStream
@@ -147,9 +149,9 @@ class Call {
     const { audio, video } = store.getState().calls.settings
     const isVideo = type === UserMediaType.video
     const tracks = isVideo ? 'getVideoTracks' : 'getAudioTracks'
-    this.selfStream[tracks]().forEach((track) => {
-      track.enabled = isVideo ? video : audio
-    })
+    const value = type === UserMediaType.audio ? audio : video
+    if (value) this.setStream()
+    else this.selfStream[tracks]().forEach((track) => track.stop())
     const payload: SocketActionsPayload['changeCallSettings'] = { audio, video }
     this.socket.emit(SocketActions.CHANGE_CALL_SETTINGS, payload)
   }
@@ -157,13 +159,13 @@ class Call {
   leaveCall() {
     this.soundCalling.stop()
     this.soundConnection.stop()
-    this.dispatch(closeCallModal())
     const tracks = this.selfStream.getTracks()
     tracks.forEach((track) => {
       track.stop()
     })
     this.socket = socket
     if (this.connection) this.connection.destroy()
+    this.dispatch(closeCallModal())
   }
 
   listenConnectionError() {

@@ -2,6 +2,7 @@ import { CallModalBodyProps } from '../../@types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import {
+  setCallId,
   setCallStartedAt,
   setMinify,
   setShowCallModal,
@@ -20,11 +21,14 @@ import { socket } from 'src/socket/socket'
 import UseCounter from 'src/hooks/useCounter'
 import { ServiceContext } from 'src/main'
 import { UIButton, UIAvatar } from 'src/components/UI'
+import { Avatar } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
 
 const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const { $call } = useContext(ServiceContext)
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
+  const { avatarPath } = useTypedSelector((state) => state.user.userData)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const [counterValue, _, startCounter, stopCounter] = UseCounter(0)
 
@@ -36,7 +40,8 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     })
     socket.on(SocketActions.CALL_USER, (data: SocketActionsPayload['callUser']) => {
       dispatch(setShowCallModal(data))
-      const { from, signal, settings } = data
+      const { from, signal, settings, callId } = data
+      dispatch(setCallId(callId))
       $call.calling(from, signal)
       dispatch(updateInterlocutorSettings(settings))
     })
@@ -50,7 +55,10 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const endCall = () => {
     stopCounter()
-    const payload: SocketActionsPayload['callEnded'] = { callerId: $call.callerId ?? $call.callToId }
+    const payload: SocketActionsPayload['callEnded'] = {
+      callerId: $call.callerId ?? $call.callToId,
+      callId: currentCall.id
+    }
     socket.emit(SocketActions.CALL_ENDED, payload)
     $call.leaveCall()
   }
@@ -59,7 +67,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     setIsAnswerLoading(true)
     const gotStream = await $call.setStream()
     setIsAnswerLoading(false)
-    if (gotStream) $call.answerCall()
+    if (gotStream) $call.answerCall(currentCall.id)
   }
 
   const toggleAudio = () => {
@@ -134,7 +142,13 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             </div>
             <CallDots />
           </div>
+
           <CallModalVideo />
+          <div className="call-modal__user-video">
+            <video autoPlay muted id="self-video" className={!settings.video ? 'd-none' : ''} />
+            <Avatar size="small" src={avatarPath} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
+          </div>
+
           <div className="call-modal__controls">
             {currentCall.status === CallStatus.inProgress && (
               <div className="call-modal__length header-text header-text--sm">
@@ -148,28 +162,20 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 </div>
               )}
               <div className="call-modal__controls-element">
-                {currentCall.status === CallStatus.calling && (
-                  <UIButton
-                    iconName={isAnswerLoading ? 'loader' : 'video-call-thin'}
-                    onClick={answerCall}
-                    tooltip="Answer Via Video"
-                  />
-                )}
-                {currentCall.status === CallStatus.inProgress && (
-                  <UIButton
-                    iconName={settings.video ? 'video-call-thin' : 'video-drop'}
-                    color={settings.video ? 'success' : 'error'}
-                    onClick={toggleVideo}
-                    tooltip="Toggle Call Type"
-                  />
-                )}
+                <UIButton
+                  iconName={settings.video ? 'video-call-thin' : 'video-drop'}
+                  color={settings.video ? 'default' : 'error'}
+                  onClick={toggleVideo}
+                  tooltip="Toggle Call Type"
+                />
               </div>
               <div className="call-modal__controls-element call-modal__controls-element--phone">
                 <UIButton iconName="phone-drop" color="error" onClick={endCall} tooltip="End Call" />
               </div>
               <div className="call-modal__controls-element">
                 <UIButton
-                  iconName={settings.audio ? 'mic-muted' : 'mic'}
+                  iconName={settings.audio ? 'mic' : 'mic-muted'}
+                  color={settings.audio ? 'default' : 'error'}
                   onClick={toggleAudio}
                   tooltip="Toggle Audio Type"
                 />

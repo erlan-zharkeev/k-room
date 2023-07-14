@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { CallsState } from './@types/CallsState'
-import { CallStatus, CallType } from 'common-types'
+import { Call, CallStatus, CallType, SocketActionsPayload } from 'common-types'
 
 const initialCurrentCall = {
+  id: '',
   authorId: '',
   authorName: '',
   startedAt: 0,
@@ -19,56 +20,18 @@ const initialCurrentCall = {
   }
 }
 
+const initialCallSettings = {
+  streamLoading: false,
+  audio: true,
+  video: false
+}
+
 const initialState: CallsState = {
   showCallModal: false,
   isMinified: false,
-  settings: {
-    streamLoading: false,
-    audio: true,
-    video: false
-  },
+  settings: initialCallSettings,
   currentCall: initialCurrentCall,
-  list: [
-    {
-      authorId: '',
-      authorName: '',
-      startedAt: 1674784901,
-      finishedAt: 1674784901,
-      length: 36,
-      interlocutorName: 'Ivan',
-      interlocutorId: '0',
-      interlocutorAvatarPath: '',
-      status: CallStatus.finished,
-      type: CallType.incoming,
-      video: true
-    },
-    {
-      authorId: '',
-      authorName: '',
-      startedAt: 1674784901,
-      finishedAt: 1674784901,
-      length: 156,
-      interlocutorName: 'Anton',
-      interlocutorId: '1',
-      interlocutorAvatarPath: '',
-      status: CallStatus.inProgress,
-      type: CallType.outgoing,
-      video: false
-    },
-    {
-      authorId: '',
-      authorName: '',
-      startedAt: 1674784901,
-      finishedAt: 1674784901,
-      length: 342,
-      interlocutorName: 'Norbik',
-      interlocutorId: '2',
-      interlocutorAvatarPath: '',
-      status: CallStatus.finished,
-      type: CallType.missed,
-      video: false
-    }
-  ]
+  list: []
 }
 
 const callsSlice = createSlice({
@@ -114,6 +77,8 @@ const callsSlice = createSlice({
     closeCallModal(state) {
       state.showCallModal = false
       state.currentCall = initialCurrentCall
+      state.settings = initialCallSettings
+      state.isMinified = false
     },
     setMinify(state) {
       state.isMinified = true
@@ -126,6 +91,18 @@ const callsSlice = createSlice({
     },
     toggleCallAudio(state) {
       state.settings.audio = !state.settings.audio
+    },
+    setCallId(state, { payload }) {
+      state.currentCall.id = payload
+    },
+    updateCalls(state, { payload }: { payload: SocketActionsPayload['callsUpdated'] }) {
+      state.list = payload
+    },
+    updateCall(state, { payload }: { payload: SocketActionsPayload['callUpdated'] }) {
+      const call = payload
+      const index = state.list.findIndex((stateCall) => stateCall.id === call.id)
+      if (index) state.list[index] = call
+      if (!state.currentCall.id) state.currentCall.id = call.id
     }
   }
 })
@@ -142,7 +119,10 @@ export const {
   updateInterlocutorSettings,
   setCallStartedAt,
   toggleSelfStreamIsLoading,
-  setShowCallModal
+  setShowCallModal,
+  updateCalls,
+  updateCall,
+  setCallId
 } = callsSlice.actions
 
 export default callsSlice.reducer

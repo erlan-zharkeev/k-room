@@ -4,8 +4,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { UIIcon } from 'src/components/UI'
 
 const CallModalVideo = () => {
-  const { settings, currentCall } = useTypedSelector((state) => state.calls)
-  const { avatarPath } = useTypedSelector((state) => state.user.userData)
+  const { currentCall } = useTypedSelector((state) => state.calls)
 
   return (
     <div
@@ -21,7 +20,6 @@ const CallModalVideo = () => {
             <div className="paragraph-text paragraph-text--sm">The interlocutor turned off the sound</div>
           </div>
         )}
-
         <video autoPlay id="interlocutor-video" className={!currentCall?.interlocutorSettings?.video ? 'd-none' : ''} />
         <Avatar
           src={currentCall.interlocutorAvatarPath}
@@ -29,11 +27,6 @@ const CallModalVideo = () => {
           className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
         />
       </div>
-      <div className="call-modal-video__user-video">
-        <video autoPlay muted id="self-video" className={!settings.video ? 'd-none' : ''} />
-        <Avatar size="small" src={avatarPath} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
-      </div>
-      <div className="call-modal-video__settings"></div>
     </div>
   )
 }

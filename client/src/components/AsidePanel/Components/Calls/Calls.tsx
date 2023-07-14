@@ -7,6 +7,7 @@ import { CallType } from 'common-types'
 
 const Calls = () => {
   const { list } = useTypedSelector((state) => state.calls)
+  const getCallType = (type: CallType) => (type === CallType.notAnswered ? 'Not answered' : firstCharUpperCase(type))
 
   return (
     <div className="call-list">
@@ -18,7 +19,7 @@ const Calls = () => {
             emptyText: <div className="paragraph-text paragraph-text--secondary">There are no calls yet</div>
           }}
           renderItem={(call) => (
-            <List.Item className={`call-list__item ${call.type === CallType.missed ? 'call-list__item--missed' : ''}`}>
+            <List.Item className={`call-list__item call-list__item--${call.type}`}>
               <List.Item.Meta
                 avatar={<UIAvatar src={call.interlocutorAvatarPath} showBadge={false} />}
                 title={<span>{call.interlocutorName}</span>}
@@ -28,7 +29,7 @@ const Calls = () => {
                   >
                     <UIIcon name={call.video ? 'video-call-thin' : 'phone-call'} />
                     <p className="call-list__type paragraph-text paragraph-text--secondary">
-                      {firstCharUpperCase(call.type)}
+                      {getCallType(call.type)}
                       {call.length && (
                         <div className="call-list__length">
                           &nbsp;({moment.utc(call.length * 1000).format('mm:ss')})
@@ -39,13 +40,13 @@ const Calls = () => {
                 }
               />
               <div className="call-list__additional-info">
-                {call.finishedAt && (
-                  <div className="call-list__finished-at">
+                {call.calledAt && (
+                  <div className="call-list__called-at">
                     <p className="paragraph-text paragraph-text--secondary">
-                      {moment.utc(call.finishedAt * 1000).format('MMMM Do YYYY')}
+                      {moment.utc(call.calledAt).format('MMMM Do YYYY')}
                     </p>
                     <p className="paragraph-text paragraph-text--secondary">
-                      {moment.utc(call.finishedAt * 1000).format('h:mm a')}
+                      {moment.utc(call.calledAt * 1000).format('LTS')}
                     </p>
                   </div>
                 )}

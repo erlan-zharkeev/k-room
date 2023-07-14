@@ -51,6 +51,7 @@ var CallType;
     CallType["incoming"] = "incoming";
     CallType["outgoing"] = "outgoing";
     CallType["missed"] = "missed";
+    CallType["notAnswered"] = "not-answered";
 })(CallType = exports.CallType || (exports.CallType = {}));
 var UserMediaType;
 (function (UserMediaType) {
@@ -144,4 +145,6 @@ var SocketActions;
     SocketActions["DELETE_MESSAGE"] = "delete-message";
     SocketActions["MESSAGE_DELETED"] = "message-deleted";
     SocketActions["ERROR_MESSAGE"] = "error-message";
+    SocketActions["CALLS_UPDATED"] = "calls-updated";
+    SocketActions["CALL_UPDATED"] = "call-updated";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
