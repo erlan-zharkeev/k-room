@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ContactsState } from './@types/ContactsState'
+import { SocketActionsPayload, User } from 'common-types'
 
 const initialState: ContactsState = {
   isLoading: true,
@@ -10,17 +11,17 @@ const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    loadContacts(state, { payload }) {
+    loadContacts(state, { payload }: { payload: Array<User> }) {
       state.contacts = payload
       state.isLoading = false
     },
-    updateContactsStatus(state, { payload }) {
+    updateContactsStatus(state, { payload }: { payload: SocketActionsPayload['statusContact'] }) {
       const { userId, status } = payload
       state.contacts.forEach((user) => {
         if (user.id === userId) user.online = status
       })
     },
-    updateContactData(state, { payload }) {
+    updateContactData(state, { payload }: { payload: SocketActionsPayload['changeContactsData'] }) {
       const { id, username, avatarPath } = payload
       state.contacts.forEach((user) => {
         if (user.id !== id) return

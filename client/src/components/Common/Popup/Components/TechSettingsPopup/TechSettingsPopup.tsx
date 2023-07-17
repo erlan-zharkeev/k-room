@@ -1,4 +1,5 @@
 import { Select } from 'antd'
+import { NotificationType } from 'common-types'
 import { useEffect, useRef, useState } from 'react'
 import { UIButton } from 'src/components/UI'
 import $sound, { Sounds } from 'src/services/$sound'
@@ -69,7 +70,7 @@ const TechSettingsPopup = () => {
     } catch {
       showNotification({
         message: 'Cant get access to video device',
-        messageType: 'error'
+        messageType: NotificationType.error
       })
       setShowVideo(false)
     } finally {
@@ -128,7 +129,7 @@ const TechSettingsPopup = () => {
     } catch {
       showNotification({
         message: 'Cant get access to audio device',
-        messageType: 'error'
+        messageType: NotificationType.error
       })
       setMicGrade(false)
     } finally {

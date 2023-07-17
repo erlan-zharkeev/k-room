@@ -134,7 +134,8 @@ export declare enum CallType {
     incoming = "incoming",
     outgoing = "outgoing",
     missed = "missed",
-    notAnswered = "not-answered"
+    notAnswered = "not-answered",
+    current = "current"
 }
 export declare enum UserMediaType {
     audio = "audio",
@@ -163,6 +164,7 @@ export interface Call {
     type: CallType;
     video: boolean;
     interlocutorSettings?: StreamSettings;
+    setId?: boolean;
 }
 export interface CallDB {
     _id: any;
@@ -200,7 +202,27 @@ export interface InfoItem {
     read: InfoItemStatus;
     contentComponent?: () => string;
 }
+export declare enum NotificationType {
+    success = "success",
+    error = "error",
+    info = "info",
+    warn = "warning"
+}
 export interface SocketActionsPayload {
+    messageDelivered: {
+        roomId: string;
+        message: Message;
+    };
+    getRooms: Array<ChatRoom>;
+    statusContact: {
+        userId: string;
+        status: boolean;
+    };
+    changeContactsData: UserShort;
+    getContacts: {
+        contacts: Array<User>;
+        messageBody: string;
+    };
     callUpdated: Call;
     callsUpdated: Array<Call>;
     initialize: {
@@ -307,6 +329,7 @@ export interface SocketActionsPayload {
         callerId: string;
     };
     errorMessage: {
+        messageType?: NotificationType;
         message: string;
     };
     messageDeleted: {

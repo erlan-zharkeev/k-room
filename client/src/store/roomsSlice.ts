@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
-import { RoomsState } from './@types/RoomsState'
+import { Message, RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
+import { AttachedFilesMessage, RoomsState } from './@types/RoomsState'
 
 const initialRepliedMessageData = {
   id: '',
@@ -27,16 +27,16 @@ const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
-    updatedAttachedFilesMessage(state, { payload }) {
+    updatedAttachedFilesMessage(state, { payload }: { payload: AttachedFilesMessage }) {
       state.attachedFilesMessage = { ...state.attachedFilesMessage, ...payload }
     },
-    loadChatRooms(state, { payload }) {
+    loadChatRooms(state, { payload }: { payload: SocketActionsPayload['getRooms'] }) {
       state.chatRooms = payload
     },
     repliedMessageSetAsForward(state) {
       state.repliedMessageData.forward = true
     },
-    updateChatMessage(state, { payload }) {
+    updateChatMessage(state, { payload }: { payload: SocketActionsPayload['messageDelivered'] }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -62,13 +62,13 @@ const roomsSlice = createSlice({
         if (roomMessage.id === messageId) roomMessage.reactions = [...(roomMessage.reactions ?? []), reaction]
       })
     },
-    pushTemporaryMessage(state, { payload }) {
+    pushTemporaryMessage(state, { payload }: { payload: { roomId: string; message: Message } }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
       room.messages.push(message)
     },
-    updateChatUsersStatus(state, { payload }) {
+    updateChatUsersStatus(state, { payload }: { payload: SocketActionsPayload['statusContact'] }) {
       const { userId, status } = payload
       const hasUser = (users: Array<UserShort>): boolean => {
         return users.some((user) => user.id === userId)
@@ -77,7 +77,7 @@ const roomsSlice = createSlice({
         if (hasUser(room.users ?? [])) room.hasOnline = status
       })
     },
-    changeChatName(state, { payload }) {
+    changeChatName(state, { payload }: { payload: SocketActionsPayload['changeContactsData'] }) {
       const { id, username, avatarPath } = payload
       state.chatRooms.forEach((room) => {
         const roomHasContact = Boolean(room.users?.find((user) => user.id === id))

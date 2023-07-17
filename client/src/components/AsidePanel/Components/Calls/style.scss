@@ -14,6 +14,13 @@
   }
 
   &__item {
+    &--current {
+      background-color: var(--dark-gray-transparent);
+    }
+    &--incoming,
+    &--outgoing {
+      background-color: var(--success-bg);
+    }
     &--missed,
     &--not-answered {
       background-color: var(--error-bg);
@@ -44,11 +51,19 @@
   &__info {
     display: flex;
     align-items: center;
-
     p {
       margin-left: $gutter-sm;
     }
-
+    &--current {
+      color: var(--secondary-text);
+    }
+    &--incoming,
+    &--outgoing {
+      color: var(--success);
+      .ui-icon--phone-call {
+        transform: rotate(90deg);
+      }
+    }
     &--missed,
     &--not-answered {
       color: var(--error);

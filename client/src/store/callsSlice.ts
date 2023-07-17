@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { CallsState } from './@types/CallsState'
-import { Call, CallStatus, CallType, SocketActionsPayload } from 'common-types'
+import { Call, CallStatus, CallType, SocketActionsPayload, StreamSettings, UserShort } from 'common-types'
 
 const initialCurrentCall = {
   id: '',
   authorId: '',
   authorName: '',
   startedAt: 0,
-  interlocutorName: '',
+  interlocutorName: 'ucon',
   interlocutorId: '',
   interlocutorAvatarPath: '',
   type: CallType.incoming,
@@ -38,10 +38,10 @@ const callsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    updateAllList(state, { payload }) {
+    updateAllList(state, { payload }: { payload: Array<Call> }) {
       state.list = payload
     },
-    initModalToCall(state, { payload }) {
+    initModalToCall(state, { payload }: { payload: UserShort }) {
       state.showCallModal = true
       const { id, avatarPath, username } = payload
       state.currentCall.interlocutorId = id
@@ -50,19 +50,19 @@ const callsSlice = createSlice({
       state.currentCall.status = CallStatus.calling
       state.currentCall.type = CallType.outgoing
     },
-    updateInterlocutorSettings(state, { payload }) {
+    updateInterlocutorSettings(state, { payload }: { payload: SocketActionsPayload['changeCallSettings'] }) {
       if (!state.currentCall.interlocutorSettings) return
       const { audio, video } = payload
       state.currentCall.interlocutorSettings.audio = audio
       state.currentCall.interlocutorSettings.video = video
     },
-    toggleSelfStreamIsLoading(state, { payload }) {
+    toggleSelfStreamIsLoading(state, { payload }: { payload: boolean }) {
       state.settings.streamLoading = payload
     },
     setCurrentCallAccepted(state) {
       state.currentCall.status = CallStatus.inProgress
     },
-    setShowCallModal(state, { payload }) {
+    setShowCallModal(state, { payload }: { payload: SocketActionsPayload['callUser'] }) {
       state.showCallModal = true
       state.currentCall.interlocutorName = payload.callerName
       state.currentCall.interlocutorAvatarPath = payload.avatarPath
@@ -71,7 +71,7 @@ const callsSlice = createSlice({
       state.currentCall.interlocutorSettings.audio = payload.settings.audio
       state.currentCall.interlocutorSettings.audio = payload.settings.video
     },
-    setCallStartedAt(state, { payload }) {
+    setCallStartedAt(state, { payload }: { payload: SocketActionsPayload['callStartedAt'] }) {
       state.currentCall.startedAt = payload
     },
     closeCallModal(state) {
@@ -92,7 +92,7 @@ const callsSlice = createSlice({
     toggleCallAudio(state) {
       state.settings.audio = !state.settings.audio
     },
-    setCallId(state, { payload }) {
+    setCallId(state, { payload }: { payload: string }) {
       state.currentCall.id = payload
     },
     updateCalls(state, { payload }: { payload: SocketActionsPayload['callsUpdated'] }) {
@@ -100,9 +100,11 @@ const callsSlice = createSlice({
     },
     updateCall(state, { payload }: { payload: SocketActionsPayload['callUpdated'] }) {
       const call = payload
-      const index = state.list.findIndex((stateCall) => stateCall.id === call.id)
-      if (index) state.list[index] = call
-      if (!state.currentCall.id) state.currentCall.id = call.id
+      const listClone = [...state.list]
+      const index = listClone.findIndex((stateCall) => stateCall.id === call.id)
+      index >= 0 ? (listClone[index] = call) : listClone.push(call)
+      if (call.setId) state.currentCall.id = call.id
+      state.list = listClone
     }
   }
 })

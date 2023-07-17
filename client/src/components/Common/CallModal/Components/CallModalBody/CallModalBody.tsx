@@ -18,7 +18,7 @@ import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
 import { CallStatus, CallType, SocketActions, SocketActionsPayload, UserMediaType } from 'common-types'
 import { socket } from 'src/socket/socket'
-import UseCounter from 'src/hooks/useCounter'
+import useCounter from 'src/hooks/useCounter'
 import { ServiceContext } from 'src/main'
 import { UIButton, UIAvatar } from 'src/components/UI'
 import { Avatar } from 'antd'
@@ -30,10 +30,10 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const { avatarPath } = useTypedSelector((state) => state.user.userData)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
-  const [counterValue, _, startCounter, stopCounter] = UseCounter(0)
+  const [counterValue, _, startCounter, stopCounter] = useCounter(0)
 
   useEffect(() => {
-    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: number) => {
+    socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: SocketActionsPayload['callStartedAt']) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
@@ -41,14 +41,14 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     socket.on(SocketActions.CALL_USER, (data: SocketActionsPayload['callUser']) => {
       dispatch(setShowCallModal(data))
       const { from, signal, settings, callId } = data
-      dispatch(setCallId(callId))
+      if (callId) dispatch(setCallId(callId))
       $call.calling(from, signal)
       dispatch(updateInterlocutorSettings(settings))
     })
     socket.on(SocketActions.CALL_ENDED, () => {
       $call.leaveCall()
     })
-    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data) => {
+    socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data: SocketActionsPayload['changeCallSettings']) => {
       dispatch(updateInterlocutorSettings(data))
     })
   }, [])
@@ -158,7 +158,12 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <div className="call-modal__controls-elements">
               {currentCall.type === CallType.incoming && currentCall.status === CallStatus.calling && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
-                  <UIButton iconName={isAnswerLoading ? 'loader' : 'call'} onClick={answerCall} tooltip="Answer" />
+                  <UIButton
+                    iconName={isAnswerLoading ? 'loader' : 'call'}
+                    onClick={answerCall}
+                    tooltip="Answer"
+                    color={isAnswerLoading ? 'default' : 'success'}
+                  />
                 </div>
               )}
               <div className="call-modal__controls-element">

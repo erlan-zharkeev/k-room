@@ -2,7 +2,7 @@ import { UserModel } from '../models/user.model'
 import { Request, Response } from 'express'
 import throwError from '../utils/throwError'
 import { ErrorMessages, SuccessMessages } from '../types/Messages'
-import { SocketActions, Status } from '../../../types'
+import { SocketActions, SocketActionsPayload, Status } from '../../../types'
 import { io } from '../server'
 import getSocketsByUserIds from '../socket/helpers/getters/getSocketsByUserIds'
 import { getUsersByHasContactId } from '../socket/helpers/getters/getUsersByHasContactId'
@@ -42,12 +42,12 @@ class UserController {
         username: updateUserDataResponse.username,
         avatarPath: updateUserDataResponse.avatarPath
       }
-
+      const payload: SocketActionsPayload['changeContactsData'] = {
+        id: userId,
+        ...updatedUserData
+      }
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, {
-          id: userId,
-          ...updatedUserData
-        })
+        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, payload)
       })
 
       return res.json({

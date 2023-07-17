@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
 // BASIC
 var Status;
 (function (Status) {
@@ -52,6 +52,7 @@ var CallType;
     CallType["outgoing"] = "outgoing";
     CallType["missed"] = "missed";
     CallType["notAnswered"] = "not-answered";
+    CallType["current"] = "current";
 })(CallType = exports.CallType || (exports.CallType = {}));
 var UserMediaType;
 (function (UserMediaType) {
@@ -64,6 +65,13 @@ var InfoItemStatus;
     InfoItemStatus["read"] = "read";
     InfoItemStatus["unread"] = "unread";
 })(InfoItemStatus = exports.InfoItemStatus || (exports.InfoItemStatus = {}));
+var NotificationType;
+(function (NotificationType) {
+    NotificationType["success"] = "success";
+    NotificationType["error"] = "error";
+    NotificationType["info"] = "info";
+    NotificationType["warn"] = "warning";
+})(NotificationType = exports.NotificationType || (exports.NotificationType = {}));
 // ENDPOINTS (!for every endpoints use upper snake case)
 var AuthEndPoints;
 (function (AuthEndPoints) {

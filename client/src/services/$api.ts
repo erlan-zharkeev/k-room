@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { RouteNames, Status } from 'common-types'
+import { NotificationType, RouteNames, Status } from 'common-types'
 import { AppDispatch } from 'src/store'
 import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
@@ -13,7 +13,8 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
   if (!response) return
   const { message, silent } = response.data
   const isSuccess = response.status === Status.success
-  if (message && !silent) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
+  if (message && !silent)
+    dispatch(showNotification({ message, messageType: isSuccess ? NotificationType.success : NotificationType.warn }))
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
@@ -44,7 +45,7 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
       break
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  dispatch(showNotification({ message, messageType: 'error' }))
+  dispatch(showNotification({ message, messageType: NotificationType.error }))
 }
 
 type RequestTypes = 'post' | 'get' | 'patch' | 'put'

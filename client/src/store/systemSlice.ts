@@ -1,7 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
-import { SystemStore } from './@types/SystemState'
+import {
+  ContextClickedObject,
+  ContextMenu,
+  ContextMenuType,
+  ModalData,
+  SystemStore,
+  ViewPort
+} from './@types/SystemState'
 import constants from 'src/constants'
+import { NotificationType, SocketActionsPayload } from 'common-types'
 
 const html = document.querySelector('html')
 
@@ -36,7 +44,7 @@ const initialState: SystemStore = {
     key: '',
     message: '',
     description: '',
-    messageType: 'info',
+    messageType: NotificationType.info,
     duration: 3,
     placement: 'top'
   },
@@ -50,17 +58,17 @@ const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    setReconnectingStatus(state, { payload }) {
+    setReconnectingStatus(state, { payload }: { payload: boolean }) {
       state.reconnecting = payload
     },
-    showModal(state, { payload }) {
+    showModal(state, { payload }: { payload: ModalData }) {
       state.modalData = payload
       state.showModal = true
     },
     closeModal(state) {
       state.showModal = false
     },
-    showNotification(state, { payload }) {
+    showNotification(state, { payload }: { payload: SocketActionsPayload['errorMessage'] }) {
       const isError = state.notificationData.messageType === 'error'
       state.notificationData = {
         ...state.notificationData,
@@ -70,13 +78,24 @@ const systemSlice = createSlice({
       if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
       state.notificationData = initialState.notificationData
     },
-    setViewPort(state, { payload }) {
+    setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
       const viewPortWidth = state.viewPort.width
       const viewPortType = viewPortWidth <= 576 ? 'mobile' : 'desktop'
       html?.setAttribute('view-port', viewPortType)
     },
-    setContextMenu(state, { payload }) {
+    setContextMenu(
+      state,
+      {
+        payload
+      }: {
+        payload: {
+          event: React.MouseEvent<HTMLDivElement, MouseEvent> | null
+          type: ContextMenuType
+          contextClickedObject?: ContextClickedObject
+        }
+      }
+    ) {
       const { event, type, contextClickedObject } = payload
       if (constants.blockNativeContextMenu && event) event.preventDefault()
       state.contextMenu.slotName = type

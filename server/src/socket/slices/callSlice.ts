@@ -1,8 +1,10 @@
 import { SocketActions, SocketActionsPayload } from '../../../../types'
 import { CallModel } from '../../models/call.model'
+import { UserModel } from '../../models/user.model'
 import { io } from '../../server'
 import { SocketInstanceType } from '../../types/SocketInstanceType'
-import { emitCallsDataToInterlocutors } from '../../utils/emitRoomsToInterlocutors'
+import { emitCallDataToInterlocutors } from '../../utils/emitCallDataToInterlocutors'
+import { transformCallDataForUser } from '../../utils/transdusers/transformCallDataForUser'
 import { getUserById } from '../helpers/getters/getUserById'
 
 export const callSlice = (socket: SocketInstanceType) => {
@@ -34,12 +36,7 @@ export const callSlice = (socket: SocketInstanceType) => {
         video: settings.video
       })
       await call.save()
-      // emitCallsDataToInterlocutors(call?.interlocutors, call._id)
-      // interlocutors.forEach((interlocutorId) => {
-      //   // const UserModel.
-      // })
-      // io.to()
-      // io.to()
+      emitCallDataToInterlocutors(interlocutors, call.id, true)
     }
   )
 
@@ -59,7 +56,7 @@ export const callSlice = (socket: SocketInstanceType) => {
         { new: true }
       )
       if (!call) return
-      emitCallsDataToInterlocutors(call?.interlocutors, call._id)
+      emitCallDataToInterlocutors(call?.interlocutors, call._id)
 
       const sockets = [interlocutor.socketId, selfSocketId]
       sockets.forEach((socketId) => {
@@ -78,6 +75,6 @@ export const callSlice = (socket: SocketInstanceType) => {
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_ENDED)
     const call = await CallModel.findOneAndUpdate({ _id: callId }, { finishedAt: new Date() })
     if (!call) return
-    emitCallsDataToInterlocutors(call?.interlocutors, call._id)
+    emitCallDataToInterlocutors(call?.interlocutors, call._id)
   })
 }

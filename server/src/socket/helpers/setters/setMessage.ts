@@ -1,6 +1,6 @@
 import { ChatRoomModel } from '../../../models/chatRoom.model'
 import { io } from '../../../server'
-import { DBChatRoom, Message, MessageStatus, SocketActions } from '../../../../../types'
+import { DBChatRoom, Message, MessageStatus, SocketActions, SocketActionsPayload } from '../../../../../types'
 import { saveImageAndGetPath } from '../../../utils/saveImageAndGetPath'
 import { SharpSettingsKey } from '../../../types/Constants'
 import { MessageModel } from '../../../models/message.model'
@@ -39,14 +39,15 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
     const messageForUser = {
       ...message,
       images,
-      id: newDbMessage._id,
+      id: String(newDbMessage._id),
       isSelf: user?.id === message.authorId,
       status: MessageStatus.delivered
     }
-    io.to(user?.socketId).emit(SocketActions.MESSAGE_DELIVERED, {
+    const payload: SocketActionsPayload['messageDelivered'] = {
       roomId,
       message: messageForUser
-    })
+    }
+    io.to(user?.socketId).emit(SocketActions.MESSAGE_DELIVERED, payload)
   })
 }
 

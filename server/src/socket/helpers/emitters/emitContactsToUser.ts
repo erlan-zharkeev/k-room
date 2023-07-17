@@ -1,15 +1,16 @@
 import { UserModel } from '../../../models/user.model'
 import { io } from '../../../server'
-import { SocketActions } from '../../../../../types'
+import { SocketActions, SocketActionsPayload } from '../../../../../types'
 import { getUserById } from '../getters/getUserById'
 import transformUsersToContacts from '../../../utils/transdusers/transformUsersToContacts'
 
-export const emitContacts = async (userId: string, message: string = '') => {
+export const emitContacts = async (userId: string, messageBody: string = '') => {
   const userData = await getUserById(userId)
   const matchedUsers = await UserModel.find({ _id: { $in: userData?.contacts } })
-  const transformedContacts = transformUsersToContacts(matchedUsers)
+  const contacts = transformUsersToContacts(matchedUsers)
   if (!userData?.socketId) return
-  io.to(userData.socketId).emit(SocketActions.GET_CONTACTS, transformedContacts, message)
+  const payload: SocketActionsPayload['getContacts'] = { contacts, messageBody }
+  io.to(userData.socketId).emit(SocketActions.GET_CONTACTS)
 }
 
 export default emitContacts

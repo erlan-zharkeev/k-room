@@ -6,7 +6,7 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { validateRules } from 'src/utils/validateRules'
 import { getNextReqInterval } from 'src/utils/getNextReqInterval'
-import UseCounter from 'src/hooks/useCounter'
+import useCounter from 'src/hooks/useCounter'
 import { CodeValidationPayload, RouteNames } from 'common-types'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import apiMethods from 'src/services/api-methods'
@@ -25,7 +25,7 @@ const PasswordRecoveryPage = () => {
   const [emailConfirmForm] = Form.useForm()
   const [codeConfirmForm] = Form.useForm()
   const dispatch = useDispatch<AppDispatch>()
-  const [counterValue, setCounterValue, startCounter, stopCounter] = UseCounter(-1)
+  const [counterValue, setCounterValue, startCounter, stopCounter] = useCounter(-1)
   const [queryParam, setQueryParams] = useSearchParams()
 
   const navigate = useNavigate()

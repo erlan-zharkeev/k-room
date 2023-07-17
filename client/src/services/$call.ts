@@ -1,4 +1,4 @@
-import { User, SocketActions, SocketActionsPayload, UserMediaType } from 'common-types'
+import { User, SocketActions, SocketActionsPayload, UserMediaType, NotificationType } from 'common-types'
 import { Howl } from 'howler'
 import Peer, { SignalData } from 'simple-peer'
 import { Socket } from 'socket.io-client'
@@ -70,7 +70,7 @@ class Call {
       this.dispatch(
         showNotification({
           message: 'Call completed',
-          messageType: 'info'
+          messageType: NotificationType.info
         })
       )
       this.socket.off(SocketActions.CALL_ACCEPTED)
@@ -112,7 +112,7 @@ class Call {
       this.dispatch(
         showNotification({
           message: 'Call completed',
-          messageType: 'info'
+          messageType: NotificationType.info
         })
       )
       this.socket.off(SocketActions.ANSWER_CALL)
@@ -132,7 +132,7 @@ class Call {
       this.dispatch(
         showNotification({
           message: 'Failed to connect to device, check for device is plugged in',
-          messageType: 'warning'
+          messageType: NotificationType.warn
         })
       )
     }
@@ -159,10 +159,12 @@ class Call {
   leaveCall() {
     this.soundCalling.stop()
     this.soundConnection.stop()
-    const tracks = this.selfStream.getTracks()
-    tracks.forEach((track) => {
-      track.stop()
-    })
+    if (this.selfStream) {
+      const tracks = this.selfStream.getTracks()
+      tracks.forEach((track) => {
+        track.stop()
+      })
+    }
     this.socket = socket
     if (this.connection) this.connection.destroy()
     this.dispatch(closeCallModal())

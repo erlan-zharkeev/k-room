@@ -4,7 +4,7 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
 import { socket } from 'src/socket/socket'
-import { Message, SocketActions, User, ChatRoom as ChatRoomInterface, SocketActionsPayload } from 'common-types'
+import { NotificationType, SocketActions, SocketActionsPayload } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
@@ -22,7 +22,6 @@ import {
   deleteMessage
 } from 'src/store/roomsSlice'
 import useDebounce from 'src/hooks/useDebounce'
-import CallModal from 'src/components/Common/CallModal/CallModal'
 import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
@@ -43,11 +42,11 @@ const MainPage = () => {
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
       $clg('success', 'Socket connected')
-      dispatch(showNotification({ messageType: 'success', message: 'Socket connected' }))
+      dispatch(showNotification({ messageType: NotificationType.success, message: 'Socket connected' }))
       return
     }
     $clg('error', 'Socket disconnected')
-    if (isAuth) dispatch(showNotification({ messageType: 'error', message: 'Socket disconnected' }))
+    if (isAuth) dispatch(showNotification({ messageType: NotificationType.error, message: 'Socket disconnected' }))
   }
 
   const debouncedStatusNotification = useDebounce(statusNotification, 1000)
@@ -55,7 +54,12 @@ const MainPage = () => {
   const hideAside = () => selectedChatRoom && viewPort.width <= 769
 
   const clickHandler = () => {
-    dispatch(setContextMenu({ event: null, type: '' }))
+    dispatch(
+      setContextMenu({
+        event: null,
+        type: ''
+      })
+    )
   }
 
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
@@ -64,12 +68,12 @@ const MainPage = () => {
     if (socket.disconnected) socket.connect()
     const initializePayload: SocketActionsPayload['initialize'] = { userId }
     socket.emit(SocketActions.INITIALIZE, initializePayload)
-    socket.on(SocketActions.RECONNECT, (attempt) => {
+    socket.on(SocketActions.RECONNECT, (attempt: number) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
-      socket.emit(SocketActions.INITIALIZE, userId)
+      socket.emit(SocketActions.INITIALIZE, initializePayload)
       dispatch(setReconnectingStatus(false))
     })
-    socket.on(SocketActions.RECONNECT_ATTEMPT, (attempt) => {
+    socket.on(SocketActions.RECONNECT_ATTEMPT, (attempt: number) => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
@@ -77,7 +81,7 @@ const MainPage = () => {
       dispatch(setReconnectingStatus(false))
     })
     socket.on(SocketActions.ERROR_MESSAGE, ({ message }: SocketActionsPayload['errorMessage']) => {
-      dispatch(showNotification({ messageType: 'error', message }))
+      dispatch(showNotification({ messageType: NotificationType.error, message }))
     })
     socket.on(SocketActions.DISCONNECT, () => {
       debouncedStatusNotification(false)
@@ -85,38 +89,38 @@ const MainPage = () => {
     socket.on(SocketActions.CONNECTION, () => {
       debouncedStatusNotification(true)
     })
-    socket.on(SocketActions.GET_CONTACTS, (contacts: Array<User>, message?: string) => {
-      if (message) dispatch(showNotification({ messageType: 'info', message }))
+    socket.on(SocketActions.GET_CONTACTS, ({ contacts, messageBody }: SocketActionsPayload['getContacts']) => {
+      if (messageBody) dispatch(showNotification({ messageType: NotificationType.info, message: messageBody }))
       dispatch(loadContacts(contacts))
     })
-    socket.on(SocketActions.STATUS_CONTACT, (userData: { userId: string; status: boolean }) => {
-      dispatch(updateContactsStatus(userData))
-      dispatch(updateChatUsersStatus(userData))
+    socket.on(SocketActions.STATUS_CONTACT, (payload: SocketActionsPayload['statusContact']) => {
+      dispatch(updateContactsStatus(payload))
+      dispatch(updateChatUsersStatus(payload))
     })
-    socket.on(SocketActions.CHANGE_CONTACTS_DATA, (updatedUserData: User) => {
-      dispatch(updateContactData(updatedUserData))
-      dispatch(changeChatName(updatedUserData))
+    socket.on(SocketActions.CHANGE_CONTACTS_DATA, (payload: SocketActionsPayload['changeContactsData']) => {
+      dispatch(updateContactData(payload))
+      dispatch(changeChatName(payload))
     })
-    socket.on(SocketActions.GET_ROOMS, (chatRooms: Array<ChatRoomInterface>) => {
-      dispatch(loadChatRooms(chatRooms))
+    socket.on(SocketActions.GET_ROOMS, (payload: SocketActionsPayload['getRooms']) => {
+      dispatch(loadChatRooms(payload))
     })
-    socket.on(SocketActions.MESSAGE_DELIVERED, (roomData: { roomId: string; message: Message }) => {
-      dispatch(updateChatMessage(roomData))
+    socket.on(SocketActions.MESSAGE_DELIVERED, (payload: SocketActionsPayload['messageDelivered']) => {
+      dispatch(updateChatMessage(payload))
     })
-    socket.on(SocketActions.UPDATE_MESSAGE_STATUS, (roomData: SocketActionsPayload['updateMessageStatus']) => {
-      dispatch(updateMessageStatus(roomData))
+    socket.on(SocketActions.UPDATE_MESSAGE_STATUS, (payload: SocketActionsPayload['updateMessageStatus']) => {
+      dispatch(updateMessageStatus(payload))
     })
-    socket.on(SocketActions.MESSAGE_DELETED, (messageData: SocketActionsPayload['messageDeleted']) => {
-      dispatch(deleteMessage(messageData))
+    socket.on(SocketActions.MESSAGE_DELETED, (payload: SocketActionsPayload['messageDeleted']) => {
+      dispatch(deleteMessage(payload))
     })
-    socket.on(SocketActions.UPDATE_MESSAGE_REACTIONS, (data: SocketActionsPayload['updatedMessageReactions']) => {
-      dispatch(updateMessageReactions(data))
+    socket.on(SocketActions.UPDATE_MESSAGE_REACTIONS, (payload: SocketActionsPayload['updatedMessageReactions']) => {
+      dispatch(updateMessageReactions(payload))
     })
-    socket.on(SocketActions.CALLS_UPDATED, (callsData: SocketActionsPayload['callsUpdated']) => {
-      dispatch(updateCalls(callsData))
+    socket.on(SocketActions.CALLS_UPDATED, (payload: SocketActionsPayload['callsUpdated']) => {
+      dispatch(updateCalls(payload))
     })
-    socket.on(SocketActions.CALL_UPDATED, (callData: SocketActionsPayload['callUpdated']) => {
-      dispatch(updateCall(callData))
+    socket.on(SocketActions.CALL_UPDATED, (payload: SocketActionsPayload['callUpdated']) => {
+      dispatch(updateCall(payload))
     })
     return () => {
       socket.removeAllListeners()

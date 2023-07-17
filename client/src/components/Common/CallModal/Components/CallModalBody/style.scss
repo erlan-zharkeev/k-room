@@ -101,6 +101,9 @@
 
     &-element {
       margin: 0 5px;
+      &--phone-answer {
+        transform: rotate(-90deg) scale(1.05);
+      }
     }
   }
 
