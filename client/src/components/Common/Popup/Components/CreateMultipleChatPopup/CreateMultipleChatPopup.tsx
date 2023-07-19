@@ -75,7 +75,7 @@ const CreateMultipleChatPopup = () => {
         </Form.Item>
         <MultipleUserSelect setMembers={setMembers} />
         <Form.Item className="create-multiple-chat-popup__controls">
-          <UIButton text="Create" border="border-default" htmltype={'submit'} disabled={!isValid} loading={isLoading} />
+          <UIButton text="Create" border="border-default" htmltype="submit" disabled={!isValid} loading={isLoading} />
         </Form.Item>
       </Form>
     </div>

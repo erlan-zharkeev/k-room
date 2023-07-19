@@ -1,10 +1,8 @@
 import { SocketActions, SocketActionsPayload } from '../../../../types'
 import { CallModel } from '../../models/call.model'
-import { UserModel } from '../../models/user.model'
 import { io } from '../../server'
 import { SocketInstanceType } from '../../types/SocketInstanceType'
 import { emitCallDataToInterlocutors } from '../../utils/emitCallDataToInterlocutors'
-import { transformCallDataForUser } from '../../utils/transdusers/transformCallDataForUser'
 import { getUserById } from '../helpers/getters/getUserById'
 
 export const callSlice = (socket: SocketInstanceType) => {
@@ -70,6 +68,7 @@ export const callSlice = (socket: SocketInstanceType) => {
   )
 
   socket.on(SocketActions.CALL_ENDED, async ({ callerId, callId }: SocketActionsPayload['callEnded']) => {
+    console.log(callerId, 'caller-id')
     const interlocutor = await getUserById(callerId)
     if (!interlocutor) return
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_ENDED)

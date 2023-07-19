@@ -19,18 +19,22 @@ import moment from 'moment'
 import { CallStatus, CallType, SocketActions, SocketActionsPayload, UserMediaType } from 'common-types'
 import { socket } from 'src/socket/socket'
 import useCounter from 'src/hooks/useCounter'
-import { ServiceContext } from 'src/main'
 import { UIButton, UIAvatar } from 'src/components/UI'
 import { Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
+import { RefsContext } from 'src/providers/RefsProvider'
+import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
 
 const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
-  const { $call } = useContext(ServiceContext)
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const { avatarPath } = useTypedSelector((state) => state.user.userData)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const [counterValue, _, startCounter, stopCounter] = useCounter(0)
+
+  const { selfVideoDom } = useContext(RefsContext)
+
+  const { $call } = useContext(AdditionalServiceContext)
 
   useEffect(() => {
     socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: SocketActionsPayload['callStartedAt']) => {
@@ -42,11 +46,11 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
       dispatch(setShowCallModal(data))
       const { from, signal, settings, callId } = data
       if (callId) dispatch(setCallId(callId))
-      $call.calling(from, signal)
+      call.current.calling(from, signal)
       dispatch(updateInterlocutorSettings(settings))
     })
     socket.on(SocketActions.CALL_ENDED, () => {
-      $call.leaveCall()
+      call.current.leaveCall(currentCall.id)
     })
     socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data: SocketActionsPayload['changeCallSettings']) => {
       dispatch(updateInterlocutorSettings(data))
@@ -55,29 +59,24 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const endCall = () => {
     stopCounter()
-    const payload: SocketActionsPayload['callEnded'] = {
-      callerId: $call.callerId ?? $call.callToId,
-      callId: currentCall.id
-    }
-    socket.emit(SocketActions.CALL_ENDED, payload)
-    $call.leaveCall()
+    call.current.leaveCall(currentCall.id)
   }
 
   const answerCall = async () => {
     setIsAnswerLoading(true)
-    const gotStream = await $call.setStream()
+    const gotStream = await call.current.setStream()
     setIsAnswerLoading(false)
-    if (gotStream) $call.answerCall(currentCall.id)
+    if (gotStream) call.current.answerCall(currentCall.id)
   }
 
   const toggleAudio = () => {
     dispatch(toggleCallAudio())
-    $call.toggleSetting(UserMediaType.audio)
+    call.current.toggleSetting(UserMediaType.audio)
   }
 
   const toggleVideo = async () => {
     dispatch(toggleCallVideo())
-    $call.toggleSetting(UserMediaType.video)
+    call.current.toggleSetting(UserMediaType.video)
   }
 
   const minifyModal = () => {
@@ -145,7 +144,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
           <CallModalVideo />
           <div className="call-modal__user-video">
-            <video autoPlay muted id="self-video" className={!settings.video ? 'd-none' : ''} />
+            <video autoPlay muted ref={selfVideoDom} id="self-video" className={!settings.video ? 'd-none' : ''} />
             <Avatar size="small" src={avatarPath} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
           </div>
 

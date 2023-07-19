@@ -113,7 +113,7 @@ const PasswordRecoveryPage = () => {
                   text="Send code"
                   border="border-default"
                   color="accent"
-                  htmltype={'submit'}
+                  htmltype="submit"
                   loading={emailSendCodeIsLoading}
                   disabled={!isEmailValid || counterValue > 0}
                 />
@@ -137,7 +137,7 @@ const PasswordRecoveryPage = () => {
                     text="Validate"
                     border="border-default"
                     color="success"
-                    htmltype={'submit'}
+                    htmltype="submit"
                     loading={codeValidationIsLoading}
                     disabled={!isCodeValid}
                   />

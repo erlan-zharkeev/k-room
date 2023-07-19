@@ -81,7 +81,7 @@ const CreateNewPassword = () => {
                 text="Change password"
                 border="border-default"
                 color="accent"
-                htmltype={'submit'}
+                htmltype="submit"
                 loading={isLoading}
                 disabled={!isValid || !isPasswordEqual}
               />

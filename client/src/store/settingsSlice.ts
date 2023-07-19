@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { setTheme } from 'src/utils/setTheme'
 import { Theme, UserSettingKey, UserSettings } from 'common-types'
+import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
 
 const initialState: UserSettings = {
   asideTab: UserSettingKey.asideTab,
@@ -35,7 +36,7 @@ const settingsSlice = createSlice({
     selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
     },
-    changeAsideTab(state, { payload }: { payload: UserSettingKey }) {
+    changeAsideTab(state, { payload }: { payload: AsideBarButtonName }) {
       state.asideTab = payload
     },
     setAbleToShowNotification(state, { payload }: { payload: boolean }) {

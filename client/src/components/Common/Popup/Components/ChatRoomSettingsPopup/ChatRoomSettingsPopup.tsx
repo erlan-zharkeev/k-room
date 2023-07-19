@@ -96,7 +96,7 @@ const ChatRoomSettingsPopup = () => {
               </Form.Item>
             </div>
             <Members />
-            <UIButton text="Update" border="border-default" htmltype={'submit'} disabled={!isValid} />
+            <UIButton text="Update" border="border-default" htmltype="submit" disabled={!isValid} />
           </Form>
         </div>
       ) : (

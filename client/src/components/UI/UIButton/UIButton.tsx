@@ -21,7 +21,7 @@ const UIButton = ({
   color,
   loading,
   disabled,
-  htmltype,
+  htmltype = 'button',
   size,
   shape,
   hover,
@@ -32,7 +32,7 @@ const UIButton = ({
   const buttonType = type ?? 'common'
   const ButtonComponent = buttons[buttonType]
   const hasIconAndText = iconName && text
-  const htmlPropAntdErrorFix = { htmlType: htmltype }
+  const htmlPropAntdErrorFix = { htmltype }
   const ButtonBody = () => (
     <ButtonComponent
       {...htmlPropAntdErrorFix}

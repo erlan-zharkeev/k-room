@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { CallsState } from './@types/CallsState'
-import { Call, CallStatus, CallType, SocketActionsPayload, StreamSettings, UserShort } from 'common-types'
+import { Call, CallStatus, CallType, SocketActionsPayload, UserShort } from 'common-types'
 
 const initialCurrentCall = {
   id: '',
   authorId: '',
   authorName: '',
   startedAt: 0,
-  interlocutorName: 'ucon',
+  interlocutorName: '',
   interlocutorId: '',
   interlocutorAvatarPath: '',
   type: CallType.incoming,
@@ -23,7 +23,7 @@ const initialCurrentCall = {
 const initialCallSettings = {
   streamLoading: false,
   audio: true,
-  video: false
+  video: true
 }
 
 const initialState: CallsState = {

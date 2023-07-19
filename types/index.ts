@@ -332,18 +332,18 @@ export interface SocketActionsPayload {
     from: string;
     avatarPath: string;
     callerName: string;
-    settings: StreamSettings;
+    settings: BasicStreamSettings;
   };
   changeCallSettings: BasicStreamSettings;
   callAccepted: {
     signal: any;
-    settings: StreamSettings;
+    settings: BasicStreamSettings;
   };
   answerCall: {
     callId: string;
     to: string;
     signal: any;
-    settings: StreamSettings;
+    settings: BasicStreamSettings;
     selfSocketId: string;
   };
   callStartedAt: number;

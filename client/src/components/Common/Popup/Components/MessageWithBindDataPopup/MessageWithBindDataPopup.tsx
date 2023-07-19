@@ -64,7 +64,7 @@ const MessageWithBindDataPopup = () => {
           <UIButton
             text="Send Message"
             border="border-default"
-            htmltype={'submit'}
+            htmltype="submit"
             disabled={!images?.length && !body}
             loading={isLoading}
           />

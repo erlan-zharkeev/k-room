@@ -76,7 +76,7 @@ const SignUpPage = () => {
                 text="Register"
                 border="border-default"
                 color="accent"
-                htmltype={'submit'}
+                htmltype="submit"
                 loading={isLoading}
                 disabled={!isValid}
               />

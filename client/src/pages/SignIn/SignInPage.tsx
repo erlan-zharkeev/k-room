@@ -6,18 +6,19 @@ import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
 import { commonSetUserDataHandler } from 'src/store/userSlice'
 import { validateRules } from 'src/utils/validateRules'
-import { ProviderType } from 'src/services/$firebase'
+import { FirebaseProviderType } from 'src/hooks/useFirebase'
 import { RouteNames, UserCredential } from 'common-types'
 import { Logo } from 'src/components/Common/Logo/Logo'
 import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import apiMethods from 'src/services/api-methods'
-import { ServiceContext } from 'src/main'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { UIIcon, UIInput, UIButton } from 'src/components/UI'
+import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
+import { Button } from 'antd'
 
 const SignInPage = () => {
-  const { $firebase } = useContext(ServiceContext)
+  const { firebase } = useContext(AdditionalServiceContext)
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
   const [fbBtnLoading, setFbBtnLoading] = useState(false)
@@ -28,6 +29,7 @@ const SignInPage = () => {
   const [form] = Form.useForm()
 
   const [isValid, validate] = useValidate()
+
   const onFinish = async (fields: UserCredential) => {
     setIsLoading(true)
     const response = (await dispatch(apiMethods.auth.login(fields))) as AsyncThunkResponseWrapper
@@ -36,9 +38,9 @@ const SignInPage = () => {
     commonSetUserDataHandler(dispatch, { userData, settings })
   }
 
-  const providerSignIn = async (providerName: ProviderType, loaderMethod: (value: boolean) => void) => {
+  const providerSignIn = async (providerName: FirebaseProviderType, loaderMethod: (value: boolean) => void) => {
     loaderMethod(true)
-    const result = await $firebase.signIn(providerName)
+    const result = await firebase.current.signIn(providerName)
     if (!result) return loaderMethod(false)
     const { displayName, email, photoURL, uid } = result.user
     const { providerId } = result
@@ -74,6 +76,7 @@ const SignInPage = () => {
           <div className="sign-in__wrapper">
             <div className="sign-in__body">
               <AuthNav />
+              <div className="sign-in__form"></div>
               <Form
                 name="sign-in"
                 initialValues={{ remember: true }}
@@ -96,13 +99,13 @@ const SignInPage = () => {
                     border="border-default"
                     fill={true}
                     hover="hoverless"
-                    onClick={() => providerSignIn('google', setGoogleBtnLoading)}
+                    onClick={() => providerSignIn(FirebaseProviderType.google, setGoogleBtnLoading)}
                     loading={googleBtnLoading}
                   />
                   <UIButton
                     iconName="facebook"
                     text="Sign in with Facebook"
-                    onClick={() => providerSignIn('facebook', setFbBtnLoading)}
+                    onClick={() => providerSignIn(FirebaseProviderType.facebook, setFbBtnLoading)}
                     border="border-default"
                     fill={true}
                     hover="hoverless"
@@ -115,7 +118,7 @@ const SignInPage = () => {
                   </div>
                 </div>
 
-                <div className="sign-in__controls">
+                {/* <div className="sign-in__controls">
                   <UIButton
                     text="Sign in"
                     border="border-default"
@@ -123,8 +126,14 @@ const SignInPage = () => {
                     htmltype="submit"
                     loading={isLoading}
                     disabled={!isValid}
+                    onClick={() => onFinish(form.getFieldsValue())}
                   />
-                </div>
+                </div> */}
+                <Form.Item className="sign-in__controls">
+                  <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
+                    Submit
+                  </Button>
+                </Form.Item>
               </Form>
             </div>
           </div>

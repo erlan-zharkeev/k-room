@@ -77,7 +77,7 @@ const UserDataSettingsPopup = () => {
           <UIButton
             text="Update"
             border="border-default"
-            htmltype={'submit'}
+            htmltype="submit"
             disabled={!isUpdateButtonAvailable()}
             loading={isLoading}
           />

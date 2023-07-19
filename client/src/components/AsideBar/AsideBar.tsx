@@ -32,7 +32,11 @@ const AsideBar = () => {
   ]
 
   const openTechSettings = () => {
-    dispatch(showModal({ title: 'Settings', modalContentComponentName: 'TechSettingsPopup' }))
+    dispatch(showModal({
+      title: 'Settings', modalContentComponentName: 'TechSettingsPopup',
+      okText: '',
+      width: ''
+    }))
   }
 
   const getButtonComponent = (button: ButtonsListElement) => (

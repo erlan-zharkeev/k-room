@@ -10,7 +10,7 @@ export const emitContacts = async (userId: string, messageBody: string = '') => 
   const contacts = transformUsersToContacts(matchedUsers)
   if (!userData?.socketId) return
   const payload: SocketActionsPayload['getContacts'] = { contacts, messageBody }
-  io.to(userData.socketId).emit(SocketActions.GET_CONTACTS)
+  io.to(userData.socketId).emit(SocketActions.GET_CONTACTS, payload)
 }
 
 export default emitContacts

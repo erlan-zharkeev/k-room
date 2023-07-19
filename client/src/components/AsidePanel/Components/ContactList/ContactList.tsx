@@ -8,12 +8,12 @@ import { socket } from 'src/socket/socket'
 import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { ServiceContext } from 'src/main'
 import { UIAvatar, UIButton } from 'src/components/UI'
 import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
+import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
 
 const ContactList = () => {
-  const { $call } = useContext(ServiceContext)
+  const { $call } = useContext(AdditionalServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)
@@ -86,10 +86,9 @@ const ContactList = () => {
   const initCall = async (interlocutorData: User) => {
     if (loaders.stream[interlocutorData.id]) return
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
-    const gotStream = await $call.setStream()
+    const gotStream = await call.current.setStream()
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
-    if (!avatarPath) return
-    if (gotStream) $call.initCall(interlocutorData, id, avatarPath, username)
+    if (gotStream) call.current.initCall(interlocutorData, id, avatarPath ?? '', username)
   }
 
   return (
