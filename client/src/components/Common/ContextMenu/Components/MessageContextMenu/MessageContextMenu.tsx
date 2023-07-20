@@ -8,6 +8,7 @@ import { MessageStatus, SocketActions, SocketActionsPayload } from 'common-types
 import { socket } from 'src/socket/socket'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { UIIcon } from 'src/components/UI'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -33,7 +34,9 @@ const MessageContextMenu = () => {
 
   const forwardHandler = () => {
     dispatch(repliedMessageSetAsForward())
-    dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'ForwardMessagePopup' }))
+    dispatch(
+      showModal({ title: 'Forward message', modalContentComponentName: ModalContentComponentName.forwardMessagePopup })
+    )
   }
 
   const deleteHandler = () => {

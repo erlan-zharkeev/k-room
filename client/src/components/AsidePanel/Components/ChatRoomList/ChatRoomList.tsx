@@ -1,6 +1,7 @@
 import { List } from 'antd'
 import { SocketActions, ChatRoom, Message, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 import { UIButton, UIAvatar } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { socket } from 'src/socket/socket'
@@ -45,7 +46,12 @@ const ChatRoomList = () => {
 
   const createMultipleChat = (e: any) => {
     e.stopPropagation()
-    dispatch(showModal({ title: 'Create New Chat Room', modalContentComponentName: 'CreateMultipleChatPopup' }))
+    dispatch(
+      showModal({
+        title: 'Create New Chat Room',
+        modalContentComponentName: ModalContentComponentName.createMultipleChatPopup
+      })
+    )
   }
 
   return (

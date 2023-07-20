@@ -12,7 +12,14 @@ import { Howl } from 'howler'
 import $clg from 'src/services/$clg'
 import $sound, { Sounds } from 'src/services/$sound'
 import { socket } from 'src/socket/socket'
-import { SocketActions, SocketActionsPayload, User, UserMediaType, NotificationType } from 'common-types'
+import {
+  SocketActions,
+  SocketActionsPayload,
+  User,
+  UserMediaType,
+  NotificationType,
+  NotificationMessage
+} from 'common-types'
 import useTypedSelector from './useTypedSelector'
 import { showNotification } from 'src/store/systemSlice'
 import { RefsContext } from 'src/providers/RefsProvider'
@@ -42,7 +49,7 @@ const useCall = () => {
   const listenConnectionError = () => {
     if (!connection.current) return
     connection.current.on('error', (e: any) => {
-      dispatch(showNotification({ messageType: NotificationType.error, message: 'An unknown error has occurred' }))
+      dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.unknownError }))
       $clg('error', 'An unknown error has occurred' + String(e))
     })
   }
@@ -54,7 +61,7 @@ const useCall = () => {
   const initCall = async (interlocutorData: User, selfId: string, selfAvatarPath: string, callerName: string) => {
     interlocutorId.current = interlocutorData.id
     dispatch(initModalToCall(interlocutorData))
-    // soundConnection.current.play()
+    soundConnection.current.play()
     selfStream.current = await navigator.mediaDevices.getUserMedia({ audio, video })
     initConnection({
       initiator: true,
@@ -81,12 +88,13 @@ const useCall = () => {
 
     connection.current.on('stream', (interlocutorMediaStream: MediaStream) => {
       interlocutorStream.current = interlocutorMediaStream
+      interlocutorVideoDom.current.srcObject = interlocutorStream.current
     })
 
     connection.current.on('close', () => {
       dispatch(
         showNotification({
-          message: 'Call completed',
+          message: NotificationMessage.callCompleted,
           messageType: NotificationType.info
         })
       )
@@ -94,7 +102,7 @@ const useCall = () => {
     })
 
     socket.on(SocketActions.CALL_ACCEPTED, (data: SocketActionsPayload['callAccepted']) => {
-      // soundConnection.current.stop()
+      soundConnection.current.stop()
       dispatch(setCurrentCallAccepted())
       dispatch(updateInterlocutorSettings(data.settings))
       if (!connection.current) return
@@ -105,10 +113,10 @@ const useCall = () => {
   // ---------
 
   const answerCall = (callId: string) => {
-    // soundCalling.current.stop()
+    soundCalling.current.stop()
     dispatch(setCurrentCallAccepted())
     if (!selfStream.current) {
-      dispatch(showNotification({ messageType: NotificationType.error, message: 'Failed to get self stream' }))
+      dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.failedGetStream }))
       return
     }
     initConnection({
@@ -137,7 +145,7 @@ const useCall = () => {
     connection.current.on('close', () => {
       dispatch(
         showNotification({
-          message: 'Call completed',
+          message: NotificationMessage.callCompleted,
           messageType: NotificationType.info
         })
       )
@@ -146,7 +154,7 @@ const useCall = () => {
     if (!callerSignal.current) {
       dispatch(
         showNotification({
-          message: 'Cannot set caller signal',
+          message: NotificationMessage.cantSetCallerSignal,
           messageType: NotificationType.error
         })
       )
@@ -158,7 +166,7 @@ const useCall = () => {
   // -----
 
   const calling = (callerId: string, callerSignalData: SignalData) => {
-    // soundCalling.current.play()
+    soundCalling.current.play()
     interlocutorId.current = callerId
     callerSignal.current = callerSignalData
   }
@@ -173,7 +181,7 @@ const useCall = () => {
       $clg('error', 'Failed to get device cause ' + String(error))
       dispatch(
         showNotification({
-          message: 'Failed to connect to device, check for device is plugged in',
+          message: NotificationMessage.failedToConnectToDevice,
           messageType: NotificationType.warn
         })
       )
@@ -200,7 +208,7 @@ const useCall = () => {
   // ------
 
   const leaveCall = (callId: string) => {
-    // soundCalling.current.stop()
+    soundCalling.current.stop()
     const payload: SocketActionsPayload['callEnded'] = {
       callerId: interlocutorId.current,
       callId

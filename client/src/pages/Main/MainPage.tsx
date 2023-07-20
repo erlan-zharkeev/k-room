@@ -4,7 +4,7 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
 import { socket } from 'src/socket/socket'
-import { NotificationType, SocketActions, SocketActionsPayload } from 'common-types'
+import { NotificationMessage, NotificationType, SocketActions, SocketActionsPayload } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
@@ -26,6 +26,8 @@ import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
 import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
 import { updateCall, updateCalls } from 'src/store/callsSlice'
+import { ViewPortWidthType } from 'src/store/@types/SystemState'
+import { AsideBarButtonName } from 'common-types'
 
 const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -42,16 +44,19 @@ const MainPage = () => {
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
       $clg('success', 'Socket connected')
-      dispatch(showNotification({ messageType: NotificationType.success, message: 'Socket connected' }))
+      dispatch(
+        showNotification({ messageType: NotificationType.success, message: NotificationMessage.socketConnected })
+      )
       return
     }
     $clg('error', 'Socket disconnected')
-    if (isAuth) dispatch(showNotification({ messageType: NotificationType.error, message: 'Socket disconnected' }))
+    if (!isAuth) return
+    dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected }))
   }
 
   const debouncedStatusNotification = useDebounce(statusNotification, 1000)
 
-  const hideAside = () => selectedChatRoom && viewPort.width <= 769
+  const hideAside = () => selectedChatRoom && viewPort.width <= ViewPortWidthType.tablet
 
   const clickHandler = () => {
     dispatch(
@@ -131,11 +136,11 @@ const MainPage = () => {
     <div className={'main-page page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
       {socket.disconnected && <StubLoading />}
       <div className="main-page__wrapper">
-        {viewPort.width >= 769 && <AsideBar />}
+        {viewPort.width >= ViewPortWidthType.tablet && <AsideBar />}
         <div className="main-page__content">
           <CallStatusBar />
           <TopBar />
-          {asideTab === 'info' ? (
+          {asideTab === AsideBarButtonName.info ? (
             <div className={mainBodyClassNames()}>
               <InfoList />
             </div>

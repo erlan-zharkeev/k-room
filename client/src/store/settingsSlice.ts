@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { setTheme } from 'src/utils/setTheme'
-import { Theme, UserSettingKey, UserSettings } from 'common-types'
-import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
+import { AsideBarButtonName, Theme, UserSettings } from 'common-types'
 
 const initialState: UserSettings = {
-  asideTab: UserSettingKey.asideTab,
+  asideTab: AsideBarButtonName.contacts,
   currentInfoId: '1',
   selectedChatRoomId: '',
   theme: Theme.dark,

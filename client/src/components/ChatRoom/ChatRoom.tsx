@@ -1,7 +1,7 @@
 import { List } from 'antd'
 import { useDispatch } from 'react-redux'
 import useDynamicRefs from 'use-dynamic-refs'
-import { SocketActions, Message, SocketActionsPayload, MessageStatus, Author } from 'common-types'
+import { SocketActions, Message, SocketActionsPayload, MessageStatus, Author, AsideBarButtonName } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import InputMessage from './Components/InputMessage/InputMessage'
 import MessageBody from './Components/MessageBody/MessageBody'
@@ -21,7 +21,7 @@ import { sendMessage } from 'src/utils/sendMessage'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-import { AsideBarButtonName } from '../AsideBar/@types/ButtonsListElement'
+import { ModalContentComponentName } from '../Common/Popup/@types'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -96,10 +96,16 @@ const ChatRoom = () => {
     dispatch(
       updatedAttachedFilesMessage({
         body: message,
-        images
+        images,
+        imageCompression: false
       })
     )
-    dispatch(showModal({ title: 'Send Message', modalContentComponentName: 'MessageWithBindDataPopup' }))
+    dispatch(
+      showModal({
+        title: 'Send Message',
+        modalContentComponentName: ModalContentComponentName.messageWithBindDataPopup
+      })
+    )
   }
 
   const locationModifier = (author: string): string => {

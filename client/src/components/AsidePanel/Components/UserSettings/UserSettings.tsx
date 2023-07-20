@@ -10,6 +10,7 @@ import { RouteNames, Theme } from 'common-types'
 import { UIAvatar, UISwitch } from 'src/components/UI'
 import { UserSettingName } from './@types/UserSettingName'
 import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 const { VITE_MAIL_APP } = import.meta.env
 
 const methods: Array<UserSettingElement> = [
@@ -26,7 +27,12 @@ const UserSettings = () => {
   const navigate = useNavigate()
 
   const changeUserData = () => {
-    dispatch(showModal({ title: 'Update User Data', modalContentComponentName: 'UserDataSettingsPopup' }))
+    dispatch(
+      showModal({
+        title: 'Update User Data',
+        modalContentComponentName: ModalContentComponentName.userDataSettingsPopup
+      })
+    )
   }
 
   const changeSetting = (value: boolean, id: string) => {

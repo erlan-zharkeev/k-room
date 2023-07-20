@@ -1,7 +1,6 @@
 import { UserModel } from '../../models/user.model'
-import { SuccessMessages } from '../../types/Messages'
 import { transformUsersData } from '../../utils/transformUserData'
-import { SocketActions, SocketActionsPayload, User } from '../../../../types'
+import { NotificationMessage, SocketActions, SocketActionsPayload, User } from '../../../../types'
 import { emitSearchedContacts, emitContactsToUser } from '../helpers/emitters'
 import { SocketInstanceType } from '../../types/SocketInstanceType'
 
@@ -47,14 +46,14 @@ export const contactsSlice = (socket: SocketInstanceType) => {
 
   socket.on(SocketActions.SAVE_CONTACT, async ({ userId, interlocutorId }: SocketActionsPayload['saveContact']) => {
     await UserModel.updateOne({ _id: userId }, { $addToSet: { contacts: interlocutorId } })
-    emitContactsToUser(userId, SuccessMessages.userAddedToContacts)
+    emitContactsToUser(userId, NotificationMessage.userAddedToContacts)
   })
 
   socket.on(
     SocketActions.DELETE_CONTACT,
     async ({ currentUserId, deletingUserId }: SocketActionsPayload['deleteContact']) => {
       await UserModel.updateOne({ _id: currentUserId }, { $pull: { contacts: deletingUserId } })
-      emitContactsToUser(currentUserId, SuccessMessages.userRemovedFromContacts)
+      emitContactsToUser(currentUserId, NotificationMessage.userRemovedFromContacts)
     }
   )
 }

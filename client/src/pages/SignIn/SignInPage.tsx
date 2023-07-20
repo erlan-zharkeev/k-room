@@ -15,7 +15,6 @@ import apiMethods from 'src/services/api-methods'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { UIIcon, UIInput, UIButton } from 'src/components/UI'
 import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
-import { Button } from 'antd'
 
 const SignInPage = () => {
   const { firebase } = useContext(AdditionalServiceContext)
@@ -118,7 +117,7 @@ const SignInPage = () => {
                   </div>
                 </div>
 
-                {/* <div className="sign-in__controls">
+                <div className="sign-in__controls">
                   <UIButton
                     text="Sign in"
                     border="border-default"
@@ -128,12 +127,7 @@ const SignInPage = () => {
                     disabled={!isValid}
                     onClick={() => onFinish(form.getFieldsValue())}
                   />
-                </div> */}
-                <Form.Item className="sign-in__controls">
-                  <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
-                    Submit
-                  </Button>
-                </Form.Item>
+                </div>
               </Form>
             </div>
           </div>

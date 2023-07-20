@@ -116,8 +116,15 @@ export declare enum UserSettingKey {
     asideTab = "asideTab",
     currentInfoId = "currentInfoId"
 }
+export declare enum AsideBarButtonName {
+    contacts = "contacts",
+    chatList = "chatList",
+    calls = "calls",
+    settings = "settings",
+    info = "info"
+}
 export interface UserSettings {
-    [UserSettingKey.asideTab]: string;
+    [UserSettingKey.asideTab]: AsideBarButtonName;
     [UserSettingKey.selectedChatRoomId]: string;
     [UserSettingKey.ableToShowNotification]: boolean;
     [UserSettingKey.theme]: Theme;
@@ -208,6 +215,60 @@ export declare enum NotificationType {
     info = "info",
     warn = "warning"
 }
+export declare enum NotificationMessage {
+    default = "",
+    cantAccessDevice = "Cant get access to video device",
+    unknownError = "An unknown error has occurred",
+    callCompleted = "Call completed",
+    failedGetStream = "Failed to get self stream",
+    cantSetCallerSignal = "Cannot set caller signal",
+    failedToConnectToDevice = "Failed to connect to device, check for device is plugged in",
+    socketConnected = "Socket connected",
+    socketDisconnected = "Socket disconnected",
+    maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
+    success = "success",
+    tokensPairUpdated = "Tokens pair updated",
+    passwordReset = "Password changed successfully",
+    loginSuccess = "Login successfully",
+    loginAndRegister = "Login and register successfully",
+    userDataUpdated = "User data updated",
+    userAddedToContacts = "User added to contacts",
+    userRemovedFromContacts = "User removed from contacts",
+    emailConfirmed = "Email confirmed",
+    checkEmailForCode = "Check your email, we have sent you a code",
+    checkEmailForConfirmationLink = "Check your email for confirmation link",
+    userCreated = "User successfully created, checkout your email address for email confirmation",
+    emailConfirmationLinkSended = "Confirmation link sent to email",
+    failedGetUserData = "Failed to get user data",
+    failedResetPassword = "Failed to change password",
+    invalidConfirmCode = "Invalid confirmation code",
+    failedCodeSend = "Code send failed",
+    commonServerError = "Server error, the operation could not be performed. Try later",
+    failedRegistration = "Registration failed, try register later",
+    failedLogin = "Login failed, try register later",
+    nonAuthorized = "User not authorized",
+    haventAccessRights = "User have not access rights",
+    failedUserDataUpdate = "Failed to update user data",
+    userWithCurrentNameAlreadyExist = "The user with the current username is already registered",
+    userWithCurrentEmailAlreadyExist = "The user with the current email address is already registered",
+    failedPassHash = "Password hashing failed",
+    failedSendConfirmEmail = "Failed to send confirmation email",
+    exhaustedConfirmationAttempts = "Attempts to send confirmation the link ended =(",
+    userNotFound = "User not found",
+    wrongPass = "Invalid password",
+    failedEmailConfirm = "Email confirm failed",
+    emailNotConfirm = "Please, confirm email",
+    usersFind = "Error while finding user(s)",
+    failedUpdateSettings = "Failed to save user settings",
+    emailLinkedToAnotherMethod = "This email is already linked to another login method",
+    failedFindEmail = "Couldn`t find the current email address",
+    nextTimeRequestNotPossible = "The code was sent earlier",
+    noFilesExist = "No files exist",
+    notImage = "File is not an image",
+    failedSendConfirmationLink = "Failed to send confirmation link, please try later",
+    coudntFindEmail = "Couldn`t find the current email address",
+    imageConverterError = "Server could not process the image, please choose another image file"
+}
 export interface SocketActionsPayload {
     messageDelivered: {
         roomId: string;
@@ -221,7 +282,7 @@ export interface SocketActionsPayload {
     changeContactsData: UserShort;
     getContacts: {
         contacts: Array<User>;
-        messageBody: string;
+        messageBody: NotificationMessage;
     };
     callUpdated: Call;
     callsUpdated: Array<Call>;
@@ -330,7 +391,7 @@ export interface SocketActionsPayload {
     };
     errorMessage: {
         messageType?: NotificationType;
-        message: string;
+        message: NotificationMessage;
     };
     messageDeleted: {
         messageId: string;

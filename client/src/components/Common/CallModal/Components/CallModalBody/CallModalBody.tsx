@@ -34,7 +34,7 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const { selfVideoDom } = useContext(RefsContext)
 
-  const { $call } = useContext(AdditionalServiceContext)
+  const { call } = useContext(AdditionalServiceContext)
 
   useEffect(() => {
     socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: SocketActionsPayload['callStartedAt']) => {

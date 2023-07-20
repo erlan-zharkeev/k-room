@@ -1,5 +1,5 @@
 import { List } from 'antd'
-import { User, SocketActions, SocketActionsPayload } from 'common-types'
+import { User, SocketActions, SocketActionsPayload, AsideBarButtonName } from 'common-types'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -9,11 +9,10 @@ import { AppDispatch } from 'src/store'
 import ContactSearch from './Components/ContactSearch/ContactSearch'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { UIAvatar, UIButton } from 'src/components/UI'
-import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
 import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
 
 const ContactList = () => {
-  const { $call } = useContext(AdditionalServiceContext)
+  const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)

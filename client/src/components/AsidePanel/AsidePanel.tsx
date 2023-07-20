@@ -6,7 +6,7 @@ import Calls from './Components/Calls/Calls'
 import { ReactElement, useEffect, useState } from 'react'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 import constants from 'src/constants'
-import { AsideBarButtonName } from '../AsideBar/@types/ButtonsListElement'
+import { AsideBarButtonName } from 'common-types'
 
 const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)

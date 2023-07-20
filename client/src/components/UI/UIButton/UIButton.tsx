@@ -4,14 +4,8 @@ import { modifiersHandler } from 'src/utils/modifiersHandler'
 import { UIButtonProps } from './@types/UIButtonProps'
 import { UIIcon } from '..'
 
-const buttons = {
-  common: Button,
-  radio: Radio.Button,
-  dropdown: Dropdown.Button
-}
-
 const UIButton = ({
-  type,
+  type = 'common',
   value,
   tooltip,
   text,
@@ -21,18 +15,23 @@ const UIButton = ({
   color,
   loading,
   disabled,
-  htmltype = 'button',
   size,
+  htmltype = 'button',
   shape,
   hover,
   fill = false,
   onClick
 }: UIButtonProps) => {
   const { showTooltips } = useTypedSelector((state) => state.persist.settings)
-  const buttonType = type ?? 'common'
-  const ButtonComponent = buttons[buttonType]
+
+  const buttons = {
+    common: Button,
+    radio: Radio.Button,
+    dropdown: Dropdown.Button
+  }
+  const ButtonComponent = buttons[type]
   const hasIconAndText = iconName && text
-  const htmlPropAntdErrorFix = { htmltype }
+  const htmlPropAntdErrorFix = type === 'common' ? { htmlType: htmltype } : {}
   const ButtonBody = () => (
     <ButtonComponent
       {...htmlPropAntdErrorFix}
@@ -50,6 +49,7 @@ const UIButton = ({
     rootClass: 'ui-button',
     modifiers: [border, color, size, hover, fill === true ? 'fill' : '']
   })
+
   return (
     <div className={modifiers + ' ' + className}>
       {showTooltips && tooltip ? (

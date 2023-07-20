@@ -2,8 +2,7 @@ import { UserModel } from '../models/user.model'
 import { Request, Response } from 'express'
 import throwError from '../utils/throwError'
 import notAccuratePinRandomGenerator from '../utils/notAccuratePinRandomGenerator'
-import { ErrorMessages, SuccessMessages } from '../types/Messages'
-import { Status } from './../../../types'
+import { NotificationMessage, Status } from './../../../types'
 import { sendEmailCodePasswordRecovery } from '../services/mail'
 import { getNextTimeCodeRequest } from '../utils/getNextTimeCodeRequest'
 import { v4 as uuidv4 } from 'uuid'
@@ -24,9 +23,9 @@ class CodesController {
 
       await sendEmailCodePasswordRecovery(email, code)
 
-      return res.json({ message: SuccessMessages.checkEmailForCode, nextTimeRequest })
+      return res.json({ message: NotificationMessage.checkEmailForCode, nextTimeRequest })
     } catch {
-      throwError(Status.badRequest, res, ErrorMessages.failedCodeSend)
+      throwError(Status.badRequest, res, NotificationMessage.failedCodeSend)
     }
   }
   async validateEmailCodePasswordRecovery(req: Request, res: Response) {
@@ -34,7 +33,7 @@ class CodesController {
       const { email, code } = req.body
       const user = await UserModel.findOne({ email })
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
-      if (!isCodeEqual) throwError(Status.badRequest, res, ErrorMessages.invalidConfirmCode)
+      if (!isCodeEqual) throwError(Status.badRequest, res, NotificationMessage.invalidConfirmCode)
       const passwordResetQuery = uuidv4()
       await user?.updateOne({
         $set: {
@@ -42,9 +41,9 @@ class CodesController {
           'codes.passwordRecovery.query.expiresIn': getNextTimeCodeRequest(ENV.PASSWORD_RECOVERY_LINK_LIFE)
         }
       })
-      return res.json({ message: SuccessMessages.success, query: passwordResetQuery, silent: true })
+      return res.json({ message: NotificationMessage.success, query: passwordResetQuery, silent: true })
     } catch {
-      throwError(Status.badRequest, res, ErrorMessages.commonServerError)
+      throwError(Status.badRequest, res, NotificationMessage.commonServerError)
     }
   }
 }

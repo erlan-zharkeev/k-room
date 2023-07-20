@@ -1,8 +1,9 @@
-import { Message, NotificationType } from 'common-types'
+import { Message, NotificationMessage, NotificationType } from 'common-types'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 export interface NotificationStore {
   key: string
-  message: string
+  message: NotificationMessage
   description: string
   messageType?: NotificationType
   duration: number
@@ -11,6 +12,12 @@ export interface NotificationStore {
 
 export type ContextMenuType = '' | 'message'
 
+export enum ViewPortWidthType {
+  desktop = 1200,
+  tablet = 769,
+  phone = 576
+}
+
 export interface ViewPort {
   width: number
   height: number
@@ -18,9 +25,9 @@ export interface ViewPort {
 
 export interface ModalData {
   title: string
-  modalContentComponentName: string
-  okText: string
-  width: string
+  modalContentComponentName: ModalContentComponentName
+  okText?: string
+  width?: string
 }
 
 export interface ContextMenu {

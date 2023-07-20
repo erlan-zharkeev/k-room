@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { AsideBarButtonName, ButtonsListElement } from './@types/ButtonsListElement'
+import { ButtonsListElement } from './@types/ButtonsListElement'
 import { Logo } from '../Common/Logo/Logo'
 import { showModal } from 'src/store/systemSlice'
-import { MessageStatus } from 'common-types'
+import { AsideBarButtonName, MessageStatus } from 'common-types'
 import { UIButton } from '../UI'
+import { ModalContentComponentName } from '../Common/Popup/@types'
+import { ViewPortWidthType } from 'src/store/@types/SystemState'
 
 const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -21,7 +23,7 @@ const AsideBar = () => {
   }
 
   const changeTabClickHandler = () => {
-    if (viewPort.width <= 769) dispatch(selectChatRoom(''))
+    if (viewPort.width <= ViewPortWidthType.tablet) dispatch(selectChatRoom(''))
   }
 
   const buttons: Array<ButtonsListElement> = [
@@ -32,11 +34,12 @@ const AsideBar = () => {
   ]
 
   const openTechSettings = () => {
-    dispatch(showModal({
-      title: 'Settings', modalContentComponentName: 'TechSettingsPopup',
-      okText: '',
-      width: ''
-    }))
+    dispatch(
+      showModal({
+        title: 'Settings',
+        modalContentComponentName: ModalContentComponentName.techSettingsPopup
+      })
+    )
   }
 
   const getButtonComponent = (button: ButtonsListElement) => (
@@ -61,7 +64,7 @@ const AsideBar = () => {
 
   return (
     <div className="aside-bar">
-      {viewPort.width >= 769 && <Logo />}
+      {viewPort.width >= ViewPortWidthType.tablet && <Logo />}
       <Radio.Group value={asideTab} onChange={changeTab}>
         {buttons.map((button) => (
           <div key={button.value} className="aside-bar__button-el">
@@ -72,7 +75,9 @@ const AsideBar = () => {
           </div>
         ))}
       </Radio.Group>
-      {viewPort.width >= 769 && <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />}
+      {viewPort.width >= ViewPortWidthType.tablet && (
+        <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />
+      )}
     </div>
   )
 }

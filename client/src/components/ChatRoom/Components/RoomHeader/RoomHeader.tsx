@@ -9,6 +9,7 @@ import constants from 'src/constants'
 import { showModal } from 'src/store/systemSlice'
 import { UIButton, UIAvatar } from 'src/components/UI'
 import { BadgePlacement } from 'src/components/UI/UIAvatar/@types/UIAvatarProps'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -45,7 +46,12 @@ const RoomHeader = () => {
   )
 
   const openChatMembers = () => {
-    dispatch(showModal({ title: 'Group Chat Info', modalContentComponentName: 'ChatRoomSettingsPopup' }))
+    dispatch(
+      showModal({
+        title: 'Group Chat Info',
+        modalContentComponentName: ModalContentComponentName.chatRoomSettingsPopup
+      })
+    )
   }
 
   const whoIsTyping = () => {

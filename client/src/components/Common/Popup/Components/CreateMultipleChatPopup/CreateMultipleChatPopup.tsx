@@ -6,12 +6,11 @@ import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import { validateRules } from 'src/utils/validateRules'
 import MultipleUserSelect from './Components/MultipleUserSelect/MultipleUserSelect'
-import { SocketActions, SocketActionsPayload, UserShort } from 'common-types'
+import { AsideBarButtonName, SocketActions, SocketActionsPayload, UserShort } from 'common-types'
 import { socket } from 'src/socket/socket'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
-import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
 
 const CreateMultipleChatPopup = () => {
   const [isLoading, setIsLoading] = useState(false)

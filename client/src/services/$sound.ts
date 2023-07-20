@@ -19,7 +19,7 @@ const soundSrc: Record<Sounds, string> = {
 const $sound = (sound: Sounds, loop?: boolean) => {
   return new Howl({
     src: [soundSrc[sound]],
-    volume: 0.2,
+    volume: 0,
     loop
   })
 }

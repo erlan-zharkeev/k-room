@@ -2,14 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
 import {
   ContextClickedObject,
-  ContextMenu,
   ContextMenuType,
   ModalData,
   SystemStore,
-  ViewPort
+  ViewPort,
+  ViewPortWidthType
 } from './@types/SystemState'
 import constants from 'src/constants'
-import { NotificationType, SocketActionsPayload } from 'common-types'
+import { NotificationMessage, NotificationType, SocketActionsPayload } from 'common-types'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 const html = document.querySelector('html')
 
@@ -36,13 +37,13 @@ const initialState: SystemStore = {
   },
   modalData: {
     title: '',
-    modalContentComponentName: 'CreateMultipleChatPopup',
+    modalContentComponentName: ModalContentComponentName.createMultipleChatPopup,
     okText: 'ok',
     width: '320px'
   },
   notificationData: {
     key: '',
-    message: '',
+    message: NotificationMessage.default,
     description: '',
     messageType: NotificationType.info,
     duration: 3,
@@ -69,7 +70,7 @@ const systemSlice = createSlice({
       state.showModal = false
     },
     showNotification(state, { payload }: { payload: SocketActionsPayload['errorMessage'] }) {
-      const isError = state.notificationData.messageType === 'error'
+      const isError = state.notificationData.messageType === NotificationType.error
       state.notificationData = {
         ...state.notificationData,
         ...payload,
@@ -81,7 +82,7 @@ const systemSlice = createSlice({
     setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
       const viewPortWidth = state.viewPort.width
-      const viewPortType = viewPortWidth <= 576 ? 'mobile' : 'desktop'
+      const viewPortType = viewPortWidth <= ViewPortWidthType.phone ? 'mobile' : 'desktop'
       html?.setAttribute('view-port', viewPortType)
     },
     setContextMenu(
