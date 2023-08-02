@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { setTheme } from 'src/utils/setTheme'
-import { Theme, UserSettings } from 'common-types'
+import { AsideBarButtonName, Theme, UserSettings } from 'common-types'
 
 const initialState: UserSettings = {
-  asideTab: 'contacts',
+  asideTab: AsideBarButtonName.contacts,
   currentInfoId: '1',
   selectedChatRoomId: '',
   theme: Theme.dark,
@@ -16,10 +16,10 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setCurrentInfoItem(state, { payload }) {
+    setCurrentInfoItem(state, { payload }: { payload: string }) {
       state.currentInfoId = payload
     },
-    updateSettings(state, { payload }) {
+    updateSettings(state, { payload }: { payload: UserSettings }) {
       if (!payload) return
       const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification, currentInfoId } =
         payload
@@ -32,23 +32,23 @@ const settingsSlice = createSlice({
       state.currentInfoId = currentInfoId
       state.ableToShowNotification = ableToShowNotification
     },
-    selectChatRoom(state, { payload }) {
+    selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
     },
-    changeAsideTab(state, { payload }) {
+    changeAsideTab(state, { payload }: { payload: AsideBarButtonName }) {
       state.asideTab = payload
     },
-    setAbleToShowNotification(state, { payload }) {
+    setAbleToShowNotification(state, { payload }: { payload: boolean }) {
       state.ableToShowNotification = payload
     },
-    changeTheme(state, { payload }) {
-      state.theme = payload ? Theme.dark : Theme.light
+    changeTheme(state, { payload }: { payload: Theme }) {
+      state.theme = payload
       setTheme(state.theme)
     },
-    setSoundValue(state, { payload }) {
+    setSoundValue(state, { payload }: { payload: boolean }) {
       state.soundOn = payload
     },
-    setTooltipsValue(state, { payload }) {
+    setTooltipsValue(state, { payload }: { payload: boolean }) {
       state.showTooltips = payload
     }
   }

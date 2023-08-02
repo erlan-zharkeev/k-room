@@ -1,18 +1,25 @@
 import { List } from 'antd'
 import { useDispatch } from 'react-redux'
 import useDynamicRefs from 'use-dynamic-refs'
-import { SocketActions, Message, SocketActionsPayload, MessageStatus, Author } from 'common-types'
+import {
+  SocketActions,
+  Message,
+  SocketActionsPayload,
+  MessageStatus,
+  Author,
+  AsideBarButtonName,
+  UserSettingKey
+} from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import InputMessage from './Components/InputMessage/InputMessage'
 import MessageBody from './Components/MessageBody/MessageBody'
 import RoomHeader from './Components/RoomHeader/RoomHeader'
 import { useEffect, useRef, useState } from 'react'
-import { socket } from 'src/socket/socket'
+
 import { AppDispatch } from 'src/store'
 import { scrollToBottom } from 'src/utils/scrollToBottom'
 import { updatedAttachedFilesMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import { changeAsideTab } from 'src/store/settingsSlice'
 import constants from 'src/constants'
 import Informer from '../Common/Informer/Informer'
 import { ImageObject } from 'common-types'
@@ -21,7 +28,9 @@ import { sendMessage } from 'src/utils/sendMessage'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-import { AsideBarButtonName } from '../AsideBar/@types/ButtonsListElement'
+import { ModalContentComponentName } from '../Common/Popup/@types'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -38,6 +47,7 @@ const ChatRoom = () => {
   const { isLoading } = useTypedSelector((state) => state.chatRooms)
   const [messages, setMessages] = useState([] as Array<Message>)
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
+  const { updateSetting } = useUpdateSettings()
 
   const observerCallback = (entries: any) => {
     entries.forEach((entry: any) => {
@@ -51,7 +61,7 @@ const ChatRoom = () => {
         status: MessageStatus.read,
         userId: id
       }
-      socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, payload)
+      $socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, payload)
     })
   }
 
@@ -96,10 +106,16 @@ const ChatRoom = () => {
     dispatch(
       updatedAttachedFilesMessage({
         body: message,
-        images
+        images,
+        imageCompression: false
       })
     )
-    dispatch(showModal({ title: 'Send Message', modalContentComponentName: 'MessageWithBindDataPopup' }))
+    dispatch(
+      showModal({
+        title: 'Send Message',
+        modalContentComponentName: ModalContentComponentName.messageWithBindDataPopup
+      })
+    )
   }
 
   const locationModifier = (author: string): string => {
@@ -132,6 +148,10 @@ const ChatRoom = () => {
       updatedMessagesWithDates.push(message)
     })
     setMessages(updatedMessagesWithDates)
+  }
+
+  const chooseChatRoomHandler = () => {
+    updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
   }
 
   return (
@@ -186,10 +206,7 @@ const ChatRoom = () => {
           </div>
         ) : (
           <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
-            <div
-              onClick={() => dispatch(changeAsideTab(AsideBarButtonName.chatList))}
-              className="paragraph-text paragraph-text--secondary"
-            >
+            <div onClick={chooseChatRoomHandler} className="paragraph-text paragraph-text--secondary">
               Choose or create chat
             </div>
           </div>

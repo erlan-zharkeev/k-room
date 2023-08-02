@@ -12,7 +12,7 @@ import apiMethods from 'src/services/api-methods'
 import { AppDispatch } from 'src/store'
 import { validateRules } from 'src/utils/validateRules'
 
-const CreateNewPassword = () => {
+const CreateNewPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [form] = Form.useForm()
   const [isValid, validate] = useValidate()
@@ -81,7 +81,7 @@ const CreateNewPassword = () => {
                 text="Change password"
                 border="border-default"
                 color="accent"
-                htmltype={'submit'}
+                htmltype="submit"
                 loading={isLoading}
                 disabled={!isValid || !isPasswordEqual}
               />
@@ -93,4 +93,4 @@ const CreateNewPassword = () => {
   )
 }
 
-export default CreateNewPassword
+export default CreateNewPasswordPage

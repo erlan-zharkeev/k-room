@@ -9,17 +9,18 @@ import ForwardMessagePopup from './Components/ForwardMessagePopup/ForwardMessage
 import CreateMultipleChatPopup from './Components/CreateMultipleChatPopup/CreateMultipleChatPopup'
 import ChatRoomSettingsPopup from './Components/ChatRoomSettingsPopup/ChatRoomSettingsPopup'
 import MessageWithBindDataPopup from './Components/MessageWithBindDataPopup/MessageWithBindDataPopup'
+import { ModalContentComponentName } from './@types'
 
 const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
-  const popups: Record<string, JSX.Element> = {
-    UserDataSettingsPopup: <UserDataSettingsPopup />,
-    TechSettingsPopup: <TechSettingsPopup />,
-    ForwardMessagePopup: <ForwardMessagePopup />,
-    CreateMultipleChatPopup: <CreateMultipleChatPopup />,
-    ChatRoomSettingsPopup: <ChatRoomSettingsPopup />,
-    MessageWithBindDataPopup: <MessageWithBindDataPopup />
+  const popups: Record<ModalContentComponentName, JSX.Element> = {
+    [ModalContentComponentName.userDataSettingsPopup]: <UserDataSettingsPopup />,
+    [ModalContentComponentName.techSettingsPopup]: <TechSettingsPopup />,
+    [ModalContentComponentName.forwardMessagePopup]: <ForwardMessagePopup />,
+    [ModalContentComponentName.createMultipleChatPopup]: <CreateMultipleChatPopup />,
+    [ModalContentComponentName.chatRoomSettingsPopup]: <ChatRoomSettingsPopup />,
+    [ModalContentComponentName.messageWithBindDataPopup]: <MessageWithBindDataPopup />
   }
 
   const ComponentContent = () => popups[modalData.modalContentComponentName]

@@ -116,8 +116,15 @@ export declare enum UserSettingKey {
     asideTab = "asideTab",
     currentInfoId = "currentInfoId"
 }
+export declare enum AsideBarButtonName {
+    contacts = "contacts",
+    chatList = "chatList",
+    calls = "calls",
+    settings = "settings",
+    info = "info"
+}
 export interface UserSettings {
-    [UserSettingKey.asideTab]: string;
+    [UserSettingKey.asideTab]: AsideBarButtonName;
     [UserSettingKey.selectedChatRoomId]: string;
     [UserSettingKey.ableToShowNotification]: boolean;
     [UserSettingKey.theme]: Theme;
@@ -133,21 +140,24 @@ export declare enum CallStatus {
 export declare enum CallType {
     incoming = "incoming",
     outgoing = "outgoing",
-    missed = "missed"
+    missed = "missed",
+    notAnswered = "not-answered",
+    current = "current"
 }
 export declare enum UserMediaType {
     audio = "audio",
-    video = "video",
-    both = "both"
+    video = "video"
 }
 export interface StreamSettings extends BasicStreamSettings {
     streamLoading: boolean;
 }
 export interface BasicStreamSettings {
-    audio: boolean;
-    video: boolean;
+    [UserMediaType.audio]: boolean;
+    [UserMediaType.video]: boolean;
 }
 export interface Call {
+    id: string;
+    calledAt?: number;
     authorId: string;
     authorName: string;
     startedAt: number;
@@ -156,10 +166,21 @@ export interface Call {
     interlocutorId: string;
     interlocutorName: string;
     interlocutorAvatarPath?: string;
-    status: CallStatus;
+    status?: CallStatus;
     type: CallType;
     video: boolean;
     interlocutorSettings?: StreamSettings;
+    setId?: boolean;
+}
+export interface CallDB {
+    _id: any;
+    calledAt: number;
+    startedAt: number;
+    finishedAt: number;
+    authorId: string;
+    interlocutors: Array<string>;
+    answered: boolean;
+    video: boolean;
 }
 export interface Codes {
     passwordRecovery: {
@@ -187,7 +208,92 @@ export interface InfoItem {
     read: InfoItemStatus;
     contentComponent?: () => string;
 }
+export declare enum NotificationType {
+    success = "success",
+    error = "error",
+    info = "info",
+    warn = "warning"
+}
+export declare enum NotificationMessage {
+    default = "",
+    cantAccessDevice = "Cant get access to video device",
+    unknownError = "An unknown error has occurred",
+    callCompleted = "Call completed",
+    failedGetStream = "Failed to get self stream",
+    cantSetCallerSignal = "Cannot set caller signal",
+    failedToConnectToDevice = "Failed to connect to device, check for device is plugged in",
+    socketConnected = "Socket connected",
+    socketDisconnected = "Socket disconnected",
+    maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
+    success = "success",
+    tokensPairUpdated = "Tokens pair updated",
+    passwordReset = "Password changed successfully",
+    loginSuccess = "Login successfully",
+    loginAndRegister = "Login and register successfully",
+    userDataUpdated = "User data updated",
+    userAddedToContacts = "User added to contacts",
+    userRemovedFromContacts = "User removed from contacts",
+    emailConfirmed = "Email confirmed",
+    checkEmailForCode = "Check your email, we have sent you a code",
+    checkEmailForConfirmationLink = "Check your email for confirmation link",
+    userCreated = "User successfully created, checkout your email address for email confirmation",
+    emailConfirmationLinkSended = "Confirmation link sent to email",
+    failedGetUserData = "Failed to get user data",
+    failedResetPassword = "Failed to change password",
+    invalidConfirmCode = "Invalid confirmation code",
+    failedCodeSend = "Code send failed",
+    commonServerError = "Server error, the operation could not be performed. Try later",
+    failedRegistration = "Registration failed, try register later",
+    failedLogin = "Login failed, try register later",
+    nonAuthorized = "User not authorized",
+    haventAccessRights = "User have not access rights",
+    failedUserDataUpdate = "Failed to update user data",
+    userWithCurrentNameAlreadyExist = "The user with the current username is already registered",
+    userWithCurrentEmailAlreadyExist = "The user with the current email address is already registered",
+    failedPassHash = "Password hashing failed",
+    failedSendConfirmEmail = "Failed to send confirmation email",
+    exhaustedConfirmationAttempts = "Attempts to send confirmation the link ended =(",
+    userNotFound = "User not found",
+    wrongPass = "Invalid password",
+    failedEmailConfirm = "Email confirm failed",
+    emailNotConfirm = "Please, confirm email",
+    usersFind = "Error while finding user(s)",
+    failedUpdateSettings = "Failed to save user settings",
+    emailLinkedToAnotherMethod = "This email is already linked to another login method",
+    failedFindEmail = "Couldn`t find the current email address",
+    nextTimeRequestNotPossible = "The code was sent earlier",
+    noFilesExist = "No files exist",
+    notImage = "File is not an image",
+    failedSendConfirmationLink = "Failed to send confirmation link, please try later",
+    coudntFindEmail = "Couldn`t find the current email address",
+    imageConverterError = "Server could not process the image, please choose another image file"
+}
 export interface SocketActionsPayload {
+    interlocutorUpdateSignal: {
+        signal: any;
+    };
+    updateSignal: {
+        signal: any;
+    };
+    markCallAsVideo: {
+        callId: string;
+    };
+    messageDelivered: {
+        roomId: string;
+        message: Message;
+    };
+    getRooms: Array<ChatRoom>;
+    statusContact: {
+        userId: string;
+        status: boolean;
+    };
+    changeContactsData: UserShort;
+    getContacts: {
+        contacts: Array<User>;
+        messageBody: NotificationMessage;
+    };
+    callUpdated: Call;
+    callsUpdated: Array<Call>;
     initialize: {
         userId: string;
     };
@@ -266,30 +372,31 @@ export interface SocketActionsPayload {
         username: string;
     };
     callUser: {
+        callId?: string;
         userToCall?: string;
         signal: any;
         from: string;
         avatarPath: string;
         callerName: string;
-        settings: StreamSettings;
     };
     changeCallSettings: BasicStreamSettings;
     callAccepted: {
         signal: any;
-        settings: StreamSettings;
     };
     answerCall: {
+        callId: string;
         to: string;
         signal: any;
-        settings: StreamSettings;
         selfSocketId: string;
     };
     callStartedAt: number;
     callEnded: {
+        callId: string;
         callerId: string;
     };
     errorMessage: {
-        message: string;
+        messageType?: NotificationType;
+        message: NotificationMessage;
     };
     messageDeleted: {
         messageId: string;
@@ -363,6 +470,7 @@ export declare enum RouteNames {
     PASSWORD_RECOVERY = "/password-recovery",
     CREATE_NEW_PASSWORD = "/create-new-password",
     NOTIFICATION = "/notification",
+    PRIVACY_POLICY = "/privacy-policy/",
     SOCKET_PATH = "/app-socket/",
     API = "/api/"
 }
@@ -402,5 +510,10 @@ export declare enum SocketActions {
     UPDATE_MESSAGE_REACTIONS = "update-message-reactions",
     DELETE_MESSAGE = "delete-message",
     MESSAGE_DELETED = "message-deleted",
-    ERROR_MESSAGE = "error-message"
+    ERROR_MESSAGE = "error-message",
+    CALLS_UPDATED = "calls-updated",
+    CALL_UPDATED = "call-updated",
+    MARK_CALL_AS_VIDEO = "mark-call-as-video",
+    UPDATE_CALL_SIGNAL = "update-call-signal",
+    INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal"
 }

@@ -40,6 +40,12 @@
 
 // select
 .ant-select {
+  .ant-select-selector {
+    border-radius: $radius-md !important;
+  }
+  .ant-select-selection-item {
+    margin-top: 2px;
+  }
   color: var(--secondary-text);
   &-multiple {
     .ant-select-selection-placeholder {
@@ -57,9 +63,6 @@
       &:hover {
         cursor: pointer;
       }
-    }
-    .ant-select-selector {
-      border-radius: $radius-md !important;
     }
   }
   &-selector {
@@ -98,6 +101,8 @@
 .ant-form-item-explain-error {
   color: var(--error-text);
   font-size: 12px;
+  margin-top: 2px;
+  margin-left: 12px;
 }
 
 // modal
@@ -133,7 +138,6 @@ div[role='dialog'] {
 
 // notification
 .ant-notification-notice {
-  border: 1px solid var(--main-bg);
   border-radius: $radius-sm;
   box-shadow: 0 3px 6px -4px rgb(0 0 0 / 100%), 0 6px 16px 0 rgb(0 0 0 / 25%), 0 9px 28px 8px rgb(0 0 0 / 15%) !important;
 
@@ -152,6 +156,9 @@ div[role='dialog'] {
   &-warning {
     background: var(--warn-bg);
   }
+  .anticon {
+    color: var(--main-text);
+  }
 }
 
 .ant-notification-notice-message {
@@ -160,10 +167,6 @@ div[role='dialog'] {
 
 .ant-notification-notice-with-icon .ant-notification-notice-message {
   margin-bottom: 0;
-}
-
-.anticon.ant-notification-notice-icon-error {
-  color: var(--error-text);
 }
 
 .ant-notification-notice-close-x {
@@ -321,4 +324,10 @@ div[role='dialog'] {
 .ant-badge {
   display: flex;
   align-items: center;
+}
+.ant-badge-status-red {
+  background: var(--error);
+}
+.ant-badge-status-green {
+  background: var(--success);
 }

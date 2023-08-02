@@ -3,7 +3,7 @@ import { io } from 'socket.io-client'
 const { DEV, VITE_SERVER_PORT, VITE_MAX_RECONNECT_ATTEMPTS } = import.meta.env
 const initConnectionPath = DEV ? `:${VITE_SERVER_PORT}` : ''
 
-export const socket = io(`${initConnectionPath}/`, {
+export const $socket = io(`${initConnectionPath}/`, {
   forceNew: false,
   path: RouteNames.SOCKET_PATH,
   reconnection: true,

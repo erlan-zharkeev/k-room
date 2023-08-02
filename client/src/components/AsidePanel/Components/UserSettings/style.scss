@@ -9,8 +9,11 @@
   .link {
     width: 100%;
     display: flex;
-    margin-top: $gutter-md;
     justify-content: center;
+  }
+
+  &__password-recovery {
+    margin-top: $gutter-md;
     margin-bottom: $gutter-xl;
   }
 

@@ -32,6 +32,10 @@
     @include icon-size-compensation(7rem);
   }
 
+  &--xl {
+    @include icon-size-compensation(10rem);
+  }
+
   &--success {
     svg {
       color: var(--success);

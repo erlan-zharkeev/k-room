@@ -2,6 +2,11 @@
   width: 100%;
   height: 30px;
   max-height: 30px;
+  &--small {
+    input {
+      margin-top: 2px;
+    }
+  }
   &--large {
     height: 36px;
     max-height: 36px;

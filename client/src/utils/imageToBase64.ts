@@ -1,3 +1,4 @@
+import { NotificationType } from 'common-types'
 import constants from 'src/constants'
 import { AppDispatch } from 'src/store'
 import { showNotification } from 'src/store/systemSlice'
@@ -22,7 +23,7 @@ export const imageToBase64 = ({
 
   if (warnings.length) {
     warnings.forEach((warning) => {
-      dispatch(showNotification({ message: warning, messageType: 'warning' }))
+      dispatch(showNotification({ message: warning, messageType: NotificationType.warn }))
     })
     return
   }

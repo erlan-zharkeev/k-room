@@ -4,15 +4,17 @@ import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import parse from 'html-react-parser'
-import { setCurrentInfoItem } from 'src/store/settingsSlice'
 import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import { Status } from 'common-types'
+import { Status, UserSettingKey } from 'common-types'
 import { markInfoItemAsRead } from 'src/store/userSlice'
 import { UIIcon } from '../UI'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import constants from 'src/constants'
 
 const InfoList = () => {
   const dispatch = useDispatch<AppDispatch>()
+  const { updateSetting } = useUpdateSettings()
   const { currentInfoId } = useTypedSelector((state) => state.persist.settings)
   const { infoItems, id } = useTypedSelector((state) => state.user.userData)
 
@@ -26,11 +28,19 @@ const InfoList = () => {
   }
 
   useEffect(() => {
-    markInfoAsRead()
+    setTimeout(() => {
+      markInfoAsRead()
+    }, constants.infoItemMarkAsReadDuration)
   }, [currentInfoId])
 
   const onChange = (key: string | string[]) => {
-    dispatch(setCurrentInfoItem(key))
+    if (key instanceof Array) {
+      key.forEach((keyElement) => {
+        updateSetting(UserSettingKey.currentInfoId, { infoId: keyElement })
+      })
+      return
+    }
+    updateSetting(UserSettingKey.currentInfoId, { infoId: key ?? null })
   }
 
   return (

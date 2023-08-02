@@ -5,9 +5,11 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 import { MessageStatus, SocketActions, SocketActionsPayload } from 'common-types'
-import { socket } from 'src/socket/socket'
+
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import { UIIcon } from 'src/components/UI'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
+import { $socket } from 'src/services/$socket'
 
 const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -28,12 +30,14 @@ const MessageContextMenu = () => {
       authorId: id,
       username
     }
-    socket.emit(SocketActions.ADD_REACTION, payload)
+    $socket.emit(SocketActions.ADD_REACTION, payload)
   }
 
   const forwardHandler = () => {
     dispatch(repliedMessageSetAsForward())
-    dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'ForwardMessagePopup' }))
+    dispatch(
+      showModal({ title: 'Forward message', modalContentComponentName: ModalContentComponentName.forwardMessagePopup })
+    )
   }
 
   const deleteHandler = () => {
@@ -46,7 +50,7 @@ const MessageContextMenu = () => {
     }
 
     dispatch(updateMessageStatus({ roomId, messageId, status: MessageStatus.sending }))
-    socket.emit(SocketActions.DELETE_MESSAGE, payload)
+    $socket.emit(SocketActions.DELETE_MESSAGE, payload)
   }
 
   return (

@@ -1,18 +1,22 @@
 import { MessageNotification } from 'src/components/Common/MessageNotification/MessageNotification'
 import $sound, { Sounds } from 'src/services/$sound'
 import { showNotification } from '../systemSlice'
-import changeSettingsHandler from './helpers/changeSettingsHandler'
+import { NotificationType } from 'common-types'
 
 const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
+  if (!action) return
   const dispatch = store.dispatch
-  changeSettingsHandler(action, store)
   switch (action.type) {
     case 'rooms/updateChatMessage':
       const { soundOn } = store.getState().persist.settings
       const { message } = action.payload
       if (!message.isSelf) {
         dispatch(
-          showNotification({ message: MessageNotification(message), messageType: 'info', placement: 'bottomRight' })
+          showNotification({
+            message: MessageNotification(message),
+            messageType: NotificationType.info,
+            placement: 'topRight'
+          })
         )
         if (soundOn) $sound(Sounds.messageDelivered).play()
       }

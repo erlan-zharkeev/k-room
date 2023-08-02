@@ -5,8 +5,8 @@ import { ModalOptions } from './@types'
 import CallModalBody from './Components/CallModalBody/CallModalBody'
 
 const initialSize = {
-  width: 500,
-  height: 500,
+  width: 300,
+  height: 450,
   minWidth: 300,
   minHeight: 450
 }

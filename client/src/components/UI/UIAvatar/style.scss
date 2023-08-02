@@ -61,6 +61,17 @@
     }
   }
 
+  &--xl {
+    #{ $self }__image {
+      $size: 150px;
+
+      width: $size !important;
+      min-width: $size;
+      height: $size !important;
+      min-height: $size;
+    }
+  }
+
   .ui-icon {
     @include wh-100;
 

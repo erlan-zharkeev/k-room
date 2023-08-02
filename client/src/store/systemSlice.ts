@@ -1,7 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
-import { SystemStore } from './@types/SystemState'
+import {
+  ContextClickedObject,
+  ContextMenuType,
+  ModalData,
+  NotificationStore,
+  SystemStore,
+  ViewPort,
+  ViewPortWidthType
+} from './@types/SystemState'
 import constants from 'src/constants'
+import { NotificationMessage, NotificationType } from 'common-types'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 const html = document.querySelector('html')
 
@@ -28,15 +38,15 @@ const initialState: SystemStore = {
   },
   modalData: {
     title: '',
-    modalContentComponentName: 'CreateMultipleChatPopup',
+    modalContentComponentName: ModalContentComponentName.createMultipleChatPopup,
     okText: 'ok',
     width: '320px'
   },
   notificationData: {
     key: '',
-    message: '',
+    message: NotificationMessage.default,
     description: '',
-    messageType: 'info',
+    messageType: NotificationType.info,
     duration: 3,
     placement: 'top'
   },
@@ -50,18 +60,18 @@ const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    setReconnectingStatus(state, { payload }) {
+    setReconnectingStatus(state, { payload }: { payload: boolean }) {
       state.reconnecting = payload
     },
-    showModal(state, { payload }) {
+    showModal(state, { payload }: { payload: ModalData }) {
       state.modalData = payload
       state.showModal = true
     },
     closeModal(state) {
       state.showModal = false
     },
-    showNotification(state, { payload }) {
-      const isError = state.notificationData.messageType === 'error'
+    showNotification(state, { payload }: { payload: NotificationStore }) {
+      const isError = state.notificationData.messageType === NotificationType.error
       state.notificationData = {
         ...state.notificationData,
         ...payload,
@@ -70,13 +80,24 @@ const systemSlice = createSlice({
       if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
       state.notificationData = initialState.notificationData
     },
-    setViewPort(state, { payload }) {
+    setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
       const viewPortWidth = state.viewPort.width
-      const viewPortType = viewPortWidth <= 576 ? 'mobile' : 'desktop'
+      const viewPortType = viewPortWidth <= ViewPortWidthType.phone ? 'mobile' : 'desktop'
       html?.setAttribute('view-port', viewPortType)
     },
-    setContextMenu(state, { payload }) {
+    setContextMenu(
+      state,
+      {
+        payload
+      }: {
+        payload: {
+          event: React.MouseEvent<HTMLDivElement, MouseEvent> | null
+          type: ContextMenuType
+          contextClickedObject?: ContextClickedObject
+        }
+      }
+    ) {
       const { event, type, contextClickedObject } = payload
       if (constants.blockNativeContextMenu && event) event.preventDefault()
       state.contextMenu.slotName = type

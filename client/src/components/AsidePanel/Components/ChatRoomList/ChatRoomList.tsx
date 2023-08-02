@@ -1,17 +1,19 @@
 import { List } from 'antd'
-import { SocketActions, ChatRoom, Message, MessageStatus } from 'common-types'
+import { SocketActions, ChatRoom, Message, MessageStatus, SocketActionsPayload, UserSettingKey } from 'common-types'
 import { useDispatch } from 'react-redux'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 import { UIButton, UIAvatar } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
+
 import { AppDispatch } from 'src/store'
-import { selectChatRoom } from 'src/store/settingsSlice'
 import { showModal } from 'src/store/systemSlice'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
 
 const ChatRoomList = () => {
+  const { updateSetting } = useUpdateSettings()
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const { id } = useTypedSelector((state) => state.user.userData)
+  const userId = useTypedSelector((state) => state.user.userData.id)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -23,12 +25,18 @@ const ChatRoomList = () => {
 
   const setChat = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
-    dispatch(selectChatRoom(id))
+    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: id })
+    const payload: SocketActionsPayload['updateUserSettings'] = {
+      userId,
+      type: UserSettingKey.selectedChatRoomId,
+      value: id
+    }
+    $socket.emit(SocketActions.UPDATE_USER_SETTINGS, payload)
   }
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
     e.stopPropagation()
-    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId })
+    $socket.emit(SocketActions.SAVE_CONTACT, { userId, interlocutorId })
   }
 
   const unreadMessages = (room: ChatRoom) =>
@@ -45,11 +53,20 @@ const ChatRoomList = () => {
 
   const createMultipleChat = (e: any) => {
     e.stopPropagation()
-    dispatch(showModal({ title: 'Create New Chat Room', modalContentComponentName: 'CreateMultipleChatPopup' }))
+    dispatch(
+      showModal({
+        title: 'Create New Chat Room',
+        modalContentComponentName: ModalContentComponentName.createMultipleChatPopup
+      })
+    )
+  }
+
+  const resetChatRoomId = () => {
+    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: '' })
   }
 
   return (
-    <div className="chat-room-list" onClick={() => dispatch(selectChatRoom(''))}>
+    <div className="chat-room-list" onClick={resetChatRoomId}>
       <div className="chat-room-list__create-chat">
         <UIButton
           text="Create group"

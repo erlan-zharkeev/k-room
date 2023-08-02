@@ -2,9 +2,10 @@ import { List } from 'antd'
 import { useEffect, useState } from 'react'
 import { User, SocketActions, SocketActionsPayload } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
+
 import useDebounce from 'src/hooks/useDebounce'
 import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components/UI'
+import { $socket } from 'src/services/$socket'
 
 const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
@@ -14,7 +15,7 @@ const ContactSearch = () => {
   const { contacts } = useTypedSelector((state) => state.contacts)
 
   useEffect(() => {
-    socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<User>) => {
+    $socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<User>) => {
       const userFilteredSelf = contacts.filter((user: User) => user.id !== id)
       setUsers(userFilteredSelf)
       setIsLoading(false)
@@ -23,7 +24,7 @@ const ContactSearch = () => {
 
   const fetchUsers = async (value: string) => {
     const searchPayload: SocketActionsPayload['searchContact'] = { value }
-    socket.emit(SocketActions.SEARCH_CONTACT, searchPayload)
+    $socket.emit(SocketActions.SEARCH_CONTACT, searchPayload)
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
@@ -41,7 +42,7 @@ const ContactSearch = () => {
     if (!interlocutorId) return
     const interlocutorData = users.find((user) => user.id === interlocutorId)
     if (!interlocutorData) return
-    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
+    $socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
   }
 
   return (
@@ -50,12 +51,12 @@ const ContactSearch = () => {
         size="small"
         placeholder="Search user"
         suffix={<UIIcon name={isLoading ? 'loader' : 'search'} color={isLoading ? 'accent' : 'default'} />}
-        onChange={async (e) => await search(e.target.value)}
+        onChange={(e) => search(e.target.value)}
       />
       {users.length > 0 && (
         <div className="contact-search__global-search">
           <List
-            header={<div>Global search</div>}
+            header={<div className="contact-search__global-search-header">Global search</div>}
             itemLayout="horizontal"
             dataSource={users}
             renderItem={(user) => (
@@ -66,12 +67,7 @@ const ContactSearch = () => {
                   description={<span>{user.email}</span>}
                 />
                 {!contacts.find((element) => element.id === user.id) && (
-                  <UIButton
-                    iconName="plus"
-                    color="accent"
-                    onClick={async () => await addUser(user.id)}
-                    tooltip="Add User"
-                  />
+                  <UIButton iconName="plus" color="accent" onClick={() => addUser(user.id)} tooltip="Add User" />
                 )}
               </List.Item>
             )}

@@ -3,6 +3,7 @@ import { UserModel } from '../../models/user.model'
 import { io } from '../../server'
 import { SocketInstanceType } from '../../types/SocketInstanceType'
 import { emitContactsToUser, emitRoomsByUserId } from '../helpers/emitters'
+import emitCallsToUser from '../helpers/emitters/emitCallToUsers'
 import { getUserBySocketId } from '../helpers/getters/getUserBySocketId'
 import { setSocketId, setUserStatus, setLastSeenData } from '../helpers/setters'
 
@@ -12,6 +13,7 @@ export const commonSlice = (socket: SocketInstanceType) => {
     await setSocketId(userId, socket.id)
     await emitContactsToUser(userId)
     await emitRoomsByUserId(userId)
+    await emitCallsToUser(userId)
     await setUserStatus(userId, true)
   })
 

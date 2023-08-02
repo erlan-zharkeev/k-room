@@ -2,14 +2,18 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/userSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
-import { changeAsideTab, setCurrentInfoItem } from 'src/store/settingsSlice'
+
 import { MenuProps } from 'antd'
 import { Dropdown } from 'antd'
 import { useEffect, useState } from 'react'
 import { UIAvatar, UIButton } from '../UI'
+import { AsideBarButtonName, UserSettingKey } from 'common-types'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const TopBar = () => {
+  const { updateSetting } = useUpdateSettings()
+
   const { username, email, avatarPath } = useTypedSelector((state) => state.user.userData)
   const { infoItems } = useTypedSelector((state) => state.user.userData)
 
@@ -38,8 +42,8 @@ const TopBar = () => {
 
   const infoItemClickHandler: MenuProps['onClick'] = ({ key }) => {
     const infoId = key
-    dispatch(changeAsideTab('info'))
-    dispatch(setCurrentInfoItem(infoId))
+    updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.info })
+    updateSetting(UserSettingKey.currentInfoId, { infoId })
   }
 
   return (
@@ -47,7 +51,7 @@ const TopBar = () => {
       <div className="top-bar__content">
         <div className="top-bar__user-data">
           <div className="top-bar__avatar">
-            <UIAvatar online={socket.connected} src={avatarPath} />
+            <UIAvatar online={$socket.connected} src={avatarPath} />
           </div>
           <div className="top-bar__credential">
             <div className="paragraph-text top-bar__username">{username}</div>

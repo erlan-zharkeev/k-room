@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
-import { socket } from 'src/socket/socket'
+
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import { validateRules } from 'src/utils/validateRules'
@@ -36,8 +36,8 @@ const ChatRoomSettingsPopup = () => {
     }
     setIsLoading(true)
 
-    socket.emit(SocketActions.UPDATE_CHAT_ROOM, updatedValues)
-    socket.on(SocketActions.ROOM_DATA_UPDATED, () => {
+    $socket.emit(SocketActions.UPDATE_CHAT_ROOM, updatedValues)
+    $socket.on(SocketActions.ROOM_DATA_UPDATED, () => {
       setIsLoading(false)
       dispatch(closeModal())
     })
@@ -96,7 +96,7 @@ const ChatRoomSettingsPopup = () => {
               </Form.Item>
             </div>
             <Members />
-            <UIButton text="Update" border="border-default" htmltype={'submit'} disabled={!isValid} />
+            <UIButton text="Update" border="border-default" htmltype="submit" disabled={!isValid} />
           </Form>
         </div>
       ) : (

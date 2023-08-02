@@ -12,11 +12,72 @@
     @include wh-100;
   }
 
+  &__user-settings {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    width: 34px;
+    overflow: hidden;
+    .ui-button {
+      background-color: var(--main-bg);
+    }
+    border-top-left-radius: $radius-md;
+    border-bottom-left-radius: $radius-md;
+  }
+  &__user-setting {
+    &:hover {
+      .ui-button {
+        background-color: var(--accent);
+      }
+      .ui-icon {
+        color: var(--white);
+      }
+    }
+  }
+
   &__body {
     position: relative;
     display: flex;
     flex-direction: column;
     height: calc(100% - $header-title);
+  }
+
+  &__user-video {
+    video {
+      @include wh-100;
+
+      object-fit: contain;
+    }
+
+    .ant-avatar {
+      width: 50px;
+      height: 50px;
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+    height: 100px;
+    overflow: hidden;
   }
 
   &__center {
@@ -82,12 +143,12 @@
 
   .ui-icon--video-call-thin {
     svg {
-      transform: scale(1.4);
+      transform: scale(1.2);
     }
   }
   .ui-icon--video-drop {
     svg {
-      transform: scale(1.3);
+      transform: scale(1.1);
     }
   }
 }

@@ -22,7 +22,7 @@ const WaitEmailConfirmPage = () => {
 
   const [_, refresh] = useState(0)
 
-  const [counter, setCounter, startCounter] = useCounter(0)
+  const [counter, setCounter, startCounter, stopCounter] = useCounter(0)
 
   const counterHandler = () => {
     const nextRequestTimestamp = Number(query.get('nextRequestTime'))
@@ -34,6 +34,9 @@ const WaitEmailConfirmPage = () => {
     setEmail(String(query.get('email')))
     setRemainingAttempts(Number(query.get('attempts')))
     counterHandler()
+    return () => {
+      stopCounter()
+    }
   }, [_])
 
   const sendLink = async () => {

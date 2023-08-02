@@ -1,5 +1,5 @@
 import { AnyAction, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
-import { RouteNames, User, UserSettings } from 'common-types'
+import { InfoItem, InfoItemStatus, RouteNames, User, UserSettings } from 'common-types'
 import $router from 'src/services/$router'
 import { clearCookie } from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
@@ -33,19 +33,19 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setInfoItems(state, { payload }) {
+    setInfoItems(state, { payload }: { payload: Array<InfoItem> }) {
       state.userData.infoItems = payload
     },
-    markInfoItemAsRead(state, { payload }) {
+    markInfoItemAsRead(state, { payload }: { payload: { id: string } }) {
       const { id } = payload
       if (!state.userData.infoItems) return
       const index = state.userData.infoItems.findIndex((item) => item.id === id)
-      state.userData.infoItems[index].read = 'read'
+      state.userData.infoItems[index].read = InfoItemStatus.read
     },
-    changeIsAppLoading: (state, { payload }) => {
+    changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
     },
-    setUserData: (state, { payload }) => {
+    setUserData: (state, { payload }: { payload: User }) => {
       state.userData = {
         ...state.userData,
         ...payload

@@ -2,25 +2,19 @@
   position: absolute;
   display: flex;
   @include wh-100;
-
+  &__interlocutor-avatar {
+    @include absolute-center;
+    top: calc(50% - 20px);
+  }
   &__interlocutor-audio-status {
-    display: flex;
-    align-items: center;
-    .ui-icon {
-      margin-right: $gutter-sm;
-    }
-    span {
-      margin-right: 1.3rem;
-      font-size: 1rem;
-    }
-
     position: absolute;
-    top: -1px;
+    bottom: -1px;
     left: 0;
     display: flex;
+    justify-content: center;
     width: 100%;
-    padding: 0.7rem;
-    background-color: var(--secondary-text);
+    padding: 0.3rem;
+    background-color: var(--main-bg);
   }
 
   &__settings {
@@ -36,44 +30,6 @@
     &:hover {
       color: var(--accent);
     }
-  }
-
-  &__user-video {
-    video {
-      @include wh-100;
-
-      object-fit: contain;
-    }
-
-    .ant-avatar {
-      width: 50px;
-      height: 50px;
-    }
-
-    img {
-      object-fit: cover;
-    }
-
-    svg {
-      width: 30px;
-      height: 30px;
-    }
-
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    position: absolute;
-    right: 0;
-    bottom: -5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20%;
-    height: 100px;
-    overflow: hidden;
   }
 
   &__interlocutor-video {

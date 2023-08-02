@@ -14,7 +14,15 @@
   }
 
   &__item {
-    &--missed {
+    &--current {
+      background-color: var(--dark-gray-transparent);
+    }
+    &--incoming,
+    &--outgoing {
+      background-color: var(--success-bg);
+    }
+    &--missed,
+    &--not-answered {
       background-color: var(--error-bg);
     }
   }
@@ -23,7 +31,7 @@
     display: flex;
   }
 
-  &__finished-at {
+  &__called-at {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -43,13 +51,25 @@
   &__info {
     display: flex;
     align-items: center;
-
     p {
       margin-left: $gutter-sm;
     }
-
-    &--missed {
+    &--current {
+      color: var(--secondary-text);
+    }
+    &--incoming,
+    &--outgoing {
+      color: var(--success);
+      .ui-icon--phone-call {
+        transform: rotate(90deg);
+      }
+    }
+    &--missed,
+    &--not-answered {
       color: var(--error);
+      .ui-icon--phone-call {
+        transform: rotate(135deg);
+      }
     }
   }
 }

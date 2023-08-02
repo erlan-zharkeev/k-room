@@ -6,14 +6,15 @@ import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'
 import { validateRules } from 'src/utils/validateRules'
 import MultipleUserSelect from './Components/MultipleUserSelect/MultipleUserSelect'
-import { SocketActions, SocketActionsPayload, UserShort } from 'common-types'
-import { socket } from 'src/socket/socket'
+import { AsideBarButtonName, SocketActions, SocketActionsPayload, UserSettingKey, UserShort } from 'common-types'
+
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
-import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
 
 const CreateMultipleChatPopup = () => {
+  const { updateSetting } = useUpdateSettings()
+
   const [isLoading, setIsLoading] = useState(false)
   const { id } = useTypedSelector((state) => state.user.userData)
 
@@ -36,12 +37,13 @@ const CreateMultipleChatPopup = () => {
       avatarFile,
       multiple: true
     }
-    socket.emit(SocketActions.CREATE_ROOM, payload)
+    $socket.emit(SocketActions.CREATE_ROOM, payload)
 
-    socket.on(SocketActions.ROOM_CREATED, (data) => {
-      dispatch(changeAsideTab(AsideBarButtonName.chatList))
+    $socket.on(SocketActions.ROOM_CREATED, (data) => {
+      updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
+
       setTimeout(() => {
-        dispatch(selectChatRoom(data.roomId))
+        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: data.roomId })
       })
       setIsLoading(false)
       dispatch(closeModal())
@@ -75,7 +77,7 @@ const CreateMultipleChatPopup = () => {
         </Form.Item>
         <MultipleUserSelect setMembers={setMembers} />
         <Form.Item className="create-multiple-chat-popup__controls">
-          <UIButton text="Create" border="border-default" htmltype={'submit'} disabled={!isValid} loading={isLoading} />
+          <UIButton text="Create" border="border-default" htmltype="submit" disabled={!isValid} loading={isLoading} />
         </Form.Item>
       </Form>
     </div>

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
 // BASIC
 var Status;
 (function (Status) {
@@ -40,6 +40,14 @@ var UserSettingKey;
     UserSettingKey["asideTab"] = "asideTab";
     UserSettingKey["currentInfoId"] = "currentInfoId";
 })(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
+var AsideBarButtonName;
+(function (AsideBarButtonName) {
+    AsideBarButtonName["contacts"] = "contacts";
+    AsideBarButtonName["chatList"] = "chatList";
+    AsideBarButtonName["calls"] = "calls";
+    AsideBarButtonName["settings"] = "settings";
+    AsideBarButtonName["info"] = "info";
+})(AsideBarButtonName = exports.AsideBarButtonName || (exports.AsideBarButtonName = {}));
 var CallStatus;
 (function (CallStatus) {
     CallStatus["calling"] = "calling";
@@ -51,18 +59,82 @@ var CallType;
     CallType["incoming"] = "incoming";
     CallType["outgoing"] = "outgoing";
     CallType["missed"] = "missed";
+    CallType["notAnswered"] = "not-answered";
+    CallType["current"] = "current";
 })(CallType = exports.CallType || (exports.CallType = {}));
 var UserMediaType;
 (function (UserMediaType) {
     UserMediaType["audio"] = "audio";
     UserMediaType["video"] = "video";
-    UserMediaType["both"] = "both";
 })(UserMediaType = exports.UserMediaType || (exports.UserMediaType = {}));
 var InfoItemStatus;
 (function (InfoItemStatus) {
     InfoItemStatus["read"] = "read";
     InfoItemStatus["unread"] = "unread";
 })(InfoItemStatus = exports.InfoItemStatus || (exports.InfoItemStatus = {}));
+var NotificationType;
+(function (NotificationType) {
+    NotificationType["success"] = "success";
+    NotificationType["error"] = "error";
+    NotificationType["info"] = "info";
+    NotificationType["warn"] = "warning";
+})(NotificationType = exports.NotificationType || (exports.NotificationType = {}));
+var NotificationMessage;
+(function (NotificationMessage) {
+    NotificationMessage["default"] = "";
+    NotificationMessage["cantAccessDevice"] = "Cant get access to video device";
+    NotificationMessage["unknownError"] = "An unknown error has occurred";
+    NotificationMessage["callCompleted"] = "Call completed";
+    NotificationMessage["failedGetStream"] = "Failed to get self stream";
+    NotificationMessage["cantSetCallerSignal"] = "Cannot set caller signal";
+    NotificationMessage["failedToConnectToDevice"] = "Failed to connect to device, check for device is plugged in";
+    NotificationMessage["socketConnected"] = "Socket connected";
+    NotificationMessage["socketDisconnected"] = "Socket disconnected";
+    // Don't forget image quantity is dynamic
+    NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
+    NotificationMessage["success"] = "success";
+    NotificationMessage["tokensPairUpdated"] = "Tokens pair updated";
+    NotificationMessage["passwordReset"] = "Password changed successfully";
+    NotificationMessage["loginSuccess"] = "Login successfully";
+    NotificationMessage["loginAndRegister"] = "Login and register successfully";
+    NotificationMessage["userDataUpdated"] = "User data updated";
+    NotificationMessage["userAddedToContacts"] = "User added to contacts";
+    NotificationMessage["userRemovedFromContacts"] = "User removed from contacts";
+    NotificationMessage["emailConfirmed"] = "Email confirmed";
+    NotificationMessage["checkEmailForCode"] = "Check your email, we have sent you a code";
+    NotificationMessage["checkEmailForConfirmationLink"] = "Check your email for confirmation link";
+    NotificationMessage["userCreated"] = "User successfully created, checkout your email address for email confirmation";
+    NotificationMessage["emailConfirmationLinkSended"] = "Confirmation link sent to email";
+    NotificationMessage["failedGetUserData"] = "Failed to get user data";
+    NotificationMessage["failedResetPassword"] = "Failed to change password";
+    NotificationMessage["invalidConfirmCode"] = "Invalid confirmation code";
+    NotificationMessage["failedCodeSend"] = "Code send failed";
+    NotificationMessage["commonServerError"] = "Server error, the operation could not be performed. Try later";
+    NotificationMessage["failedRegistration"] = "Registration failed, try register later";
+    NotificationMessage["failedLogin"] = "Login failed, try register later";
+    NotificationMessage["nonAuthorized"] = "User not authorized";
+    NotificationMessage["haventAccessRights"] = "User have not access rights";
+    NotificationMessage["failedUserDataUpdate"] = "Failed to update user data";
+    NotificationMessage["userWithCurrentNameAlreadyExist"] = "The user with the current username is already registered";
+    NotificationMessage["userWithCurrentEmailAlreadyExist"] = "The user with the current email address is already registered";
+    NotificationMessage["failedPassHash"] = "Password hashing failed";
+    NotificationMessage["failedSendConfirmEmail"] = "Failed to send confirmation email";
+    NotificationMessage["exhaustedConfirmationAttempts"] = "Attempts to send confirmation the link ended =(";
+    NotificationMessage["userNotFound"] = "User not found";
+    NotificationMessage["wrongPass"] = "Invalid password";
+    NotificationMessage["failedEmailConfirm"] = "Email confirm failed";
+    NotificationMessage["emailNotConfirm"] = "Please, confirm email";
+    NotificationMessage["usersFind"] = "Error while finding user(s)";
+    NotificationMessage["failedUpdateSettings"] = "Failed to save user settings";
+    NotificationMessage["emailLinkedToAnotherMethod"] = "This email is already linked to another login method";
+    NotificationMessage["failedFindEmail"] = "Couldn`t find the current email address";
+    NotificationMessage["nextTimeRequestNotPossible"] = "The code was sent earlier";
+    NotificationMessage["noFilesExist"] = "No files exist";
+    NotificationMessage["notImage"] = "File is not an image";
+    NotificationMessage["failedSendConfirmationLink"] = "Failed to send confirmation link, please try later";
+    NotificationMessage["coudntFindEmail"] = "Couldn`t find the current email address";
+    NotificationMessage["imageConverterError"] = "Server could not process the image, please choose another image file";
+})(NotificationMessage = exports.NotificationMessage || (exports.NotificationMessage = {}));
 // ENDPOINTS (!for every endpoints use upper snake case)
 var AuthEndPoints;
 (function (AuthEndPoints) {
@@ -102,6 +174,7 @@ var RouteNames;
     RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
     RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
     RouteNames["NOTIFICATION"] = "/notification";
+    RouteNames["PRIVACY_POLICY"] = "/privacy-policy/";
     // Don't forget to change path below in nginx manually
     RouteNames["SOCKET_PATH"] = "/app-socket/";
     RouteNames["API"] = "/api/";
@@ -144,4 +217,9 @@ var SocketActions;
     SocketActions["DELETE_MESSAGE"] = "delete-message";
     SocketActions["MESSAGE_DELETED"] = "message-deleted";
     SocketActions["ERROR_MESSAGE"] = "error-message";
+    SocketActions["CALLS_UPDATED"] = "calls-updated";
+    SocketActions["CALL_UPDATED"] = "call-updated";
+    SocketActions["MARK_CALL_AS_VIDEO"] = "mark-call-as-video";
+    SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
+    SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));

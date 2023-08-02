@@ -1,5 +1,5 @@
 #!/bin/bash
-
+pkill node
 yarn
 cd ./scripts/
 source types-watch.sh &

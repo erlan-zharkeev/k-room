@@ -1,23 +1,22 @@
 import { List } from 'antd'
-import { User, SocketActions, SocketActionsPayload } from 'common-types'
+import { User, SocketActions, SocketActionsPayload, AsideBarButtonName, UserSettingKey } from 'common-types'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
-import { AppDispatch } from 'src/store'
+
 import ContactSearch from './Components/ContactSearch/ContactSearch'
-import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { ServiceContext } from 'src/main'
 import { UIAvatar, UIButton } from 'src/components/UI'
-import { AsideBarButtonName } from 'src/components/AsideBar/@types/ButtonsListElement'
+import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const ContactList = () => {
-  const { $call } = useContext(ServiceContext)
+  const { updateSetting } = useUpdateSettings()
+  const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)
-
+  const { settings } = useTypedSelector((state) => state.calls)
   const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
     room: Record<string, boolean>
     stream: Record<string, boolean>
@@ -30,10 +29,9 @@ const ContactList = () => {
     })
   }, [contacts])
 
-  const dispatch = useDispatch<AppDispatch>()
-
   const deleteUser = (userData: User) => {
-    if (userData.id && id) socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
+    if (userData.id && id)
+      $socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
   }
 
   const createChat = (value: User) => {
@@ -42,8 +40,8 @@ const ContactList = () => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
       if (user?.id) {
-        dispatch(changeAsideTab(AsideBarButtonName.chatList))
-        dispatch(selectChatRoom(room.id))
+        updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
+        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: room.id })
       }
       return Boolean(user)
     })
@@ -61,14 +59,13 @@ const ContactList = () => {
       authorId: id,
       multiple: false
     }
-    socket.emit(SocketActions.CREATE_ROOM, socketPayload)
+    $socket.emit(SocketActions.CREATE_ROOM, socketPayload)
 
-    socket.on(SocketActions.ROOM_CREATED, (data) => {
+    $socket.on(SocketActions.ROOM_CREATED, (data) => {
       loaderStateChangeHandler(false, 'room', value.id)
-      dispatch(changeAsideTab(AsideBarButtonName.chatList))
-
+      updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
       setTimeout(() => {
-        dispatch(selectChatRoom(data.roomId))
+        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: data.roomId })
       })
     })
   }
@@ -86,10 +83,8 @@ const ContactList = () => {
   const initCall = async (interlocutorData: User) => {
     if (loaders.stream[interlocutorData.id]) return
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
-    const gotStream = await $call.setStream()
+    await call.current.initCall(interlocutorData, id, avatarPath ?? '', username, settings)
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
-    if (!avatarPath) return
-    if (gotStream) $call.initCall(interlocutorData, id, avatarPath, username)
   }
 
   return (

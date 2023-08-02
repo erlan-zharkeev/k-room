@@ -5,7 +5,7 @@ const infoMap: Record<string, InfoItem> = {
   '1': {
     id: '1',
     label: 'Welcome to K-Room',
-    read: InfoItemStatus.read,
+    read: InfoItemStatus.unread,
     content: '',
     contentComponent: welcome
   }

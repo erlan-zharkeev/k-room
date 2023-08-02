@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { UIFileLoaderProps } from './@types'
-import { ImageObject } from 'common-types'
+import { ImageObject, NotificationMessage, NotificationType } from 'common-types'
 import { imageToBase64 } from 'src/utils/imageToBase64'
 import { showNotification } from 'src/store/systemSlice'
 import constants from 'src/constants'
@@ -23,8 +23,8 @@ const UIImageLoader = ({
     if (images.length > maxQuantityBindImages) {
       dispatch(
         showNotification({
-          message: `The maximum number of attached images should not exceed ${maxQuantityBindImages}`,
-          messageType: 'warning'
+          message: NotificationMessage.maxAttachedFilesExceed,
+          messageType: NotificationType.warn
         })
       )
     }

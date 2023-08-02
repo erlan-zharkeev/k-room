@@ -1,11 +1,11 @@
-import { Avatar } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UserOutlined } from '@ant-design/icons'
-import { UIIcon } from 'src/components/UI'
+import { UIAvatar } from 'src/components/UI'
+import { useContext } from 'react'
+import { RefsContext } from 'src/providers/RefsProvider'
 
 const CallModalVideo = () => {
-  const { settings, currentCall } = useTypedSelector((state) => state.calls)
-  const { avatarPath } = useTypedSelector((state) => state.user.userData)
+  const { currentCall } = useTypedSelector((state) => state.calls)
+  const { interlocutorVideoDom } = useContext(RefsContext)
 
   return (
     <div
@@ -17,23 +17,23 @@ const CallModalVideo = () => {
       <div className="call-modal-video__interlocutor-video">
         {!currentCall?.interlocutorSettings?.audio && (
           <div className="call-modal-video__interlocutor-audio-status">
-            <UIIcon name="mic-muted" color="white" />
             <div className="paragraph-text paragraph-text--sm">The interlocutor turned off the sound</div>
           </div>
         )}
-
-        <video autoPlay id="interlocutor-video" className={!currentCall?.interlocutorSettings?.video ? 'd-none' : ''} />
-        <Avatar
-          src={currentCall.interlocutorAvatarPath}
-          icon={<UserOutlined />}
-          className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
+        <video
+          loop
+          autoPlay
+          playsInline
+          id="interlocutor-video"
+          ref={interlocutorVideoDom}
+          className={!currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
         />
+        <div className="call-modal-video__interlocutor-avatar">
+          <div className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}>
+            <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="xl" />
+          </div>
+        </div>
       </div>
-      <div className="call-modal-video__user-video">
-        <video autoPlay muted id="self-video" className={!settings.video ? 'd-none' : ''} />
-        <Avatar size="small" src={avatarPath} icon={<UserOutlined />} className={settings.video ? 'd-none' : ''} />
-      </div>
-      <div className="call-modal-video__settings"></div>
     </div>
   )
 }
