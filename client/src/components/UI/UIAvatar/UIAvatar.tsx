@@ -32,7 +32,7 @@ const UIAvatar = ({
 
   const BadgeWrapper = () =>
     ribbon ? (
-      <Badge.Ribbon text="G" placement={ribbonPlacement === 'up' ? 'start' : 'end'}>
+      <Badge.Ribbon text="G" placement={ribbonPlacement === BadgePlacement.up ? 'start' : 'end'}>
         <AvatarBody />
       </Badge.Ribbon>
     ) : (

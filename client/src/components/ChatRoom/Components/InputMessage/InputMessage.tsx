@@ -2,7 +2,7 @@ import { Form } from 'antd'
 import { useState } from 'react'
 import { SocketActions, SocketActionsPayload } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
+
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
 import { InputMessageProps } from './@types/InputMessageProps'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
@@ -26,7 +26,7 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
       usersTo: selectedChatRoom.users,
       status
     }
-    socket.emit(SocketActions.USER_TYPING, payload)
+    $socket.emit(SocketActions.USER_TYPING, payload)
   }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)

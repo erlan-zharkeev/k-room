@@ -3,180 +3,69 @@ import { useDispatch } from 'react-redux'
 import {
   initModalToCall,
   setCurrentCallAccepted,
-  updateInterlocutorSettings,
-  closeCallModal
+  closeCallModal,
+  markCurrentCallAsVideo,
+  updateInterlocutorSettings
 } from 'src/store/callsSlice'
 import { AppDispatch } from 'src/store'
 import Peer, { SignalData } from 'simple-peer'
 import { Howl } from 'howler'
 import $clg from 'src/services/$clg'
 import $sound, { Sounds } from 'src/services/$sound'
-import { socket } from 'src/socket/socket'
 import {
   SocketActions,
   SocketActionsPayload,
   User,
-  UserMediaType,
   NotificationType,
-  NotificationMessage
+  NotificationMessage,
+  BasicStreamSettings
 } from 'common-types'
-import useTypedSelector from './useTypedSelector'
 import { showNotification } from 'src/store/systemSlice'
 import { RefsContext } from 'src/providers/RefsProvider'
+import { $socket } from 'src/services/$socket'
+import useTypedSelector from './useTypedSelector'
 
-interface ConnectionOptions {
-  initiator: boolean
-  trickle: boolean
-  stream: MediaStream
+const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
+  const payload: SocketActionsPayload['callUser'] = {
+    userToCall,
+    signal,
+    from,
+    avatarPath,
+    callerName
+  }
+  $socket.emit(SocketActions.CALL_USER, payload)
+}
+
+const emitCallAnswer = (signal: SignalData, to: string, selfSocketId: string, callId: string) => {
+  const payload: SocketActionsPayload['answerCall'] = {
+    signal,
+    to,
+    selfSocketId,
+    callId
+  }
+  $socket.emit(SocketActions.ANSWER_CALL, payload)
+}
+
+const emitUpdateSignal = (signal: SignalData) => {
+  const payload: SocketActionsPayload['updateSignal'] = { signal }
+  $socket.emit(SocketActions.UPDATE_CALL_SIGNAL, payload)
 }
 
 const useCall = () => {
-  const { interlocutorVideoDom, selfVideoDom } = useContext(RefsContext)
-  const dispatch = useDispatch<AppDispatch>()
-
-  const { audio, video } = useTypedSelector((state) => state.calls.settings)
-  const selfStream = useRef<MediaStream | null>(null)
-
-  const interlocutorId = useRef<string>('')
-  const interlocutorStream = useRef<MediaStream | null>(null)
-
   const soundConnection = useRef<Howl>($sound(Sounds.connection, true))
   const soundCalling = useRef<Howl>($sound(Sounds.ring, true))
-
-  const connection = useRef<Peer.Instance>()
+  const { settings } = useTypedSelector((state) => state.calls)
+  const dispatch = useDispatch<AppDispatch>()
+  const { interlocutorVideoDom, selfVideoDom } = useContext(RefsContext)
+  const selfStream = useRef<MediaStream | null>(null)
+  const interlocutorStream = useRef<MediaStream | null>(null)
+  const connection = useRef<Peer.Instance | null>(null)
+  const interlocutorId = useRef<string>('')
   const callerSignal = useRef<SignalData>()
 
-  const listenConnectionError = () => {
-    if (!connection.current) return
-    connection.current.on('error', (e: any) => {
-      dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.unknownError }))
-      $clg('error', 'An unknown error has occurred' + String(e))
-    })
-  }
-
-  const initConnection = (options: ConnectionOptions) => {
-    connection.current = new Peer(options)
-  }
-
-  const initCall = async (interlocutorData: User, selfId: string, selfAvatarPath: string, callerName: string) => {
-    interlocutorId.current = interlocutorData.id
-    dispatch(initModalToCall(interlocutorData))
-    soundConnection.current.play()
-    selfStream.current = await navigator.mediaDevices.getUserMedia({ audio, video })
-    initConnection({
-      initiator: true,
-      trickle: false,
-      stream: selfStream.current
-    })
-    listenConnectionError()
-    if (!connection.current) return
-
-    connection.current.on('signal', (data: SignalData) => {
-      const payload: SocketActionsPayload['callUser'] = {
-        userToCall: interlocutorData.id,
-        signal: data,
-        from: selfId,
-        avatarPath: selfAvatarPath,
-        callerName,
-        settings: {
-          audio,
-          video
-        }
-      }
-      socket.emit(SocketActions.CALL_USER, payload)
-    })
-
-    connection.current.on('stream', (interlocutorMediaStream: MediaStream) => {
-      interlocutorStream.current = interlocutorMediaStream
-      interlocutorVideoDom.current.srcObject = interlocutorStream.current
-    })
-
-    connection.current.on('close', () => {
-      dispatch(
-        showNotification({
-          message: NotificationMessage.callCompleted,
-          messageType: NotificationType.info
-        })
-      )
-      socket.off(SocketActions.CALL_ACCEPTED)
-    })
-
-    socket.on(SocketActions.CALL_ACCEPTED, (data: SocketActionsPayload['callAccepted']) => {
-      soundConnection.current.stop()
-      dispatch(setCurrentCallAccepted())
-      dispatch(updateInterlocutorSettings(data.settings))
-      if (!connection.current) return
-      connection.current.signal(data.signal)
-    })
-  }
-
-  // ---------
-
-  const answerCall = (callId: string) => {
-    soundCalling.current.stop()
-    dispatch(setCurrentCallAccepted())
-    if (!selfStream.current) {
-      dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.failedGetStream }))
-      return
-    }
-    initConnection({
-      initiator: false,
-      trickle: false,
-      stream: selfStream.current
-    })
-
-    listenConnectionError()
-    if (!connection.current) return
-
-    connection.current.on('signal', (data) => {
-      const payload: SocketActionsPayload['answerCall'] = {
-        signal: data,
-        to: interlocutorId.current,
-        settings: { audio, video },
-        selfSocketId: socket.id,
-        callId
-      }
-      socket.emit(SocketActions.ANSWER_CALL, payload)
-    })
-    connection.current.on('stream', (interlocutorMediaStream: MediaStream) => {
-      interlocutorStream.current = interlocutorMediaStream
-      interlocutorVideoDom.current.srcObject = interlocutorStream.current
-    })
-    connection.current.on('close', () => {
-      dispatch(
-        showNotification({
-          message: NotificationMessage.callCompleted,
-          messageType: NotificationType.info
-        })
-      )
-      socket.off(SocketActions.ANSWER_CALL)
-    })
-    if (!callerSignal.current) {
-      dispatch(
-        showNotification({
-          message: NotificationMessage.cantSetCallerSignal,
-          messageType: NotificationType.error
-        })
-      )
-      return
-    }
-    connection.current.signal(callerSignal.current)
-  }
-
-  // -----
-
-  const calling = (callerId: string, callerSignalData: SignalData) => {
-    soundCalling.current.play()
-    interlocutorId.current = callerId
-    callerSignal.current = callerSignalData
-  }
-
-  // -----
-
-  const setStream = async () => {
+  const getSelfStream = async (constraints: BasicStreamSettings) => {
     try {
-      selfStream.current = await navigator.mediaDevices.getUserMedia({ audio, video })
-      selfVideoDom.current.srcObject = selfStream.current
+      return await navigator.mediaDevices.getUserMedia(constraints)
     } catch (error) {
       $clg('error', 'Failed to get device cause ' + String(error))
       dispatch(
@@ -186,54 +75,172 @@ const useCall = () => {
         })
       )
     }
-    return Boolean(selfStream.current)
   }
-
-  // -----
-
-  const toggleSetting = (type: UserMediaType) => {
-    const isVideo = type === UserMediaType.video
-    const tracks = isVideo ? 'getVideoTracks' : 'getAudioTracks'
-    const value = type === UserMediaType.audio ? audio : video
-    if (!selfStream.current) {
-      $clg('error', 'Failed to get self stream')
-      return
+  const applyStreamToHtmlVideoTag = (isSelf: boolean = true) => {
+    const stream = isSelf ? selfStream.current : interlocutorStream.current
+    const videoDomElement = isSelf ? selfVideoDom.current : interlocutorVideoDom.current
+    try {
+      videoDomElement.srcObject = stream
+    } catch (e) {
+      $clg('error', 'Failed to set stream tracks to HTMLElement' + String(e))
     }
-    if (value) setStream()
-    else selfStream.current[tracks]().forEach((track) => track.stop())
-    const payload: SocketActionsPayload['changeCallSettings'] = { audio, video }
-    socket.emit(SocketActions.CHANGE_CALL_SETTINGS, payload)
   }
 
-  // ------
+  const initConnection = (initiator: boolean, stream: MediaStream) => {
+    connection.current = new Peer({ initiator, trickle: false, stream })
+    connection.current.on('stream', (interlocutorMediaStream: MediaStream) => {
+      interlocutorStream.current = interlocutorMediaStream
+      interlocutorVideoDom.current.srcObject = interlocutorMediaStream
+    })
+    connection.current.on('error', (e) => {
+      dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.unknownError }))
+      $clg('error', 'An unknown error has occurred' + String(e))
+    })
+    connection.current.on('close', () => closeConnection())
+    connection.current.on('data', (data: any) => {
+      const responseData = JSON.parse(data)
+      if (responseData.settings) dispatch(updateInterlocutorSettings(responseData.settings))
+    })
+  }
+
+  const closeConnection = () => {
+    dispatch(closeCallModal())
+    soundConnection.current.stop()
+    soundCalling.current.stop()
+    dispatch(
+      showNotification({
+        message: NotificationMessage.callCompleted,
+        messageType: NotificationType.info
+      })
+    )
+    $socket.off(SocketActions.CALL_ACCEPTED)
+    selfStream.current?.getTracks().forEach((track) => track.stop())
+  }
+
+  const initCall = async (interlocutorData: User, selfId: string, selfAvatarPath: string, callerName: string) => {
+    interlocutorId.current = interlocutorData.id
+    const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
+    if (!stream) return
+    selfStream.current = stream
+    initConnection(true, selfStream.current)
+    dispatch(initModalToCall(interlocutorData))
+    soundConnection.current.play()
+    connection.current?.on('signal', (data) => {
+      if (connection.current?.connected) return emitUpdateSignal(data)
+      emitCall(interlocutorData.id, data, selfId, selfAvatarPath, callerName)
+    })
+    $socket.on(SocketActions.CALL_ACCEPTED, (data: SocketActionsPayload['callAccepted']) => {
+      soundConnection.current.stop()
+      dispatch(setCurrentCallAccepted())
+      connection.current?.signal(data.signal)
+    })
+  }
+
+  const answerCall = async (callId: string) => {
+    soundCalling.current.stop()
+    dispatch(setCurrentCallAccepted())
+    const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
+    if (!stream) return
+    selfStream.current = stream
+    initConnection(false, selfStream.current)
+    connection.current?.on('signal', (data: SignalData) => {
+      emitCallAnswer(data, interlocutorId.current, $socket.id, callId)
+    })
+    if (!callerSignal.current) return
+    connection.current?.signal(callerSignal.current)
+  }
+
+  const calling = (callerId: string, callerSignalData: SignalData) => {
+    soundCalling.current.play()
+    interlocutorId.current = callerId
+    callerSignal.current = callerSignalData
+  }
+
+  const updateCallerSignal = (signal: SignalData) => {
+    callerSignal.current = signal
+    connection.current?.signal(callerSignal.current)
+  }
+
+  const enableAudio = async ({ video }: { video: boolean }) => {
+    const newStream = await getSelfStream({ audio: true, video })
+    if (!newStream) return
+    selfStream.current?.getAudioTracks().forEach((oldAudioTrack) => {
+      const newAudioTrack = newStream.getAudioTracks()[0]
+      if (!selfStream.current) return
+      connection.current?.replaceTrack(oldAudioTrack, newAudioTrack, selfStream.current)
+      selfStream.current.removeTrack(oldAudioTrack)
+      selfStream.current.addTrack(newAudioTrack)
+    })
+    const data = { settings: { audio: true } }
+    connection.current?.send(JSON.stringify(data))
+  }
+
+  const disableAudio = () => {
+    if (!selfStream.current) return
+    selfStream.current.getAudioTracks().forEach((audioTrack) => {
+      audioTrack.stop()
+    })
+    const data = { settings: { audio: false } }
+    connection.current?.send(JSON.stringify(data))
+  }
+
+  const enableVideo = async ({ callId, audio }: { callId: string; audio: boolean }) => {
+    const newStream = await getSelfStream({ audio, video: true })
+    if (!newStream) return
+    const newVideoTrack = newStream.getVideoTracks()[0]
+    const haveVideoStream = Boolean(selfStream.current?.getVideoTracks().length)
+    const oldVideoTrack = selfStream.current?.getVideoTracks()[0]
+    if (!selfStream.current) return
+    selfStream.current.addTrack(newVideoTrack)
+    if (haveVideoStream && oldVideoTrack) {
+      connection.current?.replaceTrack(oldVideoTrack, newVideoTrack, selfStream.current)
+      selfStream.current.removeTrack(oldVideoTrack)
+    } else {
+      connection.current?.addTrack(newVideoTrack, selfStream.current)
+      applyStreamToHtmlVideoTag()
+      dispatch(markCurrentCallAsVideo())
+      const payload: SocketActionsPayload['markCallAsVideo'] = { callId }
+      $socket.emit(SocketActions.MARK_CALL_AS_VIDEO, payload)
+    }
+    const data = { settings: { video: true } }
+    connection.current?.send(JSON.stringify(data))
+  }
+
+  const disableVideo = () => {
+    if (!selfStream.current) return
+    selfStream.current.getVideoTracks().forEach((videoTrack) => {
+      videoTrack.stop()
+    })
+    const data = { settings: { video: false } }
+    connection.current?.send(JSON.stringify(data))
+  }
 
   const leaveCall = (callId: string) => {
-    soundCalling.current.stop()
+    try {
+      connection.current?.destroy()
+    } catch (e: any) {
+      $clg('error', e)
+    }
+    closeConnection()
+    if (!callId) return
     const payload: SocketActionsPayload['callEnded'] = {
       callerId: interlocutorId.current,
       callId
     }
-    socket.emit(SocketActions.CALL_ENDED, payload)
-    dispatch(closeCallModal())
-    if (selfStream.current) {
-      const tracks = selfStream.current.getTracks()
-      tracks.forEach((track) => {
-        track.stop()
-      })
-    }
-    if (connection.current) {
-      connection.current.destroy()
-    }
+    $socket.emit(SocketActions.CALL_ENDED, payload)
   }
 
   return {
     calling,
     leaveCall,
     answerCall,
-    toggleSetting,
     initCall,
-    setStream,
-    interlocutorId
+    enableAudio,
+    enableVideo,
+    updateCallerSignal,
+    disableVideo,
+    disableAudio,
+    applyStreamToHtmlVideoTag
   }
 }
 

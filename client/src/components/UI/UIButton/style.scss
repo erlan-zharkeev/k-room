@@ -26,6 +26,10 @@
     @include btn-style(var(--secondary-text));
   }
 
+  &--error {
+    @include btn-style(var(--error));
+  }
+
   &--small {
     .ant-btn {
       width: 20px;

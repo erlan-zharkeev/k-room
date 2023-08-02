@@ -1,15 +1,16 @@
-import { SocketActions, SocketActionsPayload } from 'common-types'
+import { SocketActions, SocketActionsPayload, UserSettingKey } from 'common-types'
 import { useState, useEffect } from 'react'
-import { socket } from 'src/socket/socket'
+
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import { selectChatRoom } from 'src/store/settingsSlice'
 import constants from 'src/constants'
 import { showModal } from 'src/store/systemSlice'
 import { UIButton, UIAvatar } from 'src/components/UI'
 import { BadgePlacement } from 'src/components/UI/UIAvatar/@types/UIAvatarProps'
 import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -18,6 +19,7 @@ const RoomHeader = () => {
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
   const [typingAuthors, setTypingAuthors] = useState([] as Array<{ authorId: string; authorName: string }>)
+  const { updateSetting } = useUpdateSettings()
 
   useEffect(() => {
     setTimeout(() => {
@@ -29,7 +31,7 @@ const RoomHeader = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  socket.on(
+  $socket.on(
     SocketActions.GET_USER_TYPING_STATUS,
     ({ authorData, status }: SocketActionsPayload['getUserTypingStatus']) => {
       if (!chatRoomData) return
@@ -63,10 +65,14 @@ const RoomHeader = () => {
     return ` Typing ${Array.from('.'.repeat(typingDotsQuantity)).join(' ')}`
   }
 
+  const resetChatRoom = () => {
+    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: '' })
+  }
+
   return (
     <div className="room-header" style={{ height: constants.dimensions.roomHeader }}>
       <div className="room-header__back-button">
-        <UIButton iconName="arrow-left" onClick={() => dispatch(selectChatRoom(''))} />
+        <UIButton iconName="arrow-left" onClick={resetChatRoom} />
       </div>
       <div className="room-header__info">
         <UIAvatar

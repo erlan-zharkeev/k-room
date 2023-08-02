@@ -1,6 +1,6 @@
 import { Message, MessageStatus, RepliedMessage, SocketActions, SocketActionsPayload } from 'common-types'
 import { ImageObject } from 'common-types'
-import { socket } from 'src/socket/socket'
+import { $socket } from 'src/services/$socket'
 import { AppDispatch } from 'src/store'
 import { pushTemporaryMessage, resetRepliedMessage } from 'src/store/roomsSlice'
 import { v4 as uuidv4 } from 'uuid'
@@ -40,7 +40,7 @@ export const sendMessage = ({
     roomId,
     message
   }
-  socket.emit(SocketActions.SEND_MESSAGE, payload)
+  $socket.emit(SocketActions.SEND_MESSAGE, payload)
   dispatch(resetRepliedMessage())
   dispatch(pushTemporaryMessage({ roomId, message }))
 }

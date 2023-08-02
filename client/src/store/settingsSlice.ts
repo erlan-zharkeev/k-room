@@ -42,7 +42,7 @@ const settingsSlice = createSlice({
       state.ableToShowNotification = payload
     },
     changeTheme(state, { payload }: { payload: Theme }) {
-      state.theme = payload ? Theme.dark : Theme.light
+      state.theme = payload
       setTheme(state.theme)
     },
     setSoundValue(state, { payload }: { payload: boolean }) {

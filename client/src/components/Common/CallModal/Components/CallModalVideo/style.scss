@@ -2,7 +2,10 @@
   position: absolute;
   display: flex;
   @include wh-100;
-
+  &__interlocutor-avatar {
+    @include absolute-center;
+    top: calc(50% - 20px);
+  }
   &__interlocutor-audio-status {
     display: flex;
     align-items: center;

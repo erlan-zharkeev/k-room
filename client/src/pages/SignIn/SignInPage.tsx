@@ -101,7 +101,7 @@ const SignInPage = () => {
                     onClick={() => providerSignIn(FirebaseProviderType.google, setGoogleBtnLoading)}
                     loading={googleBtnLoading}
                   />
-                  <UIButton
+                  {/* <UIButton
                     iconName="facebook"
                     text="Sign in with Facebook"
                     onClick={() => providerSignIn(FirebaseProviderType.facebook, setFbBtnLoading)}
@@ -109,7 +109,7 @@ const SignInPage = () => {
                     fill={true}
                     hover="hoverless"
                     loading={fbBtnLoading}
-                  />
+                  /> */}
                   <div className="sign-in__forgot-password">
                     <a className="paragraph-text link" onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}>
                       Forgot password?

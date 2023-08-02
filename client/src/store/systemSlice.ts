@@ -4,12 +4,13 @@ import {
   ContextClickedObject,
   ContextMenuType,
   ModalData,
+  NotificationStore,
   SystemStore,
   ViewPort,
   ViewPortWidthType
 } from './@types/SystemState'
 import constants from 'src/constants'
-import { NotificationMessage, NotificationType, SocketActionsPayload } from 'common-types'
+import { NotificationMessage, NotificationType } from 'common-types'
 import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 const html = document.querySelector('html')
@@ -69,7 +70,7 @@ const systemSlice = createSlice({
     closeModal(state) {
       state.showModal = false
     },
-    showNotification(state, { payload }: { payload: SocketActionsPayload['errorMessage'] }) {
+    showNotification(state, { payload }: { payload: NotificationStore }) {
       const isError = state.notificationData.messageType === NotificationType.error
       state.notificationData = {
         ...state.notificationData,

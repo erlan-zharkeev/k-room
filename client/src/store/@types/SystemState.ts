@@ -2,11 +2,11 @@ import { Message, NotificationMessage, NotificationType } from 'common-types'
 import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 export interface NotificationStore {
-  key: string
-  message: NotificationMessage
-  description: string
+  key?: string
+  message: NotificationMessage | JSX.Element
+  description?: string
   messageType?: NotificationType
-  duration: number
+  duration?: number
   placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
 }
 

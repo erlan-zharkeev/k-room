@@ -2,24 +2,25 @@ import { Radio, RadioChangeEvent } from 'antd'
 import { useDispatch } from 'react-redux'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
-import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
+import { selectChatRoom } from 'src/store/settingsSlice'
 import { ButtonsListElement } from './@types/ButtonsListElement'
 import { Logo } from '../Common/Logo/Logo'
 import { showModal } from 'src/store/systemSlice'
-import { AsideBarButtonName, MessageStatus } from 'common-types'
+import { AsideBarButtonName, MessageStatus, UserSettingKey } from 'common-types'
 import { UIButton } from '../UI'
 import { ModalContentComponentName } from '../Common/Popup/@types'
 import { ViewPortWidthType } from 'src/store/@types/SystemState'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
 
 const AsideBar = () => {
+  const { updateSetting } = useUpdateSettings()
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
   const { viewPort } = useTypedSelector((state) => state.system)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-
   const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
-    dispatch(changeAsideTab(currentTabName))
+    updateSetting(UserSettingKey.asideTab, { asideTab: currentTabName })
   }
 
   const changeTabClickHandler = () => {
@@ -76,7 +77,7 @@ const AsideBar = () => {
         ))}
       </Radio.Group>
       {viewPort.width >= ViewPortWidthType.tablet && (
-        <UIButton iconName="settings-mixer" onClick={openTechSettings} tooltip="Mixer" />
+        <UIButton iconName="thunder" color="accent" onClick={openTechSettings} tooltip="Check devices" />
       )}
     </div>
   )

@@ -146,15 +146,14 @@ export declare enum CallType {
 }
 export declare enum UserMediaType {
     audio = "audio",
-    video = "video",
-    both = "both"
+    video = "video"
 }
 export interface StreamSettings extends BasicStreamSettings {
     streamLoading: boolean;
 }
 export interface BasicStreamSettings {
-    audio: boolean;
-    video: boolean;
+    [UserMediaType.audio]: boolean;
+    [UserMediaType.video]: boolean;
 }
 export interface Call {
     id: string;
@@ -270,6 +269,15 @@ export declare enum NotificationMessage {
     imageConverterError = "Server could not process the image, please choose another image file"
 }
 export interface SocketActionsPayload {
+    interlocutorUpdateSignal: {
+        signal: any;
+    };
+    updateSignal: {
+        signal: any;
+    };
+    markCallAsVideo: {
+        callId: string;
+    };
     messageDelivered: {
         roomId: string;
         message: Message;
@@ -370,18 +378,15 @@ export interface SocketActionsPayload {
         from: string;
         avatarPath: string;
         callerName: string;
-        settings: BasicStreamSettings;
     };
     changeCallSettings: BasicStreamSettings;
     callAccepted: {
         signal: any;
-        settings: BasicStreamSettings;
     };
     answerCall: {
         callId: string;
         to: string;
         signal: any;
-        settings: BasicStreamSettings;
         selfSocketId: string;
     };
     callStartedAt: number;
@@ -506,5 +511,8 @@ export declare enum SocketActions {
     MESSAGE_DELETED = "message-deleted",
     ERROR_MESSAGE = "error-message",
     CALLS_UPDATED = "calls-updated",
-    CALL_UPDATED = "call-updated"
+    CALL_UPDATED = "call-updated",
+    MARK_CALL_AS_VIDEO = "mark-call-as-video",
+    UPDATE_CALL_SIGNAL = "update-call-signal",
+    INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal"
 }

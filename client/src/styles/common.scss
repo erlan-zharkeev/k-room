@@ -100,3 +100,15 @@ input:-webkit-autofill {
     color: var(--main-text);
   }
 }
+
+html[theme='light'] {
+  .call-modal__interlocutor-name {
+    color: var(--main-bg);
+  }
+  .lds-ellipsis > * {
+    background-color: var(--main-bg);
+  }
+  ::placeholder {
+    color: var(--main-text);
+  }
+}

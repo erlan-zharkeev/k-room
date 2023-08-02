@@ -1,7 +1,5 @@
-import { Avatar } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UserOutlined } from '@ant-design/icons'
-import { UIIcon } from 'src/components/UI'
+import { UIAvatar, UIIcon } from 'src/components/UI'
 import { useContext } from 'react'
 import { RefsContext } from 'src/providers/RefsProvider'
 
@@ -24,16 +22,18 @@ const CallModalVideo = () => {
           </div>
         )}
         <video
+          loop
           autoPlay
+          playsInline
           id="interlocutor-video"
           ref={interlocutorVideoDom}
           className={!currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
         />
-        <Avatar
-          src={currentCall.interlocutorAvatarPath}
-          icon={<UserOutlined />}
-          className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
-        />
+        <div className="call-modal-video__interlocutor-avatar">
+          <div className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}>
+            <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="xl" />
+          </div>
+        </div>
       </div>
     </div>
   )

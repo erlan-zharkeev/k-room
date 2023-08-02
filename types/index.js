@@ -66,7 +66,6 @@ var UserMediaType;
 (function (UserMediaType) {
     UserMediaType["audio"] = "audio";
     UserMediaType["video"] = "video";
-    UserMediaType["both"] = "both";
 })(UserMediaType = exports.UserMediaType || (exports.UserMediaType = {}));
 var InfoItemStatus;
 (function (InfoItemStatus) {
@@ -219,4 +218,7 @@ var SocketActions;
     SocketActions["ERROR_MESSAGE"] = "error-message";
     SocketActions["CALLS_UPDATED"] = "calls-updated";
     SocketActions["CALL_UPDATED"] = "call-updated";
+    SocketActions["MARK_CALL_AS_VIDEO"] = "mark-call-as-video";
+    SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
+    SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));

@@ -6,9 +6,13 @@ import { emitCallDataToInterlocutors } from '../../utils/emitCallDataToInterlocu
 import { getUserById } from '../helpers/getters/getUserById'
 
 export const callSlice = (socket: SocketInstanceType) => {
+  socket.on(SocketActions.MARK_CALL_AS_VIDEO, (payload: SocketActionsPayload['markCallAsVideo']) => {
+    CallModel.updateOne({ _id: payload.callId }, { video: true })
+  })
+
   socket.on(
     SocketActions.CALL_USER,
-    async ({ signal, userToCall, from, avatarPath, callerName, settings }: SocketActionsPayload['callUser']) => {
+    async ({ signal, userToCall, from, avatarPath, callerName }: SocketActionsPayload['callUser']) => {
       if (!userToCall) return
       const interlocutor = await getUserById(userToCall)
       if (!interlocutor) return
@@ -16,36 +20,32 @@ export const callSlice = (socket: SocketInstanceType) => {
         signal,
         from,
         avatarPath,
-        callerName,
-        settings
+        callerName
       }
       io.to(interlocutor?.socketId).emit(SocketActions.CALL_USER, payload)
-
-      socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data: SocketActionsPayload['changeCallSettings']) => {
-        io.to(interlocutor?.socketId).emit(SocketActions.CHANGE_CALL_SETTINGS, data)
-      })
-
       const interlocutors = [userToCall, from]
       const call = new CallModel({
         calledAt: new Date(),
         authorId: from,
         interlocutors,
-        answered: false,
-        video: settings.video
+        answered: false
       })
       await call.save()
       emitCallDataToInterlocutors(interlocutors, call.id, true)
+
+      socket.on(SocketActions.UPDATE_CALL_SIGNAL, (payload: SocketActionsPayload['updateSignal']) => {
+        io.to(interlocutor?.socketId).emit(SocketActions.INTERLOCUTOR_UPDATE_SIGNAL, payload)
+      })
     }
   )
 
   socket.on(
     SocketActions.ANSWER_CALL,
-    async ({ to, signal, settings, selfSocketId, callId }: SocketActionsPayload['answerCall']) => {
+    async ({ to, signal, selfSocketId, callId }: SocketActionsPayload['answerCall']) => {
       const interlocutor = await getUserById(to)
       if (!interlocutor) return
       const payload: SocketActionsPayload['callAccepted'] = {
-        signal,
-        settings
+        signal
       }
       io.to(interlocutor?.socketId).emit(SocketActions.CALL_ACCEPTED, payload)
       const call = await CallModel.findOneAndUpdate(
@@ -61,14 +61,10 @@ export const callSlice = (socket: SocketInstanceType) => {
         const payload: SocketActionsPayload['callStartedAt'] = Date.now()
         io.to(socketId).emit(SocketActions.CALL_STARTED_AT, payload)
       })
-      socket.on(SocketActions.CHANGE_CALL_SETTINGS, (data: SocketActionsPayload['changeCallSettings']) => {
-        io.to(interlocutor?.socketId).emit(SocketActions.CHANGE_CALL_SETTINGS, data)
-      })
     }
   )
 
   socket.on(SocketActions.CALL_ENDED, async ({ callerId, callId }: SocketActionsPayload['callEnded']) => {
-    console.log(callerId, 'caller-id')
     const interlocutor = await getUserById(callerId)
     if (!interlocutor) return
     io.to(interlocutor?.socketId).emit(SocketActions.CALL_ENDED)

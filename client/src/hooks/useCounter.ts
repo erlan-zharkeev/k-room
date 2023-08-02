@@ -1,25 +1,25 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
-const useCounter = (initValue: number): any => {
+const useCounter = (initValue: number, decremental: boolean = true): any => {
   const [value, setValue] = useState(initValue)
 
-  let timerId: string | number | NodeJS.Timeout = -1
+  const timerIdRef = useRef<number | NodeJS.Timeout>()
 
   const counter = () => {
     setValue((seconds) => {
       if (seconds <= 0) stopTimer()
-      return seconds - 1
+      return decremental ? seconds - 1 : seconds + 1
     })
   }
 
   const startTimer = () => {
-    if (timerId) clearTimeout(timerId)
-    timerId = setInterval(counter, 1000)
+    if (timerIdRef.current) clearTimeout(timerIdRef.current)
+    timerIdRef.current = setInterval(counter, 1000)
   }
 
   const stopTimer = () => {
-    setValue(0)
-    return clearTimeout(timerId)
+    setValue(initValue)
+    return clearTimeout(timerIdRef.current)
   }
 
   return [value, setValue, startTimer, stopTimer]

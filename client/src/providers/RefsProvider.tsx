@@ -7,8 +7,8 @@ interface RefsProviderProps {
 }
 
 const RefsProvider: React.FC<RefsProviderProps> = ({ children }) => {
-  const interlocutorVideoDom = useRef(null)
-  const selfVideoDom = useRef(null)
+  const interlocutorVideoDom = useRef<HTMLVideoElement>(null)
+  const selfVideoDom = useRef<HTMLVideoElement>(null)
 
   const refs = { interlocutorVideoDom, selfVideoDom }
 
