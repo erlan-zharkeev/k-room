@@ -7,5 +7,3 @@ export const getViewPort = (): ViewPort => {
     height
   }
 }
-
-export default getViewPort

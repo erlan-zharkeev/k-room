@@ -1,16 +1,21 @@
-.wait-confirm-email {
+.wait-email-confirm {
   .header-text {
-    margin-bottom: $gutter-md;
+    margin-bottom: $gutter-lg;
   }
 
   &__not-received {
     margin-top: $gutter-md;
-    margin-bottom: $gutter-l;
+    margin-bottom: $gutter-lg;
   }
-
+  &__counter {
+    margin-top: $gutter-lg;
+  }
   &__attempts {
     display: flex;
     align-items: center;
     margin-top: $gutter-md;
+  }
+  .ui-button {
+    margin-top: $gutter-lg;
   }
 }

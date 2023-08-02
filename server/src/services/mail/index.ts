@@ -13,19 +13,18 @@ const mailTransport = nodemailer.createTransport({
   }
 })
 
-const mailer = async (to: string, letterType: LettersType, payload: any) => {
+const mailer = async (to: string, letterType: LettersType, subject: string, payload: any) => {
   return await mailTransport.sendMail({
     from: ENV.MAIL_APP,
     to,
-    subject: 'Email confirmation',
-    text: 'Email confirm',
+    subject,
     html: letters[letterType](payload)
   })
 }
 
 export const sendEmailConfirmationLink = async (email: string) => {
   const user = await UserModel.findOneAndUpdate({ email }, { $inc: { confirmAttempts: -1 } })
-  await mailer(email, 'confirmation', {
+  await mailer(email, LettersType.confirmation, 'Email confirmation', {
     appName: ENV.APP_NAME,
     link: `${ENV.CLIENT_URL}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`,
     logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
@@ -33,4 +32,14 @@ export const sendEmailConfirmationLink = async (email: string) => {
   })
   const hasAttempts = user?.confirmAttempts && user.confirmAttempts >= 0
   return hasAttempts ? { email, timeNextRequest: getTimeNextRequest(), attempts: user?.confirmAttempts } : null
+}
+
+export const sendEmailCodePasswordRecovery = async (email: string, code: string | number) => {
+  await mailer(email, LettersType['password-repair-sent-code'], 'Password recovery', {
+    appName: ENV.APP_NAME,
+    logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
+    host: `${ENV.CLIENT_URL}/sign-in`,
+    code
+  })
+  return { message: 'code sended' }
 }

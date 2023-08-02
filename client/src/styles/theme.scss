@@ -1,24 +1,49 @@
 :root {
-  --accent-color: #418FDE;
-  --error-text: #863347;
-  --success: rgb(44 186 136);
-  --error: rgb(191 86 110);
-  --warn: rgb(255 213 79);
-  --success-bg: rgb(44 186 136 / 20%);
-  --error-bg: rgb(191 86 110 / 20%);
-  --warn-bg: rgb(255 213 79 / 20%);
-  --info-bg: rgba(255 255 255 / 20%);
+  --white: #fff;
+  --dark-green: rgb(0, 43, 29);
+  --error-transparent: rgba(191, 86, 110, 0.3);
   --modal-overflow-color: rgb(0 0 0 / 75%);
+  --select-placeholder: #5d5d5d;
 
-  &[theme="dark"] {
-    --main-bg: #1C1C1C;
+  --accent: #418fde;
+  --error: rgb(191 86 110);
+  --error-bg: rgb(191 86 110 / 20%);
+
+  &[theme='dark'] {
+    --main-bg: #1c1c1c;
     --main-text: #fff;
-    --secondary-text: rgb(177 177 177 / 84.7%);
+    --secondary-text: rgba(177, 177, 177, 0.587);
+    --shadow-outset-start: #0f0f0f;
+    --shadow-outset-end: #292929;
+    --shadow-inset-start: #161616;
+    --shadow-inset-end: #202020;
+    --dark-gray: rgb(59 59 59);
+    --dark-gray-transparent: rgba(59 59 59 / 30%);
+    --dark-gray-transparent-2: rgba(59 59 59 / 40%);
+    --error-text: #722d2d;
+    --success: rgb(38, 178, 54);
+    --success-bg: rgb(44 186 136 / 25%);
+    --info-bg: rgba(111, 116, 255, 0.187);
+    --warn: rgb(255 213 79);
+    --warn-bg: rgb(255 213 79 / 20%);
   }
 
-  &[theme="light"] {
-    --main-bg: #fff;
+  &[theme='light'] {
+    --main-bg: #cfcfcf;
     --main-text: #000;
     --secondary-text: rgb(94 94 94 / 84.7%);
+    --shadow-outset-start: #b6b6b6;
+    --shadow-outset-end: #e8e8e8;
+    --shadow-inset-start: #b6b6b6;
+    --shadow-inset-end: #e8e8e8;
+    --dark-gray: rgb(189 189 189);
+    --dark-gray-transparent: rgba(189 189 189 / 30%);
+    --dark-gray-transparent-2: rgba(133, 133, 133, 0.5);
+    --error-text: rgb(191 86 110);
+    --success: rgb(51, 154, 0);
+    --success-bg: rgb(44 186 136 / 40%);
+    --info-bg: rgba(0, 8, 255, 0.187);
+    --warn: rgb(217, 179, 54);
+    --warn-bg: rgb(231 184 37 / 26%);
   }
 }

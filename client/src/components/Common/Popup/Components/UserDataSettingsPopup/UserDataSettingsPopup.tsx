@@ -1,20 +1,24 @@
-import { Button, Image, Form, Input, Avatar } from 'antd'
-import { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import { Form } from 'antd'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { UserOutlined } from '@ant-design/icons'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { updateUserData } from 'src/store/userSlice'
-import { showNotification, closeModal } from 'src/store/systemSlice'
-import validateRules from 'src/utils/validateRules'
+import { closeModal } from 'src/store/systemSlice'
+import { validateRules } from 'src/utils/validateRules'
+import apiMethods from 'src/services/api-methods'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import { setUserData } from 'src/store/userSlice'
+import { User } from 'common-types'
+import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 
 const UserDataSettingsPopup = () => {
-  const { avatar, username, id } = useTypedSelector((state) => state.user.userData)
-
-  const [newAvatar, setNewAvatar] = useState<string | undefined>()
+  const { avatarPath, username, id } = useTypedSelector((state) => state.user.userData)
+  const [imageChanged, setImageChanged] = useState(false)
+  const [newAvatar, setNewAvatar] = useState<string | undefined>(avatarPath)
 
   const [isLoading, setIsLoading] = useState(false)
+  const [isUsernameEqualNewName, setIsUsernameEqualNewName] = useState(true)
 
   const [avatarFile, setFile] = useState()
 
@@ -23,53 +27,37 @@ const UserDataSettingsPopup = () => {
 
   const [isValid, validate] = useValidate()
 
-  const normFile = (e: any) => {
-    const file = e.target.files[0]
-    setFile(file)
-    if (!file) return
-    imageToBase64(file)
+  const imageUpdated = () => {
+    setImageChanged(true)
   }
 
-  const imageToBase64 = (file: File) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    const warnings = []
+  useEffect(() => {
+    setNewAvatar(avatarPath)
+  }, [])
 
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-    if (!isJpgOrPng) warnings.push('image resolution must be png or jpg')
-    const isLt2M = file.size / 1024 / 1024 < 2
-    if (!isLt2M) warnings.push('image resolution must be less than 2mb')
-
-    if (warnings.length) {
-      warnings.forEach((warning) => {
-        dispatch(showNotification({ message: warning, messageType: 'warning' }))
-      })
-      return
-    }
-
-    reader.onload = () => {
-      setNewAvatar(String(reader.result))
-    }
-
-    reader.onerror = (error) => {
-      // check error is object object
-      console.log(error)
-      // dispatch(showNotification({ message: `Cant convert image: ${error}`, messageType: 'error' }))
-    }
-  }
-
-  const onFinish = async (values: FormData) => {
+  const onFinish = async (values: User) => {
     const updatedUserData = {
       ...values,
       userId: id,
+      oldFilename: avatarPath?.split('?img=')[1],
       file: avatarFile
     }
     setIsLoading(true)
-    await dispatch(updateUserData(updatedUserData as any))
+    const response = (await dispatch(apiMethods.user.updateUserData(updatedUserData))) as AsyncThunkResponseWrapper
+    dispatch(setUserData(response.payload.data.userData))
     setIsLoading(false)
     dispatch(closeModal())
   }
 
+  const changeFormHandler = () => {
+    validate(form)
+    setIsUsernameEqualNewName(form.getFieldValue('username') === username)
+  }
+
+  const isUpdateButtonAvailable = () => {
+    const isTextFieldValid = isValid && !isUsernameEqualNewName
+    return imageChanged || isTextFieldValid
+  }
   return (
     <div className="user-data-settings-popup">
       <Form
@@ -77,25 +65,22 @@ const UserDataSettingsPopup = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         form={form}
-        onInput={() => validate(form)}
+        onChange={changeFormHandler}
       >
-        <div className="user-data-settings-popup__avatar">
-          {avatar || newAvatar ? (
-            <Image preview={false} src={newAvatar ?? avatar} alt="avatar" />
-          ) : (
-            <Avatar size="large" icon={<UserOutlined />} alt="avatar" />
-          )}
-          <input type="file" onChange={normFile} />
+        <div className="user-data-settings-popup__image">
+          <UIAvatarLoader path={newAvatar} setImage={setNewAvatar} setFile={setFile} updated={imageUpdated} />
         </div>
-
-        <Form.Item name="username" rules={validateRules.required} initialValue={username}>
-          <Input placeholder="Username" />
+        <Form.Item name="username" rules={validateRules.username} initialValue={username}>
+          <UIInput placeholder="Username" />
         </Form.Item>
-
         <Form.Item className="user-data-settings-popup__controls">
-          <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
-            Update
-          </Button>
+          <UIButton
+            text="Update"
+            border="border-default"
+            htmltype="submit"
+            disabled={!isUpdateButtonAvailable()}
+            loading={isLoading}
+          />
         </Form.Item>
       </Form>
     </div>

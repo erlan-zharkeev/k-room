@@ -6,6 +6,17 @@
   height: 100%;
   padding: $gutter-xl $aside-panel-padding $aside-panel-padding $aside-panel-padding;
 
+  .link {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__password-recovery {
+    margin-top: $gutter-md;
+    margin-bottom: $gutter-xl;
+  }
+
   &__id {
     text-align: center;
   }
@@ -60,7 +71,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: $gutter-xl;
+    margin-top: $gutter-lg;
   }
 
   &__title {

@@ -1,9 +1,11 @@
-import rules from './authValidator/rules'
-import jwtValidator from './accessTokenValidator'
+// import rules from './authValidator/rules'
+// import accessTokenValidator from './accessTokenValidator'
+// import codesRequestValidator from './codesRequestValidator'
 
-export const middlewares = {
-  authValidator: { rules },
-  jwtValidator
-}
+// export const middlewares = {
+//   authValidator: { rules },
+//   accessTokenValidator,
+//   codesRequestValidator
+// }
 
-export default middlewares
+// export default middlewares

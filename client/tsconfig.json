@@ -1,25 +1,32 @@
 {
   "compilerOptions": {
-    "outDir": "./bundle/",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
-    "allowJs": true,
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "skipLibCheck": true,
 
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Custom */
     "baseUrl": "./../",
     "paths": {
       "src/*": ["client/src/*"],
-      "common-types": ["types"]
+      "common-types": ["types"],
+      "ui/*": ["client/src/components/UI/*"]
     }
   },
-  "references": [
-    {
-      "path": "./../types/"
-    }
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

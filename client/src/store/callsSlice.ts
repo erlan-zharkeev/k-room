@@ -1,131 +1,89 @@
 import { createSlice } from '@reduxjs/toolkit'
-import Call from 'src/call/call'
-import { CallsState } from './@types/CallsState'
+import { CallsState, StreamConstraints } from './@types/CallsState'
+import { Call, CallStatus, CallType, SocketActionsPayload, UserMediaType, UserShort } from 'common-types'
+
+const initialCurrentCall = {
+  id: '',
+  authorId: '',
+  authorName: '',
+  startedAt: 0,
+  interlocutorName: '',
+  interlocutorId: '',
+  interlocutorAvatarPath: '',
+  type: CallType.incoming,
+  video: false,
+  status: CallStatus.calling,
+  interlocutorSettings: {
+    streamLoading: false,
+    audio: true,
+    video: false
+  }
+}
+
+const initialCallSettings = {
+  streamLoading: false,
+  audio: {
+    loading: false,
+    value: true
+  },
+  video: {
+    loading: false,
+    value: false
+  }
+}
 
 const initialState: CallsState = {
   showCallModal: false,
   isMinified: false,
-  settings: {
-    streamLoading: false,
-    audio: true,
-    video: true
-  },
-  connection: null,
-  currentCall: {
-    authorId: '',
-    authorName: '',
-    startedAt: 1674784901,
-    interlocutorName: 'Ivan',
-    interlocutorId: '0',
-    interlocutorAvatar: '',
-    type: 'incoming',
-    video: false,
-    status: 'calling',
-    interlocutorSettings: {
-      streamLoading: false,
-      audio: true,
-      video: true
-    }
-  },
-  list: [
-    {
-      authorId: '',
-      authorName: '',
-      startedAt: 1674784901,
-      finishedAt: 1674784901,
-      length: 36,
-      interlocutorName: 'Ivan',
-      interlocutorId: '0',
-      status: 'finished',
-      type: 'incoming',
-      video: true
-    },
-    {
-      authorId: '',
-      authorName: '',
-      startedAt: 1674784901,
-      finishedAt: 1674784901,
-      length: 156,
-      interlocutorName: 'Anton',
-      interlocutorId: '1',
-      status: 'in-progress',
-      type: 'outgoing',
-      video: false
-    },
-    {
-      authorId: '',
-      authorName: '',
-      startedAt: 1674784901,
-      finishedAt: 1674784901,
-      length: 342,
-      interlocutorName: 'Norbik',
-      interlocutorId: '2',
-      status: 'finished',
-      type: 'outgoing',
-      video: false
-    }
-  ]
+  settings: initialCallSettings,
+  currentCall: initialCurrentCall,
+  list: []
 }
 
 const callsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    setConnection(state, { payload }) {
-      state.connection = payload
-    },
-    updateAllList(state, { payload }) {
+    updateAllList(state, { payload }: { payload: Array<Call> }) {
       state.list = payload
     },
-    initModalToCall(state, { payload }) {
+    initModalToCall(state, { payload }: { payload: UserShort }) {
       state.showCallModal = true
-      const { id, avatar, username, stream } = payload
+      const { id, avatarPath, username } = payload
       state.currentCall.interlocutorId = id
-      state.currentCall.interlocutorAvatar = avatar
+      state.currentCall.interlocutorAvatarPath = avatarPath
       state.currentCall.interlocutorName = username
-      state.currentCall.status = 'calling'
-      state.currentCall.type = 'outgoing'
+      state.currentCall.status = CallStatus.calling
+      state.currentCall.type = CallType.outgoing
     },
-    updateInterlocutorSettings(state, { payload }) {
-      const { audio, video } = payload
-      state.currentCall.interlocutorSettings.audio = audio
-      state.currentCall.interlocutorSettings.video = video
+    updateInterlocutorSettings(state, { payload }: { payload: { audio?: boolean; video?: boolean } }) {
+      if (!state.currentCall.interlocutorSettings) return
+      const currentSettings = { ...state.currentCall.interlocutorSettings }
+      state.currentCall.interlocutorSettings = {
+        ...currentSettings,
+        ...payload
+      }
     },
-    toggleSelfStreamIsLoading(state, { payload }) {
-      state.settings.streamLoading = payload
+    toggleSelfStreamIsLoading(state, { payload }: { payload: StreamConstraints }) {
+      state.settings = payload
     },
     setCurrentCallAccepted(state) {
-      state.currentCall.status = 'in-progress'
+      state.currentCall.status = CallStatus.inProgress
     },
-    setShowCallModal(state, { payload }) {
+    setShowCallModal(state, { payload }: { payload: SocketActionsPayload['callUser'] }) {
       state.showCallModal = true
       state.currentCall.interlocutorName = payload.callerName
-      state.currentCall.interlocutorAvatar = payload.avatar
-      state.currentCall.type = 'incoming'
-      state.currentCall.interlocutorSettings.audio = payload.settings.audio
-      state.currentCall.interlocutorSettings.audio = payload.settings.video
+      state.currentCall.interlocutorAvatarPath = payload.avatarPath
+      state.currentCall.type = CallType.incoming
     },
-    setCallStartedAt(state, { payload }) {
+    setCallStartedAt(state, { payload }: { payload: SocketActionsPayload['callStartedAt'] }) {
       state.currentCall.startedAt = payload
     },
     closeCallModal(state) {
       state.showCallModal = false
-      state.currentCall = {
-        authorId: '',
-        authorName: '',
-        startedAt: 0,
-        interlocutorName: '',
-        interlocutorId: '',
-        interlocutorAvatar: '',
-        type: 'incoming',
-        video: false,
-        status: 'calling',
-        interlocutorSettings: {
-          streamLoading: false,
-          audio: false,
-          video: false
-        }
-      }
+      state.currentCall = initialCurrentCall
+      state.settings = initialCallSettings
+      state.isMinified = false
     },
     setMinify(state) {
       state.isMinified = true
@@ -133,11 +91,32 @@ const callsSlice = createSlice({
     unsetMinify(state) {
       state.isMinified = false
     },
-    toggleCallVideo(state) {
-      state.settings.video = !state.settings.video
+    setCallVideo(state, { payload }) {
+      state.settings.video.value = payload
     },
-    toggleCallAudio(state) {
-      state.settings.audio = !state.settings.audio
+    setCallAudio(state, { payload }) {
+      state.settings.audio.value = payload
+    },
+    setCallSettingsLoading(state, { payload }: { payload: { type: UserMediaType; value: boolean } }) {
+      const { type, value } = payload
+      state.settings[type].loading = value
+    },
+    setCallId(state, { payload }: { payload: string }) {
+      state.currentCall.id = payload
+    },
+    updateCalls(state, { payload }: { payload: SocketActionsPayload['callsUpdated'] }) {
+      state.list = payload
+    },
+    updateCall(state, { payload }: { payload: SocketActionsPayload['callUpdated'] }) {
+      const call = payload
+      const listClone = [...state.list]
+      const index = listClone.findIndex((stateCall) => stateCall.id === call.id)
+      index >= 0 ? (listClone[index] = call) : listClone.push(call)
+      if (call.setId) state.currentCall.id = call.id
+      state.list = listClone
+    },
+    markCurrentCallAsVideo(state) {
+      state.currentCall.video = true
     }
   }
 })
@@ -149,13 +128,17 @@ export const {
   closeCallModal,
   setMinify,
   unsetMinify,
-  toggleCallVideo,
-  toggleCallAudio,
+  setCallVideo,
+  setCallAudio,
   updateInterlocutorSettings,
   setCallStartedAt,
   toggleSelfStreamIsLoading,
-  setConnection,
-  setShowCallModal
+  setShowCallModal,
+  updateCalls,
+  updateCall,
+  setCallId,
+  markCurrentCallAsVideo,
+  setCallSettingsLoading
 } = callsSlice.actions
 
 export default callsSlice.reducer

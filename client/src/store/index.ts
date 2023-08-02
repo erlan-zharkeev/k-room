@@ -4,14 +4,12 @@ import settings from './settingsSlice'
 import calls from './callsSlice'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import user, { UserAction } from './userSlice'
+import user from './userSlice'
 import chatRooms from './roomsSlice'
 import contacts from './contactsSlice'
 import SystemMiddleware from './middlewares/systemMiddleware'
-
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>
-export type RootActions = UserAction
 
 const persistedReducer = persistReducer(
   {

@@ -1,17 +1,17 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { ModalOptions } from './@types'
 import CallModalBody from './Components/CallModalBody/CallModalBody'
 
 const initialSize = {
-  width: 500,
-  height: 500,
+  width: 300,
+  height: 450,
   minWidth: 300,
   minHeight: 450
 }
 
-export const CallModal = () => {
+const CallModal = () => {
   const viewPortWidth = useTypedSelector((state) => state.system.viewPort.width)
   const viewPortHeight = useTypedSelector((state) => state.system.viewPort.height)
   const { isMinified, showCallModal } = useTypedSelector((state) => state.calls)
@@ -23,6 +23,11 @@ export const CallModal = () => {
   }
   const [modalPositionX, setModalPositionX] = useState(initialPosition.x)
   const [modalPositionY, setModalPositionY] = useState(initialPosition.y)
+
+  useEffect(() => {
+    setModalPositionX(initialPosition.x)
+    setModalPositionY(initialPosition.y)
+  }, [showCallModal])
 
   const setModalOptions = ({ width, height, x, y }: ModalOptions) => {
     setModalWidth(width)
@@ -53,11 +58,11 @@ export const CallModal = () => {
         minWidth={initialSize.minWidth}
         minHeight={initialSize.minHeight}
         position={{ x: modalPositionX, y: modalPositionY }}
-        onDragStop={(e, d) => {
+        onDragStop={(_e, d) => {
           setModalPositionX(d.x)
           setModalPositionY(d.y)
         }}
-        onResizeStop={(e, direction, ref, delta, position) => {
+        onResizeStop={(_e, _direction, ref, _delta, position) => {
           setModalOptions({
             width: ref.offsetWidth,
             height: ref.offsetHeight,

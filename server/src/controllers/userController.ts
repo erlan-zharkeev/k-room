@@ -1,82 +1,103 @@
 import { UserModel } from '../models/user.model'
 import { Request, Response } from 'express'
 import throwError from '../utils/throwError'
-import { Messages } from '../types/Messages'
-import { SocketActions, Status } from '../../../types'
+import { NotificationMessage, SocketActions, SocketActionsPayload, Status } from '../../../types'
 import { io } from '../server'
-import ENV from '../ENV'
-import getSocketsByUsersArray from '../socket/helpers/getSocketsByUsersArray'
-import getUsersByHasContactId from '../socket/helpers/getUsersByHasContactId'
+import getSocketsByUserIds from '../socket/helpers/getters/getSocketsByUserIds'
+import { getUsersByHasContactId } from '../socket/helpers/getters/getUsersByHasContactId'
+import { getPathToImg } from '../utils/getPathToImg'
+import fs from 'fs'
+import saveImageAndGetPath from '../utils/saveImageAndGetPath'
+import { SharpSettingsKey } from '../types/Constants'
+
+const bcrypt = require('bcryptjs')
 
 class UserController {
-  async updateUserSettings(req: Request, res: Response) {
+  async updateUserData(req: Request, res: Response) {
     try {
-      const { userId, type, value } = req.body
+      const { userId, username, oldFilename } = req.body
 
-      const query = {} as any
-      query['settings.' + type] = value
+      const oldPathFilename = getPathToImg(oldFilename)
+      const isImageExist = fs.existsSync(oldPathFilename)
+      const isFileStatic = oldPathFilename.includes('static')
+      if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
 
-      await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
-      return res.json()
-    } catch (e) {
-      throwError(Status.BAD_REQUEST, res, Messages.updateSettings)
-    }
-  }
-
-  async getUserData(req: Request, res: Response) {
-    const { id } = req.body.decoded
-    const user = await UserModel.findOne({ _id: id })
-    if (!user) return throwError(Status.BAD_REQUEST, res, Messages.userNotFound)
-    return res.json({
-      userData: {
-        username: user.username,
-        email: user.email,
-        id: user._id,
-        avatar: user.avatar
-      },
-      settings: user.settings
-    })
-  }
-
-  async updateUserData(req: any, res: Response) {
-    try {
-      const { userId, username } = req.body
-
-      const filename = req.file?.filename ?? null
+      const avatar = saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar, userId)
 
       const newUserData: any = {
-        username
+        username,
+        avatar
       }
-
-      if (filename) newUserData.avatar = `${ENV.SERVER_URL}/image/${filename}`
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
 
-      if (!updateUserDataResponse) return throwError(Status.BAD_REQUEST, res, Messages.usersFindFailed)
+      if (!updateUserDataResponse) return throwError(Status.badRequest, res, NotificationMessage.usersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
       const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
-      const sockets = await getSocketsByUsersArray(usersIdsFromUsers)
+      const sockets = await getSocketsByUserIds(usersIdsFromUsers)
 
       const updatedUserData = {
         username: updateUserDataResponse.username,
-        avatar: updateUserDataResponse.avatar
+        avatarPath: updateUserDataResponse.avatarPath
       }
-
+      const payload: SocketActionsPayload['changeContactsData'] = {
+        id: userId,
+        ...updatedUserData
+      }
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, {
-          id: userId,
-          ...updatedUserData
-        })
+        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, payload)
       })
 
       return res.json({
         userData: updatedUserData,
-        message: Messages.userDataSuccess
+        message: NotificationMessage.userDataUpdated
       })
-    } catch (e: any) {
-      console.log(e)
-      throwError(Status.BAD_REQUEST, res, Messages.userDataUpdateFailedCommonError)
+    } catch {
+      throwError(Status.badRequest, res, NotificationMessage.failedUserDataUpdate)
+    }
+  }
+
+  async getUserData(req: Request, res: Response) {
+    try {
+      const { id } = req.body.decoded
+      const user = await UserModel.findOne({ _id: id })
+      if (!user) return throwError(Status.badRequest, res, NotificationMessage.userNotFound)
+      return res.json({
+        userData: {
+          username: user.username,
+          email: user.email,
+          id: user._id,
+          avatarPath: user.avatarPath,
+          infoItems: user.infoItems
+        },
+        settings: user.settings
+      })
+    } catch {
+      throwError(Status.badRequest, res, NotificationMessage.failedGetUserData)
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { query, password } = req.body
+      const hashedPassword = await bcrypt.hash(password, 6)
+      if (!hashedPassword) return throwError(Status.badRequest, res, NotificationMessage.failedPassHash)
+
+      const user = await UserModel.findOne({ 'codes.passwordRecovery.query.value': query })
+      if (!user) throwError(Status.badRequest, res, NotificationMessage.failedResetPassword)
+
+      await user?.updateOne({
+        $set: {
+          'codes.passwordRecovery.query.value': null,
+          'codes.nextRequestPossibleAt': null,
+          password: hashedPassword
+        }
+      })
+
+      return res.json({ message: NotificationMessage.passwordReset })
+    } catch {
+      return throwError(Status.badRequest, res, NotificationMessage.commonServerError)
     }
   }
 }

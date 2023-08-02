@@ -1,12 +1,12 @@
 node_modules
 db/mongo-init.js
 .vscode
-.yarn.lock
+yarn.lock
 
 client/node_modules
 client/yarn-error.log
 client/yarn.lock
-client/bundle
+client/build
 client/eslintcache
 client/package-lock.json
 
@@ -15,10 +15,11 @@ server/yarn-error.log
 server/yarn.lock
 server/build
 server/eslintcache
+server/src/assets/img
 
 types/node_modules
 types/yarn-error.log
 types/yarn.lock
 types/dist
 types/eslintcache
-
+types/tsconfig.tsbuildinfo

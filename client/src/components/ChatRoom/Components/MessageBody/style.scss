@@ -6,18 +6,44 @@
   flex-direction: column;
   padding: $gutter-sm $gutter-md;
   overflow: hidden;
-  border: $border;
-  border-radius: $md-radius;
+  border-radius: $radius-md;
+  background-color: var(--dark-gray-transparent);
+
+  &__replied-message-type {
+    color: var(--accent);
+    font-size: 10px;
+  }
+
+  &__replied-message-images {
+    display: flex;
+    max-width: 200px;
+  }
+
+  &__replied-message-image {
+    width: 100px;
+  }
+
+  &__replied-message-wrapper {
+    border-left: 1px solid var(--secondary-text);
+    padding-left: $gutter-sm;
+    margin: $gutter-md;
+    position: relative;
+    p {
+      color: var(--secondary-text);
+    }
+  }
+
+  &__images {
+    display: flex;
+    max-width: 310px;
+  }
+
+  &__image {
+    max-width: 150px;
+  }
 
   &__text {
     color: var(--secondary-text);
-  }
-
-  &--self {
-    justify-content: flex-end;
-    #{$self}__text {
-      text-align: right;
-    }
   }
 
   &__system-info {
@@ -33,6 +59,14 @@
     border-radius: 50%;
   }
 
+  &__reactions {
+    display: flex;
+  }
+
+  &__reaction {
+    margin: 0 4px;
+  }
+
   &--sending {
     &.message {
       border: 1px solid rgb(177 177 177 / 50%);
@@ -43,25 +77,11 @@
     #{$self}__system-info {
       opacity: 0.5;
     }
-    #{$self}__status {
-      &::after {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          -90deg,
-          rgb(100 135 182 / 50%),
-          var(--accent-color),
-          rgb(100 135 182 / 50%),
-          var(--accent-color)
-        );
-        background-size: 400% 400%;
-        opacity: 0.9;
-        animation: gradient 3s ease infinite;
-        content: '';
-      }
+    #{$self}__images {
+      filter: blur(1px);
+    }
+    &::after {
+      @include bg-gradient-loader(0.9);
     }
   }
 
@@ -85,21 +105,7 @@
 
   &--read {
     #{$self}__status {
-      background-color: var(--accent-color);
+      background-color: var(--accent);
     }
-  }
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
   }
 }

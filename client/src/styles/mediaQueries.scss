@@ -1,3 +1,15 @@
+@mixin max-width-1366 {
+  @media (max-width: 1366px) {
+    @content;
+  }
+}
+
+@mixin max-width-1024 {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
 @mixin max-width-768 {
   @media (max-width: 768px) {
     @content;

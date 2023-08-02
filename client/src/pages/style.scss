@@ -6,35 +6,32 @@
 
 @import './EmailConfirm/style';
 
+@import './PasswordRecovery/style';
+
 @import './Main/style';
+
+@import './CreateNewPassword/style';
+
+@import './PrivacyPolicy/style';
 
 .page {
   position: relative;
-  height: 100vh;
+  height: 100%;
+  padding: $gutter-lg;
+  overflow: hidden;
 }
 
 .sign-in,
 .sign-up,
 .wait-confirm-email,
 .confirmed-email {
-  &__logo {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-
-    .logo {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-  }
-
   &__wrapper {
     @include absolute-center;
   }
 
   &__body {
     width: $container-sm;
-    height: 200px;
+    height: 250px;
   }
 
   form {

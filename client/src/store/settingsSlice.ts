@@ -1,24 +1,12 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { UserEndPoints } from 'common-types'
-import $api from 'src/services/$api'
-import setTheme from 'src/utils/setTheme'
-import { SettingsState } from './@types/SettingsState'
+import { createSlice } from '@reduxjs/toolkit'
+import { setTheme } from 'src/utils/setTheme'
+import { AsideBarButtonName, Theme, UserSettings } from 'common-types'
 
-export enum SettingsAction {
-  UPDATE_USER_SETTINGS = 'UPDATE_USER_SETTINGS'
-}
-
-export const updateUserSettings = createAsyncThunk(
-  SettingsAction.UPDATE_USER_SETTINGS,
-  async (payload: { userId: string; type: string; value: string | boolean }, { dispatch }) => {
-    await $api('post', UserEndPoints.UPDATE_USER_SETTINGS, dispatch, payload)
-  }
-)
-
-const initialState: SettingsState = {
-  asideTab: 'users',
+const initialState: UserSettings = {
+  asideTab: AsideBarButtonName.contacts,
+  currentInfoId: '1',
   selectedChatRoomId: '',
-  theme: 'dark',
+  theme: Theme.dark,
   soundOn: true,
   showTooltips: false,
   ableToShowNotification: true
@@ -28,36 +16,39 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    updateSettings(state, { payload }) {
-      const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification } = payload
+    setCurrentInfoItem(state, { payload }: { payload: string }) {
+      state.currentInfoId = payload
+    },
+    updateSettings(state, { payload }: { payload: UserSettings }) {
+      if (!payload) return
+      const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification, currentInfoId } =
+        payload
       state.asideTab = asideTab
       state.selectedChatRoomId = selectedChatRoomId
       state.theme = theme
       setTheme(state.theme)
       state.soundOn = soundOn
       state.showTooltips = showTooltips
+      state.currentInfoId = currentInfoId
       state.ableToShowNotification = ableToShowNotification
     },
-    selectChatRoom(state, { payload }) {
+    selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
     },
-    deselectChatRoom(state) {
-      state.selectedChatRoomId = ''
-    },
-    changeAsideTab(state, { payload }) {
+    changeAsideTab(state, { payload }: { payload: AsideBarButtonName }) {
       state.asideTab = payload
     },
-    setAbleToShowNotification(state, { payload }) {
+    setAbleToShowNotification(state, { payload }: { payload: boolean }) {
       state.ableToShowNotification = payload
     },
-    changeTheme(state, { payload }) {
-      state.theme = payload ? 'dark' : 'light'
+    changeTheme(state, { payload }: { payload: Theme }) {
+      state.theme = payload
       setTheme(state.theme)
     },
-    setSoundValue(state, { payload }) {
+    setSoundValue(state, { payload }: { payload: boolean }) {
       state.soundOn = payload
     },
-    setTooltipsValue(state, { payload }) {
+    setTooltipsValue(state, { payload }: { payload: boolean }) {
       state.showTooltips = payload
     }
   }
@@ -66,12 +57,12 @@ const settingsSlice = createSlice({
 export const {
   changeAsideTab,
   changeTheme,
-  deselectChatRoom,
   setSoundValue,
   setTooltipsValue,
   selectChatRoom,
   setAbleToShowNotification,
-  updateSettings
+  updateSettings,
+  setCurrentInfoItem
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

@@ -1,79 +1,65 @@
 import axios, { AxiosResponse } from 'axios'
-import { Status, AuthEndPoints } from 'common-types'
-import ENV from 'src/ENV'
+import { NotificationType, RouteNames, Status } from 'common-types'
 import { AppDispatch } from 'src/store'
-import { changeIsAppLoading, getUserData } from 'src/store/userSlice'
+import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
 import { showNotification } from 'src/store/systemSlice'
-import $clg from './$clg'
-
-axios.defaults.proxy = {
-  host: ENV.HOST,
-  port: Number(ENV.SERVER_PORT)
-}
-
+import $clg from 'src/services/$clg'
+import apiMethods from './api-methods'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import $router from './$router'
 axios.defaults.withCredentials = true
-
-const endpointHost = ENV.IS_DEV ? '' : `${ENV.HOST}:443`
 
 const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) => {
   if (!response) return
   const { message, silent } = response.data
-  const isSuccess = response.status === Status.SUCCESS
-  if (message && !silent) dispatch(showNotification({ message, messageType: isSuccess ? 'success' : 'warning' }))
+  const isSuccess = response.status === Status.success
+  if (message && !silent)
+    dispatch(showNotification({ message, messageType: isSuccess ? NotificationType.success : NotificationType.warn }))
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const { status } = e.response ?? e.response?.data?.status
   switch (status) {
-    case Status.BAD_GATEAWAY:
+    case Status.badGateaway:
       dispatch(changeIsAppLoading(false))
       break
-    case Status.TOKEN_EXPIRED:
+    case Status.tokenExpired:
       $clg('error', 'Access token is expired')
       dispatch(changeIsAppLoading(true))
-      const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
-      dispatch(changeIsAppLoading(false))
-      const isTokensPairUpdated = updateTokenResponse?.status === Status.SUCCESS
-      if (!isTokensPairUpdated) return
+      const updateTokenResponse = (await dispatch(apiMethods.auth.updateTokensPair())) as AsyncThunkResponseWrapper
+      const isTokensPairUpdated = updateTokenResponse?.payload?.status === Status.success
+      if (!isTokensPairUpdated) {
+        $router.push(RouteNames.SIGN_IN)
+        dispatch(changeIsAppLoading(false))
+        return
+      }
       $clg('success', 'Tokens pair has been updated')
-      dispatch(getUserData(null))
+      const response = (await dispatch(apiMethods.user.getUserData(null))) as AsyncThunkResponseWrapper
+      dispatch(changeIsAppLoading(false))
+      const { userData, settings } = response.payload.data
+      commonSetUserDataHandler(dispatch, { userData, settings })
       return
-    case Status.NOT_AUTH:
+    case Status.notAuth:
       return
-    case Status.BAD_REQUEST:
+    case Status.badRequest:
       break
   }
   const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  dispatch(showNotification({ message, messageType: 'error' }))
-  // const isTokenExpired = status === Status.TOKEN_EXPIRED
-  // if (isTokenExpired) {
-  //   $clg('error', 'Access token is expired')
-  //   dispatch(changeIsAppLoading(true))
-  //   const updateTokenResponse = await $api('get', AuthEndPoints.UPDATE_TOKENS_PAIR, dispatch)
-  //   dispatch(changeIsAppLoading(false))
-  //   const isTokensPairUpdated = updateTokenResponse?.status === Status.SUCCESS
-  //   if (!isTokensPairUpdated) return
-  //   $clg('success', 'Tokens pair has been updated')
-  //   dispatch(getUserData(null))
-  //   return
-  // }
-  // if (e.response?.data?.status && e.response.data.status === Status.NOT_AUTH) return
-  // const message = e.response?.data?.message ?? `An error has occurred, please try again later. ERROR: ${e.message}`
-  // dispatch(showNotification({ message, messageType: 'error' }))
+  dispatch(showNotification({ message, messageType: NotificationType.error }))
 }
 
-type RequestTypes = 'post' | 'get' | 'patch'
+type RequestTypes = 'post' | 'get' | 'patch' | 'put'
 
-export const $api = async (
+const $api = async (
   type: RequestTypes,
   endpoint: string,
   dispatch: AppDispatch,
   payload: any = null,
   contentType: string = 'application/json'
-): Promise<AxiosResponse<any, any>> => {
+) => {
   const options = { headers: { 'Content-Type': contentType } }
   try {
-    const response = await axios[type](`${endpointHost}/api${endpoint}`, payload, options)
+    const response = await axios[type](`/api${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
   } catch (e: any) {

@@ -1,17 +1,29 @@
 import { Rule } from 'antd/lib/form'
-interface ValidateRules {
-  [key: string]: Rule[]
-}
 
-const validateRules: ValidateRules = {
+export const validateRules: Record<string, Rule[]> = {
   required: [{ required: true, message: 'Field is required' }],
+  username: [
+    {
+      validator: async (_: unknown, value: string) => {
+        let error = ''
+        if (!value) error = 'Field is required'
+        else if (value.includes('#') || value.includes('@')) error = 'Username must not contain @ # $ symbols'
+        return error ? await Promise.reject(error) : await Promise.resolve()
+      }
+    }
+  ],
+  emailCode: [
+    { required: true, message: 'Field is required' },
+    { len: 4, message: 'Field must contain 4 symbols' }
+  ],
   email: [
     {
       validator: async (_: unknown, value: string) => {
         let error = ''
         if (!value) error = 'Email is required'
         else if (value.match(/[\s]/) != null) value.replace(/\s/g, '')
-        else if (value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) == null) error = 'Please type correct email'
+        else if (value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) == null)
+          error = 'Please type correct email'
         return error ? await Promise.reject(error) : await Promise.resolve()
       }
     }
@@ -28,7 +40,14 @@ const validateRules: ValidateRules = {
         return error ? await Promise.reject(error) : await Promise.resolve()
       }
     }
+  ],
+  policy: [
+    {
+      validator: async (_: unknown, value: string) => {
+        let error = ''
+        if (!value) error = 'Field is required'
+        return error ? await Promise.reject(error) : await Promise.resolve()
+      }
+    }
   ]
 }
-
-export default validateRules

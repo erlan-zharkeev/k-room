@@ -1,61 +1,68 @@
-import { List, Image, Avatar, Button } from 'antd'
+import { List } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UserOutlined, PhoneOutlined, VideoCameraOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import firstCharUpperCase from 'src/utils/firstCharUpperCase'
+import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import moment from 'moment'
-import useDynamicRefs from 'use-dynamic-refs'
+import { UIAvatar, UIIcon } from 'src/components/UI'
+import { Call, CallType } from 'common-types'
+import { useEffect, useState } from 'react'
 
 const Calls = () => {
-  const { list } = useTypedSelector((state) => state.calls)
-  const [getRef, setRef] = useDynamicRefs() as any
-  const itemClickHandler = (id: string) => {
-    const el = getRef(id).current
-    el.classList.toggle('call-list__item--expand')
+  const { list, currentCall } = useTypedSelector((state) => state.calls)
+  const getCallType = (call: Call) => (currentCall.id === call.id ? CallType.current : call.type)
+  const [sortedList, setSortedList] = useState(list)
+  const getCallTypeName = (call: Call) => {
+    const type = getCallType(call)
+    return type === CallType.notAnswered ? 'Not answered' : firstCharUpperCase(type)
   }
+  useEffect(() => {
+    const tempList = [...list]
+    tempList.sort((a, b) => (a.calledAt ?? 0) - (b.calledAt ?? 0)).reverse()
+    setSortedList(tempList)
+  }, [list])
+
   return (
     <div className="call-list">
       <div className="call-list__body">
         <List
           itemLayout="horizontal"
-          dataSource={list}
+          dataSource={sortedList}
           locale={{
             emptyText: <div className="paragraph-text paragraph-text--secondary">There are no calls yet</div>
           }}
           renderItem={(call) => (
-            <List.Item className="call-list__item" ref={setRef(call.interlocutorId)}>
+            <List.Item className={`call-list__item call-list__item--${getCallType(call)}`}>
               <List.Item.Meta
-                avatar={
-                  call.interlocutorId ? (
-                    <Image src={call.interlocutorId} className="custom-avatar" alt="avatar" />
-                  ) : (
-                    <Avatar size="small" src={call.interlocutorId} icon={<UserOutlined />} alt="avatar" />
-                  )
-                }
+                avatar={<UIAvatar src={call.interlocutorAvatarPath} showBadge={false} />}
                 title={<span>{call.interlocutorName}</span>}
                 description={
-                  <div className={`call-list__info call-list__info--${call.type}`}>
-                    {call.video ? <VideoCameraOutlined /> : <PhoneOutlined />}
-                    <p>{firstCharUpperCase(call.type)}</p>
+                  <div
+                    className={`call-list__info call-list__info--${getCallType(
+                      call
+                    )} paragraph-text paragraph-text--secondary`}
+                  >
+                    <UIIcon name={call.video ? 'video-call-thin' : 'phone-call'} />
+                    <p className="call-list__type paragraph-text paragraph-text--secondary">
+                      {getCallTypeName(call)}
+                      {call.length && (
+                        <div className="call-list__length">
+                          &nbsp;({moment.utc(call.length * 1000).format('mm:ss')})
+                        </div>
+                      )}
+                    </p>
                   </div>
                 }
               />
-              <div className="call-list__additional-info-button">
-                <Button icon={<InfoCircleOutlined />} onClick={() => itemClickHandler(call.interlocutorId)}></Button>
-              </div>
-              <div className="call-list__length">
-                <p className="paragraph-text paragraph-text--secondary">
-                  {moment.utc(call.length * 1000).format('mm:ss')}
-                </p>
-              </div>
               <div className="call-list__additional-info">
-                <p className="paragraph-text paragraph-text--secondary">
-                  <span>Started at: </span>
-                  <span>{moment.unix(call.startedAt).format('hh.mm MM.DD.YYYY')}</span>
-                </p>
-                <p className="paragraph-text paragraph-text--secondary">
-                  <span>Finished at: </span>
-                  <span>{moment.unix(call.finishedAt).format('hh.mm MM.DD.YYYY')}</span>
-                </p>
+                {call.calledAt && (
+                  <div className="call-list__called-at">
+                    <p className="paragraph-text paragraph-text--secondary">
+                      {moment.utc(call.calledAt).format('MMMM Do YYYY')}
+                    </p>
+                    <p className="paragraph-text paragraph-text--secondary">
+                      {moment(call.calledAt).format('H:mm:ss')}
+                    </p>
+                  </div>
+                )}
               </div>
             </List.Item>
           )}

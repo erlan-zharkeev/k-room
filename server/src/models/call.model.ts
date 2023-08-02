@@ -1,7 +1,11 @@
 import { Schema, model } from 'mongoose'
-import { Call } from '../../../types'
+import { CallDB } from '../../../types'
 
-export const callModel = new Schema<Call>({
+export const callModel = new Schema<CallDB>({
+  calledAt: {
+    type: Number,
+    required: false
+  },
   startedAt: {
     type: Number,
     required: false
@@ -14,28 +18,12 @@ export const callModel = new Schema<Call>({
     type: String,
     required: true
   },
-  authorName: {
-    type: String,
+  interlocutors: {
+    type: [],
     required: true
   },
-  interlocutorId: {
-    type: String,
-    required: true
-  },
-  interlocutorName: {
-    type: String,
-    required: true
-  },
-  interlocutorAvatar: {
-    type: String,
-    required: false
-  },
-  status: {
-    type: String,
-    required: true
-  },
-  type: {
-    type: String,
+  answered: {
+    type: Boolean,
     required: true
   },
   video: {

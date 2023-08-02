@@ -3,12 +3,12 @@
 ## Development
 
 - run docker
-- run cd ./scripts && bash dev.sh
-- run in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
+- run bash dev.sh
+- set in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
 
 ## Deploy
 
-- run cd ./script && bash prod-build.sh
+- run bash prod.sh
 
 ## If smthng went wrong
 
@@ -18,13 +18,12 @@
 ## Commit convention
 
 - To use husky run yarn prepare
-- Branch name should be of the form type-dd.mm.yy(e.g. development-22.01.23)
+- Branch name should be of the form feat-dd.mm.yy(e.g. create-chat-signature-22.01.23)
 - To commit changes add changes then call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
 
-## Avoid
+## Other
 
 - Add or edit types only in ./types/index.ts file it will autocompile to index.d.ts
-  Do not edit nested .env files(edit only in root)
 
 ## Server works
 
@@ -62,55 +61,17 @@
   for more info "https://mindsers.blog/post/https-using-nginx-certbot-docker/"
 
 ## Docker hints
-
 - Remove all images - docker rmi $(docker images -a -q)
 - Remove all unused images - docker image prune --filter="dangling=true" -f
 - docker build -t branchName -f server/Dockerfile .
 - delete all volumes docker volume rm $(docker volume ls -q)
 
 ## Ubuntu hints
-
 - Turn to super user - sudo -s
 - Check ram - free -m
 - Check disk space - df -h
 - Delete dir - rm -r dirname
 
 ## Backlog
-
-- make https
-- serve front on back
-- clean up
-- Redesign
-- develop call list
-- develop add photo
-- develop add files
-- develop add video
-- develop add audio
-- Make username unique
-- develop forward and reply
-- develop reactions
-- make multiple chat
-- make multiple video chat
-- make notifications from chat
-- make update button(webWorkers)
-- check token works
-- make google/facebook authorization
-- make cookie checker
-- make gif how to use
-- share geolocation
-- delayed messages
-- find out how to deploy project for MOBILE and WINDOWS
 - setup cors to specific host and port
-- logo in email
-- types any and unknown
-- not found page
-- скомпоновать сообщения на бэке
-- восстановление пароля
-- auto upgrade version
-- уменьшить базовые изображения и удаление не нужных
-- добавить компрессию файлов
-
-
-docker stop $(docker ps -aq)
-docker rm $(docker ps -aq)
-<!-- docker-compose --env-file .env.production up -d webserver -->
+- check token works(1)

@@ -1,39 +1,20 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { AuthEndPoints, UserEndPoints, RouteNames, User } from 'common-types'
+import { AnyAction, createSlice, ThunkDispatch } from '@reduxjs/toolkit'
+import { InfoItem, InfoItemStatus, RouteNames, User, UserSettings } from 'common-types'
 import $router from 'src/services/$router'
-import $api from 'src/services/$api'
-import clearCookie from 'src/utils/clearCookie'
+import { clearCookie } from 'src/utils/clearCookie'
 import { UserState } from './@types/UserState'
 import { updateSettings } from './settingsSlice'
 
-export enum UserAction {
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-  UPDATE_USER_DATA = 'UPDATE_USER_DATA',
-  GET_USER_DATA = 'GET_USER_DATA'
+export const commonSetUserDataHandler = (
+  dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+  data: { userData: User; settings: UserSettings }
+) => {
+  dispatch(setUserData(data.userData))
+  dispatch(updateSettings(data.settings))
 }
 
-export const login = createAsyncThunk(UserAction.LOGIN, async (payload: User, { dispatch }) => {
-  const response = await $api('post', AuthEndPoints.LOGIN, dispatch, payload)
-  dispatch(setUserData(response.data.userData))
-  dispatch(updateSettings(response.data.settings))
-  $router.push(RouteNames.MAIN)
-})
-
-export const updateUserData = createAsyncThunk(UserAction.UPDATE_USER_DATA, async (payload: User, { dispatch }) => {
-  const response = await $api('post', UserEndPoints.UPDATE_USER_DATA, dispatch, payload, 'multipart/form-data')
-  dispatch(setUserData(response.data.userData))
-})
-
-export const getUserData = createAsyncThunk(UserAction.GET_USER_DATA, async (_: unknown, { dispatch }) => {
-  const response = await $api('get', UserEndPoints.GET_USER_DATA, dispatch)
-  dispatch(setUserData(response.data.userData))
-  dispatch(updateSettings(response.data.settings))
-  $router.push(RouteNames.MAIN)
-})
-
 const initialState: UserState = {
-  isAppLoading: true,
+  isAppLoading: false,
   isAuth: false,
   userData: {
     id: '',
@@ -42,7 +23,9 @@ const initialState: UserState = {
     online: false,
     chatRooms: [],
     contacts: [],
-    avatar: ''
+    avatarPath: '',
+    providerName: '',
+    infoItems: []
   }
 }
 
@@ -50,16 +33,25 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    changeIsAppLoading: (state, { payload }) => {
+    setInfoItems(state, { payload }: { payload: Array<InfoItem> }) {
+      state.userData.infoItems = payload
+    },
+    markInfoItemAsRead(state, { payload }: { payload: { id: string } }) {
+      const { id } = payload
+      if (!state.userData.infoItems) return
+      const index = state.userData.infoItems.findIndex((item) => item.id === id)
+      state.userData.infoItems[index].read = InfoItemStatus.read
+    },
+    changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
     },
-    setUserData: (state, { payload }) => {
-      state.isAppLoading = false
-      state.isAuth = true
+    setUserData: (state, { payload }: { payload: User }) => {
       state.userData = {
         ...state.userData,
         ...payload
       }
+      state.isAuth = true
+      state.isAppLoading = false
     },
     logOut: (state) => {
       clearCookie()
@@ -69,6 +61,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUserData, logOut, changeIsAppLoading } = userSlice.actions
+export const { setUserData, logOut, changeIsAppLoading, setInfoItems, markInfoItemAsRead } = userSlice.actions
 
 export default userSlice.reducer

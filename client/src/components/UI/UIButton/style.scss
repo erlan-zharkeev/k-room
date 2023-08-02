@@ -1,0 +1,115 @@
+.ui-button {
+  @mixin btn-style($color) {
+    .ant-btn,
+    .ant-btn:hover,
+    span {
+      color: $color !important;
+      border-color: $color !important;
+    }
+  }
+
+  &--fill {
+    button {
+      width: 100%;
+    }
+  }
+
+  &--accent {
+    @include btn-style(var(--accent));
+  }
+
+  &--success {
+    @include btn-style(var(--success));
+  }
+
+  &--default {
+    @include btn-style(var(--secondary-text));
+  }
+
+  &--error {
+    @include btn-style(var(--error));
+  }
+
+  &--small {
+    .ant-btn {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+    }
+  }
+
+  &--hoverless {
+    svg {
+      color: var(--secondary-text) !important;
+    }
+    span {
+      color: var(--secondary-text) !important;
+    }
+    button:hover {
+      border-color: var(--secondary-text) !important;
+
+      svg {
+        color: var(--secondary-text) !important;
+      }
+
+      span {
+        color: var(--secondary-text) !important;
+      }
+    }
+  }
+
+  &--border-default {
+    button {
+      border-color: var(--accent);
+      &:hover {
+        border-color: var(--accent);
+      }
+    }
+  }
+
+  &--borderless {
+    .ant {
+      &-btn {
+        padding: 0 8px;
+        border: none !important;
+      }
+
+      &-radio-button-wrapper {
+        border: none !important;
+      }
+    }
+  }
+
+  .ant-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-text);
+    background-color: transparent;
+    border-color: var(--secondary-text);
+    border-radius: $radius-sm;
+    &::before {
+      background: transparent;
+    }
+    &:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    &:disabled {
+      color: var(--secondary-text);
+      background-color: transparent !important;
+      border-color: var(--secondary-text);
+      opacity: 0.4;
+
+      &:hover {
+        color: var(--secondary-text);
+        border-color: var(--secondary-text);
+      }
+    }
+    .ant-radio-button-wrapper {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

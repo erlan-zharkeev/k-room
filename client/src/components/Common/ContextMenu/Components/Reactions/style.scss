@@ -1,0 +1,21 @@
+.reactions {
+  display: inline-grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: space-evenly;
+  width: 100%;
+  border-bottom: 1px var(--secondary-text) solid;
+  padding: $gutter-sm 0;
+  .reactions__element {
+    display: flex;
+    justify-content: center;
+    border-radius: $radius-sm;
+    &:hover {
+      cursor: pointer;
+      background-color: var(--secondary-text);
+    }
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.2;
+    }
+  }
+}

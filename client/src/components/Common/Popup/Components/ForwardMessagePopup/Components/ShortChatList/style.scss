@@ -1,0 +1,20 @@
+.short-chat-list {
+  padding: $gutter-lg $gutter-sm $gutter-sm $gutter-sm;
+  max-height: 200px;
+  &__item {
+    display: flex;
+    align-items: center;
+    border-radius: $radius-sm;
+    padding: $gutter-md;
+    &:hover {
+      cursor: pointer;
+      background-color: var(--dark-gray-transparent);
+    }
+    .ant-image {
+      margin-top: 4px;
+    }
+  }
+  &__name {
+    margin-left: $gutter-md;
+  }
+}

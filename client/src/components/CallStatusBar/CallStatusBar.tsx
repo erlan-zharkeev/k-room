@@ -1,27 +1,28 @@
-import { Avatar } from 'antd'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UserOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { unsetMinify } from 'src/store/callsSlice'
+import { UIAvatar } from '../UI'
+import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 
-export const CallStatusBar = () => {
+const CallStatusBar = () => {
   const { isMinified } = useTypedSelector((state) => state.calls)
+  const { currentCall } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
-
   return (
     <div
       className={`call-status-bar ${!isMinified ? 'call-status-bar--hide' : ''}`}
       onClick={() => dispatch(unsetMinify())}
     >
       <div className="call-status-bar__wrapper">
-        <div className="call-status-bar__type">Incoming audio call</div>
+        <div className="call-status-bar__type paragraph-text">{firstCharUpperCase(currentCall.type)} call</div>
         <div className="call-status-bar__info">
-          <div className="call-status-bar__avatar">
-            <Avatar size="small" src="" icon={<UserOutlined />} />
-          </div>
-          <div className="call-status-bar__interlocutor-name">Иван Судовых</div>
-          <div className="call-status-bar__length">09:20</div>
+          {currentCall.interlocutorAvatarPath && (
+            <div className="call-status-bar__avatar">
+              <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} />
+            </div>
+          )}
+          <div className="call-status-bar__interlocutor-name paragraph-text">{currentCall.authorName}</div>
         </div>
       </div>
     </div>

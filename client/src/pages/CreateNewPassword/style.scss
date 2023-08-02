@@ -1,0 +1,16 @@
+.create-new-password {
+  .header-text {
+    margin-bottom: $gutter-lg;
+  }
+  &__wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &__body {
+    display: flex;
+    width: $container-sm;
+    justify-content: center;
+    flex-direction: column;
+  }
+}

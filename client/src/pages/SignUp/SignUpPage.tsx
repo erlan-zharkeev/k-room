@@ -1,16 +1,18 @@
-import { Button, Form, Input } from 'antd'
-import { Status, RouteNames } from 'common-types'
+import { Form } from 'antd'
+import { Status, RouteNames, UserCredential } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
 import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { registration } from 'src/store/authSlice'
-import validateRules from 'src/utils/validateRules'
-const Logo = require('src/assets/images/Logo.svg') as string
+import { validateRules } from 'src/utils/validateRules'
+import { Logo } from 'src/components/Common/Logo/Logo'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import apiMethods from 'src/services/api-methods'
+import { UIInput, UISwitch, UIButton } from 'src/components/UI'
 
-export const SignUpPage = () => {
+const SignUpPage = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -19,13 +21,13 @@ export const SignUpPage = () => {
 
   const [isValid, validate] = useValidate()
 
-  const onFinish = async (values: FormData) => {
+  const onFinish = async (values: UserCredential) => {
     setIsLoading(true)
-    const response = await dispatch(registration(values as any))
+    const response = (await dispatch(apiMethods.auth.registration(values))) as AsyncThunkResponseWrapper
     setIsLoading(false)
     if (!response.payload) return
-    const { data, status } = response.payload as any
-    if (status !== Status.SUCCESS) return
+    const { data, status } = response.payload
+    if (status !== Status.success) return
     navigate(
       `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`,
       {
@@ -36,9 +38,7 @@ export const SignUpPage = () => {
 
   return (
     <div className="page sign-up">
-      <div className="sign-in__logo">
-        <img className="logo" src={Logo} alt="logo"></img>
-      </div>
+      <Logo />
       <div className="sign-up__wrapper">
         <div className="sign-up__body">
           <AuthNav />
@@ -50,22 +50,39 @@ export const SignUpPage = () => {
             form={form}
             onInput={() => validate(form)}
           >
-            <Form.Item name="username" rules={validateRules.required}>
-              <Input placeholder="Username" />
+            <Form.Item name="username" rules={validateRules.username}>
+              <UIInput placeholder="Username" size="large" autoComplete="on" />
             </Form.Item>
 
             <Form.Item name="email" rules={validateRules.email}>
-              <Input placeholder="Email" />
+              <UIInput placeholder="Email" size="large" autoComplete="on" />
             </Form.Item>
 
             <Form.Item name="password" rules={validateRules.password}>
-              <Input.Password placeholder="Password" />
+              <UIInput type="password" placeholder="Password" size="large" autoComplete="on" />
             </Form.Item>
 
+            <div className="sign-up__privacy-policy">
+              <Form.Item name="policy" rules={validateRules.policy}>
+                <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" onChange={() => {}} />
+              </Form.Item>
+              <div className="sign-up__privacy-policy-text paragraph-text paragraph-text--secondary">
+                I have read and agree{' '}
+                <a className="link" onClick={() => navigate(RouteNames.PRIVACY_POLICY)}>
+                  privacy policy
+                </a>
+              </div>
+            </div>
+
             <Form.Item className="sign-up__controls">
-              <Button ghost type="primary" htmlType="submit" disabled={!isValid} loading={isLoading}>
-                Submit
-              </Button>
+              <UIButton
+                text="Register"
+                border="border-default"
+                color="accent"
+                htmltype="submit"
+                loading={isLoading}
+                disabled={!isValid}
+              />
             </Form.Item>
           </Form>
         </div>

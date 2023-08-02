@@ -1,17 +1,20 @@
-import { List, Image, Badge, Tooltip, Button, Avatar } from 'antd'
-import { PlusOutlined, UserOutlined } from '@ant-design/icons'
-import { SocketActions, ChatRoom, Message } from 'common-types'
+import { List } from 'antd'
+import { SocketActions, ChatRoom, Message, MessageStatus, SocketActionsPayload, UserSettingKey } from 'common-types'
 import { useDispatch } from 'react-redux'
+import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
+import { UIButton, UIAvatar } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
-import { AppDispatch } from 'src/store'
-import { deselectChatRoom, selectChatRoom } from 'src/store/settingsSlice'
 
-export const ChatRoomList = () => {
+import { AppDispatch } from 'src/store'
+import { showModal } from 'src/store/systemSlice'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+
+const ChatRoomList = () => {
+  const { updateSetting } = useUpdateSettings()
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const { id } = useTypedSelector((state) => state.user.userData)
-  const { selectedChatRoomId, showTooltips } = useTypedSelector((state) => state.persist.settings)
+  const userId = useTypedSelector((state) => state.user.userData.id)
+  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -22,44 +25,59 @@ export const ChatRoomList = () => {
 
   const setChat = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
-    dispatch(selectChatRoom(id))
+    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: id })
+    const payload: SocketActionsPayload['updateUserSettings'] = {
+      userId,
+      type: UserSettingKey.selectedChatRoomId,
+      value: id
+    }
+    $socket.emit(SocketActions.UPDATE_USER_SETTINGS, payload)
   }
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
     e.stopPropagation()
-    socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId })
+    $socket.emit(SocketActions.SAVE_CONTACT, { userId, interlocutorId })
   }
 
   const unreadMessages = (room: ChatRoom) =>
-    room.messages.filter((message) => !message.isSelf && message.status === 'delivered').length
+    room.messages.filter((message) => !message.isSelf && message.status === MessageStatus.delivered).length
 
-  const AddUserButtonWrapper = (chatRoom: ChatRoom) => {
-    if (chatRoom.multiple) return
-    if (chatRoom.users.length !== 1) return
-    const user = chatRoom.users[0]
-    const hasUserInContacts = !!contacts.find((element) => element.id === user.id)
-    if (hasUserInContacts) return
-    return showTooltips ? (
-      <Tooltip placement="topLeft" title="Add to contact">
-        <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
-      </Tooltip>
-    ) : (
-      <Button size="small" icon={<PlusOutlined />} onClick={async (e) => await addUser(e, user.id)} />
+  const getFirstUserIdInChatRoom = (chatRoom: ChatRoom) => chatRoom.users[0].id
+
+  const showAddUserButton = (chatRoom: ChatRoom) => {
+    const userId = getFirstUserIdInChatRoom(chatRoom)
+    const hasUserInContacts = !!contacts.find((element) => element.id === userId)
+    const isChatMultiple = chatRoom.multiple || chatRoom.users.length !== 1
+    return !hasUserInContacts && !isChatMultiple
+  }
+
+  const createMultipleChat = (e: any) => {
+    e.stopPropagation()
+    dispatch(
+      showModal({
+        title: 'Create New Chat Room',
+        modalContentComponentName: ModalContentComponentName.createMultipleChatPopup
+      })
     )
   }
 
-  const UnreadMessagesWrapper = (chatRoom: ChatRoom) => {
-    return unreadMessages(chatRoom) ? (
-      <Button type="primary" shape="default" size="small" className="chat-room-list__unread-messages">
-        {unreadMessages(chatRoom)} unread message{unreadMessages(chatRoom) > 1 && 's'}
-      </Button>
-    ) : (
-      <></>
-    )
+  const resetChatRoomId = () => {
+    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: '' })
   }
 
   return (
-    <div className="chat-room-list" onClick={() => dispatch(deselectChatRoom())}>
+    <div className="chat-room-list" onClick={resetChatRoomId}>
+      <div className="chat-room-list__create-chat">
+        <UIButton
+          text="Create group"
+          iconName="plus"
+          border="border-default"
+          fill={true}
+          onClick={createMultipleChat}
+        />
+        <div className="divider" />
+      </div>
+
       <div className="chat-room-list__body">
         <List
           itemLayout="horizontal"
@@ -69,26 +87,33 @@ export const ChatRoomList = () => {
           }}
           renderItem={(chatRoom) => (
             <List.Item
-              onClick={(e) => setChat(e, chatRoom.roomId)}
-              key={chatRoom.roomId}
-              className={selectedChatRoomId === chatRoom.roomId ? 'active' : ''}
+              onClick={(e) => setChat(e, chatRoom.id)}
+              key={chatRoom.id}
+              className={selectedChatRoomId === chatRoom.id ? 'active' : ''}
             >
               <List.Item.Meta
                 avatar={
-                  <Badge dot={chatRoom.hasOnline} color="green">
-                    {chatRoom.avatar ? (
-                      <Image src={chatRoom.avatar} className="custom-avatar" alt="avatar" />
-                    ) : (
-                      <Avatar size="small" src={chatRoom.avatar} icon={<UserOutlined />} alt="avatar" />
-                    )}
-                  </Badge>
+                  <UIAvatar
+                    ribbon={chatRoom.multiple}
+                    online={chatRoom.hasOnline}
+                    stubIconName={chatRoom.multiple ? 'image-stub' : 'user-stub'}
+                    src={chatRoom.avatarPath}
+                    shape={chatRoom.multiple ? 'square' : 'round'}
+                  />
                 }
                 title={<span>{chatRoom.chatName}</span>}
                 description={getLastMessage(chatRoom.messages)}
               />
               <div className="chat-room-list__controls">
-                {AddUserButtonWrapper(chatRoom)}
-                {UnreadMessagesWrapper(chatRoom)}
+                {Boolean(unreadMessages(chatRoom)) && <div className="custom-badge">{unreadMessages(chatRoom)}</div>}
+                {showAddUserButton(chatRoom) && (
+                  <UIButton
+                    iconName="plus"
+                    size="small"
+                    tooltip="Add User"
+                    onClick={async (e) => await addUser(e, getFirstUserIdInChatRoom(chatRoom))}
+                  />
+                )}
               </div>
             </List.Item>
           )}

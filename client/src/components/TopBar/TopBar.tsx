@@ -1,0 +1,79 @@
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { logOut } from 'src/store/userSlice'
+import useTypedSelector from 'src/hooks/useTypedSelector'
+
+import { MenuProps } from 'antd'
+import { Dropdown } from 'antd'
+import { useEffect, useState } from 'react'
+import { UIAvatar, UIButton } from '../UI'
+import { AsideBarButtonName, UserSettingKey } from 'common-types'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
+
+const TopBar = () => {
+  const { updateSetting } = useUpdateSettings()
+
+  const { username, email, avatarPath } = useTypedSelector((state) => state.user.userData)
+  const { infoItems } = useTypedSelector((state) => state.user.userData)
+
+  const [transformedIInfoItems, setTransformedInfoItems] = useState([] as MenuProps['items'])
+
+  useEffect(() => {
+    const updatedItems = infoItems?.map((item) => {
+      const updatedItem = { ...item, key: item.id }
+      return updatedItem
+    })
+    if (!updatedItems) return
+    setTransformedInfoItems(updatedItems)
+  }, [infoItems])
+
+  const dispatch = useDispatch<AppDispatch>()
+
+  const resetChat = () => {
+    // dispatch(selectChatRoom(''))
+  }
+
+  const exit = () => {
+    dispatch(logOut())
+  }
+
+  const unreadInfoQuantity = () => Number(infoItems?.filter((item) => item.read === 'unread').length)
+
+  const infoItemClickHandler: MenuProps['onClick'] = ({ key }) => {
+    const infoId = key
+    updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.info })
+    updateSetting(UserSettingKey.currentInfoId, { infoId })
+  }
+
+  return (
+    <div className="top-bar" onClick={resetChat}>
+      <div className="top-bar__content">
+        <div className="top-bar__user-data">
+          <div className="top-bar__avatar">
+            <UIAvatar online={$socket.connected} src={avatarPath} />
+          </div>
+          <div className="top-bar__credential">
+            <div className="paragraph-text top-bar__username">{username}</div>
+            <div className="paragraph-text paragraph-text--secondary">{email}</div>
+          </div>
+        </div>
+        <div className="top-bar__buttons">
+          <div className="top-bar__info">
+            <Dropdown
+              menu={{ items: transformedIInfoItems, onClick: infoItemClickHandler }}
+              trigger={['click']}
+              placement="bottom"
+            >
+              <UIButton iconName="notification-bell" />
+            </Dropdown>
+            {unreadInfoQuantity() > 0 && <div className="custom-badge custom-badge--error">{unreadInfoQuantity()}</div>}
+          </div>
+          <UIButton tooltip="Logout" iconName="exit" onClick={() => exit()} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default TopBar

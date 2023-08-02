@@ -1,0 +1,30 @@
+.message-with-bind-data-popup {
+  width: $container-sm;
+
+  &__compress {
+    display: flex;
+    align-items: center;
+    margin-bottom: $gutter-lg;
+    span {
+      white-space: nowrap;
+      margin-right: $gutter-md;
+    }
+    .ui-switch label {
+      width: 70px;
+    }
+  }
+  &__images-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 142px);
+    grid-gap: $gutter-sm;
+    margin-bottom: $gutter-lg;
+  }
+  &__image {
+    border: 1px solid var(--secondary-text);
+  }
+  &__controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0;
+  }
+}

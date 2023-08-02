@@ -1,24 +1,40 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import AsidePanelControl from './Components/AsidePanelControl/AsidePanelControl'
 import ChatRoomList from './Components/ChatRoomList/ChatRoomList'
 import ContactList from './Components/ContactList/ContactList'
 import UserSettings from './Components/UserSettings/UserSettings'
 import Calls from './Components/Calls/Calls'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
+import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
+import constants from 'src/constants'
+import { AsideBarButtonName } from 'common-types'
 
 const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
-  const TabComponents: { [key: string]: ReactElement } = {
-    users: <ContactList />,
+  const contactListLoading = useTypedSelector((state) => state.contacts.isLoading)
+  const roomListIsLoading = useTypedSelector((state) => state.chatRooms.isLoading)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const TabComponents: Record<string, ReactElement> = {
+    contacts: <ContactList />,
     chatList: <ChatRoomList />,
     calls: <Calls />,
     settings: <UserSettings />
   }
 
+  useEffect(() => {
+    const contactsLoading = asideTab === AsideBarButtonName.contacts && contactListLoading
+    const roomsIsLoading = asideTab === AsideBarButtonName.chatList && roomListIsLoading
+    setTimeout(() => {
+      setIsLoading(contactsLoading && roomsIsLoading)
+    }, constants.asidePanelLoaderMinDuration)
+  }, [contactListLoading, roomListIsLoading])
+
   return (
     <div className="aside-panel">
-      <div className="aside-panel__content">{TabComponents[asideTab]}</div>
-      <AsidePanelControl />
+      <div className="aside-panel__content">
+        <WidgetLoader hide={!isLoading} />
+        {TabComponents[asideTab]}
+      </div>
     </div>
   )
 }

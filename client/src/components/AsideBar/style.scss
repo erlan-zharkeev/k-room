@@ -1,0 +1,53 @@
+.aside-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: $aside-bar-width;
+  min-width: $aside-bar-width;
+  margin-right: $gutter-lg;
+  padding: $gutter-md $gutter-sm;
+  @include nm-outset-element;
+  @include max-width-768 {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: $aside-bar-width;
+    min-height: $aside-bar-width;
+    margin-top: $gutter-lg;
+  }
+
+  .logo {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
+  &__button-el {
+    position: relative;
+    .custom-badge {
+      padding: 8px 10px;
+    }
+  }
+
+  .ant-radio-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    max-width: $container-sm;
+    @include max-width-768 {
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+
+      svg {
+        margin-top: 6px;
+      }
+    }
+
+    .ant-radio-button-wrapper {
+      margin: $gutter-lg 0;
+    }
+  }
+}

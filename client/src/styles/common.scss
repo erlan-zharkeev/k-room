@@ -6,21 +6,31 @@ html {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  color: var(--main-text);
   background-color: var(--main-bg);
+}
+
+* {
+  font-weight: 400;
+  font-family: 'Montserrat, Helvetica', sans-serif;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  color: var(--main-text);
+}
+
+::placeholder {
+  opacity: 0.4;
 }
 
 form {
   width: 100%;
-}
-
-.d-none {
-  display: none;
-}
-
-.borderless {
-  border: none;
 }
 
 .blink-me {
@@ -33,19 +43,15 @@ form {
   }
 }
 
-.transitionless {
-  transition: all 0s linear;
-}
-
 ::-webkit-scrollbar {
-  width: 4px; /* Y scroll width */
-  height: 7px; /* Y scroll height */
+  width: 4px;
+  height: 7px;
   background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--secondary-text);
-  border-radius: $sm-radius;
+  border-radius: $radius-sm;
 }
 
 input:-webkit-autofill {
@@ -58,31 +64,50 @@ input:-webkit-autofill {
   }
 }
 
-.custom-avatar {
-  width: 32px !important;
-  height: 32px !important;
-  object-fit: cover !important;
-  border-radius: 50% !important;
+.nm-outset-shadow {
+  @include nm-outset-shadow;
 }
 
-.app-loader {
+.pointer {
+  cursor: pointer;
+}
+
+.divider {
+  width: 100%;
+  background-color: var(--dark-gray);
+  height: 1px;
+}
+
+.custom-badge {
+  max-height: 1rem;
+  position: absolute;
+  right: -6px;
+  background-color: var(--accent);
+  font-size: 10px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 100%;
+  align-items: center;
+  z-index: 2;
+  padding: 8px;
+  border-radius: $radius-sm;
+  max-width: 14px;
+  bottom: calc(100% - 24px);
+  line-height: 0;
+  color: var(--main-bg);
+  &--error {
+    background-color: var(--error);
+    color: var(--main-text);
+  }
+}
 
-  &__content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    span {
-      margin-bottom: $gutter-xl;
-      color: var(--accent-color);
-      font-size: 60px;
-      stroke-width: 25;
-    }
+html[theme='light'] {
+  .call-modal__interlocutor-name {
+    color: var(--main-bg);
+  }
+  .lds-ellipsis > * {
+    background-color: var(--main-bg);
+  }
+  ::placeholder {
+    color: var(--main-text);
   }
 }

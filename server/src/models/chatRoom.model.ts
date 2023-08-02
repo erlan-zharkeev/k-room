@@ -1,12 +1,12 @@
 import { Schema, model } from 'mongoose'
-import { ChatRoom } from '../../../types'
+import { DBChatRoom } from '../../../types'
 
-export const chatRoomModel = new Schema<ChatRoom>({
+export const chatRoomModel = new Schema<DBChatRoom>({
   chatName: {
     type: String,
     required: false
   },
-  avatar: {
+  avatarPath: {
     type: String,
     required: false
   },
@@ -19,14 +19,19 @@ export const chatRoomModel = new Schema<ChatRoom>({
     required: false
   },
   users: {
-    type: [{ id: String, username: String }],
+    type: [String],
     required: true,
     default: []
   },
   messages: {
-    type: [],
+    type: [String],
     required: false,
     default: []
+  },
+  blocked: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 })
 

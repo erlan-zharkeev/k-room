@@ -4,7 +4,7 @@ interface ValidationForm {
   getFieldsValue: () => { [s: string]: string }
 }
 
-export const useValidate = (): [boolean, (form: ValidationForm) => void] => {
+const useValidate = (): [boolean, (form: ValidationForm) => void] => {
   const [isValid, setIsValid] = useState(false)
 
   const validate = (form: ValidationForm) => {

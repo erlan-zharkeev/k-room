@@ -1,0 +1,12 @@
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+  &__image {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

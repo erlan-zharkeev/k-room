@@ -1,53 +1,47 @@
-import { List, Badge, Avatar, Image, Button, Tooltip } from 'antd'
-import {
-  UserOutlined,
-  MessageOutlined,
-  CloseCircleOutlined,
-  LoadingOutlined,
-  PhoneOutlined,
-  VideoCameraOutlined
-} from '@ant-design/icons'
-import { User, SocketActions } from 'common-types'
+import { List } from 'antd'
+import { User, SocketActions, SocketActionsPayload, AsideBarButtonName, UserSettingKey } from 'common-types'
 import moment from 'moment'
-import { ReactElement, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useContext, useEffect, useState } from 'react'
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { socket } from 'src/socket/socket'
-import { AppDispatch } from 'src/store'
+
 import ContactSearch from './Components/ContactSearch/ContactSearch'
-import { changeAsideTab, selectChatRoom } from 'src/store/settingsSlice'
-import { initModalToCall, setCurrentCallAccepted } from 'src/store/callsSlice'
-import call from './../../../../call/call'
+import { UIAvatar, UIButton } from 'src/components/UI'
+import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
+import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const ContactList = () => {
+  const { updateSetting } = useUpdateSettings()
+  const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { id, username, avatar } = useTypedSelector((state) => state.user.userData)
-  const [roomCreateLoader, setRoomCreateLoader] = useState(false)
-  const { settings } = useTypedSelector((state) => state.persist)
-  const [isStreamIsLoading, setIsStreamIsLoading] = useState(false)
-  // const { call } = useTypedSelector((state) => state.calls)
+  const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)
+  const { settings } = useTypedSelector((state) => state.calls)
+  const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
+    room: Record<string, boolean>
+    stream: Record<string, boolean>
+  })
 
-  const dispatch = useDispatch<AppDispatch>()
-
-  const createUser = (id: string, username: string) => {
-    return {
-      id,
-      username: username ?? ''
-    }
-  }
+  useEffect(() => {
+    contacts.forEach((contact) => {
+      loaderStateChangeHandler(false, 'room', contact.id)
+      loaderStateChangeHandler(false, 'stream', contact.id)
+    })
+  }, [contacts])
 
   const deleteUser = (userData: User) => {
-    if (userData.id && id) socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
+    if (userData.id && id)
+      $socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
   }
 
   const createChat = (value: User) => {
+    if (loaders.room[value.id]) return
     const hasChatWithContact = chatRooms.some((room) => {
       if (room.multiple) return
       const user = room.users.find((user) => user.id === value.id)
-      if (user.id) {
-        dispatch(changeAsideTab('chatList'))
-        dispatch(selectChatRoom(room.roomId))
+      if (user?.id) {
+        updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
+        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: room.id })
       }
       return Boolean(user)
     })
@@ -57,34 +51,29 @@ const ContactList = () => {
 
     const hasUsersData = contactId && contactName && id && username
     if (!hasUsersData) return
-    const users = [createUser(id, username), createUser(contactId, contactName)]
 
-    setRoomCreateLoader(true)
-    socket.emit(SocketActions.CREATE_ROOM, { users, authorId: id })
+    loaderStateChangeHandler(true, 'room', value.id)
+    const socketPayload: SocketActionsPayload['createRoom'] = {
+      chatName: contactName,
+      users: [id, contactId],
+      authorId: id,
+      multiple: false
+    }
+    $socket.emit(SocketActions.CREATE_ROOM, socketPayload)
 
-    socket.on(SocketActions.ROOM_CREATED, () => {
-      setRoomCreateLoader(false)
-      dispatch(changeAsideTab('chatList'))
+    $socket.on(SocketActions.ROOM_CREATED, (data) => {
+      loaderStateChangeHandler(false, 'room', value.id)
+      updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
+      setTimeout(() => {
+        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: data.roomId })
+      })
     })
   }
 
-  const CustomButton = (clickEvent: (value: User) => void, icon: ReactElement, clickEventPayload: any) => (
-    <Button icon={icon} onClick={() => clickEvent(clickEventPayload)} size="large" className="borderless" type="text" />
-  )
-
-  const ButtonWrapper = (
-    clickEvent: (value: any) => void,
-    icon: ReactElement,
-    clickEventPayload: User,
-    title: string
-  ) => {
-    return settings.showTooltips ? (
-      <Tooltip placement="topLeft" title={title}>
-        {CustomButton(clickEvent, icon, clickEventPayload)}
-      </Tooltip>
-    ) : (
-      <>{CustomButton(clickEvent, icon, clickEventPayload)}</>
-    )
+  const loaderStateChangeHandler = (value: boolean, type: 'room' | 'stream', id: string) => {
+    const loadersClone = { ...loaders }
+    loadersClone[type][id] = value
+    setLoaders(loadersClone)
   }
 
   const lastSeen = (timeStamp: string | undefined) => {
@@ -92,15 +81,16 @@ const ContactList = () => {
   }
 
   const initCall = async (interlocutorData: User) => {
-    setIsStreamIsLoading(true)
-    const gotStream = await call.setStream()
-    setIsStreamIsLoading(false)
-    if (gotStream) call.initCall(interlocutorData, id, avatar, username)
+    if (loaders.stream[interlocutorData.id]) return
+    loaderStateChangeHandler(true, 'stream', interlocutorData.id)
+    await call.current.initCall(interlocutorData, id, avatarPath ?? '', username, settings)
+    loaderStateChangeHandler(false, 'stream', interlocutorData.id)
   }
 
   return (
     <div className="contact-list">
       <ContactSearch />
+      <div className="divider" />
       <List
         header={<div>Contacts</div>}
         itemLayout="horizontal"
@@ -111,35 +101,27 @@ const ContactList = () => {
         renderItem={(user) => (
           <List.Item>
             <List.Item.Meta
-              avatar={
-                <Badge dot={user.online} color="green">
-                  {user.avatar ? (
-                    <Image src={user.avatar} className="custom-avatar" alt="avatar" />
-                  ) : (
-                    <Avatar size="small" src={user.avatar} icon={<UserOutlined />} alt="avatar" />
-                  )}
-                </Badge>
-              }
+              avatar={<UIAvatar online={user.online} src={user.avatarPath} />}
               title={<span>{user.username}</span>}
               description={
-                <span className="paragraph-text paragraph-text--secondary">
+                <span className="paragraph-text paragraph-text--sm paragraph-text--secondary">
                   {user.online ? 'online' : lastSeen(user.lastSeen)}
                 </span>
               }
             />
-            {isStreamIsLoading ? (
-              <Button icon={<LoadingOutlined />} size="large" className="borderless" type="text" />
-            ) : (
-              <Button
-                icon={<PhoneOutlined />}
-                onClick={async () => await initCall(user)}
-                size="large"
-                className="borderless"
-                type="text"
+            <div className="contact-list__controls">
+              <UIButton
+                iconName={loaders.stream[user.id] ? 'loader' : 'call'}
+                onClick={() => initCall(user)}
+                tooltip="Call"
               />
-            )}
-            {ButtonWrapper(createChat, roomCreateLoader ? <LoadingOutlined /> : <MessageOutlined />, user, 'Open chat')}
-            {ButtonWrapper(deleteUser, <CloseCircleOutlined />, user, 'Delete contact')}
+              <UIButton
+                iconName={loaders.room[user.id] ? 'loader' : 'chat'}
+                onClick={() => createChat(user)}
+                tooltip="Create Chat"
+              />
+              <UIButton iconName="cross" onClick={() => deleteUser(user)} tooltip="Delete User" />
+            </div>
           </List.Item>
         )}
       />

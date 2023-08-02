@@ -3,39 +3,31 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { IRoute } from './@types/IRoute'
 import { privateRoutes, publicRoutes } from './routes'
-import { LoadingOutlined } from '@ant-design/icons'
-import getCookie from 'src/utils/getCookie'
 
 const AppRouter = () => {
-  const { isAuth, isAppLoading } = useTypedSelector((state) => state.user)
-  const hasJwt = getCookie('jwt')
-  const showLoader = isAppLoading && hasJwt
-  const convertedRouteProps = (
-    route: IRoute
-  ): { key: string; path: string; element: React.ReactElement; exact: boolean } => {
-    return { key: route.path, element: <route.component />, path: route.path, exact: true }
+  const { isAuth } = useTypedSelector((state) => state.user)
+
+  const convertedRouteProps = (route: any): { path: string; element: React.ReactElement; exact: boolean } => {
+    return {
+      element: <route.component />,
+      path: route.path,
+      exact: true
+    }
   }
 
-  return showLoader ? (
-    <div className="app-loader">
-      <div className="app-loader__content">
-        <LoadingOutlined />
-        <h3 className="header-text header-text--md">Loading</h3>
-      </div>
-    </div>
-  ) : isAuth ? (
+  return isAuth ? (
     <Routes>
-      {privateRoutes.map((route: IRoute) => (
-        <Route {...convertedRouteProps(route)} />
+      <Route path="*" element={<Navigate to={RouteNames.MAIN} />} />
+      {privateRoutes.map((route: IRoute, idx) => (
+        <Route {...convertedRouteProps(route)} key={idx} />
       ))}
-      <Route path="*" element={<Navigate to={RouteNames.MAIN} replace />} />
     </Routes>
   ) : (
     <Routes>
-      {publicRoutes.map((route: IRoute) => (
-        <Route {...convertedRouteProps(route)} />
-      ))}
       <Route path="*" element={<Navigate to={RouteNames.SIGN_IN} replace />} />
+      {publicRoutes.map((route: IRoute, idx) => (
+        <Route {...convertedRouteProps(route)} key={idx} />
+      ))}
     </Routes>
   )
 }
