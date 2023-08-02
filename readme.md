@@ -61,22 +61,17 @@
   for more info "https://mindsers.blog/post/https-using-nginx-certbot-docker/"
 
 ## Docker hints
-
 - Remove all images - docker rmi $(docker images -a -q)
 - Remove all unused images - docker image prune --filter="dangling=true" -f
 - docker build -t branchName -f server/Dockerfile .
 - delete all volumes docker volume rm $(docker volume ls -q)
 
 ## Ubuntu hints
-
 - Turn to super user - sudo -s
 - Check ram - free -m
 - Check disk space - df -h
 - Delete dir - rm -r dirname
 
 ## Backlog
-- develop call list(4)
 - setup cors to specific host and port
 - check token works(1)
-- create info items(welcome, what is next)
-- privacy policy create and to facebook dev

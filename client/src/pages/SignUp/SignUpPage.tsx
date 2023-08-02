@@ -67,7 +67,10 @@ const SignUpPage = () => {
                 <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" onChange={() => {}} />
               </Form.Item>
               <div className="sign-up__privacy-policy-text paragraph-text paragraph-text--secondary">
-                I have read and agree <a className="link">privacy policy</a>
+                I have read and agree{' '}
+                <a className="link" onClick={() => navigate(RouteNames.PRIVACY_POLICY)}>
+                  privacy policy
+                </a>
               </div>
             </div>
 

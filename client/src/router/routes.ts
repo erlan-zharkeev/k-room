@@ -5,7 +5,8 @@ import WaitConfirmPage from 'src/pages/WaitEmailConfirm/WaitEmailConfirmPage'
 import ConfirmedPage from 'src/pages/EmailConfirm/EmailConfirmPage'
 import NotFoundPage from 'src/pages/NotFound/NotFoundPage'
 import PasswordRecoveryPage from 'src/pages/PasswordRecovery/PasswordRecoveryPage'
-import CreateNewPassword from 'src/pages/CreateNewPassword/CreateNewPassword'
+import CreateNewPasswordPage from 'src/pages/CreateNewPassword/CreateNewPasswordPage'
+import PrivacyPolicyPage from 'src/pages/PrivacyPolicy/PrivacyPolicyPage'
 
 import { IRoute } from './@types/IRoute'
 import { RouteNames } from 'common-types'
@@ -16,7 +17,7 @@ const commonRoutes = [
     component: () => ConfirmedPage()
   },
   {
-    path: RouteNames['not-found'],
+    path: RouteNames.NOT_FOUND,
     component: () => NotFoundPage()
   },
   {
@@ -25,12 +26,32 @@ const commonRoutes = [
   },
   {
     path: RouteNames.CREATE_NEW_PASSWORD,
-    component: () => CreateNewPassword()
+    component: () => CreateNewPasswordPage()
+  },
+  {
+    path: RouteNames.PRIVACY_POLICY,
+    component: () => PrivacyPolicyPage()
   }
 ]
 
 export const publicRoutes: Array<IRoute> = [
   ...commonRoutes,
+  {
+    path: RouteNames.EMAIL_CONFIRM,
+    component: () => ConfirmedPage()
+  },
+  {
+    path: RouteNames.NOT_FOUND,
+    component: () => NotFoundPage()
+  },
+  {
+    path: RouteNames.PASSWORD_RECOVERY,
+    component: () => PasswordRecoveryPage()
+  },
+  {
+    path: RouteNames.CREATE_NEW_PASSWORD,
+    component: () => CreateNewPasswordPage()
+  },
   {
     path: RouteNames.SIGN_IN,
     component: () => LoginPage()

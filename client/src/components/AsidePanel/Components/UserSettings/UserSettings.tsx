@@ -5,10 +5,9 @@ import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 import appData from '../../../../../package.json'
 import { useNavigate } from 'react-router-dom'
-import { RouteNames, SocketActions, SocketActionsPayload, Theme, UserSettingKey } from 'common-types'
+import { RouteNames, Theme, UserSettingKey } from 'common-types'
 import { UIAvatar, UISwitch } from 'src/components/UI'
 import { UserSettingName } from './@types/UserSettingName'
-import { changeTheme, setSoundValue, setTooltipsValue, setAbleToShowNotification } from 'src/store/settingsSlice'
 import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
 
 import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
@@ -65,7 +64,10 @@ const UserSettings = () => {
           />
           <span className="user-settings__id paragraph-text paragraph-text-sm paragraph-text--secondary">#{id}</span>
         </div>
-        <div className="link paragraph-text" onClick={() => navigate({ pathname: RouteNames.PASSWORD_RECOVERY })}>
+        <div
+          className="link paragraph-text user-settings__password-recovery"
+          onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}
+        >
           Password recovery
         </div>
         <div className="user-settings__theme-switch">
@@ -98,15 +100,18 @@ const UserSettings = () => {
         </div>
       </div>
       <div className="user-settings__info">
+        <a className="link paragraph-text" href={`mailto:${VITE_MAIL_APP}?subject=Support%20Request(${id})`}>
+          Tech support
+        </a>
+        <a className="link paragraph-text" onClick={() => navigate(RouteNames.PRIVACY_POLICY)}>
+          Privacy policy
+        </a>
         <div className="user-settings__app-name paragraph-text paragraph-text-sm paragraph-text--secondary">
           {appData.name}
         </div>
         <div className="user-settings__version paragraph-text paragraph-text-sm paragraph-text--secondary">
           v.{appData.version}
         </div>
-        <a className="link paragraph-text" href={`mailto:${VITE_MAIL_APP}?subject=Support%20Request(${id})`}>
-          Tech support
-        </a>
       </div>
     </div>
   )

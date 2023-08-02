@@ -174,6 +174,7 @@ var RouteNames;
     RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
     RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
     RouteNames["NOTIFICATION"] = "/notification";
+    RouteNames["PRIVACY_POLICY"] = "/privacy-policy/";
     // Don't forget to change path below in nginx manually
     RouteNames["SOCKET_PATH"] = "/app-socket/";
     RouteNames["API"] = "/api/";

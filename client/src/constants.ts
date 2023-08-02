@@ -4,6 +4,7 @@ export default {
   asidePanelLoaderMinDuration: 2000,
   chatRoomLoaderMinDuration: 2500,
   commonTimeoutDuration: 1000,
+  infoItemMarkAsReadDuration: 1500,
   maxImageWeightMb: 2,
   maxQuantityBindImages: 4,
   maxGroupChatMembersQuantity: 5,

@@ -20,7 +20,7 @@ const SignInPage = () => {
   const { firebase } = useContext(AdditionalServiceContext)
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
-  const [fbBtnLoading, setFbBtnLoading] = useState(false)
+  // const [fbBtnLoading, setFbBtnLoading] = useState(false)
 
   const navigate = useNavigate()
 

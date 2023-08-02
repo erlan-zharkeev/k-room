@@ -1,5 +1,5 @@
 import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UIAvatar, UIIcon } from 'src/components/UI'
+import { UIAvatar } from 'src/components/UI'
 import { useContext } from 'react'
 import { RefsContext } from 'src/providers/RefsProvider'
 
@@ -17,7 +17,6 @@ const CallModalVideo = () => {
       <div className="call-modal-video__interlocutor-video">
         {!currentCall?.interlocutorSettings?.audio && (
           <div className="call-modal-video__interlocutor-audio-status">
-            <UIIcon name="mic-muted" color="white" />
             <div className="paragraph-text paragraph-text--sm">The interlocutor turned off the sound</div>
           </div>
         )}

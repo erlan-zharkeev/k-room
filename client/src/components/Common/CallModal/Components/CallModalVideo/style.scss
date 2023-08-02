@@ -7,23 +7,14 @@
     top: calc(50% - 20px);
   }
   &__interlocutor-audio-status {
-    display: flex;
-    align-items: center;
-    .ui-icon {
-      margin-right: $gutter-sm;
-    }
-    span {
-      margin-right: 1.3rem;
-      font-size: 1rem;
-    }
-
     position: absolute;
-    top: -1px;
+    bottom: -1px;
     left: 0;
     display: flex;
+    justify-content: center;
     width: 100%;
-    padding: 0.7rem;
-    background-color: var(--secondary-text);
+    padding: 0.3rem;
+    background-color: var(--main-bg);
   }
 
   &__settings {

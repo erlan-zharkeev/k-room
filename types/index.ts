@@ -506,6 +506,7 @@ export enum RouteNames {
   PASSWORD_RECOVERY = "/password-recovery",
   CREATE_NEW_PASSWORD = "/create-new-password",
   NOTIFICATION = "/notification",
+  PRIVACY_POLICY = "/privacy-policy/",
   // Don't forget to change path below in nginx manually
   SOCKET_PATH = "/app-socket/",
   API = "/api/",

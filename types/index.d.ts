@@ -470,6 +470,7 @@ export declare enum RouteNames {
     PASSWORD_RECOVERY = "/password-recovery",
     CREATE_NEW_PASSWORD = "/create-new-password",
     NOTIFICATION = "/notification",
+    PRIVACY_POLICY = "/privacy-policy/",
     SOCKET_PATH = "/app-socket/",
     API = "/api/"
 }

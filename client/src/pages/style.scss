@@ -12,10 +12,13 @@
 
 @import './CreateNewPassword/style';
 
+@import './PrivacyPolicy/style';
+
 .page {
   position: relative;
-  height: 100vh;
+  height: 100%;
   padding: $gutter-lg;
+  overflow: hidden;
 }
 
 .sign-in,
