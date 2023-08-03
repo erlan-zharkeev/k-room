@@ -1,4 +1,4 @@
-import { NotificationType } from 'common-types'
+import { NotificationMessage, NotificationType } from 'common-types'
 import constants from 'src/constants'
 import { AppDispatch } from 'src/store'
 import { showNotification } from 'src/store/systemSlice'
@@ -17,9 +17,9 @@ export const imageToBase64 = ({
 
   const warnings = []
   const resolutionNotAllowed = !allowedResolutions.includes(image.type)
-  if (resolutionNotAllowed) warnings.push('Image resolution not allowed')
+  if (resolutionNotAllowed) warnings.push(NotificationMessage.imageResNotAllowed)
   const isGreaterThanAllowed = image.size / 1024 / 1024 > constants.maxImageWeightMb
-  if (isGreaterThanAllowed) warnings.push(`Image size must be less than ${constants.maxImageWeightMb}mb`)
+  if (isGreaterThanAllowed) warnings.push(NotificationMessage.imageSizeMustLessThan2mb)
 
   if (warnings.length) {
     warnings.forEach((warning) => {

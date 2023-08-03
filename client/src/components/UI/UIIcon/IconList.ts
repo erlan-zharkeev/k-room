@@ -8,7 +8,7 @@ import {
 } from 'react-icons/io5'
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
-import { GoSettings, GoSearch } from 'react-icons/go'
+import { GoSearch } from 'react-icons/go'
 import { IconListElement } from './@types/IconList'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
 import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
@@ -40,7 +40,6 @@ const IconList: Array<IconListElement> = [
   { name: 'chats', Icon: IoChatboxEllipsesSharp },
   { name: 'calls', Icon: TbPhoneCall },
   { name: 'settings-cog', Icon: FiSettings },
-  { name: 'settings-mixer', Icon: GoSettings },
   { name: 'notification-bell', Icon: IoNotificationsSharp },
   { name: 'exit', Icon: MdExitToApp },
   { name: 'user-stub', Icon: FaUserCircle },

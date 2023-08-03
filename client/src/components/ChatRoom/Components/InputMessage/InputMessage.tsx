@@ -10,6 +10,7 @@ import useDebounce from 'src/hooks/useDebounce'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
 import { ImageObject } from 'common-types'
 import { UIImageLoader, UIInput, UIButton } from 'src/components/UI'
+import { $socket } from 'src/services/$socket'
 
 const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')

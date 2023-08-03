@@ -8,6 +8,7 @@ import useTypedSelector from 'src/hooks/useTypedSelector'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/systemSlice'
 import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const ChatRoomList = () => {
   const { updateSetting } = useUpdateSettings()

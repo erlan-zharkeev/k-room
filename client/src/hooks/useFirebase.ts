@@ -2,7 +2,7 @@ import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, Aut
 import { AppDispatch } from 'src/store'
 import { showNotification } from 'src/store/systemSlice'
 import $clg from 'src/services/$clg'
-import { NotificationType } from 'common-types'
+import { NotificationMessage, NotificationType } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -11,9 +11,9 @@ export enum FirebaseProviderType {
   facebook = 'facebook'
 }
 
-const commonErrors = {
-  'Firebase: Error (auth/account-exists-with-different-credential).': 'Account exists with different credential'
-} as Record<string, string>
+// const commonErrors = {
+//   'Firebase: Error (auth/account-exists-with-different-credential).': 'Account exists with different credential'
+// } as Record<string, string>
 
 export const useFirebase = () => {
   const [auth, _] = useState<Auth>(getAuth())
@@ -36,10 +36,9 @@ export const useFirebase = () => {
       result = await signInWithPopup(auth, provider)
     } catch (e: any) {
       $clg('error', e.message)
-      const readableError = commonErrors[e.message] ?? 'Login failed, server error. Please try again, later'
       dispatch(
         showNotification({
-          message: readableError,
+          message: NotificationMessage.failedToLogin,
           messageType: NotificationType.error
         })
       )
