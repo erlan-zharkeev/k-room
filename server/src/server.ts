@@ -34,7 +34,11 @@ server.listen(PORT, () => {
 
 // Create path for images
 const imagesPath = 'assets/img/'
-if (!fs.existsSync(path.join(__dirname, imagesPath))) fs.mkdir(path.join(__dirname, imagesPath))
+if (!fs.existsSync(path.join(__dirname, imagesPath))) {
+  fs.mkdir(path.join(__dirname, imagesPath), (err: any) => {
+    console.log(clc.red.bgWhite('-Cant create image directory'))
+  })
+}
 
 export const io = new Server(server, {
   path: RouteNames.SOCKET_PATH,
