@@ -92,6 +92,7 @@ var NotificationMessage;
     NotificationMessage["socketDisconnected"] = "Socket disconnected";
     // Don't forget image quantity is dynamic
     NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
+    NotificationMessage["imageSizeMustLessThan2mb"] = "Image size must be less than 2mb";
     NotificationMessage["success"] = "success";
     NotificationMessage["tokensPairUpdated"] = "Tokens pair updated";
     NotificationMessage["passwordReset"] = "Password changed successfully";
@@ -134,6 +135,8 @@ var NotificationMessage;
     NotificationMessage["failedSendConfirmationLink"] = "Failed to send confirmation link, please try later";
     NotificationMessage["coudntFindEmail"] = "Couldn`t find the current email address";
     NotificationMessage["imageConverterError"] = "Server could not process the image, please choose another image file";
+    NotificationMessage["failedToLogin"] = "Login failed, server error. Please try again, later";
+    NotificationMessage["imageResNotAllowed"] = "Image resolution not allowed";
 })(NotificationMessage = exports.NotificationMessage || (exports.NotificationMessage = {}));
 // ENDPOINTS (!for every endpoints use upper snake case)
 var AuthEndPoints;

@@ -225,6 +225,7 @@ export declare enum NotificationMessage {
     socketConnected = "Socket connected",
     socketDisconnected = "Socket disconnected",
     maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
+    imageSizeMustLessThan2mb = "Image size must be less than 2mb",
     success = "success",
     tokensPairUpdated = "Tokens pair updated",
     passwordReset = "Password changed successfully",
@@ -266,7 +267,9 @@ export declare enum NotificationMessage {
     notImage = "File is not an image",
     failedSendConfirmationLink = "Failed to send confirmation link, please try later",
     coudntFindEmail = "Couldn`t find the current email address",
-    imageConverterError = "Server could not process the image, please choose another image file"
+    imageConverterError = "Server could not process the image, please choose another image file",
+    failedToLogin = "Login failed, server error. Please try again, later",
+    imageResNotAllowed = "Image resolution not allowed"
 }
 export interface SocketActionsPayload {
     interlocutorUpdateSignal: {

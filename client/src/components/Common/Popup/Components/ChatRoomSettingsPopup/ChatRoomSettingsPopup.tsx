@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import useValidate from 'src/hooks/useValidate'
+import { $socket } from 'src/services/$socket'
 
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/systemSlice'

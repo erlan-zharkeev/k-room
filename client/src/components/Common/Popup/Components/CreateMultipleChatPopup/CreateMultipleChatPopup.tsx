@@ -11,6 +11,7 @@ import { AsideBarButtonName, SocketActions, SocketActionsPayload, UserSettingKey
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
 import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { $socket } from 'src/services/$socket'
 
 const CreateMultipleChatPopup = () => {
   const { updateSetting } = useUpdateSettings()

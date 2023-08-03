@@ -4,6 +4,7 @@ import { AppDispatch } from 'src/store'
 
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import { UIIcon, UIButton } from 'src/components/UI'
+import { $socket } from 'src/services/$socket'
 
 const StubLoading = () => {
   const dispatch = useDispatch<AppDispatch>()
