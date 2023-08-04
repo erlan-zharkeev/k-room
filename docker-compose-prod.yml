@@ -10,10 +10,11 @@ services:
     volumes:
       - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   server:
+    image:
     restart: always
     build:
       context: ./
-      dockerfile: ./server/Dockerfile
+      # dockerfile: ./server/Dockerfile
     ports:
       - '${SERVER_PORT}:${SERVER_PORT}'
     links:
@@ -43,3 +44,4 @@ services:
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+
