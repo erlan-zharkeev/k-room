@@ -7,8 +7,7 @@
     "noImplicitAny": true,
     "declaration": true,
     "composite": true,
-    "moduleResolution": "node",
-    "watch": true
+    "moduleResolution": "node"
   },
   "include": ["index.ts"],
   "exclude": ["node_modules", "Makefile", "readme.md", "yarn-error", "yarn-lock"]

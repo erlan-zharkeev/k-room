@@ -1,4 +1,4 @@
-FROM node:14.20.0
+FROM node:14.20.1
 
 RUN mkdir types
 

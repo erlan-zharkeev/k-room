@@ -11,7 +11,7 @@ const httpServer = http.createServer(app)
 
 httpServer.listen(ENV.CLIENT_PORT)
 
-const routes = ['/', '/app', '/app/', '/sign-in', '/sign-up', '/wait-email-confirm', '/confirm-email', '/password-recovery']
+const routes = ['/', '/app', '/app/', '/sign-in', '/sign-up', '/wait-email-confirm', '/confirm-email', '/password-recovery', '/privacy-policy']
 routes.forEach(route =>{
   app.get(route, (_, res) => res.sendFile(path.join(__dirname, './build/index.html')))
 })

@@ -4,4 +4,4 @@ cd ..
 cd ./types
 yarn
 
-npx tsc
+npx tsc --watch

@@ -1,9 +1,8 @@
-import appData from '../../../../package.json'
-import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
+// import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 const { VITE_MAIL_APP } = import.meta.env
 
 const PrivacyPolicyPage = () => {
-  const appName = firstCharUpperCase(appData.name)
+  const appName = 'K-Room'
   return (
     <div className="privacy-policy">
       <h1>Privacy Policy for {appName}</h1>
