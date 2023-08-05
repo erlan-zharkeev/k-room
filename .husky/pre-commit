@@ -6,3 +6,8 @@ yarn lint:fix-style && yarn lint:fix-es
 
 cd ../server
 yarn lint:fix-es
+
+CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+if [ "$CURRENT_BRANCH" = "main" ]; then
+  bash ./scripts/prod-build.sh
+fi

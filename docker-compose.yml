@@ -17,6 +17,3 @@ services:
       dockerfile: ./client/Dockerfile
     ports:
       - '${CLIENT_PORT}:${CLIENT_PORT}'
-
-
-
