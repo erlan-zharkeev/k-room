@@ -1,3 +1,7 @@
+stage:
+  - build
+  - publish
+
 variables:
   SERVER_IMAGE: ketjo/k-room_server
   CLIENT_IMAGE: ketjo/k-room_client
