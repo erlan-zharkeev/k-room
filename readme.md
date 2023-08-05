@@ -8,13 +8,6 @@
 
 ## Deploy
 
-- run bash prod.sh
-
-## If smthng went wrong
-
-- Make shure that node-env is installed: (<https://www.npmjs.com/package/win-node-env>)
-- Set project app to recommended node version: 14.20.1
-
 ## Commit convention
 
 - To use husky run yarn prepare
