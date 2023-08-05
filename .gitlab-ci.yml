@@ -1,3 +1,9 @@
+# .gitlab-ci.yml
+
+stages:
+  - build
+  - publish
+
 variables:
   SERVER_IMAGE: ketjo/k-room_server
   CLIENT_IMAGE: ketjo/k-room_client
@@ -11,10 +17,6 @@ build:
     - docker-compose build
   only:
     - main
-  artifacts:
-    paths:
-      - server   # Путь к сборке серверного образа
-      - client   # Путь к сборке клиентского образа
 
 publish:
   stage: publish
@@ -22,9 +24,8 @@ publish:
   services:
     - docker:dind
   script:
+    - docker images
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-    - docker load -i server    # Загрузка серверного образа из артефактов
-    - docker load -i client    # Загрузка клиентского образа из артефактов
     - docker tag ${SERVER_IMAGE}:latest ${SERVER_IMAGE}:${CI_COMMIT_SHA}
     - docker tag ${CLIENT_IMAGE}:latest ${CLIENT_IMAGE}:${CI_COMMIT_SHA}
     - docker push ${SERVER_IMAGE}:${CI_COMMIT_SHA}
