@@ -12,7 +12,7 @@ build:
   services:
     - docker:dind
   script:
-    - docker-compose build
+    - docker-compose build --output ./artifacts
   only:
     - main
   artifacts:
@@ -26,9 +26,10 @@ publish:
   services:
     - docker:dind
   script:
+    - images
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-    - docker load -i server
-    - docker load -i client
+    - docker load -i artifacts/server
+    - docker load -i artifacts/client
     - docker tag ${SERVER_IMAGE}:latest ${SERVER_IMAGE}:${CI_COMMIT_SHA}
     - docker tag ${CLIENT_IMAGE}:latest ${CLIENT_IMAGE}:${CI_COMMIT_SHA}
     - docker push ${SERVER_IMAGE}:${CI_COMMIT_SHA}
