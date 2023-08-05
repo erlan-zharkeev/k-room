@@ -24,10 +24,11 @@ publish:
   services:
     - docker:dind
   script:
+    - docker images
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-    # - docker tag ${SERVER_IMAGE}:latest ${SERVER_IMAGE}:${CI_COMMIT_SHA}
-    # - docker tag ${CLIENT_IMAGE}:latest ${CLIENT_IMAGE}:${CI_COMMIT_SHA}
-    - docker push ${SERVER_IMAGE}:latest
-    - docker push ${CLIENT_IMAGE}:latest
+    - docker tag ${SERVER_IMAGE}:latest ${SERVER_IMAGE}:${CI_COMMIT_SHA}
+    - docker tag ${CLIENT_IMAGE}:latest ${CLIENT_IMAGE}:${CI_COMMIT_SHA}
+    - docker push ${SERVER_IMAGE}:${CI_COMMIT_SHA}
+    - docker push ${CLIENT_IMAGE}:${CI_COMMIT_SHA}
   only:
     - main
