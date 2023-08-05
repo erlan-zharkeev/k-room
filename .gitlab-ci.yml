@@ -1,7 +1,3 @@
-stages:
-  - build
-  - publish
-
 variables:
   SERVER_IMAGE: ketjo/k-room_server
   CLIENT_IMAGE: ketjo/k-room_client
@@ -12,13 +8,15 @@ build:
   services:
     - docker:dind
   script:
-    - docker-compose build --output ./artifacts
+    - docker-compose build
+    - mkdir artifacts  # Создаем директорию для сохранения архивов
+    - docker save -o artifacts/server.tar ${SERVER_IMAGE}:latest
+    - docker save -o artifacts/client.tar ${CLIENT_IMAGE}:latest
   only:
     - main
   artifacts:
     paths:
-      - server
-      - client
+      - artifacts/   # Сохраняем всю директорию с архивами
 
 publish:
   stage: publish
@@ -26,10 +24,9 @@ publish:
   services:
     - docker:dind
   script:
-    - images
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-    - docker load -i artifacts/server
-    - docker load -i artifacts/client
+    - docker load -i artifacts/server.tar
+    - docker load -i artifacts/client.tar
     - docker tag ${SERVER_IMAGE}:latest ${SERVER_IMAGE}:${CI_COMMIT_SHA}
     - docker tag ${CLIENT_IMAGE}:latest ${CLIENT_IMAGE}:${CI_COMMIT_SHA}
     - docker push ${SERVER_IMAGE}:${CI_COMMIT_SHA}
