@@ -8,6 +8,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "commitizen": "^4.3.0",
     "cz-customizable": "^7.0.0",
     "husky": "^8.0.2"
   }

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:14.20.1
+FROM --platform=linux/amd64 node:16.20.0
 
 RUN mkdir types
 
