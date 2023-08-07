@@ -1,11 +1,14 @@
 .ui-file-loader {
   position: relative;
+
   label {
     cursor: pointer;
   }
+
   input {
     display: none !important;
   }
+
   .ui-icon:hover {
     color: var(--accent);
   }

@@ -43,9 +43,11 @@
     display: flex;
     align-items: center;
   }
+
   .top-bar__info {
     position: relative;
     margin-right: 1rem;
+
     .custom-badge {
       top: -5px;
       right: -5px;

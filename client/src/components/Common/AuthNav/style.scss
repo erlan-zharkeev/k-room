@@ -2,12 +2,15 @@
   a {
     margin-right: $gutter-lg;
     padding-bottom: 0.4rem;
+
     &:hover {
       color: var(--main-text);
+
       &.active {
         color: var(--accent);
       }
     }
+
     &.active {
       border: none;
     }

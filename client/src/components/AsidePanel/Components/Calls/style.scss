@@ -6,6 +6,7 @@
       width: 100%;
       padding: 0.5rem 1rem;
       overflow: hidden;
+
       &-meta {
         display: flex;
         align-items: center;
@@ -17,10 +18,12 @@
     &--current {
       background-color: var(--dark-gray-transparent);
     }
+
     &--incoming,
     &--outgoing {
       background-color: var(--success-bg);
     }
+
     &--missed,
     &--not-answered {
       background-color: var(--error-bg);
@@ -35,6 +38,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+
     p {
       color: var(--accent);
       font-size: 10px;
@@ -44,29 +48,35 @@
   &__additional-info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
   }
 
   &__info {
     display: flex;
     align-items: center;
+
     p {
       margin-left: $gutter-sm;
     }
+
     &--current {
       color: var(--secondary-text);
     }
+
     &--incoming,
     &--outgoing {
       color: var(--success);
+
       .ui-icon--phone-call {
         transform: rotate(90deg);
       }
     }
+
     &--missed,
     &--not-answered {
       color: var(--error);
+
       .ui-icon--phone-call {
         transform: rotate(135deg);
       }

@@ -1,4 +1,4 @@
-@import './Components/ReplyMessage/style.scss';
+@import './Components/ReplyMessage/style';
 
 .input-message {
   position: absolute;
@@ -6,6 +6,7 @@
   left: 0;
   width: 100%;
   background-color: var(--main-bg);
+
   form {
     display: flex;
     align-items: center;

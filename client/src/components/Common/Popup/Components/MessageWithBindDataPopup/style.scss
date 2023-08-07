@@ -5,23 +5,28 @@
     display: flex;
     align-items: center;
     margin-bottom: $gutter-lg;
+
     span {
-      white-space: nowrap;
       margin-right: $gutter-md;
+      white-space: nowrap;
     }
+
     .ui-switch label {
       width: 70px;
     }
   }
+
   &__images-wrapper {
     display: grid;
-    grid-template-columns: repeat(2, 142px);
     grid-gap: $gutter-sm;
+    grid-template-columns: repeat(2, 142px);
     margin-bottom: $gutter-lg;
   }
+
   &__image {
     border: 1px solid var(--secondary-text);
   }
+
   &__controls {
     display: flex;
     justify-content: flex-end;

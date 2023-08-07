@@ -2,16 +2,20 @@
 
 .contact-list {
   padding: $aside-panel-padding;
+
   .divider {
     margin-top: $gutter-lg;
   }
+
   .ant-list-item-meta {
     display: flex;
     align-items: center;
   }
+
   .ant-list-item-meta-title {
     margin-bottom: 0;
   }
+
   .ant-list-item-meta-avatar {
     margin-right: 10px;
   }
@@ -26,9 +30,10 @@
   &__controls {
     display: flex;
     margin-top: 4px;
+
     .ui-icon--chat {
-      transform: scale(0.9);
       margin-top: 2px;
+      transform: scale(0.9);
     }
   }
 }

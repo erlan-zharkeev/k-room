@@ -74,29 +74,30 @@ input:-webkit-autofill {
 
 .divider {
   width: 100%;
-  background-color: var(--dark-gray);
   height: 1px;
+  background-color: var(--dark-gray);
 }
 
 .custom-badge {
-  max-height: 1rem;
   position: absolute;
   right: -6px;
-  background-color: var(--accent);
-  font-size: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  padding: 8px;
-  border-radius: $radius-sm;
-  max-width: 14px;
   bottom: calc(100% - 24px);
-  line-height: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 14px;
+  max-height: 1rem;
+  padding: 8px;
   color: var(--main-bg);
+  font-size: 10px;
+  line-height: 0;
+  background-color: var(--accent);
+  border-radius: $radius-sm;
+
   &--error {
-    background-color: var(--error);
     color: var(--main-text);
+    background-color: var(--error);
   }
 }
 
@@ -104,9 +105,11 @@ html[theme='light'] {
   .call-modal__interlocutor-name {
     color: var(--main-bg);
   }
+
   .lds-ellipsis > * {
     background-color: var(--main-bg);
   }
+
   ::placeholder {
     color: var(--main-text);
   }

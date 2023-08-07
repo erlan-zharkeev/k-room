@@ -2,15 +2,17 @@
   .header-text {
     margin-bottom: $gutter-lg;
   }
+
   &__wrapper {
-    height: 100%;
     display: flex;
     justify-content: center;
+    height: 100%;
   }
+
   &__body {
     display: flex;
-    width: $container-sm;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
+    width: $container-sm;
   }
 }

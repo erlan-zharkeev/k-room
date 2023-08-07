@@ -23,7 +23,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig)
 
-window['process'] = process
+window.process = process
 const root = document.getElementById('root') as HTMLElement
 
 const persistor = persistStore(store)

@@ -43,9 +43,11 @@
     svg {
       color: var(--secondary-text) !important;
     }
+
     span {
       color: var(--secondary-text) !important;
     }
+
     button:hover {
       border-color: var(--secondary-text) !important;
 
@@ -62,6 +64,7 @@
   &--border-default {
     button {
       border-color: var(--accent);
+
       &:hover {
         border-color: var(--accent);
       }
@@ -89,13 +92,16 @@
     background-color: transparent;
     border-color: var(--secondary-text);
     border-radius: $radius-sm;
+
     &::before {
       background: transparent;
     }
+
     &:hover {
       color: var(--accent);
       border-color: var(--accent);
     }
+
     &:disabled {
       color: var(--secondary-text);
       background-color: transparent !important;
@@ -107,6 +113,7 @@
         border-color: var(--secondary-text);
       }
     }
+
     .ant-radio-button-wrapper {
       display: flex;
       align-items: center;
