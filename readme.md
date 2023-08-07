@@ -1,7 +1,7 @@
 # K-Room
 
 ##
-Product https://k-room.space
+Product link https://k-room.space
 
 ## Commit convention
 - To use husky run yarn prepare in root
