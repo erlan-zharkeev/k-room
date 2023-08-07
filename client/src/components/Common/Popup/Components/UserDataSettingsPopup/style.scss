@@ -4,9 +4,11 @@
   align-items: center;
   width: $container-sm;
   margin-top: $gutter-lg;
+
   &__image {
     margin-bottom: $gutter-xl;
   }
+
   &__controls {
     .ant-form-item-control-input-content {
       display: flex;

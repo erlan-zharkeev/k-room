@@ -1,10 +1,13 @@
 .info-list {
   @include nm-outset-element;
+
   width: 100%;
   padding: $gutter-lg;
+
   &__header {
     margin-bottom: $gutter-lg;
   }
+
   p {
     color: var(--secondary-text);
     font-size: 12px;

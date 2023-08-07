@@ -3,19 +3,22 @@
   grid-template-columns: repeat(4, 1fr);
   justify-content: space-evenly;
   width: 100%;
-  border-bottom: 1px var(--secondary-text) solid;
   padding: $gutter-sm 0;
+  border-bottom: 1px var(--secondary-text) solid;
+
   .reactions__element {
     display: flex;
     justify-content: center;
     border-radius: $radius-sm;
+
     &:hover {
-      cursor: pointer;
       background-color: var(--secondary-text);
+      cursor: pointer;
     }
+
     &--disabled {
-      pointer-events: none;
       opacity: 0.2;
+      pointer-events: none;
     }
   }
 }

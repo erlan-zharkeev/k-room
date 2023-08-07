@@ -1,19 +1,23 @@
 .short-chat-list {
-  padding: $gutter-lg $gutter-sm $gutter-sm $gutter-sm;
   max-height: 200px;
+  padding: $gutter-lg $gutter-sm $gutter-sm $gutter-sm;
+
   &__item {
     display: flex;
     align-items: center;
-    border-radius: $radius-sm;
     padding: $gutter-md;
+    border-radius: $radius-sm;
+
     &:hover {
-      cursor: pointer;
       background-color: var(--dark-gray-transparent);
+      cursor: pointer;
     }
+
     .ant-image {
       margin-top: 4px;
     }
   }
+
   &__name {
     margin-left: $gutter-md;
   }

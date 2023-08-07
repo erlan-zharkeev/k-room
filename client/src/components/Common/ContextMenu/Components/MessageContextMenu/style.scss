@@ -3,16 +3,19 @@
     display: flex;
     justify-content: space-between;
     padding: $radius-sm $gutter-md;
+
     span {
       width: 70%;
       margin-left: $gutter-sm;
     }
   }
+
   .forward-icon {
     .ui-icon {
       transform: rotateY(180deg);
     }
   }
+
   .delete-icon {
     .ui-icon {
       transform: scale(0.8);

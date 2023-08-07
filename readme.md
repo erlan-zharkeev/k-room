@@ -1,9 +1,13 @@
 # K-Room
 
+##
+Product https://k-room.space
+
 ## Commit convention
 - To use husky run yarn prepare in root
-- To name branches, use the following template feat-dd.mm.yy(e.g. create-chat-signature-22.01.23)
-- To commit changes add changes then call in project root terminal command - cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
+- Then give rules chmod +x .husky/pre-commit
+- The name of the branch should reflect the essence of the added changes, for example, added-list-calls
+- To commit changes add changes then call in project root terminal command - git cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
 
 ## Development
 - run bash dev.sh
@@ -29,3 +33,4 @@
 ## TODO List
 - setup cors to specific host and port
 - check token works
+- Add token to socket.io

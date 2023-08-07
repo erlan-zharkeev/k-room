@@ -3,11 +3,14 @@
     display: flex;
     align-items: center;
     margin-bottom: $gutter-lg;
+
     &-text {
       margin-bottom: 25px;
     }
+
     .ui-switch {
       margin-right: $gutter-md;
+
       &__value-text {
         left: 34px;
       }

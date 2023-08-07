@@ -6,8 +6,8 @@
   flex-direction: column;
   padding: $gutter-sm $gutter-md;
   overflow: hidden;
-  border-radius: $radius-md;
   background-color: var(--dark-gray-transparent);
+  border-radius: $radius-md;
 
   &__replied-message-type {
     color: var(--accent);
@@ -24,10 +24,11 @@
   }
 
   &__replied-message-wrapper {
-    border-left: 1px solid var(--secondary-text);
-    padding-left: $gutter-sm;
-    margin: $gutter-md;
     position: relative;
+    margin: $gutter-md;
+    padding-left: $gutter-sm;
+    border-left: 1px solid var(--secondary-text);
+
     p {
       color: var(--secondary-text);
     }
@@ -80,6 +81,7 @@
     #{$self}__images {
       filter: blur(1px);
     }
+
     &::after {
       @include bg-gradient-loader(0.9);
     }

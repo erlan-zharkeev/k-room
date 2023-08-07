@@ -1,10 +1,10 @@
 // radio button
 .ant-radio-button-wrapper {
+  display: flex;
+  align-items: center;
   color: var(--secondary-text) !important;
   background: var(--main-bg) !important;
   border: 1px solid var(--secondary-text) !important;
-  display: flex;
-  align-items: center;
 }
 
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
@@ -43,46 +43,58 @@
   .ant-select-selector {
     border-radius: $radius-md !important;
   }
+
   .ant-select-selection-item {
     margin-top: 2px;
   }
+
   color: var(--secondary-text);
+
   &-multiple {
     .ant-select-selection-placeholder {
       color: var(--select-placeholder) !important;
     }
+
     .ant-select-selection-item {
       background: var(--dark-gray-transparent);
       border-color: var(--dark-gray-transparent);
       border-radius: $radius-md !important;
+
       &-remove {
         svg {
           color: var(--secondary-text);
         }
       }
+
       &:hover {
         cursor: pointer;
       }
     }
   }
+
   &-selector {
     @include nm-inset-element;
+
     border: none !important;
   }
+
   &-arrow {
     z-index: 1;
     color: var(--secondary-text) !important;
   }
+
   &-dropdown {
-    background: var(--dark-gray) !important;
     padding: 0 !important;
-  }
-  &-item {
     background: var(--dark-gray) !important;
+  }
+
+  &-item {
     color: var(--secondary-text) !important;
+    background: var(--dark-gray) !important;
+
     &:hover {
-      background-color: var(--secondary-text) !important;
       color: var(--main-text) !important;
+      background-color: var(--secondary-text) !important;
       cursor: pointer;
     }
   }
@@ -90,19 +102,19 @@
 
 .ant-select-item-option-state {
   svg {
-    background: var(--dark-gray);
-    border-radius: 50%;
     padding: 2px;
     color: var(--success) !important;
+    background: var(--dark-gray);
+    border-radius: 50%;
   }
 }
 
 // error
 .ant-form-item-explain-error {
-  color: var(--error-text);
-  font-size: 12px;
   margin-top: 2px;
   margin-left: 12px;
+  color: var(--error-text);
+  font-size: 12px;
 }
 
 // modal
@@ -156,6 +168,7 @@ div[role='dialog'] {
   &-warning {
     background: var(--warn-bg);
   }
+
   .anticon {
     color: var(--main-text);
   }
@@ -220,11 +233,12 @@ div[role='dialog'] {
 .ant-tooltip {
   padding: 0;
 }
+
 .ant-tooltip-inner {
-  background-color: var(--dark-gray) !important;
-  font-size: 12px;
-  color: var(--secondary-text);
   padding-top: 7px;
+  color: var(--secondary-text);
+  font-size: 12px;
+  background-color: var(--dark-gray) !important;
 }
 
 // table
@@ -261,25 +275,28 @@ div[role='dialog'] {
   }
 
   ul {
+    overflow: hidden;
     background: var(--dark-gray);
     border-radius: $radius-sm;
-    overflow: hidden;
+
     li {
-      color: var(--secondary-text) !important;
       position: relative;
-      &[read='unread']:before {
-        content: '';
+      color: var(--secondary-text) !important;
+
+      &[read='unread']::before {
         position: absolute;
-        width: 5px;
-        height: 5px;
         top: 5px;
         right: 4px;
-        border-radius: 50%;
+        width: 5px;
+        height: 5px;
         background-color: var(--error);
+        border-radius: 50%;
+        content: '';
       }
+
       &:hover {
-        background-color: var(--secondary-text);
         color: var(--main-bg) !important;
+        background-color: var(--secondary-text);
       }
     }
   }
@@ -309,14 +326,16 @@ div[role='dialog'] {
 .ant-collapse {
   background-color: transparent;
   border: transparent;
+
   span {
     color: var(--secondary-text) !important;
   }
+
   &-item {
-    border: none !important;
-    background-color: var(--dark-gray);
-    border-radius: $radius-sm !important;
     margin-bottom: $gutter-md;
+    background-color: var(--dark-gray);
+    border: none !important;
+    border-radius: $radius-sm !important;
   }
 }
 
@@ -325,9 +344,11 @@ div[role='dialog'] {
   display: flex;
   align-items: center;
 }
+
 .ant-badge-status-red {
   background: var(--error);
 }
+
 .ant-badge-status-green {
   background: var(--success);
 }

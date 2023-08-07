@@ -1,25 +1,28 @@
 .error-bucket {
-  border: solid 1px var(--error);
-  border-radius: $radius-sm;
+  margin-bottom: $gutter-lg;
+  padding: $gutter-md;
   color: var(--secondary-text);
   background-color: var(--error-transparent);
-  padding: $gutter-md;
-  margin-bottom: $gutter-lg;
+  border: solid 1px var(--error);
+  border-radius: $radius-sm;
+
   &__el {
     position: relative;
-    &:before {
-      content: '';
-      width: 5px;
-      height: 5px;
+
+    &::before {
       position: absolute;
       top: 10px;
       left: 2px;
+      width: 5px;
+      height: 5px;
       background-color: var(--secondary-text);
       border-radius: 50%;
+      content: '';
     }
+
     span {
-      margin-left: $gutter-lg;
       margin-bottom: 2px;
+      margin-left: $gutter-lg;
     }
   }
 }

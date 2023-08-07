@@ -5,6 +5,7 @@
     justify-content: center;
     height: 100%;
   }
+
   &__loader-content {
     position: relative;
     display: flex;
@@ -19,11 +20,13 @@
       stroke-width: 25;
     }
   }
+
   &__forgot-password {
     display: flex;
     justify-content: flex-end;
     margin-bottom: $gutter-md;
   }
+
   &__additional__links {
     #container {
       * {
@@ -31,6 +34,7 @@
         border: 1px solid var(--secondary-text);
       }
     }
+
     .ui-button {
       margin-bottom: $gutter-md;
     }

@@ -14,21 +14,24 @@
 
   &__user-settings {
     position: absolute;
-    right: 0;
     top: 50px;
+    right: 0;
     width: 34px;
     overflow: hidden;
+    border-top-left-radius: $radius-md;
+    border-bottom-left-radius: $radius-md;
+
     .ui-button {
       background-color: var(--main-bg);
     }
-    border-top-left-radius: $radius-md;
-    border-bottom-left-radius: $radius-md;
   }
+
   &__user-setting {
     &:hover {
       .ui-button {
         background-color: var(--accent);
       }
+
       .ui-icon {
         color: var(--white);
       }
@@ -146,6 +149,7 @@
       transform: scale(1.2);
     }
   }
+
   .ui-icon--video-drop {
     svg {
       transform: scale(1.1);
