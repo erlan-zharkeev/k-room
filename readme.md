@@ -10,8 +10,12 @@ Product link https://k-room.space
 - To commit changes add changes then call in project root terminal command - git cz, it will start commit wizard(if wizard not appear, run npm install -g commitizen)
 
 ## Development
-- run bash dev.sh
-- set in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
+- Run bash dev.sh
+- Set in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
+
+## Deploy
+- Run bash prod-build.sh
+- Go to this repo https://gitlab.com/ketjo/k-room-aws-deploy and follow instructions
 
 ## Create New AWS Instance(Ubuntu image)
 - Create and Launch instance on Amazon AWS EC2(while creating don't forget to generate key pair)
