@@ -9,7 +9,7 @@ services:
 publish-images:
   stage: publish-images
   script:
-    - docker-compose --env-file .env.production build
+    - docker-compose --env-file .env build
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
     - docker push ketjo/k-room_server:latest
     - docker push ketjo/k-room_client:latest
