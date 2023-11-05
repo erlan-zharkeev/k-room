@@ -1,5 +1,7 @@
 FROM --platform=linux/amd64 node:16.20.0
 
+RUN npm install -g pnpm
+
 RUN mkdir types
 
 COPY types types
@@ -10,12 +12,12 @@ COPY server/ server
 
 WORKDIR /server
 
-RUN npm install
+RUN pnpm install
 
-RUN npm run build
+RUN pnpm run build
 
 ENV PORT $SERVER_PORT
 
 EXPOSE $SERVER_PORT
 
-CMD [ "npm", "run", "server-run" ]
+CMD [ "pnpm", "run", "server-run" ]
