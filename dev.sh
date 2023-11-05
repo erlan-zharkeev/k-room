@@ -1,8 +1,21 @@
 #!/bin/bash
-pkill node
+node_pids=""
+
+get_node_pids() {
+  node_pids=$(ps aux | grep 'node' | awk '{print $2}')
+}
+
+cleanup() {
+  for pid in $node_pids; do
+    kill $pid
+  done
+}
+
+trap cleanup EXIT
+
 pnpm install
 
-docker build -t k-room-db . && docker run -d -p 27017:27017 --rm --name k-room-db k-room-db &
+docker-compose up -d db &
 
 cd ./types
 pnpm install
@@ -15,3 +28,5 @@ pnpm run serve &
 cd ../client/
 pnpm install
 pnpm run serve &
+
+wait
