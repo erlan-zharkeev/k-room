@@ -13,4 +13,4 @@ export default {
   K_ROOM_ACCESS_TOKEN_SECRET,
   K_ROOM_MAIL_PASS,
   K_ROOM_REFRESH_TOKEN_SECRET
-}
+} as EnvVariables
