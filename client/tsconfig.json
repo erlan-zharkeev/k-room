@@ -27,6 +27,6 @@
       "ui/*": ["client/src/components/UI/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "./vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

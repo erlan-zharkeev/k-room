@@ -13,7 +13,7 @@ import { SharpSettingsKey } from '../types/Constants'
 const bcrypt = require('bcryptjs')
 
 class UserController {
-  async updateUserData(req: Request, res: Response) {
+  async updateUserData(req: any, res: Response) {
     try {
       const { userId, username, oldFilename } = req.body
 

@@ -1,6 +1,6 @@
 import { Form } from 'antd'
 import { useState } from 'react'
-import { SocketActions, SocketActionsPayload } from 'common-types'
+import { SocketActions, SocketActionsPayload, ImageObject } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
 import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
@@ -8,7 +8,7 @@ import { InputMessageProps } from './@types/InputMessageProps'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import useDebounce from 'src/hooks/useDebounce'
 import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
-import { ImageObject } from 'common-types'
+
 import { UIImageLoader, UIInput, UIButton } from 'src/components/UI'
 import { $socket } from 'src/services/$socket'
 
@@ -49,7 +49,7 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
   }
 
   const isButtonDisabled = () => {
-    return !haveRepliedMessage() && !Boolean(message)
+    return !haveRepliedMessage() && !message
   }
 
   return (

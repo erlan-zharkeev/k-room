@@ -1,8 +1,17 @@
 #!/bin/bash
 pkill node
-yarn
-cd ./scripts/
-source types-watch.sh &
-source dev-serve-db.sh &
-source dev-serve-server.sh &
-source dev-serve-client.sh
+pnpm install
+
+docker build -t k-room-db . && docker run -d -p 27017:27017 --rm --name k-room-db k-room-db &
+
+cd ./types
+pnpm install
+npx tsc --watch &
+
+cd ../server/
+pnpm install
+pnpm run serve &
+
+cd ../client/
+pnpm install
+pnpm run serve &

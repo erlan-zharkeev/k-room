@@ -32,7 +32,7 @@ const ChatRoomSettingsPopup = () => {
       users: [id, ...userIds],
       chatName: values['chat-name'],
       avatarPath: imagePath ?? '',
-      avatarFile: avatarFile,
+      avatarFile,
       authorId: id
     }
     setIsLoading(true)

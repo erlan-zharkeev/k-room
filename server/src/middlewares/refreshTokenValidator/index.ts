@@ -10,7 +10,7 @@ const haventRightsError = (res: Response) => throwError(Status.notAuth, res, Not
 export const refreshTokenValidator = async (req: Request, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']
   if (!refreshToken) return throwError(Status.notAuth, res, NotificationMessage.nonAuthorized)
-  jwt.verify(refreshToken, ENV?.JWT_REFRESH_TOKEN_SECRET, async (error: any, decoded: any) => {
+  jwt.verify(refreshToken, ENV?.K_ROOM_REFRESH_TOKEN_SECRET, async (error: any, decoded: any) => {
     if (error) return haventRightsError(res)
     const id = decoded.id
     const userData = await UserModel.findOne({ _id: id })

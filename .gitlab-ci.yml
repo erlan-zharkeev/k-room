@@ -1,0 +1,17 @@
+image: docker:20.10
+
+stages:
+  - publish-images
+
+services:
+  - docker:dind
+
+publish-images:
+  stage: publish-images
+  script:
+    - docker-compose --env-file .env.production build
+    - docker login -u ketjo -p $DOCKERHUB_TOKEN
+    - docker push ketjo/k-room_server:latest
+    - docker push ketjo/k-room_client:latest
+  only:
+    - main

@@ -47,7 +47,7 @@ const UIButton = ({
   )
   const modifiers = modifiersHandler({
     rootClass: 'ui-button',
-    modifiers: [border, color, size, hover, fill === true ? 'fill' : '']
+    modifiers: [border, color, size, hover, fill ? 'fill' : '']
   })
 
   return (

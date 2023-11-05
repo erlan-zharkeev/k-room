@@ -16,7 +16,7 @@ export const ContextMenu = () => {
 
   const currentMenu = menus[firstCharUpperCase(contextMenu.slotName)]
 
-  const Content = () => (currentMenu ? currentMenu : null)
+  const Content = () => (currentMenu || null)
 
   return (
     <div

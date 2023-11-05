@@ -451,10 +451,10 @@ export interface EnvVariables {
   JWT_ACCESS_EXPIRES_INTERVAL: string;
   APP_NAME: string;
   MAIL_APP: string;
-  MAIL_PASS: string;
+  K_ROOM_MAIL_PASS: string;
   REGISTRATION_RESEND_INTERVAL_MINUTES: string;
-  JWT_ACCESS_TOKEN_SECRET: string;
-  JWT_REFRESH_TOKEN_SECRET: string;
+  K_ROOM_ACCESS_TOKEN_SECRET: string;
+  K_ROOM_REFRESH_TOKEN_SECRET: string;
   IS_DEV: boolean;
   SERVER_ASSETS_PATH: string;
   MAX_RECONNECT_ATTEMPTS: number;

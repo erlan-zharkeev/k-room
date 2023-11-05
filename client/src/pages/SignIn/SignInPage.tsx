@@ -98,7 +98,7 @@ const SignInPage = () => {
                     border="border-default"
                     fill={true}
                     hover="hoverless"
-                    onClick={() => providerSignIn(FirebaseProviderType.google, setGoogleBtnLoading)}
+                    onClick={async () => await providerSignIn(FirebaseProviderType.google, setGoogleBtnLoading)}
                     loading={googleBtnLoading}
                   />
                   {/* <UIButton
@@ -125,7 +125,7 @@ const SignInPage = () => {
                     htmltype="submit"
                     loading={isLoading}
                     disabled={!isValid}
-                    onClick={() => onFinish(form.getFieldsValue())}
+                    onClick={async () => await onFinish(form.getFieldsValue())}
                   />
                 </div>
               </Form>

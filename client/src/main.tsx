@@ -9,10 +9,10 @@ import { RefsProvider } from 'src/providers/RefsProvider'
 import { AdditionalServiceProvider } from './providers/AdditionalServiceProvider'
 import * as process from 'process'
 import { initializeApp } from 'firebase/app'
-const { VITE_FIREBASE_API_KEY } = import.meta.env
+const { K_ROOM_VITE_FIREBASE_API_KEY } = import.meta.env
 
 const firebaseConfig = {
-  apiKey: VITE_FIREBASE_API_KEY,
+  apiKey: K_ROOM_VITE_FIREBASE_API_KEY,
   authDomain: 'k-room-3a49a.firebaseapp.com',
   projectId: 'k-room-3a49a',
   storageBucket: 'k-room-3a49a.appspot.com',

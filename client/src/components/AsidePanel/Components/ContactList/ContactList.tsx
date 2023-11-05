@@ -30,8 +30,7 @@ const ContactList = () => {
   }, [contacts])
 
   const deleteUser = (userData: User) => {
-    if (userData.id && id)
-      $socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id })
+    if (userData.id && id) { $socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id }) }
   }
 
   const createChat = (value: User) => {
@@ -112,7 +111,7 @@ const ContactList = () => {
             <div className="contact-list__controls">
               <UIButton
                 iconName={loaders.stream[user.id] ? 'loader' : 'call'}
-                onClick={() => initCall(user)}
+                onClick={async () => await initCall(user)}
                 tooltip="Call"
               />
               <UIButton
