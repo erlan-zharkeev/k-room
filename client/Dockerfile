@@ -10,12 +10,12 @@ COPY client/ client
 
 WORKDIR /client
 
-RUN yarn
+RUN npm install
 
-RUN yarn build
+RUN npm run build
 
 ENV PORT $CLIENT_PORT
 
 EXPOSE $CLIENT_PORT
 
-CMD [ "yarn", "serve:build"]
+CMD [ "npm", "run", "serve:build"]
