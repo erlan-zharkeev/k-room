@@ -9,8 +9,11 @@
     "server-run": "NODE_ENV=production node ./build/index.js"
   },
   "dependencies": {
+    "@types/cors": "^2.8.15",
+    "@types/multer": "^1.4.9",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",

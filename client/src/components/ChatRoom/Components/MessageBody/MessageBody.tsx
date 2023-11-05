@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import constants from 'src/constants'
 import { useEffect, useState } from 'react'
-import { Tooltip } from 'antd'
-import { Image } from 'antd'
+import { Tooltip, Image } from 'antd'
+
 import { Author } from 'common-types'
 
 const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
@@ -23,7 +23,7 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const showCreatedAt = message.createdAt && message.authorId !== Author.system
 
   useEffect(() => {
-    let reactionMap = {} as any
+    const reactionMap = {} as any
     message.reactions?.forEach((reaction) => {
       const authors = reactionMap[reaction.glyphKey] ? reactionMap[reaction.glyphKey].authors : []
       const hasAuthor = Boolean(authors.find((author: { id: string }) => author.id === reaction.authorId))

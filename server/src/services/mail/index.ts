@@ -9,7 +9,7 @@ const mailTransport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: ENV.MAIL_APP,
-    pass: ENV.MAIL_PASS
+    pass: ENV.K_ROOM_MAIL_PASS
   }
 })
 

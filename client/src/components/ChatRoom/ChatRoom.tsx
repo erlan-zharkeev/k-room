@@ -9,6 +9,7 @@ import {
   Author,
   AsideBarButtonName,
   UserSettingKey
+  , ImageObject
 } from 'common-types'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import InputMessage from './Components/InputMessage/InputMessage'
@@ -22,7 +23,7 @@ import { updatedAttachedFilesMessage } from 'src/store/roomsSlice'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import constants from 'src/constants'
 import Informer from '../Common/Informer/Informer'
-import { ImageObject } from 'common-types'
+
 import { showModal } from 'src/store/systemSlice'
 import { sendMessage } from 'src/utils/sendMessage'
 import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'

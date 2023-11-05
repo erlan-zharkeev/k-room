@@ -25,6 +25,13 @@ module.exports = {
     '@typescript-eslint/member-delimiter-style': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/consistent-type-assertions': 'off',
+    '@typescript-eslint/prefer-optional-chain': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-invalid-void-type': 'off',
+    '@typescript-eslint/prefer-optional-chain': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/restrict-plus-operands': 'off',
+    'react/no-unescaped-entities': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-key': 'off',
     'react/no-unknown-property': 'off',
@@ -32,7 +39,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'circular-dependecy-issue': 'off',
     'no-case-declarations': 'off',
-    'array-callback-return': 'off',
+    'array-callback-return': 'off'
   },
   settings: {
     react: {

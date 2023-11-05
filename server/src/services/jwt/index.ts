@@ -16,7 +16,7 @@ const setToken = (res: Response, tokenName: string, id: string, secret: string, 
 }
 
 export const updateTokens = async (id: string, res: Response) => {
-  setToken(res, 'jwt', id, ENV?.JWT_ACCESS_TOKEN_SECRET, '60s')
-  const refreshToken = setToken(res, 'refresh-jwt', id, ENV?.JWT_REFRESH_TOKEN_SECRET, '1d')
+  setToken(res, 'jwt', id, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, '60s')
+  const refreshToken = setToken(res, 'refresh-jwt', id, ENV?.K_ROOM_REFRESH_TOKEN_SECRET, '1d')
   return await UserModel.updateOne({ _id: id }, { refreshToken })
 }

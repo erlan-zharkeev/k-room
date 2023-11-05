@@ -26,14 +26,14 @@ export const useUpdateSettings = () => {
       selectChatRoomId?: string
     }
   ) => {
-    let payload: SocketActionsPayload['updateUserSettings'] = {
+    const payload: SocketActionsPayload['updateUserSettings'] = {
       userId,
       type,
       value: ''
     }
     switch (type) {
       case UserSettingKey.theme:
-        payload.value = Boolean(value.commonSettings) ? Theme.dark : Theme.light
+        payload.value = value.commonSettings ? Theme.dark : Theme.light
         dispatch(changeTheme(payload.value as Theme))
         break
       case UserSettingKey.soundOn:

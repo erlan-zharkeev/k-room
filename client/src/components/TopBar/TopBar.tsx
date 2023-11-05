@@ -3,8 +3,8 @@ import { AppDispatch } from 'src/store'
 import { logOut } from 'src/store/userSlice'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 
-import { MenuProps } from 'antd'
-import { Dropdown } from 'antd'
+import { MenuProps, Dropdown } from 'antd'
+
 import { useEffect, useState } from 'react'
 import { UIAvatar, UIButton } from '../UI'
 import { AsideBarButtonName, UserSettingKey } from 'common-types'

@@ -13,8 +13,7 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
   if (!response) return
   const { message, silent } = response.data
   const isSuccess = response.status === Status.success
-  if (message && !silent)
-    dispatch(showNotification({ message, messageType: isSuccess ? NotificationType.success : NotificationType.warn }))
+  if (message && !silent) { dispatch(showNotification({ message, messageType: isSuccess ? NotificationType.success : NotificationType.warn })) }
 }
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {

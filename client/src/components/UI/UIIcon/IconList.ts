@@ -5,6 +5,7 @@ import {
   IoCallSharp,
   IoInformationCircleOutline,
   IoWarning
+  , IoVideocamOffOutline
 } from 'react-icons/io5'
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
@@ -32,7 +33,6 @@ import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
 import { FcGoogle } from 'react-icons/fc'
 import { VscDeviceCameraVideo } from 'react-icons/vsc'
-import { IoVideocamOffOutline } from 'react-icons/io5'
 
 const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },

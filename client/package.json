@@ -6,7 +6,7 @@
   "scripts": {
     "lint:fix-style": "stylelint **/*.scss --fix",
     "lint:fix-es": "eslint **/*.{ts,tsx} --fix",
-    "dev": "vite --host",
+    "serve": "vite --host",
     "build": "tsc && vite build",
     "serve:build": "node prod-server.cjs",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

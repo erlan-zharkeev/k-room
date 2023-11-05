@@ -16,7 +16,7 @@ const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
       .filter((room) => {
         const username = room.chatName.toLowerCase()
         const searchParams = searchString.toLowerCase()
-        const match = username.indexOf(searchParams) > -1
+        const match = username.includes(searchParams)
         if (match) return room
       })
     setFilteredRooms(updatedContacts)

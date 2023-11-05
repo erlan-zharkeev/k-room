@@ -7,7 +7,7 @@ import { NotificationMessage, Status } from '../../../../types'
 export const accessTokenValidator = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt
   if (!accessToken) return throwError(Status.notAuth, res, NotificationMessage.nonAuthorized)
-  jwt.verify(accessToken, ENV?.JWT_ACCESS_TOKEN_SECRET, (error: any, decoded: any) => {
+  jwt.verify(accessToken, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, (error: any, decoded: any) => {
     if (error) return throwError(Status.tokenExpired, res, NotificationMessage.haventAccessRights)
     req.body.decoded = decoded
     next()

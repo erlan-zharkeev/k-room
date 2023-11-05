@@ -22,8 +22,7 @@ export const validateRules: Record<string, Rule[]> = {
         let error = ''
         if (!value) error = 'Email is required'
         else if (value.match(/[\s]/) != null) value.replace(/\s/g, '')
-        else if (value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) == null)
-          error = 'Please type correct email'
+        else if (value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) == null) { error = 'Please type correct email' }
         return error ? await Promise.reject(error) : await Promise.resolve()
       }
     }

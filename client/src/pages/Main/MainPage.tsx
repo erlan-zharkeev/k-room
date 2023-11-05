@@ -3,7 +3,7 @@ import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
-import { NotificationMessage, NotificationType, SocketActions, SocketActionsPayload } from 'common-types'
+import { NotificationMessage, NotificationType, SocketActions, SocketActionsPayload, AsideBarButtonName } from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
@@ -26,7 +26,7 @@ import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
 import { updateCall, updateCalls } from 'src/store/callsSlice'
 import { ViewPortWidthType } from 'src/store/@types/SystemState'
-import { AsideBarButtonName } from 'common-types'
+
 import { $socket } from 'src/services/$socket'
 
 const MainPage = () => {
