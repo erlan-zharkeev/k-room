@@ -22,7 +22,8 @@ deploy:
   before_script:
     - command -v ssh-agent >/dev/null || ( apk add --update openssh )
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add
+    - echo ssh-agent -s
+    - echo $SSH_PRIVATE_KEY | tr -d '\r' | ssh-add
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan $EC2_IPADDRESS >> ~/.ssh/known_hosts
