@@ -32,7 +32,6 @@ server.listen(PORT, () => {
   console.log(clc.green.bgWhite(`-Server listening on port ${PORT}`))
 })
 
-// Create path for images
 const imagesPath = 'assets/img/'
 if (!fs.existsSync(path.join(__dirname, imagesPath))) {
   fs.mkdir(path.join(__dirname, imagesPath), (err: any) => {
@@ -44,7 +43,6 @@ export const io = new Server(server, {
   path: RouteNames.SOCKET_PATH,
   maxHttpBufferSize: constants.maxMbQuantityTransfer * 1000000,
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: ENV.IS_DEV ? '*' : ['https://k-room.space', 'http://k-room.space']
   }
 })

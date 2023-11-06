@@ -2,16 +2,32 @@ image: docker:20.10
 
 stages:
   - publish-images
+  - deploy
 
 services:
   - docker:dind
 
-publish-images:
-  stage: publish-images
+# publish-images:
+#   stage: publish-images
+#   script:
+#     - docker-compose -f deploy/docker-compose-prod.yml build
+#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
+#     - docker push ketjo/k-room_server:latest
+#     - docker push ketjo/k-room_client:latest
+#   only:
+#     - main
+
+deploy:
+  stage: deploy
+  before_script:
+    - command -v ssh-agent >/dev/null || ( apk add --update openssh )
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $EC2_IPADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - docker-compose --env-file .env build
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
+    - echo 'HELLO YAY!'
   only:
     - main
