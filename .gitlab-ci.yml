@@ -1,7 +1,7 @@
-image: docker:20.10
+# image: docker:20.10
 
 stages:
-  - publish-images
+  # - publish-images
   - deploy
 
 services:
@@ -30,6 +30,7 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - scp -r -o StrictHostKeyChecking=no ./deploy $EC2_IPADDRESS:/
+    - ssh ubuntu@$EC2_IPADDRESS "mkdir -p /app"
+    - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/app/
   only:
     - main
