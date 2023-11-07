@@ -33,7 +33,7 @@ deploy:
     - mkdir .app
     - cp -r deploy .app
     - mv .app app
-    - scp -o StrictHostKeyChecking=no app ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
+    - scp -r -o StrictHostKeyChecking=no app ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     # - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     # - cd deploy
     # - docker-compose up --build
