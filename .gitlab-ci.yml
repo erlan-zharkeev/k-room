@@ -30,7 +30,6 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -i id_rsa ubuntu@$EC2_IPADDRESS "[ -d /app ] && rm -r /app; mkdir /app || mkdir /app"
-    - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/app/
+    - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/var/www
   only:
     - main
