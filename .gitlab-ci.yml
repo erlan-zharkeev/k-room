@@ -31,7 +31,8 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - mkdir test
+    - ls -a
+    - mkdir testNEW2
     - echo 'HELLO YAY!'
   only:
     - main
