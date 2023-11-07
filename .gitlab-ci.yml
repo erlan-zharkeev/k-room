@@ -30,9 +30,9 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    # - ls /deploy
-    # - cp -r deploy .app
-    # - mv deploy app
+    - mkdir .deploy
+    - cp -r deploy .deploy
+    - mv .deploy deploy
     - scp -r -o StrictHostKeyChecking=no deploy ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     # - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     # - cd deploy
