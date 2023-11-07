@@ -30,7 +30,7 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh ubuntu@$EC2_IPADDRESS "mkdir -p /app"
+    - ssh -i id_rsa ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com "mkdir -p /app"
     - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/app/
   only:
     - main
