@@ -30,8 +30,7 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ls -a
-    - set x
-    - scp -r -o StrictHostKeyChecking=no deploy/ ubuntu@$EC2_IPADDRESS:/
+    - ssh ubuntu@$EC2_IPADDRESS "[ -d /app ] && rm -r /app; mkdir /app || mkdir /app"
+    - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/app/
   only:
     - main
