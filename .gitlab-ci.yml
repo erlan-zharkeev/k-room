@@ -31,6 +31,6 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - rsync -avz -e "ssh -i id_rsa" deploy $EC2_IPADDRESS:/
+    - scp -i id_rsa -r deploy user@$EC2_IPADDRESS:/app
   only:
     - main
