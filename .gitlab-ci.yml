@@ -30,10 +30,10 @@ deploy:
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - mkdir .app
-    - cp -r deploy .app
-    - mv .app app
-    - scp -r -o StrictHostKeyChecking=no app ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
+    # - ls /deploy
+    # - cp -r deploy .app
+    # - mv deploy app
+    - scp -r -o StrictHostKeyChecking=no deploy ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     # - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     # - cd deploy
     # - docker-compose up --build
