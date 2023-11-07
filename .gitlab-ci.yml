@@ -22,15 +22,16 @@ deploy:
   before_script:
     - command -v ssh-agent >/dev/null || ( apk add --update openssh )
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" > id_rsa
-    - chmod 600 id_rsa
-    - ssh-add id_rsa
+    - echo "$SSH_PRIVATE_KEY" > aws.pem
+    - chmod 600 aws.pem
+    - ssh-add aws.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -i id_rsa ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com "mkdir -p /app"
+    - ls -a
+    - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com "mkdir -p /app"
     - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/app/
   only:
     - main
