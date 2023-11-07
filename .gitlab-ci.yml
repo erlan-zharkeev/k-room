@@ -31,7 +31,7 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
-    - ls -a
-    - scp -r -o StrictHostKeyChecking=no ./deploy/ ubuntu@$EC2_IPADDRESS:/app
+    - ls -a /app
+    - scp -r -o StrictHostKeyChecking=no deploy ubuntu@$EC2_IPADDRESS:/app
   only:
     - main
