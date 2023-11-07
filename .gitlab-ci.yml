@@ -31,6 +31,7 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ls -a
-    - scp -r -o StrictHostKeyChecking=no ./deploy ubuntu@$EC2_IPADDRESS:/
+    - set x
+    - scp -r -o StrictHostKeyChecking=no deploy/ ubuntu@$EC2_IPADDRESS:/
   only:
     - main
