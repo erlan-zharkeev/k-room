@@ -10,7 +10,9 @@ services:
 publish-images:
   stage: publish-images
   script:
-    - docker-compose -f deploy/docker-compose-prod.yml build
+    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ../
+    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ../
+    # - docker-compose -f deploy/docker-compose-prod.yml build
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
     - docker push ketjo/k-room_server:latest
     - docker push ketjo/k-room_client:latest
@@ -31,6 +33,6 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d"
+    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "sudo docker login -u ketjo -p $DOCKERHUB_TOKEN && sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d"
   only:
     - main

@@ -12,17 +12,17 @@ services:
   server:
     image: ketjo/k-room_server:latest
     restart: always
-    build:
-      context: ../
-      dockerfile: ./server/Dockerfile
+    # build:
+    #   context: ../
+    #   dockerfile: ./server/Dockerfile
     ports:
       - 3000:3000
   client:
     image: ketjo/k-room_client:latest
     restart: always
-    build:
-      context: ../
-      dockerfile: ./client/Dockerfile
+    # build:
+    #   context: ../
+    #   dockerfile: ./client/Dockerfile
     ports:
       - 3001:3001
   webserver:
