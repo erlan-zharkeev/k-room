@@ -34,7 +34,7 @@ deploy:
     # - mv .deploy deploy
     # - scp -r -o StrictHostKeyChecking=no deploy ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com
     - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com "ls -a"
-    - scp -i aws.pem -r deploy ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com:/app
+    - scp -i aws.pem -r deploy ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com:./app
     - ssh -i aws.pem ubuntu@ec2-52-91-58-90.compute-1.amazonaws.com "ls -a"
     # - cd deploy
     # - docker-compose up --build
