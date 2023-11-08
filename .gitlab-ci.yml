@@ -1,21 +1,21 @@
-# image: docker:20.10
+image: docker:20.10
 
 stages:
-  # - publish-images
+  - publish-images
   - deploy
 
 services:
-  # - docker:dind
+  - docker:dind
 
-# publish-images:
-#   stage: publish-images
-#   script:
-#     - docker-compose -f deploy/docker-compose-prod.yml build
-#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
-#     - docker push ketjo/k-room_server:latest
-#     - docker push ketjo/k-room_client:latest
-#   only:
-#     - main
+publish-images:
+  stage: publish-images
+  script:
+    - docker-compose -f deploy/docker-compose-prod.yml build
+    - docker login -u ketjo -p $DOCKERHUB_TOKEN
+    - docker push ketjo/k-room_server:latest
+    - docker push ketjo/k-room_client:latest
+  only:
+    - main
 
 deploy:
   stage: deploy
@@ -31,6 +31,6 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "cd ./app/deploy && sudo docker-compose up --build"
+    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d"
   only:
     - main
