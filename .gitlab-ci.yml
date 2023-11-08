@@ -10,8 +10,8 @@ services:
 publish-images:
   stage: publish-images
   script:
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ../
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ../
+    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
     # - docker-compose -f deploy/docker-compose-prod.yml build
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
     - docker push ketjo/k-room_server:latest
