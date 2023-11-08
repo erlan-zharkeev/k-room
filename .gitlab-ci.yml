@@ -31,6 +31,6 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "cd ./app/deploy && docker-compose up --build"
+    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "cd ./app/deploy && sudo docker-compose up --build"
   only:
     - main
