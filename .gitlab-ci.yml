@@ -33,14 +33,13 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      sudo usermod -aG docker $AWS_USER &&
-      docker stop \$(docker ps -aq) &&
-      docker rm \$(docker ps -aq) &&
-      docker volume prune -f &&
-      docker rmi \$(docker images -a -q) &&
-      docker pull ketjo/k-room_server:latest &&
-      docker pull ketjo/k-room_client:latest &&
-      docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
+      sudo docker stop \ sudo docker ps -aq &&
+      # sudo docker rm \$(docker ps -aq) &&
+      # sudo docker volume prune -f &&
+      # sudo docker rmi \$(docker images -a -q) &&
+      sudo docker pull ketjo/k-room_server:latest &&
+      sudo docker pull ketjo/k-room_client:latest &&
+      sudo docker login -u ketjo -p $DOCKERHUB_TOKEN &&
+      sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
   only:
     - main
