@@ -33,10 +33,10 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      sudo docker stop $(docker ps -aq) &&
-      sudo docker rm $(docker ps -aq) &&
+      sudo docker stop \$(docker ps -aq) &&
+      sudo docker rm \$(docker ps -aq) &&
       sudo docker volume prune -f &&
-      sudo docker rmi $(docker images -a -q) &&
+      sudo docker rmi \$(docker images -a -q) &&
       sudo docker pull ketjo/k-room_server:latest &&
       sudo docker pull ketjo/k-room_client:latest &&
       sudo docker login -u ketjo -p $DOCKERHUB_TOKEN &&
