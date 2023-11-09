@@ -36,6 +36,6 @@ deploy:
       sudo docker stop \$(sudo docker ps -aq) &&
       sudo docker rm \$(sudo docker ps -aq) &&
       sudo docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d"
+      sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
   only:
     - main
