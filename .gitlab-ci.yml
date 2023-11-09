@@ -33,16 +33,11 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      running_containers=\$(sudo docker ps -q)
-      if [ -n \"\$running_containers\" ]; then
-        sudo docker stop \$running_containers
-      fi
-      stopped_containers=\$(sudo docker ps -a -q)
-      if [ -n \"\$stopped_containers\" ]; then
-        sudo docker rm \$stopped_containers
-      fi
-      sudo docker rmi \$(sudo docker images -a -q)
-      sudo docker login -u ketjo -p $DOCKERHUB_TOKEN
+      sudo docker stop --if-exists $(sudo docker ps -aq) &&
+      sudo docker rm \$(sudo docker ps -aq) &&
+      sudo docker rmi \$(sudo docker images -a -q) &&
+      sudo docker volume prune -f &&
+      sudo docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
   only:
     - main
