@@ -33,7 +33,7 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      sudo -s &&
+      sudo usermod -aG docker $AWS_USER &&
       docker stop \$(docker ps -aq) &&
       docker rm \$(docker ps -aq) &&
       docker volume prune -f &&
