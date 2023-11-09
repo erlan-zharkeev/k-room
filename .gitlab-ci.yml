@@ -1,22 +1,22 @@
 image: docker:20.10
 
 stages:
-  - publish-images
+  # - publish-images
   - deploy
 
 services:
   - docker:dind
 
-publish-images:
-  stage: publish-images
-  script:
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
-  only:
-    - main
+# publish-images:
+#   stage: publish-images
+#   script:
+#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
+#     - docker push ketjo/k-room_server:latest
+#     - docker push ketjo/k-room_client:latest
+#   only:
+#     - main
 
 deploy:
   stage: deploy
@@ -33,11 +33,13 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      sudo docker stop $(sudo docker ps -aq) || true &&
-      sudo docker rm \$(sudo docker ps -aq) &&
-      sudo docker rmi \$(sudo docker images -a -q) &&
-      sudo docker volume prune -f &&
-      sudo docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      sudo docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
+      docker stop $(sudo docker ps -aq) &&
+      docker rm $(sudo docker ps -aq) &&
+      docker volume prune -f &&
+      docker rmi $(sudo docker images -a -q) &&
+      docker pull ketjo/k-room_server:latest &&
+      docker pull ketjo/k-room_client:latest &&
+      docker login -u ketjo -p $DOCKERHUB_TOKEN &&
+      docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
   only:
     - main
