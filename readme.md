@@ -24,4 +24,4 @@ a) permission denied while trying to connect to the Docker daemon socket
 
 ### SSL cert generate
 docs - https://mindsers.blog/en/post/https-using-nginx-certbot-docker
-- to update certificate docker compose run --rm certbot renew
+- to update certificate run "docker compose run --rm certbot renew" on the remote server
