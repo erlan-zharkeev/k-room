@@ -28,9 +28,9 @@ services:
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro # To generate ssl for first time comment this line###SSL-stage-1-comment
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
   certbot:
     image: certbot/certbot:latest
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw # To generate ssl for first time comment this line###SSL-stage-1-comment
+      - ./certbot/conf/:/etc/letsencrypt/:rw

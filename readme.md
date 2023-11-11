@@ -24,6 +24,4 @@ a) permission denied while trying to connect to the Docker daemon socket
 
 ### SSL cert generate
 docs - https://mindsers.blog/en/post/https-using-nginx-certbot-docker
-a) Find all comment with ###SSL-stage-1-comment
-b) Enter to remote server, find docker compose file directory and run "docker compose run --rm  certbot certonly --webroot --webroot-path /var/www/certbot/ -d k-room.space"
-c)
+- to update certificate docker compose run --rm certbot renew
