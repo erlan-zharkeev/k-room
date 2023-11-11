@@ -1,22 +1,22 @@
 image: docker:20.10
 
 stages:
-  - publish-images
+  # - publish-images
   - deploy
 
 services:
   - docker:dind
 
-publish-images:
-  stage: publish-images
-  script:
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
-  only:
-    - main
+# publish-images:
+#   stage: publish-images
+#   script:
+#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
+#     - docker push ketjo/k-room_server:latest
+#     - docker push ketjo/k-room_client:latest
+#   only:
+#     - main
 
 deploy:
   stage: deploy
@@ -34,7 +34,7 @@ deploy:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
       echo "$VITE_FIREBASE_API_KEY" &&
-      sudo export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
+      export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
       printenv "$VITE_FIREBASE_API_KEY" &&
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       docker pull ketjo/k-room_server:latest &&
