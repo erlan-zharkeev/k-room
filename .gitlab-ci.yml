@@ -8,16 +8,16 @@ stages:
 services:
   - docker:dind
 
-# publish-images:
-#   stage: publish-images
-#   script:
-#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
-#     - docker push ketjo/k-room_server:latest
-#     - docker push ketjo/k-room_client:latest
-#   only:
-#     - main
+publish-images:
+  stage: publish-images
+  script:
+    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+    - docker login -u ketjo -p $DOCKERHUB_TOKEN
+    - docker push ketjo/k-room_server:latest
+    - docker push ketjo/k-room_client:latest
+  only:
+    - main
 
 deploy:
   stage: deploy
@@ -34,13 +34,13 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
+      sudo usermod -aG docker $USER &&
       export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
       export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET &&
       export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS &&
       export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET &&
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      docker pull ketjo/k-room_server:latest &&
-      docker pull ketjo/k-room_client:latest &&
+      docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
   only:
     - main
