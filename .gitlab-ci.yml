@@ -1,41 +1,42 @@
 image: docker:20.10
 
 stages:
-  # - publish-images
+  - publish-images
   - deploy
 
 services:
   - docker:dind
 
-# publish-images:
-#   stage: publish-images
-#   script:
-#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
-#     - docker push ketjo/k-room_server:latest
-#     - docker push ketjo/k-room_client:latest
-#   only:
-#     - main
-
-deploy:
-  stage: deploy
-  before_script:
-    - command -v ssh-agent >/dev/null || (apk add --update openssh)
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" > aws.pem
-    - chmod 600 aws.pem
-    - ssh-add aws.pem
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
+publish-images:
+  stage: publish-images
   script:
-    - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      docker pull ketjo/k-room_server:latest &&
-      docker pull ketjo/k-room_client:latest &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
+    - echo "$VITE_FIREBASE_API_KEY"
+    # - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+    # - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+    # - docker login -u ketjo -p $DOCKERHUB_TOKEN
+    # - docker push ketjo/k-room_server:latest
+    # - docker push ketjo/k-room_client:latest
   only:
     - main
+
+# deploy:
+#   stage: deploy
+#   before_script:
+#     - command -v ssh-agent >/dev/null || (apk add --update openssh)
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_PRIVATE_KEY" > aws.pem
+#     - chmod 600 aws.pem
+#     - ssh-add aws.pem
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
+#     - chmod 644 ~/.ssh/known_hosts
+#   script:
+#     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
+#     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
+#       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
+#       docker pull ketjo/k-room_server:latest &&
+#       docker pull ketjo/k-room_client:latest &&
+#       docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
+#   only:
+#     - main
