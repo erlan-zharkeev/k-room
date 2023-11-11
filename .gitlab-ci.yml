@@ -8,16 +8,17 @@ stages:
 services:
   - docker:dind
 
-# publish-images:
-#   stage: publish-images
-#   script:
-#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
-#     - docker push ketjo/k-room_server:latest
-#     - docker push ketjo/k-room_client:latest
-#   only:
-#     - main
+publish-images:
+  stage: publish-images
+  script:
+    - sudo usermod -aG docker $USER
+    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+    - docker login -u ketjo -p $DOCKERHUB_TOKEN
+    - docker push ketjo/k-room_server:latest
+    - docker push ketjo/k-room_client:latest
+  only:
+    - main
 
 deploy:
   stage: deploy
@@ -34,7 +35,6 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      sudo usermod -aG docker $USER &&
       export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
       export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET &&
       export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS &&
