@@ -32,9 +32,9 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY"
+    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "set VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY"
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      printenv "$VITE_FIREBASE_API_KEY" &&
+      env &&
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       docker pull ketjo/k-room_server:latest &&
       docker pull ketjo/k-room_client:latest &&
