@@ -16,3 +16,8 @@ Production: https://k-room.space
 
 ## Deploy
 - Just merge to main branch
+
+
+## FAQ
+-permission denied while trying to connect to the Docker daemon socket
+  - use "sudo usermod -aG docker $USER" on remote server
