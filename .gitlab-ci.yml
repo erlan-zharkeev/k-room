@@ -10,11 +10,11 @@ services:
 publish-images:
   stage: publish-images
   script:
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
+    - sudo docker login -u ketjo -p $DOCKERHUB_TOKEN
+    - sudo docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+    - sudo docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+    - sudo docker push ketjo/k-room_server:latest
+    - sudo docker push ketjo/k-room_client:latest
   only:
     - main
 
