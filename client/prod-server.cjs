@@ -7,7 +7,18 @@ const app = express()
 app.use(express.static(path.join(__dirname + '/build/')))
 const httpServer = http.createServer(app)
 httpServer.listen(ENV.VITE_CLIENT_PORT)
-const routes = ['/', '/app', '/app/', '/sign-in', '/sign-up', '/wait-email-confirm', '/confirm-email', '/password-recovery', '/privacy-policy']
-routes.forEach(route =>{
+const routes = [
+  '/',
+  '/app',
+  '/app/',
+  '/sign-in',
+  '/sign-up',
+  '/wait-email-confirm',
+  '/confirm-email',
+  '/password-recovery',
+  '/privacy-policy'
+]
+routes.forEach((route) => {
   app.get(route, (_, res) => res.sendFile(path.join(__dirname, './build/index.html')))
 })
+console.log('x')
