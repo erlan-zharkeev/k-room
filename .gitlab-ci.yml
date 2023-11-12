@@ -12,7 +12,7 @@ publish-images:
   stage: publish-images
   script:
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - docker build --build-arg="VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY" -t ketjo/k-room_client:latest -f ./client/Dockerfile
+    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./ --build-arg="VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY"
     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
     - docker push ketjo/k-room_server:latest
     - docker push ketjo/k-room_client:latest
