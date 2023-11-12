@@ -11,6 +11,11 @@ services:
 publish-images:
   stage: publish-images
   script:
+    - echo "$VITE_FIREBASE_API_KEY"
+    - export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
+    - export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET &&
+    - export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS &&
+    - export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET &&
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
@@ -35,10 +40,6 @@ deploy:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
-      export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET &&
-      export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS &&
-      export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET &&
       docker stop deploy_server_1 &&
       docker stop deploy_client_1 &&
       docker rm deploy_server_1 &&
