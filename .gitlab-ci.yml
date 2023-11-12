@@ -39,6 +39,7 @@ deploy:
       export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET &&
       export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS &&
       export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET &&
+      docker images -q -f dangling=true | xargs docker rmi &&
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml up -d --remove-orphans"
