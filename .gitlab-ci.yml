@@ -3,7 +3,7 @@ image: docker:20.10
 
 stages:
   - publish-images
-  - deploy
+  # - deploy
 
 services:
   - docker:dind
@@ -11,42 +11,43 @@ services:
 publish-images:
   stage: publish-images
   script:
-    - echo "$VITE_FIREBASE_API_KEY"
-    - export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY &&
-    - export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET &&
-    - export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS &&
-    - export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET &&
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
+    - echo "$CI_RUNNER_OS"
+    # - echo "$VITE_FIREBASE_API_KEY"
+    # - export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY
+    # - export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET
+    # - export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS
+    # - export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET
+    # - docker login -u ketjo -p $DOCKERHUB_TOKEN
+    # - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+    # - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+    # - docker push ketjo/k-room_server:latest
+    # - docker push ketjo/k-room_client:latest
   only:
     - main
 
-deploy:
-  stage: deploy
-  before_script:
-    - command -v ssh-agent >/dev/null || (apk add --update openssh)
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" > aws.pem
-    - chmod 600 aws.pem
-    - ssh-add aws.pem
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-  script:
-    - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      docker stop deploy_server_1 &&
-      docker stop deploy_client_1 &&
-      docker rm deploy_server_1 &&
-      docker rm deploy_client_1 &&
-      docker rmi ketjo/k-room_server:latest &&
-      docker rmi ketjo/k-room_client:latest &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build -d --remove-orphans"
-  only:
-    - main
+# deploy:
+#   stage: deploy
+#   before_script:
+#     - command -v ssh-agent >/dev/null || (apk add --update openssh)
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_PRIVATE_KEY" > aws.pem
+#     - chmod 600 aws.pem
+#     - ssh-add aws.pem
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
+#     - chmod 644 ~/.ssh/known_hosts
+#   script:
+#     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
+#     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
+#       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
+#       docker stop deploy_server_1 &&
+#       docker stop deploy_client_1 &&
+#       docker rm deploy_server_1 &&
+#       docker rm deploy_client_1 &&
+#       docker rmi ketjo/k-room_server:latest &&
+#       docker rmi ketjo/k-room_client:latest &&
+#       docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
+#       docker-compose -f ./app/deploy/docker-compose-prod.yml up --build -d --remove-orphans"
+#   only:
+#     - main
