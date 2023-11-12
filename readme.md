@@ -20,7 +20,7 @@ Production: https://k-room.space
 
 ## Common error fix
 a) permission denied while trying to connect to the Docker daemon socket
-  - use "sudo usermod -aG docker $USER" on remote server
+  - use "sudo usermod -aG docker $USER" on remote server(wait for 2-3 min before restart)
 
 ### SSL cert generate
 docs - https://mindsers.blog/en/post/https-using-nginx-certbot-docker

@@ -21,4 +21,4 @@ const routes = [
 routes.forEach((route) => {
   app.get(route, (_, res) => res.sendFile(path.join(__dirname, './build/index.html')))
 })
-console.log('x')
+console.log(ENV.VITE_CLIENT_PORT)

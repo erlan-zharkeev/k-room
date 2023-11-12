@@ -10,7 +10,7 @@ import { AdditionalServiceProvider } from './providers/AdditionalServiceProvider
 import { initializeApp } from 'firebase/app'
 import * as process from 'process'
 
-console.log(import.meta.env, 'env', process.env)
+console.log(import.meta.env.VITE_FIREBASE_API_KEY, process.env.VITE_FIREBASE_API_KEY)
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? process.env.VITE_FIREBASE_API_KEY,
