@@ -9,7 +9,9 @@ import { RefsProvider } from 'src/providers/RefsProvider'
 import { AdditionalServiceProvider } from './providers/AdditionalServiceProvider'
 import { initializeApp } from 'firebase/app'
 import * as process from 'process'
-console.log(import.meta.env)
+
+console.log(import.meta.env, 'env')
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'k-room-3a49a.firebaseapp.com',
