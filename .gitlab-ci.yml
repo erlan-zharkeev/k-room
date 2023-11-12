@@ -3,7 +3,7 @@ image: docker:20.10
 
 stages:
   - publish-images
-  # - deploy
+  - deploy
 
 services:
   - docker:dind
