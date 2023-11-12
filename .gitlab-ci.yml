@@ -11,6 +11,7 @@ services:
 publish-images:
   stage: publish-images
   script:
+    - sudo usermod -aG docker $USER
     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
