@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  console.log(env)
+  console.log(env, 'env')
   if (!env.VITE_FIREBASE_API_KEY) throw new Error('HUI')
   const VITE_FIREBASE_API_KEY = JSON.stringify(env.VITE_FIREBASE_API_KEY)
   return {
