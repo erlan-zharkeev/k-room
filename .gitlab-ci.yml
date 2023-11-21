@@ -46,7 +46,7 @@ deploy:
       docker rmi ketjo/k-room_server:latest &&
       docker rmi ketjo/k-room_client:latest &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build -d --remove-orphans &&
-      docker-compose restart"
+      docker-compose -f ./app/deploy/docker-compose-prod.yml --build -d --remove-orphans &&
+      docker compose restart"
   only:
     - main
