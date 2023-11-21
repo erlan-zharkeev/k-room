@@ -43,6 +43,7 @@ export const io = new Server(server, {
   path: RouteNames.SOCKET_PATH,
   maxHttpBufferSize: constants.maxMbQuantityTransfer * 1000000,
   cors: {
-    origin: ENV.IS_DEV ? '*' : ['https://k-room.space', 'http://k-room.space']
+    // origin: ENV.IS_DEV ? '*' : ['https://k-room.space', 'http://k-room.space']
+    origin: '*'
   }
 })

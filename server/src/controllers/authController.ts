@@ -107,7 +107,8 @@ class AuthController {
         settings: user.settings,
         message: NotificationMessage.loginSuccess
       })
-    } catch {
+    } catch (e: any) {
+      console.log(e, '!!!!!!!!!!!')
       throwError(Status.badRequest, res, NotificationMessage.failedLogin)
     }
   }
