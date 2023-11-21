@@ -11,7 +11,6 @@ publish-images:
   stage: publish-images
   script:
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - echo $VITE_FIREBASE_API_KEY
     - echo "VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY" >> ./client/.env.production
     - cat ./client/.env.production
     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
@@ -47,9 +46,3 @@ deploy:
       docker-compose -f ./app/deploy/docker-compose-prod.yml up --build -d --remove-orphans"
   only:
     - main
-
-
-# - export VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY
-# - export K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET
-# - export K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS
-# - export K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET
