@@ -59,6 +59,6 @@ deploy:
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build"
+      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build -d"
   only:
     - main
