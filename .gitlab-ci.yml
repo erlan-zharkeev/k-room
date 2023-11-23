@@ -41,12 +41,14 @@ deploy:
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       docker stop deploy_server_1 &&
       docker stop deploy_client_1 &&
+      docker stop deploy_webserver &&
       docker rm deploy_server_1 &&
       docker rm deploy_client_1 &&
+      docker rm deploy_webserver &&
       docker rmi ketjo/k-room_server:latest &&
       docker rmi ketjo/k-room_client:latest &&
+      docker rmi deploy_webserver &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
-      docker-compose up -d --remove-orphans"
+      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build &&
   only:
     - main
