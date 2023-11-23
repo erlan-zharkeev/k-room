@@ -49,6 +49,6 @@ deploy:
       docker rmi ketjo/k-room_client:latest &&
       docker rmi deploy_webserver &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build &&
+      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build"
   only:
     - main
