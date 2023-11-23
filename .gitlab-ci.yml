@@ -25,10 +25,6 @@ publish-images:
 
 deploy:
   stage: deploy
-  # variables:
-  #   CONTAINER_NAMES:
-  #     ["deploy_server_1", "deploy_client_1", "deploy_webserver_1"]
-  #   IMAGE_NAMES: ["ketjo/k-room_server:latest", "ketjo/k-room_client:latest"]
   before_script:
     - command -v ssh-agent >/dev/null || (apk add --update openssh)
     - eval $(ssh-agent -s)
@@ -47,6 +43,7 @@ deploy:
           if [ "$(docker ps -aq -f status=exited -f name=$name)" ]; then
             docker stop $name
             docker rm $name
+            echo $name
           fi
         fi
       done
@@ -58,7 +55,9 @@ deploy:
       done
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml pull &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml up --build -d"
+      docker-compose ketjo/k-room_server:latest pull &&
+      docker-compose ketjo/k-room_client:latest pull &&
+      docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
+      docker-compose restart"
   only:
     - main
