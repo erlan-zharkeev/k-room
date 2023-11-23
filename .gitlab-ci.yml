@@ -25,14 +25,10 @@ publish-images:
 
 deploy:
   stage: deploy
-  variables:
-    CONTAINER_NAMES:
-      - "deploy_server_1"
-      - "deploy_client_1"
-      - "deploy_webserver_1"
-    IMAGE_NAMES:
-      - "ketjo/k-room_server:latest"
-      - "ketjo/k-room_client:latest"
+  # variables:
+  #   CONTAINER_NAMES:
+  #     ["deploy_server_1", "deploy_client_1", "deploy_webserver_1"]
+  #   IMAGE_NAMES: ["ketjo/k-room_server:latest", "ketjo/k-room_client:latest"]
   before_script:
     - command -v ssh-agent >/dev/null || (apk add --update openssh)
     - eval $(ssh-agent -s)
@@ -46,7 +42,7 @@ deploy:
   script:
     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
     - |
-      for name in "${CONTAINER_NAMES[@]}"; do
+      for name in "deploy_server_1 deploy_client_1 deploy_webserver_1"; do
         if [ ! "$(docker ps -a -q -f name=$name)" ]; then
           if [ "$(docker ps -aq -f status=exited -f name=$name)" ]; then
             docker stop $name
@@ -55,7 +51,7 @@ deploy:
         fi
       done
     - |
-      for image in "${IMAGE_NAMES[@]}"; do
+      for image in "ketjo/k-room_server:latest ketjo/k-room_client:latest"; do
         if [ "$(docker images -q $image)" ]; then
           docker rmi $image
         fi
