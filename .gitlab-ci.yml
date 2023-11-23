@@ -54,8 +54,8 @@ deploy:
     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
       docker pull ketjo/k-room_server:latest  &&
-      docker pull ketjo/k-room_client:latest &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
-      docker-compose restart"
+      docker pull ketjo/k-room_client:latest"
+    - docker-compose -f ./app/deploy/docker-compose-prod.yml build
+    - docker-compose ./app/deploy/docker-compose-prod.yml restart
   only:
     - main
