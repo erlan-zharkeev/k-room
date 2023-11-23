@@ -1,27 +1,27 @@
 image: docker:20.10
 
 stages:
-  - publish-images
+  # - publish-images
   - deploy
 
 services:
   - docker:dind
 
-publish-images:
-  stage: publish-images
-  script:
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./server/.env.production
-    - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./server/.env.production
-    - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./server/.env.production
-    - echo "VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY" >> ./client/.env.production
-    - cat ./client/.env.production
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
-  only:
-    - main
+# publish-images:
+#   stage: publish-images
+#   script:
+#     - docker login -u ketjo -p $DOCKERHUB_TOKEN
+#     - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./server/.env.production
+#     - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./server/.env.production
+#     - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./server/.env.production
+#     - echo "VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY" >> ./client/.env.production
+#     - cat ./client/.env.production
+#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+#     - docker push ketjo/k-room_server:latest
+#     - docker push ketjo/k-room_client:latest
+#   only:
+#     - main
 
 deploy:
   stage: deploy
@@ -56,6 +56,6 @@ deploy:
       docker pull ketjo/k-room_server:latest  &&
       docker pull ketjo/k-room_client:latest &&
       docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
-      docker-compose ./app/deploy/docker-compose-prod.yml restart"
+      docker-compose -f ./app/deploy/docker-compose-prod.yml restart"
   only:
     - main
