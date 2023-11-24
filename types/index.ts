@@ -471,7 +471,7 @@ export interface EnvVariables {
   PASSWORD_RECOVERY_LINK_LIFE: number;
 }
 
-// ENDPOINTS (!for every endpoints use upper snake case)
+// !for every endpoints use upper snake case!
 export enum AuthEndPoints {
   REGISTRATION = "/auth/registration",
   SEND_EMAIL_CONFIRMATION_LINK = "/auth/send-email-confirmation-link",
