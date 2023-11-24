@@ -5,22 +5,12 @@ import validationRules from '../middlewares/authValidator/rules'
 import accessTokenValidator from '../middlewares/accessTokenValidator'
 import refreshTokenValidator from '../middlewares/refreshTokenValidator'
 import codesRequestValidator from '../middlewares/codesRequestValidator'
-import cors from 'cors'
-import ENV from '../ENV'
 import commonController from '../controllers/commonController'
 import userController from '../controllers/userController'
 import codesController from '../controllers/codesController'
-import fileUploader from '../middlewares/fileUploder'
+import fileUploader from '../middlewares/fileUploader'
 
 const router = Router()
-
-const corsOptions = {
-  origin: `${ENV.HOST}`,
-  optionsSuccessStatus: 200,
-  credentials: true
-}
-
-router.use(cors(corsOptions))
 
 router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, authController.updateTokensPair)
 router.post(AuthEndPoints.REGISTRATION, validationRules.registration, authController.registration)

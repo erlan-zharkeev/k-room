@@ -4,6 +4,8 @@ import router from './router'
 import ENV from './ENV'
 import constants from './constants'
 import { RouteNames } from './../../types'
+import cors from 'cors'
+// import throwError from './utils/throwError'
 
 const fs = require('fs')
 const path = require('path')
@@ -13,14 +15,24 @@ const bodyParser = require('body-parser')
 const clc = require('cli-color')
 const cookieParser = require('cookie-parser')
 
+const origins = ['https://k-room.space', 'http://k-room.space']
+
+const corsOptions = {
+  origin: 'https://k-room.space',
+  optionsSuccessStatus: 200,
+  preflightContinue: true,
+  credentials: true
+}
+
 const app = express()
 
+app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use(RouteNames.API, router)
 
-app.get(RouteNames.API, (req: Request, res: Response) => {
+app.get(RouteNames.API, (_: Request, res: Response) => {
   res.send('Server running')
 })
 
@@ -43,7 +55,6 @@ export const io = new Server(server, {
   path: RouteNames.SOCKET_PATH,
   maxHttpBufferSize: constants.maxMbQuantityTransfer * 1000000,
   cors: {
-    // origin: ENV.IS_DEV ? '*' : ['https://k-room.space', 'http://k-room.space']
-    origin: '*'
+    origin: ENV.IS_DEV ? '*' : origins
   }
 })
