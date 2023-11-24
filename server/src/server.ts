@@ -5,7 +5,6 @@ import ENV from './ENV'
 import constants from './constants'
 import { RouteNames } from './../../types'
 import cors from 'cors'
-// import throwError from './utils/throwError'
 
 const fs = require('fs')
 const path = require('path')
@@ -18,7 +17,7 @@ const cookieParser = require('cookie-parser')
 const origins = ['https://k-room.space', 'http://k-room.space']
 
 const corsOptions = {
-  origin: 'https://k-room.space',
+  origin: origins,
   optionsSuccessStatus: 200,
   preflightContinue: true,
   credentials: true
