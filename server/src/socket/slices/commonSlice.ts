@@ -8,7 +8,8 @@ import { getUserBySocketId } from '../helpers/getters/getUserBySocketId'
 import { setSocketId, setUserStatus, setLastSeenData } from '../helpers/setters'
 
 export const commonSlice = (socket: SocketInstanceType) => {
-  socket.on(SocketActions.INITIALIZE, async ({ userId }: SocketActionsPayload['initialize']) => {
+  socket.on(SocketActions.INITIALIZE, async () => {
+    const { userId } = socket.data
     io.to(socket.id).emit(SocketActions.CONNECTION)
     await setSocketId(userId, socket.id)
     await emitContactsToUser(userId)

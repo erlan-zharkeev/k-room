@@ -3,10 +3,9 @@ export enum Status {
   success = 200,
   badRequest = 400,
   notAuth = 401,
-  tokenExpired = 403,
   notFound = 404,
   unreachable = 503,
-  badGateaway = 504,
+  badGateway = 504,
 }
 export interface MessageMetaData {
   id: string;
@@ -255,9 +254,8 @@ export enum NotificationMessage {
   // Don't forget image quantity is dynamic
   maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
   imageSizeMustLessThan2mb = "Image size must be less than 2mb",
-
+  tokensPairUpdated = "Token pair is updated",
   success = "success",
-  tokensPairUpdated = "Tokens pair updated",
   passwordReset = "Password changed successfully",
   loginSuccess = "Login successfully",
   loginAndRegister = "Login and register successfully",
@@ -278,7 +276,7 @@ export enum NotificationMessage {
   failedRegistration = "Registration failed, try register later",
   failedLogin = "Login failed, try register later",
   nonAuthorized = "User not authorized",
-  haventAccessRights = "User have not access rights",
+  haveNotAccessRights = "User have not access rights",
   failedUserDataUpdate = "Failed to update user data",
   userWithCurrentNameAlreadyExist = "The user with the current username is already registered",
   userWithCurrentEmailAlreadyExist = "The user with the current email address is already registered",
@@ -292,15 +290,17 @@ export enum NotificationMessage {
   usersFind = "Error while finding user(s)",
   failedUpdateSettings = "Failed to save user settings",
   emailLinkedToAnotherMethod = "This email is already linked to another login method",
-  failedFindEmail = "Couldn`t find the current email address",
+  failedFindEmail = "Could not find the current email address",
   nextTimeRequestNotPossible = "The code was sent earlier",
   noFilesExist = "No files exist",
   notImage = "File is not an image",
   failedSendConfirmationLink = "Failed to send confirmation link, please try later",
-  coudntFindEmail = "Couldn`t find the current email address",
+  couldNotFindEmail = "Could not find the current email address",
   imageConverterError = "Server could not process the image, please choose another image file",
   failedToLogin = "Login failed, server error. Please try again, later",
   imageResNotAllowed = "Image resolution not allowed",
+  tokenExpired = "Token expired",
+  authenticationError = "Authentication error",
 }
 
 export interface SocketActionsPayload {
@@ -449,6 +449,7 @@ export interface EnvVariables {
   MONGO_HOST: string;
   HOST: string;
   JWT_ACCESS_EXPIRES_INTERVAL: string;
+  JWTR_ACCESS_EXPIRES_INTERVAL: string;
   APP_NAME: string;
   MAIL_APP: string;
   K_ROOM_MAIL_PASS: string;
@@ -517,7 +518,9 @@ export enum RouteNames {
 
 export enum SocketActions {
   CONNECTION = "connection",
+  ERROR = "error",
   RECONNECT = "reconnect",
+  AUTH_ERROR = "auth_error",
   RECONNECT_ATTEMPT = "reconnect_attempt",
   RECONNECT_FAILED = "reconnect_failed",
   INITIALIZE = "initialize",
@@ -557,4 +560,9 @@ export enum SocketActions {
   MARK_CALL_AS_VIDEO = "mark-call-as-video",
   UPDATE_CALL_SIGNAL = "update-call-signal",
   INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
+}
+
+export enum AuthTokens {
+  accessToken = "jwt",
+  refreshToken = "refresh-jwt",
 }

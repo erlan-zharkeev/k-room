@@ -8,7 +8,7 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
     const { email } = req.body
     const candidate = await UserModel.findOne({ email })
 
-    if (!candidate) throwError(Status.badRequest, res, NotificationMessage.coudntFindEmail)
+    if (!candidate) throwError(Status.badRequest, res, NotificationMessage.couldNotFindEmail)
     const currentDate = Date.now()
 
     const ableToSendCode = currentDate > Number(candidate?.codes.nextRequestPossibleAt)

@@ -44,9 +44,11 @@ const UserDataSettingsPopup = () => {
     }
     setIsLoading(true)
     const response = (await dispatch(apiMethods.user.updateUserData(updatedUserData))) as AsyncThunkResponseWrapper
-    dispatch(setUserData(response.payload.data.userData))
-    setIsLoading(false)
-    dispatch(closeModal())
+    if (response.payload?.data?.userData) {
+      dispatch(setUserData(response.payload.data.userData))
+      setIsLoading(false)
+      dispatch(closeModal())
+    }
   }
 
   const changeFormHandler = () => {

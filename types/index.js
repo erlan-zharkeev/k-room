@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
 // BASIC
 var Status;
 (function (Status) {
     Status[Status["success"] = 200] = "success";
     Status[Status["badRequest"] = 400] = "badRequest";
     Status[Status["notAuth"] = 401] = "notAuth";
-    Status[Status["tokenExpired"] = 403] = "tokenExpired";
     Status[Status["notFound"] = 404] = "notFound";
     Status[Status["unreachable"] = 503] = "unreachable";
-    Status[Status["badGateaway"] = 504] = "badGateaway";
+    Status[Status["badGateway"] = 504] = "badGateway";
 })(Status = exports.Status || (exports.Status = {}));
 var Author;
 (function (Author) {
@@ -93,8 +92,8 @@ var NotificationMessage;
     // Don't forget image quantity is dynamic
     NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
     NotificationMessage["imageSizeMustLessThan2mb"] = "Image size must be less than 2mb";
+    NotificationMessage["tokensPairUpdated"] = "Token pair is updated";
     NotificationMessage["success"] = "success";
-    NotificationMessage["tokensPairUpdated"] = "Tokens pair updated";
     NotificationMessage["passwordReset"] = "Password changed successfully";
     NotificationMessage["loginSuccess"] = "Login successfully";
     NotificationMessage["loginAndRegister"] = "Login and register successfully";
@@ -114,7 +113,7 @@ var NotificationMessage;
     NotificationMessage["failedRegistration"] = "Registration failed, try register later";
     NotificationMessage["failedLogin"] = "Login failed, try register later";
     NotificationMessage["nonAuthorized"] = "User not authorized";
-    NotificationMessage["haventAccessRights"] = "User have not access rights";
+    NotificationMessage["haveNotAccessRights"] = "User have not access rights";
     NotificationMessage["failedUserDataUpdate"] = "Failed to update user data";
     NotificationMessage["userWithCurrentNameAlreadyExist"] = "The user with the current username is already registered";
     NotificationMessage["userWithCurrentEmailAlreadyExist"] = "The user with the current email address is already registered";
@@ -128,17 +127,19 @@ var NotificationMessage;
     NotificationMessage["usersFind"] = "Error while finding user(s)";
     NotificationMessage["failedUpdateSettings"] = "Failed to save user settings";
     NotificationMessage["emailLinkedToAnotherMethod"] = "This email is already linked to another login method";
-    NotificationMessage["failedFindEmail"] = "Couldn`t find the current email address";
+    NotificationMessage["failedFindEmail"] = "Could not find the current email address";
     NotificationMessage["nextTimeRequestNotPossible"] = "The code was sent earlier";
     NotificationMessage["noFilesExist"] = "No files exist";
     NotificationMessage["notImage"] = "File is not an image";
     NotificationMessage["failedSendConfirmationLink"] = "Failed to send confirmation link, please try later";
-    NotificationMessage["coudntFindEmail"] = "Couldn`t find the current email address";
+    NotificationMessage["couldNotFindEmail"] = "Could not find the current email address";
     NotificationMessage["imageConverterError"] = "Server could not process the image, please choose another image file";
     NotificationMessage["failedToLogin"] = "Login failed, server error. Please try again, later";
     NotificationMessage["imageResNotAllowed"] = "Image resolution not allowed";
+    NotificationMessage["tokenExpired"] = "Token expired";
+    NotificationMessage["authenticationError"] = "Authentication error";
 })(NotificationMessage = exports.NotificationMessage || (exports.NotificationMessage = {}));
-// ENDPOINTS (!for every endpoints use upper snake case)
+// !for every endpoints use upper snake case!
 var AuthEndPoints;
 (function (AuthEndPoints) {
     AuthEndPoints["REGISTRATION"] = "/auth/registration";
@@ -185,7 +186,9 @@ var RouteNames;
 var SocketActions;
 (function (SocketActions) {
     SocketActions["CONNECTION"] = "connection";
+    SocketActions["ERROR"] = "error";
     SocketActions["RECONNECT"] = "reconnect";
+    SocketActions["AUTH_ERROR"] = "auth_error";
     SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
     SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
     SocketActions["INITIALIZE"] = "initialize";
@@ -226,3 +229,8 @@ var SocketActions;
     SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
     SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
+var AuthTokens;
+(function (AuthTokens) {
+    AuthTokens["accessToken"] = "jwt";
+    AuthTokens["refreshToken"] = "refresh-jwt";
+})(AuthTokens = exports.AuthTokens || (exports.AuthTokens = {}));

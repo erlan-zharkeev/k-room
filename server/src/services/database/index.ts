@@ -4,7 +4,7 @@ import { loadUsersFixtures } from './../../fixtures/users'
 import { loadMessageFixtures } from '../../fixtures/messages'
 const clc = require('cli-color')
 
-const db = mongoose
+const db = mongoose.set('strictQuery', true)
 
 async function initDataBase() {
   try {

@@ -3,7 +3,13 @@ import ChatRoom from 'src/components/ChatRoom/ChatRoom'
 import useTypedSelector from 'src/hooks/useTypedSelector'
 import AsidePanel from 'src/components/AsidePanel/AsidePanel'
 import TopBar from 'src/components/TopBar/TopBar'
-import { NotificationMessage, NotificationType, SocketActions, SocketActionsPayload, AsideBarButtonName } from 'common-types'
+import {
+  NotificationMessage,
+  NotificationType,
+  SocketActions,
+  SocketActionsPayload,
+  AsideBarButtonName
+} from 'common-types'
 import useSelectedRoom from 'src/hooks/useSelectedRoom'
 import StubLoading from 'src/components/Common/StubLoading/StubLoading'
 import $clg from 'src/services/$clg'
@@ -26,13 +32,11 @@ import AsideBar from 'src/components/AsideBar/AsideBar'
 import InfoList from 'src/components/InfoList/InfoList'
 import { updateCall, updateCalls } from 'src/store/callsSlice'
 import { ViewPortWidthType } from 'src/store/@types/SystemState'
-
-import { $socket } from 'src/services/$socket'
+import { $socket, socketReconnect } from 'src/services/$socket'
 
 const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
 
-  const userId = useTypedSelector((state) => state.user.userData.id)
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -71,17 +75,24 @@ const MainPage = () => {
 
   useEffect(() => {
     if ($socket.disconnected) $socket.connect()
-    const initializePayload: SocketActionsPayload['initialize'] = { userId }
-    $socket.emit(SocketActions.INITIALIZE, initializePayload)
+    // const initializePayload: SocketActionsPayload['initialize'] = { userId }
+
+    $socket.emit(SocketActions.INITIALIZE)
+
+    $socket.on(SocketActions.AUTH_ERROR, async () => {
+      socketReconnect(dispatch)
+    })
+
     $socket.on(SocketActions.RECONNECT, (attempt: number) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
-      $socket.emit(SocketActions.INITIALIZE, initializePayload)
+      $socket.emit(SocketActions.INITIALIZE)
       dispatch(setReconnectingStatus(false))
     })
     $socket.on(SocketActions.RECONNECT_ATTEMPT, (attempt: number) => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
+
     $socket.on(SocketActions.RECONNECT_FAILED, () => {
       dispatch(setReconnectingStatus(false))
     })

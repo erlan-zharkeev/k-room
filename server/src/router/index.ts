@@ -4,6 +4,7 @@ import authController from '../controllers/authController'
 import validationRules from '../middlewares/authValidator/rules'
 import accessTokenValidator from '../middlewares/accessTokenValidator'
 import refreshTokenValidator from '../middlewares/refreshTokenValidator'
+
 import codesRequestValidator from '../middlewares/codesRequestValidator'
 import commonController from '../controllers/commonController'
 import userController from '../controllers/userController'
@@ -20,17 +21,26 @@ router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, authController.sendConfi
 router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION, authController.confirmEmail)
 
 router.get(UserEndPoints.GET_USER_DATA, accessTokenValidator, userController.getUserData)
-router.post(UserEndPoints.UPDATE_USER_DATA, fileUploader.single('file'), userController.updateUserData)
-router.post(UserEndPoints.RESET_PASSWORD, userController.resetPassword)
+router.post(
+  UserEndPoints.UPDATE_USER_DATA,
+  accessTokenValidator,
+  fileUploader.single('file'),
+  userController.updateUserData
+)
+router.post(UserEndPoints.RESET_PASSWORD, accessTokenValidator, userController.resetPassword)
 
-router.post(CommonEndPoints.GET_INFO, commonController.readInfoHandler)
-router.get(CommonEndPoints.COMMON_IMAGES, commonController.imagesHandler)
+router.post(CommonEndPoints.GET_INFO, accessTokenValidator, commonController.readInfoHandler)
+router.get(CommonEndPoints.COMMON_IMAGES, accessTokenValidator, commonController.imagesHandler)
 
 router.post(
   CodesEndPoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY,
   codesRequestValidator,
   codesController.emailPasswordRecovery
 )
-router.post(CodesEndPoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY, codesController.validateEmailCodePasswordRecovery)
+router.post(
+  CodesEndPoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY,
+  accessTokenValidator,
+  codesController.validateEmailCodePasswordRecovery
+)
 
 export default router

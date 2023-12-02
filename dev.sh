@@ -15,7 +15,7 @@ trap cleanup EXIT
 
 pnpm install
 
-docker-compose up -d db &
+docker run -d -p 27017:27017 --name db mongo:latest &
 
 cd ./types
 pnpm install
