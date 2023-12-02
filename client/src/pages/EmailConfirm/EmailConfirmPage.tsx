@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { Status, RouteNames } from 'common-types'
-import useQuery from 'src/hooks/useQuery'
-import { AppDispatch } from 'src/store'
-import { logOut } from 'src/store/userSlice'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import apiMethods from 'src/services/api-methods'
-import { UIIcon, UIButton } from 'src/components/UI'
+import { UIIcon, UIButton } from 'src/components'
+import { useQuery } from 'src/hooks'
+import { apiMethods } from 'src/services'
+import { AppDispatch } from 'src/store'
+import { logOut } from 'src/store/user-slice'
 
-const EmailConfirmPage = () => {
+export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const query = useQuery()
@@ -59,4 +59,3 @@ const EmailConfirmPage = () => {
     </div>
   )
 }
-export default EmailConfirmPage

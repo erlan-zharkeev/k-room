@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react'
 import { UISwitchProps } from './@types/UISwitchProps'
 
-const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', onChange }: UISwitchProps) => {
+export const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', onChange }: UISwitchProps) => {
   const [value, setValue] = useState(initValue)
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.checked
@@ -17,5 +17,3 @@ const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', onChange }: U
     </div>
   )
 }
-
-export default UISwitch

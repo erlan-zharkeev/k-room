@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { CallDB } from '../../../types'
+import { CallDB } from '../@types'
 
-export const callModel = new Schema<CallDB>({
+const callModel = new Schema<CallDB>({
   calledAt: {
     type: Number,
     required: false

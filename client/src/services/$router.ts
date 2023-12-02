@@ -2,7 +2,7 @@ import { createBrowserHistory } from 'history'
 import { publicRoutes } from 'src/router/routes'
 import { $socket } from './$socket'
 
-const $router = createBrowserHistory()
+export const $router = createBrowserHistory()
 
 $router.listen(({ location }) => {
   const path = location.pathname
@@ -12,5 +12,3 @@ $router.listen(({ location }) => {
     $socket.disconnect()
   })
 })
-
-export default $router

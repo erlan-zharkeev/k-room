@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios'
-import { NotificationType, RouteNames, Status } from 'common-types'
+import { Status, NotificationType, RouteNames } from 'common-types'
 import { AppDispatch } from 'src/store'
-import { changeIsAppLoading } from 'src/store/userSlice'
-import { showNotification } from 'src/store/systemSlice'
-import $clg from 'src/services/$clg'
+import { showNotification } from 'src/store/system-slice'
+import { changeIsAppLoading } from 'src/store/user-slice'
+import { $clg } from './$clg'
 
 axios.defaults.withCredentials = true
 
@@ -18,7 +18,7 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const { status } = e.response ?? e.response?.data?.status
-  let { message, silent } = e.response?.data
+  const { message, silent } = e.response?.data
   switch (status) {
     case Status.notAuth:
       const isInitRoute = window.location.pathname === RouteNames.SIGN_IN
@@ -34,7 +34,7 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
 
 type RequestTypes = 'post' | 'get' | 'patch' | 'put'
 
-const $api = async (
+export const $api = async (
   type: RequestTypes,
   endpoint: string,
   dispatch: AppDispatch,
@@ -50,5 +50,3 @@ const $api = async (
     errorInterceptor(e, dispatch)
   }
 }
-
-export default $api

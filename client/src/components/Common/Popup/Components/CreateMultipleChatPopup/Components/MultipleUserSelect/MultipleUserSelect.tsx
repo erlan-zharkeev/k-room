@@ -1,9 +1,13 @@
 import { SelectProps, Select } from 'antd'
 import { UserShort } from 'common-types'
-import { useEffect, useState } from 'react'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { useState, useEffect } from 'react'
+import { useTypedSelector } from 'src/hooks'
 
-const MultipleUserSelect = ({ setMembers }: { setMembers: React.Dispatch<React.SetStateAction<Array<UserShort>>> }) => {
+export const MultipleUserSelect = ({
+  setMembers
+}: {
+  setMembers: React.Dispatch<React.SetStateAction<Array<UserShort>>>
+}) => {
   const { contacts } = useTypedSelector((state) => state.contacts)
   const [users, setUsers] = useState([] as SelectProps['options'])
 
@@ -35,5 +39,3 @@ const MultipleUserSelect = ({ setMembers }: { setMembers: React.Dispatch<React.S
     </div>
   )
 }
-
-export default MultipleUserSelect

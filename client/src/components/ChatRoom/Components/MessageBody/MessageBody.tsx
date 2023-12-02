@@ -1,15 +1,14 @@
 import moment from 'moment'
 import { MessageBodyProps } from './@types/MessageBodyProps'
-import { setContextMenu } from 'src/store/systemSlice'
+import { setContextMenu } from 'src/store/system-slice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import constants from 'src/constants'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
-
 import { Author } from 'common-types'
+import { constants } from 'src/constants'
 
-const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
+export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const showMessageAuthor =
     !message.isSelf && isChatMultiple && message.authorName !== Author.system && message.authorName !== Author.time
@@ -109,4 +108,3 @@ const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
     </div>
   )
 }
-export default MessageBody

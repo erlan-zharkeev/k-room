@@ -1,14 +1,11 @@
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import ChatRoomList from './Components/ChatRoomList/ChatRoomList'
-import ContactList from './Components/ContactList/ContactList'
-import UserSettings from './Components/UserSettings/UserSettings'
-import Calls from './Components/Calls/Calls'
-import { ReactElement, useEffect, useState } from 'react'
-import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
-import constants from 'src/constants'
 import { AsideBarButtonName } from 'common-types'
+import { useState, ReactElement, useEffect } from 'react'
+import { constants } from 'src/constants'
+import { useTypedSelector } from 'src/hooks'
+import { WidgetLoader } from '..'
+import { ContactList, ChatRoomList, Calls, UserSettings } from './components'
 
-const AsidePanel = () => {
+export const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const contactListLoading = useTypedSelector((state) => state.contacts.isLoading)
   const roomListIsLoading = useTypedSelector((state) => state.chatRooms.isLoading)
@@ -38,5 +35,3 @@ const AsidePanel = () => {
     </div>
   )
 }
-
-export default AsidePanel

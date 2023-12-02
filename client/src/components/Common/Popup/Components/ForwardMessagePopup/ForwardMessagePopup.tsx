@@ -1,15 +1,14 @@
 import { UserSettingKey } from 'common-types'
-import ShortChatList from './Components/ShortChatList/ShortChatList'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { UIInput, UIIcon } from 'src/components/UI'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { UIInput, UIIcon } from 'src/components'
+import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { setRepliedMessage } from 'src/store/roomsSlice'
-import { closeModal } from 'src/store/systemSlice'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
+import { setRepliedMessage } from 'src/store/rooms-slice'
+import { closeModal } from 'src/store/system-slice'
+import { ShortChatList } from './components'
 
-const ForwardMessagePopup = () => {
+export const ForwardMessagePopup = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { updateSetting } = useUpdateSettings()
   const [searchString, setSearchString] = useState('')
@@ -34,5 +33,3 @@ const ForwardMessagePopup = () => {
     </div>
   )
 }
-
-export default ForwardMessagePopup

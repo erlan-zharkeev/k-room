@@ -1,17 +1,15 @@
 import { Form } from 'antd'
-import { SocketActions, SocketActionsPayload } from 'common-types'
-import { useEffect, useState } from 'react'
+import { SocketActionsPayload, SocketActions } from 'common-types'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import useValidate from 'src/hooks/useValidate'
-import { $socket } from 'src/services/$socket'
-
+import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components'
+import { useTypedSelector, useValidate } from 'src/hooks'
+import { $socket } from 'src/services'
 import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/systemSlice'
-import { validateRules } from 'src/utils/validateRules'
+import { closeModal } from 'src/store/system-slice'
+import { validateRules } from 'src/utils'
 
-const ChatRoomSettingsPopup = () => {
+export const ChatRoomSettingsPopup = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
@@ -32,8 +30,7 @@ const ChatRoomSettingsPopup = () => {
       users: [id, ...userIds],
       chatName: values['chat-name'],
       avatarPath: imagePath ?? '',
-      avatarFile,
-      authorId: id
+      avatarFile
     }
     setIsLoading(true)
 
@@ -118,5 +115,3 @@ const ChatRoomSettingsPopup = () => {
     </div>
   )
 }
-
-export default ChatRoomSettingsPopup

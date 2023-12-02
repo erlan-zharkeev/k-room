@@ -1,18 +1,17 @@
+import { constants } from 'src/constants'
+import parse from 'html-react-parser'
 import { Collapse } from 'antd'
+import { Status, UserSettingKey } from 'common-types'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { AppDispatch } from 'src/store'
-import parse from 'html-react-parser'
-import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import { Status, UserSettingKey } from 'common-types'
-import { markInfoItemAsRead } from 'src/store/userSlice'
-import { UIIcon } from '../UI'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import constants from 'src/constants'
+import { useUpdateSettings, useTypedSelector } from 'src/hooks'
+import { AppDispatch } from 'src/store'
+import { markInfoItemAsRead } from 'src/store/user-slice'
+import { UIIcon } from '..'
+import { apiMethods } from 'src/services'
 
-const InfoList = () => {
+export const InfoList = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { updateSetting } = useUpdateSettings()
   const { currentInfoId } = useTypedSelector((state) => state.persist.settings)
@@ -62,5 +61,3 @@ const InfoList = () => {
     </div>
   )
 }
-
-export default InfoList

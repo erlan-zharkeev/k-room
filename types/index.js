@@ -89,9 +89,6 @@ var NotificationMessage;
     NotificationMessage["failedToConnectToDevice"] = "Failed to connect to device, check for device is plugged in";
     NotificationMessage["socketConnected"] = "Socket connected";
     NotificationMessage["socketDisconnected"] = "Socket disconnected";
-    // Don't forget image quantity is dynamic
-    NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
-    NotificationMessage["imageSizeMustLessThan2mb"] = "Image size must be less than 2mb";
     NotificationMessage["tokensPairUpdated"] = "Token pair is updated";
     NotificationMessage["success"] = "success";
     NotificationMessage["passwordReset"] = "Password changed successfully";
@@ -138,6 +135,8 @@ var NotificationMessage;
     NotificationMessage["imageResNotAllowed"] = "Image resolution not allowed";
     NotificationMessage["tokenExpired"] = "Token expired";
     NotificationMessage["authenticationError"] = "Authentication error";
+    NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
+    NotificationMessage["imageSizeMustLessThan2mb"] = "Image size must be less than 2mb";
 })(NotificationMessage = exports.NotificationMessage || (exports.NotificationMessage = {}));
 // !for every endpoints use upper snake case!
 var AuthEndPoints;
@@ -188,9 +187,7 @@ var SocketActions;
     SocketActions["CONNECTION"] = "connection";
     SocketActions["ERROR"] = "error";
     SocketActions["RECONNECT"] = "reconnect";
-    SocketActions["AUTH_ERROR"] = "auth_error";
-    SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
-    SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
+    SocketActions["AUTH_ERROR"] = "auth-error";
     SocketActions["INITIALIZE"] = "initialize";
     SocketActions["DISCONNECT"] = "disconnect";
     SocketActions["GET_ROOMS"] = "get-rooms";
@@ -228,6 +225,9 @@ var SocketActions;
     SocketActions["MARK_CALL_AS_VIDEO"] = "mark-call-as-video";
     SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
     SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
+    // Socket.io events
+    SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
+    SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
 })(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
 var AuthTokens;
 (function (AuthTokens) {

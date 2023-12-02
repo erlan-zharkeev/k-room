@@ -1,19 +1,16 @@
 import { Form } from 'antd'
+import { UserShort, SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import useValidate from 'src/hooks/useValidate'
+import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
+import { useUpdateSettings, useTypedSelector, useValidate } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/systemSlice'
-import { validateRules } from 'src/utils/validateRules'
-import MultipleUserSelect from './Components/MultipleUserSelect/MultipleUserSelect'
-import { AsideBarButtonName, SocketActions, SocketActionsPayload, UserSettingKey, UserShort } from 'common-types'
+import { closeModal } from 'src/store/system-slice'
+import { validateRules } from 'src/utils'
+import { MultipleUserSelect } from './components'
+import { $socket } from 'src/services'
 
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import { $socket } from 'src/services/$socket'
-
-const CreateMultipleChatPopup = () => {
+export const CreateMultipleChatPopup = () => {
   const { updateSetting } = useUpdateSettings()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -33,7 +30,6 @@ const CreateMultipleChatPopup = () => {
     const membersIds = members.map((member) => member.id)
     const payload: SocketActionsPayload['createRoom'] = {
       users: [id, ...membersIds],
-      authorId: id,
       chatName,
       avatarFile,
       multiple: true
@@ -84,5 +80,3 @@ const CreateMultipleChatPopup = () => {
     </div>
   )
 }
-
-export default CreateMultipleChatPopup

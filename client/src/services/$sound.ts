@@ -16,12 +16,10 @@ const soundSrc: Record<Sounds, string> = {
   ring: './sounds/ring.mp3'
 }
 
-const $sound = (sound: Sounds, loop?: boolean) => {
+export const $sound = (sound: Sounds, loop?: boolean) => {
   return new Howl({
     src: [soundSrc[sound]],
     volume: 0.2,
     loop
   })
 }
-
-export default $sound

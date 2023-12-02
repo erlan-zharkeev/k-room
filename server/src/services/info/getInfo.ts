@@ -1,5 +1,5 @@
-import { InfoItem, InfoItemStatus } from '../../../../types'
-import welcome from './items/welcome'
+import { InfoItem, InfoItemStatus } from '../../@types'
+import { welcome } from './items'
 
 const infoMap: Record<string, InfoItem> = {
   '1': {

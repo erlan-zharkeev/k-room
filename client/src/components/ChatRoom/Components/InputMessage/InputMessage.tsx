@@ -1,20 +1,15 @@
 import { Form } from 'antd'
+import { SocketActionsPayload, SocketActions, ImageObject } from 'common-types'
 import { useState } from 'react'
-import { SocketActions, SocketActionsPayload, ImageObject } from 'common-types'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-
-import EmojiDropDown from '../EmojiDropdown/EmojiDropDown'
+import { UIImageLoader, UIInput, UIButton } from 'src/components'
+import { useTypedSelector, useSelectedRoom, useDebounce } from 'src/hooks'
 import { InputMessageProps } from './@types/InputMessageProps'
-import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import useDebounce from 'src/hooks/useDebounce'
-import ReplyMessage from './Components/ReplyMessage/ReplyMessage'
+import { ReplyMessage, EmojiDropDown } from './components'
+import { $socket } from 'src/services'
 
-import { UIImageLoader, UIInput, UIButton } from 'src/components/UI'
-import { $socket } from 'src/services/$socket'
-
-const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
+export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')
-  const { username, id } = useTypedSelector((state) => state.user.userData)
+  const { username } = useTypedSelector((state) => state.user.userData)
   const selectedChatRoom = useSelectedRoom()
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
   const haveRepliedMessage = () => Boolean(repliedMessageData.id)
@@ -23,7 +18,6 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
     if (!selectedChatRoom) return
     const payload: SocketActionsPayload['userTyping'] = {
       authorName: username,
-      authorId: id,
       usersTo: selectedChatRoom.users,
       status
     }
@@ -69,5 +63,3 @@ const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageP
     </div>
   )
 }
-
-export default InputMessage

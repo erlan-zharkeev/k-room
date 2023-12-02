@@ -1,10 +1,8 @@
-@import './Components/EmojiDropdown/style';
+@import './components/InputMessage/style';
 
-@import './Components/InputMessage/style';
+@import './components/MessageBody/style';
 
-@import './Components/MessageBody/style';
-
-@import './Components/RoomHeader/style';
+@import './components/RoomHeader/style';
 
 .chat-room {
   position: relative;

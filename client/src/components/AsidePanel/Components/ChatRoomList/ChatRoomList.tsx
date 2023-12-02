@@ -1,20 +1,17 @@
 import { List } from 'antd'
-import { SocketActions, ChatRoom, Message, MessageStatus, SocketActionsPayload, UserSettingKey } from 'common-types'
+import { Message, UserSettingKey, SocketActionsPayload, SocketActions, ChatRoom, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
-import { UIButton, UIAvatar } from 'src/components/UI'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-
+import { UIButton, UIAvatar } from 'src/components'
+import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { useUpdateSettings, useTypedSelector } from 'src/hooks'
+import { $socket } from 'src/services'
 import { AppDispatch } from 'src/store'
-import { showModal } from 'src/store/systemSlice'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import { $socket } from 'src/services/$socket'
+import { showModal } from 'src/store/system-slice'
 
-const ChatRoomList = () => {
+export const ChatRoomList = () => {
   const { updateSetting } = useUpdateSettings()
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { contacts } = useTypedSelector((state) => state.contacts)
-  const userId = useTypedSelector((state) => state.user.userData.id)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -28,7 +25,6 @@ const ChatRoomList = () => {
     e.stopPropagation()
     updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: id })
     const payload: SocketActionsPayload['updateUserSettings'] = {
-      userId,
       type: UserSettingKey.selectedChatRoomId,
       value: id
     }
@@ -37,7 +33,8 @@ const ChatRoomList = () => {
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
     e.stopPropagation()
-    $socket.emit(SocketActions.SAVE_CONTACT, { userId, interlocutorId })
+    const payload: SocketActionsPayload['saveContact'] = { interlocutorId }
+    $socket.emit(SocketActions.SAVE_CONTACT, payload)
   }
 
   const unreadMessages = (room: ChatRoom) =>
@@ -123,5 +120,3 @@ const ChatRoomList = () => {
     </div>
   )
 }
-
-export default ChatRoomList

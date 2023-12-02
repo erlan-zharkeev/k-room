@@ -1,4 +1,4 @@
-import { Constants, SystemMessages } from './types/Constants'
+import { Constants, SystemMessages } from './@types/Constants'
 
 export const constants: Constants = {
   sharp: {
@@ -50,5 +50,3 @@ export const constants: Constants = {
     ]
   }
 }
-
-export default constants

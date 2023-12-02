@@ -1,4 +1,4 @@
-export default {
+export const constants = {
   blockNativeContextMenu: true,
   errorNotificationDuration: 10000,
   asidePanelLoaderMinDuration: 2000,

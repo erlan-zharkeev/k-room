@@ -1,6 +1,4 @@
-import emitContactsToUser from './emitContactsToUser'
-import emitRoomsByUserId from './emitRoomsByUserId'
-import emitUserStatusToAll from './emitUserStatusToAll'
-import emitSearchedContacts from './emitSearchedContacts'
-
-export { emitContactsToUser, emitRoomsByUserId, emitUserStatusToAll, emitSearchedContacts }
+export { emitContactsToUser } from './emit-contacts-to-user'
+export { emitRoomsByUserId } from './emit-rooms-by-user-Id'
+export { emitUserStatusToAll } from './emit-user-status-to-all'
+export { emitSearchedContacts } from './emit-searched-contacts'

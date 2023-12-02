@@ -223,8 +223,6 @@ export declare enum NotificationMessage {
     failedToConnectToDevice = "Failed to connect to device, check for device is plugged in",
     socketConnected = "Socket connected",
     socketDisconnected = "Socket disconnected",
-    maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
-    imageSizeMustLessThan2mb = "Image size must be less than 2mb",
     tokensPairUpdated = "Token pair is updated",
     success = "success",
     passwordReset = "Password changed successfully",
@@ -270,7 +268,9 @@ export declare enum NotificationMessage {
     failedToLogin = "Login failed, server error. Please try again, later",
     imageResNotAllowed = "Image resolution not allowed",
     tokenExpired = "Token expired",
-    authenticationError = "Authentication error"
+    authenticationError = "Authentication error",
+    maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
+    imageSizeMustLessThan2mb = "Image size must be less than 2mb"
 }
 export interface SocketActionsPayload {
     interlocutorUpdateSignal: {
@@ -288,7 +288,7 @@ export interface SocketActionsPayload {
     };
     getRooms: Array<ChatRoom>;
     statusContact: {
-        userId: string;
+        interlocutorId: string;
         status: boolean;
     };
     changeContactsData: UserShort;
@@ -298,28 +298,21 @@ export interface SocketActionsPayload {
     };
     callUpdated: Call;
     callsUpdated: Array<Call>;
-    initialize: {
-        userId: string;
-    };
     saveContact: {
-        userId: string;
         interlocutorId: string;
     };
     deleteContact: {
-        currentUserId: string;
         deletingUserId: string;
     };
     searchContact: {
         value: string;
     };
     updateUserSettings: {
-        userId: string;
         type: keyof UserSettings;
         value: string | boolean;
     };
     createRoom: {
         users: Array<string>;
-        authorId: string;
         multiple: boolean;
         avatarFile?: {
             buffer: ArrayBuffer;
@@ -334,10 +327,8 @@ export interface SocketActionsPayload {
         avatarFile: {
             buffer: ArrayBuffer;
         } | undefined;
-        authorId: string;
     };
     userTyping: {
-        authorId: string;
         authorName: string;
         usersTo: Array<UserShort>;
         status: boolean;
@@ -362,7 +353,6 @@ export interface SocketActionsPayload {
         roomId: string;
         messageId: string;
         status: MessageStatus;
-        userId: string;
     };
     deleteMessage: {
         messageId: string;
@@ -372,7 +362,6 @@ export interface SocketActionsPayload {
         glyphKey: string;
         messageId: string;
         roomId: string;
-        authorId: string;
         username: string;
     };
     callUser: {
@@ -483,9 +472,7 @@ export declare enum SocketActions {
     CONNECTION = "connection",
     ERROR = "error",
     RECONNECT = "reconnect",
-    AUTH_ERROR = "auth_error",
-    RECONNECT_ATTEMPT = "reconnect_attempt",
-    RECONNECT_FAILED = "reconnect_failed",
+    AUTH_ERROR = "auth-error",
     INITIALIZE = "initialize",
     DISCONNECT = "disconnect",
     GET_ROOMS = "get-rooms",
@@ -522,7 +509,9 @@ export declare enum SocketActions {
     CALL_UPDATED = "call-updated",
     MARK_CALL_AS_VIDEO = "mark-call-as-video",
     UPDATE_CALL_SIGNAL = "update-call-signal",
-    INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal"
+    INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
+    RECONNECT_ATTEMPT = "reconnect_attempt",
+    RECONNECT_FAILED = "reconnect_failed"
 }
 export declare enum AuthTokens {
     accessToken = "jwt",

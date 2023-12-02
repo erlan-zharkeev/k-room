@@ -1,16 +1,15 @@
-import { logOut } from 'src/store/userSlice'
 import { useDispatch } from 'react-redux'
+import { UIIcon, UIButton } from 'src/components'
+import { useTypedSelector } from 'src/hooks'
+import { socketReconnect } from 'src/services/$socket'
 import { AppDispatch } from 'src/store'
+import { logOut } from 'src/store/user-slice'
 
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UIIcon, UIButton } from 'src/components/UI'
-import { $socket } from 'src/services/$socket'
-
-const StubLoading = () => {
+export const StubLoading = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { reconnecting } = useTypedSelector((state) => state.system)
   const reconnect = () => {
-    $socket.connect()
+    socketReconnect(dispatch)
   }
   const exit = () => {
     dispatch(logOut())
@@ -36,5 +35,3 @@ const StubLoading = () => {
     </div>
   )
 }
-
-export default StubLoading

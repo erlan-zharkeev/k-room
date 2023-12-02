@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { CommonEndPoints } from 'common-types'
-import $api from '../$api'
+import { $api } from '..'
 
 export const markInfoAsRead = createAsyncThunk(
   'GET_NOTIFICATION',

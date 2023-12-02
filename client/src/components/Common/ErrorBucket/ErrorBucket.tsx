@@ -1,4 +1,4 @@
-import ErrorBucketProps from './@types'
+import { ErrorBucketProps } from './@types'
 
 export const ErrorBucket = ({ errors }: ErrorBucketProps) => {
   return (
@@ -12,5 +12,3 @@ export const ErrorBucket = ({ errors }: ErrorBucketProps) => {
     </div>
   )
 }
-
-export default ErrorBucket

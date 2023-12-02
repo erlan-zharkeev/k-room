@@ -1,10 +1,10 @@
-import { Button, Dropdown, Radio, Tooltip } from 'antd'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { modifiersHandler } from 'src/utils/modifiersHandler'
-import { UIButtonProps } from './@types/UIButtonProps'
+import { Button, Radio, Dropdown, Tooltip } from 'antd'
+import { useTypedSelector } from 'src/hooks'
+import { modifiersHandler } from 'src/utils'
 import { UIIcon } from '..'
+import { UIButtonProps } from './@types/UIButtonProps'
 
-const UIButton = ({
+export const UIButton = ({
   type = 'common',
   value,
   tooltip,
@@ -64,5 +64,3 @@ const UIButton = ({
     </div>
   )
 }
-
-export default UIButton

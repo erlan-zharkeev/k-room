@@ -1,7 +1,7 @@
-import { Author, MessageStatus } from '../../../types'
-import { MessageModel } from '../models/message.model'
-import constants from '../constants'
 import mongoose from 'mongoose'
+import { constants } from '../constants'
+import { Author, MessageStatus } from '../@types'
+import { MessageModel } from '../models'
 
 export const loadMessageFixtures = async () => {
   return await Promise.all(

@@ -1,3 +1,6 @@
+@import './components/CallModalVideo/style';
+@import './components/CallDots/style';
+
 .call-modal {
   @include wh-100;
 

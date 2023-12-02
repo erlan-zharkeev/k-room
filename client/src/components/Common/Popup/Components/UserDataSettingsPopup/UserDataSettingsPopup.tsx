@@ -1,18 +1,17 @@
 import { Form } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import useValidate from 'src/hooks/useValidate'
 import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/systemSlice'
-import { validateRules } from 'src/utils/validateRules'
-import apiMethods from 'src/services/api-methods'
+import { closeModal } from 'src/store/system-slice'
+import { validateRules } from 'src/utils/validate-rules'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import { setUserData } from 'src/store/userSlice'
+import { setUserData } from 'src/store/user-slice'
 import { User } from 'common-types'
-import { UIAvatarLoader, UIInput, UIButton } from 'src/components/UI'
+import { useTypedSelector, useValidate } from 'src/hooks'
+import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
+import { apiMethods } from 'src/services'
 
-const UserDataSettingsPopup = () => {
+export const UserDataSettingsPopup = () => {
   const { avatarPath, username, id } = useTypedSelector((state) => state.user.userData)
   const [imageChanged, setImageChanged] = useState(false)
   const [newAvatar, setNewAvatar] = useState<string | undefined>(avatarPath)
@@ -88,5 +87,3 @@ const UserDataSettingsPopup = () => {
     </div>
   )
 }
-
-export default UserDataSettingsPopup

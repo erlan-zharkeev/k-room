@@ -1,8 +1,8 @@
-import { UIIcon } from 'src/components/UI'
+import { UIIcon } from 'src/components'
+import { IconName } from 'src/components/ui/UIIcon/@types/IconName'
 import { InformerProps } from './@types'
-import { IconName } from 'src/components/UI/UIIcon/@types/IconName'
 
-const Informer = ({ type, text }: InformerProps) => {
+export const Informer = ({ type, text }: InformerProps) => {
   const currentType = type as IconName
   return (
     <div className={`informer informer--${type}`}>
@@ -13,5 +13,3 @@ const Informer = ({ type, text }: InformerProps) => {
     </div>
   )
 }
-
-export default Informer

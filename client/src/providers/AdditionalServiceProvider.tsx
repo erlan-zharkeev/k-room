@@ -1,6 +1,5 @@
-import React, { createContext, useRef, ReactNode } from 'react'
-import useCall from 'src/hooks/useCall'
-import useFirebase from '../hooks/useFirebase'
+import { createContext, ReactNode, useRef } from 'react'
+import { useCall, useFirebase } from 'src/hooks'
 
 const AdditionalServiceContext = createContext<{ [key: string]: React.MutableRefObject<any> }>({})
 
@@ -8,7 +7,7 @@ interface ServiceProviderProps {
   children: ReactNode
 }
 
-const AdditionalServiceProvider: React.FC<ServiceProviderProps> = ({ children }) => {
+const AdditionalServiceProvider: React.FC<ServiceProviderProps> = ({ children }: ServiceProviderProps) => {
   const call = useRef(useCall())
   const firebase = useRef(useFirebase())
   const services = { call, firebase }

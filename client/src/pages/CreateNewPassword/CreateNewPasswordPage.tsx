@@ -1,18 +1,16 @@
-import { Form } from 'antd'
+import Form from 'antd/lib/form'
 import { RouteNames, Status } from 'common-types'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import ErrorBucket from 'src/components/Common/ErrorBucket/ErrorBucket'
-import { Logo } from 'src/components/Common/Logo/Logo'
-import { UIInput, UIButton } from 'src/components/UI'
-import useValidate from 'src/hooks/useValidate'
-import apiMethods from 'src/services/api-methods'
+import { Logo, UIInput, ErrorBucket, UIButton } from 'src/components'
+import { useValidate } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { validateRules } from 'src/utils/validateRules'
+import { validateRules } from 'src/utils'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { apiMethods } from 'src/services'
 
-const CreateNewPasswordPage = () => {
+export const CreateNewPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [form] = Form.useForm()
   const [isValid, validate] = useValidate()
@@ -92,5 +90,3 @@ const CreateNewPasswordPage = () => {
     </div>
   )
 }
-
-export default CreateNewPasswordPage

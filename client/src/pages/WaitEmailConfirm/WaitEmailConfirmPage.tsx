@@ -1,16 +1,15 @@
 import { Status, RouteNames } from 'common-types'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import useQuery from 'src/hooks/useQuery'
-import { AppDispatch } from 'src/store'
-import { getNextReqInterval } from 'src/utils/getNextReqInterval'
-import useCounter from 'src/hooks/useCounter'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import apiMethods from 'src/services/api-methods'
-import { UIButton } from 'src/components/UI'
+import { UIButton } from 'src/components'
+import { useQuery, useCounter } from 'src/hooks'
+import { apiMethods } from 'src/services'
+import { AppDispatch } from 'src/store'
+import { getNextReqInterval } from 'src/utils'
 
-const WaitEmailConfirmPage = () => {
+export const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
   const query = useQuery()
   const dispatch = useDispatch<AppDispatch>()
@@ -101,4 +100,3 @@ const WaitEmailConfirmPage = () => {
     </div>
   )
 }
-export default WaitEmailConfirmPage

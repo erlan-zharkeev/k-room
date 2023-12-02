@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
-import router from './router'
-import ENV from './ENV'
-import constants from './constants'
 import { RouteNames } from './../../types'
 import cors from 'cors'
+import { constants } from './constants'
+import { ENV } from './ENV'
+import { router } from './router'
 
 const fs = require('fs')
 const path = require('path')

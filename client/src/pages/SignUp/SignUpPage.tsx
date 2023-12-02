@@ -1,18 +1,16 @@
-import { Form } from 'antd'
-import { Status, RouteNames, UserCredential } from 'common-types'
+import Form from 'antd/lib/form'
+import { UserCredential, Status, RouteNames } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
-import useValidate from 'src/hooks/useValidate'
-import { AppDispatch } from 'src/store'
-import { validateRules } from 'src/utils/validateRules'
-import { Logo } from 'src/components/Common/Logo/Logo'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import apiMethods from 'src/services/api-methods'
-import { UIInput, UISwitch, UIButton } from 'src/components/UI'
+import { Logo, AuthNav, UIInput, UISwitch, UIButton } from 'src/components'
+import { useValidate } from 'src/hooks'
+import { apiMethods } from 'src/services'
+import { AppDispatch } from 'src/store'
+import { validateRules } from 'src/utils'
 
-const SignUpPage = () => {
+export const SignUpPage = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -90,5 +88,3 @@ const SignUpPage = () => {
     </div>
   )
 }
-
-export default SignUpPage

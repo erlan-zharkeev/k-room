@@ -1,17 +1,14 @@
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/store'
-import { logOut } from 'src/store/userSlice'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-
 import { MenuProps, Dropdown } from 'antd'
+import { UserSettingKey, AsideBarButtonName } from 'common-types'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useUpdateSettings, useTypedSelector } from 'src/hooks'
+import { AppDispatch } from 'src/store'
+import { logOut } from 'src/store/user-slice'
+import { UIAvatar, UIButton } from '..'
+import { $socket } from 'src/services'
 
-import { useEffect, useState } from 'react'
-import { UIAvatar, UIButton } from '../UI'
-import { AsideBarButtonName, UserSettingKey } from 'common-types'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import { $socket } from 'src/services/$socket'
-
-const TopBar = () => {
+export const TopBar = () => {
   const { updateSetting } = useUpdateSettings()
 
   const { username, email, avatarPath } = useTypedSelector((state) => state.user.userData)
@@ -75,5 +72,3 @@ const TopBar = () => {
     </div>
   )
 }
-
-export default TopBar

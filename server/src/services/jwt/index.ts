@@ -1,7 +1,9 @@
 import { Response } from 'express'
-import ENV from '../../ENV'
-import { UserModel } from '../../models/user.model'
-import { AuthTokens } from '../../../../types'
+import { ENV } from '../../ENV'
+import { UserModel } from '../../models'
+import { AuthTokens } from '../../@types'
+
+const clc = require('cli-color')
 
 export const jwt = require('jsonwebtoken')
 
@@ -17,7 +19,7 @@ const setToken = (res: Response, tokenName: string, id: string, secret: string, 
 }
 
 export const updateTokens = async (id: string, res: Response) => {
-  console.log('token update')
+  console.log(clc.green.bgWhite('- Token pair updated'))
   setToken(res, 'jwt', id, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, ENV.JWT_ACCESS_EXPIRES_INTERVAL)
   const refreshToken = setToken(
     res,

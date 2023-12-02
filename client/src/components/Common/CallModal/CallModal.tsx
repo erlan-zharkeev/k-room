@@ -1,8 +1,8 @@
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Rnd } from 'react-rnd'
+import { useTypedSelector } from 'src/hooks'
 import { ModalOptions } from './@types'
-import CallModalBody from './Components/CallModalBody/CallModalBody'
+import { CallModalBody } from './components'
 
 const initialSize = {
   width: 300,
@@ -11,7 +11,7 @@ const initialSize = {
   minHeight: 450
 }
 
-const CallModal = () => {
+export const CallModal = () => {
   const viewPortWidth = useTypedSelector((state) => state.system.viewPort.width)
   const viewPortHeight = useTypedSelector((state) => state.system.viewPort.height)
   const { isMinified, showCallModal } = useTypedSelector((state) => state.calls)
@@ -76,5 +76,3 @@ const CallModal = () => {
     </div>
   )
 }
-
-export default CallModal

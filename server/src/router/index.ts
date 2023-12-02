@@ -1,46 +1,42 @@
 import { Router } from 'express'
-import { AuthEndPoints, CodesEndPoints, CommonEndPoints, UserEndPoints } from '../../../types'
-import authController from '../controllers/authController'
-import validationRules from '../middlewares/authValidator/rules'
-import accessTokenValidator from '../middlewares/accessTokenValidator'
-import refreshTokenValidator from '../middlewares/refreshTokenValidator'
+import { AuthController, UserController, CommonController, CodesController } from '../controllers'
+import {
+  accessTokenValidator,
+  refreshTokenValidator,
+  codesRequestValidator,
+  fileUploader,
+  validationRules
+} from '../middlewares'
+import { AuthEndPoints, UserEndPoints, CommonEndPoints, CodesEndPoints } from '../@types'
 
-import codesRequestValidator from '../middlewares/codesRequestValidator'
-import commonController from '../controllers/commonController'
-import userController from '../controllers/userController'
-import codesController from '../controllers/codesController'
-import fileUploader from '../middlewares/fileUploader'
+export const router = Router()
 
-const router = Router()
+router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, AuthController.updateTokensPair)
+router.post(AuthEndPoints.REGISTRATION, validationRules.registration, AuthController.registration)
+router.post(AuthEndPoints.LOGIN, AuthController.login)
+router.post(AuthEndPoints.PROVIDER_LOGIN, AuthController.signInWithProvider)
+router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, AuthController.sendConfirmationLink)
+router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION, AuthController.confirmEmail)
 
-router.get(AuthEndPoints.UPDATE_TOKENS_PAIR, refreshTokenValidator, authController.updateTokensPair)
-router.post(AuthEndPoints.REGISTRATION, validationRules.registration, authController.registration)
-router.post(AuthEndPoints.LOGIN, authController.login)
-router.post(AuthEndPoints.PROVIDER_LOGIN, authController.signInWithProvider)
-router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION_LINK, authController.sendConfirmationLink)
-router.post(AuthEndPoints.SEND_EMAIL_CONFIRMATION, authController.confirmEmail)
-
-router.get(UserEndPoints.GET_USER_DATA, accessTokenValidator, userController.getUserData)
+router.get(UserEndPoints.GET_USER_DATA, accessTokenValidator, UserController.getUserData)
 router.post(
   UserEndPoints.UPDATE_USER_DATA,
   accessTokenValidator,
   fileUploader.single('file'),
-  userController.updateUserData
+  UserController.updateUserData
 )
-router.post(UserEndPoints.RESET_PASSWORD, accessTokenValidator, userController.resetPassword)
+router.post(UserEndPoints.RESET_PASSWORD, accessTokenValidator, UserController.resetPassword)
 
-router.post(CommonEndPoints.GET_INFO, accessTokenValidator, commonController.readInfoHandler)
-router.get(CommonEndPoints.COMMON_IMAGES, accessTokenValidator, commonController.imagesHandler)
+router.post(CommonEndPoints.GET_INFO, accessTokenValidator, CommonController.readInfoHandler)
+router.get(CommonEndPoints.COMMON_IMAGES, accessTokenValidator, CommonController.imagesHandler)
 
 router.post(
   CodesEndPoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY,
   codesRequestValidator,
-  codesController.emailPasswordRecovery
+  CodesController.emailPasswordRecovery
 )
 router.post(
   CodesEndPoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY,
   accessTokenValidator,
-  codesController.validateEmailCodePasswordRecovery
+  CodesController.validateEmailCodePasswordRecovery
 )
-
-export default router

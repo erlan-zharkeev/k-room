@@ -1,46 +1,36 @@
-import { useEffect } from 'react'
-import ChatRoom from 'src/components/ChatRoom/ChatRoom'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import AsidePanel from 'src/components/AsidePanel/AsidePanel'
-import TopBar from 'src/components/TopBar/TopBar'
 import {
-  NotificationMessage,
   NotificationType,
+  NotificationMessage,
   SocketActions,
   SocketActionsPayload,
   AsideBarButtonName
 } from 'common-types'
-import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import StubLoading from 'src/components/Common/StubLoading/StubLoading'
-import $clg from 'src/services/$clg'
-import { setContextMenu, setReconnectingStatus, showNotification } from 'src/store/systemSlice'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom } from 'src/components'
+import { useSelectedRoom, useTypedSelector, useDebounce } from 'src/hooks'
+import { $clg, $socket } from 'src/services'
+import { socketReconnect } from 'src/services/$socket'
 import { AppDispatch } from 'src/store'
-import { updateContactsStatus, loadContacts, updateContactData } from 'src/store/contactsSlice'
+import { ViewPortWidthType } from 'src/store/@types'
+import { updateCalls, updateCall } from 'src/store/calls-slice'
+import { loadContacts, updateContactsStatus, updateContactData } from 'src/store/contacts-slice'
 import {
   updateChatUsersStatus,
+  changeChatName,
   loadChatRooms,
   updateChatMessage,
   updateMessageStatus,
-  changeChatName,
-  updateMessageReactions,
-  deleteMessage
-} from 'src/store/roomsSlice'
-import useDebounce from 'src/hooks/useDebounce'
-import CallStatusBar from 'src/components/CallStatusBar/CallStatusBar'
-import AsideBar from 'src/components/AsideBar/AsideBar'
-import InfoList from 'src/components/InfoList/InfoList'
-import { updateCall, updateCalls } from 'src/store/callsSlice'
-import { ViewPortWidthType } from 'src/store/@types/SystemState'
-import { $socket, socketReconnect } from 'src/services/$socket'
+  deleteMessage,
+  updateMessageReactions
+} from 'src/store/rooms-slice'
+import { showNotification, setContextMenu, setReconnectingStatus } from 'src/store/system-slice'
 
-const MainPage = () => {
+export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
-
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
-
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -75,7 +65,6 @@ const MainPage = () => {
 
   useEffect(() => {
     if ($socket.disconnected) $socket.connect()
-    // const initializePayload: SocketActionsPayload['initialize'] = { userId }
 
     $socket.emit(SocketActions.INITIALIZE)
 
@@ -167,5 +156,3 @@ const MainPage = () => {
     </div>
   )
 }
-
-export default MainPage

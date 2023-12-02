@@ -1,11 +1,9 @@
-import ENV from '../ENV'
-import { UserModel } from './../models/user.model'
-import firstCharUpperCase from '../utils/firstCharUpperCase'
+import { ENV } from '../ENV'
+import { UserModel } from '../models'
+import { getInfo } from '../services'
+import { firstCharUpperCase, getRequestStringToImg } from '../utils'
+import { initUserSettings, initUserCodes } from './helpers'
 
-import { initUserCodes } from './helpers/initUserCodes'
-import { getInfo } from '../services/info/getInfo'
-import { getRequestStringToImg } from '../utils/getRequestStringToImg'
-import initUserSettings from './helpers/initUserSettings'
 const bcrypt = require('bcryptjs')
 
 export const loadUsersFixtures = async () => {

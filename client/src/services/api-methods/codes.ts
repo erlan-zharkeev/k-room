@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { CodesEndPoints, CodeValidationPayload } from 'common-types'
-import $api from 'src/services/$api'
+import { $api } from '..'
 
 export const sendEmailCodePasswordRecovery = createAsyncThunk(
   'SEND_EMAIL_CODE_PASSWORD_RECOVERY',

@@ -1,7 +1,6 @@
-// import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 const { VITE_MAIL_APP } = import.meta.env
 
-const PrivacyPolicyPage = () => {
+export const PrivacyPolicyPage = () => {
   const appName = 'K-Room'
   return (
     <div className="privacy-policy">
@@ -112,5 +111,3 @@ const PrivacyPolicyPage = () => {
     </div>
   )
 }
-
-export default PrivacyPolicyPage

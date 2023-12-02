@@ -1,9 +1,9 @@
 import { Badge, Image } from 'antd'
-import { useEffect, useState } from 'react'
-import { BadgePlacement, UIAvatarProps } from 'src/components/UI/UIAvatar/@types/UIAvatarProps'
+import { useState, useEffect } from 'react'
 import { UIIcon } from '..'
+import { BadgePlacement, UIAvatarProps } from './@types/UIAvatarProps'
 
-const UIAvatar = ({
+export const UIAvatar = ({
   online,
   src,
   size = 'small',
@@ -51,5 +51,3 @@ const UIAvatar = ({
     </div>
   )
 }
-
-export default UIAvatar

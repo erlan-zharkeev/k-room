@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { User, UserEndPoints } from 'common-types'
-import $api from 'src/services/$api'
+import { $api } from '..'
 
 export const resetPassword = createAsyncThunk(
   'RESET_PASSWORD',

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
-import ENV from './../../ENV'
-import { loadUsersFixtures } from './../../fixtures/users'
-import { loadMessageFixtures } from '../../fixtures/messages'
+import { ENV } from '../../ENV'
+import { loadMessageFixtures, loadUsersFixtures } from '../../fixtures'
+
 const clc = require('cli-color')
 
-const db = mongoose.set('strictQuery', true)
+export const db = mongoose.set('strictQuery', true)
 
 async function initDataBase() {
   try {
@@ -20,5 +20,3 @@ async function initDataBase() {
 }
 
 initDataBase()
-
-export default db

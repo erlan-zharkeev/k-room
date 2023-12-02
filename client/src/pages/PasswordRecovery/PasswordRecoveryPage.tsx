@@ -1,20 +1,16 @@
-import { Form } from 'antd'
-import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { Logo } from 'src/components/Common/Logo/Logo'
-import useValidate from 'src/hooks/useValidate'
-import { AppDispatch } from 'src/store'
-import { validateRules } from 'src/utils/validateRules'
-import { getNextReqInterval } from 'src/utils/getNextReqInterval'
-import useCounter from 'src/hooks/useCounter'
+import Form from 'antd/lib/form'
 import { CodeValidationPayload, RouteNames } from 'common-types'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import apiMethods from 'src/services/api-methods'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UIInput, UIButton } from 'src/components/UI'
+import { Logo, UIInput, UIButton } from 'src/components'
+import { useTypedSelector, useValidate, useCounter } from 'src/hooks'
+import { apiMethods } from 'src/services'
+import { AppDispatch } from 'src/store'
+import { getNextReqInterval, validateRules } from 'src/utils'
 
-const PasswordRecoveryPage = () => {
+export const PasswordRecoveryPage = () => {
   const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
   const [codeValidationIsLoading, setCodeValidationIsLoading] = useState(false)
   const { email } = useTypedSelector((state) => state.user.userData)
@@ -150,5 +146,3 @@ const PasswordRecoveryPage = () => {
     </div>
   )
 }
-
-export default PasswordRecoveryPage

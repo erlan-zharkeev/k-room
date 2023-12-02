@@ -1,26 +1,22 @@
-import { Form } from 'antd'
+import Form from 'antd/lib/form'
+import { UserCredential, RouteNames } from 'common-types'
 import { useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AuthNav } from 'src/components/Common/AuthNav/AuthNav'
-import useValidate from 'src/hooks/useValidate'
-import { AppDispatch } from 'src/store'
-import { commonSetUserDataHandler } from 'src/store/userSlice'
-import { validateRules } from 'src/utils/validateRules'
-import { FirebaseProviderType } from 'src/hooks/useFirebase'
-import { RouteNames, UserCredential } from 'common-types'
-import { Logo } from 'src/components/Common/Logo/Logo'
 import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
-import apiMethods from 'src/services/api-methods'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { UIIcon, UIInput, UIButton } from 'src/components/UI'
+import { UIIcon, Logo, AuthNav, UIInput, UIButton } from 'src/components'
+import { useValidate, useTypedSelector } from 'src/hooks'
+import { FirebaseProviderType } from 'src/hooks/use-firebase'
 import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
+import { apiMethods } from 'src/services'
+import { AppDispatch } from 'src/store'
+import { commonSetUserDataHandler } from 'src/store/user-slice'
+import { validateRules } from 'src/utils'
 
-const SignInPage = () => {
+export const SignInPage = () => {
   const { firebase } = useContext(AdditionalServiceContext)
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
-  // const [fbBtnLoading, setFbBtnLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -136,5 +132,3 @@ const SignInPage = () => {
     </div>
   )
 }
-
-export default SignInPage

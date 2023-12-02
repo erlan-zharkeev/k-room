@@ -1,30 +1,27 @@
-import { CallModalBodyProps } from '../../@types'
+import { SocketActions, SocketActionsPayload, UserMediaType, CallStatus, CallType } from 'common-types'
+import moment from 'moment'
+import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { UIButton, UIAvatar } from 'src/components'
+import { useTypedSelector, useCounter } from 'src/hooks'
+import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
+import { RefsContext } from 'src/providers/RefsProvider'
 import { AppDispatch } from 'src/store'
 import {
-  setCallAudio,
-  setCallId,
-  setCallSettingsLoading,
   setCallStartedAt,
-  setCallVideo,
+  setShowCallModal,
+  setCallId,
   setMinify,
-  setShowCallModal
-} from 'src/store/callsSlice'
-import CallModalVideo from '../CallModalVideo/CallModalVideo'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { useContext, useEffect, useState } from 'react'
-import CallDots from '../CallDots/CallDots'
-import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
-import moment from 'moment'
-import { CallStatus, CallType, SocketActions, SocketActionsPayload, UserMediaType } from 'common-types'
+  setCallAudio,
+  setCallSettingsLoading,
+  setCallVideo
+} from 'src/store/calls-slice'
+import { firstCharUpperCase } from 'src/utils'
+import { CallModalBodyProps } from '../../@types'
+import { CallDots, CallModalVideo } from './components'
+import { $socket } from 'src/services'
 
-import { UIButton, UIAvatar } from 'src/components/UI'
-import { RefsContext } from 'src/providers/RefsProvider'
-import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
-import useCounter from 'src/hooks/useCounter'
-import { $socket } from 'src/services/$socket'
-
-const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
+export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const { avatarPath } = useTypedSelector((state) => state.user.userData)
@@ -246,5 +243,3 @@ const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
     </div>
   )
 }
-
-export default CallModalBody

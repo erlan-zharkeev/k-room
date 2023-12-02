@@ -1,19 +1,18 @@
 import Meta from 'antd/lib/card/Meta'
+import { UserSettingKey, RouteNames, Theme } from 'common-types'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { AppDispatch } from 'src/store'
-import { showModal } from 'src/store/systemSlice'
-import appData from '../../../../../package.json'
 import { useNavigate } from 'react-router-dom'
-import { RouteNames, Theme, UserSettingKey } from 'common-types'
-import { UIAvatar, UISwitch } from 'src/components/UI'
+import { UIAvatar, UISwitch } from 'src/components'
+import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { useTypedSelector, useUpdateSettings } from 'src/hooks'
+import { AppDispatch } from 'src/store'
+import { showModal } from 'src/store/system-slice'
 import { UserSettingName } from './@types/UserSettingName'
-import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
+import appData from '../../../../../package.json'
 
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
 const { VITE_MAIL_APP } = import.meta.env
 
-const UserSettings = () => {
+export const UserSettings = () => {
   const { username, email, id, avatarPath } = useTypedSelector((state) => state.user.userData)
   const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
@@ -116,5 +115,3 @@ const UserSettings = () => {
     </div>
   )
 }
-
-export default UserSettings

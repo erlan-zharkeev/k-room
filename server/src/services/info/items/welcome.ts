@@ -5,5 +5,3 @@ export const welcome = (): string => `<div class="welcome">
   <p>Enjoy the ability to make high-quality video calls with your loved ones, no matter where they are located. Share life's brightest moments with friends by sending and receiving photos right within the chat.</p>
   <p>As we continue to develop the website, expect even more features and improvements to enhance your experience.</p>
 </div>`
-
-export default welcome

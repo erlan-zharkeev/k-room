@@ -1,9 +1,9 @@
-import ENV from '../../ENV'
 import nodemailer from 'nodemailer'
-import letters, { LettersType } from './letters'
-import { UserModel } from '../../models/user.model'
-import getTimeNextRequest from '../../utils/getNextTimeRequest'
-import { CommonEndPoints, RouteNames } from '../../../../types'
+import { ENV } from '../../ENV'
+import { UserModel } from '../../models'
+import { RouteNames, CommonEndPoints } from '../../@types'
+import { getTimeNextRequest } from '../../utils'
+import { LettersType, letters } from './letters'
 
 const mailTransport = nodemailer.createTransport({
   service: 'gmail',

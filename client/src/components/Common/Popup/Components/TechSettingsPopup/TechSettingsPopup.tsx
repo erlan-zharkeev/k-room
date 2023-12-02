@@ -1,11 +1,11 @@
 import { Select } from 'antd'
 import { NotificationMessage, NotificationType } from 'common-types'
-import { useEffect, useRef, useState } from 'react'
-import { UIButton } from 'src/components/UI'
-import $sound, { Sounds } from 'src/services/$sound'
-import { showNotification } from 'src/store/systemSlice'
+import { useState, useEffect, useRef } from 'react'
+import { UIButton } from 'src/components'
+import { $sound, Sounds } from 'src/services'
+import { showNotification } from 'src/store/system-slice'
 
-const TechSettingsPopup = () => {
+export const TechSettingsPopup = () => {
   const [audioInputDevices, setAudioInputDevices] = useState([] as MediaDeviceInfo[])
   const [selectedAudioInputDeviceValue, setSelectedAudioInputDeviceValue] = useState('default')
 
@@ -202,5 +202,3 @@ const TechSettingsPopup = () => {
     </div>
   )
 }
-
-export default TechSettingsPopup

@@ -1,14 +1,14 @@
 import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
-import persistStore from 'redux-persist/es/persistStore'
-import { BrowserRouter } from 'react-router-dom'
-import { store } from 'src/store'
-import App from 'src/App'
 import { RefsProvider } from 'src/providers/RefsProvider'
 import { AdditionalServiceProvider } from './providers/AdditionalServiceProvider'
 import { initializeApp } from 'firebase/app'
 import * as process from 'process'
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+import { App } from './App'
+import { store } from './store'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,

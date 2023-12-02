@@ -1,39 +1,31 @@
-import { List } from 'antd'
-import { useDispatch } from 'react-redux'
 import useDynamicRefs from 'use-dynamic-refs'
-import {
-  SocketActions,
-  Message,
-  SocketActionsPayload,
-  MessageStatus,
-  Author,
-  AsideBarButtonName,
-  UserSettingKey
-  , ImageObject
-} from 'common-types'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import InputMessage from './Components/InputMessage/InputMessage'
-import MessageBody from './Components/MessageBody/MessageBody'
-import RoomHeader from './Components/RoomHeader/RoomHeader'
-import { useEffect, useRef, useState } from 'react'
-
-import { AppDispatch } from 'src/store'
-import { scrollToBottom } from 'src/utils/scrollToBottom'
-import { updatedAttachedFilesMessage } from 'src/store/roomsSlice'
-import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import constants from 'src/constants'
-import Informer from '../Common/Informer/Informer'
-
-import { showModal } from 'src/store/systemSlice'
-import { sendMessage } from 'src/utils/sendMessage'
-import { WidgetLoader } from '../Common/WidgetLoader/WidgetLoader'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-import { ModalContentComponentName } from '../Common/Popup/@types'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import { $socket } from 'src/services/$socket'
+import { constants } from 'src/constants'
+import { List } from 'antd'
+import {
+  AsideBarButtonName,
+  Message,
+  Author,
+  SocketActionsPayload,
+  MessageStatus,
+  SocketActions,
+  ImageObject,
+  UserSettingKey
+} from 'common-types'
+import { useState, useRef, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useSelectedRoom, useTypedSelector, useUpdateSettings } from 'src/hooks'
+import { AppDispatch } from 'src/store'
+import { updatedAttachedFilesMessage } from 'src/store/rooms-slice'
+import { showModal } from 'src/store/system-slice'
+import { scrollToBottom, sendMessage } from 'src/utils'
+import { WidgetLoader, Informer } from '..'
+import { ModalContentComponentName } from '../common/Popup/@types'
+import { RoomHeader, MessageBody, InputMessage } from './components'
+import { $socket } from 'src/services'
 
-const ChatRoom = () => {
+export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
@@ -59,8 +51,7 @@ const ChatRoom = () => {
       const payload: SocketActionsPayload['changeMessageStatus'] = {
         roomId: selectedChatRoom.id,
         messageId,
-        status: MessageStatus.read,
-        userId: id
+        status: MessageStatus.read
       }
       $socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, payload)
     })
@@ -216,5 +207,3 @@ const ChatRoom = () => {
     </div>
   )
 }
-
-export default ChatRoom

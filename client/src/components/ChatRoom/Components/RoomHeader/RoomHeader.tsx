@@ -1,18 +1,16 @@
 import { SocketActions, SocketActionsPayload, UserSettingKey } from 'common-types'
 import { useState, useEffect } from 'react'
-
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { UIButton, UIAvatar } from 'src/components'
+import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { BadgePlacement } from 'src/components/ui/UIAvatar/@types/UIAvatarProps'
+import { constants } from 'src/constants'
+import { useTypedSelector, useUpdateSettings } from 'src/hooks'
+import { $socket } from 'src/services'
 import { AppDispatch } from 'src/store'
-import constants from 'src/constants'
-import { showModal } from 'src/store/systemSlice'
-import { UIButton, UIAvatar } from 'src/components/UI'
-import { BadgePlacement } from 'src/components/UI/UIAvatar/@types/UIAvatarProps'
-import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import { $socket } from 'src/services/$socket'
+import { showModal } from 'src/store/system-slice'
 
-const RoomHeader = () => {
+export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
@@ -94,5 +92,3 @@ const RoomHeader = () => {
     </div>
   )
 }
-
-export default RoomHeader

@@ -1,18 +1,16 @@
-import { Radio, RadioChangeEvent } from 'antd'
+import { RadioChangeEvent, Radio } from 'antd'
+import { UserSettingKey, AsideBarButtonName, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { selectChatRoom } from 'src/store/settingsSlice'
+import { ViewPortWidthType } from 'src/store/@types'
+import { selectChatRoom } from 'src/store/settings-slice'
+import { showModal } from 'src/store/system-slice'
+import { UIButton, Logo } from '..'
+import { ModalContentComponentName } from '../common/Popup/@types'
 import { ButtonsListElement } from './@types/ButtonsListElement'
-import { Logo } from '../Common/Logo/Logo'
-import { showModal } from 'src/store/systemSlice'
-import { AsideBarButtonName, MessageStatus, UserSettingKey } from 'common-types'
-import { UIButton } from '../UI'
-import { ModalContentComponentName } from '../Common/Popup/@types'
-import { ViewPortWidthType } from 'src/store/@types/SystemState'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
 
-const AsideBar = () => {
+export const AsideBar = () => {
   const { updateSetting } = useUpdateSettings()
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
@@ -82,5 +80,3 @@ const AsideBar = () => {
     </div>
   )
 }
-
-export default AsideBar

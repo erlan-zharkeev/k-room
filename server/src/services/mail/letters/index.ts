@@ -1,5 +1,5 @@
-import confirmation from './confirmation'
-import passwordRepairSentCode from './passwordRepairSentCode'
+import { confirmation } from './confirmation'
+import { passwordRepairSentCode } from './password-repair-sent-code'
 
 export enum LettersType {
   confirmation = 'confirmation',
@@ -11,6 +11,4 @@ export interface Letters {
   passwordRepairSentCode: (payload: { appName: string; logoSrc: string; host: string; code: string | number }) => string
 }
 
-const letters: Letters = { confirmation, passwordRepairSentCode }
-
-export default letters
+export const letters: Letters = { confirmation, passwordRepairSentCode }

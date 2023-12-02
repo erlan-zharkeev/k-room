@@ -1,11 +1,11 @@
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { UIIcon } from 'src/components'
+import { constants } from 'src/constants'
+import { useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { resetRepliedMessage } from 'src/store/roomsSlice'
-import { resetContextClickedObject } from 'src/store/systemSlice'
-import constants from 'src/constants'
-import { useEffect, useState } from 'react'
-import { UIIcon } from 'src/components/UI'
+import { resetRepliedMessage } from 'src/store/rooms-slice'
+import { resetContextClickedObject } from 'src/store/system-slice'
 
 export const ReplyMessage = () => {
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
@@ -44,5 +44,3 @@ export const ReplyMessage = () => {
     </div>
   )
 }
-
-export default ReplyMessage

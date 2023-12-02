@@ -1,16 +1,14 @@
 import { List } from 'antd'
-import { User, SocketActions, SocketActionsPayload, AsideBarButtonName, UserSettingKey } from 'common-types'
+import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, User } from 'common-types'
 import moment from 'moment'
-import { useContext, useEffect, useState } from 'react'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-
-import ContactSearch from './Components/ContactSearch/ContactSearch'
-import { UIAvatar, UIButton } from 'src/components/UI'
+import { useContext, useState, useEffect } from 'react'
+import { UIAvatar, UIButton } from 'src/components'
+import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
-import { useUpdateSettings } from 'src/hooks/useUpdateSettings'
-import { $socket } from 'src/services/$socket'
+import { ContactSearch } from './components/ContactSearch/ContactSearch'
+import { $socket } from 'src/services'
 
-const ContactList = () => {
+export const ContactList = () => {
   const { updateSetting } = useUpdateSettings()
   const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
@@ -29,8 +27,10 @@ const ContactList = () => {
     })
   }, [contacts])
 
-  const deleteUser = (userData: User) => {
-    if (userData.id && id) { $socket.emit(SocketActions.DELETE_CONTACT, { currentUserId: id, deletingUserId: userData.id }) }
+  const deleteUser = (interlocutorData: User) => {
+    if (!interlocutorData.id) return
+    const payload: SocketActionsPayload['deleteContact'] = { deletingUserId: interlocutorData.id }
+    $socket.emit(SocketActions.DELETE_CONTACT, payload)
   }
 
   const createChat = (value: User) => {
@@ -55,7 +55,6 @@ const ContactList = () => {
     const socketPayload: SocketActionsPayload['createRoom'] = {
       chatName: contactName,
       users: [id, contactId],
-      authorId: id,
       multiple: false
     }
     $socket.emit(SocketActions.CREATE_ROOM, socketPayload)
@@ -127,5 +126,3 @@ const ContactList = () => {
     </div>
   )
 }
-
-export default ContactList

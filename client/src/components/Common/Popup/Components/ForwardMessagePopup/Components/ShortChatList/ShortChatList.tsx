@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { useState, useEffect } from 'react'
+import { UIAvatar } from 'src/components'
+import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { ShortChatListProps } from './@types'
-import { UIAvatar } from 'src/components/UI'
-import useSelectedRoom from 'src/hooks/useSelectedRoom'
 
-const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
+export const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const [filteredRooms, setFilteredRooms] = useState(chatRooms)
   const selectedChatRoom = useSelectedRoom()
@@ -43,5 +42,3 @@ const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
     </div>
   )
 }
-
-export default ShortChatList

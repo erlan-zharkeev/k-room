@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-export const messageSchema = new Schema({
+const messageSchema = new Schema({
   authorId: {
     type: String,
     unique: false,

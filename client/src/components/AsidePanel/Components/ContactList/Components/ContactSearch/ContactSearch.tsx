@@ -1,13 +1,11 @@
 import { List } from 'antd'
-import { useEffect, useState } from 'react'
-import { User, SocketActions, SocketActionsPayload } from 'common-types'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { SocketActions, SocketActionsPayload, User } from 'common-types'
+import { useState, useEffect } from 'react'
+import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components'
+import { useTypedSelector, useDebounce } from 'src/hooks'
+import { $socket } from 'src/services'
 
-import useDebounce from 'src/hooks/useDebounce'
-import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components/UI'
-import { $socket } from 'src/services/$socket'
-
-const ContactSearch = () => {
+export const ContactSearch = () => {
   const [users, setUsers] = useState([] as Array<User>)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -51,7 +49,7 @@ const ContactSearch = () => {
         size="small"
         placeholder="Search user"
         suffix={<UIIcon name={isLoading ? 'loader' : 'search'} color={isLoading ? 'accent' : 'default'} />}
-        onChange={async (e) => await search(e.target.value)}
+        onChange={async (e: { target: { value: string } }) => await search(e.target.value)}
       />
       {users.length > 0 && (
         <div className="contact-search__global-search">
@@ -67,7 +65,12 @@ const ContactSearch = () => {
                   description={<span>{user.email}</span>}
                 />
                 {!contacts.find((element) => element.id === user.id) && (
-                  <UIButton iconName="plus" color="accent" onClick={async () => await addUser(user.id)} tooltip="Add User" />
+                  <UIButton
+                    iconName="plus"
+                    color="accent"
+                    onClick={async () => await addUser(user.id)}
+                    tooltip="Add User"
+                  />
                 )}
               </List.Item>
             )}
@@ -77,5 +80,3 @@ const ContactSearch = () => {
     </div>
   )
 }
-
-export default ContactSearch

@@ -1,14 +1,13 @@
-import useTypedSelector from 'src/hooks/useTypedSelector'
 import { Form, Image } from 'antd'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { UISwitch, UIInput, UIButton } from 'src/components'
+import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/systemSlice'
-import { sendMessage } from 'src/utils/sendMessage'
-import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import { UISwitch, UIInput, UIButton } from 'src/components/UI'
+import { closeModal } from 'src/store/system-slice'
+import { sendMessage } from 'src/utils'
 
-const MessageWithBindDataPopup = () => {
+export const MessageWithBindDataPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { body, images } = useTypedSelector((state) => state.chatRooms.attachedFilesMessage)
   const { id, username } = useTypedSelector((state) => state.user.userData)
@@ -73,5 +72,3 @@ const MessageWithBindDataPopup = () => {
     </div>
   )
 }
-
-export default MessageWithBindDataPopup

@@ -251,9 +251,6 @@ export enum NotificationMessage {
   failedToConnectToDevice = "Failed to connect to device, check for device is plugged in",
   socketConnected = "Socket connected",
   socketDisconnected = "Socket disconnected",
-  // Don't forget image quantity is dynamic
-  maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
-  imageSizeMustLessThan2mb = "Image size must be less than 2mb",
   tokensPairUpdated = "Token pair is updated",
   success = "success",
   passwordReset = "Password changed successfully",
@@ -267,7 +264,6 @@ export enum NotificationMessage {
   checkEmailForConfirmationLink = "Check your email for confirmation link",
   userCreated = "User successfully created, checkout your email address for email confirmation",
   emailConfirmationLinkSended = "Confirmation link sent to email",
-
   failedGetUserData = "Failed to get user data",
   failedResetPassword = "Failed to change password",
   invalidConfirmCode = "Invalid confirmation code",
@@ -301,6 +297,8 @@ export enum NotificationMessage {
   imageResNotAllowed = "Image resolution not allowed",
   tokenExpired = "Token expired",
   authenticationError = "Authentication error",
+  maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
+  imageSizeMustLessThan2mb = "Image size must be less than 2mb",
 }
 
 export interface SocketActionsPayload {
@@ -316,7 +314,7 @@ export interface SocketActionsPayload {
   messageDelivered: { roomId: string; message: Message };
   getRooms: Array<ChatRoom>;
   statusContact: {
-    userId: string;
+    interlocutorId: string;
     status: boolean;
   };
   changeContactsData: UserShort;
@@ -326,28 +324,21 @@ export interface SocketActionsPayload {
   };
   callUpdated: Call;
   callsUpdated: Array<Call>;
-  initialize: {
-    userId: string;
-  };
   saveContact: {
-    userId: string;
     interlocutorId: string;
   };
   deleteContact: {
-    currentUserId: string;
     deletingUserId: string;
   };
   searchContact: {
     value: string;
   };
   updateUserSettings: {
-    userId: string;
     type: keyof UserSettings;
     value: string | boolean;
   };
   createRoom: {
     users: Array<string>;
-    authorId: string;
     multiple: boolean;
     avatarFile?: {
       buffer: ArrayBuffer;
@@ -364,10 +355,8 @@ export interface SocketActionsPayload {
           buffer: ArrayBuffer;
         }
       | undefined;
-    authorId: string;
   };
   userTyping: {
-    authorId: string;
     authorName: string;
     usersTo: Array<UserShort>;
     status: boolean;
@@ -389,7 +378,6 @@ export interface SocketActionsPayload {
     roomId: string;
     messageId: string;
     status: MessageStatus;
-    userId: string;
   };
   deleteMessage: {
     messageId: string;
@@ -399,7 +387,6 @@ export interface SocketActionsPayload {
     glyphKey: string;
     messageId: string;
     roomId: string;
-    authorId: string;
     username: string;
   };
   callUser: {
@@ -520,9 +507,7 @@ export enum SocketActions {
   CONNECTION = "connection",
   ERROR = "error",
   RECONNECT = "reconnect",
-  AUTH_ERROR = "auth_error",
-  RECONNECT_ATTEMPT = "reconnect_attempt",
-  RECONNECT_FAILED = "reconnect_failed",
+  AUTH_ERROR = "auth-error",
   INITIALIZE = "initialize",
   DISCONNECT = "disconnect",
   GET_ROOMS = "get-rooms",
@@ -560,6 +545,9 @@ export enum SocketActions {
   MARK_CALL_AS_VIDEO = "mark-call-as-video",
   UPDATE_CALL_SIGNAL = "update-call-signal",
   INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
+  // Socket.io events
+  RECONNECT_ATTEMPT = "reconnect_attempt",
+  RECONNECT_FAILED = "reconnect_failed",
 }
 
 export enum AuthTokens {

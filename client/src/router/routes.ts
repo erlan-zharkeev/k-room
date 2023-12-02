@@ -1,20 +1,21 @@
-import LoginPage from 'src/pages/SignIn/SignInPage'
-import RegisterPage from 'src/pages/SignUp/SignUpPage'
-import MainPage from 'src/pages/Main/MainPage'
-import WaitConfirmPage from 'src/pages/WaitEmailConfirm/WaitEmailConfirmPage'
-import ConfirmedPage from 'src/pages/EmailConfirm/EmailConfirmPage'
-import NotFoundPage from 'src/pages/NotFound/NotFoundPage'
-import PasswordRecoveryPage from 'src/pages/PasswordRecovery/PasswordRecoveryPage'
-import CreateNewPasswordPage from 'src/pages/CreateNewPassword/CreateNewPasswordPage'
-import PrivacyPolicyPage from 'src/pages/PrivacyPolicy/PrivacyPolicyPage'
-
-import { IRoute } from './@types/IRoute'
 import { RouteNames } from 'common-types'
+import {
+  NotFoundPage,
+  PasswordRecoveryPage,
+  CreateNewPasswordPage,
+  PrivacyPolicyPage,
+  MainPage,
+  EmailConfirmPage,
+  SignInPage,
+  SignUpPage,
+  WaitEmailConfirmPage
+} from 'src/pages'
+import { IRoute } from './@types/IRoute'
 
 const commonRoutes = [
   {
     path: RouteNames.EMAIL_CONFIRM,
-    component: () => ConfirmedPage()
+    component: () => EmailConfirmPage()
   },
   {
     path: RouteNames.NOT_FOUND,
@@ -38,7 +39,7 @@ export const publicRoutes: Array<IRoute> = [
   ...commonRoutes,
   {
     path: RouteNames.EMAIL_CONFIRM,
-    component: () => ConfirmedPage()
+    component: () => EmailConfirmPage()
   },
   {
     path: RouteNames.NOT_FOUND,
@@ -54,15 +55,15 @@ export const publicRoutes: Array<IRoute> = [
   },
   {
     path: RouteNames.SIGN_IN,
-    component: () => LoginPage()
+    component: () => SignInPage()
   },
   {
     path: RouteNames.SIGN_UP,
-    component: () => RegisterPage()
+    component: () => SignUpPage()
   },
   {
     path: RouteNames.WAIT_EMAIL_CONFIRM,
-    component: () => WaitConfirmPage()
+    component: () => WaitEmailConfirmPage()
   },
   {
     path: RouteNames.PASSWORD_RECOVERY,

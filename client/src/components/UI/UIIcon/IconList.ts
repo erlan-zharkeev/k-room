@@ -4,13 +4,12 @@ import {
   IoNotificationsSharp,
   IoCallSharp,
   IoInformationCircleOutline,
-  IoWarning
-  , IoVideocamOffOutline
+  IoWarning,
+  IoVideocamOffOutline
 } from 'react-icons/io5'
 import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
 import { GoSearch } from 'react-icons/go'
-import { IconListElement } from './@types/IconList'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
 import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
 import { RiLoader5Fill, RiShareForwardFill, RiImage2Fill } from 'react-icons/ri'
@@ -33,8 +32,9 @@ import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
 import { FcGoogle } from 'react-icons/fc'
 import { VscDeviceCameraVideo } from 'react-icons/vsc'
+import { IconListElement } from './@types'
 
-const IconList: Array<IconListElement> = [
+export const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },
   { name: 'chat', Icon: BsChatSquareText },
   { name: 'chats', Icon: IoChatboxEllipsesSharp },
@@ -74,5 +74,3 @@ const IconList: Array<IconListElement> = [
   { name: 'warn', Icon: IoWarning },
   { name: 'thunder', Icon: AiTwotoneThunderbolt }
 ]
-
-export default IconList

@@ -1,23 +1,18 @@
 import 'antd/dist/antd.css'
-import 'src/styles/App.scss'
+import 'src/styles/app.scss'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import AppRouter from 'src/router/AppRouter'
-import { AppDispatch } from 'src/store'
-import { setViewPort } from 'src/store/systemSlice'
-import { getCookie } from 'src/utils/getCookie'
-import { setTheme } from 'src/utils/setTheme'
-import { clearLocalStorageOnKeyDown } from 'src/utils/clearLocalStorageOnKeyDown'
-import { getViewPort } from 'src/utils/getViewPort'
-import apiMethods from 'src/services/api-methods'
-import { changeIsAppLoading, commonSetUserDataHandler } from 'src/store/userSlice'
-import { AsyncThunkResponseWrapper } from 'src/@types'
-import ContextMenu from 'src/components/Common/ContextMenu/ContextMenu'
-import Popup from 'src/components/Common/Popup/Popup'
-import CallModal from 'src/components/Common/CallModal/CallModal'
+import { AsyncThunkResponseWrapper } from './@types'
+import { Popup, CallModal, ContextMenu } from './components'
+import { useTypedSelector } from './hooks'
+import { AppRouter } from './router/AppRouter'
+import { AppDispatch } from './store'
+import { setViewPort } from './store/system-slice'
+import { commonSetUserDataHandler, changeIsAppLoading } from './store/user-slice'
+import { getViewPort, setTheme, clearLocalStorageOnKeyDown, getCookie } from './utils'
+import { apiMethods } from 'src/services'
 
-const App = () => {
+export const App = () => {
   const { theme } = useTypedSelector((state) => state.persist.settings)
 
   const dispatch = useDispatch<AppDispatch>()
@@ -57,5 +52,3 @@ const App = () => {
     </>
   )
 }
-
-export default App

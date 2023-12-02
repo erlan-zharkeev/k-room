@@ -1,11 +1,11 @@
-import useTypedSelector from 'src/hooks/useTypedSelector'
 import { useDispatch } from 'react-redux'
+import { useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { unsetMinify } from 'src/store/callsSlice'
-import { UIAvatar } from '../UI'
-import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
+import { unsetMinify } from 'src/store/calls-slice'
+import { firstCharUpperCase } from 'src/utils'
+import { UIAvatar } from '..'
 
-const CallStatusBar = () => {
+export const CallStatusBar = () => {
   const { isMinified } = useTypedSelector((state) => state.calls)
   const { currentCall } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
@@ -28,5 +28,3 @@ const CallStatusBar = () => {
     </div>
   )
 }
-
-export default CallStatusBar

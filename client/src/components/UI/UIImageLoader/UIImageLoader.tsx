@@ -1,15 +1,15 @@
+import { v4 as uuidv4 } from 'uuid'
+import { constants } from 'src/constants'
+import { NotificationMessage, NotificationType, ImageObject } from 'common-types'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { UIFileLoaderProps } from './@types'
-import { ImageObject, NotificationMessage, NotificationType } from 'common-types'
-import { imageToBase64 } from 'src/utils/imageToBase64'
-import { showNotification } from 'src/store/systemSlice'
-import constants from 'src/constants'
-import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { showNotification } from 'src/store/system-slice'
+import { imageToBase64 } from 'src/utils'
 import { UIIcon } from '..'
+import { UIFileLoaderProps } from './@types'
 
-const UIImageLoader = ({
+export const UIImageLoader = ({
   multiple = false,
   allowedResolutions = constants.imageResolutions,
   setImages
@@ -60,5 +60,3 @@ const UIImageLoader = ({
     </div>
   )
 }
-
-export default UIImageLoader

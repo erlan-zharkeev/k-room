@@ -1,10 +1,17 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { UIAvatarLoaderProps } from './@types'
-import { imageToBase64 } from 'src/utils/imageToBase64'
+import { imageToBase64 } from 'src/utils/image-to-base64'
 import { UIAvatar, UIIcon } from '..'
 
-const UIAvatarLoader = ({ path, setImage, setFile, updated, stubIconName, shape = 'round' }: UIAvatarLoaderProps) => {
+export const UIAvatarLoader = ({
+  path,
+  setImage,
+  setFile,
+  updated,
+  stubIconName,
+  shape = 'round'
+}: UIAvatarLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const normFile = async (e: any) => {
@@ -38,5 +45,3 @@ const UIAvatarLoader = ({ path, setImage, setFile, updated, stubIconName, shape 
     </div>
   )
 }
-
-export default UIAvatarLoader

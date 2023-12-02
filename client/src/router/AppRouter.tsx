@@ -1,10 +1,10 @@
 import { RouteNames } from 'common-types'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import useTypedSelector from 'src/hooks/useTypedSelector'
+import { useTypedSelector } from 'src/hooks'
 import { IRoute } from './@types/IRoute'
 import { privateRoutes, publicRoutes } from './routes'
 
-const AppRouter = () => {
+export const AppRouter = () => {
   const { isAuth } = useTypedSelector((state) => state.user)
 
   const convertedRouteProps = (route: any): { path: string; element: React.ReactElement; exact: boolean } => {
@@ -31,5 +31,3 @@ const AppRouter = () => {
     </Routes>
   )
 }
-
-export default AppRouter

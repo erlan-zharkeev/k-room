@@ -1,17 +1,15 @@
-import Reactions from '../Reactions/Reactions'
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import { repliedMessageSetAsForward, setRepliedMessage, updateMessageStatus } from 'src/store/roomsSlice'
+import { SocketActionsPayload, SocketActions, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
+import { UIIcon } from 'src/components'
+import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { showModal } from 'src/store/systemSlice'
-import { MessageStatus, SocketActions, SocketActionsPayload } from 'common-types'
+import { repliedMessageSetAsForward, updateMessageStatus, setRepliedMessage } from 'src/store/rooms-slice'
+import { showModal } from 'src/store/system-slice'
+import { Reactions } from './components'
+import { $socket } from 'src/services'
 
-import useSelectedRoom from 'src/hooks/useSelectedRoom'
-import { UIIcon } from 'src/components/UI'
-import { ModalContentComponentName } from 'src/components/Common/Popup/@types'
-import { $socket } from 'src/services/$socket'
-
-const MessageContextMenu = () => {
+export const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)
@@ -27,7 +25,6 @@ const MessageContextMenu = () => {
       glyphKey: key,
       messageId: message.id,
       roomId: selectedChatRoom?.id ?? '',
-      authorId: id,
       username
     }
     $socket.emit(SocketActions.ADD_REACTION, payload)
@@ -78,5 +75,3 @@ const MessageContextMenu = () => {
     </div>
   )
 }
-
-export default MessageContextMenu

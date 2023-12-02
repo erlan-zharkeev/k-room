@@ -20,8 +20,6 @@ const consoleColorMap: Record<string, ConsoleColorElement> = {
   }
 }
 
-const $clg = (type: ConsoleType, message: string) => {
+export const $clg = (type: ConsoleType, message: string) => {
   console.log(`%c ${message} `, `background: ${consoleColorMap[type].bg}; color: ${consoleColorMap[type].text}`)
 }
-
-export default $clg

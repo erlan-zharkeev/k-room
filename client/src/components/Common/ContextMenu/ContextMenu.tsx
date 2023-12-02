@@ -1,9 +1,9 @@
-import useTypedSelector from 'src/hooks/useTypedSelector'
-import MessageContextMenu from './Components/MessageContextMenu/MessageContextMenu'
-import { firstCharUpperCase } from 'src/utils/firstCharUpperCase'
 import { useDispatch } from 'react-redux'
+import { useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
-import { setContextMenu } from 'src/store/systemSlice'
+import { setContextMenu } from 'src/store/system-slice'
+import { firstCharUpperCase } from 'src/utils'
+import { MessageContextMenu } from './components'
 
 export const ContextMenu = () => {
   const { contextMenu } = useTypedSelector((state) => state.system)
@@ -16,7 +16,7 @@ export const ContextMenu = () => {
 
   const currentMenu = menus[firstCharUpperCase(contextMenu.slotName)]
 
-  const Content = () => (currentMenu || null)
+  const Content = () => currentMenu || null
 
   return (
     <div
@@ -41,5 +41,3 @@ export const ContextMenu = () => {
     </div>
   )
 }
-
-export default ContextMenu

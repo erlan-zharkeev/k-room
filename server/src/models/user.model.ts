@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { Codes, InfoItem, User, UserSettings } from '../../../types'
+import { User, UserSettings, Codes, InfoItem } from '../@types'
 
 export interface IUserSchema extends User {
   socketId: string
@@ -12,7 +12,7 @@ export interface IUserSchema extends User {
   _id: string
 }
 
-export const userSchema = new Schema<IUserSchema>({
+const userSchema = new Schema<IUserSchema>({
   socketId: {
     type: String,
     unique: false,
