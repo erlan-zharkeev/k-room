@@ -6,7 +6,7 @@ import { AppDispatch } from 'src/store'
 import { ViewPortWidthType } from 'src/store/@types'
 import { selectChatRoom } from 'src/store/settings-slice'
 import { showModal } from 'src/store/system-slice'
-import { IconName, ModalContentComponentName, UIButton, Logo } from '..'
+import { ModalContentComponentName, Logo, IconName, UIButton } from '..'
 
 export interface ButtonsListElement {
   value: AsideBarButtonName
