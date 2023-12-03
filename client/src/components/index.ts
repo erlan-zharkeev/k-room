@@ -1,11 +1,9 @@
-import { AsideBar } from './AsideBar/AsideBar'
-import { AsidePanel } from './AsidePanel/AsidePanel'
-import { CallStatusBar } from './CallStatusBar/CallStatusBar'
-import { ChatRoom } from './ChatRoom/ChatRoom'
-import { InfoList } from './InfoList/InfoList'
-import { TopBar } from './TopBar/TopBar'
-
-export { AsideBar, AsidePanel, CallStatusBar, ChatRoom, InfoList, TopBar }
+export { AsideBar } from './AsideBar/AsideBar'
+export { AsidePanel } from './AsidePanel/AsidePanel'
+export { CallStatusBar } from './CallStatusBar/CallStatusBar'
+export { ChatRoom } from './ChatRoom/ChatRoom'
+export { InfoList } from './InfoList/InfoList'
+export { TopBar } from './TopBar/TopBar'
 export {
   AuthNav,
   CallModal,
@@ -20,4 +18,22 @@ export {
   WidgetLoader
 } from './common'
 export type { ModalOptions, ErrorBucketProps, InformerTypes } from './common'
-export * from './ui'
+export {
+  UIAvatarBadgePlacement,
+  UIAvatar,
+  UIAvatarLoader,
+  UIButton,
+  UIImageLoader,
+  UIIcon,
+  UIInput,
+  UISwitch
+} from './ui'
+export type {
+  UIAvatarProps,
+  UIAvatarLoaderProps,
+  IconListElement,
+  IconProps,
+  IconName,
+  UIInputProps,
+  UISwitchProps
+} from './ui'
