@@ -1,8 +1,7 @@
 import { Badge, Image } from 'antd'
 import { useState, useEffect } from 'react'
-import { UIIcon } from '..'
 import { SizeModifiers, ShapeModifiers } from 'src/@types'
-import { IconName } from '../UIIcon/UIIcon'
+import { IconName, UIIcon } from '..'
 
 export enum UIAvatarBadgePlacement {
   up = 'up',
