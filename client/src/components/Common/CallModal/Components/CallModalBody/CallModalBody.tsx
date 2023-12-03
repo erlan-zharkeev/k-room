@@ -4,8 +4,6 @@ import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIButton, UIAvatar } from 'src/components'
 import { useTypedSelector, useCounter } from 'src/hooks'
-import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
-import { RefsContext } from 'src/providers/RefsProvider'
 import { AppDispatch } from 'src/store'
 import {
   setCallStartedAt,
@@ -19,6 +17,7 @@ import {
 import { firstCharUpperCase } from 'src/utils'
 import { CallDots, CallModalVideo } from './components'
 import { $socket } from 'src/services'
+import { RefsContext, AdditionalServiceContext } from 'src/providers'
 
 export interface CallModalBodyProps {
   toggleExpandModal: () => void

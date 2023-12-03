@@ -20,8 +20,8 @@ import {
 } from 'common-types'
 import { showNotification } from 'src/store/system-slice'
 import { useTypedSelector } from '.'
-import { RefsContext } from 'src/providers/RefsProvider'
 import { $socket, $sound, Sounds, $clg } from 'src/services'
+import { RefsContext } from 'src/providers'
 
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
   const payload: SocketActionsPayload['callUser'] = {

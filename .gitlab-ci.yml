@@ -10,6 +10,7 @@ services:
 publish-images:
   stage: publish-images
   script:
+    - echo $DOCKERHUB_TOKEN
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
     - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./server/.env.production
     - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./server/.env.production

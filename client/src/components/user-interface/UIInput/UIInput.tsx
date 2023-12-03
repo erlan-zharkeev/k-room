@@ -1,6 +1,6 @@
 import { Input } from 'antd'
-import { modifiersHandler } from 'src/utils/modifiers-handler'
 import { ChangeEvent, ReactNode } from 'react'
+import { modifiersHandler } from 'src/utils'
 
 export interface UIInputProps {
   type?: 'password' | 'common'

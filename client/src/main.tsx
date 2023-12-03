@@ -1,6 +1,4 @@
 import ReactDOM from 'react-dom/client'
-import { RefsProvider } from 'src/providers/RefsProvider'
-import { AdditionalServiceProvider } from './providers/AdditionalServiceProvider'
 import { initializeApp } from 'firebase/app'
 import * as process from 'process'
 import { Provider } from 'react-redux'
@@ -9,6 +7,7 @@ import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import { App } from './App'
 import { store } from './store'
+import { RefsProvider, AdditionalServiceProvider } from './providers'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,

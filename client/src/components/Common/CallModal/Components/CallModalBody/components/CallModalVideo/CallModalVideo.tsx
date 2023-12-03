@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { UIAvatar } from 'src/components'
 import { useTypedSelector } from 'src/hooks'
-import { RefsContext } from 'src/providers/RefsProvider'
+import { RefsContext } from 'src/providers'
 
 export const CallModalVideo = () => {
   const { currentCall } = useTypedSelector((state) => state.calls)

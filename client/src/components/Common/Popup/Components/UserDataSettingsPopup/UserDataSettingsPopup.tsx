@@ -1,15 +1,15 @@
 import { Form } from 'antd'
-import { useEffect, useState } from 'react'
+import { KRoomUser } from 'common-types'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { AsyncThunkResponseWrapper } from 'src/@types'
+import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
+import { useTypedSelector, useValidate } from 'src/hooks'
+import { apiMethods } from 'src/services'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/system-slice'
-import { validateRules } from 'src/utils/validate-rules'
-import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/user-slice'
-import { KRoomUser } from 'common-types'
-import { useTypedSelector, useValidate } from 'src/hooks'
-import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
-import { apiMethods } from 'src/services'
+import { validateRules } from 'src/utils'
 
 export const UserDataSettingsPopup = () => {
   const { avatarPath, username, id } = useTypedSelector((state) => state.user.userData)

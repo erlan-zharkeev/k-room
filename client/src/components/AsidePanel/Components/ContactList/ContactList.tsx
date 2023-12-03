@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useContext, useState, useEffect } from 'react'
 import { UIAvatar, UIButton } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
-import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
+import { AdditionalServiceContext } from 'src/providers'
 import { $socket } from 'src/services'
 import { ContactSearch } from './components/ContactSearch/ContactSearch'
 
