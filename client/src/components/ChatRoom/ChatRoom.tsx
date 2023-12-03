@@ -180,7 +180,7 @@ export const ChatRoom = () => {
               <Informer type="warn" text="You need to wait for a response from the interlocutor to start a dialogue." />
             ) : (
               <InputMessage
-                sendMessage={(message) =>
+                sendMessage={(message: string) =>
                   sendMessage({
                     authorId: id,
                     roomId: selectedChatRoom?.id,
