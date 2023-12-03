@@ -13,7 +13,7 @@ export interface IEmojiItems {
   glyph: string
 }
 
-export const EmojiDropDown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
+export const EmojiDropdown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
   const items: MenuProps['items'] = clientConstants.emojis.map((el) => {
     return {
       key: el.key,

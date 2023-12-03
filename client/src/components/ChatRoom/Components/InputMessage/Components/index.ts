@@ -1,2 +1,2 @@
-export * from './ReplyMessage/ReplyMessage'
-export * from './EmojiDropdown/EmojiDropdown'
+export { EmojiDropdown } from './EmojiDropdown/EmojiDropdown'
+export { ReplyMessage } from './ReplyMessage/ReplyMessage'

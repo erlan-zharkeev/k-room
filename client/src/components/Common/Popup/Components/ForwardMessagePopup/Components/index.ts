@@ -1,1 +1,1 @@
-export * from './ShortChatList/ShortChatList'
+export { ShortChatList } from './ShortChatList/ShortChatList'

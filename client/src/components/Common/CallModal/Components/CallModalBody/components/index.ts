@@ -1,2 +1,2 @@
-export * from './CallModalVideo/CallModalVideo'
-export * from './CallDots/CallDots'
+export { CallModalVideo } from './CallModalVideo/CallModalVideo'
+export { CallDots } from './CallDots/CallDots'

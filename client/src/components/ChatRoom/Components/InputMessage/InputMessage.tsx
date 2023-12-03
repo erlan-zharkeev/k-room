@@ -3,7 +3,7 @@ import { SocketActionsPayload, SocketActions, ImageObject } from 'common-types'
 import { useState } from 'react'
 import { UIImageLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useSelectedRoom, useDebounce } from 'src/hooks'
-import { ReplyMessage, EmojiDropDown } from './components'
+import { ReplyMessage, EmojiDropdown } from './components'
 import { $socket } from 'src/services'
 
 export interface InputMessageProps {
@@ -62,7 +62,7 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
       <Form onFinish={send}>
         <UIImageLoader multiple={true} setImages={setImagesHandler} />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
-        <EmojiDropDown setEmoji={setEmoji} />
+        <EmojiDropdown setEmoji={setEmoji} />
         <UIButton htmltype="submit" disabled={isButtonDisabled()} iconName="send" onClick={send} />
       </Form>
     </div>
