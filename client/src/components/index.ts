@@ -7,4 +7,4 @@ import { TopBar } from './TopBar/TopBar'
 
 export { AsideBar, AsidePanel, CallStatusBar, ChatRoom, InfoList, TopBar }
 export * from './common'
-export * from './ui'
+export * from './user-interface'
