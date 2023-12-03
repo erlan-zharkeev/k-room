@@ -3,7 +3,10 @@ import { useState, ReactElement, useEffect } from 'react'
 import { clientConstants } from 'src/client-constants'
 import { useTypedSelector } from 'src/hooks'
 import { WidgetLoader } from '..'
-import { ContactList, ChatRoomList, Calls, UserSettings } from './components'
+import { Calls } from './components/Calls/Calls'
+import { ChatRoomList } from './components/ChatRoomList/ChatRoomList'
+import { ContactList } from './components/ContactList/ContactList'
+import { UserSettings } from './components/UserSettings/UserSettings'
 
 export const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)

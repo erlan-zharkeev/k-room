@@ -1,6 +1,0 @@
-export { ChatRoomSettingsPopup } from './ChatRoomSettingsPopup/ChatRoomSettingsPopup'
-export { CreateMultipleChatPopup } from './CreateMultipleChatPopup/CreateMultipleChatPopup'
-export { ForwardMessagePopup } from './ForwardMessagePopup/ForwardMessagePopup'
-export { MessageWithBindDataPopup } from './MessageWithBindDataPopup/MessageWithBindDataPopup'
-export { TechSettingsPopup } from './TechSettingsPopup/TechSettingsPopup'
-export { UserDataSettingsPopup } from './UserDataSettingsPopup/UserDataSettingsPopup'

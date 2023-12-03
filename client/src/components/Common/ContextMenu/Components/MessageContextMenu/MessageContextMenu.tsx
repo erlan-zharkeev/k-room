@@ -5,8 +5,8 @@ import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { repliedMessageSetAsForward, updateMessageStatus, setRepliedMessage } from 'src/store/rooms-slice'
 import { showModal } from 'src/store/system-slice'
-import { Reactions } from './components'
 import { $socket } from 'src/services'
+import { Reactions } from './components/Reactions/Reactions'
 
 export const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()

@@ -6,7 +6,7 @@ import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { setRepliedMessage } from 'src/store/rooms-slice'
 import { closeModal } from 'src/store/system-slice'
-import { ShortChatList } from './components'
+import { ShortChatList } from './components/ShortChatList/ShortChatList'
 
 export const ForwardMessagePopup = () => {
   const dispatch = useDispatch<AppDispatch>()

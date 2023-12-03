@@ -3,7 +3,7 @@ import { useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { setContextMenu } from 'src/store/system-slice'
 import { firstCharUpperCase } from 'src/utils'
-import { MessageContextMenu } from './components'
+import { MessageContextMenu } from './components/MessageContextMenu/MessageContextMenu'
 
 export const ContextMenu = () => {
   const { contextMenu } = useTypedSelector((state) => state.system)

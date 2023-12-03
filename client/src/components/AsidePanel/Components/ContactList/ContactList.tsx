@@ -6,7 +6,7 @@ import { UIAvatar, UIButton } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $socket } from 'src/services'
-import { ContactSearch } from './components'
+import { ContactSearch } from './components/ContactSearch/ContactSearch'
 
 export const ContactList = () => {
   const { updateSetting } = useUpdateSettings()

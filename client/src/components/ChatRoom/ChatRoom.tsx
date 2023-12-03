@@ -21,8 +21,10 @@ import { updatedAttachedFilesMessage } from 'src/store/rooms-slice'
 import { showModal } from 'src/store/system-slice'
 import { scrollToBottom, sendMessage } from 'src/utils'
 import { WidgetLoader, Informer, ModalContentComponentName } from '..'
-import { RoomHeader, MessageBody, InputMessage } from './components'
 import { $socket } from 'src/services'
+import { InputMessage } from './components/InputMessage/InputMessage'
+import { MessageBody } from './components/MessageBody/MessageBody'
+import { RoomHeader } from './components/RoomHeader/RoomHeader'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()

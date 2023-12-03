@@ -3,8 +3,9 @@ import { SocketActionsPayload, SocketActions, ImageObject } from 'common-types'
 import { useState } from 'react'
 import { UIImageLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useSelectedRoom, useDebounce } from 'src/hooks'
-import { ReplyMessage, EmojiDropdown } from './components'
 import { $socket } from 'src/services'
+import { EmojiDropdown } from './components/EmojiDropdown/EmojiDropdown'
+import { ReplyMessage } from './components/ReplyMessage/ReplyMessage'
 
 export interface InputMessageProps {
   sendMessage: (message: string) => void

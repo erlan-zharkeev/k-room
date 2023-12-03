@@ -7,8 +7,8 @@ import { useUpdateSettings, useTypedSelector, useValidate } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/system-slice'
 import { validateRules } from 'src/utils'
-import { MultipleUserSelect } from './components'
 import { $socket } from 'src/services'
+import { MultipleUserSelect } from './components/MultipleUserSelect/MultipleUserSelect'
 
 export const CreateMultipleChatPopup = () => {
   const { updateSetting } = useUpdateSettings()

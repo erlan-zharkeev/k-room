@@ -15,9 +15,10 @@ import {
   setCallVideo
 } from 'src/store/calls-slice'
 import { firstCharUpperCase } from 'src/utils'
-import { CallDots, CallModalVideo } from './components'
 import { $socket } from 'src/services'
 import { RefsContext, AdditionalServiceContext } from 'src/providers'
+import { CallDots } from './components/CallDots/CallDots'
+import { CallModalVideo } from './components/CallModalVideo/CallModalVideo'
 
 export interface CallModalBodyProps {
   toggleExpandModal: () => void
