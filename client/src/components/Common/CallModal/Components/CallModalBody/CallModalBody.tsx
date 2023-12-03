@@ -17,9 +17,12 @@ import {
   setCallVideo
 } from 'src/store/calls-slice'
 import { firstCharUpperCase } from 'src/utils'
-import { CallModalBodyProps } from '../../@types'
 import { CallDots, CallModalVideo } from './components'
 import { $socket } from 'src/services'
+
+export interface CallModalBodyProps {
+  toggleExpandModal: () => void
+}
 
 export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()

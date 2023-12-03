@@ -25,7 +25,7 @@ export interface SystemMessage {
   text: string
 }
 
-export interface Constants {
+export interface ServerConstants {
   sharp: Record<SharpSettingsKey, SharpConfig>
   maxMbQuantityTransfer: number
   messages: {

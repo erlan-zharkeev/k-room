@@ -1,4 +1,4 @@
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import { $clg } from 'src/services'
 
 /**
@@ -11,6 +11,6 @@ export const clearLocalStorageOnKeyDown = (e: KeyboardEvent): void => {
     $clg('success', 'local storage cleared')
     setTimeout(() => {
       window.location.reload()
-    }, constants.commonTimeoutDuration)
+    }, clientConstants.commonTimeoutDuration)
   }
 }

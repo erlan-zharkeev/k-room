@@ -1,4 +1,4 @@
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import parse from 'html-react-parser'
 import { Collapse } from 'antd'
 import { Status, UserSettingKey } from 'common-types'
@@ -29,7 +29,7 @@ export const InfoList = () => {
   useEffect(() => {
     setTimeout(() => {
       markInfoAsRead()
-    }, constants.infoItemMarkAsReadDuration)
+    }, clientConstants.infoItemMarkAsReadDuration)
   }, [currentInfoId])
 
   const onChange = (key: string | string[]) => {

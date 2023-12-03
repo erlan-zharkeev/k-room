@@ -1,8 +1,12 @@
-import { ReactionsProps } from './@types'
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
+
+export interface ReactionsProps {
+  reactionHandler: (reaction: string) => Promise<void> | void | any
+  blockedKeys: Array<string>
+}
 
 export const Reactions = ({ reactionHandler, blockedKeys }: ReactionsProps) => {
-  const reactions = constants.emojis.filter((emoji) => emoji.reactions)
+  const reactions = clientConstants.emojis.filter((emoji) => emoji.reactions)
   const isDisabled = (glyphKey: string) => (blockedKeys.includes(glyphKey) ? 'disabled' : 'default')
   return (
     <div className="reactions">

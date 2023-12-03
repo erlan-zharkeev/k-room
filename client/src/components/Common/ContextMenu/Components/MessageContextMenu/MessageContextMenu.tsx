@@ -1,7 +1,6 @@
 import { SocketActionsPayload, SocketActions, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { UIIcon } from 'src/components'
-import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { ModalContentComponentName, UIIcon } from 'src/components'
 import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { repliedMessageSetAsForward, updateMessageStatus, setRepliedMessage } from 'src/store/rooms-slice'

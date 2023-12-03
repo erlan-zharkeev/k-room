@@ -1,8 +1,18 @@
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { UIAvatarLoaderProps } from './@types'
 import { imageToBase64 } from 'src/utils/image-to-base64'
 import { UIAvatar, UIIcon } from '..'
+import { ShapeModifiers } from 'src/@types'
+import { IconName } from '../UIIcon/@types'
+
+export interface UIAvatarLoaderProps {
+  path: string | undefined
+  setImage: React.Dispatch<any>
+  setFile: React.Dispatch<(prevState: undefined | undefined) => undefined>
+  updated?: () => void
+  stubIconName?: IconName
+  shape?: ShapeModifiers
+}
 
 export const UIAvatarLoader = ({
   path,

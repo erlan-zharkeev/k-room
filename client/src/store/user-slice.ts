@@ -1,5 +1,5 @@
 import { ThunkDispatch, AnyAction, createSlice } from '@reduxjs/toolkit'
-import { UserSettings, InfoItem, InfoItemStatus, RouteNames, User } from 'common-types'
+import { UserSettings, InfoItem, InfoItemStatus, RouteNames, KRoomUser } from 'common-types'
 import { clearCookie } from 'src/utils'
 import { UserState } from './@types'
 import { updateSettings } from './settings-slice'
@@ -7,7 +7,7 @@ import { $router } from 'src/services'
 
 export const commonSetUserDataHandler = (
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  data: { userData: User; settings: UserSettings }
+  data: { userData: KRoomUser; settings: UserSettings }
 ) => {
   dispatch(setUserData(data.userData))
   dispatch(updateSettings(data.settings))
@@ -45,7 +45,7 @@ const userSlice = createSlice({
     changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
     },
-    setUserData: (state, { payload }: { payload: User }) => {
+    setUserData: (state, { payload }: { payload: KRoomUser }) => {
       state.userData = {
         ...state.userData,
         ...payload

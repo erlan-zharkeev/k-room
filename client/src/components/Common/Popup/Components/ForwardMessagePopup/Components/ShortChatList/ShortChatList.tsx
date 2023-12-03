@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import { UIAvatar } from 'src/components'
 import { useTypedSelector, useSelectedRoom } from 'src/hooks'
-import { ShortChatListProps } from './@types'
+
+export interface ShortChatListProps {
+  searchString: string
+  clickChat: (userId: string) => Promise<void> | void | any
+}
 
 export const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)

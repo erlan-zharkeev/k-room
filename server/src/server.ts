@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
 import { RouteNames } from './../../types'
 import cors from 'cors'
-import { constants } from './constants'
+import { serverConstants } from './server-constants'
 import { ENV } from './ENV'
 import { router } from './router'
 
@@ -52,7 +52,7 @@ if (!fs.existsSync(path.join(__dirname, imagesPath))) {
 
 export const io = new Server(server, {
   path: RouteNames.SOCKET_PATH,
-  maxHttpBufferSize: constants.maxMbQuantityTransfer * 1000000,
+  maxHttpBufferSize: serverConstants.maxMbQuantityTransfer * 1000000,
   cors: {
     origin: ENV.IS_DEV ? '*' : origins
   }

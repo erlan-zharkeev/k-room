@@ -1,1 +1,1 @@
-export { MessageContextMenu } from './MessageContextMenu/MessageContextMenu'
+export * from './MessageContextMenu/MessageContextMenu'

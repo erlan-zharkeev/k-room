@@ -13,7 +13,7 @@ import { Howl } from 'howler'
 import {
   SocketActions,
   SocketActionsPayload,
-  User,
+  KRoomUser,
   NotificationType,
   NotificationMessage,
   BasicStreamSettings
@@ -115,7 +115,7 @@ export const useCall = () => {
     selfStream.current?.getTracks().forEach((track) => track.stop())
   }
 
-  const initCall = async (interlocutorData: User, selfId: string, selfAvatarPath: string, callerName: string) => {
+  const initCall = async (interlocutorData: KRoomUser, selfId: string, selfAvatarPath: string, callerName: string) => {
     interlocutorId.current = interlocutorData.id
     const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
     if (!stream) return

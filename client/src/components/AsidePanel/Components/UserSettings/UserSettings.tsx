@@ -1,14 +1,19 @@
 import Meta from 'antd/lib/card/Meta'
+import appData from '../../../../../package.json'
 import { UserSettingKey, RouteNames, Theme } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { UIAvatar, UISwitch } from 'src/components'
-import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { ModalContentComponentName, UIAvatar, UISwitch } from 'src/components'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { showModal } from 'src/store/system-slice'
-import { UserSettingName } from './@types/UserSettingName'
-import appData from '../../../../../package.json'
+
+export enum UserSettingName {
+  theme = 'theme',
+  tooltips = 'tooltips',
+  notification = 'notification',
+  sound = 'sound'
+}
 
 const { VITE_MAIL_APP } = import.meta.env
 

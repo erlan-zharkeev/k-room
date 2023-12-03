@@ -3,9 +3,14 @@ import { SocketActionsPayload, SocketActions, ImageObject } from 'common-types'
 import { useState } from 'react'
 import { UIImageLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useSelectedRoom, useDebounce } from 'src/hooks'
-import { InputMessageProps } from './@types/InputMessageProps'
 import { ReplyMessage, EmojiDropDown } from './components'
 import { $socket } from 'src/services'
+
+export interface InputMessageProps {
+  sendMessage: (message: string) => void
+  uploadImageHandler: (payload: { message: string; images: Array<ImageObject> }) => void
+  height: number
+}
 
 export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputMessageProps) => {
   const [message, setMessage] = useState('')

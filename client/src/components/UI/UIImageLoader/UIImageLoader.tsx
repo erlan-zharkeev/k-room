@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import { NotificationMessage, NotificationType, ImageObject } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -7,11 +7,16 @@ import { AppDispatch } from 'src/store'
 import { showNotification } from 'src/store/system-slice'
 import { imageToBase64 } from 'src/utils'
 import { UIIcon } from '..'
-import { UIFileLoaderProps } from './@types'
+
+export interface UIFileLoaderProps {
+  multiple?: boolean
+  allowedResolutions?: Array<string>
+  setImages: (images: Array<ImageObject>) => void
+}
 
 export const UIImageLoader = ({
   multiple = false,
-  allowedResolutions = constants.imageResolutions,
+  allowedResolutions = clientConstants.imageResolutions,
   setImages
 }: UIFileLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,7 +24,7 @@ export const UIImageLoader = ({
   const normFile = async (e: { target: { files: Array<File> | any } }) => {
     setIsLoading(true)
     const images = e.target.files
-    const { maxQuantityBindImages } = constants
+    const { maxQuantityBindImages } = clientConstants
     if (images.length > maxQuantityBindImages) {
       dispatch(
         showNotification({

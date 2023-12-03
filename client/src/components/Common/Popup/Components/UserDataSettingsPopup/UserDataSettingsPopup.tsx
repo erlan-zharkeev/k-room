@@ -6,7 +6,7 @@ import { closeModal } from 'src/store/system-slice'
 import { validateRules } from 'src/utils/validate-rules'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { setUserData } from 'src/store/user-slice'
-import { User } from 'common-types'
+import { KRoomUser } from 'common-types'
 import { useTypedSelector, useValidate } from 'src/hooks'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
 import { apiMethods } from 'src/services'
@@ -34,7 +34,7 @@ export const UserDataSettingsPopup = () => {
     setNewAvatar(avatarPath)
   }, [])
 
-  const onFinish = async (values: User) => {
+  const onFinish = async (values: KRoomUser) => {
     const updatedUserData = {
       ...values,
       userId: id,

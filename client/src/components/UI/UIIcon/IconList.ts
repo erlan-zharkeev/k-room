@@ -32,7 +32,7 @@ import { IoMdMail, IoIosCall } from 'react-icons/io'
 import { CgArrowsExpandLeft } from 'react-icons/cg'
 import { FcGoogle } from 'react-icons/fc'
 import { VscDeviceCameraVideo } from 'react-icons/vsc'
-import { IconListElement } from './@types'
+import { IconListElement } from './UIIcon'
 
 export const IconList: Array<IconListElement> = [
   { name: 'contacts', Icon: ImUsers },

@@ -1,6 +1,11 @@
-import { UIIcon } from 'src/components'
-import { IconName } from 'src/components/ui/UIIcon/@types/IconName'
-import { InformerProps } from './@types'
+import { IconName, UIIcon } from 'src/components'
+
+export type InformerTypes = 'error' | 'warn' | 'success'
+
+export interface InformerProps {
+  type: InformerTypes
+  text: string
+}
 
 export const Informer = ({ type, text }: InformerProps) => {
   const currentType = type as IconName

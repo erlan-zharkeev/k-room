@@ -9,9 +9,9 @@ import {
   ViewPort,
   ViewPortWidthType
 } from './@types/system-state'
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import { NotificationMessage, NotificationType } from 'common-types'
-import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { ModalContentComponentName } from 'src/components'
 
 const html = document.querySelector('html')
 
@@ -75,7 +75,7 @@ const systemSlice = createSlice({
       state.notificationData = {
         ...state.notificationData,
         ...payload,
-        duration: isError ? constants.errorNotificationDuration : initialState.notificationData.duration
+        duration: isError ? clientConstants.errorNotificationDuration : initialState.notificationData.duration
       }
       if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
       state.notificationData = initialState.notificationData
@@ -99,7 +99,7 @@ const systemSlice = createSlice({
       }
     ) {
       const { event, type, contextClickedObject } = payload
-      if (constants.blockNativeContextMenu && event) event.preventDefault()
+      if (clientConstants.blockNativeContextMenu && event) event.preventDefault()
       state.contextMenu.slotName = type
       if (!event) return
       const currentClickedObject = state.contextMenu.contextClickedObject
@@ -109,8 +109,8 @@ const systemSlice = createSlice({
       let x = event.pageX
       let y = event.pageY
       const defaultPadding = 4
-      const menuWidth = constants.dimensions.contextMenuWidth
-      const menuHeight = constants.dimensions.contextMenuHeight
+      const menuWidth = clientConstants.dimensions.contextMenuWidth
+      const menuHeight = clientConstants.dimensions.contextMenuHeight
       if (menuWidth + x > viewportWidth) x = viewportWidth - menuWidth - defaultPadding
       if (menuHeight + y > viewportHeight) y = viewportHeight - menuHeight - defaultPadding
       state.contextMenu.coord = {

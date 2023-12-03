@@ -1,5 +1,5 @@
 import { UserModel } from '../../models'
-import { SocketInstanceType, SocketActions, SocketActionsPayload, User, NotificationMessage } from '../../@types'
+import { SocketInstanceType, SocketActions, SocketActionsPayload, KRoomUser, NotificationMessage } from '../../@types'
 import { transformUsersData } from '../../utils'
 import { emitSearchedContacts, emitContactsToUser } from '../helpers'
 
@@ -36,7 +36,7 @@ export const contactsSlice = (socket: SocketInstanceType) => {
     }
     const searchType = searchTypeMap[type]
     if (!searchType) validSearch = false
-    let searchedUsers: User[] = []
+    let searchedUsers: KRoomUser[] = []
     if (validSearch) {
       const users = await UserModel.find(searchType)
       searchedUsers = transformUsersData(users)

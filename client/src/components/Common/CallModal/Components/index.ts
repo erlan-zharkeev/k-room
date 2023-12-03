@@ -1,1 +1,1 @@
-export { CallModalBody } from './CallModalBody/CallModalBody'
+export * from './CallModalBody/CallModalBody'

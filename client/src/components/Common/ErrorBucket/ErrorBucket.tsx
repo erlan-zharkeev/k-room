@@ -1,4 +1,6 @@
-import { ErrorBucketProps } from './@types'
+export interface ErrorBucketProps {
+  errors: Array<string>
+}
 
 export const ErrorBucket = ({ errors }: ErrorBucketProps) => {
   return (

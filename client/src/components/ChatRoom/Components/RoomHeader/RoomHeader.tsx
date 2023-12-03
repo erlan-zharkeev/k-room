@@ -1,10 +1,8 @@
 import { SocketActions, SocketActionsPayload, UserSettingKey } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { UIButton, UIAvatar } from 'src/components'
-import { ModalContentComponentName } from 'src/components/common/Popup/@types'
-import { BadgePlacement } from 'src/components/ui/UIAvatar/@types/UIAvatarProps'
-import { constants } from 'src/constants'
+import { UIButton, UIAvatar, UIAvatarBadgePlacement, ModalContentComponentName } from 'src/components'
+import { clientConstants } from 'src/client-constants'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { $socket } from 'src/services'
 import { AppDispatch } from 'src/store'
@@ -24,7 +22,7 @@ export const RoomHeader = () => {
       setTypingDotsQuantity((typingDotsQuantity) => {
         return typingDotsQuantity < 3 ? typingDotsQuantity + 1 : 0
       })
-    }, constants.commonTimeoutDuration)
+    }, clientConstants.commonTimeoutDuration)
   }, [isTyping])
 
   const dispatch = useDispatch<AppDispatch>()
@@ -68,15 +66,15 @@ export const RoomHeader = () => {
   }
 
   return (
-    <div className="room-header" style={{ height: constants.dimensions.roomHeader }}>
+    <div className="room-header" style={{ height: clientConstants.dimensions.roomHeader }}>
       <div className="room-header__back-button">
         <UIButton iconName="arrow-left" onClick={resetChatRoom} />
       </div>
       <div className="room-header__info">
         <UIAvatar
           ribbon={chatRoomData?.multiple}
-          ribbonPlacement={BadgePlacement.down}
-          dotPlacement={BadgePlacement.down}
+          ribbonPlacement={UIAvatarBadgePlacement.down}
+          dotPlacement={UIAvatarBadgePlacement.down}
           stubIconName={chatRoomData?.multiple ? 'image-stub' : 'user-stub'}
           online={chatRoomData?.hasOnline}
           src={chatRoomData?.avatarPath}

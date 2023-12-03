@@ -1,19 +1,23 @@
 import moment from 'moment'
-import { MessageBodyProps } from './@types/MessageBodyProps'
 import { setContextMenu } from 'src/store/system-slice'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
-import { Author } from 'common-types'
-import { constants } from 'src/constants'
+import { Author, Message } from 'common-types'
+import { clientConstants } from 'src/client-constants'
+
+export interface MessageBodyProps {
+  message: Message
+  isChatMultiple: Boolean
+}
 
 export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const showMessageAuthor =
     !message.isSelf && isChatMultiple && message.authorName !== Author.system && message.authorName !== Author.time
   const [reactions, setReactions] = useState([] as Array<{ glyph: string; authors: Array<string> }>)
-  const getGlyph = (name: string) => constants.emojis.find((emoji) => name === emoji.key)?.glyph
+  const getGlyph = (name: string) => clientConstants.emojis.find((emoji) => name === emoji.key)?.glyph
 
   const getAuthorTooltip = (authors: any) => {
     return authors.map((author: any) => author.username).join(', ')

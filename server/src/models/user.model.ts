@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { User, UserSettings, Codes, InfoItem } from '../@types'
+import { KRoomUser, UserSettings, Codes, InfoItem } from '../@types'
 
-export interface IUserSchema extends User {
+export interface IUserSchema extends KRoomUser {
   socketId: string
   confirmed: Boolean
   confirmAttempts: number

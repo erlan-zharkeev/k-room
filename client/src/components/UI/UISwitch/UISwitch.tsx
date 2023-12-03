@@ -1,5 +1,12 @@
 import { ChangeEvent, useState } from 'react'
-import { UISwitchProps } from './@types/UISwitchProps'
+
+export interface UISwitchProps {
+  initValue: boolean
+  onText?: string
+  offText?: string
+  id: string
+  onChange?: (value: boolean, id: string) => void
+}
 
 export const UISwitch = ({ initValue, id, onText = 'On', offText = 'Off', onChange }: UISwitchProps) => {
   const [value, setValue] = useState(initValue)

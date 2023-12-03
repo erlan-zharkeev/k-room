@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { User, UserEndPoints } from 'common-types'
+import { KRoomUser, UserEndPoints } from 'common-types'
 import { $api } from '..'
 
 export const resetPassword = createAsyncThunk(
@@ -10,7 +10,7 @@ export const resetPassword = createAsyncThunk(
 
 export const updateUserData = createAsyncThunk(
   'UPDATE_USER_DATA',
-  async (payload: User, { dispatch }) =>
+  async (payload: KRoomUser, { dispatch }) =>
     await $api('post', UserEndPoints.UPDATE_USER_DATA, dispatch, payload, 'multipart/form-data')
 )
 

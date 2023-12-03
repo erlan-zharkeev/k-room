@@ -1,4 +1,4 @@
-export const constants = {
+export const clientConstants = {
   blockNativeContextMenu: true,
   errorNotificationDuration: 10000,
   asidePanelLoaderMinDuration: 2000,

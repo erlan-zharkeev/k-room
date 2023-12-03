@@ -1,6 +1,6 @@
-import { Constants, SystemMessages } from './@types/Constants'
+import { ServerConstants, SystemMessages } from './@types/Constants'
 
-export const constants: Constants = {
+export const serverConstants: ServerConstants = {
   sharp: {
     avatar: {
       dimensions: {

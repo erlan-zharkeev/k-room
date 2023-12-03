@@ -1,14 +1,18 @@
 import { RadioChangeEvent, Radio } from 'antd'
-import { UserSettingKey, AsideBarButtonName, MessageStatus } from 'common-types'
+import { AsideBarButtonName, UserSettingKey, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { ViewPortWidthType } from 'src/store/@types'
 import { selectChatRoom } from 'src/store/settings-slice'
 import { showModal } from 'src/store/system-slice'
-import { UIButton, Logo } from '..'
-import { ModalContentComponentName } from '../common/Popup/@types'
-import { ButtonsListElement } from './@types/ButtonsListElement'
+import { IconName, ModalContentComponentName, UIButton, Logo } from '..'
+
+export interface ButtonsListElement {
+  value: AsideBarButtonName
+  iconName: IconName
+  tooltip?: string
+}
 
 export const AsideBar = () => {
   const { updateSetting } = useUpdateSettings()

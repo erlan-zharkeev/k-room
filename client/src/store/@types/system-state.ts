@@ -1,5 +1,5 @@
 import { Message, NotificationMessage, NotificationType } from 'common-types'
-import { ModalContentComponentName } from 'src/components/common/Popup/@types'
+import { ModalContentComponentName } from 'src/components'
 
 export interface NotificationStore {
   key?: string

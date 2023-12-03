@@ -1,3 +1,3 @@
-export { InputMessage } from './InputMessage/InputMessage'
-export { MessageBody } from './MessageBody/MessageBody'
-export { RoomHeader } from './RoomHeader/RoomHeader'
+export * from './InputMessage/InputMessage'
+export * from './MessageBody/MessageBody'
+export * from './RoomHeader/RoomHeader'

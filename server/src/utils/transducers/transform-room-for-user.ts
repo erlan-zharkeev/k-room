@@ -1,4 +1,4 @@
-import { constants } from '../../constants'
+import { serverConstants } from '../../server-constants'
 import { UserModel, MessageModel } from '../../models'
 import { getUserById } from '../../socket'
 import { DBChatRoom, SystemMessages, MessageStatus, DBMessage, ChatRoom } from '../../@types'
@@ -28,7 +28,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
 
   const setInviteMessage = messages.length < 1
   if (setInviteMessage) {
-    const systemMessagesMap = constants.messages.system.reduce((acc, message) => {
+    const systemMessagesMap = serverConstants.messages.system.reduce((acc, message) => {
       const name = message.name
       acc[name] = message.id
       return acc

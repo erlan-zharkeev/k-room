@@ -1,4 +1,4 @@
-export { Calls } from './Calls/Calls'
-export { ChatRoomList } from './ChatRoomList/ChatRoomList'
-export { ContactList } from './ContactList/ContactList'
-export { UserSettings } from './UserSettings/UserSettings'
+export * from './Calls/Calls'
+export * from './ChatRoomList/ChatRoomList'
+export * from './ContactList/ContactList'
+export * from './UserSettings/UserSettings'

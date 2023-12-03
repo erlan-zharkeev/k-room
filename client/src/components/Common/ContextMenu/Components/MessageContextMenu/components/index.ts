@@ -1,1 +1,1 @@
-export { Reactions } from './Reactions/Reactions'
+export * from './Reactions/Reactions'

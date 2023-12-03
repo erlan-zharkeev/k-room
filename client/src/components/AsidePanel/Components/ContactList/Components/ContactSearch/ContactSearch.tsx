@@ -1,20 +1,20 @@
 import { List } from 'antd'
-import { SocketActions, SocketActionsPayload, User } from 'common-types'
+import { SocketActions, KRoomUser, SocketActionsPayload } from 'common-types'
 import { useState, useEffect } from 'react'
 import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components'
 import { useTypedSelector, useDebounce } from 'src/hooks'
 import { $socket } from 'src/services'
 
 export const ContactSearch = () => {
-  const [users, setUsers] = useState([] as Array<User>)
+  const [users, setUsers] = useState([] as Array<KRoomUser>)
   const [isLoading, setIsLoading] = useState(false)
 
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
 
   useEffect(() => {
-    $socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<User>) => {
-      const userFilteredSelf = contacts.filter((user: User) => user.id !== id)
+    $socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<KRoomUser>) => {
+      const userFilteredSelf = contacts.filter((user: KRoomUser) => user.id !== id)
       setUsers(userFilteredSelf)
       setIsLoading(false)
     })

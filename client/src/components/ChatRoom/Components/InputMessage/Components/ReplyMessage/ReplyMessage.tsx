@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIIcon } from 'src/components'
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import { useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { resetRepliedMessage } from 'src/store/rooms-slice'
@@ -13,7 +13,7 @@ export const ReplyMessage = () => {
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const { fullInputMessage, shortInputMessage } = constants.dimensions
+    const { fullInputMessage, shortInputMessage } = clientConstants.dimensions
     const updatedHeight = repliedMessageData.id ? fullInputMessage - shortInputMessage - 8 : 0
     setHeight(updatedHeight)
   }, [repliedMessageData])

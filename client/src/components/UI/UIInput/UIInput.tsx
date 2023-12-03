@@ -1,6 +1,18 @@
 import { Input } from 'antd'
 import { modifiersHandler } from 'src/utils/modifiers-handler'
-import { UIInputProps } from 'ui/UIInput/@types/UIInputProps'
+import { ChangeEvent, ReactNode } from 'react'
+
+export interface UIInputProps {
+  type?: 'password' | 'common'
+  placeholder?: string
+  size?: any
+  suffix?: ReactNode
+  autoComplete?: 'on' | 'off'
+  value?: string
+  disabled?: boolean
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => Promise<void> | void
+  onBlur?: () => void
+}
 
 const inputTypes = [
   { name: 'common', component: Input },

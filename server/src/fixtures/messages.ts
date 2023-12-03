@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'
-import { constants } from '../constants'
+import { serverConstants } from '../server-constants'
 import { Author, MessageStatus } from '../@types'
 import { MessageModel } from '../models'
 
 export const loadMessageFixtures = async () => {
   return await Promise.all(
-    constants.messages.system.map(async (systemMessage) => {
+    serverConstants.messages.system.map(async (systemMessage) => {
       const _id = new mongoose.Types.ObjectId(systemMessage.id)
       const messageCandidate = await MessageModel.findOne({ _id })
       if (messageCandidate) return

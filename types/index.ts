@@ -92,11 +92,11 @@ export interface UserCredential extends UserShort {
   providerName?: string;
 }
 
-export interface User extends UserCredential {
+export interface KRoomUser extends UserCredential {
   online: boolean;
   chatRooms: ChatRooms;
   lastSeen?: string;
-  contacts?: Array<User>;
+  contacts?: Array<KRoomUser>;
   infoItems?: Array<InfoItem>;
 }
 
@@ -319,7 +319,7 @@ export interface SocketActionsPayload {
   };
   changeContactsData: UserShort;
   getContacts: {
-    contacts: Array<User>;
+    contacts: Array<KRoomUser>;
     messageBody: NotificationMessage;
   };
   callUpdated: Call;

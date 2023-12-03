@@ -1,7 +1,7 @@
 import { IUserSchema } from '../models'
-import { User } from '../@types'
+import { KRoomUser } from '../@types'
 
-export const transformUserData = (user: IUserSchema): User => {
+export const transformUserData = (user: IUserSchema): KRoomUser => {
   return {
     id: user._id,
     username: user.username,
@@ -12,7 +12,7 @@ export const transformUserData = (user: IUserSchema): User => {
   }
 }
 
-export const transformUsersData = (users: Array<IUserSchema>): Array<User> => {
+export const transformUsersData = (users: Array<IUserSchema>): Array<KRoomUser> => {
   return users.map((user) => {
     return transformUserData(user)
   })

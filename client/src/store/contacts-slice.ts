@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ContactsState } from './@types/contacts-state'
-import { SocketActionsPayload, User } from 'common-types'
+import { SocketActionsPayload, KRoomUser } from 'common-types'
 
 const initialState: ContactsState = {
   isLoading: true,
@@ -11,7 +11,7 @@ const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    loadContacts(state, { payload }: { payload: Array<User> }) {
+    loadContacts(state, { payload }: { payload: Array<KRoomUser> }) {
       state.contacts = payload
       state.isLoading = false
     },

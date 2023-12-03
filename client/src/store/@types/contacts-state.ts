@@ -1,6 +1,6 @@
-import { User } from 'common-types'
+import { KRoomUser } from 'common-types'
 
 export interface ContactsState {
   isLoading: boolean
-  contacts: Array<User>
+  contacts: Array<KRoomUser>
 }

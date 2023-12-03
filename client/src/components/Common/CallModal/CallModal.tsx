@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Rnd } from 'react-rnd'
 import { useTypedSelector } from 'src/hooks'
-import { ModalOptions } from './@types'
 import { CallModalBody } from './components'
+
+export interface ModalOptions {
+  width: number
+  height: number
+  x: number
+  y: number
+}
 
 const initialSize = {
   width: 300,

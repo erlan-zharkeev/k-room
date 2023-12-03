@@ -1,7 +1,7 @@
 import useDynamicRefs from 'use-dynamic-refs'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import { List } from 'antd'
 import {
   AsideBarButtonName,
@@ -20,8 +20,7 @@ import { AppDispatch } from 'src/store'
 import { updatedAttachedFilesMessage } from 'src/store/rooms-slice'
 import { showModal } from 'src/store/system-slice'
 import { scrollToBottom, sendMessage } from 'src/utils'
-import { WidgetLoader, Informer } from '..'
-import { ModalContentComponentName } from '../common/Popup/@types'
+import { WidgetLoader, Informer, ModalContentComponentName } from '..'
 import { RoomHeader, MessageBody, InputMessage } from './components'
 import { $socket } from 'src/services'
 
@@ -32,7 +31,7 @@ export const ChatRoom = () => {
   const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === AsideBarButtonName.chatList
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
-  const [inputMessageHeight, setInputMessageHeight] = useState(constants.dimensions.shortInputMessage)
+  const [inputMessageHeight, setInputMessageHeight] = useState(clientConstants.dimensions.shortInputMessage)
   const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0, height: 0 })
   const dispatch = useDispatch<AppDispatch>()
   const roomDomEl = useRef<HTMLDivElement>(null)
@@ -75,13 +74,13 @@ export const ChatRoom = () => {
     scrollToBottom()
     setTimeout(() => {
       setRefToMessages()
-    }, constants.commonTimeoutDuration)
+    }, clientConstants.commonTimeoutDuration)
   }, [selectedChatRoom, showWidgetLoader])
 
   useEffect(() => {
     const roomEl = roomDomEl.current
     if (roomEl) {
-      const { fullInputMessage, shortInputMessage, chatRoomHeaderHeight } = constants.dimensions
+      const { fullInputMessage, shortInputMessage, chatRoomHeaderHeight } = clientConstants.dimensions
       const inputHeight = haveMessageToReply ? fullInputMessage : shortInputMessage
 
       setInputMessageHeight(inputHeight)
@@ -118,7 +117,7 @@ export const ChatRoom = () => {
   useEffect(() => {
     setTimeout(() => {
       setShowWidgetLoader(!isLoading)
-    }, constants.chatRoomLoaderMinDuration)
+    }, clientConstants.chatRoomLoaderMinDuration)
   })
 
   const injectDateToMessages = () => {

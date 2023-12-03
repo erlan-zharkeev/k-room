@@ -1,6 +1,6 @@
 import { AsideBarButtonName } from 'common-types'
 import { useState, ReactElement, useEffect } from 'react'
-import { constants } from 'src/constants'
+import { clientConstants } from 'src/client-constants'
 import { useTypedSelector } from 'src/hooks'
 import { WidgetLoader } from '..'
 import { ContactList, ChatRoomList, Calls, UserSettings } from './components'
@@ -23,7 +23,7 @@ export const AsidePanel = () => {
     const roomsIsLoading = asideTab === AsideBarButtonName.chatList && roomListIsLoading
     setTimeout(() => {
       setIsLoading(contactsLoading && roomsIsLoading)
-    }, constants.asidePanelLoaderMinDuration)
+    }, clientConstants.asidePanelLoaderMinDuration)
   }, [contactListLoading, roomListIsLoading])
 
   return (

@@ -1,12 +1,12 @@
 import { List } from 'antd'
-import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, User } from 'common-types'
+import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, KRoomUser } from 'common-types'
 import moment from 'moment'
 import { useContext, useState, useEffect } from 'react'
 import { UIAvatar, UIButton } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers/AdditionalServiceProvider'
-import { ContactSearch } from './components/ContactSearch/ContactSearch'
 import { $socket } from 'src/services'
+import { ContactSearch } from './components/ContactSearch/ContactSearch'
 
 export const ContactList = () => {
   const { updateSetting } = useUpdateSettings()
@@ -27,13 +27,13 @@ export const ContactList = () => {
     })
   }, [contacts])
 
-  const deleteUser = (interlocutorData: User) => {
+  const deleteUser = (interlocutorData: KRoomUser) => {
     if (!interlocutorData.id) return
     const payload: SocketActionsPayload['deleteContact'] = { deletingUserId: interlocutorData.id }
     $socket.emit(SocketActions.DELETE_CONTACT, payload)
   }
 
-  const createChat = (value: User) => {
+  const createChat = (value: KRoomUser) => {
     if (loaders.room[value.id]) return
     const hasChatWithContact = chatRooms.some((room) => {
       if (room.multiple) return
@@ -78,7 +78,7 @@ export const ContactList = () => {
     return timeStamp ? `last seen ${moment(Number(timeStamp)).startOf('minutes').fromNow()}` : ''
   }
 
-  const initCall = async (interlocutorData: User) => {
+  const initCall = async (interlocutorData: KRoomUser) => {
     if (loaders.stream[interlocutorData.id]) return
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
     await call.current.initCall(interlocutorData, id, avatarPath ?? '', username, settings)
