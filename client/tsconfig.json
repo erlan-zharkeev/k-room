@@ -24,7 +24,7 @@
     "paths": {
       "src/*": ["client/src/*"],
       "common-types": ["types"],
-      "ui/*": ["client/src/components/ui/*"]
+      "cmp/*": ["client/src/components/*"]
     }
   },
   "include": ["src", "./vite.config.ts"],
