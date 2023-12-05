@@ -6,7 +6,7 @@ import { AppDispatch } from 'src/store'
 import { repliedMessageSetAsForward, updateMessageStatus, setRepliedMessage } from 'src/store/rooms-slice'
 import { showModal } from 'src/store/system-slice'
 import { $socket } from 'src/services'
-import { Reactions } from './components/Reactions/Reactions'
+import { Reactions } from './elements'
 
 export const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()

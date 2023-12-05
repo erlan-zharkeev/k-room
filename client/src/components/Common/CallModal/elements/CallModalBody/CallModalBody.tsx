@@ -17,8 +17,7 @@ import {
 import { firstCharUpperCase } from 'src/utils'
 import { $socket } from 'src/services'
 import { RefsContext, AdditionalServiceContext } from 'src/providers'
-import { CallDots } from './components/CallDots/CallDots'
-import { CallModalVideo } from './components/CallModalVideo/CallModalVideo'
+import { CallDots, CallModalVideo } from './elements'
 
 export interface CallModalBodyProps {
   toggleExpandModal: () => void

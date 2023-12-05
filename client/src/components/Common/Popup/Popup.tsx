@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/hooks'
 import { AppDispatch } from 'src/store'
 import { closeModal } from 'src/store/system-slice'
-import { ChatRoomSettingsPopup } from './components/ChatRoomSettingsPopup/ChatRoomSettingsPopup'
-import { CreateMultipleChatPopup } from './components/CreateMultipleChatPopup/CreateMultipleChatPopup'
-import { ForwardMessagePopup } from './components/ForwardMessagePopup/ForwardMessagePopup'
-import { MessageWithBindDataPopup } from './components/MessageWithBindDataPopup/MessageWithBindDataPopup'
-import { TechSettingsPopup } from './components/TechSettingsPopup/TechSettingsPopup'
-import { UserDataSettingsPopup } from './components/UserDataSettingsPopup/UserDataSettingsPopup'
+import {
+  UserDataSettingsPopup,
+  TechSettingsPopup,
+  ForwardMessagePopup,
+  CreateMultipleChatPopup,
+  ChatRoomSettingsPopup,
+  MessageWithBindDataPopup
+} from './elements'
 
 export enum ModalContentComponentName {
   userDataSettingsPopup = 'UserDataSettingsPopup',

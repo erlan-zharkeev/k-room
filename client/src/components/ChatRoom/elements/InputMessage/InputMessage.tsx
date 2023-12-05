@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { UIImageLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useSelectedRoom, useDebounce } from 'src/hooks'
 import { $socket } from 'src/services'
-import { EmojiDropdown } from './components/EmojiDropdown/EmojiDropdown'
-import { ReplyMessage } from './components/ReplyMessage/ReplyMessage'
+import { ReplyMessage, EmojiDropdown } from './elements'
 
 export interface InputMessageProps {
   sendMessage: (message: string) => void
