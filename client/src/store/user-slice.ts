@@ -62,5 +62,4 @@ const userSlice = createSlice({
 })
 
 export const { setUserData, logOut, changeIsAppLoading, setInfoItems, markInfoItemAsRead } = userSlice.actions
-
 export default userSlice.reducer

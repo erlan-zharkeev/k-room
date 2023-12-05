@@ -121,5 +121,4 @@ export const {
   updatedAttachedFilesMessage,
   deleteMessage
 } = roomsSlice.actions
-
 export default roomsSlice.reducer
