@@ -1,7 +1,6 @@
 import moment from 'moment'
-import { setContextMenu } from 'src/store/system-slice'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/store'
+import { AppDispatch, setContextMenu } from 'src/store'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
 import { Author, Message } from 'common-types'

@@ -1,7 +1,6 @@
 import { Message, MessageStatus, RepliedMessage, SocketActions, SocketActionsPayload, ImageObject } from 'common-types'
 import { $socket } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { pushTemporaryMessage, resetRepliedMessage } from 'src/store/rooms-slice'
+import { AppDispatch, pushTemporaryMessage, resetRepliedMessage } from 'src/store'
 import { v4 as uuidv4 } from 'uuid'
 
 export const sendMessage = ({

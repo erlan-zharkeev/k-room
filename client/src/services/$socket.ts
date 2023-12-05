@@ -1,8 +1,7 @@
 import { RouteNames, AuthTokens, SocketActions } from 'common-types'
 import Cookies from 'js-cookie'
 import { io } from 'socket.io-client'
-import { AppDispatch } from 'src/store'
-import { setReconnectingStatus } from 'src/store/system-slice'
+import { AppDispatch, setReconnectingStatus } from 'src/store'
 import { apiMethods } from './api-methods'
 
 const { DEV, VITE_SERVER_PORT, VITE_MAX_RECONNECT_ATTEMPTS } = import.meta.env

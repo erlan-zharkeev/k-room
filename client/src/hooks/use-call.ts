@@ -1,13 +1,14 @@
 import { useContext, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import {
-  initModalToCall,
-  setCurrentCallAccepted,
+  AppDispatch,
   closeCallModal,
+  initModalToCall,
   markCurrentCallAsVideo,
+  setCurrentCallAccepted,
+  showNotification,
   updateInterlocutorSettings
-} from 'src/store/calls-slice'
-import { AppDispatch } from 'src/store'
+} from 'src/store'
 import Peer, { SignalData } from 'simple-peer'
 import { Howl } from 'howler'
 import {
@@ -18,7 +19,6 @@ import {
   NotificationMessage,
   BasicStreamSettings
 } from 'common-types'
-import { showNotification } from 'src/store/system-slice'
 import { useTypedSelector } from '.'
 import { $socket, $sound, Sounds, $clg } from 'src/services'
 import { RefsContext } from 'src/providers'

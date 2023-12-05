@@ -4,16 +4,16 @@ import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIButton, UIAvatar } from 'src/components'
 import { useTypedSelector, useCounter } from 'src/hooks'
-import { AppDispatch } from 'src/store'
 import {
-  setCallStartedAt,
-  setShowCallModal,
-  setCallId,
-  setMinify,
+  AppDispatch,
   setCallAudio,
+  setCallId,
   setCallSettingsLoading,
-  setCallVideo
-} from 'src/store/calls-slice'
+  setCallStartedAt,
+  setCallVideo,
+  setMinify,
+  setShowCallModal
+} from 'src/store'
 import { firstCharUpperCase } from 'src/utils'
 import { $socket } from 'src/services'
 import { RefsContext, AdditionalServiceContext } from 'src/providers'

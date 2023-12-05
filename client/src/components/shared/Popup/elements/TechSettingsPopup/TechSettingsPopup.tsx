@@ -3,7 +3,7 @@ import { NotificationMessage, NotificationType } from 'common-types'
 import { useState, useEffect, useRef } from 'react'
 import { UIButton } from 'src/components'
 import { $sound, Sounds } from 'src/services'
-import { showNotification } from 'src/store/system-slice'
+import { showNotification } from 'src/store'
 
 export const TechSettingsPopup = () => {
   const [audioInputDevices, setAudioInputDevices] = useState([] as MediaDeviceInfo[])

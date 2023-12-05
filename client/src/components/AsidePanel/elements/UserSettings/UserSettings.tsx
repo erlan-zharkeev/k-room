@@ -3,10 +3,10 @@ import appData from '../../../../../package.json'
 import { UserSettingKey, RouteNames, Theme } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { ModalContentComponentName, UIAvatar, UISwitch } from 'src/components'
+import { UIAvatar, UISwitch } from 'src/components'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { showModal } from 'src/store/system-slice'
+import { AppDispatch, showModal } from 'src/store'
+import { ModalContentComponentName } from 'src/@types'
 
 export enum UserSettingName {
   theme = 'theme',

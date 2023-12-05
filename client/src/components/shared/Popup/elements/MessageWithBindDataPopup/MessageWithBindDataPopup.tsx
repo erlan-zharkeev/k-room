@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UISwitch, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useSelectedRoom } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/system-slice'
+import { AppDispatch, closeModal } from 'src/store'
 import { sendMessage } from 'src/utils'
 
 export const MessageWithBindDataPopup = () => {

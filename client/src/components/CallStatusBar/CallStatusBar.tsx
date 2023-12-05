@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { unsetMinify } from 'src/store/calls-slice'
+import { AppDispatch, unsetMinify } from 'src/store'
 import { firstCharUpperCase } from 'src/utils'
 import { UIAvatar } from '..'
 

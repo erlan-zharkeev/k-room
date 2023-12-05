@@ -12,7 +12,7 @@ const initialState: UserSettings = {
   ableToShowNotification: true
 }
 
-const settingsSlice = createSlice({
+export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
@@ -53,16 +53,3 @@ const settingsSlice = createSlice({
     }
   }
 })
-
-export const {
-  changeAsideTab,
-  changeTheme,
-  setSoundValue,
-  setTooltipsValue,
-  selectChatRoom,
-  setAbleToShowNotification,
-  updateSettings,
-  setCurrentInfoItem
-} = settingsSlice.actions
-
-export default settingsSlice.reducer

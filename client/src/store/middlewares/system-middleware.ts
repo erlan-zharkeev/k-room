@@ -1,7 +1,7 @@
 import { NotificationType } from 'common-types'
 import { MessageNotification } from 'src/components'
 import { $sound, Sounds } from 'src/services'
-import { showNotification } from '../system-slice'
+import { showNotification } from '..'
 
 export const SystemMiddleware = (store: any) => (next: any) => (action: any) => {
   if (!action) return

@@ -5,8 +5,7 @@ import { useDispatch } from 'react-redux'
 import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useValidate } from 'src/hooks'
 import { $socket } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/system-slice'
+import { AppDispatch, closeModal } from 'src/store'
 import { validateRules } from 'src/utils'
 
 export const ChatRoomSettingsPopup = () => {

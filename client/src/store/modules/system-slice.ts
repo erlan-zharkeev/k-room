@@ -1,17 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { notification } from 'antd'
-import {
-  ContextClickedObject,
-  ContextMenuType,
-  ModalData,
-  NotificationStore,
-  SystemStore,
-  ViewPort,
-  ViewPortWidthType
-} from './@types/system-state'
 import { clientConstants } from 'src/client-constants'
 import { NotificationMessage, NotificationType } from 'common-types'
-import { ModalContentComponentName } from 'src/components'
+import {
+  ViewPort,
+  ViewPortWidthType,
+  ContextMenuType,
+  ContextMenu,
+  ContextClickedObject,
+  ModalContentComponentName
+} from 'src/@types'
+
+console.log(ModalContentComponentName)
+
+interface NotificationStore {
+  key?: string
+  message: NotificationMessage | JSX.Element
+  description?: string
+  messageType?: NotificationType
+  duration?: number
+  placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
+}
+
+interface ModalData {
+  title: string
+  modalContentComponentName: ModalContentComponentName
+  okText?: string
+  width?: string
+}
+
+interface SystemStore {
+  reconnecting: boolean
+  showModal: boolean
+  contextMenu: ContextMenu
+  modalData: ModalData
+  notificationData: NotificationStore
+  viewPort: ViewPort
+}
 
 const html = document.querySelector('html')
 
@@ -56,7 +81,7 @@ const initialState: SystemStore = {
   }
 }
 
-const systemSlice = createSlice({
+export const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
@@ -123,15 +148,3 @@ const systemSlice = createSlice({
     }
   }
 })
-
-export const {
-  setReconnectingStatus,
-  showNotification,
-  showModal,
-  closeModal,
-  setViewPort,
-  setContextMenu,
-  resetContextClickedObject
-} = systemSlice.actions
-
-export default systemSlice.reducer

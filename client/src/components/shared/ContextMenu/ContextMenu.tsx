@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { setContextMenu } from 'src/store/system-slice'
+import { AppDispatch, setContextMenu } from 'src/store'
 import { firstCharUpperCase } from 'src/utils'
 import { MessageContextMenu } from './elements'
 

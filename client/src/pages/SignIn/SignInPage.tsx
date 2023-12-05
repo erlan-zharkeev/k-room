@@ -9,8 +9,7 @@ import { useValidate, useTypedSelector } from 'src/hooks'
 import { FirebaseProviderType } from 'src/hooks/use-firebase'
 import { AdditionalServiceContext } from 'src/providers'
 import { apiMethods } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { commonSetUserDataHandler } from 'src/store/user-slice'
+import { AppDispatch, commonSetUserDataHandler } from 'src/store'
 import { validateRules } from 'src/utils'
 
 export const SignInPage = () => {

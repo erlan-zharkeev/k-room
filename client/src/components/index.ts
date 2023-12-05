@@ -12,22 +12,12 @@ export {
   Informer,
   Logo,
   MessageNotification,
-  ModalContentComponentName,
   Popup,
   StubLoading,
   WidgetLoader
 } from './shared'
 export type { ModalOptions, ErrorBucketProps, InformerTypes } from './shared'
-export {
-  UIAvatarBadgePlacement,
-  UIAvatar,
-  UIAvatarLoader,
-  UIButton,
-  UIImageLoader,
-  UIIcon,
-  UIInput,
-  UISwitch
-} from './ui'
+export { UIAvatar, UIAvatarLoader, UIButton, UIImageLoader, UIIcon, UIInput, UISwitch } from './ui'
 export type {
   UIAvatarProps,
   UIAvatarLoaderProps,

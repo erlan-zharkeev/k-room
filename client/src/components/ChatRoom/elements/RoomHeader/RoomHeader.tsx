@@ -1,12 +1,12 @@
 import { SocketActions, SocketActionsPayload, UserSettingKey } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { UIButton, UIAvatar, UIAvatarBadgePlacement, ModalContentComponentName } from 'src/components'
+import { UIButton, UIAvatar } from 'src/components'
 import { clientConstants } from 'src/client-constants'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { $socket } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { showModal } from 'src/store/system-slice'
+import { AppDispatch, showModal } from 'src/store'
+import { ModalContentComponentName, UIAvatarBadgePlacement } from 'src/@types'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)

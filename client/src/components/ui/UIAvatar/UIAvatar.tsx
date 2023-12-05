@@ -1,13 +1,7 @@
 import { Badge, Image } from 'antd'
 import { useState, useEffect } from 'react'
-import { SizeModifiers, ShapeModifiers } from 'src/@types'
+import { SizeModifiers, ShapeModifiers, UIAvatarBadgePlacement } from 'src/@types'
 import { IconName, UIIcon } from '..'
-
-export enum UIAvatarBadgePlacement {
-  up = 'up',
-  down = 'down'
-}
-
 export interface UIAvatarProps {
   online?: boolean
   src?: string

@@ -1,4 +1,4 @@
-import { ViewPort } from 'src/store/@types/system-state'
+import { ViewPort } from 'src/@types'
 
 export const getViewPort = (): ViewPort => {
   const { innerWidth: width, innerHeight: height } = window

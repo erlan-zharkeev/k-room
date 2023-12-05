@@ -3,9 +3,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIInput, UIIcon } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { setRepliedMessage } from 'src/store/rooms-slice'
-import { closeModal } from 'src/store/system-slice'
+import { AppDispatch, closeModal, setRepliedMessage } from 'src/store'
 import { ShortChatList } from './components/ShortChatList/ShortChatList'
 
 export const ForwardMessagePopup = () => {

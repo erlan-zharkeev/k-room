@@ -1,6 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Message, RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
-import { AttachedFilesMessage, RoomsState } from './@types/rooms-state'
+import { ChatRoom, ImageObject, Message, RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
+
+interface AttachedFilesMessage {
+  body: string
+  images: Array<ImageObject>
+  imageCompression: boolean
+}
+
+interface RoomsState {
+  isLoading: boolean
+  chatRooms: Array<ChatRoom>
+  repliedMessageData: RepliedMessage
+  attachedFilesMessage: AttachedFilesMessage
+}
 
 const initialRepliedMessageData = {
   id: '',
@@ -23,7 +35,7 @@ const initialState: RoomsState = {
   attachedFilesMessage: initialAttachedFilesMessage
 }
 
-const roomsSlice = createSlice({
+export const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
@@ -106,19 +118,3 @@ const roomsSlice = createSlice({
     }
   }
 })
-
-export const {
-  loadChatRooms,
-  updateChatUsersStatus,
-  updateChatMessage,
-  pushTemporaryMessage,
-  updateMessageReactions,
-  updateMessageStatus,
-  changeChatName,
-  setRepliedMessage,
-  repliedMessageSetAsForward,
-  resetRepliedMessage,
-  updatedAttachedFilesMessage,
-  deleteMessage
-} = roomsSlice.actions
-export default roomsSlice.reducer

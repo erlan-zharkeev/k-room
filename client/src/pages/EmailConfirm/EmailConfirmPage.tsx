@@ -6,8 +6,7 @@ import { AsyncThunkResponseWrapper } from 'src/@types'
 import { UIIcon, UIButton } from 'src/components'
 import { useQuery } from 'src/hooks'
 import { apiMethods } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { logOut } from 'src/store/user-slice'
+import { AppDispatch, logOut } from 'src/store'
 
 export const EmailConfirmPage = () => {
   const dispatch = useDispatch<AppDispatch>()

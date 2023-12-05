@@ -3,8 +3,7 @@ import { Auth, getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopu
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { $clg } from 'src/services/$clg'
-import { AppDispatch } from 'src/store'
-import { showNotification } from 'src/store/system-slice'
+import { AppDispatch, showNotification } from 'src/store'
 
 export enum FirebaseProviderType {
   google = 'google',

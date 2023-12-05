@@ -1,15 +1,15 @@
 import { UserSettingKey, Theme, SocketActionsPayload, SocketActions, AsideBarButtonName } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/store'
 import {
-  changeTheme,
-  setSoundValue,
-  setTooltipsValue,
-  setAbleToShowNotification,
+  AppDispatch,
   changeAsideTab,
+  changeTheme,
+  selectChatRoom,
+  setAbleToShowNotification,
   setCurrentInfoItem,
-  selectChatRoom
-} from 'src/store/settings-slice'
+  setSoundValue,
+  setTooltipsValue
+} from 'src/store'
 import { $socket } from 'src/services/$socket'
 
 export const useUpdateSettings = () => {

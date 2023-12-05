@@ -1,7 +1,6 @@
 import { clientConstants } from 'src/client-constants'
 import { NotificationMessage, NotificationType } from 'common-types'
-import { AppDispatch } from 'src/store'
-import { showNotification } from 'src/store/system-slice'
+import { AppDispatch, showNotification } from 'src/store'
 
 export const imageToBase64 = ({
   image,

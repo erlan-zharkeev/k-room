@@ -1,8 +1,7 @@
 import { Modal } from 'antd'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/system-slice'
+import { AppDispatch, closeModal } from 'src/store'
 import {
   UserDataSettingsPopup,
   TechSettingsPopup,
@@ -11,15 +10,7 @@ import {
   ChatRoomSettingsPopup,
   MessageWithBindDataPopup
 } from './elements'
-
-export enum ModalContentComponentName {
-  userDataSettingsPopup = 'UserDataSettingsPopup',
-  techSettingsPopup = 'TechSettingsPopup',
-  forwardMessagePopup = 'ForwardMessagePopup',
-  createMultipleChatPopup = 'CreateMultipleChatPopup',
-  chatRoomSettingsPopup = 'ChatRoomSettingsPopup',
-  messageWithBindDataPopup = 'MessageWithBindDataPopup'
-}
+import { ModalContentComponentName } from 'src/@types'
 
 export const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)

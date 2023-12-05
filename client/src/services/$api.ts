@@ -1,8 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { Status, NotificationType, RouteNames } from 'common-types'
-import { AppDispatch } from 'src/store'
-import { showNotification } from 'src/store/system-slice'
-import { changeIsAppLoading } from 'src/store/user-slice'
+import { AppDispatch, changeIsAppLoading, showNotification } from 'src/store'
 import { $clg } from './$clg'
 
 axios.defaults.withCredentials = true

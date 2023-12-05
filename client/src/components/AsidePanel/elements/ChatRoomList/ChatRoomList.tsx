@@ -1,11 +1,11 @@
 import { List } from 'antd'
 import { Message, UserSettingKey, SocketActionsPayload, SocketActions, ChatRoom, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { ModalContentComponentName, UIButton, UIAvatar } from 'src/components'
+import { ModalContentComponentName } from 'src/@types'
+import { UIButton, UIAvatar } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { $socket } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { showModal } from 'src/store/system-slice'
+import { AppDispatch, showModal } from 'src/store'
 
 export const ChatRoomList = () => {
   const { updateSetting } = useUpdateSettings()

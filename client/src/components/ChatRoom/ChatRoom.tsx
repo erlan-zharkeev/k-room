@@ -16,13 +16,12 @@ import {
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelectedRoom, useTypedSelector, useUpdateSettings } from 'src/hooks'
-import { AppDispatch } from 'src/store'
-import { updatedAttachedFilesMessage } from 'src/store/rooms-slice'
-import { showModal } from 'src/store/system-slice'
+import { AppDispatch, showModal, updatedAttachedFilesMessage } from 'src/store'
 import { scrollToBottom, sendMessage } from 'src/utils'
-import { WidgetLoader, Informer, ModalContentComponentName } from '..'
 import { $socket } from 'src/services'
 import { RoomHeader, MessageBody, InputMessage } from './elements'
+import { ModalContentComponentName } from 'src/@types'
+import { WidgetLoader, Informer } from '..'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()

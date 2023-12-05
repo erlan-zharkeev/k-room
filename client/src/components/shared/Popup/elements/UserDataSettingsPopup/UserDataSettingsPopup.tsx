@@ -6,9 +6,7 @@ import { AsyncThunkResponseWrapper } from 'src/@types'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useValidate } from 'src/hooks'
 import { apiMethods } from 'src/services'
-import { AppDispatch } from 'src/store'
-import { closeModal } from 'src/store/system-slice'
-import { setUserData } from 'src/store/user-slice'
+import { AppDispatch, closeModal, setUserData } from 'src/store'
 import { validateRules } from 'src/utils'
 
 export const UserDataSettingsPopup = () => {

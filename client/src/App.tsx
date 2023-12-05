@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css'
-import 'src/styles/App.scss'
+import 'src/styles/main.scss'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { AsyncThunkResponseWrapper } from './@types'
@@ -7,9 +7,7 @@ import { Popup, CallModal, ContextMenu } from './components'
 import { useTypedSelector } from './hooks'
 import { AppRouter } from './router/AppRouter'
 import { apiMethods } from './services'
-import { AppDispatch } from './store'
-import { setViewPort } from './store/system-slice'
-import { commonSetUserDataHandler, changeIsAppLoading } from './store/user-slice'
+import { AppDispatch, changeIsAppLoading, commonSetUserDataHandler, setViewPort } from './store'
 import { getViewPort, setTheme, clearLocalStorageOnKeyDown, getCookie } from './utils'
 
 export const App = () => {

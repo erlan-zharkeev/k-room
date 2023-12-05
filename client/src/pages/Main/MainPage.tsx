@@ -7,24 +7,29 @@ import {
 } from 'common-types'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { ViewPortWidthType } from 'src/@types'
 import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom } from 'src/components'
 import { useSelectedRoom, useTypedSelector, useDebounce } from 'src/hooks'
 import { $clg, $socket } from 'src/services'
 import { socketReconnect } from 'src/services/$socket'
-import { AppDispatch } from 'src/store'
-import { ViewPortWidthType } from 'src/store/@types'
-import { updateCalls, updateCall } from 'src/store/calls-slice'
-import { loadContacts, updateContactsStatus, updateContactData } from 'src/store/contacts-slice'
 import {
-  updateChatUsersStatus,
+  AppDispatch,
   changeChatName,
-  loadChatRooms,
-  updateChatMessage,
-  updateMessageStatus,
   deleteMessage,
-  updateMessageReactions
-} from 'src/store/rooms-slice'
-import { showNotification, setContextMenu, setReconnectingStatus } from 'src/store/system-slice'
+  loadChatRooms,
+  loadContacts,
+  setContextMenu,
+  setReconnectingStatus,
+  showNotification,
+  updateCall,
+  updateCalls,
+  updateChatMessage,
+  updateChatUsersStatus,
+  updateContactData,
+  updateContactsStatus,
+  updateMessageReactions,
+  updateMessageStatus
+} from 'src/store'
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()

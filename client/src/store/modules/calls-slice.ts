@@ -1,6 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { CallsState, StreamConstraints } from './@types/calls-state'
 import { Call, CallStatus, CallType, SocketActionsPayload, UserMediaType, UserShort } from 'common-types'
+
+interface StreamConstraints {
+  [UserMediaType.audio]: {
+    loading: boolean
+    value: boolean
+  }
+  [UserMediaType.video]: {
+    loading: boolean
+    value: boolean
+  }
+}
+
+interface CallsState {
+  showCallModal: boolean
+  isMinified: boolean
+  currentCall: Call
+  list: Array<Call>
+  settings: StreamConstraints
+}
 
 const initialCurrentCall = {
   id: '',
@@ -40,7 +58,7 @@ const initialState: CallsState = {
   list: []
 }
 
-const callsSlice = createSlice({
+export const callsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
@@ -120,25 +138,3 @@ const callsSlice = createSlice({
     }
   }
 })
-
-export const {
-  updateAllList,
-  setCurrentCallAccepted,
-  initModalToCall,
-  closeCallModal,
-  setMinify,
-  unsetMinify,
-  setCallVideo,
-  setCallAudio,
-  updateInterlocutorSettings,
-  setCallStartedAt,
-  toggleSelfStreamIsLoading,
-  setShowCallModal,
-  updateCalls,
-  updateCall,
-  setCallId,
-  markCurrentCallAsVideo,
-  setCallSettingsLoading
-} = callsSlice.actions
-
-export default callsSlice.reducer

@@ -2,8 +2,7 @@ import { useDispatch } from 'react-redux'
 import { UIIcon, UIButton } from 'src/components'
 import { useTypedSelector } from 'src/hooks'
 import { socketReconnect } from 'src/services/$socket'
-import { AppDispatch } from 'src/store'
-import { logOut } from 'src/store/user-slice'
+import { AppDispatch, logOut } from 'src/store'
 
 export const StubLoading = () => {
   const dispatch = useDispatch<AppDispatch>()
