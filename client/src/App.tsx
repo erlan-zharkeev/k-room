@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css'
+import 'src/styles/App.scss'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import 'src/styles/app.scss'
 import { AsyncThunkResponseWrapper } from './@types'
 import { Popup, CallModal, ContextMenu } from './components'
 import { useTypedSelector } from './hooks'
