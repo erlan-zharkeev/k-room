@@ -16,8 +16,8 @@ export {
   Popup,
   StubLoading,
   WidgetLoader
-} from './common'
-export type { ModalOptions, ErrorBucketProps, InformerTypes } from './common'
+} from './shared'
+export type { ModalOptions, ErrorBucketProps, InformerTypes } from './shared'
 export {
   UIAvatarBadgePlacement,
   UIAvatar,
