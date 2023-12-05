@@ -1,10 +1,10 @@
-@import './components/UserSettings/style';
+@import './elements/UserSettings/style';
 
-@import './components/ChatRoomList/style';
+@import './elements/ChatRoomList/style';
 
-@import './components/ContactList/style';
+@import './elements/ContactList/style';
 
-@import './components/Calls/style';
+@import './elements/Calls/style';
 
 .aside-panel {
   position: relative;
@@ -21,8 +21,6 @@
 
   &__content {
     height: 100%;
-
-    // overflow-y: scroll;
     overflow-y: auto;
   }
 }

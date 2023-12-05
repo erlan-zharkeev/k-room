@@ -6,7 +6,7 @@ import { UIAvatar, UIIcon } from 'src/components'
 import { useTypedSelector } from 'src/hooks'
 import { firstCharUpperCase } from 'src/utils'
 
-const Calls = () => {
+export const Calls = () => {
   const { list, currentCall } = useTypedSelector((state) => state.calls)
   const getCallType = (call: Call) => (currentCall.id === call.id ? CallType.current : call.type)
   const [sortedList, setSortedList] = useState(list)
@@ -71,5 +71,3 @@ const Calls = () => {
     </div>
   )
 }
-
-export default Calls
