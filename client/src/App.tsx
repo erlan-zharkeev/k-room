@@ -7,8 +7,10 @@ import { Popup, CallModal, ContextMenu } from './components'
 import { useTypedSelector } from './hooks'
 import { AppRouter } from './router/AppRouter'
 import { apiMethods } from './services'
-import { AppDispatch, changeIsAppLoading, commonSetUserDataHandler, setViewPort } from './store'
+import { AppDispatch, changeIsAppLoading, commonSetUserDataHandler, setViewPort, showNotification } from './store'
 import { getViewPort, setTheme, clearLocalStorageOnKeyDown, getCookie } from './utils'
+import { NotificationMessage, NotificationType } from 'common-types'
+import { $socket, socketReconnect } from './services/$socket'
 
 export const App = () => {
   const { theme } = useTypedSelector((state) => state.persist.settings)
@@ -22,6 +24,25 @@ export const App = () => {
     dispatch(changeIsAppLoading(false))
   }
   const handleResize = () => dispatch(setViewPort(getViewPort()))
+  const handleOffline = () => {
+    $socket.disconnect()
+    dispatch(
+      showNotification({
+        message: NotificationMessage.networkOffline,
+        messageType: NotificationType.error,
+        duration: 5000
+      })
+    )
+  }
+  const handleOnline = () => {
+    socketReconnect(dispatch)
+    dispatch(
+      showNotification({
+        message: NotificationMessage.networkOnline,
+        messageType: NotificationType.info
+      })
+    )
+  }
 
   useEffect(() => {
     setTheme(theme)
@@ -30,6 +51,9 @@ export const App = () => {
 
     window.addEventListener('load', handleResize)
     window.addEventListener('resize', handleResize)
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
 
     const hasJwt = Boolean(getCookie('jwt'))
     dispatch(changeIsAppLoading(hasJwt))

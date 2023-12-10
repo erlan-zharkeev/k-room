@@ -14,13 +14,11 @@ export const InfoList = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { updateSetting } = useUpdateSettings()
   const { currentInfoId } = useTypedSelector((state) => state.persist.settings)
-  const { infoItems, id } = useTypedSelector((state) => state.user.userData)
+  const { infoItems } = useTypedSelector((state) => state.user.userData)
 
   const markInfoAsRead = async () => {
     if (!currentInfoId) return
-    const response = (await dispatch(
-      apiMethods.common.markInfoAsRead({ currentInfoId, userId: id })
-    )) as AsyncThunkResponseWrapper
+    const response = (await dispatch(apiMethods.common.markInfoAsRead({ currentInfoId }))) as AsyncThunkResponseWrapper
     if (response.payload.status !== Status.success) return
     dispatch(markInfoItemAsRead({ id: currentInfoId }))
   }

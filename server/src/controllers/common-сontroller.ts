@@ -21,7 +21,8 @@ class CommonController {
 
   async readInfoHandler(req: Request, res: Response) {
     try {
-      const { currentInfoId, userId } = req.body
+      const { currentInfoId } = req.body
+      const userId = req.app.locals.id
       await UserModel.findOneAndUpdate(
         {
           _id: userId,

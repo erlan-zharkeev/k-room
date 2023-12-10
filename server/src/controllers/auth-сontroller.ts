@@ -11,8 +11,8 @@ const bcrypt = require('bcryptjs')
 
 class AuthController {
   async updateTokensPair(req: Request, res: Response) {
-    const { id } = req.body.decoded
-    await updateTokens(id, res)
+    const userId = req.app.locals.id
+    await updateTokens(userId, res)
     res.json({ message: NotificationMessage.tokensPairUpdated, silent: true })
   }
 

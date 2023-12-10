@@ -10,7 +10,7 @@ export const accessTokenValidator = (req: Request, res: Response, next: NextFunc
   if (!accessToken) return throwError(Status.notAuth, res, NotificationMessage.nonAuthorized)
   jwt.verify(accessToken, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, (error: string, decoded: JWTDecoded) => {
     if (error) return refreshTokenValidator(req, res, next)
-    req.body.decoded = decoded
+    req.app.locals = decoded
     next()
   })
 }

@@ -18,7 +18,7 @@ export const StubLoading = () => {
       {reconnecting ? (
         <div className="stub-loading__circle">
           <UIIcon name="loader" color="accent" size="large" />
-          <p className="header-text header-text--secondary">Socket reconnecting</p>
+          <p className="header-text header-text--secondary">Reconnecting</p>
         </div>
       ) : (
         <div className="stub-loading__update-block">

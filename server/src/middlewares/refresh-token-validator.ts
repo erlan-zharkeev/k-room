@@ -19,7 +19,7 @@ export const refreshTokenValidator = async (req: Request, res: Response, next: N
     const isTokensEqual = userRefreshToken === refreshToken
     if (!isTokensEqual) return haveNotRightsError(res)
     await updateTokens(id, res)
-    req.body.decoded = decoded
+    req.app.locals = decoded
     next()
   })
 }

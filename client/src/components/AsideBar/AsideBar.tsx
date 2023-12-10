@@ -65,7 +65,7 @@ export const AsideBar = () => {
 
   return (
     <div className="aside-bar">
-      {viewPort.width >= ViewPortWidthType.tablet && <Logo />}
+      {viewPort.width >= ViewPortWidthType.tablet && <Logo showPointer={false} />}
       <Radio.Group value={asideTab} onChange={changeTab}>
         {buttons.map((button) => (
           <div key={button.value} className="aside-bar__button-el">

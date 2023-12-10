@@ -53,8 +53,6 @@ export const MainPage = () => {
     dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected }))
   }
 
-  const debouncedStatusNotification = useDebounce(statusNotification, 1000)
-
   const hideAside = () => selectedChatRoom && viewPort.width <= ViewPortWidthType.tablet
 
   const clickHandler = () => {
@@ -94,10 +92,10 @@ export const MainPage = () => {
       dispatch(showNotification({ messageType: NotificationType.error, message }))
     })
     $socket.on(SocketActions.DISCONNECT, () => {
-      debouncedStatusNotification(false)
+      statusNotification(false)
     })
     $socket.on(SocketActions.CONNECTION, () => {
-      debouncedStatusNotification(true)
+      statusNotification(true)
     })
     $socket.on(SocketActions.GET_CONTACTS, ({ contacts, messageBody }: SocketActionsPayload['getContacts']) => {
       if (messageBody) dispatch(showNotification({ messageType: NotificationType.info, message: messageBody }))

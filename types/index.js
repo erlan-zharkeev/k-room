@@ -81,14 +81,16 @@ var NotificationType;
 var NotificationMessage;
 (function (NotificationMessage) {
     NotificationMessage["default"] = "";
+    NotificationMessage["networkOffline"] = "The internet connection has been terminated. Network problems";
+    NotificationMessage["networkOnline"] = "The internet connection has been restored";
     NotificationMessage["cantAccessDevice"] = "Cant get access to video device";
     NotificationMessage["unknownError"] = "An unknown error has occurred";
     NotificationMessage["callCompleted"] = "Call completed";
     NotificationMessage["failedGetStream"] = "Failed to get self stream";
     NotificationMessage["cantSetCallerSignal"] = "Cannot set caller signal";
     NotificationMessage["failedToConnectToDevice"] = "Failed to connect to device, check for device is plugged in";
-    NotificationMessage["socketConnected"] = "Socket connected";
-    NotificationMessage["socketDisconnected"] = "Socket disconnected";
+    NotificationMessage["socketConnected"] = "Connected";
+    NotificationMessage["socketDisconnected"] = "Disconnected";
     NotificationMessage["tokensPairUpdated"] = "Token pair is updated";
     NotificationMessage["success"] = "success";
     NotificationMessage["passwordReset"] = "Password changed successfully";

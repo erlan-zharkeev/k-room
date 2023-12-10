@@ -53,7 +53,7 @@ export const SignInPage = () => {
     commonSetUserDataHandler(dispatch, { userData, settings })
   }
 
-  const { isAppLoading } = useTypedSelector((state) => state.user)
+  const { isAppLoading } = useTypedSelector((state) => state.system)
 
   return (
     <div className="page sign-in">
@@ -96,15 +96,6 @@ export const SignInPage = () => {
                     onClick={async () => await providerSignIn(FirebaseProviderType.google, setGoogleBtnLoading)}
                     loading={googleBtnLoading}
                   />
-                  {/* <UIButton
-                    iconName="facebook"
-                    text="Sign in with Facebook"
-                    onClick={() => providerSignIn(FirebaseProviderType.facebook, setFbBtnLoading)}
-                    border="border-default"
-                    fill={true}
-                    hover="hoverless"
-                    loading={fbBtnLoading}
-                  /> */}
                   <div className="sign-in__forgot-password">
                     <a className="paragraph-text link" onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}>
                       Forgot password?

@@ -10,7 +10,7 @@ import { AppDispatch, closeModal, setUserData } from 'src/store'
 import { validateRules } from 'src/utils'
 
 export const UserDataSettingsPopup = () => {
-  const { avatarPath, username, id } = useTypedSelector((state) => state.user.userData)
+  const { avatarPath, username } = useTypedSelector((state) => state.user.userData)
   const [imageChanged, setImageChanged] = useState(false)
   const [newAvatar, setNewAvatar] = useState<string | undefined>(avatarPath)
 
@@ -35,7 +35,6 @@ export const UserDataSettingsPopup = () => {
   const onFinish = async (values: KRoomUser) => {
     const updatedUserData = {
       ...values,
-      userId: id,
       oldFilename: avatarPath?.split('?img=')[1],
       file: avatarFile
     }

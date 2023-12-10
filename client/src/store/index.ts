@@ -33,7 +33,7 @@ export const store = configureStore({
 })
 
 export { commonSetUserDataHandler } from './modules'
-export const { setUserData, logOut, changeIsAppLoading, setInfoItems, markInfoItemAsRead } = userSlice.actions
+export const { setUserData, logOut, setInfoItems, markInfoItemAsRead } = userSlice.actions
 export const {
   loadChatRooms,
   updateChatUsersStatus,
@@ -56,7 +56,8 @@ export const {
   closeModal,
   setViewPort,
   setContextMenu,
-  resetContextClickedObject
+  resetContextClickedObject,
+  changeIsAppLoading
 } = systemSlice.actions
 export const {
   changeAsideTab,

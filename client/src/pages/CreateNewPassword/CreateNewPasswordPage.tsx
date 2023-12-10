@@ -67,13 +67,10 @@ export const CreateNewPasswordPage = () => {
             <Form.Item name="password-first" rules={validateRules.password}>
               <UIInput placeholder="Password" type="password" size="large" />
             </Form.Item>
-
             <Form.Item name="password-second" rules={validateRules.password}>
               <UIInput placeholder="Confirm password" type="password" size="large" />
             </Form.Item>
-
             {additionalErrors && <ErrorBucket errors={additionalErrors} />}
-
             <Form.Item className="sign-in__controls">
               <UIButton
                 text="Change password"

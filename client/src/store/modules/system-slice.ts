@@ -11,8 +11,6 @@ import {
   ModalContentComponentName
 } from 'src/@types'
 
-console.log(ModalContentComponentName)
-
 interface NotificationStore {
   key?: string
   message: NotificationMessage | JSX.Element
@@ -30,6 +28,7 @@ interface ModalData {
 }
 
 interface SystemStore {
+  isAppLoading: boolean
   reconnecting: boolean
   showModal: boolean
   contextMenu: ContextMenu
@@ -37,8 +36,6 @@ interface SystemStore {
   notificationData: NotificationStore
   viewPort: ViewPort
 }
-
-const html = document.querySelector('html')
 
 const clickedObjectInitialState = {
   message: {
@@ -51,6 +48,7 @@ const clickedObjectInitialState = {
 }
 
 const initialState: SystemStore = {
+  isAppLoading: false,
   reconnecting: false,
   showModal: false,
   contextMenu: {
@@ -85,6 +83,9 @@ export const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
+    changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
+      state.isAppLoading = payload
+    },
     setReconnectingStatus(state, { payload }: { payload: boolean }) {
       state.reconnecting = payload
     },
@@ -109,6 +110,7 @@ export const systemSlice = createSlice({
       state.viewPort = payload
       const viewPortWidth = state.viewPort.width
       const viewPortType = viewPortWidth <= ViewPortWidthType.phone ? 'mobile' : 'desktop'
+      const html = document.querySelector('html')
       html?.setAttribute('view-port', viewPortType)
     },
     setContextMenu(

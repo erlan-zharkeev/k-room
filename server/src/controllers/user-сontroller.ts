@@ -9,24 +9,25 @@ import { getPathToImg, saveImageAndGetPath, throwError } from '../utils'
 const bcrypt = require('bcryptjs')
 
 class UserController {
-  async updateUserData(req: any, res: Response) {
+  async updateUserData(req: Request, res: Response) {
     try {
-      const { userId, username, oldFilename } = req.body
+      const { username, oldFilename } = req.body
+      const userId = req.app.locals.id
 
       const oldPathFilename = getPathToImg(oldFilename)
       const isImageExist = fs.existsSync(oldPathFilename)
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
+      const avatarPath = await saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar, userId)
 
-      const avatar = saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar, userId)
-
-      const newUserData: any = {
-        username,
-        avatar
-      }
-
-      const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, newUserData, { new: true })
-
+      const updateUserDataResponse = await UserModel.findOneAndUpdate(
+        { _id: userId },
+        {
+          username,
+          avatarPath
+        },
+        { new: true }
+      )
       if (!updateUserDataResponse) return throwError(Status.badRequest, res, NotificationMessage.usersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
@@ -49,15 +50,16 @@ class UserController {
         userData: updatedUserData,
         message: NotificationMessage.userDataUpdated
       })
-    } catch {
+    } catch (e: any) {
+      console.log(e)
       throwError(Status.badRequest, res, NotificationMessage.failedUserDataUpdate)
     }
   }
 
   async getUserData(req: Request, res: Response) {
     try {
-      const { id } = req.body.decoded
-      const user = await UserModel.findOne({ _id: id })
+      const userId = req.app.locals.id
+      const user = await UserModel.findOne({ _id: userId })
       if (!user) return throwError(Status.badRequest, res, NotificationMessage.userNotFound)
       return res.json({
         userData: {

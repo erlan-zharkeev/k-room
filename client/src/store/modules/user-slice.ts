@@ -5,7 +5,6 @@ import { $router } from 'src/services'
 import { updateSettings } from '..'
 
 export interface UserState {
-  isAppLoading: boolean
   isAuth: boolean
   userData: KRoomUser
 }
@@ -19,7 +18,6 @@ export const commonSetUserDataHandler = (
 }
 
 const initialState: UserState = {
-  isAppLoading: false,
   isAuth: false,
   userData: {
     id: '',
@@ -47,16 +45,12 @@ export const userSlice = createSlice({
       const index = state.userData.infoItems.findIndex((item) => item.id === id)
       state.userData.infoItems[index].read = InfoItemStatus.read
     },
-    changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
-      state.isAppLoading = payload
-    },
     setUserData: (state, { payload }: { payload: KRoomUser }) => {
       state.userData = {
         ...state.userData,
         ...payload
       }
       state.isAuth = true
-      state.isAppLoading = false
     },
     logOut: (state) => {
       clearCookie()

@@ -78,6 +78,30 @@ input:-webkit-autofill {
   background-color: var(--dark-gray);
 }
 
+.transitionless {
+  transition: all 0s linear;
+}
+
+.borderless {
+  padding: 0;
+  border: none !important;
+}
+
+.d-none {
+  display: none;
+}
+
+.glow {
+  @include glow;
+}
+
+.link {
+  color: var(--accent);
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .custom-badge {
   position: absolute;
   right: -6px;

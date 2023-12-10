@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
 import { Logo, UIInput, UIButton } from 'src/components'
-import { useTypedSelector, useValidate, useCounter } from 'src/hooks'
+import { useValidate, useCounter } from 'src/hooks'
 import { apiMethods } from 'src/services'
 import { AppDispatch } from 'src/store'
 import { getNextReqInterval, validateRules } from 'src/utils'
@@ -13,17 +13,15 @@ import { getNextReqInterval, validateRules } from 'src/utils'
 export const PasswordRecoveryPage = () => {
   const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
   const [codeValidationIsLoading, setCodeValidationIsLoading] = useState(false)
-  const { email } = useTypedSelector((state) => state.user.userData)
   const [isEmailValid, validateEmailConfirm] = useValidate()
   const [isCodeValid, validateCode] = useValidate()
   const [codeSent, setCodeAsSent] = useState(false)
-
   const [emailConfirmForm] = Form.useForm()
   const [codeConfirmForm] = Form.useForm()
   const dispatch = useDispatch<AppDispatch>()
   const [counterValue, setCounterValue, startCounter, stopCounter] = useCounter(-1)
   const [queryParam, setQueryParams] = useSearchParams()
-
+  const [email] = useState(queryParam.get('user-email'))
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -79,25 +77,19 @@ export const PasswordRecoveryPage = () => {
             <Form
               className="password-recovery__email-confirm"
               name="password-recovery"
-              initialValues={{ remember: true }}
+              initialValues={{ email }}
               onFinish={onFinishEmailConfirm}
               form={emailConfirmForm}
               onChange={() => validateEmailConfirm(emailConfirmForm)}
             >
-              <Form.Item
-                name="email"
-                className="password-recovery__email-field"
-                rules={validateRules.email}
-                initialValue={email ?? ''}
-              >
+              <Form.Item name="email" className="password-recovery__email-field" rules={validateRules.email}>
                 <UIInput
                   placeholder="Enter email address"
                   size="large"
                   autoComplete="on"
-                  disabled={emailSendCodeIsLoading}
+                  disabled={emailSendCodeIsLoading || Boolean(email)}
                 />
               </Form.Item>
-
               {counterValue > 0 && (
                 <span className="paragraph-text paragraph-text--secondary password-recovery__next-request">
                   The next request is possible in {counterValue} sec.
@@ -126,7 +118,6 @@ export const PasswordRecoveryPage = () => {
                 <Form.Item name="code" className="password-recovery__code-field" rules={validateRules.emailCode}>
                   <UIInput placeholder="Enter code" size="large" autoComplete="on" disabled={codeValidationIsLoading} />
                 </Form.Item>
-
                 <Form.Item className="password-recovery__code-submit">
                   <UIButton
                     fill={true}

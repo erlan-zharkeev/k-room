@@ -8,6 +8,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { App } from './App'
 import { store } from './store'
 import { RefsProvider, AdditionalServiceProvider } from './providers'
+import appData from './../package.json'
+import { $clg } from './services'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,6 +27,8 @@ window.process = process
 const root = document.getElementById('root') as HTMLElement
 
 const persistor = persistStore(store)
+
+$clg('warn', `${appData.name} v. ${appData.version}`)
 
 ReactDOM.createRoot(root).render(
   <Provider store={store}>

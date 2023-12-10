@@ -81,20 +81,18 @@ export const PrivacyPolicyPage = () => {
         personalized experience.
       </p>
       <p>We use various types of cookies:</p>
-      <ol>
-        <li>
-          <strong>Functional cookies:</strong> These cookies are necessary for the website to function properly and
-          provide basic features such as authentication and saving user preferences.
-        </li>
-        <li>
-          <strong>Analytical cookies:</strong> These cookies allow us to collect anonymous information about how users
-          interact with the website, helping us analyze and improve its performance and functionality.
-        </li>
-        <li>
-          <strong>Advertising cookies:</strong> We may use cookies to display relevant advertisements on our website or
-          on third-party partner websites.
-        </li>
-      </ol>
+      <p>
+        <strong>6.1</strong> Functional cookies: These cookies are necessary for the website to function properly and
+        provide basic features such as authentication and saving user preferences.
+      </p>
+      <p>
+        <strong>6.2</strong> Analytical cookies: These cookies allow us to collect anonymous information about how users
+        interact with the website, helping us analyze and improve its performance and functionality.
+      </p>
+      <p>
+        <strong>6.3</strong> Advertising cookies: We may use cookies to display relevant advertisements on our website
+        or on third-party partner websites.
+      </p>
       <p>
         You can manage cookie settings through your browser settings. Please note that disabling some cookies may impact
         the functionality of the website and your experience while using it.
@@ -103,7 +101,7 @@ export const PrivacyPolicyPage = () => {
       <h2>7. Contacts</h2>
       <p>
         If you have any questions regarding this Privacy Policy, please&nbsp;
-        <a className="link paragraph-text" href={`mailto:${VITE_MAIL_APP}?subject=common`}>
+        <a className="link paragraph-text paragraph-text--md" href={`mailto:${VITE_MAIL_APP}?subject=common`}>
           contact us
         </a>
         .

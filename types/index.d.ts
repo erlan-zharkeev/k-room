@@ -215,14 +215,16 @@ export declare enum NotificationType {
 }
 export declare enum NotificationMessage {
     default = "",
+    networkOffline = "The internet connection has been terminated. Network problems",
+    networkOnline = "The internet connection has been restored",
     cantAccessDevice = "Cant get access to video device",
     unknownError = "An unknown error has occurred",
     callCompleted = "Call completed",
     failedGetStream = "Failed to get self stream",
     cantSetCallerSignal = "Cannot set caller signal",
     failedToConnectToDevice = "Failed to connect to device, check for device is plugged in",
-    socketConnected = "Socket connected",
-    socketDisconnected = "Socket disconnected",
+    socketConnected = "Connected",
+    socketDisconnected = "Disconnected",
     tokensPairUpdated = "Token pair is updated",
     success = "success",
     passwordReset = "Password changed successfully",

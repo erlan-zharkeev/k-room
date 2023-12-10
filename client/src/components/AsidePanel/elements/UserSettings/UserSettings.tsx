@@ -1,5 +1,5 @@
 import Meta from 'antd/lib/card/Meta'
-import appData from '../../../../../package.json'
+import appData from './../../../../../package.json'
 import { UserSettingKey, RouteNames, Theme } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -70,7 +70,7 @@ export const UserSettings = () => {
         </div>
         <div
           className="link paragraph-text user-settings__password-recovery"
-          onClick={() => navigate(RouteNames.PASSWORD_RECOVERY)}
+          onClick={() => navigate({ pathname: RouteNames.PASSWORD_RECOVERY, search: `?user-email=${email}` })}
         >
           Password recovery
         </div>
