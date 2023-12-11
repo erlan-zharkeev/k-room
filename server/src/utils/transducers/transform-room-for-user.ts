@@ -28,7 +28,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
 
   const setInviteMessage = messages.length < 1
   if (setInviteMessage) {
-    const systemMessagesMap = serverConstants.messages.system.reduce((acc, message) => {
+    const systemMessagesMap: Record<SystemMessages, string> = serverConstants.messages.system.reduce((acc, message) => {
       const name = message.name
       acc[name] = message.id
       return acc

@@ -8,7 +8,7 @@ export const emitCallsToUser = async (userId: string) => {
   if (!user) return
   const calls = await CallModel.find({ interlocutors: { $in: [userId] } })
   const callsWithDataPromises = calls.map(async (call) => {
-    return transformCallDataForUser(userId, call._id)
+    return await transformCallDataForUser(userId, call._id)
   })
   const callsWithData = await Promise.all(callsWithDataPromises)
   const payload = callsWithData.filter((callData) => callData !== null) as SocketActionsPayload['callsUpdated']

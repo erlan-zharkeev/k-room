@@ -26,6 +26,7 @@ class CodesController {
       throwError(Status.badRequest, res, NotificationMessage.failedCodeSend)
     }
   }
+
   async validateEmailCodePasswordRecovery(req: Request, res: Response) {
     try {
       const { email, code } = req.body

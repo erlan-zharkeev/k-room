@@ -19,17 +19,15 @@ class AuthController {
   async registration(req: Request, res: Response) {
     try {
       authValidator(req, res)
-      let { username, email, password } = req.body
+      const { username, email, password } = req.body
 
       const userNameCandidate = await UserModel.findOne({ username })
 
-      if (userNameCandidate)
-        return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentNameAlreadyExist)
+      if (userNameCandidate) { return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentNameAlreadyExist) }
 
       const emailCandidate = await UserModel.findOne({ email })
 
-      if (emailCandidate)
-        return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentEmailAlreadyExist)
+      if (emailCandidate) { return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentEmailAlreadyExist) }
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
@@ -48,8 +46,7 @@ class AuthController {
       await user.save()
 
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
-      if (!confirmEmailData)
-        return throwError(Status['unreachable'], res, NotificationMessage.failedSendConfirmationLink)
+      if (!confirmEmailData) { return throwError(Status.unreachable, res, NotificationMessage.failedSendConfirmationLink) }
 
       return res.json(confirmEmailData)
     } catch {
@@ -63,7 +60,7 @@ class AuthController {
       const confirmEmailData = await sendEmailConfirmationLink(email)
       return res.json(confirmEmailData)
     } catch {
-      throwError(Status['unreachable'], res, NotificationMessage.failedSendConfirmEmail)
+      throwError(Status.unreachable, res, NotificationMessage.failedSendConfirmEmail)
     }
   }
 
@@ -83,7 +80,7 @@ class AuthController {
 
   async login(req: Request, res: Response) {
     try {
-      let { email, password } = req.body
+      const { email, password } = req.body
       const user = await UserModel.findOne({ email })
       if (!user) return throwError(Status.badRequest, res, NotificationMessage.userNotFound)
       if (!user.confirmed) return throwError(Status.badRequest, res, NotificationMessage.emailNotConfirm)

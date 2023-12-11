@@ -116,9 +116,6 @@ dependencies:
   express-validator:
     specifier: ^6.14.2
     version: 6.15.0
-  gridfs-stream:
-    specifier: ^1.1.1
-    version: 1.1.1
   jsonwebtoken:
     specifier: ^8.5.1
     version: 8.5.1
@@ -137,9 +134,6 @@ dependencies:
   multer:
     specifier: ^1.4.5-lts.1
     version: 1.4.5-lts.1
-  multer-gridfs-storage:
-    specifier: ^5.0.2
-    version: 5.0.2(multer@1.4.5-lts.1)
   nodemailer:
     specifier: ^6.7.8
     version: 6.9.7
@@ -166,9 +160,6 @@ devDependencies:
   '@types/express':
     specifier: ^4.17.13
     version: 4.17.21
-  '@types/gridfs-stream':
-    specifier: ^0.5.36
-    version: 0.5.39
   '@types/lodash':
     specifier: ^4.14.182
     version: 4.14.202
@@ -2571,15 +2562,6 @@ packages:
       '@types/qs': 6.9.10
       '@types/serve-static': 1.15.5
 
-  /@types/gridfs-stream@0.5.39:
-    resolution: {integrity: sha512-vifaBx+4uzJC3z6JocmqHk2hb10wpQS5V6c4HxfthGP/tiKCcno9RqUAO2OLQ3bqK5LtWW7GAQA7ZD5PinMRdA==}
-    dependencies:
-      '@types/node': 18.19.0
-      mongodb: 4.17.1
-    transitivePeerDependencies:
-      - aws-crt
-    dev: true
-
   /@types/http-errors@2.0.4:
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
 
@@ -2611,13 +2593,6 @@ packages:
 
   /@types/mime@3.0.4:
     resolution: {integrity: sha512-iJt33IQnVRkqeqC7PzBHPTC6fDlRNRW8vjrgqtScAhrmMwe8c4Eo7+fUGTa+XdWrpEgpyKWMYmi2dIwMAYRzPw==}
-
-  /@types/mongodb@3.6.20:
-    resolution: {integrity: sha512-WcdpPJCakFzcWWD9juKoZbRtQxKIMYF/JIAM4JrNHrMcnJL6/a2NWjXxW7fo9hxboxxkg+icff8d7+WIEvKgYQ==}
-    dependencies:
-      '@types/bson': 4.2.0
-      '@types/node': 18.19.0
-    dev: false
 
   /@types/mongodb@4.0.7:
     resolution: {integrity: sha512-lPUYPpzA43baXqnd36cZ9xxorprybxXDzteVKCPAdp14ppHtFJHnXYvNpmBvtMUTb5fKXVv6sVbzo1LHkWhJlw==}
@@ -4632,10 +4607,6 @@ packages:
     resolution: {integrity: sha512-r5wGx7YeOwNWNlCA0wQ86zKyDLMQr+/RB8xy74M4hTphfmjlijTSSXGuH8rnvKZnfT9i+75zmd8jcKdMR4O6jA==}
     dev: true
 
-  /flushwritable@1.0.0:
-    resolution: {integrity: sha512-3VELfuWCLVzt5d2Gblk8qcqFro6nuwvxwMzHaENVDHI7rxcBRtMCwTk/E9FXcgh+82DSpavPNDueA9+RxXJoFg==}
-    dev: false
-
   /follow-redirects@1.15.3:
     resolution: {integrity: sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==}
     engines: {node: '>=4.0'}
@@ -4820,13 +4791,6 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /gridfs-stream@1.1.1:
-    resolution: {integrity: sha512-EcELdPIjC7tpZUiZA/8trfmszLbcsZlFyDQ8DhMtyJIMDmuLi5Vzt/056OO6FqfvY/zwiTCo1eZAqwtqrhBGMQ==}
-    engines: {node: '>= 0.4.2'}
-    dependencies:
-      flushwritable: 1.0.0
-    dev: false
-
   /handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
     dev: true
@@ -4844,11 +4808,6 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
     dev: true
-
-  /has-own-prop@2.0.0:
-    resolution: {integrity: sha512-Pq0h+hvsVm6dDEa8x82GnLSYHOzNDt7f0ddFa3FqcQlgzEiptPqL+XrOJNavjOzSYiYWIrgeVYYgGlLmnxwilQ==}
-    engines: {node: '>=8'}
-    dev: false
 
   /has-property-descriptors@1.0.1:
     resolution: {integrity: sha512-VsX8eaIewvas0xnvinAe9bw4WfIeODpGYikiWYLH+dma0Jw6KHYqWiWfhQlgOVK8D6PvjubK5Uc4P0iIhIcNVg==}
@@ -5133,10 +5092,6 @@ packages:
       has-tostringtag: 1.0.0
     dev: true
 
-  /is-generator@1.0.3:
-    resolution: {integrity: sha512-G56jBpbJeg7ds83HW1LuShNs8J73Fv3CPz/bmROHOHlnKkN8sWb9ujiagjmxxMUywftgq48HlBZELKKqFLk0oA==}
-    dev: false
-
   /is-glob@4.0.3:
     resolution: {integrity: sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==}
     engines: {node: '>=0.10.0'}
@@ -5180,10 +5135,6 @@ packages:
   /is-promise@2.2.2:
     resolution: {integrity: sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==}
     dev: true
-
-  /is-promise@4.0.0:
-    resolution: {integrity: sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==}
-    dev: false
 
   /is-regex@1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -5607,11 +5558,6 @@ packages:
       whatwg-url: 13.0.0
     dev: false
 
-  /mongodb-uri@0.9.7:
-    resolution: {integrity: sha512-s6BdnqNoEYfViPJgkH85X5Nw5NpzxN8hoflKLweNa7vBxt2V7kaS06d74pAtqDxde8fn4r9h4dNdLiFGoNV0KA==}
-    engines: {node: '>= 0.6.0'}
-    dev: false
-
   /mongodb@4.17.1:
     resolution: {integrity: sha512-MBuyYiPUPRTqfH2dV0ya4dcr2E5N52ocBuZ8Sgg/M030nGF78v855B3Z27mZJnp8PxjnUquEnAtjOsphgMZOlQ==}
     engines: {node: '>=12.9.0'}
@@ -5692,34 +5638,6 @@ packages:
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
-
-  /multer-gridfs-storage@5.0.2(multer@1.4.5-lts.1):
-    resolution: {integrity: sha512-oYl70i792uyJfgpvOfJrZIru4MsjjAueDHLZXTDGix/yPJuk1/lfqdPHHnv/XVVGfVZb4G9jJqwEFf9JIX1SOQ==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      multer: ^1.4.2
-    dependencies:
-      '@types/express': 4.17.21
-      '@types/mongodb': 3.6.20
-      '@types/multer': 1.4.11
-      '@types/pump': 1.1.3
-      has-own-prop: 2.0.0
-      is-generator: 1.0.3
-      is-promise: 4.0.0
-      lodash.isplainobject: 4.0.6
-      mongodb: 6.3.0
-      mongodb-uri: 0.9.7
-      multer: 1.4.5-lts.1
-      pump: 3.0.0
-    transitivePeerDependencies:
-      - '@aws-sdk/credential-providers'
-      - '@mongodb-js/zstd'
-      - gcp-metadata
-      - kerberos
-      - mongodb-client-encryption
-      - snappy
-      - socks
-    dev: false
 
   /multer@1.4.5-lts.1:
     resolution: {integrity: sha512-ywPWvcDMeH+z9gQq5qYHCCy+ethsk4goepZ45GLD63fOu0YcNecQxi64nDs3qluZB+murG3/D4dJ7+dGctcCQQ==}

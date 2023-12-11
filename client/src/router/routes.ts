@@ -12,7 +12,7 @@ import {
 } from 'src/pages'
 import { IRoute } from './@types/IRoute'
 
-const commonRoutes = [
+const commonRoutes: Array<IRoute> = [
   {
     path: RouteNames.EMAIL_CONFIRM,
     component: () => EmailConfirmPage()

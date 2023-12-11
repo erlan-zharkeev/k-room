@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import { Status, NotificationType, RouteNames } from 'common-types'
 import { AppDispatch, changeIsAppLoading, showNotification } from 'src/store'
 import { $clg } from './$clg'
+import { publicRoutes } from 'src/router/routes'
 
 axios.defaults.withCredentials = true
 
@@ -19,8 +20,8 @@ const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const { message, silent } = e.response?.data
   switch (status) {
     case Status.notAuth:
-      const isInitRoute = window.location.pathname === RouteNames.SIGN_IN
-      if (!isInitRoute) window.location.href = RouteNames.SIGN_IN
+      const isCurrentRoutePublic = publicRoutes.some((route) => route.path === window.location.pathname)
+      if (!isCurrentRoutePublic) window.location.href = RouteNames.SIGN_IN
       break
   }
   dispatch(changeIsAppLoading(false))

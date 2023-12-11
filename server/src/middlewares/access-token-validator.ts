@@ -8,8 +8,8 @@ import { refreshTokenValidator } from './refresh-token-validator'
 export const accessTokenValidator = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt
   if (!accessToken) return throwError(Status.notAuth, res, NotificationMessage.nonAuthorized)
-  jwt.verify(accessToken, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, (error: string, decoded: JWTDecoded) => {
-    if (error) return refreshTokenValidator(req, res, next)
+  jwt.verify(accessToken, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, async (error: string, decoded: JWTDecoded) => {
+    if (error) return await refreshTokenValidator(req, res, next)
     req.app.locals = decoded
     next()
   })

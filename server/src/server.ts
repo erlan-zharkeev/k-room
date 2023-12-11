@@ -45,7 +45,7 @@ server.listen(PORT, () => {
 
 const imagesPath = 'assets/img/'
 if (!fs.existsSync(path.join(__dirname, imagesPath))) {
-  fs.mkdir(path.join(__dirname, imagesPath), (err: any) => {
+  fs.mkdir(path.join(__dirname, imagesPath), (err: unknown) => {
     console.log(clc.red.bgWhite('-Cant create image directory'))
   })
 }
