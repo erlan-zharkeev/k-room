@@ -28,11 +28,12 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
 
   const setInviteMessage = messages.length < 1
   if (setInviteMessage) {
-    const systemMessagesMap: Record<SystemMessages, string> = serverConstants.messages.system.reduce((acc, message) => {
+    const systemMessagesMap: Record<SystemMessages, string> = {} as Record<SystemMessages, string>
+
+    for (const message of serverConstants.messages.system) {
       const name = message.name
-      acc[name] = message.id
-      return acc
-    }, {} as Record<SystemMessages, string>)
+      systemMessagesMap[name] = message.id
+    }
 
     const isUserAuthor = room.authorId === userId
 
