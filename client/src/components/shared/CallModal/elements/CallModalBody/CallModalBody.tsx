@@ -228,6 +228,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                   <UIButton
                     onClick={answerCall}
                     tooltip="Accept call"
+                    fillBg={isAnswerLoading ? 'default' : 'success'}
                     color={isAnswerLoading ? 'default' : 'success'}
                     text="Accept call"
                     loading={isAnswerLoading}
@@ -236,7 +237,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 </div>
               )}
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <UIButton color="error" onClick={endCall} text="Decline call" border="border-default" />
+                <UIButton fillBg="error" color="error" onClick={endCall} text="Decline call" border="border-default" />
               </div>
             </div>
           </div>

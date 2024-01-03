@@ -8,6 +8,18 @@
     }
   }
 
+  @mixin btn-bg-style($color) {
+    background-color: $color;
+    overflow: hidden;
+    border-radius: 4px;
+    .ant-btn,
+    .ant-btn:hover,
+    span {
+      color: var(--main-bg) !important;
+      border-color: var($color) !important;
+    }
+  }
+
   &--fill {
     button {
       width: 100%;
@@ -28,6 +40,22 @@
 
   &--error {
     @include btn-style(var(--error));
+  }
+
+  &--accent-bg {
+    @include btn-bg-style(var(--accent));
+  }
+
+  &--success-bg {
+    @include btn-bg-style(var(--success));
+  }
+
+  &--default-bg {
+    @include btn-bg-style(var(--secondary-text));
+  }
+
+  &--error-bg {
+    @include btn-bg-style(var(--error));
   }
 
   &--small {

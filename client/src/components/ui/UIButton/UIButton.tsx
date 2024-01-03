@@ -21,6 +21,7 @@ export interface UIButtonProps {
   shape?: 'default' | 'circle' | 'round'
   hover?: 'hoverless' | ''
   fill?: boolean
+  fillBg?: ColorModifiers
   onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 
@@ -40,6 +41,7 @@ export const UIButton = ({
   shape,
   hover,
   fill = false,
+  fillBg = 'default',
   onClick
 }: UIButtonProps) => {
   const { showTooltips } = useTypedSelector((state) => state.persist.settings)
@@ -67,7 +69,7 @@ export const UIButton = ({
   )
   const modifiers = modifiersHandler({
     rootClass: 'ui-button',
-    modifiers: [border, color, size, hover, fill ? 'fill' : '']
+    modifiers: [border, color, size, hover, fillBg === 'default' ? '' : `${fillBg}-bg`, fill ? 'fill' : '']
   })
 
   return (
