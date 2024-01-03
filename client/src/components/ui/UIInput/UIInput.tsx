@@ -1,17 +1,18 @@
 import { Input } from 'antd'
+import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { ChangeEvent, ReactNode } from 'react'
 import { modifiersHandler } from 'src/utils'
 
 export interface UIInputProps {
   type?: 'password' | 'common'
   placeholder?: string
-  size?: any
+  size?: SizeType
   suffix?: ReactNode
   autoComplete?: 'on' | 'off'
-  value?: string
   disabled?: boolean
   onChange?: (e: ChangeEvent<HTMLInputElement>) => Promise<void> | void
   onBlur?: () => void
+  value?: string
 }
 
 const inputTypes = [

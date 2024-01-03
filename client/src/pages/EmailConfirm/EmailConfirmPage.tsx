@@ -48,8 +48,9 @@ export const EmailConfirmPage = () => {
             </div>
             <UIButton
               color="accent"
-              border="borderless"
+              fill
               text="Go to app"
+              border="border-default"
               onClick={() => navigate(RouteNames.SIGN_IN)}
             />
           </>

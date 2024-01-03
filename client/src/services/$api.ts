@@ -17,11 +17,14 @@ const successMessageHandler = (response: AxiosResponse, dispatch: AppDispatch) =
 
 const errorInterceptor = async (e: any, dispatch: AppDispatch) => {
   const { status } = e.response ?? e.response?.data?.status
-  const { message, silent } = e.response?.data
+  let { message, silent } = e.response?.data
   switch (status) {
     case Status.notAuth:
       const isCurrentRoutePublic = publicRoutes.some((route) => route.path === window.location.pathname)
-      if (!isCurrentRoutePublic) window.location.href = RouteNames.SIGN_IN
+      if (!isCurrentRoutePublic) {
+        window.location.href = RouteNames.SIGN_IN
+        silent = true
+      }
       break
   }
   dispatch(changeIsAppLoading(false))
@@ -45,7 +48,7 @@ export const $api = async (
     const response = await axios[type](`/api${endpoint}`, payload, options)
     successMessageHandler(response, dispatch)
     return response
-  } catch (e: any) {
+  } catch (e: unknown) {
     errorInterceptor(e, dispatch)
   }
 }

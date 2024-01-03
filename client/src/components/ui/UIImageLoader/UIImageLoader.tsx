@@ -24,6 +24,7 @@ export const UIImageLoader = ({
     setIsLoading(true)
     const images = e.target.files
     const { maxQuantityBindImages } = clientConstants
+    if (!images) return
     if (images.length > maxQuantityBindImages) {
       dispatch(
         showNotification({
@@ -31,8 +32,9 @@ export const UIImageLoader = ({
           messageType: NotificationType.warn
         })
       )
+      setIsLoading(false)
+      return
     }
-    if (!images) return
     let updatedImages: Array<ImageObject> = []
     ;[...images].forEach((image, idx) => {
       const reader = imageToBase64({ image, allowedResolutions, dispatch })

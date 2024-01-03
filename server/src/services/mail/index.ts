@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer'
+import { RouteNames, CommonEndPoints } from '../../@types'
 import { ENV } from '../../ENV'
 import { UserModel } from '../../models'
-import { RouteNames, CommonEndPoints } from '../../@types'
 import { getTimeNextRequest } from '../../utils'
-import { LettersType, letters } from './letters'
+import { getAdditionalMailData } from './letters'
 
 const mailTransport = nodemailer.createTransport({
   service: 'gmail',
@@ -13,33 +13,35 @@ const mailTransport = nodemailer.createTransport({
   }
 })
 
-const mailer = async (to: string, letterType: LettersType, subject: string, payload: any) => {
+export interface MailerPayload { to: string; subject: string; html: string }
+
+const mailer = async (payload: MailerPayload) => {
+  const { to, subject, html } = payload
   return await mailTransport.sendMail({
     from: ENV.MAIL_APP,
     to,
     subject,
-    html: letters[letterType](payload)
+    html
   })
 }
 
 export const sendEmailConfirmationLink = async (email: string) => {
   const user = await UserModel.findOneAndUpdate({ email }, { $inc: { confirmAttempts: -1 } })
-  await mailer(email, LettersType.confirmation, 'Email confirmation', {
+  const payload = {
     appName: ENV.APP_NAME,
     link: `${ENV.CLIENT_URL}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`,
     logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
     host: `${ENV.CLIENT_URL}/sign-in`
-  })
+  }
+  const mailData = getAdditionalMailData('confirmation', payload)
+  await mailer({ to: email, ...mailData })
   const hasAttempts = user?.confirmAttempts && user.confirmAttempts >= 0
   return hasAttempts ? { email, timeNextRequest: getTimeNextRequest(), attempts: user?.confirmAttempts } : null
 }
 
 export const sendEmailCodePasswordRecovery = async (email: string, code: string | number) => {
-  await mailer(email, LettersType['password-repair-sent-code'], 'Password recovery', {
-    appName: ENV.APP_NAME,
-    logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
-    host: `${ENV.CLIENT_URL}/sign-in`,
-    code
-  })
+  const payload = { code }
+  const mailData = getAdditionalMailData('password-repair-sent-code', payload)
+  await mailer({ to: email, ...mailData })
   return { message: 'code sended' }
 }

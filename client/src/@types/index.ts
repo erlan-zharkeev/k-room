@@ -1,3 +1,4 @@
+import { SizeType } from 'antd/lib/config-provider/SizeContext'
 import { AxiosResponse } from 'axios'
 import { Message } from 'common-types'
 
@@ -9,7 +10,7 @@ export type ContextMenuType = '' | 'message'
 
 export type ColorModifiers = 'accent' | 'success' | 'error' | 'warn' | 'default' | 'white' | 'black'
 
-export type SizeModifiers = 'xl' | 'large' | 'medium' | 'small'
+export type SizeModifiers = 'xl' | 'medium' | SizeType
 
 export type ShapeModifiers = 'round' | 'square'
 

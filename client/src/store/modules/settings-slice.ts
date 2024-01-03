@@ -9,7 +9,8 @@ const initialState: UserSettings = {
   theme: Theme.dark,
   soundOn: true,
   showTooltips: false,
-  ableToShowNotification: true
+  ableToShowNotification: true,
+  showWallpaper: true
 }
 
 export const settingsSlice = createSlice({
@@ -21,8 +22,16 @@ export const settingsSlice = createSlice({
     },
     updateSettings(state, { payload }: { payload: UserSettings }) {
       if (!payload) return
-      const { asideTab, selectedChatRoomId, theme, soundOn, showTooltips, ableToShowNotification, currentInfoId } =
-        payload
+      const {
+        asideTab,
+        selectedChatRoomId,
+        theme,
+        soundOn,
+        showTooltips,
+        ableToShowNotification,
+        currentInfoId,
+        showWallpaper
+      } = payload
       state.asideTab = asideTab
       state.selectedChatRoomId = selectedChatRoomId
       state.theme = theme
@@ -31,6 +40,7 @@ export const settingsSlice = createSlice({
       state.showTooltips = showTooltips
       state.currentInfoId = currentInfoId
       state.ableToShowNotification = ableToShowNotification
+      state.showWallpaper = showWallpaper
     },
     selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
@@ -50,6 +60,9 @@ export const settingsSlice = createSlice({
     },
     setTooltipsValue(state, { payload }: { payload: boolean }) {
       state.showTooltips = payload
+    },
+    showWallpaper(state, { payload }: { payload: boolean }) {
+      state.showWallpaper = payload
     }
   }
 })

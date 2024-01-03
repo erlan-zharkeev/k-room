@@ -1,4 +1,4 @@
-import { io } from '../server'
+import { clc, io } from '../server'
 import { SocketInstanceType } from '../@types/SocketInstanceType'
 import { slices } from './slices'
 import { jwt } from '../services/jwt'
@@ -28,6 +28,6 @@ try {
     await authMiddleware(socket)
     Object.values(slices).forEach((slice) => slice(socket))
   })
-} catch (e) {
-  console.log(e)
+} catch (errors: unknown) {
+  console.log(clc.red.bgWhite(`-${errors}`))
 }

@@ -29,8 +29,8 @@ export const useFirebase = () => {
     try {
       if (!provider) return
       result = await signInWithPopup(auth, provider)
-    } catch (e: any) {
-      $clg('error', e.message)
+    } catch (e: unknown) {
+      if (e instanceof Error) $clg('error', e.message)
       dispatch(
         showNotification({
           message: NotificationMessage.failedToLogin,

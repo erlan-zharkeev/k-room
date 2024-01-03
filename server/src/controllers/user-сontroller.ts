@@ -50,8 +50,7 @@ class UserController {
         userData: updatedUserData,
         message: NotificationMessage.userDataUpdated
       })
-    } catch (e: any) {
-      console.log(e)
+    } catch {
       throwError(Status.badRequest, res, NotificationMessage.failedUserDataUpdate)
     }
   }

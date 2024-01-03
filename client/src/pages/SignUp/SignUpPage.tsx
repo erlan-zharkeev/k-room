@@ -66,12 +66,11 @@ export const SignUpPage = () => {
               </Form.Item>
               <div className="sign-up__privacy-policy-text paragraph-text paragraph-text--secondary">
                 I have read and agree{' '}
-                <a className="link" onClick={() => navigate(RouteNames.PRIVACY_POLICY)}>
+                <a className="link" target="_blank" href={RouteNames.PRIVACY_POLICY} rel="noreferrer">
                   privacy policy
                 </a>
               </div>
             </div>
-
             <Form.Item className="sign-up__controls">
               <UIButton
                 text="Register"

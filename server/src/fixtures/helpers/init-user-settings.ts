@@ -2,10 +2,11 @@ import { UserSettings, AsideBarButtonName, Theme } from '../../@types'
 
 export const initUserSettings: UserSettings = {
   asideTab: AsideBarButtonName.contacts,
+  currentInfoId: '1',
   selectedChatRoomId: '',
-  ableToShowNotification: true,
   theme: Theme.dark,
-  showTooltips: false,
   soundOn: true,
-  currentInfoId: ''
+  showTooltips: false,
+  ableToShowNotification: true,
+  showWallpaper: true
 }

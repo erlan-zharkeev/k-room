@@ -32,4 +32,13 @@
     justify-content: flex-end;
     margin-bottom: 0;
   }
+
+  .ant-image {
+    height: 100%;
+
+    &-img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 }

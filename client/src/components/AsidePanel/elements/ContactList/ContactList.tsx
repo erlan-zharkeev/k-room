@@ -1,5 +1,5 @@
 import { List } from 'antd'
-import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, KRoomUser } from 'common-types'
+import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, Contact } from 'common-types'
 import moment from 'moment'
 import { useContext, useState, useEffect } from 'react'
 import { UIAvatar, UIButton } from 'src/components'
@@ -27,13 +27,13 @@ export const ContactList = () => {
     })
   }, [contacts])
 
-  const deleteUser = (interlocutorData: KRoomUser) => {
+  const deleteUser = (interlocutorData: Contact) => {
     if (!interlocutorData.id) return
     const payload: SocketActionsPayload['deleteContact'] = { deletingUserId: interlocutorData.id }
     $socket.emit(SocketActions.DELETE_CONTACT, payload)
   }
 
-  const createChat = (value: KRoomUser) => {
+  const createChat = (value: Contact) => {
     if (loaders.room[value.id]) return
     const hasChatWithContact = chatRooms.some((room) => {
       if (room.multiple) return
@@ -78,7 +78,7 @@ export const ContactList = () => {
     return timeStamp ? `last seen ${moment(Number(timeStamp)).startOf('minutes').fromNow()}` : ''
   }
 
-  const initCall = async (interlocutorData: KRoomUser) => {
+  const initCall = async (interlocutorData: Contact) => {
     if (loaders.stream[interlocutorData.id]) return
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
     await call.current.initCall(interlocutorData, id, avatarPath ?? '', username, settings)

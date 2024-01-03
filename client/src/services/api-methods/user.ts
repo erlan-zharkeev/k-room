@@ -16,5 +16,5 @@ export const updateUserData = createAsyncThunk(
 
 export const getUserData = createAsyncThunk(
   'GET_USER_DATA',
-  async (_: unknown, { dispatch }) => await $api('get', UserEndPoints.GET_USER_DATA, dispatch)
+  async (_, { dispatch }) => await $api('get', UserEndPoints.GET_USER_DATA, dispatch)
 )

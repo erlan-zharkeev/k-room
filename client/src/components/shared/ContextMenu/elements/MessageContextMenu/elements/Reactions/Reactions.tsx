@@ -1,7 +1,7 @@
 import { clientConstants } from 'src/client-constants'
 
 export interface ReactionsProps {
-  reactionHandler: (reaction: string) => Promise<void> | void | any
+  reactionHandler: (reaction: string) => void
   blockedKeys: Array<string>
 }
 

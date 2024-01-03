@@ -28,7 +28,9 @@ export const SignInPage = () => {
     setIsLoading(true)
     const response = (await dispatch(apiMethods.auth.login(fields))) as AsyncThunkResponseWrapper
     setIsLoading(false)
-    const { userData, settings } = response.payload.data
+    const data = response.payload?.data
+    if (!data) return
+    const { userData, settings } = data
     commonSetUserDataHandler(dispatch, { userData, settings })
   }
 

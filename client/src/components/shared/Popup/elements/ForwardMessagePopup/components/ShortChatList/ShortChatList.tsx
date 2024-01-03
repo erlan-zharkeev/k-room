@@ -4,7 +4,7 @@ import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 
 export interface ShortChatListProps {
   searchString: string
-  clickChat: (userId: string) => Promise<void> | void | any
+  clickChat: (userId: string) => void
 }
 
 export const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {

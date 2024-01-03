@@ -6,10 +6,9 @@ interface ValidationForm {
 
 export const useValidate = (): [boolean, (form: ValidationForm) => void] => {
   const [isValid, setIsValid] = useState(false)
-
   const validate = (form: ValidationForm) => {
     setTimeout(() => {
-      const errors = [] as Array<Boolean>
+      const errors: Array<Boolean> = []
       form.getFieldsError().forEach((field) => {
         errors.push(!!field.errors.length)
       })

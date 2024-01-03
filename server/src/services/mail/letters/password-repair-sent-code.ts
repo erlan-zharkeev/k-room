@@ -1,9 +1,6 @@
-export const passwordRepairSentCode = (payload: {
-  appName: string
-  logoSrc: string
-  host: string
-  code: string | number
-}): string => `
+import { PasswordRepairSentCodeLetterPayload, commonPayload } from '.'
+
+export const passwordRepairSentCode = (payload: PasswordRepairSentCodeLetterPayload): string => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -142,8 +139,8 @@ export const passwordRepairSentCode = (payload: {
           </tr>
           <tr>
             <td align="center" bgcolor="#ffffff" valign="top" style="padding: 36px 24px;">
-              <a href="${payload.host}" target="_blank" style="max-width: 150px; max-height: 150px;">
-                <img src="${payload.logoSrc}" alt='logo' border="0" style="display: block; width: 150px">
+              <a href="${commonPayload.host}" target="_blank" style="max-width: 150px; max-height: 150px;">
+                <img src="${commonPayload.logoSrc}" alt='logo' border="0" style="display: block; width: 150px">
               </a>
             </td>
           </tr>
@@ -177,7 +174,7 @@ export const passwordRepairSentCode = (payload: {
           <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-              <p style="margin: 0;">Cheers,<br>${payload.appName}</p>
+              <p style="margin: 0;">Cheers,<br>${commonPayload.appName}</p>
             </td>
           </tr>
           <!-- end copy -->

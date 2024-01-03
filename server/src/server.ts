@@ -5,13 +5,13 @@ import cors from 'cors'
 import { serverConstants } from './server-constants'
 import { ENV } from './ENV'
 import { router } from './router'
+export const clc = require('cli-color')
 
 const fs = require('fs')
 const path = require('path')
 const http = require('http')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
-const clc = require('cli-color')
 const cookieParser = require('cookie-parser')
 
 const origins = ['https://k-room.space', 'http://k-room.space']

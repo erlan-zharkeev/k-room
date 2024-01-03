@@ -20,14 +20,17 @@ class AuthController {
     try {
       authValidator(req, res)
       const { username, email, password } = req.body
-
       const userNameCandidate = await UserModel.findOne({ username })
 
-      if (userNameCandidate) { return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentNameAlreadyExist) }
+      if (userNameCandidate) {
+        return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentNameAlreadyExist)
+      }
 
       const emailCandidate = await UserModel.findOne({ email })
 
-      if (emailCandidate) { return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentEmailAlreadyExist) }
+      if (emailCandidate) {
+        return throwError(Status.badRequest, res, NotificationMessage.userWithCurrentEmailAlreadyExist)
+      }
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
@@ -46,7 +49,9 @@ class AuthController {
       await user.save()
 
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
-      if (!confirmEmailData) { return throwError(Status.unreachable, res, NotificationMessage.failedSendConfirmationLink) }
+      if (!confirmEmailData) {
+        return throwError(Status.unreachable, res, NotificationMessage.failedSendConfirmationLink)
+      }
 
       return res.json(confirmEmailData)
     } catch {
@@ -88,7 +93,6 @@ class AuthController {
       const validPassword = bcrypt.compareSync(password, user.password)
 
       if (!validPassword) return throwError(Status.badRequest, res, NotificationMessage.wrongPass)
-
       await updateTokens(user._id, res)
       return res.json({
         userData: {

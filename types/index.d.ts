@@ -3,6 +3,7 @@ export declare enum Status {
     badRequest = 400,
     notAuth = 401,
     notFound = 404,
+    server = 500,
     unreachable = 503,
     badGateway = 504
 }
@@ -19,6 +20,11 @@ export interface Reaction {
     authorId: string;
     glyphKey: string;
 }
+export interface ImageObject {
+    src: string;
+    name: string;
+    fileBuffer?: ArrayBuffer;
+}
 export interface Message {
     id: string;
     tempId?: string;
@@ -29,7 +35,7 @@ export interface Message {
     isSelf?: boolean;
     status?: MessageStatus;
     reactions?: Array<Reaction>;
-    images?: Array<any>;
+    images?: ImageObject[];
     imageCompression?: boolean;
     repliedMessage?: RepliedMessage | null;
 }
@@ -38,7 +44,7 @@ export interface RepliedMessage {
     authorName: string;
     authorId: string;
     body: string;
-    images?: Array<any>;
+    images?: Array<ImageObject>;
     forward?: boolean;
 }
 export declare enum MessageStatus {
@@ -72,6 +78,7 @@ export interface DBMessage extends Message {
     }>;
 }
 export type ChatRooms = Array<ChatRoom>;
+export type Contact = Omit<KRoomUser, "chatRooms">;
 export interface UserShort {
     id: string;
     username: string;
@@ -101,11 +108,6 @@ export declare enum Theme {
     dark = "dark",
     light = "light"
 }
-export interface ImageObject {
-    name: string;
-    src?: string;
-    fileBuffer?: File | ArrayBuffer;
-}
 export declare enum UserSettingKey {
     theme = "theme",
     soundOn = "soundOn",
@@ -113,7 +115,8 @@ export declare enum UserSettingKey {
     ableToShowNotification = "ableToShowNotification",
     selectedChatRoomId = "selectedChatRoomId",
     asideTab = "asideTab",
-    currentInfoId = "currentInfoId"
+    currentInfoId = "currentInfoId",
+    showWallpaper = "showWallpaper"
 }
 export declare enum AsideBarButtonName {
     contacts = "contacts",
@@ -130,6 +133,7 @@ export interface UserSettings {
     [UserSettingKey.showTooltips]: boolean;
     [UserSettingKey.soundOn]: boolean;
     [UserSettingKey.currentInfoId]: string;
+    [UserSettingKey.showWallpaper]: boolean;
 }
 export declare enum CallStatus {
     calling = "calling",
@@ -172,7 +176,7 @@ export interface Call {
     setId?: boolean;
 }
 export interface CallDB {
-    _id: any;
+    _id: string;
     calledAt: number;
     startedAt: number;
     finishedAt: number;
@@ -274,12 +278,18 @@ export declare enum NotificationMessage {
     maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
     imageSizeMustLessThan2mb = "Image size must be less than 2mb"
 }
+export interface ErrorResponse<T> {
+    message: T;
+    status: Status;
+    data: null;
+    silent: boolean;
+}
 export interface SocketActionsPayload {
     interlocutorUpdateSignal: {
-        signal: any;
+        signal: unknown;
     };
     updateSignal: {
-        signal: any;
+        signal: unknown;
     };
     markCallAsVideo: {
         callId: string;
@@ -295,7 +305,7 @@ export interface SocketActionsPayload {
     };
     changeContactsData: UserShort;
     getContacts: {
-        contacts: Array<KRoomUser>;
+        contacts: Array<Contact>;
         messageBody: NotificationMessage;
     };
     callUpdated: Call;
@@ -369,19 +379,19 @@ export interface SocketActionsPayload {
     callUser: {
         callId?: string;
         userToCall?: string;
-        signal: any;
+        signal: unknown;
         from: string;
         avatarPath: string;
         callerName: string;
     };
     changeCallSettings: BasicStreamSettings;
     callAccepted: {
-        signal: any;
+        signal: unknown;
     };
     answerCall: {
         callId: string;
         to: string;
-        signal: any;
+        signal: unknown;
         selfSocketId: string;
     };
     callStartedAt: number;

@@ -7,7 +7,7 @@ import { imageToBase64 } from 'src/utils'
 export interface UIAvatarLoaderProps {
   path: string | undefined
   setImage: React.Dispatch<any>
-  setFile: React.Dispatch<(prevState: undefined | undefined) => undefined>
+  setFile: React.Dispatch<React.SetStateAction<any>>
   updated?: () => void
   stubIconName?: IconName
   shape?: ShapeModifiers
@@ -23,7 +23,8 @@ export const UIAvatarLoader = ({
 }: UIAvatarLoaderProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
-  const normFile = async (e: any) => {
+  const normFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) return
     const file = e.target.files[0]
     setFile(file)
     if (!file) return

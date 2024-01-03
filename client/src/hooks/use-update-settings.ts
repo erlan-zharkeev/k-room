@@ -8,7 +8,8 @@ import {
   setAbleToShowNotification,
   setCurrentInfoItem,
   setSoundValue,
-  setTooltipsValue
+  setTooltipsValue,
+  showWallpaper
 } from 'src/store'
 import { $socket } from 'src/services/$socket'
 
@@ -44,6 +45,10 @@ export const useUpdateSettings = () => {
       case UserSettingKey.ableToShowNotification:
         payload.value = Boolean(value.commonSettings)
         dispatch(setAbleToShowNotification(payload.value))
+        break
+      case UserSettingKey.showWallpaper:
+        payload.value = Boolean(value.commonSettings)
+        dispatch(showWallpaper(payload.value))
         break
       case UserSettingKey.selectedChatRoomId:
         if (value.selectChatRoomId === undefined) return

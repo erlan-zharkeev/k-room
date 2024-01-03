@@ -21,7 +21,7 @@ import { scrollToBottom, sendMessage } from 'src/utils'
 import { $socket } from 'src/services'
 import { RoomHeader, MessageBody, InputMessage } from './elements'
 import { ModalContentComponentName } from 'src/@types'
-import { WidgetLoader, Informer } from '..'
+import { WidgetWrapper, Informer } from '../shared'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -40,7 +40,7 @@ export const ChatRoom = () => {
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
   const { updateSetting } = useUpdateSettings()
 
-  const observerCallback = (entries: any) => {
+  const observerCallback = (entries: any[]) => {
     entries.forEach((entry: any) => {
       if (!entry.isIntersecting || !selectedChatRoom) return
       const messageId = entry.target.getAttribute('id')
@@ -146,62 +146,70 @@ export const ChatRoom = () => {
 
   return (
     <div className="chat-room">
-      <WidgetLoader hide={!showWidgetLoader} />
-      <div className="chat-room__wrapper" ref={roomDomEl}>
-        {selectedChatRoom ? (
-          <div>
-            <RoomHeader />
-            <div
-              className="chat-room__body"
-              style={{
-                top: `${chatRoomPosition.top}px`,
-                height: `${chatRoomPosition.height}px`
-              }}
-            >
-              <List
-                id="message-list"
-                itemLayout="horizontal"
-                dataSource={messages ?? []}
-                locale={{ emptyText: ' ' }}
-                renderItem={(item: Message) => (
-                  <List.Item className={`chat-room__message--${locationModifier(item.authorId)}`} ref={setRef(item.id)}>
-                    <MessageBody message={item} isChatMultiple={selectedChatRoom.multiple} />
-                  </List.Item>
-                )}
-              />
-            </div>
-            {messages.length === 0 && (
-              <div className="chat-room__empty-text paragraph-text paragraph-text--secondary">
-                There are no messages, write first
+      <WidgetWrapper loading={showWidgetLoader} wallpaperPlacement="main">
+        <div className="chat-room__wrapper" ref={roomDomEl}>
+          {selectedChatRoom ? (
+            <div>
+              <RoomHeader />
+              <div
+                className="chat-room__body"
+                style={{
+                  top: `${chatRoomPosition.top}px`,
+                  height: `${chatRoomPosition.height}px`
+                }}
+              >
+                <List
+                  id="message-list"
+                  itemLayout="horizontal"
+                  dataSource={messages ?? []}
+                  locale={{ emptyText: ' ' }}
+                  renderItem={(item: Message) => (
+                    <List.Item
+                      key={item.id}
+                      className={`chat-room__message--${locationModifier(item.authorId)}`}
+                      ref={setRef(item.id)}
+                    >
+                      <MessageBody message={item} isChatMultiple={selectedChatRoom.multiple} />
+                    </List.Item>
+                  )}
+                />
               </div>
-            )}
-            {selectedChatRoom.blocked ? (
-              <Informer type="warn" text="You need to wait for a response from the interlocutor to start a dialogue." />
-            ) : (
-              <InputMessage
-                sendMessage={(message: string) =>
-                  sendMessage({
-                    authorId: id,
-                    roomId: selectedChatRoom?.id,
-                    username,
-                    messageText: message,
-                    repliedMessage: repliedMessageData,
-                    dispatch
-                  })
-                }
-                uploadImageHandler={uploadImageHandler}
-                height={inputMessageHeight}
-              />
-            )}
-          </div>
-        ) : (
-          <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
-            <div onClick={chooseChatRoomHandler} className="paragraph-text paragraph-text--secondary">
-              Choose or create chat
+              {messages.length === 0 && (
+                <div className="chat-room__empty-text paragraph-text paragraph-text--secondary">
+                  There are no messages, write first
+                </div>
+              )}
+              {selectedChatRoom.blocked ? (
+                <Informer
+                  type="warn"
+                  text="You need to wait for a response from the interlocutor to start a dialogue."
+                />
+              ) : (
+                <InputMessage
+                  sendMessage={(message: string) =>
+                    sendMessage({
+                      authorId: id,
+                      roomId: selectedChatRoom?.id,
+                      username,
+                      messageText: message,
+                      repliedMessage: repliedMessageData,
+                      dispatch
+                    })
+                  }
+                  uploadImageHandler={uploadImageHandler}
+                  height={inputMessageHeight}
+                />
+              )}
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
+              <div onClick={chooseChatRoomHandler} className="paragraph-text paragraph-text--secondary">
+                Choose or create chat
+              </div>
+            </div>
+          )}
+        </div>
+      </WidgetWrapper>
     </div>
   )
 }

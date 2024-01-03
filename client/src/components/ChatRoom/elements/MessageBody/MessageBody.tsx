@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch, setContextMenu } from 'src/store'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
-import { Author, Message } from 'common-types'
+import { Author, Message, UserShort } from 'common-types'
 import { clientConstants } from 'src/client-constants'
 
 export interface MessageBodyProps {
@@ -11,21 +11,32 @@ export interface MessageBodyProps {
   isChatMultiple: Boolean
 }
 
+interface Reaction {
+  authors: Array<UserShort>
+  glyph: string
+}
+
+interface ReactionMap {
+  [key: string]: Reaction
+}
+
 export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
-  const showMessageAuthor =
-    !message.isSelf && isChatMultiple && message.authorName !== Author.system && message.authorName !== Author.time
-  const [reactions, setReactions] = useState([] as Array<{ glyph: string; authors: Array<string> }>)
+  const notSystemAuthor = message.authorName !== Author.system && message.authorName !== Author.time
+  const showMessageAuthor = !message.isSelf && isChatMultiple && notSystemAuthor
+  const [reactions, setReactions] = useState<Reaction[]>([])
+
   const getGlyph = (name: string) => clientConstants.emojis.find((emoji) => name === emoji.key)?.glyph
 
-  const getAuthorTooltip = (authors: any) => {
-    return authors.map((author: any) => author.username).join(', ')
+  const getAuthorTooltip = (authors: Reaction['authors']) => {
+    return authors.map((author) => author.username).join(', ')
   }
 
   const showCreatedAt = message.createdAt && message.authorId !== Author.system
 
   useEffect(() => {
-    const reactionMap = {} as any
+    const reactionMap: ReactionMap = {}
+
     message.reactions?.forEach((reaction) => {
       const authors = reactionMap[reaction.glyphKey] ? reactionMap[reaction.glyphKey].authors : []
       const hasAuthor = Boolean(authors.find((author: { id: string }) => author.id === reaction.authorId))
@@ -34,8 +45,10 @@ export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
         id: reaction.authorId,
         username: reaction.username
       })
+      const glyph = getGlyph(reaction.glyphKey)
+      if (!glyph) return
       reactionMap[reaction.glyphKey] = {
-        glyph: getGlyph(reaction.glyphKey),
+        glyph,
         authors
       }
     })

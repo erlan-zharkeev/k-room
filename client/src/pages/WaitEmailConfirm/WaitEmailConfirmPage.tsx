@@ -96,6 +96,12 @@ export const WaitEmailConfirmPage = () => {
             loading={isLoading}
           />
         )}
+        <UIButton
+          border="border-default"
+          text="Back to app"
+          color="accent"
+          onClick={() => navigate(RouteNames.SIGN_IN)}
+        />
       </div>
     </div>
   )

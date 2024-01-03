@@ -1,7 +1,7 @@
-import { KRoomUser } from '../../@types'
+import { Contact, KRoomUser } from '../../@types'
 
 export const transformUsersToContacts = (users: Array<KRoomUser>) =>
-  users.reduce((acc: Array<any>, user) => {
+  users.reduce((acc: Array<Contact>, user) => {
     acc.push({
       id: user.id,
       username: user.username,

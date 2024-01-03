@@ -68,8 +68,8 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(-90deg, rgb(100 135 182 / 50%), var(--accent), rgb(100 135 182 / 50%), var(--accent));
-  background-size: 400% 400%;
+  background: var(--accent);
+  background-size: 100% 100%;
   transform: scale(1.1);
   opacity: $opacity;
   transition: transform ease-in-out 0.4s;

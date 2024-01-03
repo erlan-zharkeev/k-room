@@ -8,7 +8,8 @@
   justify-content: space-between;
   width: calc(100% + 2rem);
   padding: 0 1rem 1rem;
-  background-color: var(--main-bg);
+
+  // background-color: var(--main-bg);
   @include max-width-768 {
     justify-content: space-between;
     margin-top: $gutter-sm;

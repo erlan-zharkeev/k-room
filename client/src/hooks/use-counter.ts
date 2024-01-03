@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react'
 
-export const useCounter = (initValue: number, decremental: boolean = true): any => {
+export const useCounter = (
+  initValue: number,
+  decremental: boolean = true
+): [number, React.Dispatch<React.SetStateAction<number>>, () => void, () => void] => {
   const [value, setValue] = useState(initValue)
 
   const timerIdRef = useRef<number | NodeJS.Timeout>()

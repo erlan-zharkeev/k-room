@@ -13,8 +13,7 @@ export {
   Logo,
   MessageNotification,
   Popup,
-  StubLoading,
-  WidgetLoader
+  StubLoading
 } from './shared'
 export type { ModalOptions, ErrorBucketProps, InformerTypes } from './shared'
 export { UIAvatar, UIAvatarLoader, UIButton, UIImageLoader, UIIcon, UIInput, UISwitch } from './ui'

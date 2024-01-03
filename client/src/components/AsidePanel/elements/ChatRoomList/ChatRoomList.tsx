@@ -23,11 +23,6 @@ export const ChatRoomList = () => {
   const setChat = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
     updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: id })
-    const payload: SocketActionsPayload['updateUserSettings'] = {
-      type: UserSettingKey.selectedChatRoomId,
-      value: id
-    }
-    $socket.emit(SocketActions.UPDATE_USER_SETTINGS, payload)
   }
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
@@ -48,7 +43,7 @@ export const ChatRoomList = () => {
     return !hasUserInContacts && !isChatMultiple
   }
 
-  const createMultipleChat = (e: any) => {
+  const createMultipleChat = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.stopPropagation()
     dispatch(
       showModal({
@@ -65,13 +60,7 @@ export const ChatRoomList = () => {
   return (
     <div className="chat-room-list" onClick={resetChatRoomId}>
       <div className="chat-room-list__create-chat">
-        <UIButton
-          text="Create group"
-          iconName="plus"
-          border="border-default"
-          fill={true}
-          onClick={createMultipleChat}
-        />
+        <UIButton text="Create group" iconName="plus" border="border-default" fill onClick={createMultipleChat} />
         <div className="divider" />
       </div>
 

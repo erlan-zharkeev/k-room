@@ -16,7 +16,7 @@ export const CreateNewPasswordPage = () => {
   const [isValid, validate] = useValidate()
   const [searchParams] = useSearchParams()
   const [passwordRestoreQuery, setPasswordRestoreQuery] = useState('')
-  const [additionalErrors, setAdditionalErrors] = useState([] as Array<string>)
+  const [additionalErrors, setAdditionalErrors] = useState<Array<string>>([])
   const [isPasswordEqual, setIsPasswordEqual] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -70,7 +70,7 @@ export const CreateNewPasswordPage = () => {
             <Form.Item name="password-second" rules={validateRules.password}>
               <UIInput placeholder="Confirm password" type="password" size="large" />
             </Form.Item>
-            {additionalErrors && <ErrorBucket errors={additionalErrors} />}
+            {additionalErrors.length > 0 && <ErrorBucket errors={additionalErrors} />}
             <Form.Item className="sign-in__controls">
               <UIButton
                 text="Change password"

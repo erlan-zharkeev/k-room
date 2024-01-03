@@ -17,7 +17,7 @@ export const App = () => {
 
   const dispatch = useDispatch<AppDispatch>()
   const fetchUser = async () => {
-    const response = (await dispatch(apiMethods.user.getUserData({}))) as AsyncThunkResponseWrapper
+    const response = (await dispatch(apiMethods.user.getUserData())) as AsyncThunkResponseWrapper
     if (!response.payload) return
     const { userData, settings } = response.payload?.data
     if (userData && settings) commonSetUserDataHandler(dispatch, { userData, settings })

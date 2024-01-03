@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
-// BASIC
 var Status;
 (function (Status) {
     Status[Status["success"] = 200] = "success";
     Status[Status["badRequest"] = 400] = "badRequest";
     Status[Status["notAuth"] = 401] = "notAuth";
     Status[Status["notFound"] = 404] = "notFound";
+    Status[Status["server"] = 500] = "server";
     Status[Status["unreachable"] = 503] = "unreachable";
     Status[Status["badGateway"] = 504] = "badGateway";
 })(Status = exports.Status || (exports.Status = {}));
@@ -38,6 +38,7 @@ var UserSettingKey;
     UserSettingKey["selectedChatRoomId"] = "selectedChatRoomId";
     UserSettingKey["asideTab"] = "asideTab";
     UserSettingKey["currentInfoId"] = "currentInfoId";
+    UserSettingKey["showWallpaper"] = "showWallpaper";
 })(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
 var AsideBarButtonName;
 (function (AsideBarButtonName) {

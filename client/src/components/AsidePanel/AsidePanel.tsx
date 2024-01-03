@@ -2,8 +2,8 @@ import { AsideBarButtonName } from 'common-types'
 import { useState, ReactElement, useEffect } from 'react'
 import { clientConstants } from 'src/client-constants'
 import { useTypedSelector } from 'src/hooks'
-import { WidgetLoader } from '..'
 import { ContactList, ChatRoomList, UserSettings, Calls } from './elements'
+import { WidgetWrapper } from '../shared'
 
 export const AsidePanel = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
@@ -28,10 +28,9 @@ export const AsidePanel = () => {
 
   return (
     <div className="aside-panel">
-      <div className="aside-panel__content">
-        <WidgetLoader hide={!isLoading} />
-        {TabComponents[asideTab]}
-      </div>
+      <WidgetWrapper loading={isLoading} wallpaperPlacement="aside">
+        <div className="aside-panel__content">{TabComponents[asideTab]}</div>
+      </WidgetWrapper>
     </div>
   )
 }

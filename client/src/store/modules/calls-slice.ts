@@ -1,15 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Call, CallStatus, CallType, SocketActionsPayload, UserMediaType, UserShort } from 'common-types'
 
+interface Constraint {
+  loading: boolean
+  value: boolean
+}
+
 interface StreamConstraints {
-  [UserMediaType.audio]: {
-    loading: boolean
-    value: boolean
-  }
-  [UserMediaType.video]: {
-    loading: boolean
-    value: boolean
-  }
+  [UserMediaType.audio]: Constraint
+  [UserMediaType.video]: Constraint
 }
 
 interface CallsState {

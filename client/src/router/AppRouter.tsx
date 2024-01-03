@@ -7,7 +7,7 @@ import { privateRoutes, publicRoutes } from './routes'
 export const AppRouter = () => {
   const { isAuth } = useTypedSelector((state) => state.user)
 
-  const convertedRouteProps = (route: any): { path: string; element: React.ReactElement; exact: boolean } => {
+  const convertedRouteProps = (route: IRoute): { path: string; element: React.ReactElement; exact: boolean } => {
     return {
       element: <route.component />,
       path: route.path,

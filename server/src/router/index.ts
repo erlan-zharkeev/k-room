@@ -25,7 +25,7 @@ router.post(
   fileUploader.single('file'),
   UserController.updateUserData
 )
-router.post(UserEndPoints.RESET_PASSWORD, accessTokenValidator, UserController.resetPassword)
+router.post(UserEndPoints.RESET_PASSWORD, UserController.resetPassword)
 
 router.post(CommonEndPoints.GET_INFO, accessTokenValidator, CommonController.readInfoHandler)
 router.get(CommonEndPoints.COMMON_IMAGES, accessTokenValidator, CommonController.imagesHandler)
@@ -37,6 +37,6 @@ router.post(
 )
 router.post(
   CodesEndPoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY,
-  accessTokenValidator,
+  codesRequestValidator,
   CodesController.validateEmailCodePasswordRecovery
 )

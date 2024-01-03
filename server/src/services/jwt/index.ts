@@ -1,7 +1,8 @@
 import { Response } from 'express'
 import { ENV } from '../../ENV'
 import { UserModel } from '../../models'
-import { AuthTokens } from '../../@types'
+import { AuthTokens, NotificationMessage, Status } from '../../@types'
+import { throwError } from '../../utils'
 
 const clc = require('cli-color')
 
@@ -19,14 +20,18 @@ const setToken = (res: Response, tokenName: string, id: string, secret: string, 
 }
 
 export const updateTokens = async (id: string, res: Response) => {
-  console.log(clc.green.bgWhite('- Token pair updated'))
+  if (!ENV?.K_ROOM_ACCESS_TOKEN_SECRET || !ENV?.K_ROOM_REFRESH_TOKEN_SECRET) {
+    console.log(clc.red.bgWhite('failed to load - K_ROOM_ACCESS_TOKEN_SECRET'))
+    throwError(Status.server, res, NotificationMessage.commonServerError)
+  }
   setToken(res, 'jwt', id, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, ENV.JWT_ACCESS_EXPIRES_INTERVAL)
   const refreshToken = setToken(
     res,
     AuthTokens.refreshToken,
     id,
-    ENV?.K_ROOM_REFRESH_TOKEN_SECRET,
-    ENV?.JWTR_ACCESS_EXPIRES_INTERVAL
+    ENV.K_ROOM_REFRESH_TOKEN_SECRET,
+    ENV.JWTR_ACCESS_EXPIRES_INTERVAL
   )
+  console.log(clc.green.bgWhite('- Token pair updated'))
   return await UserModel.updateOne({ _id: id }, { refreshToken })
 }

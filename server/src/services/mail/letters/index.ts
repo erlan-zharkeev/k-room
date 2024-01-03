@@ -1,14 +1,54 @@
+import { MailerPayload } from '..'
+import { CommonEndPoints } from '../../../@types'
+import { ENV } from '../../../ENV'
 import { confirmation } from './confirmation'
 import { passwordRepairSentCode } from './password-repair-sent-code'
 
-export enum LettersType {
-  confirmation = 'confirmation',
-  'password-repair-sent-code' = 'passwordRepairSentCode'
+interface CommonPayload {
+  appName: string
+  logoSrc: string
+  host: string
 }
 
-export interface Letters {
-  confirmation: (payload: { appName: string; link: string; logoSrc: string; host: string }) => string
-  passwordRepairSentCode: (payload: { appName: string; logoSrc: string; host: string; code: string | number }) => string
+export const commonPayload: CommonPayload = {
+  appName: ENV.APP_NAME,
+  logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
+  host: `${ENV.CLIENT_URL}/sign-in`
 }
 
-export const letters: Letters = { confirmation, passwordRepairSentCode }
+export type LettersName = 'confirmation' | 'password-repair-sent-code'
+
+export interface ConfirmationLetterPayload { link: string }
+export interface PasswordRepairSentCodeLetterPayload {
+  code: string | number
+}
+
+export interface LettersPayload {
+  confirmation: ConfirmationLetterPayload
+  ['password-repair-sent-code']: PasswordRepairSentCodeLetterPayload
+}
+
+type PayloadForGenerateHTML<T extends LettersName> = LettersPayload[T]
+
+export const getAdditionalMailData = <T extends LettersName>(
+  letterName: T,
+  payload: PayloadForGenerateHTML<T>
+): Omit<MailerPayload, 'to'> => {
+  let subject
+  let html
+  switch (letterName) {
+    case 'confirmation':
+      subject = 'Email confirmation'
+      html = confirmation(payload as ConfirmationLetterPayload)
+      break
+    case 'password-repair-sent-code':
+      subject = 'Password recovery'
+      html = passwordRepairSentCode(payload as PasswordRepairSentCodeLetterPayload)
+      break
+    default:
+      subject = ''
+      html = ''
+      break
+  }
+  return { subject, html }
+}

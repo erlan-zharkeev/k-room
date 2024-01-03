@@ -12,14 +12,17 @@ export enum UserSettingName {
   theme = 'theme',
   tooltips = 'tooltips',
   notification = 'notification',
-  sound = 'sound'
+  sound = 'sound',
+  wallpaper = 'wallpaper'
 }
 
 const { VITE_MAIL_APP } = import.meta.env
 
 export const UserSettings = () => {
   const { username, email, id, avatarPath } = useTypedSelector((state) => state.user.userData)
-  const { theme, soundOn, showTooltips, ableToShowNotification } = useTypedSelector((state) => state.persist.settings)
+  const { theme, soundOn, showTooltips, ableToShowNotification, showWallpaper } = useTypedSelector(
+    (state) => state.persist.settings
+  )
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const { updateSetting } = useUpdateSettings()
@@ -47,6 +50,9 @@ export const UserSettings = () => {
         break
       case UserSettingName.notification:
         type = UserSettingKey.ableToShowNotification
+        break
+      case UserSettingName.wallpaper:
+        type = UserSettingKey.showWallpaper
         break
       default:
         break
@@ -92,7 +98,7 @@ export const UserSettings = () => {
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Tooltips</div>
           <UISwitch initValue={showTooltips} id="tooltips" onText="Show" offText="Hide" onChange={changeSetting} />
         </div>
-        <div className="user-settings__tooltip-switch">
+        <div className="user-settings__notification-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Notification</div>
           <UISwitch
             initValue={ableToShowNotification}
@@ -101,6 +107,10 @@ export const UserSettings = () => {
             offText="Hide"
             onChange={changeSetting}
           />
+        </div>
+        <div className="user-settings__wallpaper-switch">
+          <div className="user-settings__title paragraph-text paragraph-text--secondary">Wallpaper</div>
+          <UISwitch initValue={showWallpaper} id="wallpaper" onText="Show" offText="Hide" onChange={changeSetting} />
         </div>
       </div>
       <div className="user-settings__info">

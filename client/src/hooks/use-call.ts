@@ -95,7 +95,8 @@ export const useCall = () => {
       $clg('error', 'An unknown error has occurred' + String(e))
     })
     connection.current.on('close', () => closeConnection())
-    connection.current.on('data', (data: any) => {
+    connection.current.on('data', (data: unknown) => {
+      if (typeof data !== 'string') return
       const responseData = JSON.parse(data)
       if (responseData.settings) dispatch(updateInterlocutorSettings(responseData.settings))
     })
@@ -130,7 +131,7 @@ export const useCall = () => {
     $socket.on(SocketActions.CALL_ACCEPTED, (data: SocketActionsPayload['callAccepted']) => {
       soundConnection.current.stop()
       dispatch(setCurrentCallAccepted())
-      connection.current?.signal(data.signal)
+      connection.current?.signal(data.signal as SignalData)
     })
   }
 
@@ -216,8 +217,8 @@ export const useCall = () => {
   const leaveCall = (callId: string) => {
     try {
       connection.current?.destroy()
-    } catch (e: any) {
-      $clg('error', e)
+    } catch (e: unknown) {
+      if (e instanceof Error) $clg('error', e.message)
     }
     closeConnection()
     if (!callId) return

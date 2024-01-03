@@ -1,6 +1,6 @@
 import { RouteNames } from 'common-types'
 import { useNavigate } from 'react-router-dom'
-import LogoImage from 'src/assets/img/Logo.svg'
+import { LogoImage } from 'src/assets'
 
 export const Logo = ({ showPointer = true }: { showPointer?: boolean }) => {
   const navigate = useNavigate()

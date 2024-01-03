@@ -47,9 +47,7 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
     uploadImageHandler({ message, images })
   }
 
-  const isButtonDisabled = () => {
-    return !haveRepliedMessage() && !message
-  }
+  const isButtonDisabled = !haveRepliedMessage() && !message
 
   return (
     <div
@@ -63,7 +61,7 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
         <UIImageLoader multiple={true} setImages={setImagesHandler} />
         <UIInput onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropdown setEmoji={setEmoji} />
-        <UIButton htmltype="submit" disabled={isButtonDisabled()} iconName="send" onClick={send} />
+        <UIButton htmltype="submit" disabled={isButtonDisabled} iconName="send" onClick={send} />
       </Form>
     </div>
   )
