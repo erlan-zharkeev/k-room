@@ -62,7 +62,7 @@ export const ChatRoom = () => {
       /** Use only strict validation without type casting */
       if (message.isSelf ?? message.isSelf === undefined) return
       const el = getRef(message.id)
-      if (!el) return
+      if (!el.current) return
       el.current.setAttribute('id', message.id)
       observer.observe(el.current)
     })
@@ -124,7 +124,7 @@ export const ChatRoom = () => {
     const updatedMessagesWithDates: Array<Message> = []
     selectedChatRoom?.messages.forEach((message) => {
       const messageDate = moment(Number(message.createdAt)).format('LL').split(',')[0]
-      if (messageDate !== lastDate) {
+      if (messageDate !== lastDate && message.authorName !== Author.system) {
         lastDate = messageDate
         const dateMessage: Message = {
           id: `${uuidv4()}-time`,

@@ -2,7 +2,7 @@
   position: absolute;
   display: flex;
   @include wh-100;
-
+  overflow: hidden;
   &__interlocutor-avatar {
     @include absolute-center;
 

@@ -2,7 +2,7 @@ image: docker:20.10
 
 stages:
   - publish-images
-  - deploy
+  # - deploy
 
 cache:
   paths: []
@@ -26,39 +26,40 @@ publish-images:
   only:
     - main
 
-deploy:
-  stage: deploy
-  before_script:
-    - command -v ssh-agent >/dev/null || (apk add --update openssh)
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" > aws.pem
-    - chmod 600 aws.pem
-    - ssh-add aws.pem
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-  script:
-    - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-    - |
-      for name in deploy_server_1 deploy_client_1 deploy_webserver_1; do
-        if [ ! -z "$(docker ps -a -q -f name=$name)" ]; then
-          docker stop $name
-          docker rm $name
-          echo "!Container - $name - deleted!"
-        fi
-      done
-    - |
-      for image in ketjo/k-room_server:latest ketjo/k-room_client:latest; do
-        if [ ! -z "$(docker images -q $image)" ]; then
-          docker rmi $image
-        fi
-      done
-    - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-      docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-      docker pull ketjo/k-room_server:latest  &&
-      docker pull ketjo/k-room_client:latest &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
-      docker-compose -f ./app/deploy/docker-compose-prod.yml restart"
-  only:
-    - main
+# Temporarily locked cause i don't wanna pay to aws)
+# deploy:
+#   stage: deploy
+#   before_script:
+#     - command -v ssh-agent >/dev/null || (apk add --update openssh)
+#     - eval $(ssh-agent -s)
+#     - echo "$SSH_PRIVATE_KEY" > aws.pem
+#     - chmod 600 aws.pem
+#     - ssh-add aws.pem
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
+#     - chmod 644 ~/.ssh/known_hosts
+#   script:
+#     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
+#     - |
+#       for name in deploy_server_1 deploy_client_1 deploy_webserver_1; do
+#         if [ ! -z "$(docker ps -a -q -f name=$name)" ]; then
+#           docker stop $name
+#           docker rm $name
+#           echo "!Container - $name - deleted!"
+#         fi
+#       done
+#     - |
+#       for image in ketjo/k-room_server:latest ketjo/k-room_client:latest; do
+#         if [ ! -z "$(docker images -q $image)" ]; then
+#           docker rmi $image
+#         fi
+#       done
+#     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
+#       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
+#       docker pull ketjo/k-room_server:latest  &&
+#       docker pull ketjo/k-room_client:latest &&
+#       docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
+#       docker-compose -f ./app/deploy/docker-compose-prod.yml restart"
+#   only:
+#     - main

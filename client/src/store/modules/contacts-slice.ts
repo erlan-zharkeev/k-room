@@ -15,6 +15,10 @@ export const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
+    resetContactStore(state) {
+      state.isLoading = true
+      state.contacts = []
+    },
     loadContacts(state, { payload }: { payload: Array<Contact> }) {
       state.contacts = payload
       state.isLoading = false

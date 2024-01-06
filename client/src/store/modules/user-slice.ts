@@ -2,7 +2,7 @@ import { ThunkDispatch, AnyAction, createSlice } from '@reduxjs/toolkit'
 import { UserSettings, InfoItem, InfoItemStatus, RouteNames, KRoomUser } from 'common-types'
 import { clearCookie } from 'src/utils'
 import { $router } from 'src/services'
-import { updateSettings } from '..'
+import { resetStores, updateSettings } from '..'
 
 export interface UserState {
   isAuth: boolean
@@ -36,6 +36,20 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    resetUserStore(state) {
+      state.isAuth = false
+      state.userData = {
+        id: '',
+        email: '',
+        username: '',
+        online: false,
+        chatRooms: [],
+        contacts: [],
+        avatarPath: '',
+        providerName: '',
+        infoItems: []
+      }
+    },
     setInfoItems(state, { payload }: { payload: Array<InfoItem> }) {
       state.userData.infoItems = payload
     },

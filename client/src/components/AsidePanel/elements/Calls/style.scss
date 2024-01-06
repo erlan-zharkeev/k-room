@@ -15,18 +15,10 @@
   }
 
   &__item {
+    border-bottom: solid 1px var(--dark-gray-transparent-3) !important;
+    background-color: var(--main-bg);
     &--current {
       background-color: var(--dark-gray-transparent);
-    }
-
-    &--incoming,
-    &--outgoing {
-      background-color: var(--success-bg);
-    }
-
-    &--missed,
-    &--not-answered {
-      background-color: var(--error-bg);
     }
   }
 

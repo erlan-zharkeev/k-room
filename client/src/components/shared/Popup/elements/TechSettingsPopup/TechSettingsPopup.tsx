@@ -2,6 +2,7 @@ import { Select } from 'antd'
 import { NotificationMessage, NotificationType } from 'common-types'
 import { useState, useEffect, useRef } from 'react'
 import { UIButton } from 'src/components'
+import { useTypedSelector } from 'src/hooks'
 import { $sound, Sounds } from 'src/services'
 import { showNotification } from 'src/store'
 
@@ -28,6 +29,17 @@ export const TechSettingsPopup = () => {
     setAudioOutputDevices((oldArray) => [...oldArray, ...availableAudioOutputDevices])
   }
 
+  const { showModal } = useTypedSelector((state) => state.system)
+
+  useEffect(() => {
+    if (!showModal) {
+      const tracks = videoStream?.getTracks()
+      tracks?.forEach((track) => track.stop())
+      setShowVideo(false)
+      outputTestAudioSample.stop()
+    }
+  }, [showModal])
+
   useEffect(() => {
     getAvailableAudioDevices()
   }, [])
@@ -44,6 +56,12 @@ export const TechSettingsPopup = () => {
     setSelectedAudioOutputDeviceValue(value)
   }
 
+  const hideVideo = () => {
+    const tracks = videoStream?.getTracks()
+    tracks?.forEach((track) => track.stop())
+    setShowVideo(false)
+  }
+
   const videoEl = useRef<HTMLVideoElement>(null)
 
   const [isVideoLoading, setVideoIsLoading] = useState(false)
@@ -52,9 +70,7 @@ export const TechSettingsPopup = () => {
 
   const toggleVideo = async () => {
     if (showVideo) {
-      const tracks = videoStream?.getTracks()
-      tracks?.forEach((track) => track.stop())
-      setShowVideo(false)
+      hideVideo()
       return
     }
 

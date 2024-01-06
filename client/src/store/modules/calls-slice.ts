@@ -61,6 +61,13 @@ export const callsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
+    resetCallStore(state) {
+      state.showCallModal = false
+      state.isMinified = false
+      state.settings = initialCallSettings
+      state.currentCall = initialCurrentCall
+      state.list = []
+    },
     updateAllList(state, { payload }: { payload: Array<Call> }) {
       state.list = payload
     },

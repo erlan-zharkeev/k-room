@@ -8,7 +8,7 @@
   background-color: var(--dark-gray-transparent-2);
   border: 2px solid var(--dark-gray);
   border-radius: $radius-md;
-
+  backdrop-filter: blur(10px);
   $header-title: 35px;
 
   &__wrapper {

@@ -17,6 +17,8 @@ export const AsideBar = () => {
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const dispatch = useDispatch<AppDispatch>()
   const { viewPort } = useTypedSelector((state) => state.system)
+  const modalAppearance = useTypedSelector((state) => state.system.showModal)
+  const { showCallModal } = useTypedSelector((state) => state.calls)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
@@ -77,7 +79,13 @@ export const AsideBar = () => {
         ))}
       </Radio.Group>
       {viewPort.width >= ViewPortWidthType.tablet && (
-        <UIButton iconName="thunder" color="accent" onClick={openTechSettings} tooltip="Check devices" />
+        <UIButton
+          iconName="thunder"
+          color="accent"
+          onClick={openTechSettings}
+          tooltip="Check devices"
+          disabled={modalAppearance || showCallModal}
+        />
       )}
     </div>
   )

@@ -69,9 +69,10 @@ export const useCall = () => {
       dispatch(
         showNotification({
           message: NotificationMessage.failedToConnectToDevice,
-          messageType: NotificationType.warn
+          messageType: NotificationType.error
         })
       )
+      return null
     }
   }
   const applyStreamToHtmlVideoTag = (isSelf: boolean = true) => {
@@ -91,12 +92,10 @@ export const useCall = () => {
       interlocutorVideoDom.current.srcObject = interlocutorMediaStream
     })
     connection.current.on('error', (e) => {
-      dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.unknownError }))
       $clg('error', 'An unknown error has occurred' + String(e))
     })
     connection.current.on('close', () => closeConnection())
-    connection.current.on('data', (data: unknown) => {
-      if (typeof data !== 'string') return
+    connection.current.on('data', (data: any) => {
       const responseData = JSON.parse(data)
       if (responseData.settings) dispatch(updateInterlocutorSettings(responseData.settings))
     })
@@ -113,7 +112,9 @@ export const useCall = () => {
       })
     )
     $socket.off(SocketActions.CALL_ACCEPTED)
-    selfStream.current?.getTracks().forEach((track) => track.stop())
+    selfStream.current?.getTracks().forEach((track) => {
+      track.stop()
+    })
   }
 
   const initCall = async (interlocutorData: KRoomUser, selfId: string, selfAvatarPath: string, callerName: string) => {
@@ -137,9 +138,12 @@ export const useCall = () => {
 
   const answerCall = async (callId: string) => {
     soundCalling.current.stop()
-    dispatch(setCurrentCallAccepted())
     const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
-    if (!stream) return
+    if (!stream) {
+      leaveCall(callId)
+      return
+    }
+    dispatch(setCurrentCallAccepted())
     selfStream.current = stream
     initConnection(false, selfStream.current)
     connection.current?.on('signal', (data: SignalData) => {
@@ -239,6 +243,7 @@ export const useCall = () => {
     updateCallerSignal,
     disableVideo,
     disableAudio,
-    applyStreamToHtmlVideoTag
+    applyStreamToHtmlVideoTag,
+    closeConnection
   }
 }

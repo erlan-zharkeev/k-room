@@ -14,7 +14,6 @@ export const commonSlice = (socket: SocketInstanceType) => {
     await emitCallsToUser(userId)
     await setUserStatus(userId, true)
   })
-
   socket.on(SocketActions.DISCONNECT, async () => {
     await setUserStatus(userId, false)
     setLastSeenData(userId)

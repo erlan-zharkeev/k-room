@@ -63,6 +63,16 @@ export const settingsSlice = createSlice({
     },
     showWallpaper(state, { payload }: { payload: boolean }) {
       state.showWallpaper = payload
+    },
+    resetSettings(state) {
+      state.asideTab = AsideBarButtonName.contacts
+      state.currentInfoId = '1'
+      state.selectedChatRoomId = ''
+      state.theme = Theme.dark
+      state.soundOn = true
+      state.showTooltips = false
+      state.ableToShowNotification = true
+      state.showWallpaper = true
     }
   }
 })

@@ -47,6 +47,18 @@ const clickedObjectInitialState = {
   }
 }
 
+const initialModalData = {
+  title: '',
+  modalContentComponentName: ModalContentComponentName.createMultipleChatPopup,
+  okText: 'ok',
+  width: '320px'
+}
+
+const initViewPort = {
+  width: 1920,
+  height: 1080
+}
+
 const initialState: SystemStore = {
   isAppLoading: false,
   reconnecting: false,
@@ -59,12 +71,7 @@ const initialState: SystemStore = {
     },
     contextClickedObject: clickedObjectInitialState
   },
-  modalData: {
-    title: '',
-    modalContentComponentName: ModalContentComponentName.createMultipleChatPopup,
-    okText: 'ok',
-    width: '320px'
-  },
+  modalData: initialModalData,
   notificationData: {
     key: '',
     message: NotificationMessage.default,
@@ -73,16 +80,28 @@ const initialState: SystemStore = {
     duration: 3,
     placement: 'top'
   },
-  viewPort: {
-    width: 0,
-    height: 0
-  }
+  viewPort: initViewPort
 }
 
 export const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
+    resetSystemStore: (state) => {
+      state.isAppLoading = false
+      state.reconnecting = false
+      state.showModal = false
+      state.contextMenu = {
+        slotName: '',
+        coord: {
+          x: 0,
+          y: 0
+        },
+        contextClickedObject: clickedObjectInitialState
+      }
+      state.modalData = initialModalData
+      state.viewPort = initViewPort
+    },
     changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
     },
@@ -95,15 +114,21 @@ export const systemSlice = createSlice({
     },
     closeModal(state) {
       state.showModal = false
+      state.modalData = initialModalData
     },
     showNotification(state, { payload }: { payload: NotificationStore }) {
-      const isError = state.notificationData.messageType === NotificationType.error
+      const isError = payload.messageType === NotificationType.error
+      const isInfo = payload.messageType === NotificationType.info
       state.notificationData = {
         ...state.notificationData,
         ...payload,
+        placement: isInfo ? 'bottomRight' : 'top',
         duration: isError ? clientConstants.errorNotificationDuration : initialState.notificationData.duration
       }
-      if (state.notificationData.messageType) notification[state.notificationData.messageType](state.notificationData)
+
+      if (state.notificationData.messageType) {
+        notification[state.notificationData.messageType](state.notificationData)
+      }
       state.notificationData = initialState.notificationData
     },
     setViewPort(state, { payload }: { payload: ViewPort }) {

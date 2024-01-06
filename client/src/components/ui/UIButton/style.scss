@@ -9,13 +9,14 @@
   }
 
   @mixin btn-bg-style($color) {
-    background-color: $color;
     overflow: hidden;
+    background-color: $color;
     border-radius: 4px;
+
     .ant-btn,
     .ant-btn:hover,
     span {
-      color: var(--main-bg) !important;
+      color: var(--white) !important;
       border-color: var($color) !important;
     }
   }

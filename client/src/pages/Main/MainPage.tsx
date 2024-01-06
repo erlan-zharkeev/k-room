@@ -5,11 +5,12 @@ import {
   SocketActionsPayload,
   AsideBarButtonName
 } from 'common-types'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { ViewPortWidthType } from 'src/@types'
 import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom } from 'src/components'
 import { useSelectedRoom, useTypedSelector } from 'src/hooks'
+import { AdditionalServiceContext } from 'src/providers'
 import { $clg, $socket } from 'src/services'
 import { socketReconnect } from 'src/services/$socket'
 import {
@@ -33,11 +34,12 @@ import {
 
 export const MainPage = () => {
   const selectedChatRoom = useSelectedRoom()
+  const { call } = useContext(AdditionalServiceContext)
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
-
+  useTypedSelector((state) => state.calls.currentCall)
   const dispatch = useDispatch<AppDispatch>()
 
   const statusNotification = (isSuccess: Boolean) => {
@@ -50,6 +52,7 @@ export const MainPage = () => {
     }
     $clg('error', 'Socket disconnected')
     if (!isAuth) return
+    call.current.closeConnection()
     dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected }))
   }
 
@@ -67,7 +70,7 @@ export const MainPage = () => {
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   useEffect(() => {
-    if ($socket.disconnected) $socket.connect()
+    if ($socket.disconnected) socketReconnect(dispatch)
 
     $socket.emit(SocketActions.INITIALIZE)
 

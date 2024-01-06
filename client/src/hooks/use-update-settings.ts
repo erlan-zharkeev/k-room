@@ -12,6 +12,7 @@ import {
   showWallpaper
 } from 'src/store'
 import { $socket } from 'src/services/$socket'
+import { scrollToBottom } from 'src/utils'
 
 export const useUpdateSettings = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -54,6 +55,7 @@ export const useUpdateSettings = () => {
         if (value.selectChatRoomId === undefined) return
         payload.value = value.selectChatRoomId
         dispatch(selectChatRoom(value.selectChatRoomId))
+        scrollToBottom()
         break
       case UserSettingKey.asideTab:
         if (value.asideTab === undefined) return

@@ -352,3 +352,7 @@ div[role='dialog'] {
 .ant-badge-status-green {
   background: var(--success);
 }
+
+.react-draggable {
+  overflow: hidden !important;
+}

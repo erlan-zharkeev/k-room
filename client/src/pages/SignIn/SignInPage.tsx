@@ -1,6 +1,6 @@
 import Form from 'antd/lib/form'
 import { UserCredential, RouteNames } from 'common-types'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
@@ -10,7 +10,7 @@ import { FirebaseProviderType } from 'src/hooks/use-firebase'
 import { AdditionalServiceContext } from 'src/providers'
 import { apiMethods } from 'src/services'
 import { AppDispatch, commonSetUserDataHandler } from 'src/store'
-import { validateRules } from 'src/utils'
+import { clearCookie, validateRules } from 'src/utils'
 
 export const SignInPage = () => {
   const { firebase } = useContext(AdditionalServiceContext)
@@ -23,6 +23,10 @@ export const SignInPage = () => {
   const [form] = Form.useForm()
 
   const [isValid, validate] = useValidate()
+
+  useEffect(() => {
+    clearCookie()
+  }, [])
 
   const onFinish = async (fields: UserCredential) => {
     setIsLoading(true)

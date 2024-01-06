@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ChatRoom, ImageObject, Message, RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
+import { scrollToBottom } from 'src/utils'
 
 interface AttachedFilesMessage {
   body: string
@@ -39,6 +40,12 @@ export const roomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
+    resetRoomsStore(state) {
+      state.isLoading = true
+      state.chatRooms = []
+      state.repliedMessageData = initialRepliedMessageData
+      state.attachedFilesMessage = initialAttachedFilesMessage
+    },
     updatedAttachedFilesMessage(state, { payload }: { payload: AttachedFilesMessage }) {
       state.attachedFilesMessage = { ...state.attachedFilesMessage, ...payload }
     },
@@ -56,6 +63,7 @@ export const roomsSlice = createSlice({
         if (roomMessage.tempId === message.tempId) room.messages.splice(idx, 1)
       })
       room.messages.push(message)
+      scrollToBottom()
       if (room?.messages.length > 1) room.blocked = false
     },
     updateMessageStatus(state, { payload }: { payload: SocketActionsPayload['updateMessageStatus'] }) {

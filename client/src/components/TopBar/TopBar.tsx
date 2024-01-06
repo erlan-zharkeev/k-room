@@ -3,7 +3,7 @@ import { UserSettingKey, AsideBarButtonName } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
-import { AppDispatch, logOut } from 'src/store'
+import { AppDispatch, logOut, selectChatRoom } from 'src/store'
 import { UIAvatar, UIButton } from '..'
 import { $socket } from 'src/services'
 
@@ -26,10 +26,6 @@ export const TopBar = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const resetChat = () => {
-    // dispatch(selectChatRoom(''))
-  }
-
   const exit = () => {
     dispatch(logOut())
   }
@@ -43,7 +39,7 @@ export const TopBar = () => {
   }
 
   return (
-    <div className="top-bar" onClick={resetChat}>
+    <div className="top-bar">
       <div className="top-bar__content">
         <div className="top-bar__user-data">
           <div className="top-bar__avatar">

@@ -1,6 +1,6 @@
 import Form from 'antd/lib/form'
 import { UserCredential, Status, RouteNames } from 'common-types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AsyncThunkResponseWrapper } from 'src/@types'
@@ -8,7 +8,7 @@ import { Logo, AuthNav, UIInput, UISwitch, UIButton } from 'src/components'
 import { useValidate } from 'src/hooks'
 import { apiMethods } from 'src/services'
 import { AppDispatch } from 'src/store'
-import { validateRules } from 'src/utils'
+import { clearCookie, validateRules } from 'src/utils'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -18,6 +18,10 @@ export const SignUpPage = () => {
   const [form] = Form.useForm()
 
   const [isValid, validate] = useValidate()
+
+  useEffect(() => {
+    clearCookie()
+  }, [])
 
   const onFinish = async (values: UserCredential) => {
     setIsLoading(true)

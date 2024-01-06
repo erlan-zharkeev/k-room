@@ -1,6 +1,6 @@
 import { userSlice, roomsSlice, contactsSlice, systemSlice, settingsSlice, callsSlice } from './modules'
 
-export const { setUserData, logOut, setInfoItems, markInfoItemAsRead } = userSlice.actions
+export const { setUserData, logOut, setInfoItems, markInfoItemAsRead, resetUserStore } = userSlice.actions
 export const {
   loadChatRooms,
   updateChatUsersStatus,
@@ -13,9 +13,10 @@ export const {
   repliedMessageSetAsForward,
   resetRepliedMessage,
   updatedAttachedFilesMessage,
-  deleteMessage
+  deleteMessage,
+  resetRoomsStore
 } = roomsSlice.actions
-export const { loadContacts, updateContactsStatus, updateContactData } = contactsSlice.actions
+export const { loadContacts, updateContactsStatus, updateContactData, resetContactStore } = contactsSlice.actions
 export const {
   setReconnectingStatus,
   showNotification,
@@ -24,7 +25,8 @@ export const {
   setViewPort,
   setContextMenu,
   resetContextClickedObject,
-  changeIsAppLoading
+  changeIsAppLoading,
+  resetSystemStore
 } = systemSlice.actions
 export const {
   changeAsideTab,
@@ -35,7 +37,8 @@ export const {
   setAbleToShowNotification,
   updateSettings,
   setCurrentInfoItem,
-  showWallpaper
+  showWallpaper,
+  resetSettings
 } = settingsSlice.actions
 export const {
   updateAllList,
@@ -54,5 +57,15 @@ export const {
   updateCall,
   setCallId,
   markCurrentCallAsVideo,
-  setCallSettingsLoading
+  setCallSettingsLoading,
+  resetCallStore
 } = callsSlice.actions
+
+export const resetStores = [
+  resetUserStore,
+  resetRoomsStore,
+  resetContactStore,
+  resetSystemStore,
+  resetSettings,
+  resetCallStore
+]

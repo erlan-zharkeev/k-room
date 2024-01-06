@@ -1,6 +1,10 @@
 # K-Room
 ##
-Production: https://k-room.space
+Production: https://k-room.space(Temporarily closed)
+
+![App main screen](./main-screen.png 'main screen')
+
+![App call screen](./call-screen.png 'call screen')
 
 ## Pre-install
 - To use husky run yarn prepare in root
