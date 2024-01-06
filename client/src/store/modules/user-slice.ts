@@ -2,7 +2,7 @@ import { ThunkDispatch, AnyAction, createSlice } from '@reduxjs/toolkit'
 import { UserSettings, InfoItem, InfoItemStatus, RouteNames, KRoomUser } from 'common-types'
 import { clearCookie } from 'src/utils'
 import { $router } from 'src/services'
-import { resetStores, updateSettings } from '..'
+import { updateSettings } from '..'
 
 export interface UserState {
   isAuth: boolean

@@ -15,8 +15,9 @@
   }
 
   &__item {
-    border-bottom: solid 1px var(--dark-gray-transparent-3) !important;
     background-color: var(--main-bg);
+    border-bottom: solid 1px var(--dark-gray-transparent-3) !important;
+
     &--current {
       background-color: var(--dark-gray-transparent);
     }
