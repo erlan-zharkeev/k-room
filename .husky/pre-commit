@@ -4,4 +4,4 @@
 cd ./client
 pnpm lint:fix-style && pnpm lint:fix-es && pnpm build
 cd ../server
-pnpm lint:fix-es
+# pnpm lint:fix-es
