@@ -7,7 +7,7 @@
     "serve": "cross-env NODE_ENV=development nodemon --exitcrash src/index.ts",
     "build": "cross-env NODE_ENV=production webpack",
     "server-run": "cross-env NODE_ENV=production node ./build/index.js",
-    "lint:fix-es": "eslint **/*.{ts,ts} --fix"
+    "lint:fix-es": "eslint **/*.{ts} --fix"
   },
   "dependencies": {
     "@types/bonjour": "^3.5.12",
