@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { ENV } from '../../ENV'
-import { loadMessageFixtures, loadUsersFixtures } from '../../fixtures'
+import { loadFixtures } from '../../fixtures'
 
 const clc = require('cli-color')
 
@@ -10,9 +10,7 @@ async function initDataBase() {
   try {
     await db.connect(ENV.MONGO_HOST)
     console.log(clc.green.bgWhite('-Connected to DB'))
-    await loadMessageFixtures()
-    await loadUsersFixtures()
-    console.log(clc.green.bgWhite('-Fixtures loaded'))
+    loadFixtures()
   } catch (e) {
     console.log(clc.red.bgWhite(e))
     console.log(clc.red.bgWhite('-init DB failed'))

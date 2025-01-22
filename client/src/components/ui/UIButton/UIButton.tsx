@@ -13,7 +13,7 @@ export interface UIButtonProps {
   text?: string
   iconName?: IconName
   className?: string
-  border?: 'borderless' | 'border-default'
+  border?: 'borderless' | 'common-border'
   color?: ColorModifiers
   loading?: boolean
   disabled?: boolean
@@ -73,7 +73,7 @@ export const UIButton = ({
   })
 
   return (
-    <div className={modifiers + ' ' + className}>
+    <div className={`${modifiers}${className ? ` ${className}` : ''}`}>
       {showTooltips && tooltip ? (
         <Tooltip title={tooltip} showArrow={false} destroyTooltipOnHide={true} placement="top">
           <div className="tooltip-content">

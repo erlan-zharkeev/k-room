@@ -1,7 +1,7 @@
 import { Result, ValidationError } from 'express-validator'
 import { Response } from 'express'
 import { NotificationMessage, Status, ErrorResponse } from '../@types'
-import { clc } from '../server'
+import { clc } from './clc'
 
 export const throwError = (
   status: Status,

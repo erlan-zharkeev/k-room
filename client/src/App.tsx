@@ -2,50 +2,94 @@ import 'antd/dist/antd.css'
 import 'src/styles/main.scss'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { AsyncThunkResponseWrapper } from './@types'
 import { Popup, CallModal, ContextMenu } from './components'
-import { useTypedSelector } from './hooks'
+import { useNotification, useTypedSelector } from './hooks'
 import { AppRouter } from './router/AppRouter'
-import { apiMethods } from './services'
-import { AppDispatch, changeIsAppLoading, commonSetUserDataHandler, setViewPort, showNotification } from './store'
+import { useApi } from './services'
+import { AppDispatch, resetStores, changeIsAppLoading, commonSetUserDataHandler, setViewPort, enableAllowAudioContext } from './store'
 import { getViewPort, setTheme, clearLocalStorageOnKeyDown, getCookie } from './utils'
-import { NotificationMessage, NotificationType } from 'common-types'
+import { NotificationMessage, NotificationType, UserEndpoints } from 'common-types'
 import { $socket, socketReconnect } from './services/$socket'
 
+const setRealVh = () => {
+  const vh = window.innerHeight * 0.01
+  document.documentElement.style.setProperty('--real-1-percent-vh', `${vh}px`)
+}
+
 export const App = () => {
-  const { theme } = useTypedSelector((state) => state.persist.settings)
+  const { theme, soundOn } = useTypedSelector((state) => state.persist.settings)
+  const { isAuth } = useTypedSelector((state) => state.user)
+  const { allowAudioContext } = useTypedSelector((state) => state.system)
+  const notifications = useNotification()
+  const { doRequest } = useApi()
 
   const dispatch = useDispatch<AppDispatch>()
   const fetchUser = async () => {
-    const response = (await dispatch(apiMethods.user.getUserData())) as AsyncThunkResponseWrapper
-    if (!response.payload) return
-    const { userData, settings } = response.payload?.data
+    const response = await doRequest('get', UserEndpoints.GET_USER_DATA)
+    if (!response || !response.data) return
+    const { userData, settings } = response.data
     if (userData && settings) commonSetUserDataHandler(dispatch, { userData, settings })
     dispatch(changeIsAppLoading(false))
   }
-  const handleResize = () => dispatch(setViewPort(getViewPort()))
+
+  const handleResize = () => {
+    setRealVh()
+    dispatch(setViewPort(getViewPort()))
+  }
+
+  const networkOfflineNotification = notifications.getNotification({
+    message: NotificationMessage.networkOffline,
+    messageType: NotificationType.error
+  })
+
+  const networkOnlineNotification = notifications.getNotification({
+    message: NotificationMessage.networkOnline,
+    messageType: NotificationType.info
+  })
+
   const handleOffline = () => {
     $socket.disconnect()
-    dispatch(
-      showNotification({
-        message: NotificationMessage.networkOffline,
-        messageType: NotificationType.error,
-        duration: 5000
-      })
-    )
+    networkOfflineNotification.open()
   }
+
   const handleOnline = () => {
     socketReconnect(dispatch)
-    dispatch(
-      showNotification({
-        message: NotificationMessage.networkOnline,
-        messageType: NotificationType.info
-      })
-    )
+    networkOnlineNotification.open()
+  }
+
+  const enableAudioInBrowser = () => {
+    dispatch(enableAllowAudioContext())
+    window.removeEventListener('click', enableAudioInBrowser)
   }
 
   useEffect(() => {
+    if (isAuth) return
+    resetStores.forEach((resetStore) => dispatch(resetStore()))
+  }, [isAuth])
+
+  const soundContextNotification = notifications.getNotification({
+    key: 'sound-context',
+    message: NotificationMessage.allowAudioContext,
+    messageType: NotificationType.info,
+    duration: 0
+  })
+
+  useEffect(() => {
+    if (allowAudioContext) {
+      soundContextNotification.close('sound-context')
+    }
+  }, [allowAudioContext])
+
+  useEffect(() => {
+    setRealVh()
     setTheme(theme)
+
+    if (soundOn && !allowAudioContext) {
+      setTimeout(() => {
+        if (isAuth) soundContextNotification.open()
+      }, 3000)
+    }
+
     const root = document.querySelector('body')
     root?.addEventListener('keydown', clearLocalStorageOnKeyDown)
 
@@ -55,14 +99,11 @@ export const App = () => {
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
 
+    window.addEventListener('click', enableAudioInBrowser)
+
     const hasJwt = Boolean(getCookie('jwt'))
     dispatch(changeIsAppLoading(hasJwt))
     if (hasJwt) fetchUser()
-
-    return () => {
-      root?.removeEventListener('keydown', clearLocalStorageOnKeyDown)
-      window.removeEventListener('resize', handleResize)
-    }
   }, [])
 
   return (

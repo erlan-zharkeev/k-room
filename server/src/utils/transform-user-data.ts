@@ -1,9 +1,9 @@
-import { IUserSchema } from '../models'
-import { KRoomUser } from '../@types'
+import { IUserSchema, KRoomUser } from '../@types'
 
 export const transformUserData = (user: IUserSchema): KRoomUser => {
   return {
     id: user._id,
+    role: user.role,
     username: user.username,
     avatarPath: user.avatarPath,
     email: user.email,

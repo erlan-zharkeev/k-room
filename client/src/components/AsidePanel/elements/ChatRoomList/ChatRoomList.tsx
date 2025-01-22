@@ -60,10 +60,9 @@ export const ChatRoomList = () => {
   return (
     <div className="chat-room-list" onClick={resetChatRoomId}>
       <div className="chat-room-list__create-chat">
-        <UIButton text="Create group" iconName="plus" border="border-default" fill onClick={createMultipleChat} />
+        <UIButton text="Create group" iconName="plus" border="common-border" fill onClick={createMultipleChat} />
         <div className="divider" />
       </div>
-
       <div className="chat-room-list__body">
         <List
           itemLayout="horizontal"
@@ -97,7 +96,7 @@ export const ChatRoomList = () => {
                     iconName="plus"
                     size="small"
                     tooltip="Add User"
-                    onClick={async (e) => await addUser(e, getFirstUserIdInChatRoom(chatRoom))}
+                    onClick={(e) => addUser(e, getFirstUserIdInChatRoom(chatRoom))}
                   />
                 )}
               </div>

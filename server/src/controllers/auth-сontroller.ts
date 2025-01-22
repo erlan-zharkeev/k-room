@@ -43,7 +43,8 @@ class AuthController {
         socketId: '',
         settings: initUserSettings,
         codes: initUserCodes,
-        infoItems: [welcomeInfoItem]
+        infoItems: [welcomeInfoItem],
+        role: 'user'
       })
 
       await user.save()
@@ -96,6 +97,7 @@ class AuthController {
       await updateTokens(user._id, res)
       return res.json({
         userData: {
+          role: user.role,
           username: user.username,
           email,
           id: user._id,
@@ -118,6 +120,7 @@ class AuthController {
         const hashedPassword = await bcrypt.hash(uuidv4(), 6)
         user = new UserModel({
           username,
+          role: 'user',
           email,
           avatarPath,
           providerName,
@@ -137,7 +140,8 @@ class AuthController {
           username: user.username ?? username,
           email,
           id: user?._id,
-          avatarPath: user.avatarPath ?? avatarPath
+          avatarPath: user.avatarPath ?? avatarPath,
+          role: user.role
         },
         settings: user.settings,
         message: NotificationMessage.loginAndRegister

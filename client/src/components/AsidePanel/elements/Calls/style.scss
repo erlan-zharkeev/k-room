@@ -1,5 +1,9 @@
 .call-list {
   &__body {
+    .ant-list-items {
+      padding: 4px;
+    }
+
     .ant-list-item {
       display: flex;
       flex-wrap: wrap;
@@ -15,8 +19,10 @@
   }
 
   &__item {
+    margin-bottom: 4px;
     background-color: var(--main-bg);
-    border-bottom: solid 1px var(--dark-gray-transparent-3) !important;
+    border-radius: $radius-sm;
+    @include nm-inset-shadow;
 
     &--current {
       background-color: var(--dark-gray-transparent);

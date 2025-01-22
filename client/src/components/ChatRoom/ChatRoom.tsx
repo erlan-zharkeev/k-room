@@ -31,11 +31,9 @@ export const ChatRoom = () => {
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
   const [inputMessageHeight, setInputMessageHeight] = useState(clientConstants.dimensions.shortInputMessage)
-  const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0, height: 0 })
+  const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0 })
   const dispatch = useDispatch<AppDispatch>()
   const roomDomEl = useRef<HTMLDivElement>(null)
-  const [showWidgetLoader, setShowWidgetLoader] = useState(true)
-  const { isLoading } = useTypedSelector((state) => state.chatRooms)
   const [messages, setMessages] = useState([] as Array<Message>)
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
   const { updateSetting } = useUpdateSettings()
@@ -74,7 +72,7 @@ export const ChatRoom = () => {
     setTimeout(() => {
       setRefToMessages()
     }, clientConstants.commonTimeoutDuration)
-  }, [selectedChatRoom, showWidgetLoader])
+  }, [selectedChatRoom])
 
   useEffect(() => {
     const roomEl = roomDomEl.current
@@ -83,10 +81,8 @@ export const ChatRoom = () => {
       const inputHeight = haveMessageToReply ? fullInputMessage : shortInputMessage
 
       setInputMessageHeight(inputHeight)
-      const chatRoomBodyHeight = roomEl.offsetHeight - chatRoomHeaderHeight - inputHeight
       const position = {
         top: chatRoomHeaderHeight,
-        height: chatRoomBodyHeight
       }
       setChatRoomPosition(position)
     }
@@ -112,12 +108,6 @@ export const ChatRoom = () => {
     if (author === Author.system || author === Author.time) return author
     else return author === id ? 'self' : ''
   }
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowWidgetLoader(!isLoading)
-    }, clientConstants.chatRoomLoaderMinDuration)
-  })
 
   const injectDateToMessages = () => {
     let lastDate = ''
@@ -146,7 +136,7 @@ export const ChatRoom = () => {
 
   return (
     <div className="chat-room">
-      <WidgetWrapper loading={showWidgetLoader} wallpaperPlacement="main">
+      <WidgetWrapper wallpaperPlacement="main">
         <div className="chat-room__wrapper" ref={roomDomEl}>
           {selectedChatRoom ? (
             <div>
@@ -155,7 +145,6 @@ export const ChatRoom = () => {
                 className="chat-room__body"
                 style={{
                   top: `${chatRoomPosition.top}px`,
-                  height: `${chatRoomPosition.height}px`
                 }}
               >
                 <List

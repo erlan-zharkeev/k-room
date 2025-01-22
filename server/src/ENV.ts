@@ -2,7 +2,6 @@ import dotenv, { DotenvParseOutput } from 'dotenv'
 import { EnvVariables } from './@types'
 
 const envs = dotenv.config({ path: `./.env.${process.env.NODE_ENV}` }).parsed as DotenvParseOutput | EnvVariables
-
 envs.IS_DEV = process.env.NODE_ENV === 'development'
 envs.SERVER_ASSETS_PATH = envs.IS_DEV ? './src/assets/' : './build/assets/'
 envs.SERVER_URL = envs.IS_DEV ? `${envs.HOST}:${envs.SERVER_PORT}/api` : `${envs.HOST}/api`

@@ -1,16 +1,15 @@
 @import './elements/CallModalBody/style';
 
 .react-draggable {
-  z-index: 5;
+  z-index: 4;
 }
 
 .draggable-resizable-modal {
-  z-index: 5;
+  z-index: 4;
   opacity: 1;
   transition: opacity 0.1s linear;
 
   &--collapse {
-    z-index: -5;
     opacity: 0;
     transition: opacity 0.1s linear;
   }

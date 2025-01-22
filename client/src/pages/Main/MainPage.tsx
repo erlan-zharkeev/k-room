@@ -8,8 +8,8 @@ import {
 import { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { ViewPortWidthType } from 'src/@types'
-import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom } from 'src/components'
-import { useSelectedRoom, useTypedSelector } from 'src/hooks'
+import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom, AdminPanelContent } from 'src/components'
+import { useNotification, useSelectedRoom, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $clg, $socket } from 'src/services'
 import { socketReconnect } from 'src/services/$socket'
@@ -21,7 +21,6 @@ import {
   loadContacts,
   setContextMenu,
   setReconnectingStatus,
-  showNotification,
   updateCall,
   updateCalls,
   updateChatMessage,
@@ -39,21 +38,26 @@ export const MainPage = () => {
   const { isAuth } = useTypedSelector((state) => state.user)
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
+  const notifications = useNotification();
+
   useTypedSelector((state) => state.calls.currentCall)
   const dispatch = useDispatch<AppDispatch>()
+
+  const socketConnectedNotification = notifications.getNotification({ messageType: NotificationType.success, message: NotificationMessage.socketConnected })
+  const socketDisconnectedNotification = notifications.getNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected })
 
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
       $clg('success', 'Socket connected')
-      dispatch(
-        showNotification({ messageType: NotificationType.success, message: NotificationMessage.socketConnected })
-      )
+      socketConnectedNotification.open()
       return
     }
     $clg('error', 'Socket disconnected')
     if (!isAuth) return
-    call.current.closeConnection()
-    dispatch(showNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected }))
+    if (call.current) {
+      call.current.closeConnection(true);
+    }
+    socketDisconnectedNotification.open()
   }
 
   const hideAside = () => selectedChatRoom && viewPort.width <= ViewPortWidthType.tablet
@@ -67,14 +71,25 @@ export const MainPage = () => {
     )
   }
 
+  const getNotificationPermission = () => {
+    if (!('Notification' in window)) {
+      console.log('Your browser doesn`t support Notification API');
+    }
+    window.Notification.requestPermission()
+  }
+
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   useEffect(() => {
-    if ($socket.disconnected) socketReconnect(dispatch)
+    getNotificationPermission()
+
+    if ($socket.disconnected) {
+      socketReconnect(dispatch)
+    }
 
     $socket.emit(SocketActions.INITIALIZE)
 
-    $socket.on(SocketActions.AUTH_ERROR, async () => {
+    $socket.on(SocketActions.AUTH_ERROR, () => {
       socketReconnect(dispatch)
     })
 
@@ -92,16 +107,22 @@ export const MainPage = () => {
       dispatch(setReconnectingStatus(false))
     })
     $socket.on(SocketActions.ERROR_MESSAGE, ({ message }: SocketActionsPayload['errorMessage']) => {
-      dispatch(showNotification({ messageType: NotificationType.error, message }))
+      const errorMessageNotification = notifications.getNotification({ messageType: NotificationType.error, message })
+      errorMessageNotification.open()
     })
+
     $socket.on(SocketActions.DISCONNECT, () => {
       statusNotification(false)
     })
+
     $socket.on(SocketActions.CONNECTION, () => {
       statusNotification(true)
     })
     $socket.on(SocketActions.GET_CONTACTS, ({ contacts, messageBody }: SocketActionsPayload['getContacts']) => {
-      if (messageBody) dispatch(showNotification({ messageType: NotificationType.info, message: messageBody }))
+      if (messageBody) {
+        const getContactsNotification = notifications.getNotification({ messageType: NotificationType.info, message: messageBody })
+        getContactsNotification.open()
+      }
       dispatch(loadContacts(contacts))
     })
     $socket.on(SocketActions.STATUS_CONTACT, (payload: SocketActionsPayload['statusContact']) => {
@@ -133,6 +154,7 @@ export const MainPage = () => {
     $socket.on(SocketActions.CALL_UPDATED, (payload: SocketActionsPayload['callUpdated']) => {
       dispatch(updateCall(payload))
     })
+
     return () => {
       $socket.removeAllListeners()
     }
@@ -146,9 +168,10 @@ export const MainPage = () => {
         <div className="main-page__content">
           <CallStatusBar />
           <TopBar />
-          {asideTab === AsideBarButtonName.info ? (
+          {asideTab === AsideBarButtonName.info || asideTab === AsideBarButtonName.adminPanel ? (
             <div className={mainBodyClassNames()}>
-              <InfoList />
+              {asideTab === AsideBarButtonName.info && <InfoList />}
+              {asideTab === AsideBarButtonName.adminPanel && <AdminPanelContent />}
             </div>
           ) : (
             <div className={mainBodyClassNames()}>

@@ -1,18 +1,17 @@
 import { clientConstants } from 'src/client-constants'
 import { NotificationMessage, NotificationType } from 'common-types'
-import { AppDispatch, showNotification } from 'src/store'
+import { useNotification } from 'src/hooks'
 
 export const imageToBase64 = ({
   image,
   allowedResolutions = clientConstants.imageResolutions,
-  dispatch
 }: {
   image: File
-  dispatch: AppDispatch
   allowedResolutions?: Array<string>
 }) => {
   const reader = new FileReader()
   reader.readAsDataURL(image)
+  const notifications = useNotification();
 
   const warnings = []
   const resolutionNotAllowed = !allowedResolutions.includes(image.type)
@@ -22,7 +21,8 @@ export const imageToBase64 = ({
 
   if (warnings.length) {
     warnings.forEach((warning) => {
-      dispatch(showNotification({ message: warning, messageType: NotificationType.warn }))
+      const warningNotification = notifications.getNotification({ message: warning, messageType: NotificationType.warn })
+      warningNotification.open()
     })
     return
   }

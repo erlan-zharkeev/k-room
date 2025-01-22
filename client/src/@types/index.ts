@@ -10,7 +10,7 @@ export type ContextMenuType = '' | 'message'
 
 export type ColorModifiers = 'accent' | 'success' | 'error' | 'warn' | 'default' | 'white' | 'black'
 
-export type SizeModifiers = 'xl' | 'medium' | SizeType
+export type SizeModifiers = 'xs' | 'xl' | 'medium' | SizeType
 
 export type ShapeModifiers = 'round' | 'square'
 
@@ -44,7 +44,9 @@ export enum ModalContentComponentName {
   forwardMessagePopup = 'ForwardMessagePopup',
   createMultipleChatPopup = 'CreateMultipleChatPopup',
   chatRoomSettingsPopup = 'ChatRoomSettingsPopup',
-  messageWithBindDataPopup = 'MessageWithBindDataPopup'
+  messageWithBindDataPopup = 'MessageWithBindDataPopup',
+  dBClearConfirmPopup = 'ResetDBConfirmPopup',
+  applyFixturesPopup = 'ApplyFixturesPopup'
 }
 
 export enum UIAvatarBadgePlacement {

@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { CallDB } from '../@types'
+import { IDBCallSchema } from '../@types'
 
-const callModel = new Schema<CallDB>({
+const callModel = new Schema<IDBCallSchema>({
   calledAt: {
     type: Number,
     required: false

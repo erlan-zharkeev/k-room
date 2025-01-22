@@ -1,18 +1,14 @@
-import { Status, RouteNames } from 'common-types'
+import { Status, RouteNames, AuthEndpoints } from 'common-types'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AsyncThunkResponseWrapper } from 'src/@types'
 import { UIButton } from 'src/components'
 import { useQuery, useCounter } from 'src/hooks'
-import { apiMethods } from 'src/services'
-import { AppDispatch } from 'src/store'
+import { useApi } from 'src/services'
 import { getNextReqInterval } from 'src/utils'
 
 export const WaitEmailConfirmPage = () => {
   const navigate = useNavigate()
   const query = useQuery()
-  const dispatch = useDispatch<AppDispatch>()
 
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -22,6 +18,7 @@ export const WaitEmailConfirmPage = () => {
   const [_, refresh] = useState(0)
 
   const [counter, setCounter, startCounter, stopCounter] = useCounter(0)
+  const { doRequest } = useApi()
 
   const counterHandler = () => {
     const nextRequestTimestamp = Number(query.get('nextRequestTime'))
@@ -40,10 +37,10 @@ export const WaitEmailConfirmPage = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = (await dispatch(apiMethods.auth.sendConfirmationLink(email))) as AsyncThunkResponseWrapper
+    const response = await doRequest('post', AuthEndpoints.SEND_EMAIL_CONFIRMATION_LINK, { email })
     setIsLoading(false)
-    const { data, status } = response.payload
-    if (status !== Status.success) return
+    if (!response || response.status !== Status.success) return
+    const { data } = response
     const updatedPath = `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })
     refresh(_ + 1)
@@ -89,7 +86,7 @@ export const WaitEmailConfirmPage = () => {
 
         {counter <= 0 && remainingAttempts > 0 && (
           <UIButton
-            border="border-default"
+            border="common-border"
             text="Send confirmation link"
             color="accent"
             onClick={sendLink}
@@ -97,7 +94,7 @@ export const WaitEmailConfirmPage = () => {
           />
         )}
         <UIButton
-          border="border-default"
+          border="common-border"
           text="Back to app"
           color="accent"
           onClick={() => navigate(RouteNames.SIGN_IN)}

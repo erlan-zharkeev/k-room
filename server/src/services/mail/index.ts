@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { RouteNames, CommonEndPoints } from '../../@types'
+import { RouteNames } from '../../@types'
 import { ENV } from '../../ENV'
 import { UserModel } from '../../models'
 import { getTimeNextRequest } from '../../utils'
@@ -30,7 +30,6 @@ export const sendEmailConfirmationLink = async (email: string) => {
   const payload = {
     appName: ENV.APP_NAME,
     link: `${ENV.CLIENT_URL}${RouteNames.EMAIL_CONFIRM}?userId=${user?.id}`,
-    logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
     host: `${ENV.CLIENT_URL}/sign-in`
   }
   const mailData = getAdditionalMailData('confirmation', payload)

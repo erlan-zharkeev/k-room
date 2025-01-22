@@ -1,4 +1,4 @@
-import { UserSettingKey, Theme, SocketActionsPayload, SocketActions, AsideBarButtonName } from 'common-types'
+import { UserSettingKey, Theme, SocketActionsPayload, SocketActions, AsideBarButtonName, AdminPanelModelTab } from 'common-types'
 import { useDispatch } from 'react-redux'
 import {
   AppDispatch,
@@ -9,7 +9,8 @@ import {
   setCurrentInfoItem,
   setSoundValue,
   setTooltipsValue,
-  showWallpaper
+  showWallpaper,
+  setAdminPanelTab
 } from 'src/store'
 import { $socket } from 'src/services/$socket'
 import { scrollToBottom } from 'src/utils'
@@ -24,6 +25,7 @@ export const useUpdateSettings = () => {
       asideTab?: AsideBarButtonName
       infoId?: string
       selectChatRoomId?: string
+      selectedAdminPanelModelTab?: AdminPanelModelTab
     }
   ) => {
     const payload: SocketActionsPayload['updateUserSettings'] = {
@@ -66,6 +68,11 @@ export const useUpdateSettings = () => {
         if (value.infoId === undefined) return
         payload.value = value.infoId
         dispatch(setCurrentInfoItem(value.infoId))
+        break
+      case UserSettingKey.selectedAdminPanelModelTab:
+        if (value.selectedAdminPanelModelTab === undefined) return
+        payload.value = value.selectedAdminPanelModelTab
+        dispatch(setAdminPanelTab(value.selectedAdminPanelModelTab))
         break
       default:
         break

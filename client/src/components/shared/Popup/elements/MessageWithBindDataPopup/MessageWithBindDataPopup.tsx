@@ -61,7 +61,7 @@ export const MessageWithBindDataPopup = () => {
         <Form.Item className="message-with-bind-data-popup__controls">
           <UIButton
             text="Send Message"
-            border="border-default"
+            border="common-border"
             htmltype="submit"
             disabled={!images?.length && !body}
             loading={isLoading}

@@ -5,11 +5,11 @@ import cors from 'cors'
 import { serverConstants } from './server-constants'
 import { ENV } from './ENV'
 import { router } from './router'
-export const clc = require('cli-color')
+import { clc } from './utils'
 
 const fs = require('fs')
 const path = require('path')
-const http = require('http')
+const https = require('https')
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -35,7 +35,12 @@ app.get(RouteNames.API, (_: Request, res: Response) => {
   res.send('Server running')
 })
 
-const server = http.createServer(app)
+const options = {
+  key: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev-key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev.pem')),
+}
+
+const server = https.createServer(options, app)
 
 const PORT = ENV.SERVER_PORT
 

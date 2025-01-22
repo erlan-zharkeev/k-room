@@ -4,6 +4,7 @@ import { Status, NotificationMessage } from '../@types'
 import { throwError } from '../utils'
 
 export const codesRequestValidator = async (req: Request, res: Response, next: NextFunction) => {
+
   try {
     const { email } = req.body
     const candidate = await UserModel.findOne({ email })

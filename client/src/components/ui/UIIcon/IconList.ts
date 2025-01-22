@@ -11,7 +11,7 @@ import { TbPhoneCall } from 'react-icons/tb'
 import { FiSettings } from 'react-icons/fi'
 import { GoSearch } from 'react-icons/go'
 import { MdExitToApp, MdOutlineArrowBackIos } from 'react-icons/md'
-import { FaUserCircle, FaPhoneSlash } from 'react-icons/fa'
+import { FaUserCircle, FaPhoneSlash, FaShieldAlt } from 'react-icons/fa'
 import { RiLoader5Fill, RiShareForwardFill, RiImage2Fill } from 'react-icons/ri'
 import { RxCrossCircled, RxCross2 } from 'react-icons/rx'
 import {
@@ -35,6 +35,7 @@ import { VscDeviceCameraVideo } from 'react-icons/vsc'
 import { IconListElement } from './UIIcon'
 
 export const IconList: Array<IconListElement> = [
+  { name: 'shield', Icon: FaShieldAlt },
   { name: 'contacts', Icon: ImUsers },
   { name: 'chat', Icon: BsChatSquareText },
   { name: 'chats', Icon: IoChatboxEllipsesSharp },

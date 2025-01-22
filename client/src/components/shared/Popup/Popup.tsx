@@ -8,27 +8,32 @@ import {
   ForwardMessagePopup,
   CreateMultipleChatPopup,
   ChatRoomSettingsPopup,
-  MessageWithBindDataPopup
+  MessageWithBindDataPopup,
+  DBClearConfirmPopup,
+  ApplyBasicFixturesPopup
 } from './elements'
 import { ModalContentComponentName } from 'src/@types'
+import { ReactNode } from 'react'
 
 export const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
-  const popups: Record<ModalContentComponentName, JSX.Element> = {
+  const popups: Record<ModalContentComponentName, ReactNode> = {
     [ModalContentComponentName.userDataSettingsPopup]: <UserDataSettingsPopup />,
     [ModalContentComponentName.techSettingsPopup]: <TechSettingsPopup />,
     [ModalContentComponentName.forwardMessagePopup]: <ForwardMessagePopup />,
     [ModalContentComponentName.createMultipleChatPopup]: <CreateMultipleChatPopup />,
     [ModalContentComponentName.chatRoomSettingsPopup]: <ChatRoomSettingsPopup />,
-    [ModalContentComponentName.messageWithBindDataPopup]: <MessageWithBindDataPopup />
+    [ModalContentComponentName.messageWithBindDataPopup]: <MessageWithBindDataPopup />,
+    [ModalContentComponentName.dBClearConfirmPopup]: <DBClearConfirmPopup />,
+    [ModalContentComponentName.applyFixturesPopup]: <ApplyBasicFixturesPopup />
   }
-  const ComponentContent = () => popups[modalData.modalContentComponentName]
+  const ComponentContent = popups[modalData.modalContentComponentName]
 
   return (
     <div className="modal">
       <Modal centered title={modalData.title} open={showModal} footer={null} onCancel={() => dispatch(closeModal())}>
-        <ComponentContent />
+        {ComponentContent}
       </Modal>
     </div>
   )

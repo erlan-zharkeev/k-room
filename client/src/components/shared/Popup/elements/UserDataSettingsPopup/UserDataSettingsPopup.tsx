@@ -1,11 +1,10 @@
 import { Form } from 'antd'
-import { KRoomUser } from 'common-types'
+import { KRoomUser, UserEndpoints } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { AsyncThunkResponseWrapper } from 'src/@types'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useValidate } from 'src/hooks'
-import { apiMethods } from 'src/services'
+import { useApi } from 'src/services'
 import { AppDispatch, closeModal, setUserData } from 'src/store'
 import { validateRules } from 'src/utils'
 
@@ -24,6 +23,8 @@ export const UserDataSettingsPopup = () => {
 
   const [isValid, validate] = useValidate()
 
+  const { doRequest } = useApi()
+
   const imageUpdated = () => {
     setImageChanged(true)
   }
@@ -39,9 +40,9 @@ export const UserDataSettingsPopup = () => {
       file: avatarFile
     }
     setIsLoading(true)
-    const response = (await dispatch(apiMethods.user.updateUserData(updatedUserData))) as AsyncThunkResponseWrapper
-    if (response.payload?.data?.userData) {
-      dispatch(setUserData(response.payload.data.userData))
+    const response = await doRequest('post', UserEndpoints.UPDATE_USER_DATA, updatedUserData, 'multipart/form-data')
+    if (response?.data?.userData) {
+      dispatch(setUserData(response.data.userData))
       setIsLoading(false)
       dispatch(closeModal())
     }
@@ -74,7 +75,7 @@ export const UserDataSettingsPopup = () => {
         <Form.Item className="user-data-settings-popup__controls">
           <UIButton
             text="Update"
-            border="border-default"
+            border="common-border"
             htmltype="submit"
             disabled={!isUpdateButtonAvailable()}
             loading={isLoading}

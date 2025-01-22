@@ -11,7 +11,7 @@
   @mixin btn-bg-style($color) {
     overflow: hidden;
     background-color: $color;
-    border-radius: 4px;
+    border-radius: $radius-sm;
 
     .ant-btn,
     .ant-btn:hover,
@@ -22,6 +22,8 @@
   }
 
   &--fill {
+    width: 100%;
+
     button {
       width: 100%;
     }
@@ -90,7 +92,7 @@
     }
   }
 
-  &--border-default {
+  &--common-border {
     button {
       border-color: var(--accent);
 

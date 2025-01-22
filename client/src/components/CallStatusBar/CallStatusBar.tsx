@@ -8,6 +8,7 @@ export const CallStatusBar = () => {
   const { isMinified } = useTypedSelector((state) => state.calls)
   const { currentCall } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
+
   return (
     <div
       className={`call-status-bar ${!isMinified ? 'call-status-bar--hide' : ''}`}
@@ -18,10 +19,10 @@ export const CallStatusBar = () => {
         <div className="call-status-bar__info">
           {currentCall.interlocutorAvatarPath && (
             <div className="call-status-bar__avatar">
-              <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} />
+              <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="xs" />
             </div>
           )}
-          <div className="call-status-bar__interlocutor-name paragraph-text">{currentCall.authorName}</div>
+          <div className="call-status-bar__interlocutor-name paragraph-text">{currentCall.interlocutorName}</div>
         </div>
       </div>
     </div>

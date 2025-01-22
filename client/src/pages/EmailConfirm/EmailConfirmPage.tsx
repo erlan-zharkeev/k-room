@@ -1,11 +1,10 @@
-import { Status, RouteNames } from 'common-types'
+import { Status, RouteNames, AuthEndpoints } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AsyncThunkResponseWrapper } from 'src/@types'
 import { UIIcon, UIButton } from 'src/components'
 import { useQuery } from 'src/hooks'
-import { apiMethods } from 'src/services'
+import { useApi } from 'src/services'
 import { AppDispatch, logOut } from 'src/store'
 
 export const EmailConfirmPage = () => {
@@ -15,12 +14,13 @@ export const EmailConfirmPage = () => {
 
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const { doRequest } = useApi()
 
   const sendEmailConfirmation = async (id: string) => {
-    const response = (await dispatch(apiMethods.auth.emailConfirm(id))) as AsyncThunkResponseWrapper
-    const { status, data } = response.payload
-    if (status !== Status.success) return navigate(RouteNames.SIGN_IN)
-    setEmail(data.userData.email)
+    const response = await doRequest('post', AuthEndpoints.SEND_EMAIL_CONFIRMATION, { userId: id })
+    if (!response) return
+    if (response.status !== Status.success) return navigate(RouteNames.SIGN_IN)
+    setEmail(response.data.userData.email)
     setIsLoading(false)
     dispatch(logOut())
   }
@@ -50,7 +50,7 @@ export const EmailConfirmPage = () => {
               color="accent"
               fill
               text="Go to app"
-              border="border-default"
+              border="common-border"
               onClick={() => navigate(RouteNames.SIGN_IN)}
             />
           </>

@@ -5,6 +5,7 @@ import { io } from '../server'
 import { getUsersByHasContactId, getSocketsByUserIds } from '../socket'
 import { SharpSettingsKey, Status, NotificationMessage, SocketActionsPayload, SocketActions } from '../@types'
 import { getPathToImg, saveImageAndGetPath, throwError } from '../utils'
+import { updateTokens } from '../services'
 
 const bcrypt = require('bcryptjs')
 
@@ -60,9 +61,11 @@ class UserController {
       const userId = req.app.locals.id
       const user = await UserModel.findOne({ _id: userId })
       if (!user) return throwError(Status.badRequest, res, NotificationMessage.userNotFound)
+      await updateTokens(user._id, res)
       return res.json({
         userData: {
           username: user.username,
+          role: user.role,
           email: user.email,
           id: user._id,
           avatarPath: user.avatarPath,

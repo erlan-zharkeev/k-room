@@ -1,4 +1,10 @@
 .auth-nav {
+  margin-bottom: 12px;
+
+  &__admin-nav {
+    color: var(--secondary-text);
+  }
+
   a {
     margin-right: $gutter-lg;
     padding-bottom: 0.4rem;

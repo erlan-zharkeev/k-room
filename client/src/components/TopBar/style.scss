@@ -1,13 +1,24 @@
 .top-bar {
+  position: relative;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   height: $bar-height;
   min-height: $bar-height;
   margin-bottom: $gutter-lg;
   padding: 0 1rem;
+  overflow: hidden;
   @include nm-outset-element;
+
+  .widget-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .widget-wallpaper {
+    // display: flex;
+    // height: 100%;
+    // align-items: center;
+    // justify-content: space-between;
+  }
 
   &__content {
     display: flex;
@@ -42,6 +53,15 @@
   &__buttons {
     display: flex;
     align-items: center;
+  }
+
+  &__allow-audio-context {
+    margin-right: 16px;
+    padding: 4px 8px;
+    color: var(--accent);
+    border: solid 2px var(--accent);
+    border-radius: $radius-sm;
+    cursor: pointer;
   }
 
   .top-bar__info {

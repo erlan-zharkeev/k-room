@@ -2,15 +2,18 @@ export enum Status {
   success = 200,
   badRequest = 400,
   notAuth = 401,
+  forbidden = 403,
   notFound = 404,
   server = 500,
   unreachable = 503,
   badGateway = 504,
 }
+
 export interface MessageMetaData {
   id: string;
   status: Record<MessageStatus, string>;
 }
+
 export enum Author {
   system = "system",
   time = "time",
@@ -31,12 +34,12 @@ export interface ImageObject {
 export interface Message {
   id: string;
   tempId?: string;
-  authorName: string;
-  authorId: string;
-  body: string;
-  createdAt?: string;
   isSelf?: boolean;
   status?: MessageStatus;
+  authorId: string;
+  authorName: string;
+  body: string;
+  createdAt?: string;
   reactions?: Array<Reaction>;
   images?: ImageObject[];
   imageCompression?: boolean;
@@ -78,9 +81,11 @@ export interface DBChatRoom extends Omit<ChatRoom, "users" | "messages"> {
   messages: Array<string>;
 }
 
+export type UsersMetaData = Array<{ id: string; status: MessageStatus }>
+
 export interface DBMessage extends Message {
   _id: string;
-  usersMetaData: Array<{ id: string; status: MessageStatus }>;
+  usersMetaData: UsersMetaData;
 }
 
 export type ChatRooms = Array<ChatRoom>;
@@ -100,9 +105,15 @@ export interface UserCredential extends UserShort {
   providerName?: string;
 }
 
+export enum UserRole {
+  user = 'user',
+  admin = 'admin'
+}
+
 export interface KRoomUser extends UserCredential {
   online: boolean;
   chatRooms: ChatRooms;
+  role: keyof typeof UserRole;
   lastSeen?: string;
   contacts?: Array<KRoomUser>;
   infoItems?: Array<InfoItem>;
@@ -123,6 +134,7 @@ export enum Theme {
 
 export enum UserSettingKey {
   theme = "theme",
+  selectedAdminPanelModelTab = "selectedAdminPanelModelTab",
   soundOn = "soundOn",
   showTooltips = "showTooltips",
   ableToShowNotification = "ableToShowNotification",
@@ -133,6 +145,7 @@ export enum UserSettingKey {
 }
 
 export enum AsideBarButtonName {
+  adminPanel = "adminPanel",
   contacts = "contacts",
   chatList = "chatList",
   calls = "calls",
@@ -140,8 +153,16 @@ export enum AsideBarButtonName {
   info = "info",
 }
 
+export enum AdminPanelModelTab {
+  users = "users",
+  calls = "calls",
+  chatRooms = "chat-rooms",
+  messages = "messages"
+}
+
 export interface UserSettings {
   [UserSettingKey.asideTab]: AsideBarButtonName;
+  [UserSettingKey.selectedAdminPanelModelTab]: AdminPanelModelTab;
   [UserSettingKey.selectedChatRoomId]: string;
   [UserSettingKey.ableToShowNotification]: boolean;
   [UserSettingKey.theme]: Theme;
@@ -197,7 +218,7 @@ export interface Call {
   setId?: boolean;
 }
 
-export interface CallDB {
+export interface DBCall {
   _id: string;
   calledAt: number;
   startedAt: number;
@@ -304,6 +325,16 @@ export enum NotificationMessage {
   authenticationError = "Authentication error",
   maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
   imageSizeMustLessThan2mb = "Image size must be less than 2mb",
+  allowAudioContext = "The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.",
+  failedToDecodeAdminId = "Failed to decode admin id",
+  forbiddenDoNotHavePermission = "Forbidden. You don't have permission to get access",
+  failedToGetData = "Failed to get data",
+  dbRestored = 'Data base restored',
+  dbResetFailed = 'Data base reset failed',
+  fixturesAreApplied = 'The fixtures are applied',
+  userDeleteSuccess = 'The user has been successfully deleted',
+  deleteUserFailed = "Couldn't delete user",
+  userUpdateSuccess = "User update success"
 }
 
 export interface ErrorResponse<T> {
@@ -311,6 +342,15 @@ export interface ErrorResponse<T> {
   status: Status;
   data: null;
   silent: boolean;
+}
+
+export interface KRoomNotification<T = NotificationMessage> {
+  key?: string
+  message: T
+  description?: string
+  messageType?: NotificationType
+  duration?: number
+  placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
 }
 
 export interface SocketActionsPayload {
@@ -366,10 +406,10 @@ export interface SocketActionsPayload {
     chatName: string;
     avatarPath: string;
     avatarFile:
-      | {
-          buffer: ArrayBuffer;
-        }
-      | undefined;
+    | {
+      buffer: ArrayBuffer;
+    }
+    | undefined;
   };
   userTyping: {
     authorName: string;
@@ -454,10 +494,12 @@ export interface EnvVariables {
   JWTR_ACCESS_EXPIRES_INTERVAL: string;
   APP_NAME: string;
   MAIL_APP: string;
-  K_ROOM_MAIL_PASS: string;
+  MAIL_APP_PASS: string;
   REGISTRATION_RESEND_INTERVAL_MINUTES: string;
   K_ROOM_ACCESS_TOKEN_SECRET: string;
   K_ROOM_REFRESH_TOKEN_SECRET: string;
+  K_ROOM_MAIL_PASS: string;
+  K_ROOM_ADMIN_PASS: string;
   IS_DEV: boolean;
   SERVER_ASSETS_PATH: string;
   MAX_RECONNECT_ATTEMPTS: number;
@@ -475,7 +517,10 @@ export interface EnvVariables {
 }
 
 // !for every endpoints use upper snake case!
-export enum AuthEndPoints {
+
+export type EndpointsType = AuthEndpoints | UserEndpoints | CommonEndpoints | CodesEndpoints | AdminEndpoints
+
+export enum AuthEndpoints {
   REGISTRATION = "/auth/registration",
   SEND_EMAIL_CONFIRMATION_LINK = "/auth/send-email-confirmation-link",
   SEND_EMAIL_CONFIRMATION = "/auth/send-email-confirmation",
@@ -486,20 +531,28 @@ export enum AuthEndPoints {
   UPDATE_TOKENS_PAIR = "/auth/update-tokens-pair",
 }
 
-export enum UserEndPoints {
+export enum UserEndpoints {
   GET_USER_DATA = "/auth/get-user-data",
   UPDATE_USER_DATA = "/auth/user-data/update",
   RESET_PASSWORD = "/user/reset-password",
 }
 
-export enum CommonEndPoints {
+export enum CommonEndpoints {
   COMMON_IMAGES = "/common-images",
   GET_INFO = "/notification",
 }
 
-export enum CodesEndPoints {
+export enum CodesEndpoints {
   SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
   VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery",
+}
+
+export enum AdminEndpoints {
+  GET_APP_DATA = "/admin/get-app-data",
+  DB_CLEAR = "/admin/db-reset",
+  APPLY_FIXTURES = "/admin/apply-fixtures",
+  DELETE_USER = "/admin/delete-user",
+  UPDATE_USER_DATA = "/admin/update-user-data"
 }
 
 export enum RouteNames {
@@ -513,6 +566,7 @@ export enum RouteNames {
   CREATE_NEW_PASSWORD = "/create-new-password",
   NOTIFICATION = "/notification",
   PRIVACY_POLICY = "/privacy-policy/",
+  ADMIN_PANEL = "/admin-panel/",
   // Don't forget to change path below in nginx manually
   SOCKET_PATH = "/app-socket/",
   API = "/api/",
@@ -569,3 +623,22 @@ export enum AuthTokens {
   accessToken = "jwt",
   refreshToken = "refresh-jwt",
 }
+
+export interface IUserSchema extends KRoomUser {
+  socketId: string
+  confirmed: Boolean
+  confirmAttempts: number
+  refreshToken: string
+  settings: UserSettings
+  codes: Codes
+  infoItems: Array<InfoItem>
+  _id: string
+}
+
+export interface IMessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status'> {
+  usersMetaData?: UsersMetaData;
+}
+
+export interface IDBChatRoomSchema extends DBChatRoom { }
+
+export interface IDBCallSchema extends DBCall { }

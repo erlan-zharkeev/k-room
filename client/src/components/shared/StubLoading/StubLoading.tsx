@@ -13,6 +13,7 @@ export const StubLoading = () => {
   const exit = () => {
     dispatch(logOut())
   }
+
   return (
     <div className="stub-loading">
       {reconnecting ? (
@@ -26,8 +27,8 @@ export const StubLoading = () => {
           <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Try again later</p>
 
           <div className="stub-loading__controls">
-            <UIButton border="border-default" text="Reconnect" onClick={reconnect} />
-            <UIButton border="border-default" text="Logout" onClick={exit} />
+            <UIButton border="common-border" text="Reconnect" onClick={reconnect} />
+            <UIButton border="common-border" text="Logout" onClick={exit} />
           </div>
         </div>
       )}

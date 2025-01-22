@@ -1,18 +1,15 @@
 import { MailerPayload } from '..'
-import { CommonEndPoints } from '../../../@types'
 import { ENV } from '../../../ENV'
 import { confirmation } from './confirmation'
 import { passwordRepairSentCode } from './password-repair-sent-code'
 
 interface CommonPayload {
   appName: string
-  logoSrc: string
   host: string
 }
 
 export const commonPayload: CommonPayload = {
   appName: ENV.APP_NAME,
-  logoSrc: `${ENV.SERVER_URL}${CommonEndPoints.COMMON_IMAGES}?img=logo(70x70).png`,
   host: `${ENV.CLIENT_URL}/sign-in`
 }
 

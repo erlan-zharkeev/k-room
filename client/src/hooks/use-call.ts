@@ -6,7 +6,6 @@ import {
   initModalToCall,
   markCurrentCallAsVideo,
   setCurrentCallAccepted,
-  showNotification,
   updateInterlocutorSettings
 } from 'src/store'
 import Peer, { SignalData } from 'simple-peer'
@@ -19,7 +18,7 @@ import {
   NotificationMessage,
   BasicStreamSettings
 } from 'common-types'
-import { useTypedSelector } from '.'
+import { useNotification, useTypedSelector } from '.'
 import { $socket, $sound, Sounds, $clg } from 'src/services'
 import { RefsContext } from 'src/providers'
 
@@ -61,17 +60,19 @@ export const useCall = () => {
   const interlocutorId = useRef<string>('')
   const callerSignal = useRef<SignalData>()
 
+  const notifications = useNotification();
+
+  const failedToConnectToDeviceNotification = notifications.getNotification({
+    message: NotificationMessage.failedToConnectToDevice,
+    messageType: NotificationType.error
+  })
+
   const getSelfStream = async (constraints: BasicStreamSettings) => {
     try {
       return await navigator.mediaDevices.getUserMedia(constraints)
     } catch (error) {
       $clg('error', 'Failed to get device cause ' + String(error))
-      dispatch(
-        showNotification({
-          message: NotificationMessage.failedToConnectToDevice,
-          messageType: NotificationType.error
-        })
-      )
+      failedToConnectToDeviceNotification.open()
       return null
     }
   }
@@ -101,16 +102,18 @@ export const useCall = () => {
     })
   }
 
-  const closeConnection = () => {
+  const callCompletedNotification = notifications.getNotification({
+    message: NotificationMessage.callCompleted,
+    messageType: NotificationType.info
+  })
+
+  const closeConnection = (silent = false) => {
     dispatch(closeCallModal())
     soundConnection.current.stop()
     soundCalling.current.stop()
-    dispatch(
-      showNotification({
-        message: NotificationMessage.callCompleted,
-        messageType: NotificationType.info
-      })
-    )
+    if (!silent) {
+      callCompletedNotification.open()
+    }
     $socket.off(SocketActions.CALL_ACCEPTED)
     selfStream.current?.getTracks().forEach((track) => {
       track.stop()
@@ -124,6 +127,7 @@ export const useCall = () => {
     selfStream.current = stream
     initConnection(true, selfStream.current)
     dispatch(initModalToCall(interlocutorData))
+    // Добавить логику включения громкости allowAudioContext
     soundConnection.current.play()
     connection.current?.on('signal', (data) => {
       if (connection.current?.connected) return emitUpdateSignal(data)

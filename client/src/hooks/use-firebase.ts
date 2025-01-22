@@ -1,9 +1,8 @@
 import { NotificationMessage, NotificationType } from 'common-types'
 import { Auth, getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { $clg } from 'src/services/$clg'
-import { AppDispatch, showNotification } from 'src/store'
+import { useNotification } from './use-notification'
 
 export enum FirebaseProviderType {
   google = 'google',
@@ -12,15 +11,22 @@ export enum FirebaseProviderType {
 
 export const useFirebase = () => {
   const [auth, _] = useState<Auth>(getAuth())
-  const dispatch = useDispatch<AppDispatch>()
   const [provider, setProvider] = useState<GoogleAuthProvider | FacebookAuthProvider | null>(null)
 
   const providers = {
     google: GoogleAuthProvider,
     facebook: FacebookAuthProvider
   }
+
   useEffect(() => {
     auth.languageCode = 'en'
+  })
+
+  const notifications = useNotification();
+
+  const failedToLoginNotification = notifications.getNotification({
+    message: NotificationMessage.failedToLogin,
+    messageType: NotificationType.error
   })
 
   const signIn = async (providerName: FirebaseProviderType) => {
@@ -31,12 +37,7 @@ export const useFirebase = () => {
       result = await signInWithPopup(auth, provider)
     } catch (e: unknown) {
       if (e instanceof Error) $clg('error', e.message)
-      dispatch(
-        showNotification({
-          message: NotificationMessage.failedToLogin,
-          messageType: NotificationType.error
-        })
-      )
+      failedToLoginNotification.open()
     }
     return result
   }

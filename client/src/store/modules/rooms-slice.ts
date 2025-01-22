@@ -9,7 +9,6 @@ interface AttachedFilesMessage {
 }
 
 interface RoomsState {
-  isLoading: boolean
   chatRooms: Array<ChatRoom>
   repliedMessageData: RepliedMessage
   attachedFilesMessage: AttachedFilesMessage
@@ -30,7 +29,6 @@ const initialAttachedFilesMessage = {
 }
 
 const initialState: RoomsState = {
-  isLoading: true,
   chatRooms: [],
   repliedMessageData: initialRepliedMessageData,
   attachedFilesMessage: initialAttachedFilesMessage
@@ -41,7 +39,6 @@ export const roomsSlice = createSlice({
   initialState,
   reducers: {
     resetRoomsStore(state) {
-      state.isLoading = true
       state.chatRooms = []
       state.repliedMessageData = initialRepliedMessageData
       state.attachedFilesMessage = initialAttachedFilesMessage

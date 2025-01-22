@@ -93,7 +93,7 @@ export const ChatRoomSettingsPopup = () => {
               </Form.Item>
             </div>
             <Members />
-            <UIButton text="Update" border="border-default" htmltype="submit" disabled={!isValid} />
+            <UIButton text="Update" border="common-border" htmltype="submit" disabled={!isValid} />
           </Form>
         </div>
       ) : (
@@ -108,7 +108,7 @@ export const ChatRoomSettingsPopup = () => {
             />
           </div>
           <Members />
-          <UIButton text="Close" border="border-default" onClick={() => dispatch(closeModal())} loading={isLoading} />
+          <UIButton text="Close" border="common-border" onClick={() => dispatch(closeModal())} loading={isLoading} />
         </div>
       )}
     </div>

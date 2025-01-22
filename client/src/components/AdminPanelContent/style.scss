@@ -1,0 +1,34 @@
+@import './elements/UsersTable/style';
+
+.admin-panel-content {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: $gutter-xl;
+  overflow: hidden;
+  @include nm-outset-element;
+
+  .admin-panel-content__header {
+    display: flex;
+    align-items: center;
+  }
+
+  .admin-panel-content__btn {
+    margin-left: 16px;
+  }
+
+  .admin-panel-content__header-elements {
+    display: flex;
+    margin-top: $gutter-md;
+  }
+
+  .admin-panel-content__header-element {
+    margin-right: 8px;
+    text-transform: uppercase;
+  }
+
+  .admin-panel-content__body {
+    margin-top: 16px;
+  }
+}

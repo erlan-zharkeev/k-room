@@ -1,6 +1,6 @@
 import { Theme } from 'common-types'
 import { ReactNode } from 'react'
-import { WallpaperMainDark, WallpaperMainLight, WallpaperAsideLight, WallpaperAsideDark } from 'src/assets'
+import { WallpaperMainDark, WallpaperMainLight, WallpaperAsideLight, WallpaperAsideDark, WallpaperTopLight, WallpaperTopDark } from 'src/assets'
 import { useTypedSelector } from 'src/hooks'
 
 const wallpaperMap = {
@@ -11,16 +11,24 @@ const wallpaperMap = {
   main: {
     [Theme.dark]: WallpaperMainDark,
     [Theme.light]: WallpaperMainLight
+  },
+  top: {
+    [Theme.dark]: WallpaperTopDark,
+    [Theme.light]: WallpaperTopLight
+  },
+  left: {
+    [Theme.dark]: WallpaperTopDark,
+    [Theme.light]: WallpaperTopLight
   }
 }
 
 export const WidgetWrapper = ({
-  loading,
   wallpaperPlacement,
+  loading,
   children
 }: {
-  loading: boolean
   wallpaperPlacement: keyof typeof wallpaperMap
+  loading?: boolean
   children?: ReactNode
 }) => {
   const { showWallpaper, theme } = useTypedSelector((state) => state.persist.settings)
@@ -35,22 +43,13 @@ export const WidgetWrapper = ({
       )}
     </div>
   )
+
   return (
     <div className="widget-wrapper">
       {wallpaper}
-      <div className={`widget-loader widget-loader--${loaderModifier}`}>
+      <div className={`widget-loader widget-loader--${loaderModifier}`} >
         {wallpaper}
-        <div className="loading-container">
-          <div className="loading-text">
-            <span>L</span>
-            <span>O</span>
-            <span>A</span>
-            <span>D</span>
-            <span>I</span>
-            <span>N</span>
-            <span>G</span>
-          </div>
-        </div>
+        <div className="loading-container" />
       </div>
       {children}
     </div>

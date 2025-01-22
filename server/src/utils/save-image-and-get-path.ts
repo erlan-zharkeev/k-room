@@ -7,7 +7,7 @@ import { throwErrorViaSocket } from './throw-error-via-socket'
 import { serverConstants } from '../server-constants'
 
 export const saveImageAndGetPath = async (
-  buffer: ArrayBuffer | undefined,
+  buffer: ArrayBuffer | undefined | Buffer,
   type = SharpSettingsKey.commonCompressed,
   authorId: string
 ): Promise<string> => {

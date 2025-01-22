@@ -1,13 +1,10 @@
 import Form from 'antd/lib/form'
-import { CodeValidationPayload, RouteNames } from 'common-types'
+import { CodesEndpoints, CodeValidationPayload, RouteNames } from 'common-types'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { AsyncThunkResponseWrapper } from 'src/@types'
 import { Logo, UIInput, UIButton } from 'src/components'
 import { useValidate, useCounter } from 'src/hooks'
-import { apiMethods } from 'src/services'
-import { AppDispatch } from 'src/store'
+import { useApi } from 'src/services'
 import { getNextReqInterval, validateRules } from 'src/utils'
 
 export const PasswordRecoveryPage = () => {
@@ -18,11 +15,11 @@ export const PasswordRecoveryPage = () => {
   const [codeSent, setCodeAsSent] = useState(false)
   const [emailConfirmForm] = Form.useForm()
   const [codeConfirmForm] = Form.useForm()
-  const dispatch = useDispatch<AppDispatch>()
   const [counterValue, setCounterValue, startCounter, stopCounter] = useCounter(-1)
   const [queryParam, setQueryParams] = useSearchParams()
   const [email] = useState(queryParam.get('user-email'))
   const navigate = useNavigate()
+  const { doRequest } = useApi()
 
   useEffect(() => {
     const nextTimeRequestFromQuery = Number(queryParam.get('next-time-request'))
@@ -40,29 +37,24 @@ export const PasswordRecoveryPage = () => {
   const onFinishEmailConfirm = async (fields: FormData) => {
     stopCounter()
     setEmailSendCodeIsLoading(true)
-    const response = (await dispatch(
-      apiMethods.codes.sendEmailCodePasswordRecovery(fields)
-    )) as AsyncThunkResponseWrapper
+    const response = await doRequest('post', CodesEndpoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY, fields)
     setEmailSendCodeIsLoading(false)
     setCodeAsSent(true)
-    if (!response.payload) return
-    const { nextTimeRequest } = response.payload.data
+    if (!response) return
+    const { nextTimeRequest } = response.data
     setQueryParams({ 'next-time-request': nextTimeRequest })
     setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
     startCounter()
   }
-
   const onFinishCodeConfirm = async (fields: { code: string }) => {
     setCodeValidationIsLoading(true)
     const payload: CodeValidationPayload = {
       email: emailConfirmForm.getFieldValue('email'),
       code: fields.code
     }
-    const response = (await dispatch(
-      apiMethods.codes.validateEmailCodePasswordRecovery(payload)
-    )) as AsyncThunkResponseWrapper
+    const response = await doRequest('post', CodesEndpoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY, payload)
     if (!response) return
-    const { query } = response.payload.data
+    const { query } = response.data
     setCodeValidationIsLoading(false)
     navigate({ pathname: RouteNames.CREATE_NEW_PASSWORD, search: `?password-recovery=${query}` })
   }
@@ -99,7 +91,7 @@ export const PasswordRecoveryPage = () => {
                 <UIButton
                   fill={true}
                   text="Send code"
-                  border="border-default"
+                  border="common-border"
                   color="accent"
                   htmltype="submit"
                   loading={emailSendCodeIsLoading}
@@ -122,7 +114,7 @@ export const PasswordRecoveryPage = () => {
                   <UIButton
                     fill={true}
                     text="Validate"
-                    border="border-default"
+                    border="common-border"
                     color="success"
                     htmltype="submit"
                     loading={codeValidationIsLoading}

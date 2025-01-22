@@ -2,6 +2,7 @@ export declare enum Status {
     success = 200,
     badRequest = 400,
     notAuth = 401,
+    forbidden = 403,
     notFound = 404,
     server = 500,
     unreachable = 503,
@@ -28,12 +29,12 @@ export interface ImageObject {
 export interface Message {
     id: string;
     tempId?: string;
-    authorName: string;
-    authorId: string;
-    body: string;
-    createdAt?: string;
     isSelf?: boolean;
     status?: MessageStatus;
+    authorId: string;
+    authorName: string;
+    body: string;
+    createdAt?: string;
     reactions?: Array<Reaction>;
     images?: ImageObject[];
     imageCompression?: boolean;
@@ -70,12 +71,13 @@ export interface DBChatRoom extends Omit<ChatRoom, "users" | "messages"> {
     users: Array<string>;
     messages: Array<string>;
 }
+export type UsersMetaData = Array<{
+    id: string;
+    status: MessageStatus;
+}>;
 export interface DBMessage extends Message {
     _id: string;
-    usersMetaData: Array<{
-        id: string;
-        status: MessageStatus;
-    }>;
+    usersMetaData: UsersMetaData;
 }
 export type ChatRooms = Array<ChatRoom>;
 export type Contact = Omit<KRoomUser, "chatRooms">;
@@ -90,9 +92,14 @@ export interface UserCredential extends UserShort {
     avatarPath?: string;
     providerName?: string;
 }
+export declare enum UserRole {
+    user = "user",
+    admin = "admin"
+}
 export interface KRoomUser extends UserCredential {
     online: boolean;
     chatRooms: ChatRooms;
+    role: keyof typeof UserRole;
     lastSeen?: string;
     contacts?: Array<KRoomUser>;
     infoItems?: Array<InfoItem>;
@@ -110,6 +117,7 @@ export declare enum Theme {
 }
 export declare enum UserSettingKey {
     theme = "theme",
+    selectedAdminPanelModelTab = "selectedAdminPanelModelTab",
     soundOn = "soundOn",
     showTooltips = "showTooltips",
     ableToShowNotification = "ableToShowNotification",
@@ -119,14 +127,22 @@ export declare enum UserSettingKey {
     showWallpaper = "showWallpaper"
 }
 export declare enum AsideBarButtonName {
+    adminPanel = "adminPanel",
     contacts = "contacts",
     chatList = "chatList",
     calls = "calls",
     settings = "settings",
     info = "info"
 }
+export declare enum AdminPanelModelTab {
+    users = "users",
+    calls = "calls",
+    chatRooms = "chat-rooms",
+    messages = "messages"
+}
 export interface UserSettings {
     [UserSettingKey.asideTab]: AsideBarButtonName;
+    [UserSettingKey.selectedAdminPanelModelTab]: AdminPanelModelTab;
     [UserSettingKey.selectedChatRoomId]: string;
     [UserSettingKey.ableToShowNotification]: boolean;
     [UserSettingKey.theme]: Theme;
@@ -175,7 +191,7 @@ export interface Call {
     interlocutorSettings?: StreamSettings;
     setId?: boolean;
 }
-export interface CallDB {
+export interface DBCall {
     _id: string;
     calledAt: number;
     startedAt: number;
@@ -276,13 +292,31 @@ export declare enum NotificationMessage {
     tokenExpired = "Token expired",
     authenticationError = "Authentication error",
     maxAttachedFilesExceed = "The maximum number of attached images should not exceed 4",
-    imageSizeMustLessThan2mb = "Image size must be less than 2mb"
+    imageSizeMustLessThan2mb = "Image size must be less than 2mb",
+    allowAudioContext = "The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.",
+    failedToDecodeAdminId = "Failed to decode admin id",
+    forbiddenDoNotHavePermission = "Forbidden. You don't have permission to get access",
+    failedToGetData = "Failed to get data",
+    dbRestored = "Data base restored",
+    dbResetFailed = "Data base reset failed",
+    fixturesAreApplied = "The fixtures are applied",
+    userDeleteSuccess = "The user has been successfully deleted",
+    deleteUserFailed = "Couldn't delete user",
+    userUpdateSuccess = "User update success"
 }
 export interface ErrorResponse<T> {
     message: T;
     status: Status;
     data: null;
     silent: boolean;
+}
+export interface KRoomNotification<T = NotificationMessage> {
+    key?: string;
+    message: T;
+    description?: string;
+    messageType?: NotificationType;
+    duration?: number;
+    placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft';
 }
 export interface SocketActionsPayload {
     interlocutorUpdateSignal: {
@@ -424,10 +458,12 @@ export interface EnvVariables {
     JWTR_ACCESS_EXPIRES_INTERVAL: string;
     APP_NAME: string;
     MAIL_APP: string;
-    K_ROOM_MAIL_PASS: string;
+    MAIL_APP_PASS: string;
     REGISTRATION_RESEND_INTERVAL_MINUTES: string;
     K_ROOM_ACCESS_TOKEN_SECRET: string;
     K_ROOM_REFRESH_TOKEN_SECRET: string;
+    K_ROOM_MAIL_PASS: string;
+    K_ROOM_ADMIN_PASS: string;
     IS_DEV: boolean;
     SERVER_ASSETS_PATH: string;
     MAX_RECONNECT_ATTEMPTS: number;
@@ -443,7 +479,8 @@ export interface EnvVariables {
     NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
     PASSWORD_RECOVERY_LINK_LIFE: number;
 }
-export declare enum AuthEndPoints {
+export type EndpointsType = AuthEndpoints | UserEndpoints | CommonEndpoints | CodesEndpoints | AdminEndpoints;
+export declare enum AuthEndpoints {
     REGISTRATION = "/auth/registration",
     SEND_EMAIL_CONFIRMATION_LINK = "/auth/send-email-confirmation-link",
     SEND_EMAIL_CONFIRMATION = "/auth/send-email-confirmation",
@@ -453,18 +490,25 @@ export declare enum AuthEndPoints {
     LOGOUT = "/auth/logout",
     UPDATE_TOKENS_PAIR = "/auth/update-tokens-pair"
 }
-export declare enum UserEndPoints {
+export declare enum UserEndpoints {
     GET_USER_DATA = "/auth/get-user-data",
     UPDATE_USER_DATA = "/auth/user-data/update",
     RESET_PASSWORD = "/user/reset-password"
 }
-export declare enum CommonEndPoints {
+export declare enum CommonEndpoints {
     COMMON_IMAGES = "/common-images",
     GET_INFO = "/notification"
 }
-export declare enum CodesEndPoints {
+export declare enum CodesEndpoints {
     SEND_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/password-recovery",
     VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY = "/codes/email/validate-email-code-password-recovery"
+}
+export declare enum AdminEndpoints {
+    GET_APP_DATA = "/admin/get-app-data",
+    DB_CLEAR = "/admin/db-reset",
+    APPLY_FIXTURES = "/admin/apply-fixtures",
+    DELETE_USER = "/admin/delete-user",
+    UPDATE_USER_DATA = "/admin/update-user-data"
 }
 export declare enum RouteNames {
     SIGN_IN = "/sign-in",
@@ -477,6 +521,7 @@ export declare enum RouteNames {
     CREATE_NEW_PASSWORD = "/create-new-password",
     NOTIFICATION = "/notification",
     PRIVACY_POLICY = "/privacy-policy/",
+    ADMIN_PANEL = "/admin-panel/",
     SOCKET_PATH = "/app-socket/",
     API = "/api/"
 }
@@ -528,4 +573,21 @@ export declare enum SocketActions {
 export declare enum AuthTokens {
     accessToken = "jwt",
     refreshToken = "refresh-jwt"
+}
+export interface IUserSchema extends KRoomUser {
+    socketId: string;
+    confirmed: Boolean;
+    confirmAttempts: number;
+    refreshToken: string;
+    settings: UserSettings;
+    codes: Codes;
+    infoItems: Array<InfoItem>;
+    _id: string;
+}
+export interface IMessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status'> {
+    usersMetaData?: UsersMetaData;
+}
+export interface IDBChatRoomSchema extends DBChatRoom {
+}
+export interface IDBCallSchema extends DBCall {
 }

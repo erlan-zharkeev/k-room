@@ -8,7 +8,7 @@ import {
   EmailConfirmPage,
   SignInPage,
   SignUpPage,
-  WaitEmailConfirmPage
+  WaitEmailConfirmPage,
 } from 'src/pages'
 import { IRoute } from './@types/IRoute'
 

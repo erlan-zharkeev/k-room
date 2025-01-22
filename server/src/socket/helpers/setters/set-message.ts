@@ -46,7 +46,7 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
       images,
       id: String(newDbMessage._id),
       isSelf: user?.id === message.authorId,
-      status: MessageStatus.delivered
+      status: MessageStatus.delivered,
     }
     const payload: SocketActionsPayload['messageDelivered'] = {
       roomId,

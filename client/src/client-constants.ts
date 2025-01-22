@@ -1,8 +1,6 @@
 export const clientConstants = {
   blockNativeContextMenu: true,
-  errorNotificationDuration: 5000,
-  asidePanelLoaderMinDuration: 2000,
-  chatRoomLoaderMinDuration: 2500,
+  errorNotificationDuration: 5,
   commonTimeoutDuration: 1500,
   infoItemMarkAsReadDuration: 1500,
   maxImageWeightMb: 2,

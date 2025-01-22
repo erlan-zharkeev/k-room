@@ -16,7 +16,7 @@ publish-images:
     - docker login -u ketjo -p $DOCKERHUB_TOKEN
     - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./server/.env.production
     - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./server/.env.production
-    - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./server/.env.production
+    - echo "MAIL_APP_PASS=$MAIL_APP_PASS" >> ./server/.env.production
     - echo "VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY" >> ./client/.env.production
     - cat ./client/.env.production
     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./

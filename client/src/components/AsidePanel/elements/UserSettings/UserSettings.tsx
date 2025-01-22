@@ -25,6 +25,7 @@ export const UserSettings = () => {
   )
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+  const { allowAudioContext } = useTypedSelector((state) => state.system)
   const { updateSetting } = useUpdateSettings()
 
   const changeUserData = () => {
@@ -92,11 +93,16 @@ export const UserSettings = () => {
         </div>
         <div className="user-settings__sound-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Sound</div>
-          <UISwitch initValue={soundOn} id="sound" onChange={changeSetting} />
+          <UISwitch initValue={soundOn} id="sound" onChange={changeSetting} disabled={!allowAudioContext} />
+          {!allowAudioContext && <div className="user-settings__additional-setting-info">The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.</div>}
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Tooltips</div>
           <UISwitch initValue={showTooltips} id="tooltips" onText="Show" offText="Hide" onChange={changeSetting} />
+        </div>
+        <div className="user-settings__wallpaper-switch">
+          <div className="user-settings__title paragraph-text paragraph-text--secondary">Wallpaper</div>
+          <UISwitch initValue={showWallpaper} id="wallpaper" onText="Show" offText="Hide" onChange={changeSetting} />
         </div>
         <div className="user-settings__notification-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Notification</div>
@@ -107,10 +113,7 @@ export const UserSettings = () => {
             offText="Hide"
             onChange={changeSetting}
           />
-        </div>
-        <div className="user-settings__wallpaper-switch">
-          <div className="user-settings__title paragraph-text paragraph-text--secondary">Wallpaper</div>
-          <UISwitch initValue={showWallpaper} id="wallpaper" onText="Show" offText="Hide" onChange={changeSetting} />
+          {<div className="user-settings__additional-setting-info">If you want to disable/enable browser notifications, you need to do this manually (the setting next to the address bar), the security policy does not allow you to do this from the application interface. The current setting is responsible for notification toasts inside the app.</div>}
         </div>
       </div>
       <div className="user-settings__info">

@@ -2,31 +2,32 @@ import { Select } from 'antd'
 import { NotificationMessage, NotificationType } from 'common-types'
 import { useState, useEffect, useRef } from 'react'
 import { UIButton } from 'src/components'
-import { useTypedSelector } from 'src/hooks'
+import { useNotification, useTypedSelector } from 'src/hooks'
 import { $sound, Sounds } from 'src/services'
-import { showNotification } from 'src/store'
 
 export const TechSettingsPopup = () => {
-  const [audioInputDevices, setAudioInputDevices] = useState([] as MediaDeviceInfo[])
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
+
+  const [audioInputDeviceList, setAudioInputDeviceList] = useState([] as MediaDeviceInfo[])
   const [selectedAudioInputDeviceValue, setSelectedAudioInputDeviceValue] = useState('default')
 
-  const [videoInputDevices, setVideoInputDevices] = useState([] as MediaDeviceInfo[])
+  const [videoInputDeviceList, setVideoInputDeviceList] = useState([] as MediaDeviceInfo[])
   const [selectedVideoInputDeviceValue, setSelectedVideoInputDeviceValue] = useState('default')
 
-  const [audioOutputDevices, setAudioOutputDevices] = useState([] as MediaDeviceInfo[])
+  const [audioOutputDeviceList, setAudioOutputDeviceList] = useState([] as MediaDeviceInfo[])
   const [selectedAudioOutputDevicesValue, setSelectedAudioOutputDeviceValue] = useState('default')
 
-  const getAvailableAudioDevices = async () => {
-    const devices = await navigator.mediaDevices.enumerateDevices()
-    const availableInputAudioDevices = devices.filter((device) => device.kind === 'audioinput')
-    setAudioInputDevices((oldArray) => [...oldArray, ...availableInputAudioDevices])
+  const requiredInputElements = { 'audioinput': { setDeviceByKindListAction: setAudioInputDeviceList, setCurrentDeviceAction: setSelectedAudioInputDeviceValue }, 'videoinput': { setDeviceByKindListAction: setVideoInputDeviceList, setCurrentDeviceAction: setSelectedVideoInputDeviceValue }, 'audiooutput': { setDeviceByKindListAction: setAudioOutputDeviceList, setCurrentDeviceAction: setSelectedAudioOutputDeviceValue } }
 
-    const availableVideoInputDevices = devices.filter((device) => device.kind === 'videoinput')
-    setVideoInputDevices((oldArray) => [...oldArray, ...availableVideoInputDevices])
-    setSelectedVideoInputDeviceValue(availableVideoInputDevices[0].deviceId)
+  const setDeviceData = (kind: string, setDeviceByKindListAction: React.Dispatch<React.SetStateAction<MediaDeviceInfo[]>>, setCurrentDeviceAction: React.Dispatch<React.SetStateAction<string>>) => {
+    const devicesByKind = devices.filter((device) => device.kind === kind)
+    setDeviceByKindListAction((oldArray) => [...oldArray, ...devicesByKind])
+    if (devicesByKind.length > 0 && devicesByKind[0].deviceId) setCurrentDeviceAction(devicesByKind[0].deviceId)
+  }
 
-    const availableAudioOutputDevices = devices.filter((device) => device.kind === 'audiooutput')
-    setAudioOutputDevices((oldArray) => [...oldArray, ...availableAudioOutputDevices])
+  const updateAvailableDevices = async () => {
+    let availableDevices = await navigator.mediaDevices.enumerateDevices()
+    setDevices(availableDevices)
   }
 
   const { showModal } = useTypedSelector((state) => state.system)
@@ -41,19 +42,26 @@ export const TechSettingsPopup = () => {
   }, [showModal])
 
   useEffect(() => {
-    getAvailableAudioDevices()
+    ['audioinput', 'videoinput', 'audiooutput'].forEach((input) => {
+      const { setDeviceByKindListAction, setCurrentDeviceAction } = requiredInputElements[input as keyof typeof requiredInputElements]
+      setDeviceData(input, setDeviceByKindListAction, setCurrentDeviceAction)
+    })
+  }, [devices])
+
+  useEffect(() => {
+    updateAvailableDevices()
   }, [])
 
   const onAudioInputDeviceChange = (value: string) => {
-    setSelectedAudioInputDeviceValue(value)
+    setSelectedAudioInputDeviceValue(value || 'default')
   }
 
   const onVideoInputDeviceChange = (value: string) => {
-    setSelectedVideoInputDeviceValue(value)
+    setSelectedVideoInputDeviceValue(value || 'default')
   }
 
   const onAudioOutputDeviceChange = async (value: string) => {
-    setSelectedAudioOutputDeviceValue(value)
+    setSelectedAudioOutputDeviceValue(value || 'default')
   }
 
   const hideVideo = () => {
@@ -67,6 +75,13 @@ export const TechSettingsPopup = () => {
   const [isVideoLoading, setVideoIsLoading] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null)
+
+  const notifications = useNotification();
+
+  const cantAccessDeviceNotification = notifications.getNotification({
+    message: NotificationMessage.cantAccessDevice,
+    messageType: NotificationType.error
+  })
 
   const toggleVideo = async () => {
     if (showVideo) {
@@ -84,18 +99,17 @@ export const TechSettingsPopup = () => {
       video!.srcObject = stream
       setShowVideo(true)
     } catch {
-      showNotification({
-        message: NotificationMessage.cantAccessDevice,
-        messageType: NotificationType.error
-      })
+      cantAccessDeviceNotification.open()
       setShowVideo(false)
     } finally {
       setVideoIsLoading(false)
+      updateAvailableDevices()
     }
   }
 
   const outputTestAudioSample = $sound(Sounds.messageDelivered)
   const toggleAudioOutput = () => {
+    updateAvailableDevices()
     outputTestAudioSample.stop()
     outputTestAudioSample.play()
   }
@@ -143,23 +157,16 @@ export const TechSettingsPopup = () => {
       initAudioVisualizer(stream)
       setMicGrade(true)
     } catch {
-      showNotification({
-        message: NotificationMessage.cantAccessDevice,
-        messageType: NotificationType.error
-      })
+      cantAccessDeviceNotification.open()
       setMicGrade(false)
     } finally {
       setMicIsLoading(false)
+      updateAvailableDevices()
     }
   }
 
-  const micIcon = () => {
-    return isMicLoading ? 'loader' : showMicGrade ? 'cross' : 'thunder'
-  }
-
-  const videoIcon = () => {
-    return isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
-  }
+  const micIcon = () => isMicLoading ? 'loader' : showMicGrade ? 'cross' : 'thunder'
+  const videoIcon = () => isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
 
   return (
     <div className="tech-settings-popup">
@@ -169,17 +176,16 @@ export const TechSettingsPopup = () => {
           <Select
             disabled
             style={{ width: '100%' }}
-            loading={audioInputDevices.length < 0}
+            loading={audioInputDeviceList.length < 0}
             value={selectedAudioInputDeviceValue}
             onChange={onAudioInputDeviceChange}
-            options={audioInputDevices.map((device) => ({ label: device.label, value: device.deviceId }))}
+            options={audioInputDeviceList.map((device) => ({ label: device.label, value: device.deviceId }))}
           />
           <UIButton onClick={toggleMic} iconName={micIcon()} color={showMicGrade ? 'error' : 'accent'} />
         </div>
         <div
-          className={`tech-settings-popup__volume-indicator-wrapper ${
-            !showMicGrade && 'tech-settings-popup__volume-indicator-wrapper--hide'
-          }`}
+          className={`tech-settings-popup__volume-indicator-wrapper ${!showMicGrade && 'tech-settings-popup__volume-indicator-wrapper--hide'
+            }`}
         >
           <div ref={volumeIndicator} className="tech-settings-popup__volume-indicator" />
         </div>
@@ -190,10 +196,10 @@ export const TechSettingsPopup = () => {
           <Select
             disabled
             style={{ width: '100%' }}
-            loading={videoInputDevices.length < 0}
+            loading={videoInputDeviceList.length < 0}
             value={selectedVideoInputDeviceValue}
             onChange={onVideoInputDeviceChange}
-            options={videoInputDevices.map((device) => ({ label: device.label, value: device.deviceId }))}
+            options={videoInputDeviceList.map((device) => ({ label: device.label, value: device.deviceId }))}
           />
           <UIButton onClick={toggleVideo} iconName={videoIcon()} color={showVideo ? 'error' : 'accent'} />
         </div>
@@ -207,10 +213,10 @@ export const TechSettingsPopup = () => {
           <Select
             disabled
             style={{ width: '100%' }}
-            loading={audioOutputDevices.length < 0}
+            loading={audioOutputDeviceList.length < 0}
             value={selectedAudioOutputDevicesValue}
             onChange={onAudioOutputDeviceChange}
-            options={audioOutputDevices.map((device) => ({ label: device.label, value: device.deviceId }))}
+            options={audioOutputDeviceList.map((device) => ({ label: device.label, value: device.deviceId }))}
           />
           <UIButton onClick={toggleAudioOutput} iconName="thunder" color="accent" />
         </div>

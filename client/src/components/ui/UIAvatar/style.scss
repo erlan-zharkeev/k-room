@@ -32,6 +32,17 @@
     }
   }
 
+  &--xs {
+    #{ $self }__image {
+      $size: 28px;
+
+      width: $size !important;
+      min-width: $size;
+      height: $size !important;
+      min-height: $size;
+    }
+  }
+
   &--small {
     #{ $self }__image {
       $size: 32px;

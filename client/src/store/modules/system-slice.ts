@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { notification } from 'antd'
 import { clientConstants } from 'src/client-constants'
-import { NotificationMessage, NotificationType } from 'common-types'
 import {
   ViewPort,
   ViewPortWidthType,
@@ -11,29 +9,21 @@ import {
   ModalContentComponentName
 } from 'src/@types'
 
-interface NotificationStore {
-  key?: string
-  message: NotificationMessage | JSX.Element
-  description?: string
-  messageType?: NotificationType
-  duration?: number
-  placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
-}
-
 interface ModalData {
   title: string
   modalContentComponentName: ModalContentComponentName
   okText?: string
   width?: string
+  actions?: Record<string, (payload?: unknown) => void | Promise<void>>
 }
 
 interface SystemStore {
   isAppLoading: boolean
   reconnecting: boolean
   showModal: boolean
+  allowAudioContext: boolean
   contextMenu: ContextMenu
   modalData: ModalData
-  notificationData: NotificationStore
   viewPort: ViewPort
 }
 
@@ -49,9 +39,9 @@ const clickedObjectInitialState = {
 
 const initialModalData = {
   title: '',
-  modalContentComponentName: ModalContentComponentName.createMultipleChatPopup,
+  modalContentComponentName: ModalContentComponentName.messageWithBindDataPopup,
   okText: 'ok',
-  width: '320px'
+  width: '320px',
 }
 
 const initViewPort = {
@@ -63,6 +53,7 @@ const initialState: SystemStore = {
   isAppLoading: false,
   reconnecting: false,
   showModal: false,
+  allowAudioContext: false,
   contextMenu: {
     slotName: '',
     coord: {
@@ -72,14 +63,6 @@ const initialState: SystemStore = {
     contextClickedObject: clickedObjectInitialState
   },
   modalData: initialModalData,
-  notificationData: {
-    key: '',
-    message: NotificationMessage.default,
-    description: '',
-    messageType: NotificationType.info,
-    duration: 3,
-    placement: 'top'
-  },
   viewPort: initViewPort
 }
 
@@ -102,6 +85,9 @@ export const systemSlice = createSlice({
       state.modalData = initialModalData
       state.viewPort = initViewPort
     },
+    enableAllowAudioContext: (state) => {
+      state.allowAudioContext = true
+    },
     changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
     },
@@ -115,21 +101,6 @@ export const systemSlice = createSlice({
     closeModal(state) {
       state.showModal = false
       state.modalData = initialModalData
-    },
-    showNotification(state, { payload }: { payload: NotificationStore }) {
-      const isError = payload.messageType === NotificationType.error
-      const isInfo = payload.messageType === NotificationType.info
-      state.notificationData = {
-        ...state.notificationData,
-        ...payload,
-        placement: isInfo ? 'bottomRight' : 'top',
-        duration: isError ? clientConstants.errorNotificationDuration : initialState.notificationData.duration
-      }
-
-      if (state.notificationData.messageType) {
-        notification[state.notificationData.messageType](state.notificationData)
-      }
-      state.notificationData = initialState.notificationData
     },
     setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload

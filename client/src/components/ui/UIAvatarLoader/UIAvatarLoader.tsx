@@ -1,5 +1,3 @@
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/store'
 import { IconName, UIAvatar, UIIcon } from '..'
 import { ShapeModifiers } from 'src/@types'
 import { imageToBase64 } from 'src/utils'
@@ -21,14 +19,12 @@ export const UIAvatarLoader = ({
   stubIconName,
   shape = 'round'
 }: UIAvatarLoaderProps) => {
-  const dispatch = useDispatch<AppDispatch>()
-
   const normFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
     const file = e.target.files[0]
     setFile(file)
     if (!file) return
-    const reader = imageToBase64({ image: file, dispatch })
+    const reader = imageToBase64({ image: file })
     if (!reader) return
     reader.onload = () => {
       setImage(String(reader.result))

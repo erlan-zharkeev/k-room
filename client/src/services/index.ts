@@ -1,5 +1,4 @@
-export { $api } from './$api'
-export { apiMethods } from './api-methods'
+export { useApi, apiErrorInterceptor } from './$api'
 export { $clg } from './$clg'
 export { $router } from './$router'
 export { $socket } from './$socket'

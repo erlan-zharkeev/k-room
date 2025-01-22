@@ -1,18 +1,12 @@
 import { Schema, model } from 'mongoose'
-import { KRoomUser, UserSettings, Codes, InfoItem } from '../@types'
-
-export interface IUserSchema extends KRoomUser {
-  socketId: string
-  confirmed: Boolean
-  confirmAttempts: number
-  refreshToken: string
-  settings: UserSettings
-  codes: Codes
-  infoItems: Array<InfoItem>
-  _id: string
-}
+import { IUserSchema } from '../@types'
 
 const userSchema = new Schema<IUserSchema>({
+  role: {
+    type: String,
+    unique: false,
+    required: false
+  },
   socketId: {
     type: String,
     unique: false,

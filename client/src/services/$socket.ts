@@ -1,13 +1,15 @@
-import { RouteNames, AuthTokens, SocketActions } from 'common-types'
+import { RouteNames, AuthTokens, SocketActions, AuthEndpoints } from 'common-types'
 import Cookies from 'js-cookie'
 import { io } from 'socket.io-client'
 import { AppDispatch, setReconnectingStatus } from 'src/store'
-import { apiMethods } from './api-methods'
+import axios from 'axios'
+import { apiErrorInterceptor } from './$api'
 
 const { DEV, VITE_SERVER_PORT, VITE_MAX_RECONNECT_ATTEMPTS } = import.meta.env
 const initConnectionPath = DEV ? `:${VITE_SERVER_PORT}` : ''
 
 export const $socket = io(`${initConnectionPath}/`, {
+  secure: true,
   forceNew: false,
   path: RouteNames.SOCKET_PATH,
   reconnection: true,
@@ -18,8 +20,12 @@ export const $socket = io(`${initConnectionPath}/`, {
 })
 
 export const socketReconnect = async (dispatch: AppDispatch) => {
-  await dispatch(apiMethods.auth.updateTokensPair())
-  $socket.auth = { token: Cookies.get('jwt') }
+  try {
+    await axios.get(`/api${AuthEndpoints.UPDATE_TOKENS_PAIR}`, { headers: { 'Content-Type': 'application/json' } })
+  } catch (e) {
+    apiErrorInterceptor(e)
+  }
+  $socket.auth = { token: Cookies.get(AuthTokens.accessToken) }
   $socket.connect()
   $socket.emit(SocketActions.INITIALIZE)
   dispatch(setReconnectingStatus(false))

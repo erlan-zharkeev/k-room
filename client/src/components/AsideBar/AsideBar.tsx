@@ -5,11 +5,13 @@ import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AppDispatch, selectChatRoom, showModal } from 'src/store'
 import { ModalContentComponentName, ViewPortWidthType } from 'src/@types'
 import { IconName, UIButton, Logo } from '..'
+import { WidgetWrapper } from '../shared'
+import { useEffect, useState } from 'react'
 
 export interface ButtonsListElement {
   value: AsideBarButtonName
   iconName: IconName
-  tooltip?: string
+  tooltip?: string,
 }
 
 export const AsideBar = () => {
@@ -20,6 +22,8 @@ export const AsideBar = () => {
   const modalAppearance = useTypedSelector((state) => state.system.showModal)
   const { showCallModal } = useTypedSelector((state) => state.calls)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
+  const { role } = useTypedSelector((state) => state.user.userData)
+
   const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
     updateSetting(UserSettingKey.asideTab, { asideTab: currentTabName })
@@ -65,28 +69,40 @@ export const AsideBar = () => {
     return result
   }
 
+  const [buttonElements, setButtonElements] = useState(buttons)
+
+  useEffect(() => {
+    if (role === 'admin') {
+      setButtonElements((buttons) => [{ value: AsideBarButtonName.adminPanel, iconName: 'shield', tooltip: 'Admin' }, ...buttons])
+    }
+  }, [role])
+
   return (
     <div className="aside-bar">
-      {viewPort.width >= ViewPortWidthType.tablet && <Logo showPointer={false} />}
-      <Radio.Group value={asideTab} onChange={changeTab}>
-        {buttons.map((button) => (
-          <div key={button.value} className="aside-bar__button-el">
-            {getButtonComponent(button)}
-            {button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 && (
-              <div className="custom-badge">{unreadMessagesCount()}</div>
-            )}
-          </div>
-        ))}
-      </Radio.Group>
-      {viewPort.width >= ViewPortWidthType.tablet && (
-        <UIButton
-          iconName="thunder"
-          color="accent"
-          onClick={openTechSettings}
-          tooltip="Check devices"
-          disabled={modalAppearance || showCallModal}
-        />
-      )}
+      <WidgetWrapper wallpaperPlacement="left">
+        <div className="aside-bar__wrapper">
+          {viewPort.width >= ViewPortWidthType.tablet && <Logo showPointer={false} />}
+          <Radio.Group value={asideTab} onChange={changeTab}>
+            {buttonElements.map((button) => (
+              <div key={button.value} className="aside-bar__button-el">
+                {getButtonComponent(button)}
+                {button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 && (
+                  <div className="custom-badge">{unreadMessagesCount()}</div>
+                )}
+              </div>
+            ))}
+          </Radio.Group>
+          {viewPort.width >= ViewPortWidthType.tablet && (
+            <UIButton
+              iconName="thunder"
+              color="accent"
+              onClick={openTechSettings}
+              tooltip="Check devices"
+              disabled={modalAppearance || showCallModal}
+            />
+          )}
+        </div>
+      </WidgetWrapper>
     </div>
   )
 }

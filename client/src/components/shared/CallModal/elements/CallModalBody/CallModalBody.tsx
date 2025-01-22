@@ -232,12 +232,12 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                     color={isAnswerLoading ? 'default' : 'success'}
                     text="Accept call"
                     loading={isAnswerLoading}
-                    border="border-default"
+                    border="common-border"
                   />
                 </div>
               )}
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <UIButton fillBg="error" color="error" onClick={endCall} text="Decline call" border="border-default" />
+                <UIButton fillBg="error" color="error" onClick={endCall} text="Decline call" border="common-border" />
               </div>
             </div>
           </div>

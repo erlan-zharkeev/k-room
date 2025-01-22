@@ -1,6 +1,12 @@
 import { Schema, model } from 'mongoose'
+import { IMessageSchema, MessageStatus } from '../@types';
 
-const messageSchema = new Schema({
+const usersMetaDataSchema = new Schema<{ id: string; status: MessageStatus }>({
+  id: { type: String, required: true },
+  status: { type: String, enum: Object.values(MessageStatus), required: true },
+});
+
+const messageSchema = new Schema<IMessageSchema>({
   authorId: {
     type: String,
     unique: false,
@@ -22,12 +28,12 @@ const messageSchema = new Schema({
     required: true
   },
   reactions: {
-    type: [],
+    type: [String],
     unique: false,
     required: false
   },
   images: {
-    type: [],
+    type: [String],
     unique: false,
     required: false
   },
@@ -37,7 +43,7 @@ const messageSchema = new Schema({
     default: true
   },
   usersMetaData: {
-    type: [],
+    type: [usersMetaDataSchema],
     required: false,
     default: []
   },

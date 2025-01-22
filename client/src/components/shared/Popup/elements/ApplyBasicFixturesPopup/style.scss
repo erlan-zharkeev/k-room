@@ -1,0 +1,11 @@
+.apply-basic-fixtures-popup {
+  .apply-basic-fixtures-popup__actions {
+    display: flex;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .ui-button:first-child {
+    margin-right: 8px;
+  }
+}

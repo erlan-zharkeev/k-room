@@ -1,16 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AsideBarButtonName, Theme, UserSettings } from 'common-types'
+import { AdminPanelModelTab, AsideBarButtonName, Theme, UserSettings } from 'common-types'
 import { setTheme } from 'src/utils'
 
 const initialState: UserSettings = {
   asideTab: AsideBarButtonName.contacts,
   currentInfoId: '1',
   selectedChatRoomId: '',
+  selectedAdminPanelModelTab: AdminPanelModelTab.users,
   theme: Theme.dark,
   soundOn: true,
   showTooltips: false,
   ableToShowNotification: true,
-  showWallpaper: true
+  showWallpaper: true,
 }
 
 export const settingsSlice = createSlice({
@@ -30,7 +31,8 @@ export const settingsSlice = createSlice({
         showTooltips,
         ableToShowNotification,
         currentInfoId,
-        showWallpaper
+        showWallpaper,
+        selectedAdminPanelModelTab
       } = payload
       state.asideTab = asideTab
       state.selectedChatRoomId = selectedChatRoomId
@@ -41,6 +43,10 @@ export const settingsSlice = createSlice({
       state.currentInfoId = currentInfoId
       state.ableToShowNotification = ableToShowNotification
       state.showWallpaper = showWallpaper
+      state.selectedAdminPanelModelTab = selectedAdminPanelModelTab
+    },
+    setAdminPanelTab(state, { payload }: { payload: AdminPanelModelTab }) {
+      state.selectedAdminPanelModelTab = payload
     },
     selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
@@ -68,6 +74,7 @@ export const settingsSlice = createSlice({
       state.asideTab = AsideBarButtonName.contacts
       state.currentInfoId = '1'
       state.selectedChatRoomId = ''
+      state.selectedAdminPanelModelTab = AdminPanelModelTab.users
       state.theme = Theme.dark
       state.soundOn = true
       state.showTooltips = false

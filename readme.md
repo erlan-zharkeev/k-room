@@ -1,13 +1,13 @@
 # K-Room
 ##
-Production: https://k-room.space(Temporarily closed)
+Production: https://k-room.space (Temporarily closed)
 
 ![App main screen](./main-screen.png 'main screen')
 
 ![App call screen](./call-screen.png 'call screen')
 
 ## Pre-install
-- To use husky run yarn prepare in root
+- To use husky run pnpm prepare in root
 - Then give rules chmod +x .husky/pre-commit
 
 ### Requirements
@@ -15,8 +15,8 @@ Production: https://k-room.space(Temporarily closed)
 - pnpm as package manager
 
 ## Development
+- Add variables to bash K_ROOM_MAIL_PASS, VITE_FIREBASE_API_KEY
 - Run bash dev.sh
-- Set in chrome url chrome://flags/#unsafely-treat-insecure-origin-as-secure and put in input field "http://localhost:3001"
 
 ## Deploy
 - Just merge to main branch

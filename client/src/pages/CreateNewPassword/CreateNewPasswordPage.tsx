@@ -1,14 +1,11 @@
 import Form from 'antd/lib/form'
-import { RouteNames, Status } from 'common-types'
+import { RouteNames, Status, UserEndpoints } from 'common-types'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { AsyncThunkResponseWrapper } from 'src/@types'
 import { Logo, UIInput, ErrorBucket, UIButton } from 'src/components'
 import { useValidate } from 'src/hooks'
-import { AppDispatch } from 'src/store'
 import { validateRules } from 'src/utils'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { apiMethods } from 'src/services'
+import { useApi } from 'src/services'
 
 export const CreateNewPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -19,7 +16,7 @@ export const CreateNewPasswordPage = () => {
   const [additionalErrors, setAdditionalErrors] = useState<Array<string>>([])
   const [isPasswordEqual, setIsPasswordEqual] = useState(false)
   const navigate = useNavigate()
-  const dispatch = useDispatch<AppDispatch>()
+  const { doRequest } = useApi()
 
   useEffect(() => {
     const passwordRestoreQuery = searchParams.get('password-recovery')
@@ -33,10 +30,9 @@ export const CreateNewPasswordPage = () => {
       password: form.getFieldsValue()['password-first'],
       query: passwordRestoreQuery
     }
-    const response = (await dispatch(apiMethods.user.resetPassword(payload))) as AsyncThunkResponseWrapper
+    const response = await doRequest('post', UserEndpoints.RESET_PASSWORD, payload)
     setIsLoading(false)
-    const { status } = response.payload
-    if (status === Status.success) navigate(RouteNames.SIGN_IN)
+    if (response && response.status === Status.success) navigate(RouteNames.SIGN_IN)
   }
 
   const formChangeHandler = () => {
@@ -58,7 +54,7 @@ export const CreateNewPasswordPage = () => {
         <div className="create-new-password__body">
           <div className="header-text header-text--md header-text--accent">Create new password</div>
           <Form
-            name="sign-in"
+            name="create-new-password"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             form={form}
@@ -71,10 +67,10 @@ export const CreateNewPasswordPage = () => {
               <UIInput placeholder="Confirm password" type="password" size="large" />
             </Form.Item>
             {additionalErrors.length > 0 && <ErrorBucket errors={additionalErrors} />}
-            <Form.Item className="sign-in__controls">
+            <Form.Item className="create-new-password__controls">
               <UIButton
                 text="Change password"
-                border="border-default"
+                border="common-border"
                 color="accent"
                 htmltype="submit"
                 loading={isLoading}

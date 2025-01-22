@@ -5,7 +5,7 @@ import { $router } from 'src/services'
 import { updateSettings } from '..'
 
 export interface UserState {
-  isAuth: boolean
+  isAuth: boolean;
   userData: KRoomUser
 }
 
@@ -21,6 +21,7 @@ const initialState: UserState = {
   isAuth: false,
   userData: {
     id: '',
+    role: 'user',
     email: '',
     username: '',
     online: false,
@@ -40,6 +41,7 @@ export const userSlice = createSlice({
       state.isAuth = false
       state.userData = {
         id: '',
+        role: 'user',
         email: '',
         username: '',
         online: false,

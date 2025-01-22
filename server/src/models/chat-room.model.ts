@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { DBChatRoom } from '../@types'
+import { IDBChatRoomSchema } from '../@types'
 
-const chatRoomModel = new Schema<DBChatRoom>({
+const chatRoomModel = new Schema<IDBChatRoomSchema>({
   chatName: {
     type: String,
     required: false

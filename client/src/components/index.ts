@@ -3,6 +3,7 @@ export { AsidePanel } from './AsidePanel/AsidePanel'
 export { CallStatusBar } from './CallStatusBar/CallStatusBar'
 export { ChatRoom } from './ChatRoom/ChatRoom'
 export { InfoList } from './InfoList/InfoList'
+export { AdminPanelContent } from './AdminPanelContent/AdminPanelContent'
 export { TopBar } from './TopBar/TopBar'
 export {
   AuthNav,

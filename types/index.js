@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.CodesEndPoints = exports.CommonEndPoints = exports.UserEndPoints = exports.AuthEndPoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.MessageStatus = exports.Author = exports.Status = void 0;
+exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.AdminEndpoints = exports.CodesEndpoints = exports.CommonEndpoints = exports.UserEndpoints = exports.AuthEndpoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AdminPanelModelTab = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.UserRole = exports.MessageStatus = exports.Author = exports.Status = void 0;
 var Status;
 (function (Status) {
     Status[Status["success"] = 200] = "success";
     Status[Status["badRequest"] = 400] = "badRequest";
     Status[Status["notAuth"] = 401] = "notAuth";
+    Status[Status["forbidden"] = 403] = "forbidden";
     Status[Status["notFound"] = 404] = "notFound";
     Status[Status["server"] = 500] = "server";
     Status[Status["unreachable"] = 503] = "unreachable";
@@ -24,6 +25,11 @@ var MessageStatus;
     MessageStatus["read"] = "read";
     MessageStatus["none"] = "none";
 })(MessageStatus = exports.MessageStatus || (exports.MessageStatus = {}));
+var UserRole;
+(function (UserRole) {
+    UserRole["user"] = "user";
+    UserRole["admin"] = "admin";
+})(UserRole = exports.UserRole || (exports.UserRole = {}));
 var Theme;
 (function (Theme) {
     Theme["dark"] = "dark";
@@ -32,6 +38,7 @@ var Theme;
 var UserSettingKey;
 (function (UserSettingKey) {
     UserSettingKey["theme"] = "theme";
+    UserSettingKey["selectedAdminPanelModelTab"] = "selectedAdminPanelModelTab";
     UserSettingKey["soundOn"] = "soundOn";
     UserSettingKey["showTooltips"] = "showTooltips";
     UserSettingKey["ableToShowNotification"] = "ableToShowNotification";
@@ -42,12 +49,20 @@ var UserSettingKey;
 })(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
 var AsideBarButtonName;
 (function (AsideBarButtonName) {
+    AsideBarButtonName["adminPanel"] = "adminPanel";
     AsideBarButtonName["contacts"] = "contacts";
     AsideBarButtonName["chatList"] = "chatList";
     AsideBarButtonName["calls"] = "calls";
     AsideBarButtonName["settings"] = "settings";
     AsideBarButtonName["info"] = "info";
 })(AsideBarButtonName = exports.AsideBarButtonName || (exports.AsideBarButtonName = {}));
+var AdminPanelModelTab;
+(function (AdminPanelModelTab) {
+    AdminPanelModelTab["users"] = "users";
+    AdminPanelModelTab["calls"] = "calls";
+    AdminPanelModelTab["chatRooms"] = "chat-rooms";
+    AdminPanelModelTab["messages"] = "messages";
+})(AdminPanelModelTab = exports.AdminPanelModelTab || (exports.AdminPanelModelTab = {}));
 var CallStatus;
 (function (CallStatus) {
     CallStatus["calling"] = "calling";
@@ -140,35 +155,52 @@ var NotificationMessage;
     NotificationMessage["authenticationError"] = "Authentication error";
     NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
     NotificationMessage["imageSizeMustLessThan2mb"] = "Image size must be less than 2mb";
+    NotificationMessage["allowAudioContext"] = "The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.";
+    NotificationMessage["failedToDecodeAdminId"] = "Failed to decode admin id";
+    NotificationMessage["forbiddenDoNotHavePermission"] = "Forbidden. You don't have permission to get access";
+    NotificationMessage["failedToGetData"] = "Failed to get data";
+    NotificationMessage["dbRestored"] = "Data base restored";
+    NotificationMessage["dbResetFailed"] = "Data base reset failed";
+    NotificationMessage["fixturesAreApplied"] = "The fixtures are applied";
+    NotificationMessage["userDeleteSuccess"] = "The user has been successfully deleted";
+    NotificationMessage["deleteUserFailed"] = "Couldn't delete user";
+    NotificationMessage["userUpdateSuccess"] = "User update success";
 })(NotificationMessage = exports.NotificationMessage || (exports.NotificationMessage = {}));
-// !for every endpoints use upper snake case!
-var AuthEndPoints;
-(function (AuthEndPoints) {
-    AuthEndPoints["REGISTRATION"] = "/auth/registration";
-    AuthEndPoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/auth/send-email-confirmation-link";
-    AuthEndPoints["SEND_EMAIL_CONFIRMATION"] = "/auth/send-email-confirmation";
-    AuthEndPoints["LOGIN"] = "/auth/login";
-    AuthEndPoints["GOOGLE_LOGIN"] = "/auth/google-login";
-    AuthEndPoints["PROVIDER_LOGIN"] = "/auth/provider-login";
-    AuthEndPoints["LOGOUT"] = "/auth/logout";
-    AuthEndPoints["UPDATE_TOKENS_PAIR"] = "/auth/update-tokens-pair";
-})(AuthEndPoints = exports.AuthEndPoints || (exports.AuthEndPoints = {}));
-var UserEndPoints;
-(function (UserEndPoints) {
-    UserEndPoints["GET_USER_DATA"] = "/auth/get-user-data";
-    UserEndPoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
-    UserEndPoints["RESET_PASSWORD"] = "/user/reset-password";
-})(UserEndPoints = exports.UserEndPoints || (exports.UserEndPoints = {}));
-var CommonEndPoints;
-(function (CommonEndPoints) {
-    CommonEndPoints["COMMON_IMAGES"] = "/common-images";
-    CommonEndPoints["GET_INFO"] = "/notification";
-})(CommonEndPoints = exports.CommonEndPoints || (exports.CommonEndPoints = {}));
-var CodesEndPoints;
-(function (CodesEndPoints) {
-    CodesEndPoints["SEND_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/password-recovery";
-    CodesEndPoints["VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/validate-email-code-password-recovery";
-})(CodesEndPoints = exports.CodesEndPoints || (exports.CodesEndPoints = {}));
+var AuthEndpoints;
+(function (AuthEndpoints) {
+    AuthEndpoints["REGISTRATION"] = "/auth/registration";
+    AuthEndpoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/auth/send-email-confirmation-link";
+    AuthEndpoints["SEND_EMAIL_CONFIRMATION"] = "/auth/send-email-confirmation";
+    AuthEndpoints["LOGIN"] = "/auth/login";
+    AuthEndpoints["GOOGLE_LOGIN"] = "/auth/google-login";
+    AuthEndpoints["PROVIDER_LOGIN"] = "/auth/provider-login";
+    AuthEndpoints["LOGOUT"] = "/auth/logout";
+    AuthEndpoints["UPDATE_TOKENS_PAIR"] = "/auth/update-tokens-pair";
+})(AuthEndpoints = exports.AuthEndpoints || (exports.AuthEndpoints = {}));
+var UserEndpoints;
+(function (UserEndpoints) {
+    UserEndpoints["GET_USER_DATA"] = "/auth/get-user-data";
+    UserEndpoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
+    UserEndpoints["RESET_PASSWORD"] = "/user/reset-password";
+})(UserEndpoints = exports.UserEndpoints || (exports.UserEndpoints = {}));
+var CommonEndpoints;
+(function (CommonEndpoints) {
+    CommonEndpoints["COMMON_IMAGES"] = "/common-images";
+    CommonEndpoints["GET_INFO"] = "/notification";
+})(CommonEndpoints = exports.CommonEndpoints || (exports.CommonEndpoints = {}));
+var CodesEndpoints;
+(function (CodesEndpoints) {
+    CodesEndpoints["SEND_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/password-recovery";
+    CodesEndpoints["VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/validate-email-code-password-recovery";
+})(CodesEndpoints = exports.CodesEndpoints || (exports.CodesEndpoints = {}));
+var AdminEndpoints;
+(function (AdminEndpoints) {
+    AdminEndpoints["GET_APP_DATA"] = "/admin/get-app-data";
+    AdminEndpoints["DB_CLEAR"] = "/admin/db-reset";
+    AdminEndpoints["APPLY_FIXTURES"] = "/admin/apply-fixtures";
+    AdminEndpoints["DELETE_USER"] = "/admin/delete-user";
+    AdminEndpoints["UPDATE_USER_DATA"] = "/admin/update-user-data";
+})(AdminEndpoints = exports.AdminEndpoints || (exports.AdminEndpoints = {}));
 var RouteNames;
 (function (RouteNames) {
     RouteNames["SIGN_IN"] = "/sign-in";
@@ -181,6 +213,7 @@ var RouteNames;
     RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
     RouteNames["NOTIFICATION"] = "/notification";
     RouteNames["PRIVACY_POLICY"] = "/privacy-policy/";
+    RouteNames["ADMIN_PANEL"] = "/admin-panel/";
     // Don't forget to change path below in nginx manually
     RouteNames["SOCKET_PATH"] = "/app-socket/";
     RouteNames["API"] = "/api/";

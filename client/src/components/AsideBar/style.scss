@@ -1,13 +1,22 @@
 .aside-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
   width: $aside-bar-width;
   min-width: $aside-bar-width;
   margin-right: $gutter-lg;
   padding: $gutter-md $gutter-sm;
+  overflow: hidden;
   @include nm-outset-element;
+
+  $self: &;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
   @include max-width-768 {
     flex-direction: row;
     align-items: center;
@@ -15,6 +24,9 @@
     height: $aside-bar-width;
     min-height: $aside-bar-width;
     margin-top: $gutter-lg;
+    #{ $self }__wrapper {
+      justify-content: center;
+    }
   }
 
   .logo {
@@ -49,6 +61,7 @@
 
     .ant-radio-button-wrapper {
       margin: $gutter-lg 0;
+      background: transparent !important;
     }
   }
 }

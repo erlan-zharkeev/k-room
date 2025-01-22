@@ -1,6 +1,4 @@
 $aside-bar-width: 50px;
-$bar-height: 50px;
-$call-bar-height: 35px;
 $input-message-height: 35px;
 $container-sm: 300px;
 $radius-sm: 4px;
@@ -10,9 +8,12 @@ $gutter-md: 8px;
 $gutter-lg: 16px;
 $gutter-xl: 32px;
 $gutter-xxl: 46px;
+$bar-height: 50px;
+$call-bar-height: 35px;
 $aside-panel-padding: $gutter-lg;
 
 html {
+  --real-1-percent-vh: 100vh;
   --chat-room-list-width: 35%;
 
   @include max-width-768 {

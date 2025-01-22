@@ -2,7 +2,7 @@
   height: $call-bar-height;
   margin-bottom: $gutter-lg;
   overflow: hidden;
-  background: var(--dark-gray-transparent);
+  background: var(--success-bg);
   border-radius: $radius-md;
   cursor: pointer;
   transition: height 0.1s ease-in;
@@ -36,7 +36,12 @@
     margin-right: 0.5rem;
   }
 
+  &__type {
+    color: var(--secondary-text)
+  }
+
   &__interlocutor-name {
     margin-right: 1rem;
+    color: var(--secondary-text)
   }
 }

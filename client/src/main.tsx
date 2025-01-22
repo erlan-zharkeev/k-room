@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import { initializeApp } from 'firebase/app'
-import * as process from 'process'
+import * as processLib from 'process'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { persistStore } from 'redux-persist'
@@ -23,13 +23,13 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig)
 
-window.process = process
+// @ts-expect-error
+window.process = processLib.process as NodeJS.Process
 const root = document.getElementById('root') as HTMLElement
 
 const persistor = persistStore(store)
 
-$clg('warn', `${appData.name} v. ${appData.version}`)
-
+$clg('success', `${appData.name} v.${appData.version}`)
 ReactDOM.createRoot(root).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

@@ -19,7 +19,7 @@ export const {
 export const { loadContacts, updateContactsStatus, updateContactData, resetContactStore } = contactsSlice.actions
 export const {
   setReconnectingStatus,
-  showNotification,
+  enableAllowAudioContext,
   showModal,
   closeModal,
   setViewPort,
@@ -38,7 +38,8 @@ export const {
   updateSettings,
   setCurrentInfoItem,
   showWallpaper,
-  resetSettings
+  resetSettings,
+  setAdminPanelTab
 } = settingsSlice.actions
 export const {
   updateAllList,

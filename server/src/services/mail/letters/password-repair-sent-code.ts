@@ -137,13 +137,6 @@ export const passwordRepairSentCode = (payload: PasswordRepairSentCodeLetterPayl
               <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Password recovery</h1>
             </td>
           </tr>
-          <tr>
-            <td align="center" bgcolor="#ffffff" valign="top" style="padding: 36px 24px;">
-              <a href="${commonPayload.host}" target="_blank" style="max-width: 150px; max-height: 150px;">
-                <img src="${commonPayload.logoSrc}" alt='logo' border="0" style="display: block; width: 150px">
-              </a>
-            </td>
-          </tr>
         </table>
         <!--[if (gte mso 9)|(IE)]>
         </td>

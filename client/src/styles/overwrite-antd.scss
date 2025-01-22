@@ -141,11 +141,12 @@ div[role='dialog'] {
 }
 
 .ant-modal-title {
-  color: var(--main-text) !important;
+  color: var(--secondary-text) !important;
+  font-size: 18px;
 }
 
 .ant-modal-close-x {
-  color: var(--main-text) !important;
+  color: var(--secondary-text) !important;
 }
 
 // notification
@@ -354,5 +355,6 @@ div[role='dialog'] {
 }
 
 .react-draggable {
+  position: fixed !important;
   overflow: hidden !important;
 }

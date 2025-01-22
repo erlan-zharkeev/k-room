@@ -15,6 +15,7 @@ export interface IconProps {
 }
 
 export type IconName =
+  | 'shield'
   | 'contacts'
   | 'chat'
   | 'chats'
