@@ -1,18 +1,18 @@
 import { clientConstants } from 'src/client-constants'
 import { NotificationMessage, NotificationType } from 'common-types'
-import { useNotification } from 'src/hooks'
+import { UseNotification } from 'src/hooks/use-notification'
 
 export const imageToBase64 = ({
   image,
   allowedResolutions = clientConstants.imageResolutions,
+  notifications
 }: {
   image: File
   allowedResolutions?: Array<string>
+  notifications: UseNotification
 }) => {
   const reader = new FileReader()
   reader.readAsDataURL(image)
-  const notifications = useNotification();
-
   const warnings = []
   const resolutionNotAllowed = !allowedResolutions.includes(image.type)
   if (resolutionNotAllowed) warnings.push(NotificationMessage.imageResNotAllowed)

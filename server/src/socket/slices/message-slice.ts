@@ -5,14 +5,19 @@ import { setMessage, setMessageStatus, getSocketsByUserIds } from '../helpers'
 
 export const messageSlice = (socket: SocketInstanceType) => {
   const { userId } = socket.data
+
   socket.on(SocketActions.SEND_MESSAGE, async ({ roomId, message }: SocketActionsPayload['sendMessage']) => {
-    await setMessage({ roomId, message })
+    try {
+      await setMessage({ roomId, message })
+    } catch (e: unknown) {
+      console.log(e, 'y');
+    }
   })
 
   socket.on(
     SocketActions.CHANGE_MESSAGE_STATUS,
     async ({ messageId, status, roomId }: SocketActionsPayload['changeMessageStatus']) => {
-      setMessageStatus(messageId, status, userId, roomId)
+      await setMessageStatus(messageId, status, userId, roomId)
     }
   )
 
@@ -35,14 +40,18 @@ export const messageSlice = (socket: SocketInstanceType) => {
         authorId: userId,
         username
       }
-      await MessageModel.updateOne({ _id: messageId }, { $push: { reactions: reaction } })
-      const room = await ChatRoomModel.findOne({ _id: roomId })
-      if (!room) return
-      const socketIds = await getSocketsByUserIds(room.users)
-      const payload: SocketActionsPayload['updatedMessageReactions'] = { roomId, messageId, reaction }
-      socketIds.forEach((socketId) => {
-        io.to(socketId).emit(SocketActions.UPDATE_MESSAGE_REACTIONS, payload)
-      })
+      try {
+        await MessageModel.updateOne({ _id: messageId }, { $push: { reactions: reaction } })
+        const room = await ChatRoomModel.findOne({ _id: roomId })
+        if (!room) return
+        const socketIds = await getSocketsByUserIds(room.users)
+        const payload: SocketActionsPayload['updatedMessageReactions'] = { roomId, messageId, reaction }
+        socketIds.forEach((socketId) => {
+          io.to(socketId).emit(SocketActions.UPDATE_MESSAGE_REACTIONS, payload)
+        })
+      } catch (e: unknown) {
+        console.log(e)
+      }
     }
   )
 }

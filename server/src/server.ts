@@ -35,10 +35,10 @@ app.get(RouteNames.API, (_: Request, res: Response) => {
   res.send('Server running')
 })
 
-const options = {
+const options = ENV.IS_DEV ? {
   key: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev-key.pem')),
   cert: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev.pem'))
-}
+} : {}
 
 const server = https.createServer(options, app)
 

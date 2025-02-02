@@ -5,7 +5,7 @@ import { AppDispatch } from '..'
 import { MiddlewareAPI, AnyAction } from '@reduxjs/toolkit'
 import { Dispatch } from 'react'
 import { LogoImage } from 'src/assets'
-import { useNotification } from 'src/hooks'
+import { UseNotification } from 'src/hooks/use-notification'
 
 export const SystemMiddleware =
   (store: MiddlewareAPI<AppDispatch, any>) => (next: Dispatch<AnyAction>) => (action: AnyAction) => {
@@ -14,9 +14,8 @@ export const SystemMiddleware =
       case 'rooms/updateChatMessage':
         const { soundOn } = store.getState().persist.settings
         const { allowAudioContext } = store.getState().system
-        const { message, roomId } = action.payload as SocketActionsPayload['messageDelivered']
+        const { message, roomId, notifications } = action.payload as SocketActionsPayload['messageDelivered'] & { notifications: UseNotification }
         if (!message.isSelf) {
-          const notifications = useNotification();
           const incomeMessageNotification = notifications.getNotification({
             message: MessageNotification(message),
             messageType: NotificationType.info,

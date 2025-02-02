@@ -1,4 +1,8 @@
 .users-table {
+  @include max-width-1024 {
+    max-width: 600px;
+  }
+
   .users-table__operations {
     display: flex;
   }

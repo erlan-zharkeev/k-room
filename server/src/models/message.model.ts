@@ -1,9 +1,20 @@
 import { Schema, model } from 'mongoose'
-import { IMessageSchema, MessageStatus } from '../@types';
+import { ImageObject, IMessageSchema, MessageStatus, Reaction } from '../@types';
 
 const usersMetaDataSchema = new Schema<{ id: string; status: MessageStatus }>({
   id: { type: String, required: true },
   status: { type: String, enum: Object.values(MessageStatus), required: true },
+});
+
+const reactionSchema = new Schema<Reaction>({
+  username: { type: String, required: true },
+  authorId: { type: String, required: true },
+  glyphKey: { type: String, required: true }
+});
+
+const imageSchema = new Schema<Omit<ImageObject, 'fileBuffer'>>({
+  src: { type: String, required: true },
+  name: { type: String, required: true }
 });
 
 const messageSchema = new Schema<IMessageSchema>({
@@ -28,12 +39,12 @@ const messageSchema = new Schema<IMessageSchema>({
     required: true
   },
   reactions: {
-    type: [String],
+    type: [reactionSchema],
     unique: false,
     required: false
   },
   images: {
-    type: [String],
+    type: [imageSchema],
     unique: false,
     required: false
   },

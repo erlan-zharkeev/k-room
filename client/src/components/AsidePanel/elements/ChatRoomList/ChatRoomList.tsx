@@ -1,4 +1,4 @@
-import { List } from 'antd'
+import { Badge, List } from 'antd'
 import { Message, UserSettingKey, SocketActionsPayload, SocketActions, ChatRoom, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { ModalContentComponentName } from 'src/@types'
@@ -79,7 +79,7 @@ export const ChatRoomList = () => {
               <List.Item.Meta
                 avatar={
                   <UIAvatar
-                    ribbon={chatRoom.multiple}
+                    showBadge={!chatRoom.multiple}
                     online={chatRoom.hasOnline}
                     stubIconName={chatRoom.multiple ? 'image-stub' : 'user-stub'}
                     src={chatRoom.avatarPath}
@@ -90,7 +90,7 @@ export const ChatRoomList = () => {
                 description={getLastMessage(chatRoom.messages)}
               />
               <div className="chat-room-list__controls">
-                {Boolean(unreadMessages(chatRoom)) && <div className="custom-badge">{unreadMessages(chatRoom)}</div>}
+                <Badge color='var(--accent)' count={Boolean(unreadMessages(chatRoom)) ? unreadMessages(chatRoom) : 0} offset={[-20, 0]} className='chat-room-list__badge'> </Badge>
                 {showAddUserButton(chatRoom) && (
                   <UIButton
                     iconName="plus"

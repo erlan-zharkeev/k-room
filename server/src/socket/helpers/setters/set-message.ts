@@ -6,13 +6,14 @@ import {
   DBChatRoom,
   MessageStatus,
   SocketActionsPayload,
-  SocketActions
+  SocketActions,
+  ImageObject
 } from '../../../@types'
 import { saveImageAndGetPath } from '../../../utils'
 import { getUserById } from '../getters'
 
 export const setMessage = async ({ roomId, message }: { roomId: string; message: Message }) => {
-  let images: { src: string; name: string }[] = []
+  let images: ImageObject[] = []
   if (message.images) {
     const compressionType = message.imageCompression
       ? SharpSettingsKey.commonCompressed

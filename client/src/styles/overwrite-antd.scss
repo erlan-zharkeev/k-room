@@ -38,6 +38,13 @@
   }
 }
 
+// tag
+.ant-tag {
+  @include nm-inset-shadow;
+
+  color: var(--secondary-text);
+}
+
 // select
 .ant-select {
   .ant-select-selector {
@@ -52,7 +59,7 @@
 
   &-multiple {
     .ant-select-selection-placeholder {
-      color: var(--select-placeholder) !important;
+      color: var(--secondary-text) !important;
     }
 
     .ant-select-selection-item {
@@ -352,6 +359,10 @@ div[role='dialog'] {
 
 .ant-badge-status-green {
   background: var(--success);
+}
+
+.ant-scroll-number-only-unit {
+  font-size: 12px;
 }
 
 .react-draggable {

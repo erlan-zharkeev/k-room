@@ -16,7 +16,7 @@ export const {
   deleteMessage,
   resetRoomsStore
 } = roomsSlice.actions
-export const { loadContacts, updateContactsStatus, updateContactData, resetContactStore } = contactsSlice.actions
+export const { loadContacts, updateContactsStatus, updateContactsStatusLocal, updateContactData, resetContactStore } = contactsSlice.actions
 export const {
   setReconnectingStatus,
   enableAllowAudioContext,

@@ -1,7 +1,8 @@
 import { UserModel } from '../../models'
 import { SocketInstanceType, SocketActions, SocketActionsPayload, KRoomUser, NotificationMessage } from '../../@types'
 import { transformUsersData } from '../../utils'
-import { emitSearchedContacts, emitContactsToUser } from '../helpers'
+import { emitSearchedContacts, emitContactsToUser, emitUserStatusToAll, setUserStatus } from '../helpers'
+import { io } from '../../server'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
 
@@ -21,14 +22,14 @@ export const contactsSlice = (socket: SocketInstanceType) => {
     if (!value) validSearch = false
     const $regex = new RegExp(value, 'i')
     const searchTypeMap: Record<
-    string,
-    Record<
-    string,
-    | {
-      $regex: RegExp
-    }
-    | string
-    >
+      string,
+      Record<
+        string,
+        | {
+          $regex: RegExp
+        }
+        | string
+      >
     > = {
       name: { username: { $regex } },
       email: { email: { $regex } },
@@ -52,5 +53,9 @@ export const contactsSlice = (socket: SocketInstanceType) => {
   socket.on(SocketActions.DELETE_CONTACT, async ({ deletingUserId }: SocketActionsPayload['deleteContact']) => {
     await UserModel.updateOne({ _id: userId }, { $pull: { contacts: deletingUserId } })
     emitContactsToUser(userId, NotificationMessage.userRemovedFromContacts)
+  })
+
+  socket.on(SocketActions.INTERLOCUTOR_PING, async () => {
+    await setUserStatus(userId, true)
   })
 }

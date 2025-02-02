@@ -335,7 +335,8 @@ export interface SocketActionsPayload {
     getRooms: Array<ChatRoom>;
     statusContact: {
         interlocutorId: string;
-        status: boolean;
+        online: boolean;
+        onlineStatusUpdatedTimestamp: number;
     };
     changeContactsData: UserShort;
     getContacts: {
@@ -567,6 +568,7 @@ export declare enum SocketActions {
     MARK_CALL_AS_VIDEO = "mark-call-as-video",
     UPDATE_CALL_SIGNAL = "update-call-signal",
     INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
+    INTERLOCUTOR_PING = "interlocutor-ping",
     RECONNECT_ATTEMPT = "reconnect_attempt",
     RECONNECT_FAILED = "reconnect_failed"
 }

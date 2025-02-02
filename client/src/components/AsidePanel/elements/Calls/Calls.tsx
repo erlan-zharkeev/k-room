@@ -27,7 +27,7 @@ export const Calls = () => {
           itemLayout="horizontal"
           dataSource={sortedList}
           locale={{
-            emptyText: <div className="paragraph-text paragraph-text--secondary">There are no calls yet</div>
+            emptyText: <div className="paragraph-text paragraph-text--secondary call-list__empty-title">There are no calls yet</div>
           }}
           renderItem={(call) => (
             <List.Item className={`call-list__item call-list__item--${getCallType(call)}`}>

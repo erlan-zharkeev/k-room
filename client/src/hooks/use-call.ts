@@ -228,7 +228,7 @@ export const useCall = () => {
     } catch (e: unknown) {
       if (e instanceof Error) $clg('error', e.message)
     }
-    closeConnection()
+    closeConnection(true)
     if (!callId) return
     const payload: SocketActionsPayload['callEnded'] = {
       callerId: interlocutorId.current,

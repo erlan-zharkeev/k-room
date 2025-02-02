@@ -1,7 +1,7 @@
-import { Form, Input, Popconfirm, Table, Typography } from 'antd';
+import { Form, Popconfirm, Table, Typography } from 'antd';
 import { AdminEndpoints, IUserSchema, Status } from 'common-types';
 import React, { useState } from 'react';
-import { UIAvatar, UIButton, UIIcon } from 'src/components/ui';
+import { UIAvatar, UIButton, UIIcon, UIInput } from 'src/components/ui';
 import { useApi } from 'src/services';
 import { Checkbox, Select } from 'antd';
 
@@ -40,7 +40,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       </Select>
     );
   } else {
-    inputNode = <Input />;
+    inputNode = <UIInput />;
   }
 
   return (
@@ -140,7 +140,7 @@ export const UsersTable: React.FC<{ originData: Item[] }> = ({ originData }) => 
       dataIndex: 'avatarPath',
       render: (_: unknown, record: Item) => (
         <div className='avatar-path-column'>
-          <UIAvatar src={record.avatarPath} showBadge={false} />
+          <UIAvatar src={record.avatarPath} online={record.online} />
         </div>
       ),
     },
@@ -164,12 +164,6 @@ export const UsersTable: React.FC<{ originData: Item[] }> = ({ originData }) => 
       dataIndex: 'role',
       editable: true,
       render: (_: unknown, record: Item) => record.role,
-    },
-    {
-      title: 'Online',
-      dataIndex: 'online',
-      editable: false,
-      render: (_: unknown, record: Item) => <Checkbox checked={record.online} disabled />,
     },
     {
       title: 'Confirmed',

@@ -7,6 +7,7 @@ import { AppDispatch, logOut } from 'src/store'
 import { UIAvatar, UIButton } from '..'
 import { $socket } from 'src/services'
 import { WidgetWrapper } from '../shared'
+import { Badge } from 'antd'
 
 export const TopBar = () => {
   const { updateSetting } = useUpdateSettings()
@@ -58,9 +59,10 @@ export const TopBar = () => {
                 trigger={['click']}
                 placement="bottom"
               >
-                <UIButton iconName="notification-bell" />
+                <Badge color={`var(--error)`} count={unreadInfoQuantity()} size="small" offset={[-5, 2]}>
+                  <UIButton iconName="notification-bell" />
+                </Badge>
               </Dropdown>
-              {unreadInfoQuantity() > 0 && <div className="custom-badge custom-badge--error">{unreadInfoQuantity()}</div>}
             </div>
             <UIButton tooltip="Logout" iconName="exit" onClick={() => exit()} />
           </div>

@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { SocketActionsPayload, Contact } from 'common-types'
 
+export type SliceContact = Contact & { onlineStatusUpdatedTimestamp: number }
+
 interface ContactsState {
-  contacts: Array<Contact>
+  contacts: Array<SliceContact>
 }
 
 const initialState: ContactsState = {
@@ -17,13 +19,23 @@ export const contactsSlice = createSlice({
       state.contacts = []
     },
     loadContacts(state, { payload }: { payload: Array<Contact> }) {
-      state.contacts = payload
+      state.contacts = payload.map((contact) => ({
+        ...contact,
+        onlineStatusUpdatedTimestamp: Date.now()
+      }))
     },
     updateContactsStatus(state, { payload }: { payload: SocketActionsPayload['statusContact'] }) {
-      const { interlocutorId, status } = payload
+      const { interlocutorId, online, onlineStatusUpdatedTimestamp } = payload
       state.contacts.forEach((user) => {
-        if (user.id === interlocutorId) user.online = status
+        if (user.id === interlocutorId) {
+          user.online = online
+          user.onlineStatusUpdatedTimestamp = onlineStatusUpdatedTimestamp
+        }
       })
+    },
+    updateContactsStatusLocal(state, { payload } : { payload: { contactId: string, online: boolean }}) {
+      const contact = state.contacts.find((contact) => contact.id === payload.contactId)
+      if (contact) contact.online = payload.online
     },
     updateContactData(state, { payload }: { payload: SocketActionsPayload['changeContactsData'] }) {
       const { id, username, avatarPath } = payload

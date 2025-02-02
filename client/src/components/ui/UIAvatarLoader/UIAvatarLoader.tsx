@@ -1,5 +1,6 @@
 import { IconName, UIAvatar, UIIcon } from '..'
 import { ShapeModifiers } from 'src/@types'
+import { useNotification } from 'src/hooks'
 import { imageToBase64 } from 'src/utils'
 
 export interface UIAvatarLoaderProps {
@@ -19,12 +20,14 @@ export const UIAvatarLoader = ({
   stubIconName,
   shape = 'round'
 }: UIAvatarLoaderProps) => {
+  const notifications = useNotification();
+
   const normFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
     const file = e.target.files[0]
     setFile(file)
     if (!file) return
-    const reader = imageToBase64({ image: file })
+    const reader = imageToBase64({ image: file, notifications })
     if (!reader) return
     reader.onload = () => {
       setImage(String(reader.result))

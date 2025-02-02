@@ -16,6 +16,7 @@ export const InfoList = () => {
   const { currentInfoId } = useTypedSelector((state) => state.persist.settings)
   const { infoItems } = useTypedSelector((state) => state.user.userData)
   const { doRequest } = useApi()
+
   const markInfoAsRead = async () => {
     if (!currentInfoId) return
     const response = await doRequest('post', CommonEndpoints.GET_INFO, { currentInfoId })
@@ -26,7 +27,7 @@ export const InfoList = () => {
   useEffect(() => {
     const timerId = setTimeout(() => {
       const foundEl = infoItems?.find(infoItem => infoItem.id === currentInfoId)
-      if (foundEl && !foundEl.read) markInfoAsRead()
+      if (foundEl && foundEl.read === 'unread') markInfoAsRead()
     }, clientConstants.infoItemMarkAsReadDuration)
     return () => clearTimeout(timerId)
   }, [currentInfoId, infoItems])

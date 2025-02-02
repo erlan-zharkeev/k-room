@@ -370,7 +370,8 @@ export interface SocketActionsPayload {
   getRooms: Array<ChatRoom>;
   statusContact: {
     interlocutorId: string;
-    status: boolean;
+    online: boolean;
+    onlineStatusUpdatedTimestamp: number;
   };
   changeContactsData: UserShort;
   getContacts: {
@@ -479,7 +480,7 @@ export interface SocketActionsPayload {
     roomId: string;
     messageId: string;
     reaction: Reaction;
-  };
+  }
 }
 
 // ENV VARs
@@ -614,6 +615,7 @@ export enum SocketActions {
   MARK_CALL_AS_VIDEO = "mark-call-as-video",
   UPDATE_CALL_SIGNAL = "update-call-signal",
   INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
+  INTERLOCUTOR_PING = "interlocutor-ping",
   // Socket.io events
   RECONNECT_ATTEMPT = "reconnect_attempt",
   RECONNECT_FAILED = "reconnect_failed",

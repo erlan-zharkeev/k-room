@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ChatRoom, ImageObject, Message, RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
+import { UseNotification } from 'src/hooks/use-notification'
 import { scrollToBottom } from 'src/utils'
 
 interface AttachedFilesMessage {
@@ -52,7 +53,7 @@ export const roomsSlice = createSlice({
     repliedMessageSetAsForward(state) {
       state.repliedMessageData.forward = true
     },
-    updateChatMessage(state, { payload }: { payload: SocketActionsPayload['messageDelivered'] }) {
+    updateChatMessage(state, { payload }: { payload: SocketActionsPayload['messageDelivered'] & { notifications: UseNotification } }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -86,12 +87,12 @@ export const roomsSlice = createSlice({
       room.messages.push(message)
     },
     updateChatUsersStatus(state, { payload }: { payload: SocketActionsPayload['statusContact'] }) {
-      const { interlocutorId, status } = payload
+      const { interlocutorId, online } = payload
       const hasUser = (users: Array<UserShort>): boolean => {
         return users.some((user) => user.id === interlocutorId)
       }
       state.chatRooms.forEach((room) => {
-        if (hasUser(room.users ?? [])) room.hasOnline = status
+        if (hasUser(room.users ?? [])) room.hasOnline = online
       })
     },
     changeChatName(state, { payload }: { payload: SocketActionsPayload['changeContactsData'] }) {

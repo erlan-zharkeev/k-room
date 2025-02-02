@@ -2,73 +2,73 @@
   color: var(--main-text);
   font-size: 14px;
   line-height: 1;
+}
 
-  &--secondary {
-    color: var(--secondary-text);
-  }
+.header-text--secondary {
+  color: var(--secondary-text);
+}
 
-  &--accent {
-    color: var(--accent);
-  }
+.header-text--accent {
+  color: var(--accent);
+}
 
-  &--left {
-    margin-right: auto;
-  }
+.header-text--left {
+  margin-right: auto;
+}
 
-  &--bold {
-    font-weight: bold;
-  }
+.header-text--bold {
+  font-weight: bold;
+}
 
-  &--sm {
-    font-size: 16px;
-  }
+.header-text--sm {
+  font-size: 16px;
+}
 
-  &--md {
-    font-size: 20px;
-  }
+.header-text--md {
+  font-size: 20px;
+}
 
-  &--lg {
-    font-size: 24px;
-  }
+.header-text--lg {
+  font-size: 24px;
+}
 
-  &--xl {
-    font-size: 32px;
-  }
+.header-text--xl {
+  font-size: 32px;
+}
 
-  &--xxl {
-    font-size: 40px;
-  }
+.header-text--xxl {
+  font-size: 40px;
+}
 
-  &--tribal {
-    font-family: 'Rajdhani, Helvetica', sans-serif;
-  }
+.header-text--tribal {
+  font-family: 'Rajdhani, Helvetica', sans-serif;
 }
 
 .paragraph-text {
   color: var(--main-text);
   font-size: 12px;
+}
 
-  &--bold {
-    font-weight: bold;
-  }
+.paragraph-text--bold {
+  font-weight: bold;
+}
 
-  &--accent {
-    color: var(--accent);
-  }
+.paragraph-text--accent {
+  color: var(--accent);
+}
 
-  &--error {
-    color: var(--error);
-  }
+.paragraph-text--error {
+  color: var(--error);
+}
 
-  &--secondary {
-    color: var(--secondary-text);
-  }
+.paragraph-text--secondary {
+  color: var(--secondary-text);
+}
 
-  &--sm {
-    font-size: 10px;
-  }
+.paragraph-text--sm {
+  font-size: 10px;
+}
 
-  &--md {
-    font-size: 14px;
-  }
+.paragraph-text--md {
+  font-size: 14px;
 }

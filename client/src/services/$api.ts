@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { Status, NotificationType, RouteNames, EndpointsType } from 'common-types'
-import { AppDispatch, changeIsAppLoading } from 'src/store'
+import { Status, NotificationType, RouteNames, EndpointsType, AsideBarButtonName } from 'common-types'
+import { AppDispatch, changeAsideTab, changeIsAppLoading } from 'src/store'
 import { $clg } from './$clg'
 import { publicRoutes } from 'src/router/routes'
 import { useNotification, UseNotification } from 'src/hooks/use-notification'
@@ -31,6 +31,10 @@ export const apiErrorInterceptor = async (e: unknown, dispatch?: AppDispatch, no
           window.location.href = RouteNames.SIGN_IN;
           silent = true;
         }
+        break;
+      }
+      case Status.forbidden: {
+        if (dispatch) dispatch(changeAsideTab(AsideBarButtonName.contacts))
         break;
       }
     }

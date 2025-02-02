@@ -5,7 +5,7 @@ import {
   SocketActionsPayload,
   AsideBarButtonName
 } from 'common-types'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { ViewPortWidthType } from 'src/@types'
 import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom, AdminPanelContent } from 'src/components'
@@ -25,10 +25,11 @@ import {
   updateCalls,
   updateChatMessage,
   updateChatUsersStatus,
+  updateContactsStatusLocal,
   updateContactData,
   updateContactsStatus,
   updateMessageReactions,
-  updateMessageStatus
+  updateMessageStatus,
 } from 'src/store'
 
 export const MainPage = () => {
@@ -37,19 +38,20 @@ export const MainPage = () => {
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
+  const {contacts } = useTypedSelector((state) => state.contacts)
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
   const notifications = useNotification();
+  const pingTimer = useRef<number | NodeJS.Timeout>()
+  const [pingTimerCounter, updateTimerCounter] = useState<number>(0)
 
   useTypedSelector((state) => state.calls.currentCall)
   const dispatch = useDispatch<AppDispatch>()
 
-  const socketConnectedNotification = notifications.getNotification({ messageType: NotificationType.success, message: NotificationMessage.socketConnected })
   const socketDisconnectedNotification = notifications.getNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected })
 
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
       $clg('success', 'Socket connected')
-      socketConnectedNotification.open()
       return
     }
     $clg('error', 'Socket disconnected')
@@ -80,8 +82,31 @@ export const MainPage = () => {
 
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
+  const checkForContactOnline = () => {
+    $socket.emit(SocketActions.INTERLOCUTOR_PING);
+    const maxDiffSeconds = 30;
+    const currentTimestamp = Date.now();
+    contacts.forEach((contact) => {
+      const outOfInterval = Math.abs(currentTimestamp - contact.onlineStatusUpdatedTimestamp) / 1000 > maxDiffSeconds;
+      if (outOfInterval) {
+        updateContactsStatusLocal({ contactId: contact.id, online: false })
+      }
+    })
+  }
+
+  useEffect(() => {
+    checkForContactOnline()
+  }, [pingTimerCounter])
+
   useEffect(() => {
     getNotificationPermission()
+
+    pingTimer.current = setInterval(() => {
+      updateTimerCounter(prev => {
+        const newValue = prev + 1;
+        return newValue;
+      });
+    }, 5000);
 
     if ($socket.disconnected) {
       socketReconnect(dispatch)
@@ -92,7 +117,6 @@ export const MainPage = () => {
     $socket.on(SocketActions.AUTH_ERROR, () => {
       socketReconnect(dispatch)
     })
-
     $socket.on(SocketActions.RECONNECT, (attempt: number) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
       $socket.emit(SocketActions.INITIALIZE)
@@ -102,7 +126,6 @@ export const MainPage = () => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
-
     $socket.on(SocketActions.RECONNECT_FAILED, () => {
       dispatch(setReconnectingStatus(false))
     })
@@ -110,11 +133,9 @@ export const MainPage = () => {
       const errorMessageNotification = notifications.getNotification({ messageType: NotificationType.error, message })
       errorMessageNotification.open()
     })
-
     $socket.on(SocketActions.DISCONNECT, () => {
       statusNotification(false)
     })
-
     $socket.on(SocketActions.CONNECTION, () => {
       statusNotification(true)
     })
@@ -137,7 +158,7 @@ export const MainPage = () => {
       dispatch(loadChatRooms(payload))
     })
     $socket.on(SocketActions.MESSAGE_DELIVERED, (payload: SocketActionsPayload['messageDelivered']) => {
-      dispatch(updateChatMessage(payload))
+      dispatch(updateChatMessage({ ...payload, notifications }))
     })
     $socket.on(SocketActions.UPDATE_MESSAGE_STATUS, (payload: SocketActionsPayload['updateMessageStatus']) => {
       dispatch(updateMessageStatus(payload))
@@ -157,6 +178,7 @@ export const MainPage = () => {
 
     return () => {
       $socket.removeAllListeners()
+      if (pingTimer.current) clearInterval(pingTimer.current)
     }
   }, [])
 

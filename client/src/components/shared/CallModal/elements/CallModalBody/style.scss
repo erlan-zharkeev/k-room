@@ -10,13 +10,11 @@
   border-radius: $radius-md;
   backdrop-filter: blur(10px);
 
-  $header-title: 35px;
-
-  &__wrapper {
+  .call-modal__wrapper {
     @include wh-100;
   }
 
-  &__user-settings {
+  .call-modal__user-settings {
     position: absolute;
     top: 50px;
     right: 0;
@@ -24,58 +22,28 @@
     overflow: hidden;
     border-top-left-radius: $radius-md;
     border-bottom-left-radius: $radius-md;
-
-    .ui-button {
-      background-color: var(--main-bg);
-    }
   }
 
-  &__user-setting {
-    &:hover {
-      .ui-button {
-        background-color: var(--accent);
-      }
-
-      .ui-icon {
-        color: var(--white);
-      }
-    }
+  .call-modal__user-settings .ui-button {
+    background-color: var(--main-bg);
   }
 
-  &__body {
+  .call-modal__user-setting:hover .ui-button {
+    background-color: var(--accent);
+  }
+
+  .call-modal__user-setting:hover .ui-icon {
+    color: var(--white);
+  }
+
+  .call-modal__body {
     position: relative;
     display: flex;
     flex-direction: column;
-    height: calc(100% - $header-title);
+    height: calc(100% - 35px);
   }
 
-  &__user-video {
-    video {
-      @include wh-100;
-
-      object-fit: contain;
-    }
-
-    .ant-avatar {
-      width: 50px;
-      height: 50px;
-    }
-
-    img {
-      object-fit: cover;
-    }
-
-    svg {
-      width: 30px;
-      height: 30px;
-    }
-
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
+  .call-modal__user-video {
     position: absolute;
     right: 0;
     bottom: -5px;
@@ -87,7 +55,33 @@
     overflow: hidden;
   }
 
-  &__center {
+  .call-modal__user-video video {
+    @include wh-100;
+
+    object-fit: contain;
+  }
+
+  .call-modal__user-video .ant-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .call-modal__user-video img {
+    object-fit: cover;
+  }
+
+  .call-modal__user-video svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .call-modal__user-video span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .call-modal__center {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,21 +91,21 @@
     padding-top: 1.5rem;
   }
 
-  &__length {
+  .call-modal__length {
     padding: 0.5rem;
     background-color: rgb(0 0 0 / 20%);
   }
 
-  &__header {
+  .call-modal__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: $header-title;
+    height: 35px;
     padding: 0 $gutter-lg 0 $gutter-sm;
     background-color: var(--main-bg);
   }
 
-  &__controls {
+  .call-modal__controls {
     position: absolute;
     bottom: 10px;
     display: flex;
@@ -120,42 +114,38 @@
     justify-content: center;
     width: 100%;
     padding-bottom: 1.5rem;
-
-    &-elements {
-      display: flex;
-      justify-content: space-evenly;
-      max-width: 300px;
-      margin-top: 1rem;
-    }
-
-    &-element {
-      margin: 0 5px;
-    }
   }
 
-  &__interlocutor-name {
+  .call-modal__controls-elements {
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 300px;
+    margin-top: 1rem;
+  }
+
+  .call-modal__controls-element {
+    margin: 0 5px;
+  }
+
+  .call-modal__interlocutor-name {
     margin-top: $gutter-xl;
   }
 
-  &__window-controls {
+  .call-modal__window-controls {
     z-index: 1;
     display: flex;
     border-color: var(--main-text);
-
-    &-element {
-      margin: 0 $gutter-sm;
-    }
   }
 
-  .ui-icon--video-call-thin {
-    svg {
-      transform: scale(1.2);
-    }
+  .call-modal__window-controls-element {
+    margin: 0 $gutter-sm;
   }
 
-  .ui-icon--video-drop {
-    svg {
-      transform: scale(1.1);
-    }
+  .ui-icon--video-call-thin svg {
+    transform: scale(1.2);
+  }
+
+  .ui-icon--video-drop svg {
+    transform: scale(1.1);
   }
 }

@@ -11,11 +11,9 @@
 
   .admin-panel-content__header {
     display: flex;
-    align-items: center;
-  }
-
-  .admin-panel-content__btn {
-    margin-left: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center
   }
 
   .admin-panel-content__header-elements {
@@ -30,5 +28,14 @@
 
   .admin-panel-content__body {
     margin-top: 16px;
+  }
+
+  .admin-panel-content__actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .admin-panel-content__data {
+    overflow: auto;
   }
 }

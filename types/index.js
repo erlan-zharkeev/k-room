@@ -261,6 +261,7 @@ var SocketActions;
     SocketActions["MARK_CALL_AS_VIDEO"] = "mark-call-as-video";
     SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
     SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
+    SocketActions["INTERLOCUTOR_PING"] = "interlocutor-ping";
     // Socket.io events
     SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
     SocketActions["RECONNECT_FAILED"] = "reconnect_failed";

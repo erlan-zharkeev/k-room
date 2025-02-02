@@ -1,8 +1,7 @@
 import { useApi } from "src/services";
 import { WidgetWrapper } from "../shared"
 import { useEffect, useState } from "react"
-import { AdminEndpoints, AdminPanelModelTab, IDBCallSchema, IDBChatRoomSchema, IMessageSchema, IUserSchema, RouteNames, Status, UserSettingKey } from "common-types";
-import { useNavigate } from "react-router-dom";
+import { AdminEndpoints, AdminPanelModelTab, IDBCallSchema, IDBChatRoomSchema, IMessageSchema, IUserSchema, Status, UserSettingKey } from "common-types";
 import { useTypedSelector, useUpdateSettings } from "src/hooks";
 import { UIButton } from "../ui";
 import { useDispatch } from "react-redux";
@@ -31,7 +30,6 @@ export const AdminPanelContent = () => {
   const { doRequest } = useApi()
   const [data, setData] = useState<IGetAppDataPayload | null>(null)
   const [error, setError] = useState(false)
-  const navigate = useNavigate()
   const { selectedAdminPanelModelTab } = useTypedSelector((state) => state.persist.settings)
 
   const getData = async () => {
@@ -39,7 +37,6 @@ export const AdminPanelContent = () => {
     const response = await doRequest('get', AdminEndpoints.GET_APP_DATA)
     setLoading(false)
     if (response && response.status) {
-      if (response.status === Status.forbidden) navigate(RouteNames.MAIN)
       if (response.status === Status.success && response.data) {
         const data = response.data as IGetAppDataPayload
         setData(data)
@@ -80,9 +77,11 @@ export const AdminPanelContent = () => {
           <div className="admin-panel-content__data">
             <div className="admin-panel-content__header">
               <h1 className="header-text header-text--secondary header-text--lg">Admin panel</h1>
-              <UIButton text="Refresh" border="common-border" className="refresh-btn admin-panel-content__btn" onClick={getData} />
-              <UIButton text="DB Сlear" border="common-border" className="db-reset-btn admin-panel-content__btn" onClick={dbClearLoaderHandler} />
-              <UIButton text="Apply basic fixtures" border="common-border" className="apply-base-fixtures-btn admin-panel-content__btn" onClick={applyBasicFixtures} />
+              <div className="admin-panel-content__actions">
+                <UIButton text="Refresh" border="common-border" className="refresh-btn admin-panel-content__btn" onClick={getData} />
+                <UIButton text="DB Сlear" border="common-border" className="db-reset-btn admin-panel-content__btn" onClick={dbClearLoaderHandler} />
+                <UIButton text="Apply basic fixtures" border="common-border" className="apply-base-fixtures-btn admin-panel-content__btn" onClick={applyBasicFixtures} />
+              </div>
             </div>
             <div className="admin-panel-content__header-elements">
               {dbElements.map((el) => (<div key={el.value} className={`paragraph-text pointer admin-panel-content__header-element ${selectedAdminPanelModelTab === el.value ? 'paragraph-text--accent' : 'paragraph-text--secondary'}`} onClick={() => updateSetting(UserSettingKey.selectedAdminPanelModelTab, { selectedAdminPanelModelTab: el.value })}>

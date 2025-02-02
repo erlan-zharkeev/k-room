@@ -1,4 +1,4 @@
-import { RadioChangeEvent, Radio } from 'antd'
+import { RadioChangeEvent, Radio, Badge } from 'antd'
 import { AsideBarButtonName, UserSettingKey, MessageStatus } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
@@ -72,8 +72,8 @@ export const AsideBar = () => {
   const [buttonElements, setButtonElements] = useState(buttons)
 
   useEffect(() => {
-    if (role === 'admin') {
-      setButtonElements((buttons) => [{ value: AsideBarButtonName.adminPanel, iconName: 'shield', tooltip: 'Admin' }, ...buttons])
+    if (role === 'admin' && !Boolean(buttons.find((button) => button.value === AsideBarButtonName.adminPanel))) {
+      setButtonElements((buttons) => [{ value: AsideBarButtonName.adminPanel, iconName: 'shield', tooltip: 'Admin panel' }, ...buttons])
     }
   }, [role])
 
@@ -85,10 +85,9 @@ export const AsideBar = () => {
           <Radio.Group value={asideTab} onChange={changeTab}>
             {buttonElements.map((button) => (
               <div key={button.value} className="aside-bar__button-el">
-                {getButtonComponent(button)}
-                {button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 && (
-                  <div className="custom-badge">{unreadMessagesCount()}</div>
-                )}
+                <Badge color='var(--accent)' count={button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 ? 1 : 0} size='small' offset={[-15, 10]}>
+                  {getButtonComponent(button)}
+                </Badge>
               </div>
             ))}
           </Radio.Group>

@@ -105,7 +105,8 @@ class AuthController {
           infoItems: user.infoItems
         },
         settings: user.settings,
-        message: NotificationMessage.loginSuccess
+        message: NotificationMessage.loginSuccess,
+        silent: true
       })
     } catch {
       throwError(Status.badRequest, res, NotificationMessage.failedLogin)

@@ -38,7 +38,7 @@ export const UIImageLoader = ({
     }
     let updatedImages: Array<ImageObject> = []
       ;[...images].forEach((image, idx) => {
-        const reader = imageToBase64({ image, allowedResolutions })
+        const reader = imageToBase64({ image, allowedResolutions, notifications })
         if (!reader) {
           setIsLoading(false)
           return

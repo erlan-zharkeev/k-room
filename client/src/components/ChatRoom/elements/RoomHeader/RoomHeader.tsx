@@ -6,7 +6,7 @@ import { clientConstants } from 'src/client-constants'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { $socket } from 'src/services'
 import { AppDispatch, showModal } from 'src/store'
-import { ModalContentComponentName, UIAvatarBadgePlacement } from 'src/@types'
+import { ModalContentComponentName } from 'src/@types'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -54,9 +54,8 @@ export const RoomHeader = () => {
 
   const whoIsTyping = () => {
     if (chatRoomData?.multiple) {
-      return `${typingAuthors.map((author) => author.authorName).join(', ')} ${
-        typingAuthors.length > 1 ? 'are typing' : 'is typing'
-      }`
+      return `${typingAuthors.map((author) => author.authorName).join(', ')} ${typingAuthors.length > 1 ? 'are typing' : 'is typing'
+        }`
     }
     return ` Typing ${Array.from('.'.repeat(typingDotsQuantity)).join(' ')}`
   }
@@ -72,9 +71,7 @@ export const RoomHeader = () => {
       </div>
       <div className="room-header__info">
         <UIAvatar
-          ribbon={chatRoomData?.multiple}
-          ribbonPlacement={UIAvatarBadgePlacement.down}
-          dotPlacement={UIAvatarBadgePlacement.down}
+          showBadge={!chatRoomData?.multiple}
           stubIconName={chatRoomData?.multiple ? 'image-stub' : 'user-stub'}
           online={chatRoomData?.hasOnline}
           src={chatRoomData?.avatarPath}

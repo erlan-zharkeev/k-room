@@ -2,6 +2,16 @@
   max-height: 200px;
   padding: $gutter-lg $gutter-sm $gutter-sm $gutter-sm;
 
+  .short-chat-list__container {
+    height: 180px;
+    overflow: auto;
+  }
+
+  .short-chat-list__subtitle {
+    margin-top: $gutter-md;
+    color: var(--secondary-text);
+  }
+
   &__item {
     display: flex;
     align-items: center;

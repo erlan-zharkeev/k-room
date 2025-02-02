@@ -7,7 +7,7 @@ import { useUpdateSettings, useTypedSelector, useValidate } from 'src/hooks'
 import { AppDispatch, closeModal } from 'src/store'
 import { validateRules } from 'src/utils'
 import { $socket } from 'src/services'
-import { MultipleUserSelect } from './components/MultipleUserSelect/MultipleUserSelect'
+import { SelectUsers } from 'src/components/shared/SelectUsers/SelectUsers'
 
 export const CreateMultipleChatPopup = () => {
   const { updateSetting } = useUpdateSettings()
@@ -68,10 +68,10 @@ export const CreateMultipleChatPopup = () => {
             shape="square"
           />
         </div>
+        <SelectUsers setMembers={setMembers} />
         <Form.Item name="chat-name" rules={validateRules.required}>
           <UIInput placeholder="Enter chat name" />
         </Form.Item>
-        <MultipleUserSelect setMembers={setMembers} />
         <Form.Item className="create-multiple-chat-popup__controls">
           <UIButton text="Create" border="common-border" htmltype="submit" disabled={!isValid} loading={isLoading} />
         </Form.Item>

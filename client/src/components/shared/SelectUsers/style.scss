@@ -1,0 +1,38 @@
+.select-users {
+  .select-users__title {
+    color: var(--secondary-text);
+  }
+
+  .select-users__user {
+    display: flex;
+    align-items: center;
+    padding: $gutter-sm;
+    border-radius: $radius-sm;
+    cursor: pointer;
+  }
+
+  .select-users__user:hover {
+    background: var(--dark-gray-transparent);
+  }
+
+  .select-users__divider {
+    height: 1px;
+    margin: $gutter-md 0;
+    background: var(--secondary-text);
+  }
+
+  .select-users__user .paragraph-text {
+    margin-left: $gutter-md;
+  }
+
+  .select-users__selected-users {
+    display: flex;
+    margin-bottom: $gutter-lg;
+  }
+
+  .select-users__choose-list {
+    gap: $gutter-md;
+    max-height: 140px;
+    overflow: auto;
+  }
+}
