@@ -30,7 +30,7 @@ export const CallModalVideo = () => {
         />
         <div className="call-modal-video__interlocutor-avatar">
           <div className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}>
-            <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="xl" />
+            <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="extra-large" />
           </div>
         </div>
       </div>
