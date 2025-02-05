@@ -1,7 +1,7 @@
 import { modifiersHandler } from 'src/utils'
 import { IconList } from './IconList'
 import { IconType } from 'react-icons'
-import { ColorModifiers, SizeModifiers } from 'src/@types'
+import { ColorModifiers, ExpandedSizeModifiers } from 'src/@types'
 
 export interface IconListElement {
   name: IconName
@@ -11,7 +11,7 @@ export interface IconListElement {
 export interface IconProps {
   name: IconName
   color?: ColorModifiers
-  size?: SizeModifiers
+  size?: ExpandedSizeModifiers
 }
 
 export type IconName =

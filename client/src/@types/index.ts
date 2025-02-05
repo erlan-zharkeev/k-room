@@ -10,8 +10,8 @@ export type ContextMenuType = '' | 'message'
 
 export type ColorModifiers = 'accent' | 'success' | 'error' | 'warn' | 'default' | 'white' | 'black'
 
-export type SizeModifiers = 'xs' | 'xl' | 'medium' | SizeType
-
+export type BasicSizeModifiers = SizeType
+export type ExpandedSizeModifiers = 'extra-small' | 'extra-large' | 'medium' | BasicSizeModifiers
 export type ShapeModifiers = 'round' | 'square'
 
 export interface AsyncThunkResponseWrapper {

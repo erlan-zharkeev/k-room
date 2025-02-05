@@ -19,7 +19,7 @@ export const CallStatusBar = () => {
         <div className="call-status-bar__info">
           {currentCall.interlocutorAvatarPath && (
             <div className="call-status-bar__avatar">
-              <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="xs" />
+              <UIAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="extra-small" />
             </div>
           )}
           <div className="call-status-bar__interlocutor-name paragraph-text">{currentCall.interlocutorName}</div>

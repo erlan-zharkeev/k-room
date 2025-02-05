@@ -1,12 +1,14 @@
 import { List } from 'antd'
-import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, Contact } from 'common-types'
+import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, Contact, InteractionType } from 'common-types'
 import moment from 'moment'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { UIAvatar, UIButton } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $socket } from 'src/services'
 import { ContactSearch } from './elements'
+import { addContact, AppDispatch, updateContactInteractionType } from 'src/store'
+import { useDispatch } from 'react-redux'
 
 export const ContactList = () => {
   const { updateSetting } = useUpdateSettings()
@@ -15,17 +17,12 @@ export const ContactList = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { id, username, avatarPath } = useTypedSelector((state) => state.user.userData)
   const { settings } = useTypedSelector((state) => state.calls)
-  const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
+  const [loaders, setLoaders] = useState({ room: {}, stream: {}, invite: {} } as {
     room: Record<string, boolean>
     stream: Record<string, boolean>
+    invite: Record<string, boolean>
   })
-
-  useEffect(() => {
-    contacts.forEach((contact) => {
-      loaderStateChangeHandler(false, 'room', contact.id)
-      loaderStateChangeHandler(false, 'stream', contact.id)
-    })
-  }, [contacts])
+  const dispatch = useDispatch<AppDispatch>()
 
   const deleteUser = (interlocutorData: Contact) => {
     if (!interlocutorData.id) return
@@ -59,7 +56,7 @@ export const ContactList = () => {
     }
     $socket.emit(SocketActions.CREATE_ROOM, socketPayload)
 
-    $socket.on(SocketActions.ROOM_CREATED, (data) => {
+    $socket.on(SocketActions.ROOM_CREATED, (data: SocketActionsPayload['roomCreated']) => {
       loaderStateChangeHandler(false, 'room', value.id)
       updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
       setTimeout(() => {
@@ -68,7 +65,7 @@ export const ContactList = () => {
     })
   }
 
-  const loaderStateChangeHandler = (value: boolean, type: 'room' | 'stream', id: string) => {
+  const loaderStateChangeHandler = (value: boolean, type: 'room' | 'stream' | 'invite', id: string) => {
     const loadersClone = { ...loaders }
     loadersClone[type][id] = value
     setLoaders(loadersClone)
@@ -84,6 +81,23 @@ export const ContactList = () => {
     await call.current.initCall(interlocutorData, id, avatarPath ?? '', username, settings)
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
   }
+
+  const inviteHandler = async (contactId: string) => {
+    if (loaders.invite[contactId]) return
+    loaderStateChangeHandler(true, 'invite', contactId)
+    const interactionType = InteractionType.invited
+    const payload: SocketActionsPayload['updateInteractionType'] = { contactId, interactionType }
+    $socket.emit(SocketActions.UPDATE_CONTACT_INTERACTION_TYPE, payload)
+    $socket.on(SocketActions.UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS, () => {
+      dispatch(updateContactInteractionType({ contactId, interactionType }))
+    })
+  }
+
+  useEffect(() => {
+    $socket.on(SocketActions.INVITE_RECEIVED, (payload: SocketActionsPayload['inviteReceived']) => {
+      dispatch(addContact(payload))
+    })
+  }, [])
 
   return (
     <div className="contact-list">
@@ -108,16 +122,21 @@ export const ContactList = () => {
               }
             />
             <div className="contact-list__controls">
-              <UIButton
-                iconName={loaders.stream[user.id] ? 'loader' : 'call'}
-                onClick={async () => await initCall(user)}
-                tooltip="Call"
-              />
-              <UIButton
-                iconName={loaders.room[user.id] ? 'loader' : 'chat'}
-                onClick={() => createChat(user)}
-                tooltip="Create Chat"
-              />
+              {user.interactionType === 'default' && <UIButton text="Invite" border="common-border" size="large" onClick={() => inviteHandler(user.id)}
+              />}
+              {user.interactionType === 'invited' && <div className='contact-list__invited' >Invited</div>}
+              {user.interactionType === 'invite-accepted' && <>
+                <UIButton
+                  iconName={loaders.stream[user.id] ? 'loader' : 'call'}
+                  onClick={() => initCall(user)}
+                  tooltip="Call"
+                />
+                <UIButton
+                  iconName={loaders.room[user.id] ? 'loader' : 'chat'}
+                  onClick={() => createChat(user)}
+                  tooltip="Create Chat"
+                />
+              </>}
               <UIButton iconName="cross" onClick={() => deleteUser(user)} tooltip="Delete User" />
             </div>
           </List.Item>

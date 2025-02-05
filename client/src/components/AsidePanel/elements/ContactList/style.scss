@@ -3,6 +3,12 @@
 .contact-list {
   padding: $aside-panel-padding;
 
+  .contact-list__invited {
+    display: flex;
+    align-items: center;
+    color: var(--accent)
+  }
+
   .divider {
     margin-top: $gutter-lg;
   }
@@ -27,7 +33,7 @@
     }
   }
 
-  &__controls {
+  .contact-list__controls {
     display: flex;
     margin-top: 4px;
 

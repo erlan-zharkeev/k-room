@@ -1,7 +1,7 @@
 import { UserModel } from '../../models'
-import { SocketInstanceType, SocketActions, SocketActionsPayload, KRoomUser, NotificationMessage } from '../../@types'
+import { SocketInstanceType, SocketActions, SocketActionsPayload, KRoomUser, NotificationMessage, InteractionType } from '../../@types'
 import { transformUsersData } from '../../utils'
-import { emitSearchedContacts, emitContactsToUser, emitUserStatusToAll, setUserStatus } from '../helpers'
+import { emitSearchedContacts, emitContactsToUser, setUserStatus } from '../helpers'
 import { io } from '../../server'
 
 const ObjectIdType = require('mongoose').Types.ObjectId
@@ -46,16 +46,45 @@ export const contactsSlice = (socket: SocketInstanceType) => {
   })
 
   socket.on(SocketActions.SAVE_CONTACT, async ({ interlocutorId }: SocketActionsPayload['saveContact']) => {
-    await UserModel.updateOne({ _id: userId }, { $addToSet: { contacts: interlocutorId } })
+    await UserModel.updateOne(
+      { _id: userId },
+      {
+        $set: { [`contacts.${interlocutorId}`]: { id: interlocutorId, interactionType: InteractionType.default } }
+      }
+    );
     emitContactsToUser(userId, NotificationMessage.userAddedToContacts)
   })
 
   socket.on(SocketActions.DELETE_CONTACT, async ({ deletingUserId }: SocketActionsPayload['deleteContact']) => {
-    await UserModel.updateOne({ _id: userId }, { $pull: { contacts: deletingUserId } })
+    await UserModel.updateOne(
+      { _id: userId },
+      { $unset: { [`contacts.${deletingUserId}`]: "" } }
+    )
     emitContactsToUser(userId, NotificationMessage.userRemovedFromContacts)
   })
 
   socket.on(SocketActions.INTERLOCUTOR_PING, async () => {
     await setUserStatus(userId, true)
   })
+
+  socket.on(SocketActions.UPDATE_CONTACT_INTERACTION_TYPE, async ({ contactId, interactionType }: SocketActionsPayload['updateInteractionType']) => {
+    const selfContact = await UserModel.findOneAndUpdate(
+      { _id: userId, [`contacts.${contactId}`]: { $exists: true } },
+      {
+        $set: { [`contacts.${contactId}.interactionType`]: interactionType }
+      }
+    );
+    if (interactionType === InteractionType.invited) {
+      const contactData = await UserModel.findOneAndUpdate(
+        { _id: contactId },
+        { $set: { [`contacts.${userId}`]: { id: userId, interactionType: InteractionType.inviteReceived } } }
+      );
+      if (contactData && selfContact) {
+        const { id, username, email, online, avatarPath, lastSeen } = selfContact
+        const payload: SocketActionsPayload['inviteReceived'] = { contactData: { id, username, email, online, avatarPath, lastSeen, interactionType: InteractionType.inviteReceived } }
+        io.to(contactData.socketId).emit(SocketActions.INVITE_RECEIVED, payload)
+      }
+    }
+    io.to(socket.id).emit(SocketActions.UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS)
+  });
 }

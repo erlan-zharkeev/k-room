@@ -9,8 +9,10 @@ export const emitContactsToUser = async (
   messageBody: NotificationMessage = NotificationMessage.default
 ) => {
   const userData = await getUserById(userId)
-  const matchedUsers = await UserModel.find({ _id: { $in: userData?.contacts } })
-  const contacts = transformUsersToContacts(matchedUsers)
+  if (!userData || !userData.contacts) return
+  const contactIds = Object.keys(userData.contacts)
+  const matchedUsers = await UserModel.find({ _id: { $in: contactIds } })
+  const contacts = transformUsersToContacts(matchedUsers, userData?.contacts)
   if (!userData?.socketId) return
   const payload: SocketActionsPayload['getContacts'] = { contacts, messageBody }
   io.to(userData.socketId).emit(SocketActions.GET_CONTACTS, payload)

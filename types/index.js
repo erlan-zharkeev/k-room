@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.AdminEndpoints = exports.CodesEndpoints = exports.CommonEndpoints = exports.UserEndpoints = exports.AuthEndpoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AdminPanelModelTab = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.UserRole = exports.MessageStatus = exports.Author = exports.Status = void 0;
+exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.AdminEndpoints = exports.CodesEndpoints = exports.CommonEndpoints = exports.UserEndpoints = exports.AuthEndpoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AdminPanelModelTab = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.UserRole = exports.InteractionType = exports.MessageStatus = exports.Author = exports.Status = void 0;
 var Status;
 (function (Status) {
     Status[Status["success"] = 200] = "success";
@@ -25,6 +25,13 @@ var MessageStatus;
     MessageStatus["read"] = "read";
     MessageStatus["none"] = "none";
 })(MessageStatus = exports.MessageStatus || (exports.MessageStatus = {}));
+var InteractionType;
+(function (InteractionType) {
+    InteractionType["default"] = "default";
+    InteractionType["invited"] = "invited";
+    InteractionType["inviteAccepted"] = "invite-accepted";
+    InteractionType["inviteReceived"] = "invite-received";
+})(InteractionType = exports.InteractionType || (exports.InteractionType = {}));
 var UserRole;
 (function (UserRole) {
     UserRole["user"] = "user";
@@ -262,6 +269,9 @@ var SocketActions;
     SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
     SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
     SocketActions["INTERLOCUTOR_PING"] = "interlocutor-ping";
+    SocketActions["UPDATE_CONTACT_INTERACTION_TYPE"] = "update-interaction-type";
+    SocketActions["UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS"] = "update-contact-success";
+    SocketActions["INVITE_RECEIVED"] = "invite-received";
     // Socket.io events
     SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
     SocketActions["RECONNECT_FAILED"] = "reconnect_failed";

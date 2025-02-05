@@ -80,7 +80,16 @@ export interface DBMessage extends Message {
     usersMetaData: UsersMetaData;
 }
 export type ChatRooms = Array<ChatRoom>;
-export type Contact = Omit<KRoomUser, "chatRooms">;
+export declare enum InteractionType {
+    default = "default",
+    invited = "invited",
+    inviteAccepted = "invite-accepted",
+    inviteReceived = "invite-received"
+}
+export type Contact = Omit<KRoomUser, "chatRooms" | "contacts" | "infoItems" | "role"> & {
+    interactionType: InteractionType;
+};
+export type DBContact = Pick<Contact, 'id' | 'interactionType'>;
 export interface UserShort {
     id: string;
     username: string;
@@ -447,6 +456,16 @@ export interface SocketActionsPayload {
         messageId: string;
         reaction: Reaction;
     };
+    roomCreated: {
+        roomId: string;
+    };
+    updateInteractionType: {
+        contactId: string;
+        interactionType: InteractionType;
+    };
+    inviteReceived: {
+        contactData: Contact;
+    };
 }
 export interface EnvVariables {
     SERVER_PORT: string;
@@ -569,6 +588,9 @@ export declare enum SocketActions {
     UPDATE_CALL_SIGNAL = "update-call-signal",
     INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
     INTERLOCUTOR_PING = "interlocutor-ping",
+    UPDATE_CONTACT_INTERACTION_TYPE = "update-interaction-type",
+    UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS = "update-contact-success",
+    INVITE_RECEIVED = "invite-received",
     RECONNECT_ATTEMPT = "reconnect_attempt",
     RECONNECT_FAILED = "reconnect_failed"
 }
@@ -576,7 +598,8 @@ export declare enum AuthTokens {
     accessToken = "jwt",
     refreshToken = "refresh-jwt"
 }
-export interface IUserSchema extends KRoomUser {
+export type DBContactMap = Record<string, DBContact>;
+export interface IUserSchema extends Omit<KRoomUser, 'contacts'> {
     socketId: string;
     confirmed: Boolean;
     confirmAttempts: number;
@@ -584,6 +607,7 @@ export interface IUserSchema extends KRoomUser {
     settings: UserSettings;
     codes: Codes;
     infoItems: Array<InfoItem>;
+    contacts: DBContactMap;
     _id: string;
 }
 export interface IMessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status'> {

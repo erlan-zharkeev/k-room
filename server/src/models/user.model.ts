@@ -54,8 +54,8 @@ const userSchema = new Schema<IUserSchema>({
     required: false
   },
   contacts: {
-    type: [String],
-    required: false
+    type: {},
+    default: {}
   },
   chatRooms: {
     type: [],

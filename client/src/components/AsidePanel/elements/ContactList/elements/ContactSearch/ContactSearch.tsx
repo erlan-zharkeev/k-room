@@ -1,6 +1,6 @@
 import { List } from 'antd'
 import { SocketActions, KRoomUser, SocketActionsPayload } from 'common-types'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components'
 import { useTypedSelector, useDebounce } from 'src/hooks'
 import { $socket } from 'src/services'
@@ -12,28 +12,22 @@ export const ContactSearch = () => {
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
 
-  useEffect(() => {
-    $socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<KRoomUser>) => {
-      const userFilteredSelf = contacts.filter((user: KRoomUser) => user.id !== id)
-      setUsers(userFilteredSelf)
-      setIsLoading(false)
-    })
-  }, [])
+  $socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<KRoomUser>) => {
+    const userFilteredSelf = contacts.filter((user: KRoomUser) => user.id !== id)
+    setUsers(userFilteredSelf)
+    setIsLoading(false)
+  })
 
-  const fetchUsers = async (value: string) => {
+  const fetchUsers = (value: string) => {
     const searchPayload: SocketActionsPayload['searchContact'] = { value }
     $socket.emit(SocketActions.SEARCH_CONTACT, searchPayload)
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
 
-  const search = async (value: string) => {
-    if (value.trim() === '') {
-      setUsers([])
-      return
-    }
+  const search = (value: string) => {
     setIsLoading(true)
-    await debouncedSearch(value)
+    debouncedSearch(value)
   }
 
   const addUser = async (interlocutorId: string | undefined) => {
@@ -49,7 +43,7 @@ export const ContactSearch = () => {
         size="small"
         placeholder="Search user"
         suffix={<UIIcon name={isLoading ? 'loader' : 'search'} color={isLoading ? 'accent' : 'default'} />}
-        onChange={async (e: { target: { value: string } }) => await search(e.target.value)}
+        onChange={(e: { target: { value: string } }) => search(e.target.value)}
       />
       {users.length > 0 && (
         <div className="contact-search__global-search">
@@ -60,7 +54,7 @@ export const ContactSearch = () => {
             renderItem={(user) => (
               <List.Item key={user.id}>
                 <List.Item.Meta
-                  avatar={<UIAvatar src={user.avatarPath} />}
+                  avatar={<UIAvatar src={user.avatarPath} showBadge={false} />}
                   title={<span>{user.username}</span>}
                   description={<span>{user.email}</span>}
                 />
@@ -68,7 +62,7 @@ export const ContactSearch = () => {
                   <UIButton
                     iconName="plus"
                     color="accent"
-                    onClick={async () => await addUser(user.id)}
+                    onClick={() => addUser(user.id)}
                     tooltip="Add User"
                   />
                 )}

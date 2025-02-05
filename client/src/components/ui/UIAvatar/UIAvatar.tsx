@@ -1,11 +1,11 @@
 import { Badge, Image } from 'antd'
 import { useState, useEffect } from 'react'
-import { SizeModifiers, ShapeModifiers, UIAvatarBadgePlacement } from 'src/@types'
+import { ExpandedSizeModifiers, ShapeModifiers, UIAvatarBadgePlacement } from 'src/@types'
 import { IconName, UIIcon } from '..'
 export interface UIAvatarProps {
   online?: boolean
   src?: string
-  size?: SizeModifiers
+  size?: ExpandedSizeModifiers
   showBadge?: boolean
   stubIconName?: IconName
   ribbon?: boolean

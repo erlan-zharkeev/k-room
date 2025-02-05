@@ -4,7 +4,7 @@ import { SocketActionsPayload, SocketActions } from '../../../@types'
 import { getSocketsByUserIds } from '../getters'
 
 export const emitUserStatusToAll = async (interlocutorId: string, online: boolean) => {
-  const users = await UserModel.find({ contacts: { $in: interlocutorId } })
+  const users = await UserModel.find({ [`contacts.${interlocutorId}`]: { $exists: true } })
   const userIds = users.map((user) => user.id)
   const sockets = await getSocketsByUserIds(userIds)
   const payload: SocketActionsPayload['statusContact'] = { interlocutorId, online, onlineStatusUpdatedTimestamp: Date.now() }

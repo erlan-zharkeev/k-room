@@ -2,7 +2,7 @@ import { Button, Radio, Dropdown, Tooltip } from 'antd'
 import { useTypedSelector } from 'src/hooks'
 import { modifiersHandler } from 'src/utils'
 import { UIIcon } from '..'
-import { ColorModifiers, SizeModifiers } from 'src/@types'
+import { ColorModifiers, BasicSizeModifiers } from 'src/@types'
 import { IconName } from '../UIIcon/UIIcon'
 
 export interface UIButtonProps {
@@ -17,7 +17,7 @@ export interface UIButtonProps {
   color?: ColorModifiers
   loading?: boolean
   disabled?: boolean
-  size?: SizeModifiers
+  size?: BasicSizeModifiers
   shape?: 'default' | 'circle' | 'round'
   hover?: 'hoverless' | ''
   fill?: boolean

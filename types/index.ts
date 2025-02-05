@@ -90,8 +90,15 @@ export interface DBMessage extends Message {
 
 export type ChatRooms = Array<ChatRoom>;
 
-export type Contact = Omit<KRoomUser, "chatRooms">;
+export enum InteractionType {
+  default = 'default',
+  invited = 'invited',
+  inviteAccepted = 'invite-accepted',
+  inviteReceived = 'invite-received'
+}
 
+export type Contact = Omit<KRoomUser, "chatRooms" | "contacts" | "infoItems" | "role"> & { interactionType: InteractionType };
+export type DBContact = Pick<Contact, 'id' | 'interactionType'>
 export interface UserShort {
   id: string;
   username: string;
@@ -480,6 +487,16 @@ export interface SocketActionsPayload {
     roomId: string;
     messageId: string;
     reaction: Reaction;
+  };
+  roomCreated: {
+    roomId: string;
+  },
+  updateInteractionType: {
+    contactId: string;
+    interactionType: InteractionType;
+  },
+  inviteReceived: {
+    contactData: Contact
   }
 }
 
@@ -616,6 +633,9 @@ export enum SocketActions {
   UPDATE_CALL_SIGNAL = "update-call-signal",
   INTERLOCUTOR_UPDATE_SIGNAL = "interlocutor-update-signal",
   INTERLOCUTOR_PING = "interlocutor-ping",
+  UPDATE_CONTACT_INTERACTION_TYPE = 'update-interaction-type',
+  UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS = 'update-contact-success',
+  INVITE_RECEIVED = 'invite-received',
   // Socket.io events
   RECONNECT_ATTEMPT = "reconnect_attempt",
   RECONNECT_FAILED = "reconnect_failed",
@@ -626,7 +646,9 @@ export enum AuthTokens {
   refreshToken = "refresh-jwt",
 }
 
-export interface IUserSchema extends KRoomUser {
+export type DBContactMap = Record<string, DBContact>
+
+export interface IUserSchema extends Omit<KRoomUser, 'contacts'> {
   socketId: string
   confirmed: Boolean
   confirmAttempts: number
@@ -634,6 +656,7 @@ export interface IUserSchema extends KRoomUser {
   settings: UserSettings
   codes: Codes
   infoItems: Array<InfoItem>
+  contacts: DBContactMap
   _id: string
 }
 
