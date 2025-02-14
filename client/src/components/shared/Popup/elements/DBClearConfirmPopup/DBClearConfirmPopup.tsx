@@ -18,7 +18,7 @@ export const DBClearConfirmPopup = () => {
 
   const dbClearLoaderHandler = async () => {
     setLoader(true)
-    await doRequest('post', AdminEndpoints.DB_CLEAR)
+    await doRequest('post', AdminEndpoints.DBClear)
     if (modalData.actions && modalData.actions.getData) {
       await modalData.actions.getData()
     }
@@ -28,7 +28,9 @@ export const DBClearConfirmPopup = () => {
 
   return (
     <div className="clear-db-confirm-popup">
-      <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Are you shure want to clear data base?</p>
+      <p className="paragraph-text paragraph-text--secondary paragraph-text--md">
+        Are you shure want to clear data base?
+      </p>
       <div className="clear-db-confirm-popup__actions">
         <UIButton text="Clear" border="common-border" fill onClick={dbClearLoaderHandler} loading={loader} />
         <UIButton text="Cancel" border="common-border" fill onClick={closeModalHandler} />

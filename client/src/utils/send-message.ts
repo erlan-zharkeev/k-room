@@ -1,4 +1,4 @@
-import { Message, MessageStatus, RepliedMessage, SocketActions, SocketActionsPayload, ImageObject } from 'common-types'
+import { EventSendMessage, ImageObject, Message, RepliedMessage, SocketActions } from 'common-types'
 import { $socket } from 'src/services'
 import { AppDispatch, pushTemporaryMessage, resetRepliedMessage } from 'src/store'
 import { v4 as uuidv4 } from 'uuid'
@@ -25,7 +25,7 @@ export const sendMessage = ({
   const message: Message = {
     id: '',
     tempId: uuidv4(),
-    status: MessageStatus.sending,
+    status: 'sending',
     authorName: username,
     authorId,
     body: messageText,
@@ -34,11 +34,11 @@ export const sendMessage = ({
     createdAt: String(Date.now()),
     repliedMessage
   }
-  const payload: SocketActionsPayload['sendMessage'] = {
+  const payload: EventSendMessage = {
     roomId,
     message
   }
-  $socket.emit(SocketActions.SEND_MESSAGE, payload)
+  $socket.emit<SocketActions>('send-message', payload)
   dispatch(resetRepliedMessage())
   dispatch(pushTemporaryMessage({ roomId, message }))
 }

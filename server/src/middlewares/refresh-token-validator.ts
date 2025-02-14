@@ -2,15 +2,17 @@ import { NextFunction, Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { UserModel } from '../models'
 import { jwt, updateTokens } from '../services'
-import { Status, NotificationMessage, AuthTokens, JWTDecoded } from '../@types'
+import { Status, JWTDecoded } from '../@types'
 import { throwError } from '../utils'
+import { ServerNotificationMessage } from '../@enums'
 
-const haveNotRightsError = (res: Response) => throwError(Status.notAuth, res, NotificationMessage.nonAuthorized, true)
+const haveNotRightsError = (res: Response) =>
+  throwError(Status.NotAuth, res, ServerNotificationMessage.NonAuthorized, true)
 
 export const refreshTokenValidator = async (req: Request, res: Response, next: NextFunction) => {
-  const refreshToken = req.cookies[AuthTokens.refreshToken]
+  const refreshToken = req.cookies['refresh-jwt']
   if (!refreshToken) {
-    return throwError(Status.notAuth, res, NotificationMessage.nonAuthorized)
+    return throwError(Status.NotAuth, res, ServerNotificationMessage.NonAuthorized)
   }
   jwt.verify(refreshToken, ENV?.K_ROOM_REFRESH_TOKEN_SECRET, async (error: string, decoded: JWTDecoded) => {
     if (error) {

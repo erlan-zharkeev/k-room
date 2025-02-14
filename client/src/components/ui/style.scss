@@ -1,7 +1,7 @@
-@import './UIButton/style';
-@import './UIIcon/style';
-@import './UIAvatar/style';
-@import './UIInput/style';
-@import './UISwitch/style';
-@import './UIAvatarLoader/style';
-@import './UIImageLoader/style';
+@forward './UIButton/style';
+@forward './UIIcon/style';
+@forward './UIAvatar/style';
+@forward './UIInput/style';
+@forward './UISwitch/style';
+@forward './UIAvatarLoader/style';
+@forward './UIImageLoader/style';

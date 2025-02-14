@@ -1,24 +1,24 @@
 .wait-email-confirm {
   .header-text {
-    margin-bottom: $gutter-lg;
+    margin-bottom: 16px;
   }
 
   &__not-received {
-    margin-top: $gutter-md;
-    margin-bottom: $gutter-lg;
+    margin-top: 8px;
+    margin-bottom: 16px;
   }
 
   &__counter {
-    margin-top: $gutter-lg;
+    margin-top: 16px;
   }
 
   &__attempts {
     display: flex;
     align-items: center;
-    margin-top: $gutter-md;
+    margin-top: 8px;
   }
 
   .ui-button {
-    margin-top: $gutter-lg;
+    margin-top: 16px;
   }
 }

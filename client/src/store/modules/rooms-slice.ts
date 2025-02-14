@@ -1,5 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ChatRoom, ImageObject, Message, RepliedMessage, SocketActionsPayload, UserShort } from 'common-types'
+import {
+  ChatRoom,
+  EventChangeContactsData,
+  EventDeleteMessage,
+  EventGetRooms,
+  EventMessageDelivered,
+  EventStatusContact,
+  EventUpdatedMessageReactions,
+  EventUpdateMessageStatus,
+  ImageObject,
+  Message,
+  RepliedMessage,
+  UserShort
+} from 'common-types'
 import { UseNotification } from 'src/hooks/use-notification'
 import { scrollToBottom } from 'src/utils'
 
@@ -47,13 +60,13 @@ export const roomsSlice = createSlice({
     updatedAttachedFilesMessage(state, { payload }: { payload: AttachedFilesMessage }) {
       state.attachedFilesMessage = { ...state.attachedFilesMessage, ...payload }
     },
-    loadChatRooms(state, { payload }: { payload: SocketActionsPayload['getRooms'] }) {
+    loadChatRooms(state, { payload }: { payload: EventGetRooms }) {
       state.chatRooms = payload
     },
     repliedMessageSetAsForward(state) {
       state.repliedMessageData.forward = true
     },
-    updateChatMessage(state, { payload }: { payload: SocketActionsPayload['messageDelivered'] & { notifications: UseNotification } }) {
+    updateChatMessage(state, { payload }: { payload: EventMessageDelivered & { notifications: UseNotification } }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -62,9 +75,8 @@ export const roomsSlice = createSlice({
       })
       room.messages.push(message)
       scrollToBottom()
-      if (room?.messages.length > 1) room.blocked = false
     },
-    updateMessageStatus(state, { payload }: { payload: SocketActionsPayload['updateMessageStatus'] }) {
+    updateMessageStatus(state, { payload }: { payload: EventUpdateMessageStatus }) {
       const { roomId, messageId, status } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -72,7 +84,7 @@ export const roomsSlice = createSlice({
         if (roomMessage.id === messageId) roomMessage.status = status
       })
     },
-    updateMessageReactions(state, { payload }: { payload: SocketActionsPayload['updatedMessageReactions'] }) {
+    updateMessageReactions(state, { payload }: { payload: EventUpdatedMessageReactions }) {
       const { roomId, messageId, reaction } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -86,7 +98,7 @@ export const roomsSlice = createSlice({
       if (!room) return
       room.messages.push(message)
     },
-    updateChatUsersStatus(state, { payload }: { payload: SocketActionsPayload['statusContact'] }) {
+    updateChatUsersStatus(state, { payload }: { payload: EventStatusContact }) {
       const { interlocutorId, online } = payload
       const hasUser = (users: Array<UserShort>): boolean => {
         return users.some((user) => user.id === interlocutorId)
@@ -95,7 +107,7 @@ export const roomsSlice = createSlice({
         if (hasUser(room.users ?? [])) room.hasOnline = online
       })
     },
-    changeChatName(state, { payload }: { payload: SocketActionsPayload['changeContactsData'] }) {
+    changeChatName(state, { payload }: { payload: EventChangeContactsData }) {
       const { id, username, avatarPath } = payload
       state.chatRooms.forEach((room) => {
         const roomHasContact = Boolean(room.users?.find((user) => user.id === id))
@@ -114,7 +126,7 @@ export const roomsSlice = createSlice({
     resetRepliedMessage(state) {
       state.repliedMessageData = initialRepliedMessageData
     },
-    deleteMessage(state, { payload }: { payload: SocketActionsPayload['deleteMessage'] }) {
+    deleteMessage(state, { payload }: { payload: EventDeleteMessage }) {
       const { roomId, messageId } = payload
       state.chatRooms.forEach((room) => {
         if (room.id !== roomId) return

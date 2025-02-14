@@ -1,8 +1,8 @@
 import { Badge, List } from 'antd'
-import { Message, UserSettingKey, SocketActionsPayload, SocketActions, ChatRoom, MessageStatus } from 'common-types'
+import { Message, SocketActions, ChatRoom, EventSaveContact } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { ModalContentComponentName } from 'src/@types'
 import { UIButton, UIAvatar } from 'src/components'
+import { ModalContentComponentName } from 'src/@enums'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { $socket } from 'src/services'
 import { AppDispatch, showModal } from 'src/store'
@@ -22,17 +22,17 @@ export const ChatRoomList = () => {
 
   const setChat = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
-    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: id })
+    updateSetting('selectedChatRoomId', { selectChatRoomId: id })
   }
 
   const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
     e.stopPropagation()
-    const payload: SocketActionsPayload['saveContact'] = { interlocutorId }
-    $socket.emit(SocketActions.SAVE_CONTACT, payload)
+    const payload: EventSaveContact = { interlocutorId }
+    $socket.emit<SocketActions>('save-contact', payload)
   }
 
   const unreadMessages = (room: ChatRoom) =>
-    room.messages.filter((message) => !message.isSelf && message.status === MessageStatus.delivered).length
+    room.messages.filter((message) => !message.isSelf && message.status === 'delivered').length
 
   const getFirstUserIdInChatRoom = (chatRoom: ChatRoom) => chatRoom.users[0].id
 
@@ -48,13 +48,13 @@ export const ChatRoomList = () => {
     dispatch(
       showModal({
         title: 'Create New Chat Room',
-        modalContentComponentName: ModalContentComponentName.createMultipleChatPopup
+        modalContentComponentName: ModalContentComponentName.CreateMultipleChatPopup
       })
     )
   }
 
   const resetChatRoomId = () => {
-    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: '' })
+    updateSetting('selectedChatRoomId', { selectChatRoomId: '' })
   }
 
   return (
@@ -90,7 +90,14 @@ export const ChatRoomList = () => {
                 description={getLastMessage(chatRoom.messages)}
               />
               <div className="chat-room-list__controls">
-                <Badge color='var(--accent)' count={Boolean(unreadMessages(chatRoom)) ? unreadMessages(chatRoom) : 0} offset={[-20, 0]} className='chat-room-list__badge'> </Badge>
+                <Badge
+                  color="var(--accent)"
+                  count={Boolean(unreadMessages(chatRoom)) ? unreadMessages(chatRoom) : 0}
+                  offset={[-20, 0]}
+                  className="chat-room-list__badge"
+                >
+                  {' '}
+                </Badge>
                 {showAddUserButton(chatRoom) && (
                   <UIButton
                     iconName="plus"

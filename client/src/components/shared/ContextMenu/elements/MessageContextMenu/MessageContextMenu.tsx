@@ -1,11 +1,11 @@
-import { SocketActionsPayload, SocketActions, MessageStatus } from 'common-types'
+import { SocketActions, EventAddReaction, EventDeleteMessage } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { UIIcon } from 'src/components'
 import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { AppDispatch, repliedMessageSetAsForward, setRepliedMessage, showModal, updateMessageStatus } from 'src/store'
 import { $socket } from 'src/services'
 import { Reactions } from './elements'
-import { ModalContentComponentName } from 'src/@types'
+import { ModalContentComponentName } from 'src/@enums'
 
 export const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,19 +19,19 @@ export const MessageContextMenu = () => {
     message.reactions?.filter((reaction) => reaction.authorId === id).map((reaction) => reaction.glyphKey) ?? []
 
   const reactionHandler = (key: string) => {
-    const payload: SocketActionsPayload['addReaction'] = {
+    const payload: EventAddReaction = {
       glyphKey: key,
       messageId: message.id,
       roomId: selectedChatRoom?.id ?? '',
       username
     }
-    $socket.emit(SocketActions.ADD_REACTION, payload)
+    $socket.emit<SocketActions>('add-reaction', payload)
   }
 
   const forwardHandler = () => {
     dispatch(repliedMessageSetAsForward())
     dispatch(
-      showModal({ title: 'Forward message', modalContentComponentName: ModalContentComponentName.forwardMessagePopup })
+      showModal({ title: 'Forward message', modalContentComponentName: ModalContentComponentName.ForwardMessagePopup })
     )
   }
 
@@ -39,13 +39,13 @@ export const MessageContextMenu = () => {
     if (!selectedChatRoom?.id) return
     const roomId = selectedChatRoom.id
     const messageId = message.id
-    const payload: SocketActionsPayload['deleteMessage'] = {
+    const payload: EventDeleteMessage = {
       roomId,
       messageId
     }
 
-    dispatch(updateMessageStatus({ roomId, messageId, status: MessageStatus.sending }))
-    $socket.emit(SocketActions.DELETE_MESSAGE, payload)
+    dispatch(updateMessageStatus({ roomId, messageId, status: 'sending' }))
+    $socket.emit<SocketActions>('delete-message', payload)
   }
 
   return (

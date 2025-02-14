@@ -1,7 +1,9 @@
 import { IconName, UIAvatar, UIIcon } from '..'
-import { ShapeModifiers } from 'src/@types'
+import { ShapeModifier } from 'src/@types'
 import { useNotification } from 'src/hooks'
 import { imageToBase64 } from 'src/utils'
+
+type UIAvatarLoaderShapeModifier = Extract<ShapeModifier, 'square' | 'round'>
 
 export interface UIAvatarLoaderProps {
   path: string | undefined
@@ -9,7 +11,7 @@ export interface UIAvatarLoaderProps {
   setFile: React.Dispatch<React.SetStateAction<any>>
   updated?: () => void
   stubIconName?: IconName
-  shape?: ShapeModifiers
+  shape?: UIAvatarLoaderShapeModifier
 }
 
 export const UIAvatarLoader = ({

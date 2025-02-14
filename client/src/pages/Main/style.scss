@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .main-page {
   position: relative;
   display: flex;
@@ -16,16 +18,16 @@
   &__body {
     position: relative;
     display: flex;
-    height: calc(100% - $bar-height - $gutter-lg);
+    height: calc(100% - $bar-height - 16px);
     @include max-width-768 {
-      height: calc(100% - ($bar-height * 2) - ($gutter-lg * 2));
+      height: calc(100% - ($bar-height * 2) - (16px * 2));
     }
   }
 
   &__body--call-minified {
-    height: calc(100% - $bar-height - $call-bar-height - ($gutter-lg * 2));
+    height: calc(100% - $bar-height - $call-bar-height - (16px * 2));
     @include max-width-768 {
-      height: calc(100% - ($bar-height * 2) - ($call-bar-height) - ($gutter-lg * 3));
+      height: calc(100% - ($bar-height * 2) - ($call-bar-height) - (16px * 3));
     }
   }
 

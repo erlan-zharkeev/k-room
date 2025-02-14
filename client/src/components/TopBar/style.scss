@@ -1,9 +1,11 @@
+@use '~/global/index' as *;
+
 .top-bar {
   position: relative;
   z-index: 2;
   height: $bar-height;
   min-height: $bar-height;
-  margin-bottom: $gutter-lg;
+  margin-bottom: 16px;
   padding: 0 1rem;
   overflow: hidden;
   @include nm-outset-element;
@@ -24,13 +26,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-right: $gutter-md;
+    margin-right: 8px;
   }
 
   .top-bar__credential {
     display: flex;
     flex-direction: column;
-    margin-left: $gutter-lg;
+    margin-left: 16px;
   }
 
   .top-bar__logo {
@@ -53,7 +55,7 @@
     padding: 4px 8px;
     color: var(--accent);
     border: solid 2px var(--accent);
-    border-radius: $radius-sm;
+    border-radius: 4px;
     cursor: pointer;
   }
 

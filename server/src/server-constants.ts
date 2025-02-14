@@ -1,4 +1,5 @@
-import { ServerConstants, SystemMessages } from './@types/Constants'
+import { SystemMessages } from './@enums'
+import { ServerConstants } from './@types/constants'
 
 export const serverConstants: ServerConstants = {
   sharp: {
@@ -29,22 +30,22 @@ export const serverConstants: ServerConstants = {
     system: [
       {
         id: '56cb91bdc3464f14678934ca',
-        name: SystemMessages.inviteMessage,
+        name: SystemMessages.InviteMessage,
         text: 'Hi, this is an automatically created message, reply to start a conversation'
       },
       {
         id: '56cb91bdc3464f14678934cb',
-        name: SystemMessages.authorCreatedChat,
+        name: SystemMessages.AuthorCreatedChat,
         text: 'You have created the chat'
       },
       {
         id: '56cb91bdc3464f14678934cc',
-        name: SystemMessages.inviteGroupChat,
+        name: SystemMessages.InviteGroupChat,
         text: 'You have been added to the group chat'
       },
       {
         id: '56cb91bdc3464f14678934cd',
-        name: SystemMessages.authorCreatedGroupChat,
+        name: SystemMessages.AuthorCreatedGroupChat,
         text: 'You have created the group chat'
       }
     ]

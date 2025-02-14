@@ -1,19 +1,10 @@
-@import './AuthNav/style';
-
-@import './Popup/style';
-
-@import './StubLoading/styles';
-
-@import './CallModal/style';
-
-@import './Logo/style';
-
-@import './ErrorBucket/style';
-
-@import './ContextMenu/style';
-
-@import './Informer/style';
-
-@import './WidgetWrapper/style';
-
-@import './SelectUsers/style';
+@forward './AuthNav/style';
+@forward './Popup/style';
+@forward './StubLoading/styles';
+@forward './CallModal/style';
+@forward './Logo/style';
+@forward './ErrorBucket/style';
+@forward './ContextMenu/style';
+@forward './Informer/style';
+@forward './WidgetWrapper/style';
+@forward './SelectUsers/style';

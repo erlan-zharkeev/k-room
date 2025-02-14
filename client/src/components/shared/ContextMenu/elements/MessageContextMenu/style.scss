@@ -1,14 +1,14 @@
-@import './elements/Reactions/style';
+@forward './elements/Reactions/style';
 
 .message-context-menu {
   &__element {
     display: flex;
     justify-content: space-between;
-    padding: $radius-sm $gutter-md;
+    padding: 4px 8px;
 
     span {
       width: 70%;
-      margin-left: $gutter-sm;
+      margin-left: 4px;
     }
   }
 

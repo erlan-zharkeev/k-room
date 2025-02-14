@@ -1,14 +1,16 @@
+@use '~/global/index' as *;
+
 .chat-room-settings-popup {
   width: $container-sm;
 
   &__chat-name {
-    margin-top: $gutter-lg;
+    margin-top: 16px;
   }
 
   &__title {
     display: flex;
     justify-content: center;
-    margin-bottom: $gutter-md;
+    margin-bottom: 8px;
   }
 
   &__control-button {
@@ -22,7 +24,7 @@
 
   &__members-list {
     display: flex;
-    margin-top: $gutter-sm;
+    margin-top: 4px;
   }
 
   &__member {
@@ -30,7 +32,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-right: $gutter-sm;
+    margin-right: 4px;
   }
 
   .ui-button {

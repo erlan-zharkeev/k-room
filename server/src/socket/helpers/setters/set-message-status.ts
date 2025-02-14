@@ -1,6 +1,6 @@
 import { MessageModel, ChatRoomModel } from '../../../models'
 import { io } from '../../../server'
-import { MessageStatus, SocketActionsPayload, SocketActions } from '../../../@types'
+import { EventUpdateMessageStatus, MessageStatus, SocketActions } from '../../../@types'
 import { getUserById, getSocketsByUserIds } from '../getters'
 
 export const setMessageStatus = async (messageId: string, status: MessageStatus, userId: string, roomId: string) => {
@@ -15,12 +15,12 @@ export const setMessageStatus = async (messageId: string, status: MessageStatus,
   if (!room) return
   const userSockets = await getSocketsByUserIds(room?.users)
 
-  const payload: SocketActionsPayload['updateMessageStatus'] = {
+  const payload: EventUpdateMessageStatus = {
     roomId,
     messageId,
     status
   }
   userSockets.forEach((socketId) => {
-    io.to(socketId).emit(SocketActions.UPDATE_MESSAGE_STATUS, payload)
+    io.to(socketId).emit<SocketActions>('update-message-status', payload)
   })
 }

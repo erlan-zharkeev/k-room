@@ -1,4 +1,4 @@
-import { SocketActions, SocketActionsPayload, UserMediaType, CallStatus, CallType } from 'common-types'
+import { EventCallStartedAt, EventCallUser, EventInterlocutorUpdateSignal, SocketActions } from 'common-types'
 import moment from 'moment'
 import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -35,22 +35,22 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const [counterValue, _, startCounter, stopCounter] = useCounter(1, false)
 
   useEffect(() => {
-    $socket.on(SocketActions.CALL_STARTED_AT, (timeStamp: SocketActionsPayload['callStartedAt']) => {
+    $socket.on<SocketActions>('call-started-at', (timeStamp: EventCallStartedAt) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
     })
-    $socket.on(SocketActions.CALL_USER, (data: SocketActionsPayload['callUser']) => {
+    $socket.on<SocketActions>('call-user', (data: EventCallUser) => {
       dispatch(setShowCallModal(data))
       const { from, signal, callId } = data
       if (callId) dispatch(setCallId(callId))
       call.current.calling(from, signal)
     })
-    $socket.on(SocketActions.CALL_ENDED, () => {
+    $socket.on<SocketActions>('call-ended', () => {
       call.current.leaveCall(currentCall.id)
       stopCounter()
     })
-    $socket.on(SocketActions.INTERLOCUTOR_UPDATE_SIGNAL, (data: SocketActionsPayload['interlocutorUpdateSignal']) => {
+    $socket.on<SocketActions>('interlocutor-update-signal', (data: EventInterlocutorUpdateSignal) => {
       call.current.updateCallerSignal(data.signal)
     })
   }, [])
@@ -72,9 +72,9 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const enableAudio = async () => {
     dispatch(setCallAudio(true))
-    dispatch(setCallSettingsLoading({ type: UserMediaType.audio, value: true }))
+    dispatch(setCallSettingsLoading({ type: 'audio', value: true }))
     await call.current.enableAudio({ video: settings.video.value })
-    dispatch(setCallSettingsLoading({ type: UserMediaType.audio, value: false }))
+    dispatch(setCallSettingsLoading({ type: 'audio', value: false }))
   }
 
   const disableAudio = async () => {
@@ -84,9 +84,9 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const enableVideo = async () => {
     dispatch(setCallVideo(true))
-    dispatch(setCallSettingsLoading({ type: UserMediaType.video, value: true }))
+    dispatch(setCallSettingsLoading({ type: 'video', value: true }))
     await call.current.enableVideo({ callId: currentCall.id, audio: settings.audio.value })
-    dispatch(setCallSettingsLoading({ type: UserMediaType.video, value: false }))
+    dispatch(setCallSettingsLoading({ type: 'video', value: false }))
   }
 
   const disableVideo = async () => {
@@ -95,9 +95,9 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   }
 
   const hideSelfVideo = () => !settings.video.value || settings.video.loading
-  const isCallInProgress = () => currentCall.status === CallStatus.inProgress
-  const isCallIncoming = () => currentCall.type === CallType.incoming
-  const isIncomingCallCalling = () => isCallIncoming() && currentCall.status === CallStatus.calling
+  const isCallInProgress = () => currentCall.status === 'in-progress'
+  const isCallIncoming = () => currentCall.type === 'incoming'
+  const isIncomingCallCalling = () => isCallIncoming() && currentCall.status === 'calling'
 
   return (
     <div className="call-modal">

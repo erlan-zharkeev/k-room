@@ -1,13 +1,8 @@
-import { NotificationMessage, NotificationType } from 'common-types'
 import { Auth, getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useState, useEffect } from 'react'
 import { $clg } from 'src/services/$clg'
 import { useNotification } from './use-notification'
-
-export enum FirebaseProviderType {
-  google = 'google',
-  facebook = 'facebook'
-}
+import { ClientNotificationMessage, FirebaseProviderType } from 'src/@enums'
 
 export const useFirebase = () => {
   const [auth, _] = useState<Auth>(getAuth())
@@ -22,11 +17,11 @@ export const useFirebase = () => {
     auth.languageCode = 'en'
   })
 
-  const notifications = useNotification();
+  const notifications = useNotification()
 
   const failedToLoginNotification = notifications.getNotification({
-    message: NotificationMessage.failedToLogin,
-    messageType: NotificationType.error
+    message: ClientNotificationMessage.FailedToLogin,
+    messageType: 'error'
   })
 
   const signIn = async (providerName: FirebaseProviderType) => {

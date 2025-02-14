@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { serverConstants } from '../server-constants'
-import { Author, MessageStatus } from '../@types'
+import { Author } from '../@types'
 import { MessageModel } from '../models'
 
 export const loadMessageFixtures = async () => {
@@ -11,9 +11,9 @@ export const loadMessageFixtures = async () => {
       if (messageCandidate) return
       const message = new MessageModel({
         _id,
-        authorId: Author.system,
-        authorName: Author.system,
-        status: MessageStatus.none,
+        authorId: 'system',
+        authorName: 'system',
+        status: 'none',
         body: systemMessage.text,
         createdAt: Date.now(),
         usersMetaData: []

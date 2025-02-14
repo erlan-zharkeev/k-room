@@ -12,21 +12,21 @@ import {
   DBClearConfirmPopup,
   ApplyBasicFixturesPopup
 } from './elements'
-import { ModalContentComponentName } from 'src/@types'
 import { ReactNode } from 'react'
+import { ModalContentComponentName } from 'src/@enums'
 
 export const Popup = () => {
   const { showModal, modalData } = useTypedSelector((state) => state.system)
   const dispatch = useDispatch<AppDispatch>()
   const popups: Record<ModalContentComponentName, ReactNode> = {
-    [ModalContentComponentName.userDataSettingsPopup]: <UserDataSettingsPopup />,
-    [ModalContentComponentName.techSettingsPopup]: <TechSettingsPopup />,
-    [ModalContentComponentName.forwardMessagePopup]: <ForwardMessagePopup />,
-    [ModalContentComponentName.createMultipleChatPopup]: <CreateMultipleChatPopup />,
-    [ModalContentComponentName.chatRoomSettingsPopup]: <ChatRoomSettingsPopup />,
-    [ModalContentComponentName.messageWithBindDataPopup]: <MessageWithBindDataPopup />,
-    [ModalContentComponentName.dBClearConfirmPopup]: <DBClearConfirmPopup />,
-    [ModalContentComponentName.applyFixturesPopup]: <ApplyBasicFixturesPopup />
+    [ModalContentComponentName.UserDataSettingsPopup]: <UserDataSettingsPopup />,
+    [ModalContentComponentName.TechSettingsPopup]: <TechSettingsPopup />,
+    [ModalContentComponentName.ForwardMessagePopup]: <ForwardMessagePopup />,
+    [ModalContentComponentName.CreateMultipleChatPopup]: <CreateMultipleChatPopup />,
+    [ModalContentComponentName.ChatRoomSettingsPopup]: <ChatRoomSettingsPopup />,
+    [ModalContentComponentName.MessageWithBindDataPopup]: <MessageWithBindDataPopup />,
+    [ModalContentComponentName.DBClearConfirmPopup]: <DBClearConfirmPopup />,
+    [ModalContentComponentName.ApplyFixturesPopup]: <ApplyBasicFixturesPopup />
   }
   const ComponentContent = popups[modalData.modalContentComponentName]
 

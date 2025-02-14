@@ -4,14 +4,14 @@
   align-items: center;
   height: 0;
   margin: 4px 0;
-  padding: $gutter-md;
+  padding: 8px;
   color: var(--secondary-text);
   background-color: var(--dark-gray-transparent);
-  border-radius: $radius-sm;
+  border-radius: 4px;
 
   &__icon {
-    margin-right: $gutter-lg;
-    padding-right: $gutter-sm;
+    margin-right: 16px;
+    padding-right: 4px;
     border-right: 1px solid var(--secondary-text);
   }
 

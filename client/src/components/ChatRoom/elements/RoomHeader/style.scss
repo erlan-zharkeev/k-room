@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .room-header {
   position: absolute;
   top: 0;
@@ -11,7 +13,7 @@
 
   @include max-width-768 {
     justify-content: space-between;
-    margin-top: $gutter-sm;
+    margin-top: 4px;
   }
 
   &__back-button {
@@ -19,7 +21,7 @@
 
     @include max-width-768 {
       display: block;
-      margin-right: $gutter-lg;
+      margin-right: 16px;
     }
   }
 

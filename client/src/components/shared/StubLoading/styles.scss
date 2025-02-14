@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .stub-loading {
   position: absolute;
   top: 0;
@@ -26,7 +28,7 @@
     height: 100%;
 
     button {
-      margin-top: $gutter-md;
+      margin-top: 8px;
     }
   }
 

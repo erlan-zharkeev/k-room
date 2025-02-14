@@ -1,5 +1,4 @@
 import { MenuProps, Dropdown } from 'antd'
-import { UserSettingKey, AsideBarButtonName } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
@@ -35,8 +34,8 @@ export const TopBar = () => {
 
   const infoItemClickHandler: MenuProps['onClick'] = ({ key }) => {
     const infoId = key
-    updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.info })
-    updateSetting(UserSettingKey.currentInfoId, { infoId })
+    updateSetting('asideTab', { asideTab: 'info' })
+    updateSetting('currentInfoId', { infoId })
   }
 
   return (

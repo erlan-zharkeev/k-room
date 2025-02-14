@@ -1,4 +1,4 @@
-import { SocketActions, SocketActionsPayload, UserSettingKey } from 'common-types'
+import { EventGetUserTypingStatus, SocketActions } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIButton, UIAvatar } from 'src/components'
@@ -6,7 +6,7 @@ import { clientConstants } from 'src/client-constants'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { $socket } from 'src/services'
 import { AppDispatch, showModal } from 'src/store'
-import { ModalContentComponentName } from 'src/@types'
+import { ModalContentComponentName } from 'src/@enums'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -27,41 +27,39 @@ export const RoomHeader = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  $socket.on(
-    SocketActions.GET_USER_TYPING_STATUS,
-    ({ authorData, status }: SocketActionsPayload['getUserTypingStatus']) => {
-      if (!chatRoomData) return
-      setIsTyping(status)
-      let newArrayOfTypingAuthors = [...typingAuthors]
-      if (status) {
-        const authorCandidate = newArrayOfTypingAuthors.find((author) => author.authorId === authorData.authorId)
-        if (!authorCandidate) newArrayOfTypingAuthors.push(authorData)
-      } else {
-        newArrayOfTypingAuthors = newArrayOfTypingAuthors.filter((author) => author.authorId === authorData.authorId)
-      }
-      setTypingAuthors(newArrayOfTypingAuthors)
+  $socket.on<SocketActions>('get-user-typing-status', ({ authorData, status }: EventGetUserTypingStatus) => {
+    if (!chatRoomData) return
+    setIsTyping(status)
+    let newArrayOfTypingAuthors = [...typingAuthors]
+    if (status) {
+      const authorCandidate = newArrayOfTypingAuthors.find((author) => author.authorId === authorData.authorId)
+      if (!authorCandidate) newArrayOfTypingAuthors.push(authorData)
+    } else {
+      newArrayOfTypingAuthors = newArrayOfTypingAuthors.filter((author) => author.authorId === authorData.authorId)
     }
-  )
+    setTypingAuthors(newArrayOfTypingAuthors)
+  })
 
   const openChatMembers = () => {
     dispatch(
       showModal({
         title: 'Group Chat Info',
-        modalContentComponentName: ModalContentComponentName.chatRoomSettingsPopup
+        modalContentComponentName: ModalContentComponentName.ChatRoomSettingsPopup
       })
     )
   }
 
   const whoIsTyping = () => {
     if (chatRoomData?.multiple) {
-      return `${typingAuthors.map((author) => author.authorName).join(', ')} ${typingAuthors.length > 1 ? 'are typing' : 'is typing'
-        }`
+      return `${typingAuthors.map((author) => author.authorName).join(', ')} ${
+        typingAuthors.length > 1 ? 'are typing' : 'is typing'
+      }`
     }
     return ` Typing ${Array.from('.'.repeat(typingDotsQuantity)).join(' ')}`
   }
 
   const resetChatRoom = () => {
-    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: '' })
+    updateSetting('selectedChatRoomId', { selectChatRoomId: '' })
   }
 
   return (

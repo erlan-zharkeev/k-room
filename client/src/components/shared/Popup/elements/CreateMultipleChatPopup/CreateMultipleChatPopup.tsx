@@ -1,5 +1,5 @@
 import { Form } from 'antd'
-import { UserShort, SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName } from 'common-types'
+import { UserShort, SocketActions, EventCreateRoom, EventRoomCreated } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIAvatarLoader, UIInput, UIButton } from 'src/components'
@@ -27,19 +27,19 @@ export const CreateMultipleChatPopup = () => {
     const chatName = values['chat-name']
     setIsLoading(true)
     const membersIds = members.map((member) => member.id)
-    const payload: SocketActionsPayload['createRoom'] = {
+    const payload: EventCreateRoom = {
       users: [id, ...membersIds],
       chatName,
       avatarFile,
       multiple: true
     }
-    $socket.emit(SocketActions.CREATE_ROOM, payload)
+    $socket.emit<SocketActions>('create-room', payload)
 
-    $socket.on(SocketActions.ROOM_CREATED, (data) => {
-      updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
+    $socket.on<SocketActions>('room-created', (data: EventRoomCreated) => {
+      updateSetting('asideTab', { asideTab: 'chat-list' })
 
       setTimeout(() => {
-        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: data.roomId })
+        updateSetting('selectedChatRoomId', { selectChatRoomId: data.roomId })
       })
       setIsLoading(false)
       dispatch(closeModal())

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { CallModel, ChatRoomModel, MessageModel, UserModel } from '../models'
-import { Status, NotificationMessage } from '../@types'
+import { Status } from '../@types'
 import { throwError } from '../utils'
 import { loadFixtures } from '../fixtures'
+import { ServerNotificationMessage } from '../@enums'
 
 class AdminController {
   async getAppData(_: Request, res: Response) {
@@ -19,7 +20,7 @@ class AdminController {
         messages
       })
     } catch (e: unknown) {
-      throwError(Status.badRequest, res, NotificationMessage.failedToGetData)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedToGetData)
     }
   }
 
@@ -29,13 +30,13 @@ class AdminController {
         UserModel.deleteMany({ role: { $ne: 'admin' } }),
         CallModel.deleteMany({}),
         ChatRoomModel.deleteMany({}),
-        MessageModel.deleteMany({}),
-      ]);
+        MessageModel.deleteMany({})
+      ])
       return res.json({
-        message: NotificationMessage.dbRestored,
-      });
+        message: ServerNotificationMessage.DBRestored
+      })
     } catch (e: unknown) {
-      throwError(Status.badRequest, res, NotificationMessage.dbResetFailed)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.DBResetFailed)
     }
   }
 
@@ -43,50 +44,49 @@ class AdminController {
     try {
       loadFixtures(false)
       return res.json({
-        message: NotificationMessage.fixturesAreApplied,
-      });
+        message: ServerNotificationMessage.FixturesAreApplied
+      })
     } catch (e: unknown) {
-      throwError(Status.badRequest, res, NotificationMessage.dbResetFailed)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.DBResetFailed)
     }
   }
 
   async deleteUser(req: Request, res: Response) {
     try {
       const deleteUserId = req.body.deleteUserId
-      const user = await UserModel.findById(deleteUserId);
+      const user = await UserModel.findById(deleteUserId)
       if (!user) {
-        return throwError(Status.notFound, res, NotificationMessage.userNotFound);
+        return throwError(Status.NotFound, res, ServerNotificationMessage.UserNotFound)
       }
-      await UserModel.findByIdAndDelete(deleteUserId);
+      await UserModel.findByIdAndDelete(deleteUserId)
       return res.json({
-        message: NotificationMessage.userDeleteSuccess,
-      });
+        message: ServerNotificationMessage.UserDeleteSuccess
+      })
     } catch {
-      throwError(Status.badRequest, res, NotificationMessage.deleteUserFailed)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.DeleteUserFailed)
     }
   }
 
   async updateUserData(req: Request, res: Response) {
     try {
-      const { id, username, email, role, confirmed } = req.body.userData;
-      let user = await UserModel.findById(id);
+      const { id, username, email, role, confirmed } = req.body.userData
+      let user = await UserModel.findById(id)
       if (!user) {
-        return throwError(Status.notFound, res, NotificationMessage.userNotFound);
+        return throwError(Status.NotFound, res, ServerNotificationMessage.UserNotFound)
       }
 
-      user.username = username;
-      user.email = email;
-      user.role = role;
-      user.confirmed = confirmed;
+      user.username = username
+      user.email = email
+      user.role = role
+      user.confirmed = confirmed
 
-      await user.save();
+      await user.save()
 
       return res.json({
-        message: NotificationMessage.userUpdateSuccess,
-        updatedUser: user,
-      });
-    } catch {
-    }
+        message: ServerNotificationMessage.UserUpdateSuccess,
+        updatedUser: user
+      })
+    } catch {}
   }
 }
 

@@ -1,13 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { clientConstants } from 'src/client-constants'
-import {
-  ViewPort,
-  ViewPortWidthType,
-  ContextMenuType,
-  ContextMenu,
-  ContextClickedObject,
-  ModalContentComponentName
-} from 'src/@types'
+import { ViewPort, ContextMenuType, ContextMenu, ContextClickedObject } from 'src/@types'
+import { ModalContentComponentName, ViewPortWidthType } from 'src/@enums'
 
 interface ModalData {
   title: string
@@ -39,9 +33,9 @@ const clickedObjectInitialState = {
 
 const initialModalData = {
   title: '',
-  modalContentComponentName: ModalContentComponentName.messageWithBindDataPopup,
+  modalContentComponentName: ModalContentComponentName.MessageWithBindDataPopup,
   okText: 'ok',
-  width: '320px',
+  width: '320px'
 }
 
 const initViewPort = {
@@ -105,7 +99,7 @@ export const systemSlice = createSlice({
     setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
       const viewPortWidth = state.viewPort.width
-      const viewPortType = viewPortWidth <= ViewPortWidthType.phone ? 'mobile' : 'desktop'
+      const viewPortType = viewPortWidth <= ViewPortWidthType.Phone ? 'mobile' : 'desktop'
       const html = document.querySelector('html')
       html?.setAttribute('view-port', viewPortType)
     },

@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserModel } from '../models'
-import { Status, NotificationMessage } from '../@types'
+import { Status } from '../@types'
 import { throwError } from '../utils'
+import { ServerNotificationMessage } from '../@enums'
 
 export const codesRequestValidator = async (req: Request, res: Response, next: NextFunction) => {
-
   try {
     const { email } = req.body
     const candidate = await UserModel.findOne({ email })
 
-    if (!candidate) throwError(Status.badRequest, res, NotificationMessage.couldNotFindEmail)
+    if (!candidate) throwError(Status.BadRequest, res, ServerNotificationMessage.CouldNotFindEmail)
     const currentDate = Date.now()
 
     const ableToSendCode = currentDate > Number(candidate?.codes.nextRequestPossibleAt)
@@ -17,8 +17,8 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
       next()
       return
     }
-    throwError(Status.badRequest, res, NotificationMessage.nextTimeRequestNotPossible)
+    throwError(Status.BadRequest, res, ServerNotificationMessage.NextTimeRequestNotPossible)
   } catch {
-    throwError(Status.badRequest, res, NotificationMessage.commonServerError)
+    throwError(Status.BadRequest, res, ServerNotificationMessage.CommonServerError)
   }
 }

@@ -12,9 +12,7 @@ export const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) =
   const [filteredRooms, setFilteredRooms] = useState(chatRooms)
   const selectedChatRoom = useSelectedRoom()
   const filterList = () => {
-    const unBlockedRooms = chatRooms
-      .filter((room) => !room.blocked)
-    const selfFilteredRooms = unBlockedRooms.filter((room) => room.id !== selectedChatRoom?.id)
+    const selfFilteredRooms = chatRooms.filter((room) => room.id !== selectedChatRoom?.id)
     const queryFilteredRooms = selfFilteredRooms.filter((room) => {
       const username = room.chatName.toLowerCase()
       const searchParams = searchString.toLowerCase()

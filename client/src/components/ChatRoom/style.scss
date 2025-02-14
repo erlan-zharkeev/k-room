@@ -1,8 +1,7 @@
-@import './elements/InputMessage/style';
-
-@import './elements/MessageBody/style';
-
-@import './elements/RoomHeader/style';
+@forward './elements/InputMessage/style';
+@forward './elements/MessageBody/style';
+@forward './elements/RoomHeader/style';
+@use '~/global/index' as *;
 
 .chat-room {
   position: relative;
@@ -28,11 +27,11 @@
 
     &--system {
       justify-content: center;
-      margin-left: $gutter-lg;
+      margin-left: 16px;
 
       .message {
         width: 100%;
-        border-radius: $radius-sm;
+        border-radius: 4px;
       }
 
       .message__text {

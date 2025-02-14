@@ -1,22 +1,8 @@
-@import 'src/styles/media-queries';
-
-@import 'src/styles/theme';
-
-@import 'src/styles/variables';
-
-@import 'src/styles/nullstyle';
-
-@import 'src/styles/mixins';
-
-@import 'src/styles/typography';
-
-@import 'src/styles/common';
-
-@import 'src/styles/overwrite-antd';
-
-@import 'src/layouts/style';
-
-@import 'src/pages/style';
-
-@import 'src/components/style';
-
+@use 'src/styles/theme.scss';
+@use 'src/styles/nullstyle';
+@use 'src/styles/typography';
+@use 'src/styles/initial';
+@use 'src/styles/overwrite-antd';
+@use 'src/layouts/layout-style';
+@use 'src/pages/page-style';
+@use 'src/components/component-style';

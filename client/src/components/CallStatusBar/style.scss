@@ -1,9 +1,11 @@
+@use '~/global/index' as *;
+
 .call-status-bar {
   height: $call-bar-height;
-  margin-bottom: $gutter-lg;
+  margin-bottom: 16px;
   overflow: hidden;
   background: var(--success-bg);
-  border-radius: $radius-md;
+  border-radius: 8px;
   cursor: pointer;
   transition: height 0.1s ease-in;
 

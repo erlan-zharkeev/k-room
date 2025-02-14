@@ -1,11 +1,11 @@
 import { ThunkDispatch, AnyAction, createSlice } from '@reduxjs/toolkit'
-import { UserSettings, InfoItem, InfoItemStatus, RouteNames, KRoomUser } from 'common-types'
+import { UserSettings, InfoItem, RouteNames, KRoomUser } from 'common-types'
 import { clearCookie } from 'src/utils'
 import { $router } from 'src/services'
 import { updateSettings } from '..'
 
 export interface UserState {
-  isAuth: boolean;
+  isAuth: boolean
   userData: KRoomUser
 }
 
@@ -59,7 +59,7 @@ export const userSlice = createSlice({
       const { id } = payload
       if (!state.userData.infoItems) return
       const index = state.userData.infoItems.findIndex((item) => item.id === id)
-      state.userData.infoItems[index].read = InfoItemStatus.read
+      state.userData.infoItems[index].read = 'read'
     },
     setUserData: (state, { payload }: { payload: KRoomUser }) => {
       state.userData = {

@@ -40,7 +40,7 @@ export const UserDataSettingsPopup = () => {
       file: avatarFile
     }
     setIsLoading(true)
-    const response = await doRequest('post', UserEndpoints.UPDATE_USER_DATA, updatedUserData, 'multipart/form-data')
+    const response = await doRequest('post', UserEndpoints.UpdateUserData, updatedUserData, 'multipart/form-data')
     if (response?.data?.userData) {
       dispatch(setUserData(response.data.userData))
       setIsLoading(false)

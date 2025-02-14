@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .ui-switch {
   $toggler-width: 24px;
   $switcher-width: 80px;

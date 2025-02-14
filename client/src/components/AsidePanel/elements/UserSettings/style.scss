@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  padding-top: $gutter-lg;
+  padding-top: 16px;
 
   .link {
     display: flex;
@@ -13,8 +13,8 @@
   }
 
   &__password-recovery {
-    margin-top: $gutter-md;
-    margin-bottom: $gutter-xl;
+    margin-top: 8px;
+    margin-bottom: 32px;
   }
 
   &__id {
@@ -27,11 +27,11 @@
     cursor: pointer;
 
     .ant-card-body {
-      padding: $gutter-md;
+      padding: 8px;
     }
 
     .ant-card-meta-avatar {
-      margin-bottom: $gutter-md;
+      margin-bottom: 8px;
       padding: 0;
     }
 
@@ -49,7 +49,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: $gutter-sm;
+      margin-bottom: 4px;
     }
 
     .ant-card-meta-title {
@@ -81,11 +81,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: $gutter-lg;
+    margin-top: 16px;
   }
 
   &__title {
-    margin-bottom: $gutter-md;
+    margin-bottom: 8px;
   }
 
   &__info {
@@ -94,7 +94,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding-top: $gutter-lg;
-    padding-bottom: $gutter-lg;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 }

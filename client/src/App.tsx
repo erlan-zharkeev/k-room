@@ -6,15 +6,24 @@ import { Popup, CallModal, ContextMenu } from './components'
 import { useNotification, useTypedSelector } from './hooks'
 import { AppRouter } from './router/AppRouter'
 import { useApi } from './services'
-import { AppDispatch, resetStores, changeIsAppLoading, commonSetUserDataHandler, setViewPort, enableAllowAudioContext } from './store'
+import {
+  AppDispatch,
+  resetStores,
+  changeIsAppLoading,
+  commonSetUserDataHandler,
+  setViewPort,
+  enableAllowAudioContext
+} from './store'
 import { getViewPort, setTheme, clearLocalStorageOnKeyDown, getCookie } from './utils'
-import { NotificationMessage, NotificationType, UserEndpoints } from 'common-types'
+import { UserEndpoints } from 'common-types'
 import { $socket, socketReconnect } from './services/$socket'
+import { ClientNotificationMessage } from './@enums'
 
 const setRealVh = () => {
   const vh = window.innerHeight * 0.01
   document.documentElement.style.setProperty('--real-1-percent-vh', `${vh}px`)
 }
+
 
 export const App = () => {
   const { theme, soundOn } = useTypedSelector((state) => state.persist.settings)
@@ -25,7 +34,7 @@ export const App = () => {
 
   const dispatch = useDispatch<AppDispatch>()
   const fetchUser = async () => {
-    const response = await doRequest('get', UserEndpoints.GET_USER_DATA)
+    const response = await doRequest('get', UserEndpoints.GetUserData)
     if (!response || !response.data) return
     const { userData, settings } = response.data
     if (userData && settings) commonSetUserDataHandler(dispatch, { userData, settings })
@@ -38,13 +47,13 @@ export const App = () => {
   }
 
   const networkOfflineNotification = notifications.getNotification({
-    message: NotificationMessage.networkOffline,
-    messageType: NotificationType.error
+    message: ClientNotificationMessage.NetworkOffline,
+    messageType: 'error'
   })
 
   const networkOnlineNotification = notifications.getNotification({
-    message: NotificationMessage.networkOnline,
-    messageType: NotificationType.info
+    message: ClientNotificationMessage.NetworkOnline,
+    messageType: 'info'
   })
 
   const handleOffline = () => {
@@ -69,8 +78,8 @@ export const App = () => {
 
   const soundContextNotification = notifications.getNotification({
     key: 'sound-context',
-    message: NotificationMessage.allowAudioContext,
-    messageType: NotificationType.info,
+    message: ClientNotificationMessage.AllowAudioContext,
+    messageType: 'info',
     duration: 0
   })
 

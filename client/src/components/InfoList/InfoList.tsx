@@ -1,7 +1,7 @@
 import { clientConstants } from 'src/client-constants'
 import parse from 'html-react-parser'
 import { Collapse } from 'antd'
-import { CommonEndpoints, Status, UserSettingKey } from 'common-types'
+import { CommonEndpoints, Status } from 'common-types'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
@@ -19,14 +19,14 @@ export const InfoList = () => {
 
   const markInfoAsRead = async () => {
     if (!currentInfoId) return
-    const response = await doRequest('post', CommonEndpoints.GET_INFO, { currentInfoId })
-    if (!response || response.status !== Status.success) return
+    const response = await doRequest('post', CommonEndpoints.GetInfo, { currentInfoId })
+    if (!response || response.status !== Status.Success) return
     dispatch(markInfoItemAsRead({ id: currentInfoId }))
   }
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      const foundEl = infoItems?.find(infoItem => infoItem.id === currentInfoId)
+      const foundEl = infoItems?.find((infoItem) => infoItem.id === currentInfoId)
       if (foundEl && foundEl.read === 'unread') markInfoAsRead()
     }, clientConstants.infoItemMarkAsReadDuration)
     return () => clearTimeout(timerId)
@@ -35,11 +35,11 @@ export const InfoList = () => {
   const onChange = (key: string | string[]) => {
     if (key instanceof Array) {
       key.forEach((keyElement) => {
-        updateSetting(UserSettingKey.currentInfoId, { infoId: keyElement })
+        updateSetting('currentInfoId', { infoId: keyElement })
       })
       return
     }
-    updateSetting(UserSettingKey.currentInfoId, { infoId: key ?? null })
+    updateSetting('currentInfoId', { infoId: key ?? null })
   }
 
   return (

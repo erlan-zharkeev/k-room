@@ -1,17 +1,25 @@
 import { Badge, Image } from 'antd'
 import { useState, useEffect } from 'react'
-import { ExpandedSizeModifiers, ShapeModifiers, UIAvatarBadgePlacement } from 'src/@types'
+import { ShapeModifier, SizeModifier } from 'src/@types'
 import { IconName, UIIcon } from '..'
+
+enum UIAvatarBadgePlacement {
+  Up = 'up',
+  Down = 'down'
+}
+
+type UIAvatarShapeModifier = Extract<ShapeModifier, 'round' | 'square'>
+
 export interface UIAvatarProps {
   online?: boolean
   src?: string
-  size?: ExpandedSizeModifiers
+  size?: SizeModifier
   showBadge?: boolean
   stubIconName?: IconName
   ribbon?: boolean
   ribbonPlacement?: UIAvatarBadgePlacement
   dotPlacement?: UIAvatarBadgePlacement
-  shape?: ShapeModifiers
+  shape?: UIAvatarShapeModifier
 }
 
 export const UIAvatar = ({
@@ -21,8 +29,8 @@ export const UIAvatar = ({
   showBadge = true,
   stubIconName = 'user-stub',
   ribbon = false,
-  ribbonPlacement = UIAvatarBadgePlacement.up,
-  dotPlacement = UIAvatarBadgePlacement.up,
+  ribbonPlacement = UIAvatarBadgePlacement.Up,
+  dotPlacement = UIAvatarBadgePlacement.Up,
   shape = 'round'
 }: UIAvatarProps) => {
   const [haveSource, setHaveSource] = useState(false)
@@ -32,9 +40,11 @@ export const UIAvatar = ({
   }, [src])
 
   const AvatarBody = () => {
+    const iconSize = size === 'middle' || size === 'extra-small' || size === 'small' ? 'small' : size
+
     return !haveSource ? (
       <div className="ui-avatar__image">
-        <UIIcon name={stubIconName} size={size} />
+        <UIIcon name={stubIconName} size={iconSize} />
       </div>
     ) : (
       <Image src={src} className="ui-avatar__image" alt="avatar" onError={() => setHaveSource(false)} />
@@ -43,7 +53,7 @@ export const UIAvatar = ({
 
   const BadgeWrapper = () =>
     ribbon ? (
-      <Badge.Ribbon text="G" placement={ribbonPlacement === UIAvatarBadgePlacement.up ? 'start' : 'end'}>
+      <Badge.Ribbon text="G" placement={ribbonPlacement === UIAvatarBadgePlacement.Up ? 'start' : 'end'}>
         <AvatarBody />
       </Badge.Ribbon>
     ) : (

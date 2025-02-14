@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import { UserModel } from '../models'
-import { Status, NotificationMessage } from '../@types'
+import { Status } from '../@types'
 import { getPathToImg, throwError } from '../utils'
+import { ServerNotificationMessage } from '../@enums'
 
 const fs = require('fs')
 
@@ -11,11 +12,11 @@ class CommonController {
       const filename = req.query.img as string
       const resolution = filename.split('.')[1]
       const path = getPathToImg(filename)
-      if (!fs.existsSync(path)) return throwError(Status.notFound, res, NotificationMessage.noFilesExist)
+      if (!fs.existsSync(path)) return throwError(Status.NotFound, res, ServerNotificationMessage.NoFilesExist)
       res.writeHead(200, { 'content-type': `image/${resolution}` })
       fs.createReadStream(path).pipe(res)
     } catch {
-      return throwError(Status.notFound, res, NotificationMessage.noFilesExist)
+      return throwError(Status.NotFound, res, ServerNotificationMessage.NoFilesExist)
     }
   }
 
@@ -42,9 +43,9 @@ class CommonController {
           arrayFilters: [{ 'outer.id': currentInfoId }]
         }
       )
-      return res.json({ message: NotificationMessage.success, silent: true })
+      return res.json({ message: ServerNotificationMessage.Success, silent: true })
     } catch {
-      throwError(Status.notFound, res, NotificationMessage.notImage)
+      throwError(Status.NotFound, res, ServerNotificationMessage.NotImage)
     }
   }
 }

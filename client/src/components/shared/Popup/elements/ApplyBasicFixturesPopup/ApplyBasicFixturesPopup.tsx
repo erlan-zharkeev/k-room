@@ -18,7 +18,7 @@ export const ApplyBasicFixturesPopup = () => {
 
   const applyBasicFixtures = async () => {
     setLoader(true)
-    await doRequest('patch', AdminEndpoints.APPLY_FIXTURES)
+    await doRequest('patch', AdminEndpoints.ApplyFixtures)
     if (modalData.actions && modalData.actions.getData) {
       await modalData.actions.getData()
     }
@@ -28,7 +28,9 @@ export const ApplyBasicFixturesPopup = () => {
 
   return (
     <div className="apply-basic-fixtures-popup">
-      <p className="paragraph-text paragraph-text--secondary paragraph-text--md">Are you shure want to apply basic fixtures?</p>
+      <p className="paragraph-text paragraph-text--secondary paragraph-text--md">
+        Are you shure want to apply basic fixtures?
+      </p>
       <div className="apply-basic-fixtures-popup__actions">
         <UIButton text="Apply" border="common-border" fill onClick={applyBasicFixtures} loading={loader} />
         <UIButton text="Cancel" border="common-border" fill onClick={closeModalHandler} />

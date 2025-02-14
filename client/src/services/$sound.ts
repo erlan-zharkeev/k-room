@@ -1,15 +1,8 @@
 import { Howl } from 'howler'
-
-export enum Sounds {
-  messageDelivered = 'messageDelivered',
-  calling = 'calling',
-  busy = 'busy',
-  connection = 'connection',
-  ring = 'ring'
-}
+import { Sounds } from 'src/@enums'
 
 const soundSrc: Record<Sounds, string> = {
-  messageDelivered: './sounds/ding.mp3',
+  'message-delivered': './sounds/ding.mp3',
   calling: './sounds/calling.mp3',
   busy: './sounds/busy.mp3',
   connection: './sounds/connection.mp3',

@@ -1,5 +1,6 @@
-@import './elements/CallModalVideo/style';
-@import './elements/CallDots/style';
+@forward './elements/CallModalVideo/style';
+@forward './elements/CallDots/style';
+@use '~/global/index' as *;
 
 .call-modal {
   @include wh-100;
@@ -7,7 +8,7 @@
   overflow: hidden;
   background-color: var(--dark-gray-transparent-2);
   border: 2px solid var(--dark-gray);
-  border-radius: $radius-md;
+  border-radius: 8px;
   backdrop-filter: blur(10px);
 
   .call-modal__wrapper {
@@ -20,8 +21,8 @@
     right: 0;
     width: 34px;
     overflow: hidden;
-    border-top-left-radius: $radius-md;
-    border-bottom-left-radius: $radius-md;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
   }
 
   .call-modal__user-settings .ui-button {
@@ -101,7 +102,7 @@
     align-items: center;
     justify-content: space-between;
     height: 35px;
-    padding: 0 $gutter-lg 0 $gutter-sm;
+    padding: 0 16px 0 4px;
     background-color: var(--main-bg);
   }
 
@@ -128,7 +129,7 @@
   }
 
   .call-modal__interlocutor-name {
-    margin-top: $gutter-xl;
+    margin-top: 32px;
   }
 
   .call-modal__window-controls {
@@ -138,7 +139,7 @@
   }
 
   .call-modal__window-controls-element {
-    margin: 0 $gutter-sm;
+    margin: 0 4px;
   }
 
   .ui-icon--video-call-thin svg {

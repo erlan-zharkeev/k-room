@@ -3,8 +3,9 @@ import { Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { UserModel } from '../models'
 import { sendEmailCodePasswordRecovery } from '../services'
-import { NotificationMessage, Status } from '../@types'
+import { Status } from '../@types'
 import { notAccuratePinRandomGenerator, getNextTimeCodeRequest, throwError } from '../utils'
+import { ServerNotificationMessage } from '../@enums'
 
 class CodesController {
   async emailPasswordRecovery(req: Request, res: Response) {
@@ -21,9 +22,9 @@ class CodesController {
 
       await sendEmailCodePasswordRecovery(email, code)
 
-      return res.json({ message: NotificationMessage.checkEmailForCode, nextTimeRequest })
+      return res.json({ message: ServerNotificationMessage.CheckEmailForCode, nextTimeRequest })
     } catch {
-      throwError(Status.badRequest, res, NotificationMessage.failedCodeSend)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedCodeSend)
     }
   }
 
@@ -32,7 +33,7 @@ class CodesController {
       const { email, code } = req.body
       const user = await UserModel.findOne({ email })
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
-      if (!isCodeEqual) throwError(Status.badRequest, res, NotificationMessage.invalidConfirmCode)
+      if (!isCodeEqual) throwError(Status.BadRequest, res, ServerNotificationMessage.InvalidConfirmCode)
       const passwordResetQuery = uuidv4()
       await user?.updateOne({
         $set: {
@@ -40,9 +41,13 @@ class CodesController {
           'codes.passwordRecovery.query.expiresIn': getNextTimeCodeRequest(ENV.PASSWORD_RECOVERY_LINK_LIFE)
         }
       })
-      return res.json({ message: NotificationMessage.success, query: passwordResetQuery, silent: true })
+      return res.json({
+        message: ServerNotificationMessage.Success,
+        query: passwordResetQuery,
+        silent: true
+      })
     } catch {
-      throwError(Status.badRequest, res, NotificationMessage.commonServerError)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.CommonServerError)
     }
   }
 }

@@ -2,7 +2,7 @@
   width: 400px;
 
   &__select:not(:first-child) {
-    margin-bottom: $gutter-lg;
+    margin-bottom: 16px;
   }
 
   &__title-wrapper {
@@ -19,7 +19,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: $gutter-sm;
+    margin-top: 4px;
 
     .ant-select {
       width: 90% !important;
@@ -39,10 +39,10 @@
   &__volume-indicator-wrapper {
     position: relative;
     height: 7px;
-    margin: $gutter-md 0;
+    margin: 8px 0;
     overflow: hidden;
     background-color: var(--dark-green);
-    border-radius: $radius-md;
+    border-radius: 8px;
     transition: ease-in-out 0.4s height;
 
     &--hide {
@@ -67,8 +67,8 @@
     video {
       width: 100%;
       height: 100%;
-      margin-top: $gutter-md;
-      border-radius: $radius-md;
+      margin-top: 8px;
+      border-radius: 8px;
     }
 
     height: 300px;

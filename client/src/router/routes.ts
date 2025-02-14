@@ -1,4 +1,5 @@
 import { RouteNames } from 'common-types'
+import { IRoute } from 'src/@types'
 import {
   NotFoundPage,
   PasswordRecoveryPage,
@@ -10,7 +11,6 @@ import {
   SignUpPage,
   WaitEmailConfirmPage,
 } from 'src/pages'
-import { IRoute } from './@types/IRoute'
 
 const commonRoutes: Array<IRoute> = [
   {

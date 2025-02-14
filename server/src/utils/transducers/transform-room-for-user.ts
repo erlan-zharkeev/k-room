@@ -1,11 +1,12 @@
 import { serverConstants } from '../../server-constants'
 import { UserModel, MessageModel } from '../../models'
 import { getUserById } from '../../socket'
-import { DBChatRoom, SystemMessages, MessageStatus, DBMessage, ChatRoom } from '../../@types'
+import { DBChatRoom, DBMessage, ChatRoom } from '../../@types'
 import { transformMessageForUsers } from './transform-message-for-users'
+import { SystemMessages } from '../../@enums'
 
 export const transformRoomForUser = async ({ userId, room }: { userId: string; room: DBChatRoom }) => {
-  let { chatName, users, avatarPath, multiple, authorId, _id, messages, blocked } = room
+  let { chatName, users, avatarPath, multiple, authorId, _id, messages } = room
   let hasOnline = false
 
   if (!multiple) {
@@ -44,7 +45,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
         : systemMessagesMap['invite-group-chat']
     }
 
-    const status = isUserAuthor ? MessageStatus.none : MessageStatus.delivered
+    const status = isUserAuthor ? 'none' : 'delivered'
     await MessageModel.updateOne({ _id: systemMessageId }, { $set: { usersMetaData: { id: userId, status } } })
 
     messages?.push(systemMessageId)
@@ -53,14 +54,12 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
   const fullBodyMessages: Array<DBMessage> = await MessageModel.find({ _id: { $in: messages } })
 
   const transformedMessages = fullBodyMessages.map((message) => transformMessageForUsers(message, userId))
-  const isRoomBlocked = authorId === userId && blocked
   const result: ChatRoom = {
     id: String(_id),
     authorId,
     chatName,
     avatarPath,
     hasOnline,
-    blocked: isRoomBlocked,
     users: shortUserList,
     messages: transformedMessages,
     multiple

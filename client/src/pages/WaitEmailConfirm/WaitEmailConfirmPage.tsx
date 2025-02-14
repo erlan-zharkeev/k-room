@@ -37,9 +37,9 @@ export const WaitEmailConfirmPage = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpoints.SEND_EMAIL_CONFIRMATION_LINK, { email })
+    const response = await doRequest('post', AuthEndpoints.SendEmailConfirmationLink, { email })
     setIsLoading(false)
-    if (!response || response.status !== Status.success) return
+    if (!response || response.status !== Status.Success) return
     const { data } = response
     const updatedPath = `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })

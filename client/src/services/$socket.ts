@@ -1,4 +1,4 @@
-import { RouteNames, AuthTokens, SocketActions, AuthEndpoints } from 'common-types'
+import { RouteNames, SocketActions, AuthEndpoints } from 'common-types'
 import Cookies from 'js-cookie'
 import { io } from 'socket.io-client'
 import { AppDispatch, setReconnectingStatus } from 'src/store'
@@ -16,17 +16,17 @@ export const $socket = io(`${initConnectionPath}/`, {
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,
   reconnectionAttempts: VITE_MAX_RECONNECT_ATTEMPTS,
-  auth: { token: Cookies.get(AuthTokens.accessToken), refreshToken: Cookies.get(AuthTokens.refreshToken) }
+  auth: { token: Cookies.get('access-token'), refreshToken: Cookies.get('refresh-token') }
 })
 
 export const socketReconnect = async (dispatch: AppDispatch) => {
   try {
-    await axios.get(`/api${AuthEndpoints.UPDATE_TOKENS_PAIR}`, { headers: { 'Content-Type': 'application/json' } })
+    await axios.get(`/api${AuthEndpoints.UpdateTokensPair}`, { headers: { 'Content-Type': 'application/json' } })
   } catch (e) {
     apiErrorInterceptor(e)
   }
-  $socket.auth = { token: Cookies.get(AuthTokens.accessToken) }
+  $socket.auth = { token: Cookies.get('access-token') }
   $socket.connect()
-  $socket.emit(SocketActions.INITIALIZE)
+  $socket.emit<SocketActions>('initialize')
   dispatch(setReconnectingStatus(false))
 }

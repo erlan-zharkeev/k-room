@@ -17,9 +17,9 @@ export const EmailConfirmPage = () => {
   const { doRequest } = useApi()
 
   const sendEmailConfirmation = async (id: string) => {
-    const response = await doRequest('post', AuthEndpoints.SEND_EMAIL_CONFIRMATION, { userId: id })
+    const response = await doRequest('post', AuthEndpoints.SendEmailConfirmation, { userId: id })
     if (!response) return
-    if (response.status !== Status.success) return navigate(RouteNames.SIGN_IN)
+    if (response.status !== Status.Success) return navigate(RouteNames.SIGN_IN)
     setEmail(response.data.userData.email)
     setIsLoading(false)
     dispatch(logOut())

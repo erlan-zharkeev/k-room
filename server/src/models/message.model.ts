@@ -1,21 +1,16 @@
 import { Schema, model } from 'mongoose'
-import { ImageObject, IMessageSchema, MessageStatus, Reaction } from '../@types';
-
-const usersMetaDataSchema = new Schema<{ id: string; status: MessageStatus }>({
-  id: { type: String, required: true },
-  status: { type: String, enum: Object.values(MessageStatus), required: true },
-});
+import { ImageObject, IMessageSchema, Reaction } from '../@types'
 
 const reactionSchema = new Schema<Reaction>({
   username: { type: String, required: true },
   authorId: { type: String, required: true },
   glyphKey: { type: String, required: true }
-});
+})
 
 const imageSchema = new Schema<Omit<ImageObject, 'fileBuffer'>>({
   src: { type: String, required: true },
   name: { type: String, required: true }
-});
+})
 
 const messageSchema = new Schema<IMessageSchema>({
   authorId: {
@@ -54,7 +49,12 @@ const messageSchema = new Schema<IMessageSchema>({
     default: true
   },
   usersMetaData: {
-    type: [usersMetaDataSchema],
+    type: [
+      {
+        id: { type: String, required: true },
+        status: { type: String, enum: ['sending', 'undelivered', 'delivered', 'read', 'none'], required: true }
+      }
+    ],
     required: false,
     default: []
   },

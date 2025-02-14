@@ -1,5 +1,5 @@
 import { Form } from 'antd'
-import { SocketActionsPayload, SocketActions } from 'common-types'
+import { EventUpdateChatRoom, SocketActions } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIAvatar, UIAvatarLoader, UIInput, UIButton } from 'src/components'
@@ -24,7 +24,7 @@ export const ChatRoomSettingsPopup = () => {
 
   const onFinish = async (values: { 'chat-name': string }) => {
     const userIds = chatRoomData?.users.map((user) => user.id) ?? []
-    const updatedValues: SocketActionsPayload['updateChatRoom'] = {
+    const updatedValues: EventUpdateChatRoom = {
       roomId: selectedChatRoomId,
       users: [id, ...userIds],
       chatName: values['chat-name'],
@@ -33,8 +33,8 @@ export const ChatRoomSettingsPopup = () => {
     }
     setIsLoading(true)
 
-    $socket.emit(SocketActions.UPDATE_CHAT_ROOM, updatedValues)
-    $socket.on(SocketActions.ROOM_DATA_UPDATED, () => {
+    $socket.emit<SocketActions>('update-chat-room', updatedValues)
+    $socket.on<SocketActions>('room-data-updated', () => {
       setIsLoading(false)
       dispatch(closeModal())
     })

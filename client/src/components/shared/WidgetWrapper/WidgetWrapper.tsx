@@ -1,24 +1,30 @@
-import { Theme } from 'common-types'
 import { ReactNode } from 'react'
-import { WallpaperMainDark, WallpaperMainLight, WallpaperAsideLight, WallpaperAsideDark, WallpaperTopLight, WallpaperTopDark } from 'src/assets'
+import {
+  WallpaperMainDark,
+  WallpaperMainLight,
+  WallpaperAsideLight,
+  WallpaperAsideDark,
+  WallpaperTopLight,
+  WallpaperTopDark
+} from 'src/assets'
 import { useTypedSelector } from 'src/hooks'
 
 const wallpaperMap = {
   aside: {
-    [Theme.dark]: WallpaperAsideDark,
-    [Theme.light]: WallpaperAsideLight
+    dark: WallpaperAsideDark,
+    light: WallpaperAsideLight
   },
   main: {
-    [Theme.dark]: WallpaperMainDark,
-    [Theme.light]: WallpaperMainLight
+    dark: WallpaperMainDark,
+    light: WallpaperMainLight
   },
   top: {
-    [Theme.dark]: WallpaperTopDark,
-    [Theme.light]: WallpaperTopLight
+    dark: WallpaperTopDark,
+    light: WallpaperTopLight
   },
   left: {
-    [Theme.dark]: WallpaperTopDark,
-    [Theme.light]: WallpaperTopLight
+    dark: WallpaperTopDark,
+    light: WallpaperTopLight
   }
 }
 
@@ -47,7 +53,7 @@ export const WidgetWrapper = ({
   return (
     <div className="widget-wrapper">
       {wallpaper}
-      <div className={`widget-loader widget-loader--${loaderModifier}`} >
+      <div className={`widget-loader widget-loader--${loaderModifier}`}>
         {wallpaper}
         <div className="loading-container" />
       </div>

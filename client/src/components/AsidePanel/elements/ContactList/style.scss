@@ -1,7 +1,12 @@
-@import './elements/ContactSearch/style';
+@forward './elements/ContactSearch/style';
+@use '~/global/index' as *;
 
 .contact-list {
-  padding: $aside-panel-padding;
+  padding: 16px;
+
+  .contact-list__btn:nth-child(2) {
+    margin: 0 8px;
+  }
 
   .contact-list__invited {
     display: flex;
@@ -10,7 +15,7 @@
   }
 
   .divider {
-    margin-top: $gutter-lg;
+    margin-top: 16px;
   }
 
   .ant-list-item-meta {
@@ -33,9 +38,16 @@
     }
   }
 
+  .contact-list__list-item {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
   .contact-list__controls {
     display: flex;
-    margin-top: 4px;
+    margin-top: 2px;
+    margin-left: 32px;
 
     .ui-icon--chat {
       margin-top: 2px;

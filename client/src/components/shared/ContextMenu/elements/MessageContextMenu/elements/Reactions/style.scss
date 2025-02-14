@@ -3,13 +3,13 @@
   grid-template-columns: repeat(4, 1fr);
   justify-content: space-evenly;
   width: 100%;
-  padding: $gutter-sm 0;
+  padding: 4px 0;
   border-bottom: 1px var(--secondary-text) solid;
 
   .reactions__element {
     display: flex;
     justify-content: center;
-    border-radius: $radius-sm;
+    border-radius: 4px;
 
     &:hover {
       background-color: var(--secondary-text);

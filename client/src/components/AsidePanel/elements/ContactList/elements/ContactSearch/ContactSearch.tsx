@@ -1,5 +1,5 @@
 import { List } from 'antd'
-import { SocketActions, KRoomUser, SocketActionsPayload } from 'common-types'
+import { SocketActions, KRoomUser, EventSearchContact } from 'common-types'
 import { useState } from 'react'
 import { UIInput, UIIcon, UIAvatar, UIButton } from 'src/components'
 import { useTypedSelector, useDebounce } from 'src/hooks'
@@ -12,15 +12,15 @@ export const ContactSearch = () => {
   const { id } = useTypedSelector((state) => state.user.userData)
   const { contacts } = useTypedSelector((state) => state.contacts)
 
-  $socket.on(SocketActions.GET_SEARCHED_CONTACT, (contacts: Array<KRoomUser>) => {
+  $socket.on<SocketActions>('get-searched-contact', (contacts: Array<KRoomUser>) => {
     const userFilteredSelf = contacts.filter((user: KRoomUser) => user.id !== id)
     setUsers(userFilteredSelf)
     setIsLoading(false)
   })
 
   const fetchUsers = (value: string) => {
-    const searchPayload: SocketActionsPayload['searchContact'] = { value }
-    $socket.emit(SocketActions.SEARCH_CONTACT, searchPayload)
+    const searchPayload: EventSearchContact = { value }
+    $socket.emit<SocketActions>('search-contact', searchPayload)
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
@@ -34,7 +34,7 @@ export const ContactSearch = () => {
     if (!interlocutorId) return
     const interlocutorData = users.find((user) => user.id === interlocutorId)
     if (!interlocutorData) return
-    $socket.emit(SocketActions.SAVE_CONTACT, { userId: id, interlocutorId: interlocutorData.id })
+    $socket.emit<SocketActions>('save-contact', { userId: id, interlocutorId: interlocutorData.id })
   }
 
   return (
@@ -59,12 +59,7 @@ export const ContactSearch = () => {
                   description={<span>{user.email}</span>}
                 />
                 {!contacts.find((element) => element.id === user.id) && (
-                  <UIButton
-                    iconName="plus"
-                    color="accent"
-                    onClick={() => addUser(user.id)}
-                    tooltip="Add User"
-                  />
+                  <UIButton iconName="plus" color="accent" onClick={() => addUser(user.id)} tooltip="Add User" />
                 )}
               </List.Item>
             )}

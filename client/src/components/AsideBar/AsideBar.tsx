@@ -1,17 +1,17 @@
 import { RadioChangeEvent, Radio, Badge } from 'antd'
-import { AsideBarButtonName, UserSettingKey, MessageStatus } from 'common-types'
+import { AsideBarButtonName } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AppDispatch, selectChatRoom, showModal } from 'src/store'
-import { ModalContentComponentName, ViewPortWidthType } from 'src/@types'
 import { IconName, UIButton, Logo } from '..'
 import { WidgetWrapper } from '../shared'
 import { useEffect, useState } from 'react'
+import { ModalContentComponentName, ViewPortWidthType } from 'src/@enums'
 
 export interface ButtonsListElement {
   value: AsideBarButtonName
   iconName: IconName
-  tooltip?: string,
+  tooltip?: string
 }
 
 export const AsideBar = () => {
@@ -26,25 +26,25 @@ export const AsideBar = () => {
 
   const changeTab = (e: RadioChangeEvent) => {
     const currentTabName = e.target.value
-    updateSetting(UserSettingKey.asideTab, { asideTab: currentTabName })
+    updateSetting('asideTab', { asideTab: currentTabName })
   }
 
   const changeTabClickHandler = () => {
-    if (viewPort.width <= ViewPortWidthType.tablet) dispatch(selectChatRoom(''))
+    if (viewPort.width <= ViewPortWidthType.Tablet) dispatch(selectChatRoom(''))
   }
 
   const buttons: Array<ButtonsListElement> = [
-    { value: AsideBarButtonName.contacts, iconName: 'contacts', tooltip: 'Contacts' },
-    { value: AsideBarButtonName.chatList, iconName: 'chats', tooltip: 'Chats' },
-    { value: AsideBarButtonName.calls, iconName: 'calls', tooltip: 'Calls' },
-    { value: AsideBarButtonName.settings, iconName: 'settings-cog', tooltip: 'Settings' }
+    { value: 'contacts', iconName: 'contacts', tooltip: 'Contacts' },
+    { value: 'chat-list', iconName: 'chats', tooltip: 'Chats' },
+    { value: 'calls', iconName: 'calls', tooltip: 'Calls' },
+    { value: 'settings', iconName: 'settings-cog', tooltip: 'Settings' }
   ]
 
   const openTechSettings = () => {
     dispatch(
       showModal({
         title: 'Settings',
-        modalContentComponentName: ModalContentComponentName.techSettingsPopup
+        modalContentComponentName: ModalContentComponentName.TechSettingsPopup
       })
     )
   }
@@ -63,7 +63,7 @@ export const AsideBar = () => {
     let result = 0
     chatRooms.forEach((room) =>
       room.messages.forEach((message) => {
-        if (message.status === MessageStatus.delivered && !message.isSelf) result += 1
+        if (message.status === 'delivered' && !message.isSelf) result += 1
       })
     )
     return result
@@ -72,8 +72,8 @@ export const AsideBar = () => {
   const [buttonElements, setButtonElements] = useState(buttons)
 
   useEffect(() => {
-    if (role === 'admin' && !Boolean(buttons.find((button) => button.value === AsideBarButtonName.adminPanel))) {
-      setButtonElements((buttons) => [{ value: AsideBarButtonName.adminPanel, iconName: 'shield', tooltip: 'Admin panel' }, ...buttons])
+    if (role === 'admin' && !Boolean(buttons.find((button) => button.value === 'admin-panel'))) {
+      setButtonElements((buttons) => [{ value: 'admin-panel', iconName: 'shield', tooltip: 'Admin panel' }, ...buttons])
     }
   }, [role])
 
@@ -81,17 +81,22 @@ export const AsideBar = () => {
     <div className="aside-bar">
       <WidgetWrapper wallpaperPlacement="left">
         <div className="aside-bar__wrapper">
-          {viewPort.width >= ViewPortWidthType.tablet && <Logo showPointer={false} />}
+          {viewPort.width >= ViewPortWidthType.Tablet && <Logo showPointer={false} />}
           <Radio.Group value={asideTab} onChange={changeTab}>
             {buttonElements.map((button) => (
               <div key={button.value} className="aside-bar__button-el">
-                <Badge color='var(--accent)' count={button.value === AsideBarButtonName.chatList && unreadMessagesCount() > 0 ? 1 : 0} size='small' offset={[-15, 10]}>
+                <Badge
+                  color="var(--accent)"
+                  count={button.value === 'chat-list' && unreadMessagesCount() > 0 ? 1 : 0}
+                  size="small"
+                  offset={[-15, 10]}
+                >
                   {getButtonComponent(button)}
                 </Badge>
               </div>
             ))}
           </Radio.Group>
-          {viewPort.width >= ViewPortWidthType.tablet && (
+          {viewPort.width >= ViewPortWidthType.Tablet && (
             <UIButton
               iconName="thunder"
               color="accent"

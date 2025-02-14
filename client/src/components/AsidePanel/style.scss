@@ -1,10 +1,8 @@
-@import './elements/UserSettings/style';
-
-@import './elements/ChatRoomList/style';
-
-@import './elements/ContactList/style';
-
-@import './elements/Calls/style';
+@forward './elements/UserSettings/style';
+@forward './elements/ChatRoomList/style';
+@forward './elements/ContactList/style';
+@forward './elements/Calls/style';
+@use '~/global/index' as *;
 
 .aside-panel {
   position: relative;

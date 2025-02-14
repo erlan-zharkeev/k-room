@@ -1,5 +1,5 @@
 import { List } from 'antd'
-import { Call, CallType } from 'common-types'
+import { Call } from 'common-types'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 import { UIAvatar, UIIcon } from 'src/components'
@@ -8,11 +8,11 @@ import { firstCharUpperCase } from 'src/utils'
 
 export const Calls = () => {
   const { list, currentCall } = useTypedSelector((state) => state.calls)
-  const getCallType = (call: Call) => (currentCall.id === call.id ? CallType.current : call.type)
+  const getCallType = (call: Call) => (currentCall.id === call.id ? 'current' : call.type)
   const [sortedList, setSortedList] = useState(list)
   const getCallTypeName = (call: Call) => {
     const type = getCallType(call)
-    return type === CallType.notAnswered ? 'Not answered' : firstCharUpperCase(type)
+    return type === 'not-answered' ? 'Not answered' : firstCharUpperCase(type)
   }
   useEffect(() => {
     const tempList = [...list]
@@ -27,7 +27,11 @@ export const Calls = () => {
           itemLayout="horizontal"
           dataSource={sortedList}
           locale={{
-            emptyText: <div className="paragraph-text paragraph-text--secondary call-list__empty-title">There are no calls yet</div>
+            emptyText: (
+              <div className="paragraph-text paragraph-text--secondary call-list__empty-title">
+                There are no calls yet
+              </div>
+            )
           }}
           renderItem={(call) => (
             <List.Item className={`call-list__item call-list__item--${getCallType(call)}`}>

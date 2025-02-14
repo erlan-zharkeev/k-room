@@ -1,11 +1,11 @@
-import { UserSettings, AsideBarButtonName, Theme, AdminPanelModelTab } from '../../@types'
+import { UserSettings } from '../../@types'
 
 export const initUserSettings: UserSettings = {
-  asideTab: AsideBarButtonName.contacts,
-  selectedAdminPanelModelTab: AdminPanelModelTab.users,
+  asideTab: 'contacts',
+  selectedAdminPanelModelTab: 'users',
   currentInfoId: '1',
   selectedChatRoomId: '',
-  theme: Theme.dark,
+  theme: 'dark',
   soundOn: true,
   showTooltips: false,
   ableToShowNotification: true,

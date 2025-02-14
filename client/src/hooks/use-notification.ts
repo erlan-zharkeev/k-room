@@ -1,33 +1,44 @@
-import { KRoomNotification, NotificationMessage, NotificationType } from "common-types";
-import { clientConstants } from "src/client-constants";
-import { notification as antdNotification } from "antd";
-import { useTypedSelector } from "./use-typed-selector";
-import { ReactNode } from "react";
+import { clientConstants } from 'src/client-constants'
+import { notification as antdNotification } from 'antd'
+import { useTypedSelector } from './use-typed-selector'
+import { ReactNode } from 'react'
+import { ClientNotificationMessage, NotificationType } from 'src/@enums'
 
-const basicNotificationData: KRoomNotification = {
+interface Notification {
+  key?: string
+  message: ClientNotificationMessage | '' | ReactNode
+  description?: string
+  messageType?: NotificationType
+  duration?: number
+  placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
+}
+
+const basicNotificationData: Notification = {
   key: '',
-  message: NotificationMessage.default,
+  message: '',
   description: '',
-  messageType: NotificationType.info,
+  messageType: 'info',
   duration: 3,
   placement: 'top'
 }
 
 export type UseNotification = ReturnType<typeof useNotification>
 
-type CurrentNotification = KRoomNotification<NotificationMessage | ReactNode>
-
 export const useNotification = () => {
   const { ableToShowNotification } = useTypedSelector((state) => state.persist.settings)
-  const getNotification = (notification: CurrentNotification) => {
-    const messageType = notification.messageType ?? basicNotificationData.messageType as NotificationType
-    const isError = messageType === NotificationType.error
-    const isInfo = messageType === NotificationType.info
+  const getNotification = (notification: Notification) => {
+    const messageType = notification.messageType ?? (basicNotificationData.messageType as NotificationType)
+    const isError = messageType === 'error'
+    const isInfo = messageType === 'info'
     const placement = isInfo ? 'bottomRight' : 'top'
     const key = notification.key === undefined ? '' : notification.key
-    const duration = isError ? clientConstants.errorNotificationDuration : notification.duration !== undefined ? notification.duration : basicNotificationData.duration
+    const duration = isError
+      ? clientConstants.errorNotificationDuration
+      : notification.duration !== undefined
+      ? notification.duration
+      : basicNotificationData.duration
 
-    const notificationData: CurrentNotification = {
+    const notificationData: Notification = {
       ...basicNotificationData,
       ...notification,
       messageType,
@@ -36,12 +47,12 @@ export const useNotification = () => {
     }
 
     const open = () => {
-      if (ableToShowNotification) antdNotification[messageType](notificationData);
+      if (ableToShowNotification) antdNotification[messageType](notificationData)
     }
 
-    const close = (id: string) => antdNotification.close(id);
+    const close = (id: string) => antdNotification.close(id)
 
-    return { open, close, key };
+    return { open, close, key }
   }
 
   return {

@@ -1,13 +1,15 @@
+@use '~/global/index' as *;
+
 .message-with-bind-data-popup {
   width: $container-sm;
 
   &__compress {
     display: flex;
     align-items: center;
-    margin-bottom: $gutter-lg;
+    margin-bottom: 16px;
 
     span {
-      margin-right: $gutter-md;
+      margin-right: 8px;
       white-space: nowrap;
     }
 
@@ -18,9 +20,9 @@
 
   &__images-wrapper {
     display: grid;
-    grid-gap: $gutter-sm;
+    grid-gap: 4px;
     grid-template-columns: repeat(2, 142px);
-    margin-bottom: $gutter-lg;
+    margin-bottom: 16px;
   }
 
   &__image {

@@ -1,11 +1,11 @@
-import { InfoItem, InfoItemStatus } from '../../@types'
+import { InfoItem } from '../../@types'
 import { welcome } from './items'
 
 const infoMap: Record<string, InfoItem> = {
   1: {
     id: '1',
     label: 'Welcome to K-Room',
-    read: InfoItemStatus.unread,
+    read: 'unread',
     content: '',
     contentComponent: welcome
   }

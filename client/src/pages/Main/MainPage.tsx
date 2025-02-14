@@ -1,14 +1,34 @@
 import {
-  NotificationType,
-  NotificationMessage,
-  SocketActions,
-  SocketActionsPayload,
-  AsideBarButtonName
+  EventCallsUpdated,
+  EventCallUpdated,
+  EventChangeContactsData,
+  EventContactAddSuccess,
+  EventDeleteContactSuccess,
+  EventErrorMessage,
+  EventGetContacts,
+  EventGetRooms,
+  EventInviteReceived,
+  EventMessageDeleted,
+  EventMessageDelivered,
+  EventStatusContact,
+  EventUpdateContactInteractionTypeSuccess,
+  EventUpdatedMessageReactions,
+  EventUpdateMessageStatus,
+  SocketActions
 } from 'common-types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { ViewPortWidthType } from 'src/@types'
-import { StubLoading, AsideBar, CallStatusBar, TopBar, InfoList, AsidePanel, ChatRoom, AdminPanelContent } from 'src/components'
+import {
+  StubLoading,
+  AsideBar,
+  CallStatusBar,
+  TopBar,
+  InfoList,
+  AsidePanel,
+  ChatRoom,
+  AdminPanelContent
+} from 'src/components'
+import { ClientNotificationMessage, ViewPortWidthType } from 'src/@enums'
 import { useNotification, useSelectedRoom, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $clg, $socket } from 'src/services'
@@ -30,6 +50,10 @@ import {
   updateContactsStatus,
   updateMessageReactions,
   updateMessageStatus,
+  addContact,
+  updateContactInteractionType,
+  deleteContact,
+  acceptInvite
 } from 'src/store'
 
 export const MainPage = () => {
@@ -38,16 +62,27 @@ export const MainPage = () => {
   const { viewPort } = useTypedSelector((state) => state.system)
   const { isAuth } = useTypedSelector((state) => state.user)
   const { asideTab } = useTypedSelector((state) => state.persist.settings)
-  const {contacts } = useTypedSelector((state) => state.contacts)
+  const { contacts } = useTypedSelector((state) => state.contacts)
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
-  const notifications = useNotification();
+  const notifications = useNotification()
   const pingTimer = useRef<number | NodeJS.Timeout>()
   const [pingTimerCounter, updateTimerCounter] = useState<number>(0)
 
   useTypedSelector((state) => state.calls.currentCall)
   const dispatch = useDispatch<AppDispatch>()
 
-  const socketDisconnectedNotification = notifications.getNotification({ messageType: NotificationType.error, message: NotificationMessage.socketDisconnected })
+  const socketDisconnectedNotification = notifications.getNotification({
+    messageType: 'error',
+    message: ClientNotificationMessage.SocketDisconnected
+  })
+  const contactAddedSuccessNotification = notifications.getNotification({
+    messageType: 'info',
+    message: ClientNotificationMessage.ContactAdded
+  })
+  const contactDeletedSuccessNotification = notifications.getNotification({
+    messageType: 'info',
+    message: ClientNotificationMessage.ContactDeleted
+  })
 
   const statusNotification = (isSuccess: Boolean) => {
     if (isSuccess) {
@@ -57,12 +92,12 @@ export const MainPage = () => {
     $clg('error', 'Socket disconnected')
     if (!isAuth) return
     if (call.current) {
-      call.current.closeConnection(true);
+      call.current.closeConnection(true)
     }
     socketDisconnectedNotification.open()
   }
 
-  const hideAside = () => selectedChatRoom && viewPort.width <= ViewPortWidthType.tablet
+  const hideAside = () => selectedChatRoom && viewPort.width <= ViewPortWidthType.Tablet
 
   const clickHandler = () => {
     dispatch(
@@ -75,7 +110,7 @@ export const MainPage = () => {
 
   const getNotificationPermission = () => {
     if (!('Notification' in window)) {
-      console.log('Your browser doesn`t support Notification API');
+      console.log('Your browser doesn`t support Notification API')
     }
     window.Notification.requestPermission()
   }
@@ -83,11 +118,11 @@ export const MainPage = () => {
   const mainBodyClassNames = () => `main-page__body ${isCallMinified ? 'main-page__body--call-minified' : ''}`
 
   const checkForContactOnline = () => {
-    $socket.emit(SocketActions.INTERLOCUTOR_PING);
-    const maxDiffSeconds = 30;
-    const currentTimestamp = Date.now();
+    $socket.emit<SocketActions>('interlocutor-ping')
+    const maxDiffSeconds = 30
+    const currentTimestamp = Date.now()
     contacts.forEach((contact) => {
-      const outOfInterval = Math.abs(currentTimestamp - contact.onlineStatusUpdatedTimestamp) / 1000 > maxDiffSeconds;
+      const outOfInterval = Math.abs(currentTimestamp - contact.onlineStatusUpdatedTimestamp) / 1000 > maxDiffSeconds
       if (outOfInterval) {
         updateContactsStatusLocal({ contactId: contact.id, online: false })
       }
@@ -102,80 +137,92 @@ export const MainPage = () => {
     getNotificationPermission()
 
     pingTimer.current = setInterval(() => {
-      updateTimerCounter(prev => {
-        const newValue = prev + 1;
-        return newValue;
-      });
-    }, 5000);
+      updateTimerCounter((prev) => {
+        const newValue = prev + 1
+        return newValue
+      })
+    }, 5000)
 
     if ($socket.disconnected) {
       socketReconnect(dispatch)
     }
 
-    $socket.emit(SocketActions.INITIALIZE)
+    $socket.emit<SocketActions>('initialize')
 
-    $socket.on(SocketActions.AUTH_ERROR, () => {
+    $socket.on<SocketActions>('auth-error', () => {
       socketReconnect(dispatch)
     })
-    $socket.on(SocketActions.RECONNECT, (attempt: number) => {
+    $socket.on<SocketActions>('reconnect', (attempt: number) => {
       $clg('success', `Socket reconnected on attempt: ${attempt}`)
-      $socket.emit(SocketActions.INITIALIZE)
+      $socket.emit<SocketActions>('initialize')
       dispatch(setReconnectingStatus(false))
     })
-    $socket.on(SocketActions.RECONNECT_ATTEMPT, (attempt: number) => {
+    $socket.on<SocketActions>('reconnect_attempt', (attempt: number) => {
       $clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
-    $socket.on(SocketActions.RECONNECT_FAILED, () => {
+    $socket.on<SocketActions>('reconnect_failed', () => {
       dispatch(setReconnectingStatus(false))
     })
-    $socket.on(SocketActions.ERROR_MESSAGE, ({ message }: SocketActionsPayload['errorMessage']) => {
-      const errorMessageNotification = notifications.getNotification({ messageType: NotificationType.error, message })
+    $socket.on<SocketActions>('error-message', ({ message }: EventErrorMessage) => {
+      const errorMessageNotification = notifications.getNotification({ messageType: 'error', message })
       errorMessageNotification.open()
     })
-    $socket.on(SocketActions.DISCONNECT, () => {
+    $socket.on<SocketActions>('disconnect', () => {
       statusNotification(false)
     })
-    $socket.on(SocketActions.CONNECTION, () => {
+    $socket.on<SocketActions>('connection', () => {
       statusNotification(true)
     })
-    $socket.on(SocketActions.GET_CONTACTS, ({ contacts, messageBody }: SocketActionsPayload['getContacts']) => {
-      if (messageBody) {
-        const getContactsNotification = notifications.getNotification({ messageType: NotificationType.info, message: messageBody })
-        getContactsNotification.open()
-      }
+    $socket.on<SocketActions>('get-contacts', ({ contacts }: EventGetContacts) => {
       dispatch(loadContacts(contacts))
     })
-    $socket.on(SocketActions.STATUS_CONTACT, (payload: SocketActionsPayload['statusContact']) => {
+    $socket.on<SocketActions>('status-contact', (payload: EventStatusContact) => {
       dispatch(updateContactsStatus(payload))
       dispatch(updateChatUsersStatus(payload))
     })
-    $socket.on(SocketActions.CHANGE_CONTACTS_DATA, (payload: SocketActionsPayload['changeContactsData']) => {
+    $socket.on<SocketActions>('change-contacts-data', (payload: EventChangeContactsData) => {
       dispatch(updateContactData(payload))
       dispatch(changeChatName(payload))
     })
-    $socket.on(SocketActions.GET_ROOMS, (payload: SocketActionsPayload['getRooms']) => {
+    $socket.on<SocketActions>('get-rooms', (payload: EventGetRooms) => {
       dispatch(loadChatRooms(payload))
     })
-    $socket.on(SocketActions.MESSAGE_DELIVERED, (payload: SocketActionsPayload['messageDelivered']) => {
+    $socket.on<SocketActions>('message-delivered', (payload: EventMessageDelivered) => {
       dispatch(updateChatMessage({ ...payload, notifications }))
     })
-    $socket.on(SocketActions.UPDATE_MESSAGE_STATUS, (payload: SocketActionsPayload['updateMessageStatus']) => {
+    $socket.on<SocketActions>('update-message-status', (payload: EventUpdateMessageStatus) => {
       dispatch(updateMessageStatus(payload))
     })
-    $socket.on(SocketActions.MESSAGE_DELETED, (payload: SocketActionsPayload['messageDeleted']) => {
+    $socket.on<SocketActions>('message-deleted', (payload: EventMessageDeleted) => {
       dispatch(deleteMessage(payload))
     })
-    $socket.on(SocketActions.UPDATE_MESSAGE_REACTIONS, (payload: SocketActionsPayload['updatedMessageReactions']) => {
+    $socket.on<SocketActions>('update-message-reactions', (payload: EventUpdatedMessageReactions) => {
       dispatch(updateMessageReactions(payload))
     })
-    $socket.on(SocketActions.CALLS_UPDATED, (payload: SocketActionsPayload['callsUpdated']) => {
+    $socket.on<SocketActions>('call-updated', (payload: EventCallsUpdated) => {
       dispatch(updateCalls(payload))
     })
-    $socket.on(SocketActions.CALL_UPDATED, (payload: SocketActionsPayload['callUpdated']) => {
+    $socket.on<SocketActions>('call-updated', (payload: EventCallUpdated) => {
       dispatch(updateCall(payload))
     })
-
+    $socket.on<SocketActions>('invite-received', (payload: EventInviteReceived) => {
+      dispatch(acceptInvite(payload))
+    })
+    $socket.on<SocketActions>('contact-add-success', (payload: EventContactAddSuccess) => {
+      dispatch(addContact(payload))
+      contactAddedSuccessNotification.open()
+    })
+    $socket.on<SocketActions>(
+      'contact-interaction-type-updated',
+      ({ contactId, interactionType }: EventUpdateContactInteractionTypeSuccess) => {
+        dispatch(updateContactInteractionType({ contactId, interactionType }))
+      }
+    )
+    $socket.on<SocketActions>('contact-delete-success', ({ deletedContactId, silent }: EventDeleteContactSuccess) => {
+      dispatch(deleteContact({ contactId: deletedContactId }))
+      if (!silent) contactDeletedSuccessNotification.open()
+    })
     return () => {
       $socket.removeAllListeners()
       if (pingTimer.current) clearInterval(pingTimer.current)
@@ -186,14 +233,14 @@ export const MainPage = () => {
     <div className={'main-page page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
       {$socket.disconnected && <StubLoading />}
       <div className="main-page__wrapper">
-        {viewPort.width >= ViewPortWidthType.tablet && <AsideBar />}
+        {viewPort.width >= ViewPortWidthType.Tablet && <AsideBar />}
         <div className="main-page__content">
           <CallStatusBar />
           <TopBar />
-          {asideTab === AsideBarButtonName.info || asideTab === AsideBarButtonName.adminPanel ? (
+          {asideTab === 'info' || asideTab === 'admin-panel' ? (
             <div className={mainBodyClassNames()}>
-              {asideTab === AsideBarButtonName.info && <InfoList />}
-              {asideTab === AsideBarButtonName.adminPanel && <AdminPanelContent />}
+              {asideTab === 'info' && <InfoList />}
+              {asideTab === 'admin-panel' && <AdminPanelContent />}
             </div>
           ) : (
             <div className={mainBodyClassNames()}>

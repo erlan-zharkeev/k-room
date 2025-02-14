@@ -1,8 +1,8 @@
-@import './elements/UserDataSettingsPopup/style';
-@import './elements/TechSettingsPopup/style';
-@import './elements/ForwardMessagePopup/style';
-@import './elements/CreateMultipleChatPopup/style';
-@import './elements/ChatRoomSettingsPopup/style';
-@import './elements/MessageWithBindDataPopup/style';
-@import './elements/DBClearConfirmPopup/style';
-@import './elements/ApplyBasicFixturesPopup/style';
+@forward './elements/UserDataSettingsPopup/style';
+@forward './elements/TechSettingsPopup/style';
+@forward './elements/ForwardMessagePopup/style';
+@forward './elements/CreateMultipleChatPopup/style';
+@forward './elements/ChatRoomSettingsPopup/style';
+@forward './elements/MessageWithBindDataPopup/style';
+@forward './elements/DBClearConfirmPopup/style';
+@forward './elements/ApplyBasicFixturesPopup/style';

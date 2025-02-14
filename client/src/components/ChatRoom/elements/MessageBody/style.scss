@@ -1,13 +1,15 @@
+@use '~/global/index' as *;
+
 .message {
   $self: &;
 
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: $gutter-sm $gutter-md;
+  padding: 4px 8px;
   overflow: hidden;
   background-color: var(--dark-gray-transparent);
-  border-radius: $radius-md;
+  border-radius: 8px;
 
   &__replied-message-type {
     color: var(--accent);
@@ -25,8 +27,8 @@
 
   &__replied-message-wrapper {
     position: relative;
-    margin: $gutter-md;
-    padding-left: $gutter-sm;
+    margin: 8px;
+    padding-left: 4px;
     border-left: 1px solid var(--secondary-text);
 
     p {

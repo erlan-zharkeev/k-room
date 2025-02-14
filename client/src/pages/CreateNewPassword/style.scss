@@ -1,6 +1,8 @@
+@use '~/global/index' as *;
+
 .create-new-password {
   .header-text {
-    margin-bottom: $gutter-lg;
+    margin-bottom: 16px;
   }
 
   &__wrapper {

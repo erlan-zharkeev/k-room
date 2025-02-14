@@ -4,17 +4,17 @@
   }
 
   &__global-search-header {
-    margin-top: $gutter-md;
+    margin-top: 8px;
   }
 
   &__search-type {
     display: flex;
     align-items: center;
-    margin-bottom: $gutter-md;
+    margin-bottom: 8px;
   }
 
   .ant-radio-button-wrapper {
-    margin-right: $gutter-md;
+    margin-right: 8px;
     padding: 0;
     border: none !important;
   }

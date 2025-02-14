@@ -2,14 +2,14 @@ import { CallModel } from '../../models'
 import { getUserById } from '../../socket'
 import { CallType } from '../../@types'
 
-const getCallType = (answered: boolean, isIncoming: boolean): CallType => {
+const getCallType = (answered: boolean, isIncoming: boolean) => {
   let type
   if (answered) {
-    type = isIncoming ? CallType.incoming : CallType.outgoing
+    type = isIncoming ? 'incoming' : 'outgoing'
   } else {
-    type = isIncoming ? CallType.missed : CallType.notAnswered
+    type = isIncoming ? 'missed' : 'no-answered'
   }
-  return type
+  return type as CallType
 }
 
 export const transformCallDataForUser = async (userId: string, callId: string) => {

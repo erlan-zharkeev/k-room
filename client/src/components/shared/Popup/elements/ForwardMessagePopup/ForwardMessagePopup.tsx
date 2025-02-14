@@ -1,4 +1,3 @@
-import { UserSettingKey } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UIInput, UIIcon } from 'src/components'
@@ -12,7 +11,7 @@ export const ForwardMessagePopup = () => {
   const [searchString, setSearchString] = useState('')
   const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)
   const clickChatHandler = (roomId: string) => {
-    updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: roomId })
+    updateSetting('selectedChatRoomId', { selectChatRoomId: roomId })
     dispatch(setRepliedMessage(message))
     dispatch(closeModal())
   }

@@ -1,6 +1,6 @@
 .short-chat-list {
   max-height: 200px;
-  padding: $gutter-lg $gutter-sm $gutter-sm $gutter-sm;
+  padding: 16px 4px 4px 4px;
 
   .short-chat-list__container {
     height: 180px;
@@ -8,15 +8,15 @@
   }
 
   .short-chat-list__subtitle {
-    margin-top: $gutter-md;
+    margin-top: 8px;
     color: var(--secondary-text);
   }
 
   &__item {
     display: flex;
     align-items: center;
-    padding: $gutter-md;
-    border-radius: $radius-sm;
+    padding: 8px;
+    border-radius: 4px;
 
     &:hover {
       background-color: var(--dark-gray-transparent);
@@ -29,6 +29,6 @@
   }
 
   &__name {
-    margin-left: $gutter-md;
+    margin-left: 8px;
   }
 }

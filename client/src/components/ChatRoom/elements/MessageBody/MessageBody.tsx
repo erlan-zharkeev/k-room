@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch, setContextMenu } from 'src/store'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
-import { Author, Message, UserShort } from 'common-types'
+import { Message, UserShort } from 'common-types'
 import { clientConstants } from 'src/client-constants'
 
 export interface MessageBodyProps {
@@ -22,7 +22,7 @@ interface ReactionMap {
 
 export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
-  const notSystemAuthor = message.authorName !== Author.system && message.authorName !== Author.time
+  const notSystemAuthor = message.authorName !== 'system' && message.authorName !== 'time'
   const showMessageAuthor = !message.isSelf && isChatMultiple && notSystemAuthor
   const [reactions, setReactions] = useState<Reaction[]>([])
 
@@ -32,7 +32,7 @@ export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
     return authors.map((author) => author.username).join(', ')
   }
 
-  const showCreatedAt = message.createdAt && message.authorId !== Author.system
+  const showCreatedAt = message.createdAt && message.authorId !== 'system'
 
   useEffect(() => {
     const reactionMap: ReactionMap = {}
@@ -56,7 +56,7 @@ export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   }, [message])
 
   const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (message.authorId === Author.system || message.authorId === Author.time) return
+    if (message.authorId === 'system' || message.authorId === 'time') return
     dispatch(setContextMenu({ event: e, type: 'message', contextClickedObject: { message } }))
   }
 

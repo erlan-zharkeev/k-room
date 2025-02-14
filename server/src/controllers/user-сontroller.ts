@@ -3,9 +3,10 @@ import fs from 'fs'
 import { UserModel } from '../models'
 import { io } from '../server'
 import { getUsersByHasContactId, getSocketsByUserIds } from '../socket'
-import { SharpSettingsKey, Status, NotificationMessage, SocketActionsPayload, SocketActions } from '../@types'
+import { Status, SocketActions, EventChangeContactsData } from '../@types'
 import { getPathToImg, saveImageAndGetPath, throwError } from '../utils'
 import { updateTokens } from '../services'
+import { ServerNotificationMessage, SharpSettingsKey } from '../@enums'
 
 const bcrypt = require('bcryptjs')
 
@@ -19,7 +20,7 @@ class UserController {
       const isImageExist = fs.existsSync(oldPathFilename)
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
-      const avatarPath = await saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.avatar, userId)
+      const avatarPath = await saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.Avatar, userId)
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate(
         { _id: userId },
@@ -29,7 +30,7 @@ class UserController {
         },
         { new: true }
       )
-      if (!updateUserDataResponse) return throwError(Status.badRequest, res, NotificationMessage.usersFind)
+      if (!updateUserDataResponse) return throwError(Status.BadRequest, res, ServerNotificationMessage.UsersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
       const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
@@ -39,20 +40,20 @@ class UserController {
         username: updateUserDataResponse.username,
         avatarPath: updateUserDataResponse.avatarPath
       }
-      const payload: SocketActionsPayload['changeContactsData'] = {
+      const payload: EventChangeContactsData = {
         id: userId,
         ...updatedUserData
       }
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit(SocketActions.CHANGE_CONTACTS_DATA, payload)
+        io.to(socketId).emit<SocketActions>('change-contacts-data', payload)
       })
 
       return res.json({
         userData: updatedUserData,
-        message: NotificationMessage.userDataUpdated
+        message: ServerNotificationMessage.UserDataUpdated
       })
     } catch {
-      throwError(Status.badRequest, res, NotificationMessage.failedUserDataUpdate)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedUserDataUpdate)
     }
   }
 
@@ -60,7 +61,7 @@ class UserController {
     try {
       const userId = req.app.locals.id
       const user = await UserModel.findOne({ _id: userId })
-      if (!user) return throwError(Status.badRequest, res, NotificationMessage.userNotFound)
+      if (!user) return throwError(Status.BadRequest, res, ServerNotificationMessage.UserNotFound)
       await updateTokens(user._id, res)
       return res.json({
         userData: {
@@ -74,7 +75,7 @@ class UserController {
         settings: user.settings
       })
     } catch {
-      throwError(Status.badRequest, res, NotificationMessage.failedGetUserData)
+      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedGetUserData)
     }
   }
 
@@ -82,10 +83,10 @@ class UserController {
     try {
       const { query, password } = req.body
       const hashedPassword = await bcrypt.hash(password, 6)
-      if (!hashedPassword) return throwError(Status.badRequest, res, NotificationMessage.failedPassHash)
+      if (!hashedPassword) return throwError(Status.BadRequest, res, ServerNotificationMessage.FailedPassHash)
 
       const user = await UserModel.findOne({ 'codes.passwordRecovery.query.value': query })
-      if (!user) throwError(Status.badRequest, res, NotificationMessage.failedResetPassword)
+      if (!user) throwError(Status.BadRequest, res, ServerNotificationMessage.FailedResetPassword)
 
       await user?.updateOne({
         $set: {
@@ -95,9 +96,9 @@ class UserController {
         }
       })
 
-      return res.json({ message: NotificationMessage.passwordReset })
+      return res.json({ message: ServerNotificationMessage.PasswordReset })
     } catch {
-      return throwError(Status.badRequest, res, NotificationMessage.commonServerError)
+      return throwError(Status.BadRequest, res, ServerNotificationMessage.CommonServerError)
     }
   }
 }

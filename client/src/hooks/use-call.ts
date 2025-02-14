@@ -12,45 +12,49 @@ import Peer, { SignalData } from 'simple-peer'
 import { Howl } from 'howler'
 import {
   SocketActions,
-  SocketActionsPayload,
   KRoomUser,
-  NotificationType,
-  NotificationMessage,
-  BasicStreamSettings
+  BasicStreamSettings,
+  EventCallUser,
+  EventAnswerCall,
+  EventUpdateSignal,
+  EventCallAccepted,
+  EventMarkCallAsVideo,
+  EventCallEnded
 } from 'common-types'
 import { useNotification, useTypedSelector } from '.'
-import { $socket, $sound, Sounds, $clg } from 'src/services'
+import { $socket, $sound, $clg } from 'src/services'
 import { RefsContext } from 'src/providers'
+import { ClientNotificationMessage, Sounds } from 'src/@enums'
 
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
-  const payload: SocketActionsPayload['callUser'] = {
+  const payload: EventCallUser = {
     userToCall,
     signal,
     from,
     avatarPath,
     callerName
   }
-  $socket.emit(SocketActions.CALL_USER, payload)
+  $socket.emit<SocketActions>('call-user', payload)
 }
 
 const emitCallAnswer = (signal: SignalData, to: string, selfSocketId: string, callId: string) => {
-  const payload: SocketActionsPayload['answerCall'] = {
+  const payload: EventAnswerCall = {
     signal,
     to,
     selfSocketId,
     callId
   }
-  $socket.emit(SocketActions.ANSWER_CALL, payload)
+  $socket.emit<SocketActions>('answer-call', payload)
 }
 
 const emitUpdateSignal = (signal: SignalData) => {
-  const payload: SocketActionsPayload['updateSignal'] = { signal }
-  $socket.emit(SocketActions.UPDATE_CALL_SIGNAL, payload)
+  const payload: EventUpdateSignal = { signal }
+  $socket.emit<SocketActions>('update-call-signal', payload)
 }
 
 export const useCall = () => {
-  const soundConnection = useRef<Howl>($sound(Sounds.connection, true))
-  const soundCalling = useRef<Howl>($sound(Sounds.ring, true))
+  const soundConnection = useRef<Howl>($sound(Sounds.Connection, true))
+  const soundCalling = useRef<Howl>($sound(Sounds.Ring, true))
   const { settings } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
   const { interlocutorVideoDom, selfVideoDom } = useContext(RefsContext)
@@ -60,11 +64,11 @@ export const useCall = () => {
   const interlocutorId = useRef<string>('')
   const callerSignal = useRef<SignalData>()
 
-  const notifications = useNotification();
+  const notifications = useNotification()
 
   const failedToConnectToDeviceNotification = notifications.getNotification({
-    message: NotificationMessage.failedToConnectToDevice,
-    messageType: NotificationType.error
+    message: ClientNotificationMessage.FailedToConnectToDevice,
+    messageType: 'error'
   })
 
   const getSelfStream = async (constraints: BasicStreamSettings) => {
@@ -103,8 +107,8 @@ export const useCall = () => {
   }
 
   const callCompletedNotification = notifications.getNotification({
-    message: NotificationMessage.callCompleted,
-    messageType: NotificationType.info
+    message: ClientNotificationMessage.CallCompleted,
+    messageType: 'info'
   })
 
   const closeConnection = (silent = false) => {
@@ -114,7 +118,7 @@ export const useCall = () => {
     if (!silent) {
       callCompletedNotification.open()
     }
-    $socket.off(SocketActions.CALL_ACCEPTED)
+    $socket.off('call-accepted')
     selfStream.current?.getTracks().forEach((track) => {
       track.stop()
     })
@@ -133,7 +137,7 @@ export const useCall = () => {
       if (connection.current?.connected) return emitUpdateSignal(data)
       emitCall(interlocutorData.id, data, selfId, selfAvatarPath, callerName)
     })
-    $socket.on(SocketActions.CALL_ACCEPTED, (data: SocketActionsPayload['callAccepted']) => {
+    $socket.on<SocketActions>('call-accepted', (data: EventCallAccepted) => {
       soundConnection.current.stop()
       dispatch(setCurrentCallAccepted())
       connection.current?.signal(data.signal as SignalData)
@@ -151,6 +155,7 @@ export const useCall = () => {
     selfStream.current = stream
     initConnection(false, selfStream.current)
     connection.current?.on('signal', (data: SignalData) => {
+      if (!$socket.id) return
       emitCallAnswer(data, interlocutorId.current, $socket.id, callId)
     })
     if (!callerSignal.current) return
@@ -206,8 +211,8 @@ export const useCall = () => {
       connection.current?.addTrack(newVideoTrack, selfStream.current)
       applyStreamToHtmlVideoTag()
       dispatch(markCurrentCallAsVideo())
-      const payload: SocketActionsPayload['markCallAsVideo'] = { callId }
-      $socket.emit(SocketActions.MARK_CALL_AS_VIDEO, payload)
+      const payload: EventMarkCallAsVideo = { callId }
+      $socket.emit<SocketActions>('mark-call-as-video', payload)
     }
     const data = { settings: { video: true } }
     connection.current?.send(JSON.stringify(data))
@@ -230,11 +235,11 @@ export const useCall = () => {
     }
     closeConnection(true)
     if (!callId) return
-    const payload: SocketActionsPayload['callEnded'] = {
+    const payload: EventCallEnded = {
       callerId: interlocutorId.current,
       callId
     }
-    $socket.emit(SocketActions.CALL_ENDED, payload)
+    $socket.emit<SocketActions>('call-ended', payload)
   }
 
   return {

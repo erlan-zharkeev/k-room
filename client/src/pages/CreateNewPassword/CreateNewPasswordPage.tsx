@@ -30,9 +30,9 @@ export const CreateNewPasswordPage = () => {
       password: form.getFieldsValue()['password-first'],
       query: passwordRestoreQuery
     }
-    const response = await doRequest('post', UserEndpoints.RESET_PASSWORD, payload)
+    const response = await doRequest('post', UserEndpoints.ResetPassword, payload)
     setIsLoading(false)
-    if (response && response.status === Status.success) navigate(RouteNames.SIGN_IN)
+    if (response && response.status === Status.Success) navigate(RouteNames.SIGN_IN)
   }
 
   const formChangeHandler = () => {

@@ -2,13 +2,13 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 import { getPathToImg } from './get-path-to-img'
 import { getRequestStringToImg } from './get-request-string-to-img'
-import { SharpSettingsKey } from '../@types/Constants'
 import { throwErrorViaSocket } from './throw-error-via-socket'
 import { serverConstants } from '../server-constants'
+import { SharpSettingsKey } from '../@enums'
 
 export const saveImageAndGetPath = async (
   buffer: ArrayBuffer | undefined | Buffer,
-  type = SharpSettingsKey.commonCompressed,
+  type = SharpSettingsKey.CommonCompressed,
   authorId: string
 ): Promise<string> => {
   if (!buffer) return ''

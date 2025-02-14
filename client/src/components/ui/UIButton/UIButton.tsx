@@ -2,8 +2,12 @@ import { Button, Radio, Dropdown, Tooltip } from 'antd'
 import { useTypedSelector } from 'src/hooks'
 import { modifiersHandler } from 'src/utils'
 import { UIIcon } from '..'
-import { ColorModifiers, BasicSizeModifiers } from 'src/@types'
 import { IconName } from '../UIIcon/UIIcon'
+import { ColorModifier, ShapeModifier, SizeModifier } from 'src/@types'
+
+type UIButtonColorModifier = Extract<ColorModifier, 'accent' | 'success' | 'default' | 'error'>
+type UIButtonShapeModifier = Extract<ShapeModifier, 'default' | 'circle' | 'round'>
+type UIButtonSizeModifier = Extract<SizeModifier, 'small'>
 
 export interface UIButtonProps {
   htmltype?: 'button' | 'submit'
@@ -14,14 +18,14 @@ export interface UIButtonProps {
   iconName?: IconName
   className?: string
   border?: 'borderless' | 'common-border'
-  color?: ColorModifiers
+  color?: UIButtonColorModifier
   loading?: boolean
   disabled?: boolean
-  size?: BasicSizeModifiers
-  shape?: 'default' | 'circle' | 'round'
+  size?: UIButtonSizeModifier
+  shape?: UIButtonShapeModifier
   hover?: 'hoverless' | ''
   fill?: boolean
-  fillBg?: ColorModifiers
+  fillBg?: UIButtonColorModifier
   onClick?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
 }
 

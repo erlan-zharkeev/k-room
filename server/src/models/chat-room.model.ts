@@ -28,11 +28,6 @@ const chatRoomModel = new Schema<IDBChatRoomSchema>({
     required: false,
     default: []
   },
-  blocked: {
-    type: Boolean,
-    required: false,
-    default: false
-  }
 })
 
 export const ChatRoomModel = model('ChatRoom', chatRoomModel)

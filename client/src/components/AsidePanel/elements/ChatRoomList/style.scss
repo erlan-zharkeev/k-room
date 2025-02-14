@@ -1,10 +1,12 @@
+@use '~/global/index' as *;
+
 .chat-room-list {
   &__create-chat {
-    padding: $gutter-lg;
+    padding: 16px;
   }
 
   .divider {
-    margin-top: $gutter-lg;
+    margin-top: 16px;
   }
 
   &__body {
@@ -23,7 +25,7 @@
       display: flex;
       flex-wrap: wrap;
       width: 100%;
-      padding: $gutter-md $gutter-lg;
+      padding: 8px 16px;
       border: none;
       cursor: pointer;
       transition: 0.2s linear all;
@@ -52,12 +54,12 @@
       position: relative;
       top: 0;
       right: 0;
-      margin-right: $gutter-md;
+      margin-right: 8px;
       padding: 10px 10px 9px;
     }
   }
 
   &__unread-messages {
-    margin-right: $gutter-md;
+    margin-right: 8px;
   }
 }

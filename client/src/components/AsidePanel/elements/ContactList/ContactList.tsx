@@ -1,14 +1,20 @@
 import { List } from 'antd'
-import { SocketActionsPayload, SocketActions, UserSettingKey, AsideBarButtonName, Contact, InteractionType } from 'common-types'
+import {
+  SocketActions,
+  Contact,
+  InteractionType,
+  EventDeleteContact,
+  EventCreateRoom,
+  EventRoomCreated,
+  EventUpdateInteractionType
+} from 'common-types'
 import moment from 'moment'
 import { useContext, useEffect, useState } from 'react'
-import { UIAvatar, UIButton } from 'src/components'
+import { UIAvatar, UIButton, UIIcon } from 'src/components'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $socket } from 'src/services'
 import { ContactSearch } from './elements'
-import { addContact, AppDispatch, updateContactInteractionType } from 'src/store'
-import { useDispatch } from 'react-redux'
 
 export const ContactList = () => {
   const { updateSetting } = useUpdateSettings()
@@ -22,47 +28,78 @@ export const ContactList = () => {
     stream: Record<string, boolean>
     invite: Record<string, boolean>
   })
-  const dispatch = useDispatch<AppDispatch>()
 
-  const deleteUser = (interlocutorData: Contact) => {
+  useEffect(() => {
+    const updatedContacts = contacts.filter((contact) => loaders.invite[contact.id])
+    if (updatedContacts.length > 0) {
+      const newLoaders = { ...loaders }
+      updatedContacts.forEach((contact) => {
+        newLoaders.invite[contact.id] = false
+      })
+      setLoaders(newLoaders)
+    }
+  }, [contacts])
+
+  const deleteUserHandler = (interlocutorData: Contact) => {
     if (!interlocutorData.id) return
-    const payload: SocketActionsPayload['deleteContact'] = { deletingUserId: interlocutorData.id }
-    $socket.emit(SocketActions.DELETE_CONTACT, payload)
+    const payload: EventDeleteContact = { deletingUserId: interlocutorData.id }
+    $socket.emit<SocketActions>('delete-contact', payload)
   }
 
-  const createChat = (value: Contact) => {
-    if (loaders.room[value.id]) return
-    const hasChatWithContact = chatRooms.some((room) => {
+  const changeBocksSelections = (roomId: string) => {
+    updateSetting('asideTab', { asideTab: 'chat-list' })
+    updateSetting('selectedChatRoomId', { selectChatRoomId: roomId })
+  }
+
+  const getPersonalChatRoomId = (contact: Contact) => {
+    let result = null
+    chatRooms.forEach((room) => {
       if (room.multiple) return
-      const user = room.users.find((user) => user.id === value.id)
-      if (user?.id) {
-        updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
-        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: room.id })
-      }
-      return Boolean(user)
+      const user = room.users.find((user) => user.id === contact.id)
+      if (user) result = room.id
     })
-    if (hasChatWithContact) return
-    const contactId = value.id
-    const contactName = value.username
+    return result
+  }
 
-    const hasUsersData = contactId && contactName && id && username
-    if (!hasUsersData) return
+  const createChat = (contactId: string, contactName: string) => {
+    loaderStateChangeHandler(true, 'room', contactId)
 
-    loaderStateChangeHandler(true, 'room', value.id)
-    const socketPayload: SocketActionsPayload['createRoom'] = {
+    const socketPayload: EventCreateRoom = {
       chatName: contactName,
       users: [id, contactId],
       multiple: false
     }
-    $socket.emit(SocketActions.CREATE_ROOM, socketPayload)
 
-    $socket.on(SocketActions.ROOM_CREATED, (data: SocketActionsPayload['roomCreated']) => {
-      loaderStateChangeHandler(false, 'room', value.id)
-      updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
-      setTimeout(() => {
-        updateSetting(UserSettingKey.selectedChatRoomId, { selectChatRoomId: data.roomId })
-      })
+    $socket.emit<SocketActions>('create-room', socketPayload)
+
+    let updateSelectedChatRoomTimeoutId: NodeJS.Timeout | null = setTimeout(() => {
+      updateSetting('selectedChatRoomId', { selectChatRoomId: 'timeout' })
     })
+
+    const onRoomCreated = (data: EventRoomCreated) => {
+      loaderStateChangeHandler(false, 'room', contactId)
+      updateSetting('asideTab', { asideTab: 'chat-list' })
+
+      if (updateSelectedChatRoomTimeoutId) {
+        clearTimeout(updateSelectedChatRoomTimeoutId)
+        updateSelectedChatRoomTimeoutId = null
+      }
+
+      updateSetting('selectedChatRoomId', { selectChatRoomId: data.roomId })
+      $socket.off('room-created', onRoomCreated)
+    }
+
+    $socket.on<SocketActions>('room-created', onRoomCreated)
+  }
+
+  const clickChatBtnHandler = (contact: Contact) => {
+    if (loaders.room[contact.id]) return
+    const personalChatRoomId = getPersonalChatRoomId(contact)
+    if (personalChatRoomId) {
+      changeBocksSelections(personalChatRoomId)
+      return
+    }
+    createChat(contact.id, contact.username)
   }
 
   const loaderStateChangeHandler = (value: boolean, type: 'room' | 'stream' | 'invite', id: string) => {
@@ -82,22 +119,11 @@ export const ContactList = () => {
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
   }
 
-  const inviteHandler = async (contactId: string) => {
-    if (loaders.invite[contactId]) return
+  const updateInteractionType = (contactId: string, interactionType: InteractionType) => {
     loaderStateChangeHandler(true, 'invite', contactId)
-    const interactionType = InteractionType.invited
-    const payload: SocketActionsPayload['updateInteractionType'] = { contactId, interactionType }
-    $socket.emit(SocketActions.UPDATE_CONTACT_INTERACTION_TYPE, payload)
-    $socket.on(SocketActions.UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS, () => {
-      dispatch(updateContactInteractionType({ contactId, interactionType }))
-    })
+    const payload: EventUpdateInteractionType = { contactId, interactionType }
+    $socket.emit<SocketActions>('update-contact-interaction-type', payload)
   }
-
-  useEffect(() => {
-    $socket.on(SocketActions.INVITE_RECEIVED, (payload: SocketActionsPayload['inviteReceived']) => {
-      dispatch(addContact(payload))
-    })
-  }, [])
 
   return (
     <div className="contact-list">
@@ -106,12 +132,12 @@ export const ContactList = () => {
       <List
         header={<div>Contacts</div>}
         itemLayout="horizontal"
-        dataSource={contacts}
+        dataSource={contacts.filter((contact) => contact.interactionType !== 'invite-hidden')}
         locale={{
           emptyText: <div className="paragraph-text paragraph-text--secondary">There are no contacts yet</div>
         }}
         renderItem={(user) => (
-          <List.Item>
+          <List.Item className="contact-list__list-item">
             <List.Item.Meta
               avatar={<UIAvatar online={user.online} src={user.avatarPath} />}
               title={<span>{user.username}</span>}
@@ -122,22 +148,61 @@ export const ContactList = () => {
               }
             />
             <div className="contact-list__controls">
-              {user.interactionType === 'default' && <UIButton text="Invite" border="common-border" size="large" onClick={() => inviteHandler(user.id)}
-              />}
-              {user.interactionType === 'invited' && <div className='contact-list__invited' >Invited</div>}
-              {user.interactionType === 'invite-accepted' && <>
-                <UIButton
-                  iconName={loaders.stream[user.id] ? 'loader' : 'call'}
-                  onClick={() => initCall(user)}
-                  tooltip="Call"
-                />
-                <UIButton
-                  iconName={loaders.room[user.id] ? 'loader' : 'chat'}
-                  onClick={() => createChat(user)}
-                  tooltip="Create Chat"
-                />
-              </>}
-              <UIButton iconName="cross" onClick={() => deleteUser(user)} tooltip="Delete User" />
+              {loaders.invite[user.id] ? (
+                <UIIcon name="loader" color="accent" />
+              ) : (
+                <>
+                  {user.interactionType === 'default' && (
+                    <UIButton
+                      text="Invite"
+                      border="common-border"
+                      onClick={() => updateInteractionType(user.id, 'invited')}
+                    />
+                  )}
+                  {user.interactionType === 'invited' && <div className="contact-list__invited">Invited</div>}
+                  {user.interactionType === 'invite-accepted' && (
+                    <>
+                      <UIButton
+                        iconName={loaders.stream[user.id] ? 'loader' : 'call'}
+                        onClick={() => initCall(user)}
+                        tooltip="Call"
+                      />
+                      <UIButton
+                        iconName={loaders.room[user.id] ? 'loader' : 'chat'}
+                        onClick={() => clickChatBtnHandler(user)}
+                        tooltip="Create Chat"
+                      />
+                    </>
+                  )}
+                  {user.interactionType === 'invite-received' && (
+                    <>
+                      <UIButton
+                        className="contact-list__btn"
+                        text="Accept"
+                        color="accent"
+                        border="common-border"
+                        onClick={() => updateInteractionType(user.id, 'invite-accepted')}
+                      />
+                      <UIButton
+                        className="contact-list__btn"
+                        text="Decline"
+                        color="error"
+                        border="common-border"
+                        onClick={() => updateInteractionType(user.id, 'default')}
+                      />
+                      <UIButton
+                        className="contact-list__btn"
+                        text="Hide"
+                        border="common-border"
+                        onClick={() => updateInteractionType(user.id, 'invite-hidden')}
+                      />
+                    </>
+                  )}
+                  {user.interactionType !== 'invite-received' && (
+                    <UIButton iconName="cross" onClick={() => deleteUserHandler(user)} tooltip="Delete User" />
+                  )}
+                </>
+              )}
             </div>
           </List.Item>
         )}

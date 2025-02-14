@@ -3,16 +3,7 @@ import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 import { clientConstants } from 'src/client-constants'
 import { List } from 'antd'
-import {
-  AsideBarButtonName,
-  Message,
-  Author,
-  SocketActionsPayload,
-  MessageStatus,
-  SocketActions,
-  ImageObject,
-  UserSettingKey
-} from 'common-types'
+import { Message, SocketActions, ImageObject, EventChangeMessageStatus } from 'common-types'
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelectedRoom, useTypedSelector, useUpdateSettings } from 'src/hooks'
@@ -20,14 +11,14 @@ import { AppDispatch, showModal, updatedAttachedFilesMessage } from 'src/store'
 import { scrollToBottom, sendMessage } from 'src/utils'
 import { $socket } from 'src/services'
 import { RoomHeader, MessageBody, InputMessage } from './elements'
-import { ModalContentComponentName } from 'src/@types'
-import { WidgetWrapper, Informer } from '../shared'
+import { WidgetWrapper } from '../shared'
+import { ModalContentComponentName } from 'src/@enums'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
-  const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === AsideBarButtonName.chatList
+  const isSetChatList = useTypedSelector((state) => state.persist.settings.asideTab) === 'chat-list'
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
   const [inputMessageHeight, setInputMessageHeight] = useState(clientConstants.dimensions.shortInputMessage)
@@ -43,13 +34,13 @@ export const ChatRoom = () => {
       if (!entry.isIntersecting || !selectedChatRoom) return
       const messageId = entry.target.getAttribute('id')
       const messageRead = Boolean(entry.target.querySelector('.message--read'))
-      if (messageId.includes(Author.time) || messageRead) return
-      const payload: SocketActionsPayload['changeMessageStatus'] = {
+      if (messageId.includes('time') || messageRead) return
+      const payload: EventChangeMessageStatus = {
         roomId: selectedChatRoom.id,
         messageId,
-        status: MessageStatus.read
+        status: 'read'
       }
-      $socket.emit(SocketActions.CHANGE_MESSAGE_STATUS, payload)
+      $socket.emit<SocketActions>('change-message-status', payload)
     })
   }
 
@@ -82,7 +73,7 @@ export const ChatRoom = () => {
 
       setInputMessageHeight(inputHeight)
       const position = {
-        top: chatRoomHeaderHeight,
+        top: chatRoomHeaderHeight
       }
       setChatRoomPosition(position)
     }
@@ -99,13 +90,13 @@ export const ChatRoom = () => {
     dispatch(
       showModal({
         title: 'Send Message',
-        modalContentComponentName: ModalContentComponentName.messageWithBindDataPopup
+        modalContentComponentName: ModalContentComponentName.MessageWithBindDataPopup
       })
     )
   }
 
   const locationModifier = (author: string): string => {
-    if (author === Author.system || author === Author.time) return author
+    if (author === 'system' || author === 'time') return author
     else return author === id ? 'self' : ''
   }
 
@@ -114,14 +105,14 @@ export const ChatRoom = () => {
     const updatedMessagesWithDates: Array<Message> = []
     selectedChatRoom?.messages.forEach((message) => {
       const messageDate = moment(Number(message.createdAt)).format('LL').split(',')[0]
-      if (messageDate !== lastDate && message.authorName !== Author.system) {
+      if (messageDate !== lastDate && message.authorName !== 'system') {
         lastDate = messageDate
         const dateMessage: Message = {
           id: `${uuidv4()}-time`,
-          authorName: Author.time,
-          authorId: Author.time,
+          authorName: 'time',
+          authorId: 'time',
           body: lastDate,
-          status: MessageStatus.none
+          status: 'none'
         }
         updatedMessagesWithDates.push(dateMessage)
       }
@@ -131,7 +122,7 @@ export const ChatRoom = () => {
   }
 
   const chooseChatRoomHandler = () => {
-    updateSetting(UserSettingKey.asideTab, { asideTab: AsideBarButtonName.chatList })
+    updateSetting('asideTab', { asideTab: 'chat-list' })
   }
 
   return (
@@ -144,7 +135,7 @@ export const ChatRoom = () => {
               <div
                 className="chat-room__body"
                 style={{
-                  top: `${chatRoomPosition.top}px`,
+                  top: `${chatRoomPosition.top}px`
                 }}
               >
                 <List
@@ -168,27 +159,20 @@ export const ChatRoom = () => {
                   There are no messages, write first
                 </div>
               )}
-              {selectedChatRoom.blocked ? (
-                <Informer
-                  type="warn"
-                  text="You need to wait for a response from the interlocutor to start a dialogue."
-                />
-              ) : (
-                <InputMessage
-                  sendMessage={(message: string) =>
-                    sendMessage({
-                      authorId: id,
-                      roomId: selectedChatRoom?.id,
-                      username,
-                      messageText: message,
-                      repliedMessage: repliedMessageData,
-                      dispatch
-                    })
-                  }
-                  uploadImageHandler={uploadImageHandler}
-                  height={inputMessageHeight}
-                />
-              )}
+              <InputMessage
+                sendMessage={(message: string) =>
+                  sendMessage({
+                    authorId: id,
+                    roomId: selectedChatRoom?.id,
+                    username,
+                    messageText: message,
+                    repliedMessage: repliedMessageData,
+                    dispatch
+                  })
+                }
+                uploadImageHandler={uploadImageHandler}
+                height={inputMessageHeight}
+              />
             </div>
           ) : (
             <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>

@@ -2,7 +2,7 @@
   &__forgot-password {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: $gutter-md;
+    margin-bottom: 8px;
   }
 
   &__additional__links {
@@ -14,7 +14,7 @@
     }
 
     .ui-button {
-      margin-bottom: $gutter-md;
+      margin-bottom: 8px;
     }
   }
 }

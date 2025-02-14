@@ -1,5 +1,5 @@
-@import './elements/ReplyMessage/style';
-@import './elements/EmojiDropdown/style';
+@forward './elements/ReplyMessage/style';
+@forward './elements/EmojiDropdown/style';
 
 .input-message {
   position: absolute;

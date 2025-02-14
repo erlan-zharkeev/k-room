@@ -1,29 +1,7 @@
-export enum SharpSettingsKey {
-  avatar = 'avatar',
-  commonCompressed = 'common-compressed',
-  commonUncompressed = 'common-uncompressed'
-}
-
-interface SharpConfig {
-  quality: number
-  dimensions: {
-    x: number | null
-    y: number | null
-  }
-}
-
-export enum SystemMessages {
-  inviteMessage = 'invite-message',
-  authorCreatedChat = 'author-created-chat',
-  authorCreatedGroupChat = 'author-created-group-chat',
-  inviteGroupChat = 'invite-group-chat'
-}
-
-export interface SystemMessage {
-  id: string
-  name: SystemMessages
-  text: string
-}
+import { Status } from '../../../types'
+import { SharpSettingsKey } from '../@enums'
+import { SharpConfig } from './sharp'
+import { SystemMessage } from './system-message'
 
 export interface ServerConstants {
   sharp: Record<SharpSettingsKey, SharpConfig>
@@ -31,4 +9,11 @@ export interface ServerConstants {
   messages: {
     system: Array<SystemMessage>
   }
+}
+
+export interface ErrorResponse<T> {
+  message: T
+  status: Status
+  data: unknown
+  silent: boolean
 }

@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .users-table {
   @include max-width-1024 {
     max-width: 600px;

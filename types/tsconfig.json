@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./",
-    "module": "CommonJS",
+    "module": "ESNext",
     "target": "ES2015",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
@@ -9,6 +9,12 @@
     "composite": true,
     "moduleResolution": "node"
   },
-  "include": ["index.ts"],
-  "exclude": ["node_modules", "Makefile", "readme.md", "yarn-error", "yarn-lock"]
+  "include": ["./shared-types/**/*.ts", "index.ts"],
+  "exclude": [
+    "node_modules",
+    "Makefile",
+    "readme.md",
+    "yarn-error",
+    "yarn-lock"
+  ]
 }

@@ -1,4 +1,11 @@
-import { UserSettingKey, Theme, SocketActionsPayload, SocketActions, AsideBarButtonName, AdminPanelModelTab } from 'common-types'
+import {
+  Theme,
+  SocketActions,
+  AdminPanelModelTab,
+  UserSettings,
+  AsideBarButtonName,
+  EventUpdateUserSettings
+} from 'common-types'
 import { useDispatch } from 'react-redux'
 import {
   AppDispatch,
@@ -19,7 +26,7 @@ export const useUpdateSettings = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const updateSetting = (
-    type: UserSettingKey,
+    type: keyof UserSettings,
     value: {
       commonSettings?: boolean
       asideTab?: AsideBarButtonName
@@ -28,48 +35,48 @@ export const useUpdateSettings = () => {
       selectedAdminPanelModelTab?: AdminPanelModelTab
     }
   ) => {
-    const payload: SocketActionsPayload['updateUserSettings'] = {
+    const payload: EventUpdateUserSettings = {
       type,
       value: ''
     }
     switch (type) {
-      case UserSettingKey.theme:
-        payload.value = value.commonSettings ? Theme.dark : Theme.light
+      case 'theme':
+        payload.value = value.commonSettings ? 'dark' : 'light'
         dispatch(changeTheme(payload.value as Theme))
         break
-      case UserSettingKey.soundOn:
+      case 'soundOn':
         payload.value = Boolean(value.commonSettings)
         dispatch(setSoundValue(payload.value))
         break
-      case UserSettingKey.showTooltips:
+      case 'showTooltips':
         payload.value = Boolean(value.commonSettings)
         dispatch(setTooltipsValue(payload.value))
         break
-      case UserSettingKey.ableToShowNotification:
+      case 'ableToShowNotification':
         payload.value = Boolean(value.commonSettings)
         dispatch(setAbleToShowNotification(payload.value))
         break
-      case UserSettingKey.showWallpaper:
+      case 'showWallpaper':
         payload.value = Boolean(value.commonSettings)
         dispatch(showWallpaper(payload.value))
         break
-      case UserSettingKey.selectedChatRoomId:
+      case 'selectedChatRoomId':
         if (value.selectChatRoomId === undefined) return
         payload.value = value.selectChatRoomId
         dispatch(selectChatRoom(value.selectChatRoomId))
         scrollToBottom()
         break
-      case UserSettingKey.asideTab:
+      case 'asideTab':
         if (value.asideTab === undefined) return
         payload.value = value.asideTab
         dispatch(changeAsideTab(value.asideTab))
         break
-      case UserSettingKey.currentInfoId:
+      case 'currentInfoId':
         if (value.infoId === undefined) return
         payload.value = value.infoId
         dispatch(setCurrentInfoItem(value.infoId))
         break
-      case UserSettingKey.selectedAdminPanelModelTab:
+      case 'selectedAdminPanelModelTab':
         if (value.selectedAdminPanelModelTab === undefined) return
         payload.value = value.selectedAdminPanelModelTab
         dispatch(setAdminPanelTab(value.selectedAdminPanelModelTab))
@@ -78,7 +85,7 @@ export const useUpdateSettings = () => {
         break
     }
     if (!type) return
-    $socket.emit(SocketActions.UPDATE_USER_SETTINGS, payload)
+    $socket.emit<SocketActions>('update-user-settings', payload)
   }
   return { updateSetting }
 }

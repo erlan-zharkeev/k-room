@@ -37,7 +37,7 @@ export const PasswordRecoveryPage = () => {
   const onFinishEmailConfirm = async (fields: FormData) => {
     stopCounter()
     setEmailSendCodeIsLoading(true)
-    const response = await doRequest('post', CodesEndpoints.SEND_EMAIL_CODE_PASSWORD_RECOVERY, fields)
+    const response = await doRequest('post', CodesEndpoints.SendEmailCodePasswordRecovery, fields)
     setEmailSendCodeIsLoading(false)
     setCodeAsSent(true)
     if (!response) return
@@ -52,7 +52,7 @@ export const PasswordRecoveryPage = () => {
       email: emailConfirmForm.getFieldValue('email'),
       code: fields.code
     }
-    const response = await doRequest('post', CodesEndpoints.VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY, payload)
+    const response = await doRequest('post', CodesEndpoints.ValidateEmailCodePasswordRecovery, payload)
     if (!response) return
     const { query } = response.data
     setCodeValidationIsLoading(false)

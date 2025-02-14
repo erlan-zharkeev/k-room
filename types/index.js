@@ -1,214 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthTokens = exports.SocketActions = exports.RouteNames = exports.AdminEndpoints = exports.CodesEndpoints = exports.CommonEndpoints = exports.UserEndpoints = exports.AuthEndpoints = exports.NotificationMessage = exports.NotificationType = exports.InfoItemStatus = exports.UserMediaType = exports.CallType = exports.CallStatus = exports.AdminPanelModelTab = exports.AsideBarButtonName = exports.UserSettingKey = exports.Theme = exports.UserRole = exports.InteractionType = exports.MessageStatus = exports.Author = exports.Status = void 0;
-var Status;
-(function (Status) {
-    Status[Status["success"] = 200] = "success";
-    Status[Status["badRequest"] = 400] = "badRequest";
-    Status[Status["notAuth"] = 401] = "notAuth";
-    Status[Status["forbidden"] = 403] = "forbidden";
-    Status[Status["notFound"] = 404] = "notFound";
-    Status[Status["server"] = 500] = "server";
-    Status[Status["unreachable"] = 503] = "unreachable";
-    Status[Status["badGateway"] = 504] = "badGateway";
-})(Status = exports.Status || (exports.Status = {}));
-var Author;
-(function (Author) {
-    Author["system"] = "system";
-    Author["time"] = "time";
-})(Author = exports.Author || (exports.Author = {}));
-var MessageStatus;
-(function (MessageStatus) {
-    MessageStatus["sending"] = "sending";
-    MessageStatus["undelivered"] = "undelivered";
-    MessageStatus["delivered"] = "delivered";
-    MessageStatus["read"] = "read";
-    MessageStatus["none"] = "none";
-})(MessageStatus = exports.MessageStatus || (exports.MessageStatus = {}));
-var InteractionType;
-(function (InteractionType) {
-    InteractionType["default"] = "default";
-    InteractionType["invited"] = "invited";
-    InteractionType["inviteAccepted"] = "invite-accepted";
-    InteractionType["inviteReceived"] = "invite-received";
-})(InteractionType = exports.InteractionType || (exports.InteractionType = {}));
-var UserRole;
-(function (UserRole) {
-    UserRole["user"] = "user";
-    UserRole["admin"] = "admin";
-})(UserRole = exports.UserRole || (exports.UserRole = {}));
-var Theme;
-(function (Theme) {
-    Theme["dark"] = "dark";
-    Theme["light"] = "light";
-})(Theme = exports.Theme || (exports.Theme = {}));
-var UserSettingKey;
-(function (UserSettingKey) {
-    UserSettingKey["theme"] = "theme";
-    UserSettingKey["selectedAdminPanelModelTab"] = "selectedAdminPanelModelTab";
-    UserSettingKey["soundOn"] = "soundOn";
-    UserSettingKey["showTooltips"] = "showTooltips";
-    UserSettingKey["ableToShowNotification"] = "ableToShowNotification";
-    UserSettingKey["selectedChatRoomId"] = "selectedChatRoomId";
-    UserSettingKey["asideTab"] = "asideTab";
-    UserSettingKey["currentInfoId"] = "currentInfoId";
-    UserSettingKey["showWallpaper"] = "showWallpaper";
-})(UserSettingKey = exports.UserSettingKey || (exports.UserSettingKey = {}));
-var AsideBarButtonName;
-(function (AsideBarButtonName) {
-    AsideBarButtonName["adminPanel"] = "adminPanel";
-    AsideBarButtonName["contacts"] = "contacts";
-    AsideBarButtonName["chatList"] = "chatList";
-    AsideBarButtonName["calls"] = "calls";
-    AsideBarButtonName["settings"] = "settings";
-    AsideBarButtonName["info"] = "info";
-})(AsideBarButtonName = exports.AsideBarButtonName || (exports.AsideBarButtonName = {}));
-var AdminPanelModelTab;
-(function (AdminPanelModelTab) {
-    AdminPanelModelTab["users"] = "users";
-    AdminPanelModelTab["calls"] = "calls";
-    AdminPanelModelTab["chatRooms"] = "chat-rooms";
-    AdminPanelModelTab["messages"] = "messages";
-})(AdminPanelModelTab = exports.AdminPanelModelTab || (exports.AdminPanelModelTab = {}));
-var CallStatus;
-(function (CallStatus) {
-    CallStatus["calling"] = "calling";
-    CallStatus["inProgress"] = "in-progress";
-    CallStatus["finished"] = "finished";
-})(CallStatus = exports.CallStatus || (exports.CallStatus = {}));
-var CallType;
-(function (CallType) {
-    CallType["incoming"] = "incoming";
-    CallType["outgoing"] = "outgoing";
-    CallType["missed"] = "missed";
-    CallType["notAnswered"] = "not-answered";
-    CallType["current"] = "current";
-})(CallType = exports.CallType || (exports.CallType = {}));
-var UserMediaType;
-(function (UserMediaType) {
-    UserMediaType["audio"] = "audio";
-    UserMediaType["video"] = "video";
-})(UserMediaType = exports.UserMediaType || (exports.UserMediaType = {}));
-var InfoItemStatus;
-(function (InfoItemStatus) {
-    InfoItemStatus["read"] = "read";
-    InfoItemStatus["unread"] = "unread";
-})(InfoItemStatus = exports.InfoItemStatus || (exports.InfoItemStatus = {}));
-var NotificationType;
-(function (NotificationType) {
-    NotificationType["success"] = "success";
-    NotificationType["error"] = "error";
-    NotificationType["info"] = "info";
-    NotificationType["warn"] = "warning";
-})(NotificationType = exports.NotificationType || (exports.NotificationType = {}));
-var NotificationMessage;
-(function (NotificationMessage) {
-    NotificationMessage["default"] = "";
-    NotificationMessage["networkOffline"] = "The internet connection has been terminated. Network problems";
-    NotificationMessage["networkOnline"] = "The internet connection has been restored";
-    NotificationMessage["cantAccessDevice"] = "Cant get access to video device";
-    NotificationMessage["unknownError"] = "An unknown error has occurred";
-    NotificationMessage["callCompleted"] = "Call completed";
-    NotificationMessage["failedGetStream"] = "Failed to get self stream";
-    NotificationMessage["cantSetCallerSignal"] = "Cannot set caller signal";
-    NotificationMessage["failedToConnectToDevice"] = "Failed to connect to device, check for device is plugged in";
-    NotificationMessage["socketConnected"] = "Connected";
-    NotificationMessage["socketDisconnected"] = "Disconnected";
-    NotificationMessage["tokensPairUpdated"] = "Token pair is updated";
-    NotificationMessage["success"] = "success";
-    NotificationMessage["passwordReset"] = "Password changed successfully";
-    NotificationMessage["loginSuccess"] = "Login successfully";
-    NotificationMessage["loginAndRegister"] = "Login and register successfully";
-    NotificationMessage["userDataUpdated"] = "User data updated";
-    NotificationMessage["userAddedToContacts"] = "User added to contacts";
-    NotificationMessage["userRemovedFromContacts"] = "User removed from contacts";
-    NotificationMessage["emailConfirmed"] = "Email confirmed";
-    NotificationMessage["checkEmailForCode"] = "Check your email, we have sent you a code";
-    NotificationMessage["checkEmailForConfirmationLink"] = "Check your email for confirmation link";
-    NotificationMessage["userCreated"] = "User successfully created, checkout your email address for email confirmation";
-    NotificationMessage["emailConfirmationLinkSended"] = "Confirmation link sent to email";
-    NotificationMessage["failedGetUserData"] = "Failed to get user data";
-    NotificationMessage["failedResetPassword"] = "Failed to change password";
-    NotificationMessage["invalidConfirmCode"] = "Invalid confirmation code";
-    NotificationMessage["failedCodeSend"] = "Code send failed";
-    NotificationMessage["commonServerError"] = "Server error, the operation could not be performed. Try later";
-    NotificationMessage["failedRegistration"] = "Registration failed, try register later";
-    NotificationMessage["failedLogin"] = "Login failed, try register later";
-    NotificationMessage["nonAuthorized"] = "User not authorized";
-    NotificationMessage["haveNotAccessRights"] = "User have not access rights";
-    NotificationMessage["failedUserDataUpdate"] = "Failed to update user data";
-    NotificationMessage["userWithCurrentNameAlreadyExist"] = "The user with the current username is already registered";
-    NotificationMessage["userWithCurrentEmailAlreadyExist"] = "The user with the current email address is already registered";
-    NotificationMessage["failedPassHash"] = "Password hashing failed";
-    NotificationMessage["failedSendConfirmEmail"] = "Failed to send confirmation email";
-    NotificationMessage["exhaustedConfirmationAttempts"] = "Attempts to send confirmation the link ended =(";
-    NotificationMessage["userNotFound"] = "User not found";
-    NotificationMessage["wrongPass"] = "Invalid password";
-    NotificationMessage["failedEmailConfirm"] = "Email confirm failed";
-    NotificationMessage["emailNotConfirm"] = "Please, confirm email";
-    NotificationMessage["usersFind"] = "Error while finding user(s)";
-    NotificationMessage["failedUpdateSettings"] = "Failed to save user settings";
-    NotificationMessage["emailLinkedToAnotherMethod"] = "This email is already linked to another login method";
-    NotificationMessage["failedFindEmail"] = "Could not find the current email address";
-    NotificationMessage["nextTimeRequestNotPossible"] = "The code was sent earlier";
-    NotificationMessage["noFilesExist"] = "No files exist";
-    NotificationMessage["notImage"] = "File is not an image";
-    NotificationMessage["failedSendConfirmationLink"] = "Failed to send confirmation link, please try later";
-    NotificationMessage["couldNotFindEmail"] = "Could not find the current email address";
-    NotificationMessage["imageConverterError"] = "Server could not process the image, please choose another image file";
-    NotificationMessage["failedToLogin"] = "Login failed, server error. Please try again, later";
-    NotificationMessage["imageResNotAllowed"] = "Image resolution not allowed";
-    NotificationMessage["tokenExpired"] = "Token expired";
-    NotificationMessage["authenticationError"] = "Authentication error";
-    NotificationMessage["maxAttachedFilesExceed"] = "The maximum number of attached images should not exceed 4";
-    NotificationMessage["imageSizeMustLessThan2mb"] = "Image size must be less than 2mb";
-    NotificationMessage["allowAudioContext"] = "The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.";
-    NotificationMessage["failedToDecodeAdminId"] = "Failed to decode admin id";
-    NotificationMessage["forbiddenDoNotHavePermission"] = "Forbidden. You don't have permission to get access";
-    NotificationMessage["failedToGetData"] = "Failed to get data";
-    NotificationMessage["dbRestored"] = "Data base restored";
-    NotificationMessage["dbResetFailed"] = "Data base reset failed";
-    NotificationMessage["fixturesAreApplied"] = "The fixtures are applied";
-    NotificationMessage["userDeleteSuccess"] = "The user has been successfully deleted";
-    NotificationMessage["deleteUserFailed"] = "Couldn't delete user";
-    NotificationMessage["userUpdateSuccess"] = "User update success";
-})(NotificationMessage = exports.NotificationMessage || (exports.NotificationMessage = {}));
-var AuthEndpoints;
-(function (AuthEndpoints) {
-    AuthEndpoints["REGISTRATION"] = "/auth/registration";
-    AuthEndpoints["SEND_EMAIL_CONFIRMATION_LINK"] = "/auth/send-email-confirmation-link";
-    AuthEndpoints["SEND_EMAIL_CONFIRMATION"] = "/auth/send-email-confirmation";
-    AuthEndpoints["LOGIN"] = "/auth/login";
-    AuthEndpoints["GOOGLE_LOGIN"] = "/auth/google-login";
-    AuthEndpoints["PROVIDER_LOGIN"] = "/auth/provider-login";
-    AuthEndpoints["LOGOUT"] = "/auth/logout";
-    AuthEndpoints["UPDATE_TOKENS_PAIR"] = "/auth/update-tokens-pair";
-})(AuthEndpoints = exports.AuthEndpoints || (exports.AuthEndpoints = {}));
-var UserEndpoints;
-(function (UserEndpoints) {
-    UserEndpoints["GET_USER_DATA"] = "/auth/get-user-data";
-    UserEndpoints["UPDATE_USER_DATA"] = "/auth/user-data/update";
-    UserEndpoints["RESET_PASSWORD"] = "/user/reset-password";
-})(UserEndpoints = exports.UserEndpoints || (exports.UserEndpoints = {}));
-var CommonEndpoints;
-(function (CommonEndpoints) {
-    CommonEndpoints["COMMON_IMAGES"] = "/common-images";
-    CommonEndpoints["GET_INFO"] = "/notification";
-})(CommonEndpoints = exports.CommonEndpoints || (exports.CommonEndpoints = {}));
-var CodesEndpoints;
-(function (CodesEndpoints) {
-    CodesEndpoints["SEND_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/password-recovery";
-    CodesEndpoints["VALIDATE_EMAIL_CODE_PASSWORD_RECOVERY"] = "/codes/email/validate-email-code-password-recovery";
-})(CodesEndpoints = exports.CodesEndpoints || (exports.CodesEndpoints = {}));
-var AdminEndpoints;
-(function (AdminEndpoints) {
-    AdminEndpoints["GET_APP_DATA"] = "/admin/get-app-data";
-    AdminEndpoints["DB_CLEAR"] = "/admin/db-reset";
-    AdminEndpoints["APPLY_FIXTURES"] = "/admin/apply-fixtures";
-    AdminEndpoints["DELETE_USER"] = "/admin/delete-user";
-    AdminEndpoints["UPDATE_USER_DATA"] = "/admin/update-user-data";
-})(AdminEndpoints = exports.AdminEndpoints || (exports.AdminEndpoints = {}));
-var RouteNames;
+export * from "./shared-types";
+export var RouteNames;
 (function (RouteNames) {
     RouteNames["SIGN_IN"] = "/sign-in";
     RouteNames["SIGN_UP"] = "/sign-up";
@@ -224,60 +15,50 @@ var RouteNames;
     // Don't forget to change path below in nginx manually
     RouteNames["SOCKET_PATH"] = "/app-socket/";
     RouteNames["API"] = "/api/";
-})(RouteNames = exports.RouteNames || (exports.RouteNames = {}));
-var SocketActions;
-(function (SocketActions) {
-    SocketActions["CONNECTION"] = "connection";
-    SocketActions["ERROR"] = "error";
-    SocketActions["RECONNECT"] = "reconnect";
-    SocketActions["AUTH_ERROR"] = "auth-error";
-    SocketActions["INITIALIZE"] = "initialize";
-    SocketActions["DISCONNECT"] = "disconnect";
-    SocketActions["GET_ROOMS"] = "get-rooms";
-    SocketActions["CREATE_ROOM"] = "create-room";
-    SocketActions["SEND_MESSAGE"] = "send-message";
-    SocketActions["MESSAGE_DELIVERED"] = "message-delivered";
-    SocketActions["ROOM_CREATED"] = "room-created";
-    SocketActions["SEARCH_CONTACT"] = "search-contact";
-    SocketActions["GET_SEARCHED_CONTACT"] = "get-searched-contact";
-    SocketActions["STATUS_CONTACT"] = "status-contact";
-    SocketActions["GET_CONTACTS"] = "get-contacts";
-    SocketActions["SAVE_CONTACT"] = "save-contact";
-    SocketActions["DELETE_CONTACT"] = "delete-contact";
-    SocketActions["USER_TYPING"] = "user-typing";
-    SocketActions["GET_USER_TYPING_STATUS"] = "get-user-typing-status";
-    SocketActions["CHANGE_MESSAGE_STATUS"] = "change-message-status";
-    SocketActions["UPDATE_MESSAGE_STATUS"] = "update-message-status";
-    SocketActions["CHANGE_CONTACTS_DATA"] = "change-contacts-data";
-    SocketActions["CALL_USER"] = "call-user";
-    SocketActions["ANSWER_CALL"] = "answer-call";
-    SocketActions["CALL_ACCEPTED"] = "call-accepted";
-    SocketActions["CALL_ENDED"] = "call-ended";
-    SocketActions["CHANGE_CALL_SETTINGS"] = "change-call-settings";
-    SocketActions["CALL_STARTED_AT"] = "call-started-at";
-    SocketActions["UPDATE_USER_SETTINGS"] = "update-user-settings";
-    SocketActions["UPDATE_CHAT_ROOM"] = "update-chat-room";
-    SocketActions["ROOM_DATA_UPDATED"] = "room-data-updated";
-    SocketActions["ADD_REACTION"] = "add-reaction";
-    SocketActions["UPDATE_MESSAGE_REACTIONS"] = "update-message-reactions";
-    SocketActions["DELETE_MESSAGE"] = "delete-message";
-    SocketActions["MESSAGE_DELETED"] = "message-deleted";
-    SocketActions["ERROR_MESSAGE"] = "error-message";
-    SocketActions["CALLS_UPDATED"] = "calls-updated";
-    SocketActions["CALL_UPDATED"] = "call-updated";
-    SocketActions["MARK_CALL_AS_VIDEO"] = "mark-call-as-video";
-    SocketActions["UPDATE_CALL_SIGNAL"] = "update-call-signal";
-    SocketActions["INTERLOCUTOR_UPDATE_SIGNAL"] = "interlocutor-update-signal";
-    SocketActions["INTERLOCUTOR_PING"] = "interlocutor-ping";
-    SocketActions["UPDATE_CONTACT_INTERACTION_TYPE"] = "update-interaction-type";
-    SocketActions["UPDATE_CONTACT_INTERACTION_TYPE_SUCCESS"] = "update-contact-success";
-    SocketActions["INVITE_RECEIVED"] = "invite-received";
-    // Socket.io events
-    SocketActions["RECONNECT_ATTEMPT"] = "reconnect_attempt";
-    SocketActions["RECONNECT_FAILED"] = "reconnect_failed";
-})(SocketActions = exports.SocketActions || (exports.SocketActions = {}));
-var AuthTokens;
-(function (AuthTokens) {
-    AuthTokens["accessToken"] = "jwt";
-    AuthTokens["refreshToken"] = "refresh-jwt";
-})(AuthTokens = exports.AuthTokens || (exports.AuthTokens = {}));
+})(RouteNames || (RouteNames = {}));
+export var Status;
+(function (Status) {
+    Status[Status["Success"] = 200] = "Success";
+    Status[Status["BadRequest"] = 400] = "BadRequest";
+    Status[Status["NotAuth"] = 401] = "NotAuth";
+    Status[Status["Forbidden"] = 403] = "Forbidden";
+    Status[Status["NotFound"] = 404] = "NotFound";
+    Status[Status["Server"] = 500] = "Server";
+    Status[Status["Unreachable"] = 503] = "Unreachable";
+    Status[Status["BadGateway"] = 504] = "BadGateway";
+})(Status || (Status = {}));
+export var AuthEndpoints;
+(function (AuthEndpoints) {
+    AuthEndpoints["Registration"] = "/auth/registration";
+    AuthEndpoints["SendEmailConfirmationLink"] = "/auth/send-email-confirmation-link";
+    AuthEndpoints["SendEmailConfirmation"] = "/auth/send-email-confirmation";
+    AuthEndpoints["Login"] = "/auth/login";
+    AuthEndpoints["GoogleLogin"] = "/auth/google-login";
+    AuthEndpoints["ProviderLogin"] = "/auth/provider-login";
+    AuthEndpoints["Logout"] = "/auth/logout";
+    AuthEndpoints["UpdateTokensPair"] = "/auth/update-tokens-pair";
+})(AuthEndpoints || (AuthEndpoints = {}));
+export var UserEndpoints;
+(function (UserEndpoints) {
+    UserEndpoints["GetUserData"] = "/auth/get-user-data";
+    UserEndpoints["UpdateUserData"] = "/auth/user-data/update";
+    UserEndpoints["ResetPassword"] = "/user/reset-password";
+})(UserEndpoints || (UserEndpoints = {}));
+export var CommonEndpoints;
+(function (CommonEndpoints) {
+    CommonEndpoints["CommonImages"] = "/common-images";
+    CommonEndpoints["GetInfo"] = "/notification";
+})(CommonEndpoints || (CommonEndpoints = {}));
+export var CodesEndpoints;
+(function (CodesEndpoints) {
+    CodesEndpoints["SendEmailCodePasswordRecovery"] = "/codes/email/password-recovery";
+    CodesEndpoints["ValidateEmailCodePasswordRecovery"] = "/codes/email/validate-email-code-password-recovery";
+})(CodesEndpoints || (CodesEndpoints = {}));
+export var AdminEndpoints;
+(function (AdminEndpoints) {
+    AdminEndpoints["GetAppData"] = "/admin/get-app-data";
+    AdminEndpoints["DBClear"] = "/admin/db-reset";
+    AdminEndpoints["ApplyFixtures"] = "/admin/apply-fixtures";
+    AdminEndpoints["DeleteUser"] = "/admin/delete-user";
+    AdminEndpoints["UpdateUserData"] = "/admin/update-user-data";
+})(AdminEndpoints || (AdminEndpoints = {}));

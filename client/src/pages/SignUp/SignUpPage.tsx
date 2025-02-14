@@ -23,11 +23,11 @@ export const SignUpPage = () => {
 
   const onFinish = async (values: UserCredential) => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpoints.REGISTRATION, values)
+    const response = await doRequest('post', AuthEndpoints.Registration, values)
     setIsLoading(false)
     if (!response) return
     const { data, status } = response
-    if (status !== Status.success) return
+    if (status !== Status.Success) return
     navigate(
       `${RouteNames.WAIT_EMAIL_CONFIRM}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`,
       {
@@ -57,7 +57,7 @@ export const SignUpPage = () => {
         </Form.Item>
         <div className="sign-up__privacy-policy">
           <Form.Item name="policy" rules={validateRules.policy}>
-            <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" onChange={() => { }} />
+            <UISwitch id="privacy-policy" initValue={false} onText="Read" offText="Unread" onChange={() => {}} />
           </Form.Item>
           <div className="sign-up__privacy-policy-text paragraph-text paragraph-text--secondary">
             I have read and agree{' '}

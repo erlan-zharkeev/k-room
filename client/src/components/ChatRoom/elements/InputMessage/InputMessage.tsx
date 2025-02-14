@@ -1,5 +1,5 @@
 import { Form } from 'antd'
-import { SocketActionsPayload, SocketActions, ImageObject } from 'common-types'
+import { SocketActions, ImageObject, EventUserTyping } from 'common-types'
 import { useState } from 'react'
 import { UIImageLoader, UIInput, UIButton } from 'src/components'
 import { useTypedSelector, useSelectedRoom, useDebounce } from 'src/hooks'
@@ -21,12 +21,12 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
 
   const sendUserTypingStatus = (status: boolean) => {
     if (!selectedChatRoom) return
-    const payload: SocketActionsPayload['userTyping'] = {
+    const payload: EventUserTyping = {
       authorName: username,
       usersTo: selectedChatRoom.users,
       status
     }
-    $socket.emit(SocketActions.USER_TYPING, payload)
+    $socket.emit<SocketActions>('user-typing', payload)
   }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)

@@ -1,9 +1,13 @@
+@use '~/global/index' as *;
+
 .aside-bar {
+  $aside-bar-width: 50px;
+
   position: relative;
   width: $aside-bar-width;
   min-width: $aside-bar-width;
-  margin-right: $gutter-lg;
-  padding: $gutter-md $gutter-sm;
+  margin-right: 16px;
+  padding: 8px 4px;
   overflow: hidden;
   @include nm-outset-element;
 
@@ -23,7 +27,7 @@
     width: 100%;
     height: $aside-bar-width;
     min-height: $aside-bar-width;
-    margin-top: $gutter-lg;
+    margin-top: 16px;
     #{ $self }__wrapper {
       justify-content: center;
     }
@@ -60,7 +64,7 @@
     }
 
     .ant-radio-button-wrapper {
-      margin: $gutter-lg 0;
+      margin: 16px 0;
       background: transparent !important;
     }
   }

@@ -1,19 +1,19 @@
 import Meta from 'antd/lib/card/Meta'
 import appData from './../../../../../package.json'
-import { UserSettingKey, RouteNames, Theme } from 'common-types'
+import { RouteNames, UserSettings as IUserSettings } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { UIAvatar, UISwitch } from 'src/components'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { AppDispatch, showModal } from 'src/store'
-import { ModalContentComponentName } from 'src/@types'
+import { ModalContentComponentName } from 'src/@enums'
 
-export enum UserSettingName {
-  theme = 'theme',
-  tooltips = 'tooltips',
-  notification = 'notification',
-  sound = 'sound',
-  wallpaper = 'wallpaper'
+enum UserSettingName {
+  Theme = 'theme',
+  Tooltips = 'tooltips',
+  Notification = 'notification',
+  Sound = 'sound',
+  Wallpaper = 'wallpaper'
 }
 
 const { VITE_MAIL_APP } = import.meta.env
@@ -32,28 +32,28 @@ export const UserSettings = () => {
     dispatch(
       showModal({
         title: 'Update User Data',
-        modalContentComponentName: ModalContentComponentName.userDataSettingsPopup
+        modalContentComponentName: ModalContentComponentName.UserDataSettingsPopup
       })
     )
   }
 
   const changeSetting = (value: boolean, id: string) => {
-    let type: UserSettingKey | null = null
+    let type: keyof IUserSettings | null = null
     switch (id) {
-      case UserSettingName.theme:
-        type = UserSettingKey.theme
+      case UserSettingName.Theme:
+        type = 'theme'
         break
-      case UserSettingName.sound:
-        type = UserSettingKey.soundOn
+      case UserSettingName.Sound:
+        type = 'soundOn'
         break
-      case UserSettingName.tooltips:
-        type = UserSettingKey.showTooltips
+      case UserSettingName.Tooltips:
+        type = 'showTooltips'
         break
-      case UserSettingName.notification:
-        type = UserSettingKey.ableToShowNotification
+      case UserSettingName.Notification:
+        type = 'ableToShowNotification'
         break
-      case UserSettingName.wallpaper:
-        type = UserSettingKey.showWallpaper
+      case UserSettingName.Wallpaper:
+        type = 'showWallpaper'
         break
       default:
         break
@@ -69,7 +69,7 @@ export const UserSettings = () => {
       <div className="user-settings__body">
         <div className="user-settings__user-card" onClick={changeUserData}>
           <Meta
-            avatar={<UIAvatar size="medium" showBadge={false} src={avatarPath} />}
+            avatar={<UIAvatar size="middle" showBadge={false} src={avatarPath} />}
             title={username}
             description={email}
           />
@@ -83,18 +83,17 @@ export const UserSettings = () => {
         </div>
         <div className="user-settings__theme-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Theme</div>
-          <UISwitch
-            onText="Dark"
-            id="theme"
-            offText="Light"
-            initValue={theme === Theme.dark}
-            onChange={changeSetting}
-          />
+          <UISwitch onText="Dark" id="theme" offText="Light" initValue={theme === 'dark'} onChange={changeSetting} />
         </div>
         <div className="user-settings__sound-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Sound</div>
           <UISwitch initValue={soundOn} id="sound" onChange={changeSetting} disabled={!allowAudioContext} />
-          {!allowAudioContext && <div className="user-settings__additional-setting-info">The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.</div>}
+          {!allowAudioContext && (
+            <div className="user-settings__additional-setting-info">
+              The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio
+              context.
+            </div>
+          )}
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title paragraph-text paragraph-text--secondary">Tooltips</div>
@@ -113,7 +112,13 @@ export const UserSettings = () => {
             offText="Hide"
             onChange={changeSetting}
           />
-          {<div className="user-settings__additional-setting-info">If you want to disable/enable browser notifications, you need to do this manually (the setting next to the address bar), the security policy does not allow you to do this from the application interface. The current setting is responsible for notification toasts inside the app.</div>}
+          {
+            <div className="user-settings__additional-setting-info">
+              If you want to disable/enable browser notifications, you need to do this manually (the setting next to the
+              address bar), the security policy does not allow you to do this from the application interface. The
+              current setting is responsible for notification toasts inside the app.
+            </div>
+          }
         </div>
       </div>
       <div className="user-settings__info">

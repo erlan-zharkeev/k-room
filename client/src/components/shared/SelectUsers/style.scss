@@ -6,8 +6,8 @@
   .select-users__user {
     display: flex;
     align-items: center;
-    padding: $gutter-sm;
-    border-radius: $radius-sm;
+    padding: 4px;
+    border-radius: 4px;
     cursor: pointer;
   }
 
@@ -17,21 +17,21 @@
 
   .select-users__divider {
     height: 1px;
-    margin: $gutter-md 0;
+    margin: 8px 0;
     background: var(--secondary-text);
   }
 
   .select-users__user .paragraph-text {
-    margin-left: $gutter-md;
+    margin-left: 8px;
   }
 
   .select-users__selected-users {
     display: flex;
-    margin-bottom: $gutter-lg;
+    margin-bottom: 16px;
   }
 
   .select-users__choose-list {
-    gap: $gutter-md;
+    gap: 8px;
     max-height: 140px;
     overflow: auto;
   }
