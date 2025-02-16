@@ -4,17 +4,28 @@
   height: 100%;
 }
 
+.widget-wrapper--light .widget-wallpaper {
+  opacity: 0.25;
+  filter: invert(1);
+}
+
+.widget-wallpaper--main {
+  background-position: 0 0;
+  background-size: calc(100% / 5) auto;
+  transform: rotate(-45deg);
+  scale: 1.6;
+}
+
 .widget-wallpaper {
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.1;
-    pointer-events: none;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 100%;
+  background-image: url('src/assets/img/main-wallpaper.jpg');
+  background-repeat: repeat;
+  opacity: 0.15;
+  pointer-events: none;
 }
 
 .widget-loader {

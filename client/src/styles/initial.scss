@@ -3,6 +3,7 @@
 html {
   overflow: hidden;
   background-color: var(--main-bg);
+
   --real-1-percent-vh: 100vh;
   --chat-room-list-width: 35%;
   @include max-width-768 {

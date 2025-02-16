@@ -1,5 +1,5 @@
+import { ClientNotificationMessage } from 'src/@types'
 import { clientConstants } from 'src/client-constants'
-import { ClientNotificationMessage } from 'src/@enums'
 import { UseNotification } from 'src/hooks/use-notification'
 
 export const imageToBase64 = ({

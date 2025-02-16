@@ -44,7 +44,7 @@ export const InfoList = () => {
 
   return (
     <div className="info-list">
-      <WidgetWrapper wallpaperPlacement="main">
+      <WidgetWrapper>
         <div className="info-list__header header-text header-text--md header-text--secondary">Info messages</div>
         <Collapse activeKey={currentInfoId} onChange={onChange} bordered={false} accordion={true}>
           {infoItems?.map((item) => {

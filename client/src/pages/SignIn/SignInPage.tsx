@@ -3,7 +3,7 @@ import { UserCredential, RouteNames, AuthEndpoints } from 'common-types'
 import { useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { FirebaseProviderType } from 'src/@enums'
+import { FirebaseProvider } from 'src/@types'
 import { UIInput, UIButton } from 'src/components'
 import { useValidate } from 'src/hooks'
 import { SignInFormLayoutPage } from 'src/layouts'
@@ -33,7 +33,7 @@ export const SignInPage = () => {
     commonSetUserDataHandler(dispatch, { userData, settings })
   }
 
-  const providerSignIn = async (providerName: FirebaseProviderType, loaderMethod: (value: boolean) => void) => {
+  const providerSignIn = async (providerName: FirebaseProvider, loaderMethod: (value: boolean) => void) => {
     loaderMethod(true)
     const result = await firebase.current.signIn(providerName)
     if (!result) return loaderMethod(false)
@@ -79,7 +79,7 @@ export const SignInPage = () => {
             border="common-border"
             fill={true}
             hover="hoverless"
-            onClick={() => providerSignIn(FirebaseProviderType.Google, setGoogleBtnLoading)}
+            onClick={() => providerSignIn('google', setGoogleBtnLoading)}
             loading={googleBtnLoading}
           />
           <div className="sign-in__forgot-password">

@@ -2,7 +2,7 @@ import { Auth, getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopu
 import { useState, useEffect } from 'react'
 import { $clg } from 'src/services/$clg'
 import { useNotification } from './use-notification'
-import { ClientNotificationMessage, FirebaseProviderType } from 'src/@enums'
+import { ClientNotificationMessage, FirebaseProvider } from 'src/@types'
 
 export const useFirebase = () => {
   const [auth, _] = useState<Auth>(getAuth())
@@ -24,7 +24,7 @@ export const useFirebase = () => {
     messageType: 'error'
   })
 
-  const signIn = async (providerName: FirebaseProviderType) => {
+  const signIn = async (providerName: FirebaseProvider) => {
     setProvider(new providers[providerName]())
     let result = null
     try {

@@ -5,7 +5,6 @@ import { useTypedSelector, useSelectedRoom } from 'src/hooks'
 import { AppDispatch, repliedMessageSetAsForward, setRepliedMessage, showModal, updateMessageStatus } from 'src/store'
 import { $socket } from 'src/services'
 import { Reactions } from './elements'
-import { ModalContentComponentName } from 'src/@enums'
 
 export const MessageContextMenu = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -30,9 +29,7 @@ export const MessageContextMenu = () => {
 
   const forwardHandler = () => {
     dispatch(repliedMessageSetAsForward())
-    dispatch(
-      showModal({ title: 'Forward message', modalContentComponentName: ModalContentComponentName.ForwardMessagePopup })
-    )
+    dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'forward-message-popup' }))
   }
 
   const deleteHandler = () => {

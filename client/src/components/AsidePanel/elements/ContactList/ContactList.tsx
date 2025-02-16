@@ -15,6 +15,8 @@ import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $socket } from 'src/services'
 import { ContactSearch } from './elements'
+import { useDispatch } from 'react-redux'
+import { AppDispatch, closeModal, showModal } from 'src/store'
 
 export const ContactList = () => {
   const { updateSetting } = useUpdateSettings()
@@ -40,10 +42,26 @@ export const ContactList = () => {
     }
   }, [contacts])
 
+  const dispatch = useDispatch<AppDispatch>()
+
   const deleteUserHandler = (interlocutorData: Contact) => {
+    dispatch(
+      showModal({
+        title: 'Confirmation',
+        textContent: 'Are you sure you want to delete this contact?',
+        confirmBtn: {
+          text: 'Delete',
+          callback: () => deleteContactConfirmed(interlocutorData)
+        }
+      })
+    )
+  }
+
+  const deleteContactConfirmed = (interlocutorData: Contact) => {
     if (!interlocutorData.id) return
     const payload: EventDeleteContact = { deletingUserId: interlocutorData.id }
     $socket.emit<SocketActions>('delete-contact', payload)
+    dispatch(closeModal())
   }
 
   const changeBocksSelections = (roomId: string) => {
@@ -199,7 +217,7 @@ export const ContactList = () => {
                     </>
                   )}
                   {user.interactionType !== 'invite-received' && (
-                    <UIButton iconName="cross" onClick={() => deleteUserHandler(user)} tooltip="Delete User" />
+                    <UIButton iconName="cross" onClick={() => deleteUserHandler(user)} tooltip="Delete contact" />
                   )}
                 </>
               )}

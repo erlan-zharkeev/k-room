@@ -6,15 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { UIAvatar, UISwitch } from 'src/components'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { AppDispatch, showModal } from 'src/store'
-import { ModalContentComponentName } from 'src/@enums'
-
-enum UserSettingName {
-  Theme = 'theme',
-  Tooltips = 'tooltips',
-  Notification = 'notification',
-  Sound = 'sound',
-  Wallpaper = 'wallpaper'
-}
 
 const { VITE_MAIL_APP } = import.meta.env
 
@@ -32,7 +23,7 @@ export const UserSettings = () => {
     dispatch(
       showModal({
         title: 'Update User Data',
-        modalContentComponentName: ModalContentComponentName.UserDataSettingsPopup
+        modalContentComponentName: 'user-data-settings-popup'
       })
     )
   }
@@ -40,19 +31,19 @@ export const UserSettings = () => {
   const changeSetting = (value: boolean, id: string) => {
     let type: keyof IUserSettings | null = null
     switch (id) {
-      case UserSettingName.Theme:
+      case 'theme':
         type = 'theme'
         break
-      case UserSettingName.Sound:
+      case 'sound':
         type = 'soundOn'
         break
-      case UserSettingName.Tooltips:
+      case 'tooltips':
         type = 'showTooltips'
         break
-      case UserSettingName.Notification:
+      case 'notification':
         type = 'ableToShowNotification'
         break
-      case UserSettingName.Wallpaper:
+      case 'wallpaper':
         type = 'showWallpaper'
         break
       default:

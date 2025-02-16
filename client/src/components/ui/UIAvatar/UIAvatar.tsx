@@ -3,11 +3,7 @@ import { useState, useEffect } from 'react'
 import { ShapeModifier, SizeModifier } from 'src/@types'
 import { IconName, UIIcon } from '..'
 
-enum UIAvatarBadgePlacement {
-  Up = 'up',
-  Down = 'down'
-}
-
+type UIAvatarBadgePlacement = 'up' | 'down'
 type UIAvatarShapeModifier = Extract<ShapeModifier, 'round' | 'square'>
 
 export interface UIAvatarProps {
@@ -29,8 +25,8 @@ export const UIAvatar = ({
   showBadge = true,
   stubIconName = 'user-stub',
   ribbon = false,
-  ribbonPlacement = UIAvatarBadgePlacement.Up,
-  dotPlacement = UIAvatarBadgePlacement.Up,
+  ribbonPlacement = 'up',
+  dotPlacement = 'up',
   shape = 'round'
 }: UIAvatarProps) => {
   const [haveSource, setHaveSource] = useState(false)
@@ -53,7 +49,7 @@ export const UIAvatar = ({
 
   const BadgeWrapper = () =>
     ribbon ? (
-      <Badge.Ribbon text="G" placement={ribbonPlacement === UIAvatarBadgePlacement.Up ? 'start' : 'end'}>
+      <Badge.Ribbon text="G" placement={ribbonPlacement === 'up' ? 'start' : 'end'}>
         <AvatarBody />
       </Badge.Ribbon>
     ) : (

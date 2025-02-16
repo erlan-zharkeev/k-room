@@ -1,14 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { clientConstants } from 'src/client-constants'
-import { ViewPort, ContextMenuType, ContextMenu, ContextClickedObject } from 'src/@types'
-import { ModalContentComponentName, ViewPortWidthType } from 'src/@enums'
+import {
+  ViewPort,
+  ContextMenuType,
+  ContextMenu,
+  ContextClickedObject,
+  ModalContentComponentName,
+  ViewPortWidthType
+} from 'src/@types'
+
+interface ModalBtn {
+  text: string
+  loader?: boolean
+  callback?: (...args: unknown[]) => void
+}
 
 interface ModalData {
-  title: string
-  modalContentComponentName: ModalContentComponentName
-  okText?: string
   width?: string
-  actions?: Record<string, (payload?: unknown) => void | Promise<void>>
+  title?: string
+  modalContentComponentName?: ModalContentComponentName | null
+  textContent?: string
+  confirmBtn?: ModalBtn
+  cancelBtn?: ModalBtn
 }
 
 interface SystemStore {
@@ -33,8 +46,7 @@ const clickedObjectInitialState = {
 
 const initialModalData = {
   title: '',
-  modalContentComponentName: ModalContentComponentName.MessageWithBindDataPopup,
-  okText: 'ok',
+  modalContentComponentName: null,
   width: '320px'
 }
 

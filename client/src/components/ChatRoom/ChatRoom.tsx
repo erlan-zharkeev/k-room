@@ -12,7 +12,6 @@ import { scrollToBottom, sendMessage } from 'src/utils'
 import { $socket } from 'src/services'
 import { RoomHeader, MessageBody, InputMessage } from './elements'
 import { WidgetWrapper } from '../shared'
-import { ModalContentComponentName } from 'src/@enums'
 
 export const ChatRoom = () => {
   const selectedChatRoom = useSelectedRoom()
@@ -90,7 +89,7 @@ export const ChatRoom = () => {
     dispatch(
       showModal({
         title: 'Send Message',
-        modalContentComponentName: ModalContentComponentName.MessageWithBindDataPopup
+        modalContentComponentName: 'message-with-bind-data-popup'
       })
     )
   }
@@ -127,7 +126,7 @@ export const ChatRoom = () => {
 
   return (
     <div className="chat-room">
-      <WidgetWrapper wallpaperPlacement="main">
+      <WidgetWrapper isMain>
         <div className="chat-room__wrapper" ref={roomDomEl}>
           {selectedChatRoom ? (
             <div>

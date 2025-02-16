@@ -40,7 +40,7 @@ export const TopBar = () => {
 
   return (
     <div className="top-bar">
-      <WidgetWrapper wallpaperPlacement="top" loading={false}>
+      <WidgetWrapper>
         <div className="top-bar__content">
           <div className="top-bar__user-data">
             <div className="top-bar__avatar">

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { imageToBase64 } from 'src/utils'
 import { UIIcon } from '..'
 import { useNotification } from 'src/hooks'
-import { ClientNotificationMessage } from 'src/@enums'
+import { ClientNotificationMessage } from 'src/@types'
 
 export interface UIFileLoaderProps {
   multiple?: boolean

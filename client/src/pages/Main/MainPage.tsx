@@ -18,6 +18,7 @@ import {
 } from 'common-types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { ClientNotificationMessage, ViewPortWidthType } from 'src/@types'
 import {
   StubLoading,
   AsideBar,
@@ -28,7 +29,6 @@ import {
   ChatRoom,
   AdminPanelContent
 } from 'src/components'
-import { ClientNotificationMessage, ViewPortWidthType } from 'src/@enums'
 import { useNotification, useSelectedRoom, useTypedSelector } from 'src/hooks'
 import { AdditionalServiceContext } from 'src/providers'
 import { $clg, $socket } from 'src/services'
@@ -110,7 +110,7 @@ export const MainPage = () => {
 
   const getNotificationPermission = () => {
     if (!('Notification' in window)) {
-      console.log('Your browser doesn`t support Notification API')
+      console.log('Browser doesn`t support Notification API')
     }
     window.Notification.requestPermission()
   }

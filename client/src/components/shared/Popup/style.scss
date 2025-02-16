@@ -4,5 +4,9 @@
 @forward './elements/CreateMultipleChatPopup/style';
 @forward './elements/ChatRoomSettingsPopup/style';
 @forward './elements/MessageWithBindDataPopup/style';
-@forward './elements/DBClearConfirmPopup/style';
-@forward './elements/ApplyBasicFixturesPopup/style';
+
+.modal__confirmation-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}

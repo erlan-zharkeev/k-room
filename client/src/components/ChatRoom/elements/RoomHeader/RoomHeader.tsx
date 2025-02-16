@@ -6,7 +6,6 @@ import { clientConstants } from 'src/client-constants'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { $socket } from 'src/services'
 import { AppDispatch, showModal } from 'src/store'
-import { ModalContentComponentName } from 'src/@enums'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -44,7 +43,7 @@ export const RoomHeader = () => {
     dispatch(
       showModal({
         title: 'Group Chat Info',
-        modalContentComponentName: ModalContentComponentName.ChatRoomSettingsPopup
+        modalContentComponentName: 'chat-room-settings-popup'
       })
     )
   }

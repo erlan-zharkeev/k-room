@@ -4,5 +4,3 @@ export * from './ForwardMessagePopup/ForwardMessagePopup'
 export * from './MessageWithBindDataPopup/MessageWithBindDataPopup'
 export * from './TechSettingsPopup/TechSettingsPopup'
 export * from './UserDataSettingsPopup/UserDataSettingsPopup'
-export * from './DBClearConfirmPopup/DBClearConfirmPopup'
-export * from './ApplyBasicFixturesPopup/ApplyBasicFixturesPopup';

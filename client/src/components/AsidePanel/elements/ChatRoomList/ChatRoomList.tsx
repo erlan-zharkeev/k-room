@@ -2,7 +2,6 @@ import { Badge, List } from 'antd'
 import { Message, SocketActions, ChatRoom, EventSaveContact } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { UIButton, UIAvatar } from 'src/components'
-import { ModalContentComponentName } from 'src/@enums'
 import { useUpdateSettings, useTypedSelector } from 'src/hooks'
 import { $socket } from 'src/services'
 import { AppDispatch, showModal } from 'src/store'
@@ -48,7 +47,7 @@ export const ChatRoomList = () => {
     dispatch(
       showModal({
         title: 'Create New Chat Room',
-        modalContentComponentName: ModalContentComponentName.CreateMultipleChatPopup
+        modalContentComponentName: 'create-multiple-chat-popup'
       })
     )
   }

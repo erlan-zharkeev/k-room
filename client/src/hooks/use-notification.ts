@@ -2,7 +2,7 @@ import { clientConstants } from 'src/client-constants'
 import { notification as antdNotification } from 'antd'
 import { useTypedSelector } from './use-typed-selector'
 import { ReactNode } from 'react'
-import { ClientNotificationMessage, NotificationType } from 'src/@enums'
+import { ClientNotificationMessage, NotificationType } from 'src/@types'
 
 interface Notification {
   key?: string

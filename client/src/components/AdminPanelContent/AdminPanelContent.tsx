@@ -1,13 +1,20 @@
 import { useApi } from 'src/services'
 import { WidgetWrapper } from '../shared'
 import { useEffect, useState } from 'react'
-import { AdminEndpoints, AdminPanelModelTab, IDBCallSchema, IDBChatRoomSchema, IMessageSchema, IUserSchema, Status } from 'common-types'
+import {
+  AdminEndpoints,
+  AdminPanelModelTab,
+  IDBCallSchema,
+  IDBChatRoomSchema,
+  IMessageSchema,
+  IUserSchema,
+  Status
+} from 'common-types'
 import { useTypedSelector, useUpdateSettings } from 'src/hooks'
 import { UIButton } from '../ui'
 import { useDispatch } from 'react-redux'
 import { showModal } from 'src/store'
 import { UsersTable } from './elements'
-import { ModalContentComponentName } from 'src/@enums'
 
 interface IGetAppDataPayload {
   users: IUserSchema[]
@@ -49,29 +56,49 @@ export const AdminPanelContent = () => {
     getData()
   }, [])
 
+  const [dbClearLoader, setDbClearLoader] = useState(false)
   const dbClearLoaderHandler = () => {
     dispatch(
       showModal({
         title: 'Confirmation',
-        modalContentComponentName: ModalContentComponentName.DBClearConfirmPopup,
-        actions: { getData }
+        textContent: 'Are you shure want to clear data base?',
+        confirmBtn: {
+          text: 'Clear',
+          loader: dbClearLoader,
+          callback: async () => {
+            setDbClearLoader(true)
+            await doRequest('post', AdminEndpoints.DBClear)
+            await getData()
+            setDbClearLoader(false)
+          }
+        }
       })
     )
   }
 
+  const [dBApplyFixturesLoader, setdBApplyFixturesLoader] = useState(false)
   const applyBasicFixtures = () => {
     dispatch(
       showModal({
         title: 'Confirmation',
-        modalContentComponentName: ModalContentComponentName.ApplyFixturesPopup,
-        actions: { getData }
+        textContent: 'Are you shure want to apply basic fixtures?',
+        confirmBtn: {
+          text: 'Apply',
+          loader: dBApplyFixturesLoader,
+          callback: async () => {
+            setdBApplyFixturesLoader(true)
+            await doRequest('patch', AdminEndpoints.ApplyFixtures)
+            await getData()
+            setdBApplyFixturesLoader(false)
+          }
+        }
       })
     )
   }
 
   return (
     <div className="admin-panel-content">
-      <WidgetWrapper wallpaperPlacement="main" loading={loading}>
+      <WidgetWrapper loading={loading}>
         {error ? (
           <p>Failed to get data</p>
         ) : (
@@ -106,7 +133,11 @@ export const AdminPanelContent = () => {
                   className={`paragraph-text pointer admin-panel-content__header-element ${
                     selectedAdminPanelModelTab === el.value ? 'paragraph-text--accent' : 'paragraph-text--secondary'
                   }`}
-                  onClick={() => updateSetting('selectedAdminPanelModelTab', { selectedAdminPanelModelTab: el.value as AdminPanelModelTab })}
+                  onClick={() =>
+                    updateSetting('selectedAdminPanelModelTab', {
+                      selectedAdminPanelModelTab: el.value as AdminPanelModelTab
+                    })
+                  }
                 >
                   {el.name}
                 </div>

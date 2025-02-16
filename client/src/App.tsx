@@ -17,13 +17,12 @@ import {
 import { getViewPort, setTheme, clearLocalStorageOnKeyDown, getCookie } from './utils'
 import { UserEndpoints } from 'common-types'
 import { $socket, socketReconnect } from './services/$socket'
-import { ClientNotificationMessage } from './@enums'
+import { ClientNotificationMessage } from './@types'
 
 const setRealVh = () => {
   const vh = window.innerHeight * 0.01
   document.documentElement.style.setProperty('--real-1-percent-vh', `${vh}px`)
 }
-
 
 export const App = () => {
   const { theme, soundOn } = useTypedSelector((state) => state.persist.settings)

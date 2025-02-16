@@ -6,7 +6,7 @@ import { AppDispatch, selectChatRoom, showModal } from 'src/store'
 import { IconName, UIButton, Logo } from '..'
 import { WidgetWrapper } from '../shared'
 import { useEffect, useState } from 'react'
-import { ModalContentComponentName, ViewPortWidthType } from 'src/@enums'
+import { ViewPortWidthType } from 'src/@types'
 
 export interface ButtonsListElement {
   value: AsideBarButtonName
@@ -44,7 +44,7 @@ export const AsideBar = () => {
     dispatch(
       showModal({
         title: 'Settings',
-        modalContentComponentName: ModalContentComponentName.TechSettingsPopup
+        modalContentComponentName: 'tech-settings-popup'
       })
     )
   }
@@ -79,7 +79,7 @@ export const AsideBar = () => {
 
   return (
     <div className="aside-bar">
-      <WidgetWrapper wallpaperPlacement="left">
+      <WidgetWrapper>
         <div className="aside-bar__wrapper">
           {viewPort.width >= ViewPortWidthType.Tablet && <Logo showPointer={false} />}
           <Radio.Group value={asideTab} onChange={changeTab}>

@@ -24,7 +24,7 @@ import {
 import { useNotification, useTypedSelector } from '.'
 import { $socket, $sound, $clg } from 'src/services'
 import { RefsContext } from 'src/providers'
-import { ClientNotificationMessage, Sounds } from 'src/@enums'
+import { ClientNotificationMessage } from 'src/@types'
 
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
   const payload: EventCallUser = {
@@ -53,8 +53,8 @@ const emitUpdateSignal = (signal: SignalData) => {
 }
 
 export const useCall = () => {
-  const soundConnection = useRef<Howl>($sound(Sounds.Connection, true))
-  const soundCalling = useRef<Howl>($sound(Sounds.Ring, true))
+  const soundConnection = useRef<Howl>($sound('connection', true))
+  const soundCalling = useRef<Howl>($sound('ring', true))
   const { settings } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
   const { interlocutorVideoDom, selfVideoDom } = useContext(RefsContext)

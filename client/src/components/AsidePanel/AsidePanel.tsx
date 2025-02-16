@@ -15,7 +15,7 @@ export const AsidePanel = () => {
 
   return (
     <div className="aside-panel">
-      <WidgetWrapper wallpaperPlacement="aside">
+      <WidgetWrapper>
         <div className="aside-panel__content">{TabComponents[asideTab]}</div>
       </WidgetWrapper>
     </div>

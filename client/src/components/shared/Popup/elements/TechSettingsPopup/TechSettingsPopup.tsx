@@ -1,7 +1,7 @@
 import { Select } from 'antd'
 import { useState, useEffect, useRef } from 'react'
+import { ClientNotificationMessage } from 'src/@types'
 import { UIButton } from 'src/components'
-import { ClientNotificationMessage, Sounds } from 'src/@enums'
 import { useNotification, useTypedSelector } from 'src/hooks'
 import { $sound } from 'src/services'
 
@@ -125,7 +125,7 @@ export const TechSettingsPopup = () => {
     }
   }
 
-  const outputTestAudioSample = $sound(Sounds.MessageDelivered)
+  const outputTestAudioSample = $sound('message-delivered')
   const toggleAudioOutput = () => {
     updateAvailableDevices()
     outputTestAudioSample.stop()

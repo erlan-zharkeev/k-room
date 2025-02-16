@@ -16,7 +16,7 @@ export const $socket = io(`${initConnectionPath}/`, {
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,
   reconnectionAttempts: VITE_MAX_RECONNECT_ATTEMPTS,
-  auth: { token: Cookies.get('access-token'), refreshToken: Cookies.get('refresh-token') }
+  auth: { token: Cookies.get('jwt'), refreshToken: Cookies.get('jwt-refresh') }
 })
 
 export const socketReconnect = async (dispatch: AppDispatch) => {
@@ -25,7 +25,7 @@ export const socketReconnect = async (dispatch: AppDispatch) => {
   } catch (e) {
     apiErrorInterceptor(e)
   }
-  $socket.auth = { token: Cookies.get('access-token') }
+  $socket.auth = { token: Cookies.get('jwt') }
   $socket.connect()
   $socket.emit<SocketActions>('initialize')
   dispatch(setReconnectingStatus(false))

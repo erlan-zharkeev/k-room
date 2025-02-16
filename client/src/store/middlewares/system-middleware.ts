@@ -6,7 +6,6 @@ import { MiddlewareAPI, AnyAction } from '@reduxjs/toolkit'
 import { Dispatch } from 'react'
 import { LogoImage } from 'src/assets'
 import { UseNotification } from 'src/hooks/use-notification'
-import { Sounds } from 'src/@enums'
 
 export const SystemMiddleware =
   (store: MiddlewareAPI<AppDispatch, any>) => (next: Dispatch<AnyAction>) => (action: AnyAction) => {
@@ -28,7 +27,7 @@ export const SystemMiddleware =
           const room = rooms.find((room) => room.id === roomId)
           const icon = room && room.avatarPath ? room.avatarPath : LogoImage
           new Notification(message.authorName, { body: message.body, icon })
-          if (soundOn && allowAudioContext) $sound(Sounds.MessageDelivered).play()
+          if (soundOn && allowAudioContext) $sound('message-delivered').play()
         }
         break
       default:
