@@ -1,6 +1,5 @@
 import { Status } from '../../../types'
-import { SharpSettingsKey } from '../@enums'
-import { SharpConfig } from './sharp'
+import { SharpConfig, SharpSettingsKey } from './sharp'
 import { SystemMessage } from './system-message'
 
 export interface ServerConstants {

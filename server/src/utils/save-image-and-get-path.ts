@@ -4,11 +4,11 @@ import { getPathToImg } from './get-path-to-img'
 import { getRequestStringToImg } from './get-request-string-to-img'
 import { throwErrorViaSocket } from './throw-error-via-socket'
 import { serverConstants } from '../server-constants'
-import { SharpSettingsKey } from '../@enums'
+import { SharpSettingsKey } from '../@types'
 
 export const saveImageAndGetPath = async (
   buffer: ArrayBuffer | undefined | Buffer,
-  type = SharpSettingsKey.CommonCompressed,
+  type: SharpSettingsKey = 'common-uncompressed',
   authorId: string
 ): Promise<string> => {
   if (!buffer) return ''

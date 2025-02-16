@@ -5,3 +5,5 @@ export interface SharpConfig {
     y: number | null
   }
 }
+
+export type SharpSettingsKey = 'avatar' | 'common-compressed' | 'common-uncompressed'

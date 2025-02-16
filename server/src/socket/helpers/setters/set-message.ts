@@ -1,16 +1,20 @@
 import { ChatRoomModel, MessageModel } from '../../../models'
 import { io } from '../../../server'
-import { DBChatRoom, SocketActions, ImageObject, Message, EventMessageDelivered } from '../../../@types'
+import {
+  DBChatRoom,
+  SocketActions,
+  ImageObject,
+  Message,
+  EventMessageDelivered,
+  SharpSettingsKey
+} from '../../../@types'
 import { saveImageAndGetPath } from '../../../utils'
 import { getUserById } from '../getters'
-import { SharpSettingsKey } from '../../../@enums'
 
 export const setMessage = async ({ roomId, message }: { roomId: string; message: Message }) => {
   let images: ImageObject[] = []
   if (message.images) {
-    const compressionType = message.imageCompression
-      ? SharpSettingsKey.CommonCompressed
-      : SharpSettingsKey.CommonUncompressed
+    const compressionType: SharpSettingsKey = message.imageCompression ? 'common-compressed' : 'common-uncompressed'
     const filesPromises = message.images?.map(async (image) => {
       return await saveImageAndGetPath(image.fileBuffer, compressionType, message.authorId)
     })
