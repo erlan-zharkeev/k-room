@@ -6,7 +6,7 @@ import { getUsersByHasContactId, getSocketsByUserIds } from '../socket'
 import { Status, SocketActions, EventChangeContactsData } from '../@types'
 import { getPathToImg, saveImageAndGetPath, throwError } from '../utils'
 import { updateTokens } from '../services'
-import { ServerNotificationMessage, SharpSettingsKey } from '../@enums'
+import { ServerNotificationMessage } from '../@enums'
 
 const bcrypt = require('bcryptjs')
 
@@ -20,7 +20,7 @@ class UserController {
       const isImageExist = fs.existsSync(oldPathFilename)
       const isFileStatic = oldPathFilename.includes('static')
       if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
-      const avatarPath = await saveImageAndGetPath(req.file?.buffer, SharpSettingsKey.Avatar, userId)
+      const avatarPath = await saveImageAndGetPath(req.file?.buffer, 'avatar', userId)
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate(
         { _id: userId },

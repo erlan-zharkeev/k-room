@@ -12,14 +12,13 @@ import {
 } from '../../@types'
 import { saveImageAndGetPath, getPathToImg } from '../../utils'
 import { setRoomToUsers, emitRoomsByUserId, getUserById, getSocketsByUserIds } from '../helpers'
-import { SharpSettingsKey } from '../../@enums'
 
 export const chatRoomSlice = (socket: SocketInstanceType) => {
   //  !!!!!! TODO ДОБАВИТЬ ПРОВЕРКУ на создание чата и звонок если юзер не accpeted
   const { userId } = socket.data
   socket.on<SocketActions>('create-room', async ({ users, multiple, avatarFile, chatName = '' }: EventCreateRoom) => {
     let avatarPath = ''
-    if (avatarFile) avatarPath = await saveImageAndGetPath(avatarFile.buffer, SharpSettingsKey.Avatar, userId)
+    if (avatarFile) avatarPath = await saveImageAndGetPath(avatarFile.buffer, 'avatar', userId)
     const room = new ChatRoomModel({
       avatarPath,
       multiple,
@@ -53,7 +52,7 @@ export const chatRoomSlice = (socket: SocketInstanceType) => {
     async ({ roomId, chatName, avatarPath, avatarFile }: EventUpdateChatRoom) => {
       const isImageExist = fs.existsSync(avatarPath ?? '')
       if (isImageExist) fs.unlinkSync(getPathToImg(avatarPath))
-      const updatedAvatar = await saveImageAndGetPath(avatarFile?.buffer, SharpSettingsKey.Avatar, userId)
+      const updatedAvatar = await saveImageAndGetPath(avatarFile?.buffer, 'avatar', userId)
       const room = (await ChatRoomModel.findOneAndUpdate(
         { _id: roomId },
         { avatar: updatedAvatar, chatName }
