@@ -13,6 +13,22 @@ export default defineConfig(({ mode }) => {
     define: {
       VITE_FIREBASE_API_KEY
     },
+    // vite: {
+    //   css: {
+    //     preprocessorOptions: {
+    //       scss: {
+    //         additionalData: '@use "~/styles/main.scss" as *;'
+    //       }
+    //     }
+    //   }
+    // },
+    // css: {
+    //   preprocessorOptions: {
+    //     scss: {
+    //       additionalData: `@use './src/styles/main.scss' as *;`
+    //     }
+    //   }
+    // },
     plugins: [
       nodePolyfills(),
       react(),
