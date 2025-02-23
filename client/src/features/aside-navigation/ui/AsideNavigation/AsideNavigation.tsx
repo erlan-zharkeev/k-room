@@ -1,4 +1,3 @@
-import './style.scss'
 import { Radio } from 'antd'
 import { SettingsButton, useSettings } from 'src/entities/settings'
 import { AdminPanelButton } from 'src/entities/user'
