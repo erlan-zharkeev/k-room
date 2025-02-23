@@ -27,7 +27,7 @@ export interface DBCall {
   startedAt: number;
   finishedAt: number;
   authorId: string;
-  interlocutors: Array<string>;
+  interlocutors: string[];
   answered: boolean;
   video: boolean;
 }

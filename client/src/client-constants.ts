@@ -1,12 +1,4 @@
 export const clientConstants = {
-  blockNativeContextMenu: true,
-  errorNotificationDuration: 5,
-  commonTimeoutDuration: 1500,
-  infoItemMarkAsReadDuration: 1500,
-  maxImageWeightMb: 2,
-  maxQuantityBindImages: 4,
-  maxGroupChatMembersQuantity: 5,
-  imageResolutions: ['image/png', 'image/jpeg', 'image/jpg'],
   emojis: [
     {
       key: 'xd',

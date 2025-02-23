@@ -1,0 +1,41 @@
+@use '~/global/index' as *;
+
+.admin-panel-content {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 32px;
+  overflow: hidden;
+  @include nm-outset-element;
+
+  .admin-panel-content__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .admin-panel-content__header-elements {
+    display: flex;
+    margin-top: 8px;
+  }
+
+  .admin-panel-content__header-element {
+    margin-right: 8px;
+    text-transform: uppercase;
+  }
+
+  .admin-panel-content__body {
+    margin-top: 16px;
+  }
+
+  .admin-panel-content__actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .admin-panel-content__data {
+    overflow: auto;
+  }
+}

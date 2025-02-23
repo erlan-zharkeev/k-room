@@ -1,0 +1,14 @@
+.react-draggable {
+  z-index: 4;
+}
+
+.draggable-resizable-modal {
+  z-index: 4;
+  opacity: 1;
+  transition: opacity 0.1s linear;
+
+  &--collapse {
+    opacity: 0;
+    transition: opacity 0.1s linear;
+  }
+}

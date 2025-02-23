@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { UserModel } from '../models'
-import { Status } from '../@types'
+import { ServerNotificationMessage, Status } from '../@types'
 import { throwError } from '../utils'
-import { ServerNotificationMessage } from '../@enums'
 
 export const codesRequestValidator = async (req: Request, res: Response, next: NextFunction) => {
   try {

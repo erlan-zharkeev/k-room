@@ -1,7 +1,6 @@
 import { io } from '../server'
 import { getUserById } from '../socket'
-import { EventErrorMessage, SocketActions } from '../@types'
-import { ServerNotificationMessage } from '../@enums'
+import { EventErrorMessage, ServerNotificationMessage, SocketActions } from '../@types'
 
 export const throwErrorViaSocket = async (userId: string) => {
   const userData = await getUserById(userId)

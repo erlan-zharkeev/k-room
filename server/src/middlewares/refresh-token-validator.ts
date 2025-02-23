@@ -2,9 +2,8 @@ import { NextFunction, Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { UserModel } from '../models'
 import { jwt, updateTokens } from '../services'
-import { Status, JWTDecoded } from '../@types'
+import { Status, JWTDecoded, ServerNotificationMessage } from '../@types'
 import { throwError } from '../utils'
-import { ServerNotificationMessage } from '../@enums'
 
 const haveNotRightsError = (res: Response) =>
   throwError(Status.NotAuth, res, ServerNotificationMessage.NonAuthorized, true)

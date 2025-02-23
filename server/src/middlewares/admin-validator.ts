@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { jwt } from '../services'
-import { Status, JWTDecoded } from '../@types'
+import { Status, JWTDecoded, ServerNotificationMessage } from '../@types'
 import { throwError } from '../utils'
 import { UserModel } from '../models'
-import { ServerNotificationMessage } from '../@enums'
 
 export const adminRoleValidator = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.cookies['jwt']

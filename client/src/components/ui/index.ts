@@ -1,7 +1,0 @@
-export * from './UIAvatar/UIAvatar'
-export * from './UIAvatarLoader/UIAvatarLoader'
-export * from './UIButton/UIButton'
-export * from './UIImageLoader/UIImageLoader'
-export * from './UIIcon/UIIcon'
-export * from './UIInput/UIInput'
-export * from './UISwitch/UISwitch'

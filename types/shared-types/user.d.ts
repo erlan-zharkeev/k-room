@@ -32,8 +32,8 @@ export interface KRoomUser extends UserCredential {
     chatRooms: ChatRooms;
     role: UserRole;
     lastSeen?: string;
-    contacts?: Array<KRoomUser>;
-    infoItems?: Array<InfoItem>;
+    contacts?: KRoomUser[];
+    infoItems?: InfoItem[];
 }
 export interface FirebaseUser {
     firebaseUid: string;
@@ -49,7 +49,7 @@ export interface IUserSchema extends Omit<KRoomUser, "contacts"> {
     refreshToken: string;
     settings: UserSettings;
     codes: Codes;
-    infoItems: Array<InfoItem>;
+    infoItems: InfoItem[];
     contacts: DBContactMap;
     _id: string;
 }

@@ -4,9 +4,8 @@ import { initUserSettings, initUserCodes } from '../fixtures'
 import { authValidator } from '../middlewares'
 import { UserModel } from '../models'
 import { updateTokens, getInfo, sendEmailConfirmationLink } from '../services'
-import { Status, UserCredential } from '../@types'
+import { ServerNotificationMessage, Status, UserCredential } from '../@types'
 import { throwError } from '../utils'
-import { ServerNotificationMessage } from '../@enums'
 
 const bcrypt = require('bcryptjs')
 

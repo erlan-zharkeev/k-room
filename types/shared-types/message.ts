@@ -31,7 +31,7 @@ export interface RepliedMessage {
   authorName: string;
   authorId: string;
   body: string;
-  images?: Array<ImageObject>;
+  images?: ImageObject[];
   forward?: boolean;
 }
 
@@ -44,7 +44,7 @@ export interface Message {
   authorName: string;
   body: string;
   createdAt?: string;
-  reactions?: Array<Reaction>;
+  reactions?: Reaction[];
   images?: ImageObject[];
   imageCompression?: boolean;
   repliedMessage?: RepliedMessage | null;

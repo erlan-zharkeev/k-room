@@ -31,6 +31,7 @@ module.exports = {
     '@typescript-eslint/prefer-optional-chain': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/restrict-plus-operands': 'off',
+    '@typescript-eslint/no-unused-vars': ['warn'],
     'react/no-unescaped-entities': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/jsx-key': 'off',

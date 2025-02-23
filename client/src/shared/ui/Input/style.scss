@@ -1,0 +1,78 @@
+@use '~/global/index' as *;
+
+.input {
+  width: 100%;
+  height: 30px;
+  max-height: 30px;
+
+  &--small {
+    input {
+      margin-top: 2px;
+    }
+  }
+
+  &--large {
+    height: 36px;
+    max-height: 36px;
+
+    .ant-input {
+      height: 36px;
+      max-height: 36px;
+    }
+  }
+
+  .ant-input[disabled] {
+    opacity: 0.4;
+  }
+
+  .ant-input {
+    transition: background 0s;
+
+    @include nm-inset-element;
+
+    &-lg {
+      &::placeholder {
+        font-size: 14px;
+      }
+    }
+  }
+
+  input {
+    color: var(--secondary-text) !important;
+  }
+
+  .ant-input-password,
+  .ant-input-affix-wrapper {
+    &.ant-input-affix-wrapper-lg {
+      padding: 0 !important;
+
+      .ant-input-suffix {
+        padding-right: 8px;
+        padding-left: 2px;
+      }
+    }
+    @include nm-inset-element;
+
+    input {
+      padding: 6px 11px !important;
+      @include nm-inset-shadow-compensation;
+    }
+
+    .ant-input-password-icon {
+      color: var(--secondary-text) !important;
+    }
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+    @include nm-inset-shadow-compensation;
+  }
+
+  .ant-input-affix-wrapper > .ant-input:focus {
+    @include nm-inset-shadow-compensation;
+  }
+}

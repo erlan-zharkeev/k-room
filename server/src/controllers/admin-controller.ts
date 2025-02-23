@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 import { CallModel, ChatRoomModel, MessageModel, UserModel } from '../models'
-import { Status } from '../@types'
+import { ServerNotificationMessage, Status } from '../@types'
 import { throwError } from '../utils'
 import { loadFixtures } from '../fixtures'
-import { ServerNotificationMessage } from '../@enums'
 
 class AdminController {
   async getAppData(_: Request, res: Response) {

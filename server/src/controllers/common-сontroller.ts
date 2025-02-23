@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
 import { UserModel } from '../models'
-import { Status } from '../@types'
+import { ServerNotificationMessage, Status } from '../@types'
 import { getPathToImg, throwError } from '../utils'
-import { ServerNotificationMessage } from '../@enums'
 
 const fs = require('fs')
 

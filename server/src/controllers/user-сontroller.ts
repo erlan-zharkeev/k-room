@@ -3,10 +3,9 @@ import fs from 'fs'
 import { UserModel } from '../models'
 import { io } from '../server'
 import { getUsersByHasContactId, getSocketsByUserIds } from '../socket'
-import { Status, SocketActions, EventChangeContactsData } from '../@types'
+import { Status, SocketActions, EventChangeContactsData, ServerNotificationMessage } from '../@types'
 import { getPathToImg, saveImageAndGetPath, throwError } from '../utils'
 import { updateTokens } from '../services'
-import { ServerNotificationMessage } from '../@enums'
 
 const bcrypt = require('bcryptjs')
 

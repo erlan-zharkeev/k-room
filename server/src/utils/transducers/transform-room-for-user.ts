@@ -1,22 +1,11 @@
-import { serverConstants } from '../../server-constants'
 import { UserModel, MessageModel } from '../../models'
-import { getUserById } from '../../socket'
-import { DBChatRoom, DBMessage, ChatRoom } from '../../@types'
+import { DBMessage, ChatRoom } from '../../@types'
 import { transformMessageForUsers } from './transform-message-for-users'
-import { SystemMessages } from '../../@enums'
+import { ChatRoomSchemaType } from '../../models/chat-room.model'
 
-export const transformRoomForUser = async ({ userId, room }: { userId: string; room: DBChatRoom }) => {
-  let { chatName, users, avatarPath, multiple, authorId, _id, messages } = room
-  let hasOnline = false
-
-  if (!multiple) {
-    const interlocutorId = users?.find((id) => id !== userId) ?? ''
-    const userData = await getUserById(interlocutorId)
-    chatName = userData?.username ?? userData?.id
-    avatarPath = userData?.avatarPath
-    hasOnline = Boolean(userData?.online)
-  }
-
+export const transformRoomForUser = async ({ userId, room }: { userId: string; room: ChatRoomSchemaType }) => {
+  let { chatName, users, avatarPath, multiple, authorId, messages, _id } = room
+  // Remove self id
   users?.splice(users?.indexOf(userId), 1)
   const userList = await UserModel.find({ _id: { $in: users } })
   const shortUserList = userList.map((user) => {
@@ -26,43 +15,16 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
       avatarPath: user.avatarPath
     }
   })
-
-  const setInviteMessage = messages.length < 1
-  if (setInviteMessage) {
-    const systemMessagesMap: Record<SystemMessages, string> = {} as Record<SystemMessages, string>
-
-    for (const message of serverConstants.messages.system) {
-      const name = message.name
-      systemMessagesMap[name] = message.id
-    }
-
-    const isUserAuthor = room.authorId === userId
-
-    let systemMessageId = isUserAuthor ? systemMessagesMap['author-created-chat'] : systemMessagesMap['invite-message']
-    if (multiple) {
-      systemMessageId = isUserAuthor
-        ? systemMessagesMap['author-created-group-chat']
-        : systemMessagesMap['invite-group-chat']
-    }
-
-    const status = isUserAuthor ? 'none' : 'delivered'
-    await MessageModel.updateOne({ _id: systemMessageId }, { $set: { usersMetaData: { id: userId, status } } })
-
-    messages?.push(systemMessageId)
-  }
-
   const fullBodyMessages: Array<DBMessage> = await MessageModel.find({ _id: { $in: messages } })
-
   const transformedMessages = fullBodyMessages.map((message) => transformMessageForUsers(message, userId))
   const result: ChatRoom = {
     id: String(_id),
     authorId,
     chatName,
     avatarPath,
-    hasOnline,
     users: shortUserList,
     messages: transformedMessages,
-    multiple
+    multiple: multiple ?? false
   }
   return result
 }

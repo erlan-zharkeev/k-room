@@ -28,7 +28,7 @@ export interface EventMessageDelivered {
   message: Message;
 }
 
-export type EventGetRooms = Array<ChatRoom>;
+export type EventGetRooms = ChatRoom[];
 
 export interface EventStatusContact {
   interlocutorId: string;
@@ -38,7 +38,7 @@ export interface EventStatusContact {
 export type EventChangeContactsData = UserShort;
 
 export interface EventGetContacts {
-  contacts: Array<Contact>;
+  contacts: Contact[];
 }
 export type EventCallUpdated = Call;
 export type EventCallsUpdated = Call[];
@@ -56,16 +56,13 @@ export interface EventUpdateUserSettings {
   type: keyof UserSettings;
   value: string | boolean;
 }
+
 export interface EventCreateRoom {
-  users: Array<string>;
-  multiple: boolean;
-  avatarFile?: {
-    buffer: ArrayBuffer;
-  };
-  chatName?: string;
+  contactId: string;
 }
+
 export interface EventUpdateChatRoom {
-  users: Array<string>;
+  users: string[];
   roomId: string;
   chatName: string;
   avatarPath: string;
@@ -77,7 +74,7 @@ export interface EventUpdateChatRoom {
 }
 export interface EventUserTyping {
   authorName: string;
-  usersTo: Array<UserShort>;
+  usersTo: UserShort[];
   status: boolean;
 }
 export interface EventGetUserTypingStatus {
@@ -178,7 +175,8 @@ export type SocketActions =
   | "initialize"
   | "disconnect"
   | "get-rooms"
-  | "create-room"
+  | "create-personal-room"
+  | "new-room-added"
   | "send-message"
   | "message-delivered"
   | "room-created"

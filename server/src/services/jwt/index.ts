@@ -1,9 +1,8 @@
 import { Response } from 'express'
 import { ENV } from '../../ENV'
 import { UserModel } from '../../models'
-import { AuthTokens, Status } from '../../@types'
+import { AuthTokens, ServerNotificationMessage, Status } from '../../@types'
 import { throwError } from '../../utils'
-import { ServerNotificationMessage } from '../../@enums'
 
 const clc = require('cli-color')
 

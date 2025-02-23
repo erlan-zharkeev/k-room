@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { jwt } from '../services'
-import { Status, JWTDecoded } from '../@types'
+import { Status, JWTDecoded, ServerNotificationMessage } from '../@types'
 import { throwError } from '../utils'
 import { refreshTokenValidator } from './refresh-token-validator'
-import { ServerNotificationMessage } from '../@enums'
 
 export const accessTokenValidator = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.cookies['jwt']

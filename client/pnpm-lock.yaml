@@ -55,7 +55,7 @@ importers:
         version: 8.3.2
       vite-plugin-pwa:
         specifier: ^0.21.1
-        version: 0.21.1(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))(workbox-build@6.6.0(@types/babel__core@7.20.5))(workbox-window@6.6.0)
+        version: 0.21.1(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))(workbox-build@6.6.0(@types/babel__core@7.20.5))(workbox-window@6.6.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.19.1
@@ -116,10 +116,10 @@ importers:
         version: 5.62.0(eslint@8.57.1)(typescript@5.7.3)
       '@vitejs/plugin-react':
         specifier: ^4.0.0
-        version: 4.3.4(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))
+        version: 4.3.4(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))
       '@vitejs/plugin-react-swc':
         specifier: ^3.0.0
-        version: 3.8.0(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))
+        version: 3.8.0(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))
       babel-loader:
         specifier: ^8.2.5
         version: 8.4.1(@babel/core@7.26.8)(webpack@5.97.1)
@@ -185,16 +185,16 @@ importers:
         version: 6.29.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-scripts:
         specifier: ^5.0.1
-        version: 5.0.1(@babel/plugin-syntax-flow@7.26.0(@babel/core@7.26.8))(@babel/plugin-transform-react-jsx@7.25.9(@babel/core@7.26.8))(@types/babel__core@7.20.5)(eslint@8.57.1)(react@18.2.0)(sass@1.84.0)(type-fest@0.21.3)(typescript@5.7.3)
+        version: 5.0.1(@babel/plugin-syntax-flow@7.26.0(@babel/core@7.26.8))(@babel/plugin-transform-react-jsx@7.25.9(@babel/core@7.26.8))(@types/babel__core@7.20.5)(eslint@8.57.1)(react@18.2.0)(sass@1.85.0)(type-fest@0.21.3)(typescript@5.7.3)
       redux-persist:
         specifier: ^6.0.0
         version: 6.0.0(react@18.2.0)(redux@4.2.1)
       sass:
-        specifier: ^1.54.9
-        version: 1.84.0
+        specifier: ^1.85.0
+        version: 1.85.0
       sass-loader:
         specifier: ^13.0.2
-        version: 13.3.3(sass@1.84.0)(webpack@5.97.1)
+        version: 13.3.3(sass@1.85.0)(webpack@5.97.1)
       stylelint:
         specifier: 14.5.1
         version: 14.5.1
@@ -218,10 +218,10 @@ importers:
         version: 1.0.0(react@18.2.0)
       vite:
         specifier: ^4.3.8
-        version: 4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1)
+        version: 4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1)
       vite-plugin-node-polyfills:
         specifier: ^0.22.0
-        version: 0.22.0(rollup@2.79.2)(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))
+        version: 0.22.0(rollup@2.79.2)(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))
 
 packages:
 
@@ -7141,8 +7141,8 @@ packages:
       sass-embedded:
         optional: true
 
-  sass@1.84.0:
-    resolution: {integrity: sha512-XDAbhEPJRxi7H0SxrnOpiXFQoUJHwkR2u3Zc4el+fK/Tt5Hpzw5kkQ59qVDfvdaUq6gCrEZIbySFBM2T9DNKHg==}
+  sass@1.85.0:
+    resolution: {integrity: sha512-3ToiC1xZ1Y8aU7+CkgCI/tqyuPXEmYGJXO7H4uqp0xkLXUqp88rQQ4j1HmP37xSJLbCJPaIiv+cT1y+grssrww==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -10841,21 +10841,21 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitejs/plugin-react-swc@3.8.0(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))':
+  '@vitejs/plugin-react-swc@3.8.0(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))':
     dependencies:
       '@swc/core': 1.10.15
-      vite: 4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1)
+      vite: 4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitejs/plugin-react@4.3.4(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))':
+  '@vitejs/plugin-react@4.3.4(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))':
     dependencies:
       '@babel/core': 7.26.8
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.8)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.8)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1)
+      vite: 4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -15321,7 +15321,7 @@ snapshots:
     dependencies:
       htmlparser2: 3.10.1
       postcss: 7.0.39
-      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-markdown@0.36.0(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-scss@2.1.1)(postcss@7.0.39)
+      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4)(postcss-less@3.1.4)(postcss-markdown@0.36.0)(postcss-scss@2.1.1)(postcss@7.0.39)
 
   postcss-image-set-function@4.0.7(postcss@8.5.1):
     dependencies:
@@ -15348,7 +15348,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.8
       postcss: 7.0.39
-      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-markdown@0.36.0(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-scss@2.1.1)(postcss@7.0.39)
+      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4)(postcss-less@3.1.4)(postcss-markdown@0.36.0)(postcss-scss@2.1.1)(postcss@7.0.39)
     transitivePeerDependencies:
       - supports-color
 
@@ -15384,7 +15384,7 @@ snapshots:
   postcss-markdown@0.36.0(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39):
     dependencies:
       postcss: 7.0.39
-      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-markdown@0.36.0(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-scss@2.1.1)(postcss@7.0.39)
+      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4)(postcss-less@3.1.4)(postcss-markdown@0.36.0)(postcss-scss@2.1.1)(postcss@7.0.39)
       remark: 10.0.1
       unist-util-find-all-after: 1.0.5
 
@@ -15681,7 +15681,7 @@ snapshots:
       postcss-value-parser: 4.2.0
       svgo: 2.8.0
 
-  postcss-syntax@0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-markdown@0.36.0(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-scss@2.1.1)(postcss@7.0.39):
+  postcss-syntax@0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4)(postcss-less@3.1.4)(postcss-markdown@0.36.0)(postcss-scss@2.1.1)(postcss@7.0.39):
     dependencies:
       postcss: 7.0.39
     optionalDependencies:
@@ -16305,7 +16305,7 @@ snapshots:
       '@remix-run/router': 1.22.0
       react: 18.2.0
 
-  react-scripts@5.0.1(@babel/plugin-syntax-flow@7.26.0(@babel/core@7.26.8))(@babel/plugin-transform-react-jsx@7.25.9(@babel/core@7.26.8))(@types/babel__core@7.20.5)(eslint@8.57.1)(react@18.2.0)(sass@1.84.0)(type-fest@0.21.3)(typescript@5.7.3):
+  react-scripts@5.0.1(@babel/plugin-syntax-flow@7.26.0(@babel/core@7.26.8))(@babel/plugin-transform-react-jsx@7.25.9(@babel/core@7.26.8))(@types/babel__core@7.20.5)(eslint@8.57.1)(react@18.2.0)(sass@1.85.0)(type-fest@0.21.3)(typescript@5.7.3):
     dependencies:
       '@babel/core': 7.26.8
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.15(react-refresh@0.11.0)(type-fest@0.21.3)(webpack-dev-server@4.15.2(webpack@5.97.1))(webpack@5.97.1)
@@ -16345,7 +16345,7 @@ snapshots:
       react-refresh: 0.11.0
       resolve: 1.22.10
       resolve-url-loader: 4.0.0
-      sass-loader: 12.6.0(sass@1.84.0)(webpack@5.97.1)
+      sass-loader: 12.6.0(sass@1.85.0)(webpack@5.97.1)
       semver: 7.7.1
       source-map-loader: 3.0.2(webpack@5.97.1)
       style-loader: 3.3.4(webpack@5.97.1)
@@ -16703,22 +16703,22 @@ snapshots:
 
   sanitize.css@13.0.0: {}
 
-  sass-loader@12.6.0(sass@1.84.0)(webpack@5.97.1):
+  sass-loader@12.6.0(sass@1.85.0)(webpack@5.97.1):
     dependencies:
       klona: 2.0.6
       neo-async: 2.6.2
       webpack: 5.97.1
     optionalDependencies:
-      sass: 1.84.0
+      sass: 1.85.0
 
-  sass-loader@13.3.3(sass@1.84.0)(webpack@5.97.1):
+  sass-loader@13.3.3(sass@1.85.0)(webpack@5.97.1):
     dependencies:
       neo-async: 2.6.2
       webpack: 5.97.1
     optionalDependencies:
-      sass: 1.84.0
+      sass: 1.85.0
 
-  sass@1.84.0:
+  sass@1.85.0:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.0.3
@@ -17410,7 +17410,7 @@ snapshots:
       postcss-sass: 0.3.5
       postcss-scss: 2.1.1
       postcss-selector-parser: 3.1.2
-      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-markdown@0.36.0(postcss-syntax@0.36.2(postcss@8.5.1))(postcss@7.0.39))(postcss-scss@2.1.1)(postcss@7.0.39)
+      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-jsx@0.36.4)(postcss-less@3.1.4)(postcss-markdown@0.36.0)(postcss-scss@2.1.1)(postcss@7.0.39)
       postcss-value-parser: 3.3.1
       resolve-from: 4.0.0
       signal-exit: 3.0.7
@@ -17929,26 +17929,26 @@ snapshots:
       unist-util-stringify-position: 1.1.2
       vfile-message: 1.1.1
 
-  vite-plugin-node-polyfills@0.22.0(rollup@2.79.2)(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1)):
+  vite-plugin-node-polyfills@0.22.0(rollup@2.79.2)(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@2.79.2)
       node-stdlib-browser: 1.3.1
-      vite: 4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1)
+      vite: 4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1)
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-pwa@0.21.1(vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1))(workbox-build@6.6.0(@types/babel__core@7.20.5))(workbox-window@6.6.0):
+  vite-plugin-pwa@0.21.1(vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1))(workbox-build@6.6.0(@types/babel__core@7.20.5))(workbox-window@6.6.0):
     dependencies:
       debug: 4.4.0
       pretty-bytes: 6.1.1
       tinyglobby: 0.2.10
-      vite: 4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1)
+      vite: 4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1)
       workbox-build: 6.6.0(@types/babel__core@7.20.5)
       workbox-window: 6.6.0
     transitivePeerDependencies:
       - supports-color
 
-  vite@4.5.9(@types/node@16.18.126)(sass@1.84.0)(sugarss@2.0.0)(terser@5.38.1):
+  vite@4.5.9(@types/node@16.18.126)(sass@1.85.0)(sugarss@2.0.0)(terser@5.38.1):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.5.1
@@ -17956,7 +17956,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 16.18.126
       fsevents: 2.3.3
-      sass: 1.84.0
+      sass: 1.85.0
       sugarss: 2.0.0
       terser: 5.38.1
 

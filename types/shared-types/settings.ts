@@ -1,17 +1,14 @@
 export type Theme = "dark" | "light";
-
 export type AsideBarButtonName =
   | "admin-panel"
   | "contacts"
   | "chat-list"
   | "calls"
-  | "settings"
-  | "info";
-
+  | "settings";
+export type SelectedContentElement = "info" | AsideBarButtonName;
 export type AdminPanelModelTab = "users" | "calls" | "chat-rooms" | "messages";
-
 export interface UserSettings {
-  asideTab: AsideBarButtonName;
+  selectedContentElement: SelectedContentElement;
   selectedAdminPanelModelTab: AdminPanelModelTab;
   selectedChatRoomId: string;
   ableToShowNotification: boolean;

@@ -11,8 +11,7 @@ import {
   EventCallStartedAt,
   EventCallEnded
 } from '../../@types'
-import { emitCallDataToInterlocutors } from '../../utils'
-import { getUserById } from '../helpers'
+import { emitCallDataToInterlocutors, getUserById } from '../helpers'
 
 export const callSlice = (socket: SocketInstanceType) => {
   socket.on<SocketActions>('mark-call-as-video', (payload: EventMarkCallAsVideo) => {

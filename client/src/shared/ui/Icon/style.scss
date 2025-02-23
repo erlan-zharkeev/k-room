@@ -1,0 +1,91 @@
+@mixin icon-size-compensation($font-size) {
+  svg {
+    font-size: $font-size !important;
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+
+  &--accent {
+    color: var(--accent);
+  }
+
+  &--default {
+    color: var(--secondary-text);
+  }
+
+  &--large {
+    @include icon-size-compensation(7rem);
+  }
+
+  &--extra-large {
+    @include icon-size-compensation(10rem);
+  }
+
+  &--success {
+    svg {
+      color: var(--success);
+    }
+  }
+
+  &--warn {
+    svg {
+      color: var(--warn);
+    }
+  }
+
+  &--error {
+    svg {
+      color: var(--error);
+    }
+  }
+
+  &--loader {
+    font-size: 1.4rem;
+    animation: rotation 1s infinite linear;
+  }
+
+  &--white {
+    svg {
+      color: var(--white);
+    }
+  }
+
+  &--call {
+    @include icon-size-compensation(1.1rem);
+  }
+
+  &--mic {
+    @include icon-size-compensation(1.1rem);
+  }
+
+  &--mic-muted {
+    @include icon-size-compensation(1.1rem);
+  }
+
+  &--dash {
+    @include icon-size-compensation(1rem);
+  }
+
+  &--expand {
+    @include icon-size-compensation(1rem);
+  }
+
+  &--search {
+    @include icon-size-compensation(1rem);
+  }
+}

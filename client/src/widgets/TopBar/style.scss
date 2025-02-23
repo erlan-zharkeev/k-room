@@ -1,0 +1,29 @@
+@use '~/global/index' as *;
+
+.top-bar {
+  z-index: 2;
+  position: relative;
+  height: $bar-height;
+  min-height: $bar-height;
+  margin-bottom: 16px;
+  padding: 0 8px;
+  overflow: hidden;
+  @include nm-outset-element;
+
+  .top-bar__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .top-bar__action-btns {
+    display: flex;
+    align-items: center;
+  }
+
+  .widget-wrapper {
+    display: flex;
+    align-items: center;
+  }
+}

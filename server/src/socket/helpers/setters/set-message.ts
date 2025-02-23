@@ -1,13 +1,6 @@
 import { ChatRoomModel, MessageModel } from '../../../models'
 import { io } from '../../../server'
-import {
-  DBChatRoom,
-  SocketActions,
-  ImageObject,
-  Message,
-  EventMessageDelivered,
-  SharpSettingsKey
-} from '../../../@types'
+import { SocketActions, ImageObject, Message, EventMessageDelivered, SharpSettingsKey } from '../../../@types'
 import { saveImageAndGetPath } from '../../../utils'
 import { getUserById } from '../getters'
 
@@ -23,7 +16,7 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
       return { src: value, name: value.split('img=')[1] }
     })
   }
-  const room = (await ChatRoomModel.findOne({ _id: roomId })) as DBChatRoom
+  const room = await ChatRoomModel.findOne({ _id: roomId })
   const messageForDb = {
     reactions: [],
     ...message,

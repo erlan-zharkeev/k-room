@@ -3,9 +3,8 @@ import { Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { UserModel } from '../models'
 import { sendEmailCodePasswordRecovery } from '../services'
-import { Status } from '../@types'
+import { ServerNotificationMessage, Status } from '../@types'
 import { notAccuratePinRandomGenerator, getNextTimeCodeRequest, throwError } from '../utils'
-import { ServerNotificationMessage } from '../@enums'
 
 class CodesController {
   async emailPasswordRecovery(req: Request, res: Response) {

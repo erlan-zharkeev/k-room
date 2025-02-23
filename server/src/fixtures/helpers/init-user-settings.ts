@@ -1,7 +1,7 @@
 import { UserSettings } from '../../@types'
 
 export const initUserSettings: UserSettings = {
-  asideTab: 'contacts',
+  selectedContentElement: 'contacts',
   selectedAdminPanelModelTab: 'users',
   currentInfoId: '1',
   selectedChatRoomId: '',

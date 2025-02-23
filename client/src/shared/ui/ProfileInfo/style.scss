@@ -1,0 +1,11 @@
+.profile-info {
+  display: flex;
+  align-items: center;
+
+  .profile-info__credential {
+    margin-left: 12px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

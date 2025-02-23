@@ -1,0 +1,43 @@
+@use '~/global/index' as *;
+
+.main {
+  position: relative;
+  display: flex;
+
+  $self: &;
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+  }
+
+  &__content {
+    width: 100%;
+  }
+
+  &__body {
+    position: relative;
+    display: flex;
+    height: calc(100% - $bar-height - 16px);
+    @include max-width-768 {
+      height: calc(100% - ($bar-height * 2) - (16px * 2));
+    }
+  }
+
+  &__body--call-minified {
+    height: calc(100% - $bar-height - $call-bar-height - (16px * 2));
+    @include max-width-768 {
+      height: calc(100% - ($bar-height * 2) - ($call-bar-height) - (16px * 3));
+    }
+  }
+
+  &.move-aside {
+    .aside-panel {
+      display: none;
+    }
+
+    .chat-room {
+      margin-left: 0;
+    }
+  }
+}

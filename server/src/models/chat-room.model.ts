@@ -1,22 +1,24 @@
-import { Schema, model } from 'mongoose'
-import { IDBChatRoomSchema } from '../@types'
+import { InferSchemaType, Schema, model, Types } from 'mongoose'
 
-const chatRoomModel = new Schema<IDBChatRoomSchema>({
+const chatRoomSchema = new Schema({
   chatName: {
     type: String,
-    required: false
+    required: false,
+    default: ''
   },
   avatarPath: {
     type: String,
-    required: false
+    required: false,
+    default: ''
+  },
+  multiple: {
+    type: Boolean,
+    required: false,
+    default: false
   },
   authorId: {
     type: String,
     required: true
-  },
-  multiple: {
-    type: Boolean,
-    required: false
   },
   users: {
     type: [String],
@@ -25,9 +27,10 @@ const chatRoomModel = new Schema<IDBChatRoomSchema>({
   },
   messages: {
     type: [String],
-    required: false,
+    required: true,
     default: []
-  },
+  }
 })
 
-export const ChatRoomModel = model('ChatRoom', chatRoomModel)
+export const ChatRoomModel = model('ChatRoom', chatRoomSchema)
+export type ChatRoomSchemaType = InferSchemaType<typeof chatRoomSchema> & { _id: Types.ObjectId }

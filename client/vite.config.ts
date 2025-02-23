@@ -13,22 +13,14 @@ export default defineConfig(({ mode }) => {
     define: {
       VITE_FIREBASE_API_KEY
     },
-    // vite: {
-    //   css: {
-    //     preprocessorOptions: {
-    //       scss: {
-    //         additionalData: '@use "~/styles/main.scss" as *;'
-    //       }
-    //     }
-    //   }
-    // },
-    // css: {
-    //   preprocessorOptions: {
-    //     scss: {
-    //       additionalData: `@use './src/styles/main.scss' as *;`
-    //     }
-    //   }
-    // },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+          silenceDeprecations: ['legacy-js-api']
+        }
+      }
+    },
     plugins: [
       nodePolyfills(),
       react(),
@@ -121,7 +113,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        '~': path.resolve(__dirname, './src/styles'),
+        '~': path.resolve(__dirname, './src/shared/config/styles'),
         src: path.resolve(__dirname, './src'),
         'common-types': path.resolve(__dirname, './../types')
       }

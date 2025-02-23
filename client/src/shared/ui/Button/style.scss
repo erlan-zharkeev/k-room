@@ -1,0 +1,155 @@
+@use '~/global/index' as *;
+
+.button {
+  @mixin btn-style($color) {
+    .ant-btn,
+    .ant-btn:hover,
+    span {
+      color: $color !important;
+      border-color: $color !important;
+    }
+  }
+
+  @mixin btn-bg-style($color) {
+    overflow: hidden;
+    background-color: $color;
+    border-radius: 4px;
+
+    .ant-btn,
+    .ant-btn:hover,
+    span {
+      color: var(--white) !important;
+      border-color: var($color) !important;
+    }
+  }
+
+  &--fill {
+    width: 100%;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  &--accent {
+    @include btn-style(var(--accent));
+  }
+
+  &--success {
+    @include btn-style(var(--success));
+  }
+
+  &--default {
+    @include btn-style(var(--secondary-text));
+  }
+
+  &--error {
+    @include btn-style(var(--error));
+  }
+
+  &--accent-bg {
+    @include btn-bg-style(var(--accent));
+  }
+
+  &--success-bg {
+    @include btn-bg-style(var(--success));
+  }
+
+  &--default-bg {
+    @include btn-bg-style(var(--secondary-text));
+  }
+
+  &--error-bg {
+    @include btn-bg-style(var(--error));
+  }
+
+  &--small {
+    .ant-btn {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      min-height: 20px;
+    }
+  }
+
+  &--hoverless {
+    svg {
+      color: var(--secondary-text) !important;
+    }
+
+    span {
+      color: var(--secondary-text) !important;
+    }
+
+    button:hover {
+      border-color: var(--secondary-text) !important;
+
+      svg {
+        color: var(--secondary-text) !important;
+      }
+
+      span {
+        color: var(--secondary-text) !important;
+      }
+    }
+  }
+
+  &--common-border {
+    button {
+      border-color: var(--accent);
+
+      &:hover {
+        border-color: var(--accent);
+      }
+    }
+  }
+
+  &--borderless {
+    .ant {
+      &-btn {
+        padding: 0 8px;
+        border: none !important;
+      }
+
+      &-radio-button-wrapper {
+        border: none !important;
+      }
+    }
+  }
+
+  .ant-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-text);
+    background-color: transparent;
+    border-color: var(--secondary-text);
+    border-radius: 4px;
+
+    &::before {
+      background: transparent;
+    }
+
+    &:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    &:disabled {
+      color: var(--secondary-text);
+      background-color: transparent !important;
+      border-color: var(--secondary-text);
+      opacity: 0.4;
+
+      &:hover {
+        color: var(--secondary-text);
+        border-color: var(--secondary-text);
+      }
+    }
+
+    .ant-radio-button-wrapper {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
