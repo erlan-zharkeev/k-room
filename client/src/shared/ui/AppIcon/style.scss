@@ -2,16 +2,17 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(359deg);
   }
 }
 
 .app-icon {
-  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text);
 }
 
 .app-icon--large svg {

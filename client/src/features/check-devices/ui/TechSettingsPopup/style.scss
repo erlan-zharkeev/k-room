@@ -44,6 +44,7 @@
     margin: 8px 0;
     overflow: hidden;
     @include nm-inset-shadow;
+
     border-radius: 8px;
     transition: ease-in-out 0.4s height;
 

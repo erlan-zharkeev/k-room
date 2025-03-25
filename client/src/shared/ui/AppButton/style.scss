@@ -6,22 +6,25 @@
   border-radius: 4px;
 
   button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
+    height: var(--medium-ui-height);
     color: var(--text);
     background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border: none;
-    height: var(--medium-ui-height);
   }
+
   button:hover {
     cursor: pointer;
   }
+
   span {
     padding-bottom: 2px;
   }
+
   .app-icon {
     margin: 0 4px;
     padding-bottom: 2px;
@@ -40,6 +43,7 @@
 
 .app-button--borderless {
   border: none;
+
   .app-icon {
     padding-bottom: 0;
   }
@@ -48,6 +52,7 @@
 .app-button--loading {
   border-color: var(--accent);
   @include disabled;
+
   button {
     color: var(--accent);
   }
@@ -59,6 +64,7 @@
 
 .app-button--accent-color {
   border-color: var(--accent);
+
   button,
   span {
     color: var(--accent);

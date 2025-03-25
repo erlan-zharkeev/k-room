@@ -5,6 +5,7 @@ input {
   height: var(--medium-ui-height);
 
   @include nm-inset-element;
+
   color: var(--text) !important; // *important* overwrite browser inline styles
   text-indent: 12px;
 }
