@@ -1,0 +1,86 @@
+@use '~/global/index' as *;
+
+.call-list {
+  &__body {
+    .ant-list-items {
+      padding: 4px;
+    }
+
+    .ant-list-item {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      overflow: hidden;
+
+      &-meta {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  &__item {
+    margin-bottom: 4px;
+    background-color: var(--main-bg);
+    border-radius: 4px;
+    @include nm-inset-shadow;
+
+    &--current {
+      background-color: var(--dark-gray-transparent);
+    }
+  }
+
+  &__type {
+    display: flex;
+  }
+
+  &__called-at {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    p {
+      color: var(--accent);
+      font-size: 10px;
+    }
+  }
+
+  &__additional-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-left: 4px;
+    }
+
+    &--current {
+      color: var(--text);
+    }
+
+    &--incoming,
+    &--outgoing {
+      color: var(--success);
+
+      .icon--phone-call {
+        transform: rotate(90deg);
+      }
+    }
+
+    &--missed,
+    &--not-answered {
+      color: var(--error);
+
+      .icon--phone-call {
+        transform: rotate(135deg);
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+.auth-tabs-layout {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+
+  .auth-tabs-layout__nav {
+    margin-bottom: 12px;
+  }
+
+  .auth-tabs-layout__nav a {
+    margin-right: 16px;
+    padding-bottom: 0.4rem;
+    border: none;
+  }
+
+  .auth-tabs-layout__nav a:hover {
+    color: var(--contrast-text);
+  }
+
+  .auth-tabs-layout__nav a:hover.active {
+    color: var(--accent);
+  }
+
+  .auth-tabs-layout__nav a.active {
+    border: none;
+  }
+}

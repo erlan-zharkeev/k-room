@@ -1,0 +1,66 @@
+@use '~/global/index' as *;
+
+.app-button {
+  height: var(--medium-ui-height);
+  border: solid 1px var(--text);
+  border-radius: 4px;
+
+  button {
+    width: 100%;
+    height: 100%;
+    color: var(--text);
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    height: var(--medium-ui-height);
+  }
+  button:hover {
+    cursor: pointer;
+  }
+  span {
+    padding-bottom: 2px;
+  }
+  .app-icon {
+    margin: 0 4px;
+    padding-bottom: 2px;
+  }
+}
+
+.app-button:hover:not(.app-button--hoverless) {
+  border-color: var(--accent);
+
+  button,
+  span,
+  svg {
+    color: var(--accent);
+  }
+}
+
+.app-button--borderless {
+  border: none;
+  .app-icon {
+    padding-bottom: 0;
+  }
+}
+
+.app-button--loading {
+  border-color: var(--accent);
+  @include disabled;
+  button {
+    color: var(--accent);
+  }
+}
+
+.app-button--disabled {
+  @include disabled;
+}
+
+.app-button--accent-color {
+  border-color: var(--accent);
+  button,
+  span {
+    color: var(--accent);
+  }
+}

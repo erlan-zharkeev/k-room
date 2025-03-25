@@ -1,0 +1,11 @@
+.aside-navigation {
+  .aside-navigation__button-el {
+    margin: 16px 0;
+  }
+
+  .aside-navigation__button-el--active {
+    svg {
+      fill: var(--accent);
+    }
+  }
+}

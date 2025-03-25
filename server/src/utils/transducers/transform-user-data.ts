@@ -1,8 +1,10 @@
+import { ObjectId } from 'mongoose'
 import { IUserSchema, KRoomUser } from '../../@types'
 
 export const transformUserData = (user: IUserSchema): KRoomUser => {
+  const { _id } = user as IUserSchema & { _id: ObjectId }
   return {
-    id: user._id,
+    id: _id.toString(),
     role: user.role,
     username: user.username,
     avatarPath: user.avatarPath,

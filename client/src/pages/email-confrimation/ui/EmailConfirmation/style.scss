@@ -1,0 +1,19 @@
+.email-confirmation {
+  .email-confirmation__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-text {
+    margin-bottom: 8px;
+  }
+
+  .paragraph-text {
+    margin-bottom: 16px;
+  }
+
+  .email-confirmation__loader {
+    margin-top: 16px;
+  }
+}

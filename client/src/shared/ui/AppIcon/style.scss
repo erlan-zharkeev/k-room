@@ -1,0 +1,55 @@
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.app-icon {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon--large svg {
+  width: var(--large-ui-height);
+  height: var(--large-ui-height);
+}
+
+.app-icon--medium svg {
+  width: var(--medium-ui-height);
+  height: var(--medium-ui-height);
+}
+
+.app-icon--small svg {
+  width: var(--small-ui-height);
+  height: var(--small-ui-height);
+}
+
+.app-icon--xs svg {
+  width: var(--xs-ui-height);
+  height: var(--xs-ui-height);
+}
+
+.app-icon--accent-color svg {
+  color: var(--accent);
+}
+
+.app-icon--success-color svg {
+  color: var(--success);
+}
+
+.app-icon--warn-color svg {
+  color: var(--warn);
+}
+
+.app-icon--error-color svg {
+  color: var(--error);
+}
+
+.app-icon--loader {
+  animation: rotation 1s infinite linear;
+}

@@ -1,24 +1,20 @@
 .wait-email-confirm {
-  .header-text {
-    margin-bottom: 16px;
-  }
-
-  &__not-received {
+  .wait-email-confirm__not-received {
     margin-top: 8px;
     margin-bottom: 16px;
   }
 
-  &__counter {
+  .wait-email-confirm__counter {
     margin-top: 16px;
   }
 
-  &__attempts {
+  .wait-email-confirm__attempts {
     display: flex;
     align-items: center;
     margin-top: 8px;
   }
 
-  .button {
-    margin-top: 16px;
+  .wait-email-confirm__actions {
+    margin-top: 8px;
   }
 }

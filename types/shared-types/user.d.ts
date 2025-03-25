@@ -1,40 +1,11 @@
 import { ChatRooms, Codes, DBContactMap, InfoItem, MessageStatus, UserSettings } from ".";
 export type UserRole = "user" | "admin";
-export interface UserShort {
-    id: string;
-    username: string;
-    avatarPath?: string;
-}
-export interface UserCredential extends UserShort {
-    email?: string;
-    password?: string;
-    providerName?: string;
-}
 export interface UserMessageStatus {
     id: string;
     status: MessageStatus;
 }
 export type UserMediaType = "audio" | "video";
 export type UsersMetaData = UserMessageStatus[];
-export interface UserShort {
-    id: string;
-    username: string;
-    avatarPath?: string;
-}
-export interface UserCredential extends UserShort {
-    email?: string;
-    password?: string;
-    avatarPath?: string;
-    providerName?: string;
-}
-export interface KRoomUser extends UserCredential {
-    online: boolean;
-    chatRooms: ChatRooms;
-    role: UserRole;
-    lastSeen?: string;
-    contacts?: KRoomUser[];
-    infoItems?: InfoItem[];
-}
 export interface FirebaseUser {
     firebaseUid: string;
     username: string;
@@ -42,6 +13,22 @@ export interface FirebaseUser {
     avatar: string;
     providerId: string;
 }
+export interface KRoomUser {
+    id: string;
+    username: string;
+    online: boolean;
+    chatRooms: ChatRooms;
+    role: UserRole;
+    avatarPath?: string;
+    email?: string;
+    password?: string;
+    providerName?: string;
+    lastSeen?: string;
+    contacts?: KRoomUser[];
+    infoItems?: InfoItem[];
+}
+export type UserShort = Pick<KRoomUser, "id" | "username" | "avatarPath">;
+export type UserCredential = Pick<KRoomUser, "id" | "username" | "email" | "avatarPath" | "password" | "providerName">;
 export interface IUserSchema extends Omit<KRoomUser, "contacts"> {
     socketId: string;
     confirmed: Boolean;
@@ -51,5 +38,7 @@ export interface IUserSchema extends Omit<KRoomUser, "contacts"> {
     codes: Codes;
     infoItems: InfoItem[];
     contacts: DBContactMap;
-    _id: string;
+}
+export interface ICreateNewPasswordPayload extends Pick<KRoomUser, "password"> {
+    query: string;
 }

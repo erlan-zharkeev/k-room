@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
 import { socket } from 'src/shared/api'
 import { Reactions } from './elements'
-import { Icon } from 'src/shared/ui'
+import { AppIcon } from 'src/shared/ui'
 import {
   repliedMessageSetAsForward,
   updateMessageStatus,
@@ -62,16 +62,16 @@ export const MessageContextMenu = () => {
         className="message-context-menu__element context-menu__element"
         onClick={() => dispatch(setRepliedMessage(message))}
       >
-        <Icon name="reply" />
+        <AppIcon name="reply" />
         <span>Reply</span>
       </div>
       <div className="message-context-menu__element context-menu__element forward-icon" onClick={forwardHandler}>
-        <Icon name="reply" />
+        <AppIcon name="reply" />
         <span>Forward</span>
       </div>
       {message.isSelf && (
         <div className="message-context-menu__element context-menu__element delete-icon" onClick={deleteHandler}>
-          <Icon name="trash" />
+          <AppIcon name="trash" />
           <span>Delete</span>
         </div>
       )}

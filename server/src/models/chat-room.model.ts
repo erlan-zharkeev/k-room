@@ -1,6 +1,7 @@
-import { InferSchemaType, Schema, model, Types } from 'mongoose'
+import { Schema, model } from 'mongoose'
+import { IChatRoomSchema } from '../@types'
 
-const chatRoomSchema = new Schema({
+const chatRoomSchema = new Schema<IChatRoomSchema>({
   chatName: {
     type: String,
     required: false,
@@ -33,4 +34,3 @@ const chatRoomSchema = new Schema({
 })
 
 export const ChatRoomModel = model('ChatRoom', chatRoomSchema)
-export type ChatRoomSchemaType = InferSchemaType<typeof chatRoomSchema> & { _id: Types.ObjectId }

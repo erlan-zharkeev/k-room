@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react-swc'
 import fs from 'fs'
 import path from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
+import svgr from 'vite-plugin-svgr'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -24,6 +25,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       nodePolyfills(),
       react(),
+      svgr({}),
       !isDev &&
         VitePWA({
           registerType: 'autoUpdate',
@@ -119,7 +121,15 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      host: '0.0.0.0',
+      // watch: {
+      //   usePolling: true
+      // },
+      // hmr: {
+      //   overlay: false,
+      //   clientPort: 3001,
+      //   strict: false
+      // },
+      // host: '0.0.0.0',
       port: Number(env.VITE_CLIENT_PORT),
       https: {
         key: fs.readFileSync('./dev-certs/k-room-dev-key.pem'),
@@ -127,7 +137,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: `https://k-room-dev:${env.VITE_SERVER_PORT}`,
+          target: `${env.VITE_HOST}:${env.VITE_SERVER_PORT}`,
           changeOrigin: true,
           secure: false
         }

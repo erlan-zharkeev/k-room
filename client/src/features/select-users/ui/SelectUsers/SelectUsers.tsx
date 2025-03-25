@@ -3,7 +3,7 @@ import { Tag } from 'antd'
 import { UserShort } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useTypedSelector } from 'src/shared/lib'
-import { Avatar } from 'src/shared/ui'
+import { AppAvatar } from 'src/shared/ui'
 
 type UsersToSelect = Array<UserShort>
 
@@ -52,8 +52,8 @@ export const SelectUsers = ({ setMembers }: { setMembers: React.Dispatch<React.S
       <div className="select-users__choose-list">
         {contactsToSelect.map((contact) => (
           <div className="select-users__user" key={contact.id} onClick={() => onClickHandler(contact)}>
-            <Avatar shape="square" src={contact.avatarPath} />
-            <span className="paragraph-text paragraph-text--secondary select-users__name">{contact.username}</span>
+            <AppAvatar shape="square" src={contact.avatarPath} />
+            <span className="paragraph-text  select-users__name">{contact.username}</span>
           </div>
         ))}
       </div>

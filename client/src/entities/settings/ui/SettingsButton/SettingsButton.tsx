@@ -1,5 +1,5 @@
-import { Button } from 'src/shared/ui'
+import { AppButton } from 'src/shared/ui'
 
 export const SettingsButton = () => {
-  return <Button type="radio" value="settings" iconName="settings-cog" />
+  return <AppButton prefixIconName="settings-cog" borderless />
 }

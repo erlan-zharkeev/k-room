@@ -1,4 +1,4 @@
-import { Avatar } from 'src/shared/ui'
+import { AppAvatar } from 'src/shared/ui'
 import { useTypedSelector } from 'src/shared/lib'
 
 export const ContactAvatar = ({ id, showBadge = true }: { id: string; showBadge?: boolean }) => {
@@ -6,12 +6,12 @@ export const ContactAvatar = ({ id, showBadge = true }: { id: string; showBadge?
   const contact = contacts.find((contact) => contact.id === id)
 
   return (
-    <Avatar
+    <AppAvatar
       showBadge={showBadge}
       online={contact?.online}
-      stubIconName={'user-stub'}
+      stubIconName="user-stub"
       src={contact?.avatarPath}
-      shape={'round'}
+      shape="circle-shape"
     />
   )
 }

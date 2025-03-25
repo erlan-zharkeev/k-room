@@ -1,5 +1,5 @@
 export { emitContactsToUser } from './emit-contacts-to-user'
-export { emitRoomsByUserId } from './emit-rooms-by-user-Id'
+export { emitRoomsByUserId } from './emit-rooms-by-user-id'
 export { emitUserStatusToAll } from './emit-user-status-to-all'
 export { emitSearchedContacts } from './emit-searched-contacts'
 export { emitCallDataToInterlocutors } from './emit-call-data-to-interlocutors'

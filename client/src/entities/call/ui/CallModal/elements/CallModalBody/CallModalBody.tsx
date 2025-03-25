@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { useTypedSelector, useCounter } from 'src/shared/lib'
 import { AppDispatch } from 'src/app/store'
 import { socket } from 'src/shared/api'
-import { Button, Avatar } from 'src/shared/ui'
+import { AppButton, AppAvatar } from 'src/shared/ui'
 import { firstCharUpperCase } from 'src/shared/utils'
 import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
 import { CallDots, CallModalVideo } from './elements'
@@ -106,35 +106,17 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
         <div className="call-modal__header">
           <div className="call-modal__window-controls">
             <div className="call-modal__window-controls-element">
-              <Button
-                iconName="cross-2"
-                onClick={endCall}
-                border="borderless"
-                shape="circle"
-                size="small"
-                hover="hoverless"
-                tooltip="Leave Call"
-              />
+              <AppButton prefixIconName="cross-2" onClick={endCall} borderless hoverless tooltip="Leave Call" />
             </div>
             <div className="call-modal__window-controls-element">
-              <Button
-                iconName="dash"
-                onClick={minifyModal}
-                border="borderless"
-                shape="circle"
-                size="small"
-                hover="hoverless"
-                tooltip="Minify Modal Call"
-              />
+              <AppButton prefixIconName="dash" onClick={minifyModal} borderless hoverless tooltip="Minify Modal Call" />
             </div>
             <div className="call-modal__window-controls-element">
-              <Button
-                iconName="expand"
+              <AppButton
+                prefixIconName="expand"
                 onClick={toggleExpandModal}
-                border="borderless"
-                shape="circle"
-                size="small"
-                hover="hoverless"
+                borderless
+                hoverless
                 tooltip="Expand Modal Call"
               />
             </div>
@@ -151,7 +133,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             }}
           >
             <div className="call-modal__avatar">
-              <Avatar size="large" src={currentCall.interlocutorAvatarPath} showBadge={false} />
+              <AppAvatar size="large" src={currentCall.interlocutorAvatarPath} showBadge={false} />
             </div>
             <div className="call-modal__interlocutor-name header-text header-text--secondary header-text--bold header-text--md">
               {currentCall.interlocutorName} {isCallIncoming() && <span>is calling</span>}
@@ -173,7 +155,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 />
                 <div className="call-modal__user-avatar">
                   <div className={settings.video.value ? 'd-none' : ''}>
-                    <Avatar src={avatarPath} showBadge={false} size="small" />
+                    <AppAvatar src={avatarPath} showBadge={false} size="small" />
                   </div>
                 </div>
               </div>
@@ -181,16 +163,14 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 {settings.audio.value}
                 <div className="call-modal__user-setting">
                   {settings.video.value ? (
-                    <Button
-                      iconName={settings.video.loading ? 'loader' : 'video-drop'}
-                      color="default"
+                    <AppButton
+                      prefixIconName={settings.video.loading ? 'loader' : 'video-cancel'}
                       onClick={disableVideo}
                       tooltip="Disable Video"
                     />
                   ) : (
-                    <Button
-                      iconName={settings.video.loading ? 'loader' : 'video-call-thin'}
-                      color="default"
+                    <AppButton
+                      prefixIconName={settings.video.loading ? 'loader' : 'video-call-thin'}
                       onClick={enableVideo}
                       tooltip="Enable Video"
                     />
@@ -198,16 +178,14 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 </div>
                 <div className="call-modal__user-setting">
                   {settings.audio.value ? (
-                    <Button
-                      iconName={settings.audio.loading ? 'loader' : 'mic-muted'}
-                      color="default"
+                    <AppButton
+                      prefixIconName={settings.audio.loading ? 'loader' : 'mic-muted'}
                       onClick={disableAudio}
                       tooltip="Disable Audio"
                     />
                   ) : (
-                    <Button
-                      iconName={settings.audio.loading ? 'loader' : 'mic'}
-                      color="default"
+                    <AppButton
+                      prefixIconName={settings.audio.loading ? 'loader' : 'mic'}
                       onClick={enableAudio}
                       tooltip="Enable Audio"
                     />
@@ -226,19 +204,17 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <div className="call-modal__controls-elements">
               {isIncomingCallCalling() && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
-                  <Button
+                  <AppButton
                     onClick={answerCall}
                     tooltip="Accept call"
-                    fillBg={isAnswerLoading ? 'default' : 'success'}
-                    color={isAnswerLoading ? 'default' : 'success'}
+                    color={isAnswerLoading ? 'accent-color' : 'success-color'}
                     text="Accept call"
                     loading={isAnswerLoading}
-                    border="common-border"
                   />
                 </div>
               )}
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <Button fillBg="error" color="error" onClick={endCall} text="Decline call" border="common-border" />
+                <AppButton color="error-color" onClick={endCall} text="Decline call" />
               </div>
             </div>
           </div>

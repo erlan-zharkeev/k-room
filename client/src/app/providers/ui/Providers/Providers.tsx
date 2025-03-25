@@ -46,7 +46,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => (
     <PersistGate loading={null} persistor={persistor}>
       <RefsProvider>
         <AdditionalServiceProvider>
-          <BrowserRouter>{children}</BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>{children}</BrowserRouter>
         </AdditionalServiceProvider>
       </RefsProvider>
     </PersistGate>

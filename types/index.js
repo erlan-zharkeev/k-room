@@ -1,20 +1,19 @@
 export * from "./shared-types";
 export var RouteNames;
 (function (RouteNames) {
-    RouteNames["SIGN_IN"] = "/sign-in";
-    RouteNames["SIGN_UP"] = "/sign-up";
-    RouteNames["WAIT_EMAIL_CONFIRM"] = "/wait-email-confirm";
-    RouteNames["EMAIL_CONFIRM"] = "/confirm-email";
-    RouteNames["MAIN"] = "/app";
-    RouteNames["NOT_FOUND"] = "/not-found";
-    RouteNames["PASSWORD_RECOVERY"] = "/password-recovery";
-    RouteNames["CREATE_NEW_PASSWORD"] = "/create-new-password";
-    RouteNames["NOTIFICATION"] = "/notification";
-    RouteNames["PRIVACY_POLICY"] = "/privacy-policy/";
-    RouteNames["ADMIN_PANEL"] = "/admin-panel/";
+    RouteNames["Login"] = "/login";
+    RouteNames["Registration"] = "/registration";
+    RouteNames["EmailConfirmation"] = "/email-confirmation";
+    RouteNames["WaitEmailCofirm"] = "/wait-email-confirm";
+    RouteNames["Main"] = "/app";
+    RouteNames["PasswordRecovery"] = "/password-recovery";
+    RouteNames["CreateNewPassword"] = "/create-new-password";
+    RouteNames["Notification"] = "/notification";
+    RouteNames["PrivacyPolicy"] = "/privacy-policy";
+    RouteNames["NotFound"] = "/not-found";
     // Don't forget to change path below in nginx manually
-    RouteNames["SOCKET_PATH"] = "/app-socket/";
-    RouteNames["API"] = "/api/";
+    RouteNames["SocketPath"] = "/app-socket/";
+    RouteNames["Api"] = "/api/";
 })(RouteNames || (RouteNames = {}));
 export var Status;
 (function (Status) {

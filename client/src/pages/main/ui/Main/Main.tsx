@@ -20,7 +20,6 @@ import {
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
-import { AdminPanelContent, AsideBar, AsidePanel, CallStatusBar, ChatRoom, InfoList, TopBar } from 'src/widgets'
 import { AdditionalServiceContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
 import { socket, socketReconnect } from 'src/shared/api'
@@ -48,6 +47,13 @@ import {
 import { setContextMenu, setReconnectingStatus, useViewport } from 'src/entities/system'
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 import { useTypedSelector } from 'src/shared/lib'
+import { AdminPanelContent } from 'src/widgets/admin-panel-content'
+import { AsideBar } from 'src/widgets/aside-bar'
+import { AsidePanel } from 'src/widgets/aside-panel'
+import { CallStatusBar } from 'src/widgets/call-status-bar'
+import { ChatRoom } from 'src/widgets/chat-room'
+import { InfoList } from 'src/widgets/info'
+import { TopBar } from 'src/widgets/top-bar'
 
 export const Main = () => {
   const { selectedChatRoom } = useChatRooms()
@@ -105,7 +111,7 @@ export const Main = () => {
 
   const getNotificationPermission = () => {
     if (!('Notification' in window)) {
-      console.log('Browser doesn`t support Notification API')
+      console.log('Browser doesn`t support Notification Api')
     }
     window.Notification.requestPermission()
   }
@@ -224,7 +230,7 @@ export const Main = () => {
   }, [])
 
   return (
-    <div className={'main page' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
+    <div className={'main' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
       {socket.disconnected && <StubLoading />}
       <div className="main__wrapper">
         {greaterOrEqualTablet && <AsideBar />}

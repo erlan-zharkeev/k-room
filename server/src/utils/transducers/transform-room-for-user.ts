@@ -1,10 +1,10 @@
 import { UserModel, MessageModel } from '../../models'
-import { DBMessage, ChatRoom } from '../../@types'
+import { DBMessage, ChatRoom, IChatRoomSchema } from '../../@types'
 import { transformMessageForUsers } from './transform-message-for-users'
-import { ChatRoomSchemaType } from '../../models/chat-room.model'
+import { ObjectId } from 'mongoose'
 
-export const transformRoomForUser = async ({ userId, room }: { userId: string; room: ChatRoomSchemaType }) => {
-  let { chatName, users, avatarPath, multiple, authorId, messages, _id } = room
+export const transformRoomForUser = async ({ userId, room }: { userId: string; room: IChatRoomSchema }) => {
+  let { chatName, users, avatarPath, multiple, authorId, messages, _id } = room as IChatRoomSchema & { _id: ObjectId }
   // Remove self id
   users?.splice(users?.indexOf(userId), 1)
   const userList = await UserModel.find({ _id: { $in: users } })

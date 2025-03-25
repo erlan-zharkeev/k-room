@@ -27,6 +27,7 @@ const ERROR_NOTIFICATION_DURATION_IN_SEC = 5
 
 export const useNotification = () => {
   const { ableToShowNotification } = useTypedSelector((state) => state.persist.settings)
+
   const getNotification = (notification: Notification) => {
     const messageType = notification.messageType ?? (basicNotificationData.messageType as NotificationType)
     const isError = messageType === 'error'
@@ -51,7 +52,7 @@ export const useNotification = () => {
       if (ableToShowNotification) antdNotification[messageType](notificationData)
     }
 
-    const close = (id: string) => antdNotification.close(id)
+    const close = (id: string) => antdNotification.destroy(id)
 
     return { open, close, key }
   }

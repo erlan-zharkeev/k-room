@@ -1,4 +1,4 @@
-import { Avatar } from 'src/shared/ui'
+import { AppAvatar } from 'src/shared/ui'
 import { ChatRoom } from 'common-types'
 import { ContactAvatar } from 'src/entities/contact'
 import { useTypedSelector } from 'src/shared/lib'
@@ -13,12 +13,12 @@ export const ChatRoomAvatar = ({ room }: { room: ChatRoom }) => {
   }
 
   return room.multiple ? (
-    <Avatar
+    <AppAvatar
       showBadge={false}
       online={isAnyUserOnline(room)}
-      stubIconName={'image-stub'}
+      stubIconName="image-stub"
       src={room.avatarPath}
-      shape={'square'}
+      shape="circle-shape"
     />
   ) : (
     <ContactAvatar id={room.users[0].id} />

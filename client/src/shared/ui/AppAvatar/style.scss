@@ -1,0 +1,109 @@
+@use '~/global/index' as *;
+
+.app-avatar {
+  display: flex;
+  align-items: center;
+
+  .app-avatar__image {
+    padding: 1px;
+    object-fit: cover !important;
+    overflow: hidden;
+    background: var(--main-bg) !important;
+    border: solid 1px var(--text);
+    border-radius: 50% !important;
+  }
+
+  .app-avatar--square-shape {
+    .ant-image-mask {
+      border-radius: 0;
+    }
+    .app-avatar__image {
+      border-radius: 4px !important;
+
+      .icon {
+        svg {
+          transform: scale(1.5);
+        }
+      }
+    }
+  }
+
+  &.app-avatar--small {
+    color: red;
+
+    .app-avatar__image {
+      $size: 32px;
+
+      width: $size !important;
+      min-width: $size;
+      height: $size !important;
+      min-height: $size;
+    }
+  }
+
+  &.app-avatar--medium {
+    .app-avatar__image {
+      $size: 64px;
+
+      width: $size !important;
+      min-width: $size;
+      height: $size !important;
+      min-height: $size;
+    }
+  }
+
+  &.app-avatar--large {
+    .app-avatar__image {
+      $size: 100px;
+
+      width: $size !important;
+      min-width: $size;
+      height: $size !important;
+      min-height: $size;
+    }
+  }
+
+  &.app-avatar--ribbon-down {
+    .ant-ribbon {
+      top: 22px;
+    }
+  }
+
+  &.app-avatar--dot-down {
+    .ant-badge-dot.ant-scroll-number {
+      top: 28px;
+      left: 23px;
+    }
+  }
+
+  .icon {
+    @include wh-100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      color: var(--text);
+      font-size: 4rem;
+    }
+  }
+
+  .ant-ribbon {
+    top: -10px;
+    display: flex;
+    justify-content: center;
+    height: 14px;
+    padding: 0 4px;
+    font-size: 10px;
+    line-height: 16px;
+  }
+
+  .ant-ribbon-corner {
+    display: none;
+  }
+
+  .ant-image-mask {
+    border-radius: 50%;
+  }
+}

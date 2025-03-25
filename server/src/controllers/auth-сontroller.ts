@@ -4,7 +4,7 @@ import { initUserSettings, initUserCodes } from '../fixtures'
 import { authValidator } from '../middlewares'
 import { UserModel } from '../models'
 import { updateTokens, getInfo, sendEmailConfirmationLink } from '../services'
-import { ServerNotificationMessage, Status, UserCredential } from '../@types'
+import { AuthLoginPayload, AuthRegistrationPayload, ServerNotificationMessage, Status, UserCredential } from '../@types'
 import { throwError } from '../utils'
 
 const bcrypt = require('bcryptjs')
@@ -19,7 +19,7 @@ class AuthController {
   async registration(req: Request, res: Response) {
     try {
       authValidator(req, res)
-      const { username, email, password } = req.body
+      const { username, email, password } = req.body as AuthRegistrationPayload
       const userNameCandidate = await UserModel.findOne({ username })
 
       if (userNameCandidate) {
@@ -86,7 +86,7 @@ class AuthController {
 
   async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body
+      const { email, password } = req.body as AuthLoginPayload
       const user = await UserModel.findOne({ email })
       if (!user) return throwError(Status.BadRequest, res, ServerNotificationMessage.UserNotFound)
       if (!user.confirmed) return throwError(Status.BadRequest, res, ServerNotificationMessage.EmailNotConfirm)
@@ -94,7 +94,7 @@ class AuthController {
       const validPassword = bcrypt.compareSync(password, user.password)
 
       if (!validPassword) return throwError(Status.BadRequest, res, ServerNotificationMessage.WrongPass)
-      await updateTokens(user._id, res)
+      await updateTokens(user._id.toString(), res)
       return res.json({
         userData: {
           role: user.role,
@@ -134,7 +134,7 @@ class AuthController {
         await user.save()
       }
 
-      await updateTokens(user._id, res)
+      await updateTokens(user._id.toString(), res)
 
       return res.json({
         userData: {

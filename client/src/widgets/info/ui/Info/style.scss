@@ -1,0 +1,18 @@
+@use '~/global/index' as *;
+
+.info-list {
+  @include nm-outset-element;
+
+  width: 100%;
+  padding: 16px;
+
+  .info-list__header {
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: var(--text);
+    font-size: 12px;
+    margin: 2px 8px;
+  }
+}

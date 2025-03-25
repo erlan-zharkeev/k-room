@@ -1,5 +1,5 @@
 import './style.scss'
-import { Avatar } from 'src/shared/ui'
+import { AppAvatar } from 'src/shared/ui'
 
 export const ProfileInfo = ({
   avatarPath,
@@ -16,10 +16,10 @@ export const ProfileInfo = ({
 }) => {
   return (
     <div className="profile-info">
-      <Avatar online={online} src={avatarPath} showBadge={showBadge} />
+      <AppAvatar online={online} src={avatarPath} showBadge={showBadge} />
       <div className="profile-info__credential">
         <div className="paragraph-text profile-info__username">{username}</div>
-        <div className="paragraph-text paragraph-text--secondary">{email}</div>
+        <div className="paragraph-text ">{email}</div>
       </div>
     </div>
   )

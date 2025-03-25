@@ -1,13 +1,10 @@
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useUser = () => {
-  const { username, email, avatarPath, infoItems, role } = useTypedSelector((state) => state.user.userData)
+  const { userData, isAuth } = useTypedSelector((state) => state.user)
 
   return {
-    username,
-    email,
-    avatarPath,
-    infoItems,
-    role
+    ...userData,
+    isAuth
   }
 }

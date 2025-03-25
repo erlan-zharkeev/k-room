@@ -1,5 +1,4 @@
-import 'antd/dist/antd.css'
-import 'src/shared/config/styles/main.scss'
+import 'src/shared/config/styles'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { UserEndpoints } from 'common-types'
@@ -15,8 +14,8 @@ import { ClientNotificationMessage, useNotification } from 'src/entities/notific
 import { useTypedSelector } from 'src/shared/lib'
 import { AppRouter } from './router'
 import { AppDispatch } from './store'
-import { Popup } from 'src/entities/popup'
 import { ContextMenuWrapper } from 'src/entities/context-menu'
+import { Modal } from 'src/widgets/modal'
 
 const resetStores = [
   resetUserStore,
@@ -124,9 +123,9 @@ export const App = () => {
 
   return (
     <>
-      <Popup />
-      <CallModal />
       <AppRouter />
+      <Modal />
+      <CallModal />
       <ContextMenuWrapper />
     </>
   )

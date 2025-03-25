@@ -26,7 +26,7 @@ export const useFirebase = () => {
     messageType: 'error'
   })
 
-  const signIn = async (providerName: FirebaseProvider) => {
+  const login = async (providerName: FirebaseProvider) => {
     setProvider(new providers[providerName]())
     let result = null
     try {
@@ -38,5 +38,5 @@ export const useFirebase = () => {
     }
     return result
   }
-  return { signIn }
+  return { login }
 }

@@ -1,0 +1,28 @@
+.app-error-bucket {
+  margin-bottom: 16px;
+  padding: 8px;
+  color: var(--text);
+  background-color: var(--error-transparent);
+  border: solid 1px var(--error);
+  border-radius: 4px;
+
+  .app-error-bucket__el {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      top: 10px;
+      left: 2px;
+      width: 5px;
+      height: 5px;
+      background-color: var(--text);
+      border-radius: 50%;
+      content: '';
+    }
+
+    span {
+      margin-bottom: 2px;
+      margin-left: 16px;
+    }
+  }
+}

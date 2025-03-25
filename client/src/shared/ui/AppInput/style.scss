@@ -1,0 +1,12 @@
+.app-input {
+  width: 100%;
+  height: var(--medium-ui-height);
+
+  input {
+    padding-top: 2px;
+  }
+}
+
+.app-input--password {
+  display: flex;
+}

@@ -1,0 +1,115 @@
+@use '~/global/index' as *;
+
+.message {
+  $self: &;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 8px;
+  overflow: hidden;
+  background-color: var(--dark-gray-transparent);
+  border-radius: 8px;
+
+  &__replied-message-type {
+    color: var(--accent);
+    font-size: 10px;
+  }
+
+  &__replied-message-images {
+    display: flex;
+    max-width: 200px;
+  }
+
+  &__replied-message-image {
+    width: 100px;
+  }
+
+  &__replied-message-wrapper {
+    position: relative;
+    margin: 8px;
+    padding-left: 4px;
+    border-left: 1px solid var(--text);
+
+    p {
+      color: var(--text);
+    }
+  }
+
+  &__images {
+    display: flex;
+    max-width: 310px;
+  }
+
+  &__image {
+    max-width: 150px;
+  }
+
+  &__text {
+    color: var(--text);
+  }
+
+  &__system-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__status {
+    width: 5px;
+    height: 5px;
+    margin-right: 5px;
+    border-radius: 50%;
+  }
+
+  &__reactions {
+    display: flex;
+  }
+
+  &__reaction {
+    margin: 0 4px;
+  }
+
+  &--sending {
+    &.message {
+      border: 1px solid rgb(177 177 177 / 50%);
+    }
+    #{$self}__text {
+      opacity: 0.5;
+    }
+    #{$self}__system-info {
+      opacity: 0.5;
+    }
+    #{$self}__images {
+      filter: blur(1px);
+    }
+
+    &::after {
+      @include bg-gradient-loader(0.9);
+    }
+  }
+
+  &--undelivered {
+    #{$self}__text {
+      opacity: 0.5;
+    }
+    #{$self}__system-info {
+      opacity: 0.5;
+    }
+    #{$self}__status {
+      background-color: var(--error-text);
+    }
+  }
+
+  &--delivered {
+    #{$self}__status {
+      background-color: var(--text);
+    }
+  }
+
+  &--read {
+    #{$self}__status {
+      background-color: var(--accent);
+    }
+  }
+}

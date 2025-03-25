@@ -4,7 +4,7 @@ import { MessageNotification } from 'src/entities/message'
 import { UseNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
-import { LogoImage } from 'src/shared/assets'
+import { AppLogoIcon } from 'src/shared/assets'
 import { sound, useTypedSelector } from 'src/shared/lib'
 
 export const useChatRooms = () => {
@@ -36,7 +36,7 @@ export const useChatRooms = () => {
       })
       incomeMessageNotification.open()
       const room = chatRooms.find((room) => room.id === roomId)
-      const icon = room && room.avatarPath ? room.avatarPath : LogoImage
+      const icon = room && room.avatarPath ? room.avatarPath : AppLogoIcon
       new Notification(message.authorName, { body: message.body, icon })
       if (soundOn && allowAudioContext) sound('message-delivered').play()
     }

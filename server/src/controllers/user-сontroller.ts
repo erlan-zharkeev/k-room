@@ -3,7 +3,13 @@ import fs from 'fs'
 import { UserModel } from '../models'
 import { io } from '../server'
 import { getUsersByHasContactId, getSocketsByUserIds } from '../socket'
-import { Status, SocketActions, EventChangeContactsData, ServerNotificationMessage } from '../@types'
+import {
+  Status,
+  SocketActions,
+  EventChangeContactsData,
+  ServerNotificationMessage,
+  ICreateNewPasswordPayload
+} from '../@types'
 import { getPathToImg, saveImageAndGetPath, throwError } from '../utils'
 import { updateTokens } from '../services'
 
@@ -61,7 +67,7 @@ class UserController {
       const userId = req.app.locals.id
       const user = await UserModel.findOne({ _id: userId })
       if (!user) return throwError(Status.BadRequest, res, ServerNotificationMessage.UserNotFound)
-      await updateTokens(user._id, res)
+      await updateTokens(user._id.toString(), res)
       return res.json({
         userData: {
           username: user.username,
@@ -80,7 +86,7 @@ class UserController {
 
   async resetPassword(req: Request, res: Response) {
     try {
-      const { query, password } = req.body
+      const { query, password } = req.body as ICreateNewPasswordPayload
       const hashedPassword = await bcrypt.hash(password, 6)
       if (!hashedPassword) return throwError(Status.BadRequest, res, ServerNotificationMessage.FailedPassHash)
 

@@ -29,16 +29,18 @@ app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use(RouteNames.API, router)
+app.use(RouteNames.Api, router)
 
-app.get(RouteNames.API, (_: Request, res: Response) => {
+app.get(RouteNames.Api, (_: Request, res: Response) => {
   res.send('Server running')
 })
 
-const options = ENV.IS_DEV ? {
-  key: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev-key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev.pem'))
-} : {}
+const options = ENV.IS_DEV
+  ? {
+      key: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev-key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'dev-certs', 'k-room-dev.pem'))
+    }
+  : {}
 
 const server = https.createServer(options, app)
 
@@ -56,7 +58,7 @@ if (!fs.existsSync(path.join(__dirname, imagesPath))) {
 }
 
 export const io = new Server(server, {
-  path: RouteNames.SOCKET_PATH,
+  path: RouteNames.SocketPath,
   maxHttpBufferSize: serverConstants.maxMbQuantityTransfer * 1000000,
   cors: {
     origin: ENV.IS_DEV ? '*' : origins

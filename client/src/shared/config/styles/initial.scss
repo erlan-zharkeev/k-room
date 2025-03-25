@@ -30,8 +30,9 @@ h2,
 h3,
 h4,
 h5,
+span,
 p {
-  color: var(--main-text);
+  color: var(--text);
 }
 
 ::placeholder {
@@ -59,12 +60,12 @@ form {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--secondary-text);
+  background-color: var(--text);
   border-radius: 4px;
 }
 
 input:-webkit-autofill {
-  -webkit-text-fill-color: var(--secondary-text) !important;
+  -webkit-text-fill-color: var(--text) !important;
 
   &:hover,
   &:focus,
@@ -106,10 +107,14 @@ input:-webkit-autofill {
 
 .link {
   color: var(--accent);
+}
 
-  &:hover {
-    cursor: pointer;
-  }
+.link:hover {
+  cursor: pointer;
+}
+
+.link--small {
+  font-size: 12px;
 }
 
 html[theme='light'] {
@@ -122,6 +127,6 @@ html[theme='light'] {
   }
 
   ::placeholder {
-    color: var(--main-text);
+    color: var(--contrast-text);
   }
 }

@@ -11,3 +11,8 @@ export interface ChatRoom {
 }
 
 export type ChatRooms = ChatRoom[];
+
+export interface IChatRoomSchema extends Omit<ChatRoom, "users" | "messages"> {
+  users: string[];
+  messages: string[];
+}

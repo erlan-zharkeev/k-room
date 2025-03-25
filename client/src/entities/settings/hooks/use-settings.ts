@@ -1,4 +1,3 @@
-import { RadioChangeEvent } from 'antd'
 import {
   UserSettings,
   SelectedContentElement,
@@ -25,7 +24,10 @@ import {
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useSettings = () => {
-  const { selectedContentElement, selectedChatRoomId, soundOn } = useTypedSelector((state) => state.persist.settings)
+  const { selectedContentElement, selectedChatRoomId, soundOn, currentInfoId } = useTypedSelector(
+    (state) => state.persist.settings
+  )
+
   const dispatch = useDispatch<AppDispatch>()
 
   const updateSetting = (
@@ -91,9 +93,8 @@ export const useSettings = () => {
     socket.emit<SocketActions>('update-user-settings', payload)
   }
 
-  const changeAsideTab = (e: RadioChangeEvent) => {
-    const currentTabName = e.target.value
-    updateSetting('selectedContentElement', { selectedContentElement: currentTabName })
+  const changeAsideTab = (value: SelectedContentElement) => {
+    updateSetting('selectedContentElement', { selectedContentElement: value })
   }
 
   return {
@@ -101,6 +102,7 @@ export const useSettings = () => {
     updateSetting,
     selectedContentElement,
     selectedChatRoomId,
-    soundOn
+    soundOn,
+    currentInfoId
   }
 }

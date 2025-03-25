@@ -42,7 +42,6 @@
 @mixin nm-outset-element {
   @include nm-outset-shadow;
 
-  background-color: var(--main-bg) !important;
   border: none;
   border-radius: 8px;
 }
@@ -124,4 +123,9 @@
   @media (min-width: 1366px) {
     @content;
   }
+}
+
+@mixin disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }

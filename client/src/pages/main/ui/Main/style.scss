@@ -3,19 +3,20 @@
 .main {
   position: relative;
   display: flex;
+  height: 100%;
+  padding: 16px;
+  overflow: hidden;
 
-  $self: &;
-
-  &__wrapper {
+  .main__wrapper {
     display: flex;
     width: 100%;
   }
 
-  &__content {
+  .main__content {
     width: 100%;
   }
 
-  &__body {
+  .main__body {
     position: relative;
     display: flex;
     height: calc(100% - $bar-height - 16px);
@@ -24,14 +25,14 @@
     }
   }
 
-  &__body--call-minified {
+  .main__body--call-minified {
     height: calc(100% - $bar-height - $call-bar-height - (16px * 2));
     @include max-width-768 {
       height: calc(100% - ($bar-height * 2) - ($call-bar-height) - (16px * 3));
     }
   }
 
-  &.move-aside {
+  .main.move-aside {
     .aside-panel {
       display: none;
     }

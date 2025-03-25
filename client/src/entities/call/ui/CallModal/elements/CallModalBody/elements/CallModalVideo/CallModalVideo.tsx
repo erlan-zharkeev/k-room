@@ -2,7 +2,7 @@ import './style.scss'
 import { useContext } from 'react'
 import { useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
-import { Avatar } from 'src/shared/ui'
+import { AppAvatar } from 'src/shared/ui'
 
 export const CallModalVideo = () => {
   const { currentCall } = useTypedSelector((state) => state.calls)
@@ -30,7 +30,7 @@ export const CallModalVideo = () => {
         />
         <div className="call-modal-video__interlocutor-avatar">
           <div className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}>
-            <Avatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="extra-large" />
+            <AppAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="large" />
           </div>
         </div>
       </div>

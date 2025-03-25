@@ -1,8 +1,8 @@
 import { EventSendMessage, ImageObject, Message, RepliedMessage, SocketActions } from 'common-types'
 import { socket } from 'src/shared/api'
 import { AppDispatch } from 'src/app/store'
-import { v4 as uuidv4 } from 'uuid'
 import { resetRepliedMessage, pushTemporaryMessage } from 'src/entities/chat-room'
+import { generateUUIDv4 } from './generate-uuid-v4'
 
 export const sendMessage = ({
   authorId,
@@ -25,7 +25,7 @@ export const sendMessage = ({
 }) => {
   const message: Message = {
     id: '',
-    tempId: uuidv4(),
+    tempId: generateUUIDv4(),
     status: 'sending',
     authorName: username,
     authorId,

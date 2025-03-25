@@ -1,12 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { Status, RouteNames, EndpointsType } from 'common-types'
 import { AppDispatch } from 'src/app/store'
-import { publicRoutes } from 'src/app/router/routes'
 import { useNotification, UseNotification } from 'src/entities/notification/hooks/use-notification'
 import { useDispatch } from 'react-redux'
 import { clg } from 'src/shared/utils'
 import { changeSelectedContentElement } from 'src/entities/settings'
 import { changeIsAppLoading } from 'src/entities/system'
+import { RequestTypes } from './types'
 
 axios.defaults.withCredentials = true
 
@@ -29,11 +29,12 @@ export const apiErrorInterceptor = async (e: unknown, dispatch?: AppDispatch, no
     let { message, silent } = e.response?.data ?? {}
     switch (status) {
       case Status.NotAuth: {
-        const isCurrentRoutePublic = publicRoutes.some((route) => route.path === window.location.pathname)
-        if (!isCurrentRoutePublic) {
-          window.location.href = RouteNames.SIGN_IN
-          silent = true
-        }
+        // const isCurrentRoutePublic = publicRoutes.some((route) => route.path === window.location.pathname)
+
+        // if (!isCurrentRoutePublic) {
+        //   window.location.href = RouteNames.Login
+        //   silent = true
+        // }
         break
       }
       case Status.Forbidden: {
@@ -52,8 +53,6 @@ export const apiErrorInterceptor = async (e: unknown, dispatch?: AppDispatch, no
   if (dispatch) dispatch(changeIsAppLoading(false))
 }
 
-type RequestTypes = 'post' | 'get' | 'patch' | 'put' | 'delete'
-
 export const useApi = () => {
   const notifications = useNotification()
   const dispatch = useDispatch<AppDispatch>()
@@ -68,7 +67,10 @@ export const useApi = () => {
     try {
       const response = await axios[type](`/api${endpoint}`, data, options)
       successMessageHandler(response, notifications)
-      return response as AxiosResponse
+      if (response) {
+        return response as AxiosResponse
+      }
+      throw new Error('No response')
     } catch (e: unknown) {
       apiErrorInterceptor(e, dispatch, notifications)
     }

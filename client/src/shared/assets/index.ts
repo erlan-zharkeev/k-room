@@ -1,2 +1,2 @@
 export * from './img'
-export * from './icons'
+export * from '../ui/AppIcon/icons'

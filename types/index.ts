@@ -1,20 +1,19 @@
 export * from "./shared-types";
 
 export enum RouteNames {
-  SIGN_IN = "/sign-in",
-  SIGN_UP = "/sign-up",
-  WAIT_EMAIL_CONFIRM = "/wait-email-confirm",
-  EMAIL_CONFIRM = "/confirm-email",
-  MAIN = "/app",
-  NOT_FOUND = "/not-found",
-  PASSWORD_RECOVERY = "/password-recovery",
-  CREATE_NEW_PASSWORD = "/create-new-password",
-  NOTIFICATION = "/notification",
-  PRIVACY_POLICY = "/privacy-policy/",
-  ADMIN_PANEL = "/admin-panel/",
+  Login = "/login",
+  Registration = "/registration",
+  EmailConfirmation = "/email-confirmation",
+  WaitEmailCofirm = "/wait-email-confirm",
+  Main = "/app",
+  PasswordRecovery = "/password-recovery",
+  CreateNewPassword = "/create-new-password",
+  Notification = "/notification",
+  PrivacyPolicy = "/privacy-policy",
+  NotFound = "/not-found",
   // Don't forget to change path below in nginx manually
-  SOCKET_PATH = "/app-socket/",
-  API = "/api/",
+  SocketPath = "/app-socket/",
+  Api = "/api/",
 }
 
 export enum Status {

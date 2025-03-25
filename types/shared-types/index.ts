@@ -9,3 +9,4 @@ export * from "./contact";
 export * from "./codes";
 export * from "./info";
 export * from "./common";
+export * from "./auth";

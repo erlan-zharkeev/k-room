@@ -1,53 +1,7 @@
-@use '~/global/index' as *;
-
 .password-recovery {
-  .header-text {
-    margin-bottom: 16px;
-  }
-
-  &__wrapper {
-    display: flex;
-    justify-content: center;
-    height: 100%;
-  }
-
-  &__body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: $container-sm;
-  }
-
-  .ant-form {
-    top: 40px;
-  }
-
-  &__content {
-    margin-top: 4px;
-  }
-
-  &__email-field {
-    width: 100%;
-  }
-
-  &__code-field {
-    width: 100%;
-  }
-
-  &__code-validation {
-    display: flex;
-    margin-top: 16px;
-  }
-
-  &__email-submit {
-    margin-top: 16px;
-  }
-
-  &__code-submit {
-    margin-left: 8px;
-  }
-
-  .ant-form-item {
-    margin-bottom: 8px;
-  }
+  width: 300px;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
 }

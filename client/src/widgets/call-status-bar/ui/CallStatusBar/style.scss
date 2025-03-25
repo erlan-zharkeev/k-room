@@ -1,0 +1,49 @@
+@use '~/global/index' as *;
+
+.call-status-bar {
+  height: $call-bar-height;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: var(--success-bg);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: height 0.1s ease-in;
+
+  $self: &;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  &--hide {
+    height: 0;
+    margin-bottom: 0;
+    transition: height 0.1s ease-in;
+    #{ $self }__wrapper {
+      display: none;
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+  }
+
+  &__avatar {
+    margin-right: 0.5rem;
+  }
+
+  &__type {
+    color: var(--text);
+  }
+
+  &__interlocutor-name {
+    margin-right: 1rem;
+    color: var(--text);
+  }
+}

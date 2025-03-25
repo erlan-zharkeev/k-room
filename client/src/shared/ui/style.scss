@@ -1,0 +1,23 @@
+@use '~/global/index' as *;
+
+input {
+  width: 100%;
+  height: var(--medium-ui-height);
+
+  @include nm-inset-element;
+  color: var(--text) !important; // *important* overwrite browser inline styles
+  text-indent: 12px;
+}
+
+input::placeholder {
+  color: var(--text);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+select:focus-visible {
+  border: none;
+  border-bottom: 2px solid var(--accent);
+  outline: none;
+}

@@ -87,7 +87,7 @@ export const userSlice = createSlice({
     logOut: (state) => {
       clearCookie()
       state.isAuth = false
-      router.push(RouteNames.SIGN_IN)
+      router.push(RouteNames.Login)
     }
   }
 })

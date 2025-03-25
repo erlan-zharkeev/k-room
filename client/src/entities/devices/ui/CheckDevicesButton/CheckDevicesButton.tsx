@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
 import { showModal, useViewport } from 'src/entities/system'
 import { useTypedSelector } from 'src/shared/lib'
-import { Button } from 'src/shared/ui'
+import { AppButton } from 'src/shared/ui'
 
 export const CheckDevicesButton = () => {
   const { greaterOrEqualTablet } = useViewport()
@@ -13,7 +13,7 @@ export const CheckDevicesButton = () => {
   const openTechSettings = () => {
     dispatch(
       showModal({
-        title: 'Settings',
+        title: 'Devices settings',
         modalContentComponentName: 'tech-settings-popup'
       })
     )
@@ -22,12 +22,13 @@ export const CheckDevicesButton = () => {
   if (!greaterOrEqualTablet) return null
 
   return (
-    <Button
-      iconName="thunder"
-      color="accent"
+    <AppButton
+      prefixIconName="thunder"
+      color="accent-color"
       onClick={openTechSettings}
       tooltip="Check devices"
       disabled={modalAppearance || showCallModal}
+      borderless
     />
   )
 }

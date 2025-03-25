@@ -1,16 +1,21 @@
 :root {
-  --white: #fff;
-  --dark-green: rgb(0 43 29);
+  --white: #ffffff;
   --error-transparent: rgb(191 86 110 / 30%);
+
   --modal-overflow-color: rgb(0 0 0 / 75%);
   --accent: #418fde;
   --error: rgb(191 86 110);
   --error-bg: rgb(191 86 110 / 20%);
 
+  --xs-ui-height: 20px;
+  --small-ui-height: 24px;
+  --medium-ui-height: 30px;
+  --large-ui-height: 36px;
+
   &[theme='dark'] {
     --main-bg: #1c1c1c;
-    --main-text: #fff;
-    --secondary-text: rgb(177 177 177 / 58.7%);
+    --contrast-text: #fff;
+    --text: rgb(177 177 177 / 58.7%);
     --shadow-outset-start: #0f0f0f;
     --shadow-outset-end: #292929;
     --shadow-inset-start: #161616;
@@ -19,7 +24,7 @@
     --dark-gray-transparent: rgba(59 59 59 / 30%);
     --dark-gray-transparent-2: rgba(59 59 59 / 40%);
     --dark-gray-transparent-3: rgba(59 59 59 / 50%);
-    --error-text: #722d2d;
+    --error-text: #984343;
     --success: rgb(38 178 54);
     --success-bg: rgb(44 186 136 / 25%);
     --info-bg: rgb(111 116 255 / 18.7%);
@@ -29,8 +34,8 @@
 
   &[theme='light'] {
     --main-bg: #cfcfcf;
-    --main-text: #000;
-    --secondary-text: rgb(94 94 94 / 84.7%);
+    --contrast-text: #000;
+    --text: rgb(94 94 94 / 84.7%);
     --shadow-outset-start: #b6b6b6;
     --shadow-outset-end: #e8e8e8;
     --shadow-inset-start: #b6b6b6;

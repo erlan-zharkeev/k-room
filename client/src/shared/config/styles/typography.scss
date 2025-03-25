@@ -1,11 +1,11 @@
 .header-text {
-  color: var(--main-text);
+  color: var(--text);
   font-size: 14px;
   line-height: 1;
 }
 
-.header-text--secondary {
-  color: var(--secondary-text);
+.header-text--contrast {
+  color: var(--contrast-text);
 }
 
 .header-text--accent {
@@ -45,8 +45,12 @@
 }
 
 .paragraph-text {
-  color: var(--main-text);
+  color: var(--text);
   font-size: 12px;
+}
+
+.paragraph-text--contrast {
+  color: var(--contrast-text);
 }
 
 .paragraph-text--bold {
@@ -59,10 +63,6 @@
 
 .paragraph-text--error {
   color: var(--error);
-}
-
-.paragraph-text--secondary {
-  color: var(--secondary-text);
 }
 
 .paragraph-text--sm {

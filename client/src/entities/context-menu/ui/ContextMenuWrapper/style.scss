@@ -7,7 +7,7 @@
     min-width: 150px;
     max-width: 300px;
     height: auto;
-    color: var(--secondary-text);
+    color: var(--text);
     background-color: var(--dark-gray);
     border-radius: 4px;
     transition: opacity 0.2s ease-in-out;
@@ -26,7 +26,7 @@
 
     &:hover {
       color: var(--main-bg);
-      background-color: var(--secondary-text);
+      background-color: var(--text);
       cursor: pointer;
     }
   }

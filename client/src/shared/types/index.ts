@@ -3,3 +3,5 @@ export enum ImageResolutions {
   jpeg = 'image/jpeg',
   jpg = 'image/jpg'
 }
+
+export type ContextRef = React.MutableRefObject<any>

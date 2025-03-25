@@ -1,4 +1,4 @@
-import { IUserSchema, DBContact, Contact } from '../../@types'
+import { DBContact, Contact, IUserSchema } from '../../@types'
 
 export const transformUserToContact = (user: IUserSchema, userContact: DBContact): Contact => ({
   id: user.id,

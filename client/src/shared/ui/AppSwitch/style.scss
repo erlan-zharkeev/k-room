@@ -1,0 +1,72 @@
+@use '~/global/index' as *;
+
+.switch {
+  $switcher-width: 80px;
+  $switcher-height: 32px;
+  $transition: left ease-in-out 0.2s;
+  $compensation: 4px;
+  $toggler-width: 24px;
+  position: relative;
+
+  .switch__value-text {
+    position: absolute;
+    top: -3px;
+    left: $toggler-width + 12px;
+    z-index: 1;
+    color: var(--text);
+    font-size: 11px;
+    transition: $transition;
+  }
+
+  input[type='checkbox'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+
+  label {
+    position: relative;
+    display: block;
+    width: $switcher-width;
+    height: $switcher-height;
+    text-indent: -9999px;
+    border-radius: 12px;
+    cursor: pointer;
+    @include nm-inset-element;
+  }
+
+  &[data-checked='true'] {
+    .switch {
+      &__value-text {
+        left: $toggler-width - 12px;
+        color: var(--success);
+        transition: $transition;
+      }
+    }
+  }
+
+  label::after {
+    position: absolute;
+    top: $compensation;
+    left: $compensation;
+    z-index: 2;
+    width: $toggler-width;
+    height: $toggler-width;
+    border-radius: 50%;
+    transition: $transition;
+    content: '';
+    @include nm-outset-element-sharpen;
+  }
+
+  input:checked + label::after {
+    left: calc(100% - 27px);
+  }
+}
+
+.switch--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

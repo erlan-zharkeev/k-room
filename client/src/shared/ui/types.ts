@@ -1,3 +1,11 @@
-export type ShapeModifier = 'round' | 'square' | 'default' | 'circle' | 'round'
-export type ColorModifier = 'accent' | 'success' | 'error' | 'warn' | 'default' | 'white' | 'black'
-export type SizeModifier = 'extra-small' | 'small' | 'middle' | 'large' | 'extra-large'
+export type SizeModifier = 'small' | 'medium' | 'large'
+export type ShapeModifier = 'square-shape' | 'default-shape' | 'circle-shape'
+export type ColorModifier =
+  | 'text-color'
+  | 'accent-color'
+  | 'success-color'
+  | 'error-color'
+  | 'warn-color'
+  | 'white-color'
+  | 'black-color'
+export type AvatarLoaderShapeModifier = Extract<ShapeModifier, 'square-shape' | 'circle-shape'>

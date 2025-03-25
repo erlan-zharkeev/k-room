@@ -1,11 +1,17 @@
-import { Radio } from 'antd'
+import './style.scss'
 import { SettingsButton, useSettings } from 'src/entities/settings'
 import { AdminPanelButton } from 'src/entities/user'
 import { ContactsButton } from 'src/entities/contact'
 import { CallsButton } from 'src/entities/call'
 import { ChatRoomsButton } from 'src/entities/chat-room'
+import { SelectedContentElement } from 'common-types'
 
-const buttons = [
+interface AsideNavigationButton {
+  Component: () => JSX.Element | null
+  value: SelectedContentElement
+}
+
+const buttons: AsideNavigationButton[] = [
   { Component: AdminPanelButton, value: 'admin-panel' },
   { Component: ContactsButton, value: 'contacts' },
   { Component: ChatRoomsButton, value: 'chat-list' },
@@ -18,13 +24,17 @@ export const AsideNavigation = () => {
 
   return (
     <div className="aside-navigation">
-      <Radio.Group value={selectedContentElement} onChange={changeAsideTab}>
-        {buttons.map(({ Component, value }) => (
-          <div key={value} className="aside-bar__button-el">
-            <Component />
-          </div>
-        ))}
-      </Radio.Group>
+      {buttons.map(({ Component, value }) => (
+        <div
+          key={value}
+          className={`aside-navigation__button-el ${
+            value === selectedContentElement ? 'aside-navigation__button-el--active' : ''
+          }`}
+          onClick={() => changeAsideTab(value)}
+        >
+          <Component />
+        </div>
+      ))}
     </div>
   )
 }

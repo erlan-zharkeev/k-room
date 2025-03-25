@@ -3,7 +3,7 @@ import { Dropdown, Badge, MenuProps } from 'antd'
 import { useState, useEffect } from 'react'
 import { useSettings } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
-import { Button } from 'src/shared/ui'
+import { AppButton } from 'src/shared/ui'
 
 export const InfoDropdown = () => {
   const { updateSetting } = useSettings()
@@ -34,8 +34,8 @@ export const InfoDropdown = () => {
       placement="bottom"
       className="info-dropdown"
     >
-      <Badge color={`var(--error)`} count={unreadInfoQuantity()} size="small" offset={[-5, 2]}>
-        <Button iconName="notification-bell" />
+      <Badge color={`var(--error)`} count={unreadInfoQuantity()} offset={[-5, 2]}>
+        <AppButton prefixIconName="notification" borderless />
       </Badge>
     </Dropdown>
   )

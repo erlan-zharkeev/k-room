@@ -1,6 +1,6 @@
 .select-users {
   .select-users__title {
-    color: var(--secondary-text);
+    color: var(--text);
   }
 
   .select-users__user {
@@ -18,7 +18,7 @@
   .select-users__divider {
     height: 1px;
     margin: 8px 0;
-    background: var(--secondary-text);
+    background: var(--text);
   }
 
   .select-users__user .paragraph-text {
