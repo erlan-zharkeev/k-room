@@ -17,31 +17,21 @@ export interface AvatarProps {
 
 const AvatarBody = ({
   src,
-  size,
   stubIconName,
   haveSource,
   setHaveSource
 }: {
   src?: string
-  size: SizeModifier
   stubIconName: AppIconName
   haveSource: boolean
   setHaveSource: (v: boolean) => void
 }) => {
-  const iconSize = size === 'medium' || size === 'small' ? 'small' : size
-
   return !haveSource ? (
     <div className="app-avatar__image">
-      <AppIcon name={stubIconName} size={iconSize} />
+      <AppIcon name={stubIconName} size="fill" />
     </div>
   ) : (
-    <Image
-      src="https://i.pravatar.cc/150?img=66"
-      className="app-avatar__image"
-      alt="avatar"
-      onError={() => setHaveSource(false)}
-    />
-    // <Image src={src} className="app-avatar__image" alt="avatar" onError={() => setHaveSource(false)} />
+    <Image src={src} className="app-avatar__image" alt="avatar" onError={() => setHaveSource(false)} />
   )
 }
 
@@ -84,13 +74,7 @@ export const AppAvatar = ({
   }, [src])
 
   const body = (
-    <AvatarBody
-      src={src}
-      size={size}
-      stubIconName={stubIconName}
-      haveSource={haveSource}
-      setHaveSource={setHaveSource}
-    />
+    <AvatarBody src={src} stubIconName={stubIconName} haveSource={haveSource} setHaveSource={setHaveSource} />
   )
 
   return (

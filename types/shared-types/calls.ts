@@ -1,9 +1,9 @@
-import { StreamSettings } from ".";
+import { IStreamSettings } from ".";
 
-export type CallStatus = "calling" | "in-progress" | "finished";
-export type CallType = "incoming" | "outgoing" | "missed" | "not-answered";
+export type CallStatusType = "calling" | "in-progress" | "finished";
+export type CallFlowType = "incoming" | "outgoing" | "missed" | "not-answered";
 
-export interface Call {
+export interface ICall {
   id: string;
   calledAt?: number;
   authorId: string;
@@ -14,14 +14,14 @@ export interface Call {
   interlocutorId: string;
   interlocutorName: string;
   interlocutorAvatarPath?: string;
-  status?: CallStatus;
-  type: CallType;
+  status?: CallStatusType;
+  flow: CallFlowType;
   video: boolean;
-  interlocutorSettings?: StreamSettings;
+  interlocutorSettings?: IStreamSettings;
   setId?: boolean;
 }
 
-export interface DBCall {
+export interface IDBCall {
   _id: string;
   calledAt: number;
   startedAt: number;
@@ -32,4 +32,4 @@ export interface DBCall {
   video: boolean;
 }
 
-export interface IDBCallSchema extends DBCall {}
+export interface IDBCallSchema extends IDBCall {}

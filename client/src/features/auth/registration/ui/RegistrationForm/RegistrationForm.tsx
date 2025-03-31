@@ -2,13 +2,13 @@ import './style.scss'
 import { AppForm } from 'src/shared/ui'
 import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
 import { useRegistration } from '../../hooks'
-import { AuthRegistrationPayload } from 'common-types'
+import { AuthRegistrationPayloadType } from 'common-types'
 
 export const RegistrationForm = () => {
   const { register } = useRegistration()
 
   const onSubmit = (paylod: unknown) => {
-    const formData = paylod as AuthRegistrationPayload
+    const formData = paylod as AuthRegistrationPayloadType
     register(formData)
   }
 

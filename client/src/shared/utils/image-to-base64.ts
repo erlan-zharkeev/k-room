@@ -9,7 +9,7 @@ export const imageToBase64 = ({
   notifications
 }: {
   image: File
-  allowedResolutions?: Array<string>
+  allowedResolutions?: string[]
   notifications: UseNotification
 }) => {
   const reader = new FileReader()

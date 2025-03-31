@@ -1,6 +1,6 @@
 import './style.scss'
 import { Form } from 'antd'
-import { UserShort, SocketActions, EventCreateRoom, EventRoomCreated } from 'common-types'
+import { UserShortType, SocketActionsType, IEventCreateRoom, IEventRoomCreated } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector, useValidate } from 'src/shared/lib'
@@ -24,21 +24,21 @@ export const CreateMultipleChatPopup = () => {
   const [avatarFile, setFile] = useState()
 
   const [form] = Form.useForm()
-  const [members, setMembers] = useState([] as Array<UserShort>)
+  const [members, setMembers] = useState<UserShortType[]>([])
 
   const onFinish = async (values: { 'chat-name': string }) => {
     // const chatName = values['chat-name']
     setIsLoading(true)
     // const membersIds = members.map((member) => member.id)
-    // const payload: EventCreateRoom = {
+    // const payload: IEventCreateRoom = {
     //   users: [id, ...membersIds],
     //   chatName,
     //   avatarFile,
     //   multiple: true
     // }
-    // socket.emit<SocketActions>('create-personal-room', payload)
+    // socket.emit<SocketActionsType>('create-personal-room', payload)
 
-    socket.on<SocketActions>('room-created', (data: EventRoomCreated) => {
+    socket.on<SocketActionsType>('room-created', (data: IEventRoomCreated) => {
       updateSetting('selectedContentElement', { selectedContentElement: 'chat-list' })
 
       setTimeout(() => {

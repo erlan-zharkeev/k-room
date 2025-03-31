@@ -1,10 +1,10 @@
 import { useCallback, useRef } from 'react'
 
-export const useDebounce = (fn: (payload: unknown) => void, timeout: number) => {
+export const useDebounce = <T>(fn: (payload: T) => void, timeout: number) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   return useCallback(
-    (payload: unknown) => {
+    (payload: T) => {
       if (timerRef.current) {
         clearTimeout(timerRef.current)
       }

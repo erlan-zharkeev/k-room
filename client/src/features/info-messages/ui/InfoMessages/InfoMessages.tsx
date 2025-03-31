@@ -1,5 +1,4 @@
-import './style.scss'
-import { CommonEndpoints, Status } from 'common-types'
+import { CommonEndpointsEnum, StatusEnum } from 'common-types'
 import { parse } from 'path'
 import { useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
@@ -7,8 +6,7 @@ import { AppDispatch } from 'src/app/store'
 import { useSettings } from 'src/entities/settings'
 import { useUser, markInfoItemAsRead } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
-import { AppIcon } from 'src/shared/ui'
-import { Collapse } from 'antd'
+import { AppCollapse, AppIcon } from 'src/shared/ui'
 
 const INFO_ITEM_MARK_AS_READ_DURATION_IN_SEC = 1.5
 
@@ -20,8 +18,8 @@ export const InfoMessages = () => {
 
   const markInfoAsRead = async () => {
     if (!currentInfoId) return
-    const response = await doRequest('post', CommonEndpoints.GetInfo, { currentInfoId })
-    if (!response || response.status !== Status.Success) return
+    const response = await doRequest('post', CommonEndpointsEnum.GetInfo, { currentInfoId })
+    if (!response || response.status !== StatusEnum.Success) return
     dispatch(markInfoItemAsRead({ id: currentInfoId }))
   }
 
@@ -43,20 +41,21 @@ export const InfoMessages = () => {
     }
   }
 
+  // extra: item.read === 'unread' && <AppIcon name="exclamation" color="success-color" />
+
   const items = useMemo(
     () =>
       infoItems?.map((item) => ({
-        key: item.id,
-        label: item.label,
-        children: parse(item.content),
-        extra: item.read === 'unread' && <AppIcon name="exclamation" color="success-color" />
+        id: item.id,
+        title: item.label,
+        content: item.content
       })) ?? [],
     [infoItems]
   )
 
   return (
     <div className="info-messages">
-      <Collapse items={items} activeKey={currentInfoId} onChange={onChange} bordered={false} />
+      <AppCollapse items={items} />
     </div>
   )
 }

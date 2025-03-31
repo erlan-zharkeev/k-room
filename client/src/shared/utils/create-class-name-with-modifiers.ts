@@ -4,7 +4,7 @@ export const createClassNameWithModifiers = ({
   additionalClassName
 }: {
   rootClass: string
-  modifiers: Array<string | boolean | undefined>
+  modifiers: (string | boolean | undefined)[]
   additionalClassName?: string
 }): string => {
   const filteredModifiers = modifiers.filter((modifier) => modifier !== undefined && modifier !== false) as string[]

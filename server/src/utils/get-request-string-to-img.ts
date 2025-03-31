@@ -1,6 +1,6 @@
 import { ENV } from '../ENV'
-import { CommonEndpoints } from '../@types'
+import { CommonEndpointsEnum } from '../@types'
 
 export const getRequestStringToImg = (filename: string): string => {
-  return `${ENV.SERVER_URL}${CommonEndpoints.CommonImages}?img=${filename}`
+  return `${ENV.SERVER_URL}${CommonEndpointsEnum.CommonImages}?img=${filename}`
 }

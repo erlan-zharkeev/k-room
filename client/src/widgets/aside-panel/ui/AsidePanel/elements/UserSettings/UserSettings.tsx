@@ -1,7 +1,7 @@
 import appData from './../../../../../../../package.json'
 import './style.scss'
 import Meta from 'antd/lib/card/Meta'
-import { RouteNames, UserSettings as IUserSettings } from 'common-types'
+import { RouteNamesEnum, IUserSettings as IUserSettings } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from 'src/shared/lib'
@@ -9,6 +9,7 @@ import { AppDispatch } from 'src/app/store'
 import { AppAvatar, AppSwitch } from 'src/shared/ui'
 import { showModal } from 'src/entities/system'
 import { useSettings } from 'src/entities/settings'
+import { useThemeUpdate } from 'src/features/update-theme'
 
 const { VITE_MAIL_APP } = import.meta.env
 
@@ -21,12 +22,13 @@ export const UserSettings = () => {
   const navigate = useNavigate()
   const { allowAudioContext } = useTypedSelector((state) => state.system)
   const { updateSetting } = useSettings()
+  const { udpateTheme } = useThemeUpdate()
 
   const changeUserData = () => {
     dispatch(
       showModal({
         title: 'Update User Data',
-        modalContentComponentName: 'user-data-settings-popup'
+        modalContentComponentName: 'user-data-settings-modal'
       })
     )
   }
@@ -35,7 +37,7 @@ export const UserSettings = () => {
     let type: keyof IUserSettings | null = null
     switch (id) {
       case 'theme':
-        type = 'theme'
+        udpateTheme(value)
         break
       case 'sound':
         type = 'soundOn'
@@ -62,26 +64,33 @@ export const UserSettings = () => {
     <div className="user-settings">
       <div className="user-settings__body">
         <div className="user-settings__user-card" onClick={changeUserData}>
-          <Meta
-            avatar={<AppAvatar size="middle" showBadge={false} src={avatarPath} />}
-            title={username}
-            description={email}
-          />
+          <Meta avatar={<AppAvatar showBadge={false} src={avatarPath} />} title={username} description={email} />
           <span className="user-settings__id paragraph-text paragraph-text-sm ">#{id}</span>
         </div>
         <div
           className="link paragraph-text user-settings__password-recovery"
-          onClick={() => navigate({ pathname: RouteNames.PasswordRecovery, search: `?user-email=${email}` })}
+          onClick={() => navigate({ pathname: RouteNamesEnum.PasswordRecovery, search: `?user-email=${email}` })}
         >
           Password recovery
         </div>
         <div className="user-settings__theme-switch">
-          <div className="user-settings__title paragraph-text ">Theme</div>
-          <AppSwitch onText="Dark" id="theme" offText="Light" initValue={theme === 'dark'} onChange={changeSetting} />
+          <div className="user-settings__title paragraph-text ">ThemeType</div>
+          <AppSwitch
+            name="theme"
+            onText="Dark"
+            offText="Light"
+            value={theme === 'dark'}
+            onChange={(event) => changeSetting(event.target.checked, 'theme')}
+          />
         </div>
         <div className="user-settings__sound-switch">
           <div className="user-settings__title paragraph-text ">Sound</div>
-          <AppSwitch initValue={soundOn} id="sound" onChange={changeSetting} disabled={!allowAudioContext} />
+          <AppSwitch
+            value={soundOn}
+            name="sound"
+            onChange={(event) => changeSetting(event.target.checked, 'sound')}
+            disabled={!allowAudioContext}
+          />
           {!allowAudioContext && (
             <div className="user-settings__additional-setting-info">
               The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio
@@ -91,20 +100,32 @@ export const UserSettings = () => {
         </div>
         <div className="user-settings__tooltip-switch">
           <div className="user-settings__title paragraph-text ">Tooltips</div>
-          <AppSwitch initValue={showTooltips} id="tooltips" onText="Show" offText="Hide" onChange={changeSetting} />
+          <AppSwitch
+            value={showTooltips}
+            name="tooltips"
+            onText="Show"
+            offText="Hide"
+            onChange={(event) => changeSetting(event.target.checked, 'tooltips')}
+          />
         </div>
         <div className="user-settings__wallpaper-switch">
           <div className="user-settings__title paragraph-text ">Wallpaper</div>
-          <AppSwitch initValue={showWallpaper} id="wallpaper" onText="Show" offText="Hide" onChange={changeSetting} />
+          <AppSwitch
+            value={showWallpaper}
+            name="wallpaper"
+            onText="Show"
+            offText="Hide"
+            onChange={(event) => changeSetting(event.target.checked, 'wallpaper')}
+          />
         </div>
         <div className="user-settings__notification-switch">
           <div className="user-settings__title paragraph-text ">Notification</div>
           <AppSwitch
-            initValue={ableToShowNotification}
-            id="notification"
+            value={ableToShowNotification}
+            name="notification"
             onText="Show"
             offText="Hide"
-            onChange={changeSetting}
+            onChange={(event) => changeSetting(event.target.checked, 'notification')}
           />
           {
             <div className="user-settings__additional-setting-info">
@@ -119,7 +140,7 @@ export const UserSettings = () => {
         <a className="link paragraph-text" href={`mailto:${VITE_MAIL_APP}?subject=Support%20Request(${id})`}>
           Tech support
         </a>
-        <a className="link paragraph-text" onClick={() => navigate(RouteNames.PrivacyPolicy)}>
+        <a className="link paragraph-text" onClick={() => navigate(RouteNamesEnum.PrivacyPolicy)}>
           Privacy policy
         </a>
         <div className="user-settings__app-name paragraph-text paragraph-text-sm ">{appData.name}</div>

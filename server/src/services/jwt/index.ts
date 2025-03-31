@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { ENV } from '../../ENV'
 import { UserModel } from '../../models'
-import { AuthTokens, ServerNotificationMessage, Status } from '../../@types'
+import { AuthTokensType, ServerNotificationMessage, StatusEnum } from '../../@types'
 import { throwError } from '../../utils'
 
 const clc = require('cli-color')
@@ -16,7 +16,7 @@ const generateToken = (id: string, secret: string, expiresIn: number | string) =
 
 const setToken = (
   res: Response,
-  tokenName: AuthTokens,
+  tokenName: AuthTokensType,
   id: string,
   secret: string,
   expiresIn: number | string
@@ -31,7 +31,7 @@ const setToken = (
 export const updateTokens = async (id: string, res: Response) => {
   if (!ENV?.K_ROOM_ACCESS_TOKEN_SECRET || !ENV?.K_ROOM_REFRESH_TOKEN_SECRET) {
     console.log(clc.red.bgWhite('failed to load - K_ROOM_ACCESS_TOKEN_SECRET'))
-    throwError(Status.Server, res, ServerNotificationMessage.CommonServerError)
+    throwError(StatusEnum.Server, res, ServerNotificationMessage.CommonServerError)
   }
   setToken(res, 'jwt', id, ENV?.K_ROOM_ACCESS_TOKEN_SECRET, ENV.JWT_ACCESS_EXPIRES_INTERVAL)
   const refreshToken = setToken(

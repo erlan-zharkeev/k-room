@@ -1,61 +1,61 @@
-import { UsersMetaData } from ".";
+import { UsersMetaDataType } from ".";
 
-export type MessageStatus =
+export type MessageStatusType =
   | "sending"
   | "undelivered"
   | "delivered"
   | "read"
   | "none";
 
-export type Author = "system" | "time";
+export type AuthorType = "system" | "time";
 
-export interface MessageMetaData {
+export interface IMessageMetaData {
   id: string;
-  status: MessageStatus;
+  status: MessageStatusType;
 }
 
-export interface Reaction {
+export interface IReaction {
   username: string;
   authorId: string;
   glyphKey: string;
 }
 
-export interface ImageObject {
+export interface IImageObject {
   src: string;
   name: string;
   fileBuffer?: ArrayBuffer;
 }
 
-export interface RepliedMessage {
+export interface IRepliedMessage {
   id: string;
   authorName: string;
   authorId: string;
   body: string;
-  images?: ImageObject[];
+  images?: IImageObject[];
   forward?: boolean;
 }
 
-export interface Message {
+export interface IMessage {
   id: string;
   tempId?: string;
   isSelf?: boolean;
-  status?: MessageStatus;
+  status?: MessageStatusType;
   authorId: string;
   authorName: string;
   body: string;
   createdAt?: string;
-  reactions?: Reaction[];
-  images?: ImageObject[];
+  reactions?: IReaction[];
+  images?: IImageObject[];
   imageCompression?: boolean;
-  repliedMessage?: RepliedMessage | null;
+  repliedMessage?: IRepliedMessage | null;
 }
 
-export interface DBMessage extends Message {
+export interface IDBMessage extends IMessage {
   _id: string;
-  usersMetaData: UsersMetaData;
+  usersMetaData: UsersMetaDataType;
 }
 
 export interface IMessageSchema
-  extends Omit<Message, "id" | "tempId" | "isSelf" | "status"> {
-  usersMetaData?: UsersMetaData;
+  extends Omit<IMessage, "id" | "tempId" | "isSelf" | "status"> {
+  usersMetaData?: UsersMetaDataType;
 }

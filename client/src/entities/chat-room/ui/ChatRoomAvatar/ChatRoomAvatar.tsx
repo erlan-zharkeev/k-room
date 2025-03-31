@@ -1,12 +1,12 @@
 import { AppAvatar } from 'src/shared/ui'
-import { ChatRoom } from 'common-types'
+import { IChatRoom } from 'common-types'
 import { ContactAvatar } from 'src/entities/contact'
 import { useTypedSelector } from 'src/shared/lib'
 
-export const ChatRoomAvatar = ({ room }: { room: ChatRoom }) => {
+export const ChatRoomAvatar = ({ room }: { room: IChatRoom }) => {
   const { contacts } = useTypedSelector((state) => state.contacts)
 
-  const isAnyUserOnline = (chatRoom: ChatRoom) => {
+  const isAnyUserOnline = (chatRoom: IChatRoom) => {
     return chatRoom.users.some((user) => {
       return contacts.find((contact) => contact.id === user.id)?.online
     })

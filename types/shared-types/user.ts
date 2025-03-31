@@ -1,20 +1,20 @@
 import {
-  ChatRooms,
-  Codes,
-  DBContactMap,
-  InfoItem,
-  MessageStatus,
-  UserSettings,
+  ChatRoomsType,
+  ICodes,
+  DBContactMapType,
+  IInfoItem,
+  MessageStatusType,
+  IUserSettings,
 } from ".";
 
-export type UserRole = "user" | "admin";
-export interface UserMessageStatus {
+export type UserRoleType = "user" | "admin";
+export interface IUserMessageStatus {
   id: string;
-  status: MessageStatus;
+  status: MessageStatusType;
 }
 export type UserMediaType = "audio" | "video";
-export type UsersMetaData = UserMessageStatus[];
-export interface FirebaseUser {
+export type UsersMetaDataType = IUserMessageStatus[];
+export interface IFirebaseUser {
   firebaseUid: string;
   username: string;
   email: string;
@@ -22,39 +22,39 @@ export interface FirebaseUser {
   providerId: string;
 }
 
-export interface KRoomUser {
+export interface IUserData {
   id: string;
   username: string;
   online: boolean;
-  chatRooms: ChatRooms;
-  role: UserRole;
+  chatRooms: ChatRoomsType;
+  role: UserRoleType;
   avatarPath?: string;
   email?: string;
   password?: string;
   providerName?: string;
   lastSeen?: string;
-  contacts?: KRoomUser[];
-  infoItems?: InfoItem[];
+  contacts?: IUserData[];
+  infoItems?: IInfoItem[];
 }
 
-export type UserShort = Pick<KRoomUser, "id" | "username" | "avatarPath">;
+export type UserShortType = Pick<IUserData, "id" | "username" | "avatarPath">;
 
-export type UserCredential = Pick<
-  KRoomUser,
+export type UserCredentialType = Pick<
+  IUserData,
   "id" | "username" | "email" | "avatarPath" | "password" | "providerName"
 >;
 
-export interface IUserSchema extends Omit<KRoomUser, "contacts"> {
+export interface IUserSchema extends Omit<IUserData, "contacts"> {
   socketId: string;
   confirmed: Boolean;
   confirmAttempts: number;
   refreshToken: string;
-  settings: UserSettings;
-  codes: Codes;
-  infoItems: InfoItem[];
-  contacts: DBContactMap;
+  settings: IUserSettings;
+  codes: ICodes;
+  infoItems: IInfoItem[];
+  contacts: DBContactMapType;
 }
 
-export interface ICreateNewPasswordPayload extends Pick<KRoomUser, "password"> {
+export interface ICreateNewPasswordPayload extends Pick<IUserData, "password"> {
   query: string;
 }

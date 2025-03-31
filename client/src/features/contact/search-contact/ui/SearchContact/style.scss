@@ -1,0 +1,17 @@
+.search-contact {
+  position: sticky;
+
+  .search-contact__list {
+    padding: 8px 0;
+  }
+
+  .search-contact__list-element {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .search-contact__list-element:not(:last-child) {
+    margin-bottom: 16px;
+  }
+}

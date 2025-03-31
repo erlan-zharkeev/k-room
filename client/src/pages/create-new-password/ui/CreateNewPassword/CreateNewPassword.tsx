@@ -1,5 +1,4 @@
 import { CreateNewPasswordForm } from 'src/features/create-new-password'
-import './style.scss'
 
 export const CreateNewPassword = () => {
   return (

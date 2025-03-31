@@ -38,5 +38,6 @@ export const useFirebase = () => {
     }
     return result
   }
+
   return { login }
 }

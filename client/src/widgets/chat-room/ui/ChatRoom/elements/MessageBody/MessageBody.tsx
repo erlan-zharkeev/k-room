@@ -4,17 +4,17 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
-import { Message, UserShort } from 'common-types'
+import { IMessage, UserShortType } from 'common-types'
 import { clientConstants } from 'src/client-constants'
 import { setContextMenu } from 'src/entities/system'
 
 export interface MessageBodyProps {
-  message: Message
+  message: IMessage
   isChatMultiple: Boolean
 }
 
-interface Reaction {
-  authors: Array<UserShort>
+interface IReaction {
+  authors: UserShortType[]
   glyph: string
 }
 
@@ -22,18 +22,18 @@ export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const notSystemAuthor = message.authorName !== 'system' && message.authorName !== 'time'
   const showMessageAuthor = !message.isSelf && isChatMultiple && notSystemAuthor
-  const [reactions, setReactions] = useState<Reaction[]>([])
+  const [reactions, setReactions] = useState<IReaction[]>([])
 
   const getGlyph = (name: string) => clientConstants.emojis.find((emoji) => name === emoji.key)?.glyph
 
-  const getAuthorTooltip = (authors: Reaction['authors']) => {
+  const getAuthorTooltip = (authors: IReaction['authors']) => {
     return authors.map((author) => author.username).join(', ')
   }
 
   const showCreatedAt = message.createdAt && message.authorId !== 'system'
 
   useEffect(() => {
-    const reactionMap: Record<string, Reaction> = {}
+    const reactionMap: Record<string, IReaction> = {}
 
     message.reactions?.forEach((reaction) => {
       const authors = reactionMap[reaction.glyphKey] ? reactionMap[reaction.glyphKey].authors : []

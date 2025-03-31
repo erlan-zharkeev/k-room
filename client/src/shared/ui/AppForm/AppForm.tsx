@@ -7,7 +7,15 @@ import { useValidate, ValidateRule } from 'src/shared/lib'
 import { AppSwitch } from '../AppSwitch/AppSwitch'
 export * from './types'
 
-export const AppForm = ({ onSubmit, fields, submitBtnText, submitBtnLoading, children }: AppFormProps) => {
+export const AppForm = ({
+  onSubmit,
+  fields,
+  submitBtnText,
+  submitBtnLoading,
+  children,
+  showSubmitBtn = true,
+  onChange
+}: AppFormProps) => {
   const [form, setForm] = useState(() => {
     const initialState: Record<string, AppFormFieldValue> = {}
     Object.keys(fields).forEach((key) => {
@@ -19,17 +27,18 @@ export const AppForm = ({ onSubmit, fields, submitBtnText, submitBtnLoading, chi
   const { touchedFields, validateField, errors, isFormTotalValid } = useValidate(form)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, rule?: ValidateRule) => {
+    if (onChange) onChange(e)
     const { name, value } = e.target
     setForm((prev) => ({
       ...prev,
       [name]: value
     }))
-    if (rule) validateField(value, rule, name)
+    validateField(value, name, false, rule)
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(form)
+    if (onSubmit) onSubmit(form)
   }
 
   useEffect(() => {
@@ -38,9 +47,7 @@ export const AppForm = ({ onSubmit, fields, submitBtnText, submitBtnLoading, chi
 
   const validateAllFields = (silent = true) => {
     Object.entries(fields).forEach(([fieldName, field]) => {
-      if (field.rule) {
-        validateField(form[fieldName], field.rule, fieldName, silent)
-      }
+      validateField(form[fieldName], fieldName, silent, field.rule)
     })
   }
 
@@ -69,21 +76,25 @@ export const AppForm = ({ onSubmit, fields, submitBtnText, submitBtnLoading, chi
                 autoComplete={field.autoComplete}
                 onChange={(e) => handleChange(e, field.rule)}
                 onBlur={() => validateAllFields(false)}
+                showClearButton={field.showClearButton}
+                prefixSlot={field.prefixSlot}
               />
             )}
           </AppFormItem>
         )
       })}
       {children}
-      <div className="app-form__controls">
-        <AppButton
-          htmltype="submit"
-          text={submitBtnText}
-          color="accent-color"
-          loading={submitBtnLoading}
-          disabled={!isFormTotalValid}
-        />
-      </div>
+      {showSubmitBtn && (
+        <div className="app-form__controls">
+          <AppButton
+            htmltype="submit"
+            text={submitBtnText}
+            color="accent-color"
+            loading={submitBtnLoading}
+            disabled={!isFormTotalValid}
+          />
+        </div>
+      )}
     </form>
   )
 }

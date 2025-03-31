@@ -1,8 +1,8 @@
-import { AsideBarButtonName } from 'common-types'
-import { IconName } from 'src/shared/ui'
+import { AsideBarButtonNameType } from 'common-types'
+import { AppIconName } from 'src/shared/ui'
 
 export interface ButtonsListElement {
-  value: AsideBarButtonName
-  iconName: IconName
+  value: AsideBarButtonNameType
+  iconName: AppIconName
   tooltip?: string
 }

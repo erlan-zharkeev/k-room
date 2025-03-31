@@ -1,10 +1,10 @@
 import { Result, ValidationError } from 'express-validator'
 import { Response } from 'express'
-import { Status, ErrorResponse, ServerNotificationMessage } from '../@types'
+import { StatusEnum, ErrorResponse, ServerNotificationMessage } from '../@types'
 import { clc } from './clc'
 
 export const throwError = (
-  status: Status,
+  status: StatusEnum,
   res: Response,
   errors: Result<ValidationError> | ServerNotificationMessage,
   silent: boolean = false

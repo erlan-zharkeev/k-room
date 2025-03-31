@@ -1,9 +1,9 @@
-import { KRoomUser } from ".";
+import { IUserData } from ".";
 export type InteractionType = "default" | "invited" | "invite-accepted" | "invite-hidden" | "invite-received";
-export interface ContactBase {
+export interface IContactBase {
     id: string;
-    interactionType: InteractionType;
+    interaction: InteractionType;
 }
-export type Contact = ContactBase & Omit<KRoomUser, "chatRooms" | "contacts" | "infoItems" | "role">;
-export type DBContact = ContactBase;
-export type DBContactMap = Record<string, DBContact>;
+export type ContactType = IContactBase & Omit<IUserData, "chatRooms" | "contacts" | "infoItems" | "role">;
+export type DBContactType = IContactBase;
+export type DBContactMapType = Record<string, DBContactType>;

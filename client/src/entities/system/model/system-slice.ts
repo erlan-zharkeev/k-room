@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { clientConstants } from 'src/client-constants'
-import { ModalContentComponentName } from 'src/entities/popup/ui/Popup'
 import { ContextMenu, ContextMenuType, ContextClickedObject } from 'src/entities/context-menu'
+import { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
 
 interface ModalBtn {
   text: string
@@ -95,7 +95,7 @@ export const systemSlice = createSlice({
     enableAllowAudioContext: (state) => {
       state.allowAudioContext = true
     },
-    changeIsAppLoading: (state, { payload }: { payload: boolean }) => {
+    updateAppLoaderState: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
     },
     setReconnectingStatus(state, { payload }: { payload: boolean }) {
@@ -158,6 +158,6 @@ export const {
   setViewPort,
   setContextMenu,
   resetContextClickedObject,
-  changeIsAppLoading,
+  updateAppLoaderState,
   resetSystemStore
 } = systemSlice.actions

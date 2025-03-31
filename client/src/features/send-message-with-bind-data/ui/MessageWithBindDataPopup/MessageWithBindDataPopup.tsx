@@ -59,12 +59,12 @@ export const MessageWithBindDataPopup = () => {
           </div>
         )}
         <Form.Item name="message" initialValue={body}>
-          <AppInput placeholder="Message" value="" name="message" />
+          <AppInput placeholder="IMessage" value="" name="message" />
         </Form.Item>
         <Form.Item className="message-with-bind-data-popup__controls">
           <AppButton
             borderless
-            text="Send Message"
+            text="Send IMessage"
             htmltype="submit"
             disabled={!images?.length && !body}
             loading={isLoading}

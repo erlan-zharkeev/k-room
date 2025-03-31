@@ -3,7 +3,7 @@ import { clientConstants } from 'src/client-constants'
 
 export interface ReactionsProps {
   reactionHandler: (reaction: string) => void
-  blockedKeys: Array<string>
+  blockedKeys: string[]
 }
 
 export const Reactions = ({ reactionHandler, blockedKeys }: ReactionsProps) => {

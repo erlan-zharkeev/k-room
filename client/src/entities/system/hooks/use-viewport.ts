@@ -7,7 +7,8 @@ export enum ViewPortWidthType {
 }
 
 export const useViewport = () => {
-  const width = useTypedSelector((state) => state.system.viewPort.width)
+  const { viewPort } = useTypedSelector((state) => state.system)
+  const { width } = viewPort
 
   return {
     isPhone: width <= ViewPortWidthType.Phone,
@@ -26,6 +27,8 @@ export const useViewport = () => {
     lessThanDesktop: width < ViewPortWidthType.Desktop,
 
     lessOrEqualTablet: width <= ViewPortWidthType.Tablet,
-    lessOrEqualDesktop: width <= ViewPortWidthType.Desktop
+    lessOrEqualDesktop: width <= ViewPortWidthType.Desktop,
+
+    viewPort
   }
 }

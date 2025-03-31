@@ -19,7 +19,9 @@ export type AppFormField = AppFormTextInputField | AppFormSwitchField
 export type AppFormData = Record<string, unknown>
 
 export interface AppFormProps {
-  onSubmit: (formData: AppFormData) => void
+  onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void
+  showSubmitBtn?: boolean
+  onSubmit?: (formData: AppFormData) => void
   fields: Record<string, AppFormField>
   submitBtnText: string
   submitBtnLoading?: boolean

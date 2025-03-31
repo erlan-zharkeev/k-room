@@ -3,7 +3,7 @@ import useDynamicRefs from 'use-dynamic-refs'
 import moment from 'moment'
 import { clientConstants } from 'src/client-constants'
 import { List } from 'antd'
-import { Message, SocketActions, ImageObject, EventChangeMessageStatus } from 'common-types'
+import { IMessage, SocketActionsType, IImageObject, IEventChangeMessageStatus } from 'common-types'
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/shared/lib'
@@ -28,7 +28,7 @@ export const ChatRoom = () => {
   const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0 })
   const dispatch = useDispatch<AppDispatch>()
   const roomDomEl = useRef<HTMLDivElement>(null)
-  const [messages, setMessages] = useState([] as Array<Message>)
+  const [messages, setMessages] = useState<IMessage[]>([])
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
   const { updateSetting } = useSettings()
 
@@ -38,12 +38,12 @@ export const ChatRoom = () => {
       const messageId = entry.target.getAttribute('id')
       const messageRead = Boolean(entry.target.querySelector('.message--read'))
       if (messageId.includes('time') || messageRead) return
-      const payload: EventChangeMessageStatus = {
+      const payload: IEventChangeMessageStatus = {
         roomId: selectedChatRoom.id,
         messageId,
         status: 'read'
       }
-      socket.emit<SocketActions>('change-message-status', payload)
+      socket.emit<SocketActionsType>('change-message-status', payload)
     })
   }
 
@@ -82,7 +82,7 @@ export const ChatRoom = () => {
     }
   }, [haveMessageToReply])
 
-  const uploadImageHandler = ({ message, images }: { message: string; images: Array<ImageObject> }) => {
+  const uploadImageHandler = ({ message, images }: { message: string; images: IImageObject[] }) => {
     dispatch(
       updatedAttachedFilesMessage({
         body: message,
@@ -92,7 +92,7 @@ export const ChatRoom = () => {
     )
     dispatch(
       showModal({
-        title: 'Send Message',
+        title: 'Send IMessage',
         modalContentComponentName: 'message-with-bind-data-popup'
       })
     )
@@ -105,12 +105,12 @@ export const ChatRoom = () => {
 
   const injectDateToMessages = () => {
     let lastDate = ''
-    const updatedMessagesWithDates: Array<Message> = []
+    const updatedMessagesWithDates: IMessage[] = []
     selectedChatRoom?.messages.forEach((message) => {
       const messageDate = moment(Number(message.createdAt)).format('LL').split(',')[0]
       if (messageDate !== lastDate && message.authorName !== 'system') {
         lastDate = messageDate
-        const dateMessage: Message = {
+        const dateMessage: IMessage = {
           id: `${generateUUIDv4()}-time`,
           authorName: 'time',
           authorId: 'time',
@@ -146,7 +146,7 @@ export const ChatRoom = () => {
                   itemLayout="horizontal"
                   dataSource={messages ?? []}
                   locale={{ emptyText: ' ' }}
-                  renderItem={(item: Message) => (
+                  renderItem={(item: IMessage) => (
                     <List.Item
                       key={item.id}
                       className={`chat-room__message--${locationModifier(item.authorId)}`}

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { RouteNames } from '../../@types'
+import { RouteNamesEnum } from '../../@types'
 import { ENV } from '../../ENV'
 import { UserModel } from '../../models'
 import { getTimeNextRequest } from '../../utils'
@@ -33,7 +33,7 @@ export const sendEmailConfirmationLink = async (email: string) => {
   const user = await UserModel.findOneAndUpdate({ email }, { $inc: { confirmAttempts: -1 } })
   const payload = {
     appName: ENV.APP_NAME,
-    link: `${ENV.CLIENT_URL}${RouteNames.EmailConfirmation}?userId=${user?.id}`,
+    link: `${ENV.CLIENT_URL}${RouteNamesEnum.EmailConfirmation}?userId=${user?.id}`,
     host: `${ENV.CLIENT_URL}/sign-in`
   }
   const mailData = getAdditionalMailData('confirmation', payload)

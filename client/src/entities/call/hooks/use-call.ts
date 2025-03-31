@@ -4,15 +4,15 @@ import { AppDispatch } from 'src/app/store'
 import Peer, { SignalData } from 'simple-peer'
 import { Howl } from 'howler'
 import {
-  SocketActions,
-  KRoomUser,
-  BasicStreamSettings,
-  EventCallUser,
-  EventAnswerCall,
-  EventUpdateSignal,
-  EventCallAccepted,
-  EventMarkCallAsVideo,
-  EventCallEnded
+  SocketActionsType,
+  IUserData,
+  IBasicStreamSettings,
+  IEventCallUser,
+  IEventAnswerCall,
+  IEventUpdateSignal,
+  IEventCallAccepted,
+  IEventMarkCallAsVideo,
+  IEventCallEnded
 } from 'common-types'
 import { RefsContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
@@ -28,29 +28,29 @@ import {
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
-  const payload: EventCallUser = {
+  const payload: IEventCallUser = {
     userToCall,
     signal,
     from,
     avatarPath,
     callerName
   }
-  socket.emit<SocketActions>('call-user', payload)
+  socket.emit<SocketActionsType>('call-user', payload)
 }
 
 const emitCallAnswer = (signal: SignalData, to: string, selfSocketId: string, callId: string) => {
-  const payload: EventAnswerCall = {
+  const payload: IEventAnswerCall = {
     signal,
     to,
     selfSocketId,
     callId
   }
-  socket.emit<SocketActions>('answer-call', payload)
+  socket.emit<SocketActionsType>('answer-call', payload)
 }
 
 const emitUpdateSignal = (signal: SignalData) => {
-  const payload: EventUpdateSignal = { signal }
-  socket.emit<SocketActions>('update-call-signal', payload)
+  const payload: IEventUpdateSignal = { signal }
+  socket.emit<SocketActionsType>('update-call-signal', payload)
 }
 
 export const useCall = () => {
@@ -74,7 +74,7 @@ export const useCall = () => {
     messageType: 'error'
   })
 
-  const getSelfStream = async (constraints: BasicStreamSettings) => {
+  const getSelfStream = async (constraints: IBasicStreamSettings) => {
     try {
       return await navigator.mediaDevices.getUserMedia(constraints)
     } catch (error) {
@@ -127,7 +127,7 @@ export const useCall = () => {
     })
   }
 
-  const initCall = async (interlocutorData: KRoomUser, selfId: string, selfAvatarPath: string, callerName: string) => {
+  const initCall = async (interlocutorData: IUserData, selfId: string, selfAvatarPath: string, callerName: string) => {
     interlocutorId.current = interlocutorData.id
     const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
     if (!stream) return
@@ -140,7 +140,7 @@ export const useCall = () => {
       if (connection.current?.connected) return emitUpdateSignal(data)
       emitCall(interlocutorData.id, data, selfId, selfAvatarPath, callerName)
     })
-    socket.on<SocketActions>('call-accepted', (data: EventCallAccepted) => {
+    socket.on<SocketActionsType>('call-accepted', (data: IEventCallAccepted) => {
       soundConnection.current.stop()
       dispatch(setCurrentCallAccepted())
       connection.current?.signal(data.signal as SignalData)
@@ -214,8 +214,8 @@ export const useCall = () => {
       connection.current?.addTrack(newVideoTrack, selfStream.current)
       applyStreamToHtmlVideoTag()
       dispatch(markCurrentCallAsVideo())
-      const payload: EventMarkCallAsVideo = { callId }
-      socket.emit<SocketActions>('mark-call-as-video', payload)
+      const payload: IEventMarkCallAsVideo = { callId }
+      socket.emit<SocketActionsType>('mark-call-as-video', payload)
     }
     const data = { settings: { video: true } }
     connection.current?.send(JSON.stringify(data))
@@ -238,11 +238,11 @@ export const useCall = () => {
     }
     closeConnection(true)
     if (!callId) return
-    const payload: EventCallEnded = {
+    const payload: IEventCallEnded = {
       callerId: interlocutorId.current,
       callId
     }
-    socket.emit<SocketActions>('call-ended', payload)
+    socket.emit<SocketActionsType>('call-ended', payload)
   }
 
   return {

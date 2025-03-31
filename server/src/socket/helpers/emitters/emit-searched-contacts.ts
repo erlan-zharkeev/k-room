@@ -1,6 +1,6 @@
 import { io } from '../../../server'
-import { KRoomUser, SocketActions } from '../../../@types'
+import { IUserData, SocketActionsType } from '../../../@types'
 
-export const emitSearchedContacts = (socketId: string, contacts: Array<KRoomUser>) => {
-  io.to(socketId).emit<SocketActions>('get-searched-contact', contacts)
+export const emitSearchedContacts = (socketId: string, contacts: Array<IUserData>) => {
+  io.to(socketId).emit<SocketActionsType>('get-searched-contact', contacts)
 }

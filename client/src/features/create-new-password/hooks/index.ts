@@ -1,4 +1,4 @@
-import { UserEndpoints, Status, RouteNames, ICreateNewPasswordPayload } from 'common-types'
+import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useApi } from 'src/shared/api'
@@ -15,7 +15,7 @@ export const useCreateNewPassword = () => {
 
   useEffect(() => {
     const currentPasswordRestoreQuery = searchParams.get('password-recovery')
-    if (!currentPasswordRestoreQuery) return navigate(RouteNames.Main)
+    if (!currentPasswordRestoreQuery) return navigate(RouteNamesEnum.Main)
     setPasswordRestoreQuery(currentPasswordRestoreQuery)
   })
 
@@ -31,9 +31,9 @@ export const useCreateNewPassword = () => {
 
     setIsLoading(true)
     const formData = { ...payload, query: passwordRestoreQuery } as ICreateNewPasswordPayload
-    const response = await doRequest('post', UserEndpoints.ResetPassword, formData)
+    const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)
     setIsLoading(false)
-    if (response && response.status === Status.Success) navigate(RouteNames.Login)
+    if (response && response.status === StatusEnum.Success) navigate(RouteNamesEnum.Login)
   }
 
   return {

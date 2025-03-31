@@ -1,4 +1,4 @@
-import { Status } from '../../../types'
+import { StatusEnum } from '../../../types'
 import { SharpConfig, SharpSettingsKey } from './sharp'
 
 export interface ServerConstants {
@@ -8,7 +8,7 @@ export interface ServerConstants {
 
 export interface ErrorResponse<T> {
   message: T
-  status: Status
+  status: StatusEnum
   data: unknown
   silent: boolean
 }

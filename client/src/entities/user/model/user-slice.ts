@@ -1,12 +1,12 @@
 import { ThunkDispatch, AnyAction, createSlice } from '@reduxjs/toolkit'
-import { UserSettings, InfoItem, RouteNames, KRoomUser } from 'common-types'
+import { IUserSettings, IInfoItem, RouteNamesEnum, IUserData } from 'common-types'
 import { clearCookie } from 'src/shared/utils'
 import { router } from 'src/shared/lib'
 import { updateSettings } from 'src/entities/settings'
 
 type StoreUserData = Required<
   Pick<
-    KRoomUser,
+    IUserData,
     | 'id'
     | 'role'
     | 'email'
@@ -19,7 +19,6 @@ type StoreUserData = Required<
     | 'infoItems'
   >
 >
-
 export interface UserState {
   isAuth: boolean
   userData: StoreUserData
@@ -27,7 +26,7 @@ export interface UserState {
 
 export const commonSetUserDataHandler = (
   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  data: { userData: KRoomUser; settings: UserSettings }
+  data: { userData: IUserData; settings: IUserSettings }
 ) => {
   dispatch(userSlice.actions.setUserData(data.userData))
   dispatch(updateSettings(data.settings))
@@ -68,7 +67,7 @@ export const userSlice = createSlice({
         infoItems: []
       }
     },
-    setInfoItems(state, { payload }: { payload: Array<InfoItem> }) {
+    setInfoItems(state, { payload }: { payload: IInfoItem[] }) {
       state.userData.infoItems = payload
     },
     markInfoItemAsRead(state, { payload }: { payload: { id: string } }) {
@@ -77,7 +76,7 @@ export const userSlice = createSlice({
       const index = state.userData.infoItems.findIndex((item) => item.id === id)
       state.userData.infoItems[index].read = 'read'
     },
-    setUserData: (state, { payload }: { payload: KRoomUser }) => {
+    setUserData: (state, { payload }: { payload: IUserData }) => {
       state.userData = {
         ...state.userData,
         ...payload
@@ -87,7 +86,7 @@ export const userSlice = createSlice({
     logOut: (state) => {
       clearCookie()
       state.isAuth = false
-      router.push(RouteNames.Login)
+      router.push(RouteNamesEnum.Login)
     }
   }
 })

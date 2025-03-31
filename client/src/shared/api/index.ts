@@ -1,3 +1,3 @@
 export * from './types'
-export * from './socket'
-export * from './api'
+export * from './config'
+export * from './hooks'

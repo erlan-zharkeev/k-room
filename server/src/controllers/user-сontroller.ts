@@ -4,9 +4,9 @@ import { UserModel } from '../models'
 import { io } from '../server'
 import { getUsersByHasContactId, getSocketsByUserIds } from '../socket'
 import {
-  Status,
-  SocketActions,
-  EventChangeContactsData,
+  StatusEnum,
+  SocketActionsType,
+  IEventChangeContactsData,
   ServerNotificationMessage,
   ICreateNewPasswordPayload
 } from '../@types'
@@ -35,7 +35,7 @@ class UserController {
         },
         { new: true }
       )
-      if (!updateUserDataResponse) return throwError(Status.BadRequest, res, ServerNotificationMessage.UsersFind)
+      if (!updateUserDataResponse) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UsersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
       const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
@@ -45,12 +45,12 @@ class UserController {
         username: updateUserDataResponse.username,
         avatarPath: updateUserDataResponse.avatarPath
       }
-      const payload: EventChangeContactsData = {
+      const payload: IEventChangeContactsData = {
         id: userId,
         ...updatedUserData
       }
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit<SocketActions>('change-contacts-data', payload)
+        io.to(socketId).emit<SocketActionsType>('change-contacts-data', payload)
       })
 
       return res.json({
@@ -58,7 +58,7 @@ class UserController {
         message: ServerNotificationMessage.UserDataUpdated
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedUserDataUpdate)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedUserDataUpdate)
     }
   }
 
@@ -66,7 +66,7 @@ class UserController {
     try {
       const userId = req.app.locals.id
       const user = await UserModel.findOne({ _id: userId })
-      if (!user) return throwError(Status.BadRequest, res, ServerNotificationMessage.UserNotFound)
+      if (!user) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserNotFound)
       await updateTokens(user._id.toString(), res)
       return res.json({
         userData: {
@@ -80,7 +80,7 @@ class UserController {
         settings: user.settings
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedGetUserData)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedGetUserData)
     }
   }
 
@@ -88,10 +88,10 @@ class UserController {
     try {
       const { query, password } = req.body as ICreateNewPasswordPayload
       const hashedPassword = await bcrypt.hash(password, 6)
-      if (!hashedPassword) return throwError(Status.BadRequest, res, ServerNotificationMessage.FailedPassHash)
+      if (!hashedPassword) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedPassHash)
 
       const user = await UserModel.findOne({ 'codes.passwordRecovery.query.value': query })
-      if (!user) throwError(Status.BadRequest, res, ServerNotificationMessage.FailedResetPassword)
+      if (!user) throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedResetPassword)
 
       await user?.updateOne({
         $set: {
@@ -103,7 +103,7 @@ class UserController {
 
       return res.json({ message: ServerNotificationMessage.PasswordReset })
     } catch {
-      return throwError(Status.BadRequest, res, ServerNotificationMessage.CommonServerError)
+      return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.CommonServerError)
     }
   }
 }

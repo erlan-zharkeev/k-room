@@ -1,6 +1,6 @@
 import { UserModel } from '../../../models'
 import { io } from '../../../server'
-import { SocketActions, EventGetContacts } from '../../../@types'
+import { SocketActionsType, IEventGetContacts } from '../../../@types'
 import { transformUsersToContacts } from '../../../utils'
 import { getUserById } from '../getters'
 
@@ -11,6 +11,6 @@ export const emitContactsToUser = async (userId: string) => {
   const matchedUsers = await UserModel.find({ _id: { $in: contactIds } })
   const contacts = transformUsersToContacts(matchedUsers, userData?.contacts)
   if (!userData?.socketId) return
-  const payload: EventGetContacts = { contacts }
-  io.to(userData.socketId).emit<SocketActions>('get-contacts', payload)
+  const payload: IEventGetContacts = { contacts }
+  io.to(userData.socketId).emit<SocketActionsType>('get-contacts', payload)
 }

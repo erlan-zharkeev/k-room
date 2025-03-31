@@ -12,7 +12,7 @@ export const ContextMenuWrapper = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const menus: Record<string, JSX.Element> = {
-    Message: <MessageContextMenu />
+    IMessage: <MessageContextMenu />
   }
 
   const currentMenu = menus[firstCharUpperCase(contextMenu.slotName)]

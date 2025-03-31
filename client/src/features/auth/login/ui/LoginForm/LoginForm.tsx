@@ -1,6 +1,6 @@
 import './style.scss'
 import { useLogin } from '../../hooks'
-import { RouteNames } from 'common-types'
+import { RouteNamesEnum } from 'common-types'
 import { AppButton } from 'src/shared/ui'
 import { AppForm } from 'src/shared/ui/AppForm/AppForm'
 
@@ -37,7 +37,7 @@ export const LoginForm = () => {
             hoverless
           />
           <div className="login-form__forgot-password">
-            <a className="link link--small" href={RouteNames.PasswordRecovery}>
+            <a className="link link--small" href={RouteNamesEnum.PasswordRecovery}>
               Forgot password?
             </a>
           </div>

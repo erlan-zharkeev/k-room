@@ -1,11 +1,11 @@
 import { ChatRoomModel, MessageModel } from '../../../models'
 import { io } from '../../../server'
-import { SocketActions, ImageObject, Message, EventMessageDelivered, SharpSettingsKey } from '../../../@types'
+import { SocketActionsType, IImageObject, IMessage, IEventMessageDelivered, SharpSettingsKey } from '../../../@types'
 import { saveImageAndGetPath } from '../../../utils'
 import { getUserById } from '../getters'
 
-export const setMessage = async ({ roomId, message }: { roomId: string; message: Message }) => {
-  let images: ImageObject[] = []
+export const setMessage = async ({ roomId, message }: { roomId: string; message: IMessage }) => {
+  let images: IImageObject[] = []
   if (message.images) {
     const compressionType: SharpSettingsKey = message.imageCompression ? 'common-compressed' : 'common-uncompressed'
     const filesPromises = message.images?.map(async (image) => {
@@ -33,17 +33,17 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
     )
     const user = await getUserById(userId)
     if (!user?.socketId) return
-    const messageForUser: Message = {
+    const messageForUser: IMessage = {
       ...message,
       images,
       id: String(newDbMessage._id),
       isSelf: user?.id === message.authorId,
       status: 'delivered'
     }
-    const payload: EventMessageDelivered = {
+    const payload: IEventMessageDelivered = {
       roomId,
       message: messageForUser
     }
-    io.to(user?.socketId).emit<SocketActions>('message-delivered', payload)
+    io.to(user?.socketId).emit<SocketActionsType>('message-delivered', payload)
   })
 }

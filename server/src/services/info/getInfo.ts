@@ -1,7 +1,7 @@
-import { InfoItem } from '../../@types'
+import { IInfoItem } from '../../@types'
 import { welcome } from './items'
 
-const infoMap: Record<string, InfoItem> = {
+const infoMap: Record<string, IInfoItem> = {
   1: {
     id: '1',
     label: 'Welcome to K-Room',

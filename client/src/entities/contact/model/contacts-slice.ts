@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Contact, InteractionType, EventStatusContact, EventChangeContactsData } from 'common-types'
+import { ContactType, InteractionType, IEventStatusContact, IEventChangeContactsData } from 'common-types'
 
-export type SliceContact = Contact & { onlineStatusUpdatedTimestamp: number }
+export type SliceContact = ContactType & { onlineStatusUpdatedTimestamp: number }
 
 interface ContactsState {
-  contacts: Array<SliceContact>
+  contacts: SliceContact[]
 }
 
 const initialState: ContactsState = {
@@ -18,13 +18,13 @@ export const contactsSlice = createSlice({
     resetContactStore(state) {
       state.contacts = []
     },
-    loadContacts(state, { payload }: { payload: Array<Contact> }) {
+    loadContacts(state, { payload }: { payload: ContactType[] }) {
       state.contacts = payload.map((contact) => ({
         ...contact,
         onlineStatusUpdatedTimestamp: Date.now()
       }))
     },
-    updateContactsStatus(state, { payload }: { payload: EventStatusContact }) {
+    updateContactsStatus(state, { payload }: { payload: IEventStatusContact }) {
       const { interlocutorId, online, onlineStatusUpdatedTimestamp } = payload
       state.contacts.forEach((user) => {
         if (user.id === interlocutorId) {
@@ -37,7 +37,7 @@ export const contactsSlice = createSlice({
       const contact = state.contacts.find((contact) => contact.id === payload.contactId)
       if (contact) contact.online = payload.online
     },
-    updateContactData(state, { payload }: { payload: EventChangeContactsData }) {
+    updateContactData(state, { payload }: { payload: IEventChangeContactsData }) {
       const { id, username, avatarPath } = payload
       state.contacts.forEach((user) => {
         if (user.id !== id) return
@@ -45,18 +45,15 @@ export const contactsSlice = createSlice({
         user.avatarPath = avatarPath
       })
     },
-    updateContactInteractionType(
-      state,
-      { payload }: { payload: { contactId: string; interactionType: InteractionType } }
-    ) {
+    updateContactInteractionType(state, { payload }: { payload: { contactId: string; interaction: InteractionType } }) {
       const contact = state.contacts.find((contact) => contact.id === payload.contactId)
-      if (contact) contact.interactionType = payload.interactionType
+      if (contact) contact.interaction = payload.interaction
     },
-    addContact(state, { payload }: { payload: { contactData: Contact } }) {
+    addContact(state, { payload }: { payload: { contactData: ContactType } }) {
       const data = { ...payload.contactData, onlineStatusUpdatedTimestamp: Date.now() }
       state.contacts.push(data)
     },
-    acceptInvite(state, { payload }: { payload: { contactData: Contact } }) {
+    acceptInvite(state, { payload }: { payload: { contactData: ContactType } }) {
       const contactIndex = state.contacts.findIndex((contact) => contact.id === payload.contactData.id)
       if (contactIndex !== -1) {
         state.contacts[contactIndex] = {

@@ -1,10 +1,10 @@
 export * from "./shared-types";
 
-export enum RouteNames {
+export enum RouteNamesEnum {
   Login = "/login",
   Registration = "/registration",
   EmailConfirmation = "/email-confirmation",
-  WaitEmailCofirm = "/wait-email-confirm",
+  WaitEmailConfirm = "/wait-email-confirm",
   Main = "/app",
   PasswordRecovery = "/password-recovery",
   CreateNewPassword = "/create-new-password",
@@ -16,7 +16,7 @@ export enum RouteNames {
   Api = "/api/",
 }
 
-export enum Status {
+export enum StatusEnum {
   Success = 200,
   BadRequest = 400,
   NotAuth = 401,
@@ -27,7 +27,7 @@ export enum Status {
   BadGateway = 504,
 }
 
-export enum AuthEndpoints {
+export enum AuthEndpointsEnum {
   Registration = "/auth/registration",
   SendEmailConfirmationLink = "/auth/send-email-confirmation-link",
   SendEmailConfirmation = "/auth/send-email-confirmation",
@@ -38,23 +38,23 @@ export enum AuthEndpoints {
   UpdateTokensPair = "/auth/update-tokens-pair",
 }
 
-export enum UserEndpoints {
+export enum UserEndpointsEnum {
   GetUserData = "/auth/get-user-data",
   UpdateUserData = "/auth/user-data/update",
   ResetPassword = "/user/reset-password",
 }
 
-export enum CommonEndpoints {
+export enum CommonEndpointsEnum {
   CommonImages = "/common-images",
   GetInfo = "/notification",
 }
 
-export enum CodesEndpoints {
+export enum CodesEndpointsEnum {
   SendEmailCodePasswordRecovery = "/codes/email/password-recovery",
   ValidateEmailCodePasswordRecovery = "/codes/email/validate-email-code-password-recovery",
 }
 
-export enum AdminEndpoints {
+export enum AdminEndpointsEnum {
   GetAppData = "/admin/get-app-data",
   DBClear = "/admin/db-reset",
   ApplyFixtures = "/admin/apply-fixtures",
@@ -63,8 +63,8 @@ export enum AdminEndpoints {
 }
 
 export type EndpointsType =
-  | AuthEndpoints
-  | UserEndpoints
-  | CommonEndpoints
-  | CodesEndpoints
-  | AdminEndpoints;
+  | AuthEndpointsEnum
+  | UserEndpointsEnum
+  | CommonEndpointsEnum
+  | CodesEndpointsEnum
+  | AdminEndpointsEnum;

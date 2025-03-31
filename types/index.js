@@ -1,63 +1,63 @@
 export * from "./shared-types";
-export var RouteNames;
-(function (RouteNames) {
-    RouteNames["Login"] = "/login";
-    RouteNames["Registration"] = "/registration";
-    RouteNames["EmailConfirmation"] = "/email-confirmation";
-    RouteNames["WaitEmailCofirm"] = "/wait-email-confirm";
-    RouteNames["Main"] = "/app";
-    RouteNames["PasswordRecovery"] = "/password-recovery";
-    RouteNames["CreateNewPassword"] = "/create-new-password";
-    RouteNames["Notification"] = "/notification";
-    RouteNames["PrivacyPolicy"] = "/privacy-policy";
-    RouteNames["NotFound"] = "/not-found";
+export var RouteNamesEnum;
+(function (RouteNamesEnum) {
+    RouteNamesEnum["Login"] = "/login";
+    RouteNamesEnum["Registration"] = "/registration";
+    RouteNamesEnum["EmailConfirmation"] = "/email-confirmation";
+    RouteNamesEnum["WaitEmailConfirm"] = "/wait-email-confirm";
+    RouteNamesEnum["Main"] = "/app";
+    RouteNamesEnum["PasswordRecovery"] = "/password-recovery";
+    RouteNamesEnum["CreateNewPassword"] = "/create-new-password";
+    RouteNamesEnum["Notification"] = "/notification";
+    RouteNamesEnum["PrivacyPolicy"] = "/privacy-policy";
+    RouteNamesEnum["NotFound"] = "/not-found";
     // Don't forget to change path below in nginx manually
-    RouteNames["SocketPath"] = "/app-socket/";
-    RouteNames["Api"] = "/api/";
-})(RouteNames || (RouteNames = {}));
-export var Status;
-(function (Status) {
-    Status[Status["Success"] = 200] = "Success";
-    Status[Status["BadRequest"] = 400] = "BadRequest";
-    Status[Status["NotAuth"] = 401] = "NotAuth";
-    Status[Status["Forbidden"] = 403] = "Forbidden";
-    Status[Status["NotFound"] = 404] = "NotFound";
-    Status[Status["Server"] = 500] = "Server";
-    Status[Status["Unreachable"] = 503] = "Unreachable";
-    Status[Status["BadGateway"] = 504] = "BadGateway";
-})(Status || (Status = {}));
-export var AuthEndpoints;
-(function (AuthEndpoints) {
-    AuthEndpoints["Registration"] = "/auth/registration";
-    AuthEndpoints["SendEmailConfirmationLink"] = "/auth/send-email-confirmation-link";
-    AuthEndpoints["SendEmailConfirmation"] = "/auth/send-email-confirmation";
-    AuthEndpoints["Login"] = "/auth/login";
-    AuthEndpoints["GoogleLogin"] = "/auth/google-login";
-    AuthEndpoints["ProviderLogin"] = "/auth/provider-login";
-    AuthEndpoints["Logout"] = "/auth/logout";
-    AuthEndpoints["UpdateTokensPair"] = "/auth/update-tokens-pair";
-})(AuthEndpoints || (AuthEndpoints = {}));
-export var UserEndpoints;
-(function (UserEndpoints) {
-    UserEndpoints["GetUserData"] = "/auth/get-user-data";
-    UserEndpoints["UpdateUserData"] = "/auth/user-data/update";
-    UserEndpoints["ResetPassword"] = "/user/reset-password";
-})(UserEndpoints || (UserEndpoints = {}));
-export var CommonEndpoints;
-(function (CommonEndpoints) {
-    CommonEndpoints["CommonImages"] = "/common-images";
-    CommonEndpoints["GetInfo"] = "/notification";
-})(CommonEndpoints || (CommonEndpoints = {}));
-export var CodesEndpoints;
-(function (CodesEndpoints) {
-    CodesEndpoints["SendEmailCodePasswordRecovery"] = "/codes/email/password-recovery";
-    CodesEndpoints["ValidateEmailCodePasswordRecovery"] = "/codes/email/validate-email-code-password-recovery";
-})(CodesEndpoints || (CodesEndpoints = {}));
-export var AdminEndpoints;
-(function (AdminEndpoints) {
-    AdminEndpoints["GetAppData"] = "/admin/get-app-data";
-    AdminEndpoints["DBClear"] = "/admin/db-reset";
-    AdminEndpoints["ApplyFixtures"] = "/admin/apply-fixtures";
-    AdminEndpoints["DeleteUser"] = "/admin/delete-user";
-    AdminEndpoints["UpdateUserData"] = "/admin/update-user-data";
-})(AdminEndpoints || (AdminEndpoints = {}));
+    RouteNamesEnum["SocketPath"] = "/app-socket/";
+    RouteNamesEnum["Api"] = "/api/";
+})(RouteNamesEnum || (RouteNamesEnum = {}));
+export var StatusEnum;
+(function (StatusEnum) {
+    StatusEnum[StatusEnum["Success"] = 200] = "Success";
+    StatusEnum[StatusEnum["BadRequest"] = 400] = "BadRequest";
+    StatusEnum[StatusEnum["NotAuth"] = 401] = "NotAuth";
+    StatusEnum[StatusEnum["Forbidden"] = 403] = "Forbidden";
+    StatusEnum[StatusEnum["NotFound"] = 404] = "NotFound";
+    StatusEnum[StatusEnum["Server"] = 500] = "Server";
+    StatusEnum[StatusEnum["Unreachable"] = 503] = "Unreachable";
+    StatusEnum[StatusEnum["BadGateway"] = 504] = "BadGateway";
+})(StatusEnum || (StatusEnum = {}));
+export var AuthEndpointsEnum;
+(function (AuthEndpointsEnum) {
+    AuthEndpointsEnum["Registration"] = "/auth/registration";
+    AuthEndpointsEnum["SendEmailConfirmationLink"] = "/auth/send-email-confirmation-link";
+    AuthEndpointsEnum["SendEmailConfirmation"] = "/auth/send-email-confirmation";
+    AuthEndpointsEnum["Login"] = "/auth/login";
+    AuthEndpointsEnum["GoogleLogin"] = "/auth/google-login";
+    AuthEndpointsEnum["ProviderLogin"] = "/auth/provider-login";
+    AuthEndpointsEnum["Logout"] = "/auth/logout";
+    AuthEndpointsEnum["UpdateTokensPair"] = "/auth/update-tokens-pair";
+})(AuthEndpointsEnum || (AuthEndpointsEnum = {}));
+export var UserEndpointsEnum;
+(function (UserEndpointsEnum) {
+    UserEndpointsEnum["GetUserData"] = "/auth/get-user-data";
+    UserEndpointsEnum["UpdateUserData"] = "/auth/user-data/update";
+    UserEndpointsEnum["ResetPassword"] = "/user/reset-password";
+})(UserEndpointsEnum || (UserEndpointsEnum = {}));
+export var CommonEndpointsEnum;
+(function (CommonEndpointsEnum) {
+    CommonEndpointsEnum["CommonImages"] = "/common-images";
+    CommonEndpointsEnum["GetInfo"] = "/notification";
+})(CommonEndpointsEnum || (CommonEndpointsEnum = {}));
+export var CodesEndpointsEnum;
+(function (CodesEndpointsEnum) {
+    CodesEndpointsEnum["SendEmailCodePasswordRecovery"] = "/codes/email/password-recovery";
+    CodesEndpointsEnum["ValidateEmailCodePasswordRecovery"] = "/codes/email/validate-email-code-password-recovery";
+})(CodesEndpointsEnum || (CodesEndpointsEnum = {}));
+export var AdminEndpointsEnum;
+(function (AdminEndpointsEnum) {
+    AdminEndpointsEnum["GetAppData"] = "/admin/get-app-data";
+    AdminEndpointsEnum["DBClear"] = "/admin/db-reset";
+    AdminEndpointsEnum["ApplyFixtures"] = "/admin/apply-fixtures";
+    AdminEndpointsEnum["DeleteUser"] = "/admin/delete-user";
+    AdminEndpointsEnum["UpdateUserData"] = "/admin/update-user-data";
+})(AdminEndpointsEnum || (AdminEndpointsEnum = {}));

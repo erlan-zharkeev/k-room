@@ -1,17 +1,16 @@
 import {
-  UserSettings,
-  SelectedContentElement,
-  AdminPanelModelTab,
-  EventUpdateUserSettings,
-  Theme,
-  SocketActions
+  IUserSettings,
+  SelectedContentElementType,
+  AdminPanelModelTabType,
+  IEventUpdateUserSettings,
+  ThemeType,
+  SocketActionsType
 } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
 import { socket } from 'src/shared/api'
 import { scrollToBottom } from 'src/shared/utils'
 import {
-  changeTheme,
   setSoundValue,
   setTooltipsValue,
   setAbleToShowNotification,
@@ -24,30 +23,30 @@ import {
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useSettings = () => {
-  const { selectedContentElement, selectedChatRoomId, soundOn, currentInfoId } = useTypedSelector(
+  const { selectedContentElement, selectedChatRoomId, soundOn, currentInfoId, theme } = useTypedSelector(
     (state) => state.persist.settings
   )
 
   const dispatch = useDispatch<AppDispatch>()
 
   const updateSetting = (
-    type: keyof UserSettings,
+    type: keyof IUserSettings,
     value: {
       commonSettings?: boolean
-      selectedContentElement?: SelectedContentElement
+      selectedContentElement?: SelectedContentElementType
       infoId?: string
       selectChatRoomId?: string
-      selectedAdminPanelModelTab?: AdminPanelModelTab
+      selectedAdminPanelModelTab?: AdminPanelModelTabType
+      theme?: ThemeType
     }
   ) => {
-    const payload: EventUpdateUserSettings = {
+    const payload: IEventUpdateUserSettings = {
       type,
       value: ''
     }
     switch (type) {
       case 'theme':
-        payload.value = value.commonSettings ? 'dark' : 'light'
-        dispatch(changeTheme(payload.value as Theme))
+        payload.value = value.theme ?? 'dark'
         break
       case 'soundOn':
         payload.value = Boolean(value.commonSettings)
@@ -90,10 +89,10 @@ export const useSettings = () => {
         break
     }
     if (!type) return
-    socket.emit<SocketActions>('update-user-settings', payload)
+    socket.emit<SocketActionsType>('update-user-settings', payload)
   }
 
-  const changeAsideTab = (value: SelectedContentElement) => {
+  const changeAsideTab = (value: SelectedContentElementType) => {
     updateSetting('selectedContentElement', { selectedContentElement: value })
   }
 
@@ -103,6 +102,7 @@ export const useSettings = () => {
     selectedContentElement,
     selectedChatRoomId,
     soundOn,
-    currentInfoId
+    currentInfoId,
+    theme
   }
 }

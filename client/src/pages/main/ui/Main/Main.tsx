@@ -1,39 +1,30 @@
 import './style.scss'
 import {
-  EventCallsUpdated,
-  EventCallUpdated,
-  EventChangeContactsData,
-  EventContactAddSuccess,
-  EventDeleteContactSuccess,
-  EventErrorMessage,
-  EventGetContacts,
-  EventGetRooms,
-  EventInviteReceived,
-  EventMessageDeleted,
-  EventMessageDelivered,
-  EventStatusContact,
-  EventUpdateContactInteractionTypeSuccess,
-  EventUpdatedMessageReactions,
-  EventUpdateMessageStatus,
-  SocketActions
+  EventCallsUpdatedType,
+  EventCallUpdatedType,
+  IEventChangeContactsData,
+  IEventGetContacts,
+  EventGetRoomsType,
+  IEventInviteReceived,
+  IEventMessageDeleted,
+  IEventMessageDelivered,
+  IEventStatusContact,
+  IEventUpdateContactInteractionSuccess,
+  IEventUpdatedMessageReactions,
+  IEventUpdateMessageStatus,
+  SocketActionsType
 } from 'common-types'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
-import { AdditionalServiceContext } from 'src/shared/providers'
-import { clg } from 'src/shared/utils'
-import { socket, socketReconnect } from 'src/shared/api'
-import { StubLoading } from 'src/pages/main'
-import { updateCalls, updateCall } from 'src/entities/call'
+import { socket, useSocket } from 'src/shared/api'
+import { updateCalls, updateCall, CallModal } from 'src/entities/call'
 import {
-  updateContactsStatusLocal,
   loadContacts,
   updateContactsStatus,
   updateContactData,
   acceptInvite,
-  addContact,
-  updateContactInteractionType,
-  deleteContact
+  updateContactInteractionType
 } from 'src/entities/contact'
 import {
   changeChatName,
@@ -44,61 +35,36 @@ import {
   updateMessageReactions,
   useChatRooms
 } from 'src/entities/chat-room'
-import { setContextMenu, setReconnectingStatus, useViewport } from 'src/entities/system'
-import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
+import { setContextMenu, useViewport } from 'src/entities/system'
+import { useNotification } from 'src/entities/notification'
 import { useTypedSelector } from 'src/shared/lib'
-import { AdminPanelContent } from 'src/widgets/admin-panel-content'
 import { AsideBar } from 'src/widgets/aside-bar'
 import { AsidePanel } from 'src/widgets/aside-panel'
 import { CallStatusBar } from 'src/widgets/call-status-bar'
 import { ChatRoom } from 'src/widgets/chat-room'
 import { InfoList } from 'src/widgets/info'
 import { TopBar } from 'src/widgets/top-bar'
+import { Modal } from 'antd'
+import { ContextMenuWrapper } from 'src/entities/context-menu'
+import { useContactOnlineMonitor } from 'src/features/monitor-contacts-online'
+import { AppLoader } from 'src/widgets/app-loader'
+import { useSettings } from 'src/entities/settings'
+import { useContactUpdatesMonitor } from 'src/features/contact/monitor-contact-updates'
+import { useGetNotificationPermission } from 'src/features/get-bom-permission'
 
 export const Main = () => {
   const { selectedChatRoom } = useChatRooms()
-
-  const { call } = useContext(AdditionalServiceContext)
-  const { viewPort } = useTypedSelector((state) => state.system)
-  const { isAuth } = useTypedSelector((state) => state.user)
-  const { selectedContentElement } = useTypedSelector((state) => state.persist.settings)
-  const { contacts } = useTypedSelector((state) => state.contacts)
+  const { monitorContactsOnline } = useContactOnlineMonitor()
+  const { initSocketConnection } = useSocket()
+  const { selectedContentElement } = useSettings()
+  const { monitorContactUpdates } = useContactUpdatesMonitor()
+  const { getNotificationPermission } = useGetNotificationPermission()
   const isCallMinified = useTypedSelector((state) => state.calls.isMinified)
-  const notifications = useNotification()
-  const pingTimer = useRef<number | NodeJS.Timeout>()
-  const [pingTimerCounter, updateTimerCounter] = useState<number>(0)
 
-  useTypedSelector((state) => state.calls.currentCall)
+  const notifications = useNotification()
   const dispatch = useDispatch<AppDispatch>()
 
-  const socketDisconnectedNotification = notifications.getNotification({
-    messageType: 'error',
-    message: ClientNotificationMessage.SocketDisconnected
-  })
-  const contactAddedSuccessNotification = notifications.getNotification({
-    messageType: 'info',
-    message: ClientNotificationMessage.ContactAdded
-  })
-  const contactDeletedSuccessNotification = notifications.getNotification({
-    messageType: 'info',
-    message: ClientNotificationMessage.ContactDeleted
-  })
-
-  const statusNotification = (isSuccess: Boolean) => {
-    if (isSuccess) {
-      clg('success', 'Socket connected')
-      return
-    }
-    clg('error', 'Socket disconnected')
-    if (!isAuth) return
-    if (call.current) {
-      call.current.closeConnection(true)
-    }
-    socketDisconnectedNotification.open()
-  }
-
-  const { lessOrEqualTablet, greaterOrEqualTablet } = useViewport()
-  const hideAside = () => selectedChatRoom && lessOrEqualTablet
+  const { lessOrEqualTablet, greaterOrEqualTablet, viewPort } = useViewport()
 
   const clickHandler = () => {
     dispatch(
@@ -109,148 +75,88 @@ export const Main = () => {
     )
   }
 
-  const getNotificationPermission = () => {
-    if (!('Notification' in window)) {
-      console.log('Browser doesn`t support Notification Api')
-    }
-    window.Notification.requestPermission()
-  }
-
-  const mainBodyClassNames = () => `main__body ${isCallMinified ? 'main__body--call-minified' : ''}`
-
-  const checkForContactOnline = () => {
-    socket.emit<SocketActions>('interlocutor-ping')
-    const maxDiffSeconds = 30
-    const currentTimestamp = Date.now()
-    contacts.forEach((contact) => {
-      const outOfInterval = Math.abs(currentTimestamp - contact.onlineStatusUpdatedTimestamp) / 1000 > maxDiffSeconds
-      if (outOfInterval) {
-        updateContactsStatusLocal({ contactId: contact.id, online: false })
-      }
-    })
-  }
+  getNotificationPermission()
+  monitorContactsOnline()
+  initSocketConnection()
+  monitorContactUpdates()
 
   useEffect(() => {
-    checkForContactOnline()
-  }, [pingTimerCounter])
-
-  useEffect(() => {
-    getNotificationPermission()
-
-    pingTimer.current = setInterval(() => {
-      updateTimerCounter((prev) => {
-        const newValue = prev + 1
-        return newValue
-      })
-    }, 5000)
-
-    if (socket.disconnected) {
-      socketReconnect(dispatch)
-    }
-
-    socket.emit<SocketActions>('initialize')
-
-    socket.on<SocketActions>('auth-error', () => {
-      socketReconnect(dispatch)
-    })
-    socket.on<SocketActions>('reconnect', (attempt: number) => {
-      clg('success', `Socket reconnected on attempt: ${attempt}`)
-      socket.emit<SocketActions>('initialize')
-      dispatch(setReconnectingStatus(false))
-    })
-    socket.on<SocketActions>('reconnect_attempt', (attempt: number) => {
-      clg('warn', `Socket reconnecting. Attempt: ${attempt}`)
-      dispatch(setReconnectingStatus(true))
-    })
-    socket.on<SocketActions>('reconnect_failed', () => {
-      dispatch(setReconnectingStatus(false))
-    })
-    socket.on<SocketActions>('error-message', ({ message }: EventErrorMessage) => {
-      const errorMessageNotification = notifications.getNotification({ messageType: 'error', message })
-      errorMessageNotification.open()
-    })
-    socket.on<SocketActions>('disconnect', () => {
-      statusNotification(false)
-    })
-    socket.on<SocketActions>('connection', () => {
-      statusNotification(true)
-    })
-    socket.on<SocketActions>('get-contacts', ({ contacts }: EventGetContacts) => {
+    socket.on<SocketActionsType>('get-contacts', ({ contacts }: IEventGetContacts) => {
       dispatch(loadContacts(contacts))
     })
-    socket.on<SocketActions>('status-contact', (payload: EventStatusContact) => {
+    socket.on<SocketActionsType>('status-contact', (payload: IEventStatusContact) => {
       dispatch(updateContactsStatus(payload))
     })
-    socket.on<SocketActions>('change-contacts-data', (payload: EventChangeContactsData) => {
+    socket.on<SocketActionsType>('change-contacts-data', (payload: IEventChangeContactsData) => {
       dispatch(updateContactData(payload))
       dispatch(changeChatName(payload))
     })
-    socket.on<SocketActions>('get-rooms', (payload: EventGetRooms) => {
+    socket.on<SocketActionsType>('get-rooms', (payload: EventGetRoomsType) => {
       dispatch(loadChatRooms(payload))
     })
-    socket.on<SocketActions>('message-delivered', (payload: EventMessageDelivered) => {
+    socket.on<SocketActionsType>('message-delivered', (payload: IEventMessageDelivered) => {
       dispatch(updateChatMessage({ ...payload, notifications }))
     })
-    socket.on<SocketActions>('update-message-status', (payload: EventUpdateMessageStatus) => {
+    socket.on<SocketActionsType>('update-message-status', (payload: IEventUpdateMessageStatus) => {
       dispatch(updateMessageStatus(payload))
     })
-    socket.on<SocketActions>('message-deleted', (payload: EventMessageDeleted) => {
+    socket.on<SocketActionsType>('message-deleted', (payload: IEventMessageDeleted) => {
       dispatch(deleteMessage(payload))
     })
-    socket.on<SocketActions>('update-message-reactions', (payload: EventUpdatedMessageReactions) => {
+    socket.on<SocketActionsType>('update-message-reactions', (payload: IEventUpdatedMessageReactions) => {
       dispatch(updateMessageReactions(payload))
     })
-    socket.on<SocketActions>('call-updated', (payload: EventCallsUpdated) => {
+    socket.on<SocketActionsType>('call-updated', (payload: EventCallsUpdatedType) => {
       dispatch(updateCalls(payload))
     })
-    socket.on<SocketActions>('call-updated', (payload: EventCallUpdated) => {
+    socket.on<SocketActionsType>('call-updated', (payload: EventCallUpdatedType) => {
       dispatch(updateCall(payload))
     })
-    socket.on<SocketActions>('invite-received', (payload: EventInviteReceived) => {
+    socket.on<SocketActionsType>('invite-received', (payload: IEventInviteReceived) => {
       dispatch(acceptInvite(payload))
     })
-    socket.on<SocketActions>('contact-add-success', (payload: EventContactAddSuccess) => {
-      dispatch(addContact(payload))
-      contactAddedSuccessNotification.open()
-    })
-    socket.on<SocketActions>(
+
+    socket.on<SocketActionsType>(
       'contact-interaction-type-updated',
-      ({ contactId, interactionType }: EventUpdateContactInteractionTypeSuccess) => {
-        dispatch(updateContactInteractionType({ contactId, interactionType }))
+      ({ contactId, interaction }: IEventUpdateContactInteractionSuccess) => {
+        dispatch(updateContactInteractionType({ contactId, interaction }))
       }
     )
-    socket.on<SocketActions>('contact-delete-success', ({ deletedContactId, silent }: EventDeleteContactSuccess) => {
-      dispatch(deleteContact({ contactId: deletedContactId }))
-      if (!silent) contactDeletedSuccessNotification.open()
-    })
-    return () => {
-      socket.removeAllListeners()
-      if (pingTimer.current) clearInterval(pingTimer.current)
-    }
   }, [])
 
+  const rootClassName = useMemo(
+    () => (selectedChatRoom && lessOrEqualTablet ? 'main move-aside' : 'main'),
+    [selectedChatRoom, lessOrEqualTablet]
+  )
+
+  const contentPartClassName = useMemo(() => {
+    return isCallMinified ? 'main__body main__body--call-minified' : 'main__body'
+  }, [isCallMinified])
+
   return (
-    <div className={'main' + (hideAside() ? ' move-aside' : '')} onClick={clickHandler}>
-      {socket.disconnected && <StubLoading />}
-      <div className="main__wrapper">
-        {greaterOrEqualTablet && <AsideBar />}
-        <div className="main__content">
-          <CallStatusBar />
-          <TopBar />
-          {selectedContentElement === 'info' || selectedContentElement === 'admin-panel' ? (
-            <div className={mainBodyClassNames()}>
-              {selectedContentElement === 'info' && <InfoList />}
-              {selectedContentElement === 'admin-panel' && <AdminPanelContent />}
-            </div>
-          ) : (
-            <div className={mainBodyClassNames()}>
-              <AsidePanel />
-              <ChatRoom />
-            </div>
-          )}
-          {viewPort.width <= 768 && <AsideBar />}
+    <>
+      <div className={rootClassName} onClick={clickHandler}>
+        <div className="main__wrapper">
+          {greaterOrEqualTablet && <AsideBar />}
+          <div className="main__content">
+            <CallStatusBar />
+            <TopBar />
+            {selectedContentElement === 'info' ? (
+              <div className={contentPartClassName}>{selectedContentElement === 'info' && <InfoList />}</div>
+            ) : (
+              <div className={contentPartClassName}>
+                <AsidePanel />
+                <ChatRoom />
+              </div>
+            )}
+            {viewPort.width <= 768 && <AsideBar />}
+          </div>
         </div>
       </div>
-    </div>
+      <AppLoader />
+      <Modal />
+      <CallModal />
+      <ContextMenuWrapper />
+    </>
   )
 }

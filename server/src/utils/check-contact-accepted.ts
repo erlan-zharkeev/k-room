@@ -12,7 +12,7 @@ export const checkContactsAccepted = async (selfId: string, contactId: string): 
     const selfContact = self.contacts?.[contactId]
     const userContact = user.contacts?.[selfId]
 
-    return selfContact?.interactionType === 'invite-accepted' && userContact?.interactionType === 'invite-accepted'
+    return selfContact?.interaction === 'invite-accepted' && userContact?.interaction === 'invite-accepted'
   } catch (error) {
     console.error('Error checking contacts:', error)
     return false

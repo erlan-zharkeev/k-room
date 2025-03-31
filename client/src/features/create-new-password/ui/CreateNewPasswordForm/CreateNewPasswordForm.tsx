@@ -1,4 +1,3 @@
-import './style.scss'
 import { AppForm } from 'src/shared/ui'
 import { useCreateNewPassword } from '../../hooks'
 

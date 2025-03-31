@@ -1,4 +1,4 @@
-import { EventMessageDelivered } from 'common-types'
+import { IEventMessageDelivered } from 'common-types'
 import { useMemo } from 'react'
 import { MessageNotification } from 'src/entities/message'
 import { UseNotification } from 'src/entities/notification'
@@ -23,7 +23,7 @@ export const useChatRooms = () => {
     return chatRooms.find((room) => room.id === selectedChatRoomId) || null
   }, [chatRooms, selectedChatRoomId])
 
-  type UpdateChatMessagePayload = EventMessageDelivered & {
+  type UpdateChatMessagePayload = IEventMessageDelivered & {
     notifications: UseNotification
   }
 

@@ -1,6 +1,6 @@
-import { UserSettings } from '../../@types'
+import { IUserSettings } from '../../@types'
 
-export const initUserSettings: UserSettings = {
+export const initUserSettings: IUserSettings = {
   selectedContentElement: 'contacts',
   selectedAdminPanelModelTab: 'users',
   currentInfoId: '1',

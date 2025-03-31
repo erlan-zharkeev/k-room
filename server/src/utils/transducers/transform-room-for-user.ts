@@ -1,5 +1,5 @@
 import { UserModel, MessageModel } from '../../models'
-import { DBMessage, ChatRoom, IChatRoomSchema } from '../../@types'
+import { IDBMessage, IChatRoom, IChatRoomSchema } from '../../@types'
 import { transformMessageForUsers } from './transform-message-for-users'
 import { ObjectId } from 'mongoose'
 
@@ -15,9 +15,9 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
       avatarPath: user.avatarPath
     }
   })
-  const fullBodyMessages: Array<DBMessage> = await MessageModel.find({ _id: { $in: messages } })
+  const fullBodyMessages: Array<IDBMessage> = await MessageModel.find({ _id: { $in: messages } })
   const transformedMessages = fullBodyMessages.map((message) => transformMessageForUsers(message, userId))
-  const result: ChatRoom = {
+  const result: IChatRoom = {
     id: String(_id),
     authorId,
     chatName,

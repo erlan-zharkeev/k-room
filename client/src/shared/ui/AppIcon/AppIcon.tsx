@@ -42,7 +42,7 @@ import ThunderIcon from './icons/thunder.svg?react'
 import EyeIcon from './icons/eye.svg?react'
 import EyeBlockedIcon from './icons/eye-blocked.svg?react'
 
-export const IconList: Array<AppIconListElement> = [
+export const IconList: AppIconListElement[] = [
   { name: 'logo', AppIcon: LogoIcon },
   { name: 'shield', AppIcon: ShieldIcon },
   { name: 'contacts', AppIcon: ContactsIcon },
@@ -86,6 +86,7 @@ export const IconList: Array<AppIconListElement> = [
 
 export const AppIcon = ({ name, color = 'text-color', size = 'small' }: AppIconProps) => {
   const AppIcon = IconList.find((IconElement) => IconElement.name === name)?.AppIcon
+
   const className = createClassNameWithModifiers({ rootClass: 'app-icon', modifiers: [name, size, color] })
   return <div className={className}>{AppIcon && <AppIcon />}</div>
 }

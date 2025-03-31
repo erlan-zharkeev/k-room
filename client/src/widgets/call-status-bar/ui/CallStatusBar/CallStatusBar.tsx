@@ -17,11 +17,11 @@ export const CallStatusBar = () => {
       onClick={() => dispatch(unsetMinify())}
     >
       <div className="call-status-bar__wrapper">
-        <div className="call-status-bar__type paragraph-text">{firstCharUpperCase(currentCall.type)} call</div>
+        <div className="call-status-bar__type paragraph-text">{firstCharUpperCase(currentCall.flow)} call</div>
         <div className="call-status-bar__info">
           {currentCall.interlocutorAvatarPath && (
             <div className="call-status-bar__avatar">
-              <AppAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="extra-small" />
+              <AppAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="small" />
             </div>
           )}
           <div className="call-status-bar__interlocutor-name paragraph-text">{currentCall.interlocutorName}</div>

@@ -1,4 +1,4 @@
-import { Message } from 'common-types'
+import { IMessage } from 'common-types'
 
 export type ContextMenuType = '' | 'message'
 export interface ContextMenu {
@@ -10,5 +10,5 @@ export interface ContextMenu {
   contextClickedObject: ContextClickedObject
 }
 export interface ContextClickedObject {
-  message: Message
+  message: IMessage
 }

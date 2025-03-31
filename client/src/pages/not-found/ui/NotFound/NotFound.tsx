@@ -1,6 +1,6 @@
 import './style.scss'
 import { AppButton } from 'src/shared/ui'
-import { RouteNames } from 'common-types'
+import { RouteNamesEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from 'src/entities/user'
 
@@ -9,7 +9,7 @@ export const NotFound = () => {
   const { isAuth } = useUser()
 
   const goToAppHandler = () => {
-    const routeTo = isAuth ? RouteNames.Main : RouteNames.Login
+    const routeTo = isAuth ? RouteNamesEnum.Main : RouteNamesEnum.Login
     navigate(routeTo)
   }
 

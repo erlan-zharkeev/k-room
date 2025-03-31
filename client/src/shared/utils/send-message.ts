@@ -1,4 +1,4 @@
-import { EventSendMessage, ImageObject, Message, RepliedMessage, SocketActions } from 'common-types'
+import { IEventSendMessage, IImageObject, IMessage, IRepliedMessage, SocketActionsType } from 'common-types'
 import { socket } from 'src/shared/api'
 import { AppDispatch } from 'src/app/store'
 import { resetRepliedMessage, pushTemporaryMessage } from 'src/entities/chat-room'
@@ -19,11 +19,11 @@ export const sendMessage = ({
   roomId: string
   username: string
   dispatch: AppDispatch
-  images?: Array<ImageObject>
+  images?: IImageObject[]
   imageCompression?: boolean
-  repliedMessage?: RepliedMessage | null
+  repliedMessage?: IRepliedMessage | null
 }) => {
-  const message: Message = {
+  const message: IMessage = {
     id: '',
     tempId: generateUUIDv4(),
     status: 'sending',
@@ -35,11 +35,11 @@ export const sendMessage = ({
     createdAt: String(Date.now()),
     repliedMessage
   }
-  const payload: EventSendMessage = {
+  const payload: IEventSendMessage = {
     roomId,
     message
   }
-  socket.emit<SocketActions>('send-message', payload)
+  socket.emit<SocketActionsType>('send-message', payload)
   dispatch(resetRepliedMessage())
   dispatch(pushTemporaryMessage({ roomId, message }))
 }

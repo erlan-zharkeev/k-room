@@ -1,4 +1,4 @@
-export interface Codes {
+export interface ICodes {
     passwordRecovery: {
         query: {
             value: string;
@@ -9,7 +9,7 @@ export interface Codes {
     };
     nextRequestPossibleAt: string;
 }
-export interface CodeValidationPayload {
+export interface ICodeValidationPayload {
     email: string;
     code: string;
 }

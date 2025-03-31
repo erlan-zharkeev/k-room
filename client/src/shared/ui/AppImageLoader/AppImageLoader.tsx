@@ -1,5 +1,5 @@
 import './style.scss'
-import { ImageObject } from 'common-types'
+import { IImageObject } from 'common-types'
 import { useState } from 'react'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
 import { AppIcon } from 'src/shared/ui'
@@ -8,8 +8,8 @@ import { ImageResolutions } from 'src/shared/types'
 
 export interface UIFileLoaderProps {
   multiple?: boolean
-  allowedResolutions?: Array<string>
-  setImages: (images: Array<ImageObject>) => void
+  allowedResolutions?: string[]
+  setImages: (images: IImageObject[]) => void
 }
 
 const MAX_QUANTITY_BIND_IMAGES = 4
@@ -28,7 +28,7 @@ export const AppImageLoader = ({
     messageType: 'warning'
   })
 
-  const normFile = async (e: { target: { files: Array<File> | any } }) => {
+  const normFile = async (e: { target: { files: File[] | any } }) => {
     setIsLoading(true)
     const images = e.target.files
     if (!images) return
@@ -37,7 +37,7 @@ export const AppImageLoader = ({
       setIsLoading(false)
       return
     }
-    let updatedImages: Array<ImageObject> = []
+    let updatedImages: IImageObject[] = []
     ;[...images].forEach((image, idx) => {
       const reader = imageToBase64({ image, allowedResolutions, notifications })
       if (!reader) {

@@ -1,4 +1,4 @@
-import { CodesEndpoints, CodeValidationPayload, RouteNames } from 'common-types'
+import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common-types'
 import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useApi } from 'src/shared/api'
@@ -34,7 +34,7 @@ export const usePasswordRecovery = () => {
   // const onFinishEmailConfirm = async (fields: FormData) => {
   //   stopCounter()
   //   setEmailSendCodeIsLoading(true)
-  //   const response = await doRequest('post', CodesEndpoints.SendEmailCodePasswordRecovery, fields)
+  //   const response = await doRequest('post', CodesEndpointsEnum.SendEmailCodePasswordRecovery, fields)
   //   setEmailSendCodeIsLoading(false)
   //   setCodeAsSent(true)
   //   if (!response) return
@@ -46,15 +46,15 @@ export const usePasswordRecovery = () => {
 
   // const onFinishCodeConfirm = async (fields: { code: string }) => {
   //   setCodeValidationIsLoading(true)
-  //   const payload: CodeValidationPayload = {
+  //   const payload: ICodeValidationPayload = {
   //     email: emailConfirmForm.getFieldValue('email'),
   //     code: fields.code
   //   }
-  //   const response = await doRequest('post', CodesEndpoints.ValidateEmailCodePasswordRecovery, payload)
+  //   const response = await doRequest('post', CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, payload)
   //   if (!response) return
   //   const { query } = response.data
   //   setCodeValidationIsLoading(false)
-  //   navigate({ pathname: RouteNames.CreateNewPassword, search: `?password-recovery=${query}` })
+  //   navigate({ pathname: RouteNamesEnum.CreateNewPassword, search: `?password-recovery=${query}` })
   // }
 
   return {

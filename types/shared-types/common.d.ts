@@ -1,1 +1,1 @@
-export type AuthTokens = "jwt" | "refresh-jwt";
+export type AuthTokensType = "jwt" | "refresh-jwt";

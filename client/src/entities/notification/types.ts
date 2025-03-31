@@ -7,10 +7,10 @@ export enum ClientNotificationMessage {
   CantAccessDevice = 'Cant get access to video device',
   MaxAttachedFilesExceed = 'The maximum number of attached images should not exceed 4',
   FailedToConnectToDevice = 'Failed to connect to device, check for device is plugged in',
-  CallCompleted = 'Call completed',
+  CallCompleted = 'ICall completed',
   FailedToLogin = 'Login failed, server error. Please try again, later',
-  ContactAdded = 'Contact added',
-  ContactDeleted = 'Contact deleted',
+  ContactAdded = 'ContactType added',
+  ContactDeleted = 'ContactType deleted',
   ImageResNotAllowed = 'Image resolution not allowed',
   ImageSizeMustLessThan2mb = 'Image size must be less than 2mb',
   SocketDisconnected = 'Socket disconnected'

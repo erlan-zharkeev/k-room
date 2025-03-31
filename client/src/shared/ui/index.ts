@@ -1,4 +1,5 @@
 import './style.scss'
+
 export * from './AppAvatar/AppAvatar'
 export * from './AppAvatarLoader/AppAvatarLoader'
 export * from './AppButton/AppButton'
@@ -10,6 +11,7 @@ export * from './AppLogo/AppLogo'
 export * from './AppImageLoader/AppImageLoader'
 export * from './AppSwitch/AppSwitch'
 export * from './AppErrorBucket/AppErrorBucket'
-export * from './ProfileInfo/ProfileInfo'
+export * from './AppCollapse/AppCollapse'
+export * from './AppProgressBar/AppProgressBar'
 
 export * from './types'

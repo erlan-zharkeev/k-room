@@ -1,6 +1,6 @@
-import { DBMessage, Message } from '../../@types'
+import { IDBMessage, IMessage } from '../../@types'
 
-export const transformMessageForUsers = (message: DBMessage, userId: string): Message => {
+export const transformMessageForUsers = (message: IDBMessage, userId: string): IMessage => {
   const { _id, authorId, authorName, body, createdAt, usersMetaData, reactions, images, repliedMessage } = message
   const isSelf = authorId === userId
   const readBySomeone = usersMetaData.some((data) => data.status === 'read')

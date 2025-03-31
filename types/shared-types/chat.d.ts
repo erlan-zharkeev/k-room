@@ -1,15 +1,15 @@
-import { UserShort, Message } from ".";
-export interface ChatRoom {
+import { UserShortType, IMessage } from ".";
+export interface IChatRoom {
     id: string;
     authorId: string;
     chatName?: string;
     avatarPath?: string;
-    users: UserShort[];
-    messages: Message[];
+    users: UserShortType[];
+    messages: IMessage[];
     multiple: boolean;
 }
-export type ChatRooms = ChatRoom[];
-export interface IChatRoomSchema extends Omit<ChatRoom, "users" | "messages"> {
+export type ChatRoomsType = IChatRoom[];
+export interface IChatRoomSchema extends Omit<IChatRoom, "users" | "messages"> {
     users: string[];
     messages: string[];
 }

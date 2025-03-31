@@ -1,5 +1,5 @@
 import './style.scss'
-import { Status, RouteNames, AuthEndpoints } from 'common-types'
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -19,8 +19,8 @@ export const EmailConfirmation = () => {
   const { doRequest } = useApi()
 
   const sendEmailConfirmation = async (id: string) => {
-    const response = await doRequest('post', AuthEndpoints.SendEmailConfirmation, { userId: id })
-    if (response?.status !== Status.Success) return navigate(RouteNames.Login)
+    const response = await doRequest('post', AuthEndpointsEnum.SendEmailConfirmation, { userId: id })
+    if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
     setEmail(response.data.userData.email)
     setIsLoading(false)
     dispatch(logOut())
@@ -29,7 +29,7 @@ export const EmailConfirmation = () => {
   useEffect(() => {
     const userId = query.get('userId')
     if (userId) sendEmailConfirmation(userId)
-    else navigate(RouteNames.Login)
+    else navigate(RouteNamesEnum.Login)
   }, [])
 
   return (
@@ -47,7 +47,7 @@ export const EmailConfirmation = () => {
               <span className="header-text header-text--sm header-text--accent"> {email} </span>
               confirmed
             </div>
-            <AppButton text="Go to app" onClick={() => navigate(RouteNames.Login)} />
+            <AppButton text="Go to app" onClick={() => navigate(RouteNamesEnum.Login)} />
           </>
         )}
       </div>

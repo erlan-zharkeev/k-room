@@ -2,7 +2,7 @@ import { io } from '../server'
 import { SocketInstanceType } from '../@types/socket'
 import { slices } from './slices'
 import { jwt } from '../services/jwt'
-import { JWTDecoded, SocketActions } from '../@types'
+import { JWTDecoded, SocketActionsType } from '../@types'
 import { ENV } from '../ENV'
 import { clc } from '../utils'
 
@@ -10,7 +10,7 @@ export * from './helpers'
 export * from './slices'
 
 const breakConnection = (socket: SocketInstanceType) => {
-  socket.emit<SocketActions>('auth-error')
+  socket.emit<SocketActionsType>('auth-error')
   socket.disconnect()
 }
 
@@ -25,7 +25,7 @@ const authMiddleware = async (socket: SocketInstanceType) => {
 }
 
 try {
-  io.on<SocketActions>('connection', async (socket: SocketInstanceType) => {
+  io.on<SocketActionsType>('connection', async (socket: SocketInstanceType) => {
     await authMiddleware(socket)
     Object.values(slices).forEach((slice) => slice(socket))
   })

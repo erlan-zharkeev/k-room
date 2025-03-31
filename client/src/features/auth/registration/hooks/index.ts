@@ -1,4 +1,4 @@
-import { AuthEndpoints, AuthRegistrationPayload, RouteNames, Status } from 'common-types'
+import { AuthEndpointsEnum, AuthRegistrationPayloadType, RouteNamesEnum, StatusEnum } from 'common-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
@@ -20,14 +20,14 @@ export const useRegistration = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [isLoading, setIsLoading] = useState(false)
 
-  const register = async (fields: AuthRegistrationPayload) => {
+  const register = async (fields: AuthRegistrationPayloadType) => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpoints.Registration, fields)
+    const response = await doRequest('post', AuthEndpointsEnum.Registration, fields)
     setIsLoading(false)
-    if (response?.status === Status.Success && response.data) {
+    if (response?.status === StatusEnum.Success && response.data) {
       const { userData, settings } = response.data
       commonSetUserDataHandler(dispatch, { userData, settings })
-      navigate(RouteNames.Login)
+      navigate(RouteNamesEnum.Login)
     }
   }
 

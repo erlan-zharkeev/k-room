@@ -2,7 +2,6 @@ import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@redu
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { persistStore } from 'redux-persist'
-
 import { systemSlice } from 'src/entities/system'
 import { chatRoomsSlice } from 'src/entities/chat-room'
 import { userSlice } from 'src/entities/user'

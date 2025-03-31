@@ -1,9 +1,10 @@
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useSystem = () => {
-  const { allowAudioContext } = useTypedSelector((state) => state.system)
+  const { allowAudioContext, isAppLoading } = useTypedSelector((state) => state.system)
 
   return {
-    allowAudioContext
+    allowAudioContext,
+    isAppLoading
   }
 }

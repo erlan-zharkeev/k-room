@@ -1,11 +1,11 @@
-import { DBContact, Contact, IUserSchema } from '../../@types'
+import { DBContactType, ContactType, IUserSchema } from '../../@types'
 
-export const transformUserToContact = (user: IUserSchema, userContact: DBContact): Contact => ({
+export const transformUserToContact = (user: IUserSchema, userContact: DBContactType): ContactType => ({
   id: user.id,
   username: user.username,
   email: user.email,
   online: user.online,
   avatarPath: user.avatarPath ?? '',
   lastSeen: user.lastSeen ?? '',
-  interactionType: userContact?.interactionType ?? 'default'
+  interaction: userContact?.interaction ?? 'default'
 })

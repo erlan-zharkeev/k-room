@@ -1,5 +1,5 @@
 import './style.scss'
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, ReactNode, useMemo, useState } from 'react'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 import { AppButton } from '../AppButton/AppButton'
 
@@ -12,6 +12,8 @@ export interface AppInputProps {
   autoComplete?: 'on' | 'off'
   onChange?: (e: ChangeEvent<HTMLInputElement>) => Promise<void> | void
   onBlur?: (e: ChangeEvent<HTMLInputElement>) => Promise<void> | void
+  showClearButton?: boolean
+  prefixSlot?: ReactNode
 }
 
 const rootClass = 'app-input'
@@ -24,9 +26,12 @@ export const AppInput = ({
   disabled,
   autoComplete = 'off',
   onChange,
-  onBlur
+  onBlur,
+  showClearButton = false,
+  prefixSlot = undefined
 }: AppInputProps) => {
-  const className = createClassNameWithModifiers({ rootClass, modifiers: [type] })
+  const [focused, setFocused] = useState(false)
+  const className = createClassNameWithModifiers({ rootClass, modifiers: [type, focused && 'focused'] })
   const [showPasswordText, setShowPasswordText] = useState(false)
 
   const currentType = useMemo(() => {
@@ -34,18 +39,35 @@ export const AppInput = ({
     return showPasswordText ? 'text' : 'password'
   }, [type, showPasswordText])
 
+  const clearHandler = () => {
+    const syntheticEvent = {
+      target: {
+        name,
+        value: ''
+      }
+    } as ChangeEvent<HTMLInputElement>
+    onChange?.(syntheticEvent)
+  }
+
   return (
     <div className={className}>
-      <input
-        name={name}
-        value={value}
-        type={currentType}
-        placeholder={placeholder}
-        disabled={disabled}
-        onChange={onChange}
-        onBlur={onBlur}
-        autoComplete={autoComplete}
-      />
+      {prefixSlot && <div className="app-input__prefix-icon">{prefixSlot}</div>}
+      <div className="app-input__input-wrapper">
+        <input
+          name={name}
+          value={value}
+          type={currentType}
+          placeholder={placeholder}
+          disabled={disabled}
+          onChange={onChange}
+          onBlur={(e) => {
+            setFocused(false)
+            onBlur?.(e)
+          }}
+          onFocus={() => setFocused(true)}
+          autoComplete={autoComplete}
+        />
+      </div>
       {type === 'password' && (
         <AppButton
           prefixIconName={showPasswordText ? 'eye-blocked' : 'eye'}
@@ -54,6 +76,7 @@ export const AppInput = ({
           borderless
         />
       )}
+      {showClearButton && <AppButton prefixIconName="cross" borderless onClick={clearHandler} />}
     </div>
   )
 }

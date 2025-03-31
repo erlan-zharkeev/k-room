@@ -1,4 +1,4 @@
-import { UserCredential, AuthEndpoints, AuthLoginPayload, Status, RouteNames } from 'common-types'
+import { UserCredentialType, AuthEndpointsEnum, AuthLoginPayloadType, StatusEnum, RouteNamesEnum } from 'common-types'
 import { useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -18,19 +18,19 @@ export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [googleBtnLoading, setGoogleBtnLoading] = useState(false)
 
-  const login = async (fields: AuthLoginPayload) => {
+  const login = async (fields: AuthLoginPayloadType) => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpoints.Login, fields)
+    const response = await doRequest('post', AuthEndpointsEnum.Login, fields)
     setIsLoading(false)
-    if (response?.status === Status.Success && response.data) {
+    if (response?.status === StatusEnum.Success && response.data) {
       const { userData, settings } = response.data
       commonSetUserDataHandler(dispatch, { userData, settings })
-      navigate(RouteNames.Main)
+      navigate(RouteNamesEnum.Main)
     }
   }
 
   const onSubmit = (payload: unknown) => {
-    const formData = payload as AuthLoginPayload
+    const formData = payload as AuthLoginPayloadType
     login(formData)
   }
 
@@ -41,7 +41,7 @@ export const useLogin = () => {
     const { providerId } = result
     const haveFullData = displayName && email && photoURL && uid && providerId
     if (!haveFullData) return
-    const credential: UserCredential = {
+    const credential: UserCredentialType = {
       id: uid,
       username: displayName,
       email,
@@ -49,7 +49,7 @@ export const useLogin = () => {
       providerName: providerId
     }
 
-    const response = await doRequest('post', AuthEndpoints.ProviderLogin, credential)
+    const response = await doRequest('post', AuthEndpointsEnum.ProviderLogin, credential)
     setGoogleBtnLoading(false)
     if (!response) return
     const { userData, settings } = response.data

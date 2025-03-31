@@ -5,15 +5,18 @@
   align-items: center;
 
   .app-avatar__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 1px;
-    object-fit: cover !important;
+    object-fit: cover;
     overflow: hidden;
-    background: var(--main-bg) !important;
+    background: var(--main-bg);
     border: solid 1px var(--text);
-    border-radius: 50% !important;
+    border-radius: 50%;
   }
 
-  .app-avatar--square-shape {
+  &.app-avatar--square-shape {
     .ant-image-mask {
       border-radius: 0;
     }
@@ -30,8 +33,6 @@
   }
 
   &.app-avatar--small {
-    color: red;
-
     .app-avatar__image {
       $size: 32px;
 

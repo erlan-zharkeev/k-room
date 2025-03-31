@@ -1,5 +1,5 @@
 import './style.scss'
-import { Status, RouteNames, AuthEndpoints } from 'common-types'
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from 'src/shared/api'
@@ -38,11 +38,11 @@ export const WaitEmailConfirm = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpoints.SendEmailConfirmationLink, { email })
+    const response = await doRequest('post', AuthEndpointsEnum.SendEmailConfirmationLink, { email })
     setIsLoading(false)
-    if (!response || response.status !== Status.Success) return
+    if (!response || response.status !== StatusEnum.Success) return
     const { data } = response
-    const updatedPath = `${RouteNames.WaitEmailCofirm}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
+    const updatedPath = `${RouteNamesEnum.WaitEmailConfirm}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
     navigate(updatedPath, { replace: true })
     refresh(_ + 1)
   }
@@ -84,7 +84,7 @@ export const WaitEmailConfirm = () => {
           {counter <= 0 && remainingAttempts > 0 && (
             <AppButton text="Send confirmation link" color="accent-color" onClick={sendLink} loading={isLoading} />
           )}
-          <AppButton text="Back to app" color="accent-color" onClick={() => navigate(RouteNames.Login)} />
+          <AppButton text="Back to app" color="accent-color" onClick={() => navigate(RouteNamesEnum.Login)} />
         </div>
       </div>
     </div>

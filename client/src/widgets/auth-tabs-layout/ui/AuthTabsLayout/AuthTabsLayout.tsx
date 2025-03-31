@@ -1,6 +1,6 @@
 import './style.scss'
 import { ReactNode } from 'react'
-import { RouteNames } from 'common-types'
+import { RouteNamesEnum } from 'common-types'
 import { Link, useLocation } from 'react-router-dom'
 
 export const AuthTabsLayout = (props: { children: ReactNode; hideAuthNav?: boolean }) => {
@@ -13,12 +13,15 @@ export const AuthTabsLayout = (props: { children: ReactNode; hideAuthNav?: boole
       <div className="auth-tabs-layout__body">
         {!props.hideAuthNav && (
           <nav className="auth-tabs-layout__nav">
-            <Link to={RouteNames.Login} className={`header-text header-text--lg ${isPathEqual(RouteNames.Login)}`}>
+            <Link
+              to={RouteNamesEnum.Login}
+              className={`header-text header-text--lg ${isPathEqual(RouteNamesEnum.Login)}`}
+            >
               Login
             </Link>
             <Link
-              to={RouteNames.Registration}
-              className={`header-text header-text--lg ${isPathEqual(RouteNames.Registration)}`}
+              to={RouteNamesEnum.Registration}
+              className={`header-text header-text--lg ${isPathEqual(RouteNamesEnum.Registration)}`}
             >
               Register
             </Link>

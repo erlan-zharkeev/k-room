@@ -1,7 +1,7 @@
 import './style.scss'
 import { Badge, List } from 'antd'
 import { AppButton } from 'src/shared/ui'
-import { Message, SocketActions, ChatRoom, EventSaveContact } from 'common-types'
+import { IMessage, SocketActionsType, IChatRoom, IEventSaveContact } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/shared/lib'
 import { getChatName } from 'src/shared/utils'
@@ -19,7 +19,7 @@ export const ChatRoomList = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  const getLastMessage = (messages: Array<Message>): string => {
+  const getLastMessage = (messages: IMessage[]): string => {
     if (!messages) return ''
     return messages[messages.length - 1]?.body ?? ''
   }
@@ -29,26 +29,24 @@ export const ChatRoomList = () => {
     updateSetting('selectedChatRoomId', { selectChatRoomId: id })
   }
 
-  const addUser = async (e: React.MouseEvent<HTMLElement, MouseEvent>, interlocutorId: string) => {
-    e.stopPropagation()
-    const payload: EventSaveContact = { interlocutorId }
-    socket.emit<SocketActions>('save-contact', payload)
+  const addUser = async (interlocutorId: string) => {
+    const payload: IEventSaveContact = { interlocutorId }
+    socket.emit<SocketActionsType>('save-contact', payload)
   }
 
-  const unreadMessages = (room: ChatRoom) =>
+  const unreadMessages = (room: IChatRoom) =>
     room.messages.filter((message) => !message.isSelf && message.status === 'delivered').length
 
-  const getFirstUserIdInChatRoom = (chatRoom: ChatRoom) => chatRoom.users[0].id
+  const getFirstUserIdInChatRoom = (chatRoom: IChatRoom) => chatRoom.users[0].id
 
-  const showAddUserButton = (chatRoom: ChatRoom) => {
+  const showAddUserButton = (chatRoom: IChatRoom) => {
     const userId = getFirstUserIdInChatRoom(chatRoom)
     const hasUserInContacts = !!contacts.find((element) => element.id === userId)
     const isChatMultiple = chatRoom.multiple || chatRoom.users.length !== 1
     return !hasUserInContacts && !isChatMultiple
   }
 
-  const createMultipleChat = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    e.stopPropagation()
+  const createMultipleChat = () => {
     dispatch(
       showModal({
         title: 'Create New Chat Room',
@@ -64,7 +62,7 @@ export const ChatRoomList = () => {
   return (
     <div className="chat-room-list" onClick={resetChatRoomId}>
       <div className="chat-room-list__create-chat">
-        <AppButton text="Create group" iconName="plus" border="common-border" fill onClick={createMultipleChat} />
+        <AppButton text="Create group" prefixIconName="plus" borderless onClick={createMultipleChat} />
         <div className="divider" />
       </div>
       <div className="chat-room-list__body">
@@ -98,7 +96,7 @@ export const ChatRoomList = () => {
                   <AppButton
                     prefixIconName="plus"
                     tooltip="Add User"
-                    onClick={(e) => addUser(e, getFirstUserIdInChatRoom(chatRoom))}
+                    onClick={() => addUser(getFirstUserIdInChatRoom(chatRoom))}
                   />
                 )}
               </div>

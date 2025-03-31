@@ -3163,7 +3163,7 @@ define(['exports'], function (exports) {
       }
     }
     /**
-     * Precaches new and updated assets. Call this method from the service worker
+     * Precaches new and updated assets. ICall this method from the service worker
      * install event.
      *
      * Note: this method calls `event.waitUntil()` for you, so you do not need
@@ -3210,7 +3210,7 @@ define(['exports'], function (exports) {
     }
     /**
      * Deletes assets that are no longer present in the current precache manifest.
-     * Call this method from the service worker activate event.
+     * ICall this method from the service worker activate event.
      *
      * Note: this method calls `event.waitUntil()` for you, so you do not need
      * to call it yourself in your event handlers.

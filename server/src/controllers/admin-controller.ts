@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { CallModel, ChatRoomModel, MessageModel, UserModel } from '../models'
-import { ServerNotificationMessage, Status } from '../@types'
+import { ServerNotificationMessage, StatusEnum } from '../@types'
 import { throwError } from '../utils'
 import { loadFixtures } from '../fixtures'
 
@@ -19,7 +19,7 @@ class AdminController {
         messages
       })
     } catch (e: unknown) {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedToGetData)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedToGetData)
     }
   }
 
@@ -35,7 +35,7 @@ class AdminController {
         message: ServerNotificationMessage.DBRestored
       })
     } catch (e: unknown) {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.DBResetFailed)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.DBResetFailed)
     }
   }
 
@@ -46,7 +46,7 @@ class AdminController {
         message: ServerNotificationMessage.FixturesAreApplied
       })
     } catch (e: unknown) {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.DBResetFailed)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.DBResetFailed)
     }
   }
 
@@ -55,14 +55,14 @@ class AdminController {
       const deleteUserId = req.body.deleteUserId
       const user = await UserModel.findById(deleteUserId)
       if (!user) {
-        return throwError(Status.NotFound, res, ServerNotificationMessage.UserNotFound)
+        return throwError(StatusEnum.NotFound, res, ServerNotificationMessage.UserNotFound)
       }
       await UserModel.findByIdAndDelete(deleteUserId)
       return res.json({
         message: ServerNotificationMessage.UserDeleteSuccess
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.DeleteUserFailed)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.DeleteUserFailed)
     }
   }
 
@@ -71,7 +71,7 @@ class AdminController {
       const { id, username, email, role, confirmed } = req.body.userData
       let user = await UserModel.findById(id)
       if (!user) {
-        return throwError(Status.NotFound, res, ServerNotificationMessage.UserNotFound)
+        return throwError(StatusEnum.NotFound, res, ServerNotificationMessage.UserNotFound)
       }
 
       user.username = username

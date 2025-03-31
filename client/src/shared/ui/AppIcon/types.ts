@@ -1,6 +1,6 @@
 import { ColorModifier, SizeModifier } from '../types'
 
-export type AppIconSize = SizeModifier | 'xs'
+export type AppIconSize = SizeModifier | 'xs' | 'fill'
 
 export interface AppIconListElement {
   name: AppIconName

@@ -1,6 +1,6 @@
 import './style.scss'
 import { Form } from 'antd'
-import { SocketActions, ImageObject, EventUserTyping } from 'common-types'
+import { SocketActionsType, IImageObject, IEventUserTyping } from 'common-types'
 import { useState } from 'react'
 import { useTypedSelector } from 'src/shared/lib'
 import { socket } from 'src/shared/api'
@@ -11,7 +11,7 @@ import { useDebounce } from 'src/shared/lib/hooks'
 
 export interface InputMessageProps {
   sendMessage: (message: string) => void
-  uploadImageHandler: (payload: { message: string; images: Array<ImageObject> }) => void
+  uploadImageHandler: (payload: { message: string; images: IImageObject[] }) => void
   height: number
 }
 
@@ -24,12 +24,12 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
 
   const sendUserTypingStatus = (status: boolean) => {
     if (!selectedChatRoom) return
-    const payload: EventUserTyping = {
+    const payload: IEventUserTyping = {
       authorName: username,
       usersTo: selectedChatRoom.users,
       status
     }
-    socket.emit<SocketActions>('user-typing', payload)
+    socket.emit<SocketActionsType>('user-typing', payload)
   }
 
   const debouncedInput = useDebounce(sendUserTypingStatus, 2000)
@@ -46,7 +46,7 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
     setMessage('')
   }
 
-  const setImagesHandler = (images: Array<ImageObject>) => {
+  const setImagesHandler = (images: IImageObject[]) => {
     uploadImageHandler({ message, images })
   }
 

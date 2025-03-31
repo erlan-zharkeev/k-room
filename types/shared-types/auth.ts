@@ -1,6 +1,8 @@
-import { KRoomUser } from "./user";
+import { IUserData } from "./user";
 
-export type AuthLoginPayload = Required<Pick<KRoomUser, "email" | "password">>;
-export type AuthRegistrationPayload = Required<
-  Pick<KRoomUser, "username" | "email" | "password">
+export type AuthLoginPayloadType = Required<
+  Pick<IUserData, "email" | "password">
+>;
+export type AuthRegistrationPayloadType = Required<
+  Pick<IUserData, "username" | "email" | "password">
 >;

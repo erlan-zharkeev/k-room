@@ -33,4 +33,4 @@ const chatRoomSchema = new Schema<IChatRoomSchema>({
   }
 })
 
-export const ChatRoomModel = model('ChatRoom', chatRoomSchema)
+export const ChatRoomModel = model('IChatRoom', chatRoomSchema)

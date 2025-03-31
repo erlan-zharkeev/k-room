@@ -1,5 +1,5 @@
 import './style.scss'
-import { EventCallStartedAt, EventCallUser, EventInterlocutorUpdateSignal, SocketActions } from 'common-types'
+import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common-types'
 import moment from 'moment'
 import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -36,22 +36,22 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
   const [counterValue, _, startCounter, stopCounter] = useCounter(1, false)
 
   useEffect(() => {
-    socket.on<SocketActions>('call-started-at', (timeStamp: EventCallStartedAt) => {
+    socket.on<SocketActionsType>('call-started-at', (timeStamp: EventCallStartedAtType) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
     })
-    socket.on<SocketActions>('call-user', (data: EventCallUser) => {
+    socket.on<SocketActionsType>('call-user', (data: IEventCallUser) => {
       dispatch(setShowCallModal(data))
       const { from, signal, callId } = data
       if (callId) dispatch(setCallId(callId))
       call.current.calling(from, signal)
     })
-    socket.on<SocketActions>('call-ended', () => {
+    socket.on<SocketActionsType>('call-ended', () => {
       call.current.leaveCall(currentCall.id)
       stopCounter()
     })
-    socket.on<SocketActions>('interlocutor-update-signal', (data: EventInterlocutorUpdateSignal) => {
+    socket.on<SocketActionsType>('interlocutor-update-signal', (data: IEventInterlocutorUpdateSignal) => {
       call.current.updateCallerSignal(data.signal)
     })
   }, [])
@@ -97,7 +97,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
   const hideSelfVideo = () => !settings.video.value || settings.video.loading
   const isCallInProgress = () => currentCall.status === 'in-progress'
-  const isCallIncoming = () => currentCall.type === 'incoming'
+  const isCallIncoming = () => currentCall.flow === 'incoming'
   const isIncomingCallCalling = () => isCallIncoming() && currentCall.status === 'calling'
 
   return (
@@ -106,10 +106,16 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
         <div className="call-modal__header">
           <div className="call-modal__window-controls">
             <div className="call-modal__window-controls-element">
-              <AppButton prefixIconName="cross-2" onClick={endCall} borderless hoverless tooltip="Leave Call" />
+              <AppButton prefixIconName="cross-2" onClick={endCall} borderless hoverless tooltip="Leave ICall" />
             </div>
             <div className="call-modal__window-controls-element">
-              <AppButton prefixIconName="dash" onClick={minifyModal} borderless hoverless tooltip="Minify Modal Call" />
+              <AppButton
+                prefixIconName="dash"
+                onClick={minifyModal}
+                borderless
+                hoverless
+                tooltip="Minify Modal ICall"
+              />
             </div>
             <div className="call-modal__window-controls-element">
               <AppButton
@@ -117,12 +123,12 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                 onClick={toggleExpandModal}
                 borderless
                 hoverless
-                tooltip="Expand Modal Call"
+                tooltip="Expand Modal ICall"
               />
             </div>
           </div>
           <div className="call-modal__title header-text header-text--sm header-text--secondary">
-            {firstCharUpperCase(currentCall.type)} call
+            {firstCharUpperCase(currentCall.flow)} call
           </div>
         </div>
         <div className="call-modal__body">

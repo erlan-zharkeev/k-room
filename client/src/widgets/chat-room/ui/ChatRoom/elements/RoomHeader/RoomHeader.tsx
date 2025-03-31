@@ -1,5 +1,5 @@
 import './style.scss'
-import { EventGetUserTypingStatus, SocketActions } from 'common-types'
+import { IEventGetUserTypingStatus, SocketActionsType } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { clientConstants } from 'src/client-constants'
@@ -18,7 +18,7 @@ export const RoomHeader = () => {
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
-  const [typingAuthors, setTypingAuthors] = useState([] as Array<{ authorId: string; authorName: string }>)
+  const [typingAuthors, setTypingAuthors] = useState<{ authorId: string; authorName: string }[]>([])
   const { updateSetting } = useSettings()
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const RoomHeader = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-  socket.on<SocketActions>('get-user-typing-status', ({ authorData, status }: EventGetUserTypingStatus) => {
+  socket.on<SocketActionsType>('get-user-typing-status', ({ authorData, status }: IEventGetUserTypingStatus) => {
     if (!chatRoomData) return
     setIsTyping(status)
     let newArrayOfTypingAuthors = [...typingAuthors]

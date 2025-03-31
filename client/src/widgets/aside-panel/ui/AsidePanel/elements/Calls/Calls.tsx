@@ -1,6 +1,6 @@
 import './style.scss'
 import { List } from 'antd'
-import { Call } from 'common-types'
+import { ICall } from 'common-types'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 import { useTypedSelector } from 'src/shared/lib'
@@ -9,10 +9,10 @@ import { firstCharUpperCase } from 'src/shared/utils'
 
 export const Calls = () => {
   const { list, currentCall } = useTypedSelector((state) => state.calls)
-  const getCallType = (call: Call) => (currentCall.id === call.id ? 'current' : call.type)
+  const getFlowType = (call: ICall) => (currentCall.id === call.id ? 'current' : call.type)
   const [sortedList, setSortedList] = useState(list)
-  const getCallTypeName = (call: Call) => {
-    const type = getCallType(call)
+  const getCallTypeName = (call: ICall) => {
+    const type = getFlowType(call)
     return type === 'not-answered' ? 'Not answered' : firstCharUpperCase(type)
   }
   useEffect(() => {
@@ -31,12 +31,12 @@ export const Calls = () => {
             emptyText: <div className="paragraph-text  call-list__empty-title">There are no calls yet</div>
           }}
           renderItem={(call) => (
-            <List.Item className={`call-list__item call-list__item--${getCallType(call)}`}>
+            <List.Item className={`call-list__item call-list__item--${getFlowType(call)}`}>
               <List.Item.Meta
                 avatar={<AppAvatar src={call.interlocutorAvatarPath} showBadge={false} />}
                 title={<span>{call.interlocutorName}</span>}
                 description={
-                  <div className={`call-list__info call-list__info--${getCallType(call)} paragraph-text `}>
+                  <div className={`call-list__info call-list__info--${getFlowType(call)} paragraph-text `}>
                     <AppIcon name={call.video ? 'video-call-thin' : 'call'} />
                     <p className="call-list__type paragraph-text ">
                       {getCallTypeName(call)}

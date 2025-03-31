@@ -1,67 +1,67 @@
 import {
-  Call,
-  ChatRoom,
-  Contact,
+  ICall,
+  IChatRoom,
+  ContactType,
   InteractionType,
-  Message,
-  MessageStatus,
-  Reaction,
-  UserSettings,
-  BasicStreamSettings,
-  UserShort,
+  IMessage,
+  MessageStatusType,
+  IReaction,
+  IUserSettings,
+  IBasicStreamSettings,
+  UserShortType,
 } from ".";
 
-export interface EventInterlocutorUpdateSignal {
+export interface IEventInterlocutorUpdateSignal {
   signal: unknown;
 }
 
-export interface EventUpdateSignal {
+export interface IEventUpdateSignal {
   signal: unknown;
 }
 
-export interface EventMarkCallAsVideo {
+export interface IEventMarkCallAsVideo {
   callId: string;
 }
 
-export interface EventMessageDelivered {
+export interface IEventMessageDelivered {
   roomId: string;
-  message: Message;
+  message: IMessage;
 }
 
-export type EventGetRooms = ChatRoom[];
+export type EventGetRoomsType = IChatRoom[];
 
-export interface EventStatusContact {
+export interface IEventStatusContact {
   interlocutorId: string;
   online: boolean;
   onlineStatusUpdatedTimestamp: number;
 }
-export type EventChangeContactsData = UserShort;
+export type IEventChangeContactsData = UserShortType;
 
-export interface EventGetContacts {
-  contacts: Contact[];
+export interface IEventGetContacts {
+  contacts: ContactType[];
 }
-export type EventCallUpdated = Call;
-export type EventCallsUpdated = Call[];
+export type EventCallUpdatedType = ICall;
+export type EventCallsUpdatedType = ICall[];
 
-export interface EventSaveContact {
+export interface IEventSaveContact {
   interlocutorId: string;
 }
-export interface EventDeleteContact {
+export interface IEventDeleteContact {
   deletingUserId: string;
 }
-export interface EventSearchContact {
+export interface IEventSearchContact {
   value: string;
 }
-export interface EventUpdateUserSettings {
-  type: keyof UserSettings;
+export interface IEventUpdateUserSettings {
+  type: keyof IUserSettings;
   value: string | boolean;
 }
 
-export interface EventCreateRoom {
+export interface IEventCreateRoom {
   contactId: string;
 }
 
-export interface EventUpdateChatRoom {
+export interface IEventUpdateChatRoom {
   users: string[];
   roomId: string;
   chatName: string;
@@ -72,43 +72,43 @@ export interface EventUpdateChatRoom {
       }
     | undefined;
 }
-export interface EventUserTyping {
+export interface IEventUserTyping {
   authorName: string;
-  usersTo: UserShort[];
+  usersTo: UserShortType[];
   status: boolean;
 }
-export interface EventGetUserTypingStatus {
+export interface IEventGetUserTypingStatus {
   authorData: {
     authorName: string;
     authorId: string;
   };
   status: boolean;
 }
-export interface EventSendMessage {
+export interface IEventSendMessage {
   roomId: string;
-  message: Message;
+  message: IMessage;
 }
-export interface EventUpdateMessageStatus {
-  roomId: string;
-  messageId: string;
-  status: MessageStatus;
-}
-export interface EventChangeMessageStatus {
+export interface IEventUpdateMessageStatus {
   roomId: string;
   messageId: string;
-  status: MessageStatus;
+  status: MessageStatusType;
 }
-export interface EventDeleteMessage {
+export interface IEventChangeMessageStatus {
+  roomId: string;
+  messageId: string;
+  status: MessageStatusType;
+}
+export interface IEventDeleteMessage {
   messageId: string;
   roomId: string;
 }
-export interface EventAddReaction {
+export interface IEventAddReaction {
   glyphKey: string;
   messageId: string;
   roomId: string;
   username: string;
 }
-export interface EventCallUser {
+export interface IEventCallUser {
   callId?: string;
   userToCall?: string;
   signal: unknown;
@@ -116,58 +116,58 @@ export interface EventCallUser {
   avatarPath: string;
   callerName: string;
 }
-export type EventChangeCallSettings = BasicStreamSettings;
-export interface EventCallAccepted {
+export type EventChangeCallSettingsType = IBasicStreamSettings;
+export interface IEventCallAccepted {
   signal: unknown;
 }
 
-export interface EventAnswerCall {
+export interface IEventAnswerCall {
   callId: string;
   to: string;
   signal: unknown;
   selfSocketId: string;
 }
-export type EventCallStartedAt = number;
-export interface EventCallEnded {
+export type EventCallStartedAtType = number;
+export interface IEventCallEnded {
   callId: string;
   callerId: string;
 }
-export interface EventErrorMessage {
+export interface IEventErrorMessage {
   messageType?: string;
   message: string;
 }
-export interface EventMessageDeleted {
+export interface IEventMessageDeleted {
   messageId: string;
   roomId: string;
 }
-export interface EventUpdatedMessageReactions {
+export interface IEventUpdatedMessageReactions {
   roomId: string;
   messageId: string;
-  reaction: Reaction;
+  reaction: IReaction;
 }
-export interface EventRoomCreated {
+export interface IEventRoomCreated {
   roomId: string;
 }
-export interface EventUpdateInteractionType {
+export interface IEventUpdateInteraction {
   contactId: string;
-  interactionType: InteractionType;
+  interaction: InteractionType;
 }
-export interface EventInviteReceived {
-  contactData: Contact;
+export interface IEventInviteReceived {
+  contactData: ContactType;
 }
-export interface EventUpdateContactInteractionTypeSuccess {
+export interface IEventUpdateContactInteractionSuccess {
   contactId: string;
-  interactionType: InteractionType;
+  interaction: InteractionType;
 }
-export interface EventContactAddSuccess {
-  contactData: Contact;
+export interface IEventContactAddSuccess {
+  contactData: ContactType;
 }
-export interface EventDeleteContactSuccess {
+export interface IEventDeleteContactSuccess {
   deletedContactId: string;
   silent: boolean;
 }
 
-export type SocketActions =
+export type SocketActionsType =
   | "connection"
   | "error"
   | "reconnect"

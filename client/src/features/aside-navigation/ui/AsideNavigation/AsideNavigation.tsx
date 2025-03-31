@@ -1,18 +1,16 @@
 import './style.scss'
 import { SettingsButton, useSettings } from 'src/entities/settings'
-import { AdminPanelButton } from 'src/entities/user'
 import { ContactsButton } from 'src/entities/contact'
 import { CallsButton } from 'src/entities/call'
 import { ChatRoomsButton } from 'src/entities/chat-room'
-import { SelectedContentElement } from 'common-types'
+import { SelectedContentElementType } from 'common-types'
 
 interface AsideNavigationButton {
   Component: () => JSX.Element | null
-  value: SelectedContentElement
+  value: SelectedContentElementType
 }
 
 const buttons: AsideNavigationButton[] = [
-  { Component: AdminPanelButton, value: 'admin-panel' },
   { Component: ContactsButton, value: 'contacts' },
   { Component: ChatRoomsButton, value: 'chat-list' },
   { Component: CallsButton, value: 'calls' },

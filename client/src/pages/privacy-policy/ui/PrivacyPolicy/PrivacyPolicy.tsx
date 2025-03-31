@@ -1,4 +1,3 @@
-import './style.scss'
 const { VITE_MAIL_APP } = import.meta.env
 
 export const PrivacyPolicy = () => {

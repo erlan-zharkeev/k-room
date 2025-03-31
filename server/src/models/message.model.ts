@@ -1,13 +1,13 @@
 import { Schema, model } from 'mongoose'
-import { ImageObject, IMessageSchema, Reaction } from '../@types'
+import { IImageObject, IMessageSchema, IReaction } from '../@types'
 
-const reactionSchema = new Schema<Reaction>({
+const reactionSchema = new Schema<IReaction>({
   username: { type: String, required: true },
   authorId: { type: String, required: true },
   glyphKey: { type: String, required: true }
 })
 
-const imageSchema = new Schema<Omit<ImageObject, 'fileBuffer'>>({
+const imageSchema = new Schema<Omit<IImageObject, 'fileBuffer'>>({
   src: { type: String, required: true },
   name: { type: String, required: true }
 })
@@ -65,4 +65,4 @@ const messageSchema = new Schema<IMessageSchema>({
   }
 })
 
-export const MessageModel = model('Message', messageSchema)
+export const MessageModel = model('IMessage', messageSchema)

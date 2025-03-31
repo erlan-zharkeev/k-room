@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AdminPanelModelTab, Theme, UserSettings, SelectedContentElement } from 'common-types'
-import { setTheme } from 'src/shared/utils'
+import { AdminPanelModelTabType, ThemeType, IUserSettings, SelectedContentElementType } from 'common-types'
 
-const initialState: UserSettings = {
+const initialState: IUserSettings = {
   selectedContentElement: 'contacts',
   currentInfoId: '1',
   selectedChatRoomId: '',
@@ -21,7 +20,7 @@ export const settingsSlice = createSlice({
     setCurrentInfoItem(state, { payload }: { payload: string }) {
       state.currentInfoId = payload
     },
-    updateSettings(state, { payload }: { payload: UserSettings }) {
+    updateSettings(state, { payload }: { payload: IUserSettings }) {
       if (!payload) return
       const {
         selectedContentElement,
@@ -37,7 +36,6 @@ export const settingsSlice = createSlice({
       state.selectedContentElement = selectedContentElement
       state.selectedChatRoomId = selectedChatRoomId
       state.theme = theme
-      setTheme(state.theme)
       state.soundOn = soundOn
       state.showTooltips = showTooltips
       state.currentInfoId = currentInfoId
@@ -45,21 +43,20 @@ export const settingsSlice = createSlice({
       state.showWallpaper = showWallpaper
       state.selectedAdminPanelModelTab = selectedAdminPanelModelTab
     },
-    setAdminPanelTab(state, { payload }: { payload: AdminPanelModelTab }) {
+    setAdminPanelTab(state, { payload }: { payload: AdminPanelModelTabType }) {
       state.selectedAdminPanelModelTab = payload
     },
     selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
     },
-    changeSelectedContentElement(state, { payload }: { payload: SelectedContentElement }) {
+    changeSelectedContentElement(state, { payload }: { payload: SelectedContentElementType }) {
       state.selectedContentElement = payload
     },
     setAbleToShowNotification(state, { payload }: { payload: boolean }) {
       state.ableToShowNotification = payload
     },
-    changeTheme(state, { payload }: { payload: Theme }) {
+    changeTheme(state, { payload }: { payload: ThemeType }) {
       state.theme = payload
-      setTheme(state.theme)
     },
     setSoundValue(state, { payload }: { payload: boolean }) {
       state.soundOn = payload

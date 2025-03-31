@@ -1,6 +1,6 @@
-import { Message } from 'common-types'
+import { IMessage } from 'common-types'
 
-export const MessageNotification = (message: Message) => {
+export const MessageNotification = (message: IMessage) => {
   return (
     <>
       <p>{message.authorName}</p>

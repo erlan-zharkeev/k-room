@@ -2,21 +2,21 @@ import { MessageModel, ChatRoomModel } from '../../models'
 import { io } from '../../server'
 import {
   SocketInstanceType,
-  SocketActions,
-  Reaction,
-  EventSendMessage,
-  EventChangeMessageStatus,
-  EventDeleteMessage,
-  EventMessageDeleted,
-  EventAddReaction,
-  EventUpdatedMessageReactions
+  SocketActionsType,
+  IReaction,
+  IEventSendMessage,
+  IEventChangeMessageStatus,
+  IEventDeleteMessage,
+  IEventMessageDeleted,
+  IEventAddReaction,
+  IEventUpdatedMessageReactions
 } from '../../@types'
 import { setMessage, setMessageStatus, getSocketsByUserIds } from '../helpers'
 
 export const messageSlice = (socket: SocketInstanceType) => {
   const { userId } = socket.data
 
-  socket.on<SocketActions>('send-message', async ({ roomId, message }: EventSendMessage) => {
+  socket.on<SocketActionsType>('send-message', async ({ roomId, message }: IEventSendMessage) => {
     try {
       await setMessage({ roomId, message })
     } catch (e: unknown) {
@@ -24,23 +24,26 @@ export const messageSlice = (socket: SocketInstanceType) => {
     }
   })
 
-  socket.on<SocketActions>('change-message-status', async ({ messageId, status, roomId }: EventChangeMessageStatus) => {
-    await setMessageStatus(messageId, status, userId, roomId)
-  })
+  socket.on<SocketActionsType>(
+    'change-message-status',
+    async ({ messageId, status, roomId }: IEventChangeMessageStatus) => {
+      await setMessageStatus(messageId, status, userId, roomId)
+    }
+  )
 
-  socket.on<SocketActions>('delete-message', async ({ messageId, roomId }: EventDeleteMessage) => {
+  socket.on<SocketActionsType>('delete-message', async ({ messageId, roomId }: IEventDeleteMessage) => {
     await MessageModel.findByIdAndDelete({ _id: messageId })
     const room = await ChatRoomModel.findOneAndUpdate({ _id: roomId }, { $pull: { messages: messageId } })
     if (!room) return
     const socketIds = await getSocketsByUserIds(room.users)
-    const payload: EventMessageDeleted = { messageId, roomId }
+    const payload: IEventMessageDeleted = { messageId, roomId }
     socketIds.forEach((socketId) => {
-      io.to(socketId).emit<SocketActions>('message-deleted', payload)
+      io.to(socketId).emit<SocketActionsType>('message-deleted', payload)
     })
   })
 
-  socket.on<SocketActions>('add-reaction', async ({ glyphKey, messageId, roomId, username }: EventAddReaction) => {
-    const reaction: Reaction = {
+  socket.on<SocketActionsType>('add-reaction', async ({ glyphKey, messageId, roomId, username }: IEventAddReaction) => {
+    const reaction: IReaction = {
       glyphKey,
       authorId: userId,
       username
@@ -50,9 +53,9 @@ export const messageSlice = (socket: SocketInstanceType) => {
       const room = await ChatRoomModel.findOne({ _id: roomId })
       if (!room) return
       const socketIds = await getSocketsByUserIds(room.users)
-      const payload: EventUpdatedMessageReactions = { roomId, messageId, reaction }
+      const payload: IEventUpdatedMessageReactions = { roomId, messageId, reaction }
       socketIds.forEach((socketId) => {
-        io.to(socketId).emit<SocketActions>('update-message-reactions', payload)
+        io.to(socketId).emit<SocketActionsType>('update-message-reactions', payload)
       })
     } catch (e: unknown) {
       console.log(e)

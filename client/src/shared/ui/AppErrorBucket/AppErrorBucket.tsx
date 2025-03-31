@@ -1,6 +1,6 @@
 import './style.scss'
 export interface ErrorBucketProps {
-  errors: Array<string>
+  errors: string[]
 }
 
 export const AppErrorBucket = ({ errors }: ErrorBucketProps) => {

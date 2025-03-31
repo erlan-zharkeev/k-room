@@ -1,5 +1,5 @@
 import './style.scss'
-import { SocketActions, EventAddReaction, EventDeleteMessage } from 'common-types'
+import { SocketActionsType, IEventAddReaction, IEventDeleteMessage } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
 import { socket } from 'src/shared/api'
@@ -26,13 +26,13 @@ export const MessageContextMenu = () => {
     message.reactions?.filter((reaction) => reaction.authorId === id).map((reaction) => reaction.glyphKey) ?? []
 
   const reactionHandler = (key: string) => {
-    const payload: EventAddReaction = {
+    const payload: IEventAddReaction = {
       glyphKey: key,
       messageId: message.id,
       roomId: selectedChatRoom?.id ?? '',
       username
     }
-    socket.emit<SocketActions>('add-reaction', payload)
+    socket.emit<SocketActionsType>('add-reaction', payload)
   }
 
   const forwardHandler = () => {
@@ -44,13 +44,13 @@ export const MessageContextMenu = () => {
     if (!selectedChatRoom?.id) return
     const roomId = selectedChatRoom.id
     const messageId = message.id
-    const payload: EventDeleteMessage = {
+    const payload: IEventDeleteMessage = {
       roomId,
       messageId
     }
 
     dispatch(updateMessageStatus({ roomId, messageId, status: 'sending' }))
-    socket.emit<SocketActions>('delete-message', payload)
+    socket.emit<SocketActionsType>('delete-message', payload)
   }
 
   return (

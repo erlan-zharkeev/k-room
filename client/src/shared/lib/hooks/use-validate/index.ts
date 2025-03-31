@@ -43,11 +43,12 @@ export const useValidate = (form: Record<string, AppFormFieldValue>) => {
     return isValid
   }, [errors, touchedFields])
 
-  const validateField = (value: AppFormFieldValue, rule: ValidateRule, fieldName: string, silent = false) => {
+  const validateField = (value: AppFormFieldValue, fieldName: string, silent = false, rule?: ValidateRule) => {
     if (!silent && !touchedFields[fieldName]) {
       setTouchedFields((touchedFields) => ({ ...touchedFields, [fieldName]: true }))
     }
 
+    if (!rule) return
     let currentErrors: string[] = []
 
     if (typeof value === 'string') {

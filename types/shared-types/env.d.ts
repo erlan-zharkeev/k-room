@@ -1,4 +1,4 @@
-export interface EnvVariables {
+export interface IEnvVariables {
     SERVER_PORT: string;
     CLIENT_PORT: string;
     SERVER_URL: string;

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { Server } from 'socket.io'
-import { RouteNames } from './../../types'
+import { RouteNamesEnum } from './../../types'
 import cors from 'cors'
 import { serverConstants } from './server-constants'
 import { ENV } from './ENV'
@@ -29,9 +29,9 @@ app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use(RouteNames.Api, router)
+app.use(RouteNamesEnum.Api, router)
 
-app.get(RouteNames.Api, (_: Request, res: Response) => {
+app.get(RouteNamesEnum.Api, (_: Request, res: Response) => {
   res.send('Server running')
 })
 
@@ -58,7 +58,7 @@ if (!fs.existsSync(path.join(__dirname, imagesPath))) {
 }
 
 export const io = new Server(server, {
-  path: RouteNames.SocketPath,
+  path: RouteNamesEnum.SocketPath,
   maxHttpBufferSize: serverConstants.maxMbQuantityTransfer * 1000000,
   cors: {
     origin: ENV.IS_DEV ? '*' : origins

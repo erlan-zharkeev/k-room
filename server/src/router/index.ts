@@ -7,39 +7,49 @@ import {
   fileUploader,
   validationRules
 } from '../middlewares'
-import { AuthEndpoints, UserEndpoints, CommonEndpoints, CodesEndpoints, AdminEndpoints } from '../@types'
+import {
+  AuthEndpointsEnum,
+  UserEndpointsEnum,
+  CommonEndpointsEnum,
+  CodesEndpointsEnum,
+  AdminEndpointsEnum
+} from '../@types'
 import { adminRoleValidator } from '../middlewares/admin-validator'
 
 export const router = Router()
 
-router.get(AuthEndpoints.UpdateTokensPair, refreshTokenValidator, AuthController.updateTokensPair)
-router.post(AuthEndpoints.Registration, validationRules.registration, AuthController.registration)
-router.post(AuthEndpoints.Login, AuthController.login)
-router.post(AuthEndpoints.ProviderLogin, AuthController.signInWithProvider)
-router.post(AuthEndpoints.SendEmailConfirmationLink, AuthController.sendConfirmationLink)
-router.post(AuthEndpoints.SendEmailConfirmation, AuthController.confirmEmail)
+router.get(AuthEndpointsEnum.UpdateTokensPair, refreshTokenValidator, AuthController.updateTokensPair)
+router.post(AuthEndpointsEnum.Registration, validationRules.registration, AuthController.registration)
+router.post(AuthEndpointsEnum.Login, AuthController.login)
+router.post(AuthEndpointsEnum.ProviderLogin, AuthController.signInWithProvider)
+router.post(AuthEndpointsEnum.SendEmailConfirmationLink, AuthController.sendConfirmationLink)
+router.post(AuthEndpointsEnum.SendEmailConfirmation, AuthController.confirmEmail)
 
-router.get(UserEndpoints.GetUserData, accessTokenValidator, UserController.getUserData)
+router.get(UserEndpointsEnum.GetUserData, accessTokenValidator, UserController.getUserData)
 router.post(
-  UserEndpoints.UpdateUserData,
+  UserEndpointsEnum.UpdateUserData,
   accessTokenValidator,
   fileUploader.single('file'),
   UserController.updateUserData
 )
-router.post(UserEndpoints.ResetPassword, UserController.resetPassword)
+router.post(UserEndpointsEnum.ResetPassword, UserController.resetPassword)
 
-router.post(CommonEndpoints.GetInfo, accessTokenValidator, CommonController.readInfoHandler)
-router.get(CommonEndpoints.CommonImages, accessTokenValidator, CommonController.imagesHandler)
+router.post(CommonEndpointsEnum.GetInfo, accessTokenValidator, CommonController.readInfoHandler)
+router.get(CommonEndpointsEnum.CommonImages, accessTokenValidator, CommonController.imagesHandler)
 
-router.post(CodesEndpoints.SendEmailCodePasswordRecovery, codesRequestValidator, CodesController.emailPasswordRecovery)
 router.post(
-  CodesEndpoints.ValidateEmailCodePasswordRecovery,
+  CodesEndpointsEnum.SendEmailCodePasswordRecovery,
+  codesRequestValidator,
+  CodesController.emailPasswordRecovery
+)
+router.post(
+  CodesEndpointsEnum.ValidateEmailCodePasswordRecovery,
   codesRequestValidator,
   CodesController.validateEmailCodePasswordRecovery
 )
 
-router.get(AdminEndpoints.GetAppData, accessTokenValidator, adminRoleValidator, AdminController.getAppData)
-router.post(AdminEndpoints.DBClear, accessTokenValidator, adminRoleValidator, AdminController.resetDB)
-router.patch(AdminEndpoints.ApplyFixtures, accessTokenValidator, adminRoleValidator, AdminController.applyFixtures)
-router.post(AdminEndpoints.DeleteUser, accessTokenValidator, adminRoleValidator, AdminController.deleteUser)
-router.post(AdminEndpoints.UpdateUserData, accessTokenValidator, adminRoleValidator, AdminController.updateUserData)
+router.get(AdminEndpointsEnum.GetAppData, accessTokenValidator, adminRoleValidator, AdminController.getAppData)
+router.post(AdminEndpointsEnum.DBClear, accessTokenValidator, adminRoleValidator, AdminController.resetDB)
+router.patch(AdminEndpointsEnum.ApplyFixtures, accessTokenValidator, adminRoleValidator, AdminController.applyFixtures)
+router.post(AdminEndpointsEnum.DeleteUser, accessTokenValidator, adminRoleValidator, AdminController.deleteUser)
+router.post(AdminEndpointsEnum.UpdateUserData, accessTokenValidator, adminRoleValidator, AdminController.updateUserData)

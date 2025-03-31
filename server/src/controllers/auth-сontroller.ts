@@ -4,7 +4,13 @@ import { initUserSettings, initUserCodes } from '../fixtures'
 import { authValidator } from '../middlewares'
 import { UserModel } from '../models'
 import { updateTokens, getInfo, sendEmailConfirmationLink } from '../services'
-import { AuthLoginPayload, AuthRegistrationPayload, ServerNotificationMessage, Status, UserCredential } from '../@types'
+import {
+  AuthLoginPayloadType,
+  AuthRegistrationPayloadType,
+  ServerNotificationMessage,
+  StatusEnum,
+  UserCredentialType
+} from '../@types'
 import { throwError } from '../utils'
 
 const bcrypt = require('bcryptjs')
@@ -19,22 +25,22 @@ class AuthController {
   async registration(req: Request, res: Response) {
     try {
       authValidator(req, res)
-      const { username, email, password } = req.body as AuthRegistrationPayload
+      const { username, email, password } = req.body as AuthRegistrationPayloadType
       const userNameCandidate = await UserModel.findOne({ username })
 
       if (userNameCandidate) {
-        return throwError(Status.BadRequest, res, ServerNotificationMessage.UserWithCurrentNameAlreadyExist)
+        return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserWithCurrentNameAlreadyExist)
       }
 
       const emailCandidate = await UserModel.findOne({ email })
 
       if (emailCandidate) {
-        return throwError(Status.BadRequest, res, ServerNotificationMessage.UserWithCurrentEmailAlreadyExist)
+        return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserWithCurrentEmailAlreadyExist)
       }
 
       const hashedPassword = await bcrypt.hash(password, 6)
 
-      if (!hashedPassword) return throwError(Status.BadRequest, res, ServerNotificationMessage.FailedPassHash)
+      if (!hashedPassword) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedPassHash)
       const welcomeInfoItem = getInfo('1')
       const user = new UserModel({
         username,
@@ -51,12 +57,12 @@ class AuthController {
 
       const confirmEmailData = await sendEmailConfirmationLink(req.body.email)
       if (!confirmEmailData) {
-        return throwError(Status.Unreachable, res, ServerNotificationMessage.FailedSendConfirmationLink)
+        return throwError(StatusEnum.Unreachable, res, ServerNotificationMessage.FailedSendConfirmationLink)
       }
 
       return res.json(confirmEmailData)
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedRegistration)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedRegistration)
     }
   }
 
@@ -66,7 +72,7 @@ class AuthController {
       const confirmEmailData = await sendEmailConfirmationLink(email)
       return res.json(confirmEmailData)
     } catch {
-      throwError(Status.Unreachable, res, ServerNotificationMessage.FailedSendConfirmEmail)
+      throwError(StatusEnum.Unreachable, res, ServerNotificationMessage.FailedSendConfirmEmail)
     }
   }
 
@@ -80,20 +86,20 @@ class AuthController {
         message: ServerNotificationMessage.EmailConfirmed
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedEmailConfirm)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedEmailConfirm)
     }
   }
 
   async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body as AuthLoginPayload
+      const { email, password } = req.body as AuthLoginPayloadType
       const user = await UserModel.findOne({ email })
-      if (!user) return throwError(Status.BadRequest, res, ServerNotificationMessage.UserNotFound)
-      if (!user.confirmed) return throwError(Status.BadRequest, res, ServerNotificationMessage.EmailNotConfirm)
+      if (!user) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserNotFound)
+      if (!user.confirmed) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.EmailNotConfirm)
 
       const validPassword = bcrypt.compareSync(password, user.password)
 
-      if (!validPassword) return throwError(Status.BadRequest, res, ServerNotificationMessage.WrongPass)
+      if (!validPassword) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.WrongPass)
       await updateTokens(user._id.toString(), res)
       return res.json({
         userData: {
@@ -109,13 +115,13 @@ class AuthController {
         silent: true
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedLogin)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedLogin)
     }
   }
 
   async signInWithProvider(req: Request, res: Response) {
     try {
-      const { username, email, avatarPath, providerName }: UserCredential = req.body
+      const { username, email, avatarPath, providerName }: UserCredentialType = req.body
       let user = await UserModel.findOne({ email })
       if (!user) {
         const hashedPassword = await bcrypt.hash(uuidv4(), 6)
@@ -148,7 +154,7 @@ class AuthController {
         message: ServerNotificationMessage.LoginAndRegister
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedLogin)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedLogin)
     }
   }
 }

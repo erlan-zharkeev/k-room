@@ -1,1 +1,1 @@
-export * from './UserDataSettingsPopup/UserDataSettingsPopup'
+export * from './UserDataSettingsModal/UserDataSettingsModal'

@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { ENV } from '../ENV'
 import { UserModel } from '../models'
 import { sendEmailCodePasswordRecovery } from '../services'
-import { ServerNotificationMessage, Status } from '../@types'
+import { ServerNotificationMessage, StatusEnum } from '../@types'
 import { notAccuratePinRandomGenerator, getNextTimeCodeRequest, throwError } from '../utils'
 
 class CodesController {
@@ -23,7 +23,7 @@ class CodesController {
 
       return res.json({ message: ServerNotificationMessage.CheckEmailForCode, nextTimeRequest })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.FailedCodeSend)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedCodeSend)
     }
   }
 
@@ -32,7 +32,7 @@ class CodesController {
       const { email, code } = req.body
       const user = await UserModel.findOne({ email })
       const isCodeEqual = code === String(user?.codes.passwordRecovery.email)
-      if (!isCodeEqual) throwError(Status.BadRequest, res, ServerNotificationMessage.InvalidConfirmCode)
+      if (!isCodeEqual) throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.InvalidConfirmCode)
       const passwordResetQuery = uuidv4()
       await user?.updateOne({
         $set: {
@@ -46,7 +46,7 @@ class CodesController {
         silent: true
       })
     } catch {
-      throwError(Status.BadRequest, res, ServerNotificationMessage.CommonServerError)
+      throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.CommonServerError)
     }
   }
 }

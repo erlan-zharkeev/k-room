@@ -1,11 +1,11 @@
 import './style.scss'
 import { Tag } from 'antd'
-import { UserShort } from 'common-types'
+import { UserShortType } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useTypedSelector } from 'src/shared/lib'
 import { AppAvatar } from 'src/shared/ui'
 
-type UsersToSelect = Array<UserShort>
+type UsersToSelect = UserShortType[]
 
 export const SelectUsers = ({ setMembers }: { setMembers: React.Dispatch<React.SetStateAction<UsersToSelect>> }) => {
   const { contacts } = useTypedSelector((state) => state.contacts)
@@ -28,7 +28,7 @@ export const SelectUsers = ({ setMembers }: { setMembers: React.Dispatch<React.S
     setContactsToSelect(updatedContacts)
   }, [contacts, selectedUsers])
 
-  const onClickHandler = (clickedContact: UserShort) => {
+  const onClickHandler = (clickedContact: UserShortType) => {
     updateSelectedUsers((prevSelected) => {
       const isUserExist = prevSelected.some((contact) => contact.id === clickedContact.id)
       const updatedSelected = isUserExist
@@ -52,7 +52,7 @@ export const SelectUsers = ({ setMembers }: { setMembers: React.Dispatch<React.S
       <div className="select-users__choose-list">
         {contactsToSelect.map((contact) => (
           <div className="select-users__user" key={contact.id} onClick={() => onClickHandler(contact)}>
-            <AppAvatar shape="square" src={contact.avatarPath} />
+            <AppAvatar shape="square-shape" src={contact.avatarPath} />
             <span className="paragraph-text  select-users__name">{contact.username}</span>
           </div>
         ))}

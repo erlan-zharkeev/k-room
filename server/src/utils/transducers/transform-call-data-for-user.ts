@@ -1,15 +1,15 @@
 import { CallModel } from '../../models'
 import { getUserById } from '../../socket'
-import { CallType } from '../../@types'
+import { CallFlowType } from '../../@types'
 
-const getCallType = (answered: boolean, isIncoming: boolean) => {
-  let type
+const getFlowType = (answered: boolean, isIncoming: boolean) => {
+  let flow
   if (answered) {
-    type = isIncoming ? 'incoming' : 'outgoing'
+    flow = isIncoming ? 'incoming' : 'outgoing'
   } else {
-    type = isIncoming ? 'missed' : 'no-answered'
+    flow = isIncoming ? 'missed' : 'no-answered'
   }
-  return type as CallType
+  return flow as CallFlowType
 }
 
 export const transformCallDataForUser = async (userId: string, callId: string) => {
@@ -21,7 +21,7 @@ export const transformCallDataForUser = async (userId: string, callId: string) =
   const interlocutor = await getUserById(interlocutorId)
   if (!interlocutor) return null
   const isIncoming = userId !== author?.id
-  const type = getCallType(call.answered, isIncoming)
+  const flow = getFlowType(call.answered, isIncoming)
   const { calledAt, startedAt, finishedAt, authorId, video } = call
   const transformedCall = {
     id: call._id,
@@ -30,7 +30,7 @@ export const transformCallDataForUser = async (userId: string, callId: string) =
     finishedAt,
     authorId,
     video,
-    type,
+    flow,
     interlocutorId,
     authorName: author.username,
     interlocutorName: interlocutor.username,

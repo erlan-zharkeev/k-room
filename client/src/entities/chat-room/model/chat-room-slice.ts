@@ -1,28 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
-  ChatRoom,
-  EventChangeContactsData,
-  EventDeleteMessage,
-  EventGetRooms,
-  EventMessageDelivered,
-  EventUpdatedMessageReactions,
-  EventUpdateMessageStatus,
-  ImageObject,
-  Message,
-  RepliedMessage
+  IChatRoom,
+  IEventChangeContactsData,
+  IEventDeleteMessage,
+  EventGetRoomsType,
+  IEventMessageDelivered,
+  IEventUpdatedMessageReactions,
+  IEventUpdateMessageStatus,
+  IImageObject,
+  IMessage,
+  IRepliedMessage
 } from 'common-types'
 import { UseNotification } from 'src/entities/notification'
 import { scrollToBottom } from 'src/shared/utils'
 
 interface AttachedFilesMessage {
   body: string
-  images: Array<ImageObject>
+  images: IImageObject[]
   imageCompression: boolean
 }
 
 interface RoomsState {
-  chatRooms: Array<ChatRoom>
-  repliedMessageData: RepliedMessage
+  chatRooms: IChatRoom[]
+  repliedMessageData: IRepliedMessage
   attachedFilesMessage: AttachedFilesMessage
 }
 
@@ -58,13 +58,13 @@ export const chatRoomsSlice = createSlice({
     updatedAttachedFilesMessage(state, { payload }: { payload: AttachedFilesMessage }) {
       state.attachedFilesMessage = { ...state.attachedFilesMessage, ...payload }
     },
-    loadChatRooms(state, { payload }: { payload: EventGetRooms }) {
+    loadChatRooms(state, { payload }: { payload: EventGetRoomsType }) {
       state.chatRooms = payload
     },
     repliedMessageSetAsForward(state) {
       state.repliedMessageData.forward = true
     },
-    updateChatMessage(state, { payload }: { payload: EventMessageDelivered & { notifications: UseNotification } }) {
+    updateChatMessage(state, { payload }: { payload: IEventMessageDelivered & { notifications: UseNotification } }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -74,7 +74,7 @@ export const chatRoomsSlice = createSlice({
       room.messages.push(message)
       scrollToBottom()
     },
-    updateMessageStatus(state, { payload }: { payload: EventUpdateMessageStatus }) {
+    updateMessageStatus(state, { payload }: { payload: IEventUpdateMessageStatus }) {
       const { roomId, messageId, status } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -82,7 +82,7 @@ export const chatRoomsSlice = createSlice({
         if (roomMessage.id === messageId) roomMessage.status = status
       })
     },
-    updateMessageReactions(state, { payload }: { payload: EventUpdatedMessageReactions }) {
+    updateMessageReactions(state, { payload }: { payload: IEventUpdatedMessageReactions }) {
       const { roomId, messageId, reaction } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -90,13 +90,13 @@ export const chatRoomsSlice = createSlice({
         if (roomMessage.id === messageId) roomMessage.reactions = [...(roomMessage.reactions ?? []), reaction]
       })
     },
-    pushTemporaryMessage(state, { payload }: { payload: { roomId: string; message: Message } }) {
+    pushTemporaryMessage(state, { payload }: { payload: { roomId: string; message: IMessage } }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
       room.messages.push(message)
     },
-    changeChatName(state, { payload }: { payload: EventChangeContactsData }) {
+    changeChatName(state, { payload }: { payload: IEventChangeContactsData }) {
       const { id, username, avatarPath } = payload
       state.chatRooms.forEach((room) => {
         const roomHasContact = Boolean(room.users?.find((user) => user.id === id))
@@ -106,7 +106,7 @@ export const chatRoomsSlice = createSlice({
         room.avatarPath = avatarPath
       })
     },
-    setRepliedMessage(state, { payload }: { payload: RepliedMessage }) {
+    setRepliedMessage(state, { payload }: { payload: IRepliedMessage }) {
       state.repliedMessageData = {
         ...state.repliedMessageData,
         ...payload
@@ -115,7 +115,7 @@ export const chatRoomsSlice = createSlice({
     resetRepliedMessage(state) {
       state.repliedMessageData = initialRepliedMessageData
     },
-    deleteMessage(state, { payload }: { payload: EventDeleteMessage }) {
+    deleteMessage(state, { payload }: { payload: IEventDeleteMessage }) {
       const { roomId, messageId } = payload
       state.chatRooms.forEach((room) => {
         if (room.id !== roomId) return

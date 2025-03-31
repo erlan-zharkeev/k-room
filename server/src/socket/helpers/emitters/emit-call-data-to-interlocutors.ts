@@ -1,6 +1,6 @@
 import { UserModel } from '../../../models'
 import { io } from '../../../server'
-import { EventCallUpdated, SocketActions } from '../../../@types'
+import { EventCallUpdatedType, SocketActionsType } from '../../../@types'
 import { transformCallDataForUser } from '../../../utils/transducers'
 
 export const emitCallDataToInterlocutors = (interlocutors: Array<string>, callId: string, setId?: boolean) => {
@@ -9,10 +9,10 @@ export const emitCallDataToInterlocutors = (interlocutors: Array<string>, callId
     if (!transformedCallData) return null
     const user = await UserModel.findOne({ _id: interlocutorId })
     if (!user) return
-    const payload: EventCallUpdated = {
+    const payload: EventCallUpdatedType = {
       ...transformedCallData,
       setId
     }
-    io.to(user.socketId).emit<SocketActions>('call-updated', payload)
+    io.to(user.socketId).emit<SocketActionsType>('call-updated', payload)
   })
 }
