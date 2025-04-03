@@ -1,6 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+
 import { useDispatch } from 'react-redux'
+
 import { AppDispatch } from 'src/app/store'
+
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { enableAllowAudioContext, useSystem } from 'src/entities/system'
@@ -12,6 +15,7 @@ export const useAudioContextMonitor = () => {
   const { allowAudioContext } = useSystem()
   const { soundOn } = useSettings()
   const { isAuth } = useUser()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
   const enableAudioInBrowser = () => {
     dispatch(enableAllowAudioContext())
@@ -28,24 +32,23 @@ export const useAudioContextMonitor = () => {
   const monitorToShowAudioContextNotification = () => {
     window.addEventListener('click', enableAudioInBrowser)
     if (soundOn && !allowAudioContext) {
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         if (isAuth) soundContextNotification.open()
       }, 3000)
     }
   }
 
-  const monitorAudioContext = () => {
-    useEffect(() => {
-      if (allowAudioContext) {
-        soundContextNotification.close('sound-context')
-      }
-    }, [allowAudioContext])
-  }
+  useEffect(() => {
+    if (allowAudioContext) {
+      soundContextNotification.close('sound-context')
+    }
+  }, [allowAudioContext])
 
-  monitorAudioContext()
-
-  return {
-    monitorToShowAudioContextNotification,
-    monitorAudioContext
-  }
+  useEffect(() => {
+    monitorToShowAudioContextNotification()
+    return () => {
+      window.removeEventListener('click', enableAudioInBrowser)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [])
 }

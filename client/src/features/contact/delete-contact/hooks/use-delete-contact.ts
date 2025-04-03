@@ -1,9 +1,10 @@
 import { SocketActionsType, IEventDeleteContactSuccess, IEventDeleteContact } from 'common-types'
-import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+
 import { deleteContact } from 'src/entities/contact'
 import { useNotification, ClientNotificationMessage } from 'src/entities/notification'
 import { showModal, closeModal } from 'src/entities/system'
+
 import { socket } from 'src/shared/api'
 
 export const useDeleteContact = () => {

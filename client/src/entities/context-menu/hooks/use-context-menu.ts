@@ -1,5 +1,8 @@
 import { useDispatch } from 'react-redux'
+
 import { setContextMenu } from 'src/entities/system'
+
+import { useTypedSelector } from 'src/shared/lib'
 
 export const useContextMenu = () => {
   const dispatch = useDispatch()
@@ -14,6 +17,7 @@ export const useContextMenu = () => {
   }
 
   return {
-    reset
+    reset,
+    ...useTypedSelector((state) => state.system.contextMenu)
   }
 }

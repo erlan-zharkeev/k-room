@@ -1,4 +1,6 @@
 import './style.scss'
+import { useContext, useEffect, useState } from 'react'
+
 import { List } from 'antd'
 import {
   SocketActionsType,
@@ -9,14 +11,16 @@ import {
   IEventUpdateInteraction
 } from 'common-types'
 import moment from 'moment'
-import { useContext, useEffect, useState } from 'react'
-import { useTypedSelector } from 'src/shared/lib'
-import { AppAvatar, AppIcon, AppButton } from 'src/shared/ui'
-import { AdditionalServiceContext } from 'src/shared/providers'
-import { socket } from 'src/shared/api'
-import { useSettings } from 'src/entities/settings'
-import { SearchContact } from 'src/features/contact/search-contact'
+
 import { DeleteContactBtn } from 'src/features/contact/delete-contact'
+import { SearchContact } from 'src/features/contact/search-contact'
+
+import { useSettings } from 'src/entities/settings'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector } from 'src/shared/lib'
+import { AdditionalServiceContext } from 'src/shared/providers'
+import { AppAvatar, AppIcon, AppButton } from 'src/shared/ui'
 
 export const ContactList = () => {
   const { updateSetting } = useSettings()
@@ -139,7 +143,7 @@ export const ContactList = () => {
                     <>
                       <AppButton
                         prefixIconName={loaders.stream[user.id] ? 'loader' : 'call'}
-                        onClick={() => initCall(user)}
+                        onClick={async () => await initCall(user)}
                         tooltip="ICall"
                         borderless
                       />

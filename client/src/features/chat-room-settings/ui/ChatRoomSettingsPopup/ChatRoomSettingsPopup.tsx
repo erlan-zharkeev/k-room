@@ -1,14 +1,18 @@
 import './style.scss'
+import { useState, useEffect } from 'react'
+
 import { Form } from 'antd'
 import { IEventUpdateChatRoom, SocketActionsType } from 'common-types'
-import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+
+import { AppDispatch } from 'src/app/store'
+
+import { closeModal } from 'src/entities/system'
+
 import { socket } from 'src/shared/api'
+import { useTypedSelector, useValidate } from 'src/shared/lib'
 import { AppAvatar, AppAvatarLoader, AppButton, AppInput } from 'src/shared/ui'
 import { validateRules } from 'src/shared/utils'
-import { AppDispatch } from 'src/app/store'
-import { closeModal } from 'src/entities/system'
-import { useTypedSelector, useValidate } from 'src/shared/lib'
 
 export const ChatRoomSettingsPopup = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -44,7 +48,7 @@ export const ChatRoomSettingsPopup = () => {
 
   useEffect(() => {
     validate(form)
-  })
+  }, [])
 
   const changeFormHandler = () => {
     validate(form)

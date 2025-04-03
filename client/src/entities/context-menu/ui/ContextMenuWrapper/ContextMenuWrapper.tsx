@@ -1,13 +1,18 @@
 import './style.scss'
 import { useDispatch } from 'react-redux'
+
 import { AppDispatch } from 'src/app/store'
-import { MessageContextMenu } from './elements'
-import { firstCharUpperCase } from 'src/shared/utils'
+
 import { setContextMenu } from 'src/entities/system'
-import { useTypedSelector } from 'src/shared/lib'
+
+import { firstCharUpperCase } from 'src/shared/utils'
+
+import { useContextMenu } from '../../hooks'
+
+import { MessageContextMenu } from './elements'
 
 export const ContextMenuWrapper = () => {
-  const { contextMenu } = useTypedSelector((state) => state.system)
+  const { slotName, coord } = useContextMenu()
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -15,7 +20,7 @@ export const ContextMenuWrapper = () => {
     IMessage: <MessageContextMenu />
   }
 
-  const currentMenu = menus[firstCharUpperCase(contextMenu.slotName)]
+  const currentMenu = menus[firstCharUpperCase(slotName)]
 
   const Content = () => currentMenu || null
 
@@ -32,8 +37,8 @@ export const ContextMenuWrapper = () => {
           className="context-menu-wrapper__body"
           style={{
             opacity: currentMenu ? '1' : '0',
-            left: contextMenu.coord.x,
-            top: contextMenu.coord.y
+            left: coord.x,
+            top: coord.y
           }}
         >
           <Content />

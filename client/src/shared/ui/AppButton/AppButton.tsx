@@ -1,10 +1,13 @@
 import './style.scss'
-import { Tooltip } from 'antd'
-import { AppIconName, AppIconSize } from '../AppIcon/types'
 import { useMemo } from 'react'
-import { AppIcon } from '../AppIcon'
-import { ColorModifier } from '../types'
+
+import { Tooltip } from 'antd'
+
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { AppIcon } from '../AppIcon'
+import { AppIconName, AppIconSize } from '../AppIcon/types'
+import { ColorModifier } from '../types'
 
 export interface ButtonProps {
   htmltype?: 'button' | 'submit'

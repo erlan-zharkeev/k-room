@@ -1,15 +1,12 @@
 import './style.scss'
+import { useState, useContext, useEffect } from 'react'
+
 import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common-types'
 import moment from 'moment'
-import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useTypedSelector, useCounter } from 'src/shared/lib'
+
 import { AppDispatch } from 'src/app/store'
-import { socket } from 'src/shared/api'
-import { AppButton, AppAvatar } from 'src/shared/ui'
-import { firstCharUpperCase } from 'src/shared/utils'
-import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
-import { CallDots, CallModalVideo } from './elements'
+
 import {
   setCallStartedAt,
   setShowCallModal,
@@ -19,6 +16,14 @@ import {
   setCallSettingsLoading,
   setCallVideo
 } from 'src/entities/call'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector, useCounter } from 'src/shared/lib'
+import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
+import { AppButton, AppAvatar } from 'src/shared/ui'
+import { firstCharUpperCase } from 'src/shared/utils'
+
+import { CallDots, CallModalVideo } from './elements'
 
 export interface CallModalBodyProps {
   toggleExpandModal: () => void

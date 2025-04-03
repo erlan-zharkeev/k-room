@@ -1,5 +1,9 @@
+import { useEffect } from 'react'
+
 import { useDispatch } from 'react-redux'
+
 import { setViewPort } from 'src/entities/system'
+
 import { getViewPort } from 'src/shared/utils'
 
 export const useViewportMonitor = () => {
@@ -21,7 +25,15 @@ export const useViewportMonitor = () => {
     window.addEventListener('resize', handleResize)
   }
 
-  return {
-    monitorViewPortChanges
+  const unsubscribeMonitorViewPortChanges = () => {
+    window.removeEventListener('load', handleResize)
+    window.removeEventListener('resize', handleResize)
   }
+
+  useEffect(() => {
+    monitorViewPortChanges()
+    return () => {
+      unsubscribeMonitorViewPortChanges()
+    }
+  }, [])
 }

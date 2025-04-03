@@ -1,15 +1,19 @@
 import './style.scss'
-import { IEventGetUserTypingStatus, SocketActionsType } from 'common-types'
 import { useState, useEffect } from 'react'
+
+import { IEventGetUserTypingStatus, SocketActionsType } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { useTypedSelector } from 'src/shared/lib'
-import { socket } from 'src/shared/api'
+
 import { AppDispatch } from 'src/app/store'
+
+import { CHAT_ROOM_HEADER_HEIGHT, ChatRoomAvatar } from 'src/entities/chat-room'
+import { useSettings } from 'src/entities/settings'
+import { showModal } from 'src/entities/system'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
 import { getChatName } from 'src/shared/utils'
-import { showModal } from 'src/entities/system'
-import { useSettings } from 'src/entities/settings'
-import { CHAT_ROOM_HEADER_HEIGHT, ChatRoomAvatar } from 'src/entities/chat-room'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)

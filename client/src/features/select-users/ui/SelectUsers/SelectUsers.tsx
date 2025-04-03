@@ -1,7 +1,9 @@
 import './style.scss'
+import { useState, useEffect } from 'react'
+
 import { Tag } from 'antd'
 import { UserShortType } from 'common-types'
-import { useState, useEffect } from 'react'
+
 import { useTypedSelector } from 'src/shared/lib'
 import { AppAvatar } from 'src/shared/ui'
 

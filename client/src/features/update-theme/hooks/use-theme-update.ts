@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux'
+
 import { changeTheme, useSettings } from 'src/entities/settings'
 
 export const useThemeUpdate = () => {
@@ -10,7 +11,7 @@ export const useThemeUpdate = () => {
     html?.setAttribute('theme', theme)
   }
 
-  const udpateTheme = (value: boolean) => {
+  const updateTheme = (value: boolean) => {
     const newTheme = value ? 'dark' : 'light'
     dispatch(changeTheme(newTheme))
     setTheme()
@@ -19,6 +20,6 @@ export const useThemeUpdate = () => {
 
   return {
     setTheme,
-    udpateTheme
+    updateTheme
   }
 }

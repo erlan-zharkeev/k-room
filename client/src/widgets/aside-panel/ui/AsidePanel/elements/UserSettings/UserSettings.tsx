@@ -1,15 +1,20 @@
-import appData from './../../../../../../../package.json'
 import './style.scss'
 import Meta from 'antd/lib/card/Meta'
-import { RouteNamesEnum, IUserSettings as IUserSettings } from 'common-types'
+import { RouteNamesEnum, IUserSettings } from 'common-types'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useTypedSelector } from 'src/shared/lib'
+
 import { AppDispatch } from 'src/app/store'
-import { AppAvatar, AppSwitch } from 'src/shared/ui'
-import { showModal } from 'src/entities/system'
-import { useSettings } from 'src/entities/settings'
+
 import { useThemeUpdate } from 'src/features/update-theme'
+
+import { useSettings } from 'src/entities/settings'
+import { showModal } from 'src/entities/system'
+
+import { useTypedSelector } from 'src/shared/lib'
+import { AppAvatar, AppSwitch } from 'src/shared/ui'
+
+import appData from './../../../../../../../package.json'
 
 const { VITE_MAIL_APP } = import.meta.env
 
@@ -22,7 +27,7 @@ export const UserSettings = () => {
   const navigate = useNavigate()
   const { allowAudioContext } = useTypedSelector((state) => state.system)
   const { updateSetting } = useSettings()
-  const { udpateTheme } = useThemeUpdate()
+  const { updateTheme } = useThemeUpdate()
 
   const changeUserData = () => {
     dispatch(
@@ -37,7 +42,7 @@ export const UserSettings = () => {
     let type: keyof IUserSettings | null = null
     switch (id) {
       case 'theme':
-        udpateTheme(value)
+        updateTheme(value)
         break
       case 'sound':
         type = 'soundOn'

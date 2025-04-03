@@ -1,6 +1,9 @@
-import { SocketActionsType } from 'common-types'
 import { useState, useEffect, useRef } from 'react'
+
+import { SocketActionsType } from 'common-types'
+
 import { updateContactsStatusLocal, useContact } from 'src/entities/contact'
+
 import { socket } from 'src/shared/api'
 
 export const useContactOnlineMonitor = () => {
@@ -20,26 +23,20 @@ export const useContactOnlineMonitor = () => {
     })
   }
 
-  const monitorContactOnlineStatus = () => {
-    pingMonitorContactOnlineTimer.current = setInterval(() => {
-      updateTimerCounter((prev) => {
-        const newValue = prev + 1
-        return newValue
-      })
-    }, 5000)
+  pingMonitorContactOnlineTimer.current = setInterval(() => {
+    updateTimerCounter((prev) => {
+      const newValue = prev + 1
+      return newValue
+    })
+  }, 5000)
 
-    useEffect(() => {
-      checkForContactOnline()
+  useEffect(() => {
+    checkForContactOnline()
 
-      return () => {
-        if (pingMonitorContactOnlineTimer.current) {
-          clearInterval(pingMonitorContactOnlineTimer.current)
-        }
+    return () => {
+      if (pingMonitorContactOnlineTimer.current) {
+        clearInterval(pingMonitorContactOnlineTimer.current)
       }
-    }, [pingTimerCounter])
-  }
-
-  return {
-    monitorContactOnlineStatus
-  }
+    }
+  }, [pingTimerCounter])
 }

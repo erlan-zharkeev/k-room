@@ -1,5 +1,8 @@
-import { socket, useSocket } from 'src/shared/api'
+import { useEffect } from 'react'
+
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
+
+import { socket, useSocket } from 'src/shared/api'
 
 export const useNetworkMonitor = () => {
   const { socketReconnect } = useSocket()
@@ -27,7 +30,16 @@ export const useNetworkMonitor = () => {
     window.addEventListener('offline', handleOffline)
   }
 
-  return {
-    monitorNetwork
+  const unsubscribeMonitorNetwork = () => {
+    window.removeEventListener('online', handleOnline)
+    window.removeEventListener('offline', handleOffline)
   }
+
+  useEffect(() => {
+    monitorNetwork()
+
+    return () => {
+      unsubscribeMonitorNetwork()
+    }
+  }, [])
 }

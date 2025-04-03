@@ -1,6 +1,8 @@
-import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common-types'
 import { useEffect, useState } from 'react'
+
+import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common-types'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+
 import { useApi } from 'src/shared/api'
 import { useCounter } from 'src/shared/lib'
 import { getNextReqInterval } from 'src/shared/utils'
@@ -29,7 +31,7 @@ export const usePasswordRecovery = () => {
     return () => {
       stopCounter()
     }
-  })
+  }, [])
 
   // const onFinishEmailConfirm = async (fields: FormData) => {
   //   stopCounter()

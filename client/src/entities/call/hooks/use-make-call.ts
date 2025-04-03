@@ -1,8 +1,5 @@
 import { useContext, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/app/store'
-import Peer, { SignalData } from 'simple-peer'
-import { Howl } from 'howler'
+
 import {
   SocketActionsType,
   IUserData,
@@ -14,10 +11,12 @@ import {
   IEventMarkCallAsVideo,
   IEventCallEnded
 } from 'common-types'
-import { RefsContext } from 'src/shared/providers'
-import { clg } from 'src/shared/utils'
-import { socket } from 'src/shared/api'
-import { sound, useTypedSelector } from 'src/shared/lib'
+import { Howl } from 'howler'
+import { useDispatch } from 'react-redux'
+import Peer, { SignalData } from 'simple-peer'
+
+import { AppDispatch } from 'src/app/store'
+
 import {
   updateInterlocutorSettings,
   closeCallModal,
@@ -26,6 +25,11 @@ import {
   markCurrentCallAsVideo
 } from 'src/entities/call'
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
+
+import { socket } from 'src/shared/api'
+import { sound, useTypedSelector } from 'src/shared/lib'
+import { RefsContext } from 'src/shared/providers'
+import { clg } from 'src/shared/utils'
 
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
   const payload: IEventCallUser = {

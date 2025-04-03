@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
+
 import { useDispatch } from 'react-redux'
-import { useUser } from 'src/entities/user'
+
 import { resetStores } from 'src/features/global-store-reset'
+
+import { useUser } from 'src/entities/user'
 
 export const useAuthMonitor = () => {
   const { isAuth } = useUser()

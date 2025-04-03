@@ -1,11 +1,13 @@
 import './style.scss'
-import { useLogin } from '../../hooks'
 import { RouteNamesEnum } from 'common-types'
-import { AppButton } from 'src/shared/ui'
-import { AppForm } from 'src/shared/ui/AppForm/AppForm'
+
+import { AppForm } from 'src/shared/ui'
+
+import { useLogin } from '../../hooks'
+import { FirebaseProviderLoginBtn } from '../FirebaseProviderLoginBtn/FirebaseProviderLoginBtn'
 
 export const LoginForm = () => {
-  const { onSubmit, isLoading, googleBtnLoading, providerLogin } = useLogin()
+  const { onSubmit, isLoading } = useLogin()
 
   return (
     <div className="login-form">
@@ -28,14 +30,7 @@ export const LoginForm = () => {
         submitBtnLoading={isLoading}
       >
         <div className="login-form__additional__links">
-          <AppButton
-            prefixIconName="google"
-            iconSize="xs"
-            text="Sign in with Google"
-            onClick={() => providerLogin('google')}
-            loading={googleBtnLoading}
-            hoverless
-          />
+          <FirebaseProviderLoginBtn />
           <div className="login-form__forgot-password">
             <a className="link link--small" href={RouteNamesEnum.PasswordRecovery}>
               Forgot password?

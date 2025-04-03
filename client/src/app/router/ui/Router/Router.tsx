@@ -1,16 +1,18 @@
 import { RouteNamesEnum } from 'common-types'
 import { Routes, Route, Navigate } from 'react-router-dom'
+
 import { CreateNewPassword } from 'src/pages/create-new-password'
-import { EmailConfirmation } from 'src/pages/email-confrimation'
+import { EmailConfirmation } from 'src/pages/email-confirmation'
 import { Login } from 'src/pages/login'
 import { Main } from 'src/pages/main'
 import { PasswordRecovery } from 'src/pages/password-recovery'
 import { PrivacyPolicy } from 'src/pages/privacy-policy'
 import { Registration } from 'src/pages/registration'
 import { WaitEmailConfirm } from 'src/pages/wait-email-confirm'
+
 import { PageLayout } from 'src/widgets/page-layout'
 
-export const AppRouter = () => {
+export const Router = () => {
   return (
     <Routes>
       <Route element={<PageLayout />}>

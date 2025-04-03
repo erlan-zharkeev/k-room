@@ -1,11 +1,14 @@
-import axios from 'axios'
-import Cookies from 'js-cookie'
-import { AuthEndpointsEnum, IEventErrorMessage, SocketActionsType } from 'common-types'
 import { useContext, useEffect } from 'react'
+
+import axios from 'axios'
+import { AuthEndpointsEnum, IEventErrorMessage, SocketActionsType } from 'common-types'
+import Cookies from 'js-cookie'
 import { useDispatch } from 'react-redux'
+
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 import { setReconnectingStatus } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
+
 import { socket, useApiInterсeptor } from 'src/shared/api'
 import { AdditionalServiceContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'

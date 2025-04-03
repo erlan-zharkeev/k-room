@@ -1,8 +1,11 @@
 import './style.scss'
-import { Dropdown, Badge, MenuProps } from 'antd'
 import { useState, useEffect } from 'react'
+
+import { Dropdown, Badge, MenuProps } from 'antd'
+
 import { useSettings } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
+
 import { AppButton } from 'src/shared/ui'
 
 export const InfoDropdown = () => {
@@ -34,7 +37,7 @@ export const InfoDropdown = () => {
       placement="bottom"
       className="info-dropdown"
     >
-      <Badge color={`var(--error)`} count={unreadInfoQuantity()} offset={[-5, 2]}>
+      <Badge color={'var(--error)'} count={unreadInfoQuantity()} offset={[-5, 2]}>
         <AppButton prefixIconName="notification" borderless />
       </Badge>
     </Dropdown>

@@ -1,6 +1,8 @@
-import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common-types'
 import { useEffect, useState } from 'react'
+
+import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common-types'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+
 import { useApi } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'
 
@@ -17,7 +19,7 @@ export const useCreateNewPassword = () => {
     const currentPasswordRestoreQuery = searchParams.get('password-recovery')
     if (!currentPasswordRestoreQuery) return navigate(RouteNamesEnum.Main)
     setPasswordRestoreQuery(currentPasswordRestoreQuery)
-  })
+  }, [])
 
   const checkPassMatch = (payload: AppFormData) => {
     const { firstPassword, secondPassword } = payload

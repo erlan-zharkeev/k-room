@@ -1,26 +1,25 @@
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
-import { BrowserRouter } from 'react-router-dom'
-import { store, persistor } from 'src/app/store'
-import { ReactNode, useRef } from 'react'
-import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
-import { initializeApp } from 'firebase/app'
 import * as processLib from 'process'
+
+import { ReactNode, useRef } from 'react'
+
+import { initializeApp } from 'firebase/app'
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import { PersistGate } from 'redux-persist/integration/react'
+
+import { store, persistor } from 'src/app/store'
+
 import { useMakeCall } from 'src/entities/call'
-import { useFirebase } from '../../hooks'
 
-interface ProviderProps {
-  children: ReactNode
-}
+import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
 
-const AdditionalServiceProvider: React.FC<ProviderProps> = ({ children }) => {
+const AdditionalServiceProvider = ({ children }: { children: ReactNode }) => {
   const call = useRef(useMakeCall())
-  const firebase = useRef(useFirebase())
-  const services = { call, firebase }
+  const services = { call }
   return <AdditionalServiceContext.Provider value={services}>{children}</AdditionalServiceContext.Provider>
 }
 
-const RefsProvider: React.FC<ProviderProps> = ({ children }) => {
+const RefsProvider = ({ children }: { children: ReactNode }) => {
   const interlocutorVideoDom = useRef<HTMLVideoElement>(null)
   const selfVideoDom = useRef<HTMLVideoElement>(null)
   const refs = { interlocutorVideoDom, selfVideoDom }
