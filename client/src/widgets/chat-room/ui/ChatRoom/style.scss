@@ -6,7 +6,7 @@
 
   margin-left: 16px;
   padding: 1rem;
-  @include nm-outset-element;
+  @include nm-outset-shadow;
 
   overflow: hidden;
   @include max-width-576 {

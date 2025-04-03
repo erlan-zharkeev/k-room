@@ -20,7 +20,7 @@ export const useContactOnlineMonitor = () => {
     })
   }
 
-  const monitorContactsOnline = () => {
+  const monitorContactOnlineStatus = () => {
     pingMonitorContactOnlineTimer.current = setInterval(() => {
       updateTimerCounter((prev) => {
         const newValue = prev + 1
@@ -40,6 +40,6 @@ export const useContactOnlineMonitor = () => {
   }
 
   return {
-    monitorContactsOnline
+    monitorContactOnlineStatus
   }
 }

@@ -2,7 +2,6 @@ import './style.scss'
 import { IEventGetUserTypingStatus, SocketActionsType } from 'common-types'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { clientConstants } from 'src/client-constants'
 import { useTypedSelector } from 'src/shared/lib'
 import { socket } from 'src/shared/api'
 import { AppDispatch } from 'src/app/store'
@@ -10,7 +9,7 @@ import { AppButton } from 'src/shared/ui'
 import { getChatName } from 'src/shared/utils'
 import { showModal } from 'src/entities/system'
 import { useSettings } from 'src/entities/settings'
-import { ChatRoomAvatar } from 'src/entities/chat-room'
+import { CHAT_ROOM_HEADER_HEIGHT, ChatRoomAvatar } from 'src/entities/chat-room'
 
 export const RoomHeader = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -67,7 +66,7 @@ export const RoomHeader = () => {
   }
 
   return (
-    <div className="room-header" style={{ height: clientConstants.dimensions.roomHeader }}>
+    <div className="room-header" style={{ height: CHAT_ROOM_HEADER_HEIGHT }}>
       <div className="room-header__back-button">
         <AppButton prefixIconName="arrow-left" onClick={resetChatRoom} />
       </div>

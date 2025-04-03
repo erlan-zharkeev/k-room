@@ -5,14 +5,14 @@ export type AsideBarButtonNameType =
   | "chat-list"
   | "calls"
   | "settings";
-export type SelectedContentElementType = "info" | AsideBarButtonNameType;
+export type ContentTabType = "info" | AsideBarButtonNameType;
 export type AdminPanelModelTabType =
   | "users"
   | "calls"
   | "chat-rooms"
   | "messages";
 export interface IUserSettings {
-  selectedContentElement: SelectedContentElementType;
+  selectedContentElement: ContentTabType;
   selectedAdminPanelModelTab: AdminPanelModelTabType;
   selectedChatRoomId: string;
   ableToShowNotification: boolean;

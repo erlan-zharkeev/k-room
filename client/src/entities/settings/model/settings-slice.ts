@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AdminPanelModelTabType, ThemeType, IUserSettings, SelectedContentElementType } from 'common-types'
+import { AdminPanelModelTabType, ThemeType, IUserSettings, ContentTabType } from 'common-types'
 
 const initialState: IUserSettings = {
   selectedContentElement: 'contacts',
@@ -49,7 +49,7 @@ export const settingsSlice = createSlice({
     selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
     },
-    changeSelectedContentElement(state, { payload }: { payload: SelectedContentElementType }) {
+    changeSelectedContentElement(state, { payload }: { payload: ContentTabType }) {
       state.selectedContentElement = payload
     },
     setAbleToShowNotification(state, { payload }: { payload: boolean }) {

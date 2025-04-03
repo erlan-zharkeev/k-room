@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: space-between;
   width: calc(100% + 2rem);
+  height: 55px;
   padding: 0 1rem 1rem;
 
   @include max-width-768 {

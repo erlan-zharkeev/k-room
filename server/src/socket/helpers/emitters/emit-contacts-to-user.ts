@@ -12,5 +12,5 @@ export const emitContactsToUser = async (userId: string) => {
   const contacts = transformUsersToContacts(matchedUsers, userData?.contacts)
   if (!userData?.socketId) return
   const payload: IEventGetContacts = { contacts }
-  io.to(userData.socketId).emit<SocketActionsType>('get-contacts', payload)
+  io.to(userData.socketId).emit<SocketActionsType>('contacts-loaded', payload)
 }

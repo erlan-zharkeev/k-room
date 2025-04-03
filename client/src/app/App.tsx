@@ -22,9 +22,5 @@ export const App = () => {
     monitorToShowAudioContextNotification()
   }, [])
 
-  return (
-    <>
-      <AppRouter />
-    </>
-  )
+  return <AppRouter />
 }

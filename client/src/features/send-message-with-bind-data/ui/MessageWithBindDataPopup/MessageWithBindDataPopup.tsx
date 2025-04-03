@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from 'src/shared/lib'
 import { AppSwitch, AppInput, AppButton } from 'src/shared/ui'
-import { sendMessage } from 'src/shared/utils'
 import { AppDispatch } from 'src/app/store'
 import { closeModal } from 'src/entities/system'
 import { useChatRooms } from 'src/entities/chat-room'
+import { useMessageSend } from 'src/features/message'
 
 export const MessageWithBindDataPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -16,7 +16,7 @@ export const MessageWithBindDataPopup = () => {
   const [compress, setCompress] = useState(true)
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
   const [form] = Form.useForm()
-
+  const { sendMessage } = useMessageSend()
   const dispatch = useDispatch<AppDispatch>()
   const { selectedChatRoom } = useChatRooms()
 
@@ -47,7 +47,7 @@ export const MessageWithBindDataPopup = () => {
           <div className="message-with-bind-data-popup__images">
             <div className="message-with-bind-data-popup__compress">
               <span className="paragraph-text ">Image compression:</span>
-              <AppSwitch initValue={compress} id="compression" onChange={setCompress} />
+              <AppSwitch value={compress} name="compression" onChange={() => setCompress} />
             </div>
             <div className="message-with-bind-data-popup__images-wrapper">
               {images.map((image) => (

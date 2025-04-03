@@ -1,7 +1,6 @@
 import './style.scss'
 import useDynamicRefs from 'use-dynamic-refs'
 import moment from 'moment'
-import { clientConstants } from 'src/client-constants'
 import { List } from 'antd'
 import { IMessage, SocketActionsType, IImageObject, IEventChangeMessageStatus } from 'common-types'
 import { useState, useRef, useEffect } from 'react'
@@ -10,21 +9,24 @@ import { useTypedSelector } from 'src/shared/lib'
 import { AppDispatch } from 'src/app/store'
 import { socket } from 'src/shared/api'
 import { RoomHeader, MessageBody, InputMessage } from './elements'
-import { generateUUIDv4, scrollToBottom, sendMessage } from 'src/shared/utils'
-import { updatedAttachedFilesMessage, useChatRooms } from 'src/entities/chat-room'
+import { generateUUIDv4 } from 'src/shared/utils'
+import { CHAT_ROOM_HEADER_HEIGHT, updatedAttachedFilesMessage, useChatRooms } from 'src/entities/chat-room'
 import { showModal } from 'src/entities/system'
 import { useSettings } from 'src/entities/settings'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
+import { useMessageSend } from 'src/features/message'
+import { FULL_INPUT_MESSAGE_HEIGHT, SHORT_INPUT_MESSAGE_HEIGHT } from 'src/entities/message'
 
 export const ChatRoom = () => {
   const { selectedChatRoom } = useChatRooms()
+  const { sendMessage } = useMessageSend()
 
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
   const isSetChatList = useTypedSelector((state) => state.persist.settings.selectedContentElement) === 'chat-list'
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
-  const [inputMessageHeight, setInputMessageHeight] = useState(clientConstants.dimensions.shortInputMessage)
+  const [inputMessageHeight, setInputMessageHeight] = useState(SHORT_INPUT_MESSAGE_HEIGHT)
   const [chatRoomPosition, setChatRoomPosition] = useState({ top: 0 })
   const dispatch = useDispatch<AppDispatch>()
   const roomDomEl = useRef<HTMLDivElement>(null)
@@ -62,7 +64,7 @@ export const ChatRoom = () => {
 
   useEffect(() => {
     injectDateToMessages()
-    scrollToBottom()
+    // scrollToBottom()
     setTimeout(() => {
       setRefToMessages()
     }, 1500)
@@ -71,12 +73,11 @@ export const ChatRoom = () => {
   useEffect(() => {
     const roomEl = roomDomEl.current
     if (roomEl) {
-      const { fullInputMessage, shortInputMessage, chatRoomHeaderHeight } = clientConstants.dimensions
-      const inputHeight = haveMessageToReply ? fullInputMessage : shortInputMessage
+      const inputHeight = haveMessageToReply ? FULL_INPUT_MESSAGE_HEIGHT : SHORT_INPUT_MESSAGE_HEIGHT
 
       setInputMessageHeight(inputHeight)
       const position = {
-        top: chatRoomHeaderHeight
+        top: CHAT_ROOM_HEADER_HEIGHT
       }
       setChatRoomPosition(position)
     }
@@ -167,8 +168,7 @@ export const ChatRoom = () => {
                     roomId: selectedChatRoom?.id,
                     username,
                     messageText: message,
-                    repliedMessage: repliedMessageData,
-                    dispatch
+                    repliedMessage: repliedMessageData
                   })
                 }
                 uploadImageHandler={uploadImageHandler}

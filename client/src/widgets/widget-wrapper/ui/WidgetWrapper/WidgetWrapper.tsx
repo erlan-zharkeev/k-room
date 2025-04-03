@@ -8,7 +8,7 @@ export const WidgetWrapper = ({
   children
 }: {
   loading?: boolean
-  placement: 'top' | 'bar' | 'aside' | 'main'
+  placement: 'top' | 'aside-bar' | 'bottom-bar' | 'aside-panel' | 'main'
   children?: ReactNode
 }) => {
   const { showWallpaper, theme } = useTypedSelector((state) => state.persist.settings)

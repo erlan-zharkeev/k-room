@@ -11,5 +11,5 @@ export const emitRoomsByUserId = async (userId: string) => {
   const transformedRooms: EventGetRoomsType = await Promise.all(
     rooms.map(async (room) => await transformRoomForUser({ userId, room }))
   )
-  io.to(userData.socketId).emit<SocketActionsType>('get-rooms', transformedRooms)
+  io.to(userData.socketId).emit<SocketActionsType>('rooms-loaded', transformedRooms)
 }

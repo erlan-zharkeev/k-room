@@ -1,0 +1,2 @@
+export const SHORT_INPUT_MESSAGE_HEIGHT = 35
+export const FULL_INPUT_MESSAGE_HEIGHT = 100

@@ -1,12 +1,12 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { clientConstants } from 'src/client-constants'
 import { useTypedSelector } from 'src/shared/lib'
 import { AppIcon } from 'src/shared/ui'
 import { AppDispatch } from 'src/app/store'
 import { resetRepliedMessage } from 'src/entities/chat-room'
 import { resetContextClickedObject } from 'src/entities/system'
+import { FULL_INPUT_MESSAGE_HEIGHT, SHORT_INPUT_MESSAGE_HEIGHT } from 'src/entities/message'
 
 export const ReplyMessage = () => {
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
@@ -14,8 +14,7 @@ export const ReplyMessage = () => {
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const { fullInputMessage, shortInputMessage } = clientConstants.dimensions
-    const updatedHeight = repliedMessageData.id ? fullInputMessage - shortInputMessage - 8 : 0
+    const updatedHeight = repliedMessageData.id ? FULL_INPUT_MESSAGE_HEIGHT - SHORT_INPUT_MESSAGE_HEIGHT - 8 : 0
     setHeight(updatedHeight)
   }, [repliedMessageData])
 

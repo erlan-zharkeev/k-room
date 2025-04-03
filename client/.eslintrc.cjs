@@ -6,11 +6,12 @@ module.exports = {
   extends: ['plugin:react/recommended', 'standard-with-typescript'],
   parserOptions: {
     project: ['./tsconfig.json'],
+    tsconfigRootDir: __dirname, // 🔧 чтобы ESLint правильно нашёл tsconfig
     files: ['*.ts', '*.tsx', '*.js'],
     ecmaVersion: 8,
     sourceType: 'module'
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'import'],
   ignorePatterns: ['**/*.js'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -40,7 +41,18 @@ module.exports = {
     'no-useless-escape': 'off',
     'circular-dependecy-issue': 'off',
     'no-case-declarations': 'off',
-    'array-callback-return': 'off'
+    'array-callback-return': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true
+        },
+        'newlines-between': 'always'
+      }
+    ]
   },
   settings: {
     react: {

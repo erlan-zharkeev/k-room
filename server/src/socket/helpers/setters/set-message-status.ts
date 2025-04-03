@@ -26,6 +26,6 @@ export const setMessageStatus = async (
     status
   }
   userSockets.forEach((socketId) => {
-    io.to(socketId).emit<SocketActionsType>('update-message-status', payload)
+    io.to(socketId).emit<SocketActionsType>('message-status-updated', payload)
   })
 }

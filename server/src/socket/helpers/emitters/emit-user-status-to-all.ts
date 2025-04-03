@@ -13,6 +13,6 @@ export const emitUserStatusToAll = async (interlocutorId: string, online: boolea
     onlineStatusUpdatedTimestamp: Date.now()
   }
   sockets.forEach((socketId: string) => {
-    io.to(socketId).emit<SocketActionsType>('status-contact', payload)
+    io.to(socketId).emit<SocketActionsType>('contact-status-updated', payload)
   })
 }

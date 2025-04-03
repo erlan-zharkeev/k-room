@@ -1,8 +1,8 @@
 import './style.scss'
 import { Dropdown, MenuProps } from 'antd'
-import { clientConstants } from 'src/client-constants'
 import { ReactElement } from 'react'
 import { AppButton } from 'src/shared/ui'
+import { EMOJI_LIST } from 'src/entities/emoji'
 
 export interface EmojiDropdownProps {
   setEmoji?: (value: string) => void
@@ -15,7 +15,7 @@ export interface IEmojiItems {
 }
 
 export const EmojiDropdown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
-  const items: MenuProps['items'] = clientConstants.emojis.map((el) => {
+  const items: MenuProps['items'] = EMOJI_LIST.map((el) => {
     return {
       key: el.key,
       label: (

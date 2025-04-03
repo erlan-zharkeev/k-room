@@ -34,7 +34,7 @@ export const useDeleteContact = () => {
     dispatch(closeModal())
   }
 
-  const listenContactDelete = () => {
+  const monitorContactDeletion = () => {
     socket.on<SocketActionsType>(
       'contact-delete-success',
       ({ deletedContactId, silent }: IEventDeleteContactSuccess) => {
@@ -46,6 +46,6 @@ export const useDeleteContact = () => {
 
   return {
     deleteUserHandler,
-    listenContactDelete
+    monitorContactDeletion
   }
 }

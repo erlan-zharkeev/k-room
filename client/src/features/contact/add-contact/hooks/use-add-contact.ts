@@ -22,7 +22,7 @@ export const useAddContact = () => {
     message: ClientNotificationMessage.ContactAdded
   })
 
-  const listenAddingContact = () => {
+  const monitorContactAdding = () => {
     socket.on<SocketActionsType>('contact-add-success', (payload: IEventContactAddSuccess) => {
       dispatch(addContact(payload))
       contactAddedSuccessNotification.open()
@@ -31,6 +31,6 @@ export const useAddContact = () => {
 
   return {
     clickAddContactHandler,
-    listenAddingContact
+    monitorContactAdding
   }
 }

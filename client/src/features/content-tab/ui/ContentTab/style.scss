@@ -1,0 +1,11 @@
+.content-tab {
+  .content-tab__button-el {
+    margin: 24px 0;
+  }
+
+  .content-tab__button-el--active {
+    svg {
+      fill: var(--accent);
+    }
+  }
+}

@@ -50,7 +50,7 @@ class UserController {
         ...updatedUserData
       }
       sockets.forEach((socketId: string) => {
-        io.to(socketId).emit<SocketActionsType>('change-contacts-data', payload)
+        io.to(socketId).emit<SocketActionsType>('contact-data-changed', payload)
       })
 
       return res.json({

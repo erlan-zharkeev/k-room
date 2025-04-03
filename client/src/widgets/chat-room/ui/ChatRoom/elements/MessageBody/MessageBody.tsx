@@ -5,8 +5,8 @@ import { AppDispatch } from 'src/app/store'
 import { useEffect, useState } from 'react'
 import { Tooltip, Image } from 'antd'
 import { IMessage, UserShortType } from 'common-types'
-import { clientConstants } from 'src/client-constants'
 import { setContextMenu } from 'src/entities/system'
+import { EMOJI_LIST } from 'src/entities/emoji'
 
 export interface MessageBodyProps {
   message: IMessage
@@ -24,7 +24,7 @@ export const MessageBody = ({ message, isChatMultiple }: MessageBodyProps) => {
   const showMessageAuthor = !message.isSelf && isChatMultiple && notSystemAuthor
   const [reactions, setReactions] = useState<IReaction[]>([])
 
-  const getGlyph = (name: string) => clientConstants.emojis.find((emoji) => name === emoji.key)?.glyph
+  const getGlyph = (name: string) => EMOJI_LIST.find((emoji) => name === emoji.key)?.glyph
 
   const getAuthorTooltip = (authors: IReaction['authors']) => {
     return authors.map((author) => author.username).join(', ')

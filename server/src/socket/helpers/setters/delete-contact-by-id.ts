@@ -31,6 +31,6 @@ export const deleteContactById = async (
       contactId: userId,
       interaction: 'default'
     }
-    io.to(deletingContact.socketId).emit<SocketActionsType>('contact-interaction-type-updated', payload)
+    io.to(deletingContact.socketId).emit<SocketActionsType>('contact-interaction-updated', payload)
   }
 }

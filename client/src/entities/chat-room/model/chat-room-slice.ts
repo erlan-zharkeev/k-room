@@ -11,9 +11,6 @@ import {
   IMessage,
   IRepliedMessage
 } from 'common-types'
-import { UseNotification } from 'src/entities/notification'
-import { scrollToBottom } from 'src/shared/utils'
-
 interface AttachedFilesMessage {
   body: string
   images: IImageObject[]
@@ -64,7 +61,7 @@ export const chatRoomsSlice = createSlice({
     repliedMessageSetAsForward(state) {
       state.repliedMessageData.forward = true
     },
-    updateChatMessage(state, { payload }: { payload: IEventMessageDelivered & { notifications: UseNotification } }) {
+    pushMessage(state, { payload }: { payload: IEventMessageDelivered }) {
       const { roomId, message } = payload
       const room = state.chatRooms.find((room) => room.id === roomId)
       if (!room) return
@@ -72,7 +69,6 @@ export const chatRoomsSlice = createSlice({
         if (roomMessage.tempId === message.tempId) room.messages.splice(idx, 1)
       })
       room.messages.push(message)
-      scrollToBottom()
     },
     updateMessageStatus(state, { payload }: { payload: IEventUpdateMessageStatus }) {
       const { roomId, messageId, status } = payload
@@ -128,7 +124,7 @@ export const chatRoomsSlice = createSlice({
 
 export const {
   loadChatRooms,
-  updateChatMessage,
+  pushMessage,
   pushTemporaryMessage,
   updateMessageReactions,
   updateMessageStatus,

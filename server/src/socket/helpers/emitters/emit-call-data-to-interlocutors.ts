@@ -13,6 +13,6 @@ export const emitCallDataToInterlocutors = (interlocutors: Array<string>, callId
       ...transformedCallData,
       setId
     }
-    io.to(user.socketId).emit<SocketActionsType>('call-updated', payload)
+    io.to(user.socketId).emit<SocketActionsType>('call-data-changed', payload)
   })
 }

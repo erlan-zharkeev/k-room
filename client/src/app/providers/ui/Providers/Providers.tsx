@@ -6,7 +6,7 @@ import { ReactNode, useRef } from 'react'
 import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
 import { initializeApp } from 'firebase/app'
 import * as processLib from 'process'
-import { useCall } from 'src/entities/call'
+import { useMakeCall } from 'src/entities/call'
 import { useFirebase } from '../../hooks'
 
 interface ProviderProps {
@@ -14,7 +14,7 @@ interface ProviderProps {
 }
 
 const AdditionalServiceProvider: React.FC<ProviderProps> = ({ children }) => {
-  const call = useRef(useCall())
+  const call = useRef(useMakeCall())
   const firebase = useRef(useFirebase())
   const services = { call, firebase }
   return <AdditionalServiceContext.Provider value={services}>{children}</AdditionalServiceContext.Provider>

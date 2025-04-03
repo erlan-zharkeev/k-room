@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { clientConstants } from 'src/client-constants'
-import { ContextMenu, ContextMenuType, ContextClickedObject } from 'src/entities/context-menu'
+import {
+  ContextMenu,
+  ContextMenuType,
+  ContextClickedObject,
+  CONTEXT_MENU_HEIGHT,
+  CONTEXT_MENU_WIDTH
+} from 'src/entities/context-menu'
 import { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
 
 interface ModalBtn {
@@ -135,8 +140,8 @@ export const systemSlice = createSlice({
       let x = event.pageX
       let y = event.pageY
       const defaultPadding = 4
-      const menuWidth = clientConstants.dimensions.contextMenuWidth
-      const menuHeight = clientConstants.dimensions.contextMenuHeight
+      const menuWidth = CONTEXT_MENU_WIDTH
+      const menuHeight = CONTEXT_MENU_HEIGHT
       if (menuWidth + x > viewportWidth) x = viewportWidth - menuWidth - defaultPadding
       if (menuHeight + y > viewportHeight) y = viewportHeight - menuHeight - defaultPadding
       state.contextMenu.coord = {

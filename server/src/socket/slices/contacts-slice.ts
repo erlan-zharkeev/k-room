@@ -106,7 +106,7 @@ export const contactsSlice = (socket: SocketInstanceType) => {
             contactId: userId,
             interaction
           }
-          io.to(contactCandidate.socketId).emit<SocketActionsType>('contact-interaction-type-updated', payload)
+          io.to(contactCandidate.socketId).emit<SocketActionsType>('contact-interaction-updated', payload)
         }
       }
       if (interaction === 'default') {
@@ -141,7 +141,7 @@ export const contactsSlice = (socket: SocketInstanceType) => {
       }
 
       const payload: IEventUpdateContactInteractionSuccess = { contactId, interaction }
-      io.to(socket.id).emit<SocketActionsType>('contact-interaction-type-updated', payload)
+      io.to(socket.id).emit<SocketActionsType>('contact-interaction-updated', payload)
     }
   )
 }

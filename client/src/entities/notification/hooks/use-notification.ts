@@ -2,6 +2,8 @@ import { notification as antdNotification } from 'antd'
 import { ReactNode } from 'react'
 import { ClientNotificationMessage, NotificationType } from '../types'
 import { useTypedSelector } from 'src/shared/lib'
+import { IMessage } from 'common-types'
+import { AppLogoIcon } from 'src/shared/assets'
 
 interface Notification {
   key?: string
@@ -57,7 +59,13 @@ export const useNotification = () => {
     return { open, close, key }
   }
 
+  const openBrowserNotification = (payload: { message: IMessage; icon?: string }) => {
+    const { message, icon = AppLogoIcon } = payload
+    new Notification(message.authorName, { body: message.body, icon })
+  }
+
   return {
-    getNotification
+    getNotification,
+    openBrowserNotification
   }
 }

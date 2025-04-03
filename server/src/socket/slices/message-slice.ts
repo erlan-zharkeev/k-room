@@ -55,7 +55,7 @@ export const messageSlice = (socket: SocketInstanceType) => {
       const socketIds = await getSocketsByUserIds(room.users)
       const payload: IEventUpdatedMessageReactions = { roomId, messageId, reaction }
       socketIds.forEach((socketId) => {
-        io.to(socketId).emit<SocketActionsType>('update-message-reactions', payload)
+        io.to(socketId).emit<SocketActionsType>('message-reaction-updated', payload)
       })
     } catch (e: unknown) {
       console.log(e)

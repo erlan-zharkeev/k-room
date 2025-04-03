@@ -1,5 +1,6 @@
 import './style.scss'
-import { clientConstants } from 'src/client-constants'
+
+import { EMOJI_LIST } from 'src/entities/emoji'
 
 export interface ReactionsProps {
   reactionHandler: (reaction: string) => void
@@ -7,7 +8,7 @@ export interface ReactionsProps {
 }
 
 export const Reactions = ({ reactionHandler, blockedKeys }: ReactionsProps) => {
-  const reactions = clientConstants.emojis.filter((emoji) => emoji.reactions)
+  const reactions = EMOJI_LIST.filter((emoji) => emoji.reactions)
   const isDisabled = (glyphKey: string) => (blockedKeys.includes(glyphKey) ? 'disabled' : 'default')
   return (
     <div className="reactions">

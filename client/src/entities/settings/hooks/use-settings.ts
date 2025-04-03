@@ -1,6 +1,6 @@
 import {
   IUserSettings,
-  SelectedContentElementType,
+  ContentTabType,
   AdminPanelModelTabType,
   IEventUpdateUserSettings,
   ThemeType,
@@ -9,7 +9,6 @@ import {
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/app/store'
 import { socket } from 'src/shared/api'
-import { scrollToBottom } from 'src/shared/utils'
 import {
   setSoundValue,
   setTooltipsValue,
@@ -33,7 +32,7 @@ export const useSettings = () => {
     type: keyof IUserSettings,
     value: {
       commonSettings?: boolean
-      selectedContentElement?: SelectedContentElementType
+      selectedContentElement?: ContentTabType
       infoId?: string
       selectChatRoomId?: string
       selectedAdminPanelModelTab?: AdminPanelModelTabType
@@ -68,7 +67,7 @@ export const useSettings = () => {
         if (value.selectChatRoomId === undefined) return
         payload.value = value.selectChatRoomId
         dispatch(selectChatRoom(value.selectChatRoomId))
-        scrollToBottom()
+        // scrollToBottom()
         break
       case 'selectedContentElement':
         if (value.selectedContentElement === undefined) return
@@ -92,12 +91,12 @@ export const useSettings = () => {
     socket.emit<SocketActionsType>('update-user-settings', payload)
   }
 
-  const changeAsideTab = (value: SelectedContentElementType) => {
+  const changeContentTabSelection = (value: ContentTabType) => {
     updateSetting('selectedContentElement', { selectedContentElement: value })
   }
 
   return {
-    changeAsideTab,
+    changeContentTabSelection,
     updateSetting,
     selectedContentElement,
     selectedChatRoomId,
