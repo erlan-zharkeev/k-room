@@ -1,42 +1,50 @@
+@use '~/global/index' as *;
+
 .app-input {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   height: var(--medium-ui-height);
 
-  &.app-input--focused {
-    .app-input__input-wrapper::before {
-      transform: scaleX(1);
-      opacity: 1;
-    }
-  }
-
   .app-input__input-wrapper {
     position: relative;
     width: 100%;
-
-    &::before {
-      position: absolute;
-      bottom: 0;
-      left: 5px;
-      width: calc(100% - 8px);
-      height: 2px;
-      background: var(--accent);
-      border-bottom-right-radius: 2px;
-      border-bottom-left-radius: 2px;
-      transform: scaleX(0);
-      transform-origin: left;
-      opacity: 0;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      content: '';
-    }
+    overflow: hidden;
+    border-radius: 8px;
+    @include focused-line;
   }
 
   .app-input__prefix-icon {
     margin-right: 8px;
   }
 
+  .app-input__clear-btn {
+    position: absolute;
+    right: 0;
+  }
+
+  .app-input__show-pass-btn {
+    margin-left: 4px;
+  }
+
   input {
     padding-top: 2px;
   }
+
+  &.app-input--with-clear-btn {
+    input {
+      padding-right: 40px;
+    }
+  }
+
+  &.app-input--focused {
+    .app-input__input-wrapper {
+      @include focused-line-active;
+    }
+  }
+}
+
+.app-input--disabled {
+  @include disabled;
 }

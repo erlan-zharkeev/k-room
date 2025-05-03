@@ -1,19 +1,16 @@
 import { useState } from 'react'
 
 import { AuthEndpointsEnum, AuthLoginPayloadType, StatusEnum, RouteNamesEnum } from 'common-types'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { AppDispatch } from 'src/app/store'
-
-import { commonSetUserDataHandler } from 'src/entities/user'
+import { useSetUserData } from 'src/features/user/set-user-data/hooks/use-set-user-data'
 
 import { useApi } from 'src/shared/api'
 
 export const useLogin = () => {
   const { doRequest } = useApi()
+  const { setUserData } = useSetUserData()
 
-  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -24,7 +21,7 @@ export const useLogin = () => {
     setIsLoading(false)
     if (response?.status === StatusEnum.Success && response.data) {
       const { userData, settings } = response.data
-      commonSetUserDataHandler(dispatch, { userData, settings })
+      setUserData({ userData, settings })
       navigate(RouteNamesEnum.Main)
     }
   }

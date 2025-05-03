@@ -1,0 +1,16 @@
+@use '~/global/index' as *;
+
+.socket-connection-status {
+  margin-right: 8px;
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+.socket-connection-status--disconnected {
+  border: solid 1px var(--error);
+}
+
+.socket-connection-status--connecting {
+  border: solid 1px var(--accent);
+  animation: blinker 1s infinite;
+}

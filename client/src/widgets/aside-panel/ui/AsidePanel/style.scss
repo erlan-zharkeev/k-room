@@ -6,7 +6,8 @@
   width: 30%;
   min-width: 300px;
   height: 100%;
-  overflow: hidden;
+  margin-left: 12px;
+
   @include nm-outset-shadow;
   @include max-width-768 {
     width: 100%;

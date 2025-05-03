@@ -6,8 +6,9 @@ import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'src/app/store'
 
+import { useRoomSelect } from 'src/features/room'
+
 import { CHAT_ROOM_HEADER_HEIGHT, ChatRoomAvatar } from 'src/entities/chat-room'
-import { useSettings } from 'src/entities/settings'
 import { showModal } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
@@ -22,7 +23,6 @@ export const RoomHeader = () => {
   const [typingDotsQuantity, setTypingDotsQuantity] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
   const [typingAuthors, setTypingAuthors] = useState<{ authorId: string; authorName: string }[]>([])
-  const { updateSetting } = useSettings()
 
   useEffect(() => {
     setTimeout(() => {
@@ -65,14 +65,12 @@ export const RoomHeader = () => {
     return ` Typing ${Array.from('.'.repeat(typingDotsQuantity)).join(' ')}`
   }
 
-  const resetChatRoom = () => {
-    updateSetting('selectedChatRoomId', { selectChatRoomId: '' })
-  }
+  const { resetRoomSelection } = useRoomSelect()
 
   return (
     <div className="room-header" style={{ height: CHAT_ROOM_HEADER_HEIGHT }}>
       <div className="room-header__back-button">
-        <AppButton prefixIconName="arrow-left" onClick={resetChatRoom} />
+        <AppButton prefixIconName="arrow-left" onClick={resetRoomSelection} />
       </div>
       <div className="room-header__info">
         {chatRoomData && <ChatRoomAvatar room={chatRoomData} />}
@@ -81,7 +79,7 @@ export const RoomHeader = () => {
         ) : (
           <h3 className="room-header__name">{getChatName(chatRoomData)}</h3>
         )}
-        {isTyping && <div className="is-typing blink-me paragraph-text paragraph-text--accent">{whoIsTyping()}</div>}
+        {isTyping && <div className="is-typing paragraph-text paragraph-text--accent">{whoIsTyping()}</div>}
       </div>
     </div>
   )

@@ -1,7 +1,9 @@
+@use '~/global/index' as *;
+
 .password-recovery {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  width: 300px;
-  transform: translateX(-50%);
+  @include absolute-center-form;
+
+  .password-recovery__title {
+    margin-bottom: 8px;
+  }
 }

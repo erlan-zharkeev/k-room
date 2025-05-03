@@ -46,7 +46,7 @@ export enum UserEndpointsEnum {
 
 export enum CommonEndpointsEnum {
   CommonImages = "/common-images",
-  GetInfo = "/notification",
+  InfoItem = "/info-item",
 }
 
 export enum CodesEndpointsEnum {

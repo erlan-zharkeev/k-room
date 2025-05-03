@@ -1,14 +1,14 @@
-import { AuthEndpointsEnum, AuthRegistrationPayloadType, RouteNamesEnum, StatusEnum } from 'common-types'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/app/store'
-import { commonSetUserDataHandler } from 'src/entities/user'
-import { useApi } from 'src/shared/api'
+
+import { AuthEndpointsEnum, AuthRegistrationPayloadType, RouteNamesEnum, StatusEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
+
+import { useApi } from 'src/shared/api'
 
 export const useRegistration = () => {
   const [policySwitch, setPolicySwitch] = useState(false)
   const [policyTouched, setPolicyTouched] = useState(false)
+
   const navigate = useNavigate()
 
   const policySwitchHandler = (e: boolean) => {
@@ -17,16 +17,13 @@ export const useRegistration = () => {
   }
 
   const { doRequest } = useApi()
-  const dispatch = useDispatch<AppDispatch>()
   const [isLoading, setIsLoading] = useState(false)
 
   const register = async (fields: AuthRegistrationPayloadType) => {
     setIsLoading(true)
     const response = await doRequest('post', AuthEndpointsEnum.Registration, fields)
     setIsLoading(false)
-    if (response?.status === StatusEnum.Success && response.data) {
-      const { userData, settings } = response.data
-      commonSetUserDataHandler(dispatch, { userData, settings })
+    if (response?.status === StatusEnum.Success) {
       navigate(RouteNamesEnum.Login)
     }
   }

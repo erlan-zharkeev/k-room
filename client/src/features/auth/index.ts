@@ -1,4 +1,4 @@
 export * from './login'
 export * from './registration'
 export * from './check-auth'
-export * from './monitor'
+export * from './logout'

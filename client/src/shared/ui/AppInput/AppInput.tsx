@@ -1,12 +1,14 @@
 import './style.scss'
 import { ChangeEvent, ReactNode, useMemo, useState } from 'react'
+
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
 import { AppButton } from '../AppButton/AppButton'
 
 export interface AppInputProps {
   name: string
   value: string
-  type?: 'password' | 'text'
+  nativeType?: React.HTMLInputTypeAttribute
   placeholder?: string
   disabled?: boolean
   autoComplete?: 'on' | 'off'
@@ -20,7 +22,7 @@ const rootClass = 'app-input'
 
 export const AppInput = ({
   name,
-  type = 'text',
+  nativeType = 'text',
   placeholder,
   value = '',
   disabled,
@@ -31,13 +33,16 @@ export const AppInput = ({
   prefixSlot = undefined
 }: AppInputProps) => {
   const [focused, setFocused] = useState(false)
-  const className = createClassNameWithModifiers({ rootClass, modifiers: [type, focused && 'focused'] })
+  const className = createClassNameWithModifiers({
+    rootClass,
+    modifiers: [nativeType, disabled && 'disabled', focused && 'focused', showClearButton && 'with-clear-btn']
+  })
   const [showPasswordText, setShowPasswordText] = useState(false)
 
   const currentType = useMemo(() => {
-    if (type === 'text') return 'text'
+    if (nativeType !== 'password') return nativeType
     return showPasswordText ? 'text' : 'password'
-  }, [type, showPasswordText])
+  }, [nativeType, showPasswordText])
 
   const clearHandler = () => {
     const syntheticEvent = {
@@ -68,15 +73,21 @@ export const AppInput = ({
           autoComplete={autoComplete}
         />
       </div>
-      {type === 'password' && (
-        <AppButton
-          prefixIconName={showPasswordText ? 'eye-blocked' : 'eye'}
-          iconSize="xs"
-          onClick={() => setShowPasswordText(!showPasswordText)}
-          borderless
-        />
+      {showClearButton && (
+        <div className="app-input__clear-btn">
+          <AppButton prefixIconName="cross" borderless onClick={clearHandler} />
+        </div>
       )}
-      {showClearButton && <AppButton prefixIconName="cross" borderless onClick={clearHandler} />}
+      {nativeType === 'password' && (
+        <div className="app-input__show-pass-btn">
+          <AppButton
+            prefixIconName={showPasswordText ? 'eye-blocked' : 'eye'}
+            iconSize="xs"
+            onClick={() => setShowPasswordText(!showPasswordText)}
+            borderless
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -1,0 +1,84 @@
+import './style.scss'
+import { useEffect, useState } from 'react'
+
+import { Badge } from 'antd'
+import parse from 'html-react-parser'
+
+import { AppHeader } from '../AppHeader/AppHeader'
+import { AppIcon } from '../AppIcon'
+
+interface CollapseItem {
+  id: string
+  title: string
+  content?: string
+  badgeName?: React.ReactNode
+}
+
+interface AppCollapseProps {
+  items: CollapseItem[]
+  onClickCollapseEl: (id: string) => void
+}
+
+export const AppCollapseList = ({ items, onClickCollapseEl }: AppCollapseProps) => {
+  const [openElId, setOpenIElId] = useState<string | null>(null)
+  const [delayedOverflowIndex, setDelayedOverflowIndex] = useState<string | null>(null)
+
+  const clickHandler = (id: string) => {
+    setOpenIElId((prev) => (prev === id ? null : id))
+    onClickCollapseEl(id)
+  }
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | null = null
+
+    if (openElId !== null) {
+      timeout = setTimeout(() => {
+        setDelayedOverflowIndex(openElId)
+      }, 300)
+    } else {
+      setDelayedOverflowIndex(null)
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout)
+    }
+  }, [openElId])
+
+  return (
+    <div className="app-collapse-list">
+      {items.map((item) => {
+        const isOpen = openElId === item.id
+        const showOverflow = delayedOverflowIndex === item.id
+        return (
+          <Badge color={'var(--error)'} count={item.badgeName} offset={[-5, 2]} key={item.id}>
+            <div
+              className={`app-collapse-list__element ${isOpen ? 'app-collapse-list__element--open' : ''}`}
+              onClick={() => clickHandler(item.id)}
+            >
+              <div className="app-collapse-list__element-header">
+                <AppHeader bold={false} tag="h4">
+                  {item.title}
+                </AppHeader>
+                <div className="app-collapse-list__element-header-right-side">
+                  <div className="app-collapse-list__element-chevron-icon">
+                    <AppIcon name="arrow-left" size="xs" />
+                  </div>
+                </div>
+              </div>
+              <div
+                className="app-collapse-list__element-content"
+                style={{
+                  overflow: showOverflow ? 'auto' : 'hidden'
+                }}
+              >
+                <div className="app-collapse-list__element-content-body">
+                  {parse(item.content ?? '<p>Сouldn`t get the data, try later</p>')}
+                </div>
+              </div>
+            </div>
+          </Badge>
+        )
+      })}
+    </div>
+  )
+}

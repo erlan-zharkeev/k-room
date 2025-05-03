@@ -2,7 +2,7 @@ import {
   ChatRoomsType,
   ICodes,
   DBContactMapType,
-  IInfoItem,
+  IInfoMessage,
   MessageStatusType,
   IUserSettings,
 } from ".";
@@ -34,7 +34,7 @@ export interface IUserData {
   providerName?: string;
   lastSeen?: string;
   contacts?: IUserData[];
-  infoItems?: IInfoItem[];
+  infoNotifications?: IInfoMessage[];
 }
 
 export type UserShortType = Pick<IUserData, "id" | "username" | "avatarPath">;
@@ -51,7 +51,7 @@ export interface IUserSchema extends Omit<IUserData, "contacts"> {
   refreshToken: string;
   settings: IUserSettings;
   codes: ICodes;
-  infoItems: IInfoItem[];
+  infoNotifications: IInfoMessage[];
   contacts: DBContactMapType;
 }
 

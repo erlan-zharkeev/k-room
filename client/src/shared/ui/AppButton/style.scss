@@ -21,6 +21,10 @@
     cursor: pointer;
   }
 
+  * {
+    cursor: inherit;
+  }
+
   span {
     padding-bottom: 2px;
   }
@@ -68,5 +72,14 @@
   button,
   span {
     color: var(--accent);
+  }
+}
+
+.app-button--success-color {
+  border-color: var(--success);
+
+  button,
+  span {
+    color: var(--success);
   }
 }

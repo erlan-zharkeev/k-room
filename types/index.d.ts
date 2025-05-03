@@ -40,7 +40,7 @@ export declare enum UserEndpointsEnum {
 }
 export declare enum CommonEndpointsEnum {
     CommonImages = "/common-images",
-    GetInfo = "/notification"
+    InfoItem = "/info-item"
 }
 export declare enum CodesEndpointsEnum {
     SendEmailCodePasswordRecovery = "/codes/email/password-recovery",

@@ -1,5 +1,9 @@
+@use '~/global/index' as *;
+
 .privacy-policy-switch {
-  .privacy-policy-switch__text {
-    font-size: 12px;
-  }
+  // font-size: 12px;
+}
+
+.privacy-policy-switch--disabled {
+  @include disabled;
 }

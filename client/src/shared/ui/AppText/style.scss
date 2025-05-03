@@ -1,0 +1,23 @@
+span.app-text--sm,
+p.app-text--sm {
+  font-size: 12px;
+}
+
+span.app-text--md,
+p.app-text--md {
+  font-size: 14px;
+}
+
+span.app-text--lg,
+p.app-text--lg {
+  font-size: 16px;
+}
+
+.app-text {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.app-text--accent {
+  color: var(--accent);
+}

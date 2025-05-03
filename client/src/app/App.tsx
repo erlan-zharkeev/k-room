@@ -2,23 +2,23 @@ import 'src/shared/config/styles'
 import { useEffect } from 'react'
 
 import { useCheckAuth } from 'src/features/auth'
-import { useAudioContextMonitor } from 'src/features/monitor-audio-context'
 import { useNetworkMonitor } from 'src/features/monitor-network/hooks'
 import { useViewportMonitor } from 'src/features/monitor-viewport'
-import { useThemeUpdate } from 'src/features/update-theme'
+import { useThemeUpdate } from 'src/features/settings/update-theme'
+
+import { useSettings } from 'src/entities/settings'
 
 import { Router } from './router'
 
 export const App = () => {
+  const { theme } = useSettings()
   const { setTheme } = useThemeUpdate()
-
-  useAudioContextMonitor()
   useNetworkMonitor()
   useViewportMonitor()
   useCheckAuth()
 
   useEffect(() => {
-    setTheme()
+    setTheme(theme)
   }, [])
 
   return <Router />

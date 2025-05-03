@@ -1,7 +1,9 @@
 import './style.scss'
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
 import { useState, useEffect } from 'react'
+
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
+
 import { useApi } from 'src/shared/api'
 import { useQuery, useCounter } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
@@ -50,12 +52,12 @@ export const WaitEmailConfirm = () => {
   return (
     <div className="wait-email-confirm">
       <div className="wait-confirm-email__wrapper">
-        <div className="header-text header-text--md header-text--accent">Email confirmation</div>
-        <p className="paragraph-text ">
+        <div className="wait-email-confirm__header">Email confirmation</div>
+        <p className="paragraph-text">
           A confirmation was sent to your email
-          {email && <span className="header-text header-text--sm header-text--accent"> {email}</span>}
+          {email && <span> {email}</span>}
         </p>
-        <p className="paragraph-text ">In order to complete the registration, follow the link provided in the email.</p>
+        <p className="paragraph-text">In order to complete the registration, follow the link provided in the email.</p>
         {remainingAttempts <= 0 ? (
           <div className="wait-email-confirm__attempts">
             <div className="paragraph-text  paragraph-text--bold">You have exhausted all attempts. Try again later</div>

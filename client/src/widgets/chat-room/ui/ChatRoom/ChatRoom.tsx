@@ -1,21 +1,26 @@
 import './style.scss'
-import useDynamicRefs from 'use-dynamic-refs'
-import moment from 'moment'
+import { useState, useRef, useEffect } from 'react'
+
 import { List } from 'antd'
 import { IMessage, SocketActionsType, IImageObject, IEventChangeMessageStatus } from 'common-types'
-import { useState, useRef, useEffect } from 'react'
+import moment from 'moment'
 import { useDispatch } from 'react-redux'
-import { useTypedSelector } from 'src/shared/lib'
+import useDynamicRefs from 'use-dynamic-refs'
+
 import { AppDispatch } from 'src/app/store'
-import { socket } from 'src/shared/api'
-import { RoomHeader, MessageBody, InputMessage } from './elements'
-import { generateUUIDv4 } from 'src/shared/utils'
-import { CHAT_ROOM_HEADER_HEIGHT, updatedAttachedFilesMessage, useChatRooms } from 'src/entities/chat-room'
-import { showModal } from 'src/entities/system'
-import { useSettings } from 'src/entities/settings'
-import { WidgetWrapper } from 'src/widgets/widget-wrapper'
+
+import { useContentTabSelect } from 'src/features/content-tab/select-content-tab'
 import { useMessageSend } from 'src/features/message'
+
+import { CHAT_ROOM_HEADER_HEIGHT, updatedAttachedFilesMessage, useChatRooms } from 'src/entities/chat-room'
 import { FULL_INPUT_MESSAGE_HEIGHT, SHORT_INPUT_MESSAGE_HEIGHT } from 'src/entities/message'
+import { showModal } from 'src/entities/system'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector } from 'src/shared/lib'
+import { generateUUIDv4 } from 'src/shared/utils'
+
+import { RoomHeader, MessageBody, InputMessage } from './elements'
 
 export const ChatRoom = () => {
   const { selectedChatRoom } = useChatRooms()
@@ -23,7 +28,7 @@ export const ChatRoom = () => {
 
   const haveMessageToReply = Boolean(useTypedSelector((state) => state.chatRooms.repliedMessageData.id))
   const haveAnyChatRoom = Boolean(useTypedSelector((state) => state.chatRooms.chatRooms).length)
-  const isSetChatList = useTypedSelector((state) => state.persist.settings.selectedContentElement) === 'chat-list'
+  const isSetChatList = useTypedSelector((state) => state.persist.settings.selectedContentTab) === 'chat-list'
   const { id, username } = useTypedSelector((state) => state.user.userData)
   const [getRef, setRef] = useDynamicRefs() as any
   const [inputMessageHeight, setInputMessageHeight] = useState(SHORT_INPUT_MESSAGE_HEIGHT)
@@ -32,7 +37,6 @@ export const ChatRoom = () => {
   const roomDomEl = useRef<HTMLDivElement>(null)
   const [messages, setMessages] = useState<IMessage[]>([])
   const { repliedMessageData } = useTypedSelector((state) => state.chatRooms)
-  const { updateSetting } = useSettings()
 
   const observerCallback = (entries: any[]) => {
     entries.forEach((entry: any) => {
@@ -64,7 +68,6 @@ export const ChatRoom = () => {
 
   useEffect(() => {
     injectDateToMessages()
-    // scrollToBottom()
     setTimeout(() => {
       setRefToMessages()
     }, 1500)
@@ -93,7 +96,7 @@ export const ChatRoom = () => {
     )
     dispatch(
       showModal({
-        title: 'Send IMessage',
+        title: 'Send Message',
         modalContentComponentName: 'message-with-bind-data-popup'
       })
     )
@@ -124,66 +127,59 @@ export const ChatRoom = () => {
     })
     setMessages(updatedMessagesWithDates)
   }
-
-  const chooseChatRoomHandler = () => {
-    updateSetting('selectedContentElement', { selectedContentElement: 'chat-list' })
-  }
+  const { selectContentTab } = useContentTabSelect()
 
   return (
-    <div className="chat-room">
-      <WidgetWrapper placement="main">
-        <div className="chat-room__wrapper" ref={roomDomEl}>
-          {selectedChatRoom ? (
-            <div>
-              <RoomHeader />
-              <div
-                className="chat-room__body"
-                style={{
-                  top: `${chatRoomPosition.top}px`
-                }}
-              >
-                <List
-                  id="message-list"
-                  itemLayout="horizontal"
-                  dataSource={messages ?? []}
-                  locale={{ emptyText: ' ' }}
-                  renderItem={(item: IMessage) => (
-                    <List.Item
-                      key={item.id}
-                      className={`chat-room__message--${locationModifier(item.authorId)}`}
-                      ref={setRef(item.id)}
-                    >
-                      <MessageBody message={item} isChatMultiple={selectedChatRoom.multiple} />
-                    </List.Item>
-                  )}
-                />
-              </div>
-              {messages.length === 0 && (
-                <div className="chat-room__empty-text paragraph-text ">There are no messages, write first</div>
+    <div className="chat-room" ref={roomDomEl}>
+      {selectedChatRoom ? (
+        <div>
+          <RoomHeader />
+          <div
+            className="chat-room__body"
+            style={{
+              top: `${chatRoomPosition.top}px`
+            }}
+          >
+            <List
+              id="message-list"
+              itemLayout="horizontal"
+              dataSource={messages ?? []}
+              locale={{ emptyText: ' ' }}
+              renderItem={(item: IMessage) => (
+                <List.Item
+                  key={item.id}
+                  className={`chat-room__message--${locationModifier(item.authorId)}`}
+                  ref={setRef(item.id)}
+                >
+                  <MessageBody message={item} isChatMultiple={selectedChatRoom.multiple} />
+                </List.Item>
               )}
-              <InputMessage
-                sendMessage={(message: string) =>
-                  sendMessage({
-                    authorId: id,
-                    roomId: selectedChatRoom?.id,
-                    username,
-                    messageText: message,
-                    repliedMessage: repliedMessageData
-                  })
-                }
-                uploadImageHandler={uploadImageHandler}
-                height={inputMessageHeight}
-              />
-            </div>
-          ) : (
-            <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
-              <div onClick={chooseChatRoomHandler} className="paragraph-text ">
-                Choose or create chat
-              </div>
-            </div>
+            />
+          </div>
+          {messages.length === 0 && (
+            <div className="chat-room__empty-text paragraph-text">There are no messages, write first</div>
           )}
+          <InputMessage
+            sendMessage={(message: string) =>
+              sendMessage({
+                authorId: id,
+                roomId: selectedChatRoom?.id,
+                username,
+                messageText: message,
+                repliedMessage: repliedMessageData
+              })
+            }
+            uploadImageHandler={uploadImageHandler}
+            height={inputMessageHeight}
+          />
         </div>
-      </WidgetWrapper>
+      ) : (
+        <div className={`chat-room__stub ${haveAnyChatRoom && !isSetChatList ? 'pointer' : ''}`}>
+          <div onClick={() => selectContentTab('chat-list')} className="paragraph-text">
+            Choose or create chat
+          </div>
+        </div>
+      )}
     </div>
   )
 }

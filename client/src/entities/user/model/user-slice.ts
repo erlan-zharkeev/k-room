@@ -1,8 +1,5 @@
-import { ThunkDispatch, AnyAction, createSlice } from '@reduxjs/toolkit'
-import { IUserSettings, IInfoItem, RouteNamesEnum, IUserData } from 'common-types'
-import { clearCookie } from 'src/shared/utils'
-import { router } from 'src/shared/lib'
-import { updateSettings } from 'src/entities/settings'
+import { createSlice } from '@reduxjs/toolkit'
+import { IUserData, IInfoMessage } from 'common-types'
 
 type StoreUserData = Required<
   Pick<
@@ -16,23 +13,16 @@ type StoreUserData = Required<
     | 'contacts'
     | 'avatarPath'
     | 'providerName'
-    | 'infoItems'
+    | 'infoNotifications'
   >
 >
-export interface UserState {
+
+export interface UserStore {
   isAuth: boolean
   userData: StoreUserData
 }
 
-export const commonSetUserDataHandler = (
-  dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  data: { userData: IUserData; settings: IUserSettings }
-) => {
-  dispatch(userSlice.actions.setUserData(data.userData))
-  dispatch(updateSettings(data.settings))
-}
-
-const initialState: UserState = {
+const initialState: UserStore = {
   isAuth: false,
   userData: {
     id: '',
@@ -44,7 +34,7 @@ const initialState: UserState = {
     contacts: [],
     avatarPath: '',
     providerName: '',
-    infoItems: []
+    infoNotifications: []
   }
 }
 
@@ -64,17 +54,25 @@ export const userSlice = createSlice({
         contacts: [],
         avatarPath: '',
         providerName: '',
-        infoItems: []
+        infoNotifications: []
       }
     },
-    setInfoItems(state, { payload }: { payload: IInfoItem[] }) {
-      state.userData.infoItems = payload
+    updateInfoNotificationContent(state, { payload }: { payload: IInfoMessage[] }) {
+      payload.forEach((newItem) => {
+        const index = state.userData.infoNotifications.findIndex((item) => item.id === newItem.id)
+        if (index !== -1) {
+          state.userData.infoNotifications[index].content = newItem.content
+        }
+      })
     },
-    markInfoItemAsRead(state, { payload }: { payload: { id: string } }) {
+    setInfoItems(state, { payload }: { payload: IInfoMessage[] }) {
+      state.userData.infoNotifications = payload
+    },
+    markInfoNotificationAsRead(state, { payload }: { payload: { id: string } }) {
       const { id } = payload
-      if (!state.userData.infoItems) return
-      const index = state.userData.infoItems.findIndex((item) => item.id === id)
-      state.userData.infoItems[index].read = 'read'
+      if (!state.userData.infoNotifications) return
+      const index = state.userData.infoNotifications.findIndex((item) => item.id === id)
+      state.userData.infoNotifications[index].read = true
     },
     setUserData: (state, { payload }: { payload: IUserData }) => {
       state.userData = {
@@ -82,13 +80,9 @@ export const userSlice = createSlice({
         ...payload
       }
       state.isAuth = true
-    },
-    logOut: (state) => {
-      clearCookie()
-      state.isAuth = false
-      router.push(RouteNamesEnum.Login)
     }
   }
 })
 
-export const { setUserData, logOut, setInfoItems, markInfoItemAsRead, resetUserStore } = userSlice.actions
+export const { setUserData, resetUserStore, setInfoItems, markInfoNotificationAsRead, updateInfoNotificationContent } =
+  userSlice.actions

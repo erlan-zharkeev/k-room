@@ -1,7 +1,4 @@
 import './style.scss'
-import { useMemo } from 'react'
-
-import { Tooltip } from 'antd'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
@@ -20,9 +17,9 @@ export interface ButtonProps {
   disabled?: boolean
   hoverless?: boolean
   showTooltips?: boolean
-  tooltip?: string
   onClick?: (...args: unknown[]) => void | Promise<void>
   additionalClassName?: string
+  children?: React.ReactNode
 }
 
 const rootClass = 'app-button'
@@ -31,31 +28,16 @@ export const AppButton = ({
   htmltype = 'button',
   color,
   text,
-  tooltip,
   borderless,
   iconSize = 'xs',
   prefixIconName,
   loading,
   disabled,
   hoverless,
-  showTooltips,
   onClick = () => {},
-  additionalClassName
+  additionalClassName,
+  children
 }: ButtonProps) => {
-  const ButtonBody = useMemo(() => {
-    return (
-      <button type={htmltype} disabled={disabled} onClick={onClick}>
-        {loading && <AppIcon name="loader" color={color} size={iconSize} />}
-        {!loading && (
-          <>
-            {prefixIconName && <AppIcon name={prefixIconName} color={color} size={iconSize} />}
-            {text && <span>{text}</span>}
-          </>
-        )}
-      </button>
-    )
-  }, [htmltype, disabled, onClick, prefixIconName, color, text])
-
   const className = createClassNameWithModifiers({
     rootClass,
     modifiers: [
@@ -70,13 +52,16 @@ export const AppButton = ({
 
   return (
     <div className={className}>
-      {showTooltips && tooltip ? (
-        <Tooltip title={tooltip} showArrow={false} destroyTooltipOnHide={true} placement="top">
-          <div className="tooltip-content">{ButtonBody}</div>
-        </Tooltip>
-      ) : (
-        ButtonBody
-      )}
+      <button type={htmltype} disabled={disabled} onClick={onClick}>
+        {loading && <AppIcon name="loader" color={`${color ?? 'accent-color'}`} size={iconSize} />}
+        {!loading && (
+          <>
+            {prefixIconName && <AppIcon name={prefixIconName} color={color} size={iconSize} />}
+            {text && <span>{text}</span>}
+            {children}
+          </>
+        )}
+      </button>
     </div>
   )
 }

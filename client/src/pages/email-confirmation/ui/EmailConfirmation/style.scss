@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .email-confirmation {
   .email-confirmation__wrapper {
     display: flex;

@@ -1,6 +1,8 @@
 import './style.scss'
-import { Badge, Image } from 'antd'
 import { useState, useEffect } from 'react'
+
+import { Badge, Image } from 'antd'
+
 import { AppIconName, AppIcon, SizeModifier, AvatarLoaderShapeModifier } from 'src/shared/ui'
 
 export interface AvatarProps {
@@ -13,25 +15,34 @@ export interface AvatarProps {
   ribbonPlacement?: 'up' | 'down'
   dotPlacement?: 'up' | 'down'
   shape?: AvatarLoaderShapeModifier
+  preview?: boolean
 }
 
 const AvatarBody = ({
   src,
   stubIconName,
   haveSource,
-  setHaveSource
+  setHaveSource,
+  preview = true
 }: {
   src?: string
   stubIconName: AppIconName
   haveSource: boolean
   setHaveSource: (v: boolean) => void
+  preview?: boolean
 }) => {
   return !haveSource ? (
     <div className="app-avatar__image">
       <AppIcon name={stubIconName} size="fill" />
     </div>
   ) : (
-    <Image src={src} className="app-avatar__image" alt="avatar" onError={() => setHaveSource(false)} />
+    <Image
+      src={src}
+      preview={preview}
+      className="app-avatar__image"
+      alt="avatar"
+      onError={() => setHaveSource(false)}
+    />
   )
 }
 
@@ -65,7 +76,8 @@ export const AppAvatar = ({
   ribbon = false,
   ribbonPlacement = 'up',
   dotPlacement = 'up',
-  shape = 'circle-shape'
+  shape = 'circle-shape',
+  preview = true
 }: AvatarProps) => {
   const [haveSource, setHaveSource] = useState(Boolean(src))
 
@@ -74,7 +86,13 @@ export const AppAvatar = ({
   }, [src])
 
   const body = (
-    <AvatarBody src={src} stubIconName={stubIconName} haveSource={haveSource} setHaveSource={setHaveSource} />
+    <AvatarBody
+      src={src}
+      preview={preview}
+      stubIconName={stubIconName}
+      haveSource={haveSource}
+      setHaveSource={setHaveSource}
+    />
   )
 
   return (

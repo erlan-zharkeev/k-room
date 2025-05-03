@@ -1,7 +1,8 @@
 import './style.scss'
-import { imageToBase64 } from 'src/shared/utils'
-import { AppAvatar, AppIconName, AppIcon, AvatarLoaderShapeModifier } from 'src/shared/ui'
 import { useNotification } from 'src/entities/notification'
+
+import { AppAvatar, AppIconName, AppIcon, AvatarLoaderShapeModifier } from 'src/shared/ui'
+import { imageToBase64 } from 'src/shared/utils'
 
 export interface AvatarLoaderProps {
   path: string | undefined

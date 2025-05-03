@@ -1,10 +1,19 @@
 import { useTypedSelector } from 'src/shared/lib'
 
+import appData from './../../../../package.json'
+
 export const useSystem = () => {
-  const { allowAudioContext, isAppLoading } = useTypedSelector((state) => state.system)
+  const { isAppLoading, showModal, hasInteracted, micPermission, camPermission, reconnecting, modalData } =
+    useTypedSelector((state) => state.system)
 
   return {
-    allowAudioContext,
-    isAppLoading
+    isAppLoading,
+    showModal,
+    appData,
+    hasInteracted,
+    micPermission,
+    camPermission,
+    reconnecting,
+    modalData
   }
 }

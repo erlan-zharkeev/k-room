@@ -1,13 +1,17 @@
 import './style.scss'
+import { useState } from 'react'
+
 import { Form } from 'antd'
 import { SocketActionsType, IImageObject, IEventUserTyping } from 'common-types'
-import { useState } from 'react'
-import { useTypedSelector } from 'src/shared/lib'
-import { socket } from 'src/shared/api'
-import { ReplyMessage, EmojiDropdown } from './elements'
-import { AppImageLoader, AppButton, AppInput } from 'src/shared/ui'
+
 import { useChatRooms } from 'src/entities/chat-room'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector } from 'src/shared/lib'
 import { useDebounce } from 'src/shared/lib/hooks'
+import { AppFileLoader, AppButton, AppInput } from 'src/shared/ui'
+
+import { ReplyMessage, EmojiDropdown } from './elements'
 
 export interface InputMessageProps {
   sendMessage: (message: string) => void
@@ -61,7 +65,7 @@ export const InputMessage = ({ sendMessage, uploadImageHandler, height }: InputM
     >
       <ReplyMessage />
       <Form onFinish={send}>
-        <AppImageLoader multiple={true} setImages={setImagesHandler} />
+        <AppFileLoader multiple={true} setImages={setImagesHandler} />
         <AppInput name="message" onChange={onChange} value={message} onBlur={() => sendUserTypingStatus(false)} />
         <EmojiDropdown setEmoji={setEmoji} />
         <AppButton htmltype="submit" disabled={isButtonDisabled} prefixIconName="send" onClick={send} borderless />

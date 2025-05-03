@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
-import { TextInputValidateRule, ValidateRule } from './types'
+
 import { AppFormFieldValue } from 'src/shared/ui/AppForm/types'
-export type { ValidateRule, SwitchValidateRule, TextInputValidateRule } from './types'
+
+import { TextInputValidateRule, ValidateRule } from './types'
+export type { ValidateRule, SwitchValidateRule, TextInputValidateRule, FileInputValidateRule } from './types'
 
 export const booleanValidateRules = {
   requiredTrue: (value: boolean) => (!value ? ['Field is required'] : [])
@@ -13,7 +15,7 @@ export const stringValidateRules = {
     return quantity && String(value).length < quantity ? [`At least ${quantity} characters are required`] : []
   },
   email: (value: string) =>
-    !Boolean(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) ? ['Email is required'] : [],
+    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ? ['Email is required'] : [],
   username: (value: string) => {
     const excludeSymbolError =
       value.includes('@') || value.includes('#') || value.includes('$') ? 'Username must not contain @ # $ symbols' : ''
@@ -21,11 +23,13 @@ export const stringValidateRules = {
     return [requiredField, excludeSymbolError].flat().filter((error) => error !== '')
   },
   password: (value: string) => {
-    const latinLetterError = !Boolean(/^[a-zA-Z0-9]+$/.test(value))
-      ? 'Field must consist only of Latin letters and numbers'
+    const allowedSymbolsRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]+$/
+    const latinLetterError = !allowedSymbolsRegex.test(value)
+      ? 'Password must consist only of Latin letters, numbers, and allowed symbols'
       : ''
     const minLengthError = stringValidateRules.minLength(value, { quantity: 6 })
-    return [minLengthError, latinLetterError].flat().filter((error) => error !== '')
+    const capitalLetterError = !/[A-Z]/.test(value) ? 'Password must contain at least one uppercase letter' : ''
+    return [minLengthError, latinLetterError, capitalLetterError].flat().filter((error) => error !== '')
   }
 }
 

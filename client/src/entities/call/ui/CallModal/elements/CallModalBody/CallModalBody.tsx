@@ -111,30 +111,16 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
         <div className="call-modal__header">
           <div className="call-modal__window-controls">
             <div className="call-modal__window-controls-element">
-              <AppButton prefixIconName="cross-2" onClick={endCall} borderless hoverless tooltip="Leave ICall" />
+              <AppButton prefixIconName="cross-2" onClick={endCall} borderless hoverless />
             </div>
             <div className="call-modal__window-controls-element">
-              <AppButton
-                prefixIconName="dash"
-                onClick={minifyModal}
-                borderless
-                hoverless
-                tooltip="Minify Modal ICall"
-              />
+              <AppButton prefixIconName="dash" onClick={minifyModal} borderless hoverless />
             </div>
             <div className="call-modal__window-controls-element">
-              <AppButton
-                prefixIconName="expand"
-                onClick={toggleExpandModal}
-                borderless
-                hoverless
-                tooltip="Expand Modal ICall"
-              />
+              <AppButton prefixIconName="expand" onClick={toggleExpandModal} borderless hoverless />
             </div>
           </div>
-          <div className="call-modal__title header-text header-text--sm header-text--secondary">
-            {firstCharUpperCase(currentCall.flow)} call
-          </div>
+          <div className="call-modal__title">{firstCharUpperCase(currentCall.flow)} call</div>
         </div>
         <div className="call-modal__body">
           <div
@@ -146,7 +132,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
             <div className="call-modal__avatar">
               <AppAvatar size="large" src={currentCall.interlocutorAvatarPath} showBadge={false} />
             </div>
-            <div className="call-modal__interlocutor-name header-text header-text--secondary header-text--bold header-text--md">
+            <div className="call-modal__interlocutor-name">
               {currentCall.interlocutorName} {isCallIncoming() && <span>is calling</span>}
             </div>
             <CallDots />
@@ -162,10 +148,10 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                   muted
                   ref={selfVideoDom}
                   id="self-video"
-                  className={hideSelfVideo() ? 'd-none' : ''}
+                  className={hideSelfVideo() ? 'call-modal__hide' : ''}
                 />
                 <div className="call-modal__user-avatar">
-                  <div className={settings.video.value ? 'd-none' : ''}>
+                  <div className={settings.video.value ? 'call-modal__hide' : ''}>
                     <AppAvatar src={avatarPath} showBadge={false} size="small" />
                   </div>
                 </div>
@@ -177,13 +163,11 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                     <AppButton
                       prefixIconName={settings.video.loading ? 'loader' : 'video-cancel'}
                       onClick={disableVideo}
-                      tooltip="Disable Video"
                     />
                   ) : (
                     <AppButton
                       prefixIconName={settings.video.loading ? 'loader' : 'video-call-thin'}
                       onClick={enableVideo}
-                      tooltip="Enable Video"
                     />
                   )}
                 </div>
@@ -192,14 +176,9 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
                     <AppButton
                       prefixIconName={settings.audio.loading ? 'loader' : 'mic-muted'}
                       onClick={disableAudio}
-                      tooltip="Disable Audio"
                     />
                   ) : (
-                    <AppButton
-                      prefixIconName={settings.audio.loading ? 'loader' : 'mic'}
-                      onClick={enableAudio}
-                      tooltip="Enable Audio"
-                    />
+                    <AppButton prefixIconName={settings.audio.loading ? 'loader' : 'mic'} onClick={enableAudio} />
                   )}
                 </div>
               </div>
@@ -208,16 +187,13 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
 
           <div className="call-modal__controls">
             {isCallInProgress() && (
-              <div className="call-modal__length header-text header-text--sm">
-                {moment.utc(counterValue * 1000).format('HH:mm:ss')}
-              </div>
+              <div className="call-modal__length">{moment.utc(counterValue * 1000).format('HH:mm:ss')}</div>
             )}
             <div className="call-modal__controls-elements">
               {isIncomingCallCalling() && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">
                   <AppButton
                     onClick={answerCall}
-                    tooltip="Accept call"
                     color={isAnswerLoading ? 'accent-color' : 'success-color'}
                     text="Accept call"
                     loading={isAnswerLoading}

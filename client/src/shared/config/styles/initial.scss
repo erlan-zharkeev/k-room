@@ -6,8 +6,15 @@ html {
 
   --real-1-percent-vh: 100vh;
   --chat-room-list-width: 35%;
+
   @include max-width-768 {
     --chat-room-list-width: 40%;
+  }
+
+  &[theme='light'] {
+    ::placeholder {
+      color: var(--contrast-text);
+    }
   }
 }
 
@@ -40,20 +47,6 @@ p {
   opacity: 0.4;
 }
 
-form {
-  width: 100%;
-}
-
-.blink-me {
-  animation: blinker 1s linear infinite;
-}
-
-@keyframes blinker {
-  50% {
-    opacity: 0;
-  }
-}
-
 ::-webkit-scrollbar {
   width: 4px;
   height: 7px;
@@ -63,71 +56,4 @@ form {
 ::-webkit-scrollbar-thumb {
   background-color: var(--text);
   border-radius: 4px;
-}
-
-input:-webkit-autofill {
-  -webkit-text-fill-color: var(--text) !important;
-
-  &:hover,
-  &:focus,
-  &:active {
-    box-shadow: 0 0 0 30px var(--main-bg) inset !important;
-  }
-}
-
-.nm-outset-shadow {
-  @include nm-outset-shadow;
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.divider {
-  width: 100%;
-  height: 1px;
-  background-color: var(--dark-gray);
-}
-
-.transitionless {
-  transition: all 0s linear;
-}
-
-.borderless {
-  padding: 0;
-  border: none !important;
-}
-
-.d-none {
-  display: none;
-}
-
-.glow {
-  @include glow;
-}
-
-.link {
-  color: var(--accent);
-}
-
-.link:hover {
-  cursor: pointer;
-}
-
-.link--small {
-  font-size: 12px;
-}
-
-html[theme='light'] {
-  .call-modal__interlocutor-name {
-    color: var(--main-bg);
-  }
-
-  .lds-ellipsis > * {
-    background-color: var(--main-bg);
-  }
-
-  ::placeholder {
-    color: var(--contrast-text);
-  }
 }

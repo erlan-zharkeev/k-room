@@ -1,8 +1,10 @@
 import './style.scss'
+import { useState, useEffect } from 'react'
+
 import { List } from 'antd'
 import { ICall } from 'common-types'
 import moment from 'moment'
-import { useState, useEffect } from 'react'
+
 import { useTypedSelector } from 'src/shared/lib'
 import { AppAvatar, AppIcon } from 'src/shared/ui'
 import { firstCharUpperCase } from 'src/shared/utils'
@@ -36,9 +38,9 @@ export const Calls = () => {
                 avatar={<AppAvatar src={call.interlocutorAvatarPath} showBadge={false} />}
                 title={<span>{call.interlocutorName}</span>}
                 description={
-                  <div className={`call-list__info call-list__info--${getFlowType(call)} paragraph-text `}>
+                  <div className={`call-list__info call-list__info--${getFlowType(call)} paragraph-text`}>
                     <AppIcon name={call.video ? 'video-call-thin' : 'call'} />
-                    <p className="call-list__type paragraph-text ">
+                    <p className="call-list__type paragraph-text">
                       {getCallTypeName(call)}
                       {call.length && (
                         <div className="call-list__length">
@@ -52,8 +54,8 @@ export const Calls = () => {
               <div className="call-list__additional-info">
                 {call.calledAt && (
                   <div className="call-list__called-at">
-                    <p className="paragraph-text ">{moment.utc(call.calledAt).format('MMMM Do YYYY')}</p>
-                    <p className="paragraph-text ">{moment(call.calledAt).format('H:mm:ss')}</p>
+                    <p className="paragraph-text">{moment.utc(call.calledAt).format('MMMM Do YYYY')}</p>
+                    <p className="paragraph-text">{moment(call.calledAt).format('H:mm:ss')}</p>
                   </div>
                 )}
               </div>

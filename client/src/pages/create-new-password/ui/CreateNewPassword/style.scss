@@ -1,11 +1,5 @@
-.create-new-password {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  width: 300px;
-  transform: translateX(-50%);
+@use '~/global/index' as *;
 
-  .header-text {
-    margin-bottom: 16px;
-  }
+.create-new-password {
+  @include absolute-center-form;
 }

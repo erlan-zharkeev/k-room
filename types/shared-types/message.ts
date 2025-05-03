@@ -1,4 +1,4 @@
-import { UsersMetaDataType } from ".";
+import { IImageObject, UsersMetaDataType } from ".";
 
 export type MessageStatusType =
   | "sending"
@@ -18,12 +18,6 @@ export interface IReaction {
   username: string;
   authorId: string;
   glyphKey: string;
-}
-
-export interface IImageObject {
-  src: string;
-  name: string;
-  fileBuffer?: ArrayBuffer;
 }
 
 export interface IRepliedMessage {

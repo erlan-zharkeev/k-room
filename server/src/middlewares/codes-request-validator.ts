@@ -12,6 +12,9 @@ export const codesRequestValidator = async (req: Request, res: Response, next: N
     const currentDate = Date.now()
 
     const ableToSendCode = currentDate > Number(candidate?.codes.nextRequestPossibleAt)
+
+    console.log('ableToSendCode - ', ableToSendCode, currentDate, Number(candidate?.codes.nextRequestPossibleAt))
+
     if (ableToSendCode) {
       next()
       return

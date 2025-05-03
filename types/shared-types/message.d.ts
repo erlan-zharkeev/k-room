@@ -1,4 +1,4 @@
-import { UsersMetaDataType } from ".";
+import { IImageObject, UsersMetaDataType } from ".";
 export type MessageStatusType = "sending" | "undelivered" | "delivered" | "read" | "none";
 export type AuthorType = "system" | "time";
 export interface IMessageMetaData {
@@ -9,11 +9,6 @@ export interface IReaction {
     username: string;
     authorId: string;
     glyphKey: string;
-}
-export interface IImageObject {
-    src: string;
-    name: string;
-    fileBuffer?: ArrayBuffer;
 }
 export interface IRepliedMessage {
     id: string;

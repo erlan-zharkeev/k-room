@@ -1,5 +1,6 @@
 import './style.scss'
 import { useContext } from 'react'
+
 import { useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
 import { AppAvatar } from 'src/shared/ui'
@@ -26,10 +27,10 @@ export const CallModalVideo = () => {
           playsInline
           id="interlocutor-video"
           ref={interlocutorVideoDom}
-          className={!currentCall?.interlocutorSettings?.video ? 'd-none' : ''}
+          className={!currentCall?.interlocutorSettings?.video ? 'call-modal-video__hide' : ''}
         />
         <div className="call-modal-video__interlocutor-avatar">
-          <div className={currentCall?.interlocutorSettings?.video ? 'd-none' : ''}>
+          <div className={currentCall?.interlocutorSettings?.video ? 'call-modal-video__hide' : ''}>
             <AppAvatar src={currentCall.interlocutorAvatarPath} showBadge={false} size="large" />
           </div>
         </div>

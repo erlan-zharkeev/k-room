@@ -46,7 +46,7 @@ export var UserEndpointsEnum;
 export var CommonEndpointsEnum;
 (function (CommonEndpointsEnum) {
     CommonEndpointsEnum["CommonImages"] = "/common-images";
-    CommonEndpointsEnum["GetInfo"] = "/notification";
+    CommonEndpointsEnum["InfoItem"] = "/info-item";
 })(CommonEndpointsEnum || (CommonEndpointsEnum = {}));
 export var CodesEndpointsEnum;
 (function (CodesEndpointsEnum) {

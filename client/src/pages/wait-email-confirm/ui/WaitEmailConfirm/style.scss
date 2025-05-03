@@ -1,3 +1,5 @@
+@use '~/global/index' as *;
+
 .wait-email-confirm {
   .wait-email-confirm__not-received {
     margin-top: 8px;

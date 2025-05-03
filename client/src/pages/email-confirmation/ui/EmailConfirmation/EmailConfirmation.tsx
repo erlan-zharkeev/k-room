@@ -1,19 +1,19 @@
 import './style.scss'
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
+
+import { useLogout } from 'src/features/auth/logout'
+
 import { useApi } from 'src/shared/api'
-import { AppIcon, AppButton } from 'src/shared/ui'
-import { AppDispatch } from 'src/app/store'
-import { logOut } from 'src/entities/user'
 import { useQuery } from 'src/shared/lib'
+import { AppIcon, AppButton } from 'src/shared/ui'
 
 export const EmailConfirmation = () => {
-  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const query = useQuery()
-
+  const { logout } = useLogout()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const { doRequest } = useApi()
@@ -23,7 +23,7 @@ export const EmailConfirmation = () => {
     if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
     setEmail(response.data.userData.email)
     setIsLoading(false)
-    dispatch(logOut())
+    logout()
   }
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export const EmailConfirmation = () => {
   return (
     <div className="email-confirmation">
       <div className="email-confirmation__wrapper">
-        <div className="header-text header-text--md header-text--secondary header-text--left">Congratulations</div>
+        <div className="email-confirmation__header">Congratulations</div>
         {isLoading ? (
           <div className="email-confirmation__loader">
             <AppIcon color="accent-color" size="large" name="loader" />
@@ -44,7 +44,7 @@ export const EmailConfirmation = () => {
           <>
             <div className="paragraph-text ">
               Email
-              <span className="header-text header-text--sm header-text--accent"> {email} </span>
+              <span className="header-text"> {email} </span>
               confirmed
             </div>
             <AppButton text="Go to app" onClick={() => navigate(RouteNamesEnum.Login)} />

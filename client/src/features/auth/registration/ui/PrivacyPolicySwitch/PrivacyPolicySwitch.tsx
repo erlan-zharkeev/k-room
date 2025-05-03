@@ -1,15 +1,19 @@
 import './style.scss'
+
 import { RouteNamesEnum } from 'common-types'
 
-export const PrivacyPolicySwitch = () => {
+import { AppLink, AppText } from 'src/shared/ui'
+import { createClassNameWithModifiers } from 'src/shared/utils'
+
+export const PrivacyPolicySwitch = ({ disabled }: { disabled: boolean }) => {
+  const className = createClassNameWithModifiers({
+    rootClass: 'privacy-policy-switch',
+    modifiers: [disabled && 'disabled']
+  })
+
   return (
-    <div className="privacy-policy-switch">
-      <span className="privacy-policy-switch__text">
-        I have read and agree{' '}
-        <a className="link" target="_blank" href={RouteNamesEnum.PrivacyPolicy} rel="noreferrer">
-          privacy policy
-        </a>
-      </span>
-    </div>
+    <AppText additionalClassName={className} size="sm">
+      I have read and agree <AppLink text="privacy policy" href={RouteNamesEnum.PrivacyPolicy} />
+    </AppText>
   )
 }

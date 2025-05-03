@@ -1,27 +1,16 @@
-
 module.exports = {
   env: {
     es2021: true,
     node: true
   },
-  extends: [
-    'standard-with-typescript'
-  ],
+  extends: ['standard-with-typescript'],
   parserOptions: {
-    project: [
-      './tsconfig.json'
-    ],
-    files: [
-      '*.ts',
-      '*.tsx',
-      '*.js'
-    ],
+    project: ['./server/tsconfig.json'],
+    files: ['*.ts', '*.js'],
     ecmaVersion: 8,
     sourceType: 'module'
   },
-  plugins: [
-    '@typescript-eslint'
-  ],
+  plugins: ['@typescript-eslint'],
   ignorePatterns: ['**/*.js'],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -39,6 +28,6 @@ module.exports = {
     '@typescript-eslint/member-delimiter-style': 'off',
     'array-callback-return': 'off',
     '@typescript-eslint/restrict-plus-operands': 'off',
-    '@typescript-eslint/consistent-type-assertions': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off'
   }
 }

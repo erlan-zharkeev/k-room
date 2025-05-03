@@ -59,5 +59,6 @@
 
   .is-typing {
     margin-left: 1rem;
+    animation: blinker 1s linear infinite;
   }
 }

@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+
+import { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
+
 import {
   ContextMenu,
   ContextMenuType,
@@ -6,7 +9,6 @@ import {
   CONTEXT_MENU_HEIGHT,
   CONTEXT_MENU_WIDTH
 } from 'src/entities/context-menu'
-import { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
 
 interface ModalBtn {
   text: string
@@ -32,10 +34,12 @@ interface SystemStore {
   isAppLoading: boolean
   reconnecting: boolean
   showModal: boolean
-  allowAudioContext: boolean
   contextMenu: ContextMenu
   modalData: ModalData
   viewPort: ViewPort
+  hasInteracted: boolean
+  camPermission?: PermissionState
+  micPermission?: PermissionState
 }
 
 const clickedObjectInitialState = {
@@ -63,7 +67,6 @@ const initialState: SystemStore = {
   isAppLoading: false,
   reconnecting: false,
   showModal: false,
-  allowAudioContext: false,
   contextMenu: {
     slotName: '',
     coord: {
@@ -73,7 +76,10 @@ const initialState: SystemStore = {
     contextClickedObject: clickedObjectInitialState
   },
   modalData: initialModalData,
-  viewPort: initViewPort
+  viewPort: initViewPort,
+  hasInteracted: false,
+  camPermission: undefined,
+  micPermission: undefined
 }
 
 const BLOCK_NATIVE_CONTEXT_MENU = true
@@ -97,11 +103,14 @@ export const systemSlice = createSlice({
       state.modalData = initialModalData
       state.viewPort = initViewPort
     },
-    enableAllowAudioContext: (state) => {
-      state.allowAudioContext = true
-    },
     updateAppLoaderState: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
+    },
+    updateCamPermission: (state, { payload }: { payload: PermissionState }) => {
+      state.camPermission = payload
+    },
+    updateMicPermission: (state, { payload }: { payload: PermissionState }) => {
+      state.micPermission = payload
     },
     setReconnectingStatus(state, { payload }: { payload: boolean }) {
       state.reconnecting = payload
@@ -113,6 +122,9 @@ export const systemSlice = createSlice({
     closeModal(state) {
       state.showModal = false
       state.modalData = initialModalData
+    },
+    setHasInteraction(state, { payload }: { payload: boolean }) {
+      state.hasInteracted = payload
     },
     setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
@@ -157,12 +169,14 @@ export const systemSlice = createSlice({
 
 export const {
   setReconnectingStatus,
-  enableAllowAudioContext,
   showModal,
   closeModal,
   setViewPort,
   setContextMenu,
   resetContextClickedObject,
   updateAppLoaderState,
-  resetSystemStore
+  resetSystemStore,
+  setHasInteraction,
+  updateCamPermission,
+  updateMicPermission
 } = systemSlice.actions

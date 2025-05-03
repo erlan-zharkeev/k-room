@@ -1,9 +1,6 @@
-export type InfoItemStatusType = "read" | "unread";
-
-export interface IInfoItem {
+export interface IInfoMessage {
   id: string;
   label: string;
-  content: string;
-  read: InfoItemStatusType;
-  contentComponent?: () => string;
+  read: boolean;
+  content?: string;
 }

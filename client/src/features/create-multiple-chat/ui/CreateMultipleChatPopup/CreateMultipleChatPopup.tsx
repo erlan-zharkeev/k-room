@@ -1,20 +1,24 @@
 import './style.scss'
+import { useState } from 'react'
+
 import { Form } from 'antd'
 import { UserShortType, SocketActionsType, IEventCreateRoom, IEventRoomCreated } from 'common-types'
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useTypedSelector, useValidate } from 'src/shared/lib'
+
 import { AppDispatch } from 'src/app/store'
-import { socket } from 'src/shared/api'
-import { AppAvatarLoader, AppInput, AppButton } from 'src/shared/ui'
-import { validateRules } from 'src/shared/utils'
-import { closeModal } from 'src/entities/system'
-import { useSettings } from 'src/entities/settings'
+
+import { useContentTabSelect } from 'src/features/content-tab/select-content-tab'
+import { useRoomSelect } from 'src/features/room'
 import { SelectUsers } from 'src/features/select-users'
 
-export const CreateMultipleChatPopup = () => {
-  const { updateSetting } = useSettings()
+import { closeModal } from 'src/entities/system'
 
+import { socket } from 'src/shared/api'
+import { useValidate } from 'src/shared/lib'
+import { AppAvatarLoader, AppInput, AppButton } from 'src/shared/ui'
+import { validateRules } from 'src/shared/utils'
+
+export const CreateMultipleChatPopup = () => {
   const [isLoading, setIsLoading] = useState(false)
   // const { id } = useTypedSelector((state) => state.user.userData)
 
@@ -37,12 +41,13 @@ export const CreateMultipleChatPopup = () => {
     //   multiple: true
     // }
     // socket.emit<SocketActionsType>('create-personal-room', payload)
+    const { selectRoomById } = useRoomSelect()
+    const { selectContentTab } = useContentTabSelect()
 
     socket.on<SocketActionsType>('room-created', (data: IEventRoomCreated) => {
-      updateSetting('selectedContentElement', { selectedContentElement: 'chat-list' })
-
+      selectContentTab('chat-list')
       setTimeout(() => {
-        updateSetting('selectedChatRoomId', { selectChatRoomId: data.roomId })
+        selectRoomById(data.roomId)
       })
       setIsLoading(false)
       dispatch(closeModal())

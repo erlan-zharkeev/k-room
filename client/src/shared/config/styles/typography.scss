@@ -4,44 +4,12 @@
   line-height: 1;
 }
 
-.header-text--contrast {
-  color: var(--contrast-text);
-}
-
-.header-text--accent {
-  color: var(--accent);
-}
-
-.header-text--left {
-  margin-right: auto;
-}
-
-.header-text--bold {
-  font-weight: bold;
-}
-
-.header-text--sm {
-  font-size: 16px;
-}
-
 .header-text--md {
   font-size: 20px;
 }
 
 .header-text--lg {
   font-size: 24px;
-}
-
-.header-text--xl {
-  font-size: 32px;
-}
-
-.header-text--xxl {
-  font-size: 40px;
-}
-
-.header-text--tribal {
-  font-family: 'Rajdhani, Helvetica', sans-serif;
 }
 
 .paragraph-text {
@@ -71,4 +39,8 @@
 
 .paragraph-text--md {
   font-size: 14px;
+}
+
+.paragraph-text--center {
+  text-align: center;
 }

@@ -11,7 +11,6 @@ import {
   IEventMarkCallAsVideo,
   IEventCallEnded
 } from 'common-types'
-import { Howl } from 'howler'
 import { useDispatch } from 'react-redux'
 import Peer, { SignalData } from 'simple-peer'
 
@@ -27,7 +26,7 @@ import {
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 
 import { socket } from 'src/shared/api'
-import { sound, useTypedSelector } from 'src/shared/lib'
+import { useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
 
@@ -58,8 +57,8 @@ const emitUpdateSignal = (signal: SignalData) => {
 }
 
 export const useMakeCall = () => {
-  const soundConnection = useRef<Howl>(sound('connection', true))
-  const soundCalling = useRef<Howl>(sound('ring', true))
+  // const soundConnection = useRef<Howl>(useSound('connection', true))
+  // const soundCalling = useRef<Howl>(useSound('ring', true))
   const { settings } = useTypedSelector((state) => state.calls)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -120,8 +119,8 @@ export const useMakeCall = () => {
 
   const closeConnection = (silent = false) => {
     dispatch(closeCallModal())
-    soundConnection.current.stop()
-    soundCalling.current.stop()
+    // soundConnection.current.stop()
+    // soundCalling.current.stop()
     if (!silent) {
       callCompletedNotification.open()
     }
@@ -138,21 +137,20 @@ export const useMakeCall = () => {
     selfStream.current = stream
     initConnection(true, selfStream.current)
     dispatch(initModalToCall(interlocutorData))
-    // Добавить логику включения громкости allowAudioContext
-    soundConnection.current.play()
+    // soundConnection.current.play()
     connection.current?.on('signal', (data) => {
       if (connection.current?.connected) return emitUpdateSignal(data)
       emitCall(interlocutorData.id, data, selfId, selfAvatarPath, callerName)
     })
     socket.on<SocketActionsType>('call-accepted', (data: IEventCallAccepted) => {
-      soundConnection.current.stop()
+      // soundConnection.current.stop()
       dispatch(setCurrentCallAccepted())
       connection.current?.signal(data.signal as SignalData)
     })
   }
 
   const answerCall = async (callId: string) => {
-    soundCalling.current.stop()
+    // soundCalling.current.stop()
     const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
     if (!stream) {
       leaveCall(callId)
@@ -170,7 +168,7 @@ export const useMakeCall = () => {
   }
 
   const calling = (callerId: string, callerSignalData: SignalData) => {
-    soundCalling.current.play()
+    // soundCalling.current.play()
     interlocutorId.current = callerId
     callerSignal.current = callerSignalData
   }

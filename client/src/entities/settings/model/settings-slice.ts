@@ -1,59 +1,52 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { AdminPanelModelTabType, ThemeType, IUserSettings, ContentTabType } from 'common-types'
+import { ThemeType, IUserSettings, ContentTabType } from 'common-types'
 
 const initialState: IUserSettings = {
-  selectedContentElement: 'contacts',
-  currentInfoId: '1',
+  selectedContentTab: 'contacts',
   selectedChatRoomId: '',
-  selectedAdminPanelModelTab: 'users',
   theme: 'dark',
   soundOn: true,
   showTooltips: false,
-  ableToShowNotification: true,
-  showWallpaper: true
+  showNotification: true,
+  showWallpaper: true,
+  selectedAudioInputDeviceId: '',
+  selectedVideoInputDeviceId: '',
+  selectedAudioOutputDeviceId: ''
 }
 
 export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setCurrentInfoItem(state, { payload }: { payload: string }) {
-      state.currentInfoId = payload
-    },
     updateSettings(state, { payload }: { payload: IUserSettings }) {
       if (!payload) return
-      const {
-        selectedContentElement,
-        selectedChatRoomId,
-        theme,
-        soundOn,
-        showTooltips,
-        ableToShowNotification,
-        currentInfoId,
-        showWallpaper,
-        selectedAdminPanelModelTab
-      } = payload
-      state.selectedContentElement = selectedContentElement
+      const { selectedContentTab, selectedChatRoomId, theme, soundOn, showTooltips, showNotification, showWallpaper } =
+        payload
+      state.selectedContentTab = selectedContentTab
       state.selectedChatRoomId = selectedChatRoomId
       state.theme = theme
       state.soundOn = soundOn
       state.showTooltips = showTooltips
-      state.currentInfoId = currentInfoId
-      state.ableToShowNotification = ableToShowNotification
+      state.showNotification = showNotification
       state.showWallpaper = showWallpaper
-      state.selectedAdminPanelModelTab = selectedAdminPanelModelTab
     },
-    setAdminPanelTab(state, { payload }: { payload: AdminPanelModelTabType }) {
-      state.selectedAdminPanelModelTab = payload
+    updateSelectedAudioInputDeviceId: (state, { payload }: { payload: string }) => {
+      state.selectedAudioInputDeviceId = payload
+    },
+    updateSelectedVideoInputDeviceId: (state, { payload }: { payload: string }) => {
+      state.selectedVideoInputDeviceId = payload
+    },
+    updateSelectedAudioOutputDeviceId: (state, { payload }: { payload: string }) => {
+      state.selectedAudioOutputDeviceId = payload
     },
     selectChatRoom(state, { payload }: { payload: string }) {
       state.selectedChatRoomId = payload
     },
     changeSelectedContentElement(state, { payload }: { payload: ContentTabType }) {
-      state.selectedContentElement = payload
+      state.selectedContentTab = payload
     },
     setAbleToShowNotification(state, { payload }: { payload: boolean }) {
-      state.ableToShowNotification = payload
+      state.showNotification = payload
     },
     changeTheme(state, { payload }: { payload: ThemeType }) {
       state.theme = payload
@@ -68,14 +61,12 @@ export const settingsSlice = createSlice({
       state.showWallpaper = payload
     },
     resetSettings(state) {
-      state.selectedContentElement = 'contacts'
-      state.currentInfoId = '1'
+      state.selectedContentTab = 'contacts'
       state.selectedChatRoomId = ''
-      state.selectedAdminPanelModelTab = 'users'
       state.theme = 'dark'
       state.soundOn = true
       state.showTooltips = false
-      state.ableToShowNotification = true
+      state.showNotification = true
       state.showWallpaper = true
     }
   }
@@ -89,8 +80,9 @@ export const {
   selectChatRoom,
   setAbleToShowNotification,
   updateSettings,
-  setCurrentInfoItem,
   showWallpaper,
   resetSettings,
-  setAdminPanelTab
+  updateSelectedAudioOutputDeviceId,
+  updateSelectedAudioInputDeviceId,
+  updateSelectedVideoInputDeviceId
 } = settingsSlice.actions

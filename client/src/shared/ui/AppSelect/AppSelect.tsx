@@ -1,0 +1,15 @@
+import './style.scss'
+
+import { IAppSelectProps } from './types'
+
+export const AppSelect = ({ options, value, onChange, loading, disabled }: IAppSelectProps) => {
+  return (
+    <select className="app-select" value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}>
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </select>
+  )
+}

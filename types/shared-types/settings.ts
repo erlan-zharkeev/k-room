@@ -1,26 +1,21 @@
 export type ThemeType = "dark" | "light";
 export type AsideBarButtonNameType =
-  | "admin-panel"
   | "contacts"
   | "chat-list"
   | "calls"
   | "settings";
 export type ContentTabType = "info" | AsideBarButtonNameType;
-export type AdminPanelModelTabType =
-  | "users"
-  | "calls"
-  | "chat-rooms"
-  | "messages";
 export interface IUserSettings {
-  selectedContentElement: ContentTabType;
-  selectedAdminPanelModelTab: AdminPanelModelTabType;
+  selectedContentTab: ContentTabType;
   selectedChatRoomId: string;
-  ableToShowNotification: boolean;
+  showNotification: boolean;
   theme: ThemeType;
   showTooltips: boolean;
   soundOn: boolean;
-  currentInfoId: string;
   showWallpaper: boolean;
+  selectedAudioInputDeviceId: string;
+  selectedVideoInputDeviceId: string;
+  selectedAudioOutputDeviceId: string;
 }
 
 export interface IBasicStreamSettings {

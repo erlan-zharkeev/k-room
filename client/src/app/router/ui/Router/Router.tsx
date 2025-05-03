@@ -12,7 +12,12 @@ import { WaitEmailConfirm } from 'src/pages/wait-email-confirm'
 
 import { PageLayout } from 'src/widgets/page-layout'
 
+import { useUser } from 'src/entities/user'
+
 export const Router = () => {
+  const { isAuth } = useUser()
+  const redirectTo = isAuth ? RouteNamesEnum.Main : RouteNamesEnum.Login
+
   return (
     <Routes>
       <Route element={<PageLayout />}>
@@ -23,7 +28,7 @@ export const Router = () => {
         <Route path={RouteNamesEnum.PasswordRecovery} element={<PasswordRecovery />} />
         <Route path={RouteNamesEnum.CreateNewPassword} element={<CreateNewPassword />} />
         <Route path={RouteNamesEnum.WaitEmailConfirm} element={<WaitEmailConfirm />} />
-        <Route path="*" element={<Navigate to={RouteNamesEnum.NotFound} replace />} />
+        <Route path="*" element={<Navigate to={redirectTo} replace />} />
       </Route>
       <Route path={RouteNamesEnum.Main} element={<Main />} />
     </Routes>

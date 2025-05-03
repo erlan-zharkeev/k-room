@@ -4,6 +4,6 @@ export interface IContactBase {
     id: string;
     interaction: InteractionType;
 }
-export type ContactType = IContactBase & Omit<IUserData, "chatRooms" | "contacts" | "infoItems" | "role">;
+export type ContactType = IContactBase & Omit<IUserData, "chatRooms" | "contacts" | "infoNotifications" | "role">;
 export type DBContactType = IContactBase;
 export type DBContactMapType = Record<string, DBContactType>;

@@ -10,6 +10,12 @@ export const throwError = (
   silent: boolean = false
 ) => {
   console.log(clc.red.bgWhite(`-${errors}`))
+
+  if (res.headersSent) {
+    console.warn(clc.yellow(`⚠️ Attempted to send error after headers were already sent: ${errors}`))
+    return
+  }
+
   const payload: ErrorResponse<Result<ValidationError> | ServerNotificationMessage> = {
     message: errors,
     status,

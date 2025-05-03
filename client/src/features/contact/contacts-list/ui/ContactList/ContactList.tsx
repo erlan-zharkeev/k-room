@@ -14,8 +14,8 @@ import moment from 'moment'
 
 import { DeleteContactBtn } from 'src/features/contact/delete-contact'
 import { SearchContact } from 'src/features/contact/search-contact'
-
-import { useSettings } from 'src/entities/settings'
+import { useContentTabSelect } from 'src/features/content-tab/select-content-tab'
+import { useRoomSelect } from 'src/features/room'
 
 import { socket } from 'src/shared/api'
 import { useTypedSelector } from 'src/shared/lib'
@@ -23,7 +23,6 @@ import { AdditionalServiceContext } from 'src/shared/providers'
 import { AppAvatar, AppIcon, AppButton } from 'src/shared/ui'
 
 export const ContactList = () => {
-  const { updateSetting } = useSettings()
   const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
@@ -34,6 +33,9 @@ export const ContactList = () => {
     stream: Record<string, boolean>
     invite: Record<string, boolean>
   })
+
+  const { selectRoomById } = useRoomSelect()
+  const { selectContentTab } = useContentTabSelect()
 
   useEffect(() => {
     const updatedContacts = contacts.filter((contact) => loaders.invite[contact.id])
@@ -47,8 +49,8 @@ export const ContactList = () => {
   }, [contacts])
 
   const setChat = (roomId: string) => {
-    updateSetting('selectedContentElement', { selectedContentElement: 'chat-list' })
-    updateSetting('selectedChatRoomId', { selectChatRoomId: roomId })
+    selectContentTab('chat-list')
+    selectRoomById(roomId)
   }
 
   const getPersonalChatRoomId = (contact: ContactType) => {
@@ -143,14 +145,14 @@ export const ContactList = () => {
                     <>
                       <AppButton
                         prefixIconName={loaders.stream[user.id] ? 'loader' : 'call'}
-                        onClick={async () => await initCall(user)}
-                        tooltip="ICall"
+                        onClick={() => {
+                          initCall(user)
+                        }}
                         borderless
                       />
                       <AppButton
                         prefixIconName={loaders.room[user.id] ? 'loader' : 'chat'}
                         onClick={() => clickChatBtnHandler(user)}
-                        tooltip="Create Chat"
                         borderless
                       />
                     </>

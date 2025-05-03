@@ -1,19 +1,33 @@
 import { ENV } from '../ENV'
 import { UserModel } from '../models'
-import { getInfo } from '../services'
+import { getPreviewInfoNotification } from '../services'
 import { firstCharUpperCase, getRequestStringToImg } from '../utils'
 import { initUserSettings, initUserCodes } from './helpers'
 
 const bcrypt = require('bcryptjs')
 
-const usersDevFixtures = [{ username: 'tolik' }, { username: 'ivan' }, { username: 'guest-1' }, { username: 'guest-2' }, { username: 'guest-3' }]
+const usersDevFixtures = [
+  { username: 'tolik' },
+  { username: 'ivan' },
+  { username: 'guest-1' },
+  { username: 'guest-2' },
+  { username: 'guest-3' }
+]
 const adminDevFixtures = [{ username: 'erlan', admin: true }]
 
 const usersProdFixtures = [{ username: 'guest-1' }]
 const adminProdFixtures = [{ username: 'erlan', admin: true, password: ENV.K_ROOM_ADMIN_PASS }]
 
 export const loadUsersFixtures = async (loadAdmin: boolean) => {
-  const createUser = async ({ username, admin, password }: { username: string, admin?: boolean, password?: string }) => {
+  const createUser = async ({
+    username,
+    admin,
+    password
+  }: {
+    username: string
+    admin?: boolean
+    password?: string
+  }) => {
     const candidate = await UserModel.findOneAndUpdate({ email: `${username}@gmail.com` }, { online: false })
     if (candidate) return
     const pass = password ? password : 'Asdf1234'
@@ -31,7 +45,7 @@ export const loadUsersFixtures = async (loadAdmin: boolean) => {
       settings: initUserSettings,
       codes: initUserCodes,
       online: false,
-      infoItems: [getInfo('1')]
+      infoNotifications: [getPreviewInfoNotification('1')]
     })
     await user.save()
   }

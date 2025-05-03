@@ -12,4 +12,9 @@
     margin-bottom: 12px;
     margin-left: -12px;
   }
+
+  .page-layout__outlet-body {
+    height: calc(100% - 48px);
+    overflow: auto;
+  }
 }

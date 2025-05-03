@@ -69,7 +69,7 @@ class AdminController {
   async updateUserData(req: Request, res: Response) {
     try {
       const { id, username, email, role, confirmed } = req.body.userData
-      let user = await UserModel.findById(id)
+      const user = await UserModel.findById(id)
       if (!user) {
         return throwError(StatusEnum.NotFound, res, ServerNotificationMessage.UserNotFound)
       }

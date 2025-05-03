@@ -69,10 +69,10 @@ const userSchema = new Schema<IUserSchema>({
     type: {},
     required: false
   },
-  infoItems: {
+  infoNotifications: {
     type: [],
     required: false
   }
 })
 
-export const UserModel = model('User', userSchema)
+export const UserModel = model('User', userSchema, 'user')

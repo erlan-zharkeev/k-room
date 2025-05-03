@@ -9,7 +9,7 @@ export const AppFormItem = ({ name, children, label, errors = [], required }: Ap
         {label} {required && <span className="app-form-item__required">*</span>}
       </label>
       {children}
-      {<div className={`app-form-item__error ${error ? 'app-form-item__error--active' : ''}`}>{error ?? ''}</div>}
+      {<div className={`app-form-item__error${error ? ' app-form-item__error--active' : ''}`}>{error ?? ''}</div>}
     </div>
   )
 }

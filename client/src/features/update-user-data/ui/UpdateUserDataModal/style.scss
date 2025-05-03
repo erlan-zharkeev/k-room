@@ -1,0 +1,7 @@
+@use '~/global/index' as *;
+
+.update-user-data-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

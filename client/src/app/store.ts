@@ -1,13 +1,13 @@
 import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
-import { persistReducer } from 'redux-persist'
+import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import { persistStore } from 'redux-persist'
-import { systemSlice } from 'src/entities/system'
-import { chatRoomsSlice } from 'src/entities/chat-room'
-import { userSlice } from 'src/entities/user'
-import { contactsSlice } from 'src/entities/contact'
+
 import { callsSlice } from 'src/entities/call'
+import { chatRoomsSlice } from 'src/entities/chat-room'
+import { contactsSlice } from 'src/entities/contact'
 import { settingsSlice } from 'src/entities/settings'
+import { systemSlice } from 'src/entities/system'
+import { userSlice } from 'src/entities/user'
 
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
 export type RootState = ReturnType<typeof store.getState>

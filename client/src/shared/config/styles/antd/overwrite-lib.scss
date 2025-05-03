@@ -1,0 +1,137 @@
+@use '~/global/index' as *;
+
+.k-room-app {
+  // badge
+  .ant-badge {
+    display: flex;
+    align-items: center;
+
+    span {
+      color: var(--white);
+    }
+  }
+
+  .ant-badge-status-red {
+    background: var(--error);
+  }
+
+  .ant-badge-status-green {
+    background: var(--success);
+  }
+
+  .ant-scroll-number-only-unit {
+    font-size: 12px;
+  }
+
+  // dropdown
+  // .ant-dropdown-menu {
+  //   background-color: var(--main-bg);
+
+  //   .ant-dropdown-menu-item {
+  //     position: relative;
+  //   }
+
+  //   .ant-dropdown-menu-item[read='unread']::before {
+  //     position: absolute;
+  //     top: 5px;
+  //     right: 4px;
+  //     width: 5px;
+  //     height: 5px;
+  //     background-color: var(--error);
+  //     border-radius: 50%;
+  //     content: '';
+  //   }
+
+  //   .ant-dropdown-menu-item:hover {
+  //     background-color: var(--text);
+  //   }
+
+  //   .ant-dropdown-menu-item:hover span {
+  //     color: var(--main-bg);
+  //   }
+  // }
+
+  // modal
+  .ant-modal {
+    .ant-modal-content {
+      background: var(--main-bg);
+    }
+
+    .ant-modal-header {
+      margin-bottom: 16px;
+      background: var(--main-bg);
+    }
+
+    .ant-modal-title {
+      color: var(--text);
+    }
+  }
+
+  // notification
+  .ant-notification {
+    .ant-notification-notice-wrapper {
+      background: var(--main-bg);
+    }
+
+    .ant-notification-notice {
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        position: absolute;
+        z-index: 0;
+        background: rgb(255 255 255 / 1%);
+        border-radius: 8px;
+        backdrop-filter: blur(8px);
+        content: '';
+        inset: 0;
+      }
+    }
+
+    .ant-notification-notice-message {
+      position: relative;
+    }
+
+    .ant-notification-notice-message,
+    .ant-notification-notice-description,
+    .ant-notification-notice-close {
+      z-index: 1;
+      color: var(--text);
+    }
+
+    .ant-notification-notice-with-icon .ant-notification-notice-message {
+      margin-bottom: 0;
+    }
+
+    .ant-notification-notice-close {
+      .anticon svg {
+        color: var(--text);
+      }
+    }
+  }
+
+  // tooltip
+  .ant-tooltip {
+    .ant-tooltip-inner {
+      text-align: center;
+    }
+  }
+
+  // image mask
+  .ant-image-mask {
+    .ant-image-mask-info {
+      font-size: 0;
+    }
+  }
+
+  // image preview
+  .ant-image-preview-footer {
+    display: none;
+  }
+
+  // call modal
+  .react-draggable {
+    position: fixed !important;
+    overflow: hidden !important;
+  }
+}

@@ -22,7 +22,8 @@ class CodesController {
       await sendEmailCodePasswordRecovery(email, code)
 
       return res.json({ message: ServerNotificationMessage.CheckEmailForCode, nextTimeRequest })
-    } catch {
+    } catch (e: unknown) {
+      console.log(e)
       throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedCodeSend)
     }
   }

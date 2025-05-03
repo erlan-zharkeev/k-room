@@ -1,8 +1,11 @@
 import { AxiosResponse } from 'axios'
 import { EndpointsType, StatusEnum } from 'common-types'
+
 import { useNotification } from 'src/entities/notification'
-import { RequestTypes } from '../types'
+
 import { axios } from '../config'
+import { RequestTypes } from '../types'
+
 import { useApiInterсeptor } from './use-api-interceptor'
 
 export const useApi = () => {
@@ -33,7 +36,7 @@ export const useApi = () => {
       const response = await axios[type](`/api${endpoint}`, data, options)
       successMessageHandler(response)
       if (response) {
-        return response as AxiosResponse
+        return response
       }
       throw new Error('No response')
     } catch (e: unknown) {

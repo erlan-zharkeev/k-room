@@ -1,11 +1,12 @@
 import { useState } from 'react'
 
-import { UserCredentialType, AuthEndpointsEnum } from 'common-types'
+import { UserCredentialType, AuthEndpointsEnum, RouteNamesEnum } from 'common-types'
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
-import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
+import { useSetUserData } from 'src/features/user/set-user-data/hooks/use-set-user-data'
 
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
-import { commonSetUserDataHandler } from 'src/entities/user'
 
 import { useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
@@ -18,10 +19,10 @@ const providers = {
 }
 
 export const useFirebase = () => {
-  const [loading, setLoading] = useState(false)
+  const [firebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
+  const { setUserData } = useSetUserData()
   const { doRequest } = useApi()
-  const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const notifications = useNotification()
 
   const failedToLoginNotification = notifications.getNotification({
@@ -34,7 +35,7 @@ export const useFirebase = () => {
     try {
       const auth = getAuth()
       auth.languageCode = 'en'
-      setLoading(true)
+      setFirebaseLoginLoading(true)
       const result = await signInWithPopup(auth, currentProvider)
 
       const { displayName, email, photoURL, uid } = result.user
@@ -52,14 +53,15 @@ export const useFirebase = () => {
       const response = await doRequest('post', AuthEndpointsEnum.ProviderLogin, credential)
       if (!response) return
       const { userData, settings } = response.data
-      commonSetUserDataHandler(dispatch, { userData, settings })
+      setUserData({ userData, settings })
+      navigate(RouteNamesEnum.Main)
     } catch (e: unknown) {
       if (e instanceof Error) clg('error', e.message)
       failedToLoginNotification.open()
     } finally {
-      setLoading(false)
+      setFirebaseLoginLoading(false)
     }
   }
 
-  return { firebaseLogin, loading }
+  return { firebaseLogin, firebaseLoginLoading }
 }

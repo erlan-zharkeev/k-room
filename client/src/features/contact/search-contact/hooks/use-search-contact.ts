@@ -1,6 +1,9 @@
-import { IUserData, SocketActionsType, IEventSearchContact } from 'common-types'
 import { ChangeEvent, useState } from 'react'
+
+import { IUserData, SocketActionsType, IEventSearchContact } from 'common-types'
+
 import { useUser } from 'src/entities/user'
+
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'
 

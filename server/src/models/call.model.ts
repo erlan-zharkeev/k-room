@@ -32,4 +32,4 @@ const callModel = new Schema<IDBCallSchema>({
   }
 })
 
-export const CallModel = model('ICall', callModel)
+export const CallModel = model('ICall', callModel, 'call')

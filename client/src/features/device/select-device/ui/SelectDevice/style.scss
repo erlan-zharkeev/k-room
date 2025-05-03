@@ -1,0 +1,17 @@
+.select-device {
+  display: flex;
+  flex-direction: column;
+
+  .select-device__select-wrapper {
+    display: flex;
+  }
+
+  .select-device__title {
+    margin-bottom: 8px;
+  }
+
+  .app-select {
+    min-width: 240px;
+    margin-right: 4px;
+  }
+}

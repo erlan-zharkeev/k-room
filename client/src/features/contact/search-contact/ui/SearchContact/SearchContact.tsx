@@ -1,9 +1,11 @@
 import './style.scss'
-import { AppForm, AppIcon } from 'src/shared/ui'
-import { useSearchContact } from '../../hooks'
-import { AppScrollContainer } from 'src/shared/ui/AppScrollContainer/AppScrollContainer'
-import { ContactInfo } from 'src/features/contact/contact-info'
 import { AddContactBtn } from 'src/features/contact/add-contact'
+import { ProfileInfo } from 'src/features/profile-info'
+
+import { AppForm } from 'src/shared/ui'
+import { AppScrollContainer } from 'src/shared/ui/AppScrollContainer/AppScrollContainer'
+
+import { useSearchContact } from '../../hooks'
 
 export const SearchContact = () => {
   const { searchQuery, search, isLoading, searchedContacts } = useSearchContact()
@@ -15,9 +17,8 @@ export const SearchContact = () => {
         fields={{
           contact: {
             value: searchQuery,
-            placeholder: 'Search contact',
-            showClearButton: true,
-            prefixSlot: <AppIcon name="search" size="xs" />
+            placeholder: '🔍 Search contact',
+            showClearButton: true
           }
         }}
         submitBtnText="Search"
@@ -29,7 +30,7 @@ export const SearchContact = () => {
           <div className="search-contact__list">
             {searchedContacts.map((contact) => (
               <div className="search-contact__list-element">
-                <ContactInfo
+                <ProfileInfo
                   avatarPath={contact.avatarPath}
                   username={contact.username}
                   email={contact.email}

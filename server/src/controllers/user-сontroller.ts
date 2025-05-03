@@ -20,21 +20,20 @@ class UserController {
     try {
       const { username, oldFilename } = req.body
       const userId = req.app.locals.id
-
       const oldPathFilename = getPathToImg(oldFilename)
-      const isImageExist = fs.existsSync(oldPathFilename)
-      const isFileStatic = oldPathFilename.includes('static')
-      if (!isFileStatic && isImageExist) fs.unlinkSync(getPathToImg(oldFilename))
-      const avatarPath = await saveImageAndGetPath(req.file?.buffer, 'avatar', userId)
+      const updateData: { username: string; avatarPath?: string } = {
+        username
+      }
 
-      const updateUserDataResponse = await UserModel.findOneAndUpdate(
-        { _id: userId },
-        {
-          username,
-          avatarPath
-        },
-        { new: true }
-      )
+      if (req.file) {
+        const isImageExist = fs.existsSync(oldPathFilename)
+        const isFileNotStatic = !oldPathFilename.includes('static')
+        if (isImageExist && isFileNotStatic) fs.unlinkSync(getPathToImg(oldFilename))
+        updateData.avatarPath = await saveImageAndGetPath(req.file.buffer, 'avatar', userId)
+      }
+
+      const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, updateData, { new: true })
+
       if (!updateUserDataResponse) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UsersFind)
 
       const usersHasCurrentContact = await getUsersByHasContactId(userId)
@@ -45,6 +44,7 @@ class UserController {
         username: updateUserDataResponse.username,
         avatarPath: updateUserDataResponse.avatarPath
       }
+
       const payload: IEventChangeContactsData = {
         id: userId,
         ...updatedUserData
@@ -55,7 +55,8 @@ class UserController {
 
       return res.json({
         userData: updatedUserData,
-        message: ServerNotificationMessage.UserDataUpdated
+        message: ServerNotificationMessage.UserDataUpdated,
+        silent: true
       })
     } catch {
       throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedUserDataUpdate)
@@ -75,7 +76,7 @@ class UserController {
           email: user.email,
           id: user._id,
           avatarPath: user.avatarPath,
-          infoItems: user.infoItems
+          infoNotifications: user.infoNotifications
         },
         settings: user.settings
       })
@@ -101,7 +102,7 @@ class UserController {
         }
       })
 
-      return res.json({ message: ServerNotificationMessage.PasswordReset })
+      return res.json({ message: ServerNotificationMessage.PasswordReset, silent: true })
     } catch {
       return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.CommonServerError)
     }

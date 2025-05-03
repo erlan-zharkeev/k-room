@@ -1,18 +1,21 @@
 import './style.scss'
 import { Badge, List } from 'antd'
-import { AppButton } from 'src/shared/ui'
 import { IMessage, SocketActionsType, IChatRoom, IEventSaveContact } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { useTypedSelector } from 'src/shared/lib'
-import { getChatName } from 'src/shared/utils'
+
 import { AppDispatch } from 'src/app/store'
-import { socket } from 'src/shared/api'
-import { showModal } from 'src/entities/system'
-import { useSettings } from 'src/entities/settings'
+
+import { useRoomSelect } from 'src/features/room'
+
 import { ChatRoomAvatar } from 'src/entities/chat-room'
+import { showModal } from 'src/entities/system'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector } from 'src/shared/lib'
+import { AppButton } from 'src/shared/ui'
+import { getChatName } from 'src/shared/utils'
 
 export const ChatRoomList = () => {
-  const { updateSetting } = useSettings()
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { contacts } = useTypedSelector((state) => state.contacts)
   const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
@@ -24,9 +27,11 @@ export const ChatRoomList = () => {
     return messages[messages.length - 1]?.body ?? ''
   }
 
+  const { selectRoomById, resetRoomSelection } = useRoomSelect()
+
   const setChat = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
     e.stopPropagation()
-    updateSetting('selectedChatRoomId', { selectChatRoomId: id })
+    selectRoomById(id)
   }
 
   const addUser = async (interlocutorId: string) => {
@@ -55,12 +60,8 @@ export const ChatRoomList = () => {
     )
   }
 
-  const resetChatRoomId = () => {
-    updateSetting('selectedChatRoomId', { selectChatRoomId: '' })
-  }
-
   return (
-    <div className="chat-room-list" onClick={resetChatRoomId}>
+    <div className="chat-room-list" onClick={resetRoomSelection}>
       <div className="chat-room-list__create-chat">
         <AppButton text="Create group" prefixIconName="plus" borderless onClick={createMultipleChat} />
         <div className="divider" />
@@ -70,7 +71,7 @@ export const ChatRoomList = () => {
           itemLayout="horizontal"
           dataSource={chatRooms}
           locale={{
-            emptyText: <div className="paragraph-text ">There are no chats yet</div>
+            emptyText: <div className="paragraph-text">There are no chats yet</div>
           }}
           renderItem={(chatRoom) => (
             <List.Item
@@ -86,7 +87,7 @@ export const ChatRoomList = () => {
               <div className="chat-room-list__controls">
                 <Badge
                   color="var(--accent)"
-                  count={Boolean(unreadMessages(chatRoom)) ? unreadMessages(chatRoom) : 0}
+                  count={unreadMessages(chatRoom) ? unreadMessages(chatRoom) : 0}
                   offset={[-20, 0]}
                   className="chat-room-list__badge"
                 >
@@ -95,8 +96,9 @@ export const ChatRoomList = () => {
                 {showAddUserButton(chatRoom) && (
                   <AppButton
                     prefixIconName="plus"
-                    tooltip="Add User"
-                    onClick={() => addUser(getFirstUserIdInChatRoom(chatRoom))}
+                    onClick={() => {
+                      addUser(getFirstUserIdInChatRoom(chatRoom))
+                    }}
                   />
                 )}
               </div>

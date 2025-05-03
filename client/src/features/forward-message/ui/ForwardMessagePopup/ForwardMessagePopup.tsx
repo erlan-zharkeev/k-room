@@ -1,21 +1,28 @@
 import './style.scss'
 import { useState } from 'react'
+
 import { useDispatch } from 'react-redux'
-import { useTypedSelector } from 'src/shared/lib'
+
 import { AppDispatch } from 'src/app/store'
-import { ShortChatList } from './components/ShortChatList/ShortChatList'
-import { AppInput, AppIcon } from 'src/shared/ui'
+
+import { useRoomSelect } from 'src/features/room'
+
 import { setRepliedMessage } from 'src/entities/chat-room'
 import { closeModal } from 'src/entities/system'
-import { useSettings } from 'src/entities/settings'
+
+import { useTypedSelector } from 'src/shared/lib'
+import { AppInput, AppIcon } from 'src/shared/ui'
+
+import { ShortChatList } from './components/ShortChatList/ShortChatList'
 
 export const ForwardMessagePopup = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { updateSetting } = useSettings()
   const [searchString, setSearchString] = useState('')
   const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)
+  const { selectRoomById } = useRoomSelect()
+
   const clickChatHandler = (roomId: string) => {
-    updateSetting('selectedChatRoomId', { selectChatRoomId: roomId })
+    selectRoomById(roomId)
     dispatch(setRepliedMessage(message))
     dispatch(closeModal())
   }

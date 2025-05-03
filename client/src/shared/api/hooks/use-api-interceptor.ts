@@ -1,11 +1,13 @@
 import { AxiosError } from 'axios'
 import { StatusEnum, RouteNamesEnum } from 'common-types'
-import { useNotification } from 'src/entities/notification/hooks/use-notification'
 import { useDispatch } from 'react-redux'
-import { clg } from 'src/shared/utils'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+import { useNotification } from 'src/entities/notification/hooks/use-notification'
 import { changeSelectedContentElement } from 'src/entities/settings'
 import { updateAppLoaderState } from 'src/entities/system'
-import { useLocation, useNavigate } from 'react-router-dom'
+
+import { clg } from 'src/shared/utils'
 
 export const useApiInterсeptor = () => {
   const navigate = useNavigate()

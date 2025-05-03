@@ -1,24 +1,29 @@
-import { IInfoItem } from '../../@types'
+import { IInfoMessage } from '../../@types'
 import { welcome } from './items'
 
-const infoMap: Record<string, IInfoItem> = {
+const infoMap: Record<string, IInfoMessage> = {
   1: {
     id: '1',
     label: 'Welcome to K-Room',
-    read: 'unread',
-    content: '',
-    contentComponent: welcome
+    read: false,
+    content: welcome()
   }
 }
 
-export const getInfo = (id: string) => {
+export const getPreviewInfoNotification = (id: string) => {
   const item = infoMap[id]
-  if (!item.contentComponent) return null
-  const currentContent = item.contentComponent()
   return {
     id: item.id,
     label: item.label,
-    read: item.read,
-    content: currentContent
+    read: item.read
+  }
+}
+
+export const getInfoItem = (id: string) => {
+  const item = infoMap[id]
+
+  return {
+    id: item.id,
+    content: item.content
   }
 }

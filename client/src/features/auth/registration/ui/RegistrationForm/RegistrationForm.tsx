@@ -1,14 +1,16 @@
 import './style.scss'
-import { AppForm } from 'src/shared/ui'
-import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
-import { useRegistration } from '../../hooks'
 import { AuthRegistrationPayloadType } from 'common-types'
 
-export const RegistrationForm = () => {
-  const { register } = useRegistration()
+import { AppForm } from 'src/shared/ui'
 
-  const onSubmit = (paylod: unknown) => {
-    const formData = paylod as AuthRegistrationPayloadType
+import { useRegistration } from '../../hooks'
+import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
+
+export const RegistrationForm = () => {
+  const { register, isLoading } = useRegistration()
+
+  const onSubmit = (payload: unknown) => {
+    const formData = payload as AuthRegistrationPayloadType
     register(formData)
   }
 
@@ -18,35 +20,39 @@ export const RegistrationForm = () => {
         onSubmit={onSubmit}
         fields={{
           username: {
+            inputType: 'text',
             value: '',
             placeholder: 'Username',
             rule: { name: 'minLength', quantity: 2 },
             autoComplete: 'on'
           },
           email: {
+            inputType: 'text',
+            nativeType: 'email',
             value: '',
             placeholder: 'Email',
             rule: { name: 'email' },
             autoComplete: 'on'
           },
           password: {
+            inputType: 'text',
             value: '',
             placeholder: 'Password',
             rule: { name: 'minLength', quantity: 6 },
             autoComplete: 'off',
-            type: 'password'
+            nativeType: 'password'
           },
           policy: {
             inputType: 'switch',
             value: false,
             rule: { name: 'requiredTrue' },
-            children: <PrivacyPolicySwitch />,
+            children: <PrivacyPolicySwitch disabled={isLoading} />,
             onText: 'Read',
             offText: 'Unread'
           }
         }}
         submitBtnText="Register"
-        submitBtnLoading={false}
+        submitBtnLoading={isLoading}
       />
     </div>
   )

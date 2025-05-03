@@ -1,12 +1,14 @@
 import { SocketActionsType, IEventMessageDelivered, IEventSendMessage, IMessage } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { pushMessage, useChatRooms } from 'src/entities/chat-room'
-import { socket } from 'src/shared/api'
-import { resetRepliedMessage, pushTemporaryMessage } from 'src/entities/chat-room'
-import { generateUUIDv4 } from 'src/shared/utils'
-import { ISendMessagePayload } from '../types'
+
+import { pushMessage, useChatRooms, resetRepliedMessage, pushTemporaryMessage } from 'src/entities/chat-room'
 import { useNotification } from 'src/entities/notification'
 import { useSound } from 'src/entities/sound'
+
+import { socket } from 'src/shared/api'
+import { generateUUIDv4 } from 'src/shared/utils'
+
+import { ISendMessagePayload } from '../types'
 import { MessageNotification } from '../ui'
 
 export const useMessageSend = () => {

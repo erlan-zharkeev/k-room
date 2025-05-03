@@ -1,6 +1,8 @@
-import { AppButton } from 'src/shared/ui'
-import { useDeleteContact } from '../../hooks'
 import { InteractionType } from 'common-types'
+
+import { AppButton } from 'src/shared/ui'
+
+import { useDeleteContact } from '../../hooks'
 
 export const DeleteContactBtn = ({ interaction, id }: { interaction: InteractionType; id: string }) => {
   const { deleteUserHandler } = useDeleteContact()
@@ -8,7 +10,7 @@ export const DeleteContactBtn = ({ interaction, id }: { interaction: Interaction
   return (
     <>
       {interaction !== 'invite-received' && (
-        <AppButton prefixIconName="cross" onClick={() => deleteUserHandler(id)} tooltip="Delete contact" borderless />
+        <AppButton prefixIconName="cross" onClick={() => deleteUserHandler(id)} borderless />
       )}
     </>
   )

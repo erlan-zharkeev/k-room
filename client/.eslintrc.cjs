@@ -21,8 +21,15 @@ module.exports = {
 
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/return-await': 'warn',
-    'no-return-await': 'warn',
-
+    'no-return-await': 'error',
+    '@typescript-eslint/prefer-nullish-coalescing': [
+      'warn',
+      {
+        ignoreConditionalTests: true,
+        ignoreMixedLogicalExpressions: true
+      }
+    ],
+    '@typescript-eslint/indent': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-base-to-string': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',

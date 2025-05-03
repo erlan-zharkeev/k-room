@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
+
 import { useSettings } from 'src/entities/settings'
+
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useChatRooms = () => {
@@ -7,14 +9,14 @@ export const useChatRooms = () => {
 
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
 
-  const unreadMessagesCount = useMemo(() => {
+  const unreadMessageQuantity = useMemo(() => {
     return chatRooms.reduce((total, room) => {
       return total + room.messages.filter((message) => message.status === 'delivered' && !message.isSelf).length
     }, 0)
   }, [chatRooms])
 
   const selectedChatRoom = useMemo(() => {
-    return chatRooms.find((room) => room.id === selectedChatRoomId) || null
+    return chatRooms.find((room) => room.id === selectedChatRoomId) ?? null
   }, [chatRooms, selectedChatRoomId])
 
   const getRoomById = (id: string) => {
@@ -23,7 +25,7 @@ export const useChatRooms = () => {
 
   return {
     chatRooms,
-    unreadMessagesCount,
+    unreadMessageQuantity,
     selectedChatRoom,
     getRoomById
   }

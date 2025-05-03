@@ -1,0 +1,15 @@
+@use '~/global/index' as *;
+
+.app-link {
+  width: fit-content;
+  color: var(--accent);
+  font-size: 12px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.app-link--disabled {
+  @include disabled;
+}

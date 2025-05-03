@@ -11,6 +11,8 @@ export const useCreateNewPassword = () => {
   const [searchParams] = useSearchParams()
   const [passwordRestoreQuery, setPasswordRestoreQuery] = useState('')
   const [passMatched, setPassMatched] = useState(false)
+  const [isFormTouched, setIsFormTouched] = useState(false)
+  const [isPasswordChanged, setIPasswordChanged] = useState(false)
 
   const navigate = useNavigate()
   const { doRequest } = useApi()
@@ -22,25 +24,34 @@ export const useCreateNewPassword = () => {
   }, [])
 
   const checkPassMatch = (payload: AppFormData) => {
+    setIsFormTouched(true)
     const { firstPassword, secondPassword } = payload
     const matched = firstPassword === secondPassword
     setPassMatched(matched)
-    if (!matched) return
   }
 
   const onSubmit = async (payload: AppFormData) => {
-    checkPassMatch(payload)
-
-    setIsLoading(true)
-    const formData = { ...payload, query: passwordRestoreQuery } as ICreateNewPasswordPayload
-    const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)
-    setIsLoading(false)
-    if (response && response.status === StatusEnum.Success) navigate(RouteNamesEnum.Login)
+    try {
+      checkPassMatch(payload)
+      setIsLoading(true)
+      const formData = { password: payload.secondPassword, query: passwordRestoreQuery } as ICreateNewPasswordPayload
+      const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)
+      if (response && response.status === StatusEnum.Success) {
+        setIPasswordChanged(true)
+      }
+    } catch (error: unknown) {
+      console.error('Error in create new password:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return {
     isLoading,
     passMatched,
-    onSubmit
+    onSubmit,
+    checkPassMatch,
+    isFormTouched,
+    isPasswordChanged
   }
 }

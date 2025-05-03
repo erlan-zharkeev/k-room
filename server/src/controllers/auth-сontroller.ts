@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { initUserSettings, initUserCodes } from '../fixtures'
 import { authValidator } from '../middlewares'
 import { UserModel } from '../models'
-import { updateTokens, getInfo, sendEmailConfirmationLink } from '../services'
+import { updateTokens, getPreviewInfoNotification, sendEmailConfirmationLink } from '../services'
 import {
   AuthLoginPayloadType,
   AuthRegistrationPayloadType,
@@ -41,7 +41,7 @@ class AuthController {
       const hashedPassword = await bcrypt.hash(password, 6)
 
       if (!hashedPassword) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedPassHash)
-      const welcomeInfoItem = getInfo('1')
+      const welcomeInfoNotification = getPreviewInfoNotification('1')
       const user = new UserModel({
         username,
         email,
@@ -49,7 +49,7 @@ class AuthController {
         socketId: '',
         settings: initUserSettings,
         codes: initUserCodes,
-        infoItems: [welcomeInfoItem],
+        infoNotifications: [welcomeInfoNotification],
         role: 'user'
       })
 
@@ -60,7 +60,7 @@ class AuthController {
         return throwError(StatusEnum.Unreachable, res, ServerNotificationMessage.FailedSendConfirmationLink)
       }
 
-      return res.json(confirmEmailData)
+      return res.json({ confirmEmailData, message: ServerNotificationMessage.RegistrationSuccess })
     } catch {
       throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedRegistration)
     }
@@ -108,7 +108,7 @@ class AuthController {
           email,
           id: user._id,
           avatarPath: user.avatarPath,
-          infoItems: user.infoItems
+          infoNotifications: user.infoNotifications
         },
         settings: user.settings,
         message: ServerNotificationMessage.LoginSuccess,
@@ -125,6 +125,7 @@ class AuthController {
       let user = await UserModel.findOne({ email })
       if (!user) {
         const hashedPassword = await bcrypt.hash(uuidv4(), 6)
+        const welcomeInfoNotification = getPreviewInfoNotification('1')
         user = new UserModel({
           username,
           role: 'user',
@@ -135,7 +136,8 @@ class AuthController {
           socketId: '',
           confirmed: true,
           settings: initUserSettings,
-          codes: initUserCodes
+          codes: initUserCodes,
+          infoNotifications: [welcomeInfoNotification]
         })
         await user.save()
       }
@@ -148,10 +150,12 @@ class AuthController {
           email,
           id: user?._id,
           avatarPath: user.avatarPath ?? avatarPath,
-          role: user.role
+          role: user.role,
+          infoNotifications: user.infoNotifications
         },
         settings: user.settings,
-        message: ServerNotificationMessage.LoginAndRegister
+        message: ServerNotificationMessage.LoginWithProvider,
+        silent: true
       })
     } catch {
       throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedLogin)

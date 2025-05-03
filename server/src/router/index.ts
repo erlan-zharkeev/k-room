@@ -34,19 +34,16 @@ router.post(
 )
 router.post(UserEndpointsEnum.ResetPassword, UserController.resetPassword)
 
-router.post(CommonEndpointsEnum.GetInfo, accessTokenValidator, CommonController.readInfoHandler)
-router.get(CommonEndpointsEnum.CommonImages, accessTokenValidator, CommonController.imagesHandler)
+router.post(CommonEndpointsEnum.InfoItem, accessTokenValidator, CommonController.readInfoItem)
+router.get(CommonEndpointsEnum.InfoItem, accessTokenValidator, CommonController.getInfoItem)
+router.get(CommonEndpointsEnum.CommonImages, accessTokenValidator, CommonController.getImage)
 
 router.post(
   CodesEndpointsEnum.SendEmailCodePasswordRecovery,
   codesRequestValidator,
   CodesController.emailPasswordRecovery
 )
-router.post(
-  CodesEndpointsEnum.ValidateEmailCodePasswordRecovery,
-  codesRequestValidator,
-  CodesController.validateEmailCodePasswordRecovery
-)
+router.post(CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, CodesController.validateEmailCodePasswordRecovery)
 
 router.get(AdminEndpointsEnum.GetAppData, accessTokenValidator, adminRoleValidator, AdminController.getAppData)
 router.post(AdminEndpointsEnum.DBClear, accessTokenValidator, adminRoleValidator, AdminController.resetDB)

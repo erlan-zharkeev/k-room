@@ -3,11 +3,13 @@
 .top-bar {
   position: relative;
   z-index: 2;
+  display: flex;
+  align-items: center;
   height: $bar-height;
   min-height: $bar-height;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  margin-left: 12px;
   padding: 0 8px;
-  overflow: hidden;
   @include nm-outset-shadow;
 
   .top-bar__content {
@@ -15,6 +17,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    height: 100%;
   }
 
   .top-bar__action-btns {

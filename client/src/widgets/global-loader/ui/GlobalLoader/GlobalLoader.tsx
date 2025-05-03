@@ -1,5 +1,6 @@
-import { AppProgressBar } from 'src/shared/ui'
 import { useSystem } from 'src/entities/system'
+
+import { AppProgressBar } from 'src/shared/ui'
 import './style.scss'
 
 export const GlobalLoader = () => {
