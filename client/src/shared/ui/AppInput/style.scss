@@ -19,7 +19,7 @@
     margin-right: 8px;
   }
 
-  .app-input__clear-btn {
+  .app-input__suffix-slot {
     position: absolute;
     right: 0;
   }
@@ -43,8 +43,8 @@
       @include focused-line-active;
     }
   }
-}
 
-.app-input--disabled {
-  @include disabled;
+  &.app-input--disabled {
+    @include disabled;
+  }
 }

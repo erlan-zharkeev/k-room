@@ -65,6 +65,16 @@
   }
 }
 
+.app-icon--xxs svg {
+  width: 16px;
+  height: 16px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 .app-icon--accent-color svg {
   color: var(--accent);
 }

@@ -90,7 +90,6 @@ export const useInputAudioDevice = () => {
       })
       audioStream.current = stream
     } catch (error) {
-      console.log('error', error)
       cantAccessDeviceNotification.open()
     } finally {
       setMicIsLoading(false)

@@ -1,6 +1,6 @@
 import { useSettings } from 'src/entities/settings'
 
-import { AppSwitch } from 'src/shared/ui'
+import { AppSwitch, AppText } from 'src/shared/ui'
 
 import { useShowWallpaper } from '../../hooks'
 
@@ -10,7 +10,7 @@ export const ShowWallpaperSwitcher = () => {
 
   return (
     <div className="show-wallpaper-switcher">
-      <div className="paragraph-text paragraph-text--center">Wallpaper</div>
+      <AppText size="sm">Wallpaper</AppText>
       <AppSwitch value={showWallpaper} name="wallpaper" onText="Show" offText="Hide" onChange={toggleShowWallpaper} />
     </div>
   )

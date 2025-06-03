@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference types="vite-plugin-svgr/client" />
 import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/utils'
@@ -34,6 +35,7 @@ import SearchIcon from './icons/search.svg?react'
 import SendIcon from './icons/send.svg?react'
 import SettingsIcon from './icons/settings.svg?react'
 import ShieldIcon from './icons/shield.svg?react'
+import ThreeDots from './icons/three-dots.svg?react'
 import ThunderIcon from './icons/thunder.svg?react'
 import TrashIcon from './icons/trash.svg?react'
 import UserStubIcon from './icons/user-stub.svg?react'
@@ -82,7 +84,8 @@ export const IconList: AppIconListElement[] = [
   { name: 'warn', AppIcon: WarnIcon },
   { name: 'thunder', AppIcon: ThunderIcon },
   { name: 'eye', AppIcon: EyeIcon },
-  { name: 'eye-blocked', AppIcon: EyeBlockedIcon }
+  { name: 'eye-blocked', AppIcon: EyeBlockedIcon },
+  { name: 'three-dots', AppIcon: ThreeDots }
 ]
 
 export const AppIcon = ({ name, color = 'text-color', size = 'small' }: AppIconProps) => {

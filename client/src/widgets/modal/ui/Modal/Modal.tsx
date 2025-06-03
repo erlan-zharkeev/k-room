@@ -1,70 +1,85 @@
 import './style.scss'
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
 
 import { Modal as AntdModal } from 'antd'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'src/app/store'
 
-import { ChatRoomSettingsPopup } from 'src/features/chat-room-settings'
-import { CreateMultipleChatPopup } from 'src/features/create-multiple-chat'
-import { DevicesPopup } from 'src/features/device'
-import { ForwardMessagePopup } from 'src/features/forward-message'
-import { MessageWithBindDataPopup } from 'src/features/send-message-with-bind-data'
-import { UpdateUserDataModal } from 'src/features/update-user-data'
+import { ChatRoomSettingsModal, CreateChatRoomModal } from 'src/features/chat-room'
+import { SelectDevicesModal } from 'src/features/device'
+import { ForwardMessageModal, MessageWithBindDataModal, MessageWithBindDataModalMenu } from 'src/features/message'
+import { UpdateUserDataModal } from 'src/features/user'
 
-import { closeModal, useSystem } from 'src/entities/system'
+import { closeModal, useSystem, useViewport } from 'src/entities/system'
 
-import { AppButton } from 'src/shared/ui'
+import { AppButton, AppHeader, AppText } from 'src/shared/ui'
 
 import { ModalContentComponentName } from './types'
 
 export const Modal = () => {
   const { showModal, modalData } = useSystem()
-
+  const { lessOrEqualPhone } = useViewport()
   const dispatch = useDispatch<AppDispatch>()
 
   const popups: Record<ModalContentComponentName, ReactNode> = {
     'update-user-data-modal': <UpdateUserDataModal />,
-    'devices-popup': <DevicesPopup />,
-    'forward-message-popup': <ForwardMessagePopup />,
-    'create-multiple-chat-popup': <CreateMultipleChatPopup />,
-    'chat-room-settings-popup': <ChatRoomSettingsPopup />,
-    'message-with-bind-data-popup': <MessageWithBindDataPopup />
+    'select-devices-modal': <SelectDevicesModal />,
+    'forward-message-modal': <ForwardMessageModal />,
+    'create-chat-room-modal': <CreateChatRoomModal />,
+    'chat-room-settings-modal': <ChatRoomSettingsModal />,
+    'message-with-bind-data-modal': <MessageWithBindDataModal />
   }
+
+  const additionalDropdownMenuElements: Partial<Record<ModalContentComponentName, ReactNode>> = {
+    'message-with-bind-data-modal': <MessageWithBindDataModalMenu />
+  }
+
   const ComponentContent = modalData.modalContentComponentName ? (
     popups[modalData.modalContentComponentName]
   ) : (
-    <p className="paragraph-text paragraph-text--md">{modalData.textContent ?? ''}</p>
+    <AppText>{modalData.textContent ?? ''}</AppText>
   )
 
+  const modalWidth = useMemo(() => {
+    if (lessOrEqualPhone) return 300
+    return 420
+  }, [lessOrEqualPhone])
+
   return (
-    <div className="modal">
-      <AntdModal
-        centered
-        title={modalData.title}
-        open={showModal}
-        footer={null}
-        onCancel={() => dispatch(closeModal())}
-        destroyOnClose
-      >
-        {ComponentContent}
-        {modalData.textContent && (
-          <div className="modal__confirmation-actions">
-            <AppButton
-              onClick={modalData.confirmBtn?.callback ?? (() => dispatch(closeModal()))}
-              loading={modalData.confirmBtn?.loader}
-              color="accent-color"
-              text={modalData.confirmBtn?.text ?? 'OK'}
-            />
-            <AppButton
-              onClick={modalData.cancelBtn?.callback ?? (() => dispatch(closeModal()))}
-              loading={modalData.cancelBtn?.loader}
-              text={modalData.cancelBtn?.text ?? 'Cancel'}
-            />
-          </div>
-        )}
-      </AntdModal>
-    </div>
+    <AntdModal
+      centered
+      title={
+        <div className="modal__title">
+          <AppHeader tag="h4">{modalData.title}</AppHeader>
+          {modalData.modalContentComponentName && additionalDropdownMenuElements[modalData.modalContentComponentName]}
+        </div>
+      }
+      open={showModal}
+      footer={null}
+      onCancel={() => dispatch(closeModal())}
+      destroyOnClose
+      width={modalWidth}
+      className="modal"
+    >
+      {ComponentContent}
+      {modalData.textContent && (
+        <div className="modal__confirmation-actions">
+          <AppButton
+            onClick={modalData.confirmBtn?.callback ?? (() => dispatch(closeModal()))}
+            loading={modalData.confirmBtn?.loader}
+            color="accent-color"
+            text={modalData.confirmBtn?.text ?? 'OK'}
+            fill
+          />
+          <AppButton
+            onClick={modalData.cancelBtn?.callback ?? (() => dispatch(closeModal()))}
+            loading={modalData.cancelBtn?.loader}
+            text={modalData.cancelBtn?.text ?? 'Cancel'}
+            fill
+          />
+        </div>
+      )}
+    </AntdModal>
   )
 }

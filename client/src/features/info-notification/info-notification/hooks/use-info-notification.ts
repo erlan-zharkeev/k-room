@@ -10,8 +10,9 @@ import { useContentTabSelect } from 'src/features/content-tab/select-content-tab
 import { useUser, markInfoNotificationAsRead, updateInfoNotificationContent } from 'src/entities/user'
 
 import { useApi } from 'src/shared/api'
+import { useTimeout } from 'src/shared/lib'
 
-const INFO_ITEM_MARK_AS_READ_DURATION_IN_SEC = 1.5
+const INFO_ITEM_MARK_AS_READ_DURATION = 1.5 * 1000
 
 export const useInfoNotification = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,7 +20,7 @@ export const useInfoNotification = () => {
   const { doRequest } = useApi()
   const [isInfoItemLoading, setIsInfoItemLoading] = useState(false)
   const { selectContentTab } = useContentTabSelect()
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const { startTimeout } = useTimeout()
 
   const markInfoAsRead = async (id: string) => {
     const response = await doRequest('post', CommonEndpointsEnum.InfoItem, { id })
@@ -30,14 +31,12 @@ export const useInfoNotification = () => {
   const infoNotificationClickHandler = (id: string) => {
     selectContentTab('info')
 
-    if (timerRef.current) {
-      clearTimeout(timerRef.current)
-    }
     const foundEl = infoNotifications?.find((infoItem) => infoItem.id === id)
+
     if (foundEl && !foundEl.read) {
-      timerRef.current = setTimeout(() => {
+      startTimeout(() => {
         markInfoAsRead(id)
-      }, INFO_ITEM_MARK_AS_READ_DURATION_IN_SEC * 1000)
+      }, INFO_ITEM_MARK_AS_READ_DURATION)
     }
   }
 
@@ -71,10 +70,6 @@ export const useInfoNotification = () => {
 
   useEffect(() => {
     getInfoItemContent()
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-    }
   }, [infoNotifications])
 
   return { collapseInfoNotifications, isInfoItemLoading, infoNotificationClickHandler }

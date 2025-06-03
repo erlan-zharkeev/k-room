@@ -1,10 +1,12 @@
 import './style.scss'
 
-import { PasswordRecoveryLink } from 'src/features/password-recovery'
+import { PasswordRecoveryLink } from 'src/features/auth'
 import { ProfileInfo } from 'src/features/profile-info'
-import { OpenModalUpdateUserDataBtn } from 'src/features/update-user-data'
+import { OpenModalUpdateUserDataBtn } from 'src/features/user'
 
 import { useUser } from 'src/entities/user'
+
+import { AppText } from 'src/shared/ui'
 
 export const UserProfileData = () => {
   const { id, username, email, avatarPath } = useUser()
@@ -12,14 +14,14 @@ export const UserProfileData = () => {
   return (
     <div className="user-profile-data">
       <ProfileInfo
-        username={username}
-        email={email}
+        title={username}
+        description={email}
         avatarPath={avatarPath}
         showBadge={false}
         horizontal
         avatarSize="large"
       />
-      <span className="user-profile-data__id paragraph-text paragraph-text-sm">#{id}</span>
+      <AppText size="small">#{id}</AppText>
       <OpenModalUpdateUserDataBtn />
       <PasswordRecoveryLink />
     </div>

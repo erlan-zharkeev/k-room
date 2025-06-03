@@ -32,7 +32,7 @@ export interface IUserData {
   email?: string;
   password?: string;
   providerName?: string;
-  lastSeen?: string;
+  lastSeen?: number;
   contacts?: IUserData[];
   infoNotifications?: IInfoMessage[];
 }

@@ -50,7 +50,7 @@ const userSchema = new Schema<IUserSchema>({
     default: false
   },
   lastSeen: {
-    type: String,
+    type: Number,
     required: false
   },
   contacts: {

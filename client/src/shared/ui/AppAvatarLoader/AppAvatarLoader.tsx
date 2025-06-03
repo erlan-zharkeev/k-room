@@ -1,7 +1,7 @@
 import './style.scss'
 import { useNotification } from 'src/entities/notification'
 
-import { AppAvatar, AppIconName, AppIcon, AvatarLoaderShapeModifier } from 'src/shared/ui'
+import { AppAvatar, AppIconName, AppIcon, AvatarShapeModifier } from 'src/shared/ui'
 import { imageToBase64 } from 'src/shared/utils'
 
 export interface AvatarLoaderProps {
@@ -10,7 +10,7 @@ export interface AvatarLoaderProps {
   setFile: React.Dispatch<React.SetStateAction<any>>
   updated?: () => void
   stubIconName?: AppIconName
-  shape?: AvatarLoaderShapeModifier
+  shape?: AvatarShapeModifier
 }
 
 export const AppAvatarLoader = ({

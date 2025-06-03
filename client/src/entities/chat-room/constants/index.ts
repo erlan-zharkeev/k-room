@@ -1,1 +1,0 @@
-export const CHAT_ROOM_HEADER_HEIGHT = 55

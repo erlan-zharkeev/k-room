@@ -1,2 +1,3 @@
 export * from './types'
-export * from './ui'
+export * from './contact-tab'
+export * from './select-content-tab'

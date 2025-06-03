@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Badge } from 'antd'
 import parse from 'html-react-parser'
 
+import { useTimeout } from 'src/shared/lib'
+
 import { AppHeader } from '../AppHeader/AppHeader'
 import { AppIcon } from '../AppIcon'
 
@@ -22,6 +24,7 @@ interface AppCollapseProps {
 export const AppCollapseList = ({ items, onClickCollapseEl }: AppCollapseProps) => {
   const [openElId, setOpenIElId] = useState<string | null>(null)
   const [delayedOverflowIndex, setDelayedOverflowIndex] = useState<string | null>(null)
+  const { startTimeout } = useTimeout()
 
   const clickHandler = (id: string) => {
     setOpenIElId((prev) => (prev === id ? null : id))
@@ -29,18 +32,10 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: AppCollapseProps) 
   }
 
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout> | null = null
-
     if (openElId !== null) {
-      timeout = setTimeout(() => {
-        setDelayedOverflowIndex(openElId)
-      }, 300)
+      startTimeout(() => setDelayedOverflowIndex(openElId), 300)
     } else {
       setDelayedOverflowIndex(null)
-    }
-
-    return () => {
-      if (timeout) clearTimeout(timeout)
     }
   }, [openElId])
 

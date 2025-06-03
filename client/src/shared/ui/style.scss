@@ -1,17 +1,21 @@
 @use '~/global/index' as *;
 
+// *important* overwrite browser inline styles
+
 input {
   width: 100%;
   height: var(--medium-ui-height);
 
   @include nm-inset-element;
 
-  color: var(--text) !important; // *important* overwrite browser inline styles
+  color: var(--text) !important;
   text-indent: 12px;
 }
 
 input::placeholder {
-  color: var(--text);
+  padding-top: 10px;
+  color: var(--contrast-text);
+  opacity: 0.3;
 }
 
 input:focus-visible,

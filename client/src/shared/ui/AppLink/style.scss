@@ -10,6 +10,14 @@
   }
 }
 
+.app-link--error-color {
+  color: var(--error);
+}
+
+.app-link--text-color {
+  color: var(--text);
+}
+
 .app-link--disabled {
   @include disabled;
 }

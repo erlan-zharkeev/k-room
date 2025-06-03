@@ -12,6 +12,10 @@
   padding: 0 8px;
   @include nm-outset-shadow;
 
+  @include max-width-768 {
+    margin-left: 0;
+  }
+
   .top-bar__content {
     display: flex;
     align-items: center;

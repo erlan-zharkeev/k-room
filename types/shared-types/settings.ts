@@ -1,7 +1,7 @@
 export type ThemeType = "dark" | "light";
 export type AsideBarButtonNameType =
   | "contacts"
-  | "chat-list"
+  | "chat-rooms"
   | "calls"
   | "settings";
 export type ContentTabType = "info" | AsideBarButtonNameType;

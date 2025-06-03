@@ -1,0 +1,47 @@
+.chat-room-list {
+  $transition-selected-background: background ease-in-out 0.2s;
+  $transition-selected-right: right ease-in-out 0.3s;
+
+  height: calc(100% - 90px);
+
+  .chat-room-list__scroll-container {
+    padding: 4px 0;
+  }
+
+  .chat-room-list__list-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 4px;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: $transition-selected-background;
+  }
+
+  .chat-room-list__list-item:not(:last-child) {
+    margin-bottom: 7px;
+  }
+
+  .chat-room-list__list-item--selected {
+    background: var(--dark-gray-transparent-2);
+    transition: $transition-selected-background;
+  }
+
+  .chat-room-list__list-item::before {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    transition: $transition-selected-right;
+    content: '';
+  }
+
+  .chat-room-list__list-item--selected::before {
+    right: 0;
+    transition: $transition-selected-right;
+  }
+}

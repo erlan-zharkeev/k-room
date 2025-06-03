@@ -4,3 +4,6 @@ export interface IImageObject {
     name: string;
     fileBuffer?: ArrayBuffer;
 }
+export type MediaFileValueType = IImageObject;
+export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[];
+export type UnknownCallback = (...args: any[]) => any;

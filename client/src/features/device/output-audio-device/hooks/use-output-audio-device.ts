@@ -6,17 +6,24 @@ import { updateSelectedAudioOutputDeviceId, useSettings } from 'src/entities/set
 import { useSound } from 'src/entities/sound'
 import { showModal, useSystem } from 'src/entities/system'
 
+import { useTimeout } from 'src/shared/lib'
+
 export const useOutputAudioDevice = () => {
   const [audioOutputDeviceList, setAudioOutputDeviceList] = useState([] as MediaDeviceInfo[])
   const { camPermission, micPermission } = useSystem()
   const { selectedAudioOutputDeviceId } = useSettings()
+  const { startTimeout } = useTimeout()
 
   const { play, stop } = useSound()
   const dispatch = useDispatch()
+  const [showIndicator, setShowIndicator] = useState(false)
 
   const testAudioOutput = () => {
+    setShowIndicator(true)
     stop('message-delivered')
     play('message-delivered')
+
+    startTimeout(() => setShowIndicator(false), 400)
   }
 
   const loading = useMemo(() => {
@@ -77,6 +84,7 @@ export const useOutputAudioDevice = () => {
     loading,
     outputAudioDevices,
     onAudioOutputDeviceChange,
-    updateOutputAudioDeviceList
+    updateOutputAudioDeviceList,
+    showIndicator
   }
 }

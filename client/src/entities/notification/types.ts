@@ -9,8 +9,6 @@ export enum ClientNotificationMessage {
   FailedToConnectToDevice = 'Failed to connect to device, check for device is plugged in',
   CallCompleted = 'ICall completed',
   FailedToLogin = 'Login failed, server error. Please try again, later',
-  ContactAdded = 'ContactType added',
-  ContactDeleted = 'ContactType deleted',
   ImageResNotAllowed = 'Image resolution not allowed',
   ImageSizeMustLessThan2mb = 'Image size must be less than 2mb',
   SocketDisconnected = 'Socket disconnected'

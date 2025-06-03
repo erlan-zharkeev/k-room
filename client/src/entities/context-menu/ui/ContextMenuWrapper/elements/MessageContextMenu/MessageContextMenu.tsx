@@ -10,7 +10,7 @@ import {
   setRepliedMessage,
   useChatRooms
 } from 'src/entities/chat-room'
-import { useContextMenu } from 'src/entities/context-menu/hooks'
+import { useContextMenu } from 'src/entities/context-menu'
 import { showModal } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
@@ -44,7 +44,7 @@ export const MessageContextMenu = () => {
 
   const forwardHandler = () => {
     dispatch(repliedMessageSetAsForward())
-    dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'forward-message-popup' }))
+    dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'forward-message-modal' }))
   }
 
   const deleteHandler = () => {
@@ -76,12 +76,12 @@ export const MessageContextMenu = () => {
         <AppIcon name="reply" />
         <span>Forward</span>
       </div>
-      {contextClickedObject.message.isSelf && (
+      {/* {contextClickedObject.message.isSelf && (
         <div className="message-context-menu__element context-menu__element delete-icon" onClick={deleteHandler}>
           <AppIcon name="trash" />
           <span>Delete</span>
         </div>
-      )}
+      )} */}
     </div>
   )
 }

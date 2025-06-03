@@ -131,6 +131,7 @@ export default defineConfig(({ mode }) => {
       //   strict: false
       // },
       // host: '0.0.0.0',
+      historyApiFallback: true,
       port: Number(env.VITE_CLIENT_PORT),
       https: {
         key: fs.readFileSync('./dev-certs/k-room-dev-key.pem'),

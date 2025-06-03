@@ -69,7 +69,8 @@ export const useNotification = () => {
     return { open, close, key }
   }
 
-  const openBrowserNotification = (payload: { message: IMessage; icon?: string }) => {
+  const openBrowserNotification = (payload: { message: Omit<IMessage, 'id' | 'authorId'>; icon?: string }) => {
+    if (!showNotification) return
     const { message, icon = AppLogoIcon } = payload
     void new Notification(message.authorName, { body: message.body, icon })
   }

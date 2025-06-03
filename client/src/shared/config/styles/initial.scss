@@ -5,16 +5,10 @@ html {
   background-color: var(--main-bg);
 
   --real-1-percent-vh: 100vh;
-  --chat-room-list-width: 35%;
+  --chat-rooms-width: 35%;
 
   @include max-width-768 {
-    --chat-room-list-width: 40%;
-  }
-
-  &[theme='light'] {
-    ::placeholder {
-      color: var(--contrast-text);
-    }
+    --chat-rooms-width: 40%;
   }
 }
 
@@ -41,10 +35,6 @@ span,
 summary,
 p {
   color: var(--text);
-}
-
-::placeholder {
-  opacity: 0.4;
 }
 
 ::-webkit-scrollbar {

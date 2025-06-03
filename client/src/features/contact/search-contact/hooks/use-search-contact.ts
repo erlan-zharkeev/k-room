@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { IUserData, SocketActionsType, IEventSearchContact } from 'common-types'
 
@@ -13,11 +13,13 @@ export const useSearchContact = () => {
   const { id } = useUser()
   const [searchedContacts, setSearchedContacts] = useState<IUserData[]>([])
 
-  socket.on<SocketActionsType>('get-searched-contact', (contacts: IUserData[]) => {
-    const userFilteredSelf = contacts.filter((user: IUserData) => user.id !== id)
-    setSearchedContacts(userFilteredSelf)
-    setIsLoading(false)
-  })
+  useEffect(() => {
+    socket.on<SocketActionsType>('get-searched-contact', (contacts: IUserData[]) => {
+      const userFilteredSelf = contacts.filter((user: IUserData) => user.id !== id)
+      setSearchedContacts(userFilteredSelf)
+      setIsLoading(false)
+    })
+  }, [])
 
   const fetchUsers = (value: string) => {
     const searchPayload: IEventSearchContact = { value }
@@ -29,6 +31,10 @@ export const useSearchContact = () => {
   const search = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target
     setSearchQuery(value)
+    if (value === '') {
+      setSearchedContacts([])
+      return
+    }
     setIsLoading(true)
     debouncedSearch(value)
   }

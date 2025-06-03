@@ -50,6 +50,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'no-case-declarations': 'off',
     'array-callback-return': 'off',
+    'import/no-cycle': ['error', { maxDepth: Infinity }],
     'import/order': [
       'error',
       {

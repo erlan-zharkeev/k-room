@@ -1,0 +1,17 @@
+.audio-output-device-select {
+  .audio-output-device-select__indicator {
+    height: 3px;
+    width: calc(100% - 50px);
+    border-bottom-left-radius: 99px;
+    border-bottom-right-radius: 99px;
+    background-color: var(--accent);
+    opacity: 0;
+    box-shadow: 0 0 0 transparent;
+    transition: opacity 0.3s ease, box-shadow 0.4s ease;
+  }
+
+  .audio-output-device-select__indicator--visible {
+    opacity: 1;
+    box-shadow: 0 0 3px var(--accent), 0 0 6px var(--accent), 0 0 8px var(--accent);
+  }
+}

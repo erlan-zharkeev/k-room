@@ -11,7 +11,8 @@ import {
   IMessage,
   IRepliedMessage
 } from 'common-types'
-interface AttachedFilesMessage {
+
+interface IMessageInputData {
   body: string
   images: IImageObject[]
   imageCompression: boolean
@@ -20,7 +21,7 @@ interface AttachedFilesMessage {
 interface RoomsState {
   chatRooms: IChatRoom[]
   repliedMessageData: IRepliedMessage
-  attachedFilesMessage: AttachedFilesMessage
+  messageInputData: IMessageInputData
 }
 
 const initialRepliedMessageData = {
@@ -31,7 +32,7 @@ const initialRepliedMessageData = {
   forward: false
 }
 
-const initialAttachedFilesMessage = {
+const initialMessageInputData = {
   body: '',
   images: [],
   imageCompression: true
@@ -40,20 +41,27 @@ const initialAttachedFilesMessage = {
 const initialState: RoomsState = {
   chatRooms: [],
   repliedMessageData: initialRepliedMessageData,
-  attachedFilesMessage: initialAttachedFilesMessage
+  messageInputData: initialMessageInputData
 }
 
 export const chatRoomsSlice = createSlice({
   name: 'rooms',
   initialState,
   reducers: {
+    updateMessageInputData(state, { payload }: { payload: Partial<IMessageInputData> }) {
+      state.messageInputData = {
+        ...state.messageInputData,
+        ...payload
+      }
+    },
+    removeImageInMessageInputDataByImageName(state, { payload }: { payload: { name: string } }) {
+      const filteredImages = [...state.messageInputData.images].filter((img) => img.name !== payload.name)
+      state.messageInputData.images = filteredImages
+    },
     resetRoomsStore(state) {
       state.chatRooms = []
       state.repliedMessageData = initialRepliedMessageData
-      state.attachedFilesMessage = initialAttachedFilesMessage
-    },
-    updatedAttachedFilesMessage(state, { payload }: { payload: AttachedFilesMessage }) {
-      state.attachedFilesMessage = { ...state.attachedFilesMessage, ...payload }
+      state.messageInputData = initialMessageInputData
     },
     loadChatRooms(state, { payload }: { payload: EventGetRoomsType }) {
       state.chatRooms = payload
@@ -107,6 +115,7 @@ export const chatRoomsSlice = createSlice({
         ...state.repliedMessageData,
         ...payload
       }
+      console.log(state.repliedMessageData, 'repl')
     },
     resetRepliedMessage(state) {
       state.repliedMessageData = initialRepliedMessageData
@@ -132,7 +141,8 @@ export const {
   setRepliedMessage,
   repliedMessageSetAsForward,
   resetRepliedMessage,
-  updatedAttachedFilesMessage,
   deleteMessage,
-  resetRoomsStore
+  resetRoomsStore,
+  updateMessageInputData,
+  removeImageInMessageInputDataByImageName
 } = chatRoomsSlice.actions

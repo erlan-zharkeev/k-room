@@ -1,0 +1,43 @@
+@use '~/global/index' as *;
+
+.app-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+  padding: 12px;
+  border-radius: 4px;
+
+  @include nm-inset-shadow;
+
+  .app-tags__tag {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    @include nm-outset-shadow;
+  }
+
+  .app-tags__tag-prefix-slot {
+    margin-right: 4px;
+  }
+
+  .app-tags__cross {
+    margin-left: 6px;
+    cursor: pointer;
+
+    button {
+      padding: 0;
+    }
+
+    .app-icon {
+      margin: 0;
+    }
+  }
+
+  &.app-tags--clickable {
+    .app-tags__tag {
+      cursor: pointer;
+    }
+  }
+}

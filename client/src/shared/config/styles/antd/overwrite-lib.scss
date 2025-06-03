@@ -24,38 +24,21 @@
   }
 
   // dropdown
-  // .ant-dropdown-menu {
-  //   background-color: var(--main-bg);
+  .ant-dropdown-menu {
+    background-color: var(--main-bg);
 
-  //   .ant-dropdown-menu-item {
-  //     position: relative;
-  //   }
+    .ant-dropdown-menu-item:hover {
+      background-color: var(--text);
+    }
 
-  //   .ant-dropdown-menu-item[read='unread']::before {
-  //     position: absolute;
-  //     top: 5px;
-  //     right: 4px;
-  //     width: 5px;
-  //     height: 5px;
-  //     background-color: var(--error);
-  //     border-radius: 50%;
-  //     content: '';
-  //   }
-
-  //   .ant-dropdown-menu-item:hover {
-  //     background-color: var(--text);
-  //   }
-
-  //   .ant-dropdown-menu-item:hover span {
-  //     color: var(--main-bg);
-  //   }
-  // }
+    .ant-dropdown-menu-item:hover span {
+      color: var(--main-bg);
+    }
+  }
 
   // modal
   .ant-modal {
-    .ant-modal-content {
-      background: var(--main-bg);
-    }
+    width: 600px;
 
     .ant-modal-header {
       margin-bottom: 16px;
@@ -64,6 +47,10 @@
 
     .ant-modal-title {
       color: var(--text);
+    }
+
+    .ant-modal-content {
+      background: var(--main-bg);
     }
   }
 

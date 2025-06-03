@@ -2,10 +2,11 @@ import './style.scss'
 import { useState, useContext, useEffect } from 'react'
 
 import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common-types'
-import moment from 'moment'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'src/app/store'
+
+import { callCounter } from 'src/features/call'
 
 import {
   setCallStartedAt,
@@ -186,9 +187,7 @@ export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
           )}
 
           <div className="call-modal__controls">
-            {isCallInProgress() && (
-              <div className="call-modal__length">{moment.utc(counterValue * 1000).format('HH:mm:ss')}</div>
-            )}
+            {isCallInProgress() && <div className="call-modal__length">{callCounter(counterValue)}</div>}
             <div className="call-modal__controls-elements">
               {isIncomingCallCalling() && (
                 <div className="call-modal__controls-element call-modal__controls-element--phone-answer">

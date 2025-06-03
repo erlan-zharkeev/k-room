@@ -40,7 +40,6 @@ export const useSound = () => {
         // @ts-expect-error
         const audioNode = sound._sounds?.[0]?._node
         if (typeof audioNode?.setSinkId === 'function' && selectedAudioOutputDeviceId) {
-          console.log('selectedAudioOutputDeviceId', selectedAudioOutputDeviceId)
           audioNode.setSinkId(selectedAudioOutputDeviceId).catch((err: unknown) => {
             console.warn('Failed to setSinkId:', err)
           })

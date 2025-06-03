@@ -1,5 +1,7 @@
 import './style.scss'
 
+import { UnknownCallback } from 'common-types'
+
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { AppIcon } from '../AppIcon'
@@ -17,12 +19,14 @@ export interface ButtonProps {
   disabled?: boolean
   hoverless?: boolean
   showTooltips?: boolean
-  onClick?: (...args: unknown[]) => void | Promise<void>
+  onClick?: UnknownCallback
   additionalClassName?: string
   children?: React.ReactNode
+  small?: boolean
+  fill?: boolean
+  onSubmit?: UnknownCallback
+  info?: boolean
 }
-
-const rootClass = 'app-button'
 
 export const AppButton = ({
   htmltype = 'button',
@@ -36,23 +40,30 @@ export const AppButton = ({
   hoverless,
   onClick = () => {},
   additionalClassName,
-  children
+  children,
+  small = false,
+  fill = false,
+  onSubmit = () => {},
+  info = false
 }: ButtonProps) => {
   const className = createClassNameWithModifiers({
-    rootClass,
+    rootClass: 'app-button',
     modifiers: [
       color,
       loading && 'loading',
       borderless && 'borderless',
       hoverless && 'hoverless',
-      disabled && 'disabled'
+      disabled && 'disabled',
+      small && 'small',
+      fill && 'fill',
+      info && 'info'
     ],
     additionalClassName
   })
 
   return (
     <div className={className}>
-      <button type={htmltype} disabled={disabled} onClick={onClick}>
+      <button type={htmltype} disabled={disabled} onClick={onClick} onSubmit={onSubmit}>
         {loading && <AppIcon name="loader" color={`${color ?? 'accent-color'}`} size={iconSize} />}
         {!loading && (
           <>

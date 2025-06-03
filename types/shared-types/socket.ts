@@ -9,6 +9,8 @@ import {
   IUserSettings,
   IBasicStreamSettings,
   UserShortType,
+  FileLoaderValueType,
+  MediaFileValueType,
 } from ".";
 
 export interface IEventInterlocutorUpdateSignal {
@@ -58,7 +60,9 @@ export interface IEventUpdateUserSettings {
 }
 
 export interface IEventCreateRoom {
-  contactId: string;
+  contactIds: string[];
+  chatName?: string;
+  avatarFile?: MediaFileValueType;
 }
 
 export interface IEventUpdateChatRoom {
@@ -66,22 +70,16 @@ export interface IEventUpdateChatRoom {
   roomId: string;
   chatName: string;
   avatarPath: string;
-  avatarFile:
-    | {
-        buffer: ArrayBuffer;
-      }
-    | undefined;
+  avatarFile?: MediaFileValueType; // TODO change to IEventCreateRoom
 }
+
 export interface IEventUserTyping {
   authorName: string;
   usersTo: UserShortType[];
   status: boolean;
 }
-export interface IEventGetUserTypingStatus {
-  authorData: {
-    authorName: string;
-    authorId: string;
-  };
+export interface IEventGetContactTypingStatus {
+  contactId: string;
   status: boolean;
 }
 export interface IEventSendMessage {
@@ -175,7 +173,7 @@ export type SocketActionsType =
   | "initialize"
   | "disconnect"
   | "rooms-loaded"
-  | "create-personal-room"
+  | "create-chat-room"
   | "new-room-added"
   | "send-message"
   | "message-delivered"
@@ -186,8 +184,8 @@ export type SocketActionsType =
   | "contacts-loaded"
   | "save-contact"
   | "delete-contact"
-  | "user-typing"
-  | "get-user-typing-status"
+  | "client-typing"
+  | "get-contact-typing-status"
   | "change-message-status"
   | "message-status-updated"
   | "contact-data-changed"

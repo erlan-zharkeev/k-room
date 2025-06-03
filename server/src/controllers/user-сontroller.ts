@@ -29,7 +29,10 @@ class UserController {
         const isImageExist = fs.existsSync(oldPathFilename)
         const isFileNotStatic = !oldPathFilename.includes('static')
         if (isImageExist && isFileNotStatic) fs.unlinkSync(getPathToImg(oldFilename))
-        updateData.avatarPath = await saveImageAndGetPath(req.file.buffer, 'avatar', userId)
+        const avatarPath = await saveImageAndGetPath(req.file.buffer, 'avatar')
+        if (avatarPath) {
+          updateData.avatarPath = avatarPath
+        }
       }
 
       const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, updateData, { new: true })

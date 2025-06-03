@@ -5,9 +5,29 @@ import { useSettings } from 'src/entities/settings'
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useChatRooms = () => {
+  const { chatRooms, repliedMessageData, messageInputData } = useTypedSelector((state) => state.chatRooms)
+
   const { selectedChatRoomId } = useSettings()
 
-  const { chatRooms } = useTypedSelector((state) => state.chatRooms)
+  const getRoomById = (id: string) => {
+    return chatRooms.find((room) => room.id === id)
+  }
+
+  const getPersonalRoomByContactId = (id: string) =>
+    chatRooms.find((room) => {
+      return room.users.length === 1 && room.users[0] === id
+    })
+
+  const selectedChatRoom = useMemo(() => {
+    return chatRooms.find((room) => room.id === selectedChatRoomId)
+  }, [chatRooms, selectedChatRoomId])
+
+  const isSelectedRoomPrivate = useMemo(
+    () => Boolean(selectedChatRoom && selectedChatRoom.users.length > 0),
+    [selectedChatRoom]
+  )
+
+  const haveMessageToReply = useMemo(() => Boolean(repliedMessageData.id), [repliedMessageData])
 
   const unreadMessageQuantity = useMemo(() => {
     return chatRooms.reduce((total, room) => {
@@ -15,18 +35,15 @@ export const useChatRooms = () => {
     }, 0)
   }, [chatRooms])
 
-  const selectedChatRoom = useMemo(() => {
-    return chatRooms.find((room) => room.id === selectedChatRoomId) ?? null
-  }, [chatRooms, selectedChatRoomId])
-
-  const getRoomById = (id: string) => {
-    return chatRooms.find((room) => room.id === id)
-  }
-
   return {
+    getRoomById,
+    getPersonalRoomByContactId,
     chatRooms,
     unreadMessageQuantity,
     selectedChatRoom,
-    getRoomById
+    isSelectedRoomPrivate,
+    repliedMessageData,
+    haveMessageToReply,
+    messageInputData
   }
 }

@@ -2,25 +2,18 @@ import { SocketActionsType, IEventDeleteContactSuccess, IEventDeleteContact } fr
 import { useDispatch } from 'react-redux'
 
 import { deleteContact } from 'src/entities/contact'
-import { useNotification, ClientNotificationMessage } from 'src/entities/notification'
 import { showModal, closeModal } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
 
 export const useDeleteContact = () => {
-  const notifications = useNotification()
   const dispatch = useDispatch()
-
-  const contactDeletedSuccessNotification = notifications.getNotification({
-    messageType: 'info',
-    message: ClientNotificationMessage.ContactDeleted
-  })
 
   const deleteUserHandler = (id: string) => {
     dispatch(
       showModal({
         title: 'Confirmation',
-        textContent: 'Are you sure you want to delete this contact?',
+        textContent: 'Are you sure want to delete this contact?',
         confirmBtn: {
           text: 'Delete',
           callback: () => deleteContactConfirmed(id)
@@ -36,13 +29,9 @@ export const useDeleteContact = () => {
   }
 
   const monitorContactDeletion = () => {
-    socket.on<SocketActionsType>(
-      'contact-delete-success',
-      ({ deletedContactId, silent }: IEventDeleteContactSuccess) => {
-        dispatch(deleteContact({ contactId: deletedContactId }))
-        if (!silent) contactDeletedSuccessNotification.open()
-      }
-    )
+    socket.on<SocketActionsType>('contact-delete-success', ({ deletedContactId }: IEventDeleteContactSuccess) => {
+      dispatch(deleteContact({ contactId: deletedContactId }))
+    })
   }
 
   return {

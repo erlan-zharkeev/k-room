@@ -1,23 +1,34 @@
 import { useDispatch } from 'react-redux'
 
-import { setContextMenu } from 'src/entities/system'
+import { resetContextMenuToInitial, setContextMenu, useSystem } from 'src/entities/system'
 
-import { useTypedSelector } from 'src/shared/lib'
+import { ContextMenuNameType, ContextClickedObject } from '../types'
 
 export const useContextMenu = () => {
   const dispatch = useDispatch()
+  const { contextMenu } = useSystem()
+
+  const setMenu = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent> | null,
+    name: ContextMenuNameType,
+    contextClickedObject: ContextClickedObject
+  ) => {
+    if (!event) return
+    event.preventDefault()
+    const coord = {
+      x: event.pageX,
+      y: event.pageY
+    }
+    dispatch(setContextMenu({ coord, name, contextClickedObject }))
+  }
 
   const reset = () => {
-    dispatch(
-      setContextMenu({
-        event: null,
-        type: ''
-      })
-    )
+    dispatch(resetContextMenuToInitial())
   }
 
   return {
+    ...contextMenu,
     reset,
-    ...useTypedSelector((state) => state.system.contextMenu)
+    setMenu
   }
 }

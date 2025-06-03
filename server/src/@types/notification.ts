@@ -41,5 +41,7 @@ export enum ServerNotificationMessage {
   UserDeleteSuccess = 'User has been successfully deleted',
   DeleteUserFailed = 'Failed to delete user',
   UserUpdateSuccess = 'User has been successfully updated',
-  InfoIdsNotProvided = 'Information IDs were not provided'
+  InfoIdsNotProvided = 'Information IDs were not provided',
+  RoomCreationError = 'Failed to create chat room',
+  ImageSaveError = 'Failed to save image'
 }

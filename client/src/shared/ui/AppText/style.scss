@@ -1,15 +1,15 @@
-span.app-text--sm,
-p.app-text--sm {
+span.app-text--small,
+p.app-text--small {
   font-size: 12px;
 }
 
-span.app-text--md,
-p.app-text--md {
+span.app-text--medium,
+p.app-text--medium {
   font-size: 14px;
 }
 
-span.app-text--lg,
-p.app-text--lg {
+span.app-text--large,
+p.app-text--large {
   font-size: 16px;
 }
 
@@ -20,4 +20,16 @@ p.app-text--lg {
 
 .app-text--accent {
   color: var(--accent);
+}
+
+.app-text--left {
+  text-align: left;
+}
+
+.app-text--center {
+  text-align: center;
+}
+
+.app-text--right {
+  text-align: right;
 }

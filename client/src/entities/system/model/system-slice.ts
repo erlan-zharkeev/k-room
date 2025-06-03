@@ -1,19 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { UnknownCallback } from 'common-types'
 
 import { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
 
 import {
   ContextMenu,
-  ContextMenuType,
+  ContextMenuNameType,
   ContextClickedObject,
   CONTEXT_MENU_HEIGHT,
-  CONTEXT_MENU_WIDTH
+  CONTEXT_MENU_WIDTH,
+  ICoord
 } from 'src/entities/context-menu'
 
 interface ModalBtn {
   text: string
   loader?: boolean
-  callback?: (...args: unknown[]) => void
+  callback?: UnknownCallback
 }
 
 interface ModalData {
@@ -63,26 +65,26 @@ const initViewPort = {
   height: 1080
 }
 
+const initialContextMenu: ContextMenu = {
+  name: '',
+  coord: {
+    x: 0,
+    y: 0
+  },
+  contextClickedObject: clickedObjectInitialState
+}
+
 const initialState: SystemStore = {
   isAppLoading: false,
   reconnecting: false,
   showModal: false,
-  contextMenu: {
-    slotName: '',
-    coord: {
-      x: 0,
-      y: 0
-    },
-    contextClickedObject: clickedObjectInitialState
-  },
+  contextMenu: initialContextMenu,
   modalData: initialModalData,
   viewPort: initViewPort,
   hasInteracted: false,
   camPermission: undefined,
   micPermission: undefined
 }
-
-const BLOCK_NATIVE_CONTEXT_MENU = true
 
 export const systemSlice = createSlice({
   name: 'system',
@@ -93,7 +95,7 @@ export const systemSlice = createSlice({
       state.reconnecting = false
       state.showModal = false
       state.contextMenu = {
-        slotName: '',
+        name: '',
         coord: {
           x: 0,
           y: 0
@@ -129,40 +131,30 @@ export const systemSlice = createSlice({
     setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
     },
-    setContextMenu(
-      state,
-      {
-        payload
-      }: {
-        payload: {
-          event: React.MouseEvent<HTMLDivElement, MouseEvent> | null
-          type: ContextMenuType
-          contextClickedObject?: ContextClickedObject
-        }
-      }
-    ) {
-      const { event, type, contextClickedObject } = payload
-      if (BLOCK_NATIVE_CONTEXT_MENU && event) event.preventDefault()
-      state.contextMenu.slotName = type
-      if (!event) return
+    setContextMenu(state, { payload }: { payload: ContextMenu }) {
+      const { coord, name, contextClickedObject } = payload
+      state.contextMenu.name = name
       const currentClickedObject = state.contextMenu.contextClickedObject
       state.contextMenu.contextClickedObject = { ...currentClickedObject, ...contextClickedObject }
       const viewportWidth = state.viewPort.width
       const viewportHeight = state.viewPort.height
-      let x = event.pageX
-      let y = event.pageY
+      let xAxis = coord.x
+      let yAxis = coord.y
       const defaultPadding = 4
       const menuWidth = CONTEXT_MENU_WIDTH
       const menuHeight = CONTEXT_MENU_HEIGHT
-      if (menuWidth + x > viewportWidth) x = viewportWidth - menuWidth - defaultPadding
-      if (menuHeight + y > viewportHeight) y = viewportHeight - menuHeight - defaultPadding
+      if (menuWidth + xAxis > viewportWidth) xAxis = viewportWidth - menuWidth - defaultPadding
+      if (menuHeight + yAxis > viewportHeight) yAxis = viewportHeight - menuHeight - defaultPadding
       state.contextMenu.coord = {
-        x,
-        y
+        x: xAxis,
+        y: yAxis
       }
     },
     resetContextClickedObject(state) {
       state.contextMenu.contextClickedObject = clickedObjectInitialState
+    },
+    resetContextMenuToInitial(state) {
+      state.contextMenu = initialContextMenu
     }
   }
 })
@@ -178,5 +170,6 @@ export const {
   resetSystemStore,
   setHasInteraction,
   updateCamPermission,
-  updateMicPermission
+  updateMicPermission,
+  resetContextMenuToInitial
 } = systemSlice.actions

@@ -1,7 +1,7 @@
 export type ModalContentComponentName =
   | 'update-user-data-modal'
-  | 'devices-popup'
-  | 'forward-message-popup'
-  | 'create-multiple-chat-popup'
-  | 'chat-room-settings-popup'
-  | 'message-with-bind-data-popup'
+  | 'select-devices-modal'
+  | 'forward-message-modal'
+  | 'create-chat-room-modal'
+  | 'chat-room-settings-modal'
+  | 'message-with-bind-data-modal'

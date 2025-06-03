@@ -7,10 +7,12 @@
 }
 
 .socket-connection-status--disconnected {
+  color: var(--error);
   border: solid 1px var(--error);
 }
 
 .socket-connection-status--connecting {
+  color: var(--accent);
   border: solid 1px var(--accent);
   animation: blinker 1s infinite;
 }

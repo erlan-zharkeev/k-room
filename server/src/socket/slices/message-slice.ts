@@ -20,7 +20,7 @@ export const messageSlice = (socket: SocketInstanceType) => {
     try {
       await setMessage({ roomId, message })
     } catch (e: unknown) {
-      console.log(e, 'y')
+      console.log(e)
     }
   })
 

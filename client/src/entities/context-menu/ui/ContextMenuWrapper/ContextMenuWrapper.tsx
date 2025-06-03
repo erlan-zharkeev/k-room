@@ -1,26 +1,17 @@
 import './style.scss'
-import { useDispatch } from 'react-redux'
-
-import { AppDispatch } from 'src/app/store'
-
-import { setContextMenu } from 'src/entities/system'
-
-import { firstCharUpperCase } from 'src/shared/utils'
 
 import { useContextMenu } from '../../hooks'
 
 import { MessageContextMenu } from './elements'
 
 export const ContextMenuWrapper = () => {
-  const { slotName, coord } = useContextMenu()
-
-  const dispatch = useDispatch<AppDispatch>()
+  const { name, coord, reset } = useContextMenu()
 
   const menus: Record<string, JSX.Element> = {
-    IMessage: <MessageContextMenu />
+    message: <MessageContextMenu />
   }
 
-  const currentMenu = menus[firstCharUpperCase(slotName)]
+  const currentMenu = menus[name]
 
   const Content = () => currentMenu || null
 
@@ -30,7 +21,7 @@ export const ContextMenuWrapper = () => {
       style={{
         opacity: currentMenu ? '1' : '0'
       }}
-      onClick={() => dispatch(setContextMenu({ event: null, type: '' }))}
+      onClick={reset}
     >
       {
         <div

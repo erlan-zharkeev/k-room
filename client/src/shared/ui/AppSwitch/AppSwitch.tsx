@@ -4,14 +4,7 @@ import { ChangeEvent, useState } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export interface AppSwitchProps {
-  name: string
-  value: boolean
-  onText?: string
-  offText?: string
-  disabled?: boolean
-  onChange?: (val: ChangeEvent<HTMLInputElement>) => void
-}
+import { AppSwitchProps } from './types'
 
 const rootClass = 'app-switch'
 

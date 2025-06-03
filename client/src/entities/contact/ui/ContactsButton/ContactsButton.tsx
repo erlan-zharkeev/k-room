@@ -5,10 +5,10 @@ import { AppButton } from 'src/shared/ui'
 import { useContact } from '../../hooks'
 
 export const ContactsButton = () => {
-  const { invitationsQuantity } = useContact()
+  const { contactInvitationsQuantity } = useContact()
 
   return (
-    <Badge color="var(--accent)" count={invitationsQuantity} size="small" offset={[-15, 10]}>
+    <Badge color="var(--accent)" count={contactInvitationsQuantity} size="small" offset={[-8, 0]}>
       <AppButton prefixIconName="contacts" borderless />
     </Badge>
   )

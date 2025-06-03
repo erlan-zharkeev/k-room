@@ -1,3 +1,20 @@
-import { IImageObject } from 'common-types'
+import { FileLoaderValueType } from 'common-types'
 
-export type FileLoaderPayloadType = IImageObject[]
+import { AppIconName } from '../AppIcon'
+import { AvatarShapeModifier } from '../types'
+
+export interface AppFileLoaderProps {
+  name: string
+  multiple?: boolean
+  allowedResolutions?: string[]
+  showPreview?: boolean
+  design?: 'avatar' | 'common'
+  value?: FileLoaderValueType
+  onChange: (files: FileLoaderValueType) => void
+  maxAttachedFiles?: number
+  disabled?: boolean
+  avatarStubIcon?: AppIconName
+  avatarShape?: AvatarShapeModifier
+  avatarBorderless?: boolean
+  showTextLabel?: boolean
+}

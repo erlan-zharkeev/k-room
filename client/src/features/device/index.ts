@@ -1,6 +1,6 @@
 export * from './device-settings'
 export * from './select-audio-input-device'
-export * from './devices-popup'
+export * from './select-devices-modal'
 export * from './select-device'
 export * from './select-video-input-device'
 export * from './select-audio-output-device'

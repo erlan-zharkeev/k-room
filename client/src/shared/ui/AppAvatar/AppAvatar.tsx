@@ -3,20 +3,10 @@ import { useState, useEffect } from 'react'
 
 import { Badge, Image } from 'antd'
 
-import { AppIconName, AppIcon, SizeModifier, AvatarLoaderShapeModifier } from 'src/shared/ui'
+import { AppIconName, AppIcon } from 'src/shared/ui'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export interface AvatarProps {
-  online?: boolean
-  src?: string
-  size?: SizeModifier
-  showBadge?: boolean
-  stubIconName?: AppIconName
-  ribbon?: boolean
-  ribbonPlacement?: 'up' | 'down'
-  dotPlacement?: 'up' | 'down'
-  shape?: AvatarLoaderShapeModifier
-  preview?: boolean
-}
+import { AppAvatarProps } from './types'
 
 const AvatarBody = ({
   src,
@@ -77,8 +67,9 @@ export const AppAvatar = ({
   ribbonPlacement = 'up',
   dotPlacement = 'up',
   shape = 'circle-shape',
-  preview = true
-}: AvatarProps) => {
+  preview = true,
+  borderless = false
+}: AppAvatarProps) => {
   const [haveSource, setHaveSource] = useState(Boolean(src))
 
   useEffect(() => {
@@ -95,10 +86,13 @@ export const AppAvatar = ({
     />
   )
 
+  const classNames = createClassNameWithModifiers({
+    rootClass: 'app-avatar',
+    modifiers: [size, shape, `ribbon-${ribbonPlacement}`, `dot-${dotPlacement}`, borderless && 'borderless']
+  })
+
   return (
-    <div
-      className={`app-avatar app-avatar--${size} app-avatar--${shape} app-avatar--ribbon-${ribbonPlacement} app-avatar--dot-${dotPlacement}`}
-    >
+    <div className={classNames}>
       {showBadge ? (
         <BadgeWrapper online={online} ribbon={ribbon} ribbonPlacement={ribbonPlacement}>
           {body}

@@ -36,9 +36,9 @@
     .app-avatar__image {
       $size: 32px;
 
-      width: $size !important;
+      width: $size;
       min-width: $size;
-      height: $size !important;
+      height: $size;
       min-height: $size;
     }
   }
@@ -47,9 +47,9 @@
     .app-avatar__image {
       $size: 64px;
 
-      width: $size !important;
+      width: $size;
       min-width: $size;
-      height: $size !important;
+      height: $size;
       min-height: $size;
     }
   }
@@ -58,9 +58,9 @@
     .app-avatar__image {
       $size: 100px;
 
-      width: $size !important;
+      width: $size;
       min-width: $size;
-      height: $size !important;
+      height: $size;
       min-height: $size;
     }
   }
@@ -75,6 +75,12 @@
     .ant-badge-dot.ant-scroll-number {
       top: 28px;
       left: 23px;
+    }
+  }
+
+  &.app-avatar--borderless {
+    .app-avatar__image {
+      border: none;
     }
   }
 

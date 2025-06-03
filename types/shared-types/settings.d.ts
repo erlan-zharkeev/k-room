@@ -1,5 +1,5 @@
 export type ThemeType = "dark" | "light";
-export type AsideBarButtonNameType = "contacts" | "chat-list" | "calls" | "settings";
+export type AsideBarButtonNameType = "contacts" | "chat-rooms" | "calls" | "settings";
 export type ContentTabType = "info" | AsideBarButtonNameType;
 export interface IUserSettings {
     selectedContentTab: ContentTabType;

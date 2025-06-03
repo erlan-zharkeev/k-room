@@ -1,0 +1,9 @@
+@use '~/global/index' as *;
+
+.chat-room-stub {
+  @include absolute-center;
+}
+
+.chat-room-stub--pointer {
+  cursor: pointer;
+}

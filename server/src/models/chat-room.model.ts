@@ -12,11 +12,6 @@ const chatRoomSchema = new Schema<IChatRoomSchema>({
     required: false,
     default: ''
   },
-  multiple: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
   authorId: {
     type: String,
     required: true

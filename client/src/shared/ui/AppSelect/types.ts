@@ -5,8 +5,8 @@ export interface IAppSelectOption {
 
 export interface IAppSelectProps {
   options: IAppSelectOption[]
-  value: string
-  onChange: (value: string) => void
-  loading: boolean
+  value: string | string[]
+  onChange: (value: string | string[]) => void
+  loading?: boolean
   disabled: boolean
 }

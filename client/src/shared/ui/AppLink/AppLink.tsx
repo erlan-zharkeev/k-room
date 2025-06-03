@@ -1,23 +1,29 @@
 import './style.scss'
 
+import { UnknownCallback } from 'common-types'
+
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { ColorModifier } from '../types'
 
 export const AppLink = ({
   href = '',
   text,
+  color,
   target = '_blank',
   onClick = () => {},
   disabled = false
 }: {
   href?: string
   text: string
+  color?: ColorModifier
   target?: React.HTMLAttributeAnchorTarget
-  onClick?: (...args: unknown[]) => void
+  onClick?: UnknownCallback
   disabled?: boolean
 }) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-link',
-    modifiers: [disabled && 'disabled']
+    modifiers: [disabled && 'disabled', color]
   })
 
   return (

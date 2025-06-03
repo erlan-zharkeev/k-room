@@ -13,10 +13,13 @@ import { UserProfileData } from 'src/features/user/user-profile-data'
 
 import { useSystem } from 'src/entities/system'
 
+import { AppText } from 'src/shared/ui'
+
 export const UserSettings = () => {
   const {
     appData: { name, version }
   } = useSystem()
+
   const Switchers = [
     <ThemeSwitcher />,
     <EnableSoundSwitcher />,
@@ -24,6 +27,7 @@ export const UserSettings = () => {
     <ShowWallpaperSwitcher />,
     <ShowNotificationSwitcher />
   ]
+
   return (
     <div className="user-settings">
       <div className="user-settings__body">
@@ -42,8 +46,10 @@ export const UserSettings = () => {
         <div className="user-settings__info">
           <TechSupportLink />
           <PrivacyPolicyLink />
-          <div className="user-settings__app-name paragraph-text paragraph-text-sm">{name}</div>
-          <div className="user-settings__version paragraph-text paragraph-text-sm">v.{version}</div>
+          <div className="user-settings__info-package-data">
+            <AppText size="small">{name}</AppText>
+            <AppText size="small">v.{version}</AppText>
+          </div>
         </div>
       </div>
     </div>

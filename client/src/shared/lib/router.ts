@@ -1,4 +1,5 @@
 import { createBrowserHistory } from 'history'
+
 import { socket } from 'src/shared/api'
 
 export const router = createBrowserHistory()

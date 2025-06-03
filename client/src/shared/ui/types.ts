@@ -1,4 +1,4 @@
-export type SizeModifier = 'small' | 'medium' | 'large'
+export type BaseSizeModifier = 'small' | 'medium' | 'large'
 export type ShapeModifier = 'square-shape' | 'default-shape' | 'circle-shape'
 export type ColorModifier =
   | 'text-color'
@@ -8,4 +8,5 @@ export type ColorModifier =
   | 'warn-color'
   | 'white-color'
   | 'black-color'
-export type AvatarLoaderShapeModifier = Extract<ShapeModifier, 'square-shape' | 'circle-shape'>
+export type AvatarShapeModifier = Extract<ShapeModifier, 'square-shape' | 'circle-shape'>
+export * from './AppTags/types'

@@ -2,15 +2,14 @@ import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 import { getPathToImg } from './get-path-to-img'
 import { getRequestStringToImg } from './get-request-string-to-img'
-import { throwErrorViaSocket } from './throw-error-via-socket'
 import { serverConstants } from '../server-constants'
 import { SharpSettingsKey } from '../@types'
+import { clc } from './clc'
 
 export const saveImageAndGetPath = async (
   buffer: ArrayBuffer | undefined | Buffer,
-  type: SharpSettingsKey = 'common-uncompressed',
-  authorId: string
-): Promise<string> => {
+  type: SharpSettingsKey = 'common-uncompressed'
+): Promise<string | null> => {
   if (!buffer) return ''
   const newFileName = `${uuidv4()}.jpg`
   const { dimensions, quality } = serverConstants.sharp[`${type}`]
@@ -22,10 +21,9 @@ export const saveImageAndGetPath = async (
         quality
       })
       .toFile(`${pathToSave}`)
-  } catch {
-    await throwErrorViaSocket(authorId)
-    return ''
+  } catch (e: unknown) {
+    console.log(clc.red.bgWhite(e))
   }
 
-  return buffer ? getRequestStringToImg(newFileName) : ''
+  return buffer ? getRequestStringToImg(newFileName) : null
 }

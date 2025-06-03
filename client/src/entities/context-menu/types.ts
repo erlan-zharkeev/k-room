@@ -1,12 +1,15 @@
 import { IMessage } from 'common-types'
 
-export type ContextMenuType = '' | 'message'
+export type ContextMenuNameType = '' | 'message'
+
+export interface ICoord {
+  x: number
+  y: number
+}
+
 export interface ContextMenu {
-  slotName: ContextMenuType
-  coord: {
-    x: number
-    y: number
-  }
+  name: ContextMenuNameType
+  coord: ICoord
   contextClickedObject: ContextClickedObject
 }
 export interface ContextClickedObject {

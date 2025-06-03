@@ -1,5 +1,6 @@
 import './style.scss'
-import { PasswordRecoveryBody } from 'src/features/password-recovery'
+
+import { PasswordRecoveryBody } from 'src/features/auth'
 
 export const PasswordRecovery = () => {
   return (

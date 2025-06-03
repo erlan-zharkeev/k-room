@@ -1,5 +1,5 @@
-import { AppAvatar } from 'src/shared/ui'
 import { useTypedSelector } from 'src/shared/lib'
+import { AppAvatar } from 'src/shared/ui'
 
 export const ContactAvatar = ({ id, showBadge = true }: { id: string; showBadge?: boolean }) => {
   const { contacts } = useTypedSelector((state) => state.contacts)

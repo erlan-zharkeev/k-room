@@ -30,20 +30,21 @@ export const LoginForm = () => {
           }
         }}
         submitBtnText="Login"
-        submitBtnLoading={isLoading}
+        actionProcessing={isLoading}
         disabled={firebaseLoginLoading}
       >
         <div className="login-form__additional__links">
           <AppButton
             prefixIconName="google"
             iconSize="xs"
-            text="Sign in with Google"
+            text="Login with Google"
             onClick={() => {
               firebaseLogin('google')
             }}
             loading={firebaseLoginLoading}
             hoverless
             disabled={isLoading}
+            fill
           />
           <div className="login-form__forgot-password">
             <AppLink

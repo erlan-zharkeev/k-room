@@ -1,6 +1,7 @@
 @use '~/global/index' as *;
 
 .app-button {
+  width: fit-content;
   height: var(--medium-ui-height);
   border: solid 1px var(--text);
   border-radius: 4px;
@@ -11,7 +12,6 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    height: var(--medium-ui-height);
     color: var(--text);
     background: transparent;
     border: none;
@@ -26,12 +26,24 @@
   }
 
   span {
-    padding-bottom: 2px;
+    line-height: 0;
   }
 
   .app-icon {
-    margin: 0 4px;
+    margin: 1px 4px 0;
     padding-bottom: 2px;
+  }
+}
+
+.app-button--fill {
+  width: 100%;
+}
+
+.app-button--small {
+  height: var(--small-ui-height);
+
+  span {
+    font-size: 12px;
   }
 }
 
@@ -75,11 +87,34 @@
   }
 }
 
+.app-button--error-color {
+  border-color: var(--error);
+
+  button,
+  span {
+    color: var(--error);
+  }
+}
+
 .app-button--success-color {
   border-color: var(--success);
 
   button,
   span {
     color: var(--success);
+  }
+}
+
+.app-button--info {
+  button:hover {
+    cursor: default;
+  }
+
+  &.app-button--accent-color {
+    button,
+    span {
+      color: var(--main-bg);
+      background: var(--accent);
+    }
   }
 }

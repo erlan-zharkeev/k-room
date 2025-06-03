@@ -6,7 +6,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
     margin-left: 12px;
+  }
+
+  .profile-info__credential--pointer {
+    cursor: pointer;
   }
 
   &.profile-info--horizontal {

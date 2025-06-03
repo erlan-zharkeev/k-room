@@ -9,13 +9,12 @@ import { TopBar } from 'src/widgets/top-bar'
 import { WorkspaceLayout } from 'src/widgets/workspace-layout'
 
 import { useCallDataUpdateMonitor } from 'src/features/call'
+import { useChatRoomUpdateMonitor } from 'src/features/chat-room'
 import { useContactUpdateMonitor } from 'src/features/contact'
 import { useGetNotificationPermission } from 'src/features/get-notification-permission'
 import { useMessageUpdateMonitor } from 'src/features/message'
 import { useAudioContextMonitor } from 'src/features/monitor-audio-context'
-import { useContactOnlineMonitor } from 'src/features/monitor-contacts-online'
 import { useUserInteractionMonitor } from 'src/features/monitor-user-interaction'
-import { useRoomUpdateMonitor } from 'src/features/room'
 import { useSocketConnectionMonitor } from 'src/features/socket'
 
 import { CallModal } from 'src/entities/call'
@@ -24,13 +23,12 @@ import { useViewport } from 'src/entities/system'
 
 export const Main = () => {
   const { greaterOrEqualTablet, lessThanTablet } = useViewport()
-  const { reset: resetContextMenu } = useContextMenu()
+  // const { reset: resetContextMenu } = useContextMenu()
 
   useSocketConnectionMonitor()
-  useContactOnlineMonitor()
   useContactUpdateMonitor()
   useMessageUpdateMonitor()
-  useRoomUpdateMonitor()
+  useChatRoomUpdateMonitor()
   useCallDataUpdateMonitor()
   useUserInteractionMonitor()
   useAudioContextMonitor()
@@ -38,7 +36,7 @@ export const Main = () => {
 
   return (
     <>
-      <div className="main" onClick={resetContextMenu}>
+      <div className="main">
         <div className="main__wrapper">
           {greaterOrEqualTablet && <AsideBar />}
           <div className="main__right-side">

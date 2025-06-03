@@ -2,7 +2,7 @@ import './style.scss'
 
 import { useSettings } from 'src/entities/settings'
 
-import { AppSwitch, AppTooltip } from 'src/shared/ui'
+import { AppSwitch, AppText, AppTooltip } from 'src/shared/ui'
 
 import { useShowNotification } from '../../hooks'
 
@@ -12,7 +12,7 @@ export const ShowNotificationSwitcher = () => {
 
   return (
     <div className="show-notification-switcher">
-      <div className="paragraph-text paragraph-text--center">Notification</div>
+      <AppText size="sm">Notification</AppText>
       <AppTooltip
         text="If you want to disable/enable browser notifications, you need to do this manually (the setting next to the
           address bar), the security policy does not allow you to do this from the application interface. The current

@@ -52,7 +52,7 @@ export const RegistrationForm = () => {
           }
         }}
         submitBtnText="Register"
-        submitBtnLoading={isLoading}
+        actionProcessing={isLoading}
       />
     </div>
   )

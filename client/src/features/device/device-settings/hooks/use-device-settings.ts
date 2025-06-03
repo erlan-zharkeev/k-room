@@ -11,7 +11,7 @@ export const useDeviceSettings = () => {
     dispatch(
       showModal({
         title: 'Devices settings',
-        modalContentComponentName: 'devices-popup'
+        modalContentComponentName: 'select-devices-modal'
       })
     )
   }

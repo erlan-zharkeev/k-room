@@ -11,7 +11,7 @@ import { useSettings } from 'src/entities/settings'
 
 const CONTENT_COMPONENT_MAP: Record<ContentTabType, ReactElement> = {
   info: <InfoNotification />,
-  'chat-list': <ChatRoom />,
+  'chat-rooms': <ChatRoom />,
   calls: <ChatRoom />,
   contacts: <ChatRoom />,
   settings: <ChatRoom />

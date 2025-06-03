@@ -2,7 +2,7 @@ import './style.scss'
 
 import { IAppSelectProps } from './types'
 
-export const AppSelect = ({ options, value, onChange, loading, disabled }: IAppSelectProps) => {
+export const AppSelect = ({ options, value, onChange, loading = false, disabled }: IAppSelectProps) => {
   return (
     <select className="app-select" value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}>
       {options.map((opt) => (

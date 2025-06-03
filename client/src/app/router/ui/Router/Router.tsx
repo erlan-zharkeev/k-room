@@ -20,6 +20,7 @@ export const Router = () => {
 
   return (
     <Routes>
+      <Route path="/" element={<Navigate to={redirectTo} replace />} />
       <Route element={<PageLayout />}>
         <Route path={RouteNamesEnum.Login} element={<Login />} />
         <Route path={RouteNamesEnum.Registration} element={<Registration />} />

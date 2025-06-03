@@ -2,7 +2,7 @@ import './style.scss'
 
 import { ReactNode, useMemo } from 'react'
 
-import { AppButton, AppIconName, AppSelect, type IAppSelectOption } from 'src/shared/ui'
+import { AppButton, AppIconName, AppSelect, AppText, type IAppSelectOption } from 'src/shared/ui'
 
 export const SelectDevice = ({
   title,
@@ -29,9 +29,9 @@ export const SelectDevice = ({
 
   return (
     <div className="select-device">
-      <div className="select-device__title header-text">{title}</div>
+      <AppText additionalClassName="select-device__title">{title}</AppText>
       {isOptionsEmpty ? (
-        <div className="paragraph-text">Permissions were not granted or the devices were not detected.</div>
+        <AppText size="sm">Permissions were not granted or the devices were not detected.</AppText>
       ) : (
         <>
           <div className="select-device__select-wrapper">

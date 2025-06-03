@@ -3,7 +3,7 @@ import './style.scss'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
-import { AppSwitch, AppTooltip } from 'src/shared/ui'
+import { AppSwitch, AppText, AppTooltip } from 'src/shared/ui'
 
 import { useEnableSound } from '../../hooks'
 
@@ -17,7 +17,7 @@ export const EnableSoundSwitcher = () => {
 
   return (
     <div className="enable-sound-switcher">
-      <div className="paragraph-text paragraph-text--center">Sound</div>
+      <AppText size="sm">Sound</AppText>
       <AppTooltip text={tooltipText} placement="right">
         <AppSwitch value={soundOn} name="sound" onChange={toggleEnableSound} disabled={!hasInteracted} />
       </AppTooltip>

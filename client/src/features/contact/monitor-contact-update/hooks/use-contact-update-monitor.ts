@@ -4,8 +4,10 @@ import { useAddContact } from '../../add-contact'
 import { useContactDataChange } from '../../change-contact-data'
 import { useDeleteContact } from '../../delete-contact'
 import { useLoadContacts } from '../../load-contact'
+import { useContactOnlineMonitor } from '../../monitor-contact-online'
+import { useContactTypingMonitor } from '../../monitor-contact-typing'
 import { useInviteSend } from '../../send-invite'
-import { useContactStatusUpdate } from '../../update-contact-status/hooks/use-contact-status-update'
+import { useContactStatusUpdate } from '../../update-contact-status'
 import { useContactInteractionUpdate } from '../../update-interaction'
 
 export const useContactUpdateMonitor = () => {
@@ -15,7 +17,9 @@ export const useContactUpdateMonitor = () => {
   const { monitorContactStatusUpdate } = useContactStatusUpdate()
   const { monitorContactDataChange } = useContactDataChange()
   const { monitorContactInteractionUpdate } = useContactInteractionUpdate()
-  const { monitorInvitationReceipt } = useInviteSend()
+  const { monitorInvitation } = useInviteSend()
+  const { monitorContactTyping } = useContactTypingMonitor()
+  const { monitorContactOnline } = useContactOnlineMonitor()
 
   useEffect(() => {
     monitorContactsLoading()
@@ -24,6 +28,8 @@ export const useContactUpdateMonitor = () => {
     monitorContactStatusUpdate()
     monitorContactDataChange()
     monitorContactInteractionUpdate()
-    monitorInvitationReceipt()
+    monitorInvitation()
+    monitorContactTyping()
+    monitorContactOnline()
   }, [])
 }

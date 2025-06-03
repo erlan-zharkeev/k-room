@@ -92,7 +92,7 @@ export const useInputVideoDevice = () => {
       })
       videoStream.current = stream
     } catch (error) {
-      console.log('error', error)
+      console.error('error', error)
       cantAccessDeviceNotification.open()
     } finally {
       setVideoIsLoading(false)

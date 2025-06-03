@@ -1,0 +1,21 @@
+@use '~/global/index' as *;
+
+.content-tab {
+  .content-tab__button-el {
+    margin: 24px 0;
+  }
+
+  .content-tab__button-el--active {
+    svg {
+      fill: var(--accent);
+    }
+  }
+
+  @include max-width-768 {
+    display: flex;
+
+    .content-tab__button-el {
+      margin: 0 40px;
+    }
+  }
+}

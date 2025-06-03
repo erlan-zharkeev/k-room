@@ -4,26 +4,24 @@ import './style.scss'
 import { useSystem } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
+import { useTimeout } from 'src/shared/lib'
 
 export const SocketConnectionStatusInfo = () => {
   const { reconnecting } = useSystem()
   const [showDisconnected, setShowDisconnected] = useState(false)
+  const { delay } = useTimeout()
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null
-
+  const checkDisconnected = async () => {
     if (socket.disconnected) {
-      timeoutId = setTimeout(() => setShowDisconnected(true), 2000)
+      await delay(2000)
+      if (socket.disconnected) setShowDisconnected(true)
     } else {
-      if (timeoutId) clearTimeout(timeoutId)
       setShowDisconnected(false)
     }
+  }
 
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
-    }
+  useEffect(() => {
+    checkDisconnected()
   }, [socket.disconnected])
 
   return (

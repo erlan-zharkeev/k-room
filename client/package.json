@@ -50,6 +50,7 @@
     "howler": "^2.2.3",
     "html-react-parser": "^3.0.16",
     "js-cookie": "^3.0.5",
+    "madge": "^8.0.0",
     "moment": "^2.29.4",
     "postcss": "^8.4.16",
     "postcss-sorting": "^7.0.1",

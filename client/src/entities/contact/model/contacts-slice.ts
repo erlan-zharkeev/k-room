@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ContactType, InteractionType, IEventStatusContact, IEventChangeContactsData } from 'common-types'
 
-export type SliceContact = ContactType & { onlineStatusUpdatedTimestamp: number }
+export type SliceContact = ContactType & { onlineStatusUpdatedTimestamp: number; isTyping: boolean }
 
 interface ContactsState {
   contacts: SliceContact[]
@@ -9,6 +9,11 @@ interface ContactsState {
 
 const initialState: ContactsState = {
   contacts: []
+}
+
+const initialContactValues = {
+  onlineStatusUpdatedTimestamp: Date.now(),
+  isTyping: false
 }
 
 export const contactsSlice = createSlice({
@@ -21,7 +26,7 @@ export const contactsSlice = createSlice({
     loadContacts(state, { payload }: { payload: ContactType[] }) {
       state.contacts = payload.map((contact) => ({
         ...contact,
-        onlineStatusUpdatedTimestamp: Date.now()
+        ...initialContactValues
       }))
     },
     updateContactsStatus(state, { payload }: { payload: IEventStatusContact }) {
@@ -49,11 +54,17 @@ export const contactsSlice = createSlice({
       const contact = state.contacts.find((contact) => contact.id === payload.contactId)
       if (contact) contact.interaction = payload.interaction
     },
+    updateContactTypingStatus(state, { payload }: { payload: { contactId: string; status: boolean } }) {
+      const contact = state.contacts.find((contact) => contact.id === payload.contactId)
+      if (contact) {
+        contact.isTyping = payload.status
+      }
+    },
     addContact(state, { payload }: { payload: { contactData: ContactType } }) {
-      const data = { ...payload.contactData, onlineStatusUpdatedTimestamp: Date.now() }
+      const data = { ...payload.contactData, ...initialContactValues }
       state.contacts.push(data)
     },
-    acceptInvite(state, { payload }: { payload: { contactData: ContactType } }) {
+    processInvitation(state, { payload }: { payload: { contactData: ContactType } }) {
       const contactIndex = state.contacts.findIndex((contact) => contact.id === payload.contactData.id)
       if (contactIndex !== -1) {
         state.contacts[contactIndex] = {
@@ -63,7 +74,7 @@ export const contactsSlice = createSlice({
         }
         return
       }
-      state.contacts.push({ ...payload.contactData, onlineStatusUpdatedTimestamp: Date.now() })
+      state.contacts.push({ ...payload.contactData, ...initialContactValues })
     },
     deleteContact(state, { payload }: { payload: { contactId: string } }) {
       state.contacts = state.contacts.filter((contact) => contact.id !== payload.contactId)
@@ -80,5 +91,6 @@ export const {
   updateContactInteractionType,
   resetContactStore,
   deleteContact,
-  acceptInvite
+  updateContactTypingStatus,
+  processInvitation
 } = contactsSlice.actions

@@ -1,6 +1,6 @@
-import { ColorModifier, SizeModifier } from '../types'
+import { ColorModifier, BaseSizeModifier } from '../types'
 
-export type AppIconSize = SizeModifier | 'xs' | 'fill'
+export type AppIconSize = BaseSizeModifier | 'xs' | 'xxs' | 'fill'
 
 export interface AppIconListElement {
   name: AppIconName
@@ -56,6 +56,7 @@ export type AppIconName =
   | 'trash'
   | 'warn'
   | 'thunder'
+  | 'three-dots'
 
 export type AppIconComponent = React.FunctionComponent<
   React.SVGProps<SVGSVGElement> & {

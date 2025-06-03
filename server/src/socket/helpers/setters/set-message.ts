@@ -9,12 +9,17 @@ export const setMessage = async ({ roomId, message }: { roomId: string; message:
   if (message.images) {
     const compressionType: SharpSettingsKey = message.imageCompression ? 'common-compressed' : 'common-uncompressed'
     const filesPromises = message.images?.map(async (image) => {
-      return await saveImageAndGetPath(image.fileBuffer, compressionType, message.authorId)
+      return await saveImageAndGetPath(image.fileBuffer, compressionType)
     })
     const links = await Promise.all(filesPromises)
-    images = links.map((value) => {
-      return { src: value, name: value.split('img=')[1] }
-    })
+    images = links
+      .map((value) => {
+        if (value) {
+          return { src: value, name: value.split('img=')[1] }
+        }
+        return undefined
+      })
+      .filter((value): value is IImageObject => value !== undefined)
   }
   const room = await ChatRoomModel.findOne({ _id: roomId })
   const messageForDb = {

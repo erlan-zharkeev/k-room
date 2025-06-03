@@ -1,6 +1,8 @@
 import { SocketActionsType, IEventUpdateContactInteractionSuccess } from 'common-types'
 import { useDispatch } from 'react-redux'
+
 import { updateContactInteractionType } from 'src/entities/contact'
+
 import { socket } from 'src/shared/api'
 
 export const useContactInteractionUpdate = () => {

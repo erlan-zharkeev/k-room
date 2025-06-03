@@ -1,14 +1,25 @@
-import { ReactNode } from 'react'
-import './style.scss'
+import { AppScrollContainerProps } from './types'
 
-interface AppScrollContainerProps {
-  height?: string
-  children: ReactNode
-}
+export const AppScrollContainer = ({
+  height = '300px',
+  children,
+  additionalClassName,
+  id,
+  overflowY = 'auto',
+  overflowX = 'auto'
+}: AppScrollContainerProps) => {
+  const style: React.CSSProperties = {
+    maxHeight: height,
+    overflowX,
+    overflowY
+  }
 
-export const AppScrollContainer = ({ height = '300px', children }: AppScrollContainerProps) => {
   return (
-    <div className="app-scroll-container" style={{ maxHeight: height }}>
+    <div
+      id={id ?? String(Date.now())}
+      className={`app-scroll-container${additionalClassName ? ` ${additionalClassName}` : ''}`}
+      style={style}
+    >
       {children}
     </div>
   )

@@ -1,0 +1,15 @@
+.message-list {
+  flex: 1 1 auto;
+
+  .message-list__message-body-wrapper {
+    display: flex;
+  }
+
+  .message-list__message-body-wrapper--time {
+    justify-content: center;
+  }
+
+  .message-list__message-body-wrapper--self {
+    justify-content: flex-end;
+  }
+}

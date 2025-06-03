@@ -37,7 +37,14 @@
   .user-settings__element {
     margin-bottom: 8px;
 
-    .paragraph-text {
+    > div:first-child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-text {
       margin-bottom: 4px;
     }
   }
@@ -51,5 +58,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .user-settings__info-package-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4px;
   }
 }

@@ -26,6 +26,7 @@ export const useViewport = () => {
     lessThanTablet: width < ViewPortWidthType.Tablet,
     lessThanDesktop: width < ViewPortWidthType.Desktop,
 
+    lessOrEqualPhone: width <= ViewPortWidthType.Phone,
     lessOrEqualTablet: width <= ViewPortWidthType.Tablet,
     lessOrEqualDesktop: width <= ViewPortWidthType.Desktop,
 
