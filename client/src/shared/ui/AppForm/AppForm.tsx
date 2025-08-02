@@ -1,17 +1,18 @@
 import './style.scss'
 import React, { useEffect, useState } from 'react'
 
+import { FileLoaderValueType } from 'common-types'
+
 import { useValidate, ValidateRule } from 'src/shared/lib'
 
 import { AppButton } from '../AppButton/AppButton'
 import { AppElementPicker } from '../AppElementPicker/AppElementPicker'
 import { AppFileLoader } from '../AppFileLoader/AppFileLoader'
-import { FileLoaderPayloadType } from '../AppFileLoader/types'
 import { AppFormItem } from '../AppFormItem/AppFormItem'
 import { AppInput } from '../AppInput/AppInput'
 import { AppSwitch } from '../AppSwitch/AppSwitch'
 
-import { AppFormField, AppFormFieldValue, AppFormProps } from './types'
+import type { AppFormField, AppFormFieldValue, IAppFormProps } from './types'
 
 export * from './types'
 
@@ -37,7 +38,7 @@ export const AppForm = ({
   onChange,
   title,
   disabled = false
-}: AppFormProps) => {
+}: IAppFormProps) => {
   const initialState: Record<string, AppFormFieldValue> = {}
   Object.keys(fields).forEach((key) => {
     initialState[key] = fields[key].value ?? getDefaultValue(fields[key].inputType)
@@ -121,7 +122,7 @@ export const AppForm = ({
             multiple={field.multiple}
             allowedResolutions={field.allowedResolutions}
             showPreview={field.showPreview}
-            value={form[key] as FileLoaderPayloadType}
+            value={form[key] as FileLoaderValueType}
             onChange={(images) => handleChange({ name: key, value: images })}
             design={field.design}
             avatarStubIcon={field.avatarStubIcon}

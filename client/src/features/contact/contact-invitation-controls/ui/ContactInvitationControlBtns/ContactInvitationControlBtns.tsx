@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { SliceContact } from 'src/entities/contact'
+import { type SliceContact } from 'src/entities/contact'
 
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
@@ -27,7 +27,7 @@ export const ContactInvitationControlBtns = ({ contactData }: { contactData: Sli
             <AppLink onClick={() => updateInteractionType(contactData.id, 'invited')} text="Send invite" />
           )}
           {contactData.interaction === 'invited' && (
-            <AppText tag="p" size="small" accent>
+            <AppText tag="p" size="small" color="accent-color">
               Invited
             </AppText>
           )}

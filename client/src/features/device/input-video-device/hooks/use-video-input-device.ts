@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
-import { updateSelectedVideoInputDeviceId, useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
 import { showModal } from 'src/entities/system'
 
 import { AppIconName } from 'src/shared/ui'
@@ -14,7 +12,7 @@ export const useInputVideoDevice = () => {
   const { getNotification } = useNotification()
 
   const [videoInputDeviceList, setVideoInputDeviceList] = useState([] as MediaDeviceInfo[])
-  const { selectedVideoInputDeviceId } = useSettings()
+  const { selectedVideoInputDeviceId, updateSetting } = useSettings()
   const [isVideoLoading, setVideoIsLoading] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
   const videoStream = useRef<MediaStream | null>(null)
@@ -29,10 +27,8 @@ export const useInputVideoDevice = () => {
 
   const loading = useMemo(() => videoInputDeviceList.length < 0, [videoInputDeviceList])
 
-  const dispatch = useDispatch()
-
   const changeVideoInputDevice = (value: string = '') => {
-    dispatch(updateSelectedVideoInputDeviceId(value))
+    updateSetting({ selectedVideoInputDeviceId: value })
   }
 
   const hideVideo = () => {

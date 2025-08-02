@@ -3,8 +3,17 @@ import { useTypedSelector } from 'src/shared/lib'
 import appData from './../../../../package.json'
 
 export const useSystem = () => {
-  const { isAppLoading, showModal, hasInteracted, micPermission, camPermission, reconnecting, modalData, contextMenu } =
-    useTypedSelector((state) => state.system)
+  const {
+    isAppLoading,
+    showModal,
+    hasInteracted,
+    micPermission,
+    camPermission,
+    reconnecting,
+    modalData,
+    contextMenu,
+    viewPort
+  } = useTypedSelector((state) => state.system)
 
   return {
     isAppLoading,
@@ -15,6 +24,7 @@ export const useSystem = () => {
     camPermission,
     reconnecting,
     modalData,
-    contextMenu
+    contextMenu,
+    viewPort
   }
 }

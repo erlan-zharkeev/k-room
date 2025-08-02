@@ -3,16 +3,13 @@ import { RouteNamesEnum } from 'common-types'
 
 import { AppButton, AppForm, AppLink } from 'src/shared/ui'
 
-import { useFirebase, useLogin } from '../../hooks'
+import { LoginFormProps } from './types'
 
-export const LoginForm = () => {
-  const { onSubmit, isLoading } = useLogin()
-  const { firebaseLoginLoading, firebaseLogin } = useFirebase()
-
+export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: LoginFormProps) => {
   return (
     <div className="login-form">
       <AppForm
-        onSubmit={onSubmit}
+        onSubmit={onLogin}
         fields={{
           email: {
             value: '',
@@ -31,7 +28,7 @@ export const LoginForm = () => {
         }}
         submitBtnText="Login"
         actionProcessing={isLoading}
-        disabled={firebaseLoginLoading}
+        disabled={isFirebaseLoginLoading}
       >
         <div className="login-form__additional__links">
           <AppButton
@@ -39,9 +36,9 @@ export const LoginForm = () => {
             iconSize="xs"
             text="Login with Google"
             onClick={() => {
-              firebaseLogin('google')
+              onFirebaseLogin('google')
             }}
-            loading={firebaseLoginLoading}
+            loading={isFirebaseLoginLoading}
             hoverless
             disabled={isLoading}
             fill
@@ -50,7 +47,7 @@ export const LoginForm = () => {
             <AppLink
               href={RouteNamesEnum.PasswordRecovery}
               text="Forgot password?"
-              disabled={isLoading || firebaseLoginLoading}
+              disabled={isLoading || isFirebaseLoginLoading}
             />
           </div>
         </div>

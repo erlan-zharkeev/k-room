@@ -1,10 +1,14 @@
 import { IMessage } from 'common-types'
 
+import { AppText } from 'src/shared/ui'
+
 export const MessageNotification = (message: IMessage) => {
   return (
     <>
-      <p>{message.authorName}</p>
-      <p>{message.body}</p>
+      <AppText size="large" tag="p">
+        {message.authorName}
+      </AppText>
+      <AppText>{message.body}</AppText>
     </>
   )
 }

@@ -1,15 +1,20 @@
-import { SocketActionsType, IEventGetContacts } from 'common-types'
-import { useDispatch } from 'react-redux'
+import { SocketActionsType, EventGetContactsType } from 'common-types'
+
 import { socket } from 'src/shared/api'
-import { loadContacts } from 'src/entities/contact'
+import { db } from 'src/shared/lib'
+
+import { REQUIRED_CONTACT_DATA } from '../../lib'
 
 export const useLoadContacts = () => {
-  const dispatch = useDispatch()
+  const loadContacts = async (list: EventGetContactsType) => {
+    const result = Object.entries(list).map(([_, data]) => {
+      return { ...data, ...REQUIRED_CONTACT_DATA }
+    })
+    await db.contacts.bulkPut(result)
+  }
 
   const monitorContactsLoading = () => {
-    socket.on<SocketActionsType>('contacts-loaded', ({ contacts }: IEventGetContacts) => {
-      dispatch(loadContacts(contacts))
-    })
+    socket.on<SocketActionsType>('contacts-loaded', loadContacts)
   }
 
   return { monitorContactsLoading }

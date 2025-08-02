@@ -9,14 +9,10 @@ export const ReplyMessage = () => {
 
   return (
     <div className="reply-message">
-      <div className="reply-message__icon">
-        <AppIcon name="reply" color="accent-color" />
-      </div>
+      <AppIcon name="reply" color="accent-color" />
       <div className="reply-message__content">
         <AppText>{authorName}</AppText>
         <AppText>{body}</AppText>
-        {/* <div className="reply-message__author">{authorName}</div>
-        <div className="reply-message__text">{body}</div> */}
       </div>
       <div className="reply-message__close" onClick={closeReplyMessage}>
         <AppIcon name="cross" />

@@ -1,23 +1,16 @@
 import './style.scss'
-import { AuthRegistrationPayloadType } from 'common-types'
 
 import { AppForm } from 'src/shared/ui'
 
-import { useRegistration } from '../../hooks'
 import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
 
-export const RegistrationForm = () => {
-  const { register, isLoading } = useRegistration()
+import { RegistrationFormProps } from './types'
 
-  const onSubmit = (payload: unknown) => {
-    const formData = payload as AuthRegistrationPayloadType
-    register(formData)
-  }
-
+export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProps) => {
   return (
     <div className="registration-form">
       <AppForm
-        onSubmit={onSubmit}
+        onSubmit={onRegister}
         fields={{
           username: {
             inputType: 'text',

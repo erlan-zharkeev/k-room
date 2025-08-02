@@ -1,4 +1,5 @@
 export type BaseSizeModifier = 'small' | 'medium' | 'large'
+export type ExtendedSizeModifier = BaseSizeModifier | 'extra-small' | 'extra-large'
 export type ShapeModifier = 'square-shape' | 'default-shape' | 'circle-shape'
 export type ColorModifier =
   | 'text-color'

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { updateMessageInputData, useChatRooms } from 'src/entities/chat-room'
 
 import { AppDropdown, AppText, AppButton } from 'src/shared/ui'
+import { stopPropagation } from 'src/shared/utils'
 
 export const MessageWithBindDataModalMenu = () => {
   const { messageInputData } = useChatRooms()
@@ -19,8 +20,7 @@ export const MessageWithBindDataModalMenu = () => {
       ),
       handler: (evt: unknown) => {
         dispatch(updateMessageInputData({ imageCompression: !imageCompression }))
-        const event = evt as React.MouseEvent<HTMLElement, MouseEvent>
-        event.stopPropagation()
+        stopPropagation(evt)
       }
     }
   ]

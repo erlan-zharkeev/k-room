@@ -1,28 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
-  IChatRoom,
   IEventChangeContactsData,
   IEventDeleteMessage,
   EventGetRoomsType,
   IEventMessageDelivered,
   IEventUpdatedMessageReactions,
   IEventUpdateMessageStatus,
-  IImageObject,
   IMessage,
   IRepliedMessage
 } from 'common-types'
 
-interface IMessageInputData {
-  body: string
-  images: IImageObject[]
-  imageCompression: boolean
-}
-
-interface RoomsState {
-  chatRooms: IChatRoom[]
-  repliedMessageData: IRepliedMessage
-  messageInputData: IMessageInputData
-}
+import type { IRoomState, IMessageInputData } from '../types'
 
 const initialRepliedMessageData = {
   id: '',
@@ -38,7 +26,7 @@ const initialMessageInputData = {
   imageCompression: true
 }
 
-const initialState: RoomsState = {
+const initialState: IRoomState = {
   chatRooms: [],
   repliedMessageData: initialRepliedMessageData,
   messageInputData: initialMessageInputData
@@ -115,7 +103,6 @@ export const chatRoomsSlice = createSlice({
         ...state.repliedMessageData,
         ...payload
       }
-      console.log(state.repliedMessageData, 'repl')
     },
     resetRepliedMessage(state) {
       state.repliedMessageData = initialRepliedMessageData

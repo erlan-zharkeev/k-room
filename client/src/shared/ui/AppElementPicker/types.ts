@@ -1,9 +1,9 @@
-import { AppTag } from '../types'
+import type { IAppTag } from '../types'
 
-export interface AppElementPickerProps {
+export interface IAppElementPickerProps {
   fromTitle: string
   toTitle: string
-  availableElements: AppTag[]
+  availableElements: IAppTag[]
   name: string
   setPickedElementIds: (ids: string[]) => void
   value?: string[]

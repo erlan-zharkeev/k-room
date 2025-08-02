@@ -1,2 +1,2 @@
-import MainWallpaper from './main-wallpaper.jpg'
+import MainWallpaper from './main-wallpaper.jpeg'
 export { MainWallpaper }

@@ -4,7 +4,7 @@ import { UnknownCallback } from 'common-types'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import { ColorModifier } from '../types'
+import type { ColorModifier } from '../types'
 
 export const AppLink = ({
   href = '',

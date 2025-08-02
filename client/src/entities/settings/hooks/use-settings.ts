@@ -1,12 +1,36 @@
-import { useMemo } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
 
-import { ContentTabType } from 'common-types'
+import { type IUserSettings, db } from 'src/shared/lib'
 
-import { useTypedSelector } from 'src/shared/lib'
-
-const FULL_CONTENT_ELEMENTS: ContentTabType[] = ['info']
+import { DEFAULT_SETTINGS, FULL_CONTENT_ELEMENTS } from '..'
 
 export const useSettings = () => {
+  const settings = useLiveQuery(async () => {
+    const store = await db.settings.get('settings')
+    return store
+  })
+
+  const initialize = async () => {
+    const hasSettings = await db.settings.toCollection().first()
+    if (!hasSettings) {
+      await db.settings.put({ ...DEFAULT_SETTINGS, id: 'settings' })
+    }
+  }
+
+  const updateSetting = async (setting: Partial<IUserSettings>) => {
+    if (!settings) return
+    await db.settings.put({ ...settings, ...setting, id: 'settings' })
+  }
+
+  const reset = async () => {
+    await db.settings.put({ ...DEFAULT_SETTINGS, id: 'settings' })
+  }
+
+  const mergedSettings: IUserSettings = {
+    ...DEFAULT_SETTINGS,
+    ...settings
+  }
+
   const {
     selectedContentTab,
     selectedChatRoomId,
@@ -18,9 +42,10 @@ export const useSettings = () => {
     selectedAudioInputDeviceId,
     selectedVideoInputDeviceId,
     selectedAudioOutputDeviceId
-  } = useTypedSelector((state) => state.persist.settings)
+  } = mergedSettings
 
-  const hideAsidePanel = useMemo(() => FULL_CONTENT_ELEMENTS.includes(selectedContentTab), [selectedContentTab])
+  const showAsidePanel = !FULL_CONTENT_ELEMENTS.includes(selectedContentTab)
+  const isThemeDark = theme === 'dark'
 
   return {
     selectedContentTab,
@@ -33,7 +58,10 @@ export const useSettings = () => {
     selectedAudioInputDeviceId,
     selectedVideoInputDeviceId,
     selectedAudioOutputDeviceId,
-    showAsidePanel: !hideAsidePanel,
-    isThemeDark: useMemo(() => theme === 'dark', [theme])
+    showAsidePanel,
+    isThemeDark,
+    updateSetting,
+    reset,
+    initialize
   }
 }

@@ -61,10 +61,6 @@ const userSchema = new Schema<IUserSchema>({
     type: [],
     required: false
   },
-  settings: {
-    type: {},
-    required: false
-  },
   codes: {
     type: {},
     required: false

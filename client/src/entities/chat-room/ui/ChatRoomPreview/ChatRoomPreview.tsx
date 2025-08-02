@@ -1,7 +1,7 @@
 import './style.scss'
 import { IChatRoom, UnknownCallback } from 'common-types'
 
-import { ProfileInfo } from 'src/features/profile-info'
+import { ProfileInfo } from 'src/entities/profile-info'
 
 import { BaseSizeModifier } from 'src/shared/ui'
 import { chatRoomLastMessageBody, createClassNameWithModifiers } from 'src/shared/utils'

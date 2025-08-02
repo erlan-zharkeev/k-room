@@ -1,0 +1,28 @@
+.app-scroll-container {
+  padding-right: 12px;
+  overflow: auto;
+  scrollbar-width: none;
+  scrollbar-color: #888 transparent;
+
+  &.app-scroll-container--show {
+    scrollbar-width: thin;
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--text);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--text);
+  }
+}

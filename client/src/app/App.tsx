@@ -8,17 +8,25 @@ import { useThemeUpdate } from 'src/features/settings/update-theme'
 
 import { useSettings } from 'src/entities/settings'
 
+import { useInitializeIndexedDb } from './hooks/'
 import { Router } from './router'
 
 export const App = () => {
+  const { initializeIndexedDb } = useInitializeIndexedDb()
   const { theme } = useSettings()
-  const { setTheme } = useThemeUpdate()
+  const { setThemeToDom } = useThemeUpdate()
+
   useNetworkMonitor()
   useViewportMonitor()
   useCheckAuth()
 
+  const initializeApp = async () => {
+    await initializeIndexedDb()
+    setThemeToDom(theme)
+  }
+
   useEffect(() => {
-    setTheme(theme)
+    initializeApp()
   }, [])
 
   return <Router />

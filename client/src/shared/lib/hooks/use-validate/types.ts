@@ -4,24 +4,24 @@ type ValidateBooleanRule = keyof typeof booleanValidateRules
 type ValidateTextRule = keyof typeof stringValidateRules
 type ValidateArrayRule = keyof typeof arrayValidateRules
 
-export interface SwitchValidateRule {
+export interface ISwitchValidateRule {
   name: ValidateBooleanRule
 }
-export interface TextInputValidateRule {
+export interface ITextInputValidateRule {
   name: ValidateTextRule
   quantity?: number
 }
 
-export interface FileInputValidateRule {
+export interface IFileInputValidateRule {
   name: ValidateBooleanRule
 }
 
-export interface ElementPickerValidateRule {
+export interface IElementPickerValidateRule {
   name: ValidateArrayRule
 }
 
 export type ValidateRule =
-  | SwitchValidateRule
-  | TextInputValidateRule
-  | FileInputValidateRule
-  | ElementPickerValidateRule
+  | ISwitchValidateRule
+  | ITextInputValidateRule
+  | IFileInputValidateRule
+  | IElementPickerValidateRule

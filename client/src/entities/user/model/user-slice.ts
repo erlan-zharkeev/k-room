@@ -1,28 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IUserData, IInfoMessage } from 'common-types'
 
-type StoreUserData = Required<
-  Pick<
-    IUserData,
-    | 'id'
-    | 'role'
-    | 'email'
-    | 'username'
-    | 'online'
-    | 'chatRooms'
-    | 'contacts'
-    | 'avatarPath'
-    | 'providerName'
-    | 'infoNotifications'
-  >
->
+import type { IUserStore } from '../types'
 
-export interface UserStore {
-  isAuth: boolean
-  userData: StoreUserData
-}
-
-const initialState: UserStore = {
+const initialState: IUserStore = {
   isAuth: false,
   userData: {
     id: '',

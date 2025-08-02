@@ -1,11 +1,11 @@
-export interface AppTag {
+export interface IAppTag {
   value: string
   label: string
   prefixSlot?: JSX.Element
 }
 
-export interface AppTagsProps {
-  tags: AppTag[]
+export interface IAppTagsProps {
+  tags: IAppTag[]
   onRemove?: (value: string) => void
   showCross?: boolean
   onElementClick?: (value: string) => void

@@ -1,16 +1,10 @@
-import { useDispatch } from 'react-redux'
-
-import { setAbleToShowNotification } from 'src/entities/settings'
-
-import { saveUserSetting } from '../../save-setting'
+import { useSettings } from 'src/entities/settings'
 
 export const useShowNotification = () => {
-  const dispatch = useDispatch()
-
+  const { updateSetting } = useSettings()
   const toggleShowNotification = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    dispatch(setAbleToShowNotification(value))
-    saveUserSetting({ type: 'showNotification', value })
+    updateSetting({ showNotification: value })
   }
 
   return { toggleShowNotification }

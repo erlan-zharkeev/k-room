@@ -5,9 +5,9 @@ import { AppButton } from '../AppButton/AppButton'
 import { AppScrollContainer } from '../AppScrollContainer/AppScrollContainer'
 import { AppText } from '../AppText/AppText'
 
-import { AppTagsProps } from './types'
+import type { IAppTagsProps } from './types'
 
-export const AppTags = ({ tags, onRemove, onElementClick, title, name }: AppTagsProps) => {
+export const AppTags = ({ tags, onRemove, onElementClick, title, name }: IAppTagsProps) => {
   const classNames = createClassNameWithModifiers({ rootClass: 'app-tags', modifiers: [onElementClick && 'clickable'] })
 
   return (

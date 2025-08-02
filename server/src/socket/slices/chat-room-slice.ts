@@ -48,13 +48,13 @@ export const chatRoomSlice = (socket: SocketInstanceType) => {
     }
   })
 
-  socket.on<SocketActionsType>('client-typing', async ({ usersTo, status }: IEventUserTyping) => {
+  socket.on<SocketActionsType>('client-typing', async ({ usersTo, isTyping }: IEventUserTyping) => {
     const userIds = usersTo.map((user) => user.id)
     const sockets = await getSocketsByUserIds(userIds)
     sockets.forEach((socketId) => {
       const payload: IEventGetContactTypingStatus = {
         contactId: userId,
-        status
+        isTyping
       }
       io.to(socketId).emit<SocketActionsType>('get-contact-typing-status', payload)
     })

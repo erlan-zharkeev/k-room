@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { UserEndpointsEnum } from 'common-types'
+import { MediaFileValueType, UserEndpointsEnum } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { closeModal } from 'src/entities/system'
@@ -8,7 +8,6 @@ import { useUser, setUserData } from 'src/entities/user'
 
 import { useApi } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'
-import { FileLoaderPayloadType } from 'src/shared/ui/AppFileLoader/types'
 
 export const useUpdateUserData = () => {
   const { username, avatarPath } = useUser()
@@ -25,16 +24,16 @@ export const useUpdateUserData = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const updateUserData = async (fields: AppFormData) => {
-    const { username, avatar } = fields as { username: string; avatar: FileLoaderPayloadType }
+    const { username, avatar } = fields as { username: string; avatar: MediaFileValueType }
 
     const payloadFormData = new FormData()
     payloadFormData.append('username', username)
     payloadFormData.append('oldFilename', avatarPath?.split('?img=')[1] || '')
 
-    const fileBuffer = avatar[0]?.fileBuffer
+    const fileBuffer = avatar.fileBuffer
     if (fileBuffer) {
       const blob = new Blob([fileBuffer], { type: 'image/jpeg' })
-      payloadFormData.append('file', blob, avatar[0].name)
+      payloadFormData.append('file', blob, avatar.name)
     }
 
     try {

@@ -1,24 +1,24 @@
-import { useDispatch } from 'react-redux'
+import { useContentTabSelect } from 'src/features/content-tab'
 
-import { useContentTabSelect } from 'src/features/content-tab/select-content-tab'
-import { saveUserSetting } from 'src/features/settings'
+import { useSettings } from 'src/entities/settings'
 
-import { selectChatRoom } from 'src/entities/settings'
+// import { useChatRoomScroll } from '../../'
 
 export const useChatRoomSelect = () => {
-  const dispatch = useDispatch()
   const { selectContentTab } = useContentTabSelect()
+  const { updateSetting } = useSettings()
+  // const { scrollToBottom } = useChatRoomScroll()
 
-  const selectChatWithAsideById = (value: string | undefined) => {
+  const selectChatWithAsideById = (value?: string) => {
     if (value === undefined) return
     selectContentTab('chat-rooms')
     selectChatRoomById(value)
   }
 
-  const selectChatRoomById = (value: string | undefined) => {
+  const selectChatRoomById = (value?: string) => {
     if (value === undefined) return
-    dispatch(selectChatRoom(value))
-    saveUserSetting({ type: 'selectedChatRoomId', value })
+    updateSetting({ selectedChatRoomId: value })
+    // TODO Установить скролл из стора по текущему выбранному элементу
     // scrollToBottom()
   }
 

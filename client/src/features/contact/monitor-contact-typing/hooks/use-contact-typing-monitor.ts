@@ -1,17 +1,19 @@
 import { SocketActionsType, IEventGetContactTypingStatus } from 'common-types'
-import { useDispatch } from 'react-redux'
-
-import { updateContactTypingStatus } from 'src/entities/contact'
 
 import { socket } from 'src/shared/api'
 
+import { useUpdateContactData } from '../../update-contact-data'
+
 export const useContactTypingMonitor = () => {
-  const dispatch = useDispatch()
+  const { updateContactData } = useUpdateContactData()
+
+  const updateContactTypingStatus = async (payload: IEventGetContactTypingStatus) => {
+    const { contactId, isTyping } = payload
+    await updateContactData(contactId, { isTyping })
+  }
 
   const monitorContactTyping = () => {
-    socket.on<SocketActionsType>('get-contact-typing-status', (payload: IEventGetContactTypingStatus) => {
-      dispatch(updateContactTypingStatus(payload))
-    })
+    socket.on<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
   }
 
   return { monitorContactTyping }

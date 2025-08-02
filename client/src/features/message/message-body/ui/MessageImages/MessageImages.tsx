@@ -1,0 +1,23 @@
+import './style.scss'
+
+import { Image } from 'antd'
+import { IMessage } from 'common-types'
+
+export const MessageImages = ({ message }: { message: IMessage }) => {
+  if (!message.images || message.images.length <= 0) return null
+
+  return (
+    <div
+      className="message-images"
+      onClick={(evt) => {
+        evt.stopPropagation()
+      }}
+    >
+      {message.images.map((image) => (
+        <div key={image.name} className="message-images__image">
+          <Image src={image.src} />
+        </div>
+      ))}
+    </div>
+  )
+}

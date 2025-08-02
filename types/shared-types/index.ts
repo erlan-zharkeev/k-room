@@ -2,7 +2,6 @@ export * from "./calls";
 export * from "./chat";
 export * from "./env";
 export * from "./message";
-export * from "./settings";
 export * from "./socket";
 export * from "./user";
 export * from "./contact";

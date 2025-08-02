@@ -8,11 +8,11 @@ import { useDebounce } from 'src/shared/lib'
 export const useContactTyping = (selectedChatRoom: IChatRoom) => {
   const { username } = useUser()
 
-  const sendUserTypingStatus = (status: boolean) => {
+  const sendUserTypingStatus = (isTyping: boolean) => {
     const payload: IEventUserTyping = {
       authorName: username,
       usersTo: selectedChatRoom.users,
-      status
+      isTyping
     }
     socket.emit<SocketActionsType>('client-typing', payload)
   }

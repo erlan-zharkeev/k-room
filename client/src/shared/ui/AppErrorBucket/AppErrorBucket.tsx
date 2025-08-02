@@ -1,9 +1,6 @@
 import './style.scss'
-export interface ErrorBucketProps {
-  errors: string[]
-}
 
-export const AppErrorBucket = ({ errors }: ErrorBucketProps) => {
+export const AppErrorBucket = ({ errors }: IErrorBucketProps) => {
   return (
     <div className="app-error-bucket">
       {errors &&

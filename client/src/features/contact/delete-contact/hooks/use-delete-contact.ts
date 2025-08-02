@@ -1,10 +1,10 @@
 import { SocketActionsType, IEventDeleteContactSuccess, IEventDeleteContact } from 'common-types'
 import { useDispatch } from 'react-redux'
 
-import { deleteContact } from 'src/entities/contact'
 import { showModal, closeModal } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
+import { db } from 'src/shared/lib'
 
 export const useDeleteContact = () => {
   const dispatch = useDispatch()
@@ -28,10 +28,12 @@ export const useDeleteContact = () => {
     dispatch(closeModal())
   }
 
+  const deleteContact = async (payload: IEventDeleteContactSuccess) => {
+    await db.contacts.delete(payload.deletedContactId)
+  }
+
   const monitorContactDeletion = () => {
-    socket.on<SocketActionsType>('contact-delete-success', ({ deletedContactId }: IEventDeleteContactSuccess) => {
-      dispatch(deleteContact({ contactId: deletedContactId }))
-    })
+    socket.on<SocketActionsType>('contact-delete-success', deleteContact)
   }
 
   return {

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { AuthEndpointsEnum, AuthLoginPayloadType, StatusEnum, RouteNamesEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
-import { useSetUserData } from 'src/features/user/set-user-data/hooks/use-set-user-data'
+import { useSetUserData } from 'src/features/user'
 
 import { useApi } from 'src/shared/api'
 
@@ -20,13 +20,13 @@ export const useLogin = () => {
     const response = await doRequest('post', AuthEndpointsEnum.Login, fields)
     setIsLoading(false)
     if (response?.status === StatusEnum.Success && response.data) {
-      const { userData, settings } = response.data
-      setUserData({ userData, settings })
+      const { userData } = response.data
+      setUserData({ userData })
       navigate(RouteNamesEnum.Main)
     }
   }
 
-  const onSubmit = (payload: unknown) => {
+  const onLogin = (payload: unknown) => {
     const formData = payload as AuthLoginPayloadType
     login(formData)
   }
@@ -34,6 +34,6 @@ export const useLogin = () => {
   return {
     login,
     isLoading,
-    onSubmit
+    onLogin
   }
 }

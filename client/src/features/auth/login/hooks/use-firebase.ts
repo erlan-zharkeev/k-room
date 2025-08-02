@@ -19,7 +19,7 @@ const providers = {
 }
 
 export const useFirebase = () => {
-  const [firebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
+  const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
   const { setUserData } = useSetUserData()
   const { doRequest } = useApi()
   const navigate = useNavigate()
@@ -30,7 +30,7 @@ export const useFirebase = () => {
     messageType: 'error'
   })
 
-  const firebaseLogin = async (providerName: FirebaseProvider) => {
+  const onFirebaseLogin = async (providerName: FirebaseProvider) => {
     const currentProvider = new providers[providerName]()
     try {
       const auth = getAuth()
@@ -63,5 +63,5 @@ export const useFirebase = () => {
     }
   }
 
-  return { firebaseLogin, firebaseLoginLoading }
+  return { onFirebaseLogin, isFirebaseLoginLoading }
 }

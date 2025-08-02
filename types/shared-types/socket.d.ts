@@ -1,4 +1,4 @@
-import { ICall, IChatRoom, ContactType, InteractionType, IMessage, MessageStatusType, IReaction, IUserSettings, IBasicStreamSettings, UserShortType, MediaFileValueType } from ".";
+import { ICall, IChatRoom, ContactType, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, UserShortType, MediaFileValueType } from ".";
 export interface IEventInterlocutorUpdateSignal {
     signal: unknown;
 }
@@ -19,9 +19,7 @@ export interface IEventStatusContact {
     onlineStatusUpdatedTimestamp: number;
 }
 export type IEventChangeContactsData = UserShortType;
-export interface IEventGetContacts {
-    contacts: ContactType[];
-}
+export type EventGetContactsType = Record<string, ContactType>;
 export type EventCallUpdatedType = ICall;
 export type EventCallsUpdatedType = ICall[];
 export interface IEventSaveContact {
@@ -32,10 +30,6 @@ export interface IEventDeleteContact {
 }
 export interface IEventSearchContact {
     value: string;
-}
-export interface IEventUpdateUserSettings {
-    type: keyof IUserSettings;
-    value: string | boolean;
 }
 export interface IEventCreateRoom {
     contactIds: string[];
@@ -52,11 +46,11 @@ export interface IEventUpdateChatRoom {
 export interface IEventUserTyping {
     authorName: string;
     usersTo: UserShortType[];
-    status: boolean;
+    isTyping: boolean;
 }
 export interface IEventGetContactTypingStatus {
     contactId: string;
-    status: boolean;
+    isTyping: boolean;
 }
 export interface IEventSendMessage {
     roomId: string;

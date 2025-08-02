@@ -1,94 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { UnknownCallback } from 'common-types'
 
-import { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
+import { type IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/entities/context-menu'
 
 import {
-  ContextMenu,
-  ContextMenuNameType,
-  ContextClickedObject,
-  CONTEXT_MENU_HEIGHT,
-  CONTEXT_MENU_WIDTH,
-  ICoord
-} from 'src/entities/context-menu'
-
-interface ModalBtn {
-  text: string
-  loader?: boolean
-  callback?: UnknownCallback
-}
-
-interface ModalData {
-  width?: string
-  title?: string
-  modalContentComponentName?: ModalContentComponentName | null
-  textContent?: string
-  confirmBtn?: ModalBtn
-  cancelBtn?: ModalBtn
-}
-
-interface ViewPort {
-  width: number
-  height: number
-}
-
-interface SystemStore {
-  isAppLoading: boolean
-  reconnecting: boolean
-  showModal: boolean
-  contextMenu: ContextMenu
-  modalData: ModalData
-  viewPort: ViewPort
-  hasInteracted: boolean
-  camPermission?: PermissionState
-  micPermission?: PermissionState
-}
-
-const clickedObjectInitialState = {
-  message: {
-    id: '',
-    authorName: '',
-    author: '',
-    body: '',
-    authorId: ''
-  }
-}
-
-const initialModalData = {
-  title: '',
-  modalContentComponentName: null,
-  width: '320px'
-}
-
-const initViewPort = {
-  width: 1920,
-  height: 1080
-}
-
-const initialContextMenu: ContextMenu = {
-  name: '',
-  coord: {
-    x: 0,
-    y: 0
-  },
-  contextClickedObject: clickedObjectInitialState
-}
-
-const initialState: SystemStore = {
-  isAppLoading: false,
-  reconnecting: false,
-  showModal: false,
-  contextMenu: initialContextMenu,
-  modalData: initialModalData,
-  viewPort: initViewPort,
-  hasInteracted: false,
-  camPermission: undefined,
-  micPermission: undefined
-}
+  INITIAL_MODAL_DATA,
+  INITIAL_VIEWPORT,
+  INITIAL_SYSTEM_STORE,
+  INITIAL_CONTEXT_MENU,
+  CLICKED_OBJECT_INITIAL_STATE
+} from '../config'
+import type { IModalData, IViewPort } from '../config/types'
 
 export const systemSlice = createSlice({
   name: 'system',
-  initialState,
+  initialState: INITIAL_SYSTEM_STORE,
   reducers: {
     resetSystemStore: (state) => {
       state.isAppLoading = false
@@ -100,10 +25,10 @@ export const systemSlice = createSlice({
           x: 0,
           y: 0
         },
-        contextClickedObject: clickedObjectInitialState
+        contextClickedObject: CLICKED_OBJECT_INITIAL_STATE
       }
-      state.modalData = initialModalData
-      state.viewPort = initViewPort
+      state.modalData = INITIAL_MODAL_DATA
+      state.viewPort = INITIAL_VIEWPORT
     },
     updateAppLoaderState: (state, { payload }: { payload: boolean }) => {
       state.isAppLoading = payload
@@ -117,21 +42,21 @@ export const systemSlice = createSlice({
     setReconnectingStatus(state, { payload }: { payload: boolean }) {
       state.reconnecting = payload
     },
-    showModal(state, { payload }: { payload: ModalData }) {
+    showModal(state, { payload }: { payload: IModalData }) {
       state.modalData = payload
       state.showModal = true
     },
     closeModal(state) {
       state.showModal = false
-      state.modalData = initialModalData
+      state.modalData = INITIAL_MODAL_DATA
     },
     setHasInteraction(state, { payload }: { payload: boolean }) {
       state.hasInteracted = payload
     },
-    setViewPort(state, { payload }: { payload: ViewPort }) {
+    setViewPort(state, { payload }: { payload: IViewPort }) {
       state.viewPort = payload
     },
-    setContextMenu(state, { payload }: { payload: ContextMenu }) {
+    setContextMenu(state, { payload }: { payload: IContextMenu }) {
       const { coord, name, contextClickedObject } = payload
       state.contextMenu.name = name
       const currentClickedObject = state.contextMenu.contextClickedObject
@@ -151,10 +76,10 @@ export const systemSlice = createSlice({
       }
     },
     resetContextClickedObject(state) {
-      state.contextMenu.contextClickedObject = clickedObjectInitialState
+      state.contextMenu.contextClickedObject = CLICKED_OBJECT_INITIAL_STATE
     },
     resetContextMenuToInitial(state) {
-      state.contextMenu = initialContextMenu
+      state.contextMenu = INITIAL_CONTEXT_MENU
     }
   }
 })

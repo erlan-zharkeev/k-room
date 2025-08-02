@@ -1,20 +1,19 @@
 import { SocketActionsType, IEventUpdateContactInteractionSuccess } from 'common-types'
-import { useDispatch } from 'react-redux'
-
-import { updateContactInteractionType } from 'src/entities/contact'
 
 import { socket } from 'src/shared/api'
 
+import { useUpdateContactData } from '../../update-contact-data'
+
 export const useContactInteractionUpdate = () => {
-  const dispatch = useDispatch()
+  const { updateContactData } = useUpdateContactData()
+
+  const updateContactInteractionType = async (payload: IEventUpdateContactInteractionSuccess) => {
+    const { contactId, interaction } = payload
+    await updateContactData(contactId, { interaction })
+  }
 
   const monitorContactInteractionUpdate = () => {
-    socket.on<SocketActionsType>(
-      'contact-interaction-updated',
-      ({ contactId, interaction }: IEventUpdateContactInteractionSuccess) => {
-        dispatch(updateContactInteractionType({ contactId, interaction }))
-      }
-    )
+    socket.on<SocketActionsType>('contact-interaction-updated', updateContactInteractionType)
   }
 
   return {

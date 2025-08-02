@@ -1,9 +1,9 @@
 import './style.scss'
 import { AppText } from '../AppText/AppText'
 
-import { AppFormItemProps } from './types'
+import type { IAppFormItemProps } from './types'
 
-export const AppFormItem = ({ children, label, errors = [], required }: AppFormItemProps) => {
+export const AppFormItem = ({ children, label, errors = [], required }: IAppFormItemProps) => {
   const error = errors.length > 0 && errors[0]
   return (
     <div className="app-form-item">

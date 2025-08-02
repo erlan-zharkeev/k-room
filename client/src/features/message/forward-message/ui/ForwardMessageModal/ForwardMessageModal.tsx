@@ -31,7 +31,7 @@ export const ForwardMessageModal = () => {
     <div className="forward-message-modal">
       <div className="forward-message-modal__select">
         <AppInput
-          suffix={<AppIcon name={'search'} color={'default'} />}
+          // prefixSlot={<AppIcon name={'search'} color="text-color" />}
           placeholder="Find room"
           onChange={(e) => setSearchString(e.target.value)}
         />

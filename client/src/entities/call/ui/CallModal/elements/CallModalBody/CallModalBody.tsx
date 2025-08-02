@@ -25,12 +25,9 @@ import { AppButton, AppAvatar } from 'src/shared/ui'
 import { firstCharUpperCase } from 'src/shared/utils'
 
 import { CallDots, CallModalVideo } from './elements'
+import type { ICallModalBodyProps } from './types'
 
-export interface CallModalBodyProps {
-  toggleExpandModal: () => void
-}
-
-export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
+export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const { avatarPath } = useTypedSelector((state) => state.user.userData)

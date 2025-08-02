@@ -12,7 +12,7 @@ export const PrivacyPolicySwitch = ({ disabled }: { disabled: boolean }) => {
   })
 
   return (
-    <AppText additionalClassName={className} size="sm">
+    <AppText additionalClassName={className} size="small">
       I have read and agree <AppLink text="privacy policy" href={RouteNamesEnum.PrivacyPolicy} />
     </AppText>
   )

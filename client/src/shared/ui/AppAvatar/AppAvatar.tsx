@@ -6,7 +6,7 @@ import { Badge, Image } from 'antd'
 import { AppIconName, AppIcon } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import { AppAvatarProps } from './types'
+import type { IAppAvatarProps } from './types'
 
 const AvatarBody = ({
   src,
@@ -69,7 +69,7 @@ export const AppAvatar = ({
   shape = 'circle-shape',
   preview = true,
   borderless = false
-}: AppAvatarProps) => {
+}: IAppAvatarProps) => {
   const [haveSource, setHaveSource] = useState(Boolean(src))
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { ProfileInfo } from 'src/features/profile-info'
+import { ProfileInfo } from 'src/entities/profile-info'
 
 import { useUser } from '../../model'
 

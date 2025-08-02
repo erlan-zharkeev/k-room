@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { initUserSettings, initUserCodes } from '../fixtures'
+import { initUserCodes } from '../fixtures'
 import { authValidator } from '../middlewares'
 import { UserModel } from '../models'
 import { updateTokens, getPreviewInfoNotification, sendEmailConfirmationLink } from '../services'
@@ -47,7 +47,7 @@ class AuthController {
         email,
         password: hashedPassword,
         socketId: '',
-        settings: initUserSettings,
+        avatarPath: '',
         codes: initUserCodes,
         infoNotifications: [welcomeInfoNotification],
         role: 'user'
@@ -110,7 +110,6 @@ class AuthController {
           avatarPath: user.avatarPath,
           infoNotifications: user.infoNotifications
         },
-        settings: user.settings,
         message: ServerNotificationMessage.LoginSuccess,
         silent: true
       })
@@ -135,7 +134,6 @@ class AuthController {
           password: hashedPassword,
           socketId: '',
           confirmed: true,
-          settings: initUserSettings,
           codes: initUserCodes,
           infoNotifications: [welcomeInfoNotification]
         })
@@ -153,7 +151,6 @@ class AuthController {
           role: user.role,
           infoNotifications: user.infoNotifications
         },
-        settings: user.settings,
         message: ServerNotificationMessage.LoginWithProvider,
         silent: true
       })

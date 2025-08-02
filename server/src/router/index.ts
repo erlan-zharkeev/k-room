@@ -25,6 +25,8 @@ router.post(AuthEndpointsEnum.ProviderLogin, AuthController.signInWithProvider)
 router.post(AuthEndpointsEnum.SendEmailConfirmationLink, AuthController.sendConfirmationLink)
 router.post(AuthEndpointsEnum.SendEmailConfirmation, AuthController.confirmEmail)
 
+router.post(AuthEndpointsEnum.SendEmailConfirmation, AuthController.confirmEmail)
+
 router.get(UserEndpointsEnum.GetUserData, accessTokenValidator, UserController.getUserData)
 router.post(
   UserEndpointsEnum.UpdateUserData,

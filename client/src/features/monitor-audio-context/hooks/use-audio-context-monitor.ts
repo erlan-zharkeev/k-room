@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'

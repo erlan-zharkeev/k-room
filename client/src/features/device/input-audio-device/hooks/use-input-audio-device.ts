@@ -1,11 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-
 import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
 import { useNotification, ClientNotificationMessage } from 'src/entities/notification'
-import { updateSelectedAudioInputDeviceId, useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
 import { AppIconName } from 'src/shared/ui'
@@ -13,8 +11,7 @@ import { AppIconName } from 'src/shared/ui'
 export const useInputAudioDevice = () => {
   const [audioInputDeviceList, setAudioInputDeviceList] = useState<MediaDeviceInfo[]>([])
   const { showModal } = useSystem()
-  const { selectedAudioInputDeviceId } = useSettings()
-  const dispatch = useDispatch()
+  const { selectedAudioInputDeviceId, updateSetting } = useSettings()
   const [isMicLoading, setMicIsLoading] = useState(false)
   const [showMicGrade, setMicGrade] = useState(false)
   const audioStream = useRef<MediaStream | null>(null)
@@ -48,7 +45,7 @@ export const useInputAudioDevice = () => {
   }
 
   const changeAudioInputDevice = (value: string = '') => {
-    dispatch(updateSelectedAudioInputDeviceId(value))
+    updateSetting({ selectedAudioInputDeviceId: value })
   }
 
   const initAudioVisualizer = (stream: MediaStream) => {

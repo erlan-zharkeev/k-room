@@ -1,6 +1,8 @@
-import { SocketActionsType, IEventMessageDeleted } from 'common-types'
+import { SocketActionsType, IEventMessageDeleted, IEventDeleteMessage } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { deleteMessage } from 'src/entities/chat-room'
+
+import { deleteMessage, updateMessageStatus } from 'src/entities/chat-room'
+
 import { socket } from 'src/shared/api'
 
 export const useMessageDelete = () => {
@@ -12,7 +14,19 @@ export const useMessageDelete = () => {
     })
   }
 
+  const deleteMessageHandler = (roomId: string, messageId: string) => {
+    if (!roomId) return
+    const payload: IEventDeleteMessage = {
+      roomId,
+      messageId
+    }
+
+    dispatch(updateMessageStatus({ roomId, messageId, status: 'sending' }))
+    socket.emit<SocketActionsType>('delete-message', payload)
+  }
+
   return {
-    monitorMessageDeletion
+    monitorMessageDeletion,
+    deleteMessageHandler
   }
 }

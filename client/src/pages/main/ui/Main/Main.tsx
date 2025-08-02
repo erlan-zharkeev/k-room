@@ -18,12 +18,10 @@ import { useUserInteractionMonitor } from 'src/features/monitor-user-interaction
 import { useSocketConnectionMonitor } from 'src/features/socket'
 
 import { CallModal } from 'src/entities/call'
-import { ContextMenuWrapper, useContextMenu } from 'src/entities/context-menu'
 import { useViewport } from 'src/entities/system'
 
 export const Main = () => {
   const { greaterOrEqualTablet, lessThanTablet } = useViewport()
-  // const { reset: resetContextMenu } = useContextMenu()
 
   useSocketConnectionMonitor()
   useContactUpdateMonitor()
@@ -50,7 +48,6 @@ export const Main = () => {
       <GlobalLoader />
       <Modal />
       <CallModal />
-      <ContextMenuWrapper />
     </>
   )
 }

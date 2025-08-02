@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useNotification } from 'src/entities/notification/hooks/use-notification'
-import { changeSelectedContentElement } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
 import { updateAppLoaderState } from 'src/entities/system'
 
 import { clg } from 'src/shared/utils'
@@ -13,6 +13,7 @@ export const useApiInterсeptor = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+  const { updateSetting } = useSettings()
   const notifications = useNotification()
 
   const interceptError = (e: unknown) => {
@@ -30,7 +31,7 @@ export const useApiInterсeptor = () => {
           break
         }
         case StatusEnum.Forbidden: {
-          dispatch(changeSelectedContentElement('contacts'))
+          updateSetting({ selectedContentTab: 'contacts' })
           break
         }
       }

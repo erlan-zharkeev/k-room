@@ -2,7 +2,7 @@ import { ENV } from '../ENV'
 import { UserModel } from '../models'
 import { getPreviewInfoNotification } from '../services'
 import { firstCharUpperCase, getRequestStringToImg } from '../utils'
-import { initUserSettings, initUserCodes } from './helpers'
+import { initUserCodes } from './helpers'
 
 const bcrypt = require('bcryptjs')
 
@@ -42,7 +42,6 @@ export const loadUsersFixtures = async (loadAdmin: boolean) => {
       socketId: '',
       refreshToken: username,
       confirmed: true,
-      settings: initUserSettings,
       codes: initUserCodes,
       online: false,
       infoNotifications: [getPreviewInfoNotification('1')]

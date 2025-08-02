@@ -9,6 +9,7 @@ import { useChatRooms } from 'src/entities/chat-room'
 
 import { useTimeout } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
+import { stopPropagation } from 'src/shared/utils'
 
 export const ContactMenu = ({ id }: { id: string }) => {
   const { deleteUserHandler } = useDeleteContact()
@@ -28,8 +29,7 @@ export const ContactMenu = ({ id }: { id: string }) => {
       label: 'Create chat',
       loadingLabel: 'Creating chat',
       handler: (evt: unknown) => {
-        const event = evt as React.MouseEvent<HTMLElement, MouseEvent>
-        event.stopPropagation()
+        stopPropagation(evt)
         createChatRoom({ formData: { contactIds: [id] } })
       },
       loading: isChatCreating

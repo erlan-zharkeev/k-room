@@ -10,7 +10,7 @@ export const ShowWallpaperSwitcher = () => {
 
   return (
     <div className="show-wallpaper-switcher">
-      <AppText size="sm">Wallpaper</AppText>
+      <AppText size="small">Wallpaper</AppText>
       <AppSwitch value={showWallpaper} name="wallpaper" onText="Show" offText="Hide" onChange={toggleShowWallpaper} />
     </div>
   )

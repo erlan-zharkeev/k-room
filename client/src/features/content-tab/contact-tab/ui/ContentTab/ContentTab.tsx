@@ -1,21 +1,18 @@
 import './style.scss'
-import { ContentTabType } from 'common-types'
+
+import { useContentTabSelect } from 'src/features/content-tab'
 
 import { CallsButton } from 'src/entities/call'
 import { ChatRoomsButton } from 'src/entities/chat-room'
 import { ContactsButton } from 'src/entities/contact'
 import { SettingsButton, useSettings } from 'src/entities/settings'
+import { ContentTabType } from 'src/entities/settings/config'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import { useContentTabSelect } from '../../../select-content-tab'
+import type { IContentTabButton } from './types'
 
-interface ContentTabButton {
-  Component: () => JSX.Element | null
-  value: ContentTabType
-}
-
-const buttons: ContentTabButton[] = [
+const buttons: IContentTabButton[] = [
   { Component: ContactsButton, value: 'contacts' },
   { Component: ChatRoomsButton, value: 'chat-rooms' },
   { Component: CallsButton, value: 'calls' },

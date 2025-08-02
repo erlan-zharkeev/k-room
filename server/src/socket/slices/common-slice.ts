@@ -1,6 +1,6 @@
 import { UserModel } from '../../models'
 import { io } from '../../server'
-import { SocketInstanceType, SocketActionsType, IEventUpdateUserSettings } from '../../@types'
+import { SocketInstanceType, SocketActionsType } from '../../@types'
 import { setSocketId, emitContactsToUser, emitRoomsByUserId, setUserStatus, setLastSeenData } from '../helpers'
 import { emitCallsToUser } from '../helpers/emitters/emit-call-to-users'
 
@@ -17,11 +17,5 @@ export const commonSlice = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('disconnect', async () => {
     await setUserStatus(userId, false)
     setLastSeenData(userId)
-  })
-
-  socket.on<SocketActionsType>('update-user-settings', async ({ type, value }: IEventUpdateUserSettings) => {
-    const query: Record<string, string | boolean> = {}
-    query['settings.' + type] = value
-    await UserModel.findOneAndUpdate({ _id: userId }, query, { new: true })
   })
 }

@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react'
 
 import { SocketActionsType } from 'common-types'
 
-import { updateContactsStatusLocal, useContact } from 'src/entities/contact'
+import { useContact } from 'src/entities/contact'
 
 import { socket } from 'src/shared/api'
 import { useTimeout } from 'src/shared/lib'
 
+import { useUpdateContactData } from '../../update-contact-data'
+
 export const useContactOnlineMonitor = () => {
   const [isMonitoring, setIsMonitoring] = useState(false)
   const { contacts } = useContact()
+  const { updateContactData } = useUpdateContactData()
+
   const { startTimeout } = useTimeout()
 
   const checkForContactOnline = () => {
@@ -22,7 +26,7 @@ export const useContactOnlineMonitor = () => {
       const outdated = Math.abs(currentTimestamp - contact.onlineStatusUpdatedTimestamp) / 1000 > maxDiffSeconds
 
       if (outdated) {
-        updateContactsStatusLocal({ contactId: contact.id, online: false })
+        updateContactData(contact.id, { online: false })
       }
     })
   }

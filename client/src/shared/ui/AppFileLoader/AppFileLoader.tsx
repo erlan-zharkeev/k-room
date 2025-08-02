@@ -9,7 +9,7 @@ import { ImageResolutions } from 'src/shared/types'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
 
-import { AppFileLoaderProps } from './types'
+import type { IAppFileLoaderProps } from './types'
 
 export const AppFileLoader = ({
   name,
@@ -25,7 +25,7 @@ export const AppFileLoader = ({
   avatarShape,
   avatarBorderless,
   showTextLabel = true
-}: AppFileLoaderProps) => {
+}: IAppFileLoaderProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const notifications = useNotification()
 

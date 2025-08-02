@@ -5,9 +5,9 @@ import { ReactNode, useRef } from 'react'
 import { initializeApp } from 'firebase/app'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { PersistGate } from 'redux-persist/integration/react'
 
-import { store, persistor } from 'src/app/store'
+import 'src/shared/lib/db/db'
+import { store } from 'src/app/store'
 
 import { useMakeCall } from 'src/entities/call'
 
@@ -42,12 +42,10 @@ initializeApp(firebaseConfig)
 window.process = processLib.process as NodeJS.Process
 export const Providers = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <RefsProvider>
-        <AdditionalServiceProvider>
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>{children}</BrowserRouter>
-        </AdditionalServiceProvider>
-      </RefsProvider>
-    </PersistGate>
+    <RefsProvider>
+      <AdditionalServiceProvider>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>{children}</BrowserRouter>
+      </AdditionalServiceProvider>
+    </RefsProvider>
   </Provider>
 )

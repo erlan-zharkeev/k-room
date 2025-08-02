@@ -1,3 +1,8 @@
+span.app-text--extra-small,
+p.app-text--extra-small {
+  font-size: 11px;
+}
+
 span.app-text--small,
 p.app-text--small {
   font-size: 12px;
@@ -16,10 +21,15 @@ p.app-text--large {
 .app-text {
   margin-top: 0;
   margin-bottom: 0;
+  color: var(--text);
 }
 
-.app-text--accent {
+.app-text--accent-color {
   color: var(--accent);
+}
+
+.app-text--warn-color {
+  color: var(--warn);
 }
 
 .app-text--left {

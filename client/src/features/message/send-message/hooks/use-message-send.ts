@@ -11,6 +11,7 @@ import {
 } from 'common-types'
 import { useDispatch } from 'react-redux'
 
+import { useChatRoomScroll } from 'src/features/chat-room'
 import { useContactTyping } from 'src/features/contact'
 
 import {
@@ -40,6 +41,7 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
   const { getRoomById, repliedMessageData, messageInputData } = useChatRooms()
   const { sendUserTypingStatus, debouncedChangeTypeStatus } = useContactTyping(selectedChatRoom)
   const { id, username } = useUser()
+  const { scrollToBottom } = useChatRoomScroll()
 
   const openSendMessageModal = () => {
     dispatch(
@@ -135,6 +137,7 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
     dispatch(resetRepliedMessage())
     dispatch(pushTemporaryMessage(payload))
     dispatch(updateMessageInputData({ body: '', images: [] }))
+    scrollToBottom()
   }
 
   const setMessageBody = (value: string) => dispatch(updateMessageInputData({ body: value }))

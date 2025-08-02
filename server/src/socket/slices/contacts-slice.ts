@@ -109,6 +109,7 @@ export const contactsSlice = (socket: SocketInstanceType) => {
           io.to(contactCandidate.socketId).emit<SocketActionsType>('contact-interaction-updated', payload)
         }
       }
+      console.log(interaction, 'interaction')
       if (interaction === 'default') {
         await deleteContactById(userId, contactId, socket.id)
         await updateContactInteractionTypeInContact()

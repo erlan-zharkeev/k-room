@@ -1,7 +1,7 @@
 import './style.scss'
 
 import { AddContactBtn } from 'src/features/contact/add-contact'
-import { ProfileInfo } from 'src/features/profile-info'
+import { ProfileInfo } from 'src/entities/profile-info'
 
 import { AppInput, AppScrollContainer } from 'src/shared/ui'
 
@@ -14,7 +14,7 @@ export const SearchContact = () => {
     <div className="search-contact">
       <AppInput
         showClearButton={Boolean(searchQuery)}
-        placeholder="🔍  Search contact"
+        placeholder="Search contact"
         onChange={search}
         name="contact"
         value={searchQuery}

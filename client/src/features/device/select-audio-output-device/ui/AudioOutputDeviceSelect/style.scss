@@ -1,17 +1,22 @@
 .audio-output-device-select {
+  position: relative;
+
   .audio-output-device-select__indicator {
-    height: 3px;
-    width: calc(100% - 50px);
-    border-bottom-left-radius: 99px;
-    border-bottom-right-radius: 99px;
+    position: absolute;
+    top: -11px;
+    left: 130px;
+    width: 5px;
+    height: 5px;
+    margin-top: 20px;
     background-color: var(--accent);
-    opacity: 0;
+    border-radius: 50%;
     box-shadow: 0 0 0 transparent;
-    transition: opacity 0.3s ease, box-shadow 0.4s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease, box-shadow 0.5s ease;
   }
 
   .audio-output-device-select__indicator--visible {
-    opacity: 1;
     box-shadow: 0 0 3px var(--accent), 0 0 6px var(--accent), 0 0 8px var(--accent);
+    opacity: 1;
   }
 }

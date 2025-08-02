@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 
 import { resetContextMenuToInitial, setContextMenu, useSystem } from 'src/entities/system'
 
-import { ContextMenuNameType, ContextClickedObject } from '../types'
+import type { ContextMenuNameType, IContextClickedObject } from '../types'
 
 export const useContextMenu = () => {
   const dispatch = useDispatch()
@@ -11,7 +11,7 @@ export const useContextMenu = () => {
   const setMenu = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent> | null,
     name: ContextMenuNameType,
-    contextClickedObject: ContextClickedObject
+    contextClickedObject: IContextClickedObject
   ) => {
     if (!event) return
     event.preventDefault()

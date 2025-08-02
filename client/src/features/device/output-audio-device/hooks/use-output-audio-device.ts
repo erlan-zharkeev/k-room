@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-
-import { updateSelectedAudioOutputDeviceId, useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
 import { useSound } from 'src/entities/sound'
 import { showModal, useSystem } from 'src/entities/system'
 
@@ -11,11 +9,10 @@ import { useTimeout } from 'src/shared/lib'
 export const useOutputAudioDevice = () => {
   const [audioOutputDeviceList, setAudioOutputDeviceList] = useState([] as MediaDeviceInfo[])
   const { camPermission, micPermission } = useSystem()
-  const { selectedAudioOutputDeviceId } = useSettings()
+  const { selectedAudioOutputDeviceId, updateSetting } = useSettings()
   const { startTimeout } = useTimeout()
 
   const { play, stop } = useSound()
-  const dispatch = useDispatch()
   const [showIndicator, setShowIndicator] = useState(false)
 
   const testAudioOutput = () => {
@@ -38,7 +35,7 @@ export const useOutputAudioDevice = () => {
   }, [audioOutputDeviceList])
 
   const onAudioOutputDeviceChange = (value: string = '') => {
-    dispatch(updateSelectedAudioOutputDeviceId(value))
+    updateSetting({ selectedAudioOutputDeviceId: value })
   }
 
   useEffect(() => {

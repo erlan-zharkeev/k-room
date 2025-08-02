@@ -1,4 +1,4 @@
-import { useTypedSelector } from 'src/shared/lib'
+import { useSystem } from './use-system'
 
 export enum ViewPortWidthType {
   Desktop = 1200,
@@ -7,7 +7,7 @@ export enum ViewPortWidthType {
 }
 
 export const useViewport = () => {
-  const { viewPort } = useTypedSelector((state) => state.system)
+  const { viewPort } = useSystem()
   const { width } = viewPort
 
   return {

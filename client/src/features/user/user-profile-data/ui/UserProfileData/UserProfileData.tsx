@@ -1,7 +1,7 @@
 import './style.scss'
 
 import { PasswordRecoveryLink } from 'src/features/auth'
-import { ProfileInfo } from 'src/features/profile-info'
+import { ProfileInfo } from 'src/entities/profile-info'
 import { OpenModalUpdateUserDataBtn } from 'src/features/user'
 
 import { useUser } from 'src/entities/user'

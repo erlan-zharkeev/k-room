@@ -1,4 +1,3 @@
-export * from './save-setting'
 export * from './update-theme'
 export * from './toggle-enable-sound'
 export * from './toggle-show-notification'

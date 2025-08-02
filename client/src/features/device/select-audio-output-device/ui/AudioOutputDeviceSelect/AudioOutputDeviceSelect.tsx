@@ -1,13 +1,11 @@
 import './style.scss'
 import { useEffect } from 'react'
 
-import { SelectDevice } from 'src/features/device/select-device'
+import { SelectDevice, useOutputAudioDevice } from 'src/features/device'
 
 import { useSettings } from 'src/entities/settings'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { useOutputAudioDevice } from '../../../output-audio-device/hooks/use-output-audio-device'
 
 export const AudioOutputDeviceSelect = () => {
   const {

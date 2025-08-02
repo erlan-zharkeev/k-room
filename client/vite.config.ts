@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const VITE_FIREBASE_API_KEY = JSON.stringify(env.VITE_FIREBASE_API_KEY)
   const isDev = mode === 'development'
+
   return {
     define: {
       VITE_FIREBASE_API_KEY
@@ -97,7 +98,22 @@ export default defineConfig(({ mode }) => {
                 options: {
                   cacheName: 'audio-cache',
                   expiration: {
-                    maxEntries: 50
+                    maxEntries: 50,
+                    maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+                  },
+                  cacheableResponse: {
+                    statuses: [0, 200, 206]
+                  }
+                }
+              },
+              {
+                urlPattern: /.*\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'image-cache',
+                  expiration: {
+                    maxEntries: 100,
+                    maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
                   },
                   cacheableResponse: {
                     statuses: [0, 200]

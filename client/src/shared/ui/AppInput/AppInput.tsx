@@ -5,11 +5,11 @@ import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { AppButton } from '../AppButton/AppButton'
 
-import { AppInputProps } from './types'
+import type { IAppInputProps } from './types'
 
 const rootClass = 'app-input'
 
-export const AppInput = forwardRef<HTMLInputElement, AppInputProps>(
+export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
   (
     {
       name,
@@ -23,7 +23,7 @@ export const AppInput = forwardRef<HTMLInputElement, AppInputProps>(
       showClearButton = false,
       prefixSlot = undefined,
       loading = false
-    }: AppInputProps,
+    }: IAppInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     const [focused, setFocused] = useState(false)

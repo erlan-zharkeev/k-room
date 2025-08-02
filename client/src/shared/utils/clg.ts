@@ -1,11 +1,10 @@
-interface ConsoleColorElement {
-  bg: string
-  text: string
-}
-
-type ConsoleType = 'error' | 'success' | 'warn'
-
-const consoleColorMap: Record<string, ConsoleColorElement> = {
+const consoleColorMap: Record<
+  string,
+  {
+    bg: string
+    text: string
+  }
+> = {
   error: {
     bg: '#000000',
     text: 'red'
@@ -20,6 +19,6 @@ const consoleColorMap: Record<string, ConsoleColorElement> = {
   }
 }
 
-export const clg = (type: ConsoleType, message: string) => {
+export const clg = (type: 'error' | 'success' | 'warn', message: string) => {
   console.log(`%c ${message} `, `background: ${consoleColorMap[type].bg}; color: ${consoleColorMap[type].text}`)
 }

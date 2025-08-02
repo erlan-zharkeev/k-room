@@ -1,7 +1,8 @@
 import './style.scss'
 import { IChatRoom } from 'common-types'
 
-import { MessageBody, NoMessagesPlaceholder } from 'src/features/message'
+import { isAutoMessage, MessageBody, NoMessagesPlaceholder } from 'src/features/message'
+import { MessageMenu } from 'src/features/message/message-menu/ui'
 
 import { useUser } from 'src/entities/user'
 
@@ -18,10 +19,10 @@ export const MessageList = ({
   isSelectedRoomPrivate: boolean
 }) => {
   const { messages, setRef } = useMessageList(selectedChatRoom)
-  const { id } = useUser()
+  const { id, username } = useUser()
 
   return (
-    <AppScrollContainer id="message-list" additionalClassName="message-list" height="100%">
+    <AppScrollContainer additionalClassName="message-list" height="100%" id={selectedChatRoom.id}>
       <NoMessagesPlaceholder messages={selectedChatRoom.messages} />
       {messages.map((message) =>
         message.id ? (
@@ -33,7 +34,17 @@ export const MessageList = ({
             )}`}
             ref={setRef(message.id)}
           >
-            <MessageBody message={message} isPrivate={isSelectedRoomPrivate} />
+            <div className="message-list__body-with-settings">
+              {isAutoMessage(message) ? (
+                <MessageBody message={message} isPrivate={isSelectedRoomPrivate} />
+              ) : (
+                <MessageMenu userId={id} username={username} message={message} selectedChatRoomId={selectedChatRoom.id}>
+                  <div role="button" tabIndex={0}>
+                    <MessageBody message={message} isPrivate={isSelectedRoomPrivate} />
+                  </div>
+                </MessageMenu>
+              )}
+            </div>
           </div>
         ) : null
       )}

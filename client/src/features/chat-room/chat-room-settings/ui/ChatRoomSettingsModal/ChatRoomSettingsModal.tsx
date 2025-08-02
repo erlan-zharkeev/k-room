@@ -16,7 +16,7 @@ import { AppAvatar, AppAvatarLoader, AppButton, AppInput } from 'src/shared/ui'
 
 export const ChatRoomSettingsModal = () => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { selectedChatRoomId } = useTypedSelector((state) => state.persist.settings)
+  const { selectedChatRoomId } = useTypedSelector((state) => state.settings)
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const { id } = useTypedSelector((state) => state.user.userData)
   const [imagePath, setNewImagePath] = useState<string | undefined>(chatRoomData?.avatarPath)

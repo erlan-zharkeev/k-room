@@ -1,22 +1,16 @@
-import { ThemeType } from 'common-types'
-import { useDispatch } from 'react-redux'
-
-import { changeTheme } from 'src/entities/settings'
-
-import { saveUserSetting } from '../../save-setting'
+import { ThemeType, useSettings } from 'src/entities/settings'
 
 export const useThemeUpdate = () => {
-  const dispatch = useDispatch()
+  const { updateSetting } = useSettings()
 
-  const setTheme = (value: ThemeType) => {
+  const setThemeToDom = (value: ThemeType) => {
     const html = document.querySelector('html')
     html?.setAttribute('theme', value)
   }
 
   const updateThemeByName = (value: ThemeType) => {
-    dispatch(changeTheme(value))
-    saveUserSetting({ type: 'theme', value })
-    setTheme(value)
+    updateSetting({ theme: value })
+    setThemeToDom(value)
   }
 
   const toggleTheme = (value: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +22,6 @@ export const useThemeUpdate = () => {
   return {
     toggleTheme,
     updateThemeByName,
-    setTheme
+    setThemeToDom
   }
 }

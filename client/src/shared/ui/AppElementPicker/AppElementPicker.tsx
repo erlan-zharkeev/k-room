@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { AppTags } from 'src/shared/ui'
 
-import { AppElementPickerProps } from './types'
+import type { IAppElementPickerProps } from './types'
 
 export const AppElementPicker = ({
   availableElements,
@@ -11,7 +11,7 @@ export const AppElementPicker = ({
   name,
   value = [],
   setPickedElementIds
-}: AppElementPickerProps) => {
+}: IAppElementPickerProps) => {
   const fromTags = useMemo(
     () => availableElements.filter((el) => !value.includes(el.value)),
     [availableElements, value]

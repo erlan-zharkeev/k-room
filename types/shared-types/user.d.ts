@@ -1,4 +1,4 @@
-import { ChatRoomsType, ICodes, DBContactMapType, IInfoMessage, MessageStatusType, IUserSettings } from ".";
+import { ChatRoomsType, ICodes, DBContactMapType, IInfoMessage, MessageStatusType } from ".";
 export type UserRoleType = "user" | "admin";
 export interface IUserMessageStatus {
     id: string;
@@ -34,7 +34,6 @@ export interface IUserSchema extends Omit<IUserData, "contacts"> {
     confirmed: Boolean;
     confirmAttempts: number;
     refreshToken: string;
-    settings: IUserSettings;
     codes: ICodes;
     infoNotifications: IInfoMessage[];
     contacts: DBContactMapType;

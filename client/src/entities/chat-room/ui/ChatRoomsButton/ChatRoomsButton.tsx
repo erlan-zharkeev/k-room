@@ -7,7 +7,7 @@ import { useChatRooms } from '../../hooks'
 export const ChatRoomsButton = () => {
   const { unreadMessageQuantity } = useChatRooms()
   return (
-    <Badge color="var(--accent)" count={unreadMessageQuantity} size="small" offset={[-15, 10]}>
+    <Badge color="var(--accent)" count={unreadMessageQuantity} size="small" offset={['-8px', '5px']}>
       <AppButton prefixIconName="chat" borderless />
     </Badge>
   )

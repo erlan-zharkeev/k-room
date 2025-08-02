@@ -1,6 +1,6 @@
-import { BaseSizeModifier } from '../types'
+import type { BaseSizeModifier } from '../types'
 
-export interface DotsAnimatedTextProps {
+export interface IDotsAnimatedTextProps {
   text: string
   maxDots?: number
   interval?: number

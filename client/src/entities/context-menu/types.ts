@@ -7,11 +7,11 @@ export interface ICoord {
   y: number
 }
 
-export interface ContextMenu {
+export interface IContextMenu {
   name: ContextMenuNameType
   coord: ICoord
-  contextClickedObject: ContextClickedObject
+  contextClickedObject: IContextClickedObject
 }
-export interface ContextClickedObject {
+export interface IContextClickedObject {
   message: IMessage
 }

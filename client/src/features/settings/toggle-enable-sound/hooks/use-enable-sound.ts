@@ -1,16 +1,10 @@
-import { useDispatch } from 'react-redux'
-
-import { setSoundValue } from 'src/entities/settings'
-
-import { saveUserSetting } from '../../save-setting'
+import { useSettings } from 'src/entities/settings'
 
 export const useEnableSound = () => {
-  const dispatch = useDispatch()
-
+  const { updateSetting } = useSettings()
   const toggleEnableSound = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    dispatch(setSoundValue(value))
-    saveUserSetting({ type: 'soundOn', value })
+    updateSetting({ soundOn: value })
   }
 
   return {

@@ -10,7 +10,7 @@ export const ShowTooltipsSwitcher = () => {
 
   return (
     <div className="show-tooltips-switcher">
-      <AppText size="sm">Tooltips</AppText>
+      <AppText size="small">Tooltips</AppText>
       <AppSwitch value={showTooltips} name="tooltips" onText="Show" offText="Hide" onChange={toggleShowTooltip} />
     </div>
   )

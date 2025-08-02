@@ -1,15 +1,19 @@
 import { SocketActionsType, IEventStatusContact } from 'common-types'
-import { useDispatch } from 'react-redux'
-import { updateContactsStatus } from 'src/entities/contact'
+
 import { socket } from 'src/shared/api'
 
+import { useUpdateContactData } from '../../update-contact-data'
+
 export const useContactStatusUpdate = () => {
-  const dispatch = useDispatch()
+  const { updateContactData } = useUpdateContactData()
+
+  const updateStatus = (payload: IEventStatusContact) => {
+    const { interlocutorId, online, onlineStatusUpdatedTimestamp } = payload
+    updateContactData(interlocutorId, { online, onlineStatusUpdatedTimestamp })
+  }
 
   const monitorContactStatusUpdate = () => {
-    socket.on<SocketActionsType>('contact-status-updated', (payload: IEventStatusContact) => {
-      dispatch(updateContactsStatus(payload))
-    })
+    socket.on<SocketActionsType>('contact-status-updated', updateStatus)
   }
   return { monitorContactStatusUpdate }
 }

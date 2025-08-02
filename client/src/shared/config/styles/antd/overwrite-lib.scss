@@ -57,7 +57,7 @@
   // notification
   .ant-notification {
     .ant-notification-notice-wrapper {
-      background: var(--main-bg);
+      background: var(--dark-gray-transparent-1);
     }
 
     .ant-notification-notice {
@@ -67,7 +67,6 @@
       &::before {
         position: absolute;
         z-index: 0;
-        background: rgb(255 255 255 / 1%);
         border-radius: 8px;
         backdrop-filter: blur(8px);
         content: '';

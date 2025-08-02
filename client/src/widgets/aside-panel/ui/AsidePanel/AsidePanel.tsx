@@ -9,13 +9,10 @@ import { UserSettings } from 'src/features/settings'
 
 import { useSettings } from 'src/entities/settings'
 
-import { useTypedSelector } from 'src/shared/lib'
-
 import { ChatRooms, Calls, Contacts } from './elements'
 
 export const AsidePanel = () => {
-  const { showAsidePanel } = useSettings()
-  const { selectedContentTab } = useTypedSelector((state) => state.persist.settings)
+  const { showAsidePanel, selectedContentTab } = useSettings()
 
   const TAB_COMPONENTS_MAP: Record<Exclude<ContentTabType, 'info'>, ReactElement> = {
     contacts: <Contacts />,

@@ -15,7 +15,7 @@ import { closeModal, useSystem, useViewport } from 'src/entities/system'
 
 import { AppButton, AppHeader, AppText } from 'src/shared/ui'
 
-import { ModalContentComponentName } from './types'
+import type { ModalContentComponentName } from './types'
 
 export const Modal = () => {
   const { showModal, modalData } = useSystem()

@@ -10,7 +10,7 @@ export const ThemeSwitcher = () => {
 
   return (
     <div className="theme-switcher">
-      <AppText size="sm">Theme</AppText>
+      <AppText size="small">Theme</AppText>
       <AppSwitch name="theme" onText="Dark" offText="Light" value={isThemeDark} onChange={toggleTheme} />
     </div>
   )

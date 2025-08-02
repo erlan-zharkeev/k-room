@@ -1,16 +1,31 @@
-import { useMemo } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
 
-import { useTypedSelector } from 'src/shared/lib'
+import { ContactDbItemType, db } from 'src/shared/lib'
 
 export const useContact = () => {
-  const { contacts } = useTypedSelector((state) => state.contacts)
-  const contactInvitationsQuantity = useMemo(
-    () => contacts.filter((contact) => contact.interaction === 'invite-received').length,
-    [contacts]
-  )
-  const getContact = (id: string) => contacts.find((contact) => contact.id === id)
-  const isContactExist = (id: string) => Boolean(getContact(id))
-  const getContacts = (ids: string[]) => contacts.filter((contact) => ids.includes(contact.id))
+  const contactMap =
+    useLiveQuery(async () => {
+      const allContacts = await db.contacts.toArray()
+      return allContacts.reduce<Record<string, ContactDbItemType>>((acc, contact) => {
+        acc[contact.id] = contact
+        return acc
+      }, {})
+    }) ?? {}
 
-  return { contacts, contactInvitationsQuantity, isContactExist, getContact, getContacts }
+  const contactInvitationsQuantity = () =>
+    Object.values(contactMap).filter((data) => {
+      const contact = data
+      return contact.interaction === 'invite-received'
+    }).length
+  const getContact = (id: string) => contactMap[id]
+  const isContactExist = (id: string) => Boolean(getContact(id))
+  const getContacts = (ids: string[]) => Object.values(contactMap).filter((contact) => ids.includes(contact.id))
+
+  return {
+    contacts: Object.values(contactMap),
+    contactInvitationsQuantity,
+    isContactExist,
+    getContact,
+    getContacts
+  }
 }

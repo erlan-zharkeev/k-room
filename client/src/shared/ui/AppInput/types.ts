@@ -1,6 +1,6 @@
 import { ChangeEvent, ForwardedRef, ReactNode } from 'react'
 
-export interface AppInputProps {
+export interface IAppInputProps {
   name: string
   value?: string
   nativeType?: React.HTMLInputTypeAttribute

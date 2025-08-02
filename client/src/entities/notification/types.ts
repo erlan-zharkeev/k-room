@@ -1,3 +1,7 @@
+import { ReactNode } from 'react'
+
+import { useNotification } from './hooks'
+
 export type NotificationType = 'success' | 'error' | 'info' | 'warning'
 
 export enum ClientNotificationMessage {
@@ -12,4 +16,16 @@ export enum ClientNotificationMessage {
   ImageResNotAllowed = 'Image resolution not allowed',
   ImageSizeMustLessThan2mb = 'Image size must be less than 2mb',
   SocketDisconnected = 'Socket disconnected'
+}
+
+export type UseNotification = ReturnType<typeof useNotification>
+
+export interface IAppNotification {
+  key?: string
+  message: ClientNotificationMessage | '' | ReactNode
+  description?: string
+  messageType?: NotificationType
+  duration?: number
+  placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
+  icon?: JSX.Element
 }

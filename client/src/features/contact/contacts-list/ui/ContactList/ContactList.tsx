@@ -1,8 +1,8 @@
 import './style.scss'
 
-import { ContactInvitationControlBtns, ContactMenu, useContactList } from 'src/features/contact'
-import { getContactDescription } from 'src/features/contact/lib'
-import { ProfileInfo } from 'src/features/profile-info'
+import { ContactInvitationControlBtns, ContactMenu, useContactList, getContactDescription } from 'src/features/contact'
+
+import { ProfileInfo } from 'src/entities/profile-info'
 
 import { AppText, AppScrollContainer } from 'src/shared/ui'
 

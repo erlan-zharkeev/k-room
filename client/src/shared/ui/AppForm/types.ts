@@ -1,16 +1,18 @@
+import { FileLoaderValueType } from 'common-types'
+
 import {
-  SwitchValidateRule,
-  TextInputValidateRule,
-  FileInputValidateRule,
-  ElementPickerValidateRule
+  ISwitchValidateRule,
+  ITextInputValidateRule,
+  IFileInputValidateRule,
+  IElementPickerValidateRule
 } from 'src/shared/lib'
 
-import { AppElementPickerProps } from '../AppElementPicker/types'
-import { AppFileLoaderProps, FileLoaderPayloadType } from '../AppFileLoader/types'
-import { AppInputProps } from '../AppInput/types'
-import { AppSwitchProps } from '../AppSwitch/types'
+import type { IAppElementPickerProps } from '../AppElementPicker/types'
+import type { IAppFileLoaderProps } from '../AppFileLoader/types'
+import type { IAppInputProps } from '../AppInput/types'
+import type { IAppSwitchProps } from '../AppSwitch/types'
 
-export type AppFormFieldValue = string | boolean | FileLoaderPayloadType | string[]
+export type AppFormFieldValue = string | boolean | FileLoaderValueType | string[]
 
 type BaseAppFormField<T extends string, V = AppFormFieldValue> = {
   inputType: T
@@ -21,31 +23,31 @@ type BaseAppFormField<T extends string, V = AppFormFieldValue> = {
 } & { [key: string]: unknown }
 
 export type AppFormSwitchField = BaseAppFormField<'switch', boolean> &
-  Omit<AppSwitchProps, 'name'> & {
-    rule?: SwitchValidateRule
+  Omit<IAppSwitchProps, 'name'> & {
+    rule?: ISwitchValidateRule
     children?: React.ReactNode
   }
 
 export type AppFormTextInputField = BaseAppFormField<'text', string> &
-  Omit<AppInputProps, 'name'> & {
-    rule?: TextInputValidateRule
+  Omit<IAppInputProps, 'name'> & {
+    rule?: ITextInputValidateRule
   }
 
-export type AppFormFileInputField = BaseAppFormField<'file', FileLoaderPayloadType> &
-  Omit<AppFileLoaderProps, 'name' | 'onChange'> & {
-    rule?: FileInputValidateRule
+export type AppFormFileInputField = BaseAppFormField<'file', FileLoaderValueType> &
+  Omit<IAppFileLoaderProps, 'name' | 'onChange'> & {
+    rule?: IFileInputValidateRule
   }
 
 export type AppFormPickElementField = BaseAppFormField<'element-picker'> &
-  Omit<AppElementPickerProps, 'name' | 'setPickedElementIds'> & {
-    rule?: ElementPickerValidateRule
+  Omit<IAppElementPickerProps, 'name' | 'setPickedElementIds'> & {
+    rule?: IElementPickerValidateRule
   }
 
 export type AppFormField = AppFormTextInputField | AppFormSwitchField | AppFormFileInputField | AppFormPickElementField
 
 export type AppFormData = Record<string, unknown>
 
-export interface AppFormProps {
+export interface IAppFormProps {
   title?: string
   disabled?: boolean
   onChange?: (formData: AppFormData) => void

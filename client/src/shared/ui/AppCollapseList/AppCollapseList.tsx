@@ -1,5 +1,5 @@
 import './style.scss'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Badge } from 'antd'
 import parse from 'html-react-parser'
@@ -9,22 +9,13 @@ import { useTimeout } from 'src/shared/lib'
 import { AppHeader } from '../AppHeader/AppHeader'
 import { AppIcon } from '../AppIcon'
 
-interface CollapseItem {
-  id: string
-  title: string
-  content?: string
-  badgeName?: React.ReactNode
-}
+import type { IAppCollapseProps } from './types'
 
-interface AppCollapseProps {
-  items: CollapseItem[]
-  onClickCollapseEl: (id: string) => void
-}
-
-export const AppCollapseList = ({ items, onClickCollapseEl }: AppCollapseProps) => {
+export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps) => {
   const [openElId, setOpenIElId] = useState<string | null>(null)
   const [delayedOverflowIndex, setDelayedOverflowIndex] = useState<string | null>(null)
   const { startTimeout } = useTimeout()
+  const contentBodyDOM = useRef<HTMLDivElement>(null)
 
   const clickHandler = (id: string) => {
     setOpenIElId((prev) => (prev === id ? null : id))
@@ -63,10 +54,11 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: AppCollapseProps) 
               <div
                 className="app-collapse-list__element-content"
                 style={{
-                  overflow: showOverflow ? 'auto' : 'hidden'
+                  overflow: showOverflow ? 'auto' : 'hidden',
+                  height: isOpen ? `${contentBodyDOM.current?.clientHeight}px` : '0'
                 }}
               >
-                <div className="app-collapse-list__element-content-body">
+                <div ref={contentBodyDOM} className="app-collapse-list__element-content-body">
                   {parse(item.content ?? '<p>Сouldn`t get the data, try later</p>')}
                 </div>
               </div>

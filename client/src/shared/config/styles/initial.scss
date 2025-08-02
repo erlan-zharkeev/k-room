@@ -36,14 +36,3 @@ summary,
 p {
   color: var(--text);
 }
-
-::-webkit-scrollbar {
-  width: 4px;
-  height: 7px;
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--text);
-  border-radius: 4px;
-}

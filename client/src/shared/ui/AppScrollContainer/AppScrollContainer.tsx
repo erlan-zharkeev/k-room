@@ -1,25 +1,42 @@
-import { AppScrollContainerProps } from './types'
+import './style.scss'
+import { useEffect, useRef, useState } from 'react'
+
+import { useTimeout } from 'src/shared/lib'
+import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { IAppScrollContainerProps } from './types'
 
 export const AppScrollContainer = ({
   height = '300px',
   children,
   additionalClassName,
-  id,
-  overflowY = 'auto',
-  overflowX = 'auto'
-}: AppScrollContainerProps) => {
-  const style: React.CSSProperties = {
-    maxHeight: height,
-    overflowX,
-    overflowY
-  }
+  id
+}: IAppScrollContainerProps) => {
+  const [showScrollbar, setShowScrollbar] = useState(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const { startTimeout } = useTimeout()
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const handleScroll = () => {
+      setShowScrollbar(true)
+      startTimeout(() => setShowScrollbar(false), 1000)
+    }
+
+    el.addEventListener('scroll', handleScroll)
+    return () => el.removeEventListener('scroll', handleScroll)
+  }, [startTimeout])
+
+  const className = createClassNameWithModifiers({
+    rootClass: 'app-scroll-container',
+    modifiers: [showScrollbar && 'show'],
+    additionalClassName
+  })
 
   return (
-    <div
-      id={id ?? String(Date.now())}
-      className={`app-scroll-container${additionalClassName ? ` ${additionalClassName}` : ''}`}
-      style={style}
-    >
+    <div id={id ?? String(Date.now())} ref={scrollRef} className={className} style={{ maxHeight: height }}>
       {children}
     </div>
   )

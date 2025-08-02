@@ -1,8 +1,6 @@
 @use '~/global/index' as *;
 
 .chat-room-settings-modal {
-  width: $container-sm;
-
   &__chat-name {
     margin-top: 16px;
   }

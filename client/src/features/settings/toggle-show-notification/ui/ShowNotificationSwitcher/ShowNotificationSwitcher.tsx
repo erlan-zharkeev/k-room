@@ -12,7 +12,7 @@ export const ShowNotificationSwitcher = () => {
 
   return (
     <div className="show-notification-switcher">
-      <AppText size="sm">Notification</AppText>
+      <AppText size="small">Notification</AppText>
       <AppTooltip
         text="If you want to disable/enable browser notifications, you need to do this manually (the setting next to the
           address bar), the security policy does not allow you to do this from the application interface. The current

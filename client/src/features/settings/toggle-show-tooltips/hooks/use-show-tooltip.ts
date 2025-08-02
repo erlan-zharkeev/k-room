@@ -1,16 +1,11 @@
-import { useDispatch } from 'react-redux'
-
-import { setTooltipsValue } from 'src/entities/settings'
-
-import { saveUserSetting } from '../../save-setting'
+import { useSettings } from 'src/entities/settings'
 
 export const useShowTooltip = () => {
-  const dispatch = useDispatch()
+  const { updateSetting } = useSettings()
 
   const toggleShowTooltip = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    dispatch(setTooltipsValue(value))
-    saveUserSetting({ type: 'showTooltips', value })
+    updateSetting({ showTooltips: value })
   }
 
   return { toggleShowTooltip }

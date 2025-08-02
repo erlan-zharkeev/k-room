@@ -9,23 +9,7 @@ import {
   UserShortType
 } from 'common-types'
 
-interface Constraint {
-  loading: boolean
-  value: boolean
-}
-
-interface StreamConstraints {
-  audio: Constraint
-  video: Constraint
-}
-
-interface CallsState {
-  showCallModal: boolean
-  isMinified: boolean
-  currentCall: ICall
-  list: ICall[]
-  settings: StreamConstraints
-}
+import type { ICallsState, IStreamConstraints } from '../types'
 
 const initialCurrentCall: ICall = {
   id: '',
@@ -57,7 +41,7 @@ const initialCallSettings = {
   }
 }
 
-const initialState: CallsState = {
+const initialState: ICallsState = {
   showCallModal: false,
   isMinified: false,
   settings: initialCallSettings,
@@ -96,7 +80,7 @@ export const callsSlice = createSlice({
         ...payload
       }
     },
-    toggleSelfStreamIsLoading(state, { payload }: { payload: StreamConstraints }) {
+    toggleSelfStreamIsLoading(state, { payload }: { payload: IStreamConstraints }) {
       state.settings = payload
     },
     setCurrentCallAccepted(state) {

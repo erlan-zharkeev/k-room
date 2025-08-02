@@ -31,11 +31,9 @@ export const ChatRoomList = () => {
             key={chatRoom.id}
           >
             <ChatRoomPreview room={chatRoom} isRoomSelected={chatRoom.id === selectedChatRoomId} />
-            <div className="chat-rooms__controls">
-              {Boolean(chatRoomUnreadMessagesCount(chatRoom)) && (
-                <Badge color="var(--accent)" count={chatRoomUnreadMessagesCount(chatRoom)} offset={[-20, 0]} />
-              )}
-            </div>
+            {Boolean(chatRoomUnreadMessagesCount(chatRoom)) && (
+              <Badge color="var(--accent)" count={chatRoomUnreadMessagesCount(chatRoom)} offset={[-5, 0]} />
+            )}
           </div>
         ))}
       </AppScrollContainer>

@@ -4,15 +4,6 @@ import { useNotification } from 'src/entities/notification'
 import { AppAvatar, AppIconName, AppIcon, AvatarShapeModifier } from 'src/shared/ui'
 import { imageToBase64 } from 'src/shared/utils'
 
-export interface AvatarLoaderProps {
-  path: string | undefined
-  setImage: React.Dispatch<any>
-  setFile: React.Dispatch<React.SetStateAction<any>>
-  updated?: () => void
-  stubIconName?: AppIconName
-  shape?: AvatarShapeModifier
-}
-
 export const AppAvatarLoader = ({
   path,
   setImage,
@@ -20,7 +11,7 @@ export const AppAvatarLoader = ({
   updated,
   stubIconName,
   shape = 'circle-shape'
-}: AvatarLoaderProps) => {
+}: IAvatarLoaderProps) => {
   const notifications = useNotification()
 
   const normFile = async (e: React.ChangeEvent<HTMLInputElement>) => {

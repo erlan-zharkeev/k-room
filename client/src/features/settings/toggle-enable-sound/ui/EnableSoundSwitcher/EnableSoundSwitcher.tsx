@@ -17,7 +17,7 @@ export const EnableSoundSwitcher = () => {
 
   return (
     <div className="enable-sound-switcher">
-      <AppText size="sm">Sound</AppText>
+      <AppText size="small">Sound</AppText>
       <AppTooltip text={tooltipText} placement="right">
         <AppSwitch value={soundOn} name="sound" onChange={toggleEnableSound} disabled={!hasInteracted} />
       </AppTooltip>

@@ -3,7 +3,7 @@ import { FileLoaderValueType } from 'common-types'
 import { AppIconName } from '../AppIcon'
 import { AvatarShapeModifier } from '../types'
 
-export interface AppFileLoaderProps {
+export interface IAppFileLoaderProps {
   name: string
   multiple?: boolean
   allowedResolutions?: string[]

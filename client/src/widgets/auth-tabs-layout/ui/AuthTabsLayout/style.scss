@@ -8,6 +8,10 @@
     margin-bottom: 12px;
   }
 
+  .auth-tabs-layout__nav--block {
+    @include disabled;
+  }
+
   .auth-tabs-layout__login-link {
     margin-right: 8px;
   }

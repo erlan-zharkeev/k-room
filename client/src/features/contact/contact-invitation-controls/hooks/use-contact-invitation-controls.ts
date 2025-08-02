@@ -10,12 +10,15 @@ import { useTimeout } from 'src/shared/lib'
 export const useContactInvitationControls = () => {
   const { contacts } = useContact()
   const [loaders, setLoaders] = useState<Record<string, boolean>>({})
-  const { startTimeout } = useTimeout()
+  const { startTimeout: inviteTimer } = useTimeout()
+  const { startTimeout: contactsUpdatedTimer } = useTimeout()
 
   const updateInteractionType = (contactId: string, interaction: InteractionType) => {
     setLoaders((prev) => ({ ...prev, [contactId]: true }))
     const payload: IEventUpdateInteraction = { contactId, interaction }
-    startTimeout(() => socket.emit<SocketActionsType>('update-contact-interaction-type', payload), 2000) // Fake delay for smooth ui
+    inviteTimer(() => {
+      socket.emit<SocketActionsType>('update-contact-interaction-type', payload) // Fake delay for smooth ui
+    }, 2000)
   }
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export const useContactInvitationControls = () => {
       updatedContacts.forEach((contact) => {
         newLoaders[contact.id] = false
       })
-      startTimeout(() => setLoaders(newLoaders), 2000) // Fake delay for smooth ui
+      contactsUpdatedTimer(() => setLoaders(newLoaders), 2000) // Fake delay for smooth ui
     }
   }, [contacts])
 

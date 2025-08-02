@@ -7,7 +7,7 @@ export const CallsButton = () => {
   const unAnsweredCalls = 0
 
   return (
-    <Badge color="var(--accent)" count={unAnsweredCalls} size="small" offset={[-15, 10]}>
+    <Badge color="var(--accent)" count={unAnsweredCalls} size="small" offset={['-8px', '5px']}>
       <AppButton prefixIconName="call" borderless />
     </Badge>
   )

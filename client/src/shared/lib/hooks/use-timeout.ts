@@ -18,11 +18,22 @@ export const useTimeout = () => {
     })
   }, [])
 
+  const appNextTick = async (): Promise<void> => {
+    // eslint-disable-next-line no-return-await
+    return await new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve()
+        })
+      })
+    })
+  }
+
   useEffect(() => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
   }, [])
 
-  return { startTimeout, delay }
+  return { startTimeout, delay, appNextTick }
 }

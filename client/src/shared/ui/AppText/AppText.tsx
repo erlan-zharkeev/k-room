@@ -3,13 +3,13 @@ import { createElement } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import { BaseSizeModifier } from '../types'
+import type { ColorModifier, ExtendedSizeModifier } from '../types'
 
 export const AppText = ({
   tag = 'span',
   children,
   additionalClassName,
-  accent = false,
+  color = 'text-color',
   size = 'medium',
   align = 'left',
   onClick
@@ -17,14 +17,14 @@ export const AppText = ({
   tag?: 'span' | 'p'
   children?: React.ReactNode
   additionalClassName?: string
-  accent?: boolean
-  size?: BaseSizeModifier
+  color?: ColorModifier
+  size?: ExtendedSizeModifier
   align?: 'left' | 'center' | 'right'
   onClick?: (e: React.MouseEvent<HTMLElement>) => void | Promise<void>
 }) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-text',
-    modifiers: [accent && 'accent', size, align],
+    modifiers: [color, size, align],
     additionalClassName
   })
 

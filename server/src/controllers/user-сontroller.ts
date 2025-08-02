@@ -24,7 +24,6 @@ class UserController {
       const updateData: { username: string; avatarPath?: string } = {
         username
       }
-
       if (req.file) {
         const isImageExist = fs.existsSync(oldPathFilename)
         const isFileNotStatic = !oldPathFilename.includes('static')
@@ -72,6 +71,7 @@ class UserController {
       const user = await UserModel.findOne({ _id: userId })
       if (!user) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserNotFound)
       await updateTokens(user._id.toString(), res)
+      console.log(user.avatarPath)
       return res.json({
         userData: {
           username: user.username,
@@ -80,8 +80,7 @@ class UserController {
           id: user._id,
           avatarPath: user.avatarPath,
           infoNotifications: user.infoNotifications
-        },
-        settings: user.settings
+        }
       })
     } catch {
       throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedGetUserData)

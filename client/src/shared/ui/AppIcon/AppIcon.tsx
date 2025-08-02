@@ -35,7 +35,9 @@ import SearchIcon from './icons/search.svg?react'
 import SendIcon from './icons/send.svg?react'
 import SettingsIcon from './icons/settings.svg?react'
 import ShieldIcon from './icons/shield.svg?react'
-import ThreeDots from './icons/three-dots.svg?react'
+import SuccessIcon from './icons/success.svg?react'
+import ThreeDotsIcon from './icons/three-dots.svg?react'
+import ThreeVerticalsDotsIcon from './icons/three-vertical-dots.svg?react'
 import ThunderIcon from './icons/thunder.svg?react'
 import TrashIcon from './icons/trash.svg?react'
 import UserStubIcon from './icons/user-stub.svg?react'
@@ -43,9 +45,9 @@ import VideoCallThin from './icons/video-call-thin.svg?react'
 import VideoCallIcon from './icons/video-call.svg?react'
 import VideoCancel from './icons/video-cancel.svg?react'
 import WarnIcon from './icons/warn.svg?react'
-import { AppIconListElement, AppIconProps } from './types'
+import type { IAppIconListElement, IAppIconProps } from './types'
 
-export const IconList: AppIconListElement[] = [
+export const IconList: IAppIconListElement[] = [
   { name: 'logo', AppIcon: LogoIcon },
   { name: 'shield', AppIcon: ShieldIcon },
   { name: 'contacts', AppIcon: ContactsIcon },
@@ -61,6 +63,7 @@ export const IconList: AppIconListElement[] = [
   { name: 'plus', AppIcon: PlusIcon },
   { name: 'emoji', AppIcon: EmojiIcon },
   { name: 'send', AppIcon: SendIcon },
+  { name: 'success', AppIcon: SuccessIcon },
   { name: 'paper-clip', AppIcon: PaperClipIcon },
   { name: 'mail', AppIcon: MailIcon },
   { name: 'video-call', AppIcon: VideoCallIcon },
@@ -85,10 +88,11 @@ export const IconList: AppIconListElement[] = [
   { name: 'thunder', AppIcon: ThunderIcon },
   { name: 'eye', AppIcon: EyeIcon },
   { name: 'eye-blocked', AppIcon: EyeBlockedIcon },
-  { name: 'three-dots', AppIcon: ThreeDots }
+  { name: 'three-dots', AppIcon: ThreeDotsIcon },
+  { name: 'three-vertical-dots', AppIcon: ThreeVerticalsDotsIcon }
 ]
 
-export const AppIcon = ({ name, color = 'text-color', size = 'small' }: AppIconProps) => {
+export const AppIcon = ({ name, color = 'text-color', size = 'small' }: IAppIconProps) => {
   const AppIcon = IconList.find((IconElement) => IconElement.name === name)?.AppIcon
 
   const className = createClassNameWithModifiers({ rootClass: 'app-icon', modifiers: [name, size, color] })

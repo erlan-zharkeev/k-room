@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 
-import { AppFormFieldValue } from 'src/shared/ui/AppForm/types'
+import type { AppFormFieldValue } from 'src/shared/ui/AppForm/types'
 
 import { stringValidateRules, booleanValidateRules, arrayValidateRules } from './rules'
-import {
-  ElementPickerValidateRule,
-  FileInputValidateRule,
-  SwitchValidateRule,
-  TextInputValidateRule,
+import type {
+  IElementPickerValidateRule,
+  IFileInputValidateRule,
+  ISwitchValidateRule,
+  ITextInputValidateRule,
   ValidateRule
 } from './types'
 
@@ -34,21 +34,21 @@ export const useValidate = (form: Record<string, AppFormFieldValue>) => {
     let currentErrors: string[] = []
     if (typeof value === 'string') {
       if (rule.name in stringValidateRules) {
-        const inferredRule = rule as TextInputValidateRule
+        const inferredRule = rule as ITextInputValidateRule
         currentErrors = stringValidateRules[inferredRule.name](value, inferredRule)
       } else {
         console.warn(`Unknown string validation rule: ${rule.name}`)
       }
     } else if (typeof value === 'boolean') {
       if (rule.name in booleanValidateRules) {
-        const inferredRule = rule as SwitchValidateRule | FileInputValidateRule
+        const inferredRule = rule as ISwitchValidateRule | IFileInputValidateRule
         currentErrors = booleanValidateRules[inferredRule.name](value)
       } else {
         console.warn(`Unknown boolean validation rule: ${rule.name}`)
       }
     } else if (Array.isArray(value)) {
       if (rule.name in arrayValidateRules) {
-        const inferredRule = rule as ElementPickerValidateRule
+        const inferredRule = rule as IElementPickerValidateRule
         currentErrors = arrayValidateRules[inferredRule.name](value)
       }
     }

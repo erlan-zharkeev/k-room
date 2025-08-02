@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 import { notification as antdNotification } from 'antd'
 import { IMessage } from 'common-types'
 
@@ -8,27 +6,9 @@ import { useUser } from 'src/entities/user'
 
 import { AppLogoIcon } from 'src/shared/assets'
 
-import { ClientNotificationMessage, NotificationType } from '../types'
+import type { IAppNotification, NotificationType } from '../types'
 
-interface Notification {
-  key?: string
-  message: ClientNotificationMessage | '' | ReactNode
-  description?: string
-  messageType?: NotificationType
-  duration?: number
-  placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
-}
-
-const basicNotificationData: Notification = {
-  key: '',
-  message: '',
-  description: '',
-  messageType: 'info',
-  duration: 8,
-  placement: 'top'
-}
-
-export type UseNotification = ReturnType<typeof useNotification>
+import { getNotificationIcon } from './../lib'
 
 const ERROR_NOTIFICATION_DURATION_IN_SEC = 10
 
@@ -37,7 +17,17 @@ export const useNotification = () => {
 
   const { showNotification } = useSettings()
 
-  const getNotification = (notification: Notification) => {
+  const basicNotificationData: IAppNotification = {
+    key: '',
+    message: '',
+    description: '',
+    messageType: 'info',
+    duration: 8,
+    placement: 'top',
+    icon: getNotificationIcon('info')
+  }
+
+  const getNotification = (notification: IAppNotification) => {
     const messageType = notification.messageType ?? (basicNotificationData.messageType as NotificationType)
     const isError = messageType === 'error'
     const isInfo = messageType === 'info'
@@ -52,12 +42,13 @@ export const useNotification = () => {
       duration = notification.duration
     }
 
-    const notificationData: Notification = {
+    const notificationData: IAppNotification = {
       ...basicNotificationData,
       ...notification,
       messageType,
       placement,
-      duration
+      duration,
+      icon: getNotificationIcon(messageType)
     }
 
     const open = () => {

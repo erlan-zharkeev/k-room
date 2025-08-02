@@ -11,23 +11,23 @@ import { AppAvatar, AppIcon } from 'src/shared/ui'
 import { firstCharUpperCase } from 'src/shared/utils'
 
 export const Calls = () => {
-  const { list, currentCall } = useTypedSelector((state) => state.calls)
-  const getFlowType = (call: ICall) => (currentCall.id === call.id ? 'current' : call.type)
-  const [sortedList, setSortedList] = useState(list)
-  const getCallTypeName = (call: ICall) => {
-    const type = getFlowType(call)
-    return type === 'not-answered' ? 'Not answered' : firstCharUpperCase(type)
-  }
-  useEffect(() => {
-    const tempList = [...list]
-    tempList.sort((a, b) => (a.calledAt ?? 0) - (b.calledAt ?? 0)).reverse()
-    setSortedList(tempList)
-  }, [list])
+  // const { list, currentCall } = useTypedSelector((state) => state.calls)
+  // const getFlowType = (call: ICall) => (currentCall.id === call.id ? 'current' : call.type)
+  // const [sortedList, setSortedList] = useState(list)
+  // const getCallTypeName = (call: ICall) => {
+  //   const type = getFlowType(call)
+  //   return type === 'not-answered' ? 'Not answered' : firstCharUpperCase(type)
+  // }
+  // useEffect(() => {
+  //   const tempList = [...list]
+  //   tempList.sort((a, b) => (a.calledAt ?? 0) - (b.calledAt ?? 0)).reverse()
+  //   setSortedList(tempList)
+  // }, [list])
 
   return (
     <div className="call-list">
       <div className="call-list__body">
-        <List
+        {/* <List
           itemLayout="horizontal"
           dataSource={sortedList}
           locale={{
@@ -58,7 +58,7 @@ export const Calls = () => {
               </div>
             </List.Item>
           )}
-        />
+        /> */}
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import { EndpointsType, StatusEnum } from 'common-types'
 import { useNotification } from 'src/entities/notification'
 
 import { axios } from '../config'
-import { RequestTypes } from '../types'
+import type { RequestTypes } from '../types'
 
 import { useApiInterсeptor } from './use-api-interceptor'
 
