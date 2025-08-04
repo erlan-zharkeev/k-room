@@ -23,7 +23,7 @@ export const useContactOnlineMonitor = () => {
     const currentTimestamp = Date.now()
 
     contacts.forEach((contact) => {
-      const outdated = Math.abs(currentTimestamp - contact.onlineStatusUpdatedTimestamp) / 1000 > maxDiffSeconds
+      const outdated = Math.abs(currentTimestamp - contact.onlineStatusSyncedAt) / 1000 > maxDiffSeconds
 
       if (outdated) {
         updateContactData(contact.id, { online: false })

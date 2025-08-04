@@ -5,6 +5,8 @@ export interface IConstraint {
   value: boolean
 }
 
+export type CallMediaType = 'audio' | 'video'
+
 export interface IStreamConstraints {
   audio: IConstraint
   video: IConstraint

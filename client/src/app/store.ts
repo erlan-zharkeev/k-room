@@ -22,6 +22,3 @@ export const store = configureStore({
       serializableCheck: false
     })
 })
-
-// 2) Делаем запрос на бэкэнд в котором указываем timestamp
-// 3) Бэкэнд возвращает все по базе все что изменилось после timestamp

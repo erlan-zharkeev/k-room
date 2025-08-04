@@ -11,7 +11,16 @@
     "noImplicitAny": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "./../",
+    "paths": {
+      "features/*": ["server/src/features/*"],
+      "entities/*": ["server/src/entities/*"],
+      "shared/*": ["server/src/shared"],
+      "shared": ["server/src/shared"],
+      "common-types": ["types"]
+    }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["../server/src", "../types/shared-types"],
+  "exclude": ["node_modules", "./build", "./src/utils"]
 }

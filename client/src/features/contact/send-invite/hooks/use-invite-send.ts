@@ -5,7 +5,7 @@ import { useNotification } from 'src/entities/notification'
 import { socket } from 'src/shared/api'
 import { db } from 'src/shared/lib'
 
-import { REQUIRED_CONTACT_DATA } from '../../lib'
+import { getRequiredContactSystemData } from '../../lib'
 
 export const useInviteSend = () => {
   const { openBrowserNotification } = useNotification()
@@ -13,17 +13,16 @@ export const useInviteSend = () => {
   const processInvitation = async (payload: IEventInviteReceived) => {
     const { contactData } = payload
     const existingContact = await db.contacts.get(contactData.id)
-    const onlineStatusUpdatedTimestamp = Date.now()
+    const onlineStatusSyncedAt = Date.now()
     const data = existingContact
       ? {
           ...existingContact,
           ...contactData,
-          onlineStatusUpdatedTimestamp
+          onlineStatusSyncedAt
         }
       : {
           ...contactData,
-          ...REQUIRED_CONTACT_DATA,
-          onlineStatusUpdatedTimestamp
+          ...getRequiredContactSystemData()
         }
     await db.contacts.put(data)
   }

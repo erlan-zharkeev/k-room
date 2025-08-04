@@ -3,12 +3,12 @@ import { SocketActionsType, EventGetContactsType } from 'common-types'
 import { socket } from 'src/shared/api'
 import { db } from 'src/shared/lib'
 
-import { REQUIRED_CONTACT_DATA } from '../../lib'
+import { getRequiredContactSystemData } from '../../lib'
 
 export const useLoadContacts = () => {
   const loadContacts = async (list: EventGetContactsType) => {
     const result = Object.entries(list).map(([_, data]) => {
-      return { ...data, ...REQUIRED_CONTACT_DATA }
+      return { ...data, ...getRequiredContactSystemData() }
     })
     await db.contacts.bulkPut(result)
   }

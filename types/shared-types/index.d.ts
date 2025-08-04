@@ -6,6 +6,7 @@ export * from "./socket";
 export * from "./user";
 export * from "./contact";
 export * from "./codes";
-export * from "./info";
+export * from "./info-notification";
 export * from "./common";
 export * from "./auth";
+export * from "./media";

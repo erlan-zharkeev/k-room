@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import { type IUserSettings, db } from 'src/shared/lib'
+import { type IUserSetting, db } from 'src/shared/lib'
 
 import { DEFAULT_SETTINGS, FULL_CONTENT_ELEMENTS } from '..'
 
@@ -17,7 +17,7 @@ export const useSettings = () => {
     }
   }
 
-  const updateSetting = async (setting: Partial<IUserSettings>) => {
+  const updateSetting = async (setting: Partial<IUserSetting>) => {
     if (!settings) return
     await db.settings.put({ ...settings, ...setting, id: 'settings' })
   }
@@ -26,7 +26,7 @@ export const useSettings = () => {
     await db.settings.put({ ...DEFAULT_SETTINGS, id: 'settings' })
   }
 
-  const mergedSettings: IUserSettings = {
+  const mergedSettings: IUserSetting = {
     ...DEFAULT_SETTINGS,
     ...settings
   }

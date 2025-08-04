@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { useInfoNotification } from 'src/features/info-notification'
+import { useInfoNotification } from 'src/entities/info-notification'
 
 import { AppCollapseList, AppHeader } from 'src/shared/ui'
 

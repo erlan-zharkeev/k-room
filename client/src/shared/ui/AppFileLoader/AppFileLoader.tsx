@@ -5,7 +5,7 @@ import { IImageObject } from 'common-types'
 
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 
-import { ImageResolutions } from 'src/shared/types'
+import { ImageResolutions } from 'src/shared/config/types'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
 

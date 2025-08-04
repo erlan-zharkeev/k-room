@@ -1,4 +1,4 @@
-import { ChatRoomsType, ICodes, DBContactMapType, IInfoMessage, MessageStatusType } from ".";
+import { ChatRoomsType, ICodes, DBContactMapType, IInfoNotification, MessageStatusType } from ".";
 export type UserRoleType = "user" | "admin";
 export interface IUserMessageStatus {
     id: string;
@@ -25,7 +25,7 @@ export interface IUserData {
     providerName?: string;
     lastSeen?: number;
     contacts?: IUserData[];
-    infoNotifications?: IInfoMessage[];
+    infoNotifications?: IInfoNotification[];
 }
 export type UserShortType = Pick<IUserData, "id" | "username" | "avatarPath">;
 export type UserCredentialType = Pick<IUserData, "id" | "username" | "email" | "avatarPath" | "password" | "providerName">;
@@ -35,7 +35,7 @@ export interface IUserSchema extends Omit<IUserData, "contacts"> {
     confirmAttempts: number;
     refreshToken: string;
     codes: ICodes;
-    infoNotifications: IInfoMessage[];
+    infoNotifications: IInfoNotification[];
     contacts: DBContactMapType;
 }
 export interface ICreateNewPasswordPayload extends Pick<IUserData, "password"> {

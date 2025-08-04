@@ -1,8 +1,8 @@
-import type { ContentTabType, IUserSettings } from 'src/shared/lib'
+import type { ContentTabType, IUserSetting } from 'src/shared/lib'
 
 export const FULL_CONTENT_ELEMENTS: ContentTabType[] = ['info']
 
-export const DEFAULT_SETTINGS: IUserSettings = {
+export const DEFAULT_SETTINGS: IUserSetting = {
   selectedContentTab: 'contacts',
   selectedChatRoomId: '',
   theme: 'dark',

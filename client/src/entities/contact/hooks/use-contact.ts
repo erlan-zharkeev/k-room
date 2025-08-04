@@ -1,12 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import { ContactDbItemType, db } from 'src/shared/lib'
+import type { DbContactType } from 'src/shared/config'
+import { db } from 'src/shared/lib'
 
 export const useContact = () => {
   const contactMap =
     useLiveQuery(async () => {
       const allContacts = await db.contacts.toArray()
-      return allContacts.reduce<Record<string, ContactDbItemType>>((acc, contact) => {
+      return allContacts.reduce<Record<string, DbContactType>>((acc, contact) => {
         acc[contact.id] = contact
         return acc
       }, {})

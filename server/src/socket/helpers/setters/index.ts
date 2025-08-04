@@ -1,7 +1,0 @@
-export { setSocketId } from './set-socket-id'
-export { setUserStatus } from './set-user-status'
-export { setLastSeenData } from './set-last-seen-data'
-export { setMessageStatus } from './set-message-status'
-export { setRoomToUsers } from './set-room-to-users'
-export { setMessage } from './set-message'
-export { deleteContactById } from './delete-contact-by-id'

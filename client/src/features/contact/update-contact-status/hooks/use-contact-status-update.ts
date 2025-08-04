@@ -8,8 +8,8 @@ export const useContactStatusUpdate = () => {
   const { updateContactData } = useUpdateContactData()
 
   const updateStatus = (payload: IEventStatusContact) => {
-    const { interlocutorId, online, onlineStatusUpdatedTimestamp } = payload
-    updateContactData(interlocutorId, { online, onlineStatusUpdatedTimestamp })
+    const { interlocutorId, online, onlineStatusSyncedAt } = payload
+    updateContactData(interlocutorId, { online, onlineStatusSyncedAt })
   }
 
   const monitorContactStatusUpdate = () => {

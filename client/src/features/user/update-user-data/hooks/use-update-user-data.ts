@@ -1,12 +1,13 @@
 import { useState } from 'react'
 
-import { MediaFileValueType, UserEndpointsEnum } from 'common-types'
+import { UserEndpointsEnum } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { closeModal } from 'src/entities/system'
 import { useUser, setUserData } from 'src/entities/user'
 
 import { useApi } from 'src/shared/api'
+import { MediaFileValueType } from 'src/shared/config'
 import { AppFormData } from 'src/shared/ui'
 
 export const useUpdateUserData = () => {

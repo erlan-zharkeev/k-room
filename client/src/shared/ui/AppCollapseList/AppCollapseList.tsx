@@ -2,7 +2,6 @@ import './style.scss'
 import { useEffect, useRef, useState } from 'react'
 
 import { Badge } from 'antd'
-import parse from 'html-react-parser'
 
 import { useTimeout } from 'src/shared/lib'
 
@@ -32,18 +31,18 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps)
 
   return (
     <div className="app-collapse-list">
-      {items.map((item) => {
-        const isOpen = openElId === item.id
-        const showOverflow = delayedOverflowIndex === item.id
+      {items.map(({ id, title, content: Content, badgeName }) => {
+        const isOpen = openElId === id
+        const showOverflow = delayedOverflowIndex === id
         return (
-          <Badge color={'var(--error)'} count={item.badgeName} offset={[-5, 2]} key={item.id}>
+          <Badge color={'var(--error)'} count={badgeName} offset={[-5, 2]} key={id}>
             <div
               className={`app-collapse-list__element ${isOpen ? 'app-collapse-list__element--open' : ''}`}
-              onClick={() => clickHandler(item.id)}
+              onClick={() => clickHandler(id)}
             >
               <div className="app-collapse-list__element-header">
                 <AppHeader bold={false} tag="h4">
-                  {item.title}
+                  {title}
                 </AppHeader>
                 <div className="app-collapse-list__element-header-right-side">
                   <div className="app-collapse-list__element-chevron-icon">
@@ -59,7 +58,7 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps)
                 }}
               >
                 <div ref={contentBodyDOM} className="app-collapse-list__element-content-body">
-                  {parse(item.content ?? '<p>Сouldn`t get the data, try later</p>')}
+                  {Content && <Content />}
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { ClientNotificationMessage, UseNotification } from 'src/entities/notification'
 
-import { ImageResolutions } from '../types'
+import { ImageResolutions } from '../config/types'
 
 const MAX_IMAGE_WEIGHT_IN_MB = 2
 

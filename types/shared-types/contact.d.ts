@@ -3,7 +3,8 @@ export type InteractionType = "default" | "invited" | "invite-accepted" | "invit
 export interface IContactBase {
     id: string;
     interaction: InteractionType;
+    updatedAt: number;
 }
-export type ContactType = IContactBase & Omit<IUserData, "chatRooms" | "contacts" | "infoNotifications" | "role">;
+export type ContactType = Omit<IContactBase, "updatedAt"> & Omit<IUserData, "chatRooms" | "contacts" | "infoNotifications" | "role">;
 export type DBContactType = IContactBase;
 export type DBContactMapType = Record<string, DBContactType>;

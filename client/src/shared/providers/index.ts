@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import type { ContextRef } from '../types'
+import { ContextRefType } from '../config'
 
-export const RefsContext = createContext<Record<string, ContextRef>>({})
-export const AdditionalServiceContext = createContext<Record<string, ContextRef>>({})
+export const RefsContext = createContext<Record<string, ContextRefType>>({})
+export const AdditionalServiceContext = createContext<Record<string, ContextRefType>>({})

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IUserData, IInfoMessage } from 'common-types'
+import { IUserData, IInfoNotification } from 'common-types'
 
 import type { IUserStore } from '../types'
 
@@ -38,7 +38,7 @@ export const userSlice = createSlice({
         infoNotifications: []
       }
     },
-    updateInfoNotificationContent(state, { payload }: { payload: IInfoMessage[] }) {
+    updateInfoNotificationContent(state, { payload }: { payload: IInfoNotification[] }) {
       payload.forEach((newItem) => {
         const index = state.userData.infoNotifications.findIndex((item) => item.id === newItem.id)
         if (index !== -1) {
@@ -46,7 +46,7 @@ export const userSlice = createSlice({
         }
       })
     },
-    setInfoItems(state, { payload }: { payload: IInfoMessage[] }) {
+    setInfoItems(state, { payload }: { payload: IInfoNotification[] }) {
       state.userData.infoNotifications = payload
     },
     markInfoNotificationAsRead(state, { payload }: { payload: { id: string } }) {

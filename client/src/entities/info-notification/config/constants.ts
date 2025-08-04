@@ -1,0 +1,1 @@
+export const INFO_ITEM_MARK_AS_READ_DURATION = 1.5 * 1000

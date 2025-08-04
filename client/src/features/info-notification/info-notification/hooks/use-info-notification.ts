@@ -12,7 +12,7 @@ import { useUser, markInfoNotificationAsRead, updateInfoNotificationContent } fr
 import { useApi } from 'src/shared/api'
 import { useTimeout } from 'src/shared/lib'
 
-const INFO_ITEM_MARK_AS_READ_DURATION = 1.5 * 1000
+// const INFO_ITEM_MARK_AS_READ_DURATION = 1.5 * 1000
 
 export const useInfoNotification = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -22,40 +22,40 @@ export const useInfoNotification = () => {
   const { selectContentTab } = useContentTabSelect()
   const { startTimeout } = useTimeout()
 
-  const markInfoAsRead = async (id: string) => {
-    const response = await doRequest('post', CommonEndpointsEnum.InfoItem, { id })
-    if (!response || response.status !== StatusEnum.Success) return
-    dispatch(markInfoNotificationAsRead({ id }))
-  }
+  // const markInfoAsRead = async (id: string) => {
+  //   const response = await doRequest('post', CommonEndpointsEnum.InfoItem, { id })
+  //   if (!response || response.status !== StatusEnum.Success) return
+  //   dispatch(markInfoNotificationAsRead({ id }))
+  // }
 
-  const infoNotificationClickHandler = (id: string) => {
-    selectContentTab('info')
+  // const infoNotificationClickHandler = (id: string) => {
+  //   selectContentTab('info')
 
-    const foundEl = infoNotifications?.find((infoItem) => infoItem.id === id)
+  //   const foundEl = infoNotifications?.find((infoItem) => infoItem.id === id)
 
-    if (foundEl && !foundEl.read) {
-      startTimeout(() => {
-        markInfoAsRead(id)
-      }, INFO_ITEM_MARK_AS_READ_DURATION)
-    }
-  }
+  //   if (foundEl && !foundEl.read) {
+  //     startTimeout(() => {
+  //       markInfoAsRead(id)
+  //     }, INFO_ITEM_MARK_AS_READ_DURATION)
+  //   }
+  // }
 
-  const getInfoItemContent = async () => {
-    const elementIdsWithoutContent = infoNotifications.filter((item) => !item.content).map((item) => item.id)
-    if (!elementIdsWithoutContent.length) return
+  // const getInfoItemContent = async () => {
+  //   const elementIdsWithoutContent = infoNotifications.filter((item) => !item.content).map((item) => item.id)
+  //   if (!elementIdsWithoutContent.length) return
 
-    try {
-      setIsInfoItemLoading(true)
-      const ids = elementIdsWithoutContent.join(',')
-      const response = await doRequest('get', `${CommonEndpointsEnum.InfoItem}?ids=${ids}` as CommonEndpointsEnum)
-      if (!response || response.status !== StatusEnum.Success || !response.data) return
-      dispatch(updateInfoNotificationContent(response.data))
-    } catch (error: unknown) {
-      console.error('Error fetching info item content:', error)
-    } finally {
-      setIsInfoItemLoading(false)
-    }
-  }
+  //   try {
+  //     setIsInfoItemLoading(true)
+  //     const ids = elementIdsWithoutContent.join(',')
+  //     const response = await doRequest('get', `${CommonEndpointsEnum.InfoItem}?ids=${ids}` as CommonEndpointsEnum)
+  //     if (!response || response.status !== StatusEnum.Success || !response.data) return
+  //     dispatch(updateInfoNotificationContent(response.data))
+  //   } catch (error: unknown) {
+  //     console.error('Error fetching info item content:', error)
+  //   } finally {
+  //     setIsInfoItemLoading(false)
+  //   }
+  // }
 
   const collapseInfoNotifications = useMemo(() => {
     const result =
@@ -69,7 +69,7 @@ export const useInfoNotification = () => {
   }, [infoNotifications])
 
   useEffect(() => {
-    getInfoItemContent()
+    // getInfoItemContent()
   }, [infoNotifications])
 
   return { collapseInfoNotifications, isInfoItemLoading, infoNotificationClickHandler }

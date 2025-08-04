@@ -5,7 +5,7 @@ import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
 import { db } from 'src/shared/lib'
 
-import { REQUIRED_CONTACT_DATA } from '../../lib'
+import { getRequiredContactSystemData } from '../../lib'
 
 export const useAddContact = () => {
   const { id } = useUser()
@@ -18,7 +18,7 @@ export const useAddContact = () => {
   }
 
   const addContact = async (payload: IEventContactAddSuccess) => {
-    const newContact = { ...payload.contactData, ...REQUIRED_CONTACT_DATA }
+    const newContact = { ...payload.contactData, ...getRequiredContactSystemData() }
     await db.contacts.put(newContact)
   }
 

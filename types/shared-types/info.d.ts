@@ -1,4 +1,4 @@
-export interface IInfoMessage {
+export interface IInfoNotification {
     id: string;
     label: string;
     read: boolean;

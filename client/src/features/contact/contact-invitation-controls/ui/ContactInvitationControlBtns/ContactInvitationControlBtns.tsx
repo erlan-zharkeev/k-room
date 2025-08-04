@@ -1,13 +1,12 @@
 import './style.scss'
 
-import { type SliceContact } from 'src/entities/contact'
-
+import type { DbContactType } from 'src/shared/config'
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { useContactInvitationControls } from '../../hooks'
 
-export const ContactInvitationControlBtns = ({ contactData }: { contactData: SliceContact }) => {
+export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbContactType }) => {
   const className = createClassNameWithModifiers({
     rootClass: 'contact-invitation-control-btns',
     modifiers: [contactData.interaction]
