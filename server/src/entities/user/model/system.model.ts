@@ -1,18 +1,11 @@
-import { Schema } from 'mongoose'
 import type { IUserSystemData } from 'entities/user'
+import { Schema } from 'mongoose'
+
+import { deviceSchema } from './device.model'
 
 export const systemSchema = new Schema<IUserSystemData>(
   {
-    socketIds: {
-      type: [String],
-      unique: true,
-      required: false
-    },
-    refreshToken: {
-      type: String,
-      unique: true,
-      required: false
-    },
+    device: deviceSchema,
     confirmed: {
       type: Boolean,
       required: true,

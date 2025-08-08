@@ -2,12 +2,18 @@
   "name": "k-room",
   "version": "1.0.0",
   "repository": "git@gitlab.com:k-room/k-room.git",
-  "author": "zharkeev <zharkeev.post@gmail.com>",
+  "author": "<zharkeev.post@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
-    "husky": "^8.0.2"
+    "@types/jest": "^30.0.0",
+    "depcheck": "^1.4.7",
+    "husky": "^8.0.2",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.1"
   }
 }

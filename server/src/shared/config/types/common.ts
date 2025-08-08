@@ -1,4 +1,4 @@
-import { StatusEnum } from 'common-types'
+import { type StatusEnum } from 'common-types'
 
 export interface ErrorResponse<T> {
   message: T

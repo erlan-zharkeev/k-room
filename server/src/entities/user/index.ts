@@ -1,2 +1,2 @@
+export type { IUserPersonalData, IUserPublicData, IUserSchema, IUserSystemData } from './config'
 export * from './model'
-export * from './config'

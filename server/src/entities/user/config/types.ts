@@ -1,8 +1,12 @@
-import { UserRoleType, ChatRoomsType } from 'common-types'
+import { type UserRoleType } from 'common-types'
+
+export interface IUserDevice {
+  socketId: string
+  refreshToken: string
+}
 
 export interface IUserSystemData {
-  socketIds: string[]
-  refreshToken: string
+  device: Record<string, IUserDevice>
   confirmed: boolean
   confirmAttempts: number
   password: string
@@ -21,4 +25,11 @@ export interface IUserPublicData {
   avatarPath: string
   online: boolean
   lastSeen: number
+}
+
+export interface IUserSchema {
+  id: string
+  system: IUserSystemData
+  personal: IUserPersonalData
+  public: IUserPublicData
 }

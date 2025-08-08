@@ -1,18 +1,9 @@
-import { Result, ValidationError } from 'express-validator'
-import { Response } from 'express'
-import type { SocketActionsType } from 'common-types'
-import { StatusEnum } from 'common-types'
+import type { SocketActionsType, StatusEnum } from 'common-types'
+import { type Response } from 'express'
+import type { ErrorResponse, ServerNotificationMessage } from 'shared-config'
+import { getIO, log } from 'shared-lib'
 
-import type { ErrorResponse, ServerNotificationMessage } from 'shared/types'
-import { log } from 'shared/utils'
-import { getIO } from 'shared/services'
-
-export const throwError = (
-  status: StatusEnum,
-  res: Response,
-  errors: Result<ValidationError> | ServerNotificationMessage,
-  silent: boolean = false
-) => {
+export const throwHTTPError = (status: StatusEnum, res: Response, errors: any, silent: boolean = false) => {
   log.error(`-${errors}`)
 
   if (res.headersSent) {
@@ -20,7 +11,7 @@ export const throwError = (
     return
   }
 
-  const payload: ErrorResponse<Result<ValidationError> | ServerNotificationMessage> = {
+  const payload: any = {
     message: errors,
     status,
     data: null,
@@ -35,5 +26,6 @@ export const throwSocketError = (
   status: StatusEnum = 500,
   silent: boolean = false
 ) => {
-  getIO().to(socketId).emit<SocketActionsType>('error-message', { error, silent, status })
+  const io = getIO()
+  io.to(socketId).emit<SocketActionsType>('error-message', { error, silent, status })
 }

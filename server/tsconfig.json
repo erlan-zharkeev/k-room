@@ -14,13 +14,15 @@
     "resolveJsonModule": true,
     "baseUrl": "./../",
     "paths": {
+      "app/*": ["server/src/app/*"],
       "features/*": ["server/src/features/*"],
       "entities/*": ["server/src/entities/*"],
-      "shared/*": ["server/src/shared"],
-      "shared": ["server/src/shared"],
+      "shared-config": ["server/src/shared/config"],
+      "shared-lib": ["server/src/shared/lib"],
+      "shared-middleware": ["server/src/shared/middleware"],
       "common-types": ["types"]
     }
   },
-  "include": ["../server/src", "../types/shared-types"],
+  "include": ["../server/src", "../types/shared-types", "**/*.cjs"],
   "exclude": ["node_modules", "./build", "./src/utils"]
 }

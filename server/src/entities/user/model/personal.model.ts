@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose'
-import type { IUserPersonalData } from 'entities/user'
 import { USER_ROLES } from 'common-types'
+import type { IUserPersonalData } from 'entities/user'
+import { Schema } from 'mongoose'
 
 export const personalSchema = new Schema<IUserPersonalData>(
   {

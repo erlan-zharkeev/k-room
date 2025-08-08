@@ -1,10 +1,10 @@
 import { ChatRoomsType, ICodes, DBContactMapType, IInfoNotification, MessageStatusType } from ".";
-export type UserRoleType = "user" | "admin";
+export declare const USER_ROLES: readonly ["user", "admin"];
+export type UserRoleType = (typeof USER_ROLES)[number];
 export interface IUserMessageStatus {
     id: string;
     status: MessageStatusType;
 }
-export type UserMediaType = "audio" | "video";
 export type UsersMetaDataType = IUserMessageStatus[];
 export interface IFirebaseUser {
     firebaseUid: string;
@@ -16,11 +16,11 @@ export interface IFirebaseUser {
 export interface IUserData {
     id: string;
     username: string;
+    avatarPath?: string;
+    email?: string;
     online: boolean;
     chatRooms: ChatRoomsType;
     role: UserRoleType;
-    avatarPath?: string;
-    email?: string;
     password?: string;
     providerName?: string;
     lastSeen?: number;

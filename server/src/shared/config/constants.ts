@@ -1,6 +1,6 @@
-import dotenv, { DotenvParseOutput } from 'dotenv'
 import type { IEnvVariables } from 'common-types'
-import type { ISystemDataConstants } from './types'
+import dotenv, { type DotenvParseOutput } from 'dotenv'
+import type { ISystemDataConstants } from 'shared-config'
 
 const envs = dotenv.config({ path: `./.env.${process.env.NODE_ENV}` }).parsed as DotenvParseOutput | IEnvVariables
 envs.IS_DEV = process.env.NODE_ENV === 'development'

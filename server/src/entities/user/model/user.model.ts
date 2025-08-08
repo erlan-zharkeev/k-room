@@ -1,20 +1,22 @@
-import { Schema, model } from 'mongoose'
+import { model, Schema } from 'mongoose'
+
+import type { IUserSchema } from '../config'
+import { personalSchema } from './personal.model'
 import { publicSchema } from './public.model'
 import { systemSchema } from './system.model'
-import { personalSchema } from './personal.model'
 
-const userSchema = new Schema({
-  system: {
-    type: systemSchema,
-    required: true
-  },
-  personal: {
-    type: personalSchema,
-    required: true
-  },
-  public: {
-    type: publicSchema,
-    required: true
+const userSchema = new Schema<IUserSchema>({
+  system: systemSchema,
+  personal: personalSchema,
+  public: publicSchema
+})
+
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_doc, ret) => {
+    ret.id = ret._id
+    delete ret._id
   }
 })
 
