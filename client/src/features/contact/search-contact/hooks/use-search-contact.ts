@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
-import { IUserData, SocketActionsType, IEventSearchContact } from 'common-types'
+import { IFrontendUserData, SocketActionsType, IEventSearchContact } from 'common-types'
 
 import { useUser } from 'src/entities/user'
 
@@ -11,11 +11,11 @@ export const useSearchContact = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { id } = useUser()
-  const [searchedContacts, setSearchedContacts] = useState<IUserData[]>([])
+  const [searchedContacts, setSearchedContacts] = useState<IFrontendUserData[]>([])
 
   useEffect(() => {
-    socket.on<SocketActionsType>('get-searched-contact', (contacts: IUserData[]) => {
-      const userFilteredSelf = contacts.filter((user: IUserData) => user.id !== id)
+    socket.on<SocketActionsType>('get-searched-contact', (contacts: IFrontendUserData[]) => {
+      const userFilteredSelf = contacts.filter((user: IFrontendUserData) => user.id !== id)
       setSearchedContacts(userFilteredSelf)
       setIsLoading(false)
     })

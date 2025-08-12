@@ -1,4 +1,4 @@
-import { IEventContactAddSuccess, IUserData, SocketActionsType } from 'common-types'
+import { IEventContactAddSuccess, IFrontendUserData, SocketActionsType } from 'common-types'
 
 import { useUser } from 'src/entities/user'
 
@@ -10,7 +10,7 @@ import { getRequiredContactSystemData } from '../../lib'
 export const useAddContact = () => {
   const { id } = useUser()
 
-  const clickAddContactHandler = async (interlocutorId: string | undefined, searchedContacts: IUserData[]) => {
+  const clickAddContactHandler = async (interlocutorId: string | undefined, searchedContacts: IFrontendUserData[]) => {
     if (!interlocutorId) return
     const interlocutorData = searchedContacts.find((user) => user.id === interlocutorId)
     if (!interlocutorData) return

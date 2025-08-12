@@ -1,4 +1,4 @@
-export * from './~shared/lib'
+export * from './~shared'
 export * from './get-user-data'
 export * from './reset-password'
 export * from './router'

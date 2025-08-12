@@ -26,7 +26,7 @@ export declare enum StatusEnum {
 export declare enum AuthEndpointsEnum {
     Registration = "/auth/registration",
     SendEmailConfirmationLink = "/auth/send-email-confirmation-link",
-    SendEmailConfirmation = "/auth/send-email-confirmation",
+    ConfirmEmail = "/auth/send-email-confirmation",
     Login = "/auth/login",
     GoogleLogin = "/auth/google-login",
     ProviderLogin = "/auth/provider-login",

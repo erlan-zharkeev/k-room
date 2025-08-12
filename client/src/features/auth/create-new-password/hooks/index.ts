@@ -34,7 +34,10 @@ export const useCreateNewPassword = () => {
     try {
       checkPassMatch(payload)
       setIsLoading(true)
-      const formData = { password: payload.secondPassword, query: passwordRestoreQuery } as ICreateNewPasswordPayload
+      const formData: ICreateNewPasswordPayload = {
+        password: payload.secondPassword as string,
+        query: passwordRestoreQuery
+      }
       const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)
       if (response && response.status === StatusEnum.Success) {
         setIPasswordChanged(true)

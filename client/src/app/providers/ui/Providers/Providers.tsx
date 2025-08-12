@@ -3,7 +3,7 @@ import * as processLib from 'process'
 import { ReactNode, useRef } from 'react'
 
 import { initializeApp } from 'firebase/app'
-import { Provider } from 'react-redux'
+import { ProviderType } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
 import 'src/shared/lib/db/db'
@@ -16,14 +16,14 @@ import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
 const AdditionalServiceProvider = ({ children }: { children: ReactNode }) => {
   const call = useRef(useMakeCall())
   const services = { call }
-  return <AdditionalServiceContext.Provider value={services}>{children}</AdditionalServiceContext.Provider>
+  return <AdditionalServiceContext.ProviderType value={services}>{children}</AdditionalServiceContext.ProviderType>
 }
 
 const RefsProvider = ({ children }: { children: ReactNode }) => {
   const interlocutorVideoDom = useRef<HTMLVideoElement>(null)
   const selfVideoDom = useRef<HTMLVideoElement>(null)
   const refs = { interlocutorVideoDom, selfVideoDom }
-  return <RefsContext.Provider value={refs}>{children}</RefsContext.Provider>
+  return <RefsContext.ProviderType value={refs}>{children}</RefsContext.ProviderType>
 }
 
 const firebaseConfig = {
@@ -41,11 +41,11 @@ initializeApp(firebaseConfig)
 // @ts-expect-error
 window.process = processLib.process as NodeJS.Process
 export const Providers = ({ children }: { children: React.ReactNode }) => (
-  <Provider store={store}>
+  <ProviderType store={store}>
     <RefsProvider>
       <AdditionalServiceProvider>
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>{children}</BrowserRouter>
       </AdditionalServiceProvider>
     </RefsProvider>
-  </Provider>
+  </ProviderType>
 )

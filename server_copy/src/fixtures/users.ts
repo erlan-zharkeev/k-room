@@ -36,7 +36,7 @@ export const loadUsersFixtures = async (loadAdmin: boolean) => {
     const user = new UserModel({
       username: firstCharUpperCase(username),
       role: admin ? 'admin' : 'user',
-      avatarPath: `${getRequestStringToImg(avatarFilename)}.jpg`,
+      avatar: `${getRequestStringToImg(avatarFilename)}.jpg`,
       email: `${username}@gmail.com`,
       password: hashedPassword,
       socketId: '',

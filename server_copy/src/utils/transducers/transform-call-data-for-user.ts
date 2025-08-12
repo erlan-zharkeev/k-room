@@ -34,7 +34,7 @@ export const transformCallDataForUser = async (userId: string, callId: string) =
     interlocutorId,
     authorName: author.username,
     interlocutorName: interlocutor.username,
-    interlocutorAvatarPath: interlocutor.avatarPath
+    interlocutorAvatarPath: interlocutor.avatar
   }
   return transformedCall
 }

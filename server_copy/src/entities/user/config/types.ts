@@ -18,7 +18,7 @@ export interface IUserPersonalData {
 export interface IUserPublicData {
   username: string
   email: string
-  avatarPath: string
+  avatar: string
   online: boolean
   lastSeen: number
 }

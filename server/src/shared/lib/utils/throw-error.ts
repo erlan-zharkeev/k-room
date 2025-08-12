@@ -1,21 +1,22 @@
-import type { SocketActionsType, StatusEnum } from 'common-types'
+import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common-types'
 import { type Response } from 'express'
-import type { ErrorResponse, ServerNotificationMessage } from 'shared-config'
+import type { ServerNotificationMessage } from 'shared-config'
 import { getIO, log } from 'shared-lib'
 
-export const throwHTTPError = (status: StatusEnum, res: Response, errors: any, silent: boolean = false) => {
-  log.error(`-${errors}`)
+export const throwHTTPError = (status: StatusEnum, res: Response, error: string, silent: boolean = false) => {
+  log.error(`-${error}`)
 
   if (res.headersSent) {
-    log.warn(`⚠️ Attempted to send error after headers were already sent: ${errors}`)
+    log.warn(`⚠️ Attempted to send error after headers were already sent: ${error}`)
     return
   }
 
-  const payload: any = {
-    message: errors,
-    status,
+  const payload: IBackendResponse<null> = {
     data: null,
-    silent
+    message: {
+      text: error,
+      silent
+    }
   }
   return res.status(status).json(payload)
 }

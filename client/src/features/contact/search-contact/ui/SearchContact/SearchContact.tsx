@@ -26,7 +26,7 @@ export const SearchContact = () => {
             {searchedContacts.map((contact) => (
               <div className="search-contact__list-element" key={contact.id}>
                 <ProfileInfo
-                  avatarPath={contact.avatarPath}
+                  avatar={contact.avatar}
                   title={contact.username}
                   description={contact.email}
                   showBadge={false}

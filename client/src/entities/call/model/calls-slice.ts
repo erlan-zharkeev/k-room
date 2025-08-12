@@ -65,9 +65,9 @@ export const callsSlice = createSlice({
     },
     initModalToCall(state, { payload }: { payload: UserShortType }) {
       state.showCallModal = true
-      const { id, avatarPath, username } = payload
+      const { id, avatar, username } = payload
       state.currentCall.interlocutorId = id
-      state.currentCall.interlocutorAvatarPath = avatarPath
+      state.currentCall.interlocutorAvatarPath = avatar
       state.currentCall.interlocutorName = username
       state.currentCall.status = 'calling'
       state.currentCall.flow = 'outgoing'
@@ -89,7 +89,7 @@ export const callsSlice = createSlice({
     setShowCallModal(state, { payload }: { payload: IEventCallUser }) {
       state.showCallModal = true
       state.currentCall.interlocutorName = payload.callerName
-      state.currentCall.interlocutorAvatarPath = payload.avatarPath
+      state.currentCall.interlocutorAvatarPath = payload.avatar
       state.currentCall.flow = 'incoming'
     },
     setCallStartedAt(state, { payload }: { payload: EventCallStartedAtType }) {

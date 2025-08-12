@@ -248,7 +248,7 @@
                 o = await s.UserModel.findOneAndUpdate({ _id: r }, { confirmed: !0 }, { new: !0 })
               if (!o) return
               return t.json({
-                userData: { username: o.username, email: o.email, id: o._id, avatar: o.avatarPath },
+                userData: { username: o.username, email: o.email, id: o._id, avatar: o.avatar },
                 message: d.ServerNotificationMessage.EmailConfirmed
               })
             } catch {
@@ -269,7 +269,7 @@
                           username: a.username,
                           email: r,
                           id: a._id,
-                          avatarPath: a.avatarPath,
+                          avatar: a.avatar,
                           infoItems: a.infoItems
                         },
                         settings: a.settings,
@@ -285,7 +285,7 @@
           }
           async signInWithProvider(e, t) {
             try {
-              const { username: r, email: n, avatarPath: l, providerName: u } = e.body
+              const { username: r, email: n, avatar: l, providerName: u } = e.body
               let m = await s.UserModel.findOne({ email: n })
               if (!m) {
                 const e = await c.hash((0, o.v4)(), 6)
@@ -293,7 +293,7 @@
                   username: r,
                   role: 'user',
                   email: n,
-                  avatarPath: l,
+                  avatar: l,
                   providerName: u,
                   password: e,
                   socketId: '',
@@ -310,7 +310,7 @@
                     username: m.username ?? r,
                     email: n,
                     id: m?._id,
-                    avatarPath: m.avatarPath ?? l,
+                    avatar: m.avatar ?? l,
                     role: m.role
                   },
                   settings: m.settings,
@@ -474,11 +474,11 @@
                 m = a.default.existsSync(u)
               !u.includes('static') && m && a.default.unlinkSync((0, l.getPathToImg)(o))
               const f = await (0, l.saveImageAndGetPath)(e.file?.buffer, 'avatar', c),
-                p = await n.UserModel.findOneAndUpdate({ _id: c }, { username: r, avatarPath: f }, { new: !0 })
+                p = await n.UserModel.findOneAndUpdate({ _id: c }, { username: r, avatar: f }, { new: !0 })
               if (!p) return (0, l.throwError)(d.Status.BadRequest, t, d.ServerNotificationMessage.UsersFind)
               const g = (await (0, i.getUsersByHasContactId)(c)).map((e) => e.id),
                 y = await (0, i.getSocketsByUserIds)(g),
-                h = { username: p.username, avatarPath: p.avatarPath },
+                h = { username: p.username, avatar: p.avatar },
                 v = { id: c, ...h }
               return (
                 y.forEach((e) => {
@@ -502,7 +502,7 @@
                       role: o.role,
                       email: o.email,
                       id: o._id,
-                      avatarPath: o.avatarPath,
+                      avatar: o.avatar,
                       infoItems: o.infoItems
                     },
                     settings: o.settings
@@ -672,7 +672,7 @@
               u = new a.UserModel({
                 username: (0, s.firstCharUpperCase)(e),
                 role: t ? 'admin' : 'user',
-                avatarPath: `${(0, s.getRequestStringToImg)(c)}.jpg`,
+                avatar: `${(0, s.getRequestStringToImg)(c)}.jpg`,
                 email: `${e}@gmail.com`,
                 password: l,
                 socketId: '',
@@ -862,7 +862,7 @@
         const o = r(1185),
           a = new o.Schema({
             chatName: { type: String, required: !1 },
-            avatarPath: { type: String, required: !1 },
+            avatar: { type: String, required: !1 },
             authorId: { type: String, required: !0 },
             multiple: { type: Boolean, required: !1 },
             users: { type: [String], required: !0, default: [] },
@@ -945,7 +945,7 @@
             confirmed: { type: Boolean, required: !0, default: !1 },
             confirmAttempts: { type: Number, required: !0, default: 3 },
             password: { type: String, required: !0 },
-            avatarPath: { type: String, required: !1 },
+            avatar: { type: String, required: !1 },
             online: { type: Boolean, required: !1, default: !1 },
             lastSeen: { type: String, required: !1 },
             contacts: { type: {}, default: {} },
@@ -969,7 +969,7 @@
           t.router.post(s.AuthEndpoints.Login, a.AuthController.login),
           t.router.post(s.AuthEndpoints.ProviderLogin, a.AuthController.signInWithProvider),
           t.router.post(s.AuthEndpoints.SendEmailConfirmationLink, a.AuthController.sendConfirmationLink),
-          t.router.post(s.AuthEndpoints.SendEmailConfirmation, a.AuthController.confirmEmail),
+          t.router.post(s.AuthEndpoints.ConfirmEmail, a.AuthController.confirmEmail),
           t.router.get(s.UserEndpoints.GetUserData, n.accessTokenValidator, a.UserController.getUserData),
           t.router.post(
             s.UserEndpoints.UpdateUserData,
@@ -1700,11 +1700,11 @@
           e.on('mark-call-as-video', (e) => {
             o.CallModel.updateOne({ _id: e.callId }, { video: !0 })
           }),
-            e.on('call-user', async ({ signal: t, userToCall: r, from: i, avatarPath: d, callerName: l }) => {
+            e.on('call-user', async ({ signal: t, userToCall: r, from: i, avatar: d, callerName: l }) => {
               if (!r) return
               const c = await (0, s.getUserById)(r)
               if (!c) return
-              const u = { signal: t, from: i, avatarPath: d, callerName: l }
+              const u = { signal: t, from: i, avatar: d, callerName: l }
               a.io.to(c?.socketId).emit('call-user', u)
               const m = [r, i],
                 f = new o.CallModel({ calledAt: new Date(), authorId: i, interlocutors: m, answered: !1 })
@@ -1758,7 +1758,7 @@
             let l = ''
             o && (l = await (0, i.saveImageAndGetPath)(o.buffer, 'avatar', t))
             const c = new n.ChatRoomModel({
-                avatarPath: l,
+                avatar: l,
                 multiple: r,
                 chatName: a,
                 users: e,
@@ -1778,7 +1778,7 @@
                 s.io.to(r).emit('get-user-typing-status', a)
               })
             }),
-            e.on('update-chat-room', async ({ roomId: e, chatName: r, avatarPath: o, avatarFile: l }) => {
+            e.on('update-chat-room', async ({ roomId: e, chatName: r, avatar: o, avatarFile: l }) => {
               a.default.existsSync(o ?? '') && a.default.unlinkSync((0, i.getPathToImg)(o))
               const c = await (0, i.saveImageAndGetPath)(l?.buffer, 'avatar', t),
                 u = await n.ChatRoomModel.findOneAndUpdate({ _id: e }, { avatar: c, chatName: r })
@@ -1883,14 +1883,14 @@
                   ),
                   a = await i()
                 if (e && a) {
-                  const { id: t, username: r, email: o, online: n, avatarPath: i, lastSeen: d } = a,
+                  const { id: t, username: r, email: o, online: n, avatar: i, lastSeen: d } = a,
                     l = {
                       contactData: {
                         id: t,
                         username: r,
                         email: o,
                         online: n,
-                        avatarPath: i,
+                        avatar: i,
                         lastSeen: d,
                         interactionType: 'invite-received'
                       }
@@ -2315,7 +2315,7 @@
             interlocutorId: s,
             authorName: n.username,
             interlocutorName: i.username,
-            interlocutorAvatarPath: i.avatarPath
+            interlocutorAvatarPath: i.avatar
           }
         }
       },
@@ -2358,18 +2358,18 @@
           n = r(8679),
           s = r(7595)
         t.transformRoomForUser = async ({ userId: e, room: t }) => {
-          let { chatName: r, users: i, avatarPath: d, multiple: l, authorId: c, _id: u, messages: m } = t,
+          let { chatName: r, users: i, avatar: d, multiple: l, authorId: c, _id: u, messages: m } = t,
             f = !1
           if (!l) {
             const t = i?.find((t) => t !== e) ?? '',
               o = await (0, n.getUserById)(t)
-            ;(r = o?.username ?? o?.id), (d = o?.avatarPath), (f = Boolean(o?.online))
+            ;(r = o?.username ?? o?.id), (d = o?.avatar), (f = Boolean(o?.online))
           }
           i?.splice(i?.indexOf(e), 1)
           const p = (await a.UserModel.find({ _id: { $in: i } })).map((e) => ({
             id: e.id,
             username: e.username,
-            avatarPath: e.avatarPath
+            avatar: e.avatar
           }))
           if (m.length < 1) {
             const r = {}
@@ -2385,7 +2385,7 @@
             id: String(u),
             authorId: c,
             chatName: r,
-            avatarPath: d,
+            avatar: d,
             hasOnline: f,
             users: p,
             messages: g,
@@ -2401,7 +2401,7 @@
             username: e.username,
             email: e.email,
             online: e.online,
-            avatarPath: e.avatarPath ?? '',
+            avatar: e.avatar ?? '',
             lastSeen: e.lastSeen ?? '',
             interactionType: t?.interactionType ?? 'default'
           }))
@@ -2418,7 +2418,7 @@
             id: e._id,
             role: e.role,
             username: e.username,
-            avatarPath: e.avatarPath,
+            avatar: e.avatar,
             email: e.email,
             online: e.online ?? !1,
             chatRooms: e.chatRooms ?? []
@@ -2489,7 +2489,7 @@
           (d[(d.BadGateway = 504)] = 'BadGateway'),
           ((i = t.AuthEndpoints || (t.AuthEndpoints = {})).Registration = '/auth/registration'),
           (i.SendEmailConfirmationLink = '/auth/send-email-confirmation-link'),
-          (i.SendEmailConfirmation = '/auth/send-email-confirmation'),
+          (i.ConfirmEmail = '/auth/send-email-confirmation'),
           (i.Login = '/auth/login'),
           (i.GoogleLogin = '/auth/google-login'),
           (i.ProviderLogin = '/auth/provider-login'),

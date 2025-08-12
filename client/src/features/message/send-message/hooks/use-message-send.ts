@@ -95,7 +95,7 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
       messageType: 'info'
     })
     incomeMessageNotification.open()
-    openBrowserNotification({ message, icon: getRoomById(roomId)?.avatarPath })
+    openBrowserNotification({ message, icon: getRoomById(roomId)?.avatar })
     play('message-delivered')
   }
 

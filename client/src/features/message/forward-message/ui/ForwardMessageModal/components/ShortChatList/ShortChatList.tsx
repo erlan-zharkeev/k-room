@@ -37,7 +37,7 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
               stubIconName={room.multiple ? 'image-stub' : 'user-stub'}
               shape={room.multiple ? 'square-shape' : 'circle-shape'}
               showBadge={false}
-              src={room.avatarPath}
+              src={room.avatar}
               ribbon={true}
             />
             <span className="paragraph-text  short-chat-list__name">{room.chatName}</span>

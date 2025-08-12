@@ -34,7 +34,7 @@ export const ChatRoomPreview = ({
     <div className={className}>
       <ProfileInfo
         titleSize={titleSize}
-        avatarPath={room.avatarPath}
+        avatar={room.avatar}
         title={room.chatName ?? '-'}
         description={!headerMode ? chatRoomLastMessageBody(room) : ''}
         shape={chatRoomAvatarShape}

@@ -30,7 +30,7 @@ import type { ICallModalBodyProps } from './types'
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
-  const { avatarPath } = useTypedSelector((state) => state.user.userData)
+  const { avatar } = useTypedSelector((state) => state.user.userData)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const { selfVideoDom } = useContext(RefsContext)
 
@@ -150,7 +150,7 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
                 />
                 <div className="call-modal__user-avatar">
                   <div className={settings.video.value ? 'call-modal__hide' : ''}>
-                    <AppAvatar src={avatarPath} showBadge={false} size="small" />
+                    <AppAvatar src={avatar} showBadge={false} size="small" />
                   </div>
                 </div>
               </div>

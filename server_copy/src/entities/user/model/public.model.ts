@@ -12,7 +12,7 @@ export const publicSchema = new Schema<IUserPublicData>(
       unique: true,
       required: true
     },
-    avatarPath: {
+    avatar: {
       type: String,
       required: false
     },

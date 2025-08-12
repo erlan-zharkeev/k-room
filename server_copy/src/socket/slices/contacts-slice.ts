@@ -1,5 +1,5 @@
 import type {
-  IUserData,
+  IFrontendUserData,
   IEventSearchContact,
   IEventSaveContact,
   IEventContactAddSuccess,
@@ -56,7 +56,7 @@ export const contactsSlice = (socket: SocketInstanceType) => {
     }
     const searchType = searchTypeMap[type]
     if (!searchType) validSearch = false
-    let searchedUsers: IUserData[] = []
+    let searchedUsers: IFrontendUserData[] = []
     if (validSearch) {
       const users = await UserModel.find(searchType)
       searchedUsers = transformUsersData(users)
@@ -113,14 +113,14 @@ export const contactsSlice = (socket: SocketInstanceType) => {
           const contactData = await createContactInteraction(contactId, userId, 'invite-received')
           const authorData = await updateAuthorContactInteraction()
           if (!contactData || !authorData) return
-          const { id, username, email, online, avatarPath, lastSeen } = authorData
+          const { id, username, email, online, avatar, lastSeen } = authorData
           const payload: IEventInviteReceived = {
             contactData: {
               id,
               username,
               email,
               online,
-              avatarPath,
+              avatar,
               lastSeen,
               interaction: 'invite-received'
             }

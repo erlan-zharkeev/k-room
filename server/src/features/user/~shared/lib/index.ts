@@ -1,2 +1,2 @@
 export * from './create-user'
-export * from './getters'
+export * from './map-user-to-dto'

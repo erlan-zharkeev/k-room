@@ -19,7 +19,7 @@ export const EmailConfirmation = () => {
   const { doRequest } = useApi()
 
   const sendEmailConfirmation = async (id: string) => {
-    const response = await doRequest('post', AuthEndpointsEnum.SendEmailConfirmation, { userId: id })
+    const response = await doRequest('post', AuthEndpointsEnum.ConfirmEmail, { userId: id })
     if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
     setEmail(response.data.userData.email)
     setIsLoading(false)

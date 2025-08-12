@@ -18,16 +18,16 @@ class UserController {
       const { username, oldFilename } = req.body
       const userId = req.app.locals.id
       const oldPathFilename = getPathToImg(oldFilename)
-      const updateData: { username: string; avatarPath?: string } = {
+      const updateData: { username: string; avatar?: string } = {
         username
       }
       if (req.file) {
         const isImageExist = fs.existsSync(oldPathFilename)
         const isFileNotStatic = !oldPathFilename.includes('static')
         if (isImageExist && isFileNotStatic) fs.unlinkSync(getPathToImg(oldFilename))
-        const avatarPath = await saveImageAndGetPath(req.file.buffer, 'avatar')
-        if (avatarPath) {
-          updateData.avatarPath = avatarPath
+        const avatar = await saveImageAndGetPath(req.file.buffer, 'avatar')
+        if (avatar) {
+          updateData.avatar = avatar
         }
       }
 
@@ -41,7 +41,7 @@ class UserController {
 
       const updatedUserData = {
         username: updateUserDataResponse.username,
-        avatarPath: updateUserDataResponse.avatarPath
+        avatar: updateUserDataResponse.avatar
       }
 
       const payload: IEventChangeContactsData = {
@@ -74,7 +74,7 @@ class UserController {
           role: user.role,
           email: user.email,
           id: user._id,
-          avatarPath: user.avatarPath,
+          avatar: user.avatar,
           infoNotifications: user.infoNotifications
         }
       })

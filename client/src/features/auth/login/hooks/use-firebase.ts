@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { UserCredentialType, AuthEndpointsEnum, RouteNamesEnum } from 'common-types'
+import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType } from 'common-types'
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,8 +10,6 @@ import { ClientNotificationMessage, useNotification } from 'src/entities/notific
 
 import { useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
-
-export type FirebaseProvider = 'google' | 'facebook'
 
 const providers = {
   google: GoogleAuthProvider,
@@ -30,8 +28,8 @@ export const useFirebase = () => {
     messageType: 'error'
   })
 
-  const onFirebaseLogin = async (providerName: FirebaseProvider) => {
-    const currentProvider = new providers[providerName]()
+  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
+    const currentProvider = new providers[provider]()
     try {
       const auth = getAuth()
       auth.languageCode = 'en'
@@ -42,12 +40,12 @@ export const useFirebase = () => {
       const { providerId } = result
       const haveFullData = displayName && email && photoURL && uid && providerId
       if (!haveFullData) return
-      const credential: UserCredentialType = {
+      const credential = {
         id: uid,
         username: displayName,
         email,
-        avatarPath: photoURL,
-        providerName: providerId
+        avatar: photoURL,
+        provider: providerId
       }
 
       const response = await doRequest('post', AuthEndpointsEnum.ProviderLogin, credential)

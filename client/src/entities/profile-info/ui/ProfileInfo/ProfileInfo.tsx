@@ -8,7 +8,7 @@ import { AppAvatar, AppIconName, AppText, AvatarShapeModifier, BaseSizeModifier 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ProfileInfo = ({
-  avatarPath,
+  avatar,
   title,
   description,
   online,
@@ -23,7 +23,7 @@ export const ProfileInfo = ({
   isDescriptionAccent,
   descriptionNode
 }: {
-  avatarPath?: string
+  avatar?: string
   title: string
   description?: string
   online?: boolean
@@ -44,7 +44,7 @@ export const ProfileInfo = ({
     <div className={className}>
       <AppAvatar
         online={online}
-        src={avatarPath}
+        src={avatar}
         showBadge={showBadge}
         size={avatarSize}
         shape={shape}

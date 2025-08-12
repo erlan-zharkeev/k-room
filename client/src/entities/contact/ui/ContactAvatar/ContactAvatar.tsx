@@ -10,7 +10,7 @@ export const ContactAvatar = ({ id, showBadge = true }: { id: string; showBadge?
       showBadge={showBadge}
       online={contact?.online}
       stubIconName="user-stub"
-      src={contact?.avatarPath}
+      src={contact?.avatar}
       shape="circle-shape"
     />
   )

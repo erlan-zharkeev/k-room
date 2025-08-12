@@ -61,7 +61,7 @@ export interface IEventUpdateChatRoom {
   users: string[];
   roomId: string;
   chatName: string;
-  avatarPath: string;
+  avatar: string;
   avatarFile?: MediaFileValueType; // TODO change to IEventCreateRoom
 }
 
@@ -103,7 +103,7 @@ export interface IEventCallUser {
   userToCall?: string;
   signal: unknown;
   from: string;
-  avatarPath: string;
+  avatar: string;
   callerName: string;
 }
 export type EventChangeCallSettingsType = IBasicStreamSettings;

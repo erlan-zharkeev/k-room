@@ -1,9 +1,3 @@
-import { check } from 'express-validator'
+import { requiredStringRule } from 'features/auth'
 
-import { Message } from './message'
-
-export const fieldsValidation = [
-  check('email').notEmpty().withMessage(Message.EmailIsRequired),
-  check('email').isEmail().withMessage(Message.InvalidEmailFormat),
-  check('password').notEmpty().withMessage(Message.PasswordIsRequired)
-]
+export const fieldsValidation = [requiredStringRule('email'), requiredStringRule('password')]

@@ -15,7 +15,7 @@ export const usePickContact = () => {
         .map((contact) => ({
           label: contact.username,
           value: contact.id,
-          prefixSlot: <AppAvatar src={contact.avatarPath} showBadge={false} />
+          prefixSlot: <AppAvatar src={contact.avatar} showBadge={false} />
         })),
     [contacts]
   )

@@ -29,8 +29,8 @@ export const chatRoomSlice = (socket: SocketInstanceType) => {
         messages: []
       }
       if (avatarFile) {
-        const avatarPath = await saveImageAndGetPath(avatarFile.fileBuffer, 'avatar')
-        if (avatarPath) roomData.avatarPath = avatarPath
+        const avatar = await saveImageAndGetPath(avatarFile.fileBuffer, 'avatar')
+        if (avatar) roomData.avatar = avatar
       }
       if (chatName) {
         roomData.chatName = chatName
@@ -61,9 +61,9 @@ export const chatRoomSlice = (socket: SocketInstanceType) => {
 
   socket.on<SocketActionsType>(
     'update-chat-room',
-    async ({ roomId, chatName, avatarPath, avatarFile }: IEventUpdateChatRoom) => {
-      // const isImageExist = fs.existsSync(avatarPath ?? '')
-      // if (isImageExist) fs.unlinkSync(getPathToImg(avatarPath))
+    async ({ roomId, chatName, avatar, avatarFile }: IEventUpdateChatRoom) => {
+      // const isImageExist = fs.existsSync(avatar ?? '')
+      // if (isImageExist) fs.unlinkSync(getPathToImg(avatar))
       // const updatedAvatar = await saveImageAndGetPath(avatarFile?.buffer, 'avatar', userId)
       // const room = await ChatRoomModel.findOneAndUpdate({ _id: roomId }, { avatar: updatedAvatar, chatName })
       // if (!room) return

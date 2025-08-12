@@ -9,14 +9,14 @@ import { useUser } from 'src/entities/user'
 import { AppText } from 'src/shared/ui'
 
 export const UserProfileData = () => {
-  const { id, username, email, avatarPath } = useUser()
+  const { id, username, email, avatar } = useUser()
 
   return (
     <div className="user-profile-data">
       <ProfileInfo
         title={username}
         description={email}
-        avatarPath={avatarPath}
+        avatar={avatar}
         showBadge={false}
         horizontal
         avatarSize="large"

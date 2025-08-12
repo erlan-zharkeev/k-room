@@ -30,7 +30,7 @@ export enum StatusEnum {
 export enum AuthEndpointsEnum {
   Registration = "/auth/registration",
   SendEmailConfirmationLink = "/auth/send-email-confirmation-link",
-  SendEmailConfirmation = "/auth/send-email-confirmation",
+  ConfirmEmail = "/auth/send-email-confirmation",
   Login = "/auth/login",
   GoogleLogin = "/auth/google-login",
   ProviderLogin = "/auth/provider-login",
@@ -39,8 +39,8 @@ export enum AuthEndpointsEnum {
 }
 
 export enum UserEndpointsEnum {
-  GetUserData = "/auth/get-user-data",
-  UpdateUserData = "/auth/user-data/update",
+  GetUserData = "/user/get-user-data",
+  UpdateUserData = "/user/user-data/update",
   ResetPassword = "/user/reset-password",
 }
 

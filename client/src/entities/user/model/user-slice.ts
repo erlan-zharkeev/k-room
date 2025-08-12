@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IUserData, IInfoNotification } from 'common-types'
+import { IFrontendUserData, IInfoNotification } from 'common-types'
 
 import type { IUserStore } from '../types'
 
@@ -13,8 +13,8 @@ const initialState: IUserStore = {
     online: false,
     chatRooms: [],
     contacts: [],
-    avatarPath: '',
-    providerName: '',
+    avatar: '',
+    provider: '',
     infoNotifications: []
   }
 }
@@ -33,8 +33,8 @@ export const userSlice = createSlice({
         online: false,
         chatRooms: [],
         contacts: [],
-        avatarPath: '',
-        providerName: '',
+        avatar: '',
+        provider: '',
         infoNotifications: []
       }
     },
@@ -55,7 +55,7 @@ export const userSlice = createSlice({
       const index = state.userData.infoNotifications.findIndex((item) => item.id === id)
       state.userData.infoNotifications[index].read = true
     },
-    setUserData: (state, { payload }: { payload: IUserData }) => {
+    setUserData: (state, { payload }: { payload: IFrontendUserData }) => {
       state.userData = {
         ...state.userData,
         ...payload

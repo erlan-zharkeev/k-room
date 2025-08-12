@@ -1,4 +1,4 @@
-import { IUserData } from ".";
+import { IFrontendUserData } from ".";
 
 export type InteractionType =
   | "default"
@@ -14,7 +14,10 @@ export interface IContactBase {
 }
 
 export type ContactType = Omit<IContactBase, "updatedAt"> &
-  Omit<IUserData, "chatRooms" | "contacts" | "infoNotifications" | "role">;
+  Omit<
+    IFrontendUserData,
+    "chatRooms" | "contacts" | "infoNotifications" | "role"
+  >;
 
 export type DBContactType = IContactBase;
 export type DBContactMapType = Record<string, DBContactType>;

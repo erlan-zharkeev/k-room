@@ -19,7 +19,7 @@ export const ChatRoomSettingsModal = () => {
   const { selectedChatRoomId } = useTypedSelector((state) => state.settings)
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const { id } = useTypedSelector((state) => state.user.userData)
-  const [imagePath, setNewImagePath] = useState<string | undefined>(chatRoomData?.avatarPath)
+  const [imagePath, setNewImagePath] = useState<string | undefined>(chatRoomData?.avatar)
   const [avatarFile, setFile] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const isUserAuthor = chatRoomData?.authorId === id
@@ -34,7 +34,7 @@ export const ChatRoomSettingsModal = () => {
       roomId: selectedChatRoomId,
       users: [id, ...userIds],
       chatName: values['chat-name'],
-      avatarPath: imagePath ?? '',
+      avatar: imagePath ?? '',
       avatarFile
     }
     setIsLoading(true)
@@ -61,7 +61,7 @@ export const ChatRoomSettingsModal = () => {
         <div className="chat-room-settings-modal__members-list">
           {chatRoomData?.users?.map((user) => (
             <div className="chat-room-settings-modal__member" key={user.id}>
-              <AppAvatar src={user.avatarPath} showBadge={false} />
+              <AppAvatar src={user.avatar} showBadge={false} />
               <span className="paragraph-text ">{user.username}</span>
             </div>
           ))}
@@ -108,7 +108,7 @@ export const ChatRoomSettingsModal = () => {
       ) : (
         <div className="chat-room-settings-modal__wrapper">
           <div className="chat-room-settings-modal__image">
-            <AppAvatar src={chatRoomData?.avatarPath} stubIconName="image-stub" showBadge={false} size="large" />
+            <AppAvatar src={chatRoomData?.avatar} stubIconName="image-stub" showBadge={false} size="large" />
           </div>
           <Members />
           <AppButton text="Close" onClick={closeModalHandler} loading={isLoading} />

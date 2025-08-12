@@ -1,4 +1,4 @@
-import { type UserRoleType } from 'common-types'
+import type { ProviderType, UserRoleType } from 'common-types'
 
 export interface IUserDevice {
   socketId: string
@@ -10,6 +10,7 @@ export interface IUserSystemData {
   confirmed: boolean
   confirmAttempts: number
   password: string
+  provider?: ProviderType
 }
 
 export interface IUserPersonalData {
@@ -22,7 +23,7 @@ export interface IUserPersonalData {
 export interface IUserPublicData {
   username: string
   email: string
-  avatarPath: string
+  avatar: string
   online: boolean
   lastSeen: number
 }

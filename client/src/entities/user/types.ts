@@ -1,8 +1,8 @@
-import { IUserData } from 'common-types'
+import { IFrontendUserData } from 'common-types'
 
 export type StoreUserData = Required<
   Pick<
-    IUserData,
+    IFrontendUserData,
     | 'id'
     | 'role'
     | 'email'
@@ -10,8 +10,8 @@ export type StoreUserData = Required<
     | 'online'
     | 'chatRooms'
     | 'contacts'
-    | 'avatarPath'
-    | 'providerName'
+    | 'avatar'
+    | 'provider'
     | 'infoNotifications'
   >
 >

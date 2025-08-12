@@ -1,33 +1,41 @@
 import { StatusEnum } from 'common-types'
+import { RequestMulterFile } from 'entities/media'
+import { UserModel } from 'entities/user'
 import type { Request, Response } from 'express'
 import { ServerNotificationMessage } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
+import { USER_MESSAGE } from '../~shared'
+import { MESSAGE } from './config'
+
 export const updateUserData = async (req: Request, res: Response) => {
   try {
-    // const { username, oldFilename } = req.body
-    // const userId = req.app.locals.id
-    // const oldPathFilename = getPathToImg(oldFilename)
-    // const updateData: { username: string; avatarPath?: string } = {
-    //   username
-    // }
-    // if (req.file) {
-    //   const isImageExist = fs.existsSync(oldPathFilename)
-    //   const isFileNotStatic = !oldPathFilename.includes('static')
-    //   if (isImageExist && isFileNotStatic) fs.unlinkSync(getPathToImg(oldFilename))
-    //   const avatarPath = await saveImageAndGetPath(req.file.buffer, 'avatar')
-    //   if (avatarPath) {
-    //     updateData.avatarPath = avatarPath
-    //   }
-    // }
-    // const updateUserDataResponse = await UserModel.findOneAndUpdate({ _id: userId }, { ...updateData }, { new: true })
-    // if (!updateUserDataResponse) return throwHTTPError(StatusEnum.BadRequest, res, ServerNotificationMessage.UsersFind)
+    const username: string | undefined = req.body.username
+    const avatarFile: RequestMulterFile | undefined = req.file
+    const userId = req.app.locals.id
+
+    if (!username && !avatarFile) {
+      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.nothingToUpdate)
+    }
+
+    const user = await UserModel.findById(userId)
+
+    if (!user) {
+      return throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userNotFound)
+    }
+
+    if (username && username !== user.public.username) {
+      await user.updateOne({ $set: { 'public.username': username } })
+    }
+
+    return res.json({ data: { username }, silent: true })
+
     // const usersHasCurrentContact = await getUsersByHasContactId(userId)
     // const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
     // const sockets = await getSocketsByUserIds(usersIdsFromUsers)
     // const updatedUserData = {
     //   username: updateUserDataResponse.username,
-    //   avatarPath: updateUserDataResponse.avatarPath
+    //   avatar: updateUserDataResponse.avatar
     // }
     // const payload: IEventChangeContactsData = {
     //   id: userId,

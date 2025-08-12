@@ -8,7 +8,7 @@ const chatRoomSchema = new Schema<IChatRoomSchema>(
       required: false,
       default: ''
     },
-    avatarPath: {
+    avatar: {
       type: String,
       required: false,
       default: ''

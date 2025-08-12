@@ -1,4 +1,4 @@
-import { IUserData } from 'common-types'
+import { IFrontendUserData } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 // import { useChatRoomScroll } from 'src/features/chat-room'
@@ -10,7 +10,7 @@ export const useSetUserData = () => {
   const dispatch = useDispatch()
   // const { scrollToBottom } = useChatRoomScroll()
 
-  const setUserData = ({ userData }: { userData: IUserData }) => {
+  const setUserData = ({ userData }: { userData: IFrontendUserData }) => {
     dispatch(storeSetUserData(userData))
     // scrollToBottom()
     socket.connect()

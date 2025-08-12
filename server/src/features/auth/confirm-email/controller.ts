@@ -1,19 +1,36 @@
-import { StatusEnum } from 'common-types'
+import { IConfirmEmailResponse, StatusEnum } from 'common-types'
 import { UserModel } from 'entities/user'
-import type { Request, Response } from 'express'
-import { ServerNotificationMessage } from 'shared-config'
+import { mapUserToDto, USER_MESSAGE } from 'features/user'
+import { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
-export const confirmEmail = async (req: Request, res: Response) => {
+import { MESSAGE } from './config'
+
+export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
   try {
     const userId = req.body.userId
-    const user = await UserModel.findOneAndUpdate({ _id: userId }, { confirmed: true }, { new: true })
-    if (!user) return
-    return res.json({
-      // userData: { username: user.username, email: user.email, id: user._id, avatar: user.avatarPath },
-      // message: ServerNotificationMessage.EmailConfirmed
-    })
+
+    const updateResult = await UserModel.updateOne(
+      { _id: userId, 'system.confirmed': { $ne: true } },
+      { $set: { 'system.confirmed': true } }
+    )
+
+    const user = await UserModel.findById(userId)
+
+    if (!user) {
+      return throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userNotFound)
+    }
+
+    const response = {
+      data: { email: mapUserToDto(user).email },
+      message: {
+        text: updateResult.modifiedCount === 1 ? MESSAGE.emailConfirmed : MESSAGE.emailAlreadyConfirmed,
+        silent: false
+      }
+    }
+
+    return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedEmailConfirm)
+    throwHTTPError(StatusEnum.Server, res, MESSAGE.failedEmailConfirm)
   }
 }

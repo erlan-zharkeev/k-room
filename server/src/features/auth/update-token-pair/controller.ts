@@ -1,10 +1,10 @@
-import { Response } from 'express'
-import { IRequest, ServerNotificationMessage } from 'shared-config'
+import { AppResponseType, IAppRequest } from 'shared-config'
 
 import { updateTokens } from '../~shared'
+import { MESSAGE } from './config'
 
-export const updateTokensPair = async (req: IRequest, res: Response) => {
+export const updateTokensPair = async (req: IAppRequest, res: AppResponseType<null>) => {
   const userId = req.app.locals.id
   await updateTokens(userId, req, res)
-  res.json({ message: ServerNotificationMessage.TokensPairUpdated, silent: true })
+  res.json({ data: null, message: { text: MESSAGE.tokensPairUpdated, silent: true } })
 }

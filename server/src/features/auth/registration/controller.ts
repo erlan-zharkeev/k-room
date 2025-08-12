@@ -1,26 +1,26 @@
 import bcrypt from 'bcryptjs'
 import { AuthRegistrationPayloadType, StatusEnum } from 'common-types'
 import { UserModel } from 'entities/user'
-import type { Request, Response } from 'express'
 import { createUser } from 'features/user'
+import type { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
-import { Message } from './lib'
+import { MESSAGE } from './config'
 
-export const registration = async (req: Request, res: Response) => {
+export const registration = async (req: IAppRequest, res: AppResponseType<null>) => {
   try {
     const { username, email, password }: AuthRegistrationPayloadType = req.body
 
     const userNameCandidate = await UserModel.findOne({ 'public.username': username })
 
     if (userNameCandidate) {
-      return throwHTTPError(StatusEnum.BadRequest, res, Message.UserWithCurrentNameAlreadyExist)
+      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.userWithCurrentNameAlreadyExist)
     }
 
     const emailCandidate = await UserModel.findOne({ 'public.email': email })
 
     if (emailCandidate) {
-      return throwHTTPError(StatusEnum.BadRequest, res, Message.UserWithCurrentEmailAlreadyExist)
+      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.userWithCurrentEmailAlreadyExist)
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -31,8 +31,16 @@ export const registration = async (req: Request, res: Response) => {
 
     // TODO Добавить сюда отправку письма на почту пользователя
 
-    return res.json({ message: Message.RegistrationSuccess })
+    const response = {
+      data: null,
+      message: {
+        text: MESSAGE.registrationSuccess,
+        silent: false
+      }
+    }
+
+    return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, Message.FailedRegistration)
+    throwHTTPError(StatusEnum.Server, res, MESSAGE.failedRegistration)
   }
 }

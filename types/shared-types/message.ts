@@ -1,4 +1,4 @@
-import { IImageObject, UsersMetaDataType } from ".";
+import { IImageObject } from ".";
 
 export type MessageStatusType =
   | "sending"
@@ -46,10 +46,10 @@ export interface IMessage {
 
 export interface IDBMessage extends IMessage {
   _id: string;
-  usersMetaData: UsersMetaDataType;
+  usersMetaData: Array<unknown>;
 }
 
 export interface IMessageSchema
   extends Omit<IMessage, "id" | "tempId" | "isSelf" | "status"> {
-  usersMetaData?: UsersMetaDataType;
+  usersMetaData?: Array<unknown>;
 }

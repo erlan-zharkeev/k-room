@@ -2,7 +2,7 @@ import { useContext, useRef } from 'react'
 
 import {
   SocketActionsType,
-  IUserData,
+  IFrontendUserData,
   IBasicStreamSettings,
   IEventCallUser,
   IEventAnswerCall,
@@ -30,12 +30,12 @@ import { useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
 
-const emitCall = (userToCall: string, signal: SignalData, from: string, avatarPath: string, callerName: string) => {
+const emitCall = (userToCall: string, signal: SignalData, from: string, avatar: string, callerName: string) => {
   const payload: IEventCallUser = {
     userToCall,
     signal,
     from,
-    avatarPath,
+    avatar,
     callerName
   }
   socket.emit<SocketActionsType>('call-user', payload)
@@ -130,7 +130,12 @@ export const useMakeCall = () => {
     })
   }
 
-  const initCall = async (interlocutorData: IUserData, selfId: string, selfAvatarPath: string, callerName: string) => {
+  const initCall = async (
+    interlocutorData: IFrontendUserData,
+    selfId: string,
+    selfAvatarPath: string,
+    callerName: string
+  ) => {
     interlocutorId.current = interlocutorData.id
     const stream = await getSelfStream({ audio: settings.audio.value, video: settings.video.value })
     if (!stream) return

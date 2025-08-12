@@ -89,13 +89,13 @@ export const chatRoomsSlice = createSlice({
       room.messages.push(message)
     },
     changeChatName(state, { payload }: { payload: IEventChangeContactsData }) {
-      const { id, username, avatarPath } = payload
+      const { id, username, avatar } = payload
       state.chatRooms.forEach((room) => {
         const roomHasContact = Boolean(room.users?.find((user) => user.id === id))
         if (!roomHasContact) return
         if (room.multiple) return
         room.chatName = username
-        room.avatarPath = avatarPath
+        room.avatar = avatar
       })
     },
     setRepliedMessage(state, { payload }: { payload: IRepliedMessage }) {

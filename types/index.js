@@ -30,7 +30,7 @@ export var AuthEndpointsEnum;
 (function (AuthEndpointsEnum) {
     AuthEndpointsEnum["Registration"] = "/auth/registration";
     AuthEndpointsEnum["SendEmailConfirmationLink"] = "/auth/send-email-confirmation-link";
-    AuthEndpointsEnum["SendEmailConfirmation"] = "/auth/send-email-confirmation";
+    AuthEndpointsEnum["ConfirmEmail"] = "/auth/send-email-confirmation";
     AuthEndpointsEnum["Login"] = "/auth/login";
     AuthEndpointsEnum["GoogleLogin"] = "/auth/google-login";
     AuthEndpointsEnum["ProviderLogin"] = "/auth/provider-login";

@@ -1,29 +1,31 @@
-import { StatusEnum } from 'common-types'
-// import { UserModel } from 'entities/user'
-import { type Request, type Response } from 'express'
-// import { updateTokens } from 'features/auth'
-import { ServerNotificationMessage } from 'shared-config'
+import { IGetUserDataResponse, StatusEnum } from 'common-types'
+import { UserModel } from 'entities/user'
+import { updateTokens } from 'features/auth'
+import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
-export const getUserData = async (req: Request, res: Response) => {
+import { mapUserToDto, USER_MESSAGE } from '../~shared'
+import { MESSAGE } from './config'
+
+export const getUserData = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
   try {
-    // const userId = req.app.locals.id
-    // const user = await UserModel.findOne({ _id: userId })
-    // if (!user) return throwHTTPError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserNotFound)
-    // await updateTokens(user._id.toString(), res)
-    // const { username, email, avatarPath } = user.public
-    // const { role, unreadInfoNotifications } = user.personal
-    // return res.json({
-    //   userData: {
-    //     username,
-    //     role,
-    //     email,
-    //     id: user._id,
-    //     avatarPath,
-    //     infoNotifications: unreadInfoNotifications
-    //   }
-    // })
+    const userId = req.app.locals.id
+
+    const user = await UserModel.findById(userId)
+
+    if (!user) {
+      return throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userNotFound)
+    }
+
+    await updateTokens(user.id, req, res)
+
+    const response = {
+      data: mapUserToDto(user),
+      message: { text: SHARED_MESSAGE.success, silent: true }
+    }
+
+    return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedGetUserData)
+    throwHTTPError(StatusEnum.Server, res, MESSAGE.failedGetUserData)
   }
 }

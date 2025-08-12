@@ -11,7 +11,7 @@ import { MediaFileValueType } from 'src/shared/config'
 import { AppFormData } from 'src/shared/ui'
 
 export const useUpdateUserData = () => {
-  const { username, avatarPath } = useUser()
+  const { username, avatar } = useUser()
 
   const { doRequest } = useApi()
 
@@ -19,7 +19,7 @@ export const useUpdateUserData = () => {
 
   const initialFormData = {
     username,
-    avatarPath: avatarPath ? [{ name: 'avatar', src: avatarPath }] : []
+    avatar: avatar ? [{ name: 'avatar', src: avatar }] : []
   }
 
   const [isLoading, setIsLoading] = useState(false)
@@ -29,7 +29,7 @@ export const useUpdateUserData = () => {
 
     const payloadFormData = new FormData()
     payloadFormData.append('username', username)
-    payloadFormData.append('oldFilename', avatarPath?.split('?img=')[1] || '')
+    payloadFormData.append('oldFilename', avatar?.split('?img=')[1] || '')
 
     const fileBuffer = avatar.fileBuffer
     if (fileBuffer) {

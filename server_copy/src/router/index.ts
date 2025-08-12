@@ -11,7 +11,7 @@ router.post(AuthEndpointsEnum.Registration, validationRules.registration, AuthCo
 router.post(AuthEndpointsEnum.Login, AuthController.login)
 router.post(AuthEndpointsEnum.ProviderLogin, AuthController.signInWithProvider)
 router.post(AuthEndpointsEnum.SendEmailConfirmationLink, AuthController.sendConfirmationLink)
-router.post(AuthEndpointsEnum.SendEmailConfirmation, AuthController.confirmEmail)
+router.post(AuthEndpointsEnum.ConfirmEmail, AuthController.confirmEmail)
 
 router.post(CommonEndpointsEnum.InfoItem, accessTokenValidator, CommonController.readInfoItem)
 router.get(CommonEndpointsEnum.InfoItem, accessTokenValidator, CommonController.getInfoItem)

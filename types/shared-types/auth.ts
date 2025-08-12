@@ -1,8 +1,19 @@
-import { IUserData } from "./user";
+import { ProviderType } from "./common";
 
-export type AuthLoginPayloadType = Required<
-  Pick<IUserData, "email" | "password">
->;
-export type AuthRegistrationPayloadType = Required<
-  Pick<IUserData, "username" | "email" | "password">
->;
+export interface AuthLoginPayloadType {
+  email: string;
+  password: string;
+}
+
+export interface AuthRegistrationPayloadType {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export interface SignInWithProviderPayloadType {
+  username: string;
+  email: string;
+  provider: ProviderType;
+  avatar?: string;
+}

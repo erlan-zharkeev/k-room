@@ -13,7 +13,7 @@ export const useContactList = () => {
   const { contacts } = useContact()
   const contactList = contacts.filter((contact) => contact.interaction !== 'invite-hidden')
 
-  const { id, username, avatarPath } = useUser()
+  const { id, username, avatar } = useUser()
 
   const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
     room: Record<string, boolean>
@@ -29,7 +29,7 @@ export const useContactList = () => {
   const initCall = async (interlocutorData: ContactType) => {
     if (loaders.stream[interlocutorData.id]) return
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
-    await call.current.initCall(interlocutorData, id, avatarPath ?? '', username, settings)
+    await call.current.initCall(interlocutorData, id, avatar ?? '', username, settings)
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
   }
 

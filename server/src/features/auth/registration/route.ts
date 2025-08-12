@@ -7,4 +7,4 @@ import { fieldsValidation } from './lib'
 
 export const registrationRouter = Router()
 
-registrationRouter.get(AuthEndpointsEnum.Registration, fieldsValidation, validateRequest, registration)
+registrationRouter.post(AuthEndpointsEnum.Registration, fieldsValidation, validateRequest, registration)

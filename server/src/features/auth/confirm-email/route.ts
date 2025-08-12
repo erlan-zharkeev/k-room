@@ -1,9 +1,10 @@
 import { AuthEndpointsEnum } from 'common-types'
 import { Router } from 'express'
+import { validateRequest } from 'shared-middleware'
 
-import { refreshTokenValidator } from '../~shared'
 import { confirmEmail } from './controller'
+import { fieldsValidation } from './lib'
 
 export const confirmEmailRouter = Router()
 
-confirmEmailRouter.get(AuthEndpointsEnum.SendEmailConfirmation, refreshTokenValidator, confirmEmail)
+confirmEmailRouter.post(AuthEndpointsEnum.ConfirmEmail, fieldsValidation, validateRequest, confirmEmail)

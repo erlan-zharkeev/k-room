@@ -1,5 +1,4 @@
-export type { ErrorResponse } from './common'
-export type { IRequest } from './express'
+export type { AppResponseType, IAppRequest } from './express'
 export type { JWTDecoded } from './jwt'
 export * from './notification'
 export type { SharpConfig, SharpSettingsKey } from './sharp'

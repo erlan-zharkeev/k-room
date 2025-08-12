@@ -23,5 +23,13 @@ module.exports = {
     'no-control-regex': 'off',
     'no-extra-semi': 'off',
     semi: ['error', 'never']
-  }
+  },
+  overrides: [
+    {
+      files: ['**/*.spec.ts', '**/*.test.ts'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off'
+      }
+    }
+  ]
 }

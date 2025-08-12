@@ -19,6 +19,10 @@ export const systemSchema = new Schema<IUserSystemData>(
     password: {
       type: String,
       required: true
+    },
+    provider: {
+      type: String,
+      required: false
     }
   },
   { _id: false }

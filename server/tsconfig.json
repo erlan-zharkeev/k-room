@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -13,6 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "baseUrl": "./../",
+    "lib": ["ES2022", "ESNext.AsyncIterable", "ESNext.Disposable"],
     "paths": {
       "app/*": ["server/src/app/*"],
       "features/*": ["server/src/features/*"],

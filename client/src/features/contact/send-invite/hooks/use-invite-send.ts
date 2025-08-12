@@ -35,7 +35,7 @@ export const useInviteSend = () => {
           authorName: payload.contactData.username,
           body: 'Invite received'
         },
-        icon: payload.contactData.avatarPath
+        icon: payload.contactData.avatar
       })
     })
   }

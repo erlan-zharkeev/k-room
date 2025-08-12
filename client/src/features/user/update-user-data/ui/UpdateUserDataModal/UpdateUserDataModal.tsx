@@ -14,7 +14,7 @@ export const UpdateUserDataModal = () => {
         fields={{
           avatar: {
             inputType: 'file',
-            value: initialFormData.avatarPath,
+            value: initialFormData.avatar,
             design: 'avatar'
           },
           username: {

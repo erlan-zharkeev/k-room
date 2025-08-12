@@ -44,7 +44,7 @@ class AuthController {
         email,
         password: hashedPassword,
         socketId: '',
-        avatarPath: '',
+        avatar: '',
         codes: initUserCodes,
         infoNotifications: [welcomeInfoNotification],
         role: 'user'
@@ -79,7 +79,7 @@ class AuthController {
       const user = await UserModel.findOneAndUpdate({ _id: userId }, { confirmed: true }, { new: true })
       if (!user) return
       return res.json({
-        userData: { username: user.username, email: user.email, id: user._id, avatar: user.avatarPath },
+        userData: { username: user.username, email: user.email, id: user._id, avatar: user.avatar },
         message: ServerNotificationMessage.EmailConfirmed
       })
     } catch {
@@ -104,7 +104,7 @@ class AuthController {
           username: user.username,
           email,
           id: user._id,
-          avatarPath: user.avatarPath,
+          avatar: user.avatar,
           infoNotifications: user.infoNotifications
         },
         message: ServerNotificationMessage.LoginSuccess,
@@ -117,7 +117,7 @@ class AuthController {
 
   async signInWithProvider(req: Request, res: Response) {
     try {
-      const { username, email, avatarPath, providerName }: UserCredentialType = req.body
+      const { username, email, avatar, provider }: UserCredentialType = req.body
       let user = await UserModel.findOne({ email })
       if (!user) {
         const hashedPassword = await bcrypt.hash(uuidv4(), 6)
@@ -126,8 +126,8 @@ class AuthController {
           username,
           role: 'user',
           email,
-          avatarPath,
-          providerName,
+          avatar,
+          provider,
           password: hashedPassword,
           socketId: '',
           confirmed: true,
@@ -144,7 +144,7 @@ class AuthController {
           username: user.username ?? username,
           email,
           id: user?._id,
-          avatarPath: user.avatarPath ?? avatarPath,
+          avatar: user.avatar ?? avatar,
           role: user.role,
           infoNotifications: user.infoNotifications
         },

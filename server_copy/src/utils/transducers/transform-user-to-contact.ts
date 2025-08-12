@@ -6,7 +6,7 @@ export const transformUserToContact = (user: IUserSchema, userContact: DBContact
     username: user.username,
     email: user.email,
     online: user.online,
-    avatarPath: user.avatarPath ?? '',
+    avatar: user.avatar ?? '',
     lastSeen: user.lastSeen,
     interaction: userContact?.interaction ?? 'default'
   }

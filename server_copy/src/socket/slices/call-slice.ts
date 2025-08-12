@@ -21,14 +21,14 @@ export const callSlice = (socket: SocketInstanceType) => {
 
   socket.on<SocketActionsType>(
     'call-user',
-    async ({ signal, userToCall, from, avatarPath, callerName }: IEventCallUser) => {
+    async ({ signal, userToCall, from, avatar, callerName }: IEventCallUser) => {
       if (!userToCall) return
       const interlocutor = await getUserById(userToCall)
       if (!interlocutor) return
       const payload: IEventCallUser = {
         signal,
         from,
-        avatarPath,
+        avatar,
         callerName
       }
       io.to(interlocutor?.socketId).emit<SocketActionsType>('call-user', payload)

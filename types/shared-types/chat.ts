@@ -4,7 +4,7 @@ export interface IChatRoom {
   id: string;
   authorId: string;
   chatName?: string;
-  avatarPath?: string;
+  avatar?: string;
   users: string[];
   messages: IMessage[];
 }

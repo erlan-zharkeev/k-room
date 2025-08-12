@@ -16,7 +16,7 @@ export const ContactList = () => {
         {contactList.map((contactData) => (
           <div className="contact-list__list-item" key={contactData.id}>
             <ProfileInfo
-              avatarPath={contactData.avatarPath}
+              avatar={contactData.avatar}
               title={contactData.username}
               showBadge={false}
               description={getContactDescription(contactData)}

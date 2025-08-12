@@ -6,7 +6,7 @@ import { getUserById } from '../../socket'
 import { UserModel } from 'entities/user'
 
 export const transformRoomForUser = async ({ userId, room }: { userId: string; room: IChatRoomSchema }) => {
-  let { chatName, users, avatarPath, authorId, messages, _id } = room as IChatRoomSchema & { _id: ObjectId }
+  let { chatName, users, avatar, authorId, messages, _id } = room as IChatRoomSchema & { _id: ObjectId }
   // Remove self id
   users?.splice(users?.indexOf(userId), 1)
   const contactList = await UserModel.find({ _id: { $in: users } }, { _id: 1 })
@@ -17,7 +17,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
     id: String(_id),
     authorId,
     chatName,
-    avatarPath,
+    avatar,
     users: contactIds,
     messages: transformedMessages
   }
@@ -25,7 +25,7 @@ export const transformRoomForUser = async ({ userId, room }: { userId: string; r
     const firstContact = await getUserById(users[0])
     if (!firstContact) return
     result.chatName = firstContact.username
-    result.avatarPath = firstContact.avatarPath
+    result.avatar = firstContact.avatar
   }
 
   return result
