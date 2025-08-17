@@ -3,7 +3,9 @@ import bodyParser from 'body-parser'
 import { RouteNamesEnum } from 'common-types'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import { initMediaBuckets } from 'entities/media'
 import express from 'express'
+import { loadFixtures } from 'features/fixtures'
 import https from 'https'
 import methodOverride from 'method-override'
 import { ENV } from 'shared-config'
@@ -23,8 +25,14 @@ app.use(RouteNamesEnum.Api, rootRouter)
 const server = https.createServer(httpsOptions, app)
 const io = getSocketIO(server)
 
-initDataBase()
-initIO(io)
+const initializeEnvironment = async () => {
+  await initDataBase()
+  initMediaBuckets()
+  loadFixtures()
+  initIO(io)
+}
+
+initializeEnvironment()
 
 server.listen(ENV.SERVER_PORT, () => {
   log.success(`-Server listening on port ${ENV.SERVER_PORT}`)

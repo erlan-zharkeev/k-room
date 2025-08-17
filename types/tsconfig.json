@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./",
-    "rootDir": "./../",
+    // "rootDir": "./../",
     "module": "ESNext",
     "target": "ES2015",
     "allowSyntheticDefaultImports": true,
@@ -10,7 +10,7 @@
     "composite": true,
     "moduleResolution": "node"
   },
-  "include": ["./shared-types/**/*.ts", "index.ts"],
+  "include": ["./shared-types"],
   "exclude": [
     "node_modules",
     "Makefile",

@@ -3,8 +3,10 @@ import { type Response } from 'express'
 import type { ServerNotificationMessage } from 'shared-config'
 import { getIO, log } from 'shared-lib'
 
-export const throwHTTPError = (status: StatusEnum, res: Response, error: string, silent: boolean = false) => {
+export const throwHTTPError = (status: StatusEnum, res: Response | null, error: string, silent: boolean = false) => {
   log.error(`-${error}`)
+
+  if (!res) return
 
   if (res.headersSent) {
     log.warn(`⚠️ Attempted to send error after headers were already sent: ${error}`)

@@ -1,6 +1,6 @@
 export const VALIDATION_LIMITS = {
   passwordMinLength: 6,
-  usernameMinLength: 1,
+  usernameMinLength: 2,
   usernameMaxLength: 32,
 };
 

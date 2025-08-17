@@ -23,7 +23,6 @@ export interface IUserPersonalData {
 export interface IUserPublicData {
   username: string
   email: string
-  avatar: string
   online: boolean
   lastSeen: number
 }

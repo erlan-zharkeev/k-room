@@ -39,8 +39,8 @@ export var AuthEndpointsEnum;
 })(AuthEndpointsEnum || (AuthEndpointsEnum = {}));
 export var UserEndpointsEnum;
 (function (UserEndpointsEnum) {
-    UserEndpointsEnum["GetUserData"] = "/auth/get-user-data";
-    UserEndpointsEnum["UpdateUserData"] = "/auth/user-data/update";
+    UserEndpointsEnum["GetUserData"] = "/user/get-user-data";
+    UserEndpointsEnum["UpdateUserData"] = "/user/user-data/update";
     UserEndpointsEnum["ResetPassword"] = "/user/reset-password";
 })(UserEndpointsEnum || (UserEndpointsEnum = {}));
 export var CommonEndpointsEnum;

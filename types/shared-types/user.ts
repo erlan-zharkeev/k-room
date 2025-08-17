@@ -8,16 +8,12 @@ export interface IFrontendUserData {
   role: UserRoleType;
   email: string;
   username: string;
-  avatar: string;
   contacts: [];
   textRooms: [];
   unreadInfoNotifications: string[];
 }
 
-export type UserShortType = Pick<
-  IFrontendUserData,
-  "id" | "username" | "avatar"
->;
+export type UserShortType = Pick<IFrontendUserData, "id" | "username">;
 
 export interface IUserSchema extends Omit<IFrontendUserData, "contacts"> {
   socketId: string;

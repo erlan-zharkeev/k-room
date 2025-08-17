@@ -1,4 +1,3 @@
-import { StatusEnum } from "..";
 export type AuthTokensType = "jwt" | "refresh-jwt";
 export declare const firebaseProviders: readonly ["google", "facebook"];
 export type FirebaseProviderType = typeof firebaseProviders;
@@ -14,7 +13,6 @@ export interface IStreamSettings extends IBasicStreamSettings {
     streamLoading: boolean;
 }
 export interface IBackendResponse<T> {
-    status: StatusEnum;
     data: T;
     message: {
         text: string;

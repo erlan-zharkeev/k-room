@@ -1,5 +1,5 @@
 import { UserEndpointsEnum } from 'common-types'
-import { uploadAvatar } from 'entities/media'
+import { multerUploader } from 'entities/media'
 import { Router } from 'express'
 import { accessTokenValidator } from 'features/auth'
 import { validateRequest } from 'shared-middleware'
@@ -12,8 +12,8 @@ export const updateUserRouter = Router()
 updateUserRouter.post(
   UserEndpointsEnum.UpdateUserData,
   accessTokenValidator,
+  multerUploader.single('avatar'),
   fieldsValidation,
   validateRequest,
-  uploadAvatar,
   updateUserData
 )

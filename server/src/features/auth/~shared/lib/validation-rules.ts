@@ -2,7 +2,7 @@ import { providers, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'common-types'
 import { check, oneOf } from 'express-validator'
 import mongoose from 'mongoose'
 
-import { MESSAGE } from '../config/constants'
+import { MESSAGE } from '../config'
 
 export const emailRule = () =>
   check('email')
@@ -50,19 +50,10 @@ export const atLeastOneOf = (fields: string[], message = MESSAGE.atLeastOneRequi
     message
   )
 
-export const requiredIfPresent = (field: string) =>
-  check(field).optional({ nullable: true, checkFalsy: false }).notEmpty()
-
-export const usernameRule = (options?: { ifPresent?: boolean }) => {
-  console.log('OOOOOOOOOOOOOOO')
-  const base = options?.ifPresent
-    ? requiredIfPresent('username')
-    : check('username').notEmpty().withMessage(MESSAGE.usernameIsRequired)
-
-  return base
-    .trim()
+export const usernameRule = () => {
+  return check('username')
     .isLength({ min: VALIDATION_LIMITS.usernameMinLength })
-    .withMessage(MESSAGE.usernameIsRequired)
+    .withMessage(MESSAGE.usernameTooShort)
     .isLength({ max: VALIDATION_LIMITS.usernameMaxLength })
     .withMessage(MESSAGE.usernameTooLong)
 }

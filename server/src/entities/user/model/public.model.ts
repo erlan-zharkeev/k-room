@@ -12,10 +12,6 @@ export const publicSchema = new Schema<IUserPublicData>(
       unique: true,
       required: true
     },
-    avatar: {
-      type: String,
-      required: false
-    },
     online: {
       type: Boolean,
       required: true,

@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs'
 import { ISignInWithProvider, SignInWithProviderPayloadType, StatusEnum } from 'common-types'
-import { UserModel } from 'entities/user'
 import { createUser, mapUserToDto } from 'features/user'
 import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
@@ -13,15 +12,11 @@ export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<
   try {
     const data: SignInWithProviderPayloadType = req.body
     const { username, email, provider } = data
-    const avatar = data.avatar ?? ''
 
-    let user = await UserModel.findOne({ 'public.email': email })
+    const hashedPassword = await bcrypt.hash(uuidv4(), 6)
+    const user = await createUser({ username, email, provider, hashedPassword })
 
-    if (!user) {
-      const hashedPassword = await bcrypt.hash(uuidv4(), 6)
-      user = createUser({ username, email, avatar, provider, hashedPassword })
-      await user.save()
-    }
+    if (!user) return
 
     await updateTokens(user.id, req, res)
 

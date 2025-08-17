@@ -14,5 +14,6 @@ export const MESSAGE = {
   invalidProvider: 'Invalid provider',
   atLeastOneRequired: 'Require at least one field',
   usernameIsRequired: 'Username is required',
-  usernameTooLong: 'Username is too long'
+  usernameTooLong: 'Username is too long',
+  usernameTooShort: 'Username is too short'
 }

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { AuthRegistrationPayloadType, StatusEnum } from 'common-types'
+import { type AuthRegistrationPayloadType, StatusEnum } from 'common-types'
 import { UserModel } from 'entities/user'
 import { createUser } from 'features/user'
 import type { AppResponseType, IAppRequest } from 'shared-config'
@@ -25,9 +25,7 @@ export const registration = async (req: IAppRequest, res: AppResponseType<null>)
 
     const hashedPassword = await bcrypt.hash(password, 6)
 
-    const user = createUser({ email, username, hashedPassword })
-
-    await user.save()
+    await createUser({ email, username, hashedPassword })
 
     // TODO Добавить сюда отправку письма на почту пользователя
 

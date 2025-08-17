@@ -1,5 +1,4 @@
 import { StatusEnum } from 'common-types'
-import { RequestMulterFile } from 'entities/media'
 import { UserModel } from 'entities/user'
 import type { Request, Response } from 'express'
 import { ServerNotificationMessage } from 'shared-config'
@@ -7,14 +6,15 @@ import { throwHTTPError } from 'shared-lib'
 
 import { USER_MESSAGE } from '../~shared'
 import { MESSAGE } from './config'
+import { updateUserAvatar } from './lib'
 
 export const updateUserData = async (req: Request, res: Response) => {
   try {
     const username: string | undefined = req.body.username
-    const avatarFile: RequestMulterFile | undefined = req.file
+    const avatarFileBuffer: Buffer | undefined = req.file?.buffer
     const userId = req.app.locals.id
 
-    if (!username && !avatarFile) {
+    if (!username && !avatarFileBuffer) {
       return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.nothingToUpdate)
     }
 
@@ -28,28 +28,13 @@ export const updateUserData = async (req: Request, res: Response) => {
       await user.updateOne({ $set: { 'public.username': username } })
     }
 
-    return res.json({ data: { username }, silent: true })
+    if (avatarFileBuffer) {
+      await updateUserAvatar(avatarFileBuffer, userId, res)
+    }
 
-    // const usersHasCurrentContact = await getUsersByHasContactId(userId)
-    // const usersIdsFromUsers = usersHasCurrentContact.map((user) => user.id)
-    // const sockets = await getSocketsByUserIds(usersIdsFromUsers)
-    // const updatedUserData = {
-    //   username: updateUserDataResponse.username,
-    //   avatar: updateUserDataResponse.avatar
-    // }
-    // const payload: IEventChangeContactsData = {
-    //   id: userId,
-    //   ...updatedUserData
-    // }
-    // const io = getIO()
-    // sockets.forEach((socketId: string) => {
-    //   io.to(socketId).emit<SocketActionsType>('contact-data-changed', payload)
-    // })
-    // return res.json({
-    //   userData: updatedUserData,
-    //   message: ServerNotificationMessage.UserDataUpdated,
-    //   silent: true
-    // })
+    // TODO Нужно сообщить всем у кого есть в контактах
+
+    return res.json({ data: { username }, silent: true })
   } catch {
     throwHTTPError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedUserDataUpdate)
   }

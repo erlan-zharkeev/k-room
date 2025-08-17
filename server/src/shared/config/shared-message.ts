@@ -1,6 +1,6 @@
 export const SHARED_MESSAGE = {
-  success: 'Success',
-  error: 'Error',
-  warn: 'Warning',
-  info: 'Info'
+  success: 'success',
+  error: 'error',
+  warn: 'warning',
+  info: 'info'
 }

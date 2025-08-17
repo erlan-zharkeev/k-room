@@ -1,3 +1,3 @@
-import { emailRule, usernameRule } from 'features/auth'
+import { usernameRule } from 'features/auth'
 
-export const fieldsValidation = [emailRule(), usernameRule({ ifPresent: true })]
+export const fieldsValidation = [usernameRule().optional()]
