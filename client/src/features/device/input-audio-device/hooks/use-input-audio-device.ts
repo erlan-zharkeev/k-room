@@ -11,7 +11,7 @@ import { AppIconName } from 'src/shared/ui'
 export const useInputAudioDevice = () => {
   const [audioInputDeviceList, setAudioInputDeviceList] = useState<MediaDeviceInfo[]>([])
   const { showModal } = useSystem()
-  const { selectedAudioInputDeviceId, updateSetting } = useSettings()
+  const settings = useSettings()
   const [isMicLoading, setMicIsLoading] = useState(false)
   const [showMicGrade, setMicGrade] = useState(false)
   const audioStream = useRef<MediaStream | null>(null)
@@ -22,7 +22,7 @@ export const useInputAudioDevice = () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const audioInputs = devices.filter((device) => device.kind === 'audioinput')
     setAudioInputDeviceList(audioInputs)
-    const selectedStillExists = audioInputs.some((device) => device.deviceId === selectedAudioInputDeviceId)
+    const selectedStillExists = audioInputs.some((device) => device.deviceId === settings.selectedAudioInputDeviceId)
 
     if (!selectedStillExists) {
       changeAudioInputDevice()
@@ -45,7 +45,7 @@ export const useInputAudioDevice = () => {
   }
 
   const changeAudioInputDevice = (value: string = '') => {
-    updateSetting({ selectedAudioInputDeviceId: value })
+    settings.update({ selectedAudioInputDeviceId: value })
   }
 
   const initAudioVisualizer = (stream: MediaStream) => {
@@ -82,7 +82,7 @@ export const useInputAudioDevice = () => {
       }
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          deviceId: selectedAudioInputDeviceId ? { exact: selectedAudioInputDeviceId } : undefined
+          deviceId: settings.selectedAudioInputDeviceId ? { exact: settings.selectedAudioInputDeviceId } : undefined
         }
       })
       audioStream.current = stream

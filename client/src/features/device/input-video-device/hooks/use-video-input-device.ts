@@ -12,7 +12,7 @@ export const useInputVideoDevice = () => {
   const { getNotification } = useNotification()
 
   const [videoInputDeviceList, setVideoInputDeviceList] = useState([] as MediaDeviceInfo[])
-  const { selectedVideoInputDeviceId, updateSetting } = useSettings()
+  const settings = useSettings()
   const [isVideoLoading, setVideoIsLoading] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
   const videoStream = useRef<MediaStream | null>(null)
@@ -28,7 +28,7 @@ export const useInputVideoDevice = () => {
   const loading = useMemo(() => videoInputDeviceList.length < 0, [videoInputDeviceList])
 
   const changeVideoInputDevice = (value: string = '') => {
-    updateSetting({ selectedVideoInputDeviceId: value })
+    settings.update({ selectedVideoInputDeviceId: value })
   }
 
   const hideVideo = () => {
@@ -53,7 +53,7 @@ export const useInputVideoDevice = () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const videoInputs = devices.filter((device) => device.kind === 'videoinput')
     setVideoInputDeviceList(videoInputs)
-    const selectedStillExists = videoInputs.some((device) => device.deviceId === selectedVideoInputDeviceId)
+    const selectedStillExists = videoInputs.some((device) => device.deviceId === settings.selectedVideoInputDeviceId)
 
     if (!selectedStillExists) {
       changeVideoInputDevice()
@@ -83,7 +83,7 @@ export const useInputVideoDevice = () => {
       }
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          deviceId: selectedVideoInputDeviceId ? { exact: selectedVideoInputDeviceId } : undefined
+          deviceId: settings.selectedVideoInputDeviceId ? { exact: settings.selectedVideoInputDeviceId } : undefined
         }
       })
       videoStream.current = stream

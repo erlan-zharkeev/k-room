@@ -1,4 +1,4 @@
-export type MediaType = "image" | "video" | "audio" | "pdf" | "unknown";
+export type MediaKindType = "image" | "video" | "audio" | "pdf" | "unknown";
 
 export interface IImageObject {
   src: string;

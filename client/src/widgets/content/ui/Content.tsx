@@ -1,13 +1,13 @@
 import './style.scss'
 import { ReactElement } from 'react'
 
-import { ContentTabType } from 'common-types'
-
 import { ChatRoom } from 'src/widgets/chat-room'
 import { InfoNotification } from 'src/widgets/info-notifications'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { useSettings } from 'src/entities/settings'
+
+import type { ContentTabType } from 'src/shared/config'
 
 const CONTENT_COMPONENT_MAP: Record<ContentTabType, ReactElement> = {
   info: <InfoNotification />,

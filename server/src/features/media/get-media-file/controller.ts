@@ -1,6 +1,6 @@
 import { StatusEnum } from 'common-types'
 import { MediaBucketNameType } from 'entities/media'
-import { streamGridFSFile } from 'entities/media/lib/stream-media-file'
+import { streamMediaFile } from 'entities/media/lib/stream-media-file'
 import type { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
@@ -14,8 +14,10 @@ export const getMediaFile = async (req: IAppRequest, res: AppResponseType<null>)
       return throwHTTPError(StatusEnum.NotFound, res, MESSAGE.idNotProvideOrNotValid)
     }
     const { bucketName, id } = parseBucketNameFromId(idParam)
+    const asAttachment = ['1', 'true', 'yes'].includes(String(req.query.download || '').toLowerCase())
 
-    streamGridFSFile(bucketName as MediaBucketNameType, id, res)
+    streamMediaFile(bucketName as MediaBucketNameType, id, res, { asAttachment })
+    return
   } catch {
     return throwHTTPError(StatusEnum.Server, res, MESSAGE.failedToProvideMedia)
   }

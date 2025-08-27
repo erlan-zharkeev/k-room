@@ -1,10 +1,10 @@
 import { useSettings } from 'src/entities/settings'
 
 export const useShowNotification = () => {
-  const { updateSetting } = useSettings()
+  const settings = useSettings()
   const toggleShowNotification = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    updateSetting({ showNotification: value })
+    settings.update({ showNotification: value })
   }
 
   return { toggleShowNotification }

@@ -1,3 +1,7 @@
+import { StatusEnum } from 'common-types'
+import { type Response } from 'express'
+import { throwHTTPError } from 'shared-lib'
+
 import {
   type IFileData,
   type MediaBucketNameType,
@@ -5,16 +9,20 @@ import {
   validationMediaOptionsMap
 } from '../config'
 
-export const validateFileMetaData = (filedata: IFileData, bucketName: MediaBucketNameType) => {
+export const validateFileMetaData = (
+  filedata: IFileData,
+  bucketName: MediaBucketNameType,
+  res: Response | null = null
+) => {
   const { maxMb, supportedKindMediaType } = validationMediaOptionsMap[bucketName]
 
   const maxBytes = maxMb * 1024 * 1024
   if (filedata.metadata.size > maxBytes) {
-    throw new Error(VALIDATE_MEDIA_FILE_MESSAGE.fileIsTooLarge)
+    throwHTTPError(StatusEnum.BadRequest, res, VALIDATE_MEDIA_FILE_MESSAGE.fileIsTooLarge)
   }
 
   if (filedata.metadata.kind !== supportedKindMediaType) {
-    throw new Error(VALIDATE_MEDIA_FILE_MESSAGE.extNotSupported)
+    throwHTTPError(StatusEnum.BadRequest, res, VALIDATE_MEDIA_FILE_MESSAGE.extNotSupported)
   }
   return true
 }

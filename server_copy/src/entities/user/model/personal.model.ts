@@ -20,7 +20,7 @@ export const personalSchema = new Schema<IUserPersonalData>(
       default: [],
       required: true
     },
-    unreadInfoNotifications: {
+    infoNotifications: {
       type: [String],
       required: true,
       default: []

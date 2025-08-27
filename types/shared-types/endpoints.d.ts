@@ -25,13 +25,11 @@ export declare enum AuthEndpointsEnum {
 export declare enum UserEndpointsEnum {
     GetUserData = "/user/get-user-data",
     UpdateUserData = "/user/user-data/update",
-    ResetPassword = "/user/reset-password"
+    ResetPassword = "/user/reset-password",
+    MarkInfoNotificationAsRead = "/user/notification/read"
 }
 export declare enum MediaEndpointsEnum {
-    GetMediaFile = "/media/get-media-file/:id"
-}
-export declare enum CommonEndpointsEnum {
-    InfoItem = "/info-item"
+    GetMediaFile = "/media/get-media-file"
 }
 export declare enum CodesEndpointsEnum {
     SendEmailCodePasswordRecovery = "/codes/email/password-recovery",
@@ -44,4 +42,4 @@ export declare enum AdminEndpointsEnum {
     DeleteUser = "/admin/delete-user",
     UpdateUserData = "/admin/update-user-data"
 }
-export type EndpointsType = AuthEndpointsEnum | UserEndpointsEnum | CommonEndpointsEnum | CodesEndpointsEnum | AdminEndpointsEnum | MediaEndpointsEnum;
+export type EndpointsType = AuthEndpointsEnum | UserEndpointsEnum | CodesEndpointsEnum | AdminEndpointsEnum | MediaEndpointsEnum;

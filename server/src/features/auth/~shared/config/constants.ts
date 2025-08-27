@@ -1,6 +1,6 @@
 import { VALIDATION_LIMITS } from 'common-types'
 
-export const MESSAGE = {
+export const AUTH_MESSAGE = {
   nonAuthorized: 'User not authorized',
   usernameRequired: 'Username is required',
   passwordMustBeAtLeast: `Password must be at least ${VALIDATION_LIMITS.passwordMinLength} characters long`,

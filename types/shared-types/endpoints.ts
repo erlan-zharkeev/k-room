@@ -2,7 +2,6 @@ export enum RouteNamesEnum {
   Login = "/login",
   Registration = "/registration",
   EmailConfirmation = "/email-confirmation",
-
   WaitEmailConfirm = "/wait-email-confirm",
   Main = "/app",
   PasswordRecovery = "/password-recovery",
@@ -30,15 +29,11 @@ export enum UserEndpointsEnum {
   GetUserData = "/user/get-user-data",
   UpdateUserData = "/user/user-data/update",
   ResetPassword = "/user/reset-password",
+  MarkInfoNotificationAsRead = "/user/notification/read",
 }
 
 export enum MediaEndpointsEnum {
-  GetMediaFile = "/media/get-media-file/:id",
-}
-
-export enum CommonEndpointsEnum {
-  // CommonImages = "/common-images",
-  InfoItem = "/info-item",
+  GetMediaFile = "/media/get-media-file",
 }
 
 export enum CodesEndpointsEnum {
@@ -57,7 +52,6 @@ export enum AdminEndpointsEnum {
 export type EndpointsType =
   | AuthEndpointsEnum
   | UserEndpointsEnum
-  | CommonEndpointsEnum
   | CodesEndpointsEnum
   | AdminEndpointsEnum
   | MediaEndpointsEnum;

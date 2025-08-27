@@ -12,10 +12,11 @@ export interface IBasicStreamSettings {
 export interface IStreamSettings extends IBasicStreamSettings {
     streamLoading: boolean;
 }
+export interface IBackendMessage {
+    text: string;
+    silent: boolean;
+}
 export interface IBackendResponse<T> {
     data: T;
-    message: {
-        text: string;
-        silent: boolean;
-    };
+    message: IBackendMessage;
 }

@@ -1,6 +1,6 @@
 import { StatusEnum } from 'common-types'
 import { type NextFunction, type Request, type Response } from 'express'
-import { MESSAGE, refreshTokenValidator, verifyToken } from 'features/auth'
+import { AUTH_MESSAGE, refreshTokenValidator, verifyToken } from 'features/auth'
 import { ENV } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
@@ -8,7 +8,7 @@ export const accessTokenValidator = async (req: Request, res: Response, next: Ne
   const accessToken = req.cookies.jwt
 
   if (!accessToken) {
-    return throwHTTPError(StatusEnum.NotAuth, res, MESSAGE.nonAuthorized, true)
+    throwHTTPError(StatusEnum.NotAuth, res, AUTH_MESSAGE.nonAuthorized, true)
   }
 
   try {

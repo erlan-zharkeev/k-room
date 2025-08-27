@@ -157,6 +157,11 @@ export interface IEventDeleteContactSuccess {
   silent: boolean;
 }
 
+export interface IEventAuthError {
+  event: string;
+  payload: unknown;
+}
+
 export type SocketActionsType =
   | "connection"
   | "error"

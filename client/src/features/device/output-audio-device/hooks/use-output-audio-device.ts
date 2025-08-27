@@ -9,7 +9,7 @@ import { useTimeout } from 'src/shared/lib'
 export const useOutputAudioDevice = () => {
   const [audioOutputDeviceList, setAudioOutputDeviceList] = useState([] as MediaDeviceInfo[])
   const { camPermission, micPermission } = useSystem()
-  const { selectedAudioOutputDeviceId, updateSetting } = useSettings()
+  const settings = useSettings()
   const { startTimeout } = useTimeout()
 
   const { play, stop } = useSound()
@@ -35,7 +35,7 @@ export const useOutputAudioDevice = () => {
   }, [audioOutputDeviceList])
 
   const onAudioOutputDeviceChange = (value: string = '') => {
-    updateSetting({ selectedAudioOutputDeviceId: value })
+    settings.update({ selectedAudioOutputDeviceId: value })
   }
 
   useEffect(() => {
@@ -54,7 +54,9 @@ export const useOutputAudioDevice = () => {
       }
       setAudioOutputDeviceList(audioOutputs)
 
-      const selectedStillExists = audioOutputs.some((device) => device.deviceId === selectedAudioOutputDeviceId)
+      const selectedStillExists = audioOutputs.some(
+        (device) => device.deviceId === settings.selectedAudioOutputDeviceId
+      )
 
       if (!selectedStillExists) onAudioOutputDeviceChange()
     } catch (error) {

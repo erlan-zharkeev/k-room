@@ -6,4 +6,4 @@ import { getMediaFile } from './controller'
 
 export const getMediaFileRouter = Router()
 
-getMediaFileRouter.get(MediaEndpointsEnum.GetMediaFile, accessTokenValidator, getMediaFile)
+getMediaFileRouter.get(`${MediaEndpointsEnum.GetMediaFile}/:id`, accessTokenValidator, getMediaFile)

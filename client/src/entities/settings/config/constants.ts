@@ -1,4 +1,4 @@
-import type { ContentTabType, IUserSetting } from 'src/shared/lib'
+import { ContentTabType, IUserSetting } from 'src/shared/config'
 
 export const FULL_CONTENT_ELEMENTS: ContentTabType[] = ['info']
 

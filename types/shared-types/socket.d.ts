@@ -133,4 +133,8 @@ export interface IEventDeleteContactSuccess {
     deletedContactId: string;
     silent: boolean;
 }
+export interface IEventAuthError {
+    event: string;
+    payload: unknown;
+}
 export type SocketActionsType = "connection" | "error" | "reconnect" | "auth-error" | "initialize" | "disconnect" | "rooms-loaded" | "create-chat-room" | "new-room-added" | "send-message" | "message-delivered" | "room-created" | "search-contact" | "get-searched-contact" | "contact-status-updated" | "contacts-loaded" | "save-contact" | "delete-contact" | "client-typing" | "get-contact-typing-status" | "change-message-status" | "message-status-updated" | "contact-data-changed" | "call-user" | "answer-call" | "call-accepted" | "call-ended" | "change-call-settings" | "call-started-at" | "update-user-settings" | "update-chat-room" | "room-data-updated" | "add-reaction" | "message-reaction-updated" | "delete-message" | "message-deleted" | "error-message" | "calls-data-loaded" | "call-data-changed" | "mark-call-as-video" | "update-call-signal" | "interlocutor-update-signal" | "interlocutor-ping" | "update-interaction-type" | "update-contact-success" | "invite-received" | "contact-delete-success" | "contact-add-success" | "update-contact-interaction-type" | "contact-interaction-updated" | "reconnect_attempt" | "reconnect_failed";

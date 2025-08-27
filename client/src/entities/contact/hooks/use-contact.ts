@@ -13,6 +13,10 @@ export const useContact = () => {
       }, {})
     }) ?? {}
 
+  const reset = async () => {
+    await db.contacts.clear()
+  }
+
   const contactInvitationsQuantity = () =>
     Object.values(contactMap).filter((data) => {
       const contact = data
@@ -27,6 +31,7 @@ export const useContact = () => {
     contactInvitationsQuantity,
     isContactExist,
     getContact,
-    getContacts
+    getContacts,
+    reset
   }
 }

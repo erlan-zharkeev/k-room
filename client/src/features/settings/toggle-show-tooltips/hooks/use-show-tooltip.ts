@@ -1,11 +1,11 @@
 import { useSettings } from 'src/entities/settings'
 
 export const useShowTooltip = () => {
-  const { updateSetting } = useSettings()
+  const settings = useSettings()
 
   const toggleShowTooltip = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    updateSetting({ showTooltips: value })
+    settings.update({ showTooltips: value })
   }
 
   return { toggleShowTooltip }

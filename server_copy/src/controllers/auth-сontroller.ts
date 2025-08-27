@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { initUserCodes } from '../fixtures'
 import { authValidator } from '../middlewares'
 import { updateTokens, getPreviewInfoNotification, sendEmailConfirmationLink } from '../services'
-import type { AuthLoginPayloadType, AuthRegistrationPayloadType, UserCredentialType } from 'common-types'
+import type { IAuthLoginPayload, IAuthRegistrationPayload, UserCredentialType } from 'common-types'
 import { ServerNotificationMessage } from 'shared/types'
 import { StatusEnum } from 'common-types'
 
@@ -22,7 +22,7 @@ class AuthController {
   async registration(req: Request, res: Response) {
     try {
       authValidator(req, res)
-      const { username, email, password } = req.body as AuthRegistrationPayloadType
+      const { username, email, password } = req.body as IAuthRegistrationPayload
       const userNameCandidate = await UserModel.findOne({ username })
 
       if (userNameCandidate) {
@@ -89,7 +89,7 @@ class AuthController {
 
   async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body as AuthLoginPayloadType
+      const { email, password } = req.body as IAuthLoginPayload
       const user = await UserModel.findOne({ email })
       if (!user) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.UserNotFound)
       if (!user.confirmed) return throwError(StatusEnum.BadRequest, res, ServerNotificationMessage.EmailNotConfirm)

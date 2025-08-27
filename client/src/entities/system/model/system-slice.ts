@@ -9,14 +9,19 @@ import {
   INITIAL_CONTEXT_MENU,
   CLICKED_OBJECT_INITIAL_STATE
 } from '../config'
-import type { IModalData, IViewPort } from '../config/types'
+import type { AuthStatusType, IModalData, IViewPort } from '../config/types'
 
 export const systemSlice = createSlice({
   name: 'system',
   initialState: INITIAL_SYSTEM_STORE,
   reducers: {
+    setAuth: (state, { payload }: { payload: AuthStatusType }) => {
+      state.auth = payload
+    },
+    setOnline: (state, { payload }: { payload: boolean }) => {
+      state.online = payload
+    },
     resetSystemStore: (state) => {
-      state.isAppLoading = false
       state.reconnecting = false
       state.showModal = false
       state.contextMenu = {
@@ -29,9 +34,6 @@ export const systemSlice = createSlice({
       }
       state.modalData = INITIAL_MODAL_DATA
       state.viewPort = INITIAL_VIEWPORT
-    },
-    updateAppLoaderState: (state, { payload }: { payload: boolean }) => {
-      state.isAppLoading = payload
     },
     updateCamPermission: (state, { payload }: { payload: PermissionState }) => {
       state.camPermission = payload
@@ -86,12 +88,13 @@ export const systemSlice = createSlice({
 
 export const {
   setReconnectingStatus,
+  setAuth,
+  setOnline,
   showModal,
   closeModal,
   setViewPort,
   setContextMenu,
   resetContextClickedObject,
-  updateAppLoaderState,
   resetSystemStore,
   setHasInteraction,
   updateCamPermission,

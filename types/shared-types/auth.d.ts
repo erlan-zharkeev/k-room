@@ -1,14 +1,14 @@
 import { ProviderType } from "./common";
-export interface AuthLoginPayloadType {
+export interface IAuthLoginPayload {
     email: string;
     password: string;
 }
-export interface AuthRegistrationPayloadType {
+export interface IAuthRegistrationPayload {
     username: string;
     email: string;
     password: string;
 }
-export interface SignInWithProviderPayloadType {
+export interface ISignInWithProviderPayload {
     username: string;
     email: string;
     provider: ProviderType;

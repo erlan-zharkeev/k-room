@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, AuthRegistrationPayloadType, RouteNamesEnum, StatusEnum } from 'common-types'
+import { AuthEndpointsEnum, IAuthRegistrationPayload, RouteNamesEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
@@ -19,17 +19,15 @@ export const useRegistration = () => {
   const { doRequest } = useApi()
   const [isLoading, setIsLoading] = useState(false)
 
-  const register = async (fields: AuthRegistrationPayloadType) => {
+  const register = async (fields: IAuthRegistrationPayload) => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpointsEnum.Registration, fields)
+    await doRequest('post', AuthEndpointsEnum.Registration, fields)
     setIsLoading(false)
-    if (response?.status === StatusEnum.Success) {
-      navigate(RouteNamesEnum.Login)
-    }
+    navigate(RouteNamesEnum.Login)
   }
 
   const onRegister = (payload: unknown) => {
-    const formData = payload as AuthRegistrationPayloadType
+    const formData = payload as IAuthRegistrationPayload
     register(formData)
   }
 

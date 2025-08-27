@@ -6,6 +6,6 @@ export interface IConfirmEmailResponse {
 
 export interface ILoginResponse extends IFrontendUserData {}
 
-export interface ISignInWithProvider extends IFrontendUserData {}
+export interface ISignInWithProviderResponse extends IFrontendUserData {}
 
 export interface IGetUserDataResponse extends IFrontendUserData {}

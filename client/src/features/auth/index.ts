@@ -1,5 +1,4 @@
 export * from './login'
 export * from './registration'
-export * from './check-auth'
 export * from './logout'
 export * from './password-recovery'

@@ -25,8 +25,8 @@ cd ../server/
 pnpm install
 pnpm run serve &
 
-# cd ../client/
-# pnpm install
-# pnpm run serve &
+cd ../client/
+pnpm install
+pnpm run serve &
 
 wait

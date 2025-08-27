@@ -1,4 +1,5 @@
-import { DbContactType, db } from 'src/shared/lib'
+import type { DbContactType } from 'src/shared/config'
+import { db } from 'src/shared/lib'
 
 export const useUpdateContactData = () => {
   const updateContactData = async (id: string, updatedFields: Partial<DbContactType>) => {

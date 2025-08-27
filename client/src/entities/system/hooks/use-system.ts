@@ -4,8 +4,9 @@ import appData from './../../../../package.json'
 
 export const useSystem = () => {
   const {
-    isAppLoading,
+    auth,
     showModal,
+    online,
     hasInteracted,
     micPermission,
     camPermission,
@@ -16,8 +17,9 @@ export const useSystem = () => {
   } = useTypedSelector((state) => state.system)
 
   return {
-    isAppLoading,
+    auth,
     showModal,
+    online,
     appData,
     hasInteracted,
     micPermission,

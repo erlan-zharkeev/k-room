@@ -1,6 +1,6 @@
 import { StatusEnum } from 'common-types'
 import type { Response } from 'express'
-import { errorToMessage, throwHTTPError } from 'shared-lib'
+import { throwHTTPError } from 'shared-lib'
 
 import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from '../config'
 import { VALIDATE_MEDIA_FILE_MESSAGE } from '../config'
@@ -18,7 +18,7 @@ export const uploadBufferToBucket = async (
   try {
     const fileData = await buildFileData(buffer, filename)
 
-    validateFileMetaData(fileData, bucketName)
+    validateFileMetaData(fileData, bucketName, res)
 
     const overwrite = options?.overwrite ?? false
 
@@ -26,7 +26,7 @@ export const uploadBufferToBucket = async (
 
     if (existing.length > 0) {
       if (!overwrite) {
-        throw new Error(VALIDATE_MEDIA_FILE_MESSAGE.fileWithThisNameAlreadyExists)
+        return throwHTTPError(StatusEnum.Server, res ?? null, VALIDATE_MEDIA_FILE_MESSAGE.fileWithThisNameAlreadyExists)
       }
       await Promise.all(existing.map((f) => bucket.delete(f._id)))
     }
@@ -40,8 +40,7 @@ export const uploadBufferToBucket = async (
       stream.once('error', reject)
       stream.end(buffer)
     })
-  } catch (e: unknown) {
-    const message = errorToMessage(e, VALIDATE_MEDIA_FILE_MESSAGE.uploadFailed)
-    throwHTTPError(StatusEnum.Server, res ?? null, message, false)
+  } catch {
+    throwHTTPError(StatusEnum.Server, res ?? null, VALIDATE_MEDIA_FILE_MESSAGE.uploadFailed)
   }
 }

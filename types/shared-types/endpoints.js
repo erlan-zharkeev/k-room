@@ -30,16 +30,12 @@ export var UserEndpointsEnum;
     UserEndpointsEnum["GetUserData"] = "/user/get-user-data";
     UserEndpointsEnum["UpdateUserData"] = "/user/user-data/update";
     UserEndpointsEnum["ResetPassword"] = "/user/reset-password";
+    UserEndpointsEnum["MarkInfoNotificationAsRead"] = "/user/notification/read";
 })(UserEndpointsEnum || (UserEndpointsEnum = {}));
 export var MediaEndpointsEnum;
 (function (MediaEndpointsEnum) {
-    MediaEndpointsEnum["GetMediaFile"] = "/media/get-media-file/:id";
+    MediaEndpointsEnum["GetMediaFile"] = "/media/get-media-file";
 })(MediaEndpointsEnum || (MediaEndpointsEnum = {}));
-export var CommonEndpointsEnum;
-(function (CommonEndpointsEnum) {
-    // CommonImages = "/common-images",
-    CommonEndpointsEnum["InfoItem"] = "/info-item";
-})(CommonEndpointsEnum || (CommonEndpointsEnum = {}));
 export var CodesEndpointsEnum;
 (function (CodesEndpointsEnum) {
     CodesEndpointsEnum["SendEmailCodePasswordRecovery"] = "/codes/email/password-recovery";

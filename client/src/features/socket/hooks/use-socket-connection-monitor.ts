@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 
-import { IEventErrorMessage, SocketActionsType } from 'common-types'
+import { IEventErrorMessage, IEventAuthError, SocketActionsType } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { useSocketReconnect } from 'src/features/socket'
@@ -37,8 +37,9 @@ export const useSocketConnectionMonitor = () => {
       errorMessageNotification.open()
     })
 
-    socket.on<SocketActionsType>('auth-error', () => {
-      socketReconnect()
+    socket.on<SocketActionsType>('auth-error', async ({ event, payload }: IEventAuthError) => {
+      await socketReconnect()
+      socket.emit(event, payload) // Replay Failed Event
     })
 
     socket.on<SocketActionsType>('reconnect', (attempt: number) => {

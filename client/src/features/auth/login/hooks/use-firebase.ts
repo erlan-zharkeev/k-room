@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType } from 'common-types'
+import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithProviderResponse } from 'common-types'
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
-import { useSetUserData } from 'src/features/user/set-user-data/hooks/use-set-user-data'
+import { useSetUserData } from 'src/features/user'
 
 import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
 
@@ -48,10 +48,10 @@ export const useFirebase = () => {
         provider: providerId
       }
 
-      const response = await doRequest('post', AuthEndpointsEnum.ProviderLogin, credential)
+      const response = await doRequest<ISignInWithProviderResponse>('post', AuthEndpointsEnum.ProviderLogin, credential)
       if (!response) return
-      const { userData, settings } = response.data
-      setUserData({ userData, settings })
+      const { data } = response.data
+      setUserData(data)
       navigate(RouteNamesEnum.Main)
     } catch (e: unknown) {
       if (e instanceof Error) clg('error', e.message)

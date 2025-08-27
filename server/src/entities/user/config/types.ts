@@ -1,4 +1,4 @@
-import type { ProviderType, UserRoleType } from 'common-types'
+import type { InfoNotificationMapType, ProviderType, UserRoleType } from 'common-types'
 
 export interface IUserDevice {
   socketId: string
@@ -17,7 +17,7 @@ export interface IUserPersonalData {
   role: UserRoleType
   contacts: string[]
   chatRooms: string[]
-  unreadInfoNotifications: string[]
+  infoNotifications: InfoNotificationMapType
 }
 
 export interface IUserPublicData {

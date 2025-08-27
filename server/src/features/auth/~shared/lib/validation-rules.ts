@@ -2,34 +2,34 @@ import { providers, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'common-types'
 import { check, oneOf } from 'express-validator'
 import mongoose from 'mongoose'
 
-import { MESSAGE } from '../config'
+import { AUTH_MESSAGE } from '../config'
 
 export const emailRule = () =>
   check('email')
     .notEmpty()
-    .withMessage(MESSAGE.emailIsRequired)
+    .withMessage(AUTH_MESSAGE.emailIsRequired)
     .bail()
     .isEmail()
-    .withMessage(MESSAGE.invalidEmailFormat)
+    .withMessage(AUTH_MESSAGE.invalidEmailFormat)
 
-export const requiredStringRule = (field: string, msg = MESSAGE.fieldIsRequired) =>
+export const requiredStringRule = (field: string, msg = AUTH_MESSAGE.fieldIsRequired) =>
   check(field).notEmpty().withMessage(msg)
 
 export const passwordRule = () =>
   check('password')
     .notEmpty()
-    .withMessage(MESSAGE.passwordIsRequired)
+    .withMessage(AUTH_MESSAGE.passwordIsRequired)
     .bail()
     .isLength({ min: VALIDATION_LIMITS.passwordMinLength })
-    .withMessage(MESSAGE.passwordMustBeAtLeast)
+    .withMessage(AUTH_MESSAGE.passwordMustBeAtLeast)
     .matches(new RegExp(VALIDATION_PATTERNS.passwordStrong))
-    .withMessage(MESSAGE.passwordMustBeStrong)
+    .withMessage(AUTH_MESSAGE.passwordMustBeStrong)
 check('password')
   .not()
   .matches(new RegExp(VALIDATION_PATTERNS.noSpaces))
-  .withMessage(MESSAGE.passwordNotContainSpaces)
+  .withMessage(AUTH_MESSAGE.passwordNotContainSpaces)
   .matches(new RegExp(VALIDATION_PATTERNS.onlyLatin))
-  .withMessage(MESSAGE.passwordMustContainOnlyLatin)
+  .withMessage(AUTH_MESSAGE.passwordMustContainOnlyLatin)
 
 export const objectIdRule = (field: string) =>
   check(field)
@@ -39,12 +39,12 @@ export const objectIdRule = (field: string) =>
 export const providerRule = (field = 'providerName') =>
   check(field)
     .exists({ checkNull: true })
-    .withMessage(MESSAGE.fieldIsRequired)
+    .withMessage(AUTH_MESSAGE.fieldIsRequired)
     .bail()
     .isIn([...providers])
-    .withMessage(MESSAGE.invalidProvider)
+    .withMessage(AUTH_MESSAGE.invalidProvider)
 
-export const atLeastOneOf = (fields: string[], message = MESSAGE.atLeastOneRequired) =>
+export const atLeastOneOf = (fields: string[], message = AUTH_MESSAGE.atLeastOneRequired) =>
   oneOf(
     fields.map((f) => check(f).exists({ checkNull: true, checkFalsy: true }).bail().notEmpty()),
     message
@@ -53,7 +53,7 @@ export const atLeastOneOf = (fields: string[], message = MESSAGE.atLeastOneRequi
 export const usernameRule = () => {
   return check('username')
     .isLength({ min: VALIDATION_LIMITS.usernameMinLength })
-    .withMessage(MESSAGE.usernameTooShort)
+    .withMessage(AUTH_MESSAGE.usernameTooShort)
     .isLength({ max: VALIDATION_LIMITS.usernameMaxLength })
-    .withMessage(MESSAGE.usernameTooLong)
+    .withMessage(AUTH_MESSAGE.usernameTooLong)
 }

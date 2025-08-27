@@ -1,4 +1,4 @@
-import { MediaFileValueType, MediaType } from 'common-types'
+import { MediaFileValueType, MediaKindType } from 'common-types'
 
 export enum ImageResolutions {
   png = 'image/png',
@@ -8,10 +8,12 @@ export enum ImageResolutions {
 
 export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[]
 
-export interface DbMediaType {
+export interface IDbMedia {
   id: string
-  url: string
-  type: MediaType
-  createdAt: number
-  blobUrl?: string
+  blob: Blob
+  contentType: string
+  etag: string
+  kind: MediaKindType
+  lastModified: string
+  lastChecked: number
 }

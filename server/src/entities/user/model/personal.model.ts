@@ -1,4 +1,4 @@
-import { USER_ROLES } from 'common-types'
+import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType, USER_ROLES } from 'common-types'
 import type { IUserPersonalData } from 'entities/user'
 import { Schema } from 'mongoose'
 
@@ -20,10 +20,14 @@ export const personalSchema = new Schema<IUserPersonalData>(
       default: [],
       required: true
     },
-    unreadInfoNotifications: {
-      type: [String],
+    infoNotifications: {
+      type: Map,
+      of: {
+        type: String,
+        enum: INFO_NOTIFICATION_STATUS as ReadonlyArray<InfoNotificationMapType>
+      },
       required: true,
-      default: []
+      default: {}
     }
   },
   { _id: false }

@@ -30,8 +30,11 @@ export interface IModalData {
   cancelBtn?: IModalBtn
 }
 
+export type AuthStatusType = 'authorized' | 'unauthorized' | 'loading'
+
 export interface ISystemStore {
-  isAppLoading: boolean
+  auth: AuthStatusType
+  online: boolean
   reconnecting: boolean
   showModal: boolean
   contextMenu: IContextMenu

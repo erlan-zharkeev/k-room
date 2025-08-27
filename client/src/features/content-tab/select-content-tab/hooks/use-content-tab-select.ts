@@ -1,11 +1,13 @@
-import { type ContentTabType, useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
+
+import { ContentTabType } from 'src/shared/config'
 
 export const useContentTabSelect = () => {
-  const { selectedContentTab, updateSetting } = useSettings()
+  const { selectedContentTab, update } = useSettings()
 
   const selectContentTab = (value: ContentTabType) => {
     if (value === undefined || selectedContentTab === value) return
-    updateSetting({ selectedContentTab: value })
+    update({ selectedContentTab: value })
   }
 
   return { selectContentTab }

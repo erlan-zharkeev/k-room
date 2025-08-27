@@ -9,10 +9,10 @@ import { loadFixtures } from 'features/fixtures'
 import https from 'https'
 import methodOverride from 'method-override'
 import { ENV } from 'shared-config'
-import { initDataBase, initIO, log } from 'shared-lib'
+import { initDataBase, log, setIO } from 'shared-lib'
 
 import { rootRouter } from './router'
-import { getSocketIO } from './socket'
+import { initIO } from './socket'
 
 const app = express()
 
@@ -23,17 +23,16 @@ app.use(methodOverride('_method'))
 app.use(RouteNamesEnum.Api, rootRouter)
 
 const server = https.createServer(httpsOptions, app)
-const io = getSocketIO(server)
 
-const initializeEnvironment = async () => {
+const run = async () => {
   await initDataBase()
   initMediaBuckets()
   loadFixtures()
-  initIO(io)
+  const io = initIO(server)
+  setIO(io)
+  server.listen(ENV.SERVER_PORT, () => {
+    log.success(`-Server listening on port ${ENV.SERVER_PORT}`)
+  })
 }
 
-initializeEnvironment()
-
-server.listen(ENV.SERVER_PORT, () => {
-  log.success(`-Server listening on port ${ENV.SERVER_PORT}`)
-})
+run()

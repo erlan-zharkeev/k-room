@@ -9,7 +9,7 @@ import { AppFormData } from 'src/shared/ui'
 export const useCreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [searchParams] = useSearchParams()
-  const [passwordRestoreQuery, setPasswordRestoreQuery] = useState('')
+  const [passwordRestoreCode, setPasswordRestoreCode] = useState('')
   const [passMatched, setPassMatched] = useState(false)
   const [isFormTouched, setIsFormTouched] = useState(false)
   const [isPasswordChanged, setIPasswordChanged] = useState(false)
@@ -20,7 +20,7 @@ export const useCreateNewPassword = () => {
   useEffect(() => {
     const currentPasswordRestoreQuery = searchParams.get('password-recovery')
     if (!currentPasswordRestoreQuery) return navigate(RouteNamesEnum.Main)
-    setPasswordRestoreQuery(currentPasswordRestoreQuery)
+    setPasswordRestoreCode(currentPasswordRestoreQuery)
   }, [])
 
   const checkPassMatch = (payload: AppFormData) => {
@@ -36,7 +36,7 @@ export const useCreateNewPassword = () => {
       setIsLoading(true)
       const formData: ICreateNewPasswordPayload = {
         password: payload.secondPassword as string,
-        query: passwordRestoreQuery
+        codeToValidate: passwordRestoreCode
       }
       const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)
       if (response && response.status === StatusEnum.Success) {

@@ -1,1 +1,1 @@
-export * from './InfoNotifications/InfoNotifications'
+export * from './InfoNotifications'

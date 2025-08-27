@@ -14,5 +14,5 @@ export const socket = io(`${initConnectionPath}/`, {
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,
   reconnectionAttempts: VITE_MAX_RECONNECT_ATTEMPTS,
-  auth: { token: Cookies.get('jwt'), refreshToken: Cookies.get('jwt-refresh') }
+  auth: { jwt: Cookies.get('jwt'), refreshJwt: Cookies.get('refresh-jwt') }
 })

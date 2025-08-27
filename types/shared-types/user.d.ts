@@ -1,4 +1,4 @@
-import { ICodes, DBContactMapType, IInfoNotification } from ".";
+import { ICodes, DBContactMapType, InfoNotificationMapType } from ".";
 export declare const USER_ROLES: readonly ["user", "admin"];
 export type UserRoleType = (typeof USER_ROLES)[number];
 export interface IFrontendUserData {
@@ -6,9 +6,9 @@ export interface IFrontendUserData {
     role: UserRoleType;
     email: string;
     username: string;
+    infoNotifications: InfoNotificationMapType;
     contacts: [];
     textRooms: [];
-    unreadInfoNotifications: string[];
 }
 export type UserShortType = Pick<IFrontendUserData, "id" | "username">;
 export interface IUserSchema extends Omit<IFrontendUserData, "contacts"> {
@@ -17,6 +17,5 @@ export interface IUserSchema extends Omit<IFrontendUserData, "contacts"> {
     confirmAttempts: number;
     refreshToken: string;
     codes: ICodes;
-    infoNotifications: IInfoNotification[];
     contacts: DBContactMapType;
 }

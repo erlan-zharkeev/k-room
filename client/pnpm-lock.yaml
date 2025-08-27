@@ -57,6 +57,9 @@ importers:
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
+      '@types/lodash':
+        specifier: ^4.17.20
+        version: 4.17.20
       '@types/moment':
         specifier: ^2.13.0
         version: 2.13.0
@@ -108,6 +111,9 @@ importers:
       html-react-parser:
         specifier: ^3.0.16
         version: 3.0.16(react@18.2.0)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       madge:
         specifier: ^8.0.0
         version: 8.0.0(typescript@5.7.3)
@@ -1551,6 +1557,9 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/lodash@4.17.20':
+    resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
 
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
@@ -7447,6 +7456,8 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
+
+  '@types/lodash@4.17.20': {}
 
   '@types/long@4.0.2': {}
 

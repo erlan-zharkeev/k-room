@@ -3,7 +3,7 @@
     "outDir": "./",
     // "rootDir": "./../",
     "module": "ESNext",
-    "target": "ES2015",
+    "target": "ESNext",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "declaration": true,

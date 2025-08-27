@@ -18,6 +18,10 @@ export const INITIAL_MODAL_DATA = {
   width: '320px'
 }
 
+export const MIN_SUPPORTED_WIDTH = 320
+
+export const MIN_SUPPORTED_HEIGHT = 575
+
 export const INITIAL_VIEWPORT = {
   width: 1920,
   height: 1080
@@ -33,7 +37,8 @@ export const INITIAL_CONTEXT_MENU: IContextMenu = {
 }
 
 export const INITIAL_SYSTEM_STORE: ISystemStore = {
-  isAppLoading: false,
+  auth: 'loading',
+  online: true,
   reconnecting: false,
   showModal: false,
   contextMenu: INITIAL_CONTEXT_MENU,

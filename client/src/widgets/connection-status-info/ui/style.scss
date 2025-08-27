@@ -1,0 +1,11 @@
+@use '~/global/index' as *;
+
+.connection-status {
+  margin-right: 8px;
+  padding: 0 6px 2px;
+  border-radius: 4px;
+}
+
+.connection-status--connecting {
+  animation: blinker 1s infinite;
+}

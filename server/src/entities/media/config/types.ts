@@ -1,4 +1,4 @@
-import type { MediaType } from 'common-types'
+import type { MediaKindType } from 'common-types'
 import type { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
 
@@ -18,7 +18,7 @@ export type MediaBucketNameType = (typeof MEDIA_BUCKET_NAMES)[number]
 export type MulterErrorCode = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
 
 export interface IMediaBucketOptions {
-  supportedKindMediaType: MediaType
+  supportedKindMediaType: MediaKindType
   maxMb: number
 }
 

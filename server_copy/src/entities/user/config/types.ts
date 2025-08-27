@@ -12,7 +12,7 @@ export interface IUserPersonalData {
   role: UserRoleType
   contacts: string[]
   chatRooms: string[]
-  unreadInfoNotifications: string[]
+  infoNotifications: string[]
 }
 
 export interface IUserPublicData {

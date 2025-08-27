@@ -1,12 +1,12 @@
 import { StatusEnum } from 'common-types'
 import { UserModel } from 'entities/user'
 import { type NextFunction, type Request, type Response } from 'express'
-import { MESSAGE, updateTokens, verifyToken } from 'features/auth'
+import { AUTH_MESSAGE, updateTokens, verifyToken } from 'features/auth'
 import { ENV } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
 const haveNotRightsError = (res: Response, silent = true) =>
-  throwHTTPError(StatusEnum.NotAuth, res, MESSAGE.nonAuthorized, silent)
+  throwHTTPError(StatusEnum.NotAuth, res, AUTH_MESSAGE.nonAuthorized, silent)
 
 export const refreshTokenValidator = async (req: Request, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']

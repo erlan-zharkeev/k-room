@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" theme="dark">
   <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/style/theme.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="msapplication-TileColor" content="#1c1c1c" />
     <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png" />
@@ -19,6 +20,73 @@
 
   <body class="k-room-app">
     <div id="root"></div>
+
+    <div id="app-loader" class="app-loader" aria-busy="true" aria-live="polite">
+      <div class="app-progressbar">
+        <div class="app-progressbar-inner"></div>
+      </div>
+    </div>
+
+    <style>
+      .app-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--main-bg);
+        z-index: 9999;
+      }
+
+      .app-loader--hide {
+        opacity: 0;
+        transition: 0.3s ease-in-out;
+        pointer-events: none;
+      }
+
+      .app-progressbar {
+        position: relative;
+        width: 200px;
+        height: 4px;
+        background: var(--shadow-outset-start);
+        overflow: hidden;
+        border-radius: 2px;
+      }
+
+      .app-progressbar-inner {
+        position: absolute;
+        left: -50%;
+        width: 50%;
+        height: 100%;
+        background: var(--accent);
+        animation: progress-slide 1s infinite ease-in-out;
+      }
+
+      @keyframes progress-slide {
+        0% {
+          left: -50%;
+          width: 50%;
+        }
+        50% {
+          left: 25%;
+          width: 30%;
+        }
+        100% {
+          left: 100%;
+          width: 50%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .app-progressbar-inner {
+          animation: none;
+          width: 100%;
+          left: 0;
+        }
+      }
+    </style>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

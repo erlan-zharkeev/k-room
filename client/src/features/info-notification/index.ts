@@ -1,2 +1,2 @@
 export * from './info-notification-btn'
-export * from './info-notification'
+export * from './mark-info-notification-as-read'

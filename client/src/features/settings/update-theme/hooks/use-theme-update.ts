@@ -1,7 +1,9 @@
-import { ThemeType, useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
+
+import type { ThemeType } from 'src/shared/config'
 
 export const useThemeUpdate = () => {
-  const { updateSetting } = useSettings()
+  const settings = useSettings()
 
   const setThemeToDom = (value: ThemeType) => {
     const html = document.querySelector('html')
@@ -9,7 +11,7 @@ export const useThemeUpdate = () => {
   }
 
   const updateThemeByName = (value: ThemeType) => {
-    updateSetting({ theme: value })
+    settings.update({ theme: value })
     setThemeToDom(value)
   }
 

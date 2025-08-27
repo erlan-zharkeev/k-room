@@ -1,27 +1,17 @@
 import bcrypt from 'bcryptjs'
-import { type AuthRegistrationPayloadType, StatusEnum } from 'common-types'
-import { UserModel } from 'entities/user'
+import { type IAuthRegistrationPayload, StatusEnum } from 'common-types'
 import { createUser } from 'features/user'
 import type { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
+import { isUserExist } from '../~shared'
 import { MESSAGE } from './config'
 
 export const registration = async (req: IAppRequest, res: AppResponseType<null>) => {
   try {
-    const { username, email, password }: AuthRegistrationPayloadType = req.body
+    const { username, email, password }: IAuthRegistrationPayload = req.body
 
-    const userNameCandidate = await UserModel.findOne({ 'public.username': username })
-
-    if (userNameCandidate) {
-      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.userWithCurrentNameAlreadyExist)
-    }
-
-    const emailCandidate = await UserModel.findOne({ 'public.email': email })
-
-    if (emailCandidate) {
-      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.userWithCurrentEmailAlreadyExist)
-    }
+    await isUserExist({ username, email }, res)
 
     const hashedPassword = await bcrypt.hash(password, 6)
 

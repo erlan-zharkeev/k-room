@@ -21,7 +21,6 @@ module.exports = {
 
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/return-await': 'warn',
-    'no-return-await': 'error',
     '@typescript-eslint/prefer-nullish-coalescing': [
       'warn',
       {
@@ -50,6 +49,8 @@ module.exports = {
     'no-useless-escape': 'off',
     'no-case-declarations': 'off',
     'array-callback-return': 'off',
+    '@typescript-eslint/no-return-await': 'off',
+    '@typescript-eslint/promise-function-async': 'off',
     'import/no-cycle': ['error', { maxDepth: Infinity }],
     'import/order': [
       'error',

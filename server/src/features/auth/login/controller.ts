@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { type AuthLoginPayloadType, ILoginResponse, StatusEnum } from 'common-types'
+import { type IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common-types'
 import { UserModel } from 'entities/user'
 import { mapUserToDto } from 'features/user'
 import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
@@ -10,7 +10,7 @@ import { MESSAGE } from './config'
 
 export const login = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
   try {
-    const { email: inputEmail, password }: AuthLoginPayloadType = req.body
+    const { email: inputEmail, password }: IAuthLoginPayload = req.body
     const user = await UserModel.findOne({ 'public.email': inputEmail })
 
     if (!user) {

@@ -1,10 +1,7 @@
 import { IFrontendUserData } from "./user";
 export interface IConfirmEmailResponse {
-    email: string;
+  email: string;
 }
-export interface ILoginResponse extends IFrontendUserData {
-}
-export interface ISignInWithProvider extends IFrontendUserData {
-}
-export interface IGetUserDataResponse extends IFrontendUserData {
-}
+export interface ILoginResponse extends IFrontendUserData {}
+export interface ISignInWithProviderResponse extends IFrontendUserData {}
+export interface IGetUserDataResponse extends IFrontendUserData {}

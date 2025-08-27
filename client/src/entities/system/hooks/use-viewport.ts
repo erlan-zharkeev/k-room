@@ -1,14 +1,10 @@
-import { useSystem } from './use-system'
+import { MIN_SUPPORTED_HEIGHT, MIN_SUPPORTED_WIDTH, ViewPortWidthType } from '../config'
 
-export enum ViewPortWidthType {
-  Desktop = 1200,
-  Tablet = 769,
-  Phone = 576
-}
+import { useSystem } from './use-system'
 
 export const useViewport = () => {
   const { viewPort } = useSystem()
-  const { width } = viewPort
+  const { width, height } = viewPort
 
   return {
     isPhone: width <= ViewPortWidthType.Phone,
@@ -29,6 +25,8 @@ export const useViewport = () => {
     lessOrEqualPhone: width <= ViewPortWidthType.Phone,
     lessOrEqualTablet: width <= ViewPortWidthType.Tablet,
     lessOrEqualDesktop: width <= ViewPortWidthType.Desktop,
+
+    lessThenSupported: width <= MIN_SUPPORTED_WIDTH || height <= MIN_SUPPORTED_HEIGHT,
 
     viewPort
   }

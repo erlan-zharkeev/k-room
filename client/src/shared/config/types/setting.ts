@@ -17,4 +17,4 @@ export interface IUserSetting {
   selectedAudioOutputDeviceId: string
 }
 
-export type DbUserSettingType = IUserSetting & { id: string }
+export type DbUserSettingType = IUserSetting

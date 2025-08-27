@@ -6,7 +6,7 @@ import { useSettings } from 'src/entities/settings'
 
 export const useChatRoomSelect = () => {
   const { selectContentTab } = useContentTabSelect()
-  const { updateSetting } = useSettings()
+  const settings = useSettings()
   // const { scrollToBottom } = useChatRoomScroll()
 
   const selectChatWithAsideById = (value?: string) => {
@@ -17,7 +17,7 @@ export const useChatRoomSelect = () => {
 
   const selectChatRoomById = (value?: string) => {
     if (value === undefined) return
-    updateSetting({ selectedChatRoomId: value })
+    settings.update({ selectedChatRoomId: value })
     // TODO Установить скролл из стора по текущему выбранному элементу
     // scrollToBottom()
   }

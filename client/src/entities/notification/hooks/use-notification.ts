@@ -2,7 +2,7 @@ import { notification as antdNotification } from 'antd'
 import { IMessage } from 'common-types'
 
 import { useSettings } from 'src/entities/settings'
-import { useUser } from 'src/entities/user'
+import { useSystem } from 'src/entities/system'
 
 import { AppLogoIcon } from 'src/shared/assets'
 
@@ -13,8 +13,6 @@ import { getNotificationIcon } from './../lib'
 const ERROR_NOTIFICATION_DURATION_IN_SEC = 10
 
 export const useNotification = () => {
-  const { isAuth } = useUser()
-
   const { showNotification } = useSettings()
 
   const basicNotificationData: IAppNotification = {
@@ -52,7 +50,7 @@ export const useNotification = () => {
     }
 
     const open = () => {
-      if (showNotification || !isAuth) antdNotification[messageType](notificationData)
+      if (showNotification) antdNotification[messageType](notificationData)
     }
 
     const close = (id: string) => antdNotification.destroy(id)

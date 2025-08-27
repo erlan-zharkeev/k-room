@@ -1,6 +1,8 @@
 import { ProviderType } from 'common-types'
 import { UserModel } from 'entities/user'
-import mongoose, { FilterQuery } from 'mongoose'
+import { isUserExist } from 'features/auth'
+import mongoose from 'mongoose'
+import { log } from 'shared-lib'
 
 export const createUser = async ({
   id,
@@ -17,26 +19,18 @@ export const createUser = async ({
 }) => {
   let user = null
   try {
-    const orConditions: FilterQuery<unknown>[] = [{ 'public.email': email }, { 'public.username': username }]
+    const idCandidate = new mongoose.Types.ObjectId(id)
 
-    if (id) {
-      orConditions.push({ _id: new mongoose.Types.ObjectId(id) })
-    }
-
-    const exists = await UserModel.exists({ $or: orConditions })
-
-    if (exists) {
-      throw new Error('User with same id, email, or username already exists')
-    }
+    await isUserExist({ id: idCandidate, username, email })
 
     user = await new UserModel({
       _id: id ? new mongoose.Types.ObjectId(id) : new mongoose.Types.ObjectId(),
       public: { email, username },
-      personal: { role: 'user' },
+      personal: { role: 'user', infoNotifications: { 1: 'unread' } },
       system: { password: hashedPassword, provider }
     }).save()
   } catch {
-    //
+    log.error('-New user creating failed')
   }
   return user
 }

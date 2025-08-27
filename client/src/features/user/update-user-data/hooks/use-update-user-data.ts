@@ -4,14 +4,13 @@ import { UserEndpointsEnum } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { closeModal } from 'src/entities/system'
-import { useUser, setUserData } from 'src/entities/user'
+import { useUser } from 'src/entities/user'
 
 import { useApi } from 'src/shared/api'
-import { MediaFileValueType } from 'src/shared/config'
 import { AppFormData } from 'src/shared/ui'
 
 export const useUpdateUserData = () => {
-  const { username, avatar } = useUser()
+  const { username } = useUser()
 
   const { doRequest } = useApi()
 
@@ -39,11 +38,11 @@ export const useUpdateUserData = () => {
 
     try {
       setIsLoading(true)
-      const response = await doRequest('post', UserEndpointsEnum.UpdateUserData, payloadFormData, 'multipart/form-data')
-      if (response?.data?.userData) {
-        dispatch(setUserData(response.data.userData))
-        dispatch(closeModal())
-      }
+      const response = await doRequest('post', UserEndpointsEnum.UpdateUserData, payloadFormData, {
+        contentType: 'multipart/form-data'
+      })
+      dispatch(setUserData(response.data))
+      dispatch(closeModal())
     } catch (error) {
       console.error('Error updating user data:', error)
     } finally {

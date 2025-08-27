@@ -1,5 +1,5 @@
-import { RouteNamesEnum } from 'common-types'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { RouteNamesEnum as R } from 'common-types'
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { CreateNewPassword } from 'src/pages/create-new-password'
 import { EmailConfirmation } from 'src/pages/email-confirmation'
@@ -12,26 +12,41 @@ import { WaitEmailConfirm } from 'src/pages/wait-email-confirm'
 
 import { PageLayout } from 'src/widgets/page-layout'
 
-import { useUser } from 'src/entities/user'
+import { useSystem } from 'src/entities/system'
+
+const PrivateRoute = () => {
+  const { auth } = useSystem()
+  const location = useLocation()
+  return auth === 'authorized' ? <Outlet /> : <Navigate to={R.Login} replace state={{ from: location }} />
+}
+
+const PublicRoute = () => {
+  const { auth } = useSystem()
+  return auth === 'authorized' ? <Navigate to={R.Main} replace /> : <Outlet />
+}
 
 export const Router = () => {
-  const { isAuth } = useUser()
-  const redirectTo = isAuth ? RouteNamesEnum.Main : RouteNamesEnum.Login
-
   return (
     <Routes>
-      <Route path="/" element={<Navigate to={redirectTo} replace />} />
-      <Route element={<PageLayout />}>
-        <Route path={RouteNamesEnum.Login} element={<Login />} />
-        <Route path={RouteNamesEnum.Registration} element={<Registration />} />
-        <Route path={RouteNamesEnum.EmailConfirmation} element={<EmailConfirmation />} />
-        <Route path={RouteNamesEnum.PrivacyPolicy} element={<PrivacyPolicy />} />
-        <Route path={RouteNamesEnum.PasswordRecovery} element={<PasswordRecovery />} />
-        <Route path={RouteNamesEnum.CreateNewPassword} element={<CreateNewPassword />} />
-        <Route path={RouteNamesEnum.WaitEmailConfirm} element={<WaitEmailConfirm />} />
-        <Route path="*" element={<Navigate to={redirectTo} replace />} />
+      <Route path="/" element={<Navigate to={R.Main} replace />} />
+
+      <Route element={<PublicRoute />}>
+        <Route element={<PageLayout />}>
+          <Route path={R.Login} element={<Login />} />
+          <Route path={R.Registration} element={<Registration />} />
+          <Route path={R.EmailConfirmation} element={<EmailConfirmation />} />
+          <Route path={R.PrivacyPolicy} element={<PrivacyPolicy />} />
+          <Route path={R.PasswordRecovery} element={<PasswordRecovery />} />
+          <Route path={R.CreateNewPassword} element={<CreateNewPassword />} />
+          <Route path={R.WaitEmailConfirm} element={<WaitEmailConfirm />} />
+        </Route>
       </Route>
-      <Route path={RouteNamesEnum.Main} element={<Main />} />
+
+      <Route element={<PrivateRoute />}>
+        <Route path={R.Main} element={<Main />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to={R.Main} replace />} />
     </Routes>
   )
 }

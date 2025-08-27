@@ -1,5 +1,6 @@
 export * from '../config/constants'
 export * from './generate-token'
+export * from './is-user-exist'
 export * from './set-token'
 export * from './update-token'
 export * from './validation-rules'

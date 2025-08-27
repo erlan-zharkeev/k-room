@@ -1,46 +1,27 @@
-import { useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 
-import { useContentTabSelect } from 'src/features/content-tab'
+import { useUser } from 'src/entities/user'
 
-// import { useTimeout } from 'src/shared/lib'
-
-// import { INFO_ITEM_MARK_AS_READ_DURATION } from '../config'
-import { WelcomeInfoNotification } from '../ui'
-
-const map = {
-  1: {
-    id: 1,
-    title: 'Welcome to K-Room',
-    content: WelcomeInfoNotification
-  }
-}
+import { INFO_NOTIFICATION_MAP } from '../config'
 
 export const useInfoNotification = () => {
-  const { selectContentTab } = useContentTabSelect()
-  // const { startTimeout } = useTimeout()
+  const { infoNotifications } = useUser()
 
-  // TODO Будет приходить с бэка
-  const unread = useRef<string[]>([])
-
-  const markInfoAsRead = async (id: string) => {
-    //
-  }
-
-  const infoNotificationClickHandler = (id: string) => {
-    selectContentTab('info')
-    //
-  }
+  const unreadInfoNotificationQuantity = useMemo(
+    () => Number(Object.values(infoNotifications)?.filter((status) => status === 'unread').length),
+    [infoNotifications]
+  )
 
   const collapseInfoNotifications = useMemo(() => {
     const result =
-      Object.entries(map)?.map(([id, info]) => ({
+      Object.entries(INFO_NOTIFICATION_MAP)?.map(([id, info]) => ({
         id,
         title: info.title,
         content: info.content,
-        badgeName: unread.current.includes(id) ? 'Unread' : undefined
+        badgeName: infoNotifications[Number(id)] === 'unread' ? 'Unread' : undefined
       })) ?? []
     return result
-  }, [unread])
+  }, [infoNotifications])
 
-  return { collapseInfoNotifications, infoNotificationClickHandler }
+  return { collapseInfoNotifications, unreadInfoNotificationQuantity }
 }

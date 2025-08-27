@@ -8,13 +8,19 @@ import path from 'path'
 
 import { USER_FIXTURES } from './constants'
 
-const loadUserFixture = async (data: { id: string; email: string; username: string; pass: string }) => {
-  const { id, username, email, pass } = data
+const loadUserFixture = async (data: {
+  id: string
+  email: string
+  username: string
+  pass: string
+  avatarPath: string
+}) => {
+  const { id, username, email, pass, avatarPath } = data
   const hashedPassword = await bcrypt.hash(pass, 6)
   const identifier = new mongoose.Types.ObjectId(id)
   const user = await createUser({ id: identifier, email, username, hashedPassword })
   await user?.set('system.confirmed', true).save()
-  const avatarSrc = path.resolve(`src/entities/fixtures/images/${username}.jpg`)
+  const avatarSrc = path.resolve(avatarPath)
   const buffer = await fs.readFile(avatarSrc)
   await updateUserAvatar(buffer, id)
   return user

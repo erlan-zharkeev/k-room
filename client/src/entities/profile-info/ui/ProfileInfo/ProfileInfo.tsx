@@ -7,6 +7,8 @@ import { UnknownCallback } from 'common-types'
 import { AppAvatar, AppIconName, AppText, AvatarShapeModifier, BaseSizeModifier } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
+import { ProfileInfoAvatarSizeType } from './types'
+
 export const ProfileInfo = ({
   avatar,
   title,
@@ -29,7 +31,7 @@ export const ProfileInfo = ({
   online?: boolean
   showBadge?: boolean
   horizontal?: boolean
-  avatarSize?: 'small' | 'large'
+  avatarSize?: ProfileInfoAvatarSizeType
   shape?: AvatarShapeModifier
   stubIconName?: AppIconName
   onClick?: UnknownCallback
