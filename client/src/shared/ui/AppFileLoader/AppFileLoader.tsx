@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { IImageObject } from 'common-types'
 
-import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 
 import { ImageResolutions } from 'src/shared/config/types'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
@@ -41,7 +41,7 @@ export const AppFileLoader = ({
   }
 
   const maxAttachedFilesExceedNotification = notifications.getNotification({
-    message: ClientNotificationMessage.MaxAttachedFilesExceed,
+    message: NOTIFICATION_MESSAGE.maxAttachedFilesExceed(maxAttachedFiles),
     messageType: 'warning'
   })
 
@@ -118,7 +118,7 @@ export const AppFileLoader = ({
         <div className="user-data-settings-modal__avatar">
           <label htmlFor="file-upload" className="app-file-loader__avatar-label">
             <AppAvatar
-              src={normalizedValue[0]?.src}
+              src={normalizedValue[0]?.src ?? normalizedValue[0]}
               size="large"
               showBadge={false}
               preview={false}
@@ -140,9 +140,12 @@ export const AppFileLoader = ({
               hidden
             />
           </label>
-          {normalizedValue[0]?.src && (
-            <AppButton text="Reset" borderless onClick={() => removeFile(normalizedValue[0].name)} />
-          )}
+          <AppButton
+            additionalClassName={`app-file-loader__reset-btn ${!value ? 'app-file-loader__reset-btn--hide' : ''}`}
+            text="Reset"
+            borderless
+            onClick={() => removeFile(normalizedValue[0].name)}
+          />
         </div>
       )}
     </div>

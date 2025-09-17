@@ -3,10 +3,17 @@ export interface IAppSelectOption {
   value: string
 }
 
-export interface IAppSelectProps {
+export type IAppSelectProps<TMultiple extends boolean = false> = {
   options: IAppSelectOption[]
-  value: string | string[]
-  onChange: (value: string | string[]) => void
+  multiple?: TMultiple
   loading?: boolean
-  disabled: boolean
-}
+  disabled?: boolean
+} & (TMultiple extends true
+  ? {
+    value: string[]
+    onChange: (value: string[]) => void
+  }
+  : {
+    value: string
+    onChange: (value: string) => void
+  })

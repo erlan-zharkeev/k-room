@@ -1,25 +1,18 @@
-import { ICodes, DBContactMapType, InfoNotificationMapType } from ".";
+import { FrontendContactTypeMap, InfoNotificationMapType } from ".";
 
 export const USER_ROLES = ["user", "admin"] as const;
 export type UserRoleType = (typeof USER_ROLES)[number];
 
-export interface IFrontendUserData {
+export interface IBaseFrontendUserData {
   id: string;
+  username: string;
+}
+
+export interface IFrontendUserData extends IBaseFrontendUserData {
   role: UserRoleType;
   email: string;
-  username: string;
   infoNotifications: InfoNotificationMapType;
-  contacts: [];
+  contacts: FrontendContactTypeMap;
   textRooms: [];
 }
 
-export type UserShortType = Pick<IFrontendUserData, "id" | "username">;
-
-export interface IUserSchema extends Omit<IFrontendUserData, "contacts"> {
-  socketId: string;
-  confirmed: Boolean;
-  confirmAttempts: number;
-  refreshToken: string;
-  codes: ICodes;
-  contacts: DBContactMapType;
-}

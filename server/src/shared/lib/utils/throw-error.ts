@@ -1,6 +1,5 @@
 import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common-types'
 import { type Response } from 'express'
-import type { ServerNotificationMessage } from 'shared-config'
 import { getIO, log } from 'shared-lib'
 
 export const throwHTTPError = (status: StatusEnum, res: Response | null, error: string, silent: boolean = false) => {
@@ -20,13 +19,14 @@ export const throwHTTPError = (status: StatusEnum, res: Response | null, error: 
       silent
     }
   }
+
   return res.status(status).json(payload)
 }
 
 export const throwSocketError = (
   socketId: string,
-  error: ServerNotificationMessage,
-  status: StatusEnum = 500,
+  error: string = 'Unknown error',
+  status: StatusEnum | undefined = 500,
   silent: boolean = false
 ) => {
   const io = getIO()

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 import { UnsupportedResolutionStub } from 'src/widgets/unsupported-resolution-stub'
 
-import { useHideMainLoader } from 'src/features/hide-main-loader'
+import { useSyncAvatars } from 'src/features/contact'
 import { useNetworkMonitor } from 'src/features/monitor-network/hooks'
 import { useViewportMonitor } from 'src/features/monitor-viewport'
 import { useThemeUpdate } from 'src/features/settings/update-theme'
@@ -19,15 +19,14 @@ export const App = () => {
   const { theme } = useSettings()
   const { setThemeToDom } = useThemeUpdate()
   const { fetchUserData } = useFetchUserData()
-  const { hideMainLoader } = useHideMainLoader()
 
   useNetworkMonitor()
   useViewportMonitor()
+  useSyncAvatars()
 
   const initializeApp = async () => {
-    await fetchUserData()
     await initializeIndexedDb()
-    hideMainLoader()
+    await fetchUserData()
     setThemeToDom(theme)
   }
 

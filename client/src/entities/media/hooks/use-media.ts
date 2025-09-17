@@ -1,20 +1,13 @@
 import { IDbMedia } from 'src/shared/config'
-import { db, dexieKeyValueStore } from 'src/shared/lib'
+import { db } from 'src/shared/lib'
 
-export const mediaStore = dexieKeyValueStore<IDbMedia>(db.media, 'media')
+import { useLiveMediaUrl } from './use-live-media-url'
 
 export const useMedia = () => {
-  const updateMedia = async (filename: string, payload: Partial<IDbMedia>) => {
-    await db.media.update(filename, payload)
-  }
-
-  const reset = async () => {
-    await db.media.clear()
-  }
-
   return {
     media: db.media,
-    updateMedia,
-    reset
+    getLiveMedia: (id: string) => useLiveMediaUrl(id),
+    update: (filename: string, payload: Partial<IDbMedia>) => db.media.update(filename, payload),
+    reset: () => db.media.clear()
   }
 }

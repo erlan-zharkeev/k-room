@@ -1,17 +1,19 @@
-import { StatusEnum } from 'common-types'
+import { SocketActionsType, StatusEnum } from 'common-types'
 import { UserModel } from 'entities/user'
-import type { Request, Response } from 'express'
-import { ServerNotificationMessage } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
+import { AppResponseType, IAppRequest, ServerNotificationMessage, SHARED_MESSAGE } from 'shared-config'
+import { getIO, log, throwHTTPError } from 'shared-lib'
 
 import { USER_MESSAGE } from '../~shared'
+import { getSocketByUserIds } from '../~shared/lib/get-sockets-by-ids'
+import { transformUserToContact } from '../~shared/lib/transform-user-to-frontend-contact'
 import { MESSAGE } from './config'
 import { updateUserAvatar } from './lib'
 
-export const updateUserData = async (req: Request, res: Response) => {
+export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
   try {
     const username: string | undefined = req.body.username
     const avatarFileBuffer: Buffer | undefined = req.file?.buffer
+    const resetAvatar: 'reset' | '' = req.body['reset-avatar']
     const userId = req.app.locals.id
 
     if (!username && !avatarFileBuffer) {
@@ -32,10 +34,31 @@ export const updateUserData = async (req: Request, res: Response) => {
       await updateUserAvatar(avatarFileBuffer, userId, res)
     }
 
-    // TODO Нужно сообщить всем у кого есть в контактах
+    if (resetAvatar === 'reset') {
+      await updateUserAvatar(null, userId, res)
+    }
 
-    return res.json({ data: { username }, silent: true })
-  } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, ServerNotificationMessage.FailedUserDataUpdate)
+    const contacts = await UserModel.find(
+      { [`personal.contacts.${userId}`]: { $exists: true } },
+      { _id: 1 }
+    ).lean()
+
+    const ids = contacts.map((c) => String(c._id))
+    if (ids.length) {
+      const socketIds = await getSocketByUserIds(ids)
+      const updatedUserData = await UserModel.findById(userId).lean()
+      if (!updatedUserData) return
+      socketIds.forEach((socketId) => {
+        log.warn(String(socketId))
+        getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData)
+        )
+      })
+    }
+
+
+    return res.json({ data: null, message: { text: SHARED_MESSAGE.success, silent: true } })
+  } catch (e: unknown) {
+    log.error(String(e))
+    throwHTTPError(StatusEnum.Server, res, ServerNotificationMessage.FailedUserDataUpdate)
   }
 }

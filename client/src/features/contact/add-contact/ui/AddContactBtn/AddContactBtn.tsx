@@ -1,14 +1,12 @@
-import { IFrontendUserData } from 'common-types'
-
 import { useContact } from 'src/entities/contact'
 
 import { AppButton } from 'src/shared/ui'
 
 import { useAddContact } from '../../hooks'
 
-export const AddContactBtn = ({ id, searchedContacts }: { id: string; searchedContacts: IFrontendUserData[] }) => {
+export const AddContactBtn = ({ id }: { id: string }) => {
   const { isContactExist } = useContact()
-  const { clickAddContactHandler } = useAddContact()
+  const { clickAddContactHandler, loading } = useAddContact()
 
   return (
     <>
@@ -16,8 +14,9 @@ export const AddContactBtn = ({ id, searchedContacts }: { id: string; searchedCo
         <AppButton
           prefixIconName="plus"
           color="accent-color"
+          loading={loading}
           onClick={() => {
-            clickAddContactHandler(id, searchedContacts)
+            clickAddContactHandler(id)
           }}
           borderless
         />

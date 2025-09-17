@@ -1,4 +1,3 @@
-import { UserRoleType, ChatRoomsType } from 'common-types'
 
 export interface IUserSystemData {
   socketIds: string[]

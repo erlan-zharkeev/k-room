@@ -1,17 +1,23 @@
 import { IGetUserDataResponse, UserEndpointsEnum } from 'common-types'
 
-import { useSetUserData } from 'src/features/user'
+import { useSwitchMainLoader } from 'src/features/switch-main-loader'
+import { useActivateUserSession } from 'src/features/user'
 
 import { useApi } from 'src/shared/api'
 
 export const useFetchUserData = () => {
   const { doRequest } = useApi()
-  const { setUserData } = useSetUserData()
+  const { activateUserSession } = useActivateUserSession()
+  const { switchMainLoader } = useSwitchMainLoader()
 
   const fetchUserData = async () => {
-    const response = await doRequest<IGetUserDataResponse>('get', UserEndpointsEnum.GetUserData)
-    const { data } = response.data
-    setUserData(data)
+    try {
+      const response = await doRequest<IGetUserDataResponse>('get', UserEndpointsEnum.GetUserData)
+      const { data } = response.data
+      activateUserSession(data)
+    } finally {
+      switchMainLoader('hide')
+    }
   }
 
   return { fetchUserData }

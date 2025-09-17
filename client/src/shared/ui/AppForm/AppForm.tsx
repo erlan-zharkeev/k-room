@@ -1,8 +1,7 @@
 import './style.scss'
 import React, { useEffect, useState } from 'react'
 
-import { FileLoaderValueType } from 'common-types'
-
+import { FileLoaderValueType } from 'src/shared/config'
 import { useValidate, ValidateRule } from 'src/shared/lib'
 
 import { AppButton } from '../AppButton/AppButton'
@@ -151,7 +150,7 @@ export const AppForm = ({
   return (
     <form className="app-form" onSubmit={handleSubmit}>
       {title && <div className="app-form__title header-text header-text--md header-text--accent">{title}</div>}
-      <div className="app-form__prefix-slot">{prefixSlot}</div>
+      {prefixSlot && <div className="app-form__prefix-slot">{prefixSlot}</div>}
 
       {Object.keys(fields).map((key) => (
         <AppFormItem

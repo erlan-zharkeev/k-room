@@ -18,7 +18,7 @@ export const isUserExist = async <T>(
     if (res) throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userWithCurrentNameAlreadyExist)
   }
 
-  const emailCandidate = await UserModel.findOne({ 'public.email': email })
+  const emailCandidate = await UserModel.findOne({ 'personal.email': email })
 
   if (emailCandidate) {
     userExist = true

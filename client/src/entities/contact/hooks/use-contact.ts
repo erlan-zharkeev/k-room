@@ -4,34 +4,27 @@ import type { DbContactType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 export const useContact = () => {
-  const contactMap =
-    useLiveQuery(async () => {
-      const allContacts = await db.contacts.toArray()
-      return allContacts.reduce<Record<string, DbContactType>>((acc, contact) => {
-        acc[contact.id] = contact
-        return acc
-      }, {})
-    }) ?? {}
+  const contacts = useLiveQuery(async () => {
+    return await (db.contacts.toArray() as Promise<DbContactType[]>)
+  }, []) ?? []
 
-  const reset = async () => {
-    await db.contacts.clear()
+  const getContactByIds = (ids: string[]): DbContactType[] => {
+    if (!ids?.length) return []
+    const map = new Map(contacts.map(c => [c.id, c] as const))
+    const result: DbContactType[] = []
+    for (const id of ids) {
+      const c = map.get(id)
+      if (c) result.push(c)
+    }
+    return result
   }
 
-  const contactInvitationsQuantity = () =>
-    Object.values(contactMap).filter((data) => {
-      const contact = data
-      return contact.interaction === 'invite-received'
-    }).length
-  const getContact = (id: string) => contactMap[id]
-  const isContactExist = (id: string) => Boolean(getContact(id))
-  const getContacts = (ids: string[]) => Object.values(contactMap).filter((contact) => ids.includes(contact.id))
-
   return {
-    contacts: Object.values(contactMap),
-    contactInvitationsQuantity,
-    isContactExist,
-    getContact,
-    getContacts,
-    reset
+    contacts,
+    contactInvitationsQuantity: contacts?.filter(c => c.interactionType === 'invite-received').length ?? 0,
+    isContactExist: (id: string) => Boolean(contacts?.some(c => c.id === id)),
+    getContactByIds,
+    update: (id: string, payload: Partial<DbContactType>) => db.contacts.update(id, payload),
+    reset: () => db.contacts.clear()
   }
 }

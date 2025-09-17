@@ -1,7 +1,7 @@
 import './style.scss'
 
 import { PasswordRecoveryLink } from 'src/features/auth'
-import { OpenModalUpdateUserDataBtn } from 'src/features/user'
+import { OpenModalEditUserDataBtn } from 'src/features/user'
 
 import { UserProfile, useUser } from 'src/entities/user'
 
@@ -14,8 +14,10 @@ export const UserProfileData = () => {
     <div className="user-profile-data">
       <UserProfile horizontal avatarSize="large" />
       <AppText size="small">#{id}</AppText>
-      <OpenModalUpdateUserDataBtn />
-      <PasswordRecoveryLink />
+      <div className="user-profile-data__actions">
+        <OpenModalEditUserDataBtn />
+        <PasswordRecoveryLink />
+      </div>
     </div>
   )
 }

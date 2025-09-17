@@ -12,5 +12,6 @@ export const DEFAULT_SETTINGS: IUserSetting = {
   showWallpaper: true,
   selectedAudioInputDeviceId: '',
   selectedVideoInputDeviceId: '',
-  selectedAudioOutputDeviceId: ''
+  selectedAudioOutputDeviceId: '',
+  hiddenNotification: []
 }

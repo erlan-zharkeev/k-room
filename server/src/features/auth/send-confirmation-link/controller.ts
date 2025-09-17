@@ -1,10 +1,10 @@
-import { StatusEnum } from 'common-types'
-import type { Request, Response } from 'express'
+import { ISendConfirmationLinkResponse, StatusEnum } from 'common-types'
+import { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
 import { MESSAGE } from './config'
 
-export const sendConfirmationLink = async (req: Request, res: Response) => {
+export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   // const { email } = req.body
   try {
     // TODO Отправить ссылку на почту

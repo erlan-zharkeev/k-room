@@ -1,11 +1,9 @@
 import './style.scss'
 
-import { AddContactBtn } from 'src/features/contact/add-contact'
-import { ProfileInfo } from 'src/entities/profile-info'
-
-import { AppInput, AppScrollContainer } from 'src/shared/ui'
+import { AppInput, AppScrollContainer, AppText } from 'src/shared/ui'
 
 import { useSearchContact } from '../../hooks'
+import { FoundContact } from '../FoundContact/FoundContact'
 
 export const SearchContact = () => {
   const { searchQuery, search, searchedContacts, isLoading } = useSearchContact()
@@ -21,21 +19,18 @@ export const SearchContact = () => {
         loading={isLoading}
       />
       {searchedContacts.length > 0 && (
-        <div className="search-contact__list">
-          <AppScrollContainer>
-            {searchedContacts.map((contact) => (
-              <div className="search-contact__list-element" key={contact.id}>
-                <ProfileInfo
-                  avatar={contact.avatar}
-                  title={contact.username}
-                  description={contact.email}
-                  showBadge={false}
-                />
-                <AddContactBtn id={contact.id} searchedContacts={searchedContacts} />
-              </div>
-            ))}
-          </AppScrollContainer>
-        </div>
+        <>
+          <AppText tag="p" align="right" additionalClassName="search-contact__found-el-quantity">
+            Found {searchedContacts.length} contacts
+          </AppText>
+          <div className="search-contact__list">
+            <AppScrollContainer>
+              {searchedContacts.map((contact) => (
+                <FoundContact key={contact.id} {...contact} />
+              ))}
+            </AppScrollContainer>
+          </div>
+        </>
       )}
     </div>
   )

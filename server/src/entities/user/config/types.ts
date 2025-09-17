@@ -1,4 +1,4 @@
-import type { InfoNotificationMapType, ProviderType, UserRoleType } from 'common-types'
+import type { InfoNotificationMapType, InteractionType, ProviderType, UserRoleType } from 'common-types'
 
 export interface IUserDevice {
   socketId: string
@@ -6,6 +6,7 @@ export interface IUserDevice {
 }
 
 export interface IUserSystemData {
+  role: UserRoleType
   device: Record<string, IUserDevice>
   confirmed: boolean
   confirmAttempts: number
@@ -13,16 +14,21 @@ export interface IUserSystemData {
   provider?: ProviderType
 }
 
+export interface IContact {
+  id: string;
+  interaction: InteractionType;
+  updatedAt: number;
+};
+
 export interface IUserPersonalData {
-  role: UserRoleType
-  contacts: string[]
+  email: string
+  contacts: Record<string, IContact>
   chatRooms: string[]
   infoNotifications: InfoNotificationMapType
 }
 
 export interface IUserPublicData {
   username: string
-  email: string
   online: boolean
   lastSeen: number
 }
@@ -33,3 +39,4 @@ export interface IUserSchema {
   personal: IUserPersonalData
   public: IUserPublicData
 }
+

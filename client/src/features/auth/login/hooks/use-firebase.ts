@@ -4,9 +4,9 @@ import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithPro
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
-import { useSetUserData } from 'src/features/user'
+import { useActivateUserSession } from 'src/features/user'
 
-import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 
 import { useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
@@ -18,13 +18,13 @@ const providers = {
 
 export const useFirebase = () => {
   const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
-  const { setUserData } = useSetUserData()
+  const { activateUserSession } = useActivateUserSession()
   const { doRequest } = useApi()
   const navigate = useNavigate()
   const notifications = useNotification()
 
   const failedToLoginNotification = notifications.getNotification({
-    message: ClientNotificationMessage.FailedToLogin,
+    message: NOTIFICATION_MESSAGE.failedToLogin(),
     messageType: 'error'
   })
 
@@ -51,7 +51,7 @@ export const useFirebase = () => {
       const response = await doRequest<ISignInWithProviderResponse>('post', AuthEndpointsEnum.ProviderLogin, credential)
       if (!response) return
       const { data } = response.data
-      setUserData(data)
+      activateUserSession(data)
       navigate(RouteNamesEnum.Main)
     } catch (e: unknown) {
       if (e instanceof Error) clg('error', e.message)

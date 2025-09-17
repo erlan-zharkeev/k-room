@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, ISendConfirmationLinkResponse } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
@@ -24,14 +24,14 @@ export const WaitEmailConfirm = () => {
   const { doRequest } = useApi()
 
   const counterHandler = () => {
-    const nextRequestTimestamp = Number(query.get('nextRequestTime'))
+    const nextRequestTimestamp = Number(query.value.get('nextRequestTime'))
     setCounter(getNextReqInterval(nextRequestTimestamp))
     startCounter()
   }
 
   useEffect(() => {
-    setEmail(String(query.get('email')))
-    setRemainingAttempts(Number(query.get('attempts')))
+    setEmail(String(query.value.get('email')))
+    setRemainingAttempts(Number(query.value.get('attempts')))
     counterHandler()
     return () => {
       stopCounter()
@@ -40,11 +40,21 @@ export const WaitEmailConfirm = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = await doRequest('post', AuthEndpointsEnum.SendEmailConfirmationLink, { email })
+    const response = await doRequest<ISendConfirmationLinkResponse>(
+      'post',
+      AuthEndpointsEnum.SendEmailConfirmationLink,
+      { email }
+    )
     setIsLoading(false)
     if (!response || response.status !== StatusEnum.Success) return
-    const { data } = response
-    const updatedPath = `${RouteNamesEnum.WaitEmailConfirm}?email=${data.email}&nextRequestTime=${data.timeNextRequest}&attempts=${data.attempts}`
+    const { data } = response.data
+
+    const updatedPath = query.buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, {
+      email: data.email,
+      nextRequestTime: data.nextRequestTime,
+      attempts: data.attempts
+    })
+
     navigate(updatedPath, { replace: true })
     refresh(_ + 1)
   }

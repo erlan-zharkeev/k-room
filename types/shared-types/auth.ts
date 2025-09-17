@@ -17,3 +17,4 @@ export interface ISignInWithProviderPayload {
   provider: ProviderType;
   avatar?: string;
 }
+

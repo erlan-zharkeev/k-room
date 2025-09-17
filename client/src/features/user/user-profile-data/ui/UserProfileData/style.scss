@@ -4,3 +4,10 @@
   gap: 4px;
   align-items: center;
 }
+
+.user-profile-data__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+}

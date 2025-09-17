@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum } from 'common-types'
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
 import { useLogout } from 'src/features/auth/logout'
@@ -19,15 +19,16 @@ export const EmailConfirmation = () => {
   const { doRequest } = useApi()
 
   const sendEmailConfirmation = async (id: string) => {
-    const response = await doRequest('post', AuthEndpointsEnum.ConfirmEmail, { userId: id })
+    const response = await doRequest<IConfirmEmailResponse>('post', AuthEndpointsEnum.ConfirmEmail, { userId: id })
     if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
-    setEmail(response.data.userData.email)
+    const { data } = response.data
+    setEmail(data.email)
+    await logout()
     setIsLoading(false)
-    logout()
   }
 
   useEffect(() => {
-    const userId = query.get('userId')
+    const userId = query.value.get('userId')
     if (userId) sendEmailConfirmation(userId)
     else navigate(RouteNamesEnum.Login)
   }, [])
@@ -42,7 +43,7 @@ export const EmailConfirmation = () => {
           </div>
         ) : (
           <>
-            <div className="paragraph-text ">
+            <div className="paragraph-text">
               Email
               <span className="header-text"> {email} </span>
               confirmed

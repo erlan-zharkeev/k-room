@@ -4,14 +4,14 @@ import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'comm
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
-import { useCounter } from 'src/shared/lib'
+import { useCounter, useQuery } from 'src/shared/lib'
 import { AppFormData } from 'src/shared/ui'
 import { getNextReqInterval } from 'src/shared/utils'
 
 export const usePasswordRecovery = () => {
   const navigate = useNavigate()
   const { doRequest } = useApi()
-
+  const { buildPathWithParams } = useQuery()
   const [queryParam, setQueryParams] = useSearchParams()
   const [email] = useState(queryParam.get('user-email') ?? '')
   const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
@@ -74,7 +74,8 @@ export const usePasswordRecovery = () => {
       const response = await doRequest('post', CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, payload)
       if (!response) return
       const { query } = response.data
-      navigate({ pathname: RouteNamesEnum.CreateNewPassword, search: `?password-recovery=${query}` })
+      const pathname = buildPathWithParams(RouteNamesEnum.CreateNewPassword, { 'password-recovery': query })
+      navigate({ pathname })
     } catch (error) {
       console.error(error)
     } finally {

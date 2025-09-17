@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useSettings } from 'src/entities/settings'
 import { useSound } from 'src/entities/sound'
@@ -23,16 +23,12 @@ export const useOutputAudioDevice = () => {
     startTimeout(() => setShowIndicator(false), 400)
   }
 
-  const loading = useMemo(() => {
-    return audioOutputDeviceList.length < 0
-  }, [audioOutputDeviceList])
+  const loading = audioOutputDeviceList.length < 0
 
-  const outputAudioDevices = useMemo(() => {
-    return audioOutputDeviceList.map((device) => ({
-      label: device.label,
-      value: device.deviceId
-    }))
-  }, [audioOutputDeviceList])
+  const outputAudioDevices = audioOutputDeviceList.map((device) => ({
+    label: device.label,
+    value: device.deviceId
+  }))
 
   const onAudioOutputDeviceChange = (value: string = '') => {
     settings.update({ selectedAudioOutputDeviceId: value })

@@ -1,9 +1,16 @@
 .search-contact {
   position: sticky;
 
-  .search-contact__list {
-    padding: 8px 0;
+  .search-contact__found-el-quantity {
     margin-top: 8px;
+  }
+
+  .search-contact__list {
+    margin-top: 8px;
+    padding: 8px 0;
+    padding-left: 8px;
+    background: var(--main-bg);
+    border-radius: 8px;
   }
 
   .search-contact__list-element {

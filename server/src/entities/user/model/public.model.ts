@@ -7,11 +7,6 @@ export const publicSchema = new Schema<IUserPublicData>(
       type: String,
       required: true
     },
-    email: {
-      type: String,
-      unique: true,
-      required: true
-    },
     online: {
       type: Boolean,
       required: true,

@@ -1,6 +1,6 @@
-import type { DBContactType, ContactType, IUserSchema } from 'common-types'
+import type { IDBContact, ContactType, IUserSchema } from 'common-types'
 
-export const transformUserToContact = (user: IUserSchema, userContact: DBContactType): ContactType => {
+export const transformUserToContact = (user: IUserSchema, userContact: IDBContact): ContactType => {
   return {
     id: user.id,
     username: user.username,

@@ -11,11 +11,11 @@ export const usePickContact = () => {
   const contactListToPick = useMemo(
     () =>
       contacts
-        .filter((contact) => contact.interaction === 'invite-accepted')
+        .filter((contact) => contact.interactionType === 'invite-accepted')
         .map((contact) => ({
           label: contact.username,
           value: contact.id,
-          prefixSlot: <AppAvatar src={contact.avatar} showBadge={false} />
+          prefixSlot: <AppAvatar src={''} showBadge={false} />
         })),
     [contacts]
   )

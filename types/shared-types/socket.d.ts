@@ -1,4 +1,4 @@
-import { ICall, IChatRoom, ContactType, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, UserShortType, MediaFileValueType } from ".";
+import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, FrontendContactTypeMap, FrontendContactType } from ".";
 export interface IEventInterlocutorUpdateSignal {
     signal: unknown;
 }
@@ -18,8 +18,8 @@ export interface IEventStatusContact {
     online: boolean;
     onlineStatusUpdatedTimestamp: number;
 }
-export type IEventChangeContactsData = UserShortType;
-export type EventGetContactsType = Record<string, ContactType>;
+export type EventChangeContactsDataType = IBaseFrontendUserData;
+export type EventGetContactsType = FrontendContactTypeMap;
 export type EventCallUpdatedType = ICall;
 export type EventCallsUpdatedType = ICall[];
 export interface IEventSaveContact {
@@ -45,7 +45,7 @@ export interface IEventUpdateChatRoom {
 }
 export interface IEventUserTyping {
     authorName: string;
-    usersTo: UserShortType[];
+    usersTo: IBaseFrontendUserData[];
     isTyping: boolean;
 }
 export interface IEventGetContactTypingStatus {
@@ -120,14 +120,14 @@ export interface IEventUpdateInteraction {
     interaction: InteractionType;
 }
 export interface IEventInviteReceived {
-    contactData: ContactType;
+    contactData: FrontendContactType;
 }
 export interface IEventUpdateContactInteractionSuccess {
     contactId: string;
     interaction: InteractionType;
 }
 export interface IEventContactAddSuccess {
-    contactData: ContactType;
+    contactData: FrontendContactType;
 }
 export interface IEventDeleteContactSuccess {
     deletedContactId: string;

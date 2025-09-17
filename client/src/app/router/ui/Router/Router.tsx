@@ -14,6 +14,8 @@ import { PageLayout } from 'src/widgets/page-layout'
 
 import { useSystem } from 'src/entities/system'
 
+import { PATH_TO_REDIRECT_IF_AUTHORIZED } from '../../config'
+
 const PrivateRoute = () => {
   const { auth } = useSystem()
   const location = useLocation()
@@ -22,7 +24,9 @@ const PrivateRoute = () => {
 
 const PublicRoute = () => {
   const { auth } = useSystem()
-  return auth === 'authorized' ? <Navigate to={R.Main} replace /> : <Outlet />
+  const location = useLocation()
+  const isPathValidToRedirect = PATH_TO_REDIRECT_IF_AUTHORIZED.includes(location.pathname as R)
+  return auth === 'authorized' && isPathValidToRedirect ? <Navigate to={R.Main} replace /> : <Outlet />
 }
 
 export const Router = () => {
@@ -35,10 +39,11 @@ export const Router = () => {
           <Route path={R.Login} element={<Login />} />
           <Route path={R.Registration} element={<Registration />} />
           <Route path={R.EmailConfirmation} element={<EmailConfirmation />} />
+          <Route path={R.WaitEmailConfirm} element={<WaitEmailConfirm />} />
+
           <Route path={R.PrivacyPolicy} element={<PrivacyPolicy />} />
           <Route path={R.PasswordRecovery} element={<PasswordRecovery />} />
           <Route path={R.CreateNewPassword} element={<CreateNewPassword />} />
-          <Route path={R.WaitEmailConfirm} element={<WaitEmailConfirm />} />
         </Route>
       </Route>
 

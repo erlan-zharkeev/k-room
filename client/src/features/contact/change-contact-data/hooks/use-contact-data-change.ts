@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventChangeContactsData } from 'common-types'
+import { SocketActionsType, EventChangeContactsDataType } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { changeChatName } from 'src/entities/chat-room'
@@ -9,17 +9,17 @@ import { useUpdateContactData } from '../../update-contact-data'
 
 export const useContactDataChange = () => {
   const dispatch = useDispatch()
-  const { updateContactData: update } = useUpdateContactData()
+  const { updateContactData } = useUpdateContactData()
 
-  const updateContactData = async (payload: IEventChangeContactsData) => {
+  const updateContactDataHandler = async (payload: EventChangeContactsDataType) => {
     const { id } = payload
-    update(id, payload)
+    updateContactData(id, payload)
     // ! TODO !
     dispatch(changeChatName(payload))
   }
 
   const monitorContactDataChange = () => {
-    socket.on<SocketActionsType>('contact-data-changed', updateContactData)
+    socket.on<SocketActionsType>('contact-data-changed', updateContactDataHandler)
   }
 
   return {

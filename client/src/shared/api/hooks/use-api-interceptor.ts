@@ -1,29 +1,62 @@
 import { AxiosError } from 'axios'
 import { StatusEnum, RouteNamesEnum } from 'common-types'
+import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { useResetAllStores } from 'src/features/reset-all-stores'
 
 import { useNotification } from 'src/entities/notification/hooks/use-notification'
 import { useSettings } from 'src/entities/settings'
 
 import { clg } from 'src/shared/utils'
 
+const extractErrorPayload = async (e: AxiosError) => {
+  const res = e.response
+  if (!res) return null
+
+  const data = res.data as any
+
+  if (data instanceof Blob) {
+    if (data.type?.includes('application/json')) {
+      try {
+        const text = await data.text()
+        return JSON.parse(text)
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+  return data
+}
+
 export const useApiInterсeptor = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const settings = useSettings()
   const notifications = useNotification()
+  const dispatch = useDispatch()
+  const { reset: resetStores } = useResetAllStores(dispatch)
 
-  const interceptError = (e: unknown) => {
+  const interceptError = async (e: unknown) => {
     if (e instanceof AxiosError) {
       const status = e.response?.status
-      let { text, silent } = e.response?.data.message ?? {}
+
+      const payload = await extractErrorPayload(e)
+      let text: string | undefined
+      let silent: boolean | undefined
+
+      if (payload?.message) {
+        ({ text, silent } = payload.message)
+      }
 
       switch (status) {
         case StatusEnum.NotAuth: {
+          silent = true
+          resetStores()
           const isOnMain = location.pathname === RouteNamesEnum.Main
           if (isOnMain) {
             navigate(RouteNamesEnum.Login)
-            silent = true
           }
           break
         }
@@ -39,8 +72,7 @@ export const useApiInterсeptor = () => {
         message: notificationMessage,
         messageType: 'error'
       })
-
-      silent ? clg('error', text) : errorInterceptorNotification.open()
+      silent ? clg('error', text ?? 'Unknown error') : errorInterceptorNotification.open()
     }
   }
 

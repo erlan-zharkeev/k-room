@@ -1,4 +1,4 @@
-import { IFrontendUserData } from ".";
+import { IBaseFrontendUserData } from "./user";
 
 export type InteractionType =
   | "default"
@@ -7,17 +7,6 @@ export type InteractionType =
   | "invite-hidden"
   | "invite-received";
 
-export interface IContactBase {
-  id: string;
-  interaction: InteractionType;
-  updatedAt: number;
-}
+export type FrontendContactType = IBaseFrontendUserData & { interactionType: InteractionType }
 
-export type ContactType = Omit<IContactBase, "updatedAt"> &
-  Omit<
-    IFrontendUserData,
-    "chatRooms" | "contacts" | "infoNotifications" | "role"
-  >;
-
-export type DBContactType = IContactBase;
-export type DBContactMapType = Record<string, DBContactType>;
+export type FrontendContactTypeMap = Record<string, FrontendContactType>

@@ -1,3 +1,5 @@
 export * from './hooks'
 export * from './types'
 export * from './lib'
+export * from './config'
+export * from './ui'

@@ -23,14 +23,26 @@ export const updateTokens = async (id: string, req: IAppRequest, res: Response) 
     maxAge: 3_153_600_000_000 // SET FOR 100 years
   })
 
-  await UserModel.updateOne(
-    { id },
-    {
-      $set: {
-        [`system.device.${deviceId}.refreshToken`]: refreshToken
-      }
-    }
-  )
+  try {
+    await UserModel.updateOne(
+      { _id: id },
+      [
+        {
+          $set: {
+            [`system.device.${deviceId}`]: {
+              $mergeObjects: [
+                { $ifNull: [`$system.device.${deviceId}`, {}] },
+                { refreshToken, socketId: null }
+              ]
+            }
+          }
+        }
+      ]
+    )
+  } catch (e) {
+    log.error(String(e))
+  }
+
 
   log.success('-Token pair updated')
 }

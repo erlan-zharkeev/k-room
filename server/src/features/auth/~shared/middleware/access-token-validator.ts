@@ -8,7 +8,7 @@ export const accessTokenValidator = async (req: Request, res: Response, next: Ne
   const accessToken = req.cookies.jwt
 
   if (!accessToken) {
-    throwHTTPError(StatusEnum.NotAuth, res, AUTH_MESSAGE.nonAuthorized, true)
+    return throwHTTPError(StatusEnum.NotAuth, res, AUTH_MESSAGE.nonAuthorized, true)
   }
 
   try {
@@ -16,6 +16,6 @@ export const accessTokenValidator = async (req: Request, res: Response, next: Ne
     req.app.locals = decoded
     return next()
   } catch {
-    return await refreshTokenValidator(req, res, next)
+    return refreshTokenValidator(req, res, next)
   }
 }

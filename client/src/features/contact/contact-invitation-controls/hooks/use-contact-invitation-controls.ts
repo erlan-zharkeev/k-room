@@ -22,6 +22,7 @@ export const useContactInvitationControls = () => {
   }
 
   useEffect(() => {
+    if (!contacts) return
     const updatedContacts = contacts.filter((contact) => loaders[contact.id])
     if (updatedContacts.length > 0) {
       const newLoaders = { ...loaders }

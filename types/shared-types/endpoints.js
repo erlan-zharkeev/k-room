@@ -28,7 +28,7 @@ export var AuthEndpointsEnum;
 export var UserEndpointsEnum;
 (function (UserEndpointsEnum) {
     UserEndpointsEnum["GetUserData"] = "/user/get-user-data";
-    UserEndpointsEnum["UpdateUserData"] = "/user/user-data/update";
+    UserEndpointsEnum["EditUserData"] = "/user/user-data/edit";
     UserEndpointsEnum["ResetPassword"] = "/user/reset-password";
     UserEndpointsEnum["MarkInfoNotificationAsRead"] = "/user/notification/read";
 })(UserEndpointsEnum || (UserEndpointsEnum = {}));

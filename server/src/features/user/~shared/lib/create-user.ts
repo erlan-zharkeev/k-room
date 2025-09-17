@@ -25,9 +25,9 @@ export const createUser = async ({
 
     user = await new UserModel({
       _id: id ? new mongoose.Types.ObjectId(id) : new mongoose.Types.ObjectId(),
-      public: { email, username },
-      personal: { role: 'user', infoNotifications: { 1: 'unread' } },
-      system: { password: hashedPassword, provider }
+      public: { username },
+      personal: { email, infoNotifications: { 1: 'unread' } },
+      system: { role: 'user', password: hashedPassword, provider, device: {} }
     }).save()
   } catch {
     log.error('-New user creating failed')

@@ -17,7 +17,7 @@ export const InfoNotification = () => {
       </AppHeader>
       <AppCollapseList
         items={collapseInfoNotifications}
-        onClickCollapseEl={async (val) => {
+        onClickCollapseEl={(val) => {
           markAsRead(Number(val))
         }}
       />

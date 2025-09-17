@@ -24,7 +24,7 @@ export declare enum AuthEndpointsEnum {
 }
 export declare enum UserEndpointsEnum {
     GetUserData = "/user/get-user-data",
-    UpdateUserData = "/user/user-data/update",
+    EditUserData = "/user/user-data/edit",
     ResetPassword = "/user/reset-password",
     MarkInfoNotificationAsRead = "/user/notification/read"
 }

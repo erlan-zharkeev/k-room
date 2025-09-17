@@ -9,7 +9,7 @@ import { AppDispatch } from 'src/app/store'
 import { ChatRoomSettingsModal, CreateChatRoomModal } from 'src/features/chat-room'
 import { SelectDevicesModal } from 'src/features/device'
 import { ForwardMessageModal, MessageWithBindDataModal, MessageWithBindDataModalMenu } from 'src/features/message'
-import { UpdateUserDataModal } from 'src/features/user'
+import { EditUserDataModal } from 'src/features/user'
 
 import { closeModal, useSystem, useViewport } from 'src/entities/system'
 
@@ -23,7 +23,7 @@ export const Modal = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const popups: Record<ModalContentComponentName, ReactNode> = {
-    'update-user-data-modal': <UpdateUserDataModal />,
+    'edit-user-data-modal': <EditUserDataModal />,
     'select-devices-modal': <SelectDevicesModal />,
     'forward-message-modal': <ForwardMessageModal />,
     'create-chat-room-modal': <CreateChatRoomModal />,

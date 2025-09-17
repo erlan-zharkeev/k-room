@@ -1,5 +1,5 @@
 export type ModalContentComponentName =
-  | 'update-user-data-modal'
+  | 'edit-user-data-modal'
   | 'select-devices-modal'
   | 'forward-message-modal'
   | 'create-chat-room-modal'

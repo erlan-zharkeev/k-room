@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
-import { useNotification, ClientNotificationMessage } from 'src/entities/notification'
+import { useNotification, NOTIFICATION_MESSAGE } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
@@ -70,7 +70,7 @@ export const useInputAudioDevice = () => {
   }
 
   const cantAccessDeviceNotification = getNotification({
-    message: ClientNotificationMessage.CantAccessDevice,
+    message: NOTIFICATION_MESSAGE.cantAccessDevice(),
     messageType: 'error'
   })
 
@@ -110,19 +110,14 @@ export const useInputAudioDevice = () => {
     }
   }
 
-  const micIcon: AppIconName = useMemo(
-    () => (isMicLoading ? 'loader' : showMicGrade ? 'cross' : 'thunder'),
-    [isMicLoading, showMicGrade]
-  )
+  const micIcon: AppIconName = isMicLoading ? 'loader' : (showMicGrade ? 'cross' : 'thunder')
 
-  const audioDevices = useMemo(() => {
-    return audioInputDeviceList.map((device) => ({
-      label: device.label,
-      value: device.deviceId
-    }))
-  }, [audioInputDeviceList])
+  const audioDevices = audioInputDeviceList.map((device) => ({
+    label: device.label,
+    value: device.deviceId
+  }))
 
-  const loading = useMemo(() => audioInputDeviceList.length < 0, [audioInputDeviceList])
+  const loading = audioInputDeviceList.length === 0
 
   const volumeIndicator = useRef<HTMLDivElement>(null)
 

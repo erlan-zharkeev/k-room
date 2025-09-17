@@ -1,13 +1,33 @@
 import './style.scss'
-import { Outlet } from 'react-router-dom'
+import { RouteNamesEnum as R } from 'common-types'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import { AppLogo } from 'src/shared/ui'
+import { AppButton, AppIcon, AppLogo } from 'src/shared/ui'
 
 export const PageLayout = () => {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  const hiddenBackRoutes = new Set<R>([R.Login, R.Registration])
+  const showBack = !hiddenBackRoutes.has(pathname as R)
+
+  const handleBack = () => {
+    if (window.history.length > 1) navigate(-1)
+    else navigate(R.Main, { replace: true })
+  }
+
   return (
     <div className="page-layout">
       <div className="page-layout__wrapper">
-        <AppLogo />
+        <div className="page-layout__top-side">
+          <AppLogo />
+          {showBack && (
+            <AppButton borderless onClick={handleBack}>
+              <AppIcon name="arrow-left" />
+              Go back
+            </AppButton>
+          )}
+        </div>
         <div className="page-layout__outlet-body">
           <Outlet />
         </div>

@@ -6,13 +6,13 @@
   height: calc(100% - $bar-height - 16px);
 
   @include max-width-768 {
-    height: calc(100% - ($bar-height * 2) - (16px * 2));
+    height: calc(100% - ($bar-height * 2) - (12px * 2));
   }
 }
 
 .workspace-layout--with-minified-call-window {
   height: calc(100% - $bar-height - $call-bar-height - (16px * 2));
   @include max-width-768 {
-    height: calc(100% - ($bar-height * 2) - ($call-bar-height) - (16px * 3));
+    height: calc(100% - ($bar-height * 2) - ($call-bar-height) - (12px * 3));
   }
 }

@@ -1,10 +1,10 @@
 import './style.scss'
 
-import { ContactInvitationControlBtns, ContactMenu, useContactList, getContactDescription } from 'src/features/contact'
-
-import { ProfileInfo } from 'src/entities/profile-info'
+import { useContactList } from 'src/features/contact'
 
 import { AppText, AppScrollContainer } from 'src/shared/ui'
+
+import { ContactListEl } from '../ContactListEl/ContactListEl'
 
 export const ContactList = () => {
   const { contactList } = useContactList()
@@ -15,20 +15,7 @@ export const ContactList = () => {
       <AppScrollContainer height="100%" additionalClassName="contact-list__scroll-controller">
         {contactList.map((contactData) => (
           <div className="contact-list__list-item" key={contactData.id}>
-            <ProfileInfo
-              avatar={contactData.avatar}
-              title={contactData.username}
-              showBadge={false}
-              description={getContactDescription(contactData)}
-              isDescriptionAccent={contactData.online}
-              descriptionNode={
-                contactData.interaction !== 'invite-accepted' && (
-                  <ContactInvitationControlBtns contactData={contactData} />
-                )
-              }
-            >
-              {contactData.interaction === 'invite-accepted' && <ContactMenu id={contactData.id} />}
-            </ProfileInfo>
+            <ContactListEl contactData={contactData} />
           </div>
         ))}
       </AppScrollContainer>

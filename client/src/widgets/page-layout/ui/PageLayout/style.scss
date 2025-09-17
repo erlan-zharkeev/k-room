@@ -17,4 +17,8 @@
     height: calc(100% - 48px);
     overflow: auto;
   }
+
+  .page-layout__top-side {
+    display: flex;
+  }
 }

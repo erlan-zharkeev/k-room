@@ -1,8 +1,11 @@
 .app-scroll-container {
-  padding-right: 12px;
   overflow: auto;
   scrollbar-width: none;
-  scrollbar-color: #888 transparent;
+  scrollbar-color: var(--text) transparent;
+
+  &.app-scroll-container--has {
+    scrollbar-width: thin;
+  }
 
   &.app-scroll-container--show {
     scrollbar-width: thin;

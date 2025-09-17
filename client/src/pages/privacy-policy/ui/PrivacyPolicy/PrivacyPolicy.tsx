@@ -1,9 +1,12 @@
+import './style.scss'
+import { AppScrollContainer } from 'src/shared/ui'
+
 const { VITE_MAIL_APP } = import.meta.env
 
 export const PrivacyPolicy = () => {
   const appName = 'K-Room'
   return (
-    <div className="privacy-policy">
+    <AppScrollContainer additionalClassName="privacy-policy" height="100%">
       <h1>Privacy Policy for {appName}</h1>
       <p>
         <strong>Last updated:</strong> August 3rd, 2023
@@ -106,6 +109,6 @@ export const PrivacyPolicy = () => {
         </a>
         .
       </p>
-    </div>
+    </AppScrollContainer>
   )
 }

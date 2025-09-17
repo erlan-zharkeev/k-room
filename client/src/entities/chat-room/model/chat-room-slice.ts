@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
-  IEventChangeContactsData,
+  EventChangeContactsDataType,
   IEventDeleteMessage,
   EventGetRoomsType,
   IEventMessageDelivered,
@@ -88,7 +88,7 @@ export const chatRoomsSlice = createSlice({
       if (!room) return
       room.messages.push(message)
     },
-    changeChatName(state, { payload }: { payload: IEventChangeContactsData }) {
+    changeChatName(state, { payload }: { payload: EventChangeContactsDataType }) {
       const { id, username, avatar } = payload
       state.chatRooms.forEach((room) => {
         const roomHasContact = Boolean(room.users?.find((user) => user.id === id))

@@ -45,8 +45,8 @@ export const contactsSlice = (socket: SocketInstanceType) => {
       Record<
         string,
         | {
-            $regex: RegExp
-          }
+          $regex: RegExp
+        }
         | string
       >
     > = {

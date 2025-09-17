@@ -10,9 +10,9 @@ import { fieldsValidation } from './lib'
 export const updateUserRouter = Router()
 
 updateUserRouter.post(
-  UserEndpointsEnum.UpdateUserData,
+  UserEndpointsEnum.EditUserData,
   accessTokenValidator,
-  multerUploader.single('avatar'),
+  multerUploader.single('file'),
   fieldsValidation,
   validateRequest,
   updateUserData

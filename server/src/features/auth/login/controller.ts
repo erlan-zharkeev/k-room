@@ -11,7 +11,7 @@ import { MESSAGE } from './config'
 export const login = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
   try {
     const { email: inputEmail, password }: IAuthLoginPayload = req.body
-    const user = await UserModel.findOne({ 'public.email': inputEmail })
+    const user = await UserModel.findOne({ 'personal.email': inputEmail })
 
     if (!user) {
       return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.invalidEmailOrPassword)

@@ -9,7 +9,7 @@ export const streamMediaFile = async (
   bucketName: MediaBucketNameType,
   id: string,
   res: Response,
-  opts?: { asAttachment?: boolean }
+  opts?: { asAttachment?: boolean, revalidateCache?: boolean }
 ) => {
   try {
     const bucket = mediaBuckets[bucketName]
@@ -23,14 +23,16 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      return throwHTTPError(StatusEnum.NotFound, res, COMMON_MEDIA_MESSAGE.fileNotFound)
+      return throwHTTPError(StatusEnum.NotFound, res, COMMON_MEDIA_MESSAGE.fileNotFound, true)
     }
 
     res.setHeader('Content-Type', file.contentType || 'application/octet-stream')
     if (file.uploadDate) res.setHeader('Last-Modified', file.uploadDate.toUTCString())
     const etag = `W/"sha256-${file?.metadata?.sha256}"`
     res.setHeader('ETag', etag)
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    const maxAge = opts?.revalidateCache ? '0' : '31536000'
+    const mutable = opts?.revalidateCache ? 'must-revalidate' : 'immutable'
+    res.setHeader('Cache-Control', `public, max-age=${maxAge}, ${mutable}`)
     res.setHeader('X-Media-Kind', file.metadata?.kind || '')
     if (opts?.asAttachment) {
       res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(file.filename)}"`)

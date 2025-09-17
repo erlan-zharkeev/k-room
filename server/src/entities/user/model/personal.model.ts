@@ -1,19 +1,20 @@
-import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType, USER_ROLES } from 'common-types'
+import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType } from 'common-types'
 import type { IUserPersonalData } from 'entities/user'
 import { Schema } from 'mongoose'
 
+import { contactSchema } from './contact.model'
+
 export const personalSchema = new Schema<IUserPersonalData>(
   {
-    role: {
+    email: {
       type: String,
-      enum: USER_ROLES,
-      unique: false,
-      required: false
+      unique: true,
+      required: true
     },
     contacts: {
-      type: [String],
-      default: [],
-      required: true
+      type: Map,
+      of: contactSchema,
+      default: () => new Map(),
     },
     chatRooms: {
       type: [String],

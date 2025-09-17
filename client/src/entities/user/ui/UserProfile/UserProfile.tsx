@@ -1,19 +1,16 @@
-import { useGetMedia } from 'src/features/media'
-
 import { ProfileInfo } from 'src/entities/profile-info'
 import { useUser } from 'src/entities/user'
 
 import { IUserProfileProps } from './types'
 
 export const UserProfile = (props: IUserProfileProps) => {
-  const { username, email, id } = useUser()
-  const src = useGetMedia(id, 'avatar')
+  const { username, email, avatarPath } = useUser()
 
   return (
     <ProfileInfo
       title={username}
       description={email}
-      avatar={src}
+      avatar={avatarPath}
       showBadge={false}
       horizontal={props.horizontal}
       avatarSize={props.avatarSize}

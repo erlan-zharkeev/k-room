@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { ReactNode, useMemo } from 'react'
+import { ReactNode } from 'react'
 
 import { AppButton, AppIconName, AppSelect, AppText, type IAppSelectOption } from 'src/shared/ui'
 
@@ -25,7 +25,7 @@ export const SelectDevice = ({
   onChange: (value: string) => void
   loading: boolean
 }) => {
-  const isOptionsEmpty = useMemo(() => options.length === 0, [options])
+  const isOptionsEmpty = options.length === 0
 
   return (
     <div className="select-device">

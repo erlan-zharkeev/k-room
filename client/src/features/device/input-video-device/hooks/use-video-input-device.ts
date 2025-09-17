@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { ClientNotificationMessage, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { showModal } from 'src/entities/system'
 
@@ -21,11 +21,9 @@ export const useInputVideoDevice = () => {
 
   const videoEl = useRef<HTMLVideoElement>(null)
 
-  const videoIcon: AppIconName = useMemo(() => {
-    return isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
-  }, [isVideoLoading, showVideo])
+  const videoIcon: AppIconName = isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
 
-  const loading = useMemo(() => videoInputDeviceList.length < 0, [videoInputDeviceList])
+  const loading = videoInputDeviceList.length < 0
 
   const changeVideoInputDevice = (value: string = '') => {
     settings.update({ selectedVideoInputDeviceId: value })
@@ -38,16 +36,14 @@ export const useInputVideoDevice = () => {
   }
 
   const cantAccessDeviceNotification = getNotification({
-    message: ClientNotificationMessage.CantAccessDevice,
+    message: NOTIFICATION_MESSAGE.cantAccessDevice(),
     messageType: 'error'
   })
 
-  const videoDevices = useMemo(() => {
-    return videoInputDeviceList.map((device) => ({
-      label: device.label,
-      value: device.deviceId
-    }))
-  }, [videoInputDeviceList])
+  const videoDevices = videoInputDeviceList.map((device) => ({
+    label: device.label,
+    value: device.deviceId
+  }))
 
   const updateDeviceList = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()

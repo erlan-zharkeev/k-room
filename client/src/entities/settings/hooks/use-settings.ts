@@ -16,8 +16,6 @@ export const useSettings = () => {
     initialize: () => settingsStore.ensure(DEFAULT_SETTINGS),
     reset: () => settingsStore.reset(DEFAULT_SETTINGS),
     update: (changes: Partial<IUserSetting>) => settingsStore.updateShallow(changes),
-    setByPath: (path: string, value: unknown) => settingsStore.setByPath(path, value),
-    unsetByPath: (path: string) => settingsStore.unsetByPath(path),
-    patchByPath: (patch: Record<string, unknown>) => settingsStore.patchByPath(patch)
+    setByPath: (path: string, value: unknown) => settingsStore.setByPath(path, value)
   }
 }

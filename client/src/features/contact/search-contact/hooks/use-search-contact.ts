@@ -1,22 +1,20 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
-import { IFrontendUserData, SocketActionsType, IEventSearchContact } from 'common-types'
-
-import { useUser } from 'src/entities/user'
+import { SocketActionsType, IEventSearchContact, FrontendContactType } from 'common-types'
 
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'
 
+// import { SEARCHED_CONTACTS_MOCK } from '../config/constants'
+
 export const useSearchContact = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { id } = useUser()
-  const [searchedContacts, setSearchedContacts] = useState<IFrontendUserData[]>([])
+  const [searchedContacts, setSearchedContacts] = useState<FrontendContactType[]>([])
 
   useEffect(() => {
-    socket.on<SocketActionsType>('get-searched-contact', (contacts: IFrontendUserData[]) => {
-      const userFilteredSelf = contacts.filter((user: IFrontendUserData) => user.id !== id)
-      setSearchedContacts(userFilteredSelf)
+    socket.on<SocketActionsType>('get-searched-contact', (contacts: FrontendContactType[]) => {
+      setSearchedContacts(contacts)
       setIsLoading(false)
     })
   }, [])

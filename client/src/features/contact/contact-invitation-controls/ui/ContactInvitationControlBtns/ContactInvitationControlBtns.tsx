@@ -9,7 +9,7 @@ import { useContactInvitationControls } from '../../hooks'
 export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbContactType }) => {
   const className = createClassNameWithModifiers({
     rootClass: 'contact-invitation-control-btns',
-    modifiers: [contactData.interaction]
+    modifiers: [contactData.interactionType]
   })
 
   const { loaders, updateInteractionType } = useContactInvitationControls()
@@ -22,15 +22,15 @@ export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbC
         </div>
       ) : (
         <>
-          {contactData.interaction === 'default' && (
+          {contactData.interactionType === 'default' && (
             <AppLink onClick={() => updateInteractionType(contactData.id, 'invited')} text="Send invite" />
           )}
-          {contactData.interaction === 'invited' && (
+          {contactData.interactionType === 'invited' && (
             <AppText tag="p" size="small" color="accent-color">
               Invited
             </AppText>
           )}
-          {contactData.interaction === 'invite-received' && (
+          {contactData.interactionType === 'invite-received' && (
             <>
               <AppLink onClick={() => updateInteractionType(contactData.id, 'invite-accepted')} text="Accept" />
               <AppLink

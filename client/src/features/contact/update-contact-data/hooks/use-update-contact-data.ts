@@ -1,14 +1,11 @@
+import { useContact } from 'src/entities/contact'
+
 import type { DbContactType } from 'src/shared/config'
-import { db } from 'src/shared/lib'
 
 export const useUpdateContactData = () => {
+  const { update } = useContact()
   const updateContactData = async (id: string, updatedFields: Partial<DbContactType>) => {
-    const contact = await db.contacts.get(id)
-    if (!contact) return
-    await db.contacts.put({
-      ...contact,
-      ...updatedFields
-    })
+    update(id, updatedFields)
   }
 
   return { updateContactData }

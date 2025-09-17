@@ -4,6 +4,8 @@ export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'sett
 
 export type ContentTabType = 'info' | AsideBarButtonNameType
 
+export type HiddenNotificationType = 'audio-context'
+
 export interface IUserSetting {
   selectedContentTab: ContentTabType
   selectedChatRoomId: string
@@ -15,6 +17,7 @@ export interface IUserSetting {
   selectedAudioInputDeviceId: string
   selectedVideoInputDeviceId: string
   selectedAudioOutputDeviceId: string
+  hiddenNotification: HiddenNotificationType[]
 }
 
 export type DbUserSettingType = IUserSetting

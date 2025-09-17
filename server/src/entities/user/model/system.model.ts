@@ -1,3 +1,4 @@
+import { USER_ROLES } from 'common-types'
 import type { IUserSystemData } from 'entities/user'
 import { Schema } from 'mongoose'
 
@@ -5,7 +6,17 @@ import { deviceSchema } from './device.model'
 
 export const systemSchema = new Schema<IUserSystemData>(
   {
-    device: deviceSchema,
+    role: {
+      type: String,
+      enum: USER_ROLES,
+      unique: false,
+      required: false
+    },
+    device: {
+      type: Map,
+      of: deviceSchema,
+      default: () => new Map()
+    },
     confirmed: {
       type: Boolean,
       required: true,
