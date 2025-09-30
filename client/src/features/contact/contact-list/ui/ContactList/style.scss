@@ -4,10 +4,16 @@
   height: calc(100% - 90px);
 
   .contact-list__scroll-controller {
-    padding: 8px 4px;
+    padding: 8px 8px 4px 0;
+  }
+
+  .contact-list__list-item {
+    padding: 4px;
+    background: var(--main-bg);
+    border-radius: 4px;
   }
 
   .contact-list__list-item:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 }

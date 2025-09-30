@@ -1,9 +1,8 @@
 import { IEventContactAddSuccess, IEventSaveContact, SocketActionsType } from 'common-types'
 import { UserModel } from 'entities/user'
-import { transformUserToContact } from 'features/user/~shared/lib/transform-user-to-frontend-contact'
+import { transformUserToContact } from 'features/user'
 import { SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'
-
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('save-contact', async ({ interlocutorId }: IEventSaveContact) => {

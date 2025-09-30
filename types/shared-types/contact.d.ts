@@ -1,6 +1,9 @@
-import { IBaseFrontendUserData } from "./user";
 export type InteractionType = "default" | "invited" | "invite-accepted" | "invite-hidden" | "invite-received";
-export type FrontendContactType = IBaseFrontendUserData & {
+export interface IFrontendContact {
+    id: string;
+    username: string;
+    online: boolean;
+    lastSeen: number;
     interactionType: InteractionType;
-};
-export type FrontendContactTypeMap = Record<string, FrontendContactType>;
+}
+export type IFrontendContactMap = Record<string, IFrontendContact>;

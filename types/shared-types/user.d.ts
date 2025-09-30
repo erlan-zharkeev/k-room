@@ -1,4 +1,4 @@
-import { FrontendContactTypeMap, InfoNotificationMapType } from ".";
+import { InfoNotificationMapType } from ".";
 export declare const USER_ROLES: readonly ["user", "admin"];
 export type UserRoleType = (typeof USER_ROLES)[number];
 export interface IBaseFrontendUserData {
@@ -9,6 +9,4 @@ export interface IFrontendUserData extends IBaseFrontendUserData {
     role: UserRoleType;
     email: string;
     infoNotifications: InfoNotificationMapType;
-    contacts: FrontendContactTypeMap;
-    textRooms: [];
 }

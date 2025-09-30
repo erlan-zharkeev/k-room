@@ -1,5 +1,5 @@
 export * from './add-contact'
-export * from './contacts-list'
+export * from './contact-list'
 export * from './delete-contact'
 export * from './search-contact'
 export * from './monitor-contact-update'

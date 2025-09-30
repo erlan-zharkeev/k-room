@@ -1,6 +1,8 @@
 import { SocketActionsType, EventCallUpdatedType } from 'common-types'
 import { useDispatch } from 'react-redux'
+
 import { updateCall } from 'src/entities/call'
+
 import { socket } from 'src/shared/api'
 
 export const useCallDataChange = () => {

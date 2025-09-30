@@ -1,6 +1,7 @@
 import { UserModel } from "entities/user"
+import mongoose from "mongoose"
 
-export const getSocketByUserIds = async (ids: string[]) => {
+export const getSocketsByUserIds = async (ids: (string | mongoose.Types.ObjectId)[]) => {
   const users = await UserModel.find(
     { _id: { $in: ids } },
     { _id: 1, 'system.device': 1 }

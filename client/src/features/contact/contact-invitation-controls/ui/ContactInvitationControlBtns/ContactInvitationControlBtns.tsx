@@ -23,7 +23,9 @@ export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbC
       ) : (
         <>
           {contactData.interactionType === 'default' && (
-            <AppLink onClick={() => updateInteractionType(contactData.id, 'invited')} text="Send invite" />
+            <>
+              <AppLink prevent onClick={() => updateInteractionType(contactData.id, 'invited')} text="Send invite" />
+            </>
           )}
           {contactData.interactionType === 'invited' && (
             <AppText tag="p" size="small" color="accent-color">
@@ -32,13 +34,15 @@ export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbC
           )}
           {contactData.interactionType === 'invite-received' && (
             <>
-              <AppLink onClick={() => updateInteractionType(contactData.id, 'invite-accepted')} text="Accept" />
+              <AppLink prevent onClick={() => updateInteractionType(contactData.id, 'invite-accepted')} text="Accept" />
               <AppLink
+                prevent
                 onClick={() => updateInteractionType(contactData.id, 'default')}
                 text="Decline"
                 color="error-color"
               />
               <AppLink
+                prevent
                 onClick={() => updateInteractionType(contactData.id, 'invite-hidden')}
                 text="Hide"
                 color="text-color"

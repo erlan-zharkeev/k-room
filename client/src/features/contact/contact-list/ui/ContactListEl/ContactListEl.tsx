@@ -23,7 +23,9 @@ export const ContactListEl = ({ contactData }: { contactData: DbContactType }) =
         contactData.interactionType !== 'invite-accepted' && <ContactInvitationControlBtns contactData={contactData} />
       }
     >
-      {contactData.interactionType === 'invite-accepted' && <ContactMenu id={contactData.id} />}
+      {(contactData.interactionType === 'invite-accepted' || contactData.interactionType === 'default') && (
+        <ContactMenu id={contactData.id} interactionType={contactData.interactionType} />
+      )}
     </ProfileInfo>
   )
 }

@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
-import { SocketActionsType, IEventSearchContact, FrontendContactType } from 'common-types'
+import { SocketActionsType, IEventSearchContact, IFrontendContact } from 'common-types'
 
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'
@@ -10,10 +10,10 @@ import { useDebounce } from 'src/shared/lib'
 export const useSearchContact = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [searchedContacts, setSearchedContacts] = useState<FrontendContactType[]>([])
+  const [searchedContacts, setSearchedContacts] = useState<IFrontendContact[]>([])
 
   useEffect(() => {
-    socket.on<SocketActionsType>('get-searched-contact', (contacts: FrontendContactType[]) => {
+    socket.on<SocketActionsType>('get-searched-contact', (contacts: IFrontendContact[]) => {
       setSearchedContacts(contacts)
       setIsLoading(false)
     })

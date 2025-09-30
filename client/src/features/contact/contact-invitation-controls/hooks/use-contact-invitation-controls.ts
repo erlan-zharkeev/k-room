@@ -18,7 +18,7 @@ export const useContactInvitationControls = () => {
     const payload: IEventUpdateInteraction = { contactId, interaction }
     inviteTimer(() => {
       socket.emit<SocketActionsType>('update-contact-interaction-type', payload) // Fake delay for smooth ui
-    }, 2000)
+    }, 1000)
   }
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const useContactInvitationControls = () => {
       updatedContacts.forEach((contact) => {
         newLoaders[contact.id] = false
       })
-      contactsUpdatedTimer(() => setLoaders(newLoaders), 2000) // Fake delay for smooth ui
+      contactsUpdatedTimer(() => setLoaders(newLoaders), 1000) // Fake delay for smooth ui
     }
   }, [contacts])
 

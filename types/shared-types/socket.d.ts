@@ -1,4 +1,4 @@
-import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, FrontendContactTypeMap, FrontendContactType } from ".";
+import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, IFrontendContactMap, IFrontendContact } from ".";
 export interface IEventInterlocutorUpdateSignal {
     signal: unknown;
 }
@@ -19,7 +19,7 @@ export interface IEventStatusContact {
     onlineStatusUpdatedTimestamp: number;
 }
 export type EventChangeContactsDataType = IBaseFrontendUserData;
-export type EventGetContactsType = FrontendContactTypeMap;
+export type EventGetContactsType = IFrontendContactMap;
 export type EventCallUpdatedType = ICall;
 export type EventCallsUpdatedType = ICall[];
 export interface IEventSaveContact {
@@ -119,15 +119,13 @@ export interface IEventUpdateInteraction {
     contactId: string;
     interaction: InteractionType;
 }
-export interface IEventInviteReceived {
-    contactData: FrontendContactType;
-}
+export type EventInviteReceivedType = IFrontendContact;
 export interface IEventUpdateContactInteractionSuccess {
     contactId: string;
     interaction: InteractionType;
 }
 export interface IEventContactAddSuccess {
-    contactData: FrontendContactType;
+    contactData: IFrontendContact;
 }
 export interface IEventDeleteContactSuccess {
     deletedContactId: string;
@@ -137,4 +135,4 @@ export interface IEventAuthError {
     event: string;
     payload: unknown;
 }
-export type SocketActionsType = "connection" | "error" | "reconnect" | "auth-error" | "initialize" | "disconnect" | "rooms-loaded" | "create-chat-room" | "new-room-added" | "send-message" | "message-delivered" | "room-created" | "search-contact" | "get-searched-contact" | "contact-status-updated" | "contacts-loaded" | "save-contact" | "delete-contact" | "client-typing" | "get-contact-typing-status" | "change-message-status" | "message-status-updated" | "contact-data-changed" | "call-user" | "answer-call" | "call-accepted" | "call-ended" | "change-call-settings" | "call-started-at" | "update-user-settings" | "update-chat-room" | "room-data-updated" | "add-reaction" | "message-reaction-updated" | "delete-message" | "message-deleted" | "error-message" | "calls-data-loaded" | "call-data-changed" | "mark-call-as-video" | "update-call-signal" | "interlocutor-update-signal" | "interlocutor-ping" | "update-interaction-type" | "update-contact-success" | "invite-received" | "contact-delete-success" | "contact-add-success" | "update-contact-interaction-type" | "contact-interaction-updated" | "reconnect_attempt" | "reconnect_failed";
+export type SocketActionsType = "connection" | "error" | "reconnect" | "auth-error" | "initialize" | "disconnect" | "rooms-loaded" | "create-chat-room" | "new-room-added" | "send-message" | "message-delivered" | "room-created" | "search-contact" | "get-searched-contact" | "contact-status-updated" | "contacts-loaded" | "save-contact" | "delete-contact" | "client-typing" | "get-contact-typing-status" | "change-message-status" | "message-status-updated" | "contact-data-changed" | "call-user" | "answer-call" | "call-accepted" | "call-ended" | "change-call-settings" | "call-started-at" | "actual-contacts" | "update-user-settings" | "update-chat-room" | "room-data-updated" | "add-reaction" | "message-reaction-updated" | "message-deleted" | "error-message" | "calls-data-loaded" | "call-data-changed" | 'contact-removed' | "mark-call-as-video" | "update-call-signal" | "interlocutor-update-signal" | "interlocutor-ping" | "update-interaction-type" | "update-contact-success" | "invite-received" | "contact-delete-success" | "contact-add-success" | "update-contact-interaction-type" | "contact-interaction-updated" | "get-actual-contacts" | "reconnect_attempt" | "reconnect_failed";

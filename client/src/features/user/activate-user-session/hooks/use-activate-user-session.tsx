@@ -8,6 +8,7 @@ import { useUser } from 'src/entities/user'
 
 export const useActivateUserSession = () => {
   const user = useUser()
+
   const dispatch = useDispatch()
   const { socketConnect } = useSocketConnect()
 

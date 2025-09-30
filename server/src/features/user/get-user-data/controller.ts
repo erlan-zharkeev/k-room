@@ -17,7 +17,7 @@ export const getUserData = async (req: IAppRequest, res: AppResponseType<IGetUse
       return throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userNotFound)
     }
 
-    await updateTokens(user.id, req, res)
+    await updateTokens(userId, req, res)
 
     const response = {
       data: mapUserToDto(user),

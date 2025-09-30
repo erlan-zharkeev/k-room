@@ -1,5 +1,6 @@
 import { IEventAuthError, SocketActionsType } from 'common-types'
 import { parse } from 'cookie'
+import { UserModel } from 'entities/user'
 import { ENV, SocketInstanceType } from 'shared-config'
 
 import { verifyToken } from '../lib'
@@ -22,9 +23,22 @@ export const socketAuthMiddleware = async (socket: SocketInstanceType) => {
         return authErrorBreakConnection(socket, replayData)
       }
       const decoded = await verifyToken(accessToken, ENV?.K_ROOM_ACCESS_TOKEN_SECRET)
-      socket.data = { userId: decoded.id }
+      const deviceId = parsedCookie['device-id'] ?? ''
+      socket.data = { userId: decoded.id, deviceId }
+      await UserModel.updateOne(
+        { _id: decoded.id },
+        [
+          {
+            $set: {
+              [`system.device.${deviceId}.socketId`]: socket.id
+            }
+          }
+        ]
+      )
+
       return next()
-    } catch {
+    } catch (e: unknown) {
+      console.log('error', e)
       return authErrorBreakConnection(socket, replayData)
     }
   })

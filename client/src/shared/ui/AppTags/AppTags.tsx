@@ -2,13 +2,15 @@ import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { AppButton } from '../AppButton/AppButton'
+import { AppIcon } from '../AppIcon'
 import { AppScrollContainer } from '../AppScrollContainer/AppScrollContainer'
 import { AppText } from '../AppText/AppText'
 
 import type { IAppTagsProps } from './types'
 
-export const AppTags = ({ tags, onRemove, onElementClick, title, name }: IAppTagsProps) => {
+export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedIds, disabled }: IAppTagsProps) => {
   const classNames = createClassNameWithModifiers({ rootClass: 'app-tags', modifiers: [onElementClick && 'clickable'] })
+  const tagClassName = createClassNameWithModifiers({ rootClass: 'app-tags__tag', modifiers: [disabled && 'disabled'] })
 
   return (
     <>
@@ -17,7 +19,7 @@ export const AppTags = ({ tags, onRemove, onElementClick, title, name }: IAppTag
           <AppText>{title}</AppText>
           <AppScrollContainer height={'200px'} additionalClassName={classNames}>
             {tags.map((tag) => (
-              <div key={tag.value} className="app-tags__tag" onClick={() => onElementClick?.(tag.value)}>
+              <div key={tag.value} className={tagClassName} onClick={() => onElementClick?.(tag.value)}>
                 {tag.prefixSlot && (
                   <div
                     className="app-tags__tag-prefix-slot"
@@ -29,6 +31,9 @@ export const AppTags = ({ tags, onRemove, onElementClick, title, name }: IAppTag
                   </div>
                 )}
                 <AppText>{tag.label}</AppText>
+                <div className="app-tags__tag-icon">
+                  {selectedIds?.includes(tag.value) && <AppIcon name="success" color="success-color" size="xs" />}
+                </div>
                 {onRemove && (
                   <AppButton
                     prefixIconName="cross"

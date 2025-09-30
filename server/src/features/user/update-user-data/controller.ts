@@ -4,7 +4,7 @@ import { AppResponseType, IAppRequest, ServerNotificationMessage, SHARED_MESSAGE
 import { getIO, log, throwHTTPError } from 'shared-lib'
 
 import { USER_MESSAGE } from '../~shared'
-import { getSocketByUserIds } from '../~shared/lib/get-sockets-by-ids'
+import { getSocketsByUserIds } from '../~shared/lib/get-sockets-by-ids'
 import { transformUserToContact } from '../~shared/lib/transform-user-to-frontend-contact'
 import { MESSAGE } from './config'
 import { updateUserAvatar } from './lib'
@@ -45,7 +45,7 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
 
     const ids = contacts.map((c) => String(c._id))
     if (ids.length) {
-      const socketIds = await getSocketByUserIds(ids)
+      const socketIds = await getSocketsByUserIds(ids)
       const updatedUserData = await UserModel.findById(userId).lean()
       if (!updatedUserData) return
       socketIds.forEach((socketId) => {

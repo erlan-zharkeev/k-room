@@ -7,6 +7,12 @@ export type InteractionType =
   | "invite-hidden"
   | "invite-received";
 
-export type FrontendContactType = IBaseFrontendUserData & { interactionType: InteractionType }
+export interface IFrontendContact {
+  id: string;
+  username: string
+  online: boolean
+  lastSeen: number
+  interactionType: InteractionType,
+}
 
-export type FrontendContactTypeMap = Record<string, FrontendContactType>
+export type IFrontendContactMap = Record<string, IFrontendContact>

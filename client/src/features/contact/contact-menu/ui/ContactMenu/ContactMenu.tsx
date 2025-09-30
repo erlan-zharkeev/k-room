@@ -2,6 +2,8 @@ import './style.scss'
 
 import { useMemo } from 'react'
 
+import { InteractionType } from 'common-types'
+
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
 import { useDeleteContact } from 'src/features/contact'
 
@@ -11,7 +13,7 @@ import { useTimeout } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
-export const ContactMenu = ({ id }: { id: string }) => {
+export const ContactMenu = ({ id, interactionType }: { id: string; interactionType: InteractionType }) => {
   const { deleteUserHandler } = useDeleteContact()
   const { delay } = useTimeout()
   const { isLoading: isChatCreating, createChatRoom } = useCreateChatRoom()
@@ -23,7 +25,8 @@ export const ContactMenu = ({ id }: { id: string }) => {
   const items = [
     {
       label: 'Call',
-      handler: () => {}
+      handler: () => {},
+      value: 'call'
     },
     {
       label: 'Create chat',
@@ -32,26 +35,35 @@ export const ContactMenu = ({ id }: { id: string }) => {
         stopPropagation(evt)
         createChatRoom({ formData: { contactIds: [id] } })
       },
-      loading: isChatCreating
+      loading: isChatCreating,
+      value: 'create-chat'
     },
     {
       label: 'Text',
       handler: () => {
         selectChatWithAsideById(contactRoom?.id)
-      }
+      },
+      value: 'text'
     },
     {
       label: 'Delete',
       handler: async () => {
-        await delay(2000)
+        await delay(400)
         deleteUserHandler(id)
-      }
+      },
+      value: 'delete'
     }
   ]
 
   const filteredItems = items.filter((item) => {
-    if (item.label === 'Create chat') {
+    if (interactionType === 'default') {
+      return item.value === 'delete'
+    }
+    if (item.value === 'create-chat') {
       return !contactRoom
+    }
+    if (item.value === 'text') {
+      return contactRoom
     }
     return true
   })

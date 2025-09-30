@@ -1,6 +1,5 @@
 import { RouteNamesEnum } from 'common-types'
 import { SocketActionsType } from 'common-types'
-import { UserModel } from 'entities/user'
 import { socketAuthMiddleware } from 'features/auth'
 import type { Server as HttpsServer } from 'https'
 import { ENV, ORIGINS, SYSTEM_DATA } from 'shared-config'
@@ -25,7 +24,6 @@ export const initIO = (server: HttpsServer): Server => {
   try {
     io.on<SocketActionsType>('connection', async (socket: SocketInstanceType) => {
       await socketAuthMiddleware(socket)
-      // UserModel.find
       socketRouter(socket)
     })
   } catch (errors: unknown) {

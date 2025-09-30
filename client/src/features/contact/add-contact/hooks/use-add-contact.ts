@@ -13,7 +13,7 @@ import { getRequiredContactSystemData } from '../../lib'
 export const useAddContact = () => {
   const { id } = useUser()
   const [loading, setLoading] = useState(false)
-  const { update: updateContact } = useContact()
+  const { putContact } = useContact()
   const { startTimeout } = useTimeout()
 
   const clickAddContactHandler = async (interlocutorId: string | undefined) => {
@@ -28,8 +28,7 @@ export const useAddContact = () => {
   }
 
   const addContact = async (payload: IEventContactAddSuccess) => {
-    const newContact = { ...payload.contactData, ...getRequiredContactSystemData() }
-    updateContact(newContact.id, newContact)
+    putContact({ ...payload.contactData, ...getRequiredContactSystemData() })
   }
 
   const monitorContactAdding = () => {

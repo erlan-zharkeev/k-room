@@ -7,4 +7,6 @@ export interface IAppElementPickerProps {
   name: string
   setPickedElementIds: (ids: string[]) => void
   value?: string[]
+  selectedElements?: []
+  disabled: boolean
 }

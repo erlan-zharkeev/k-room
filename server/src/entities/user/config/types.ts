@@ -34,7 +34,7 @@ export interface IUserPublicData {
 }
 
 export interface IUserSchema {
-  id: string
+  _id: string
   system: IUserSystemData
   personal: IUserPersonalData
   public: IUserPublicData

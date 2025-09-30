@@ -14,7 +14,7 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
     const user = await UserModel.findById(userId)
     if (user && deviceId) {
       if (user.system.device[deviceId]) {
-        user.system.device[deviceId].refreshToken = ''
+        delete user.system.device[deviceId]
       }
       await user.save()
     }

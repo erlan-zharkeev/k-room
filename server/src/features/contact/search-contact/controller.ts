@@ -1,10 +1,11 @@
-import { FrontendContactType, IEventSearchContact, SocketActionsType } from 'common-types'
+import { IEventSearchContact, IFrontendContact, SocketActionsType } from 'common-types'
 import { UserModel } from 'entities/user'
-import { transformUserToContact } from 'features/user/~shared/lib/transform-user-to-frontend-contact'
+import { transformUserToContact } from 'features/user'
 import { Types } from 'mongoose'
 import { SocketInstanceType } from 'shared-config'
 
-import { emitSearchedContacts } from './emitter'
+import { emitSearchedContacts } from './lib'
+
 
 export const controller = (socket: SocketInstanceType) => {
 
@@ -36,7 +37,7 @@ export const controller = (socket: SocketInstanceType) => {
 
     const searchFilter = validSearch ? searchTypeMap[type] : null
 
-    let searchedUsers: FrontendContactType[] = []
+    let searchedUsers: IFrontendContact[] = []
 
     if (searchFilter) {
       const users = await UserModel.find(searchFilter)

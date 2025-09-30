@@ -1,10 +1,13 @@
-import type { FrontendContactType, InteractionType } from "common-types"
+import type { IFrontendContact, InteractionType } from "common-types"
 import type { IUserSchema } from "entities/user"
 
-export const transformUserToContact = (user: IUserSchema, interactionType: InteractionType = 'default'): FrontendContactType => {
+export const transformUserToContact = (user: IUserSchema, interactionType: InteractionType = 'default'): IFrontendContact => {
+  const { lastSeen, online } = user.public
   return {
-    id: user.id,
+    id: user._id,
     username: user.public.username,
-    interactionType
+    interactionType,
+    online,
+    lastSeen
   }
 }

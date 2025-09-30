@@ -7,19 +7,26 @@ import { useCreateChatRoom } from '../../hooks'
 export const CreateChatRoomForm = () => {
   const { isLoading, createChatRoom } = useCreateChatRoom()
 
-  const { contactListToPick, pickedContactIds, setPickedContactIds } = usePickContact()
+  const { contactListToPick, pickedContactIds, setPickedContactIds, filterQuery, setFilterQuery } = usePickContact()
 
   return (
     <AppForm
       onSubmit={(formData) => createChatRoom({ formData })}
       onChange={(formData) => {
+        setFilterQuery(formData.query as string)
         setPickedContactIds(formData.contactIds as string[])
       }}
       fields={{
+        query: {
+          value: filterQuery,
+          inputType: 'text',
+          placeholder: 'Find contact',
+          label: 'Filter'
+        },
         contactIds: {
           inputType: 'element-picker',
           availableElements: contactListToPick,
-          fromTitle: 'Pick contacts',
+          fromTitle: `Pick contacts ${pickedContactIds.length > 0 ? `(${pickedContactIds.length})` : ''}`,
           toTitle: 'Chat room contacts',
           rule: { name: 'required' }
         },

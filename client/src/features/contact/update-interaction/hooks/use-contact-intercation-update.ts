@@ -9,7 +9,7 @@ export const useContactInteractionUpdate = () => {
 
   const updateContactInteractionType = async (payload: IEventUpdateContactInteractionSuccess) => {
     const { contactId, interaction } = payload
-    await updateContactData(contactId, { interaction })
+    await updateContactData(contactId, { interactionType: interaction })
   }
 
   const monitorContactInteractionUpdate = () => {

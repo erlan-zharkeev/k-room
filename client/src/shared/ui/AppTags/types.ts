@@ -11,4 +11,6 @@ export interface IAppTagsProps {
   onElementClick?: (value: string) => void
   title?: string
   name?: string
+  selectedIds?: string[],
+  disabled?: boolean
 }

@@ -8,8 +8,8 @@ import {
   IBasicStreamSettings,
   MediaFileValueType,
   IBaseFrontendUserData,
-  FrontendContactTypeMap,
-  FrontendContactType,
+  IFrontendContactMap,
+  IFrontendContact,
 } from ".";
 
 export interface IEventInterlocutorUpdateSignal {
@@ -39,7 +39,7 @@ export interface IEventStatusContact {
 
 export type EventChangeContactsDataType = IBaseFrontendUserData
 
-export type EventGetContactsType = FrontendContactTypeMap;
+export type EventGetContactsType = IFrontendContactMap;
 export type EventCallUpdatedType = ICall;
 export type EventCallsUpdatedType = ICall[];
 
@@ -144,15 +144,15 @@ export interface IEventUpdateInteraction {
   contactId: string;
   interaction: InteractionType;
 }
-export interface IEventInviteReceived {
-  contactData: FrontendContactType;
-}
+
+export type EventInviteReceivedType = IFrontendContact
+
 export interface IEventUpdateContactInteractionSuccess {
   contactId: string;
   interaction: InteractionType;
 }
 export interface IEventContactAddSuccess {
-  contactData: FrontendContactType;
+  contactData: IFrontendContact;
 }
 export interface IEventDeleteContactSuccess {
   deletedContactId: string;
@@ -194,16 +194,17 @@ export type SocketActionsType =
   | "call-ended"
   | "change-call-settings"
   | "call-started-at"
+  | "actual-contacts"
   | "update-user-settings"
   | "update-chat-room"
   | "room-data-updated"
   | "add-reaction"
   | "message-reaction-updated"
-  | "delete-message"
   | "message-deleted"
   | "error-message"
   | "calls-data-loaded"
   | "call-data-changed"
+  | 'contact-removed'
   | "mark-call-as-video"
   | "update-call-signal"
   | "interlocutor-update-signal"
@@ -215,5 +216,6 @@ export type SocketActionsType =
   | "contact-add-success"
   | "update-contact-interaction-type"
   | "contact-interaction-updated"
+  | "get-actual-contacts"
   | "reconnect_attempt"
   | "reconnect_failed";

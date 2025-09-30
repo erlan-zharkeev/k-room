@@ -3,6 +3,8 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import type { DbContactType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
+// import { MOCK } from '../config'
+
 export const useContact = () => {
   const contacts = useLiveQuery(async () => {
     return await (db.contacts.toArray() as Promise<DbContactType[]>)
@@ -24,7 +26,10 @@ export const useContact = () => {
     contactInvitationsQuantity: contacts?.filter(c => c.interactionType === 'invite-received').length ?? 0,
     isContactExist: (id: string) => Boolean(contacts?.some(c => c.id === id)),
     getContactByIds,
-    update: (id: string, payload: Partial<DbContactType>) => db.contacts.update(id, payload),
+    putContact: async (payload: DbContactType) => await db.contacts.put(payload),
+    updateContact: async (id: string, patch: Partial<DbContactType>) => {
+      await db.contacts.update(id, patch)
+    },
     reset: () => db.contacts.clear()
   }
 }

@@ -1,6 +1,6 @@
-import { FrontendContactType } from 'common-types'
+import { IFrontendContact } from 'common-types'
 
-export const SEARCHED_CONTACTS_MOCK: FrontendContactType[] = [
+export const SEARCHED_CONTACTS_MOCK: IFrontendContact[] = [
   { id: 'user-1', username: 'User 1', interactionType: 'default' },
   { id: 'user-2', username: 'User 2', interactionType: 'invited' },
   { id: 'user-3', username: 'User 3', interactionType: 'invite-accepted' },

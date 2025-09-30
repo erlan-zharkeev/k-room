@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 import { useAddContact } from '../../add-contact'
 import { useContactDataChange } from '../../change-contact-data'
+import { useContactActualize } from '../../contact-actualize'
 import { useDeleteContact } from '../../delete-contact'
 import { useLoadContacts } from '../../load-contact'
 import { useContactOnlineMonitor } from '../../monitor-contact-online'
@@ -20,8 +21,10 @@ export const useContactUpdateMonitor = () => {
   const { monitorInvitation } = useInviteSend()
   const { monitorContactTyping } = useContactTypingMonitor()
   const { monitorContactOnline } = useContactOnlineMonitor()
+  const { monitorContactsActualize } = useContactActualize()
 
   useEffect(() => {
+    monitorContactsActualize()
     monitorContactsLoading()
     monitorContactDeletion()
     monitorContactAdding()

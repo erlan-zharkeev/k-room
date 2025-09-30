@@ -1,6 +1,6 @@
-import { FrontendContactType } from 'common-types'
+import { IFrontendContact } from 'common-types'
 
-export type DbContactType = FrontendContactType & IDbContactRequiredSystemData
+export type DbContactType = IFrontendContact & IDbContactRequiredSystemData
 
 export interface IDbContactRequiredSystemData {
   onlineStatusSyncedAt: number

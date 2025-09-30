@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventDeleteContactSuccess, IEventDeleteContact } from 'common-types'
+import { SocketActionsType, IEventDeleteContactSuccess } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { showModal, closeModal } from 'src/entities/system'
@@ -22,9 +22,8 @@ export const useDeleteContact = () => {
     )
   }
 
-  const deleteContactConfirmed = (id: string) => {
-    const payload: IEventDeleteContact = { deletingUserId: id }
-    socket.emit<SocketActionsType>('delete-contact', payload)
+  const deleteContactConfirmed = (contactId: string) => {
+    socket.emit<SocketActionsType>('update-contact-interaction-type', { contactId, interaction: 'default' })
     dispatch(closeModal())
   }
 
@@ -38,6 +37,7 @@ export const useDeleteContact = () => {
 
   return {
     deleteUserHandler,
+    deleteContact,
     monitorContactDeletion
   }
 }
