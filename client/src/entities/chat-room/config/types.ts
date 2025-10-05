@@ -1,4 +1,4 @@
-import { IImageObject, IChatRoom, IRepliedMessage } from 'common-types'
+import { IImageObject, IChatRoom } from 'common-types'
 
 export interface IMessageInputData {
   body: string
@@ -12,6 +12,4 @@ export interface IAppChatRoom extends IChatRoom {
 
 export interface IRoomState {
   chatRooms: IAppChatRoom[]
-  repliedMessageData: IRepliedMessage
-  messageInputData: IMessageInputData
 }

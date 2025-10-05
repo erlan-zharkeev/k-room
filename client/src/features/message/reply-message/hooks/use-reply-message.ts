@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'src/app/store'
 
-import { useChatRooms, resetRepliedMessage, setRepliedMessage } from 'src/entities/chat-room'
+import { useChatRoom, resetRepliedMessage, setRepliedMessage } from 'src/entities/chat-room'
 import { resetContextClickedObject } from 'src/entities/system'
 
 export const useReplyMessage = () => {
-  const { repliedMessageData } = useChatRooms()
+  const { repliedMessageData } = useChatRoom()
 
   const dispatch = useDispatch<AppDispatch>()
 

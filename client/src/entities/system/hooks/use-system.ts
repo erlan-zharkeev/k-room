@@ -13,7 +13,9 @@ export const useSystem = () => {
     reconnecting,
     modalData,
     contextMenu,
-    viewPort
+    viewPort,
+    repliedMessageData,
+    messageInputData
   } = useTypedSelector((state) => state.system)
 
   return {
@@ -27,6 +29,8 @@ export const useSystem = () => {
     reconnecting,
     modalData,
     contextMenu,
-    viewPort
+    viewPort,
+    repliedMessageData,
+    messageInputData
   }
 }

@@ -1,13 +1,13 @@
 import './style.scss'
 import { useDispatch } from 'react-redux'
 
-import { updateMessageInputData, useChatRooms } from 'src/entities/chat-room'
+import { updateMessageInputData, useChatRoom } from 'src/entities/chat-room'
 
 import { AppDropdown, AppText, AppButton } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
 export const MessageWithBindDataModalMenu = () => {
-  const { messageInputData } = useChatRooms()
+  const { messageInputData } = useChatRoom()
   const { imageCompression } = messageInputData
   const dispatch = useDispatch()
 

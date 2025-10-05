@@ -1,8 +1,11 @@
 import './style.scss'
-import { IChatRoom, UnknownCallback } from 'common-types'
 
+import { UnknownCallback } from 'common-types'
+
+import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
 
+import { DbChatRoomType } from 'src/shared/config'
 import { BaseSizeModifier } from 'src/shared/ui'
 import { chatRoomLastMessageBody, createClassNameWithModifiers } from 'src/shared/utils'
 
@@ -13,12 +16,14 @@ export const ChatRoomPreview = ({
   titleSize,
   isRoomSelected
 }: {
-  room: IChatRoom
+  room: DbChatRoomType
   onClick?: UnknownCallback
   headerMode?: boolean
   titleSize?: BaseSizeModifier
   isRoomSelected?: boolean
 }) => {
+  const { getLiveMedia } = useMedia()
+
   const isPrivate = room.users.length === 1
 
   const chatRoomAvatarShape = isPrivate ? 'circle-shape' : 'square-shape'
@@ -30,11 +35,13 @@ export const ChatRoomPreview = ({
     modifiers: [headerMode && 'header-mode', isRoomSelected && 'selected']
   })
 
+  const avatarPath = getLiveMedia(room.avatarId)
+
   return (
     <div className={className}>
       <ProfileInfo
         titleSize={titleSize}
-        avatar={room.avatar}
+        avatar={avatarPath}
         title={room.chatName ?? '-'}
         description={!headerMode ? chatRoomLastMessageBody(room) : ''}
         shape={chatRoomAvatarShape}

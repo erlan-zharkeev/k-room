@@ -8,11 +8,6 @@ const chatRoomSchema = new Schema<IChatRoomSchema>(
       required: false,
       default: ''
     },
-    avatar: {
-      type: String,
-      required: false,
-      default: ''
-    },
     authorId: {
       type: String,
       required: true

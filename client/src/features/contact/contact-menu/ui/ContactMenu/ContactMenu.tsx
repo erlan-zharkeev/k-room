@@ -7,7 +7,7 @@ import { InteractionType } from 'common-types'
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
 import { useDeleteContact } from 'src/features/contact'
 
-import { useChatRooms } from 'src/entities/chat-room'
+import { useChatRoom } from 'src/entities/chat-room'
 
 import { useTimeout } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
@@ -17,7 +17,7 @@ export const ContactMenu = ({ id, interactionType }: { id: string; interactionTy
   const { deleteUserHandler } = useDeleteContact()
   const { delay } = useTimeout()
   const { isLoading: isChatCreating, createChatRoom } = useCreateChatRoom()
-  const { getPersonalRoomByContactId, chatRooms } = useChatRooms()
+  const { getPersonalRoomByContactId, chatRooms } = useChatRoom()
   const { selectChatWithAsideById } = useChatRoomSelect()
 
   const contactRoom = useMemo(() => getPersonalRoomByContactId(id), [chatRooms])

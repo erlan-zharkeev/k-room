@@ -1,5 +1,5 @@
-import { FileLoaderValueType } from 'common-types'
 
+import { FileLoaderValueType } from 'src/shared/config'
 import {
   ISwitchValidateRule,
   ITextInputValidateRule,
@@ -57,4 +57,5 @@ export interface IAppFormProps {
   actionProcessing?: boolean
   prefixSlot?: React.ReactNode
   children?: React.ReactNode
+  disabledActionBtn?: boolean
 }

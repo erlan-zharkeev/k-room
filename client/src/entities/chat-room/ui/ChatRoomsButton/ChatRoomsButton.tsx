@@ -2,10 +2,11 @@ import { Badge } from 'antd'
 
 import { AppButton } from 'src/shared/ui'
 
-import { useChatRooms } from '../../hooks'
+import { useChatRoom } from '../../hooks'
 
 export const ChatRoomsButton = () => {
-  const { unreadMessageQuantity } = useChatRooms()
+  const { unreadMessageQuantity } = useChatRoom()
+
   return (
     <Badge color="var(--accent)" count={unreadMessageQuantity} size="small" offset={['-8px', '5px']}>
       <AppButton prefixIconName="chat" borderless />

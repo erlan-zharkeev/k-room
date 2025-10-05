@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useMemo } from 'react'
 
-import { useChatRooms } from 'src/entities/chat-room'
+import { useChatRoom } from 'src/entities/chat-room'
 
 import { useTypedSelector } from 'src/shared/lib'
 import { AppAvatar } from 'src/shared/ui'
@@ -11,7 +11,7 @@ import type { IShortChatListProps } from './types'
 export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const [filteredRooms, setFilteredRooms] = useState(chatRooms)
-  const { selectedChatRoom } = useChatRooms()
+  const { selectedChatRoom } = useChatRoom()
 
   const filterList = () => {
     const selfFilteredRooms = chatRooms.filter((room) => room.id !== selectedChatRoom?.id)

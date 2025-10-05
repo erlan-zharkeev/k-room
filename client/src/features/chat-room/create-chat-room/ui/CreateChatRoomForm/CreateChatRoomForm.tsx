@@ -1,13 +1,21 @@
+import './style.scss'
+
 import { usePickContact } from 'src/features/contact'
 
-import { AppForm } from 'src/shared/ui'
+import { AppForm, AppText } from 'src/shared/ui'
 
 import { useCreateChatRoom } from '../../hooks'
 
 export const CreateChatRoomForm = () => {
   const { isLoading, createChatRoom } = useCreateChatRoom()
-
-  const { contactListToPick, pickedContactIds, setPickedContactIds, filterQuery, setFilterQuery } = usePickContact()
+  const {
+    contactListToPick,
+    pickedContactIds,
+    setPickedContactIds,
+    filterQuery,
+    setFilterQuery,
+    isPrivateChatAlreadyExists
+  } = usePickContact()
 
   return (
     <AppForm
@@ -21,7 +29,8 @@ export const CreateChatRoomForm = () => {
           value: filterQuery,
           inputType: 'text',
           placeholder: 'Find contact',
-          label: 'Filter'
+          label: 'Filter',
+          hide: !(contactListToPick.length > 3)
         },
         contactIds: {
           inputType: 'element-picker',
@@ -47,8 +56,17 @@ export const CreateChatRoomForm = () => {
           label: 'Chat name'
         }
       }}
+      disabledActionBtn={isPrivateChatAlreadyExists}
       submitBtnText="Create"
       actionProcessing={isLoading}
-    />
+    >
+      {isPrivateChatAlreadyExists && (
+        <div className="create-chat-room-form__warning">
+          <AppText size="small" color="warn-color">
+            Private chat with selected contact already exist, choose one more or another contact
+          </AppText>
+        </div>
+      )}
+    </AppForm>
   )
 }

@@ -46,5 +46,7 @@ export const INITIAL_SYSTEM_STORE: ISystemStore = {
   viewPort: INITIAL_VIEWPORT,
   hasInteracted: false,
   camPermission: undefined,
-  micPermission: undefined
+  micPermission: undefined,
+  repliedMessageData: null,
+  messageInputData: null
 }

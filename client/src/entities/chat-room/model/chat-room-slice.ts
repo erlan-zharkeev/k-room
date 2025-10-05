@@ -10,7 +10,7 @@ import {
   IRepliedMessage
 } from 'common-types'
 
-import type { IRoomState, IMessageInputData } from '../types'
+import type { IRoomState, IMessageInputData } from '../config/types'
 
 const initialRepliedMessageData = {
   id: '',

@@ -1,7 +1,6 @@
 import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
 
 import { callsSlice } from 'src/entities/call'
-import { chatRoomsSlice } from 'src/entities/chat-room'
 import { systemSlice } from 'src/entities/system'
 
 export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
@@ -9,7 +8,6 @@ export type RootState = ReturnType<typeof store.getState>
 
 const reducers = combineReducers({
   system: systemSlice.reducer,
-  chatRooms: chatRoomsSlice.reducer,
   calls: callsSlice.reducer
 })
 

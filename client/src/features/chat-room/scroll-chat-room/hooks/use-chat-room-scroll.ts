@@ -1,9 +1,9 @@
-import { useChatRooms } from 'src/entities/chat-room'
+import { useChatRoom } from 'src/entities/chat-room'
 
 import { useTimeout } from 'src/shared/lib'
 
 export const useChatRoomScroll = () => {
-  const { selectedChatRoom } = useChatRooms()
+  const { selectedChatRoom } = useChatRoom()
   const { delay } = useTimeout()
 
   const scrollToBottom = async () => {

@@ -3,13 +3,13 @@ import './style.scss'
 import { EmojiDropdown } from 'src/features/emoji-dropdown'
 import { useMessageSend } from 'src/features/message'
 
-import { useChatRooms } from 'src/entities/chat-room'
+import { useChatRoom } from 'src/entities/chat-room'
 
 import { AppButton, AppFileLoader, AppInput } from 'src/shared/ui'
 
 export const MessageInput = () => {
-  const { selectedChatRoom } = useChatRooms()
-  if (!selectedChatRoom?.id) return null
+  const chatRoomData = useChatRoom()
+  if (!chatRoomData.selectedChatRoom) return null
 
   const {
     onSendMessageFormSubmitHandler,
@@ -21,7 +21,7 @@ export const MessageInput = () => {
     message,
     inputRef,
     images
-  } = useMessageSend(selectedChatRoom)
+  } = useMessageSend(chatRoomData.selectedChatRoom)
 
   return (
     <form onSubmit={onSendMessageFormSubmitHandler} className="message-input">

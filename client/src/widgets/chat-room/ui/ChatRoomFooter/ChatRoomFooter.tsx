@@ -6,7 +6,7 @@ export const ChatRoomFooter = () => {
   return (
     <div className="chat-room-footer">
       <ReplyMessage />
-      <MessageInput />
+      {/* <MessageInput /> */}
     </div>
   )
 }

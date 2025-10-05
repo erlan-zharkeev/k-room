@@ -4,14 +4,14 @@ import { Badge } from 'antd'
 
 import { useChatRoomSelect } from 'src/features/chat-room/select-chat-room'
 
-import { ChatRoomPreview, useChatRooms } from 'src/entities/chat-room'
+import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
 import { useSettings } from 'src/entities/settings'
 
 import { AppScrollContainer, AppText } from 'src/shared/ui'
 import { chatRoomUnreadMessagesCount } from 'src/shared/utils'
 
 export const ChatRoomList = () => {
-  const { chatRooms } = useChatRooms()
+  const { chatRooms } = useChatRoom()
   const { selectedChatRoomId } = useSettings()
   const { selectChatRoomById } = useChatRoomSelect()
 

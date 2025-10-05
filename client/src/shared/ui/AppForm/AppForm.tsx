@@ -36,7 +36,8 @@ export const AppForm = ({
   prefixSlot,
   onChange,
   title,
-  disabled = false
+  disabled = false,
+  disabledActionBtn = false
 }: IAppFormProps) => {
   const initialState: Record<string, AppFormFieldValue> = {}
   Object.keys(fields).forEach((key) => {
@@ -77,8 +78,6 @@ export const AppForm = ({
   }
 
   const renderField = (key: string, field: AppFormField) => {
-    if (field.hide) return null
-
     const commonProps = {
       name: key,
       disabled: actionProcessing || disabled
@@ -151,20 +150,19 @@ export const AppForm = ({
     <form className="app-form" onSubmit={handleSubmit}>
       {title && <div className="app-form__title header-text header-text--md header-text--accent">{title}</div>}
       {prefixSlot && <div className="app-form__prefix-slot">{prefixSlot}</div>}
-
-      {Object.keys(fields).map((key) => (
-        <AppFormItem
-          key={key}
-          name={key}
-          errors={errors[key] && touchedFields[key] ? errors[key] : []}
-          label={fields[key].label}
-        >
-          {renderField(key, fields[key])}
-        </AppFormItem>
-      ))}
-
+      {Object.entries(fields).map(([name, field]) =>
+        !field.hide ? (
+          <AppFormItem
+            key={name}
+            name={name}
+            errors={errors[name] && touchedFields[name] ? errors[name] : []}
+            label={field.label}
+          >
+            {renderField(name, field)}
+          </AppFormItem>
+        ) : null
+      )}
       {children}
-
       {submitBtnText && (
         <div className="app-form__controls">
           <AppButton
@@ -172,7 +170,7 @@ export const AppForm = ({
             text={submitBtnText}
             color="accent-color"
             loading={actionProcessing}
-            disabled={disabled || !isFormTotalValid}
+            disabled={disabled || !isFormTotalValid || disabledActionBtn}
             fill
           />
         </div>

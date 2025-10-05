@@ -6,7 +6,6 @@ import {
   IEventSendMessage,
   IMessage,
   IChatRoom,
-  FileLoaderValueType,
   IImageObject
 } from 'common-types'
 import { useDispatch } from 'react-redux'
@@ -16,14 +15,14 @@ import { useContactTyping } from 'src/features/contact'
 
 import {
   pushMessage,
-  useChatRooms,
+  useChatRoom,
   resetRepliedMessage,
   pushTemporaryMessage,
   updateMessageInputData
 } from 'src/entities/chat-room'
 import { useNotification } from 'src/entities/notification'
 import { useSound } from 'src/entities/sound'
-import { showModal } from 'src/entities/system'
+import { showModal, useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
@@ -32,27 +31,28 @@ import { generateUUIDv4 } from 'src/shared/utils'
 import { MessageNotification } from '../ui'
 
 export const useMessageSend = (selectedChatRoom: IChatRoom) => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
+  const { repliedMessageData, messageInputData } = useSystem()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { getNotification, openBrowserNotification } = useNotification()
   const { play } = useSound()
-  const { getRoomById, repliedMessageData, messageInputData } = useChatRooms()
+  const { getRoomById } = useChatRoom()
   const { sendUserTypingStatus, debouncedChangeTypeStatus } = useContactTyping(selectedChatRoom)
   const { id, username } = useUser()
   const { scrollToBottom } = useChatRoomScroll()
 
   const openSendMessageModal = () => {
-    dispatch(
-      showModal({
-        title: 'Send Message',
-        modalContentComponentName: 'message-with-bind-data-modal'
-      })
-    )
+    // dispatch(
+    //   showModal({
+    //     title: 'Send Message',
+    //     modalContentComponentName: 'message-with-bind-data-modal'
+    //   })
+    // )
   }
 
-  const sendBtnDisabled = !repliedMessageData.id && !messageInputData.body
+  const sendBtnDisabled = !repliedMessageData?.id && !messageInputData?.body
 
   const onBlur = () => {
     sendUserTypingStatus(false)
@@ -65,7 +65,7 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
     const start = input.selectionStart ?? 0
     const end = input.selectionEnd ?? 0
 
-    const newText = messageInputData.body.slice(0, start) + value + ' ' + messageInputData.body.slice(end)
+    const newText = messageInputData?.body.slice(0, start) + value + ' ' + messageInputData?.body.slice(end)
 
     setMessageBody(newText)
 
@@ -83,7 +83,7 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
   }
 
   const setImagesHandler = (imagesFiles: FileLoaderValueType) => {
-    dispatch(updateMessageInputData({ images: imagesFiles as IImageObject[] }))
+    // dispatch(updateMessageInputData({ images: imagesFiles as IImageObject[] }))
     openSendMessageModal()
   }
 
@@ -95,12 +95,12 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
       messageType: 'info'
     })
     incomeMessageNotification.open()
-    openBrowserNotification({ message, icon: getRoomById(roomId)?.avatar })
+    // openBrowserNotification({ message, icon: getRoomById(roomId)?.avatar })
     play('message-delivered')
   }
 
   const pushNewMessage = (payload: IEventMessageDelivered) => {
-    dispatch(pushMessage(payload))
+    // dispatch(pushMessage(payload))
     // Do scroll to bottom
     notifyIncomeMessage(payload)
   }
@@ -122,9 +122,9 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
       createdAt: String(Date.now()),
       tempId: generateUUIDv4(),
       status: 'sending',
-      body: messageInputData.body,
-      images: messageInputData.images,
-      imageCompression: messageInputData.imageCompression,
+      body: messageInputData?.body ?? '',
+      images: messageInputData?.images,
+      imageCompression: messageInputData?.imageCompression,
       repliedMessage: repliedMessageData
     }
 
@@ -134,13 +134,16 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
     }
 
     socket.emit<SocketActionsType>('send-message', payload)
-    dispatch(resetRepliedMessage())
-    dispatch(pushTemporaryMessage(payload))
-    dispatch(updateMessageInputData({ body: '', images: [] }))
+    // dispatch(resetRepliedMessage())
+    // dispatch(pushTemporaryMessage(payload))
+    // dispatch(updateMessageInputData({ body: '', images: [] }))
     scrollToBottom()
   }
 
-  const setMessageBody = (value: string) => dispatch(updateMessageInputData({ body: value }))
+  const setMessageBody = (value: string) => {
+    return ''
+    // return dispatch(updateMessageInputData({ body: value }))
+  }
 
   return {
     monitorMessageDelivered,
@@ -153,7 +156,7 @@ export const useMessageSend = (selectedChatRoom: IChatRoom) => {
     setImagesHandler,
     inputRef,
     sendBtnDisabled,
-    message: messageInputData.body,
-    images: messageInputData.images
+    message: messageInputData?.body,
+    images: messageInputData?.images
   }
 }

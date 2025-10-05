@@ -1,8 +1,9 @@
-import { UnknownCallback } from 'common-types'
+import { IRepliedMessage, UnknownCallback } from 'common-types'
 
-import type { ModalContentComponentName } from 'src/widgets/modal/ui/Modal/types'
+import type { ModalContentComponentName } from 'src/widgets/modal'
 
-import { IContextMenu } from '../../context-menu'
+import { IMessageInputData } from 'src/entities/chat-room'
+import { IContextMenu } from 'src/entities/context-menu'
 
 export interface IViewPort {
   width: number
@@ -43,4 +44,6 @@ export interface ISystemStore {
   hasInteracted: boolean
   camPermission?: PermissionState
   micPermission?: PermissionState
+  repliedMessageData: IRepliedMessage | null
+  messageInputData: IMessageInputData | null
 }
