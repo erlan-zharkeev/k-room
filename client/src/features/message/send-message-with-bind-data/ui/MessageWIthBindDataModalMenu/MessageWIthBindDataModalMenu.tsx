@@ -1,15 +1,14 @@
 import './style.scss'
-import { useDispatch } from 'react-redux'
 
-import { updateMessageInputData, useChatRoom } from 'src/entities/chat-room'
+import { useChatRoom } from 'src/entities/chat-room'
+import { useSystem } from 'src/entities/system'
 
 import { AppDropdown, AppText, AppButton } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
 export const MessageWithBindDataModalMenu = () => {
-  const { messageInputData } = useChatRoom()
+  const { messageInputData } = useSystem()
   const { imageCompression } = messageInputData
-  const dispatch = useDispatch()
 
   const items = [
     {
@@ -19,7 +18,7 @@ export const MessageWithBindDataModalMenu = () => {
         </>
       ),
       handler: (evt: unknown) => {
-        dispatch(updateMessageInputData({ imageCompression: !imageCompression }))
+        // dispatch(updateMessageInputData({ imageCompression: !imageCompression }))
         stopPropagation(evt)
       }
     }

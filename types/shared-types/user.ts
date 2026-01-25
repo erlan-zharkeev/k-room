@@ -1,4 +1,4 @@
-import { IFrontendContactMap, InfoNotificationMapType } from ".";
+import { InfoNotificationMapType } from ".";
 
 export const USER_ROLES = ["user", "admin"] as const;
 export type UserRoleType = (typeof USER_ROLES)[number];

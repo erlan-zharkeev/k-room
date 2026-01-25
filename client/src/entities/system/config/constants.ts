@@ -36,6 +36,21 @@ export const INITIAL_CONTEXT_MENU: IContextMenu = {
   contextClickedObject: CLICKED_OBJECT_INITIAL_STATE
 }
 
+export const INITIAL_MESSAGE_INPUT_DATA = {
+  imageCompression: true,
+  images: [],
+  body: ''
+}
+
+export const INITIAL_REPLIED_MESSAGE_DATA = {
+  id: '',
+  authorName: '',
+  authorId: '',
+  body: '',
+  images: [],
+  forward: false
+}
+
 export const INITIAL_SYSTEM_STORE: ISystemStore = {
   auth: 'loading',
   online: true,
@@ -47,6 +62,6 @@ export const INITIAL_SYSTEM_STORE: ISystemStore = {
   hasInteracted: false,
   camPermission: undefined,
   micPermission: undefined,
-  repliedMessageData: null,
-  messageInputData: null
+  repliedMessageData: INITIAL_REPLIED_MESSAGE_DATA,
+  messageInputData: INITIAL_MESSAGE_INPUT_DATA
 }

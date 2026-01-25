@@ -1,9 +1,8 @@
 import './style.scss'
-import { IMessage } from 'common-types'
 
 import { AppText } from 'src/shared/ui'
 
-export const NoMessagesPlaceholder = ({ messages }: { messages: IMessage[] }) => {
+export const NoMessagesPlaceholder = ({ messages }: { messages: string[] }) => {
   if (messages.length) return null
 
   return (

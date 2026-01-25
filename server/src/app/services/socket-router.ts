@@ -1,8 +1,9 @@
 import { socketChatRoomRouter } from "features/chat-room"
 import { socketContactRouter } from "features/contact"
+import { socketMessageRouter } from "features/message"
 import { SocketInstanceType } from "shared-config"
 
-const featureRouters = [socketChatRoomRouter, socketContactRouter]
+const featureRouters = [socketChatRoomRouter, socketContactRouter, socketMessageRouter]
 
 export const socketRouter = (socket: SocketInstanceType) => {
   featureRouters.forEach((router) => router(socket))

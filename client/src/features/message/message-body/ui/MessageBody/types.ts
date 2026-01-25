@@ -1,8 +1,7 @@
-import { IMessage, UserShortType } from 'common-types'
+import { IMessage } from 'common-types'
 
 export interface IMessageBodyProps {
   message: IMessage
-  isPrivate: Boolean
 }
 
 export interface IMessageBodyReaction {

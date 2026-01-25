@@ -5,6 +5,7 @@ import { throwHTTPError } from 'shared-lib'
 import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from '../config'
 import { VALIDATE_MEDIA_FILE_MESSAGE } from '../config'
 import { buildFileData } from './build-file-data'
+import { processImageWithSharp } from './process-image'
 import { validateFileMetaData } from './validate-file-meta-data'
 
 export const uploadBufferToBucket = async (
@@ -16,7 +17,9 @@ export const uploadBufferToBucket = async (
   options?: IUploadOptions
 ) => {
   try {
-    const fileData = await buildFileData(buffer, filename)
+    const outBuffer = await processImageWithSharp(buffer, options?.compression ?? 'common-compressed')
+
+    const fileData = await buildFileData(outBuffer, filename)
 
     validateFileMetaData(fileData, bucketName, res)
 
@@ -38,7 +41,7 @@ export const uploadBufferToBucket = async (
       })
       stream.once('finish', () => resolve(stream.id))
       stream.once('error', reject)
-      stream.end(buffer)
+      stream.end(outBuffer)
     })
   } catch {
     throwHTTPError(StatusEnum.Server, res ?? null, VALIDATE_MEDIA_FILE_MESSAGE.uploadFailed)

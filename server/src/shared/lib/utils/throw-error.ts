@@ -30,5 +30,5 @@ export const throwSocketError = (
   silent: boolean = false
 ) => {
   const io = getIO()
-  io.to(socketId).emit<SocketActionsType>('error-message', { error, silent, status })
+  io.to(socketId).emit<SocketActionsType>('error-message', { message: error, silent, status })
 }

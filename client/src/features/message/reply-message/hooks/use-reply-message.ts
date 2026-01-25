@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'src/app/store'
 
-import { useChatRoom, resetRepliedMessage, setRepliedMessage } from 'src/entities/chat-room'
+import { useChatRoom } from 'src/entities/chat-room'
 import { resetContextClickedObject } from 'src/entities/system'
 
 export const useReplyMessage = () => {
@@ -13,11 +13,11 @@ export const useReplyMessage = () => {
 
   const closeReplyMessage = () => {
     dispatch(resetContextClickedObject())
-    dispatch(resetRepliedMessage())
+    // dispatch(resetRepliedMessage())
   }
 
   const replyMessageHandler = (message: IMessage) => {
-    dispatch(setRepliedMessage(message))
+    // dispatch(setRepliedMessage(message))
   }
 
   return {

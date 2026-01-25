@@ -1,10 +1,4 @@
-import { IImageObject, IChatRoom } from 'common-types'
-
-export interface IMessageInputData {
-  body: string
-  images: IImageObject[]
-  imageCompression: boolean
-}
+import { IChatRoom } from 'common-types'
 
 export interface IAppChatRoom extends IChatRoom {
   lastScrolledMessageId?: string

@@ -1,7 +1,10 @@
 import './style.scss'
 
+import { useEffect, useState } from 'react'
+
 import { UnknownCallback } from 'common-types'
 
+import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
 
@@ -23,7 +26,7 @@ export const ChatRoomPreview = ({
   isRoomSelected?: boolean
 }) => {
   const { getLiveMedia } = useMedia()
-
+  const { contacts } = useContact()
   const isPrivate = room.users.length === 1
 
   const chatRoomAvatarShape = isPrivate ? 'circle-shape' : 'square-shape'
@@ -37,12 +40,23 @@ export const ChatRoomPreview = ({
 
   const avatarPath = getLiveMedia(room.avatarId)
 
+  const [chatName, setChatName] = useState(room.chatName ?? '')
+
+  useEffect(() => {
+    if (!room.chatName) {
+      const contactData = contacts.find((contact) => contact.id === room.users[0])
+      if (contactData) {
+        setChatName(contactData.username)
+      }
+    }
+  }, [room, contacts])
+
   return (
     <div className={className}>
       <ProfileInfo
         titleSize={titleSize}
         avatar={avatarPath}
-        title={room.chatName ?? '-'}
+        title={chatName}
         description={!headerMode ? chatRoomLastMessageBody(room) : ''}
         shape={chatRoomAvatarShape}
         stubIconName={chatRoomStubIcon}

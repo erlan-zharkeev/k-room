@@ -14,6 +14,7 @@
 :root[theme='dark'] {
   --main-bg: #1c1c1c;
   --contrast-text: #fff;
+  --semi-contrast-text: rgb(255 255 255 / 79.7%);
   --text: rgb(177 177 177 / 58.7%);
   --shadow-outset-start: #0f0f0f;
   --shadow-outset-end: #292929;
@@ -35,6 +36,7 @@
 :root[theme='light'] {
   --main-bg: #cfcfcf;
   --contrast-text: #000;
+  --semi-contrast-text: rgb(74 74 74 / 79.7%);
   --text: rgb(94 94 94 / 84.7%);
   --shadow-outset-start: #b6b6b6;
   --shadow-outset-end: #e8e8e8;

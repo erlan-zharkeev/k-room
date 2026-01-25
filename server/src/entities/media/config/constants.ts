@@ -1,3 +1,5 @@
+import { SharpSettingsKey } from 'shared-config'
+
 import { ValidateFileMetaOptionsMapType } from './types'
 
 export const ALLOWED_CONTENT_TYPES = ['image/', 'audio/', 'video/', 'application/pdf']
@@ -24,5 +26,29 @@ export const validationMediaOptionsMap: ValidateFileMetaOptionsMapType = {
   video: {
     maxMb: 50,
     supportedKindMediaType: 'video'
+  }
+}
+
+export const SHARP_PRESETS: Record<SharpSettingsKey, { quality: number; dimensions: { width: number | null, height: number | null } }> = {
+  avatar: {
+    dimensions: {
+      width: 300,
+      height: 300
+    },
+    quality: 100
+  },
+  'common-compressed': {
+    quality: 60,
+    dimensions: {
+      width: null,
+      height: null
+    }
+  },
+  'common-uncompressed': {
+    quality: 100,
+    dimensions: {
+      width: null,
+      height: null
+    }
   }
 }

@@ -7,11 +7,10 @@ import { AppDispatch } from 'src/app/store'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
 
-import { setRepliedMessage } from 'src/entities/chat-room'
 import { closeModal } from 'src/entities/system'
 
 import { useTypedSelector } from 'src/shared/lib'
-import { AppInput, AppIcon } from 'src/shared/ui'
+import { AppInput } from 'src/shared/ui'
 
 import { ShortChatList } from './components/ShortChatList/ShortChatList'
 
@@ -23,7 +22,7 @@ export const ForwardMessageModal = () => {
 
   const clickChatHandler = (roomId: string) => {
     selectChatRoomById(roomId)
-    dispatch(setRepliedMessage(message))
+    // dispatch(setRepliedMessage(message))
     dispatch(closeModal())
   }
 
@@ -31,6 +30,7 @@ export const ForwardMessageModal = () => {
     <div className="forward-message-modal">
       <div className="forward-message-modal__select">
         <AppInput
+          name="forward-message-input"
           // prefixSlot={<AppIcon name={'search'} color="text-color" />}
           placeholder="Find room"
           onChange={(e) => setSearchString(e.target.value)}

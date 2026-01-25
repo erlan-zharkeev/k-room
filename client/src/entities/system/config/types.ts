@@ -1,8 +1,7 @@
-import { IRepliedMessage, UnknownCallback } from 'common-types'
+import { IImageObject, IRepliedMessage, UnknownCallback } from 'common-types'
 
 import type { ModalContentComponentName } from 'src/widgets/modal'
 
-import { IMessageInputData } from 'src/entities/chat-room'
 import { IContextMenu } from 'src/entities/context-menu'
 
 export interface IViewPort {
@@ -29,9 +28,16 @@ export interface IModalData {
   textContent?: string
   confirmBtn?: IModalBtn
   cancelBtn?: IModalBtn
+  data?: unknown
 }
 
 export type AuthStatusType = 'authorized' | 'unauthorized' | 'loading'
+
+export interface IMessageInputData {
+  body: string
+  images: IImageObject[]
+  imageCompression: boolean
+}
 
 export interface ISystemStore {
   auth: AuthStatusType
@@ -44,6 +50,6 @@ export interface ISystemStore {
   hasInteracted: boolean
   camPermission?: PermissionState
   micPermission?: PermissionState
-  repliedMessageData: IRepliedMessage | null
-  messageInputData: IMessageInputData | null
+  repliedMessageData: IRepliedMessage
+  messageInputData: IMessageInputData
 }

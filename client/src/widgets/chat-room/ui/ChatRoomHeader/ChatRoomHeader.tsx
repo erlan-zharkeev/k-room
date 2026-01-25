@@ -1,16 +1,15 @@
 import './style.scss'
 
-import { IChatRoom } from 'common-types'
-
 import { useChatRoomSelect, useOpenChatRoomSettingsModal } from 'src/features/chat-room'
 
 import { ChatRoomPreview } from 'src/entities/chat-room'
 
+import { DbChatRoomType } from 'src/shared/config'
 import { AppButton } from 'src/shared/ui'
 
 import { RoomTypingContact } from '../RoomTypingContact/RoomTypingContact'
 
-export const ChatRoomHeader = ({ selectedChatRoom }: { selectedChatRoom: IChatRoom }) => {
+export const ChatRoomHeader = ({ selectedChatRoom }: { selectedChatRoom: DbChatRoomType }) => {
   const { selectChatWithAsideById } = useChatRoomSelect()
   const { openChatRoomSettingsModal } = useOpenChatRoomSettingsModal()
 

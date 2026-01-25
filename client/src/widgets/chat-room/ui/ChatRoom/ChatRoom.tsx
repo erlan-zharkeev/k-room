@@ -13,16 +13,14 @@ import { ChatRoomStub } from '../ChatRoomStub/ChatRoomStub'
 export const ChatRoom = () => {
   const roomDomEl = useRef<HTMLDivElement>(null)
   const { greaterOrEqualDesktop } = useViewport()
-
-  const { selectedChatRoom, isSelectedRoomPrivate } = useChatRoom()
-
+  const { selectedChatRoom } = useChatRoom()
   return (
     <div className="chat-room" ref={roomDomEl}>
       {greaterOrEqualDesktop && <ChatRoomStub selectedChatRoom={selectedChatRoom} />}
       {selectedChatRoom && (
         <div className="chat-room__content">
           <ChatRoomHeader selectedChatRoom={selectedChatRoom} />
-          <MessageList selectedChatRoom={selectedChatRoom} isSelectedRoomPrivate={isSelectedRoomPrivate} />
+          <MessageList selectedChatRoom={selectedChatRoom} />
           <ChatRoomFooter />
         </div>
       )}

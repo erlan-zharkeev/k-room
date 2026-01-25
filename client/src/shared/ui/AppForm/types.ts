@@ -1,4 +1,6 @@
 
+import { UnknownCallback } from 'common-types'
+
 import { FileLoaderValueType } from 'src/shared/config'
 import {
   ISwitchValidateRule,
@@ -19,7 +21,8 @@ type BaseAppFormField<T extends string, V = AppFormFieldValue> = {
   label?: string
   hide?: boolean
   rule?: unknown
-  value?: V
+  value?: V,
+  onChange?: UnknownCallback
 } & { [key: string]: unknown }
 
 export type AppFormSwitchField = BaseAppFormField<'switch', boolean> &
@@ -53,9 +56,10 @@ export interface IAppFormProps {
   onChange?: (formData: AppFormData) => void
   onSubmit?: (formData: AppFormData) => void
   fields: Record<string, AppFormField>
-  submitBtnText: string
+  submitBtnText?: string
   actionProcessing?: boolean
   prefixSlot?: React.ReactNode
   children?: React.ReactNode
   disabledActionBtn?: boolean
+  onBlur?: UnknownCallback;
 }

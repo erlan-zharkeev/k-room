@@ -5,6 +5,9 @@ import { IMessage } from 'common-types'
 import { useMessageDelete, useMessageForward } from 'src/features/message'
 import { useReplyMessage } from 'src/features/message/reply-message/hooks'
 
+import { useSettings } from 'src/entities/settings'
+import { useUser } from 'src/entities/user'
+
 import { AppDropdown, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
@@ -12,20 +15,18 @@ import { MessageReactions } from './../'
 
 export const MessageMenu = ({
   userId,
-  username,
-  selectedChatRoomId,
   message,
   children
 }: {
   userId: string
-  username: string
-  selectedChatRoomId: string
   message: IMessage
   children: React.ReactNode
 }) => {
   const { deleteMessageHandler } = useMessageDelete()
   const { forwardMessageHandler } = useMessageForward()
   const { replyMessageHandler } = useReplyMessage()
+  const { username } = useUser()
+  const { selectedChatRoomId } = useSettings()
 
   const items = [
     {

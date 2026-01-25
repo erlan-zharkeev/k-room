@@ -1,17 +1,20 @@
-import { IChatRoom, IEventUserTyping, SocketActionsType } from 'common-types'
+import { IEventUserTyping, SocketActionsType } from 'common-types'
 
+import { useChatRoom } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'
 
-export const useContactTyping = (selectedChatRoom: IChatRoom) => {
+export const useContactTyping = () => {
   const { username } = useUser()
+  const chatRoomData = useChatRoom()
 
   const sendUserTypingStatus = (isTyping: boolean) => {
+    if (!chatRoomData.selectedChatRoom) return
     const payload: IEventUserTyping = {
       authorName: username,
-      usersTo: selectedChatRoom.users,
+      usersTo: chatRoomData.selectedChatRoom.users,
       isTyping
     }
     socket.emit<SocketActionsType>('client-typing', payload)

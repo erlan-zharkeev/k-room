@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { IRepliedMessage } from 'common-types'
 
 import { type IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/entities/context-menu'
 
@@ -7,9 +8,10 @@ import {
   INITIAL_VIEWPORT,
   INITIAL_SYSTEM_STORE,
   INITIAL_CONTEXT_MENU,
-  CLICKED_OBJECT_INITIAL_STATE
+  CLICKED_OBJECT_INITIAL_STATE,
+  INITIAL_REPLIED_MESSAGE_DATA
 } from '../config'
-import type { AuthStatusType, IModalData, IViewPort } from '../config/types'
+import type { AuthStatusType, IMessageInputData, IModalData, IViewPort } from '../config/types'
 
 export const systemSlice = createSlice({
   name: 'system',
@@ -82,6 +84,23 @@ export const systemSlice = createSlice({
     },
     resetContextMenuToInitial(state) {
       state.contextMenu = INITIAL_CONTEXT_MENU
+    },
+    updateMessageInputData(state, { payload }: { payload: Partial<IMessageInputData> }) {
+      state.messageInputData = {
+        ...state.messageInputData,
+        ...payload
+      }
+    },
+    removeImageByNameFromMessageInputData(state, { payload }: { payload: string }) {
+      state.messageInputData.images = state.messageInputData.images.filter(
+        (img) => img.name !== payload
+      )
+    },
+    updateRepliedMessage(state, { payload }: { payload: IRepliedMessage }) {
+      state.repliedMessageData = payload
+    },
+    resetRepliedMessage(state) {
+      state.repliedMessageData = INITIAL_REPLIED_MESSAGE_DATA
     }
   }
 })
@@ -99,5 +118,9 @@ export const {
   setHasInteraction,
   updateCamPermission,
   updateMicPermission,
-  resetContextMenuToInitial
+  resetContextMenuToInitial,
+  removeImageByNameFromMessageInputData,
+  updateMessageInputData,
+  updateRepliedMessage,
+  resetRepliedMessage
 } = systemSlice.actions

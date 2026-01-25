@@ -1,27 +1,4 @@
 .message-list {
   flex: 1 1 auto;
 
-  .message-list__message-body-wrapper {
-    display: flex;
-    margin-bottom: 8px;
-  }
-
-  .message-list__body-with-settings {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .message-list__message-body-wrapper--time {
-    justify-content: center;
-  }
-
-  .message-list__message-body-wrapper--self {
-    justify-content: flex-end;
-  }
-
-  .message-list__message-body-wrapper--interlocutor {
-    .message-list__body-with-settings {
-      align-items: flex-end;
-    }
-  }
 }

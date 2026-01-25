@@ -1,8 +1,7 @@
 import type { IChatRoom, IChatRoomSchema } from 'common-types'
-import { UserModel } from 'entities/user'
 import { ObjectId } from 'mongoose'
 
-export const transformRoomForUser = async ({
+export const transformRoomForUser = ({
   userId,
   room,
 }: { userId: string; room: IChatRoomSchema }) => {
@@ -18,11 +17,6 @@ export const transformRoomForUser = async ({
     chatName,
     users: otherUsers,
     messages,
-  }
-
-  if (otherUsers.length === 1) {
-    const interlocutor = await UserModel.findById(otherUsers[0], { 'public.username': 1 }).lean()
-    if (interlocutor?.public?.username) result.chatName = interlocutor.public.username
   }
 
   return result

@@ -25,6 +25,7 @@ export const useApi = () => {
       messageType: isSuccess ? 'success' : 'warning'
     })
     if (text && !silent) {
+      console.log('b')
       successMessageNotification.open()
     }
   }

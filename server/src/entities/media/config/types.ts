@@ -1,6 +1,7 @@
 import type { MediaKindType } from 'common-types'
 import type { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
+import { SharpSettingsKey } from 'shared-config'
 
 import { MEDIA_BUCKET_NAMES } from './constants'
 
@@ -45,4 +46,5 @@ export interface IFileData {
 
 export interface IUploadOptions {
   overwrite?: boolean
+  compression?: SharpSettingsKey
 }

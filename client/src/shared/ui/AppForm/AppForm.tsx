@@ -36,6 +36,7 @@ export const AppForm = ({
   prefixSlot,
   onChange,
   title,
+  onBlur = () => {},
   disabled = false,
   disabledActionBtn = false
 }: IAppFormProps) => {
@@ -54,6 +55,8 @@ export const AppForm = ({
     const name = 'target' in inputOrPatch ? inputOrPatch.target.name : inputOrPatch.name
     const value = 'target' in inputOrPatch ? inputOrPatch.target.value : inputOrPatch.value
 
+    // console.log()
+
     const newForm = { ...form, [name]: value }
     setForm(newForm)
     validateField(value, name, false, rule)
@@ -70,6 +73,19 @@ export const AppForm = ({
 
   useEffect(() => {
     validateAllFields()
+    const next: Record<string, AppFormFieldValue> = {}
+    for (const [k, f] of Object.entries(fields)) {
+      next[k] = f.value ?? getDefaultValue(f.inputType)
+    }
+
+    let changed = false
+    for (const k of Object.keys(next)) {
+      if (form[k] !== next[k]) {
+        changed = true
+        break
+      }
+    }
+    if (changed) setForm(next)
   }, [fields])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -90,7 +106,10 @@ export const AppForm = ({
             <AppSwitch
               {...commonProps}
               value={form[key] as boolean}
-              onChange={(e) => handleChange(e, field.rule)}
+              onChange={(e) => {
+                if (field.onChange) field.onChange(e)
+                handleChange(e, field.rule)
+              }}
               onText={field.onText}
               offText={field.offText}
             />
@@ -106,10 +125,17 @@ export const AppForm = ({
             placeholder={field.placeholder}
             nativeType={field.nativeType}
             autoComplete={field.autoComplete}
-            onChange={(e) => handleChange(e, field.rule)}
-            onBlur={() => validateAllFields(true)}
+            onChange={(e) => {
+              if (field.onChange) field.onChange(e)
+              handleChange(e, field.rule)
+            }}
+            onBlur={() => {
+              onBlur()
+              validateAllFields(true)
+            }}
             showClearButton={field.showClearButton}
             prefixSlot={field.prefixSlot}
+            ref={field.ref}
           />
         )
 
@@ -121,11 +147,15 @@ export const AppForm = ({
             allowedResolutions={field.allowedResolutions}
             showPreview={field.showPreview}
             value={form[key] as FileLoaderValueType}
-            onChange={(images) => handleChange({ name: key, value: images })}
+            onChange={(images) => {
+              if (field.onChange) field.onChange({ name: key, value: images })
+              handleChange({ name: key, value: images })
+            }}
             design={field.design}
             avatarStubIcon={field.avatarStubIcon}
             avatarShape={field.avatarShape}
             avatarBorderless={field.avatarBorderless}
+            showTextLabel={field.showTextLabel}
           />
         )
 
@@ -137,7 +167,10 @@ export const AppForm = ({
             toTitle={field.toTitle}
             availableElements={field.availableElements}
             value={form[key] as string[]}
-            setPickedElementIds={(elements) => handleChange({ name: key, value: elements }, field.rule)}
+            setPickedElementIds={(elements) => {
+              if (field.onChange) field.onChange({ name: key, value: elements })
+              handleChange({ name: key, value: elements }, field.rule)
+            }}
           />
         )
 

@@ -8,7 +8,7 @@ import { db } from 'src/shared/lib'
 
 export const useChatRoom = () => {
   const { selectedChatRoomId } = useSettings()
-  const { repliedMessageData, messageInputData } = useSystem()
+  const { repliedMessageData } = useSystem()
 
   const chatRooms = useLiveQuery(async () => {
     return await (db['chat-rooms'].toArray() as Promise<DbChatRoomType[]>)
@@ -41,7 +41,6 @@ export const useChatRoom = () => {
     isSelectedRoomPrivate,
     repliedMessageData,
     haveMessageToReply,
-    messageInputData,
     putChatRoom: async (payload: DbChatRoomType) => await db['chat-rooms'].put(payload),
     updateChatRoom: async (id: string, patch: Partial<DbChatRoomType>) => {
       await db['chat-rooms'].update(id, patch)

@@ -1,11 +1,8 @@
 import { IImageObject } from ".";
 
-export type MessageStatusType =
-  | "sending"
-  | "undelivered"
-  | "delivered"
-  | "read"
-  | "none";
+export const MESSAGE_STATUS = ["sending", "undelivered", "delivered", "read", "none"] as const;
+export type MessageStatusType = (typeof MESSAGE_STATUS)[number];
+
 
 export type AuthorType = "system" | "time";
 

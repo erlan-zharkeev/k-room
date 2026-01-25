@@ -5,6 +5,10 @@
     justify-content: center;
   }
 
+  span {
+    color: unset;
+  }
+
   .ant-dropdown-menu .ant-dropdown-menu-item:hover {
     background-color: var(--dark-gray-transparent-3);
   }
