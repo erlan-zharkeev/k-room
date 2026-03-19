@@ -9,6 +9,10 @@ import { reactionSchema } from './reaction.model'
 
 const messageSchema = new Schema<IMessageSchema>(
   {
+    _id: {
+      type: String,
+      required: true
+    },
     authorId: {
       type: String,
       unique: false,

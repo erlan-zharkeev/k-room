@@ -24,6 +24,7 @@ export const controller = (socket: SocketInstanceType) => {
       })
 
       const messageForDb = {
+        _id: message.id,
         reactions: [],
         ...message,
         images: filenames,
@@ -46,7 +47,7 @@ export const controller = (socket: SocketInstanceType) => {
         const messageForUser: IMessage = {
           ...message,
           images: filenames.map((filename) => ({ src: filename, name: filename })),
-          id: String(newDbMessage._id),
+          id: newDbMessage.id,
           isSelf: user?.id === message.authorId,
           status: 'delivered'
         }

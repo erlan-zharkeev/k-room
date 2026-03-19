@@ -38,5 +38,6 @@ export interface IDBMessage extends IMessage {
     usersMetaData: Array<unknown>;
 }
 export interface IMessageSchema extends Omit<IMessage, "id" | "tempId" | "isSelf" | "status"> {
+    _id?: string;
     usersMetaData?: Array<unknown>;
 }
