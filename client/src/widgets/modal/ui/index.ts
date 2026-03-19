@@ -1,2 +1,2 @@
 export * from './Modal/Modal'
-export * from './Modal/types'
+export * from '../config/types'

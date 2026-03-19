@@ -50,7 +50,6 @@ export const useNotification = () => {
     }
 
     const open = () => {
-      console.log(notificationData, 'data')
       if (showNotification || ['unauthorized', 'loading'].includes(auth)) {
         antdNotification[messageType](notificationData)
       }

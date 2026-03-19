@@ -20,19 +20,22 @@ export const useAudioContextMonitor = () => {
     actions: <DontShowNotificationAgainBtn notificationName="audio-context" />
   })
 
+  const closeIfInteracted = () => {
+    if (!hasInteracted) return false
+    soundContextNotification.close('sound-context')
+    return true
+  }
+
   const handleShowNotification = () => {
-    if (hasInteracted) {
-      soundContextNotification.close('sound-context')
-    } else {
-      if (!soundOn) return
-      startTimeout(() => {
-        if (hasInteracted) {
-          soundContextNotification.close('sound-context')
-        }
-        if (hiddenNotification.includes('audio-context')) return
-        if (auth === 'authorized') soundContextNotification.open()
-      }, 3000)
-    }
+    if (closeIfInteracted() || !soundOn) return
+
+    startTimeout(() => {
+      if (closeIfInteracted()) return
+      if (hiddenNotification.includes('audio-context')) return
+      if (auth !== 'authorized') return
+
+      soundContextNotification.open()
+    }, 3000)
   }
 
   useEffect(() => {

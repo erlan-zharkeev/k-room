@@ -1,42 +1,24 @@
 import './style.scss'
-import { ReactNode, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { Modal as AntdModal } from 'antd'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'src/app/store'
 
-import { ChatRoomSettingsModal, CreateChatRoomModal } from 'src/features/chat-room'
-import { SelectDevicesModal } from 'src/features/device'
-import { ForwardMessageModal, MessageWithBindDataModal, MessageWithBindDataModalMenu } from 'src/features/message'
-import { EditUserDataModal } from 'src/features/user'
-
 import { closeModal, useSystem, useViewport } from 'src/entities/system'
 
 import { AppButton, AppHeader, AppText } from 'src/shared/ui'
 
-import type { ModalContentComponentName } from './types'
+import { AdditionalDropdownMenuElements, Popups } from '../../config'
 
 export const Modal = () => {
   const { showModal, modalData } = useSystem()
   const { lessOrEqualPhone } = useViewport()
   const dispatch = useDispatch<AppDispatch>()
 
-  const popups: Record<ModalContentComponentName, ReactNode> = {
-    'edit-user-data-modal': <EditUserDataModal />,
-    'select-devices-modal': <SelectDevicesModal />,
-    'forward-message-modal': <ForwardMessageModal />,
-    'create-chat-room-modal': <CreateChatRoomModal />,
-    'chat-room-settings-modal': <ChatRoomSettingsModal />,
-    'message-with-bind-data-modal': <MessageWithBindDataModal />
-  }
-
-  const additionalDropdownMenuElements: Partial<Record<ModalContentComponentName, ReactNode>> = {
-    'message-with-bind-data-modal': <MessageWithBindDataModalMenu />
-  }
-
   const ComponentContent = modalData.modalContentComponentName ? (
-    popups[modalData.modalContentComponentName]
+    Popups[modalData.modalContentComponentName]
   ) : (
     <AppText>{modalData.textContent ?? ''}</AppText>
   )
@@ -52,7 +34,7 @@ export const Modal = () => {
       title={
         <div className="modal__title">
           <AppHeader tag="h4">{modalData.title}</AppHeader>
-          {modalData.modalContentComponentName && additionalDropdownMenuElements[modalData.modalContentComponentName]}
+          {modalData.modalContentComponentName && AdditionalDropdownMenuElements[modalData.modalContentComponentName]}
         </div>
       }
       open={showModal}

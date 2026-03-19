@@ -14,7 +14,6 @@ export const useSettings = () => {
     showAsidePanel: !FULL_CONTENT_ELEMENTS.includes(settings.selectedContentTab),
 
     initialize: () => settingsStore.ensure(DEFAULT_SETTINGS),
-    reset: () => settingsStore.reset(DEFAULT_SETTINGS),
     update: (changes: Partial<IUserSetting>) => settingsStore.updateShallow(changes),
     setByPath: (path: string, value: unknown) => settingsStore.setByPath(path, value)
   }
