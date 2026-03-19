@@ -10,7 +10,7 @@ export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchem
   userIds.forEach(async (userId) => {
     const userData = await UserModel.findOne({ _id: userId }).lean()
     if (!userData) return
-    const transformedRoom = await transformRoomForUser({ userId, room })
+    const transformedRoom = transformRoomForUser({ userId, room })
     const sockets = await getSocketsByUserIds([userId])
     sockets.forEach((socketId) => {
       getIO().to(socketId).emit<SocketActionsType>('new-room-added', transformedRoom)

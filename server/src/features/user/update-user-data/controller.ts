@@ -3,9 +3,7 @@ import { UserModel } from 'entities/user'
 import { AppResponseType, IAppRequest, ServerNotificationMessage, SHARED_MESSAGE } from 'shared-config'
 import { getIO, log, throwHTTPError } from 'shared-lib'
 
-import { USER_MESSAGE } from '../~shared'
-import { getSocketsByUserIds } from '../~shared/lib/get-sockets-by-ids'
-import { transformUserToContact } from '../~shared/lib/transform-user-to-frontend-contact'
+import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from '../~shared'
 import { MESSAGE } from './config'
 import { updateUserAvatar } from './lib'
 

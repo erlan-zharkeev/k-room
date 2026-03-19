@@ -1,4 +1,7 @@
 export * from './create-user'
+export * from './emit-user-status-to-all'
 export * from './get-sockets-by-ids'
 export * from './map-user-to-dto'
+export * from './set-last-seen-data'
+export * from './set-user-status'
 export * from './transform-user-to-frontend-contact'
