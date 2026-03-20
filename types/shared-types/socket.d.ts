@@ -17,6 +17,7 @@ export interface IEventStatusContact {
     interlocutorId: string;
     online: boolean;
     onlineStatusUpdatedTimestamp: number;
+    lastSeen?: number;
 }
 export type EventChangeContactsDataType = IBaseFrontendUserData;
 export type EventGetContactsType = IFrontendContactMap;

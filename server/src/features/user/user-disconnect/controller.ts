@@ -7,7 +7,7 @@ import { updateOnlineStatus } from '../update-online-status'
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('disconnect', async () => {
     const { userId } = socket.data
-    await updateOnlineStatus(userId, false)
-    await setLastSeenData(userId)
+    const lastSeen = await setLastSeenData(userId)
+    await updateOnlineStatus(userId, false, lastSeen)
   })
 }

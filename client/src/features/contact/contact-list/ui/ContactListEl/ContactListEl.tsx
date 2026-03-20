@@ -6,9 +6,13 @@ import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
 
 import { DbContactType } from 'src/shared/config'
+import { useIntervalRerender } from 'src/shared/lib'
+
+import { CONTACT_LIST_RERENDER_INTERVAL } from '../../config'
 
 export const ContactListEl = ({ contactData }: { contactData: DbContactType }) => {
   const { getLiveMedia } = useMedia()
+  useIntervalRerender(CONTACT_LIST_RERENDER_INTERVAL)
 
   const avatar = getLiveMedia(`avatar.${contactData.id}`)
 

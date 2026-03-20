@@ -4,7 +4,7 @@ import { getIO } from 'shared-lib'
 
 import { getSocketsByUserIds } from './get-sockets-by-ids'
 
-export const emitUserStatusToAll = async (interlocutorId: string, online: boolean) => {
+export const emitUserStatusToAll = async (interlocutorId: string, online: boolean, lastSeen?: number) => {
   const users = await UserModel.find(
     { [`personal.contacts.${interlocutorId}`]: { $exists: true } },
     { _id: 1 }
@@ -17,7 +17,8 @@ export const emitUserStatusToAll = async (interlocutorId: string, online: boolea
   const payload: IEventStatusContact = {
     interlocutorId,
     online,
-    onlineStatusUpdatedTimestamp: Date.now()
+    onlineStatusUpdatedTimestamp: Date.now(),
+    lastSeen
   }
 
   sockets.forEach((socketId) => {
