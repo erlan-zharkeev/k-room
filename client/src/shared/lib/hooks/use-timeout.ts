@@ -2,10 +2,21 @@ import { useCallback, useEffect, useRef } from 'react'
 
 export const useTimeout = () => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const startTimeout = useCallback((callback: () => void, delay: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
     timeoutRef.current = setTimeout(callback, delay)
+  }, [])
+
+  const startInterval = useCallback((callback: () => void, delay: number) => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    intervalRef.current = setInterval(callback, delay)
+  }, [])
+
+  const stopInterval = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    intervalRef.current = null
   }, [])
 
   const delay = useCallback(async (ms: number): Promise<void> => {
@@ -32,8 +43,9 @@ export const useTimeout = () => {
   useEffect(() => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [])
 
-  return { startTimeout, delay, appNextTick }
+  return { startTimeout, startInterval, stopInterval, delay, appNextTick }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { SocketActionsType } from 'common-types'
 
@@ -14,7 +14,13 @@ export const useContactOnlineMonitor = () => {
   const { contacts } = useContact()
   const { updateContactData } = useUpdateContactData()
 
-  const { startTimeout } = useTimeout()
+  const { startInterval, stopInterval } = useTimeout()
+  // Keep the latest contacts accessible to the interval callback without restarting the interval on every update.
+  const contactsRef = useRef(contacts)
+
+  useEffect(() => {
+    contactsRef.current = contacts
+  }, [contacts])
 
   const checkForContactOnline = () => {
     socket.emit<SocketActionsType>('interlocutor-ping')
@@ -22,7 +28,7 @@ export const useContactOnlineMonitor = () => {
     const maxDiffSeconds = 30
     const currentTimestamp = Date.now()
 
-    contacts.forEach((contact) => {
+    contactsRef.current.forEach((contact) => {
       const outdated = Math.abs(currentTimestamp - contact.onlineStatusSyncedAt) / 1000 > maxDiffSeconds
 
       if (outdated) {
@@ -33,9 +39,13 @@ export const useContactOnlineMonitor = () => {
 
   useEffect(() => {
     if (isMonitoring) {
-      startTimeout(() => checkForContactOnline, 10000)
+      startInterval(checkForContactOnline, 10000)
     }
-  }, [contacts, isMonitoring])
+
+    return () => {
+      stopInterval()
+    }
+  }, [isMonitoring])
 
   const monitorContactOnline = () => {
     setIsMonitoring(true)

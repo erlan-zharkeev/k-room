@@ -39,6 +39,7 @@ export const ChatRoomPreview = ({
   })
 
   const avatarPath = getLiveMedia(room.avatarId)
+  const privateRoomContact = isPrivate ? contacts.find((contact) => contact.id === room.users[0]) : undefined
 
   const [chatName, setChatName] = useState(room.chatName ?? '')
 
@@ -58,6 +59,7 @@ export const ChatRoomPreview = ({
         avatar={avatarPath}
         title={chatName}
         description={!headerMode ? chatRoomLastMessageBody(room) : ''}
+        online={privateRoomContact?.online}
         shape={chatRoomAvatarShape}
         stubIconName={chatRoomStubIcon}
         showBadge={isPrivate}

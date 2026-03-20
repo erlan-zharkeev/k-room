@@ -14,7 +14,7 @@ export const ProfileInfo = ({
   title,
   description,
   online,
-  showBadge = true,
+  showBadge = false,
   horizontal = false,
   avatarSize = 'small',
   shape,

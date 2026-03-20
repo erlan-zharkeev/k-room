@@ -52,7 +52,7 @@ const BadgeWrapper = ({
       {children}
     </Badge.Ribbon>
   ) : (
-    <Badge dot color={online ? 'green' : 'red'}>
+    <Badge dot={online !== undefined} color={online ? 'green' : 'red'}>
       {children}
     </Badge>
   )
