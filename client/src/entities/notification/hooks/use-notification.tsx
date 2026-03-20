@@ -29,7 +29,7 @@ export const useNotification = () => {
     const messageType = notification.messageType ?? (basicNotificationData.messageType as NotificationType)
     const isError = messageType === 'error'
     const isInfo = messageType === 'info'
-    const placement = isInfo ? 'bottomRight' : 'top'
+    const placement = notification.placement ?? (isInfo ? 'bottomRight' : 'top')
     const key = notification.key === undefined ? '' : notification.key
 
     let duration: number | undefined = basicNotificationData.duration

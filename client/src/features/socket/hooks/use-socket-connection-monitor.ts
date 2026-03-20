@@ -34,7 +34,6 @@ export const useSocketConnectionMonitor = () => {
 
     socket.on<SocketActionsType>('error-message', ({ message }: IEventErrorMessage) => {
       const errorMessageNotification = notifications.getNotification({ messageType: 'error', message })
-      console.log('err', message)
       errorMessageNotification.open()
     })
 

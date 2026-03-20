@@ -31,7 +31,6 @@ export const useNetworkMonitor = () => {
 
   const handleOffline = () => {
     socket.disconnect()
-    console.log('0')
     networkOfflineNotification.open()
     dispatch(setOnline(false))
   }
@@ -45,7 +44,6 @@ export const useNetworkMonitor = () => {
       return
     }
     socketReconnect()
-    console.log('b')
     networkOnlineNotification.open()
     dispatch(setOnline(true))
   }

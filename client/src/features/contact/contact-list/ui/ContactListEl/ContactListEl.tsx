@@ -22,7 +22,7 @@ export const ContactListEl = ({ contactData }: { contactData: DbContactType }) =
       title={contactData.username}
       showBadge={false}
       description={getContactDescription(contactData)}
-      isDescriptionAccent={true} /// TODO ONLINE
+      isDescriptionAccent={Boolean(contactData.online)}
       descriptionNode={
         contactData.interactionType !== 'invite-accepted' && <ContactInvitationControlBtns contactData={contactData} />
       }

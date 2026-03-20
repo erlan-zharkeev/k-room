@@ -8,14 +8,24 @@ export const useMessage = () => {
     return await (db.messages.toArray() as Promise<DbMessageType[]>)
   }, []) ?? []
 
+  const isMessageExist = (id: string) => Boolean(messages?.some(c => c.id === id))
+
+  const getMessageById = (id: string) => messages.find((message) => message.id === id)
+
+  const putMessage = async (payload: DbMessageType) => await db.messages.put(payload)
+
+  const updateMessage = async (id: string, patch: Partial<DbMessageType>) => {
+    await db.messages.update(id, patch)
+  }
+
+  const reset = () => db.messages.clear()
+
   return {
     messages,
-    isMessageExist: (id: string) => Boolean(messages?.some(c => c.id === id)),
-    getMessageById: (id: string) => messages.find((message) => message.id === id),
-    putMessage: async (payload: DbMessageType) => await db.messages.put(payload),
-    updateMessage: async (id: string, patch: Partial<DbMessageType>) => {
-      await db.messages.update(id, patch)
-    },
-    reset: () => db.messages.clear()
+    isMessageExist,
+    getMessageById,
+    putMessage,
+    updateMessage,
+    reset
   }
 }

@@ -1,4 +1,4 @@
-import { IChatRoom } from 'common-types'
+import { IChatRoom, IMessage } from 'common-types'
 
 export const getChatName = (room: IChatRoom | undefined) => {
   if (room === undefined) return ''
@@ -11,6 +11,7 @@ export const chatRoomLastMessageBody = (chatRoom: IChatRoom): string => {
   return messages[messages.length - 1]?.body ?? ''
 }
 
-export const chatRoomUnreadMessagesCount = (chatRoom: IChatRoom) => {
-  return chatRoom.messages.filter((message) => !message.isSelf && message.status === 'delivered').length ?? 0
+export const chatRoomUnreadMessagesCount = (chatRoom: IChatRoom, messages: IMessage[]) => {
+  const roomMessageIds = new Set(chatRoom.messages)
+  return messages.filter((message) => roomMessageIds.has(message.id) && !message.isSelf && message.status === 'delivered').length
 }

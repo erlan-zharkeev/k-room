@@ -52,7 +52,6 @@ export const useApiInterсeptor = () => {
 
       switch (status) {
         case StatusEnum.NotAuth: {
-          console.log('trying to navigate')
           // silent = true
           // resetStores()
           // const isOnMain = location.pathname === RouteNamesEnum.Main

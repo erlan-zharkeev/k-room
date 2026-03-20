@@ -20,7 +20,8 @@ export const usePushMessage = () => {
     const { message, roomId } = payload
     const incomeMessageNotification = getNotification({
       message: MessageNotification(message),
-      messageType: 'info'
+      messageType: 'info',
+      placement: 'topRight'
     })
     incomeMessageNotification.open()
     openBrowserNotification({ message, icon: getRoomById(roomId)?.avatarId })
@@ -39,7 +40,6 @@ export const usePushMessage = () => {
       addMessage(roomId, message)
     }
 
-    console.log('[message/delivery] messageId', payload.message.id)
     // TODO Do scroll to bottom
     notifyIncomeMessage(payload)
   }

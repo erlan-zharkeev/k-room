@@ -5,6 +5,7 @@ import { Badge } from 'antd'
 import { useChatRoomSelect } from 'src/features/chat-room/select-chat-room'
 
 import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
+import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
 
 import { AppScrollContainer, AppText } from 'src/shared/ui'
@@ -12,6 +13,7 @@ import { chatRoomUnreadMessagesCount } from 'src/shared/utils'
 
 export const ChatRoomList = () => {
   const { chatRooms } = useChatRoom()
+  const { messages } = useMessage()
   const { selectedChatRoomId } = useSettings()
   const { selectChatRoomById } = useChatRoomSelect()
 
@@ -31,8 +33,8 @@ export const ChatRoomList = () => {
             key={chatRoom.id}
           >
             <ChatRoomPreview room={chatRoom} isRoomSelected={chatRoom.id === selectedChatRoomId} />
-            {Boolean(chatRoomUnreadMessagesCount(chatRoom)) && (
-              <Badge color="var(--accent)" count={chatRoomUnreadMessagesCount(chatRoom)} offset={[-5, 0]} />
+            {Boolean(chatRoomUnreadMessagesCount(chatRoom, messages)) && (
+              <Badge color="var(--accent)" count={chatRoomUnreadMessagesCount(chatRoom, messages)} offset={[-5, 0]} />
             )}
           </div>
         ))}

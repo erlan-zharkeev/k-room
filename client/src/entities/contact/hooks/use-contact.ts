@@ -21,15 +21,23 @@ export const useContact = () => {
     return result
   }
 
+  const isContactExist = (id: string) => Boolean(contacts?.some(c => c.id === id))
+
+  const putContact = async (payload: DbContactType) => await db.contacts.put(payload)
+
+  const updateContact = async (id: string, patch: Partial<DbContactType>) => {
+    await db.contacts.update(id, patch)
+  }
+
+  const reset = () => db.contacts.clear()
+
   return {
     contacts,
     contactInvitationsQuantity: contacts?.filter(c => c.interactionType === 'invite-received').length ?? 0,
-    isContactExist: (id: string) => Boolean(contacts?.some(c => c.id === id)),
+    isContactExist,
     getContactByIds,
-    putContact: async (payload: DbContactType) => await db.contacts.put(payload),
-    updateContact: async (id: string, patch: Partial<DbContactType>) => {
-      await db.contacts.update(id, patch)
-    },
-    reset: () => db.contacts.clear()
+    putContact,
+    updateContact,
+    reset
   }
 }
