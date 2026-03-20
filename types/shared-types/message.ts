@@ -43,11 +43,11 @@ export interface IMessage {
 
 export interface IDBMessage extends IMessage {
   _id: string;
-  usersMetaData: Array<unknown>;
+  usersMetaData: IMessageMetaData[];
 }
 
 export interface IMessageSchema
   extends Omit<IMessage, "id" | "tempId" | "isSelf" | "status"> {
   _id?: string;
-  usersMetaData?: Array<unknown>;
+  usersMetaData?: IMessageMetaData[];
 }

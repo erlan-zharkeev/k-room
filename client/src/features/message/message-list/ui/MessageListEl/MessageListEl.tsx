@@ -1,5 +1,7 @@
 import './style.scss'
 
+import { RefObject } from 'react'
+
 import { isAutoMessage } from 'src/features/message/lib'
 import { MessageBody } from 'src/features/message/message-body'
 import { MessageMenu } from 'src/features/message/message-menu'
@@ -9,7 +11,7 @@ import { useUser } from 'src/entities/user'
 
 import { locationModifier } from '../../lib'
 
-export const MessageListEl = ({ id }: { id: string }) => {
+export const MessageListEl = ({ id, setRef }: { id: string; setRef?: (id: string) => RefObject<HTMLDivElement> }) => {
   const { getMessageById } = useMessage()
   const message = getMessageById(id)
   const { id: userId } = useUser()
@@ -19,7 +21,7 @@ export const MessageListEl = ({ id }: { id: string }) => {
     <div
       key={message.id}
       className={`message-list-el message-list-el--${locationModifier(message.authorId, userId)}`}
-      // ref={setRef(message.id)}
+      ref={setRef?.(message.id)}
     >
       <div className="message-list-el__body-with-settings">
         {isAutoMessage(message) ? (

@@ -1,71 +1,76 @@
-import { useEffect, useState } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 
-import { IChatRoom, IEventChangeMessageStatus, IMessage, SocketActionsType } from 'common-types'
-import moment from 'moment'
+import { IChatRoom, IEventChangeMessageStatus, SocketActionsType } from 'common-types'
 import useDynamicRefs from 'use-dynamic-refs'
+
+import { useMessage } from 'src/entities/message'
 
 import { socket } from 'src/shared/api'
 import { useTimeout } from 'src/shared/lib'
-import { generateUUIDv4 } from 'src/shared/utils'
+
+import { MESSAGE_LIST_OBSERVER_BIND_DELAY } from '../config'
+
+type MessageElementRef = MutableRefObject<HTMLDivElement | null>
+type DynamicRefsTuple = [(id: string) => MessageElementRef | undefined, (id: string) => (instance: HTMLDivElement | null) => void]
 
 export const useMessageList = (selectedChatRoom: IChatRoom) => {
-  // const [messages, setMessages] = useState<IMessage[]>([])
-  const [getRef, setRef] = useDynamicRefs() as any
-  // const { startTimeout } = useTimeout()
+  const [getRef, setRef] = useDynamicRefs() as unknown as DynamicRefsTuple
+  const { startTimeout } = useTimeout()
+  const { getMessageById } = useMessage()
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   useEffect(() => {
-    // injectDateToMessages()
-    // startTimeout(() => setRefToMessages(), 1500)
+    startTimeout(() => setRefToMessages(), MESSAGE_LIST_OBSERVER_BIND_DELAY)
+
+    return () => {
+      observerRef.current?.disconnect()
+    }
   }, [selectedChatRoom])
 
-  const observerCallback = (entries: any[]) => {
-    // entries.forEach((entry: any) => {
-    //   if (!entry.isIntersecting || !selectedChatRoom) return
-    //   const messageId = entry.target.getAttribute('id')
-    //   const messageRead = Boolean(entry.target.querySelector('.message--read'))
-    //   if (messageId.includes('time') || messageRead) return
-    //   const payload: IEventChangeMessageStatus = {
-    //     roomId: selectedChatRoom.id,
-    //     messageId,
-    //     status: 'read'
-    //   }
-    //   socket.emit<SocketActionsType>('change-message-status', payload)
-    // })
+  const observerCallback = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || !selectedChatRoom) return
+
+      const messageId = entry.target.getAttribute('id')
+      if (!messageId) return
+
+      const message = getMessageById(messageId)
+      if (!message) return
+
+      const messageRead = message?.status === 'read'
+      const isSelfMessage = Boolean(message?.isSelf)
+
+      if (!messageId || messageRead || isSelfMessage) return
+
+      const payload: IEventChangeMessageStatus = {
+        roomId: selectedChatRoom.id,
+        messageId,
+        status: 'read'
+      }
+
+      socket.emit<SocketActionsType>('change-message-status', payload)
+    })
   }
 
-  // const observer = new IntersectionObserver(observerCallback, { threshold: 0.5 })
+  const getObserver = () => {
+    if (!observerRef.current) {
+      observerRef.current = new IntersectionObserver(observerCallback, { threshold: 0.5 })
+    }
+
+    return observerRef.current
+  }
 
   const setRefToMessages = () => {
-    // selectedChatRoom?.messages.forEach((message) => {
-    //   /** Use only strict validation without type casting */
-    //   if (message.isSelf ?? message.isSelf === undefined) return
-    //   const el = getRef(message.id)
-    //   if (!el.current) return
-    //   el.current.setAttribute('id', message.id)
-    //   observer.observe(el.current)
-    // })
-  }
+    const observer = getObserver()
 
-  // const injectDateToMessages = () => {
-  //   let lastDate = ''
-  //   const updatedMessagesWithDates: IMessage[] = []
-  //   selectedChatRoom?.messages.forEach((message) => {
-  //     const messageDate = moment(Number(message.createdAt)).format('LL').split(',')[0]
-  //     if (messageDate !== lastDate && message.authorName !== 'system') {
-  //       lastDate = messageDate
-  //       const dateMessage: IMessage = {
-  //         id: `${generateUUIDv4()}-time`,
-  //         authorName: 'time',
-  //         authorId: 'time',
-  //         body: lastDate,
-  //         status: 'none'
-  //       }
-  //       updatedMessagesWithDates.push(dateMessage)
-  //     }
-  //     updatedMessagesWithDates.push(message)
-  //   })
-  //   setMessages(updatedMessagesWithDates)
-  // }
+    selectedChatRoom?.messages.forEach((messageId) => {
+      const el = getRef(messageId)
+      if (!el?.current) return
+
+      el.current.setAttribute('id', messageId)
+      observer.observe(el.current)
+    })
+  }
 
   return { setRef }
 }

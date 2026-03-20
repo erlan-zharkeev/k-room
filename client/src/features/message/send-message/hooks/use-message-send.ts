@@ -56,6 +56,7 @@ export const useMessageSend = () => {
       authorId: id,
       authorName: username,
       id: generateUUIDv4(),
+      isSelf: true,
       createdAt: String(Date.now()),
       status: 'sending',
       body: messageInputData?.body ?? '',
