@@ -6,8 +6,32 @@ const ERLAN_ID = USER_FIXTURES.find(({ username }) => username === 'erlan')?.id 
 const TOLIK_ID = USER_FIXTURES.find(({ username }) => username === 'tolik')?.id ?? ''
 
 const MESSAGE_COUNT = 100
-const MESSAGE_INTERVAL_MS = 1000 * 60 * 7
 const CONTACT_INTERACTION = 'invite-accepted'
+const DAY_IN_MS = 1000 * 60 * 60 * 24
+const HOUR_IN_MS = 1000 * 60 * 60
+
+const MESSAGE_TEMPLATES = [
+  'Are you already there?',
+  'Yes, I just arrived. How about you?',
+  'I am on the way. I will be there in about twenty minutes.',
+  'Alright, I will grab a coffee and take the table by the window.',
+  'Nice. Did you review yesterday\'s call notes?',
+  'Yes, I wrote down a few points about the chat flow.',
+  'The main thing left is proper paginated message loading.',
+  'Agreed. We also need to preserve scroll position per room.',
+  'I am thinking about storing firstVisibleItemId for that.',
+  'That sounds better than relying on raw scrollTop.',
+  'Then I will take the client side and you handle the server?',
+  'Works for me. I will set up the contract and the beforeCreatedAt cursor.',
+  'Great. We should also verify the reopen-room scenario.',
+  'Yes, especially when the room is already selected on page load.',
+  'After that we can properly test the virtualized list.',
+  'And we should prepare realistic fixtures instead of placeholder text.',
+  'Let us spread the conversation across several days so the date separators are obvious.',
+  'Exactly. That will also make the upward loading behavior easier to verify.',
+  'Alright, let us sync again in the evening.',
+  'Sounds good. I will send an update as soon as my part is done.'
+]
 
 const buildFixtureMessageId = (idx: number) => `fixture-erlan-tolik-${String(idx).padStart(3, '0')}`
 
@@ -15,13 +39,21 @@ const buildFixtureMessage = (idx: number) => {
   const isErlanAuthor = idx % 2 !== 0
   const authorId = isErlanAuthor ? ERLAN_ID : TOLIK_ID
   const authorName = isErlanAuthor ? 'erlan' : 'tolik'
-  const createdAt = String(Date.now() - (MESSAGE_COUNT - idx) * MESSAGE_INTERVAL_MS)
+  const dayOffset = Math.floor((idx - 1) / 20)
+  const messageOffsetInDay = (idx - 1) % 20
+  const createdAt = String(
+    Date.now()
+    - (4 - dayOffset) * DAY_IN_MS
+    + (9 + Math.floor(messageOffsetInDay / 2)) * HOUR_IN_MS
+    + (messageOffsetInDay % 2) * 1000 * 60 * 18
+  )
+  const body = MESSAGE_TEMPLATES[(idx - 1) % MESSAGE_TEMPLATES.length]
 
   return {
     _id: buildFixtureMessageId(idx),
     authorId,
     authorName,
-    body: `Fixture message ${idx} between erlan and tolik`,
+    body,
     createdAt,
     reactions: [],
     images: [],
@@ -96,13 +128,11 @@ export const loadDialogFixtures = async () => {
 
   const fixtureMessages = Array.from({ length: MESSAGE_COUNT }, (_, idx) => buildFixtureMessage(idx + 1))
   const fixtureMessageIds = fixtureMessages.map(({ _id }) => _id)
-  const existingMessages = await MessageModel.find({ _id: { $in: fixtureMessageIds } }).select('_id').lean()
-  const existingMessageIds = new Set(existingMessages.map(({ _id }) => String(_id)))
-  const missingMessages = fixtureMessages.filter(({ _id }) => !existingMessageIds.has(_id))
-
-  if (missingMessages.length) {
-    await MessageModel.insertMany(missingMessages, { ordered: true })
-  }
+  await Promise.all(
+    fixtureMessages.map(async (message) => {
+      await MessageModel.updateOne({ _id: message._id }, message, { upsert: true })
+    })
+  )
 
   const roomMessageIds = new Set((room.messages ?? []).map((id) => String(id)))
   const missingRoomMessageIds = fixtureMessageIds.filter((id) => !roomMessageIds.has(id))

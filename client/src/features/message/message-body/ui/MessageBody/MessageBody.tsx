@@ -1,7 +1,4 @@
 import './style.scss'
-
-import { useChatRoom } from 'src/entities/chat-room'
-
 import { AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
@@ -12,8 +9,10 @@ import { RepliedMessage } from '../RepliedMessage/RepliedMessage'
 
 import type { IMessageBodyProps } from './types'
 
-export const MessageBody = ({ message }: IMessageBodyProps) => {
-  const { isSelectedRoomPrivate } = useChatRoom()
+export const MessageBody = ({
+  message,
+  isSelectedRoomPrivate = false
+}: IMessageBodyProps & { isSelectedRoomPrivate?: boolean }) => {
   const showAuthorName = !isSelectedRoomPrivate && !message.isSelf
 
   const className = createClassNameWithModifiers({ rootClass: 'message-body', modifiers: [message.status] })

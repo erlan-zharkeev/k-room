@@ -6,9 +6,14 @@ export type ContentTabType = 'info' | AsideBarButtonNameType
 
 export type HiddenNotificationType = 'audio-context'
 
+export interface IMessageListScrollState {
+  firstVisibleItemId: string
+}
+
 export interface IUserSetting {
   selectedContentTab: ContentTabType
   selectedChatRoomId: string
+  messageScrollByRoom: Record<string, IMessageListScrollState>
   showNotification: boolean
   theme: ThemeType
   showTooltips: boolean

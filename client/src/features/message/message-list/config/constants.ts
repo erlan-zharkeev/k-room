@@ -1,2 +1,1 @@
-export const MESSAGE_LIST_OBSERVER_BIND_DELAY = 1500
-// TODO remove after Virtuoso integration is verified
+export const MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS = 300

@@ -1,12 +1,13 @@
 @use '~/global/index' as *;
 
-.aside-bar {
+.aside-bar.widget-wrapper {
   $aside-bar-width: 50px;
 
   position: relative;
   width: $aside-bar-width;
   min-width: $aside-bar-width;
   padding: 12px 0;
+  overflow: visible;
 
   @include nm-outset-shadow;
 
