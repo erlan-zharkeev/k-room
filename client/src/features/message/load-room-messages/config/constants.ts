@@ -1,0 +1,1 @@
+export const ROOM_MESSAGES_PAGE_LIMIT = 30

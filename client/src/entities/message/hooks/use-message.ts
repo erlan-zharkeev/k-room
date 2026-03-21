@@ -14,6 +14,10 @@ export const useMessage = () => {
 
   const putMessage = async (payload: DbMessageType) => await db.messages.put(payload)
 
+  const bulkPutMessages = async (payload: DbMessageType[]) => {
+    await db.messages.bulkPut(payload)
+  }
+
   const updateMessage = async (id: string, patch: Partial<DbMessageType>) => {
     await db.messages.update(id, patch)
   }
@@ -25,6 +29,7 @@ export const useMessage = () => {
     isMessageExist,
     getMessageById,
     putMessage,
+    bulkPutMessages,
     updateMessage,
     reset
   }

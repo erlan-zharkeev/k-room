@@ -1,7 +1,5 @@
 import './style.scss'
 
-import { isAutoMessage } from 'src/features/message/lib'
-
 import { useChatRoom } from 'src/entities/chat-room'
 
 import { AppText } from 'src/shared/ui'
@@ -16,7 +14,7 @@ import type { IMessageBodyProps } from './types'
 
 export const MessageBody = ({ message }: IMessageBodyProps) => {
   const { isSelectedRoomPrivate } = useChatRoom()
-  const showAuthorName = !isSelectedRoomPrivate && !message.isSelf && !isAutoMessage(message)
+  const showAuthorName = !isSelectedRoomPrivate && !message.isSelf
 
   const className = createClassNameWithModifiers({ rootClass: 'message-body', modifiers: [message.status] })
 

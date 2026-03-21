@@ -1,7 +1,6 @@
 import { IImageObject } from ".";
 export declare const MESSAGE_STATUS: readonly ["sending", "undelivered", "delivered", "read", "none"];
 export type MessageStatusType = (typeof MESSAGE_STATUS)[number];
-export type AuthorType = "system" | "time";
 export interface IMessageMetaData {
     id: string;
     status: MessageStatusType;

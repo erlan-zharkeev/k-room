@@ -91,6 +91,17 @@ export interface IEventChangeMessageStatus {
   messageId: string;
   status: MessageStatusType;
 }
+export interface IEventLoadRoomMessages {
+  roomId: string;
+  limit: number;
+  beforeCreatedAt?: string;
+}
+export interface IEventRoomMessagesLoaded {
+  roomId: string;
+  messages: IMessage[];
+  hasMore: boolean;
+  nextBeforeCreatedAt?: string;
+}
 export interface IEventDeleteMessage {
   messageId: string;
   roomId: string;
@@ -186,6 +197,8 @@ export type SocketActionsType =
   | "delete-contact"
   | "client-typing"
   | "get-contact-typing-status"
+  | "load-room-messages"
+  | "room-messages-loaded"
   | "change-message-status"
   | "message-status-updated"
   | "contact-data-changed"

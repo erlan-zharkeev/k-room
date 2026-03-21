@@ -14,18 +14,16 @@ import { stopPropagation } from 'src/shared/utils'
 import { MessageReactions } from './../'
 
 export const MessageMenu = ({
-  userId,
   message,
   children
 }: {
-  userId: string
   message: IMessage
   children: React.ReactNode
 }) => {
   const { deleteMessageHandler } = useMessageDelete()
   const { forwardMessageHandler } = useMessageForward()
   const { replyMessageHandler } = useReplyMessage()
-  const { username } = useUser()
+  const { username, id: userId } = useUser()
   const { selectedChatRoomId } = useSettings()
 
   const items = [
@@ -33,7 +31,7 @@ export const MessageMenu = ({
       name: 'reactions',
       label: (
         <MessageReactions
-          userId={userId}
+          userId={userId ?? ''}
           username={username}
           selectedChatRoomId={selectedChatRoomId}
           message={message}

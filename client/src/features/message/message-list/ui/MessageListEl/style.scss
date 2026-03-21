@@ -3,21 +3,23 @@
     margin: 12px 0;
   }
 
+.message-list-el__body-with-settings {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-list-el--self {
+  justify-content: flex-end;
+
   .message-list-el__body-with-settings {
-    display: flex;
-    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 12px;
   }
+}
 
-  .message-list-el--time {
-    justify-content: center;
+.message-list-el--interlocutor {
+  .message-list-el__body-with-settings {
+    align-items: flex-start;
+    padding-right: 12px;
   }
-
-  .message-list-el--self {
-    justify-content: flex-end;
-  }
-
-  .message-list-el--interlocutor {
-    .message-list-el__body-with-settings {
-      align-items: flex-end;
-    }
-  }
+}

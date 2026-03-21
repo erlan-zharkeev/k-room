@@ -3,9 +3,6 @@ import { IImageObject } from ".";
 export const MESSAGE_STATUS = ["sending", "undelivered", "delivered", "read", "none"] as const;
 export type MessageStatusType = (typeof MESSAGE_STATUS)[number];
 
-
-export type AuthorType = "system" | "time";
-
 export interface IMessageMetaData {
   id: string;
   status: MessageStatusType;
