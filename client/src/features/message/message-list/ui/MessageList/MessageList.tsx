@@ -21,7 +21,7 @@ export const MessageList = ({ selectedChatRoom }: { selectedChatRoom: IChatRoom 
   const { isSelectedRoomPrivate } = useChatRoom()
   const { getMessageById } = useMessage()
   const { loadRoomMessages, getHasMoreMessages, getNextBeforeCreatedAt } = useLoadRoomMessages()
-  const { messageScrollByRoom } = useSettings()
+  const { isReady, messageScrollByRoom } = useSettings()
   const messages = useMemo(
     () =>
       selectedChatRoom.messages
@@ -86,6 +86,10 @@ export const MessageList = ({ selectedChatRoom }: { selectedChatRoom: IChatRoom 
         <NoMessagesPlaceholder messages={messages.map(({ id }) => id)} />
       </div>
     )
+  }
+
+  if (!isReady) {
+    return <div className="message-list" />
   }
 
   return (

@@ -1,3 +1,5 @@
+import { useLiveQuery } from 'dexie-react-hooks'
+
 import type { IUserSetting } from 'src/shared/config'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
 
@@ -7,9 +9,11 @@ export const settingsStore = dexieKeyValueStore<IUserSetting>(db.settings, 'sett
 
 export const useSettings = () => {
   const settings = settingsStore.use<IUserSetting>(DEFAULT_SETTINGS)
+  const settingsEntry = useLiveQuery(async () => await db.settings.get('settings'), [], null)
 
   return {
     ...settings,
+    isReady: settingsEntry !== null,
     isThemeDark: settings.theme === 'dark',
     showAsidePanel: !FULL_CONTENT_ELEMENTS.includes(settings.selectedContentTab),
 
