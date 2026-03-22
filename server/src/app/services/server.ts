@@ -3,9 +3,7 @@ import bodyParser from 'body-parser'
 import { RouteNamesEnum } from 'common-types'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import { initMediaBuckets } from 'entities/media'
 import express from 'express'
-import { loadFixtures } from 'features/fixtures'
 import https from 'https'
 import methodOverride from 'method-override'
 import { ENV } from 'shared-config'
@@ -26,8 +24,6 @@ const server = https.createServer(httpsOptions, app)
 
 const run = async () => {
   await initDataBase()
-  initMediaBuckets()
-  loadFixtures()
   const io = initIO(server)
   setIO(io)
   server.listen(ENV.SERVER_PORT, () => {
@@ -35,4 +31,17 @@ const run = async () => {
   })
 }
 
-run()
+process.on('unhandledRejection', (error) => {
+  log.error('-Unhandled rejection')
+  log.error(String(error))
+})
+
+process.on('uncaughtException', (error) => {
+  log.error('-Uncaught exception')
+  log.error(String(error))
+})
+
+run().catch((error) => {
+  log.error('-Server startup failed')
+  log.error(String(error))
+})
