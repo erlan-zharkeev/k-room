@@ -1,6 +1,5 @@
 import './style.scss'
 
-import { useChatRoom } from 'src/entities/chat-room'
 import { useSystem } from 'src/entities/system'
 
 import { AppDropdown, AppText, AppButton } from 'src/shared/ui'

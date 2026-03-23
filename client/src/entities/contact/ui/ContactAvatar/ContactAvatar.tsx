@@ -1,8 +1,7 @@
+import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
 
 import { AppAvatar } from 'src/shared/ui'
-
-import { useContact } from 'src/entities/contact'
 
 export const ContactAvatar = ({ id, showBadge = true }: { id: string; showBadge?: boolean }) => {
   const { contacts } = useContact()

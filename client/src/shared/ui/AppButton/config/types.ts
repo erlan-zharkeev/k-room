@@ -1,7 +1,7 @@
 import { UnknownCallback } from 'common-types'
 
-import { AppIconSize, AppIconName } from '../AppIcon'
 import type { ColorModifier } from '../../config'
+import type { AppIconName, AppIconSize } from '../AppIcon'
 
 export interface IButtonProps {
   htmltype?: 'button' | 'submit'

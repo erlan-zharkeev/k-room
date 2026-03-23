@@ -8,42 +8,41 @@
   border-radius: 8px;
   cursor: pointer;
   transition: height 0.1s ease-in;
+}
 
-  $self: &;
+.call-status-bar__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
 
-  &__wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    padding-right: 1rem;
-    padding-left: 1rem;
-  }
+.call-status-bar--hide {
+  height: 0;
+  margin-bottom: 0;
+  transition: height 0.1s ease-in;
+}
 
-  &--hide {
-    height: 0;
-    margin-bottom: 0;
-    transition: height 0.1s ease-in;
-    #{ $self }__wrapper {
-      display: none;
-    }
-  }
+.call-status-bar--hide .call-status-bar__wrapper {
+  display: none;
+}
 
-  &__info {
-    display: flex;
-    align-items: center;
-  }
+.call-status-bar__info {
+  display: flex;
+  align-items: center;
+}
 
-  &__avatar {
-    margin-right: 0.5rem;
-  }
+.call-status-bar__avatar {
+  margin-right: 0.5rem;
+}
 
-  &__type {
-    color: var(--text);
-  }
+.call-status-bar__type {
+  color: var(--text);
+}
 
-  &__interlocutor-name {
-    margin-right: 1rem;
-    color: var(--text);
-  }
+.call-status-bar__interlocutor-name {
+  margin-right: 1rem;
+  color: var(--text);
 }

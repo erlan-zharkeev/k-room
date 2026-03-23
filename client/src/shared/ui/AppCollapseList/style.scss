@@ -1,61 +1,57 @@
 @use '~/global/index' as *;
 
-.app-collapse-list {
-  .ant-badge {
-    width: 100%;
-  }
+$transition-icon: 0.2s ease-in-out rotate;
+$transition-height: 0.2s ease-in-out height;
 
-  .app-collapse-list__element {
-    $transition-icon: 0.2s ease-in-out rotate;
-    $transition-height: 0.2s ease-in-out height;
+.app-collapse-list .ant-badge {
+  width: 100%;
+}
 
-    width: 100%;
-    margin-top: 8px;
-    padding: 16px;
-    overflow: hidden;
-    background: var(--dark-gray-transparent-3);
-    border-radius: 8px;
+.app-collapse-list__element {
+  width: 100%;
+  margin-top: 8px;
+  padding: 16px;
+  overflow: hidden;
+  background: var(--dark-gray-transparent-3);
+  border-radius: 8px;
+}
 
-    &:hover {
-      cursor: pointer;
-    }
+.app-collapse-list__element:hover {
+  cursor: pointer;
+}
 
-    &.app-collapse-list__element--open {
-      .app-collapse__chevron-icon {
-        transition: $transition-icon;
-        rotate: 90deg;
-      }
+.app-collapse-list__element.app-collapse-list__element--open .app-collapse__chevron-icon {
+  transition: $transition-icon;
+  rotate: 90deg;
+}
 
-      .app-collapse-list__element-content {
-        transition: $transition-height;
-      }
-    }
+.app-collapse-list__element.app-collapse-list__element--open .app-collapse-list__element-content {
+  transition: $transition-height;
+}
 
-    .app-collapse-list__element-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.app-collapse-list__element-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .app-collapse-list__element-content {
-      height: 0;
-      padding-right: 24px;
-      transition: $transition-height;
-    }
+.app-collapse-list__element-content {
+  height: 0;
+  padding-right: 24px;
+  transition: $transition-height;
+}
 
-    .app-collapse-list__element-content-body {
-      padding-top: 8px;
-    }
+.app-collapse-list__element-content-body {
+  padding-top: 8px;
+}
 
-    .app-collapse-list__element-chevron-icon {
-      margin-left: 8px;
-      transition: $transition-icon;
-      rotate: -90deg;
-    }
+.app-collapse-list__element-chevron-icon {
+  margin-left: 8px;
+  transition: $transition-icon;
+  rotate: -90deg;
+}
 
-    .app-collapse-list__element-header-right-side {
-      display: flex;
-      align-items: center;
-    }
-  }
+.app-collapse-list__element-header-right-side {
+  display: flex;
+  align-items: center;
 }

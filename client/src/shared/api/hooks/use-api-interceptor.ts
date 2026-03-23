@@ -1,7 +1,6 @@
 import { AxiosError } from 'axios'
-import { StatusEnum, RouteNamesEnum } from 'common-types'
+import { StatusEnum } from 'common-types'
 import { useDispatch } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
 
@@ -31,12 +30,10 @@ const extractErrorPayload = async (e: AxiosError) => {
 }
 
 export const useApiInterсeptor = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
   const settings = useSettings()
   const notifications = useNotification()
   const dispatch = useDispatch()
-  const { reset: resetStores } = useResetAllStores(dispatch)
+  useResetAllStores(dispatch)
 
   const interceptError = async (e: unknown) => {
     if (e instanceof AxiosError) {

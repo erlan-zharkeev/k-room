@@ -41,37 +41,37 @@
 
 .app-button--small {
   height: var(--small-ui-height);
+}
 
-  span {
-    font-size: 12px;
-  }
+.app-button--small span {
+  font-size: 12px;
 }
 
 .app-button:hover:not(.app-button--hoverless) {
   border-color: var(--accent);
+}
 
-  button,
-  span,
-  svg {
-    color: var(--accent);
-  }
+.app-button:hover:not(.app-button--hoverless) button,
+.app-button:hover:not(.app-button--hoverless) span,
+.app-button:hover:not(.app-button--hoverless) svg {
+  color: var(--accent);
 }
 
 .app-button--borderless {
   border: none;
+}
 
-  .app-icon {
-    padding-bottom: 0;
-  }
+.app-button--borderless .app-icon {
+  padding-bottom: 0;
 }
 
 .app-button--loading {
   border-color: var(--accent);
   @include disabled;
+}
 
-  button {
-    color: var(--accent);
-  }
+.app-button--loading button {
+  color: var(--accent);
 }
 
 .app-button--disabled {
@@ -80,41 +80,37 @@
 
 .app-button--accent-color {
   border-color: var(--accent);
+}
 
-  button,
-  span {
-    color: var(--accent);
-  }
+.app-button--accent-color button,
+.app-button--accent-color span {
+  color: var(--accent);
 }
 
 .app-button--error-color {
   border-color: var(--error);
+}
 
-  button,
-  span {
-    color: var(--error);
-  }
+.app-button--error-color button,
+.app-button--error-color span {
+  color: var(--error);
 }
 
 .app-button--success-color {
   border-color: var(--success);
-
-  button,
-  span {
-    color: var(--success);
-  }
 }
 
-.app-button--info {
-  button:hover {
-    cursor: default;
-  }
+.app-button--success-color button,
+.app-button--success-color span {
+  color: var(--success);
+}
 
-  &.app-button--accent-color {
-    button,
-    span {
-      color: var(--main-bg);
-      background: var(--accent);
-    }
-  }
+.app-button--info button:hover {
+  cursor: default;
+}
+
+.app-button--info.app-button--accent-color button,
+.app-button--info.app-button--accent-color span {
+  color: var(--main-bg);
+  background: var(--accent);
 }

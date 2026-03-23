@@ -1,48 +1,46 @@
 @use '~/global/index' as *;
 
-.chat-room-settings-modal {
-  &__chat-name {
-    margin-top: 16px;
-  }
+.chat-room-settings-modal__chat-name {
+  margin-top: 16px;
+}
 
-  &__title {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 8px;
-  }
+.chat-room-settings-modal__title {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
 
-  &__control-button {
-    margin-left: auto;
-  }
+.chat-room-settings-modal__control-button {
+  margin-left: auto;
+}
 
-  &__image {
-    display: flex;
-    justify-content: center;
-  }
+.chat-room-settings-modal__image {
+  display: flex;
+  justify-content: center;
+}
 
-  &__members-list {
-    display: flex;
-    margin-top: 4px;
-  }
+.chat-room-settings-modal__members-list {
+  display: flex;
+  margin-top: 4px;
+}
 
-  &__member {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-right: 4px;
-  }
+.chat-room-settings-modal__member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
 
-  .button {
-    display: flex;
-    justify-content: flex-end;
-  }
+.chat-room-settings-modal .button {
+  display: flex;
+  justify-content: flex-end;
+}
 
-  .icon--image {
-    background-color: var(--dark-gray);
+.chat-room-settings-modal .icon--image {
+  background-color: var(--dark-gray);
+}
 
-    svg {
-      transform: scale(1.6);
-    }
-  }
+.chat-room-settings-modal .icon--image svg {
+  transform: scale(1.6);
 }

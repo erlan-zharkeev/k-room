@@ -21,7 +21,6 @@ export const useTimeout = () => {
 
   const delay = useCallback(async (ms: number): Promise<void> => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    // eslint-disable-next-line no-return-await
     return await new Promise((resolve) => {
       timeoutRef.current = setTimeout(() => {
         resolve()
@@ -30,7 +29,6 @@ export const useTimeout = () => {
   }, [])
 
   const appNextTick = async (): Promise<void> => {
-    // eslint-disable-next-line no-return-await
     return await new Promise((resolve) => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {

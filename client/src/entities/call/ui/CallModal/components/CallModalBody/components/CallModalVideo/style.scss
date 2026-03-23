@@ -1,0 +1,77 @@
+@use '~/global/index' as *;
+
+.call-modal-video {
+  position: absolute;
+  display: flex;
+  @include wh-100;
+
+  overflow: hidden;
+}
+
+.call-modal-video__interlocutor-avatar {
+  @include absolute-center;
+
+  top: calc(50% - 20px);
+}
+
+.call-modal-video__interlocutor-audio-status {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.3rem;
+  background-color: var(--main-bg);
+}
+
+.call-modal-video__settings {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+
+  span {
+    font-size: 1.5rem;
+  }
+
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+.call-modal-video__interlocutor-video {
+  position: absolute;
+  @include wh-100;
+
+  video {
+    @include wh-100;
+
+    object-fit: contain;
+  }
+}
+
+.call-modal-video__interlocutor-video .ant-avatar {
+  @include absolute-center;
+
+  width: 150px;
+  height: 150px;
+
+  img {
+    object-fit: cover;
+  }
+
+  svg {
+    width: 100px;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.call-modal-video__hide {
+  display: none;
+}

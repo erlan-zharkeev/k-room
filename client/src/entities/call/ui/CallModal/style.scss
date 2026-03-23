@@ -6,9 +6,9 @@
   z-index: 4;
   opacity: 1;
   transition: opacity 0.1s linear;
+}
 
-  &--collapse {
-    opacity: 0;
-    transition: opacity 0.1s linear;
-  }
+.draggable-resizable-modal--collapse {
+  opacity: 0;
+  transition: opacity 0.1s linear;
 }

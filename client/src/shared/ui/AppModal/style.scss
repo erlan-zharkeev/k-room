@@ -13,8 +13,8 @@
   min-width: 300px;
   max-height: calc(100vh - 24px);
   overflow: auto;
-  border-radius: 12px;
   background: var(--main-bg);
+  border-radius: 12px;
   box-shadow: 0 18px 60px rgb(0 0 0 / 35%);
 
   .app-modal__header {
@@ -26,8 +26,8 @@
 
   .app-modal__title {
     display: flex;
-    align-items: center;
     gap: 8px;
+    align-items: center;
   }
 
   .app-modal__content {

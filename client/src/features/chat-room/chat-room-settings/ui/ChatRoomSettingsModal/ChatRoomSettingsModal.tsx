@@ -5,8 +5,8 @@ import { Form } from 'antd'
 import { IEventUpdateChatRoom, SocketActionsType } from 'common-types'
 
 import { socket } from 'src/shared/api'
-import { useTypedSelector, useValidate } from 'src/shared/lib'
-import { AppAvatar, AppAvatarLoader, AppButton, AppInput } from 'src/shared/ui'
+import { useTypedSelector } from 'src/shared/lib'
+import { AppAvatar, AppAvatarLoader, AppButton } from 'src/shared/ui'
 // import { validateRules } from 'src/shared/utils'
 
 export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
@@ -40,9 +40,7 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
     })
   }
 
-  useEffect(() => {
-    // validate(form)
-  }, [])
+  useEffect(() => {}, [])
 
   const changeFormHandler = () => {
     // validate(form)

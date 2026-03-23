@@ -1,14 +1,4 @@
 import './style.scss'
-import { useState, useEffect } from 'react'
-
-import { List } from 'antd'
-import { ICall } from 'common-types'
-
-import { getCallLength, callDate, callTime } from 'src/features/call'
-
-import { useTypedSelector } from 'src/shared/lib'
-import { AppAvatar, AppIcon } from 'src/shared/ui'
-import { firstCharUpperCase } from 'src/shared/utils'
 
 export const Calls = () => {
   // const { list, currentCall } = useTypedSelector((state) => state.calls)

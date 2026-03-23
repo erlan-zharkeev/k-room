@@ -24,7 +24,7 @@ import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
 import { AppButton, AppAvatar } from 'src/shared/ui'
 import { firstCharUpperCase } from 'src/shared/utils'
 
-import { CallDots, CallModalVideo } from './elements'
+import { CallDots, CallModalVideo } from './components'
 import type { ICallModalBodyProps } from './types'
 
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
@@ -35,7 +35,7 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
 
   const { call } = useContext(AdditionalServiceContext)
 
-  const [counterValue, _, startCounter, stopCounter] = useCounter(1, false)
+  const [counterValue, startCounter, stopCounter] = useCounter(1, false)
 
   useEffect(() => {
     socket.on<SocketActionsType>('call-started-at', (timeStamp: EventCallStartedAtType) => {

@@ -96,7 +96,7 @@ export const AppForm = ({
   const renderField = (key: string, field: AppFormField) => {
     const commonProps = {
       name: key,
-      disabled: actionProcessing || disabled
+      disabled: actionProcessing ?? disabled
     }
 
     switch (field.inputType) {

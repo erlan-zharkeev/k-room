@@ -3,115 +3,99 @@
 .app-avatar {
   display: flex;
   align-items: center;
+}
 
-  .app-avatar__image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1px;
-    object-fit: cover;
-    overflow: hidden;
-    background: var(--main-bg);
-    border: solid 1px var(--text);
-    border-radius: 50%;
-  }
+.app-avatar__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  object-fit: cover;
+  overflow: hidden;
+  background: var(--main-bg);
+  border: solid 1px var(--text);
+  border-radius: 50%;
+}
 
-  &.app-avatar--square-shape {
-    .ant-image-mask {
-      border-radius: 0;
-    }
+.app-avatar.app-avatar--square-shape .ant-image-mask {
+  border-radius: 0;
+}
 
-    .app-avatar__image {
-      border-radius: 4px !important;
+.app-avatar.app-avatar--square-shape .app-avatar__image {
+  border-radius: 4px !important;
+}
 
-      .icon {
-        svg {
-          transform: scale(1.5);
-        }
-      }
-    }
-  }
+.app-avatar.app-avatar--square-shape .app-avatar__image .icon svg {
+  transform: scale(1.5);
+}
 
-  &.app-avatar--small {
-    .app-avatar__image {
-      $size: 32px;
+.app-avatar.app-avatar--small .app-avatar__image {
+  $size: 32px;
 
-      width: $size;
-      min-width: $size;
-      height: $size;
-      min-height: $size;
-    }
-  }
+  width: $size;
+  min-width: $size;
+  height: $size;
+  min-height: $size;
+}
 
-  &.app-avatar--medium {
-    .app-avatar__image {
-      $size: 64px;
+.app-avatar.app-avatar--medium .app-avatar__image {
+  $size: 64px;
 
-      width: $size;
-      min-width: $size;
-      height: $size;
-      min-height: $size;
-    }
-  }
+  width: $size;
+  min-width: $size;
+  height: $size;
+  min-height: $size;
+}
 
-  &.app-avatar--large {
-    .app-avatar__image {
-      $size: 100px;
+.app-avatar.app-avatar--large .app-avatar__image {
+  $size: 100px;
 
-      width: $size;
-      min-width: $size;
-      height: $size;
-      min-height: $size;
-    }
-  }
+  width: $size;
+  min-width: $size;
+  height: $size;
+  min-height: $size;
+}
 
-  &.app-avatar--ribbon-down {
-    .ant-ribbon {
-      top: 22px;
-    }
-  }
+.app-avatar.app-avatar--ribbon-down .ant-ribbon {
+  top: 22px;
+}
 
-  &.app-avatar--dot-down {
-    .ant-badge-dot.ant-scroll-number {
-      top: 28px;
-      left: 23px;
-    }
-  }
+.app-avatar.app-avatar--dot-down .ant-badge-dot.ant-scroll-number {
+  top: 28px;
+  left: 23px;
+}
 
-  &.app-avatar--borderless {
-    .app-avatar__image {
-      border: none;
-    }
-  }
+.app-avatar.app-avatar--borderless .app-avatar__image {
+  border: none;
+}
 
-  .icon {
-    @include wh-100;
+.app-avatar .icon {
+  @include wh-100;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    svg {
-      color: var(--text);
-      font-size: 4rem;
-    }
-  }
+.app-avatar .icon svg {
+  color: var(--text);
+  font-size: 4rem;
+}
 
-  .ant-ribbon {
-    top: -10px;
-    display: flex;
-    justify-content: center;
-    height: 14px;
-    padding: 0 4px;
-    font-size: 10px;
-    line-height: 16px;
-  }
+.app-avatar .ant-ribbon {
+  top: -10px;
+  display: flex;
+  justify-content: center;
+  height: 14px;
+  padding: 0 4px;
+  font-size: 10px;
+  line-height: 16px;
+}
 
-  .ant-ribbon-corner {
-    display: none;
-  }
+.app-avatar .ant-ribbon-corner {
+  display: none;
+}
 
-  .ant-image-mask {
-    border-radius: 50%;
-  }
+.app-avatar .ant-image-mask {
+  border-radius: 50%;
 }

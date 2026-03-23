@@ -3,14 +3,12 @@ import { useState } from 'react'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
 
-import { useTypedSelector } from 'src/shared/lib'
 import { AppInput } from 'src/shared/ui'
 
-import { ShortChatList } from './components/ShortChatList/ShortChatList'
+import { ShortChatList } from './components'
 
 export const ForwardMessageModal = ({ onClose }: { onClose: () => void }) => {
   const [searchString, setSearchString] = useState('')
-  const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)
   const { selectChatRoomById } = useChatRoomSelect()
 
   const clickChatHandler = (roomId: string) => {

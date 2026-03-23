@@ -1,9 +1,10 @@
+import './style.scss'
 import { useEffect } from 'react'
 
-import './style.scss'
 import { SelectDevice, useInputVideoDevice } from 'src/features/device'
 
 import { useSettings } from 'src/entities/settings'
+
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const VideoInputDeviceSelect = () => {

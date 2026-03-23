@@ -26,6 +26,12 @@ Relative imports are allowed only for local style files of the current component
 import './style.scss'
 ```
 
+Relative imports are also allowed for the current component's own internal `components` directory when those components are private implementation details of that parent component:
+
+```ts
+import { CallModalBody } from './components'
+```
+
 Barrel exports are an exception: in `index.ts` files, use relative `export` paths.
 
 ```ts
@@ -208,6 +214,25 @@ lib/transform-room-data.ts
 lib/get-message-group-date-label.ts
 ```
 
+5. If a component exists only to split one parent component and is not reused elsewhere, keep it inside that parent component in a `components` directory.
+
+Use:
+
+```text
+ForwardMessageModal/
+  components/
+    ShortChatList/
+      index.ts
+      ShortChatList.tsx
+      style.scss
+      config/
+        index.ts
+        types.ts
+  ForwardMessageModal.tsx
+```
+
+Do not lift such local split-only components to the feature root or neighboring public directories when they are only implementation details of one parent component.
+
 ## Class Name Rules
 
 1. When building BEM-style class names with modifiers, use `createClassNameWithModifiers`.
@@ -228,3 +253,52 @@ className={`message-list-el message-list-el--${message.isSelf ? 'self' : 'interl
 ```
 
 2. Manual `className` string concatenation is acceptable only for plain static class names without modifier-building logic.
+
+## Style Rules
+
+1. The project uses BEM naming for CSS classes.
+
+Use block, element, and modifier naming consistently:
+
+```scss
+.call-modal {}
+.call-modal__body {}
+.call-modal--collapse {}
+```
+
+2. Do not build BEM elements or modifiers in SCSS through `&__...` or `&--...`.
+
+Write full explicit selectors instead:
+
+```scss
+.call-modal {}
+
+.call-modal__body {}
+
+.call-modal--collapse {}
+```
+
+Do not use nested BEM construction like:
+
+```scss
+.call-modal {
+  &__body {}
+  &--collapse {}
+}
+```
+
+Pseudo-classes and similar state selectors like `&:hover` remain allowed.
+
+3. Nested selectors should be used sparingly.
+
+Allowed:
+- pseudo-classes and pseudo-elements such as `&:hover`, `&:focus`, `&::before`
+- local library overrides like `.ant-*` when they are scoped to the current block
+- shallow nesting for nearby contextual styling only
+
+Avoid:
+- deep class-in-class-in-class selector chains
+- styling one BEM class only through another BEM class wrapper
+- relying on DOM structure when an explicit class selector would be clearer
+
+As a rule of thumb, nesting should stay shallow. If styling starts depending on multiple nested class levels, rewrite it into explicit selectors.

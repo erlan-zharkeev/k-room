@@ -3,15 +3,14 @@ import { useState, useEffect } from 'react'
 
 import { Rnd } from 'react-rnd'
 
-import { CALL_MODAL_INITIAL_SIZE } from 'src/entities/call/config'
+import type { IModalOptions } from 'src/entities/call'
+import { CALL_MODAL_INITIAL_SIZE } from 'src/entities/call'
 import { useViewport } from 'src/entities/system'
 
 import { useTypedSelector } from 'src/shared/lib'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import type { IModalOptions } from '../../types'
-
-import { CallModalBody } from './elements'
+import { CallModalBody } from './components'
 
 export const CallModal = () => {
   const { viewPort } = useViewport()

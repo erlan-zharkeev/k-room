@@ -1,6 +1,8 @@
 import { RouteNamesEnum as R } from 'common-types'
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 
+import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router/config'
+
 import { CreateNewPassword } from 'src/pages/create-new-password'
 import { EmailConfirmation } from 'src/pages/email-confirmation'
 import { Login } from 'src/pages/login'
@@ -13,8 +15,6 @@ import { WaitEmailConfirm } from 'src/pages/wait-email-confirm'
 import { PageLayout } from 'src/widgets/page-layout'
 
 import { useSystem } from 'src/entities/system'
-
-import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router/config'
 
 const PrivateRoute = () => {
   const { auth } = useSystem()

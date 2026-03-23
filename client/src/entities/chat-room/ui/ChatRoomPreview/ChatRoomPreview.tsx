@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react'
 
 import { UnknownCallback } from 'common-types'
 
+import { isRoomPrivate } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
 import { useMessage } from 'src/entities/message'
 import { ProfileInfo } from 'src/entities/profile-info'
-import { isRoomPrivate } from 'src/entities/chat-room'
 
-import { FChatRoomType } from 'src/shared/config'
-import { BaseSizeModifier } from 'src/shared/ui'
+import type { FChatRoomType } from 'src/shared/config'
+import type { BaseSizeModifier } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomPreview = ({

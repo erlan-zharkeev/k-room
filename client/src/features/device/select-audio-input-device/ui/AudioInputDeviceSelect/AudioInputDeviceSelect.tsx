@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { SelectDevice, useInputAudioDevice } from 'src/features/device'
 
 import { useSettings } from 'src/entities/settings'
+
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AudioInputDeviceSelect = () => {

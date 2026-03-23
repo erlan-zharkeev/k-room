@@ -3,7 +3,9 @@ import './style.scss'
 import { useDispatch } from 'react-redux'
 
 import { MessageInput } from 'src/features/message'
+
 import { removeImageByNameFromMessageInputData, useSystem } from 'src/entities/system'
+
 import { AppImagePreview, AppModal } from 'src/shared/ui'
 
 export const MessageWithBindDataModal = ({

@@ -3,15 +3,13 @@ import { useState, useMemo } from 'react'
 
 import { useChatRoom } from 'src/entities/chat-room'
 
-import { useTypedSelector } from 'src/shared/lib'
-import { AppAvatar } from 'src/shared/ui'
+// import { AppAvatar } from 'src/shared/ui'
 
-import type { IShortChatListProps } from './types'
+import type { IShortChatListProps } from './config'
 
 export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
-  const { chatRooms } = useTypedSelector((state) => state.chatRooms)
+  const { chatRooms, selectedChatRoom } = useChatRoom()
   const [filteredRooms, setFilteredRooms] = useState(chatRooms)
-  const { selectedChatRoom } = useChatRoom()
 
   const filterList = () => {
     const selfFilteredRooms = chatRooms.filter((room) => room.id !== selectedChatRoom?.id)
@@ -33,13 +31,13 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
       <div className="short-chat-list__container">
         {filteredRooms.map((room) => (
           <div className="short-chat-list__item" key={room.id} onClick={() => clickChat(room.id)}>
-            <AppAvatar
+            {/* <AppAvatar
               stubIconName={room.multiple ? 'image-stub' : 'user-stub'}
               shape={room.multiple ? 'square-shape' : 'circle-shape'}
               showBadge={false}
               src={room.avatar}
               ribbon={true}
-            />
+            /> */}
             <span className="paragraph-text  short-chat-list__name">{room.chatName}</span>
           </div>
         ))}
