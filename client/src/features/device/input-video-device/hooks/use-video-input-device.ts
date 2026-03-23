@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
-import { showModal } from 'src/entities/system'
 
 import { AppIconName } from 'src/shared/ui'
 
@@ -108,12 +107,12 @@ export const useInputVideoDevice = () => {
   }
 
   useEffect(() => {
-    if (!showModal) {
+    return () => {
       const tracks = videoStream.current?.getTracks()
       tracks?.forEach((track) => track.stop())
       setShowVideo(false)
     }
-  }, [showModal])
+  }, [])
 
   useEffect(() => {
     if (videoInputDeviceList.length > 0) {

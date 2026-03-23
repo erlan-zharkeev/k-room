@@ -1,21 +1,14 @@
 import './style.scss'
 import { useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-
-import { AppDispatch } from 'src/app/store'
-
 import { useChatRoomSelect } from 'src/features/chat-room'
-
-import { closeModal } from 'src/entities/system'
 
 import { useTypedSelector } from 'src/shared/lib'
 import { AppInput } from 'src/shared/ui'
 
 import { ShortChatList } from './components/ShortChatList/ShortChatList'
 
-export const ForwardMessageModal = () => {
-  const dispatch = useDispatch<AppDispatch>()
+export const ForwardMessageModal = ({ onClose }: { onClose: () => void }) => {
   const [searchString, setSearchString] = useState('')
   const { message } = useTypedSelector((state) => state.system.contextMenu.contextClickedObject)
   const { selectChatRoomById } = useChatRoomSelect()
@@ -23,7 +16,7 @@ export const ForwardMessageModal = () => {
   const clickChatHandler = (roomId: string) => {
     selectChatRoomById(roomId)
     // dispatch(setRepliedMessage(message))
-    dispatch(closeModal())
+    onClose()
   }
 
   return (

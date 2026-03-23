@@ -1,5 +1,9 @@
 image: docker:20.10
 
+workflow:
+  rules:
+    - when: never
+
 stages:
   - publish-images
   # - deploy

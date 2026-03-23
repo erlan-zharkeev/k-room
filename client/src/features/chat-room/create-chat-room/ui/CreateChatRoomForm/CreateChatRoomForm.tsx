@@ -6,8 +6,8 @@ import { AppForm, AppText } from 'src/shared/ui'
 
 import { useCreateChatRoom } from '../../hooks'
 
-export const CreateChatRoomForm = () => {
-  const { isLoading, createChatRoom } = useCreateChatRoom()
+export const CreateChatRoomForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+  const { isLoading, createChatRoom } = useCreateChatRoom({ onSuccess })
   const {
     contactListToPick,
     pickedContactIds,

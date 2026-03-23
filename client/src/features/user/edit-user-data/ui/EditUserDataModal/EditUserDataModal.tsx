@@ -4,8 +4,8 @@ import './style.scss'
 
 import { AppForm } from 'src/shared/ui'
 
-export const EditUserDataModal = () => {
-  const { editUserData, isLoading, initialFormData } = useEditUserData()
+export const EditUserDataModal = ({ onSuccess }: { onSuccess?: () => void }) => {
+  const { editUserData, isLoading, initialFormData } = useEditUserData({ onSuccess })
 
   return (
     <div className="edit-user-data-modal">

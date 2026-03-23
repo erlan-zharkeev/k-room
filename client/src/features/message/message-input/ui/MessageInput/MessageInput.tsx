@@ -1,59 +1,71 @@
 import './style.scss'
 
+import { useState } from 'react'
+
 import { useContactTyping } from 'src/features/contact'
 import { EmojiDropdown } from 'src/features/emoji-dropdown'
-import { useMessageSend } from 'src/features/message'
-
-import { useChatRoom } from 'src/entities/chat-room'
+import { MessageWithBindDataModal, useMessageSend } from 'src/features/message'
 
 import { FileLoaderValueType } from 'src/shared/config'
 import { AppButton, AppForm } from 'src/shared/ui'
 
-export const MessageInput = () => {
-  const chatRoomData = useChatRoom()
-
-  if (!chatRoomData) return null
-
-  const { body, inputBodyRef, images, setBody, setEmoji, onSendMessageFormSubmitHandler, setImages } = useMessageSend()
-
+export const MessageInput = ({
+  roomId,
+  emitTypingStatus = true,
+  insideModal = false,
+  onSubmitSuccess
+}: {
+  roomId: string
+  emitTypingStatus?: boolean
+  insideModal?: boolean
+  onSubmitSuccess?: () => void
+}) => {
   const { sendUserTypingStatus, debouncedChangeTypeStatus } = useContactTyping()
+  const { body, inputBodyRef, images, setBody, setEmoji, onSendMessageFormSubmitHandler, setImages } = useMessageSend()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
-    <div className="message-input">
-      <AppForm
-        onSubmit={() => {
-          const roomId = chatRoomData.selectedChatRoom?.id as string
-          onSendMessageFormSubmitHandler(roomId)
-        }}
-        onBlur={() => {
-          sendUserTypingStatus(false)
-        }}
-        fields={{
-          images: {
-            multiple: true,
-            value: images,
-            inputType: 'file',
-            showPreview: false,
-            showTextLabel: false,
-            onChange: (fieldData) => {
-              setImages(fieldData.value as FileLoaderValueType)
+    <>
+      <div className="message-input">
+        <AppForm
+          onSubmit={() => {
+            onSendMessageFormSubmitHandler(roomId)
+            if (insideModal) onSubmitSuccess?.()
+          }}
+          onBlur={() => {
+            if (!emitTypingStatus) return
+            sendUserTypingStatus(false)
+          }}
+          fields={{
+            images: {
+              multiple: true,
+              value: images,
+              inputType: 'file',
+              showPreview: false,
+              showTextLabel: false,
+              onChange: (fieldData) => {
+                setImages(fieldData.value as FileLoaderValueType)
+                if (!insideModal) setIsModalOpen(true)
+              }
+            },
+            body: {
+              value: body,
+              inputType: 'text',
+              placeholder: 'Type message',
+              ref: inputBodyRef,
+              onChange: (e) => {
+                setBody(e.target.value as string)
+                if (!emitTypingStatus) return
+                debouncedChangeTypeStatus(false)
+              }
             }
-          },
-          body: {
-            value: body,
-            inputType: 'text',
-            placeholder: 'Type message',
-            ref: inputBodyRef,
-            onChange: (e) => {
-              setBody(e.target.value as string)
-              debouncedChangeTypeStatus(false)
-            }
-          }
-        }}
-      >
-        <EmojiDropdown setEmoji={setEmoji} />
-        <AppButton htmltype="submit" prefixIconName="send" borderless />
-      </AppForm>
-    </div>
+          }}
+        >
+          <EmojiDropdown setEmoji={setEmoji} />
+          <AppButton htmltype="submit" prefixIconName="send" borderless />
+        </AppForm>
+      </div>
+      {!insideModal && <MessageWithBindDataModal open={isModalOpen} onClose={() => setIsModalOpen(false)} roomId={roomId} />}
+    </>
   )
 }

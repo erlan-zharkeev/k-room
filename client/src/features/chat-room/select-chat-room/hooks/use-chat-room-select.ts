@@ -9,6 +9,10 @@ export const useChatRoomSelect = () => {
   const settings = useSettings()
   // const { scrollToBottom } = useChatRoomScroll()
 
+  const resetChatRoomSelection = () => {
+    selectChatWithAsideById('')
+  }
+
   const selectChatWithAsideById = (value?: string) => {
     if (value === undefined) return
     selectContentTab('chat-rooms')
@@ -22,5 +26,5 @@ export const useChatRoomSelect = () => {
     // scrollToBottom()
   }
 
-  return { selectChatRoomById, selectChatWithAsideById }
+  return { selectChatRoomById, selectChatWithAsideById, resetChatRoomSelection }
 }

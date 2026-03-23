@@ -12,12 +12,6 @@ export const CLICKED_OBJECT_INITIAL_STATE = {
   }
 }
 
-export const INITIAL_MODAL_DATA = {
-  title: '',
-  modalContentComponentName: null,
-  width: '320px'
-}
-
 export const MIN_SUPPORTED_WIDTH = 320
 
 export const MIN_SUPPORTED_HEIGHT = 575
@@ -55,9 +49,7 @@ export const INITIAL_SYSTEM_STORE: ISystemStore = {
   auth: 'loading',
   online: true,
   reconnecting: false,
-  showModal: false,
   contextMenu: INITIAL_CONTEXT_MENU,
-  modalData: INITIAL_MODAL_DATA,
   viewPort: INITIAL_VIEWPORT,
   hasInteracted: false,
   camPermission: undefined,

@@ -3,14 +3,13 @@ import { useRef } from 'react'
 import {
   IEventSendMessage,
   IMessage,
-  IImageObject,
   SocketActionsType
 } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { useAddMessage } from 'src/features/message/add-message'
 
-import { closeModal, resetRepliedMessage, showModal, updateMessageInputData, useSystem } from 'src/entities/system'
+import { resetRepliedMessage, updateMessageInputData, useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
@@ -22,17 +21,9 @@ export const useMessageSend = () => {
   const { addMessage } = useAddMessage()
 
   const { messageInputData, repliedMessageData } = useSystem()
+
   const inputBodyRef = useRef<HTMLInputElement>(null)
   const { id, username } = useUser()
-
-  const openSendMessageModal = () => {
-    dispatch(
-      showModal({
-        title: 'Send Message',
-        modalContentComponentName: 'message-with-bind-data-modal'
-      })
-    )
-  }
 
   const setBody = (body: string) => {
     dispatch(updateMessageInputData({ body }))
@@ -47,11 +38,10 @@ export const useMessageSend = () => {
   }
 
   const setImages = (imagesFiles: FileLoaderValueType) => {
-    dispatch(updateMessageInputData({ images: imagesFiles as IImageObject[] }))
-    openSendMessageModal()
+    dispatch(updateMessageInputData({ images: imagesFiles }))
   }
 
-  const onSendMessageFormSubmitHandler = (selectedChatRoomId: string) => {
+  const onSendMessageFormSubmitHandler = (roomId: string) => {
     const messageData: IMessage = {
       authorId: id,
       authorName: username,
@@ -66,16 +56,15 @@ export const useMessageSend = () => {
     }
 
     const payload: IEventSendMessage = {
-      roomId: selectedChatRoomId,
+      roomId,
       message: messageData
     }
 
     socket.emit<SocketActionsType>('send-message', payload)
-    addMessage(selectedChatRoomId, messageData)
+    addMessage(roomId, messageData)
     dispatch(resetRepliedMessage())
     dispatch(updateMessageInputData({ body: '', images: [] }))
     inputBodyRef.current?.blur()
-    dispatch(closeModal())
   }
 
   return {

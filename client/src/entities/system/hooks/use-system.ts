@@ -5,13 +5,11 @@ import appData from './../../../../package.json'
 export const useSystem = () => {
   const {
     auth,
-    showModal,
     online,
     hasInteracted,
     micPermission,
     camPermission,
     reconnecting,
-    modalData,
     contextMenu,
     viewPort,
     repliedMessageData,
@@ -20,14 +18,12 @@ export const useSystem = () => {
 
   return {
     auth,
-    showModal,
     online,
     appData,
     hasInteracted,
     micPermission,
     camPermission,
     reconnecting,
-    modalData,
     contextMenu,
     viewPort,
     repliedMessageData,

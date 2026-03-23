@@ -4,13 +4,11 @@ import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
 import { useNotification, NOTIFICATION_MESSAGE } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
-import { useSystem } from 'src/entities/system'
 
 import { AppIconName } from 'src/shared/ui'
 
 export const useInputAudioDevice = () => {
   const [audioInputDeviceList, setAudioInputDeviceList] = useState<MediaDeviceInfo[]>([])
-  const { showModal } = useSystem()
   const settings = useSettings()
   const [isMicLoading, setMicIsLoading] = useState(false)
   const [showMicGrade, setMicGrade] = useState(false)
@@ -122,12 +120,12 @@ export const useInputAudioDevice = () => {
   const volumeIndicator = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!showModal) {
+    return () => {
       const tracks = audioStream.current?.getTracks()
       tracks?.forEach((track) => track.stop())
       setMicGrade(false)
     }
-  }, [showModal])
+  }, [])
 
   useEffect(() => {
     if (audioInputDeviceList.length > 0) {

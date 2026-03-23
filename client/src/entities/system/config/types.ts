@@ -1,6 +1,4 @@
-import { IImageObject, IRepliedMessage, UnknownCallback } from 'common-types'
-
-import type { ModalContentComponentName } from 'src/widgets/modal'
+import { IImageObject, IRepliedMessage } from 'common-types'
 
 import { IContextMenu } from 'src/entities/context-menu'
 
@@ -15,22 +13,6 @@ export enum ViewPortWidthType {
   Phone = 576
 }
 
-export interface IModalBtn {
-  text: string
-  loader?: boolean
-  callback?: UnknownCallback
-}
-
-export interface IModalData {
-  width?: string
-  title?: string
-  modalContentComponentName?: ModalContentComponentName | null
-  textContent?: string
-  confirmBtn?: IModalBtn
-  cancelBtn?: IModalBtn
-  data?: unknown
-}
-
 export type AuthStatusType = 'authorized' | 'unauthorized' | 'loading'
 
 export interface IMessageInputData {
@@ -43,9 +25,7 @@ export interface ISystemStore {
   auth: AuthStatusType
   online: boolean
   reconnecting: boolean
-  showModal: boolean
   contextMenu: IContextMenu
-  modalData: IModalData
   viewPort: IViewPort
   hasInteracted: boolean
   camPermission?: PermissionState

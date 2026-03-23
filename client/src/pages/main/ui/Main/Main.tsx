@@ -3,7 +3,6 @@ import './style.scss'
 import { AsideBar } from 'src/widgets/aside-bar'
 import { BottomBar } from 'src/widgets/bottom-bar'
 import { CallStatusBar } from 'src/widgets/call-status-bar'
-import { Modal } from 'src/widgets/modal'
 import { TopBar } from 'src/widgets/top-bar'
 import { WorkspaceLayout } from 'src/widgets/workspace-layout'
 
@@ -45,7 +44,6 @@ export const Main = () => {
           </div>
         </div>
       </div>
-      <Modal />
       <CallModal />
     </>
   )

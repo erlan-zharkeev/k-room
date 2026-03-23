@@ -1,14 +1,15 @@
-import { useDispatch } from 'react-redux'
-
-import { showModal } from 'src/entities/system'
+import { useState } from 'react'
 
 export const useMessageForward = () => {
-  const dispatch = useDispatch()
+  const [isOpen, setIsOpen] = useState(false)
 
   const forwardMessageHandler = () => {
-    // dispatch(repliedMessageSetAsForward())
-    dispatch(showModal({ title: 'Forward message', modalContentComponentName: 'forward-message-modal' }))
+    setIsOpen(true)
   }
 
-  return { forwardMessageHandler }
+  const closeForwardMessageModal = () => {
+    setIsOpen(false)
+  }
+
+  return { isOpen, forwardMessageHandler, closeForwardMessageModal }
 }

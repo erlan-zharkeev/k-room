@@ -3,18 +3,13 @@ import { useState, useEffect } from 'react'
 
 import { Form } from 'antd'
 import { IEventUpdateChatRoom, SocketActionsType } from 'common-types'
-import { useDispatch } from 'react-redux'
-
-import { AppDispatch } from 'src/app/store'
-
-import { closeModal } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
 import { useTypedSelector, useValidate } from 'src/shared/lib'
 import { AppAvatar, AppAvatarLoader, AppButton, AppInput } from 'src/shared/ui'
 // import { validateRules } from 'src/shared/utils'
 
-export const ChatRoomSettingsModal = () => {
+export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
   const { chatRooms } = useTypedSelector((state) => state.chatRooms)
   const { selectedChatRoomId } = useTypedSelector((state) => state.settings)
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
@@ -24,7 +19,6 @@ export const ChatRoomSettingsModal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const isUserAuthor = chatRoomData?.authorId === id
 
-  const dispatch = useDispatch<AppDispatch>()
   const [form] = Form.useForm()
   // const [isValid, validate] = useValidate()
 
@@ -42,7 +36,7 @@ export const ChatRoomSettingsModal = () => {
     socket.emit<SocketActionsType>('update-chat-room', updatedValues)
     socket.on<SocketActionsType>('room-data-updated', () => {
       setIsLoading(false)
-      dispatch(closeModal())
+      onClose()
     })
   }
 
@@ -68,10 +62,6 @@ export const ChatRoomSettingsModal = () => {
         </div>
       </div>
     )
-  }
-
-  const closeModalHandler = () => {
-    dispatch(closeModal())
   }
 
   return (
@@ -111,7 +101,7 @@ export const ChatRoomSettingsModal = () => {
             <AppAvatar src={chatRoomData?.avatar} stubIconName="image-stub" showBadge={false} size="large" />
           </div>
           <Members />
-          <AppButton text="Close" onClick={closeModalHandler} loading={isLoading} />
+          <AppButton text="Close" onClick={onClose} loading={isLoading} />
         </div>
       )}
     </div>

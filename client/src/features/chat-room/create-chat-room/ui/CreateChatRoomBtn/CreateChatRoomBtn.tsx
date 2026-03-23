@@ -1,20 +1,18 @@
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
 
-import { showModal } from 'src/entities/system'
+import { AppButton, AppModal } from 'src/shared/ui'
 
-import { AppButton } from 'src/shared/ui'
+import { CreateChatRoomModal } from '../CreateChatRoomModal/CreateChatRoomModal'
 
 export const CreateChatRoomBtn = () => {
-  const dispatch = useDispatch()
+  const [isOpen, setIsOpen] = useState(false)
 
-  const createMultipleChat = () => {
-    dispatch(
-      showModal({
-        title: 'Create chat room',
-        modalContentComponentName: 'create-chat-room-modal'
-      })
-    )
-  }
-
-  return <AppButton text="Create chat" fill onClick={createMultipleChat} />
+  return (
+    <>
+      <AppButton text="Create chat" fill onClick={() => setIsOpen(true)} />
+      <AppModal title="Create chat room" open={isOpen} onClose={() => setIsOpen(false)}>
+        <CreateChatRoomModal onSuccess={() => setIsOpen(false)} />
+      </AppModal>
+    </>
+  )
 }

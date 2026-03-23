@@ -1,23 +1,19 @@
 import { useState } from 'react'
 
 import { MediaFileValueType, UserEndpointsEnum } from 'common-types'
-import { useDispatch } from 'react-redux'
 
 import { useLoadMedia } from 'src/features/media'
 
-import { closeModal } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { useApi } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'
 
-export const useEditUserData = () => {
+export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { username, avatarPath, update, id: userId } = useUser()
   const { loadMedia } = useLoadMedia()
 
   const { doRequest } = useApi()
-
-  const dispatch = useDispatch()
 
   const initialFormData = {
     username,
@@ -49,7 +45,7 @@ export const useEditUserData = () => {
       if (fileBuffer || resetAvatar) {
         loadMedia(`avatar.${userId}`)
       }
-      dispatch(closeModal())
+      onSuccess?.()
     } catch (error) {
       console.error('Error updating user data:', error)
     } finally {

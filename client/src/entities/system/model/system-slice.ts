@@ -4,14 +4,13 @@ import { IRepliedMessage } from 'common-types'
 import { type IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/entities/context-menu'
 
 import {
-  INITIAL_MODAL_DATA,
   INITIAL_VIEWPORT,
   INITIAL_SYSTEM_STORE,
   INITIAL_CONTEXT_MENU,
   CLICKED_OBJECT_INITIAL_STATE,
   INITIAL_REPLIED_MESSAGE_DATA
 } from '../config'
-import type { AuthStatusType, IMessageInputData, IModalData, IViewPort } from '../config/types'
+import type { AuthStatusType, IMessageInputData, IViewPort } from '../config/types'
 
 export const systemSlice = createSlice({
   name: 'system',
@@ -25,7 +24,6 @@ export const systemSlice = createSlice({
     },
     resetSystemStore: (state) => {
       state.reconnecting = false
-      state.showModal = false
       state.contextMenu = {
         name: '',
         coord: {
@@ -34,7 +32,6 @@ export const systemSlice = createSlice({
         },
         contextClickedObject: CLICKED_OBJECT_INITIAL_STATE
       }
-      state.modalData = INITIAL_MODAL_DATA
       state.viewPort = INITIAL_VIEWPORT
     },
     updateCamPermission: (state, { payload }: { payload: PermissionState }) => {
@@ -45,14 +42,6 @@ export const systemSlice = createSlice({
     },
     setReconnectingStatus(state, { payload }: { payload: boolean }) {
       state.reconnecting = payload
-    },
-    showModal(state, { payload }: { payload: IModalData }) {
-      state.modalData = payload
-      state.showModal = true
-    },
-    closeModal(state) {
-      state.showModal = false
-      state.modalData = INITIAL_MODAL_DATA
     },
     setHasInteraction(state, { payload }: { payload: boolean }) {
       state.hasInteracted = payload
@@ -109,8 +98,6 @@ export const {
   setReconnectingStatus,
   setAuth,
   setOnline,
-  showModal,
-  closeModal,
   setViewPort,
   setContextMenu,
   resetContextClickedObject,

@@ -25,6 +25,7 @@ export * from './AppElementPicker/AppElementPicker'
 export * from './AppDotsAnimatedText/AppDotsAnimatedText'
 export * from './AppDropdown/AppDropdown'
 export * from './AppImagePreview/AppImagePreview'
+export * from './AppModal'
 export * from './AppScrollDownButton'
 
 export * from './types'

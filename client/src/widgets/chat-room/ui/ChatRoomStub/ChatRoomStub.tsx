@@ -4,13 +4,10 @@ import { useContentTabSelect } from 'src/features/content-tab'
 
 import { useSettings } from 'src/entities/settings'
 
-import { FChatRoomType } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export const ChatRoomStub = ({ room }: { room: FChatRoomType | undefined }) => {
-  if (room) return null
-
+export const ChatRoomStub = () => {
   const { selectContentTab } = useContentTabSelect()
   const { selectedContentTab } = useSettings()
 

@@ -13,6 +13,8 @@ import { FChatRoomType } from 'src/shared/config'
 import { BaseSizeModifier } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
+import { isRoomPrivate } from '../../lib'
+
 export const ChatRoomPreview = ({
   room,
   onClick,
@@ -29,7 +31,7 @@ export const ChatRoomPreview = ({
   const { getLiveMedia } = useMedia()
   const { contacts } = useContact()
   const { getMessageById } = useMessage()
-  const isPrivate = room.users.length === 1
+  const isPrivate = isRoomPrivate(room)
 
   const chatRoomAvatarShape = isPrivate ? 'circle-shape' : 'square-shape'
   const chatRoomStubIcon = isPrivate ? 'user-stub' : 'image-stub'

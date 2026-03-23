@@ -1,12 +1,12 @@
-import './style.scss'
+import { ReactNode } from 'react'
 
-import { MessageInput, ReplyMessage } from 'src/features/message'
+import { MessageInput } from 'src/features/message'
 
-export const ChatRoomFooter = () => {
+export const ChatRoomFooter = ({ roomId, prependChildren }: { roomId: string; prependChildren?: ReactNode }) => {
   return (
     <div className="chat-room-footer">
-      <ReplyMessage />
-      <MessageInput />
+      {prependChildren}
+      <MessageInput roomId={roomId} />
     </div>
   )
 }

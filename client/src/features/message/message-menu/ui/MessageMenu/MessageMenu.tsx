@@ -2,13 +2,13 @@ import './style.scss'
 
 import { IMessage } from 'common-types'
 
-import { useMessageDelete, useMessageForward } from 'src/features/message'
+import { ForwardMessageModal, useMessageDelete, useMessageForward } from 'src/features/message'
 import { useReplyMessage } from 'src/features/message/reply-message/hooks'
 
 import { useSettings } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
-import { AppDropdown, AppText } from 'src/shared/ui'
+import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
 import { MessageReactions } from './../'
@@ -21,7 +21,7 @@ export const MessageMenu = ({
   children: React.ReactNode
 }) => {
   const { deleteMessageHandler } = useMessageDelete()
-  const { forwardMessageHandler } = useMessageForward()
+  const { isOpen, forwardMessageHandler, closeForwardMessageModal } = useMessageForward()
   const { replyMessageHandler } = useReplyMessage()
   const { username, id: userId } = useUser()
   const { selectedChatRoomId } = useSettings()
@@ -65,17 +65,22 @@ export const MessageMenu = ({
   ]
 
   return (
-    <AppDropdown
-      overlayStyle={{ width: '200px', minWidth: '200px' }}
-      additionalClassName="message-menu"
-      items={items.map((item, idx) => ({
-        type: 'item',
-        onClick: item.handler,
-        label: item.label,
-        key: idx
-      }))}
-    >
-      {children}
-    </AppDropdown>
+    <>
+      <AppDropdown
+        overlayStyle={{ width: '200px', minWidth: '200px' }}
+        additionalClassName="message-menu"
+        items={items.map((item, idx) => ({
+          type: 'item',
+          onClick: item.handler,
+          label: item.label,
+          key: idx
+        }))}
+      >
+        {children}
+      </AppDropdown>
+      <AppModal title="Forward message" open={isOpen} onClose={closeForwardMessageModal}>
+        <ForwardMessageModal onClose={closeForwardMessageModal} />
+      </AppModal>
+    </>
   )
 }

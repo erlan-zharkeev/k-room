@@ -1,27 +1,20 @@
-import { useDeviceSettings } from 'src/features/device/device-settings'
+import { useState } from 'react'
 
-import { useCall } from 'src/entities/call'
-import { useSystem, useViewport } from 'src/entities/system'
+import { SelectDevicesModal } from 'src/features/device'
 
-import { AppButton, AppTooltip } from 'src/shared/ui'
+import { AppButton, AppModal, AppTooltip } from 'src/shared/ui'
 
 export const OpenDeviceSettingsButton = () => {
-  const { greaterOrEqualTablet } = useViewport()
-  const { showCallModal } = useCall()
-  const { showModal: modalAppearance } = useSystem()
-  const { openDeviceSettings } = useDeviceSettings()
-
-  if (!greaterOrEqualTablet) return null
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <AppTooltip text="Device settings">
-      <AppButton
-        prefixIconName="thunder"
-        color="accent-color"
-        onClick={openDeviceSettings}
-        disabled={modalAppearance || showCallModal}
-        borderless
-      />
-    </AppTooltip>
+    <>
+      <AppTooltip text="Device settings">
+        <AppButton prefixIconName="thunder" color="accent-color" onClick={() => setIsOpen(true)} borderless />
+      </AppTooltip>
+      <AppModal title="Devices settings" open={isOpen} onClose={() => setIsOpen(false)}>
+        <SelectDevicesModal />
+      </AppModal>
+    </>
   )
 }

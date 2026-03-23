@@ -1,26 +1,39 @@
 import './style.scss'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
-import { MessageList } from 'src/features/message'
+import { ChatRoomHeader, ChatRoomStub, ChatRoomFooter } from 'src/widgets/chat-room'
 
-import { FChatRoomType } from 'src/shared/config'
+import { ChatRoomSettingsModal, useChatRoomSelect } from 'src/features/chat-room'
+import { MessageList, ReplyMessage } from 'src/features/message'
 
-import { ChatRoomFooter } from '../ChatRoomFooter/ChatRoomFooter'
-import { ChatRoomHeader } from '../ChatRoomHeader/ChatRoomHeader'
-import { ChatRoomStub } from '../ChatRoomStub/ChatRoomStub'
+import { useChatRoom } from 'src/entities/chat-room'
 
-export const ChatRoom = ({ room }: { room: FChatRoomType | undefined }) => {
+import { AppModal } from 'src/shared/ui'
+
+export const ChatRoom = () => {
+  const { selectedChatRoom } = useChatRoom()
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
+  const { resetChatRoomSelection } = useChatRoomSelect()
+
   const roomDomEl = useRef<HTMLDivElement>(null)
 
   return (
     <div className="chat-room" ref={roomDomEl}>
-      <ChatRoomStub room={room} />
-      {room && (
+      {selectedChatRoom ? (
         <div className="chat-room__content">
-          <ChatRoomHeader room={room} />
-          <MessageList room={room} />
-          <ChatRoomFooter />
+          <ChatRoomHeader
+            room={selectedChatRoom}
+            onClickChatRoomSettings={() => setIsSettingsModalOpen(true)}
+            onResetChatRoomSelection={resetChatRoomSelection}
+          />
+          <MessageList room={selectedChatRoom} />
+          <ChatRoomFooter roomId={selectedChatRoom.id} prependChildren={<ReplyMessage />} />
+          <AppModal title="Group Chat Info" open={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)}>
+            <ChatRoomSettingsModal onClose={() => setIsSettingsModalOpen(false)} />
+          </AppModal>
         </div>
+      ) : (
+        <ChatRoomStub />
       )}
     </div>
   )

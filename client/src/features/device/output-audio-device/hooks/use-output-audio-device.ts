@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useSettings } from 'src/entities/settings'
 import { useSound } from 'src/entities/sound'
-import { showModal, useSystem } from 'src/entities/system'
+import { useSystem } from 'src/entities/system'
 
 import { useTimeout } from 'src/shared/lib'
 
@@ -61,10 +61,10 @@ export const useOutputAudioDevice = () => {
   }
 
   useEffect(() => {
-    if (!showModal) {
+    return () => {
       stop('message-delivered')
     }
-  }, [showModal])
+  }, [])
 
   useEffect(() => {
     navigator.mediaDevices.addEventListener('devicechange', updateOutputAudioDeviceList)
