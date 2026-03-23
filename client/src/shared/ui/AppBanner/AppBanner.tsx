@@ -1,9 +1,13 @@
 import './style.scss'
-import { BannerType } from './types'
+import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { BannerType } from './config'
 
 export const AppBanner = ({ message, type = 'info' }: { message: string; type?: BannerType }) => {
+  const className = createClassNameWithModifiers({ rootClass: 'app-banner', modifiers: [type] })
+
   return (
-    <div className={`app-banner app-banner--${type}`}>
+    <div className={className}>
       <div className="app-banner__message">{message}</div>
     </div>
   )

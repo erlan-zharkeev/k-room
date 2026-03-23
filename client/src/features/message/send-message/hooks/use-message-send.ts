@@ -7,7 +7,7 @@ import {
 } from 'common-types'
 import { useDispatch } from 'react-redux'
 
-import { useAddMessage } from 'src/features/message/add-message'
+import { useAddMessage } from 'src/features/message'
 
 import { resetRepliedMessage, updateMessageInputData, useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'

@@ -1,18 +1,18 @@
 import 'src/shared/config/styles'
 import { useEffect } from 'react'
 
+import { useInitializeIndexedDb } from 'src/app/hooks'
+import { Router } from 'src/app/router'
+
 import { UnsupportedResolutionStub } from 'src/widgets/unsupported-resolution-stub'
 
 import { useSyncAvatars } from 'src/features/contact'
-import { useNetworkMonitor } from 'src/features/monitor-network/hooks'
+import { useNetworkMonitor } from 'src/features/monitor-network'
 import { useViewportMonitor } from 'src/features/monitor-viewport'
-import { useThemeUpdate } from 'src/features/settings/update-theme'
+import { useThemeUpdate } from 'src/features/settings'
 import { useFetchUserData } from 'src/features/user'
 
 import { useSettings } from 'src/entities/settings'
-
-import { useInitializeIndexedDb } from './hooks/'
-import { Router } from './router'
 
 export const App = () => {
   const { initializeIndexedDb } = useInitializeIndexedDb()

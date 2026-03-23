@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 
 import { resetContextMenuToInitial, setContextMenu, useSystem } from 'src/entities/system'
 
-import type { ContextMenuNameType, IContextClickedObject } from '../types'
+import type { ContextMenuNameType, IContextClickedObject } from 'src/entities/context-menu'
 
 export const useContextMenu = () => {
   const dispatch = useDispatch()

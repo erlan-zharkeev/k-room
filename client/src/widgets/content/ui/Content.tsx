@@ -1,21 +1,9 @@
 import './style.scss'
-import { ReactElement } from 'react'
 
-import { ChatRoom } from 'src/widgets/chat-room'
-import { InfoNotification } from 'src/widgets/info-notifications'
+import { CONTENT_COMPONENT_MAP } from 'src/widgets/content/config'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { useSettings } from 'src/entities/settings'
-
-import type { ContentTabType } from 'src/shared/config'
-
-const CONTENT_COMPONENT_MAP: Record<ContentTabType, ReactElement> = {
-  info: <InfoNotification />,
-  'chat-rooms': <ChatRoom />,
-  calls: <ChatRoom />,
-  contacts: <ChatRoom />,
-  settings: <ChatRoom />
-}
 
 export const Content = () => {
   const { selectedContentTab } = useSettings()

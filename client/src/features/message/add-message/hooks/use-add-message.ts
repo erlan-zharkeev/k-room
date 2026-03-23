@@ -1,6 +1,6 @@
 import { IMessage } from 'common-types'
 
-import { useAddMessageToChatRoom } from 'src/features/chat-room/add-message-to-chat-room'
+import { useAddMessageToChatRoom } from 'src/features/chat-room'
 
 import { useMessage } from 'src/entities/message'
 

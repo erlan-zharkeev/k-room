@@ -1,12 +1,14 @@
 import './style.scss'
 
-import { ReactNode, useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import type { ReactNode } from 'react'
 
 import { createPortal } from 'react-dom'
 
 import { useViewport } from 'src/entities/system'
 
 import { AppButton, AppHeader } from 'src/shared/ui'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { MODAL_WIDTH } from './config'
 
@@ -31,6 +33,11 @@ export const AppModal = ({
     if (lessOrEqualPhone) return MODAL_WIDTH.PHONE
     return MODAL_WIDTH.GREATER_THAN_PHONE
   }, [lessOrEqualPhone])
+  const modalClassName = createClassNameWithModifiers({
+    rootClass: 'app-modal',
+    modifiers: [],
+    additionalClassName: className
+  })
 
   useEffect(() => {
     if (!open) return
@@ -54,7 +61,7 @@ export const AppModal = ({
   return createPortal(
     <div className="app-modal-layer" role="presentation" onClick={onClose}>
       <div
-        className={`app-modal${className ? ` ${className}` : ''}`}
+        className={modalClassName}
         role="dialog"
         aria-modal="true"
         onClick={(evt) => evt.stopPropagation()}

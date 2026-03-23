@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 
-import { IChatRoom } from 'common-types'
+import type { IChatRoom } from 'common-types'
 
-import { ROOM_MESSAGES_PAGE_LIMIT } from 'src/features/message/load-room-messages'
-import { MessageListItemType } from 'src/features/message/message-list/config'
+import { ROOM_MESSAGES_PAGE_LIMIT, MessageListItemType } from 'src/features/message'
 
 import { useSettings } from 'src/entities/settings'
 

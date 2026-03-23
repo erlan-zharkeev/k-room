@@ -2,7 +2,7 @@ import './style.scss'
 import { useNotification } from 'src/entities/notification'
 
 import { AppAvatar, AppIconName, AppIcon, AvatarShapeModifier } from 'src/shared/ui'
-import { imageToBase64 } from 'src/shared/utils'
+import { createClassNameWithModifiers, imageToBase64 } from 'src/shared/utils'
 
 export const AppAvatarLoader = ({
   path,
@@ -13,6 +13,10 @@ export const AppAvatarLoader = ({
   shape = 'circle-shape'
 }: IAvatarLoaderProps) => {
   const notifications = useNotification()
+  const className = createClassNameWithModifiers({
+    rootClass: 'app-app-avatar-loader',
+    modifiers: [shape]
+  })
 
   const normFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
@@ -33,7 +37,7 @@ export const AppAvatarLoader = ({
   }
 
   return (
-    <div className={`app-app-avatar-loader app-app-avatar-loader--${shape}`}>
+    <div className={className}>
       <div className="app-avatar-loader__body">
         <AppAvatar src={path} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
         <input type="file" onChange={normFile} />

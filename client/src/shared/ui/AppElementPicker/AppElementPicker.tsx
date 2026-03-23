@@ -1,6 +1,6 @@
 import { AppTags } from 'src/shared/ui'
 
-import type { IAppElementPickerProps } from './types'
+import type { IAppElementPickerProps } from './config'
 
 export const AppElementPicker = ({
   availableElements,

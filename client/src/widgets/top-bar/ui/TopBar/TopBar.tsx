@@ -1,7 +1,7 @@
 import './style.scss'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
-import { LogoutButton } from 'src/features/auth/logout'
+import { LogoutButton } from 'src/features/auth'
 import { InfoMessageBtn } from 'src/features/info-notification'
 import { ConnectionStatusInfo } from 'src/features/socket'
 

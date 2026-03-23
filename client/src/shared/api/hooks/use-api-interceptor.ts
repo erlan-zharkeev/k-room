@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
 
-import { useNotification } from 'src/entities/notification/hooks/use-notification'
+import { useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
 import { clg } from 'src/shared/utils'

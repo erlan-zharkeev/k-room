@@ -9,7 +9,7 @@ import {
   ThemeSwitcher
 } from 'src/features/settings'
 import { TechSupportLink } from 'src/features/support'
-import { UserProfileData } from 'src/features/user/user-profile-data'
+import { UserProfileData } from 'src/features/user'
 
 import { useSystem } from 'src/entities/system'
 

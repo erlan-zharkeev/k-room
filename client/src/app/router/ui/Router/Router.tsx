@@ -14,7 +14,7 @@ import { PageLayout } from 'src/widgets/page-layout'
 
 import { useSystem } from 'src/entities/system'
 
-import { PATH_TO_REDIRECT_IF_AUTHORIZED } from '../../config'
+import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router/config'
 
 const PrivateRoute = () => {
   const { auth } = useSystem()

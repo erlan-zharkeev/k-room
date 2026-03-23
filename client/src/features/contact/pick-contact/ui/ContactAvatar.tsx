@@ -1,4 +1,4 @@
-import { useLiveMediaUrl } from 'src/entities/media/hooks/use-live-media-url'
+import { useLiveMediaUrl } from 'src/entities/media'
 
 import { AppAvatar } from 'src/shared/ui'
 

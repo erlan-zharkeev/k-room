@@ -11,6 +11,6 @@ export const log = {
     console.error(clc.red.bgWhite(msg))
   },
   warn: (msg: string) => {
-    console.warn(clc.yellow.bgWhite(msg))
+    console.warn(clc.bgYellowBright.bgWhite(msg))
   }
 }

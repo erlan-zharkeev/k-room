@@ -8,12 +8,11 @@ import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
 import { useMessage } from 'src/entities/message'
 import { ProfileInfo } from 'src/entities/profile-info'
+import { isRoomPrivate } from 'src/entities/chat-room'
 
 import { FChatRoomType } from 'src/shared/config'
 import { BaseSizeModifier } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { isRoomPrivate } from '../../lib'
 
 export const ChatRoomPreview = ({
   room,

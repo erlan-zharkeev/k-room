@@ -3,31 +3,30 @@ import { useState, useEffect } from 'react'
 
 import { Rnd } from 'react-rnd'
 
+import { CALL_MODAL_INITIAL_SIZE } from 'src/entities/call/config'
 import { useViewport } from 'src/entities/system'
 
 import { useTypedSelector } from 'src/shared/lib'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import type { IModalOptions } from '../../types'
 
 import { CallModalBody } from './elements'
 
-const initialSize = {
-  width: 300,
-  height: 450,
-  minWidth: 300,
-  minHeight: 450
-}
-
 export const CallModal = () => {
   const { viewPort } = useViewport()
 
   const { isMinified, showCallModal } = useTypedSelector((state) => state.calls)
+  const className = createClassNameWithModifiers({
+    rootClass: 'draggable-resizable-modal',
+    modifiers: [!(showCallModal && !isMinified) && 'collapse']
+  })
 
-  const [modalWidth, setModalWidth] = useState(initialSize.width)
-  const [modalHeight, setModalHeight] = useState(initialSize.height)
+  const [modalWidth, setModalWidth] = useState(CALL_MODAL_INITIAL_SIZE.width)
+  const [modalHeight, setModalHeight] = useState(CALL_MODAL_INITIAL_SIZE.height)
   const initialPosition = {
-    x: (viewPort.width - initialSize.width) / 2,
-    y: (viewPort.height - initialSize.height) / 2
+    x: (viewPort.width - CALL_MODAL_INITIAL_SIZE.width) / 2,
+    y: (viewPort.height - CALL_MODAL_INITIAL_SIZE.height) / 2
   }
   const [modalPositionX, setModalPositionX] = useState(initialPosition.x)
   const [modalPositionY, setModalPositionY] = useState(initialPosition.y)
@@ -47,8 +46,8 @@ export const CallModal = () => {
   const toggleExpandModal = () => {
     const isFullyOpened = viewPort.width === modalWidth && viewPort.height === modalHeight
     const updatedOptions = {
-      width: isFullyOpened ? initialSize.width : viewPort.width,
-      height: isFullyOpened ? initialSize.height : viewPort.height,
+      width: isFullyOpened ? CALL_MODAL_INITIAL_SIZE.width : viewPort.width,
+      height: isFullyOpened ? CALL_MODAL_INITIAL_SIZE.height : viewPort.height,
       x: isFullyOpened ? initialPosition.x : 0,
       y: isFullyOpened ? initialPosition.y : 0
     }
@@ -56,15 +55,11 @@ export const CallModal = () => {
   }
 
   return (
-    <div
-      className={`draggable-resizable-modal ${
-        showCallModal && !isMinified ? '' : 'draggable-resizable-modal--collapse'
-      }`}
-    >
+    <div className={className}>
       <Rnd
         size={{ width: modalWidth, height: modalHeight }}
-        minWidth={initialSize.minWidth}
-        minHeight={initialSize.minHeight}
+        minWidth={CALL_MODAL_INITIAL_SIZE.minWidth}
+        minHeight={CALL_MODAL_INITIAL_SIZE.minHeight}
         position={{ x: modalPositionX, y: modalPositionY }}
         onDragStop={(_e, d) => {
           setModalPositionX(d.x)

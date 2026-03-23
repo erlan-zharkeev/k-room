@@ -1,7 +1,7 @@
 import { FileLoaderValueType } from 'common-types'
 
 import { AppIconName } from '../AppIcon'
-import { AvatarShapeModifier } from '../types'
+import type { AvatarShapeModifier } from '../../config'
 
 export interface IAppFileLoaderProps {
   name: string

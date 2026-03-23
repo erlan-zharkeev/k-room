@@ -9,10 +9,10 @@ import {
   IElementPickerValidateRule
 } from 'src/shared/lib'
 
-import type { IAppElementPickerProps } from '../AppElementPicker/types'
-import type { IAppFileLoaderProps } from '../AppFileLoader/types'
-import type { IAppInputProps } from '../AppInput/types'
-import type { IAppSwitchProps } from '../AppSwitch/types'
+import type { IAppElementPickerProps } from '../AppElementPicker/config'
+import type { IAppFileLoaderProps } from '../AppFileLoader/config'
+import type { IAppInputProps } from '../AppInput/config'
+import type { IAppSwitchProps } from '../AppSwitch/config'
 
 export type AppFormFieldValue = string | boolean | FileLoaderValueType | string[]
 

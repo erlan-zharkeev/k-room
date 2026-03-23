@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { useNotification } from './hooks'
+import { useNotification } from 'src/entities/notification'
 
 export type NotificationType = 'success' | 'error' | 'info' | 'warning'
 

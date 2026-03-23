@@ -1,10 +1,16 @@
 import './style.scss'
+import { createClassNameWithModifiers } from 'src/shared/utils'
+
 import { AppText } from '../AppText/AppText'
 
-import type { IAppFormItemProps } from './types'
+import type { IAppFormItemProps } from './config'
 
 export const AppFormItem = ({ children, label, errors = [], required }: IAppFormItemProps) => {
   const error = errors.length > 0 && errors[0]
+  const errorClassName = createClassNameWithModifiers({
+    rootClass: 'app-form-item__error',
+    modifiers: [error && 'active']
+  })
   return (
     <div className="app-form-item">
       {children && (
@@ -15,7 +21,7 @@ export const AppFormItem = ({ children, label, errors = [], required }: IAppForm
         </div>
       )}
       {children}
-      {<div className={`app-form-item__error${error ? ' app-form-item__error--active' : ''}`}>{error ?? ''}</div>}
+      {<div className={errorClassName}>{error ?? ''}</div>}
     </div>
   )
 }

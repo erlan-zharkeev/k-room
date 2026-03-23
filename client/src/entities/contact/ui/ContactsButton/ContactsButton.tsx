@@ -2,7 +2,7 @@ import { Badge } from 'antd'
 
 import { AppButton } from 'src/shared/ui'
 
-import { useContact } from '../../hooks'
+import { useContact } from 'src/entities/contact'
 
 export const ContactsButton = () => {
   const { contactInvitationsQuantity } = useContact()

@@ -1,1 +1,2 @@
-export * from './hooks/use-reset-all-stores'
+export * from './hooks'
+export * from './config'

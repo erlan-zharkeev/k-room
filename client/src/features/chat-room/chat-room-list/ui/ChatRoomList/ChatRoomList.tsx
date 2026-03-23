@@ -2,14 +2,14 @@ import './style.scss'
 
 import { Badge } from 'antd'
 
-import { useChatRoomSelect } from 'src/features/chat-room/select-chat-room'
+import { useChatRoomSelect } from 'src/features/chat-room'
 
 import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
 
 import { AppScrollContainer, AppText } from 'src/shared/ui'
-import { chatRoomUnreadMessagesCount } from 'src/shared/utils'
+import { chatRoomUnreadMessagesCount, createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomList = () => {
   const { chatRooms } = useChatRoom()
@@ -23,9 +23,10 @@ export const ChatRoomList = () => {
       <AppScrollContainer height="100%" additionalClassName="chat-room-list__scroll-container">
         {chatRooms.map((chatRoom) => (
           <div
-            className={`chat-room-list__list-item${
-              chatRoom.id === selectedChatRoomId ? ' chat-room-list__list-item--selected' : ''
-            }`}
+            className={createClassNameWithModifiers({
+              rootClass: 'chat-room-list__list-item',
+              modifiers: [chatRoom.id === selectedChatRoomId && 'selected']
+            })}
             onClick={(e) => {
               e.stopPropagation()
               selectChatRoomById(chatRoom.id)

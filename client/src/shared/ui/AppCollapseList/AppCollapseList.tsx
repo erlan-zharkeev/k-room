@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import { Badge } from 'antd'
 
 import { useTimeout } from 'src/shared/lib'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { AppHeader } from '../AppHeader/AppHeader'
 import { AppIcon } from '../AppIcon'
 
-import type { IAppCollapseProps } from './types'
+import type { IAppCollapseProps } from './config'
 
 export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps) => {
   const [openElId, setOpenIElId] = useState<string | null>(null)
@@ -34,12 +35,13 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps)
       {items.map(({ id, title, content: Content, badgeName }) => {
         const isOpen = openElId === id
         const showOverflow = delayedOverflowIndex === id
+        const className = createClassNameWithModifiers({
+          rootClass: 'app-collapse-list__element',
+          modifiers: [isOpen && 'open']
+        })
         return (
           <Badge color={'var(--error)'} count={badgeName} offset={[-5, 2]} key={id}>
-            <div
-              className={`app-collapse-list__element ${isOpen ? 'app-collapse-list__element--open' : ''}`}
-              onClick={() => clickHandler(id)}
-            >
+            <div className={className} onClick={() => clickHandler(id)}>
               <div className="app-collapse-list__element-header">
                 <AppHeader bold={false} tag="h4">
                   {title}

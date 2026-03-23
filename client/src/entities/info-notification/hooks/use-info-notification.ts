@@ -1,6 +1,5 @@
+import { INFO_NOTIFICATION_MAP } from 'src/entities/info-notification'
 import { useUser } from 'src/entities/user'
-
-import { INFO_NOTIFICATION_MAP } from '../config'
 
 export const useInfoNotification = () => {
   const { infoNotifications } = useUser()

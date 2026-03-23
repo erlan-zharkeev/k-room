@@ -32,3 +32,5 @@ export const NOTIFICATION_MESSAGE = {
   socketDisconnected: () =>
     'Socket disconnected'
 }
+
+export const ERROR_NOTIFICATION_DURATION_IN_SEC = 10

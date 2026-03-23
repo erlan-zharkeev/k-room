@@ -1,6 +1,6 @@
 import { AppIcon, AppIconName, ColorModifier } from 'src/shared/ui'
 
-import { NotificationType } from '../types'
+import type { NotificationType } from 'src/entities/notification'
 
 const notificationIconMap: Record<NotificationType, { name: AppIconName; color: ColorModifier }> = {
   success: {

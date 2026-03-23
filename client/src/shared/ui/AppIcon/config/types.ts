@@ -1,4 +1,4 @@
-import type { ColorModifier, BaseSizeModifier } from '../types'
+import type { ColorModifier, BaseSizeModifier } from '../../config'
 
 export type AppIconSize = BaseSizeModifier | 'xs' | 'xxs' | 'fill'
 

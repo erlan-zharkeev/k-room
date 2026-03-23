@@ -28,4 +28,4 @@ export * from './AppImagePreview/AppImagePreview'
 export * from './AppModal'
 export * from './AppScrollDownButton'
 
-export * from './types'
+export * from './config'

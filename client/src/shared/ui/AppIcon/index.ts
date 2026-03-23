@@ -1,2 +1,2 @@
 export * from './AppIcon'
-export * from './types'
+export * from './config'

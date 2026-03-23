@@ -5,7 +5,7 @@ import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { AppButton } from '../AppButton/AppButton'
 
-import type { IAppInputProps } from './types'
+import type { IAppInputProps } from './config'
 
 const rootClass = 'app-input'
 

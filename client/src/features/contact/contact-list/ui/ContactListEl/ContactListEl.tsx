@@ -1,6 +1,4 @@
-import { ContactInvitationControlBtns } from 'src/features/contact/contact-invitation-controls'
-import { ContactMenu } from 'src/features/contact/contact-menu'
-import { getContactDescription } from 'src/features/contact/lib'
+import { ContactInvitationControlBtns, ContactMenu, getContactDescription } from 'src/features/contact'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'

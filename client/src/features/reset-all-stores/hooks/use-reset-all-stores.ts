@@ -1,12 +1,11 @@
 import { AppDispatch } from 'src/app/store'
 
+import { RESET_STORE_REDUCERS } from 'src/features/reset-all-stores'
+
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
-import { resetSystemStore } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
-
-const resetStoreReducers = [resetSystemStore]
 
 export const useResetAllStores = (dispatch: AppDispatch) => {
   const userStore = useUser()
@@ -20,7 +19,7 @@ export const useResetAllStores = (dispatch: AppDispatch) => {
     stores.forEach((method) => {
       method()
     })
-    resetStoreReducers.forEach((resetStore) => dispatch(resetStore()))
+    RESET_STORE_REDUCERS.forEach((resetStore) => dispatch(resetStore()))
   }
 
   return { reset }

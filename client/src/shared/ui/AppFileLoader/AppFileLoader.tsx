@@ -9,7 +9,7 @@ import { ImageResolutions } from 'src/shared/config/types'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
 
-import type { IAppFileLoaderProps } from './types'
+import type { IAppFileLoaderProps } from './config'
 
 export const AppFileLoader = ({
   name,

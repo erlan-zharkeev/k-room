@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { SelectDevice, useInputAudioDevice } from 'src/features/device'
 
 import { useSettings } from 'src/entities/settings'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AudioInputDeviceSelect = () => {
   const { selectedAudioInputDeviceId } = useSettings()
@@ -18,6 +19,10 @@ export const AudioInputDeviceSelect = () => {
     volumeIndicator,
     requestInputAudioDeviceList
   } = useInputAudioDevice()
+  const volumeIndicatorClassName = createClassNameWithModifiers({
+    rootClass: 'audio-input-device-select__volume-indicator-wrapper',
+    modifiers: [!showMicGrade && 'hide']
+  })
 
   useEffect(() => {
     requestInputAudioDeviceList()
@@ -35,11 +40,7 @@ export const AudioInputDeviceSelect = () => {
         value={selectedAudioInputDeviceId}
         isErrorColor={showMicGrade}
       >
-        <div
-          className={`audio-input-device-select__volume-indicator-wrapper${
-            showMicGrade ? '' : ' audio-input-device-select__volume-indicator-wrapper--hide'
-          }`}
-        >
+        <div className={volumeIndicatorClassName}>
           <div ref={volumeIndicator} className="audio-input-device-select__volume-indicator" />
         </div>
       </SelectDevice>

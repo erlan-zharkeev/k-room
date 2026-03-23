@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import type { IAppSwitchProps } from './types'
+import type { IAppSwitchProps } from './config'
 
 const rootClass = 'app-switch'
 

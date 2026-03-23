@@ -3,7 +3,7 @@ import { createElement } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import type { ColorModifier, ExtendedSizeModifier } from '../types'
+import type { ColorModifier, ExtendedSizeModifier } from '../config'
 
 export const AppText = ({
   tag = 'span',

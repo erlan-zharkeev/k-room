@@ -21,7 +21,11 @@ export const createUser = async ({
   try {
     const idCandidate = new mongoose.Types.ObjectId(id)
 
-    await isUserExist({ id: idCandidate, username, email })
+    const userAlreadyExists = await isUserExist({ id: idCandidate, username, email })
+    if (userAlreadyExists) {
+      log.warn('-New user creating skipped: user already exists')
+      return null
+    }
 
     user = await new UserModel({
       _id: id ? new mongoose.Types.ObjectId(id) : new mongoose.Types.ObjectId(),
@@ -29,8 +33,9 @@ export const createUser = async ({
       personal: { email, infoNotifications: { 1: 'unread' } },
       system: { role: 'user', password: hashedPassword, provider, device: {} }
     }).save()
-  } catch {
+  } catch (error) {
     log.error('-New user creating failed')
+    log.error(String(error))
   }
   return user
 }

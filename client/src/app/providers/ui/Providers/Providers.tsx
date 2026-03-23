@@ -1,19 +1,21 @@
 import * as processLib from 'process'
 
-import { ReactNode, useRef } from 'react'
+import { useRef } from 'react'
+import type { ReactNode } from 'react'
 
 import { initializeApp } from 'firebase/app'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
-import 'src/shared/lib/db/db'
+import { FIREBASE_CONFIG } from 'src/app/providers/config'
 import { store } from 'src/app/store'
-
-import { UnsupportedResolutionStub } from 'src/widgets/unsupported-resolution-stub'
 
 import { useMakeCall } from 'src/entities/call'
 
 import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
+
+// Some browser-side dependencies still expect a global `process` shim at runtime.
+window.process = processLib
 
 const AdditionalServiceProvider = ({ children }: { children: ReactNode }) => {
   const call = useRef(useMakeCall())
@@ -28,21 +30,9 @@ const RefsProvider = ({ children }: { children: ReactNode }) => {
   return <RefsContext.Provider value={refs}>{children}</RefsContext.Provider>
 }
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: 'k-room-3a49a.firebaseapp.com',
-  projectId: 'k-room-3a49a',
-  storageBucket: 'k-room-3a49a.appspot.com',
-  messagingSenderId: '199419640502',
-  appId: '1:199419640502:web:71eb090633e8593d704417',
-  measurementId: 'G-81GNPVFH7E'
-}
+initializeApp(FIREBASE_CONFIG)
 
-initializeApp(firebaseConfig)
-
-// @ts-expect-error
-window.process = processLib.process as NodeJS.Process
-export const Providers = ({ children }: { children: React.ReactNode }) => (
+export const Providers = ({ children }: { children: ReactNode }) => (
   <ReduxProvider store={store}>
     <RefsProvider>
       <AdditionalServiceProvider>

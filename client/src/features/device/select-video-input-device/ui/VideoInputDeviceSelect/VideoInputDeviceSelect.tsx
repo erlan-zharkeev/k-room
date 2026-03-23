@@ -4,6 +4,7 @@ import './style.scss'
 import { SelectDevice, useInputVideoDevice } from 'src/features/device'
 
 import { useSettings } from 'src/entities/settings'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const VideoInputDeviceSelect = () => {
   const {
@@ -17,6 +18,10 @@ export const VideoInputDeviceSelect = () => {
     requestInputVideoDeviceList
   } = useInputVideoDevice()
   const { selectedVideoInputDeviceId } = useSettings()
+  const videoClassName = createClassNameWithModifiers({
+    rootClass: 'video-input-device-select__video',
+    modifiers: [!showVideo && 'hide']
+  })
 
   useEffect(() => {
     requestInputVideoDeviceList()
@@ -34,9 +39,7 @@ export const VideoInputDeviceSelect = () => {
         value={selectedVideoInputDeviceId}
         isErrorColor={showVideo}
       >
-        <div
-          className={`video-input-device-select__video${showVideo ? '' : ' video-input-device-select__video--hide'}`}
-        >
+        <div className={videoClassName}>
           <video ref={videoEl} autoPlay />
         </div>
       </SelectDevice>

@@ -2,7 +2,7 @@ import './style.scss'
 
 import { IFrontendContact, MediaEndpointsEnum } from 'common-types'
 
-import { AddContactBtn } from 'src/features/contact/add-contact'
+import { AddContactBtn } from 'src/features/contact'
 
 import { ProfileInfo } from 'src/entities/profile-info'
 

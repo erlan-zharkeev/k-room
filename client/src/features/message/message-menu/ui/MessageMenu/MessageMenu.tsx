@@ -2,8 +2,13 @@ import './style.scss'
 
 import { IMessage } from 'common-types'
 
-import { ForwardMessageModal, useMessageDelete, useMessageForward } from 'src/features/message'
-import { useReplyMessage } from 'src/features/message/reply-message/hooks'
+import {
+  ForwardMessageModal,
+  MessageReactions,
+  useMessageDelete,
+  useMessageForward,
+  useReplyMessage
+} from 'src/features/message'
 
 import { useSettings } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
@@ -11,15 +16,7 @@ import { useUser } from 'src/entities/user'
 import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
-import { MessageReactions } from './../'
-
-export const MessageMenu = ({
-  message,
-  children
-}: {
-  message: IMessage
-  children: React.ReactNode
-}) => {
+export const MessageMenu = ({ message, children }: { message: IMessage; children: React.ReactNode }) => {
   const { deleteMessageHandler } = useMessageDelete()
   const { isOpen, forwardMessageHandler, closeForwardMessageModal } = useMessageForward()
   const { replyMessageHandler } = useReplyMessage()

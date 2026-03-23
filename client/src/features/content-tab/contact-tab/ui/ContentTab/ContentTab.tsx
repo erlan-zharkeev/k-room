@@ -6,8 +6,8 @@ import { CallsButton } from 'src/entities/call'
 import { ChatRoomsButton } from 'src/entities/chat-room'
 import { ContactsButton } from 'src/entities/contact'
 import { SettingsButton, useSettings } from 'src/entities/settings'
-import { ContentTabType } from 'src/entities/settings/config'
 
+import type { ContentTabType } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import type { IContentTabButton } from './types'

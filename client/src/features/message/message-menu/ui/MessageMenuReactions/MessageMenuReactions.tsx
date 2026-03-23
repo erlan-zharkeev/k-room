@@ -7,6 +7,7 @@ import { IEventAddReaction, SocketActionsType } from 'common-types'
 import { EMOJI_LIST } from 'src/entities/emoji'
 
 import { socket } from 'src/shared/api'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import type { IReactionsProps } from './types'
 
@@ -34,7 +35,10 @@ export const MessageReactions = ({ userId, username, selectedChatRoomId, message
     <div className="message-menu-reactions">
       {reactions.map((reaction) => (
         <div
-          className={`message-menu-reactions__element message-menu-reactions__element--${isDisabled(reaction.key)}`}
+          className={createClassNameWithModifiers({
+            rootClass: 'message-menu-reactions__element',
+            modifiers: [isDisabled(reaction.key)]
+          })}
           key={reaction.key}
           onClick={() => addReactionToMessage(reaction.key)}
         >

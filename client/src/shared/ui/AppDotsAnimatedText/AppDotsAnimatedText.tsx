@@ -5,7 +5,7 @@ import { useTimeout } from 'src/shared/lib'
 
 import { AppText } from '../AppText/AppText'
 
-import type { IDotsAnimatedTextProps } from './types'
+import type { IDotsAnimatedTextProps } from './config'
 
 export const AppDotsAnimatedText = ({ text, maxDots = 3, interval = 500, textSize }: IDotsAnimatedTextProps) => {
   const [dots, setDots] = useState(0)

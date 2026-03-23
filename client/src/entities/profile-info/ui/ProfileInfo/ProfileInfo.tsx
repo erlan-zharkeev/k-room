@@ -7,7 +7,7 @@ import { UnknownCallback } from 'common-types'
 import { AppAvatar, AppIconName, AppText, AvatarShapeModifier, BaseSizeModifier } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import { ProfileInfoAvatarSizeType } from './types'
+import type { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
 
 export const ProfileInfo = ({
   avatar,
@@ -41,6 +41,10 @@ export const ProfileInfo = ({
   descriptionNode?: ReactNode
 }) => {
   const className = createClassNameWithModifiers({ rootClass: 'profile-info', modifiers: [horizontal && 'horizontal'] })
+  const credentialClassName = createClassNameWithModifiers({
+    rootClass: 'profile-info__credential',
+    modifiers: [onClick && 'pointer']
+  })
 
   return (
     <div className={className}>
@@ -52,10 +56,7 @@ export const ProfileInfo = ({
         shape={shape}
         stubIconName={stubIconName}
       />
-      <div
-        className={`profile-info__credential${onClick ? ' profile-info__credential--pointer' : ''}`}
-        onClick={onClick}
-      >
+      <div className={credentialClassName} onClick={onClick}>
         <AppText tag="p" size={titleSize}>
           {title}
         </AppText>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
-import { useLogout } from 'src/features/auth/logout'
+import { useLogout } from 'src/features/auth'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'

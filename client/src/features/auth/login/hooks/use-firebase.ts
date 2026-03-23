@@ -1,20 +1,16 @@
 import { useState } from 'react'
 
 import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithProviderResponse } from 'common-types'
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'firebase/auth'
+import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
+import { FIREBASE_PROVIDER_MAP } from 'src/features/auth/login/config'
 import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 
 import { useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
-
-const providers = {
-  google: GoogleAuthProvider,
-  facebook: FacebookAuthProvider
-}
 
 export const useFirebase = () => {
   const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
@@ -29,7 +25,7 @@ export const useFirebase = () => {
   })
 
   const onFirebaseLogin = async (provider: FirebaseProviderType) => {
-    const currentProvider = new providers[provider]()
+    const currentProvider = new FIREBASE_PROVIDER_MAP[provider]()
     try {
       const auth = getAuth()
       auth.languageCode = 'en'

@@ -4,7 +4,7 @@ import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { AppIcon } from '../AppIcon'
 
-import type { IButtonProps } from './types'
+import type { IButtonProps } from './config'
 
 export const AppButton = ({
   htmltype = 'button',

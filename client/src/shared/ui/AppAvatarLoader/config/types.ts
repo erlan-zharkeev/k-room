@@ -1,5 +1,5 @@
 import { AppIconName } from '../AppIcon'
-import { AvatarShapeModifier } from '../types'
+import type { AvatarShapeModifier } from '../../config'
 
 export interface IAvatarLoaderProps {
   path: string | undefined

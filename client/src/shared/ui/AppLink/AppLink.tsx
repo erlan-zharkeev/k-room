@@ -5,7 +5,7 @@ import { Link as RouterLink, type To } from 'react-router-dom'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import type { ColorModifier } from '../types'
+import type { ColorModifier } from '../config'
 
 interface Props {
   text: string

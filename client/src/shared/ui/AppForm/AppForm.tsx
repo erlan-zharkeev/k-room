@@ -11,9 +11,9 @@ import { AppFormItem } from '../AppFormItem/AppFormItem'
 import { AppInput } from '../AppInput/AppInput'
 import { AppSwitch } from '../AppSwitch/AppSwitch'
 
-import type { AppFormField, AppFormFieldValue, IAppFormProps } from './types'
+import type { AppFormField, AppFormFieldValue, IAppFormProps } from './config'
 
-export * from './types'
+export * from './config'
 
 const getDefaultValue = (inputType: AppFormField['inputType']): AppFormFieldValue => {
   switch (inputType) {
