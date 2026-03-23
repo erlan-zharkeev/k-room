@@ -1,15 +1,14 @@
 import './style.scss'
 import { ReactElement } from 'react'
 
-import { ContentTabType } from 'common-types'
-
+import { Calls, ChatRooms, Contacts } from 'src/widgets/aside-panel'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { UserSettings } from 'src/features/settings'
 
 import { useSettings } from 'src/entities/settings'
 
-import { ChatRooms, Calls, Contacts } from './elements'
+import { ContentTabType } from 'src/shared/config'
 
 export const AsidePanel = () => {
   const { showAsidePanel, selectedContentTab } = useSettings()

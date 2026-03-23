@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
 import type { IUserSetting } from 'src/shared/config'
-import { db, dexieKeyValueStore } from 'src/shared/lib'
+import { dexieKeyValueStore, db } from 'src/shared/lib/db'
 
 import { DEFAULT_SETTINGS, FULL_CONTENT_ELEMENTS } from '..'
 

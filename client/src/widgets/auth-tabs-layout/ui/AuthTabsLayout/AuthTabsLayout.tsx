@@ -7,7 +7,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { AppHeader } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-import { AuthTabsLayoutProps } from './types'
+import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
 
 export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProps) => {
   const location = useLocation()
