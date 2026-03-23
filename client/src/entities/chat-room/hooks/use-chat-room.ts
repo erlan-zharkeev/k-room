@@ -1,10 +1,11 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
+import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
-import { DbChatRoomType } from 'src/shared/config'
+import { FChatRoomType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 export const useChatRoom = () => {
@@ -13,7 +14,7 @@ export const useChatRoom = () => {
   const { messages } = useMessage()
 
   const chatRooms = useLiveQuery(async () => {
-    return await (db['chat-rooms'].toArray() as Promise<DbChatRoomType[]>)
+    return await (db['chat-rooms'].toArray() as Promise<FChatRoomType[]>)
   }, []) ?? []
 
   const getRoomById = (id: string) => chatRooms.find((room) => room.id === id)
@@ -25,14 +26,14 @@ export const useChatRoom = () => {
   }
 
   const selectedChatRoom = chatRooms.find((room) => room.id === selectedChatRoomId)
-  const isSelectedRoomPrivate = Boolean(selectedChatRoom && selectedChatRoom.users.length > 0)
+  const isSelectedRoomPrivate = isRoomPrivate(selectedChatRoom)
   const haveMessageToReply = Boolean(repliedMessageData?.id)
 
   const unreadMessageQuantity = messages.filter((message) => message.status === 'delivered' && !message.isSelf).length
 
-  const putChatRoom = async (payload: DbChatRoomType) => await db['chat-rooms'].put(payload)
+  const putChatRoom = async (payload: FChatRoomType) => await db['chat-rooms'].put(payload)
 
-  const updateChatRoom = async (id: string, patch: Partial<DbChatRoomType>) => {
+  const updateChatRoom = async (id: string, patch: Partial<FChatRoomType>) => {
     await db['chat-rooms'].update(id, patch)
   }
 

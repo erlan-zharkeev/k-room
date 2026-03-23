@@ -4,6 +4,7 @@ import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import LogoIcon from './icons/app-logo.svg?react'
+import ArrowDownIcon from './icons/arrow-down.svg?react'
 import ArrowLeftIcon from './icons/arrow-left.svg?react'
 import CallIcon from './icons/call.svg?react'
 import ChatIcon from './icons/chat.svg?react'
@@ -71,6 +72,7 @@ export const IconList: IAppIconListElement[] = [
   { name: 'video-cancel', AppIcon: VideoCancel },
   { name: 'info', AppIcon: InfoIcon },
   { name: 'arrow-left', AppIcon: ArrowLeftIcon },
+  { name: 'arrow-down', AppIcon: ArrowDownIcon },
   { name: 'phone-cancel', AppIcon: PhoneCancelIcon },
   { name: 'mic', AppIcon: MicIcon },
   { name: 'mic-muted', AppIcon: MicMutedIcon },

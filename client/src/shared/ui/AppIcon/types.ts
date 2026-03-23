@@ -40,6 +40,7 @@ export type AppIconName =
   | 'phone-call'
   | 'info'
   | 'arrow-left'
+  | 'arrow-down'
   | 'phone-cancel'
   | 'mic'
   | 'mic-muted'

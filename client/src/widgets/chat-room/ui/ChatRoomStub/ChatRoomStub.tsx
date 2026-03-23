@@ -1,16 +1,15 @@
 import './style.scss'
 
-import { IChatRoom } from 'common-types'
-
 import { useContentTabSelect } from 'src/features/content-tab'
 
 import { useSettings } from 'src/entities/settings'
 
+import { FChatRoomType } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export const ChatRoomStub = ({ selectedChatRoom }: { selectedChatRoom: IChatRoom | undefined }) => {
-  if (selectedChatRoom) return null
+export const ChatRoomStub = ({ room }: { room: FChatRoomType | undefined }) => {
+  if (room) return null
 
   const { selectContentTab } = useContentTabSelect()
   const { selectedContentTab } = useSettings()

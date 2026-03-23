@@ -1,4 +1,4 @@
-import { DbChatRoomType } from 'src/shared/config'
+import { FChatRoomType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 export const useAddMessageToChatRoom = () => {
@@ -7,7 +7,7 @@ export const useAddMessageToChatRoom = () => {
       await db['chat-rooms']
         .where('id')
         .equals(roomId)
-        .modify((room: DbChatRoomType) => {
+        .modify((room: FChatRoomType) => {
           room.messages = Array.isArray(room.messages) ? room.messages : []
           if (room.messages[room.messages.length - 1] !== messageId) {
             room.messages.push(messageId)

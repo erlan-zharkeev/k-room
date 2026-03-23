@@ -6,11 +6,12 @@ import { UnknownCallback } from 'common-types'
 
 import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
+import { useMessage } from 'src/entities/message'
 import { ProfileInfo } from 'src/entities/profile-info'
 
-import { DbChatRoomType } from 'src/shared/config'
+import { FChatRoomType } from 'src/shared/config'
 import { BaseSizeModifier } from 'src/shared/ui'
-import { chatRoomLastMessageBody, createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomPreview = ({
   room,
@@ -19,7 +20,7 @@ export const ChatRoomPreview = ({
   titleSize,
   isRoomSelected
 }: {
-  room: DbChatRoomType
+  room: FChatRoomType
   onClick?: UnknownCallback
   headerMode?: boolean
   titleSize?: BaseSizeModifier
@@ -27,6 +28,7 @@ export const ChatRoomPreview = ({
 }) => {
   const { getLiveMedia } = useMedia()
   const { contacts } = useContact()
+  const { getMessageById } = useMessage()
   const isPrivate = room.users.length === 1
 
   const chatRoomAvatarShape = isPrivate ? 'circle-shape' : 'square-shape'
@@ -40,6 +42,7 @@ export const ChatRoomPreview = ({
 
   const avatarPath = getLiveMedia(room.avatarId)
   const privateRoomContact = isPrivate ? contacts.find((contact) => contact.id === room.users[0]) : undefined
+  const lastMessageBody = room.lastMessageId ? getMessageById(room.lastMessageId)?.body ?? '' : ''
 
   const [chatName, setChatName] = useState(room.chatName ?? '')
 
@@ -58,7 +61,7 @@ export const ChatRoomPreview = ({
         titleSize={titleSize}
         avatar={avatarPath}
         title={chatName}
-        description={!headerMode ? chatRoomLastMessageBody(room) : ''}
+        description={!headerMode ? lastMessageBody : ''}
         online={privateRoomContact?.online}
         shape={chatRoomAvatarShape}
         stubIconName={chatRoomStubIcon}

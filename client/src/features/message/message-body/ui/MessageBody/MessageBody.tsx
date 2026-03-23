@@ -9,11 +9,8 @@ import { RepliedMessage } from '../RepliedMessage/RepliedMessage'
 
 import type { IMessageBodyProps } from './types'
 
-export const MessageBody = ({
-  message,
-  isSelectedRoomPrivate = false
-}: IMessageBodyProps & { isSelectedRoomPrivate?: boolean }) => {
-  const showAuthorName = !isSelectedRoomPrivate && !message.isSelf
+export const MessageBody = ({ message, isRoomPrivate = false }: IMessageBodyProps & { isRoomPrivate?: boolean }) => {
+  const showAuthorName = !isRoomPrivate && !message.isSelf
 
   const className = createClassNameWithModifiers({ rootClass: 'message-body', modifiers: [message.status] })
 

@@ -15,6 +15,7 @@ export const transformRoomForUser = ({
     id: String(_id),
     authorId,
     chatName,
+    lastMessageId: messages[messages.length - 1] ?? null,
     users: otherUsers,
     messages,
   }

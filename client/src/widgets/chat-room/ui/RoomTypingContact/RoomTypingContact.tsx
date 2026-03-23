@@ -6,9 +6,9 @@ import { useContact } from 'src/entities/contact'
 
 import { AppDotsAnimatedText } from 'src/shared/ui'
 
-export const RoomTypingContact = ({ selectedChatRoom }: { selectedChatRoom: IChatRoom }) => {
+export const RoomTypingContact = ({ room }: { room: IChatRoom }) => {
   const { getContactByIds } = useContact()
-  const searchedContacts = getContactByIds(selectedChatRoom.users)
+  const searchedContacts = getContactByIds(room.users)
 
   const typingContact = searchedContacts.filter((contact) => contact.isTyping).map((contact) => contact.username)
   if (!typingContact.length) return null

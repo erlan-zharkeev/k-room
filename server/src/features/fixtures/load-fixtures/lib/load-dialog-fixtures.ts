@@ -5,7 +5,7 @@ import { USER_FIXTURES, UserModel } from 'entities/user'
 const ERLAN_ID = USER_FIXTURES.find(({ username }) => username === 'erlan')?.id ?? ''
 const TOLIK_ID = USER_FIXTURES.find(({ username }) => username === 'tolik')?.id ?? ''
 
-const MESSAGE_COUNT = 100
+const MESSAGE_COUNT = 101
 const CONTACT_INTERACTION = 'invite-accepted'
 const DAY_IN_MS = 1000 * 60 * 60 * 24
 const HOUR_IN_MS = 1000 * 60 * 60
@@ -137,7 +137,8 @@ export const loadDialogFixtures = async () => {
   const roomMessageIds = new Set((room.messages ?? []).map((id) => String(id)))
   const missingRoomMessageIds = fixtureMessageIds.filter((id) => !roomMessageIds.has(id))
 
-  if (missingRoomMessageIds.length) {
-    await ChatRoomModel.updateOne({ _id: room.id }, { $push: { messages: { $each: missingRoomMessageIds } } })
-  }
+  await ChatRoomModel.updateOne(
+    { _id: room.id },
+    missingRoomMessageIds.length ? { $push: { messages: { $each: missingRoomMessageIds } } } : {}
+  )
 }

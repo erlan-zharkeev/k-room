@@ -1,3 +1,3 @@
 import { IChatRoom } from 'common-types'
 
-export type DbChatRoomType = IChatRoom & { avatarId: string }
+export type FChatRoomType = IChatRoom & { avatarId: string }

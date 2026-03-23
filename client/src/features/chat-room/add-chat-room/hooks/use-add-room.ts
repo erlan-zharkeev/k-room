@@ -3,7 +3,7 @@ import { SocketActionsType } from 'common-types'
 import { useChatRoom } from 'src/entities/chat-room'
 
 import { socket } from 'src/shared/api'
-import { DbChatRoomType } from 'src/shared/config'
+import { FChatRoomType } from 'src/shared/config'
 
 import { transformRoomData } from '../../~shared'
 
@@ -14,7 +14,7 @@ export const useAddRoom = () => {
     socket.on<SocketActionsType>('new-room-added', roomAdditionHandler)
   }
 
-  const roomAdditionHandler = (data: DbChatRoomType) => {
+  const roomAdditionHandler = (data: FChatRoomType) => {
     putChatRoom(transformRoomData(data))
   }
 

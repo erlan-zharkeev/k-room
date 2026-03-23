@@ -3,24 +3,22 @@ import { useRef } from 'react'
 
 import { MessageList } from 'src/features/message'
 
-import { useChatRoom } from 'src/entities/chat-room'
-import { useViewport } from 'src/entities/system'
+import { FChatRoomType } from 'src/shared/config'
 
 import { ChatRoomFooter } from '../ChatRoomFooter/ChatRoomFooter'
 import { ChatRoomHeader } from '../ChatRoomHeader/ChatRoomHeader'
 import { ChatRoomStub } from '../ChatRoomStub/ChatRoomStub'
 
-export const ChatRoom = () => {
+export const ChatRoom = ({ room }: { room: FChatRoomType | undefined }) => {
   const roomDomEl = useRef<HTMLDivElement>(null)
-  const { greaterOrEqualDesktop } = useViewport()
-  const { selectedChatRoom } = useChatRoom()
+
   return (
     <div className="chat-room" ref={roomDomEl}>
-      {greaterOrEqualDesktop && <ChatRoomStub selectedChatRoom={selectedChatRoom} />}
-      {selectedChatRoom && (
+      <ChatRoomStub room={room} />
+      {room && (
         <div className="chat-room__content">
-          <ChatRoomHeader selectedChatRoom={selectedChatRoom} />
-          <MessageList selectedChatRoom={selectedChatRoom} />
+          <ChatRoomHeader room={room} />
+          <MessageList room={room} />
           <ChatRoomFooter />
         </div>
       )}

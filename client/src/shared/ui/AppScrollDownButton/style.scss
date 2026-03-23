@@ -1,0 +1,23 @@
+.app-scroll-down-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--modal-overflow-color);
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  svg {
+    color: var(--text);
+  }
+}
+
+.app-scroll-down-button--hidden {
+  opacity: 0;
+  transition: opacity 400ms ease;
+  pointer-events: none;
+}

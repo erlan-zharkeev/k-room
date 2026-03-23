@@ -1,14 +1,14 @@
 import { SocketActionsType } from 'common-types'
 
+import { useHandleDeliveredMessage } from 'src/features/message/message-delivery-handler'
+
 import { socket } from 'src/shared/api'
 
-import { usePushMessage } from '../../push-message/hooks'
-
 export const useMessageDelivery = () => {
-  const { pushMessage } = usePushMessage()
+  const { handleDeliveredMessage } = useHandleDeliveredMessage()
 
   const monitorMessageDelivered = () => {
-    socket.on<SocketActionsType>('message-delivered', pushMessage)
+    socket.on<SocketActionsType>('message-delivered', handleDeliveredMessage)
   }
   return { monitorMessageDelivered }
 }

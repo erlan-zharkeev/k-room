@@ -2,9 +2,7 @@ import './style.scss'
 
 import { AppText } from 'src/shared/ui'
 
-export const NoMessagesPlaceholder = ({ messages }: { messages: string[] }) => {
-  if (messages.length) return null
-
+export const NoMessagesPlaceholder = () => {
   return (
     <div className="no-messages-placeholder">
       <AppText>There are no messages, write first</AppText>

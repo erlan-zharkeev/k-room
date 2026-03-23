@@ -20,6 +20,19 @@ export const useLoadRoomMessages = () => {
     socket.emit<SocketActionsType>('load-room-messages', payload)
   }
 
+  const loadOlderMessages = (roomId: string) => {
+    const beforeCreatedAt = nextBeforeCreatedAtRef.current[roomId]
+    const hasMoreMessages = hasMoreMessagesRef.current[roomId] ?? true
+
+    if (!beforeCreatedAt || !hasMoreMessages) return
+
+    loadRoomMessages({
+      roomId,
+      limit: ROOM_MESSAGES_PAGE_LIMIT,
+      beforeCreatedAt
+    })
+  }
+
   const handleRoomMessagesLoaded = async ({
     roomId,
     messages,
@@ -51,8 +64,5 @@ export const useLoadRoomMessages = () => {
     })
   }, [selectedChatRoom?.id])
 
-  const getNextBeforeCreatedAt = (roomId: string) => nextBeforeCreatedAtRef.current[roomId]
-  const getHasMoreMessages = (roomId: string) => hasMoreMessagesRef.current[roomId] ?? true
-
-  return { loadRoomMessages, getNextBeforeCreatedAt, getHasMoreMessages }
+  return { loadRoomMessages, loadOlderMessages }
 }

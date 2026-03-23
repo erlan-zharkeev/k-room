@@ -4,12 +4,12 @@ import { useChatRoomSelect, useOpenChatRoomSettingsModal } from 'src/features/ch
 
 import { ChatRoomPreview } from 'src/entities/chat-room'
 
-import { DbChatRoomType } from 'src/shared/config'
+import { FChatRoomType } from 'src/shared/config'
 import { AppButton } from 'src/shared/ui'
 
 import { RoomTypingContact } from '../RoomTypingContact/RoomTypingContact'
 
-export const ChatRoomHeader = ({ selectedChatRoom }: { selectedChatRoom: DbChatRoomType }) => {
+export const ChatRoomHeader = ({ room }: { room: FChatRoomType }) => {
   const { selectChatWithAsideById } = useChatRoomSelect()
   const { openChatRoomSettingsModal } = useOpenChatRoomSettingsModal()
 
@@ -19,8 +19,8 @@ export const ChatRoomHeader = ({ selectedChatRoom }: { selectedChatRoom: DbChatR
         <AppButton prefixIconName="arrow-left" onClick={() => selectChatWithAsideById('')} borderless />
       </div>
       <div className="chat-room-header__info">
-        <ChatRoomPreview room={selectedChatRoom} headerMode onClick={openChatRoomSettingsModal} titleSize="large" />
-        <RoomTypingContact selectedChatRoom={selectedChatRoom} />
+        <ChatRoomPreview room={room} headerMode onClick={openChatRoomSettingsModal} titleSize="large" />
+        <RoomTypingContact room={room} />
       </div>
     </div>
   )
