@@ -6,6 +6,7 @@
   "scripts": {
     "lint:fix-style": "stylelint **/*.scss --fix",
     "lint:fix-es": "eslint **/*.{ts,tsx} --fix",
+    "lint:style": "stylelint \"src/**/*.scss\"",
     "serve": "vite --host",
     "build": "tsc && vite build",
     "serve:build": "node prod-server.cjs",

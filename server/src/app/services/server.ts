@@ -1,11 +1,14 @@
-import { corsOptions, httpsOptions } from 'app/config'
 import bodyParser from 'body-parser'
-import { RouteNamesEnum } from 'common-types'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import https from 'https'
 import methodOverride from 'method-override'
+
+import { RouteNamesEnum } from 'common-types'
+
+import { corsOptions, httpsOptions } from 'app/config'
+
 import { ENV } from 'shared-config'
 import { initDataBase, log, setIO } from 'shared-lib'
 

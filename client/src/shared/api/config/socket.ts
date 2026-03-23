@@ -1,8 +1,9 @@
 import { RouteNamesEnum } from 'common-types'
 import { io } from 'socket.io-client'
 
-const { DEV, VITE_SERVER_PORT, VITE_MAX_RECONNECT_ATTEMPTS } = import.meta.env
-const initConnectionPath = DEV ? `:${VITE_SERVER_PORT}` : ''
+import { CLIENT_ENV } from 'src/shared/config'
+
+const initConnectionPath = import.meta.env.DEV ? `:${CLIENT_ENV.serverPort}` : ''
 
 export const socket = io(`${initConnectionPath}/`, {
   transports: ['websocket'],
@@ -13,5 +14,5 @@ export const socket = io(`${initConnectionPath}/`, {
   reconnection: true,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,
-  reconnectionAttempts: VITE_MAX_RECONNECT_ATTEMPTS
+  reconnectionAttempts: CLIENT_ENV.maxReconnectAttempts
 })

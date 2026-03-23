@@ -3,6 +3,7 @@ import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 
 import { IFileData, IFileMetaData } from '../config'
+
 import { createSha256FromBuffer } from './create-sha-from-buffer'
 
 export const buildFileData = async (buffer: Buffer, filename: string): Promise<IFileData> => {

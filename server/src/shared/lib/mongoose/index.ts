@@ -1,6 +1,9 @@
-import { initMediaBuckets } from 'entities/media'
-import { loadFixtures } from 'features/fixtures'
 import mongoose from 'mongoose'
+
+import { loadFixtures } from 'features/fixtures'
+
+import { initMediaBuckets } from 'entities/media'
+
 import { ENV } from 'shared-config'
 import { log } from 'shared-lib'
 

@@ -1,5 +1,3 @@
-import { IBaseFrontendUserData } from "./user";
-
 export type InteractionType =
   | "default"
   | "invited"

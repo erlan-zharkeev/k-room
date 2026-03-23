@@ -8,14 +8,23 @@ import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  const VITE_FIREBASE_API_KEY = JSON.stringify(env.VITE_FIREBASE_API_KEY)
+  const envDir = path.resolve(__dirname, '..')
+  const env = loadEnv(mode, envDir, '')
   const isDev = mode === 'development'
 
   return {
     define: {
-      VITE_FIREBASE_API_KEY
+      CLIENT_ENV_DATA: JSON.stringify({
+        appName: env.APP_NAME,
+        serverPort: Number(env.SERVER_PORT),
+        clientPort: Number(env.CLIENT_PORT),
+        mailApp: env.MAIL_APP,
+        host: env.HOST,
+        maxReconnectAttempts: Number(env.MAX_RECONNECT_ATTEMPTS),
+        firebaseApiKey: env.FIREBASE_API_KEY
+      })
     },
+    envDir,
     css: {
       preprocessorOptions: {
         scss: {
@@ -148,14 +157,14 @@ export default defineConfig(({ mode }) => {
       // },
       // host: '0.0.0.0',
       historyApiFallback: true,
-      port: Number(env.VITE_CLIENT_PORT),
+      port: Number(env.CLIENT_PORT),
       https: {
         key: fs.readFileSync('./dev-certs/k-room-dev-key.pem'),
         cert: fs.readFileSync('./dev-certs/k-room-dev.pem')
       },
       proxy: {
         '/api': {
-          target: `${env.VITE_HOST}:${env.VITE_SERVER_PORT}`,
+          target: `${env.HOST}:${env.SERVER_PORT}`,
           changeOrigin: true,
           secure: false
         }

@@ -1,10 +1,10 @@
 import './style.scss'
+
+import { CLIENT_ENV } from 'src/shared/config'
 import { AppScrollContainer } from 'src/shared/ui'
 
-const { VITE_MAIL_APP } = import.meta.env
-
 export const PrivacyPolicy = () => {
-  const appName = 'K-Room'
+  const appName = CLIENT_ENV.appName
   return (
     <AppScrollContainer additionalClassName="privacy-policy" height="100%">
       <h1>Privacy Policy for {appName}</h1>
@@ -104,8 +104,8 @@ export const PrivacyPolicy = () => {
       <h2>7. Contacts</h2>
       <p>
         If you have any questions regarding this Privacy Policy, please&nbsp;
-        <a className="link paragraph-text paragraph-text--md" href={`mailto:${VITE_MAIL_APP}?subject=common`}>
-          contact us ({VITE_MAIL_APP})
+        <a className="link paragraph-text paragraph-text--md" href={`mailto:${CLIENT_ENV.mailApp}?subject=common`}>
+          contact us ({CLIENT_ENV.mailApp})
         </a>
         .
       </p>

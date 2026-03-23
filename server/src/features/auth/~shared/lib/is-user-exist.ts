@@ -1,7 +1,11 @@
-import { StatusEnum } from 'common-types'
-import { UserModel } from 'entities/user'
-import { USER_MESSAGE } from 'features/user'
 import mongoose from 'mongoose'
+
+import { StatusEnum } from 'common-types'
+
+import { USER_MESSAGE } from 'features/user'
+
+import { UserModel } from 'entities/user'
+
 import { AppResponseType } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

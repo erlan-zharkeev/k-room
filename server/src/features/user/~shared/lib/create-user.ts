@@ -1,7 +1,11 @@
-import { ProviderType } from 'common-types'
-import { UserModel } from 'entities/user'
-import { isUserExist } from 'features/auth'
 import mongoose from 'mongoose'
+
+import { ProviderType } from 'common-types'
+
+import { isUserExist } from 'features/auth'
+
+import { UserModel } from 'entities/user'
+
 import { log } from 'shared-lib'
 
 export const createUser = async ({
@@ -23,7 +27,7 @@ export const createUser = async ({
 
     const userAlreadyExists = await isUserExist({ id: idCandidate, username, email })
     if (userAlreadyExists) {
-      log.warn('-New user creating skipped: user already exists')
+      log.success('-New user creating skipped: user already exists')
       return null
     }
 

@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose'
 
 import { ICodeSchema } from '../config'
+
 import { codePurposeSchema } from './code-purpose.model'
 
 const codesSchema = new Schema<ICodeSchema>({

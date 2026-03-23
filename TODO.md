@@ -8,4 +8,4 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 
 ## Backlog
 
-- Add upcoming tasks here.
+- Rewrite privacy policy.

@@ -1,4 +1,5 @@
 import { IFrontendUserData } from 'common-types'
+
 import { IUserSchema } from 'entities/user'
 
 export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {

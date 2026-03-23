@@ -1,11 +1,13 @@
 import bcrypt from 'bcryptjs'
-import { type IAuthRegistrationPayload, StatusEnum } from 'common-types'
-import { createUser } from 'features/user'
 import type { AppResponseType, IAppRequest } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
 
-import { isUserExist } from '../~shared'
-import { MESSAGE } from './config'
+import { type IAuthRegistrationPayload, StatusEnum } from 'common-types'
+
+import { isUserExist } from 'features/auth'
+import { MESSAGE } from 'features/auth/registration/config'
+import { createUser } from 'features/user'
+
+import { throwHTTPError } from 'shared-lib'
 
 export const registration = async (req: IAppRequest, res: AppResponseType<null>) => {
   try {

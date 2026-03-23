@@ -1,6 +1,9 @@
-import { StatusEnum } from 'common-types'
 import { type NextFunction, type Request, type Response } from 'express'
+
+import { StatusEnum } from 'common-types'
+
 import { AUTH_MESSAGE, refreshTokenValidator, verifyToken } from 'features/auth'
+
 import { ENV } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

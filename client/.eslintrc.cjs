@@ -1,18 +1,20 @@
 module.exports = {
+  extends: ['../.eslintrc.base.cjs', 'plugin:react/recommended', 'standard-with-typescript'],
   env: {
-    es2021: true,
     browser: true
   },
-  extends: ['plugin:react/recommended', 'standard-with-typescript'],
   parserOptions: {
     project: ['./tsconfig.json', './tsconfig.node.json'],
     tsconfigRootDir: __dirname,
     files: ['*.ts', '*.tsx', '*.js'],
-    ecmaVersion: 8,
-    sourceType: 'module'
+    ecmaVersion: 8
   },
   plugins: ['react', '@typescript-eslint', 'import'],
-  ignorePatterns: ['**/*.js'],
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/space-before-function-paren': 'off',

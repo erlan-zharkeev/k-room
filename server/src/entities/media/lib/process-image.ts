@@ -1,7 +1,8 @@
 import type { Buffer } from 'node:buffer'
 
-import { SharpSettingsKey } from "shared-config"
 import sharp from "sharp"
+
+import { SharpSettingsKey } from "shared-config"
 
 import { SHARP_PRESETS } from '../config'
 

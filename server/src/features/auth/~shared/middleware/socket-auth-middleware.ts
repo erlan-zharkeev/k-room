@@ -1,6 +1,9 @@
-import { IEventAuthError, SocketActionsType } from 'common-types'
 import { parse } from 'cookie'
+
+import { IEventAuthError, SocketActionsType } from 'common-types'
+
 import { UserModel } from 'entities/user'
+
 import { ENV, SocketInstanceType } from 'shared-config'
 
 import { verifyToken } from '../lib'

@@ -1,5 +1,6 @@
-import { AuthEndpointsEnum } from 'common-types'
 import { Router } from 'express'
+
+import { AuthEndpointsEnum } from 'common-types'
 
 import { signInWithProvider } from './controller'
 

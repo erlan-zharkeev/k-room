@@ -1,10 +1,13 @@
-import { UserModel } from 'entities/user'
 import { type Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
+
 import { setToken } from 'features/auth'
 import { setCookie } from 'features/cookie'
+
+import { UserModel } from 'entities/user'
+
 import { ENV, IAppRequest } from 'shared-config'
 import { log } from 'shared-lib'
-import { v4 as uuidv4 } from 'uuid'
 
 export const updateTokens = async (id: string, req: IAppRequest, res: Response) => {
   setToken(res, 'jwt', id, ENV.K_ROOM_ACCESS_TOKEN_SECRET, ENV.JWT_ACCESS_EXPIRES_INTERVAL)

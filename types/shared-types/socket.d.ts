@@ -46,7 +46,7 @@ export interface IEventUpdateChatRoom {
 }
 export interface IEventUserTyping {
     authorName: string;
-    usersTo: IBaseFrontendUserData[];
+    usersTo: string[];
     isTyping: boolean;
 }
 export interface IEventGetContactTypingStatus {

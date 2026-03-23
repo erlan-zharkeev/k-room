@@ -1,7 +1,8 @@
+import { model, Schema } from 'mongoose'
+
 import {
   type IMessageSchema
 } from 'common-types'
-import { model, Schema } from 'mongoose'
 
 import { messageMetaDataSchema } from './meta-data.model'
 import { reactionSchema } from './reaction.model'

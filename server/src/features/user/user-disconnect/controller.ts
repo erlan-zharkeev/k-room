@@ -1,7 +1,9 @@
 import { SocketActionsType } from 'common-types'
+
+import { setLastSeenData } from 'features/user'
+
 import { SocketInstanceType } from 'shared-config'
 
-import { setLastSeenData } from '../~shared'
 import { updateOnlineStatus } from '../update-online-status'
 
 export const controller = (socket: SocketInstanceType) => {

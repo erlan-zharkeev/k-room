@@ -1,12 +1,14 @@
 import bcrypt from 'bcryptjs'
-import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common-types'
-import { createUser, mapUserToDto } from 'features/user'
-import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
 import { v4 as uuidv4 } from 'uuid'
 
-import { updateTokens } from '../~shared'
-import { MESSAGE } from './config'
+import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common-types'
+
+import { updateTokens } from 'features/auth'
+import { MESSAGE } from 'features/auth/sign-in-with-provider/config'
+import { createUser, mapUserToDto } from 'features/user'
+
+import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
+import { throwHTTPError } from 'shared-lib'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
   try {

@@ -6,7 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.ts',
+  entry: './src/app/index.ts',
   target: 'node',
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -16,7 +16,14 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      '@features': path.resolve(__dirname, 'src/features')
+      '@features': path.resolve(__dirname, 'src/features'),
+      app: path.resolve(__dirname, 'src/app'),
+      features: path.resolve(__dirname, 'src/features'),
+      entities: path.resolve(__dirname, 'src/entities'),
+      'shared-config': path.resolve(__dirname, 'src/shared/config'),
+      'shared-lib': path.resolve(__dirname, 'src/shared/lib'),
+      'shared-middleware': path.resolve(__dirname, 'src/shared/middleware'),
+      'common-types': path.resolve(__dirname, '../types')
     }
   },
   externals: [nodeExternals()],
@@ -36,7 +43,7 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: 'src/assets', to: './assets' }]
+      patterns: [{ from: 'src/assets', to: './assets', noErrorOnMissing: true }]
     })
   ],
   module: {

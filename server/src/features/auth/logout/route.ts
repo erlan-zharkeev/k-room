@@ -1,7 +1,9 @@
-import { AuthEndpointsEnum } from 'common-types'
 import { Router } from 'express'
 
-import { accessTokenValidator } from '../~shared'
+import { AuthEndpointsEnum } from 'common-types'
+
+import { accessTokenValidator } from 'features/auth'
+
 import { logout } from './controller'
 
 export const logoutRouter = Router()

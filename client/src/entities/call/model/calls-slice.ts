@@ -4,12 +4,13 @@ import {
   EventCallStartedAtType,
   EventCallsUpdatedType,
   EventCallUpdatedType,
-  IEventCallUser,
-  UserMediaType,
-  UserShortType
+  IEventCallUser
 } from 'common-types'
+import type { IBaseFrontendUserData } from 'common-types'
 
-import type { ICallsState, IStreamConstraints } from '../types'
+import type { CallMediaType, ICallsState, IStreamConstraints } from '../types'
+
+type CallInterlocutorType = IBaseFrontendUserData & { avatar?: string }
 
 const initialCurrentCall: ICall = {
   id: '',
@@ -63,7 +64,7 @@ export const callsSlice = createSlice({
     updateAllList(state, { payload }: { payload: ICall[] }) {
       state.list = payload
     },
-    initModalToCall(state, { payload }: { payload: UserShortType }) {
+    initModalToCall(state, { payload }: { payload: CallInterlocutorType }) {
       state.showCallModal = true
       const { id, avatar, username } = payload
       state.currentCall.interlocutorId = id
@@ -113,7 +114,7 @@ export const callsSlice = createSlice({
     setCallAudio(state, { payload }) {
       state.settings.audio.value = payload
     },
-    setCallSettingsLoading(state, { payload }: { payload: { type: UserMediaType; value: boolean } }) {
+    setCallSettingsLoading(state, { payload }: { payload: { type: CallMediaType; value: boolean } }) {
       const { type, value } = payload
       state.settings[type].loading = value
     },

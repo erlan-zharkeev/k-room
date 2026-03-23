@@ -1,21 +1,32 @@
 module.exports = {
+  extends: ['../.eslintrc.base.cjs', 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   env: {
-    es2021: true,
     node: true
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
-    sourceType: 'module',
     files: ['*.ts', '*.js'],
-    ecmaVersion: 8,
-    sourceType: 'module'
+    ecmaVersion: 8
   },
   plugins: ['@typescript-eslint', 'simple-import-sort'],
-  ignorePatterns: ['**/*.js'],
   rules: {
-    'simple-import-sort/imports': 'error',
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          ['^node:'],
+          ['^@?\\w'],
+          ['^common-types$'],
+          ['^app/'],
+          ['^features/'],
+          ['^entities/'],
+          ['^shared-config$', '^shared-lib$', '^shared-middleware$'],
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$']
+        ]
+      }
+    ],
     'simple-import-sort/exports': 'error',
     'sort-imports': 'off',
     'import/order': 'off',

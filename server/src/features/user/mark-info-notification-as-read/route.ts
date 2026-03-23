@@ -1,5 +1,7 @@
-import { UserEndpointsEnum } from 'common-types'
 import { Router } from 'express'
+
+import { UserEndpointsEnum } from 'common-types'
+
 import { accessTokenValidator } from 'features/auth'
 
 import { markInfoAsRead } from './controller'

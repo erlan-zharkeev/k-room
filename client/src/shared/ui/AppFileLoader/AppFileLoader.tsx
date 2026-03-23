@@ -1,5 +1,5 @@
 import './style.scss'
-import { useState } from 'react'
+import { useId, useState } from 'react'
 
 import { IImageObject } from 'common-types'
 
@@ -28,13 +28,15 @@ export const AppFileLoader = ({
 }: IAppFileLoaderProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const notifications = useNotification()
+  const previewValue = typeof value === 'string' ? value : undefined
+  const inputId = useId()
 
   if (design === 'avatar' && multiple) {
     console.warn('AppFileLoader: design "avatar" is not compatible with multiple=true. Forcing multiple = false.')
     multiple = false
   }
 
-  const normalizedValue: IImageObject[] = Array.isArray(value) ? value : value ? [value] : []
+  const normalizedValue: IImageObject[] = Array.isArray(value) ? value.filter((item): item is IImageObject => typeof item !== 'string') : value && typeof value !== 'string' ? [value] : []
 
   const updateValue = (images: IImageObject[]) => {
     onChange(multiple ? images : images[0] ?? null)
@@ -94,14 +96,14 @@ export const AppFileLoader = ({
       {design === 'common' && (
         <div className="app-file-loader__actions">
           <AppButton loading={isLoading} disabled={disabled || isLoading} borderless>
-            <label htmlFor="file-upload" className="app-file-loader__label">
+            <label htmlFor={inputId} className="app-file-loader__label">
               <AppIcon name={isLoading ? 'loader' : 'paper-clip'} size="xs" />
               {showTextLabel && <span>Upload</span>}
               <input
                 key={isLoading ? 'uploading' : 'ready'}
                 name={name}
                 disabled={disabled || isLoading}
-                id="file-upload"
+                id={inputId}
                 type="file"
                 multiple={multiple}
                 onChange={(e) => {
@@ -116,9 +118,9 @@ export const AppFileLoader = ({
       )}
       {design === 'avatar' && (
         <div className="user-data-settings-modal__avatar">
-          <label htmlFor="file-upload" className="app-file-loader__avatar-label">
+          <label htmlFor={inputId} className="app-file-loader__avatar-label">
             <AppAvatar
-              src={normalizedValue[0]?.src ?? normalizedValue[0]}
+              src={normalizedValue[0]?.src ?? previewValue}
               size="large"
               showBadge={false}
               preview={false}
@@ -130,7 +132,7 @@ export const AppFileLoader = ({
               key={isLoading ? 'uploading' : 'ready'}
               name={name}
               disabled={disabled || isLoading}
-              id="file-upload"
+              id={inputId}
               type="file"
               multiple={false}
               onChange={(e) => {
@@ -144,7 +146,13 @@ export const AppFileLoader = ({
             additionalClassName={`app-file-loader__reset-btn ${!value ? 'app-file-loader__reset-btn--hide' : ''}`}
             text="Reset"
             borderless
-            onClick={() => removeFile(normalizedValue[0].name)}
+            onClick={() => {
+              if (normalizedValue[0]?.name) {
+                removeFile(normalizedValue[0].name)
+                return
+              }
+              onChange(null)
+            }}
           />
         </div>
       )}

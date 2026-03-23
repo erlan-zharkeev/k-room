@@ -1,5 +1,7 @@
 import { IMarkAsReadPayload, StatusEnum } from 'common-types'
+
 import { UserModel } from 'entities/user'
+
 import { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

@@ -1,7 +1,10 @@
 import type { IEventUpdateMessageStatus, MessageStatusType, SocketActionsType } from 'common-types'
+
+import { getSocketsByUserIds } from 'features/user'
+
 import { ChatRoomModel } from 'entities/chat-room'
 import { MessageModel } from 'entities/message'
-import { getSocketsByUserIds } from 'features/user'
+
 import { getIO } from 'shared-lib'
 
 export const changeMessageStatus = async (

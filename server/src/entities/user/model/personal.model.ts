@@ -1,6 +1,8 @@
-import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType } from 'common-types'
-import type { IUserPersonalData } from 'entities/user'
 import { Schema } from 'mongoose'
+
+import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType } from 'common-types'
+
+import type { IUserPersonalData } from 'entities/user'
 
 import { contactSchema } from './contact.model'
 

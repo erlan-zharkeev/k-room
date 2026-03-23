@@ -1,11 +1,14 @@
+import type { Server as HttpsServer } from 'https'
+import { Server } from 'socket.io'
+
 import { RouteNamesEnum } from 'common-types'
 import { SocketActionsType } from 'common-types'
+
 import { socketAuthMiddleware } from 'features/auth'
-import type { Server as HttpsServer } from 'https'
+
 import { ENV, ORIGINS, SYSTEM_DATA } from 'shared-config'
 import { type SocketInstanceType } from 'shared-config'
 import { log } from 'shared-lib'
-import { Server } from 'socket.io'
 
 import { socketRouter } from './socket-router'
 

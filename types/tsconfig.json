@@ -1,11 +1,9 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./",
     // "rootDir": "./../",
     "module": "ESNext",
-    "target": "ESNext",
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
     "declaration": true,
     "composite": true,
     "moduleResolution": "node"

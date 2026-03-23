@@ -2,11 +2,11 @@ const express = require('express')
 const path = require('path')
 const dotenv = require('dotenv')
 const http = require('http')
-const ENV = dotenv.config({ path: '.env.production' }).parsed
+const ENV = dotenv.config({ path: path.resolve(__dirname, '../.env.production') }).parsed
 const app = express()
 app.use(express.static(path.join(__dirname + '/build/')))
 const httpServer = http.createServer(app)
-httpServer.listen(ENV.VITE_CLIENT_PORT)
+httpServer.listen(ENV.CLIENT_PORT)
 const routes = [
   '/',
   '/app',
@@ -21,4 +21,4 @@ const routes = [
 routes.forEach((route) => {
   app.get(route, (_, res) => res.sendFile(path.join(__dirname, './build/index.html')))
 })
-console.log(ENV.VITE_CLIENT_PORT)
+console.log(ENV.CLIENT_PORT)

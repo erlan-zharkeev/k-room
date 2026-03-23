@@ -1,23 +1,29 @@
-import { StatusEnum } from 'common-types'
+import { Buffer } from 'node:buffer'
+
 import type { Response } from 'express'
+
+import { StatusEnum } from 'common-types'
+
 import { throwHTTPError } from 'shared-lib'
 
 import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from '../config'
 import { VALIDATE_MEDIA_FILE_MESSAGE } from '../config'
+
 import { buildFileData } from './build-file-data'
 import { processImageWithSharp } from './process-image'
 import { validateFileMetaData } from './validate-file-meta-data'
 
 export const uploadBufferToBucket = async (
   bucket: MongooseGridFSBucketType,
-  buffer: Buffer,
+  buffer: Buffer | ArrayBuffer,
   filename: string,
   bucketName: MediaBucketNameType,
   res?: Response,
   options?: IUploadOptions
 ) => {
   try {
-    const outBuffer = await processImageWithSharp(buffer, options?.compression ?? 'common-compressed')
+    const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
+    const outBuffer = await processImageWithSharp(normalizedBuffer, options?.compression ?? 'common-compressed')
 
     const fileData = await buildFileData(outBuffer, filename)
 

@@ -1,4 +1,5 @@
 import { IFrontendContact } from "common-types"
+
 import { UserModel } from "entities/user"
 import { IContact } from "entities/user/config/types"
 

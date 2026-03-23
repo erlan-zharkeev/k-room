@@ -1,5 +1,6 @@
 import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common-types'
 import { type Response } from 'express'
+
 import { getIO, log } from 'shared-lib'
 
 export const throwHTTPError = (status: StatusEnum, res: Response | null, error: string, silent: boolean = false) => {

@@ -7,7 +7,6 @@ export const AppSelect = ({
   value,
   onChange,
   multiple = false,
-  loading = false,
   disabled = false
 }: IAppSelectProps) => {
   return (

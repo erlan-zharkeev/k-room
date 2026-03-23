@@ -1,5 +1,5 @@
+import type { AppIconName } from '../../AppIcon'
 import type { BaseSizeModifier, AvatarShapeModifier } from '../../config'
-import type { AppIconName } from '../AppIcon'
 
 export interface IAppAvatarProps {
   online?: boolean

@@ -41,7 +41,7 @@ export const AppAvatarLoader = ({
   return (
     <div className={className}>
       <div className="app-avatar-loader__body">
-        <AppAvatar src={path} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
+        <AppAvatar src={path ?? undefined} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
         <input type="file" onChange={normFile} />
         {path && (
           <div className="app-avatar-loader__clear-button" onClick={resetImage}>

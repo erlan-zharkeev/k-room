@@ -1,6 +1,9 @@
 import { IEventContactAddSuccess, IEventSaveContact, SocketActionsType } from 'common-types'
-import { UserModel } from 'entities/user'
+
 import { transformUserToContact } from 'features/user'
+
+import { UserModel } from 'entities/user'
+
 import { SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'
 

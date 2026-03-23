@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 import { MEDIA_BUCKET_NAMES } from '../config'
+
 import { mediaBuckets } from './media-bucket'
 
 export const initMediaBuckets = (): void => {

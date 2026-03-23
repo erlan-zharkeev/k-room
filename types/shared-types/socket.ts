@@ -1,16 +1,4 @@
-import {
-  ICall,
-  IChatRoom,
-  InteractionType,
-  IMessage,
-  MessageStatusType,
-  IReaction,
-  IBasicStreamSettings,
-  MediaFileValueType,
-  IBaseFrontendUserData,
-  IFrontendContactMap,
-  IFrontendContact,
-} from ".";
+import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, IFrontendContactMap, IFrontendContact } from ".";
 
 export interface IEventInterlocutorUpdateSignal {
   signal: unknown;
@@ -70,7 +58,7 @@ export interface IEventUpdateChatRoom {
 
 export interface IEventUserTyping {
   authorName: string;
-  usersTo: IBaseFrontendUserData[];
+  usersTo: string[];
   isTyping: boolean;
 }
 export interface IEventGetContactTypingStatus {

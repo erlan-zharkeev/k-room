@@ -1,5 +1,7 @@
 import { IEventStatusContact, SocketActionsType } from 'common-types'
+
 import { UserModel } from 'entities/user'
+
 import { getIO } from 'shared-lib'
 
 import { getSocketsByUserIds } from './get-sockets-by-ids'

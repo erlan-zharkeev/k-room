@@ -1,10 +1,13 @@
 import { SocketActionsType, StatusEnum } from 'common-types'
+
+import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'features/user'
+import { MESSAGE } from 'features/user/update-user-data/config'
+
 import { UserModel } from 'entities/user'
+
 import { AppResponseType, IAppRequest, ServerNotificationMessage, SHARED_MESSAGE } from 'shared-config'
 import { getIO, log, throwHTTPError } from 'shared-lib'
 
-import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from '../~shared'
-import { MESSAGE } from './config'
 import { updateUserAvatar } from './lib'
 
 export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {

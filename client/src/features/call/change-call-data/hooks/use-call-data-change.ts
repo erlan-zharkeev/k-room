@@ -9,9 +9,15 @@ export const useCallDataChange = () => {
   const dispatch = useDispatch()
 
   const monitorCallDataChanging = () => {
-    socket.on<SocketActionsType>('call-data-changed', (payload: EventCallUpdatedType) => {
+    const handleCallChanged = (payload: EventCallUpdatedType) => {
       dispatch(updateCall(payload))
-    })
+    }
+
+    socket.on<SocketActionsType>('call-data-changed', handleCallChanged)
+
+    return () => {
+      socket.off<SocketActionsType>('call-data-changed', handleCallChanged)
+    }
   }
 
   return { monitorCallDataChanging }

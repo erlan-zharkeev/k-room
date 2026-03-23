@@ -1,7 +1,11 @@
-import { IEventSearchContact, IFrontendContact, SocketActionsType } from 'common-types'
-import { UserModel } from 'entities/user'
-import { transformUserToContact } from 'features/user'
 import { Types } from 'mongoose'
+
+import { IEventSearchContact, IFrontendContact, SocketActionsType } from 'common-types'
+
+import { transformUserToContact } from 'features/user'
+
+import { UserModel } from 'entities/user'
+
 import { SocketInstanceType } from 'shared-config'
 
 import { emitSearchedContacts } from './lib'

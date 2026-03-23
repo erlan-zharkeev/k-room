@@ -1,7 +1,11 @@
-import { UserEndpointsEnum } from 'common-types'
-import { multerUploader } from 'entities/media'
 import { Router } from 'express'
+
+import { UserEndpointsEnum } from 'common-types'
+
 import { accessTokenValidator } from 'features/auth'
+
+import { multerUploader } from 'entities/media'
+
 import { validateRequest } from 'shared-middleware'
 
 import { updateUserData } from './controller'

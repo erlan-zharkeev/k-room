@@ -1,20 +1,21 @@
-import { useContext, useState } from 'react'
+// import { useContext, useState } from 'react'
+import { useState } from 'react'
 
-import avatar from 'antd/es/avatar'
-import { settings } from 'firebase/analytics'
+// import avatar from 'antd/es/avatar'
+// import { settings } from 'firebase/analytics'
 
 import { useContact } from 'src/entities/contact'
-import { useUser } from 'src/entities/user'
+// import { useUser } from 'src/entities/user'
 
 import { DbContactType } from 'src/shared/config'
-import { AdditionalServiceContext } from 'src/shared/providers'
+// import { AdditionalServiceContext } from 'src/shared/providers'
 
 export const useContactList = () => {
-  const { call } = useContext(AdditionalServiceContext)
+  // const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useContact()
   const contactList = contacts?.filter((contact) => contact.interactionType !== 'invite-hidden')
 
-  const { id, username } = useUser()
+  // const { id, username } = useUser()
 
   const [loaders, setLoaders] = useState({ room: {}, stream: {} } as {
     room: Record<string, boolean>
@@ -30,7 +31,7 @@ export const useContactList = () => {
   const initCall = async (interlocutorData: DbContactType) => {
     if (loaders.stream[interlocutorData.id]) return
     loaderStateChangeHandler(true, 'stream', interlocutorData.id)
-    await call.current.initCall(interlocutorData, id, avatar ?? '', username, settings)
+    // await call.current.initCall(interlocutorData, id, avatar ?? '', username, settings)
     loaderStateChangeHandler(false, 'stream', interlocutorData.id)
   }
 

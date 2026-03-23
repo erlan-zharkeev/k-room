@@ -15,7 +15,7 @@ export const EditUserDataModal = ({ onSuccess }: { onSuccess?: () => void }) => 
         fields={{
           avatar: {
             inputType: 'file',
-            value: initialFormData.avatar,
+            value: initialFormData.avatar ? { name: 'avatar', src: initialFormData.avatar } : null,
             design: 'avatar'
           },
           username: {

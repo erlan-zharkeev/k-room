@@ -1,12 +1,16 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { IEventMessageDelivered, IEventSendMessage, IMessage, SocketActionsType } from 'common-types'
+
+import { getSocketsByUserIds } from 'features/user'
+
 import { ChatRoomModel } from 'entities/chat-room'
 import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'entities/media'
 import { MessageModel } from 'entities/message'
 import { UserModel } from 'entities/user'
-import { getSocketsByUserIds } from 'features/user'
+
 import { SharpSettingsKey, SocketInstanceType } from 'shared-config'
 import { getIO } from 'shared-lib'
-import { v4 as uuidv4 } from 'uuid'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('send-message', async (data: IEventSendMessage) => {

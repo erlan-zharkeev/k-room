@@ -1,6 +1,9 @@
 import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from "common-types"
-import { UserModel } from "entities/user"
+
 import { getSocketsByUserIds } from "features/user/~shared/lib/get-sockets-by-ids"
+
+import { UserModel } from "entities/user"
+
 import { getIO } from "shared-lib"
 
 export const deleteContactById = async (

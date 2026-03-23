@@ -1,11 +1,15 @@
 import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common-types'
+
+import { getSocketsByUserIds } from 'features/user'
+
 import { ChatRoomModel } from 'entities/chat-room'
 import { UserModel } from 'entities/user'
-import { getSocketsByUserIds } from 'features/user'
+
 import { SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'
 
 import { transformRoomForUser } from '../../chat-room/~shared'
+
 import { transformUserToFrontendContact } from './lib'
 
 export const controller = (socket: SocketInstanceType) => {

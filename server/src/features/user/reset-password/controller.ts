@@ -1,8 +1,12 @@
 import bcrypt from 'bcryptjs'
+
 import { type ICreateNewPasswordPayload, StatusEnum } from 'common-types'
+
+import { isCodeExpired } from 'features/code'
+
 import { CodeModel } from 'entities/code'
 import { UserModel } from 'entities/user'
-import { isCodeExpired } from 'features/code'
+
 import { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

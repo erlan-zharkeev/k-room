@@ -1,6 +1,8 @@
-import { USER_ROLES } from 'common-types'
-import type { IUserSystemData } from 'entities/user'
 import { Schema } from 'mongoose'
+
+import { USER_ROLES } from 'common-types'
+
+import type { IUserSystemData } from 'entities/user'
 
 import { deviceSchema } from './device.model'
 

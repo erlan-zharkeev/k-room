@@ -1,7 +1,11 @@
-import { StatusEnum } from 'common-types'
-import { UserModel } from 'entities/user'
 import { type NextFunction, type Request, type Response } from 'express'
+
+import { StatusEnum } from 'common-types'
+
 import { AUTH_MESSAGE, updateTokens, verifyToken } from 'features/auth'
+
+import { UserModel } from 'entities/user'
+
 import { ENV } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

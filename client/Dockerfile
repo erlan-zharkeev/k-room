@@ -1,10 +1,12 @@
-FROM --platform=linux/amd64 node:18.13.0
+FROM --platform=linux/amd64 node:24.14.0
 
 RUN npm install -g pnpm
 
 RUN mkdir types
 
 COPY types types
+COPY .env.development /.env.development
+COPY .env.production /.env.production
 
 RUN mkdir client
 

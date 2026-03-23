@@ -30,6 +30,20 @@ import { useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
 
+const parsePeerData = (data: unknown) => {
+  if (typeof data === 'string') return JSON.parse(data) as { settings?: { audio?: boolean; video?: boolean } }
+  if (data instanceof Uint8Array) {
+    return JSON.parse(new TextDecoder().decode(data)) as { settings?: { audio?: boolean; video?: boolean } }
+  }
+  if (data instanceof ArrayBuffer) {
+    return JSON.parse(new TextDecoder().decode(new Uint8Array(data))) as {
+      settings?: { audio?: boolean; video?: boolean }
+    }
+  }
+
+  return null
+}
+
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatar: string, callerName: string) => {
   const payload: IEventCallUser = {
     userToCall,
@@ -89,6 +103,7 @@ export const useMakeCall = () => {
   const applyStreamToHtmlVideoTag = (isSelf: boolean = true) => {
     const stream = isSelf ? selfStream.current : interlocutorStream.current
     const videoDomElement = isSelf ? selfVideoDom.current : interlocutorVideoDom.current
+    if (!videoDomElement) return
     try {
       videoDomElement.srcObject = stream
     } catch (e) {
@@ -100,14 +115,16 @@ export const useMakeCall = () => {
     connection.current = new Peer({ initiator, trickle: false, stream })
     connection.current.on('stream', (interlocutorMediaStream: MediaStream) => {
       interlocutorStream.current = interlocutorMediaStream
+      if (!interlocutorVideoDom.current) return
       interlocutorVideoDom.current.srcObject = interlocutorMediaStream
     })
     connection.current.on('error', (e) => {
       clg('error', 'An unknown error has occurred' + String(e))
     })
     connection.current.on('close', () => closeConnection())
-    connection.current.on('data', (data: any) => {
-      const responseData = JSON.parse(data)
+    connection.current.on('data', (data: unknown) => {
+      const responseData = parsePeerData(data)
+      if (!responseData) return
       if (responseData.settings) dispatch(updateInterlocutorSettings(responseData.settings))
     })
   }

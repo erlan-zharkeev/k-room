@@ -1,6 +1,8 @@
-import { StatusEnum } from 'common-types'
 import { NextFunction, Request } from 'express'
 import { validationResult } from 'express-validator'
+
+import { StatusEnum } from 'common-types'
+
 import { AppResponseType } from 'shared-config'
 
 export const validateRequest = (req: Request, res: AppResponseType<null>, next: NextFunction) => {

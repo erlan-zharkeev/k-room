@@ -46,7 +46,7 @@ export const usePasswordRecovery = () => {
       const response = await doRequest('post', CodesEndpointsEnum.SendEmailCodePasswordRecovery, { email })
       if (!response) return
       setCodeAsSent(true)
-      const { nextTimeRequest } = response.data
+      const { nextTimeRequest } = response.data as unknown as { nextTimeRequest: number }
 
       setQueryParams((prev) => {
         const params = new URLSearchParams(prev)
@@ -73,7 +73,7 @@ export const usePasswordRecovery = () => {
       }
       const response = await doRequest('post', CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, payload)
       if (!response) return
-      const { query } = response.data
+      const { query } = response.data as unknown as { query: string }
       const pathname = buildPathWithParams(RouteNamesEnum.CreateNewPassword, { 'password-recovery': query })
       navigate({ pathname })
     } catch (error) {

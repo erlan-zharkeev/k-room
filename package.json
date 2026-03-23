@@ -6,6 +6,13 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
+    "client:lint": "npm --prefix client run lint",
+    "client:stylelint": "npm --prefix client run lint:style",
+    "client:build": "npm --prefix client run build",
+    "server:lint": "npm --prefix server run lint",
+    "server:typecheck": "npm --prefix server run typecheck",
+    "server:build": "npm --prefix server run build",
+    "check": "npm run client:lint && npm run client:stylelint && npm run client:build && npm run server:lint && npm run server:typecheck && npm run server:build",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },

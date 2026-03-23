@@ -1,21 +1,27 @@
 import './style.scss'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import { Form } from 'antd'
-import { IEventUpdateChatRoom, SocketActionsType } from 'common-types'
+import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common-types'
+
+import { useChatRoom } from 'src/entities/chat-room'
+import { useContact } from 'src/entities/contact'
+import { useSettings } from 'src/entities/settings'
+import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
-import { useTypedSelector } from 'src/shared/lib'
 import { AppAvatar, AppAvatarLoader, AppButton } from 'src/shared/ui'
 // import { validateRules } from 'src/shared/utils'
 
 export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
-  const { chatRooms } = useTypedSelector((state) => state.chatRooms)
-  const { selectedChatRoomId } = useTypedSelector((state) => state.settings)
+  const { chatRooms } = useChatRoom()
+  const { getContactByIds } = useContact()
+  const { selectedChatRoomId } = useSettings()
+  const { id } = useUser()
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
-  const { id } = useTypedSelector((state) => state.user.userData)
-  const [imagePath, setNewImagePath] = useState<string | undefined>(chatRoomData?.avatar)
-  const [avatarFile, setFile] = useState()
+  const members = chatRoomData ? getContactByIds(chatRoomData.users) : []
+  const [imagePath, setNewImagePath] = useState<string | null | undefined>(chatRoomData?.avatarId)
+  const [avatarFile, setFile] = useState<File | MediaFileValueType | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const isUserAuthor = chatRoomData?.authorId === id
 
@@ -23,24 +29,22 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
   // const [isValid, validate] = useValidate()
 
   const onFinish = async (values: { 'chat-name': string }) => {
-    const userIds = chatRoomData?.users.map((user) => user.id) ?? []
+    const userIds = chatRoomData?.users ?? []
     const updatedValues: IEventUpdateChatRoom = {
       roomId: selectedChatRoomId,
-      users: [id, ...userIds],
+      users: userIds,
       chatName: values['chat-name'],
       avatar: imagePath ?? '',
-      avatarFile
+      avatarFile: avatarFile as IEventUpdateChatRoom['avatarFile']
     }
     setIsLoading(true)
 
     socket.emit<SocketActionsType>('update-chat-room', updatedValues)
-    socket.on<SocketActionsType>('room-data-updated', () => {
+    socket.once<SocketActionsType>('room-data-updated', () => {
       setIsLoading(false)
       onClose()
     })
   }
-
-  useEffect(() => {}, [])
 
   const changeFormHandler = () => {
     // validate(form)
@@ -51,9 +55,9 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
       <div className="chat-room-settings-modal__members">
         <span className="paragraph-text ">Members:</span>
         <div className="chat-room-settings-modal__members-list">
-          {chatRoomData?.users?.map((user) => (
+          {members.map((user) => (
             <div className="chat-room-settings-modal__member" key={user.id}>
-              <AppAvatar src={user.avatar} showBadge={false} />
+              <AppAvatar src={`avatar.${user.id}`} showBadge={false} />
               <span className="paragraph-text ">{user.username}</span>
             </div>
           ))}
@@ -96,7 +100,7 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
       ) : (
         <div className="chat-room-settings-modal__wrapper">
           <div className="chat-room-settings-modal__image">
-            <AppAvatar src={chatRoomData?.avatar} stubIconName="image-stub" showBadge={false} size="large" />
+            <AppAvatar src={chatRoomData?.avatarId} stubIconName="image-stub" showBadge={false} size="large" />
           </div>
           <Members />
           <AppButton text="Close" onClick={onClose} loading={isLoading} />

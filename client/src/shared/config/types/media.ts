@@ -6,7 +6,7 @@ export enum ImageResolutions {
   jpg = 'image/jpg'
 }
 
-export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[]
+export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[] | string | null
 
 export interface IDbMedia {
   id: string

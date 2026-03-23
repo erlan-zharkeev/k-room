@@ -10,7 +10,7 @@ export const useSyncMedia = () => {
   const sync = (filename: string) => {
     syncMedia(filename, {
       mediaGet: (filename: string) => media.get(filename),
-      updateMedia: (fn: string, patch: any) => updateMedia(fn, patch),
+      updateMedia: (fn: string, patch) => updateMedia(fn, patch),
       loadMedia: (fn: string) => loadMedia(fn),
       loadMediaHeaders: (fn: string) => loadMediaHeaders(fn)
     }).catch(console.error)

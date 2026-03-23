@@ -1,6 +1,9 @@
-import { StatusEnum } from "common-types"
-import { UserModel } from "entities/user"
 import { ObjectId } from "mongoose"
+
+import { StatusEnum } from "common-types"
+
+import { UserModel } from "entities/user"
+
 import { AppResponseType, IAppRequest, SHARED_MESSAGE } from "shared-config"
 import { log, throwHTTPError } from "shared-lib"
 

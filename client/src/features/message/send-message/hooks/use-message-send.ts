@@ -38,7 +38,10 @@ export const useMessageSend = () => {
   }
 
   const setImages = (imagesFiles: FileLoaderValueType) => {
-    dispatch(updateMessageInputData({ images: imagesFiles }))
+    const normalizedImages = (
+      Array.isArray(imagesFiles) ? imagesFiles : imagesFiles ? [imagesFiles] : []
+    ).filter((image): image is Exclude<typeof image, string> => typeof image !== 'string')
+    dispatch(updateMessageInputData({ images: normalizedImages }))
   }
 
   const onSendMessageFormSubmitHandler = (roomId: string) => {

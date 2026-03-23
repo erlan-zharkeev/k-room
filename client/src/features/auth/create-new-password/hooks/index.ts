@@ -34,8 +34,9 @@ export const useCreateNewPassword = () => {
     try {
       checkPassMatch(payload)
       setIsLoading(true)
+      const password = typeof payload.secondPassword === 'string' ? payload.secondPassword : ''
       const formData: ICreateNewPasswordPayload = {
-        password: payload.secondPassword as string,
+        password,
         codeToValidate: passwordRestoreCode
       }
       const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)

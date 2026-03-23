@@ -1,5 +1,7 @@
+import { CLIENT_ENV } from 'src/shared/config'
+
 export const FIREBASE_CONFIG = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  apiKey: CLIENT_ENV.firebaseApiKey,
   authDomain: 'k-room-3a49a.firebaseapp.com',
   projectId: 'k-room-3a49a',
   storageBucket: 'k-room-3a49a.appspot.com',

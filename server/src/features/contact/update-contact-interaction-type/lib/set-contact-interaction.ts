@@ -1,4 +1,5 @@
 import type { InteractionType } from 'common-types'
+
 import { UserModel } from 'entities/user'
 
 export const setContactInteraction = async (docId: string, contactId: string, interaction: InteractionType) => {

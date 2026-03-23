@@ -8,7 +8,7 @@ export type ProviderType = (typeof providers)[number];
 
 export type AvailableCookieType = "device-id" | AuthTokensType;
 
-export type UnknownCallback = (...args: any[]) => any;
+export type UnknownCallback = (...args: unknown[]) => unknown;
 
 export interface IBasicStreamSettings {
   audio: boolean;

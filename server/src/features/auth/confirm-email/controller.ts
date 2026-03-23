@@ -1,6 +1,9 @@
 import { IConfirmEmailResponse, StatusEnum } from 'common-types'
-import { UserModel } from 'entities/user'
+
 import { mapUserToDto, USER_MESSAGE } from 'features/user'
+
+import { UserModel } from 'entities/user'
+
 import { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

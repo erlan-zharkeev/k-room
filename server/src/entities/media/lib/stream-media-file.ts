@@ -1,5 +1,7 @@
-import { StatusEnum } from 'common-types'
 import type { Response } from 'express'
+
+import { StatusEnum } from 'common-types'
+
 import { throwHTTPError } from 'shared-lib'
 
 import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from '../config'

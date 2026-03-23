@@ -1,5 +1,6 @@
-import { IImageObject } from "common-types"
 import { Schema } from "mongoose"
+
+import { IImageObject } from "common-types"
 
 export const imageSchema = new Schema<Omit<IImageObject, 'fileBuffer'>>({
   // TODO Probably src or name redundant

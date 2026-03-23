@@ -1,5 +1,7 @@
-import { UserEndpointsEnum } from 'common-types'
 import { Router } from 'express'
+
+import { UserEndpointsEnum } from 'common-types'
+
 import { validateRequest } from 'shared-middleware'
 
 import { resetPassword } from './controller'

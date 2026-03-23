@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from 'react'
 
 import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common-types'
 import { useDispatch } from 'react-redux'
+import type { SignalData } from 'simple-peer'
 
 import { AppDispatch } from 'src/app/store'
 
@@ -34,38 +35,54 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const { selfVideoDom } = useContext(RefsContext)
 
   const { call } = useContext(AdditionalServiceContext)
+  const callService = call.current
 
-  const [counterValue, startCounter, stopCounter] = useCounter(1, false)
+  const [counterValue, , startCounter, stopCounter] = useCounter(1, false)
 
   useEffect(() => {
-    socket.on<SocketActionsType>('call-started-at', (timeStamp: EventCallStartedAtType) => {
+    const handleCallStartedAt = (timeStamp: EventCallStartedAtType) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
-    })
-    socket.on<SocketActionsType>('call-user', (data: IEventCallUser) => {
+    }
+
+    const handleCallUser = (data: IEventCallUser) => {
       dispatch(setShowCallModal(data))
       const { from, signal, callId } = data
       if (callId) dispatch(setCallId(callId))
-      call.current.calling(from, signal)
-    })
-    socket.on<SocketActionsType>('call-ended', () => {
-      call.current.leaveCall(currentCall.id)
+      callService?.calling(from, signal as SignalData)
+    }
+
+    const handleCallEnded = () => {
+      callService?.leaveCall(currentCall.id)
       stopCounter()
-    })
-    socket.on<SocketActionsType>('interlocutor-update-signal', (data: IEventInterlocutorUpdateSignal) => {
-      call.current.updateCallerSignal(data.signal)
-    })
-  }, [])
+    }
+
+    const handleInterlocutorUpdateSignal = (data: IEventInterlocutorUpdateSignal) => {
+      callService?.updateCallerSignal(data.signal as SignalData)
+    }
+
+    socket.on<SocketActionsType>('call-started-at', handleCallStartedAt)
+    socket.on<SocketActionsType>('call-user', handleCallUser)
+    socket.on<SocketActionsType>('call-ended', handleCallEnded)
+    socket.on<SocketActionsType>('interlocutor-update-signal', handleInterlocutorUpdateSignal)
+
+    return () => {
+      socket.off<SocketActionsType>('call-started-at', handleCallStartedAt)
+      socket.off<SocketActionsType>('call-user', handleCallUser)
+      socket.off<SocketActionsType>('call-ended', handleCallEnded)
+      socket.off<SocketActionsType>('interlocutor-update-signal', handleInterlocutorUpdateSignal)
+    }
+  }, [callService, currentCall.id, dispatch, startCounter, stopCounter])
 
   const endCall = () => {
-    call.current.leaveCall(currentCall.id, stopCounter)
+    callService?.leaveCall(currentCall.id)
     stopCounter()
   }
 
   const answerCall = async () => {
     setIsAnswerLoading(true)
-    await call.current.answerCall(currentCall.id, settings)
+    await callService?.answerCall(currentCall.id)
     setIsAnswerLoading(false)
   }
 
@@ -76,25 +93,25 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const enableAudio = async () => {
     dispatch(setCallAudio(true))
     dispatch(setCallSettingsLoading({ type: 'audio', value: true }))
-    await call.current.enableAudio({ video: settings.video.value })
+    await callService?.enableAudio({ video: settings.video.value })
     dispatch(setCallSettingsLoading({ type: 'audio', value: false }))
   }
 
   const disableAudio = async () => {
     dispatch(setCallAudio(false))
-    call.current.disableAudio()
+    callService?.disableAudio()
   }
 
   const enableVideo = async () => {
     dispatch(setCallVideo(true))
     dispatch(setCallSettingsLoading({ type: 'video', value: true }))
-    await call.current.enableVideo({ callId: currentCall.id, audio: settings.audio.value })
+    await callService?.enableVideo({ callId: currentCall.id, audio: settings.audio.value })
     dispatch(setCallSettingsLoading({ type: 'video', value: false }))
   }
 
   const disableVideo = async () => {
     dispatch(setCallVideo(false))
-    call.current.disableVideo(false)
+    callService?.disableVideo()
   }
 
   const hideSelfVideo = () => !settings.video.value || settings.video.loading

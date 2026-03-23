@@ -1,5 +1,6 @@
-import { MESSAGE_STATUS } from 'common-types'
 import { Schema } from 'mongoose'
+
+import { MESSAGE_STATUS } from 'common-types'
 
 export const messageMetaDataSchema = new Schema(
   {

@@ -1,5 +1,6 @@
-import { InteractionType } from 'common-types'
 import { Schema } from 'mongoose'
+
+import { InteractionType } from 'common-types'
 
 import { IContact } from '../config/types'
 

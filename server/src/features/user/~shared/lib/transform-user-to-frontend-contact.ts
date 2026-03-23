@@ -1,4 +1,5 @@
 import type { IFrontendContact, InteractionType } from "common-types"
+
 import type { IUserSchema } from "entities/user"
 
 export const transformUserToContact = (user: IUserSchema, interactionType: InteractionType = 'default'): IFrontendContact => {

@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { StatusEnum } from 'common-types'
+import { IBackendResponse, StatusEnum } from 'common-types'
 import { useDispatch } from 'react-redux'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
@@ -13,7 +13,7 @@ const extractErrorPayload = async (e: AxiosError) => {
   const res = e.response
   if (!res) return null
 
-  const data = res.data as any
+  const data = res.data
 
   if (data instanceof Blob) {
     if (data.type?.includes('application/json')) {
@@ -26,7 +26,7 @@ const extractErrorPayload = async (e: AxiosError) => {
     }
     return null
   }
-  return data
+  return data as IBackendResponse<unknown> | null
 }
 
 export const useApiInterсeptor = () => {

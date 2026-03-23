@@ -1,6 +1,7 @@
+import type { Response } from 'express'
+
 import { MongooseGridFSBucketType, uploadBufferToBucket } from 'entities/media'
 import { mediaBuckets } from 'entities/media'
-import type { Response } from 'express'
 
 export const updateUserAvatar = async (buffer: Buffer | null, userId: string, res?: Response) => {
   const bucket = mediaBuckets.avatar as MongooseGridFSBucketType

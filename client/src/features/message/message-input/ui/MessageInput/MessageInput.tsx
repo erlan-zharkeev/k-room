@@ -6,7 +6,6 @@ import { useContactTyping } from 'src/features/contact'
 import { EmojiDropdown } from 'src/features/emoji-dropdown'
 import { MessageWithBindDataModal, useMessageSend } from 'src/features/message'
 
-import { FileLoaderValueType } from 'src/shared/config'
 import { AppButton, AppForm } from 'src/shared/ui'
 
 export const MessageInput = ({
@@ -44,7 +43,7 @@ export const MessageInput = ({
               showPreview: false,
               showTextLabel: false,
               onChange: (fieldData) => {
-                setImages(fieldData.value as FileLoaderValueType)
+                setImages(fieldData.value)
                 if (!insideModal) setIsModalOpen(true)
               }
             },
@@ -54,7 +53,7 @@ export const MessageInput = ({
               placeholder: 'Type message',
               ref: inputBodyRef,
               onChange: (e) => {
-                setBody(e.target.value as string)
+                setBody(e.target.value)
                 if (!emitTypingStatus) return
                 debouncedChangeTypeStatus(false)
               }

@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises'
 
 import bcrypt from 'bcryptjs'
-import { createUser } from 'features/user'
-import { updateUserAvatar } from 'features/user/update-user-data/lib'
 import mongoose from 'mongoose'
 import path from 'path'
+
+import { createUser } from 'features/user'
+import { updateUserAvatar } from 'features/user/update-user-data/lib'
 
 import { USER_FIXTURES } from './constants'
 

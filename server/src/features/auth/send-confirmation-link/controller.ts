@@ -1,4 +1,5 @@
 import { ISendConfirmationLinkResponse, StatusEnum } from 'common-types'
+
 import { AppResponseType, IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 

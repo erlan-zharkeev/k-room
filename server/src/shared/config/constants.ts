@@ -2,7 +2,7 @@ import type { IEnvVariables } from 'common-types'
 import dotenv, { type DotenvParseOutput } from 'dotenv'
 import type { ISystemDataConstants } from 'shared-config'
 
-const envs = dotenv.config({ path: `./.env.${process.env.NODE_ENV}` }).parsed as DotenvParseOutput | IEnvVariables
+const envs = dotenv.config({ path: `../.env.${process.env.NODE_ENV}` }).parsed as DotenvParseOutput | IEnvVariables
 envs.IS_DEV = process.env.NODE_ENV === 'development'
 envs.SERVER_ASSETS_PATH = envs.IS_DEV ? './src/assets/' : './build/assets/'
 envs.SERVER_URL = envs.IS_DEV ? `${envs.HOST}:${envs.SERVER_PORT}/api` : `${envs.HOST}/api`

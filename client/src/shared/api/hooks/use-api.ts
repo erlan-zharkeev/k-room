@@ -1,10 +1,10 @@
-import { AxiosResponse, ResponseType } from 'axios'
+import type { AxiosResponse, ResponseType } from 'axios'
 import { EndpointsType, IBackendResponse, StatusEnum } from 'common-types'
 
 import { useNotification } from 'src/entities/notification'
 
 import { axios, IDoRequestOpts } from '../config'
-import type { RequestTypes } from '../types'
+import type { RequestPayload, RequestTypes } from '../types'
 
 import { useApiInterсeptor } from './use-api-interceptor'
 
@@ -32,7 +32,7 @@ export const useApi = () => {
   const doRequest = async <T, R extends ResponseType = 'json'>(
     type: RequestTypes,
     endpoint: EndpointsType,
-    data: any = {},
+    data: RequestPayload = {},
     opts: IDoRequestOpts<R> = {}
   ): Promise<R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>> => {
     const { contentType = 'application/json', responseType = 'json' } = opts || {}

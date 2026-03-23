@@ -16,7 +16,7 @@ export const useReplyMessage = () => {
     // dispatch(resetRepliedMessage())
   }
 
-  const replyMessageHandler = (message: IMessage) => {
+  const replyMessageHandler = (_message: IMessage) => {
     // dispatch(setRepliedMessage(message))
   }
 

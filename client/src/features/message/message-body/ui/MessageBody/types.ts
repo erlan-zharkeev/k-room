@@ -1,10 +1,10 @@
-import { IMessage } from 'common-types'
+import type { IBaseFrontendUserData, IMessage } from 'common-types'
 
 export interface IMessageBodyProps {
   message: IMessage
 }
 
 export interface IMessageBodyReaction {
-  authors: UserShortType[]
+  authors: IBaseFrontendUserData[]
   glyph: string
 }

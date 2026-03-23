@@ -2,7 +2,7 @@ import { createBrowserHistory } from 'history'
 
 export const router = createBrowserHistory()
 
-router.listen(({ location }) => {
+router.listen(() => {
   // const path = location.pathname
   // const isRoutePublic = Boolean(publicRoutes.find((route) => route.path === path))
   // if (!isRoutePublic) return

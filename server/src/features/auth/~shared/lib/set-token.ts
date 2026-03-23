@@ -1,5 +1,6 @@
 import type { AuthTokensType } from 'common-types'
 import { type Response } from 'express'
+
 import { generateToken } from 'features/auth'
 import { parseExpires, setCookie } from 'features/cookie'
 
