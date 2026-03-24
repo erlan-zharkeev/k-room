@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['../.eslintrc.base.cjs', 'plugin:react/recommended', 'standard-with-typescript'],
+  extends: ['../config/eslint/base.cjs', 'plugin:react/recommended', 'standard-with-typescript'],
   env: {
     browser: true
   },

@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['../.eslintrc.base.cjs', 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: ['../config/eslint/base.cjs', 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   env: {
     node: true
   },

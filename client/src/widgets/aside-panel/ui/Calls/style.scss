@@ -5,11 +5,12 @@
 }
 
 .call-list__body .ant-list-item {
+  overflow: hidden;
   display: flex;
   flex-wrap: wrap;
+
   width: 100%;
   padding: 0.5rem 1rem;
-  overflow: hidden;
 }
 
 .call-list__body .ant-list-item-meta {
@@ -19,8 +20,8 @@
 
 .call-list__item {
   margin-bottom: 4px;
-  background-color: var(--main-bg);
   border-radius: 4px;
+  background-color: var(--main-bg);
   @include nm-inset-shadow;
 }
 
@@ -39,8 +40,8 @@
 }
 
 .call-list__called-at p {
-  color: var(--accent);
   font-size: 10px;
+  color: var(--accent);
 }
 
 .call-list__additional-info {

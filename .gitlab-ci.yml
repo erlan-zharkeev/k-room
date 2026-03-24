@@ -1,69 +1,36 @@
-image: docker:20.10
+stages:
+  - verify
+  - publish-images
 
 workflow:
   rules:
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-stages:
-  - publish-images
-  # - deploy
-
-cache:
-  paths: []
-
-services:
-  - docker:dind
+verify:
+  image: node:24.14.0
+  stage: verify
+  script:
+    - npm ci
+    - npm --prefix types ci
+    - npm --prefix client ci --legacy-peer-deps
+    - npm --prefix server ci
+    - npm run check
 
 publish-images:
+  image: docker:20.10
   stage: publish-images
+  services:
+    - docker:dind
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - docker login -u ketjo -p $DOCKERHUB_TOKEN
-    - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./server/.env.production
-    - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./server/.env.production
-    - echo "MAIL_APP_PASS=$MAIL_APP_PASS" >> ./server/.env.production
-    - echo "VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY" >> ./client/.env.production
-    - cat ./client/.env.production
+    - echo "$DOCKERHUB_TOKEN" | docker login -u ketjo --password-stdin
+    - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./.env.production
+    - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./.env.production
+    - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./.env.production
+    - echo "FIREBASE_API_KEY=$FIREBASE_API_KEY" >> ./.env.production
     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
     - docker push ketjo/k-room_server:latest
     - docker push ketjo/k-room_client:latest
-  only:
-    - main
-
-# Temporarily locked cause i don't wanna pay to aws)
-# deploy:
-#   stage: deploy
-#   before_script:
-#     - command -v ssh-agent >/dev/null || (apk add --update openssh)
-#     - eval $(ssh-agent -s)
-#     - echo "$SSH_PRIVATE_KEY" > aws.pem
-#     - chmod 600 aws.pem
-#     - ssh-add aws.pem
-#     - mkdir -p ~/.ssh
-#     - chmod 700 ~/.ssh
-#     - ssh-keyscan "$EC2_IPADDRESS" >> ~/.ssh/known_hosts
-#     - chmod 644 ~/.ssh/known_hosts
-#   script:
-#     - scp -i aws.pem -r deploy $AWS_USER@$EC2_IPADDRESS:./app
-#     - |
-#       for name in deploy_server_1 deploy_client_1 deploy_webserver_1; do
-#         if [ ! -z "$(docker ps -a -q -f name=$name)" ]; then
-#           docker stop $name
-#           docker rm $name
-#           echo "!Container - $name - deleted!"
-#         fi
-#       done
-#     - |
-#       for image in ketjo/k-room_server:latest ketjo/k-room_client:latest; do
-#         if [ ! -z "$(docker images -q $image)" ]; then
-#           docker rmi $image
-#         fi
-#       done
-#     - ssh -i aws.pem $AWS_USER@$EC2_IPADDRESS "
-#       docker login -u ketjo -p $DOCKERHUB_TOKEN &&
-#       docker pull ketjo/k-room_server:latest  &&
-#       docker pull ketjo/k-room_client:latest &&
-#       docker-compose -f ./app/deploy/docker-compose-prod.yml build &&
-#       docker-compose -f ./app/deploy/docker-compose-prod.yml restart"
-#   only:
-#     - main

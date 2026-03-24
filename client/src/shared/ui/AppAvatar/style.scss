@@ -6,15 +6,17 @@
 }
 
 .app-avatar__image {
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 1px;
-  object-fit: cover;
-  overflow: hidden;
-  background: var(--main-bg);
   border: solid 1px var(--text);
   border-radius: 50%;
+
+  object-fit: cover;
+  background: var(--main-bg);
 }
 
 .app-avatar.app-avatar--square-shape .ant-image-mask {
@@ -78,16 +80,19 @@
 }
 
 .app-avatar .icon svg {
-  color: var(--text);
   font-size: 4rem;
+  color: var(--text);
 }
 
 .app-avatar .ant-ribbon {
   top: -10px;
+
   display: flex;
   justify-content: center;
+
   height: 14px;
   padding: 0 4px;
+
   font-size: 10px;
   line-height: 16px;
 }

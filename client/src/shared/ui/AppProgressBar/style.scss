@@ -12,16 +12,19 @@
 
 .app-progress-bar {
   position: relative;
+  overflow: hidden;
   width: 100%;
   height: 4px;
-  overflow: hidden;
   @include nm-inset-element;
 
   .app-progress-bar__runner {
     position: absolute;
+
     width: 40%;
     height: 100%;
+
     background-color: var(--accent);
+
     animation: app-progress-bar-move 1.4s ease-in-out infinite;
   }
 }

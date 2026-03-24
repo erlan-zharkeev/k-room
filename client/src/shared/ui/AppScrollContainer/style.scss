@@ -1,15 +1,7 @@
 .app-scroll-container {
-  overflow: auto;
-  scrollbar-width: none;
   scrollbar-color: var(--text) transparent;
-
-  &.app-scroll-container--has {
-    scrollbar-width: thin;
-  }
-
-  &.app-scroll-container--show {
-    scrollbar-width: thin;
-  }
+  scrollbar-width: none;
+  overflow: auto;
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -21,11 +13,19 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--text);
     border-radius: 4px;
+    background: var(--text);
   }
 
   &::-webkit-scrollbar-thumb:hover {
     background: var(--text);
+  }
+
+  &.app-scroll-container--has {
+    scrollbar-width: thin;
+  }
+
+  &.app-scroll-container--show {
+    scrollbar-width: thin;
   }
 }

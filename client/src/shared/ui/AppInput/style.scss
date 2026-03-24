@@ -2,15 +2,17 @@
 
 .app-input {
   position: relative;
+
   display: flex;
   align-items: center;
+
   width: 100%;
   height: var(--medium-ui-height);
 
   .app-input__input-wrapper {
     position: relative;
-    width: 100%;
     overflow: hidden;
+    width: 100%;
     border-radius: 8px;
     @include focused-line;
   }

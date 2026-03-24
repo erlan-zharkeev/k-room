@@ -9,8 +9,8 @@
 
   .contact-list__list-item {
     padding: 4px;
-    background: var(--main-bg);
     border-radius: 4px;
+    background: var(--main-bg);
   }
 
   .contact-list__list-item:not(:last-child) {

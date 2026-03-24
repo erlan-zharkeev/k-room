@@ -2,10 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 32px;
   height: 32px;
-  background: var(--modal-overflow-color);
   border: none;
+
+  background: var(--modal-overflow-color);
 
   &:hover {
     cursor: pointer;
@@ -17,7 +19,7 @@
 }
 
 .app-scroll-down-button--hidden {
+  pointer-events: none;
   opacity: 0;
   transition: opacity 400ms ease;
-  pointer-events: none;
 }

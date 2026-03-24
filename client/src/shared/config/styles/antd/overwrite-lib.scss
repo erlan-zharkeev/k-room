@@ -67,12 +67,15 @@
   }
 
   .ant-notification .ant-notification-notice::before {
+    content: '';
+
     position: absolute;
     z-index: 0;
-    border-radius: 8px;
-    backdrop-filter: blur(8px);
-    content: '';
     inset: 0;
+
+    border-radius: 8px;
+
+    backdrop-filter: blur(8px);
   }
 
   .ant-notification .ant-notification-notice-message {

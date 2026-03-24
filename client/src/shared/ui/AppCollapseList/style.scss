@@ -8,12 +8,14 @@ $transition-height: 0.2s ease-in-out height;
 }
 
 .app-collapse-list__element {
+  overflow: hidden;
+
   width: 100%;
   margin-top: 8px;
   padding: 16px;
-  overflow: hidden;
-  background: var(--dark-gray-transparent-3);
   border-radius: 8px;
+
+  background: var(--dark-gray-transparent-3);
 }
 
 .app-collapse-list__element:hover {
@@ -21,8 +23,8 @@ $transition-height: 0.2s ease-in-out height;
 }
 
 .app-collapse-list__element.app-collapse-list__element--open .app-collapse__chevron-icon {
-  transition: $transition-icon;
   rotate: 90deg;
+  transition: $transition-icon;
 }
 
 .app-collapse-list__element.app-collapse-list__element--open .app-collapse-list__element-content {
@@ -46,9 +48,9 @@ $transition-height: 0.2s ease-in-out height;
 }
 
 .app-collapse-list__element-chevron-icon {
+  rotate: -90deg;
   margin-left: 8px;
   transition: $transition-icon;
-  rotate: -90deg;
 }
 
 .app-collapse-list__element-header-right-side {

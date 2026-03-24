@@ -4,24 +4,27 @@
 
 Production: https://k-room.space (Temporarily closed)
 
-![App main screen](./main-screen.png 'main screen')
+![App main screen](./docs/assets/main-screen.png 'main screen')
 
-![App call screen](./call-screen.png 'call screen')
+![App call screen](./docs/assets/call-screen.png 'call screen')
 
 ## Pre-install
 
-- To use husky run pnpm prepare in root
-- Then give rules chmod +x .husky/pre-commit
+- Husky is initialized automatically by `sh scripts/dev.sh`
 
 ### Requirements
 
 - node 24.14.0
-- pnpm as package manager
+- npm as package manager
 
 ## Development
 
 - Add variables to bash K_ROOM_MAIL_PASS, VITE_FIREBASE_API_KEY
-- Run sh dev.sh
+- Run `sh scripts/dev.sh`
+
+### Package managers
+
+- root, `client`, `server`, and `types` use `npm`
 
 ## Deploy
 

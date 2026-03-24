@@ -4,8 +4,8 @@
 }
 
 .short-chat-list__container {
-  height: 180px;
   overflow: auto;
+  height: 180px;
 }
 
 .short-chat-list__subtitle {
@@ -20,8 +20,8 @@
   border-radius: 4px;
 
   &:hover {
-    background-color: var(--dark-gray-transparent);
     cursor: pointer;
+    background-color: var(--dark-gray-transparent);
   }
 
   .ant-image {

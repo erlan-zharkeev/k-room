@@ -5,9 +5,9 @@
 }
 
 body {
+  scroll-behavior: smooth;
   margin: 0;
   line-height: 1.5;
-  scroll-behavior: smooth;
   text-rendering: optimizespeed;
 }
 
@@ -31,9 +31,9 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   * {
+    scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
   }
 }

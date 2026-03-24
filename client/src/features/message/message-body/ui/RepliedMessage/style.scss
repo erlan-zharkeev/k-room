@@ -1,18 +1,23 @@
 .replied-message {
   position: relative;
+
+  overflow: hidden;
+
   margin-top: 4px;
   padding: 8px;
-  overflow: hidden;
   border-radius: 8px;
 
   &::before {
+    content: '';
+
     position: absolute;
     top: 0;
     left: 0;
+
     width: 100%;
     height: 100%;
-    background: var(--accent);
+
     opacity: 0.1;
-    content: '';
+    background: var(--accent);
   }
 }

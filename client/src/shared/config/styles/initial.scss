@@ -1,11 +1,11 @@
 @use '~/global/index' as *;
 
 html {
-  overflow: hidden;
-  background-color: var(--main-bg);
-
   --real-1-percent-vh: 100vh;
   --chat-rooms-width: 35%;
+
+  overflow: hidden;
+  background-color: var(--main-bg);
 
   @include max-width-768 {
     --chat-rooms-width: 40%;
@@ -20,10 +20,11 @@ html {
 }
 
 * {
-  font-weight: 400;
-  font-family: 'Montserrat, Helvetica', sans-serif;
-  -webkit-touch-callout: none;
   user-select: none;
+  font-family: 'Montserrat, Helvetica', sans-serif;
+  font-weight: 400;
+
+  -webkit-touch-callout: none;
 }
 
 h1,

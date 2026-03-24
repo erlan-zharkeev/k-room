@@ -9,14 +9,18 @@
   }
 
   .chat-room-list__list-item {
+    cursor: pointer;
+
     position: relative;
+
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     padding: 8px 4px;
-    overflow: hidden;
     border-radius: 8px;
-    cursor: pointer;
+
     transition: $transition-selected-background;
   }
 
@@ -30,14 +34,18 @@
   }
 
   .chat-room-list__list-item::before {
+    content: '';
+
     position: absolute;
     top: 0;
     right: -10px;
+
     width: 3px;
     height: 100%;
+
     background: var(--accent);
+
     transition: $transition-selected-right;
-    content: '';
   }
 
   .chat-room-list__list-item--selected::before {

@@ -16,7 +16,9 @@ export const ENV = {
   K_ROOM_REFRESH_TOKEN_SECRET
 } as IEnvVariables
 
-export const ORIGINS = ['https://k-room.space', 'http://k-room.space']
+const host = new URL(ENV.HOST)
+
+export const ORIGINS = [`https://${host.hostname}`, `http://${host.hostname}`]
 
 export const SYSTEM_DATA: ISystemDataConstants = {
   sharp: {

@@ -5,10 +5,13 @@
 
   .audio-input-device-select__volume-indicator-wrapper {
     position: relative;
+
+    overflow: hidden;
+
     height: 7px;
     margin-top: 8px;
-    overflow: hidden;
     border-radius: 8px;
+
     transition: ease-in-out 0.4s height;
     @include nm-inset-shadow;
   }
@@ -23,7 +26,9 @@
     position: absolute;
     top: 0;
     left: 0;
+
     height: 100%;
+
     background-color: var(--accent);
   }
 }

@@ -9,9 +9,9 @@
 @mixin nm-inset-element {
   @include nm-inset-shadow;
 
-  background-color: var(--main-bg) !important;
   border: none;
   border-radius: 8px;
+  background-color: var(--main-bg) !important;
 }
 
 @mixin nm-outset-shadow {
@@ -34,6 +34,6 @@
 @mixin nm-outset-element-sharpen {
   @include nm-outset-shadow-sharpen;
 
-  background-color: var(--main-bg) !important;
   border: none;
+  background-color: var(--main-bg) !important;
 }

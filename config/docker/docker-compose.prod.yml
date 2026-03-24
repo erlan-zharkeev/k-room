@@ -15,8 +15,6 @@ services:
   client:
     image: ketjo/k-room_client:latest
     restart: always
-    ports:
-      - 3001:3001
   webserver:
     image: nginx:latest
     ports:
@@ -24,4 +22,4 @@ services:
       - 443:443
     restart: unless-stopped
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ../nginx/:/etc/nginx/conf.d/:ro

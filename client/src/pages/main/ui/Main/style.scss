@@ -1,9 +1,11 @@
 .main {
   position: relative;
+
+  overflow: hidden;
   display: flex;
+
   height: 100%;
   padding: 12px;
-  overflow: hidden;
 
   .main__wrapper {
     display: flex;

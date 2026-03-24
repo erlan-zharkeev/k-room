@@ -1,6 +1,4 @@
-FROM --platform=linux/amd64 node:24.14.0
-
-RUN npm install -g pnpm
+FROM --platform=linux/amd64 node:24.14.0 AS build
 
 RUN mkdir types
 
@@ -14,12 +12,13 @@ COPY client/ client
 
 WORKDIR /client
 
-RUN pnpm install
+RUN npm ci --legacy-peer-deps
 
-RUN pnpm run build
+RUN npm run build
 
-ENV PORT $CLIENT_PORT
+FROM nginx:stable-alpine
 
-EXPOSE $CLIENT_PORT
+COPY config/nginx/client.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /client/build /usr/share/nginx/html
 
-CMD [ "pnpm", "run", "serve:build"]
+EXPOSE 80

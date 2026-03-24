@@ -4,6 +4,7 @@
   display: inline-grid;
   grid-template-columns: repeat(4, 1fr);
   justify-content: space-evenly;
+
   width: 100%;
   padding: 4px 0;
   border-bottom: 1px var(--text) solid;
@@ -11,9 +12,11 @@
   .message-menu-reactions__element {
     display: flex;
     justify-content: center;
+
     padding: 4px;
-    font-size: 20px;
     border-radius: 4px;
+
+    font-size: 20px;
   }
 
   .message-menu-reactions__element:hover {

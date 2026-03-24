@@ -2,10 +2,9 @@
 
 .call-modal-video {
   position: absolute;
+  overflow: hidden;
   display: flex;
   @include wh-100;
-
-  overflow: hidden;
 }
 
 .call-modal-video__interlocutor-avatar {
@@ -18,18 +17,21 @@
   position: absolute;
   bottom: -1px;
   left: 0;
+
   display: flex;
   justify-content: center;
+
   width: 100%;
   padding: 0.3rem;
+
   background-color: var(--main-bg);
 }
 
 .call-modal-video__settings {
+  cursor: pointer;
   position: absolute;
   top: 1rem;
   right: 1rem;
-  cursor: pointer;
 
   span {
     font-size: 1.5rem;
