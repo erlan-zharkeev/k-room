@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common-types'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { ApiError, useApi } from 'src/shared/api'
+import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { useCounter, useQuery } from 'src/shared/lib'
 import { AppFormData } from 'src/shared/ui'
 import { clg, getNextReqInterval } from 'src/shared/utils'
@@ -57,9 +57,7 @@ export const usePasswordRecovery = () => {
       setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
       startCounter()
     } catch (error: unknown) {
-      if (error instanceof ApiError || error instanceof Error) {
-        clg('error', error.message)
-      }
+      clg('error', getHandledErrorMessage(error))
     } finally {
       setEmailSendCodeIsLoading(false)
     }
@@ -79,9 +77,7 @@ export const usePasswordRecovery = () => {
       const pathname = buildPathWithParams(RouteNamesEnum.CreateNewPassword, { 'password-recovery': query })
       navigate({ pathname })
     } catch (error: unknown) {
-      if (error instanceof ApiError || error instanceof Error) {
-        clg('error', error.message)
-      }
+      clg('error', getHandledErrorMessage(error))
     } finally {
       setCodeValidationIsLoading(false)
     }

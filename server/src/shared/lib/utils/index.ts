@@ -1,3 +1,4 @@
 export * from './error-to-message'
 export * from './log'
+export * from './sentry'
 export * from './throw-error'

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common-types'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { ApiError, useApi } from 'src/shared/api'
+import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'
 import { clg } from 'src/shared/utils'
 
@@ -45,9 +45,7 @@ export const useCreateNewPassword = () => {
         setIPasswordChanged(true)
       }
     } catch (error: unknown) {
-      if (error instanceof ApiError || error instanceof Error) {
-        clg('error', error.message)
-      }
+      clg('error', getHandledErrorMessage(error))
     } finally {
       setIsLoading(false)
     }

@@ -8,8 +8,21 @@ import { useResetAllStores } from 'src/features/reset-all-stores'
 import { useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
-import { ApiError } from 'src/shared/api'
+import { createApiError } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
+
+const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
+  if (!data || typeof data !== 'object') return false
+
+  const candidate = data as Record<string, unknown>
+  const message = candidate.message
+
+  if (!message || typeof message !== 'object') return false
+
+  const inferredMessage = message as Record<string, unknown>
+
+  return typeof inferredMessage.text === 'string' && typeof inferredMessage.silent === 'boolean'
+}
 
 const extractErrorPayload = async (e: AxiosError) => {
   const res = e.response
@@ -21,14 +34,16 @@ const extractErrorPayload = async (e: AxiosError) => {
     if (data.type?.includes('application/json')) {
       try {
         const text = await data.text()
-        return JSON.parse(text)
+        const parsed = JSON.parse(text)
+        return isBackendResponse(parsed) ? parsed : null
       } catch {
         return null
       }
     }
     return null
   }
-  return data as IBackendResponse<unknown> | null
+
+  return isBackendResponse(data) ? data : null
 }
 
 export const useApiInterсeptor = () => {
@@ -40,11 +55,11 @@ export const useApiInterсeptor = () => {
 
   useResetAllStores(dispatch)
 
-  const interceptError = async (e: unknown) => {
-    if (e instanceof AxiosError) {
-      const status = e.response?.status
+  const interceptError = async (error: unknown) => {
+    if (error instanceof AxiosError) {
+      const status = error.response?.status
 
-      const payload = await extractErrorPayload(e)
+      const payload = await extractErrorPayload(error)
       let text: string | undefined
       let silent: boolean | undefined
 
@@ -68,7 +83,7 @@ export const useApiInterсeptor = () => {
         }
       }
 
-      const notificationMessage = text ?? `An error has occurred, please try again later. Error: ${e.message}`
+      const notificationMessage = text ?? `An error has occurred, please try again later. Error: ${error.message}`
 
       const errorInterceptorNotification = notifications.getNotification({
         message: notificationMessage,
@@ -76,7 +91,7 @@ export const useApiInterсeptor = () => {
       })
       silent ? clg('error', text ?? 'Unknown error') : errorInterceptorNotification.open()
 
-      return new ApiError({
+      return createApiError({
         message: notificationMessage,
         status,
         silent,
@@ -84,11 +99,11 @@ export const useApiInterсeptor = () => {
       })
     }
 
-    if (e instanceof Error) {
-      return new ApiError({ message: e.message })
+    if (error instanceof Error) {
+      return createApiError({ message: error.message })
     }
 
-    return new ApiError({ message: 'Unknown error' })
+    return createApiError({ message: 'Unknown error' })
   }
 
   return {

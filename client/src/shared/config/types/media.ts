@@ -1,10 +1,10 @@
 import { MediaFileValueType, MediaKindType } from 'common-types'
 
-export enum ImageResolutions {
-  png = 'image/png',
-  jpeg = 'image/jpeg',
-  jpg = 'image/jpg'
-}
+export const IMAGE_RESOLUTIONS = {
+  png: 'image/png',
+  jpeg: 'image/jpeg',
+  jpg: 'image/jpg'
+} as const
 
 export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[] | string | null
 

@@ -1,10 +1,10 @@
 import { NOTIFICATION_MESSAGE, UseNotification } from 'src/entities/notification'
 
-import { ImageResolutions } from '../config/types'
+import { IMAGE_RESOLUTIONS } from 'src/shared/config/types'
 
 export const imageToBase64 = ({
   image,
-  allowedResolutions = Object.values(ImageResolutions),
+  allowedResolutions = Object.values(IMAGE_RESOLUTIONS),
   notifications,
   maxImageSizeInMb = 5
 }: {

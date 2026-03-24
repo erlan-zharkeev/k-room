@@ -14,3 +14,4 @@ export * from "./constants";
 export * from "./response";
 export * from "./requests";
 export * from "./endpoints";
+export * from "./sentry";

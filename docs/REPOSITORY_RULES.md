@@ -258,6 +258,48 @@ className={`message-list-el message-list-el--${message.isSelf ? 'self' : 'interl
 
 1. The project uses BEM naming for CSS classes.
 
+## Sentry Rules
+
+1. Capture only unexpected failures in Sentry.
+
+Send errors to Sentry only when they indicate a bug, broken invariant, critical integration failure, data loss risk, unhandled exception, or unexpected server-side failure.
+
+Examples:
+
+```ts
+frontCaptureSentryException(new Error('Unexpected media stream failure'))
+serverCaptureSentryException(error)
+serverCaptureSentryHttpError({ message: 'Unexpected database failure', status: StatusEnum.Server })
+```
+
+2. Do not capture expected business or validation flows.
+
+Do not send handled validation errors, authentication denials, permission denials, missing resources in normal flows, cancelled requests, silent errors, or other expected user-facing states.
+
+Examples of errors that should not be captured:
+
+```text
+400 BadRequest
+401 NotAuth
+403 Forbidden
+404 NotFound
+form validation errors
+email not confirmed
+request cancellation
+```
+
+3. Use the project Sentry wrappers instead of direct ad hoc capture calls in feature code.
+
+Use:
+
+```ts
+frontCaptureSentryException(error)
+serverCaptureSentryException(error)
+serverCaptureSentryHttpError({ message, status, silent })
+```
+
+Avoid scattering raw SDK calls across feature code when a project wrapper already exists.
+
 Use block, element, and modifier naming consistently:
 
 ```scss

@@ -9,7 +9,7 @@ import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 
-import { ApiError, useApi } from 'src/shared/api'
+import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
 
 export const useFirebase = () => {
@@ -50,10 +50,7 @@ export const useFirebase = () => {
       activateUserSession(payload)
       navigate(RouteNamesEnum.Main)
     } catch (error: unknown) {
-      if (error instanceof ApiError || error instanceof Error) {
-        clg('error', error.message)
-      }
-
+      clg('error', getHandledErrorMessage(error))
       failedToLoginNotification.open()
     } finally {
       setFirebaseLoginLoading(false)

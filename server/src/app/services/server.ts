@@ -7,10 +7,10 @@ import methodOverride from 'method-override'
 
 import { RouteNamesEnum } from 'common-types'
 
-import { corsOptions, httpsOptions } from 'app/config'
+import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'app/config'
 
 import { ENV } from 'shared-config'
-import { initDataBase, log, setIO } from 'shared-lib'
+import { initDataBase, log, serverCaptureSentryException, setIO } from 'shared-lib'
 
 import { rootRouter } from './router'
 import { initIO } from './socket'
@@ -22,6 +22,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use(RouteNamesEnum.Api, rootRouter)
+setupSentryErrorHandler(app)
 
 const server = https.createServer(httpsOptions, app)
 
@@ -37,14 +38,17 @@ const run = async () => {
 process.on('unhandledRejection', (error) => {
   log.error('-Unhandled rejection')
   log.error(String(error))
+  serverCaptureSentryException(error)
 })
 
 process.on('uncaughtException', (error) => {
   log.error('-Uncaught exception')
   log.error(String(error))
+  serverCaptureSentryException(error)
 })
 
 run().catch((error) => {
   log.error('-Server startup failed')
   log.error(String(error))
+  serverCaptureSentryException(error)
 })

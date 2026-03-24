@@ -19,7 +19,7 @@ Production: https://k-room.space (Temporarily closed)
 
 ## Development
 
-- Add variables to bash `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_FROM_NAME`, `EMAIL_CONFIRM_SECRET`, `VITE_FIREBASE_API_KEY`
+- Add variables to bash `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_FROM_NAME`, `EMAIL_CONFIRM_SECRET`, `FIREBASE_API_KEY`, `SENTRY_DSN_CLIENT`, `SENTRY_DSN_SERVER`
 - Run `sh scripts/dev.sh`
 
 ### Package managers

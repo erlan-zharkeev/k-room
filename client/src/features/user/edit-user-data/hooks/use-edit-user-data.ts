@@ -6,7 +6,7 @@ import { useLoadMedia } from 'src/features/media'
 
 import { useUser } from 'src/entities/user'
 
-import { ApiError, useApi } from 'src/shared/api'
+import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'
 import { clg } from 'src/shared/utils'
 
@@ -48,9 +48,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
       }
       onSuccess?.()
     } catch (error: unknown) {
-      if (error instanceof ApiError || error instanceof Error) {
-        clg('error', error.message)
-      }
+      clg('error', getHandledErrorMessage(error))
     } finally {
       setIsLoading(false)
     }

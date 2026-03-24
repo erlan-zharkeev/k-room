@@ -8,7 +8,7 @@ import { getSocketsByUserIds } from 'features/user'
 import { ChatRoomModel } from 'entities/chat-room'
 import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'entities/media'
 
-import { ServerNotificationMessage, SocketInstanceType } from 'shared-config'
+import { SERVER_NOTIFICATION_MESSAGE, SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'
 
 export const controller = (socket: SocketInstanceType) => {
@@ -45,7 +45,7 @@ export const controller = (socket: SocketInstanceType) => {
         getIO().to(socketId).emit<SocketActionsType>('room-created', payload)
       })
     } catch {
-      throwSocketError(socket.id, ServerNotificationMessage.RoomCreationError)
+      throwSocketError(socket.id, SERVER_NOTIFICATION_MESSAGE.RoomCreationError)
     }
   })
 }

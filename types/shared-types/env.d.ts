@@ -18,6 +18,11 @@ export interface IEnvVariables {
     RESEND_API_KEY: string;
     RESEND_FROM_EMAIL: string;
     RESEND_FROM_NAME: string;
+    SENTRY_DSN_CLIENT: string;
+    SENTRY_DSN_SERVER: string;
+    SENTRY_ENVIRONMENT: string;
+    SENTRY_RELEASE: string;
+    SENTRY_ENABLED: string;
     IS_DEV: boolean;
     SERVER_ASSETS_PATH: string;
     MAX_RECONNECT_ATTEMPTS: number;

@@ -5,28 +5,37 @@ export interface IDoRequestOpts<R> {
   responseType?: R
 }
 
-export class ApiError extends Error {
+export type ApiError = Error & {
+  type: 'api-error'
+  message: string
   status?: StatusEnum
   silent: boolean
   payload: IBackendResponse<unknown> | null
-
-  constructor({
-    message,
-    status,
-    silent = false,
-    payload = null
-  }: {
-    message: string
-    status?: StatusEnum
-    silent?: boolean
-    payload?: IBackendResponse<unknown> | null
-  }) {
-    super(message)
-    this.name = 'ApiError'
-    this.status = status
-    this.silent = silent
-    this.payload = payload
-  }
 }
 
-export const isApiError = (error: unknown): error is ApiError => error instanceof ApiError
+export const createApiError = ({
+  message,
+  status,
+  silent = false,
+  payload = null
+}: {
+  message: string
+  status?: StatusEnum
+  silent?: boolean
+  payload?: IBackendResponse<unknown> | null
+}): ApiError =>
+  Object.assign(new Error(message), {
+    type: 'api-error' as const,
+    status,
+    silent,
+    payload
+  })
+
+export const isApiError = (error: unknown): error is ApiError => {
+  if (!error || typeof error !== 'object') return false
+  const candidate = error as Record<string, unknown>
+  return candidate.type === 'api-error' && typeof candidate.message === 'string'
+}
+
+export const isHandledError = (error: unknown): error is ApiError | Error => isApiError(error) || error instanceof Error
+export const getHandledErrorMessage = (error: unknown) => (isHandledError(error) ? error.message : 'Unknown error')

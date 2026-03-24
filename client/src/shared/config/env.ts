@@ -5,6 +5,10 @@ export interface IClientEnv {
   host: string
   maxReconnectAttempts: number
   firebaseApiKey: string
+  sentryDsnClient: string
+  sentryEnvironment: string
+  sentryRelease: string
+  sentryEnabled: boolean
 }
 
 declare const CLIENT_ENV_DATA: IClientEnv

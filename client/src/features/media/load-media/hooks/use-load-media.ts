@@ -1,6 +1,6 @@
 import { EndpointsType, MediaEndpointsEnum, StatusEnum } from 'common-types'
 
-import { ApiError, useApi } from 'src/shared/api'
+import { getHandledErrorMessage, isApiError, useApi } from 'src/shared/api'
 
 import { useDeleteMedia } from '../../delete-media'
 import { useSaveMedia } from '../../save-media'
@@ -31,7 +31,7 @@ export const useLoadMedia = () => {
       const mediaData = transformHeadersToMediaData(response)
       await saveMedia({ id: filename, blob: response.data, ...mediaData })
     } catch (error: unknown) {
-      if (error instanceof ApiError && error.status === StatusEnum.NotFound) {
+      if (isApiError(error) && error.status === StatusEnum.NotFound) {
         deleteMedia(filename)
       }
     }
@@ -42,9 +42,8 @@ export const useLoadMedia = () => {
       const response = await requestMedia(filename)
       return response.data
     } catch (error: unknown) {
-      if (error instanceof ApiError || error instanceof Error) {
-        return undefined
-      }
+      getHandledErrorMessage(error)
+      return undefined
     }
   }
 

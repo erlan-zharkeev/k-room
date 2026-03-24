@@ -1,4 +1,4 @@
-import { MIN_SUPPORTED_HEIGHT, MIN_SUPPORTED_WIDTH, ViewPortWidthType } from '../config'
+import { MIN_SUPPORTED_HEIGHT, MIN_SUPPORTED_WIDTH, VIEW_PORT_WIDTH } from '../config'
 
 import { useSystem } from './use-system'
 
@@ -7,24 +7,24 @@ export const useViewport = () => {
   const { width, height } = viewPort
 
   return {
-    isPhone: width <= ViewPortWidthType.Phone,
-    isTablet: width > ViewPortWidthType.Phone && width <= ViewPortWidthType.Tablet,
-    isDesktop: width > ViewPortWidthType.Tablet,
+    isPhone: width <= VIEW_PORT_WIDTH.Phone,
+    isTablet: width > VIEW_PORT_WIDTH.Phone && width <= VIEW_PORT_WIDTH.Tablet,
+    isDesktop: width > VIEW_PORT_WIDTH.Tablet,
 
-    greaterThanPhone: width > ViewPortWidthType.Phone,
-    greaterThanTablet: width > ViewPortWidthType.Tablet,
-    greaterThanDesktop: width > ViewPortWidthType.Desktop,
+    greaterThanPhone: width > VIEW_PORT_WIDTH.Phone,
+    greaterThanTablet: width > VIEW_PORT_WIDTH.Tablet,
+    greaterThanDesktop: width > VIEW_PORT_WIDTH.Desktop,
 
-    greaterOrEqualPhone: width >= ViewPortWidthType.Phone,
-    greaterOrEqualTablet: width >= ViewPortWidthType.Tablet,
-    greaterOrEqualDesktop: width >= ViewPortWidthType.Desktop,
+    greaterOrEqualPhone: width >= VIEW_PORT_WIDTH.Phone,
+    greaterOrEqualTablet: width >= VIEW_PORT_WIDTH.Tablet,
+    greaterOrEqualDesktop: width >= VIEW_PORT_WIDTH.Desktop,
 
-    lessThanTablet: width < ViewPortWidthType.Tablet,
-    lessThanDesktop: width < ViewPortWidthType.Desktop,
+    lessThanTablet: width < VIEW_PORT_WIDTH.Tablet,
+    lessThanDesktop: width < VIEW_PORT_WIDTH.Desktop,
 
-    lessOrEqualPhone: width <= ViewPortWidthType.Phone,
-    lessOrEqualTablet: width <= ViewPortWidthType.Tablet,
-    lessOrEqualDesktop: width <= ViewPortWidthType.Desktop,
+    lessOrEqualPhone: width <= VIEW_PORT_WIDTH.Phone,
+    lessOrEqualTablet: width <= VIEW_PORT_WIDTH.Tablet,
+    lessOrEqualDesktop: width <= VIEW_PORT_WIDTH.Desktop,
 
     lessThenSupported: width <= MIN_SUPPORTED_WIDTH || height <= MIN_SUPPORTED_HEIGHT,
 

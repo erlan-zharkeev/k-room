@@ -7,11 +7,11 @@ export interface IViewPort {
   height: number
 }
 
-export enum ViewPortWidthType {
-  Desktop = 1200,
-  Tablet = 769,
-  Phone = 576
-}
+export const VIEW_PORT_WIDTH = {
+  Desktop: 1200,
+  Tablet: 769,
+  Phone: 576
+} as const
 
 export type AuthStatusType = 'authorized' | 'unauthorized' | 'loading'
 

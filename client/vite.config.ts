@@ -20,7 +20,11 @@ export default defineConfig(({ mode }) => {
         clientPort: Number(env.CLIENT_PORT),
         host: env.HOST,
         maxReconnectAttempts: Number(env.MAX_RECONNECT_ATTEMPTS),
-        firebaseApiKey: env.FIREBASE_API_KEY
+        firebaseApiKey: env.FIREBASE_API_KEY,
+        sentryDsnClient: env.SENTRY_DSN_CLIENT,
+        sentryEnvironment: env.SENTRY_ENVIRONMENT,
+        sentryRelease: env.SENTRY_RELEASE,
+        sentryEnabled: env.SENTRY_ENABLED === 'true'
       })
     },
     envDir,
