@@ -17,6 +17,6 @@ export interface IBackendMessage {
     silent: boolean;
 }
 export interface IBackendResponse<T> {
-    data: T;
+    payload: T;
     message: IBackendMessage;
 }

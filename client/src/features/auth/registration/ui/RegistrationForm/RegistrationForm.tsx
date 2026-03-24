@@ -1,4 +1,5 @@
 import './style.scss'
+import type { IAuthRegistrationPayload } from 'common-types'
 
 import { AppForm } from 'src/shared/ui'
 
@@ -6,10 +7,14 @@ import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
 
 import { RegistrationFormProps } from './types'
 
+type RegistrationFormData = IAuthRegistrationPayload & {
+  policy: boolean
+}
+
 export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProps) => {
   return (
     <div className="registration-form">
-      <AppForm
+      <AppForm<RegistrationFormData>
         onSubmit={onRegister}
         fields={{
           username: {

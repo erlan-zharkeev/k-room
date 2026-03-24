@@ -18,7 +18,6 @@ export default defineConfig(({ mode }) => {
         appName: env.APP_NAME,
         serverPort: Number(env.SERVER_PORT),
         clientPort: Number(env.CLIENT_PORT),
-        mailApp: env.MAIL_APP,
         host: env.HOST,
         maxReconnectAttempts: Number(env.MAX_RECONNECT_ATTEMPTS),
         firebaseApiKey: env.FIREBASE_API_KEY

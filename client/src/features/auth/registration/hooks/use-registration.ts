@@ -1,15 +1,27 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, IAuthRegistrationPayload, RouteNamesEnum } from 'common-types'
+import {
+  AuthEndpointsEnum,
+  IAuthRegistrationPayload,
+  ISendConfirmationLinkResponse,
+  RouteNamesEnum,
+  StatusEnum
+} from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
+import { useQuery } from 'src/shared/lib'
+
+type RegistrationFormData = IAuthRegistrationPayload & {
+  policy: boolean
+}
 
 export const useRegistration = () => {
   const [policySwitch, setPolicySwitch] = useState(false)
   const [policyTouched, setPolicyTouched] = useState(false)
 
   const navigate = useNavigate()
+  const { buildPathWithParams } = useQuery()
 
   const policySwitchHandler = (e: boolean) => {
     setPolicySwitch(e)
@@ -21,14 +33,20 @@ export const useRegistration = () => {
 
   const register = async (fields: IAuthRegistrationPayload) => {
     setIsLoading(true)
-    await doRequest('post', AuthEndpointsEnum.Registration, fields)
+    const response = await doRequest<ISendConfirmationLinkResponse>('post', AuthEndpointsEnum.Registration, fields)
     setIsLoading(false)
-    navigate(RouteNamesEnum.Login)
+
+    if (!response || response.status !== StatusEnum.Success) return
+
+    const { payload } = response.data
+
+    const pathname = buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, payload)
+
+    navigate(pathname)
   }
 
-  const onRegister = (payload: unknown) => {
-    const formData = payload as IAuthRegistrationPayload
-    register(formData)
+  const onRegister = ({ email, password, username }: RegistrationFormData) => {
+    register({ email, password, username })
   }
 
   return {

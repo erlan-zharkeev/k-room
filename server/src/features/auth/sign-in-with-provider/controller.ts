@@ -23,7 +23,7 @@ export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<
     await updateTokens(user.id, req, res)
 
     return res.json({
-      data: mapUserToDto(user),
+      payload: mapUserToDto(user),
       message: {
         text: SHARED_MESSAGE.success,
         silent: true

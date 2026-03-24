@@ -6,4 +6,4 @@ import { sendConfirmationLink } from './controller'
 
 export const sendEmailConfirmationLinkRouter = Router()
 
-sendEmailConfirmationLinkRouter.get(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLink)
+sendEmailConfirmationLinkRouter.post(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLink)

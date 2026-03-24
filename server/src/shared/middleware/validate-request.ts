@@ -10,7 +10,7 @@ export const validateRequest = (req: Request, res: AppResponseType<null>, next: 
 
   if (!errors.isEmpty()) {
     return res.status(StatusEnum.BadRequest).json({
-      data: null,
+      payload: null,
       message: {
         text: errors.array().map((err) => err.msg)[0],
         silent: false

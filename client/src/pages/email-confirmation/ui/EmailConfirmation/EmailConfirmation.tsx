@@ -18,18 +18,18 @@ export const EmailConfirmation = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { doRequest } = useApi()
 
-  const sendEmailConfirmation = async (id: string) => {
-    const response = await doRequest<IConfirmEmailResponse>('post', AuthEndpointsEnum.ConfirmEmail, { userId: id })
+  const sendEmailConfirmation = async (token: string) => {
+    const response = await doRequest<IConfirmEmailResponse>('post', AuthEndpointsEnum.ConfirmEmail, { token })
     if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
-    const { data } = response.data
-    setEmail(data.email)
+    const payload = response.data.payload
+    setEmail(payload.email)
     await logout()
     setIsLoading(false)
   }
 
   useEffect(() => {
-    const userId = query.value.get('userId')
-    if (userId) sendEmailConfirmation(userId)
+    const token = query.value.get('token')
+    if (token) sendEmailConfirmation(token)
     else navigate(RouteNamesEnum.Login)
   }, [])
 

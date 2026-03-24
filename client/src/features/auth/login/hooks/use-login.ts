@@ -17,8 +17,8 @@ export const useLogin = () => {
     setIsLoading(true)
     try {
       const response = await doRequest<ILoginResponse>('post', AuthEndpointsEnum.Login, fields)
-      const { data } = response.data
-      activateUserSession(data)
+      const payload = response.data.payload
+      activateUserSession(payload)
     } finally {
       setIsLoading(false)
     }

@@ -1,3 +1,3 @@
-import { objectIdRule, requiredStringRule } from 'features/auth'
+import { requiredStringRule } from 'features/auth'
 
-export const fieldsValidation = [requiredStringRule('email'), objectIdRule('userId')]
+export const fieldsValidation = [requiredStringRule('token')]

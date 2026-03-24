@@ -103,11 +103,7 @@ export const PrivacyPolicy = () => {
 
       <h2>7. Contacts</h2>
       <p>
-        If you have any questions regarding this Privacy Policy, please&nbsp;
-        <a className="link paragraph-text paragraph-text--md" href={`mailto:${CLIENT_ENV.mailApp}?subject=common`}>
-          contact us ({CLIENT_ENV.mailApp})
-        </a>
-        .
+        If you have any questions regarding this Privacy Policy, please contact support through the app settings.
       </p>
     </AppScrollContainer>
   )

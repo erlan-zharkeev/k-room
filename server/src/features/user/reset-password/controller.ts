@@ -53,7 +53,7 @@ export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>
       }
     })
 
-    return res.json({ data: null, message: { text: MESSAGE.success, silent: true } })
+    return res.json({ payload: null, message: { text: MESSAGE.success, silent: true } })
   } catch {
     return throwHTTPError(StatusEnum.Server, res, MESSAGE.failed)
   }

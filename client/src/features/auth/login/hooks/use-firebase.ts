@@ -9,7 +9,7 @@ import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 
-import { useApi } from 'src/shared/api'
+import { ApiError, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
 
 export const useFirebase = () => {
@@ -46,11 +46,14 @@ export const useFirebase = () => {
 
       const response = await doRequest<ISignInWithProviderResponse>('post', AuthEndpointsEnum.ProviderLogin, credential)
       if (!response) return
-      const { data } = response.data
-      activateUserSession(data)
+      const payload = response.data.payload
+      activateUserSession(payload)
       navigate(RouteNamesEnum.Main)
-    } catch (e: unknown) {
-      if (e instanceof Error) clg('error', e.message)
+    } catch (error: unknown) {
+      if (error instanceof ApiError || error instanceof Error) {
+        clg('error', error.message)
+      }
+
       failedToLoginNotification.open()
     } finally {
       setFirebaseLoginLoading(false)

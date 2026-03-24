@@ -1,6 +1,6 @@
 import { EndpointsType, MediaEndpointsEnum, StatusEnum } from 'common-types'
 
-import { IAxiosError, useApi } from 'src/shared/api'
+import { ApiError, useApi } from 'src/shared/api'
 
 import { useDeleteMedia } from '../../delete-media'
 import { useSaveMedia } from '../../save-media'
@@ -30,9 +30,8 @@ export const useLoadMedia = () => {
       const response = await requestMedia(filename)
       const mediaData = transformHeadersToMediaData(response)
       await saveMedia({ id: filename, blob: response.data, ...mediaData })
-    } catch (e: unknown) {
-      const error = e as IAxiosError
-      if (error.response.status === StatusEnum.NotFound) {
+    } catch (error: unknown) {
+      if (error instanceof ApiError && error.status === StatusEnum.NotFound) {
         deleteMedia(filename)
       }
     }
@@ -42,8 +41,10 @@ export const useLoadMedia = () => {
     try {
       const response = await requestMedia(filename)
       return response.data
-    } catch (e: unknown) {
-      console.log(e)
+    } catch (error: unknown) {
+      if (error instanceof ApiError || error instanceof Error) {
+        return undefined
+      }
     }
   }
 

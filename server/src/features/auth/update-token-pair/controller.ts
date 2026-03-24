@@ -6,5 +6,5 @@ import { AppResponseType, IAppRequest } from 'shared-config'
 export const updateTokensPair = async (req: IAppRequest, res: AppResponseType<null>) => {
   const userId = req.app.locals.id
   await updateTokens(userId, req, res)
-  res.json({ data: null, message: { text: MESSAGE.tokensPairUpdated, silent: true } })
+  res.json({ payload: null, message: { text: MESSAGE.tokensPairUpdated, silent: true } })
 }

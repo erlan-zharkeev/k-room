@@ -1,11 +1,11 @@
 import { AuthEndpointsEnum } from 'common-types'
 
-import { useApi, useApiInterсeptor } from 'src/shared/api'
+import { ApiError, useApi } from 'src/shared/api'
+import { clg } from 'src/shared/utils'
 
 import { useSocketConnect } from './use-socket-connect'
 
 export const useSocketReconnect = () => {
-  const { interceptError } = useApiInterсeptor()
   const { doRequest } = useApi()
   const { socketConnect } = useSocketConnect()
 
@@ -13,8 +13,10 @@ export const useSocketReconnect = () => {
     try {
       await doRequest('get', AuthEndpointsEnum.UpdateTokensPair, undefined)
       socketConnect()
-    } catch (e) {
-      interceptError(e)
+    } catch (error: unknown) {
+      if (error instanceof ApiError || error instanceof Error) {
+        clg('error', error.message)
+      }
     }
   }
   return { socketReconnect }

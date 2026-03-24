@@ -11,7 +11,7 @@ import { AppFormItem } from '../AppFormItem/AppFormItem'
 import { AppInput } from '../AppInput/AppInput'
 import { AppSwitch } from '../AppSwitch/AppSwitch'
 
-import type { AppFormField, AppFormFieldValue, IAppFormProps } from './config'
+import type { AppFormData, AppFormField, AppFormFieldValue, IAppFormProps } from './config'
 
 export * from './config'
 
@@ -27,7 +27,7 @@ const getDefaultValue = (inputType: AppFormField['inputType']): AppFormFieldValu
   }
 }
 
-export const AppForm = ({
+export const AppForm = <TFormData extends object = AppFormData>({
   onSubmit,
   fields,
   submitBtnText,
@@ -39,7 +39,7 @@ export const AppForm = ({
   onBlur = () => {},
   disabled = false,
   disabledActionBtn = false
-}: IAppFormProps) => {
+}: IAppFormProps<TFormData>) => {
   const initialState: Record<string, AppFormFieldValue> = {}
   Object.keys(fields).forEach((key) => {
     initialState[key] = fields[key].value ?? getDefaultValue(fields[key].inputType)
@@ -61,7 +61,7 @@ export const AppForm = ({
     setForm(newForm)
     validateField(value, name, false, rule)
 
-    if (onChange) onChange(newForm)
+    if (onChange) onChange(newForm as TFormData)
   }
 
   const validateAllFields = (silent = true) => {
@@ -90,7 +90,7 @@ export const AppForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (onSubmit) onSubmit(form)
+    if (onSubmit) onSubmit(form as TFormData)
   }
 
   const renderField = (key: string, field: AppFormField) => {

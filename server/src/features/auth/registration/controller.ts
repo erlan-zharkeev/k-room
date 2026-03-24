@@ -1,15 +1,16 @@
 import bcrypt from 'bcryptjs'
-import type { AppResponseType, IAppRequest } from 'shared-config'
 
-import { type IAuthRegistrationPayload, StatusEnum } from 'common-types'
+import { type IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common-types'
 
-import { isUserExist } from 'features/auth'
+import { generateToken, isUserExist } from 'features/auth'
 import { MESSAGE } from 'features/auth/registration/config'
+import { sendEmailConfirmationEmail } from 'features/email'
 import { createUser } from 'features/user'
 
+import { type AppResponseType, ENV, type IAppRequest } from 'shared-config'
 import { throwHTTPError } from 'shared-lib'
 
-export const registration = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const registration = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   try {
     const { username, email, password }: IAuthRegistrationPayload = req.body
 
@@ -17,12 +18,30 @@ export const registration = async (req: IAppRequest, res: AppResponseType<null>)
 
     const hashedPassword = await bcrypt.hash(password, 6)
 
-    await createUser({ email, username, hashedPassword })
+    const user = await createUser({ email, username, hashedPassword })
 
-    // TODO Добавить сюда отправку письма на почту пользователя
+    if (!user) {
+      return throwHTTPError(StatusEnum.Server, res, MESSAGE.failedRegistration)
+    }
+
+    const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))
+
+    await sendEmailConfirmationEmail({
+      email,
+      token: confirmToken,
+      username
+    })
+
+    const nextRequestTime = String(
+      Date.now() + Number(ENV.REGISTRATION_RESEND_INTERVAL_MINUTES) * 60 * 1000
+    )
 
     const response = {
-      data: null,
+      payload: {
+        email,
+        attempts: user.system.confirmAttempts,
+        nextRequestTime
+      },
       message: {
         text: MESSAGE.registrationSuccess,
         silent: false

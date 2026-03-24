@@ -35,7 +35,7 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
         text: SHARED_MESSAGE.success,
         silent: true,
       },
-      data: null
+      payload: null
     })
   } catch (e) {
     log.error(String(e))

@@ -2,7 +2,6 @@ export interface IClientEnv {
   appName: string
   serverPort: number
   clientPort: number
-  mailApp: string
   host: string
   maxReconnectAttempts: number
   firebaseApiKey: string

@@ -57,7 +57,7 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
     }
 
 
-    return res.json({ data: null, message: { text: SHARED_MESSAGE.success, silent: true } })
+    return res.json({ payload: null, message: { text: SHARED_MESSAGE.success, silent: true } })
   } catch (e: unknown) {
     log.error(String(e))
     throwHTTPError(StatusEnum.Server, res, ServerNotificationMessage.FailedUserDataUpdate)

@@ -14,7 +14,7 @@ export const markInfoAsRead = async (req: IAppRequest, res: AppResponseType<null
 
     await UserModel.updateOne({ _id: userId }, { $set: { [`personal.infoNotifications.${id}`]: 'read' } })
 
-    res.json({ data: null, message: { text: 'success', silent: true } })
+    res.json({ payload: null, message: { text: 'success', silent: true } })
   } catch {
     return throwHTTPError(StatusEnum.Server, res, MESSAGE.failed)
   }

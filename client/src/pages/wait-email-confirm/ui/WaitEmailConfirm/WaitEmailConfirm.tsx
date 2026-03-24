@@ -47,12 +47,12 @@ export const WaitEmailConfirm = () => {
     )
     setIsLoading(false)
     if (!response || response.status !== StatusEnum.Success) return
-    const { data } = response.data
+    const payload = response.data.payload
 
     const updatedPath = query.buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, {
-      email: data.email,
-      nextRequestTime: data.nextRequestTime,
-      attempts: data.attempts
+      email: payload.email,
+      nextRequestTime: payload.nextRequestTime,
+      attempts: payload.attempts
     })
 
     navigate(updatedPath, { replace: true })

@@ -3,10 +3,9 @@ import { EndpointsType, IBackendResponse, StatusEnum } from 'common-types'
 
 import { useNotification } from 'src/entities/notification'
 
-import { axios, IDoRequestOpts } from '../config'
-import type { RequestPayload, RequestTypes } from '../types'
-
-import { useApiInterсeptor } from './use-api-interceptor'
+import { axios, ApiError, IDoRequestOpts } from 'src/shared/api/config'
+import { useApiInterсeptor } from 'src/shared/api/hooks/use-api-interceptor'
+import type { RequestPayload, RequestTypes } from 'src/shared/api/types'
 
 export const useApi = () => {
   const notifications = useNotification()
@@ -53,8 +52,8 @@ export const useApi = () => {
       }
       throw new Error('No response')
     } catch (e: unknown) {
-      interceptError(e)
-      throw e
+      const apiError = await interceptError(e)
+      throw apiError instanceof ApiError ? apiError : new ApiError({ message: 'Unknown error' })
     }
   }
 

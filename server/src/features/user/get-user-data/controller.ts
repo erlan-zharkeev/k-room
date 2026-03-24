@@ -22,7 +22,7 @@ export const getUserData = async (req: IAppRequest, res: AppResponseType<IGetUse
     await updateTokens(userId, req, res)
 
     const response = {
-      data: mapUserToDto(user),
+      payload: mapUserToDto(user),
       message: { text: SHARED_MESSAGE.success, silent: true }
     }
 

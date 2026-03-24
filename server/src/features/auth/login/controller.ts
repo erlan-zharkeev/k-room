@@ -33,7 +33,7 @@ export const login = async (req: IAppRequest, res: AppResponseType<ILoginRespons
     await updateTokens(user.id, req, res)
 
     const response = {
-      data: mapUserToDto(user),
+      payload: mapUserToDto(user),
       message: {
         text: SHARED_MESSAGE.success,
         silent: true

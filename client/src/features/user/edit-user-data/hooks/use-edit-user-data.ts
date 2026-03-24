@@ -6,8 +6,9 @@ import { useLoadMedia } from 'src/features/media'
 
 import { useUser } from 'src/entities/user'
 
-import { useApi } from 'src/shared/api'
+import { ApiError, useApi } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'
+import { clg } from 'src/shared/utils'
 
 export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { username, avatarPath, update, id: userId } = useUser()
@@ -46,8 +47,10 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
         loadMedia(`avatar.${userId}`)
       }
       onSuccess?.()
-    } catch (error) {
-      console.error('Error updating user data:', error)
+    } catch (error: unknown) {
+      if (error instanceof ApiError || error instanceof Error) {
+        clg('error', error.message)
+      }
     } finally {
       setIsLoading(false)
     }

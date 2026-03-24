@@ -1,12 +1,14 @@
 import { AxiosError } from 'axios'
-import { IBackendResponse, StatusEnum } from 'common-types'
+import { IBackendResponse, RouteNamesEnum, StatusEnum } from 'common-types'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
 
 import { useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
+import { ApiError } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
 
 const extractErrorPayload = async (e: AxiosError) => {
@@ -33,6 +35,9 @@ export const useApiInterсeptor = () => {
   const settings = useSettings()
   const notifications = useNotification()
   const dispatch = useDispatch()
+  const { reset: resetStores } = useResetAllStores(dispatch)
+  const navigate = useNavigate()
+
   useResetAllStores(dispatch)
 
   const interceptError = async (e: unknown) => {
@@ -44,18 +49,17 @@ export const useApiInterсeptor = () => {
       let silent: boolean | undefined
 
       if (payload?.message) {
-        ({ text, silent } = payload.message)
+        ;({ text, silent } = payload.message)
       }
 
       switch (status) {
         case StatusEnum.NotAuth: {
-          // silent = true
-          // resetStores()
-          // const isOnMain = location.pathname === RouteNamesEnum.Main
-          // if (isOnMain) {
-          //   console.log('trying to navigate')
-          //   navigate(RouteNamesEnum.Login)
-          // }
+          silent = true
+          resetStores()
+          const isOnMain = location.pathname === RouteNamesEnum.Main
+          if (isOnMain) {
+            navigate(RouteNamesEnum.Login)
+          }
           break
         }
         case StatusEnum.Forbidden: {
@@ -71,7 +75,20 @@ export const useApiInterсeptor = () => {
         messageType: 'error'
       })
       silent ? clg('error', text ?? 'Unknown error') : errorInterceptorNotification.open()
+
+      return new ApiError({
+        message: notificationMessage,
+        status,
+        silent,
+        payload
+      })
     }
+
+    if (e instanceof Error) {
+      return new ApiError({ message: e.message })
+    }
+
+    return new ApiError({ message: 'Unknown error' })
   }
 
   return {

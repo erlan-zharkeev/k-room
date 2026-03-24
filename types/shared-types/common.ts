@@ -25,6 +25,6 @@ export interface IBackendMessage {
 }
 
 export interface IBackendResponse<T> {
-  data: T;
+  payload: T;
   message: IBackendMessage;
 }

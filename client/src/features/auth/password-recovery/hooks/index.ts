@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common-types'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { useApi } from 'src/shared/api'
+import { ApiError, useApi } from 'src/shared/api'
 import { useCounter, useQuery } from 'src/shared/lib'
 import { AppFormData } from 'src/shared/ui'
-import { getNextReqInterval } from 'src/shared/utils'
+import { clg, getNextReqInterval } from 'src/shared/utils'
 
 export const usePasswordRecovery = () => {
   const navigate = useNavigate()
@@ -46,7 +46,7 @@ export const usePasswordRecovery = () => {
       const response = await doRequest('post', CodesEndpointsEnum.SendEmailCodePasswordRecovery, { email })
       if (!response) return
       setCodeAsSent(true)
-      const { nextTimeRequest } = response.data as unknown as { nextTimeRequest: number }
+      const { nextTimeRequest } = response.data.payload as { nextTimeRequest: number }
 
       setQueryParams((prev) => {
         const params = new URLSearchParams(prev)
@@ -56,8 +56,10 @@ export const usePasswordRecovery = () => {
 
       setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
       startCounter()
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      if (error instanceof ApiError || error instanceof Error) {
+        clg('error', error.message)
+      }
     } finally {
       setEmailSendCodeIsLoading(false)
     }
@@ -73,11 +75,13 @@ export const usePasswordRecovery = () => {
       }
       const response = await doRequest('post', CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, payload)
       if (!response) return
-      const { query } = response.data as unknown as { query: string }
+      const { query } = response.data.payload as { query: string }
       const pathname = buildPathWithParams(RouteNamesEnum.CreateNewPassword, { 'password-recovery': query })
       navigate({ pathname })
-    } catch (error) {
-      console.error(error)
+    } catch (error: unknown) {
+      if (error instanceof ApiError || error instanceof Error) {
+        clg('error', error.message)
+      }
     } finally {
       setCodeValidationIsLoading(false)
     }

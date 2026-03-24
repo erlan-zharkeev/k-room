@@ -14,7 +14,7 @@ export const throwHTTPError = (status: StatusEnum, res: Response | null, error: 
   }
 
   const payload: IBackendResponse<null> = {
-    data: null,
+    payload: null,
     message: {
       text: error,
       silent

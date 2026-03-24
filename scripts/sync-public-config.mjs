@@ -3,8 +3,6 @@ import path from 'node:path'
 
 const rootPath = process.cwd()
 const envPath = path.join(rootPath, '.env.production')
-const readmeTemplatePath = path.join(rootPath, 'config/templates/README.template.md')
-const readmePath = path.join(rootPath, 'README.md')
 const nginxTemplatePath = path.join(rootPath, 'config/nginx/webserver.template.conf')
 const nginxPath = path.join(rootPath, 'config/nginx/webserver.conf')
 
@@ -41,5 +39,4 @@ const applyTemplate = (templatePath, outputPath, replacements) => {
   fs.writeFileSync(outputPath, content)
 }
 
-applyTemplate(readmeTemplatePath, readmePath, { HOST: env.HOST })
 applyTemplate(nginxTemplatePath, nginxPath, { DOMAIN: domain })

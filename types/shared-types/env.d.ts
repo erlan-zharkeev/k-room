@@ -8,13 +8,16 @@ export interface IEnvVariables {
     JWT_ACCESS_EXPIRES_INTERVAL: string;
     JWTR_ACCESS_EXPIRES_INTERVAL: string;
     APP_NAME: string;
-    MAIL_APP: string;
     MAIL_APP_PASS: string;
     REGISTRATION_RESEND_INTERVAL_MINUTES: string;
     K_ROOM_ACCESS_TOKEN_SECRET: string;
+    EMAIL_CONFIRM_SECRET: string;
     K_ROOM_REFRESH_TOKEN_SECRET: string;
     K_ROOM_MAIL_PASS: string;
     K_ROOM_ADMIN_PASS: string;
+    RESEND_API_KEY: string;
+    RESEND_FROM_EMAIL: string;
+    RESEND_FROM_NAME: string;
     IS_DEV: boolean;
     SERVER_ASSETS_PATH: string;
     MAX_RECONNECT_ATTEMPTS: number;
@@ -28,5 +31,6 @@ export interface IEnvVariables {
     FIREBASE_APP_ID: string;
     FIREBASE_MEASUREMENT_ID: string;
     NEXT_CODE_REQUEST_INTERVAL_SECONDS: number;
+    EMAIL_CONFIRMATION_LINK_LIFE: number;
     PASSWORD_RECOVERY_LINK_LIFE: number;
 }

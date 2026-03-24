@@ -52,13 +52,13 @@ export type AppFormPickElementField = BaseAppFormField<'element-picker'> &
 
 export type AppFormField = AppFormTextInputField | AppFormSwitchField | AppFormFileInputField | AppFormPickElementField
 
-export type AppFormData = Record<string, unknown>
+export type AppFormData = Record<string, AppFormFieldValue>
 
-export interface IAppFormProps {
+export interface IAppFormProps<TFormData extends object = AppFormData> {
   title?: string
   disabled?: boolean
-  onChange?: (formData: AppFormData) => void
-  onSubmit?: (formData: AppFormData) => void
+  onChange?: (formData: TFormData) => void
+  onSubmit?: (formData: TFormData) => void
   fields: Record<string, AppFormField>
   submitBtnText?: string
   actionProcessing?: boolean
