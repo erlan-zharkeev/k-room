@@ -10,14 +10,22 @@
     "client:lint": "npm --prefix client run lint",
     "client:stylelint": "npm --prefix client run lint:style",
     "client:build": "npm --prefix client run build",
+    "client:test": "npm --prefix client run test",
+    "client:test:watch": "npm --prefix client run test:watch",
     "server:lint": "npm --prefix server run lint",
     "server:typecheck": "npm --prefix server run typecheck",
     "server:build": "npm --prefix server run build",
+    "e2e": "playwright test -c config/playwright/playwright.config.ts",
+    "e2e:headed": "playwright test -c config/playwright/playwright.config.ts --headed",
+    "e2e:ui": "playwright test -c config/playwright/playwright.config.ts --ui",
+    "e2e:login": "playwright test -c config/playwright/playwright.config.ts e2e/auth/login.spec.ts",
     "check": "npm run client:lint && npm run client:stylelint && npm run client:build && npm run server:lint && npm run server:typecheck && npm run server:build",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch"
+    "test": "npm run client:test",
+    "test:watch": "npm run client:test:watch"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0",
     "depcheck": "^1.4.7",
     "husky": "^8.0.2"
   }

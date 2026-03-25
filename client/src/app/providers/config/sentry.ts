@@ -32,12 +32,6 @@ const shouldIgnoreSentryError = ({ message, silent, status }: ISentryErrorContex
   return SENTRY_IGNORED_SUBSTRINGS.some((substring) => normalizedMessage.includes(substring))
 }
 
-export const frontCaptureSentryException = (error: unknown) => {
-  if (!Sentry.isInitialized()) return
-
-  Sentry.captureException(error)
-}
-
 export const initSentry = () => {
   if (!CLIENT_ENV.sentryEnabled || !CLIENT_ENV.sentryDsnClient || Sentry.isInitialized()) {
     return

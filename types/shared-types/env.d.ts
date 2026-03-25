@@ -18,6 +18,10 @@ export interface IEnvVariables {
     RESEND_API_KEY: string;
     RESEND_FROM_EMAIL: string;
     RESEND_FROM_NAME: string;
+    PLAYWRIGHT_BASE_URL: string;
+    PLAYWRIGHT_SERVER_URL: string;
+    PLAYWRIGHT_MONGO_HOST: string;
+    PLAYWRIGHT_MONGO_PORT: string;
     SENTRY_DSN_CLIENT: string;
     SENTRY_DSN_SERVER: string;
     SENTRY_ENVIRONMENT: string;

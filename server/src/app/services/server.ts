@@ -8,12 +8,12 @@ import methodOverride from 'method-override'
 import { RouteNamesEnum } from 'common-types'
 
 import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'app/config'
+import { initDataBase } from 'app/services/database'
+import { rootRouter } from 'app/services/router'
+import { initIO } from 'app/services/socket'
 
 import { ENV } from 'shared-config'
-import { initDataBase, log, serverCaptureSentryException, setIO } from 'shared-lib'
-
-import { rootRouter } from './router'
-import { initIO } from './socket'
+import { log, serverCaptureSentryException, setIO } from 'shared-lib'
 
 const app = express()
 

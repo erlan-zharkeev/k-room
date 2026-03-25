@@ -4,8 +4,8 @@ import { loadFixtures } from 'features/fixtures'
 
 import { initMediaBuckets } from 'entities/media'
 
-import { ENV } from 'shared-config'
-import { log } from 'shared-lib'
+import { ENV, MONGO_CONNECTION_OPTIONS } from 'shared-config'
+import { log, serverCaptureSentryException } from 'shared-lib'
 
 mongoose.set('strictQuery', true)
 
@@ -39,6 +39,7 @@ const initMongoConnectionListeners = () => {
   mongoose.connection.on('error', (error) => {
     log.error('-Mongo connection error')
     log.error(String(error))
+    serverCaptureSentryException(error)
   })
 }
 
@@ -46,13 +47,7 @@ export const initDataBase = async (): Promise<boolean> => {
   initMongoConnectionListeners()
 
   try {
-    await mongoose.connect(ENV.MONGO_HOST, {
-      serverSelectionTimeoutMS: 15000,
-      connectTimeoutMS: 15000,
-      socketTimeoutMS: 45000,
-      maxPoolSize: 10,
-      minPoolSize: 1
-    })
+    await mongoose.connect(ENV.MONGO_HOST, MONGO_CONNECTION_OPTIONS)
     log.success('-Connected to DB')
 
     try {
@@ -61,12 +56,14 @@ export const initDataBase = async (): Promise<boolean> => {
     } catch (error) {
       log.error('-Post-DB init failed')
       log.error(String(error))
+      serverCaptureSentryException(error)
     }
 
     return true
-  } catch (e) {
+  } catch (error) {
     log.error('-Init DB failed')
-    log.error(String(e))
+    log.error(String(error))
+    serverCaptureSentryException(error)
     return false
   }
 }

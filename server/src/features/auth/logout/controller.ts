@@ -5,7 +5,7 @@ import { StatusEnum } from "common-types"
 import { UserModel } from "entities/user"
 
 import { AppResponseType, IAppRequest, SHARED_MESSAGE } from "shared-config"
-import { log, throwHTTPError } from "shared-lib"
+import { log, serverCaptureSentryException, throwHTTPError } from "shared-lib"
 
 import { MESSAGE } from "./config"
 
@@ -37,8 +37,9 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
       },
       payload: null
     })
-  } catch (e) {
-    log.error(String(e))
+  } catch (error) {
+    log.error(String(error))
+    serverCaptureSentryException(error)
     throwHTTPError(StatusEnum.Server, res, MESSAGE.failed)
   }
 }

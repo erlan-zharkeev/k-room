@@ -6,7 +6,7 @@ import { isUserExist } from 'features/auth'
 
 import { UserModel } from 'entities/user'
 
-import { log } from 'shared-lib'
+import { log, serverCaptureSentryException } from 'shared-lib'
 
 export const createUser = async ({
   id,
@@ -40,6 +40,7 @@ export const createUser = async ({
   } catch (error) {
     log.error('-New user creating failed')
     log.error(String(error))
+    serverCaptureSentryException(error)
   }
   return user
 }

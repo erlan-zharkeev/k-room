@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
+import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconName } from 'src/shared/ui'
 
 import { useDevicePermissionRequestAndUpdate } from '../../request-and-update-device-permission'
@@ -44,6 +45,18 @@ export const useInputVideoDevice = () => {
     value: device.deviceId
   }))
 
+  const isExpectedVideoDeviceError = (error: unknown) => {
+    if (error instanceof DOMException) {
+      return error.name === 'NotAllowedError' || error.name === 'NotFoundError' || error.name === 'AbortError'
+    }
+
+    if (error instanceof Error) {
+      return error.message === 'Permission denied' || error.message === 'Get user media not supported'
+    }
+
+    return false
+  }
+
   const updateDeviceList = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const videoInputs = devices.filter((device) => device.kind === 'videoinput')
@@ -83,7 +96,10 @@ export const useInputVideoDevice = () => {
       })
       videoStream.current = stream
     } catch (error) {
-      console.error('error', error)
+      if (!isExpectedVideoDeviceError(error)) {
+        frontCaptureSentryException(error)
+      }
+
       cantAccessDeviceNotification.open()
     } finally {
       setVideoIsLoading(false)

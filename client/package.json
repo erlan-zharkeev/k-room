@@ -8,9 +8,12 @@
     "lint:fix-es": "eslint **/*.{ts,tsx} --fix",
     "lint:style": "stylelint \"src/**/*.scss\"",
     "serve": "vite --host",
+    "serve:e2e": "vite --host --strictPort",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run --config config/vitest/vitest.config.ts",
+    "test:watch": "vitest --config config/vitest/vitest.config.ts"
   },
   "dependencies": {
     "@sentry/react": "^10.45.0",
@@ -29,10 +32,14 @@
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.8.2",
+    "@rolldown/binding-darwin-arm64": "^1.0.0-rc.11",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/howler": "^2.2.7",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.20",
-    "@types/node": "^16.11.36",
+    "@types/node": "^25.5.0",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
     "@types/react-redux": "^7.1.24",
@@ -47,6 +54,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.30.1",
     "history": "^5.3.0",
+    "jsdom": "^29.0.1",
     "lodash": "^4.17.21",
     "postcss": "^8.4.16",
     "postcss-sorting": "^7.0.1",
@@ -65,6 +73,7 @@
     "typescript": "^5.0.2",
     "vite": "^4.3.8",
     "vite-plugin-node-polyfills": "^0.22.0",
-    "vite-plugin-svgr": "^4.3.0"
+    "vite-plugin-svgr": "^4.3.0",
+    "vitest": "^4.1.1"
   }
 }

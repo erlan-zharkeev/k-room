@@ -4,7 +4,7 @@ import { useSettings } from 'src/entities/settings'
 import { useSound } from 'src/entities/sound'
 import { useSystem } from 'src/entities/system'
 
-import { useTimeout } from 'src/shared/lib'
+import { frontCaptureSentryException, useTimeout } from 'src/shared/lib'
 
 export const useOutputAudioDevice = () => {
   const [audioOutputDeviceList, setAudioOutputDeviceList] = useState([] as MediaDeviceInfo[])
@@ -34,6 +34,18 @@ export const useOutputAudioDevice = () => {
     settings.update({ selectedAudioOutputDeviceId: value })
   }
 
+  const isExpectedOutputAudioDeviceError = (error: unknown) => {
+    if (error instanceof DOMException) {
+      return error.name === 'NotAllowedError' || error.name === 'NotFoundError' || error.name === 'AbortError'
+    }
+
+    if (error instanceof Error) {
+      return error.message === 'No audio output devices found or there are no permissions'
+    }
+
+    return false
+  }
+
   useEffect(() => {
     if (camPermission === 'granted' || micPermission === 'granted') {
       updateOutputAudioDeviceList()
@@ -56,7 +68,9 @@ export const useOutputAudioDevice = () => {
 
       if (!selectedStillExists) onAudioOutputDeviceChange()
     } catch (error) {
-      console.error('Error accessing audio output devices:', error)
+      if (!isExpectedOutputAudioDeviceError(error)) {
+        frontCaptureSentryException(error)
+      }
     }
   }
 

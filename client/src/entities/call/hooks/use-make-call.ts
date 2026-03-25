@@ -26,7 +26,7 @@ import {
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 
 import { socket } from 'src/shared/api'
-import { useTypedSelector } from 'src/shared/lib'
+import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
 
@@ -106,8 +106,9 @@ export const useMakeCall = () => {
     if (!videoDomElement) return
     try {
       videoDomElement.srcObject = stream
-    } catch (e) {
-      clg('error', 'Failed to set stream tracks to HTMLElement' + String(e))
+    } catch (error) {
+      clg('error', 'Failed to set stream tracks to HTMLElement' + String(error))
+      frontCaptureSentryException(error)
     }
   }
 
@@ -120,6 +121,7 @@ export const useMakeCall = () => {
     })
     connection.current.on('error', (e) => {
       clg('error', 'An unknown error has occurred' + String(e))
+      frontCaptureSentryException(e)
     })
     connection.current.on('close', () => closeConnection())
     connection.current.on('data', (data: unknown) => {
@@ -257,8 +259,9 @@ export const useMakeCall = () => {
   const leaveCall = (callId: string) => {
     try {
       connection.current?.destroy()
-    } catch (e: unknown) {
-      if (e instanceof Error) clg('error', e.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) clg('error', error.message)
+      frontCaptureSentryException(error)
     }
     closeConnection(true)
     if (!callId) return

@@ -5,6 +5,7 @@ import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 import { useNotification, NOTIFICATION_MESSAGE } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
+import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconName } from 'src/shared/ui'
 
 export const useInputAudioDevice = () => {
@@ -72,6 +73,18 @@ export const useInputAudioDevice = () => {
     messageType: 'error'
   })
 
+  const isExpectedAudioDeviceError = (error: unknown) => {
+    if (error instanceof DOMException) {
+      return error.name === 'NotAllowedError' || error.name === 'NotFoundError' || error.name === 'AbortError'
+    }
+
+    if (error instanceof Error) {
+      return error.message === 'Permission denied' || error.message === 'Get user media not supported'
+    }
+
+    return false
+  }
+
   const setAudioStreamHandler = async () => {
     try {
       setMicIsLoading(true)
@@ -85,6 +98,10 @@ export const useInputAudioDevice = () => {
       })
       audioStream.current = stream
     } catch (error) {
+      if (!isExpectedAudioDeviceError(error)) {
+        frontCaptureSentryException(error)
+      }
+
       cantAccessDeviceNotification.open()
     } finally {
       setMicIsLoading(false)

@@ -38,8 +38,7 @@ export const socketAuthMiddleware = async (socket: SocketInstanceType) => {
         }
       ]
     )
-  } catch (e: unknown) {
-    console.log('error', e)
+  } catch {
     return authErrorBreakConnection(socket, replayData)
   }
 }

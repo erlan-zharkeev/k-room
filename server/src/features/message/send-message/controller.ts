@@ -10,7 +10,7 @@ import { MessageModel } from 'entities/message'
 import { UserModel } from 'entities/user'
 
 import { SharpSettingsKey, SocketInstanceType } from 'shared-config'
-import { getIO } from 'shared-lib'
+import { getIO, serverCaptureSentryException } from 'shared-lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('send-message', async (data: IEventSendMessage) => {
@@ -65,8 +65,8 @@ export const controller = (socket: SocketInstanceType) => {
           getIO().to(socketId).emit<SocketActionsType>('message-delivered', payload)
         })
       })
-    } catch (e: unknown) {
-      console.log(e)
+    } catch (error: unknown) {
+      serverCaptureSentryException(error)
     }
   })
 }

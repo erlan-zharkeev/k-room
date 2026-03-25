@@ -6,7 +6,7 @@ import { MESSAGE } from 'features/user/update-user-data/config'
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, IAppRequest, SERVER_NOTIFICATION_MESSAGE, SHARED_MESSAGE } from 'shared-config'
-import { getIO, log, throwHTTPError } from 'shared-lib'
+import { getIO, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
 
 import { updateUserAvatar } from './lib'
 
@@ -58,8 +58,9 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
 
 
     return res.json({ payload: null, message: { text: SHARED_MESSAGE.success, silent: true } })
-  } catch (e: unknown) {
-    log.error(String(e))
+  } catch (error: unknown) {
+    log.error(String(error))
+    serverCaptureSentryException(error)
     throwHTTPError(StatusEnum.Server, res, SERVER_NOTIFICATION_MESSAGE.FailedUserDataUpdate)
   }
 }

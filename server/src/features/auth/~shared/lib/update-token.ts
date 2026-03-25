@@ -7,7 +7,7 @@ import { setCookie } from 'features/cookie'
 import { UserModel } from 'entities/user'
 
 import { ENV, IAppRequest } from 'shared-config'
-import { log } from 'shared-lib'
+import { log, serverCaptureSentryException } from 'shared-lib'
 
 export const updateTokens = async (id: string, req: IAppRequest, res: Response) => {
   setToken(res, 'jwt', id, ENV.K_ROOM_ACCESS_TOKEN_SECRET, ENV.JWT_ACCESS_EXPIRES_INTERVAL)
@@ -42,8 +42,9 @@ export const updateTokens = async (id: string, req: IAppRequest, res: Response) 
         }
       ]
     )
-  } catch (e) {
-    log.error(String(e))
+  } catch (error) {
+    log.error(String(error))
+    serverCaptureSentryException(error)
   }
 
 

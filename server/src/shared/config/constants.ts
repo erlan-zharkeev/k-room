@@ -1,6 +1,5 @@
 import type { IEnvVariables } from 'common-types'
 import dotenv, { type DotenvParseOutput } from 'dotenv'
-import type { ISystemDataConstants } from 'shared-config'
 
 const envs = dotenv.config({ path: `../.env.${process.env.NODE_ENV}` }).parsed as DotenvParseOutput | IEnvVariables
 envs.IS_DEV = process.env.NODE_ENV === 'development'
@@ -40,29 +39,12 @@ const host = new URL(ENV.HOST)
 
 export const ORIGINS = [`https://${host.hostname}`, `http://${host.hostname}`]
 
-export const SYSTEM_DATA: ISystemDataConstants = {
-  sharp: {
-    avatar: {
-      dimensions: {
-        x: 300,
-        y: 300
-      },
-      quality: 100
-    },
-    'common-compressed': {
-      quality: 60,
-      dimensions: {
-        x: null,
-        y: null
-      }
-    },
-    'common-uncompressed': {
-      quality: 100,
-      dimensions: {
-        x: null,
-        y: null
-      }
-    }
-  },
-  maxMbQuantityTransfer: 10
-}
+export const MAX_HTTP_BUFFER_SIZE_MB = 10
+
+export const MONGO_CONNECTION_OPTIONS = {
+  serverSelectionTimeoutMS: 15000,
+  connectTimeoutMS: 15000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 10,
+  minPoolSize: 1
+} as const
