@@ -1,13 +1,13 @@
-import { RouteNamesEnum } from 'common-types'
+import { RouteNamesEnum } from 'common'
 
 import './style.scss'
-
-import { PASSWORD_RECOVERY_LINK_TEXT } from 'src/features/auth/password-recovery/ui/PasswordRecoveryLink/config'
 
 import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { AppLink } from 'src/shared/ui'
+
+import { PASSWORD_RECOVERY_LINK_TEXT } from './config'
 
 export const PasswordRecoveryLink = () => {
   const { email } = useUser()

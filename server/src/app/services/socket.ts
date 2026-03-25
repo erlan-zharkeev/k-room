@@ -1,7 +1,7 @@
 import type { Server as HttpsServer } from 'https'
 import { Server } from 'socket.io'
 
-import { RouteNamesEnum, type SocketActionsType } from 'common-types'
+import { RouteNamesEnum, type SocketActionsType } from 'common'
 
 import { MAX_HTTP_BUFFER_SIZE } from 'app/config'
 import { socketRouter } from 'app/services/socket-router'

@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventMessageDeleted } from 'common-types'
+import { SocketActionsType, IEventMessageDeleted } from 'common'
 
 import { socket } from 'src/shared/api'
 

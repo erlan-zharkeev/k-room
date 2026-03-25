@@ -1,6 +1,6 @@
 import { Schema } from "mongoose"
 
-import { IReaction } from "common-types"
+import { IReaction } from "common"
 
 export const reactionSchema = new Schema<IReaction>({
   username: { type: String, required: true },

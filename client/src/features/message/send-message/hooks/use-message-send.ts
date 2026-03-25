@@ -4,7 +4,7 @@ import {
   IEventSendMessage,
   IMessage,
   SocketActionsType
-} from 'common-types'
+} from 'common'
 import { useDispatch } from 'react-redux'
 
 import { useAddMessage } from 'src/features/message'

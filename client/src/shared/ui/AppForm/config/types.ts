@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react'
 
-import { UnknownCallback } from 'common-types'
+import { UnknownCallback } from 'common'
 
 import type { FileLoaderValueType } from 'src/shared/config'
 import {

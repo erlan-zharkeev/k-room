@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const LOGIN_FORM_TEXT = {
   emailPlaceholder: {
@@ -21,4 +21,4 @@ export const LOGIN_FORM_TEXT = {
     en: 'Forgot password?',
     ru: 'Забыли пароль?'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

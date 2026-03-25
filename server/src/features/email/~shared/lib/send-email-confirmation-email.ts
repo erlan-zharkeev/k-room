@@ -34,6 +34,11 @@ export const sendEmailConfirmationEmail = async ({
   const confirmUrl = buildEmailConfirmationLink(token)
   const from = ENV.RESEND_FROM_NAME ? `${ENV.RESEND_FROM_NAME} <${ENV.RESEND_FROM_EMAIL}>` : ENV.RESEND_FROM_EMAIL
 
+  if (!resend) {
+    log.warn(`-Mock confirmation email for ${email}: ${confirmUrl}`)
+    return { id: 'mock-resend-id' }
+  }
+
   const { data, error } = await resend.emails.send({
     from,
     to: email,

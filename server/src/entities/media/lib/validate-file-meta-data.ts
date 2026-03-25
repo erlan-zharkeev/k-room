@@ -1,6 +1,6 @@
 import { type Response } from 'express'
 
-import { type AppLanguageType, StatusEnum } from 'common-types'
+import { type AppLanguageType, StatusEnum } from 'common'
 
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
 

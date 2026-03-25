@@ -1,5 +1,5 @@
 import './style.scss'
-import type { IMessage } from 'common-types'
+import type { IMessage } from 'common'
 
 import { MessageBody, MessageMenu } from 'src/features/message'
 

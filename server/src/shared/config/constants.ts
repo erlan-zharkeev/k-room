@@ -1,7 +1,17 @@
-import type { IEnvVariables } from 'common-types'
+import type { IEnvVariables } from 'common'
 import dotenv, { type DotenvParseOutput } from 'dotenv'
 
-const envs = dotenv.config({ path: `../.env.${process.env.NODE_ENV}` }).parsed as DotenvParseOutput | IEnvVariables
+const stage = process.env.NODE_ENV ?? 'development'
+const envs = dotenv.config({ path: `../.env.${stage}` }).parsed as DotenvParseOutput | IEnvVariables
+
+const requireServerEnv = (key: string, value?: string) => {
+  if (!value) {
+    throw new Error(`[server] Missing required env "${key}" in .env.${stage}`)
+  }
+
+  return value
+}
+
 envs.IS_DEV = process.env.NODE_ENV === 'development'
 envs.SERVER_ASSETS_PATH = envs.IS_DEV ? './src/assets/' : './build/assets/'
 envs.SERVER_URL = envs.IS_DEV ? `${envs.API_HOST}:${envs.SERVER_PORT}/api` : `${envs.API_HOST}/api`
@@ -23,13 +33,13 @@ const {
 export const ENV = {
   ...envs,
   K_ROOM_ACCESS_TOKEN_SECRET,
-  EMAIL_CONFIRM_SECRET,
+  EMAIL_CONFIRM_SECRET: requireServerEnv('EMAIL_CONFIRM_SECRET', EMAIL_CONFIRM_SECRET),
   K_ROOM_MAIL_PASS,
   K_ROOM_REFRESH_TOKEN_SECRET,
-  RESEND_API_KEY,
-  RESEND_FROM_EMAIL,
-  RESEND_FROM_NAME,
-  SENTRY_DSN_SERVER,
+  RESEND_API_KEY: requireServerEnv('RESEND_API_KEY', RESEND_API_KEY),
+  RESEND_FROM_EMAIL: requireServerEnv('RESEND_FROM_EMAIL', RESEND_FROM_EMAIL),
+  RESEND_FROM_NAME: requireServerEnv('RESEND_FROM_NAME', RESEND_FROM_NAME),
+  SENTRY_DSN_SERVER: requireServerEnv('SENTRY_DSN_SERVER', SENTRY_DSN_SERVER),
   SENTRY_ENVIRONMENT,
   SENTRY_RELEASE,
   SENTRY_ENABLED

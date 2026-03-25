@@ -1,5 +1,5 @@
 import type { AxiosResponse, ResponseType } from 'axios'
-import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common-types'
+import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common'
 
 import { useNotification } from 'src/entities/notification'
 import { settingsStore } from 'src/entities/settings/hooks/use-settings'

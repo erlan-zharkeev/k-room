@@ -1,4 +1,4 @@
-import type { IEventChangeMessageStatus, SocketActionsType } from 'common-types'
+import type { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
 import { changeMessageStatus } from 'features/message/change-message-status'
 

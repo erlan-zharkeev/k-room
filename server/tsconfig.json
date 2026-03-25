@@ -15,9 +15,9 @@
       "shared-config": ["server/src/shared/config"],
       "shared-lib": ["server/src/shared/lib"],
       "shared-middleware": ["server/src/shared/middleware"],
-      "common-types": ["types"]
+      "common": ["common/index.ts"]
     }
   },
-  "include": ["../server/src", "../types/shared-types", "**/*.cjs"],
+  "include": ["../server/src", "../common/shared-types", "**/*.cjs"],
   "exclude": ["node_modules", "./build", "./src/utils"]
 }

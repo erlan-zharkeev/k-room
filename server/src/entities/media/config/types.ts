@@ -1,4 +1,4 @@
-import type { MediaKindType } from 'common-types'
+import type { MediaKindType } from 'common'
 import type { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
 

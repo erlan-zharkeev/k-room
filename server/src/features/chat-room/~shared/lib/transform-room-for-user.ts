@@ -1,4 +1,4 @@
-import type { IChatRoom, IChatRoomSchema } from 'common-types'
+import type { IChatRoom, IChatRoomSchema } from 'common'
 import { ObjectId } from 'mongoose'
 
 export const transformRoomForUser = ({

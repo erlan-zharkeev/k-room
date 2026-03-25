@@ -1,4 +1,4 @@
-import { IGetUserDataResponse, StatusEnum, UserEndpointsEnum } from 'common-types'
+import { IGetUserDataResponse, StatusEnum, UserEndpointsEnum } from 'common'
 
 import { useMainLoader } from 'src/features/switch-main-loader'
 import { useActivateUserSession } from 'src/features/user'

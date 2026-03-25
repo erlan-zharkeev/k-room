@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const CONTACT_INVITATION_CONTROL_BTNS_I18N = {
   updatingStatus: {
@@ -25,4 +25,4 @@ export const CONTACT_INVITATION_CONTROL_BTNS_I18N = {
     en: 'Hide',
     ru: 'Скрыть'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

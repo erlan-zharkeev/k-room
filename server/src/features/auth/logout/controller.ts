@@ -1,13 +1,13 @@
 import { ObjectId } from 'mongoose'
 
-import { StatusEnum } from 'common-types'
-
-import { MESSAGE } from 'features/auth/logout/config'
+import { StatusEnum } from 'common'
 
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'shared-config'
 import { getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
+
+import { MESSAGE } from './config'
 
 export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

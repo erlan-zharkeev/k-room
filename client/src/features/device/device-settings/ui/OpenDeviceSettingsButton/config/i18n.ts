@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const OPEN_DEVICE_SETTINGS_BUTTON_I18N = {
   tooltip: {
@@ -9,4 +9,4 @@ export const OPEN_DEVICE_SETTINGS_BUTTON_I18N = {
     en: 'Device settings',
     ru: 'Настройки устройств'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

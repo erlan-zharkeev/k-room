@@ -1,4 +1,4 @@
-import { type AppLanguageType, DEFAULT_APP_LANGUAGE, type LocalizedTextType } from 'common-types'
+import { type AppLanguageType, DEFAULT_APP_LANGUAGE, type LocalizedTextType } from 'common'
 
 export const getLocalizedText = <T>(texts: LocalizedTextType<T>, language?: AppLanguageType): T => {
   return texts[language ?? DEFAULT_APP_LANGUAGE] ?? texts[DEFAULT_APP_LANGUAGE]

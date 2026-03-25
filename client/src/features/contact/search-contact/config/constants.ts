@@ -1,4 +1,4 @@
-import { IFrontendContact } from 'common-types'
+import { IFrontendContact } from 'common'
 
 export const SEARCHED_CONTACTS_MOCK: IFrontendContact[] = [
   { id: 'user-1', username: 'User 1', online: false, lastSeen: 0, interactionType: 'default' },

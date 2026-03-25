@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { MediaEndpointsEnum } from 'common-types'
+import { MediaEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'features/auth'
 

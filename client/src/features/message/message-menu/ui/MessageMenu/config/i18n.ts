@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const MESSAGE_MENU_I18N = {
   reply: {
@@ -17,4 +17,4 @@ export const MESSAGE_MENU_I18N = {
     en: 'Forward message',
     ru: 'Переслать сообщение'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

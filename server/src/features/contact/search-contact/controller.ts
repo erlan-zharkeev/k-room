@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-import { IEventSearchContact, IFrontendContact, SocketActionsType } from 'common-types'
+import { IEventSearchContact, IFrontendContact, SocketActionsType } from 'common'
 
 import { transformUserToContact } from 'features/user'
 

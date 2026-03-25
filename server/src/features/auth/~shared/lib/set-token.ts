@@ -1,4 +1,4 @@
-import type { AuthTokensType } from 'common-types'
+import type { AuthTokensType } from 'common'
 import { type Response } from 'express'
 
 import { generateToken } from 'features/auth'

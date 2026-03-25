@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import type { IFrontendUserData } from 'common-types'
+import type { IFrontendUserData } from 'common'
 import type { SignalData } from 'simple-peer'
 
 import { ContextRefType } from '../config'

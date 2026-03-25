@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { IFrontendContact, MediaEndpointsEnum } from 'common-types'
+import { IFrontendContact, MediaEndpointsEnum } from 'common'
 
 import { AddContactBtn } from 'src/features/contact'
 

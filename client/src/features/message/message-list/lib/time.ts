@@ -1,7 +1,9 @@
-import moment from 'moment'
+import { type AppLanguageType } from 'common'
 
-export const getMessageGroupDateLabel = (createdAt?: string) => {
+import { formatLocalizedDate } from 'src/shared/lib'
+
+export const getMessageGroupDateLabel = (createdAt: string | undefined, language: AppLanguageType) => {
   if (!createdAt) return ''
 
-  return moment(Number(createdAt)).format('LL')
+  return formatLocalizedDate(createdAt, language)
 }

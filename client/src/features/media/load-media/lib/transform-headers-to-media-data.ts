@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { MediaKindType } from 'common-types'
+import { MediaKindType } from 'common'
 
 import { IDbMedia } from 'src/shared/config'
 

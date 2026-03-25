@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const LEGAL_INFO_PAGE_I18N = {
   title: {
@@ -207,4 +207,4 @@ export const LEGAL_INFO_PAGE_I18N = {
     en: 'Back',
     ru: 'Назад'
   }
-} as const satisfies Record<string, LocalizedTextType<any>>
+} as const satisfies LocalizedTextMapType<any>

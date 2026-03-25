@@ -1,4 +1,4 @@
-import { SocketActionsType } from 'common-types'
+import { SocketActionsType } from 'common'
 
 import { socket } from 'src/shared/api'
 import { FChatRoomType } from 'src/shared/config'

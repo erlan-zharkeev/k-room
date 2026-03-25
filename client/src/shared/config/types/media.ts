@@ -1,4 +1,4 @@
-import { MediaFileValueType, MediaKindType } from 'common-types'
+import { MediaFileValueType, MediaKindType } from 'common'
 
 export const IMAGE_RESOLUTIONS = {
   png: 'image/png',

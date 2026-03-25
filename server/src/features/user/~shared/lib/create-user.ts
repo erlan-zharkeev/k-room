@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { ProviderType } from 'common-types'
+import { ProviderType } from 'common'
 
 import { isUserExist } from 'features/auth'
 

@@ -1,4 +1,4 @@
-import { IImageObject, IRepliedMessage } from 'common-types'
+import { IImageObject, IRepliedMessage } from 'common'
 
 export interface ISendMessagePayload {
   authorId: string

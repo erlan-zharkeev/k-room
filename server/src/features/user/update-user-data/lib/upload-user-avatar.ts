@@ -1,6 +1,6 @@
 import type { Response } from 'express'
 
-import { type AppLanguageType } from 'common-types'
+import { type AppLanguageType } from 'common'
 
 import { MongooseGridFSBucketType, uploadBufferToBucket } from 'entities/media'
 import { mediaBuckets } from 'entities/media'

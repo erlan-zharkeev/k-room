@@ -1,5 +1,5 @@
 import { notification as antdNotification } from 'antd'
-import { IMessage } from 'common-types'
+import { IMessage } from 'common'
 
 import type { IAppNotification, NotificationType } from 'src/entities/notification'
 import { ERROR_NOTIFICATION_DURATION_IN_SEC } from 'src/entities/notification/config'

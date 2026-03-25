@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { StatusEnum } from 'common-types'
+import { StatusEnum } from 'common'
 
 import { USER_MESSAGE } from 'features/user'
 

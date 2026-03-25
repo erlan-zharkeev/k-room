@@ -1,6 +1,6 @@
 import { type NextFunction, type Response } from 'express'
 
-import { StatusEnum } from 'common-types'
+import { StatusEnum } from 'common'
 
 import { AUTH_MESSAGE, updateTokens, verifyToken } from 'features/auth'
 

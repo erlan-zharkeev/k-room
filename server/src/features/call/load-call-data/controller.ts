@@ -1,4 +1,4 @@
-import { SocketActionsType } from 'common-types'
+import { SocketActionsType } from 'common'
 
 import { emitCallsToUser } from 'features/call'
 

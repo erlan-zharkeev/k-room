@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const SHOW_WALLPAPER_SWITCHER_TEXT = {
   label: {
@@ -13,4 +13,4 @@ export const SHOW_WALLPAPER_SWITCHER_TEXT = {
     en: 'Hide',
     ru: 'Выкл'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

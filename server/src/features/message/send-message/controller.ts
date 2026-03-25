@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { IEventMessageDelivered, IEventSendMessage, IMessage, SocketActionsType } from 'common-types'
+import { IEventMessageDelivered, IEventSendMessage, IMessage, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'features/user'
 

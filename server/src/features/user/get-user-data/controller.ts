@@ -1,13 +1,14 @@
-import { IGetUserDataResponse, StatusEnum } from 'common-types'
+import { IGetUserDataResponse, StatusEnum } from 'common'
 
 import { updateTokens } from 'features/auth'
 import { mapUserToDto, USER_MESSAGE } from 'features/user'
-import { MESSAGE } from 'features/user/get-user-data/config'
 
 import { UserModel } from 'entities/user'
 
 import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
+
+import { MESSAGE } from './config'
 
 export const getUserData = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
   const language = req.language

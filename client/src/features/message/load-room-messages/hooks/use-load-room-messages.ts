@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsType } from 'common-types'
+import { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsType } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'

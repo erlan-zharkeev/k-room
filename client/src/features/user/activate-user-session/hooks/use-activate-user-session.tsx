@@ -1,4 +1,4 @@
-import { IFrontendUserData, SocketActionsType } from 'common-types'
+import { IFrontendUserData, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
 
 import { useSocketConnect } from 'src/features/socket'

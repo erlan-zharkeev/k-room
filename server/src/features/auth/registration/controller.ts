@@ -1,14 +1,15 @@
 import bcrypt from 'bcryptjs'
 
-import { type IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common-types'
+import { type IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 import { generateToken, isUserExist } from 'features/auth'
-import { MESSAGE } from 'features/auth/registration/config'
 import { sendEmailConfirmationEmail } from 'features/email'
 import { createUser } from 'features/user'
 
 import { type AppResponseType, ENV, type IAppRequest } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
+
+import { MESSAGE } from './config'
 
 export const registration = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language

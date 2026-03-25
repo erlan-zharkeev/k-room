@@ -1,2 +1,2 @@
 export * from './constants'
-export * from './message'
+export * from './i18n'

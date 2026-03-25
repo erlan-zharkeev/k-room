@@ -1,6 +1,10 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const PASSWORD_RECOVERY_BODY_TEXT = {
+  emailPlaceholder: {
+    en: 'Enter your email',
+    ru: 'Введите email'
+  },
   resendTimer: {
     en: (seconds: number) => `A new code can be sent after ${seconds} seconds.`,
     ru: (seconds: number) => `Новый код можно отправить через ${seconds} сек.`
@@ -17,4 +21,4 @@ export const PASSWORD_RECOVERY_BODY_TEXT = {
     en: 'Validate',
     ru: 'Проверить'
   }
-} as const satisfies Record<string, LocalizedTextType<any>>
+} as const satisfies LocalizedTextMapType<any>

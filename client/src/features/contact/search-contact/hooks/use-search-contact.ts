@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
-import { SocketActionsType, IEventSearchContact, IFrontendContact } from 'common-types'
+import { SocketActionsType, IEventSearchContact, IFrontendContact } from 'common'
 
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'

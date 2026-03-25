@@ -1,14 +1,14 @@
 import './style.scss'
 
-import { IMessage } from 'common-types'
-
-import { REPLIED_MESSAGE_I18N } from 'src/features/message/message-body/ui/RepliedMessage/config'
+import { IMessage } from 'common'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppText } from 'src/shared/ui'
 
 import { MessageImages } from '../MessageImages/MessageImages'
+
+import { REPLIED_MESSAGE_I18N } from './config'
 
 export const RepliedMessage = ({ message }: { message: IMessage }) => {
   if (!message.repliedMessage?.id) return null

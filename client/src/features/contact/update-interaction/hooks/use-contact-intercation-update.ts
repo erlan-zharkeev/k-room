@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventUpdateContactInteractionSuccess } from 'common-types'
+import { SocketActionsType, IEventUpdateContactInteractionSuccess } from 'common'
 
 import { socket } from 'src/shared/api'
 

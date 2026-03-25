@@ -1,4 +1,4 @@
-import { SocketActionsType, EventGetContactsType } from 'common-types'
+import { SocketActionsType, EventGetContactsType } from 'common'
 
 import { getRequiredContactSystemData } from 'src/features/contact/~shared/lib'
 

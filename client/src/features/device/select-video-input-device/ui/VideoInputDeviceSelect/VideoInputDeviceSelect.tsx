@@ -2,12 +2,13 @@ import './style.scss'
 import { useEffect } from 'react'
 
 import { SelectDevice, useInputVideoDevice } from 'src/features/device'
-import { VIDEO_INPUT_DEVICE_SELECT_I18N } from 'src/features/device/select-video-input-device/ui/VideoInputDeviceSelect/config'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { VIDEO_INPUT_DEVICE_SELECT_I18N } from './config'
 
 export const VideoInputDeviceSelect = () => {
   const { t } = useI18n()

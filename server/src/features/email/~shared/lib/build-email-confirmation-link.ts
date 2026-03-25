@@ -1,4 +1,4 @@
-import { RouteNamesEnum } from 'common-types'
+import { RouteNamesEnum } from 'common'
 
 import { ENV } from 'shared-config'
 

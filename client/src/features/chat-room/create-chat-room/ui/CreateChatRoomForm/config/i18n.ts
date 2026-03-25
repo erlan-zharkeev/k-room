@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const CREATE_CHAT_ROOM_FORM_I18N = {
   queryPlaceholder: {
@@ -37,4 +37,4 @@ export const CREATE_CHAT_ROOM_FORM_I18N = {
     en: 'A private chat with the selected contact already exists. Choose another contact or add one more.',
     ru: 'Личный чат с выбранным контактом уже существует. Выберите другой контакт или добавьте ещё одного.'
   }
-} as const satisfies Record<string, LocalizedTextType<any>>
+} as const satisfies LocalizedTextMapType<any>

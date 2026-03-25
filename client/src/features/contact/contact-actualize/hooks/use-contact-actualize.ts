@@ -1,4 +1,4 @@
-import { IFrontendContact, SocketActionsType } from 'common-types'
+import { IFrontendContact, SocketActionsType } from 'common'
 
 import { socket } from 'src/shared/api'
 import { DbContactType } from 'src/shared/config'

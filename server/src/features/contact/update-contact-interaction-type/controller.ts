@@ -1,9 +1,9 @@
-import { EventInviteReceivedType, IEventUpdateContactInteractionSuccess, IEventUpdateInteraction, SocketActionsType } from 'common-types'
-
-import { getSocketsByUserIds } from 'features/user/~shared/lib/get-sockets-by-ids'
+import { EventInviteReceivedType, IEventUpdateContactInteractionSuccess, IEventUpdateInteraction, SocketActionsType } from 'common'
 
 import { SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'
+
+import { getSocketsByUserIds } from '../../user/~shared/lib/get-sockets-by-ids'
 
 import { createContactInteraction } from './lib/create-contact-interaction'
 import { emitContactInteractionUpdated } from './lib/emit-contact-interaction-updated'

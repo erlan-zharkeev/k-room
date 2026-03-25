@@ -1,17 +1,9 @@
 import * as Sentry from '@sentry/node'
 import type { Express } from 'express'
 
-import { type ISentryErrorContext, SENTRY_IGNORED_SUBSTRINGS } from 'common-types'
+import { shouldIgnoreSentryError } from 'common'
 
 import { ENV } from 'shared-config'
-
-const shouldIgnoreSentryError = ({ message }: ISentryErrorContext) => {
-  if (!message) return false
-
-  const normalizedMessage = message.toLowerCase()
-
-  return SENTRY_IGNORED_SUBSTRINGS.some((substring) => normalizedMessage.includes(substring))
-}
 
 export const initSentry = () => {
   if (ENV.SENTRY_ENABLED !== 'true' || !ENV.SENTRY_DSN_SERVER || Sentry.isInitialized()) {

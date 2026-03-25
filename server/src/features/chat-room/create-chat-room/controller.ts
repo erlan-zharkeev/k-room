@@ -1,6 +1,6 @@
 import { setTimeout } from 'timers/promises'
 
-import { IChatRoomSchema, IEventCreateRoom, IEventRoomCreated, SocketActionsType } from 'common-types'
+import { IChatRoomSchema, IEventCreateRoom, IEventRoomCreated, SocketActionsType } from 'common'
 
 import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from 'features/chat-room'
 import { getSocketsByUserIds } from 'features/user'

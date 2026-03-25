@@ -1,7 +1,7 @@
 import './style.scss'
 
 import { Image } from 'antd'
-import { IMessage } from 'common-types'
+import { IMessage } from 'common'
 
 export const MessageImages = ({ message }: { message: IMessage }) => {
   if (!message.images || message.images.length <= 0) return null

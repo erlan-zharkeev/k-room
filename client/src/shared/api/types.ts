@@ -1,5 +1,5 @@
 import type { AxiosResponse, ResponseType } from 'axios'
-import { EndpointsType } from 'common-types'
+import { EndpointsType } from 'common'
 
 export type RequestTypes = 'post' | 'get' | 'patch' | 'put' | 'delete' | 'head'
 

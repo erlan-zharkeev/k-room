@@ -8,6 +8,7 @@ import { AppButton } from '../AppButton/AppButton'
 import { AppElementPicker } from '../AppElementPicker/AppElementPicker'
 import { AppFileLoader } from '../AppFileLoader/AppFileLoader'
 import { AppFormItem } from '../AppFormItem/AppFormItem'
+import { AppHeader } from '../AppHeader/AppHeader'
 import { AppInput } from '../AppInput/AppInput'
 import { AppSwitch } from '../AppSwitch/AppSwitch'
 
@@ -181,7 +182,11 @@ export const AppForm = <TFormData extends object = AppFormData>({
 
   return (
     <form className="app-form" onSubmit={handleSubmit}>
-      {title && <div className="app-form__title header-text header-text--md header-text--accent">{title}</div>}
+      {title && (
+        <AppHeader tag="h3" accent additionalClassName="app-form__title">
+          {title}
+        </AppHeader>
+      )}
       {prefixSlot && <div className="app-form__prefix-slot">{prefixSlot}</div>}
       {Object.entries(fields).map(([name, field]) =>
         !field.hide ? (

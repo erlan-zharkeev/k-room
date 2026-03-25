@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const SHORT_CHAT_LIST_I18N = {
   chooseRoom: {
@@ -9,4 +9,4 @@ export const SHORT_CHAT_LIST_I18N = {
     en: 'Chat rooms not found',
     ru: 'Чаты не найдены'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

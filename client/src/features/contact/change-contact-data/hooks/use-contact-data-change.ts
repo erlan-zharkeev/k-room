@@ -1,4 +1,4 @@
-import { SocketActionsType, EventChangeContactsDataType } from 'common-types'
+import { SocketActionsType, EventChangeContactsDataType } from 'common'
 
 import { socket } from 'src/shared/api'
 

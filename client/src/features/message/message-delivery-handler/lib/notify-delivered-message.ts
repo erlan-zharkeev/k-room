@@ -1,4 +1,4 @@
-import { IEventMessageDelivered } from 'common-types'
+import { IEventMessageDelivered } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useNotification } from 'src/entities/notification'

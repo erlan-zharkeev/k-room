@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, RouteNamesEnum } from 'common-types'
+import { AuthEndpointsEnum, RouteNamesEnum } from 'common'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 

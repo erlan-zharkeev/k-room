@@ -1,4 +1,4 @@
-import { IFrontendContact } from 'common-types'
+import { IFrontendContact } from 'common'
 
 export type DbContactType = IFrontendContact & IDbContactRequiredSystemData
 

@@ -1,6 +1,6 @@
 import { type FC } from 'react'
 
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextType } from 'common'
 
 export interface IInfoNotificationItem {
   id: number

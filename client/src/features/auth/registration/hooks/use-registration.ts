@@ -6,7 +6,7 @@ import {
   ISendConfirmationLinkResponse,
   RouteNamesEnum,
   StatusEnum
-} from 'common-types'
+} from 'common'
 import { useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'

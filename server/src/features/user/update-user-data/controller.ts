@@ -1,13 +1,14 @@
-import { SocketActionsType, StatusEnum } from 'common-types'
+import { SocketActionsType, StatusEnum } from 'common'
 
 import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'features/user'
-import { MESSAGE } from 'features/user/update-user-data/config'
-import { updateUserAvatar } from 'features/user/update-user-data/lib'
 
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'shared-config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
+
+import { MESSAGE } from './config'
+import { updateUserAvatar } from './lib'
 
 export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

@@ -1,4 +1,4 @@
-import { DEFAULT_APP_LANGUAGE, SocketActionsType } from 'common-types'
+import { DEFAULT_APP_LANGUAGE, SocketActionsType } from 'common'
 import Cookies from 'js-cookie'
 import { useDispatch } from 'react-redux'
 

@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const EDIT_USER_DATA_MODAL_I18N = {
   usernamePlaceholder: {
@@ -13,4 +13,4 @@ export const EDIT_USER_DATA_MODAL_I18N = {
     en: 'Reset',
     ru: 'Сбросить'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

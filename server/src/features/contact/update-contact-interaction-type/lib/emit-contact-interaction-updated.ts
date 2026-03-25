@@ -1,4 +1,4 @@
-import { IEventUpdateContactInteractionSuccess, InteractionType, SocketActionsType } from "common-types"
+import { IEventUpdateContactInteractionSuccess, InteractionType, SocketActionsType } from "common"
 
 import { getIO } from "shared-lib"
 

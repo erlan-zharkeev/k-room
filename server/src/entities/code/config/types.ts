@@ -4,6 +4,7 @@ export interface ICodeElement {
 }
 
 export interface ICodeMethod {
+  query: ICodeElement
   email: ICodeElement
   sms: ICodeElement
 }

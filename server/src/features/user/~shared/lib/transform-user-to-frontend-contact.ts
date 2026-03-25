@@ -1,4 +1,4 @@
-import type { IFrontendContact, InteractionType } from "common-types"
+import type { IFrontendContact, InteractionType } from "common"
 
 import type { IUserSchema } from "entities/user"
 

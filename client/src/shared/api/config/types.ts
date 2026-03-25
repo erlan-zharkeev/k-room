@@ -1,4 +1,4 @@
-import { IBackendResponse, StatusEnum } from 'common-types'
+import { IBackendResponse, StatusEnum } from 'common'
 
 export interface IDoRequestOpts<R> {
   contentType?: string

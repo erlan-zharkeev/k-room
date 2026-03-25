@@ -1,4 +1,4 @@
-import { InteractionType } from 'common-types'
+import { InteractionType } from 'common'
 
 import { AppIconName, ColorModifier } from 'src/shared/ui'
 

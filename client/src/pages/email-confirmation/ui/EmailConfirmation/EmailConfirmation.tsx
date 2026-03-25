@@ -1,10 +1,8 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common-types'
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
-
-import { EMAIL_CONFIRMATION_TEXT } from 'src/pages/email-confirmation/ui/EmailConfirmation/config'
 
 import { useLogout } from 'src/features/auth'
 
@@ -12,7 +10,9 @@ import { useI18n } from 'src/entities/system'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
-import { AppIcon, AppButton } from 'src/shared/ui'
+import { AppIcon, AppButton, AppText } from 'src/shared/ui'
+
+import { EMAIL_CONFIRMATION_TEXT } from './config'
 
 export const EmailConfirmation = () => {
   const navigate = useNavigate()
@@ -50,7 +50,9 @@ export const EmailConfirmation = () => {
           <>
             <div className="paragraph-text">
               {t(EMAIL_CONFIRMATION_TEXT.email)}
-              <span className="header-text"> {email} </span>
+              <AppText tag="span" size="large" additionalClassName="email-confirmation__email">
+                {' '}{email}{' '}
+              </AppText>
               {t(EMAIL_CONFIRMATION_TEXT.confirmed)}
             </div>
             <AppButton text={t(EMAIL_CONFIRMATION_TEXT.back)} onClick={() => navigate(RouteNamesEnum.Login)} />

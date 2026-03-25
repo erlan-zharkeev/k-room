@@ -3,7 +3,6 @@ import './style.scss'
 import { Badge } from 'antd'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
-import { CHAT_ROOM_LIST_I18N } from 'src/features/chat-room/chat-room-list/ui/ChatRoomList/config'
 
 import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
@@ -12,6 +11,8 @@ import { useI18n } from 'src/entities/system'
 
 import { AppScrollContainer, AppText } from 'src/shared/ui'
 import { chatRoomUnreadMessagesCount, createClassNameWithModifiers } from 'src/shared/utils'
+
+import { CHAT_ROOM_LIST_I18N } from './config'
 
 export const ChatRoomList = () => {
   const { chatRooms } = useChatRoom()

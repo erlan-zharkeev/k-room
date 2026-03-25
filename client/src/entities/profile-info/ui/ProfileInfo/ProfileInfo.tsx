@@ -2,7 +2,7 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
-import { UnknownCallback } from 'common-types'
+import { UnknownCallback } from 'common'
 
 import type { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
 

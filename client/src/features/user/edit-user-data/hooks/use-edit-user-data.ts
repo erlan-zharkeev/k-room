@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { MediaFileValueType, UserEndpointsEnum } from 'common-types'
+import { MediaFileValueType, UserEndpointsEnum } from 'common'
 
 import { useLoadMedia } from 'src/features/media'
 

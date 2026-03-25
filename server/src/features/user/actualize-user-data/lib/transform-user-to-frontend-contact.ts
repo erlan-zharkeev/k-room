@@ -1,7 +1,8 @@
-import { IFrontendContact } from "common-types"
+import { IFrontendContact } from "common"
 
 import { UserModel } from "entities/user"
-import { IContact } from "entities/user/config/types"
+
+import { IContact } from "../../../../entities/user/config/types"
 
 export const transformUserToFrontendContact = async (
   contacts: Record<string, IContact>

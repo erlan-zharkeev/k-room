@@ -1,7 +1,5 @@
 import './style.scss'
 
-import { CONTACT_INVITATION_CONTROL_BTNS_I18N } from 'src/features/contact/contact-invitation-controls/ui/ContactInvitationControlBtns/config'
-
 import { useI18n } from 'src/entities/system'
 
 import type { DbContactType } from 'src/shared/config'
@@ -9,6 +7,8 @@ import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import { useContactInvitationControls } from '../../hooks'
+
+import { CONTACT_INVITATION_CONTROL_BTNS_I18N } from './config'
 
 export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbContactType }) => {
   const { t } = useI18n()

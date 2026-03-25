@@ -1,4 +1,4 @@
-import type { IChatRoomSchema, SocketActionsType } from 'common-types'
+import type { IChatRoomSchema, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'features/user'
 

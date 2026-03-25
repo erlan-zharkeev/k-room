@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const PRIVACY_POLICY_SWITCH_TEXT = {
   agreement: {
@@ -9,4 +9,4 @@ export const PRIVACY_POLICY_SWITCH_TEXT = {
     en: 'legal information',
     ru: 'правовую информацию'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

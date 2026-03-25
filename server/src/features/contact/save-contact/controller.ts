@@ -1,4 +1,4 @@
-import { IEventContactAddSuccess, IEventSaveContact, SocketActionsType } from 'common-types'
+import { IEventContactAddSuccess, IEventSaveContact, SocketActionsType } from 'common'
 
 import { transformUserToContact } from 'features/user'
 

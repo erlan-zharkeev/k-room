@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventGetContactTypingStatus } from 'common-types'
+import { SocketActionsType, IEventGetContactTypingStatus } from 'common'
 
 import { socket } from 'src/shared/api'
 

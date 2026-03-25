@@ -1,4 +1,4 @@
-import { IMessage } from 'common-types'
+import { IMessage } from 'common'
 
 import { useAddMessageToChatRoom } from 'src/features/chat-room'
 

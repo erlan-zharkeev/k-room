@@ -1,4 +1,4 @@
-import { EndpointsType, MediaEndpointsEnum, StatusEnum } from 'common-types'
+import { EndpointsType, MediaEndpointsEnum, StatusEnum } from 'common'
 
 import { getHandledErrorMessage, isApiError, useApi } from 'src/shared/api'
 

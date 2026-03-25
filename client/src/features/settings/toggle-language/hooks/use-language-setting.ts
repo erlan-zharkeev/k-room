@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react'
 
-import { APP_LANGUAGE } from 'common-types'
+import { APP_LANGUAGE } from 'common'
 
 import { useSettings } from 'src/entities/settings'
 

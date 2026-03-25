@@ -1,4 +1,4 @@
-import { IEventMessageDelivered } from 'common-types'
+import { IEventMessageDelivered } from 'common'
 
 import { useAddMessage } from 'src/features/message'
 import { notifyDeliveredMessage } from 'src/features/message/message-delivery-handler'

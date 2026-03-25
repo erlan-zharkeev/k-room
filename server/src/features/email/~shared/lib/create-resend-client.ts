@@ -11,6 +11,10 @@ export const createResendClient = () => {
   if (resendClient) return resendClient
 
   if (!ENV.RESEND_API_KEY) {
+    if (ENV.IS_DEV) {
+      return null
+    }
+
     throw new Error(getLocalizedText(EMAIL_MESSAGE.resendApiKeyMissing))
   }
 

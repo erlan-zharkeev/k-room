@@ -1,20 +1,8 @@
 import * as Sentry from '@sentry/react'
-import { SENTRY_IGNORED_SUBSTRINGS, StatusEnum, type ISentryErrorContext } from 'common-types'
+import { shouldIgnoreSentryError } from 'common'
 
 import { isApiError } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
-
-const isIgnoredStatus = (status?: number | null) => {
-  switch (status) {
-    case StatusEnum.BadRequest:
-    case StatusEnum.NotAuth:
-    case StatusEnum.Forbidden:
-    case StatusEnum.NotFound:
-      return true
-    default:
-      return false
-  }
-}
 
 const getClientTracePropagationTargets = () => [
   /^\/api/,
@@ -22,16 +10,6 @@ const getClientTracePropagationTargets = () => [
   `${CLIENT_ENV.apiHost}:${CLIENT_ENV.serverPort}`,
   `${CLIENT_ENV.apiHost}/api`
 ]
-
-const shouldIgnoreSentryError = ({ message, silent, status }: ISentryErrorContext) => {
-  if (silent) return true
-  if (isIgnoredStatus(status)) return true
-  if (!message) return false
-
-  const normalizedMessage = message.toLowerCase()
-
-  return SENTRY_IGNORED_SUBSTRINGS.some((substring) => normalizedMessage.includes(substring))
-}
 
 export const initSentry = () => {
   if (!CLIENT_ENV.sentryEnabled || !CLIENT_ENV.sentryDsnClient || Sentry.isInitialized()) {

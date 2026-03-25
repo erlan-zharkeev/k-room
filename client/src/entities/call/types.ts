@@ -1,4 +1,4 @@
-import { ICall } from 'common-types'
+import { ICall } from 'common'
 
 export interface IConstraint {
   loading: boolean

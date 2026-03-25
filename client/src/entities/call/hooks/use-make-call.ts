@@ -10,7 +10,7 @@ import {
   IEventCallAccepted,
   IEventMarkCallAsVideo,
   IEventCallEnded
-} from 'common-types'
+} from 'common'
 import { useDispatch } from 'react-redux'
 import Peer, { SignalData } from 'simple-peer'
 

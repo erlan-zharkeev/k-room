@@ -2,9 +2,7 @@ import './style.scss'
 import { useState } from 'react'
 
 import { Form } from 'antd'
-import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common-types'
-
-import { CHAT_ROOM_SETTINGS_MODAL_I18N } from 'src/features/chat-room/chat-room-settings/ui/ChatRoomSettingsModal/config'
+import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
@@ -13,7 +11,9 @@ import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
-import { AppAvatar, AppAvatarLoader, AppButton } from 'src/shared/ui'
+import { AppAvatar, AppAvatarLoader, AppButton, AppHeader } from 'src/shared/ui'
+
+import { CHAT_ROOM_SETTINGS_MODAL_I18N } from './config'
 // import { validateRules } from 'src/shared/utils'
 
 export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
@@ -73,7 +73,9 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="chat-room-settings-modal">
       <div className="chat-room-settings-modal__title">
-        <span className="header-text header-text--secondary header-text--lg">{chatRoomData?.chatName}</span>
+        <AppHeader tag="h4" bold={false}>
+          {chatRoomData?.chatName}
+        </AppHeader>
       </div>
       {isUserAuthor ? (
         <div className="chat-room-settings-modal__wrapper">

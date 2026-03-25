@@ -1,4 +1,4 @@
-import { SocketActionsType } from 'common-types'
+import { SocketActionsType } from 'common'
 
 import { updateOnlineStatus } from 'features/user/update-online-status'
 

@@ -11,7 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       src: path.resolve(CLIENT_ROOT, 'src'),
-      'common-types': path.resolve(CLIENT_ROOT, '../types'),
+      common: path.resolve(CLIENT_ROOT, '../common/index.ts'),
       '~': path.resolve(CLIENT_ROOT, 'src/shared/config/styles')
     }
   },

@@ -22,7 +22,7 @@
     "baseUrl": "./../",
     "paths": {
       "src/*": ["client/src/*"],
-      "common-types": ["types"],
+      "common": ["common/index.ts"],
       "cmp/*": ["client/src/components/*"]
     }
   },

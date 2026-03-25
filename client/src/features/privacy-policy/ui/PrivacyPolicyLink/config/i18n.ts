@@ -1,8 +1,8 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const LEGAL_INFO_LINK_I18N = {
   link: {
     en: 'Legal information',
     ru: 'Правовая информация'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

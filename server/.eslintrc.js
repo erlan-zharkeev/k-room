@@ -17,7 +17,7 @@ module.exports = {
         groups: [
           ['^node:'],
           ['^@?\\w'],
-          ['^common-types$'],
+          ['^common$'],
           ['^app/'],
           ['^features/'],
           ['^entities/'],
@@ -29,6 +29,22 @@ module.exports = {
     ],
     'simple-import-sort/exports': 'error',
     'sort-imports': 'off',
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: [
+              'app/*/*/*/*',
+              'features/*/*/*/*',
+              'entities/*/*/*/*',
+              'shared/*/*/*/*'
+            ],
+            message: 'Avoid deep absolute imports. Use the module public API (`index.ts`) where it exists.'
+          }
+        ]
+      }
+    ],
     'import/order': 'off',
     'no-duplicate-imports': 'off',
     'no-control-regex': 'off',

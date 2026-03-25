@@ -1,4 +1,4 @@
-import { IDBMessage, IEventLoadRoomMessages, IEventRoomMessagesLoaded } from 'common-types'
+import { IDBMessage, IEventLoadRoomMessages, IEventRoomMessagesLoaded } from 'common'
 
 import { transformMessageForUser } from 'features/message/~shared'
 

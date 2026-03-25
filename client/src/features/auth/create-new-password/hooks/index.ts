@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common-types'
+import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'

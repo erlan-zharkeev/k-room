@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import { USER_ROLES } from 'common-types'
+import { USER_ROLES } from 'common'
 
 import type { IUserSystemData } from 'entities/user'
 

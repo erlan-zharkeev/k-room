@@ -2,7 +2,7 @@ import './style.scss'
 import { useEffect, useState } from 'react'
 
 import { Tooltip } from 'antd'
-import { IMessage } from 'common-types'
+import { IMessage } from 'common'
 
 import { EMOJI_LIST } from 'src/entities/emoji'
 

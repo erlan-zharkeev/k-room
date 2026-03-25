@@ -2,7 +2,7 @@ import './style.scss'
 
 import { useEffect, useState } from 'react'
 
-import { UnknownCallback } from 'common-types'
+import { UnknownCallback } from 'common'
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'

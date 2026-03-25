@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { SocketActionsType, IEventRoomCreated, IEventCreateRoom } from 'common-types'
+import { SocketActionsType, IEventRoomCreated, IEventCreateRoom } from 'common'
 
 import { socket } from 'src/shared/api'
 import { AppFormData } from 'src/shared/ui'

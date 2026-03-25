@@ -28,5 +28,5 @@ export const useSyncAvatars = () => {
   useEffect(() => {
     if (!contacts.length || !user.id) return
     syncContactAvatars()
-  }, [contacts.map(c => c.id).sort().join('|'), user.id])
+  }, [contacts.map((contact) => contact.id).sort((left, right) => left.localeCompare(right)).join('|'), user.id])
 }

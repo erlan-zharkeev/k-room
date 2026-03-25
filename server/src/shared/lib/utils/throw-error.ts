@@ -1,4 +1,4 @@
-import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common-types'
+import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
 import { type Response } from 'express'
 
 import { getIO, log, serverCaptureSentryHttpError } from 'shared-lib'

@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const CREATE_NEW_PASSWORD_BODY_TEXT = {
   success: {
@@ -29,4 +29,4 @@ export const CREATE_NEW_PASSWORD_BODY_TEXT = {
     en: "Passwords don't match",
     ru: 'Пароли не совпадают'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

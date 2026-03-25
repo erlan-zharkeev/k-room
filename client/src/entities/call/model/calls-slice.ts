@@ -5,8 +5,8 @@ import {
   EventCallsUpdatedType,
   EventCallUpdatedType,
   IEventCallUser
-} from 'common-types'
-import type { IBaseFrontendUserData } from 'common-types'
+} from 'common'
+import type { IBaseFrontendUserData } from 'common'
 
 import type { CallMediaType, ICallsState, IStreamConstraints } from '../types'
 

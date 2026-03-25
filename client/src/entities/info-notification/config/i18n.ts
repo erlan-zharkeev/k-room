@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const INFO_NOTIFICATIONS_I18N = {
   title: {
@@ -29,4 +29,4 @@ export const INFO_NOTIFICATIONS_I18N = {
     en: 'As we continue to develop the website, expect even more features and improvements to enhance your experience.',
     ru: 'По мере развития сервиса вас будут ждать новые функции и улучшения, которые сделают использование приложения ещё удобнее.'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

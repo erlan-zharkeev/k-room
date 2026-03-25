@@ -3,11 +3,12 @@ import './style.scss'
 import { useDispatch } from 'react-redux'
 
 import { MessageInput } from 'src/features/message'
-import { MESSAGE_WITH_BIND_DATA_MODAL_I18N } from 'src/features/message/send-message-with-bind-data/ui/MessageWithBindDataModal/config'
 
 import { removeImageByNameFromMessageInputData, useSystem, useI18n } from 'src/entities/system'
 
 import { AppImagePreview, AppModal } from 'src/shared/ui'
+
+import { MESSAGE_WITH_BIND_DATA_MODAL_I18N } from './config'
 
 export const MessageWithBindDataModal = ({
   open,

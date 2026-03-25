@@ -1,8 +1,12 @@
-import moment from 'moment'
+import { useI18n } from 'src/entities/system'
 
+import { formatLocalizedTime } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 export const MessageTime = ({ createdAt }: { createdAt?: string }) => {
+  const { language } = useI18n()
+
   if (!createdAt) return null
-  return <AppText size="extra-small">{moment(Number(createdAt)).format('HH:mm')}</AppText>
+
+  return <AppText size="extra-small">{formatLocalizedTime(createdAt, language)}</AppText>
 }

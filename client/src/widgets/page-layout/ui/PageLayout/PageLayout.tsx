@@ -1,5 +1,5 @@
 import './style.scss'
-import { RouteNamesEnum as R } from 'common-types'
+import { RouteNamesEnum as R } from 'common'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { PAGE_LAYOUT_TEXT } from 'src/widgets/page-layout/config'

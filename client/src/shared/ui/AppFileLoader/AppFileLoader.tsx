@@ -1,16 +1,16 @@
 import './style.scss'
 import { useId, useState } from 'react'
 
-import { IImageObject } from 'common-types'
+import { IImageObject } from 'common'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/system'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config/types'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
-import { APP_FILE_LOADER_I18N } from 'src/shared/ui/AppFileLoader/config'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
 
+import { APP_FILE_LOADER_I18N } from './config'
 import type { IAppFileLoaderProps } from './config'
 
 export const AppFileLoader = ({

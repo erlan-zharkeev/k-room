@@ -1,4 +1,4 @@
-import { AuthEndpointsEnum } from 'common-types'
+import { AuthEndpointsEnum } from 'common'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'

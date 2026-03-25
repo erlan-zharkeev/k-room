@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common-types'
+import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
@@ -13,7 +13,7 @@ export const usePasswordRecovery = () => {
   const { doRequest } = useApi()
   const { buildPathWithParams } = useQuery()
   const [queryParam, setQueryParams] = useSearchParams()
-  const [email] = useState(queryParam.get('user-email') ?? '')
+  const [email, setEmail] = useState(queryParam.get('user-email') ?? '')
   const [emailSendCodeIsLoading, setEmailSendCodeIsLoading] = useState(false)
   const [codeValidationIsLoading, setCodeValidationIsLoading] = useState(false)
   const [codeSent, setCodeAsSent] = useState(false)
@@ -39,17 +39,22 @@ export const usePasswordRecovery = () => {
     }
   }, [counterValue])
 
-  const sendEmailCodeToPasswordRecovery = async () => {
+  const sendEmailCodeToPasswordRecovery = async (fields?: AppFormData) => {
     try {
+      const nextEmail = typeof fields?.email === 'string' ? fields.email.trim() : email.trim()
+      if (!nextEmail) return
+
       stopCounter()
       setEmailSendCodeIsLoading(true)
-      const response = await doRequest('post', CodesEndpointsEnum.SendEmailCodePasswordRecovery, { email })
+      const response = await doRequest('post', CodesEndpointsEnum.SendEmailCodePasswordRecovery, { email: nextEmail })
       if (!response) return
+      setEmail(nextEmail)
       setCodeAsSent(true)
       const { nextTimeRequest } = response.data.payload as { nextTimeRequest: number }
 
       setQueryParams((prev) => {
         const params = new URLSearchParams(prev)
+        params.set('user-email', nextEmail)
         params.set('next-time-request', String(nextTimeRequest))
         return params
       })
@@ -68,7 +73,7 @@ export const usePasswordRecovery = () => {
       const { code } = fields as { code: string }
       setCodeValidationIsLoading(true)
       const payload: ICodeValidationPayload = {
-        email,
+        email: email.trim(),
         code
       }
       const response = await doRequest('post', CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, payload)
@@ -88,6 +93,7 @@ export const usePasswordRecovery = () => {
     counterValue,
     email,
     codeValidationIsLoading,
+    hasPresetEmail: Boolean(queryParam.get('user-email')),
     emailSendCodeIsLoading,
     sendEmailCodeToPasswordRecovery,
     validateCodeToRecoveryPassword

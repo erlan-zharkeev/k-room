@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { UserEndpointsEnum } from 'common-types'
+import { UserEndpointsEnum } from 'common'
 
 import { validateRequest } from 'shared-middleware'
 

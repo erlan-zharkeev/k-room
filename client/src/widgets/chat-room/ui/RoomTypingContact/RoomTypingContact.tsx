@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { IChatRoom } from 'common-types'
+import { IChatRoom } from 'common'
 
 import { useContact } from 'src/entities/contact'
 

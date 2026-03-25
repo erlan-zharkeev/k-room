@@ -1,7 +1,7 @@
 import { check, oneOf } from 'express-validator'
 import mongoose from 'mongoose'
 
-import { providers, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'common-types'
+import { providers, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'common'
 
 import { AUTH_MESSAGE } from '../config'
 

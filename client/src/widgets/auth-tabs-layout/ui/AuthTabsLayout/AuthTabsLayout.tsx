@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { RouteNamesEnum } from 'common-types'
+import { RouteNamesEnum } from 'common'
 import { Link, useLocation } from 'react-router-dom'
 
 import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'

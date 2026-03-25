@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useContext, useEffect } from 'react'
 
-import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common-types'
+import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
 import type { SignalData } from 'simple-peer'
 
@@ -18,7 +18,6 @@ import {
   setCallSettingsLoading,
   setCallVideo
 } from 'src/entities/call'
-import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui/CallModal/components/CallModalBody/config'
 import { useI18n } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
@@ -27,6 +26,7 @@ import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
 import { AppButton, AppAvatar } from 'src/shared/ui'
 
 import { CallDots, CallModalVideo } from './components'
+import { CALL_MODAL_BODY_I18N } from './config'
 import type { ICallModalBodyProps } from './types'
 
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {

@@ -1,10 +1,8 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, ISendConfirmationLinkResponse } from 'common-types'
+import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, ISendConfirmationLinkResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
-
-import { WAIT_EMAIL_CONFIRM_TEXT } from 'src/pages/wait-email-confirm/ui/WaitEmailConfirm/config'
 
 import { useI18n } from 'src/entities/system'
 
@@ -12,6 +10,8 @@ import { useApi } from 'src/shared/api'
 import { useQuery, useCounter } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
 import { getNextReqInterval } from 'src/shared/utils'
+
+import { WAIT_EMAIL_CONFIRM_TEXT } from './config'
 
 export const WaitEmailConfirm = () => {
   const navigate = useNavigate()

@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const CALL_MODAL_BODY_I18N = {
   outgoingCall: {
@@ -21,4 +21,4 @@ export const CALL_MODAL_BODY_I18N = {
     en: 'Decline call',
     ru: 'Отклонить звонок'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

@@ -1,4 +1,4 @@
-import type { IDBCallSchema } from 'common-types'
+import type { IDBCallSchema } from 'common'
 import { model, Schema } from 'mongoose'
 
 const callSchema = new Schema<IDBCallSchema>(

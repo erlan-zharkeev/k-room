@@ -1,4 +1,4 @@
-import { IEventLoadRoomMessages, SocketActionsType } from 'common-types'
+import { IEventLoadRoomMessages, SocketActionsType } from 'common'
 
 import { loadRoomMessages } from 'features/message/load-room-messages'
 

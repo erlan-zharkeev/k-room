@@ -1,8 +1,8 @@
 FROM --platform=linux/amd64 node:24.14.0 AS build
 
-RUN mkdir types
+RUN mkdir common
 
-COPY types types
+COPY common common
 COPY .env.development /.env.development
 COPY .env.production /.env.production
 

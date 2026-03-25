@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { IEventContactAddSuccess, SocketActionsType } from 'common-types'
+import { IEventContactAddSuccess, SocketActionsType } from 'common'
 
 import { getRequiredContactSystemData } from 'src/features/contact/~shared/lib'
 

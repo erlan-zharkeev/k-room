@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const CONTACT_MENU_I18N = {
   call: {
@@ -21,4 +21,4 @@ export const CONTACT_MENU_I18N = {
     en: 'Delete',
     ru: 'Удалить'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

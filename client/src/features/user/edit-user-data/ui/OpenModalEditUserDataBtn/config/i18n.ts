@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT = {
   link: {
@@ -9,4 +9,4 @@ export const OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT = {
     en: 'Edit user data',
     ru: 'Редактирование профиля'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

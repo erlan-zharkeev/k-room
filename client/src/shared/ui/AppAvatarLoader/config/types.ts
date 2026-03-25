@@ -1,4 +1,4 @@
-import type { MediaFileValueType } from 'common-types'
+import type { MediaFileValueType } from 'common'
 
 import type { AppIconName } from '../../AppIcon'
 import type { AvatarShapeModifier } from '../../config'

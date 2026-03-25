@@ -1,4 +1,4 @@
-import { UserEndpointsEnum } from 'common-types'
+import { UserEndpointsEnum } from 'common'
 
 import { useInfoNotification } from 'src/entities/info-notification'
 import { useUser } from 'src/entities/user'

@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const CREATE_CHAT_ROOM_BTN_I18N = {
   button: {
@@ -9,4 +9,4 @@ export const CREATE_CHAT_ROOM_BTN_I18N = {
     en: 'Create chat room',
     ru: 'Создать чат'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

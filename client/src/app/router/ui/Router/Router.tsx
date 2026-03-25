@@ -1,4 +1,4 @@
-import { RouteNamesEnum as R } from 'common-types'
+import { RouteNamesEnum as R } from 'common'
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router/config'

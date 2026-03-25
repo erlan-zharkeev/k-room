@@ -1,4 +1,4 @@
-import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common-types'
+import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'features/user'
 

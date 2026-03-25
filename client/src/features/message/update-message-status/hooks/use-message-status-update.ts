@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventUpdateMessageStatus } from 'common-types'
+import { SocketActionsType, IEventUpdateMessageStatus } from 'common'
 
 import { useMessage } from 'src/entities/message'
 

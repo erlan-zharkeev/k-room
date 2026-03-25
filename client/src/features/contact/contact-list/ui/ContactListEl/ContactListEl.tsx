@@ -1,6 +1,5 @@
-import moment from 'moment'
-
 import { ContactInvitationControlBtns, ContactMenu } from 'src/features/contact'
+import { lastSeen } from 'src/features/contact/~shared/lib'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
@@ -23,11 +22,7 @@ export const ContactListEl = ({ contactData }: { contactData: DbContactType }) =
         ? language === 'ru'
           ? 'в сети'
           : 'online'
-        : contactData.lastSeen
-          ? language === 'ru'
-            ? `был(а) в сети ${moment(contactData.lastSeen).locale('ru').startOf('minutes').fromNow()}`
-            : `last seen ${moment(contactData.lastSeen).locale('en').startOf('minutes').fromNow()}`
-          : ''
+        : lastSeen(contactData.lastSeen, language)
       : ''
 
   return (

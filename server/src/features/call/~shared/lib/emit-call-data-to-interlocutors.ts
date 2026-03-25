@@ -1,4 +1,4 @@
-import type { EventCallUpdatedType, SocketActionsType } from 'common-types'
+import type { EventCallUpdatedType, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'features/user'
 

@@ -1,12 +1,14 @@
 import './style.scss'
 
 import { useSearchContact } from 'src/features/contact/search-contact/hooks'
-import { FoundContact } from 'src/features/contact/search-contact/ui/FoundContact/FoundContact'
-import { SEARCH_CONTACT_I18N } from 'src/features/contact/search-contact/ui/SearchContact/config'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppInput, AppScrollContainer, AppText } from 'src/shared/ui'
+
+import { FoundContact } from '../FoundContact/FoundContact'
+
+import { SEARCH_CONTACT_I18N } from './config'
 
 export const SearchContact = () => {
   const { searchQuery, search, searchedContacts, isLoading } = useSearchContact()

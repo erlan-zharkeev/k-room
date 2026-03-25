@@ -1,4 +1,4 @@
-import type { IEventMarkCallAsVideo, SocketActionsType } from 'common-types'
+import type { IEventMarkCallAsVideo, SocketActionsType } from 'common'
 
 import { CallModel } from 'entities/call'
 

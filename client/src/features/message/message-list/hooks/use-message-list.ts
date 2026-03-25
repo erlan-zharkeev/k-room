@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { IEventChangeMessageStatus, SocketActionsType } from 'common-types'
+import { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
 import { useSettings } from 'src/entities/settings'
 

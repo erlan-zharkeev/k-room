@@ -1,4 +1,4 @@
-import type { IEventCallUser, SocketActionsType } from 'common-types'
+import type { IEventCallUser, SocketActionsType } from 'common'
 
 import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from 'features/call'
 import { getSocketsByUserIds } from 'features/user'

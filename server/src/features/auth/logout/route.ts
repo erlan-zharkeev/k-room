@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { AuthEndpointsEnum } from 'common-types'
+import { AuthEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'features/auth'
 

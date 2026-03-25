@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-import { type ICreateNewPasswordPayload, StatusEnum } from 'common-types'
+import { type ICreateNewPasswordPayload, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'features/code'
 
@@ -17,19 +17,14 @@ export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>
 
   try {
     const { codeToValidate, password }: ICreateNewPasswordPayload = req.body
-
-    const userId = req.app.locals.id
-
-    const code = await CodeModel.findById(userId)
+    const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
 
     if (!code) {
       return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.failed, language))
     }
 
-    // TODO Temp only via email
-    const method = 'email'
-
-    const { value: validCode, expiresAt } = code.codes.passwordRecovery[method]
+    const userId = code.id
+    const { value: validCode, expiresAt } = code.codes.passwordRecovery.query
 
     const isExpired = isCodeExpired(expiresAt)
 
@@ -49,8 +44,10 @@ export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>
 
     await code.updateOne({
       $set: {
-        [`codes.passwordRecovery.${method}.value`]: '',
-        [`codes.passwordRecovery.${method}.expiresAt`]: null,
+        'codes.passwordRecovery.query.value': '',
+        'codes.passwordRecovery.query.expiresAt': 0,
+        'codes.passwordRecovery.email.value': '',
+        'codes.passwordRecovery.email.expiresAt': 0,
         nextRequestPossibleAt: null
       }
     })

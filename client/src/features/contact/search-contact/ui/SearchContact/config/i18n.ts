@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const SEARCH_CONTACT_I18N = {
   placeholder: {
@@ -9,4 +9,4 @@ export const SEARCH_CONTACT_I18N = {
     en: (count: number) => `Found ${count} contacts`,
     ru: (count: number) => `Найдено контактов: ${count}`
   }
-} as const satisfies Record<string, LocalizedTextType<any>>
+} as const satisfies LocalizedTextMapType<any>

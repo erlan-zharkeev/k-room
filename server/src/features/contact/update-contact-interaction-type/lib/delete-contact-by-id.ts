@@ -1,10 +1,10 @@
-import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from "common-types"
-
-import { getSocketsByUserIds } from "features/user/~shared/lib/get-sockets-by-ids"
+import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from "common"
 
 import { UserModel } from "entities/user"
 
 import { getIO } from "shared-lib"
+
+import { getSocketsByUserIds } from "../../../user/~shared/lib/get-sockets-by-ids"
 
 export const deleteContactById = async (
   userId: string,

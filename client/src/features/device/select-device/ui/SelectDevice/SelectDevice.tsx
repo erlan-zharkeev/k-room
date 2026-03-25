@@ -2,11 +2,11 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
-import { SELECT_DEVICE_I18N } from 'src/features/device/select-device/ui/SelectDevice/config'
-
 import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppIconName, AppSelect, AppText, type IAppSelectOption } from 'src/shared/ui'
+
+import { SELECT_DEVICE_I18N } from './config'
 
 export const SelectDevice = ({
   title,

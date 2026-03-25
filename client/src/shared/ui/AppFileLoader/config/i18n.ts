@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const APP_FILE_LOADER_I18N = {
   upload: {
@@ -9,4 +9,4 @@ export const APP_FILE_LOADER_I18N = {
     en: 'Reset',
     ru: 'Сбросить'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

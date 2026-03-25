@@ -1,8 +1,8 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N = {
   button: {
     en: "Don't show again",
     ru: 'Больше не показывать'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

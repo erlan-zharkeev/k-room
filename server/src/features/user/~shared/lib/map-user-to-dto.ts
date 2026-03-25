@@ -1,4 +1,4 @@
-import { IFrontendUserData } from 'common-types'
+import { IFrontendUserData } from 'common'
 
 import { IUserSchema } from 'entities/user'
 

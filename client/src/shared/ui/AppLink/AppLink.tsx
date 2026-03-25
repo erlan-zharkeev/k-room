@@ -1,6 +1,6 @@
 // AppLink.tsx
 import './style.scss'
-import { UnknownCallback } from 'common-types'
+import { UnknownCallback } from 'common'
 import { Link as RouterLink, type To } from 'react-router-dom'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'

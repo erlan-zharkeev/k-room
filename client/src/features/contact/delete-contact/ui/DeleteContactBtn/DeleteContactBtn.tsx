@@ -1,5 +1,5 @@
 import './style.scss'
-import { InteractionType } from 'common-types'
+import { InteractionType } from 'common'
 
 import { AppButton } from 'src/shared/ui'
 

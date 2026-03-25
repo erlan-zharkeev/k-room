@@ -1,3 +1,3 @@
-import { IChatRoom } from 'common-types'
+import { IChatRoom } from 'common'
 
 export type FChatRoomType = IChatRoom & { avatarId: string }

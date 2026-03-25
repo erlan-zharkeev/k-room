@@ -1,4 +1,4 @@
-import { IEventStatusContact, SocketActionsType } from 'common-types'
+import { IEventStatusContact, SocketActionsType } from 'common'
 
 import { UserModel } from 'entities/user'
 

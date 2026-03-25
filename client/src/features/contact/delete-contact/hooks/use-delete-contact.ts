@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventDeleteContactSuccess } from 'common-types'
+import { SocketActionsType, IEventDeleteContactSuccess } from 'common'
 
 import { socket } from 'src/shared/api'
 import { db } from 'src/shared/lib'

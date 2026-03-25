@@ -6,7 +6,7 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "paths": {
-      "common-types": ["./types"]
+      "common": ["./common/index.ts"]
     },
     "types": ["node", "@playwright/test"],
     "strict": true,

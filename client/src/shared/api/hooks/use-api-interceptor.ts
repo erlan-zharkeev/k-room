@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { IBackendResponse, RouteNamesEnum, StatusEnum } from 'common-types'
+import { IBackendResponse, RouteNamesEnum, StatusEnum } from 'common'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 

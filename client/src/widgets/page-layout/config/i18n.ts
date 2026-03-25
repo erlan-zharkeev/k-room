@@ -1,8 +1,8 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const PAGE_LAYOUT_TEXT = {
   back: {
     en: 'Back',
     ru: 'Назад'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

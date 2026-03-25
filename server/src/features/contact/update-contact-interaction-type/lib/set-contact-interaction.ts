@@ -1,4 +1,4 @@
-import type { InteractionType } from 'common-types'
+import type { InteractionType } from 'common'
 
 import { UserModel } from 'entities/user'
 

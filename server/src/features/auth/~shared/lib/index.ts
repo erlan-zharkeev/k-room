@@ -1,4 +1,4 @@
-export * from '../config/constants'
+export * from '../config'
 export * from './generate-token'
 export * from './is-user-exist'
 export * from './set-token'

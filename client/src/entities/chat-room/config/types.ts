@@ -1,4 +1,4 @@
-import { IChatRoom } from 'common-types'
+import { IChatRoom } from 'common'
 
 export interface IAppChatRoom extends IChatRoom {
   lastScrolledMessageId?: string

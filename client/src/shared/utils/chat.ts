@@ -1,4 +1,4 @@
-import { IChatRoom, IMessage } from 'common-types'
+import { IChatRoom, IMessage } from 'common'
 
 export const getChatName = (room: IChatRoom | undefined) => {
   if (room === undefined) return ''

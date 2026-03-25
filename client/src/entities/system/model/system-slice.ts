@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { IRepliedMessage } from 'common-types'
+import { IRepliedMessage } from 'common'
 
 import { type IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/entities/context-menu'
 

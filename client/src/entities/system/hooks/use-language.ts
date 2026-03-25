@@ -1,4 +1,4 @@
-import { type AppLanguageType } from 'common-types'
+import { type AppLanguageType } from 'common'
 
 import { useSettings } from 'src/entities/settings'
 

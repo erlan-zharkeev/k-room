@@ -1,5 +1,5 @@
 import './style.scss'
-import { IImageObject } from 'common-types'
+import { IImageObject } from 'common'
 
 import { AppButton } from '../AppButton/AppButton'
 import { AppScrollContainer } from '../AppScrollContainer/AppScrollContainer'

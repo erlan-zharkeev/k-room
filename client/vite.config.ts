@@ -11,6 +11,13 @@ export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
   const isDev = mode === 'development'
+  const getClientEnv = (key: string, value?: string) => {
+    if (isDev && !value) {
+      throw new Error(`[client] Missing required env "${key}" in .env.${mode}`)
+    }
+
+    return value ?? ''
+  }
 
   return {
     define: {
@@ -22,8 +29,8 @@ export default defineConfig(({ mode }) => {
         appHost: env.APP_HOST,
         apiHost: env.API_HOST,
         maxReconnectAttempts: Number(env.MAX_RECONNECT_ATTEMPTS),
-        firebaseApiKey: env.FIREBASE_API_KEY,
-        sentryDsnClient: env.SENTRY_DSN_CLIENT,
+        firebaseApiKey: getClientEnv('FIREBASE_API_KEY', env.FIREBASE_API_KEY),
+        sentryDsnClient: getClientEnv('SENTRY_DSN_CLIENT', env.SENTRY_DSN_CLIENT),
         sentryEnvironment: env.SENTRY_ENVIRONMENT,
         sentryRelease: env.SENTRY_RELEASE,
         sentryEnabled: env.SENTRY_ENABLED === 'true'
@@ -148,7 +155,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '~': path.resolve(__dirname, './src/shared/config/styles'),
         src: path.resolve(__dirname, './src'),
-        'common-types': path.resolve(__dirname, './../types')
+        common: path.resolve(__dirname, './../common/index.ts')
       }
     },
     server: {

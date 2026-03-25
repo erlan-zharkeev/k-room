@@ -3,9 +3,9 @@ import { defineConfig, devices } from '@playwright/test'
 import { E2E_ENV, E2E_TIMEOUTS } from 'e2e/config'
 
 const SERVER_COMMAND =
-  'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && npm --prefix server run serve:e2e\''
+  'bash -lc \'cd ../.. && export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && npm --prefix server run serve:e2e\''
 const CLIENT_COMMAND =
-  'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && npm --prefix client run serve:e2e\''
+  'bash -lc \'cd ../.. && export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && npm --prefix client run serve:e2e\''
 
 export default defineConfig({
   testDir: '../../e2e',

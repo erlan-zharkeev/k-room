@@ -1,4 +1,4 @@
-import type { IEventUpdateMessageStatus, MessageStatusType, SocketActionsType } from 'common-types'
+import type { IEventUpdateMessageStatus, MessageStatusType, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'features/user'
 

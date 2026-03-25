@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextType } from 'common'
 
 import { useSettings } from 'src/entities/settings'
 

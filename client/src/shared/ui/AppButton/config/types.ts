@@ -1,4 +1,4 @@
-import { UnknownCallback } from 'common-types'
+import { UnknownCallback } from 'common'
 
 import type { AppIconName, AppIconSize } from '../../AppIcon'
 import type { ColorModifier } from '../../config'

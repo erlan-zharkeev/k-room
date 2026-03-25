@@ -1,4 +1,4 @@
-import { IImageObject, IRepliedMessage } from 'common-types'
+import { IImageObject, IRepliedMessage } from 'common'
 
 import { IContextMenu } from 'src/entities/context-menu'
 

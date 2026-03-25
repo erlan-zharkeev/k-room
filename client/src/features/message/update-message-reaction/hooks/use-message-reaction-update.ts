@@ -1,4 +1,4 @@
-import { SocketActionsType, IEventUpdatedMessageReactions } from 'common-types'
+import { SocketActionsType, IEventUpdatedMessageReactions } from 'common'
 
 import { socket } from 'src/shared/api'
 

@@ -1,7 +1,7 @@
 import { type Socket } from 'socket.io'
 import { type DefaultEventsMap } from 'socket.io/dist/typed-events'
 
-import { type AppLanguageType } from 'common-types'
+import { type AppLanguageType } from 'common'
 
 export type SocketInstanceType = Socket<
   DefaultEventsMap,

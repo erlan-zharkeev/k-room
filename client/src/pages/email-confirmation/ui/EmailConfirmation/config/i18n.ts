@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const EMAIL_CONFIRMATION_TEXT = {
   title: {
@@ -17,4 +17,4 @@ export const EMAIL_CONFIRMATION_TEXT = {
     en: 'Back',
     ru: 'Назад'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

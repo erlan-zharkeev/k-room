@@ -2,7 +2,7 @@ import './style.scss'
 
 import { useMemo } from 'react'
 
-import { IMessage } from 'common-types'
+import { IMessage } from 'common'
 import { Virtuoso } from 'react-virtuoso'
 
 import { MessageListLoader, NoMessagesPlaceholder, useLoadRoomMessages } from 'src/features/message'
@@ -19,6 +19,7 @@ import {
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 
 import { FChatRoomType } from 'src/shared/config'
 import { AppScrollDownButton } from 'src/shared/ui'
@@ -29,6 +30,7 @@ export const MessageList = ({ room }: { room: FChatRoomType }) => {
   const { getMessageById } = useMessage()
   const { loadOlderMessages } = useLoadRoomMessages()
   const { isReady } = useSettings()
+  const { language } = useI18n()
   const { virtuosoRef, isAtBottom, setIsAtBottom } = useMessageListScroll()
 
   const roomMessages = useMemo(
@@ -44,7 +46,7 @@ export const MessageList = ({ room }: { room: FChatRoomType }) => {
     let previousGroupDateLabel = ''
 
     roomMessages.forEach((message) => {
-      const label = getMessageGroupDateLabel(message.createdAt)
+      const label = getMessageGroupDateLabel(message.createdAt, language)
 
       if (previousGroupDateLabel !== label) {
         nextItems.push({
@@ -63,7 +65,7 @@ export const MessageList = ({ room }: { room: FChatRoomType }) => {
     })
 
     return nextItems
-  }, [roomMessages])
+  }, [language, roomMessages])
 
   const { initialTopMostItemIndex } = useInitialScrollPosition({ room, items: virtualizedMessages })
   const { handleVisibleRangeChange } = useMessageList({ roomId: room.id, items: virtualizedMessages })

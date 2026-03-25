@@ -1,4 +1,4 @@
-import { IMessage } from 'common-types'
+import { IMessage } from 'common'
 
 export interface IReactionsProps {
   userId: string

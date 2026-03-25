@@ -1,6 +1,6 @@
 import { parse } from 'cookie'
 
-import { IEventAuthError, SocketActionsType } from 'common-types'
+import { IEventAuthError, SocketActionsType } from 'common'
 
 import { verifyToken } from 'features/auth'
 

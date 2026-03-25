@@ -1,5 +1,5 @@
 import './style.scss'
-import { RouteNamesEnum } from 'common-types'
+import { RouteNamesEnum } from 'common'
 import { useNavigate } from 'react-router-dom'
 
 import { AppButton } from '../AppButton/AppButton'

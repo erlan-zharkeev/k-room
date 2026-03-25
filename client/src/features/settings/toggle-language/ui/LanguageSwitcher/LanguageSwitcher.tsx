@@ -1,4 +1,4 @@
-import { APP_LANGUAGE } from 'common-types'
+import { APP_LANGUAGE } from 'common'
 
 import { useLanguageSetting } from 'src/features/settings/toggle-language/hooks'
 

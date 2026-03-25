@@ -1,4 +1,4 @@
-import { EventInviteReceivedType, SocketActionsType } from 'common-types'
+import { EventInviteReceivedType, SocketActionsType } from 'common'
 
 import { getRequiredContactSystemData } from 'src/features/contact/~shared/lib'
 

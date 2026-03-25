@@ -1,4 +1,4 @@
-import { DEFAULT_APP_LANGUAGE, RouteNamesEnum } from 'common-types'
+import { DEFAULT_APP_LANGUAGE, RouteNamesEnum } from 'common'
 import { io } from 'socket.io-client'
 
 import { settingsStore } from 'src/entities/settings/hooks/use-settings'

@@ -1,11 +1,12 @@
 import type { AppResponseType, IAppRequest } from 'shared-config'
 
-import { StatusEnum } from 'common-types'
+import { StatusEnum } from 'common'
 
 import { MediaBucketNameType } from 'entities/media'
-import { streamMediaFile } from 'entities/media/lib/stream-media-file'
 
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
+
+import { streamMediaFile } from '../../../entities/media/lib/stream-media-file'
 
 import { MESSAGE } from './config'
 import { parseBucketNameFromId } from './lib'

@@ -1,4 +1,4 @@
-import type { IFrontendContact, SocketActionsType } from 'common-types'
+import type { IFrontendContact, SocketActionsType } from 'common'
 
 import { getIO } from 'shared-lib'
 

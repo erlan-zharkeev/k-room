@@ -2,7 +2,7 @@ import './style.scss'
 
 import { useMemo } from 'react'
 
-import { IEventAddReaction, SocketActionsType } from 'common-types'
+import { IEventAddReaction, SocketActionsType } from 'common'
 
 import { EMOJI_LIST } from 'src/entities/emoji'
 

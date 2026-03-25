@@ -5,7 +5,7 @@ import express from 'express'
 import https from 'https'
 import methodOverride from 'method-override'
 
-import { RouteNamesEnum } from 'common-types'
+import { RouteNamesEnum } from 'common'
 
 import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'app/config'
 import { initDataBase } from 'app/services/database'

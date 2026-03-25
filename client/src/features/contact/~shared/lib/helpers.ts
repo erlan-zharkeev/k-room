@@ -1,16 +1,21 @@
-import moment from 'moment'
+import { APP_LANGUAGE, type AppLanguageType } from 'common'
 
 import type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/config'
+import { formatLocalizedRelativeTime } from 'src/shared/lib'
 
-export const lastSeen = (timeStamp: number | undefined) =>
-  timeStamp ? `last seen ${moment(timeStamp).startOf('minutes').fromNow()}` : ''
+export const lastSeen = (timeStamp: number | undefined, language: AppLanguageType) =>
+  timeStamp
+    ? language === APP_LANGUAGE.Ru
+      ? `был(а) в сети ${formatLocalizedRelativeTime(timeStamp, language)}`
+      : `last seen ${formatLocalizedRelativeTime(timeStamp, language)}`
+    : ''
 
-export const getContactDescription = (payload: DbContactType) => {
+export const getContactDescription = (payload: DbContactType, language: AppLanguageType) => {
   const { online, interactionType, lastSeen: timestamp } = payload
   let result
 
   if (interactionType === 'invite-accepted') {
-    result = online ? 'online' : lastSeen(timestamp)
+    result = online ? (language === APP_LANGUAGE.Ru ? 'в сети' : 'online') : lastSeen(timestamp, language)
   }
 
   return result

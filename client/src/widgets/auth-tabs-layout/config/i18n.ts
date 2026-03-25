@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const AUTH_TABS_LAYOUT_TEXT = {
   login: {
@@ -9,4 +9,4 @@ export const AUTH_TABS_LAYOUT_TEXT = {
     en: 'Register',
     ru: 'Регистрация'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

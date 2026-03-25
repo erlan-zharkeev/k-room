@@ -1,4 +1,4 @@
-import { IEventUserTyping, SocketActionsType } from 'common-types'
+import { IEventUserTyping, SocketActionsType } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'

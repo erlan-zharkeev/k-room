@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const ENABLE_SOUND_SWITCHER_TEXT = {
   label: {
@@ -17,4 +17,4 @@ export const ENABLE_SOUND_SWITCHER_TEXT = {
     en: 'The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.',
     ru: 'Браузеру нужно действие пользователя, чтобы включить звук. Нажмите в любом месте, чтобы активировать аудиоконтекст.'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

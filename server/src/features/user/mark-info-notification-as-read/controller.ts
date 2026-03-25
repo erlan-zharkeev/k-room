@@ -1,4 +1,4 @@
-import { IMarkAsReadPayload, StatusEnum } from 'common-types'
+import { IMarkAsReadPayload, StatusEnum } from 'common'
 
 import { UserModel } from 'entities/user'
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithProviderResponse } from 'common-types'
+import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithProviderResponse } from 'common'
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
@@ -24,24 +24,46 @@ export const useFirebase = () => {
     messageType: 'error'
   })
 
-  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
-    const currentProvider = new FIREBASE_PROVIDER_MAP[provider]()
-    try {
-      const auth = getAuth()
-      auth.languageCode = 'en'
-      setFirebaseLoginLoading(true)
-      const result = await signInWithPopup(auth, currentProvider)
+  const getFirebaseCredential = async (provider: FirebaseProviderType) => {
+    if (import.meta.env.DEV && window.__E2E_FIREBASE_AUTH_RESULT__) {
+      const { displayName, email, photoURL, uid, provider: e2eProvider } = window.__E2E_FIREBASE_AUTH_RESULT__
 
-      const { displayName, email, photoURL, uid } = result.user
-      const { providerId } = result
-      const haveFullData = displayName && email && photoURL && uid && providerId
+      return {
+        displayName,
+        email,
+        photoURL,
+        uid,
+        provider: e2eProvider ?? provider
+      }
+    }
+
+    const currentProvider = new FIREBASE_PROVIDER_MAP[provider]()
+    const auth = getAuth()
+    auth.languageCode = 'en'
+    const result = await signInWithPopup(auth, currentProvider)
+    const { displayName, email, photoURL, uid } = result.user
+
+    return {
+      displayName,
+      email,
+      photoURL,
+      uid,
+      provider
+    }
+  }
+
+  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
+    try {
+      setFirebaseLoginLoading(true)
+      const { displayName, email, photoURL, uid, provider: normalizedProvider } = await getFirebaseCredential(provider)
+      const haveFullData = displayName && email && photoURL && uid && normalizedProvider
       if (!haveFullData) return
       const credential = {
         id: uid,
         username: displayName,
         email,
         avatar: photoURL,
-        provider: providerId
+        provider: normalizedProvider
       }
 
       const response = await doRequest<ISignInWithProviderResponse>('post', AuthEndpointsEnum.ProviderLogin, credential)

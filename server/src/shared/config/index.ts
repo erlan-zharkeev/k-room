@@ -1,3 +1,3 @@
 export * from './constants'
-export * from './shared-message'
+export * from './i18n'
 export * from './types'

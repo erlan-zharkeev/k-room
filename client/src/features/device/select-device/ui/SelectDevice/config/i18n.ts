@@ -1,8 +1,8 @@
-import { type LocalizedTextType } from 'common-types'
+import { type LocalizedTextMapType } from 'common'
 
 export const SELECT_DEVICE_I18N = {
   notAvailable: {
     en: 'Permissions were not granted or the devices were not detected.',
     ru: 'Разрешения не были выданы или устройства не обнаружены.'
   }
-} as const satisfies Record<string, LocalizedTextType>
+} as const satisfies LocalizedTextMapType

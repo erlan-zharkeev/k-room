@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import type { IEnvVariables } from 'common-types'
+import type { IEnvVariables } from 'common'
 import path from 'node:path'
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development'

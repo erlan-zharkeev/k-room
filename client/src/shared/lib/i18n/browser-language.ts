@@ -1,4 +1,4 @@
-import { APP_LANGUAGE, DEFAULT_APP_LANGUAGE, type AppLanguageType } from 'common-types'
+import { APP_LANGUAGE, DEFAULT_APP_LANGUAGE, type AppLanguageType } from 'common'
 
 export const normalizeAppLanguage = (value: string | null | undefined): AppLanguageType | null => {
   if (!value) return null

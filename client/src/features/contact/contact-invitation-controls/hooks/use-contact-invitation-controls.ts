@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { InteractionType, IEventUpdateInteraction, SocketActionsType } from 'common-types'
+import { InteractionType, IEventUpdateInteraction, SocketActionsType } from 'common'
 
 import { useContact } from 'src/entities/contact'
 
