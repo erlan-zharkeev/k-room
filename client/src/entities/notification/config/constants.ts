@@ -1,3 +1,5 @@
+import { type LocalizedTextType } from 'common-types'
+
 export const NOTIFICATION_MESSAGE = {
   networkOffline: () =>
     'The internet connection has been terminated. Network problems',
@@ -8,8 +10,10 @@ export const NOTIFICATION_MESSAGE = {
   allowAudioContext: () =>
     'The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.',
 
-  cantAccessDevice: () =>
-    'Can’t get access to requested device, check for browser permissions',
+  cantAccessDevice: {
+    en: 'Can’t get access to requested device, check for browser permissions',
+    ru: 'Не удалось получить доступ к устройству, проверьте разрешения браузера'
+  },
 
   maxAttachedFilesExceed: (max: number) =>
     `The maximum number of attached images should not exceed ${max}`,
@@ -31,6 +35,6 @@ export const NOTIFICATION_MESSAGE = {
 
   socketDisconnected: () =>
     'Socket disconnected'
-}
+} as const satisfies Record<string, LocalizedTextType | ((...args: never[]) => string) | ((...args: number[]) => string)>
 
 export const ERROR_NOTIFICATION_DURATION_IN_SEC = 10

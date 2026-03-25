@@ -8,9 +8,11 @@ import { sendEmailConfirmationEmail } from 'features/email'
 import { createUser } from 'features/user'
 
 import { type AppResponseType, ENV, type IAppRequest } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 export const registration = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
+  const language = req.language
+
   try {
     const { username, email, password }: IAuthRegistrationPayload = req.body
 
@@ -21,7 +23,7 @@ export const registration = async (req: IAppRequest, res: AppResponseType<ISendC
     const user = await createUser({ email, username, hashedPassword })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.Server, res, MESSAGE.failedRegistration)
+      return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedRegistration, language))
     }
 
     const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))
@@ -43,13 +45,13 @@ export const registration = async (req: IAppRequest, res: AppResponseType<ISendC
         nextRequestTime
       },
       message: {
-        text: MESSAGE.registrationSuccess,
+        text: getLocalizedText(MESSAGE.registrationSuccess, language),
         silent: false
       }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, MESSAGE.failedRegistration)
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedRegistration, language))
   }
 }

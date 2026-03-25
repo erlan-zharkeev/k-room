@@ -1,4 +1,4 @@
-export const useSwitchMainLoader = () => {
+export const useMainLoader = () => {
   const loader = document.getElementById('app-loader')
 
   const switchMainLoader = (status: 'hide' | 'show') => {

@@ -1,6 +1,20 @@
+import { type LocalizedTextType } from 'common-types'
+
 export const EMAIL_MESSAGE = {
-  resendApiKeyMissing: 'RESEND_API_KEY is not configured',
-  resendFromEmailMissing: 'RESEND_FROM_EMAIL is not configured',
-  emailConfirmationTokenMissing: 'Email confirmation token is required',
-  emailRecipientMissing: 'Email recipient is required'
-}
+  resendApiKeyMissing: {
+    en: 'RESEND_API_KEY is not configured',
+    ru: 'RESEND_API_KEY не настроен'
+  },
+  resendFromEmailMissing: {
+    en: 'RESEND_FROM_EMAIL is not configured',
+    ru: 'RESEND_FROM_EMAIL не настроен'
+  },
+  emailConfirmationTokenMissing: {
+    en: 'Email confirmation token is required',
+    ru: 'Требуется токен подтверждения email'
+  },
+  emailRecipientMissing: {
+    en: 'Email recipient is required',
+    ru: 'Требуется получатель email'
+  }
+} as const satisfies Record<string, LocalizedTextType>

@@ -1,9 +1,13 @@
-import { useUser } from 'src/entities/user'
+import { TECH_SUPPORT_LINK_I18N } from 'src/features/support/ui/TechSupportLink/config'
 
-import { AppText } from 'src/shared/ui'
+import { useI18n } from 'src/entities/system'
+
+import { CLIENT_ENV } from 'src/shared/config'
+import { AppLink } from 'src/shared/ui'
 
 export const TechSupportLink = () => {
-  const { id } = useUser()
+  const { t } = useI18n()
+  const supportEmail = CLIENT_ENV.supportEmail
 
-  return <AppText size="small">Support email is not configured yet. User ID: {id}</AppText>
+  return <AppLink text={t(TECH_SUPPORT_LINK_I18N.link)(supportEmail)} href={`mailto:${supportEmail}`} target="_self" />
 }

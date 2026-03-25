@@ -2,13 +2,16 @@ import './style.scss'
 import { useEffect } from 'react'
 
 import { SelectDevice, useInputAudioDevice } from 'src/features/device'
+import { AUDIO_INPUT_DEVICE_SELECT_I18N } from 'src/features/device/select-audio-input-device/ui/AudioInputDeviceSelect/config'
 
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AudioInputDeviceSelect = () => {
   const { selectedAudioInputDeviceId } = useSettings()
+  const { t } = useI18n()
 
   const {
     testMic,
@@ -34,7 +37,7 @@ export const AudioInputDeviceSelect = () => {
       <SelectDevice
         onChange={changeAudioInputDevice}
         actionHandler={testMic}
-        title="Audio input device"
+        title={t(AUDIO_INPUT_DEVICE_SELECT_I18N.title)}
         prefixIconName={micIcon}
         options={audioDevices}
         loading={loading}

@@ -1,7 +1,10 @@
 import './style.scss'
 import { useState, useMemo } from 'react'
 
+import { SHORT_CHAT_LIST_I18N } from 'src/features/message/forward-message/ui/ForwardMessageModal/components/ShortChatList/config'
+
 import { useChatRoom } from 'src/entities/chat-room'
+import { useI18n } from 'src/entities/system'
 
 // import { AppAvatar } from 'src/shared/ui'
 
@@ -10,6 +13,7 @@ import type { IShortChatListProps } from './config'
 export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
   const { chatRooms, selectedChatRoom } = useChatRoom()
   const [filteredRooms, setFilteredRooms] = useState(chatRooms)
+  const { t } = useI18n()
 
   const filterList = () => {
     const selfFilteredRooms = chatRooms.filter((room) => room.id !== selectedChatRoom?.id)
@@ -27,7 +31,7 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
 
   return (
     <div className="short-chat-list">
-      {filteredRooms.length > 0 && <div className="paragraph-text short-chat-list__subtitle">Choose room</div>}
+      {filteredRooms.length > 0 && <div className="paragraph-text short-chat-list__subtitle">{t(SHORT_CHAT_LIST_I18N.chooseRoom)}</div>}
       <div className="short-chat-list__container">
         {filteredRooms.map((room) => (
           <div className="short-chat-list__item" key={room.id} onClick={() => clickChat(room.id)}>
@@ -42,7 +46,7 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
           </div>
         ))}
       </div>
-      {filteredRooms.length <= 0 && <div className="paragraph-text ">Chat rooms not found</div>}
+      {filteredRooms.length <= 0 && <div className="paragraph-text ">{t(SHORT_CHAT_LIST_I18N.notFound)}</div>}
     </div>
   )
 }

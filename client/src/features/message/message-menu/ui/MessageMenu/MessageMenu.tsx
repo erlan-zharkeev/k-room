@@ -9,8 +9,10 @@ import {
   useMessageForward,
   useReplyMessage
 } from 'src/features/message'
+import { MESSAGE_MENU_I18N } from 'src/features/message/message-menu/ui/MessageMenu/config'
 
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
@@ -22,6 +24,7 @@ export const MessageMenu = ({ message, children }: { message: IMessage; children
   const { replyMessageHandler } = useReplyMessage()
   const { username, id: userId } = useUser()
   const { selectedChatRoomId } = useSettings()
+  const { t } = useI18n()
 
   const items = [
     {
@@ -37,7 +40,7 @@ export const MessageMenu = ({ message, children }: { message: IMessage; children
     },
     {
       name: 'reply',
-      label: <AppText additionalClassName="message-menu__el-text">Reply</AppText>,
+      label: <AppText additionalClassName="message-menu__el-text">{t(MESSAGE_MENU_I18N.reply)}</AppText>,
       handler: (evt: unknown) => {
         stopPropagation(evt)
         replyMessageHandler(message)
@@ -45,7 +48,7 @@ export const MessageMenu = ({ message, children }: { message: IMessage; children
     },
     {
       name: 'forward',
-      label: <AppText additionalClassName="message-menu__el-text">Forward</AppText>,
+      label: <AppText additionalClassName="message-menu__el-text">{t(MESSAGE_MENU_I18N.forward)}</AppText>,
       handler: (evt: unknown) => {
         stopPropagation(evt)
         forwardMessageHandler()
@@ -53,7 +56,7 @@ export const MessageMenu = ({ message, children }: { message: IMessage; children
     },
     {
       name: 'delete',
-      label: <AppText additionalClassName="message-menu__el-text">Delete</AppText>,
+      label: <AppText additionalClassName="message-menu__el-text">{t(MESSAGE_MENU_I18N.delete)}</AppText>,
       handler: (evt: unknown) => {
         stopPropagation(evt)
         deleteMessageHandler(selectedChatRoomId, message.id)
@@ -75,7 +78,7 @@ export const MessageMenu = ({ message, children }: { message: IMessage; children
       >
         {children}
       </AppDropdown>
-      <AppModal title="Forward message" open={isOpen} onClose={closeForwardMessageModal}>
+      <AppModal title={t(MESSAGE_MENU_I18N.forwardModalTitle)} open={isOpen} onClose={closeForwardMessageModal}>
         <ForwardMessageModal onClose={closeForwardMessageModal} />
       </AppModal>
     </>

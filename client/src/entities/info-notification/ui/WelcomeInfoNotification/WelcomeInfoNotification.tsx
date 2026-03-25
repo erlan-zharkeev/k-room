@@ -1,22 +1,15 @@
+import { INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
+import { useI18n } from 'src/entities/system'
+
 export const WelcomeInfoNotification = () => {
+  const { t } = useI18n()
+
   return (
     <>
-      <div className="app-text">
-        We are excited to introduce you to the beta version of our web app, where you can seamlessly communicate with
-        your friends and loved ones. Connect through private chats, exchange text messages, share photos, and engage in
-        both regular and video calls.
-      </div>
-      <div className="app-text">
-        Create your own group chats to bring together friends, colleagues, or family members, allowing for seamless
-        communication and information exchange within the group.
-      </div>
-      <div className="app-text">
-        Enjoy the ability to make high-quality video calls with your loved ones, no matter where they are located. Share
-        life's brightest moments with friends by sending and receiving photos right within the chat.
-      </div>
-      <div className="app-text">
-        As we continue to develop the website, expect even more features and improvements to enhance your experience.
-      </div>
+      <div className="app-text">{t(INFO_NOTIFICATIONS_I18N.welcomeParagraph1)}</div>
+      <div className="app-text">{t(INFO_NOTIFICATIONS_I18N.welcomeParagraph2)}</div>
+      <div className="app-text">{t(INFO_NOTIFICATIONS_I18N.welcomeParagraph3)}</div>
+      <div className="app-text">{t(INFO_NOTIFICATIONS_I18N.welcomeParagraph4)}</div>
     </>
   )
 }

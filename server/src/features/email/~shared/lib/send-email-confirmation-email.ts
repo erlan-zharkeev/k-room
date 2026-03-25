@@ -7,7 +7,7 @@ import {
 } from 'features/email'
 
 import { ENV } from 'shared-config'
-import { log } from 'shared-lib'
+import { getLocalizedText, log } from 'shared-lib'
 
 export const sendEmailConfirmationEmail = async ({
   email,
@@ -19,15 +19,15 @@ export const sendEmailConfirmationEmail = async ({
   username?: string
 }) => {
   if (!email) {
-    throw new Error(EMAIL_MESSAGE.emailRecipientMissing)
+    throw new Error(getLocalizedText(EMAIL_MESSAGE.emailRecipientMissing))
   }
 
   if (!token) {
-    throw new Error(EMAIL_MESSAGE.emailConfirmationTokenMissing)
+    throw new Error(getLocalizedText(EMAIL_MESSAGE.emailConfirmationTokenMissing))
   }
 
   if (!ENV.RESEND_FROM_EMAIL) {
-    throw new Error(EMAIL_MESSAGE.resendFromEmailMissing)
+    throw new Error(getLocalizedText(EMAIL_MESSAGE.resendFromEmailMissing))
   }
 
   const resend = createResendClient()

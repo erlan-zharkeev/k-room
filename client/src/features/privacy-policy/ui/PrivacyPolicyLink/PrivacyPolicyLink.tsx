@@ -1,7 +1,13 @@
 import { RouteNamesEnum } from 'common-types'
 
+import { LEGAL_INFO_LINK_I18N } from 'src/features/privacy-policy/ui/PrivacyPolicyLink/config'
+
+import { useI18n } from 'src/entities/system'
+
 import { AppLink } from 'src/shared/ui'
 
 export const PrivacyPolicyLink = () => {
-  return <AppLink to={RouteNamesEnum.PrivacyPolicy} text="Privacy policy" />
+  const { t } = useI18n()
+
+  return <AppLink to={RouteNamesEnum.PrivacyPolicy} text={t(LEGAL_INFO_LINK_I18N.link)} />
 }

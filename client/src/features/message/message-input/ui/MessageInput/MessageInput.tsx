@@ -5,6 +5,9 @@ import { useState } from 'react'
 import { useContactTyping } from 'src/features/contact'
 import { EmojiDropdown } from 'src/features/emoji-dropdown'
 import { MessageWithBindDataModal, useMessageSend } from 'src/features/message'
+import { MESSAGE_INPUT_I18N } from 'src/features/message/message-input/ui/MessageInput/config'
+
+import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppForm } from 'src/shared/ui'
 
@@ -22,6 +25,7 @@ export const MessageInput = ({
   const { sendUserTypingStatus, debouncedChangeTypeStatus } = useContactTyping()
   const { body, inputBodyRef, images, setBody, setEmoji, onSendMessageFormSubmitHandler, setImages } = useMessageSend()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { t } = useI18n()
 
   return (
     <>
@@ -50,7 +54,7 @@ export const MessageInput = ({
             body: {
               value: body,
               inputType: 'text',
-              placeholder: 'Type message',
+              placeholder: t(MESSAGE_INPUT_I18N.placeholder),
               ref: inputBodyRef,
               onChange: (e) => {
                 setBody(e.target.value)

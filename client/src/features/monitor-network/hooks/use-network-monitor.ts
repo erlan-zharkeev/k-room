@@ -4,12 +4,13 @@ import { useDispatch } from 'react-redux'
 
 import { useLogout } from 'src/features/auth'
 import { useSocketReconnect } from 'src/features/socket'
-import { useSwitchMainLoader } from 'src/features/switch-main-loader'
+import { useMainLoader } from 'src/features/switch-main-loader'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { setOnline, useSystem } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
+import { LOCAL_STORAGE_KEY } from 'src/shared/config'
 
 export const useNetworkMonitor = () => {
   const { socketReconnect } = useSocketReconnect()
@@ -17,7 +18,7 @@ export const useNetworkMonitor = () => {
   const { auth } = useSystem()
   const dispatch = useDispatch()
   const { logout } = useLogout()
-  const { switchMainLoader } = useSwitchMainLoader()
+  const { switchMainLoader } = useMainLoader()
 
   const networkOfflineNotification = notifications.getNotification({
     message: NOTIFICATION_MESSAGE.networkOffline(),
@@ -36,7 +37,7 @@ export const useNetworkMonitor = () => {
   }
 
   const handleOnline = async () => {
-    const logoutStatus = localStorage.getItem('logout-status')
+    const logoutStatus = localStorage.getItem(LOCAL_STORAGE_KEY.LogoutStatus)
     if (logoutStatus === 'failed' && auth === 'unauthorized') {
       switchMainLoader('show')
       await logout()

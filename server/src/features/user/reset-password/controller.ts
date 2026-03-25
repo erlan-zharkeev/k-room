@@ -8,11 +8,13 @@ import { CodeModel } from 'entities/code'
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, IAppRequest } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 import { MESSAGE } from './config'
 
 export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>) => {
+  const language = req.language
+
   try {
     const { codeToValidate, password }: ICreateNewPasswordPayload = req.body
 
@@ -21,7 +23,7 @@ export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>
     const code = await CodeModel.findById(userId)
 
     if (!code) {
-      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.failed)
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.failed, language))
     }
 
     // TODO Temp only via email
@@ -32,13 +34,13 @@ export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>
     const isExpired = isCodeExpired(expiresAt)
 
     if (isExpired) {
-      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.codeExpired)
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.codeExpired, language))
     }
 
     const isCodeMatched = codeToValidate === validCode
 
     if (!isCodeMatched) {
-      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.codeNotValid)
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.codeNotValid, language))
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -53,8 +55,8 @@ export const resetPassword = async (req: IAppRequest, res: AppResponseType<null>
       }
     })
 
-    return res.json({ payload: null, message: { text: MESSAGE.success, silent: true } })
+    return res.json({ payload: null, message: { text: getLocalizedText(MESSAGE.success, language), silent: true } })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, MESSAGE.failed)
+    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failed, language))
   }
 }

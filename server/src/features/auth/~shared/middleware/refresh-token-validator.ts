@@ -1,4 +1,4 @@
-import { type NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Response } from 'express'
 
 import { StatusEnum } from 'common-types'
 
@@ -6,17 +6,17 @@ import { AUTH_MESSAGE, updateTokens, verifyToken } from 'features/auth'
 
 import { UserModel } from 'entities/user'
 
-import { ENV } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
+import { ENV, type IAppRequest } from 'shared-config'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
-const haveNotRightsError = (res: Response, silent = true) =>
-  throwHTTPError(StatusEnum.NotAuth, res, AUTH_MESSAGE.nonAuthorized, silent)
+const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
+  throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(AUTH_MESSAGE.nonAuthorized, req.language), silent)
 
-export const refreshTokenValidator = async (req: Request, res: Response, next: NextFunction) => {
+export const refreshTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']
 
   if (!refreshToken) {
-    return haveNotRightsError(res, false)
+    return haveNotRightsError(req, res, false)
   }
 
   try {
@@ -26,19 +26,19 @@ export const refreshTokenValidator = async (req: Request, res: Response, next: N
     const userData = await UserModel.findById(userId)
 
     const deviceId = req.cookies['device-id']
-    const device = userData?.system.device?.[deviceId]
+    const device = deviceId ? userData?.system.device?.[deviceId] : undefined
 
     if (!device || device.refreshToken !== refreshToken) {
-      return haveNotRightsError(res)
+      return haveNotRightsError(req, res)
     }
 
     const isTokensEqual = device.refreshToken === refreshToken
-    if (!isTokensEqual) return haveNotRightsError(res)
+    if (!isTokensEqual) return haveNotRightsError(req, res)
 
     await updateTokens(userId, req, res)
     req.app.locals = decoded
     return next()
   } catch {
-    return haveNotRightsError(res)
+    return haveNotRightsError(req, res)
   }
 }

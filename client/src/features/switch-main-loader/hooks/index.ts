@@ -1,1 +1,1 @@
-export * from './use-switch-main-loader'
+export * from './use-main-loader'

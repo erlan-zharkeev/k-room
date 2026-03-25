@@ -8,9 +8,11 @@ export const lastSeen = (timeStamp: number | undefined) =>
 export const getContactDescription = (payload: DbContactType) => {
   const { online, interactionType, lastSeen: timestamp } = payload
   let result
+
   if (interactionType === 'invite-accepted') {
     result = online ? 'online' : lastSeen(timestamp)
   }
+
   return result
 }
 

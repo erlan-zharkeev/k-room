@@ -2,22 +2,27 @@ import './style.scss'
 import { RouteNamesEnum } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
+import { useCreateNewPassword } from 'src/features/auth/create-new-password/hooks'
+import { CREATE_NEW_PASSWORD_BODY_TEXT } from 'src/features/auth/create-new-password/ui/CreateNewPasswordBody/config'
+
+import { useI18n } from 'src/entities/system'
+
 import { AppButton, AppForm, AppBanner } from 'src/shared/ui'
 
-import { useCreateNewPassword } from '../../hooks'
 export const CreateNewPasswordBody = () => {
   const { onSubmit, isLoading, passMatched, checkPassMatch, isFormTouched, isPasswordChanged } = useCreateNewPassword()
   const navigate = useNavigate()
+  const { t } = useI18n()
 
   return (
     <div className="create-new-password-body">
       {isPasswordChanged ? (
         <div className="create-new-password-body__success">
-          <AppBanner message="Password changed successfully!" type="success" />
+          <AppBanner message={t(CREATE_NEW_PASSWORD_BODY_TEXT.success)} type="success" />
           <div className="create-new-password-body__to-login-btn">
             <AppButton
               onClick={() => navigate(RouteNamesEnum.Login)}
-              text="Go to login page"
+              text={t(CREATE_NEW_PASSWORD_BODY_TEXT.toLogin)}
               color="success-color"
               hoverless
             />
@@ -25,7 +30,7 @@ export const CreateNewPasswordBody = () => {
         </div>
       ) : (
         <AppForm
-          title="Create new password"
+          title={t(CREATE_NEW_PASSWORD_BODY_TEXT.title)}
           disabled={!passMatched}
           onSubmit={onSubmit}
           onChange={checkPassMatch}
@@ -33,7 +38,7 @@ export const CreateNewPasswordBody = () => {
             firstPassword: {
               value: '',
               inputType: 'text',
-              placeholder: 'Password',
+              placeholder: t(CREATE_NEW_PASSWORD_BODY_TEXT.firstPasswordPlaceholder),
               rule: { name: 'password' },
               autoComplete: 'off',
               type: 'password'
@@ -41,18 +46,18 @@ export const CreateNewPasswordBody = () => {
             secondPassword: {
               value: '',
               inputType: 'text',
-              placeholder: 'Confirm password',
+              placeholder: t(CREATE_NEW_PASSWORD_BODY_TEXT.secondPasswordPlaceholder),
               rule: { name: 'password' },
               autoComplete: 'off',
               type: 'password'
             }
           }}
-          submitBtnText="Change password"
+          submitBtnText={t(CREATE_NEW_PASSWORD_BODY_TEXT.submit)}
           actionProcessing={isLoading}
         >
           {!passMatched && isFormTouched && (
             <div className="create-new-password-body__additional-error paragraph-text paragraph-text--error">
-              Password don`t match
+              {t(CREATE_NEW_PASSWORD_BODY_TEXT.mismatch)}
             </div>
           )}
         </AppForm>

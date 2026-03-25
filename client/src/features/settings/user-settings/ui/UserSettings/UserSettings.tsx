@@ -3,6 +3,7 @@ import './style.scss'
 import { PrivacyPolicyLink } from 'src/features/privacy-policy'
 import {
   EnableSoundSwitcher,
+  LanguageSwitcher,
   ShowNotificationSwitcher,
   ShowTooltipsSwitcher,
   ShowWallpaperSwitcher,
@@ -25,7 +26,8 @@ export const UserSettings = () => {
     <EnableSoundSwitcher />,
     <ShowTooltipsSwitcher />,
     <ShowWallpaperSwitcher />,
-    <ShowNotificationSwitcher />
+    <ShowNotificationSwitcher />,
+    <LanguageSwitcher />
   ]
 
   return (

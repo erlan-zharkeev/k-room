@@ -1,6 +1,6 @@
 import { IGetUserDataResponse, StatusEnum, UserEndpointsEnum } from 'common-types'
 
-import { useSwitchMainLoader } from 'src/features/switch-main-loader'
+import { useMainLoader } from 'src/features/switch-main-loader'
 import { useActivateUserSession } from 'src/features/user'
 
 import { isApiError, useApi } from 'src/shared/api'
@@ -8,7 +8,7 @@ import { isApiError, useApi } from 'src/shared/api'
 export const useFetchUserData = () => {
   const { doRequest } = useApi()
   const { activateUserSession } = useActivateUserSession()
-  const { switchMainLoader } = useSwitchMainLoader()
+  const { switchMainLoader } = useMainLoader()
 
   const fetchUserData = async () => {
     try {

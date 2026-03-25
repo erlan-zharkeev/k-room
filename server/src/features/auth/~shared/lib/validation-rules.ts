@@ -35,7 +35,7 @@ check('password')
 export const objectIdRule = (field: string) =>
   check(field)
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
-    .withMessage('Invalid id')
+    .withMessage(AUTH_MESSAGE.invalidId)
 
 export const providerRule = (field = 'providerName') =>
   check(field)

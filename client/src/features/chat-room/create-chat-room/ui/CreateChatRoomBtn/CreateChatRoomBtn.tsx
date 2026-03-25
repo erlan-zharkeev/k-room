@@ -1,16 +1,20 @@
 import { useState } from 'react'
 
-import { AppButton, AppModal } from 'src/shared/ui'
+import { CREATE_CHAT_ROOM_BTN_I18N } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomBtn/config'
+import { CreateChatRoomModal } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomModal/CreateChatRoomModal'
 
-import { CreateChatRoomModal } from '../CreateChatRoomModal/CreateChatRoomModal'
+import { useI18n } from 'src/entities/system'
+
+import { AppButton, AppModal } from 'src/shared/ui'
 
 export const CreateChatRoomBtn = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useI18n()
 
   return (
     <>
-      <AppButton text="Create chat" fill onClick={() => setIsOpen(true)} />
-      <AppModal title="Create chat room" open={isOpen} onClose={() => setIsOpen(false)}>
+      <AppButton text={t(CREATE_CHAT_ROOM_BTN_I18N.button)} fill onClick={() => setIsOpen(true)} />
+      <AppModal title={t(CREATE_CHAT_ROOM_BTN_I18N.modalTitle)} open={isOpen} onClose={() => setIsOpen(false)}>
         <CreateChatRoomModal onSuccess={() => setIsOpen(false)} />
       </AppModal>
     </>

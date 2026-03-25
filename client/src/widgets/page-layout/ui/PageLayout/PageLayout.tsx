@@ -2,11 +2,16 @@ import './style.scss'
 import { RouteNamesEnum as R } from 'common-types'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
+import { PAGE_LAYOUT_TEXT } from 'src/widgets/page-layout/config'
+
+import { useI18n } from 'src/entities/system'
+
 import { AppButton, AppIcon, AppLogo } from 'src/shared/ui'
 
 export const PageLayout = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { t } = useI18n()
 
   const hiddenBackRoutes = new Set<R>([R.Login, R.Registration])
   const showBack = !hiddenBackRoutes.has(pathname as R)
@@ -24,7 +29,7 @@ export const PageLayout = () => {
           {showBack && (
             <AppButton borderless onClick={handleBack}>
               <AppIcon name="arrow-left" />
-              Go back
+              {t(PAGE_LAYOUT_TEXT.back)}
             </AppButton>
           )}
         </div>

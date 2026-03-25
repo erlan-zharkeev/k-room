@@ -1,16 +1,17 @@
 import { IConfirmEmailResponse, StatusEnum } from 'common-types'
 
 import { verifyToken } from 'features/auth'
+import { MESSAGE } from 'features/auth/confirm-email/config'
 import { mapUserToDto, USER_MESSAGE } from 'features/user'
 
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, ENV, IAppRequest } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
-
-import { MESSAGE } from './config'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
+  const language = req.language
+
   try {
     const token = req.body.token
     const decoded = await verifyToken(token, ENV.EMAIL_CONFIRM_SECRET)
@@ -24,19 +25,22 @@ export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfi
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userNotFound)
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userNotFound, language))
     }
 
     const response = {
       payload: { email: mapUserToDto(user).email },
       message: {
-        text: updateResult.modifiedCount === 1 ? MESSAGE.emailConfirmed : MESSAGE.emailAlreadyConfirmed,
+        text: getLocalizedText(
+          updateResult.modifiedCount === 1 ? MESSAGE.emailConfirmed : MESSAGE.emailAlreadyConfirmed,
+          language
+        ),
         silent: false
       }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, MESSAGE.failedEmailConfirm)
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedEmailConfirm, language))
   }
 }

@@ -17,4 +17,5 @@ export interface IAppFileLoaderProps {
   avatarShape?: AvatarShapeModifier
   avatarBorderless?: boolean
   showTextLabel?: boolean
+  resetText?: string
 }

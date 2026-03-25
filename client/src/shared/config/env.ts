@@ -1,5 +1,6 @@
 export interface IClientEnv {
   appName: string
+  supportEmail: string
   serverPort: number
   clientPort: number
   appHost: string

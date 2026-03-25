@@ -1,13 +1,16 @@
 import './style.scss'
 
+import { useCreateChatRoom } from 'src/features/chat-room/create-chat-room/hooks'
+import { CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomForm/config'
 import { usePickContact } from 'src/features/contact'
+
+import { useI18n } from 'src/entities/system'
 
 import { AppForm, AppText } from 'src/shared/ui'
 
-import { useCreateChatRoom } from '../../hooks'
-
 export const CreateChatRoomForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { isLoading, createChatRoom } = useCreateChatRoom({ onSuccess })
+  const { t } = useI18n()
   const {
     contactListToPick,
     pickedContactIds,
@@ -28,15 +31,15 @@ export const CreateChatRoomForm = ({ onSuccess }: { onSuccess?: () => void }) =>
         query: {
           value: filterQuery,
           inputType: 'text',
-          placeholder: 'Find contact',
-          label: 'Filter',
+          placeholder: t(CREATE_CHAT_ROOM_FORM_I18N.queryPlaceholder),
+          label: t(CREATE_CHAT_ROOM_FORM_I18N.queryLabel),
           hide: !(contactListToPick.length > 3)
         },
         contactIds: {
           inputType: 'element-picker',
           availableElements: contactListToPick,
-          fromTitle: `Pick contacts ${pickedContactIds.length > 0 ? `(${pickedContactIds.length})` : ''}`,
-          toTitle: 'Chat room contacts',
+          fromTitle: t(CREATE_CHAT_ROOM_FORM_I18N.fromTitle)(pickedContactIds.length),
+          toTitle: t(CREATE_CHAT_ROOM_FORM_I18N.toTitle),
           rule: { name: 'required' }
         },
         avatarFile: {
@@ -46,24 +49,24 @@ export const CreateChatRoomForm = ({ onSuccess }: { onSuccess?: () => void }) =>
           avatarShape: 'square-shape',
           avatarBorderless: true,
           hide: !(pickedContactIds.length > 1),
-          label: 'Chat avatar'
+          label: t(CREATE_CHAT_ROOM_FORM_I18N.avatarLabel)
         },
         chatName: {
           inputType: 'text',
-          placeholder: 'Type...',
+          placeholder: t(CREATE_CHAT_ROOM_FORM_I18N.chatNamePlaceholder),
           rule: { name: 'required' },
           hide: !(pickedContactIds.length > 1),
-          label: 'Chat name'
+          label: t(CREATE_CHAT_ROOM_FORM_I18N.chatNameLabel)
         }
       }}
       disabledActionBtn={isPrivateChatAlreadyExists}
-      submitBtnText="Create"
+      submitBtnText={t(CREATE_CHAT_ROOM_FORM_I18N.submit)}
       actionProcessing={isLoading}
     >
       {isPrivateChatAlreadyExists && (
         <div className="create-chat-room-form__warning">
           <AppText size="small" color="warn-color">
-            Private chat with selected contact already exist, choose one more or another contact
+            {t(CREATE_CHAT_ROOM_FORM_I18N.privateChatExists)}
           </AppText>
         </div>
       )}

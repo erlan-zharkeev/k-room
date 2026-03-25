@@ -1,19 +1,22 @@
 import { RouteNamesEnum } from 'common-types'
-import './style.scss'
-import { useNavigate } from 'react-router-dom'
 
+import './style.scss'
+
+import { PASSWORD_RECOVERY_LINK_TEXT } from 'src/features/auth/password-recovery/ui/PasswordRecoveryLink/config'
+
+import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { AppLink } from 'src/shared/ui'
 
 export const PasswordRecoveryLink = () => {
   const { email } = useUser()
-  const navigate = useNavigate()
+  const { t } = useI18n()
 
   return (
     <AppLink
-      text="Password recovery"
-      onClick={() => navigate({ pathname: RouteNamesEnum.PasswordRecovery, search: `?user-email=${email}` })}
+      text={t(PASSWORD_RECOVERY_LINK_TEXT.link)}
+      to={{ pathname: RouteNamesEnum.PasswordRecovery, search: `?user-email=${email}` }}
     />
   )
 }

@@ -2,18 +2,20 @@ import './style.scss'
 
 import { useMarkInfoNotificationAsRead } from 'src/features/info-notification'
 
-import { useInfoNotification } from 'src/entities/info-notification'
+import { INFO_NOTIFICATIONS_I18N, useInfoNotification } from 'src/entities/info-notification'
+import { useI18n } from 'src/entities/system'
 
 import { AppCollapseList, AppHeader } from 'src/shared/ui'
 
 export const InfoNotification = () => {
   const { collapseInfoNotifications } = useInfoNotification()
   const { markAsRead } = useMarkInfoNotificationAsRead()
+  const { t } = useI18n()
 
   return (
     <div className="info-notifications">
       <AppHeader tag="h2" bold={false}>
-        Info notification
+        {t(INFO_NOTIFICATIONS_I18N.title)}
       </AppHeader>
       <AppCollapseList
         items={collapseInfoNotifications}

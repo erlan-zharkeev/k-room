@@ -4,9 +4,11 @@ import { useId, useState } from 'react'
 import { IImageObject } from 'common-types'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { useI18n } from 'src/entities/system'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config/types'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
+import { APP_FILE_LOADER_I18N } from 'src/shared/ui/AppFileLoader/config'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
 
 import type { IAppFileLoaderProps } from './config'
@@ -24,10 +26,12 @@ export const AppFileLoader = ({
   avatarStubIcon,
   avatarShape,
   avatarBorderless,
-  showTextLabel = true
+  showTextLabel = true,
+  resetText = 'Reset'
 }: IAppFileLoaderProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const notifications = useNotification()
+  const { t } = useI18n()
   const previewValue = typeof value === 'string' ? value : undefined
   const inputId = useId()
 
@@ -98,7 +102,7 @@ export const AppFileLoader = ({
           <AppButton loading={isLoading} disabled={disabled || isLoading} borderless>
             <label htmlFor={inputId} className="app-file-loader__label">
               <AppIcon name={isLoading ? 'loader' : 'paper-clip'} size="xs" />
-              {showTextLabel && <span>Upload</span>}
+              {showTextLabel && <span>{t(APP_FILE_LOADER_I18N.upload)}</span>}
               <input
                 key={isLoading ? 'uploading' : 'ready'}
                 name={name}
@@ -144,7 +148,7 @@ export const AppFileLoader = ({
           </label>
           <AppButton
             additionalClassName={`app-file-loader__reset-btn ${!value ? 'app-file-loader__reset-btn--hide' : ''}`}
-            text="Reset"
+            text={resetText === 'Reset' ? t(APP_FILE_LOADER_I18N.reset) : resetText}
             borderless
             onClick={() => {
               if (normalizedValue[0]?.name) {

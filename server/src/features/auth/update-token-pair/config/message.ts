@@ -1,3 +1,8 @@
+import { type LocalizedTextType } from 'common-types'
+
 export const MESSAGE = {
-  tokensPairUpdated: 'Token pair has been updated'
+  tokensPairUpdated: {
+    en: 'Token pair has been updated',
+    ru: 'Пара токенов обновлена'
+  } satisfies LocalizedTextType
 }

@@ -1,3 +1,8 @@
+import { type LocalizedTextType } from 'common-types'
+
 export const MESSAGE = {
-  failed: 'Failed to server logout'
+  failed: {
+    en: 'Failed to server logout',
+    ru: 'Не удалось завершить сессию на сервере'
+  } satisfies LocalizedTextType
 }

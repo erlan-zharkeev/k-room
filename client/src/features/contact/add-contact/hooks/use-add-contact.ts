@@ -2,13 +2,13 @@ import { useState } from 'react'
 
 import { IEventContactAddSuccess, SocketActionsType } from 'common-types'
 
+import { getRequiredContactSystemData } from 'src/features/contact/~shared/lib'
+
 import { useContact } from 'src/entities/contact'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
 import { useTimeout } from 'src/shared/lib'
-
-import { getRequiredContactSystemData } from '../../lib'
 
 export const useAddContact = () => {
   const { id } = useUser()

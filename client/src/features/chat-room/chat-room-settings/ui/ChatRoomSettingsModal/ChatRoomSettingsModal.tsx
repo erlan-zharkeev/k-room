@@ -4,9 +4,12 @@ import { useState } from 'react'
 import { Form } from 'antd'
 import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common-types'
 
+import { CHAT_ROOM_SETTINGS_MODAL_I18N } from 'src/features/chat-room/chat-room-settings/ui/ChatRoomSettingsModal/config'
+
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
@@ -24,6 +27,7 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
   const [avatarFile, setFile] = useState<File | MediaFileValueType | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const isUserAuthor = chatRoomData?.authorId === id
+  const { t } = useI18n()
 
   const [form] = Form.useForm()
   // const [isValid, validate] = useValidate()
@@ -53,7 +57,7 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
   const Members = () => {
     return (
       <div className="chat-room-settings-modal__members">
-        <span className="paragraph-text ">Members:</span>
+        <span className="paragraph-text ">{t(CHAT_ROOM_SETTINGS_MODAL_I18N.members)}</span>
         <div className="chat-room-settings-modal__members-list">
           {members.map((user) => (
             <div className="chat-room-settings-modal__member" key={user.id}>
@@ -103,7 +107,7 @@ export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {
             <AppAvatar src={chatRoomData?.avatarId} stubIconName="image-stub" showBadge={false} size="large" />
           </div>
           <Members />
-          <AppButton text="Close" onClick={onClose} loading={isLoading} />
+          <AppButton text={t(CHAT_ROOM_SETTINGS_MODAL_I18N.close)} onClick={onClose} loading={isLoading} />
         </div>
       )}
     </div>

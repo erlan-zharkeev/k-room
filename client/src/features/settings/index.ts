@@ -1,5 +1,6 @@
 export * from './update-theme'
 export * from './toggle-enable-sound'
+export * from './toggle-language'
 export * from './toggle-show-notification'
 export * from './toggle-show-tooltips'
 export * from './toggle-show-wallpaper'

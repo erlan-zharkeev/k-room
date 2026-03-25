@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react'
 import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common-types'
 import { useNavigate } from 'react-router-dom'
 
+import { EMAIL_CONFIRMATION_TEXT } from 'src/pages/email-confirmation/ui/EmailConfirmation/config'
+
 import { useLogout } from 'src/features/auth'
+
+import { useI18n } from 'src/entities/system'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
@@ -14,6 +18,7 @@ export const EmailConfirmation = () => {
   const navigate = useNavigate()
   const query = useQuery()
   const { logout } = useLogout()
+  const { t } = useI18n()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const { doRequest } = useApi()
@@ -36,7 +41,7 @@ export const EmailConfirmation = () => {
   return (
     <div className="email-confirmation">
       <div className="email-confirmation__wrapper">
-        <div className="email-confirmation__header">Congratulations</div>
+        <div className="email-confirmation__header">{t(EMAIL_CONFIRMATION_TEXT.title)}</div>
         {isLoading ? (
           <div className="email-confirmation__loader">
             <AppIcon color="accent-color" size="large" name="loader" />
@@ -44,11 +49,11 @@ export const EmailConfirmation = () => {
         ) : (
           <>
             <div className="paragraph-text">
-              Email
+              {t(EMAIL_CONFIRMATION_TEXT.email)}
               <span className="header-text"> {email} </span>
-              confirmed
+              {t(EMAIL_CONFIRMATION_TEXT.confirmed)}
             </div>
-            <AppButton text="Go to app" onClick={() => navigate(RouteNamesEnum.Login)} />
+            <AppButton text={t(EMAIL_CONFIRMATION_TEXT.back)} onClick={() => navigate(RouteNamesEnum.Login)} />
           </>
         )}
       </div>

@@ -1,11 +1,16 @@
 import './style.scss'
 import { RouteNamesEnum } from 'common-types'
 
+import { LOGIN_FORM_TEXT } from 'src/features/auth/login/ui/LoginForm/config'
+import { LoginFormProps } from 'src/features/auth/login/ui/LoginForm/types'
+
+import { useI18n } from 'src/entities/system'
+
 import { AppButton, AppForm, AppLink } from 'src/shared/ui'
 
-import { LoginFormProps } from './types'
-
 export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: LoginFormProps) => {
+  const { t } = useI18n()
+
   return (
     <div className="login-form">
       <AppForm
@@ -15,18 +20,18 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
             value: '',
             inputType: 'text',
             nativeType: 'email',
-            placeholder: 'Enter your email',
+            placeholder: t(LOGIN_FORM_TEXT.emailPlaceholder),
             rule: { name: 'email' }
           },
           password: {
             value: '',
             inputType: 'text',
             nativeType: 'password',
-            placeholder: 'Enter your password',
+            placeholder: t(LOGIN_FORM_TEXT.passwordPlaceholder),
             rule: { name: 'password' }
           }
         }}
-        submitBtnText="Login"
+        submitBtnText={t(LOGIN_FORM_TEXT.submit)}
         actionProcessing={isLoading}
         disabled={isFirebaseLoginLoading}
       >
@@ -34,7 +39,7 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
           <AppButton
             prefixIconName="google"
             iconSize="xs"
-            text="Login with Google"
+            text={t(LOGIN_FORM_TEXT.withGoogle)}
             onClick={() => {
               onFirebaseLogin('google')
             }}
@@ -46,7 +51,7 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
           <div className="login-form__forgot-password">
             <AppLink
               href={RouteNamesEnum.PasswordRecovery}
-              text="Forgot password?"
+              text={t(LOGIN_FORM_TEXT.forgotPassword)}
               disabled={isLoading || isFirebaseLoginLoading}
             />
           </div>

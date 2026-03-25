@@ -2,15 +2,16 @@ import { SocketActionsType, StatusEnum } from 'common-types'
 
 import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'features/user'
 import { MESSAGE } from 'features/user/update-user-data/config'
+import { updateUserAvatar } from 'features/user/update-user-data/lib'
 
 import { UserModel } from 'entities/user'
 
-import { AppResponseType, IAppRequest, SERVER_NOTIFICATION_MESSAGE, SHARED_MESSAGE } from 'shared-config'
-import { getIO, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
-
-import { updateUserAvatar } from './lib'
+import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'shared-config'
+import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
 
 export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
+  const language = req.language
+
   try {
     const username: string | undefined = req.body.username
     const avatarFileBuffer: Buffer | undefined = req.file?.buffer
@@ -18,13 +19,13 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
     const userId = req.app.locals.id
 
     if (!username && !avatarFileBuffer) {
-      return throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.nothingToUpdate)
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.nothingToUpdate, language))
     }
 
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userNotFound)
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userNotFound, language))
     }
 
     if (username && username !== user.public.username) {
@@ -32,11 +33,11 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
     }
 
     if (avatarFileBuffer) {
-      await updateUserAvatar(avatarFileBuffer, userId, res)
+      await updateUserAvatar(avatarFileBuffer, userId, res, language)
     }
 
     if (resetAvatar === 'reset') {
-      await updateUserAvatar(null, userId, res)
+      await updateUserAvatar(null, userId, res, language)
     }
 
     const contacts = await UserModel.find(
@@ -56,11 +57,10 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
       })
     }
 
-
-    return res.json({ payload: null, message: { text: SHARED_MESSAGE.success, silent: true } })
+    return res.json({ payload: null, message: { text: getLocalizedText(SHARED_MESSAGE.success, language), silent: true } })
   } catch (error: unknown) {
     log.error(String(error))
     serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, SERVER_NOTIFICATION_MESSAGE.FailedUserDataUpdate)
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedUpdate, language))
   }
 }

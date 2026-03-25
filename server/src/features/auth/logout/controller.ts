@@ -1,15 +1,17 @@
-import { ObjectId } from "mongoose"
+import { ObjectId } from 'mongoose'
 
-import { StatusEnum } from "common-types"
+import { StatusEnum } from 'common-types'
 
-import { UserModel } from "entities/user"
+import { MESSAGE } from 'features/auth/logout/config'
 
-import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from "shared-config"
-import { log, serverCaptureSentryException, throwHTTPError } from "shared-lib"
+import { UserModel } from 'entities/user'
 
-import { MESSAGE } from "./config"
+import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'shared-config'
+import { getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
 
 export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
+  const language = req.language
+
   try {
     const deviceId = req.cookies['device-id']
     const userId = req.app.locals.id as ObjectId
@@ -26,14 +28,14 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
       res.clearCookie(cookie, {
         httpOnly: true,
         secure: true,
-        sameSite: "lax",
+        sameSite: 'lax',
         domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
-        path: "/",
+        path: '/',
       })
     })
     return res.json({
       message: {
-        text: SHARED_MESSAGE.success,
+        text: getLocalizedText(SHARED_MESSAGE.success, language),
         silent: true,
       },
       payload: null
@@ -41,6 +43,6 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
   } catch (error) {
     log.error(String(error))
     serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, MESSAGE.failed)
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failed, language))
   }
 }

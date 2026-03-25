@@ -1,6 +1,9 @@
 import './style.scss'
 import { useContext } from 'react'
 
+import { CALL_MODAL_VIDEO_I18N } from 'src/entities/call/ui/CallModal/components/CallModalBody/components/CallModalVideo/config'
+import { useI18n } from 'src/entities/system'
+
 import { useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
 import { AppAvatar } from 'src/shared/ui'
@@ -8,6 +11,7 @@ import { AppAvatar } from 'src/shared/ui'
 export const CallModalVideo = () => {
   const { currentCall } = useTypedSelector((state) => state.calls)
   const { interlocutorVideoDom } = useContext(RefsContext)
+  const { t } = useI18n()
   return (
     <div
       className="call-modal-video"
@@ -18,7 +22,7 @@ export const CallModalVideo = () => {
       <div className="call-modal-video__interlocutor-video">
         {!currentCall?.interlocutorSettings?.audio && (
           <div className="call-modal-video__interlocutor-audio-status">
-            <div className="paragraph-text paragraph-text--sm">The interlocutor turned off the sound</div>
+            <div className="paragraph-text paragraph-text--sm">{t(CALL_MODAL_VIDEO_I18N.audioOff)}</div>
           </div>
         )}
         <video

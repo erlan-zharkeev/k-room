@@ -3,10 +3,12 @@ import './style.scss'
 import { Badge } from 'antd'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
+import { CHAT_ROOM_LIST_I18N } from 'src/features/chat-room/chat-room-list/ui/ChatRoomList/config'
 
 import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 
 import { AppScrollContainer, AppText } from 'src/shared/ui'
 import { chatRoomUnreadMessagesCount, createClassNameWithModifiers } from 'src/shared/utils'
@@ -16,10 +18,11 @@ export const ChatRoomList = () => {
   const { messages } = useMessage()
   const { selectedChatRoomId } = useSettings()
   const { selectChatRoomById } = useChatRoomSelect()
+  const { t } = useI18n()
 
   return (
     <div className="chat-room-list">
-      {chatRooms.length <= 0 && <AppText>There are no chats yet</AppText>}
+      {chatRooms.length <= 0 && <AppText>{t(CHAT_ROOM_LIST_I18N.empty)}</AppText>}
       <AppScrollContainer height="100%" additionalClassName="chat-room-list__scroll-container">
         {chatRooms.map((chatRoom) => (
           <div

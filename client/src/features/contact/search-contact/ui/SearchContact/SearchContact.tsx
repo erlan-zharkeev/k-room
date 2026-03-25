@@ -1,18 +1,22 @@
 import './style.scss'
 
-import { AppInput, AppScrollContainer, AppText } from 'src/shared/ui'
+import { useSearchContact } from 'src/features/contact/search-contact/hooks'
+import { FoundContact } from 'src/features/contact/search-contact/ui/FoundContact/FoundContact'
+import { SEARCH_CONTACT_I18N } from 'src/features/contact/search-contact/ui/SearchContact/config'
 
-import { useSearchContact } from '../../hooks'
-import { FoundContact } from '../FoundContact/FoundContact'
+import { useI18n } from 'src/entities/system'
+
+import { AppInput, AppScrollContainer, AppText } from 'src/shared/ui'
 
 export const SearchContact = () => {
   const { searchQuery, search, searchedContacts, isLoading } = useSearchContact()
+  const { t } = useI18n()
 
   return (
     <div className="search-contact">
       <AppInput
         showClearButton={Boolean(searchQuery)}
-        placeholder="Search contact"
+        placeholder={t(SEARCH_CONTACT_I18N.placeholder)}
         onChange={search}
         name="contact"
         value={searchQuery}
@@ -21,7 +25,7 @@ export const SearchContact = () => {
       {searchedContacts.length > 0 && (
         <>
           <AppText tag="p" align="right" additionalClassName="search-contact__found-el-quantity">
-            Found {searchedContacts.length} contacts
+            {t(SEARCH_CONTACT_I18N.found)(searchedContacts.length)}
           </AppText>
           <div className="search-contact__list">
             <AppScrollContainer>

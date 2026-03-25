@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconName } from 'src/shared/ui'
@@ -10,6 +11,7 @@ import { useDevicePermissionRequestAndUpdate } from '../../request-and-update-de
 
 export const useInputVideoDevice = () => {
   const { getNotification } = useNotification()
+  const { t } = useI18n()
 
   const [videoInputDeviceList, setVideoInputDeviceList] = useState([] as MediaDeviceInfo[])
   const settings = useSettings()
@@ -36,7 +38,7 @@ export const useInputVideoDevice = () => {
   }
 
   const cantAccessDeviceNotification = getNotification({
-    message: NOTIFICATION_MESSAGE.cantAccessDevice(),
+    message: t(NOTIFICATION_MESSAGE.cantAccessDevice),
     messageType: 'error'
   })
 

@@ -2,6 +2,10 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
+import { SELECT_DEVICE_I18N } from 'src/features/device/select-device/ui/SelectDevice/config'
+
+import { useI18n } from 'src/entities/system'
+
 import { AppButton, AppIconName, AppSelect, AppText, type IAppSelectOption } from 'src/shared/ui'
 
 export const SelectDevice = ({
@@ -26,12 +30,13 @@ export const SelectDevice = ({
   loading: boolean
 }) => {
   const isOptionsEmpty = options.length === 0
+  const { t } = useI18n()
 
   return (
     <div className="select-device">
       <AppText additionalClassName="select-device__title">{title}</AppText>
       {isOptionsEmpty ? (
-        <AppText size="small">Permissions were not granted or the devices were not detected.</AppText>
+        <AppText size="small">{t(SELECT_DEVICE_I18N.notAvailable)}</AppText>
       ) : (
         <>
           <div className="select-device__select-wrapper">

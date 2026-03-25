@@ -4,11 +4,13 @@ import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
 import { useNotification, NOTIFICATION_MESSAGE } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconName } from 'src/shared/ui'
 
 export const useInputAudioDevice = () => {
+  const { t } = useI18n()
   const [audioInputDeviceList, setAudioInputDeviceList] = useState<MediaDeviceInfo[]>([])
   const settings = useSettings()
   const [isMicLoading, setMicIsLoading] = useState(false)
@@ -69,7 +71,7 @@ export const useInputAudioDevice = () => {
   }
 
   const cantAccessDeviceNotification = getNotification({
-    message: NOTIFICATION_MESSAGE.cantAccessDevice(),
+    message: t(NOTIFICATION_MESSAGE.cantAccessDevice),
     messageType: 'error'
   })
 

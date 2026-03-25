@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
     define: {
       CLIENT_ENV_DATA: JSON.stringify({
         appName: env.APP_NAME,
+        supportEmail: env.SUPPORT_EMAIL,
         serverPort: Number(env.SERVER_PORT),
         clientPort: Number(env.CLIENT_PORT),
         appHost: env.APP_HOST,

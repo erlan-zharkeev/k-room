@@ -8,9 +8,11 @@ import { MESSAGE } from 'features/auth/sign-in-with-provider/config'
 import { createUser, mapUserToDto } from 'features/user'
 
 import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
+  const language = req.language
+
   try {
     const data: ISignInWithProviderPayload = req.body
     const { username, email, provider } = data
@@ -25,11 +27,11 @@ export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<
     return res.json({
       payload: mapUserToDto(user),
       message: {
-        text: SHARED_MESSAGE.success,
+        text: getLocalizedText(SHARED_MESSAGE.success, language),
         silent: true
       }
     })
   } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, MESSAGE.failed)
+    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.failed, language))
   }
 }

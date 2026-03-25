@@ -1,8 +1,8 @@
 import type { Response } from 'express'
 
-import { StatusEnum } from 'common-types'
+import { type AppLanguageType, StatusEnum } from 'common-types'
 
-import { throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from '../config'
 import { mediaBuckets } from '../model/media-bucket'
@@ -11,13 +11,14 @@ export const streamMediaFile = async (
   bucketName: MediaBucketNameType,
   id: string,
   res: Response,
+  language?: AppLanguageType,
   opts?: { asAttachment?: boolean, revalidateCache?: boolean }
 ) => {
   try {
     const bucket = mediaBuckets[bucketName]
 
     if (!bucket) {
-      return throwHTTPError(StatusEnum.NotFound, res, COMMON_MEDIA_MESSAGE.failedToStreamFile)
+      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language))
     }
 
     const filename = `${bucketName}.${id}`
@@ -25,7 +26,7 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      return throwHTTPError(StatusEnum.NotFound, res, COMMON_MEDIA_MESSAGE.fileNotFound, true)
+      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language), true)
     }
 
     res.setHeader('Content-Type', file.contentType || 'application/octet-stream')
@@ -42,9 +43,9 @@ export const streamMediaFile = async (
 
     bucket
       .openDownloadStreamByName(filename)
-      .on('error', () => throwHTTPError(StatusEnum.NotFound, res, COMMON_MEDIA_MESSAGE.fileNotFound))
+      .on('error', () => throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language)))
       .pipe(res)
   } catch {
-    return throwHTTPError(StatusEnum.Server, res ?? null, COMMON_MEDIA_MESSAGE.failedToStreamFile)
+    return throwHTTPError(StatusEnum.Server, res ?? null, getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language))
   }
 }

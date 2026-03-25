@@ -16,7 +16,7 @@ import { useSettings } from 'src/entities/settings'
 
 export const App = () => {
   const { initializeIndexedDb } = useInitializeIndexedDb()
-  const { theme } = useSettings()
+  const { theme, language } = useSettings()
   const { setThemeToDom } = useThemeUpdate()
   const { fetchUserData } = useFetchUserData()
 
@@ -33,6 +33,10 @@ export const App = () => {
   useEffect(() => {
     initializeApp()
   }, [])
+
+  useEffect(() => {
+    document.documentElement.lang = language
+  }, [language])
 
   return (
     <>

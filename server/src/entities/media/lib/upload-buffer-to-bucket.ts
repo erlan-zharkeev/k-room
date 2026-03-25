@@ -2,9 +2,9 @@ import { Buffer } from 'node:buffer'
 
 import type { Response } from 'express'
 
-import { StatusEnum } from 'common-types'
+import { type AppLanguageType, StatusEnum } from 'common-types'
 
-import { throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from '../config'
 import { VALIDATE_MEDIA_FILE_MESSAGE } from '../config'
@@ -19,7 +19,8 @@ export const uploadBufferToBucket = async (
   filename: string,
   bucketName: MediaBucketNameType,
   res?: Response,
-  options?: IUploadOptions
+  options?: IUploadOptions,
+  language?: AppLanguageType
 ) => {
   try {
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
@@ -27,7 +28,7 @@ export const uploadBufferToBucket = async (
 
     const fileData = await buildFileData(outBuffer, filename)
 
-    validateFileMetaData(fileData, bucketName, res)
+    validateFileMetaData(fileData, bucketName, res, language)
 
     const overwrite = options?.overwrite ?? false
 
@@ -35,7 +36,11 @@ export const uploadBufferToBucket = async (
 
     if (existing.length > 0) {
       if (!overwrite) {
-        return throwHTTPError(StatusEnum.Server, res ?? null, VALIDATE_MEDIA_FILE_MESSAGE.fileWithThisNameAlreadyExists)
+        return throwHTTPError(
+          StatusEnum.Server,
+          res ?? null,
+          getLocalizedText(VALIDATE_MEDIA_FILE_MESSAGE.fileWithThisNameAlreadyExists, language)
+        )
       }
       await Promise.all(existing.map((f) => bucket.delete(f._id)))
     }
@@ -50,6 +55,6 @@ export const uploadBufferToBucket = async (
       stream.end(outBuffer)
     })
   } catch {
-    throwHTTPError(StatusEnum.Server, res ?? null, VALIDATE_MEDIA_FILE_MESSAGE.uploadFailed)
+    throwHTTPError(StatusEnum.Server, res ?? null, getLocalizedText(VALIDATE_MEDIA_FILE_MESSAGE.uploadFailed, language))
   }
 }

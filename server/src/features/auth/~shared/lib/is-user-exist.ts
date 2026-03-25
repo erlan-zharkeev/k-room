@@ -7,7 +7,7 @@ import { USER_MESSAGE } from 'features/user'
 import { UserModel } from 'entities/user'
 
 import { AppResponseType } from 'shared-config'
-import { throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'shared-lib'
 
 export const isUserExist = async <T>(
   { username, email, id }: { username: string; email: string; id?: mongoose.Types.ObjectId },
@@ -19,21 +19,21 @@ export const isUserExist = async <T>(
 
   if (userNameCandidate) {
     userExist = true
-    if (res) throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userWithCurrentNameAlreadyExist)
+    if (res) throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userWithCurrentNameAlreadyExist))
   }
 
   const emailCandidate = await UserModel.findOne({ 'personal.email': email })
 
   if (emailCandidate) {
     userExist = true
-    if (res) throwHTTPError(StatusEnum.BadRequest, res, USER_MESSAGE.userWithCurrentEmailAlreadyExist)
+    if (res) throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userWithCurrentEmailAlreadyExist))
   }
 
   if (id) {
     const idCandidate = await UserModel.findById(id)
     if (idCandidate) {
       userExist = true
-      if (res) throwHTTPError(StatusEnum.Server, res, USER_MESSAGE.userWithCurrentIdAlreadyExist)
+      if (res) throwHTTPError(StatusEnum.Server, res, getLocalizedText(USER_MESSAGE.userWithCurrentIdAlreadyExist))
     }
   }
 

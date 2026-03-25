@@ -1,7 +1,8 @@
 import type { AxiosResponse, ResponseType } from 'axios'
-import { EndpointsType, IBackendResponse, StatusEnum } from 'common-types'
+import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common-types'
 
 import { useNotification } from 'src/entities/notification'
+import { settingsStore } from 'src/entities/settings/hooks/use-settings'
 
 import { useApiInterсeptor, axios, createApiError, IDoRequestOpts, isApiError } from 'src/shared/api'
 import type { RequestPayload, RequestTypes } from 'src/shared/api'
@@ -38,10 +39,16 @@ export const useApi = () => {
     const { contentType = 'application/json', responseType = 'json' } = opts || {}
 
     try {
+      const settings = await settingsStore.get()
+      const language = settings?.language ?? DEFAULT_APP_LANGUAGE
+
       const response = await axios.request({
         method: type,
         url: `${apiBaseUrl}/api${endpoint}`,
-        headers: { 'Content-Type': contentType },
+        headers: {
+          'Content-Type': contentType,
+          ...(language ? { [APP_LANGUAGE_HEADER]: language } : {})
+        },
         responseType,
         ...(type === 'get' ? { params: data } : { data })
       })

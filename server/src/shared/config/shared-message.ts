@@ -1,6 +1,20 @@
+import { type LocalizedTextType } from 'common-types'
+
 export const SHARED_MESSAGE = {
-  success: 'success',
-  error: 'error',
-  warn: 'warning',
-  info: 'info'
-}
+  success: {
+    en: 'Success',
+    ru: 'Успешно'
+  },
+  error: {
+    en: 'Error',
+    ru: 'Ошибка'
+  },
+  warn: {
+    en: 'Warning',
+    ru: 'Предупреждение'
+  },
+  info: {
+    en: 'Info',
+    ru: 'Информация'
+  }
+} as const satisfies Record<string, LocalizedTextType>

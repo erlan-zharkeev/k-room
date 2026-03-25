@@ -14,6 +14,7 @@ import { initIO } from 'app/services/socket'
 
 import { ENV } from 'shared-config'
 import { log, serverCaptureSentryException, setIO } from 'shared-lib'
+import { attachRequestLanguage } from 'shared-middleware'
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
+app.use(attachRequestLanguage)
 app.use(RouteNamesEnum.Api, rootRouter)
 setupSentryErrorHandler(app)
 

@@ -1,4 +1,4 @@
 export const MODAL_WIDTH = {
   PHONE: 300,
   GREATER_THAN_PHONE: 420
-}
+} as const

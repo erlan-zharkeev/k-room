@@ -6,10 +6,12 @@ export interface IEnvVariables {
   MONGO_HOST: string;
   APP_HOST: string;
   API_HOST: string;
+  MONGO_ADMIN_HOST: string;
   COOKIE_DOMAIN: string;
   JWT_ACCESS_EXPIRES_INTERVAL: string;
   JWTR_ACCESS_EXPIRES_INTERVAL: string;
   APP_NAME: string;
+  SUPPORT_EMAIL: string;
   MAIL_APP_PASS: string;
   REGISTRATION_RESEND_INTERVAL_MINUTES: string;
   K_ROOM_ACCESS_TOKEN_SECRET: string;
@@ -20,6 +22,9 @@ export interface IEnvVariables {
   RESEND_API_KEY: string;
   RESEND_FROM_EMAIL: string;
   RESEND_FROM_NAME: string;
+  MONGO_ADMIN_USERNAME: string;
+  MONGO_ADMIN_PASSWORD: string;
+  MONGO_ADMIN_MONGODB_URL: string;
   PLAYWRIGHT_BASE_URL: string;
   PLAYWRIGHT_SERVER_URL: string;
   PLAYWRIGHT_MONGO_HOST: string;

@@ -3,8 +3,9 @@ import './style.scss'
 import { useDispatch } from 'react-redux'
 
 import { MessageInput } from 'src/features/message'
+import { MESSAGE_WITH_BIND_DATA_MODAL_I18N } from 'src/features/message/send-message-with-bind-data/ui/MessageWithBindDataModal/config'
 
-import { removeImageByNameFromMessageInputData, useSystem } from 'src/entities/system'
+import { removeImageByNameFromMessageInputData, useSystem, useI18n } from 'src/entities/system'
 
 import { AppImagePreview, AppModal } from 'src/shared/ui'
 
@@ -20,9 +21,10 @@ export const MessageWithBindDataModal = ({
   const { messageInputData } = useSystem()
   const { images } = messageInputData
   const dispatch = useDispatch()
+  const { t } = useI18n()
 
   return (
-    <AppModal title="Send Message" open={open} onClose={onClose}>
+    <AppModal title={t(MESSAGE_WITH_BIND_DATA_MODAL_I18N.title)} open={open} onClose={onClose}>
       <div className="message-with-bind-data-modal">
         <AppImagePreview images={images} removeImage={(name) => dispatch(removeImageByNameFromMessageInputData(name))} />
         <MessageInput roomId={roomId} emitTypingStatus={false} insideModal onSubmitSuccess={onClose} />

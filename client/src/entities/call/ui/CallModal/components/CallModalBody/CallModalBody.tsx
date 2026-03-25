@@ -18,12 +18,13 @@ import {
   setCallSettingsLoading,
   setCallVideo
 } from 'src/entities/call'
+import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui/CallModal/components/CallModalBody/config'
+import { useI18n } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
 import { useTypedSelector, useCounter } from 'src/shared/lib'
 import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
 import { AppButton, AppAvatar } from 'src/shared/ui'
-import { firstCharUpperCase } from 'src/shared/utils'
 
 import { CallDots, CallModalVideo } from './components'
 import type { ICallModalBodyProps } from './types'
@@ -36,6 +37,7 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
 
   const { call } = useContext(AdditionalServiceContext)
   const callService = call.current
+  const { t } = useI18n()
 
   const [counterValue, , startCounter, stopCounter] = useCounter(1, false)
 
@@ -134,7 +136,9 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
               <AppButton prefixIconName="expand" onClick={toggleExpandModal} borderless hoverless />
             </div>
           </div>
-          <div className="call-modal__title">{firstCharUpperCase(currentCall.flow)} call</div>
+          <div className="call-modal__title">
+            {isCallIncoming() ? t(CALL_MODAL_BODY_I18N.incomingCall) : t(CALL_MODAL_BODY_I18N.outgoingCall)}
+          </div>
         </div>
         <div className="call-modal__body">
           <div
@@ -147,7 +151,7 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
               <AppAvatar size="large" src={currentCall.interlocutorAvatarPath} showBadge={false} />
             </div>
             <div className="call-modal__interlocutor-name">
-              {currentCall.interlocutorName} {isCallIncoming() && <span>is calling</span>}
+              {currentCall.interlocutorName} {isCallIncoming() && <span>{t(CALL_MODAL_BODY_I18N.isCalling)}</span>}
             </div>
             <CallDots />
           </div>
@@ -207,13 +211,13 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
                   <AppButton
                     onClick={answerCall}
                     color={isAnswerLoading ? 'accent-color' : 'success-color'}
-                    text="Accept call"
+                    text={t(CALL_MODAL_BODY_I18N.acceptCall)}
                     loading={isAnswerLoading}
                   />
                 </div>
               )}
               <div className="call-modal__controls-element call-modal__controls-element--phone">
-                <AppButton color="error-color" onClick={endCall} text="Decline call" />
+                <AppButton color="error-color" onClick={endCall} text={t(CALL_MODAL_BODY_I18N.declineCall)} />
               </div>
             </div>
           </div>

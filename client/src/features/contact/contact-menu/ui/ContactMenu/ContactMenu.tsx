@@ -6,8 +6,10 @@ import { InteractionType } from 'common-types'
 
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
 import { useDeleteContact } from 'src/features/contact'
+import { CONTACT_MENU_I18N } from 'src/features/contact/contact-menu/ui/ContactMenu/config'
 
 import { useChatRoom } from 'src/entities/chat-room'
+import { useI18n } from 'src/entities/system'
 
 import { useTimeout } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
@@ -19,18 +21,19 @@ export const ContactMenu = ({ id, interactionType }: { id: string; interactionTy
   const { isLoading: isChatCreating, createChatRoom } = useCreateChatRoom()
   const { getPersonalRoomByContactId, chatRooms } = useChatRoom()
   const { selectChatWithAsideById } = useChatRoomSelect()
+  const { t } = useI18n()
 
   const contactRoom = useMemo(() => getPersonalRoomByContactId(id), [chatRooms])
 
   const items = [
     {
-      label: 'Call',
+      label: t(CONTACT_MENU_I18N.call),
       handler: () => {},
       value: 'call'
     },
     {
-      label: 'Create chat',
-      loadingLabel: 'Creating chat',
+      label: t(CONTACT_MENU_I18N.createChat),
+      loadingLabel: t(CONTACT_MENU_I18N.creatingChat),
       handler: (evt: unknown) => {
         stopPropagation(evt)
         createChatRoom({ formData: { contactIds: [id] } })
@@ -39,14 +42,14 @@ export const ContactMenu = ({ id, interactionType }: { id: string; interactionTy
       value: 'create-chat'
     },
     {
-      label: 'Text',
+      label: t(CONTACT_MENU_I18N.text),
       handler: () => {
         selectChatWithAsideById(contactRoom?.id)
       },
       value: 'text'
     },
     {
-      label: 'Delete',
+      label: t(CONTACT_MENU_I18N.delete),
       handler: async () => {
         await delay(400)
         deleteUserHandler(id)
