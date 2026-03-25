@@ -4,7 +4,9 @@ export interface IEnvVariables {
     SERVER_URL: string;
     CLIENT_URL: string;
     MONGO_HOST: string;
-    HOST: string;
+    APP_HOST: string;
+    API_HOST: string;
+    COOKIE_DOMAIN: string;
     JWT_ACCESS_EXPIRES_INTERVAL: string;
     JWTR_ACCESS_EXPIRES_INTERVAL: string;
     APP_NAME: string;

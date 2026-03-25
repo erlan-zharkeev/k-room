@@ -23,6 +23,7 @@ export const updateTokens = async (id: string, req: IAppRequest, res: Response) 
     httpOnly: false,
     secure: true,
     sameSite: 'strict',
+    domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
     maxAge: 3_153_600_000_000 // SET FOR 100 years
   })
 

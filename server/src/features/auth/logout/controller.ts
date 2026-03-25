@@ -4,7 +4,7 @@ import { StatusEnum } from "common-types"
 
 import { UserModel } from "entities/user"
 
-import { AppResponseType, IAppRequest, SHARED_MESSAGE } from "shared-config"
+import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from "shared-config"
 import { log, serverCaptureSentryException, throwHTTPError } from "shared-lib"
 
 import { MESSAGE } from "./config"
@@ -27,6 +27,7 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
         httpOnly: true,
         secure: true,
         sameSite: "lax",
+        domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
         path: "/",
       })
     })

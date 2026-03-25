@@ -2,7 +2,7 @@
 
 ##
 
-Production domain: `HOST` from `.env.production`
+Production domains: `APP_HOST` and `API_HOST` from `.env.production`
 
 ![App main screen](./docs/assets/main-screen.png 'main screen')
 
@@ -14,18 +14,9 @@ Production domain: `HOST` from `.env.production`
 
 ### Requirements
 
-- node 24.14.0
 - npm as package manager
 
 ## Development
 
 - Add variables to bash `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_FROM_NAME`, `EMAIL_CONFIRM_SECRET`,`FIREBASE_API_KEY`, `SENTRY_DSN_CLIENT`, `SENTRY_DSN_SERVER`
 - Run `sh scripts/dev.sh`
-
-### Package managers
-
-- root, `client`, `server`, and `types` use `npm`
-
-## Deploy
-
-- Just merge to main branch

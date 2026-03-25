@@ -3,17 +3,18 @@ import { Server } from 'socket.io'
 
 import { RouteNamesEnum, type SocketActionsType } from 'common-types'
 
+import { MAX_HTTP_BUFFER_SIZE } from 'app/config'
 import { socketRouter } from 'app/services/socket-router'
 
 import { socketAuthMiddleware } from 'features/auth'
 
-import { ENV, MAX_HTTP_BUFFER_SIZE_MB, ORIGINS, type SocketInstanceType } from 'shared-config'
+import { ENV, ORIGINS, type SocketInstanceType } from 'shared-config'
 import { log, serverCaptureSentryException } from 'shared-lib'
 
 const getSocketIO = (server: HttpsServer) =>
   new Server(server, {
     path: RouteNamesEnum.SocketPath,
-    maxHttpBufferSize: MAX_HTTP_BUFFER_SIZE_MB * 1_000_000,
+    maxHttpBufferSize: MAX_HTTP_BUFFER_SIZE,
     cors: {
       origin: ENV.IS_DEV ? '*' : ORIGINS,
       credentials: true

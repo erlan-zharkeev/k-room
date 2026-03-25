@@ -4,6 +4,8 @@ import { type Response } from 'express'
 import { generateToken } from 'features/auth'
 import { parseExpires, setCookie } from 'features/cookie'
 
+import { ENV } from 'shared-config'
+
 export const setToken = (
   res: Response,
   tokenName: AuthTokensType,
@@ -16,6 +18,7 @@ export const setToken = (
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
+    domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
     maxAge: parseExpires(expiresAt)
   })
 

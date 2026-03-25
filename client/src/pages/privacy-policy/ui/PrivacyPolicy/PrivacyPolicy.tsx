@@ -1,10 +1,20 @@
 import './style.scss'
 
+import { RouteNamesEnum } from 'common-types'
+import { useNavigate } from 'react-router-dom'
+
 import { CLIENT_ENV } from 'src/shared/config'
-import { AppScrollContainer } from 'src/shared/ui'
+import { AppButton, AppScrollContainer } from 'src/shared/ui'
 
 export const PrivacyPolicy = () => {
+  const navigate = useNavigate()
   const appName = CLIENT_ENV.appName
+
+  const handleBack = () => {
+    if (window.history.length > 1) navigate(-1)
+    else navigate(RouteNamesEnum.Main, { replace: true })
+  }
+
   return (
     <AppScrollContainer additionalClassName="privacy-policy" height="100%">
       <h1>Privacy Policy for {appName}</h1>
@@ -133,6 +143,9 @@ export const PrivacyPolicy = () => {
 
       <h2>12. Contact</h2>
       <p>If you have questions or requests related to this Privacy Policy, contact support through the app settings.</p>
+      <div className="privacy-policy__footer">
+        <AppButton text="Back" onClick={handleBack} />
+      </div>
     </AppScrollContainer>
   )
 }

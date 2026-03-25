@@ -18,7 +18,8 @@ export default defineConfig(({ mode }) => {
         appName: env.APP_NAME,
         serverPort: Number(env.SERVER_PORT),
         clientPort: Number(env.CLIENT_PORT),
-        host: env.HOST,
+        appHost: env.APP_HOST,
+        apiHost: env.API_HOST,
         maxReconnectAttempts: Number(env.MAX_RECONNECT_ATTEMPTS),
         firebaseApiKey: env.FIREBASE_API_KEY,
         sentryDsnClient: env.SENTRY_DSN_CLIENT,
@@ -167,7 +168,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: `${env.HOST}:${env.SERVER_PORT}`,
+          target: `${env.API_HOST}:${env.SERVER_PORT}`,
           changeOrigin: true,
           secure: false
         }

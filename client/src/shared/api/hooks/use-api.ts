@@ -5,10 +5,12 @@ import { useNotification } from 'src/entities/notification'
 
 import { useApiInterсeptor, axios, createApiError, IDoRequestOpts, isApiError } from 'src/shared/api'
 import type { RequestPayload, RequestTypes } from 'src/shared/api'
+import { CLIENT_ENV } from 'src/shared/config'
 
 export const useApi = () => {
   const notifications = useNotification()
   const { interceptError } = useApiInterсeptor()
+  const apiBaseUrl = import.meta.env.DEV ? '' : CLIENT_ENV.apiHost
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
     if (!response) return
@@ -38,7 +40,7 @@ export const useApi = () => {
     try {
       const response = await axios.request({
         method: type,
-        url: `/api${endpoint}`,
+        url: `${apiBaseUrl}/api${endpoint}`,
         headers: { 'Content-Type': contentType },
         responseType,
         ...(type === 'get' ? { params: data } : { data })

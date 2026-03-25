@@ -18,8 +18,9 @@ const isIgnoredStatus = (status?: number | null) => {
 
 const getClientTracePropagationTargets = () => [
   /^\/api/,
-  `${CLIENT_ENV.host}:${CLIENT_ENV.serverPort}`,
-  `${CLIENT_ENV.host}/api`
+  `${CLIENT_ENV.appHost}:${CLIENT_ENV.clientPort}`,
+  `${CLIENT_ENV.apiHost}:${CLIENT_ENV.serverPort}`,
+  `${CLIENT_ENV.apiHost}/api`
 ]
 
 const shouldIgnoreSentryError = ({ message, silent, status }: ISentryErrorContext) => {

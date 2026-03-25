@@ -3,9 +3,9 @@ import { io } from 'socket.io-client'
 
 import { CLIENT_ENV } from 'src/shared/config'
 
-const initConnectionPath = import.meta.env.DEV ? `:${CLIENT_ENV.serverPort}` : ''
+const socketBaseUrl = import.meta.env.DEV ? `${CLIENT_ENV.apiHost}:${CLIENT_ENV.serverPort}` : CLIENT_ENV.apiHost
 
-export const socket = io(`${initConnectionPath}/`, {
+export const socket = io(`${socketBaseUrl}/`, {
   transports: ['websocket'],
   secure: true,
   forceNew: false,

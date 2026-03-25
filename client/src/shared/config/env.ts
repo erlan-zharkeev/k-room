@@ -2,7 +2,8 @@ export interface IClientEnv {
   appName: string
   serverPort: number
   clientPort: number
-  host: string
+  appHost: string
+  apiHost: string
   maxReconnectAttempts: number
   firebaseApiKey: string
   sentryDsnClient: string
