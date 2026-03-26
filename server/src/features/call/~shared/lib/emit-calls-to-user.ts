@@ -1,12 +1,11 @@
 import type { EventCallsUpdatedType, SocketActionsType } from 'common'
 
+import { transformCallForUser } from 'features/call/~shared/lib/transform-call-for-user'
 import { getSocketsByUserIds } from 'features/user'
 
 import { CallModel } from 'entities/call'
 
 import { getIO } from 'shared-lib'
-
-import { transformCallForUser } from './transform-call-for-user'
 
 export const emitCallsToUser = async (userId: string) => {
   const calls = await CallModel.find({ interlocutors: { $in: [userId] } }).sort({ calledAt: -1 }).lean()

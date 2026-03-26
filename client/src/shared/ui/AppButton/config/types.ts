@@ -1,7 +1,7 @@
 import { UnknownCallback } from 'common'
 
-import type { AppIconName, AppIconSize } from '../../AppIcon'
-import type { ColorModifier } from '../../config'
+import type { AppIconName, AppIconSize } from 'src/shared/ui/AppIcon'
+import type { ColorModifier } from 'src/shared/ui/config'
 
 export interface IButtonProps {
   htmltype?: 'button' | 'submit'

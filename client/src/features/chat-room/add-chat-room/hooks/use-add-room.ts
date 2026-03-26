@@ -1,11 +1,11 @@
 import { SocketActionsType } from 'common'
 
+import { transformRoomData } from 'src/features/chat-room/~shared'
+
 import { useChatRoom } from 'src/entities/chat-room'
 
 import { socket } from 'src/shared/api'
 import { FChatRoomType } from 'src/shared/config'
-
-import { transformRoomData } from '../../~shared'
 
 export const useAddRoom = () => {
   const { putChatRoom } = useChatRoom()

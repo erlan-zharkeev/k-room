@@ -1,12 +1,11 @@
 
+import { useShowTooltip } from 'src/features/settings/toggle-show-tooltips/hooks'
+import { SHOW_TOOLTIPS_SWITCHER_TEXT } from 'src/features/settings/toggle-show-tooltips/ui/ShowTooltipsSwitcher/config'
+
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { AppSwitch, AppText } from 'src/shared/ui'
-
-import { useShowTooltip } from '../../hooks'
-
-import { SHOW_TOOLTIPS_SWITCHER_TEXT } from './config'
 
 export const ShowTooltipsSwitcher = () => {
   const { showTooltips } = useSettings()

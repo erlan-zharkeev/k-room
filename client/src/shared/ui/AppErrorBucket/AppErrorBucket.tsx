@@ -1,5 +1,5 @@
 import './style.scss'
-import type { IErrorBucketProps } from './config'
+import type { IErrorBucketProps } from 'src/shared/ui/AppErrorBucket/config'
 
 export const AppErrorBucket = ({ errors }: IErrorBucketProps) => {
   return (

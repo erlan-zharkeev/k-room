@@ -6,6 +6,7 @@ import { InteractionType } from 'common'
 
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
 import { useDeleteContact } from 'src/features/contact'
+import { CONTACT_MENU_I18N } from 'src/features/contact/contact-menu/ui/ContactMenu/config'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/system'
@@ -13,8 +14,6 @@ import { useI18n } from 'src/entities/system'
 import { useTimeout } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
-
-import { CONTACT_MENU_I18N } from './config'
 
 export const ContactMenu = ({ id, interactionType }: { id: string; interactionType: InteractionType }) => {
   const { deleteUserHandler } = useDeleteContact()

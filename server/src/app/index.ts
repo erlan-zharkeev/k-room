@@ -3,4 +3,4 @@ import { initSentry } from 'app/config'
 initSentry()
 
 // Entrypoint
-import './services/server'
+import 'app/services/server'

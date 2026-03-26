@@ -9,6 +9,7 @@ import {
   useMessageForward,
   useReplyMessage
 } from 'src/features/message'
+import { MESSAGE_MENU_I18N } from 'src/features/message/message-menu/ui/MessageMenu/config'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
@@ -16,8 +17,6 @@ import { useUser } from 'src/entities/user'
 
 import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
-
-import { MESSAGE_MENU_I18N } from './config'
 
 export const MessageMenu = ({ message, children }: { message: IMessage; children: React.ReactNode }) => {
   const { deleteMessageHandler } = useMessageDelete()

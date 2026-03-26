@@ -2,14 +2,13 @@ import type { AppResponseType, IAppRequest } from 'shared-config'
 
 import { StatusEnum } from 'common'
 
+import { MESSAGE } from 'features/media/get-media-file/config'
+import { parseBucketNameFromId } from 'features/media/get-media-file/lib'
+
 import { MediaBucketNameType } from 'entities/media'
+import { streamMediaFile } from 'entities/media/lib/stream-media-file'
 
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
-
-import { streamMediaFile } from '../../../entities/media/lib/stream-media-file'
-
-import { MESSAGE } from './config'
-import { parseBucketNameFromId } from './lib'
 
 export const getMediaFile = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

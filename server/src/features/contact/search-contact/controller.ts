@@ -2,13 +2,12 @@ import { Types } from 'mongoose'
 
 import { IEventSearchContact, IFrontendContact, SocketActionsType } from 'common'
 
+import { emitSearchedContacts } from 'features/contact/search-contact/lib'
 import { transformUserToContact } from 'features/user'
 
 import { UserModel } from 'entities/user'
 
 import { SocketInstanceType } from 'shared-config'
-
-import { emitSearchedContacts } from './lib'
 
 
 export const controller = (socket: SocketInstanceType) => {

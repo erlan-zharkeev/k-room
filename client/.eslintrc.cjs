@@ -53,22 +53,11 @@ module.exports = {
     'array-callback-return': 'off',
     '@typescript-eslint/no-return-await': 'off',
     '@typescript-eslint/promise-function-async': 'off',
-    'no-restricted-imports': [
+    'no-restricted-syntax': [
       'error',
       {
-        patterns: [
-          {
-            group: [
-              'src/app/*/*/*/*',
-              'src/pages/*/*/*/*',
-              'src/widgets/*/*/*/*',
-              'src/features/*/*/*/*',
-              'src/entities/*/*/*/*',
-              'src/shared/*/*/*/*'
-            ],
-            message: 'Avoid deep absolute imports. Use the module public API (`index.ts`) where it exists.'
-          }
-        ]
+        selector: "ImportDeclaration[source.value=/^\\.\\.?\\//][source.value!='./style.scss']",
+        message: 'Use alias imports. Relative imports are allowed only for `./style.scss`.'
       }
     ],
     'import/no-cycle': ['error', { maxDepth: Infinity }],

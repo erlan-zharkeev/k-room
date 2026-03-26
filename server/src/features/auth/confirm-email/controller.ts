@@ -1,14 +1,13 @@
 import { IConfirmEmailResponse, StatusEnum } from 'common'
 
 import { verifyToken } from 'features/auth'
+import { MESSAGE } from 'features/auth/confirm-email/config'
 import { mapUserToDto, USER_MESSAGE } from 'features/user'
 
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, ENV, IAppRequest } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
-
-import { MESSAGE } from './config'
 
 export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
   const language = req.language

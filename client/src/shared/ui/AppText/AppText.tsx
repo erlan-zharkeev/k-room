@@ -1,9 +1,8 @@
 import './style.scss'
 import { createElement } from 'react'
 
+import type { ColorModifier, ExtendedSizeModifier } from 'src/shared/ui/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import type { ColorModifier, ExtendedSizeModifier } from '../config'
 
 export const AppText = ({
   tag = 'span',

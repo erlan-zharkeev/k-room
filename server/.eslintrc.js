@@ -11,6 +11,13 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'simple-import-sort'],
   rules: {
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: "ImportDeclaration[source.value=/^\\.\\.?\\//]",
+        message: 'Use alias imports instead of relative imports.'
+      }
+    ],
     'simple-import-sort/imports': [
       'error',
       {
@@ -29,22 +36,6 @@ module.exports = {
     ],
     'simple-import-sort/exports': 'error',
     'sort-imports': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: [
-              'app/*/*/*/*',
-              'features/*/*/*/*',
-              'entities/*/*/*/*',
-              'shared/*/*/*/*'
-            ],
-            message: 'Avoid deep absolute imports. Use the module public API (`index.ts`) where it exists.'
-          }
-        ]
-      }
-    ],
     'import/order': 'off',
     'no-duplicate-imports': 'off',
     'no-control-regex': 'off',

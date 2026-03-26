@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Form } from 'antd'
 import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common'
 
+import { CHAT_ROOM_SETTINGS_MODAL_I18N } from 'src/features/chat-room/chat-room-settings/ui/ChatRoomSettingsModal/config'
+
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useSettings } from 'src/entities/settings'
@@ -13,7 +15,6 @@ import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
 import { AppAvatar, AppAvatarLoader, AppButton, AppHeader } from 'src/shared/ui'
 
-import { CHAT_ROOM_SETTINGS_MODAL_I18N } from './config'
 // import { validateRules } from 'src/shared/utils'
 
 export const ChatRoomSettingsModal = ({ onClose }: { onClose: () => void }) => {

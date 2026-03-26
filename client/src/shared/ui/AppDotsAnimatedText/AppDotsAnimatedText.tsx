@@ -2,10 +2,8 @@ import './style.scss'
 import { useEffect, useState } from 'react'
 
 import { useTimeout } from 'src/shared/lib'
-
-import { AppText } from '../AppText/AppText'
-
-import type { IDotsAnimatedTextProps } from './config'
+import type { IDotsAnimatedTextProps } from 'src/shared/ui/AppDotsAnimatedText/config'
+import { AppText } from 'src/shared/ui/AppText/AppText'
 
 export const AppDotsAnimatedText = ({ text, maxDots = 3, interval = 500, textSize }: IDotsAnimatedTextProps) => {
   const [dots, setDots] = useState(0)

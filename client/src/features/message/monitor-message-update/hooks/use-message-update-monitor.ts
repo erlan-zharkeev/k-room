@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 
-import { useMessageDelete } from '../../delete-message'
-// import { useMessageSend } from '../../send-message'
-import { useMessageDelivery } from '../../message-delivery-handler'
-import { useMessageReactionUpdate } from '../../update-message-reaction'
-import { useMessageStatusUpdate } from '../../update-message-status'
+import { useMessageDelete } from 'src/features/message/delete-message'
+// import { useMessageSend } from 'src/features/message/send-message'
+import { useMessageDelivery } from 'src/features/message/message-delivery-handler'
+import { useMessageReactionUpdate } from 'src/features/message/update-message-reaction'
+import { useMessageStatusUpdate } from 'src/features/message/update-message-status'
 
 export const useMessageUpdateMonitor = () => {
   const { monitorMessageDeletion } = useMessageDelete()

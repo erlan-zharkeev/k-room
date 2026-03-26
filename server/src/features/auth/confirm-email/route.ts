@@ -2,10 +2,10 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { validateRequest } from 'shared-middleware'
+import { confirmEmail } from 'features/auth/confirm-email/controller'
+import { fieldsValidation } from 'features/auth/confirm-email/lib'
 
-import { confirmEmail } from './controller'
-import { fieldsValidation } from './lib'
+import { validateRequest } from 'shared-middleware'
 
 export const confirmEmailRouter = Router()
 

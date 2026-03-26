@@ -1,11 +1,10 @@
 import './style.scss'
 import { usePasswordRecovery } from 'src/features/auth/password-recovery/hooks'
+import { PASSWORD_RECOVERY_BODY_TEXT } from 'src/features/auth/password-recovery/ui/PasswordRecoveryBody/config'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppForm } from 'src/shared/ui'
-
-import { PASSWORD_RECOVERY_BODY_TEXT } from './config'
 
 export const PasswordRecoveryBody = () => {
   const { t } = useI18n()

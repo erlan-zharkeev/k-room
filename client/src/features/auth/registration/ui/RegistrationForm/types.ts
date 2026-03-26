@@ -1,4 +1,4 @@
-import { useRegistration } from '../../hooks'
+import { useRegistration } from 'src/features/auth/registration/hooks'
 
 type UseRegistrationReturnType = ReturnType<typeof useRegistration>
 

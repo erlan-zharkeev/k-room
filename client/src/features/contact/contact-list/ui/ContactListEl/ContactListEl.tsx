@@ -1,4 +1,5 @@
 import { ContactInvitationControlBtns, ContactMenu } from 'src/features/contact'
+import { CONTACT_LIST_RERENDER_INTERVAL } from 'src/features/contact/contact-list/config'
 import { lastSeen } from 'src/features/contact/~shared/lib'
 
 import { useMedia } from 'src/entities/media'
@@ -7,8 +8,6 @@ import { useI18n } from 'src/entities/system'
 
 import { DbContactType } from 'src/shared/config'
 import { useIntervalRerender } from 'src/shared/lib'
-
-import { CONTACT_LIST_RERENDER_INTERVAL } from '../../config'
 
 export const ContactListEl = ({ contactData }: { contactData: DbContactType }) => {
   const { getLiveMedia } = useMedia()

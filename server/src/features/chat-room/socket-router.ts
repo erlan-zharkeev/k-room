@@ -1,8 +1,7 @@
+import { controller as createChatRoomController } from 'features/chat-room/create-chat-room'
+import { controller as getChatRooms } from 'features/user/actualize-user-data'
+
 import { SocketInstanceType } from 'shared-config'
-
-import { controller as getChatRooms } from '../user/actualize-user-data'
-
-import { controller as createChatRoomController } from './create-chat-room'
 
 const controllers = [createChatRoomController, getChatRooms]
 

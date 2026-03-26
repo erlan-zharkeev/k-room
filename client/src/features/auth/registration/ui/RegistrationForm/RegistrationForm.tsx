@@ -1,14 +1,13 @@
 import './style.scss'
 import type { IAuthRegistrationPayload } from 'common'
 
+import { PrivacyPolicySwitch } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/PrivacyPolicySwitch'
+import { REGISTRATION_FORM_TEXT } from 'src/features/auth/registration/ui/RegistrationForm/config'
+import { RegistrationFormProps } from 'src/features/auth/registration/ui/RegistrationForm/types'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppForm } from 'src/shared/ui'
-
-import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
-
-import { REGISTRATION_FORM_TEXT } from './config'
-import { RegistrationFormProps } from './types'
 
 type RegistrationFormData = IAuthRegistrationPayload & {
   policy: boolean

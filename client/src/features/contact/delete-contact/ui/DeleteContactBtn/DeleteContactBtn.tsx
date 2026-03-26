@@ -1,9 +1,9 @@
 import './style.scss'
 import { InteractionType } from 'common'
 
-import { AppButton } from 'src/shared/ui'
+import { useDeleteContact } from 'src/features/contact/delete-contact/hooks'
 
-import { useDeleteContact } from '../../hooks'
+import { AppButton } from 'src/shared/ui'
 
 export const DeleteContactBtn = ({ interaction, id }: { interaction: InteractionType; id: string }) => {
   const { deleteUserHandler } = useDeleteContact()

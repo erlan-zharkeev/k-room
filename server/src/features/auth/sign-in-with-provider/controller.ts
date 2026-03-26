@@ -4,12 +4,11 @@ import { v4 as uuidv4 } from 'uuid'
 import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
 
 import { updateTokens } from 'features/auth'
+import { MESSAGE } from 'features/auth/sign-in-with-provider/config'
 import { createUser, mapUserToDto } from 'features/user'
 
 import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
-
-import { MESSAGE } from './config'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
   const language = req.language

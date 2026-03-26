@@ -2,7 +2,7 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { AppButton } from '../AppButton/AppButton'
+import { AppButton } from 'src/shared/ui/AppButton/AppButton'
 
 export const AppLogo = () => {
   const navigate = useNavigate()

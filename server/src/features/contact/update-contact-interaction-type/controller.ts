@@ -1,13 +1,12 @@
 import { EventInviteReceivedType, IEventUpdateContactInteractionSuccess, IEventUpdateInteraction, SocketActionsType } from 'common'
 
+import { deleteContactById, setContactInteraction } from 'features/contact/update-contact-interaction-type/lib'
+import { createContactInteraction } from 'features/contact/update-contact-interaction-type/lib/create-contact-interaction'
+import { emitContactInteractionUpdated } from 'features/contact/update-contact-interaction-type/lib/emit-contact-interaction-updated'
+import { getSocketsByUserIds } from 'features/user/~shared/lib/get-sockets-by-ids'
+
 import { SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'
-
-import { getSocketsByUserIds } from '../../user/~shared/lib/get-sockets-by-ids'
-
-import { createContactInteraction } from './lib/create-contact-interaction'
-import { emitContactInteractionUpdated } from './lib/emit-contact-interaction-updated'
-import { deleteContactById, setContactInteraction } from './lib'
 
 
 export const controller = (socket: SocketInstanceType) => {

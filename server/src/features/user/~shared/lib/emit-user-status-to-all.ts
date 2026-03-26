@@ -1,10 +1,10 @@
 import { IEventStatusContact, SocketActionsType } from 'common'
 
+import { getSocketsByUserIds } from 'features/user/~shared/lib/get-sockets-by-ids'
+
 import { UserModel } from 'entities/user'
 
 import { getIO } from 'shared-lib'
-
-import { getSocketsByUserIds } from './get-sockets-by-ids'
 
 export const emitUserStatusToAll = async (interlocutorId: string, online: boolean, lastSeen?: number) => {
   const users = await UserModel.find(

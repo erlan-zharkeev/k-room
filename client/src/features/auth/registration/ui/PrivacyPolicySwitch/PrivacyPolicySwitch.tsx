@@ -2,12 +2,12 @@ import './style.scss'
 
 import { RouteNamesEnum } from 'common'
 
+import { PRIVACY_POLICY_SWITCH_TEXT } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/config'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { PRIVACY_POLICY_SWITCH_TEXT } from './config'
 
 export const PrivacyPolicySwitch = ({ disabled }: { disabled: boolean }) => {
   const { t } = useI18n()

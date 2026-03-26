@@ -2,7 +2,7 @@ import { useContentTabSelect } from 'src/features/content-tab'
 
 import { useSettings } from 'src/entities/settings'
 
-// import { useChatRoomScroll } from '../../'
+// import { useChatRoomScroll } from 'src/features/chat-room'
 
 export const useChatRoomSelect = () => {
   const { selectContentTab } = useContentTabSelect()

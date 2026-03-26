@@ -1,13 +1,12 @@
 import './style.scss'
 
+import { useEnableSound } from 'src/features/settings/toggle-enable-sound/hooks'
+import { ENABLE_SOUND_SWITCHER_TEXT } from 'src/features/settings/toggle-enable-sound/ui/EnableSoundSwitcher/config'
+
 import { useSettings } from 'src/entities/settings'
 import { useI18n, useSystem } from 'src/entities/system'
 
 import { AppSwitch, AppText, AppTooltip } from 'src/shared/ui'
-
-import { useEnableSound } from '../../hooks'
-
-import { ENABLE_SOUND_SWITCHER_TEXT } from './config'
 
 export const EnableSoundSwitcher = () => {
   const { toggleEnableSound } = useEnableSound()

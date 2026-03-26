@@ -1,4 +1,4 @@
-import type { ColorModifier, BaseSizeModifier } from '../../config'
+import type { ColorModifier, BaseSizeModifier } from 'src/shared/ui/config'
 
 export type AppIconSize = BaseSizeModifier | 'xs' | 'xxs' | 'fill'
 

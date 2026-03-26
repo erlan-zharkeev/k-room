@@ -8,9 +8,8 @@ import { createPortal } from 'react-dom'
 import { useViewport } from 'src/entities/system'
 
 import { AppButton, AppHeader } from 'src/shared/ui'
+import { MODAL_WIDTH } from 'src/shared/ui/AppModal/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { MODAL_WIDTH } from './config'
 
 export const AppModal = ({
   title,

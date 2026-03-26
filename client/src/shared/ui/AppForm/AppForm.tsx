@@ -3,16 +3,14 @@ import React, { useEffect, useState } from 'react'
 
 import { FileLoaderValueType } from 'src/shared/config'
 import { useValidate, ValidateRule } from 'src/shared/lib'
-
-import { AppButton } from '../AppButton/AppButton'
-import { AppElementPicker } from '../AppElementPicker/AppElementPicker'
-import { AppFileLoader } from '../AppFileLoader/AppFileLoader'
-import { AppFormItem } from '../AppFormItem/AppFormItem'
-import { AppHeader } from '../AppHeader/AppHeader'
-import { AppInput } from '../AppInput/AppInput'
-import { AppSwitch } from '../AppSwitch/AppSwitch'
-
-import type { AppFormData, AppFormField, AppFormFieldValue, IAppFormProps } from './config'
+import { AppButton } from 'src/shared/ui/AppButton/AppButton'
+import { AppElementPicker } from 'src/shared/ui/AppElementPicker/AppElementPicker'
+import { AppFileLoader } from 'src/shared/ui/AppFileLoader/AppFileLoader'
+import type { AppFormData, AppFormField, AppFormFieldValue, IAppFormProps } from 'src/shared/ui/AppForm/config'
+import { AppFormItem } from 'src/shared/ui/AppFormItem/AppFormItem'
+import { AppHeader } from 'src/shared/ui/AppHeader/AppHeader'
+import { AppInput } from 'src/shared/ui/AppInput/AppInput'
+import { AppSwitch } from 'src/shared/ui/AppSwitch/AppSwitch'
 
 export * from './config'
 

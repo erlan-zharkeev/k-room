@@ -2,9 +2,9 @@ import type { MediaKindType } from 'common'
 import type { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
 
-import { SharpSettingsKey } from 'shared-config'
+import { MEDIA_BUCKET_NAMES } from 'entities/media/config/constants'
 
-import { MEDIA_BUCKET_NAMES } from './constants'
+import { SharpSettingsKey } from 'shared-config'
 
 export type MulterHandler = (req: Request, res: Response, next: NextFunction) => void
 

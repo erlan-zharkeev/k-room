@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 
+import { ContactAvatar } from 'src/features/contact/pick-contact/ui'
+
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
-
-import { ContactAvatar } from '../ui'
 
 export const usePickContact = () => {
   const { contacts } = useContact()

@@ -1,4 +1,4 @@
-import { MediaBucketNameType, MongooseGridFSBucketType } from '../config'
+import { MediaBucketNameType, MongooseGridFSBucketType } from 'entities/media/config'
 
 export const mediaBuckets: Record<MediaBucketNameType, MongooseGridFSBucketType | null> = {
   avatar: null,

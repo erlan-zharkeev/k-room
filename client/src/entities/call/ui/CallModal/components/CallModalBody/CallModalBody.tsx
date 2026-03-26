@@ -18,16 +18,15 @@ import {
   setCallSettingsLoading,
   setCallVideo
 } from 'src/entities/call'
+import { CallDots, CallModalVideo } from 'src/entities/call/ui/CallModal/components/CallModalBody/components'
+import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui/CallModal/components/CallModalBody/config'
+import type { ICallModalBodyProps } from 'src/entities/call/ui/CallModal/components/CallModalBody/types'
 import { useI18n } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
 import { useTypedSelector, useCounter } from 'src/shared/lib'
 import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
 import { AppButton, AppAvatar } from 'src/shared/ui'
-
-import { CallDots, CallModalVideo } from './components'
-import { CALL_MODAL_BODY_I18N } from './config'
-import type { ICallModalBodyProps } from './types'
 
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatch>()

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
+import { EMAIL_CONFIRMATION_TEXT } from 'src/pages/email-confirmation/ui/EmailConfirmation/config'
+
 import { useLogout } from 'src/features/auth'
 
 import { useI18n } from 'src/entities/system'
@@ -11,8 +13,6 @@ import { useI18n } from 'src/entities/system'
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
 import { AppIcon, AppButton, AppText } from 'src/shared/ui'
-
-import { EMAIL_CONFIRMATION_TEXT } from './config'
 
 export const EmailConfirmation = () => {
   const navigate = useNavigate()

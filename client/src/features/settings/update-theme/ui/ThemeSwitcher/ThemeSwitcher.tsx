@@ -1,12 +1,11 @@
 
+import { useThemeUpdate } from 'src/features/settings/update-theme/hooks'
+import { THEME_SWITCHER_TEXT } from 'src/features/settings/update-theme/ui/ThemeSwitcher/config'
+
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { AppSwitch, AppText } from 'src/shared/ui'
-
-import { useThemeUpdate } from '../../hooks'
-
-import { THEME_SWITCHER_TEXT } from './config'
 
 export const ThemeSwitcher = () => {
   const { toggleTheme } = useThemeUpdate()

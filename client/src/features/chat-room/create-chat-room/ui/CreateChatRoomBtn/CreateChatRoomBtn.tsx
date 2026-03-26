@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
+import { CREATE_CHAT_ROOM_BTN_I18N } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomBtn/config'
+import { CreateChatRoomModal } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomModal/CreateChatRoomModal'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppModal } from 'src/shared/ui'
-
-import { CreateChatRoomModal } from '../CreateChatRoomModal/CreateChatRoomModal'
-
-import { CREATE_CHAT_ROOM_BTN_I18N } from './config'
 
 export const CreateChatRoomBtn = () => {
   const [isOpen, setIsOpen] = useState(false)

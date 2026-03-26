@@ -1,12 +1,11 @@
 
+import { useShowWallpaper } from 'src/features/settings/toggle-show-wallpaper/hooks'
+import { SHOW_WALLPAPER_SWITCHER_TEXT } from 'src/features/settings/toggle-show-wallpaper/ui/ShowWallpaperSwitcher/config'
+
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { AppSwitch, AppText } from 'src/shared/ui'
-
-import { useShowWallpaper } from '../../hooks'
-
-import { SHOW_WALLPAPER_SWITCHER_TEXT } from './config'
 
 export const ShowWallpaperSwitcher = () => {
   const { showWallpaper } = useSettings()

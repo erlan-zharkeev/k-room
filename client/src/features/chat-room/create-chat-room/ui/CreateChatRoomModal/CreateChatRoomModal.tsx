@@ -1,4 +1,4 @@
-import { CreateChatRoomForm } from '../CreateChatRoomForm/CreateChatRoomForm'
+import { CreateChatRoomForm } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomForm/CreateChatRoomForm'
 
 export const CreateChatRoomModal = ({ onSuccess }: { onSuccess?: () => void }) => {
   return (

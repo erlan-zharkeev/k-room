@@ -7,7 +7,7 @@ import path from 'path'
 import { createUser } from 'features/user'
 import { updateUserAvatar } from 'features/user/update-user-data/lib'
 
-import { USER_FIXTURES } from './constants'
+import { USER_FIXTURES } from 'entities/user/config/constants'
 
 const loadUserFixture = async (data: {
   id: string

@@ -3,12 +3,11 @@ import './style.scss'
 import { IFrontendContact, MediaEndpointsEnum } from 'common'
 
 import { AddContactBtn } from 'src/features/contact'
+import { NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP } from 'src/features/contact/search-contact/ui/FoundContact/constants'
 
 import { ProfileInfo } from 'src/entities/profile-info'
 
 import { AppIcon } from 'src/shared/ui'
-
-import { NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP } from './constants'
 
 export const FoundContact = ({ id, username, interactionType }: IFrontendContact) => {
   if (interactionType === 'invite-hidden') return null

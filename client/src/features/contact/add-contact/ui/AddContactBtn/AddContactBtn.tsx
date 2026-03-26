@@ -1,8 +1,8 @@
+import { useAddContact } from 'src/features/contact/add-contact/hooks'
+
 import { useContact } from 'src/entities/contact'
 
 import { AppButton } from 'src/shared/ui'
-
-import { useAddContact } from '../../hooks'
 
 export const AddContactBtn = ({ id }: { id: string }) => {
   const { isContactExist } = useContact()

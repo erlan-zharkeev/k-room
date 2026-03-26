@@ -2,10 +2,10 @@ import { Router } from 'express'
 
 import { CodesEndpointsEnum } from 'common'
 
-import { validateRequest } from 'shared-middleware'
+import { sendPasswordRecoveryCode } from 'features/code/send-password-recovery-code/controller'
+import { fieldsValidation } from 'features/code/send-password-recovery-code/lib'
 
-import { sendPasswordRecoveryCode } from './controller'
-import { fieldsValidation } from './lib'
+import { validateRequest } from 'shared-middleware'
 
 export const sendPasswordRecoveryCodeRouter = Router()
 

@@ -2,10 +2,10 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { validateRequest } from 'shared-middleware'
+import { login } from 'features/auth/login/controller'
+import { fieldsValidation } from 'features/auth/login/lib'
 
-import { login } from './controller'
-import { fieldsValidation } from './lib'
+import { validateRequest } from 'shared-middleware'
 
 export const loginRouter = Router()
 

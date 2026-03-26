@@ -6,12 +6,10 @@ import { IImageObject } from 'common'
 import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/system'
 
-import { IMAGE_RESOLUTIONS } from 'src/shared/config/types'
-import { AppAvatar, AppButton, AppIcon, AppImagePreview } from 'src/shared/ui'
+import { IMAGE_RESOLUTIONS } from 'src/shared/config'
+import { AppAvatar, AppButton, AppIcon, AppImagePreview, APP_FILE_LOADER_I18N } from 'src/shared/ui'
+import type { IAppFileLoaderProps } from 'src/shared/ui'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
-
-import { APP_FILE_LOADER_I18N } from './config'
-import type { IAppFileLoaderProps } from './config'
 
 export const AppFileLoader = ({
   name,
@@ -40,7 +38,11 @@ export const AppFileLoader = ({
     multiple = false
   }
 
-  const normalizedValue: IImageObject[] = Array.isArray(value) ? value.filter((item): item is IImageObject => typeof item !== 'string') : value && typeof value !== 'string' ? [value] : []
+  const normalizedValue: IImageObject[] = Array.isArray(value)
+    ? value.filter((item): item is IImageObject => typeof item !== 'string')
+    : value && typeof value !== 'string'
+    ? [value]
+    : []
 
   const updateValue = (images: IImageObject[]) => {
     onChange(multiple ? images : images[0] ?? null)

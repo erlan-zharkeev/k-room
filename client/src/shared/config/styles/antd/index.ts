@@ -1,1 +1,1 @@
-import './overwrite-lib.scss'
+import 'src/shared/config/styles/antd/overwrite-lib.scss'

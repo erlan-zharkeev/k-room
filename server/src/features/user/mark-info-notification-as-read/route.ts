@@ -3,8 +3,7 @@ import { Router } from 'express'
 import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'features/auth'
-
-import { markInfoAsRead } from './controller'
+import { markInfoAsRead } from 'features/user/mark-info-notification-as-read/controller'
 
 export const markInfoNotificationAsReadRouter = Router()
 

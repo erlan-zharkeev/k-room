@@ -2,6 +2,7 @@ import { randomInt } from 'node:crypto'
 
 import { ISendPasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
+import { MESSAGE } from 'features/code/send-password-recovery-code/config'
 import { sendPasswordRecoveryEmail } from 'features/email'
 import { USER_MESSAGE } from 'features/user'
 
@@ -10,8 +11,6 @@ import { UserModel } from 'entities/user'
 
 import { AppResponseType, ENV, IAppRequest } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
-
-import { MESSAGE } from './config'
 
 const CODE_LIFE_MS = 1000 * 60 * 15
 const buildPasswordRecoveryCode = () => String(randomInt(100000, 1000000))

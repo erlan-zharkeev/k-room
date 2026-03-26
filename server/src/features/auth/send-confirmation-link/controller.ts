@@ -1,6 +1,7 @@
 import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 import { generateToken } from 'features/auth'
+import { MESSAGE } from 'features/auth/send-confirmation-link/config'
 import { sendEmailConfirmationEmail } from 'features/email'
 import { USER_MESSAGE } from 'features/user'
 
@@ -8,8 +9,6 @@ import { UserModel } from 'entities/user'
 
 import { AppResponseType, ENV, IAppRequest } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
-
-import { MESSAGE } from './config'
 
 export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language

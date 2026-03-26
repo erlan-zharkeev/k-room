@@ -1,13 +1,12 @@
 import './style.scss'
 
+import { useShowNotification } from 'src/features/settings/toggle-show-notification/hooks'
+import { SHOW_NOTIFICATION_SWITCHER_TEXT } from 'src/features/settings/toggle-show-notification/ui/ShowNotificationSwitcher/config'
+
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { AppSwitch, AppText, AppTooltip } from 'src/shared/ui'
-
-import { useShowNotification } from '../../hooks'
-
-import { SHOW_NOTIFICATION_SWITCHER_TEXT } from './config'
 
 export const ShowNotificationSwitcher = () => {
   const { showNotification } = useSettings()

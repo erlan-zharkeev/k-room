@@ -3,8 +3,7 @@ import { Router } from 'express'
 import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'features/auth'
-
-import { getUserData } from './controller'
+import { getUserData } from 'features/user/get-user-data/controller'
 
 export const getUserRouter = Router()
 

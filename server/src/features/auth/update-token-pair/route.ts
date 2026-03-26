@@ -3,8 +3,7 @@ import { Router } from 'express'
 import { AuthEndpointsEnum } from 'common'
 
 import { refreshTokenValidator } from 'features/auth'
-
-import { updateTokensPair } from './controller'
+import { updateTokensPair } from 'features/auth/update-token-pair/controller'
 
 export const updateTokenPairRouter = Router()
 

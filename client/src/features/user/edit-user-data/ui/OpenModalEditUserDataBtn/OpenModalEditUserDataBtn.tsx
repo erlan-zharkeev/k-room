@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
+import { EditUserDataModal } from 'src/features/user/edit-user-data/ui/EditUserDataModal/EditUserDataModal'
+import { OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT } from 'src/features/user/edit-user-data/ui/OpenModalEditUserDataBtn/config'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppLink, AppModal } from 'src/shared/ui'
-
-import { EditUserDataModal } from '../EditUserDataModal/EditUserDataModal'
-
-import { OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT } from './config'
 
 export const OpenModalEditUserDataBtn = () => {
   const [isOpen, setIsOpen] = useState(false)

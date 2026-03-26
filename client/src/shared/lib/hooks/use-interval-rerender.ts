@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useTimeout } from './use-timeout'
+import { useTimeout } from 'src/shared/lib/hooks/use-timeout'
 
 export const useIntervalRerender = (delay: number) => {
   const [, setTick] = useState(0)

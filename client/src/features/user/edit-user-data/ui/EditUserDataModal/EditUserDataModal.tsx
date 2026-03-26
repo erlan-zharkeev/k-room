@@ -1,12 +1,10 @@
 import './style.scss'
 
-import { useEditUserData } from 'src/features/user'
+import { EDIT_USER_DATA_MODAL_I18N, useEditUserData } from 'src/features/user'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppForm } from 'src/shared/ui'
-
-import { EDIT_USER_DATA_MODAL_I18N } from './config'
 
 export const EditUserDataModal = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { editUserData, isLoading, initialFormData } = useEditUserData({ onSuccess })

@@ -1,6 +1,5 @@
+import { CLIENT_ENV } from 'src/shared/config'
 import { useTypedSelector } from 'src/shared/lib'
-
-import appData from './../../../../package.json'
 
 export const useSystem = () => {
   const {
@@ -19,7 +18,10 @@ export const useSystem = () => {
   return {
     auth,
     online,
-    appData,
+    appData: {
+      name: CLIENT_ENV.appName,
+      version: CLIENT_ENV.appVersion
+    },
     hasInteracted,
     micPermission,
     camPermission,

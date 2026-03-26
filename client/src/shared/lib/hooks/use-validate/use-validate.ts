@@ -1,15 +1,14 @@
 import { useMemo, useState } from 'react'
 
-import type { AppFormFieldValue } from 'src/shared/ui/AppForm'
-
-import { stringValidateRules, booleanValidateRules, arrayValidateRules } from './rules'
+import { stringValidateRules, booleanValidateRules, arrayValidateRules } from 'src/shared/lib/hooks/use-validate/rules'
 import type {
   IElementPickerValidateRule,
   IFileInputValidateRule,
   ISwitchValidateRule,
   ITextInputValidateRule,
   ValidateRule
-} from './types'
+} from 'src/shared/lib/hooks/use-validate/types'
+import type { AppFormFieldValue } from 'src/shared/ui/AppForm'
 
 export const useValidate = (form: Record<string, AppFormFieldValue>) => {
   const initialErrorFields = Object.fromEntries(Object.keys(form).map((field) => [field, []]))

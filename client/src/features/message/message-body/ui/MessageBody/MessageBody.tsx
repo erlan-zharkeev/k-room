@@ -1,13 +1,12 @@
 import './style.scss'
+import type { IMessageBodyProps } from 'src/features/message/message-body/ui/MessageBody/types'
+import { MessageImages } from 'src/features/message/message-body/ui/MessageImages/MessageImages'
+import { MessageReactions } from 'src/features/message/message-body/ui/MessageReactions/MessageReactions'
+import { MessageTime } from 'src/features/message/message-body/ui/MessageTime/MessageTime'
+import { RepliedMessage } from 'src/features/message/message-body/ui/RepliedMessage/RepliedMessage'
+
 import { AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { MessageImages } from '../MessageImages/MessageImages'
-import { MessageReactions } from '../MessageReactions/MessageReactions'
-import { MessageTime } from '../MessageTime/MessageTime'
-import { RepliedMessage } from '../RepliedMessage/RepliedMessage'
-
-import type { IMessageBodyProps } from './types'
 
 export const MessageBody = ({ message, isRoomPrivate = false }: IMessageBodyProps & { isRoomPrivate?: boolean }) => {
   const showAuthorName = !isRoomPrivate && !message.isSelf

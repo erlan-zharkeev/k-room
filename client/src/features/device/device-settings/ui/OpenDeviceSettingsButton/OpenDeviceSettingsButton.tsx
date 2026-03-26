@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
 import { SelectDevicesModal } from 'src/features/device'
+import { OPEN_DEVICE_SETTINGS_BUTTON_I18N } from 'src/features/device/device-settings/ui/OpenDeviceSettingsButton/config'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppModal, AppTooltip } from 'src/shared/ui'
-
-import { OPEN_DEVICE_SETTINGS_BUTTON_I18N } from './config'
 
 export const OpenDeviceSettingsButton = () => {
   const [isOpen, setIsOpen] = useState(false)

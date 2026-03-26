@@ -1,9 +1,9 @@
 import { AuthEndpointsEnum } from 'common'
 
+import { useSocketConnect } from 'src/features/socket/hooks/use-socket-connect'
+
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
-
-import { useSocketConnect } from './use-socket-connect'
 
 export const useSocketReconnect = () => {
   const { doRequest } = useApi()

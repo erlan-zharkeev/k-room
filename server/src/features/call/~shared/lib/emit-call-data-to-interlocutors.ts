@@ -1,10 +1,9 @@
 import type { EventCallUpdatedType, SocketActionsType } from 'common'
 
+import { transformCallForUser } from 'features/call/~shared/lib/transform-call-for-user'
 import { getSocketsByUserIds } from 'features/user'
 
 import { getIO } from 'shared-lib'
-
-import { transformCallForUser } from './transform-call-for-user'
 
 export const emitCallDataToInterlocutors = async (
   interlocutors: string[],

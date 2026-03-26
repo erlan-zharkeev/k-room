@@ -1,7 +1,6 @@
 import { ProfileInfo } from 'src/entities/profile-info'
 import { useUser } from 'src/entities/user'
-
-import { IUserProfileProps } from './types'
+import { IUserProfileProps } from 'src/entities/user/ui/UserProfile/types'
 
 export const UserProfile = (props: IUserProfileProps) => {
   const { username, email, avatarPath } = useUser()

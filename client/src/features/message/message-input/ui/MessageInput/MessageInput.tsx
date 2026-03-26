@@ -5,12 +5,11 @@ import { useState } from 'react'
 import { useContactTyping } from 'src/features/contact'
 import { EmojiDropdown } from 'src/features/emoji-dropdown'
 import { MessageWithBindDataModal, useMessageSend } from 'src/features/message'
+import { MESSAGE_INPUT_I18N } from 'src/features/message/message-input/ui/MessageInput/config'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppForm } from 'src/shared/ui'
-
-import { MESSAGE_INPUT_I18N } from './config'
 
 export const MessageInput = ({
   roomId,

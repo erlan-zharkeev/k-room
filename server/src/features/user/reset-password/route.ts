@@ -2,10 +2,10 @@ import { Router } from 'express'
 
 import { UserEndpointsEnum } from 'common'
 
-import { validateRequest } from 'shared-middleware'
+import { resetPassword } from 'features/user/reset-password/controller'
+import { fieldsValidation } from 'features/user/reset-password/lib'
 
-import { resetPassword } from './controller'
-import { fieldsValidation } from './lib'
+import { validateRequest } from 'shared-middleware'
 
 export const resetPasswordRouter = Router()
 

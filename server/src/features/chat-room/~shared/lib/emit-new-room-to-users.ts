@@ -1,12 +1,11 @@
 import type { IChatRoomSchema, SocketActionsType } from 'common'
 
+import { transformRoomForUser } from 'features/chat-room/~shared/lib/transform-room-for-user'
 import { getSocketsByUserIds } from 'features/user'
 
 import { UserModel } from 'entities/user'
 
 import { getIO } from 'shared-lib'
-
-import { transformRoomForUser } from './transform-room-for-user'
 
 
 export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchema) => {

@@ -1,6 +1,6 @@
-import { AppButton } from 'src/shared/ui'
+import { useLogout } from 'src/features/auth/logout/hooks'
 
-import { useLogout } from '../../hooks'
+import { AppButton } from 'src/shared/ui'
 
 export const LogoutButton = () => {
   const { logout, isLoading } = useLogout()

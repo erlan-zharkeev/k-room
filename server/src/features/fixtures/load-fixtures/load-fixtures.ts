@@ -1,6 +1,6 @@
-import { loadUserFixtures } from 'entities/user'
+import { loadDialogFixtures } from 'features/fixtures/load-fixtures/lib'
 
-import { loadDialogFixtures } from './lib'
+import { loadUserFixtures } from 'entities/user'
 
 export const loadFixtures = async () => {
   await loadUserFixtures()

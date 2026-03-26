@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
-import { sendPasswordRecoveryCodeRouter } from './send-password-recovery-code'
-import { validatePasswordRecoveryCodeRouter } from './validate-password-recovery-code'
+import { sendPasswordRecoveryCodeRouter } from 'features/code/send-password-recovery-code'
+import { validatePasswordRecoveryCodeRouter } from 'features/code/validate-password-recovery-code'
 
 export const codeRouter = Router()
 

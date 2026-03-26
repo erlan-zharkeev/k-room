@@ -2,9 +2,8 @@ import fileTypeDep from 'file-type'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 
-import { IFileData, IFileMetaData } from '../config'
-
-import { createSha256FromBuffer } from './create-sha-from-buffer'
+import { IFileData, IFileMetaData } from 'entities/media/config'
+import { createSha256FromBuffer } from 'entities/media/lib/create-sha-from-buffer'
 
 export const buildFileData = async (buffer: Buffer, filename: string): Promise<IFileData> => {
   const fileType = await fileTypeDep.fromBuffer(buffer).catch(() => null)

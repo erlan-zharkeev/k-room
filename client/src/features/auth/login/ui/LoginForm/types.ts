@@ -1,4 +1,4 @@
-import { useFirebase, useLogin } from '../../hooks'
+import { useFirebase, useLogin } from 'src/features/auth/login/hooks'
 
 type UseLoginReturnType = ReturnType<typeof useLogin>
 type UseFirebaseLoginReturnType = ReturnType<typeof useFirebase>

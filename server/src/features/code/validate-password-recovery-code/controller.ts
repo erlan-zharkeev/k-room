@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { IValidatePasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'features/code'
+import { MESSAGE } from 'features/code/validate-password-recovery-code/config'
 import { USER_MESSAGE } from 'features/user'
 
 import { CodeModel } from 'entities/code'
@@ -10,8 +11,6 @@ import { UserModel } from 'entities/user'
 
 import { AppResponseType, IAppRequest } from 'shared-config'
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
-
-import { MESSAGE } from './config'
 
 const QUERY_LIFE_MS = 1000 * 60 * 20
 
