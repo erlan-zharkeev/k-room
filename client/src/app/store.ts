@@ -3,8 +3,8 @@ import { AnyAction, combineReducers, configureStore, ThunkDispatch } from '@redu
 import { callsSlice } from 'src/entities/call'
 import { systemSlice } from 'src/entities/system'
 
-export type AppDispatch = ThunkDispatch<unknown, unknown, AnyAction>
-export type RootState = ReturnType<typeof store.getState>
+export type AppDispatchType = ThunkDispatch<unknown, unknown, AnyAction>
+export type RootStateType = ReturnType<typeof store.getState>
 
 const reducers = combineReducers({
   system: systemSlice.reducer,

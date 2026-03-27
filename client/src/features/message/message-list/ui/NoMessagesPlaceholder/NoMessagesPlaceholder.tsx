@@ -11,7 +11,7 @@ export const NoMessagesPlaceholder = () => {
 
   return (
     <div className="no-messages-placeholder">
-      <AppText>{t(NO_MESSAGES_PLACEHOLDER_I18N.text)}</AppText>
+      <AppText align="center">{t(NO_MESSAGES_PLACEHOLDER_I18N.text)}</AppText>
     </div>
   )
 }

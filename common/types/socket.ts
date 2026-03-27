@@ -1,4 +1,4 @@
-import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, IFrontendContactMap, IFrontendContact } from ".";
+import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, FrontendContactMapType, IFrontendContact } from ".";
 
 export interface IEventInterlocutorUpdateSignal {
   signal: unknown;
@@ -28,7 +28,7 @@ export interface IEventStatusContact {
 
 export type EventChangeContactsDataType = IBaseFrontendUserData
 
-export type EventGetContactsType = IFrontendContactMap;
+export type EventGetContactsType = FrontendContactMapType;
 export type EventCallUpdatedType = ICall;
 export type EventCallsUpdatedType = ICall[];
 
@@ -40,6 +40,15 @@ export interface IEventDeleteContact {
 }
 export interface IEventSearchContact {
   value: string;
+  offset?: number;
+  limit?: number;
+}
+export interface IEventGetSearchedContact {
+  value: string;
+  offset: number;
+  contacts: IFrontendContact[];
+  hasMore: boolean;
+  nextOffset?: number;
 }
 
 export interface IEventCreateRoom {

@@ -88,6 +88,77 @@ enum RouteNames {
 }
 ```
 
+## TypeScript Rules
+
+1. All TypeScript interfaces must be named with a capital `I` prefix.
+
+Use:
+
+```ts
+export interface IMessageListProps { ... }
+export interface IContactAvatarProps { ... }
+```
+
+Do not use:
+
+```ts
+export interface MessageListProps { ... }
+export interface ContactAvatarProps { ... }
+```
+
+2. Component props interfaces must end with the `Props` suffix.
+
+Use:
+
+```ts
+export interface IMessageListProps { ... }
+export interface IContactAvatarProps { ... }
+```
+
+Do not use:
+
+```ts
+export interface IMessageList { ... }
+export interface IContactAvatar { ... }
+```
+
+3. Component props interfaces must be placed in `config/types.ts` within that component's directory and imported with `import type`.
+
+Use:
+
+```ts
+// MessageList/config/types.ts
+export interface IMessageListProps { room: FChatRoomType }
+
+// MessageList/MessageList.tsx
+import type { IMessageListProps } from 'src/features/message/message-list/ui/MessageList/config'
+
+export const MessageList = ({ room }: IMessageListProps) => { ... }
+```
+
+Do not define props inline:
+
+```ts
+export const MessageList = ({ room }: { room: FChatRoomType }) => { ... }
+```
+
+4. All `type` aliases must end with the `Type` suffix.
+
+Use:
+
+```ts
+export type BannerType = 'success' | 'error' | 'info' | 'warning'
+export type AppLanguageType = 'ru' | 'en'
+export type DbContactType = { id: string; username: string }
+```
+
+Do not use:
+
+```ts
+export type BannerVariant = 'success' | 'error'
+export type AppLanguage = 'ru' | 'en'
+```
+
 ## Feature Rules
 
 1. A feature may contain nested subfeatures when they belong to one common domain.

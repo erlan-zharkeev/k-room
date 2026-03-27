@@ -2,13 +2,14 @@ import './style.scss'
 
 import { useCreateChatRoom } from 'src/features/chat-room/create-chat-room/hooks'
 import { CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomForm/config'
+import type { ICreateChatRoomFormProps } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomForm/config'
 import { usePickContact } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppForm, AppText } from 'src/shared/ui'
 
-export const CreateChatRoomForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const CreateChatRoomForm = ({ onSuccess }: ICreateChatRoomFormProps) => {
   const { isLoading, createChatRoom } = useCreateChatRoom({ onSuccess })
   const { t } = useI18n()
   const {

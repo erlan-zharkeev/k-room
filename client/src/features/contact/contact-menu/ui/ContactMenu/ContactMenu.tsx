@@ -1,26 +1,26 @@
 import './style.scss'
 
-import { useMemo } from 'react'
-
-import { InteractionType } from 'common'
+import { useMemo, useState } from 'react'
 
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
-import { useDeleteContact } from 'src/features/contact'
-import { CONTACT_MENU_I18N } from 'src/features/contact/contact-menu/ui/ContactMenu/config'
+import { CONTACT_MENU_I18N } from 'src/features/contact/contact-menu'
+import type { IContactMenuProps } from 'src/features/contact/contact-menu'
+import { DeleteContactConfirmModal, DELETE_CONTACT_I18N, useDeleteContact } from 'src/features/contact/delete-contact'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/system'
 
 import { useTimeout } from 'src/shared/lib'
-import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
+import { AppButton, AppDotsAnimatedText, AppDropdown, AppModal, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
-export const ContactMenu = ({ id, interactionType }: { id: string; interactionType: InteractionType }) => {
-  const { deleteUserHandler } = useDeleteContact()
+export const ContactMenu = ({ id, interactionType }: IContactMenuProps) => {
+  const { deleteUserHandler, loading } = useDeleteContact()
   const { delay } = useTimeout()
   const { isLoading: isChatCreating, createChatRoom } = useCreateChatRoom()
   const { getPersonalRoomByContactId, chatRooms } = useChatRoom()
   const { selectChatWithAsideById } = useChatRoomSelect()
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { t } = useI18n()
 
   const contactRoom = useMemo(() => getPersonalRoomByContactId(id), [chatRooms])
@@ -50,9 +50,10 @@ export const ContactMenu = ({ id, interactionType }: { id: string; interactionTy
     },
     {
       label: t(CONTACT_MENU_I18N.delete),
-      handler: async () => {
+      handler: async (evt: unknown) => {
+        stopPropagation(evt)
         await delay(400)
-        deleteUserHandler(id)
+        setIsConfirmOpen(true)
       },
       value: 'delete'
     }
@@ -72,16 +73,35 @@ export const ContactMenu = ({ id, interactionType }: { id: string; interactionTy
   })
 
   return (
-    <AppDropdown
-      additionalClassName="contact-menu"
-      items={filteredItems.map((item, idx) => ({
-        type: 'item',
-        onClick: item.handler,
-        label: item.loading ? <AppDotsAnimatedText text={item.loadingLabel} /> : <AppText>{item.label}</AppText>,
-        key: idx
-      }))}
-    >
-      <AppButton prefixIconName="three-dots" borderless small />
-    </AppDropdown>
+    <>
+      <AppDropdown
+        additionalClassName="contact-menu"
+        items={filteredItems.map((item, idx) => ({
+          type: 'item',
+          onClick: item.handler,
+          label: item.loading ? <AppDotsAnimatedText text={item.loadingLabel} /> : <AppText>{item.label}</AppText>,
+          key: idx
+        }))}
+      >
+        <AppButton prefixIconName="three-dots" borderless small />
+      </AppDropdown>
+      <AppModal
+        title={t(DELETE_CONTACT_I18N.modalTitle)}
+        open={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        cancelAction={{ onClick: () => setIsConfirmOpen(false) }}
+        okAction={{
+          text: t(DELETE_CONTACT_I18N.confirm),
+          color: 'error-color',
+          loading,
+          onClick: () => {
+            deleteUserHandler(id)
+            setIsConfirmOpen(false)
+          }
+        }}
+      >
+        <DeleteContactConfirmModal />
+      </AppModal>
+    </>
   )
 }

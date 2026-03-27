@@ -1,14 +1,13 @@
 import './style.scss'
 
 import { useEffect, useMemo } from 'react'
-import type { ReactNode } from 'react'
 
 import { createPortal } from 'react-dom'
 
-import { useViewport } from 'src/entities/system'
+import { useI18n, useViewport } from 'src/entities/system'
 
-import { AppButton, AppHeader } from 'src/shared/ui'
-import { MODAL_WIDTH } from 'src/shared/ui/AppModal/config'
+import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH } from 'src/shared/ui'
+import type { IAppModalProps } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AppModal = ({
@@ -17,16 +16,13 @@ export const AppModal = ({
   onClose,
   children,
   headerExtra,
-  className
-}: {
-  title?: ReactNode
-  open: boolean
-  onClose: () => void
-  children: ReactNode
-  headerExtra?: ReactNode
-  className?: string
-}) => {
+  className,
+  okAction,
+  cancelAction,
+  actions
+}: IAppModalProps) => {
   const { lessOrEqualPhone } = useViewport()
+  const { t } = useI18n()
 
   const modalWidth = useMemo(() => {
     if (lessOrEqualPhone) return MODAL_WIDTH.PHONE
@@ -76,6 +72,35 @@ export const AppModal = ({
           </div>
         )}
         <div className="app-modal__content">{children}</div>
+        {(actions || okAction || cancelAction) && (
+          <div className="app-modal__actions">
+            {actions ?? (
+              <>
+                {cancelAction && (
+                  <AppButton
+                    text={cancelAction.text ?? t(APP_MODAL_I18N.cancel)}
+                    onClick={cancelAction.onClick}
+                    loading={cancelAction.loading}
+                    disabled={cancelAction.disabled}
+                    htmltype={cancelAction.htmltype}
+                    fill
+                  />
+                )}
+                {okAction && (
+                  <AppButton
+                    text={okAction.text ?? t(APP_MODAL_I18N.ok)}
+                    onClick={okAction.onClick}
+                    loading={okAction.loading}
+                    disabled={okAction.disabled}
+                    color={okAction.color}
+                    htmltype={okAction.htmltype}
+                    fill
+                  />
+                )}
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>,
     document.body

@@ -1,7 +1,7 @@
 import { IMessage } from 'common'
 import { useDispatch } from 'react-redux'
 
-import { AppDispatch } from 'src/app/store'
+import { AppDispatchType } from 'src/app/store'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { resetContextClickedObject } from 'src/entities/system'
@@ -9,7 +9,7 @@ import { resetContextClickedObject } from 'src/entities/system'
 export const useReplyMessage = () => {
   const { repliedMessageData } = useChatRoom()
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatchType>()
 
   const closeReplyMessage = () => {
     dispatch(resetContextClickedObject())

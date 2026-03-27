@@ -1,10 +1,11 @@
 import { useAddContact } from 'src/features/contact/add-contact/hooks'
+import type { IAddContactBtnProps } from 'src/features/contact/add-contact/ui/AddContactBtn/config'
 
 import { useContact } from 'src/entities/contact'
 
 import { AppButton } from 'src/shared/ui'
 
-export const AddContactBtn = ({ id }: { id: string }) => {
+export const AddContactBtn = ({ id }: IAddContactBtnProps) => {
   const { isContactExist } = useContact()
   const { clickAddContactHandler, loading } = useAddContact()
 

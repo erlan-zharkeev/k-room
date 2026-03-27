@@ -1,10 +1,10 @@
 export type * from '../AppCollapseList/config'
 export type * from '../AppTags/config'
 
-export type BaseSizeModifier = 'small' | 'medium' | 'large'
-export type ExtendedSizeModifier = BaseSizeModifier | 'extra-small' | 'extra-large'
-export type ShapeModifier = 'square-shape' | 'default-shape' | 'circle-shape'
-export type ColorModifier =
+export type BaseSizeModifierType = 'small' | 'medium' | 'large'
+export type ExtendedSizeModifierType = BaseSizeModifierType | 'extra-small' | 'extra-large'
+export type ShapeModifierType = 'square-shape' | 'default-shape' | 'circle-shape'
+export type ColorModifierType =
   | 'text-color'
   | 'accent-color'
   | 'success-color'
@@ -12,4 +12,4 @@ export type ColorModifier =
   | 'warn-color'
   | 'white-color'
   | 'black-color'
-export type AvatarShapeModifier = Extract<ShapeModifier, 'square-shape' | 'circle-shape'>
+export type AvatarShapeModifierType = Extract<ShapeModifierType, 'square-shape' | 'circle-shape'>

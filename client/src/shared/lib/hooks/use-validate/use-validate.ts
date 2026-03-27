@@ -6,11 +6,11 @@ import type {
   IFileInputValidateRule,
   ISwitchValidateRule,
   ITextInputValidateRule,
-  ValidateRule
+  ValidateRuleType
 } from 'src/shared/lib/hooks/use-validate/types'
-import type { AppFormFieldValue } from 'src/shared/ui/AppForm'
+import type { AppFormFieldValueType } from 'src/shared/ui/AppForm'
 
-export const useValidate = (form: Record<string, AppFormFieldValue>) => {
+export const useValidate = (form: Record<string, AppFormFieldValueType>) => {
   const initialErrorFields = Object.fromEntries(Object.keys(form).map((field) => [field, []]))
   const [errors, setErrors] = useState<Record<string, string[]>>(initialErrorFields)
   const initialTouchedFields = Object.fromEntries(Object.keys(form).map((field) => [field, false]))
@@ -24,7 +24,7 @@ export const useValidate = (form: Record<string, AppFormFieldValue>) => {
     return isValid
   }, [errors, touchedFields])
 
-  const validateField = (value: AppFormFieldValue, fieldName: string, silent = false, rule?: ValidateRule) => {
+  const validateField = (value: AppFormFieldValueType, fieldName: string, silent = false, rule?: ValidateRuleType) => {
     if (!silent && !touchedFields[fieldName]) {
       setTouchedFields((touchedFields) => ({ ...touchedFields, [fieldName]: true }))
     }

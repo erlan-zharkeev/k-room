@@ -1,16 +1,16 @@
 // AppLink.tsx
 import './style.scss'
-import { UnknownCallback } from 'common'
+import type { UnknownCallbackType } from 'common'
 import { Link as RouterLink, type To } from 'react-router-dom'
 
-import type { ColorModifier } from 'src/shared/ui/config'
+import type { ColorModifierType } from 'src/shared/ui/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 interface Props {
   text: string
-  color?: ColorModifier
+  color?: ColorModifierType
   target?: React.HTMLAttributeAnchorTarget
-  onClick?: UnknownCallback
+  onClick?: UnknownCallbackType
   disabled?: boolean
   prevent?: boolean
   to?: To // <-- для внутренней навигации (SPA)

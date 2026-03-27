@@ -2,11 +2,11 @@ import './style.scss'
 import React, { useEffect, useState } from 'react'
 
 import { FileLoaderValueType } from 'src/shared/config'
-import { useValidate, ValidateRule } from 'src/shared/lib'
+import { useValidate, ValidateRuleType } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui/AppButton/AppButton'
 import { AppElementPicker } from 'src/shared/ui/AppElementPicker/AppElementPicker'
 import { AppFileLoader } from 'src/shared/ui/AppFileLoader/AppFileLoader'
-import type { AppFormData, AppFormField, AppFormFieldValue, IAppFormProps } from 'src/shared/ui/AppForm/config'
+import type { AppFormDataType, AppFormFieldType, AppFormFieldValueType, IAppFormProps } from 'src/shared/ui/AppForm/config'
 import { AppFormItem } from 'src/shared/ui/AppFormItem/AppFormItem'
 import { AppHeader } from 'src/shared/ui/AppHeader/AppHeader'
 import { AppInput } from 'src/shared/ui/AppInput/AppInput'
@@ -14,7 +14,7 @@ import { AppSwitch } from 'src/shared/ui/AppSwitch/AppSwitch'
 
 export * from './config'
 
-const getDefaultValue = (inputType: AppFormField['inputType']): AppFormFieldValue => {
+const getDefaultValue = (inputType: AppFormFieldType['inputType']): AppFormFieldValueType => {
   switch (inputType) {
     case 'switch':
       return false
@@ -26,7 +26,7 @@ const getDefaultValue = (inputType: AppFormField['inputType']): AppFormFieldValu
   }
 }
 
-export const AppForm = <TFormData extends object = AppFormData>({
+export const AppForm = <TFormData extends object = AppFormDataType>({
   onSubmit,
   fields,
   submitBtnText,
@@ -39,7 +39,7 @@ export const AppForm = <TFormData extends object = AppFormData>({
   disabled = false,
   disabledActionBtn = false
 }: IAppFormProps<TFormData>) => {
-  const initialState: Record<string, AppFormFieldValue> = {}
+  const initialState: Record<string, AppFormFieldValueType> = {}
   Object.keys(fields).forEach((key) => {
     initialState[key] = fields[key].value ?? getDefaultValue(fields[key].inputType)
   })
@@ -48,8 +48,8 @@ export const AppForm = <TFormData extends object = AppFormData>({
   const { touchedFields, validateField, errors, isFormTotalValid } = useValidate(form)
 
   const handleChange = (
-    inputOrPatch: React.ChangeEvent<HTMLInputElement> | { name: string; value: AppFormFieldValue },
-    rule?: ValidateRule
+    inputOrPatch: React.ChangeEvent<HTMLInputElement> | { name: string; value: AppFormFieldValueType },
+    rule?: ValidateRuleType
   ) => {
     const name = 'target' in inputOrPatch ? inputOrPatch.target.name : inputOrPatch.name
     const value = 'target' in inputOrPatch ? inputOrPatch.target.value : inputOrPatch.value
@@ -72,7 +72,7 @@ export const AppForm = <TFormData extends object = AppFormData>({
 
   useEffect(() => {
     validateAllFields()
-    const next: Record<string, AppFormFieldValue> = {}
+    const next: Record<string, AppFormFieldValueType> = {}
     for (const [k, f] of Object.entries(fields)) {
       next[k] = f.value ?? getDefaultValue(f.inputType)
     }
@@ -92,7 +92,7 @@ export const AppForm = <TFormData extends object = AppFormData>({
     if (onSubmit) onSubmit(form as TFormData)
   }
 
-  const renderField = (key: string, field: AppFormField) => {
+  const renderField = (key: string, field: AppFormFieldType) => {
     const commonProps = {
       name: key,
       disabled: actionProcessing ?? disabled

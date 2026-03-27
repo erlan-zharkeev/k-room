@@ -14,7 +14,7 @@ import {
 import { useDispatch } from 'react-redux'
 import Peer, { SignalData } from 'simple-peer'
 
-import { AppDispatch } from 'src/app/store'
+import { AppDispatchType } from 'src/app/store'
 
 import {
   updateInterlocutorSettings,
@@ -74,7 +74,7 @@ export const useMakeCall = () => {
   // const soundConnection = useRef<Howl>(useSound('connection', true))
   // const soundCalling = useRef<Howl>(useSound('ring', true))
   const { settings } = useTypedSelector((state) => state.calls)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatchType>()
 
   const { interlocutorVideoDom, selfVideoDom } = useContext(RefsContext)
 

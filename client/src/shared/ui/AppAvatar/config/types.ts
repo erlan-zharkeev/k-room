@@ -1,16 +1,16 @@
-import type { AppIconName } from 'src/shared/ui/AppIcon'
-import type { BaseSizeModifier, AvatarShapeModifier } from 'src/shared/ui/config'
+import type { AppIconNameType } from 'src/shared/ui/AppIcon'
+import type { BaseSizeModifierType, AvatarShapeModifierType } from 'src/shared/ui/config'
 
 export interface IAppAvatarProps {
   online?: boolean
   src?: string
-  size?: BaseSizeModifier
+  size?: BaseSizeModifierType
   showBadge?: boolean
-  stubIconName?: AppIconName
+  stubIconName?: AppIconNameType
   ribbon?: boolean
   ribbonPlacement?: 'up' | 'down'
   dotPlacement?: 'up' | 'down'
-  shape?: AvatarShapeModifier
+  shape?: AvatarShapeModifierType
   preview?: boolean
   borderless?: boolean
 }

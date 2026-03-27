@@ -15,16 +15,16 @@ import {
   useMessageList,
   useMessageListScroll
 } from 'src/features/message/message-list'
+import type { IMessageListProps } from 'src/features/message/message-list/ui/MessageList/config'
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
-import { FChatRoomType } from 'src/shared/config'
 import { AppScrollDownButton } from 'src/shared/ui'
 
-export const MessageList = ({ room }: { room: FChatRoomType }) => {
+export const MessageList = ({ room }: IMessageListProps) => {
   const isCurrentRoomPrivate = isRoomPrivate(room)
 
   const { getMessageById } = useMessage()

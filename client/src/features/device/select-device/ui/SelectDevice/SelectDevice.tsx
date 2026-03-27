@@ -6,7 +6,7 @@ import { SELECT_DEVICE_I18N } from 'src/features/device/select-device/ui/SelectD
 
 import { useI18n } from 'src/entities/system'
 
-import { AppButton, AppIconName, AppSelect, AppText, type IAppSelectOption } from 'src/shared/ui'
+import { AppButton, AppSelect, AppText, type IAppSelectOption, type AppIconNameType } from 'src/shared/ui'
 
 export const SelectDevice = ({
   title,
@@ -22,7 +22,7 @@ export const SelectDevice = ({
   title: string
   actionHandler: () => void
   isErrorColor: boolean
-  prefixIconName: AppIconName
+  prefixIconName: AppIconNameType
   children?: ReactNode
   options: IAppSelectOption[]
   value: string

@@ -5,7 +5,7 @@ import { useNotification } from 'src/entities/notification'
 import { settingsStore } from 'src/entities/settings/hooks/use-settings'
 
 import { useApiInterсeptor, axios, createApiError, IDoRequestOpts, isApiError } from 'src/shared/api'
-import type { RequestPayload, RequestTypes } from 'src/shared/api'
+import type { RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 
 export const useApi = () => {
@@ -31,9 +31,9 @@ export const useApi = () => {
   }
 
   const doRequest = async <T, R extends ResponseType = 'json'>(
-    type: RequestTypes,
+    type: RequestType,
     endpoint: EndpointsType,
-    data: RequestPayload = {},
+    data: RequestPayloadType = {},
     opts: IDoRequestOpts<R> = {}
   ): Promise<R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>> => {
     const { contentType = 'application/json', responseType = 'json' } = opts || {}

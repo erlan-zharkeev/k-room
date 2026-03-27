@@ -1,19 +1,19 @@
-import type { ColorModifier, BaseSizeModifier } from 'src/shared/ui/config'
+import type { ColorModifierType, BaseSizeModifierType } from 'src/shared/ui/config'
 
-export type AppIconSize = BaseSizeModifier | 'xs' | 'xxs' | 'fill'
+export type AppIconSizeType = BaseSizeModifierType | 'xs' | 'xxs' | 'fill'
 
 export interface IAppIconListElement {
-  name: AppIconName
-  AppIcon: AppIconComponent
+  name: AppIconNameType
+  AppIcon: AppIconComponentType
 }
 
 export interface IAppIconProps {
-  name: AppIconName
-  size?: AppIconSize
-  color?: ColorModifier
+  name: AppIconNameType
+  size?: AppIconSizeType
+  color?: ColorModifierType
 }
 
-export type AppIconName =
+export type AppIconNameType =
   | 'logo'
   | 'eye'
   | 'eye-blocked'
@@ -61,7 +61,7 @@ export type AppIconName =
   | 'three-vertical-dots'
   | 'success'
 
-export type AppIconComponent = React.FunctionComponent<
+export type AppIconComponentType = React.FunctionComponent<
   React.SVGProps<SVGSVGElement> & {
     title?: string
     titleId?: string

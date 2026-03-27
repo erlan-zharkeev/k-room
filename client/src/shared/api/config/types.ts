@@ -5,7 +5,7 @@ export interface IDoRequestOpts<R> {
   responseType?: R
 }
 
-export type ApiError = Error & {
+export type ApiErrorType = Error & {
   type: 'api-error'
   message: string
   status?: StatusEnum
@@ -23,7 +23,7 @@ export const createApiError = ({
   status?: StatusEnum
   silent?: boolean
   payload?: IBackendResponse<unknown> | null
-}): ApiError =>
+}): ApiErrorType =>
   Object.assign(new Error(message), {
     type: 'api-error' as const,
     status,
@@ -31,11 +31,11 @@ export const createApiError = ({
     payload
   })
 
-export const isApiError = (error: unknown): error is ApiError => {
+export const isApiError = (error: unknown): error is ApiErrorType => {
   if (!error || typeof error !== 'object') return false
   const candidate = error as Record<string, unknown>
   return candidate.type === 'api-error' && typeof candidate.message === 'string'
 }
 
-export const isHandledError = (error: unknown): error is ApiError | Error => isApiError(error) || error instanceof Error
+export const isHandledError = (error: unknown): error is ApiErrorType | Error => isApiError(error) || error instanceof Error
 export const getHandledErrorMessage = (error: unknown) => (isHandledError(error) ? error.message : 'Unknown error')

@@ -7,7 +7,7 @@ import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
-import { AppIconName } from 'src/shared/ui'
+import { AppIconNameType } from 'src/shared/ui'
 
 export const useInputVideoDevice = () => {
   const { getNotification } = useNotification()
@@ -23,7 +23,7 @@ export const useInputVideoDevice = () => {
 
   const videoEl = useRef<HTMLVideoElement>(null)
 
-  const videoIcon: AppIconName = isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
+  const videoIcon: AppIconNameType = isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
 
   const loading = videoInputDeviceList.length < 0
 

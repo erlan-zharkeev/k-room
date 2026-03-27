@@ -4,7 +4,7 @@ import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayloa
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
-import { AppFormData } from 'src/shared/ui'
+import { AppFormDataType } from 'src/shared/ui'
 import { clg } from 'src/shared/utils'
 
 export const useCreateNewPassword = () => {
@@ -24,14 +24,14 @@ export const useCreateNewPassword = () => {
     setPasswordRestoreCode(currentPasswordRestoreQuery)
   }, [])
 
-  const checkPassMatch = (payload: AppFormData) => {
+  const checkPassMatch = (payload: AppFormDataType) => {
     setIsFormTouched(true)
     const { firstPassword, secondPassword } = payload
     const matched = firstPassword === secondPassword
     setPassMatched(matched)
   }
 
-  const onSubmit = async (payload: AppFormData) => {
+  const onSubmit = async (payload: AppFormDataType) => {
     try {
       checkPassMatch(payload)
       setIsLoading(true)

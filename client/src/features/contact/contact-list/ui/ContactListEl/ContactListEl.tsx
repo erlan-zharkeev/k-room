@@ -1,15 +1,15 @@
 import { ContactInvitationControlBtns, ContactMenu } from 'src/features/contact'
 import { CONTACT_LIST_RERENDER_INTERVAL } from 'src/features/contact/contact-list/config'
+import type { IContactListElProps } from 'src/features/contact/contact-list/ui/ContactListEl/config'
 import { lastSeen } from 'src/features/contact/~shared/lib'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
 import { useI18n } from 'src/entities/system'
 
-import { DbContactType } from 'src/shared/config'
 import { useIntervalRerender } from 'src/shared/lib'
 
-export const ContactListEl = ({ contactData }: { contactData: DbContactType }) => {
+export const ContactListEl = ({ contactData }: IContactListElProps) => {
   const { getLiveMedia } = useMedia()
   const { language } = useI18n()
   useIntervalRerender(CONTACT_LIST_RERENDER_INTERVAL)

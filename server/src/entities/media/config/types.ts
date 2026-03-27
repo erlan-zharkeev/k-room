@@ -4,11 +4,11 @@ import mongoose from 'mongoose'
 
 import { MEDIA_BUCKET_NAMES } from 'entities/media/config/constants'
 
-import { SharpSettingsKey } from 'shared-config'
+import { SharpSettingsKeyType } from 'shared-config'
 
-export type MulterHandler = (req: Request, res: Response, next: NextFunction) => void
+export type MulterHandlerType = (req: Request, res: Response, next: NextFunction) => void
 
-export type RequestMulterFile = Express.Multer.File & {
+export type RequestMulterFileType = Express.Multer.File & {
   id?: string
   filename?: string
   contentType?: string
@@ -17,7 +17,7 @@ export type RequestMulterFile = Express.Multer.File & {
 
 export type MediaBucketNameType = (typeof MEDIA_BUCKET_NAMES)[number]
 
-export type MulterErrorCode = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
+export type MulterErrorCodeType = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
 
 export interface IMediaBucketOptions {
   supportedKindMediaType: MediaKindType
@@ -47,5 +47,5 @@ export interface IFileData {
 
 export interface IUploadOptions {
   overwrite?: boolean
-  compression?: SharpSettingsKey
+  compression?: SharpSettingsKeyType
 }

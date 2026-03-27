@@ -10,7 +10,7 @@ declare global {
   }
 
   interface Window {
-    $notifications: UseNotification
+    $notifications: UseNotificationType
     __E2E_FIREBASE_AUTH_RESULT__?: IE2EFirebaseAuthResult
   }
 }

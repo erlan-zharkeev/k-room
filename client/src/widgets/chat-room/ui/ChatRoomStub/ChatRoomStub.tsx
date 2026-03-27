@@ -22,7 +22,9 @@ export const ChatRoomStub = () => {
 
   return (
     <div className={className} onClick={() => selectContentTab('chat-rooms')}>
-      <AppText>{t(CHAT_ROOM_STUB_I18N.text)}</AppText>
+      <AppText align="center" tag="p">
+        {t(CHAT_ROOM_STUB_I18N.text)}
+      </AppText>
     </div>
   )
 }

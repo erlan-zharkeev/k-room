@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { Badge, Image } from 'antd'
 
-import { AppIconName, AppIcon } from 'src/shared/ui'
+import { AppIconNameType, AppIcon } from 'src/shared/ui'
 import type { IAppAvatarProps } from 'src/shared/ui/AppAvatar/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
@@ -15,7 +15,7 @@ const AvatarBody = ({
   preview = true
 }: {
   src?: string
-  stubIconName: AppIconName
+  stubIconName: AppIconNameType
   haveSource: boolean
   setHaveSource: (v: boolean) => void
   preview?: boolean

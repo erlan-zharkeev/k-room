@@ -2,11 +2,11 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
-import { UnknownCallback } from 'common'
+import type { UnknownCallbackType } from 'common'
 
 import type { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
 
-import type { AppIconName, AvatarShapeModifier, BaseSizeModifier } from 'src/shared/ui'
+import type { AppIconNameType, AvatarShapeModifierType, BaseSizeModifierType } from 'src/shared/ui'
 import { AppAvatar, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
@@ -33,10 +33,10 @@ export const ProfileInfo = ({
   showBadge?: boolean
   horizontal?: boolean
   avatarSize?: ProfileInfoAvatarSizeType
-  shape?: AvatarShapeModifier
-  stubIconName?: AppIconName
-  onClick?: UnknownCallback
-  titleSize?: BaseSizeModifier
+  shape?: AvatarShapeModifierType
+  stubIconName?: AppIconNameType
+  onClick?: UnknownCallbackType
+  titleSize?: BaseSizeModifierType
   children?: ReactNode
   isDescriptionAccent?: boolean
   descriptionNode?: ReactNode

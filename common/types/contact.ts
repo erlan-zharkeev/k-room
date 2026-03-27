@@ -13,4 +13,4 @@ export interface IFrontendContact {
   interactionType: InteractionType,
 }
 
-export type IFrontendContactMap = Record<string, IFrontendContact>
+export type FrontendContactMapType = Record<string, IFrontendContact>

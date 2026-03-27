@@ -2,13 +2,13 @@ import './style.scss'
 import { useEffect, useState } from 'react'
 
 import { Tooltip } from 'antd'
-import { IMessage } from 'common'
 
 import type { IMessageBodyReaction } from 'src/features/message/message-body/ui/MessageBody/types'
+import type { IMessageReactionsProps } from 'src/features/message/message-body/ui/MessageReactions/config'
 
 import { EMOJI_LIST } from 'src/entities/emoji'
 
-export const MessageReactions = ({ message }: { message: IMessage }) => {
+export const MessageReactions = ({ message }: IMessageReactionsProps) => {
   const [reactions, setReactions] = useState<IMessageBodyReaction[]>([])
 
   const getReactionAuthorTooltip = (authors: IMessageBodyReaction['authors']) =>
