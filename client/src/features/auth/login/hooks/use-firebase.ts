@@ -56,7 +56,7 @@ export const useFirebase = () => {
     try {
       setFirebaseLoginLoading(true)
       const { displayName, email, photoURL, uid, provider: normalizedProvider } = await getFirebaseCredential(provider)
-      const haveFullData = displayName && email && photoURL && uid && normalizedProvider
+      const haveFullData = displayName && email && uid && normalizedProvider
       if (!haveFullData) return
       const credential = {
         id: uid,

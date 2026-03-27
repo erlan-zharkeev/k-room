@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
@@ -12,14 +12,19 @@ if [ -f ".nvmrc" ]; then
   nvm use >/dev/null || nvm install
 fi
 
-if [ ! -f ".env.development" ]; then
-  echo "Missing .env.development in project root." >&2
-  exit 1
+if [ -f ".env.development" ]; then
+  while IFS= read -r line; do
+    [[ "$line" =~ ^[[:space:]]*# ]] && continue
+    [[ -z "${line// }" ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    value="${value%\'}"
+    value="${value#\'}"
+    if [[ -z "${(P)key}" ]]; then
+      export "$key"="$value"
+    fi
+  done < .env.development
 fi
-
-set -a
-. ./.env.development
-set +a
 
 required_env_vars=(
   "RESEND_API_KEY"
@@ -34,7 +39,7 @@ required_env_vars=(
 missing_env_vars=()
 
 for env_var_name in "${required_env_vars[@]}"; do
-  if [ -z "${!env_var_name}" ]; then
+  if [ -z "${(P)env_var_name}" ]; then
     missing_env_vars+=("$env_var_name")
   fi
 done
@@ -113,7 +118,7 @@ if ! docker ps --format '{{.Names}}' | grep -qx 'mongo-express'; then
     docker start mongo-express >/dev/null
   else
     docker run -d \
-      -p 8081:8081 \
+      -p 47821:8081 \
       --name mongo-express \
       -e ME_CONFIG_BASICAUTH_USERNAME=admin \
       -e ME_CONFIG_BASICAUTH_PASSWORD=admin \

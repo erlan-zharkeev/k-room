@@ -7,7 +7,7 @@ import { MESSAGE } from 'features/auth/logout/config'
 import { UserModel } from 'entities/user'
 
 import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
+import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
 
 export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
@@ -18,6 +18,10 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
 
     const user = await UserModel.findById(userId)
     if (user && deviceId) {
+      const socketId = user.system.device[deviceId]?.socketId
+      if (socketId) {
+        getIO().sockets.sockets.get(socketId)?.disconnect(true)
+      }
       if (user.system.device[deviceId]) {
         delete user.system.device[deviceId]
       }

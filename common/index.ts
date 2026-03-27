@@ -1,2 +1,2 @@
-export * from "./shared-types";
-export { StatusEnum } from "./shared-types/status";
+export * from "./types";
+export { StatusEnum } from "./types/status";
