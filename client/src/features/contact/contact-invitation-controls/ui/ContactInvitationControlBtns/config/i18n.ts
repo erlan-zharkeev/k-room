@@ -7,11 +7,11 @@ export const CONTACT_INVITATION_CONTROL_BTNS_I18N = {
   },
   sendInvite: {
     en: 'Send invite',
-    ru: 'Отправить приглашение'
+    ru: 'Пригласить'
   },
   invited: {
     en: 'Invited',
-    ru: 'Приглашение отправлено'
+    ru: 'Пригласить'
   },
   accept: {
     en: 'Accept',

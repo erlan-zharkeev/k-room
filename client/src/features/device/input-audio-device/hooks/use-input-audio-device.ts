@@ -7,7 +7,7 @@ import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
-import { AppIconName } from 'src/shared/ui'
+import { AppIconNameType } from 'src/shared/ui'
 
 export const useInputAudioDevice = () => {
   const { t } = useI18n()
@@ -127,7 +127,7 @@ export const useInputAudioDevice = () => {
     }
   }
 
-  const micIcon: AppIconName = isMicLoading ? 'loader' : (showMicGrade ? 'cross' : 'thunder')
+  const micIcon: AppIconNameType = isMicLoading ? 'loader' : (showMicGrade ? 'cross' : 'thunder')
 
   const audioDevices = audioInputDeviceList.map((device) => ({
     label: device.label,

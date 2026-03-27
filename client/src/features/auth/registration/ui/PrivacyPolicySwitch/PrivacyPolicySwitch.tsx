@@ -3,13 +3,14 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 
 import { PRIVACY_POLICY_SWITCH_TEXT } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/config'
+import type { IPrivacyPolicySwitchProps } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/config'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export const PrivacyPolicySwitch = ({ disabled }: { disabled: boolean }) => {
+export const PrivacyPolicySwitch = ({ disabled }: IPrivacyPolicySwitchProps) => {
   const { t } = useI18n()
   const className = createClassNameWithModifiers({
     rootClass: 'privacy-policy-switch',

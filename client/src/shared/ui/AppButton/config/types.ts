@@ -1,24 +1,24 @@
-import { UnknownCallback } from 'common'
+import type { UnknownCallbackType } from 'common'
 
-import type { AppIconName, AppIconSize } from 'src/shared/ui/AppIcon'
-import type { ColorModifier } from 'src/shared/ui/config'
+import type { AppIconNameType, AppIconSizeType } from 'src/shared/ui/AppIcon'
+import type { ColorModifierType } from 'src/shared/ui/config'
 
 export interface IButtonProps {
   htmltype?: 'button' | 'submit'
-  color?: ColorModifier
+  color?: ColorModifierType
   text?: string
-  iconSize?: AppIconSize
+  iconSize?: AppIconSizeType
   borderless?: boolean
-  prefixIconName?: AppIconName
+  prefixIconName?: AppIconNameType
   loading?: boolean
   disabled?: boolean
   hoverless?: boolean
   showTooltips?: boolean
-  onClick?: UnknownCallback
+  onClick?: UnknownCallbackType
   additionalClassName?: string
   children?: React.ReactNode
   small?: boolean
   fill?: boolean
-  onSubmit?: UnknownCallback
+  onSubmit?: UnknownCallbackType
   info?: boolean
 }

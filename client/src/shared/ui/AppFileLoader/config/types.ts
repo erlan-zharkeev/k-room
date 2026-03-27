@@ -1,6 +1,6 @@
 import type { FileLoaderValueType } from 'src/shared/config'
-import type { AppIconName } from 'src/shared/ui/AppIcon'
-import type { AvatarShapeModifier } from 'src/shared/ui/config'
+import type { AppIconNameType } from 'src/shared/ui/AppIcon'
+import type { AvatarShapeModifierType } from 'src/shared/ui/config'
 
 export interface IAppFileLoaderProps {
   name: string
@@ -12,8 +12,8 @@ export interface IAppFileLoaderProps {
   onChange: (files: FileLoaderValueType) => void
   maxAttachedFiles?: number
   disabled?: boolean
-  avatarStubIcon?: AppIconName
-  avatarShape?: AvatarShapeModifier
+  avatarStubIcon?: AppIconNameType
+  avatarShape?: AvatarShapeModifierType
   avatarBorderless?: boolean
   showTextLabel?: boolean
   resetText?: string

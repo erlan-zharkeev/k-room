@@ -8,6 +8,7 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
 import { FIREBASE_CONFIG } from 'src/app/providers/config'
+import type { IProvidersProps } from 'src/app/providers/ui/Providers/config'
 import { store } from 'src/app/store'
 
 import { useMakeCall } from 'src/entities/call'
@@ -32,7 +33,7 @@ const RefsProvider = ({ children }: { children: ReactNode }) => {
 
 initializeApp(FIREBASE_CONFIG)
 
-export const Providers = ({ children }: { children: ReactNode }) => (
+export const Providers = ({ children }: IProvidersProps) => (
   <ReduxProvider store={store}>
     <RefsProvider>
       <AdditionalServiceProvider>

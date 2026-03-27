@@ -1,5 +1,5 @@
 export type { AppResponseType, IAppRequest } from './express'
 export type { JWTDecoded } from './jwt'
 export * from './notification'
-export type { SharpConfig, SharpSettingsKey } from './sharp'
+export type { SharpConfig, SharpSettingsKeyType } from './sharp'
 export type { SocketInstanceType } from './socket'

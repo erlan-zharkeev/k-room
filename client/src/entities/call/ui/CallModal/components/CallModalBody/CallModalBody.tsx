@@ -5,7 +5,7 @@ import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal,
 import { useDispatch } from 'react-redux'
 import type { SignalData } from 'simple-peer'
 
-import { AppDispatch } from 'src/app/store'
+import { AppDispatchType } from 'src/app/store'
 
 import { callCounter } from 'src/features/call'
 
@@ -29,7 +29,7 @@ import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
 import { AppButton, AppAvatar } from 'src/shared/ui'
 
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatchType>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const { selfVideoDom } = useContext(RefsContext)

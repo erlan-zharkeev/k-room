@@ -1,8 +1,8 @@
 import './style.scss'
-import type { BannerType } from 'src/shared/ui/AppBanner/config'
+import type { IAppBannerProps } from 'src/shared/ui/AppBanner/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export const AppBanner = ({ message, type = 'info' }: { message: string; type?: BannerType }) => {
+export const AppBanner = ({ message, type = 'info' }: IAppBannerProps) => {
   const className = createClassNameWithModifiers({ rootClass: 'app-banner', modifiers: [type] })
 
   return (

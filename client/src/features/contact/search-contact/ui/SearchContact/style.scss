@@ -7,11 +7,16 @@
 
   .search-contact__list {
     margin-top: 8px;
-    padding: 8px 0;
-    padding-left: 8px;
+    padding: 8px 0 8px 8px;
     border-radius: 8px;
 
     background: var(--main-bg);
+  }
+
+  .search-contact__footer-loader {
+    display: flex;
+    justify-content: center;
+    padding: 8px 8px 0 0;
   }
 
   .search-contact__list-element {

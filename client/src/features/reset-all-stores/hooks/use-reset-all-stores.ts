@@ -1,4 +1,4 @@
-import { AppDispatch } from 'src/app/store'
+import { AppDispatchType } from 'src/app/store'
 
 import { RESET_STORE_REDUCERS } from 'src/features/reset-all-stores'
 
@@ -7,7 +7,7 @@ import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
 import { useUser } from 'src/entities/user'
 
-export const useResetAllStores = (dispatch: AppDispatch) => {
+export const useResetAllStores = (dispatch: AppDispatchType) => {
   const userStore = useUser()
   const contactStore = useContact()
   const mediaStore = useMedia()

@@ -1,11 +1,11 @@
 import './style.scss'
-import type { IMessage } from 'common'
 
 import { MessageBody, MessageMenu } from 'src/features/message'
+import type { IMessageListElProps } from 'src/features/message/message-list/ui/MessageListEl/config'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export const MessageListEl = ({ message, isRoomPrivate }: { message: IMessage; isRoomPrivate: boolean }) => {
+export const MessageListEl = ({ message, isRoomPrivate }: IMessageListElProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'message-list-el',
     modifiers: [message.isSelf ? 'self' : 'interlocutor']

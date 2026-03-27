@@ -2,14 +2,14 @@ import './style.scss'
 
 import { useContactInvitationControls } from 'src/features/contact/contact-invitation-controls/hooks'
 import { CONTACT_INVITATION_CONTROL_BTNS_I18N } from 'src/features/contact/contact-invitation-controls/ui/ContactInvitationControlBtns/config'
+import type { IContactInvitationControlBtnsProps } from 'src/features/contact/contact-invitation-controls/ui/ContactInvitationControlBtns/config'
 
 import { useI18n } from 'src/entities/system'
 
-import type { DbContactType } from 'src/shared/config'
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-export const ContactInvitationControlBtns = ({ contactData }: { contactData: DbContactType }) => {
+export const ContactInvitationControlBtns = ({ contactData }: IContactInvitationControlBtnsProps) => {
   const { t } = useI18n()
   const className = createClassNameWithModifiers({
     rootClass: 'contact-invitation-control-btns',

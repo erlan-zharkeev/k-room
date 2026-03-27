@@ -1,14 +1,14 @@
 import type { AxiosResponse, ResponseType } from 'axios'
 import { EndpointsType } from 'common'
 
-export type RequestTypes = 'post' | 'get' | 'patch' | 'put' | 'delete' | 'head'
+export type RequestType = 'post' | 'get' | 'patch' | 'put' | 'delete' | 'head'
 
-export type RequestPayload = object | FormData | URLSearchParams | string | null | undefined
+export type RequestPayloadType = object | FormData | URLSearchParams | string | null | undefined
 
-export type DoRequest = <T = unknown, R extends ResponseType = 'json'>(
-  type: RequestTypes,
+export type DoRequestType = <T = unknown, R extends ResponseType = 'json'>(
+  type: RequestType,
   endpoint: EndpointsType,
-  data?: RequestPayload,
+  data?: RequestPayloadType,
   opts?: {
     contentType?: string
     responseType?: R

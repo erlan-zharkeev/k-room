@@ -1,12 +1,12 @@
 import './style.scss'
 
-import { IChatRoom } from 'common'
+import type { IRoomTypingContactProps } from 'src/widgets/chat-room/ui/RoomTypingContact/config'
 
 import { useContact } from 'src/entities/contact'
 
 import { AppDotsAnimatedText } from 'src/shared/ui'
 
-export const RoomTypingContact = ({ room }: { room: IChatRoom }) => {
+export const RoomTypingContact = ({ room }: IRoomTypingContactProps) => {
   const { getContactByIds } = useContact()
   const searchedContacts = getContactByIds(room.users)
 

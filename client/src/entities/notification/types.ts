@@ -4,7 +4,7 @@ import { useNotification } from 'src/entities/notification'
 
 export type NotificationType = 'success' | 'error' | 'info' | 'warning'
 
-export type UseNotification = ReturnType<typeof useNotification>
+export type UseNotificationType = ReturnType<typeof useNotification>
 
 export interface IAppNotification {
   key?: string

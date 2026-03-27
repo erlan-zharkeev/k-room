@@ -1,16 +1,21 @@
+import { useState } from 'react'
+
 import { SocketActionsType, IEventDeleteContactSuccess } from 'common'
 
 import { socket } from 'src/shared/api'
-import { db } from 'src/shared/lib'
+import { db, useTimeout } from 'src/shared/lib'
 
 export const useDeleteContact = () => {
-  const deleteUserHandler = (id: string) => {
-    if (!window.confirm('Are you sure want to delete this contact?')) return
-    deleteContactConfirmed(id)
-  }
+  const [loading, setLoading] = useState(false)
+  const { startTimeout } = useTimeout()
 
-  const deleteContactConfirmed = (contactId: string) => {
+  const deleteUserHandler = (contactId: string) => {
+    setLoading(true)
     socket.emit<SocketActionsType>('update-contact-interaction-type', { contactId, interaction: 'default' })
+
+    socket.once<SocketActionsType>('contact-delete-success', () => {
+      startTimeout(() => setLoading(false), 400)
+    })
   }
 
   const deleteContact = async (payload: IEventDeleteContactSuccess) => {
@@ -24,6 +29,7 @@ export const useDeleteContact = () => {
   return {
     deleteUserHandler,
     deleteContact,
-    monitorContactDeletion
+    monitorContactDeletion,
+    loading
   }
 }

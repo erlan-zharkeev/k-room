@@ -1,7 +1,7 @@
 import './style.scss'
 import { createElement } from 'react'
 
-import type { ColorModifier, ExtendedSizeModifier } from 'src/shared/ui/config'
+import type { ColorModifierType, ExtendedSizeModifierType } from 'src/shared/ui/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AppText = ({
@@ -16,8 +16,8 @@ export const AppText = ({
   tag?: 'span' | 'p'
   children?: React.ReactNode
   additionalClassName?: string
-  color?: ColorModifier
-  size?: ExtendedSizeModifier
+  color?: ColorModifierType
+  size?: ExtendedSizeModifierType
   align?: 'left' | 'center' | 'right'
   onClick?: (e: React.MouseEvent<HTMLElement>) => void | Promise<void>
 }) => {

@@ -38,4 +38,14 @@
   .app-modal__content {
     padding: 0 16px 16px;
   }
+
+  .app-modal__actions {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 16px;
+
+    > * {
+      flex: 1 1 50%;
+    }
+  }
 }

@@ -2,7 +2,7 @@ import './style.scss'
 
 import { useEffect, useState } from 'react'
 
-import { UnknownCallback } from 'common'
+import type { UnknownCallbackType } from 'common'
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
@@ -11,7 +11,7 @@ import { useMessage } from 'src/entities/message'
 import { ProfileInfo } from 'src/entities/profile-info'
 
 import type { FChatRoomType } from 'src/shared/config'
-import type { BaseSizeModifier } from 'src/shared/ui'
+import type { BaseSizeModifierType } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomPreview = ({
@@ -22,9 +22,9 @@ export const ChatRoomPreview = ({
   isRoomSelected
 }: {
   room: FChatRoomType
-  onClick?: UnknownCallback
+  onClick?: UnknownCallbackType
   headerMode?: boolean
-  titleSize?: BaseSizeModifier
+  titleSize?: BaseSizeModifierType
   isRoomSelected?: boolean
 }) => {
   const { getLiveMedia } = useMedia()

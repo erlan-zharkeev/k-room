@@ -1,9 +1,10 @@
 import './style.scss'
 
 import { Image } from 'antd'
-import { IMessage } from 'common'
 
-export const MessageImages = ({ message }: { message: IMessage }) => {
+import type { IMessageImagesProps } from 'src/features/message/message-body/ui/MessageImages/config'
+
+export const MessageImages = ({ message }: IMessageImagesProps) => {
   if (!message.images || message.images.length <= 0) return null
 
   return (

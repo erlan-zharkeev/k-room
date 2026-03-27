@@ -7,7 +7,7 @@ import { useLoadMedia } from 'src/features/media'
 import { useUser } from 'src/entities/user'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
-import { AppFormData } from 'src/shared/ui'
+import { AppFormDataType } from 'src/shared/ui'
 import { clg } from 'src/shared/utils'
 
 export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
@@ -23,7 +23,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const editUserData = async (fields: AppFormData) => {
+  const editUserData = async (fields: AppFormDataType) => {
     const { username, avatar } = fields as { username: string; avatar: MediaFileValueType }
 
     const payloadFormData = new FormData()

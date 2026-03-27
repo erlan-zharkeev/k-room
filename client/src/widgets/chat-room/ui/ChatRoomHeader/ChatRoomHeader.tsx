@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { UnknownCallback } from 'common'
+import type { UnknownCallbackType } from 'common'
 
 import { RoomTypingContact } from 'src/widgets/chat-room'
 
@@ -15,8 +15,8 @@ export const ChatRoomHeader = ({
   onResetChatRoomSelection
 }: {
   room: FChatRoomType
-  onClickChatRoomSettings: UnknownCallback
-  onResetChatRoomSelection: UnknownCallback
+  onClickChatRoomSettings: UnknownCallbackType
+  onResetChatRoomSelection: UnknownCallbackType
 }) => {
   return (
     <div className="chat-room-header">

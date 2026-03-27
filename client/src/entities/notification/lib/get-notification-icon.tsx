@@ -1,9 +1,9 @@
 import type { NotificationType } from 'src/entities/notification'
 
-import type { AppIconName, ColorModifier } from 'src/shared/ui'
+import type { AppIconNameType, ColorModifierType } from 'src/shared/ui'
 import { AppIcon } from 'src/shared/ui'
 
-const notificationIconMap: Record<NotificationType, { name: AppIconName; color: ColorModifier }> = {
+const notificationIconMap: Record<NotificationType, { name: AppIconNameType; color: ColorModifierType }> = {
   success: {
     name: 'success',
     color: 'success-color'

@@ -9,7 +9,7 @@ import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'en
 import { MessageModel } from 'entities/message'
 import { UserModel } from 'entities/user'
 
-import { SharpSettingsKey, SocketInstanceType } from 'shared-config'
+import { SharpSettingsKeyType, SocketInstanceType } from 'shared-config'
 import { getIO, serverCaptureSentryException } from 'shared-lib'
 
 export const controller = (socket: SocketInstanceType) => {
@@ -23,7 +23,7 @@ export const controller = (socket: SocketInstanceType) => {
           if (imageData.fileBuffer) {
             const filename = `image.${uuidv4()}`
             filenames.push(filename)
-            const compression: SharpSettingsKey = message.imageCompression ? 'common-compressed' : 'common-uncompressed'
+            const compression: SharpSettingsKeyType = message.imageCompression ? 'common-compressed' : 'common-uncompressed'
             await uploadBufferToBucket(bucket, imageData.fileBuffer, filename, 'image', undefined, { compression })
           }
         })

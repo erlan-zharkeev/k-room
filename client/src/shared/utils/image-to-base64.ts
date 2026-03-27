@@ -1,4 +1,4 @@
-import { NOTIFICATION_MESSAGE, UseNotification } from 'src/entities/notification'
+import { NOTIFICATION_MESSAGE, UseNotificationType } from 'src/entities/notification'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config/types'
 
@@ -10,7 +10,7 @@ export const imageToBase64 = ({
 }: {
   image: File
   allowedResolutions?: string[]
-  notifications: UseNotification
+  notifications: UseNotificationType
   maxImageSizeInMb?: number
 }) => {
   const reader = new FileReader()

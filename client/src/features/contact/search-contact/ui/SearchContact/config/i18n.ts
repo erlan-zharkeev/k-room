@@ -8,5 +8,9 @@ export const SEARCH_CONTACT_I18N = {
   found: {
     en: (count: number) => `Found ${count} contacts`,
     ru: (count: number) => `Найдено контактов: ${count}`
+  },
+  loadingMore: {
+    en: 'Loading',
+    ru: 'Загрузка'
   }
 } as const satisfies LocalizedTextMapType<any>

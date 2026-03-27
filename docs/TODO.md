@@ -19,6 +19,7 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 - Add the first Playwright scenarios: registration, login, password recovery.
 - Add targeted tests for critical pure helpers and validation logic.
 
-## To codex
-
-- у common внутри есть папка shared-types это уже не релевантно там находятся и функции а не только типы. убери эту папку лишнюю.
+- добавить анимации удаление и добавления элементов из списка таких как чат, контакты и позже звонки(пока не реализовывать).
+- раз и навсегда решить проблему с глубокими импортами import { NO_MESSAGES_PLACEHOLDER_I18N } from 'src/features/message/message-list/ui/NoMessagesPlaceholder/config', если это нормально не решить то пусть в хаски вместе с остальными фиксами залетал бы и этот. для начала понять что сейчас регулирует такие импорты.
+- есть несколько элементов таких как no-messages-placeholder, Выберите чат или создайте новый которые позиционируются абсолютно внутри контейнера messsage-list. так вот их несколько может сделаешь один элемент чтобы туда пробрасывать внутрь только текст.
+- проверить флоу что с чатом если удалить пользака что будет с чатом уже созданным как груповым так и индивидуальным.

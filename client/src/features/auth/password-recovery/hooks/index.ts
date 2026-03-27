@@ -5,7 +5,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { useCounter, useQuery } from 'src/shared/lib'
-import { AppFormData } from 'src/shared/ui'
+import { AppFormDataType } from 'src/shared/ui'
 import { clg, getNextReqInterval } from 'src/shared/utils'
 
 export const usePasswordRecovery = () => {
@@ -39,7 +39,7 @@ export const usePasswordRecovery = () => {
     }
   }, [counterValue])
 
-  const sendEmailCodeToPasswordRecovery = async (fields?: AppFormData) => {
+  const sendEmailCodeToPasswordRecovery = async (fields?: AppFormDataType) => {
     try {
       const nextEmail = typeof fields?.email === 'string' ? fields.email.trim() : email.trim()
       if (!nextEmail) return
@@ -68,7 +68,7 @@ export const usePasswordRecovery = () => {
     }
   }
 
-  const validateCodeToRecoveryPassword = async (fields: AppFormData) => {
+  const validateCodeToRecoveryPassword = async (fields: AppFormDataType) => {
     try {
       const { code } = fields as { code: string }
       setCodeValidationIsLoading(true)
