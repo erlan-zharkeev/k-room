@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 
-import { AppLink } from 'src/shared/ui/AppLink/AppLink'
+import { AppLink } from 'src/shared/ui'
 
 describe('AppLink', () => {
   it('renders internal navigation through router link', () => {

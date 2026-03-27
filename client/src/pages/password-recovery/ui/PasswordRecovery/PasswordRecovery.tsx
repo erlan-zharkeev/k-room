@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { PASSWORD_RECOVERY_PAGE_TEXT } from 'src/pages/password-recovery/ui/PasswordRecovery/config'
+import { PASSWORD_RECOVERY_PAGE_TEXT } from 'src/pages/password-recovery/config'
 
 import { PasswordRecoveryBody } from 'src/features/auth'
 

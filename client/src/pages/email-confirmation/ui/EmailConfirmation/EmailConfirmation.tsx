@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { EMAIL_CONFIRMATION_TEXT } from 'src/pages/email-confirmation/ui/EmailConfirmation/config'
+import { EMAIL_CONFIRMATION_TEXT } from 'src/pages/email-confirmation/config'
 
 import { useLogout } from 'src/features/auth'
 

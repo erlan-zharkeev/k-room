@@ -2,7 +2,7 @@ import './style.scss'
 import { useEffect, useRef, useState } from 'react'
 
 import { useTimeout } from 'src/shared/lib'
-import type { IAppScrollContainerProps } from 'src/shared/ui/AppScrollContainer/config'
+import type { IAppScrollContainerProps } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AppScrollContainer = ({

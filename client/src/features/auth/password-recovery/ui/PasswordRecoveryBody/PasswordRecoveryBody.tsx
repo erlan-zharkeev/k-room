@@ -1,6 +1,6 @@
 import './style.scss'
-import { usePasswordRecovery } from 'src/features/auth/password-recovery/hooks'
-import { PASSWORD_RECOVERY_BODY_TEXT } from 'src/features/auth/password-recovery/ui/PasswordRecoveryBody/config'
+
+import { usePasswordRecovery, PASSWORD_RECOVERY_BODY_TEXT } from 'src/features/auth/password-recovery'
 
 import { useI18n } from 'src/entities/system'
 
@@ -18,6 +18,7 @@ export const PasswordRecoveryBody = () => {
     sendEmailCodeToPasswordRecovery,
     validateCodeToRecoveryPassword
   } = usePasswordRecovery()
+  const resendTimer = t(PASSWORD_RECOVERY_BODY_TEXT.resendTimer) as (value: number) => string
 
   return (
     <div className="password-recovery-body">
@@ -44,7 +45,7 @@ export const PasswordRecoveryBody = () => {
       )}
       {counterValue > 0 && (
         <div className="paragraph-text password-recovery-body__new-code-warning">
-          {t(PASSWORD_RECOVERY_BODY_TEXT.resendTimer)(counterValue)}
+          {resendTimer(counterValue)}
         </div>
       )}
       {hasPresetEmail && (

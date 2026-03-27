@@ -1,7 +1,6 @@
 import { createResendClient } from 'features/email'
 
 import { ENV } from 'shared-config'
-import { log } from 'shared-lib'
 
 export const sendPasswordRecoveryEmail = async ({
   email,
@@ -19,15 +18,18 @@ export const sendPasswordRecoveryEmail = async ({
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
       <h2>Password recovery</h2>
       <p>Hello${username ? `, ${username}` : ''}.</p>
-      <p>Your password recovery code is:</p>
-      <p style="font-size: 24px; font-weight: 700; letter-spacing: 4px;">${code}</p>
-      <p>If you did not request this code, you can ignore this message.</p>
+      <p>Use this code to continue resetting your password:</p>
+      <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</p>
+      <p>If you did not request password recovery, you can ignore this message.</p>
     </div>
   `
 
-  if (!resend) {
-    log.warn(`-Mock password recovery email for ${email}: ${code}`)
+  if (ENV.IS_DEV && !ENV.RESEND_API_KEY) {
     return { id: 'mock-recovery-email-id' }
+  }
+
+  if (!resend) {
+    throw new Error('Resend client is not configured')
   }
 
   const { data, error } = await resend.emails.send({

@@ -1,6 +1,6 @@
 import { RouteNamesEnum } from 'common'
 
-import { LEGAL_INFO_LINK_I18N } from 'src/features/privacy-policy/ui/PrivacyPolicyLink/config'
+import { LEGAL_INFO_LINK_I18N } from 'src/features/privacy-policy/config'
 
 import { useI18n } from 'src/entities/system'
 

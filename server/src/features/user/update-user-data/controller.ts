@@ -1,8 +1,8 @@
 import { SocketActionsType, StatusEnum } from 'common'
 
 import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'features/user'
-import { MESSAGE } from 'features/user/update-user-data/config'
-import { updateUserAvatar } from 'features/user/update-user-data/lib'
+import { updateUserAvatar } from 'features/user/update-user-data'
+import { MESSAGE } from 'features/user/update-user-data'
 
 import { UserModel } from 'entities/user'
 

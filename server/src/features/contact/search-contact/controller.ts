@@ -1,29 +1,26 @@
 import { Types } from 'mongoose'
 
-import { IEventSearchContact, IFrontendContact, InteractionType, SocketActionsType, VALIDATION_LIMITS } from 'common'
+import { IEventSearchContact, IFrontendContact, InteractionType, SocketActionsType } from 'common'
 
-import { emitSearchedContacts } from 'features/contact/search-contact/lib'
+import { emitSearchedContacts } from 'features/contact/search-contact'
 import { transformUserToContact } from 'features/user'
 
 import { UserModel } from 'entities/user'
 
-import { SocketInstanceType } from 'shared-config'
-
+import { SEARCH_CONTACT_RESULT_LIMIT, SocketInstanceType } from 'shared-config'
 
 export const controller = (socket: SocketInstanceType) => {
-
-  socket.on<SocketActionsType>('search-contact', async ({ value, offset = 0, limit = VALIDATION_LIMITS.searchContactResultLimit }: IEventSearchContact) => {
+  socket.on<SocketActionsType>('search-contact', async ({ value, offset = 0 }: IEventSearchContact) => {
     let type: 'name' | 'id' = 'name'
     let validSearch = true
     const normalizedValue = value?.trim() || ''
     let needle = normalizedValue
     const safeOffset = Math.max(0, offset)
-    const safeLimit = Math.min(Math.max(1, limit), VALIDATION_LIMITS.searchContactResultLimit)
+    const safeLimit = SEARCH_CONTACT_RESULT_LIMIT
 
     if (!needle) validSearch = false
 
-    // Id pattern search "#<id>"
-    if (needle.includes('#')) {
+    if (needle.startsWith('#')) {
       needle = needle.substring(1)
       type = Types.ObjectId.isValid(needle) ? 'id' : 'name'
       if (type === 'name' && !needle) validSearch = false
@@ -56,6 +53,7 @@ export const controller = (socket: SocketInstanceType) => {
       const getInteractionType = (contactId: string): InteractionType => {
         const contactData =
           contactInteractionMap instanceof Map ? contactInteractionMap.get(contactId) : contactInteractionMap[contactId]
+
         return contactData?.interaction ?? 'default'
       }
 
@@ -66,6 +64,7 @@ export const controller = (socket: SocketInstanceType) => {
           if (a.interactionType === b.interactionType) return a.username.localeCompare(b.username)
           if (a.interactionType === 'invite-accepted') return 1
           if (b.interactionType === 'invite-accepted') return -1
+
           return a.username.localeCompare(b.username)
         })
     }
@@ -77,6 +76,7 @@ export const controller = (socket: SocketInstanceType) => {
       value: normalizedValue,
       offset: safeOffset,
       contacts,
+      total: searchedUsers.length,
       hasMore,
       nextOffset: hasMore ? safeOffset + contacts.length : undefined
     })

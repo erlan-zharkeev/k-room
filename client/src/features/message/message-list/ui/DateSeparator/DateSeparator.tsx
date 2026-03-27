@@ -1,6 +1,6 @@
 import './style.scss'
 
-import type { IDateSeparatorProps } from 'src/features/message/message-list/ui/DateSeparator/config'
+import type { IDateSeparatorProps } from 'src/features/message/message-list'
 
 import { AppText } from 'src/shared/ui'
 

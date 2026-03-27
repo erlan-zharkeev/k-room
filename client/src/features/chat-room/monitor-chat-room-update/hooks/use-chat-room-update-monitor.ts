@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { useAddRoom } from 'src/features/chat-room/add-chat-room'
-import { useChatRoomActualize } from 'src/features/chat-room/chat-room-actualize/hooks'
+import { useChatRoomActualize } from 'src/features/chat-room/chat-room-actualize'
 
 export const useChatRoomUpdateMonitor = () => {
   const { monitorChatRoomActualize } = useChatRoomActualize()

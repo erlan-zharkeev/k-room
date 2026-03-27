@@ -1,5 +1,7 @@
 import { IFrontendContact } from 'common'
 
+export const DROPDOWN_CLOSE_DURATION = 260
+
 export const SEARCHED_CONTACTS_MOCK: IFrontendContact[] = [
   { id: 'user-1', username: 'User 1', online: false, lastSeen: 0, interactionType: 'default' },
   { id: 'user-2', username: 'User 2', online: false, lastSeen: 0, interactionType: 'invited' },

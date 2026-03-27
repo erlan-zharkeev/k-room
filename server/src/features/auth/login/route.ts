@@ -2,8 +2,8 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { login } from 'features/auth/login/controller'
-import { fieldsValidation } from 'features/auth/login/lib'
+import { login } from 'features/auth/login'
+import { fieldsValidation } from 'features/auth/login'
 
 import { validateRequest } from 'shared-middleware'
 

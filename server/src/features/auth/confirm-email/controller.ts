@@ -1,7 +1,7 @@
 import { IConfirmEmailResponse, StatusEnum } from 'common'
 
 import { verifyToken } from 'features/auth'
-import { MESSAGE } from 'features/auth/confirm-email/config'
+import { MESSAGE } from 'features/auth/confirm-email'
 import { mapUserToDto, USER_MESSAGE } from 'features/user'
 
 import { UserModel } from 'entities/user'

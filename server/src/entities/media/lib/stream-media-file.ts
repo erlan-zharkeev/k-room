@@ -2,8 +2,8 @@ import type { Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
+import { mediaBuckets } from 'entities/media'
 import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from 'entities/media/config'
-import { mediaBuckets } from 'entities/media/model/media-bucket'
 
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
 

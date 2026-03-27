@@ -2,8 +2,8 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { confirmEmail } from 'features/auth/confirm-email/controller'
-import { fieldsValidation } from 'features/auth/confirm-email/lib'
+import { confirmEmail } from 'features/auth/confirm-email'
+import { fieldsValidation } from 'features/auth/confirm-email'
 
 import { validateRequest } from 'shared-middleware'
 

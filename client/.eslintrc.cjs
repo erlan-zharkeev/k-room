@@ -1,3 +1,5 @@
+const { createRestrictedImportRules } = require('../config/eslint/restricted-imports.cjs')
+
 module.exports = {
   extends: ['../config/eslint/base.cjs', 'plugin:react/recommended', 'standard-with-typescript'],
   env: {
@@ -55,10 +57,10 @@ module.exports = {
     '@typescript-eslint/promise-function-async': 'off',
     'no-restricted-syntax': [
       'error',
-      {
-        selector: "ImportDeclaration[source.value=/^\\.\\.?\\//][source.value!='./style.scss']",
-        message: 'Use alias imports. Relative imports are allowed only for `./style.scss`.'
-      }
+      ...createRestrictedImportRules({
+        rootPattern: 'src\\/(app|pages|widgets|features|entities)',
+        deepImportMessage: 'Use the shortest public API import. Imports deeper than `src/<layer>/<module>` are not allowed.'
+      })
     ],
     'import/no-cycle': ['error', { maxDepth: Infinity }],
     'import/order': [

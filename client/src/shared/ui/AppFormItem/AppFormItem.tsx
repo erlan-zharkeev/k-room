@@ -1,6 +1,6 @@
 import './style.scss'
+import { AppText } from 'src/shared/ui'
 import type { IAppFormItemProps } from 'src/shared/ui/AppFormItem/config'
-import { AppText } from 'src/shared/ui/AppText/AppText'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AppFormItem = ({ children, label, errors = [], required }: IAppFormItemProps) => {

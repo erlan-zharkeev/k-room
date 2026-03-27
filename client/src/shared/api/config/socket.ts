@@ -1,7 +1,7 @@
 import { DEFAULT_APP_LANGUAGE, RouteNamesEnum } from 'common'
 import { io } from 'socket.io-client'
 
-import { settingsStore } from 'src/entities/settings/hooks/use-settings'
+import { settingsStore } from 'src/entities/settings/hooks'
 
 import { CLIENT_ENV } from 'src/shared/config'
 

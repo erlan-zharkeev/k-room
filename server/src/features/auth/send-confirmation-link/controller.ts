@@ -1,7 +1,7 @@
 import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 import { generateToken } from 'features/auth'
-import { MESSAGE } from 'features/auth/send-confirmation-link/config'
+import { MESSAGE } from 'features/auth/send-confirmation-link'
 import { sendEmailConfirmationEmail } from 'features/email'
 import { USER_MESSAGE } from 'features/user'
 

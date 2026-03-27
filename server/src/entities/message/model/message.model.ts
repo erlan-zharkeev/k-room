@@ -4,8 +4,8 @@ import {
   type IMessageSchema
 } from 'common'
 
-import { messageMetaDataSchema } from 'entities/message/model/meta-data.model'
-import { reactionSchema } from 'entities/message/model/reaction.model'
+import { messageMetaDataSchema } from 'entities/message/model'
+import { reactionSchema } from 'entities/message/model'
 
 
 const messageSchema = new Schema<IMessageSchema>(

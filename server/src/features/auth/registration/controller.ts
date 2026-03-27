@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import { type IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 import { generateToken, isUserExist } from 'features/auth'
-import { MESSAGE } from 'features/auth/registration/config'
+import { MESSAGE } from 'features/auth/registration'
 import { sendEmailConfirmationEmail } from 'features/email'
 import { createUser } from 'features/user'
 

@@ -22,6 +22,7 @@ export const getContactDescription = (payload: DbContactType, language: AppLangu
 }
 
 export const getRequiredContactSystemData = (): IDbContactRequiredSystemData => ({
+  savedAt: Date.now(),
   onlineStatusSyncedAt: Date.now(),
   isTyping: false
 })

@@ -2,9 +2,9 @@ import './style.scss'
 
 import { MediaEndpointsEnum } from 'common'
 
+import type { IFoundContactProps } from 'src/features/contact'
 import { AddContactBtn } from 'src/features/contact'
-import type { IFoundContactProps } from 'src/features/contact/search-contact/ui/FoundContact/config'
-import { NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP } from 'src/features/contact/search-contact/ui/FoundContact/constants'
+import { NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP } from 'src/features/contact/search-contact'
 
 import { ProfileInfo } from 'src/entities/profile-info'
 

@@ -2,7 +2,7 @@ import { ObjectId } from 'mongoose'
 
 import { StatusEnum } from 'common'
 
-import { MESSAGE } from 'features/auth/logout/config'
+import { MESSAGE } from 'features/auth/logout'
 
 import { UserModel } from 'entities/user'
 

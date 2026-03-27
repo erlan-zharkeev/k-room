@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { Form } from 'antd'
 import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common'
 
-import { CHAT_ROOM_SETTINGS_MODAL_I18N } from 'src/features/chat-room/chat-room-settings/ui/ChatRoomSettingsModal/config'
-import type { IChatRoomSettingsModalProps } from 'src/features/chat-room/chat-room-settings/ui/ChatRoomSettingsModal/config'
+import type { IChatRoomSettingsModalProps } from 'src/features/chat-room/chat-room-settings'
+import { CHAT_ROOM_SETTINGS_MODAL_I18N } from 'src/features/chat-room/chat-room-settings'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'

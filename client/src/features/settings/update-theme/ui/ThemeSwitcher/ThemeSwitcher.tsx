@@ -1,6 +1,5 @@
 
-import { useThemeUpdate } from 'src/features/settings/update-theme/hooks'
-import { THEME_SWITCHER_TEXT } from 'src/features/settings/update-theme/ui/ThemeSwitcher/config'
+import { useThemeUpdate, THEME_SWITCHER_TEXT } from 'src/features/settings/update-theme'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'

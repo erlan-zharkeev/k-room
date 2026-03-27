@@ -1,3 +1,6 @@
 export * from './CreateChatRoomBtn/CreateChatRoomBtn'
+export * from './CreateChatRoomBtn/config'
 export * from './CreateChatRoomModal/CreateChatRoomModal'
+export * from './CreateChatRoomModal/config'
 export * from './CreateChatRoomForm/CreateChatRoomForm'
+export * from './CreateChatRoomForm/config'

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 
-import { IEventGetSearchedContact, IEventSearchContact, IFrontendContact, SocketActionsType, VALIDATION_LIMITS } from 'common'
+import type { IEventGetSearchedContact, IEventSearchContact, IFrontendContact, SocketActionsType } from 'common'
 
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'
 
-// import { SEARCHED_CONTACTS_MOCK } from 'src/features/contact/search-contact/config/constants'
+// import { SEARCHED_CONTACTS_MOCK } from 'src/features/contact/search-contact'
 
 export const useSearchContact = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -14,11 +14,35 @@ export const useSearchContact = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(false)
   const [nextOffset, setNextOffset] = useState(0)
+  const [total, setTotal] = useState<number | null>(null)
   const [searchedContacts, setSearchedContacts] = useState<IFrontendContact[]>([])
   const currentQueryRef = useRef('')
 
+  const resetSearch = () => {
+    currentQueryRef.current = ''
+    setSearchQuery('')
+    setSearchedContacts([])
+    setTotal(null)
+    setHasMore(false)
+    setNextOffset(0)
+    setIsLoading(false)
+    setIsLoadingMore(false)
+  }
+
   useEffect(() => {
-    const handleSearchedContacts = ({ value, offset, contacts, hasMore, nextOffset }: IEventGetSearchedContact) => {
+    const handleSearchedContacts = (payload: IEventGetSearchedContact | IFrontendContact[]) => {
+      if (Array.isArray(payload)) {
+        setSearchedContacts(payload)
+        setTotal(null)
+        setHasMore(false)
+        setNextOffset(0)
+        setIsLoading(false)
+        setIsLoadingMore(false)
+        return
+      }
+
+      const { value, offset, contacts, total, hasMore, nextOffset } = payload
+
       if (value !== currentQueryRef.current) return
 
       setSearchedContacts((prev) => {
@@ -27,6 +51,7 @@ export const useSearchContact = () => {
         const knownIds = new Set(prev.map((contact) => contact.id))
         return [...prev, ...contacts.filter((contact) => !knownIds.has(contact.id))]
       })
+      setTotal(typeof total === 'number' ? total : null)
       setHasMore(hasMore)
       setNextOffset(nextOffset ?? 0)
       setIsLoading(false)
@@ -43,8 +68,7 @@ export const useSearchContact = () => {
   const fetchUsers = ({ value, offset = 0 }: { value: string; offset?: number }) => {
     const searchPayload: IEventSearchContact = {
       value,
-      offset,
-      limit: VALIDATION_LIMITS.searchContactResultLimit
+      offset
     }
     socket.emit<SocketActionsType>('search-contact', searchPayload)
   }
@@ -60,16 +84,13 @@ export const useSearchContact = () => {
     currentQueryRef.current = normalizedValue
 
     if (normalizedValue === '') {
-      setSearchedContacts([])
-      setHasMore(false)
-      setNextOffset(0)
-      setIsLoading(false)
-      setIsLoadingMore(false)
+      resetSearch()
       return
     }
 
     setIsLoading(true)
     setSearchedContacts([])
+    setTotal(null)
     setHasMore(false)
     setNextOffset(0)
     debouncedSearch({ value, offset: 0 })
@@ -89,6 +110,8 @@ export const useSearchContact = () => {
     isLoadingMore,
     hasMore,
     loadMore,
+    resetSearch,
+    total,
     searchedContacts
   }
 }

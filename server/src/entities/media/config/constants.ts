@@ -1,4 +1,4 @@
-import { ValidateFileMetaOptionsMapType } from 'entities/media/config/types'
+import { ValidateFileMetaOptionsMapType } from 'entities/media/config'
 
 import { SharpSettingsKeyType } from 'shared-config'
 

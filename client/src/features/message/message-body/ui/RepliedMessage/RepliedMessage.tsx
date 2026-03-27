@@ -1,8 +1,7 @@
 import './style.scss'
 
-import { MessageImages } from 'src/features/message/message-body/ui/MessageImages/MessageImages'
-import { REPLIED_MESSAGE_I18N } from 'src/features/message/message-body/ui/RepliedMessage/config'
-import type { IRepliedMessageProps } from 'src/features/message/message-body/ui/RepliedMessage/config'
+import { MessageImages, REPLIED_MESSAGE_I18N } from 'src/features/message/message-body'
+import type { IRepliedMessageProps } from 'src/features/message/message-body'
 
 import { useI18n } from 'src/entities/system'
 

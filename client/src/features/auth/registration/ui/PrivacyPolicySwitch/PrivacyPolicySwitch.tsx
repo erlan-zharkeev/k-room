@@ -2,8 +2,8 @@ import './style.scss'
 
 import { RouteNamesEnum } from 'common'
 
-import { PRIVACY_POLICY_SWITCH_TEXT } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/config'
-import type { IPrivacyPolicySwitchProps } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/config'
+import { PRIVACY_POLICY_SWITCH_TEXT } from 'src/features/auth/registration'
+import type { IPrivacyPolicySwitchProps } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/system'
 

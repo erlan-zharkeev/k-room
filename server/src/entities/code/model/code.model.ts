@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
 
+import { codePurposeSchema } from 'entities/code'
 import { ICodeSchema } from 'entities/code/config'
-import { codePurposeSchema } from 'entities/code/model/code-purpose.model'
 
 const codesSchema = new Schema<ICodeSchema>({
   codes: codePurposeSchema,

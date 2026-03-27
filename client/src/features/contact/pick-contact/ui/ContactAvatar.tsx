@@ -1,4 +1,5 @@
-import type { IPickContactAvatarProps } from 'src/features/contact/pick-contact/config'
+
+import type { IPickContactAvatarProps } from 'src/features/contact/pick-contact'
 
 import { useLiveMediaUrl } from 'src/entities/media'
 

@@ -1,5 +1,5 @@
 import { updateTokens } from 'features/auth'
-import { MESSAGE } from 'features/auth/update-token-pair/config'
+import { MESSAGE } from 'features/auth/update-token-pair'
 
 import { AppResponseType, IAppRequest } from 'shared-config'
 import { getLocalizedText } from 'shared-lib'

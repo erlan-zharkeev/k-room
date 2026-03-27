@@ -3,26 +3,17 @@ import { useRef } from 'react'
 import { Howl } from 'howler'
 
 import { useSettings } from 'src/entities/settings'
+import { SoundType, SOUND_SRC } from 'src/entities/sound'
 import { useSystem } from 'src/entities/system'
-
-type Sound = 'message-delivered' | 'calling' | 'busy' | 'connection' | 'ring'
-
-const soundSrc: Record<Sound, string> = {
-  'message-delivered': './sounds/ding.mp3',
-  calling: './sounds/calling.mp3',
-  busy: './sounds/busy.mp3',
-  connection: './sounds/connection.mp3',
-  ring: './sounds/ring.mp3'
-}
 
 export const useSound = () => {
   const { soundOn } = useSettings()
   const { hasInteracted } = useSystem()
   const { selectedAudioOutputDeviceId } = useSettings()
 
-  const soundInstances = useRef<Partial<Record<Sound, Howl>>>({})
+  const soundInstances = useRef<Partial<Record<SoundType, Howl>>>({})
 
-  const play = (key: Sound, loop = false) => {
+  const play = (key: SoundType, loop = false) => {
     if (!soundOn || !hasInteracted) return
 
     if (soundInstances.current[key]) {
@@ -32,7 +23,7 @@ export const useSound = () => {
     }
 
     const sound = new Howl({
-      src: [soundSrc[key]],
+      src: [SOUND_SRC[key]],
       volume: 0.2,
       html5: true,
       loop,
@@ -55,7 +46,7 @@ export const useSound = () => {
     sound.play()
   }
 
-  const stop = (key: Sound) => {
+  const stop = (key: SoundType) => {
     const sound = soundInstances.current[key]
     if (sound) {
       sound.stop()

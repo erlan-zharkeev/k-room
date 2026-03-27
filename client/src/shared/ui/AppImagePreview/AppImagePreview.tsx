@@ -1,8 +1,7 @@
 import './style.scss'
 import { IImageObject } from 'common'
 
-import { AppButton } from 'src/shared/ui/AppButton/AppButton'
-import { AppScrollContainer } from 'src/shared/ui/AppScrollContainer/AppScrollContainer'
+import { AppButton, AppScrollContainer } from 'src/shared/ui'
 
 export const AppImagePreview = ({
   images,

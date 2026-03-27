@@ -1,9 +1,9 @@
 import { EventInviteReceivedType, IEventUpdateContactInteractionSuccess, IEventUpdateInteraction, SocketActionsType } from 'common'
 
-import { deleteContactById, setContactInteraction } from 'features/contact/update-contact-interaction-type/lib'
-import { createContactInteraction } from 'features/contact/update-contact-interaction-type/lib/create-contact-interaction'
-import { emitContactInteractionUpdated } from 'features/contact/update-contact-interaction-type/lib/emit-contact-interaction-updated'
-import { getSocketsByUserIds } from 'features/user/~shared/lib/get-sockets-by-ids'
+import { deleteContactById, setContactInteraction } from 'features/contact/update-contact-interaction-type'
+import { createContactInteraction } from 'features/contact/update-contact-interaction-type'
+import { emitContactInteractionUpdated } from 'features/contact/update-contact-interaction-type'
+import { getSocketsByUserIds } from 'features/user/~shared'
 
 import { SocketInstanceType } from 'shared-config'
 import { getIO, throwSocketError } from 'shared-lib'

@@ -1,8 +1,7 @@
 import './style.scss'
 
-import { useContactInvitationControls } from 'src/features/contact/contact-invitation-controls/hooks'
-import { CONTACT_INVITATION_CONTROL_BTNS_I18N } from 'src/features/contact/contact-invitation-controls/ui/ContactInvitationControlBtns/config'
-import type { IContactInvitationControlBtnsProps } from 'src/features/contact/contact-invitation-controls/ui/ContactInvitationControlBtns/config'
+import { useContactInvitationControls, CONTACT_INVITATION_CONTROL_BTNS_I18N } from 'src/features/contact/contact-invitation-controls'
+import type { IContactInvitationControlBtnsProps } from 'src/features/contact/contact-invitation-controls'
 
 import { useI18n } from 'src/entities/system'
 

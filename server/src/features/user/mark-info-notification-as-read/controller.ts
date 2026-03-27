@@ -1,6 +1,6 @@
 import { IMarkAsReadPayload, StatusEnum } from 'common'
 
-import { MESSAGE } from 'features/user/mark-info-notification-as-read/config'
+import { MESSAGE } from 'features/user/mark-info-notification-as-read'
 
 import { UserModel } from 'entities/user'
 

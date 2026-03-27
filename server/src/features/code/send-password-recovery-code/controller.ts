@@ -2,7 +2,7 @@ import { randomInt } from 'node:crypto'
 
 import { ISendPasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
-import { CODE_LIFE_MS, MESSAGE } from 'features/code/send-password-recovery-code/config'
+import { CODE_LIFE_MS, MESSAGE } from 'features/code/send-password-recovery-code'
 import { sendPasswordRecoveryEmail } from 'features/email'
 import { USER_MESSAGE } from 'features/user'
 

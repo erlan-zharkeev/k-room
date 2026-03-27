@@ -28,6 +28,7 @@ export const useChatRoom = () => {
   const selectedChatRoom = chatRooms.find((room) => room.id === selectedChatRoomId)
   const isSelectedRoomPrivate = isRoomPrivate(selectedChatRoom)
   const haveMessageToReply = Boolean(repliedMessageData?.id)
+  const hasChatRooms = chatRooms.length > 0
 
   const unreadMessageQuantity = messages.filter((message) => message.status === 'delivered' && !message.isSelf).length
 
@@ -43,6 +44,7 @@ export const useChatRoom = () => {
     getRoomById,
     getPersonalRoomByContactId,
     chatRooms,
+    hasChatRooms,
     unreadMessageQuantity,
     selectedChatRoom,
     isSelectedRoomPrivate,

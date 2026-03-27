@@ -4,11 +4,11 @@ import type { Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
+import { VALIDATE_MEDIA_FILE_MESSAGE } from 'entities/media'
 import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from 'entities/media/config'
-import { VALIDATE_MEDIA_FILE_MESSAGE } from 'entities/media/config'
-import { buildFileData } from 'entities/media/lib/build-file-data'
-import { processImageWithSharp } from 'entities/media/lib/process-image'
-import { validateFileMetaData } from 'entities/media/lib/validate-file-meta-data'
+import { buildFileData } from 'entities/media/lib'
+import { processImageWithSharp } from 'entities/media/lib'
+import { validateFileMetaData } from 'entities/media/lib'
 
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
 

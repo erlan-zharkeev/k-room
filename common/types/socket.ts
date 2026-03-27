@@ -41,12 +41,12 @@ export interface IEventDeleteContact {
 export interface IEventSearchContact {
   value: string;
   offset?: number;
-  limit?: number;
 }
 export interface IEventGetSearchedContact {
   value: string;
   offset: number;
   contacts: IFrontendContact[];
+  total: number;
   hasMore: boolean;
   nextOffset?: number;
 }

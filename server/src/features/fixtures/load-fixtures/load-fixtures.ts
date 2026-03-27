@@ -1,4 +1,4 @@
-import { loadDialogFixtures } from 'features/fixtures/load-fixtures/lib'
+import { loadDialogFixtures } from 'features/fixtures/load-fixtures'
 
 import { loadUserFixtures } from 'entities/user'
 

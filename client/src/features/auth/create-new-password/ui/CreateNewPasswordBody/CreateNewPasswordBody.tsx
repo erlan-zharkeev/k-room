@@ -2,8 +2,7 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { useCreateNewPassword } from 'src/features/auth/create-new-password/hooks'
-import { CREATE_NEW_PASSWORD_BODY_TEXT } from 'src/features/auth/create-new-password/ui/CreateNewPasswordBody/config'
+import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_TEXT } from 'src/features/auth/create-new-password'
 
 import { useI18n } from 'src/entities/system'
 
