@@ -34,9 +34,7 @@ export const registration = async (req: IAppRequest, res: AppResponseType<ISendC
       username
     })
 
-    const nextRequestTime = String(
-      Date.now() + Number(ENV.REGISTRATION_RESEND_INTERVAL_MINUTES) * 60 * 1000
-    )
+    const nextRequestTime = Date.now() + Number(ENV.REGISTRATION_RESEND_INTERVAL_MINUTES) * 60 * 1000
 
     const response = {
       payload: {

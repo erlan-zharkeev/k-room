@@ -31,7 +31,7 @@ export interface IMessage {
   authorId: string;
   authorName: string;
   body: string;
-  createdAt?: string;
+  createdAt?: number;
   reactions?: IReaction[];
   images?: IImageObject[];
   imageCompression?: boolean;

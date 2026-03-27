@@ -82,13 +82,13 @@ export interface IEventChangeMessageStatus {
 export interface IEventLoadRoomMessages {
   roomId: string;
   limit: number;
-  beforeCreatedAt?: string;
+  beforeCreatedAt?: number;
 }
 export interface IEventRoomMessagesLoaded {
   roomId: string;
   messages: IMessage[];
   hasMore: boolean;
-  nextBeforeCreatedAt?: string;
+  nextBeforeCreatedAt?: number;
 }
 export interface IEventDeleteMessage {
   messageId: string;

@@ -30,7 +30,7 @@ const messageSchema = new Schema<IMessageSchema>(
       required: false
     },
     createdAt: {
-      type: String,
+      type: Number,
       unique: false,
       required: true
     },
