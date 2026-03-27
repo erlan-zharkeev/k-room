@@ -1,4 +1,4 @@
-import { emitUserStatusToAll } from 'features/user/~shared/lib/emit-user-status-to-all'
+import { emitUserStatusToAll } from 'features/user/~shared'
 
 import { UserModel } from 'entities/user'
 

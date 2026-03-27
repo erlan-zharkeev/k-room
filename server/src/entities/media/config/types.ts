@@ -2,7 +2,7 @@ import type { MediaKindType } from 'common'
 import type { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
 
-import { MEDIA_BUCKET_NAMES } from 'entities/media/config/constants'
+import { MEDIA_BUCKET_NAMES } from 'entities/media/config'
 
 import { SharpSettingsKeyType } from 'shared-config'
 

@@ -15,7 +15,7 @@ import {
   useMessageList,
   useMessageListScroll
 } from 'src/features/message/message-list'
-import type { IMessageListProps } from 'src/features/message/message-list/ui/MessageList/config'
+import type { IMessageListProps } from 'src/features/message/message-list'
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'

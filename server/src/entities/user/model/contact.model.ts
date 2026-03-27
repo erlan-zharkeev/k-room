@@ -2,7 +2,7 @@ import { Schema } from 'mongoose'
 
 import { InteractionType } from 'common'
 
-import { IContact } from 'entities/user/config/types'
+import { IContact } from 'entities/user/config'
 
 const interactionValues: InteractionType[] = [
   "default",

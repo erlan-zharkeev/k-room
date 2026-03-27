@@ -1,8 +1,7 @@
 import './style.scss'
 import { RouteNamesEnum } from 'common'
 
-import { LOGIN_FORM_TEXT } from 'src/features/auth/login/ui/LoginForm/config'
-import { LoginFormProps } from 'src/features/auth/login/ui/LoginForm/types'
+import { LOGIN_FORM_TEXT, LoginFormProps } from 'src/features/auth/login'
 
 import { useI18n } from 'src/entities/system'
 

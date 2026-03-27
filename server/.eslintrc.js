@@ -1,3 +1,5 @@
+const { createRestrictedImportRules } = require('../config/eslint/restricted-imports.cjs')
+
 module.exports = {
   extends: ['../config/eslint/base.cjs', 'eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   env: {
@@ -13,10 +15,10 @@ module.exports = {
   rules: {
     'no-restricted-syntax': [
       'error',
-      {
-        selector: "ImportDeclaration[source.value=/^\\.\\.?\\//]",
-        message: 'Use alias imports instead of relative imports.'
-      }
+      ...createRestrictedImportRules({
+        rootPattern: '(app|features|entities)',
+        deepImportMessage: 'Use the shortest public API import. Imports deeper than `<layer>/<module>` are not allowed.'
+      })
     ],
     'simple-import-sort/imports': [
       'error',

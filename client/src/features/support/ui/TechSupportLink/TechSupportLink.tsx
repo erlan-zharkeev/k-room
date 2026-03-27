@@ -1,5 +1,5 @@
 
-import { TECH_SUPPORT_LINK_I18N } from 'src/features/support/ui/TechSupportLink/config'
+import { TECH_SUPPORT_LINK_I18N } from 'src/features/support/config'
 
 import { useI18n } from 'src/entities/system'
 

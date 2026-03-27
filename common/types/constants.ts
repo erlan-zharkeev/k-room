@@ -2,7 +2,6 @@ export const VALIDATION_LIMITS = {
   passwordMinLength: 6,
   usernameMinLength: 2,
   usernameMaxLength: 32,
-  searchContactResultLimit: 30,
 };
 
 export const VALIDATION_PATTERNS = {

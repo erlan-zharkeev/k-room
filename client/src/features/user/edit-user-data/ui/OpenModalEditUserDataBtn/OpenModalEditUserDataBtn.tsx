@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-import { EditUserDataModal } from 'src/features/user'
-import { OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT } from 'src/features/user/edit-user-data/ui/OpenModalEditUserDataBtn/config'
+import { OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT, EditUserDataModal } from 'src/features/user'
 
 import { useI18n } from 'src/entities/system'
 

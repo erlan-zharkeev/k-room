@@ -10,6 +10,7 @@ import { AppDispatchType } from 'src/app/store'
 import { callCounter } from 'src/features/call'
 
 import {
+ CallDots, CallModalVideo,
   setCallStartedAt,
   setShowCallModal,
   setCallId,
@@ -18,9 +19,8 @@ import {
   setCallSettingsLoading,
   setCallVideo
 } from 'src/entities/call'
-import { CallDots, CallModalVideo } from 'src/entities/call/ui/CallModal/components/CallModalBody/components'
-import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui/CallModal/components/CallModalBody/config'
-import type { ICallModalBodyProps } from 'src/entities/call/ui/CallModal/components/CallModalBody/types'
+import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui'
+import type { ICallModalBodyProps } from 'src/entities/call/ui'
 import { useI18n } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'

@@ -2,8 +2,7 @@ import './style.scss'
 
 import { useDispatch } from 'react-redux'
 
-import { MessageInput } from 'src/features/message'
-import { MESSAGE_WITH_BIND_DATA_MODAL_I18N } from 'src/features/message/send-message-with-bind-data/ui/MessageWithBindDataModal/config'
+import { MESSAGE_WITH_BIND_DATA_MODAL_I18N, MessageInput } from 'src/features/message'
 
 import { removeImageByNameFromMessageInputData, useSystem, useI18n } from 'src/entities/system'
 

@@ -1,6 +1,6 @@
 import { NOTIFICATION_MESSAGE, UseNotificationType } from 'src/entities/notification'
 
-import { IMAGE_RESOLUTIONS } from 'src/shared/config/types'
+import { IMAGE_RESOLUTIONS } from 'src/shared/config'
 
 export const imageToBase64 = ({
   image,

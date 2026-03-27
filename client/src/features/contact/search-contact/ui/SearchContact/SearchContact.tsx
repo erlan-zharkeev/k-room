@@ -1,21 +1,66 @@
 import './style.scss'
 
+import { useEffect, useRef, useState } from 'react'
+
 import { Virtuoso } from 'react-virtuoso'
 
-import { useSearchContact } from 'src/features/contact/search-contact/hooks'
-import { FoundContact } from 'src/features/contact/search-contact/ui/FoundContact/FoundContact'
-import { SEARCH_CONTACT_I18N } from 'src/features/contact/search-contact/ui/SearchContact/config'
+import { DROPDOWN_CLOSE_DURATION, SEARCH_CONTACT_I18N, useSearchContact, FoundContact } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/system'
 
-import { AppDotsAnimatedText, AppInput, AppText } from 'src/shared/ui'
+import { AppClickOutside, AppDotsAnimatedText, AppInput, AppText } from 'src/shared/ui'
 
 export const SearchContact = () => {
-  const { searchQuery, search, searchedContacts, isLoading, isLoadingMore, hasMore, loadMore } = useSearchContact()
+  const { searchQuery, search, searchedContacts, isLoading, isLoadingMore, hasMore, loadMore, resetSearch, total } =
+    useSearchContact()
   const { t } = useI18n()
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
+  const [isDropdownClosing, setIsDropdownClosing] = useState(false)
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (searchedContacts.length > 0) {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current)
+        closeTimeoutRef.current = null
+      }
+
+      setIsDropdownClosing(false)
+      setIsDropdownVisible(true)
+      return
+    }
+
+    if (!isDropdownClosing) {
+      setIsDropdownVisible(false)
+    }
+  }, [searchedContacts.length])
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const closeDropdown = () => {
+    if (!isDropdownVisible || isDropdownClosing) return
+
+    setIsDropdownClosing(true)
+    closeTimeoutRef.current = setTimeout(() => {
+      setIsDropdownVisible(false)
+      setIsDropdownClosing(false)
+      resetSearch()
+      closeTimeoutRef.current = null
+    }, DROPDOWN_CLOSE_DURATION)
+  }
 
   return (
-    <div className="search-contact">
+    <AppClickOutside
+      active={isDropdownVisible && !isDropdownClosing}
+      additionalClassName="search-contact"
+      onClickOutside={closeDropdown}
+    >
       <AppInput
         showClearButton={Boolean(searchQuery)}
         placeholder={t(SEARCH_CONTACT_I18N.placeholder)}
@@ -24,11 +69,17 @@ export const SearchContact = () => {
         value={searchQuery}
         loading={isLoading}
       />
-      {searchedContacts.length > 0 && (
-        <>
-          <AppText tag="p" align="right" additionalClassName="search-contact__found-el-quantity">
-            {t(SEARCH_CONTACT_I18N.found)(searchedContacts.length)}
-          </AppText>
+      {isDropdownVisible && (
+        <div
+          className={`search-contact__dropdown ${
+            isDropdownClosing ? 'search-contact__dropdown--closing' : 'search-contact__dropdown--open'
+          }`}
+        >
+          {typeof total === 'number' && (
+            <AppText tag="p" align="right" additionalClassName="search-contact__found-el-quantity">
+              {t(SEARCH_CONTACT_I18N.found)(total)}
+            </AppText>
+          )}
           <div className="search-contact__list">
             <Virtuoso
               data={searchedContacts}
@@ -46,8 +97,8 @@ export const SearchContact = () => {
               }}
             />
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </AppClickOutside>
   )
 }

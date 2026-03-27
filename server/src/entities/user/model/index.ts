@@ -1,3 +1,5 @@
+export * from './contact.model'
+export * from './device.model'
 export * from './personal.model'
 export * from './public.model'
 export * from './system.model'

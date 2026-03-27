@@ -1,4 +1,5 @@
 export * from './monitor-chat-room-update'
+export * from './chat-room-actualize'
 export * from './select-chat-room'
 export * from './chat-room-settings'
 export * from './create-chat-room'

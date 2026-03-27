@@ -1,2 +1,6 @@
 export * from './CallsButton/CallsButton'
 export * from './CallModal/CallModal'
+export * from './CallModal/components'
+export * from './CallModal/components/CallModalBody/config'
+export * from './CallModal/components/CallModalBody/components/CallModalVideo/config'
+export * from './CallModal/components/CallModalBody/types'

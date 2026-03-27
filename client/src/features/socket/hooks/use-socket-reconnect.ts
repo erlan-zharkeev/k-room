@@ -1,6 +1,6 @@
 import { AuthEndpointsEnum } from 'common'
 
-import { useSocketConnect } from 'src/features/socket/hooks/use-socket-connect'
+import { useSocketConnect } from 'src/features/socket/hooks'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'

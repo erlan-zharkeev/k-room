@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-import { SelectDevicesModal } from 'src/features/device'
-import { OPEN_DEVICE_SETTINGS_BUTTON_I18N } from 'src/features/device/device-settings/ui/OpenDeviceSettingsButton/config'
+import { OPEN_DEVICE_SETTINGS_BUTTON_I18N, SelectDevicesModal } from 'src/features/device'
 
 import { useI18n } from 'src/entities/system'
 

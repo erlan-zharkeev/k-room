@@ -1,4 +1,5 @@
 import './style.scss'
+
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { ContentTab } from 'src/features/content-tab'

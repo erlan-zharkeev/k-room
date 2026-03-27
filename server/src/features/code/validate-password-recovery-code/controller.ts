@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { IValidatePasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'features/code'
-import { MESSAGE, QUERY_LIFE_MS } from 'features/code/validate-password-recovery-code/config'
+import { MESSAGE, QUERY_LIFE_MS } from 'features/code/validate-password-recovery-code'
 import { USER_MESSAGE } from 'features/user'
 
 import { CodeModel } from 'entities/code'

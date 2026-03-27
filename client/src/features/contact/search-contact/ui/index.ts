@@ -1,1 +1,5 @@
 export * from './SearchContact/SearchContact'
+export * from './SearchContact/config'
+export * from './FoundContact/FoundContact'
+export * from './FoundContact/config'
+export * from './FoundContact/constants'

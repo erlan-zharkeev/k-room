@@ -2,7 +2,7 @@ import { RouteNamesEnum } from 'common'
 
 import './style.scss'
 
-import { PASSWORD_RECOVERY_LINK_TEXT } from 'src/features/auth/password-recovery/ui/PasswordRecoveryLink/config'
+import { PASSWORD_RECOVERY_LINK_TEXT } from 'src/features/auth/password-recovery'
 
 import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'

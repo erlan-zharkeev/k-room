@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { AppButton } from 'src/shared/ui/AppButton/AppButton'
+import { AppButton } from 'src/shared/ui'
 
 describe('AppButton', () => {
   it('calls click handler when enabled', () => {

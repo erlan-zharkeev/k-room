@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
 import './style.scss'
-import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification/ui/DontShowNotificationAgainBtn/config'
-import type { IDontShowNotificationAgainBtnProps } from 'src/entities/notification/ui/DontShowNotificationAgainBtn/config'
+
+import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification/ui'
+import type { IDontShowNotificationAgainBtnProps } from 'src/entities/notification/ui'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 

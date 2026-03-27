@@ -1,6 +1,6 @@
 import { APP_LANGUAGE } from 'common'
 
-import { useLanguageSetting } from 'src/features/settings/toggle-language/hooks'
+import { useLanguageSetting } from 'src/features/settings/toggle-language'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'

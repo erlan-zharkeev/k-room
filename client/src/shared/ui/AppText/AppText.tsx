@@ -1,7 +1,7 @@
 import './style.scss'
 import { createElement } from 'react'
 
-import type { ColorModifierType, ExtendedSizeModifierType } from 'src/shared/ui/config'
+import type { IAppTextProps } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AppText = ({
@@ -12,15 +12,7 @@ export const AppText = ({
   size = 'medium',
   align = 'left',
   onClick
-}: {
-  tag?: 'span' | 'p'
-  children?: React.ReactNode
-  additionalClassName?: string
-  color?: ColorModifierType
-  size?: ExtendedSizeModifierType
-  align?: 'left' | 'center' | 'right'
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void | Promise<void>
-}) => {
+}: IAppTextProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-text',
     modifiers: [color, size, align],

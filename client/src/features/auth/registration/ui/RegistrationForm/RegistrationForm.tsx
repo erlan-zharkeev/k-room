@@ -1,9 +1,7 @@
 import './style.scss'
 import type { IAuthRegistrationPayload } from 'common'
 
-import { PrivacyPolicySwitch } from 'src/features/auth/registration/ui/PrivacyPolicySwitch/PrivacyPolicySwitch'
-import { REGISTRATION_FORM_TEXT } from 'src/features/auth/registration/ui/RegistrationForm/config'
-import { RegistrationFormProps } from 'src/features/auth/registration/ui/RegistrationForm/types'
+import { PrivacyPolicySwitch, REGISTRATION_FORM_TEXT, RegistrationFormProps } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/system'
 

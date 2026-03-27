@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { CHAT_ROOM_STUB_I18N } from 'src/widgets/chat-room/ui/ChatRoomStub/config'
+import { CHAT_ROOM_STUB_I18N } from 'src/widgets/chat-room'
 
 import { useContentTabSelect } from 'src/features/content-tab'
 

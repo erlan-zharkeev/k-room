@@ -6,7 +6,7 @@ import { Router } from 'src/app/router'
 
 import { UnsupportedResolutionStub } from 'src/widgets/unsupported-resolution-stub'
 
-import { useSyncAvatars } from 'src/features/contact'
+import { useSyncAvatars } from 'src/features/avatars'
 import { useNetworkMonitor } from 'src/features/monitor-network'
 import { useViewportMonitor } from 'src/features/monitor-viewport'
 import { useThemeUpdate } from 'src/features/settings'

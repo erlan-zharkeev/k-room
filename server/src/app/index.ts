@@ -4,3 +4,5 @@ initSentry()
 
 // Entrypoint
 import 'app/services/server'
+
+export * from './config'

@@ -1,7 +1,6 @@
-import { ContactInvitationControlBtns, ContactMenu } from 'src/features/contact'
-import { CONTACT_LIST_RERENDER_INTERVAL } from 'src/features/contact/contact-list/config'
-import type { IContactListElProps } from 'src/features/contact/contact-list/ui/ContactListEl/config'
-import { lastSeen } from 'src/features/contact/~shared/lib'
+
+import { CONTACT_LIST_RERENDER_INTERVAL, ContactInvitationControlBtns, ContactMenu, lastSeen } from 'src/features/contact'
+import type { IContactListElProps } from 'src/features/contact/contact-list'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'

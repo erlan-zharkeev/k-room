@@ -3,15 +3,14 @@ import './style.scss'
 import { useMemo, useState } from 'react'
 
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
-import { CONTACT_MENU_I18N } from 'src/features/contact/contact-menu'
+import { CONTACT_MENU_I18N, DeleteContactConfirmModal, useDeleteContact } from 'src/features/contact'
 import type { IContactMenuProps } from 'src/features/contact/contact-menu'
-import { DeleteContactConfirmModal, DELETE_CONTACT_I18N, useDeleteContact } from 'src/features/contact/delete-contact'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/system'
 
 import { useTimeout } from 'src/shared/lib'
-import { AppButton, AppDotsAnimatedText, AppDropdown, AppModal, AppText } from 'src/shared/ui'
+import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
 import { stopPropagation } from 'src/shared/utils'
 
 export const ContactMenu = ({ id, interactionType }: IContactMenuProps) => {
@@ -85,23 +84,15 @@ export const ContactMenu = ({ id, interactionType }: IContactMenuProps) => {
       >
         <AppButton prefixIconName="three-dots" borderless small />
       </AppDropdown>
-      <AppModal
-        title={t(DELETE_CONTACT_I18N.modalTitle)}
+      <DeleteContactConfirmModal
         open={isConfirmOpen}
+        loading={loading}
         onClose={() => setIsConfirmOpen(false)}
-        cancelAction={{ onClick: () => setIsConfirmOpen(false) }}
-        okAction={{
-          text: t(DELETE_CONTACT_I18N.confirm),
-          color: 'error-color',
-          loading,
-          onClick: () => {
-            deleteUserHandler(id)
-            setIsConfirmOpen(false)
-          }
+        onConfirm={() => {
+          deleteUserHandler(id)
+          setIsConfirmOpen(false)
         }}
-      >
-        <DeleteContactConfirmModal />
-      </AppModal>
+      />
     </>
   )
 }

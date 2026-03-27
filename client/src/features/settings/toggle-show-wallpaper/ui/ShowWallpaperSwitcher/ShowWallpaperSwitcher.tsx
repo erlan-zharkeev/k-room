@@ -1,6 +1,5 @@
 
-import { useShowWallpaper } from 'src/features/settings/toggle-show-wallpaper/hooks'
-import { SHOW_WALLPAPER_SWITCHER_TEXT } from 'src/features/settings/toggle-show-wallpaper/ui/ShowWallpaperSwitcher/config'
+import { useShowWallpaper, SHOW_WALLPAPER_SWITCHER_TEXT } from 'src/features/settings/toggle-show-wallpaper'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'

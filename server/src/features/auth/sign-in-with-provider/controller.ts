@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
 
 import { updateTokens } from 'features/auth'
-import { MESSAGE } from 'features/auth/sign-in-with-provider/config'
+import { MESSAGE } from 'features/auth/sign-in-with-provider'
 import { createUser, mapUserToDto } from 'features/user'
-import { updateUserAvatar } from 'features/user/update-user-data/lib'
+import { updateUserAvatar } from 'features/user/update-user-data'
 
 import { UserModel } from 'entities/user'
 

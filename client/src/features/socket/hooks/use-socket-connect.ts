@@ -1,7 +1,7 @@
 import { DEFAULT_APP_LANGUAGE, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
 
-import { settingsStore } from 'src/entities/settings/hooks/use-settings'
+import { settingsStore } from 'src/entities/settings/hooks'
 import { setReconnectingStatus } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'

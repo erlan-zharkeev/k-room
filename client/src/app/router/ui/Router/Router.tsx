@@ -19,6 +19,7 @@ import { useSystem } from 'src/entities/system'
 const PrivateRoute = () => {
   const { auth } = useSystem()
   const location = useLocation()
+
   return auth === 'authorized' ? <Outlet /> : <Navigate to={R.Login} replace state={{ from: location }} />
 }
 
@@ -26,6 +27,7 @@ const PublicRoute = () => {
   const { auth } = useSystem()
   const location = useLocation()
   const isPathValidToRedirect = PATH_TO_REDIRECT_IF_AUTHORIZED.includes(location.pathname as R)
+
   return auth === 'authorized' && isPathValidToRedirect ? <Navigate to={R.Main} replace /> : <Outlet />
 }
 

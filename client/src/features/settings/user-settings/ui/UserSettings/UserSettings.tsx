@@ -1,14 +1,12 @@
 import './style.scss'
 
 import { PrivacyPolicyLink } from 'src/features/privacy-policy'
-import {
-  EnableSoundSwitcher,
-  LanguageSwitcher,
-  ShowNotificationSwitcher,
-  ShowTooltipsSwitcher,
-  ShowWallpaperSwitcher,
-  ThemeSwitcher
-} from 'src/features/settings'
+import { EnableSoundSwitcher } from 'src/features/settings/toggle-enable-sound'
+import { LanguageSwitcher } from 'src/features/settings/toggle-language'
+import { ShowNotificationSwitcher } from 'src/features/settings/toggle-show-notification'
+import { ShowTooltipsSwitcher } from 'src/features/settings/toggle-show-tooltips'
+import { ShowWallpaperSwitcher } from 'src/features/settings/toggle-show-wallpaper'
+import { ThemeSwitcher } from 'src/features/settings/update-theme'
 import { TechSupportLink } from 'src/features/support'
 import { UserProfileData } from 'src/features/user'
 

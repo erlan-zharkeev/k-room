@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
-import { useCallDataChange } from 'src/features/call/change-call-data'
-import { useCallDataLoad } from 'src/features/call/load-call-data'
+import { useCallDataChange, useCallDataLoad } from 'src/features/call'
 
 export const useCallDataUpdateMonitor = () => {
   const { monitorCallDataLoading } = useCallDataLoad()

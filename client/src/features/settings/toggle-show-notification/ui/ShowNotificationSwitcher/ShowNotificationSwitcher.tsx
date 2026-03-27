@@ -1,7 +1,6 @@
 import './style.scss'
 
-import { useShowNotification } from 'src/features/settings/toggle-show-notification/hooks'
-import { SHOW_NOTIFICATION_SWITCHER_TEXT } from 'src/features/settings/toggle-show-notification/ui/ShowNotificationSwitcher/config'
+import { useShowNotification, SHOW_NOTIFICATION_SWITCHER_TEXT } from 'src/features/settings/toggle-show-notification'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'

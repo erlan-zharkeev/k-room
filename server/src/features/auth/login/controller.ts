@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import { type IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common'
 
 import { updateTokens } from 'features/auth'
-import { MESSAGE } from 'features/auth/login/config'
+import { MESSAGE } from 'features/auth/login'
 import { mapUserToDto } from 'features/user'
 
 import { UserModel } from 'entities/user'

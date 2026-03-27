@@ -3,7 +3,7 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { LEGAL_INFO_PAGE_I18N } from 'src/pages/privacy-policy/ui/PrivacyPolicy/config'
+import { LEGAL_INFO_PAGE_I18N } from 'src/pages/privacy-policy/config'
 
 import { useI18n } from 'src/entities/system'
 

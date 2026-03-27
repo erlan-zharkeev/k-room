@@ -1,4 +1,5 @@
-import type { IMessageTimeProps } from 'src/features/message/message-body/ui/MessageTime/config'
+
+import type { IMessageTimeProps } from 'src/features/message/message-body'
 
 import { useI18n } from 'src/entities/system'
 

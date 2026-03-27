@@ -2,9 +2,9 @@ import './style.scss'
 import { useState } from 'react'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
-import { ShortChatList } from 'src/features/message/forward-message/ui/ForwardMessageModal/components'
-import { FORWARD_MESSAGE_MODAL_I18N } from 'src/features/message/forward-message/ui/ForwardMessageModal/config'
-import type { IForwardMessageModalProps } from 'src/features/message/forward-message/ui/ForwardMessageModal/config'
+import { ShortChatList } from 'src/features/message'
+import { FORWARD_MESSAGE_MODAL_I18N } from 'src/features/message/forward-message'
+import type { IForwardMessageModalProps } from 'src/features/message/forward-message'
 
 import { useI18n } from 'src/entities/system'
 

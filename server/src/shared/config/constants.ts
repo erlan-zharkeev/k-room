@@ -48,3 +48,5 @@ export const ENV = {
 const host = new URL(ENV.APP_HOST)
 
 export const ORIGINS = [`https://${host.hostname}`, `http://${host.hostname}`]
+
+export const SEARCH_CONTACT_RESULT_LIMIT = 10

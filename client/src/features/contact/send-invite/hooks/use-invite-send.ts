@@ -1,6 +1,6 @@
 import { EventInviteReceivedType, SocketActionsType } from 'common'
 
-import { getRequiredContactSystemData } from 'src/features/contact/~shared/lib'
+import { getRequiredContactSystemData } from 'src/features/contact'
 
 import { useNotification } from 'src/entities/notification'
 

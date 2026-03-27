@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { CHAT_ROOMS_WIDGET_I18N } from 'src/widgets/aside-panel/ui/ChatRooms/config'
+import { CHAT_ROOMS_WIDGET_I18N } from 'src/widgets/aside-panel'
 
 import { ChatRoomList, CreateChatRoomBtn } from 'src/features/chat-room'
 

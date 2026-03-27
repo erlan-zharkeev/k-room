@@ -8,8 +8,8 @@ import {
   INITIAL_CONTEXT_MENU,
   CLICKED_OBJECT_INITIAL_STATE,
   INITIAL_REPLIED_MESSAGE_DATA
-} from 'src/entities/system/config'
-import type { AuthStatusType, IMessageInputData, IViewPort } from 'src/entities/system/config/types'
+} from 'src/entities/system'
+import type { AuthStatusType, IMessageInputData, IViewPort } from 'src/entities/system/config'
 
 export const systemSlice = createSlice({
   name: 'system',

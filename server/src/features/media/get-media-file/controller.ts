@@ -2,11 +2,11 @@ import type { AppResponseType, IAppRequest } from 'shared-config'
 
 import { StatusEnum } from 'common'
 
-import { MESSAGE } from 'features/media/get-media-file/config'
-import { parseBucketNameFromId } from 'features/media/get-media-file/lib'
+import { MESSAGE } from 'features/media/get-media-file'
+import { parseBucketNameFromId } from 'features/media/get-media-file'
 
 import { MediaBucketNameType } from 'entities/media'
-import { streamMediaFile } from 'entities/media/lib/stream-media-file'
+import { streamMediaFile } from 'entities/media'
 
 import { getLocalizedText, throwHTTPError } from 'shared-lib'
 

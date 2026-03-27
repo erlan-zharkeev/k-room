@@ -1,13 +1,16 @@
 import fs from 'node:fs/promises'
+import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
-import path from 'path'
 
+import { isUserExist } from 'features/auth'
 import { createUser } from 'features/user'
-import { updateUserAvatar } from 'features/user/update-user-data/lib'
+import { updateUserAvatar } from 'features/user/update-user-data'
 
-import { USER_FIXTURES } from 'entities/user/config/constants'
+import { USER_FIXTURES } from 'entities/user/config'
+
+import { log } from 'shared-lib'
 
 const loadUserFixture = async (data: {
   id: string
@@ -17,14 +20,32 @@ const loadUserFixture = async (data: {
   avatarPath: string
 }) => {
   const { id, username, email, pass, avatarPath } = data
-  const hashedPassword = await bcrypt.hash(pass, 6)
   const identifier = new mongoose.Types.ObjectId(id)
+
+  const userAlreadyExists = await isUserExist({ id: identifier, username, email })
+  if (userAlreadyExists) {
+    return 'skipped' as const
+  }
+
+  const hashedPassword = await bcrypt.hash(pass, 6)
   const user = await createUser({ id: identifier, email, username, hashedPassword })
+  if (!user) {
+    return 'failed' as const
+  }
+
   await user?.set('system.confirmed', true).save()
   const avatarSrc = path.resolve(avatarPath)
   const buffer = await fs.readFile(avatarSrc)
   await updateUserAvatar(buffer, id)
-  return user
+  return 'created' as const
 }
 
-export const loadUserFixtures = async () => Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data)))
+export const loadUserFixtures = async () => {
+  const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data)))
+
+  const created = results.filter((result) => result === 'created').length
+  const skipped = results.filter((result) => result === 'skipped').length
+  const failed = results.filter((result) => result === 'failed').length
+
+  log.info(`-User fixtures processed: created=${created}, skipped=${skipped}, failed=${failed}`)
+}

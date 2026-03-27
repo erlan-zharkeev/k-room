@@ -5,15 +5,19 @@ import { useState } from 'react'
 // import { settings } from 'firebase/analytics'
 
 import { useContact } from 'src/entities/contact'
-// import { useUser } from 'src/entities/user'
 
 import { DbContactType } from 'src/shared/config'
+
+// import { useUser } from 'src/entities/user'
+
 // import { AdditionalServiceContext } from 'src/shared/providers'
 
 export const useContactList = () => {
   // const { call } = useContext(AdditionalServiceContext)
   const { contacts } = useContact()
-  const contactList = contacts?.filter((contact) => contact.interactionType !== 'invite-hidden')
+  const contactList = contacts
+    ?.filter((contact) => contact.interactionType !== 'invite-hidden')
+    .sort((a, b) => (b.savedAt ?? 0) - (a.savedAt ?? 0))
 
   // const { id, username } = useUser()
 

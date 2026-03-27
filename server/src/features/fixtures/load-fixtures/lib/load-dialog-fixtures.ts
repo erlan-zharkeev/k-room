@@ -1,4 +1,4 @@
-import { BASE_FIXTURE_TIMESTAMP, CONTACT_INTERACTION, DAY_IN_MS, MESSAGE_ACTIONS, MESSAGE_QUALIFIERS, MESSAGE_SUBJECTS, MINUTE_IN_MS } from 'features/fixtures/load-fixtures/config'
+import { BASE_FIXTURE_TIMESTAMP, CONTACT_INTERACTION, DAY_IN_MS, MESSAGE_ACTIONS, MESSAGE_QUALIFIERS, MESSAGE_SUBJECTS, MINUTE_IN_MS } from 'features/fixtures/load-fixtures'
 
 import { ChatRoomModel } from 'entities/chat-room'
 import { MessageModel } from 'entities/message'

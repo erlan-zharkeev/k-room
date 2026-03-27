@@ -1,8 +1,7 @@
 import './style.scss'
 import { useEffect } from 'react'
 
-import { SelectDevice, useInputAudioDevice } from 'src/features/device'
-import { AUDIO_INPUT_DEVICE_SELECT_I18N } from 'src/features/device/select-audio-input-device/ui/AudioInputDeviceSelect/config'
+import { AUDIO_INPUT_DEVICE_SELECT_I18N, SelectDevice, useInputAudioDevice } from 'src/features/device'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'

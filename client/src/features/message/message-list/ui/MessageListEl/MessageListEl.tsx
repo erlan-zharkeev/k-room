@@ -1,7 +1,7 @@
 import './style.scss'
 
+import type { IMessageListElProps } from 'src/features/message'
 import { MessageBody, MessageMenu } from 'src/features/message'
-import type { IMessageListElProps } from 'src/features/message/message-list/ui/MessageListEl/config'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 

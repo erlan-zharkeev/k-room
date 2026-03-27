@@ -1,7 +1,6 @@
 import { IEventMessageDelivered } from 'common'
 
-import { useAddMessage } from 'src/features/message'
-import { notifyDeliveredMessage } from 'src/features/message/message-delivery-handler'
+import { notifyDeliveredMessage, useAddMessage } from 'src/features/message'
 
 import { useMessage } from 'src/entities/message'
 

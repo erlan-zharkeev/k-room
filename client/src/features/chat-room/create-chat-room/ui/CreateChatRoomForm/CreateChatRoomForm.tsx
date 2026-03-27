@@ -1,8 +1,7 @@
 import './style.scss'
 
-import { useCreateChatRoom } from 'src/features/chat-room/create-chat-room/hooks'
-import { CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomForm/config'
-import type { ICreateChatRoomFormProps } from 'src/features/chat-room/create-chat-room/ui/CreateChatRoomForm/config'
+import { useCreateChatRoom, CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room'
+import type { ICreateChatRoomFormProps } from 'src/features/chat-room/create-chat-room'
 import { usePickContact } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/system'
@@ -20,6 +19,7 @@ export const CreateChatRoomForm = ({ onSuccess }: ICreateChatRoomFormProps) => {
     setFilterQuery,
     isPrivateChatAlreadyExists
   } = usePickContact()
+  const fromTitle = t(CREATE_CHAT_ROOM_FORM_I18N.fromTitle) as (count: number) => string
 
   return (
     <AppForm
@@ -39,7 +39,7 @@ export const CreateChatRoomForm = ({ onSuccess }: ICreateChatRoomFormProps) => {
         contactIds: {
           inputType: 'element-picker',
           availableElements: contactListToPick,
-          fromTitle: t(CREATE_CHAT_ROOM_FORM_I18N.fromTitle)(pickedContactIds.length),
+          fromTitle: fromTitle(pickedContactIds.length),
           toTitle: t(CREATE_CHAT_ROOM_FORM_I18N.toTitle),
           rule: { name: 'required' }
         },

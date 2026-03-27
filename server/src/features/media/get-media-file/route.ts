@@ -3,7 +3,7 @@ import { Router } from 'express'
 import { MediaEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'features/auth'
-import { getMediaFile } from 'features/media/get-media-file/controller'
+import { getMediaFile } from 'features/media'
 
 export const getMediaFileRouter = Router()
 

@@ -1,7 +1,7 @@
 import './style.scss'
 
+import type { IContentTabButton } from 'src/features/content-tab'
 import { useContentTabSelect } from 'src/features/content-tab'
-import type { IContentTabButton } from 'src/features/content-tab/contact-tab/ui/ContentTab/types'
 
 import { CallsButton } from 'src/entities/call'
 import { ChatRoomsButton } from 'src/entities/chat-room'

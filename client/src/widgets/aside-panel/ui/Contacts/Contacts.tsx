@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { CONTACTS_WIDGET_I18N } from 'src/widgets/aside-panel/ui/Contacts/config'
+import { CONTACTS_WIDGET_I18N } from 'src/widgets/aside-panel'
 
 import { ContactList, SearchContact } from 'src/features/contact'
 

@@ -1,7 +1,7 @@
 import './style.scss'
 import { useContext } from 'react'
 
-import { CALL_MODAL_VIDEO_I18N } from 'src/entities/call/ui/CallModal/components/CallModalBody/components/CallModalVideo/config'
+import { CALL_MODAL_VIDEO_I18N } from 'src/entities/call/ui'
 import { useI18n } from 'src/entities/system'
 
 import { useTypedSelector } from 'src/shared/lib'

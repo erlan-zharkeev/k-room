@@ -1,7 +1,6 @@
 import './style.scss'
 
-import { useEnableSound } from 'src/features/settings/toggle-enable-sound/hooks'
-import { ENABLE_SOUND_SWITCHER_TEXT } from 'src/features/settings/toggle-enable-sound/ui/EnableSoundSwitcher/config'
+import { useEnableSound, ENABLE_SOUND_SWITCHER_TEXT } from 'src/features/settings/toggle-enable-sound'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n, useSystem } from 'src/entities/system'

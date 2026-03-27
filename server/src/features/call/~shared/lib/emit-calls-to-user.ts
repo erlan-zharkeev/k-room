@@ -1,6 +1,6 @@
 import type { EventCallsUpdatedType, SocketActionsType } from 'common'
 
-import { transformCallForUser } from 'features/call/~shared/lib/transform-call-for-user'
+import { transformCallForUser } from 'features/call/~shared'
 import { getSocketsByUserIds } from 'features/user'
 
 import { CallModel } from 'entities/call'

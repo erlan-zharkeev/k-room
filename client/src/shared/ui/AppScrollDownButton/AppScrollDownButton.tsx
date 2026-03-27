@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { AppButton } from 'src/shared/ui/AppButton/AppButton'
+import { AppButton } from 'src/shared/ui'
 
 export const AppScrollDownButton = ({
   hidden = false,

@@ -2,7 +2,7 @@ import { IGetUserDataResponse, StatusEnum } from 'common'
 
 import { updateTokens } from 'features/auth'
 import { mapUserToDto, USER_MESSAGE } from 'features/user'
-import { MESSAGE } from 'features/user/get-user-data/config'
+import { MESSAGE } from 'features/user/get-user-data'
 
 import { UserModel } from 'entities/user'
 

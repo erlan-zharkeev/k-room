@@ -1,6 +1,6 @@
 import { IEventMessageDelivered } from 'common'
 
-import { MessageNotification } from 'src/features/message/message-delivery-handler/ui'
+import { MessageNotification } from 'src/features/message/message-delivery-handler'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useNotification } from 'src/entities/notification'

@@ -1,6 +1,6 @@
 import { IEventStatusContact, SocketActionsType } from 'common'
 
-import { getSocketsByUserIds } from 'features/user/~shared/lib/get-sockets-by-ids'
+import { getSocketsByUserIds } from 'features/user/~shared'
 
 import { UserModel } from 'entities/user'
 

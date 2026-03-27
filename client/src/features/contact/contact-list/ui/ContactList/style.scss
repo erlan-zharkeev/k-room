@@ -7,13 +7,15 @@
     padding: 8px 8px 4px 0;
   }
 
+  .contact-list__items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .contact-list__list-item {
     padding: 4px;
     border-radius: 4px;
     background: var(--main-bg);
-  }
-
-  .contact-list__list-item:not(:last-child) {
-    margin-bottom: 8px;
   }
 }

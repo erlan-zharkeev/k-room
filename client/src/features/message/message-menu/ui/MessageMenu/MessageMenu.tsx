@@ -1,14 +1,14 @@
 import './style.scss'
 
 import {
+ MESSAGE_MENU_I18N,
   ForwardMessageModal,
-  MessageReactions,
+  MessageMenuReactions,
   useMessageDelete,
   useMessageForward,
   useReplyMessage
 } from 'src/features/message'
-import { MESSAGE_MENU_I18N } from 'src/features/message/message-menu/ui/MessageMenu/config'
-import type { IMessageMenuProps } from 'src/features/message/message-menu/ui/MessageMenu/config'
+import type { IMessageMenuProps } from 'src/features/message/message-menu'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
@@ -29,7 +29,7 @@ export const MessageMenu = ({ message, children }: IMessageMenuProps) => {
     {
       name: 'reactions',
       label: (
-        <MessageReactions
+        <MessageMenuReactions
           userId={userId ?? ''}
           username={username}
           selectedChatRoomId={selectedChatRoomId}

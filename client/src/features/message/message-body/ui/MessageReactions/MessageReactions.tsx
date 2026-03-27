@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { Tooltip } from 'antd'
 
-import type { IMessageBodyReaction } from 'src/features/message/message-body/ui/MessageBody/types'
-import type { IMessageReactionsProps } from 'src/features/message/message-body/ui/MessageReactions/config'
+import type { IMessageBodyReaction, IMessageReactionsProps } from 'src/features/message/message-body'
 
 import { EMOJI_LIST } from 'src/entities/emoji'
 

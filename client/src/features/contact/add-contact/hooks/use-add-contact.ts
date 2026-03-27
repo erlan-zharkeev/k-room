@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { IEventContactAddSuccess, SocketActionsType } from 'common'
 
-import { getRequiredContactSystemData } from 'src/features/contact/~shared/lib'
+import { getRequiredContactSystemData } from 'src/features/contact'
 
 import { useContact } from 'src/entities/contact'
 import { useUser } from 'src/entities/user'
