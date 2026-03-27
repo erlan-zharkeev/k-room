@@ -6,4 +6,4 @@ import { signInWithProvider } from 'features/auth/sign-in-with-provider/controll
 
 export const providerLoginRouter = Router()
 
-providerLoginRouter.get(AuthEndpointsEnum.ProviderLogin, signInWithProvider)
+providerLoginRouter.post(AuthEndpointsEnum.ProviderLogin, signInWithProvider)

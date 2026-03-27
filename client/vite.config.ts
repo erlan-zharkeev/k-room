@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
   const isDev = mode === 'development'
+
   const getClientEnv = (key: string, value?: string) => {
     if (isDev && !value) {
       throw new Error(`[client] Missing required env "${key}" in .env.${mode}`)

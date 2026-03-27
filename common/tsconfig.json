@@ -8,7 +8,7 @@
     "composite": true,
     "moduleResolution": "node"
   },
-  "include": ["./index.ts", "./shared-types"],
+  "include": ["./index.ts", "./types", "./lib"],
   "exclude": [
     "node_modules",
     "Makefile",

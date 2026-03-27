@@ -30,16 +30,13 @@ export const socketAuthMiddleware = async (socket: SocketInstanceType) => {
     const language = getSocketLanguage(socket)
 
     socket.data = { userId: decoded.id, deviceId, language }
-    await UserModel.updateOne(
-      { _id: decoded.id },
-      [
-        {
-          $set: {
-            [`system.device.${deviceId}.socketId`]: socket.id
-          }
+    await UserModel.updateOne({ _id: decoded.id }, [
+      {
+        $set: {
+          [`system.device.${deviceId}.socketId`]: socket.id
         }
-      ]
-    )
+      }
+    ])
   } catch {
     return authErrorBreakConnection(socket, replayData)
   }

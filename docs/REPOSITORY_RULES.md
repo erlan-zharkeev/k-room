@@ -344,3 +344,26 @@ Avoid:
 - relying on DOM structure when an explicit class selector would be clearer
 
 As a rule of thumb, nesting should stay shallow. If styling starts depending on multiple nested class levels, rewrite it into explicit selectors.
+
+---
+
+## Commit Rules
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```
+type(scope?): description
+```
+
+Types:
+- `feat` — new feature
+- `fix` — bug fix
+- `chore` — tooling, config, dependencies
+- `refactor` — code restructuring without feature or fix
+- `test` — adding or updating tests
+- `docs` — documentation only
+
+Rules:
+- Description is lowercase, no period at the end
+- Scope is optional, in parentheses: `refactor(client): ...`
+- Single short line; no body required for routine commits

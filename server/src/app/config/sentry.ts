@@ -15,7 +15,7 @@ export const initSentry = () => {
     enabled: ENV.SENTRY_ENABLED === 'true',
     environment: ENV.SENTRY_ENVIRONMENT,
     release: ENV.SENTRY_RELEASE || undefined,
-    debug: ENV.SENTRY_ENVIRONMENT === 'development',
+    debug: false,
     tracesSampleRate: ENV.SENTRY_ENVIRONMENT === 'development' ? 1 : 0.1,
     beforeSend(event, hint) {
       const originalException = hint.originalException

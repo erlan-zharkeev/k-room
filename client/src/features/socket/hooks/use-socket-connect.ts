@@ -1,5 +1,4 @@
 import { DEFAULT_APP_LANGUAGE, SocketActionsType } from 'common'
-import Cookies from 'js-cookie'
 import { useDispatch } from 'react-redux'
 
 import { settingsStore } from 'src/entities/settings/hooks/use-settings'
@@ -14,8 +13,6 @@ export const useSocketConnect = () => {
     const settings = await settingsStore.get()
 
     socket.auth = {
-      token: Cookies.get('jwt'),
-      deviceId: Cookies.get('device-id'),
       language: settings?.language ?? DEFAULT_APP_LANGUAGE
     }
     socket.connect()

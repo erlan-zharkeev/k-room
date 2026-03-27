@@ -18,3 +18,7 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 - Add Playwright e2e smoke tests for critical user flows.
 - Add the first Playwright scenarios: registration, login, password recovery.
 - Add targeted tests for critical pure helpers and validation logic.
+
+## To codex
+
+- у common внутри есть папка shared-types это уже не релевантно там находятся и функции а не только типы. убери эту папку лишнюю.

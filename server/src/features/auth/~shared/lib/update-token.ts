@@ -20,7 +20,7 @@ export const updateTokens = async (id: string, req: IAppRequest, res: Response) 
   )
   const deviceId = req.cookies['device-id'] ?? uuidv4()
   setCookie(res, 'device-id', deviceId, {
-    httpOnly: false,
+    httpOnly: true,
     secure: true,
     sameSite: 'strict',
     domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
