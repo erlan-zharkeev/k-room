@@ -23,7 +23,7 @@ const chatRoomSchema = new Schema<IChatRoomSchema>(
       default: []
     }
   },
-  { timestamps: true }
+  {}
 )
 
 export const ChatRoomModel = model('IChatRoom', chatRoomSchema, 'chat-room')
