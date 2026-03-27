@@ -60,7 +60,7 @@ const messageSchema = new Schema<IMessageSchema>(
       default: null
     }
   },
-  { timestamps: true }
+  {}
 )
 
 export const MessageModel = model('IMessage', messageSchema, 'message')

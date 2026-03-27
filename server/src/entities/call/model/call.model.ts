@@ -33,7 +33,7 @@ const callSchema = new Schema<IDBCallSchema>(
       default: false
     }
   },
-  { timestamps: true }
+  {}
 )
 
 export const CallModel = model('Call', callSchema, 'call')
