@@ -233,6 +233,40 @@ ForwardMessageModal/
 
 Do not lift such local split-only components to the feature root or neighboring public directories when they are only implementation details of one parent component.
 
+## Data Rules
+
+1. All date and time values on the server must be stored and transmitted as numeric Unix millisecond timestamps (`number` type).
+
+Do not use `Date` objects, ISO strings, or `String(Date.now())` when storing or sending time values.
+
+Use:
+
+```ts
+createdAt: Date.now()
+expiresAt: Date.now() + SOME_INTERVAL_MS
+```
+
+Do not use:
+
+```ts
+createdAt: new Date()
+createdAt: String(Date.now())
+createdAt: new Date().toISOString()
+```
+
+2. Named time interval constants belong in `config/constants.ts` of the feature that owns them.
+
+Use:
+
+```ts
+// config/constants.ts
+export const CODE_LIFE_MS = 1000 * 60 * 15
+```
+
+Do not define interval constants inline inside controllers or lib files.
+
+3. Static arrays used as configuration must use `as const`.
+
 ## Class Name Rules
 
 1. When building BEM-style class names with modifiers, use `createClassNameWithModifiers`.

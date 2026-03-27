@@ -1,55 +1,13 @@
+import { BASE_FIXTURE_TIMESTAMP, CONTACT_INTERACTION, DAY_IN_MS, MESSAGE_ACTIONS, MESSAGE_QUALIFIERS, MESSAGE_SUBJECTS, MINUTE_IN_MS } from 'features/fixtures/load-fixtures/config'
+
 import { ChatRoomModel } from 'entities/chat-room'
 import { MessageModel } from 'entities/message'
 import { FIXTURE_CONTACT_USERNAMES, FIXTURE_GROUPS, FIXTURE_MESSAGE_COUNT, USER_FIXTURES, UserModel } from 'entities/user'
-
-const CONTACT_INTERACTION = 'invite-accepted'
-const DAY_IN_MS = 1000 * 60 * 60 * 24
-const MINUTE_IN_MS = 1000 * 60
-const BASE_FIXTURE_TIMESTAMP = Date.UTC(2026, 1, 1, 8, 0, 0)
 
 const USER_BY_USERNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.username, fixture])) as Record<string, typeof USER_FIXTURES[number]>
 
 const ERLAN_ID = USER_BY_USERNAME.erlan?.id ?? ''
 const TOLIK_ID = USER_BY_USERNAME.tolik?.id ?? ''
-
-const MESSAGE_SUBJECTS = [
-  'search contacts',
-  'socket reconnect flow',
-  'message pagination',
-  'chat room sorting',
-  'device permissions',
-  'notification center',
-  'group room updates',
-  'image upload flow',
-  'scroll restoration',
-  'profile editing'
-] as const
-
-const MESSAGE_ACTIONS = [
-  'looks stable after the last patch',
-  'still needs a regression check',
-  'started behaving better in Chromium',
-  'shows the edge case more clearly now',
-  'needs cleaner empty-state handling',
-  'benefits from stronger typing',
-  'should be covered by a smoke test',
-  'would be easier to inspect with better fixtures',
-  'is ready for another review pass',
-  'should be rechecked after deploy'
-] as const
-
-const MESSAGE_QUALIFIERS = [
-  'before lunch',
-  'after the nightly restart',
-  'when the room is reopened',
-  'on a fresh session',
-  'after clearing the cache',
-  'while testing on mobile width',
-  'with multiple rooms selected in sequence',
-  'after a silent token refresh',
-  'when the modal is opened twice',
-  'while the websocket reconnects'
-] as const
 
 const buildFixtureMessageId = (idx: number) => `fixture-erlan-tolik-${String(idx).padStart(3, '0')}`
 
@@ -65,7 +23,7 @@ const buildFixtureMessage = (idx: number) => {
   const isErlanAuthor = idx % 2 !== 0
   const authorId = isErlanAuthor ? ERLAN_ID : TOLIK_ID
   const authorName = isErlanAuthor ? 'erlan' : 'tolik'
-  const createdAt = String(BASE_FIXTURE_TIMESTAMP + idx * (37 * MINUTE_IN_MS) + Math.floor(idx / 18) * DAY_IN_MS)
+  const createdAt = BASE_FIXTURE_TIMESTAMP + idx * (37 * MINUTE_IN_MS) + Math.floor(idx / 18) * DAY_IN_MS
 
   return {
     _id: buildFixtureMessageId(idx),

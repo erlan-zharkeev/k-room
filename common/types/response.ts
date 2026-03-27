@@ -12,7 +12,7 @@ export interface IGetUserDataResponse extends IFrontendUserData { }
 
 export interface ISendConfirmationLinkResponse {
   email: string
-  nextRequestTime: string
+  nextRequestTime: number
   attempts: number
 }
 

@@ -12,7 +12,7 @@ import { socket } from 'src/shared/api'
 export const useLoadRoomMessages = () => {
   const { selectedChatRoom } = useChatRoom()
   const { bulkPutMessages } = useMessage()
-  const nextBeforeCreatedAtRef = useRef<Record<string, string | undefined>>({})
+  const nextBeforeCreatedAtRef = useRef<Record<string, number | undefined>>({})
   const hasMoreMessagesRef = useRef<Record<string, boolean>>({})
 
   const loadRoomMessages = (payload: IEventLoadRoomMessages) => {
