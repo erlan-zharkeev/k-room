@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { DontShowNotificationAgainBtn, NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { DontShowNotificationAgainBtn, NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
@@ -14,7 +14,7 @@ export const useAudioContextMonitor = () => {
 
   const soundContextNotification = notifications.getNotification({
     key: 'sound-context',
-    message: NOTIFICATION_MESSAGE.allowAudioContext(),
+    message: NOTIFICATION_I18N.allowAudioContext(),
     messageType: 'info',
     duration: 0,
     actions: <DontShowNotificationAgainBtn notificationName="audio-context" />

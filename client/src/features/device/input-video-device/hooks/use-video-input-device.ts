@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useDevicePermissionRequestAndUpdate } from 'src/features/device/request-and-update-device-permission'
 
-import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
@@ -38,7 +38,7 @@ export const useInputVideoDevice = () => {
   }
 
   const cantAccessDeviceNotification = getNotification({
-    message: t(NOTIFICATION_MESSAGE.cantAccessDevice),
+    message: t(NOTIFICATION_I18N.cantAccessDevice),
     messageType: 'error'
   })
 

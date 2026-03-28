@@ -7,7 +7,7 @@ import { getSocketsByUserIds } from 'src/features/user'
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
 
-import { SERVER_NOTIFICATION_MESSAGE, SocketInstanceType } from 'src/shared/config'
+import { SERVER_NOTIFICATION_I18N, SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
 import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from './../shared'
@@ -46,7 +46,7 @@ export const createChatRoomController = (socket: SocketInstanceType) => {
         getIO().to(socketId).emit<SocketActionsType>('room-created', payload)
       })
     } catch {
-      throwSocketError(socket.id, SERVER_NOTIFICATION_MESSAGE.RoomCreationError)
+      throwSocketError(socket.id, SERVER_NOTIFICATION_I18N.RoomCreationError)
     }
   })
 }

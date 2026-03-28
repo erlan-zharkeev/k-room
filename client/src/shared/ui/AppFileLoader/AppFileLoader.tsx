@@ -3,7 +3,7 @@ import { useId, useState } from 'react'
 
 import { IImageObject } from 'common'
 
-import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/system'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
@@ -49,7 +49,7 @@ export const AppFileLoader = ({
   }
 
   const maxAttachedFilesExceedNotification = notifications.getNotification({
-    message: NOTIFICATION_MESSAGE.maxAttachedFilesExceed(maxAttachedFiles),
+    message: NOTIFICATION_I18N.maxAttachedFilesExceed(maxAttachedFiles),
     messageType: 'warning'
   })
 

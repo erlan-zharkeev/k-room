@@ -1,1 +1,1 @@
-export const CODE_MESSAGE = {}
+export const CODE_I18N = {}

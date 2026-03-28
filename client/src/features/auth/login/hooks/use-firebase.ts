@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { FIREBASE_PROVIDER_MAP } from 'src/features/auth/login'
 import { useActivateUserSession } from 'src/features/user'
 
-import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
@@ -20,7 +20,7 @@ export const useFirebase = () => {
   const notifications = useNotification()
 
   const failedToLoginNotification = notifications.getNotification({
-    message: NOTIFICATION_MESSAGE.failedToLogin(),
+    message: NOTIFICATION_I18N.failedToLogin(),
     messageType: 'error'
   })
 
