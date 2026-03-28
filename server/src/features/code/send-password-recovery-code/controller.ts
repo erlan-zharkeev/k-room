@@ -2,7 +2,7 @@ import { randomInt } from 'node:crypto'
 
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
-import { CODE_LIFE_MS, MESSAGE } from 'src/features/code/send-password-recovery-code'
+import { CODE_LIFE_MS, I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE } from 'src/features/code/send-password-recovery-code'
 import { sendPasswordRecoveryEmail } from 'src/features/email'
 import { USER_MESSAGE } from 'src/features/user'
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
@@ -36,7 +36,7 @@ export const sendPasswordRecoveryCode = async (
           nextTimeRequest: existingCode.nextRequestPossibleAt
         },
         message: {
-          text: getLocalizedText(MESSAGE.tooManyRequests, language),
+          text: getLocalizedText(I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE.tooManyRequests, language),
           silent: false
         }
       })
@@ -71,11 +71,11 @@ export const sendPasswordRecoveryCode = async (
         ...(ENV.IS_DEV ? { debugCode: code } : {})
       },
       message: {
-        text: getLocalizedText(MESSAGE.codeSent, language),
+        text: getLocalizedText(I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE.codeSent, language),
         silent: false
       }
     })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.sendFailed, language))
+    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE.sendFailed, language))
   }
 }

@@ -4,7 +4,7 @@ import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 import { updateUserData } from 'src/features/user/update-user-data'
-import { fieldsValidation } from 'src/features/user/update-user-data'
+import { UPDATE_USER_DATA_FIELDS_VALIDATION } from 'src/features/user/update-user-data'
 
 import { multerUploader } from 'src/entities/media'
 
@@ -16,7 +16,7 @@ updateUserRouter.post(
   UserEndpointsEnum.EditUserData,
   accessTokenValidator,
   multerUploader.single('file'),
-  fieldsValidation,
+  UPDATE_USER_DATA_FIELDS_VALIDATION,
   validateRequest,
   updateUserData
 )

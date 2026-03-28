@@ -1,6 +1,6 @@
 import { IMarkAsReadPayload, StatusEnum } from 'common'
 
-import { MESSAGE } from 'src/features/user/mark-info-notification-as-read'
+import { I18N_MARK_INFO_NOTIFICATION_AS_READ_MESSAGE } from 'src/features/user/mark-info-notification-as-read'
 
 import { UserModel } from 'src/entities/user'
 
@@ -18,7 +18,7 @@ export const markInfoAsRead = async (req: IAppRequest, res: AppResponseType<null
 
     res.json({ payload: null, message: { text: getLocalizedText(SHARED_MESSAGE.success, language), silent: true } })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failed, language))
+    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_MARK_INFO_NOTIFICATION_AS_READ_MESSAGE.failed, language))
   }
 
   return {}

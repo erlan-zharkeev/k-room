@@ -1,7 +1,7 @@
 import { UserModel } from 'src/entities/user'
 import { updateTokens } from 'src/features/auth'
 import { mapUserToDto, USER_MESSAGE } from 'src/features/user'
-import { MESSAGE } from 'src/features/user/get-user-data'
+import { I18N_GET_USER_DATA_MESSAGE } from 'src/features/user/get-user-data'
 import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
@@ -28,6 +28,6 @@ export const getUserData = async (req: IAppRequest, res: AppResponseType<IGetUse
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedGetUserData, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_GET_USER_DATA_MESSAGE.failedGetUserData, language))
   }
 }

@@ -1,3 +1,3 @@
 import { requiredStringRule } from 'src/features/auth'
 
-export const fieldsValidation = [requiredStringRule('codeToValidate'), requiredStringRule('password')]
+export const RESET_PASSWORD_FIELDS_VALIDATION = [requiredStringRule('codeToValidate'), requiredStringRule('password')]

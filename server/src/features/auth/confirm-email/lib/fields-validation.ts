@@ -1,3 +1,3 @@
 import { requiredStringRule } from 'src/features/auth'
 
-export const fieldsValidation = [requiredStringRule('token')]
+export const CONFIRM_EMAIL_FIELDS_VALIDATION = [requiredStringRule('token')]
