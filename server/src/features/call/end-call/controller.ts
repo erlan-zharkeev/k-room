@@ -1,12 +1,12 @@
 import type { IEventCallEnded, SocketActionsType } from 'common'
 
-import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from 'features/call'
-import { getSocketsByUserIds } from 'features/user'
+import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from 'src/features/call'
+import { getSocketsByUserIds } from 'src/features/user'
 
-import { CallModel } from 'entities/call'
+import { CallModel } from 'src/entities/call'
 
-import { SocketInstanceType } from 'shared-config'
-import { getIO, throwSocketError } from 'shared-lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO, throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('call-ended', async ({ callerId, callId }: IEventCallEnded) => {
@@ -21,11 +21,7 @@ export const controller = (socket: SocketInstanceType) => {
       clearActiveCallInterlocutor(userId)
       clearActiveCallInterlocutor(callerId)
 
-      const call = await CallModel.findOneAndUpdate(
-        { _id: callId },
-        { finishedAt: Date.now() },
-        { new: true }
-      ).lean()
+      const call = await CallModel.findOneAndUpdate({ _id: callId }, { finishedAt: Date.now() }, { new: true }).lean()
 
       if (!call) return
 

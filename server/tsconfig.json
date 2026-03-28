@@ -9,15 +9,10 @@
     "baseUrl": "./../",
     "lib": ["ESNext.AsyncIterable", "ESNext.Disposable"],
     "paths": {
-      "app/*": ["server/src/app/*"],
-      "features/*": ["server/src/features/*"],
-      "entities/*": ["server/src/entities/*"],
-      "shared-config": ["server/src/shared/config"],
-      "shared-lib": ["server/src/shared/lib"],
-      "shared-middleware": ["server/src/shared/middleware"],
+      "src/*": ["server/src/*"],
       "common": ["common/index.ts"]
     }
   },
-  "include": ["../server/src", "../common/types", "../common/lib", "**/*.cjs"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "./build", "./src/utils"]
 }

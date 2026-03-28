@@ -7,9 +7,9 @@ import {
   type MediaBucketNameType,
   VALIDATE_MEDIA_FILE_MESSAGE,
   validationMediaOptionsMap
-} from 'entities/media/config'
+} from 'src/entities/media/config'
 
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const validateFileMetaData = (
   filedata: IFileData,

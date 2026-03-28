@@ -1,13 +1,13 @@
 import { SocketActionsType, StatusEnum } from 'common'
 
-import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'features/user'
-import { updateUserAvatar } from 'features/user/update-user-data'
-import { MESSAGE } from 'features/user/update-user-data'
+import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'src/features/user'
+import { updateUserAvatar } from 'src/features/user/update-user-data'
+import { MESSAGE } from 'src/features/user/update-user-data'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
+import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
 export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
@@ -40,10 +40,7 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
       await updateUserAvatar(null, userId, res, language)
     }
 
-    const contacts = await UserModel.find(
-      { [`personal.contacts.${userId}`]: { $exists: true } },
-      { _id: 1 }
-    ).lean()
+    const contacts = await UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean()
 
     const ids = contacts.map((c) => String(c._id))
     if (ids.length) {
@@ -52,12 +49,14 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
       if (!updatedUserData) return
       socketIds.forEach((socketId) => {
         log.warn(String(socketId))
-        getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData)
-        )
+        getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
       })
     }
 
-    return res.json({ payload: null, message: { text: getLocalizedText(SHARED_MESSAGE.success, language), silent: true } })
+    return res.json({
+      payload: null,
+      message: { text: getLocalizedText(SHARED_MESSAGE.success, language), silent: true }
+    })
   } catch (error: unknown) {
     log.error(String(error))
     serverCaptureSentryException(error)

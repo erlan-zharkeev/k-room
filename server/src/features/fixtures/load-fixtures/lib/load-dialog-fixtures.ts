@@ -1,10 +1,27 @@
-import { BASE_FIXTURE_TIMESTAMP, CONTACT_INTERACTION, DAY_IN_MS, MESSAGE_ACTIONS, MESSAGE_QUALIFIERS, MESSAGE_SUBJECTS, MINUTE_IN_MS } from 'features/fixtures/load-fixtures'
+import {
+  BASE_FIXTURE_TIMESTAMP,
+  CONTACT_INTERACTION,
+  DAY_IN_MS,
+  MESSAGE_ACTIONS,
+  MESSAGE_QUALIFIERS,
+  MESSAGE_SUBJECTS,
+  MINUTE_IN_MS
+} from 'src/features/fixtures/load-fixtures'
 
-import { ChatRoomModel } from 'entities/chat-room'
-import { MessageModel } from 'entities/message'
-import { FIXTURE_CONTACT_USERNAMES, FIXTURE_GROUPS, FIXTURE_MESSAGE_COUNT, USER_FIXTURES, UserModel } from 'entities/user'
+import { ChatRoomModel } from 'src/entities/chat-room'
+import { MessageModel } from 'src/entities/message'
+import {
+  FIXTURE_CONTACT_USERNAMES,
+  FIXTURE_GROUPS,
+  FIXTURE_MESSAGE_COUNT,
+  USER_FIXTURES,
+  UserModel
+} from 'src/entities/user'
 
-const USER_BY_USERNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.username, fixture])) as Record<string, typeof USER_FIXTURES[number]>
+const USER_BY_USERNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.username, fixture])) as Record<
+  string,
+  (typeof USER_FIXTURES)[number]
+>
 
 const ERLAN_ID = USER_BY_USERNAME.erlan?.id ?? ''
 const TOLIK_ID = USER_BY_USERNAME.tolik?.id ?? ''
@@ -14,7 +31,10 @@ const buildFixtureMessageId = (idx: number) => `fixture-erlan-tolik-${String(idx
 const buildFixtureMessageBody = (idx: number) => {
   const subject = MESSAGE_SUBJECTS[(idx - 1) % MESSAGE_SUBJECTS.length]
   const action = MESSAGE_ACTIONS[Math.floor((idx - 1) / MESSAGE_SUBJECTS.length) % MESSAGE_ACTIONS.length]
-  const qualifier = MESSAGE_QUALIFIERS[Math.floor((idx - 1) / (MESSAGE_SUBJECTS.length * MESSAGE_ACTIONS.length)) % MESSAGE_QUALIFIERS.length]
+  const qualifier =
+    MESSAGE_QUALIFIERS[
+      Math.floor((idx - 1) / (MESSAGE_SUBJECTS.length * MESSAGE_ACTIONS.length)) % MESSAGE_QUALIFIERS.length
+    ]
 
   return `Fixture note ${String(idx).padStart(3, '0')}: ${subject} ${action} ${qualifier}.`
 }
@@ -111,12 +131,14 @@ const ensureGroupRooms = async () => {
         users: { $all: users, $size: users.length }
       })
 
-      const room = existingRoom ?? await new ChatRoomModel({
-        authorId,
-        users,
-        chatName,
-        messages: []
-      }).save()
+      const room =
+        existingRoom ??
+        (await new ChatRoomModel({
+          authorId,
+          users,
+          chatName,
+          messages: []
+        }).save())
 
       await Promise.all(
         users.map(async (userId) => {

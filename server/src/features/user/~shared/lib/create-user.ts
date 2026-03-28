@@ -2,11 +2,11 @@ import mongoose from 'mongoose'
 
 import { ProviderType } from 'common'
 
-import { isUserExist } from 'features/auth'
+import { isUserExist } from 'src/features/auth'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { log, serverCaptureSentryException } from 'shared-lib'
+import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 export const createUser = async ({
   id,

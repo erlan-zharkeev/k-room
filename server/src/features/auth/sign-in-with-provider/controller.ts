@@ -3,15 +3,15 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
 
-import { updateTokens } from 'features/auth'
-import { MESSAGE } from 'features/auth/sign-in-with-provider'
-import { createUser, mapUserToDto } from 'features/user'
-import { updateUserAvatar } from 'features/user/update-user-data'
+import { updateTokens } from 'src/features/auth'
+import { MESSAGE } from 'src/features/auth/sign-in-with-provider'
+import { createUser, mapUserToDto } from 'src/features/user'
+import { updateUserAvatar } from 'src/features/user/update-user-data'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
   const language = req.language
@@ -22,7 +22,7 @@ export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<
 
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await createUser({ username, email, provider, hashedPassword })
-    const user = newUser ?? await UserModel.findOne({ 'personal.email': email })
+    const user = newUser ?? (await UserModel.findOne({ 'personal.email': email }))
 
     if (newUser && avatar) {
       try {

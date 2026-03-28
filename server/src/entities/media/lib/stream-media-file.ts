@@ -2,23 +2,27 @@ import type { Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
-import { mediaBuckets } from 'entities/media'
-import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from 'entities/media/config'
+import { mediaBuckets } from 'src/entities/media'
+import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from 'src/entities/media/config'
 
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const streamMediaFile = async (
   bucketName: MediaBucketNameType,
   id: string,
   res: Response,
   language?: AppLanguageType,
-  opts?: { asAttachment?: boolean, revalidateCache?: boolean }
+  opts?: { asAttachment?: boolean; revalidateCache?: boolean }
 ) => {
   try {
     const bucket = mediaBuckets[bucketName]
 
     if (!bucket) {
-      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language))
+      return throwHTTPError(
+        StatusEnum.NotFound,
+        res,
+        getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language)
+      )
     }
 
     const filename = `${bucketName}.${id}`
@@ -26,7 +30,12 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language), true)
+      return throwHTTPError(
+        StatusEnum.NotFound,
+        res,
+        getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language),
+        true
+      )
     }
 
     res.setHeader('Content-Type', file.contentType || 'application/octet-stream')
@@ -43,9 +52,15 @@ export const streamMediaFile = async (
 
     bucket
       .openDownloadStreamByName(filename)
-      .on('error', () => throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language)))
+      .on('error', () =>
+        throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language))
+      )
       .pipe(res)
   } catch {
-    return throwHTTPError(StatusEnum.Server, res ?? null, getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language))
+    return throwHTTPError(
+      StatusEnum.Server,
+      res ?? null,
+      getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language)
+    )
   }
 }

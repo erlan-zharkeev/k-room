@@ -1,15 +1,11 @@
 import type { EventCallUpdatedType, SocketActionsType } from 'common'
 
-import { transformCallForUser } from 'features/call/~shared'
-import { getSocketsByUserIds } from 'features/user'
+import { transformCallForUser } from 'src/features/call/~shared'
+import { getSocketsByUserIds } from 'src/features/user'
 
-import { getIO } from 'shared-lib'
+import { getIO } from 'src/shared/lib'
 
-export const emitCallDataToInterlocutors = async (
-  interlocutors: string[],
-  callId: string,
-  setId?: boolean
-) => {
+export const emitCallDataToInterlocutors = async (interlocutors: string[], callId: string, setId?: boolean) => {
   await Promise.all(
     interlocutors.map(async (interlocutorId) => {
       const transformedCall = await transformCallForUser(interlocutorId, callId)

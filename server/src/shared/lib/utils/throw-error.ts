@@ -1,7 +1,7 @@
 import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
 import { type Response } from 'express'
 
-import { getIO, log, serverCaptureSentryHttpError } from 'shared-lib'
+import { getIO, log, serverCaptureSentryHttpError } from 'src/shared/lib'
 
 export const throwHTTPError = (status: StatusEnum, res: Response | null, error: string, silent: boolean = false) => {
   log.error(`-${error}`)

@@ -1,6 +1,6 @@
-import { ValidateFileMetaOptionsMapType } from 'entities/media/config'
+import { ValidateFileMetaOptionsMapType } from 'src/entities/media/config'
 
-import { SharpSettingsKeyType } from 'shared-config'
+import { SharpSettingsKeyType } from 'src/shared/config'
 
 export const ALLOWED_CONTENT_TYPES = ['image/', 'audio/', 'video/', 'application/pdf']
 
@@ -29,7 +29,10 @@ export const validationMediaOptionsMap: ValidateFileMetaOptionsMapType = {
   }
 }
 
-export const SHARP_PRESETS: Record<SharpSettingsKeyType, { quality: number; dimensions: { width: number | null, height: number | null } }> = {
+export const SHARP_PRESETS: Record<
+  SharpSettingsKeyType,
+  { quality: number; dimensions: { width: number | null; height: number | null } }
+> = {
   avatar: {
     dimensions: {
       width: 300,

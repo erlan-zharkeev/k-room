@@ -1,9 +1,9 @@
 import type { IEventMarkCallAsVideo, SocketActionsType } from 'common'
 
-import { CallModel } from 'entities/call'
+import { CallModel } from 'src/entities/call'
 
-import { SocketInstanceType } from 'shared-config'
-import { throwSocketError } from 'shared-lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('mark-call-as-video', async ({ callId }: IEventMarkCallAsVideo) => {

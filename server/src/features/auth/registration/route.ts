@@ -2,10 +2,10 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { registration } from 'features/auth/registration'
-import { fieldsValidation } from 'features/auth/registration'
+import { registration } from 'src/features/auth/registration'
+import { fieldsValidation } from 'src/features/auth/registration'
 
-import { validateRequest } from 'shared-middleware'
+import { validateRequest } from 'src/shared/middleware'
 
 export const registrationRouter = Router()
 

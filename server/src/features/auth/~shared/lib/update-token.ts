@@ -1,13 +1,13 @@
 import { type Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 
-import { setToken } from 'features/auth'
-import { setCookie } from 'features/cookie'
+import { setToken } from 'src/features/auth'
+import { setCookie } from 'src/features/cookie'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { ENV, IAppRequest } from 'shared-config'
-import { log, serverCaptureSentryException } from 'shared-lib'
+import { ENV, IAppRequest } from 'src/shared/config'
+import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 export const updateTokens = async (id: string, req: IAppRequest, res: Response) => {
   setToken(res, 'jwt', id, ENV.K_ROOM_ACCESS_TOKEN_SECRET, ENV.JWT_ACCESS_EXPIRES_INTERVAL)
@@ -28,26 +28,19 @@ export const updateTokens = async (id: string, req: IAppRequest, res: Response) 
   })
 
   try {
-    await UserModel.updateOne(
-      { _id: id },
-      [
-        {
-          $set: {
-            [`system.device.${deviceId}`]: {
-              $mergeObjects: [
-                { $ifNull: [`$system.device.${deviceId}`, {}] },
-                { refreshToken, socketId: null }
-              ]
-            }
+    await UserModel.updateOne({ _id: id }, [
+      {
+        $set: {
+          [`system.device.${deviceId}`]: {
+            $mergeObjects: [{ $ifNull: [`$system.device.${deviceId}`, {}] }, { refreshToken, socketId: null }]
           }
         }
-      ]
-    )
+      }
+    ])
   } catch (error) {
     log.error(String(error))
     serverCaptureSentryException(error)
   }
-
 
   log.success('-Token pair updated')
 }

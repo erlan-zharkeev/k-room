@@ -1,13 +1,13 @@
 import type { IEventCallUser, SocketActionsType } from 'common'
 
-import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from 'features/call'
-import { getSocketsByUserIds } from 'features/user'
+import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from 'src/features/call'
+import { getSocketsByUserIds } from 'src/features/user'
 
-import { CallModel } from 'entities/call'
-import { UserModel } from 'entities/user'
+import { CallModel } from 'src/entities/call'
+import { UserModel } from 'src/entities/user'
 
-import { SocketInstanceType } from 'shared-config'
-import { getIO, throwSocketError } from 'shared-lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO, throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('call-user', async ({ signal, userToCall, avatar, callerName }: IEventCallUser) => {

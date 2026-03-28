@@ -1,7 +1,7 @@
-import { controller as userConnectController } from 'features/user/user-connect'
-import { controller as userDisconnectController } from 'features/user/user-disconnect'
+import { controller as userConnectController } from 'src/features/user/user-connect'
+import { controller as userDisconnectController } from 'src/features/user/user-disconnect'
 
-import { SocketInstanceType } from 'shared-config'
+import { SocketInstanceType } from 'src/shared/config'
 
 const controllers = [userConnectController, userDisconnectController]
 

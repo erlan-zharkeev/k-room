@@ -2,15 +2,15 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { IEventMessageDelivered, IEventSendMessage, IMessage, SocketActionsType } from 'common'
 
-import { getSocketsByUserIds } from 'features/user'
+import { getSocketsByUserIds } from 'src/features/user'
 
-import { ChatRoomModel } from 'entities/chat-room'
-import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'entities/media'
-import { MessageModel } from 'entities/message'
-import { UserModel } from 'entities/user'
+import { ChatRoomModel } from 'src/entities/chat-room'
+import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
+import { MessageModel } from 'src/entities/message'
+import { UserModel } from 'src/entities/user'
 
-import { SharpSettingsKeyType, SocketInstanceType } from 'shared-config'
-import { getIO, serverCaptureSentryException } from 'shared-lib'
+import { SharpSettingsKeyType, SocketInstanceType } from 'src/shared/config'
+import { getIO, serverCaptureSentryException } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('send-message', async (data: IEventSendMessage) => {
@@ -23,7 +23,9 @@ export const controller = (socket: SocketInstanceType) => {
           if (imageData.fileBuffer) {
             const filename = `image.${uuidv4()}`
             filenames.push(filename)
-            const compression: SharpSettingsKeyType = message.imageCompression ? 'common-compressed' : 'common-uncompressed'
+            const compression: SharpSettingsKeyType = message.imageCompression
+              ? 'common-compressed'
+              : 'common-uncompressed'
             await uploadBufferToBucket(bucket, imageData.fileBuffer, filename, 'image', undefined, { compression })
           }
         })

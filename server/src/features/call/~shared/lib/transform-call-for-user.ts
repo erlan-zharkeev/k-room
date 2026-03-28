@@ -1,7 +1,7 @@
 import type { CallFlowType, ICall } from 'common'
 
-import { CallModel } from 'entities/call'
-import { UserModel } from 'entities/user'
+import { CallModel } from 'src/entities/call'
+import { UserModel } from 'src/entities/user'
 
 const getFlowType = (answered: boolean, isIncoming: boolean): CallFlowType => {
   if (answered) {

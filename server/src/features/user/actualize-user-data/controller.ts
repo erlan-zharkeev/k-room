@@ -1,14 +1,14 @@
 import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common'
 
-import { transformRoomForUser } from 'features/chat-room/~shared'
-import { getSocketsByUserIds } from 'features/user/~shared'
-import { transformUserToFrontendContact } from 'features/user/actualize-user-data'
+import { transformRoomForUser } from 'src/features/chat-room/~shared'
+import { getSocketsByUserIds } from 'src/features/user/~shared'
+import { transformUserToFrontendContact } from 'src/features/user/actualize-user-data'
 
-import { ChatRoomModel } from 'entities/chat-room'
-import { UserModel } from 'entities/user'
+import { ChatRoomModel } from 'src/entities/chat-room'
+import { UserModel } from 'src/entities/user'
 
-import { SocketInstanceType } from 'shared-config'
-import { getIO, throwSocketError } from 'shared-lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO, throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('actualize-user-data', async () => {
@@ -22,9 +22,9 @@ export const controller = (socket: SocketInstanceType) => {
       }
       const roomIds = data?.personal.chatRooms
       const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-      const roomsResultData: ChatRoomsType = rooms.map(room => transformRoomForUser({ userId, room }))
+      const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
       const sockets = await getSocketsByUserIds([userId])
-      sockets.forEach(socketId => {
+      sockets.forEach((socketId) => {
         getIO().to(socketId).emit<SocketActionsType>('actual-contacts', contactResultData)
         getIO().to(socketId).emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
       })

@@ -1,9 +1,9 @@
 import { SocketActionsType } from 'common'
 
-import { emitCallsToUser } from 'features/call'
+import { emitCallsToUser } from 'src/features/call'
 
-import { SocketInstanceType } from 'shared-config'
-import { throwSocketError } from 'shared-lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('initialize', async () => {

@@ -1,3 +1,3 @@
-import { emailRule, requiredStringRule } from 'features/auth'
+import { emailRule, requiredStringRule } from 'src/features/auth'
 
 export const fieldsValidation = [emailRule(), requiredStringRule('code')]

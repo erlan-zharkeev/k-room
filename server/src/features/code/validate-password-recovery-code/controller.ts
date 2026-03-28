@@ -2,15 +2,15 @@ import { randomUUID } from 'node:crypto'
 
 import { IValidatePasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
-import { isCodeExpired } from 'features/code'
-import { MESSAGE, QUERY_LIFE_MS } from 'features/code/validate-password-recovery-code'
-import { USER_MESSAGE } from 'features/user'
+import { isCodeExpired } from 'src/features/code'
+import { MESSAGE, QUERY_LIFE_MS } from 'src/features/code/validate-password-recovery-code'
+import { USER_MESSAGE } from 'src/features/user'
 
-import { CodeModel } from 'entities/code'
-import { UserModel } from 'entities/user'
+import { CodeModel } from 'src/entities/code'
+import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, IAppRequest } from 'shared-config'
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { AppResponseType, IAppRequest } from 'src/shared/config'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const validatePasswordRecoveryCode = async (
   req: IAppRequest,
@@ -19,7 +19,7 @@ export const validatePasswordRecoveryCode = async (
   const language = req.language
 
   try {
-    const { email, code } = req.body as { email: string, code: string }
+    const { email, code } = req.body as { email: string; code: string }
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {

@@ -1,12 +1,6 @@
-import { ENV } from 'shared-config'
+import { ENV } from 'src/shared/config'
 
-export const renderEmailConfirmationHtml = ({
-  confirmUrl,
-  username
-}: {
-  confirmUrl: string
-  username?: string
-}) => {
+export const renderEmailConfirmationHtml = ({ confirmUrl, username }: { confirmUrl: string; username?: string }) => {
   const greeting = username ? `Hi, ${username}!` : 'Hi!'
 
   return `

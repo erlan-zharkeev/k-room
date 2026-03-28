@@ -2,8 +2,8 @@ import { Schema } from 'mongoose'
 
 import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType } from 'common'
 
-import type { IUserPersonalData } from 'entities/user'
-import { contactSchema } from 'entities/user'
+import type { IUserPersonalData } from 'src/entities/user'
+import { contactSchema } from 'src/entities/user'
 
 export const personalSchema = new Schema<IUserPersonalData>(
   {
@@ -15,7 +15,7 @@ export const personalSchema = new Schema<IUserPersonalData>(
     contacts: {
       type: Map,
       of: contactSchema,
-      default: () => new Map(),
+      default: () => new Map()
     },
     chatRooms: {
       type: [String],

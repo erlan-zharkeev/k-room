@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
-import { authRouter } from 'features/auth'
-import { codeRouter } from 'features/code'
-import { mediaRouter } from 'features/media'
-import { userRouter } from 'features/user'
+import { authRouter } from 'src/features/auth'
+import { codeRouter } from 'src/features/code'
+import { mediaRouter } from 'src/features/media'
+import { userRouter } from 'src/features/user'
 
 export const rootRouter = Router()
 

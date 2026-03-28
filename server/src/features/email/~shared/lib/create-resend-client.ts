@@ -1,9 +1,9 @@
 import { Resend } from 'resend'
 
-import { EMAIL_MESSAGE } from 'features/email'
+import { EMAIL_MESSAGE } from 'src/features/email'
 
-import { ENV } from 'shared-config'
-import { getLocalizedText } from 'shared-lib'
+import { ENV } from 'src/shared/config'
+import { getLocalizedText } from 'src/shared/lib'
 
 let resendClient: Resend | null = null
 

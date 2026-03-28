@@ -1,9 +1,9 @@
 import { IDBMessage, IEventLoadRoomMessages, IEventRoomMessagesLoaded } from 'common'
 
-import { transformMessageForUser } from 'features/message/~shared'
+import { transformMessageForUser } from 'src/features/message/~shared'
 
-import { ChatRoomModel } from 'entities/chat-room'
-import { MessageModel } from 'entities/message'
+import { ChatRoomModel } from 'src/entities/chat-room'
+import { MessageModel } from 'src/entities/message'
 
 export const loadRoomMessages = async (
   userId: string,
@@ -18,8 +18,7 @@ export const loadRoomMessages = async (
     ? { _id: { $in: room.messages }, createdAt: { $lt: beforeCreatedAt } }
     : { _id: { $in: room.messages } }
 
-  const messages = await MessageModel
-    .find(query)
+  const messages = await MessageModel.find(query)
     .sort({ createdAt: -1 })
     .limit(limit + 1)
     .select('-__v')
@@ -27,9 +26,7 @@ export const loadRoomMessages = async (
 
   const hasMore = messages.length > limit
   const page = hasMore ? messages.slice(0, limit) : messages
-  const normalizedMessages = page
-    .reverse()
-    .map((message) => transformMessageForUser(message, userId))
+  const normalizedMessages = page.reverse().map((message) => transformMessageForUser(message, userId))
 
   return {
     roomId,

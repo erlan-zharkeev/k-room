@@ -1,4 +1,4 @@
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
 export const setLastSeenData = async (userId: string) => {
   const lastSeen = Date.now()

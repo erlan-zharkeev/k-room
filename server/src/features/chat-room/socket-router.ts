@@ -1,6 +1,6 @@
-import { controller as createChatRoomController } from 'features/chat-room/create-chat-room'
+import { controller as createChatRoomController } from 'src/features/chat-room/create-chat-room'
 
-import { SocketInstanceType } from 'shared-config'
+import { SocketInstanceType } from 'src/shared/config'
 
 const controllers = [createChatRoomController]
 

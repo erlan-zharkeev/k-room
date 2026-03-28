@@ -2,13 +2,13 @@ import { Router } from 'express'
 
 import { UserEndpointsEnum } from 'common'
 
-import { accessTokenValidator } from 'features/auth'
-import { updateUserData } from 'features/user/update-user-data'
-import { fieldsValidation } from 'features/user/update-user-data'
+import { accessTokenValidator } from 'src/features/auth'
+import { updateUserData } from 'src/features/user/update-user-data'
+import { fieldsValidation } from 'src/features/user/update-user-data'
 
-import { multerUploader } from 'entities/media'
+import { multerUploader } from 'src/entities/media'
 
-import { validateRequest } from 'shared-middleware'
+import { validateRequest } from 'src/shared/middleware'
 
 export const updateUserRouter = Router()
 

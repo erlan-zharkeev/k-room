@@ -1,4 +1,4 @@
-import { ORIGINS } from 'shared-config'
+import { ORIGINS } from 'src/shared/config'
 
 export const corsOptions = {
   origin: ORIGINS,

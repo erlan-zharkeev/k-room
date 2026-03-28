@@ -2,14 +2,11 @@ import type { Buffer } from 'node:buffer'
 
 import sharp from 'sharp'
 
-import { SHARP_PRESETS } from 'entities/media/config'
+import { SHARP_PRESETS } from 'src/entities/media/config'
 
-import { SharpSettingsKeyType } from 'shared-config'
+import { SharpSettingsKeyType } from 'src/shared/config'
 
-export const processImageWithSharp = async (
-  input: Buffer,
-  presetKey: SharpSettingsKeyType
-): Promise<Buffer> => {
+export const processImageWithSharp = async (input: Buffer, presetKey: SharpSettingsKeyType): Promise<Buffer> => {
   const preset = SHARP_PRESETS[presetKey] ?? SHARP_PRESETS['common-compressed']
 
   const image = sharp(input, { failOn: 'none' })

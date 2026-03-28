@@ -1,6 +1,6 @@
-import { createResendClient } from 'features/email'
+import { createResendClient } from 'src/features/email'
 
-import { ENV } from 'shared-config'
+import { ENV } from 'src/shared/config'
 
 export const sendPasswordRecoveryEmail = async ({
   email,
