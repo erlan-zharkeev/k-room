@@ -1,9 +1,8 @@
 import { Router } from 'express'
+import { accessTokenValidator } from 'src/features/auth'
+import { logout } from 'src/features/auth'
 
 import { AuthEndpointsEnum } from 'common'
-
-import { accessTokenValidator } from 'src/features/auth'
-import { logout } from 'src/features/auth/logout'
 
 export const logoutRouter = Router()
 

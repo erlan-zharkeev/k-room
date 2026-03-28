@@ -1,5 +1,4 @@
 import { Router } from 'express'
-
 import { confirmEmailRouter } from 'src/features/auth/confirm-email'
 import { loginRouter } from 'src/features/auth/login'
 import { logoutRouter } from 'src/features/auth/logout'
