@@ -1,7 +1,6 @@
-import { updateOnlineStatus } from 'src/features/user/update-online-status'
-
+import { updateOnlineStatus } from 'src/features/user'
 import { SocketInstanceType } from 'src/shared/config'
 
-export const controller = (socket: SocketInstanceType) => {
+export const updateUserConnection = (socket: SocketInstanceType) => {
   void updateOnlineStatus(socket.data.userId, true)
 }
