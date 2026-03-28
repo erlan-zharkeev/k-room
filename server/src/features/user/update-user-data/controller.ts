@@ -1,13 +1,15 @@
-import { SocketActionsType, StatusEnum } from 'common'
-
-import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'src/features/user'
-import { updateUserAvatar } from 'src/features/user/update-user-data'
-import { I18N_UPDATE_USER_DATA_MESSAGE } from 'src/features/user/update-user-data'
-
 import { UserModel } from 'src/entities/user'
-
+import {
+  getSocketsByUserIds,
+  I18N_UPDATE_USER_DATA_MESSAGE,
+  transformUserToContact,
+  updateUserAvatar,
+  USER_MESSAGE
+} from 'src/features/user'
 import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
+
+import { SocketActionsType, StatusEnum } from 'common'
 
 export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
@@ -19,7 +21,11 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
     const userId = req.app.locals.id
 
     if (!username && !avatarFileBuffer) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_UPDATE_USER_DATA_MESSAGE.nothingToUpdate, language))
+      return throwHTTPError(
+        StatusEnum.BadRequest,
+        res,
+        getLocalizedText(I18N_UPDATE_USER_DATA_MESSAGE.nothingToUpdate, language)
+      )
     }
 
     const user = await UserModel.findById(userId)
