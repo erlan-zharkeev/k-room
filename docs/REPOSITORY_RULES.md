@@ -4,7 +4,7 @@ This document defines the working rules for this repository.
 
 ## Import Rules
 
-1. Cross-module and cross-layer imports must use the public root alias path.
+1. Between modules and layers, use the public root alias path.
 
 Use imports through the public module entrypoint, for example:
 
@@ -13,34 +13,54 @@ import { AppModal } from 'src/shared/ui'
 import { useChatRoom } from 'src/entities/chat-room'
 ```
 
-Between modules and layers, do not use relative imports like:
+Do not import another module through a relative parent path:
 
 ```ts
 import { AppModal } from '../../shared/ui'
-import { useChatRoom } from '../hooks/use-chat-room'
 ```
 
-Inside one module, relative imports are allowed for local implementation files:
+2. Inside one module, use only relative imports.
+
+Use:
 
 ```ts
 import { normalizeMessage } from './lib/normalize-message'
+import { messageMapper } from './message-mapper'
 ```
 
-Relative imports are still allowed for local style files and private implementation details:
+Do not use alias imports to reach files inside the same module:
 
 ```ts
-import './style.scss'
-import { CallModalBody } from './components'
+import { normalizeMessage } from 'src/features/message/shared/lib/normalize-message'
 ```
 
-Barrel exports are an exception: in `index.ts` files, use relative `export` paths.
+3. If the target file is on the same directory level, use `./`.
+
+Use:
+
+```ts
+import { messageMapper } from './message-mapper'
+```
+
+4. Inside a module, do not use `..` imports.
+
+Use local `./` imports or restructure exports so the dependency is available without going to the parent directory.
+
+Do not use:
+
+```ts
+import { sharedRule } from '../shared'
+import { buildPayload } from '../../lib/build-payload'
+```
+
+5. Barrel exports are an exception: in `index.ts` files, use relative `export` paths.
 
 ```ts
 export * from './db'
 export * from './lib'
 ```
 
-2. Imports must use the shortest public path level available.
+6. Imports must use the shortest public path level available.
 
 Prefer the nearest public alias entrypoint that already exports the symbol:
 
@@ -56,7 +76,7 @@ import { dexieKeyValueStore } from 'src/shared/lib/db/lib/dexie-key-value-store'
 import { useValidate } from 'src/shared/lib/hooks/use-validate/use-validate'
 ```
 
-3. Type imports must use `import type`.
+7. Type imports must use `import type`.
 
 Use:
 
@@ -67,7 +87,7 @@ import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
 
 Do not mix type-only imports into regular `import` statements when `import type` can be used.
 
-4. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
+8. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
 
 If `enum` is used, member keys must be written only in `PascalCase`.
 
