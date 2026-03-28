@@ -7,6 +7,5 @@ export * from './reset-password'
 export * from './update-online-status'
 export * from './update-user-data'
 export * from './user-connect'
-export { controller as userDisconnectController } from './user-disconnect/controller'
+export * from './user-disconnect'
 ///
-export * from './router'

@@ -1,5 +1,4 @@
-import { updateUserConnection as userConnectController } from 'src/features/user'
-import { userDisconnectController } from 'src/features/user'
+import { userConnectController, userDisconnectController } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 
