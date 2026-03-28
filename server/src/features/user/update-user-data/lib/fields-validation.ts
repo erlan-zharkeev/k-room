@@ -1,3 +1,3 @@
 import { usernameRule } from 'src/features/auth'
 
-export const fieldsValidation = [usernameRule().optional()]
+export const UPDATE_USER_DATA_FIELDS_VALIDATION = [usernameRule().optional()]

@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const MESSAGE = {
+export const I18N_RESET_PASSWORD_MESSAGE = {
   failed: {
     en: 'Failed to reset password, try again later',
     ru: 'Не удалось сбросить пароль, попробуйте позже'

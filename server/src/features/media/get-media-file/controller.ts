@@ -2,7 +2,7 @@ import type { AppResponseType, IAppRequest } from 'src/shared/config'
 
 import { StatusEnum } from 'common'
 
-import { MESSAGE } from 'src/features/media/get-media-file'
+import { I18N_GET_MEDIA_FILE_MESSAGE } from 'src/features/media/get-media-file'
 import { parseBucketNameFromId } from 'src/features/media/get-media-file'
 
 import { MediaBucketNameType } from 'src/entities/media'
@@ -19,7 +19,7 @@ export const getMediaFile = async (req: IAppRequest, res: AppResponseType<null>)
     const revalidateCache = Boolean(req.query.revalidate)
 
     if (!idParam) {
-      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(MESSAGE.idNotProvideOrNotValid, language))
+      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(I18N_GET_MEDIA_FILE_MESSAGE.idNotProvideOrNotValid, language))
     }
     const { bucketName, id } = parseBucketNameFromId(idParam)
     const asAttachment = ['1', 'true', 'yes'].includes(String(req.query.download || '').toLowerCase())
@@ -27,6 +27,6 @@ export const getMediaFile = async (req: IAppRequest, res: AppResponseType<null>)
     streamMediaFile(bucketName as MediaBucketNameType, id, res, language, { asAttachment, revalidateCache })
     return
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedToProvideMedia, language))
+    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_GET_MEDIA_FILE_MESSAGE.failedToProvideMedia, language))
   }
 }

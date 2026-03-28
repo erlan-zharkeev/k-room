@@ -2,7 +2,7 @@ import { SocketActionsType, StatusEnum } from 'common'
 
 import { getSocketsByUserIds, transformUserToContact, USER_MESSAGE } from 'src/features/user'
 import { updateUserAvatar } from 'src/features/user/update-user-data'
-import { MESSAGE } from 'src/features/user/update-user-data'
+import { I18N_UPDATE_USER_DATA_MESSAGE } from 'src/features/user/update-user-data'
 
 import { UserModel } from 'src/entities/user'
 
@@ -19,7 +19,7 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
     const userId = req.app.locals.id
 
     if (!username && !avatarFileBuffer) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.nothingToUpdate, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_UPDATE_USER_DATA_MESSAGE.nothingToUpdate, language))
     }
 
     const user = await UserModel.findById(userId)
@@ -60,6 +60,6 @@ export const updateUserData = async (req: IAppRequest, res: AppResponseType<null
   } catch (error: unknown) {
     log.error(String(error))
     serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedUpdate, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_UPDATE_USER_DATA_MESSAGE.failedUpdate, language))
   }
 }
