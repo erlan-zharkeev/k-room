@@ -4,7 +4,7 @@ import { getLocalizedText } from 'src/shared/lib'
 import { updateTokens } from './../shared'
 import { I18N_UPDATE_TOKEN_PAIR_MESSAGE } from './config'
 
-export const updateTokensPair = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const updateTokensPairController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const userId = req.app.locals.id
   await updateTokens(userId, req, res)
   res.json({

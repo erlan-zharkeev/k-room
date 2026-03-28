@@ -11,7 +11,7 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { generateToken } from './../shared'
 import { I18N_SEND_CONFIRMATION_LINK_MESSAGE } from './config'
 
-export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
+export const sendConfirmationLinkController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language
 
   try {

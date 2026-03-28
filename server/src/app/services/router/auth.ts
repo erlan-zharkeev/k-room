@@ -5,26 +5,31 @@ import { AuthEndpointsEnum } from 'common'
 import {
   accessTokenValidator,
   CONFIRM_EMAIL_FIELDS_VALIDATION,
-  confirmEmail,
-  login,
+  confirmEmailController,
   LOGIN_FIELDS_VALIDATION,
-  logout,
+  loginController,
+  logoutController,
   refreshTokenValidator,
-  registration,
   REGISTRATION_FIELDS_VALIDATION,
-  sendConfirmationLink,
-  signInWithProvider,
-  updateTokensPair
+  registrationController,
+  sendConfirmationLinkController,
+  signInWithProviderController,
+  updateTokensPairController
 } from 'src/features/auth'
 
 import { validateRequest } from 'src/shared/middleware'
 
 export const authRouter = Router()
 
-authRouter.post(AuthEndpointsEnum.ConfirmEmail, CONFIRM_EMAIL_FIELDS_VALIDATION, validateRequest, confirmEmail)
-authRouter.post(AuthEndpointsEnum.Login, LOGIN_FIELDS_VALIDATION, validateRequest, login)
-authRouter.post(AuthEndpointsEnum.Registration, REGISTRATION_FIELDS_VALIDATION, validateRequest, registration)
-authRouter.post(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLink)
-authRouter.post(AuthEndpointsEnum.ProviderLogin, signInWithProvider)
-authRouter.get(AuthEndpointsEnum.UpdateTokensPair, refreshTokenValidator, updateTokensPair)
-authRouter.post(AuthEndpointsEnum.Logout, accessTokenValidator, logout)
+authRouter.post(
+  AuthEndpointsEnum.ConfirmEmail,
+  CONFIRM_EMAIL_FIELDS_VALIDATION,
+  validateRequest,
+  confirmEmailController
+)
+authRouter.post(AuthEndpointsEnum.Login, LOGIN_FIELDS_VALIDATION, validateRequest, loginController)
+authRouter.post(AuthEndpointsEnum.Registration, REGISTRATION_FIELDS_VALIDATION, validateRequest, registrationController)
+authRouter.post(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLinkController)
+authRouter.post(AuthEndpointsEnum.ProviderLogin, signInWithProviderController)
+authRouter.get(AuthEndpointsEnum.UpdateTokensPair, refreshTokenValidator, updateTokensPairController)
+authRouter.post(AuthEndpointsEnum.Logout, accessTokenValidator, logoutController)

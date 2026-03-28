@@ -11,7 +11,7 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { generateToken } from './../shared'
 import { I18N_REGISTRATION_MESSAGE } from '.'
 
-export const registration = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
+export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language
 
   try {

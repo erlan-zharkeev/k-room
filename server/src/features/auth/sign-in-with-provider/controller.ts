@@ -13,7 +13,10 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { updateTokens } from './../shared'
 import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE } from '.'
 
-export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
+export const signInWithProviderController = async (
+  req: IAppRequest,
+  res: AppResponseType<ISignInWithProviderResponse>
+) => {
   const language = req.language
 
   try {

@@ -1,11 +1,12 @@
 import type { EventCallsUpdatedType, SocketActionsType } from 'common'
 
-import { transformCallForUser } from 'src/features/call'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { CallModel } from 'src/entities/call'
 
 import { getIO } from 'src/shared/lib'
+
+import { transformCallForUser } from '.'
 
 export const emitCallsToUser = async (userId: string) => {
   const calls = await CallModel.find({ interlocutors: { $in: [userId] } })
