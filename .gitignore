@@ -1,30 +1,25 @@
 CLAUDE.md
 node_modules
-.pnpm-store
 db
 .vscode
 yarn.lock
 
 client/node_modules
-client/yarn-error.log
-client/yarn.lock
 client/build
 client/eslintcache
 client/package-lock.json
 
 server/node_modules
-server/yarn-error.log
-server/yarn.lock
+server/package-lock.log
 server/build
 server/eslintcache
 server/src/assets/img
 
-types/node_modules
-types/yarn-error.log
-types/yarn.lock
-types/dist
-types/eslintcache
-types/tsconfig.tsbuildinfo
+common/node_modules
+common/package-lock.log
+common/dist
+common/eslintcache
+common/tsconfig.tsbuildinfo
 
 e2e/playwright-report
 e2e/test-results

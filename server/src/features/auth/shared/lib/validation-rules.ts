@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 import { providers, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'common'
 
-import { I18N_AUTH_MESSAGE } from '../config'
+import { I18N_AUTH_MESSAGE } from './../config'
 
 export const emailRule = () =>
   check('email')

@@ -10,9 +10,8 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { updateTokens } from '../shared/lib/update-token'
-
-import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE } from './config'
+import { updateTokens } from './../shared'
+import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE } from '.'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
   const language = req.language

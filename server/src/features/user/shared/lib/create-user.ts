@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { ProviderType } from 'common'
 
-import { isUserExist } from 'src/features/auth'
+import { isUserExist } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 

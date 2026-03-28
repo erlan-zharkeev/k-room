@@ -7,7 +7,7 @@ import { UserModel } from 'src/entities/user'
 import { ENV, SocketInstanceType } from 'src/shared/config'
 import { getSocketLanguage } from 'src/shared/lib'
 
-import { verifyToken } from '../lib/verify-token'
+import { verifyToken } from './../lib'
 
 const authErrorBreakConnection = (socket: SocketInstanceType, payload: IEventAuthError) => {
   socket.emit<SocketActionsType>('auth-error', payload)

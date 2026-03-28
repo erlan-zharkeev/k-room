@@ -2,9 +2,10 @@ import type { Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
-import { COMMON_MEDIA_MESSAGE, MediaBucketNameType, mediaBuckets } from 'src/entities/media'
-
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from './../config'
+import { mediaBuckets } from './../model'
 
 export const streamMediaFile = async (
   bucketName: MediaBucketNameType,

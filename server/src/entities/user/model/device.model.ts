@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import type { IUserDevice } from '../config'
+import type { IUserDevice } from './../config'
 
 export const deviceSchema = new Schema<IUserDevice>(
   {

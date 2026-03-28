@@ -1,11 +1,7 @@
 import { model, Schema } from 'mongoose'
 
-import type { IUserSchema } from '../config'
-
-import { personalSchema } from './personal.model'
-import { publicSchema } from './public.model'
-import { systemSchema } from './system.model'
-
+import type { IUserSchema } from './../config'
+import { personalSchema, publicSchema, systemSchema } from '.'
 
 const userSchema = new Schema<IUserSchema>({
   system: systemSchema,

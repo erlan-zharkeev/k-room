@@ -2,9 +2,9 @@ import type { Buffer } from 'node:buffer'
 
 import sharp from 'sharp'
 
-import { SHARP_PRESETS } from 'src/entities/media'
-
 import { SharpSettingsKeyType } from 'src/shared/config'
+
+import { SHARP_PRESETS } from './../config'
 
 export const processImageWithSharp = async (input: Buffer, presetKey: SharpSettingsKeyType): Promise<Buffer> => {
   const preset = SHARP_PRESETS[presetKey] ?? SHARP_PRESETS['common-compressed']
