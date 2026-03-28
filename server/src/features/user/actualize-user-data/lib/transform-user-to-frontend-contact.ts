@@ -1,7 +1,7 @@
-import { IFrontendContact } from "common"
+import { IFrontendContact } from 'common'
 
-import { UserModel } from "entities/user"
-import { IContact } from "entities/user"
+import { UserModel } from 'src/entities/user'
+import { IContact } from 'src/entities/user'
 
 export const transformUserToFrontendContact = async (
   contacts: Record<string, IContact>
@@ -16,7 +16,7 @@ export const transformUserToFrontendContact = async (
         username: username,
         online: online,
         lastSeen: lastSeen,
-        interactionType: data.interaction,
+        interactionType: data.interaction
       })
     }
   }

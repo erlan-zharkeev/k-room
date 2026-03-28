@@ -2,12 +2,12 @@ import { Types } from 'mongoose'
 
 import { IEventSearchContact, IFrontendContact, InteractionType, SocketActionsType } from 'common'
 
-import { emitSearchedContacts } from 'features/contact/search-contact'
-import { transformUserToContact } from 'features/user'
+import { emitSearchedContacts } from 'src/features/contact/search-contact'
+import { transformUserToContact } from 'src/features/user'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { SEARCH_CONTACT_RESULT_LIMIT, SocketInstanceType } from 'shared-config'
+import { SEARCH_CONTACT_RESULT_LIMIT, SocketInstanceType } from 'src/shared/config'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('search-contact', async ({ value, offset = 0 }: IEventSearchContact) => {
@@ -30,9 +30,7 @@ export const controller = (socket: SocketInstanceType) => {
 
     const searchTypeMap: Record<
       typeof type,
-      | { 'public.username': { $regex: RegExp } }
-      | { 'public.email': { $regex: RegExp } }
-      | { _id: string }
+      { 'public.username': { $regex: RegExp } } | { 'public.email': { $regex: RegExp } } | { _id: string }
     > = {
       name: { 'public.username': { $regex } },
       id: { _id: needle }

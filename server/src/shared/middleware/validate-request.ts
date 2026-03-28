@@ -3,8 +3,8 @@ import { validationResult } from 'express-validator'
 
 import { type LocalizedTextType, StatusEnum } from 'common'
 
-import { AppResponseType } from 'shared-config'
-import { getLocalizedText } from 'shared-lib'
+import { AppResponseType } from 'src/shared/config'
+import { getLocalizedText } from 'src/shared/lib'
 
 export const validateRequest = (req: Request, res: AppResponseType<null>, next: NextFunction) => {
   const errors = validationResult(req)
@@ -15,9 +15,10 @@ export const validateRequest = (req: Request, res: AppResponseType<null>, next: 
     return res.status(StatusEnum.BadRequest).json({
       payload: null,
       message: {
-        text: typeof text === 'object' && text !== null
-          ? getLocalizedText(text as LocalizedTextType, (req as { language?: 'en' | 'ru' }).language)
-          : String(text),
+        text:
+          typeof text === 'object' && text !== null
+            ? getLocalizedText(text as LocalizedTextType, (req as { language?: 'en' | 'ru' }).language)
+            : String(text),
         silent: false
       }
     })

@@ -1,9 +1,8 @@
 import * as Sentry from '@sentry/node'
 import type { Express } from 'express'
+import { ENV } from 'src/shared/config'
 
 import { shouldIgnoreSentryError } from 'common'
-
-import { ENV } from 'shared-config'
 
 export const initSentry = () => {
   if (ENV.SENTRY_ENABLED !== 'true' || !ENV.SENTRY_DSN_SERVER || Sentry.isInitialized()) {

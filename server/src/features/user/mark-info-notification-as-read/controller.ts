@@ -1,11 +1,11 @@
 import { IMarkAsReadPayload, StatusEnum } from 'common'
 
-import { MESSAGE } from 'features/user/mark-info-notification-as-read'
+import { MESSAGE } from 'src/features/user/mark-info-notification-as-read'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const markInfoAsRead = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

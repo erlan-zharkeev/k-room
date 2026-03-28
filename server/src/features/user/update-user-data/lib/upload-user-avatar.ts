@@ -2,10 +2,15 @@ import type { Response } from 'express'
 
 import { type AppLanguageType } from 'common'
 
-import { MongooseGridFSBucketType, uploadBufferToBucket } from 'entities/media'
-import { mediaBuckets } from 'entities/media'
+import { MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
+import { mediaBuckets } from 'src/entities/media'
 
-export const updateUserAvatar = async (buffer: Buffer | null, userId: string, res?: Response, language?: AppLanguageType) => {
+export const updateUserAvatar = async (
+  buffer: Buffer | null,
+  userId: string,
+  res?: Response,
+  language?: AppLanguageType
+) => {
   const bucket = mediaBuckets.avatar as MongooseGridFSBucketType
   const filename = `avatar.${String(userId)}`
 
@@ -16,8 +21,16 @@ export const updateUserAvatar = async (buffer: Buffer | null, userId: string, re
     return
   }
 
-  await uploadBufferToBucket(bucket, buffer, filename, 'avatar', res, {
-    overwrite: true,
-    compression: 'avatar'
-  }, language)
+  await uploadBufferToBucket(
+    bucket,
+    buffer,
+    filename,
+    'avatar',
+    res,
+    {
+      overwrite: true,
+      compression: 'avatar'
+    },
+    language
+  )
 }

@@ -1,8 +1,8 @@
-import { controller as changeMessageStatusController } from 'features/message/change-message-status'
-import { controller as loadRoomMessagesController } from 'features/message/load-room-messages'
-import { controller as sendMessageController } from 'features/message/send-message'
+import { controller as changeMessageStatusController } from 'src/features/message/change-message-status'
+import { controller as loadRoomMessagesController } from 'src/features/message/load-room-messages'
+import { controller as sendMessageController } from 'src/features/message/send-message'
 
-import { SocketInstanceType } from 'shared-config'
+import { SocketInstanceType } from 'src/shared/config'
 
 const controllers = [sendMessageController, changeMessageStatusController, loadRoomMessagesController]
 

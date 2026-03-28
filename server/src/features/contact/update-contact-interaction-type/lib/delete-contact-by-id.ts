@@ -1,10 +1,10 @@
-import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from "common"
+import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from 'common'
 
-import { getSocketsByUserIds } from "features/user/~shared"
+import { getSocketsByUserIds } from 'features/user/~shared'
 
-import { UserModel } from "entities/user"
+import { UserModel } from 'src/entities/user'
 
-import { getIO } from "shared-lib"
+import { getIO } from 'shared-lib'
 
 export const deleteContactById = async (
   userId: string,
@@ -22,12 +22,10 @@ export const deleteContactById = async (
     { _id: 1, socketId: 1, [`personal.contacts.${userId}.interaction`]: 1 }
   )
 
-
   if (!deletingContact || !deletingContact.personal.contacts?.[userId]?.interaction) return
   const deletingUserInteractionType = deletingContact.personal.contacts[userId].interaction
 
   const deletingContactSockets = await getSocketsByUserIds([deletingContact._id])
-
 
   if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invite-hidden') {
     deletingContactSockets.forEach(async (socketId) => {
@@ -36,7 +34,10 @@ export const deleteContactById = async (
   }
 
   if (deletingUserInteractionType === 'invite-accepted') {
-    await UserModel.updateOne({ _id: deletingUserId }, { $set: { [`personal.contacts.${userId}.interaction`]: 'default' } })
+    await UserModel.updateOne(
+      { _id: deletingUserId },
+      { $set: { [`personal.contacts.${userId}.interaction`]: 'default' } }
+    )
     const payload: IEventUpdateContactInteractionSuccess = {
       contactId: userId,
       interaction: 'default'

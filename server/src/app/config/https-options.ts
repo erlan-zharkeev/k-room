@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { ENV } from 'shared-config'
+import { ENV } from 'src/shared/config'
 
 export const httpsOptions = ENV.IS_DEV
   ? {

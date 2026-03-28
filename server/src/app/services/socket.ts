@@ -3,13 +3,13 @@ import { Server } from 'socket.io'
 
 import { RouteNamesEnum, type SocketActionsType } from 'common'
 
-import { MAX_HTTP_BUFFER_SIZE } from 'app/config'
-import { socketRouter } from 'app/services/socket-router'
+import { MAX_HTTP_BUFFER_SIZE } from 'src/app/config'
+import { socketRouter } from 'src/app/services/socket-router'
 
-import { socketAuthMiddleware } from 'features/auth'
+import { socketAuthMiddleware } from 'src/features/auth'
 
-import { ENV, ORIGINS, type SocketInstanceType } from 'shared-config'
-import { log, serverCaptureSentryException } from 'shared-lib'
+import { ENV, ORIGINS, type SocketInstanceType } from 'src/shared/config'
+import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 const getSocketIO = (server: HttpsServer) =>
   new Server(server, {

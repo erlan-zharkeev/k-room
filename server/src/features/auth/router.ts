@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
-import { confirmEmailRouter } from 'features/auth/confirm-email'
-import { loginRouter } from 'features/auth/login'
-import { logoutRouter } from 'features/auth/logout'
-import { registrationRouter } from 'features/auth/registration'
-import { sendEmailConfirmationLinkRouter } from 'features/auth/send-confirmation-link'
-import { providerLoginRouter } from 'features/auth/sign-in-with-provider'
-import { updateTokenPairRouter } from 'features/auth/update-token-pair'
+import { confirmEmailRouter } from 'src/features/auth/confirm-email'
+import { loginRouter } from 'src/features/auth/login'
+import { logoutRouter } from 'src/features/auth/logout'
+import { registrationRouter } from 'src/features/auth/registration'
+import { sendEmailConfirmationLinkRouter } from 'src/features/auth/send-confirmation-link'
+import { providerLoginRouter } from 'src/features/auth/sign-in-with-provider'
+import { updateTokenPairRouter } from 'src/features/auth/update-token-pair'
 
 export const authRouter = Router()
 

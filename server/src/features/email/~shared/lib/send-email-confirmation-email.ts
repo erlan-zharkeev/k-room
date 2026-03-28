@@ -4,10 +4,10 @@ import {
   EMAIL_CONFIRMATION_SUBJECT,
   EMAIL_MESSAGE,
   renderEmailConfirmationHtml
-} from 'features/email'
+} from 'src/features/email'
 
-import { ENV } from 'shared-config'
-import { getLocalizedText, log } from 'shared-lib'
+import { ENV } from 'src/shared/config'
+import { getLocalizedText, log } from 'src/shared/lib'
 
 export const sendEmailConfirmationEmail = async ({
   email,

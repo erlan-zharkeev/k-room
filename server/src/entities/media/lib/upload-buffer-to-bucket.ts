@@ -4,13 +4,13 @@ import type { Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
-import { VALIDATE_MEDIA_FILE_MESSAGE } from 'entities/media'
-import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from 'entities/media/config'
-import { buildFileData } from 'entities/media/lib'
-import { processImageWithSharp } from 'entities/media/lib'
-import { validateFileMetaData } from 'entities/media/lib'
+import { VALIDATE_MEDIA_FILE_MESSAGE } from 'src/entities/media'
+import type { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from 'src/entities/media/config'
+import { buildFileData } from 'src/entities/media/lib'
+import { processImageWithSharp } from 'src/entities/media/lib'
+import { validateFileMetaData } from 'src/entities/media/lib'
 
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const uploadBufferToBucket = async (
   bucket: MongooseGridFSBucketType,

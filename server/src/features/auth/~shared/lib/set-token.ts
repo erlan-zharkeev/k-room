@@ -1,10 +1,10 @@
 import type { AuthTokensType } from 'common'
 import { type Response } from 'express'
 
-import { generateToken } from 'features/auth'
-import { parseExpires, setCookie } from 'features/cookie'
+import { generateToken } from 'src/features/auth'
+import { parseExpires, setCookie } from 'src/features/cookie'
 
-import { ENV } from 'shared-config'
+import { ENV } from 'src/shared/config'
 
 export const setToken = (
   res: Response,

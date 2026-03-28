@@ -4,17 +4,15 @@ import cors from 'cors'
 import express from 'express'
 import https from 'https'
 import methodOverride from 'method-override'
+import { corsOptions, httpsOptions, initSentry, setupSentryErrorHandler } from 'src/app/config'
+import { initDataBase, initIO, rootRouter } from 'src/app/services'
+import { ENV } from 'src/shared/config'
+import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
+import { attachRequestLanguage } from 'src/shared/middleware'
 
 import { RouteNamesEnum } from 'common'
 
-import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'app/config'
-import { initDataBase } from 'app/services/database'
-import { rootRouter } from 'app/services/router'
-import { initIO } from 'app/services/socket'
-
-import { ENV } from 'shared-config'
-import { log, serverCaptureSentryException, setIO } from 'shared-lib'
-import { attachRequestLanguage } from 'shared-middleware'
+initSentry()
 
 const app = express()
 
@@ -28,7 +26,7 @@ setupSentryErrorHandler(app)
 
 const server = https.createServer(httpsOptions, app)
 
-const run = async () => {
+export const runServer = async () => {
   await initDataBase()
   const io = initIO(server)
   setIO(io)
@@ -45,12 +43,6 @@ process.on('unhandledRejection', (error) => {
 
 process.on('uncaughtException', (error) => {
   log.error('-Uncaught exception')
-  log.error(String(error))
-  serverCaptureSentryException(error)
-})
-
-run().catch((error) => {
-  log.error('-Server startup failed')
   log.error(String(error))
   serverCaptureSentryException(error)
 })

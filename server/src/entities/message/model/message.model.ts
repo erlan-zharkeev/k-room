@@ -1,12 +1,9 @@
 import { model, Schema } from 'mongoose'
 
-import {
-  type IMessageSchema
-} from 'common'
+import { type IMessageSchema } from 'common'
 
-import { messageMetaDataSchema } from 'entities/message/model'
-import { reactionSchema } from 'entities/message/model'
-
+import { messageMetaDataSchema } from 'src/entities/message/model'
+import { reactionSchema } from 'src/entities/message/model'
 
 const messageSchema = new Schema<IMessageSchema>(
   {
@@ -52,7 +49,7 @@ const messageSchema = new Schema<IMessageSchema>(
     usersMetaData: {
       type: [messageMetaDataSchema],
       required: false,
-      default: [],
+      default: []
     },
     repliedMessage: {
       type: {},

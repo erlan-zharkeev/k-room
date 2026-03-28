@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "serve": "cross-env NODE_ENV=development tsx watch src/app/index.ts",
-    "serve:e2e": "cross-env NODE_ENV=development node --import tsx src/app/index.ts",
+    "serve": "cross-env NODE_ENV=development tsx watch src/index.ts",
+    "serve:e2e": "cross-env NODE_ENV=development node --import tsx src/index.ts",
     "prebuild": "npm --prefix .. run sync:public-config",
-    "build": "cross-env NODE_ENV=production tsup src/app/index.ts --format cjs --platform node --target node24 --out-dir build --clean && node ./scripts/copy-assets.mjs",
+    "build": "cross-env NODE_ENV=production tsup src/index.ts --format cjs --platform node --target node24 --out-dir build --clean && node ./scripts/copy-assets.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint \"src/**/*.ts\"",
     "server-run": "cross-env NODE_ENV=production node ./build/index.js",

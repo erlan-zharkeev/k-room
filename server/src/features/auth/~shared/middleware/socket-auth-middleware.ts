@@ -2,12 +2,12 @@ import { parse } from 'cookie'
 
 import { IEventAuthError, SocketActionsType } from 'common'
 
-import { verifyToken } from 'features/auth'
+import { verifyToken } from 'src/features/auth'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { ENV, SocketInstanceType } from 'shared-config'
-import { getSocketLanguage } from 'shared-lib'
+import { ENV, SocketInstanceType } from 'src/shared/config'
+import { getSocketLanguage } from 'src/shared/lib'
 
 const authErrorBreakConnection = (socket: SocketInstanceType, payload: IEventAuthError) => {
   socket.emit<SocketActionsType>('auth-error', payload)

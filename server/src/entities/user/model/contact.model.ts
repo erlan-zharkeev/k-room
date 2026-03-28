@@ -2,14 +2,14 @@ import { Schema } from 'mongoose'
 
 import { InteractionType } from 'common'
 
-import { IContact } from 'entities/user/config'
+import { IContact } from 'src/entities/user/config'
 
 const interactionValues: InteractionType[] = [
-  "default",
-  "invited",
-  "invite-accepted",
-  "invite-hidden",
-  "invite-received"
+  'default',
+  'invited',
+  'invite-accepted',
+  'invite-hidden',
+  'invite-received'
 ]
 
 export const contactSchema = new Schema<IContact>(

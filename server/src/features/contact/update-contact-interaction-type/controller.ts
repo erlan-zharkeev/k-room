@@ -1,13 +1,17 @@
-import { EventInviteReceivedType, IEventUpdateContactInteractionSuccess, IEventUpdateInteraction, SocketActionsType } from 'common'
+import {
+  EventInviteReceivedType,
+  IEventUpdateContactInteractionSuccess,
+  IEventUpdateInteraction,
+  SocketActionsType
+} from 'common'
 
-import { deleteContactById, setContactInteraction } from 'features/contact/update-contact-interaction-type'
-import { createContactInteraction } from 'features/contact/update-contact-interaction-type'
-import { emitContactInteractionUpdated } from 'features/contact/update-contact-interaction-type'
-import { getSocketsByUserIds } from 'features/user/~shared'
+import { deleteContactById, setContactInteraction } from 'src/features/contact/update-contact-interaction-type'
+import { createContactInteraction } from 'src/features/contact/update-contact-interaction-type'
+import { emitContactInteractionUpdated } from 'src/features/contact/update-contact-interaction-type'
+import { getSocketsByUserIds } from 'src/features/user/~shared'
 
-import { SocketInstanceType } from 'shared-config'
-import { getIO, throwSocketError } from 'shared-lib'
-
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO, throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
@@ -65,5 +69,3 @@ export const controller = (socket: SocketInstanceType) => {
     }
   )
 }
-
-

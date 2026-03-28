@@ -4,13 +4,13 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 
-import { isUserExist } from 'features/auth'
-import { createUser } from 'features/user'
-import { updateUserAvatar } from 'features/user/update-user-data'
+import { isUserExist } from 'src/features/auth'
+import { createUser } from 'src/features/user'
+import { updateUserAvatar } from 'src/features/user/update-user-data'
 
-import { USER_FIXTURES } from 'entities/user/config'
+import { USER_FIXTURES } from 'src/entities/user/config'
 
-import { log } from 'shared-lib'
+import { log } from 'src/shared/lib'
 
 const loadUserFixture = async (data: {
   id: string

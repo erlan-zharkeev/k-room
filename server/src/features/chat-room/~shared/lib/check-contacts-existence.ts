@@ -1,8 +1,9 @@
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]): Promise<boolean> => {
   const [self, contacts] = await Promise.all([
-    UserModel.findById(selfId, { 'personal.contacts': 1 }), UserModel.find({ _id: { $in: contactIds } }, { 'personal.contacts': 1 })
+    UserModel.findById(selfId, { 'personal.contacts': 1 }),
+    UserModel.find({ _id: { $in: contactIds } }, { 'personal.contacts': 1 })
   ])
 
   if (!self || contacts.length !== contactIds.length) return false

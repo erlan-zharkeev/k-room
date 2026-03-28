@@ -1,13 +1,9 @@
 import mongoose from 'mongoose'
-
-import { MONGO_CONNECTION_OPTIONS } from 'app/config'
-
-import { loadFixtures } from 'features/fixtures'
-
-import { initMediaBuckets } from 'entities/media'
-
-import { ENV } from 'shared-config'
-import { log, serverCaptureSentryException } from 'shared-lib'
+import { MONGO_CONNECTION_OPTIONS } from 'src/app/config'
+import { initMediaBuckets } from 'src/entities/media'
+import { loadFixtures } from 'src/features/fixtures'
+import { ENV } from 'src/shared/config'
+import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 mongoose.set('strictQuery', true)
 

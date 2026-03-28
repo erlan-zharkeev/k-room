@@ -2,8 +2,8 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { refreshTokenValidator } from 'features/auth'
-import { updateTokensPair } from 'features/auth/update-token-pair'
+import { refreshTokenValidator } from 'src/features/auth'
+import { updateTokensPair } from 'src/features/auth/update-token-pair'
 
 export const updateTokenPairRouter = Router()
 

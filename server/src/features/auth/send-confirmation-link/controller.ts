@@ -1,14 +1,14 @@
 import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
-import { generateToken } from 'features/auth'
-import { MESSAGE } from 'features/auth/send-confirmation-link'
-import { sendEmailConfirmationEmail } from 'features/email'
-import { USER_MESSAGE } from 'features/user'
+import { generateToken } from 'src/features/auth'
+import { MESSAGE } from 'src/features/auth/send-confirmation-link'
+import { sendEmailConfirmationEmail } from 'src/features/email'
+import { USER_MESSAGE } from 'src/features/user'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, ENV, IAppRequest } from 'shared-config'
-import { getLocalizedText, throwHTTPError } from 'shared-lib'
+import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language
@@ -42,11 +42,7 @@ export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseTyp
       return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.noConfirmationAttemptsLeft, language))
     }
 
-    const confirmToken = generateToken(
-      user.id,
-      ENV.EMAIL_CONFIRM_SECRET,
-      Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE)
-    )
+    const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))
 
     await sendEmailConfirmationEmail({
       email: user.personal.email,

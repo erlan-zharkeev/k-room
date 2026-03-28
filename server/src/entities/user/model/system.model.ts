@@ -2,8 +2,8 @@ import { Schema } from 'mongoose'
 
 import { USER_ROLES } from 'common'
 
-import type { IUserSystemData } from 'entities/user'
-import { deviceSchema } from 'entities/user'
+import type { IUserSystemData } from 'src/entities/user'
+import { deviceSchema } from 'src/entities/user'
 
 export const systemSchema = new Schema<IUserSystemData>(
   {

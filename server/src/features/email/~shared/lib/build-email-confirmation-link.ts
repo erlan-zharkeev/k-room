@@ -1,6 +1,6 @@
 import { RouteNamesEnum } from 'common'
 
-import { ENV } from 'shared-config'
+import { ENV } from 'src/shared/config'
 
 export const buildEmailConfirmationLink = (token: string) => {
   const confirmUrl = new URL(RouteNamesEnum.EmailConfirmation, ENV.CLIENT_URL)

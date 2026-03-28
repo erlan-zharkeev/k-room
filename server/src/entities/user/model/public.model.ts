@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import { type IUserPublicData } from 'entities/user'
+import { type IUserPublicData } from 'src/entities/user'
 
 export const publicSchema = new Schema<IUserPublicData>(
   {

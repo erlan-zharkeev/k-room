@@ -1,11 +1,11 @@
 import { IEventContactAddSuccess, IEventSaveContact, SocketActionsType } from 'common'
 
-import { transformUserToContact } from 'features/user'
+import { transformUserToContact } from 'src/features/user'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { SocketInstanceType } from 'shared-config'
-import { getIO, throwSocketError } from 'shared-lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO, throwSocketError } from 'src/shared/lib'
 
 export const controller = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('save-contact', async ({ interlocutorId }: IEventSaveContact) => {
@@ -14,7 +14,13 @@ export const controller = (socket: SocketInstanceType) => {
       const selfContact = await UserModel.findOneAndUpdate(
         { _id: userId },
         {
-          $set: { [`personal.contacts.${interlocutorId}`]: { id: interlocutorId, interaction: 'default', updatedAt: Date.now() } }
+          $set: {
+            [`personal.contacts.${interlocutorId}`]: {
+              id: interlocutorId,
+              interaction: 'default',
+              updatedAt: Date.now()
+            }
+          }
         },
         { new: true }
       )

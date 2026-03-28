@@ -2,12 +2,12 @@ import { ObjectId } from 'mongoose'
 
 import { StatusEnum } from 'common'
 
-import { MESSAGE } from 'features/auth/logout'
+import { MESSAGE } from 'src/features/auth/logout'
 
-import { UserModel } from 'entities/user'
+import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'shared-config'
-import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'shared-lib'
+import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
 export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
@@ -28,19 +28,19 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
       await user.save()
     }
 
-    ['jwt', 'refresh-jwt'].forEach((cookie) => {
+    ;['jwt', 'refresh-jwt'].forEach((cookie) => {
       res.clearCookie(cookie, {
         httpOnly: true,
         secure: true,
         sameSite: 'lax',
         domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
-        path: '/',
+        path: '/'
       })
     })
     return res.json({
       message: {
         text: getLocalizedText(SHARED_MESSAGE.success, language),
-        silent: true,
+        silent: true
       },
       payload: null
     })
