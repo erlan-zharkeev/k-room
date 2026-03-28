@@ -1,7 +1,5 @@
 import mongoose from 'mongoose'
-
-import { mediaBuckets } from 'src/entities/media'
-import { MEDIA_BUCKET_NAMES } from 'src/entities/media/config'
+import { MEDIA_BUCKET_NAMES, mediaBuckets } from 'src/entities/media'
 
 export const initMediaBuckets = (): void => {
   const db = mongoose.connection.db

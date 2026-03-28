@@ -1,15 +1,12 @@
 import type { Server as HttpsServer } from 'https'
 import { Server } from 'socket.io'
-
-import { RouteNamesEnum, type SocketActionsType } from 'common'
-
 import { MAX_HTTP_BUFFER_SIZE } from 'src/app/config'
-import { socketRouter } from 'src/app/services/socket-router'
-
+import { socketRouter } from 'src/app/services'
 import { socketAuthMiddleware } from 'src/features/auth'
-
 import { ENV, ORIGINS, type SocketInstanceType } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
+
+import { RouteNamesEnum, type SocketActionsType } from 'common'
 
 const getSocketIO = (server: HttpsServer) =>
   new Server(server, {

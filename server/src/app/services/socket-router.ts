@@ -3,7 +3,6 @@ import { socketChatRoomRouter } from 'src/features/chat-room'
 import { socketContactRouter } from 'src/features/contact'
 import { socketMessageRouter } from 'src/features/message'
 import { socketUserRouter } from 'src/features/user'
-
 import { SocketInstanceType } from 'src/shared/config'
 
 const featureRouters = [
