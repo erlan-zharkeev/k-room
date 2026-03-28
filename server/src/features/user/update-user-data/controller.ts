@@ -1,4 +1,5 @@
-import { UserModel } from 'src/entities/user'
+import { SocketActionsType, StatusEnum } from 'common'
+
 import {
   getSocketsByUserIds,
   I18N_UPDATE_USER_DATA_MESSAGE,
@@ -6,10 +7,11 @@ import {
   updateUserAvatar,
   USER_MESSAGE
 } from 'src/features/user'
+
+import { UserModel } from 'src/entities/user'
+
 import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
-
-import { SocketActionsType, StatusEnum } from 'common'
 
 export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

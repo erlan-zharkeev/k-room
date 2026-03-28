@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import { type ICreateNewPasswordPayload, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'src/features/code'
-import { I18N_RESET_PASSWORD_MESSAGE } from 'src/features/user/reset-password'
+import { I18N_RESET_PASSWORD_MESSAGE } from 'src/features/user'
 
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'

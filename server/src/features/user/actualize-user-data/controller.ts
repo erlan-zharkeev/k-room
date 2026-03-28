@@ -1,8 +1,8 @@
 import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common'
 
-import { transformRoomForUser } from 'src/features/chat-room/~shared'
-import { getSocketsByUserIds } from 'src/features/user/~shared'
-import { transformUserToFrontendContact } from 'src/features/user/actualize-user-data'
+import { transformRoomForUser } from 'src/features/chat-room'
+import { getSocketsByUserIds } from 'src/features/user'
+import { transformUserToFrontendContact } from 'src/features/user'
 
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { UserModel } from 'src/entities/user'

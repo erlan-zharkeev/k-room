@@ -1,4 +1,5 @@
 import { ValidateFileMetaOptionsMapType } from 'src/entities/media'
+
 import { SharpSettingsKeyType } from 'src/shared/config'
 
 export const ALLOWED_CONTENT_TYPES = ['image/', 'audio/', 'video/', 'application/pdf']

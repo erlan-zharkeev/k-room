@@ -6,7 +6,7 @@ import {
   MESSAGE_QUALIFIERS,
   MESSAGE_SUBJECTS,
   MINUTE_IN_MS
-} from 'src/features/fixtures/load-fixtures'
+} from 'src/features/fixtures'
 
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { MessageModel } from 'src/entities/message'

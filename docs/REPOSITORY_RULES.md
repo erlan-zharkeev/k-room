@@ -4,31 +4,32 @@ This document defines the working rules for this repository.
 
 ## Import Rules
 
-1. All imports must be absolute.
+1. Cross-module and cross-layer imports must use the public root alias path.
 
-Use imports from the project root alias, for example:
+Use imports through the public module entrypoint, for example:
 
 ```ts
 import { AppModal } from 'src/shared/ui'
 import { useChatRoom } from 'src/entities/chat-room'
 ```
 
-Do not use relative imports like:
+Between modules and layers, do not use relative imports like:
 
 ```ts
 import { AppModal } from '../../shared/ui'
 import { useChatRoom } from '../hooks/use-chat-room'
 ```
 
-Relative imports are allowed only for local style files of the current component:
+Inside one module, relative imports are allowed for local implementation files:
+
+```ts
+import { normalizeMessage } from './lib/normalize-message'
+```
+
+Relative imports are still allowed for local style files and private implementation details:
 
 ```ts
 import './style.scss'
-```
-
-Relative imports are also allowed for the current component's own internal `components` directory when those components are private implementation details of that parent component:
-
-```ts
 import { CallModalBody } from './components'
 ```
 

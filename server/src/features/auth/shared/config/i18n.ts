@@ -1,5 +1,6 @@
+import type { LocalizedTextMapType } from 'common'
+
 import { VALIDATION_LIMITS } from 'common'
-import { type LocalizedTextMapType } from 'common'
 
 export const AUTH_MESSAGE = {
   nonAuthorized: {

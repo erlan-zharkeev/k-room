@@ -1,11 +1,17 @@
 import bcrypt from 'bcryptjs'
-import { UserModel } from 'src/entities/user'
-import { I18N_LOGIN_MESSAGE, updateTokens } from 'src/features/auth'
+
+import { type IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common'
+
 import { mapUserToDto } from 'src/features/user'
+
+import { UserModel } from 'src/entities/user'
+
 import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { type IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common'
+import { updateTokens } from '../shared/lib/update-token'
+
+import { I18N_LOGIN_MESSAGE } from './config'
 
 export const login = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
   const language = req.language

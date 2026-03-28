@@ -4,15 +4,15 @@ import cors from 'cors'
 import express from 'express'
 import https from 'https'
 import methodOverride from 'method-override'
-import { corsOptions, httpsOptions, initSentry, setupSentryErrorHandler } from 'src/app/config'
-import { initDataBase, initIO, rootRouter } from 'src/app/services'
-import { ENV } from 'src/shared/config'
-import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
-import { attachRequestLanguage } from 'src/shared/middleware'
 
 import { RouteNamesEnum } from 'common'
 
-initSentry()
+import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'src/app/config'
+import { initDataBase, initIO, rootRouter } from 'src/app/services'
+
+import { ENV } from 'src/shared/config'
+import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
+import { attachRequestLanguage } from 'src/shared/middleware'
 
 const app = express()
 

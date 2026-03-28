@@ -1,6 +1,6 @@
 import type { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
-import { changeMessageStatus } from 'src/features/message/change-message-status'
+import { changeMessageStatus } from 'src/features/message'
 
 import { SocketInstanceType } from 'src/shared/config'
 

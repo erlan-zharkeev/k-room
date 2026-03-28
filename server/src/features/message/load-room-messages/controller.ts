@@ -1,6 +1,6 @@
 import { IEventLoadRoomMessages, SocketActionsType } from 'common'
 
-import { loadRoomMessages } from 'src/features/message/load-room-messages'
+import { loadRoomMessages } from 'src/features/message'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO } from 'src/shared/lib'

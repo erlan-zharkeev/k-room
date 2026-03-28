@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 
 import { IEventSearchContact, IFrontendContact, InteractionType, SocketActionsType } from 'common'
 
-import { emitSearchedContacts } from 'src/features/contact/search-contact'
+import { emitSearchedContacts } from 'src/features/contact'
 import { transformUserToContact } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'

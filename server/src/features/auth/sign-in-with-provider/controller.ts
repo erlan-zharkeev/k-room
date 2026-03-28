@@ -1,12 +1,18 @@
 import bcrypt from 'bcryptjs'
-import { UserModel } from 'src/entities/user'
-import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE, updateTokens } from 'src/features/auth'
-import { createUser, mapUserToDto, updateUserAvatar } from 'src/features/user'
-import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { v4 as uuidv4 } from 'uuid'
 
 import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
+
+import { createUser, mapUserToDto, updateUserAvatar } from 'src/features/user'
+
+import { UserModel } from 'src/entities/user'
+
+import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { updateTokens } from '../shared/lib/update-token'
+
+import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE } from './config'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
   const language = req.language

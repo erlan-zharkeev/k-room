@@ -1,5 +1,7 @@
 import { Router } from 'express'
-import { multerUploader } from 'src/entities/media'
+
+import { UserEndpointsEnum } from 'common'
+
 import { accessTokenValidator } from 'src/features/auth'
 import {
   getUserData,
@@ -9,9 +11,10 @@ import {
   UPDATE_USER_DATA_FIELDS_VALIDATION,
   updateUserData
 } from 'src/features/user'
-import { validateRequest } from 'src/shared/middleware'
 
-import { UserEndpointsEnum } from 'common'
+import { multerUploader } from 'src/entities/media'
+
+import { validateRequest } from 'src/shared/middleware'
 
 export const userRouter = Router()
 

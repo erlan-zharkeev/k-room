@@ -1,7 +1,11 @@
 import mongoose from 'mongoose'
+
 import { MONGO_CONNECTION_OPTIONS } from 'src/app/config'
-import { initMediaBuckets } from 'src/entities/media'
+
 import { loadFixtures } from 'src/features/fixtures'
+
+import { initMediaBuckets } from 'src/entities/media'
+
 import { ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
 
