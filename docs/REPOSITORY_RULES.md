@@ -24,8 +24,8 @@ import { AppModal } from '../../shared/ui'
 Use:
 
 ```ts
-import { normalizeMessage } from './lib/normalize-message'
 import { messageMapper } from './message-mapper'
+import { normalizeMessage } from './lib'
 ```
 
 Do not use alias imports to reach files inside the same module:
@@ -34,7 +34,25 @@ Do not use alias imports to reach files inside the same module:
 import { normalizeMessage } from 'src/features/message/shared/lib/normalize-message'
 ```
 
-3. If the target file is on the same directory level, use `./`.
+3. Prefer the shortest local relative public path available.
+
+If a local barrel such as `./lib`, `./config`, or `./shared` already exports the symbol, import through it instead of a deeper private file path.
+
+Use:
+
+```ts
+import { normalizeMessage } from './lib'
+import { authSchema } from './config'
+```
+
+Do not use:
+
+```ts
+import { normalizeMessage } from './lib/normalize-message'
+import { buildPayload } from '../../lib/build-payload'
+```
+
+4. If the target file is on the same directory level, use `./`.
 
 Use:
 
@@ -42,7 +60,7 @@ Use:
 import { messageMapper } from './message-mapper'
 ```
 
-4. Inside a module, do not use `..` imports.
+5. Inside a module, do not use `..` imports.
 
 Use local `./` imports or restructure exports so the dependency is available without going to the parent directory.
 
@@ -53,14 +71,14 @@ import { sharedRule } from '../shared'
 import { buildPayload } from '../../lib/build-payload'
 ```
 
-5. Barrel exports are an exception: in `index.ts` files, use relative `export` paths.
+6. Barrel exports are an exception: in `index.ts` files, use relative `export` paths.
 
 ```ts
 export * from './db'
 export * from './lib'
 ```
 
-6. Imports must use the shortest public path level available.
+7. Imports must use the shortest public path level available.
 
 Prefer the nearest public alias entrypoint that already exports the symbol:
 
@@ -76,7 +94,7 @@ import { dexieKeyValueStore } from 'src/shared/lib/db/lib/dexie-key-value-store'
 import { useValidate } from 'src/shared/lib/hooks/use-validate/use-validate'
 ```
 
-7. Type imports must use `import type`.
+8. Type imports must use `import type`.
 
 Use:
 
@@ -87,7 +105,7 @@ import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
 
 Do not mix type-only imports into regular `import` statements when `import type` can be used.
 
-8. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
+9. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
 
 If `enum` is used, member keys must be written only in `PascalCase`.
 
@@ -216,17 +234,9 @@ The parent feature groups related behavior, but each nested subfeature should st
 
 1. A layer may contain its own internal shared sublayer for code reused only inside that layer.
 
-2. Such internal shared sublayers must be named with a leading tilde.
+2. Such internal shared sublayers must be named `shared`.
 
 Use names like:
-
-```text
-features/chat-room/~shared
-entities/user/~shared
-widgets/some-widget/~shared
-```
-
-Do not create internal shared directories without the tilde prefix:
 
 ```text
 features/chat-room/shared
@@ -234,7 +244,15 @@ entities/user/shared
 widgets/some-widget/shared
 ```
 
-3. `~shared` is internal to its layer and should not become a cross-layer public API by default.
+Do not use alternative names for the same role:
+
+```text
+features/chat-room/internal
+entities/user/common
+widgets/some-widget/lib
+```
+
+3. `shared` is internal to its layer and should not become a cross-layer public API by default.
 
 ## Directory Index Rules
 
@@ -246,7 +264,7 @@ Use:
 
 ```text
 chat-room/
-  ~shared/
+  shared/
     lib/
       index.ts
       transform-room-data.ts
@@ -256,7 +274,7 @@ Do not expose files directly from a directory without an `index.ts` collector:
 
 ```text
 chat-room/
-  ~shared/
+  shared/
     lib/
       transform-room-data.ts
 ```
