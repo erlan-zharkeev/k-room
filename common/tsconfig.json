@@ -2,18 +2,18 @@
   "extends": "../config/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "./",
-    // "rootDir": "./../",
+    "baseUrl": ".",
     "module": "ESNext",
     "declaration": true,
     "composite": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "paths": {
+      "common": ["./index.ts"],
+      "common/*": ["./*"]
+    }
   },
   "include": ["./index.ts", "./types", "./lib"],
   "exclude": [
-    "node_modules",
-    "Makefile",
-    "readme.md",
-    "yarn-error",
-    "yarn-lock"
+    "node_modules"
   ]
 }

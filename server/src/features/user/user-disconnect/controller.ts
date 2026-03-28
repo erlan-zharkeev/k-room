@@ -5,7 +5,7 @@ import { updateOnlineStatus } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 
-export const controller = (socket: SocketInstanceType) => {
+export const userDisconnectController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('disconnect', async () => {
     const { userId } = socket.data
     const lastSeen = await setLastSeenData(userId)

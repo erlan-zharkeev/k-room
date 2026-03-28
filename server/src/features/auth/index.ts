@@ -8,4 +8,3 @@ export * from './send-confirmation-link'
 export * from './sign-in-with-provider'
 export * from './update-token-pair'
 ///
-export * from './router'

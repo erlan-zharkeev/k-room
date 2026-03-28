@@ -3,11 +3,6 @@ import { Router } from 'express'
 import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
-
-import { multerUploader } from 'src/entities/media'
-
-import { validateRequest } from 'src/shared/middleware'
-
 import {
   getUserData,
   markInfoAsRead,
@@ -15,7 +10,11 @@ import {
   resetPassword,
   UPDATE_USER_DATA_FIELDS_VALIDATION,
   updateUserData
-} from '.'
+} from 'src/features/user'
+
+import { multerUploader } from 'src/entities/media'
+
+import { validateRequest } from 'src/shared/middleware'
 
 export const userRouter = Router()
 userRouter.get(UserEndpointsEnum.GetUserData, accessTokenValidator, getUserData)
