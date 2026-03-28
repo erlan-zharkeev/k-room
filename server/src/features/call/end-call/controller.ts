@@ -1,12 +1,13 @@
 import type { IEventCallEnded, SocketActionsType } from 'common'
 
-import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from './../shared'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { CallModel } from 'src/entities/call'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
+
+import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from './../shared'
 
 export const endCallController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('call-ended', async ({ callerId, callId }: IEventCallEnded) => {

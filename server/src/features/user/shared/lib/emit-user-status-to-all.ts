@@ -1,10 +1,10 @@
 import { IEventStatusContact, SocketActionsType } from 'common'
 
-import { getSocketsByUserIds } from '.'
-
 import { UserModel } from 'src/entities/user'
 
 import { getIO } from 'src/shared/lib'
+
+import { getSocketsByUserIds } from '.'
 
 export const emitUserStatusToAll = async (interlocutorId: string, online: boolean, lastSeen?: number) => {
   const users = await UserModel.find({ [`personal.contacts.${interlocutorId}`]: { $exists: true } }, { _id: 1 }).lean()
