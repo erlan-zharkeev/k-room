@@ -1,14 +1,11 @@
-import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
-
-import { generateToken } from 'src/features/auth'
-import { MESSAGE } from 'src/features/auth/send-confirmation-link'
+import { UserModel } from 'src/entities/user'
+import { generateToken, I18N_SEND_CONFIRMATION_LINK_MESSAGE } from 'src/features/auth'
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { USER_MESSAGE } from 'src/features/user'
-
-import { UserModel } from 'src/entities/user'
-
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language
@@ -30,7 +27,7 @@ export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseTyp
           nextRequestTime: Date.now()
         },
         message: {
-          text: getLocalizedText(MESSAGE.emailAlreadyConfirmed, language),
+          text: getLocalizedText(I18N_SEND_CONFIRMATION_LINK_MESSAGE.emailAlreadyConfirmed, language),
           silent: false
         }
       }
@@ -39,7 +36,11 @@ export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseTyp
     }
 
     if (user.system.confirmAttempts <= 0) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.noConfirmationAttemptsLeft, language))
+      return throwHTTPError(
+        StatusEnum.BadRequest,
+        res,
+        getLocalizedText(I18N_SEND_CONFIRMATION_LINK_MESSAGE.noConfirmationAttemptsLeft, language)
+      )
     }
 
     const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))
@@ -63,13 +64,17 @@ export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseTyp
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(MESSAGE.confirmationLinkSent, language),
+        text: getLocalizedText(I18N_SEND_CONFIRMATION_LINK_MESSAGE.confirmationLinkSent, language),
         silent: false
       }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedSendEmailConfirmationLink, language))
+    throwHTTPError(
+      StatusEnum.Server,
+      res,
+      getLocalizedText(I18N_SEND_CONFIRMATION_LINK_MESSAGE.failedSendEmailConfirmationLink, language)
+    )
   }
 }

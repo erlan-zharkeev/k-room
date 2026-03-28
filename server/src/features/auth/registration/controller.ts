@@ -1,14 +1,11 @@
 import bcrypt from 'bcryptjs'
-
-import { type IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
-
-import { generateToken, isUserExist } from 'src/features/auth'
-import { MESSAGE } from 'src/features/auth/registration'
+import { generateToken, I18N_REGISTRATION_MESSAGE, isUserExist } from 'src/features/auth'
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { createUser } from 'src/features/user'
-
 import { type AppResponseType, ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { type IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 export const registration = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language
@@ -23,7 +20,11 @@ export const registration = async (req: IAppRequest, res: AppResponseType<ISendC
     const user = await createUser({ email, username, hashedPassword })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedRegistration, language))
+      return throwHTTPError(
+        StatusEnum.Server,
+        res,
+        getLocalizedText(I18N_REGISTRATION_MESSAGE.failedRegistration, language)
+      )
     }
 
     const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))
@@ -43,13 +44,13 @@ export const registration = async (req: IAppRequest, res: AppResponseType<ISendC
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(MESSAGE.registrationSuccess, language),
+        text: getLocalizedText(I18N_REGISTRATION_MESSAGE.registrationSuccess, language),
         silent: false
       }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedRegistration, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_REGISTRATION_MESSAGE.failedRegistration, language))
   }
 }

@@ -1,6 +1,4 @@
-import { updateTokens } from 'src/features/auth'
-import { MESSAGE } from 'src/features/auth/update-token-pair'
-
+import { I18N_UPDATE_TOKEN_PAIR_MESSAGE, updateTokens } from 'src/features/auth'
 import { AppResponseType, IAppRequest } from 'src/shared/config'
 import { getLocalizedText } from 'src/shared/lib'
 
@@ -9,6 +7,6 @@ export const updateTokensPair = async (req: IAppRequest, res: AppResponseType<nu
   await updateTokens(userId, req, res)
   res.json({
     payload: null,
-    message: { text: getLocalizedText(MESSAGE.tokensPairUpdated, req.language), silent: true }
+    message: { text: getLocalizedText(I18N_UPDATE_TOKEN_PAIR_MESSAGE.tokensPairUpdated, req.language), silent: true }
   })
 }
