@@ -22,7 +22,8 @@
     "baseUrl": "./../",
     "paths": {
       "src/*": ["client/src/*"],
-      "common": ["common/index.ts"]
+      "common": ["common/index.ts"],
+      "common/*": ["common/*"]
     }
   },
   "include": ["src/**/*"],
