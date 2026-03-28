@@ -3,7 +3,7 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { Link, useLocation } from 'react-router-dom'
 
-import { AUTH_TABS_LAYOUT_TEXT } from 'src/widgets/auth-tabs-layout'
+import { AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
 import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
 
 import { useI18n } from 'src/entities/system'
@@ -27,10 +27,10 @@ export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProp
       <div className="auth-tabs-layout__body">
         <nav className={navClassName}>
           <AppHeader accent={isPathEqual(RouteNamesEnum.Login)} additionalClassName="auth-tabs-layout__login-link">
-            <Link to={RouteNamesEnum.Login}>{t(AUTH_TABS_LAYOUT_TEXT.login)}</Link>
+            <Link to={RouteNamesEnum.Login}>{t(AUTH_TABS_LAYOUT_I18N.login)}</Link>
           </AppHeader>
           <AppHeader accent={isPathEqual(RouteNamesEnum.Registration)}>
-            <Link to={RouteNamesEnum.Registration}>{t(AUTH_TABS_LAYOUT_TEXT.register)}</Link>
+            <Link to={RouteNamesEnum.Registration}>{t(AUTH_TABS_LAYOUT_I18N.register)}</Link>
           </AppHeader>
         </nav>
         {children}

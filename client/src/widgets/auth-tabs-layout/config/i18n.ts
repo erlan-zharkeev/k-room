@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const AUTH_TABS_LAYOUT_TEXT = {
+export const AUTH_TABS_LAYOUT_I18N = {
   login: {
     en: 'Login',
     ru: 'Вход'

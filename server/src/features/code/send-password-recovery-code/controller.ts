@@ -2,9 +2,9 @@ import { randomInt } from 'node:crypto'
 
 import { ISendPasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
-import { CODE_LIFE_MS, I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE } from './config'
+import { CODE_LIFE_MS, SEND_PASSWORD_RECOVERY_CODE_I18N } from './config'
 import { sendPasswordRecoveryEmail } from 'src/features/email'
-import { USER_MESSAGE } from 'src/features/user'
+import { USER_I18N } from 'src/features/user'
 
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
@@ -26,7 +26,7 @@ export const sendPasswordRecoveryCodeController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
     }
 
     const now = Date.now()
@@ -38,7 +38,7 @@ export const sendPasswordRecoveryCodeController = async (
           nextTimeRequest: existingCode.nextRequestPossibleAt
         },
         message: {
-          text: getLocalizedText(I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE.tooManyRequests, language),
+          text: getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.tooManyRequests, language),
           silent: false
         }
       })
@@ -73,11 +73,11 @@ export const sendPasswordRecoveryCodeController = async (
         ...(ENV.IS_DEV ? { debugCode: code } : {})
       },
       message: {
-        text: getLocalizedText(I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE.codeSent, language),
+        text: getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.codeSent, language),
         silent: false
       }
     })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE.sendFailed, language))
+    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language))
   }
 }

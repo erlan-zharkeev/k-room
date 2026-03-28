@@ -9,7 +9,7 @@ import { type AppResponseType, ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { generateToken } from './../shared'
-import { I18N_REGISTRATION_MESSAGE } from '.'
+import { REGISTRATION_I18N } from '.'
 
 export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language
@@ -27,7 +27,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
       return throwHTTPError(
         StatusEnum.Server,
         res,
-        getLocalizedText(I18N_REGISTRATION_MESSAGE.failedRegistration, language)
+        getLocalizedText(REGISTRATION_I18N.failedRegistration, language)
       )
     }
 
@@ -48,13 +48,13 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(I18N_REGISTRATION_MESSAGE.registrationSuccess, language),
+        text: getLocalizedText(REGISTRATION_I18N.registrationSuccess, language),
         silent: false
       }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_REGISTRATION_MESSAGE.failedRegistration, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(REGISTRATION_I18N.failedRegistration, language))
   }
 }

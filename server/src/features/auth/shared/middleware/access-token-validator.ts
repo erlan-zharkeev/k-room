@@ -5,7 +5,7 @@ import { StatusEnum } from 'common'
 import { ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { I18N_AUTH_MESSAGE } from './../config'
+import { AUTH_I18N } from './../config'
 import { verifyToken } from './../lib'
 import { refreshTokenValidator } from '.'
 
@@ -16,7 +16,7 @@ export const accessTokenValidator = async (req: IAppRequest, res: Response, next
     return throwHTTPError(
       StatusEnum.NotAuth,
       res,
-      getLocalizedText(I18N_AUTH_MESSAGE.nonAuthorized, req.language),
+      getLocalizedText(AUTH_I18N.nonAuthorized, req.language),
       true
     )
   }

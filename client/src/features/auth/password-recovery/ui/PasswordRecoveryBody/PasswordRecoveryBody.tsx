@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { usePasswordRecovery, PASSWORD_RECOVERY_BODY_TEXT } from 'src/features/auth/password-recovery'
+import { usePasswordRecovery, PASSWORD_RECOVERY_BODY_I18N } from 'src/features/auth/password-recovery'
 
 import { useI18n } from 'src/entities/system'
 
@@ -18,7 +18,7 @@ export const PasswordRecoveryBody = () => {
     sendEmailCodeToPasswordRecovery,
     validateCodeToRecoveryPassword
   } = usePasswordRecovery()
-  const resendTimer = t(PASSWORD_RECOVERY_BODY_TEXT.resendTimer) as (value: number) => string
+  const resendTimer = t(PASSWORD_RECOVERY_BODY_I18N.resendTimer) as (value: number) => string
 
   return (
     <div className="password-recovery-body">
@@ -34,11 +34,11 @@ export const PasswordRecoveryBody = () => {
               inputType: 'text',
               value: email,
               nativeType: 'email',
-              placeholder: t(PASSWORD_RECOVERY_BODY_TEXT.emailPlaceholder),
+              placeholder: t(PASSWORD_RECOVERY_BODY_I18N.emailPlaceholder),
               rule: { name: 'email' }
             }
           }}
-          submitBtnText={t(PASSWORD_RECOVERY_BODY_TEXT.sendCode)}
+          submitBtnText={t(PASSWORD_RECOVERY_BODY_I18N.sendCode)}
           actionProcessing={emailSendCodeIsLoading}
           disabledActionBtn={counterValue > 0}
         />
@@ -51,7 +51,7 @@ export const PasswordRecoveryBody = () => {
       {hasPresetEmail && (
         <div className="password-recovery-body__send-code-btn">
           <AppButton
-            text={t(PASSWORD_RECOVERY_BODY_TEXT.sendCode)}
+            text={t(PASSWORD_RECOVERY_BODY_I18N.sendCode)}
             color="accent-color"
             loading={emailSendCodeIsLoading}
             disabled={counterValue > 0}
@@ -68,11 +68,11 @@ export const PasswordRecoveryBody = () => {
             code: {
               inputType: 'text',
               value: '',
-              placeholder: t(PASSWORD_RECOVERY_BODY_TEXT.codePlaceholder),
+              placeholder: t(PASSWORD_RECOVERY_BODY_I18N.codePlaceholder),
               rule: { name: 'minLength', quantity: 1 }
             }
           }}
-          submitBtnText={t(PASSWORD_RECOVERY_BODY_TEXT.validate)}
+          submitBtnText={t(PASSWORD_RECOVERY_BODY_I18N.validate)}
           actionProcessing={codeValidationIsLoading}
         />
       )}

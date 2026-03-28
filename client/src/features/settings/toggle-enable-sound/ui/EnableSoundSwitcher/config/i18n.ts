@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const ENABLE_SOUND_SWITCHER_TEXT = {
+export const ENABLE_SOUND_SWITCHER_I18N = {
   label: {
     en: 'Sound',
     ru: 'Звук'

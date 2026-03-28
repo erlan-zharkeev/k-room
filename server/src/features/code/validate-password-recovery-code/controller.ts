@@ -2,9 +2,9 @@ import { randomUUID } from 'node:crypto'
 
 import { IValidatePasswordRecoveryCodeResponse, StatusEnum } from 'common'
 
-import { QUERY_LIFE_MS, I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE } from './config'
+import { QUERY_LIFE_MS, VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './config'
 import { isCodeExpired } from './../shared'
-import { USER_MESSAGE } from 'src/features/user'
+import { USER_I18N } from 'src/features/user'
 
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
@@ -23,7 +23,7 @@ export const validatePasswordRecoveryCodeController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
     }
 
     const codeDoc = await CodeModel.findById(user.id)
@@ -32,7 +32,7 @@ export const validatePasswordRecoveryCodeController = async (
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE.invalidCode, language)
+        getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
       )
     }
 
@@ -43,7 +43,7 @@ export const validatePasswordRecoveryCodeController = async (
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE.expiredCode, language)
+        getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode, language)
       )
     }
 
@@ -51,7 +51,7 @@ export const validatePasswordRecoveryCodeController = async (
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE.invalidCode, language)
+        getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
       )
     }
 
@@ -69,7 +69,7 @@ export const validatePasswordRecoveryCodeController = async (
         query
       },
       message: {
-        text: getLocalizedText(I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE.validated, language),
+        text: getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validated, language),
         silent: true
       }
     })
@@ -77,7 +77,7 @@ export const validatePasswordRecoveryCodeController = async (
     return throwHTTPError(
       StatusEnum.Server,
       res,
-      getLocalizedText(I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE.validationFailed, language)
+      getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed, language)
     )
   }
 }

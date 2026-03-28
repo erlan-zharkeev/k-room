@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT, EditUserDataModal } from 'src/features/user'
+import { OPEN_MODAL_EDIT_USER_DATA_BTN_I18N, EditUserDataModal } from 'src/features/user'
 
 import { useI18n } from 'src/entities/system'
 
@@ -12,8 +12,8 @@ export const OpenModalEditUserDataBtn = () => {
 
   return (
     <>
-      <AppLink prevent text={t(OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT.link)} onClick={() => setIsOpen(true)} />
-      <AppModal title={t(OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT.modalTitle)} open={isOpen} onClose={() => setIsOpen(false)}>
+      <AppLink prevent text={t(OPEN_MODAL_EDIT_USER_DATA_BTN_I18N.link)} onClick={() => setIsOpen(true)} />
+      <AppModal title={t(OPEN_MODAL_EDIT_USER_DATA_BTN_I18N.modalTitle)} open={isOpen} onClose={() => setIsOpen(false)}>
         <EditUserDataModal onSuccess={() => setIsOpen(false)} />
       </AppModal>
     </>

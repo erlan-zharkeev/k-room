@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const WAIT_EMAIL_CONFIRM_TEXT = {
+export const WAIT_EMAIL_CONFIRM_I18N = {
   title: {
     en: 'Email confirmation',
     ru: 'Подтверждение email'

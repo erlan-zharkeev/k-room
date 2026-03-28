@@ -7,7 +7,7 @@ import { type AppLanguageType, StatusEnum } from 'common'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import {
-  I18N_VALIDATE_MEDIA_FILE_MESSAGE,
+  VALIDATE_MEDIA_FILE_I18N,
   IUploadOptions,
   MediaBucketNameType,
   MongooseGridFSBucketType
@@ -40,7 +40,7 @@ export const uploadBufferToBucket = async (
         return throwHTTPError(
           StatusEnum.Server,
           res ?? null,
-          getLocalizedText(I18N_VALIDATE_MEDIA_FILE_MESSAGE.fileWithThisNameAlreadyExists, language)
+          getLocalizedText(VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists, language)
         )
       }
       await Promise.all(existing.map((f) => bucket.delete(f._id)))
@@ -59,7 +59,7 @@ export const uploadBufferToBucket = async (
     throwHTTPError(
       StatusEnum.Server,
       res ?? null,
-      getLocalizedText(I18N_VALIDATE_MEDIA_FILE_MESSAGE.uploadFailed, language)
+      getLocalizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language)
     )
   }
 }

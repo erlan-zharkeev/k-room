@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { useShowNotification, SHOW_NOTIFICATION_SWITCHER_TEXT } from 'src/features/settings/toggle-show-notification'
+import { useShowNotification, SHOW_NOTIFICATION_SWITCHER_I18N } from 'src/features/settings/toggle-show-notification'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
@@ -14,13 +14,13 @@ export const ShowNotificationSwitcher = () => {
 
   return (
     <div className="show-notification-switcher">
-      <AppText size="small">{t(SHOW_NOTIFICATION_SWITCHER_TEXT.label)}</AppText>
-      <AppTooltip text={t(SHOW_NOTIFICATION_SWITCHER_TEXT.tooltip)} placement="bottom">
+      <AppText size="small">{t(SHOW_NOTIFICATION_SWITCHER_I18N.label)}</AppText>
+      <AppTooltip text={t(SHOW_NOTIFICATION_SWITCHER_I18N.tooltip)} placement="bottom">
         <AppSwitch
           value={showNotification}
           name="notification"
-          onText={t(SHOW_NOTIFICATION_SWITCHER_TEXT.show)}
-          offText={t(SHOW_NOTIFICATION_SWITCHER_TEXT.hide)}
+          onText={t(SHOW_NOTIFICATION_SWITCHER_I18N.show)}
+          offText={t(SHOW_NOTIFICATION_SWITCHER_I18N.hide)}
           onChange={toggleShowNotification}
         />
       </AppTooltip>

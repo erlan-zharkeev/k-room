@@ -3,14 +3,14 @@ import { SocketActionsType, StatusEnum } from 'common'
 import {
   getSocketsByUserIds,
   transformUserToContact,
-  USER_MESSAGE
+  USER_I18N
 } from './../shared'
-import { I18N_UPDATE_USER_DATA_MESSAGE } from './config'
+import { UPDATE_USER_DATA_I18N } from './config'
 import { updateUserAvatar } from './lib'
 
 import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
 export const updateUserDataController = async (req: IAppRequest, res: AppResponseType<null>) => {
@@ -26,14 +26,14 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_UPDATE_USER_DATA_MESSAGE.nothingToUpdate, language)
+        getLocalizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language)
       )
     }
 
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
     }
 
     if (username && username !== user.public.username) {
@@ -63,11 +63,11 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
 
     return res.json({
       payload: null,
-      message: { text: getLocalizedText(SHARED_MESSAGE.success, language), silent: true }
+      message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true }
     })
   } catch (error: unknown) {
     log.error(String(error))
     serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_UPDATE_USER_DATA_MESSAGE.failedUpdate, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(UPDATE_USER_DATA_I18N.failedUpdate, language))
   }
 }

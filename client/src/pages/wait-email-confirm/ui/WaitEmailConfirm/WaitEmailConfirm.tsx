@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, ISendConfirmationLinkResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { WAIT_EMAIL_CONFIRM_TEXT } from 'src/pages/wait-email-confirm/config'
+import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm/config'
 
 import { useI18n } from 'src/entities/system'
 
@@ -67,39 +67,39 @@ export const WaitEmailConfirm = () => {
   return (
     <div className="wait-email-confirm">
       <div className="wait-confirm-email__wrapper">
-        <div className="wait-email-confirm__header">{t(WAIT_EMAIL_CONFIRM_TEXT.title)}</div>
+        <div className="wait-email-confirm__header">{t(WAIT_EMAIL_CONFIRM_I18N.title)}</div>
         <p className="paragraph-text">
-          {t(WAIT_EMAIL_CONFIRM_TEXT.sentToEmail)}
+          {t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail)}
           {email && <span> {email}</span>}
         </p>
-        <p className="paragraph-text">{t(WAIT_EMAIL_CONFIRM_TEXT.followLink)}</p>
+        <p className="paragraph-text">{t(WAIT_EMAIL_CONFIRM_I18N.followLink)}</p>
         {remainingAttempts <= 0 ? (
           <div className="wait-email-confirm__attempts">
-            <div className="paragraph-text  paragraph-text--bold">{t(WAIT_EMAIL_CONFIRM_TEXT.attemptsExhausted)}</div>
+            <div className="paragraph-text  paragraph-text--bold">{t(WAIT_EMAIL_CONFIRM_I18N.attemptsExhausted)}</div>
           </div>
         ) : (
           <>
             <div className="wait-email-confirm__attempts">
-              <div className="paragraph-text  paragraph-text--bold">{t(WAIT_EMAIL_CONFIRM_TEXT.attemptsLeft)}</div>
+              <div className="paragraph-text  paragraph-text--bold">{t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft)}</div>
               <div className="paragraph-text paragraph-text--accent paragraph-text--bold">
                 &nbsp;{remainingAttempts}
               </div>
             </div>
-            <div className="paragraph-text  wait-confirm-email__not-received">{t(WAIT_EMAIL_CONFIRM_TEXT.resendHint)}</div>
+            <div className="paragraph-text  wait-confirm-email__not-received">{t(WAIT_EMAIL_CONFIRM_I18N.resendHint)}</div>
           </>
         )}
 
         {counter > 0 && (
           <div className="paragraph-text  wait-email-confirm__counter">
-            {t(WAIT_EMAIL_CONFIRM_TEXT.resendInSeconds)(Math.round(counter))}
+            {t(WAIT_EMAIL_CONFIRM_I18N.resendInSeconds)(Math.round(counter))}
           </div>
         )}
 
         <div className="wait-email-confirm__actions">
           {counter <= 0 && remainingAttempts > 0 && (
-            <AppButton text={t(WAIT_EMAIL_CONFIRM_TEXT.resend)} color="accent-color" onClick={sendLink} loading={isLoading} />
+            <AppButton text={t(WAIT_EMAIL_CONFIRM_I18N.resend)} color="accent-color" onClick={sendLink} loading={isLoading} />
           )}
-          <AppButton text={t(WAIT_EMAIL_CONFIRM_TEXT.back)} color="accent-color" onClick={() => navigate(RouteNamesEnum.Login)} />
+          <AppButton text={t(WAIT_EMAIL_CONFIRM_I18N.back)} color="accent-color" onClick={() => navigate(RouteNamesEnum.Login)} />
         </div>
       </div>
     </div>

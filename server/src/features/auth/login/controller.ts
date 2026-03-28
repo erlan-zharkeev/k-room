@@ -6,11 +6,11 @@ import { mapUserToDto } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { type AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { updateTokens } from './../shared'
-import { I18N_LOGIN_MESSAGE } from './config'
+import { LOGIN_I18N } from './config'
 
 export const loginController = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
   const language = req.language
@@ -23,7 +23,7 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_LOGIN_MESSAGE.invalidEmailOrPassword, language)
+        getLocalizedText(LOGIN_I18N.invalidEmailOrPassword, language)
       )
     }
 
@@ -33,7 +33,7 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_LOGIN_MESSAGE.invalidEmailOrPassword, language)
+        getLocalizedText(LOGIN_I18N.invalidEmailOrPassword, language)
       )
     }
 
@@ -41,7 +41,7 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_LOGIN_MESSAGE.emailNotConfirmed, language)
+        getLocalizedText(LOGIN_I18N.emailNotConfirmed, language)
       )
     }
 
@@ -50,13 +50,13 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
     const response = {
       payload: mapUserToDto(user),
       message: {
-        text: getLocalizedText(SHARED_MESSAGE.success, language),
+        text: getLocalizedText(SHARED_I18N.success, language),
         silent: true
       }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_LOGIN_MESSAGE.failed, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(LOGIN_I18N.failed, language))
   }
 }

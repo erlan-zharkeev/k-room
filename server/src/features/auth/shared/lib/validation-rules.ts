@@ -3,49 +3,49 @@ import mongoose from 'mongoose'
 
 import { providers, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'common'
 
-import { I18N_AUTH_MESSAGE } from './../config'
+import { AUTH_I18N } from './../config'
 
 export const emailRule = () =>
   check('email')
     .notEmpty()
-    .withMessage(I18N_AUTH_MESSAGE.emailIsRequired)
+    .withMessage(AUTH_I18N.emailIsRequired)
     .bail()
     .isEmail()
-    .withMessage(I18N_AUTH_MESSAGE.invalidEmailFormat)
+    .withMessage(AUTH_I18N.invalidEmailFormat)
 
-export const requiredStringRule = (field: string, msg = I18N_AUTH_MESSAGE.fieldIsRequired) =>
+export const requiredStringRule = (field: string, msg = AUTH_I18N.fieldIsRequired) =>
   check(field).notEmpty().withMessage(msg)
 
 export const passwordRule = () =>
   check('password')
     .notEmpty()
-    .withMessage(I18N_AUTH_MESSAGE.passwordIsRequired)
+    .withMessage(AUTH_I18N.passwordIsRequired)
     .bail()
     .isLength({ min: VALIDATION_LIMITS.passwordMinLength })
-    .withMessage(I18N_AUTH_MESSAGE.passwordMustBeAtLeast)
+    .withMessage(AUTH_I18N.passwordMustBeAtLeast)
     .matches(new RegExp(VALIDATION_PATTERNS.passwordStrong))
-    .withMessage(I18N_AUTH_MESSAGE.passwordMustBeStrong)
+    .withMessage(AUTH_I18N.passwordMustBeStrong)
 check('password')
   .not()
   .matches(new RegExp(VALIDATION_PATTERNS.noSpaces))
-  .withMessage(I18N_AUTH_MESSAGE.passwordNotContainSpaces)
+  .withMessage(AUTH_I18N.passwordNotContainSpaces)
   .matches(new RegExp(VALIDATION_PATTERNS.onlyLatin))
-  .withMessage(I18N_AUTH_MESSAGE.passwordMustContainOnlyLatin)
+  .withMessage(AUTH_I18N.passwordMustContainOnlyLatin)
 
 export const objectIdRule = (field: string) =>
   check(field)
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
-    .withMessage(I18N_AUTH_MESSAGE.invalidId)
+    .withMessage(AUTH_I18N.invalidId)
 
 export const providerRule = (field = 'providerName') =>
   check(field)
     .exists({ checkNull: true })
-    .withMessage(I18N_AUTH_MESSAGE.fieldIsRequired)
+    .withMessage(AUTH_I18N.fieldIsRequired)
     .bail()
     .isIn([...providers])
-    .withMessage(I18N_AUTH_MESSAGE.invalidProvider)
+    .withMessage(AUTH_I18N.invalidProvider)
 
-export const atLeastOneOf = (fields: string[], message = I18N_AUTH_MESSAGE.atLeastOneRequired) =>
+export const atLeastOneOf = (fields: string[], message = AUTH_I18N.atLeastOneRequired) =>
   oneOf(
     fields.map((f) => check(f).exists({ checkNull: true, checkFalsy: true }).bail().notEmpty()),
     message
@@ -54,7 +54,7 @@ export const atLeastOneOf = (fields: string[], message = I18N_AUTH_MESSAGE.atLea
 export const usernameRule = () => {
   return check('username')
     .isLength({ min: VALIDATION_LIMITS.usernameMinLength })
-    .withMessage(I18N_AUTH_MESSAGE.usernameTooShort)
+    .withMessage(AUTH_I18N.usernameTooShort)
     .isLength({ max: VALIDATION_LIMITS.usernameMaxLength })
-    .withMessage(I18N_AUTH_MESSAGE.usernameTooLong)
+    .withMessage(AUTH_I18N.usernameTooLong)
 }

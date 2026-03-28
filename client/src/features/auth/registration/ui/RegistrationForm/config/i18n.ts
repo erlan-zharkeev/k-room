@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const REGISTRATION_FORM_TEXT = {
+export const REGISTRATION_FORM_I18N = {
   usernamePlaceholder: {
     en: 'Username',
     ru: 'Имя пользователя'

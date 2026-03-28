@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const SHOW_NOTIFICATION_SWITCHER_TEXT = {
+export const SHOW_NOTIFICATION_SWITCHER_I18N = {
   label: {
     en: 'Notification',
     ru: 'Уведомления'

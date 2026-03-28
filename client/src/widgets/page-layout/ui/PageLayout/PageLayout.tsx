@@ -2,7 +2,7 @@ import './style.scss'
 import { RouteNamesEnum as R } from 'common'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import { PAGE_LAYOUT_TEXT } from 'src/widgets/page-layout/config'
+import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout/config'
 
 import { useI18n } from 'src/entities/system'
 
@@ -29,7 +29,7 @@ export const PageLayout = () => {
           {showBack && (
             <AppButton borderless onClick={handleBack}>
               <AppIcon name="arrow-left" />
-              {t(PAGE_LAYOUT_TEXT.back)}
+              {t(PAGE_LAYOUT_I18N.back)}
             </AppButton>
           )}
         </div>

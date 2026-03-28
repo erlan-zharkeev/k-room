@@ -1,7 +1,7 @@
 import './style.scss'
 import { RouteNamesEnum } from 'common'
 
-import { LOGIN_FORM_TEXT, LoginFormProps } from 'src/features/auth'
+import { LOGIN_FORM_I18N, LoginFormProps } from 'src/features/auth'
 
 import { useI18n } from 'src/entities/system'
 
@@ -19,18 +19,18 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
             value: '',
             inputType: 'text',
             nativeType: 'email',
-            placeholder: t(LOGIN_FORM_TEXT.emailPlaceholder),
+            placeholder: t(LOGIN_FORM_I18N.emailPlaceholder),
             rule: { name: 'email' }
           },
           password: {
             value: '',
             inputType: 'text',
             nativeType: 'password',
-            placeholder: t(LOGIN_FORM_TEXT.passwordPlaceholder),
+            placeholder: t(LOGIN_FORM_I18N.passwordPlaceholder),
             rule: { name: 'password' }
           }
         }}
-        submitBtnText={t(LOGIN_FORM_TEXT.submit)}
+        submitBtnText={t(LOGIN_FORM_I18N.submit)}
         actionProcessing={isLoading}
         disabled={isFirebaseLoginLoading}
       >
@@ -38,7 +38,7 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
           <AppButton
             prefixIconName="google"
             iconSize="xs"
-            text={t(LOGIN_FORM_TEXT.withGoogle)}
+            text={t(LOGIN_FORM_I18N.withGoogle)}
             onClick={() => {
               onFirebaseLogin('google')
             }}
@@ -50,7 +50,7 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
           <div className="login-form__forgot-password">
             <AppLink
               to={RouteNamesEnum.PasswordRecovery}
-              text={t(LOGIN_FORM_TEXT.forgotPassword)}
+              text={t(LOGIN_FORM_I18N.forgotPassword)}
               disabled={isLoading || isFirebaseLoginLoading}
             />
           </div>

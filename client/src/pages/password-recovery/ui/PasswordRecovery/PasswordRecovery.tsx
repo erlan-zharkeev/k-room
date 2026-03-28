@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { PASSWORD_RECOVERY_PAGE_TEXT } from 'src/pages/password-recovery/config'
+import { PASSWORD_RECOVERY_PAGE_I18N } from 'src/pages/password-recovery/config'
 
 import { PasswordRecoveryBody } from 'src/features/auth'
 
@@ -14,7 +14,7 @@ export const PasswordRecovery = () => {
   return (
     <div className="password-recovery">
       <AppHeader tag="h2" accent additionalClassName="password-recovery__title">
-        {t(PASSWORD_RECOVERY_PAGE_TEXT.title)}
+        {t(PASSWORD_RECOVERY_PAGE_I18N.title)}
       </AppHeader>
       <PasswordRecoveryBody />
     </div>

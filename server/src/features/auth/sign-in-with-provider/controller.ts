@@ -7,11 +7,11 @@ import { createUser, mapUserToDto, updateUserAvatar } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { updateTokens } from './../shared'
-import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE } from '.'
+import { SIGN_IN_WITH_PROVIDER_I18N } from '.'
 
 export const signInWithProviderController = async (
   req: IAppRequest,
@@ -45,7 +45,7 @@ export const signInWithProviderController = async (
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(I18N_SIGN_IN_WITH_PROVIDER_MESSAGE.failed, language)
+        getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language)
       )
 
     await updateTokens(user.id, req, res)
@@ -53,11 +53,11 @@ export const signInWithProviderController = async (
     return res.json({
       payload: mapUserToDto(user),
       message: {
-        text: getLocalizedText(SHARED_MESSAGE.success, language),
+        text: getLocalizedText(SHARED_I18N.success, language),
         silent: true
       }
     })
   } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_SIGN_IN_WITH_PROVIDER_MESSAGE.failed, language))
+    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language))
   }
 }

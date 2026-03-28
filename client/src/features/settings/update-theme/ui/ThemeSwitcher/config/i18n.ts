@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const THEME_SWITCHER_TEXT = {
+export const THEME_SWITCHER_I18N = {
   label: {
     en: 'Theme',
     ru: 'Тема'

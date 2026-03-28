@@ -4,10 +4,10 @@ import { StatusEnum } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { AppResponseType, ENV, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
-import { I18N_LOGOUT_MESSAGE } from './config'
+import { LOGOUT_I18N } from './config'
 
 export const logoutController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
@@ -39,7 +39,7 @@ export const logoutController = async (req: IAppRequest, res: AppResponseType<nu
     })
     return res.json({
       message: {
-        text: getLocalizedText(SHARED_MESSAGE.success, language),
+        text: getLocalizedText(SHARED_I18N.success, language),
         silent: true
       },
       payload: null
@@ -47,6 +47,6 @@ export const logoutController = async (req: IAppRequest, res: AppResponseType<nu
   } catch (error) {
     log.error(String(error))
     serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_LOGOUT_MESSAGE.failed, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(LOGOUT_I18N.failed, language))
   }
 }

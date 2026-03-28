@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { StatusEnum } from 'common'
 
-import { USER_MESSAGE } from './../config'
+import { USER_I18N } from './../config'
 
 import { UserModel } from 'src/entities/user'
 
@@ -19,21 +19,21 @@ export const isUserExist = async <T>(
 
   if (userNameCandidate) {
     userExist = true
-    if (res) throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userWithCurrentNameAlreadyExist))
+    if (res) throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userWithCurrentNameAlreadyExist))
   }
 
   const emailCandidate = await UserModel.findOne({ 'personal.email': email })
 
   if (emailCandidate) {
     userExist = true
-    if (res) throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userWithCurrentEmailAlreadyExist))
+    if (res) throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userWithCurrentEmailAlreadyExist))
   }
 
   if (id) {
     const idCandidate = await UserModel.findById(id)
     if (idCandidate) {
       userExist = true
-      if (res) throwHTTPError(StatusEnum.Server, res, getLocalizedText(USER_MESSAGE.userWithCurrentIdAlreadyExist))
+      if (res) throwHTTPError(StatusEnum.Server, res, getLocalizedText(USER_I18N.userWithCurrentIdAlreadyExist))
     }
   }
 
