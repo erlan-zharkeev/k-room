@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_VALIDATE_MEDIA_FILE_MESSAGE = {
+export const VALIDATE_MEDIA_FILE_I18N = {
   uploadFailed: {
     en: 'Upload failed',
     ru: 'Не удалось загрузить файл'
@@ -19,7 +19,7 @@ export const I18N_VALIDATE_MEDIA_FILE_MESSAGE = {
   }
 } as const satisfies LocalizedTextMapType
 
-export const COMMON_MEDIA_MESSAGE = {
+export const COMMON_MEDIA_I18N = {
   fileNotFound: {
     en: 'File not found',
     ru: 'Файл не найден'

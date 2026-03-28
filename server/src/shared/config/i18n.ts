@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const SHARED_MESSAGE = {
+export const SHARED_I18N = {
   success: {
     en: 'Success',
     ru: 'Успешно'

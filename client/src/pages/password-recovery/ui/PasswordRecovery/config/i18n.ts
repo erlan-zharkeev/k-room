@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const PASSWORD_RECOVERY_PAGE_TEXT = {
+export const PASSWORD_RECOVERY_PAGE_I18N = {
   title: {
     en: 'Password recovery',
     ru: 'Восстановление пароля'

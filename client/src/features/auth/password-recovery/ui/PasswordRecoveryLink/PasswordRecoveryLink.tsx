@@ -2,7 +2,7 @@ import { RouteNamesEnum } from 'common'
 
 import './style.scss'
 
-import { PASSWORD_RECOVERY_LINK_TEXT } from 'src/features/auth/password-recovery'
+import { PASSWORD_RECOVERY_LINK_I18N } from 'src/features/auth/password-recovery'
 
 import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
@@ -15,7 +15,7 @@ export const PasswordRecoveryLink = () => {
 
   return (
     <AppLink
-      text={t(PASSWORD_RECOVERY_LINK_TEXT.link)}
+      text={t(PASSWORD_RECOVERY_LINK_I18N.link)}
       to={{ pathname: RouteNamesEnum.PasswordRecovery, search: `?user-email=${email}` }}
     />
   )

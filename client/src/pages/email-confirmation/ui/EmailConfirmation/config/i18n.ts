@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const EMAIL_CONFIRMATION_TEXT = {
+export const EMAIL_CONFIRMATION_I18N = {
   title: {
     en: 'Congratulations',
     ru: 'Готово'

@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_VALIDATE_PASSWORD_RECOVERY_CODE_MESSAGE = {
+export const VALIDATE_PASSWORD_RECOVERY_CODE_I18N = {
   validated: {
     en: 'The password recovery code is valid',
     ru: 'Код восстановления пароля подтверждён'

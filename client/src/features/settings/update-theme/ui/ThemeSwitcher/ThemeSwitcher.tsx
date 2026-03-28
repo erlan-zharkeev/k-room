@@ -1,5 +1,5 @@
 
-import { useThemeUpdate, THEME_SWITCHER_TEXT } from 'src/features/settings/update-theme'
+import { useThemeUpdate, THEME_SWITCHER_I18N } from 'src/features/settings/update-theme'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
@@ -13,11 +13,11 @@ export const ThemeSwitcher = () => {
 
   return (
     <div className="theme-switcher">
-      <AppText size="small">{t(THEME_SWITCHER_TEXT.label)}</AppText>
+      <AppText size="small">{t(THEME_SWITCHER_I18N.label)}</AppText>
       <AppSwitch
         name="theme"
-        onText={t(THEME_SWITCHER_TEXT.dark)}
-        offText={t(THEME_SWITCHER_TEXT.light)}
+        onText={t(THEME_SWITCHER_I18N.dark)}
+        offText={t(THEME_SWITCHER_I18N.light)}
         value={isThemeDark}
         onChange={toggleTheme}
       />

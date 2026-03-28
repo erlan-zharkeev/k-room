@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_UPDATE_USER_DATA_MESSAGE = {
+export const UPDATE_USER_DATA_I18N = {
   nothingToUpdate: {
     en: 'Required at least one field',
     ru: 'Нужно передать хотя бы одно поле'

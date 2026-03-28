@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const USER_MESSAGE = {
+export const USER_I18N = {
   userNotFound: {
     en: 'User not found',
     ru: 'Пользователь не найден'

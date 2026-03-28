@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 
-import { EMAIL_MESSAGE } from 'src/features/email'
+import { EMAIL_I18N } from 'src/features/email'
 
 import { ENV } from 'src/shared/config'
 import { getLocalizedText } from 'src/shared/lib'
@@ -15,7 +15,7 @@ export const createResendClient = () => {
       return null
     }
 
-    throw new Error(getLocalizedText(EMAIL_MESSAGE.resendApiKeyMissing))
+    throw new Error(getLocalizedText(EMAIL_I18N.resendApiKeyMissing))
   }
 
   resendClient = new Resend(ENV.RESEND_API_KEY)

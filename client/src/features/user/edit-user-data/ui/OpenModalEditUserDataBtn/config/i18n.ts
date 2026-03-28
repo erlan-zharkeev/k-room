@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const OPEN_MODAL_EDIT_USER_DATA_BTN_TEXT = {
+export const OPEN_MODAL_EDIT_USER_DATA_BTN_I18N = {
   link: {
     en: 'Edit user data',
     ru: 'Редактировать профиль'

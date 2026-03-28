@@ -4,11 +4,11 @@ import { updateTokens } from 'src/features/auth'
 
 import { UserModel } from 'src/entities/user'
 
-import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { type AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { mapUserToDto, USER_MESSAGE } from './../shared'
-import { I18N_GET_USER_DATA_MESSAGE } from './config'
+import { mapUserToDto, USER_I18N } from './../shared'
+import { GET_USER_DATA_I18N } from './config'
 
 export const getUserDataController = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
   const language = req.language
@@ -19,18 +19,18 @@ export const getUserDataController = async (req: IAppRequest, res: AppResponseTy
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_MESSAGE.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
     }
 
     await updateTokens(userId, req, res)
 
     const response = {
       payload: mapUserToDto(user),
-      message: { text: getLocalizedText(SHARED_MESSAGE.success, language), silent: true }
+      message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true }
     }
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_GET_USER_DATA_MESSAGE.failedGetUserData, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(GET_USER_DATA_I18N.failedGetUserData, language))
   }
 }

@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_SEND_PASSWORD_RECOVERY_CODE_MESSAGE = {
+export const SEND_PASSWORD_RECOVERY_CODE_I18N = {
   codeSent: {
     en: 'Password recovery code has been sent',
     ru: 'Код для восстановления пароля отправлен'

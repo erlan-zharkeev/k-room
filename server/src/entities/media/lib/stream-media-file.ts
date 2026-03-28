@@ -4,7 +4,7 @@ import { type AppLanguageType, StatusEnum } from 'common'
 
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { COMMON_MEDIA_MESSAGE, MediaBucketNameType } from './../config'
+import { COMMON_MEDIA_I18N, MediaBucketNameType } from './../config'
 import { mediaBuckets } from './../model'
 
 export const streamMediaFile = async (
@@ -21,7 +21,7 @@ export const streamMediaFile = async (
       return throwHTTPError(
         StatusEnum.NotFound,
         res,
-        getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language)
+        getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language)
       )
     }
 
@@ -33,7 +33,7 @@ export const streamMediaFile = async (
       return throwHTTPError(
         StatusEnum.NotFound,
         res,
-        getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language),
+        getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language),
         true
       )
     }
@@ -53,14 +53,14 @@ export const streamMediaFile = async (
     bucket
       .openDownloadStreamByName(filename)
       .on('error', () =>
-        throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_MESSAGE.fileNotFound, language))
+        throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language))
       )
       .pipe(res)
   } catch {
     return throwHTTPError(
       StatusEnum.Server,
       res ?? null,
-      getLocalizedText(COMMON_MEDIA_MESSAGE.failedToStreamFile, language)
+      getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language)
     )
   }
 }

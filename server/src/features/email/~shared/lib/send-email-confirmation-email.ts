@@ -2,7 +2,7 @@ import {
   buildEmailConfirmationLink,
   createResendClient,
   EMAIL_CONFIRMATION_SUBJECT,
-  EMAIL_MESSAGE,
+  EMAIL_I18N,
   renderEmailConfirmationHtml
 } from 'src/features/email'
 
@@ -19,15 +19,15 @@ export const sendEmailConfirmationEmail = async ({
   username?: string
 }) => {
   if (!email) {
-    throw new Error(getLocalizedText(EMAIL_MESSAGE.emailRecipientMissing))
+    throw new Error(getLocalizedText(EMAIL_I18N.emailRecipientMissing))
   }
 
   if (!token) {
-    throw new Error(getLocalizedText(EMAIL_MESSAGE.emailConfirmationTokenMissing))
+    throw new Error(getLocalizedText(EMAIL_I18N.emailConfirmationTokenMissing))
   }
 
   if (!ENV.RESEND_FROM_EMAIL) {
-    throw new Error(getLocalizedText(EMAIL_MESSAGE.resendFromEmailMissing))
+    throw new Error(getLocalizedText(EMAIL_I18N.resendFromEmailMissing))
   }
 
   const resend = createResendClient()

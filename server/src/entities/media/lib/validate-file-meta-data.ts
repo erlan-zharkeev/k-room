@@ -5,7 +5,7 @@ import { type AppLanguageType, StatusEnum } from 'common'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import {
-  I18N_VALIDATE_MEDIA_FILE_MESSAGE,
+  VALIDATE_MEDIA_FILE_I18N,
   type IFileData,
   type MediaBucketNameType,
   VALIDATION_MEDIA_OPTIONS_MAP
@@ -24,7 +24,7 @@ export const validateFileMetaData = (
     throwHTTPError(
       StatusEnum.BadRequest,
       res,
-      getLocalizedText(I18N_VALIDATE_MEDIA_FILE_MESSAGE.fileIsTooLarge, language)
+      getLocalizedText(VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge, language)
     )
   }
 
@@ -32,7 +32,7 @@ export const validateFileMetaData = (
     throwHTTPError(
       StatusEnum.BadRequest,
       res,
-      getLocalizedText(I18N_VALIDATE_MEDIA_FILE_MESSAGE.extNotSupported, language)
+      getLocalizedText(VALIDATE_MEDIA_FILE_I18N.extNotSupported, language)
     )
   }
   return true

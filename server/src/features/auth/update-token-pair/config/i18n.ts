@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_UPDATE_TOKEN_PAIR_MESSAGE = {
+export const UPDATE_TOKEN_PAIR_I18N = {
   tokensPairUpdated: {
     en: 'Token pair has been updated',
     ru: 'Пара токенов обновлена'

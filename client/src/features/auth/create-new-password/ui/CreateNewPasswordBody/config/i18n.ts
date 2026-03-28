@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const CREATE_NEW_PASSWORD_BODY_TEXT = {
+export const CREATE_NEW_PASSWORD_BODY_I18N = {
   success: {
     en: 'Password changed successfully!',
     ru: 'Пароль успешно изменён!'

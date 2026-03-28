@@ -1,7 +1,7 @@
 import './style.scss'
 import type { IAuthRegistrationPayload } from 'common'
 
-import { PrivacyPolicySwitch, REGISTRATION_FORM_TEXT, RegistrationFormProps } from 'src/features/auth/registration'
+import { PrivacyPolicySwitch, REGISTRATION_FORM_I18N, RegistrationFormProps } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/system'
 
@@ -22,7 +22,7 @@ export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProp
             username: {
               inputType: 'text',
               value: '',
-              placeholder: t(REGISTRATION_FORM_TEXT.usernamePlaceholder),
+              placeholder: t(REGISTRATION_FORM_I18N.usernamePlaceholder),
               rule: { name: 'minLength', quantity: 2 },
               autoComplete: 'on'
             },
@@ -30,14 +30,14 @@ export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProp
               inputType: 'text',
               nativeType: 'email',
               value: '',
-              placeholder: t(REGISTRATION_FORM_TEXT.emailPlaceholder),
+              placeholder: t(REGISTRATION_FORM_I18N.emailPlaceholder),
               rule: { name: 'email' },
               autoComplete: 'on'
             },
           password: {
               inputType: 'text',
               value: '',
-              placeholder: t(REGISTRATION_FORM_TEXT.passwordPlaceholder),
+              placeholder: t(REGISTRATION_FORM_I18N.passwordPlaceholder),
               rule: { name: 'minLength', quantity: 6 },
               autoComplete: 'off',
               nativeType: 'password'
@@ -47,11 +47,11 @@ export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProp
             value: false,
             rule: { name: 'requiredTrue' },
             children: <PrivacyPolicySwitch disabled={isLoading} />,
-            onText: t(REGISTRATION_FORM_TEXT.read),
-            offText: t(REGISTRATION_FORM_TEXT.unread)
+            onText: t(REGISTRATION_FORM_I18N.read),
+            offText: t(REGISTRATION_FORM_I18N.unread)
           }
         }}
-        submitBtnText={t(REGISTRATION_FORM_TEXT.submit)}
+        submitBtnText={t(REGISTRATION_FORM_I18N.submit)}
         actionProcessing={isLoading}
       />
     </div>

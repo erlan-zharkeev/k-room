@@ -1,5 +1,5 @@
 
-import { useShowTooltip, SHOW_TOOLTIPS_SWITCHER_TEXT } from 'src/features/settings/toggle-show-tooltips'
+import { useShowTooltip, SHOW_TOOLTIPS_SWITCHER_I18N } from 'src/features/settings/toggle-show-tooltips'
 
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
@@ -13,12 +13,12 @@ export const ShowTooltipsSwitcher = () => {
 
   return (
     <div className="show-tooltips-switcher">
-      <AppText size="small">{t(SHOW_TOOLTIPS_SWITCHER_TEXT.label)}</AppText>
+      <AppText size="small">{t(SHOW_TOOLTIPS_SWITCHER_I18N.label)}</AppText>
       <AppSwitch
         value={showTooltips}
         name="tooltips"
-        onText={t(SHOW_TOOLTIPS_SWITCHER_TEXT.show)}
-        offText={t(SHOW_TOOLTIPS_SWITCHER_TEXT.hide)}
+        onText={t(SHOW_TOOLTIPS_SWITCHER_I18N.show)}
+        offText={t(SHOW_TOOLTIPS_SWITCHER_I18N.hide)}
         onChange={toggleShowTooltip}
       />
     </div>

@@ -7,11 +7,11 @@ import { UserModel } from 'src/entities/user'
 import { ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { I18N_AUTH_MESSAGE } from './../config'
+import { AUTH_I18N } from './../config'
 import { updateTokens, verifyToken } from './../lib'
 
 const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
-  throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(I18N_AUTH_MESSAGE.nonAuthorized, req.language), silent)
+  throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(AUTH_I18N.nonAuthorized, req.language), silent)
 
 export const refreshTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']

@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_GET_MEDIA_FILE_MESSAGE = {
+export const GET_MEDIA_FILE_I18N = {
   idNotProvideOrNotValid: {
     en: 'Id was not provided or is invalid',
     ru: 'Id не передан или некорректен'

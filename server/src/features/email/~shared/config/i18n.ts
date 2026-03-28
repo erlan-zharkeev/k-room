@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const EMAIL_MESSAGE = {
+export const EMAIL_I18N = {
   resendApiKeyMissing: {
     en: 'RESEND_API_KEY is not configured',
     ru: 'RESEND_API_KEY не настроен'

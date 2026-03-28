@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const I18N_LOGIN_MESSAGE = {
+export const LOGIN_I18N = {
   success: {
     en: 'Logged in successfully',
     ru: 'Вход выполнен'

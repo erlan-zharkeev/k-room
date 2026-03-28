@@ -2,7 +2,7 @@ import './style.scss'
 
 import { RouteNamesEnum } from 'common'
 
-import { PRIVACY_POLICY_SWITCH_TEXT } from 'src/features/auth/registration'
+import { PRIVACY_POLICY_SWITCH_I18N } from 'src/features/auth/registration'
 import type { IPrivacyPolicySwitchProps } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/system'
@@ -19,8 +19,8 @@ export const PrivacyPolicySwitch = ({ disabled }: IPrivacyPolicySwitchProps) => 
 
   return (
     <AppText additionalClassName={className} size="small">
-      {t(PRIVACY_POLICY_SWITCH_TEXT.agreement)}{' '}
-      <AppLink text={t(PRIVACY_POLICY_SWITCH_TEXT.link)} to={RouteNamesEnum.PrivacyPolicy} />
+      {t(PRIVACY_POLICY_SWITCH_I18N.agreement)}{' '}
+      <AppLink text={t(PRIVACY_POLICY_SWITCH_I18N.link)} to={RouteNamesEnum.PrivacyPolicy} />
     </AppText>
   )
 }

@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const PASSWORD_RECOVERY_BODY_TEXT = {
+export const PASSWORD_RECOVERY_BODY_I18N = {
   emailPlaceholder: {
     en: 'Enter your email',
     ru: 'Введите email'

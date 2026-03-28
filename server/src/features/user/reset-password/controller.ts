@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import { type ICreateNewPasswordPayload, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'src/features/code'
-import { I18N_RESET_PASSWORD_MESSAGE } from './config'
+import { RESET_PASSWORD_I18N } from './config'
 
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
@@ -19,7 +19,7 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
     const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
 
     if (!code) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_RESET_PASSWORD_MESSAGE.failed, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(RESET_PASSWORD_I18N.failed, language))
     }
 
     const userId = code.id
@@ -28,13 +28,13 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
     const isExpired = isCodeExpired(expiresAt)
 
     if (isExpired) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_RESET_PASSWORD_MESSAGE.codeExpired, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(RESET_PASSWORD_I18N.codeExpired, language))
     }
 
     const isCodeMatched = codeToValidate === validCode
 
     if (!isCodeMatched) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_RESET_PASSWORD_MESSAGE.codeNotValid, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(RESET_PASSWORD_I18N.codeNotValid, language))
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -51,8 +51,8 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
       }
     })
 
-    return res.json({ payload: null, message: { text: getLocalizedText(I18N_RESET_PASSWORD_MESSAGE.success, language), silent: true } })
+    return res.json({ payload: null, message: { text: getLocalizedText(RESET_PASSWORD_I18N.success, language), silent: true } })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_RESET_PASSWORD_MESSAGE.failed, language))
+    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(RESET_PASSWORD_I18N.failed, language))
   }
 }
