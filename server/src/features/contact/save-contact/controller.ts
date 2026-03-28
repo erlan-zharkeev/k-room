@@ -7,7 +7,7 @@ import { UserModel } from 'src/entities/user'
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
-export const controller = (socket: SocketInstanceType) => {
+export const saveContactController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('save-contact', async ({ interlocutorId }: IEventSaveContact) => {
     const { userId } = socket.data
     try {

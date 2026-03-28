@@ -2,18 +2,18 @@ import { SocketActionsType, StatusEnum } from 'common'
 
 import {
   getSocketsByUserIds,
-  I18N_UPDATE_USER_DATA_MESSAGE,
   transformUserToContact,
-  updateUserAvatar,
   USER_MESSAGE
-} from 'src/features/user'
+} from './../shared'
+import { I18N_UPDATE_USER_DATA_MESSAGE } from './config'
+import { updateUserAvatar } from './lib'
 
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
-export const updateUserData = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const updateUserDataController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
 
   try {

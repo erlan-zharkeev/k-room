@@ -1,6 +1,6 @@
 import { IDBMessage, IEventLoadRoomMessages, IEventRoomMessagesLoaded } from 'common'
 
-import { transformMessageForUser } from 'src/features/message'
+import { transformMessageForUser } from './../../../~shared'
 
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { MessageModel } from 'src/entities/message'

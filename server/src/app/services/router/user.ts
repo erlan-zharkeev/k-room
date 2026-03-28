@@ -4,12 +4,12 @@ import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 import {
-  getUserData,
-  markInfoAsRead,
+  getUserDataController,
+  markInfoAsReadController,
   RESET_PASSWORD_FIELDS_VALIDATION,
-  resetPassword,
+  resetPasswordController,
   UPDATE_USER_DATA_FIELDS_VALIDATION,
-  updateUserData
+  updateUserDataController
 } from 'src/features/user'
 
 import { multerUploader } from 'src/entities/media'
@@ -17,14 +17,14 @@ import { multerUploader } from 'src/entities/media'
 import { validateRequest } from 'src/shared/middleware'
 
 export const userRouter = Router()
-userRouter.get(UserEndpointsEnum.GetUserData, accessTokenValidator, getUserData)
-userRouter.post(UserEndpointsEnum.ResetPassword, RESET_PASSWORD_FIELDS_VALIDATION, validateRequest, resetPassword)
+userRouter.get(UserEndpointsEnum.GetUserData, accessTokenValidator, getUserDataController)
+userRouter.post(UserEndpointsEnum.ResetPassword, RESET_PASSWORD_FIELDS_VALIDATION, validateRequest, resetPasswordController)
 userRouter.post(
   UserEndpointsEnum.EditUserData,
   accessTokenValidator,
   multerUploader.single('file'),
   UPDATE_USER_DATA_FIELDS_VALIDATION,
   validateRequest,
-  updateUserData
+  updateUserDataController
 )
-userRouter.patch(UserEndpointsEnum.MarkInfoNotificationAsRead, accessTokenValidator, markInfoAsRead)
+userRouter.patch(UserEndpointsEnum.MarkInfoNotificationAsRead, accessTokenValidator, markInfoAsReadController)

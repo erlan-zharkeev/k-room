@@ -8,7 +8,7 @@ import { UserModel } from 'src/entities/user'
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
-import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from '../shared'
+import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from './../shared'
 
 export const callUserController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('call-user', async ({ signal, userToCall, avatar, callerName }: IEventCallUser) => {

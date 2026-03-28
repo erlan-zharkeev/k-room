@@ -1,4 +1,4 @@
-import { controller as createChatRoomController } from 'src/features/chat-room'
+import { createChatRoomController } from 'src/features/chat-room'
 
 import { SocketInstanceType } from 'src/shared/config'
 

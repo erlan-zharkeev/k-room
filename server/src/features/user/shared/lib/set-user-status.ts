@@ -1,4 +1,4 @@
-import { emitUserStatusToAll } from 'src/features/user'
+import { emitUserStatusToAll } from '.'
 
 import { UserModel } from 'src/entities/user'
 
