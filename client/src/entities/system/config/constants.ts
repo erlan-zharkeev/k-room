@@ -1,5 +1,5 @@
 import type { IContextMenu } from 'src/entities/context-menu'
-import type { ISystemStore } from 'src/entities/system/config/types'
+import { ISystemStore } from 'src/entities/system'
 
 export const CLICKED_OBJECT_INITIAL_STATE = {
   message: {
@@ -9,16 +9,16 @@ export const CLICKED_OBJECT_INITIAL_STATE = {
     body: '',
     authorId: ''
   }
-}
+} as const
 
-export const MIN_SUPPORTED_WIDTH = 320
+export const MIN_SUPPORTED_WIDTH = 320 as const
 
-export const MIN_SUPPORTED_HEIGHT = 575
+export const MIN_SUPPORTED_HEIGHT = 575 as const
 
 export const INITIAL_VIEWPORT = {
   width: 1920,
   height: 1080
-}
+} as const
 
 export const INITIAL_CONTEXT_MENU: IContextMenu = {
   name: '',

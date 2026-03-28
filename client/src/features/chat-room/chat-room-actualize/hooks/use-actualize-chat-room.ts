@@ -1,6 +1,6 @@
 import { SocketActionsType } from 'common'
 
-import { transformRoomData } from 'src/features/chat-room/~shared'
+import { transformRoomData } from 'src/features/chat-room/shared'
 
 import { socket } from 'src/shared/api'
 import { FChatRoomType } from 'src/shared/config'

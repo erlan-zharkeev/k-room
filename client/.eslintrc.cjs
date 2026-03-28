@@ -59,7 +59,6 @@ module.exports = {
       'error',
       ...createRestrictedImportRules({
         rootPattern: 'src\\/(app|pages|widgets|features|entities)',
-        relativeImportMessage: 'Use alias imports. Relative imports are allowed only for `./style.scss`.',
         deepImportMessage: 'Use the shortest public API import. Imports deeper than `src/<layer>/<module>` are not allowed.'
       })
     ],
