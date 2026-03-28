@@ -1,9 +1,9 @@
 import { IDBMessage, IEventLoadRoomMessages, IEventRoomMessagesLoaded } from 'common'
 
-import { transformMessageForUser } from './../../../shared'
-
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { MessageModel } from 'src/entities/message'
+
+import { transformMessageForUser } from './../../../shared'
 
 export const loadRoomMessages = async (
   userId: string,

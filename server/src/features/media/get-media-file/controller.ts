@@ -1,13 +1,13 @@
 import { StatusEnum } from 'common'
 
-import { GET_MEDIA_FILE_I18N } from './config'
-import { parseBucketNameFromId } from './lib'
-
 import { MediaBucketNameType } from 'src/entities/media'
 import { streamMediaFile } from 'src/entities/media'
 
 import type { AppResponseType, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { GET_MEDIA_FILE_I18N } from './config'
+import { parseBucketNameFromId } from './lib'
 
 export const getMediaFileController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

@@ -1,9 +1,9 @@
 import { IEventLoadRoomMessages, SocketActionsType } from 'common'
 
-import { loadRoomMessages } from './shared'
-
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO } from 'src/shared/lib'
+
+import { loadRoomMessages } from './shared'
 
 export const loadRoomMessagesController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('load-room-messages', async (payload: IEventLoadRoomMessages) => {

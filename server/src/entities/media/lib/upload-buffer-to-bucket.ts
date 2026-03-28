@@ -6,12 +6,7 @@ import { type AppLanguageType, StatusEnum } from 'common'
 
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import {
-  VALIDATE_MEDIA_FILE_I18N,
-  IUploadOptions,
-  MediaBucketNameType,
-  MongooseGridFSBucketType
-} from './../config'
+import { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType, VALIDATE_MEDIA_FILE_I18N } from './../config'
 import { buildFileData, processImageWithSharp, validateFileMetaData } from '.'
 
 export const uploadBufferToBucket = async (
@@ -56,10 +51,6 @@ export const uploadBufferToBucket = async (
       stream.end(outBuffer)
     })
   } catch {
-    throwHTTPError(
-      StatusEnum.Server,
-      res ?? null,
-      getLocalizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language)
-    )
+    throwHTTPError(StatusEnum.Server, res ?? null, getLocalizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language))
   }
 }

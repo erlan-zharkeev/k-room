@@ -2,12 +2,12 @@ import mongoose from 'mongoose'
 
 import { StatusEnum } from 'common'
 
-import { USER_I18N } from './../config'
-
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { USER_I18N } from './../config'
 
 export const isUserExist = async <T>(
   { username, email, id }: { username: string; email: string; id?: mongoose.Types.ObjectId },

@@ -1,9 +1,9 @@
 import { SocketActionsType } from 'common'
 
+import { SocketInstanceType } from 'src/shared/config'
+
 import { setLastSeenData } from './../shared'
 import { updateOnlineStatusController } from './../update-online-status'
-
-import { SocketInstanceType } from 'src/shared/config'
 
 export const userDisconnectController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('disconnect', async () => {

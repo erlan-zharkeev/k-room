@@ -2,9 +2,9 @@ import { Router } from 'express'
 
 import { CodesEndpointsEnum } from 'common'
 
-import { VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION, validatePasswordRecoveryCodeController } from '.'
-
 import { validateRequest } from 'src/shared/middleware'
+
+import { VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION, validatePasswordRecoveryCodeController } from '.'
 
 export const validatePasswordRecoveryCodeRouter = Router()
 

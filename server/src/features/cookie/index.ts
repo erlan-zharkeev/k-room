@@ -1,2 +1,2 @@
-export * from './shared'
 export * from './set-cookie'
+export * from './shared'

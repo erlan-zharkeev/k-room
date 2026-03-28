@@ -3,13 +3,14 @@ import bcrypt from 'bcryptjs'
 import { type ICreateNewPasswordPayload, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'src/features/code'
-import { RESET_PASSWORD_I18N } from './config'
 
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { RESET_PASSWORD_I18N } from './config'
 
 export const resetPasswordController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

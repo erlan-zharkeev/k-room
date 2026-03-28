@@ -2,12 +2,13 @@ import { Types } from 'mongoose'
 
 import { IEventSearchContact, IFrontendContact, InteractionType, SocketActionsType } from 'common'
 
-import { emitSearchedContacts } from './lib'
 import { transformUserToContact } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
 import { SEARCH_CONTACT_RESULT_LIMIT, SocketInstanceType } from 'src/shared/config'
+
+import { emitSearchedContacts } from './lib'
 
 export const searchContactController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('search-contact', async ({ value, offset = 0 }: IEventSearchContact) => {

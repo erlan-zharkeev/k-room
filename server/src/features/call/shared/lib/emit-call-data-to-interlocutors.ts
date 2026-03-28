@@ -1,9 +1,10 @@
 import type { EventCallUpdatedType, SocketActionsType } from 'common'
 
-import { transformCallForUser } from '.'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { getIO } from 'src/shared/lib'
+
+import { transformCallForUser } from '.'
 
 export const emitCallDataToInterlocutors = async (interlocutors: string[], callId: string, setId?: boolean) => {
   await Promise.all(

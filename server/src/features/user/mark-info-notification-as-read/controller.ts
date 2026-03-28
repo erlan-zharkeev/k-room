@@ -1,11 +1,11 @@
 import { IMarkAsReadPayload, StatusEnum } from 'common'
 
-import { MARK_INFO_NOTIFICATION_AS_READ_I18N } from './config'
-
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { MARK_INFO_NOTIFICATION_AS_READ_I18N } from './config'
 
 export const markInfoAsReadController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language

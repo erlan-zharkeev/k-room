@@ -5,16 +5,17 @@ import {
   SocketActionsType
 } from 'common'
 
+import { getSocketsByUserIds } from 'src/features/user'
+
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO, throwSocketError } from 'src/shared/lib'
+
 import {
   createContactInteraction,
   deleteContactById,
   emitContactInteractionUpdated,
   setContactInteraction
 } from './lib'
-import { getSocketsByUserIds } from 'src/features/user'
-
-import { SocketInstanceType } from 'src/shared/config'
-import { getIO, throwSocketError } from 'src/shared/lib'
 
 export const updateContactInteractionTypeController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
