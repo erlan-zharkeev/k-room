@@ -1,5 +1,5 @@
-import { IContextMenu } from 'src/entities/context-menu'
-import { ISystemStore } from 'src/entities/system'
+import type { IContextMenu } from 'src/entities/context-menu'
+import type { ISystemStore } from 'src/entities/system/config/types'
 
 export const CLICKED_OBJECT_INITIAL_STATE = {
   message: {
@@ -44,7 +44,7 @@ export const INITIAL_REPLIED_MESSAGE_DATA = {
   forward: false
 }
 
-export const INITIAL_SYSTEM_STORE: ISystemStore = {
+export const INITIAL_SYSTEM_STORE = {
   auth: 'loading',
   online: true,
   reconnecting: false,
@@ -55,4 +55,4 @@ export const INITIAL_SYSTEM_STORE: ISystemStore = {
   micPermission: undefined,
   repliedMessageData: INITIAL_REPLIED_MESSAGE_DATA,
   messageInputData: INITIAL_MESSAGE_INPUT_DATA
-}
+} satisfies ISystemStore

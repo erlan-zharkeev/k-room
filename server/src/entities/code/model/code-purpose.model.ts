@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose'
-import { codeMethodSchema, ICodePurpose } from 'src/entities/code'
+import type { ICodePurpose } from '../config'
+import { codeMethodSchema } from './code-method.model'
 
 export const codePurposeSchema = new Schema<ICodePurpose>(
   {

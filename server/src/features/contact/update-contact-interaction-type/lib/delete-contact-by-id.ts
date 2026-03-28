@@ -1,10 +1,10 @@
 import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from 'common'
 
-import { getSocketsByUserIds } from 'features/user/~shared'
+import { getSocketsByUserIds } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { getIO } from 'shared-lib'
+import { getIO } from 'src/shared/lib'
 
 export const deleteContactById = async (
   userId: string,
@@ -28,7 +28,7 @@ export const deleteContactById = async (
   const deletingContactSockets = await getSocketsByUserIds([deletingContact._id])
 
   if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invite-hidden') {
-    deletingContactSockets.forEach(async (socketId) => {
+    deletingContactSockets.forEach(async (socketId: string) => {
       await deleteContactById(deletingUserId, userId, socketId, true)
     })
   }
@@ -43,7 +43,7 @@ export const deleteContactById = async (
       interaction: 'default'
     }
     const deletingContactSockets = await getSocketsByUserIds([deletingContact._id])
-    deletingContactSockets.forEach((socketId) => {
+    deletingContactSockets.forEach((socketId: string) => {
       getIO().to(socketId).emit<SocketActionsType>('contact-interaction-updated', payload)
     })
   }

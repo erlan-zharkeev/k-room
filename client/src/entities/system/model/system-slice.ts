@@ -8,12 +8,14 @@ import {
   INITIAL_CONTEXT_MENU,
   CLICKED_OBJECT_INITIAL_STATE,
   INITIAL_REPLIED_MESSAGE_DATA
-} from 'src/entities/system'
-import type { AuthStatusType, IMessageInputData, IViewPort } from 'src/entities/system/config'
+} from 'src/entities/system/config'
+import type { AuthStatusType, IMessageInputData, ISystemStore, IViewPort } from 'src/entities/system/config'
+
+const initialState: ISystemStore = INITIAL_SYSTEM_STORE
 
 export const systemSlice = createSlice({
   name: 'system',
-  initialState: INITIAL_SYSTEM_STORE,
+  initialState,
   reducers: {
     setAuth: (state, { payload }: { payload: AuthStatusType }) => {
       state.auth = payload
@@ -80,9 +82,7 @@ export const systemSlice = createSlice({
       }
     },
     removeImageByNameFromMessageInputData(state, { payload }: { payload: string }) {
-      state.messageInputData.images = state.messageInputData.images.filter(
-        (img) => img.name !== payload
-      )
+      state.messageInputData.images = state.messageInputData.images.filter((img: { name: string }) => img.name !== payload)
     },
     updateRepliedMessage(state, { payload }: { payload: IRepliedMessage }) {
       state.repliedMessageData = payload

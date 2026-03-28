@@ -22,8 +22,7 @@
     "baseUrl": "./../",
     "paths": {
       "src/*": ["client/src/*"],
-      "common": ["common/index.ts"],
-      "cmp/*": ["client/src/components/*"]
+      "common": ["common/index.ts"]
     }
   },
   "include": ["src/**/*"],
