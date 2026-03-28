@@ -5,10 +5,10 @@ import {
   SocketActionsType
 } from 'common'
 
-import { deleteContactById, setContactInteraction } from 'src/features/contact/update-contact-interaction-type'
-import { createContactInteraction } from 'src/features/contact/update-contact-interaction-type'
-import { emitContactInteractionUpdated } from 'src/features/contact/update-contact-interaction-type'
-import { getSocketsByUserIds } from 'src/features/user/~shared'
+import { deleteContactById, setContactInteraction } from 'src/features/contact'
+import { createContactInteraction } from 'src/features/contact'
+import { emitContactInteractionUpdated } from 'src/features/contact'
+import { getSocketsByUserIds } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'

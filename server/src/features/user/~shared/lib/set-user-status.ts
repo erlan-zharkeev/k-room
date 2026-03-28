@@ -1,4 +1,4 @@
-import { emitUserStatusToAll } from 'src/features/user/~shared'
+import { emitUserStatusToAll } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 

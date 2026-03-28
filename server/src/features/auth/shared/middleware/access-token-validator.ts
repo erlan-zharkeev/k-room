@@ -2,10 +2,13 @@ import { type NextFunction, type Response } from 'express'
 
 import { StatusEnum } from 'common'
 
-import { AUTH_MESSAGE, refreshTokenValidator, verifyToken } from 'src/features/auth'
-
 import { ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { AUTH_MESSAGE } from '../config'
+import { verifyToken } from '../lib/verify-token'
+
+import { refreshTokenValidator } from './refresh-token-validator'
 
 export const accessTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt

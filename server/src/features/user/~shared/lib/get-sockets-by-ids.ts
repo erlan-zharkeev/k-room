@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+
 import { UserModel } from 'src/entities/user'
 
 export const getSocketsByUserIds = async (ids: (string | mongoose.Types.ObjectId)[]) => {

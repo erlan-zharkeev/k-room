@@ -1,7 +1,7 @@
 import { SocketActionsType } from 'common'
 
 import { setLastSeenData } from 'src/features/user'
-import { updateOnlineStatus } from 'src/features/user/update-online-status'
+import { updateOnlineStatus } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 

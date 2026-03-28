@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+
 import { MEDIA_BUCKET_NAMES, mediaBuckets } from 'src/entities/media'
 
 export const initMediaBuckets = (): void => {

@@ -16,7 +16,7 @@ module.exports = {
     'no-restricted-syntax': [
       'error',
       ...createRestrictedImportRules({
-        rootPattern: '(app|features|entities)',
+        rootPattern: 'src\\/(app|features|entities|shared)',
         deepImportMessage: 'Use the shortest public API import. Imports deeper than `<layer>/<module>` are not allowed.'
       })
     ],
@@ -27,10 +27,10 @@ module.exports = {
           ['^node:'],
           ['^@?\\w'],
           ['^common$'],
-          ['^app/'],
-          ['^features/'],
-          ['^entities/'],
-          ['^shared-config$', '^shared-lib$', '^shared-middleware$'],
+          ['^src/app/'],
+          ['^src/features/'],
+          ['^src/entities/'],
+          ['^src/shared/'],
           ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
           ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$']
         ]

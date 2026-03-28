@@ -1,1 +1,7 @@
 export * from './~shared'
+export { controller as answerCallController } from './answer-call/controller'
+export { controller as callUserController } from './call-user/controller'
+export { controller as endCallController } from './end-call/controller'
+export { controller as loadCallDataController } from './load-call-data/controller'
+export { controller as markCallAsVideoController } from './mark-call-as-video/controller'
+export { controller as updateCallSignalController } from './update-call-signal/controller'

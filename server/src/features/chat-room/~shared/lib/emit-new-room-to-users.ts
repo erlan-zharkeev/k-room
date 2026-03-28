@@ -1,6 +1,6 @@
 import type { IChatRoomSchema, SocketActionsType } from 'common'
 
-import { transformRoomForUser } from 'src/features/chat-room/~shared'
+import { transformRoomForUser } from 'src/features/chat-room'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'

@@ -1,6 +1,6 @@
 import { SocketActionsType } from 'common'
 
-import { updateOnlineStatus } from 'src/features/user/update-online-status'
+import { updateOnlineStatus } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 

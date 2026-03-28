@@ -1,11 +1,16 @@
-import { UserModel } from 'src/entities/user'
-import { generateToken, I18N_SEND_CONFIRMATION_LINK_MESSAGE } from 'src/features/auth'
+import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
+
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { USER_MESSAGE } from 'src/features/user'
+
+import { UserModel } from 'src/entities/user'
+
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
+import { generateToken } from '../shared/lib/generate-token'
+
+import { I18N_SEND_CONFIRMATION_LINK_MESSAGE } from './config'
 
 export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language

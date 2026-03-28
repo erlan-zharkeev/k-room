@@ -1,6 +1,10 @@
 import { model, Schema } from 'mongoose'
-import type { IUserSchema } from 'src/entities/user'
-import { personalSchema,publicSchema, systemSchema  } from 'src/entities/user'
+
+import type { IUserSchema } from '../config'
+
+import { personalSchema } from './personal.model'
+import { publicSchema } from './public.model'
+import { systemSchema } from './system.model'
 
 
 const userSchema = new Schema<IUserSchema>({

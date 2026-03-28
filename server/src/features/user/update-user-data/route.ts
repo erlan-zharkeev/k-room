@@ -3,8 +3,8 @@ import { Router } from 'express'
 import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
-import { updateUserData } from 'src/features/user/update-user-data'
-import { UPDATE_USER_DATA_FIELDS_VALIDATION } from 'src/features/user/update-user-data'
+import { updateUserData } from 'src/features/user'
+import { UPDATE_USER_DATA_FIELDS_VALIDATION } from 'src/features/user'
 
 import { multerUploader } from 'src/entities/media'
 

@@ -1,7 +1,8 @@
 import { model, Schema } from 'mongoose'
-import { messageMetaDataSchema, reactionSchema } from 'src/entities/message'
 
 import { type IMessageSchema } from 'common'
+
+import { messageMetaDataSchema, reactionSchema } from 'src/entities/message'
 
 const messageSchema = new Schema<IMessageSchema>(
   {

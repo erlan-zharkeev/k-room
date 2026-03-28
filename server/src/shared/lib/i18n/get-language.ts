@@ -1,7 +1,8 @@
 import type { IncomingHttpHeaders } from 'http'
-import type { SocketInstanceType } from 'src/shared/config'
 
 import { APP_LANGUAGE, APP_LANGUAGE_HEADER, type AppLanguageType, DEFAULT_APP_LANGUAGE } from 'common'
+
+import type { SocketInstanceType } from 'src/shared/config'
 
 const normalizeLanguage = (value: string | null | undefined): AppLanguageType | null => {
   if (!value) return null

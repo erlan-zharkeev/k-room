@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+
 import { JWTDecoded } from 'src/shared/config'
 
 export const verifyToken = (token: string, secret: string): Promise<JWTDecoded> => {

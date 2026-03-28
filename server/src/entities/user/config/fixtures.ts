@@ -3,9 +3,12 @@ import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
-import { USER_FIXTURES } from 'src/entities/user'
+
 import { isUserExist } from 'src/features/auth'
 import { createUser, updateUserAvatar } from 'src/features/user'
+
+import { USER_FIXTURES } from 'src/entities/user'
+
 import { log } from 'src/shared/lib'
 
 const loadUserFixture = async (data: {

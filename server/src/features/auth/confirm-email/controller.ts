@@ -1,10 +1,15 @@
-import { UserModel } from 'src/entities/user'
-import { I18N_CONFIRM_EMAIL_MESSAGE, verifyToken } from 'src/features/auth'
+import { IConfirmEmailResponse, StatusEnum } from 'common'
+
 import { mapUserToDto, USER_MESSAGE } from 'src/features/user'
+
+import { UserModel } from 'src/entities/user'
+
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { IConfirmEmailResponse, StatusEnum } from 'common'
+import { verifyToken } from '../shared/lib/verify-token'
+
+import { I18N_CONFIRM_EMAIL_MESSAGE } from './config'
 
 export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
   const language = req.language

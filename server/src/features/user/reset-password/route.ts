@@ -2,8 +2,8 @@ import { Router } from 'express'
 
 import { UserEndpointsEnum } from 'common'
 
-import { resetPassword } from 'src/features/user/reset-password'
-import { RESET_PASSWORD_FIELDS_VALIDATION } from 'src/features/user/reset-password'
+import { resetPassword } from 'src/features/user'
+import { RESET_PASSWORD_FIELDS_VALIDATION } from 'src/features/user'
 
 import { validateRequest } from 'src/shared/middleware'
 

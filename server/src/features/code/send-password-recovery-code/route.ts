@@ -2,8 +2,8 @@ import { Router } from 'express'
 
 import { CodesEndpointsEnum } from 'common'
 
-import { sendPasswordRecoveryCode } from 'src/features/code/send-password-recovery-code'
-import { SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION } from 'src/features/code/send-password-recovery-code'
+import { sendPasswordRecoveryCode } from 'src/features/code'
+import { SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION } from 'src/features/code'
 
 import { validateRequest } from 'src/shared/middleware'
 

@@ -1,4 +1,5 @@
-export * from './~shared'
+export * from './shared'
+////
 export * from './confirm-email'
 export * from './login'
 export * from './logout'

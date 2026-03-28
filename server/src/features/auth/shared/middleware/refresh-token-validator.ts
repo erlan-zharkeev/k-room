@@ -2,12 +2,14 @@ import { type NextFunction, type Response } from 'express'
 
 import { StatusEnum } from 'common'
 
-import { AUTH_MESSAGE, updateTokens, verifyToken } from 'src/features/auth'
-
 import { UserModel } from 'src/entities/user'
 
 import { ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { AUTH_MESSAGE } from '../config'
+import { updateTokens } from '../lib/update-token'
+import { verifyToken } from '../lib/verify-token'
 
 const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
   throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(AUTH_MESSAGE.nonAuthorized, req.language), silent)
