@@ -1,6 +1,6 @@
 export * from './shared'
 ///
-export * from './actualize-user-data/lib'
+export * from './actualize-user-data'
 export * from './get-user-data'
 export * from './mark-info-notification-as-read'
 export * from './reset-password'

@@ -3,8 +3,7 @@ import { Router } from 'express'
 import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
-import { updateUserData } from 'src/features/user'
-import { UPDATE_USER_DATA_FIELDS_VALIDATION } from 'src/features/user'
+import { UPDATE_USER_DATA_FIELDS_VALIDATION, updateUserDataController } from '.'
 
 import { multerUploader } from 'src/entities/media'
 
@@ -18,5 +17,5 @@ updateUserRouter.post(
   multerUploader.single('file'),
   UPDATE_USER_DATA_FIELDS_VALIDATION,
   validateRequest,
-  updateUserData
+  updateUserDataController
 )

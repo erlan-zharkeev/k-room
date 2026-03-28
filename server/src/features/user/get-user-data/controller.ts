@@ -8,9 +8,9 @@ import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shar
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { mapUserToDto, USER_MESSAGE } from './../shared'
-import { I18N_GET_USER_DATA_MESSAGE } from './'
+import { I18N_GET_USER_DATA_MESSAGE } from './config'
 
-export const getUserData = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
+export const getUserDataController = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
   const language = req.language
 
   try {

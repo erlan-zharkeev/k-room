@@ -1,6 +1,6 @@
 import { SocketActionsType } from 'common'
 
-import { emitCallsToUser } from '../shared'
+import { emitCallsToUser } from './../shared'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { throwSocketError } from 'src/shared/lib'

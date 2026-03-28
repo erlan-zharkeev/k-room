@@ -2,7 +2,6 @@ import { setTimeout } from 'timers/promises'
 
 import { IChatRoomSchema, IEventCreateRoom, IEventRoomCreated, SocketActionsType } from 'common'
 
-import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from 'src/features/chat-room'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { ChatRoomModel } from 'src/entities/chat-room'
@@ -11,7 +10,9 @@ import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'sr
 import { SERVER_NOTIFICATION_MESSAGE, SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
-export const controller = (socket: SocketInstanceType) => {
+import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from './../shared'
+
+export const createChatRoomController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('create-chat-room', async ({ contactIds, chatName, avatarFile }: IEventCreateRoom) => {
     const { userId } = socket.data
 

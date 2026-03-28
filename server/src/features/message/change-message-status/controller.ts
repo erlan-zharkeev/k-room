@@ -1,10 +1,10 @@
 import type { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
-import { changeMessageStatus } from 'src/features/message'
+import { changeMessageStatus } from './~shared'
 
 import { SocketInstanceType } from 'src/shared/config'
 
-export const controller = (socket: SocketInstanceType) => {
+export const changeMessageStatusController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
     'change-message-status',
     async ({ messageId, status, roomId }: IEventChangeMessageStatus) => {

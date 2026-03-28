@@ -1,6 +1,6 @@
 import type { IEventCallEnded, SocketActionsType } from 'common'
 
-import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from '../shared'
+import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from './../shared'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { CallModel } from 'src/entities/call'

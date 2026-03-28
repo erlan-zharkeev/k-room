@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { StatusEnum } from 'common'
 
-import { USER_MESSAGE } from 'src/features/user'
+import { USER_MESSAGE } from './../config'
 
 import { UserModel } from 'src/entities/user'
 

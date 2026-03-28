@@ -12,7 +12,7 @@ import { UserModel } from 'src/entities/user'
 import { SharpSettingsKeyType, SocketInstanceType } from 'src/shared/config'
 import { getIO, serverCaptureSentryException } from 'src/shared/lib'
 
-export const controller = (socket: SocketInstanceType) => {
+export const sendMessageController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('send-message', async (data: IEventSendMessage) => {
     try {
       const { message, roomId } = data

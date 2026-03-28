@@ -1,12 +1,12 @@
 import { SocketActionsType } from 'common'
 
-import { updateOnlineStatus } from 'src/features/user'
+import { updateOnlineStatusController } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 
-export const controller = (socket: SocketInstanceType) => {
+export const interlocutorPingController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('interlocutor-ping', async () => {
     const { userId } = socket.data
-    await updateOnlineStatus(userId, true)
+    await updateOnlineStatusController(userId, true)
   })
 }

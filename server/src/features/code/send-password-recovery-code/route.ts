@@ -2,8 +2,7 @@ import { Router } from 'express'
 
 import { CodesEndpointsEnum } from 'common'
 
-import { sendPasswordRecoveryCode } from 'src/features/code'
-import { SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION } from 'src/features/code'
+import { SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION, sendPasswordRecoveryCodeController } from '.'
 
 import { validateRequest } from 'src/shared/middleware'
 
@@ -13,5 +12,5 @@ sendPasswordRecoveryCodeRouter.post(
   CodesEndpointsEnum.SendEmailCodePasswordRecovery,
   SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
   validateRequest,
-  sendPasswordRecoveryCode
+  sendPasswordRecoveryCodeController
 )

@@ -1,8 +1,8 @@
 import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common'
 
 import { transformRoomForUser } from 'src/features/chat-room'
-import { getSocketsByUserIds } from 'src/features/user'
-import { transformUserToFrontendContact } from 'src/features/user'
+import { getSocketsByUserIds } from './../shared'
+import { transformUserToFrontendContact } from './lib'
 
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { UserModel } from 'src/entities/user'
@@ -10,7 +10,7 @@ import { UserModel } from 'src/entities/user'
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
-export const controller = (socket: SocketInstanceType) => {
+export const actualizeUserDataController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('actualize-user-data', async () => {
     const { userId } = socket.data
     try {

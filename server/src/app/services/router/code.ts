@@ -4,9 +4,9 @@ import { CodesEndpointsEnum } from 'common'
 
 import {
   SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
-  sendPasswordRecoveryCode,
+  sendPasswordRecoveryCodeController,
   VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
-  validatePasswordRecoveryCode
+  validatePasswordRecoveryCodeController
 } from 'src/features/code'
 
 import { validateRequest } from 'src/shared/middleware'
@@ -17,11 +17,11 @@ codeRouter.post(
   CodesEndpointsEnum.SendEmailCodePasswordRecovery,
   SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
   validateRequest,
-  sendPasswordRecoveryCode
+  sendPasswordRecoveryCodeController
 )
 codeRouter.post(
   CodesEndpointsEnum.ValidateEmailCodePasswordRecovery,
   VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
   validateRequest,
-  validatePasswordRecoveryCode
+  validatePasswordRecoveryCodeController
 )
