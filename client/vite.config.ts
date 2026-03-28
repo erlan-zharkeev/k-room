@@ -157,7 +157,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '~': path.resolve(__dirname, './src/shared/config/styles'),
         src: path.resolve(__dirname, './src'),
-        common: path.resolve(__dirname, './../common/index.ts')
+        common: path.resolve(__dirname, './../common')
       }
     },
     server: {
