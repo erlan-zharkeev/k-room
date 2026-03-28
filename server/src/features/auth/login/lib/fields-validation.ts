@@ -1,3 +1,3 @@
 import { requiredStringRule } from 'src/features/auth'
 
-export const fieldsValidation = [requiredStringRule('email'), requiredStringRule('password')]
+export const LOGIN_FIELDS_VALIDATION = [requiredStringRule('email'), requiredStringRule('password')]

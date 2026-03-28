@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const MESSAGE = {
+export const I18N_CONFIRM_EMAIL_MESSAGE = {
   failedEmailConfirm: {
     en: 'Email confirmation failed',
     ru: 'Не удалось подтвердить email'

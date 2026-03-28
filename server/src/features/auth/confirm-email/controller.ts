@@ -1,6 +1,5 @@
 import { UserModel } from 'src/entities/user'
-import { verifyToken } from 'src/features/auth'
-import { MESSAGE } from 'src/features/auth/confirm-email'
+import { I18N_CONFIRM_EMAIL_MESSAGE, verifyToken } from 'src/features/auth'
 import { mapUserToDto, USER_MESSAGE } from 'src/features/user'
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
@@ -30,7 +29,9 @@ export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfi
       payload: { email: mapUserToDto(user).email },
       message: {
         text: getLocalizedText(
-          updateResult.modifiedCount === 1 ? MESSAGE.emailConfirmed : MESSAGE.emailAlreadyConfirmed,
+          updateResult.modifiedCount === 1
+            ? I18N_CONFIRM_EMAIL_MESSAGE.emailConfirmed
+            : I18N_CONFIRM_EMAIL_MESSAGE.emailAlreadyConfirmed,
           language
         ),
         silent: false
@@ -39,6 +40,6 @@ export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfi
 
     return res.json(response)
   } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failedEmailConfirm, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_CONFIRM_EMAIL_MESSAGE.failedEmailConfirm, language))
   }
 }
