@@ -1,17 +1,12 @@
 import bcrypt from 'bcryptjs'
+import { UserModel } from 'src/entities/user'
+import { I18N_SIGN_IN_WITH_PROVIDER_MESSAGE, updateTokens } from 'src/features/auth'
+import { createUser, mapUserToDto, updateUserAvatar } from 'src/features/user'
+import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { v4 as uuidv4 } from 'uuid'
 
 import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
-
-import { updateTokens } from 'src/features/auth'
-import { MESSAGE } from 'src/features/auth/sign-in-with-provider'
-import { createUser, mapUserToDto } from 'src/features/user'
-import { updateUserAvatar } from 'src/features/user/update-user-data'
-
-import { UserModel } from 'src/entities/user'
-
-import { AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<ISignInWithProviderResponse>) => {
   const language = req.language
@@ -38,7 +33,12 @@ export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<
       }
     }
 
-    if (!user) return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.failed, language))
+    if (!user)
+      return throwHTTPError(
+        StatusEnum.BadRequest,
+        res,
+        getLocalizedText(I18N_SIGN_IN_WITH_PROVIDER_MESSAGE.failed, language)
+      )
 
     await updateTokens(user.id, req, res)
 
@@ -50,6 +50,6 @@ export const signInWithProvider = async (req: IAppRequest, res: AppResponseType<
       }
     })
   } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(MESSAGE.failed, language))
+    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(I18N_SIGN_IN_WITH_PROVIDER_MESSAGE.failed, language))
   }
 }

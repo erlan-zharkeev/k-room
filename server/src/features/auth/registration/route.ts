@@ -1,12 +1,9 @@
 import { Router } from 'express'
+import { registration, REGISTRATION_FIELDS_VALIDATION } from 'src/features/auth'
+import { validateRequest } from 'src/shared/middleware'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { registration } from 'src/features/auth/registration'
-import { fieldsValidation } from 'src/features/auth/registration'
-
-import { validateRequest } from 'src/shared/middleware'
-
 export const registrationRouter = Router()
 
-registrationRouter.post(AuthEndpointsEnum.Registration, fieldsValidation, validateRequest, registration)
+registrationRouter.post(AuthEndpointsEnum.Registration, REGISTRATION_FIELDS_VALIDATION, validateRequest, registration)

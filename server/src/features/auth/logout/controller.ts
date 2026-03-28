@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose'
 import { UserModel } from 'src/entities/user'
-import { MESSAGE } from 'src/features/auth/logout'
+import { I18N_LOGOUT_MESSAGE } from 'src/features/auth'
 import { AppResponseType, ENV, IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
@@ -44,6 +44,6 @@ export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
   } catch (error) {
     log.error(String(error))
     serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(MESSAGE.failed, language))
+    throwHTTPError(StatusEnum.Server, res, getLocalizedText(I18N_LOGOUT_MESSAGE.failed, language))
   }
 }

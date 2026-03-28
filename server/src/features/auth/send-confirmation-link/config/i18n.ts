@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const MESSAGE = {
+export const I18N_SEND_CONFIRMATION_LINK_MESSAGE = {
   confirmationLinkSent: {
     en: 'Confirmation link has been sent',
     ru: 'Ссылка подтверждения отправлена'

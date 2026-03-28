@@ -1,6 +1,6 @@
 import { type LocalizedTextMapType } from 'common'
 
-export const MESSAGE = {
+export const I18N_SIGN_IN_WITH_PROVIDER_MESSAGE = {
   failed: {
     en: 'Failed to sign in with provider',
     ru: 'Не удалось войти через провайдера'
