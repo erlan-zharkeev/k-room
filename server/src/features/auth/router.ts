@@ -2,6 +2,8 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
+import { validateRequest } from 'src/shared/middleware'
+
 import {
   accessTokenValidator,
   CONFIRM_EMAIL_FIELDS_VALIDATION,
@@ -15,9 +17,7 @@ import {
   sendConfirmationLink,
   signInWithProvider,
   updateTokensPair
-} from 'src/features/auth'
-
-import { validateRequest } from 'src/shared/middleware'
+} from '.'
 
 export const authRouter = Router()
 

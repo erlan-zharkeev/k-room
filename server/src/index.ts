@@ -1,9 +1,11 @@
 import { initSentry } from 'src/app/config'
 import { runServer } from 'src/app/services'
 
+import { log } from 'src/shared/lib'
+
 initSentry()
 
 runServer().catch((error) => {
-  console.error('-Server startup failed')
-  console.error(String(error))
+  log.error('-Server startup failed')
+  log.error(String(error))
 })

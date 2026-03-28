@@ -1,3 +1,3 @@
-import { requiredStringRule } from '../../../../shared/lib/utils/validation-rules'
+import { requiredStringRule } from '../../shared/lib/validation-rules'
 
 export const LOGIN_FIELDS_VALIDATION = [requiredStringRule('email'), requiredStringRule('password')]
