@@ -1,9 +1,7 @@
 import type { Buffer } from 'node:buffer'
 
 import sharp from 'sharp'
-
-import { SHARP_PRESETS } from 'src/entities/media/config'
-
+import { SHARP_PRESETS } from 'src/entities/media'
 import { SharpSettingsKeyType } from 'src/shared/config'
 
 export const processImageWithSharp = async (input: Buffer, presetKey: SharpSettingsKeyType): Promise<Buffer> => {

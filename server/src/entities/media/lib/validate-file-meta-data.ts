@@ -1,15 +1,13 @@
 import { type Response } from 'express'
-
-import { type AppLanguageType, StatusEnum } from 'common'
-
 import {
   type IFileData,
   type MediaBucketNameType,
   VALIDATE_MEDIA_FILE_MESSAGE,
   validationMediaOptionsMap
-} from 'src/entities/media/config'
-
+} from 'src/entities/media'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
+import { type AppLanguageType, StatusEnum } from 'common'
 
 export const validateFileMetaData = (
   filedata: IFileData,
