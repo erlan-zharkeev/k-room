@@ -1,6 +1,6 @@
 import { type LocalizedTextType } from 'common'
 
-export const NOTIFICATION_MESSAGE = {
+export const NOTIFICATION_I18N = {
   networkOffline: () =>
     'The internet connection has been terminated. Network problems',
 

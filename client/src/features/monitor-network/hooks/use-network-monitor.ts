@@ -6,7 +6,7 @@ import { useLogout } from 'src/features/auth'
 import { useSocketReconnect } from 'src/features/socket'
 import { useMainLoader } from 'src/features/switch-main-loader'
 
-import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { setOnline, useSystem } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
@@ -21,12 +21,12 @@ export const useNetworkMonitor = () => {
   const { switchMainLoader } = useMainLoader()
 
   const networkOfflineNotification = notifications.getNotification({
-    message: NOTIFICATION_MESSAGE.networkOffline(),
+    message: NOTIFICATION_I18N.networkOffline(),
     messageType: 'error'
   })
 
   const networkOnlineNotification = notifications.getNotification({
-    message: NOTIFICATION_MESSAGE.networkOnline(),
+    message: NOTIFICATION_I18N.networkOnline(),
     messageType: 'info'
   })
 

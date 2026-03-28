@@ -23,7 +23,7 @@ import {
   setCurrentCallAccepted,
   markCurrentCallAsVideo
 } from 'src/entities/call'
-import { NOTIFICATION_MESSAGE, useNotification } from 'src/entities/notification'
+import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 
 import { socket } from 'src/shared/api'
 import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'
@@ -87,7 +87,7 @@ export const useMakeCall = () => {
   const notifications = useNotification()
 
   const failedToConnectToDeviceNotification = notifications.getNotification({
-    message: NOTIFICATION_MESSAGE.failedToConnectToDevice(),
+    message: NOTIFICATION_I18N.failedToConnectToDevice(),
     messageType: 'error'
   })
 
@@ -132,7 +132,7 @@ export const useMakeCall = () => {
   }
 
   const callCompletedNotification = notifications.getNotification({
-    message: NOTIFICATION_MESSAGE.callCompleted(),
+    message: NOTIFICATION_I18N.callCompleted(),
     messageType: 'info'
   })
 

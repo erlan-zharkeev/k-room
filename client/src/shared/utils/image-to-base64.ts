@@ -1,4 +1,4 @@
-import { NOTIFICATION_MESSAGE, UseNotificationType } from 'src/entities/notification'
+import { NOTIFICATION_I18N, UseNotificationType } from 'src/entities/notification'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
 
@@ -17,9 +17,9 @@ export const imageToBase64 = ({
   reader.readAsDataURL(image)
   const warnings = []
   const resolutionNotAllowed = !allowedResolutions.includes(image.type)
-  if (resolutionNotAllowed) warnings.push(NOTIFICATION_MESSAGE.imageResNotAllowed())
+  if (resolutionNotAllowed) warnings.push(NOTIFICATION_I18N.imageResNotAllowed())
   const isGreaterThanAllowed = image.size / 1024 / 1024 > maxImageSizeInMb
-  if (isGreaterThanAllowed) warnings.push(NOTIFICATION_MESSAGE.imageSizeMustLessThan(maxImageSizeInMb))
+  if (isGreaterThanAllowed) warnings.push(NOTIFICATION_I18N.imageSizeMustLessThan(maxImageSizeInMb))
 
   if (warnings.length) {
     warnings.forEach((warning) => {

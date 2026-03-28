@@ -1,4 +1,4 @@
-export const SERVER_NOTIFICATION_MESSAGE = {
+export const SERVER_NOTIFICATION_I18N = {
   Success: 'Success',
   CommonServerError: 'Server error. The operation could not be performed. Please try again later',
   UserDataUpdated: 'User data has been updated',

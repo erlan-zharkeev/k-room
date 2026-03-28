@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
-import { useNotification, NOTIFICATION_MESSAGE } from 'src/entities/notification'
+import { useNotification, NOTIFICATION_I18N } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
@@ -71,7 +71,7 @@ export const useInputAudioDevice = () => {
   }
 
   const cantAccessDeviceNotification = getNotification({
-    message: t(NOTIFICATION_MESSAGE.cantAccessDevice),
+    message: t(NOTIFICATION_I18N.cantAccessDevice),
     messageType: 'error'
   })
 
