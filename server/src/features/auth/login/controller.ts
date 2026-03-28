@@ -9,8 +9,7 @@ import { UserModel } from 'src/entities/user'
 import { type AppResponseType, type IAppRequest, SHARED_MESSAGE } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { updateTokens } from '../shared/lib/update-token'
-
+import { updateTokens } from './../shared'
 import { I18N_LOGIN_MESSAGE } from './config'
 
 export const login = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {

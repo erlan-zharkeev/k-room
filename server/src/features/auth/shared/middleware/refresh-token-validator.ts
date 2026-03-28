@@ -7,9 +7,8 @@ import { UserModel } from 'src/entities/user'
 import { ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { I18N_AUTH_MESSAGE } from '../config'
-import { updateTokens } from '../lib/update-token'
-import { verifyToken } from '../lib/verify-token'
+import { I18N_AUTH_MESSAGE } from './../config'
+import { updateTokens, verifyToken } from './../lib'
 
 const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
   throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(I18N_AUTH_MESSAGE.nonAuthorized, req.language), silent)

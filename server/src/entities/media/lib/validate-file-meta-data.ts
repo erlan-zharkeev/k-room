@@ -2,14 +2,14 @@ import { type Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
+import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+
 import {
+  I18N_VALIDATE_MEDIA_FILE_MESSAGE,
   type IFileData,
   type MediaBucketNameType,
-  VALIDATE_MEDIA_FILE_MESSAGE,
-  validationMediaOptionsMap
-} from 'src/entities/media'
-
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+  VALIDATION_MEDIA_OPTIONS_MAP
+} from './../config'
 
 export const validateFileMetaData = (
   filedata: IFileData,
@@ -17,15 +17,23 @@ export const validateFileMetaData = (
   res: Response | null = null,
   language?: AppLanguageType
 ) => {
-  const { maxMb, supportedKindMediaType } = validationMediaOptionsMap[bucketName]
+  const { maxMb, supportedKindMediaType } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
 
   const maxBytes = maxMb * 1024 * 1024
   if (filedata.metadata.size > maxBytes) {
-    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(VALIDATE_MEDIA_FILE_MESSAGE.fileIsTooLarge, language))
+    throwHTTPError(
+      StatusEnum.BadRequest,
+      res,
+      getLocalizedText(I18N_VALIDATE_MEDIA_FILE_MESSAGE.fileIsTooLarge, language)
+    )
   }
 
   if (filedata.metadata.kind !== supportedKindMediaType) {
-    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(VALIDATE_MEDIA_FILE_MESSAGE.extNotSupported, language))
+    throwHTTPError(
+      StatusEnum.BadRequest,
+      res,
+      getLocalizedText(I18N_VALIDATE_MEDIA_FILE_MESSAGE.extNotSupported, language)
+    )
   }
   return true
 }

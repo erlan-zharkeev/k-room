@@ -8,8 +8,7 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { generateToken } from '../shared/lib/generate-token'
-
+import { generateToken } from './../shared'
 import { I18N_SEND_CONFIRMATION_LINK_MESSAGE } from './config'
 
 export const sendConfirmationLink = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
