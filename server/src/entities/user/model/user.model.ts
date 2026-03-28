@@ -1,9 +1,7 @@
 import { model, Schema } from 'mongoose'
+import type { IUserSchema } from 'src/entities/user'
+import { personalSchema,publicSchema, systemSchema  } from 'src/entities/user'
 
-import { personalSchema } from 'src/entities/user'
-import type { IUserSchema } from 'src/entities/user/config'
-import { publicSchema } from 'src/entities/user/model'
-import { systemSchema } from 'src/entities/user/model'
 
 const userSchema = new Schema<IUserSchema>({
   system: systemSchema,
