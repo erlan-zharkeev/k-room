@@ -1,4 +1,4 @@
-export * from '../../../../shared/lib/utils/validation-rules'
+export * from './validation-rules'
 ////
 export * from './generate-token'
 export * from './is-user-exist'

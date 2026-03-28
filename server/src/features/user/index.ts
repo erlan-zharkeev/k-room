@@ -1,4 +1,5 @@
-export * from './~shared'
+export * from './shared'
+///
 export * from './actualize-user-data/lib'
 export * from './get-user-data'
 export * from './mark-info-notification-as-read'
@@ -7,3 +8,5 @@ export * from './update-online-status'
 export * from './update-user-data'
 export * from './user-connect'
 export { controller as userDisconnectController } from './user-disconnect/controller'
+///
+export * from './router'

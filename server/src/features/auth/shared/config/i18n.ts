@@ -2,7 +2,7 @@ import type { LocalizedTextMapType } from 'common'
 
 import { VALIDATION_LIMITS } from 'common'
 
-export const AUTH_MESSAGE = {
+export const I18N_AUTH_MESSAGE = {
   nonAuthorized: {
     en: 'User not authorized',
     ru: 'Пользователь не авторизован'

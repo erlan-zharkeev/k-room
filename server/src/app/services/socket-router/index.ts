@@ -1,6 +1,10 @@
-import { socketCallRouter, socketChatRoomRouter, socketContactRouter, socketMessageRouter, socketUserRouter } from 'src/app/socket-router'
-
 import { SocketInstanceType } from 'src/shared/config'
+
+import { socketCallRouter } from './call'
+import { socketChatRoomRouter } from './chat-room'
+import { socketContactRouter } from './contact'
+import { socketMessageRouter } from './message'
+import { socketUserRouter } from './user'
 
 const featureRouters = [
   socketUserRouter,

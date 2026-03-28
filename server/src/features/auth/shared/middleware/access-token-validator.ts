@@ -5,16 +5,21 @@ import { StatusEnum } from 'common'
 import { ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { AUTH_MESSAGE } from '../config'
-import { verifyToken } from '../lib/verify-token'
+import { I18N_AUTH_MESSAGE } from '../config'
+import { verifyToken } from '../lib'
 
-import { refreshTokenValidator } from './refresh-token-validator'
+import { refreshTokenValidator } from '.'
 
 export const accessTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt
 
   if (!accessToken) {
-    return throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(AUTH_MESSAGE.nonAuthorized, req.language), true)
+    return throwHTTPError(
+      StatusEnum.NotAuth,
+      res,
+      getLocalizedText(I18N_AUTH_MESSAGE.nonAuthorized, req.language),
+      true
+    )
   }
 
   try {
