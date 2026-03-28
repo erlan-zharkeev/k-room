@@ -12,7 +12,7 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { updateTokens } from './../shared'
 import { I18N_LOGIN_MESSAGE } from './config'
 
-export const login = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
+export const loginController = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
   const language = req.language
 
   try {

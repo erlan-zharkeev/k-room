@@ -9,7 +9,7 @@ import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPEr
 
 import { I18N_LOGOUT_MESSAGE } from './config'
 
-export const logout = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const logoutController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const language = req.language
 
   try {

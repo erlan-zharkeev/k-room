@@ -10,7 +10,7 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { verifyToken } from './../shared'
 import { I18N_CONFIRM_EMAIL_MESSAGE } from './config'
 
-export const confirmEmail = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
+export const confirmEmailController = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
   const language = req.language
 
   try {

@@ -1,12 +1,13 @@
 import type { IEventUpdateSignal, SocketActionsType } from 'common'
 
-import { getActiveCallInterlocutor } from 'src/features/call'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
-export const controller = (socket: SocketInstanceType) => {
+import { getActiveCallInterlocutor } from './../shared'
+
+export const updateCallSignalController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('update-call-signal', async ({ signal }: IEventUpdateSignal) => {
     try {
       const { userId } = socket.data

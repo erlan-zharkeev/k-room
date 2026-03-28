@@ -1,6 +1,5 @@
 import type { EventCallStartedAtType, IEventAnswerCall, IEventCallAccepted, SocketActionsType } from 'common'
 
-import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from 'src/features/call'
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { CallModel } from 'src/entities/call'
@@ -8,7 +7,9 @@ import { CallModel } from 'src/entities/call'
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO, throwSocketError } from 'src/shared/lib'
 
-export const controller = (socket: SocketInstanceType) => {
+import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from './../shared'
+
+export const answerCallController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>('answer-call', async ({ to, signal, selfSocketId, callId }: IEventAnswerCall) => {
     try {
       const { userId } = socket.data

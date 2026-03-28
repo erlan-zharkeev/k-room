@@ -2,8 +2,8 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { sendConfirmationLink } from '.'
+import { sendConfirmationLinkController } from '.'
 
 export const sendEmailConfirmationLinkRouter = Router()
 
-sendEmailConfirmationLinkRouter.post(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLink)
+sendEmailConfirmationLinkRouter.post(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLinkController)
