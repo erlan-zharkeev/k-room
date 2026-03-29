@@ -97,6 +97,27 @@ If a re-export would otherwise require `../...`, use the public alias path inste
 export * from 'src/pages/privacy-policy/ui/PrivacyPolicy/config'
 ```
 
+If a UI element directory contains both component code and `config`, that directory must have its own local `index.ts`, and outer `ui/index.ts` files must re-export the element directory instead of exporting the component file and `config` separately.
+
+Use:
+
+```ts
+// ui/ContactList/index.ts
+export * from './ContactList'
+export * from './config'
+
+// ui/index.ts
+export * from './ContactList'
+```
+
+Do not use:
+
+```ts
+// ui/index.ts
+export * from './ContactList/ContactList'
+export * from './ContactList/config'
+```
+
 7. Imports must use the shortest public path level available.
 
 Prefer the nearest public alias entrypoint that already exports the symbol:

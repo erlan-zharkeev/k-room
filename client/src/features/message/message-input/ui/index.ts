@@ -1,2 +1,1 @@
-export * from './MessageInput/MessageInput'
-export * from './MessageInput/config'
+export * from './MessageInput'

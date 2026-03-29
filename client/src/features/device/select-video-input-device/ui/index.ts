@@ -1,2 +1,1 @@
-export * from './VideoInputDeviceSelect/VideoInputDeviceSelect'
-export * from './VideoInputDeviceSelect/config'
+export * from './VideoInputDeviceSelect'

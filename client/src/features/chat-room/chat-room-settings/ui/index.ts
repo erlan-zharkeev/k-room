@@ -1,1 +1,1 @@
-export * from './ChatRoomSettingsModal/ChatRoomSettingsModal'
+export * from './ChatRoomSettingsModal'

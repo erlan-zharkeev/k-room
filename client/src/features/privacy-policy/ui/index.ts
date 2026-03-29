@@ -1,1 +1,1 @@
-export * from './PrivacyPolicyLink/PrivacyPolicyLink'
+export * from './PrivacyPolicyLink'

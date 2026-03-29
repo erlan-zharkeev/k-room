@@ -1,2 +1,1 @@
-export * from './AddContactBtn/AddContactBtn'
-export * from './AddContactBtn/config'
+export * from './AddContactBtn'

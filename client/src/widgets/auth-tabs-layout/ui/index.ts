@@ -1,2 +1,1 @@
-export * from './AuthTabsLayout/AuthTabsLayout'
-export * from './AuthTabsLayout/types'
+export * from './AuthTabsLayout'

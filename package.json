@@ -5,6 +5,7 @@
   "author": "<zharkeev.post@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "dev": "zsh scripts/dev.sh",
     "prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:check": "client/node_modules/.bin/prettier --check .",

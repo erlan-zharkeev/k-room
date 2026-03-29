@@ -1,2 +1,2 @@
-export * from './DeleteContactConfirmModal'
 export * from './config'
+export * from './DeleteContactConfirmModal'

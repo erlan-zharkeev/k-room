@@ -1,2 +1,1 @@
-export * from './CreateNewPasswordBody/CreateNewPasswordBody'
-export * from './CreateNewPasswordBody/config'
+export * from './CreateNewPasswordBody'

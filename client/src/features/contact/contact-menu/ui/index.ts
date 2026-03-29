@@ -1,2 +1,1 @@
-export * from './ContactMenu/ContactMenu'
-export * from './ContactMenu/config'
+export * from './ContactMenu'

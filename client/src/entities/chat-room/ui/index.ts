@@ -1,2 +1,2 @@
-export * from './ChatRoomsButton/ChatRoomsButton'
-export * from './ChatRoomPreview/ChatRoomPreview'
+export * from './ChatRoomPreview'
+export * from './ChatRoomsButton'
