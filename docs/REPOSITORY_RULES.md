@@ -19,7 +19,7 @@ Do not import another module through a relative parent path:
 import { AppModal } from '../../shared/ui'
 ```
 
-2. Inside one module, use only relative imports.
+2. Relative paths may only start with `./`.
 
 Use:
 
@@ -28,13 +28,37 @@ import { messageMapper } from './message-mapper'
 import { normalizeMessage } from './lib'
 ```
 
-Do not use alias imports to reach files inside the same module:
+Do not use parent relative paths:
 
 ```ts
-import { normalizeMessage } from 'src/features/message/shared/lib/normalize-message'
+import { sharedRule } from '../shared'
+import { buildPayload } from '../../lib/build-payload'
 ```
 
-3. Prefer the shortest local relative public path available.
+Use a public alias path instead:
+
+```ts
+import { sharedRule } from 'src/features/auth/shared'
+import { buildPayload } from 'src/shared/lib/build-payload'
+```
+
+3. Bare `.` and `..` paths are not allowed.
+
+Use:
+
+```ts
+import { authSchema } from './config'
+import { createMessage } from './index'
+```
+
+Do not use:
+
+```ts
+import { createMessage } from '.'
+import { authSchema } from '..'
+```
+
+4. Prefer the shortest local relative public path available.
 
 If a local barrel such as `./lib`, `./config`, or `./shared` already exports the symbol, import through it instead of a deeper private file path.
 
@@ -49,10 +73,10 @@ Do not use:
 
 ```ts
 import { normalizeMessage } from './lib/normalize-message'
-import { buildPayload } from '../../lib/build-payload'
+import { buildPayload } from '../lib/build-payload'
 ```
 
-4. If the target file is on the same directory level, use `./`.
+5. If the target file is on the same directory level, use `./`.
 
 Use:
 
@@ -60,22 +84,17 @@ Use:
 import { messageMapper } from './message-mapper'
 ```
 
-5. Inside a module, do not use `..` imports.
-
-Use local `./` imports or restructure exports so the dependency is available without going to the parent directory.
-
-Do not use:
-
-```ts
-import { sharedRule } from '../shared'
-import { buildPayload } from '../../lib/build-payload'
-```
-
-6. Barrel exports are an exception: in `index.ts` files, use relative `export` paths.
+6. Barrel exports are an exception: in `index.ts` files, use the shortest allowed path.
 
 ```ts
 export * from './db'
 export * from './lib'
+```
+
+If a re-export would otherwise require `../...`, use the public alias path instead:
+
+```ts
+export * from 'src/pages/privacy-policy/ui/PrivacyPolicy/config'
 ```
 
 7. Imports must use the shortest public path level available.
@@ -229,6 +248,36 @@ import { useRegistration } from 'src/features/auth/registration'
 3. Subfeatures inside one feature should stay focused and independent by responsibility.
 
 The parent feature groups related behavior, but each nested subfeature should still represent one concrete capability, UI flow, or integration point.
+
+## Config Rules
+
+1. Global repository-level config files should live in `config`.
+
+Use `config` for shared top-level configuration such as TypeScript, ESLint, Prettier, Playwright, or other cross-project tooling config.
+
+Use:
+
+```text
+config/tsconfig/root.json
+config/prettier/base.json
+config/playwright/playwright.config.ts
+```
+
+2. Root-level config files should be thin proxies when a root entrypoint is still required by tools or editors.
+
+Use a short root file only when discovery from the repository root is needed:
+
+```js
+// prettier.config.cjs
+module.exports = require('./config/prettier/base.json')
+```
+
+```json
+// tsconfig.json
+{ "extends": "./config/tsconfig/root.json" }
+```
+
+Do not keep the main config body in the repository root when it can live under `config`.
 
 ## Internal Shared Rules
 

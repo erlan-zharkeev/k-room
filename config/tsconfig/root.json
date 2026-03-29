@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "baseUrl": "../..",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "paths": {
+      "common": ["common/index.ts"]
+    },
+    "types": ["node", "@playwright/test"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["../../config/playwright/**/*.ts", "../../e2e/**/*.ts"]
+}

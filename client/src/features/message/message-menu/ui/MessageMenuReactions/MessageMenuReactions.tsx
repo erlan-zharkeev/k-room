@@ -4,12 +4,12 @@ import { useMemo } from 'react'
 
 import { IEventAddReaction, SocketActionsType } from 'common'
 
+import type { IReactionsProps } from 'src/features/message/message-menu'
+
 import { EMOJI_LIST } from 'src/entities/emoji'
 
 import { socket } from 'src/shared/api'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import type { IReactionsProps } from '../..'
 
 export const MessageReactions = ({ userId, username, selectedChatRoomId, message }: IReactionsProps) => {
   const reactions = EMOJI_LIST.filter((emoji) => emoji.reactions)

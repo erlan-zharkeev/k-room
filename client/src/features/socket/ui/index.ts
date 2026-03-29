@@ -1,1 +1,1 @@
-export * from '../../../widgets/connection-status-info/ui/ConnectionStatusInfo'
+export * from 'src/widgets/connection-status-info/ui/ConnectionStatusInfo'

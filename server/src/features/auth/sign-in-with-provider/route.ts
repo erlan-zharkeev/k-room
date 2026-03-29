@@ -2,7 +2,7 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { signInWithProviderController } from '.'
+import { signInWithProviderController } from './index'
 
 export const providerLoginRouter = Router()
 

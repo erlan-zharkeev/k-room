@@ -1,9 +1,9 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
+import { DEFAULT_SETTINGS, FULL_CONTENT_ELEMENTS } from 'src/entities/settings'
+
 import type { IUserSetting } from 'src/shared/config'
 import { dexieKeyValueStore, db } from 'src/shared/lib/db'
-
-import { DEFAULT_SETTINGS, FULL_CONTENT_ELEMENTS } from '..'
 
 export const settingsStore = dexieKeyValueStore<IUserSetting>(db.settings, 'settings')
 

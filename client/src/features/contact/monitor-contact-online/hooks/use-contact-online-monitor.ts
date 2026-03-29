@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 
 import { SocketActionsType } from 'common'
 
+import { useUpdateContactData } from 'src/features/contact/update-contact-data'
+
 import { useContact } from 'src/entities/contact'
 
 import { socket } from 'src/shared/api'
 import { useTimeout } from 'src/shared/lib'
-
-import { useUpdateContactData } from '../../update-contact-data'
 
 export const useContactOnlineMonitor = () => {
   const [isMonitoring, setIsMonitoring] = useState(false)

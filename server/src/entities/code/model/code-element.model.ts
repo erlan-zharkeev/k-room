@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import type { ICodeElement } from '../config'
+import type { ICodeElement } from 'src/entities/code/config'
 
 export const codeElementSchema = new Schema<ICodeElement>(
   {

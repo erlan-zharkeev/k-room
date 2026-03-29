@@ -1,9 +1,8 @@
 import './style.scss'
 import { createElement } from 'react'
 
+import type { IAppTextProps } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import type { IAppTextProps } from '..'
 
 export const AppText = ({
   tag = 'span',

@@ -1,4 +1,4 @@
-import { IImageObject } from ".";
+import { IImageObject } from "./index";
 export declare const MESSAGE_STATUS: readonly ["sending", "undelivered", "delivered", "read", "none"];
 export type MessageStatusType = (typeof MESSAGE_STATUS)[number];
 export interface IMessageMetaData {

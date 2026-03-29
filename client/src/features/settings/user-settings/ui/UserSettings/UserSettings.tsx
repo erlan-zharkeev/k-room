@@ -1,19 +1,18 @@
 import './style.scss'
 
 import { PrivacyPolicyLink } from 'src/features/privacy-policy'
+import { EnableSoundSwitcher } from 'src/features/settings/toggle-enable-sound'
+import { LanguageSwitcher } from 'src/features/settings/toggle-language'
+import { ShowNotificationSwitcher } from 'src/features/settings/toggle-show-notification'
+import { ShowTooltipsSwitcher } from 'src/features/settings/toggle-show-tooltips'
+import { ShowWallpaperSwitcher } from 'src/features/settings/toggle-show-wallpaper'
+import { ThemeSwitcher } from 'src/features/settings/update-theme'
 import { TechSupportLink } from 'src/features/support'
 import { UserProfileData } from 'src/features/user'
 
 import { useSystem } from 'src/entities/system'
 
 import { AppText } from 'src/shared/ui'
-
-import { EnableSoundSwitcher } from '../../../toggle-enable-sound'
-import { LanguageSwitcher } from '../../../toggle-language'
-import { ShowNotificationSwitcher } from '../../../toggle-show-notification'
-import { ShowTooltipsSwitcher } from '../../../toggle-show-tooltips'
-import { ShowWallpaperSwitcher } from '../../../toggle-show-wallpaper'
-import { ThemeSwitcher } from '../../../update-theme'
 
 export const UserSettings = () => {
   const {

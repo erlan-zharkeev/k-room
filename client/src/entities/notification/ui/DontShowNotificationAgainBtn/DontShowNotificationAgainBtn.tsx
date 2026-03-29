@@ -2,14 +2,13 @@ import { useState } from 'react'
 
 import './style.scss'
 
+import type { IDontShowNotificationAgainBtnProps } from 'src/entities/notification/ui'
+import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification/ui'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { AppButton } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import type { IDontShowNotificationAgainBtnProps } from '..'
-import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from '..'
 
 export const DontShowNotificationAgainBtn = ({ notificationName }: IDontShowNotificationAgainBtnProps) => {
   const settings = useSettings()

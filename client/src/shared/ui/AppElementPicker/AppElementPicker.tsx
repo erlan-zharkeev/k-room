@@ -1,4 +1,4 @@
-import { AppTags } from '..'
+import { AppTags } from 'src/shared/ui'
 
 import type { IAppElementPickerProps } from './config'
 

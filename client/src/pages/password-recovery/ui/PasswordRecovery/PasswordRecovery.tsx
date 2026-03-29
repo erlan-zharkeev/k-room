@@ -1,12 +1,12 @@
 import './style.scss'
 
+import { PASSWORD_RECOVERY_PAGE_I18N } from 'src/pages/password-recovery/config'
+
 import { PasswordRecoveryBody } from 'src/features/auth'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppHeader } from 'src/shared/ui'
-
-import { PASSWORD_RECOVERY_PAGE_I18N } from '../../config'
 
 export const PasswordRecovery = () => {
   const { t } = useI18n()

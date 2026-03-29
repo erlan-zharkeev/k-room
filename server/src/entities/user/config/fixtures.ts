@@ -8,7 +8,7 @@ import { createUser, isUserExist, updateUserAvatar } from 'src/features/user'
 
 import { log } from 'src/shared/lib'
 
-import { USER_FIXTURES } from '.'
+import { USER_FIXTURES } from './index'
 
 const loadUserFixture = async (data: {
   id: string

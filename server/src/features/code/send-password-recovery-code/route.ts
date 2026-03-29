@@ -4,7 +4,7 @@ import { CodesEndpointsEnum } from 'common'
 
 import { validateRequest } from 'src/shared/middleware'
 
-import { SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION, sendPasswordRecoveryCodeController } from '.'
+import { SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION, sendPasswordRecoveryCodeController } from './index'
 
 export const sendPasswordRecoveryCodeRouter = Router()
 

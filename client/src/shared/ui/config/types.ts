@@ -1,5 +1,5 @@
-export type * from '../AppCollapseList/config'
-export type * from '../AppTags/config'
+export type * from 'src/shared/ui/AppCollapseList/config'
+export type * from 'src/shared/ui/AppTags/config'
 
 export type BaseSizeModifierType = 'small' | 'medium' | 'large'
 export type ExtendedSizeModifierType = BaseSizeModifierType | 'extra-small' | 'extra-large'

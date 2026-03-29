@@ -3,9 +3,8 @@ import { useState, useEffect } from 'react'
 
 import { Badge, Image } from 'antd'
 
+import { AppIconNameType, AppIcon } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { AppIconNameType, AppIcon } from '..'
 
 import type { IAppAvatarProps } from './config'
 

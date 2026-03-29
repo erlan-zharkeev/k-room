@@ -4,11 +4,11 @@ import { ReactNode } from 'react'
 
 import type { UnknownCallbackType } from 'common'
 
+import type { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
+
 import type { AppIconNameType, AvatarShapeModifierType, BaseSizeModifierType } from 'src/shared/ui'
 import { AppAvatar, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import type { ProfileInfoAvatarSizeType } from '../..'
 
 export const ProfileInfo = ({
   avatar,

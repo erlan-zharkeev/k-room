@@ -1,12 +1,12 @@
 
+import { CONTACT_LIST_RERENDER_INTERVAL, ContactInvitationControlBtns, ContactMenu, lastSeen } from 'src/features/contact'
+import type { IContactListElProps } from 'src/features/contact/contact-list'
+
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
 import { useI18n } from 'src/entities/system'
 
 import { useIntervalRerender } from 'src/shared/lib'
-
-import type { IContactListElProps } from '../..'
-import { CONTACT_LIST_RERENDER_INTERVAL, ContactInvitationControlBtns, ContactMenu, lastSeen } from '../../..'
 
 export const ContactListEl = ({ contactData }: IContactListElProps) => {
   const { getLiveMedia } = useMedia()

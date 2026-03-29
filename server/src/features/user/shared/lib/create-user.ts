@@ -6,7 +6,7 @@ import { UserModel } from 'src/entities/user'
 
 import { log, serverCaptureSentryException } from 'src/shared/lib'
 
-import { isUserExist } from '.'
+import { isUserExist } from './index'
 
 export const createUser = async ({
   id,

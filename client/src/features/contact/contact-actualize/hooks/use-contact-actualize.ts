@@ -1,10 +1,10 @@
 import { IFrontendContact, SocketActionsType } from 'common'
 
+import { getRequiredContactSystemData } from 'src/features/contact'
+
 import { socket } from 'src/shared/api'
 import { DbContactType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
-
-import { getRequiredContactSystemData } from '../..'
 
 export const useContactActualize = () => {
   const actualizeContacts = async (contacts: IFrontendContact[]) => {

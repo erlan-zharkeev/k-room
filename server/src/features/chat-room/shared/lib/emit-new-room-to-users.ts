@@ -6,7 +6,7 @@ import { UserModel } from 'src/entities/user'
 
 import { getIO } from 'src/shared/lib'
 
-import { transformRoomForUser } from '.'
+import { transformRoomForUser } from './index'
 
 export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchema) => {
   userIds.forEach(async (userId) => {

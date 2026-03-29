@@ -1,8 +1,7 @@
 import './style.scss'
 
+import { AppIcon } from 'src/shared/ui/AppIcon'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { AppIcon } from '../AppIcon'
 
 import type { IButtonProps } from './config'
 

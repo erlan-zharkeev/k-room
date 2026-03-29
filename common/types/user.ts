@@ -1,4 +1,4 @@
-import { InfoNotificationMapType } from ".";
+import { InfoNotificationMapType } from "./index";
 
 export const USER_ROLES = ["user", "admin"] as const;
 export type UserRoleType = (typeof USER_ROLES)[number];

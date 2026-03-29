@@ -4,7 +4,7 @@ import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 
-import { markInfoAsReadController } from '.'
+import { markInfoAsReadController } from './index'
 
 export const markInfoNotificationAsReadRouter = Router()
 

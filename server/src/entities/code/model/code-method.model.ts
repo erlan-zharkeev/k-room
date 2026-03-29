@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import type { ICodeMethod } from '../config'
+import type { ICodeMethod } from 'src/entities/code/config'
 
 import { codeElementSchema } from './code-element.model'
 

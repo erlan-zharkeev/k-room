@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import type { ICodePurpose } from '../config'
+import type { ICodePurpose } from 'src/entities/code/config'
 
 import { codeMethodSchema } from './code-method.model'
 

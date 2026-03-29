@@ -1,8 +1,8 @@
 import { Badge } from 'antd'
 
-import { AppButton } from 'src/shared/ui'
+import { useChatRoom } from 'src/entities/chat-room'
 
-import { useChatRoom } from '../..'
+import { AppButton } from 'src/shared/ui'
 
 export const ChatRoomsButton = () => {
   const { unreadMessageQuantity } = useChatRoom()

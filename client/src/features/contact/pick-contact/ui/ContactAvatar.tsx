@@ -1,9 +1,9 @@
 
+import type { IPickContactAvatarProps } from 'src/features/contact/pick-contact'
+
 import { useLiveMediaUrl } from 'src/entities/media'
 
 import { AppAvatar } from 'src/shared/ui'
-
-import type { IPickContactAvatarProps } from '..'
 
 export const ContactAvatar = ({ id }: IPickContactAvatarProps) => {
   const url = useLiveMediaUrl(`avatar.${id}`)

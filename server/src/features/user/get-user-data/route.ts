@@ -4,7 +4,7 @@ import { UserEndpointsEnum } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 
-import { getUserDataController } from '.'
+import { getUserDataController } from './index'
 
 export const getUserRouter = Router()
 

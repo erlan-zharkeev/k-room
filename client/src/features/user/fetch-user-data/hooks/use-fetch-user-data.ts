@@ -1,10 +1,9 @@
 import { IGetUserDataResponse, StatusEnum, UserEndpointsEnum } from 'common'
 
 import { useMainLoader } from 'src/features/switch-main-loader'
+import { useActivateUserSession } from 'src/features/user'
 
 import { isApiError, useApi } from 'src/shared/api'
-
-import { useActivateUserSession } from '../..'
 
 export const useFetchUserData = () => {
   const { doRequest } = useApi()

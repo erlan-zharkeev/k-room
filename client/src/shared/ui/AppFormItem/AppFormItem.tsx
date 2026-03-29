@@ -1,7 +1,6 @@
 import './style.scss'
+import { AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { AppText } from '..'
 
 import type { IAppFormItemProps } from './config'
 

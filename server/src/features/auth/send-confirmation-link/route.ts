@@ -2,7 +2,7 @@ import { Router } from 'express'
 
 import { AuthEndpointsEnum } from 'common'
 
-import { sendConfirmationLinkController } from '.'
+import { sendConfirmationLinkController } from './index'
 
 export const sendEmailConfirmationLinkRouter = Router()
 

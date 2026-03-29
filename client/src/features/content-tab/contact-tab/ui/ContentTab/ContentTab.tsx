@@ -1,5 +1,8 @@
 import './style.scss'
 
+import { useContentTabSelect } from 'src/features/content-tab'
+import type { IContentTabButton } from 'src/features/content-tab'
+
 import { CallsButton } from 'src/entities/call'
 import { ChatRoomsButton } from 'src/entities/chat-room'
 import { ContactsButton } from 'src/entities/contact'
@@ -7,9 +10,6 @@ import { SettingsButton, useSettings } from 'src/entities/settings'
 
 import type { ContentTabType } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { useContentTabSelect } from '../../..'
-import type { IContentTabButton } from '../../..'
 
 const buttons: IContentTabButton[] = [
   { Component: ContactsButton, value: 'contacts' },

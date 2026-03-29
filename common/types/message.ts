@@ -1,4 +1,4 @@
-import { IImageObject } from ".";
+import { IImageObject } from "./index";
 
 export const MESSAGE_STATUS = ["sending", "undelivered", "delivered", "read", "none"] as const;
 export type MessageStatusType = (typeof MESSAGE_STATUS)[number];

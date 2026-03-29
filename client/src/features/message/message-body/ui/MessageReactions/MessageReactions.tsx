@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 
 import { Tooltip } from 'antd'
 
-import { EMOJI_LIST } from 'src/entities/emoji'
+import type { IMessageBodyReaction, IMessageReactionsProps } from 'src/features/message/message-body'
 
-import type { IMessageBodyReaction, IMessageReactionsProps } from '../..'
+import { EMOJI_LIST } from 'src/entities/emoji'
 
 export const MessageReactions = ({ message }: IMessageReactionsProps) => {
   const [reactions, setReactions] = useState<IMessageBodyReaction[]>([])

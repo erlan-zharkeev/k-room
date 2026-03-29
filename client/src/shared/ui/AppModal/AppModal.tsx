@@ -6,10 +6,9 @@ import { createPortal } from 'react-dom'
 
 import { useI18n, useViewport } from 'src/entities/system'
 
+import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH } from 'src/shared/ui'
+import type { IAppModalProps } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH } from '..'
-import type { IAppModalProps } from '..'
 
 export const AppModal = ({
   title,

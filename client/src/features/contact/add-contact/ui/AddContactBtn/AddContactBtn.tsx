@@ -1,10 +1,10 @@
 
+import { useAddContact } from 'src/features/contact/add-contact'
+import type { IAddContactBtnProps } from 'src/features/contact/add-contact'
+
 import { useContact } from 'src/entities/contact'
 
 import { AppButton } from 'src/shared/ui'
-
-import { useAddContact } from '../..'
-import type { IAddContactBtnProps } from '../..'
 
 export const AddContactBtn = ({ id }: IAddContactBtnProps) => {
   const { isContactExist } = useContact()

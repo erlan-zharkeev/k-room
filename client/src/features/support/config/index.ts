@@ -1,1 +1,1 @@
-export * from '../ui/TechSupportLink/config'
+export * from 'src/features/support/ui/TechSupportLink/config'

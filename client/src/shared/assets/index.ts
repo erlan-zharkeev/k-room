@@ -1,2 +1,2 @@
 export * from './img'
-export * from '../ui/AppIcon/config/icons'
+export * from 'src/shared/ui/AppIcon/config/icons'

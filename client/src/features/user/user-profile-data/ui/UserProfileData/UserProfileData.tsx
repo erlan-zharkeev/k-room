@@ -1,12 +1,11 @@
 import './style.scss'
 
 import { PasswordRecoveryLink } from 'src/features/auth'
+import { OpenModalEditUserDataBtn } from 'src/features/user'
 
 import { UserProfile, useUser } from 'src/entities/user'
 
 import { AppText } from 'src/shared/ui'
-
-import { OpenModalEditUserDataBtn } from '../../..'
 
 export const UserProfileData = () => {
   const { id } = useUser()

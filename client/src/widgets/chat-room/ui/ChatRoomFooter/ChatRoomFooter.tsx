@@ -1,6 +1,6 @@
-import { MessageInput } from 'src/features/message'
+import type { IChatRoomFooterProps } from 'src/widgets/chat-room'
 
-import type { IChatRoomFooterProps } from '../..'
+import { MessageInput } from 'src/features/message'
 
 export const ChatRoomFooter = ({ roomId, prependChildren }: IChatRoomFooterProps) => {
   return (

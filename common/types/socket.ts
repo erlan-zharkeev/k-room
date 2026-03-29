@@ -1,4 +1,4 @@
-import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, FrontendContactMapType, IFrontendContact } from ".";
+import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, FrontendContactMapType, IFrontendContact } from "./index";
 
 export interface IEventInterlocutorUpdateSignal {
   signal: unknown;

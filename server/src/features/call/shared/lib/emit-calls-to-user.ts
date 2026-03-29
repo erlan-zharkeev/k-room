@@ -6,7 +6,7 @@ import { CallModel } from 'src/entities/call'
 
 import { getIO } from 'src/shared/lib'
 
-import { transformCallForUser } from '.'
+import { transformCallForUser } from './index'
 
 export const emitCallsToUser = async (userId: string) => {
   const calls = await CallModel.find({ interlocutors: { $in: [userId] } })

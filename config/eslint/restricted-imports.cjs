@@ -1,5 +1,7 @@
 const createDeepImportSelector = (pattern) => `ImportDeclaration[source.value=/^${pattern}\\/[^/]+\\/[^/]+\\//]`
 
+const createSourceSelector = (nodeType, pattern) => `${nodeType}[source.value=/^${pattern}$/]`
+
 const createRestrictedImportRules = ({
   rootPattern,
   deepImportSelectors,
@@ -11,6 +13,13 @@ const createRestrictedImportRules = ({
   }))
 ]
 
+const createRestrictedPathRules = ({ pathPattern, message }) =>
+  ['ImportDeclaration', 'ExportNamedDeclaration', 'ExportAllDeclaration'].map((nodeType) => ({
+    selector: createSourceSelector(nodeType, pathPattern),
+    message
+  }))
+
 module.exports = {
-  createRestrictedImportRules
+  createRestrictedImportRules,
+  createRestrictedPathRules
 }

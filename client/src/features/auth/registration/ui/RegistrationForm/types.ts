@@ -1,4 +1,4 @@
-import { useRegistration } from '../..'
+import { useRegistration } from 'src/features/auth/registration'
 
 type UseRegistrationReturnType = ReturnType<typeof useRegistration>
 

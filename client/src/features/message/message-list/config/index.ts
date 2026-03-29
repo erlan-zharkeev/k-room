@@ -1,3 +1,3 @@
 export * from './constants'
 export * from './types'
-export * from '../ui/NoMessagesPlaceholder/config'
+export * from 'src/features/message/message-list/ui/NoMessagesPlaceholder/config'

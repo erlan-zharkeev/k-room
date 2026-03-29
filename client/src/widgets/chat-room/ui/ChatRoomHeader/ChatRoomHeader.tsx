@@ -2,12 +2,12 @@ import './style.scss'
 
 import type { UnknownCallbackType } from 'common'
 
+import { RoomTypingContact } from 'src/widgets/chat-room'
+
 import { ChatRoomPreview } from 'src/entities/chat-room'
 
 import { FChatRoomType } from 'src/shared/config'
 import { AppButton } from 'src/shared/ui'
-
-import { RoomTypingContact } from '../..'
 
 export const ChatRoomHeader = ({
   room,

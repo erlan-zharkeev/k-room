@@ -8,7 +8,7 @@ import { multerUploader } from 'src/entities/media'
 
 import { validateRequest } from 'src/shared/middleware'
 
-import { UPDATE_USER_DATA_FIELDS_VALIDATION, updateUserDataController } from '.'
+import { UPDATE_USER_DATA_FIELDS_VALIDATION, updateUserDataController } from './index'
 
 export const updateUserRouter = Router()
 

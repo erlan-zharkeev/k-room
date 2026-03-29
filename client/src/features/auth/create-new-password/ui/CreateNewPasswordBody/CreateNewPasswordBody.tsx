@@ -2,11 +2,11 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { useNavigate } from 'react-router-dom'
 
+import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_I18N } from 'src/features/auth/create-new-password'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppButton, AppForm, AppBanner } from 'src/shared/ui'
-
-import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_I18N } from '../..'
 
 export const CreateNewPasswordBody = () => {
   const { onSubmit, isLoading, passMatched, checkPassMatch, isFormTouched, isPasswordChanged } = useCreateNewPassword()
