@@ -1,0 +1,46 @@
+services:
+  client:
+    image: ketjo/k-room_client:latest
+    restart: unless-stopped
+
+  server:
+    image: ketjo/k-room_server:latest
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      - db
+
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    restart: unless-stopped
+    profiles:
+      - admin
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_ADMIN_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_ADMIN_PASSWORD}
+      ME_CONFIG_MONGODB_URL: ${MONGO_ADMIN_MONGODB_URL}
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    depends_on:
+      - client
+      - server
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./config/nginx/webserver.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./deploy/certs:/etc/nginx/certs:ro
+
+volumes:
+  mongo-data:

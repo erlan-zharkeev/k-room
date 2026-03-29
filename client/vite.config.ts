@@ -172,10 +172,14 @@ export default defineConfig(({ mode }) => {
       // host: '0.0.0.0',
       historyApiFallback: true,
       port: Number(env.CLIENT_PORT),
-      https: {
-        key: fs.readFileSync('./dev-certs/k-room-dev-key.pem'),
-        cert: fs.readFileSync('./dev-certs/k-room-dev.pem')
-      },
+      ...(isDev
+        ? {
+            https: {
+              key: fs.readFileSync('./dev-certs/k-room-dev-key.pem'),
+              cert: fs.readFileSync('./dev-certs/k-room-dev.pem')
+            }
+          }
+        : {}),
       proxy: {
         '/api': {
           target: `${env.API_HOST}:${env.SERVER_PORT}`,
