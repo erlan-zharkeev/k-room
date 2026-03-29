@@ -1,11 +1,10 @@
 .git
 .gitlab-ci.yml
-.pnpm-store
 node_modules
 **/node_modules
 **/npm-debug.log
-**/yarn.lock
-**/yarn-error.log
+.env.development
+.env.test
 client/build
 client/dev-dist
 server/build

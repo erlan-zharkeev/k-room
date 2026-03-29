@@ -1,36 +1,68 @@
-# stages:
-#   - verify
-#   - publish-images
+stages:
+  - verify
+  - test
+  - publish-images
+  - deploy
 
-# workflow:
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == "push"
-#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-# verify:
-#   image: node:24.14.0
-#   stage: verify
-#   script:
-#     - npm ci
-#     - npm --prefix types ci
-#     - npm --prefix client ci --legacy-peer-deps
-#     - npm --prefix server ci
-#     - npm run check
+variables:
+  NODE_VERSION: "24.14.0"
+  DOCKER_VERSION: "27.5.1"
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_HOST: "tcp://docker:2376"
+  DOCKER_TLS_VERIFY: "1"
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  CLIENT_IMAGE_NAME: "ketjo/k-room_client"
+  SERVER_IMAGE_NAME: "ketjo/k-room_server"
 
-# publish-images:
-#   image: docker:20.10
-#   stage: publish-images
-#   services:
-#     - docker:dind
-#   rules:
-#     - when: never
-#   script:
-#     - echo "$DOCKERHUB_TOKEN" | docker login -u ketjo --password-stdin
-#     - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./.env.production
-#     - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./.env.production
-#     - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./.env.production
-#     - echo "FIREBASE_API_KEY=$FIREBASE_API_KEY" >> ./.env.production
-#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-#     - docker push ketjo/k-room_server:latest
-#     - docker push ketjo/k-room_client:latest
+verify:
+  image: node:${NODE_VERSION}
+  stage: verify
+  script:
+    - npm ci
+    - npm --prefix common ci
+    - npm --prefix client ci --legacy-peer-deps
+    - npm --prefix server ci
+    - npm run check
+
+publish-images:
+  image: docker:${DOCKER_VERSION}
+  stage: publish-images
+  services:
+    - docker:${DOCKER_VERSION}-dind
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: on_success
+    - when: never
+  script:
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker build -t ${CLIENT_IMAGE_NAME}:latest -t ${CLIENT_IMAGE_NAME}:${CI_COMMIT_SHORT_SHA} -f ./client/Dockerfile ./
+    - docker build -t ${SERVER_IMAGE_NAME}:latest -t ${SERVER_IMAGE_NAME}:${CI_COMMIT_SHORT_SHA} -f ./server/Dockerfile ./
+    - docker push ${CLIENT_IMAGE_NAME}:latest
+    - docker push ${CLIENT_IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}
+    - docker push ${SERVER_IMAGE_NAME}:latest
+    - docker push ${SERVER_IMAGE_NAME}:${CI_COMMIT_SHORT_SHA}
+
+deploy-production:
+  image: alpine:3.21
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - when: never
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - ssh-keyscan -H "$LIGHTSAIL_HOST" >> ~/.ssh/known_hosts
+  script:
+    - >
+      ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
+      "cd $LIGHTSAIL_APP_PATH
+      && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./deploy/deploy.sh"

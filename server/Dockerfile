@@ -1,23 +1,55 @@
-FROM --platform=linux/amd64 node:24.14.0
+FROM node:24.14.0 AS build
 
-RUN mkdir common
+WORKDIR /app
 
-COPY common common
-COPY .env.development /.env.development
-COPY .env.production /.env.production
+COPY package.json ./package.json
+COPY scripts/sync-public-config.mjs ./scripts/sync-public-config.mjs
+COPY config/nginx ./config/nginx
+COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
-RUN mkdir server
+COPY common/index.ts ./common/index.ts
+COPY common/package.json ./common/package.json
+COPY common/package-lock.json ./common/package-lock.json
+COPY common/tsconfig.json ./common/tsconfig.json
+COPY common/lib ./common/lib
+COPY common/types ./common/types
 
-COPY server/ server
+COPY .env.production ./.env.production
 
-WORKDIR /server
+COPY server/package.json ./server/package.json
+COPY server/package-lock.json ./server/package-lock.json
+COPY server/tsconfig.json ./server/tsconfig.json
+COPY server/src ./server/src
+
+WORKDIR /app/server
 
 RUN npm ci
-
 RUN npm run build
 
-ENV PORT $SERVER_PORT
+FROM node:24.14.0
 
-EXPOSE $SERVER_PORT
+WORKDIR /app
 
-CMD [ "npm", "run", "server-run" ]
+COPY config/tsconfig/base.json ./config/tsconfig/base.json
+
+COPY common/index.ts ./common/index.ts
+COPY common/package.json ./common/package.json
+COPY common/package-lock.json ./common/package-lock.json
+COPY common/tsconfig.json ./common/tsconfig.json
+COPY common/lib ./common/lib
+COPY common/types ./common/types
+
+COPY .env.production ./.env.production
+
+COPY server/package.json ./server/package.json
+COPY server/package-lock.json ./server/package-lock.json
+
+WORKDIR /app/server
+
+RUN npm ci --omit=dev
+
+COPY --from=build /app/server/build ./build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "server-run"]
