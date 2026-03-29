@@ -3,10 +3,12 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterEach } from 'vitest'
 
-import type { IClientEnv } from 'src/shared/config'
+import type { IClientEnv } from 'src/shared/config/env'
 
 const testClientEnv: IClientEnv = {
   appName: 'K-Room',
+  appVersion: 'test',
+  supportEmail: '',
   serverPort: 3000,
   clientPort: 3001,
   appHost: 'https://localhost',
