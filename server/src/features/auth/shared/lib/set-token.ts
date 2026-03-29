@@ -5,7 +5,7 @@ import { parseExpires, setCookie } from 'src/features/cookie'
 
 import { ENV } from 'src/shared/config'
 
-import { generateToken } from '.'
+import { generateToken } from './index'
 
 export const setToken = (
   res: Response,

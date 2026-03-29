@@ -16,20 +16,19 @@ import Peer, { SignalData } from 'simple-peer'
 
 import { AppDispatchType } from 'src/app/store'
 
-import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-
-import { socket } from 'src/shared/api'
-import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'
-import { RefsContext } from 'src/shared/providers'
-import { clg } from 'src/shared/utils'
-
 import {
   updateInterlocutorSettings,
   closeCallModal,
   initModalToCall,
   setCurrentCallAccepted,
   markCurrentCallAsVideo
-} from '..'
+} from 'src/entities/call'
+import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
+
+import { socket } from 'src/shared/api'
+import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'
+import { RefsContext } from 'src/shared/providers'
+import { clg } from 'src/shared/utils'
 
 const parsePeerData = (data: unknown) => {
   if (typeof data === 'string') return JSON.parse(data) as { settings?: { audio?: boolean; video?: boolean } }

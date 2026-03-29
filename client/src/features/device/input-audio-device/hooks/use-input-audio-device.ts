@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
+
 import { useNotification, NOTIFICATION_I18N } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconNameType } from 'src/shared/ui'
-
-import { useDevicePermissionRequestAndUpdate } from '../..'
 
 export const useInputAudioDevice = () => {
   const { t } = useI18n()

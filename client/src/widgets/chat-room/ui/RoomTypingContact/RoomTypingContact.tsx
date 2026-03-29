@@ -1,10 +1,10 @@
 import './style.scss'
 
+import type { IRoomTypingContactProps } from 'src/widgets/chat-room'
+
 import { useContact } from 'src/entities/contact'
 
 import { AppDotsAnimatedText } from 'src/shared/ui'
-
-import type { IRoomTypingContactProps } from '../..'
 
 export const RoomTypingContact = ({ room }: IRoomTypingContactProps) => {
   const { getContactByIds } = useContact()

@@ -2,8 +2,7 @@ import './style.scss'
 import { useEffect, useState } from 'react'
 
 import { useTimeout } from 'src/shared/lib'
-
-import { AppText } from '..'
+import { AppText } from 'src/shared/ui'
 
 import type { IDotsAnimatedTextProps } from './config'
 

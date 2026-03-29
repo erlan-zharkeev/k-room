@@ -3,14 +3,14 @@ import { useContext, useEffect } from 'react'
 import { IEventErrorMessage, IEventAuthError, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
 
+import { useSocketReconnect } from 'src/features/socket'
+
 import { useNotification } from 'src/entities/notification'
 import { setReconnectingStatus } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
 import { AdditionalServiceContext } from 'src/shared/providers'
 import { clg } from 'src/shared/utils'
-
-import { useSocketReconnect } from '..'
 
 export const useSocketConnectionMonitor = () => {
   const notifications = useNotification()

@@ -5,14 +5,8 @@ import { useMemo } from 'react'
 import { IMessage } from 'common'
 import { Virtuoso } from 'react-virtuoso'
 
-import { isRoomPrivate } from 'src/entities/chat-room'
-import { useMessage } from 'src/entities/message'
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
-
-import { AppScrollDownButton } from 'src/shared/ui'
-
-import type { IMessageListProps } from '../..'
+import { MessageListLoader, NoMessagesPlaceholder, useLoadRoomMessages } from 'src/features/message'
+import type { IMessageListProps } from 'src/features/message/message-list'
 import {
   DateSeparator,
   getMessageGroupDateLabel,
@@ -21,8 +15,14 @@ import {
   useInitialScrollPosition,
   useMessageList,
   useMessageListScroll
-} from '../..'
-import { MessageListLoader, NoMessagesPlaceholder, useLoadRoomMessages } from '../../..'
+} from 'src/features/message/message-list'
+
+import { isRoomPrivate } from 'src/entities/chat-room'
+import { useMessage } from 'src/entities/message'
+import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
+
+import { AppScrollDownButton } from 'src/shared/ui'
 
 export const MessageList = ({ room }: IMessageListProps) => {
   const isCurrentRoomPrivate = isRoomPrivate(room)

@@ -4,7 +4,7 @@ import { getSocketsByUserIds } from 'src/features/user'
 
 import { getIO } from 'src/shared/lib'
 
-import { transformCallForUser } from '.'
+import { transformCallForUser } from './index'
 
 export const emitCallDataToInterlocutors = async (interlocutors: string[], callId: string, setId?: boolean) => {
   await Promise.all(

@@ -1,8 +1,8 @@
 CLAUDE.md
-node_modules
-db
+.claude
 .vscode
-yarn.lock
+node_modules
+package-lock.json
 
 client/node_modules
 client/build
@@ -13,7 +13,6 @@ server/node_modules
 server/package-lock.log
 server/build
 server/eslintcache
-server/src/assets/img
 
 common/node_modules
 common/package-lock.log

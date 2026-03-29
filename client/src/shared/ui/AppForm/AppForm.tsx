@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { FileLoaderValueType } from 'src/shared/config'
 import { useValidate, ValidateRuleType } from 'src/shared/lib'
-
-import { AppButton, AppElementPicker, AppFileLoader, AppFormItem, AppHeader, AppInput, AppSwitch } from '..'
+import { AppButton, AppElementPicker, AppFileLoader, AppFormItem, AppHeader, AppInput, AppSwitch } from 'src/shared/ui'
 
 import type { AppFormDataType, AppFormFieldType, AppFormFieldValueType, IAppFormProps } from './config'
 

@@ -7,7 +7,7 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { AUTH_I18N } from './../config'
 import { verifyToken } from './../lib'
-import { refreshTokenValidator } from '.'
+import { refreshTokenValidator } from './index'
 
 export const accessTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt

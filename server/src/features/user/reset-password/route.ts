@@ -4,7 +4,7 @@ import { UserEndpointsEnum } from 'common'
 
 import { validateRequest } from 'src/shared/middleware'
 
-import { RESET_PASSWORD_FIELDS_VALIDATION, resetPasswordController } from '.'
+import { RESET_PASSWORD_FIELDS_VALIDATION, resetPasswordController } from './index'
 
 export const resetPasswordRouter = Router()
 

@@ -1,4 +1,4 @@
-const { createRestrictedImportRules } = require('../config/eslint/restricted-imports.cjs')
+const { createRestrictedImportRules, createRestrictedPathRules } = require('../config/eslint/restricted-imports.cjs')
 
 module.exports = {
   extends: ['../config/eslint/base.cjs', 'plugin:react/recommended', 'standard-with-typescript'],
@@ -57,6 +57,14 @@ module.exports = {
     '@typescript-eslint/promise-function-async': 'off',
     'no-restricted-syntax': [
       'error',
+      ...createRestrictedPathRules({
+        pathPattern: '\\.',
+        message: 'Bare `.` imports/exports are not allowed. Use `./index` or an explicit local file path.'
+      }),
+      ...createRestrictedPathRules({
+        pathPattern: '\\.\\.(?:\\/.*)?',
+        message: 'Parent relative paths are not allowed. Relative paths must start with `./`; use a public alias path instead of `../...`.'
+      }),
       ...createRestrictedImportRules({
         rootPattern: 'src\\/(app|pages|widgets|features|entities)',
         deepImportMessage: 'Use the shortest public API import. Imports deeper than `src/<layer>/<module>` are not allowed.'

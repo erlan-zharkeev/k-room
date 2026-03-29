@@ -1,11 +1,11 @@
 import './style.scss'
 import type { IAuthRegistrationPayload } from 'common'
 
+import { PrivacyPolicySwitch, REGISTRATION_FORM_I18N, RegistrationFormProps } from 'src/features/auth/registration'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppForm } from 'src/shared/ui'
-
-import { PrivacyPolicySwitch, REGISTRATION_FORM_I18N, RegistrationFormProps } from '../..'
 
 type RegistrationFormData = IAuthRegistrationPayload & {
   policy: boolean

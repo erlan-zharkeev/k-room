@@ -1,6 +1,8 @@
 import './style.scss'
 import { useRef, useState } from 'react'
 
+import { CHAT_ROOM_I18N, ChatRoomHeader, ChatRoomStub, ChatRoomFooter } from 'src/widgets/chat-room'
+
 import { ChatRoomSettingsModal, useChatRoomSelect } from 'src/features/chat-room'
 import { MessageList, ReplyMessage } from 'src/features/message'
 
@@ -8,8 +10,6 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/system'
 
 import { AppModal } from 'src/shared/ui'
-
-import { CHAT_ROOM_I18N, ChatRoomHeader, ChatRoomStub, ChatRoomFooter } from '../..'
 
 export const ChatRoom = () => {
   const { selectedChatRoom } = useChatRoom()

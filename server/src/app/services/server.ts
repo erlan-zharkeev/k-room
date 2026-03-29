@@ -13,7 +13,7 @@ import { ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
 import { attachRequestLanguage } from 'src/shared/middleware'
 
-import { initDataBase, initIO, rootRouter } from '.'
+import { initDataBase, initIO, rootRouter } from './index'
 
 const app = express()
 

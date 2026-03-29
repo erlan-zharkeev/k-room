@@ -1,4 +1,4 @@
-import type { IAppTag } from '../../config'
+import type { IAppTag } from 'src/shared/ui/config'
 
 export interface IAppElementPickerProps {
   fromTitle: string

@@ -1,1 +1,1 @@
-export * from '../ui/PasswordRecovery/config'
+export * from 'src/pages/password-recovery/ui/PasswordRecovery/config'

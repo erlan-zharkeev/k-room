@@ -1,12 +1,12 @@
 import './style.scss'
 
+import type { IContactInvitationControlBtnsProps } from 'src/features/contact/contact-invitation-controls'
+import { useContactInvitationControls, CONTACT_INVITATION_CONTROL_BTNS_I18N } from 'src/features/contact/contact-invitation-controls'
+
 import { useI18n } from 'src/entities/system'
 
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
-
-import type { IContactInvitationControlBtnsProps } from '../..'
-import { useContactInvitationControls, CONTACT_INVITATION_CONTROL_BTNS_I18N } from '../..'
 
 export const ContactInvitationControlBtns = ({ contactData }: IContactInvitationControlBtnsProps) => {
   const { t } = useI18n()

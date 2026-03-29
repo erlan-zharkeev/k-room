@@ -1,9 +1,8 @@
 import { useMedia } from 'src/entities/media'
+import { INITIAL_USER_STORE } from 'src/entities/user'
 
 import { DbUserDataType } from 'src/shared/config'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
-
-import { INITIAL_USER_STORE } from '..'
 
 export const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
 

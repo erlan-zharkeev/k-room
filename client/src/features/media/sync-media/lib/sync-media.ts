@@ -1,4 +1,4 @@
-import { SyncMediaDeps } from '..'
+import { SyncMediaDeps } from 'src/features/media/sync-media'
 
 export const syncMedia = async (filename: string, deps: SyncMediaDeps) => {
   const record = await deps.mediaGet(filename)

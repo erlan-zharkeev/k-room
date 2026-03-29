@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 
 import type { IChatRoom } from 'common'
 
-import { useSettings } from 'src/entities/settings'
+import { ROOM_MESSAGES_PAGE_LIMIT, MessageListItemType } from 'src/features/message'
 
-import { ROOM_MESSAGES_PAGE_LIMIT, MessageListItemType } from '../..'
+import { useSettings } from 'src/entities/settings'
 
 export const useInitialScrollPosition = ({
   room,

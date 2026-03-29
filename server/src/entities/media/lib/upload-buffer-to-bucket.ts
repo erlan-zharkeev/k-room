@@ -7,7 +7,7 @@ import { type AppLanguageType, StatusEnum } from 'common'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType, VALIDATE_MEDIA_FILE_I18N } from './../config'
-import { buildFileData, processImageWithSharp, validateFileMetaData } from '.'
+import { buildFileData, processImageWithSharp, validateFileMetaData } from './index'
 
 export const uploadBufferToBucket = async (
   bucket: MongooseGridFSBucketType,

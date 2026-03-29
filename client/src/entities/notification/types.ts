@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { useNotification } from '.'
+import { useNotification } from './index'
 
 export type NotificationType = 'success' | 'error' | 'info' | 'warning'
 

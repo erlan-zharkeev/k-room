@@ -9,7 +9,7 @@ import { type AppResponseType, ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { generateToken } from './../shared'
-import { REGISTRATION_I18N } from '.'
+import { REGISTRATION_I18N } from './index'
 
 export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
   const language = req.language

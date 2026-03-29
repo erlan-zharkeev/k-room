@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 
 import { SharpSettingsKeyType } from 'src/shared/config'
 
-import { MEDIA_BUCKET_NAMES } from '.'
+import { MEDIA_BUCKET_NAMES } from './index'
 
 export type MulterHandlerType = (req: Request, res: Response, next: NextFunction) => void
 

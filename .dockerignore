@@ -9,6 +9,5 @@ node_modules
 client/build
 client/dev-dist
 server/build
-types/dist
-types/tsconfig.tsbuildinfo
+common/tsconfig.tsbuildinfo
 docs

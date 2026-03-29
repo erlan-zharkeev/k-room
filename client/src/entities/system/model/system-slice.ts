@@ -2,15 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 import { IRepliedMessage } from 'common'
 
 import { type IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/entities/context-menu'
-
 import {
   INITIAL_VIEWPORT,
   INITIAL_SYSTEM_STORE,
   INITIAL_CONTEXT_MENU,
   CLICKED_OBJECT_INITIAL_STATE,
   INITIAL_REPLIED_MESSAGE_DATA
-} from '../config'
-import type { AuthStatusType, IMessageInputData, ISystemStore, IViewPort } from '../config'
+} from 'src/entities/system/config'
+import type { AuthStatusType, IMessageInputData, ISystemStore, IViewPort } from 'src/entities/system/config'
 
 const initialState: ISystemStore = INITIAL_SYSTEM_STORE
 

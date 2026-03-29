@@ -11,7 +11,7 @@ import { AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/confi
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { updateTokens } from './../shared'
-import { SIGN_IN_WITH_PROVIDER_I18N } from '.'
+import { SIGN_IN_WITH_PROVIDER_I18N } from './index'
 
 export const signInWithProviderController = async (
   req: IAppRequest,

@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
 
 import type { IUserSchema } from './../config'
-import { personalSchema, publicSchema, systemSchema } from '.'
+import { personalSchema, publicSchema, systemSchema } from './index'
 
 const userSchema = new Schema<IUserSchema>({
   system: systemSchema,

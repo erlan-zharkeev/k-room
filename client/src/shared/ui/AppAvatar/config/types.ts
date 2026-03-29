@@ -1,5 +1,5 @@
-import type { AppIconNameType } from '../../AppIcon'
-import type { BaseSizeModifierType, AvatarShapeModifierType } from '../../config'
+import type { AppIconNameType } from 'src/shared/ui/AppIcon'
+import type { BaseSizeModifierType, AvatarShapeModifierType } from 'src/shared/ui/config'
 
 export interface IAppAvatarProps {
   online?: boolean

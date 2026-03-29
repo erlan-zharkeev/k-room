@@ -1,4 +1,4 @@
-import { IStreamSettings } from ".";
+import { IStreamSettings } from "./index";
 export type CallStatusType = "calling" | "in-progress" | "finished";
 export type CallFlowType = "incoming" | "outgoing" | "missed" | "not-answered";
 export interface ICall {

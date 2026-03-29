@@ -3,7 +3,7 @@ import { Schema } from 'mongoose'
 import { INFO_NOTIFICATION_STATUS, type InfoNotificationMapType } from 'common'
 
 import type { IUserPersonalData } from './../config'
-import { contactSchema } from '.'
+import { contactSchema } from './index'
 
 export const personalSchema = new Schema<IUserPersonalData>(
   {

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { AppForm } from '..'
+import { AppForm } from 'src/shared/ui'
 
 describe('AppForm', () => {
   it('enables submit only after valid data and submits collected form payload', async () => {

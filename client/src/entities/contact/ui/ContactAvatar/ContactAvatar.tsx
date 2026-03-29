@@ -1,10 +1,9 @@
 
+import type { IContactAvatarProps } from 'src/entities/contact'
+import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'
 
 import { AppAvatar } from 'src/shared/ui'
-
-import type { IContactAvatarProps } from '../..'
-import { useContact } from '../..'
 
 export const ContactAvatar = ({ id, showBadge = true }: IContactAvatarProps) => {
   const { contacts } = useContact()

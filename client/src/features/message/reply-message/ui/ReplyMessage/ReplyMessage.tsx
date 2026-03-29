@@ -1,7 +1,7 @@
 import './style.scss'
-import { AppIcon, AppText } from 'src/shared/ui'
+import { useReplyMessage } from 'src/features/message'
 
-import { useReplyMessage } from '../../..'
+import { AppIcon, AppText } from 'src/shared/ui'
 
 export const ReplyMessage = () => {
   const { id, authorName, body, closeReplyMessage } = useReplyMessage()

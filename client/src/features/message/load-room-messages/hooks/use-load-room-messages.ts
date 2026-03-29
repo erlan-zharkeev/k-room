@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react'
 
 import { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsType } from 'common'
 
+import { ROOM_MESSAGES_PAGE_LIMIT } from 'src/features/message/load-room-messages'
+
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 
 import { socket } from 'src/shared/api'
-
-import { ROOM_MESSAGES_PAGE_LIMIT } from '..'
 
 export const useLoadRoomMessages = () => {
   const { selectedChatRoom } = useChatRoom()

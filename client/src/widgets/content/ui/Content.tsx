@@ -1,10 +1,9 @@
 import './style.scss'
 
+import { CONTENT_COMPONENT_MAP } from 'src/widgets/content/config'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { useSettings } from 'src/entities/settings'
-
-import { CONTENT_COMPONENT_MAP } from '../config'
 
 export const Content = () => {
   const { selectedContentTab } = useSettings()
