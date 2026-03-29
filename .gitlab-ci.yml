@@ -58,7 +58,7 @@ deploy-production:
     - apk add --no-cache openssh-client
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - cp "$LIGHTSAIL_SSH_PRIVATE_KEY" ~/.ssh/id_ed25519
     - chmod 600 ~/.ssh/id_ed25519
     - ssh-keyscan -H "$LIGHTSAIL_HOST" >> ~/.ssh/known_hosts
   script:
