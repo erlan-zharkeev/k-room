@@ -1,12 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
 import { FChatRoomType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
+
+import { isRoomPrivate } from '..'
 
 export const useChatRoom = () => {
   const { selectedChatRoomId } = useSettings()

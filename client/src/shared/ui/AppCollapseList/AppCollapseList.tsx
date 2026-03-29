@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Badge } from 'antd'
 
 import { useTimeout } from 'src/shared/lib'
-import { AppHeader, AppIcon } from 'src/shared/ui'
-import type { IAppCollapseProps } from 'src/shared/ui/AppCollapseList/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { AppHeader, AppIcon } from '..'
+
+import type { IAppCollapseProps } from './config'
 
 export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps) => {
   const [openElId, setOpenIElId] = useState<string | null>(null)

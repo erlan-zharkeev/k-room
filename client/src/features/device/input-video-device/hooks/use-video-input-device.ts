@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { useDevicePermissionRequestAndUpdate } from 'src/features/device/request-and-update-device-permission'
-
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconNameType } from 'src/shared/ui'
+
+import { useDevicePermissionRequestAndUpdate } from '../../request-and-update-device-permission'
 
 export const useInputVideoDevice = () => {
   const { getNotification } = useNotification()

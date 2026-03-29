@@ -1,4 +1,4 @@
-import { AudioInputDeviceSelect, VideoInputDeviceSelect, AudioOutputDeviceSelect } from 'src/features/device'
+import { AudioInputDeviceSelect, VideoInputDeviceSelect, AudioOutputDeviceSelect } from '../../..'
 
 export const SelectDevicesModal = () => {
   return (

@@ -8,8 +8,9 @@ import { useResetAllStores } from 'src/features/reset-all-stores'
 import { useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
-import { createApiError } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
+
+import { createApiError } from '..'
 
 const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
   if (!data || typeof data !== 'object') return false

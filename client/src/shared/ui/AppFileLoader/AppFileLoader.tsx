@@ -7,9 +7,10 @@ import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/system'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
-import { AppAvatar, AppButton, AppIcon, AppImagePreview, APP_FILE_LOADER_I18N } from 'src/shared/ui'
-import type { IAppFileLoaderProps } from 'src/shared/ui'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/utils'
+
+import { AppAvatar, AppButton, AppIcon, AppImagePreview, APP_FILE_LOADER_I18N } from '..'
+import type { IAppFileLoaderProps } from '..'
 
 export const AppFileLoader = ({
   name,

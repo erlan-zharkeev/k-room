@@ -3,8 +3,9 @@ import './style.scss'
 import type { UnknownCallbackType } from 'common'
 import { Link as RouterLink, type To } from 'react-router-dom'
 
-import type { ColorModifierType } from 'src/shared/ui/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { ColorModifierType } from '../config'
 
 interface Props {
   text: string

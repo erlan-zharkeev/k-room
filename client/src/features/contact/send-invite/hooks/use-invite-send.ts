@@ -1,11 +1,11 @@
 import { EventInviteReceivedType, SocketActionsType } from 'common'
 
-import { getRequiredContactSystemData } from 'src/features/contact'
-
 import { useNotification } from 'src/entities/notification'
 
 import { socket } from 'src/shared/api'
 import { db } from 'src/shared/lib'
+
+import { getRequiredContactSystemData } from '../..'
 
 export const useInviteSend = () => {
   const { openBrowserNotification } = useNotification()

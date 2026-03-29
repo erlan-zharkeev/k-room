@@ -1,10 +1,10 @@
 
-import { TECH_SUPPORT_LINK_I18N } from 'src/features/support/config'
-
 import { useI18n } from 'src/entities/system'
 
 import { CLIENT_ENV } from 'src/shared/config'
 import { AppLink } from 'src/shared/ui'
+
+import { TECH_SUPPORT_LINK_I18N } from '../../config'
 
 export const TechSupportLink = () => {
   const { t } = useI18n()

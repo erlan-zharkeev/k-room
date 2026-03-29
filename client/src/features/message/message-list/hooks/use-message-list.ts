@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react'
 
 import { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
-import { MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS, MessageListItemType } from 'src/features/message/message-list'
-
 import { useSettings } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
+
+import { MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS, MessageListItemType } from '..'
 
 export const useMessageList = ({
   roomId,

@@ -1,8 +1,10 @@
 import './style.scss'
 
-import type { IButtonProps } from 'src/shared/ui/AppButton/config'
-import { AppIcon } from 'src/shared/ui/AppIcon'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { AppIcon } from '../AppIcon'
+
+import type { IButtonProps } from './config'
 
 export const AppButton = ({
   htmltype = 'button',

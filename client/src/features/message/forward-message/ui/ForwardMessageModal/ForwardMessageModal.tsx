@@ -2,13 +2,14 @@ import './style.scss'
 import { useState } from 'react'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
-import { ShortChatList } from 'src/features/message'
-import { FORWARD_MESSAGE_MODAL_I18N } from 'src/features/message/forward-message'
-import type { IForwardMessageModalProps } from 'src/features/message/forward-message'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppInput } from 'src/shared/ui'
+
+import { FORWARD_MESSAGE_MODAL_I18N } from '../..'
+import type { IForwardMessageModalProps } from '../..'
+import { ShortChatList } from '../../..'
 
 export const ForwardMessageModal = ({ onClose }: IForwardMessageModalProps) => {
   const [searchString, setSearchString] = useState('')

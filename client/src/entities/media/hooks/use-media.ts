@@ -1,7 +1,8 @@
-import { useLiveMediaUrl } from 'src/entities/media'
 
 import { IDbMedia } from 'src/shared/config'
 import { db } from 'src/shared/lib'
+
+import { useLiveMediaUrl } from '..'
 
 export const useMedia = () => {
   const getLiveMedia = (id: string) => useLiveMediaUrl(id)

@@ -1,12 +1,12 @@
 import './style.scss'
 
-import { CONTACT_LIST_I18N, ContactListEl, useContactList } from 'src/features/contact/contact-list'
-
 import { useI18n } from 'src/entities/system'
 
 import { useAnimatedList } from 'src/shared/lib'
 import { AppScrollContainer, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { CONTACT_LIST_I18N, ContactListEl, useContactList } from '../..'
 
 export const ContactList = () => {
   const { contactList } = useContactList()

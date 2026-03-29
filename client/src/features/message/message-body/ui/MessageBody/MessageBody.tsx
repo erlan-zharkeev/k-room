@@ -1,9 +1,9 @@
 import './style.scss'
-import type { IMessageBodyProps } from 'src/features/message/message-body'
-import { MessageImages, MessageReactions, MessageTime, RepliedMessage } from 'src/features/message/message-body'
-
 import { AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { IMessageBodyProps } from '../..'
+import { MessageImages, MessageReactions, MessageTime, RepliedMessage } from '../..'
 
 export const MessageBody = ({ message, isRoomPrivate = false }: IMessageBodyProps & { isRoomPrivate?: boolean }) => {
   const showAuthorName = !isRoomPrivate && !message.isSelf

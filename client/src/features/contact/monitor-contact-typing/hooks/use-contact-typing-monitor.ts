@@ -1,8 +1,8 @@
 import { SocketActionsType, IEventGetContactTypingStatus } from 'common'
 
-import { useUpdateContactData } from 'src/features/contact/update-contact-data'
-
 import { socket } from 'src/shared/api'
+
+import { useUpdateContactData } from '../../update-contact-data'
 
 export const useContactTypingMonitor = () => {
   const { updateContactData } = useUpdateContactData()

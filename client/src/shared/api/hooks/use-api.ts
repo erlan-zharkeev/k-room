@@ -4,9 +4,10 @@ import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendRespo
 import { useNotification } from 'src/entities/notification'
 import { settingsStore } from 'src/entities/settings'
 
-import { useApiInterсeptor, axios, createApiError, IDoRequestOpts, isApiError } from 'src/shared/api'
-import type { RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
+
+import { useApiInterсeptor, axios, createApiError, IDoRequestOpts, isApiError } from '..'
+import type { RequestPayloadType, RequestType } from '..'
 
 export const useApi = () => {
   const notifications = useNotification()

@@ -1,11 +1,11 @@
 import './style.scss'
 
-import { MessageImages, REPLIED_MESSAGE_I18N } from 'src/features/message/message-body'
-import type { IRepliedMessageProps } from 'src/features/message/message-body'
-
 import { useI18n } from 'src/entities/system'
 
 import { AppText } from 'src/shared/ui'
+
+import { MessageImages, REPLIED_MESSAGE_I18N } from '../..'
+import type { IRepliedMessageProps } from '../..'
 
 export const RepliedMessage = ({ message }: IRepliedMessageProps) => {
   if (!message.repliedMessage?.id) return null

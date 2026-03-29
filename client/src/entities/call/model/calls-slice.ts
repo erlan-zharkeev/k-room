@@ -8,7 +8,7 @@ import {
 } from 'common'
 import type { IBaseFrontendUserData } from 'common'
 
-import type { CallMediaType, ICallsState, IStreamConstraints } from 'src/entities/call/types'
+import type { CallMediaType, ICallsState, IStreamConstraints } from '../types'
 
 type CallInterlocutorType = IBaseFrontendUserData & { avatar?: string }
 

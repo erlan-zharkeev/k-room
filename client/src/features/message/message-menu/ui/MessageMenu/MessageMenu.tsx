@@ -1,5 +1,13 @@
 import './style.scss'
 
+import { useSettings } from 'src/entities/settings'
+import { useI18n } from 'src/entities/system'
+import { useUser } from 'src/entities/user'
+
+import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
+import { stopPropagation } from 'src/shared/utils'
+
+import type { IMessageMenuProps } from '../..'
 import {
  MESSAGE_MENU_I18N,
   ForwardMessageModal,
@@ -7,15 +15,7 @@ import {
   useMessageDelete,
   useMessageForward,
   useReplyMessage
-} from 'src/features/message'
-import type { IMessageMenuProps } from 'src/features/message/message-menu'
-
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
-import { useUser } from 'src/entities/user'
-
-import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
-import { stopPropagation } from 'src/shared/utils'
+} from '../../..'
 
 export const MessageMenu = ({ message, children }: IMessageMenuProps) => {
   const { deleteMessageHandler } = useMessageDelete()

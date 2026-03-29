@@ -1,9 +1,9 @@
 import { SocketActionsType, EventGetContactsType } from 'common'
 
-import { getRequiredContactSystemData } from 'src/features/contact'
-
 import { socket } from 'src/shared/api'
 import { db } from 'src/shared/lib'
+
+import { getRequiredContactSystemData } from '../..'
 
 export const useLoadContacts = () => {
   const loadContacts = async (list: EventGetContactsType) => {

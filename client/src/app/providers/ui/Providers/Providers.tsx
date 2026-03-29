@@ -7,13 +7,14 @@ import { initializeApp } from 'firebase/app'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
-import type { IProvidersProps } from 'src/app/providers'
-import { FIREBASE_CONFIG } from 'src/app/providers/config'
 import { store } from 'src/app/store'
 
 import { useMakeCall } from 'src/entities/call'
 
 import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
+
+import type { IProvidersProps } from '../..'
+import { FIREBASE_CONFIG } from '../../config'
 
 // Some browser-side dependencies still expect a global `process` shim at runtime.
 window.process = processLib

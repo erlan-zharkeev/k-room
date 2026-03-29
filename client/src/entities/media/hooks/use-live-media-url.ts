@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import { acquireUrl, releaseUrl } from 'src/entities/media'
-
 import { db } from 'src/shared/lib'
+
+import { acquireUrl, releaseUrl } from '..'
 
 export const useLiveMediaUrl = (id: string) => {
   const record = useLiveQuery(async () => {

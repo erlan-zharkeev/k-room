@@ -1,9 +1,9 @@
 import './style.scss'
 
-import type { IMessageListElProps } from 'src/features/message'
-import { MessageBody, MessageMenu } from 'src/features/message'
-
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { IMessageListElProps } from '../../..'
+import { MessageBody, MessageMenu } from '../../..'
 
 export const MessageListEl = ({ message, isRoomPrivate }: IMessageListElProps) => {
   const className = createClassNameWithModifiers({

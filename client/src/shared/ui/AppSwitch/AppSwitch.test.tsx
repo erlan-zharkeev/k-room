@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { AppSwitch } from 'src/shared/ui'
+import { AppSwitch } from '..'
 
 describe('AppSwitch', () => {
   it('toggles checked state text and calls change handler', async () => {

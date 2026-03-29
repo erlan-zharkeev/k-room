@@ -1,10 +1,10 @@
 import { EndpointsType, MediaEndpointsEnum, StatusEnum } from 'common'
 
-import { useDeleteMedia } from 'src/features/media/delete-media'
-import { transformHeadersToMediaData } from 'src/features/media/load-media'
-import { useSaveMedia } from 'src/features/media/save-media'
-
 import { getHandledErrorMessage, isApiError, useApi } from 'src/shared/api'
+
+import { transformHeadersToMediaData } from '..'
+import { useDeleteMedia } from '../../delete-media'
+import { useSaveMedia } from '../../save-media'
 
 export const useLoadMedia = () => {
   const { doRequest } = useApi()

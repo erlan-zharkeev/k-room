@@ -3,12 +3,12 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { LEGAL_INFO_PAGE_I18N } from 'src/pages/privacy-policy/config'
-
 import { useI18n } from 'src/entities/system'
 
 import { CLIENT_ENV } from 'src/shared/config'
 import { AppButton, AppScrollContainer } from 'src/shared/ui'
+
+import { LEGAL_INFO_PAGE_I18N } from '../../config'
 
 export const PrivacyPolicy = () => {
   const navigate = useNavigate()

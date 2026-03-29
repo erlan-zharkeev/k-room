@@ -1,11 +1,11 @@
 import { APP_LANGUAGE } from 'common'
 
-import { useLanguageSetting } from 'src/features/settings/toggle-language'
-
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { AppSwitch, AppText } from 'src/shared/ui'
+
+import { useLanguageSetting } from '../..'
 
 const TEXT = {
   label: {

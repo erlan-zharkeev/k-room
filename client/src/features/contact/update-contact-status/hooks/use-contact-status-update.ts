@@ -1,8 +1,8 @@
 import { SocketActionsType, IEventStatusContact } from 'common'
 
-import { useUpdateContactData } from 'src/features/contact/update-contact-data'
-
 import { socket } from 'src/shared/api'
+
+import { useUpdateContactData } from '../../update-contact-data'
 
 export const useContactStatusUpdate = () => {
   const { updateContactData } = useUpdateContactData()

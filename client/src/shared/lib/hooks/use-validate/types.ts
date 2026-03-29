@@ -1,4 +1,4 @@
-import { booleanValidateRules, stringValidateRules, arrayValidateRules } from 'src/shared/lib/hooks/use-validate/rules'
+import { booleanValidateRules, stringValidateRules, arrayValidateRules } from './rules'
 
 type ValidateBooleanRuleType = keyof typeof booleanValidateRules
 type ValidateTextRuleType = keyof typeof stringValidateRules

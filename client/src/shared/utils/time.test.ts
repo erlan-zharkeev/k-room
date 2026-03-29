@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { getNextReqInterval } from 'src/shared/utils/time'
+import { getNextReqInterval } from './time'
 
 describe('getNextReqInterval', () => {
   afterEach(() => {

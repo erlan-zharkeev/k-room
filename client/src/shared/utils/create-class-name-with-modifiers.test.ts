@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { createClassNameWithModifiers } from 'src/shared/utils/create-class-name-with-modifiers'
+import { createClassNameWithModifiers } from './create-class-name-with-modifiers'
 
 describe('createClassNameWithModifiers', () => {
   it('builds root class with valid modifiers and extra class name', () => {
