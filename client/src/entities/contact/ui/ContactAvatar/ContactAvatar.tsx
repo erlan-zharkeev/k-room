@@ -1,4 +1,3 @@
-
 import type { IContactAvatarProps } from 'src/entities/contact'
 import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media'

@@ -1,7 +1,10 @@
 import './style.scss'
 
 import type { IContactInvitationControlBtnsProps } from 'src/features/contact/contact-invitation-controls'
-import { useContactInvitationControls, CONTACT_INVITATION_CONTROL_BTNS_I18N } from 'src/features/contact/contact-invitation-controls'
+import {
+  useContactInvitationControls,
+  CONTACT_INVITATION_CONTROL_BTNS_I18N
+} from 'src/features/contact/contact-invitation-controls'
 
 import { useI18n } from 'src/entities/system'
 
@@ -27,7 +30,11 @@ export const ContactInvitationControlBtns = ({ contactData }: IContactInvitation
         <>
           {contactData.interactionType === 'default' && (
             <>
-              <AppLink prevent onClick={() => updateInteractionType(contactData.id, 'invited')} text={t(CONTACT_INVITATION_CONTROL_BTNS_I18N.sendInvite)} />
+              <AppLink
+                prevent
+                onClick={() => updateInteractionType(contactData.id, 'invited')}
+                text={t(CONTACT_INVITATION_CONTROL_BTNS_I18N.sendInvite)}
+              />
             </>
           )}
           {contactData.interactionType === 'invited' && (
@@ -37,7 +44,11 @@ export const ContactInvitationControlBtns = ({ contactData }: IContactInvitation
           )}
           {contactData.interactionType === 'invite-received' && (
             <>
-              <AppLink prevent onClick={() => updateInteractionType(contactData.id, 'invite-accepted')} text={t(CONTACT_INVITATION_CONTROL_BTNS_I18N.accept)} />
+              <AppLink
+                prevent
+                onClick={() => updateInteractionType(contactData.id, 'invite-accepted')}
+                text={t(CONTACT_INVITATION_CONTROL_BTNS_I18N.accept)}
+              />
               <AppLink
                 prevent
                 onClick={() => updateInteractionType(contactData.id, 'default')}

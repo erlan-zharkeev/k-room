@@ -1,5 +1,6 @@
 import './style.scss'
 import { useNotification } from 'src/entities/notification'
+import { useI18n } from 'src/entities/system'
 
 import { AppAvatar, AppIcon } from 'src/shared/ui'
 import type { IAvatarLoaderProps } from 'src/shared/ui'
@@ -14,6 +15,7 @@ export const AppAvatarLoader = ({
   shape = 'circle-shape'
 }: IAvatarLoaderProps) => {
   const notifications = useNotification()
+  const { t } = useI18n()
   const className = createClassNameWithModifiers({
     rootClass: 'app-app-avatar-loader',
     modifiers: [shape]
@@ -24,7 +26,7 @@ export const AppAvatarLoader = ({
     const file = e.target.files[0]
     setFile(file)
     if (!file) return
-    const reader = imageToBase64({ image: file, notifications })
+    const reader = imageToBase64({ image: file, notifications, t })
     if (!reader) return
     reader.onload = () => {
       setImage(String(reader.result))

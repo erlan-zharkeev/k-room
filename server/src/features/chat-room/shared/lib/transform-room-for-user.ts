@@ -1,10 +1,7 @@
 import type { IChatRoom, IChatRoomSchema } from 'common'
 import { ObjectId } from 'mongoose'
 
-export const transformRoomForUser = ({
-  userId,
-  room,
-}: { userId: string; room: IChatRoomSchema }) => {
+export const transformRoomForUser = ({ userId, room }: { userId: string; room: IChatRoomSchema }) => {
   const { chatName, authorId, messages, _id } = room as IChatRoomSchema & { _id: ObjectId }
 
   const usersAll = (room.users ?? []).map((id) => String(id))
@@ -17,7 +14,7 @@ export const transformRoomForUser = ({
     chatName,
     lastMessageId: messages[messages.length - 1] ?? null,
     users: otherUsers,
-    messages,
+    messages
   }
 
   return result

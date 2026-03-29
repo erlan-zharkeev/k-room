@@ -19,28 +19,28 @@ export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProp
       <AppForm<RegistrationFormData>
         onSubmit={onRegister}
         fields={{
-            username: {
-              inputType: 'text',
-              value: '',
-              placeholder: t(REGISTRATION_FORM_I18N.usernamePlaceholder),
-              rule: { name: 'minLength', quantity: 2 },
-              autoComplete: 'on'
-            },
+          username: {
+            inputType: 'text',
+            value: '',
+            placeholder: t(REGISTRATION_FORM_I18N.usernamePlaceholder),
+            rule: { name: 'minLength', quantity: 2 },
+            autoComplete: 'on'
+          },
           email: {
-              inputType: 'text',
-              nativeType: 'email',
-              value: '',
-              placeholder: t(REGISTRATION_FORM_I18N.emailPlaceholder),
-              rule: { name: 'email' },
-              autoComplete: 'on'
-            },
+            inputType: 'text',
+            nativeType: 'email',
+            value: '',
+            placeholder: t(REGISTRATION_FORM_I18N.emailPlaceholder),
+            rule: { name: 'email' },
+            autoComplete: 'on'
+          },
           password: {
-              inputType: 'text',
-              value: '',
-              placeholder: t(REGISTRATION_FORM_I18N.passwordPlaceholder),
-              rule: { name: 'minLength', quantity: 6 },
-              autoComplete: 'off',
-              nativeType: 'password'
+            inputType: 'text',
+            value: '',
+            placeholder: t(REGISTRATION_FORM_I18N.passwordPlaceholder),
+            rule: { name: 'minLength', quantity: 6 },
+            autoComplete: 'off',
+            nativeType: 'password'
           },
           policy: {
             inputType: 'switch',

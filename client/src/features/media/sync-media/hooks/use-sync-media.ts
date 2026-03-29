@@ -1,4 +1,3 @@
-
 import { useLoadMedia } from 'src/features/media/load-media'
 import { syncMedia } from 'src/features/media/sync-media'
 

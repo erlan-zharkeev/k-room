@@ -82,7 +82,9 @@ export const systemSlice = createSlice({
       }
     },
     removeImageByNameFromMessageInputData(state, { payload }: { payload: string }) {
-      state.messageInputData.images = state.messageInputData.images.filter((img: { name: string }) => img.name !== payload)
+      state.messageInputData.images = state.messageInputData.images.filter(
+        (img: { name: string }) => img.name !== payload
+      )
     },
     updateRepliedMessage(state, { payload }: { payload: IRepliedMessage }) {
       state.repliedMessageData = payload

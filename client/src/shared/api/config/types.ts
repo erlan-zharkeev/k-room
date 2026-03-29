@@ -37,5 +37,6 @@ export const isApiError = (error: unknown): error is ApiErrorType => {
   return candidate.type === 'api-error' && typeof candidate.message === 'string'
 }
 
-export const isHandledError = (error: unknown): error is ApiErrorType | Error => isApiError(error) || error instanceof Error
+export const isHandledError = (error: unknown): error is ApiErrorType | Error =>
+  isApiError(error) || error instanceof Error
 export const getHandledErrorMessage = (error: unknown) => (isHandledError(error) ? error.message : 'Unknown error')

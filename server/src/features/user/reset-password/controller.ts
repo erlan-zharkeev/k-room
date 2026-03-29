@@ -52,7 +52,10 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
       }
     })
 
-    return res.json({ payload: null, message: { text: getLocalizedText(RESET_PASSWORD_I18N.success, language), silent: true } })
+    return res.json({
+      payload: null,
+      message: { text: getLocalizedText(RESET_PASSWORD_I18N.success, language), silent: true }
+    })
   } catch {
     return throwHTTPError(StatusEnum.Server, res, getLocalizedText(RESET_PASSWORD_I18N.failed, language))
   }

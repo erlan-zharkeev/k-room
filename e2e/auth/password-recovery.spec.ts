@@ -3,15 +3,15 @@ import { expect, test, type Page } from '@playwright/test'
 import { PASSWORD_RECOVERY_FIXTURE_USER } from './fixtures'
 
 const getRecoverySendResponse = (page: Page) =>
-  page.waitForResponse((response) =>
-    response.url().includes('/codes/email/password-recovery') &&
-    response.request().method() === 'POST'
+  page.waitForResponse(
+    (response) => response.url().includes('/codes/email/password-recovery') && response.request().method() === 'POST'
   )
 
 const getRecoveryValidateResponse = (page: Page) =>
-  page.waitForResponse((response) =>
-    response.url().includes('/codes/email/validate-email-code-password-recovery') &&
-    response.request().method() === 'POST'
+  page.waitForResponse(
+    (response) =>
+      response.url().includes('/codes/email/validate-email-code-password-recovery') &&
+      response.request().method() === 'POST'
   )
 
 const recoverPassword = async ({
@@ -42,7 +42,7 @@ const recoverPassword = async ({
   const sendResponsePromise = getRecoverySendResponse(page)
   await page.getByRole('button', { name: 'Send code', exact: true }).click()
   const sendResponse = await sendResponsePromise
-  const sendPayload = await sendResponse.json() as { payload?: { debugCode?: string } }
+  const sendPayload = (await sendResponse.json()) as { payload?: { debugCode?: string } }
   const debugCode = sendPayload.payload?.debugCode
 
   expect(debugCode).toMatch(/^\d{6}$/)

@@ -30,7 +30,11 @@ export const ChatRoom = () => {
           />
           <MessageList room={selectedChatRoom} />
           <ChatRoomFooter roomId={selectedChatRoom.id} prependChildren={<ReplyMessage />} />
-          <AppModal title={t(CHAT_ROOM_I18N.groupChatInfo)} open={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)}>
+          <AppModal
+            title={t(CHAT_ROOM_I18N.groupChatInfo)}
+            open={isSettingsModalOpen}
+            onClose={() => setIsSettingsModalOpen(false)}
+          >
             <ChatRoomSettingsModal onClose={() => setIsSettingsModalOpen(false)} />
           </AppModal>
         </div>

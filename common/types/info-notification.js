@@ -1,1 +1,1 @@
-export const INFO_NOTIFICATION_STATUS = ["read", "unread", "hidden"];
+export const INFO_NOTIFICATION_STATUS = ['read', 'unread', 'hidden'];

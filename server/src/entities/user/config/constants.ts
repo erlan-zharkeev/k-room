@@ -42,7 +42,8 @@ const FIXTURE_USERNAMES = [
   'lev'
 ] as const
 
-const buildFixtureId = (index: number) => (BigInt('0x68a09410778b70d522ea8fa0') + BigInt(index)).toString(16).padStart(24, '0')
+const buildFixtureId = (index: number) =>
+  (BigInt('0x68a09410778b70d522ea8fa0') + BigInt(index)).toString(16).padStart(24, '0')
 
 export const USER_FIXTURES = FIXTURE_USERNAMES.map((username, index) => ({
   id: buildFixtureId(index),
@@ -64,16 +65,7 @@ export const PRIMARY_FIXTURE_USERNAMES = {
   guest: 'guest'
 } as const
 
-export const FIXTURE_CONTACT_USERNAMES = [
-  'tolik',
-  'guest',
-  'alina',
-  'misha',
-  'dasha',
-  'roma',
-  'nina',
-  'mark'
-] as const
+export const FIXTURE_CONTACT_USERNAMES = ['tolik', 'guest', 'alina', 'misha', 'dasha', 'roma', 'nina', 'mark'] as const
 
 export const FIXTURE_GROUPS = [
   {

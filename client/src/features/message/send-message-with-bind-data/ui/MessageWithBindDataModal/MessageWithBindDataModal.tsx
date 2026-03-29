@@ -25,7 +25,10 @@ export const MessageWithBindDataModal = ({
   return (
     <AppModal title={t(MESSAGE_WITH_BIND_DATA_MODAL_I18N.title)} open={open} onClose={onClose}>
       <div className="message-with-bind-data-modal">
-        <AppImagePreview images={images} removeImage={(name) => dispatch(removeImageByNameFromMessageInputData(name))} />
+        <AppImagePreview
+          images={images}
+          removeImage={(name) => dispatch(removeImageByNameFromMessageInputData(name))}
+        />
         <MessageInput roomId={roomId} emitTypingStatus={false} insideModal onSubmitSuccess={onClose} />
       </div>
     </AppModal>

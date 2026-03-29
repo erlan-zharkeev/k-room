@@ -1,5 +1,5 @@
 export interface ISentryErrorContext {
-    message?: string | null;
-    silent?: boolean | null;
-    status?: number | null;
+  message?: string | null
+  silent?: boolean | null
+  status?: number | null
 }

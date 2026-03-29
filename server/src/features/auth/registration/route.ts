@@ -9,4 +9,9 @@ import { REGISTRATION_FIELDS_VALIDATION } from './lib'
 
 export const registrationRouter = Router()
 
-registrationRouter.post(AuthEndpointsEnum.Registration, REGISTRATION_FIELDS_VALIDATION, validateRequest, registrationController)
+registrationRouter.post(
+  AuthEndpointsEnum.Registration,
+  REGISTRATION_FIELDS_VALIDATION,
+  validateRequest,
+  registrationController
+)

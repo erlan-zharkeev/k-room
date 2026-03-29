@@ -4,11 +4,12 @@ import type { DbMessageType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 export const useMessage = () => {
-  const messages = useLiveQuery(async () => {
-    return await (db.messages.toArray() as Promise<DbMessageType[]>)
-  }, []) ?? []
+  const messages =
+    useLiveQuery(async () => {
+      return await (db.messages.toArray() as Promise<DbMessageType[]>)
+    }, []) ?? []
 
-  const isMessageExist = (id: string) => Boolean(messages?.some(c => c.id === id))
+  const isMessageExist = (id: string) => Boolean(messages?.some((c) => c.id === id))
 
   const getMessageById = (id: string) => messages.find((message) => message.id === id)
 

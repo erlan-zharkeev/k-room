@@ -1,4 +1,4 @@
-import { ProviderType } from "./common";
+import { ProviderType } from './common';
 export interface IAuthLoginPayload {
     email: string;
     password: string;

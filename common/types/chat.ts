@@ -1,14 +1,14 @@
 export interface IChatRoom {
-  id: string;
-  authorId: string;
-  chatName?: string;
-  lastMessageId: string | null;
-  users: string[];
-  messages: string[];
+  id: string
+  authorId: string
+  chatName?: string
+  lastMessageId: string | null
+  users: string[]
+  messages: string[]
 }
 
-export type ChatRoomsType = IChatRoom[];
+export type ChatRoomsType = IChatRoom[]
 
-export interface IChatRoomSchema extends Omit<IChatRoom, "users" | "lastMessageId"> {
-  users: string[];
+export interface IChatRoomSchema extends Omit<IChatRoom, 'users' | 'lastMessageId'> {
+  users: string[]
 }

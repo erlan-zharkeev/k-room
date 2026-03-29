@@ -18,7 +18,11 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
     const revalidateCache = Boolean(req.query.revalidate)
 
     if (!idParam) {
-      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(GET_MEDIA_FILE_I18N.idNotProvideOrNotValid, language))
+      return throwHTTPError(
+        StatusEnum.NotFound,
+        res,
+        getLocalizedText(GET_MEDIA_FILE_I18N.idNotProvideOrNotValid, language)
+      )
     }
     const { bucketName, id } = parseBucketNameFromId(idParam)
     const asAttachment = ['1', 'true', 'yes'].includes(String(req.query.download || '').toLowerCase())

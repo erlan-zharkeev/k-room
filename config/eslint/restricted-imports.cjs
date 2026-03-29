@@ -2,11 +2,7 @@ const createDeepImportSelector = (pattern) => `ImportDeclaration[source.value=/^
 
 const createSourceSelector = (nodeType, pattern) => `${nodeType}[source.value=/^${pattern}$/]`
 
-const createRestrictedImportRules = ({
-  rootPattern,
-  deepImportSelectors,
-  deepImportMessage
-}) => [
+const createRestrictedImportRules = ({ rootPattern, deepImportSelectors, deepImportMessage }) => [
   ...(deepImportSelectors ?? [createDeepImportSelector(rootPattern)]).map((selector) => ({
     selector,
     message: deepImportMessage

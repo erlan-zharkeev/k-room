@@ -2,7 +2,10 @@ const cache = new Map<string, { url: string; refs: number }>()
 
 export const acquireUrl = (key: string, blob: Blob) => {
   const hit = cache.get(key)
-  if (hit) { hit.refs += 1; return hit.url }
+  if (hit) {
+    hit.refs += 1
+    return hit.url
+  }
   const url = URL.createObjectURL(blob)
   cache.set(key, { url, refs: 1 })
   return url

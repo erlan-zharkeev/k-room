@@ -14,7 +14,12 @@ interface ICallService {
   calling: (callerId: string, callerSignalData: SignalData) => void
   leaveCall: (callId: string) => void
   answerCall: (callId: string) => Promise<void>
-  initCall: (interlocutorData: IFrontendUserData, selfId: string, selfAvatarPath: string, callerName: string) => Promise<void>
+  initCall: (
+    interlocutorData: IFrontendUserData,
+    selfId: string,
+    selfAvatarPath: string,
+    callerName: string
+  ) => Promise<void>
   enableAudio: ({ video }: { video: boolean }) => Promise<void>
   enableVideo: ({ callId, audio }: { callId: string; audio: boolean }) => Promise<void>
   updateCallerSignal: (signal: SignalData) => void

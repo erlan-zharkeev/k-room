@@ -13,9 +13,10 @@ export const useChatRoom = () => {
   const { repliedMessageData } = useSystem()
   const { messages } = useMessage()
 
-  const chatRooms = useLiveQuery(async () => {
-    return await (db['chat-rooms'].toArray() as Promise<FChatRoomType[]>)
-  }, []) ?? []
+  const chatRooms =
+    useLiveQuery(async () => {
+      return await (db['chat-rooms'].toArray() as Promise<FChatRoomType[]>)
+    }, []) ?? []
 
   const getRoomById = (id: string) => chatRooms.find((room) => room.id === id)
 

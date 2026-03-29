@@ -1,4 +1,3 @@
-
 import { useShowTooltip, SHOW_TOOLTIPS_SWITCHER_I18N } from 'src/features/settings/toggle-show-tooltips'
 
 import { useSettings } from 'src/entities/settings'

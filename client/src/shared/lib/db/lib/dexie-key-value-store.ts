@@ -50,8 +50,7 @@ export const dexieKeyValueStore = <T extends object, L extends string = '__key'>
       Object.assign(obj, changes)
     })
 
-  const setByPath = (path: string, value: unknown) =>
-    mutate((obj) => set(obj as unknown as IndexableType, path, value))
+  const setByPath = (path: string, value: unknown) => mutate((obj) => set(obj as unknown as IndexableType, path, value))
 
   const unsetByPath = (path: string) => mutate((obj) => unset(obj as unknown as IndexableType, path))
 

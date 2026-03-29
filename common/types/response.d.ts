@@ -1,4 +1,4 @@
-import { IFrontendUserData } from "./user";
+import { IFrontendUserData } from './user';
 export interface IConfirmEmailResponse {
     email: string;
 }

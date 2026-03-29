@@ -10,7 +10,8 @@ import { AppDispatchType } from 'src/app/store'
 import { callCounter } from 'src/features/call'
 
 import {
- CallDots, CallModalVideo,
+  CallDots,
+  CallModalVideo,
   setCallStartedAt,
   setShowCallModal,
   setCallId,

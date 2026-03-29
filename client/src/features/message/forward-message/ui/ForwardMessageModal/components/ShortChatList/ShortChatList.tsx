@@ -28,7 +28,9 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
 
   return (
     <div className="short-chat-list">
-      {filteredRooms.length > 0 && <div className="paragraph-text short-chat-list__subtitle">{t(SHORT_CHAT_LIST_I18N.chooseRoom)}</div>}
+      {filteredRooms.length > 0 && (
+        <div className="paragraph-text short-chat-list__subtitle">{t(SHORT_CHAT_LIST_I18N.chooseRoom)}</div>
+      )}
       <div className="short-chat-list__container">
         {filteredRooms.map((room) => (
           <div className="short-chat-list__item" key={room.id} onClick={() => clickChat(room.id)}>

@@ -20,29 +20,17 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
     const user = await UserModel.findOne({ 'personal.email': inputEmail })
 
     if (!user) {
-      return throwHTTPError(
-        StatusEnum.BadRequest,
-        res,
-        getLocalizedText(LOGIN_I18N.invalidEmailOrPassword, language)
-      )
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(LOGIN_I18N.invalidEmailOrPassword, language))
     }
 
     const isPasswordValid = bcrypt.compareSync(password, user.system.password)
 
     if (!isPasswordValid) {
-      return throwHTTPError(
-        StatusEnum.BadRequest,
-        res,
-        getLocalizedText(LOGIN_I18N.invalidEmailOrPassword, language)
-      )
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(LOGIN_I18N.invalidEmailOrPassword, language))
     }
 
     if (!user.system.confirmed) {
-      return throwHTTPError(
-        StatusEnum.BadRequest,
-        res,
-        getLocalizedText(LOGIN_I18N.emailNotConfirmed, language)
-      )
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(LOGIN_I18N.emailNotConfirmed, language))
     }
 
     await updateTokens(user.id, req, res)

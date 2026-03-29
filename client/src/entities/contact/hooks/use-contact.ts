@@ -6,13 +6,14 @@ import { db } from 'src/shared/lib'
 // import { MOCK } from 'src/entities/contact/config'
 
 export const useContact = () => {
-  const contacts = useLiveQuery(async () => {
-    return await (db.contacts.toArray() as Promise<DbContactType[]>)
-  }, []) ?? []
+  const contacts =
+    useLiveQuery(async () => {
+      return await (db.contacts.toArray() as Promise<DbContactType[]>)
+    }, []) ?? []
 
   const getContactByIds = (ids: string[]): DbContactType[] => {
     if (!ids?.length) return []
-    const map = new Map(contacts.map(c => [c.id, c] as const))
+    const map = new Map(contacts.map((c) => [c.id, c] as const))
     const result: DbContactType[] = []
     for (const id of ids) {
       const c = map.get(id)
@@ -21,7 +22,7 @@ export const useContact = () => {
     return result
   }
 
-  const isContactExist = (id: string) => Boolean(contacts?.some(c => c.id === id))
+  const isContactExist = (id: string) => Boolean(contacts?.some((c) => c.id === id))
 
   const putContact = async (payload: DbContactType) => await db.contacts.put(payload)
 
@@ -33,7 +34,7 @@ export const useContact = () => {
 
   return {
     contacts,
-    contactInvitationsQuantity: contacts?.filter(c => c.interactionType === 'invite-received').length ?? 0,
+    contactInvitationsQuantity: contacts?.filter((c) => c.interactionType === 'invite-received').length ?? 0,
     isContactExist,
     getContactByIds,
     putContact,

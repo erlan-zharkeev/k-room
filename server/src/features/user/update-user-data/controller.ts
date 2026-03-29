@@ -5,11 +5,7 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
 
-import {
-  getSocketsByUserIds,
-  transformUserToContact,
-  USER_I18N
-} from './../shared'
+import { getSocketsByUserIds, transformUserToContact, USER_I18N } from './../shared'
 import { UPDATE_USER_DATA_I18N } from './config'
 import { updateUserAvatar } from './lib'
 

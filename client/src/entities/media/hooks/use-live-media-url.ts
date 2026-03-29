@@ -25,7 +25,9 @@ export const useLiveMediaUrl = (id: string) => {
     const url = acquireUrl(key, record.blob)
     setUrl(url)
 
-    return () => { releaseUrl(key) }
+    return () => {
+      releaseUrl(key)
+    }
   }, [key, record?.blob])
 
   return url

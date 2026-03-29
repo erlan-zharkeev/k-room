@@ -1,234 +1,246 @@
-import { ICall, IChatRoom, InteractionType, IMessage, MessageStatusType, IReaction, IBasicStreamSettings, MediaFileValueType, IBaseFrontendUserData, FrontendContactMapType, IFrontendContact } from "./index";
+import {
+  ICall,
+  IChatRoom,
+  InteractionType,
+  IMessage,
+  MessageStatusType,
+  IReaction,
+  IBasicStreamSettings,
+  MediaFileValueType,
+  IBaseFrontendUserData,
+  FrontendContactMapType,
+  IFrontendContact
+} from './index'
 
 export interface IEventInterlocutorUpdateSignal {
-  signal: unknown;
+  signal: unknown
 }
 
 export interface IEventUpdateSignal {
-  signal: unknown;
+  signal: unknown
 }
 
 export interface IEventMarkCallAsVideo {
-  callId: string;
+  callId: string
 }
 
 export interface IEventMessageDelivered {
-  roomId: string;
-  message: IMessage;
+  roomId: string
+  message: IMessage
 }
 
-export type EventGetRoomsType = IChatRoom[];
+export type EventGetRoomsType = IChatRoom[]
 
 export interface IEventStatusContact {
-  interlocutorId: string;
-  online: boolean;
-  onlineStatusUpdatedTimestamp: number;
-  lastSeen?: number;
+  interlocutorId: string
+  online: boolean
+  onlineStatusUpdatedTimestamp: number
+  lastSeen?: number
 }
 
 export type EventChangeContactsDataType = IBaseFrontendUserData
 
-export type EventGetContactsType = FrontendContactMapType;
-export type EventCallUpdatedType = ICall;
-export type EventCallsUpdatedType = ICall[];
+export type EventGetContactsType = FrontendContactMapType
+export type EventCallUpdatedType = ICall
+export type EventCallsUpdatedType = ICall[]
 
 export interface IEventSaveContact {
-  interlocutorId: string;
+  interlocutorId: string
 }
 export interface IEventDeleteContact {
-  deletingUserId: string;
+  deletingUserId: string
 }
 export interface IEventSearchContact {
-  value: string;
-  offset?: number;
+  value: string
+  offset?: number
 }
 export interface IEventGetSearchedContact {
-  value: string;
-  offset: number;
-  contacts: IFrontendContact[];
-  total: number;
-  hasMore: boolean;
-  nextOffset?: number;
+  value: string
+  offset: number
+  contacts: IFrontendContact[]
+  total: number
+  hasMore: boolean
+  nextOffset?: number
 }
 
 export interface IEventCreateRoom {
-  contactIds: string[];
-  chatName?: string;
-  avatarFile?: MediaFileValueType;
+  contactIds: string[]
+  chatName?: string
+  avatarFile?: MediaFileValueType
 }
 
 export interface IEventUpdateChatRoom {
-  users: string[];
-  roomId: string;
-  chatName: string;
-  avatar: string;
-  avatarFile?: MediaFileValueType; // TODO change to IEventCreateRoom
+  users: string[]
+  roomId: string
+  chatName: string
+  avatar: string
+  avatarFile?: MediaFileValueType // TODO change to IEventCreateRoom
 }
 
 export interface IEventUserTyping {
-  authorName: string;
-  usersTo: string[];
-  isTyping: boolean;
+  authorName: string
+  usersTo: string[]
+  isTyping: boolean
 }
 export interface IEventGetContactTypingStatus {
-  contactId: string;
-  isTyping: boolean;
+  contactId: string
+  isTyping: boolean
 }
 export interface IEventSendMessage {
-  roomId: string;
-  message: IMessage;
+  roomId: string
+  message: IMessage
 }
 export interface IEventUpdateMessageStatus {
-  roomId: string;
-  messageId: string;
-  status: MessageStatusType;
+  roomId: string
+  messageId: string
+  status: MessageStatusType
 }
 export interface IEventChangeMessageStatus {
-  roomId: string;
-  messageId: string;
-  status: MessageStatusType;
+  roomId: string
+  messageId: string
+  status: MessageStatusType
 }
 export interface IEventLoadRoomMessages {
-  roomId: string;
-  limit: number;
-  beforeCreatedAt?: number;
+  roomId: string
+  limit: number
+  beforeCreatedAt?: number
 }
 export interface IEventRoomMessagesLoaded {
-  roomId: string;
-  messages: IMessage[];
-  hasMore: boolean;
-  nextBeforeCreatedAt?: number;
+  roomId: string
+  messages: IMessage[]
+  hasMore: boolean
+  nextBeforeCreatedAt?: number
 }
 export interface IEventDeleteMessage {
-  messageId: string;
-  roomId: string;
+  messageId: string
+  roomId: string
 }
 export interface IEventAddReaction {
-  glyphKey: string;
-  messageId: string;
-  roomId: string;
-  username: string;
+  glyphKey: string
+  messageId: string
+  roomId: string
+  username: string
 }
 export interface IEventCallUser {
-  callId?: string;
-  userToCall?: string;
-  signal: unknown;
-  from: string;
-  avatar: string;
-  callerName: string;
+  callId?: string
+  userToCall?: string
+  signal: unknown
+  from: string
+  avatar: string
+  callerName: string
 }
-export type EventChangeCallSettingsType = IBasicStreamSettings;
+export type EventChangeCallSettingsType = IBasicStreamSettings
 export interface IEventCallAccepted {
-  signal: unknown;
+  signal: unknown
 }
 
 export interface IEventAnswerCall {
-  callId: string;
-  to: string;
-  signal: unknown;
-  selfSocketId: string;
+  callId: string
+  to: string
+  signal: unknown
+  selfSocketId: string
 }
-export type EventCallStartedAtType = number;
+export type EventCallStartedAtType = number
 export interface IEventCallEnded {
-  callId: string;
-  callerId: string;
+  callId: string
+  callerId: string
 }
 export interface IEventErrorMessage {
-  messageType?: string;
-  message: string;
+  messageType?: string
+  message: string
 }
 export interface IEventMessageDeleted {
-  messageId: string;
-  roomId: string;
+  messageId: string
+  roomId: string
 }
 export interface IEventUpdatedMessageReactions {
-  roomId: string;
-  messageId: string;
-  reaction: IReaction;
+  roomId: string
+  messageId: string
+  reaction: IReaction
 }
 export interface IEventRoomCreated {
-  roomId: string;
+  roomId: string
 }
 export interface IEventUpdateInteraction {
-  contactId: string;
-  interaction: InteractionType;
+  contactId: string
+  interaction: InteractionType
 }
 
 export type EventInviteReceivedType = IFrontendContact
 
 export interface IEventUpdateContactInteractionSuccess {
-  contactId: string;
-  interaction: InteractionType;
+  contactId: string
+  interaction: InteractionType
 }
 export interface IEventContactAddSuccess {
-  contactData: IFrontendContact;
+  contactData: IFrontendContact
 }
 export interface IEventDeleteContactSuccess {
-  deletedContactId: string;
-  silent: boolean;
+  deletedContactId: string
+  silent: boolean
 }
 
 export interface IEventAuthError {
-  event: string;
-  payload: unknown;
+  event: string
+  payload: unknown
 }
 
 export type SocketActionsType =
-  | "connection"
-  | "error"
-  | "reconnect"
-  | "auth-error"
-  | "initialize"
-  | "disconnect"
-  | "rooms-loaded"
-  | "create-chat-room"
-  | "new-room-added"
-  | "send-message"
-  | "message-delivered"
-  | "room-created"
-  | "search-contact"
-  | "get-searched-contact"
-  | "contact-status-updated"
-  | "contacts-loaded"
-  | "save-contact"
-  | "delete-contact"
-  | "client-typing"
-  | "get-contact-typing-status"
-  | "load-room-messages"
-  | "room-messages-loaded"
-  | "change-message-status"
-  | "message-status-updated"
-  | "contact-data-changed"
-  | "call-user"
-  | "answer-call"
-  | "call-accepted"
-  | "call-ended"
-  | "change-call-settings"
-  | "call-started-at"
-  | "update-user-settings"
-  | "update-chat-room"
-  | "room-data-updated"
-  | "add-reaction"
-  | "message-reaction-updated"
-  | "message-deleted"
-  | "error-message"
-  | "calls-data-loaded"
-  | "call-data-changed"
+  | 'connection'
+  | 'error'
+  | 'reconnect'
+  | 'auth-error'
+  | 'initialize'
+  | 'disconnect'
+  | 'rooms-loaded'
+  | 'create-chat-room'
+  | 'new-room-added'
+  | 'send-message'
+  | 'message-delivered'
+  | 'room-created'
+  | 'search-contact'
+  | 'get-searched-contact'
+  | 'contact-status-updated'
+  | 'contacts-loaded'
+  | 'save-contact'
+  | 'delete-contact'
+  | 'client-typing'
+  | 'get-contact-typing-status'
+  | 'load-room-messages'
+  | 'room-messages-loaded'
+  | 'change-message-status'
+  | 'message-status-updated'
+  | 'contact-data-changed'
+  | 'call-user'
+  | 'answer-call'
+  | 'call-accepted'
+  | 'call-ended'
+  | 'change-call-settings'
+  | 'call-started-at'
+  | 'update-user-settings'
+  | 'update-chat-room'
+  | 'room-data-updated'
+  | 'add-reaction'
+  | 'message-reaction-updated'
+  | 'message-deleted'
+  | 'error-message'
+  | 'calls-data-loaded'
+  | 'call-data-changed'
   | 'contact-removed'
-  | "mark-call-as-video"
-  | "update-call-signal"
-  | "interlocutor-update-signal"
-  | "actual-chat-rooms"
-  | "interlocutor-ping"
-  | "update-interaction-type"
-  | "update-contact-success"
-  | "invite-received"
-  | "contact-delete-success"
-  | "contact-add-success"
-  | "update-contact-interaction-type"
-  | "contact-interaction-updated"
-  | "actual-contacts"
-  | "actual-messages"
-  | "actualize-user-data"
-  | "reconnect_attempt"
-  | "reconnect_failed"
+  | 'mark-call-as-video'
+  | 'update-call-signal'
+  | 'interlocutor-update-signal'
+  | 'actual-chat-rooms'
+  | 'interlocutor-ping'
+  | 'update-interaction-type'
+  | 'update-contact-success'
+  | 'invite-received'
+  | 'contact-delete-success'
+  | 'contact-add-success'
+  | 'update-contact-interaction-type'
+  | 'contact-interaction-updated'
+  | 'actual-contacts'
+  | 'actual-messages'
+  | 'actualize-user-data'
+  | 'reconnect_attempt'
+  | 'reconnect_failed'

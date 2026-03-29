@@ -13,6 +13,6 @@ export interface IAppNotification {
   messageType?: NotificationType
   duration?: number
   placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
-  icon?: JSX.Element,
+  icon?: JSX.Element
   actions?: JSX.Element
 }

@@ -24,11 +24,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
     const user = await createUser({ email, username, hashedPassword })
 
     if (!user) {
-      return throwHTTPError(
-        StatusEnum.Server,
-        res,
-        getLocalizedText(REGISTRATION_I18N.failedRegistration, language)
-      )
+      return throwHTTPError(StatusEnum.Server, res, getLocalizedText(REGISTRATION_I18N.failedRegistration, language))
     }
 
     const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))

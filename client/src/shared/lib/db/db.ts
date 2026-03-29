@@ -1,6 +1,13 @@
 import Dexie, { Table } from 'dexie'
 
-import type { DbUserSettingType, DbContactType, IDbMedia, DbUserDataType, DbMessageType, FChatRoomType } from 'src/shared/config'
+import type {
+  DbUserSettingType,
+  DbContactType,
+  IDbMedia,
+  DbUserDataType,
+  DbMessageType,
+  FChatRoomType
+} from 'src/shared/config'
 
 export class KRoomDB extends Dexie {
   settings!: Table<DbUserSettingType & { __key: string }>

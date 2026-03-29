@@ -1,4 +1,4 @@
 export interface ICreateNewPasswordPayload {
-    password: string;
-    codeToValidate: string;
+  password: string
+  codeToValidate: string
 }

@@ -15,10 +15,10 @@ export interface IUserSystemData {
 }
 
 export interface IContact {
-  id: string;
-  interaction: InteractionType;
-  updatedAt: number;
-};
+  id: string
+  interaction: InteractionType
+  updatedAt: number
+}
 
 export interface IUserPersonalData {
   email: string
@@ -39,4 +39,3 @@ export interface IUserSchema {
   personal: IUserPersonalData
   public: IUserPublicData
 }
-

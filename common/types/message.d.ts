@@ -1,4 +1,4 @@
-import { IImageObject } from "./index";
+import { IImageObject } from './index';
 export declare const MESSAGE_STATUS: readonly ["sending", "undelivered", "delivered", "read", "none"];
 export type MessageStatusType = (typeof MESSAGE_STATUS)[number];
 export interface IMessageMetaData {
@@ -36,7 +36,7 @@ export interface IDBMessage extends IMessage {
     _id: string;
     usersMetaData: IMessageMetaData[];
 }
-export interface IMessageSchema extends Omit<IMessage, "id" | "tempId" | "isSelf" | "status"> {
+export interface IMessageSchema extends Omit<IMessage, 'id' | 'tempId' | 'isSelf' | 'status'> {
     _id?: string;
     usersMetaData?: IMessageMetaData[];
 }

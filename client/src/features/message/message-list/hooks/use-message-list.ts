@@ -8,13 +8,7 @@ import { useSettings } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
 
-export const useMessageList = ({
-  roomId,
-  items
-}: {
-  roomId: string
-  items: MessageListItemType[]
-}) => {
+export const useMessageList = ({ roomId, items }: { roomId: string; items: MessageListItemType[] }) => {
   const pendingReadIdsRef = useRef<Set<string>>(new Set())
   const saveScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingFirstVisibleItemIdRef = useRef<string | null>(null)

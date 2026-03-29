@@ -85,7 +85,9 @@ export const WaitEmailConfirm = () => {
                 &nbsp;{remainingAttempts}
               </div>
             </div>
-            <div className="paragraph-text  wait-confirm-email__not-received">{t(WAIT_EMAIL_CONFIRM_I18N.resendHint)}</div>
+            <div className="paragraph-text  wait-confirm-email__not-received">
+              {t(WAIT_EMAIL_CONFIRM_I18N.resendHint)}
+            </div>
           </>
         )}
 
@@ -97,9 +99,18 @@ export const WaitEmailConfirm = () => {
 
         <div className="wait-email-confirm__actions">
           {counter <= 0 && remainingAttempts > 0 && (
-            <AppButton text={t(WAIT_EMAIL_CONFIRM_I18N.resend)} color="accent-color" onClick={sendLink} loading={isLoading} />
+            <AppButton
+              text={t(WAIT_EMAIL_CONFIRM_I18N.resend)}
+              color="accent-color"
+              onClick={sendLink}
+              loading={isLoading}
+            />
           )}
-          <AppButton text={t(WAIT_EMAIL_CONFIRM_I18N.back)} color="accent-color" onClick={() => navigate(RouteNamesEnum.Login)} />
+          <AppButton
+            text={t(WAIT_EMAIL_CONFIRM_I18N.back)}
+            color="accent-color"
+            onClick={() => navigate(RouteNamesEnum.Login)}
+          />
         </div>
       </div>
     </div>

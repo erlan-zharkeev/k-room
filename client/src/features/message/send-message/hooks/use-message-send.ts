@@ -1,10 +1,6 @@
 import { useRef } from 'react'
 
-import {
-  IEventSendMessage,
-  IMessage,
-  SocketActionsType
-} from 'common'
+import { IEventSendMessage, IMessage, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
 
 import { useAddMessage } from 'src/features/message'
@@ -38,9 +34,9 @@ export const useMessageSend = () => {
   }
 
   const setImages = (imagesFiles: FileLoaderValueType) => {
-    const normalizedImages = (
-      Array.isArray(imagesFiles) ? imagesFiles : imagesFiles ? [imagesFiles] : []
-    ).filter((image): image is Exclude<typeof image, string> => typeof image !== 'string')
+    const normalizedImages = (Array.isArray(imagesFiles) ? imagesFiles : imagesFiles ? [imagesFiles] : []).filter(
+      (image): image is Exclude<typeof image, string> => typeof image !== 'string'
+    )
     dispatch(updateMessageInputData({ images: normalizedImages }))
   }
 

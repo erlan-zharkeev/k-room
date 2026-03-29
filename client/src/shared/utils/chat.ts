@@ -7,5 +7,7 @@ export const getChatName = (room: IChatRoom | undefined) => {
 
 export const chatRoomUnreadMessagesCount = (chatRoom: IChatRoom, messages: IMessage[]) => {
   const roomMessageIds = new Set(chatRoom.messages)
-  return messages.filter((message) => roomMessageIds.has(message.id) && !message.isSelf && message.status === 'delivered').length
+  return messages.filter(
+    (message) => roomMessageIds.has(message.id) && !message.isSelf && message.status === 'delivered'
+  ).length
 }

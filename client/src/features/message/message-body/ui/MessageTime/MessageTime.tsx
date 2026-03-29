@@ -1,4 +1,3 @@
-
 import type { IMessageTimeProps } from 'src/features/message/message-body'
 
 import { useI18n } from 'src/entities/system'
