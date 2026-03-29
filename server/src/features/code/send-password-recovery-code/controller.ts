@@ -79,6 +79,10 @@ export const sendPasswordRecoveryCodeController = async (
       }
     })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language))
+    return throwHTTPError(
+      StatusEnum.Server,
+      res,
+      getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language)
+    )
   }
 }

@@ -8,6 +8,7 @@ import { FIREBASE_PROVIDER_MAP } from 'src/features/auth/login'
 import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
+import { useI18n } from 'src/entities/system'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'
@@ -18,9 +19,10 @@ export const useFirebase = () => {
   const { doRequest } = useApi()
   const navigate = useNavigate()
   const notifications = useNotification()
+  const { t } = useI18n()
 
   const failedToLoginNotification = notifications.getNotification({
-    message: NOTIFICATION_I18N.failedToLogin(),
+    message: t(NOTIFICATION_I18N.failedToLogin),
     messageType: 'error'
   })
 

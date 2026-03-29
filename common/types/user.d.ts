@@ -1,4 +1,4 @@
-import { InfoNotificationMapType } from "./index";
+import { InfoNotificationMapType } from './index';
 export declare const USER_ROLES: readonly ["user", "admin"];
 export type UserRoleType = (typeof USER_ROLES)[number];
 export interface IBaseFrontendUserData {

@@ -16,14 +16,14 @@ export const useContactActualize = () => {
 
         return existingContact
           ? {
-            ...existingContact,
-            ...contact,
-            onlineStatusSyncedAt: Date.now()
-          }
+              ...existingContact,
+              ...contact,
+              onlineStatusSyncedAt: Date.now()
+            }
           : {
-            ...contact,
-            ...getRequiredContactSystemData()
-          }
+              ...contact,
+              ...getRequiredContactSystemData()
+            }
       })
 
       await db.contacts.clear()

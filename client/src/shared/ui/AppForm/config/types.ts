@@ -49,7 +49,11 @@ export type AppFormPickElementFieldType = BaseAppFormFieldType<'element-picker'>
     onChange?: (fieldData: { name: string; value: string[] }) => void
   }
 
-export type AppFormFieldType = AppFormTextInputFieldType | AppFormSwitchFieldType | AppFormFileInputFieldType | AppFormPickElementFieldType
+export type AppFormFieldType =
+  | AppFormTextInputFieldType
+  | AppFormSwitchFieldType
+  | AppFormFileInputFieldType
+  | AppFormPickElementFieldType
 
 export type AppFormDataType = Record<string, AppFormFieldValueType>
 
@@ -64,5 +68,5 @@ export interface IAppFormProps<TFormData extends object = AppFormDataType> {
   prefixSlot?: React.ReactNode
   children?: React.ReactNode
   disabledActionBtn?: boolean
-  onBlur?: UnknownCallbackType;
+  onBlur?: UnknownCallbackType
 }

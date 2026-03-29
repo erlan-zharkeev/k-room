@@ -6,13 +6,7 @@ import { ROOM_MESSAGES_PAGE_LIMIT, MessageListItemType } from 'src/features/mess
 
 import { useSettings } from 'src/entities/settings'
 
-export const useInitialScrollPosition = ({
-  room,
-  items
-}: {
-  room: IChatRoom
-  items: MessageListItemType[]
-}) => {
+export const useInitialScrollPosition = ({ room, items }: { room: IChatRoom; items: MessageListItemType[] }) => {
   const { messageScrollByRoom } = useSettings()
 
   const initialFirstVisibleItemId = messageScrollByRoom[room.id]?.firstVisibleItemId

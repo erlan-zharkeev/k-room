@@ -49,7 +49,7 @@ export const AppFileLoader = ({
   }
 
   const maxAttachedFilesExceedNotification = notifications.getNotification({
-    message: NOTIFICATION_I18N.maxAttachedFilesExceed(maxAttachedFiles),
+    message: t(NOTIFICATION_I18N.maxAttachedFilesExceed(maxAttachedFiles)),
     messageType: 'warning'
   })
 
@@ -65,7 +65,7 @@ export const AppFileLoader = ({
     const promises = Array.from(files).map(async (file) => {
       // eslint-disable-next-line
       return new Promise<IImageObject | null>((resolve) => {
-        const reader = imageToBase64({ image: file, allowedResolutions, notifications })
+        const reader = imageToBase64({ image: file, allowedResolutions, notifications, t })
         if (!reader) return resolve(null)
         reader.onload = () => {
           file.arrayBuffer().then((arrayBuffer) => {

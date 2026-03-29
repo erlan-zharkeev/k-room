@@ -13,12 +13,7 @@ export const accessTokenValidator = async (req: IAppRequest, res: Response, next
   const accessToken = req.cookies.jwt
 
   if (!accessToken) {
-    return throwHTTPError(
-      StatusEnum.NotAuth,
-      res,
-      getLocalizedText(AUTH_I18N.nonAuthorized, req.language),
-      true
-    )
+    return throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(AUTH_I18N.nonAuthorized, req.language), true)
   }
 
   try {

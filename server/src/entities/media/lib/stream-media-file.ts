@@ -18,11 +18,7 @@ export const streamMediaFile = async (
     const bucket = mediaBuckets[bucketName]
 
     if (!bucket) {
-      return throwHTTPError(
-        StatusEnum.NotFound,
-        res,
-        getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language)
-      )
+      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language))
     }
 
     const filename = `${bucketName}.${id}`
@@ -30,12 +26,7 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      return throwHTTPError(
-        StatusEnum.NotFound,
-        res,
-        getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language),
-        true
-      )
+      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
     }
 
     res.setHeader('Content-Type', file.contentType || 'application/octet-stream')

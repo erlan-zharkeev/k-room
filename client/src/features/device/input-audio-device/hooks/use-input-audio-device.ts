@@ -127,7 +127,7 @@ export const useInputAudioDevice = () => {
     }
   }
 
-  const micIcon: AppIconNameType = isMicLoading ? 'loader' : (showMicGrade ? 'cross' : 'thunder')
+  const micIcon: AppIconNameType = isMicLoading ? 'loader' : showMicGrade ? 'cross' : 'thunder'
 
   const audioDevices = audioInputDeviceList.map((device) => ({
     label: device.label,

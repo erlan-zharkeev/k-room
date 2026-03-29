@@ -7,6 +7,6 @@ export interface IChatRoom {
     messages: string[];
 }
 export type ChatRoomsType = IChatRoom[];
-export interface IChatRoomSchema extends Omit<IChatRoom, "users" | "lastMessageId"> {
+export interface IChatRoomSchema extends Omit<IChatRoom, 'users' | 'lastMessageId'> {
     users: string[];
 }

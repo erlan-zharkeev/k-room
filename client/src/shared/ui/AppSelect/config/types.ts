@@ -10,10 +10,10 @@ export type IAppSelectProps<TMultiple extends boolean = false> = {
   disabled?: boolean
 } & (TMultiple extends true
   ? {
-    value: string[]
-    onChange: (value: string[]) => void
-  }
+      value: string[]
+      onChange: (value: string[]) => void
+    }
   : {
-    value: string
-    onChange: (value: string) => void
-  })
+      value: string
+      onChange: (value: string) => void
+    })

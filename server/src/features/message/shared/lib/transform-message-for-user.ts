@@ -5,7 +5,9 @@ export const transformMessageForUser = (message: IDBMessage, userId: string): IM
   const isSelf = authorId === userId
   const readBySomeone = usersMetaData.some((data) => data.status === 'read')
   const status = isSelf
-    ? (readBySomeone ? 'read' : usersMetaData.find((user) => user.id === userId)?.status)
+    ? readBySomeone
+      ? 'read'
+      : usersMetaData.find((user) => user.id === userId)?.status
     : usersMetaData.find((user) => user.id === userId)?.status
 
   return {

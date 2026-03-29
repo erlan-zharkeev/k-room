@@ -1,4 +1,3 @@
-
 import { useShowWallpaper, SHOW_WALLPAPER_SWITCHER_I18N } from 'src/features/settings/toggle-show-wallpaper'
 
 import { useSettings } from 'src/entities/settings'

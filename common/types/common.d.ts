@@ -1,9 +1,9 @@
-export type AuthTokensType = "jwt" | "refresh-jwt";
+export type AuthTokensType = 'jwt' | 'refresh-jwt';
 export declare const firebaseProviders: readonly ["google", "facebook"];
 export type FirebaseProviderType = (typeof firebaseProviders)[number];
 export declare const providers: readonly ["google", "facebook", "app"];
 export type ProviderType = (typeof providers)[number];
-export type AvailableCookieType = "device-id" | AuthTokensType;
+export type AvailableCookieType = 'device-id' | AuthTokensType;
 export type UnknownCallbackType = (...args: unknown[]) => unknown;
 export interface IBasicStreamSettings {
     audio: boolean;

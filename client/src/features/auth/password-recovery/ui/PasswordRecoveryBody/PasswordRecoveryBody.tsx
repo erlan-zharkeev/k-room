@@ -44,9 +44,7 @@ export const PasswordRecoveryBody = () => {
         />
       )}
       {counterValue > 0 && (
-        <div className="paragraph-text password-recovery-body__new-code-warning">
-          {resendTimer(counterValue)}
-        </div>
+        <div className="paragraph-text password-recovery-body__new-code-warning">{resendTimer(counterValue)}</div>
       )}
       {hasPresetEmail && (
         <div className="password-recovery-body__send-code-btn">

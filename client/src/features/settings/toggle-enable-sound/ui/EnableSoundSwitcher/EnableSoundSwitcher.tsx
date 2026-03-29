@@ -12,9 +12,7 @@ export const EnableSoundSwitcher = () => {
   const { soundOn } = useSettings()
   const { hasInteracted } = useSystem()
   const { t } = useI18n()
-  const tooltipText = !hasInteracted
-    ? t(ENABLE_SOUND_SWITCHER_I18N.tooltip)
-    : ''
+  const tooltipText = !hasInteracted ? t(ENABLE_SOUND_SWITCHER_I18N.tooltip) : ''
 
   return (
     <div className="enable-sound-switcher">

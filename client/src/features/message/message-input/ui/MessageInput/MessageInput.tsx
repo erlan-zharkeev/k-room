@@ -67,7 +67,9 @@ export const MessageInput = ({
           <AppButton htmltype="submit" prefixIconName="send" borderless />
         </AppForm>
       </div>
-      {!insideModal && <MessageWithBindDataModal open={isModalOpen} onClose={() => setIsModalOpen(false)} roomId={roomId} />}
+      {!insideModal && (
+        <MessageWithBindDataModal open={isModalOpen} onClose={() => setIsModalOpen(false)} roomId={roomId} />
+      )}
     </>
   )
 }

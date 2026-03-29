@@ -51,7 +51,8 @@ export const EmailConfirmation = () => {
             <div className="paragraph-text">
               {t(EMAIL_CONFIRMATION_I18N.email)}
               <AppText tag="span" size="large" additionalClassName="email-confirmation__email">
-                {' '}{email}{' '}
+                {' '}
+                {email}{' '}
               </AppText>
               {t(EMAIL_CONFIRMATION_I18N.confirmed)}
             </div>

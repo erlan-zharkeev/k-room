@@ -63,11 +63,13 @@ module.exports = {
       }),
       ...createRestrictedPathRules({
         pathPattern: '\\.\\.(?:\\/.*)?',
-        message: 'Parent relative paths are not allowed. Relative paths must start with `./`; use a public alias path instead of `../...`.'
+        message:
+          'Parent relative paths are not allowed. Relative paths must start with `./`; use a public alias path instead of `../...`.'
       }),
       ...createRestrictedImportRules({
         rootPattern: 'src\\/(app|pages|widgets|features|entities)',
-        deepImportMessage: 'Use the shortest public API import. Imports deeper than `src/<layer>/<module>` are not allowed.'
+        deepImportMessage:
+          'Use the shortest public API import. Imports deeper than `src/<layer>/<module>` are not allowed.'
       })
     ],
     'import/no-cycle': ['error', { maxDepth: Infinity }],

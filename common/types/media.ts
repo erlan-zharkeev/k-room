@@ -1,9 +1,9 @@
-export type MediaKindType = "image" | "video" | "audio" | "pdf" | "unknown";
+export type MediaKindType = 'image' | 'video' | 'audio' | 'pdf' | 'unknown'
 
 export interface IImageObject {
-  src: string;
-  name: string;
-  fileBuffer?: ArrayBuffer;
+  src: string
+  name: string
+  fileBuffer?: ArrayBuffer
 }
 
-export type MediaFileValueType = IImageObject;
+export type MediaFileValueType = IImageObject

@@ -14,14 +14,14 @@ export const useLoadContacts = () => {
 
       return existingContact
         ? {
-          ...existingContact,
-          ...data,
-          onlineStatusSyncedAt: Date.now()
-        }
+            ...existingContact,
+            ...data,
+            onlineStatusSyncedAt: Date.now()
+          }
         : {
-          ...data,
-          ...getRequiredContactSystemData()
-        }
+            ...data,
+            ...getRequiredContactSystemData()
+          }
     })
 
     await db.contacts.bulkPut(result)

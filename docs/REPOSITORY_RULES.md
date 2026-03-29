@@ -496,9 +496,12 @@ Avoid scattering raw SDK calls across feature code when a project wrapper alread
 Use block, element, and modifier naming consistently:
 
 ```scss
-.call-modal {}
-.call-modal__body {}
-.call-modal--collapse {}
+.call-modal {
+}
+.call-modal__body {
+}
+.call-modal--collapse {
+}
 ```
 
 2. Do not build BEM elements or modifiers in SCSS through `&__...` or `&--...`.
@@ -506,19 +509,24 @@ Use block, element, and modifier naming consistently:
 Write full explicit selectors instead:
 
 ```scss
-.call-modal {}
+.call-modal {
+}
 
-.call-modal__body {}
+.call-modal__body {
+}
 
-.call-modal--collapse {}
+.call-modal--collapse {
+}
 ```
 
 Do not use nested BEM construction like:
 
 ```scss
 .call-modal {
-  &__body {}
-  &--collapse {}
+  &__body {
+  }
+  &--collapse {
+  }
 }
 ```
 
@@ -527,11 +535,13 @@ Pseudo-classes and similar state selectors like `&:hover` remain allowed.
 3. Nested selectors should be used sparingly.
 
 Allowed:
+
 - pseudo-classes and pseudo-elements such as `&:hover`, `&:focus`, `&::before`
 - local library overrides like `.ant-*` when they are scoped to the current block
 - shallow nesting for nearby contextual styling only
 
 Avoid:
+
 - deep class-in-class-in-class selector chains
 - styling one BEM class only through another BEM class wrapper
 - relying on DOM structure when an explicit class selector would be clearer
@@ -549,6 +559,7 @@ type(scope?): description
 ```
 
 Types:
+
 - `feat` — new feature
 - `fix` — bug fix
 - `chore` — tooling, config, dependencies
@@ -557,6 +568,7 @@ Types:
 - `docs` — documentation only
 
 Rules:
+
 - Description is lowercase, no period at the end
 - Scope is optional, in parentheses: `refactor(client): ...`
 - Single short line; no body required for routine commits

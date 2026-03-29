@@ -12,12 +12,7 @@
   max-height: 120px;
   transform-origin: center top;
   will-change: opacity, transform, filter, max-height;
-  transition:
-    opacity 420ms ease,
-    transform 420ms ease,
-    filter 420ms ease,
-    max-height 420ms ease,
-    padding 420ms ease;
+  transition: opacity 420ms ease, transform 420ms ease, filter 420ms ease, max-height 420ms ease, padding 420ms ease;
 }
 
 .animated-list__item--entering {

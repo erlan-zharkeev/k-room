@@ -1,4 +1,3 @@
-
 import type { NotificationType } from 'src/entities/notification'
 
 import type { AppIconNameType, ColorModifierType } from 'src/shared/ui'

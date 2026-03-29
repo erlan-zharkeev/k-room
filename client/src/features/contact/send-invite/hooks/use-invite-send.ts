@@ -15,14 +15,14 @@ export const useInviteSend = () => {
     const onlineStatusSyncedAt = Date.now()
     const data = existingContact
       ? {
-        ...existingContact,
-        ...payload,
-        onlineStatusSyncedAt
-      }
+          ...existingContact,
+          ...payload,
+          onlineStatusSyncedAt
+        }
       : {
-        ...payload,
-        ...getRequiredContactSystemData()
-      }
+          ...payload,
+          ...getRequiredContactSystemData()
+        }
     await db.contacts.put(data)
   }
 

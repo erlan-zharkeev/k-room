@@ -18,7 +18,11 @@ export const markInfoAsReadController = async (req: IAppRequest, res: AppRespons
 
     res.json({ payload: null, message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true } })
   } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(MARK_INFO_NOTIFICATION_AS_READ_I18N.failed, language))
+    return throwHTTPError(
+      StatusEnum.Server,
+      res,
+      getLocalizedText(MARK_INFO_NOTIFICATION_AS_READ_I18N.failed, language)
+    )
   }
 
   return {}

@@ -18,7 +18,12 @@ import { validateRequest } from 'src/shared/middleware'
 
 export const userRouter = Router()
 userRouter.get(UserEndpointsEnum.GetUserData, accessTokenValidator, getUserDataController)
-userRouter.post(UserEndpointsEnum.ResetPassword, RESET_PASSWORD_FIELDS_VALIDATION, validateRequest, resetPasswordController)
+userRouter.post(
+  UserEndpointsEnum.ResetPassword,
+  RESET_PASSWORD_FIELDS_VALIDATION,
+  validateRequest,
+  resetPasswordController
+)
 userRouter.post(
   UserEndpointsEnum.EditUserData,
   accessTokenValidator,

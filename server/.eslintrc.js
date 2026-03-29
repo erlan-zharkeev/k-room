@@ -21,7 +21,8 @@ module.exports = {
       }),
       ...createRestrictedPathRules({
         pathPattern: '\\.\\.(?:\\/.*)?',
-        message: 'Parent relative paths are not allowed. Relative paths must start with `./`; use a public alias path instead of `../...`.'
+        message:
+          'Parent relative paths are not allowed. Relative paths must start with `./`; use a public alias path instead of `../...`.'
       }),
       ...createRestrictedImportRules({
         rootPattern: 'src\\/(app|features|entities|shared)',
@@ -49,8 +50,7 @@ module.exports = {
     'import/order': 'off',
     'no-duplicate-imports': 'off',
     'no-control-regex': 'off',
-    'no-extra-semi': 'off',
-    semi: ['error', 'never']
+    'no-extra-semi': 'off'
   },
   overrides: [
     {

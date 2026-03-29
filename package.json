@@ -7,6 +7,7 @@
   "scripts": {
     "prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
+    "format:check": "client/node_modules/.bin/prettier --check .",
     "client:lint": "npm --prefix client run lint",
     "client:stylelint": "npm --prefix client run lint:style",
     "client:build": "npm --prefix client run build",

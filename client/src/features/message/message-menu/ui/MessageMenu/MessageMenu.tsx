@@ -1,7 +1,7 @@
 import './style.scss'
 
 import {
- MESSAGE_MENU_I18N,
+  MESSAGE_MENU_I18N,
   ForwardMessageModal,
   MessageMenuReactions,
   useMessageDelete,

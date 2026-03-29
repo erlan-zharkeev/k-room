@@ -42,11 +42,7 @@ export const signInWithProviderController = async (
     }
 
     if (!user)
-      return throwHTTPError(
-        StatusEnum.BadRequest,
-        res,
-        getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language)
-      )
+      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language))
 
     await updateTokens(user.id, req, res)
 

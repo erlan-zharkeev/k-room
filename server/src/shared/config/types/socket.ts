@@ -7,5 +7,5 @@ export type SocketInstanceType = Socket<
   DefaultEventsMap,
   DefaultEventsMap,
   DefaultEventsMap,
-  { userId: string, deviceId: string, language: AppLanguageType }
+  { userId: string; deviceId: string; language: AppLanguageType }
 >
