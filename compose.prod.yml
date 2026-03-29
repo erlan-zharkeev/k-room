@@ -7,7 +7,10 @@ services:
     image: ketjo/k-room_server:latest
     restart: unless-stopped
     env_file:
-      - ./.env.production
+      - path: ./.env.production
+        required: true
+      - path: ./.env.runtime
+        required: false
     depends_on:
       - db
 

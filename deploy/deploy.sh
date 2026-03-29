@@ -5,6 +5,8 @@ set -eu
 ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 COMPOSE_FILE="${COMPOSE_FILE:-$ROOT_DIR/compose.prod.yml}"
 ENV_FILE="${ENV_FILE:-$ROOT_DIR/.env.production}"
+RUNTIME_ENV_FILE="${RUNTIME_ENV_FILE:-$ROOT_DIR/.env.runtime}"
+MERGED_ENV_FILE="$ROOT_DIR/.env.deploy"
 
 require_env() {
   var_name="$1"
@@ -29,9 +31,17 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 1
 fi
 
+if [ ! -f "$RUNTIME_ENV_FILE" ]; then
+  echo "[deploy] Runtime env file not found: $RUNTIME_ENV_FILE" >&2
+  exit 1
+fi
+
 mkdir -p "$ROOT_DIR/deploy/certs"
+
+cat "$ENV_FILE" "$RUNTIME_ENV_FILE" > "$MERGED_ENV_FILE"
+trap 'rm -f "$MERGED_ENV_FILE"' EXIT
 
 echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" pull
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
+docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" pull
+docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d
