@@ -3,7 +3,13 @@
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "baseUrl": "./../",
+    "paths": {
+      "src/*": ["client/src/*"],
+      "common": ["common/index.ts"],
+      "common/*": ["common/*"]
+    }
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "vitest.config.ts"]
 }
