@@ -1,5 +1,6 @@
-import { INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
 import { useI18n } from 'src/entities/system'
+
+import { INFO_NOTIFICATIONS_I18N } from '../..'
 
 export const WelcomeInfoNotification = () => {
   const { t } = useI18n()

@@ -1,8 +1,8 @@
 import { IEventMessageDelivered } from 'common'
 
-import { notifyDeliveredMessage, useAddMessage } from 'src/features/message'
-
 import { useMessage } from 'src/entities/message'
+
+import { notifyDeliveredMessage, useAddMessage } from '../..'
 
 export const useHandleDeliveredMessage = () => {
   const { getMessageById, updateMessage } = useMessage()

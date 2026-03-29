@@ -1,5 +1,6 @@
 import type { IContextMenu } from 'src/entities/context-menu'
-import { ISystemStore } from 'src/entities/system'
+
+import { ISystemStore } from '..'
 
 export const CLICKED_OBJECT_INITIAL_STATE = {
   message: {

@@ -1,9 +1,11 @@
 import './style.scss'
 import { ChangeEvent, useMemo, useState, forwardRef, ForwardedRef } from 'react'
 
-import { AppButton } from 'src/shared/ui'
-import type { IAppInputProps } from 'src/shared/ui/AppInput/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { AppButton } from '..'
+
+import type { IAppInputProps } from './config'
 
 const rootClass = 'app-input'
 

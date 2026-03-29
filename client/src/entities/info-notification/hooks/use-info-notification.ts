@@ -1,6 +1,7 @@
-import { INFO_NOTIFICATION_MAP, INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
 import { useI18n } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
+
+import { INFO_NOTIFICATION_MAP, INFO_NOTIFICATIONS_I18N } from '..'
 
 export const useInfoNotification = () => {
   const { infoNotifications } = useUser()

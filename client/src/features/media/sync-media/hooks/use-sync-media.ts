@@ -1,8 +1,8 @@
 
-import { useLoadMedia } from 'src/features/media/load-media'
-import { syncMedia } from 'src/features/media/sync-media'
-
 import { useMedia } from 'src/entities/media'
+
+import { syncMedia } from '..'
+import { useLoadMedia } from '../../load-media'
 
 export const useSyncMedia = () => {
   const { media, update: updateMedia } = useMedia()

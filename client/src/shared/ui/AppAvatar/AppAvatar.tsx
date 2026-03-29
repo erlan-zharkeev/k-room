@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react'
 
 import { Badge, Image } from 'antd'
 
-import { AppIconNameType, AppIcon } from 'src/shared/ui'
-import type { IAppAvatarProps } from 'src/shared/ui/AppAvatar/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { AppIconNameType, AppIcon } from '..'
+
+import type { IAppAvatarProps } from './config'
 
 const AvatarBody = ({
   src,

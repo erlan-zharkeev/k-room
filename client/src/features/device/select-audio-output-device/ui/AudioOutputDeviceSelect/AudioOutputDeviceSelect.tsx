@@ -1,12 +1,12 @@
 import './style.scss'
 import { useEffect } from 'react'
 
-import { AUDIO_OUTPUT_DEVICE_SELECT_I18N, SelectDevice, useOutputAudioDevice } from 'src/features/device'
-
 import { useSettings } from 'src/entities/settings'
 import { useI18n } from 'src/entities/system'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import { AUDIO_OUTPUT_DEVICE_SELECT_I18N, SelectDevice, useOutputAudioDevice } from '../../..'
 
 export const AudioOutputDeviceSelect = () => {
   const { t } = useI18n()

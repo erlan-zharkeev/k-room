@@ -9,6 +9,15 @@ import { AppDispatchType } from 'src/app/store'
 
 import { callCounter } from 'src/features/call'
 
+import { useI18n } from 'src/entities/system'
+
+import { socket } from 'src/shared/api'
+import { useTypedSelector, useCounter } from 'src/shared/lib'
+import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
+import { AppButton, AppAvatar } from 'src/shared/ui'
+
+import type { ICallModalBodyProps } from '../../..'
+import { CALL_MODAL_BODY_I18N } from '../../..'
 import {
  CallDots, CallModalVideo,
   setCallStartedAt,
@@ -18,15 +27,7 @@ import {
   setCallAudio,
   setCallSettingsLoading,
   setCallVideo
-} from 'src/entities/call'
-import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui'
-import type { ICallModalBodyProps } from 'src/entities/call/ui'
-import { useI18n } from 'src/entities/system'
-
-import { socket } from 'src/shared/api'
-import { useTypedSelector, useCounter } from 'src/shared/lib'
-import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
-import { AppButton, AppAvatar } from 'src/shared/ui'
+} from '../../../..'
 
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const dispatch = useDispatch<AppDispatchType>()

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import type { IButtonProps } from 'src/shared/ui'
+import type { IButtonProps } from '../..'
 
 export interface IAppModalAction {
   text?: string

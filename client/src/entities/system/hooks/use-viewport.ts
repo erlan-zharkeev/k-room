@@ -1,5 +1,5 @@
-import { useSystem } from 'src/entities/system'
-import { MIN_SUPPORTED_HEIGHT, MIN_SUPPORTED_WIDTH, VIEW_PORT_WIDTH } from 'src/entities/system/config'
+import { useSystem } from '..'
+import { MIN_SUPPORTED_HEIGHT, MIN_SUPPORTED_WIDTH, VIEW_PORT_WIDTH } from '../config'
 
 export const useViewport = () => {
   const { viewPort } = useSystem()

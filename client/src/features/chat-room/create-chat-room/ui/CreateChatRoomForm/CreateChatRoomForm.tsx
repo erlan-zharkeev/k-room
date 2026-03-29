@@ -1,12 +1,13 @@
 import './style.scss'
 
-import { useCreateChatRoom, CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room'
-import type { ICreateChatRoomFormProps } from 'src/features/chat-room/create-chat-room'
 import { usePickContact } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/system'
 
 import { AppForm, AppText } from 'src/shared/ui'
+
+import type { ICreateChatRoomFormProps } from '../..'
+import { useCreateChatRoom, CREATE_CHAT_ROOM_FORM_I18N } from '../..'
 
 export const CreateChatRoomForm = ({ onSuccess }: ICreateChatRoomFormProps) => {
   const { isLoading, createChatRoom } = useCreateChatRoom({ onSuccess })

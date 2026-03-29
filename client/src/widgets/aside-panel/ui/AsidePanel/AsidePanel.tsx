@@ -1,7 +1,6 @@
 import './style.scss'
 import { ReactElement } from 'react'
 
-import { Calls, ChatRooms, Contacts } from 'src/widgets/aside-panel'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { UserSettings } from 'src/features/settings'
@@ -9,6 +8,8 @@ import { UserSettings } from 'src/features/settings'
 import { useSettings } from 'src/entities/settings'
 
 import { ContentTabType } from 'src/shared/config'
+
+import { Calls, ChatRooms, Contacts } from '../..'
 
 export const AsidePanel = () => {
   const { showAsidePanel, selectedContentTab } = useSettings()

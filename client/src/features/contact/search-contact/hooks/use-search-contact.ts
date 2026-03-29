@@ -6,7 +6,7 @@ import type { IEventGetSearchedContact, IEventSearchContact, IFrontendContact, S
 import { socket } from 'src/shared/api'
 import { useDebounce } from 'src/shared/lib'
 
-// import { SEARCHED_CONTACTS_MOCK } from 'src/features/contact/search-contact'
+// import { SEARCHED_CONTACTS_MOCK } from '..'
 
 export const useSearchContact = () => {
   const [searchQuery, setSearchQuery] = useState('')

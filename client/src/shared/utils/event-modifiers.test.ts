@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { stopPropagation } from 'src/shared/utils/event-modifiers'
+import { stopPropagation } from './event-modifiers'
 
 describe('stopPropagation', () => {
   it('calls stopPropagation on a plain event', () => {

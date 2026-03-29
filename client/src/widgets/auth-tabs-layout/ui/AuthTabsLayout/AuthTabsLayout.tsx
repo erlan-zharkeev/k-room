@@ -3,13 +3,13 @@ import './style.scss'
 import { RouteNamesEnum } from 'common'
 import { Link, useLocation } from 'react-router-dom'
 
-import { AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
-import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
-
 import { useI18n } from 'src/entities/system'
 
 import { AppHeader } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { AuthTabsLayoutProps } from '../..'
+import { AUTH_TABS_LAYOUT_I18N } from '../..'
 
 export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProps) => {
   const location = useLocation()

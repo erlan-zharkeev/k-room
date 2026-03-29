@@ -1,8 +1,8 @@
 import { SocketActionsType } from 'common'
 
-import { useHandleDeliveredMessage } from 'src/features/message/message-delivery-handler'
-
 import { socket } from 'src/shared/api'
+
+import { useHandleDeliveredMessage } from '..'
 
 export const useMessageDelivery = () => {
   const { handleDeliveredMessage } = useHandleDeliveredMessage()

@@ -7,14 +7,14 @@ import {
 } from 'common'
 import { useDispatch } from 'react-redux'
 
-import { useAddMessage } from 'src/features/message'
-
 import { resetRepliedMessage, updateMessageInputData, useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
 import { FileLoaderValueType } from 'src/shared/config'
 import { generateUUIDv4 } from 'src/shared/utils'
+
+import { useAddMessage } from '../..'
 
 export const useMessageSend = () => {
   const dispatch = useDispatch()

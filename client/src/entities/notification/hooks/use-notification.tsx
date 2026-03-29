@@ -1,13 +1,14 @@
 import { notification as antdNotification } from 'antd'
 import { IMessage } from 'common'
 
-import { ERROR_NOTIFICATION_DURATION_IN_SEC } from 'src/entities/notification'
-import type { IAppNotification, NotificationType } from 'src/entities/notification'
-import { getNotificationIcon } from 'src/entities/notification/lib'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
 import { AppLogoIcon } from 'src/shared/ui'
+
+import { ERROR_NOTIFICATION_DURATION_IN_SEC } from '..'
+import type { IAppNotification, NotificationType } from '..'
+import { getNotificationIcon } from '../lib'
 
 export const useNotification = () => {
   const { showNotification } = useSettings()

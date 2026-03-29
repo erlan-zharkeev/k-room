@@ -2,8 +2,9 @@ import './style.scss'
 
 import { ChangeEvent, useState } from 'react'
 
-import type { IAppSwitchProps } from 'src/shared/ui/AppSwitch/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
+
+import type { IAppSwitchProps } from './config'
 
 const rootClass = 'app-switch'
 

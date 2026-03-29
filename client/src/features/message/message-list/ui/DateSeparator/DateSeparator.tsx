@@ -1,8 +1,8 @@
 import './style.scss'
 
-import type { IDateSeparatorProps } from 'src/features/message/message-list'
-
 import { AppText } from 'src/shared/ui'
+
+import type { IDateSeparatorProps } from '../..'
 
 export const DateSeparator = ({ label }: IDateSeparatorProps) => {
   return (

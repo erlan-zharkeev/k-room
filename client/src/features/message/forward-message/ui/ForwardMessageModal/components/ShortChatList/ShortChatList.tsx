@@ -1,11 +1,11 @@
 import './style.scss'
 import { useState, useMemo } from 'react'
 
-import { SHORT_CHAT_LIST_I18N } from 'src/features/message/forward-message'
-import type { IShortChatListProps } from 'src/features/message/forward-message'
-
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/system'
+
+import { SHORT_CHAT_LIST_I18N } from '../../../..'
+import type { IShortChatListProps } from '../../../..'
 
 export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
   const { chatRooms, selectedChatRoom } = useChatRoom()
