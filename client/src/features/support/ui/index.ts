@@ -1,1 +1,1 @@
-export * from './TechSupportLink/TechSupportLink'
+export * from './TechSupportLink'

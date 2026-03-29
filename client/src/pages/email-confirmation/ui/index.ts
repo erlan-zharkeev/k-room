@@ -1,1 +1,1 @@
-export * from './EmailConfirmation/EmailConfirmation'
+export * from './EmailConfirmation'

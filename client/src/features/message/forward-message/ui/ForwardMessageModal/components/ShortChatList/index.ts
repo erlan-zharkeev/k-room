@@ -1,2 +1,2 @@
-export * from './ShortChatList'
 export * from './config'
+export * from './ShortChatList'

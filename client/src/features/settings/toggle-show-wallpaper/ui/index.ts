@@ -1,2 +1,1 @@
-export * from './ShowWallpaperSwitcher/ShowWallpaperSwitcher'
-export * from './ShowWallpaperSwitcher/config'
+export * from './ShowWallpaperSwitcher'

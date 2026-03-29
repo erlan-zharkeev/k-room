@@ -1,3 +1,2 @@
-export * from './ContactsButton/ContactsButton'
-export * from './ContactAvatar/ContactAvatar'
-export * from './ContactAvatar/config'
+export * from './ContactAvatar'
+export * from './ContactsButton'

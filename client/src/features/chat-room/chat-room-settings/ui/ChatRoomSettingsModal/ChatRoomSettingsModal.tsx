@@ -4,9 +4,6 @@ import { useState } from 'react'
 import { Form } from 'antd'
 import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common'
 
-import { CHAT_ROOM_SETTINGS_MODAL_I18N } from 'src/features/chat-room/chat-room-settings'
-import type { IChatRoomSettingsModalProps } from 'src/features/chat-room/chat-room-settings'
-
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useSettings } from 'src/entities/settings'
@@ -15,6 +12,8 @@ import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
 import { AppAvatar, AppAvatarLoader, AppButton, AppHeader } from 'src/shared/ui'
+
+import { IChatRoomSettingsModalProps, CHAT_ROOM_SETTINGS_MODAL_I18N } from './config'
 
 // import { validateRules } from 'src/shared/utils'
 

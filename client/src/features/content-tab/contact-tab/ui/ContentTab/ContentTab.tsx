@@ -1,22 +1,13 @@
 import './style.scss'
 
 import { useContentTabSelect } from 'src/features/content-tab'
-import type { IContentTabButton } from 'src/features/content-tab'
 
-import { CallsButton } from 'src/entities/call'
-import { ChatRoomsButton } from 'src/entities/chat-room'
-import { ContactsButton } from 'src/entities/contact'
-import { SettingsButton, useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
 
 import type { ContentTabType } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/utils'
 
-const buttons: IContentTabButton[] = [
-  { Component: ContactsButton, value: 'contacts' },
-  { Component: ChatRoomsButton, value: 'chat-rooms' },
-  { Component: CallsButton, value: 'calls' },
-  { Component: SettingsButton, value: 'settings' }
-]
+import { BUTTONS } from './config'
 
 export const ContentTab = () => {
   const { selectedContentTab } = useSettings()
@@ -30,7 +21,7 @@ export const ContentTab = () => {
 
   return (
     <div className="content-tab">
-      {buttons.map(({ Component, value }) => (
+      {BUTTONS.map(({ Component, value }) => (
         <div key={value} className={tabElementClass(value)} onClick={() => selectContentTab(value)}>
           <Component />
         </div>

@@ -1,2 +1,1 @@
-export * from './ContentTab/ContentTab'
-export * from './ContentTab/types'
+export * from './ContentTab'

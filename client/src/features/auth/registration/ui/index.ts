@@ -1,5 +1,2 @@
-export * from './RegistrationForm/RegistrationForm'
-export * from './RegistrationForm/config'
-export * from './RegistrationForm/types'
-export * from './PrivacyPolicySwitch/PrivacyPolicySwitch'
-export * from './PrivacyPolicySwitch/config'
+export * from './PrivacyPolicySwitch'
+export * from './RegistrationForm'

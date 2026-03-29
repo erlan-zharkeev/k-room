@@ -1,10 +1,10 @@
 import './style.scss'
 
-import { NO_MESSAGES_PLACEHOLDER_I18N } from 'src/features/message/message-list'
-
 import { useI18n } from 'src/entities/system'
 
 import { AppText } from 'src/shared/ui'
+
+import { NO_MESSAGES_PLACEHOLDER_I18N } from './config'
 
 export const NoMessagesPlaceholder = () => {
   const { t } = useI18n()

@@ -1,3 +1,2 @@
-export * from './MessageWithBindDataModal/MessageWithBindDataModal'
-export * from './MessageWithBindDataModal/config'
-export * from './MessageWIthBindDataModalMenu/MessageWIthBindDataModalMenu'
+export * from './MessageWithBindDataModal'
+export * from './MessageWIthBindDataModalMenu'

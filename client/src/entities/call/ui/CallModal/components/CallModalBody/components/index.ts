@@ -1,2 +1,2 @@
-export * from './CallDots/CallDots'
-export * from './CallModalVideo/CallModalVideo'
+export * from './CallDots'
+export * from './CallModalVideo'

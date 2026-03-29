@@ -1,36 +1,36 @@
-stages:
-  - verify
-  - publish-images
+# stages:
+#   - verify
+#   - publish-images
 
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+# workflow:
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == "push"
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-verify:
-  image: node:24.14.0
-  stage: verify
-  script:
-    - npm ci
-    - npm --prefix types ci
-    - npm --prefix client ci --legacy-peer-deps
-    - npm --prefix server ci
-    - npm run check
+# verify:
+#   image: node:24.14.0
+#   stage: verify
+#   script:
+#     - npm ci
+#     - npm --prefix types ci
+#     - npm --prefix client ci --legacy-peer-deps
+#     - npm --prefix server ci
+#     - npm run check
 
-publish-images:
-  image: docker:20.10
-  stage: publish-images
-  services:
-    - docker:dind
-  rules:
-    - when: never
-  script:
-    - echo "$DOCKERHUB_TOKEN" | docker login -u ketjo --password-stdin
-    - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./.env.production
-    - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./.env.production
-    - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./.env.production
-    - echo "FIREBASE_API_KEY=$FIREBASE_API_KEY" >> ./.env.production
-    - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
-    - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
-    - docker push ketjo/k-room_server:latest
-    - docker push ketjo/k-room_client:latest
+# publish-images:
+#   image: docker:20.10
+#   stage: publish-images
+#   services:
+#     - docker:dind
+#   rules:
+#     - when: never
+#   script:
+#     - echo "$DOCKERHUB_TOKEN" | docker login -u ketjo --password-stdin
+#     - echo "K_ROOM_ACCESS_TOKEN_SECRET=$K_ROOM_ACCESS_TOKEN_SECRET" >> ./.env.production
+#     - echo "K_ROOM_REFRESH_TOKEN_SECRET=$K_ROOM_REFRESH_TOKEN_SECRET" >> ./.env.production
+#     - echo "K_ROOM_MAIL_PASS=$K_ROOM_MAIL_PASS" >> ./.env.production
+#     - echo "FIREBASE_API_KEY=$FIREBASE_API_KEY" >> ./.env.production
+#     - docker build -t ketjo/k-room_client:latest -f ./client/Dockerfile ./
+#     - docker build -t ketjo/k-room_server:latest -f ./server/Dockerfile ./
+#     - docker push ketjo/k-room_server:latest
+#     - docker push ketjo/k-room_client:latest

@@ -1,1 +1,1 @@
-export * from './WaitEmailConfirm/WaitEmailConfirm'
+export * from './WaitEmailConfirm'
