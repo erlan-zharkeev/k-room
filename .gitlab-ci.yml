@@ -64,5 +64,12 @@ deploy-production:
   script:
     - >
       ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
+      "mkdir -p $LIGHTSAIL_APP_PATH/deploy $LIGHTSAIL_APP_PATH/config/nginx $LIGHTSAIL_APP_PATH/deploy/certs"
+    - scp compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
+    - scp .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
+    - scp deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy/deploy.sh"
+    - scp config/nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/config/nginx/webserver.conf"
+    - >
+      ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
       "cd $LIGHTSAIL_APP_PATH
       && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./deploy/deploy.sh"
