@@ -69,6 +69,8 @@ deploy-production:
     - scp compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
     - scp .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
     - scp deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy/deploy.sh"
+    - scp deploy/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy/sync-certs.sh"
+    - scp deploy/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy/install-certbot-renew-hook.sh"
     - scp config/nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/config/nginx/webserver.conf"
     - >
       ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"

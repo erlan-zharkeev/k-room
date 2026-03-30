@@ -48,8 +48,6 @@ services:
   mongo-express:
     image: mongo-express:latest
     restart: unless-stopped
-    profiles:
-      - admin
     environment:
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_ADMIN_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_ADMIN_PASSWORD}
@@ -57,6 +55,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1:8081/ || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
   webserver:
     image: nginx:stable-alpine
@@ -65,6 +69,8 @@ services:
       client:
         condition: service_healthy
       server:
+        condition: service_healthy
+      mongo-express:
         condition: service_healthy
     ports:
       - '80:80'
