@@ -30,6 +30,8 @@ FROM node:24.14.0
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
 COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
 COPY common/index.ts ./common/index.ts
@@ -52,4 +54,4 @@ COPY --from=build /app/server/build ./build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "server-run"]
+CMD ["node", "./build/index.js"]
