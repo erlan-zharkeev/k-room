@@ -41,6 +41,13 @@ mkdir -p "$ROOT_DIR/deploy/certs"
 cat "$ENV_FILE" "$RUNTIME_ENV_FILE" > "$MERGED_ENV_FILE"
 trap 'rm -f "$MERGED_ENV_FILE"' EXIT
 
+APP_HOST="$(grep '^APP_HOST=' "$ENV_FILE" | head -n 1 | cut -d '=' -f 2- | sed "s/^'//; s/'$//; s/^\"//; s/\"$//")"
+CERT_DOMAIN="$(printf '%s' "$APP_HOST" | sed -E 's#^[a-z]+://([^/]+).*$#\1#')"
+
+if [ -r "/etc/letsencrypt/live/$CERT_DOMAIN/fullchain.pem" ]; then
+  sh "$ROOT_DIR/deploy/sync-certs.sh"
+fi
+
 echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
 docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" pull
