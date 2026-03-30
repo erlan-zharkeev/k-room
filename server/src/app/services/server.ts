@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
+import http from 'http'
 import https from 'https'
 import methodOverride from 'method-override'
 
@@ -25,7 +26,7 @@ app.use(attachRequestLanguage)
 app.use(RouteNamesEnum.Api, rootRouter)
 setupSentryErrorHandler(app)
 
-const server = https.createServer(httpsOptions, app)
+const server = ENV.IS_DEV ? https.createServer(httpsOptions, app) : http.createServer(app)
 
 export const runServer = async () => {
   await initDataBase()
