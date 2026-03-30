@@ -45,23 +45,26 @@ export const WaitEmailConfirm = () => {
 
   const sendLink = async () => {
     setIsLoading(true)
-    const response = await doRequest<ISendConfirmationLinkResponse>(
-      'post',
-      AuthEndpointsEnum.SendEmailConfirmationLink,
-      { email }
-    )
-    setIsLoading(false)
-    if (!response || response.status !== StatusEnum.Success) return
-    const payload = response.data.payload
+    try {
+      const response = await doRequest<ISendConfirmationLinkResponse>(
+        'post',
+        AuthEndpointsEnum.SendEmailConfirmationLink,
+        { email }
+      )
+      if (!response || response.status !== StatusEnum.Success) return
+      const payload = response.data.payload
 
-    const updatedPath = query.buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, {
-      email: payload.email,
-      nextRequestTime: payload.nextRequestTime,
-      attempts: payload.attempts
-    })
+      const updatedPath = query.buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, {
+        email: payload.email,
+        nextRequestTime: payload.nextRequestTime,
+        attempts: payload.attempts
+      })
 
-    navigate(updatedPath, { replace: true })
-    refresh(_ + 1)
+      navigate(updatedPath, { replace: true })
+      refresh(_ + 1)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

@@ -18,6 +18,7 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 - Add Playwright e2e smoke tests for critical user flows.
 - Add the first Playwright scenarios: registration, login, password recovery.
 - Add targeted tests for critical pure helpers and validation logic.
+- Check direct `db` usage outside `entities` and move it behind entity public APIs where needed.
 
 - проверить флоу что с чатом если удалить пользака что будет с чатом уже созданным как груповым так и индивидуальным.
 - что же там с картинками и их кэшем

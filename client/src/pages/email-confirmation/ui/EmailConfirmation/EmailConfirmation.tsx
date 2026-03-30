@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation/config'
+import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation'
 
 import { useLogout } from 'src/features/auth'
 
@@ -24,12 +24,17 @@ export const EmailConfirmation = () => {
   const { doRequest } = useApi()
 
   const sendEmailConfirmation = async (token: string) => {
-    const response = await doRequest<IConfirmEmailResponse>('post', AuthEndpointsEnum.ConfirmEmail, { token })
-    if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
-    const payload = response.data.payload
-    setEmail(payload.email)
-    await logout()
-    setIsLoading(false)
+    try {
+      const response = await doRequest<IConfirmEmailResponse>('post', AuthEndpointsEnum.ConfirmEmail, { token })
+      if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
+      const payload = response.data.payload
+      setEmail(payload.email)
+      await logout()
+    } catch {
+      navigate(RouteNamesEnum.Login)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {

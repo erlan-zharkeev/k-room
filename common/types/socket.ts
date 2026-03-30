@@ -9,7 +9,8 @@ import {
   MediaFileValueType,
   IBaseFrontendUserData,
   FrontendContactMapType,
-  IFrontendContact
+  IFrontendContact,
+  AppLanguageType
 } from './index'
 
 export interface IEventInterlocutorUpdateSignal {
@@ -185,6 +186,10 @@ export interface IEventAuthError {
   payload: unknown
 }
 
+export interface IEventUpdateLanguage {
+  language: AppLanguageType
+}
+
 export type SocketActionsType =
   | 'connection'
   | 'error'
@@ -242,5 +247,6 @@ export type SocketActionsType =
   | 'actual-contacts'
   | 'actual-messages'
   | 'actualize-user-data'
+  | 'update-language'
   | 'reconnect_attempt'
   | 'reconnect_failed'
