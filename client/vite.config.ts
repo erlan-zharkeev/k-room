@@ -7,6 +7,8 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 
+import { APP_NAME, SUPPORT_EMAIL } from './src/shared/config/constants'
+
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
@@ -23,9 +25,9 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       CLIENT_ENV_DATA: JSON.stringify({
-        appName: env.APP_NAME,
+        appName: APP_NAME,
         appVersion: process.env.npm_package_version ?? '',
-        supportEmail: env.SUPPORT_EMAIL,
+        supportEmail: SUPPORT_EMAIL,
         serverPort: Number(env.SERVER_PORT),
         clientPort: Number(env.CLIENT_PORT),
         appHost: env.APP_HOST,
@@ -59,8 +61,8 @@ export default defineConfig(({ mode }) => {
           },
           injectRegister: 'auto',
           manifest: {
-            name: 'K-Room',
-            short_name: 'K-Room',
+            name: APP_NAME,
+            short_name: APP_NAME,
             description: 'Text and video chat',
             theme_color: '#1c1c1c',
             background_color: '#1c1c1c',

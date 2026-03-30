@@ -1,12 +1,14 @@
 import {
+  APP_NAME,
   buildEmailConfirmationLink,
   createResendClient,
   EMAIL_CONFIRMATION_SUBJECT,
   EMAIL_I18N,
-  renderEmailConfirmationHtml
+  renderEmailConfirmationHtml,
+  RESEND_FROM_EMAIL,
+  RESEND_FROM_NAME,
 } from 'src/features/email'
 
-import { ENV } from 'src/shared/config'
 import { getLocalizedText, log } from 'src/shared/lib'
 
 export const sendEmailConfirmationEmail = async ({
@@ -26,13 +28,9 @@ export const sendEmailConfirmationEmail = async ({
     throw new Error(getLocalizedText(EMAIL_I18N.emailConfirmationTokenMissing))
   }
 
-  if (!ENV.RESEND_FROM_EMAIL) {
-    throw new Error(getLocalizedText(EMAIL_I18N.resendFromEmailMissing))
-  }
-
   const resend = createResendClient()
   const confirmUrl = buildEmailConfirmationLink(token)
-  const from = ENV.RESEND_FROM_NAME ? `${ENV.RESEND_FROM_NAME} <${ENV.RESEND_FROM_EMAIL}>` : ENV.RESEND_FROM_EMAIL
+  const from = RESEND_FROM_NAME ? `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>` : RESEND_FROM_EMAIL
 
   if (!resend) {
     log.warn(`-Mock confirmation email for ${email}: ${confirmUrl}`)
@@ -42,7 +40,7 @@ export const sendEmailConfirmationEmail = async ({
   const { data, error } = await resend.emails.send({
     from,
     to: email,
-    subject: `${ENV.APP_NAME}: ${EMAIL_CONFIRMATION_SUBJECT}`,
+    subject: `${APP_NAME}: ${EMAIL_CONFIRMATION_SUBJECT}`,
     html: renderEmailConfirmationHtml({ confirmUrl, username })
   })
 
