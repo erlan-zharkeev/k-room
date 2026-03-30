@@ -40,7 +40,8 @@ export const ENV = {
 } as IEnvVariables
 
 const host = new URL(ENV.APP_HOST)
+const appHostnames = [host.hostname, `www.${host.hostname}`]
 
-export const ORIGINS = [`https://${host.hostname}`, `http://${host.hostname}`]
+export const ORIGINS = appHostnames.flatMap((hostname) => [`https://${hostname}`, `http://${hostname}`])
 
 export const SEARCH_CONTACT_RESULT_LIMIT = 10
