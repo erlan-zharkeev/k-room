@@ -8,12 +8,12 @@ import { db } from 'src/shared/lib'
 export const useContact = () => {
   const contacts =
     useLiveQuery(async () => {
-      return await (db.contacts.toArray() as Promise<DbContactType[]>)
+      return await (db.contacts.toArray() satisfies Promise<DbContactType[]>)
     }, []) ?? []
 
   const getContactByIds = (ids: string[]): DbContactType[] => {
     if (!ids?.length) return []
-    const map = new Map(contacts.map((c) => [c.id, c] as const))
+    const map = new Map(contacts.map((c) => [c.id, c]))
     const result: DbContactType[] = []
     for (const id of ids) {
       const c = map.get(id)
@@ -30,6 +30,8 @@ export const useContact = () => {
     await db.contacts.update(id, patch)
   }
 
+  const bulkPutContacts = async (payload: DbContactType[]) => await db.contacts.bulkPut(payload)
+
   const reset = () => db.contacts.clear()
 
   return {
@@ -39,6 +41,7 @@ export const useContact = () => {
     getContactByIds,
     putContact,
     updateContact,
+    bulkPutContacts,
     reset
   }
 }

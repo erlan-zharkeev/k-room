@@ -1,34 +1,14 @@
-import { SocketActionsType, EventGetContactsType } from 'common'
+import { SocketActionsType } from 'common'
 
-import { getRequiredContactSystemData } from 'src/features/contact'
+import { useContact } from 'src/entities/contact'
 
 import { socket } from 'src/shared/api'
-import { db } from 'src/shared/lib'
 
 export const useLoadContacts = () => {
-  const loadContacts = async (list: EventGetContactsType) => {
-    const existingContacts = await db.contacts.toArray()
-    const existingContactMap = new Map(existingContacts.map((contact) => [contact.id, contact] as const))
-    const result = Object.entries(list).map(([_, data]) => {
-      const existingContact = existingContactMap.get(data.id)
-
-      return existingContact
-        ? {
-            ...existingContact,
-            ...data,
-            onlineStatusSyncedAt: Date.now()
-          }
-        : {
-            ...data,
-            ...getRequiredContactSystemData()
-          }
-    })
-
-    await db.contacts.bulkPut(result)
-  }
+  const { bulkPutContacts } = useContact()
 
   const monitorContactsLoading = () => {
-    socket.on<SocketActionsType>('contacts-loaded', loadContacts)
+    socket.on<SocketActionsType>('contacts-loaded', bulkPutContacts)
   }
 
   return { monitorContactsLoading }

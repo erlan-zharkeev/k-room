@@ -32,17 +32,20 @@ export const useRegistration = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const register = async (fields: IAuthRegistrationPayload) => {
-    setIsLoading(true)
-    const response = await doRequest<ISendConfirmationLinkResponse>('post', AuthEndpointsEnum.Registration, fields)
-    setIsLoading(false)
+    try {
+      setIsLoading(true)
+      const response = await doRequest<ISendConfirmationLinkResponse>('post', AuthEndpointsEnum.Registration, fields)
 
-    if (!response || response.status !== StatusEnum.Success) return
+      if (!response || response.status !== StatusEnum.Success) return
 
-    const { payload } = response.data
+      const { payload } = response.data
 
-    const pathname = buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, payload)
+      const pathname = buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, payload)
 
-    navigate(pathname)
+      navigate(pathname)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const onRegister = ({ email, password, username }: RegistrationFormData) => {
