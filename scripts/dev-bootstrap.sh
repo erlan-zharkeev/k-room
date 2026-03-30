@@ -28,8 +28,6 @@ fi
 
 required_env_vars=(
   "RESEND_API_KEY"
-  "RESEND_FROM_EMAIL"
-  "RESEND_FROM_NAME"
   "EMAIL_CONFIRM_SECRET"
   "FIREBASE_API_KEY"
   "SENTRY_DSN_CLIENT"
@@ -51,12 +49,6 @@ if [ ${#missing_env_vars[@]} -gt 0 ]; then
     case "$env_var_name" in
       "RESEND_API_KEY")
         echo "  - RESEND_API_KEY: required for password recovery and email delivery flows." >&2
-        ;;
-      "RESEND_FROM_EMAIL")
-        echo "  - RESEND_FROM_EMAIL: sender email used by Resend." >&2
-        ;;
-      "RESEND_FROM_NAME")
-        echo "  - RESEND_FROM_NAME: sender display name used by Resend." >&2
         ;;
       "EMAIL_CONFIRM_SECRET")
         echo "  - EMAIL_CONFIRM_SECRET: required to issue email confirmation tokens." >&2

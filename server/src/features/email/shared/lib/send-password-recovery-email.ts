@@ -1,4 +1,4 @@
-import { createResendClient } from 'src/features/email'
+import { APP_NAME, createResendClient, PASSWORD_RECOVERY_SUBJECT, RESEND_FROM_EMAIL, RESEND_FROM_NAME } from 'src/features/email'
 
 import { ENV } from 'src/shared/config'
 
@@ -12,8 +12,8 @@ export const sendPasswordRecoveryEmail = async ({
   username?: string
 }) => {
   const resend = createResendClient()
-  const from = ENV.RESEND_FROM_NAME ? `${ENV.RESEND_FROM_NAME} <${ENV.RESEND_FROM_EMAIL}>` : ENV.RESEND_FROM_EMAIL
-  const subject = `${ENV.APP_NAME}: Password recovery code`
+  const from = RESEND_FROM_NAME ? `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>` : RESEND_FROM_EMAIL
+  const subject = `${APP_NAME}: ${PASSWORD_RECOVERY_SUBJECT}`
   const html = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
       <h2>Password recovery</h2>

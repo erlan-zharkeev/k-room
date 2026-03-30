@@ -54,7 +54,10 @@ export const initDataBase = async (): Promise<boolean> => {
 
     try {
       initMediaBuckets()
-      await loadFixtures()
+
+      if (ENV.IS_DEV) {
+        await loadFixtures()
+      }
     } catch (error) {
       log.error('-Post-DB init failed')
       log.error(String(error))

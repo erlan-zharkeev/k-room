@@ -1,0 +1,1 @@
+export const EMAIL_CONFIRMATION_LINK_LIFE = 86_400

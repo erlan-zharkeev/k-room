@@ -1,11 +1,11 @@
-import { ENV } from 'src/shared/config'
+import { APP_NAME } from 'src/features/email'
 
 export const renderEmailConfirmationHtml = ({ confirmUrl, username }: { confirmUrl: string; username?: string }) => {
   const greeting = username ? `Hi, ${username}!` : 'Hi!'
 
   return `
     <div style="font-family: Arial, sans-serif; color: #101828; line-height: 1.6;">
-      <h2 style="margin-bottom: 16px;">${ENV.APP_NAME}</h2>
+      <h2 style="margin-bottom: 16px;">${APP_NAME}</h2>
       <p>${greeting}</p>
       <p>Please confirm your email address to finish registration.</p>
       <p>

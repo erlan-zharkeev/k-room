@@ -1,5 +1,6 @@
 import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
+import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth/shared'
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { USER_I18N } from 'src/features/user'
 
@@ -8,7 +9,6 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { generateToken } from './../shared'
 import { SEND_CONFIRMATION_LINK_I18N } from './config'
 
 export const sendConfirmationLinkController = async (
@@ -50,7 +50,7 @@ export const sendConfirmationLinkController = async (
       )
     }
 
-    const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, Number(ENV.EMAIL_CONFIRMATION_LINK_LIFE))
+    const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, EMAIL_CONFIRMATION_LINK_LIFE)
 
     await sendEmailConfirmationEmail({
       email: user.personal.email,
