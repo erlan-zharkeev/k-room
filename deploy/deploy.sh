@@ -44,4 +44,4 @@ trap 'rm -f "$MERGED_ENV_FILE"' EXIT
 echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
 docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" pull
-docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d
+docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --remove-orphans

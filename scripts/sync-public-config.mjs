@@ -32,13 +32,8 @@ if (env.API_HOST == null || env.API_HOST === '') {
   throw new Error(`API_HOST is missing in .env.${stage}`)
 }
 
-if (env.MONGO_ADMIN_HOST == null || env.MONGO_ADMIN_HOST === '') {
-  throw new Error(`MONGO_ADMIN_HOST is missing in .env.${stage}`)
-}
-
 const appDomain = new URL(env.APP_HOST).hostname
 const apiDomain = new URL(env.API_HOST).hostname
-const mongoAdminDomain = new URL(env.MONGO_ADMIN_HOST).hostname
 
 const applyTemplate = (templatePath, outputPath, replacements) => {
   let content = fs.readFileSync(templatePath, 'utf8')
@@ -52,6 +47,5 @@ const applyTemplate = (templatePath, outputPath, replacements) => {
 
 applyTemplate(nginxTemplatePath, nginxPath, {
   APP_DOMAIN: appDomain,
-  API_DOMAIN: apiDomain,
-  MONGO_ADMIN_DOMAIN: mongoAdminDomain
+  API_DOMAIN: apiDomain
 })
