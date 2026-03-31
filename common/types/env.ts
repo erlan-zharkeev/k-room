@@ -21,7 +21,6 @@ export interface IEnvVariables {
   SENTRY_DSN_CLIENT: string
   SENTRY_DSN_SERVER: string
   SENTRY_ENVIRONMENT: string
-  SENTRY_RELEASE: string
   SENTRY_ENABLED: string
   IS_DEV: boolean
   SERVER_ASSETS_PATH: string

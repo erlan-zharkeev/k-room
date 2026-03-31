@@ -36,7 +36,6 @@ export default defineConfig(({ mode }) => {
         firebaseApiKey: getClientEnv('FIREBASE_API_KEY', env.FIREBASE_API_KEY),
         sentryDsnClient: getClientEnv('SENTRY_DSN_CLIENT', env.SENTRY_DSN_CLIENT),
         sentryEnvironment: env.SENTRY_ENVIRONMENT,
-        sentryRelease: env.SENTRY_RELEASE,
         sentryEnabled: env.SENTRY_ENABLED === 'true'
       })
     },
