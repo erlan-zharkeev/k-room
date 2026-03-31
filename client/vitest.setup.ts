@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterEach } from 'vitest'
 
-import type { IClientEnv } from 'src/shared/config/env'
+import type { IClientEnv } from 'src/shared/config'
 
 Object.assign(globalThis, {
   CLIENT_ENV_DATA: {
