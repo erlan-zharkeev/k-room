@@ -3,7 +3,7 @@ import './style.scss'
 import { MessageImages, REPLIED_MESSAGE_I18N } from 'src/features/message/message-body'
 import type { IRepliedMessageProps } from 'src/features/message/message-body'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppText } from 'src/shared/ui'
 

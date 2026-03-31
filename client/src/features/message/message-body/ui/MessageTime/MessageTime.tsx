@@ -1,6 +1,6 @@
 import type { IMessageTimeProps } from 'src/features/message/message-body'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { formatLocalizedTime } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'

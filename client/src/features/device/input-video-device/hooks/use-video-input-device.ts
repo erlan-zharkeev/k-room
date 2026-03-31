@@ -4,7 +4,7 @@ import { useDevicePermissionRequestAndUpdate } from 'src/features/device/request
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconNameType } from 'src/shared/ui'

@@ -2,7 +2,7 @@ import './style.scss'
 
 import { usePasswordRecovery, PASSWORD_RECOVERY_BODY_I18N } from 'src/features/auth/password-recovery'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppButton, AppForm } from 'src/shared/ui'
 

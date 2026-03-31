@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm/config'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { useApi } from 'src/shared/api'
 import { useQuery, useCounter } from 'src/shared/lib'

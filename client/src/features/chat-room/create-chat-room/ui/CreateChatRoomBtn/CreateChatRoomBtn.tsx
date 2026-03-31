@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { CREATE_CHAT_ROOM_BTN_I18N, CreateChatRoomModal } from 'src/features/chat-room'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppButton, AppModal } from 'src/shared/ui'
 

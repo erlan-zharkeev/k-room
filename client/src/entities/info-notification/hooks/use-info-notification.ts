@@ -1,5 +1,5 @@
 import { INFO_NOTIFICATION_MAP, INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
 export const useInfoNotification = () => {

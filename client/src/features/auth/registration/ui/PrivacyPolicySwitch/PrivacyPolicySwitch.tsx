@@ -5,7 +5,7 @@ import { RouteNamesEnum } from 'common'
 import type { IPrivacyPolicySwitchProps } from 'src/features/auth/registration'
 import { PRIVACY_POLICY_SWITCH_I18N } from 'src/features/auth/registration'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'

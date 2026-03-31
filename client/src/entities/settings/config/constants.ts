@@ -1,5 +1,5 @@
+import { getBrowserLanguage } from './../lib'
 import { ContentTabType, IUserSetting } from 'src/shared/config'
-import { getBrowserLanguage } from 'src/shared/lib'
 
 export const FULL_CONTENT_ELEMENTS: ContentTabType[] = ['info']
 

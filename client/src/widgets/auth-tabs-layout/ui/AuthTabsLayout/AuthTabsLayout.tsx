@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom'
 import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
 import { AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppHeader } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'

@@ -20,7 +20,7 @@ import {
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppScrollDownButton } from 'src/shared/ui'
 

@@ -8,7 +8,7 @@ import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation'
 
 import { useLogout } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'

@@ -11,7 +11,7 @@ import {
 import type { IMessageMenuProps } from 'src/features/message/message-menu'
 
 import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
 import { AppDropdown, AppModal, AppText } from 'src/shared/ui'

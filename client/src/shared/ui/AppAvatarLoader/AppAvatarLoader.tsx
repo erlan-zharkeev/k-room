@@ -1,6 +1,6 @@
 import './style.scss'
 import { useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppAvatar, AppIcon } from 'src/shared/ui'
 import type { IAvatarLoaderProps } from 'src/shared/ui'

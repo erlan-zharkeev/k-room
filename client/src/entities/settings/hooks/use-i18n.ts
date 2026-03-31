@@ -1,8 +1,6 @@
 import { type LocalizedTextType } from 'common'
 
-import { useSettings } from 'src/entities/settings'
-
-import { getLocalizedText } from 'src/shared/lib'
+import { getLocalizedText, useSettings } from './../'
 
 export const useI18n = () => {
   const { language } = useSettings()

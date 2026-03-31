@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout/config'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppButton, AppIcon, AppLogo } from 'src/shared/ui'
 

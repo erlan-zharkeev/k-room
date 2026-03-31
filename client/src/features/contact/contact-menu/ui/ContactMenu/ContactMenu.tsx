@@ -7,7 +7,7 @@ import { CONTACT_MENU_I18N, DeleteContactConfirmModal, useDeleteContact } from '
 import type { IContactMenuProps } from 'src/features/contact/contact-menu'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { useTimeout } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'

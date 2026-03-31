@@ -6,7 +6,7 @@ import { ShortChatList } from 'src/features/message'
 import { FORWARD_MESSAGE_MODAL_I18N } from 'src/features/message/forward-message'
 import type { IForwardMessageModalProps } from 'src/features/message/forward-message'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppInput } from 'src/shared/ui'
 
