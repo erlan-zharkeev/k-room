@@ -3,7 +3,6 @@ node_modules
 client/build
 client/dev-dist
 server/build
-common/**/*.js
 common/**/*.d.ts
 common/tsconfig.tsbuildinfo
 e2e/playwright-report
