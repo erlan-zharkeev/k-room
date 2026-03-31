@@ -2,15 +2,9 @@
 
 ##
 
-Production domains: `APP_HOST` and `API_HOST` from `.env.production`
-
 ![App main screen](./docs/assets/main-screen.png 'main screen')
 
 ![App call screen](./docs/assets/call-screen.png 'call screen')
-
-## Pre-install
-
-- Husky is initialized automatically by `npm run dev`
 
 ### Requirements
 
@@ -19,5 +13,5 @@ Production domains: `APP_HOST` and `API_HOST` from `.env.production`
 
 ## Development
 
-- Add variables to bash `RESEND_API_KEY`, `EMAIL_CONFIRM_SECRET`, `FIREBASE_API_KEY`, `SENTRY_DSN_CLIENT`, `SENTRY_DSN_SERVER`
+- Add variables to bash `RESEND_API_KEY`,`EMAIL_CONFIRM_SECRET`, `FIREBASE_API_KEY`
 - Run `npm run dev`

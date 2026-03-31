@@ -9,6 +9,7 @@ import { createUser, isUserExist } from 'src/features/user'
 import { type AppResponseType, ENV, type IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
+import { REGISTRATION_RESEND_INTERVAL_MINUTES } from './config'
 import { REGISTRATION_I18N } from './index'
 
 export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
@@ -35,7 +36,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
       username
     })
 
-    const nextRequestTime = Date.now() + Number(ENV.REGISTRATION_RESEND_INTERVAL_MINUTES) * 60 * 1000
+    const nextRequestTime = Date.now() + REGISTRATION_RESEND_INTERVAL_MINUTES
 
     const response = {
       payload: {

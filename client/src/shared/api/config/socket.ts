@@ -12,5 +12,5 @@ export const socket = io(`${CLIENT_ENV.socketBaseUrl}/`, {
   reconnection: true,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 1000,
-  reconnectionAttempts: CLIENT_ENV.maxReconnectAttempts
+  reconnectionAttempts: 10
 })

@@ -10,7 +10,6 @@ export interface IClientEnv {
   clientPort: number
   appHost: string
   apiHost: string
-  maxReconnectAttempts: number
   firebaseApiKey: string
   sentryDsnClient: string
   sentryEnvironment: string

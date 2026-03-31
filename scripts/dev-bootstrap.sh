@@ -30,8 +30,6 @@ required_env_vars=(
   "RESEND_API_KEY"
   "EMAIL_CONFIRM_SECRET"
   "FIREBASE_API_KEY"
-  "SENTRY_DSN_CLIENT"
-  "SENTRY_DSN_SERVER"
 )
 
 missing_env_vars=()
@@ -55,12 +53,6 @@ if [ ${#missing_env_vars[@]} -gt 0 ]; then
         ;;
       "FIREBASE_API_KEY")
         echo "  - FIREBASE_API_KEY: required for Google sign-in on the client." >&2
-        ;;
-      "SENTRY_DSN_CLIENT")
-        echo "  - SENTRY_DSN_CLIENT: required for client-side Sentry." >&2
-        ;;
-      "SENTRY_DSN_SERVER")
-        echo "  - SENTRY_DSN_SERVER: required for server-side Sentry." >&2
         ;;
     esac
   done

@@ -6,12 +6,12 @@ import { shouldIgnoreSentryError } from 'common'
 import { ENV } from 'src/shared/config'
 
 export const initSentry = () => {
-  if (ENV.SENTRY_ENABLED !== 'true' || !ENV.SENTRY_DSN_SERVER || Sentry.isInitialized()) {
+  if (ENV.SENTRY_ENABLED !== 'true' || Sentry.isInitialized()) {
     return
   }
 
   Sentry.init({
-    dsn: ENV.SENTRY_DSN_SERVER,
+    dsn: 'https://ab1874087030df840c3e1feadaee596b@o4511099405139968.ingest.us.sentry.io/4511099731181568',
     enabled: ENV.SENTRY_ENABLED === 'true',
     environment: ENV.SENTRY_ENVIRONMENT,
     debug: false,

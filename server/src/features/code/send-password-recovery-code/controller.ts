@@ -11,7 +11,7 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { CODE_LIFE_MS, SEND_PASSWORD_RECOVERY_CODE_I18N } from './config'
+import { CODE_LIFE_MS, RESEND_CODE_INTERVAL, SEND_PASSWORD_RECOVERY_CODE_I18N } from './config'
 
 const buildPasswordRecoveryCode = () => String(randomInt(100000, 1000000))
 
@@ -46,7 +46,7 @@ export const sendPasswordRecoveryCodeController = async (
     }
 
     const code = buildPasswordRecoveryCode()
-    const nextTimeRequest = now + Number(ENV.REGISTRATION_RESEND_INTERVAL_MINUTES) * 60 * 1000
+    const nextTimeRequest = now + RESEND_CODE_INTERVAL
 
     await CodeModel.updateOne(
       { _id: user.id },

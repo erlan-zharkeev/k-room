@@ -17,6 +17,7 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 - Add backend integration tests for auth flows: registration, login/logout, email confirmation, resend confirmation, password recovery.
 - Add Playwright e2e smoke tests for critical user flows.
 - Add the first Playwright scenarios: registration, login, password recovery.
+- Add automatic test запуск for Vitest and Playwright in the intended local/CI flow.
 - Add targeted tests for critical pure helpers and validation logic.
 - Check direct `db` usage outside `entities` and move it behind entity public APIs where needed.
 
