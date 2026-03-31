@@ -162,14 +162,6 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      // watch: {
-      //   usePolling: true
-      // },
-      // hmr: {
-      //   overlay: false,
-      //   clientPort: 3001,
-      //   strict: false
-      // },
       // host: '0.0.0.0',
       historyApiFallback: true,
       port: Number(CLIENT_PORT),
