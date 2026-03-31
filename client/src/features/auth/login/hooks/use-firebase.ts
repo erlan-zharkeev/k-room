@@ -8,15 +8,17 @@ import { FIREBASE_PROVIDER_MAP } from 'src/features/auth'
 import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/settings'
+import { useI18n, useSettings } from 'src/entities/settings'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
+import { CLIENT_ENV } from 'src/shared/config'
 import { clg } from 'src/shared/utils'
 
 export const useFirebase = () => {
   const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
   const { activateUserSession } = useActivateUserSession()
   const { doRequest } = useApi()
+  const { language } = useSettings()
   const navigate = useNavigate()
   const notifications = useNotification()
   const { t } = useI18n()
@@ -27,21 +29,21 @@ export const useFirebase = () => {
   })
 
   const getFirebaseCredential = async (provider: FirebaseProviderType) => {
-    if (import.meta.env.DEV && window.__E2E_FIREBASE_AUTH_RESULT__) {
-      const { displayName, email, photoURL, uid, provider: e2eProvider } = window.__E2E_FIREBASE_AUTH_RESULT__
+    if (CLIENT_ENV.isDev && window.__E2E_FIREBASE_AUTH_RESULT__) {
+      const { displayName, email, photoURL, uid, provider } = window.__E2E_FIREBASE_AUTH_RESULT__
 
       return {
         displayName,
         email,
         photoURL,
         uid,
-        provider: e2eProvider ?? provider
+        provider
       }
     }
 
     const currentProvider = new FIREBASE_PROVIDER_MAP[provider]()
     const auth = getAuth()
-    auth.languageCode = 'en'
+    auth.languageCode = language
     const result = await signInWithPopup(auth, currentProvider)
     const { displayName, email, photoURL, uid } = result.user
 

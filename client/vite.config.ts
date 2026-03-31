@@ -31,6 +31,7 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       CLIENT_ENV_DATA: JSON.stringify({
+        isDev,
         appName,
         appVersion,
         serverPort: Number(SERVER_PORT),
@@ -42,7 +43,8 @@ export default defineConfig(({ mode }) => {
         sentryDsnClient: SENTRY_DSN_CLIENT,
         sentryEnvironment: SENTRY_ENVIRONMENT,
         sentryEnabled: SENTRY_ENABLED === 'true',
-        socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST
+        socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST,
+        apiBaseUrl: isDev ? '/api' : `${API_HOST}/api`
       })
     },
     envDir,

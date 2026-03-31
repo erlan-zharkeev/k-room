@@ -11,7 +11,6 @@ import { CLIENT_ENV } from 'src/shared/config'
 export const useApi = () => {
   const notifications = useNotification()
   const { interceptError } = useApiInterсeptor()
-  const apiBaseUrl = import.meta.env.DEV ? '' : CLIENT_ENV.apiHost
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
     if (!response) return
@@ -44,7 +43,7 @@ export const useApi = () => {
 
       const response = await axios.request({
         method: type,
-        url: `${apiBaseUrl}/api${endpoint}`,
+        url: `${CLIENT_ENV.apiBaseUrl}${endpoint}`,
         headers: {
           'Content-Type': contentType,
           ...(language ? { [APP_LANGUAGE_HEADER]: language } : {})
