@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
   const { APP_HOST, API_HOST, SERVER_PORT, CLIENT_PORT, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
 
   const { name: appName, version: appVersion } = packageJson
+
   const API_PREFIX = '/api'
 
   return {
@@ -162,14 +163,16 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      // host: '0.0.0.0',
       historyApiFallback: true,
       port: Number(CLIENT_PORT),
+      hmr: {
+        host: new URL(APP_HOST).hostname
+      },
       ...(isDev
         ? {
             https: {
-              key: fs.readFileSync('./dev-certs/k-room-dev-key.pem'),
-              cert: fs.readFileSync('./dev-certs/k-room-dev.pem')
+              key: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev-key.pem')),
+              cert: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev.pem'))
             }
           }
         : {}),
