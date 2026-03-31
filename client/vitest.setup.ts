@@ -7,9 +7,13 @@ import type { IClientEnv } from 'src/shared/config'
 
 Object.assign(globalThis, {
   CLIENT_ENV_DATA: {
+    isDev: false,
+    isE2E: false,
     appName: 'K-Room',
     appVersion: 'test',
     supportEmail: '',
+    socketBaseUrl: 'https://localhost:3000',
+    apiBaseUrl: '/api',
     serverPort: 3000,
     clientPort: 3001,
     appHost: 'https://localhost',

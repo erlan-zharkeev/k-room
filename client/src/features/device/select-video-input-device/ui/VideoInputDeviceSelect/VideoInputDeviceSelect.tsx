@@ -3,8 +3,7 @@ import { useEffect } from 'react'
 
 import { VIDEO_INPUT_DEVICE_SELECT_I18N, SelectDevice, useInputVideoDevice } from 'src/features/device'
 
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/settings'
+import { useSettings, useI18n } from 'src/entities/settings'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 

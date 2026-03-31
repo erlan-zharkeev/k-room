@@ -4,7 +4,8 @@ import { useEffect, useMemo } from 'react'
 
 import { createPortal } from 'react-dom'
 
-import { useI18n, useViewport } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
+import { useViewport } from 'src/entities/system'
 
 import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH } from 'src/shared/ui'
 import type { IAppModalProps } from 'src/shared/ui'

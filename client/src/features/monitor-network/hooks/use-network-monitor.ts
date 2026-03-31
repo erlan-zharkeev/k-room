@@ -7,7 +7,8 @@ import { useSocketReconnect } from 'src/features/socket'
 import { useMainLoader } from 'src/features/switch-main-loader'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { setOnline, useI18n, useSystem } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
+import { setOnline, useSystem } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'

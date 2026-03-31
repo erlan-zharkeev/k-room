@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
 import { useNotification, NOTIFICATION_I18N } from 'src/entities/notification'
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/settings'
+import { useSettings, useI18n } from 'src/entities/settings'
 
 import { frontCaptureSentryException } from 'src/shared/lib'
 import { AppIconNameType } from 'src/shared/ui'

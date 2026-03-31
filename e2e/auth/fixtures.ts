@@ -20,15 +20,3 @@ export const buildRegistrationFixtureUser = () => {
     password: 'Asdf1234'
   } as const
 }
-
-export const buildGoogleFixtureUser = () => {
-  const suffix = buildUniqueSuffix()
-
-  return {
-    displayName: `pw-google-${suffix}`,
-    email: `pw-google-${suffix}@example.com`,
-    photoURL: 'https://example.com/avatar.png',
-    uid: `pw-google-${suffix}`,
-    provider: 'google'
-  } as const
-}

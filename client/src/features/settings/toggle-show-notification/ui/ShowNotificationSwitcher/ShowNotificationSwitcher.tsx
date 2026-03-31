@@ -2,8 +2,7 @@ import './style.scss'
 
 import { useShowNotification, SHOW_NOTIFICATION_SWITCHER_I18N } from 'src/features/settings/toggle-show-notification'
 
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/settings'
+import { useSettings, useI18n } from 'src/entities/settings'
 
 import { AppSwitch, AppText, AppTooltip } from 'src/shared/ui'
 
