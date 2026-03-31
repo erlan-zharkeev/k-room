@@ -6,7 +6,7 @@ import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth/s
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { createUser, isUserExist } from 'src/features/user'
 
-import { type AppResponseType, ENV, type IAppRequest } from 'src/shared/config'
+import { type AppResponseType, type IAppRequest,SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { REGISTRATION_RESEND_INTERVAL_MINUTES } from './config'
@@ -28,7 +28,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
       return throwHTTPError(StatusEnum.Server, res, getLocalizedText(REGISTRATION_I18N.failedRegistration, language))
     }
 
-    const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, EMAIL_CONFIRMATION_LINK_LIFE)
+    const confirmToken = generateToken(user.id, SERVER_ENV.emailConfirmSecret, EMAIL_CONFIRMATION_LINK_LIFE)
 
     await sendEmailConfirmationEmail({
       email,

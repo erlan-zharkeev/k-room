@@ -3,7 +3,7 @@ import { type Response } from 'express'
 
 import { parseExpires, setCookie } from 'src/features/cookie'
 
-import { ENV } from 'src/shared/config'
+import { SERVER_ENV } from 'src/shared/config'
 
 import { generateToken } from './index'
 
@@ -19,7 +19,7 @@ export const setToken = (
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
-    domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
+    domain: SERVER_ENV.domain,
     maxAge: parseExpires(expiresAt)
   })
 

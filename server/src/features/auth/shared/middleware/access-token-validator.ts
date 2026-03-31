@@ -2,7 +2,7 @@ import { type NextFunction, type Response } from 'express'
 
 import { StatusEnum } from 'common'
 
-import { ENV, type IAppRequest } from 'src/shared/config'
+import { type IAppRequest,SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { AUTH_I18N } from './../config'
@@ -17,7 +17,7 @@ export const accessTokenValidator = async (req: IAppRequest, res: Response, next
   }
 
   try {
-    const decoded = await verifyToken(accessToken, ENV.K_ROOM_ACCESS_TOKEN_SECRET)
+    const decoded = await verifyToken(accessToken, SERVER_ENV.accessTokenSecret)
     req.app.locals = decoded
     return next()
   } catch {

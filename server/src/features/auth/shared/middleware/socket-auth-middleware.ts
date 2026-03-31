@@ -4,7 +4,7 @@ import { IEventAuthError, SocketActionsType } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
-import { ENV, SocketInstanceType } from 'src/shared/config'
+import { SERVER_ENV, SocketInstanceType } from 'src/shared/config'
 import { getSocketLanguage } from 'src/shared/lib'
 
 import { verifyToken } from './../lib'
@@ -25,7 +25,7 @@ export const socketAuthMiddleware = async (socket: SocketInstanceType) => {
       return authErrorBreakConnection(socket, replayData)
     }
 
-    const decoded = await verifyToken(accessToken, ENV?.K_ROOM_ACCESS_TOKEN_SECRET)
+    const decoded = await verifyToken(accessToken, SERVER_ENV.accessTokenSecret)
     const deviceId = parsedCookie['device-id'] ?? ''
     const language = getSocketLanguage(socket)
 

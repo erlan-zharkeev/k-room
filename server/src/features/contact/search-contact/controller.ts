@@ -6,8 +6,9 @@ import { transformUserToContact } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { SEARCH_CONTACT_RESULT_LIMIT, SocketInstanceType } from 'src/shared/config'
+import {  SocketInstanceType } from 'src/shared/config'
 
+import { SEARCH_CONTACT_RESULT_LIMIT } from './config'
 import { emitSearchedContacts } from './lib'
 
 export const searchContactController = (socket: SocketInstanceType) => {

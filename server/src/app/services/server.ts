@@ -10,7 +10,7 @@ import { RouteNamesEnum } from 'common'
 
 import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'src/app/config'
 
-import { ENV } from 'src/shared/config'
+import { SERVER_ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
 import { attachRequestLanguage } from 'src/shared/middleware'
 
@@ -26,14 +26,14 @@ app.use(attachRequestLanguage)
 app.use(RouteNamesEnum.Api, rootRouter)
 setupSentryErrorHandler(app)
 
-const server = ENV.IS_DEV ? https.createServer(httpsOptions, app) : http.createServer(app)
+const server = SERVER_ENV.isDev ? https.createServer(httpsOptions, app) : http.createServer(app)
 
 export const runServer = async () => {
   await initDataBase()
   const io = initIO(server)
   setIO(io)
-  server.listen(ENV.SERVER_PORT, () => {
-    log.success(`-Server listening on port ${ENV.SERVER_PORT}`)
+  server.listen(SERVER_ENV.serverPort, () => {
+    log.success(`-Server listening on port ${SERVER_ENV.serverPort}`)
   })
 }
 

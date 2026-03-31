@@ -6,7 +6,7 @@ import { loadFixtures } from 'src/features/fixtures'
 
 import { initMediaBuckets } from 'src/entities/media'
 
-import { ENV } from 'src/shared/config'
+import { SERVER_ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 mongoose.set('strictQuery', true)
@@ -49,13 +49,13 @@ export const initDataBase = async (): Promise<boolean> => {
   initMongoConnectionListeners()
 
   try {
-    await mongoose.connect(ENV.MONGO_HOST, MONGO_CONNECTION_OPTIONS)
+    await mongoose.connect(SERVER_ENV.mongoHost, MONGO_CONNECTION_OPTIONS)
     log.success('-Connected to DB')
 
     try {
       initMediaBuckets()
 
-      if (ENV.IS_DEV) {
+      if (SERVER_ENV.isDev) {
         await loadFixtures()
       }
     } catch (error) {

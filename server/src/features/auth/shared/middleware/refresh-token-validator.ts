@@ -4,7 +4,7 @@ import { StatusEnum } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
-import { ENV, type IAppRequest } from 'src/shared/config'
+import { type IAppRequest,SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { AUTH_I18N } from './../config'
@@ -21,7 +21,7 @@ export const refreshTokenValidator = async (req: IAppRequest, res: Response, nex
   }
 
   try {
-    const decoded = await verifyToken(refreshToken, ENV.K_ROOM_REFRESH_TOKEN_SECRET)
+    const decoded = await verifyToken(refreshToken, SERVER_ENV.refreshTokenSecret)
     const userId = decoded.id
 
     const userData = await UserModel.findById(userId)

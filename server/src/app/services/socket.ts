@@ -9,7 +9,7 @@ import { socketRouter } from 'src/app/services'
 
 import { socketAuthMiddleware } from 'src/features/auth'
 
-import { ENV, ORIGINS, type SocketInstanceType } from 'src/shared/config'
+import { ORIGINS, SERVER_ENV, type SocketInstanceType } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 type SocketServerType = HttpServer | HttpsServer
@@ -19,7 +19,7 @@ const getSocketIO = (server: SocketServerType) =>
     path: RouteNamesEnum.SocketPath,
     maxHttpBufferSize: MAX_HTTP_BUFFER_SIZE,
     cors: {
-      origin: ENV.IS_DEV ? '*' : ORIGINS,
+      origin: SERVER_ENV.isDev ? '*' : ORIGINS,
       credentials: true
     }
   })
