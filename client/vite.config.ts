@@ -27,11 +27,13 @@ export default defineConfig(({ mode }) => {
   } = env
 
   const { name: appName, version: appVersion } = packageJson
+  const API_PREFIX = '/api'
 
   return {
     define: {
       CLIENT_ENV_DATA: JSON.stringify({
         isDev,
+        isE2E: process.env.E2E === 'true',
         appName,
         appVersion,
         serverPort: Number(SERVER_PORT),
@@ -44,7 +46,7 @@ export default defineConfig(({ mode }) => {
         sentryEnvironment: SENTRY_ENVIRONMENT,
         sentryEnabled: SENTRY_ENABLED === 'true',
         socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST,
-        apiBaseUrl: isDev ? '/api' : `${API_HOST}/api`
+        apiBaseUrl: isDev ? `${API_PREFIX}` : `${API_HOST}${API_PREFIX}`
       })
     },
     envDir,
@@ -190,7 +192,7 @@ export default defineConfig(({ mode }) => {
           }
         : {}),
       proxy: {
-        '/api': {
+        [API_PREFIX]: {
           target: `${API_HOST}:${SERVER_PORT}`,
           changeOrigin: true,
           secure: false

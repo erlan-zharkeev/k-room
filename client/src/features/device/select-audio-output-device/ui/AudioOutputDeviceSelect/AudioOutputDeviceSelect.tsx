@@ -3,8 +3,7 @@ import { useEffect } from 'react'
 
 import { AUDIO_OUTPUT_DEVICE_SELECT_I18N, SelectDevice, useOutputAudioDevice } from 'src/features/device'
 
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/settings'
+import { useSettings, useI18n } from 'src/entities/settings'
 
 import { createClassNameWithModifiers } from 'src/shared/utils'
 

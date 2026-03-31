@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
 import { DontShowNotificationAgainBtn, NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useSettings } from 'src/entities/settings'
-import { useI18n, useSystem } from 'src/entities/system'
+import { useI18n, useSettings } from 'src/entities/settings'
+import { useSystem } from 'src/entities/system'
 
 import { useTimeout } from 'src/shared/lib'
 

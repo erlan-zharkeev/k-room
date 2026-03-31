@@ -8,7 +8,7 @@
     "lint:fix-es": "eslint **/*.{ts,tsx} --fix",
     "lint:style": "stylelint \"src/**/*.scss\"",
     "serve": "vite --host",
-    "serve:e2e": "vite --host --strictPort",
+    "serve:e2e": "E2E=true vite --host --strictPort",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",

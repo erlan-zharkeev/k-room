@@ -4,7 +4,7 @@ import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithPro
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
-import { FIREBASE_PROVIDER_MAP } from 'src/features/auth'
+import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from 'src/features/auth'
 import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
@@ -29,16 +29,8 @@ export const useFirebase = () => {
   })
 
   const getFirebaseCredential = async (provider: FirebaseProviderType) => {
-    if (CLIENT_ENV.isDev && window.__E2E_FIREBASE_AUTH_RESULT__) {
-      const { displayName, email, photoURL, uid, provider } = window.__E2E_FIREBASE_AUTH_RESULT__
-
-      return {
-        displayName,
-        email,
-        photoURL,
-        uid,
-        provider
-      }
+    if (CLIENT_ENV.isE2E) {
+      return E2E_FIREBASE_AUTH_RESULT
     }
 
     const currentProvider = new FIREBASE_PROVIDER_MAP[provider]()

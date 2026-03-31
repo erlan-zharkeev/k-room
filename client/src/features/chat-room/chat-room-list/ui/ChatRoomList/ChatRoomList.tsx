@@ -6,8 +6,7 @@ import { CHAT_ROOM_LIST_I18N, useChatRoomSelect } from 'src/features/chat-room'
 
 import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
-import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/settings'
+import { useSettings, useI18n } from 'src/entities/settings'
 
 import { useAnimatedList } from 'src/shared/lib'
 import { AppScrollContainer, AppText } from 'src/shared/ui'
