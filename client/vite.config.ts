@@ -14,17 +14,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, envDir, '')
   const isDev = mode === 'development'
 
-  const {
-    APP_HOST,
-    API_HOST,
-    SERVER_PORT,
-    CLIENT_PORT,
-    MAX_RECONNECT_ATTEMPTS,
-    FIREBASE_API_KEY,
-    SENTRY_DSN_CLIENT,
-    SENTRY_ENVIRONMENT,
-    SENTRY_ENABLED
-  } = env
+  const { APP_HOST, API_HOST, SERVER_PORT, CLIENT_PORT, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
 
   const { name: appName, version: appVersion } = packageJson
   const API_PREFIX = '/api'
@@ -40,9 +30,9 @@ export default defineConfig(({ mode }) => {
         clientPort: Number(CLIENT_PORT),
         appHost: APP_HOST,
         apiHost: API_HOST,
-        maxReconnectAttempts: Number(MAX_RECONNECT_ATTEMPTS),
         firebaseApiKey: FIREBASE_API_KEY,
-        sentryDsnClient: SENTRY_DSN_CLIENT,
+        sentryDsnClient:
+          'https://b10bd66a4f5c0bc565edbe0e0d5d9b02@o4511099405139968.ingest.us.sentry.io/4511099424997376',
         sentryEnvironment: SENTRY_ENVIRONMENT,
         sentryEnabled: SENTRY_ENABLED === 'true',
         socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST,

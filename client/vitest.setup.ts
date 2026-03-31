@@ -18,7 +18,6 @@ Object.assign(globalThis, {
     clientPort: 3001,
     appHost: 'https://localhost',
     apiHost: 'https://localhost',
-    maxReconnectAttempts: 3,
     firebaseApiKey: '',
     sentryDsnClient: '',
     sentryEnvironment: 'test',

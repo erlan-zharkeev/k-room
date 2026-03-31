@@ -18,12 +18,7 @@
     "server:typecheck": "npm --prefix server run typecheck",
     "server:build": "npm --prefix server run build",
     "e2e": "playwright test -c config/playwright/playwright.config.ts",
-    "e2e:headed": "playwright test -c config/playwright/playwright.config.ts --headed",
     "e2e:ui": "playwright test -c config/playwright/playwright.config.ts --ui",
-    "e2e:login": "playwright test -c config/playwright/playwright.config.ts e2e/auth/login.spec.ts",
-    "e2e:password-recovery": "playwright test -c config/playwright/playwright.config.ts e2e/auth/password-recovery.spec.ts",
-    "e2e:registration": "playwright test -c config/playwright/playwright.config.ts e2e/auth/registration.spec.ts",
-    "e2e:google": "playwright test -c config/playwright/playwright.config.ts e2e/auth/google-login.spec.ts",
     "check": "npm run client:lint && npm run client:stylelint && npm run client:build && npm run server:lint && npm run server:typecheck && npm run server:build",
     "test": "npm run client:test",
     "test:watch": "npm run client:test:watch"

@@ -9,7 +9,7 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { SEND_CONFIRMATION_LINK_I18N } from './config'
+import { SEND_CONFIRMATION_LINK_I18N,SEND_CONFIRMATION_LINK_INTERVAL_MINUTES } from './config'
 
 export const sendConfirmationLinkController = async (
   req: IAppRequest,
@@ -62,7 +62,7 @@ export const sendConfirmationLinkController = async (
     user.set('system.confirmAttempts', nextAttempts)
     await user.save()
 
-    const nextRequestTime = Date.now() + Number(ENV.REGISTRATION_RESEND_INTERVAL_MINUTES) * 60 * 1000
+    const nextRequestTime = Date.now() + SEND_CONFIRMATION_LINK_INTERVAL_MINUTES
 
     const response = {
       payload: {
