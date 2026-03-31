@@ -5,19 +5,19 @@ import { setCookie } from 'src/features/cookie'
 
 import { UserModel } from 'src/entities/user'
 
-import { ENV, IAppRequest } from 'src/shared/config'
+import { IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 import { JWT_ACCESS_EXPIRES_INTERVAL, JWTR_ACCESS_EXPIRES_INTERVAL } from './../config'
 import { setToken } from './set-token'
 
 export const updateTokens = async (id: string, req: IAppRequest, res: Response) => {
-  setToken(res, 'jwt', id, ENV.K_ROOM_ACCESS_TOKEN_SECRET, JWT_ACCESS_EXPIRES_INTERVAL)
+  setToken(res, 'jwt', id, SERVER_ENV.accessTokenSecret, JWT_ACCESS_EXPIRES_INTERVAL)
   const refreshToken = setToken(
     res,
     'refresh-jwt',
     id,
-    ENV.K_ROOM_REFRESH_TOKEN_SECRET,
+    SERVER_ENV.refreshTokenSecret,
     JWTR_ACCESS_EXPIRES_INTERVAL
   )
   const deviceId = req.cookies['device-id'] ?? uuidv4()
@@ -25,7 +25,7 @@ export const updateTokens = async (id: string, req: IAppRequest, res: Response) 
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
-    domain: ENV.IS_DEV ? undefined : ENV.COOKIE_DOMAIN || undefined,
+    domain: SERVER_ENV.domain,
     maxAge: 3_153_600_000_000 // SET FOR 100 years
   })
 

@@ -1,6 +1,6 @@
 import { APP_NAME, createResendClient, PASSWORD_RECOVERY_SUBJECT, RESEND_FROM_EMAIL, RESEND_FROM_NAME } from 'src/features/email'
 
-import { ENV } from 'src/shared/config'
+import { SERVER_ENV } from 'src/shared/config'
 
 export const sendPasswordRecoveryEmail = async ({
   email,
@@ -24,7 +24,7 @@ export const sendPasswordRecoveryEmail = async ({
     </div>
   `
 
-  if (ENV.IS_DEV && !ENV.RESEND_API_KEY) {
+  if (SERVER_ENV.isDev && !SERVER_ENV.resendApiKey) {
     return { id: 'mock-recovery-email-id' }
   }
 

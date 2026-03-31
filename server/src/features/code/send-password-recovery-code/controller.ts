@@ -8,7 +8,7 @@ import { USER_I18N } from 'src/features/user'
 import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { CODE_LIFE_MS, RESEND_CODE_INTERVAL, SEND_PASSWORD_RECOVERY_CODE_I18N } from './config'
@@ -71,7 +71,7 @@ export const sendPasswordRecoveryCodeController = async (
     return res.json({
       payload: {
         nextTimeRequest,
-        ...(ENV.IS_DEV ? { debugCode: code } : {})
+        ...(SERVER_ENV.isDev ? { debugCode: code } : {})
       },
       message: {
         text: getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.codeSent, language),

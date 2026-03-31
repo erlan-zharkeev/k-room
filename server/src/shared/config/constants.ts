@@ -1,43 +1,45 @@
 import type { IEnvVariables } from 'common'
 import dotenv, { type DotenvParseOutput } from 'dotenv'
 
+import { IServerEnv } from './types'
+
 const stage = process.env.NODE_ENV ?? 'development'
 const envs = dotenv.config({ path: `../.env.${stage}` }).parsed as DotenvParseOutput | IEnvVariables
 
-const requireServerEnv = (key: string, value?: string) => {
-  if (!value) {
-    throw new Error(`[server] Missing required env "${key}" in .env.${stage}`)
-  }
-
-  return value
-}
-
-envs.IS_DEV = process.env.NODE_ENV === 'development'
-envs.SERVER_ASSETS_PATH = envs.IS_DEV ? './src/assets/' : './build/assets/'
-envs.SERVER_URL = envs.IS_DEV ? `${envs.API_HOST}:${envs.SERVER_PORT}/api` : `${envs.API_HOST}/api`
-envs.CLIENT_URL = envs.IS_DEV ? `${envs.APP_HOST}:${envs.CLIENT_PORT}` : `${envs.APP_HOST}`
 const {
   K_ROOM_ACCESS_TOKEN_SECRET,
   EMAIL_CONFIRM_SECRET,
   K_ROOM_REFRESH_TOKEN_SECRET,
   RESEND_API_KEY,
   SENTRY_ENVIRONMENT,
-  SENTRY_ENABLED
-} = process.env
+  SENTRY_ENABLED,
+  APP_HOST,
+  API_HOST,
+  SERVER_PORT,
+  CLIENT_PORT,
+  MONGO_HOST,
+  COOKIE_DOMAIN
+} = envs
 
-export const ENV = {
-  ...envs,
-  K_ROOM_ACCESS_TOKEN_SECRET,
-  EMAIL_CONFIRM_SECRET: requireServerEnv('EMAIL_CONFIRM_SECRET', EMAIL_CONFIRM_SECRET),
-  K_ROOM_REFRESH_TOKEN_SECRET,
-  RESEND_API_KEY: requireServerEnv('RESEND_API_KEY', RESEND_API_KEY),
-  SENTRY_ENVIRONMENT,
-  SENTRY_ENABLED
-} as IEnvVariables
+const isDev = process.env.NODE_ENV === 'development'
 
-const host = new URL(ENV.APP_HOST)
+export const SERVER_ENV: IServerEnv = {
+  isDev,
+  domain: isDev ? '' : COOKIE_DOMAIN,
+  mongoHost: MONGO_HOST,
+  serverPort: Number(SERVER_PORT),
+  clientPort: Number(CLIENT_PORT),
+  serverUrl: isDev ? `${API_HOST}:${SERVER_PORT}/api` : `${API_HOST}/api`,
+  clientUrl: isDev ? `${APP_HOST}:${CLIENT_PORT}` : `${APP_HOST}`,
+  accessTokenSecret: K_ROOM_ACCESS_TOKEN_SECRET,
+  emailConfirmSecret: EMAIL_CONFIRM_SECRET,
+  refreshTokenSecret: K_ROOM_REFRESH_TOKEN_SECRET,
+  resendApiKey: RESEND_API_KEY,
+  sentryEnvironment: SENTRY_ENVIRONMENT,
+  sentryEnabled: SENTRY_ENABLED === 'true'
+}
+
+const host = new URL(APP_HOST)
 const appHostnames = [host.hostname, `www.${host.hostname}`]
 
 export const ORIGINS = appHostnames.flatMap((hostname) => [`https://${hostname}`, `http://${hostname}`])
-
-export const SEARCH_CONTACT_RESULT_LIMIT = 10

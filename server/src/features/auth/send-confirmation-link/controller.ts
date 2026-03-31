@@ -6,7 +6,7 @@ import { USER_I18N } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { SEND_CONFIRMATION_LINK_I18N,SEND_CONFIRMATION_LINK_INTERVAL_MINUTES } from './config'
@@ -50,7 +50,7 @@ export const sendConfirmationLinkController = async (
       )
     }
 
-    const confirmToken = generateToken(user.id, ENV.EMAIL_CONFIRM_SECRET, EMAIL_CONFIRMATION_LINK_LIFE)
+    const confirmToken = generateToken(user.id, SERVER_ENV.emailConfirmSecret, EMAIL_CONFIRMATION_LINK_LIFE)
 
     await sendEmailConfirmationEmail({
       email: user.personal.email,

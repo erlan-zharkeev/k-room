@@ -4,7 +4,7 @@ import { mapUserToDto, USER_I18N } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { AppResponseType, ENV, IAppRequest } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { verifyToken } from './../shared'
@@ -15,7 +15,7 @@ export const confirmEmailController = async (req: IAppRequest, res: AppResponseT
 
   try {
     const token = req.body.token
-    const decoded = await verifyToken(token, ENV.EMAIL_CONFIRM_SECRET)
+    const decoded = await verifyToken(token, SERVER_ENV.emailConfirmSecret)
     const userId = decoded.id
 
     const updateResult = await UserModel.updateOne(
