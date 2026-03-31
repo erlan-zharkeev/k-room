@@ -22,7 +22,7 @@ import {
 } from 'src/entities/call'
 import type { ICallModalBodyProps } from 'src/entities/call/ui'
 import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
 import { useTypedSelector, useCounter } from 'src/shared/lib'

@@ -13,33 +13,34 @@ import { AppModal } from 'src/shared/ui'
 import { useChatRoom } from 'src/entities/chat-room'
 ```
 
-Do not import another module through a relative parent path:
+Do not import another module through a deep parent relative path when a public alias path is available:
 
 ```ts
 import { AppModal } from '../../shared/ui'
 ```
 
-2. Relative paths may only start with `./`.
+2. Relative paths may start with `./`, do not use double dot `../`.
 
 Use:
 
 ```ts
 import { messageMapper } from './message-mapper'
 import { normalizeMessage } from './lib'
-```
-
-Do not use parent relative paths:
-
-```ts
 import { sharedRule } from '../shared'
-import { buildPayload } from '../../lib/build-payload'
 ```
 
-Use a public alias path instead:
+Prefer a public alias path for cross-module imports when it is available:
 
 ```ts
 import { sharedRule } from 'src/features/auth/shared'
 import { buildPayload } from 'src/shared/lib/build-payload'
+```
+
+Parent relative imports are allowed for local traversal inside the same module when no shorter public path exists:
+
+```ts
+import { sharedRule } from '../shared'
+import { buildPayload } from '../../lib/build-payload'
 ```
 
 3. Bare `.` and `..` paths are not allowed.
@@ -73,7 +74,6 @@ Do not use:
 
 ```ts
 import { normalizeMessage } from './lib/normalize-message'
-import { buildPayload } from '../lib/build-payload'
 ```
 
 5. If the target file is on the same directory level, use `./`.
@@ -91,7 +91,7 @@ export * from './db'
 export * from './lib'
 ```
 
-If a re-export would otherwise require `../...`, use the public alias path instead:
+If a re-export would otherwise require `../...`, either use that local parent relative path or switch to a public alias path when it is clearer:
 
 ```ts
 export * from 'src/pages/privacy-policy/ui/PrivacyPolicy/config'

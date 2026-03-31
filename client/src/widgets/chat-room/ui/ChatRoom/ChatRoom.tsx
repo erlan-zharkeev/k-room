@@ -7,7 +7,7 @@ import { ChatRoomSettingsModal, useChatRoomSelect } from 'src/features/chat-room
 import { MessageList, ReplyMessage } from 'src/features/message'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppModal } from 'src/shared/ui'
 

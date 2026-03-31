@@ -7,36 +7,42 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgr from 'vite-plugin-svgr'
 
-import { APP_NAME, SUPPORT_EMAIL } from './src/shared/config/constants'
+import packageJson from './package.json'
 
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
   const isDev = mode === 'development'
 
-  const getClientEnv = (key: string, value?: string) => {
-    if (isDev && !value) {
-      throw new Error(`[client] Missing required env "${key}" in .env.${mode}`)
-    }
+  const {
+    APP_HOST,
+    API_HOST,
+    SERVER_PORT,
+    CLIENT_PORT,
+    MAX_RECONNECT_ATTEMPTS,
+    FIREBASE_API_KEY,
+    SENTRY_DSN_CLIENT,
+    SENTRY_ENVIRONMENT,
+    SENTRY_ENABLED
+  } = env
 
-    return value ?? ''
-  }
+  const { name: appName, version: appVersion } = packageJson
 
   return {
     define: {
       CLIENT_ENV_DATA: JSON.stringify({
-        appName: APP_NAME,
-        appVersion: process.env.npm_package_version ?? '',
-        supportEmail: SUPPORT_EMAIL,
-        serverPort: Number(env.SERVER_PORT),
-        clientPort: Number(env.CLIENT_PORT),
-        appHost: env.APP_HOST,
-        apiHost: env.API_HOST,
-        maxReconnectAttempts: Number(env.MAX_RECONNECT_ATTEMPTS),
-        firebaseApiKey: getClientEnv('FIREBASE_API_KEY', env.FIREBASE_API_KEY),
-        sentryDsnClient: getClientEnv('SENTRY_DSN_CLIENT', env.SENTRY_DSN_CLIENT),
-        sentryEnvironment: env.SENTRY_ENVIRONMENT,
-        sentryEnabled: env.SENTRY_ENABLED === 'true'
+        appName,
+        appVersion,
+        serverPort: Number(SERVER_PORT),
+        clientPort: Number(CLIENT_PORT),
+        appHost: APP_HOST,
+        apiHost: API_HOST,
+        maxReconnectAttempts: Number(MAX_RECONNECT_ATTEMPTS),
+        firebaseApiKey: FIREBASE_API_KEY,
+        sentryDsnClient: SENTRY_DSN_CLIENT,
+        sentryEnvironment: SENTRY_ENVIRONMENT,
+        sentryEnabled: SENTRY_ENABLED === 'true',
+        socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST
       })
     },
     envDir,
@@ -60,8 +66,8 @@ export default defineConfig(({ mode }) => {
           },
           injectRegister: 'auto',
           manifest: {
-            name: APP_NAME,
-            short_name: APP_NAME,
+            name: appName,
+            short_name: appVersion,
             description: 'Text and video chat',
             theme_color: '#1c1c1c',
             background_color: '#1c1c1c',
@@ -172,7 +178,7 @@ export default defineConfig(({ mode }) => {
       // },
       // host: '0.0.0.0',
       historyApiFallback: true,
-      port: Number(env.CLIENT_PORT),
+      port: Number(CLIENT_PORT),
       ...(isDev
         ? {
             https: {
@@ -183,7 +189,7 @@ export default defineConfig(({ mode }) => {
         : {}),
       proxy: {
         '/api': {
-          target: `${env.API_HOST}:${env.SERVER_PORT}`,
+          target: `${API_HOST}:${SERVER_PORT}`,
           changeOrigin: true,
           secure: false
         }

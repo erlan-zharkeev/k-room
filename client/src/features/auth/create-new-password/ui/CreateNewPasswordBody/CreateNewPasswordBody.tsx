@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_I18N } from 'src/features/auth/create-new-password'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppButton, AppForm, AppBanner } from 'src/shared/ui'
 

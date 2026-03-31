@@ -4,7 +4,7 @@ import type { ICreateChatRoomFormProps } from 'src/features/chat-room/create-cha
 import { useCreateChatRoom, CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room'
 import { usePickContact } from 'src/features/contact'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppForm, AppText } from 'src/shared/ui'
 

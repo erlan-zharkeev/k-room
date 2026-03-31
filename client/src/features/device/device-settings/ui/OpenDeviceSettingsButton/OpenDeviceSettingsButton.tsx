@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { OPEN_DEVICE_SETTINGS_BUTTON_I18N, SelectDevicesModal } from 'src/features/device'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppButton, AppModal, AppTooltip } from 'src/shared/ui'
 

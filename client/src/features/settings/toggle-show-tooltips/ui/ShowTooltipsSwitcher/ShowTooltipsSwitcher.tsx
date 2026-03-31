@@ -1,7 +1,7 @@
 import { useShowTooltip, SHOW_TOOLTIPS_SWITCHER_I18N } from 'src/features/settings/toggle-show-tooltips'
 
 import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppSwitch, AppText } from 'src/shared/ui'
 

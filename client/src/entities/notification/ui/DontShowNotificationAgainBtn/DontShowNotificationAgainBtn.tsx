@@ -5,7 +5,7 @@ import './style.scss'
 import type { IDontShowNotificationAgainBtnProps } from 'src/entities/notification/ui'
 import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification/ui'
 import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppButton } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'

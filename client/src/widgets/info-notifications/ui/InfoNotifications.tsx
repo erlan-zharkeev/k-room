@@ -3,7 +3,7 @@ import './style.scss'
 import { useMarkInfoNotificationAsRead } from 'src/features/info-notification'
 
 import { INFO_NOTIFICATIONS_I18N, useInfoNotification } from 'src/entities/info-notification'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppCollapseList, AppHeader } from 'src/shared/ui'
 

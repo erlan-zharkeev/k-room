@@ -7,7 +7,7 @@ import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'com
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useSettings } from 'src/entities/settings'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'

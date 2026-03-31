@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppText } from 'src/shared/ui'
 

@@ -4,11 +4,11 @@ import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithPro
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
-import { FIREBASE_PROVIDER_MAP } from 'src/features/auth/login'
+import { FIREBASE_PROVIDER_MAP } from 'src/features/auth'
 import { useActivateUserSession } from 'src/features/user'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { clg } from 'src/shared/utils'

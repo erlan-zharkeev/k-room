@@ -4,7 +4,7 @@ import './style.scss'
 
 import { PASSWORD_RECOVERY_LINK_I18N } from 'src/features/auth/password-recovery'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
 import { AppLink } from 'src/shared/ui'

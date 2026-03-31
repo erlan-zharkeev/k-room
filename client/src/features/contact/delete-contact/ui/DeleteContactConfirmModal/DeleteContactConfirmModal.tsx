@@ -3,7 +3,7 @@ import './style.scss'
 import { DELETE_CONTACT_I18N } from 'src/features/contact'
 import type { IDeleteContactConfirmModalProps } from 'src/features/contact'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppModal, AppText } from 'src/shared/ui'
 

@@ -24,7 +24,7 @@ import {
   markCurrentCallAsVideo
 } from 'src/entities/call'
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
 import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'

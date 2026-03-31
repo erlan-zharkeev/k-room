@@ -4,7 +4,7 @@ import { CHAT_ROOMS_WIDGET_I18N } from 'src/widgets/aside-panel'
 
 import { ChatRoomList, CreateChatRoomBtn } from 'src/features/chat-room'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppHeader } from 'src/shared/ui'
 

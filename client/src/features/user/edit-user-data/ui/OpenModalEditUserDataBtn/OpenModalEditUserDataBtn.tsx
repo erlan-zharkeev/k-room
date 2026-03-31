@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { OPEN_MODAL_EDIT_USER_DATA_BTN_I18N, EditUserDataModal } from 'src/features/user'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppLink, AppModal } from 'src/shared/ui'
 

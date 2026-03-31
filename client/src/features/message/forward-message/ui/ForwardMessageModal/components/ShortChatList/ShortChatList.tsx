@@ -5,7 +5,7 @@ import { SHORT_CHAT_LIST_I18N } from 'src/features/message/forward-message'
 import type { IShortChatListProps } from 'src/features/message/forward-message'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
   const { chatRooms, selectedChatRoom } = useChatRoom()

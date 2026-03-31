@@ -4,7 +4,7 @@ import { useId, useState } from 'react'
 import { IImageObject } from 'common'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
 import { AppAvatar, AppButton, AppIcon, AppImagePreview, APP_FILE_LOADER_I18N } from 'src/shared/ui'

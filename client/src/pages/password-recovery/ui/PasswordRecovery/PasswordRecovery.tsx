@@ -4,7 +4,7 @@ import { PASSWORD_RECOVERY_PAGE_I18N } from 'src/pages/password-recovery/config'
 
 import { PasswordRecoveryBody } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppHeader } from 'src/shared/ui'
 

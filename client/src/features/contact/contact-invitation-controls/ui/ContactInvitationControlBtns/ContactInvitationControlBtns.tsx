@@ -6,7 +6,7 @@ import {
   CONTACT_INVITATION_CONTROL_BTNS_I18N
 } from 'src/features/contact/contact-invitation-controls'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 import { createClassNameWithModifiers } from 'src/shared/utils'

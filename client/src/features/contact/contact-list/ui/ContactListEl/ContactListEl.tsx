@@ -8,7 +8,7 @@ import type { IContactListElProps } from 'src/features/contact/contact-list'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { useIntervalRerender } from 'src/shared/lib'
 

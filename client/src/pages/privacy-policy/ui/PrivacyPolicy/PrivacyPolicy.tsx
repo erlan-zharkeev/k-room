@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { LEGAL_INFO_PAGE_I18N } from 'src/pages/privacy-policy/config'
 
-import { useI18n } from 'src/entities/system'
+import { useI18n } from 'src/entities/settings'
 
 import { CLIENT_ENV } from 'src/shared/config'
 import { AppButton, AppScrollContainer } from 'src/shared/ui'
