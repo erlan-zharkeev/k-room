@@ -1,8 +1,10 @@
 export interface IClientEnv {
+  isDev: boolean
   appName: string
   appVersion: string
   supportEmail: string
   socketBaseUrl: string
+  apiBaseUrl: string
   serverPort: number
   clientPort: number
   appHost: string
