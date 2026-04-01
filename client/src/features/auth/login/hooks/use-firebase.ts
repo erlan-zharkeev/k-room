@@ -10,9 +10,9 @@ import { useActivateUserSession } from 'src/features/user'
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useI18n, useSettings } from 'src/entities/settings'
 
-import { getHandledErrorMessage, useApi } from 'src/shared/api'
+import { useApi } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
-import { log } from 'src/shared/utils'
+import { handleRuntimeError } from 'src/shared/lib'
 
 export const useFirebase = () => {
   const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
@@ -48,28 +48,34 @@ export const useFirebase = () => {
     }
   }
 
-  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
+  const buildCredential = async (provider: FirebaseProviderType) => {
     try {
-      setFirebaseLoginLoading(true)
       const { displayName, email, photoURL, uid, provider: normalizedProvider } = await getFirebaseCredential(provider)
       const haveFullData = displayName && email && uid && normalizedProvider
-      if (!haveFullData) return
-      const credential = {
-        id: uid,
-        username: displayName,
-        email,
-        avatar: photoURL,
-        provider: normalizedProvider
-      }
+      if (!haveFullData) return null
+      return { id: uid, username: displayName, email, avatar: photoURL, provider: normalizedProvider }
+    } catch (error) {
+      handleRuntimeError('Firebase login failed', error)
+      failedToLoginNotification.open()
+      return null
+    }
+  }
 
+  const signInWithCredential = async (credential: NonNullable<Awaited<ReturnType<typeof buildCredential>>>) => {
+    try {
       const response = await doRequest<ISignInWithProviderResponse>('post', AuthEndpointsEnum.ProviderLogin, credential)
-      if (!response) return
       const payload = response.data.payload
       activateUserSession(payload)
       navigate(RouteNamesEnum.Main)
-    } catch (error: unknown) {
-      log('error', getHandledErrorMessage(error))
-      failedToLoginNotification.open()
+    } catch {}
+  }
+
+  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
+    try {
+      setFirebaseLoginLoading(true)
+      const credential = await buildCredential(provider)
+      if (!credential) return
+      await signInWithCredential(credential)
     } finally {
       setFirebaseLoginLoading(false)
     }

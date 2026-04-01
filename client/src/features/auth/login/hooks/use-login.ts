@@ -19,6 +19,7 @@ export const useLogin = () => {
       const response = await doRequest<ILoginResponse>('post', AuthEndpointsEnum.Login, fields)
       const payload = response.data.payload
       activateUserSession(payload)
+    } catch {
     } finally {
       setIsLoading(false)
     }

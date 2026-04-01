@@ -1,7 +1,6 @@
 import { AuthEndpointsEnum } from 'common'
 
-import { getHandledErrorMessage, useApi } from 'src/shared/api'
-import { log } from 'src/shared/utils'
+import { useApi } from 'src/shared/api'
 
 import { useSocketConnect } from './index'
 
@@ -13,9 +12,7 @@ export const useSocketReconnect = () => {
     try {
       await doRequest('get', AuthEndpointsEnum.UpdateTokensPair, undefined)
       socketConnect()
-    } catch (error: unknown) {
-      log('error', getHandledErrorMessage(error))
-    }
+    } catch {}
   }
   return { socketReconnect }
 }

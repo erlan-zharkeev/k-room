@@ -6,9 +6,8 @@ import { useLoadMedia } from 'src/features/media'
 
 import { useUser } from 'src/entities/user'
 
-import { getHandledErrorMessage, useApi } from 'src/shared/api'
+import { useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
-import { log } from 'src/shared/utils'
 
 export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { username, avatarPath, update, id: userId } = useUser()
@@ -47,8 +46,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
         loadMedia(`avatar.${userId}`)
       }
       onSuccess?.()
-    } catch (error: unknown) {
-      log('error', getHandledErrorMessage(error))
+    } catch {
     } finally {
       setIsLoading(false)
     }

@@ -11,9 +11,11 @@ export const useMarkInfoNotificationAsRead = () => {
   const { isRead } = useInfoNotification()
 
   const markAsRead = async (id: number) => {
-    if (isRead(id)) return
-    await doRequest('patch', UserEndpointsEnum.MarkInfoNotificationAsRead, { id })
-    setByPath(`infoNotifications.${id}`, 'read')
+    try {
+      if (isRead(id)) return
+      await doRequest('patch', UserEndpointsEnum.MarkInfoNotificationAsRead, { id })
+      setByPath(`infoNotifications.${id}`, 'read')
+    } catch {}
   }
 
   return { markAsRead }
