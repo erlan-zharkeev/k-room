@@ -19,6 +19,6 @@ const consoleColorMap: Record<
   }
 }
 
-export const clg = (type: 'error' | 'success' | 'warn', message: string) => {
+export const log = (type: 'error' | 'success' | 'warn', message: string) => {
   console.log(`%c ${message} `, `background: ${consoleColorMap[type].bg}; color: ${consoleColorMap[type].text}`)
 }

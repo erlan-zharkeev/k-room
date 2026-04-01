@@ -27,7 +27,7 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
             inputType: 'text',
             nativeType: 'password',
             placeholder: t(LOGIN_FORM_I18N.passwordPlaceholder),
-            rule: { name: 'password' }
+            rule: { name: 'required' }
           }
         }}
         submitBtnText={t(LOGIN_FORM_I18N.submit)}

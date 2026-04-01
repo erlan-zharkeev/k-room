@@ -29,7 +29,7 @@ import { useI18n } from 'src/entities/settings'
 import { socket } from 'src/shared/api'
 import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
-import { clg } from 'src/shared/utils'
+import { log } from 'src/shared/utils'
 
 const parsePeerData = (data: unknown) => {
   if (typeof data === 'string') return JSON.parse(data) as { settings?: { audio?: boolean; video?: boolean } }
@@ -97,7 +97,7 @@ export const useMakeCall = () => {
     try {
       return await navigator.mediaDevices.getUserMedia(constraints)
     } catch (error) {
-      clg('error', 'Failed to get device cause ' + String(error))
+      log('error', 'Failed to get device cause ' + String(error))
       failedToConnectToDeviceNotification.open()
       return null
     }
@@ -109,7 +109,7 @@ export const useMakeCall = () => {
     try {
       videoDomElement.srcObject = stream
     } catch (error) {
-      clg('error', 'Failed to set stream tracks to HTMLElement' + String(error))
+      log('error', 'Failed to set stream tracks to HTMLElement' + String(error))
       frontCaptureSentryException(error)
     }
   }
@@ -122,7 +122,7 @@ export const useMakeCall = () => {
       interlocutorVideoDom.current.srcObject = interlocutorMediaStream
     })
     connection.current.on('error', (e) => {
-      clg('error', 'An unknown error has occurred' + String(e))
+      log('error', 'An unknown error has occurred' + String(e))
       frontCaptureSentryException(e)
     })
     connection.current.on('close', () => closeConnection())
@@ -262,7 +262,7 @@ export const useMakeCall = () => {
     try {
       connection.current?.destroy()
     } catch (error: unknown) {
-      if (error instanceof Error) clg('error', error.message)
+      if (error instanceof Error) log('error', error.message)
       frontCaptureSentryException(error)
     }
     closeConnection(true)

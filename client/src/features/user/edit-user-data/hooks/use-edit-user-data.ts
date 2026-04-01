@@ -8,7 +8,7 @@ import { useUser } from 'src/entities/user'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
-import { clg } from 'src/shared/utils'
+import { log } from 'src/shared/utils'
 
 export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
   const { username, avatarPath, update, id: userId } = useUser()
@@ -48,7 +48,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
       }
       onSuccess?.()
     } catch (error: unknown) {
-      clg('error', getHandledErrorMessage(error))
+      log('error', getHandledErrorMessage(error))
     } finally {
       setIsLoading(false)
     }

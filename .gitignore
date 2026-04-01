@@ -3,7 +3,7 @@ CLAUDE.md
 .vscode
 .DS_Store
 node_modules
-dev-certs
+config/dev-certs
 
 client/node_modules
 client/build

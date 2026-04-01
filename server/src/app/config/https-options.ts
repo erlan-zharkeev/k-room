@@ -5,7 +5,7 @@ import { SERVER_ENV } from 'src/shared/config'
 
 export const httpsOptions = SERVER_ENV.isDev
   ? {
-      key: fs.readFileSync(path.resolve(process.cwd(), '../dev-certs', 'k-room-dev-key.pem')),
-      cert: fs.readFileSync(path.resolve(process.cwd(), '../dev-certs', 'k-room-dev.pem'))
+      key: fs.readFileSync(path.resolve(process.cwd(), '../config/dev-certs', 'k-room-dev-key.pem')),
+      cert: fs.readFileSync(path.resolve(process.cwd(), '../config/dev-certs', 'k-room-dev.pem'))
     }
   : {}

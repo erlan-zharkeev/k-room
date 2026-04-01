@@ -259,6 +259,60 @@ If a symbol is already re-exported from the top-level feature, import it from th
 import { LoginForm, useLogin, useRegistration } from 'src/features/auth'
 ```
 
+## API Request Rules
+
+1. `doRequest` must keep throwing after interceptor handling.
+
+`useApi` and the API interceptor are responsible only for shared behavior:
+
+- normalizing transport and backend errors
+- showing shared notifications
+- handling global cases such as `401` and `403`
+
+They must not silently convert a failed request into a fake success result.
+
+2. Any feature or page that calls `doRequest` must make an explicit decision about the error path.
+
+After `doRequest(...)`, the caller must do exactly one of the following:
+
+- catch the error locally and stop it there if the interceptor behavior is already sufficient
+- catch the error locally and map it to feature state
+- intentionally rethrow it to a higher layer
+
+Do not leave request promises unhandled.
+
+Use:
+
+```ts
+try {
+  await doRequest('post', AuthEndpointsEnum.Registration, payload)
+} catch {
+  // Error is already normalized and notified by the API layer.
+}
+```
+
+Use:
+
+```ts
+try {
+  await doRequest('post', UserEndpointsEnum.EditUserData, payload)
+} catch (error) {
+  setFormError(getHandledErrorMessage(error))
+}
+```
+
+Do not use:
+
+```ts
+const onSubmit = (payload: FormType) => {
+  doRequest('post', AuthEndpointsEnum.Registration, payload)
+}
+```
+
+3. Shared API notifications do not replace local control flow.
+
+The fact that the interceptor already shows a notification does not mean the caller may ignore the returned promise. If the feature does not need any local recovery logic, it must still catch the error explicitly to avoid `Uncaught (in promise)`.
+
 Avoid importing from a deeper subfeature path when the same symbol is available from the parent feature:
 
 ```ts
