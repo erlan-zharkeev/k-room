@@ -12,7 +12,7 @@ import { useI18n, useSettings } from 'src/entities/settings'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
-import { clg } from 'src/shared/utils'
+import { log } from 'src/shared/utils'
 
 export const useFirebase = () => {
   const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)
@@ -68,7 +68,7 @@ export const useFirebase = () => {
       activateUserSession(payload)
       navigate(RouteNamesEnum.Main)
     } catch (error: unknown) {
-      clg('error', getHandledErrorMessage(error))
+      log('error', getHandledErrorMessage(error))
       failedToLoginNotification.open()
     } finally {
       setFirebaseLoginLoading(false)

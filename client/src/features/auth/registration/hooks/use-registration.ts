@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
+import { log } from 'src/shared/utils'
 
 type RegistrationFormData = IAuthRegistrationPayload & {
   policy: boolean
@@ -43,6 +44,8 @@ export const useRegistration = () => {
       const pathname = buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, payload)
 
       navigate(pathname)
+    } catch {
+      log('error', 'Registration error')
     } finally {
       setIsLoading(false)
     }

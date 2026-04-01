@@ -9,7 +9,7 @@ import { useNotification } from 'src/entities/notification'
 import { useSettings } from 'src/entities/settings'
 
 import { createApiError } from 'src/shared/api'
-import { clg } from 'src/shared/utils'
+import { log } from 'src/shared/utils'
 
 const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
   if (!data || typeof data !== 'object') return false
@@ -89,7 +89,7 @@ export const useApiInterсeptor = () => {
         message: notificationMessage,
         messageType: 'error'
       })
-      silent ? clg('error', text ?? 'Unknown error') : errorInterceptorNotification.open()
+      silent ? log('error', text ?? 'Unknown error') : errorInterceptorNotification.open()
 
       return createApiError({
         message: notificationMessage,

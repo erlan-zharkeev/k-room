@@ -171,8 +171,8 @@ export default defineConfig(({ mode }) => {
       ...(isDev
         ? {
             https: {
-              key: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev-key.pem')),
-              cert: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev.pem'))
+              key: fs.readFileSync(path.resolve(__dirname, '../config/dev-certs/k-room-dev-key.pem')),
+              cert: fs.readFileSync(path.resolve(__dirname, '../config/dev-certs/k-room-dev.pem'))
             }
           }
         : {}),

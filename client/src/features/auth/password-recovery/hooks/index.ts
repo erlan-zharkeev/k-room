@@ -6,7 +6,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { useCounter, useQuery } from 'src/shared/lib'
 import { AppFormDataType } from 'src/shared/ui'
-import { clg, getNextReqInterval } from 'src/shared/utils'
+import { log, getNextReqInterval } from 'src/shared/utils'
 
 export const usePasswordRecovery = () => {
   const navigate = useNavigate()
@@ -62,7 +62,7 @@ export const usePasswordRecovery = () => {
       setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
       startCounter()
     } catch (error: unknown) {
-      clg('error', getHandledErrorMessage(error))
+      log('error', getHandledErrorMessage(error))
     } finally {
       setEmailSendCodeIsLoading(false)
     }
@@ -82,7 +82,7 @@ export const usePasswordRecovery = () => {
       const pathname = buildPathWithParams(RouteNamesEnum.CreateNewPassword, { 'password-recovery': query })
       navigate({ pathname })
     } catch (error: unknown) {
-      clg('error', getHandledErrorMessage(error))
+      log('error', getHandledErrorMessage(error))
     } finally {
       setCodeValidationIsLoading(false)
     }

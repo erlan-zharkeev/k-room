@@ -5,7 +5,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { getHandledErrorMessage, useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
-import { clg } from 'src/shared/utils'
+import { log } from 'src/shared/utils'
 
 export const useCreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -45,7 +45,7 @@ export const useCreateNewPassword = () => {
         setIPasswordChanged(true)
       }
     } catch (error: unknown) {
-      clg('error', getHandledErrorMessage(error))
+      log('error', getHandledErrorMessage(error))
     } finally {
       setIsLoading(false)
     }
