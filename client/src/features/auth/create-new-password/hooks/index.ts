@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { getHandledErrorMessage, useApi } from 'src/shared/api'
+import { useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
-import { log } from 'src/shared/utils'
 
 export const useCreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -44,8 +43,7 @@ export const useCreateNewPassword = () => {
       if (response && response.status === StatusEnum.Success) {
         setIPasswordChanged(true)
       }
-    } catch (error: unknown) {
-      log('error', getHandledErrorMessage(error))
+    } catch {
     } finally {
       setIsLoading(false)
     }

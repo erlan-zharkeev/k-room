@@ -4,13 +4,13 @@ import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendRespo
 import { useNotification } from 'src/entities/notification'
 import { settingsStore } from 'src/entities/settings'
 
-import { useApiInterсeptor, axios, createApiError, IDoRequestOpts, isApiError } from 'src/shared/api'
+import { useApiInterceptor, axios, IDoRequestOpts } from 'src/shared/api'
 import type { RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 
 export const useApi = () => {
   const notifications = useNotification()
-  const { interceptError } = useApiInterсeptor()
+  const { interceptError } = useApiInterceptor()
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
     if (!response) return
@@ -58,9 +58,8 @@ export const useApi = () => {
         return response
       }
       throw new Error('No response')
-    } catch (error: unknown) {
-      const apiError = await interceptError(error)
-      throw isApiError(apiError) ? apiError : createApiError({ message: 'Unknown error' })
+    } catch (error) {
+      throw await interceptError(error)
     }
   }
 

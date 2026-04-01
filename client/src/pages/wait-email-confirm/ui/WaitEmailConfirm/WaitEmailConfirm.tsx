@@ -62,6 +62,7 @@ export const WaitEmailConfirm = () => {
 
       navigate(updatedPath, { replace: true })
       refresh(_ + 1)
+    } catch {
     } finally {
       setIsLoading(false)
     }

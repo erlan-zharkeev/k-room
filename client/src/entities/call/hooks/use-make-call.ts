@@ -97,7 +97,7 @@ export const useMakeCall = () => {
     try {
       return await navigator.mediaDevices.getUserMedia(constraints)
     } catch (error) {
-      log('error', 'Failed to get device cause ' + String(error))
+      log('error', 'Failed to get device cause', error)
       failedToConnectToDeviceNotification.open()
       return null
     }
@@ -109,7 +109,7 @@ export const useMakeCall = () => {
     try {
       videoDomElement.srcObject = stream
     } catch (error) {
-      log('error', 'Failed to set stream tracks to HTMLElement' + String(error))
+      log('error', 'Failed to set stream tracks to HTMLElement', error)
       frontCaptureSentryException(error)
     }
   }
@@ -261,9 +261,8 @@ export const useMakeCall = () => {
   const leaveCall = (callId: string) => {
     try {
       connection.current?.destroy()
-    } catch (error: unknown) {
-      if (error instanceof Error) log('error', error.message)
-      frontCaptureSentryException(error)
+    } catch (error) {
+      log('error', 'Failed to leave call', error)
     }
     closeConnection(true)
     if (!callId) return

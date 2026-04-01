@@ -5,7 +5,7 @@ import { useDevicePermissionRequestAndUpdate } from 'src/features/device/request
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useSettings, useI18n } from 'src/entities/settings'
 
-import { frontCaptureSentryException } from 'src/shared/lib'
+import { handleRuntimeError } from 'src/shared/lib'
 import { AppIconNameType } from 'src/shared/ui'
 
 export const useInputVideoDevice = () => {
@@ -46,18 +46,6 @@ export const useInputVideoDevice = () => {
     value: device.deviceId
   }))
 
-  const isExpectedVideoDeviceError = (error: unknown) => {
-    if (error instanceof DOMException) {
-      return error.name === 'NotAllowedError' || error.name === 'NotFoundError' || error.name === 'AbortError'
-    }
-
-    if (error instanceof Error) {
-      return error.message === 'Permission denied' || error.message === 'Get user media not supported'
-    }
-
-    return false
-  }
-
   const updateDeviceList = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const videoInputs = devices.filter((device) => device.kind === 'videoinput')
@@ -80,6 +68,7 @@ export const useInputVideoDevice = () => {
       }
       updateDeviceList()
     } catch (error) {
+      handleRuntimeError('Failed to request input video device list', error)
       cantAccessDeviceNotification.open()
     }
   }
@@ -97,10 +86,7 @@ export const useInputVideoDevice = () => {
       })
       videoStream.current = stream
     } catch (error) {
-      if (!isExpectedVideoDeviceError(error)) {
-        frontCaptureSentryException(error)
-      }
-
+      handleRuntimeError('Failed to set video stream', error)
       cantAccessDeviceNotification.open()
     } finally {
       setVideoIsLoading(false)

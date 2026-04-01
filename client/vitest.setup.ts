@@ -21,8 +21,10 @@ Object.assign(globalThis, {
     firebaseApiKey: '',
     sentryDsnClient: '',
     sentryEnvironment: 'test',
-    sentryRelease: 'test',
-    sentryEnabled: false
+    sentryEnabled: false,
+    themeBg: '#020202',
+    themeAccent: '#418fde',
+    themeText: 'rgb(177 177 177 / 58.7%)'
   } satisfies IClientEnv
 })
 

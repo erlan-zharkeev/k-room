@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import { useResetAllStores } from 'src/features/reset-all-stores'
 
 import { useNotification } from 'src/entities/notification'
-import { useSettings } from 'src/entities/settings'
+import { useI18n, useSettings } from 'src/entities/settings'
 
-import { createApiError } from 'src/shared/api'
+import { API_I18N, createApiError } from 'src/shared/api'
+import { frontCaptureSentryException } from 'src/shared/lib'
 import { log } from 'src/shared/utils'
 
 const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
@@ -46,7 +47,8 @@ const extractErrorPayload = async (e: AxiosError) => {
   return isBackendResponse(data) ? data : null
 }
 
-export const useApiInterсeptor = () => {
+export const useApiInterceptor = () => {
+  const { t } = useI18n()
   const settings = useSettings()
   const notifications = useNotification()
   const dispatch = useDispatch()
@@ -56,6 +58,7 @@ export const useApiInterсeptor = () => {
   useResetAllStores(dispatch)
 
   const interceptError = async (error: unknown) => {
+    frontCaptureSentryException(error)
     if (error instanceof AxiosError) {
       const status = error.response?.status
 
@@ -83,13 +86,13 @@ export const useApiInterсeptor = () => {
         }
       }
 
-      const notificationMessage = text ?? `An error has occurred, please try again later. Error: ${error.message}`
+      const notificationMessage = text ?? t(API_I18N.genericError)(error.message)
 
       const errorInterceptorNotification = notifications.getNotification({
         message: notificationMessage,
         messageType: 'error'
       })
-      silent ? log('error', text ?? 'Unknown error') : errorInterceptorNotification.open()
+      silent ? log('error', text ?? t(API_I18N.unknownError)) : errorInterceptorNotification.open()
 
       return createApiError({
         message: notificationMessage,
@@ -103,7 +106,7 @@ export const useApiInterсeptor = () => {
       return createApiError({ message: error.message })
     }
 
-    return createApiError({ message: 'Unknown error' })
+    return createApiError({ message: t(API_I18N.unknownError) })
   }
 
   return {

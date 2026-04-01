@@ -6,4 +6,4 @@ export const LOCAL_STORAGE_KEY = {
 
 declare const CLIENT_ENV_DATA: IClientEnv
 
-export const CLIENT_ENV: IClientEnv = CLIENT_ENV_DATA
+export const CLIENT_ENV = CLIENT_ENV_DATA

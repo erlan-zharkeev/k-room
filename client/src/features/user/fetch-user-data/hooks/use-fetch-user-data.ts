@@ -1,9 +1,9 @@
-import { IGetUserDataResponse, StatusEnum, UserEndpointsEnum } from 'common'
+import { IGetUserDataResponse, UserEndpointsEnum } from 'common'
 
 import { useMainLoader } from 'src/features/switch-main-loader'
 import { useActivateUserSession } from 'src/features/user'
 
-import { isApiError, useApi } from 'src/shared/api'
+import { useApi } from 'src/shared/api'
 
 export const useFetchUserData = () => {
   const { doRequest } = useApi()
@@ -15,13 +15,7 @@ export const useFetchUserData = () => {
       const response = await doRequest<IGetUserDataResponse>('get', UserEndpointsEnum.GetUserData)
       const payload = response.data.payload
       activateUserSession(payload)
-    } catch (error: unknown) {
-      if (isApiError(error) && error.status === StatusEnum.NotAuth) {
-        console.warn('No active user session')
-        return
-      }
-
-      throw error
+    } catch {
     } finally {
       switchMainLoader('hide')
     }
