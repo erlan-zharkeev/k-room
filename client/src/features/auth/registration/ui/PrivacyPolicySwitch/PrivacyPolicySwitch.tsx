@@ -7,8 +7,8 @@ import { PRIVACY_POLICY_SWITCH_I18N } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/settings'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppLink, AppText } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const PrivacyPolicySwitch = ({ disabled }: IPrivacyPolicySwitchProps) => {
   const { t } = useI18n()

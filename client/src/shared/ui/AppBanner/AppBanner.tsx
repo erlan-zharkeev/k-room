@@ -1,5 +1,5 @@
 import './style.scss'
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import type { IAppBannerProps } from './config'
 

@@ -4,9 +4,8 @@ import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'comm
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
-import { useCounter, useQuery } from 'src/shared/lib'
+import { useCounter, useQuery, getNextReqInterval } from 'src/shared/lib'
 import { AppFormDataType } from 'src/shared/ui'
-import { getNextReqInterval } from 'src/shared/utils'
 
 export const usePasswordRecovery = () => {
   const navigate = useNavigate()

@@ -9,8 +9,8 @@ import { useNotification } from 'src/entities/notification'
 import { setReconnectingStatus } from 'src/entities/system'
 
 import { socket } from 'src/shared/api'
+import { log } from 'src/shared/lib'
 import { AdditionalServiceContext } from 'src/shared/providers'
-import { log } from 'src/shared/utils'
 
 export const useSocketConnectionMonitor = () => {
   const notifications = useNotification()

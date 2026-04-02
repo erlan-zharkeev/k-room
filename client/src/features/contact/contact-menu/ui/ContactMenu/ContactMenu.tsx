@@ -9,9 +9,8 @@ import type { IContactMenuProps } from 'src/features/contact/contact-menu'
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/settings'
 
-import { useTimeout } from 'src/shared/lib'
+import { useTimeout, stopPropagation } from 'src/shared/lib'
 import { AppButton, AppDotsAnimatedText, AppDropdown, AppText } from 'src/shared/ui'
-import { stopPropagation } from 'src/shared/utils'
 
 export const ContactMenu = ({ id, interactionType }: IContactMenuProps) => {
   const { deleteUserHandler, loading } = useDeleteContact()

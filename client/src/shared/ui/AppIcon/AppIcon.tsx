@@ -2,7 +2,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 import './style.scss'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import type { IAppIconListElement, IAppIconProps } from './config'
 import LogoIcon from './config/icons/app-logo.svg?react'

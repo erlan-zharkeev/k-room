@@ -13,8 +13,8 @@ import type { IMessageMenuProps } from 'src/features/message/message-menu'
 import { useSettings, useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
+import { stopPropagation } from 'src/shared/lib'
 import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
-import { stopPropagation } from 'src/shared/utils'
 
 export const MessageMenu = ({ message, children }: IMessageMenuProps) => {
   const { deleteMessageHandler } = useMessageDelete()

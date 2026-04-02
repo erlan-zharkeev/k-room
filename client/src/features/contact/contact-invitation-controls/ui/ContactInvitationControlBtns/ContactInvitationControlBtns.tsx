@@ -8,8 +8,8 @@ import {
 
 import { useI18n } from 'src/entities/settings'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ContactInvitationControlBtns = ({ contactData }: IContactInvitationControlBtnsProps) => {
   const { t } = useI18n()

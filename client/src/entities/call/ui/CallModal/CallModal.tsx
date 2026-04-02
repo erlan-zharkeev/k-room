@@ -8,8 +8,7 @@ import { CALL_MODAL_INITIAL_SIZE } from 'src/entities/call'
 import { CallModalBody } from 'src/entities/call/ui'
 import { useViewport } from 'src/entities/system'
 
-import { useTypedSelector } from 'src/shared/lib'
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { useTypedSelector, createClassNameWithModifiers } from 'src/shared/lib'
 
 export const CallModal = () => {
   const { viewPort } = useViewport()

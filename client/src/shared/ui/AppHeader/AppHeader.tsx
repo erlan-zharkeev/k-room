@@ -1,7 +1,7 @@
 import './style.scss'
 import { createElement } from 'react'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 export const AppHeader = ({
   tag = 'h3',

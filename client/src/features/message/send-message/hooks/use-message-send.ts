@@ -10,7 +10,7 @@ import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
 import { FileLoaderValueType } from 'src/shared/config'
-import { generateUUIDv4 } from 'src/shared/utils'
+import { generateUUIDv4 } from 'src/shared/lib'
 
 export const useMessageSend = () => {
   const dispatch = useDispatch()

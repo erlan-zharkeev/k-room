@@ -6,8 +6,8 @@ import type { IDontShowNotificationAgainBtnProps } from 'src/entities/notificati
 import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification/ui'
 import { useSettings, useI18n } from 'src/entities/settings'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const DontShowNotificationAgainBtn = ({ notificationName }: IDontShowNotificationAgainBtnProps) => {
   const settings = useSettings()

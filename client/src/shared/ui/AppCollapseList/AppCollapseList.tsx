@@ -3,9 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Badge } from 'antd'
 
-import { useTimeout } from 'src/shared/lib'
+import { useTimeout, createClassNameWithModifiers } from 'src/shared/lib'
 import { AppHeader, AppIcon } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import type { IAppCollapseProps } from './config'
 

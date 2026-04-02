@@ -3,7 +3,7 @@ import './style.scss'
 import type { IMessageListElProps } from 'src/features/message'
 import { MessageBody, MessageMenu } from 'src/features/message'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 export const MessageListEl = ({ message, isRoomPrivate }: IMessageListElProps) => {
   const className = createClassNameWithModifiers({

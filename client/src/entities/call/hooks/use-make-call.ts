@@ -27,9 +27,8 @@ import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
-import { frontCaptureSentryException, useTypedSelector } from 'src/shared/lib'
+import { frontCaptureSentryException, useTypedSelector, log } from 'src/shared/lib'
 import { RefsContext } from 'src/shared/providers'
-import { log } from 'src/shared/utils'
 
 const parsePeerData = (data: unknown) => {
   if (typeof data === 'string') return JSON.parse(data) as { settings?: { audio?: boolean; video?: boolean } }

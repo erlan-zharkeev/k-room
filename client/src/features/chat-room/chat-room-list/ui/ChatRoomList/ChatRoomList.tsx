@@ -8,9 +8,8 @@ import { ChatRoomPreview, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings, useI18n } from 'src/entities/settings'
 
-import { useAnimatedList } from 'src/shared/lib'
+import { useAnimatedList, chatRoomUnreadMessagesCount, createClassNameWithModifiers } from 'src/shared/lib'
 import { AppScrollContainer, AppText } from 'src/shared/ui'
-import { chatRoomUnreadMessagesCount, createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomList = () => {
   const { chatRooms, hasChatRooms } = useChatRoom()

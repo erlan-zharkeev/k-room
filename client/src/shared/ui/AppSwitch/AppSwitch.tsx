@@ -2,7 +2,7 @@ import './style.scss'
 
 import { ChangeEvent, useState } from 'react'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import type { IAppSwitchProps } from './config'
 
