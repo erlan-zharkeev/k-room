@@ -13,7 +13,8 @@ import { updateTokens } from './../shared'
 import { LOGIN_I18N } from './config'
 
 export const loginController = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(LOGIN_I18N.failed, language)
 
   try {
     const { email: inputEmail, password }: IAuthLoginPayload = req.body
@@ -44,7 +45,7 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
     }
 
     return res.json(response)
-  } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(LOGIN_I18N.failed, language))
+  } catch (error) {
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

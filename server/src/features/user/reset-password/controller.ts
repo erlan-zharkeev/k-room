@@ -13,14 +13,15 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { RESET_PASSWORD_I18N } from './config'
 
 export const resetPasswordController = async (req: IAppRequest, res: AppResponseType<null>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(RESET_PASSWORD_I18N.failed, language)
 
   try {
     const { codeToValidate, password }: ICreateNewPasswordPayload = req.body
     const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
 
     if (!code) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(RESET_PASSWORD_I18N.failed, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, basicError)
     }
 
     const userId = code.id
@@ -56,7 +57,7 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
       payload: null,
       message: { text: getLocalizedText(RESET_PASSWORD_I18N.success, language), silent: true }
     })
-  } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(RESET_PASSWORD_I18N.failed, language))
+  } catch (error) {
+    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

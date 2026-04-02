@@ -5,12 +5,13 @@ import { StatusEnum } from 'common'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SERVER_ENV, SHARED_I18N } from 'src/shared/config'
-import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
+import { getIO, getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { LOGOUT_I18N } from './config'
 
 export const logoutController = async (req: IAppRequest, res: AppResponseType<null>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(LOGOUT_I18N.failed, language)
 
   try {
     const deviceId = req.cookies['device-id']
@@ -45,8 +46,6 @@ export const logoutController = async (req: IAppRequest, res: AppResponseType<nu
       payload: null
     })
   } catch (error) {
-    log.error(String(error))
-    serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(LOGOUT_I18N.failed, language))
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

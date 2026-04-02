@@ -3,14 +3,15 @@ import { SocketActionsType, StatusEnum } from 'common'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
-import { getIO, getLocalizedText, log, serverCaptureSentryException, throwHTTPError } from 'src/shared/lib'
+import { getIO, getLocalizedText, isAppError, log, throwHTTPError } from 'src/shared/lib'
 
 import { getSocketsByUserIds, transformUserToContact, USER_I18N } from './../shared'
 import { UPDATE_USER_DATA_I18N } from './config'
 import { updateUserAvatar } from './lib'
 
 export const updateUserDataController = async (req: IAppRequest, res: AppResponseType<null>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(UPDATE_USER_DATA_I18N.failedUpdate, language)
 
   try {
     const username: string | undefined = req.body.username
@@ -37,11 +38,11 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
     }
 
     if (avatarFileBuffer) {
-      await updateUserAvatar(avatarFileBuffer, userId, res, language)
+      await updateUserAvatar(avatarFileBuffer, userId, language)
     }
 
     if (resetAvatar === 'reset') {
-      await updateUserAvatar(null, userId, res, language)
+      await updateUserAvatar(null, userId, language)
     }
 
     const contacts = await UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean()
@@ -62,8 +63,10 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true }
     })
   } catch (error: unknown) {
-    log.error(String(error))
-    serverCaptureSentryException(error)
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(UPDATE_USER_DATA_I18N.failedUpdate, language))
+    if (isAppError(error)) {
+      return throwHTTPError(error.status, res, error.message, error.silent)
+    }
+
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

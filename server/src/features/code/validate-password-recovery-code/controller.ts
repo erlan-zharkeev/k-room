@@ -17,7 +17,8 @@ export const validatePasswordRecoveryCodeController = async (
   req: IAppRequest,
   res: AppResponseType<IValidatePasswordRecoveryCodeResponse>
 ) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed, language)
 
   try {
     const { email, code } = req.body as { email: string; code: string }
@@ -74,11 +75,7 @@ export const validatePasswordRecoveryCodeController = async (
         silent: true
       }
     })
-  } catch {
-    return throwHTTPError(
-      StatusEnum.Server,
-      res,
-      getLocalizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed, language)
-    )
+  } catch (error) {
+    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

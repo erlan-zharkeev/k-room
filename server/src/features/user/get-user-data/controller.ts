@@ -11,7 +11,8 @@ import { mapUserToDto, USER_I18N } from './../shared'
 import { GET_USER_DATA_I18N } from './config'
 
 export const getUserDataController = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(GET_USER_DATA_I18N.failedGetUserData, language)
 
   try {
     const userId = req.app.locals.id
@@ -30,7 +31,7 @@ export const getUserDataController = async (req: IAppRequest, res: AppResponseTy
     }
 
     return res.json(response)
-  } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(GET_USER_DATA_I18N.failedGetUserData, language))
+  } catch (error) {
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

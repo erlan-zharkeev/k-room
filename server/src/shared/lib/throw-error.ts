@@ -1,7 +1,15 @@
 import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
 import { type Response } from 'express'
 
-import { getIO, log, serverCaptureSentryException, serverCaptureSentryHttpError } from 'src/shared/lib'
+import { SHARED_I18N, type SocketInstanceType } from 'src/shared/config'
+import {
+  getIO,
+  getLocalizedText,
+  log,
+  serverCaptureSentryException,
+  serverCaptureSentryHttpError,
+  serverCaptureSentrySocketError
+} from 'src/shared/lib'
 
 export const throwHTTPError = (
   status: StatusEnum,
@@ -38,10 +46,15 @@ export const throwHTTPError = (
 
 export const throwSocketError = (
   socketId: string,
-  error: string = 'Unknown error',
+  error?: string | null,
   status: StatusEnum | undefined = 500,
   silent: boolean = false
 ) => {
   const io = getIO()
-  io.to(socketId).emit<SocketActionsType>('error-message', { message: error, silent, status })
+  const socket = io.sockets.sockets.get(socketId) as SocketInstanceType | undefined
+  const message = error?.trim() || getLocalizedText(SHARED_I18N.commonServerError, socket?.data)
+
+  log.error(`-${message}`)
+  serverCaptureSentrySocketError({ message, silent, status })
+  io.to(socketId).emit<SocketActionsType>('error-message', { message, silent, status })
 }

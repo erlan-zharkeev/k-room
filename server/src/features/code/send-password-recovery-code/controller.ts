@@ -19,7 +19,8 @@ export const sendPasswordRecoveryCodeController = async (
   req: IAppRequest,
   res: AppResponseType<ISendPasswordRecoveryCodeResponse>
 ) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language)
 
   try {
     const { email } = req.body as { email: string }
@@ -78,11 +79,7 @@ export const sendPasswordRecoveryCodeController = async (
         silent: false
       }
     })
-  } catch {
-    return throwHTTPError(
-      StatusEnum.Server,
-      res,
-      getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language)
-    )
+  } catch (error) {
+    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }
