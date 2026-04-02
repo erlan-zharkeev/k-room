@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { AuthEndpointsEnum } from 'common'
+import { AUTH_ENDPOINTS } from 'common'
 
 import {
   accessTokenValidator,
@@ -22,14 +22,14 @@ import { validateRequest } from 'src/shared/middleware'
 export const authRouter = Router()
 
 authRouter.post(
-  AuthEndpointsEnum.ConfirmEmail,
+  AUTH_ENDPOINTS.confirmEmail,
   CONFIRM_EMAIL_FIELDS_VALIDATION,
   validateRequest,
   confirmEmailController
 )
-authRouter.post(AuthEndpointsEnum.Login, LOGIN_FIELDS_VALIDATION, validateRequest, loginController)
-authRouter.post(AuthEndpointsEnum.Registration, REGISTRATION_FIELDS_VALIDATION, validateRequest, registrationController)
-authRouter.post(AuthEndpointsEnum.SendEmailConfirmationLink, sendConfirmationLinkController)
-authRouter.post(AuthEndpointsEnum.ProviderLogin, signInWithProviderController)
-authRouter.get(AuthEndpointsEnum.UpdateTokensPair, refreshTokenValidator, updateTokensPairController)
-authRouter.post(AuthEndpointsEnum.Logout, accessTokenValidator, logoutController)
+authRouter.post(AUTH_ENDPOINTS.login, LOGIN_FIELDS_VALIDATION, validateRequest, loginController)
+authRouter.post(AUTH_ENDPOINTS.registration, REGISTRATION_FIELDS_VALIDATION, validateRequest, registrationController)
+authRouter.post(AUTH_ENDPOINTS.sendEmailConfirmationLink, sendConfirmationLinkController)
+authRouter.post(AUTH_ENDPOINTS.providerLogin, signInWithProviderController)
+authRouter.post(AUTH_ENDPOINTS.updateTokensPair, refreshTokenValidator, updateTokensPairController)
+authRouter.post(AUTH_ENDPOINTS.logout, accessTokenValidator, logoutController)

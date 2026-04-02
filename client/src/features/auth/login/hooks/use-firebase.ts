@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, RouteNamesEnum, FirebaseProviderType, ISignInWithProviderResponse } from 'common'
+import { AUTH_ENDPOINTS, ROUTE_NAMES, FirebaseProviderType, ISignInWithProviderResponse } from 'common'
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
@@ -63,10 +63,10 @@ export const useFirebase = () => {
 
   const signInWithCredential = async (credential: NonNullable<Awaited<ReturnType<typeof buildCredential>>>) => {
     try {
-      const response = await doRequest<ISignInWithProviderResponse>('post', AuthEndpointsEnum.ProviderLogin, credential)
+      const response = await doRequest<ISignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
       const payload = response.data.payload
       activateUserSession(payload)
-      navigate(RouteNamesEnum.Main)
+      navigate(ROUTE_NAMES.main)
     } catch {}
   }
 

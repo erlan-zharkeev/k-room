@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { AuthEndpointsEnum } from 'common'
+import { AUTH_ENDPOINTS } from 'common'
 
 import { validateRequest } from 'src/shared/middleware'
 
@@ -9,4 +9,4 @@ import { LOGIN_FIELDS_VALIDATION } from './lib'
 
 export const loginRouter = Router()
 
-loginRouter.post(AuthEndpointsEnum.Login, LOGIN_FIELDS_VALIDATION, validateRequest, loginController)
+loginRouter.post(AUTH_ENDPOINTS.login, LOGIN_FIELDS_VALIDATION, validateRequest, loginController)

@@ -1,4 +1,4 @@
-import { UserEndpointsEnum } from 'common'
+import { USER_ENDPOINTS } from 'common'
 
 import { useInfoNotification } from 'src/entities/info-notification'
 import { useUser } from 'src/entities/user'
@@ -13,7 +13,7 @@ export const useMarkInfoNotificationAsRead = () => {
   const markAsRead = async (id: number) => {
     try {
       if (isRead(id)) return
-      await doRequest('patch', UserEndpointsEnum.MarkInfoNotificationAsRead, { id })
+      await doRequest('patch', USER_ENDPOINTS.markInfoNotificationAsRead, { id })
       setByPath(`infoNotifications.${id}`, 'read')
     } catch {}
   }

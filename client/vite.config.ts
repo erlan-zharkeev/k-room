@@ -11,13 +11,19 @@ import { generatePWAConfig } from './vite.pwa.config'
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
+  const commonEnv = loadEnv('common', envDir, '')
   const isDev = mode === 'development'
   const { APP_HOST, API_HOST, SERVER_PORT, CLIENT_PORT, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
-  const { name: APP_NAME, version: APP_VERSION } = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8')) as { name: string; version: string }
+  const { SOCKET_PATH, API_PATH } = commonEnv
+  const { name: APP_NAME, version: APP_VERSION } = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8')
+  ) as { name: string; version: string }
 
   const CLIENT_ENV_DATA = {
     isDev,
     isE2E: process.env.E2E === 'true',
+    socketPath: SOCKET_PATH,
+    apiPath: API_PATH,
     appName: APP_NAME,
     appVersion: APP_VERSION,
     serverPort: Number(SERVER_PORT),
@@ -29,7 +35,7 @@ export default defineConfig(({ mode }) => {
     sentryEnvironment: SENTRY_ENVIRONMENT,
     sentryEnabled: SENTRY_ENABLED === 'true',
     socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST,
-    apiBaseUrl: isDev ? '/api' : `${API_HOST}'/api'`,
+    apiBaseUrl: isDev ? API_PATH : `${API_HOST}${API_PATH}`,
     themeBg: '#1c1c1c', // DO NOT FORGET TO SYNC WITH theme.css
     themeAccent: '#418fde', // DO NOT FORGET TO SYNC WITH theme.css
     themeText: 'rgb(177 177 177 / 58.7%)', // DO NOT FORGET TO SYNC WITH theme.css

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { CodesEndpointsEnum } from 'common'
+import { CODES_ENDPOINTS } from 'common'
 
 import { validateRequest } from 'src/shared/middleware'
 
@@ -9,7 +9,7 @@ import { VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION, validatePasswordReco
 export const validatePasswordRecoveryCodeRouter = Router()
 
 validatePasswordRecoveryCodeRouter.post(
-  CodesEndpointsEnum.ValidateEmailCodePasswordRecovery,
+  CODES_ENDPOINTS.validateEmailCodePasswordRecovery,
   VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
   validateRequest,
   validatePasswordRecoveryCodeController

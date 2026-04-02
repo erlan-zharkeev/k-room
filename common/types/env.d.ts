@@ -17,3 +17,7 @@ export interface IEnvVariables {
     K_ROOM_REFRESH_TOKEN_SECRET: string;
     EMAIL_CONFIRM_SECRET: string;
 }
+export interface IEnvCommonVariables {
+    SOCKET_PATH: string;
+    API_PATH: string;
+}

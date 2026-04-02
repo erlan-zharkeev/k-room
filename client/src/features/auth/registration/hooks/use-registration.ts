@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
 import {
-  AuthEndpointsEnum,
+  AUTH_ENDPOINTS,
   IAuthRegistrationPayload,
   ISendConfirmationLinkResponse,
-  RouteNamesEnum,
+  ROUTE_NAMES,
   StatusEnum
 } from 'common'
 import { useNavigate } from 'react-router-dom'
@@ -34,13 +34,13 @@ export const useRegistration = () => {
   const register = async (fields: IAuthRegistrationPayload) => {
     try {
       setIsLoading(true)
-      const response = await doRequest<ISendConfirmationLinkResponse>('post', AuthEndpointsEnum.Registration, fields)
+      const response = await doRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, fields)
 
       if (!response || response.status !== StatusEnum.Success) return
 
       const { payload } = response.data
 
-      const pathname = buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, payload)
+      const pathname = buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, payload)
 
       navigate(pathname)
     } catch {

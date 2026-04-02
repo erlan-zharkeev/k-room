@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { MediaEndpointsEnum } from 'common'
+import { MEDIA_ENDPOINTS } from 'common'
 
 import type { IFoundContactProps } from 'src/features/contact'
 import { AddContactBtn } from 'src/features/contact'
@@ -15,7 +15,7 @@ export const FoundContact = ({ id, username, interactionType }: IFoundContactPro
 
   return (
     <div className="search-contact__list-element" key={id}>
-      <ProfileInfo avatar={`api${MediaEndpointsEnum.GetMediaFile}/avatar.${id}`} title={username} showBadge={false} />
+      <ProfileInfo avatar={`api${MEDIA_ENDPOINTS.getMediaFile}/avatar.${id}`} title={username} showBadge={false} />
       {interactionType === 'default' ? (
         <AddContactBtn id={id} />
       ) : (

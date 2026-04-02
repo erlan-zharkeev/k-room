@@ -1,5 +1,5 @@
 import './style.scss'
-import { RouteNamesEnum as R } from 'common'
+import { ROUTE_NAMES as R, type RouteNameType } from 'common'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout/config'
@@ -13,12 +13,12 @@ export const PageLayout = () => {
   const { pathname } = useLocation()
   const { t } = useI18n()
 
-  const hiddenBackRoutes = new Set<R>([R.Login, R.Registration])
-  const showBack = !hiddenBackRoutes.has(pathname as R)
+  const hiddenBackRoutes = new Set<RouteNameType>([R.login, R.registration])
+  const showBack = !hiddenBackRoutes.has(pathname as RouteNameType)
 
   const handleBack = () => {
     if (window.history.length > 1) navigate(-1)
-    else navigate(R.Main, { replace: true })
+    else navigate(R.main, { replace: true })
   }
 
   return (

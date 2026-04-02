@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { IBackendResponse, RouteNamesEnum, StatusEnum } from 'common'
+import { IBackendResponse, ROUTE_NAMES, StatusEnum } from 'common'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -73,9 +73,9 @@ export const useApiInterceptor = () => {
         case StatusEnum.NotAuth: {
           silent = true
           resetStores()
-          const isOnMain = location.pathname === RouteNamesEnum.Main
+          const isOnMain = location.pathname === ROUTE_NAMES.main
           if (isOnMain) {
-            navigate(RouteNamesEnum.Login)
+            navigate(ROUTE_NAMES.login)
           }
           break
         }

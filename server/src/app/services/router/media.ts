@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
-import { MediaEndpointsEnum } from 'common'
+import { MEDIA_ENDPOINTS } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 import { getMediaFileController } from 'src/features/media'
 
 export const mediaRouter = Router()
 
-mediaRouter.get(`${MediaEndpointsEnum.GetMediaFile}/:id`, accessTokenValidator, getMediaFileController)
+mediaRouter.get(`${MEDIA_ENDPOINTS.getMediaFile}/:id`, accessTokenValidator, getMediaFileController)

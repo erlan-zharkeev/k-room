@@ -1,4 +1,4 @@
-import { RouteNamesEnum } from 'common'
+import { ROUTE_NAMES } from 'common'
 
 import './style.scss'
 
@@ -16,7 +16,7 @@ export const PasswordRecoveryLink = () => {
   return (
     <AppLink
       text={t(PASSWORD_RECOVERY_LINK_I18N.link)}
-      to={{ pathname: RouteNamesEnum.PasswordRecovery, search: `?user-email=${email}` }}
+      to={{ pathname: ROUTE_NAMES.passwordRecovery, search: `?user-email=${email}` }}
     />
   )
 }

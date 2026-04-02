@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, IAuthLoginPayload, type ILoginResponse } from 'common'
+import { AUTH_ENDPOINTS, IAuthLoginPayload, type ILoginResponse } from 'common'
 
 import { useActivateUserSession } from 'src/features/user'
 
@@ -16,7 +16,7 @@ export const useLogin = () => {
   const login = async (fields: IAuthLoginPayload) => {
     setIsLoading(true)
     try {
-      const response = await doRequest<ILoginResponse>('post', AuthEndpointsEnum.Login, fields)
+      const response = await doRequest<ILoginResponse>('post', AUTH_ENDPOINTS.login, fields)
       const payload = response.data.payload
       activateUserSession(payload)
     } catch {

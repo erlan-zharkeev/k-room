@@ -1,5 +1,7 @@
 export interface IServerEnv {
   isDev: boolean
+  apiPath: string
+  socketPath: string
   mongoHost: string
   domain: string
   serverPort: number

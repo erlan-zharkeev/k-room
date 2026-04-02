@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { RouteNamesEnum } from 'common'
+import { ROUTE_NAMES } from 'common'
 import { Link, useLocation } from 'react-router-dom'
 
 import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
@@ -26,11 +26,11 @@ export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProp
     <div className="auth-tabs-layout">
       <div className="auth-tabs-layout__body">
         <nav className={navClassName}>
-          <AppHeader accent={isPathEqual(RouteNamesEnum.Login)} additionalClassName="auth-tabs-layout__login-link">
-            <Link to={RouteNamesEnum.Login}>{t(AUTH_TABS_LAYOUT_I18N.login)}</Link>
+          <AppHeader accent={isPathEqual(ROUTE_NAMES.login)} additionalClassName="auth-tabs-layout__login-link">
+            <Link to={ROUTE_NAMES.login}>{t(AUTH_TABS_LAYOUT_I18N.login)}</Link>
           </AppHeader>
-          <AppHeader accent={isPathEqual(RouteNamesEnum.Registration)}>
-            <Link to={RouteNamesEnum.Registration}>{t(AUTH_TABS_LAYOUT_I18N.register)}</Link>
+          <AppHeader accent={isPathEqual(ROUTE_NAMES.registration)}>
+            <Link to={ROUTE_NAMES.registration}>{t(AUTH_TABS_LAYOUT_I18N.register)}</Link>
           </AppHeader>
         </nav>
         {children}

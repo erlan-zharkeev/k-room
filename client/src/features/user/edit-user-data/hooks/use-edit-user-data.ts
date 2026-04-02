@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { MediaFileValueType, UserEndpointsEnum } from 'common'
+import { MediaFileValueType, USER_ENDPOINTS } from 'common'
 
 import { useLoadMedia } from 'src/features/media'
 
@@ -38,7 +38,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
 
     try {
       setIsLoading(true)
-      await doRequest('post', UserEndpointsEnum.EditUserData, payloadFormData, {
+      await doRequest('patch', USER_ENDPOINTS.editUserData, payloadFormData, {
         contentType: 'multipart/form-data'
       })
       update({ username })

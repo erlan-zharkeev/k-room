@@ -1,5 +1,5 @@
 import './style.scss'
-import { RouteNamesEnum } from 'common'
+import { ROUTE_NAMES } from 'common'
 
 import { LOGIN_FORM_I18N, LoginFormProps } from 'src/features/auth'
 
@@ -49,7 +49,7 @@ export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLogin
           />
           <div className="login-form__forgot-password">
             <AppLink
-              to={RouteNamesEnum.PasswordRecovery}
+              to={ROUTE_NAMES.passwordRecovery}
               text={t(LOGIN_FORM_I18N.forgotPassword)}
               disabled={isLoading || isFirebaseLoginLoading}
             />

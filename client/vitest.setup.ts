@@ -13,6 +13,8 @@ Object.assign(globalThis, {
     appVersion: 'test',
     supportEmail: '',
     socketBaseUrl: 'https://localhost:3000',
+    apiPath: '/api',
+    socketPath: '/app-socket',
     apiBaseUrl: '/api',
     serverPort: 3000,
     clientPort: 3001,

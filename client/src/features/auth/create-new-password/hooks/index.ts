@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { UserEndpointsEnum, StatusEnum, RouteNamesEnum, ICreateNewPasswordPayload } from 'common'
+import { USER_ENDPOINTS, StatusEnum, ROUTE_NAMES, ICreateNewPasswordPayload } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
@@ -19,7 +19,7 @@ export const useCreateNewPassword = () => {
 
   useEffect(() => {
     const currentPasswordRestoreQuery = searchParams.get('password-recovery')
-    if (!currentPasswordRestoreQuery) return navigate(RouteNamesEnum.Main)
+    if (!currentPasswordRestoreQuery) return navigate(ROUTE_NAMES.main)
     setPasswordRestoreCode(currentPasswordRestoreQuery)
   }, [])
 
@@ -39,7 +39,7 @@ export const useCreateNewPassword = () => {
         password,
         codeToValidate: passwordRestoreCode
       }
-      const response = await doRequest('post', UserEndpointsEnum.ResetPassword, formData)
+      const response = await doRequest('post', USER_ENDPOINTS.resetPassword, formData)
       if (response && response.status === StatusEnum.Success) {
         setIPasswordChanged(true)
       }

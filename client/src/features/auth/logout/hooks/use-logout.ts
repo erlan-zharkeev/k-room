@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AuthEndpointsEnum, RouteNamesEnum } from 'common'
+import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'common'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -22,7 +22,7 @@ export const useLogout = () => {
   const logout = async () => {
     setIsLoading(true)
     try {
-      await doRequest('post', AuthEndpointsEnum.Logout)
+      await doRequest('post', AUTH_ENDPOINTS.logout)
       localStorage.removeItem(LOCAL_STORAGE_KEY.LogoutStatus)
     } catch {
       localStorage.setItem(LOCAL_STORAGE_KEY.LogoutStatus, 'failed')
@@ -31,7 +31,7 @@ export const useLogout = () => {
       clearCookie()
       resetStores()
       socket.disconnect()
-      navigate(RouteNamesEnum.Login)
+      navigate(ROUTE_NAMES.login)
       setIsLoading(false)
     }
   }
