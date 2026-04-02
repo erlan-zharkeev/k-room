@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "baseUrl": "../..",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "paths": {
-      "common": ["common/index.ts"]
+      "common": ["../../common/index.ts"],
+      "e2e/*": ["../../e2e/*"]
     },
     "types": ["node", "@playwright/test"],
     "strict": true,

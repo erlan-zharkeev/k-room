@@ -28,14 +28,14 @@
 
 @keyframes list-item-enter {
   0% {
+    transform: translateY(18px) scale(0.96);
     opacity: 0;
     filter: blur(3px);
-    transform: translateY(18px) scale(0.96);
   }
 
   100% {
+    transform: translateY(0) scale(1);
     opacity: 1;
     filter: blur(0);
-    transform: translateY(0) scale(1);
   }
 }
