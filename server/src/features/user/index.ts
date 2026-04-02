@@ -1,12 +1,10 @@
-export * from './shared'
-///
 export * from './actualize-user-data'
 export * from './get-user-data'
 export * from './mark-info-notification-as-read'
 export * from './reset-password'
+export * from './shared'
 export * from './update-language'
 export * from './update-online-status'
 export * from './update-user-data'
 export * from './user-connect'
 export * from './user-disconnect'
-///

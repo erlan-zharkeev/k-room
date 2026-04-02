@@ -4,9 +4,7 @@ import { ProviderType } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
-import { log, serverCaptureSentryException } from 'src/shared/lib'
-
-import { isUserExist } from './index'
+import { isUserExist } from './is-user-exist'
 
 export const createUser = async ({
   id,
@@ -21,26 +19,16 @@ export const createUser = async ({
   hashedPassword: string
   provider?: ProviderType
 }) => {
-  let user = null
-  try {
-    const idCandidate = new mongoose.Types.ObjectId(id)
+  if (!id) return null
+  const idCandidate = new mongoose.Types.ObjectId(id)
 
-    const userAlreadyExists = await isUserExist({ id: idCandidate, username, email })
-    if (userAlreadyExists) {
-      log.success('-New user creating skipped: user already exists')
-      return null
-    }
+  const userExistState = await isUserExist({ id: idCandidate, username, email })
+  if (userExistState.exists) return null
 
-    user = await new UserModel({
-      _id: id ? new mongoose.Types.ObjectId(id) : new mongoose.Types.ObjectId(),
-      public: { username },
-      personal: { email, infoNotifications: { 1: 'unread' } },
-      system: { role: 'user', password: hashedPassword, provider, device: {} }
-    }).save()
-  } catch (error) {
-    log.error('-New user creating failed')
-    log.error(String(error))
-    serverCaptureSentryException(error)
-  }
-  return user
+  return await new UserModel({
+    _id: id ? new mongoose.Types.ObjectId(id) : new mongoose.Types.ObjectId(),
+    public: { username },
+    personal: { email, infoNotifications: { 1: 'unread' } },
+    system: { role: 'user', password: hashedPassword, provider, device: {} }
+  }).save()
 }

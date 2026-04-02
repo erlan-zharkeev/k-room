@@ -313,6 +313,40 @@ const onSubmit = (payload: FormType) => {
 
 The fact that the interceptor already shows a notification does not mean the caller may ignore the returned promise. If the feature does not need any local recovery logic, it must still catch the error explicitly to avoid `Uncaught (in promise)`.
 
+4. Do not log or send API errors to Sentry manually in feature catch blocks.
+
+The interceptor automatically captures all `doRequest` errors to Sentry. Adding `log` or `frontCaptureSentryException` in a feature catch block duplicates that. Only use `log` or `frontCaptureSentryException` manually for non-API errors (e.g. WebRTC, device, browser API failures).
+
+Do not use:
+
+```ts
+} catch (error) {
+  log('error', 'Registration error', error)
+}
+```
+
+Use:
+
+```ts
+} catch {
+  // Error is already normalized, notified, and captured by the API layer.
+}
+```
+
+5. Use `handleRuntimeError` for non-API errors.
+
+For errors that originate outside `doRequest` (WebRTC, device APIs, Firebase SDK, browser APIs), use `handleRuntimeError` from `src/shared/lib`. It logs to the console and sends to Sentry in one call.
+
+```ts
+import { handleRuntimeError } from 'src/shared/lib'
+
+} catch (error) {
+  handleRuntimeError('Failed to get user media', error)
+}
+```
+
+Do not call `log` and `frontCaptureSentryException` separately for these cases.
+
 Avoid importing from a deeper subfeature path when the same symbol is available from the parent feature:
 
 ```ts

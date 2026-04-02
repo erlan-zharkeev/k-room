@@ -6,26 +6,32 @@ import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth/s
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { createUser, isUserExist } from 'src/features/user'
 
-import { type AppResponseType, type IAppRequest,SERVER_ENV } from 'src/shared/config'
+import { type AppResponseType, type IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
-import { REGISTRATION_RESEND_INTERVAL_MINUTES } from './config'
-import { REGISTRATION_I18N } from './index'
+import { REGISTRATION_I18N, REGISTRATION_RESEND_INTERVAL_MINUTES } from './config'
+import { getUserExistMessage } from './lib'
 
 export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
-  const language = req.language
+  const basicError = getLocalizedText(REGISTRATION_I18N.failedRegistration, req)
 
   try {
     const { username, email, password }: IAuthRegistrationPayload = req.body
 
-    await isUserExist({ username, email }, res)
+    const userExistState = await isUserExist({ username, email })
+
+    if (userExistState.exists) {
+      const userExistMessage = getUserExistMessage(userExistState.reason, req)
+      const status = userExistState.reason === 'id' ? StatusEnum.Server : StatusEnum.BadRequest
+      return throwHTTPError(status, res, userExistMessage)
+    }
 
     const hashedPassword = await bcrypt.hash(password, 6)
 
     const user = await createUser({ email, username, hashedPassword })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.Server, res, getLocalizedText(REGISTRATION_I18N.failedRegistration, language))
+      return throwHTTPError(StatusEnum.Server, res, basicError)
     }
 
     const confirmToken = generateToken(user.id, SERVER_ENV.emailConfirmSecret, EMAIL_CONFIRMATION_LINK_LIFE)
@@ -45,13 +51,13 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(REGISTRATION_I18N.registrationSuccess, language),
+        text: getLocalizedText(REGISTRATION_I18N.registrationSuccess, req),
         silent: false
       }
     }
 
     return res.json(response)
-  } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(REGISTRATION_I18N.failedRegistration, language))
+  } catch (error) {
+    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

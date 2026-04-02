@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
 
 import { createUser, mapUserToDto, updateUserAvatar } from 'src/features/user'
+import { loadGoogleAvatar } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
@@ -11,13 +12,13 @@ import { AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/confi
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { updateTokens } from './../shared'
-import { SIGN_IN_WITH_PROVIDER_I18N } from './index'
+import { SIGN_IN_WITH_PROVIDER_I18N } from './config'
 
 export const signInWithProviderController = async (
   req: IAppRequest,
   res: AppResponseType<ISignInWithProviderResponse>
 ) => {
-  const language = req.language
+  const basicError = getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, req)
 
   try {
     const data: ISignInWithProviderPayload = req.body
@@ -28,32 +29,22 @@ export const signInWithProviderController = async (
     const user = newUser ?? (await UserModel.findOne({ 'personal.email': email }))
 
     if (newUser && avatar) {
-      try {
-        const avatarUrl = new URL(avatar)
-        const allowedHosts = ['lh3.googleusercontent.com']
-        if (allowedHosts.includes(avatarUrl.hostname)) {
-          const response = await fetch(avatar)
-          const buffer = Buffer.from(await response.arrayBuffer())
-          await updateUserAvatar(buffer, String(newUser._id))
-        }
-      } catch {
-        // non-critical, don't fail login
-      }
+      const buffer = await loadGoogleAvatar(avatar)
+      if (buffer) await updateUserAvatar(buffer, String(newUser._id))
     }
 
-    if (!user)
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language))
+    if (!user) return throwHTTPError(StatusEnum.BadRequest, res, basicError)
 
     await updateTokens(user.id, req, res)
 
     return res.json({
       payload: mapUserToDto(user),
       message: {
-        text: getLocalizedText(SHARED_I18N.success, language),
+        text: getLocalizedText(SHARED_I18N.success, req),
         silent: true
       }
     })
-  } catch {
-    throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language))
+  } catch (error) {
+    throwHTTPError(StatusEnum.BadRequest, res, basicError, false, error)
   }
 }
