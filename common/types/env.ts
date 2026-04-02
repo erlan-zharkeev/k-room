@@ -1,6 +1,4 @@
 export interface IEnvVariables {
-  SERVER_PORT: string
-  CLIENT_PORT: string
   APP_HOST: string
   API_HOST: string
   MONGO_ADMIN_HOST: string
@@ -19,6 +17,8 @@ export interface IEnvVariables {
 }
 
 export interface IEnvCommonVariables {
+  SERVER_PORT: string
+  CLIENT_PORT: string
   SOCKET_PATH: string
   API_PATH: string
 }

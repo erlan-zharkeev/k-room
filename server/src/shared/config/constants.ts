@@ -17,13 +17,11 @@ const {
   SENTRY_ENABLED,
   APP_HOST,
   API_HOST,
-  SERVER_PORT,
-  CLIENT_PORT,
   MONGO_HOST,
   COOKIE_DOMAIN
 } = envs
 
-const { SOCKET_PATH, API_PATH } = commonEnvs
+const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH } = commonEnvs
 
 const isDev = process.env.NODE_ENV === 'development'
 
