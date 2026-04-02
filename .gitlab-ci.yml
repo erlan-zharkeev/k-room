@@ -52,7 +52,7 @@ deploy-production:
   stage: deploy
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-      when: on_success
+      when: manual
     - when: never
   before_script:
     - apk add --no-cache openssh-client

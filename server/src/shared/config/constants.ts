@@ -1,4 +1,6 @@
 import dotenv, { type DotenvParseOutput } from 'dotenv'
+import fs from 'fs'
+import path from 'path'
 
 import { IEnvCommonVariables, IEnvVariables } from 'common'
 
@@ -24,8 +26,12 @@ const {
 const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH } = commonEnvs
 
 const isDev = process.env.NODE_ENV === 'development'
+const { version: APP_VERSION } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
+) as { version: string }
 
 export const SERVER_ENV: IServerEnv = {
+  appVersion: APP_VERSION,
   isDev,
   apiPath: API_PATH,
   domain: isDev ? '' : COOKIE_DOMAIN,

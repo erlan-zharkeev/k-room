@@ -15,9 +15,12 @@ export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
   const { APP_HOST, API_HOST, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
   const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH } = commonEnv
-  const { name: APP_NAME, version: APP_VERSION } = JSON.parse(
+  const { name: APP_NAME } = JSON.parse(
     fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8')
-  ) as { name: string; version: string }
+  ) as { name: string }
+  const { version: APP_VERSION } = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as {
+    version: string
+  }
 
   const CLIENT_ENV_DATA = {
     isDev,
