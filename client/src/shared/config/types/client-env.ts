@@ -1,7 +1,9 @@
 export interface IClientEnv {
+  apiPath: string
+  apiBaseUrl: string
+  socketPath: string
   isDev: boolean
   isE2E: boolean
-  apiBaseUrl: string
   appName: string
   appVersion: string
   supportEmail: string

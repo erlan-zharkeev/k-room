@@ -2,7 +2,7 @@ import type { Server as HttpServer } from 'http'
 import type { Server as HttpsServer } from 'https'
 import { Server } from 'socket.io'
 
-import { RouteNamesEnum, type SocketActionsType } from 'common'
+import { type SocketActionsType } from 'common'
 
 import { MAX_HTTP_BUFFER_SIZE } from 'src/app/config'
 import { socketRouter } from 'src/app/services'
@@ -16,7 +16,7 @@ type SocketServerType = HttpServer | HttpsServer
 
 const getSocketIO = (server: SocketServerType) =>
   new Server(server, {
-    path: RouteNamesEnum.SocketPath,
+    path: SERVER_ENV.socketPath,
     maxHttpBufferSize: MAX_HTTP_BUFFER_SIZE,
     cors: {
       origin: SERVER_ENV.isDev ? '*' : ORIGINS,

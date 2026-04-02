@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, ISendConfirmationLinkResponse } from 'common'
+import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, ISendConfirmationLinkResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm/config'
@@ -47,13 +47,13 @@ export const WaitEmailConfirm = () => {
     try {
       const response = await doRequest<ISendConfirmationLinkResponse>(
         'post',
-        AuthEndpointsEnum.SendEmailConfirmationLink,
+        AUTH_ENDPOINTS.sendEmailConfirmationLink,
         { email }
       )
       if (!response || response.status !== StatusEnum.Success) return
       const payload = response.data.payload
 
-      const updatedPath = query.buildPathWithParams(RouteNamesEnum.WaitEmailConfirm, {
+      const updatedPath = query.buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, {
         email: payload.email,
         nextRequestTime: payload.nextRequestTime,
         attempts: payload.attempts
@@ -112,7 +112,7 @@ export const WaitEmailConfirm = () => {
           <AppButton
             text={t(WAIT_EMAIL_CONFIRM_I18N.back)}
             color="accent-color"
-            onClick={() => navigate(RouteNamesEnum.Login)}
+            onClick={() => navigate(ROUTE_NAMES.login)}
           />
         </div>
       </div>

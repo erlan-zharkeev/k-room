@@ -3,9 +3,12 @@ import path from 'node:path'
 
 const rootPath = process.cwd()
 const stage = process.argv[2] ?? 'production'
+const commonEnvPath = path.join(rootPath, '.env.common')
 const envPath = path.join(rootPath, `.env.${stage}`)
 const nginxTemplatePath = path.join(rootPath, 'config/nginx/webserver.template.conf')
 const nginxPath = path.join(rootPath, 'config/nginx/webserver.conf')
+
+const addTrailingSlash = (value) => (value.endsWith('/') ? value : `${value}/`)
 
 const parseEnv = (fileContent) =>
   Object.fromEntries(
@@ -22,7 +25,14 @@ const parseEnv = (fileContent) =>
       })
   )
 
-const env = parseEnv(fs.readFileSync(envPath, 'utf8'))
+if (!fs.existsSync(commonEnvPath)) {
+  throw new Error('.env.common is missing')
+}
+
+const env = {
+  ...parseEnv(fs.readFileSync(commonEnvPath, 'utf8')),
+  ...parseEnv(fs.readFileSync(envPath, 'utf8'))
+}
 
 if (env.APP_HOST == null || env.APP_HOST === '') {
   throw new Error(`APP_HOST is missing in .env.${stage}`)
@@ -34,6 +44,14 @@ if (env.API_HOST == null || env.API_HOST === '') {
 
 if (env.MONGO_ADMIN_HOST == null || env.MONGO_ADMIN_HOST === '') {
   throw new Error(`MONGO_ADMIN_HOST is missing in .env.${stage}`)
+}
+
+if (env.API_PATH == null || env.API_PATH === '') {
+  throw new Error('API_PATH is missing in .env.common')
+}
+
+if (env.SOCKET_PATH == null || env.SOCKET_PATH === '') {
+  throw new Error('SOCKET_PATH is missing in .env.common')
 }
 
 const appDomain = new URL(env.APP_HOST).hostname
@@ -53,5 +71,7 @@ const applyTemplate = (templatePath, outputPath, replacements) => {
 applyTemplate(nginxTemplatePath, nginxPath, {
   APP_DOMAIN: appDomain,
   API_DOMAIN: apiDomain,
-  MONGO_ADMIN_DOMAIN: mongoAdminDomain
+  MONGO_ADMIN_DOMAIN: mongoAdminDomain,
+  API_PATH: addTrailingSlash(env.API_PATH),
+  SOCKET_PATH: addTrailingSlash(env.SOCKET_PATH)
 })

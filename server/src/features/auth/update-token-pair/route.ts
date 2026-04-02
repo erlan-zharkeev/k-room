@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
-import { AuthEndpointsEnum } from 'common'
+import { AUTH_ENDPOINTS } from 'common'
 
 import { refreshTokenValidator } from './../shared'
 import { updateTokensPairController } from './controller'
 
 export const updateTokenPairRouter = Router()
 
-updateTokenPairRouter.get(AuthEndpointsEnum.UpdateTokensPair, refreshTokenValidator, updateTokensPairController)
+updateTokenPairRouter.post(AUTH_ENDPOINTS.updateTokensPair, refreshTokenValidator, updateTokensPairController)

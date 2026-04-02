@@ -28,3 +28,13 @@ export interface IBackendResponse<T> {
   payload: T
   message: IBackendMessage
 }
+
+type ValueOf<T> = T[keyof T]
+
+export type RouteNameType = ValueOf<typeof import('./constants').ROUTE_NAMES>
+export type EndpointsType =
+  | ValueOf<typeof import('./constants').AUTH_ENDPOINTS>
+  | ValueOf<typeof import('./constants').USER_ENDPOINTS>
+  | ValueOf<typeof import('./constants').CODES_ENDPOINTS>
+  | ValueOf<typeof import('./constants').ADMIN_ENDPOINTS>
+  | ValueOf<typeof import('./constants').MEDIA_ENDPOINTS>

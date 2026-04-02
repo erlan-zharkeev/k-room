@@ -1,4 +1,4 @@
-import { StatusEnum, ISentryErrorContext } from 'common/types'
+import { StatusEnum, ISentryErrorContext } from '../../types'
 import { SENTRY_IGNORED_SUBSTRINGS } from './config'
 
 export const isIgnoredSentryStatus = (status?: number | null) => {

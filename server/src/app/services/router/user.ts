@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { UserEndpointsEnum } from 'common'
+import { USER_ENDPOINTS } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 import {
@@ -17,19 +17,19 @@ import { multerUploader } from 'src/entities/media'
 import { validateRequest } from 'src/shared/middleware'
 
 export const userRouter = Router()
-userRouter.get(UserEndpointsEnum.GetUserData, accessTokenValidator, getUserDataController)
+userRouter.get(USER_ENDPOINTS.getUserData, accessTokenValidator, getUserDataController)
 userRouter.post(
-  UserEndpointsEnum.ResetPassword,
+  USER_ENDPOINTS.resetPassword,
   RESET_PASSWORD_FIELDS_VALIDATION,
   validateRequest,
   resetPasswordController
 )
-userRouter.post(
-  UserEndpointsEnum.EditUserData,
+userRouter.patch(
+  USER_ENDPOINTS.editUserData,
   accessTokenValidator,
   multerUploader.single('file'),
   UPDATE_USER_DATA_FIELDS_VALIDATION,
   validateRequest,
   updateUserDataController
 )
-userRouter.patch(UserEndpointsEnum.MarkInfoNotificationAsRead, accessTokenValidator, markInfoAsReadController)
+userRouter.patch(USER_ENDPOINTS.markInfoNotificationAsRead, accessTokenValidator, markInfoAsReadController)

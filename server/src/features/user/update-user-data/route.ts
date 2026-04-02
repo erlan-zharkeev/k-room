@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { UserEndpointsEnum } from 'common'
+import { USER_ENDPOINTS } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 
@@ -12,8 +12,8 @@ import { UPDATE_USER_DATA_FIELDS_VALIDATION, updateUserDataController } from './
 
 export const updateUserRouter = Router()
 
-updateUserRouter.post(
-  UserEndpointsEnum.EditUserData,
+updateUserRouter.patch(
+  USER_ENDPOINTS.editUserData,
   accessTokenValidator,
   multerUploader.single('file'),
   UPDATE_USER_DATA_FIELDS_VALIDATION,

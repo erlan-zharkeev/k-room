@@ -1,4 +1,4 @@
-import { EndpointsType, MediaEndpointsEnum, StatusEnum } from 'common'
+import { EndpointsType, MEDIA_ENDPOINTS, StatusEnum } from 'common'
 
 import { useSaveMedia, useDeleteMedia, transformHeadersToMediaData } from 'src/features/media'
 
@@ -9,14 +9,14 @@ export const useLoadMedia = () => {
   const { deleteMedia } = useDeleteMedia()
 
   const loadMediaHeaders = async (filename: string) => {
-    const response = await doRequest('head', `${MediaEndpointsEnum.GetMediaFile}/${filename}` as EndpointsType)
+    const response = await doRequest('head', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType)
     return transformHeadersToMediaData(response)
   }
 
   const requestMedia = (filename: string) => {
     return doRequest<never, 'blob'>(
       'get',
-      `${MediaEndpointsEnum.GetMediaFile}/${filename}` as EndpointsType,
+      `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType,
       undefined,
       { responseType: 'blob' }
     )

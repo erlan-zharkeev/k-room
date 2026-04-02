@@ -1,4 +1,4 @@
-import { AuthEndpointsEnum } from 'common'
+import { AUTH_ENDPOINTS } from 'common'
 
 import { useApi } from 'src/shared/api'
 
@@ -10,7 +10,7 @@ export const useSocketReconnect = () => {
 
   const socketReconnect = async () => {
     try {
-      await doRequest('get', AuthEndpointsEnum.UpdateTokensPair, undefined)
+      await doRequest('post', AUTH_ENDPOINTS.updateTokensPair, undefined)
       socketConnect()
     } catch {}
   }

@@ -1,4 +1,4 @@
-import { IGetUserDataResponse, UserEndpointsEnum } from 'common'
+import { IGetUserDataResponse, USER_ENDPOINTS } from 'common'
 
 import { useMainLoader } from 'src/features/switch-main-loader'
 import { useActivateUserSession } from 'src/features/user'
@@ -12,7 +12,7 @@ export const useFetchUserData = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await doRequest<IGetUserDataResponse>('get', UserEndpointsEnum.GetUserData)
+      const response = await doRequest<IGetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
       const payload = response.data.payload
       activateUserSession(payload)
     } catch {

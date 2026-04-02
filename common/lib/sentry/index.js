@@ -1,4 +1,4 @@
-import { StatusEnum } from 'common/types';
+import { StatusEnum } from '../../types';
 import { SENTRY_IGNORED_SUBSTRINGS } from './config';
 export const isIgnoredSentryStatus = (status) => {
     switch (status) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { CodesEndpointsEnum, ICodeValidationPayload, RouteNamesEnum } from 'common'
+import { CODES_ENDPOINTS, ICodeValidationPayload, ROUTE_NAMES } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import { useApi } from 'src/shared/api'
@@ -45,7 +45,7 @@ export const usePasswordRecovery = () => {
 
       stopCounter()
       setEmailSendCodeIsLoading(true)
-      const response = await doRequest('post', CodesEndpointsEnum.SendEmailCodePasswordRecovery, { email: nextEmail })
+      const response = await doRequest('post', CODES_ENDPOINTS.sendEmailCodePasswordRecovery, { email: nextEmail })
       if (!response) return
       setEmail(nextEmail)
       setCodeAsSent(true)
@@ -74,10 +74,10 @@ export const usePasswordRecovery = () => {
         email: email.trim(),
         code
       }
-      const response = await doRequest('post', CodesEndpointsEnum.ValidateEmailCodePasswordRecovery, payload)
+      const response = await doRequest('post', CODES_ENDPOINTS.validateEmailCodePasswordRecovery, payload)
       if (!response) return
       const { query } = response.data.payload as { query: string }
-      const pathname = buildPathWithParams(RouteNamesEnum.CreateNewPassword, { 'password-recovery': query })
+      const pathname = buildPathWithParams(ROUTE_NAMES.createNewPassword, { 'password-recovery': query })
       navigate({ pathname })
     } catch {
     } finally {

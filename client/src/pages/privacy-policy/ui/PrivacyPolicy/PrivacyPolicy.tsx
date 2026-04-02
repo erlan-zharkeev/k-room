@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { RouteNamesEnum } from 'common'
+import { ROUTE_NAMES } from 'common'
 import { useNavigate } from 'react-router-dom'
 
 import { LEGAL_INFO_PAGE_I18N } from 'src/pages/privacy-policy/config'
@@ -17,7 +17,7 @@ export const PrivacyPolicy = () => {
 
   const handleBack = () => {
     if (window.history.length > 1) navigate(-1)
-    else navigate(RouteNamesEnum.Main, { replace: true })
+    else navigate(ROUTE_NAMES.main, { replace: true })
   }
 
   return (

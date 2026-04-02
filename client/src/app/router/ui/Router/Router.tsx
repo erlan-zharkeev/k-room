@@ -1,4 +1,4 @@
-import { RouteNamesEnum as R } from 'common'
+import { ROUTE_NAMES as R } from 'common'
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router/config'
@@ -20,40 +20,42 @@ const PrivateRoute = () => {
   const { auth } = useSystem()
   const location = useLocation()
 
-  return auth === 'authorized' ? <Outlet /> : <Navigate to={R.Login} replace state={{ from: location }} />
+  return auth === 'authorized' ? <Outlet /> : <Navigate to={R.login} replace state={{ from: location }} />
 }
 
 const PublicRoute = () => {
   const { auth } = useSystem()
   const location = useLocation()
-  const isPathValidToRedirect = PATH_TO_REDIRECT_IF_AUTHORIZED.includes(location.pathname as R)
+  const isPathValidToRedirect = PATH_TO_REDIRECT_IF_AUTHORIZED.includes(
+    location.pathname as (typeof PATH_TO_REDIRECT_IF_AUTHORIZED)[number]
+  )
 
-  return auth === 'authorized' && isPathValidToRedirect ? <Navigate to={R.Main} replace /> : <Outlet />
+  return auth === 'authorized' && isPathValidToRedirect ? <Navigate to={R.main} replace /> : <Outlet />
 }
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to={R.Main} replace />} />
+      <Route path="/" element={<Navigate to={R.main} replace />} />
 
       <Route element={<PublicRoute />}>
         <Route element={<PageLayout />}>
-          <Route path={R.Login} element={<Login />} />
-          <Route path={R.Registration} element={<Registration />} />
-          <Route path={R.EmailConfirmation} element={<EmailConfirmation />} />
-          <Route path={R.WaitEmailConfirm} element={<WaitEmailConfirm />} />
+          <Route path={R.login} element={<Login />} />
+          <Route path={R.registration} element={<Registration />} />
+          <Route path={R.emailConfirmation} element={<EmailConfirmation />} />
+          <Route path={R.waitEmailConfirm} element={<WaitEmailConfirm />} />
 
-          <Route path={R.PrivacyPolicy} element={<PrivacyPolicy />} />
-          <Route path={R.PasswordRecovery} element={<PasswordRecovery />} />
-          <Route path={R.CreateNewPassword} element={<CreateNewPassword />} />
+          <Route path={R.privacyPolicy} element={<PrivacyPolicy />} />
+          <Route path={R.passwordRecovery} element={<PasswordRecovery />} />
+          <Route path={R.createNewPassword} element={<CreateNewPassword />} />
         </Route>
       </Route>
 
       <Route element={<PrivateRoute />}>
-        <Route path={R.Main} element={<Main />} />
+        <Route path={R.main} element={<Main />} />
       </Route>
 
-      <Route path="*" element={<Navigate to={R.Main} replace />} />
+      <Route path="*" element={<Navigate to={R.main} replace />} />
     </Routes>
   )
 }

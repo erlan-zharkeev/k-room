@@ -1,5 +1,5 @@
 import './style.scss'
-import { RouteNamesEnum } from 'common'
+import { ROUTE_NAMES } from 'common'
 import { useNavigate } from 'react-router-dom'
 
 import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_I18N } from 'src/features/auth/create-new-password'
@@ -20,7 +20,7 @@ export const CreateNewPasswordBody = () => {
           <AppBanner message={t(CREATE_NEW_PASSWORD_BODY_I18N.success)} type="success" />
           <div className="create-new-password-body__to-login-btn">
             <AppButton
-              onClick={() => navigate(RouteNamesEnum.Login)}
+              onClick={() => navigate(ROUTE_NAMES.login)}
               text={t(CREATE_NEW_PASSWORD_BODY_I18N.toLogin)}
               color="success-color"
               hoverless

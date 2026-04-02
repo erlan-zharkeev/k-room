@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, RouteNamesEnum, AuthEndpointsEnum, IConfirmEmailResponse } from 'common'
+import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, IConfirmEmailResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
 import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation'
@@ -25,13 +25,13 @@ export const EmailConfirmation = () => {
 
   const sendEmailConfirmation = async (token: string) => {
     try {
-      const response = await doRequest<IConfirmEmailResponse>('post', AuthEndpointsEnum.ConfirmEmail, { token })
-      if (response?.status !== StatusEnum.Success) return navigate(RouteNamesEnum.Login)
+      const response = await doRequest<IConfirmEmailResponse>('post', AUTH_ENDPOINTS.confirmEmail, { token })
+      if (response?.status !== StatusEnum.Success) return navigate(ROUTE_NAMES.login)
       const payload = response.data.payload
       setEmail(payload.email)
       await logout()
     } catch {
-      navigate(RouteNamesEnum.Login)
+      navigate(ROUTE_NAMES.login)
     } finally {
       setIsLoading(false)
     }
@@ -40,7 +40,7 @@ export const EmailConfirmation = () => {
   useEffect(() => {
     const token = query.value.get('token')
     if (token) sendEmailConfirmation(token)
-    else navigate(RouteNamesEnum.Login)
+    else navigate(ROUTE_NAMES.login)
   }, [])
 
   return (
@@ -61,7 +61,7 @@ export const EmailConfirmation = () => {
               </AppText>
               {t(EMAIL_CONFIRMATION_I18N.confirmed)}
             </div>
-            <AppButton text={t(EMAIL_CONFIRMATION_I18N.back)} onClick={() => navigate(RouteNamesEnum.Login)} />
+            <AppButton text={t(EMAIL_CONFIRMATION_I18N.back)} onClick={() => navigate(ROUTE_NAMES.login)} />
           </>
         )}
       </div>

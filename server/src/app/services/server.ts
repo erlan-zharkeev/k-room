@@ -6,8 +6,6 @@ import http from 'http'
 import https from 'https'
 import methodOverride from 'method-override'
 
-import { RouteNamesEnum } from 'common'
-
 import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'src/app/config'
 
 import { SERVER_ENV } from 'src/shared/config'
@@ -23,7 +21,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use(attachRequestLanguage)
-app.use(RouteNamesEnum.Api, rootRouter)
+app.use(SERVER_ENV.apiPath, rootRouter)
 setupSentryErrorHandler(app)
 
 const server = SERVER_ENV.isDev ? https.createServer(httpsOptions, app) : http.createServer(app)
