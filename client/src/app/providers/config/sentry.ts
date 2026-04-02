@@ -20,6 +20,7 @@ export const initSentry = () => {
     dsn: CLIENT_ENV.sentryDsnClient,
     enabled: CLIENT_ENV.sentryEnabled,
     environment: CLIENT_ENV.sentryEnvironment,
+    release: CLIENT_ENV.appVersion,
     debug: false,
     tracePropagationTargets: getClientTracePropagationTargets(),
     integrations: [
