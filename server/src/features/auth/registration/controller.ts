@@ -13,7 +13,8 @@ import { REGISTRATION_I18N, REGISTRATION_RESEND_INTERVAL_MINUTES } from './confi
 import { getUserExistMessage } from './lib'
 
 export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
-  const basicError = getLocalizedText(REGISTRATION_I18N.failedRegistration, req)
+  const { language } = req
+  const basicError = getLocalizedText(REGISTRATION_I18N.failedRegistration, language)
 
   try {
     const { username, email, password }: IAuthRegistrationPayload = req.body
@@ -21,7 +22,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
     const userExistState = await isUserExist({ username, email })
 
     if (userExistState.exists) {
-      const userExistMessage = getUserExistMessage(userExistState.reason, req)
+      const userExistMessage = getUserExistMessage(userExistState.reason, language)
       const status = userExistState.reason === 'id' ? StatusEnum.Server : StatusEnum.BadRequest
       return throwHTTPError(status, res, userExistMessage)
     }
@@ -51,7 +52,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(REGISTRATION_I18N.registrationSuccess, req),
+        text: getLocalizedText(REGISTRATION_I18N.registrationSuccess, language),
         silent: false
       }
     }

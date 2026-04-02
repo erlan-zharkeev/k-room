@@ -18,7 +18,8 @@ export const signInWithProviderController = async (
   req: IAppRequest,
   res: AppResponseType<ISignInWithProviderResponse>
 ) => {
-  const basicError = getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, req)
+  const { language } = req
+  const basicError = getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language)
 
   try {
     const data: ISignInWithProviderPayload = req.body
@@ -40,11 +41,11 @@ export const signInWithProviderController = async (
     return res.json({
       payload: mapUserToDto(user),
       message: {
-        text: getLocalizedText(SHARED_I18N.success, req),
+        text: getLocalizedText(SHARED_I18N.success, language),
         silent: true
       }
     })
   } catch (error) {
-    throwHTTPError(StatusEnum.BadRequest, res, basicError, false, error)
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

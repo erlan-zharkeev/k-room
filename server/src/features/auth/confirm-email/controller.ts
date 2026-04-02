@@ -11,8 +11,8 @@ import { verifyToken } from './../shared'
 import { CONFIRM_EMAIL_I18N } from './config'
 
 export const confirmEmailController = async (req: IAppRequest, res: AppResponseType<IConfirmEmailResponse>) => {
-  const language = req.language
-
+  const { language } = req
+  const basicError = getLocalizedText(CONFIRM_EMAIL_I18N.failedEmailConfirm, language)
   try {
     const token = req.body.token
     const decoded = await verifyToken(token, SERVER_ENV.emailConfirmSecret)
@@ -43,7 +43,7 @@ export const confirmEmailController = async (req: IAppRequest, res: AppResponseT
     }
 
     return res.json(response)
-  } catch {
-    throwHTTPError(StatusEnum.Server, res, getLocalizedText(CONFIRM_EMAIL_I18N.failedEmailConfirm, language))
+  } catch (error) {
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

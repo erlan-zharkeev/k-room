@@ -8,7 +8,8 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 import { MARK_INFO_NOTIFICATION_AS_READ_I18N } from './config'
 
 export const markInfoAsReadController = async (req: IAppRequest, res: AppResponseType<null>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(MARK_INFO_NOTIFICATION_AS_READ_I18N.failed, language)
 
   try {
     const userId = req.app.locals.id
@@ -17,12 +18,8 @@ export const markInfoAsReadController = async (req: IAppRequest, res: AppRespons
     await UserModel.updateOne({ _id: userId }, { $set: { [`personal.infoNotifications.${id}`]: 'read' } })
 
     res.json({ payload: null, message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true } })
-  } catch {
-    return throwHTTPError(
-      StatusEnum.Server,
-      res,
-      getLocalizedText(MARK_INFO_NOTIFICATION_AS_READ_I18N.failed, language)
-    )
+  } catch (error) {
+    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 
   return {}

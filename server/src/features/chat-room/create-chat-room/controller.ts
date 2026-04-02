@@ -28,7 +28,7 @@ export const createChatRoomController = (socket: SocketInstanceType) => {
       if (avatarFile && avatarFile.fileBuffer) {
         const bucket = mediaBuckets.avatar as MongooseGridFSBucketType
         const filename = `avatar.${String(userId)}`
-        await uploadBufferToBucket(bucket, avatarFile.fileBuffer, filename, 'avatar', undefined, {
+        await uploadBufferToBucket(bucket, avatarFile.fileBuffer, filename, 'avatar', {
           compression: 'avatar'
         })
       }

@@ -15,7 +15,8 @@ export const sendConfirmationLinkController = async (
   req: IAppRequest,
   res: AppResponseType<ISendConfirmationLinkResponse>
 ) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(SEND_CONFIRMATION_LINK_I18N.failedSendEmailConfirmationLink, language)
 
   try {
     const { email } = req.body
@@ -77,11 +78,7 @@ export const sendConfirmationLinkController = async (
     }
 
     return res.json(response)
-  } catch {
-    throwHTTPError(
-      StatusEnum.Server,
-      res,
-      getLocalizedText(SEND_CONFIRMATION_LINK_I18N.failedSendEmailConfirmationLink, language)
-    )
+  } catch (error) {
+    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

@@ -10,7 +10,8 @@ import { GET_MEDIA_FILE_I18N } from './config'
 import { parseBucketNameFromId } from './lib'
 
 export const getMediaFileController = async (req: IAppRequest, res: AppResponseType<null>) => {
-  const language = req.language
+  const { language } = req
+  const basicError = getLocalizedText(GET_MEDIA_FILE_I18N.failedToProvideMedia, language)
 
   try {
     const idParam = String(req.params.id || req.query.id || '')
@@ -29,7 +30,7 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
 
     streamMediaFile(bucketName as MediaBucketNameType, id, res, language, { asAttachment, revalidateCache })
     return
-  } catch {
-    return throwHTTPError(StatusEnum.Server, res, getLocalizedText(GET_MEDIA_FILE_I18N.failedToProvideMedia, language))
+  } catch (error) {
+    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }

@@ -8,21 +8,23 @@ export const serverCaptureSentryException = (error: unknown) => {
   Sentry.captureException(error)
 }
 
-export const serverCaptureSentryHttpError = ({ message, silent, status }: ISentryErrorContext) => {
-  if (!Sentry.isInitialized()) return
+export const generateSentryError =
+  (kind: 'http-error' | 'socket-error') =>
+  ({ message, silent, status }: ISentryErrorContext) => {
+    if (!Sentry.isInitialized()) return
 
-  if (shouldIgnoreSentryError({ message, silent, status })) {
-    return
+    if (shouldIgnoreSentryError({ message, silent, status })) {
+      return
+    }
+
+    Sentry.captureMessage(message ?? 'Unknown server error', {
+      level: 'error',
+      tags: {
+        kind,
+        ...(typeof status === 'number' ? { status: String(status) } : {})
+      }
+    })
   }
 
-  Sentry.captureMessage(message ?? 'Unknown server error', {
-    level: 'error',
-    tags: {
-      kind: 'http-error',
-      ...(typeof status === 'number' ? { status: String(status) } : {})
-    }
-  })
-}
-
-export const captureSentryException = serverCaptureSentryException
-export const captureSentryHttpError = serverCaptureSentryHttpError
+export const serverCaptureSentryHttpError = generateSentryError('http-error')
+export const serverCaptureSentrySocketError = generateSentryError('socket-error')

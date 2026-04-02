@@ -26,7 +26,7 @@ export const sendMessageController = (socket: SocketInstanceType) => {
             const compression: SharpSettingsKeyType = message.imageCompression
               ? 'common-compressed'
               : 'common-uncompressed'
-            await uploadBufferToBucket(bucket, imageData.fileBuffer, filename, 'image', undefined, { compression })
+            await uploadBufferToBucket(bucket, imageData.fileBuffer, filename, 'image', { compression })
           }
         })
       )
