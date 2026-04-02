@@ -1,8 +1,8 @@
 import './style.scss'
 import { ChangeEvent, useMemo, useState, forwardRef, ForwardedRef } from 'react'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import type { IAppInputProps } from './config'
 

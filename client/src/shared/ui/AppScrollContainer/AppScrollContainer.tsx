@@ -1,9 +1,8 @@
 import './style.scss'
 import { useEffect, useRef, useState } from 'react'
 
-import { useTimeout } from 'src/shared/lib'
+import { useTimeout, createClassNameWithModifiers } from 'src/shared/lib'
 import type { IAppScrollContainerProps } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AppScrollContainer = ({
   height = '300px',

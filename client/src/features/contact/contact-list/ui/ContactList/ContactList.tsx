@@ -4,9 +4,8 @@ import { CONTACT_LIST_I18N, ContactListEl, useContactList } from 'src/features/c
 
 import { useI18n } from 'src/entities/settings'
 
-import { useAnimatedList } from 'src/shared/lib'
+import { useAnimatedList, createClassNameWithModifiers } from 'src/shared/lib'
 import { AppScrollContainer, AppText } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ContactList = () => {
   const { contactList } = useContactList()

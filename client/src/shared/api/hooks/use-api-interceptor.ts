@@ -9,8 +9,7 @@ import { useNotification } from 'src/entities/notification'
 import { useI18n, useSettings } from 'src/entities/settings'
 
 import { API_I18N, createApiError } from 'src/shared/api'
-import { frontCaptureSentryException } from 'src/shared/lib'
-import { log } from 'src/shared/utils'
+import { frontCaptureSentryException, log } from 'src/shared/lib'
 
 const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
   if (!data || typeof data !== 'object') return false

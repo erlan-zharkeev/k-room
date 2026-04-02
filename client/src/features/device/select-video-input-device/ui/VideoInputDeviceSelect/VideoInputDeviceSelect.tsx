@@ -5,7 +5,7 @@ import { VIDEO_INPUT_DEVICE_SELECT_I18N, SelectDevice, useInputVideoDevice } fro
 
 import { useSettings, useI18n } from 'src/entities/settings'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 export const VideoInputDeviceSelect = () => {
   const { t } = useI18n()

@@ -6,8 +6,8 @@ import { useContentTabSelect } from 'src/features/content-tab'
 
 import { useSettings, useI18n } from 'src/entities/settings'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomStub = () => {
   const { selectContentTab } = useContentTabSelect()

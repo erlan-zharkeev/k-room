@@ -9,7 +9,7 @@ import type { IReactionsProps } from 'src/features/message/message-menu'
 import { EMOJI_LIST } from 'src/entities/emoji'
 
 import { socket } from 'src/shared/api'
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 export const MessageReactions = ({ userId, username, selectedChatRoomId, message }: IReactionsProps) => {
   const reactions = EMOJI_LIST.filter((emoji) => emoji.reactions)

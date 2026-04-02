@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 import { useSettings } from 'src/entities/settings'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 export const WidgetWrapper = ({
   name,

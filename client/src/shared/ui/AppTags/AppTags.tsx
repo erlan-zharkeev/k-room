@@ -1,7 +1,7 @@
 import './style.scss'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppButton, AppIcon, AppScrollContainer, AppText } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 import type { IAppTagsProps } from './config'
 

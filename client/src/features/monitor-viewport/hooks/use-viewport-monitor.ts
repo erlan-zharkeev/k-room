@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import { setViewPort } from 'src/entities/system'
 
-import { getViewPort } from 'src/shared/utils'
+import { getViewPort } from 'src/shared/lib'
 
 export const useViewportMonitor = () => {
   const dispatch = useDispatch()

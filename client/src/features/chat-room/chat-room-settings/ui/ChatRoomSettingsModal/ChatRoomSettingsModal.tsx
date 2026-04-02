@@ -14,7 +14,7 @@ import { AppAvatar, AppAvatarLoader, AppButton, AppHeader } from 'src/shared/ui'
 
 import { IChatRoomSettingsModalProps, CHAT_ROOM_SETTINGS_MODAL_I18N } from './config'
 
-// import { validateRules } from 'src/shared/utils'
+// import { validateRules } from 'src/shared/lib'
 
 export const ChatRoomSettingsModal = ({ onClose }: IChatRoomSettingsModalProps) => {
   const { chatRooms } = useChatRoom()

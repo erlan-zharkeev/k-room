@@ -8,8 +8,8 @@ import { AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
 
 import { useI18n } from 'src/entities/settings'
 
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProps) => {
   const location = useLocation()

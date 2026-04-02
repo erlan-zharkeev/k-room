@@ -2,8 +2,8 @@ import './style.scss'
 
 import { useSystem } from 'src/entities/system'
 
+import { stopPropagation } from 'src/shared/lib'
 import { AppDropdown, AppText, AppButton } from 'src/shared/ui'
-import { stopPropagation } from 'src/shared/utils'
 
 export const MessageWithBindDataModalMenu = () => {
   const { messageInputData } = useSystem()

@@ -10,7 +10,7 @@ import { setAuth } from 'src/entities/system'
 
 import { socket, useApi } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'
-import { clearCookie } from 'src/shared/utils'
+import { clearCookie } from 'src/shared/lib'
 
 export const useLogout = () => {
   const dispatch = useDispatch()

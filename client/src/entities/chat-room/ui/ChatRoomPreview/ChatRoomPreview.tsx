@@ -11,8 +11,8 @@ import { useMessage } from 'src/entities/message'
 import { ProfileInfo } from 'src/entities/profile-info'
 
 import type { FChatRoomType } from 'src/shared/config'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 import type { BaseSizeModifierType } from 'src/shared/ui'
-import { createClassNameWithModifiers } from 'src/shared/utils'
 
 export const ChatRoomPreview = ({
   room,

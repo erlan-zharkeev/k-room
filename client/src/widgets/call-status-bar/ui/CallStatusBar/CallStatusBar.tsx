@@ -1,8 +1,8 @@
 import './style.scss'
 import { useCall } from 'src/entities/call'
 
+import { createClassNameWithModifiers, firstCharUpperCase } from 'src/shared/lib'
 import { AppAvatar } from 'src/shared/ui'
-import { createClassNameWithModifiers, firstCharUpperCase } from 'src/shared/utils'
 
 export const CallStatusBar = () => {
   const { isMinified, currentCall, minifyCallWindow } = useCall()

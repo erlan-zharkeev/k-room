@@ -5,7 +5,7 @@ import { AUDIO_OUTPUT_DEVICE_SELECT_I18N, SelectDevice, useOutputAudioDevice } f
 
 import { useSettings, useI18n } from 'src/entities/settings'
 
-import { createClassNameWithModifiers } from 'src/shared/utils'
+import { createClassNameWithModifiers } from 'src/shared/lib'
 
 export const AudioOutputDeviceSelect = () => {
   const { t } = useI18n()

@@ -9,9 +9,8 @@ import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm/config'
 import { useI18n } from 'src/entities/settings'
 
 import { useApi } from 'src/shared/api'
-import { useQuery, useCounter } from 'src/shared/lib'
+import { useQuery, useCounter, getNextReqInterval } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
-import { getNextReqInterval } from 'src/shared/utils'
 
 export const WaitEmailConfirm = () => {
   const navigate = useNavigate()
