@@ -8,10 +8,14 @@
 }
 
 .animated-list__item {
-  overflow: hidden;
-  max-height: 120px;
-  transform-origin: center top;
   will-change: opacity, transform, filter, max-height;
+
+  transform-origin: center top;
+
+  overflow: hidden;
+
+  max-height: 120px;
+
   transition: opacity 420ms ease, transform 420ms ease, filter 420ms ease, max-height 420ms ease, padding 420ms ease;
 }
 
@@ -20,11 +24,14 @@
 }
 
 .animated-list__item--exiting {
-  opacity: 0;
-  max-height: 0;
   pointer-events: none;
-  filter: blur(4px);
+
   transform: translateX(16px) scale(0.94);
+
+  max-height: 0;
   padding-top: 0;
   padding-bottom: 0;
+
+  opacity: 0;
+  filter: blur(4px);
 }

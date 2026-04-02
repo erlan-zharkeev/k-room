@@ -238,6 +238,16 @@ export type BannerVariant = 'success' | 'error'
 export type AppLanguage = 'ru' | 'en'
 ```
 
+## Error Handling Rules
+
+1. Only controllers may convert errors to HTTP responses via `throwHTTPError`.
+
+Use `throwHTTPError` only at the transport boundary where `req` and `res` are handled.
+
+2. All lower layers must throw `AppError` instead of returning HTTP errors directly.
+
+This applies to `features`, `entities`, and `shared/lib`. When throwing `AppError`, include the correct `status`, `silent`, and `cause` values.
+
 ## Feature Rules
 
 1. A feature may contain nested subfeatures when they belong to one common domain.

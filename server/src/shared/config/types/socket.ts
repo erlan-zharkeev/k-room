@@ -1,5 +1,4 @@
-import { type Socket } from 'socket.io'
-import { type DefaultEventsMap } from 'socket.io/dist/typed-events'
+import { type DefaultEventsMap, type Socket } from 'socket.io'
 
 import { type AppLanguageType } from 'common'
 
