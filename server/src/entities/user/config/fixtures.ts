@@ -20,22 +20,22 @@ const loadUserFixture = async (data: {
   const { id, username, email, pass, avatarPath } = data
   const identifier = new mongoose.Types.ObjectId(id)
 
-  const userAlreadyExists = await isUserExist({ id: identifier, username, email })
-  if (userAlreadyExists) {
-    return 'skipped' as const
+  const userExistState = await isUserExist({ id: identifier, username, email })
+  if (userExistState.exists) {
+    return 'skipped'
   }
 
   const hashedPassword = await bcrypt.hash(pass, 6)
   const user = await createUser({ id: identifier, email, username, hashedPassword })
   if (!user) {
-    return 'failed' as const
+    return 'failed'
   }
 
   await user?.set('system.confirmed', true).save()
   const avatarSrc = path.resolve(avatarPath)
   const buffer = await fs.readFile(avatarSrc)
   await updateUserAvatar(buffer, id)
-  return 'created' as const
+  return 'created'
 }
 
 export const loadUserFixtures = async () => {

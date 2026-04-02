@@ -1,2 +1,3 @@
 export * from './fields-validation'
-export * from './upload-user-avatar'
+export * from './load-google-avatar'
+export * from './update-user-avatar'

@@ -1,23 +1,34 @@
 import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
 import { type Response } from 'express'
 
-import { getIO, log, serverCaptureSentryHttpError } from 'src/shared/lib'
+import { getIO, log, serverCaptureSentryException, serverCaptureSentryHttpError } from 'src/shared/lib'
 
-export const throwHTTPError = (status: StatusEnum, res: Response | null, error: string, silent: boolean = false) => {
-  log.error(`-${error}`)
-  serverCaptureSentryHttpError({ message: error, silent, status })
+export const throwHTTPError = (
+  status: StatusEnum,
+  res: Response | null,
+  message: string,
+  silent: boolean = false,
+  error?: unknown
+) => {
+  log.error(`-${message}`)
+
+  if (error) {
+    serverCaptureSentryException(error)
+  } else {
+    serverCaptureSentryHttpError({ message, silent, status })
+  }
 
   if (!res) return
 
   if (res.headersSent) {
-    log.warn(`⚠️ Attempted to send error after headers were already sent: ${error}`)
+    log.warn(`⚠️ Attempted to send error after headers were already sent: ${message}`)
     return
   }
 
   const payload: IBackendResponse<null> = {
     payload: null,
     message: {
-      text: error,
+      text: message,
       silent
     }
   }
