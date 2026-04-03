@@ -1,4 +1,3 @@
-import { InfoNotificationMapType } from 'common/info-notification';
 import { USER_ROLES } from './constants';
 export type UserRoleType = (typeof USER_ROLES)[number];
 export interface IBaseFrontendUserData {
@@ -8,5 +7,4 @@ export interface IBaseFrontendUserData {
 export interface IFrontendUserData extends IBaseFrontendUserData {
     role: UserRoleType;
     email: string;
-    infoNotifications: InfoNotificationMapType;
 }

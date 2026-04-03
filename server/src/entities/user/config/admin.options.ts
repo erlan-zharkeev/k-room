@@ -42,7 +42,6 @@ export const ADMIN_USER_OPTIONS = {
       LAST_SEEN_PATH,
       'personal.email',
       'personal.chatRooms',
-      'personal.infoNotifications',
       'system.role',
       'system.provider',
       'system.confirmed',
@@ -85,9 +84,6 @@ export const ADMIN_USER_OPTIONS = {
       },
       'personal.chatRooms': {
         label: 'Chat Rooms'
-      },
-      'personal.infoNotifications': {
-        label: 'Info Notifications'
       },
       'system.provider': {
         label: 'Provider'

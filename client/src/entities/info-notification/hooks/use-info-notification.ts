@@ -4,29 +4,29 @@ import { useLiveQuery } from 'dexie-react-hooks'
 
 import { INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
 import { useI18n } from 'src/entities/settings'
-import { useUser } from 'src/entities/user'
 
 import { DbInfoNotificationType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 export const useInfoNotification = () => {
-  const { infoNotifications } = useUser()
   const { t } = useI18n()
   const infoNotificationList =
     useLiveQuery(async () => {
       return await (db['info-notifications'].toArray() as Promise<DbInfoNotificationType[]>)
     }, []) ?? []
 
-  const unreadInfoNotificationQuantity = infoNotificationList.filter(
-    (notification) => infoNotifications[notification.id] === 'unread'
-  ).length
+  const unreadInfoNotificationQuantity = infoNotificationList.filter((notification) => notification.status === 'unread').length
 
-  const isRead = (id: string) => infoNotifications[id] !== 'unread'
+  const isRead = (id: string) => infoNotificationList.find((notification) => notification.id === id)?.status !== 'unread'
 
   const putInfoNotification = async (payload: DbInfoNotificationType) => await db['info-notifications'].put(payload)
 
   const bulkPutInfoNotifications = async (payload: DbInfoNotificationType[]) => {
     await db['info-notifications'].bulkPut(payload)
+  }
+
+  const updateInfoNotification = async (id: string, patch: Partial<DbInfoNotificationType>) => {
+    await db['info-notifications'].update(id, patch)
   }
 
   const reset = () => db['info-notifications'].clear()
@@ -54,6 +54,7 @@ export const useInfoNotification = () => {
     isRead,
     putInfoNotification,
     bulkPutInfoNotifications,
+    updateInfoNotification,
     reset
   }
 }

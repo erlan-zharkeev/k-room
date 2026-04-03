@@ -23,3 +23,5 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 
 - проверить флоу что с чатом если удалить пользака что будет с чатом уже созданным как груповым так и индивидуальным.
 - что же там с картинками и их кэшем
+
+- A11y для shared-элементов клиента: semantic HTML, aria-label на иконочных кнопках, keyboard navigation, role для кастомных интерактивных элементов. Antd покрывает базу, но кастомные компоненты (ContactListEl, виртуальные списки) нужно проверить вручную.

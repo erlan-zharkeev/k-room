@@ -4,7 +4,7 @@ import { IUserSchema } from 'src/entities/user'
 
 export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
   const { _id } = user
-  const { email, infoNotifications } = user.personal
+  const { email } = user.personal
   const { username } = user.public
   const { role } = user.system
 
@@ -12,7 +12,6 @@ export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
     id: _id,
     role,
     email,
-    username,
-    infoNotifications
+    username
   }
 }

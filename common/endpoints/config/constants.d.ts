@@ -24,7 +24,6 @@ export declare const USER_ENDPOINTS: {
     readonly getUserData: "/users/me";
     readonly editUserData: "/users/me";
     readonly resetPassword: "/user/reset-password";
-    readonly markInfoNotificationAsRead: "/users/me/notifications/read";
 };
 export declare const MEDIA_ENDPOINTS: {
     readonly getMediaFile: "/media";

@@ -1,20 +1,17 @@
-import { USER_ENDPOINTS } from 'common'
+import { SocketActionsType } from 'common'
 
 import { useInfoNotification } from 'src/entities/info-notification'
-import { useUser } from 'src/entities/user'
 
-import { useApi } from 'src/shared/api'
+import { socket } from 'src/shared/api'
 
 export const useMarkInfoNotificationAsRead = () => {
-  const { doRequest } = useApi()
-  const { setByPath } = useUser()
-  const { isRead } = useInfoNotification()
+  const { isRead, updateInfoNotification } = useInfoNotification()
 
   const markAsRead = async (id: string) => {
     try {
       if (isRead(id)) return
-      await doRequest('patch', USER_ENDPOINTS.markInfoNotificationAsRead, { id })
-      setByPath(`infoNotifications.${id}`, 'read')
+      socket.emit<SocketActionsType>('mark-info-notification-as-read', { id })
+      await updateInfoNotification(id, { status: 'read' })
     } catch {}
   }
 

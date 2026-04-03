@@ -25,8 +25,7 @@ export const AUTH_ENDPOINTS = {
 export const USER_ENDPOINTS = {
   getUserData: '/users/me',
   editUserData: '/users/me',
-  resetPassword: '/user/reset-password',
-  markInfoNotificationAsRead: '/users/me/notifications/read'
+  resetPassword: '/user/reset-password'
 } as const
 
 export const MEDIA_ENDPOINTS = {

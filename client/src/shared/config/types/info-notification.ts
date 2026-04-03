@@ -1,3 +1,3 @@
-import { IInfoNotification } from 'common'
+import { IUserInfoNotification } from 'common'
 
-export type DbInfoNotificationType = IInfoNotification
+export type DbInfoNotificationType = IUserInfoNotification
