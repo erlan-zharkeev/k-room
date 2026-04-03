@@ -4,11 +4,10 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": "./../",
     "paths": {
-      "src/*": ["client/src/*"],
-      "common": ["common/index.ts"],
-      "common/*": ["common/*"]
+      "src/*": ["./src/*"],
+      "common": ["../common/index.ts"],
+      "common/*": ["../common/*"]
     }
   },
   "include": [

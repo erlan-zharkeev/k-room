@@ -75,11 +75,12 @@ export default defineConfig(({ mode }) => {
       outDir: './build'
     },
     resolve: {
-      alias: {
-        '~': path.resolve(__dirname, './src/shared/config/styles'),
-        src: path.resolve(__dirname, './src'),
-        common: path.resolve(__dirname, './../common')
-      }
+      alias: [
+        { find: '~', replacement: path.resolve(__dirname, './src/shared/config/styles') },
+        { find: 'src', replacement: path.resolve(__dirname, './src') },
+        { find: /^common$/, replacement: path.resolve(__dirname, './../common/index.ts') },
+        { find: /^common\/(.*)$/, replacement: `${path.resolve(__dirname, './../common')}/$1` }
+      ]
     },
     server: {
       historyApiFallback: true,

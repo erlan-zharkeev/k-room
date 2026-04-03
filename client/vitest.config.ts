@@ -9,11 +9,12 @@ const CLIENT_ROOT = import.meta.dirname
 export default defineConfig({
   plugins: [react(), svgr({})],
   resolve: {
-    alias: {
-      src: path.resolve(CLIENT_ROOT, 'src'),
-      common: path.resolve(CLIENT_ROOT, './../common'),
-      '~': path.resolve(CLIENT_ROOT, 'src/shared/config/styles')
-    }
+    alias: [
+      { find: 'src', replacement: path.resolve(CLIENT_ROOT, 'src') },
+      { find: '~', replacement: path.resolve(CLIENT_ROOT, 'src/shared/config/styles') },
+      { find: /^common$/, replacement: path.resolve(CLIENT_ROOT, './../common/index.ts') },
+      { find: /^common\/(.*)$/, replacement: `${path.resolve(CLIENT_ROOT, './../common')}/$1` }
+    ]
   },
   test: {
     environment: 'jsdom',

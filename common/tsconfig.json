@@ -2,16 +2,15 @@
   "extends": "../config/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "./",
-    "baseUrl": ".",
     "module": "ESNext",
     "declaration": true,
     "composite": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "paths": {
       "common": ["./index.ts"],
       "common/*": ["./*"]
     }
   },
-  "include": ["./index.ts", "./types", "./lib", "./user", "./endpoints"],
+  "include": ["./index.ts", "./user", "./endpoints", "./auth", "./calls", "./chat", "./codes", "./contact", "./env", "./info-notification", "./language", "./media", "./message", "./requests", "./response", "./sentry", "./shared", "./socket", "./status"],
   "exclude": ["node_modules"]
 }
