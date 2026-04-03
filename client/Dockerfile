@@ -2,6 +2,7 @@ FROM node:24.14.0 AS build
 
 WORKDIR /app
 
+COPY package.json ./package.json
 COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
 COPY common/index.ts ./common/index.ts
@@ -18,6 +19,7 @@ COPY client/package-lock.json ./client/package-lock.json
 COPY client/tsconfig.json ./client/tsconfig.json
 COPY client/tsconfig.node.json ./client/tsconfig.node.json
 COPY client/vite.config.ts ./client/vite.config.ts
+COPY client/vite.pwa.config.ts ./client/vite.pwa.config.ts
 COPY client/vitest.config.ts ./client/vitest.config.ts
 COPY client/vitest.setup.ts ./client/vitest.setup.ts
 COPY client/index.html ./client/index.html
