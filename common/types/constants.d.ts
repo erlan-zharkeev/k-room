@@ -8,6 +8,7 @@ export declare const VALIDATION_PATTERNS: {
     noSpaces: string;
     onlyLatin: string;
 };
+export declare const INFO_NOTIFICATION_STATUS: readonly ["read", "unread", "hidden"];
 export declare const ROUTE_NAMES: {
     readonly login: "/login";
     readonly registration: "/registration";
