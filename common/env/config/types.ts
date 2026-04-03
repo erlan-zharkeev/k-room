@@ -25,4 +25,5 @@ export interface IEnvCommonVariables {
   API_PATH: string
   ADMIN_ROOT_PATH: string
   ADMIN_COOKIE: string
+  SUPPORT_EMAIL: string
 }

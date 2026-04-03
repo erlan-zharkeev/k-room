@@ -5,6 +5,7 @@ import express from 'express'
 import http from 'http'
 import https from 'https'
 import methodOverride from 'method-override'
+import path from 'path'
 
 import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'src/app/config'
 
@@ -18,9 +19,13 @@ import { rootRouter } from './router'
 import { initIO } from './socket'
 
 const app = express()
+const adminFaviconPath = path.resolve(process.cwd(), 'public/admin-favicon.svg')
 
 app.use(cors(corsOptions))
 app.use(cookieParser())
+app.get('/admin-favicon.svg', (_req, res) => {
+  res.sendFile(adminFaviconPath)
+})
 app.use(SERVER_ENV.adminRootPath, adminRouter)
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))

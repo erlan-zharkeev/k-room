@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react-swc'
+import { IEnvCommonVariables } from 'common'
 import { defineConfig, loadEnv } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import svgr from 'vite-plugin-svgr'
@@ -11,14 +12,14 @@ import { generatePWAConfig } from './vite.pwa.config'
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
-  const commonEnv = loadEnv('common', envDir, '')
+  const commonEnv = loadEnv('common', envDir, '') as Record<string, string> | IEnvCommonVariables
   const isDev = mode === 'development'
   const { APP_HOST, API_HOST, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
-  const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH } = commonEnv
-  const { name: APP_NAME } = JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8')
-  ) as { name: string }
-  const { version: APP_VERSION } = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as {
+  const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, SUPPORT_EMAIL } = commonEnv
+  const { name: APP_NAME, version: APP_VERSION } = JSON.parse(
+    fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')
+  ) as {
+    name: string
     version: string
   }
 
@@ -41,8 +42,8 @@ export default defineConfig(({ mode }) => {
     apiBaseUrl: isDev ? API_PATH : `${API_HOST}${API_PATH}`,
     themeBg: '#1c1c1c', // DO NOT FORGET TO SYNC WITH theme.css
     themeAccent: '#418fde', // DO NOT FORGET TO SYNC WITH theme.css
-    themeText: 'rgb(177 177 177 / 58.7%)', // DO NOT FORGET TO SYNC WITH theme.css
-    supportEmail: ''
+    themeText: 'rgb(177 177 177 / 60%)', // DO NOT FORGET TO SYNC WITH theme.css
+    supportEmail: SUPPORT_EMAIL
   }
 
   return {
@@ -50,6 +51,7 @@ export default defineConfig(({ mode }) => {
       CLIENT_ENV_DATA
     },
     envDir,
+    publicDir: path.resolve(__dirname, './public'),
     css: {
       preprocessorOptions: {
         scss: {

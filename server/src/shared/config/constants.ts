@@ -28,11 +28,12 @@ const {
 const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, ADMIN_ROOT_PATH, ADMIN_COOKIE } = commonEnvs
 
 const isDev = process.env.NODE_ENV === 'development'
-const { version: APP_VERSION } = JSON.parse(
+const { version: APP_VERSION, name: APP_NAME } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
-) as { version: string }
+) as { version: string; name: string }
 
 export const SERVER_ENV: IServerEnv = {
+  appName: APP_NAME,
   appVersion: APP_VERSION,
   isDev,
   apiPath: API_PATH,

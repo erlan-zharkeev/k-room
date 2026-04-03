@@ -37,6 +37,7 @@ COPY .env.production ./.env.production
 
 COPY server/package.json ./server/package.json
 COPY server/package-lock.json ./server/package-lock.json
+COPY server/public ./server/public
 
 WORKDIR /app/server
 
