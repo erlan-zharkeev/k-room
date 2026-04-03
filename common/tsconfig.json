@@ -12,6 +12,6 @@
       "common/*": ["./*"]
     }
   },
-  "include": ["./index.ts", "./types", "./lib"],
+  "include": ["./index.ts", "./types", "./lib", "./user", "./endpoints"],
   "exclude": ["node_modules"]
 }
