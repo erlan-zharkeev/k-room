@@ -1,12 +1,14 @@
 import Dexie, { Table } from 'dexie'
 
 import {
+  CLIENT_ENV,
   DbUserSettingType,
   DbContactType,
   IDbMedia,
   DbUserDataType,
   DbMessageType,
-  FChatRoomType
+  FChatRoomType,
+  DbInfoNotificationType
 } from 'src/shared/config'
 
 export class KRoomDB extends Dexie {
@@ -16,16 +18,18 @@ export class KRoomDB extends Dexie {
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>
   messages!: Table<DbMessageType>
+  'info-notifications'!: Table<DbInfoNotificationType>
 
   constructor() {
-    super('k-room')
+    super(CLIENT_ENV.appName)
     this.version(1).stores({
       settings: '__key',
       user: '__key',
       contacts: '&id',
       media: '&id',
       'chat-rooms': '&id',
-      messages: '&id'
+      messages: '&id',
+      'info-notifications': '&id'
     })
   }
 }

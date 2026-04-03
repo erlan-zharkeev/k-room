@@ -23,10 +23,11 @@ export const createUser = async ({
 }) => {
   if (!id) return null
   const idCandidate = new mongoose.Types.ObjectId(id)
+  const createdAt = Date.now()
 
   const userExistState = await isUserExist({ id: idCandidate, username, email })
   if (userExistState.exists) return null
-  const infoNotifications = await getInitialInfoNotificationMap()
+  const infoNotifications = await getInitialInfoNotificationMap(createdAt)
 
   return await new UserModel({
     _id: id ? new mongoose.Types.ObjectId(id) : new mongoose.Types.ObjectId(),

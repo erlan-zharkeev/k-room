@@ -2,11 +2,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export const generatePWAConfig = ({
   appName,
-  appVersion,
   themeBg
 }: {
   appName: string
-  appVersion: string
   themeBg: string
 }) =>
   VitePWA({
@@ -17,7 +15,7 @@ export const generatePWAConfig = ({
     injectRegister: 'auto',
     manifest: {
       name: appName,
-      short_name: appVersion,
+      short_name: appName,
       description: 'Text and video chat',
       theme_color: themeBg,
       background_color: themeBg,

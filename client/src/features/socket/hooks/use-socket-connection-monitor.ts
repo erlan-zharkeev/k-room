@@ -45,6 +45,7 @@ export const useSocketConnectionMonitor = () => {
     socket.on<SocketActionsType>('reconnect', (attempt: number) => {
       log('success', `Socket reconnected on attempt: ${attempt}`)
       socket.emit<SocketActionsType>('initialize')
+      socket.emit<SocketActionsType>('actualize-user-data')
       dispatch(setReconnectingStatus(false))
     })
 

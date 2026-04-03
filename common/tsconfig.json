@@ -11,6 +11,6 @@
       "common/*": ["./*"]
     }
   },
-  "include": ["./index.ts", "./user", "./endpoints", "./auth", "./calls", "./chat", "./codes", "./contact", "./env", "./info-notification", "./language", "./media", "./message", "./requests", "./response", "./sentry", "./shared", "./socket", "./status"],
+  "include": ["./index.ts", "./user", "./endpoints", "./auth", "./calls", "./chat", "./codes", "./contact", "./env", "./info-notification", "./language", "./media", "./message", "./requests", "./response", "./sentry", "./shared", "./socket", "./status", "./time"],
   "exclude": ["node_modules"]
 }

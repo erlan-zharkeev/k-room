@@ -1,6 +1,7 @@
 import { ICall } from 'common/calls'
 import { IChatRoom } from 'common/chat'
 import { FrontendContactMapType, IFrontendContact, InteractionType } from 'common/contact'
+import { IInfoNotification } from 'common/info-notification'
 import { AppLanguageType } from 'common/language'
 import { MediaFileValueType } from 'common/media'
 import { IMessage, IReaction, MessageStatusType } from 'common/message'
@@ -36,6 +37,7 @@ export interface IEventStatusContact {
 export type EventChangeContactsDataType = IBaseFrontendUserData
 
 export type EventGetContactsType = FrontendContactMapType
+export type EventGetInfoNotificationsType = IInfoNotification[]
 export type EventCallUpdatedType = ICall
 export type EventCallsUpdatedType = ICall[]
 
@@ -239,6 +241,7 @@ export type SocketActionsType =
   | 'update-contact-interaction-type'
   | 'contact-interaction-updated'
   | 'actual-contacts'
+  | 'actual-info-notifications'
   | 'actual-messages'
   | 'actualize-user-data'
   | 'update-language'

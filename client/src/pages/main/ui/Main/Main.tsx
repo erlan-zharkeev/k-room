@@ -10,6 +10,7 @@ import { useCallDataUpdateMonitor } from 'src/features/call'
 import { useChatRoomUpdateMonitor } from 'src/features/chat-room'
 import { useContactUpdateMonitor } from 'src/features/contact'
 import { useGetNotificationPermission } from 'src/features/get-notification-permission'
+import { useInfoNotificationUpdateMonitor } from 'src/features/info-notification'
 import { useLoadRoomMessages, useMessageUpdateMonitor } from 'src/features/message'
 import { useAudioContextMonitor } from 'src/features/monitor-audio-context'
 import { useUserInteractionMonitor } from 'src/features/monitor-user-interaction'
@@ -25,6 +26,7 @@ export const Main = () => {
   useContactUpdateMonitor()
   useMessageUpdateMonitor()
   useLoadRoomMessages()
+  useInfoNotificationUpdateMonitor()
   useChatRoomUpdateMonitor()
   useCallDataUpdateMonitor()
   useUserInteractionMonitor()

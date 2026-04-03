@@ -1,4 +1,3 @@
-import { IInfoNotification } from 'common/info-notification';
 import { IFrontendUserData } from 'common/user';
 export interface IConfirmEmailResponse {
     email: string;
@@ -9,7 +8,6 @@ export interface ISignInWithProviderResponse extends IFrontendUserData {
 }
 export interface IGetUserDataResponse extends IFrontendUserData {
 }
-export type IGetInfoNotificationsResponse = IInfoNotification[];
 export interface ISendConfirmationLinkResponse {
     email: string;
     nextRequestTime: number;

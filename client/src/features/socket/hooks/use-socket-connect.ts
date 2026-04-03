@@ -16,6 +16,7 @@ export const useSocketConnect = () => {
     }
     socket.connect()
     socket.emit<SocketActionsType>('initialize')
+    socket.emit<SocketActionsType>('actualize-user-data')
     dispatch(setReconnectingStatus(false))
   }
 

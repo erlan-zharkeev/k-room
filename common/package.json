@@ -1,5 +1,5 @@
 {
-  "name": "k-room.common",
+  "name": "k-room-common",
   "version": "2.0.11",
   "main": "index.ts",
   "types": "index.d.ts",

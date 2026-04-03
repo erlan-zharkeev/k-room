@@ -1,6 +1,7 @@
 import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common'
 
 import { transformRoomForUser } from 'src/features/chat-room'
+import { getActiveInfoNotifications, getUserInfoNotificationIds } from 'src/features/info-notification'
 
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { UserModel } from 'src/entities/user'
@@ -24,10 +25,13 @@ export const actualizeUserDataController = (socket: SocketInstanceType) => {
       const roomIds = data?.personal.chatRooms
       const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
       const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
+      const infoNotificationIds = getUserInfoNotificationIds(data?.personal.infoNotifications)
+      const infoNotifications = await getActiveInfoNotifications({ ids: infoNotificationIds })
       const sockets = await getSocketsByUserIds([userId])
       sockets.forEach((socketId) => {
         getIO().to(socketId).emit<SocketActionsType>('actual-contacts', contactResultData)
         getIO().to(socketId).emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
+        getIO().to(socketId).emit<SocketActionsType>('actual-info-notifications', infoNotifications)
       })
     } catch {
       throwSocketError(socket.id)

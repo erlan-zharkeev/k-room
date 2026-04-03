@@ -1,24 +1,59 @@
-import { INFO_NOTIFICATION_MAP, INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
+import { Fragment, createElement } from 'react'
+
+import { useLiveQuery } from 'dexie-react-hooks'
+
+import { INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
 import { useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
+
+import { DbInfoNotificationType } from 'src/shared/config'
+import { db } from 'src/shared/lib'
 
 export const useInfoNotification = () => {
   const { infoNotifications } = useUser()
   const { t } = useI18n()
+  const infoNotificationList =
+    useLiveQuery(async () => {
+      return await (db['info-notifications'].toArray() as Promise<DbInfoNotificationType[]>)
+    }, []) ?? []
 
-  const unreadInfoNotificationQuantity = Number(
-    Object.values(infoNotifications)?.filter((status) => status === 'unread').length
-  )
+  const unreadInfoNotificationQuantity = infoNotificationList.filter(
+    (notification) => infoNotifications[notification.id] === 'unread'
+  ).length
 
-  const collapseInfoNotifications =
-    Object.entries(INFO_NOTIFICATION_MAP)?.map(([id, info]) => ({
-      id,
-      title: t(info.title),
-      content: info.content,
-      badgeName: infoNotifications[id] === 'unread' ? t(INFO_NOTIFICATIONS_I18N.unreadBadge) : undefined
-    })) ?? []
+  const isRead = (id: string) => infoNotifications[id] !== 'unread'
 
-  const isRead = (id: string) => infoNotifications[id] === 'read'
+  const putInfoNotification = async (payload: DbInfoNotificationType) => await db['info-notifications'].put(payload)
 
-  return { collapseInfoNotifications, unreadInfoNotificationQuantity, isRead }
+  const bulkPutInfoNotifications = async (payload: DbInfoNotificationType[]) => {
+    await db['info-notifications'].bulkPut(payload)
+  }
+
+  const reset = () => db['info-notifications'].clear()
+
+  const collapseInfoNotifications = infoNotificationList.map((notification) => {
+    const paragraphs = t(notification.content)
+
+    return {
+      id: notification.id,
+      title: t(notification.title),
+      content: () =>
+        createElement(
+          Fragment,
+          null,
+          ...paragraphs.map((paragraph) => createElement('p', { className: 'app-text', key: paragraph }, paragraph))
+        ),
+      badgeName: !isRead(notification.id) ? t(INFO_NOTIFICATIONS_I18N.unreadBadge) : undefined
+    }
+  })
+
+  return {
+    infoNotificationList,
+    unreadInfoNotificationQuantity,
+    collapseInfoNotifications,
+    isRead,
+    putInfoNotification,
+    bulkPutInfoNotifications,
+    reset
+  }
 }

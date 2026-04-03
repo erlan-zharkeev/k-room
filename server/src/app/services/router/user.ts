@@ -4,7 +4,6 @@ import { USER_ENDPOINTS } from 'common'
 
 import { accessTokenValidator } from 'src/features/auth'
 import {
-  getInfoNotificationsController,
   getUserDataController,
   markInfoAsReadController,
   RESET_PASSWORD_FIELDS_VALIDATION,
@@ -19,7 +18,6 @@ import { validateRequest } from 'src/shared/middleware'
 
 export const userRouter = Router()
 userRouter.get(USER_ENDPOINTS.getUserData, accessTokenValidator, getUserDataController)
-userRouter.get(USER_ENDPOINTS.getInfoNotifications, accessTokenValidator, getInfoNotificationsController)
 userRouter.post(
   USER_ENDPOINTS.resetPassword,
   RESET_PASSWORD_FIELDS_VALIDATION,

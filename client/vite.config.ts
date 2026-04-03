@@ -2,7 +2,8 @@ import fs from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react-swc'
-import { IEnvCommonVariables } from 'common'
+import { formatAppName } from '../common/shared/lib/format-app-name'
+import type { IEnvCommonVariables } from 'common'
 import { defineConfig, loadEnv } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import svgr from 'vite-plugin-svgr'
@@ -28,7 +29,7 @@ export default defineConfig(({ mode }) => {
     isE2E: process.env.E2E === 'true',
     socketPath: SOCKET_PATH,
     apiPath: API_PATH,
-    appName: APP_NAME,
+    appName: formatAppName(APP_NAME),
     appVersion: APP_VERSION,
     serverPort: Number(SERVER_PORT),
     clientPort: Number(CLIENT_PORT),
@@ -63,7 +64,8 @@ export default defineConfig(({ mode }) => {
     plugins: [
       {
         name: 'inject-theme-colors',
-        transformIndexHtml: (html) => html.replaceAll('__THEME_BG__', CLIENT_ENV_DATA.themeBg)
+        transformIndexHtml: (html) =>
+          html.replaceAll('__THEME_BG__', CLIENT_ENV_DATA.themeBg).replaceAll('__APP_NAME__', CLIENT_ENV_DATA.appName)
       },
       nodePolyfills(),
       react(),
