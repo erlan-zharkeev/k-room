@@ -15,6 +15,7 @@ export * from './sentry'
 export * from './shared'
 export * from './socket'
 export * from './status'
+export * from './time'
 export * from './user'
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/config/constants'

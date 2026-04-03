@@ -2,7 +2,7 @@ import {
   CONTACT_LIST_RERENDER_INTERVAL,
   ContactInvitationControlBtns,
   ContactMenu,
-  lastSeen
+  getContactDescription
 } from 'src/features/contact'
 import { IContactListElProps } from 'src/features/contact/contact-list'
 
@@ -18,14 +18,7 @@ export const ContactListEl = ({ contactData }: IContactListElProps) => {
   useIntervalRerender(CONTACT_LIST_RERENDER_INTERVAL)
 
   const avatar = getLiveMedia(`avatar.${contactData.id}`)
-  const description =
-    contactData.interactionType === 'invite-accepted'
-      ? contactData.online
-        ? language === 'ru'
-          ? 'в сети'
-          : 'online'
-        : lastSeen(contactData.lastSeen, language)
-      : ''
+  const description = getContactDescription(contactData, language) ?? ''
 
   return (
     <ProfileInfo

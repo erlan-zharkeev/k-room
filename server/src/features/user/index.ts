@@ -1,5 +1,4 @@
 export * from './actualize-user-data'
-export * from './get-info-notifications'
 export * from './get-user-data'
 export * from './mark-info-notification-as-read'
 export * from './reset-password'
