@@ -2,7 +2,7 @@ import type { Response } from 'express'
 
 import { type AppLanguageType, StatusEnum } from 'common'
 
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { AppError, getLocalizedText, isAppError, throwHTTPError } from 'src/shared/lib'
 
 import { COMMON_MEDIA_I18N, MediaBucketNameType } from './../config'
 import { mediaBuckets } from './../model'
@@ -18,7 +18,7 @@ export const streamMediaFile = async (
     const bucket = mediaBuckets[bucketName]
 
     if (!bucket) {
-      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language))
+      throw new AppError(StatusEnum.NotFound, getLocalizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
     }
 
     const filename = `${bucketName}.${id}`
@@ -26,7 +26,7 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      return throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
+      throw new AppError(StatusEnum.NotFound, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
     }
 
     res.setHeader('Content-Type', file.contentType || 'application/octet-stream')
@@ -43,15 +43,15 @@ export const streamMediaFile = async (
 
     bucket
       .openDownloadStreamByName(filename)
-      .on('error', () =>
-        throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language))
+      .on('error', (error) =>
+        throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language), false, error)
       )
       .pipe(res)
-  } catch {
-    return throwHTTPError(
-      StatusEnum.Server,
-      res ?? null,
-      getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language)
-    )
+  } catch (error) {
+    if (isAppError(error)) {
+      throw error
+    }
+
+    throw new AppError(StatusEnum.Server, getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language), false, error)
   }
 }
