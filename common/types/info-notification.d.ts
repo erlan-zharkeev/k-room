@@ -1,11 +1,16 @@
-export declare const INFO_NOTIFICATION_STATUS: readonly ['read', 'unread', 'hidden']
-export type InfoNotificationType = (typeof INFO_NOTIFICATION_STATUS)[number]
+import { INFO_NOTIFICATION_STATUS } from './constants';
+import type { LocalizedTextType } from './language';
+export type InfoNotificationStatusType = (typeof INFO_NOTIFICATION_STATUS)[number];
+export type InfoNotificationType = InfoNotificationStatusType;
 export interface IInfoNotification {
-  id: string
-  label: string
-  content: string
+    id: number;
+    title: LocalizedTextType;
+    content: LocalizedTextType<string[]>;
+    isActive: boolean;
+    createdAt: number;
+    updatedAt: number;
 }
-export type InfoNotificationMapType = Record<number, InfoNotificationType>
+export type InfoNotificationMapType = Record<number, InfoNotificationType>;
 export interface IMarkAsReadPayload {
-  id: string
+    id: number;
 }

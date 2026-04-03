@@ -8,6 +8,7 @@ export const VALIDATION_PATTERNS = {
     noSpaces: '\\S+',
     onlyLatin: '^[\\x00-\\x7F]+$'
 };
+export const INFO_NOTIFICATION_STATUS = ['read', 'unread', 'hidden'];
 export const ROUTE_NAMES = {
     login: '/login',
     registration: '/registration',
