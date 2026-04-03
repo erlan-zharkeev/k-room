@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose'
 
-import { INFO_NOTIFICATION_STATUS, InfoNotificationMapType } from 'common'
+import { INFO_NOTIFICATION_STATUS, InfoNotificationStatusType } from 'common'
 
 import { IUserPersonalData } from './../config'
 import { contactSchema } from './index'
@@ -26,7 +26,7 @@ export const personalSchema = new Schema<IUserPersonalData>(
       type: Map,
       of: {
         type: String,
-        enum: INFO_NOTIFICATION_STATUS as ReadonlyArray<InfoNotificationMapType>
+        enum: INFO_NOTIFICATION_STATUS as ReadonlyArray<InfoNotificationStatusType>
       },
       required: true,
       default: {}

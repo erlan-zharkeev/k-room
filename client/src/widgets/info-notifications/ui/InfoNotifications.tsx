@@ -20,7 +20,7 @@ export const InfoNotification = () => {
       <AppCollapseList
         items={collapseInfoNotifications}
         onClickCollapseEl={(val) => {
-          markAsRead(Number(val))
+          markAsRead(String(val))
         }}
       />
     </div>

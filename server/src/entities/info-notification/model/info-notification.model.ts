@@ -1,6 +1,10 @@
-import { model, Schema } from 'mongoose'
+import { model, Schema, Types } from 'mongoose'
 
 import { IInfoNotification } from 'common'
+
+type IInfoNotificationDocument = Omit<IInfoNotification, 'id'> & {
+  _id: Types.ObjectId
+}
 
 const localizedTextSchema = {
   en: {
@@ -26,13 +30,8 @@ const localizedParagraphsSchema = {
   }
 } as const
 
-const infoNotificationSchema = new Schema<IInfoNotification>(
+const infoNotificationSchema = new Schema<IInfoNotificationDocument>(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true
-    },
     title: localizedTextSchema,
     content: localizedParagraphsSchema,
     isActive: {
@@ -51,7 +50,9 @@ const infoNotificationSchema = new Schema<IInfoNotification>(
       default: () => Date.now()
     }
   },
-  {}
+  {
+    id: false
+  }
 )
 
 export const InfoNotificationModel = model('InfoNotification', infoNotificationSchema, 'info-notification')

@@ -6,7 +6,7 @@ export type InfoNotificationStatusType = (typeof INFO_NOTIFICATION_STATUS)[numbe
 export type InfoNotificationType = InfoNotificationStatusType
 
 export interface IInfoNotification {
-  id: number
+  id: string
   title: LocalizedTextType
   content: LocalizedTextType<string[]>
   isActive: boolean
@@ -14,8 +14,8 @@ export interface IInfoNotification {
   updatedAt: number
 }
 
-export type InfoNotificationMapType = Record<number, InfoNotificationType>
+export type InfoNotificationMapType = Record<string, InfoNotificationType>
 
 export interface IMarkAsReadPayload {
-  id: number
+  id: string
 }
