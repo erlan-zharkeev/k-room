@@ -8,7 +8,8 @@
     "lib": ["ESNext.AsyncIterable", "ESNext.Disposable"],
     "paths": {
       "src/*": ["./src/*"],
-      "common": ["../common/index.ts"]
+      "common": ["../common/index.ts"],
+      "common/*": ["../common/*"]
     }
   },
   "include": ["src/**/*"],

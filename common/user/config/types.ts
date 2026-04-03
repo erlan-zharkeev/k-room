@@ -1,4 +1,4 @@
-import type { InfoNotificationMapType } from '../../types'
+import type { InfoNotificationMapType } from 'common/info-notification'
 
 import { USER_ROLES } from './constants'
 
