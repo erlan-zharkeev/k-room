@@ -3,7 +3,7 @@ import { AppLanguageType } from 'common'
 import { DbContactType, IDbContactRequiredSystemData } from 'src/shared/config'
 import { formatLocalizedRelativeTime } from 'src/shared/lib'
 
-import { CONTACT_SHARED_I18N } from '../config'
+import { CONTACT_SHARED_I18N } from './../config'
 
 export const lastSeen = (timeStamp: number | undefined, language: AppLanguageType) =>
   timeStamp ? `${CONTACT_SHARED_I18N.lastSeen[language]} ${formatLocalizedRelativeTime(timeStamp, language)}` : ''
