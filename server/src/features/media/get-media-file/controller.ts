@@ -4,7 +4,7 @@ import { MediaBucketNameType } from 'src/entities/media'
 import { streamMediaFile } from 'src/entities/media'
 
 import type { AppResponseType, IAppRequest } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { getLocalizedText, isAppError, throwHTTPError } from 'src/shared/lib'
 
 import { GET_MEDIA_FILE_I18N } from './config'
 import { parseBucketNameFromId } from './lib'
@@ -28,9 +28,13 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
     const { bucketName, id } = parseBucketNameFromId(idParam)
     const asAttachment = ['1', 'true', 'yes'].includes(String(req.query.download || '').toLowerCase())
 
-    streamMediaFile(bucketName as MediaBucketNameType, id, res, language, { asAttachment, revalidateCache })
+    await streamMediaFile(bucketName as MediaBucketNameType, id, res, language, { asAttachment, revalidateCache })
     return
   } catch (error) {
+    if (isAppError(error)) {
+      return throwHTTPError(error.status, res, error.message, error.silent)
+    }
+
     return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
   }
 }
