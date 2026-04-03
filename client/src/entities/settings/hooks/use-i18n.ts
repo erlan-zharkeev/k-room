@@ -1,6 +1,6 @@
 import { AppLanguageType, DEFAULT_APP_LANGUAGE, LocalizedTextType } from 'common'
 
-import { useSettings } from './../'
+import { useSettings } from './../hooks'
 
 export const useI18n = () => {
   const { language }: { language: AppLanguageType } = useSettings()
