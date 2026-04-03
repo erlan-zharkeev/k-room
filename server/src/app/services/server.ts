@@ -12,12 +12,13 @@ import { SERVER_ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
 import { attachRequestLanguage } from 'src/shared/middleware'
 
-import { initDataBase, initIO, rootRouter } from './index'
+import { ADMIN_ROOT_PATH, adminRouter, initDataBase, initIO, rootRouter } from './index'
 
 const app = express()
 
 app.use(cors(corsOptions))
 app.use(cookieParser())
+app.use(ADMIN_ROOT_PATH, adminRouter)
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use(attachRequestLanguage)

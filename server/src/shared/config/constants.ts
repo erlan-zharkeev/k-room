@@ -15,6 +15,8 @@ const {
   EMAIL_CONFIRM_SECRET,
   K_ROOM_REFRESH_TOKEN_SECRET,
   RESEND_API_KEY,
+  ADMIN_USERNAME,
+  ADMIN_PASSWORD,
   SENTRY_ENVIRONMENT,
   SENTRY_ENABLED,
   APP_HOST,
@@ -45,6 +47,8 @@ export const SERVER_ENV: IServerEnv = {
   emailConfirmSecret: EMAIL_CONFIRM_SECRET,
   refreshTokenSecret: K_ROOM_REFRESH_TOKEN_SECRET,
   resendApiKey: RESEND_API_KEY,
+  adminUsername: ADMIN_USERNAME,
+  adminPassword: ADMIN_PASSWORD,
   sentryEnvironment: SENTRY_ENVIRONMENT,
   sentryEnabled: SENTRY_ENABLED === 'true'
 }

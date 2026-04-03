@@ -13,6 +13,8 @@ export interface IServerEnv {
   emailConfirmSecret: string
   refreshTokenSecret: string
   resendApiKey: string
+  adminUsername: string
+  adminPassword: string
   sentryEnvironment: string
   sentryEnabled: boolean
 }
