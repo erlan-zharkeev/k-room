@@ -1,6 +1,6 @@
 import { IMarkAsReadPayload, StatusEnum } from 'common'
 
-import { UserModel } from 'src/entities/user'
+import { updateInfoNotificationStateStatus } from 'src/entities/info-notification-state'
 
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
@@ -15,7 +15,7 @@ export const markInfoAsReadController = async (req: IAppRequest, res: AppRespons
     const userId = req.app.locals.id
     const { id }: IMarkAsReadPayload = req.body
 
-    await UserModel.updateOne({ _id: userId }, { $set: { [`personal.infoNotifications.${id}`]: 'read' } })
+    await updateInfoNotificationStateStatus({ userId, notificationId: id, status: 'read' })
 
     res.json({ payload: null, message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true } })
   } catch (error) {
