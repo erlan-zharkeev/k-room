@@ -18,7 +18,4 @@ export interface IBackendResponse<T> {
     payload: T;
     message: IBackendMessage;
 }
-type ValueOf<T> = T[keyof T];
-export type RouteNameType = ValueOf<typeof import('../../endpoints/config').ROUTE_NAMES>;
-export type EndpointsType = ValueOf<typeof import('../../endpoints/config').AUTH_ENDPOINTS> | ValueOf<typeof import('../../endpoints/config').USER_ENDPOINTS> | ValueOf<typeof import('../../endpoints/config').CODES_ENDPOINTS> | ValueOf<typeof import('../../endpoints/config').ADMIN_ENDPOINTS> | ValueOf<typeof import('../../endpoints/config').MEDIA_ENDPOINTS>;
-export {};
+export type { RouteNameType, EndpointsType } from '../../endpoints/config';

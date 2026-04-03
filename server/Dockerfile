@@ -7,13 +7,9 @@ COPY scripts/sync-public-config.mjs ./scripts/sync-public-config.mjs
 COPY config/nginx ./config/nginx
 COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
-COPY common/index.ts ./common/index.ts
-COPY common/package.json ./common/package.json
-COPY common/package-lock.json ./common/package-lock.json
-COPY common/tsconfig.json ./common/tsconfig.json
-COPY common/lib ./common/lib
-COPY common/types ./common/types
+COPY common ./common
 
+COPY .env.common ./.env.common
 COPY .env.production ./.env.production
 
 COPY server/package.json ./server/package.json
@@ -34,13 +30,9 @@ ENV NODE_ENV=production
 
 COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
-COPY common/index.ts ./common/index.ts
-COPY common/package.json ./common/package.json
-COPY common/package-lock.json ./common/package-lock.json
-COPY common/tsconfig.json ./common/tsconfig.json
-COPY common/lib ./common/lib
-COPY common/types ./common/types
+COPY common ./common
 
+COPY .env.common ./.env.common
 COPY .env.production ./.env.production
 
 COPY server/package.json ./server/package.json
