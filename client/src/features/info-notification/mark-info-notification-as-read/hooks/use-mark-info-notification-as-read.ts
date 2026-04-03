@@ -10,7 +10,7 @@ export const useMarkInfoNotificationAsRead = () => {
   const { setByPath } = useUser()
   const { isRead } = useInfoNotification()
 
-  const markAsRead = async (id: number) => {
+  const markAsRead = async (id: string) => {
     try {
       if (isRead(id)) return
       await doRequest('patch', USER_ENDPOINTS.markInfoNotificationAsRead, { id })

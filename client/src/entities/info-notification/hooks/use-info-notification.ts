@@ -15,10 +15,10 @@ export const useInfoNotification = () => {
       id,
       title: t(info.title),
       content: info.content,
-      badgeName: infoNotifications[Number(id)] === 'unread' ? t(INFO_NOTIFICATIONS_I18N.unreadBadge) : undefined
+      badgeName: infoNotifications[id] === 'unread' ? t(INFO_NOTIFICATIONS_I18N.unreadBadge) : undefined
     })) ?? []
 
-  const isRead = (id: number) => infoNotifications[id] === 'read'
+  const isRead = (id: string) => infoNotifications[id] === 'read'
 
   return { collapseInfoNotifications, unreadInfoNotificationQuantity, isRead }
 }
