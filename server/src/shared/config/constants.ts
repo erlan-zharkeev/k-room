@@ -1,4 +1,4 @@
-import dotenv, { type DotenvParseOutput } from 'dotenv'
+import dotenv, { DotenvParseOutput } from 'dotenv'
 import fs from 'fs'
 import path from 'path'
 
@@ -25,7 +25,7 @@ const {
   COOKIE_DOMAIN
 } = envs
 
-const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH } = commonEnvs
+const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, ADMIN_ROOT_PATH, ADMIN_COOKIE } = commonEnvs
 
 const isDev = process.env.NODE_ENV === 'development'
 const { version: APP_VERSION } = JSON.parse(
@@ -50,7 +50,11 @@ export const SERVER_ENV: IServerEnv = {
   adminUsername: ADMIN_USERNAME,
   adminPassword: ADMIN_PASSWORD,
   sentryEnvironment: SENTRY_ENVIRONMENT,
-  sentryEnabled: SENTRY_ENABLED === 'true'
+  sentryEnabled: SENTRY_ENABLED === 'true',
+  adminRootPath: ADMIN_ROOT_PATH,
+  adminLoginPath: `${ADMIN_ROOT_PATH}/login`,
+  adminLogoutPath: `${ADMIN_ROOT_PATH}/logout`,
+  adminCookie: ADMIN_COOKIE
 }
 
 const host = new URL(APP_HOST)

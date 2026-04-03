@@ -22,4 +22,6 @@ export interface IEnvCommonVariables {
     CLIENT_PORT: string;
     SOCKET_PATH: string;
     API_PATH: string;
+    ADMIN_ROOT_PATH: string;
+    ADMIN_COOKIE: string;
 }

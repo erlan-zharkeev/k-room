@@ -14,6 +14,7 @@ server/node_modules
 server/package-lock.log
 server/build
 server/eslintcache
+server/.adminjs
 
 common/node_modules
 common/package-lock.log
