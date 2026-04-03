@@ -5,7 +5,6 @@ import { USER_ENDPOINTS } from 'common'
 import { accessTokenValidator } from 'src/features/auth'
 import {
   getUserDataController,
-  markInfoAsReadController,
   RESET_PASSWORD_FIELDS_VALIDATION,
   resetPasswordController,
   UPDATE_USER_DATA_FIELDS_VALIDATION,
@@ -32,4 +31,3 @@ userRouter.patch(
   validateRequest,
   updateUserDataController
 )
-userRouter.patch(USER_ENDPOINTS.markInfoNotificationAsRead, accessTokenValidator, markInfoAsReadController)

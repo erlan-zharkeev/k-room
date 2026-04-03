@@ -1,7 +1,7 @@
 import { ICall } from 'common/calls';
 import { IChatRoom } from 'common/chat';
 import { FrontendContactMapType, IFrontendContact, InteractionType } from 'common/contact';
-import { IInfoNotification } from 'common/info-notification';
+import { IUserInfoNotification } from 'common/info-notification';
 import { AppLanguageType } from 'common/language';
 import { MediaFileValueType } from 'common/media';
 import { IMessage, IReaction, MessageStatusType } from 'common/message';
@@ -29,7 +29,7 @@ export interface IEventStatusContact {
 }
 export type EventChangeContactsDataType = IBaseFrontendUserData;
 export type EventGetContactsType = FrontendContactMapType;
-export type EventGetInfoNotificationsType = IInfoNotification[];
+export type EventGetInfoNotificationsType = IUserInfoNotification[];
 export type EventCallUpdatedType = ICall;
 export type EventCallsUpdatedType = ICall[];
 export interface IEventSaveContact {
@@ -168,4 +168,4 @@ export interface IEventAuthError {
 export interface IEventUpdateLanguage {
     language: AppLanguageType;
 }
-export type SocketActionsType = 'connection' | 'error' | 'reconnect' | 'auth-error' | 'initialize' | 'disconnect' | 'rooms-loaded' | 'create-chat-room' | 'new-room-added' | 'send-message' | 'message-delivered' | 'room-created' | 'search-contact' | 'get-searched-contact' | 'contact-status-updated' | 'contacts-loaded' | 'save-contact' | 'delete-contact' | 'client-typing' | 'get-contact-typing-status' | 'load-room-messages' | 'room-messages-loaded' | 'change-message-status' | 'message-status-updated' | 'contact-data-changed' | 'call-user' | 'answer-call' | 'call-accepted' | 'call-ended' | 'change-call-settings' | 'call-started-at' | 'update-user-settings' | 'update-chat-room' | 'room-data-updated' | 'add-reaction' | 'message-reaction-updated' | 'message-deleted' | 'error-message' | 'calls-data-loaded' | 'call-data-changed' | 'contact-removed' | 'mark-call-as-video' | 'update-call-signal' | 'interlocutor-update-signal' | 'actual-chat-rooms' | 'interlocutor-ping' | 'update-interaction-type' | 'update-contact-success' | 'invite-received' | 'contact-delete-success' | 'contact-add-success' | 'update-contact-interaction-type' | 'contact-interaction-updated' | 'actual-contacts' | 'actual-info-notifications' | 'actual-messages' | 'actualize-user-data' | 'update-language' | 'reconnect_attempt' | 'reconnect_failed';
+export type SocketActionsType = 'connection' | 'error' | 'reconnect' | 'auth-error' | 'initialize' | 'disconnect' | 'rooms-loaded' | 'create-chat-room' | 'new-room-added' | 'send-message' | 'message-delivered' | 'room-created' | 'search-contact' | 'get-searched-contact' | 'contact-status-updated' | 'contacts-loaded' | 'save-contact' | 'delete-contact' | 'client-typing' | 'get-contact-typing-status' | 'load-room-messages' | 'room-messages-loaded' | 'change-message-status' | 'message-status-updated' | 'contact-data-changed' | 'call-user' | 'answer-call' | 'call-accepted' | 'call-ended' | 'change-call-settings' | 'call-started-at' | 'update-user-settings' | 'update-chat-room' | 'room-data-updated' | 'add-reaction' | 'message-reaction-updated' | 'message-deleted' | 'error-message' | 'calls-data-loaded' | 'call-data-changed' | 'contact-removed' | 'mark-call-as-video' | 'update-call-signal' | 'interlocutor-update-signal' | 'actual-chat-rooms' | 'interlocutor-ping' | 'update-interaction-type' | 'update-contact-success' | 'invite-received' | 'contact-delete-success' | 'contact-add-success' | 'update-contact-interaction-type' | 'contact-interaction-updated' | 'actual-contacts' | 'actual-info-notifications' | 'mark-info-notification-as-read' | 'actual-messages' | 'actualize-user-data' | 'update-language' | 'reconnect_attempt' | 'reconnect_failed';

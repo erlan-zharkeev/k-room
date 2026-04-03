@@ -16,6 +16,10 @@ export interface IInfoNotification {
 
 export type InfoNotificationMapType = Record<string, InfoNotificationType>
 
-export interface IMarkAsReadPayload {
+export interface IUserInfoNotification extends IInfoNotification {
+  status: InfoNotificationStatusType
+}
+
+export interface IMarkInfoNotificationAsReadPayload {
   id: string
 }

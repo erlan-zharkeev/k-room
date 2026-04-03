@@ -1,4 +1,4 @@
-import { SocketActionsType, IInfoNotification } from 'common'
+import { SocketActionsType, IUserInfoNotification } from 'common'
 
 import { useInfoNotification } from 'src/entities/info-notification'
 
@@ -7,7 +7,7 @@ import { socket } from 'src/shared/api'
 export const useInfoNotificationActualize = () => {
   const { bulkPutInfoNotifications } = useInfoNotification()
 
-  const actualizeInfoNotifications = async (notifications: IInfoNotification[]) => {
+  const actualizeInfoNotifications = async (notifications: IUserInfoNotification[]) => {
     await bulkPutInfoNotifications(notifications)
   }
 

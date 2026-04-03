@@ -4,27 +4,10 @@ import { WELCOME_INFO_NOTIFICATION_ID } from 'common'
 
 import { log } from 'src/shared/lib'
 
-import { UserModel } from './../../user'
 import { InfoNotificationModel } from './../model'
-
-type InfoNotificationFixtureType = {
-  _id: Types.ObjectId
-  title: {
-    en: string
-    ru: string
-  }
-  content: {
-    en: string[]
-    ru: string[]
-  }
-  isActive: boolean
-  createdAt: number
-  updatedAt: number
-}
+import { InfoNotificationFixtureType } from './types'
 
 const now = Date.now()
-
-const LEGACY_WELCOME_INFO_NOTIFICATION_ID = 1
 
 export const INFO_NOTIFICATION_FIXTURES: InfoNotificationFixtureType[] = [
   {
@@ -59,25 +42,7 @@ export const loadInfoNotificationFixtures = async () => {
       const existingNotification = await InfoNotificationModel.findById(fixture._id, { _id: 1 }).lean()
 
       if (existingNotification) {
-        await InfoNotificationModel.updateOne({ _id: fixture._id }, { $unset: { id: '' } })
         return 'skipped'
-      }
-
-      const legacyNotification = await InfoNotificationModel.findOne(
-        { id: LEGACY_WELCOME_INFO_NOTIFICATION_ID },
-        { _id: 1 }
-      ).lean()
-
-      if (legacyNotification) {
-        await UserModel.updateMany(
-          { 'personal.infoNotifications.1': { $exists: true } },
-          {
-            $rename: {
-              'personal.infoNotifications.1': `personal.infoNotifications.${WELCOME_INFO_NOTIFICATION_ID}`
-            }
-          }
-        )
-        await InfoNotificationModel.deleteOne({ _id: legacyNotification._id })
       }
 
       await InfoNotificationModel.create(fixture)

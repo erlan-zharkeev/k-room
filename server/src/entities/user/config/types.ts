@@ -1,4 +1,4 @@
-import { InfoNotificationMapType, InteractionType, ProviderType, UserRoleType } from 'common'
+import { InteractionType, ProviderType, UserRoleType } from 'common'
 
 export interface IUserDevice {
   socketId: string
@@ -24,7 +24,6 @@ export interface IUserPersonalData {
   email: string
   contacts: Record<string, IContact>
   chatRooms: string[]
-  infoNotifications: InfoNotificationMapType
 }
 
 export interface IUserPublicData {

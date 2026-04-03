@@ -24,7 +24,6 @@ export const getUserDataController = async (req: IAppRequest, res: AppResponseTy
     }
 
     await updateTokens(userId, req, res)
-
     const response = {
       payload: mapUserToDto(user),
       message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true }
