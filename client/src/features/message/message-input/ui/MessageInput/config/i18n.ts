@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const MESSAGE_INPUT_I18N = {
   placeholder: {

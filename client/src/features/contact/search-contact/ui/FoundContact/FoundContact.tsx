@@ -2,8 +2,7 @@ import './style.scss'
 
 import { MEDIA_ENDPOINTS } from 'common'
 
-import type { IFoundContactProps } from 'src/features/contact'
-import { AddContactBtn } from 'src/features/contact'
+import { IFoundContactProps, AddContactBtn } from 'src/features/contact'
 import { NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP } from 'src/features/contact/search-contact'
 
 import { ProfileInfo } from 'src/entities/profile-info'

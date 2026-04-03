@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const LOGIN_FORM_I18N = {
   emailPlaceholder: {

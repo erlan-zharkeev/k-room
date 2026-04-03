@@ -1,4 +1,4 @@
-import type { IEventGetSearchedContact, SocketActionsType } from 'common'
+import { IEventGetSearchedContact, SocketActionsType } from 'common'
 
 import { getIO } from 'src/shared/lib'
 

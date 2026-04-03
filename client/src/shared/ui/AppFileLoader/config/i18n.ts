@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const APP_FILE_LOADER_I18N = {
   upload: {

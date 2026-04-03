@@ -1,5 +1,6 @@
-import type { AuthTokensType } from 'common'
-import { type Response } from 'express'
+import { Response } from 'express'
+
+import { AuthTokensType } from 'common'
 
 import { parseExpires, setCookie } from 'src/features/cookie'
 

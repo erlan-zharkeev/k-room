@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common'
+import { LocalizedTextType } from 'common'
 
 export const NOTIFICATION_I18N = {
   networkOffline: {

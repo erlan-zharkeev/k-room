@@ -2,7 +2,7 @@ import { Schema } from 'mongoose'
 
 import { USER_ROLES } from 'common'
 
-import type { IUserSystemData } from './../config'
+import { IUserSystemData } from './../config'
 import { deviceSchema } from './device.model'
 
 export const systemSchema = new Schema<IUserSystemData>(

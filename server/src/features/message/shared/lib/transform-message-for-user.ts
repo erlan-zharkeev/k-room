@@ -1,4 +1,4 @@
-import type { IDBMessage, IMessage } from 'common'
+import { IDBMessage, IMessage } from 'common'
 
 export const transformMessageForUser = (message: IDBMessage, userId: string): IMessage => {
   const { _id, authorId, authorName, body, createdAt, usersMetaData, reactions, images, repliedMessage } = message

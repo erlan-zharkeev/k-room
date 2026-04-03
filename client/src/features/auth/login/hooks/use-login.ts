@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AUTH_ENDPOINTS, IAuthLoginPayload, type ILoginResponse } from 'common'
+import { AUTH_ENDPOINTS, IAuthLoginPayload, ILoginResponse } from 'common'
 
 import { useActivateUserSession } from 'src/features/user'
 

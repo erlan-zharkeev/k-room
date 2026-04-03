@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const WAIT_EMAIL_CONFIRM_I18N = {
   title: {

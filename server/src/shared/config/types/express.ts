@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { type AppLanguageType, AvailableCookieType, IBackendResponse } from 'common'
+import { AppLanguageType, AvailableCookieType, IBackendResponse } from 'common'
 
 export interface IAppRequest extends Request {
   cookies: Partial<Record<AvailableCookieType, string>>

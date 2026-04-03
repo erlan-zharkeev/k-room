@@ -1,18 +1,18 @@
-import type { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 
-import type { UnknownCallbackType } from 'common'
+import { UnknownCallbackType } from 'common'
 
-import type { FileLoaderValueType } from 'src/shared/config'
+import { FileLoaderValueType } from 'src/shared/config'
 import {
   ISwitchValidateRule,
   ITextInputValidateRule,
   IFileInputValidateRule,
   IElementPickerValidateRule
 } from 'src/shared/lib'
-import type { IAppElementPickerProps } from 'src/shared/ui/AppElementPicker/config'
-import type { IAppFileLoaderProps } from 'src/shared/ui/AppFileLoader/config'
-import type { IAppInputProps } from 'src/shared/ui/AppInput/config'
-import type { IAppSwitchProps } from 'src/shared/ui/AppSwitch/config'
+import { IAppElementPickerProps } from 'src/shared/ui/AppElementPicker/config'
+import { IAppFileLoaderProps } from 'src/shared/ui/AppFileLoader/config'
+import { IAppInputProps } from 'src/shared/ui/AppInput/config'
+import { IAppSwitchProps } from 'src/shared/ui/AppSwitch/config'
 
 export type AppFormFieldValueType = string | boolean | FileLoaderValueType | string[]
 

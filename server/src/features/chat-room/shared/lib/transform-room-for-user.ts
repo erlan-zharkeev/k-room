@@ -1,5 +1,6 @@
-import type { IChatRoom, IChatRoomSchema } from 'common'
 import { ObjectId } from 'mongoose'
+
+import { IChatRoom, IChatRoomSchema } from 'common'
 
 export const transformRoomForUser = ({ userId, room }: { userId: string; room: IChatRoomSchema }) => {
   const { chatName, authorId, messages, _id } = room as IChatRoomSchema & { _id: ObjectId }

@@ -1,4 +1,4 @@
-import type { CallFlowType, ICall } from 'common'
+import { CallFlowType, ICall } from 'common'
 
 import { CallModel } from 'src/entities/call'
 import { UserModel } from 'src/entities/user'

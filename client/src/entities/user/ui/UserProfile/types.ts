@@ -1,4 +1,4 @@
-import type { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
+import { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
 
 export interface IUserProfileProps {
   horizontal?: boolean

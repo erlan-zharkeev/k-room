@@ -1,7 +1,6 @@
 import React, { CSSProperties } from 'react'
 
-import type { MenuProps } from 'antd'
-import { Dropdown } from 'antd'
+import { MenuProps, Dropdown } from 'antd'
 
 export const AppDropdown = ({
   items,

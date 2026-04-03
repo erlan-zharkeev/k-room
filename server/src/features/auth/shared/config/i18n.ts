@@ -1,5 +1,4 @@
-import type { LocalizedTextMapType } from 'common'
-
+import { LocalizedTextMapType } from 'common'
 import { VALIDATION_LIMITS } from 'common'
 
 export const AUTH_I18N = {

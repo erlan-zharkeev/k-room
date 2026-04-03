@@ -1,4 +1,4 @@
-import type { IChatRoomFooterProps } from 'src/widgets/chat-room'
+import { IChatRoomFooterProps } from 'src/widgets/chat-room'
 
 import { MessageInput } from 'src/features/message'
 

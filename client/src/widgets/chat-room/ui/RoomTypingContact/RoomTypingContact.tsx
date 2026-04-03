@@ -1,6 +1,6 @@
 import './style.scss'
 
-import type { IRoomTypingContactProps } from 'src/widgets/chat-room'
+import { IRoomTypingContactProps } from 'src/widgets/chat-room'
 
 import { useContact } from 'src/entities/contact'
 

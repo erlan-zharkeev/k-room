@@ -3,7 +3,7 @@ import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppIcon } from 'src/shared/ui/AppIcon'
 
-import type { IButtonProps } from './config'
+import { IButtonProps } from './config'
 
 export const AppButton = ({
   htmltype = 'button',

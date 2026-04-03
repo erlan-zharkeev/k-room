@@ -1,21 +1,19 @@
-import { APP_LANGUAGE, type AppLanguageType } from 'common'
+import { AppLanguageType } from 'common'
 
-import type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/config'
+import { DbContactType, IDbContactRequiredSystemData } from 'src/shared/config'
 import { formatLocalizedRelativeTime } from 'src/shared/lib'
 
+import { CONTACT_SHARED_I18N } from '../config'
+
 export const lastSeen = (timeStamp: number | undefined, language: AppLanguageType) =>
-  timeStamp
-    ? language === APP_LANGUAGE.Ru
-      ? `был(а) в сети ${formatLocalizedRelativeTime(timeStamp, language)}`
-      : `last seen ${formatLocalizedRelativeTime(timeStamp, language)}`
-    : ''
+  timeStamp ? `${CONTACT_SHARED_I18N.lastSeen[language]} ${formatLocalizedRelativeTime(timeStamp, language)}` : ''
 
 export const getContactDescription = (payload: DbContactType, language: AppLanguageType) => {
   const { online, interactionType, lastSeen: timestamp } = payload
   let result
 
   if (interactionType === 'invite-accepted') {
-    result = online ? (language === APP_LANGUAGE.Ru ? 'в сети' : 'online') : lastSeen(timestamp, language)
+    result = online ? CONTACT_SHARED_I18N.online[language] : lastSeen(timestamp, language)
   }
 
   return result

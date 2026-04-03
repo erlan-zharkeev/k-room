@@ -8,8 +8,7 @@ import { useI18n } from 'src/entities/settings'
 import { useViewport } from 'src/entities/system'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH } from 'src/shared/ui'
-import type { IAppModalProps } from 'src/shared/ui'
+import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH, IAppModalProps } from 'src/shared/ui'
 
 export const AppModal = ({
   title,

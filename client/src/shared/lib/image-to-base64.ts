@@ -1,4 +1,4 @@
-import { type LocalizedTextType } from 'common'
+import { LocalizedTextType } from 'common'
 
 import { NOTIFICATION_I18N, UseNotificationType } from 'src/entities/notification'
 

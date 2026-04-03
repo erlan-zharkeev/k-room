@@ -6,7 +6,7 @@ import { SELECT_DEVICE_I18N } from 'src/features/device/select-device'
 
 import { useI18n } from 'src/entities/settings'
 
-import { AppButton, AppSelect, AppText, type IAppSelectOption, type AppIconNameType } from 'src/shared/ui'
+import { AppButton, AppSelect, AppText, IAppSelectOption, AppIconNameType } from 'src/shared/ui'
 
 export const SelectDevice = ({
   title,

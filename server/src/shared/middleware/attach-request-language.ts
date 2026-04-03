@@ -1,6 +1,6 @@
-import type { NextFunction } from 'express'
+import { NextFunction } from 'express'
 
-import { type AppResponseType, type IAppRequest } from 'src/shared/config'
+import { AppResponseType, IAppRequest } from 'src/shared/config'
 import { getRequestLanguage } from 'src/shared/lib'
 
 export const attachRequestLanguage = (req: IAppRequest, _: AppResponseType<null>, next: NextFunction) => {

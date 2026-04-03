@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const OPEN_DEVICE_SETTINGS_BUTTON_I18N = {
   tooltip: {

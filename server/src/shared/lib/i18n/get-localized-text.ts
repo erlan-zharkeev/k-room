@@ -1,4 +1,4 @@
-import { type AppLanguageType, DEFAULT_APP_LANGUAGE, type LocalizedTextType } from 'common'
+import { AppLanguageType, DEFAULT_APP_LANGUAGE, LocalizedTextType } from 'common'
 
 type LanguageSourceType = AppLanguageType | { language?: AppLanguageType } | null | undefined
 

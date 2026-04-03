@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import type { IAppClickOutsideProps } from 'src/shared/ui'
+import { IAppClickOutsideProps } from 'src/shared/ui'
 
 export const AppClickOutside = ({
   children,

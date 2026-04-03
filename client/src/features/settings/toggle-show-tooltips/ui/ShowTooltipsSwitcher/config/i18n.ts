@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const SHOW_TOOLTIPS_SWITCHER_I18N = {
   label: {

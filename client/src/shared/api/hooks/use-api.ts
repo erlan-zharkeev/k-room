@@ -1,11 +1,10 @@
-import type { AxiosResponse, ResponseType } from 'axios'
+import { AxiosResponse, ResponseType } from 'axios'
 import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common'
 
 import { useNotification } from 'src/entities/notification'
 import { settingsStore } from 'src/entities/settings'
 
-import { useApiInterceptor, axios, IDoRequestOpts } from 'src/shared/api'
-import type { RequestPayloadType, RequestType } from 'src/shared/api'
+import { useApiInterceptor, axios, IDoRequestOpts, RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 
 export const useApi = () => {

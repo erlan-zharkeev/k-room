@@ -1,7 +1,8 @@
-import type { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
-import { type Response } from 'express'
+import { Response } from 'express'
 
-import { SHARED_I18N, type SocketInstanceType } from 'src/shared/config'
+import { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
+
+import { SHARED_I18N, SocketInstanceType } from 'src/shared/config'
 import {
   getIO,
   getLocalizedText,

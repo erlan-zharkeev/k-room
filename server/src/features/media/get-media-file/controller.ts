@@ -3,7 +3,7 @@ import { StatusEnum } from 'common'
 import { MediaBucketNameType } from 'src/entities/media'
 import { streamMediaFile } from 'src/entities/media'
 
-import type { AppResponseType, IAppRequest } from 'src/shared/config'
+import { AppResponseType, IAppRequest } from 'src/shared/config'
 import { getLocalizedText, isAppError, throwHTTPError } from 'src/shared/lib'
 
 import { GET_MEDIA_FILE_I18N } from './config'

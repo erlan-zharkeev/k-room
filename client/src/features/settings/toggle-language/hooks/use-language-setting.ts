@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 
 import { APP_LANGUAGE } from 'common'
 

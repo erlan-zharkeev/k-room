@@ -1,7 +1,7 @@
 import { NextFunction, Request } from 'express'
 import { validationResult } from 'express-validator'
 
-import { type LocalizedTextType, StatusEnum } from 'common'
+import { LocalizedTextType, StatusEnum } from 'common'
 
 import { AppResponseType } from 'src/shared/config'
 import { getLocalizedText } from 'src/shared/lib'

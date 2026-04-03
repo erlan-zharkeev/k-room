@@ -1,6 +1,6 @@
 import './style.scss'
 
-import type { UnknownCallbackType } from 'common'
+import { UnknownCallbackType } from 'common'
 
 import { RoomTypingContact } from 'src/widgets/chat-room'
 

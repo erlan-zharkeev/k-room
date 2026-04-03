@@ -1,4 +1,4 @@
-import type { LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const API_I18N = {
   unknownError: {

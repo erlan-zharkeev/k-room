@@ -1,6 +1,6 @@
 import { useContact } from 'src/entities/contact'
 
-import type { DbContactType } from 'src/shared/config'
+import { DbContactType } from 'src/shared/config'
 
 export const useUpdateContactData = () => {
   const { updateContact } = useContact()

@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ICall, EventCallStartedAtType, EventCallsUpdatedType, EventCallUpdatedType, IEventCallUser } from 'common'
-import type { IBaseFrontendUserData } from 'common'
+import { ICall, EventCallStartedAtType, EventCallsUpdatedType, EventCallUpdatedType, IEventCallUser, IBaseFrontendUserData } from 'common'
 
-import type { CallMediaType, ICallsState, IStreamConstraints } from 'src/entities/call/types'
+import { CallMediaType, ICallsState, IStreamConstraints } from 'src/entities/call/types'
 
 type CallInterlocutorType = IBaseFrontendUserData & { avatar?: string }
 

@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import type { DbMessageType } from 'src/shared/config'
+import { DbMessageType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 export const useMessage = () => {

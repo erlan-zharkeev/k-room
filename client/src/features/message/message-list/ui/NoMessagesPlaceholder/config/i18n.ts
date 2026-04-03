@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const NO_MESSAGES_PLACEHOLDER_I18N = {
   text: {

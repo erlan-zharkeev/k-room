@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node'
 
-import { type ISentryErrorContext, shouldIgnoreSentryError } from 'common'
+import { ISentryErrorContext, shouldIgnoreSentryError } from 'common'
 
 export const serverCaptureSentryException = (error: unknown) => {
   if (!Sentry.isInitialized()) return

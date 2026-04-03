@@ -1,4 +1,4 @@
-import type { IEventUpdateSignal, SocketActionsType } from 'common'
+import { IEventUpdateSignal, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'src/features/user'
 

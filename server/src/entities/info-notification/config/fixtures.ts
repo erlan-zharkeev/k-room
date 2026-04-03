@@ -1,4 +1,4 @@
-import { type IInfoNotification } from 'common'
+import { IInfoNotification } from 'common'
 
 const now = Date.now()
 

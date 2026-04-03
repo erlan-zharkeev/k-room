@@ -4,7 +4,7 @@ import { ChangeEvent, useMemo, useState, forwardRef, ForwardedRef } from 'react'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui'
 
-import type { IAppInputProps } from './config'
+import { IAppInputProps } from './config'
 
 const rootClass = 'app-input'
 

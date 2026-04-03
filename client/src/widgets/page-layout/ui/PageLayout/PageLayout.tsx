@@ -1,5 +1,5 @@
 import './style.scss'
-import { ROUTE_NAMES as R, type RouteNameType } from 'common'
+import { ROUTE_NAMES as R, RouteNameType } from 'common'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout/config'

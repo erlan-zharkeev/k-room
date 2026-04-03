@@ -1,4 +1,4 @@
-import type { IEventChangeMessageStatus, SocketActionsType } from 'common'
+import { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
 import { SocketInstanceType } from 'src/shared/config'
 

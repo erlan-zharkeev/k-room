@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const CONTACT_INVITATION_CONTROL_BTNS_I18N = {
   updatingStatus: {

@@ -1,3 +1,2 @@
-export * from './config/constants'
-export * from './config/types'
-export * from './lib/index'
+export * from './config'
+export * from './lib'

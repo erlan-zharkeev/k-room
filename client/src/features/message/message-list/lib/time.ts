@@ -1,4 +1,4 @@
-import { type AppLanguageType } from 'common'
+import { AppLanguageType } from 'common'
 
 import { formatLocalizedDate } from 'src/shared/lib'
 

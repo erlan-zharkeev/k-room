@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs'
 
-import { type IAuthRegistrationPayload, type ISendConfirmationLinkResponse, StatusEnum } from 'common'
+import { IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
 import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth/shared'
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { createUser, isUserExist } from 'src/features/user'
 
-import { type AppResponseType, type IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, getRequestLanguage, throwHTTPError } from 'src/shared/lib'
 
 import { REGISTRATION_I18N, REGISTRATION_RESEND_INTERVAL_MINUTES } from './config'

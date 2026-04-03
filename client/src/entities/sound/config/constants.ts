@@ -1,4 +1,4 @@
-import type { SoundType } from 'src/entities/sound'
+import { SoundType } from 'src/entities/sound'
 
 export const SOUND_SRC: Record<SoundType, string> = {
   'message-delivered': './sounds/ding.mp3',

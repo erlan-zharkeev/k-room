@@ -1,7 +1,7 @@
-import type { MediaFileValueType } from 'common'
+import { MediaFileValueType } from 'common'
 
-import type { AppIconNameType } from 'src/shared/ui/AppIcon'
-import type { AvatarShapeModifierType } from 'src/shared/ui/config'
+import { AppIconNameType } from 'src/shared/ui/AppIcon'
+import { AvatarShapeModifierType } from 'src/shared/ui/config'
 
 export interface IAvatarLoaderProps {
   path: string | null | undefined

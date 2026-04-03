@@ -1,4 +1,4 @@
-import type { IDbMedia } from 'src/shared/config'
+import { IDbMedia } from 'src/shared/config'
 
 export interface SyncMediaDeps {
   mediaGet: (filename: string) => Promise<IDbMedia | undefined>

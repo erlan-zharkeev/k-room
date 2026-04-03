@@ -1,4 +1,4 @@
-import type { IEventCallEnded, SocketActionsType } from 'common'
+import { IEventCallEnded, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'src/features/user'
 

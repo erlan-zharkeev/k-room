@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const MARK_INFO_NOTIFICATION_AS_READ_I18N = {
   failed: {

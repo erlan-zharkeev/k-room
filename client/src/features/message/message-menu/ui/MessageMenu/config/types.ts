@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
-import type { IMessage } from 'common'
+import { IMessage } from 'common'
 
 export interface IMessageMenuProps {
   message: IMessage

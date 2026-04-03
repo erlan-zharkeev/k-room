@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from 'react'
 
 import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
-import type { SignalData } from 'simple-peer'
+import { SignalData } from 'simple-peer'
 
 import { AppDispatchType } from 'src/app/store'
 
@@ -20,8 +20,7 @@ import {
   setCallSettingsLoading,
   setCallVideo
 } from 'src/entities/call'
-import type { ICallModalBodyProps } from 'src/entities/call/ui'
-import { CALL_MODAL_BODY_I18N } from 'src/entities/call/ui'
+import { ICallModalBodyProps, CALL_MODAL_BODY_I18N } from 'src/entities/call/ui'
 import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'

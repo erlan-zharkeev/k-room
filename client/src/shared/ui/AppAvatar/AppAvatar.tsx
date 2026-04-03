@@ -6,7 +6,7 @@ import { Badge, Image } from 'antd'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppIconNameType, AppIcon } from 'src/shared/ui'
 
-import type { IAppAvatarProps } from './config'
+import { IAppAvatarProps } from './config'
 
 const AvatarBody = ({
   src,

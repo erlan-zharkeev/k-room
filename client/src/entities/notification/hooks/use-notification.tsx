@@ -1,8 +1,7 @@
 import { notification as antdNotification } from 'antd'
 import { IMessage } from 'common'
 
-import { ERROR_NOTIFICATION_DURATION_IN_SEC } from 'src/entities/notification'
-import type { IAppNotification, NotificationType } from 'src/entities/notification'
+import { ERROR_NOTIFICATION_DURATION_IN_SEC, IAppNotification, NotificationType } from 'src/entities/notification'
 import { getNotificationIcon } from 'src/entities/notification/lib'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'

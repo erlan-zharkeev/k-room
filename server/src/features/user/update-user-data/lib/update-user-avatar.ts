@@ -1,4 +1,4 @@
-import { type AppLanguageType } from 'common'
+import { AppLanguageType } from 'common'
 
 import { MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
 import { mediaBuckets } from 'src/entities/media'

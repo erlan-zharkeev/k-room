@@ -1,6 +1,6 @@
-import { type DefaultEventsMap, type Socket } from 'socket.io'
+import { DefaultEventsMap, Socket } from 'socket.io'
 
-import { type AppLanguageType } from 'common'
+import { AppLanguageType } from 'common'
 
 export type SocketInstanceType = Socket<
   DefaultEventsMap,

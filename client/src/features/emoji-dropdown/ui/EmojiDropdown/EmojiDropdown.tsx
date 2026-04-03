@@ -2,7 +2,7 @@ import './style.scss'
 
 import { Dropdown, MenuProps } from 'antd'
 
-import type { IEmojiDropdownProps } from 'src/features/emoji-dropdown/ui'
+import { IEmojiDropdownProps } from 'src/features/emoji-dropdown/ui'
 
 import { EMOJI_LIST } from 'src/entities/emoji'
 

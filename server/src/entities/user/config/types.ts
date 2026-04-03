@@ -1,4 +1,4 @@
-import type { InfoNotificationMapType, InteractionType, ProviderType, UserRoleType } from 'common'
+import { InfoNotificationMapType, InteractionType, ProviderType, UserRoleType } from 'common'
 
 export interface IUserDevice {
   socketId: string

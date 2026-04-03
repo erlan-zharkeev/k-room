@@ -1,10 +1,10 @@
-import { type NextFunction, type Response } from 'express'
+import { NextFunction, Response } from 'express'
 
 import { StatusEnum } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
-import { type IAppRequest,SERVER_ENV } from 'src/shared/config'
+import { IAppRequest,SERVER_ENV } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { AUTH_I18N } from './../config'

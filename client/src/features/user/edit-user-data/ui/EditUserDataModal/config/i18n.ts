@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const EDIT_USER_DATA_MODAL_I18N = {
   usernamePlaceholder: {

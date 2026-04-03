@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs'
 
-import { type IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common'
+import { IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common'
 
 import { mapUserToDto } from 'src/features/user'
 
 import { UserModel } from 'src/entities/user'
 
-import { type AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { updateTokens } from './../shared'

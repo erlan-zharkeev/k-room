@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { useChatRoomSelect, useCreateChatRoom } from 'src/features/chat-room'
 import { CONTACT_MENU_I18N, DeleteContactConfirmModal, useDeleteContact } from 'src/features/contact'
-import type { IContactMenuProps } from 'src/features/contact/contact-menu'
+import { IContactMenuProps } from 'src/features/contact/contact-menu'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/settings'
