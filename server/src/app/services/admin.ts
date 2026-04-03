@@ -2,31 +2,18 @@ import AdminJSExpress from '@adminjs/express'
 import { Database, Resource } from '@adminjs/mongoose'
 import AdminJS from 'adminjs'
 
-import { InfoNotificationModel } from 'src/entities/info-notification'
-import { UserModel } from 'src/entities/user'
+import { ADMIN_INFO_NOTIFICATION_OPTIONS } from 'src/entities/info-notification'
+import { ADMIN_USER_OPTIONS } from 'src/entities/user'
 
 import { SERVER_ENV } from 'src/shared/config'
 
 AdminJS.registerAdapter({ Database, Resource })
 
-export const ADMIN_ROOT_PATH = '/admin-panel'
-
 export const admin = new AdminJS({
-  rootPath: ADMIN_ROOT_PATH,
-  resources: [
-    {
-      resource: InfoNotificationModel,
-      options: {
-        navigation: 'Content'
-      }
-    },
-    {
-      resource: UserModel,
-      options: {
-        navigation: 'Users'
-      }
-    }
-  ]
+  rootPath: SERVER_ENV.adminRootPath,
+  loginPath: SERVER_ENV.adminLoginPath,
+  logoutPath: SERVER_ENV.adminLogoutPath,
+  resources: [ADMIN_INFO_NOTIFICATION_OPTIONS, ADMIN_USER_OPTIONS]
 })
 
 export const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
@@ -39,7 +26,7 @@ export const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
 
       return null
     },
-    cookieName: 'k-room-admin',
+    cookieName: SERVER_ENV.adminCookie,
     cookiePassword: SERVER_ENV.refreshTokenSecret
   },
   null,
@@ -47,7 +34,7 @@ export const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
     secret: SERVER_ENV.refreshTokenSecret,
     resave: false,
     saveUninitialized: true,
-    name: 'k-room-admin',
+    name: SERVER_ENV.adminCookie,
     cookie: {
       httpOnly: true,
       secure: !SERVER_ENV.isDev

@@ -17,4 +17,8 @@ export interface IServerEnv {
   adminPassword: string
   sentryEnvironment: string
   sentryEnabled: boolean
+  adminRootPath: string
+  adminLoginPath: string
+  adminLogoutPath: string
+  adminCookie: string
 }

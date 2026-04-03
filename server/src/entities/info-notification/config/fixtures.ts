@@ -1,5 +1,9 @@
 import { IInfoNotification } from 'common'
 
+import { log } from 'src/shared/lib'
+
+import { InfoNotificationModel } from '../model'
+
 const now = Date.now()
 
 export const INFO_NOTIFICATION_FIXTURES: IInfoNotification[] = [
@@ -28,3 +32,23 @@ export const INFO_NOTIFICATION_FIXTURES: IInfoNotification[] = [
     updatedAt: now
   }
 ]
+
+export const loadInfoNotificationFixtures = async () => {
+  const results = await Promise.all(
+    INFO_NOTIFICATION_FIXTURES.map(async (fixture) => {
+      const existingNotification = await InfoNotificationModel.findOne({ id: fixture.id }, { id: 1 }).lean()
+
+      if (existingNotification) {
+        return 'skipped'
+      }
+
+      await InfoNotificationModel.create(fixture)
+      return 'created'
+    })
+  )
+
+  const created = results.filter((result) => result === 'created').length
+  const skipped = results.filter((result) => result === 'skipped').length
+
+  log.info(`-Info notification fixtures processed: created=${created}, skipped=${skipped}, failed=0`)
+}
