@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const VALIDATE_MEDIA_FILE_I18N = {
   uploadFailed: {

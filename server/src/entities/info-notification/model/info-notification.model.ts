@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose'
 
-import { type IInfoNotification } from 'common'
+import { IInfoNotification } from 'common'
 
 const localizedTextSchema = {
   en: {

@@ -1,4 +1,4 @@
-import type { IChatRoom } from 'common'
+import { IChatRoom } from 'common'
 
 export interface IRoomTypingContactProps {
   room: IChatRoom

@@ -1,7 +1,6 @@
 import './style.scss'
 
-import { DELETE_CONTACT_I18N } from 'src/features/contact'
-import type { IDeleteContactConfirmModalProps } from 'src/features/contact'
+import { DELETE_CONTACT_I18N, IDeleteContactConfirmModalProps } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/settings'
 

@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import type { DbContactType } from 'src/shared/config'
+import { DbContactType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
 
 // import { MOCK } from 'src/entities/contact/config'

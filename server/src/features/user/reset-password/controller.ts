@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-import { type ICreateNewPasswordPayload, StatusEnum } from 'common'
+import { ICreateNewPasswordPayload, StatusEnum } from 'common'
 
 import { isCodeExpired } from 'src/features/code'
 

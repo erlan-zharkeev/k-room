@@ -4,7 +4,7 @@ import './style.scss'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import type { IAppIconListElement, IAppIconProps } from './config'
+import { IAppIconListElement, IAppIconProps } from './config'
 import LogoIcon from './config/icons/app-logo.svg?react'
 import ArrowDownIcon from './config/icons/arrow-down.svg?react'
 import ArrowLeftIcon from './config/icons/arrow-left.svg?react'

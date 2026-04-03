@@ -1,4 +1,4 @@
-import type { LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const DELETE_CONTACT_I18N = {
   modalTitle: {

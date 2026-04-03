@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const SEND_CONFIRMATION_LINK_I18N = {
   confirmationLinkSent: {

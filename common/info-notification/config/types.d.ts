@@ -1,4 +1,4 @@
-import type { LocalizedTextType } from 'common/language';
+import { LocalizedTextType } from 'common/language';
 import { INFO_NOTIFICATION_STATUS } from './constants';
 export type InfoNotificationStatusType = (typeof INFO_NOTIFICATION_STATUS)[number];
 export type InfoNotificationType = InfoNotificationStatusType;

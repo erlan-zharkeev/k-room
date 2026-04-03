@@ -1,4 +1,4 @@
-import { type AppLanguageType } from 'common'
+import { AppLanguageType } from 'common'
 import moment from 'moment'
 
 import { formatLocalizedDate, formatLocalizedTime } from 'src/shared/lib'

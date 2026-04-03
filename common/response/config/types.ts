@@ -1,4 +1,4 @@
-import type { IFrontendUserData } from 'common/user'
+import { IFrontendUserData } from 'common/user'
 
 export interface IConfirmEmailResponse {
   email: string

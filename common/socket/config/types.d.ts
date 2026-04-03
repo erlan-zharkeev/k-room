@@ -1,11 +1,11 @@
-import type { ICall } from 'common/calls';
-import type { IChatRoom } from 'common/chat';
-import type { FrontendContactMapType, IFrontendContact, InteractionType } from 'common/contact';
-import type { AppLanguageType } from 'common/language';
-import type { MediaFileValueType } from 'common/media';
-import type { IMessage, IReaction, MessageStatusType } from 'common/message';
-import type { IBasicStreamSettings } from 'common/shared';
-import type { IBaseFrontendUserData } from 'common/user';
+import { ICall } from 'common/calls';
+import { IChatRoom } from 'common/chat';
+import { FrontendContactMapType, IFrontendContact, InteractionType } from 'common/contact';
+import { AppLanguageType } from 'common/language';
+import { MediaFileValueType } from 'common/media';
+import { IMessage, IReaction, MessageStatusType } from 'common/message';
+import { IBasicStreamSettings } from 'common/shared';
+import { IBaseFrontendUserData } from 'common/user';
 export interface IEventInterlocutorUpdateSignal {
     signal: unknown;
 }

@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const CALL_MODAL_BODY_I18N = {
   outgoingCall: {

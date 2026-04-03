@@ -1,6 +1,6 @@
 import { useSettings } from 'src/entities/settings'
 
-import type { ThemeType } from 'src/shared/config'
+import { ThemeType } from 'src/shared/config'
 
 export const useThemeUpdate = () => {
   const settings = useSettings()

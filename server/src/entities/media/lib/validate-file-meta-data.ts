@@ -1,10 +1,10 @@
-import { type AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, StatusEnum } from 'common'
 
 import { AppError, getLocalizedText } from 'src/shared/lib'
 
 import {
-  type IFileData,
-  type MediaBucketNameType,
+  IFileData,
+  MediaBucketNameType,
   VALIDATE_MEDIA_FILE_I18N,
   VALIDATION_MEDIA_OPTIONS_MAP
 } from './../config'

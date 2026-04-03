@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { UserModel } from 'src/entities/user'
 
-import type { UserExistResultType } from './types'
+import { UserExistResultType } from './types'
 
 export const isUserExist = async ({
   username,

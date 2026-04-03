@@ -2,8 +2,7 @@ import './style.scss'
 
 import { ROUTE_NAMES } from 'common'
 
-import type { IPrivacyPolicySwitchProps } from 'src/features/auth/registration'
-import { PRIVACY_POLICY_SWITCH_I18N } from 'src/features/auth/registration'
+import { IPrivacyPolicySwitchProps, PRIVACY_POLICY_SWITCH_I18N } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/settings'
 

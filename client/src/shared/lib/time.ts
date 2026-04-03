@@ -1,4 +1,4 @@
-import { APP_LANGUAGE, type AppLanguageType } from 'common'
+import { APP_LANGUAGE, AppLanguageType } from 'common'
 import moment from 'moment'
 import 'moment/locale/ru'
 

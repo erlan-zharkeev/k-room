@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/node'
-import type { Express } from 'express'
+import { Express } from 'express'
 
 import { shouldIgnoreSentryError } from 'common'
 

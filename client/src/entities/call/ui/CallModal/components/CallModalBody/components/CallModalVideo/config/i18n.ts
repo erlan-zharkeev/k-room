@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const CALL_MODAL_VIDEO_I18N = {
   audioOff: {

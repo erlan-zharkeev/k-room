@@ -1,6 +1,5 @@
 import './style.scss'
-import type { IMessageBodyProps } from 'src/features/message/message-body'
-import { MessageImages, MessageReactions, MessageTime, RepliedMessage } from 'src/features/message/message-body'
+import { IMessageBodyProps, MessageImages, MessageReactions, MessageTime, RepliedMessage } from 'src/features/message/message-body'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'

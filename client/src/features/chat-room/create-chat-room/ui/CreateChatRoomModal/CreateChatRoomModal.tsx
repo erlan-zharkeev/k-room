@@ -1,5 +1,4 @@
-import type { ICreateChatRoomModalProps } from 'src/features/chat-room'
-import { CreateChatRoomForm } from 'src/features/chat-room'
+import { ICreateChatRoomModalProps, CreateChatRoomForm } from 'src/features/chat-room'
 
 export const CreateChatRoomModal = ({ onSuccess }: ICreateChatRoomModalProps) => {
   return (

@@ -1,11 +1,11 @@
-import { type LocalizedTextType } from 'common'
+import { AppLanguageType, DEFAULT_APP_LANGUAGE, LocalizedTextType } from 'common'
 
-import { getLocalizedText, useSettings } from './../'
+import { useSettings } from './../'
 
 export const useI18n = () => {
-  const { language } = useSettings()
+  const { language }: { language: AppLanguageType } = useSettings()
 
-  const t = <T>(texts: LocalizedTextType<T>) => getLocalizedText(texts, language)
+  const t = <T>(texts: LocalizedTextType<T>): T => texts[language] ?? texts[DEFAULT_APP_LANGUAGE]
 
   return {
     language,

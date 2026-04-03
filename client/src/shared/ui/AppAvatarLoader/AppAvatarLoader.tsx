@@ -3,8 +3,7 @@ import { useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/settings'
 
 import { createClassNameWithModifiers, imageToBase64 } from 'src/shared/lib'
-import { AppAvatar, AppIcon } from 'src/shared/ui'
-import type { IAvatarLoaderProps } from 'src/shared/ui'
+import { AppAvatar, AppIcon, IAvatarLoaderProps } from 'src/shared/ui'
 
 export const AppAvatarLoader = ({
   path,

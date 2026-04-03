@@ -4,7 +4,7 @@ import { updateTokens } from 'src/features/auth'
 
 import { UserModel } from 'src/entities/user'
 
-import { type AppResponseType, type IAppRequest, SHARED_I18N } from 'src/shared/config'
+import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
 import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { mapUserToDto, USER_I18N } from './../shared'

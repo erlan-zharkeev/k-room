@@ -2,13 +2,12 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
-import type { UnknownCallbackType } from 'common'
+import { UnknownCallbackType } from 'common'
 
-import type { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
+import { ProfileInfoAvatarSizeType } from 'src/entities/profile-info'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import type { AppIconNameType, AvatarShapeModifierType, BaseSizeModifierType } from 'src/shared/ui'
-import { AppAvatar, AppText } from 'src/shared/ui'
+import { AppIconNameType, AvatarShapeModifierType, BaseSizeModifierType, AppAvatar, AppText } from 'src/shared/ui'
 
 export const ProfileInfo = ({
   avatar,

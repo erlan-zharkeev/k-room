@@ -1,4 +1,4 @@
-import type { InfoNotificationMapType } from 'common/info-notification';
+import { InfoNotificationMapType } from 'common/info-notification';
 import { USER_ROLES } from './constants';
 export type UserRoleType = (typeof USER_ROLES)[number];
 export interface IBaseFrontendUserData {

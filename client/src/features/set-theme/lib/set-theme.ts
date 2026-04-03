@@ -1,4 +1,4 @@
-import type { ThemeType } from 'src/shared/config'
+import { ThemeType } from 'src/shared/config'
 
 export const setThemeToDom = (theme: ThemeType) => {
   const html = document.querySelector('html')

@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const GET_USER_DATA_I18N = {
   failedGetUserData: {

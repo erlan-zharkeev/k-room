@@ -1,4 +1,4 @@
-import type { EventCallStartedAtType, IEventAnswerCall, IEventCallAccepted, SocketActionsType } from 'common'
+import { EventCallStartedAtType, IEventAnswerCall, IEventCallAccepted, SocketActionsType } from 'common'
 
 import { getSocketsByUserIds } from 'src/features/user'
 

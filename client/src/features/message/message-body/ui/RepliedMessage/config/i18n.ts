@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const REPLIED_MESSAGE_I18N = {
   forwarded: {

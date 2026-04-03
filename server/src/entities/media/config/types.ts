@@ -1,6 +1,7 @@
-import type { MediaKindType } from 'common'
-import type { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
+
+import { MediaKindType } from 'common'
 
 import { SharpSettingsKeyType } from 'src/shared/config'
 

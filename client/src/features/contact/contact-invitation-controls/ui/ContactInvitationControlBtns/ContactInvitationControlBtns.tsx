@@ -1,7 +1,7 @@
 import './style.scss'
 
-import type { IContactInvitationControlBtnsProps } from 'src/features/contact/contact-invitation-controls'
 import {
+ IContactInvitationControlBtnsProps,
   useContactInvitationControls,
   CONTACT_INVITATION_CONTROL_BTNS_I18N
 } from 'src/features/contact/contact-invitation-controls'

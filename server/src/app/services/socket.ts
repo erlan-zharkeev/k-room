@@ -1,15 +1,15 @@
-import type { Server as HttpServer } from 'http'
-import type { Server as HttpsServer } from 'https'
+import { Server as HttpServer } from 'http'
+import { Server as HttpsServer } from 'https'
 import { Server } from 'socket.io'
 
-import { type SocketActionsType } from 'common'
+import { SocketActionsType } from 'common'
 
 import { MAX_HTTP_BUFFER_SIZE } from 'src/app/config'
 import { socketRouter } from 'src/app/services'
 
 import { socketAuthMiddleware } from 'src/features/auth'
 
-import { ORIGINS, SERVER_ENV, type SocketInstanceType } from 'src/shared/config'
+import { ORIGINS, SERVER_ENV, SocketInstanceType } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
 
 type SocketServerType = HttpServer | HttpsServer

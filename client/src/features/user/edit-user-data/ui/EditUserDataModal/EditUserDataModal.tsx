@@ -1,7 +1,6 @@
 import './style.scss'
 
-import type { IEditUserDataModalProps } from 'src/features/user'
-import { EDIT_USER_DATA_MODAL_I18N, useEditUserData } from 'src/features/user'
+import { IEditUserDataModalProps, EDIT_USER_DATA_MODAL_I18N, useEditUserData } from 'src/features/user'
 
 import { useI18n } from 'src/entities/settings'
 

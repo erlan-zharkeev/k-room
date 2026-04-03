@@ -1,15 +1,13 @@
 import * as processLib from 'process'
 
-import { useRef } from 'react'
-import type { ReactNode } from 'react'
+import { useRef, ReactNode } from 'react'
 
 import * as Sentry from '@sentry/react'
 import { initializeApp } from 'firebase/app'
 import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
-import type { IProvidersProps } from 'src/app/providers'
-import { ErrorFallback } from 'src/app/providers'
+import { IProvidersProps, ErrorFallback } from 'src/app/providers'
 import { FIREBASE_CONFIG } from 'src/app/providers/config'
 import { store } from 'src/app/store'
 

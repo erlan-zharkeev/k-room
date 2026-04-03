@@ -1,5 +1,5 @@
 import { StatusEnum } from 'common/status'
-import type { ISentryErrorContext } from '../config'
+import { ISentryErrorContext } from '../config'
 
 import { SENTRY_IGNORED_SUBSTRINGS } from '../config'
 

@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const AUDIO_OUTPUT_DEVICE_SELECT_I18N = {
   title: {

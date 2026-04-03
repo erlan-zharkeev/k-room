@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const CREATE_CHAT_ROOM_FORM_I18N = {
   queryPlaceholder: {

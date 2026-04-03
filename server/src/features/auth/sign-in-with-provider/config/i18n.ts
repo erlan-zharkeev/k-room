@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const SIGN_IN_WITH_PROVIDER_I18N = {
   failed: {

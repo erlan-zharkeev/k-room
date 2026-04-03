@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie'
 
-import type {
+import {
   DbUserSettingType,
   DbContactType,
   IDbMedia,

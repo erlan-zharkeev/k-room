@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const AUTH_TABS_LAYOUT_I18N = {
   login: {

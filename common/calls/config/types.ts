@@ -1,4 +1,4 @@
-import type { IStreamSettings } from 'common/shared'
+import { IStreamSettings } from 'common/shared'
 
 export type CallStatusType = 'calling' | 'in-progress' | 'finished'
 

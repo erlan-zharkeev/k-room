@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const SHORT_CHAT_LIST_I18N = {
   chooseRoom: {

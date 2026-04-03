@@ -4,7 +4,7 @@ import { useContentTabSelect } from 'src/features/content-tab'
 
 import { useSettings } from 'src/entities/settings'
 
-import type { ContentTabType } from 'src/shared/config'
+import { ContentTabType } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import { BUTTONS } from './config'

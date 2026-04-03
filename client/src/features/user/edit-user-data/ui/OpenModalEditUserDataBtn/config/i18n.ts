@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const OPEN_MODAL_EDIT_USER_DATA_BTN_I18N = {
   link: {

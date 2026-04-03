@@ -1,9 +1,9 @@
-import type { Table } from 'dexie'
+import { Table } from 'dexie'
 import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
 
-import type { MutableType, IndexableType } from 'src/shared/lib/db/config'
+import { MutableType, IndexableType } from 'src/shared/lib/db/config'
 
 export const dexieKeyValueStore = <T extends object, L extends string = '__key'>(
   table: Table<T & Record<L, string>>,

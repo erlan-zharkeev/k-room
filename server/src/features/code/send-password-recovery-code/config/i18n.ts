@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const SEND_PASSWORD_RECOVERY_CODE_I18N = {
   codeSent: {

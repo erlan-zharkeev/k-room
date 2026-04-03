@@ -1,6 +1,6 @@
 import { InteractionType } from 'common'
 
-import type { AppIconNameType, ColorModifierType } from 'src/shared/ui'
+import { AppIconNameType, ColorModifierType } from 'src/shared/ui'
 
 export const NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP: Record<
   Exclude<InteractionType, 'default' | 'invite-hidden'>,

@@ -1,10 +1,10 @@
 // AppLink.tsx
 import './style.scss'
-import type { UnknownCallbackType } from 'common'
-import { Link as RouterLink, type To } from 'react-router-dom'
+import { UnknownCallbackType } from 'common'
+import { Link as RouterLink, To } from 'react-router-dom'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import type { ColorModifierType } from 'src/shared/ui/config'
+import { ColorModifierType } from 'src/shared/ui/config'
 
 interface Props {
   text: string

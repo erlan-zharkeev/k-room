@@ -1,4 +1,4 @@
-import type { IImageObject } from 'common/media';
+import { IImageObject } from 'common/media';
 import { MESSAGE_STATUS } from './constants';
 export type MessageStatusType = (typeof MESSAGE_STATUS)[number];
 export interface IMessageMetaData {

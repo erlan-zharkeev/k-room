@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
 
-import { type AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, StatusEnum } from 'common'
 
 import { AppError, getLocalizedText, isAppError } from 'src/shared/lib'
 

@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { Rnd } from 'react-rnd'
 
-import type { IModalOptions } from 'src/entities/call'
-import { CALL_MODAL_INITIAL_SIZE } from 'src/entities/call'
+import { IModalOptions, CALL_MODAL_INITIAL_SIZE } from 'src/entities/call'
 import { CallModalBody } from 'src/entities/call/ui'
 import { useViewport } from 'src/entities/system'
 

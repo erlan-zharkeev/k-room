@@ -1,4 +1,4 @@
-import type { ProviderType } from 'common/shared'
+import { ProviderType } from 'common/shared'
 
 export interface IAuthLoginPayload {
   email: string

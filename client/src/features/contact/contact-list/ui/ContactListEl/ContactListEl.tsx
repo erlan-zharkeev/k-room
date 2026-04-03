@@ -4,7 +4,7 @@ import {
   ContactMenu,
   lastSeen
 } from 'src/features/contact'
-import type { IContactListElProps } from 'src/features/contact/contact-list'
+import { IContactListElProps } from 'src/features/contact/contact-list'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'

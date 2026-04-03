@@ -1,5 +1,6 @@
-import type { IChatRoomSchema } from 'common'
 import { model, Schema } from 'mongoose'
+
+import { IChatRoomSchema } from 'common'
 
 const chatRoomSchema = new Schema<IChatRoomSchema>(
   {

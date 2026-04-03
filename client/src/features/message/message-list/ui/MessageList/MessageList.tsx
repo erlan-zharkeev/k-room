@@ -6,8 +6,8 @@ import { IMessage } from 'common'
 import { Virtuoso } from 'react-virtuoso'
 
 import { MessageListLoader, NoMessagesPlaceholder, useLoadRoomMessages } from 'src/features/message'
-import type { IMessageListProps } from 'src/features/message/message-list'
 import {
+ IMessageListProps,
   DateSeparator,
   getMessageGroupDateLabel,
   MessageListEl,

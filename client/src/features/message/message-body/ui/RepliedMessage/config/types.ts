@@ -1,4 +1,4 @@
-import type { IMessage } from 'common'
+import { IMessage } from 'common'
 
 export interface IRepliedMessageProps {
   message: IMessage

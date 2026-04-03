@@ -134,18 +134,7 @@ import { dexieKeyValueStore } from 'src/shared/lib/db/lib/dexie-key-value-store'
 import { useValidate } from 'src/shared/lib/hooks/use-validate/use-validate'
 ```
 
-8. Type imports must use `import type`.
-
-Use:
-
-```ts
-import type { IUserSetting } from 'src/shared/config'
-import type { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout'
-```
-
-Do not mix type-only imports into regular `import` statements when `import type` can be used.
-
-9. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
+8. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
 
 If `enum` is used, member keys must be written only in `PascalCase`.
 
@@ -201,7 +190,7 @@ export interface IMessageList { ... }
 export interface IContactAvatar { ... }
 ```
 
-3. Component props interfaces must be placed in `config/types.ts` within that component's directory and imported with `import type`.
+3. Component props interfaces must be placed in `config/types.ts` within that component's directory.
 
 Use:
 
@@ -210,7 +199,7 @@ Use:
 export interface IMessageListProps { room: FChatRoomType }
 
 // MessageList/MessageList.tsx
-import type { IMessageListProps } from 'src/features/message/message-list/ui/MessageList/config'
+import { IMessageListProps } from 'src/features/message/message-list/ui/MessageList/config'
 
 export const MessageList = ({ room }: IMessageListProps) => { ... }
 ```

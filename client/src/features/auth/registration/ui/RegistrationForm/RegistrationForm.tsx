@@ -1,5 +1,5 @@
 import './style.scss'
-import type { IAuthRegistrationPayload } from 'common'
+import { IAuthRegistrationPayload } from 'common'
 
 import { PrivacyPolicySwitch, REGISTRATION_FORM_I18N, RegistrationFormProps } from 'src/features/auth/registration'
 

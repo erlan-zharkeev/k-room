@@ -1,4 +1,4 @@
-import type { BaseSizeModifierType } from 'src/shared/ui/config'
+import { BaseSizeModifierType } from 'src/shared/ui/config'
 
 export interface IDotsAnimatedTextProps {
   text: string

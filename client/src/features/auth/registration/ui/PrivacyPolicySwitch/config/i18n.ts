@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const PRIVACY_POLICY_SWITCH_I18N = {
   agreement: {

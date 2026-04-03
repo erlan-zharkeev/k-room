@@ -1,4 +1,4 @@
-import { type LocalizedTextMapType } from 'common'
+import { LocalizedTextMapType } from 'common'
 
 export const CREATE_NEW_PASSWORD_BODY_I18N = {
   success: {
