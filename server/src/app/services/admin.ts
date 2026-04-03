@@ -13,6 +13,10 @@ export const admin = new AdminJS({
   rootPath: SERVER_ENV.adminRootPath,
   loginPath: SERVER_ENV.adminLoginPath,
   logoutPath: SERVER_ENV.adminLogoutPath,
+  branding: {
+    companyName: SERVER_ENV.appName,
+    favicon: '/admin-favicon.svg'
+  },
   resources: [ADMIN_INFO_NOTIFICATION_OPTIONS, ADMIN_USER_OPTIONS]
 })
 

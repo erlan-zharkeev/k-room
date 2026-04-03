@@ -4,8 +4,8 @@ import { WELCOME_INFO_NOTIFICATION_ID } from 'common'
 
 import { log } from 'src/shared/lib'
 
-import { InfoNotificationModel } from '../model'
-import { UserModel } from '../../user'
+import { UserModel } from './../../user'
+import { InfoNotificationModel } from './../model'
 
 type InfoNotificationFixtureType = {
   _id: Types.ObjectId

@@ -11,7 +11,7 @@ Object.assign(globalThis, {
     isE2E: false,
     appName: 'K-Room',
     appVersion: 'test',
-    supportEmail: '',
+    supportEmail: 'support@k-room.space',
     socketBaseUrl: 'https://localhost:3000',
     apiPath: '/api',
     socketPath: '/app-socket',
@@ -26,7 +26,7 @@ Object.assign(globalThis, {
     sentryEnabled: false,
     themeBg: '#020202',
     themeAccent: '#418fde',
-    themeText: 'rgb(177 177 177 / 58.7%)'
+    themeText: 'rgb(177 177 177 / 60%)'
   } satisfies IClientEnv
 })
 

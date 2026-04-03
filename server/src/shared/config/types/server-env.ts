@@ -1,4 +1,5 @@
 export interface IServerEnv {
+  appName: string
   appVersion: string
   isDev: boolean
   apiPath: string

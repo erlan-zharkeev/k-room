@@ -11,6 +11,7 @@
     }
   },
   "include": [
+    "../common/**/*.ts",
     "vite.config.ts",
     "vitest.config.ts",
     "vite.pwa.config.ts"
