@@ -1,7 +1,7 @@
 import { ICall } from 'common/calls'
 import { IChatRoom } from 'common/chat'
 import { FrontendContactMapType, IFrontendContact, InteractionType } from 'common/contact'
-import { IUserInfoNotification } from 'common/info-notification'
+import { InfoNotificationStatusType, IUserInfoNotification } from 'common/info-notification'
 import { AppLanguageType } from 'common/language'
 import { MediaFileValueType } from 'common/media'
 import { IMessage, IReaction, MessageStatusType } from 'common/message'
@@ -186,6 +186,11 @@ export interface IEventUpdateLanguage {
   language: AppLanguageType
 }
 
+export interface IEventInfoNotificationStatusUpdated {
+  id: string
+  status: InfoNotificationStatusType
+}
+
 export type SocketActionsType =
   | 'connection'
   | 'error'
@@ -242,6 +247,7 @@ export type SocketActionsType =
   | 'contact-interaction-updated'
   | 'actual-contacts'
   | 'actual-info-notifications'
+  | 'info-notification-status-updated'
   | 'mark-info-notification-as-read'
   | 'actual-messages'
   | 'actualize-user-data'

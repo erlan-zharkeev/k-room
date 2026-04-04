@@ -2,11 +2,12 @@ import { Fragment, createElement } from 'react'
 
 import { useLiveQuery } from 'dexie-react-hooks'
 
-import { INFO_NOTIFICATIONS_I18N } from 'src/entities/info-notification'
 import { useI18n } from 'src/entities/settings'
 
 import { DbInfoNotificationType } from 'src/shared/config'
 import { db } from 'src/shared/lib'
+
+import { INFO_NOTIFICATIONS_I18N } from './../config'
 
 export const useInfoNotification = () => {
   const { t } = useI18n()
@@ -25,8 +26,8 @@ export const useInfoNotification = () => {
     await db['info-notifications'].bulkPut(payload)
   }
 
-  const updateInfoNotification = async (id: string, patch: Partial<DbInfoNotificationType>) => {
-    await db['info-notifications'].update(id, patch)
+  const updateInfoNotificationStatus = async (id: string, status: DbInfoNotificationType['status']) => {
+    await db['info-notifications'].update(id, { status })
   }
 
   const reset = () => db['info-notifications'].clear()
@@ -54,7 +55,7 @@ export const useInfoNotification = () => {
     isRead,
     putInfoNotification,
     bulkPutInfoNotifications,
-    updateInfoNotification,
+    updateInfoNotificationStatus,
     reset
   }
 }

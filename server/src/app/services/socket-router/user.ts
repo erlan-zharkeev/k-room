@@ -1,6 +1,6 @@
+import { markInfoNotificationAsReadController } from 'src/features/info-notification'
 import {
   actualizeUserDataController,
-  markInfoAsReadController,
   updateLanguageController,
   userConnectController,
   userDisconnectController
@@ -13,7 +13,7 @@ const controllers = [
   userDisconnectController,
   updateLanguageController,
   actualizeUserDataController,
-  markInfoAsReadController
+  markInfoNotificationAsReadController
 ]
 
 export const socketUserRouter = (socket: SocketInstanceType) => {
