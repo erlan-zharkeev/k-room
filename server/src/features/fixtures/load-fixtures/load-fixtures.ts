@@ -1,7 +1,8 @@
-import { loadDialogFixtures } from 'src/features/fixtures'
+import { loadUserFixtures } from 'src/features/user'
 
 import { loadInfoNotificationFixtures } from 'src/entities/info-notification'
-import { loadUserFixtures } from 'src/entities/user'
+
+import { loadDialogFixtures } from './lib'
 
 export const loadFixtures = async () => {
   await loadInfoNotificationFixtures()
