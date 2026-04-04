@@ -11,7 +11,7 @@ import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'src/app/conf
 
 import { SERVER_ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
-import { attachRequestLanguage } from 'src/shared/middleware'
+import { httpRequestLanguageMiddleware } from 'src/shared/middleware'
 
 import { adminRouter } from './admin'
 import { initDataBase } from './database'
@@ -29,7 +29,7 @@ app.get('/admin-favicon.svg', (_req, res) => {
 app.use(SERVER_ENV.adminRootPath, adminRouter)
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use(attachRequestLanguage)
+app.use(httpRequestLanguageMiddleware)
 app.use(SERVER_ENV.apiPath, rootRouter)
 setupSentryErrorHandler(app)
 

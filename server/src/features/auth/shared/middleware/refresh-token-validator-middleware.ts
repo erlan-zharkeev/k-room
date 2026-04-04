@@ -13,7 +13,7 @@ import { updateTokens, verifyToken } from './../lib'
 const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
   throwHTTPError(StatusEnum.NotAuth, res, getLocalizedText(AUTH_I18N.nonAuthorized, req.language), silent)
 
-export const refreshTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
+export const refreshTokenValidatorMiddleware = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']
 
   if (!refreshToken) {

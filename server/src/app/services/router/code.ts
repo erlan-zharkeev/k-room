@@ -9,19 +9,19 @@ import {
   validatePasswordRecoveryCodeController
 } from 'src/features/code'
 
-import { validateRequest } from 'src/shared/middleware'
+import { validateRequestMiddleware } from 'src/shared/middleware'
 
 export const codeRouter = Router()
 
 codeRouter.post(
   CODES_ENDPOINTS.sendEmailCodePasswordRecovery,
   SEND_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
-  validateRequest,
+  validateRequestMiddleware,
   sendPasswordRecoveryCodeController
 )
 codeRouter.post(
   CODES_ENDPOINTS.validateEmailCodePasswordRecovery,
   VALIDATE_PASSWORD_RECOVERY_CODE_FIELDS_VALIDATION,
-  validateRequest,
+  validateRequestMiddleware,
   validatePasswordRecoveryCodeController
 )
