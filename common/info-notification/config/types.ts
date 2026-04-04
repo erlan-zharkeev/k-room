@@ -13,7 +13,6 @@ export interface IInfoNotification {
   updatedAt: number
 }
 
-export type InfoNotificationType = IInfoNotification
 export type InfoNotificationMapType = Record<string, InfoNotificationStatusType>
 
 export interface IUserInfoNotification extends IInfoNotification {

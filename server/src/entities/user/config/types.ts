@@ -37,4 +37,6 @@ export interface IUserSchema {
   system: IUserSystemData
   personal: IUserPersonalData
   public: IUserPublicData
+  createdAt?: Date
+  updatedAt?: Date
 }

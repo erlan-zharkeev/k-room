@@ -7,24 +7,28 @@ import { UserModel } from 'src/entities/user'
 import { AppError, getLocalizedText } from 'src/shared/lib'
 
 import { INFO_NOTIFICATION_SHARED_I18N } from './../config'
+import { emitInfoNotificationToUsers } from './emit-info-notification-to-users'
 
 export const publishInfoNotificationToAllUsers = async (
   notificationId: string,
   language: AppLanguageType,
   publishAgain: boolean = false
 ) => {
-  const notification = await InfoNotificationModel.exists({ _id: notificationId })
+  const notification = await InfoNotificationModel.findById(notificationId).lean()
 
   if (!notification) {
     throw new AppError(StatusEnum.NotFound, getLocalizedText(INFO_NOTIFICATION_SHARED_I18N.notFound, language))
   }
 
-  await InfoNotificationModel.updateOne({ _id: notificationId }, { $set: { isActive: true, updatedAt: Date.now() } })
+  const publishedAt = Date.now()
+
+  await InfoNotificationModel.updateOne({ _id: notificationId }, { $set: { isActive: true, updatedAt: publishedAt } })
 
   const users = await UserModel.find().select('_id').lean()
   const states = await InfoNotificationStateModel.find().select('userId infoNotifications').lean()
   const stateByUserId = new Map(states.map((state) => [String(state.userId), state]))
   const updateRequests: Promise<unknown>[] = []
+  const recipientUserIds: string[] = []
 
   users.forEach((user) => {
     const userId = String(user._id)
@@ -34,6 +38,8 @@ export const publishInfoNotificationToAllUsers = async (
     )
 
     if (userAlreadyHasInfoNotification && !publishAgain) return
+
+    recipientUserIds.push(userId)
 
     updateRequests.push(
       updateInfoNotificationStateStatus({
@@ -45,4 +51,15 @@ export const publishInfoNotificationToAllUsers = async (
   })
 
   await Promise.all(updateRequests)
+
+  await emitInfoNotificationToUsers({
+    userIds: recipientUserIds,
+    notification: {
+      ...notification,
+      id: String(notification._id),
+      isActive: true,
+      updatedAt: publishedAt,
+      status: 'unread' as const
+    }
+  })
 }
