@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import { IBackendResponse, SocketActionsType, StatusEnum } from 'common'
+import { IBackendResponse, LocalizedTextType, SocketActionsType, StatusEnum } from 'common'
 
 import { SHARED_I18N, SocketInstanceType } from 'src/shared/config'
 import {
@@ -47,15 +47,32 @@ export const throwHTTPError = (
 
 export const throwSocketError = (
   socketId: string,
-  error?: string | null,
-  status: StatusEnum | undefined = 500,
-  silent: boolean = false
+  basicError?: string | LocalizedTextType<string> | null,
+  options?: {
+    status?: StatusEnum
+    silent?: boolean
+    cause?: unknown
+  }
 ) => {
   const io = getIO()
   const socket = io.sockets.sockets.get(socketId) as SocketInstanceType | undefined
-  const message = error?.trim() || getLocalizedText(SHARED_I18N.commonServerError, socket?.data)
+  const preparedMessage =
+    typeof basicError === 'string'
+      ? basicError.trim()
+      : basicError
+        ? getLocalizedText(basicError, socket?.data).trim()
+        : ''
+  const message = preparedMessage || getLocalizedText(SHARED_I18N.commonServerError, socket?.data)
+  const status = options?.status ?? StatusEnum.Server
+  const silent = options?.silent ?? false
 
   log.error(`-${message}`)
-  serverCaptureSentrySocketError({ message, silent, status })
+
+  if (options?.cause) {
+    serverCaptureSentryException(options.cause)
+  } else {
+    serverCaptureSentrySocketError({ message, silent, status })
+  }
+
   io.to(socketId).emit<SocketActionsType>('error-message', { message, silent, status })
 }
