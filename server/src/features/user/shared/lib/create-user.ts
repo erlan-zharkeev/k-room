@@ -4,7 +4,7 @@ import { ProviderType } from 'common'
 
 import { getInitialInfoNotificationMap } from 'src/features/info-notification'
 
-import { InfoNotificationStateModel } from 'src/entities/info-notification-state'
+import { createInfoNotificationState } from 'src/entities/info-notification-state'
 import { UserModel } from 'src/entities/user'
 
 import { isUserExist } from './is-user-exist'
@@ -37,10 +37,10 @@ export const createUser = async ({
     system: { role: 'user', password: hashedPassword, provider, device: {} }
   }).save()
 
-  await new InfoNotificationStateModel({
+  await createInfoNotificationState({
     userId: user._id,
     infoNotifications
-  }).save()
+  })
 
   return user
 }

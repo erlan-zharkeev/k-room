@@ -30,7 +30,6 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 - Remove commented-out Howl code in `use-make-call.ts` (lines 74, 141, 165, 171, 178, 196).
 - Wire `unAnsweredCalls` in `CallsButton.tsx` to real state instead of hardcoded `0`.
 - Validate `language` from socket handshake against `APP_LANGUAGE_VALUES` in `socket-auth-middleware.ts`.
-- Fix `InfoNotificationType` in `common/info-notification/config/types.ts` — currently just an alias for `InfoNotificationStatusType`, likely a copy-paste error.
 - Resolve TODO in `common/socket/config/types.ts:74` — replace `IEventUpdateChatRoom` with `IEventCreateRoom`.
 - Resolve TODO in `image.model.ts` — remove redundant `src` or `name` field.
 
