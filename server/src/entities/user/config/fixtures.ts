@@ -4,7 +4,8 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 
-import { createUser, isUserExist, updateUserAvatar } from 'src/features/user'
+import { updateUserAvatar } from 'src/features/user'
+import { createUser, isUserExist } from 'src/features/user/shared'
 
 import { log } from 'src/shared/lib'
 
