@@ -41,7 +41,8 @@ export const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
     name: SERVER_ENV.adminCookie,
     cookie: {
       httpOnly: true,
-      secure: !SERVER_ENV.isDev
+      secure: !SERVER_ENV.isDev,
+      maxAge: 7 * 24 * 60 * 60 * 1000
     }
   }
 )
