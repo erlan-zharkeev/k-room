@@ -1,37 +1,22 @@
-import { useLiveQuery } from 'dexie-react-hooks'
-
 import { DbMessageType } from 'src/shared/config'
-import { db } from 'src/shared/lib'
+import { db, dexieCollectionStore } from 'src/shared/lib'
+
+const messageStore = dexieCollectionStore<DbMessageType>(db.messages)
 
 export const useMessage = () => {
-  const messages =
-    useLiveQuery(async () => {
-      return await (db.messages.toArray() as Promise<DbMessageType[]>)
-    }, []) ?? []
+  const messages = messageStore.use()
 
-  const isMessageExist = (id: string) => Boolean(messages?.some((c) => c.id === id))
+  const isExist = (id: string) => Boolean(messages?.some((c) => c.id === id))
 
-  const getMessageById = (id: string) => messages.find((message) => message.id === id)
-
-  const putMessage = async (payload: DbMessageType) => await db.messages.put(payload)
-
-  const bulkPutMessages = async (payload: DbMessageType[]) => {
-    await db.messages.bulkPut(payload)
-  }
-
-  const updateMessage = async (id: string, patch: Partial<DbMessageType>) => {
-    await db.messages.update(id, patch)
-  }
-
-  const reset = () => db.messages.clear()
+  const getById = (id: string) => messages.find((message) => message.id === id)
 
   return {
     messages,
-    isMessageExist,
-    getMessageById,
-    putMessage,
-    bulkPutMessages,
-    updateMessage,
-    reset
+    isExist,
+    getById,
+    put: (payload: DbMessageType) => messageStore.put(payload),
+    bulkPut: (payload: DbMessageType[]) => messageStore.bulkPut(payload),
+    update: (id: string, patch: Partial<DbMessageType>) => messageStore.update(id, patch),
+    reset: () => messageStore.reset()
   }
 }

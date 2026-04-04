@@ -1,26 +1,23 @@
-import { useLiveQuery } from 'dexie-react-hooks'
-
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/settings'
 import { useSystem } from 'src/entities/system'
 
 import { FChatRoomType } from 'src/shared/config'
-import { db } from 'src/shared/lib'
+import { db, dexieCollectionStore } from 'src/shared/lib'
+
+const chatRoomStore = dexieCollectionStore<FChatRoomType>(db['chat-rooms'])
 
 export const useChatRoom = () => {
   const { selectedChatRoomId } = useSettings()
   const { repliedMessageData } = useSystem()
   const { messages } = useMessage()
 
-  const chatRooms =
-    useLiveQuery(async () => {
-      return await (db['chat-rooms'].toArray() as Promise<FChatRoomType[]>)
-    }, []) ?? []
+  const chatRooms = chatRoomStore.use()
 
-  const getRoomById = (id: string) => chatRooms.find((room) => room.id === id)
+  const getById = (id: string) => chatRooms.find((room) => room.id === id)
 
-  const getPersonalRoomByContactId = (id: string) => {
+  const getPersonalByContactId = (id: string) => {
     return chatRooms.find((room) => {
       return room.users.length === 1 && room.users[0] === id
     })
@@ -33,17 +30,22 @@ export const useChatRoom = () => {
 
   const unreadMessageQuantity = messages.filter((message) => message.status === 'delivered' && !message.isSelf).length
 
-  const putChatRoom = async (payload: FChatRoomType) => await db['chat-rooms'].put(payload)
-
-  const updateChatRoom = async (id: string, patch: Partial<FChatRoomType>) => {
-    await db['chat-rooms'].update(id, patch)
+  const replaceAll = async (rooms: FChatRoomType[]) => {
+    await chatRoomStore.replaceAll(rooms)
   }
 
-  const reset = () => db['chat-rooms'].clear()
+  const addMessage = async (roomId: string, messageId: string) => {
+    await chatRoomStore.mutate(roomId, (room) => {
+      room.messages = Array.isArray(room.messages) ? room.messages : []
+      if (room.messages[room.messages.length - 1] !== messageId) {
+        room.messages.push(messageId)
+      }
+    })
+  }
 
   return {
-    getRoomById,
-    getPersonalRoomByContactId,
+    getById,
+    getPersonalByContactId,
     chatRooms,
     hasChatRooms,
     unreadMessageQuantity,
@@ -51,8 +53,10 @@ export const useChatRoom = () => {
     isSelectedRoomPrivate,
     repliedMessageData,
     haveMessageToReply,
-    putChatRoom,
-    updateChatRoom,
-    reset
+    put: (payload: FChatRoomType) => chatRoomStore.put(payload),
+    update: (id: string, patch: Partial<FChatRoomType>) => chatRoomStore.update(id, patch),
+    replaceAll,
+    addMessage,
+    reset: () => chatRoomStore.reset()
   }
 }

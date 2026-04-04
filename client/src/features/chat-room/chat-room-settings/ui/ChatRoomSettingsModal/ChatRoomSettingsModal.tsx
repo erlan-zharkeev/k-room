@@ -18,11 +18,11 @@ import { IChatRoomSettingsModalProps, CHAT_ROOM_SETTINGS_MODAL_I18N } from './co
 
 export const ChatRoomSettingsModal = ({ onClose }: IChatRoomSettingsModalProps) => {
   const { chatRooms } = useChatRoom()
-  const { getContactByIds } = useContact()
+  const { getByIds } = useContact()
   const { selectedChatRoomId } = useSettings()
   const { id } = useUser()
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
-  const members = chatRoomData ? getContactByIds(chatRoomData.users) : []
+  const members = chatRoomData ? getByIds(chatRoomData.users) : []
   const [imagePath, setNewImagePath] = useState<string | null | undefined>(chatRoomData?.avatarId)
   const [avatarFile, setFile] = useState<File | MediaFileValueType | null>(null)
   const [isLoading, setIsLoading] = useState(false)

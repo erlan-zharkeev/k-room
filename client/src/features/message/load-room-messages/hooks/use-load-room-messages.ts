@@ -11,7 +11,7 @@ import { socket } from 'src/shared/api'
 
 export const useLoadRoomMessages = () => {
   const { selectedChatRoom } = useChatRoom()
-  const { bulkPutMessages } = useMessage()
+  const { bulkPut } = useMessage()
   const nextBeforeCreatedAtRef = useRef<Record<string, number | undefined>>({})
   const hasMoreMessagesRef = useRef<Record<string, boolean>>({})
 
@@ -43,7 +43,7 @@ export const useLoadRoomMessages = () => {
 
     if (!messages.length) return
 
-    await bulkPutMessages(messages)
+    await bulkPut(messages)
   }
 
   useEffect(() => {

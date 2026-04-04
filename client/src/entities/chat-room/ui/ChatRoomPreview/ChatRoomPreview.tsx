@@ -29,7 +29,7 @@ export const ChatRoomPreview = ({
 }) => {
   const { getLiveMedia } = useMedia()
   const { contacts } = useContact()
-  const { getMessageById } = useMessage()
+  const { getById } = useMessage()
   const isPrivate = isRoomPrivate(room)
 
   const chatRoomAvatarShape = isPrivate ? 'circle-shape' : 'square-shape'
@@ -43,7 +43,7 @@ export const ChatRoomPreview = ({
 
   const avatarPath = getLiveMedia(room.avatarId)
   const privateRoomContact = isPrivate ? contacts.find((contact) => contact.id === room.users[0]) : undefined
-  const lastMessageBody = room.lastMessageId ? getMessageById(room.lastMessageId)?.body ?? '' : ''
+  const lastMessageBody = room.lastMessageId ? getById(room.lastMessageId)?.body ?? '' : ''
 
   const [chatName, setChatName] = useState(room.chatName ?? '')
 

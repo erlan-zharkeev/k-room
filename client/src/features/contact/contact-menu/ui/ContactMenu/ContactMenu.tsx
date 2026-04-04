@@ -16,12 +16,12 @@ export const ContactMenu = ({ id, interactionType }: IContactMenuProps) => {
   const { deleteUserHandler, loading } = useDeleteContact()
   const { delay } = useTimeout()
   const { isLoading: isChatCreating, createChatRoom } = useCreateChatRoom()
-  const { getPersonalRoomByContactId, chatRooms } = useChatRoom()
+  const { getPersonalByContactId, chatRooms } = useChatRoom()
   const { selectChatWithAsideById } = useChatRoomSelect()
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { t } = useI18n()
 
-  const contactRoom = useMemo(() => getPersonalRoomByContactId(id), [chatRooms])
+  const contactRoom = useMemo(() => getPersonalByContactId(id), [chatRooms])
 
   const items = [
     {

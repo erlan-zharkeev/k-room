@@ -26,7 +26,7 @@ import { AppScrollDownButton } from 'src/shared/ui'
 export const MessageList = ({ room }: IMessageListProps) => {
   const isCurrentRoomPrivate = isRoomPrivate(room)
 
-  const { getMessageById } = useMessage()
+  const { getById } = useMessage()
   const { loadOlderMessages } = useLoadRoomMessages()
   const { isReady } = useSettings()
   const { language } = useI18n()
@@ -35,9 +35,9 @@ export const MessageList = ({ room }: IMessageListProps) => {
   const roomMessages = useMemo(
     () =>
       room.messages
-        .map((messageId) => getMessageById(messageId))
+        .map((messageId) => getById(messageId))
         .filter((message): message is IMessage => Boolean(message)),
-    [getMessageById, room.messages]
+    [getById, room.messages]
   )
 
   const virtualizedMessages = useMemo(() => {
