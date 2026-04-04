@@ -5,7 +5,7 @@ import { DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
 import { InfoNotificationModel } from 'src/entities/info-notification'
 
 import { SERVER_ENV } from 'src/shared/config'
-import { AppError, getLocalizedText } from 'src/shared/lib'
+import { AppError, localizedText } from 'src/shared/lib'
 
 import { publishInfoNotificationToAllUsers } from './../shared'
 import { INFO_NOTIFICATION_ADMIN_I18N } from './i18n'
@@ -23,7 +23,7 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
       publishToAllUsers: {
         actionType: 'record',
         icon: 'Send',
-        guard: getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.publishGuard),
+        guard: localizedText(INFO_NOTIFICATION_ADMIN_I18N.publishGuard, DEFAULT_APP_LANGUAGE),
         component: false,
         handler: async (
           _request: ActionRequest,
@@ -33,7 +33,10 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
           const { record, currentAdmin } = context
 
           if (!record) {
-            throw new AppError(StatusEnum.NotFound, getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.recordNotFound))
+            throw new AppError(
+              StatusEnum.NotFound,
+              localizedText(INFO_NOTIFICATION_ADMIN_I18N.recordNotFound, DEFAULT_APP_LANGUAGE)
+            )
           }
 
           await publishInfoNotificationToAllUsers(record.id(), DEFAULT_APP_LANGUAGE)
@@ -43,7 +46,7 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
           if (!updatedRecord) {
             throw new AppError(
               StatusEnum.NotFound,
-              getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.publishedRecordNotFound)
+              localizedText(INFO_NOTIFICATION_ADMIN_I18N.publishedRecordNotFound, DEFAULT_APP_LANGUAGE)
             )
           }
 
@@ -51,7 +54,7 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
             record: record.toJSON(currentAdmin),
             redirectUrl: `${SERVER_ENV.adminRootPath}/resources/info-notifications/records/${String(updatedRecord._id)}/show?refresh=true`,
             notice: {
-              message: getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.published),
+              message: localizedText(INFO_NOTIFICATION_ADMIN_I18N.published, DEFAULT_APP_LANGUAGE),
               type: 'success'
             }
           }

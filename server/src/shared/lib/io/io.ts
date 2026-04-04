@@ -1,5 +1,9 @@
 import { Server } from 'socket.io'
 
+import { StatusEnum } from 'common'
+
+import { AppError } from './../app-error'
+
 let io: Server | null = null
 
 export const setIO = (data: Server) => {
@@ -7,6 +11,6 @@ export const setIO = (data: Server) => {
 }
 
 export const getIO = (): Server => {
-  if (!io) throw new Error('io not initialized')
+  if (!io) throw new AppError(StatusEnum.Server, 'io not initialized')
   return io
 }

@@ -4,7 +4,7 @@ import { InfoNotificationModel } from 'src/entities/info-notification'
 import { InfoNotificationStateModel, updateInfoNotificationStateStatus } from 'src/entities/info-notification-state'
 import { UserModel } from 'src/entities/user'
 
-import { AppError, getLocalizedText } from 'src/shared/lib'
+import { AppError, localizedText } from 'src/shared/lib'
 
 import { INFO_NOTIFICATION_SHARED_I18N } from './../config'
 import { emitInfoNotificationToUsers } from './emit-info-notification-to-users'
@@ -17,7 +17,7 @@ export const publishInfoNotificationToAllUsers = async (
   const notification = await InfoNotificationModel.findById(notificationId).lean()
 
   if (!notification) {
-    throw new AppError(StatusEnum.NotFound, getLocalizedText(INFO_NOTIFICATION_SHARED_I18N.notFound, language))
+    throw new AppError(StatusEnum.NotFound, localizedText(INFO_NOTIFICATION_SHARED_I18N.notFound, language))
   }
 
   const publishedAt = Date.now()

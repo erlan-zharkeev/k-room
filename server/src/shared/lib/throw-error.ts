@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import { IBackendResponse, LocalizedTextType, SocketActionsType, StatusEnum } from 'common'
+import { DEFAULT_APP_LANGUAGE, IBackendResponse, LocalizedTextType, SocketActionsType, StatusEnum } from 'common'
 
 import { SHARED_I18N } from 'src/shared/config'
 import {
@@ -58,7 +58,8 @@ export const throwSocketError = (
   const socket = io.sockets.sockets.get(socketId)
   const nonLocalizedError = typeof error === 'string' || error === undefined
   const userMessageSource = nonLocalizedError ? SHARED_I18N.commonServerError : error
-  const userMessage = localizedText(userMessageSource, socket?.data.language)
+  const language = socket?.data.language ?? DEFAULT_APP_LANGUAGE
+  const userMessage = localizedText(userMessageSource, language)
   const logErrorMessage = nonLocalizedError ? error : userMessage
 
   const status = options?.status ?? StatusEnum.Server

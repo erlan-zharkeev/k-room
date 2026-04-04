@@ -7,7 +7,7 @@ import { USER_I18N } from 'src/features/user'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { SEND_CONFIRMATION_LINK_I18N,SEND_CONFIRMATION_LINK_INTERVAL_MINUTES } from './config'
 
@@ -16,7 +16,7 @@ export const sendConfirmationLinkController = async (
   res: AppResponseType<ISendConfirmationLinkResponse>
 ) => {
   const { language } = req
-  const basicError = getLocalizedText(SEND_CONFIRMATION_LINK_I18N.failedSendEmailConfirmationLink, language)
+  const basicError = localizedText(SEND_CONFIRMATION_LINK_I18N.failedSendEmailConfirmationLink, language)
 
   try {
     const { email } = req.body
@@ -24,7 +24,7 @@ export const sendConfirmationLinkController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     if (user.system.confirmed) {
@@ -35,7 +35,7 @@ export const sendConfirmationLinkController = async (
           nextRequestTime: Date.now()
         },
         message: {
-          text: getLocalizedText(SEND_CONFIRMATION_LINK_I18N.emailAlreadyConfirmed, language),
+          text: localizedText(SEND_CONFIRMATION_LINK_I18N.emailAlreadyConfirmed, language),
           silent: false
         }
       }
@@ -47,7 +47,7 @@ export const sendConfirmationLinkController = async (
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(SEND_CONFIRMATION_LINK_I18N.noConfirmationAttemptsLeft, language)
+        localizedText(SEND_CONFIRMATION_LINK_I18N.noConfirmationAttemptsLeft, language)
       )
     }
 
@@ -55,6 +55,7 @@ export const sendConfirmationLinkController = async (
 
     await sendEmailConfirmationEmail({
       email: user.personal.email,
+      language,
       token: confirmToken,
       username: user.public.username
     })
@@ -72,7 +73,7 @@ export const sendConfirmationLinkController = async (
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(SEND_CONFIRMATION_LINK_I18N.confirmationLinkSent, language),
+        text: localizedText(SEND_CONFIRMATION_LINK_I18N.confirmationLinkSent, language),
         silent: false
       }
     }

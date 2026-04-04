@@ -9,7 +9,7 @@ import { loadGoogleAvatar } from 'src/features/user'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { updateTokens } from './../shared'
 import { SIGN_IN_WITH_PROVIDER_I18N } from './config'
@@ -19,7 +19,7 @@ export const signInWithProviderController = async (
   res: AppResponseType<ISignInWithProviderResponse>
 ) => {
   const { language } = req
-  const basicError = getLocalizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language)
+  const basicError = localizedText(SIGN_IN_WITH_PROVIDER_I18N.failed, language)
 
   try {
     const data: ISignInWithProviderPayload = req.body
@@ -31,7 +31,7 @@ export const signInWithProviderController = async (
 
     if (newUser && avatar) {
       const buffer = await loadGoogleAvatar(avatar)
-      if (buffer) await updateUserAvatar(buffer, String(newUser._id))
+      if (buffer) await updateUserAvatar(buffer, String(newUser._id), language)
     }
 
     if (!user) return throwHTTPError(StatusEnum.BadRequest, res, basicError)
@@ -41,7 +41,7 @@ export const signInWithProviderController = async (
     return res.json({
       payload: mapUserToDto(user),
       message: {
-        text: getLocalizedText(SHARED_I18N.success, language),
+        text: localizedText(SHARED_I18N.success, language),
         silent: true
       }
     })

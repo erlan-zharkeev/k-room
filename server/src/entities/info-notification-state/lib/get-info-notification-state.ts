@@ -1,12 +1,12 @@
-import { StatusEnum } from 'common'
+import { AppLanguageType, StatusEnum } from 'common'
 
 import type { MongoIdType } from 'src/shared/config'
-import { AppError, getLocalizedText, normalizeObjectId } from 'src/shared/lib'
+import { AppError, localizedText, normalizeObjectId } from 'src/shared/lib'
 
 import { INFO_NOTIFICATION_STATE_I18N } from './../config'
 import { InfoNotificationStateModel } from './../model'
 
-export const getInfoNotificationState = async (userId: MongoIdType) => {
+export const getInfoNotificationState = async (userId: MongoIdType, language: AppLanguageType) => {
   const normalizedUserId = normalizeObjectId(userId)
 
   const state = await InfoNotificationStateModel.findOneAndUpdate(
@@ -24,7 +24,7 @@ export const getInfoNotificationState = async (userId: MongoIdType) => {
   ).lean()
 
   if (!state) {
-    throw new AppError(StatusEnum.Server, getLocalizedText(INFO_NOTIFICATION_STATE_I18N.stateNotFound))
+    throw new AppError(StatusEnum.Server, localizedText(INFO_NOTIFICATION_STATE_I18N.stateNotFound, language))
   }
 
   return state

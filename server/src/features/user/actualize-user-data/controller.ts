@@ -30,7 +30,7 @@ export const actualizeUserDataController = (socket: SocketInstanceType) => {
         const roomIds = data?.personal.chatRooms
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
         const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
-        const infoNotifications = await getUserActiveInfoNotifications(userId)
+        const infoNotifications = await getUserActiveInfoNotifications(userId, socket.data.language)
         const sockets = await getSocketsByUserIds([userId])
         sockets.forEach((socketId) => {
           getIO().to(socketId).emit<SocketActionsType>('actual-contacts', contactResultData)

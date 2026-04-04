@@ -4,14 +4,14 @@ import { MediaBucketNameType } from 'src/entities/media'
 import { streamMediaFile } from 'src/entities/media'
 
 import { AppResponseType, IAppRequest } from 'src/shared/config'
-import { getLocalizedText, isAppError, throwHTTPError } from 'src/shared/lib'
+import { isAppError, localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { GET_MEDIA_FILE_I18N } from './config'
 import { parseBucketNameFromId } from './lib'
 
 export const getMediaFileController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const { language } = req
-  const basicError = getLocalizedText(GET_MEDIA_FILE_I18N.failedToProvideMedia, language)
+  const basicError = localizedText(GET_MEDIA_FILE_I18N.failedToProvideMedia, language)
 
   try {
     const idParam = String(req.params.id || req.query.id || '')
@@ -22,7 +22,7 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
       return throwHTTPError(
         StatusEnum.NotFound,
         res,
-        getLocalizedText(GET_MEDIA_FILE_I18N.idNotProvideOrNotValid, language)
+        localizedText(GET_MEDIA_FILE_I18N.idNotProvideOrNotValid, language)
       )
     }
     const { bucketName, id } = parseBucketNameFromId(idParam)

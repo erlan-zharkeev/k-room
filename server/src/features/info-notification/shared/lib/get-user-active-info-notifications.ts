@@ -1,11 +1,14 @@
-import { IUserInfoNotification } from 'common'
+import { AppLanguageType, IUserInfoNotification } from 'common'
 
 import { getUserInfoNotificationMap } from 'src/entities/info-notification-state'
 
 import { getActiveInfoNotifications } from './get-active-info-notifications'
 
-export const getUserActiveInfoNotifications = async (userId: string): Promise<IUserInfoNotification[]> => {
-  const infoNotificationMap = await getUserInfoNotificationMap(userId)
+export const getUserActiveInfoNotifications = async (
+  userId: string,
+  language: AppLanguageType
+): Promise<IUserInfoNotification[]> => {
+  const infoNotificationMap = await getUserInfoNotificationMap(userId, language)
   const infoNotificationIds = Object.keys(infoNotificationMap)
   const activeInfoNotifications = await getActiveInfoNotifications({ ids: infoNotificationIds })
 

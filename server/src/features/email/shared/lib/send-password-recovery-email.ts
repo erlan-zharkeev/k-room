@@ -1,17 +1,22 @@
+import { AppLanguageType, StatusEnum } from 'common'
+
 import { APP_NAME, createResendClient, PASSWORD_RECOVERY_SUBJECT, RESEND_FROM_EMAIL, RESEND_FROM_NAME } from 'src/features/email'
 
 import { SERVER_ENV } from 'src/shared/config'
+import { AppError } from 'src/shared/lib'
 
 export const sendPasswordRecoveryEmail = async ({
   email,
   code,
+  language,
   username
 }: {
   email: string
   code: string
+  language: AppLanguageType
   username?: string
 }) => {
-  const resend = createResendClient()
+  const resend = createResendClient(language)
   const from = RESEND_FROM_NAME ? `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>` : RESEND_FROM_EMAIL
   const subject = `${APP_NAME}: ${PASSWORD_RECOVERY_SUBJECT}`
   const html = `
@@ -29,7 +34,7 @@ export const sendPasswordRecoveryEmail = async ({
   }
 
   if (!resend) {
-    throw new Error('Resend client is not configured')
+    throw new AppError(StatusEnum.Server, 'Resend client is not configured')
   }
 
   const { data, error } = await resend.emails.send({
@@ -40,7 +45,7 @@ export const sendPasswordRecoveryEmail = async ({
   })
 
   if (error) {
-    throw new Error(error.message)
+    throw new AppError(StatusEnum.Server, error.message, false, error)
   }
 
   return data
