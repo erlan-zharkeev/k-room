@@ -1,5 +1,6 @@
 import { Fragment, createElement } from 'react'
 
+import { IEventInfoNotificationStatusUpdated } from 'common'
 import { useLiveQuery } from 'dexie-react-hooks'
 
 import { useI18n } from 'src/entities/settings'
@@ -16,17 +17,37 @@ export const useInfoNotification = () => {
       return await (db['info-notifications'].toArray() as Promise<DbInfoNotificationType[]>)
     }, []) ?? []
 
-  const unreadInfoNotificationQuantity = infoNotificationList.filter((notification) => notification.status === 'unread').length
+  const unreadInfoNotificationQuantity = infoNotificationList.filter(
+    (notification) => notification.status === 'unread'
+  ).length
 
-  const isRead = (id: string) => infoNotificationList.find((notification) => notification.id === id)?.status !== 'unread'
+  const isRead = (id: string) =>
+    infoNotificationList.find((notification) => notification.id === id)?.status !== 'unread'
 
   const putInfoNotification = async (payload: DbInfoNotificationType) => await db['info-notifications'].put(payload)
 
-  const bulkPutInfoNotifications = async (payload: DbInfoNotificationType[]) => {
-    await db['info-notifications'].bulkPut(payload)
+  const mergeInfoNotifications = async (payload: DbInfoNotificationType[]) => {
+    if (!payload.length) return
+
+    const existingInfoNotifications = await db['info-notifications'].bulkGet(payload.map(({ id }) => id))
+    const infoNotificationsToUpsert = payload.filter((notification, index) => {
+      const existingInfoNotification = existingInfoNotifications[index]
+
+      if (!existingInfoNotification) return true
+
+      return (
+        existingInfoNotification.status !== notification.status ||
+        existingInfoNotification.isActive !== notification.isActive ||
+        existingInfoNotification.updatedAt !== notification.updatedAt
+      )
+    })
+
+    if (!infoNotificationsToUpsert.length) return
+
+    await db['info-notifications'].bulkPut(infoNotificationsToUpsert)
   }
 
-  const updateInfoNotificationStatus = async (id: string, status: DbInfoNotificationType['status']) => {
+  const updateInfoNotificationStatus = async ({ id, status }: IEventInfoNotificationStatusUpdated) => {
     await db['info-notifications'].update(id, { status })
   }
 
@@ -54,7 +75,7 @@ export const useInfoNotification = () => {
     collapseInfoNotifications,
     isRead,
     putInfoNotification,
-    bulkPutInfoNotifications,
+    mergeInfoNotifications,
     updateInfoNotificationStatus,
     reset
   }

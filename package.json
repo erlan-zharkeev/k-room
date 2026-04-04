@@ -9,7 +9,7 @@
     "prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:check": "client/node_modules/.bin/prettier --check .",
-    "client:lint": "npm --prefix client run lint",
+    "client:lint": "client/node_modules/.bin/eslint client/src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "client:stylelint": "npm --prefix client run lint:style",
     "client:build": "npm --prefix client run build",
     "client:test": "npm --prefix client run test",

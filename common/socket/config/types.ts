@@ -191,6 +191,8 @@ export interface IEventInfoNotificationStatusUpdated {
   status: InfoNotificationStatusType
 }
 
+export type IEventInfoNotificationReceived = IUserInfoNotification
+
 export type SocketActionsType =
   | 'connection'
   | 'error'
@@ -247,6 +249,7 @@ export type SocketActionsType =
   | 'contact-interaction-updated'
   | 'actual-contacts'
   | 'actual-info-notifications'
+  | 'info-notification-received'
   | 'info-notification-status-updated'
   | 'mark-info-notification-as-read'
   | 'actual-messages'

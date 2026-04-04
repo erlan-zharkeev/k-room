@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 
-import { useInfoNotificationActualize } from './../../info-notification-actualize'
+import { useMonitorInfoNotifications } from './../../info-notification-actualize'
 
 export const useInfoNotificationUpdateMonitor = () => {
-  const { monitorInfoNotificationsActualize } = useInfoNotificationActualize()
+  const { monitorInfoNotifications } = useMonitorInfoNotifications()
 
   useEffect(() => {
-    return monitorInfoNotificationsActualize()
+    return monitorInfoNotifications()
   }, [])
 }

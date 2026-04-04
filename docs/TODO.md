@@ -32,6 +32,7 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 - Validate `language` from socket handshake against `APP_LANGUAGE_VALUES` in `socket-auth-middleware.ts`.
 - Resolve TODO in `common/socket/config/types.ts:74` — replace `IEventUpdateChatRoom` with `IEventCreateRoom`.
 - Resolve TODO in `image.model.ts` — remove redundant `src` or `name` field.
+- Distribute payload typings in `common` across proper layers (e.g. socket event payload types should live next to their domain, not in a flat common/socket file).
 
 - проверить флоу что с чатом если удалить пользака что будет с чатом уже созданным как груповым так и индивидуальным.
 - что же там с картинками и их кэшем

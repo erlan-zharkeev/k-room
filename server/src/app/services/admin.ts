@@ -2,7 +2,8 @@ import AdminJSExpress from '@adminjs/express'
 import { Database, Resource } from '@adminjs/mongoose'
 import AdminJS from 'adminjs'
 
-import { ADMIN_INFO_NOTIFICATION_OPTIONS } from 'src/entities/info-notification'
+import { ADMIN_INFO_NOTIFICATION_OPTIONS } from 'src/features/info-notification'
+
 import { ADMIN_USER_OPTIONS } from 'src/entities/user'
 
 import { SERVER_ENV } from 'src/shared/config'

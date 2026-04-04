@@ -1,29 +1,23 @@
-import { IEventInfoNotificationStatusUpdated, SocketActionsType, IUserInfoNotification } from 'common'
+import { SocketActionsType } from 'common'
 
 import { useInfoNotification } from 'src/entities/info-notification'
 
 import { socket } from 'src/shared/api'
 
-export const useInfoNotificationActualize = () => {
-  const { bulkPutInfoNotifications, updateInfoNotificationStatus } = useInfoNotification()
+export const useMonitorInfoNotifications = () => {
+  const { mergeInfoNotifications, putInfoNotification, updateInfoNotificationStatus } = useInfoNotification()
 
-  const actualizeInfoNotifications = async (notifications: IUserInfoNotification[]) => {
-    await bulkPutInfoNotifications(notifications)
-  }
-
-  const handleInfoNotificationStatusUpdate = async ({ id, status }: IEventInfoNotificationStatusUpdated) => {
-    await updateInfoNotificationStatus(id, status)
-  }
-
-  const monitorInfoNotificationsActualize = () => {
-    socket.on<SocketActionsType>('actual-info-notifications', actualizeInfoNotifications)
-    socket.on<SocketActionsType>('info-notification-status-updated', handleInfoNotificationStatusUpdate)
+  const monitorInfoNotifications = () => {
+    socket.on<SocketActionsType>('actual-info-notifications', mergeInfoNotifications)
+    socket.on<SocketActionsType>('info-notification-received', putInfoNotification)
+    socket.on<SocketActionsType>('info-notification-status-updated', updateInfoNotificationStatus)
 
     return () => {
-      socket.off<SocketActionsType>('actual-info-notifications', actualizeInfoNotifications)
-      socket.off<SocketActionsType>('info-notification-status-updated', handleInfoNotificationStatusUpdate)
+      socket.off<SocketActionsType>('actual-info-notifications', mergeInfoNotifications)
+      socket.off<SocketActionsType>('info-notification-received', putInfoNotification)
+      socket.off<SocketActionsType>('info-notification-status-updated', updateInfoNotificationStatus)
     }
   }
 
-  return { monitorInfoNotificationsActualize }
+  return { monitorInfoNotifications }
 }
