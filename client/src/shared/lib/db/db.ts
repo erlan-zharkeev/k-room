@@ -21,7 +21,7 @@ export class KRoomDB extends Dexie {
   'info-notifications'!: Table<DbInfoNotificationType>
 
   constructor() {
-    super(CLIENT_ENV.appName)
+    super(CLIENT_ENV.appName.toLocaleLowerCase())
     this.version(1).stores({
       settings: '__key',
       user: '__key',
