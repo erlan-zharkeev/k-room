@@ -357,6 +357,54 @@ import { useRegistration } from 'src/features/auth/registration'
 
 The parent feature groups related behavior, but each nested subfeature should still represent one concrete capability, UI flow, or integration point.
 
+## Client Store Rules
+
+1. Direct work with Dexie stores must stay inside `entities`.
+
+`features`, `widgets`, `pages`, and `shared/ui` must not call Dexie tables or store wrappers directly.
+
+Use:
+
+```ts
+const { addMessage, replaceAll } = useChatRoom()
+```
+
+Do not use:
+
+```ts
+await db['chat-rooms'].clear()
+await chatRoomStore.replaceAll(rooms)
+```
+
+2. `entities` may expose only base store methods and reusable read helpers.
+
+Allowed examples:
+
+- state values from the store
+- base persistence methods such as `put`, `reset`, `replaceAll`, `shallowUpdate`
+- reusable read helpers such as `getById`, `isRead`, `isThemeDark`
+
+3. Business write operations must go through `features`.
+
+If a UI action changes store state as part of an application scenario, that write must be wrapped in a feature-level hook or action instead of being performed directly from UI code.
+
+4. Key-value store updates are shallow by contract.
+
+Methods named `shallowUpdate` update only top-level fields. For nested objects, explicitly build the next top-level value before calling `shallowUpdate`.
+
+Use:
+
+```ts
+settings.shallowUpdate({
+  messageScrollByRoom: {
+    ...settings.messageScrollByRoom,
+    [roomId]: { firstVisibleItemId }
+  }
+})
+```
+
+Do not assume deep merge behavior from `shallowUpdate`.
+
 ## Config Rules
 
 1. Global repository-level config files should live in `config`.

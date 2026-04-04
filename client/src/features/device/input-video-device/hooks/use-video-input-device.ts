@@ -27,7 +27,7 @@ export const useInputVideoDevice = () => {
   const loading = videoInputDeviceList.length < 0
 
   const changeVideoInputDevice = (value: string = '') => {
-    settings.update({ selectedVideoInputDeviceId: value })
+    settings.shallowUpdate({ selectedVideoInputDeviceId: value })
   }
 
   const hideVideo = () => {

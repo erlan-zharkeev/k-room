@@ -7,14 +7,15 @@ export const settingsStore = dexieKeyValueStore<IUserSetting>(db.settings, 'sett
 
 export const useSettings = () => {
   const { data: settings, isReady } = settingsStore.useState(DEFAULT_SETTINGS)
+  const isThemeDark = settings.theme === 'dark'
+  const showAsidePanel = !FULL_CONTENT_ELEMENTS.includes(settings.selectedContentTab)
 
   return {
     ...settings,
     isReady,
-    isThemeDark: settings.theme === 'dark',
-    showAsidePanel: !FULL_CONTENT_ELEMENTS.includes(settings.selectedContentTab),
+    isThemeDark,
+    showAsidePanel,
     initialize: () => settingsStore.ensure(DEFAULT_SETTINGS),
-    update: (changes: Partial<IUserSetting>) => settingsStore.update(changes),
-    setByPath: (path: string, value: unknown) => settingsStore.setByPath(path, value)
+    shallowUpdate: (changes: Partial<IUserSetting>) => settingsStore.shallowUpdate(changes)
   }
 }

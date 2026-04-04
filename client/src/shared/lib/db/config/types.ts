@@ -22,3 +22,8 @@ export interface KvQueryState<T extends object> {
   data: T | undefined
   isReady: true
 }
+
+export interface CollectionMergeManyOptions<T extends { id: string | number }> {
+  merge: (current: T | undefined, incoming: T) => T
+  removeMissing?: boolean
+}

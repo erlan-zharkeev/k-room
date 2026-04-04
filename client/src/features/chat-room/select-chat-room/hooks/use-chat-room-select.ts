@@ -21,7 +21,7 @@ export const useChatRoomSelect = () => {
 
   const selectChatRoomById = (value?: string) => {
     if (value === undefined) return
-    settings.update({ selectedChatRoomId: value })
+    settings.shallowUpdate({ selectedChatRoomId: value })
     // TODO Установить скролл из стора по текущему выбранному элементу
     // scrollToBottom()
   }

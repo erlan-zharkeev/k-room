@@ -9,13 +9,14 @@ export const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
 export const useUser = () => {
   const userData = userStore.use(INITIAL_USER_STORE)
   const { getLiveMedia } = useMedia()
+  const avatarPath = getLiveMedia(`avatar.${userData.id}`)
 
   return {
     ...userData,
-    avatarPath: getLiveMedia(`avatar.${userData.id}`),
+    avatarPath,
     initialize: () => userStore.ensure(INITIAL_USER_STORE),
     reset: () => userStore.reset(INITIAL_USER_STORE),
-    update: (changes: Partial<DbUserDataType>) => userStore.update(changes),
+    shallowUpdate: (changes: Partial<DbUserDataType>) => userStore.shallowUpdate(changes),
     setByPath: (path: string, value: unknown) => userStore.setByPath(path, value)
   }
 }

@@ -5,7 +5,7 @@ export const useShowTooltip = () => {
 
   const toggleShowTooltip = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    settings.update({ showTooltips: value })
+    settings.shallowUpdate({ showTooltips: value })
   }
 
   return { toggleShowTooltip }

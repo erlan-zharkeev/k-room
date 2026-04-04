@@ -4,7 +4,7 @@ export const useEnableSound = () => {
   const settings = useSettings()
   const toggleEnableSound = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    settings.update({ soundOn: value })
+    settings.shallowUpdate({ soundOn: value })
   }
 
   return {

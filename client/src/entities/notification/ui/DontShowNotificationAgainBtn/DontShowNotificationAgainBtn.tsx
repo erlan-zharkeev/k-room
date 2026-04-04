@@ -21,7 +21,9 @@ export const DontShowNotificationAgainBtn = ({ notificationName }: IDontShowNoti
     setClicked(true)
     e.stopPropagation()
     e.preventDefault()
-    settings.setByPath('hiddenNotification', [...(settings.hiddenNotification ?? []), notificationName])
+    settings.shallowUpdate({
+      hiddenNotification: [...(settings.hiddenNotification ?? []), notificationName]
+    })
   }
 
   return (

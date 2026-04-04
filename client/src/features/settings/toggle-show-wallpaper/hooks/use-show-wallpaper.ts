@@ -5,7 +5,7 @@ export const useShowWallpaper = () => {
 
   const toggleShowWallpaper = (payload: React.ChangeEvent<HTMLInputElement>) => {
     const value = payload.target.checked
-    settings.update({ showWallpaper: value })
+    settings.shallowUpdate({ showWallpaper: value })
   }
 
   return { toggleShowWallpaper }

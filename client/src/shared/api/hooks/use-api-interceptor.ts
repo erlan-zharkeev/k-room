@@ -80,7 +80,7 @@ export const useApiInterceptor = () => {
           break
         }
         case StatusEnum.Forbidden: {
-          settings.update({ selectedContentTab: 'contacts' })
+          settings.shallowUpdate({ selectedContentTab: 'contacts' })
           break
         }
       }

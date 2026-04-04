@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
 
-import { IndexableType, MutableType } from 'src/shared/lib'
+import { CollectionMergeManyOptions, IndexableType, MutableType } from 'src/shared/lib'
 
 import { cloneMutable } from './lib'
 
@@ -46,6 +46,12 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     await table.delete(id as never)
   }
 
+  const bulkDelete = async (ids: readonly ItemId[]) => {
+    if (!ids.length) return
+
+    await table.bulkDelete(ids as never[])
+  }
+
   const clear = async () => {
     await table.clear()
   }
@@ -58,6 +64,50 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     await transaction('rw', async () => {
       await clear()
       await bulkPut(data)
+    })
+  }
+
+  const mergeMany = async (data: readonly Item[], options: CollectionMergeManyOptions<Item>) => {
+    const { merge, removeMissing = false } = options
+
+    await transaction('rw', async () => {
+      if (!data.length) {
+        if (removeMissing) {
+          await clear()
+        }
+
+        return
+      }
+
+      const incomingIds = data.map((item) => item.id as ItemId)
+      const existingItems = removeMissing ? await getAll() : await bulkGet(incomingIds)
+      const existingMap = new Map<ItemId, Item>()
+
+      existingItems.forEach((item) => {
+        if (item) {
+          existingMap.set(item.id as ItemId, item)
+        }
+      })
+
+      const nextItems: Item[] = []
+
+      data.forEach((incoming) => {
+        const current = existingMap.get(incoming.id as ItemId)
+        const next = merge(current, incoming)
+
+        if (!current || !Object.is(current, next)) {
+          nextItems.push(next)
+        }
+      })
+
+      await bulkPut(nextItems)
+
+      if (removeMissing) {
+        const incomingIdSet = new Set(incomingIds)
+        const idsToDelete = [...existingMap.keys()].filter((id) => !incomingIdSet.has(id))
+
+        await bulkDelete(idsToDelete)
+      }
     })
   }
 
@@ -116,9 +166,11 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     patchByPath,
     mutate,
     delete: deleteById,
+    bulkDelete,
     clear,
     reset: clear,
     replaceAll,
+    mergeMany,
     transaction
   }
 }

@@ -41,7 +41,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
     })
   }
 
-  const update = (changes: Partial<T>) =>
+  const shallowUpdate = (changes: Partial<T>) =>
     mutate((obj) => {
       Object.assign(obj, changes)
     })
@@ -102,7 +102,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
     useState,
     reset,
     ensure,
-    update,
+    shallowUpdate,
     setByPath
   }
 }
