@@ -8,8 +8,10 @@ import {
 import { getSocketsByUserIds } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
-import { getIO, throwSocketError } from 'src/shared/lib'
+import { getIO } from 'src/shared/lib'
+import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
+import { CONTACT_I18N } from './../config'
 import {
   createContactInteraction,
   deleteContactById,
@@ -20,9 +22,10 @@ import {
 export const updateContactInteractionTypeController = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
     'update-contact-interaction-type',
-    async ({ contactId, interaction }: IEventUpdateInteraction) => {
-      const { userId } = socket.data
-      try {
+    socketErrorMiddleware(
+      socket,
+      async ({ contactId, interaction }: IEventUpdateInteraction) => {
+        const { userId } = socket.data
         const updateAuthorContactInteraction = async () => setContactInteraction(userId, contactId, interaction)
         const updateContactInteraction = async () => setContactInteraction(contactId, userId, interaction)
 
@@ -67,9 +70,8 @@ export const updateContactInteractionTypeController = (socket: SocketInstanceTyp
 
         const payload: IEventUpdateContactInteractionSuccess = { contactId, interaction }
         getIO().to(socket.id).emit<SocketActionsType>('contact-interaction-updated', payload)
-      } catch {
-        throwSocketError(socket.id)
-      }
-    }
+      },
+      { basicError: CONTACT_I18N.updateContactInteractionFailed }
+    )
   )
 }

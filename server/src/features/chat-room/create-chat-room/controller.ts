@@ -7,16 +7,21 @@ import { getSocketsByUserIds } from 'src/features/user'
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
 
-import { SERVER_NOTIFICATION_I18N, SocketInstanceType } from 'src/shared/config'
-import { getIO, throwSocketError } from 'src/shared/lib'
+import { SocketInstanceType } from 'src/shared/config'
+import { getIO } from 'src/shared/lib'
+import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
+import { CHAT_ROOM_I18N } from './../config'
 import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from './../shared'
 
 export const createChatRoomController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>('create-chat-room', async ({ contactIds, chatName, avatarFile }: IEventCreateRoom) => {
-    const { userId } = socket.data
+  socket.on<SocketActionsType>(
+    'create-chat-room',
+    socketErrorMiddleware(
+      socket,
+      async ({ contactIds, chatName, avatarFile }: IEventCreateRoom) => {
+        const { userId } = socket.data
 
-    try {
       const usersAccepted = checkContactsExistence(userId, contactIds)
       if (!usersAccepted) return
       const users: string[] = [userId, ...contactIds]
@@ -45,8 +50,8 @@ export const createChatRoomController = (socket: SocketInstanceType) => {
       sockets.forEach((socketId) => {
         getIO().to(socketId).emit<SocketActionsType>('room-created', payload)
       })
-    } catch {
-      throwSocketError(socket.id, SERVER_NOTIFICATION_I18N.RoomCreationError)
-    }
-  })
+      },
+      { basicError: CHAT_ROOM_I18N.createChatRoomFailed }
+    )
+  )
 }
