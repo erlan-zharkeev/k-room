@@ -2,13 +2,14 @@ import { AxiosResponse, ResponseType } from 'axios'
 import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common'
 
 import { useNotification } from 'src/entities/notification'
-import { settingsStore } from 'src/entities/settings'
+import { useSettings } from 'src/entities/settings'
 
 import { useApiInterceptor, axios, IDoRequestOpts, RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 
 export const useApi = () => {
   const notifications = useNotification()
+  const { language } = useSettings()
   const { interceptError } = useApiInterceptor()
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
@@ -37,15 +38,12 @@ export const useApi = () => {
     const { contentType = 'application/json', responseType = 'json' } = opts || {}
 
     try {
-      const settings = await settingsStore.get()
-      const language = settings?.language ?? DEFAULT_APP_LANGUAGE
-
       const response = await axios.request({
         method: type,
         url: `${CLIENT_ENV.apiBaseUrl}${endpoint}`,
         headers: {
           'Content-Type': contentType,
-          ...(language ? { [APP_LANGUAGE_HEADER]: language } : {})
+          [APP_LANGUAGE_HEADER]: language ?? DEFAULT_APP_LANGUAGE
         },
         responseType,
         ...(type === 'get' ? { params: data } : { data })

@@ -26,9 +26,13 @@ export const useContact = () => {
     invitationsQuantity,
     isExist,
     getByIds,
+    get: (id: string) => contactStore.get(id),
     put: (payload: DbContactType) => contactStore.put(payload),
     bulkPut: (payload: DbContactType[]) => contactStore.bulkPut(payload),
     update: (id: string, patch: Partial<DbContactType>) => contactStore.update(id, patch),
+    delete: (id: string) => contactStore.delete(id),
+    mergeMany: (payload: DbContactType[], options: Parameters<typeof contactStore.mergeMany>[1]) =>
+      contactStore.mergeMany(payload, options),
     reset: () => contactStore.reset()
   }
 }

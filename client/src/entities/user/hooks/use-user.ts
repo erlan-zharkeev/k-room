@@ -4,7 +4,7 @@ import { INITIAL_USER_STORE } from 'src/entities/user'
 import { DbUserDataType } from 'src/shared/config'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
 
-export const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
+const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
 
 export const useUser = () => {
   const userData = userStore.use(INITIAL_USER_STORE)
@@ -16,7 +16,6 @@ export const useUser = () => {
     avatarPath,
     initialize: () => userStore.ensure(INITIAL_USER_STORE),
     reset: () => userStore.reset(INITIAL_USER_STORE),
-    shallowUpdate: (changes: Partial<DbUserDataType>) => userStore.shallowUpdate(changes),
-    setByPath: (path: string, value: unknown) => userStore.setByPath(path, value)
+    shallowUpdate: (changes: Partial<DbUserDataType>) => userStore.shallowUpdate(changes)
   }
 }
