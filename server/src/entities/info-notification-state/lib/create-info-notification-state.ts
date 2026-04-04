@@ -1,7 +1,6 @@
-import { Types } from 'mongoose'
-
 import { InfoNotificationMapType } from 'common'
 
+import type { MongoIdType } from 'src/shared/config'
 import { normalizeObjectId } from 'src/shared/lib'
 
 import { InfoNotificationStateModel } from './../model'
@@ -10,7 +9,7 @@ export const createInfoNotificationState = async ({
   userId,
   infoNotifications
 }: {
-  userId: string | Types.ObjectId
+  userId: MongoIdType
   infoNotifications: InfoNotificationMapType
 }) => {
   return await new InfoNotificationStateModel({

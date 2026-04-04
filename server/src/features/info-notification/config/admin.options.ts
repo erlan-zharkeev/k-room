@@ -1,10 +1,14 @@
 import { ActionContext, ActionRequest, RecordActionResponse } from 'adminjs'
 
-import { DEFAULT_APP_LANGUAGE } from 'common'
+import { DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
 
 import { InfoNotificationModel } from 'src/entities/info-notification'
 
+import { SERVER_ENV } from 'src/shared/config'
+import { AppError, getLocalizedText } from 'src/shared/lib'
+
 import { publishInfoNotificationToAllUsers } from './../shared'
+import { INFO_NOTIFICATION_ADMIN_I18N } from './i18n'
 
 export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
   resource: InfoNotificationModel,
@@ -16,39 +20,38 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
     editProperties: ['title.ru', 'title.en', 'content.ru', 'content.en', 'isActive'],
     filterProperties: ['_id', 'title.ru', 'title.en', 'isActive', 'createdAt'],
     actions: {
-      publish: {
+      publishToAllUsers: {
         actionType: 'record',
         icon: 'Send',
-        guard: 'Publish this info notification to all users?',
+        guard: getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.publishGuard),
         component: false,
         handler: async (
           _request: ActionRequest,
           _response: unknown,
           context: ActionContext
         ): Promise<RecordActionResponse> => {
-          const { record, resource, currentAdmin, h } = context
+          const { record, currentAdmin } = context
 
           if (!record) {
-            throw new Error('Info notification record was not found')
+            throw new AppError(StatusEnum.NotFound, getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.recordNotFound))
           }
 
           await publishInfoNotificationToAllUsers(record.id(), DEFAULT_APP_LANGUAGE)
 
-          const updatedRecord = await resource.findOne(record.id(), context)
+          const updatedRecord = await InfoNotificationModel.findById(record.id()).lean()
 
           if (!updatedRecord) {
-            throw new Error('Published info notification record was not found after update')
+            throw new AppError(
+              StatusEnum.NotFound,
+              getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.publishedRecordNotFound)
+            )
           }
 
           return {
-            record: updatedRecord.toJSON(currentAdmin),
-            redirectUrl: h.recordActionUrl({
-              resourceId: resource.id(),
-              recordId: updatedRecord.id(),
-              actionName: 'show'
-            }),
+            record: record.toJSON(currentAdmin),
+            redirectUrl: `${SERVER_ENV.adminRootPath}/resources/info-notifications/records/${String(updatedRecord._id)}/show?refresh=true`,
             notice: {
-              message: 'Info notification published',
+              message: getLocalizedText(INFO_NOTIFICATION_ADMIN_I18N.published),
               type: 'success'
             }
           }

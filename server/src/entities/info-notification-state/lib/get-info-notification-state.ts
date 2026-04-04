@@ -1,18 +1,31 @@
-import { Types } from 'mongoose'
+import { StatusEnum } from 'common'
 
-import { normalizeObjectId } from 'src/shared/lib'
+import type { MongoIdType } from 'src/shared/config'
+import { AppError, getLocalizedText, normalizeObjectId } from 'src/shared/lib'
 
+import { INFO_NOTIFICATION_STATE_I18N } from './../config'
 import { InfoNotificationStateModel } from './../model'
 
-export const getInfoNotificationState = async (userId: string | Types.ObjectId) => {
+export const getInfoNotificationState = async (userId: MongoIdType) => {
   const normalizedUserId = normalizeObjectId(userId)
 
-  const existingState = await InfoNotificationStateModel.findOne({ userId: normalizedUserId })
+  const state = await InfoNotificationStateModel.findOneAndUpdate(
+    { userId: normalizedUserId },
+    {
+      $setOnInsert: {
+        userId: normalizedUserId,
+        infoNotifications: {}
+      }
+    },
+    {
+      upsert: true,
+      new: true
+    }
+  ).lean()
 
-  if (existingState) return existingState
+  if (!state) {
+    throw new AppError(StatusEnum.Server, getLocalizedText(INFO_NOTIFICATION_STATE_I18N.stateNotFound))
+  }
 
-  return await new InfoNotificationStateModel({
-    userId: normalizedUserId,
-    infoNotifications: {}
-  }).save()
+  return state
 }

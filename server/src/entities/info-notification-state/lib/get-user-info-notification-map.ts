@@ -1,10 +1,10 @@
-import { Types } from 'mongoose'
-
 import { InfoNotificationMapType } from 'common'
+
+import type { MongoIdType } from 'src/shared/config'
 
 import { getInfoNotificationState } from './get-info-notification-state'
 
-export const getUserInfoNotificationMap = async (userId: string | Types.ObjectId): Promise<InfoNotificationMapType> => {
+export const getUserInfoNotificationMap = async (userId: MongoIdType): Promise<InfoNotificationMapType> => {
   const state = await getInfoNotificationState(userId)
   const infoNotifications = state.infoNotifications
 
