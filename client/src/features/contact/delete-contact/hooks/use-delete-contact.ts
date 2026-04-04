@@ -2,11 +2,14 @@ import { useState } from 'react'
 
 import { SocketActionsType, IEventDeleteContactSuccess } from 'common'
 
+import { useContact } from 'src/entities/contact'
+
 import { socket } from 'src/shared/api'
-import { db, useTimeout } from 'src/shared/lib'
+import { useTimeout } from 'src/shared/lib'
 
 export const useDeleteContact = () => {
   const [loading, setLoading] = useState(false)
+  const { delete: deleteById } = useContact()
   const { startTimeout } = useTimeout()
 
   const deleteUserHandler = (contactId: string) => {
@@ -19,7 +22,7 @@ export const useDeleteContact = () => {
   }
 
   const deleteContact = async (payload: IEventDeleteContactSuccess) => {
-    await db.contacts.delete(payload.deletedContactId)
+    await deleteById(payload.deletedContactId)
   }
 
   const monitorContactDeletion = () => {

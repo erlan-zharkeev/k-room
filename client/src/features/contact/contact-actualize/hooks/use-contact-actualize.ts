@@ -2,34 +2,31 @@ import { IFrontendContact, SocketActionsType } from 'common'
 
 import { getRequiredContactSystemData } from 'src/features/contact'
 
+import { useContact } from 'src/entities/contact'
+
 import { socket } from 'src/shared/api'
 import { DbContactType } from 'src/shared/config'
-import { db } from 'src/shared/lib'
 
 export const useContactActualize = () => {
+  const { mergeMany } = useContact()
+
   const actualizeContacts = async (contacts: IFrontendContact[]) => {
-    await db.transaction('rw', db.contacts, async () => {
-      const existingContacts = await db.contacts.toArray()
-      const existingContactMap = new Map(existingContacts.map((contact) => [contact.id, contact] as const))
-      const nextContacts = contacts.map((contact) => {
-        const existingContact = existingContactMap.get(contact.id)
+    await mergeMany(contacts as DbContactType[], {
+      merge: (current, incoming) => {
+        if (current) {
+          return {
+            ...current,
+            ...incoming,
+            onlineStatusSyncedAt: Date.now()
+          }
+        }
 
-        return existingContact
-          ? {
-              ...existingContact,
-              ...contact,
-              onlineStatusSyncedAt: Date.now()
-            }
-          : {
-              ...contact,
-              ...getRequiredContactSystemData()
-            }
-      })
-
-      await db.contacts.clear()
-      if (nextContacts.length) {
-        await db.contacts.bulkPut(nextContacts as DbContactType[])
-      }
+        return {
+          ...incoming,
+          ...getRequiredContactSystemData()
+        }
+      },
+      removeMissing: true
     })
   }
 

@@ -2,16 +2,17 @@ import { EventInviteReceivedType, SocketActionsType } from 'common'
 
 import { getRequiredContactSystemData } from 'src/features/contact'
 
+import { useContact } from 'src/entities/contact'
 import { useNotification } from 'src/entities/notification'
 
 import { socket } from 'src/shared/api'
-import { db } from 'src/shared/lib'
 
 export const useInviteSend = () => {
+  const { get, put } = useContact()
   const { openBrowserNotification } = useNotification()
 
   const processInvitation = async (payload: EventInviteReceivedType) => {
-    const existingContact = await db.contacts.get(payload.id)
+    const existingContact = await get(payload.id)
     const onlineStatusSyncedAt = Date.now()
     const data = existingContact
       ? {
@@ -23,12 +24,12 @@ export const useInviteSend = () => {
           ...payload,
           ...getRequiredContactSystemData()
         }
-    await db.contacts.put(data)
+    await put(data)
   }
 
   const monitorInvitation = () => {
     socket.on<SocketActionsType>('invite-received', async (payload: EventInviteReceivedType) => {
-      processInvitation(payload)
+      await processInvitation(payload)
       openBrowserNotification({
         message: {
           authorName: payload.username,
