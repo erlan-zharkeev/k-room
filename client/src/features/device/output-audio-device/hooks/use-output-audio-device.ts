@@ -31,7 +31,7 @@ export const useOutputAudioDevice = () => {
   }))
 
   const onAudioOutputDeviceChange = (value: string = '') => {
-    settings.update({ selectedAudioOutputDeviceId: value })
+    settings.shallowUpdate({ selectedAudioOutputDeviceId: value })
   }
 
   useEffect(() => {

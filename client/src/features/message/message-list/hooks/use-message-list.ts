@@ -12,7 +12,7 @@ export const useMessageList = ({ roomId, items }: { roomId: string; items: Messa
   const pendingReadIdsRef = useRef<Set<string>>(new Set())
   const saveScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingFirstVisibleItemIdRef = useRef<string | null>(null)
-  const { setByPath, messageScrollByRoom } = useSettings()
+  const { shallowUpdate, messageScrollByRoom } = useSettings()
 
   useEffect(() => {
     pendingReadIdsRef.current.clear()
@@ -44,7 +44,14 @@ export const useMessageList = ({ roomId, items }: { roomId: string; items: Messa
         }
 
         saveScrollTimeoutRef.current = setTimeout(() => {
-          setByPath(`messageScrollByRoom.${roomId}.firstVisibleItemId`, nextFirstVisibleItemId)
+          shallowUpdate({
+            messageScrollByRoom: {
+              ...messageScrollByRoom,
+              [roomId]: {
+                firstVisibleItemId: nextFirstVisibleItemId
+              }
+            }
+          })
           pendingFirstVisibleItemIdRef.current = null
         }, MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS)
       }

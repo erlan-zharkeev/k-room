@@ -3,11 +3,11 @@ import { useSettings } from 'src/entities/settings'
 import { ContentTabType } from 'src/shared/config'
 
 export const useContentTabSelect = () => {
-  const { selectedContentTab, update } = useSettings()
+  const { selectedContentTab, shallowUpdate } = useSettings()
 
   const selectContentTab = (value: ContentTabType) => {
     if (value === undefined || selectedContentTab === value) return
-    update({ selectedContentTab: value })
+    shallowUpdate({ selectedContentTab: value })
   }
 
   return { selectContentTab }

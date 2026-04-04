@@ -45,7 +45,7 @@ export const useInputAudioDevice = () => {
   }
 
   const changeAudioInputDevice = (value: string = '') => {
-    settings.update({ selectedAudioInputDeviceId: value })
+    settings.shallowUpdate({ selectedAudioInputDeviceId: value })
   }
 
   const initAudioVisualizer = (stream: MediaStream) => {

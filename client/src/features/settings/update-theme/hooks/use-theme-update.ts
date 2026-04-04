@@ -11,7 +11,7 @@ export const useThemeUpdate = () => {
   }
 
   const updateThemeByName = (value: ThemeType) => {
-    settings.update({ theme: value })
+    settings.shallowUpdate({ theme: value })
     setThemeToDom(value)
   }
 

@@ -7,11 +7,11 @@ import { useSettings } from 'src/entities/settings'
 import { socket } from 'src/shared/api'
 
 export const useLanguageSetting = () => {
-  const { language, update } = useSettings()
+  const { language, shallowUpdate } = useSettings()
 
   const toggleLanguage = (event: ChangeEvent<HTMLInputElement>) => {
     const language = event.target.checked ? APP_LANGUAGE.Ru : APP_LANGUAGE.En
-    update({ language })
+    shallowUpdate({ language })
     document.documentElement.lang = language
     socket.auth = {
       ...(typeof socket.auth === 'object' && socket.auth ? socket.auth : {}),

@@ -10,7 +10,7 @@ import { useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
 
 export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
-  const { username, avatarPath, update, id: userId } = useUser()
+  const { username, avatarPath, shallowUpdate, id: userId } = useUser()
   const { loadMedia } = useLoadMedia()
 
   const { doRequest } = useApi()
@@ -41,7 +41,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
       await doRequest('patch', USER_ENDPOINTS.editUserData, payloadFormData, {
         contentType: 'multipart/form-data'
       })
-      update({ username })
+      shallowUpdate({ username })
       if (fileBuffer || resetAvatar) {
         loadMedia(`avatar.${userId}`)
       }

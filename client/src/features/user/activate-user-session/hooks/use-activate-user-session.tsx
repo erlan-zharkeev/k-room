@@ -12,7 +12,7 @@ export const useActivateUserSession = () => {
   const { socketConnect } = useSocketConnect()
 
   const activateUserSession = async (data: IFrontendUserData) => {
-    await user.update(data)
+    await user.shallowUpdate(data)
     dispatch(setAuth('authorized'))
     socketConnect()
   }
