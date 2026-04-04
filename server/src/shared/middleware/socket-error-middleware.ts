@@ -9,7 +9,7 @@ export const socketErrorMiddleware =
     socket: SocketInstanceType,
     handler: (payload: TPayload) => void | Promise<void>,
     options: {
-      basicError: string | LocalizedTextType<string>
+      basicError: LocalizedTextType<string>
       status?: StatusEnum
       silent?: boolean
     }

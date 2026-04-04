@@ -7,9 +7,9 @@ import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
 
 import { AUTH_I18N } from './../config'
 import { verifyToken } from './../lib'
-import { refreshTokenValidator } from './index'
+import { refreshTokenValidatorMiddleware } from './index'
 
-export const accessTokenValidator = async (req: IAppRequest, res: Response, next: NextFunction) => {
+export const accessTokenValidatorMiddleware = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt
 
   if (!accessToken) {
@@ -21,6 +21,6 @@ export const accessTokenValidator = async (req: IAppRequest, res: Response, next
     req.app.locals = decoded
     return next()
   } catch {
-    return refreshTokenValidator(req, res, next)
+    return refreshTokenValidatorMiddleware(req, res, next)
   }
 }

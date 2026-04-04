@@ -2,27 +2,27 @@ import { Router } from 'express'
 
 import { USER_ENDPOINTS } from 'common'
 
-import { accessTokenValidator } from 'src/features/auth'
+import { accessTokenValidatorMiddleware } from 'src/features/auth'
 import {getUserDataController, RESET_PASSWORD_FIELDS_VALIDATION, resetPasswordController,UPDATE_USER_DATA_FIELDS_VALIDATION,
   updateUserDataController } from 'src/features/user'
 
 import { multerUploader } from 'src/entities/media'
 
-import { validateRequest } from 'src/shared/middleware'
+import { validateRequestMiddleware } from 'src/shared/middleware'
 
 export const userRouter = Router()
-userRouter.get(USER_ENDPOINTS.getUserData, accessTokenValidator, getUserDataController)
+userRouter.get(USER_ENDPOINTS.getUserData, accessTokenValidatorMiddleware, getUserDataController)
 userRouter.post(
   USER_ENDPOINTS.resetPassword,
   RESET_PASSWORD_FIELDS_VALIDATION,
-  validateRequest,
+  validateRequestMiddleware,
   resetPasswordController
 )
 userRouter.patch(
   USER_ENDPOINTS.editUserData,
-  accessTokenValidator,
+  accessTokenValidatorMiddleware,
   multerUploader.single('file'),
   UPDATE_USER_DATA_FIELDS_VALIDATION,
-  validateRequest,
+  validateRequestMiddleware,
   updateUserDataController
 )

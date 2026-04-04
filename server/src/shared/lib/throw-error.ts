@@ -2,10 +2,10 @@ import { Response } from 'express'
 
 import { IBackendResponse, LocalizedTextType, SocketActionsType, StatusEnum } from 'common'
 
-import { SHARED_I18N, SocketInstanceType } from 'src/shared/config'
+import { SHARED_I18N } from 'src/shared/config'
 import {
   getIO,
-  getLocalizedText,
+  localizedText,
   log,
   serverCaptureSentryException,
   serverCaptureSentryHttpError,
@@ -47,7 +47,7 @@ export const throwHTTPError = (
 
 export const throwSocketError = (
   socketId: string,
-  basicError?: string | LocalizedTextType<string> | null,
+  error?: LocalizedTextType<string> | string,
   options?: {
     status?: StatusEnum
     silent?: boolean
@@ -55,24 +55,22 @@ export const throwSocketError = (
   }
 ) => {
   const io = getIO()
-  const socket = io.sockets.sockets.get(socketId) as SocketInstanceType | undefined
-  const preparedMessage =
-    typeof basicError === 'string'
-      ? basicError.trim()
-      : basicError
-        ? getLocalizedText(basicError, socket?.data).trim()
-        : ''
-  const message = preparedMessage || getLocalizedText(SHARED_I18N.commonServerError, socket?.data)
+  const socket = io.sockets.sockets.get(socketId)
+  const nonLocalizedError = typeof error === 'string' || error === undefined
+  const userMessageSource = nonLocalizedError ? SHARED_I18N.commonServerError : error
+  const userMessage = localizedText(userMessageSource, socket?.data.language)
+  const logErrorMessage = nonLocalizedError ? error : userMessage
+
   const status = options?.status ?? StatusEnum.Server
   const silent = options?.silent ?? false
 
-  log.error(`-${message}`)
+  log.error(`-${logErrorMessage}`)
 
   if (options?.cause) {
     serverCaptureSentryException(options.cause)
   } else {
-    serverCaptureSentrySocketError({ message, silent, status })
+    serverCaptureSentrySocketError({ message: logErrorMessage, silent, status })
   }
 
-  io.to(socketId).emit<SocketActionsType>('error-message', { message, silent, status })
+  io.to(socketId).emit<SocketActionsType>('error-message', { message: userMessage, silent, status })
 }
