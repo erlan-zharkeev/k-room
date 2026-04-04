@@ -3,7 +3,6 @@ import { LocalizedTextType } from 'common/language'
 import { INFO_NOTIFICATION_STATUS } from './constants'
 
 export type InfoNotificationStatusType = (typeof INFO_NOTIFICATION_STATUS)[number]
-export type InfoNotificationType = InfoNotificationStatusType
 
 export interface IInfoNotification {
   id: string
@@ -14,7 +13,8 @@ export interface IInfoNotification {
   updatedAt: number
 }
 
-export type InfoNotificationMapType = Record<string, InfoNotificationType>
+export type InfoNotificationType = IInfoNotification
+export type InfoNotificationMapType = Record<string, InfoNotificationStatusType>
 
 export interface IUserInfoNotification extends IInfoNotification {
   status: InfoNotificationStatusType
