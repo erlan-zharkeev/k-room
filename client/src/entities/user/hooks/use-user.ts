@@ -7,17 +7,15 @@ import { db, dexieKeyValueStore } from 'src/shared/lib'
 export const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
 
 export const useUser = () => {
-  const userData = userStore.use<DbUserDataType>(INITIAL_USER_STORE)
+  const userData = userStore.use(INITIAL_USER_STORE)
   const { getLiveMedia } = useMedia()
 
   return {
     ...userData,
     avatarPath: getLiveMedia(`avatar.${userData.id}`),
-    initialize: () => {
-      userStore.ensure(INITIAL_USER_STORE)
-    },
+    initialize: () => userStore.ensure(INITIAL_USER_STORE),
     reset: () => userStore.reset(INITIAL_USER_STORE),
-    update: (changes: Partial<DbUserDataType>) => userStore.updateShallow(changes),
+    update: (changes: Partial<DbUserDataType>) => userStore.update(changes),
     setByPath: (path: string, value: unknown) => userStore.setByPath(path, value)
   }
 }

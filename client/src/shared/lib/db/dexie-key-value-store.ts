@@ -1,85 +1,108 @@
 import { Table } from 'dexie'
 import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
-import unset from 'lodash/unset'
 
-import { MutableType, IndexableType } from 'src/shared/lib/db/config'
+import { MutableType, IndexableType, KvItem, KvQueryState, UseResult, UseStateResult } from './config'
+import { cloneMutable } from './lib'
 
-export const dexieKeyValueStore = <T extends object, L extends string = '__key'>(
-  table: Table<T & Record<L, string>>,
-  keyValue: string,
-  keyField: L = '__key' as L
-) => {
-  type Item = T & Record<L, string>
+export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, keyValue: string) => {
+  const wrap = (data: T): KvItem<T> => ({ ...data, __key: keyValue })
 
-  const get = (): Promise<Item | undefined> => table.get(keyValue as unknown as never)
+  const unwrap = (data: KvItem<T> | undefined): T | undefined => {
+    if (!data) return undefined
 
-  const put = async (data: T) => {
-    const payload = { ...data, [keyField]: keyValue } as Item
-    await table.put(payload)
+    const { __key: _drop, ...value } = data
+
+    return value as T
+  }
+
+  const get = async (): Promise<T | undefined> => {
+    return unwrap(await table.get(keyValue as unknown as never))
   }
 
   const reset = async (defaults: T) => {
-    const payload = { ...defaults, [keyField]: keyValue } as Item
-    await table.put(payload)
+    await table.put(wrap(defaults))
   }
 
   const ensure = async (defaults: T) => {
     const exists = await table.get(keyValue as unknown as never)
     if (!exists) {
-      const payload = { ...defaults, [keyField]: keyValue } as Item
-      await table.put(payload)
+      await table.put(wrap(defaults))
     }
   }
 
-  const mutate = async (mutator: (draft: MutableType<Item>) => void) => {
+  const mutate = async (mutator: (draft: MutableType<T>) => void) => {
     await table.db.transaction('rw', table, async () => {
-      const current = (await table.get(keyValue as unknown as never)) as Item | undefined
-      const base: Item = current ?? ({ [keyField]: keyValue } as Item)
-      const draft =
-        typeof structuredClone === 'function'
-          ? (structuredClone(base) as MutableType<Item>)
-          : (JSON.parse(JSON.stringify(base)) as MutableType<Item>)
+      const current = unwrap(await table.get(keyValue as unknown as never))
+      const base = current ?? ({} as T)
+      const draft = cloneMutable(base)
       mutator(draft)
-      await table.put(draft as Item)
+      await table.put(wrap(draft as T))
     })
   }
 
-  const updateShallow = (changes: Partial<T>) =>
+  const update = (changes: Partial<T>) =>
     mutate((obj) => {
       Object.assign(obj, changes)
     })
 
   const setByPath = (path: string, value: unknown) => mutate((obj) => set(obj as unknown as IndexableType, path, value))
 
-  const unsetByPath = (path: string) => mutate((obj) => unset(obj as unknown as IndexableType, path))
+  const useQueryState = () => {
+    return useLiveQuery<KvQueryState<T> | undefined>(async () => {
+      return {
+        data: await get(),
+        isReady: true
+      }
+    }, [keyValue])
+  }
 
-  const patchByPath = (patch: Record<string, unknown>) =>
-    mutate((obj) => {
-      const target = obj as unknown as IndexableType
-      for (const [p, v] of Object.entries(patch)) set(target, p, v)
-    })
+  const use = <D extends Partial<T> | undefined = undefined>(defaults?: D): UseResult<T, D> => {
+    const state = useQueryState()
+    const data = state?.data
 
-  const use = <D extends Partial<T> = T>(defaults?: D) =>
-    useLiveQuery(
-      async () => {
-        const data = (await table.get(keyValue as unknown as never)) as Item | undefined
-        if (!data) return defaults as D & T // после await, если записи нет
-        const { [keyField]: _drop, ...rest } = data
-        return (defaults ? { ...(defaults as object), ...rest } : (rest as unknown)) as D & T
-      },
-      [keyValue],
-      defaults as D & T
-    )
+    if (!data) {
+      return defaults as UseResult<T, D>
+    }
+
+    if (!defaults) {
+      return data as UseResult<T, D>
+    }
+
+    return { ...defaults, ...data } as UseResult<T, D>
+  }
+
+  const useState = <D extends Partial<T> | undefined = undefined>(defaults?: D): UseStateResult<T, D> => {
+    const state = useQueryState()
+    const entry = state?.data
+
+    if (!state?.isReady) {
+      return {
+        data: defaults as UseResult<T, D>,
+        isReady: false
+      }
+    }
+
+    if (!defaults) {
+      return {
+        data: entry as UseResult<T, D>,
+        isReady: true
+      }
+    }
+
+    return {
+      data: { ...defaults, ...entry } as UseResult<T, D>,
+      isReady: true
+    }
+  }
+
   return {
     get,
     use,
-    put,
+    useState,
     reset,
     ensure,
-    updateShallow,
-    setByPath,
-    unsetByPath,
-    patchByPath
+    update,
+    setByPath
   }
 }
