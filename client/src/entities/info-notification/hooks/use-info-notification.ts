@@ -1,35 +1,29 @@
 import { Fragment, createElement } from 'react'
 
 import { IEventInfoNotificationStatusUpdated } from 'common'
-import { useLiveQuery } from 'dexie-react-hooks'
 
 import { useI18n } from 'src/entities/settings'
 
 import { DbInfoNotificationType } from 'src/shared/config'
-import { db } from 'src/shared/lib'
+import { db, dexieCollectionStore } from 'src/shared/lib'
 
 import { INFO_NOTIFICATIONS_I18N } from './../config'
 
+const infoNotificationStore = dexieCollectionStore<DbInfoNotificationType>(db['info-notifications'])
+
 export const useInfoNotification = () => {
   const { t } = useI18n()
-  const infoNotificationList =
-    useLiveQuery(async () => {
-      return await (db['info-notifications'].toArray() as Promise<DbInfoNotificationType[]>)
-    }, []) ?? []
+  const infoNotificationList = infoNotificationStore.use()
 
-  const unreadInfoNotificationQuantity = infoNotificationList.filter(
-    (notification) => notification.status === 'unread'
-  ).length
+  const unreadQuantity = infoNotificationList.filter((notification) => notification.status === 'unread').length
 
   const isRead = (id: string) =>
     infoNotificationList.find((notification) => notification.id === id)?.status !== 'unread'
 
-  const putInfoNotification = async (payload: DbInfoNotificationType) => await db['info-notifications'].put(payload)
-
-  const mergeInfoNotifications = async (payload: DbInfoNotificationType[]) => {
+  const merge = async (payload: DbInfoNotificationType[]) => {
     if (!payload.length) return
 
-    const existingInfoNotifications = await db['info-notifications'].bulkGet(payload.map(({ id }) => id))
+    const existingInfoNotifications = await infoNotificationStore.bulkGet(payload.map(({ id }) => id))
     const infoNotificationsToUpsert = payload.filter((notification, index) => {
       const existingInfoNotification = existingInfoNotifications[index]
 
@@ -44,14 +38,12 @@ export const useInfoNotification = () => {
 
     if (!infoNotificationsToUpsert.length) return
 
-    await db['info-notifications'].bulkPut(infoNotificationsToUpsert)
+    await infoNotificationStore.bulkPut(infoNotificationsToUpsert)
   }
 
-  const updateInfoNotificationStatus = async ({ id, status }: IEventInfoNotificationStatusUpdated) => {
-    await db['info-notifications'].update(id, { status })
+  const updateStatus = ({ id, status }: IEventInfoNotificationStatusUpdated) => {
+    return infoNotificationStore.update(id, { status })
   }
-
-  const reset = () => db['info-notifications'].clear()
 
   const collapseInfoNotifications = infoNotificationList.map((notification) => {
     const paragraphs = t(notification.content)
@@ -71,12 +63,12 @@ export const useInfoNotification = () => {
 
   return {
     infoNotificationList,
-    unreadInfoNotificationQuantity,
+    unreadQuantity,
     collapseInfoNotifications,
     isRead,
-    putInfoNotification,
-    mergeInfoNotifications,
-    updateInfoNotificationStatus,
-    reset
+    put: (payload: DbInfoNotificationType) => infoNotificationStore.put(payload),
+    merge,
+    updateStatus,
+    reset: () => infoNotificationStore.reset()
   }
 }

@@ -13,7 +13,7 @@ import { useTimeout } from 'src/shared/lib'
 export const useAddContact = () => {
   const { id } = useUser()
   const [loading, setLoading] = useState(false)
-  const { putContact } = useContact()
+  const { put } = useContact()
   const { startTimeout } = useTimeout()
 
   const clickAddContactHandler = async (interlocutorId: string | undefined) => {
@@ -28,7 +28,7 @@ export const useAddContact = () => {
   }
 
   const addContact = async (payload: IEventContactAddSuccess) => {
-    putContact({ ...payload.contactData, ...getRequiredContactSystemData() })
+    await put({ ...payload.contactData, ...getRequiredContactSystemData() })
   }
 
   const monitorContactAdding = () => {

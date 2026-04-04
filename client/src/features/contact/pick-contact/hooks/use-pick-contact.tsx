@@ -9,7 +9,7 @@ export const usePickContact = () => {
   const { contacts } = useContact()
   const [pickedContactIds, setPickedContactIds] = useState<string[]>([])
   const [filterQuery, setFilterQuery] = useState('')
-  const { getPersonalRoomByContactId } = useChatRoom()
+  const { getPersonalByContactId } = useChatRoom()
 
   const contactListToPick = useMemo(() => {
     const q = filterQuery.trim().toLowerCase()
@@ -26,8 +26,8 @@ export const usePickContact = () => {
 
   const isPrivateChatAlreadyExists = useMemo(() => {
     if (pickedContactIds.length !== 1) return false
-    return Boolean(getPersonalRoomByContactId(pickedContactIds[0]))
-  }, [pickedContactIds, getPersonalRoomByContactId])
+    return Boolean(getPersonalByContactId(pickedContactIds[0]))
+  }, [pickedContactIds, getPersonalByContactId])
 
   return {
     filterQuery,

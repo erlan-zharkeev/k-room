@@ -40,9 +40,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     await table.bulkPut(data as Item[])
   }
 
-  const update = async (id: ItemId, changes: Partial<Item>) => {
-    await table.update(id as never, changes as never)
-  }
+  const update = (id: ItemId, changes: Partial<Item>) => table.update(id as never, changes as never)
 
   const deleteById = async (id: ItemId) => {
     await table.delete(id as never)

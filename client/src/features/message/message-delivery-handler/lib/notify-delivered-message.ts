@@ -9,7 +9,7 @@ import { useSound } from 'src/entities/sound'
 export const notifyDeliveredMessage = (payload: IEventMessageDelivered) => {
   const { getNotification, openBrowserNotification } = useNotification()
   const { play } = useSound()
-  const { getRoomById } = useChatRoom()
+  const { getById } = useChatRoom()
 
   if (payload.message.isSelf) return
   const { message, roomId } = payload
@@ -19,6 +19,6 @@ export const notifyDeliveredMessage = (payload: IEventMessageDelivered) => {
     placement: 'topRight'
   })
   incomeMessageNotification.open()
-  openBrowserNotification({ message, icon: getRoomById(roomId)?.avatarId })
+  openBrowserNotification({ message, icon: getById(roomId)?.avatarId })
   play('message-delivered')
 }

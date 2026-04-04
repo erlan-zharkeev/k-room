@@ -1,9 +1,12 @@
+import { useMedia } from 'src/entities/media'
+
 import { IDbMedia } from 'src/shared/config'
-import { db } from 'src/shared/lib'
 
 export const useSaveMedia = () => {
+  const { put } = useMedia()
+
   const saveMedia = async (data: IDbMedia) => {
-    await db.media.put(data)
+    await put(data)
   }
 
   return {

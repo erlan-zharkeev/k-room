@@ -8,14 +8,14 @@ import { socket } from 'src/shared/api'
 import { FChatRoomType } from 'src/shared/config'
 
 export const useAddRoom = () => {
-  const { putChatRoom } = useChatRoom()
+  const { put } = useChatRoom()
 
   const monitorRoomAddition = () => {
     socket.on<SocketActionsType>('new-room-added', roomAdditionHandler)
   }
 
   const roomAdditionHandler = (data: FChatRoomType) => {
-    putChatRoom(transformRoomData(data))
+    void put(transformRoomData(data))
   }
 
   return { monitorRoomAddition }

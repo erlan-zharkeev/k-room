@@ -5,14 +5,14 @@ import { notifyDeliveredMessage, useAddMessage } from 'src/features/message'
 import { useMessage } from 'src/entities/message'
 
 export const useHandleDeliveredMessage = () => {
-  const { getMessageById, updateMessage } = useMessage()
+  const { getById, update } = useMessage()
   const { addMessage } = useAddMessage()
 
   const handleDeliveredMessage = async (payload: IEventMessageDelivered) => {
     const { roomId, message } = payload
-    const existingMessage = getMessageById(message.id)
+    const existingMessage = getById(message.id)
     if (existingMessage) {
-      await updateMessage(message.id, {
+      await update(message.id, {
         ...message,
         status: 'delivered'
       })

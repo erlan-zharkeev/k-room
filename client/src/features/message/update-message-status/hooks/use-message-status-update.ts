@@ -5,11 +5,11 @@ import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
 
 export const useMessageStatusUpdate = () => {
-  const { updateMessage } = useMessage()
+  const { update } = useMessage()
 
   const monitorMessageStatus = () => {
     socket.on<SocketActionsType>('message-status-updated', (payload: IEventUpdateMessageStatus) => {
-      void updateMessage(payload.messageId, { status: payload.status })
+      void update(payload.messageId, { status: payload.status })
     })
   }
 

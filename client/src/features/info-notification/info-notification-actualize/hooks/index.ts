@@ -1,1 +1,1 @@
-export * from './use-info-notification-actualize'
+export * from './use-monitor-info-notifications'

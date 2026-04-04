@@ -3,9 +3,9 @@ import { useContact } from 'src/entities/contact'
 import { DbContactType } from 'src/shared/config'
 
 export const useUpdateContactData = () => {
-  const { updateContact } = useContact()
+  const { update } = useContact()
   const updateContactData = async (id: string, updatedFields: Partial<DbContactType>) => {
-    updateContact(id, updatedFields)
+    update(id, updatedFields)
   }
 
   return { updateContactData }

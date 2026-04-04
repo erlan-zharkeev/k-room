@@ -1,17 +1,12 @@
-import { useLiveQuery } from 'dexie-react-hooks'
-
 import { DbContactType } from 'src/shared/config'
-import { db } from 'src/shared/lib'
+import { db, dexieCollectionStore } from 'src/shared/lib'
 
-// import { MOCK } from 'src/entities/contact/config'
+const contactStore = dexieCollectionStore<DbContactType>(db.contacts)
 
 export const useContact = () => {
-  const contacts =
-    useLiveQuery(async () => {
-      return await (db.contacts.toArray() satisfies Promise<DbContactType[]>)
-    }, []) ?? []
+  const contacts = contactStore.use()
 
-  const getContactByIds = (ids: string[]): DbContactType[] => {
+  const getByIds = (ids: string[]): DbContactType[] => {
     if (!ids?.length) return []
     const map = new Map(contacts.map((c) => [c.id, c]))
     const result: DbContactType[] = []
@@ -22,26 +17,18 @@ export const useContact = () => {
     return result
   }
 
-  const isContactExist = (id: string) => Boolean(contacts?.some((c) => c.id === id))
+  const isExist = (id: string) => Boolean(contacts?.some((c) => c.id === id))
 
-  const putContact = async (payload: DbContactType) => await db.contacts.put(payload)
-
-  const updateContact = async (id: string, patch: Partial<DbContactType>) => {
-    await db.contacts.update(id, patch)
-  }
-
-  const bulkPutContacts = async (payload: DbContactType[]) => await db.contacts.bulkPut(payload)
-
-  const reset = () => db.contacts.clear()
+  const invitationsQuantity = contacts.filter((c) => c.interactionType === 'invite-received').length
 
   return {
     contacts,
-    contactInvitationsQuantity: contacts?.filter((c) => c.interactionType === 'invite-received').length ?? 0,
-    isContactExist,
-    getContactByIds,
-    putContact,
-    updateContact,
-    bulkPutContacts,
-    reset
+    invitationsQuantity,
+    isExist,
+    getByIds,
+    put: (payload: DbContactType) => contactStore.put(payload),
+    bulkPut: (payload: DbContactType[]) => contactStore.bulkPut(payload),
+    update: (id: string, patch: Partial<DbContactType>) => contactStore.update(id, patch),
+    reset: () => contactStore.reset()
   }
 }

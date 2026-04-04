@@ -9,11 +9,11 @@ import { useInfoNotification } from 'src/entities/info-notification'
 import { AppButton } from 'src/shared/ui'
 
 export const InfoMessageBtn = () => {
-  const { unreadInfoNotificationQuantity } = useInfoNotification()
+  const { unreadQuantity } = useInfoNotification()
   const { selectContentTab } = useContentTabSelect()
 
   return (
-    <Badge color={'var(--error)'} count={unreadInfoNotificationQuantity} offset={[-5, 2]}>
+    <Badge color={'var(--error)'} count={unreadQuantity} offset={[-5, 2]}>
       <AppButton prefixIconName="notification" borderless onClick={() => selectContentTab('info')} />
     </Badge>
   )

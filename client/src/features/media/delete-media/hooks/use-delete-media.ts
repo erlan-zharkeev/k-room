@@ -1,8 +1,10 @@
-import { db } from 'src/shared/lib'
+import { useMedia } from 'src/entities/media'
 
 export const useDeleteMedia = () => {
+  const { delete: deleteMediaById } = useMedia()
+
   const deleteMedia = async (id: string) => {
-    await db.media.delete(id)
+    await deleteMediaById(id)
   }
 
   return {
