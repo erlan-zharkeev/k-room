@@ -1,7 +1,6 @@
 import { AppLanguageType } from 'common'
 
-import { MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
-import { mediaBuckets } from 'src/entities/media'
+import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
 
 export const updateUserAvatar = async (
   buffer: Buffer | null,

@@ -1,10 +1,5 @@
 import { markInfoNotificationAsReadController } from 'src/features/info-notification'
-import {
-  actualizeUserDataController,
-  updateLanguageController,
-  userConnectController,
-  userDisconnectController
-} from 'src/features/user'
+import { actualizeUserDataController,updateLanguageController, userConnectController, userDisconnectController } from 'src/features/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 
