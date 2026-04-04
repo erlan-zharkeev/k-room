@@ -9,7 +9,7 @@ import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { CODE_LIFE_MS, RESEND_CODE_INTERVAL, SEND_PASSWORD_RECOVERY_CODE_I18N } from './config'
 
@@ -20,7 +20,7 @@ export const sendPasswordRecoveryCodeController = async (
   res: AppResponseType<ISendPasswordRecoveryCodeResponse>
 ) => {
   const { language } = req
-  const basicError = getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language)
+  const basicError = localizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language)
 
   try {
     const { email } = req.body as { email: string }
@@ -28,7 +28,7 @@ export const sendPasswordRecoveryCodeController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     const now = Date.now()
@@ -40,7 +40,7 @@ export const sendPasswordRecoveryCodeController = async (
           nextTimeRequest: existingCode.nextRequestPossibleAt
         },
         message: {
-          text: getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.tooManyRequests, language),
+          text: localizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.tooManyRequests, language),
           silent: false
         }
       })
@@ -66,6 +66,7 @@ export const sendPasswordRecoveryCodeController = async (
     await sendPasswordRecoveryEmail({
       email,
       code,
+      language,
       username: user.public.username
     })
 
@@ -75,7 +76,7 @@ export const sendPasswordRecoveryCodeController = async (
         ...(SERVER_ENV.isDev ? { debugCode: code } : {})
       },
       message: {
-        text: getLocalizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.codeSent, language),
+        text: localizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.codeSent, language),
         silent: false
       }
     })

@@ -1,21 +1,19 @@
-import { ObjectId } from 'mongoose'
-
 import { StatusEnum } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SERVER_ENV, SHARED_I18N } from 'src/shared/config'
-import { getIO, getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { getIO, localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { LOGOUT_I18N } from './config'
 
 export const logoutController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const { language } = req
-  const basicError = getLocalizedText(LOGOUT_I18N.failed, language)
+  const basicError = localizedText(LOGOUT_I18N.failed, language)
 
   try {
     const deviceId = req.cookies['device-id']
-    const userId = req.app.locals.id as ObjectId
+    const userId = req.app.locals.id
 
     const user = await UserModel.findById(userId)
     if (user && deviceId) {
@@ -40,7 +38,7 @@ export const logoutController = async (req: IAppRequest, res: AppResponseType<nu
     })
     return res.json({
       message: {
-        text: getLocalizedText(SHARED_I18N.success, language),
+        text: localizedText(SHARED_I18N.success, language),
         silent: true
       },
       payload: null

@@ -2,7 +2,7 @@ import { Response } from 'express'
 
 import { AppLanguageType, StatusEnum } from 'common'
 
-import { AppError, getLocalizedText, isAppError, throwHTTPError } from 'src/shared/lib'
+import { AppError, isAppError, localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { COMMON_MEDIA_I18N, MediaBucketNameType } from './../config'
 import { mediaBuckets } from './../model'
@@ -11,14 +11,14 @@ export const streamMediaFile = async (
   bucketName: MediaBucketNameType,
   id: string,
   res: Response,
-  language?: AppLanguageType,
+  language: AppLanguageType,
   opts?: { asAttachment?: boolean; revalidateCache?: boolean }
 ) => {
   try {
     const bucket = mediaBuckets[bucketName]
 
     if (!bucket) {
-      throw new AppError(StatusEnum.NotFound, getLocalizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
+      throw new AppError(StatusEnum.NotFound, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
     }
 
     const filename = `${bucketName}.${id}`
@@ -26,7 +26,7 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      throw new AppError(StatusEnum.NotFound, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
+      throw new AppError(StatusEnum.NotFound, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
     }
 
     res.setHeader('Content-Type', file.contentType || 'application/octet-stream')
@@ -44,7 +44,7 @@ export const streamMediaFile = async (
     bucket
       .openDownloadStreamByName(filename)
       .on('error', (error) =>
-        throwHTTPError(StatusEnum.NotFound, res, getLocalizedText(COMMON_MEDIA_I18N.fileNotFound, language), false, error)
+        throwHTTPError(StatusEnum.NotFound, res, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), false, error)
       )
       .pipe(res)
   } catch (error) {
@@ -52,6 +52,6 @@ export const streamMediaFile = async (
       throw error
     }
 
-    throw new AppError(StatusEnum.Server, getLocalizedText(COMMON_MEDIA_I18N.failedToStreamFile, language), false, error)
+    throw new AppError(StatusEnum.Server, localizedText(COMMON_MEDIA_I18N.failedToStreamFile, language), false, error)
   }
 }

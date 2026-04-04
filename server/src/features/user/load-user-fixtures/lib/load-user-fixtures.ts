@@ -4,21 +4,21 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 
-import { StatusEnum } from 'common'
+import { AppLanguageType, DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
 
-import { COMMON_MEDIA_I18N, mediaBuckets, MongooseGridFSBucketType } from 'src/entities/media'
+import { COMMON_MEDIA_I18N, mediaBuckets } from 'src/entities/media'
 import { USER_FIXTURES } from 'src/entities/user'
 
-import { AppError, getLocalizedText, log } from 'src/shared/lib'
+import { AppError, localizedText, log } from 'src/shared/lib'
 
 import { createUser, isUserExist } from './../../shared'
 import { updateUserAvatar } from './../../update-user-data'
 
-const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
-  const bucket = mediaBuckets.avatar as MongooseGridFSBucketType | null
+const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: AppLanguageType) => {
+  const bucket = mediaBuckets.avatar
 
   if (!bucket) {
-    throw new AppError(StatusEnum.Server, getLocalizedText(COMMON_MEDIA_I18N.failedToFindBucket))
+    throw new AppError(StatusEnum.Server, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
   }
 
   const filename = `avatar.${userId}`
@@ -29,24 +29,27 @@ const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
   const avatarSrc = path.resolve(avatarPath)
   const buffer = await fs.readFile(avatarSrc)
 
-  await updateUserAvatar(buffer, userId)
+  await updateUserAvatar(buffer, userId, language)
 
   return true
 }
 
-const loadUserFixture = async (data: {
-  id: string
-  email: string
-  username: string
-  pass: string
-  avatarPath: string
-}) => {
+const loadUserFixture = async (
+  data: {
+    id: string
+    email: string
+    username: string
+    pass: string
+    avatarPath: string
+  },
+  language: AppLanguageType
+) => {
   const { id, username, email, pass, avatarPath } = data
   const identifier = new mongoose.Types.ObjectId(id)
 
   const userExistState = await isUserExist({ id: identifier, username, email })
   if (userExistState.exists) {
-    const avatarLoaded = await ensureAvatarLoaded(id, avatarPath)
+    const avatarLoaded = await ensureAvatarLoaded(id, avatarPath, language)
 
     return avatarLoaded ? 'updated' : 'skipped'
   }
@@ -58,13 +61,13 @@ const loadUserFixture = async (data: {
   }
 
   await user.set('system.confirmed', true).save()
-  await ensureAvatarLoaded(id, avatarPath)
+  await ensureAvatarLoaded(id, avatarPath, language)
 
   return 'created'
 }
 
-export const loadUserFixtures = async () => {
-  const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data)))
+export const loadUserFixtures = async (language: AppLanguageType = DEFAULT_APP_LANGUAGE) => {
+  const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data, language)))
 
   const created = results.filter((result) => result === 'created').length
   const updated = results.filter((result) => result === 'updated').length

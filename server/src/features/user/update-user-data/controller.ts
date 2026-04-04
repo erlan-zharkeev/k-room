@@ -3,7 +3,7 @@ import { SocketActionsType, StatusEnum } from 'common'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
-import { getIO, getLocalizedText, isAppError, log, throwHTTPError } from 'src/shared/lib'
+import { getIO, isAppError, localizedText, log, throwHTTPError } from 'src/shared/lib'
 
 import { getSocketsByUserIds, transformUserToContact, USER_I18N } from './../shared'
 import { UPDATE_USER_DATA_I18N } from './config'
@@ -11,7 +11,7 @@ import { updateUserAvatar } from './lib'
 
 export const updateUserDataController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const { language } = req
-  const basicError = getLocalizedText(UPDATE_USER_DATA_I18N.failedUpdate, language)
+  const basicError = localizedText(UPDATE_USER_DATA_I18N.failedUpdate, language)
 
   try {
     const username: string | undefined = req.body.username
@@ -23,14 +23,14 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       return throwHTTPError(
         StatusEnum.BadRequest,
         res,
-        getLocalizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language)
+        localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language)
       )
     }
 
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     if (username && username !== user.public.username) {
@@ -60,7 +60,7 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
 
     return res.json({
       payload: null,
-      message: { text: getLocalizedText(SHARED_I18N.success, language), silent: true }
+      message: { text: localizedText(SHARED_I18N.success, language), silent: true }
     })
   } catch (error: unknown) {
     if (isAppError(error)) {

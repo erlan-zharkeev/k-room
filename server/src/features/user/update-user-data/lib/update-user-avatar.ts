@@ -1,11 +1,11 @@
-import { AppLanguageType } from 'common'
+import { AppLanguageType, DEFAULT_APP_LANGUAGE } from 'common'
 
 import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/entities/media'
 
 export const updateUserAvatar = async (
   buffer: Buffer | null,
   userId: string,
-  language?: AppLanguageType
+  language: AppLanguageType = DEFAULT_APP_LANGUAGE
 ) => {
   const bucket = mediaBuckets.avatar as MongooseGridFSBucketType
   const filename = `avatar.${String(userId)}`
@@ -22,10 +22,10 @@ export const updateUserAvatar = async (
     buffer,
     filename,
     'avatar',
+    language,
     {
       overwrite: true,
       compression: 'avatar'
-    },
-    language
+    }
   )
 }

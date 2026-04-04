@@ -8,13 +8,13 @@ import { CodeModel } from 'src/entities/code'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest } from 'src/shared/config'
-import { getLocalizedText, throwHTTPError } from 'src/shared/lib'
+import { localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { RESET_PASSWORD_I18N } from './config'
 
 export const resetPasswordController = async (req: IAppRequest, res: AppResponseType<null>) => {
   const { language } = req
-  const basicError = getLocalizedText(RESET_PASSWORD_I18N.failed, language)
+  const basicError = localizedText(RESET_PASSWORD_I18N.failed, language)
 
   try {
     const { codeToValidate, password }: ICreateNewPasswordPayload = req.body
@@ -30,13 +30,13 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
     const isExpired = isCodeExpired(expiresAt)
 
     if (isExpired) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(RESET_PASSWORD_I18N.codeExpired, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(RESET_PASSWORD_I18N.codeExpired, language))
     }
 
     const isCodeMatched = codeToValidate === validCode
 
     if (!isCodeMatched) {
-      return throwHTTPError(StatusEnum.BadRequest, res, getLocalizedText(RESET_PASSWORD_I18N.codeNotValid, language))
+      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(RESET_PASSWORD_I18N.codeNotValid, language))
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -55,7 +55,7 @@ export const resetPasswordController = async (req: IAppRequest, res: AppResponse
 
     return res.json({
       payload: null,
-      message: { text: getLocalizedText(RESET_PASSWORD_I18N.success, language), silent: true }
+      message: { text: localizedText(RESET_PASSWORD_I18N.success, language), silent: true }
     })
   } catch (error) {
     return throwHTTPError(StatusEnum.Server, res, basicError, false, error)

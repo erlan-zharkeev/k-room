@@ -2,7 +2,7 @@ import { Buffer } from 'node:buffer'
 
 import { AppLanguageType, StatusEnum } from 'common'
 
-import { AppError, getLocalizedText, isAppError } from 'src/shared/lib'
+import { AppError, isAppError, localizedText } from 'src/shared/lib'
 
 import { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType, VALIDATE_MEDIA_FILE_I18N } from './../config'
 import { buildFileData, processImageWithSharp, validateFileMetaData } from './index'
@@ -12,8 +12,8 @@ export const uploadBufferToBucket = async (
   buffer: Buffer | ArrayBuffer,
   filename: string,
   bucketName: MediaBucketNameType,
-  options?: IUploadOptions,
-  language?: AppLanguageType
+  language: AppLanguageType,
+  options?: IUploadOptions
 ) => {
   try {
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
@@ -31,7 +31,7 @@ export const uploadBufferToBucket = async (
       if (!overwrite) {
         throw new AppError(
           StatusEnum.Server,
-          getLocalizedText(VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists, language)
+          localizedText(VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists, language)
         )
       }
 
@@ -52,6 +52,6 @@ export const uploadBufferToBucket = async (
       throw error
     }
 
-    throw new AppError(StatusEnum.Server, getLocalizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language), false, error)
+    throw new AppError(StatusEnum.Server, localizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language), false, error)
   }
 }

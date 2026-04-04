@@ -7,14 +7,14 @@ import { sendEmailConfirmationEmail } from 'src/features/email'
 import { createUser, isUserExist } from 'src/features/user'
 
 import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
-import { getLocalizedText, getRequestLanguage, throwHTTPError } from 'src/shared/lib'
+import { localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { REGISTRATION_I18N, REGISTRATION_RESEND_INTERVAL_MINUTES } from './config'
 import { getUserExistMessage } from './lib'
 
 export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
-  const language = getRequestLanguage(req.headers)
-  const basicError = getLocalizedText(REGISTRATION_I18N.failedRegistration, language)
+  const { language } = req
+  const basicError = localizedText(REGISTRATION_I18N.failedRegistration, language)
 
   try {
     const { username, email, password }: IAuthRegistrationPayload = req.body
@@ -39,6 +39,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
 
     await sendEmailConfirmationEmail({
       email,
+      language,
       token: confirmToken,
       username
     })
@@ -52,7 +53,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
         nextRequestTime
       },
       message: {
-        text: getLocalizedText(REGISTRATION_I18N.registrationSuccess, language),
+        text: localizedText(REGISTRATION_I18N.registrationSuccess, language),
         silent: false
       }
     }
