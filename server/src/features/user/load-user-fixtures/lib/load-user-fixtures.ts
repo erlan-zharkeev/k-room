@@ -4,12 +4,12 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 
-import { updateUserAvatar } from 'src/features/user'
-import { createUser, isUserExist } from 'src/features/user/shared'
+import { USER_FIXTURES } from 'src/entities/user'
 
 import { log } from 'src/shared/lib'
 
-import { USER_FIXTURES } from './index'
+import { createUser,isUserExist } from './../../shared'
+import { updateUserAvatar } from './../../update-user-data'
 
 const loadUserFixture = async (data: {
   id: string
@@ -32,10 +32,11 @@ const loadUserFixture = async (data: {
     return 'failed'
   }
 
-  await user?.set('system.confirmed', true).save()
+  await user.set('system.confirmed', true).save()
   const avatarSrc = path.resolve(avatarPath)
   const buffer = await fs.readFile(avatarSrc)
   await updateUserAvatar(buffer, id)
+
   return 'created'
 }
 

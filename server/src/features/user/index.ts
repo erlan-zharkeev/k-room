@@ -1,5 +1,6 @@
 export * from './actualize-user-data'
 export * from './get-user-data'
+export * from './load-user-fixtures'
 export * from './reset-password'
 export * from './shared'
 export * from './update-language'
