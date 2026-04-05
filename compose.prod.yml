@@ -15,8 +15,12 @@ services:
     env_file:
       - path: ./.env.production
         required: true
-      - path: ./.env.runtime
-        required: false
+    environment:
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      EMAIL_CONFIRM_SECRET: ${EMAIL_CONFIRM_SECRET}
     depends_on:
       db:
         condition: service_healthy

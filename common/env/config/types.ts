@@ -13,8 +13,8 @@ export interface IEnvVariables {
   RESEND_API_KEY: string
   ADMIN_USERNAME: string
   ADMIN_PASSWORD: string
-  K_ROOM_ACCESS_TOKEN_SECRET: string
-  K_ROOM_REFRESH_TOKEN_SECRET: string
+  ACCESS_TOKEN_SECRET: string
+  REFRESH_TOKEN_SECRET: string
   EMAIL_CONFIRM_SECRET: string
 }
 
