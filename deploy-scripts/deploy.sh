@@ -56,4 +56,10 @@ fi
 echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
 docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" pull
-docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --remove-orphans
+
+if ! docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --remove-orphans; then
+  echo "[deploy] docker compose up failed" >&2
+  docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" ps || true
+  docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" logs --no-color server webserver client mongo-express db || true
+  exit 1
+fi
