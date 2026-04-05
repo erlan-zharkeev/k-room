@@ -3,7 +3,7 @@ import { SocketActionsType, StatusEnum } from 'common'
 import { UserModel } from 'src/entities/user'
 
 import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
-import { getIO, isAppError, localizedText, log, throwHTTPError } from 'src/shared/lib'
+import { getIO, isAppError, localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { getSocketsByUserIds, transformUserToContact, USER_I18N } from './../shared'
 import { UPDATE_USER_DATA_I18N } from './config'
@@ -53,8 +53,7 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       const updatedUserData = await UserModel.findById(userId).lean()
       if (!updatedUserData) return
       socketIds.forEach((socketId) => {
-        log.warn(String(socketId))
-        getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
+getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
       })
     }
 
