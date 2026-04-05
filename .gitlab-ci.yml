@@ -66,18 +66,9 @@ deploy-production:
     - >
       ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
       "mkdir -p $LIGHTSAIL_APP_PATH/deploy-scripts $LIGHTSAIL_APP_PATH/config/nginx $LIGHTSAIL_APP_PATH/deploy-scripts/certs"
-    - rm -f .env.runtime
-    - printf '%s=%s\n' "MONGO_ADMIN_PASSWORD" "$MONGO_ADMIN_PASSWORD" >> .env.runtime
-    - printf '%s=%s\n' "FIREBASE_API_KEY" "$FIREBASE_API_KEY" >> .env.runtime
-    - printf '%s=%s\n' "RESEND_API_KEY" "$RESEND_API_KEY" >> .env.runtime
-    - printf '%s=%s\n' "ADMIN_PASSWORD" "$ADMIN_PASSWORD" >> .env.runtime
-    - printf '%s=%s\n' "K_ROOM_ACCESS_TOKEN_SECRET" "$K_ROOM_ACCESS_TOKEN_SECRET" >> .env.runtime
-    - printf '%s=%s\n' "K_ROOM_REFRESH_TOKEN_SECRET" "$K_ROOM_REFRESH_TOKEN_SECRET" >> .env.runtime
-    - printf '%s=%s\n' "EMAIL_CONFIRM_SECRET" "$EMAIL_CONFIRM_SECRET" >> .env.runtime
     - scp compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
     - scp .env.common "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.common"
     - scp .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
-    - scp .env.runtime "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.runtime"
     - scp deploy-scripts/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy-scripts/deploy.sh"
     - scp deploy-scripts/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy-scripts/sync-certs.sh"
     - scp deploy-scripts/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy-scripts/install-certbot-renew-hook.sh"

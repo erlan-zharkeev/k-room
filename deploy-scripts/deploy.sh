@@ -6,7 +6,6 @@ ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 COMPOSE_FILE="${COMPOSE_FILE:-$ROOT_DIR/compose.prod.yml}"
 COMMON_ENV_FILE="${COMMON_ENV_FILE:-$ROOT_DIR/.env.common}"
 ENV_FILE="${ENV_FILE:-$ROOT_DIR/.env.production}"
-RUNTIME_ENV_FILE="${RUNTIME_ENV_FILE:-$ROOT_DIR/.env.runtime}"
 MERGED_ENV_FILE="$ROOT_DIR/.env.deploy"
 
 require_env() {
@@ -21,6 +20,12 @@ require_env() {
 
 require_env DOCKERHUB_USERNAME
 require_env DOCKERHUB_TOKEN
+require_env MONGO_ADMIN_PASSWORD
+require_env RESEND_API_KEY
+require_env ADMIN_PASSWORD
+require_env ACCESS_TOKEN_SECRET
+require_env REFRESH_TOKEN_SECRET
+require_env EMAIL_CONFIRM_SECRET
 
 if [ ! -f "$COMPOSE_FILE" ]; then
   echo "[deploy] Compose file not found: $COMPOSE_FILE" >&2
@@ -39,11 +44,7 @@ fi
 
 mkdir -p "$ROOT_DIR/deploy-scripts/certs"
 
-if [ ! -f "$RUNTIME_ENV_FILE" ]; then
-  : > "$RUNTIME_ENV_FILE"
-fi
-
-cat "$COMMON_ENV_FILE" "$ENV_FILE" "$RUNTIME_ENV_FILE" > "$MERGED_ENV_FILE"
+cat "$COMMON_ENV_FILE" "$ENV_FILE" > "$MERGED_ENV_FILE"
 trap 'rm -f "$MERGED_ENV_FILE"' EXIT
 
 APP_HOST="$(grep '^APP_HOST=' "$ENV_FILE" | head -n 1 | cut -d '=' -f 2- | sed "s/^'//; s/'$//; s/^\"//; s/\"$//")"
@@ -64,10 +65,7 @@ if ! docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --rem
   SERVER_CONTAINER_ID="$(docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" ps -q server 2>/dev/null || true)"
 
   if [ -n "$SERVER_CONTAINER_ID" ]; then
-    echo "[deploy] server health:" >&2
-    docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$SERVER_CONTAINER_ID" || true
-    echo "[deploy] server logs (tail 200):" >&2
-    docker logs --tail 200 "$SERVER_CONTAINER_ID" || true
+    SERVER_HEALTH_STATUS="$(docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$SERVER_CONTAINER_ID" 2>/dev/null || true)"
   fi
 
   echo "[deploy] webserver logs (tail 60):" >&2
@@ -78,6 +76,13 @@ if ! docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --rem
 
   echo "[deploy] mongo-express logs (tail 60):" >&2
   docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" logs --no-color --tail 60 mongo-express || true
+
+  if [ -n "$SERVER_CONTAINER_ID" ]; then
+    echo "[deploy] server health:" >&2
+    printf '%s\n' "$SERVER_HEALTH_STATUS" >&2
+    echo "[deploy] server logs (tail 200):" >&2
+    docker logs --tail 200 "$SERVER_CONTAINER_ID" || true
+  fi
 
   exit 1
 fi

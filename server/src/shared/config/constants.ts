@@ -11,9 +11,9 @@ const envs = dotenv.config({ path: `../.env.${stage}` }).parsed as DotenvParseOu
 const commonEnvs = dotenv.config({ path: `../.env.common` }).parsed as DotenvParseOutput | IEnvCommonVariables
 
 const {
-  K_ROOM_ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_SECRET,
   EMAIL_CONFIRM_SECRET,
-  K_ROOM_REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
   RESEND_API_KEY,
   ADMIN_USERNAME,
   ADMIN_PASSWORD,
@@ -44,9 +44,9 @@ export const SERVER_ENV: IServerEnv = {
   clientPort: Number(CLIENT_PORT),
   serverUrl: isDev ? `${API_HOST}:${SERVER_PORT}${API_PATH}` : `${API_HOST}${API_PATH}`,
   clientUrl: isDev ? `${APP_HOST}:${CLIENT_PORT}` : `${APP_HOST}`,
-  accessTokenSecret: K_ROOM_ACCESS_TOKEN_SECRET,
+  accessTokenSecret: ACCESS_TOKEN_SECRET,
   emailConfirmSecret: EMAIL_CONFIRM_SECRET,
-  refreshTokenSecret: K_ROOM_REFRESH_TOKEN_SECRET,
+  refreshTokenSecret: REFRESH_TOKEN_SECRET,
   resendApiKey: RESEND_API_KEY,
   adminUsername: ADMIN_USERNAME,
   adminPassword: ADMIN_PASSWORD,
