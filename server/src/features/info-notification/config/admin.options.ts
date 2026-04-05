@@ -4,7 +4,6 @@ import { DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
 
 import { InfoNotificationModel } from 'src/entities/info-notification'
 
-import { SERVER_ENV } from 'src/shared/config'
 import { AppError, localizedText } from 'src/shared/lib'
 
 import { publishInfoNotificationToAllUsers } from './../shared'
@@ -30,7 +29,7 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
           _response: unknown,
           context: ActionContext
         ): Promise<RecordActionResponse> => {
-          const { record, currentAdmin } = context
+          const { record, currentAdmin, resource, h } = context
 
           if (!record) {
             throw new AppError(
@@ -52,7 +51,12 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
 
           return {
             record: record.toJSON(currentAdmin),
-            redirectUrl: `${SERVER_ENV.adminRootPath}/resources/info-notifications/records/${String(updatedRecord._id)}/show?refresh=true`,
+            redirectUrl: h.recordActionUrl({
+              resourceId: resource.id(),
+              recordId: String(updatedRecord._id),
+              actionName: 'show',
+              search: 'refresh=true'
+            }),
             notice: {
               message: localizedText(INFO_NOTIFICATION_ADMIN_I18N.published, DEFAULT_APP_LANGUAGE),
               type: 'success'

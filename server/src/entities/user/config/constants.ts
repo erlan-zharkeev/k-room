@@ -1,4 +1,5 @@
 const FIXTURE_PASSWORD = 'Asdf1234'
+export const LAST_SEEN_PATH = 'public.lastSeen'
 
 const FIXTURE_AVATAR_PATHS = [
   'src/entities/fixtures/images/erlan.jpg',

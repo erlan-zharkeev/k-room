@@ -40,3 +40,12 @@ export interface IUserSchema {
   createdAt?: Date
   updatedAt?: Date
 }
+
+export interface IAdminRecord {
+  params?: Record<string, unknown>
+}
+
+export interface IAdminActionResponse {
+  record?: IAdminRecord
+  records?: IAdminRecord[]
+}

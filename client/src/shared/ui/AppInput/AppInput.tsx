@@ -8,8 +8,6 @@ import { APP_INPUT_I18N, AppButton, AppIcon } from 'src/shared/ui'
 
 import { IAppInputProps } from './config'
 
-const rootClass = 'app-input'
-
 export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
   (
     {
@@ -32,7 +30,7 @@ export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
     const [showPasswordText, setShowPasswordText] = useState(false)
 
     const className = createClassNameWithModifiers({
-      rootClass,
+      rootClass: 'app-input',
       modifiers: [nativeType, disabled && 'disabled', focused && 'focused', showClearButton && 'with-clear-btn']
     })
 

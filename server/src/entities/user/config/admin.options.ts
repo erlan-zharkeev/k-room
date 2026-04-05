@@ -1,17 +1,11 @@
-import { formatHumanDateTime } from 'common'
+import { ActionRequest, ValidationError } from 'adminjs'
+
+import { DEFAULT_APP_LANGUAGE, formatHumanDateTime } from 'common'
+
+import { localizedText } from 'src/shared/lib'
 
 import { UserModel } from './../model'
-
-const LAST_SEEN_PATH = 'public.lastSeen'
-
-type AdminRecordType = {
-  params?: Record<string, unknown>
-}
-
-type AdminActionResponseType = {
-  record?: AdminRecordType
-  records?: AdminRecordType[]
-}
+import { IAdminActionResponse, LAST_SEEN_PATH, USER_ADMIN_I18N } from './index'
 
 const formatLastSeenParam = (params?: Record<string, unknown>) => {
   if (!params) return
@@ -22,11 +16,32 @@ const formatLastSeenParam = (params?: Record<string, unknown>) => {
   params[LAST_SEEN_PATH] = formatHumanDateTime(value)
 }
 
-const withFormattedLastSeen = <T extends AdminActionResponseType>(response: T) => {
+const withFormattedLastSeen = <T extends IAdminActionResponse>(response: T) => {
   formatLastSeenParam(response.record?.params)
   response.records?.forEach((record) => formatLastSeenParam(record.params))
 
   return response
+}
+
+const validateUserCreateRequest = async (request: ActionRequest) => {
+  if (request.method !== 'post') return request
+
+  const password = request.payload?.['system.password']
+
+  if (typeof password === 'string' && password.trim()) return request
+
+  throw new ValidationError(
+    {
+      'system.password': {
+        message: localizedText(USER_ADMIN_I18N.passwordRequired, DEFAULT_APP_LANGUAGE),
+        type: 'required'
+      }
+    },
+    {
+      message: localizedText(USER_ADMIN_I18N.validationFailed, DEFAULT_APP_LANGUAGE),
+      type: 'required'
+    }
+  )
 }
 
 export const ADMIN_USER_OPTIONS = {
@@ -47,19 +62,31 @@ export const ADMIN_USER_OPTIONS = {
       'system.confirmed',
       'system.confirmAttempts'
     ],
+    newProperties: ['public.username', 'personal.email', 'system.password', 'system.role', 'system.provider', 'system.confirmed'],
     editProperties: ['public.username', 'personal.email', 'system.role', 'system.provider', 'system.confirmed'],
     filterProperties: ['_id', 'public.username', 'personal.email', 'system.role', 'public.online', 'system.provider'],
     actions: {
+      new: {
+        before: validateUserCreateRequest
+      },
       list: {
-        after: async (response: AdminActionResponseType) => withFormattedLastSeen(response)
+        after: async (response: IAdminActionResponse) => withFormattedLastSeen(response)
       },
       show: {
-        after: async (response: AdminActionResponseType) => withFormattedLastSeen(response)
+        after: async (response: IAdminActionResponse) => withFormattedLastSeen(response)
       }
     },
     properties: {
       'system.password': {
-        isVisible: false
+        type: 'password',
+        isVisible: {
+          show: false,
+          list: false,
+          filter: false,
+          edit: true
+        },
+        isRequired: true,
+        label: 'Password'
       },
       'system.device': {
         isVisible: false

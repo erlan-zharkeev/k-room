@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 import { Badge, Image } from 'antd'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { AppIconNameType, AppIcon } from 'src/shared/ui'
+import { AppIcon } from 'src/shared/ui'
 
-import { IAppAvatarProps } from './config'
+import { IAppAvatarProps, IAvatarBodyProps, IBadgeWrapperProps } from './config'
 
 const AvatarBody = ({
   src,
@@ -14,13 +14,7 @@ const AvatarBody = ({
   haveSource,
   setHaveSource,
   preview = true
-}: {
-  src?: string
-  stubIconName: AppIconNameType
-  haveSource: boolean
-  setHaveSource: (v: boolean) => void
-  preview?: boolean
-}) => {
+}: IAvatarBodyProps) => {
   return !haveSource ? (
     <div className="app-avatar__image">
       <AppIcon name={stubIconName} size="fill" />
@@ -41,12 +35,7 @@ const BadgeWrapper = ({
   online,
   ribbon,
   ribbonPlacement
-}: {
-  children: React.ReactNode
-  online?: boolean
-  ribbon?: boolean
-  ribbonPlacement: 'up' | 'down'
-}) =>
+}: IBadgeWrapperProps) =>
   ribbon ? (
     <Badge.Ribbon text="G" placement={ribbonPlacement === 'up' ? 'start' : 'end'}>
       {children}

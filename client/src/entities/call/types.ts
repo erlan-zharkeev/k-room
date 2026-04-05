@@ -1,4 +1,4 @@
-import { ICall } from 'common'
+import { IBaseFrontendUserData, ICall } from 'common'
 
 export interface IConstraint {
   loading: boolean
@@ -25,4 +25,8 @@ export interface IModalOptions {
   height: number
   x: number
   y: number
+}
+
+export interface ICallInterlocutor extends IBaseFrontendUserData {
+  avatar?: string
 }

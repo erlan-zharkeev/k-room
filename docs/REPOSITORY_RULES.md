@@ -227,6 +227,46 @@ export type BannerVariant = 'success' | 'error'
 export type AppLanguage = 'ru' | 'en'
 ```
 
+5. Do not declare named `type` aliases or `interface` definitions in regular implementation files.
+
+Named types must live only in `types.ts` files. For UI components, place them in `config/types.ts`.
+
+Use:
+
+```ts
+// config/types.ts
+export interface IAppLinkProps { ... }
+export type RegistrationFormDataType = { ... }
+```
+
+Do not use:
+
+```ts
+// AppLink.tsx
+interface IAppLinkProps { ... }
+
+// admin.options.ts
+type AdminActionResponseType = { ... }
+```
+
+6. Do not declare module-level constants in regular implementation files.
+
+Shared literals, field paths, ids, fixture maps, and similar constants must live only in `constants.ts` files.
+
+Use:
+
+```ts
+// constants.ts
+export const LAST_SEEN_PATH = 'public.lastSeen'
+```
+
+Do not use:
+
+```ts
+// admin.options.ts
+const LAST_SEEN_PATH = 'public.lastSeen'
+```
+
 ## Error Handling Rules
 
 1. Only controllers may convert errors to HTTP responses via `throwHTTPError`.
