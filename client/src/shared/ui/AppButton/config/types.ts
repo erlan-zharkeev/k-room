@@ -7,6 +7,10 @@ export interface IButtonProps {
   htmltype?: 'button' | 'submit'
   color?: ColorModifierType
   text?: string
+  ariaLabel?: string
+  ariaControls?: string
+  ariaExpanded?: boolean
+  ariaHaspopup?: React.AriaAttributes['aria-haspopup']
   iconSize?: AppIconSizeType
   borderless?: boolean
   prefixIconName?: AppIconNameType

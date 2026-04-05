@@ -3,6 +3,9 @@
 .content-tab {
   .content-tab__button-el {
     margin: 24px 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
   }
 
   .content-tab__button-el--active {

@@ -9,6 +9,10 @@ export const AppButton = ({
   htmltype = 'button',
   color,
   text,
+  ariaLabel,
+  ariaControls,
+  ariaExpanded,
+  ariaHaspopup,
   borderless,
   iconSize = 'xs',
   prefixIconName,
@@ -37,10 +41,21 @@ export const AppButton = ({
     ],
     additionalClassName
   })
+  const buttonProps = {
+    type: htmltype,
+    disabled,
+    onClick,
+    onSubmit,
+    'aria-label': ariaLabel,
+    'aria-controls': ariaControls,
+    'aria-expanded': ariaExpanded,
+    'aria-haspopup': ariaHaspopup,
+    'aria-busy': loading ? true : undefined
+  }
 
   return (
     <div className={className}>
-      <button type={htmltype} disabled={disabled} onClick={onClick} onSubmit={onSubmit}>
+      <button {...buttonProps}>
         {loading && <AppIcon name="loader" color={`${color ?? 'accent-color'}`} size={iconSize} />}
         {!loading && (
           <>

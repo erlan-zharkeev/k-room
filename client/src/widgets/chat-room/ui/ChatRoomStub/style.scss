@@ -2,6 +2,10 @@
 
 .chat-room-stub {
   @include absolute-center;
+
+  border: 0;
+
+  background: transparent;
 }
 
 .chat-room-stub--pointer {

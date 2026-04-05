@@ -22,9 +22,9 @@ export const ContentTab = () => {
   return (
     <div className="content-tab">
       {BUTTONS.map(({ Component, value }) => (
-        <div key={value} className={tabElementClass(value)} onClick={() => selectContentTab(value)}>
+        <button type="button" key={value} className={tabElementClass(value)} onClick={() => selectContentTab(value)}>
           <Component />
-        </div>
+        </button>
       ))}
     </div>
   )

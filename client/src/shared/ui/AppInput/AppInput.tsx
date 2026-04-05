@@ -1,8 +1,10 @@
 import './style.scss'
 import { ChangeEvent, useMemo, useState, forwardRef, ForwardedRef } from 'react'
 
+import { useI18n } from 'src/entities/settings'
+
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { AppButton } from 'src/shared/ui'
+import { APP_INPUT_I18N, AppButton, AppIcon } from 'src/shared/ui'
 
 import { IAppInputProps } from './config'
 
@@ -25,6 +27,7 @@ export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
     }: IAppInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
+    const { t } = useI18n()
     const [focused, setFocused] = useState(false)
     const [showPasswordText, setShowPasswordText] = useState(false)
 
@@ -58,6 +61,7 @@ export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
             value={value}
             type={currentType}
             placeholder={placeholder}
+            aria-label={placeholder ?? name}
             disabled={disabled}
             onChange={onChange}
             onBlur={(e) => {
@@ -70,12 +74,12 @@ export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
         </div>
         {showClearButton && !loading && (
           <div className="app-input__suffix-slot">
-            <AppButton prefixIconName="cross" borderless onClick={clearHandler} />
+            <AppButton prefixIconName="cross" borderless onClick={clearHandler} ariaLabel={t(APP_INPUT_I18N.clear)} />
           </div>
         )}
         {loading && (
-          <div className="app-input__suffix-slot">
-            <AppButton prefixIconName="loader" borderless color="accent-color" />
+          <div className="app-input__suffix-slot" aria-label={t(APP_INPUT_I18N.loading)}>
+            <AppIcon name="loader" color="accent-color" />
           </div>
         )}
         {nativeType === 'password' && (
@@ -84,6 +88,7 @@ export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
               prefixIconName={showPasswordText ? 'eye-blocked' : 'eye'}
               iconSize="xs"
               onClick={() => setShowPasswordText(!showPasswordText)}
+              ariaLabel={t(showPasswordText ? APP_INPUT_I18N.hidePassword : APP_INPUT_I18N.showPassword)}
               borderless
             />
           </div>

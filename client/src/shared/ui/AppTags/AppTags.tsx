@@ -16,30 +16,31 @@ export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedI
           <AppText>{title}</AppText>
           <AppScrollContainer height={'200px'} additionalClassName={classNames}>
             {tags.map((tag) => (
-              <div key={tag.value} className={tagClassName} onClick={() => onElementClick?.(tag.value)}>
-                {tag.prefixSlot && (
-                  <div
-                    className="app-tags__tag-prefix-slot"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                    }}
-                  >
-                    {tag.prefixSlot}
+              onElementClick && !onRemove ? (
+                <button type="button" key={tag.value} className={tagClassName} onClick={() => onElementClick(tag.value)}>
+                  {tag.prefixSlot && <div className="app-tags__tag-prefix-slot">{tag.prefixSlot}</div>}
+                  <AppText>{tag.label}</AppText>
+                  <div className="app-tags__tag-icon">
+                    {selectedIds?.includes(tag.value) && <AppIcon name="success" color="success-color" size="xs" />}
                   </div>
-                )}
-                <AppText>{tag.label}</AppText>
-                <div className="app-tags__tag-icon">
-                  {selectedIds?.includes(tag.value) && <AppIcon name="success" color="success-color" size="xs" />}
+                </button>
+              ) : (
+                <div key={tag.value} className={tagClassName}>
+                  {tag.prefixSlot && <div className="app-tags__tag-prefix-slot">{tag.prefixSlot}</div>}
+                  <AppText>{tag.label}</AppText>
+                  <div className="app-tags__tag-icon">
+                    {selectedIds?.includes(tag.value) && <AppIcon name="success" color="success-color" size="xs" />}
+                  </div>
+                  {onRemove && (
+                    <AppButton
+                      prefixIconName="cross"
+                      borderless
+                      additionalClassName="app-tags__cross"
+                      onClick={() => onRemove(tag.value)}
+                    />
+                  )}
                 </div>
-                {onRemove && (
-                  <AppButton
-                    prefixIconName="cross"
-                    borderless
-                    additionalClassName="app-tags__cross"
-                    onClick={() => onRemove(tag.value)}
-                  />
-                )}
-              </div>
+              )
             ))}
           </AppScrollContainer>
         </>

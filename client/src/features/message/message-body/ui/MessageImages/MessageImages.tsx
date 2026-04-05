@@ -8,6 +8,8 @@ export const MessageImages = ({ message }: IMessageImagesProps) => {
   if (!message.images || message.images.length <= 0) return null
 
   return (
+    // Prevent parent message click handling when interacting with image preview content.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className="message-images"
       onClick={(evt) => {

@@ -45,6 +45,19 @@ export const ProfileInfo = ({
     rootClass: 'profile-info__credential',
     modifiers: [onClick && 'pointer']
   })
+  const credentials = (
+    <>
+      <AppText tag="p" size={titleSize}>
+        {title}
+      </AppText>
+      {description && (
+        <AppText tag="p" size="small" color={isDescriptionAccent ? 'accent-color' : undefined}>
+          {description}
+        </AppText>
+      )}
+      {descriptionNode && descriptionNode}
+    </>
+  )
 
   return (
     <div className={className}>
@@ -56,17 +69,13 @@ export const ProfileInfo = ({
         shape={shape}
         stubIconName={stubIconName}
       />
-      <div className={credentialClassName} onClick={onClick}>
-        <AppText tag="p" size={titleSize}>
-          {title}
-        </AppText>
-        {description && (
-          <AppText tag="p" size="small" color={isDescriptionAccent ? 'accent-color' : undefined}>
-            {description}
-          </AppText>
-        )}
-        {descriptionNode && descriptionNode}
-      </div>
+      {onClick ? (
+        <button type="button" className={credentialClassName} onClick={onClick}>
+          {credentials}
+        </button>
+      ) : (
+        <div className={credentialClassName}>{credentials}</div>
+      )}
       {children}
     </div>
   )

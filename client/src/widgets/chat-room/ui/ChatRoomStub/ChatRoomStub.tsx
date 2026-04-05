@@ -20,10 +20,10 @@ export const ChatRoomStub = () => {
   })
 
   return (
-    <div className={className} onClick={() => selectContentTab('chat-rooms')}>
+    <button type="button" className={className} onClick={() => selectContentTab('chat-rooms')}>
       <AppText align="center" tag="p">
         {t(CHAT_ROOM_STUB_I18N.text)}
       </AppText>
-    </div>
+    </button>
   )
 }

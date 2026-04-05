@@ -18,10 +18,6 @@ $transition-height: 0.2s ease-in-out height;
   background: var(--dark-gray-transparent-3);
 }
 
-.app-collapse-list__element:hover {
-  cursor: pointer;
-}
-
 .app-collapse-list__element.app-collapse-list__element--open .app-collapse__chevron-icon {
   rotate: 90deg;
   transition: $transition-icon;
@@ -32,9 +28,21 @@ $transition-height: 0.2s ease-in-out height;
 }
 
 .app-collapse-list__element-header {
+  cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  width: 100%;
+  padding: 0;
+  border: 0;
+
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
+  background: transparent;
 }
 
 .app-collapse-list__element-content {

@@ -32,14 +32,23 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps)
       {items.map(({ id, title, content: Content, badgeName }) => {
         const isOpen = openElId === id
         const showOverflow = delayedOverflowIndex === id
+        const contentId = `app-collapse-content-${id}`
+        const triggerId = `app-collapse-trigger-${id}`
         const className = createClassNameWithModifiers({
           rootClass: 'app-collapse-list__element',
           modifiers: [isOpen && 'open']
         })
         return (
           <Badge color={'var(--error)'} count={badgeName} offset={[-5, 2]} key={id}>
-            <div className={className} onClick={() => clickHandler(id)}>
-              <div className="app-collapse-list__element-header">
+            <div className={className}>
+              <button
+                id={triggerId}
+                type="button"
+                className="app-collapse-list__element-header"
+                onClick={() => clickHandler(id)}
+                aria-expanded={isOpen}
+                aria-controls={contentId}
+              >
                 <AppHeader bold={false} tag="h4">
                   {title}
                 </AppHeader>
@@ -48,8 +57,11 @@ export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps)
                     <AppIcon name="arrow-left" size="xs" />
                   </div>
                 </div>
-              </div>
+              </button>
               <div
+                id={contentId}
+                role="region"
+                aria-labelledby={triggerId}
                 className="app-collapse-list__element-content"
                 style={{
                   overflow: showOverflow ? 'auto' : 'hidden',

@@ -5,6 +5,10 @@ export const APP_MODAL_I18N = {
     en: 'OK',
     ru: 'ОК'
   },
+  close: {
+    en: 'Close dialog',
+    ru: 'Закрыть диалог'
+  },
   cancel: {
     en: 'Cancel',
     ru: 'Отмена'

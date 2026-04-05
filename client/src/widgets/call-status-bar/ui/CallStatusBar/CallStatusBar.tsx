@@ -12,7 +12,7 @@ export const CallStatusBar = () => {
   })
 
   return (
-    <div className={className} onClick={minifyCallWindow}>
+    <button type="button" className={className} onClick={minifyCallWindow}>
       <div className="call-status-bar__wrapper">
         <div className="call-status-bar__type paragraph-text">{firstCharUpperCase(currentCall.flow)} call</div>
         <div className="call-status-bar__info">
@@ -24,6 +24,6 @@ export const CallStatusBar = () => {
           <div className="call-status-bar__interlocutor-name paragraph-text">{currentCall.interlocutorName}</div>
         </div>
       </div>
-    </div>
+    </button>
   )
 }
