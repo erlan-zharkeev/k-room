@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const THEME_SWITCHER_I18N = {
+export const THEME_SWITCHER_I18N = defineI18n({
   label: {
     en: 'Theme',
     ru: 'Тема'
@@ -13,4 +13,4 @@ export const THEME_SWITCHER_I18N = {
     en: 'Light',
     ru: 'Свет.'
   }
-} as const satisfies LocalizedTextMapType
+})

@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const UPDATE_USER_DATA_I18N = {
+export const UPDATE_USER_DATA_I18N = defineI18n({
   nothingToUpdate: {
     en: 'Required at least one field',
     ru: 'Нужно передать хотя бы одно поле'
@@ -13,4 +13,4 @@ export const UPDATE_USER_DATA_I18N = {
     en: 'Failed to update user data',
     ru: 'Не удалось обновить данные пользователя'
   }
-} as const satisfies LocalizedTextMapType
+})

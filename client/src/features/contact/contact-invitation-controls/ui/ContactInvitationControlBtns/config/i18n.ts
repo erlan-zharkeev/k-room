@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CONTACT_INVITATION_CONTROL_BTNS_I18N = {
+export const CONTACT_INVITATION_CONTROL_BTNS_I18N = defineI18n({
   updatingStatus: {
     en: 'Updating status',
     ru: 'Обновление статуса'
@@ -25,4 +25,4 @@ export const CONTACT_INVITATION_CONTROL_BTNS_I18N = {
     en: 'Hide',
     ru: 'Скрыть'
   }
-} as const satisfies LocalizedTextMapType
+})

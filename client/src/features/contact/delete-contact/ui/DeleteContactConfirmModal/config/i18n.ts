@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const DELETE_CONTACT_I18N = {
+export const DELETE_CONTACT_I18N = defineI18n({
   modalTitle: {
     en: 'Delete contact',
     ru: 'Удалить контакт'
@@ -17,4 +17,4 @@ export const DELETE_CONTACT_I18N = {
     en: 'Delete',
     ru: 'Удалить'
   }
-} as const satisfies LocalizedTextMapType
+})

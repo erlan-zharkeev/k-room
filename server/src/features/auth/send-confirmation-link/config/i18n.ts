@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const SEND_CONFIRMATION_LINK_I18N = {
+export const SEND_CONFIRMATION_LINK_I18N = defineI18n({
   confirmationLinkSent: {
     en: 'Confirmation link has been sent',
     ru: 'Ссылка подтверждения отправлена'
@@ -17,4 +17,4 @@ export const SEND_CONFIRMATION_LINK_I18N = {
     en: 'Failed to send email confirmation link',
     ru: 'Не удалось отправить письмо с подтверждением'
   }
-} as const satisfies LocalizedTextMapType
+})

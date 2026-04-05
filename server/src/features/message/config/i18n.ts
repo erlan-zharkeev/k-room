@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const MESSAGE_I18N = {
+export const MESSAGE_I18N = defineI18n({
   changeMessageStatusFailed: {
     en: 'Failed to update message status',
     ru: 'Не удалось обновить статус сообщения'
@@ -13,4 +13,4 @@ export const MESSAGE_I18N = {
     en: 'Failed to send message',
     ru: 'Не удалось отправить сообщение'
   }
-} as const satisfies LocalizedTextMapType
+})

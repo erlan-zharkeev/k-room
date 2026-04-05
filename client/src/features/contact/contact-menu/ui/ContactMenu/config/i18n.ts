@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CONTACT_MENU_I18N = {
+export const CONTACT_MENU_I18N = defineI18n({
   call: {
     en: 'Call',
     ru: 'Позвонить'
@@ -21,4 +21,4 @@ export const CONTACT_MENU_I18N = {
     en: 'Delete',
     ru: 'Удалить'
   }
-} as const satisfies LocalizedTextMapType
+})

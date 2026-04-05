@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const APP_INPUT_I18N = {
+export const APP_INPUT_I18N = defineI18n({
   clear: {
     en: 'Clear input',
     ru: 'Очистить поле'
@@ -17,4 +17,4 @@ export const APP_INPUT_I18N = {
     en: 'Loading',
     ru: 'Загрузка'
   }
-} as const satisfies LocalizedTextMapType
+})

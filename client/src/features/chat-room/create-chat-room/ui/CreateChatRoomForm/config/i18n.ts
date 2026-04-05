@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CREATE_CHAT_ROOM_FORM_I18N = {
+export const CREATE_CHAT_ROOM_FORM_I18N = defineI18n({
   queryPlaceholder: {
     en: 'Find contact',
     ru: 'Найти контакт'
@@ -37,4 +37,4 @@ export const CREATE_CHAT_ROOM_FORM_I18N = {
     en: 'A private chat with the selected contact already exists. Choose another contact or add one more.',
     ru: 'Личный чат с выбранным контактом уже существует. Выберите другой контакт или добавьте ещё одного.'
   }
-} as const satisfies LocalizedTextMapType<any>
+})

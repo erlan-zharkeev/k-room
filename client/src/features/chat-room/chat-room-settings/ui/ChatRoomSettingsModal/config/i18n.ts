@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CHAT_ROOM_SETTINGS_MODAL_I18N = {
+export const CHAT_ROOM_SETTINGS_MODAL_I18N = defineI18n({
   members: {
     en: 'Members:',
     ru: 'Участники:'
@@ -9,4 +9,4 @@ export const CHAT_ROOM_SETTINGS_MODAL_I18N = {
     en: 'Close',
     ru: 'Закрыть'
   }
-} as const satisfies LocalizedTextMapType
+})

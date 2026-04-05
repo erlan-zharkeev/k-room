@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const RESET_PASSWORD_I18N = {
+export const RESET_PASSWORD_I18N = defineI18n({
   failed: {
     en: 'Failed to reset password, try again later',
     ru: 'Не удалось сбросить пароль, попробуйте позже'
@@ -17,4 +17,4 @@ export const RESET_PASSWORD_I18N = {
     en: 'Password changed successfully',
     ru: 'Пароль успешно изменён'
   }
-} as const satisfies LocalizedTextMapType
+})

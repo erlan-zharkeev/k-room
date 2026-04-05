@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const ENABLE_SOUND_SWITCHER_I18N = {
+export const ENABLE_SOUND_SWITCHER_I18N = defineI18n({
   label: {
     en: 'Sound',
     ru: 'Звук'
@@ -17,4 +17,4 @@ export const ENABLE_SOUND_SWITCHER_I18N = {
     en: 'The browser requires some kind of user action to activate the sound. Click anywhere to activate the audio context.',
     ru: 'Браузеру нужно действие пользователя, чтобы включить звук. Нажмите в любом месте, чтобы активировать аудиоконтекст.'
   }
-} as const satisfies LocalizedTextMapType
+})

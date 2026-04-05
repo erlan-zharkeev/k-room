@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const APP_MODAL_I18N = {
+export const APP_MODAL_I18N = defineI18n({
   ok: {
     en: 'OK',
     ru: 'ОК'
@@ -13,4 +13,4 @@ export const APP_MODAL_I18N = {
     en: 'Cancel',
     ru: 'Отмена'
   }
-} as const satisfies LocalizedTextMapType
+})

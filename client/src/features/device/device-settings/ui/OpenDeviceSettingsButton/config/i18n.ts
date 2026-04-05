@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const OPEN_DEVICE_SETTINGS_BUTTON_I18N = {
+export const OPEN_DEVICE_SETTINGS_BUTTON_I18N = defineI18n({
   tooltip: {
     en: 'Device settings',
     ru: 'Настройки устройств'
@@ -9,4 +9,4 @@ export const OPEN_DEVICE_SETTINGS_BUTTON_I18N = {
     en: 'Device settings',
     ru: 'Настройки устройств'
   }
-} as const satisfies LocalizedTextMapType
+})

@@ -1,8 +1,8 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const REPLY_MESSAGE_I18N = {
+export const REPLY_MESSAGE_I18N = defineI18n({
   closePreview: {
     en: 'Close reply preview',
     ru: 'Закрыть предпросмотр ответа'
   }
-} as const satisfies LocalizedTextMapType
+})

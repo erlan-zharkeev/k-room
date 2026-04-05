@@ -19,3 +19,4 @@ export * from './time'
 export * from './user'
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/config/constants'
+export { defineI18n } from './language/lib/define-i18n'

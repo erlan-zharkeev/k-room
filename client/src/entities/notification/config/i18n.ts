@@ -1,6 +1,6 @@
-import { LocalizedTextType } from 'common'
+import { defineI18n } from 'common'
 
-export const NOTIFICATION_I18N = {
+export const NOTIFICATION_I18N = defineI18n({
   networkOffline: {
     en: 'The internet connection has been terminated. Network problems',
     ru: 'Интернет-соединение прервано. Проблемы с сетью'
@@ -47,4 +47,4 @@ export const NOTIFICATION_I18N = {
     en: 'Socket disconnected',
     ru: 'Соединение с сокетом разорвано'
   }
-} as const satisfies Record<string, LocalizedTextType | ((...args: number[]) => LocalizedTextType)>
+})

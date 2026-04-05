@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CREATE_NEW_PASSWORD_BODY_I18N = {
+export const CREATE_NEW_PASSWORD_BODY_I18N = defineI18n({
   success: {
     en: 'Password changed successfully!',
     ru: 'Пароль успешно изменён!'
@@ -29,4 +29,4 @@ export const CREATE_NEW_PASSWORD_BODY_I18N = {
     en: "Passwords don't match",
     ru: 'Пароли не совпадают'
   }
-} as const satisfies LocalizedTextMapType
+})

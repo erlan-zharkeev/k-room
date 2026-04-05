@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const LEGAL_INFO_PAGE_I18N = {
+export const LEGAL_INFO_PAGE_I18N = defineI18n({
   title: {
     en: (appName: string) => `Legal Information for ${appName}`,
     ru: (appName: string) => `Правовая информация ${appName}`
@@ -207,4 +207,4 @@ export const LEGAL_INFO_PAGE_I18N = {
     en: 'Back',
     ru: 'Назад'
   }
-} as const satisfies LocalizedTextMapType<any>
+})
