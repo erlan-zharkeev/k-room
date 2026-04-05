@@ -60,6 +60,24 @@ docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" pull
 if ! docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --remove-orphans; then
   echo "[deploy] docker compose up failed" >&2
   docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" ps || true
-  docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" logs --no-color server webserver client mongo-express db || true
+
+  SERVER_CONTAINER_ID="$(docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" ps -q server 2>/dev/null || true)"
+
+  if [ -n "$SERVER_CONTAINER_ID" ]; then
+    echo "[deploy] server health:" >&2
+    docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$SERVER_CONTAINER_ID" || true
+    echo "[deploy] server logs (tail 200):" >&2
+    docker logs --tail 200 "$SERVER_CONTAINER_ID" || true
+  fi
+
+  echo "[deploy] webserver logs (tail 60):" >&2
+  docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" logs --no-color --tail 60 webserver || true
+
+  echo "[deploy] client logs (tail 60):" >&2
+  docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" logs --no-color --tail 60 client || true
+
+  echo "[deploy] mongo-express logs (tail 60):" >&2
+  docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" logs --no-color --tail 60 mongo-express || true
+
   exit 1
 fi
