@@ -24,7 +24,8 @@ export const ChatRoomList = () => {
       {!hasChatRooms && <AppText>{t(CHAT_ROOM_LIST_I18N.empty)}</AppText>}
       <AppScrollContainer height="100%" additionalClassName="chat-room-list__scroll-container">
         {renderedItems.map(({ item: chatRoom, key, state }) => (
-          <div
+          <button
+            type="button"
             className={createClassNameWithModifiers({
               rootClass: 'chat-room-list__list-item animated-list__item',
               modifiers: [chatRoom.id === selectedChatRoomId && 'selected', state],
@@ -40,7 +41,7 @@ export const ChatRoomList = () => {
             {Boolean(chatRoomUnreadMessagesCount(chatRoom, messages)) && (
               <Badge color="var(--accent)" count={chatRoomUnreadMessagesCount(chatRoom, messages)} offset={[-5, 0]} />
             )}
-          </div>
+          </button>
         ))}
       </AppScrollContainer>
     </div>

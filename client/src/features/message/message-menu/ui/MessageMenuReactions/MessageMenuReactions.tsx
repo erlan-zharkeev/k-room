@@ -34,7 +34,8 @@ export const MessageReactions = ({ userId, username, selectedChatRoomId, message
   return (
     <div className="message-menu-reactions">
       {reactions.map((reaction) => (
-        <div
+        <button
+          type="button"
           className={createClassNameWithModifiers({
             rootClass: 'message-menu-reactions__element',
             modifiers: [isDisabled(reaction.key)]
@@ -43,7 +44,7 @@ export const MessageReactions = ({ userId, username, selectedChatRoomId, message
           onClick={() => addReactionToMessage(reaction.key)}
         >
           {reaction.glyph}
-        </div>
+        </button>
       ))}
     </div>
   )

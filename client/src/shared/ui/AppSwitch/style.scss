@@ -59,6 +59,18 @@
     text-indent: -9999px;
   }
 
+  .app-switch__label-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   &[data-checked='true'] {
     .app-switch__value-text {
       left: $toggler-width - 12px;

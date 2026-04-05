@@ -32,7 +32,7 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
       )}
       <div className="short-chat-list__container">
         {filteredRooms.map((room) => (
-          <div className="short-chat-list__item" key={room.id} onClick={() => clickChat(room.id)}>
+          <button type="button" className="short-chat-list__item" key={room.id} onClick={() => clickChat(room.id)}>
             {/* <AppAvatar
               stubIconName={room.multiple ? 'image-stub' : 'user-stub'}
               shape={room.multiple ? 'square-shape' : 'circle-shape'}
@@ -41,7 +41,7 @@ export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) 
               ribbon={true}
             /> */}
             <span className="paragraph-text  short-chat-list__name">{room.chatName}</span>
-          </div>
+          </button>
         ))}
       </div>
       {filteredRooms.length <= 0 && <div className="paragraph-text ">{t(SHORT_CHAT_LIST_I18N.notFound)}</div>}

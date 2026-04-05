@@ -1,9 +1,10 @@
 import './style.scss'
+
 import { useNotification } from 'src/entities/notification'
 import { useI18n } from 'src/entities/settings'
 
 import { createClassNameWithModifiers, imageToBase64 } from 'src/shared/lib'
-import { AppAvatar, AppIcon, IAvatarLoaderProps } from 'src/shared/ui'
+import { APP_AVATAR_LOADER_I18N, AppAvatar, AppButton, IAvatarLoaderProps } from 'src/shared/ui'
 
 export const AppAvatarLoader = ({
   path,
@@ -42,11 +43,16 @@ export const AppAvatarLoader = ({
     <div className={className}>
       <div className="app-avatar-loader__body">
         <AppAvatar src={path ?? undefined} showBadge={false} size="large" stubIconName={stubIconName} shape={shape} />
-        <input type="file" onChange={normFile} />
+        <input type="file" onChange={normFile} aria-label={t(APP_AVATAR_LOADER_I18N.uploadImage)} />
         {path && (
-          <div className="app-avatar-loader__clear-button" onClick={resetImage}>
-            <AppIcon name="cross" color="accent-color" />
-          </div>
+          <AppButton
+            prefixIconName="cross"
+            color="accent-color"
+            borderless
+            additionalClassName="app-avatar-loader__clear-button"
+            onClick={resetImage}
+            ariaLabel={t(APP_AVATAR_LOADER_I18N.clearImage)}
+          />
         )}
       </div>
     </div>

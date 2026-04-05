@@ -37,12 +37,11 @@ if [ ! -f "$COMMON_ENV_FILE" ]; then
   exit 1
 fi
 
-if [ ! -f "$RUNTIME_ENV_FILE" ]; then
-  echo "[deploy] Runtime env file not found: $RUNTIME_ENV_FILE" >&2
-  exit 1
-fi
-
 mkdir -p "$ROOT_DIR/deploy-scripts/certs"
+
+if [ ! -f "$RUNTIME_ENV_FILE" ]; then
+  : > "$RUNTIME_ENV_FILE"
+fi
 
 cat "$COMMON_ENV_FILE" "$ENV_FILE" "$RUNTIME_ENV_FILE" > "$MERGED_ENV_FILE"
 trap 'rm -f "$MERGED_ENV_FILE"' EXIT

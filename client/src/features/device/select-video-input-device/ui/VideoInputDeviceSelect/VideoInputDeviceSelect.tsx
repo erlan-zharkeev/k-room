@@ -42,6 +42,8 @@ export const VideoInputDeviceSelect = () => {
         isErrorColor={showVideo}
       >
         <div className={videoClassName}>
+          {/* Local camera preview does not provide caption tracks. */}
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <video ref={videoEl} autoPlay />
         </div>
       </SelectDevice>

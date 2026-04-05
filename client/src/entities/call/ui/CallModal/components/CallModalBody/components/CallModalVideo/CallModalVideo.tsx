@@ -25,6 +25,8 @@ export const CallModalVideo = () => {
             <div className="paragraph-text paragraph-text--sm">{t(CALL_MODAL_VIDEO_I18N.audioOff)}</div>
           </div>
         )}
+        {/* Live WebRTC stream preview does not provide caption tracks. */}
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video
           loop
           autoPlay

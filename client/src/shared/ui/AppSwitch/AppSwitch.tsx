@@ -36,6 +36,7 @@ export const AppSwitch = ({
       <input
         type="checkbox"
         id={name}
+        aria-label={name}
         checked={val}
         onChange={(e) => changeHandler(e)}
         disabled={disabled}
@@ -45,7 +46,9 @@ export const AppSwitch = ({
           setFocused(false)
         }}
       />
-      <label htmlFor={name} />
+      <label htmlFor={name}>
+        <span className="app-switch__label-text">{name}</span>
+      </label>
       <div className="app-switch__value-text">{val ? onText : offText}</div>
     </div>
   )

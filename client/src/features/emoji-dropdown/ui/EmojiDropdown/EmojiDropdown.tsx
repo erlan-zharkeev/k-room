@@ -12,11 +12,7 @@ export const EmojiDropdown = ({ setEmoji = () => {} }: IEmojiDropdownProps) => {
   const items: MenuProps['items'] = EMOJI_LIST.map((el) => {
     return {
       key: el.key,
-      label: (
-        <span className="emoji-dropdown__icon" onClick={() => setEmoji(el.glyph)}>
-          {el.glyph}
-        </span>
-      )
+      label: <span className="emoji-dropdown__icon">{el.glyph}</span>
     }
   })
 
@@ -25,6 +21,13 @@ export const EmojiDropdown = ({ setEmoji = () => {} }: IEmojiDropdownProps) => {
       overlayClassName="emoji-dropdown"
       menu={{
         items,
+        onClick: ({ key }) => {
+          const emoji = EMOJI_LIST.find((el) => el.key === key)
+
+          if (emoji) {
+            setEmoji(emoji.glyph)
+          }
+        },
         style: {
           display: 'grid',
           gridTemplateColumns: 'repeat(6, 60px)'

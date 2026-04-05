@@ -1,7 +1,7 @@
 const { createCommonRelativePathRules, createRestrictedImportRules } = require('../config/eslint/restricted-imports.cjs')
 
 module.exports = {
-  extends: ['../config/eslint/base.cjs', 'plugin:react/recommended', 'standard-with-typescript'],
+  extends: ['../config/eslint/base.cjs', 'plugin:react/recommended', 'plugin:jsx-a11y/recommended', 'standard-with-typescript'],
   env: {
     browser: true
   },
@@ -11,7 +11,7 @@ module.exports = {
     files: ['*.ts', '*.tsx', '*.js'],
     ecmaVersion: 8
   },
-  plugins: ['react', '@typescript-eslint', 'import'],
+  plugins: ['react', 'jsx-a11y', '@typescript-eslint', 'import'],
   settings: {
     react: {
       version: 'detect'

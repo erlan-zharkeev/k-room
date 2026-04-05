@@ -20,6 +20,9 @@
 
     padding: 8px 4px;
     border-radius: 8px;
+    border: 0;
+    background: transparent;
+    text-align: left;
 
     transition: $transition-selected-background;
   }

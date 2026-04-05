@@ -7,7 +7,11 @@
 
   height: $call-bar-height;
   margin-bottom: 16px;
+  padding: 0;
+  border: 0;
   border-radius: 8px;
+
+  color: inherit;
 
   background: var(--success-bg);
 
