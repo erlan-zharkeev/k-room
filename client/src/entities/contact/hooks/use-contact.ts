@@ -4,6 +4,7 @@ import { db, dexieCollectionStore } from 'src/shared/lib'
 const contactStore = dexieCollectionStore<DbContactType>(db.contacts)
 
 export const useContact = () => {
+  const { get, put, bulkPut, update, remove, mergeMany, reset } = contactStore
   const contacts = contactStore.use()
 
   const getByIds = (ids: string[]): DbContactType[] => {
@@ -26,13 +27,12 @@ export const useContact = () => {
     invitationsQuantity,
     isExist,
     getByIds,
-    get: (id: string) => contactStore.get(id),
-    put: (payload: DbContactType) => contactStore.put(payload),
-    bulkPut: (payload: DbContactType[]) => contactStore.bulkPut(payload),
-    update: (id: string, patch: Partial<DbContactType>) => contactStore.update(id, patch),
-    delete: (id: string) => contactStore.delete(id),
-    mergeMany: (payload: DbContactType[], options: Parameters<typeof contactStore.mergeMany>[1]) =>
-      contactStore.mergeMany(payload, options),
-    reset: () => contactStore.reset()
+    get,
+    put,
+    bulkPut,
+    update,
+    remove,
+    mergeMany,
+    reset
   }
 }

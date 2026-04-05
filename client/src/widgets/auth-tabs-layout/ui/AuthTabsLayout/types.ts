@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export interface AuthTabsLayoutProps {
+export interface IAuthTabsLayoutProps {
   children: ReactNode
   blockNavigation?: boolean
 }

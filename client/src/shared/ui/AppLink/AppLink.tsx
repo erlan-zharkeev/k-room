@@ -6,7 +6,7 @@ import { Link as RouterLink, To } from 'react-router-dom'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { ColorModifierType } from 'src/shared/ui/config'
 
-interface Props {
+interface IProps {
   text: string
   color?: ColorModifierType
   target?: React.HTMLAttributeAnchorTarget
@@ -26,7 +26,7 @@ export const AppLink = ({
   prevent = false,
   to,
   href = ''
-}: Props) => {
+}: IProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-link',
     modifiers: [disabled && 'disabled', color]

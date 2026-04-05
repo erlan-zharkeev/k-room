@@ -5,13 +5,12 @@ import { getRequiredContactSystemData } from 'src/features/contact'
 import { useContact } from 'src/entities/contact'
 
 import { socket } from 'src/shared/api'
-import { DbContactType } from 'src/shared/config'
 
 export const useContactActualize = () => {
   const { mergeMany } = useContact()
 
   const actualizeContacts = async (contacts: IFrontendContact[]) => {
-    await mergeMany(contacts as DbContactType[], {
+    await mergeMany(contacts, {
       merge: (current, incoming) => {
         if (current) {
           return {

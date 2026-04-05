@@ -27,7 +27,7 @@ export const ChatRoomPreview = ({
   titleSize?: BaseSizeModifierType
   isRoomSelected?: boolean
 }) => {
-  const { getLiveMedia } = useMedia()
+  const { getLiveMediaUrl } = useMedia()
   const { contacts } = useContact()
   const { getById } = useMessage()
   const isPrivate = isRoomPrivate(room)
@@ -41,7 +41,7 @@ export const ChatRoomPreview = ({
     modifiers: [headerMode && 'header-mode', isRoomSelected && 'selected']
   })
 
-  const avatarPath = getLiveMedia(room.avatarId)
+  const avatarPath = getLiveMediaUrl(room.avatarId)
   const privateRoomContact = isPrivate ? contacts.find((contact) => contact.id === room.users[0]) : undefined
   const lastMessageBody = room.lastMessageId ? getById(room.lastMessageId)?.body ?? '' : ''
 

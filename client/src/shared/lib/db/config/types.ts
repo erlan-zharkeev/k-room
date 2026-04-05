@@ -1,29 +1,32 @@
 export type MutableType<T> = { -readonly [K in keyof T]: T[K] }
 export type IndexableType = Record<string, any>
 
-export interface KvOptions<KeyField extends string> {
+export interface IKvOptions<KeyField extends string> {
   mode: 'kv'
   keyValue: string
   keyField?: KeyField
 }
 
-export interface IdOptions<T, IdField extends keyof T & string> {
+export interface IIdOptions<T, IdField extends keyof T & string> {
   mode: 'id'
   idField: IdField
 }
 
 export type KvItem<T extends object> = T & { __key: string }
 export type UseResult<T extends object, D extends Partial<T> | undefined> = D extends undefined ? T | undefined : D & T
-export interface UseStateResult<T extends object, D extends Partial<T> | undefined> {
+export interface IUseStateResult<T extends object, D extends Partial<T> | undefined> {
   data: UseResult<T, D>
   isReady: boolean
 }
-export interface KvQueryState<T extends object> {
+export interface IKvQueryState<T extends object> {
   data: T | undefined
   isReady: true
 }
 
-export interface CollectionMergeManyOptions<T extends { id: string | number }> {
-  merge: (current: T | undefined, incoming: T) => T
+export interface ICollectionMergeManyOptions<
+  T extends { id: string | number },
+  Incoming extends { id: T['id'] } = T
+> {
+  merge: (current: T | undefined, incoming: Incoming) => T
   removeMissing?: boolean
 }

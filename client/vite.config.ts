@@ -19,10 +19,7 @@ export default defineConfig(({ mode }) => {
   const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, SUPPORT_EMAIL } = commonEnv
   const { name: APP_NAME, version: APP_VERSION } = JSON.parse(
     fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')
-  ) as {
-    name: string
-    version: string
-  }
+  )
 
   const CLIENT_ENV_DATA = {
     isDev,

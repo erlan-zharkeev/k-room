@@ -26,7 +26,9 @@ FROM node:24.14.0
 
 WORKDIR /app
 
+ARG SERVER_PORT=3000
 ENV NODE_ENV=production
+ENV SERVER_PORT=${SERVER_PORT}
 
 COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
@@ -45,6 +47,6 @@ RUN npm ci --omit=dev
 
 COPY --from=build /app/server/build ./build
 
-EXPOSE 3000
+EXPOSE ${SERVER_PORT}
 
 CMD ["node", "./build/index.js"]

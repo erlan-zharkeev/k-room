@@ -2,7 +2,7 @@ import { Table } from 'dexie'
 import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 
-import { MutableType, IndexableType, KvItem, KvQueryState, UseResult, UseStateResult } from './config'
+import { MutableType, IndexableType, KvItem, IKvQueryState, UseResult, IUseStateResult } from './config'
 import { cloneMutable } from './lib'
 
 export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, keyValue: string) => {
@@ -49,7 +49,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
   const setByPath = (path: string, value: unknown) => mutate((obj) => set(obj as unknown as IndexableType, path, value))
 
   const useQueryState = () => {
-    return useLiveQuery<KvQueryState<T> | undefined>(async () => {
+    return useLiveQuery<IKvQueryState<T> | undefined>(async () => {
       return {
         data: await get(),
         isReady: true
@@ -72,7 +72,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
     return { ...defaults, ...data } as UseResult<T, D>
   }
 
-  const useState = <D extends Partial<T> | undefined = undefined>(defaults?: D): UseStateResult<T, D> => {
+  const useState = <D extends Partial<T> | undefined = undefined>(defaults?: D): IUseStateResult<T, D> => {
     const state = useQueryState()
     const entry = state?.data
 

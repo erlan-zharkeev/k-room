@@ -4,6 +4,7 @@ import { db, dexieCollectionStore } from 'src/shared/lib'
 const messageStore = dexieCollectionStore<DbMessageType>(db.messages)
 
 export const useMessage = () => {
+  const { put, bulkPut, update, reset } = messageStore
   const messages = messageStore.use()
 
   const isExist = (id: string) => Boolean(messages?.some((c) => c.id === id))
@@ -14,9 +15,9 @@ export const useMessage = () => {
     messages,
     isExist,
     getById,
-    put: (payload: DbMessageType) => messageStore.put(payload),
-    bulkPut: (payload: DbMessageType[]) => messageStore.bulkPut(payload),
-    update: (id: string, patch: Partial<DbMessageType>) => messageStore.update(id, patch),
-    reset: () => messageStore.reset()
+    put,
+    bulkPut,
+    update,
+    reset
   }
 }

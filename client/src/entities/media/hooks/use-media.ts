@@ -6,14 +6,15 @@ import { db, dexieCollectionStore } from 'src/shared/lib'
 const mediaStore = dexieCollectionStore<IDbMedia>(db.media)
 
 export const useMedia = () => {
-  const getLiveMedia = (id: string) => useLiveMediaUrl(id)
+  const { get, put, remove, update, reset } = mediaStore
+  const getLiveMediaUrl = (id: string) => useLiveMediaUrl(id)
 
   return {
-    getLiveMedia,
-    get: (id: string) => mediaStore.get(id),
-    put: (payload: IDbMedia) => mediaStore.put(payload),
-    delete: (id: string) => mediaStore.delete(id),
-    update: (id: string, payload: Partial<IDbMedia>) => mediaStore.update(id, payload),
-    reset: () => mediaStore.reset()
+    getLiveMediaUrl,
+    get,
+    put,
+    remove,
+    update,
+    reset
   }
 }

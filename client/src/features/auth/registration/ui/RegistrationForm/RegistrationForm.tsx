@@ -1,7 +1,7 @@
 import './style.scss'
 import { IAuthRegistrationPayload } from 'common'
 
-import { PrivacyPolicySwitch, REGISTRATION_FORM_I18N, RegistrationFormProps } from 'src/features/auth/registration'
+import { PrivacyPolicySwitch, REGISTRATION_FORM_I18N, IRegistrationFormProps } from 'src/features/auth/registration'
 
 import { useI18n } from 'src/entities/settings'
 
@@ -11,7 +11,7 @@ type RegistrationFormData = IAuthRegistrationPayload & {
   policy: boolean
 }
 
-export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProps) => {
+export const RegistrationForm = ({ onRegister, isLoading }: IRegistrationFormProps) => {
   const { t } = useI18n()
 
   return (

@@ -13,11 +13,11 @@ import { useI18n } from 'src/entities/settings'
 import { useIntervalRerender } from 'src/shared/lib'
 
 export const ContactListEl = ({ contactData }: IContactListElProps) => {
-  const { getLiveMedia } = useMedia()
+  const { getLiveMediaUrl } = useMedia()
   const { language } = useI18n()
   useIntervalRerender(CONTACT_LIST_RERENDER_INTERVAL)
 
-  const avatar = getLiveMedia(`avatar.${contactData.id}`)
+  const avatar = getLiveMediaUrl(`avatar.${contactData.id}`)
   const description = getContactDescription(contactData, language) ?? ''
 
   return (
