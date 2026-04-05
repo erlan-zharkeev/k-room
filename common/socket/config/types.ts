@@ -191,7 +191,7 @@ export interface IEventInfoNotificationStatusUpdated {
   status: InfoNotificationStatusType
 }
 
-export type IEventInfoNotificationReceived = IUserInfoNotification
+export type EventInfoNotificationReceivedType = IUserInfoNotification
 
 export type SocketActionsType =
   | 'connection'

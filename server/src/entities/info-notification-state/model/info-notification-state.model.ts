@@ -2,9 +2,9 @@ import { model, Schema } from 'mongoose'
 
 import { INFO_NOTIFICATION_STATUS } from 'common'
 
-import { IInfoNotificationStateDocument } from './../config/types'
+import { InfoNotificationStateDocumentType } from './../config/types'
 
-const infoNotificationStateSchema = new Schema<IInfoNotificationStateDocument>(
+const infoNotificationStateSchema = new Schema<InfoNotificationStateDocumentType>(
   {
     userId: {
       type: Schema.Types.ObjectId,

@@ -1,4 +1,3 @@
-import { CLIENT_ENV } from 'src/shared/config'
 import { useTypedSelector } from 'src/shared/lib'
 
 export const useSystem = () => {
@@ -14,14 +13,11 @@ export const useSystem = () => {
     repliedMessageData,
     messageInputData
   } = useTypedSelector((state) => state.system)
+  const haveMessageToReply = Boolean(repliedMessageData?.id)
 
   return {
     auth,
     online,
-    appData: {
-      name: CLIENT_ENV.appName,
-      version: CLIENT_ENV.appVersion
-    },
     hasInteracted,
     micPermission,
     camPermission,
@@ -29,6 +25,7 @@ export const useSystem = () => {
     contextMenu,
     viewPort,
     repliedMessageData,
+    haveMessageToReply,
     messageInputData
   }
 }

@@ -1,13 +1,13 @@
 import './style.scss'
 import { ROUTE_NAMES } from 'common'
 
-import { LOGIN_FORM_I18N, LoginFormProps } from 'src/features/auth'
+import { LOGIN_FORM_I18N, ILoginFormProps } from 'src/features/auth'
 
 import { useI18n } from 'src/entities/settings'
 
 import { AppButton, AppForm, AppLink } from 'src/shared/ui'
 
-export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: LoginFormProps) => {
+export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: ILoginFormProps) => {
   const { t } = useI18n()
 
   return (

@@ -1,10 +1,10 @@
 import { useMedia } from 'src/entities/media'
 
 export const useDeleteMedia = () => {
-  const { delete: deleteMediaById } = useMedia()
+  const { remove } = useMedia()
 
   const deleteMedia = async (id: string) => {
-    await deleteMediaById(id)
+    await remove(id)
   }
 
   return {

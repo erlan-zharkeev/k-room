@@ -10,14 +10,11 @@ import { ThemeSwitcher } from 'src/features/settings/update-theme'
 import { TechSupportLink } from 'src/features/support'
 import { UserProfileData } from 'src/features/user'
 
-import { useSystem } from 'src/entities/system'
-
+import { CLIENT_ENV } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 
 export const UserSettings = () => {
-  const {
-    appData: { name, version }
-  } = useSystem()
+  const { appName, appVersion } = CLIENT_ENV
 
   const Switchers = [
     <ThemeSwitcher />,
@@ -47,8 +44,8 @@ export const UserSettings = () => {
           <TechSupportLink />
           <PrivacyPolicyLink />
           <div className="user-settings__info-package-data">
-            <AppText size="small">{name}</AppText>
-            <AppText size="small">v.{version}</AppText>
+            <AppText size="small">{appName}</AppText>
+            <AppText size="small">v.{appVersion}</AppText>
           </div>
         </div>
       </div>

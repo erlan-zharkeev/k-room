@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
 
-import { CollectionMergeManyOptions, IndexableType, MutableType } from 'src/shared/lib'
+import { ICollectionMergeManyOptions, IndexableType, MutableType } from 'src/shared/lib'
 
 import { cloneMutable } from './lib'
 
@@ -67,7 +67,10 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     })
   }
 
-  const mergeMany = async (data: readonly Item[], options: CollectionMergeManyOptions<Item>) => {
+  const mergeMany = async <Incoming extends { id: ItemId }>(
+    data: readonly Incoming[],
+    options: ICollectionMergeManyOptions<Item, Incoming>
+  ) => {
     const { merge, removeMissing = false } = options
 
     await transaction('rw', async () => {
@@ -79,7 +82,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
         return
       }
 
-      const incomingIds = data.map((item) => item.id as ItemId)
+      const incomingIds = data.map((item) => item.id)
       const existingItems = removeMissing ? await getAll() : await bulkGet(incomingIds)
       const existingMap = new Map<ItemId, Item>()
 
@@ -92,7 +95,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
       const nextItems: Item[] = []
 
       data.forEach((incoming) => {
-        const current = existingMap.get(incoming.id as ItemId)
+        const current = existingMap.get(incoming.id)
         const next = merge(current, incoming)
 
         if (!current || !Object.is(current, next)) {
@@ -165,7 +168,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     unsetByPath,
     patchByPath,
     mutate,
-    delete: deleteById,
+    remove: deleteById,
     bulkDelete,
     clear,
     reset: clear,

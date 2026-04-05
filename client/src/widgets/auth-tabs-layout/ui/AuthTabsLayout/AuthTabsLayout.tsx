@@ -3,14 +3,14 @@ import './style.scss'
 import { ROUTE_NAMES } from 'common'
 import { Link, useLocation } from 'react-router-dom'
 
-import { AuthTabsLayoutProps, AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
+import { IAuthTabsLayoutProps, AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
 
 import { useI18n } from 'src/entities/settings'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
-export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProps) => {
+export const AuthTabsLayout = ({ children, blockNavigation }: IAuthTabsLayoutProps) => {
   const location = useLocation()
   const { t } = useI18n()
   const path = location.pathname

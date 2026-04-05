@@ -8,11 +8,15 @@ import { socket } from 'src/shared/api'
 import { FChatRoomType } from 'src/shared/config'
 
 export const useChatRoomActualize = () => {
-  const { replaceAll } = useChatRoom()
+  const { mergeMany } = useChatRoom()
 
   const actualizeChatRooms = async (chatRooms: FChatRoomType[]) => {
     const rooms = chatRooms.map((room) => transformRoomData(room))
-    await replaceAll(rooms)
+
+    await mergeMany(rooms, {
+      merge: (_current, incoming) => incoming,
+      removeMissing: true
+    })
   }
 
   const monitorChatRoomActualize = () => {

@@ -13,7 +13,7 @@ import { SERVER_ENV } from 'src/shared/config'
 import { log, serverCaptureSentryException, setIO } from 'src/shared/lib'
 import { httpRequestLanguageMiddleware } from 'src/shared/middleware'
 
-import { adminRouter } from './admin'
+import { createAdminRouter } from './admin'
 import { initDataBase } from './database'
 import { rootRouter } from './router'
 import { initIO } from './socket'
@@ -26,7 +26,9 @@ app.use(cookieParser())
 app.get('/admin-favicon.svg', (_req, res) => {
   res.sendFile(adminFaviconPath)
 })
-app.use(SERVER_ENV.adminRootPath, adminRouter)
+app.get('/health', (_req, res) => {
+  res.status(200).json({ ok: true })
+})
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use(httpRequestLanguageMiddleware)
@@ -36,9 +38,17 @@ setupSentryErrorHandler(app)
 const server = SERVER_ENV.isDev ? https.createServer(httpsOptions, app) : http.createServer(app)
 
 export const runServer = async () => {
-  await initDataBase()
+  const isDatabaseInitialized = await initDataBase()
+
+  if (!isDatabaseInitialized) {
+    throw new Error('Database initialization failed')
+  }
+
+  app.use(SERVER_ENV.adminRootPath, createAdminRouter())
+
   const io = initIO(server)
   setIO(io)
+
   server.listen(SERVER_ENV.serverPort, () => {
     log.success(`-Server listening on port ${SERVER_ENV.serverPort}`)
   })

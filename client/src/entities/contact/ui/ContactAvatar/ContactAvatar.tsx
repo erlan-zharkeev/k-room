@@ -5,9 +5,9 @@ import { AppAvatar } from 'src/shared/ui'
 
 export const ContactAvatar = ({ id, showBadge = true }: IContactAvatarProps) => {
   const { contacts } = useContact()
-  const { getLiveMedia } = useMedia()
+  const { getLiveMediaUrl } = useMedia()
   const contact = contacts.find((contact) => contact.id === id)
-  const avatar = getLiveMedia(`avatar.${id}`)
+  const avatar = getLiveMediaUrl(`avatar.${id}`)
 
   return (
     <AppAvatar

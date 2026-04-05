@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
 
-import { useLiveQuery } from 'dexie-react-hooks'
-
 import { acquireUrl, releaseUrl } from 'src/entities/media'
 
-import { db } from 'src/shared/lib'
+import { IDbMedia } from 'src/shared/config'
+import { db, dexieCollectionStore } from 'src/shared/lib'
+
+const mediaStore = dexieCollectionStore<IDbMedia>(db.media)
 
 export const useLiveMediaUrl = (id: string) => {
-  const record = useLiveQuery(async () => {
-    const currentRecord = await db.media.get(id)
-    if (!currentRecord) return undefined as { blob: Blob; etag: string } | undefined
-    return { blob: currentRecord.blob, etag: currentRecord.etag }
-  }, [id])
+  const currentRecord = mediaStore.useById(id)
+  const record =
+    currentRecord?.blob && currentRecord?.etag
+      ? {
+          blob: currentRecord.blob,
+          etag: currentRecord.etag
+        }
+      : undefined
 
   const key = id && record?.etag ? `${id}:${record.etag}` : undefined
 

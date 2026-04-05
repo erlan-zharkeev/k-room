@@ -6,6 +6,7 @@ import { dexieKeyValueStore, db } from 'src/shared/lib'
 const settingsStore = dexieKeyValueStore<IUserSetting>(db.settings, 'settings')
 
 export const useSettings = () => {
+  const { shallowUpdate } = settingsStore
   const { data: settings, isReady } = settingsStore.useState(DEFAULT_SETTINGS)
   const isThemeDark = settings.theme === 'dark'
   const showAsidePanel = !FULL_CONTENT_ELEMENTS.includes(settings.selectedContentTab)
@@ -16,6 +17,6 @@ export const useSettings = () => {
     isThemeDark,
     showAsidePanel,
     initialize: () => settingsStore.ensure(DEFAULT_SETTINGS),
-    shallowUpdate: (changes: Partial<IUserSetting>) => settingsStore.shallowUpdate(changes)
+    shallowUpdate
   }
 }

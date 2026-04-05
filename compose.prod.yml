@@ -26,7 +26,7 @@ services:
           'CMD',
           'node',
           '-e',
-          "const socket=require('node:net').connect(3000,'127.0.0.1');socket.once('connect',()=>{socket.end();process.exit(0)});socket.once('error',()=>process.exit(1));setTimeout(()=>process.exit(1),4000)"
+          "const req=require('node:http').get('http://127.0.0.1:${SERVER_PORT}/health',res=>{res.resume();process.exit(res.statusCode===200?0:1)});req.on('error',()=>process.exit(1));setTimeout(()=>process.exit(1),4000)"
         ]
       interval: 30s
       timeout: 5s

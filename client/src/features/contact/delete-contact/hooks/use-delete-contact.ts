@@ -9,7 +9,7 @@ import { useTimeout } from 'src/shared/lib'
 
 export const useDeleteContact = () => {
   const [loading, setLoading] = useState(false)
-  const { delete: deleteById } = useContact()
+  const { remove } = useContact()
   const { startTimeout } = useTimeout()
 
   const deleteUserHandler = (contactId: string) => {
@@ -22,7 +22,7 @@ export const useDeleteContact = () => {
   }
 
   const deleteContact = async (payload: IEventDeleteContactSuccess) => {
-    await deleteById(payload.deletedContactId)
+    await remove(payload.deletedContactId)
   }
 
   const monitorContactDeletion = () => {
