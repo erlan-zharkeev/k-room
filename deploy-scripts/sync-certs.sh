@@ -4,7 +4,7 @@ set -eu
 
 ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 ENV_FILE="${ENV_FILE:-$ROOT_DIR/.env.production}"
-CERTS_DIR="${CERTS_DIR:-$ROOT_DIR/deploy/certs}"
+CERTS_DIR="${CERTS_DIR:-$ROOT_DIR/deploy-scripts/certs}"
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "[cert-sync] Env file not found: $ENV_FILE" >&2

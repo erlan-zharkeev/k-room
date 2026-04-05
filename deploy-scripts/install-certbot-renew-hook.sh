@@ -10,7 +10,7 @@ sudo tee "$HOOK_PATH" >/dev/null <<EOF
 #!/bin/sh
 set -eu
 APP_ROOT="$ROOT_DIR"
-sh "\$APP_ROOT/deploy/sync-certs.sh"
+sh "\$APP_ROOT/deploy-scripts/sync-certs.sh"
 docker compose --env-file "\$APP_ROOT/.env.production" --env-file "\$APP_ROOT/.env.runtime" -f "\$APP_ROOT/compose.prod.yml" up -d webserver
 EOF
 sudo chmod 755 "$HOOK_PATH"
