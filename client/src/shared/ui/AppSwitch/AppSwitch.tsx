@@ -6,8 +6,6 @@ import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import { IAppSwitchProps } from './config'
 
-const rootClass = 'app-switch'
-
 export const AppSwitch = ({
   name,
   value,
@@ -27,7 +25,7 @@ export const AppSwitch = ({
   }
 
   const className = createClassNameWithModifiers({
-    rootClass,
+    rootClass: 'app-switch',
     modifiers: [disabled && 'disabled', focused && 'focused']
   })
 

@@ -1,18 +1,15 @@
-import { Server as HttpServer } from 'http'
-import { Server as HttpsServer } from 'https'
 import { Server } from 'socket.io'
 
 import { SocketActionsType } from 'common'
 
 import { MAX_HTTP_BUFFER_SIZE } from 'src/app/config'
 import { socketRouter } from 'src/app/services'
+import { SocketServerType } from 'src/app/services/types'
 
 import { socketAuthMiddleware } from 'src/features/auth'
 
 import { ORIGINS, SERVER_ENV, SocketInstanceType } from 'src/shared/config'
 import { log, serverCaptureSentryException } from 'src/shared/lib'
-
-type SocketServerType = HttpServer | HttpsServer
 
 const getSocketIO = (server: SocketServerType) =>
   new Server(server, {

@@ -1,9 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ICall, EventCallStartedAtType, EventCallsUpdatedType, EventCallUpdatedType, IEventCallUser, IBaseFrontendUserData } from 'common'
+import { ICall, EventCallStartedAtType, EventCallsUpdatedType, EventCallUpdatedType, IEventCallUser } from 'common'
 
-import { CallMediaType, ICallsState, IStreamConstraints } from 'src/entities/call/types'
-
-type CallInterlocutorType = IBaseFrontendUserData & { avatar?: string }
+import { CallMediaType, ICallInterlocutor, ICallsState, IStreamConstraints } from 'src/entities/call/types'
 
 const initialCurrentCall: ICall = {
   id: '',
@@ -57,7 +55,7 @@ export const callsSlice = createSlice({
     updateAllList(state, { payload }: { payload: ICall[] }) {
       state.list = payload
     },
-    initModalToCall(state, { payload }: { payload: CallInterlocutorType }) {
+    initModalToCall(state, { payload }: { payload: ICallInterlocutor }) {
       state.showCallModal = true
       const { id, avatar, username } = payload
       state.currentCall.interlocutorId = id

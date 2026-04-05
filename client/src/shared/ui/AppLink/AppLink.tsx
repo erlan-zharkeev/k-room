@@ -1,21 +1,10 @@
 // AppLink.tsx
 import './style.scss'
-import { UnknownCallbackType } from 'common'
-import { Link as RouterLink, To } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { ColorModifierType } from 'src/shared/ui/config'
 
-interface IProps {
-  text: string
-  color?: ColorModifierType
-  target?: React.HTMLAttributeAnchorTarget
-  onClick?: UnknownCallbackType
-  disabled?: boolean
-  prevent?: boolean
-  to?: To // <-- для внутренней навигации (SPA)
-  href?: string // <-- для внешних ссылок
-}
+import { IAppLinkProps } from './config'
 
 export const AppLink = ({
   text,
@@ -26,7 +15,7 @@ export const AppLink = ({
   prevent = false,
   to,
   href = ''
-}: IProps) => {
+}: IAppLinkProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-link',
     modifiers: [disabled && 'disabled', color]

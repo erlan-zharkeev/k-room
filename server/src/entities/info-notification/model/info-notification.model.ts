@@ -1,10 +1,6 @@
-import { model, Schema, Types } from 'mongoose'
+import { model, Schema } from 'mongoose'
 
-import { IInfoNotification } from 'common'
-
-type IInfoNotificationDocument = Omit<IInfoNotification, 'id'> & {
-  _id: Types.ObjectId
-}
+import { IInfoNotificationDocument } from './types'
 
 const localizedTextSchema = {
   en: {

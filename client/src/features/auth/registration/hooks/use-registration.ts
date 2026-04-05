@@ -9,12 +9,10 @@ import {
 } from 'common'
 import { useNavigate } from 'react-router-dom'
 
+import { RegistrationFormDataType } from 'src/features/auth/registration'
+
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
-
-type RegistrationFormData = IAuthRegistrationPayload & {
-  policy: boolean
-}
 
 export const useRegistration = () => {
   const [policySwitch, setPolicySwitch] = useState(false)
@@ -49,7 +47,7 @@ export const useRegistration = () => {
     }
   }
 
-  const onRegister = ({ email, password, username }: RegistrationFormData) => {
+  const onRegister = ({ email, password, username }: RegistrationFormDataType) => {
     register({ email, password, username })
   }
 

@@ -14,17 +14,10 @@ import {
   FIXTURE_CONTACT_USERNAMES,
   FIXTURE_GROUPS,
   FIXTURE_MESSAGE_COUNT,
-  USER_FIXTURES,
   UserModel
 } from 'src/entities/user'
 
-const USER_BY_USERNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.username, fixture])) as Record<
-  string,
-  (typeof USER_FIXTURES)[number]
->
-
-const ERLAN_ID = USER_BY_USERNAME.erlan?.id ?? ''
-const TOLIK_ID = USER_BY_USERNAME.tolik?.id ?? ''
+import { ERLAN_ID, TOLIK_ID, USER_BY_USERNAME } from './constants'
 
 const buildFixtureMessageId = (idx: number) => `fixture-erlan-tolik-${String(idx).padStart(3, '0')}`
 
