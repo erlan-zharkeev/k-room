@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const OPEN_MODAL_EDIT_USER_DATA_BTN_I18N = {
+export const OPEN_MODAL_EDIT_USER_DATA_BTN_I18N = defineI18n({
   link: {
     en: 'Edit user data',
     ru: 'Редактировать профиль'
@@ -9,4 +9,4 @@ export const OPEN_MODAL_EDIT_USER_DATA_BTN_I18N = {
     en: 'Edit user data',
     ru: 'Редактирование профиля'
   }
-} as const satisfies LocalizedTextMapType
+})

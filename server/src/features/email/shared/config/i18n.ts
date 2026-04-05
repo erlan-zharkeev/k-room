@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const EMAIL_I18N = {
+export const EMAIL_I18N = defineI18n({
   resendApiKeyMissing: {
     en: 'RESEND_API_KEY is not configured',
     ru: 'RESEND_API_KEY не настроен'
@@ -17,4 +17,4 @@ export const EMAIL_I18N = {
     en: 'Email recipient is required',
     ru: 'Требуется получатель email'
   }
-} as const satisfies LocalizedTextMapType
+})

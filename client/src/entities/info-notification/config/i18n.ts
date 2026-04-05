@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const INFO_NOTIFICATIONS_I18N = {
+export const INFO_NOTIFICATIONS_I18N = defineI18n({
   title: {
     en: 'Info notifications',
     ru: 'Инфо уведомления'
@@ -29,4 +29,4 @@ export const INFO_NOTIFICATIONS_I18N = {
     en: 'As we continue to develop the website, expect even more features and improvements to enhance your experience.',
     ru: 'По мере развития сервиса вас будут ждать новые функции и улучшения, которые сделают использование приложения ещё удобнее.'
   }
-} as const satisfies LocalizedTextMapType
+})

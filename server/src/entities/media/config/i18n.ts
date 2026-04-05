@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const VALIDATE_MEDIA_FILE_I18N = {
+export const VALIDATE_MEDIA_FILE_I18N = defineI18n({
   uploadFailed: {
     en: 'Upload failed',
     ru: 'Не удалось загрузить файл'
@@ -17,9 +17,9 @@ export const VALIDATE_MEDIA_FILE_I18N = {
     en: 'File with this name already exists',
     ru: 'Файл с таким именем уже существует'
   }
-} as const satisfies LocalizedTextMapType
+})
 
-export const COMMON_MEDIA_I18N = {
+export const COMMON_MEDIA_I18N = defineI18n({
   fileNotFound: {
     en: 'File not found',
     ru: 'Файл не найден'
@@ -32,4 +32,4 @@ export const COMMON_MEDIA_I18N = {
     en: 'Failed to find media bucket',
     ru: 'Не удалось найти media bucket'
   }
-} as const satisfies LocalizedTextMapType
+})

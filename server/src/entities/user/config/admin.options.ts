@@ -1,11 +1,11 @@
-import { ActionRequest, ValidationError } from 'adminjs'
-
 import { DEFAULT_APP_LANGUAGE, formatHumanDateTime } from 'common'
 
 import { localizedText } from 'src/shared/lib'
 
 import { UserModel } from './../model'
-import { IAdminActionResponse, LAST_SEEN_PATH, USER_ADMIN_I18N } from './index'
+import { LAST_SEEN_PATH } from './constants'
+import { USER_ADMIN_I18N } from './i18n'
+import { IAdminActionRequest, IAdminActionResponse } from './types'
 
 const formatLastSeenParam = (params?: Record<string, unknown>) => {
   if (!params) return
@@ -23,12 +23,14 @@ const withFormattedLastSeen = <T extends IAdminActionResponse>(response: T) => {
   return response
 }
 
-const validateUserCreateRequest = async (request: ActionRequest) => {
+const validateUserCreateRequest = async (request: IAdminActionRequest) => {
   if (request.method !== 'post') return request
 
   const password = request.payload?.['system.password']
 
   if (typeof password === 'string' && password.trim()) return request
+
+  const { ValidationError } = await import('adminjs')
 
   throw new ValidationError(
     {

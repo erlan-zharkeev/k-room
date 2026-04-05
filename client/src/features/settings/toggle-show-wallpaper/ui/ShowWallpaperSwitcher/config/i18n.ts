@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const SHOW_WALLPAPER_SWITCHER_I18N = {
+export const SHOW_WALLPAPER_SWITCHER_I18N = defineI18n({
   label: {
     en: 'Wallpaper',
     ru: 'Обои'
@@ -13,4 +13,4 @@ export const SHOW_WALLPAPER_SWITCHER_I18N = {
     en: 'Hide',
     ru: 'Выкл'
   }
-} as const satisfies LocalizedTextMapType
+})

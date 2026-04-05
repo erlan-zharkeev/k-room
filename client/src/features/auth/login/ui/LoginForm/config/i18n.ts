@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const LOGIN_FORM_I18N = {
+export const LOGIN_FORM_I18N = defineI18n({
   emailPlaceholder: {
     en: 'Enter your email',
     ru: 'Введите email'
@@ -21,4 +21,4 @@ export const LOGIN_FORM_I18N = {
     en: 'Forgot password?',
     ru: 'Забыли пароль?'
   }
-} as const satisfies LocalizedTextMapType
+})

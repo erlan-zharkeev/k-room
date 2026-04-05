@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const REPLIED_MESSAGE_I18N = {
+export const REPLIED_MESSAGE_I18N = defineI18n({
   forwarded: {
     en: 'Forwarded',
     ru: 'Переслано'
@@ -9,4 +9,4 @@ export const REPLIED_MESSAGE_I18N = {
     en: 'Replied',
     ru: 'Ответ'
   }
-} as const satisfies LocalizedTextMapType
+})

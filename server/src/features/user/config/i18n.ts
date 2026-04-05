@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const USER_SOCKET_I18N = {
+export const USER_SOCKET_I18N = defineI18n({
   actualizeUserDataFailed: {
     en: 'Failed to actualize user data',
     ru: 'Не удалось актуализировать данные пользователя'
@@ -17,4 +17,4 @@ export const USER_SOCKET_I18N = {
     en: 'Failed to update online status on disconnect',
     ru: 'Не удалось обновить онлайн-статус при отключении'
   }
-} as const satisfies LocalizedTextMapType
+})

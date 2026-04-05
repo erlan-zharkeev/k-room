@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const USER_I18N = {
+export const USER_I18N = defineI18n({
   userNotFound: {
     en: 'User not found',
     ru: 'Пользователь не найден'
@@ -21,4 +21,4 @@ export const USER_I18N = {
     en: 'A user with this id is already exist',
     ru: 'Пользователь с таким id уже существует'
   }
-} as const satisfies LocalizedTextMapType
+})

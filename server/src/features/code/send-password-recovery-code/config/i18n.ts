@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const SEND_PASSWORD_RECOVERY_CODE_I18N = {
+export const SEND_PASSWORD_RECOVERY_CODE_I18N = defineI18n({
   codeSent: {
     en: 'Password recovery code has been sent',
     ru: 'Код для восстановления пароля отправлен'
@@ -13,4 +13,4 @@ export const SEND_PASSWORD_RECOVERY_CODE_I18N = {
     en: 'Please wait before requesting a new code',
     ru: 'Подождите перед повторной отправкой кода'
   }
-} as const satisfies LocalizedTextMapType
+})

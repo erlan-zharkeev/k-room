@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const SHARED_I18N = {
+export const SHARED_I18N = defineI18n({
   success: {
     en: 'Success',
     ru: 'Успешно'
@@ -21,4 +21,4 @@ export const SHARED_I18N = {
     en: 'Info',
     ru: 'Информация'
   }
-} as const satisfies LocalizedTextMapType
+})

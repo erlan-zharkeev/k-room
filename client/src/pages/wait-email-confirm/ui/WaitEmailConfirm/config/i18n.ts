@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const WAIT_EMAIL_CONFIRM_I18N = {
+export const WAIT_EMAIL_CONFIRM_I18N = defineI18n({
   title: {
     en: 'Email confirmation',
     ru: 'Подтверждение email'
@@ -37,4 +37,4 @@ export const WAIT_EMAIL_CONFIRM_I18N = {
     en: 'Back',
     ru: 'Назад'
   }
-} as const satisfies LocalizedTextMapType<any>
+})

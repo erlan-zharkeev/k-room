@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const PASSWORD_RECOVERY_BODY_I18N = {
+export const PASSWORD_RECOVERY_BODY_I18N = defineI18n({
   emailPlaceholder: {
     en: 'Enter your email',
     ru: 'Введите email'
@@ -21,4 +21,4 @@ export const PASSWORD_RECOVERY_BODY_I18N = {
     en: 'Validate',
     ru: 'Проверить'
   }
-} as const satisfies LocalizedTextMapType<any>
+})

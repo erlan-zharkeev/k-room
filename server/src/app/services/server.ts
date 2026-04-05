@@ -44,7 +44,7 @@ export const runServer = async () => {
     throw new Error('Database initialization failed')
   }
 
-  app.use(SERVER_ENV.adminRootPath, createAdminRouter())
+  app.use(SERVER_ENV.adminRootPath, await createAdminRouter())
 
   const io = initIO(server)
   setIO(io)

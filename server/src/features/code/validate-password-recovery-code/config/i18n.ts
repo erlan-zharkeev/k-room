@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const VALIDATE_PASSWORD_RECOVERY_CODE_I18N = {
+export const VALIDATE_PASSWORD_RECOVERY_CODE_I18N = defineI18n({
   validated: {
     en: 'The password recovery code is valid',
     ru: 'Код восстановления пароля подтверждён'
@@ -17,4 +17,4 @@ export const VALIDATE_PASSWORD_RECOVERY_CODE_I18N = {
     en: 'Failed to validate password recovery code',
     ru: 'Не удалось проверить код восстановления пароля'
   }
-} as const satisfies LocalizedTextMapType
+})

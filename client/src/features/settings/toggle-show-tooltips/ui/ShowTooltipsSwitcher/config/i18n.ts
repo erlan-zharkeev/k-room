@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const SHOW_TOOLTIPS_SWITCHER_I18N = {
+export const SHOW_TOOLTIPS_SWITCHER_I18N = defineI18n({
   label: {
     en: 'Tooltips',
     ru: 'Подсказки'
@@ -13,4 +13,4 @@ export const SHOW_TOOLTIPS_SWITCHER_I18N = {
     en: 'Hide',
     ru: 'Выкл'
   }
-} as const satisfies LocalizedTextMapType
+})

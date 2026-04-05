@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const APP_FILE_LOADER_I18N = {
+export const APP_FILE_LOADER_I18N = defineI18n({
   upload: {
     en: 'Upload',
     ru: 'Загрузить'
@@ -9,4 +9,4 @@ export const APP_FILE_LOADER_I18N = {
     en: 'Reset',
     ru: 'Сбросить'
   }
-} as const satisfies LocalizedTextMapType
+})

@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const LOGIN_I18N = {
+export const LOGIN_I18N = defineI18n({
   success: {
     en: 'Logged in successfully',
     ru: 'Вход выполнен'
@@ -17,4 +17,4 @@ export const LOGIN_I18N = {
     en: 'Login failed. Please try again later',
     ru: 'Не удалось выполнить вход. Попробуйте позже'
   }
-} as const satisfies LocalizedTextMapType
+})

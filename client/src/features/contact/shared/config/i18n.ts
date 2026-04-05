@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CONTACT_SHARED_I18N = {
+export const CONTACT_SHARED_I18N = defineI18n({
   online: { en: 'online', ru: 'в сети' },
   lastSeen: { en: 'last seen', ru: 'был(а) в сети' }
-} as const satisfies LocalizedTextMapType
+})

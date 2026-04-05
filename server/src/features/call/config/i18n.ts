@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CALL_I18N = {
+export const CALL_I18N = defineI18n({
   answerCallFailed: {
     en: 'Failed to answer call',
     ru: 'Не удалось ответить на звонок'
@@ -25,4 +25,4 @@ export const CALL_I18N = {
     en: 'Failed to update call signal',
     ru: 'Не удалось обновить сигнал звонка'
   }
-} as const satisfies LocalizedTextMapType
+})

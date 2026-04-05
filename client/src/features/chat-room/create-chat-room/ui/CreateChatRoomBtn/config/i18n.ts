@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CREATE_CHAT_ROOM_BTN_I18N = {
+export const CREATE_CHAT_ROOM_BTN_I18N = defineI18n({
   button: {
     en: 'Create chat',
     ru: 'Создать чат'
@@ -9,4 +9,4 @@ export const CREATE_CHAT_ROOM_BTN_I18N = {
     en: 'Create chat room',
     ru: 'Создать чат'
   }
-} as const satisfies LocalizedTextMapType
+})

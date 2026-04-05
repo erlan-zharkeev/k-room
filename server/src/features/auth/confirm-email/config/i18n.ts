@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CONFIRM_EMAIL_I18N = {
+export const CONFIRM_EMAIL_I18N = defineI18n({
   failedEmailConfirm: {
     en: 'Email confirmation failed',
     ru: 'Не удалось подтвердить email'
@@ -13,4 +13,4 @@ export const CONFIRM_EMAIL_I18N = {
     en: 'Email already confirmed',
     ru: 'Email уже подтверждён'
   }
-} as const satisfies LocalizedTextMapType
+})

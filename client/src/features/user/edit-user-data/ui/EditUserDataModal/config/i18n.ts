@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const EDIT_USER_DATA_MODAL_I18N = {
+export const EDIT_USER_DATA_MODAL_I18N = defineI18n({
   usernamePlaceholder: {
     en: 'Username',
     ru: 'Имя пользователя'
@@ -13,4 +13,4 @@ export const EDIT_USER_DATA_MODAL_I18N = {
     en: 'Reset',
     ru: 'Сбросить'
   }
-} as const satisfies LocalizedTextMapType
+})

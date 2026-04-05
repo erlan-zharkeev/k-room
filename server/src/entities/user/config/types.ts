@@ -49,3 +49,8 @@ export interface IAdminActionResponse {
   record?: IAdminRecord
   records?: IAdminRecord[]
 }
+
+export interface IAdminActionRequest {
+  method?: string
+  payload?: Record<string, unknown>
+}

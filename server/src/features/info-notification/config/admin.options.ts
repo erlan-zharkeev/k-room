@@ -1,5 +1,3 @@
-import { ActionContext, ActionRequest, RecordActionResponse } from 'adminjs'
-
 import { DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
 
 import { InfoNotificationModel } from 'src/entities/info-notification'
@@ -8,6 +6,11 @@ import { AppError, localizedText } from 'src/shared/lib'
 
 import { publishInfoNotificationToAllUsers } from './../shared'
 import { INFO_NOTIFICATION_ADMIN_I18N } from './i18n'
+import {
+  IInfoNotificationAdminActionContextType,
+  IInfoNotificationAdminActionRequest,
+  IInfoNotificationAdminRecordActionResponseType
+} from './types'
 
 export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
   resource: InfoNotificationModel,
@@ -25,10 +28,10 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
         guard: localizedText(INFO_NOTIFICATION_ADMIN_I18N.publishGuard, DEFAULT_APP_LANGUAGE),
         component: false,
         handler: async (
-          _request: ActionRequest,
+          _request: IInfoNotificationAdminActionRequest,
           _response: unknown,
-          context: ActionContext
-        ): Promise<RecordActionResponse> => {
+          context: IInfoNotificationAdminActionContextType
+        ): Promise<IInfoNotificationAdminRecordActionResponseType> => {
           const { record, currentAdmin, resource, h } = context
 
           if (!record) {

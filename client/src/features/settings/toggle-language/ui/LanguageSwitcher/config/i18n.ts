@@ -1,4 +1,6 @@
-export const LANGUAGE_SWITCHER_I18N = {
+import { defineI18n } from 'common'
+
+export const LANGUAGE_SWITCHER_I18N = defineI18n({
   label: {
     en: 'Language',
     ru: 'Язык'
@@ -11,4 +13,4 @@ export const LANGUAGE_SWITCHER_I18N = {
     en: 'RU',
     ru: 'RU'
   }
-} as const
+})

@@ -1,8 +1,8 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CHAT_ROOM_I18N = {
+export const CHAT_ROOM_I18N = defineI18n({
   groupChatInfo: {
     en: 'Group chat info',
     ru: 'Информация о групповом чате'
   }
-} as const satisfies LocalizedTextMapType
+})

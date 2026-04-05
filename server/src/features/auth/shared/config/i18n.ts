@@ -1,7 +1,7 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 import { VALIDATION_LIMITS } from 'common'
 
-export const AUTH_I18N = {
+export const AUTH_I18N = defineI18n({
   nonAuthorized: {
     en: 'User not authorized',
     ru: 'Пользователь не авторизован'
@@ -66,4 +66,4 @@ export const AUTH_I18N = {
     en: 'Invalid id',
     ru: 'Неверный id'
   }
-} as const satisfies LocalizedTextMapType
+})

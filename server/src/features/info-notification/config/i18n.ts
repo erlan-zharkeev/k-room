@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const INFO_NOTIFICATION_ADMIN_I18N = {
+export const INFO_NOTIFICATION_ADMIN_I18N = defineI18n({
   publishGuard: {
     en: 'Publish this info notification to all users?',
     ru: 'Опубликовать это информационное уведомление для всех пользователей?'
@@ -17,4 +17,4 @@ export const INFO_NOTIFICATION_ADMIN_I18N = {
     en: 'Info notification published',
     ru: 'Информационное уведомление опубликовано'
   }
-} as const satisfies LocalizedTextMapType
+})

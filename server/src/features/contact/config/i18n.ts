@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CONTACT_I18N = {
+export const CONTACT_I18N = defineI18n({
   interlocutorPingFailed: {
     en: 'Failed to update interlocutor status',
     ru: 'Не удалось обновить статус собеседника'
@@ -17,4 +17,4 @@ export const CONTACT_I18N = {
     en: 'Failed to update contact interaction',
     ru: 'Не удалось обновить взаимодействие с контактом'
   }
-} as const satisfies LocalizedTextMapType
+})

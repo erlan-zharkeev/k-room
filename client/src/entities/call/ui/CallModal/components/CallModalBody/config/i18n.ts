@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const CALL_MODAL_BODY_I18N = {
+export const CALL_MODAL_BODY_I18N = defineI18n({
   outgoingCall: {
     en: 'Outgoing call',
     ru: 'Исходящий звонок'
@@ -21,4 +21,4 @@ export const CALL_MODAL_BODY_I18N = {
     en: 'Decline call',
     ru: 'Отклонить звонок'
   }
-} as const satisfies LocalizedTextMapType
+})

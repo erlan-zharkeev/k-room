@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const API_I18N = {
+export const API_I18N = defineI18n({
   unknownError: {
     en: 'Unknown error',
     ru: 'Неизвестная ошибка'
@@ -9,4 +9,4 @@ export const API_I18N = {
     en: (msg: string) => `An error has occurred, please try again later. Error: ${msg}`,
     ru: (msg: string) => `Произошла ошибка, попробуйте позже. Ошибка: ${msg}`
   }
-} as const satisfies LocalizedTextMapType<string | ((msg: string) => string)>
+})

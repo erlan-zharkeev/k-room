@@ -1,6 +1,6 @@
-import { LocalizedTextMapType } from 'common'
+import { defineI18n } from 'common'
 
-export const PRIVACY_POLICY_SWITCH_I18N = {
+export const PRIVACY_POLICY_SWITCH_I18N = defineI18n({
   agreement: {
     en: 'I have read and agree',
     ru: 'Я прочитал и принимаю'
@@ -9,4 +9,4 @@ export const PRIVACY_POLICY_SWITCH_I18N = {
     en: 'legal information',
     ru: 'правовую информацию'
   }
-} as const satisfies LocalizedTextMapType
+})
