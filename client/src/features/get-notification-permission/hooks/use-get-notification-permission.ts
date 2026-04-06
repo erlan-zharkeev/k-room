@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { useSystem } from 'src/entities/system'
+import { useSystem } from 'src/shared/system'
 
 export const useGetNotificationPermission = () => {
   const { hasInteracted } = useSystem()

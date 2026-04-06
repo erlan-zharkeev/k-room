@@ -1,6 +1,5 @@
-import { useI18n } from 'src/entities/settings'
-
 import { CLIENT_ENV } from 'src/shared/config'
+import { useI18n } from 'src/shared/settings'
 import { AppLink } from 'src/shared/ui'
 
 import { TECH_SUPPORT_LINK_I18N } from './config'

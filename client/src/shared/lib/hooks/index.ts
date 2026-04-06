@@ -4,7 +4,5 @@ export * from './use-debounce'
 export * from './use-interval-rerender'
 export * from './use-query'
 export * from './use-validate'
-export * from './use-typed-selector'
 export * from './use-timeout'
-
 export * from './config'

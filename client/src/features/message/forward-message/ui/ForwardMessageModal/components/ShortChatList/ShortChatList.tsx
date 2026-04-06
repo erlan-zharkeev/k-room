@@ -4,7 +4,8 @@ import { useState, useMemo } from 'react'
 import { SHORT_CHAT_LIST_I18N, IShortChatListProps } from 'src/features/message'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useI18n } from 'src/entities/settings'
+
+import { useI18n } from 'src/shared/settings'
 
 export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
   const { chatRooms, selectedChatRoom } = useChatRoom()

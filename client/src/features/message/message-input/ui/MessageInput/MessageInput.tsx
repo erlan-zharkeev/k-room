@@ -6,8 +6,7 @@ import { useContactTyping } from 'src/features/contact'
 import { EmojiDropdown } from 'src/features/emoji-dropdown'
 import { MESSAGE_INPUT_I18N, MessageWithBindDataModal, useMessageSend } from 'src/features/message'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppForm } from 'src/shared/ui'
 
 export const MessageInput = ({

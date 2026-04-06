@@ -1,16 +1,13 @@
 import { AxiosError } from 'axios'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { IBackendResponse, ROUTE_NAMES, StatusEnum } from 'common'
 
-import { useResetAllStores } from 'src/features/reset-all-stores'
-
-import { useNotification } from 'src/entities/notification'
-import { useI18n, useSettings } from 'src/entities/settings'
-
 import { API_I18N, createApiError } from 'src/shared/api'
 import { frontCaptureSentryException, log } from 'src/shared/lib'
+import { useI18n, useSettings } from 'src/shared/settings'
+
+import { useNotification } from '../../notification'
 
 const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
   if (!data || typeof data !== 'object') return false
@@ -51,11 +48,7 @@ export const useApiInterceptor = () => {
   const { t } = useI18n()
   const settings = useSettings()
   const notifications = useNotification()
-  const dispatch = useDispatch()
-  const { reset: resetStores } = useResetAllStores(dispatch)
   const navigate = useNavigate()
-
-  useResetAllStores(dispatch)
 
   const interceptError = async (error: unknown) => {
     frontCaptureSentryException(error)
@@ -73,7 +66,6 @@ export const useApiInterceptor = () => {
       switch (status) {
         case StatusEnum.NotAuth: {
           silent = true
-          resetStores()
           const isOnMain = location.pathname === ROUTE_NAMES.main
           if (isOnMain) {
             navigate(ROUTE_NAMES.login)

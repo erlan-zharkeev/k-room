@@ -6,9 +6,8 @@ import { ROUTE_NAMES } from 'common'
 
 import { IAuthTabsLayoutProps, AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
 
-import { useI18n } from 'src/entities/settings'
-
 import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppHeader } from 'src/shared/ui'
 
 export const AuthTabsLayout = ({ children, blockNavigation }: IAuthTabsLayoutProps) => {

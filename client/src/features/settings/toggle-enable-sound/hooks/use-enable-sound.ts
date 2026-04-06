@@ -1,4 +1,4 @@
-import { useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/shared/settings'
 
 export const useEnableSound = () => {
   const settings = useSettings()

@@ -1,4 +1,4 @@
-const { createCommonRelativePathRules, createRestrictedImportRules } = require('./restricted-imports.cjs')
+const { createRestrictedImportRules } = require('./restricted-imports.cjs')
 const { createBoundariesConfig } = require('./boundaries.cjs')
 
 const { elements, rules: boundariesRules } = createBoundariesConfig([
@@ -59,7 +59,6 @@ module.exports = {
 
     'no-restricted-syntax': [
       'warn',
-      ...createCommonRelativePathRules(),
       ...createRestrictedImportRules({
         rootPattern: 'src\\/(app|pages|widgets|features|entities|shared)',
         deepImportMessage:

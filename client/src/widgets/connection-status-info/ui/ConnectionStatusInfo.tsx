@@ -2,10 +2,9 @@ import './style.scss'
 
 import { useState, useEffect } from 'react'
 
-import { useSystem } from 'src/entities/system'
-
 import { socket } from 'src/shared/api'
 import { useTimeout } from 'src/shared/lib'
+import { useSystem } from 'src/shared/system'
 import { AppText } from 'src/shared/ui'
 
 export const ConnectionStatusInfo = () => {

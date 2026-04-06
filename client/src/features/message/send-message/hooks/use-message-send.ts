@@ -6,12 +6,12 @@ import { IEventSendMessage, IMessage, SocketActionsType } from 'common'
 
 import { useAddMessage } from 'src/features/message'
 
-import { resetRepliedMessage, updateMessageInputData, useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
 import { FileLoaderValueType } from 'src/shared/config'
 import { generateUUIDv4 } from 'src/shared/lib'
+import { resetRepliedMessage, updateMessageInputData, useSystem } from 'src/shared/system'
 
 export const useMessageSend = () => {
   const dispatch = useDispatch()

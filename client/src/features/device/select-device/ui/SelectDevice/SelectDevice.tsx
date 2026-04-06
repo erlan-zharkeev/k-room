@@ -4,8 +4,7 @@ import { ReactNode } from 'react'
 
 import { SELECT_DEVICE_I18N } from 'src/features/device'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppSelect, AppText, IAppSelectOption, AppIconNameType } from 'src/shared/ui'
 
 export const SelectDevice = ({

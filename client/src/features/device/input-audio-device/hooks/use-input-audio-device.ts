@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
-import { useNotification, NOTIFICATION_I18N } from 'src/entities/notification'
-import { useSettings, useI18n } from 'src/entities/settings'
-
 import { handleRuntimeError } from 'src/shared/lib'
+import { useNotification, NOTIFICATION_I18N } from 'src/shared/notification'
+import { useSettings, useI18n } from 'src/shared/settings'
 import { AppIconNameType } from 'src/shared/ui'
 
 export const useInputAudioDevice = () => {

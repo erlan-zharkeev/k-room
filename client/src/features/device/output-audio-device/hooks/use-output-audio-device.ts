@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 
-import { useSettings } from 'src/entities/settings'
 import { useSound } from 'src/entities/sound'
-import { useSystem } from 'src/entities/system'
 
 import { handleRuntimeError, useTimeout } from 'src/shared/lib'
+import { useSettings } from 'src/shared/settings'
+import { useSystem } from 'src/shared/system'
 
 export const useOutputAudioDevice = () => {
   const [audioOutputDeviceList, setAudioOutputDeviceList] = useState([] as MediaDeviceInfo[])

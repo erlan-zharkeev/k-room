@@ -4,9 +4,8 @@ import { ROUTE_NAMES } from 'common'
 
 import { IPrivacyPolicySwitchProps, PRIVACY_POLICY_SWITCH_I18N } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/settings'
-
 import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppLink, AppText } from 'src/shared/ui'
 
 export const PrivacyPolicySwitch = ({ disabled }: IPrivacyPolicySwitchProps) => {

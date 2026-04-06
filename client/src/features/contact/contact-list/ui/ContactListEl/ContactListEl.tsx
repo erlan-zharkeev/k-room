@@ -8,9 +8,9 @@ import { IContactListElProps } from 'src/features/contact'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'
-import { useI18n } from 'src/entities/settings'
 
 import { useIntervalRerender } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 
 export const ContactListEl = ({ contactData }: IContactListElProps) => {
   const { getLiveMediaUrl } = useMedia()

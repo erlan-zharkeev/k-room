@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { setHasInteraction, useSystem } from 'src/entities/system'
+import { setHasInteraction, useSystem } from 'src/shared/system'
 
 export const useUserInteractionMonitor = () => {
   const { hasInteracted } = useSystem()

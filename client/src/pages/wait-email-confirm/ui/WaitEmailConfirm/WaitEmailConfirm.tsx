@@ -7,10 +7,9 @@ import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, ISendConfirmationLinkResponse 
 
 import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm'
 
-import { useI18n } from 'src/entities/settings'
-
 import { useApi } from 'src/shared/api'
 import { useQuery, useCounter, getNextReqInterval } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppButton } from 'src/shared/ui'
 
 export const WaitEmailConfirm = () => {

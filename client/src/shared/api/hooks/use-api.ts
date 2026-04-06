@@ -2,11 +2,10 @@ import { AxiosResponse, ResponseType } from 'axios'
 
 import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common'
 
-import { useNotification } from 'src/entities/notification'
-import { useSettings } from 'src/entities/settings'
-
 import { useApiInterceptor, axios, IDoRequestOpts, RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
+import { useNotification } from 'src/shared/notification'
+import { useSettings } from 'src/shared/settings'
 
 export const useApi = () => {
   const notifications = useNotification()

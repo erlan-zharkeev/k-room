@@ -2,9 +2,8 @@ import { useEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { setViewPort } from 'src/entities/system'
-
 import { getViewPort } from 'src/shared/lib'
+import { setViewPort } from 'src/shared/system'
 
 export const useViewportMonitor = () => {
   const dispatch = useDispatch()

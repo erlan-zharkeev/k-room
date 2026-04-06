@@ -3,8 +3,7 @@ import { ROUTE_NAMES } from 'common'
 
 import { LOGIN_FORM_I18N, ILoginFormProps } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppForm, AppLink } from 'src/shared/ui'
 
 export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: ILoginFormProps) => {

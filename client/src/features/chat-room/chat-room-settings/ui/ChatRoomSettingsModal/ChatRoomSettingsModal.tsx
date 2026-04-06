@@ -7,10 +7,10 @@ import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'com
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
-import { useSettings, useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
+import { useSettings, useI18n } from 'src/shared/settings'
 import { AppAvatar, AppAvatarLoader, AppButton, AppHeader } from 'src/shared/ui'
 
 import { IChatRoomSettingsModalProps, CHAT_ROOM_SETTINGS_MODAL_I18N } from './config'

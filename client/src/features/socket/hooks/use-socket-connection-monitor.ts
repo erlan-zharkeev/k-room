@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
 
@@ -6,17 +6,16 @@ import { IEventErrorMessage, IEventAuthError, SocketActionsType } from 'common'
 
 import { useSocketReconnect } from 'src/features/socket'
 
-import { useNotification } from 'src/entities/notification'
-import { setReconnectingStatus } from 'src/entities/system'
-
 import { socket } from 'src/shared/api'
 import { log } from 'src/shared/lib'
-import { AdditionalServiceContext } from 'src/shared/providers'
+import { useNotification } from 'src/shared/notification'
+import { setReconnectingStatus } from 'src/shared/system'
+// import { AdditionalServiceContext } from 'src/shared/providers'
 
 export const useSocketConnectionMonitor = () => {
   const notifications = useNotification()
   const dispatch = useDispatch()
-  const { call } = useContext(AdditionalServiceContext)
+  // const { call } = useContext(AdditionalServiceContext)
   const { socketReconnect } = useSocketReconnect()
 
   useEffect(() => {
@@ -28,9 +27,9 @@ export const useSocketConnectionMonitor = () => {
 
     socket.on<SocketActionsType>('disconnect', () => {
       log('error', 'Socket disconnected')
-      if (call.current) {
-        call.current.closeConnection(true)
-      }
+      // if (call.current) {
+      //   call.current.closeConnection(true)
+      // }
     })
 
     socket.on<SocketActionsType>('error-message', ({ message }: IEventErrorMessage) => {

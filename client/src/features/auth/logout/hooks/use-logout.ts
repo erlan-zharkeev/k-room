@@ -7,11 +7,10 @@ import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'common'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
 
-import { setAuth } from 'src/entities/system'
-
 import { socket, useApi } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'
 import { clearCookie } from 'src/shared/lib'
+import { setAuth } from 'src/shared/system'
 
 export const useLogout = () => {
   const dispatch = useDispatch()

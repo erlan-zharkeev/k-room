@@ -1,10 +1,8 @@
 import { useDispatch } from 'react-redux'
 
-import { AppDispatchType } from 'src/app/store'
-
 import { unsetMinify } from 'src/entities/call'
 
-import { useTypedSelector } from 'src/shared/lib'
+import { AppDispatchType, useTypedSelector } from 'src/shared/store'
 
 export const useCall = () => {
   const { isMinified, currentCall, showCallModal } = useTypedSelector((state) => state.calls)

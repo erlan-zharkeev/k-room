@@ -2,9 +2,8 @@ import { ChangeEvent } from 'react'
 
 import { APP_LANGUAGE } from 'common'
 
-import { useSettings } from 'src/entities/settings'
-
 import { socket } from 'src/shared/api'
+import { useSettings } from 'src/shared/settings'
 
 export const useLanguageSetting = () => {
   const { language, shallowUpdate } = useSettings()

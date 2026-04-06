@@ -1,7 +1,6 @@
 import './style.scss'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppText } from 'src/shared/ui'
 
 import { NO_MESSAGES_PLACEHOLDER_I18N } from './config'

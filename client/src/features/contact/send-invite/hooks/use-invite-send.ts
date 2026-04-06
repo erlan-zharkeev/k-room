@@ -3,9 +3,9 @@ import { EventInviteReceivedType, SocketActionsType } from 'common'
 import { getRequiredContactSystemData } from 'src/features/contact'
 
 import { useContact } from 'src/entities/contact'
-import { useNotification } from 'src/entities/notification'
 
 import { socket } from 'src/shared/api'
+import { useNotification } from 'src/shared/notification'
 
 export const useInviteSend = () => {
   const { get, put } = useContact()

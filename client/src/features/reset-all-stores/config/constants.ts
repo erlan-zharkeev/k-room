@@ -1,3 +1,3 @@
-import { resetSystemStore } from 'src/entities/system'
+import { resetSystemStore } from 'src/shared/system'
 
 export const RESET_STORE_REDUCERS = [resetSystemStore] as const

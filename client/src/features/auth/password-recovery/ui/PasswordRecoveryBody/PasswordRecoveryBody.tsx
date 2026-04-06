@@ -2,8 +2,7 @@ import './style.scss'
 
 import { usePasswordRecovery, PASSWORD_RECOVERY_BODY_I18N } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppForm } from 'src/shared/ui'
 
 export const PasswordRecoveryBody = () => {

@@ -4,9 +4,8 @@ import { useDispatch } from 'react-redux'
 
 import { IMessage } from 'common'
 
-import { AppDispatchType } from 'src/app/store'
-
-import { resetContextClickedObject, useSystem } from 'src/entities/system'
+import { AppDispatchType } from 'src/shared/store'
+import { useSystem, resetContextClickedObject } from 'src/shared/system'
 
 export const useReplyMessage = () => {
   const { repliedMessageData } = useSystem()

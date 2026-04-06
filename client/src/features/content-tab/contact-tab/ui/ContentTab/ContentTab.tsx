@@ -2,10 +2,9 @@ import './style.scss'
 
 import { useContentTabSelect } from 'src/features/content-tab'
 
-import { useSettings } from 'src/entities/settings'
-
 import { ContentTabType } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useSettings } from 'src/shared/settings'
 
 import { BUTTONS } from './config'
 

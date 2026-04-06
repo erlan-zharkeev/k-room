@@ -1,8 +1,7 @@
 import { IMessageTimeProps } from 'src/features/message'
 
-import { useI18n } from 'src/entities/settings'
-
 import { formatLocalizedTime } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppText } from 'src/shared/ui'
 
 export const MessageTime = ({ createdAt }: IMessageTimeProps) => {

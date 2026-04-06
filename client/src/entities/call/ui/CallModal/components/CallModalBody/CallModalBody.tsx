@@ -6,10 +6,6 @@ import { SignalData } from 'simple-peer'
 
 import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common'
 
-import { AppDispatchType } from 'src/app/store'
-
-import { callCounter } from 'src/features/call'
-
 import {
   CallDots,
   CallModalVideo,
@@ -23,11 +19,13 @@ import {
   ICallModalBodyProps,
   CALL_MODAL_BODY_I18N
 } from 'src/entities/call'
-import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
-import { useTypedSelector, useCounter } from 'src/shared/lib'
+import { callCounter } from 'src/shared/call'
+import { useCounter } from 'src/shared/lib'
 import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
+import { useI18n } from 'src/shared/settings'
+import { AppDispatchType, useTypedSelector } from 'src/shared/store'
 import { AppButton, AppAvatar } from 'src/shared/ui'
 
 export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {

@@ -1,5 +1,3 @@
-import { AppDispatchType } from 'src/app/store'
-
 import { RESET_STORE_REDUCERS } from 'src/features/reset-all-stores'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -7,6 +5,8 @@ import { useContact } from 'src/entities/contact'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { useMedia } from 'src/entities/media'
 import { useUser } from 'src/entities/user'
+
+import { AppDispatchType } from 'src/shared/store'
 
 export const useResetAllStores = (dispatch: AppDispatchType) => {
   const userStore = useUser()

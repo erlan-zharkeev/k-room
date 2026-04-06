@@ -1,7 +1,6 @@
 import { useLanguageSetting } from 'src/features/settings'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppSwitch, AppText } from 'src/shared/ui'
 
 import { LANGUAGE_SWITCHER_I18N } from './config'
