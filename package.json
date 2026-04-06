@@ -6,28 +6,19 @@
   "license": "MIT",
   "scripts": {
     "dev": "zsh scripts/dev.sh",
-    "prepare": "husky install",
+    "husky-prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
-    "format:check": "client/node_modules/.bin/prettier --check .",
-    "client:lint": "client/node_modules/.bin/eslint client/src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "client/node_modules/.bin/eslint client/src --ext ts,tsx --fix && npm --prefix server run lint -- --fix && npm --prefix client run lint:fix-style",
-    "client:stylelint": "npm --prefix client run lint:style",
-    "client:build": "npm --prefix client run build",
-    "client:test": "npm --prefix client run test",
-    "client:test:watch": "npm --prefix client run test:watch",
-    "server:lint": "npm --prefix server run lint",
-    "server:typecheck": "npm --prefix server run typecheck",
-    "server:build": "npm --prefix server run build",
+    "format:fix": "prettier --write .",
+    "lint:fix": "npm --prefix client run lint:fix-all && npm --prefix server run lint:fix-es",
     "e2e": "playwright test -c config/playwright/playwright.config.ts",
     "e2e:ui": "playwright test -c config/playwright/playwright.config.ts --ui",
-    "check": "npm run client:lint && npm run client:stylelint && npm run client:build && npm run server:lint && npm run server:typecheck && npm run server:build",
-    "test": "npm run client:test",
-    "test:watch": "npm run client:test:watch"
+    "check": "npm --prefix client run lint:all && npm --prefix client run build && npm --prefix server run lint:es && npm --prefix server run typecheck && npm --prefix server run build && npm run test && prettier --check .",
+    "test": "npm --prefix client run test && npm --prefix server run test --if-present"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
-    "depcheck": "^1.4.7",
-    "husky": "^8.0.2"
+    "husky": "^8.0.2",
+    "prettier": "^2.8.8"
   }
 }

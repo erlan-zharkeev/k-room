@@ -4,14 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "serve": "cross-env NODE_ENV=development node --watch --import tsx src/index.ts",
-    "serve:e2e": "cross-env NODE_ENV=development node --import tsx src/index.ts",
-    "prebuild": "npm --prefix .. run sync:public-config",
+    "serve": "node --watch --import tsx src/index.ts",
     "build": "cross-env NODE_ENV=production tsup src/index.ts --format cjs --platform node --target node24 --out-dir build --clean",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint \"src/**/*.ts\"",
-    "server-run": "cross-env NODE_ENV=production node ./build/index.js",
-    "lint:fix-es": "eslint '**/*.ts' --fix"
+    "_typecheck": "tsup does not type-check, only compiles — unlike client where tsc is part of the build",
+    "lint:es": "eslint \"src/**/*.ts\"",
+    "lint:fix-es": "eslint src --ext ts --fix"
   },
   "dependencies": {
     "@adminjs/express": "^6.1.1",

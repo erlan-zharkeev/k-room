@@ -61,7 +61,7 @@ if [ ${#missing_env_vars[@]} -gt 0 ]; then
 fi
 
 npm ci
-npm run prepare
+npm run husky-prepare
 chmod +x .husky/pre-commit
 
 if ! docker ps --format '{{.Names}}' | grep -qx 'db'; then
