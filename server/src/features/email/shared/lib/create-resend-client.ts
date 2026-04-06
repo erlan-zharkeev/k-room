@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import { EMAIL_I18N } from 'src/features/email'
 
@@ -17,7 +17,7 @@ export const createResendClient = (language: AppLanguageType) => {
       return null
     }
 
-    throw new AppError(StatusEnum.Server, localizedText(EMAIL_I18N.resendApiKeyMissing, language))
+    throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.resendApiKeyMissing, language))
   }
 
   resendClient = new Resend(SERVER_ENV.resendApiKey)

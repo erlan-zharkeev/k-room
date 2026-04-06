@@ -1,4 +1,4 @@
-import { EndpointsType, MEDIA_ENDPOINTS, StatusEnum } from 'common'
+import { EndpointsType, MEDIA_ENDPOINTS, REQ_STATUS } from 'common'
 
 import { useSaveMedia, useDeleteMedia, transformHeadersToMediaData } from 'src/features/media'
 
@@ -26,7 +26,7 @@ export const useLoadMedia = () => {
       const mediaData = transformHeadersToMediaData(response)
       await saveMedia({ id: filename, blob: response.data, ...mediaData })
     } catch (error) {
-      if (isApiError(error) && error.status === StatusEnum.NotFound) {
+      if (isApiError(error) && error.status === REQ_STATUS.notFound) {
         deleteMedia(filename)
       }
     }

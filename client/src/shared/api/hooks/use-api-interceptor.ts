@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-import { IBackendResponse, ROUTE_NAMES, StatusEnum } from 'common'
+import { IBackendResponse, ROUTE_NAMES, REQ_STATUS, ReqStatusType } from 'common'
 
 import { API_I18N, createApiError } from 'src/shared/api'
 import { frontCaptureSentryException, log } from 'src/shared/lib'
@@ -53,7 +53,7 @@ export const useApiInterceptor = () => {
   const interceptError = async (error: unknown) => {
     frontCaptureSentryException(error)
     if (error instanceof AxiosError) {
-      const status = error.response?.status
+      const status = error.response?.status as ReqStatusType | undefined
 
       const payload = await extractErrorPayload(error)
       let text: string | undefined
@@ -64,7 +64,7 @@ export const useApiInterceptor = () => {
       }
 
       switch (status) {
-        case StatusEnum.NotAuth: {
+        case REQ_STATUS.notAuth: {
           silent = true
           const isOnMain = location.pathname === ROUTE_NAMES.main
           if (isOnMain) {
@@ -72,7 +72,7 @@ export const useApiInterceptor = () => {
           }
           break
         }
-        case StatusEnum.Forbidden: {
+        case REQ_STATUS.forbidden: {
           settings.shallowUpdate({ selectedContentTab: 'contacts' })
           break
         }

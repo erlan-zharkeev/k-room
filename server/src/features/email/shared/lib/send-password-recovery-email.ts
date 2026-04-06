@@ -1,4 +1,4 @@
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import {
   APP_NAME,
@@ -40,7 +40,7 @@ export const sendPasswordRecoveryEmail = async ({
   }
 
   if (!resend) {
-    throw new AppError(StatusEnum.Server, 'Resend client is not configured')
+    throw new AppError(REQ_STATUS.server, 'Resend client is not configured')
   }
 
   const { data, error } = await resend.emails.send({
@@ -51,7 +51,7 @@ export const sendPasswordRecoveryEmail = async ({
   })
 
   if (error) {
-    throw new AppError(StatusEnum.Server, error.message, false, error)
+    throw new AppError(REQ_STATUS.server, error.message, false, error)
   }
 
   return data

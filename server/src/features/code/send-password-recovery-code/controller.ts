@@ -1,6 +1,6 @@
 import { randomInt } from 'node:crypto'
 
-import { ISendPasswordRecoveryCodeResponse, StatusEnum } from 'common'
+import { ISendPasswordRecoveryCodeResponse, REQ_STATUS } from 'common'
 
 import { sendPasswordRecoveryEmail } from 'src/features/email'
 import { USER_I18N } from 'src/features/user'
@@ -28,7 +28,7 @@ export const sendPasswordRecoveryCodeController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     const now = Date.now()
@@ -81,6 +81,6 @@ export const sendPasswordRecoveryCodeController = async (
       }
     })
   } catch (error) {
-    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    return throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

@@ -72,7 +72,14 @@ export const ADMIN_USER_OPTIONS = {
       'system.provider',
       'system.confirmed'
     ],
-    editProperties: ['public.username', 'personal.email', 'system.role', 'system.provider', 'system.confirmed'],
+    editProperties: [
+      'public.username',
+      'personal.email',
+      'system.password',
+      'system.role',
+      'system.provider',
+      'system.confirmed'
+    ],
     filterProperties: ['_id', 'public.username', 'personal.email', 'system.role', 'public.online', 'system.provider'],
     actions: {
       new: {
@@ -88,14 +95,8 @@ export const ADMIN_USER_OPTIONS = {
     properties: {
       'system.password': {
         type: 'password',
-        isVisible: {
-          show: false,
-          list: false,
-          filter: false,
-          edit: true
-        },
         isRequired: true,
-        label: 'Password'
+        isVisible: true
       },
       'system.device': {
         isVisible: false

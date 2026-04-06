@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express'
 
-import { StatusEnum } from 'common'
+import { REQ_STATUS } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
@@ -11,7 +11,7 @@ import { AUTH_I18N } from './../config'
 import { updateTokens, verifyToken } from './../lib'
 
 const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
-  throwHTTPError(StatusEnum.NotAuth, res, localizedText(AUTH_I18N.nonAuthorized, req.language), silent)
+  throwHTTPError(REQ_STATUS.notAuth, res, localizedText(AUTH_I18N.nonAuthorized, req.language), silent)
 
 export const refreshTokenValidatorMiddleware = async (req: IAppRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']

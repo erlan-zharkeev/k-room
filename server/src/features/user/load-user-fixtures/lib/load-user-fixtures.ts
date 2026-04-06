@@ -4,7 +4,7 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 
-import { AppLanguageType, DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
+import { AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'common'
 
 import { COMMON_MEDIA_I18N, mediaBuckets } from 'src/entities/media'
 import { USER_FIXTURES } from 'src/entities/user'
@@ -18,7 +18,7 @@ const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: 
   const bucket = mediaBuckets.avatar
 
   if (!bucket) {
-    throw new AppError(StatusEnum.Server, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
+    throw new AppError(REQ_STATUS.server, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
   }
 
   const filename = `avatar.${userId}`

@@ -1,4 +1,4 @@
-import { IBackendResponse, StatusEnum } from 'common'
+import { IBackendResponse, ReqStatusType } from 'common'
 
 export interface IDoRequestOpts<R> {
   contentType?: string
@@ -8,7 +8,7 @@ export interface IDoRequestOpts<R> {
 export type ApiErrorType = Error & {
   type: 'api-error'
   message: string
-  status?: StatusEnum
+  status?: ReqStatusType
   silent: boolean
   payload: IBackendResponse<unknown> | null
 }
@@ -20,7 +20,7 @@ export const createApiError = ({
   payload = null
 }: {
   message: string
-  status?: StatusEnum
+  status?: ReqStatusType
   silent?: boolean
   payload?: IBackendResponse<unknown> | null
 }): ApiErrorType =>

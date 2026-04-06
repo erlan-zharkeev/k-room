@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, IConfirmEmailResponse } from 'common'
+import { REQ_STATUS, ROUTE_NAMES, AUTH_ENDPOINTS, IConfirmEmailResponse } from 'common'
 
 import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation'
 
@@ -26,7 +26,7 @@ export const EmailConfirmation = () => {
   const sendEmailConfirmation = async (token: string) => {
     try {
       const response = await doRequest<IConfirmEmailResponse>('post', AUTH_ENDPOINTS.confirmEmail, { token })
-      if (response?.status !== StatusEnum.Success) return navigate(ROUTE_NAMES.login)
+      if (response?.status !== REQ_STATUS.success) return navigate(ROUTE_NAMES.login)
       const payload = response.data.payload
       setEmail(payload.email)
       await logout()

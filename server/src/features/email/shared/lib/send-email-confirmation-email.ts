@@ -1,4 +1,4 @@
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import {
   APP_NAME,
@@ -25,11 +25,11 @@ export const sendEmailConfirmationEmail = async ({
   username?: string
 }) => {
   if (!email) {
-    throw new AppError(StatusEnum.Server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
+    throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
   }
 
   if (!token) {
-    throw new AppError(StatusEnum.Server, localizedText(EMAIL_I18N.emailConfirmationTokenMissing, language))
+    throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailConfirmationTokenMissing, language))
   }
 
   const resend = createResendClient(language)
@@ -49,7 +49,7 @@ export const sendEmailConfirmationEmail = async ({
   })
 
   if (error) {
-    throw new AppError(StatusEnum.Server, error.message, false, error)
+    throw new AppError(REQ_STATUS.server, error.message, false, error)
   }
 
   log.success(`-Confirmation email scheduled for ${email}. Resend id: ${data?.id ?? 'unknown'}`)

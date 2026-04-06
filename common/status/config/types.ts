@@ -1,10 +1,3 @@
-export enum StatusEnum {
-  Success = 200,
-  BadRequest = 400,
-  NotAuth = 401,
-  Forbidden = 403,
-  NotFound = 404,
-  Server = 500,
-  Unreachable = 503,
-  BadGateway = 504
-}
+import { REQ_STATUS } from './constants'
+
+export type ReqStatusType = (typeof REQ_STATUS)[keyof typeof REQ_STATUS]

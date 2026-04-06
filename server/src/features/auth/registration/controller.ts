@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-import { IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
+import { IAuthRegistrationPayload, ISendConfirmationLinkResponse, REQ_STATUS } from 'common'
 
 import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth'
 import { sendEmailConfirmationEmail } from 'src/features/email'
@@ -23,7 +23,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
 
     if (userExistState.exists) {
       const userExistMessage = getUserExistMessage(userExistState.reason, language)
-      const status = userExistState.reason === 'id' ? StatusEnum.Server : StatusEnum.BadRequest
+      const status = userExistState.reason === 'id' ? REQ_STATUS.server : REQ_STATUS.badRequest
       return throwHTTPError(status, res, userExistMessage)
     }
 
@@ -32,7 +32,7 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
     const user = await createUser({ email, username, hashedPassword })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.Server, res, basicError)
+      return throwHTTPError(REQ_STATUS.server, res, basicError)
     }
 
     const confirmToken = generateToken(user.id, SERVER_ENV.emailConfirmSecret, EMAIL_CONFIRMATION_LINK_LIFE)
@@ -60,6 +60,6 @@ export const registrationController = async (req: IAppRequest, res: AppResponseT
 
     return res.json(response)
   } catch (error) {
-    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    return throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

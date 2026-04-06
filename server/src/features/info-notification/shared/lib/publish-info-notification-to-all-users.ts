@@ -1,4 +1,4 @@
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import { InfoNotificationModel } from 'src/entities/info-notification'
 import { InfoNotificationStateModel, updateInfoNotificationStateStatus } from 'src/entities/info-notification-state'
@@ -17,7 +17,7 @@ export const publishInfoNotificationToAllUsers = async (
   const notification = await InfoNotificationModel.findById(notificationId).lean()
 
   if (!notification) {
-    throw new AppError(StatusEnum.NotFound, localizedText(INFO_NOTIFICATION_SHARED_I18N.notFound, language))
+    throw new AppError(REQ_STATUS.notFound, localizedText(INFO_NOTIFICATION_SHARED_I18N.notFound, language))
   }
 
   const publishedAt = Date.now()

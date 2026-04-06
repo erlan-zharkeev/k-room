@@ -30,7 +30,7 @@ const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, ADMIN_ROOT_PATH, ADMIN_
 
 const isDev = stage !== 'production'
 const { version: APP_VERSION, name: APP_NAME } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(process.cwd(), '../package.json'), 'utf-8')
 ) as { version: string; name: string }
 
 export const SERVER_ENV: IServerEnv = {

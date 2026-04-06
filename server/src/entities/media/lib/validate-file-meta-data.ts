@@ -1,4 +1,4 @@
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import { AppError, localizedText } from 'src/shared/lib'
 
@@ -13,11 +13,11 @@ export const validateFileMetaData = (
 
   const maxBytes = maxMb * 1024 * 1024
   if (filedata.metadata.size > maxBytes) {
-    throw new AppError(StatusEnum.BadRequest, localizedText(VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge, language))
+    throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge, language))
   }
 
   if (filedata.metadata.kind !== supportedKindMediaType) {
-    throw new AppError(StatusEnum.BadRequest, localizedText(VALIDATE_MEDIA_FILE_I18N.extNotSupported, language))
+    throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_MEDIA_FILE_I18N.extNotSupported, language))
   }
 
   return true

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ISignInWithProviderPayload, ISignInWithProviderResponse, StatusEnum } from 'common'
+import { ISignInWithProviderPayload, ISignInWithProviderResponse, REQ_STATUS } from 'common'
 
 import { createUser, mapUserToDto, updateUserAvatar } from 'src/features/user'
 import { loadGoogleAvatar } from 'src/features/user'
@@ -34,7 +34,7 @@ export const signInWithProviderController = async (
       if (buffer) await updateUserAvatar(buffer, String(newUser._id), language)
     }
 
-    if (!user) return throwHTTPError(StatusEnum.BadRequest, res, basicError)
+    if (!user) return throwHTTPError(REQ_STATUS.badRequest, res, basicError)
 
     await updateTokens(user.id, req, res)
 
@@ -46,6 +46,6 @@ export const signInWithProviderController = async (
       }
     })
   } catch (error) {
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

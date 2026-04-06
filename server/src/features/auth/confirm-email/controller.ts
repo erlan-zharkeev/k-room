@@ -1,4 +1,4 @@
-import { IConfirmEmailResponse, StatusEnum } from 'common'
+import { IConfirmEmailResponse, REQ_STATUS } from 'common'
 
 import { mapUserToDto, USER_I18N } from 'src/features/user'
 
@@ -26,7 +26,7 @@ export const confirmEmailController = async (req: IAppRequest, res: AppResponseT
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     const response = {
@@ -44,6 +44,6 @@ export const confirmEmailController = async (req: IAppRequest, res: AppResponseT
 
     return res.json(response)
   } catch (error) {
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

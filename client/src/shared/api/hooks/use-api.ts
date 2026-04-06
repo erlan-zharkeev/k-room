@@ -1,6 +1,6 @@
 import { AxiosResponse, ResponseType } from 'axios'
 
-import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common'
+import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, REQ_STATUS } from 'common'
 
 import { useApiInterceptor, axios, IDoRequestOpts, RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
@@ -19,7 +19,7 @@ export const useApi = () => {
     if (!isJson) return
 
     const { text, silent } = response.data.message
-    const isSuccess = response.status === StatusEnum.Success
+    const isSuccess = response.status === REQ_STATUS.success
     const successMessageNotification = notifications.getNotification({
       message: text,
       messageType: isSuccess ? 'success' : 'warning'
@@ -51,7 +51,7 @@ export const useApi = () => {
 
       successMessageHandler(response)
 
-      if (response && response.status === StatusEnum.Success) {
+      if (response && response.status === REQ_STATUS.success) {
         return response
       }
       throw new Error('No response')

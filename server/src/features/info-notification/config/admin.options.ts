@@ -1,4 +1,4 @@
-import { DEFAULT_APP_LANGUAGE, StatusEnum } from 'common'
+import { DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'common'
 
 import { InfoNotificationModel } from 'src/entities/info-notification'
 
@@ -36,7 +36,7 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
 
           if (!record) {
             throw new AppError(
-              StatusEnum.NotFound,
+              REQ_STATUS.notFound,
               localizedText(INFO_NOTIFICATION_ADMIN_I18N.recordNotFound, DEFAULT_APP_LANGUAGE)
             )
           }
@@ -47,7 +47,7 @@ export const ADMIN_INFO_NOTIFICATION_OPTIONS = {
 
           if (!updatedRecord) {
             throw new AppError(
-              StatusEnum.NotFound,
+              REQ_STATUS.notFound,
               localizedText(INFO_NOTIFICATION_ADMIN_I18N.publishedRecordNotFound, DEFAULT_APP_LANGUAGE)
             )
           }

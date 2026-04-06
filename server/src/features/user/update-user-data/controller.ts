@@ -1,4 +1,4 @@
-import { SocketActionsType, StatusEnum } from 'common'
+import { SocketActionsType, REQ_STATUS } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
@@ -20,13 +20,13 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
     const userId = req.app.locals.id
 
     if (!username && !avatarFileBuffer) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language))
     }
 
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     if (username && username !== user.public.username) {
@@ -62,6 +62,6 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       return throwHTTPError(error.status, res, error.message, error.silent)
     }
 
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }
