@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => {
     themeText: 'rgb(177 177 177 / 60%)', // DO NOT FORGET TO SYNC WITH theme.css
     supportEmail: SUPPORT_EMAIL
   }
-
+  console.log('target', `${API_HOST}:${SERVER_PORT}`)
   return {
     define: {
       CLIENT_ENV_DATA
