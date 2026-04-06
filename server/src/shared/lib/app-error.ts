@@ -1,11 +1,11 @@
-import { StatusEnum } from 'common'
+import { ReqStatusType } from 'common'
 
 export class AppError extends Error {
-  readonly status: StatusEnum
+  readonly status: ReqStatusType
   readonly silent: boolean
   readonly cause?: unknown
 
-  constructor(status: StatusEnum, message: string, silent: boolean = false, cause?: unknown) {
+  constructor(status: ReqStatusType, message: string, silent: boolean = false, cause?: unknown) {
     super(message)
 
     this.name = 'AppError'

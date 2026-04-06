@@ -118,25 +118,25 @@ import { dexieKeyValueStore } from 'src/shared/lib/db/lib/dexie-key-value-store'
 import { useValidate } from 'src/shared/lib/hooks/use-validate/use-validate'
 ```
 
-7. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
-
-If `enum` is used, member keys must be written only in `PascalCase`.
+7. Do not use `enum`. Use `as const` objects instead.
 
 Use:
+
+```ts
+export const ROUTE_NAMES = {
+  Login: '/login',
+  Registration: '/registration'
+} as const
+
+export type RouteNamesType = (typeof ROUTE_NAMES)[keyof typeof ROUTE_NAMES]
+```
+
+Do not use:
 
 ```ts
 enum RouteNames {
   Login = '/login',
   Registration = '/registration'
-}
-```
-
-Do not use enum member keys in other casings:
-
-```ts
-enum RouteNames {
-  login = '/login',
-  REGISTRATION = '/registration'
 }
 ```
 

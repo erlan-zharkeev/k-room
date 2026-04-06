@@ -1,4 +1,4 @@
-import { StatusEnum } from 'common'
+import { REQ_STATUS } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
@@ -44,6 +44,6 @@ export const logoutController = async (req: IAppRequest, res: AppResponseType<nu
       payload: null
     })
   } catch (error) {
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

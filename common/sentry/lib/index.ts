@@ -1,14 +1,14 @@
-import { StatusEnum } from 'common/status'
+import { REQ_STATUS } from 'common/status'
 import { ISentryErrorContext } from '../config'
 
 import { SENTRY_IGNORED_SUBSTRINGS } from '../config'
 
 export const isIgnoredSentryStatus = (status?: number | null) => {
   switch (status) {
-    case StatusEnum.BadRequest:
-    case StatusEnum.NotAuth:
-    case StatusEnum.Forbidden:
-    case StatusEnum.NotFound:
+    case REQ_STATUS.badRequest:
+    case REQ_STATUS.notAuth:
+    case REQ_STATUS.forbidden:
+    case REQ_STATUS.notFound:
       return true
     default:
       return false

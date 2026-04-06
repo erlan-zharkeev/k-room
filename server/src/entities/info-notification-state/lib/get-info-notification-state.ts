@@ -1,4 +1,4 @@
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import type { MongoIdType } from 'src/shared/config'
 import { AppError, localizedText, normalizeObjectId } from 'src/shared/lib'
@@ -24,7 +24,7 @@ export const getInfoNotificationState = async (userId: MongoIdType, language: Ap
   ).lean()
 
   if (!state) {
-    throw new AppError(StatusEnum.Server, localizedText(INFO_NOTIFICATION_STATE_I18N.stateNotFound, language))
+    throw new AppError(REQ_STATUS.server, localizedText(INFO_NOTIFICATION_STATE_I18N.stateNotFound, language))
   }
 
   return state

@@ -1,4 +1,4 @@
-import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
+import { ISendConfirmationLinkResponse, REQ_STATUS } from 'common'
 
 import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth'
 import { sendEmailConfirmationEmail } from 'src/features/email'
@@ -24,7 +24,7 @@ export const sendConfirmationLinkController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     if (user.system.confirmed) {
@@ -45,7 +45,7 @@ export const sendConfirmationLinkController = async (
 
     if (user.system.confirmAttempts <= 0) {
       return throwHTTPError(
-        StatusEnum.BadRequest,
+        REQ_STATUS.badRequest,
         res,
         localizedText(SEND_CONFIRMATION_LINK_I18N.noConfirmationAttemptsLeft, language)
       )
@@ -80,6 +80,6 @@ export const sendConfirmationLinkController = async (
 
     return res.json(response)
   } catch (error) {
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

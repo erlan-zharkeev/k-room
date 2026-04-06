@@ -1,6 +1,13 @@
 import { Response } from 'express'
 
-import { DEFAULT_APP_LANGUAGE, IBackendResponse, LocalizedTextType, SocketActionsType, StatusEnum } from 'common'
+import {
+  DEFAULT_APP_LANGUAGE,
+  IBackendResponse,
+  LocalizedTextType,
+  SocketActionsType,
+  REQ_STATUS,
+  ReqStatusType
+} from 'common'
 
 import { SHARED_I18N } from 'src/shared/config'
 import {
@@ -13,7 +20,7 @@ import {
 } from 'src/shared/lib'
 
 export const throwHTTPError = (
-  status: StatusEnum,
+  status: ReqStatusType,
   res: Response | null,
   message: string,
   silent: boolean = false,
@@ -49,7 +56,7 @@ export const throwSocketError = (
   socketId: string,
   error?: LocalizedTextType<string> | string,
   options?: {
-    status?: StatusEnum
+    status?: ReqStatusType
     silent?: boolean
     cause?: unknown
   }
@@ -62,7 +69,7 @@ export const throwSocketError = (
   const userMessage = localizedText(userMessageSource, language)
   const logErrorMessage = nonLocalizedError ? error : userMessage
 
-  const status = options?.status ?? StatusEnum.Server
+  const status = options?.status ?? REQ_STATUS.server
   const silent = options?.silent ?? false
 
   log.error(`-${logErrorMessage}`)

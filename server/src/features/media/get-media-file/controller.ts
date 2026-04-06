@@ -1,4 +1,4 @@
-import { StatusEnum } from 'common'
+import { REQ_STATUS } from 'common'
 
 import { MediaBucketNameType } from 'src/entities/media'
 import { streamMediaFile } from 'src/entities/media'
@@ -20,7 +20,7 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
 
     if (!idParam) {
       return throwHTTPError(
-        StatusEnum.NotFound,
+        REQ_STATUS.notFound,
         res,
         localizedText(GET_MEDIA_FILE_I18N.idNotProvideOrNotValid, language)
       )
@@ -35,6 +35,6 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
       return throwHTTPError(error.status, res, error.message, error.silent)
     }
 
-    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    return throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

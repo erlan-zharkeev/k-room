@@ -7,7 +7,7 @@ import {
   IAuthRegistrationPayload,
   ISendConfirmationLinkResponse,
   ROUTE_NAMES,
-  StatusEnum
+  REQ_STATUS
 } from 'common'
 
 import { RegistrationFormDataType } from 'src/features/auth'
@@ -35,7 +35,7 @@ export const useRegistration = () => {
       setIsLoading(true)
       const response = await doRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, fields)
 
-      if (!response || response.status !== StatusEnum.Success) return
+      if (!response || response.status !== REQ_STATUS.success) return
 
       const { payload } = response.data
 

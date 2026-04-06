@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import { AppError, isAppError, localizedText, throwHTTPError } from 'src/shared/lib'
 
@@ -18,7 +18,7 @@ export const streamMediaFile = async (
     const bucket = mediaBuckets[bucketName]
 
     if (!bucket) {
-      throw new AppError(StatusEnum.NotFound, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
+      throw new AppError(REQ_STATUS.notFound, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
     }
 
     const filename = `${bucketName}.${id}`
@@ -26,7 +26,7 @@ export const streamMediaFile = async (
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      throw new AppError(StatusEnum.NotFound, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
+      throw new AppError(REQ_STATUS.notFound, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
     }
 
     res.setHeader('Content-Type', file.contentType ?? 'application/octet-stream')
@@ -44,7 +44,7 @@ export const streamMediaFile = async (
     bucket
       .openDownloadStreamByName(filename)
       .on('error', (error) =>
-        throwHTTPError(StatusEnum.NotFound, res, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), false, error)
+        throwHTTPError(REQ_STATUS.notFound, res, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), false, error)
       )
       .pipe(res)
   } catch (error) {
@@ -52,6 +52,6 @@ export const streamMediaFile = async (
       throw error
     }
 
-    throw new AppError(StatusEnum.Server, localizedText(COMMON_MEDIA_I18N.failedToStreamFile, language), false, error)
+    throw new AppError(REQ_STATUS.server, localizedText(COMMON_MEDIA_I18N.failedToStreamFile, language), false, error)
   }
 }

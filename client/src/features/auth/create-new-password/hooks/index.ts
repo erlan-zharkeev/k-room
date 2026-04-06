@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { USER_ENDPOINTS, StatusEnum, ROUTE_NAMES, ICreateNewPasswordPayload } from 'common'
+import { USER_ENDPOINTS, REQ_STATUS, ROUTE_NAMES, ICreateNewPasswordPayload } from 'common'
 
 import { useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
@@ -41,7 +41,7 @@ export const useCreateNewPassword = () => {
         codeToValidate: passwordRestoreCode
       }
       const response = await doRequest('post', USER_ENDPOINTS.resetPassword, formData)
-      if (response && response.status === StatusEnum.Success) {
+      if (response && response.status === REQ_STATUS.success) {
         setIPasswordChanged(true)
       }
     } catch {

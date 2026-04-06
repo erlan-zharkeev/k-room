@@ -1,4 +1,4 @@
-import { LocalizedTextType, StatusEnum } from 'common'
+import { LocalizedTextType, ReqStatusType } from 'common'
 
 import { SHARED_I18N, SocketInstanceType } from 'src/shared/config'
 
@@ -10,7 +10,7 @@ export const socketErrorMiddleware =
     handler: (payload: TPayload) => void | Promise<void>,
     options: {
       basicError: LocalizedTextType<string>
-      status?: StatusEnum
+      status?: ReqStatusType
       silent?: boolean
     }
   ) =>

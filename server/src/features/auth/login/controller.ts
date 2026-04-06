@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-import { IAuthLoginPayload, ILoginResponse, StatusEnum } from 'common'
+import { IAuthLoginPayload, ILoginResponse, REQ_STATUS } from 'common'
 
 import { mapUserToDto } from 'src/features/user'
 
@@ -21,17 +21,17 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
     const user = await UserModel.findOne({ 'personal.email': inputEmail })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(LOGIN_I18N.invalidEmailOrPassword, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(LOGIN_I18N.invalidEmailOrPassword, language))
     }
 
     const isPasswordValid = bcrypt.compareSync(password, user.system.password)
 
     if (!isPasswordValid) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(LOGIN_I18N.invalidEmailOrPassword, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(LOGIN_I18N.invalidEmailOrPassword, language))
     }
 
     if (!user.system.confirmed) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(LOGIN_I18N.emailNotConfirmed, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(LOGIN_I18N.emailNotConfirmed, language))
     }
 
     await updateTokens(user.id, req, res)
@@ -46,6 +46,6 @@ export const loginController = async (req: IAppRequest, res: AppResponseType<ILo
 
     return res.json(response)
   } catch (error) {
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

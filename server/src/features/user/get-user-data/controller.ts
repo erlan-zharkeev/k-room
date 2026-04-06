@@ -1,4 +1,4 @@
-import { IGetUserDataResponse, StatusEnum } from 'common'
+import { IGetUserDataResponse, REQ_STATUS } from 'common'
 
 import { updateTokens } from 'src/features/auth'
 
@@ -20,7 +20,7 @@ export const getUserDataController = async (req: IAppRequest, res: AppResponseTy
     const user = await UserModel.findById(userId)
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     await updateTokens(userId, req, res)
@@ -31,6 +31,6 @@ export const getUserDataController = async (req: IAppRequest, res: AppResponseTy
 
     return res.json(response)
   } catch (error) {
-    throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

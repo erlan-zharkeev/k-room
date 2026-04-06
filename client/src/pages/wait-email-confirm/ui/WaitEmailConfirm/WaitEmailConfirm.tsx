@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, ISendConfirmationLinkResponse } from 'common'
+import { REQ_STATUS, ROUTE_NAMES, AUTH_ENDPOINTS, ISendConfirmationLinkResponse } from 'common'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm'
 
@@ -50,7 +50,7 @@ export const WaitEmailConfirm = () => {
         AUTH_ENDPOINTS.sendEmailConfirmationLink,
         { email }
       )
-      if (!response || response.status !== StatusEnum.Success) return
+      if (!response || response.status !== REQ_STATUS.success) return
       const payload = response.data.payload
 
       const updatedPath = query.buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, {

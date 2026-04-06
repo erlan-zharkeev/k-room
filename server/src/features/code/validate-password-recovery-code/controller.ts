@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-import { IValidatePasswordRecoveryCodeResponse, StatusEnum } from 'common'
+import { IValidatePasswordRecoveryCodeResponse, REQ_STATUS } from 'common'
 
 import { USER_I18N } from 'src/features/user'
 
@@ -25,14 +25,14 @@ export const validatePasswordRecoveryCodeController = async (
     const user = await UserModel.findOne({ 'personal.email': email })
 
     if (!user) {
-      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(USER_I18N.userNotFound, language))
+      return throwHTTPError(REQ_STATUS.badRequest, res, localizedText(USER_I18N.userNotFound, language))
     }
 
     const codeDoc = await CodeModel.findById(user.id)
 
     if (!codeDoc) {
       return throwHTTPError(
-        StatusEnum.BadRequest,
+        REQ_STATUS.badRequest,
         res,
         localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
       )
@@ -43,7 +43,7 @@ export const validatePasswordRecoveryCodeController = async (
 
     if (isCodeExpired(currentCodeExpiresAt)) {
       return throwHTTPError(
-        StatusEnum.BadRequest,
+        REQ_STATUS.badRequest,
         res,
         localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode, language)
       )
@@ -51,7 +51,7 @@ export const validatePasswordRecoveryCodeController = async (
 
     if (code !== currentCode) {
       return throwHTTPError(
-        StatusEnum.BadRequest,
+        REQ_STATUS.badRequest,
         res,
         localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
       )
@@ -76,6 +76,6 @@ export const validatePasswordRecoveryCodeController = async (
       }
     })
   } catch (error) {
-    return throwHTTPError(StatusEnum.Server, res, basicError, false, error)
+    return throwHTTPError(REQ_STATUS.server, res, basicError, false, error)
   }
 }

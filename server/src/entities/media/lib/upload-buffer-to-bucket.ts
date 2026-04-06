@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
 
-import { AppLanguageType, StatusEnum } from 'common'
+import { AppLanguageType, REQ_STATUS } from 'common'
 
 import { AppError, isAppError, localizedText } from 'src/shared/lib'
 
@@ -31,7 +31,7 @@ export const uploadBufferToBucket = async (
     if (existing.length > 0) {
       if (!overwrite) {
         throw new AppError(
-          StatusEnum.Server,
+          REQ_STATUS.server,
           localizedText(VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists, language)
         )
       }
@@ -53,6 +53,6 @@ export const uploadBufferToBucket = async (
       throw error
     }
 
-    throw new AppError(StatusEnum.Server, localizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language), false, error)
+    throw new AppError(REQ_STATUS.server, localizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language), false, error)
   }
 }
