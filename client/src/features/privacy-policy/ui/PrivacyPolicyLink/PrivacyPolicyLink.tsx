@@ -2,8 +2,7 @@ import { ROUTE_NAMES } from 'common'
 
 import { LEGAL_INFO_LINK_I18N } from 'src/features/privacy-policy'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppLink } from 'src/shared/ui'
 
 export const PrivacyPolicyLink = () => {

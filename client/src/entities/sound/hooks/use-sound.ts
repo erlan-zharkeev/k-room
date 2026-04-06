@@ -2,9 +2,10 @@ import { useRef } from 'react'
 
 import { Howl } from 'howler'
 
-import { useSettings } from 'src/entities/settings'
 import { SoundType, SOUND_SRC } from 'src/entities/sound'
-import { useSystem } from 'src/entities/system'
+
+import { useSettings } from 'src/shared/settings'
+import { useSystem } from 'src/shared/system'
 
 export const useSound = () => {
   const { soundOn } = useSettings()

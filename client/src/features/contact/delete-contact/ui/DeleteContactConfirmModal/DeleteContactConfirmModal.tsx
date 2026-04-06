@@ -2,8 +2,7 @@ import './style.scss'
 
 import { DELETE_CONTACT_I18N, IDeleteContactConfirmModalProps } from 'src/features/contact'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppModal, AppText } from 'src/shared/ui'
 
 export const DeleteContactConfirmModal = ({ open, onConfirm, onClose, loading }: IDeleteContactConfirmModalProps) => {

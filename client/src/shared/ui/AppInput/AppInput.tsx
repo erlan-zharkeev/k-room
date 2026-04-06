@@ -1,9 +1,8 @@
 import './style.scss'
 import { ChangeEvent, useMemo, useState, forwardRef, ForwardedRef } from 'react'
 
-import { useI18n } from 'src/entities/settings'
-
 import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { APP_INPUT_I18N, AppButton, AppIcon } from 'src/shared/ui'
 
 import { IAppInputProps } from './config'

@@ -12,7 +12,7 @@ import { useViewportMonitor } from 'src/features/monitor-viewport'
 import { useThemeUpdate } from 'src/features/settings'
 import { useFetchUserData } from 'src/features/user'
 
-import { useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/shared/settings'
 
 export const App = () => {
   const { initializeIndexedDb } = useInitializeIndexedDb()

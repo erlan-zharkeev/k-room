@@ -1,5 +1,6 @@
-import { useSettings } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
+
+import { useSettings } from 'src/shared/settings'
 
 export const useInitializeIndexedDb = () => {
   const settings = useSettings()

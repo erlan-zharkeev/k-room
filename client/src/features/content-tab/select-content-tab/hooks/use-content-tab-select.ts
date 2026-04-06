@@ -1,6 +1,5 @@
-import { useSettings } from 'src/entities/settings'
-
 import { ContentTabType } from 'src/shared/config'
+import { useSettings } from 'src/shared/settings'
 
 export const useContentTabSelect = () => {
   const { selectedContentTab, shallowUpdate } = useSettings()

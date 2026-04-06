@@ -2,8 +2,7 @@ import './style.scss'
 
 import { IEditUserDataModalProps, EDIT_USER_DATA_MODAL_I18N, useEditUserData } from 'src/features/user'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppForm } from 'src/shared/ui'
 
 export const EditUserDataModal = ({ onSuccess }: IEditUserDataModalProps) => {

@@ -1,5 +1,4 @@
-import { MIN_SUPPORTED_WIDTH, MIN_SUPPORTED_HEIGHT, useViewport } from 'src/entities/system'
-
+import { MIN_SUPPORTED_WIDTH, MIN_SUPPORTED_HEIGHT, useViewport } from 'src/shared/system'
 import { AppText } from 'src/shared/ui'
 
 import './style.scss'

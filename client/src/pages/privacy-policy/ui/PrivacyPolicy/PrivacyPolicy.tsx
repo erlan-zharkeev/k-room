@@ -6,9 +6,8 @@ import { ROUTE_NAMES } from 'common'
 
 import { LEGAL_INFO_PAGE_I18N } from 'src/pages/privacy-policy'
 
-import { useI18n } from 'src/entities/settings'
-
 import { CLIENT_ENV } from 'src/shared/config'
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppScrollContainer } from 'src/shared/ui'
 
 export const PrivacyPolicy = () => {

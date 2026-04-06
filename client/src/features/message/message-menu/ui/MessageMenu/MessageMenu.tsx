@@ -10,10 +10,10 @@ import {
 } from 'src/features/message'
 import { IMessageMenuProps } from 'src/features/message'
 
-import { useSettings, useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'
 
 import { stopPropagation } from 'src/shared/lib'
+import { useSettings, useI18n } from 'src/shared/settings'
 import { AppDropdown, AppModal, AppText } from 'src/shared/ui'
 
 export const MessageMenu = ({ message, children }: IMessageMenuProps) => {

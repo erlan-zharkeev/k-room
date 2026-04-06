@@ -4,11 +4,11 @@ import { useEffect, useId, useMemo, useRef } from 'react'
 
 import { createPortal } from 'react-dom'
 
-import { useI18n } from 'src/entities/settings'
-import { useViewport } from 'src/entities/system'
-
 import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppHeader, APP_MODAL_I18N, MODAL_WIDTH, IAppModalProps } from 'src/shared/ui'
+
+import { useViewport } from '../../system'
 
 export const AppModal = ({
   title,

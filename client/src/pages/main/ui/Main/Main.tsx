@@ -2,11 +2,11 @@ import './style.scss'
 
 import { AsideBar } from 'src/widgets/aside-bar'
 import { BottomBar } from 'src/widgets/bottom-bar'
-import { CallStatusBar } from 'src/widgets/call-status-bar'
+// import { CallStatusBar } from 'src/widgets/call-status-bar'
 import { TopBar } from 'src/widgets/top-bar'
 import { WorkspaceLayout } from 'src/widgets/workspace-layout'
 
-import { useCallDataUpdateMonitor } from 'src/features/call'
+// import { useCallDataUpdateMonitor } from 'src/features/call'
 import { useChatRoomUpdateMonitor } from 'src/features/chat-room'
 import { useContactUpdateMonitor } from 'src/features/contact'
 import { useGetNotificationPermission } from 'src/features/get-notification-permission'
@@ -16,8 +16,8 @@ import { useAudioContextMonitor } from 'src/features/monitor-audio-context'
 import { useUserInteractionMonitor } from 'src/features/monitor-user-interaction'
 import { useSocketConnectionMonitor } from 'src/features/socket'
 
-import { CallModal } from 'src/entities/call'
-import { useViewport } from 'src/entities/system'
+// import { CallModal } from 'src/entities/call'
+import { useViewport } from 'src/shared/system'
 
 export const Main = () => {
   const { greaterOrEqualTablet, lessThanTablet } = useViewport()
@@ -28,7 +28,7 @@ export const Main = () => {
   useLoadRoomMessages()
   useInfoNotificationUpdateMonitor()
   useChatRoomUpdateMonitor()
-  useCallDataUpdateMonitor()
+  // useCallDataUpdateMonitor()
   useUserInteractionMonitor()
   useAudioContextMonitor()
   useGetNotificationPermission()
@@ -39,14 +39,14 @@ export const Main = () => {
         <div className="main__wrapper">
           {greaterOrEqualTablet && <AsideBar />}
           <div className="main__right-side">
-            <CallStatusBar />
+            {/* <CallStatusBar /> */}
             <TopBar />
             <WorkspaceLayout />
             {lessThanTablet && <BottomBar />}
           </div>
         </div>
       </div>
-      <CallModal />
+      {/* <CallModal /> */}
     </>
   )
 }

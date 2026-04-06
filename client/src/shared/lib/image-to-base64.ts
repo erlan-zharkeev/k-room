@@ -1,8 +1,7 @@
 import { LocalizedTextType } from 'common'
 
-import { NOTIFICATION_I18N, UseNotificationType } from 'src/entities/notification'
-
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
+import { NOTIFICATION_I18N, UseNotificationType } from 'src/shared/notification'
 
 export const imageToBase64 = ({
   image,

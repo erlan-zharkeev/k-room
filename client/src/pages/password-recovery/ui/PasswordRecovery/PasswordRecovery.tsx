@@ -4,8 +4,7 @@ import { PASSWORD_RECOVERY_PAGE_I18N } from 'src/pages/password-recovery'
 
 import { PasswordRecoveryBody } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppHeader } from 'src/shared/ui'
 
 export const PasswordRecovery = () => {

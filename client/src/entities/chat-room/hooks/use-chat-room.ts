@@ -1,9 +1,9 @@
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
-import { useSettings } from 'src/entities/settings'
 
 import { FChatRoomType } from 'src/shared/config'
 import { db, dexieCollectionStore } from 'src/shared/lib'
+import { useSettings } from 'src/shared/settings'
 
 const chatRoomStore = dexieCollectionStore<FChatRoomType>(db['chat-rooms'])
 

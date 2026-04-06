@@ -2,9 +2,8 @@ import './style.scss'
 
 import { CONTACT_LIST_I18N, ContactListEl, useContactList } from 'src/features/contact'
 
-import { useI18n } from 'src/entities/settings'
-
 import { useAnimatedList, createClassNameWithModifiers } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppScrollContainer, AppText } from 'src/shared/ui'
 
 export const ContactList = () => {

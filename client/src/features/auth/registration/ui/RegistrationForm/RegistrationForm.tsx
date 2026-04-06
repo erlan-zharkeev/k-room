@@ -7,8 +7,7 @@ import {
   RegistrationFormDataType
 } from 'src/features/auth'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppForm } from 'src/shared/ui'
 
 export const RegistrationForm = ({ onRegister, isLoading }: IRegistrationFormProps) => {

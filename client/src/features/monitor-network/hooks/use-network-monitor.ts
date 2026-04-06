@@ -6,12 +6,11 @@ import { useLogout } from 'src/features/auth'
 import { useSocketReconnect } from 'src/features/socket'
 import { useMainLoader } from 'src/features/switch-main-loader'
 
-import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/settings'
-import { setOnline, useSystem } from 'src/entities/system'
-
 import { socket } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'
+import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
+import { useI18n } from 'src/shared/settings'
+import { setOnline, useSystem } from 'src/shared/system'
 
 export const useNetworkMonitor = () => {
   const { socketReconnect } = useSocketReconnect()

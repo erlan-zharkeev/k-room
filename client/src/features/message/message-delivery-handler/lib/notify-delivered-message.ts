@@ -3,8 +3,9 @@ import { IEventMessageDelivered } from 'common'
 import { MessageNotification } from 'src/features/message'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useNotification } from 'src/entities/notification'
 import { useSound } from 'src/entities/sound'
+
+import { useNotification } from 'src/shared/notification'
 
 export const notifyDeliveredMessage = (payload: IEventMessageDelivered) => {
   const { getNotification, openBrowserNotification } = useNotification()

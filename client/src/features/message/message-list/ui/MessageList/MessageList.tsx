@@ -20,8 +20,8 @@ import {
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
-import { useSettings, useI18n } from 'src/entities/settings'
 
+import { useSettings, useI18n } from 'src/shared/settings'
 import { AppScrollDownButton } from 'src/shared/ui'
 
 export const MessageList = ({ room }: IMessageListProps) => {

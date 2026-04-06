@@ -1,8 +1,7 @@
 import './style.scss'
 import { useReplyMessage } from 'src/features/message'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppIcon, AppText } from 'src/shared/ui'
 
 import { REPLY_MESSAGE_I18N } from './config'

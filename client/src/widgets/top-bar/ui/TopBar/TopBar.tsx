@@ -3,9 +3,10 @@ import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { LogoutButton } from 'src/features/auth'
 import { InfoMessageBtn } from 'src/features/info-notification'
-import { ConnectionStatusInfo } from 'src/features/socket'
 
 import { UserProfile } from 'src/entities/user'
+
+import { ConnectionStatusInfo } from '../../../connection-status-info'
 
 export const TopBar = () => {
   return (

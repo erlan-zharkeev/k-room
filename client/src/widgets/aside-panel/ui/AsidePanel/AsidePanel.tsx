@@ -6,9 +6,8 @@ import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { UserSettings } from 'src/features/settings'
 
-import { useSettings } from 'src/entities/settings'
-
 import { ContentTabType } from 'src/shared/config'
+import { useSettings } from 'src/shared/settings'
 
 export const AsidePanel = () => {
   const { showAsidePanel, selectedContentTab } = useSettings()

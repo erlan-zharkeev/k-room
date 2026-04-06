@@ -4,8 +4,9 @@ import { IFrontendUserData } from 'common'
 
 import { useSocketConnect } from 'src/features/socket'
 
-import { setAuth } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
+
+import { setAuth } from 'src/shared/system'
 export const useActivateUserSession = () => {
   const user = useUser()
 

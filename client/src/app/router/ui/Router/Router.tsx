@@ -15,7 +15,7 @@ import { WaitEmailConfirm } from 'src/pages/wait-email-confirm'
 
 import { PageLayout } from 'src/widgets/page-layout'
 
-import { useSystem } from 'src/entities/system'
+import { useSystem } from 'src/shared/system'
 
 const PrivateRoute = () => {
   const { auth } = useSystem()

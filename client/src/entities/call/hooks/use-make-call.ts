@@ -15,8 +15,6 @@ import {
   IEventCallEnded
 } from 'common'
 
-import { AppDispatchType } from 'src/app/store'
-
 import {
   updateInterlocutorSettings,
   closeCallModal,
@@ -24,12 +22,13 @@ import {
   setCurrentCallAccepted,
   markCurrentCallAsVideo
 } from 'src/entities/call'
-import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'
-import { frontCaptureSentryException, useTypedSelector, log } from 'src/shared/lib'
+import { frontCaptureSentryException, log } from 'src/shared/lib'
+import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
 import { RefsContext } from 'src/shared/providers'
+import { useI18n } from 'src/shared/settings'
+import { useTypedSelector, AppDispatchType } from 'src/shared/store'
 
 const parsePeerData = (data: unknown) => {
   if (typeof data === 'string') return JSON.parse(data) as { settings?: { audio?: boolean; video?: boolean } }

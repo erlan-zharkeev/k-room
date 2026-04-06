@@ -8,19 +8,19 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
 import { FIREBASE_CONFIG, ErrorFallback, IContextProviderProps } from 'src/app/providers'
-import { store } from 'src/app/store'
 
-import { useMakeCall } from 'src/entities/call'
+// import { useMakeCall } from 'src/entities/call'
 
 import { AdditionalServiceContext, RefsContext } from 'src/shared/providers'
+import { store } from 'src/shared/store'
 
 // Some browser-side dependencies still expect a global `process` shim at runtime.
 window.process = processLib
 
 const AdditionalServiceProvider = ({ children }: IContextProviderProps) => {
-  const call = useRef(useMakeCall())
-  const services = { call }
-  return <AdditionalServiceContext.Provider value={services}>{children}</AdditionalServiceContext.Provider>
+  // const call = useRef(useMakeCall())
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <AdditionalServiceContext.Provider value={{} as any}>{children}</AdditionalServiceContext.Provider>
 }
 
 const RefsProvider = ({ children }: IContextProviderProps) => {

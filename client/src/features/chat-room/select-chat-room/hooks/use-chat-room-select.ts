@@ -1,6 +1,6 @@
 import { useContentTabSelect } from 'src/features/content-tab'
 
-import { useSettings } from 'src/entities/settings'
+import { useSettings } from 'src/shared/settings'
 
 // import { useChatRoomScroll } from 'src/features/chat-room'
 

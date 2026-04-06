@@ -6,9 +6,8 @@ import {
   CONTACT_INVITATION_CONTROL_BTNS_I18N
 } from 'src/features/contact'
 
-import { useI18n } from 'src/entities/settings'
-
 import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useI18n } from 'src/shared/settings'
 import { AppDotsAnimatedText, AppLink, AppText } from 'src/shared/ui'
 
 export const ContactInvitationControlBtns = ({ contactData }: IContactInvitationControlBtnsProps) => {

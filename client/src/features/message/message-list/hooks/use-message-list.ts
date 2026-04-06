@@ -4,9 +4,8 @@ import { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
 import { MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS, MessageListItemType } from 'src/features/message'
 
-import { useSettings } from 'src/entities/settings'
-
 import { socket } from 'src/shared/api'
+import { useSettings } from 'src/shared/settings'
 
 export const useMessageList = ({ roomId, items }: { roomId: string; items: MessageListItemType[] }) => {
   const pendingReadIdsRef = useRef<Set<string>>(new Set())

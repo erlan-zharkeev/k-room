@@ -5,8 +5,8 @@ import { Fragment, createElement } from 'react'
 import { useMarkInfoNotificationAsRead } from 'src/features/info-notification'
 
 import { INFO_NOTIFICATIONS_I18N, useInfoNotification } from 'src/entities/info-notification'
-import { useI18n } from 'src/entities/settings'
 
+import { useI18n } from 'src/shared/settings'
 import { AppCollapseList, AppHeader } from 'src/shared/ui'
 
 export const InfoNotification = () => {

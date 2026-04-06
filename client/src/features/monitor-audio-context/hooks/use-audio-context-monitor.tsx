@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 
-import { DontShowNotificationAgainBtn, NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n, useSettings } from 'src/entities/settings'
-import { useSystem } from 'src/entities/system'
-
 import { useTimeout } from 'src/shared/lib'
+import { DontShowNotificationAgainBtn, NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
+import { useI18n, useSettings } from 'src/shared/settings'
+import { useSystem } from 'src/shared/system'
 
 export const useAudioContextMonitor = () => {
   const notifications = useNotification()

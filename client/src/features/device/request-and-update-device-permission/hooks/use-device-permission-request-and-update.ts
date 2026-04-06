@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import { updateCamPermission, updateMicPermission } from 'src/entities/system'
+import { updateCamPermission, updateMicPermission } from 'src/shared/system'
 
 export const useDevicePermissionRequestAndUpdate = () => {
   const dispatch = useDispatch()

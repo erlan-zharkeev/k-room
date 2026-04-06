@@ -2,10 +2,9 @@ import { useDispatch } from 'react-redux'
 
 import { SocketActionsType } from 'common'
 
-import { useSettings } from 'src/entities/settings'
-import { setReconnectingStatus } from 'src/entities/system'
-
 import { socket } from 'src/shared/api'
+import { useSettings } from 'src/shared/settings'
+import { setReconnectingStatus } from 'src/shared/system'
 
 export const useSocketConnect = () => {
   const dispatch = useDispatch()

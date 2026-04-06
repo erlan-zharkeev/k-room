@@ -5,9 +5,10 @@ import { Rnd } from 'react-rnd'
 
 import { IModalOptions, CALL_MODAL_INITIAL_SIZE } from 'src/entities/call'
 import { CallModalBody } from 'src/entities/call'
-import { useViewport } from 'src/entities/system'
 
-import { useTypedSelector, createClassNameWithModifiers } from 'src/shared/lib'
+import { createClassNameWithModifiers } from 'src/shared/lib'
+import { useTypedSelector } from 'src/shared/store'
+import { useViewport } from 'src/shared/system'
 
 export const CallModal = () => {
   const { viewPort } = useViewport()

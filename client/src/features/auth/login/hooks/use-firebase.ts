@@ -8,12 +8,11 @@ import { AUTH_ENDPOINTS, ROUTE_NAMES, FirebaseProviderType, ISignInWithProviderR
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from 'src/features/auth'
 import { useActivateUserSession } from 'src/features/user'
 
-import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
-import { useI18n, useSettings } from 'src/entities/settings'
-
 import { useApi } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 import { handleRuntimeError } from 'src/shared/lib'
+import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
+import { useI18n, useSettings } from 'src/shared/settings'
 
 export const useFirebase = () => {
   const [isFirebaseLoginLoading, setFirebaseLoginLoading] = useState(false)

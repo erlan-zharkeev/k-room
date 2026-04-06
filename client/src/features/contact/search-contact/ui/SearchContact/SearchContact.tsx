@@ -6,8 +6,7 @@ import { Virtuoso } from 'react-virtuoso'
 
 import { DROPDOWN_CLOSE_DURATION, SEARCH_CONTACT_I18N, useSearchContact, FoundContact } from 'src/features/contact'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppClickOutside, AppDotsAnimatedText, AppInput, AppText } from 'src/shared/ui'
 
 export const SearchContact = () => {

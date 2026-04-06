@@ -5,8 +5,7 @@ import { ROUTE_NAMES as R, RouteNameType } from 'common'
 
 import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout'
 
-import { useI18n } from 'src/entities/settings'
-
+import { useI18n } from 'src/shared/settings'
 import { AppButton, AppIcon, AppLogo } from 'src/shared/ui'
 
 export const PageLayout = () => {

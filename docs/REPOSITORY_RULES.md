@@ -43,23 +43,7 @@ import { sharedRule } from '../shared'
 import { buildPayload } from '../../lib/build-payload'
 ```
 
-3. Bare `.` and `..` paths are not allowed.
-
-Use:
-
-```ts
-import { authSchema } from './config'
-import { createMessage } from './index'
-```
-
-Do not use:
-
-```ts
-import { createMessage } from '.'
-import { authSchema } from '..'
-```
-
-4. Prefer the shortest local relative public path available.
+3. Prefer the shortest local relative public path available.
 
 If a local barrel such as `./lib`, `./config`, or `./shared` already exports the symbol, import through it instead of a deeper private file path.
 
@@ -76,7 +60,7 @@ Do not use:
 import { normalizeMessage } from './lib/normalize-message'
 ```
 
-5. If the target file is on the same directory level, use `./`.
+4. If the target file is on the same directory level, use `./`.
 
 Use:
 
@@ -84,7 +68,7 @@ Use:
 import { messageMapper } from './message-mapper'
 ```
 
-6. Barrel exports are an exception: in `index.ts` files, use the shortest allowed path.
+5. Barrel exports are an exception: in `index.ts` files, use the shortest allowed path.
 
 ```ts
 export * from './db'
@@ -118,7 +102,7 @@ export * from './ContactList/ContactList'
 export * from './ContactList/config'
 ```
 
-7. Imports must use the shortest public path level available.
+6. Imports must use the shortest public path level available.
 
 Prefer the nearest public alias entrypoint that already exports the symbol:
 
@@ -134,7 +118,7 @@ import { dexieKeyValueStore } from 'src/shared/lib/db/lib/dexie-key-value-store'
 import { useValidate } from 'src/shared/lib/hooks/use-validate/use-validate'
 ```
 
-8. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
+7. `enum` usage is allowed, but should be avoided when a union type or `as const` object is sufficient.
 
 If `enum` is used, member keys must be written only in `PascalCase`.
 

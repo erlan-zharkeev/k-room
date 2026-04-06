@@ -1,7 +1,6 @@
 import { useShowWallpaper, SHOW_WALLPAPER_SWITCHER_I18N } from 'src/features/settings'
 
-import { useSettings, useI18n } from 'src/entities/settings'
-
+import { useSettings, useI18n } from 'src/shared/settings'
 import { AppSwitch, AppText } from 'src/shared/ui'
 
 export const ShowWallpaperSwitcher = () => {
