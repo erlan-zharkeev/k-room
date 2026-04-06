@@ -66,7 +66,7 @@ module.exports = {
           'Use the shortest public API import. Imports deeper than `src/<layer>/<module>` are not allowed.'
       })
     ],
-    'boundaries/dependencies': ['warn', { default: 'disallow', rules: boundariesRules }],
+    'boundaries/dependencies': ['error', { default: 'disallow', rules: boundariesRules }],
 
     'import/no-cycle': ['error', { maxDepth: Infinity }],
     'import/order': [

@@ -3,8 +3,6 @@ FROM node:24.14.0 AS build
 WORKDIR /app
 
 COPY package.json ./package.json
-COPY scripts/sync-public-config.mjs ./scripts/sync-public-config.mjs
-COPY config/nginx ./config/nginx
 COPY config/tsconfig/base.json ./config/tsconfig/base.json
 
 COPY common ./common
