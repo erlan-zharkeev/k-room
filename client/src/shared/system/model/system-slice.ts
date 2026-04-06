@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { IRepliedMessage } from 'common'
 
 import { IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/shared/context-menu'
+
 import {
   INITIAL_VIEWPORT,
   INITIAL_SYSTEM_STORE,
