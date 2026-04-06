@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { PASSWORD_RECOVERY_PAGE_I18N } from 'src/pages/password-recovery/config'
+import { PASSWORD_RECOVERY_PAGE_I18N } from 'src/pages/password-recovery'
 
 import { PasswordRecoveryBody } from 'src/features/auth'
 

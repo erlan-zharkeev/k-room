@@ -1,4 +1,4 @@
-import { useFirebase, useLogin } from 'src/features/auth/login'
+import { useFirebase, useLogin } from 'src/features/auth'
 
 type UseLoginReturnType = ReturnType<typeof useLogin>
 type UseFirebaseLoginReturnType = ReturnType<typeof useFirebase>

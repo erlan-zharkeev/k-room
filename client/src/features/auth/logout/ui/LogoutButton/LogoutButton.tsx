@@ -1,4 +1,4 @@
-import { useLogout } from 'src/features/auth/logout'
+import { useLogout } from 'src/features/auth'
 
 import { AppButton } from 'src/shared/ui'
 

@@ -1,6 +1,7 @@
 import './style.scss'
-import { ROUTE_NAMES } from 'common'
 import { useNavigate } from 'react-router-dom'
+
+import { ROUTE_NAMES } from 'common'
 
 import { AppButton } from 'src/shared/ui'
 

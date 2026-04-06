@@ -12,7 +12,13 @@ export const ErrorFallback = () => (
       backgroundColor: `var(--main-bg, ${CLIENT_ENV.themeBg})`
     }}
   >
-    <p style={{ color: `var(--text, ${CLIENT_ENV.themeText})`, fontFamily: 'Montserrat, Helvetica, sans-serif', margin: 0 }}>
+    <p
+      style={{
+        color: `var(--text, ${CLIENT_ENV.themeText})`,
+        fontFamily: 'Montserrat, Helvetica, sans-serif',
+        margin: 0
+      }}
+    >
       Something went wrong. Please reload the page.
     </p>
     <button

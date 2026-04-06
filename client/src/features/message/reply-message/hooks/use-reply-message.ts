@@ -1,5 +1,8 @@
-import { IMessage } from 'common'
+import { log } from 'console'
+
 import { useDispatch } from 'react-redux'
+
+import { IMessage } from 'common'
 
 import { AppDispatchType } from 'src/app/store'
 
@@ -16,6 +19,7 @@ export const useReplyMessage = () => {
   }
 
   const replyMessageHandler = (_message: IMessage) => {
+    log('replyMessageHandler', _message)
     // dispatch(setRepliedMessage(message))
   }
 

@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom/client'
 
 import { App } from 'src/app/App'
-import { Providers } from 'src/app/providers'
-import { initSentry } from 'src/app/providers/config'
+import { initSentry, Providers } from 'src/app/providers'
 
 const root = document.getElementById('root') as HTMLElement
 

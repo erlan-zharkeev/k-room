@@ -2,12 +2,13 @@ import './style.scss'
 
 import { useMemo } from 'react'
 
-import { IMessage } from 'common'
 import { Virtuoso } from 'react-virtuoso'
+
+import { IMessage } from 'common'
 
 import { MessageListLoader, NoMessagesPlaceholder, useLoadRoomMessages } from 'src/features/message'
 import {
- IMessageListProps,
+  IMessageListProps,
   DateSeparator,
   getMessageGroupDateLabel,
   MessageListEl,
@@ -15,7 +16,7 @@ import {
   useInitialScrollPosition,
   useMessageList,
   useMessageListScroll
-} from 'src/features/message/message-list'
+} from 'src/features/message'
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
@@ -34,9 +35,7 @@ export const MessageList = ({ room }: IMessageListProps) => {
 
   const roomMessages = useMemo(
     () =>
-      room.messages
-        .map((messageId) => getById(messageId))
-        .filter((message): message is IMessage => Boolean(message)),
+      room.messages.map((messageId) => getById(messageId)).filter((message): message is IMessage => Boolean(message)),
     [getById, room.messages]
   )
 

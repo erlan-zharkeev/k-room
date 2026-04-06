@@ -1,7 +1,8 @@
 import { AxiosError } from 'axios'
-import { IBackendResponse, ROUTE_NAMES, StatusEnum } from 'common'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
+import { IBackendResponse, ROUTE_NAMES, StatusEnum } from 'common'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
 
@@ -91,7 +92,11 @@ export const useApiInterceptor = () => {
         message: notificationMessage,
         messageType: 'error'
       })
-      silent ? log('error', text ?? t(API_I18N.unknownError)) : errorInterceptorNotification.open()
+      if (silent) {
+        log('error', text ?? t(API_I18N.unknownError))
+      } else {
+        errorInterceptorNotification.open()
+      }
 
       return createApiError({
         message: notificationMessage,

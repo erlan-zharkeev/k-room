@@ -1,5 +1,6 @@
-import { SocketActionsType, EventCallsUpdatedType } from 'common'
 import { useDispatch } from 'react-redux'
+
+import { SocketActionsType, EventCallsUpdatedType } from 'common'
 
 import { updateCalls } from 'src/entities/call'
 

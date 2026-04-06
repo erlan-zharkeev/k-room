@@ -2,7 +2,7 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
-import { SELECT_DEVICE_I18N } from 'src/features/device/select-device'
+import { SELECT_DEVICE_I18N } from 'src/features/device'
 
 import { useI18n } from 'src/entities/settings'
 

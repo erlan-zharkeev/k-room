@@ -12,7 +12,9 @@ export const useSocketReconnect = () => {
     try {
       await doRequest('post', AUTH_ENDPOINTS.updateTokensPair, undefined)
       socketConnect()
-    } catch {}
+    } catch {
+      //
+    }
   }
   return { socketReconnect }
 }

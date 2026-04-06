@@ -1,5 +1,6 @@
-import { SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
+
+import { SocketActionsType } from 'common'
 
 import { useSettings } from 'src/entities/settings'
 import { setReconnectingStatus } from 'src/entities/system'

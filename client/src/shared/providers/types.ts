@@ -1,7 +1,8 @@
 import { ReactNode } from 'react'
 
-import { IFrontendUserData } from 'common'
 import { SignalData } from 'simple-peer'
+
+import { IFrontendUserData } from 'common'
 
 import { ContextRefType } from 'src/shared/config'
 

@@ -5,7 +5,7 @@ import {
   REGISTRATION_FORM_I18N,
   IRegistrationFormProps,
   RegistrationFormDataType
-} from 'src/features/auth/registration'
+} from 'src/features/auth'
 
 import { useI18n } from 'src/entities/settings'
 

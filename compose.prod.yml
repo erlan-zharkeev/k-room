@@ -43,7 +43,8 @@ services:
     volumes:
       - mongo-data:/data/db
     healthcheck:
-      test: ['CMD-SHELL', 'echo "db.runCommand({ ping: 1 }).ok" | mongosh --quiet mongodb://127.0.0.1:27017/admin | grep 1']
+      test:
+        ['CMD-SHELL', 'echo "db.runCommand({ ping: 1 }).ok" | mongosh --quiet mongodb://127.0.0.1:27017/admin | grep 1']
       interval: 30s
       timeout: 10s
       retries: 5

@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 
 import { IEventAddReaction, SocketActionsType } from 'common'
 
-import { IReactionsProps } from 'src/features/message/message-menu'
+import { IReactionsProps } from 'src/features/message'
 
 import { EMOJI_LIST } from 'src/entities/emoji'
 

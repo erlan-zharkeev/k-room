@@ -10,10 +10,5 @@
       "common/*": ["../common/*"]
     }
   },
-  "include": [
-    "../common/**/*.ts",
-    "vite.config.ts",
-    "vitest.config.ts",
-    "vite.pwa.config.ts"
-  ]
+  "include": ["../common/**/*.ts", "vite.config.ts", "vitest.config.ts", "vite.pwa.config.ts"]
 }

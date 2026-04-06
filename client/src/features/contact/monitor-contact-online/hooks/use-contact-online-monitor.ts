@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { SocketActionsType } from 'common'
 
-import { useUpdateContactData } from 'src/features/contact/update-contact-data'
+import { useUpdateContactData } from 'src/features/contact'
 
 import { useContact } from 'src/entities/contact'
 

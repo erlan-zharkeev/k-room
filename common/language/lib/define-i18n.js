@@ -1,1 +1,1 @@
-export const defineI18n = (value) => value;
+export const defineI18n = (value) => value

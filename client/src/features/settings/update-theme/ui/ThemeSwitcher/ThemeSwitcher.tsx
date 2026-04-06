@@ -1,4 +1,4 @@
-import { useThemeUpdate, THEME_SWITCHER_I18N } from 'src/features/settings/update-theme'
+import { useThemeUpdate, THEME_SWITCHER_I18N } from 'src/features/settings'
 
 import { useSettings, useI18n } from 'src/entities/settings'
 

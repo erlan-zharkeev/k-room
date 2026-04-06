@@ -1,7 +1,8 @@
-import { ROUTE_NAMES as R } from 'common'
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 
-import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router/config'
+import { ROUTE_NAMES as R } from 'common'
+
+import { PATH_TO_REDIRECT_IF_AUTHORIZED } from 'src/app/router'
 
 import { CreateNewPassword } from 'src/pages/create-new-password'
 import { EmailConfirmation } from 'src/pages/email-confirmation'

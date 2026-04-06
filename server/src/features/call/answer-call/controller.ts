@@ -6,7 +6,7 @@ import { CallModel } from 'src/entities/call'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO } from 'src/shared/lib'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { CALL_I18N } from './../config'
 import { emitCallDataToInterlocutors, setActiveCallInterlocutor } from './../shared'

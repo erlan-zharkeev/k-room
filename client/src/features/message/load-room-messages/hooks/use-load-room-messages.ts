@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsType } from 'common'
 
-import { ROOM_MESSAGES_PAGE_LIMIT } from 'src/features/message/load-room-messages'
+import { ROOM_MESSAGES_PAGE_LIMIT } from 'src/features/message'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'

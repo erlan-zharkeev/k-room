@@ -1,5 +1,5 @@
 export type MutableType<T> = { -readonly [K in keyof T]: T[K] }
-export type IndexableType = Record<string, any>
+export type IndexableType = Record<string, unknown>
 
 export interface IKvOptions<KeyField extends string> {
   mode: 'kv'
@@ -23,10 +23,7 @@ export interface IKvQueryState<T extends object> {
   isReady: true
 }
 
-export interface ICollectionMergeManyOptions<
-  T extends { id: string | number },
-  Incoming extends { id: T['id'] } = T
-> {
+export interface ICollectionMergeManyOptions<T extends { id: string | number }, Incoming extends { id: T['id'] } = T> {
   merge: (current: T | undefined, incoming: Incoming) => T
   removeMissing?: boolean
 }

@@ -1,6 +1,6 @@
 import { ROUTE_NAMES } from 'common'
 
-import { LEGAL_INFO_LINK_I18N } from 'src/features/privacy-policy/config'
+import { LEGAL_INFO_LINK_I18N } from 'src/features/privacy-policy'
 
 import { useI18n } from 'src/entities/settings'
 

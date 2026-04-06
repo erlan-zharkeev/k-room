@@ -1,6 +1,6 @@
 import { SocketActionsType } from 'common'
 
-import { transformRoomData } from 'src/features/chat-room/shared'
+import { transformRoomData } from 'src/features/chat-room'
 
 import { useChatRoom } from 'src/entities/chat-room'
 

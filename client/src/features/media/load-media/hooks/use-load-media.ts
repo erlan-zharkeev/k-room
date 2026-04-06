@@ -14,12 +14,9 @@ export const useLoadMedia = () => {
   }
 
   const requestMedia = (filename: string) => {
-    return doRequest<never, 'blob'>(
-      'get',
-      `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType,
-      undefined,
-      { responseType: 'blob' }
-    )
+    return doRequest<never, 'blob'>('get', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType, undefined, {
+      responseType: 'blob'
+    })
   }
 
   const loadMedia = async (filename: string): Promise<void> => {

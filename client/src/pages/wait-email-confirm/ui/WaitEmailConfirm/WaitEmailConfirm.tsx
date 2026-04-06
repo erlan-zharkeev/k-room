@@ -1,10 +1,11 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, ISendConfirmationLinkResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm/config'
+import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, ISendConfirmationLinkResponse } from 'common'
+
+import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm'
 
 import { useI18n } from 'src/entities/settings'
 
@@ -62,6 +63,7 @@ export const WaitEmailConfirm = () => {
       navigate(updatedPath, { replace: true })
       refresh(_ + 1)
     } catch {
+      //
     } finally {
       setIsLoading(false)
     }

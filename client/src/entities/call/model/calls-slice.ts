@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 import { ICall, EventCallStartedAtType, EventCallsUpdatedType, EventCallUpdatedType, IEventCallUser } from 'common'
 
-import { CallMediaType, ICallInterlocutor, ICallsState, IStreamConstraints } from 'src/entities/call/types'
+import { CallMediaType, ICallInterlocutor, ICallsState, IStreamConstraints } from 'src/entities/call'
 
 const initialCurrentCall: ICall = {
   id: '',
@@ -119,7 +120,11 @@ export const callsSlice = createSlice({
       const call = payload
       const listClone = [...state.list]
       const index = listClone.findIndex((stateCall) => stateCall.id === call.id)
-      index >= 0 ? (listClone[index] = call) : listClone.push(call)
+      if (index >= 0) {
+        listClone[index] = call
+      } else {
+        listClone.push(call)
+      }
       if (call.setId) state.currentCall.id = call.id
       state.list = listClone
     },

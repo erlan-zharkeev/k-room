@@ -4,7 +4,7 @@ import { StatusEnum } from 'common'
 
 import { UserModel } from 'src/entities/user'
 
-import { IAppRequest,SERVER_ENV } from 'src/shared/config'
+import { IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText, throwHTTPError } from 'src/shared/lib'
 
 import { AUTH_I18N } from './../config'

@@ -11,7 +11,7 @@ export const validateRequestMiddleware = (req: IAppRequest, res: AppResponseType
   if (errors.isEmpty()) next()
 
   const error: LocalizedTextType<string> | undefined = errors.array()[0]?.msg
-  const errorSource = error ? error : SHARED_I18N.commonServerError
+  const errorSource = error ?? SHARED_I18N.commonServerError
 
   return res.status(StatusEnum.BadRequest).json({
     payload: null,

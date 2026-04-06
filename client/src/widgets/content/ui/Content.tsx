@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { CONTENT_COMPONENT_MAP } from 'src/widgets/content/config'
+import { CONTENT_COMPONENT_MAP } from 'src/widgets/content'
 import { WidgetWrapper } from 'src/widgets/widget-wrapper'
 
 import { useSettings } from 'src/entities/settings'

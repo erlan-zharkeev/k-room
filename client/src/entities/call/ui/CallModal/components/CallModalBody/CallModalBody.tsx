@@ -1,9 +1,10 @@
 import './style.scss'
 import { useState, useContext, useEffect } from 'react'
 
-import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
 import { SignalData } from 'simple-peer'
+
+import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common'
 
 import { AppDispatchType } from 'src/app/store'
 
@@ -18,9 +19,10 @@ import {
   setMinify,
   setCallAudio,
   setCallSettingsLoading,
-  setCallVideo
+  setCallVideo,
+  ICallModalBodyProps,
+  CALL_MODAL_BODY_I18N
 } from 'src/entities/call'
-import { ICallModalBodyProps, CALL_MODAL_BODY_I18N } from 'src/entities/call/ui'
 import { useI18n } from 'src/entities/settings'
 
 import { socket } from 'src/shared/api'

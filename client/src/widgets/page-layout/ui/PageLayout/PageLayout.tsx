@@ -1,8 +1,9 @@
 import './style.scss'
-import { ROUTE_NAMES as R, RouteNameType } from 'common'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout/config'
+import { ROUTE_NAMES as R, RouteNameType } from 'common'
+
+import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout'
 
 import { useI18n } from 'src/entities/settings'
 

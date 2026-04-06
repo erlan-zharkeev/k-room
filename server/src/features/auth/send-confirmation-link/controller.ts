@@ -1,6 +1,6 @@
 import { ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
-import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth/shared'
+import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth'
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { USER_I18N } from 'src/features/user'
 
@@ -9,7 +9,7 @@ import { UserModel } from 'src/entities/user'
 import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText, throwHTTPError } from 'src/shared/lib'
 
-import { SEND_CONFIRMATION_LINK_I18N,SEND_CONFIRMATION_LINK_INTERVAL_MINUTES } from './config'
+import { SEND_CONFIRMATION_LINK_I18N, SEND_CONFIRMATION_LINK_INTERVAL_MINUTES } from './config'
 
 export const sendConfirmationLinkController = async (
   req: IAppRequest,

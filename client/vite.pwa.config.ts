@@ -1,12 +1,6 @@
 import { VitePWA } from 'vite-plugin-pwa'
 
-export const generatePWAConfig = ({
-  appName,
-  themeBg
-}: {
-  appName: string
-  themeBg: string
-}) =>
+export const generatePWAConfig = ({ appName, themeBg }: { appName: string; themeBg: string }) =>
   VitePWA({
     registerType: 'autoUpdate',
     devOptions: {

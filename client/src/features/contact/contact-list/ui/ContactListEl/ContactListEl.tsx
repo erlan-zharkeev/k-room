@@ -4,7 +4,7 @@ import {
   ContactMenu,
   getContactDescription
 } from 'src/features/contact'
-import { IContactListElProps } from 'src/features/contact/contact-list'
+import { IContactListElProps } from 'src/features/contact'
 
 import { useMedia } from 'src/entities/media'
 import { ProfileInfo } from 'src/entities/profile-info'

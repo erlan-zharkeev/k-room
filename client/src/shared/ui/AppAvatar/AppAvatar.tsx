@@ -8,13 +8,7 @@ import { AppIcon } from 'src/shared/ui'
 
 import { IAppAvatarProps, IAvatarBodyProps, IBadgeWrapperProps } from './config'
 
-const AvatarBody = ({
-  src,
-  stubIconName,
-  haveSource,
-  setHaveSource,
-  preview = true
-}: IAvatarBodyProps) => {
+const AvatarBody = ({ src, stubIconName, haveSource, setHaveSource, preview = true }: IAvatarBodyProps) => {
   return !haveSource ? (
     <div className="app-avatar__image">
       <AppIcon name={stubIconName} size="fill" />
@@ -30,12 +24,7 @@ const AvatarBody = ({
   )
 }
 
-const BadgeWrapper = ({
-  children,
-  online,
-  ribbon,
-  ribbonPlacement
-}: IBadgeWrapperProps) =>
+const BadgeWrapper = ({ children, online, ribbon, ribbonPlacement }: IBadgeWrapperProps) =>
   ribbon ? (
     <Badge.Ribbon text="G" placement={ribbonPlacement === 'up' ? 'start' : 'end'}>
       {children}

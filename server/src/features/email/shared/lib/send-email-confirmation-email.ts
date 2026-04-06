@@ -8,7 +8,7 @@ import {
   EMAIL_I18N,
   renderEmailConfirmationHtml,
   RESEND_FROM_EMAIL,
-  RESEND_FROM_NAME,
+  RESEND_FROM_NAME
 } from 'src/features/email'
 
 import { AppError, localizedText, log } from 'src/shared/lib'

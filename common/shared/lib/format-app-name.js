@@ -1,1 +1,1 @@
-export const formatAppName = (value) => value.replace(/\b\w/g, (char) => char.toUpperCase());
+export const formatAppName = (value) => value.replace(/\b\w/g, (char) => char.toUpperCase())

@@ -1,1 +1,1 @@
-export * from './format-app-name';
+export * from './format-app-name'

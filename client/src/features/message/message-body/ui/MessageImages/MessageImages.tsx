@@ -2,7 +2,7 @@ import './style.scss'
 
 import { Image } from 'antd'
 
-import { IMessageImagesProps } from 'src/features/message/message-body'
+import { IMessageImagesProps } from 'src/features/message'
 
 export const MessageImages = ({ message }: IMessageImagesProps) => {
   if (!message.images || message.images.length <= 0) return null

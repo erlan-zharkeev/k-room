@@ -7,7 +7,7 @@ import { transformUserToContact } from 'src/features/user'
 import { UserModel } from 'src/entities/user'
 
 import { SocketInstanceType } from 'src/shared/config'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { CONTACT_I18N } from './../config'
 import { SEARCH_CONTACT_RESULT_LIMIT } from './config'

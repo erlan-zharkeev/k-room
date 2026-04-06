@@ -1,6 +1,6 @@
 import { SocketActionsType, IEventGetContactTypingStatus } from 'common'
 
-import { useUpdateContactData } from 'src/features/contact/update-contact-data'
+import { useUpdateContactData } from 'src/features/contact'
 
 import { socket } from 'src/shared/api'
 

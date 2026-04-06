@@ -1,5 +1,4 @@
-import { useLoadMedia } from 'src/features/media/load-media'
-import { syncMedia } from 'src/features/media/sync-media'
+import { syncMedia, useLoadMedia } from 'src/features/media'
 
 import { useMedia } from 'src/entities/media'
 

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Rnd } from 'react-rnd'
 
 import { IModalOptions, CALL_MODAL_INITIAL_SIZE } from 'src/entities/call'
-import { CallModalBody } from 'src/entities/call/ui'
+import { CallModalBody } from 'src/entities/call'
 import { useViewport } from 'src/entities/system'
 
 import { useTypedSelector, createClassNameWithModifiers } from 'src/shared/lib'

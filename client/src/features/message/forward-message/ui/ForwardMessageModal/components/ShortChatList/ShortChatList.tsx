@@ -1,7 +1,7 @@
 import './style.scss'
 import { useState, useMemo } from 'react'
 
-import { SHORT_CHAT_LIST_I18N, IShortChatListProps } from 'src/features/message/forward-message'
+import { SHORT_CHAT_LIST_I18N, IShortChatListProps } from 'src/features/message'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/entities/settings'

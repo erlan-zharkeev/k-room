@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-import { AUTH_ENDPOINTS, ROUTE_NAMES, FirebaseProviderType, ISignInWithProviderResponse } from 'common'
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
+
+import { AUTH_ENDPOINTS, ROUTE_NAMES, FirebaseProviderType, ISignInWithProviderResponse } from 'common'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from 'src/features/auth'
 import { useActivateUserSession } from 'src/features/user'
@@ -67,7 +68,9 @@ export const useFirebase = () => {
       const payload = response.data.payload
       activateUserSession(payload)
       navigate(ROUTE_NAMES.main)
-    } catch {}
+    } catch {
+      //
+    }
   }
 
   const onFirebaseLogin = async (provider: FirebaseProviderType) => {

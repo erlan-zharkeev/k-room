@@ -1,6 +1,7 @@
-import dotenv, { DotenvParseOutput } from 'dotenv'
 import fs from 'fs'
 import path from 'path'
+
+import dotenv, { DotenvParseOutput } from 'dotenv'
 
 import { formatAppName, IEnvCommonVariables, IEnvVariables } from 'common'
 

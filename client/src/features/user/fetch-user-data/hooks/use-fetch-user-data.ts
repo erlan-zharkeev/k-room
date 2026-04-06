@@ -16,6 +16,7 @@ export const useFetchUserData = () => {
       const payload = response.data.payload
       activateUserSession(payload)
     } catch {
+      //
     } finally {
       switchMainLoader('hide')
     }

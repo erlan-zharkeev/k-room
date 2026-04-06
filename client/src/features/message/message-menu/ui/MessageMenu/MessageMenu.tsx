@@ -8,7 +8,7 @@ import {
   useMessageForward,
   useReplyMessage
 } from 'src/features/message'
-import { IMessageMenuProps } from 'src/features/message/message-menu'
+import { IMessageMenuProps } from 'src/features/message'
 
 import { useSettings, useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'

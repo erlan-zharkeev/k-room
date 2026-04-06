@@ -17,15 +17,8 @@ export const updateUserAvatar = async (
     return
   }
 
-  await uploadBufferToBucket(
-    bucket,
-    buffer,
-    filename,
-    'avatar',
-    language,
-    {
-      overwrite: true,
-      compression: 'avatar'
-    }
-  )
+  await uploadBufferToBucket(bucket, buffer, filename, 'avatar', language, {
+    overwrite: true,
+    compression: 'avatar'
+  })
 }

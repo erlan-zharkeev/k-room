@@ -8,7 +8,14 @@ import { useI18n } from 'src/entities/settings'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/lib'
-import { AppAvatar, AppButton, AppIcon, AppImagePreview, APP_FILE_LOADER_I18N, IAppFileLoaderProps } from 'src/shared/ui'
+import {
+  AppAvatar,
+  AppButton,
+  AppIcon,
+  AppImagePreview,
+  APP_FILE_LOADER_I18N,
+  IAppFileLoaderProps
+} from 'src/shared/ui'
 
 export const AppFileLoader = ({
   name,
@@ -62,7 +69,6 @@ export const AppFileLoader = ({
     }
 
     const promises = Array.from(files).map(async (file) => {
-      // eslint-disable-next-line
       return new Promise<IImageObject | null>((resolve) => {
         const reader = imageToBase64({ image: file, allowedResolutions, notifications, t })
         if (!reader) return resolve(null)

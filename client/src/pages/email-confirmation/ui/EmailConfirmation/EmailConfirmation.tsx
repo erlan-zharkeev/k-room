@@ -1,8 +1,9 @@
 import './style.scss'
 import { useState, useEffect } from 'react'
 
-import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, IConfirmEmailResponse } from 'common'
 import { useNavigate } from 'react-router-dom'
+
+import { StatusEnum, ROUTE_NAMES, AUTH_ENDPOINTS, IConfirmEmailResponse } from 'common'
 
 import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation'
 

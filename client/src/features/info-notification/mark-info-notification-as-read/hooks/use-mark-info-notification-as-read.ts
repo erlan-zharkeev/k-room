@@ -11,7 +11,9 @@ export const useMarkInfoNotificationAsRead = () => {
     try {
       if (isRead(id)) return
       socket.emit<SocketActionsType>('mark-info-notification-as-read', { id })
-    } catch {}
+    } catch {
+      //
+    }
   }
 
   return { markAsRead }

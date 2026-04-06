@@ -1,4 +1,4 @@
-import { ColorModifierType, ExtendedSizeModifierType } from 'src/shared/ui/config'
+import { ColorModifierType, ExtendedSizeModifierType } from 'src/shared/ui'
 
 export interface IAppTextProps {
   tag?: 'span' | 'p' | 'div'

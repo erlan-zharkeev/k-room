@@ -1,5 +1,6 @@
-import { IFrontendUserData } from 'common'
 import { useDispatch } from 'react-redux'
+
+import { IFrontendUserData } from 'common'
 
 import { useSocketConnect } from 'src/features/socket'
 

@@ -1,4 +1,5 @@
 import { AxiosResponse, ResponseType } from 'axios'
+
 import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, StatusEnum } from 'common'
 
 import { useNotification } from 'src/entities/notification'
@@ -14,7 +15,7 @@ export const useApi = () => {
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
     if (!response) return
-    const ct = response.headers?.['content-type'] || ''
+    const ct = response.headers?.['content-type'] ?? ''
     const isJson = ct.includes('application/json')
     if (!isJson) return
 

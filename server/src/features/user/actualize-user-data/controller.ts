@@ -8,7 +8,7 @@ import { UserModel } from 'src/entities/user'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO } from 'src/shared/lib'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { USER_SOCKET_I18N } from './../config'
 import { getSocketsByUserIds } from './../shared'

@@ -12,7 +12,7 @@ export const createInfoNotificationState = async ({
   userId: MongoIdType
   infoNotifications: InfoNotificationMapType
 }) => {
-  return await new InfoNotificationStateModel({
+  return new InfoNotificationStateModel({
     userId: normalizeObjectId(userId),
     infoNotifications
   }).save()

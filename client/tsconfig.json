@@ -24,7 +24,6 @@
       "common/*": ["../common/*"]
     }
   },
-  "include": ["src/**/*", "vitest.setup.ts",
-],
+  "include": ["src/**/*", "vitest.setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,9 +1,10 @@
 import { HTMLAttributeAnchorTarget } from 'react'
 
-import { UnknownCallbackType } from 'common'
 import { To } from 'react-router-dom'
 
-import { ColorModifierType } from 'src/shared/ui/config'
+import { UnknownCallbackType } from 'common'
+
+import { ColorModifierType } from 'src/shared/ui'
 
 export interface IAppLinkProps {
   text: string

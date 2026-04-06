@@ -15,9 +15,14 @@ export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedI
         <>
           <AppText>{title}</AppText>
           <AppScrollContainer height={'200px'} additionalClassName={classNames}>
-            {tags.map((tag) => (
+            {tags.map((tag) =>
               onElementClick && !onRemove ? (
-                <button type="button" key={tag.value} className={tagClassName} onClick={() => onElementClick(tag.value)}>
+                <button
+                  type="button"
+                  key={tag.value}
+                  className={tagClassName}
+                  onClick={() => onElementClick(tag.value)}
+                >
                   {tag.prefixSlot && <div className="app-tags__tag-prefix-slot">{tag.prefixSlot}</div>}
                   <AppText>{tag.label}</AppText>
                   <div className="app-tags__tag-icon">
@@ -41,7 +46,7 @@ export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedI
                   )}
                 </div>
               )
-            ))}
+            )}
           </AppScrollContainer>
         </>
       )}

@@ -1,8 +1,9 @@
 import './style.scss'
-import { ROUTE_NAMES } from 'common'
 import { useNavigate } from 'react-router-dom'
 
-import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_I18N } from 'src/features/auth/create-new-password'
+import { ROUTE_NAMES } from 'common'
+
+import { useCreateNewPassword, CREATE_NEW_PASSWORD_BODY_I18N } from 'src/features/auth'
 
 import { useI18n } from 'src/entities/settings'
 

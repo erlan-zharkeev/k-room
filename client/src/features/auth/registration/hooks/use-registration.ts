@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useNavigate } from 'react-router-dom'
+
 import {
   AUTH_ENDPOINTS,
   IAuthRegistrationPayload,
@@ -7,9 +9,8 @@ import {
   ROUTE_NAMES,
   StatusEnum
 } from 'common'
-import { useNavigate } from 'react-router-dom'
 
-import { RegistrationFormDataType } from 'src/features/auth/registration'
+import { RegistrationFormDataType } from 'src/features/auth'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
@@ -42,6 +43,7 @@ export const useRegistration = () => {
 
       navigate(pathname)
     } catch {
+      //
     } finally {
       setIsLoading(false)
     }

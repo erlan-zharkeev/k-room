@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { SocketActionsType, IEventRoomCreated, IEventCreateRoom } from 'common'
 
-import { useChatRoomSelect } from 'src/features/chat-room/select-chat-room'
+import { useChatRoomSelect } from 'src/features/chat-room'
 
 import { socket } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
