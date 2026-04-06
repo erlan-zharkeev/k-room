@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { useDevicePermissionRequestAndUpdate } from 'src/features/device/request-and-update-device-permission'
+import { useDevicePermissionRequestAndUpdate } from 'src/features/device'
 
 import { NOTIFICATION_I18N, useNotification } from 'src/entities/notification'
 import { useSettings, useI18n } from 'src/entities/settings'

@@ -20,6 +20,7 @@ export const useLogin = () => {
       const payload = response.data.payload
       activateUserSession(payload)
     } catch {
+      //
     } finally {
       setIsLoading(false)
     }

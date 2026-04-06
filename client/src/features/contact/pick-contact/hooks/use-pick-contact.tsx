@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { ContactAvatar } from 'src/features/contact/pick-contact'
+import { ContactAvatar } from 'src/features/contact'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'

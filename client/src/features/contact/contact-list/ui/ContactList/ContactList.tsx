@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { CONTACT_LIST_I18N, ContactListEl, useContactList } from 'src/features/contact/contact-list'
+import { CONTACT_LIST_I18N, ContactListEl, useContactList } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/settings'
 

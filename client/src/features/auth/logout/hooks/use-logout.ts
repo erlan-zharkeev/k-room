@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'common'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
+import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'common'
 
 import { useResetAllStores } from 'src/features/reset-all-stores'
 

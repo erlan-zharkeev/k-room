@@ -7,8 +7,4 @@ import { updateTokensPairController } from './controller'
 
 export const updateTokenPairRouter = Router()
 
-updateTokenPairRouter.post(
-  AUTH_ENDPOINTS.updateTokensPair,
-  refreshTokenValidatorMiddleware,
-  updateTokensPairController
-)
+updateTokenPairRouter.post(AUTH_ENDPOINTS.updateTokensPair, refreshTokenValidatorMiddleware, updateTokensPairController)

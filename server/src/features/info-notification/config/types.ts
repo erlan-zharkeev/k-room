@@ -13,12 +13,7 @@ export interface IInfoNotificationAdminResourceType {
 }
 
 export interface IInfoNotificationAdminHelpersType {
-  recordActionUrl: (options: {
-    resourceId: string
-    recordId: string
-    actionName: string
-    search?: string
-  }) => string
+  recordActionUrl: (options: { resourceId: string; recordId: string; actionName: string; search?: string }) => string
 }
 
 export interface IInfoNotificationAdminActionContextType {

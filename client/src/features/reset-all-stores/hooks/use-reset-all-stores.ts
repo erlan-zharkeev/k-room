@@ -15,7 +15,13 @@ export const useResetAllStores = (dispatch: AppDispatchType) => {
   const mediaStore = useMedia()
   const chatRoomStore = useChatRoom()
 
-  const stores = [contactStore.reset, infoNotificationStore.reset, mediaStore.reset, chatRoomStore.reset, userStore.reset]
+  const stores = [
+    contactStore.reset,
+    infoNotificationStore.reset,
+    mediaStore.reset,
+    chatRoomStore.reset,
+    userStore.reset
+  ]
 
   const reset = () => {
     stores.forEach((method) => {

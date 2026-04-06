@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 
-import { IEventSendMessage, IMessage, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
+
+import { IEventSendMessage, IMessage, SocketActionsType } from 'common'
 
 import { useAddMessage } from 'src/features/message'
 

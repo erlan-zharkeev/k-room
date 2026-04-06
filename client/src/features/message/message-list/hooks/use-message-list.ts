@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
-import { MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS, MessageListItemType } from 'src/features/message/message-list'
+import { MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS, MessageListItemType } from 'src/features/message'
 
 import { useSettings } from 'src/entities/settings'
 

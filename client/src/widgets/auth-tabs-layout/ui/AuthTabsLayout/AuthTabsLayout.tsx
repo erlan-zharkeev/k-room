@@ -1,7 +1,8 @@
 import './style.scss'
 
-import { ROUTE_NAMES } from 'common'
 import { Link, useLocation } from 'react-router-dom'
+
+import { ROUTE_NAMES } from 'common'
 
 import { IAuthTabsLayoutProps, AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout'
 

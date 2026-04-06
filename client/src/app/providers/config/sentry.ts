@@ -1,14 +1,15 @@
 import * as Sentry from '@sentry/react'
+
 import { shouldIgnoreSentryError } from 'common'
 
 import { isApiError } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 
 const getClientTracePropagationTargets = () => [
-  /^\/api/,
+  new RegExp(`^${CLIENT_ENV.apiPath}`),
   `${CLIENT_ENV.appHost}:${CLIENT_ENV.clientPort}`,
   `${CLIENT_ENV.apiHost}:${CLIENT_ENV.serverPort}`,
-  `${CLIENT_ENV.apiHost}/api`
+  `${CLIENT_ENV.apiHost}${CLIENT_ENV.apiPath}`
 ]
 
 export const initSentry = () => {

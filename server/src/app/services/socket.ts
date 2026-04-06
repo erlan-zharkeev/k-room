@@ -3,8 +3,7 @@ import { Server } from 'socket.io'
 import { SocketActionsType } from 'common'
 
 import { MAX_HTTP_BUFFER_SIZE } from 'src/app/config'
-import { socketRouter } from 'src/app/services'
-import { SocketServerType } from 'src/app/services/types'
+import { SocketServerType, socketRouter } from 'src/app/services'
 
 import { socketAuthMiddleware } from 'src/features/auth'
 

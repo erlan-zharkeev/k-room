@@ -1,6 +1,7 @@
 import { Schema } from 'mongoose'
 
 import { IUserPersonalData } from './../config'
+
 import { contactSchema } from './index'
 
 export const personalSchema = new Schema<IUserPersonalData>(

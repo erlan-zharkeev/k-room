@@ -11,7 +11,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
   const unwrap = (data: KvItem<T> | undefined): T | undefined => {
     if (!data) return undefined
 
-    const { __key: _drop, ...value } = data
+    const { __key: _key, ...value } = data
 
     return value as T
   }

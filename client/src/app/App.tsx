@@ -1,4 +1,4 @@
-import 'src/shared/config/styles'
+import 'src/shared/config/styles/index.scss'
 import { useEffect } from 'react'
 
 import { useInitializeIndexedDb } from 'src/app/hooks'

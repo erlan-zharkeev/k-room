@@ -1,4 +1,4 @@
-import { useAddContact, IAddContactBtnProps } from 'src/features/contact/add-contact'
+import { useAddContact, IAddContactBtnProps } from 'src/features/contact'
 
 import { useContact } from 'src/entities/contact'
 

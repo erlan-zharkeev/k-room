@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { USER_ENDPOINTS, StatusEnum, ROUTE_NAMES, ICreateNewPasswordPayload } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+
+import { USER_ENDPOINTS, StatusEnum, ROUTE_NAMES, ICreateNewPasswordPayload } from 'common'
 
 import { useApi } from 'src/shared/api'
 import { AppFormDataType } from 'src/shared/ui'
@@ -44,6 +45,7 @@ export const useCreateNewPassword = () => {
         setIPasswordChanged(true)
       }
     } catch {
+      //
     } finally {
       setIsLoading(false)
     }

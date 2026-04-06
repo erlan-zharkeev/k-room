@@ -64,7 +64,14 @@ export const ADMIN_USER_OPTIONS = {
       'system.confirmed',
       'system.confirmAttempts'
     ],
-    newProperties: ['public.username', 'personal.email', 'system.password', 'system.role', 'system.provider', 'system.confirmed'],
+    newProperties: [
+      'public.username',
+      'personal.email',
+      'system.password',
+      'system.role',
+      'system.provider',
+      'system.confirmed'
+    ],
     editProperties: ['public.username', 'personal.email', 'system.role', 'system.provider', 'system.confirmed'],
     filterProperties: ['_id', 'public.username', 'personal.email', 'system.role', 'public.online', 'system.provider'],
     actions: {

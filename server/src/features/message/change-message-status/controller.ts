@@ -1,7 +1,7 @@
 import { IEventChangeMessageStatus, SocketActionsType } from 'common'
 
 import { SocketInstanceType } from 'src/shared/config'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { MESSAGE_I18N } from './../config'
 import { changeMessageStatus } from './shared'

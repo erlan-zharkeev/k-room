@@ -8,7 +8,7 @@ export interface IInfoNotificationStateSchema {
   infoNotifications: InfoNotificationMapType
 }
 
-export type InfoNotificationStateDocumentType =Omit<IInfoNotificationStateSchema, '_id' | 'userId'> & {
+export type InfoNotificationStateDocumentType = Omit<IInfoNotificationStateSchema, '_id' | 'userId'> & {
   _id: Types.ObjectId
   userId: Types.ObjectId
 }

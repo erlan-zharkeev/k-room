@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { CODES_ENDPOINTS, ICodeValidationPayload, ROUTE_NAMES } from 'common'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+
+import { CODES_ENDPOINTS, ICodeValidationPayload, ROUTE_NAMES } from 'common'
 
 import { useApi } from 'src/shared/api'
 import { useCounter, useQuery, getNextReqInterval } from 'src/shared/lib'
@@ -61,6 +62,7 @@ export const usePasswordRecovery = () => {
       setCounterValue(Math.round(getNextReqInterval(nextTimeRequest)))
       startCounter()
     } catch {
+      //
     } finally {
       setEmailSendCodeIsLoading(false)
     }
@@ -80,6 +82,7 @@ export const usePasswordRecovery = () => {
       const pathname = buildPathWithParams(ROUTE_NAMES.createNewPassword, { 'password-recovery': query })
       navigate({ pathname })
     } catch {
+      //
     } finally {
       setCodeValidationIsLoading(false)
     }

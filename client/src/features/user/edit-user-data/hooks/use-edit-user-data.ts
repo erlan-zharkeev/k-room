@@ -47,6 +47,7 @@ export const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) 
       }
       onSuccess?.()
     } catch {
+      //
     } finally {
       setIsLoading(false)
     }

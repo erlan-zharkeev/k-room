@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { AppFormFieldValueType } from 'src/shared/ui/AppForm'
+import { AppFormFieldValueType } from 'src/shared/ui'
 
 import { stringValidateRules, booleanValidateRules, arrayValidateRules } from './rules'
 import {

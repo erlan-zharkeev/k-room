@@ -1,11 +1,12 @@
+import http from 'http'
+import https from 'https'
+import path from 'path'
+
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import http from 'http'
-import https from 'https'
 import methodOverride from 'method-override'
-import path from 'path'
 
 import { corsOptions, httpsOptions, setupSentryErrorHandler } from 'src/app/config'
 

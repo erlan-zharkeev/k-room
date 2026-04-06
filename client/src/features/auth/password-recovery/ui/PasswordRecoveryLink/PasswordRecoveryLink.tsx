@@ -2,7 +2,7 @@ import { ROUTE_NAMES } from 'common'
 
 import './style.scss'
 
-import { PASSWORD_RECOVERY_LINK_I18N } from 'src/features/auth/password-recovery'
+import { PASSWORD_RECOVERY_LINK_I18N } from 'src/features/auth'
 
 import { useI18n } from 'src/entities/settings'
 import { useUser } from 'src/entities/user'

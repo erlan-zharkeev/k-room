@@ -19,7 +19,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
 
   const getAll = (): Promise<Item[]> => table.toArray()
 
-  const use = (defaults: Item[] = []) => useLiveQuery(async () => await getAll(), [], defaults)
+  const use = (defaults: Item[] = []) => useLiveQuery(async () => getAll(), [], defaults)
 
   const useById = <D = Item | undefined>(id: ItemId | null | undefined, defaults?: D) =>
     useLiveQuery(
@@ -57,7 +57,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
   }
 
   const transaction = async <R>(mode: TransactionMode, callback: () => Promise<R> | R) => {
-    return await table.db.transaction(mode, table, callback)
+    return table.db.transaction(mode, table, callback)
   }
 
   const replaceAll = async (data: readonly Item[]) => {

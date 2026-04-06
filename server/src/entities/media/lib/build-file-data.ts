@@ -7,7 +7,7 @@ import { createSha256FromBuffer } from './create-sha-from-buffer'
 
 export const buildFileData = async (buffer: Buffer, filename: string): Promise<IFileData> => {
   const fileType = await fileTypeDep.fromBuffer(buffer).catch(() => null)
-  const contentType = fileType?.mime || (filename ? mimeLookup(filename) || undefined : undefined)
+  const contentType = fileType?.mime ?? (filename ? mimeLookup(filename) || undefined : undefined)
 
   const meta: IFileMetaData = {
     size: buffer.length,

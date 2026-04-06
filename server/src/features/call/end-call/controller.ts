@@ -6,7 +6,7 @@ import { CallModel } from 'src/entities/call'
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO } from 'src/shared/lib'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { CALL_I18N } from './../config'
 import { clearActiveCallInterlocutor, emitCallDataToInterlocutors } from './../shared'
@@ -27,11 +27,7 @@ export const endCallController = (socket: SocketInstanceType) => {
         clearActiveCallInterlocutor(userId)
         clearActiveCallInterlocutor(callerId)
 
-        const call = await CallModel.findOneAndUpdate(
-          { _id: callId },
-          { finishedAt: Date.now() },
-          { new: true }
-        ).lean()
+        const call = await CallModel.findOneAndUpdate({ _id: callId }, { finishedAt: Date.now() }, { new: true }).lean()
 
         if (!call) return
 

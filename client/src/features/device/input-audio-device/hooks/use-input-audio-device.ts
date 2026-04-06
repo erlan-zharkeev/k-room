@@ -40,6 +40,7 @@ export const useInputAudioDevice = () => {
       }
       updateDeviceList()
     } catch (error) {
+      handleRuntimeError('Failed to get audio input devices', error)
       cantAccessDeviceNotification.open()
     }
   }

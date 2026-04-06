@@ -2,12 +2,7 @@ import { AppLanguageType, StatusEnum } from 'common'
 
 import { AppError, localizedText } from 'src/shared/lib'
 
-import {
-  IFileData,
-  MediaBucketNameType,
-  VALIDATE_MEDIA_FILE_I18N,
-  VALIDATION_MEDIA_OPTIONS_MAP
-} from './../config'
+import { IFileData, MediaBucketNameType, VALIDATE_MEDIA_FILE_I18N, VALIDATION_MEDIA_OPTIONS_MAP } from './../config'
 
 export const validateFileMetaData = (
   filedata: IFileData,

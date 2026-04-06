@@ -1,10 +1,10 @@
 import './style.scss'
 
 import {
- IContactInvitationControlBtnsProps,
+  IContactInvitationControlBtnsProps,
   useContactInvitationControls,
   CONTACT_INVITATION_CONTROL_BTNS_I18N
-} from 'src/features/contact/contact-invitation-controls'
+} from 'src/features/contact'
 
 import { useI18n } from 'src/entities/settings'
 

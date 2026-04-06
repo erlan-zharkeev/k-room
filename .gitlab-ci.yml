@@ -10,14 +10,14 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 variables:
-  NODE_VERSION: "24.14.0"
-  DOCKER_VERSION: "27.5.1"
-  DOCKER_TLS_CERTDIR: "/certs"
-  DOCKER_HOST: "tcp://docker:2376"
-  DOCKER_TLS_VERIFY: "1"
-  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
-  CLIENT_IMAGE_NAME: "ketjo/k-room_client"
-  SERVER_IMAGE_NAME: "ketjo/k-room_server"
+  NODE_VERSION: '24.14.0'
+  DOCKER_VERSION: '27.5.1'
+  DOCKER_TLS_CERTDIR: '/certs'
+  DOCKER_HOST: 'tcp://docker:2376'
+  DOCKER_TLS_VERIFY: '1'
+  DOCKER_CERT_PATH: '$DOCKER_TLS_CERTDIR/client'
+  CLIENT_IMAGE_NAME: 'ketjo/k-room_client'
+  SERVER_IMAGE_NAME: 'ketjo/k-room_server'
 
 verify:
   image: node:${NODE_VERSION}

@@ -21,7 +21,7 @@ export const useTimeout = () => {
 
   const delay = useCallback(async (ms: number): Promise<void> => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    return await new Promise((resolve) => {
+    return new Promise((resolve) => {
       timeoutRef.current = setTimeout(() => {
         resolve()
       }, ms)
@@ -29,7 +29,7 @@ export const useTimeout = () => {
   }, [])
 
   const appNextTick = async (): Promise<void> => {
-    return await new Promise((resolve) => {
+    return new Promise((resolve) => {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           resolve()

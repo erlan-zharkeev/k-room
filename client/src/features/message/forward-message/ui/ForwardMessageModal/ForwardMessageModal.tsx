@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { useChatRoomSelect } from 'src/features/chat-room'
 import { ShortChatList } from 'src/features/message'
-import { FORWARD_MESSAGE_MODAL_I18N, IForwardMessageModalProps } from 'src/features/message/forward-message'
+import { FORWARD_MESSAGE_MODAL_I18N, IForwardMessageModalProps } from 'src/features/message'
 
 import { useI18n } from 'src/entities/settings'
 

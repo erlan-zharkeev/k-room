@@ -3,7 +3,7 @@ import { IEventMarkCallAsVideo, SocketActionsType } from 'common'
 import { CallModel } from 'src/entities/call'
 
 import { SocketInstanceType } from 'src/shared/config'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { CALL_I18N } from './../config'
 

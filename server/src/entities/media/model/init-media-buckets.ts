@@ -5,6 +5,7 @@ import { StatusEnum } from 'common'
 import { AppError } from 'src/shared/lib'
 
 import { MEDIA_BUCKET_NAMES } from './../config'
+
 import { mediaBuckets } from './index'
 
 export const initMediaBuckets = (): void => {

@@ -1,6 +1,12 @@
 import { AppLanguageType, StatusEnum } from 'common'
 
-import { APP_NAME, createResendClient, PASSWORD_RECOVERY_SUBJECT, RESEND_FROM_EMAIL, RESEND_FROM_NAME } from 'src/features/email'
+import {
+  APP_NAME,
+  createResendClient,
+  PASSWORD_RECOVERY_SUBJECT,
+  RESEND_FROM_EMAIL,
+  RESEND_FROM_NAME
+} from 'src/features/email'
 
 import { SERVER_ENV } from 'src/shared/config'
 import { AppError } from 'src/shared/lib'

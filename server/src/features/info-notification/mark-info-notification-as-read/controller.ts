@@ -4,7 +4,7 @@ import { updateInfoNotificationStateStatus } from 'src/entities/info-notificatio
 
 import { SocketInstanceType } from 'src/shared/config'
 import { getIO } from 'src/shared/lib'
-import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
+import { socketErrorMiddleware } from 'src/shared/middleware'
 
 import { INFO_NOTIFICATION_SHARED_I18N } from './../shared/config/i18n'
 
@@ -18,10 +18,12 @@ export const markInfoNotificationAsReadController = (socket: SocketInstanceType)
 
         await updateInfoNotificationStateStatus({ userId, notificationId: id, status: 'read' })
 
-        getIO().to(socket.id).emit<SocketActionsType>('info-notification-status-updated', {
-          id,
-          status: 'read'
-        } satisfies IEventInfoNotificationStatusUpdated)
+        getIO()
+          .to(socket.id)
+          .emit<SocketActionsType>('info-notification-status-updated', {
+            id,
+            status: 'read'
+          } satisfies IEventInfoNotificationStatusUpdated)
       },
       { basicError: INFO_NOTIFICATION_SHARED_I18N.markAsReadFailed }
     )

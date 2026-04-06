@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 
 import { IAuthRegistrationPayload, ISendConfirmationLinkResponse, StatusEnum } from 'common'
 
-import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth/shared'
+import { EMAIL_CONFIRMATION_LINK_LIFE, generateToken } from 'src/features/auth'
 import { sendEmailConfirmationEmail } from 'src/features/email'
 import { createUser, isUserExist } from 'src/features/user'
 

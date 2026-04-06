@@ -3,8 +3,13 @@ import { Router } from 'express'
 import { USER_ENDPOINTS } from 'common'
 
 import { accessTokenValidatorMiddleware } from 'src/features/auth'
-import {getUserDataController, RESET_PASSWORD_FIELDS_VALIDATION, resetPasswordController,UPDATE_USER_DATA_FIELDS_VALIDATION,
-  updateUserDataController } from 'src/features/user'
+import {
+  getUserDataController,
+  RESET_PASSWORD_FIELDS_VALIDATION,
+  resetPasswordController,
+  UPDATE_USER_DATA_FIELDS_VALIDATION,
+  updateUserDataController
+} from 'src/features/user'
 
 import { multerUploader } from 'src/entities/media'
 

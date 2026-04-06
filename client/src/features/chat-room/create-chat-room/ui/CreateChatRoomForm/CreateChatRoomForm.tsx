@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { ICreateChatRoomFormProps, useCreateChatRoom, CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room/create-chat-room'
+import { ICreateChatRoomFormProps, useCreateChatRoom, CREATE_CHAT_ROOM_FORM_I18N } from 'src/features/chat-room'
 import { usePickContact } from 'src/features/contact'
 
 import { useI18n } from 'src/entities/settings'

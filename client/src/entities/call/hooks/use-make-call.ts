@@ -1,5 +1,8 @@
 import { useContext, useRef } from 'react'
 
+import { useDispatch } from 'react-redux'
+import Peer, { SignalData } from 'simple-peer'
+
 import {
   SocketActionsType,
   IFrontendUserData,
@@ -11,8 +14,6 @@ import {
   IEventMarkCallAsVideo,
   IEventCallEnded
 } from 'common'
-import { useDispatch } from 'react-redux'
-import Peer, { SignalData } from 'simple-peer'
 
 import { AppDispatchType } from 'src/app/store'
 

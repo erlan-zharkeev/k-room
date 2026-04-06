@@ -1,7 +1,8 @@
 import { useContext, useEffect } from 'react'
 
-import { IEventErrorMessage, IEventAuthError, SocketActionsType } from 'common'
 import { useDispatch } from 'react-redux'
+
+import { IEventErrorMessage, IEventAuthError, SocketActionsType } from 'common'
 
 import { useSocketReconnect } from 'src/features/socket'
 

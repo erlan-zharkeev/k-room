@@ -1,6 +1,6 @@
-import { IUserInfoNotification,SocketActionsType } from 'common'
+import { IUserInfoNotification, SocketActionsType } from 'common'
 
-import { getSocketsByUserIds } from 'src/features/user/shared'
+import { getSocketsByUserIds } from 'src/features/user'
 
 import { getIO } from 'src/shared/lib'
 

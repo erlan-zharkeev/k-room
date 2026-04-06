@@ -29,14 +29,14 @@ export const streamMediaFile = async (
       throw new AppError(StatusEnum.NotFound, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
     }
 
-    res.setHeader('Content-Type', file.contentType || 'application/octet-stream')
+    res.setHeader('Content-Type', file.contentType ?? 'application/octet-stream')
     if (file.uploadDate) res.setHeader('Last-Modified', file.uploadDate.toUTCString())
     const etag = `W/"sha256-${file?.metadata?.sha256}"`
     res.setHeader('ETag', etag)
     const maxAge = opts?.revalidateCache ? '0' : '31536000'
     const mutable = opts?.revalidateCache ? 'must-revalidate' : 'immutable'
     res.setHeader('Cache-Control', `public, max-age=${maxAge}, ${mutable}`)
-    res.setHeader('X-Media-Kind', file.metadata?.kind || '')
+    res.setHeader('X-Media-Kind', file.metadata?.kind ?? '')
     if (opts?.asAttachment) {
       res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(file.filename)}"`)
     }

@@ -18,7 +18,6 @@ export const useSound = () => {
 
     if (soundInstances.current[key]) {
       soundInstances.current[key].stop()
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete soundInstances.current[key]
     }
 
@@ -28,7 +27,7 @@ export const useSound = () => {
       html5: true,
       loop,
       onplay: () => {
-        // @ts-expect-error
+        // @ts-expect-error Howl internal _sounds property is not typed in the public API
         const audioNode = sound._sounds?.[0]?._node
         if (typeof audioNode?.setSinkId === 'function' && selectedAudioOutputDeviceId) {
           audioNode.setSinkId(selectedAudioOutputDeviceId).catch((err: unknown) => {
@@ -37,7 +36,6 @@ export const useSound = () => {
         }
       },
       onend: () => {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         if (!loop) delete soundInstances.current[key]
       }
     })
@@ -50,7 +48,6 @@ export const useSound = () => {
     const sound = soundInstances.current[key]
     if (sound) {
       sound.stop()
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete soundInstances.current[key]
     }
   }

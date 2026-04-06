@@ -1,5 +1,6 @@
-import { APP_LANGUAGE, AppLanguageType, normalizeTimestamp } from 'common'
 import moment from 'moment'
+
+import { APP_LANGUAGE, AppLanguageType, normalizeTimestamp } from 'common'
 
 import 'moment/locale/ru'
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import './style.scss'
 
-import { IDontShowNotificationAgainBtnProps, DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification/ui'
+import { IDontShowNotificationAgainBtnProps, DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/entities/notification'
 import { useSettings, useI18n } from 'src/entities/settings'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'

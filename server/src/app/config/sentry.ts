@@ -16,7 +16,7 @@ export const initSentry = () => {
     environment: SERVER_ENV.sentryEnvironment,
     release: SERVER_ENV.appVersion,
     debug: false,
-    tracesSampleRate: SERVER_ENV.isDev  ? 1 : 0.1,
+    tracesSampleRate: SERVER_ENV.isDev ? 1 : 0.1,
     beforeSend(event, hint) {
       const originalException = hint.originalException
       if (originalException instanceof Error) {

@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 
-import { AppIconNameType } from 'src/shared/ui/AppIcon'
-import { BaseSizeModifierType, AvatarShapeModifierType } from 'src/shared/ui/config'
+import { AppIconNameType, BaseSizeModifierType, AvatarShapeModifierType } from 'src/shared/ui'
 
 export interface IAppAvatarProps {
   online?: boolean

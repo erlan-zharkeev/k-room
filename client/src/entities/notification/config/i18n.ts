@@ -21,7 +21,7 @@ export const NOTIFICATION_I18N = defineI18n({
     ({
       en: `The maximum number of attached images should not exceed ${max}`,
       ru: `Максимальное количество прикрепленных изображений не должно превышать ${max}`
-    }) as const,
+    } as const),
   failedToConnectToDevice: {
     en: 'Failed to connect to device, check if device is plugged in',
     ru: 'Не удалось подключиться к устройству, проверьте, подключено ли оно'
@@ -42,7 +42,7 @@ export const NOTIFICATION_I18N = defineI18n({
     ({
       en: `Image size must be less than ${mb} MB`,
       ru: `Размер изображения должен быть меньше ${mb} МБ`
-    }) as const,
+    } as const),
   socketDisconnected: {
     en: 'Socket disconnected',
     ru: 'Соединение с сокетом разорвано'

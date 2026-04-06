@@ -1,5 +1,5 @@
-import type { Router } from 'express'
 import MongoStore from 'connect-mongo'
+import type { Router } from 'express'
 
 import { ADMIN_INFO_NOTIFICATION_OPTIONS } from 'src/features/info-notification'
 

@@ -10,12 +10,7 @@ import {
 
 import { ChatRoomModel } from 'src/entities/chat-room'
 import { MessageModel } from 'src/entities/message'
-import {
-  FIXTURE_CONTACT_USERNAMES,
-  FIXTURE_GROUPS,
-  FIXTURE_MESSAGE_COUNT,
-  UserModel
-} from 'src/entities/user'
+import { FIXTURE_CONTACT_USERNAMES, FIXTURE_GROUPS, FIXTURE_MESSAGE_COUNT, UserModel } from 'src/entities/user'
 
 import { ERLAN_ID, TOLIK_ID, USER_BY_USERNAME } from './constants'
 

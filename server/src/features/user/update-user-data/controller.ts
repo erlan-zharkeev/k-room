@@ -20,11 +20,7 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
     const userId = req.app.locals.id
 
     if (!username && !avatarFileBuffer) {
-      return throwHTTPError(
-        StatusEnum.BadRequest,
-        res,
-        localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language)
-      )
+      return throwHTTPError(StatusEnum.BadRequest, res, localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language))
     }
 
     const user = await UserModel.findById(userId)
@@ -53,7 +49,7 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       const updatedUserData = await UserModel.findById(userId).lean()
       if (!updatedUserData) return
       socketIds.forEach((socketId) => {
-getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
+        getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
       })
     }
 
