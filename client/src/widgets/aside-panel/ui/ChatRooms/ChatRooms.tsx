@@ -2,9 +2,10 @@ import './style.scss'
 
 import { CHAT_ROOMS_WIDGET_I18N } from 'src/widgets/aside-panel'
 
-import { ChatRoomList, CreateChatRoomBtn } from 'src/features/chat-room'
+import { ChatRoomList } from 'src/features/chat-room-list'
+import { CreateChatRoomBtn } from 'src/features/create-chat-room'
 
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { AppHeader } from 'src/shared/ui'
 
 export const ChatRooms = () => {

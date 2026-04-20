@@ -1,2 +1,2 @@
 export * from './AppSwitch'
-export * from './config'
+export * from './internals'

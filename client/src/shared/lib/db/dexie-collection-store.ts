@@ -5,7 +5,7 @@ import unset from 'lodash/unset'
 
 import { ICollectionMergeManyOptions, IndexableType, MutableType } from 'src/shared/lib'
 
-import { cloneMutable } from './lib'
+import { cloneMutable } from './helpers'
 
 export const dexieCollectionStore = <T extends { id: string | number }>(table: Table<T>) => {
   type Item = T

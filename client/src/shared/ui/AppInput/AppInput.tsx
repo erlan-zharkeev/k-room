@@ -2,10 +2,10 @@ import './style.scss'
 import { ChangeEvent, useMemo, useState, forwardRef, ForwardedRef } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { APP_INPUT_I18N, AppButton, AppIcon } from 'src/shared/ui'
 
-import { IAppInputProps } from './config'
+import { IAppInputProps } from './internals'
 
 export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
   (

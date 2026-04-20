@@ -2,7 +2,7 @@ import './style.scss'
 
 import { createClassNameWithModifiers, imageToBase64 } from 'src/shared/lib'
 import { useNotification } from 'src/shared/notification'
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { APP_AVATAR_LOADER_I18N, AppAvatar, AppButton, IAvatarLoaderProps } from 'src/shared/ui'
 
 export const AppAvatarLoader = ({

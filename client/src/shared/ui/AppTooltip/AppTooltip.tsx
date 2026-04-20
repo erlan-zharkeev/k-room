@@ -1,7 +1,7 @@
 import { Tooltip } from 'antd'
 import { TooltipPlacement } from 'antd/es/tooltip'
 
-import { useSettings } from 'src/shared/settings'
+import { useSettings } from 'src/shared/preferences'
 
 export const AppTooltip = ({
   text,

@@ -1,8 +1,9 @@
-import { ProfileInfo } from 'src/entities/profile-info'
 import { IUserProfileProps, useUser } from 'src/entities/user'
 
-export const UserProfile = (props: IUserProfileProps) => {
-  const { username, email, avatarPath } = useUser()
+import { ProfileInfo } from 'src/shared/ui'
+
+export const UserProfile = ({ avatarPath, ...props }: IUserProfileProps) => {
+  const { username, email } = useUser()
 
   return (
     <ProfileInfo

@@ -3,8 +3,8 @@ import { useContext } from 'react'
 
 import { CALL_MODAL_VIDEO_I18N } from 'src/entities/call'
 
+import { useI18n } from 'src/shared/preferences'
 import { RefsContext } from 'src/shared/providers'
-import { useI18n } from 'src/shared/settings'
 import { useTypedSelector } from 'src/shared/store'
 import { AppAvatar } from 'src/shared/ui'
 

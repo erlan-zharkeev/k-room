@@ -6,7 +6,7 @@ import { IImageObject } from 'common'
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
 import { generateUUIDv4, imageToBase64 } from 'src/shared/lib'
 import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import {
   AppAvatar,
   AppButton,

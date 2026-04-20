@@ -1,2 +1,2 @@
 export * from './AppScrollContainer'
-export * from './config'
+export * from './internals'

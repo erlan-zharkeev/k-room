@@ -2,10 +2,10 @@ import './style.scss'
 
 import { CHAT_ROOM_STUB_I18N } from 'src/widgets/chat-room'
 
-import { useContentTabSelect } from 'src/features/content-tab'
+import { useContentTabSelect } from 'src/features/select-content-tab'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { useSettings, useI18n } from 'src/shared/settings'
+import { useSettings, useI18n } from 'src/shared/preferences'
 import { AppText } from 'src/shared/ui'
 
 export const ChatRoomStub = () => {

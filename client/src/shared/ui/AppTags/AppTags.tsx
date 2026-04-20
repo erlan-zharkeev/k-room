@@ -3,7 +3,7 @@ import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppButton, AppIcon, AppScrollContainer, AppText } from 'src/shared/ui'
 
-import { IAppTagsProps } from './config'
+import { IAppTagsProps } from './internals'
 
 export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedIds, disabled }: IAppTagsProps) => {
   const classNames = createClassNameWithModifiers({ rootClass: 'app-tags', modifiers: [onElementClick && 'clickable'] })

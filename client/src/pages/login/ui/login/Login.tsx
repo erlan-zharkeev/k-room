@@ -1,6 +1,6 @@
 import { AuthTabsLayout } from 'src/widgets/auth-tabs-layout'
 
-import { LoginForm, useLogin, useFirebase } from 'src/features/auth'
+import { LoginForm, useLogin, useFirebase } from 'src/features/login'
 
 export const Login = () => {
   const { onLogin, isLoading } = useLogin()

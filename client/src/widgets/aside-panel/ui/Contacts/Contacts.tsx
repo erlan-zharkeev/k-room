@@ -2,9 +2,10 @@ import './style.scss'
 
 import { CONTACTS_WIDGET_I18N } from 'src/widgets/aside-panel'
 
-import { ContactList, SearchContact } from 'src/features/contact'
+import { ContactList } from 'src/features/contact-list'
+import { SearchContact } from 'src/features/search-contact'
 
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { AppHeader } from 'src/shared/ui'
 
 export const Contacts = () => {

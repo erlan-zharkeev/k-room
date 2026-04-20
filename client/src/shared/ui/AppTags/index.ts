@@ -1,2 +1,2 @@
 export * from './AppTags'
-export * from './config'
+export * from './internals'

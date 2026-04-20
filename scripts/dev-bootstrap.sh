@@ -1,16 +1,9 @@
 #!/bin/zsh
 
-export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-  . "$NVM_DIR/nvm.sh"
-else
-  echo "nvm not found at $NVM_DIR" >&2
-  exit 1
-fi
+ROOT_DIR="${0:A:h:h}"
 
-if [ -f ".nvmrc" ]; then
-  nvm use >/dev/null || nvm install
-fi
+cd "$ROOT_DIR" || exit $?
+. "$ROOT_DIR/scripts/use-node-version.sh" || exit $?
 
 if [ -f ".env.development" ]; then
   while IFS= read -r line; do

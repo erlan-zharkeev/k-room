@@ -5,7 +5,7 @@ import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendRespo
 import { useApiInterceptor, axios, IDoRequestOpts, RequestPayloadType, RequestType } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
 import { useNotification } from 'src/shared/notification'
-import { useSettings } from 'src/shared/settings'
+import { useSettings } from 'src/shared/preferences'
 
 export const useApi = () => {
   const notifications = useNotification()

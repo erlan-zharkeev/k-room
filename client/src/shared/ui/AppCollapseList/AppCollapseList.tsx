@@ -6,7 +6,7 @@ import { Badge } from 'antd'
 import { useTimeout, createClassNameWithModifiers } from 'src/shared/lib'
 import { AppHeader, AppIcon } from 'src/shared/ui'
 
-import { IAppCollapseProps } from './config'
+import { IAppCollapseProps } from './internals'
 
 export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps) => {
   const [openElId, setOpenIElId] = useState<string | null>(null)

@@ -9,6 +9,8 @@
     "husky-prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:fix": "prettier --write .",
+    "lint:fsd": "CHOKIDAR_USEPOLLING=1 steiger ./client/src",
+    "lint:fsd:watch": "CHOKIDAR_USEPOLLING=1 steiger ./client/src --watch",
     "lint:fix": "npm --prefix client run lint:fix-all && npm --prefix server run lint:fix-es",
     "e2e": "playwright test -c config/playwright/playwright.config.ts",
     "e2e:ui": "playwright test -c config/playwright/playwright.config.ts --ui",
@@ -16,9 +18,11 @@
     "test": "npm --prefix client run test && npm --prefix server run test --if-present"
   },
   "devDependencies": {
+    "@feature-sliced/steiger-plugin": "^0.5.7",
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
     "husky": "^8.0.2",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "steiger": "^0.5.11"
   }
 }

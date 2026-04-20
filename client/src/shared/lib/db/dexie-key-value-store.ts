@@ -2,8 +2,8 @@ import { Table } from 'dexie'
 import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 
-import { MutableType, IndexableType, KvItem, IKvQueryState, UseResult, IUseStateResult } from './config'
-import { cloneMutable } from './lib'
+import { cloneMutable } from './helpers'
+import { MutableType, IndexableType, KvItem, IKvQueryState, UseResult, IUseStateResult } from './internals'
 
 export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, keyValue: string) => {
   const wrap = (data: T): KvItem<T> => ({ ...data, __key: keyValue })

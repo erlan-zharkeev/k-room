@@ -1,20 +1,24 @@
 import './style.scss'
-import { WidgetWrapper } from 'src/widgets/widget-wrapper'
+import { ReactNode } from 'react'
 
-import { LogoutButton } from 'src/features/auth'
-import { InfoMessageBtn } from 'src/features/info-notification'
+import { InfoMessageBtn } from 'src/features/info-notification-btn'
+import { LogoutButton } from 'src/features/logout'
 
-import { UserProfile } from 'src/entities/user'
+import { useLiveMediaUrl } from 'src/entities/media-file'
+import { UserProfile, useUser } from 'src/entities/user'
 
-import { ConnectionStatusInfo } from '../../../connection-status-info'
+import { WidgetWrapper } from 'src/shared/ui'
 
-export const TopBar = () => {
+export const TopBar = ({ children }: { children?: ReactNode }) => {
+  const { id } = useUser()
+  const avatarPath = useLiveMediaUrl(`avatar.${id}`)
+
   return (
     <WidgetWrapper name="top-bar">
       <div className="top-bar__content">
-        <UserProfile />
+        <UserProfile avatarPath={avatarPath} />
         <div className="top-bar__action-btns">
-          <ConnectionStatusInfo />
+          {children}
           <InfoMessageBtn />
           <LogoutButton />
         </div>

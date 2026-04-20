@@ -5,9 +5,9 @@ import { FileLoaderValueType } from 'src/shared/config'
 import { useValidate, ValidateRuleType } from 'src/shared/lib'
 import { AppButton, AppElementPicker, AppFileLoader, AppFormItem, AppHeader, AppInput, AppSwitch } from 'src/shared/ui'
 
-import { AppFormDataType, AppFormFieldType, AppFormFieldValueType, IAppFormProps } from './config'
+import { AppFormDataType, AppFormFieldType, AppFormFieldValueType, IAppFormProps } from './internals'
 
-export * from './config'
+export * from './internals'
 
 const getDefaultValue = (inputType: AppFormFieldType['inputType']): AppFormFieldValueType => {
   switch (inputType) {

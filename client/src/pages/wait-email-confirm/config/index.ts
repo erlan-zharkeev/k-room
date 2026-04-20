@@ -1,1 +1,1 @@
-export * from 'src/pages/wait-email-confirm/ui/WaitEmailConfirm/config'
+export * from 'src/pages/wait-email-confirm/ui/WaitEmailConfirm/internals'

@@ -1,1 +1,21 @@
-export * from 'src/shared/call/model'
+export {
+  callsSlice,
+  updateAllList,
+  setCurrentCallAccepted,
+  initModalToCall,
+  closeCallModal,
+  setMinify,
+  unsetMinify,
+  setCallVideo,
+  setCallAudio,
+  updateInterlocutorSettings,
+  setCallStartedAt,
+  toggleSelfStreamIsLoading,
+  setShowCallModal,
+  updateCalls,
+  updateCall,
+  setCallId,
+  markCurrentCallAsVideo,
+  setCallSettingsLoading,
+  resetCallStore
+} from 'src/shared/call-core'

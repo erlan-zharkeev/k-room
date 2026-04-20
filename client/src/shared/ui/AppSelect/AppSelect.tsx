@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { IAppSelectProps } from './config'
+import { IAppSelectProps } from './internals'
 
 export const AppSelect = ({ options, value, onChange, multiple = false, disabled = false }: IAppSelectProps) => {
   return (

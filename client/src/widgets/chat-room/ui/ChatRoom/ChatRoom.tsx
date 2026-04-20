@@ -3,12 +3,14 @@ import { useRef, useState } from 'react'
 
 import { CHAT_ROOM_I18N, ChatRoomHeader, ChatRoomStub, ChatRoomFooter } from 'src/widgets/chat-room'
 
-import { ChatRoomSettingsModal, useChatRoomSelect } from 'src/features/chat-room'
-import { MessageList, ReplyMessage } from 'src/features/message'
+import { ChatRoomSettingsModal } from 'src/features/chat-room-settings'
+import { MessageList } from 'src/features/message-list'
+import { ReplyMessage } from 'src/features/reply-message'
+import { useChatRoomSelect } from 'src/features/select-chat-room'
 
 import { useChatRoom } from 'src/entities/chat-room'
 
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { AppModal } from 'src/shared/ui'
 
 export const ChatRoom = () => {

@@ -1,2 +1,2 @@
 export * from './AppCollapseList'
-export * from './config'
+export * from './internals'

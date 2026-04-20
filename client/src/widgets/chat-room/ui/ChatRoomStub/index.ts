@@ -1,2 +1,2 @@
 export * from './ChatRoomStub'
-export * from './config'
+export * from './internals'

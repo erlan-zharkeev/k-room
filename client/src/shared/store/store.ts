@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
-import { callsSlice } from 'src/shared/call'
+import { callsSlice } from 'src/shared/call-core'
 import { systemSlice } from 'src/shared/system'
 
 const reducers = combineReducers({

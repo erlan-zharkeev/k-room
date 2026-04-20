@@ -1,2 +1,2 @@
 export * from './CallModalVideo'
-export * from './config'
+export * from './internals'

@@ -1,1 +1,1 @@
-export * from 'src/pages/privacy-policy/ui/PrivacyPolicy/config'
+export * from 'src/pages/privacy-policy/ui/PrivacyPolicy/internals'

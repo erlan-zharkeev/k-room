@@ -1,3 +1,3 @@
 export * from './store'
-export * from './config'
+export * from './internals'
 export * from './hook'

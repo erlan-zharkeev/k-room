@@ -7,11 +7,11 @@ import { REQ_STATUS, ROUTE_NAMES, AUTH_ENDPOINTS, IConfirmEmailResponse } from '
 
 import { EMAIL_CONFIRMATION_I18N } from 'src/pages/email-confirmation'
 
-import { useLogout } from 'src/features/auth'
+import { useLogout } from 'src/features/logout'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { AppIcon, AppButton, AppText } from 'src/shared/ui'
 
 export const EmailConfirmation = () => {

@@ -1,73 +1,46 @@
-import './style.scss'
-
-import { useEffect, useState } from 'react'
-
 import { UnknownCallbackType } from 'common'
 
-import { isRoomPrivate } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
-import { useMedia } from 'src/entities/media'
-import { useMessage } from 'src/entities/message'
-import { ProfileInfo } from 'src/entities/profile-info'
-
-import { FChatRoomType } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { BaseSizeModifierType } from 'src/shared/ui'
+import { BaseSizeModifierType, ProfileInfo } from 'src/shared/ui'
 
 export const ChatRoomPreview = ({
-  room,
+  avatar,
+  title,
+  description,
+  online,
   onClick,
   headerMode = false,
   titleSize,
-  isRoomSelected
+  isPrivate = false,
+  isRoomSelected = false
 }: {
-  room: FChatRoomType
+  avatar?: string
+  title: string
+  description?: string
+  online?: boolean
   onClick?: UnknownCallbackType
   headerMode?: boolean
   titleSize?: BaseSizeModifierType
+  isPrivate?: boolean
   isRoomSelected?: boolean
 }) => {
-  const { getLiveMediaUrl } = useMedia()
-  const { contacts } = useContact()
-  const { getById } = useMessage()
-  const isPrivate = isRoomPrivate(room)
-
-  const chatRoomAvatarShape = isPrivate ? 'circle-shape' : 'square-shape'
-  const chatRoomStubIcon = isPrivate ? 'user-stub' : 'image-stub'
-  const onClickHandler = isPrivate ? undefined : onClick
-
   const className = createClassNameWithModifiers({
     rootClass: 'chat-room-preview',
     modifiers: [headerMode && 'header-mode', isRoomSelected && 'selected']
   })
 
-  const avatarPath = getLiveMediaUrl(room.avatarId)
-  const privateRoomContact = isPrivate ? contacts.find((contact) => contact.id === room.users[0]) : undefined
-  const lastMessageBody = room.lastMessageId ? getById(room.lastMessageId)?.body ?? '' : ''
-
-  const [chatName, setChatName] = useState(room.chatName ?? '')
-
-  useEffect(() => {
-    if (!room.chatName) {
-      const contactData = contacts.find((contact) => contact.id === room.users[0])
-      if (contactData) {
-        setChatName(contactData.username)
-      }
-    }
-  }, [room, contacts])
-
   return (
     <div className={className}>
       <ProfileInfo
         titleSize={titleSize}
-        avatar={avatarPath}
-        title={chatName}
-        description={!headerMode ? lastMessageBody : ''}
-        online={privateRoomContact?.online}
-        shape={chatRoomAvatarShape}
-        stubIconName={chatRoomStubIcon}
+        avatar={avatar}
+        title={title}
+        description={!headerMode ? description : ''}
+        online={online}
+        shape={isPrivate ? 'circle-shape' : 'square-shape'}
+        stubIconName={isPrivate ? 'user-stub' : 'image-stub'}
         showBadge={isPrivate}
-        onClick={onClickHandler}
+        onClick={isPrivate ? undefined : onClick}
       />
     </div>
   )

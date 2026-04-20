@@ -6,7 +6,7 @@ import { Badge, Image } from 'antd'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppIcon } from 'src/shared/ui'
 
-import { IAppAvatarProps, IAvatarBodyProps, IBadgeWrapperProps } from './config'
+import { IAppAvatarProps, IAvatarBodyProps, IBadgeWrapperProps } from './internals'
 
 const AvatarBody = ({ src, stubIconName, haveSource, setHaveSource, preview = true }: IAvatarBodyProps) => {
   return !haveSource ? (
