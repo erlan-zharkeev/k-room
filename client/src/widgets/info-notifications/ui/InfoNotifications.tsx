@@ -2,11 +2,11 @@ import './style.scss'
 
 import { Fragment, createElement } from 'react'
 
-import { useMarkInfoNotificationAsRead } from 'src/features/info-notification'
+import { useMarkInfoNotificationAsRead } from 'src/features/mark-info-notification-as-read'
 
 import { INFO_NOTIFICATIONS_I18N, useInfoNotification } from 'src/entities/info-notification'
 
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { AppCollapseList, AppHeader } from 'src/shared/ui'
 
 export const InfoNotification = () => {

@@ -1,2 +1,2 @@
 export * from './ChatRoomFooter'
-export * from './config'
+export * from './internals'

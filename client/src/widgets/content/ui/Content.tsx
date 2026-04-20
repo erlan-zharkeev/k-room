@@ -1,12 +1,9 @@
 import './style.scss'
 
-import { CONTENT_COMPONENT_MAP } from 'src/widgets/content'
-import { WidgetWrapper } from 'src/widgets/widget-wrapper'
+import { ReactNode } from 'react'
 
-import { useSettings } from 'src/shared/settings'
+import { WidgetWrapper } from 'src/shared/ui'
 
-export const Content = () => {
-  const { selectedContentTab } = useSettings()
-
-  return <WidgetWrapper name="content">{CONTENT_COMPONENT_MAP[selectedContentTab]}</WidgetWrapper>
+export const Content = ({ children }: { children?: ReactNode }) => {
+  return <WidgetWrapper name="content">{children}</WidgetWrapper>
 }

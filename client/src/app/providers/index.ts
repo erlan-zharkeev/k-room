@@ -1,2 +1,2 @@
-export * from './ui'
-export * from './config'
+export * from './views'
+export * from './internals'

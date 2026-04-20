@@ -8,7 +8,7 @@ import {
   IAppNotification,
   NotificationType
 } from 'src/shared/notification'
-import { useSettings } from 'src/shared/settings'
+import { useSettings } from 'src/shared/preferences'
 import { useSystem } from 'src/shared/system'
 import { AppLogoIcon } from 'src/shared/ui'
 

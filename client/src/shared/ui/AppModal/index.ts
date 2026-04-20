@@ -1,2 +1,2 @@
 export * from './AppModal'
-export * from './config'
+export * from './internals'

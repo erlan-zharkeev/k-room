@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { IAppLinkProps } from './config'
+import { IAppLinkProps } from './internals'
 
 export const AppLink = ({
   text,

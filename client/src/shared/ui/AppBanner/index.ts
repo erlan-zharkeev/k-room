@@ -1,2 +1,2 @@
 export * from './AppBanner'
-export * from './config'
+export * from './internals'

@@ -1,0 +1,19 @@
+.emoji-dropdown {
+  .ant-dropdown-menu-title-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    color: unset;
+  }
+
+  .ant-dropdown-menu .ant-dropdown-menu-item:hover {
+    background-color: var(--dark-gray-transparent-3);
+  }
+
+  .emoji-dropdown__icon {
+    font-size: 30px;
+  }
+}

@@ -1,5 +1,5 @@
 import './style.scss'
-import { IErrorBucketProps } from './config'
+import { IErrorBucketProps } from './internals'
 
 export const AppErrorBucket = ({ errors }: IErrorBucketProps) => {
   return (

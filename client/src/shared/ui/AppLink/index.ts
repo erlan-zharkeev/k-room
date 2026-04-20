@@ -1,2 +1,2 @@
 export * from './AppLink'
-export * from './config'
+export * from './internals'

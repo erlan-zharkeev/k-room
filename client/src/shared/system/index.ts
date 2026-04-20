@@ -1,3 +1,3 @@
-export * from './model'
+export * from './state'
 export * from './hooks'
-export * from './config'
+export * from './internals'

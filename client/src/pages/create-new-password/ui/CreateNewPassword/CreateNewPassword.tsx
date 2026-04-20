@@ -1,5 +1,5 @@
 import './style.scss'
-import { CreateNewPasswordBody } from 'src/features/auth'
+import { CreateNewPasswordBody } from 'src/features/create-new-password'
 
 export const CreateNewPassword = () => {
   return (

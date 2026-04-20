@@ -1,4 +1,4 @@
 export * from './CallModalBody'
 export * from './components'
-export * from './config'
+export * from './internals'
 export * from './types'

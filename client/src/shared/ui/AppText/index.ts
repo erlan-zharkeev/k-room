@@ -1,2 +1,2 @@
 export * from './AppText'
-export * from './config'
+export * from './internals'

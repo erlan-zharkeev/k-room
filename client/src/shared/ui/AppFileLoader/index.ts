@@ -1,2 +1,2 @@
 export * from './AppFileLoader'
-export * from './config'
+export * from './internals'

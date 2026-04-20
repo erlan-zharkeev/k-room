@@ -2,7 +2,7 @@ import './style.scss'
 import { ReactNode } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { useSettings } from 'src/shared/settings'
+import { useSettings } from 'src/shared/preferences'
 
 export const WidgetWrapper = ({
   name,

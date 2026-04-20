@@ -1,2 +1,2 @@
 export * from './AppClickOutside'
-export * from './config'
+export * from './internals'

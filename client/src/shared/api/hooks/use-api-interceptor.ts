@@ -5,7 +5,7 @@ import { IBackendResponse, ROUTE_NAMES, REQ_STATUS, ReqStatusType } from 'common
 
 import { API_I18N, createApiError } from 'src/shared/api'
 import { frontCaptureSentryException, log } from 'src/shared/lib'
-import { useI18n, useSettings } from 'src/shared/settings'
+import { useI18n, useSettings } from 'src/shared/preferences'
 
 import { useNotification } from '../../notification'
 

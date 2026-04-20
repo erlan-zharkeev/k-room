@@ -1,11 +1,9 @@
 import './style.scss'
 
-import { WidgetWrapper } from 'src/widgets/widget-wrapper'
+import { ContentTab } from 'src/features/contact-tab'
+import { OpenDeviceSettingsButton } from 'src/features/device-settings'
 
-import { ContentTab } from 'src/features/content-tab'
-import { OpenDeviceSettingsButton } from 'src/features/device'
-
-import { AppIcon } from 'src/shared/ui'
+import { AppIcon, WidgetWrapper } from 'src/shared/ui'
 
 export const AsideBar = () => {
   return (

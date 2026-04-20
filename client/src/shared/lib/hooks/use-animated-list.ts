@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { IAnimatedListItem } from './config'
+import { IAnimatedListItem } from './internals'
 
 export const useAnimatedList = <T extends object>(
   items: T[],

@@ -1,2 +1,2 @@
 export * from './AppForm'
-export * from './config'
+export * from './internals'

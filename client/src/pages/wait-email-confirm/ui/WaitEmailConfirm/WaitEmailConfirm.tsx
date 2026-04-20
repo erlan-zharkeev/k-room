@@ -9,7 +9,7 @@ import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm'
 
 import { useApi } from 'src/shared/api'
 import { useQuery, useCounter, getNextReqInterval } from 'src/shared/lib'
-import { useI18n } from 'src/shared/settings'
+import { useI18n } from 'src/shared/preferences'
 import { AppButton } from 'src/shared/ui'
 
 export const WaitEmailConfirm = () => {

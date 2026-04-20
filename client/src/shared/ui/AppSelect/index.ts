@@ -1,2 +1,2 @@
 export * from './AppSelect'
-export * from './config'
+export * from './internals'

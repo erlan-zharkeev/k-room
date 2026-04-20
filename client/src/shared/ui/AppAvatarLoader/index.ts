@@ -1,2 +1,2 @@
 export * from './AppAvatarLoader'
-export * from './config'
+export * from './internals'

@@ -21,10 +21,10 @@ import {
 } from 'src/entities/call'
 
 import { socket } from 'src/shared/api'
-import { callCounter } from 'src/shared/call'
+import { callCounter } from 'src/shared/call-core'
 import { useCounter } from 'src/shared/lib'
+import { useI18n } from 'src/shared/preferences'
 import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
-import { useI18n } from 'src/shared/settings'
 import { AppDispatchType, useTypedSelector } from 'src/shared/store'
 import { AppButton, AppAvatar } from 'src/shared/ui'
 
