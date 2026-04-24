@@ -1,0 +1,37 @@
+import { useEffect } from 'react'
+
+import { useContact } from 'src/entities/contact'
+import { useSyncMedia } from 'src/entities/media-file'
+import { useUser } from 'src/entities/user'
+
+export const useSyncAvatars = () => {
+  const { contacts } = useContact()
+  const { sync } = useSyncMedia()
+  const user = useUser()
+
+  const syncContactAvatars = () => {
+    contacts.forEach((contact) => {
+      sync(`avatar.${contact.id}`)
+    })
+  }
+
+  const syncUserAvatar = () => {
+    sync(`avatar.${user.id}`)
+  }
+
+  useEffect(() => {
+    if (!user.id) return
+    syncUserAvatar()
+  }, [user.id])
+
+  useEffect(() => {
+    if (!contacts.length || !user.id) return
+    syncContactAvatars()
+  }, [
+    contacts
+      .map((contact) => contact.id)
+      .sort((left, right) => left.localeCompare(right))
+      .join('|'),
+    user.id
+  ])
+}

@@ -1,9 +1,15 @@
-export const errorToMessage = (err: unknown, fallbackErrorText?: string): string => {
-  if (err instanceof Error) return err.message
-  if (typeof err === 'string') return err
+export const errorToMessage = (error: unknown, fallbackMessage = 'Unknown error') => {
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  if (typeof error === 'string') {
+    return error
+  }
+
   try {
-    return JSON.stringify(err)
+    return JSON.stringify(error)
   } catch {
-    return fallbackErrorText ?? 'Unknown error'
+    return fallbackMessage
   }
 }

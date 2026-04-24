@@ -1,28 +1,63 @@
 {
   "name": "k-room",
+  "private": true,
   "version": "1.0.0",
   "repository": "git@gitlab.com:k-room/k-room.git",
-  "author": "<zharkeev.post@gmail.com>",
+  "author": "<erlan.zharkeev@gmail.com>",
   "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "workspaces": [
+    "client",
+    "shared",
+    "server"
+  ],
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@firebase/util",
+      "@nestjs/core",
+      "@parcel/watcher",
+      "@swc/core",
+      "es5-ext",
+      "esbuild",
+      "protobufjs",
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
   "scripts": {
     "dev": "zsh scripts/dev.sh",
+    "dev:server-pane": "zsh scripts/dev-pane.sh server",
+    "dev:client-pane": "zsh scripts/dev-pane.sh client",
     "husky-prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:fix": "prettier --write .",
-    "lint:fsd": "CHOKIDAR_USEPOLLING=1 steiger ./client/src",
-    "lint:fsd:watch": "CHOKIDAR_USEPOLLING=1 steiger ./client/src --watch",
-    "lint:fix": "npm --prefix client run lint:fix-all && npm --prefix server run lint:fix-es",
-    "e2e": "playwright test -c config/playwright/playwright.config.ts",
-    "e2e:ui": "playwright test -c config/playwright/playwright.config.ts --ui",
-    "check": "npm --prefix client run lint:all && npm --prefix client run build && npm --prefix server run lint:es && npm --prefix server run typecheck && npm --prefix server run build && npm run test && prettier --check .",
-    "test": "npm --prefix client run test && npm --prefix server run test --if-present"
+    "lint:style": "pnpm --dir client run lint:style",
+    "lint:fsd": "pnpm --dir client run lint:fsd",
+    "lint:fsd:watch": "pnpm --dir client run lint:fsd:watch",
+    "lint:fix": "pnpm --dir client run lint:fix-es && pnpm --dir client run lint:fix-style && pnpm --dir server run lint:fix-es",
+    "e2e": "playwright test -c playwright.config.ts",
+    "e2e:ui": "playwright test -c playwright.config.ts --ui",
+    "check": "pnpm --dir client run lint:fsd && pnpm --dir client run lint:es && pnpm --dir client run lint:style && pnpm --dir client run build && pnpm --dir server run lint:es && pnpm --dir server run typecheck && pnpm --dir server run build && pnpm run test && prettier --check .",
+    "test": "pnpm --dir server run --if-present test"
   },
   "devDependencies": {
-    "@feature-sliced/steiger-plugin": "^0.5.7",
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
+    "eslint": "8.57.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-vue": "^10.9.0",
     "husky": "^8.0.2",
+    "postcss-html": "^1.8.1",
     "prettier": "^2.8.8",
-    "steiger": "^0.5.11"
+    "stylelint": "^17.6.0",
+    "stylelint-config-clean-order": "^8.0.1",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "vue-eslint-parser": "^10.4.0"
   }
 }

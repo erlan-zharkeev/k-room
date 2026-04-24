@@ -4,7 +4,9 @@ TEMP_CI_CD_AGREEMENTS.md
 .vscode
 .DS_Store
 node_modules
-config/dev-certs
+dev-certs
+pnpm-debug.log*
+.pnpm-store
 
 client/node_modules
 client/build
@@ -15,12 +17,19 @@ server/package-lock.log
 server/build
 server/eslintcache
 server/.adminjs
+server/tsconfig.tsbuildinfo
 
-common/node_modules
-common/package-lock.log
-common/dist
-common/eslintcache
-common/tsconfig.tsbuildinfo
+shared/node_modules
+shared/package-lock.log
+shared/dist
+shared/eslintcache
+shared/tsconfig.tsbuildinfo
 
 e2e/playwright-report
 e2e/test-results
+
+legacy/**/build
+legacy/**/dev-dist
+legacy/**/.adminjs
+legacy/**/*.tsbuildinfo
+scripts/deploy/certs

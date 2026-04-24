@@ -1,0 +1,29 @@
+import { captureException, captureMessage, isInitialized } from '@sentry/node'
+import { ISentryErrorContext, shouldIgnoreSentryError } from 'common'
+
+export const serverCaptureSentryException = (error: unknown) => {
+  if (!isInitialized()) return
+
+  captureException(error)
+}
+
+export const generateSentryError =
+  (kind: 'http-error' | 'socket-error') =>
+  ({ message, silent, status }: ISentryErrorContext) => {
+    if (!isInitialized()) return
+
+    if (shouldIgnoreSentryError({ message, silent, status })) {
+      return
+    }
+
+    captureMessage(message ?? 'Unknown server error', {
+      level: 'error',
+      tags: {
+        kind,
+        ...(typeof status === 'number' ? { status: String(status) } : {})
+      }
+    })
+  }
+
+export const serverCaptureSentryHttpError = generateSentryError('http-error')
+export const serverCaptureSentrySocketError = generateSentryError('socket-error')

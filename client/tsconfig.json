@@ -1,29 +1,21 @@
 {
-  "extends": "../config/tsconfig/base.json",
+  "extends": "../tsconfig.bundler.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "ESNext",
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
-
-    /* Linting */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-
-    /* Custom */
+    "jsx": "preserve",
+    "types": ["vite/client"],
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "baseUrl": ".",
     "paths": {
       "src/*": ["./src/*"],
-      "common": ["../common/index.ts"],
-      "common/*": ["../common/*"]
+      "shared": ["../shared/src/index.ts"],
+      "shared/*": ["../shared/src/*"]
     }
   },
-  "include": ["src/**/*", "vitest.setup.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

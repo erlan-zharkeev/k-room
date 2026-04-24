@@ -1,3 +1,12 @@
 {
-  "extends": "./config/tsconfig/root.json"
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "paths": {
+      "shared": ["./shared/src/index.ts"],
+      "shared/*": ["./shared/src/*"],
+      "e2e/*": ["./e2e/*"]
+    },
+    "types": ["node", "@playwright/test"]
+  },
+  "include": ["./playwright.config.ts", "./e2e/**/*.ts"]
 }

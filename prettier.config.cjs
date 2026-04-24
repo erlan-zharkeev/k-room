@@ -1,1 +1,8 @@
-module.exports = require('./config/prettier/base.json')
+module.exports = {
+  trailingComma: 'none',
+  tabWidth: 2,
+  semi: false,
+  singleQuote: true,
+  printWidth: 120,
+  endOfLine: 'lf'
+}

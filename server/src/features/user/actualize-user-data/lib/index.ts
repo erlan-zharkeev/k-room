@@ -1,1 +1,0 @@
-export * from './transform-user-to-frontend-contact'

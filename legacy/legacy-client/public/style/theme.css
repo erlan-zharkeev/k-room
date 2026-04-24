@@ -1,0 +1,56 @@
+:root {
+  --white: #fff;
+  --error-transparent: #bf566e4d;
+  --modal-overflow-color: rgb(0 0 0 / 75%);
+  --accent: #418fde;
+  --error: rgb(191 86 110);
+  --error-bg: rgb(191 86 110 / 20%);
+  --xs-ui-height: 20px;
+  --small-ui-height: 24px;
+  --medium-ui-height: 30px;
+  --large-ui-height: 36px;
+}
+
+:root[theme='dark'] {
+  --main-bg: #1c1c1c;
+  --contrast-text: #fff;
+  --semi-contrast-text: rgb(255 255 255 / 79.7%);
+  --text: rgb(177 177 177 / 60%);
+  --shadow-outset-start: #0f0f0f;
+  --shadow-outset-end: #292929;
+  --shadow-inset-start: #161616;
+  --shadow-inset-end: #202020;
+  --dark-gray: rgb(59 59 59);
+  --dark-gray-transparent: rgba(59 59 59 / 30%);
+  --dark-gray-transparent-1: rgba(59 59 59 / 35%);
+  --dark-gray-transparent-2: rgba(59 59 59 / 40%);
+  --dark-gray-transparent-3: rgba(59 59 59 / 50%);
+  --error-text: #984343;
+  --success: rgb(38 178 54);
+  --success-bg: rgb(44 186 136 / 25%);
+  --info-bg: rgb(111 116 255 / 18.7%);
+  --warn: rgb(255 213 79);
+  --warn-bg: rgb(255 213 79 / 20%);
+}
+
+:root[theme='light'] {
+  --main-bg: #cfcfcf;
+  --contrast-text: #000;
+  --semi-contrast-text: rgb(74 74 74 / 79.7%);
+  --text: rgb(94 94 94 / 84.7%);
+  --shadow-outset-start: #b6b6b6;
+  --shadow-outset-end: #e8e8e8;
+  --shadow-inset-start: #b6b6b6;
+  --shadow-inset-end: #e8e8e8;
+  --dark-gray: rgb(189 189 189);
+  --dark-gray-transparent: rgba(189 189 189 / 30%);
+  --dark-gray-transparent-1: rgba(189 189 189 / 40%);
+  --dark-gray-transparent-2: rgba(189 189 189 / 50%);
+  --dark-gray-transparent-3: rgba(189 189 189 / 60%);
+  --error-text: rgb(191 86 110);
+  --success: rgb(51 154 0);
+  --success-bg: rgb(44 186 136 / 40%);
+  --info-bg: rgb(0 8 255 / 18.7%);
+  --warn: rgb(217 179 54);
+  --warn-bg: rgb(231 184 37 / 26%);
+}

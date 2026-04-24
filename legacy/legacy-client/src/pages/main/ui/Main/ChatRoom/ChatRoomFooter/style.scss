@@ -1,0 +1,26 @@
+@use '~/global/index' as *;
+
+.chat-room-footer {
+  .app-form {
+    display: flex;
+  }
+
+  .app-form-item {
+    margin-bottom: 0;
+  }
+
+  .app-form-item:nth-child(2) {
+    width: 100%;
+  }
+
+  .app-input input {
+    color: var(--semi-contrast-text);
+  }
+}
+
+.message-with-bind-data-modal {
+  .message-with-bind-data-modal__input-line {
+    display: flex;
+    margin-bottom: 8px;
+  }
+}

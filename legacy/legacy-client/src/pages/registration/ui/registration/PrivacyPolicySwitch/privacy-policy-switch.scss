@@ -1,0 +1,5 @@
+@use '~/global/index' as *;
+
+.privacy-policy-switch--disabled {
+  @include disabled;
+}

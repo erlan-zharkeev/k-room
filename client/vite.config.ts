@@ -1,109 +1,75 @@
 import fs from 'fs'
 import path from 'path'
 
-import react from '@vitejs/plugin-react-swc'
+import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import svgr from 'vite-plugin-svgr'
-
-import type { IEnvCommonVariables } from './../common/env/config/types'
-import { formatAppName } from './../common/shared/lib/format-app-name'
-import { generatePWAConfig } from './vite.pwa.config'
 
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
-  const env = loadEnv(mode, envDir, '')
-  const commonEnv = loadEnv('common', envDir, '') as Record<string, string> | IEnvCommonVariables
+  const commonEnv = loadEnv('common', envDir, '')
+  const modeEnv = loadEnv(mode, envDir, '')
   const isDev = mode === 'development'
-  const { APP_HOST, API_HOST, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
-  const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, SUPPORT_EMAIL } = commonEnv
-  const { name: APP_NAME, version: APP_VERSION } = JSON.parse(
-    fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')
-  )
+  const isTauriDev = process.env.npm_lifecycle_event === 'serve:tauri'
+  const tauriDevHost = process.env.TAURI_DEV_HOST
+  const clientPort = Number(commonEnv.CLIENT_PORT)
+  const appHost = modeEnv.APP_HOST
 
-  const CLIENT_ENV_DATA = {
-    isDev,
-    isE2E: process.env.E2E === 'true',
-    socketPath: SOCKET_PATH,
-    apiPath: API_PATH,
-    appName: formatAppName(APP_NAME),
-    appVersion: APP_VERSION,
-    serverPort: Number(SERVER_PORT),
-    clientPort: Number(CLIENT_PORT),
-    appHost: APP_HOST,
-    apiHost: API_HOST,
-    firebaseApiKey: FIREBASE_API_KEY,
-    sentryDsnClient: 'https://b10bd66a4f5c0bc565edbe0e0d5d9b02@o4511099405139968.ingest.us.sentry.io/4511099424997376',
-    sentryEnvironment: SENTRY_ENVIRONMENT,
-    sentryEnabled: SENTRY_ENABLED === 'true',
-    socketBaseUrl: isDev ? `${APP_HOST}:${SERVER_PORT}` : API_HOST,
-    apiBaseUrl: isDev ? API_PATH : `${API_HOST}${API_PATH}`,
-    themeBg: '#1c1c1c', // DO NOT FORGET TO SYNC WITH theme.css
-    themeAccent: '#418fde', // DO NOT FORGET TO SYNC WITH theme.css
-    themeText: 'rgb(177 177 177 / 60%)', // DO NOT FORGET TO SYNC WITH theme.css
-    supportEmail: SUPPORT_EMAIL
+  if (!Number.isInteger(clientPort) || clientPort <= 0) {
+    throw new Error('CLIENT_PORT is required in .env.common')
   }
-  console.log('target', `${API_HOST}:${SERVER_PORT}`)
+
+  if (!appHost) {
+    throw new Error(`APP_HOST is required in .env.${mode}`)
+  }
+
   return {
-    define: {
-      CLIENT_ENV_DATA
-    },
+    clearScreen: false,
     envDir,
-    publicDir: path.resolve(__dirname, './public'),
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-          silenceDeprecations: ['legacy-js-api']
-        }
-      }
-    },
-    plugins: [
-      {
-        name: 'inject-theme-colors',
-        transformIndexHtml: (html) =>
-          html.replaceAll('__THEME_BG__', CLIENT_ENV_DATA.themeBg).replaceAll('__APP_NAME__', CLIENT_ENV_DATA.appName)
-      },
-      nodePolyfills(),
-      react(),
-      svgr({}),
-      !isDev && generatePWAConfig(CLIENT_ENV_DATA)
-    ],
-    optimizeDeps: {
-      exclude: ['js-big-decimal']
-    },
-    build: {
-      outDir: './build'
-    },
+    envPrefix: ['VITE_', 'TAURI_ENV_*'],
+    plugins: [vue()],
     resolve: {
       alias: [
-        { find: '~', replacement: path.resolve(__dirname, './src/shared/config/styles') },
         { find: 'src', replacement: path.resolve(__dirname, './src') },
-        { find: /^common$/, replacement: path.resolve(__dirname, './../common/index.ts') },
-        { find: /^common\/(.*)$/, replacement: `${path.resolve(__dirname, './../common')}/$1` }
+        { find: /^shared$/, replacement: path.resolve(__dirname, '../shared/src/index.ts') },
+        { find: /^shared\/(.*)$/, replacement: path.resolve(__dirname, '../shared/src/$1') }
       ]
     },
+    build: {
+      outDir: './build',
+      ...(process.env.TAURI_ENV_PLATFORM
+        ? {
+            target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
+            minify: process.env.TAURI_ENV_DEBUG ? false : 'esbuild',
+            sourcemap: Boolean(process.env.TAURI_ENV_DEBUG)
+          }
+        : {})
+    },
     server: {
-      historyApiFallback: true,
-      port: Number(CLIENT_PORT),
-      hmr: {
-        host: new URL(APP_HOST).hostname
+      host: tauriDevHost || (isTauriDev ? '127.0.0.1' : true),
+      port: clientPort,
+      strictPort: isTauriDev,
+      hmr: tauriDevHost
+        ? {
+            protocol: 'ws',
+            host: tauriDevHost,
+            port: clientPort + 1
+          }
+        : isTauriDev
+        ? undefined
+        : {
+            host: new URL(appHost).hostname
+          },
+      watch: {
+        ignored: ['**/src-tauri/**']
       },
-      ...(isDev
+      ...(isDev && !isTauriDev
         ? {
             https: {
-              key: fs.readFileSync(path.resolve(__dirname, '../config/dev-certs/k-room-dev-key.pem')),
-              cert: fs.readFileSync(path.resolve(__dirname, '../config/dev-certs/k-room-dev.pem'))
+              key: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev-key.pem')),
+              cert: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev.pem'))
             }
           }
-        : {}),
-      proxy: {
-        [CLIENT_ENV_DATA.apiBaseUrl]: {
-          target: `${API_HOST}:${SERVER_PORT}`,
-          changeOrigin: true,
-          secure: false
-        }
-      }
+        : {})
     }
   }
 })
