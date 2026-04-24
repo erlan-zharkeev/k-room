@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common'
 import { Resend } from 'resend'
 import { ROUTE_NAMES, type AppLanguageType, REQ_STATUS } from 'shared'
 
-import { SERVER_ENV } from '../../app/config/env'
-import { AppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
+import { SERVER_ENV } from 'src/app/config/env'
+import { AppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
+import { log } from 'src/shared/lib/log'
 
 import { EMAIL_I18N } from './email.i18n'
+import { renderEmailConfirmationHtml } from './render-email-confirmation-html'
 
 let resendClient: Resend | null = null
 
@@ -64,7 +66,7 @@ export class EmailService {
     const confirmUrl = this.buildEmailConfirmationLink(token)
 
     if (!resend) {
-      console.warn(`Mock confirmation email for ${email}: ${confirmUrl}`)
+      log.warn(`-Mock confirmation email for ${email}: ${confirmUrl}`)
       return { id: 'mock-resend-id' }
     }
 
@@ -72,25 +74,18 @@ export class EmailService {
       from: `${this.appName} <no-reply@k-room.space>`,
       to: email,
       subject: `${this.appName}: Confirm your email`,
-      html: `
-        <div style="font-family: Arial, sans-serif; color: #101828; line-height: 1.6;">
-          <h2 style="margin-bottom: 16px;">${this.appName}</h2>
-          <p>${username ? `Hi, ${username}!` : 'Hi!'}</p>
-          <p>Please confirm your email address to finish registration.</p>
-          <p>
-            <a href="${confirmUrl}" style="display: inline-block; padding: 12px 18px; border-radius: 8px; background: #101828; color: #ffffff; text-decoration: none;">
-              Confirm email
-            </a>
-          </p>
-          <p>If the button does not work, open this link manually:</p>
-          <p><a href="${confirmUrl}">${confirmUrl}</a></p>
-        </div>
-      `
+      html: renderEmailConfirmationHtml({
+        appName: this.appName,
+        confirmUrl,
+        username
+      })
     })
 
     if (error) {
       throw new AppError(REQ_STATUS.server, error.message, false, error)
     }
+
+    log.success(`-Confirmation email scheduled for ${email}. Resend id: ${data?.id ?? 'unknown'}`)
 
     return data
   }

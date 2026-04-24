@@ -1,4 +1,4 @@
-import { VALIDATION_LIMITS, defineI18n } from 'shared'
+import { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS, defineI18n } from 'shared'
 
 export const AUTH_I18N = defineI18n({
   nonAuthorized: {
@@ -10,8 +10,8 @@ export const AUTH_I18N = defineI18n({
     ru: `Пароль должен содержать минимум ${VALIDATION_LIMITS.passwordMinLength} символов`
   },
   passwordMustBeStrong: {
-    en: 'Password must contain at least one letter, one number, and may include @$!%*?& characters.',
-    ru: 'Пароль должен содержать хотя бы одну букву, одну цифру и может включать символы @$!%*?&.'
+    en: `Password must contain at least one letter, one number, and may include ${PASSWORD_SPECIAL_CHARACTERS} characters.`,
+    ru: `Пароль должен содержать хотя бы одну букву, одну цифру и может включать символы ${PASSWORD_SPECIAL_CHARACTERS}.`
   },
   passwordNotContainSpaces: {
     en: 'Password must not contain spaces',

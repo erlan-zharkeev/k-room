@@ -2,9 +2,10 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 import { type IBackendResponse, type IGetUserDataResponse, USER_ENDPOINTS } from 'shared'
 
-import { SHARED_I18N } from '../../shared/config/i18n'
-import { AppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
+import { SHARED_I18N } from 'src/shared/config/i18n'
+import { AppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
+
 import { AccessTokenGuard } from '../auth/auth.guard'
 import { AUTH_I18N } from '../auth/auth.i18n'
 import { AuthService } from '../auth/auth.service'
@@ -18,8 +19,7 @@ export class UserController {
   @Get(USER_ENDPOINTS.getUserData)
   @UseGuards(AccessTokenGuard)
   async getUserData(@Req() request: Request, @Res() response: Response<IBackendResponse<IGetUserDataResponse>>) {
-    const language = request.language ?? 'en'
-    const userId = request.authUserId
+    const { language, authUserId: userId } = request
 
     if (!userId) {
       throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))

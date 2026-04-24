@@ -1,12 +1,4 @@
 :root {
-  font-family: Manrope, 'Segoe UI', sans-serif;
-  font-weight: 400;
-  font-synthesis: none;
-  line-height: 1.5;
-  text-rendering: optimizelegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   --white: #fff;
   --accent: #418fde;
   --error: rgb(191 86 110);
@@ -16,10 +8,18 @@
   --small-ui-height: 24px;
   --medium-ui-height: 30px;
   --large-ui-height: 36px;
+
+  font-family: Manrope, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: 1.5;
+  text-rendering: optimizelegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 :root[theme='dark'] {
-  color-scheme: dark;
   --main-bg: #1c1c1c;
   --contrast-text: #fff;
   --semi-contrast-text: rgb(255 255 255 / 79.7%);
@@ -42,10 +42,11 @@
   --surface-card: rgb(28 28 28 / 88%);
   --page-bg: radial-gradient(circle at top, rgb(65 143 222 / 24%), transparent 34%),
     linear-gradient(180deg, #141414 0%, #1c1c1c 40%, #111 100%);
+
+  color-scheme: dark;
 }
 
 :root[theme='light'] {
-  color-scheme: light;
   --main-bg: #cfcfcf;
   --contrast-text: #000;
   --semi-contrast-text: rgb(74 74 74 / 79.7%);
@@ -68,6 +69,8 @@
   --surface-card: rgb(255 255 255 / 72%);
   --page-bg: radial-gradient(circle at top, rgb(65 143 222 / 18%), transparent 34%),
     linear-gradient(180deg, #f5f7fa 0%, #e4e8ee 48%, #d5d9df 100%);
+
+  color-scheme: light;
 }
 
 * {
@@ -83,8 +86,8 @@ body,
 
 body {
   min-width: 320px;
-  background: var(--page-bg);
   color: var(--contrast-text);
+  background: var(--page-bg);
 }
 
 button,

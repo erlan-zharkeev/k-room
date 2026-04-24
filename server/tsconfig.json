@@ -3,6 +3,9 @@
   "compilerOptions": {
     "module": "Node16",
     "moduleResolution": "node16",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
     "declaration": false,
     "removeComments": false,
     "emitDecoratorMetadata": true,

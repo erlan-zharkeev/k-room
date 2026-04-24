@@ -18,15 +18,17 @@
   padding: 32px 40px;
   border: 1px solid var(--dark-gray-transparent-2);
   border-radius: 24px;
+
   background: var(--surface-card);
   box-shadow: 16px 16px 36px var(--shadow-outset-start), -16px -16px 36px var(--shadow-outset-end);
 }
 
 .app-shell__title {
   margin: 0;
-  color: var(--contrast-text);
+
   font-size: clamp(2rem, 6vw, 3.5rem);
   line-height: 1;
+  color: var(--contrast-text);
   letter-spacing: -0.04em;
 }
 </style>
