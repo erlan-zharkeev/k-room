@@ -1,5 +1,7 @@
 import { ROUTE_NAMES } from 'global-shared'
 
+import { MAIN_PAGE_I18N } from './i18n'
+
 export const MAIN_PAGE_ROUTES = {
   chatRooms: `${ROUTE_NAMES.main}/chat-rooms`,
   calls: `${ROUTE_NAMES.main}/calls`,
@@ -12,32 +14,32 @@ export const MAIN_PAGE_NAV_ITEMS = [
   {
     id: 'chatRooms',
     path: MAIN_PAGE_ROUTES.chatRooms,
-    label: 'Чаты',
+    label: MAIN_PAGE_I18N.chatRooms,
     icon: 'pi pi-comments'
   },
   {
     id: 'calls',
     path: MAIN_PAGE_ROUTES.calls,
-    label: 'Звонки',
+    label: MAIN_PAGE_I18N.calls,
     icon: 'pi pi-phone'
   },
   {
     id: 'contacts',
     path: MAIN_PAGE_ROUTES.contacts,
-    label: 'Контакты',
+    label: MAIN_PAGE_I18N.contacts,
     icon: 'pi pi-users'
   },
   {
     id: 'info',
     path: MAIN_PAGE_ROUTES.info,
-    label: 'События',
+    label: MAIN_PAGE_I18N.info,
     icon: 'pi pi-bell',
     badge: 3
   },
   {
     id: 'settings',
     path: MAIN_PAGE_ROUTES.settings,
-    label: 'Настройки',
+    label: MAIN_PAGE_I18N.settings,
     icon: 'pi pi-cog'
   }
 ] as const

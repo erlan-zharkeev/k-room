@@ -1,5 +1,6 @@
 export { CLIENT_ENV, CLIENT_LANGUAGE, LOCAL_STORAGE_KEY, ROOM_MESSAGES_PAGE_LIMIT } from './constants'
 export { EMOJI_LIST } from './emoji'
+export { FORM_VALIDATION_I18N } from './i18n'
 export { IMAGE_RESOLUTIONS } from 'src/shared/types/media'
 export type { ContextRefType } from 'src/shared/types/other'
 export type { FileLoaderValueType, IDbMedia } from 'src/shared/types/media'

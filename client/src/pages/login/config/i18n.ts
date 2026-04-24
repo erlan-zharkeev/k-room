@@ -20,5 +20,9 @@ export const LOGIN_FORM_I18N = defineI18n({
   forgotPassword: {
     en: 'Forgot password?',
     ru: 'Забыли пароль?'
+  },
+  failedToLogin: {
+    en: 'Failed to login',
+    ru: 'Не удалось войти'
   }
 })

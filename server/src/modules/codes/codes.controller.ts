@@ -3,6 +3,7 @@ import { type Request, type Response } from 'express'
 import {
   CODES_ENDPOINTS,
   type IBackendResponse,
+  isString,
   type ISendPasswordRecoveryCodeResponse,
   type IValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
@@ -34,7 +35,7 @@ export class CodesController {
       return response.json({
         payload: {
           nextTimeRequest: result.nextTimeRequest,
-          ...(typeof result.debugCode === 'string' ? { debugCode: result.debugCode } : {})
+          ...(isString(result.debugCode) ? { debugCode: result.debugCode } : {})
         },
         message: {
           text: localizedText(

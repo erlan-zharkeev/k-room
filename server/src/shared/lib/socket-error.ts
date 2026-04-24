@@ -1,4 +1,4 @@
-import { type LocalizedTextType, REQ_STATUS, type ReqStatusType, type SocketActionsType } from 'global-shared'
+import { isString, type LocalizedTextType, REQ_STATUS, type ReqStatusType, type SocketActionsType } from 'global-shared'
 
 import { SHARED_I18N } from '../config/i18n'
 import type { SocketInstanceType } from '../types/socket'
@@ -20,7 +20,7 @@ export const throwSocketError = (
 ) => {
   const io = getIO()
   const socket = io.sockets.sockets.get(socketId)
-  const isRawError = typeof error === 'string' || error === undefined
+  const isRawError = isString(error) || error === undefined
   const userMessageSource = isRawError ? SHARED_I18N.commonServerError : error
   const language = socket?.data.language
   const userMessage = localizedText(userMessageSource, language)

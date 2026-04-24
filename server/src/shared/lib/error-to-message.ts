@@ -1,9 +1,11 @@
+import { isString } from 'global-shared'
+
 export const errorToMessage = (error: unknown, fallbackMessage = 'Unknown error') => {
   if (error instanceof Error) {
     return error.message
   }
 
-  if (typeof error === 'string') {
+  if (isString(error)) {
     return error
   }
 

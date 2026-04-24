@@ -11,8 +11,11 @@ import {
   MAIN_PAGE_NAV_ITEMS,
   MAIN_PAGE_SIDE_PANEL_ITEMS
 } from 'src/pages/main/config/constants'
+import { MAIN_PAGE_I18N } from 'src/pages/main/config/i18n'
+import { useLogout } from 'src/pages/main/model/use-logout'
 
 const route = useRoute()
+const { isLogoutLoading, logout } = useLogout()
 
 const activeNavItem = computed(
   () => MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path) ?? MAIN_PAGE_NAV_ITEMS[0]
@@ -36,7 +39,7 @@ const activeContentItem = computed(() => MAIN_PAGE_CONTENT_ITEMS[activeNavItem.v
         >
           <Button
             :href="href"
-            :aria-label="item.label"
+            :aria-label="$t(item.label)"
             :aria-current="isExactActive ? 'page' : undefined"
             :class="{ 'main-page__nav-button--active': isExactActive }"
             :icon="item.icon"
@@ -48,7 +51,7 @@ const activeContentItem = computed(() => MAIN_PAGE_CONTENT_ITEMS[activeNavItem.v
         </RouterLink>
       </nav>
 
-      <Button aria-label="Открыть устройства" icon="pi pi-volume-up" rounded text />
+      <Button :aria-label="$t(MAIN_PAGE_I18N.openDevices)" icon="pi pi-volume-up" rounded text />
     </aside>
 
     <section class="main-page__workspace">
@@ -57,22 +60,29 @@ const activeContentItem = computed(() => MAIN_PAGE_CONTENT_ITEMS[activeNavItem.v
           <Avatar label="K" shape="circle" />
           <div class="main-page__profile-text">
             <strong>K-Room</strong>
-            <span>{{ activeNavItem.label }}</span>
+            <span>{{ $t(activeNavItem.label) }}</span>
           </div>
         </div>
 
         <div class="main-page__top-actions">
           <Badge value="online" severity="success" />
-          <Button aria-label="Уведомления" icon="pi pi-bell" rounded text />
-          <Button aria-label="Выйти" icon="pi pi-sign-out" rounded text />
+          <Button :aria-label="$t(MAIN_PAGE_I18N.notifications)" icon="pi pi-bell" rounded text />
+          <Button
+            :aria-label="$t(MAIN_PAGE_I18N.logout)"
+            icon="pi pi-sign-out"
+            :loading="isLogoutLoading"
+            rounded
+            text
+            @click="logout"
+          />
         </div>
       </header>
 
       <div class="main-page__body">
         <aside class="main-page__side-panel">
           <div class="main-page__panel-header">
-            <h2>{{ activeNavItem.label }}</h2>
-            <Button aria-label="Добавить" icon="pi pi-plus" rounded text />
+            <h2>{{ $t(activeNavItem.label) }}</h2>
+            <Button :aria-label="$t(MAIN_PAGE_I18N.add)" icon="pi pi-plus" rounded text />
           </div>
 
           <InputText class="main-page__search" placeholder="Поиск" />

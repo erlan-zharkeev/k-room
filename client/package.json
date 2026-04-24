@@ -23,9 +23,12 @@
   },
   "dependencies": {
     "@primeuix/themes": "^2.0.3",
+    "axios": "^1.15.2",
+    "dexie": "^4.4.2",
+    "firebase": "^12.12.1",
+    "global-shared": "workspace:*",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.5",
-    "global-shared": "workspace:*",
     "vue": "^3.5.13",
     "vue-router": "^4.6.4"
   },
