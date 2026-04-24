@@ -3,15 +3,71 @@
   font-weight: 400;
   font-synthesis: none;
   line-height: 1.5;
-  color: #f4f7fb;
   text-rendering: optimizelegibility;
-
-  color-scheme: dark;
-  background: radial-gradient(circle at top, rgb(41 91 164 / 28%), transparent 34%),
-    linear-gradient(180deg, #07111f 0%, #091625 42%, #081019 100%);
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --white: #fff;
+  --accent: #418fde;
+  --error: rgb(191 86 110);
+  --error-bg: rgb(191 86 110 / 20%);
+  --modal-overflow-color: rgb(0 0 0 / 75%);
+  --xs-ui-height: 20px;
+  --small-ui-height: 24px;
+  --medium-ui-height: 30px;
+  --large-ui-height: 36px;
+}
+
+:root[theme='dark'] {
+  color-scheme: dark;
+  --main-bg: #1c1c1c;
+  --contrast-text: #fff;
+  --semi-contrast-text: rgb(255 255 255 / 79.7%);
+  --text: rgb(177 177 177 / 60%);
+  --shadow-outset-start: #0f0f0f;
+  --shadow-outset-end: #292929;
+  --shadow-inset-start: #161616;
+  --shadow-inset-end: #202020;
+  --dark-gray: rgb(59 59 59);
+  --dark-gray-transparent: rgb(59 59 59 / 30%);
+  --dark-gray-transparent-1: rgb(59 59 59 / 35%);
+  --dark-gray-transparent-2: rgb(59 59 59 / 40%);
+  --dark-gray-transparent-3: rgb(59 59 59 / 50%);
+  --error-text: #984343;
+  --success: rgb(38 178 54);
+  --success-bg: rgb(44 186 136 / 25%);
+  --info-bg: rgb(111 116 255 / 18.7%);
+  --warn: rgb(255 213 79);
+  --warn-bg: rgb(255 213 79 / 20%);
+  --surface-card: rgb(28 28 28 / 88%);
+  --page-bg: radial-gradient(circle at top, rgb(65 143 222 / 24%), transparent 34%),
+    linear-gradient(180deg, #141414 0%, #1c1c1c 40%, #111 100%);
+}
+
+:root[theme='light'] {
+  color-scheme: light;
+  --main-bg: #cfcfcf;
+  --contrast-text: #000;
+  --semi-contrast-text: rgb(74 74 74 / 79.7%);
+  --text: rgb(94 94 94 / 84.7%);
+  --shadow-outset-start: #b6b6b6;
+  --shadow-outset-end: #e8e8e8;
+  --shadow-inset-start: #b6b6b6;
+  --shadow-inset-end: #e8e8e8;
+  --dark-gray: rgb(189 189 189);
+  --dark-gray-transparent: rgb(189 189 189 / 30%);
+  --dark-gray-transparent-1: rgb(189 189 189 / 40%);
+  --dark-gray-transparent-2: rgb(189 189 189 / 50%);
+  --dark-gray-transparent-3: rgb(189 189 189 / 60%);
+  --error-text: rgb(191 86 110);
+  --success: rgb(51 154 0);
+  --success-bg: rgb(44 186 136 / 40%);
+  --info-bg: rgb(0 8 255 / 18.7%);
+  --warn: rgb(217 179 54);
+  --warn-bg: rgb(231 184 37 / 26%);
+  --surface-card: rgb(255 255 255 / 72%);
+  --page-bg: radial-gradient(circle at top, rgb(65 143 222 / 18%), transparent 34%),
+    linear-gradient(180deg, #f5f7fa 0%, #e4e8ee 48%, #d5d9df 100%);
 }
 
 * {
@@ -27,6 +83,8 @@ body,
 
 body {
   min-width: 320px;
+  background: var(--page-bg);
+  color: var(--contrast-text);
 }
 
 button,

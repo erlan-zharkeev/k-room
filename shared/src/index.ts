@@ -1,4 +1,4 @@
-export { VALIDATION_LIMITS, VALIDATION_PATTERNS } from './auth'
+export { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS, VALIDATION_PATTERNS } from './auth'
 export type { IAuthLoginPayload, IAuthRegistrationPayload, ISignInWithProviderPayload } from './auth'
 
 export type { CallStatusType, CallFlowType, ICall, IDBCall, IDBCallSchema } from './calls'

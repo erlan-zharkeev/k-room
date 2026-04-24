@@ -51,7 +51,7 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
   },
   technicalData: {
     en: 'Technical/session data such as cookies, refresh tokens, device identifiers, socket identifiers, browser/device details, timestamps, and similar operational logs.',
-    ru: 'Технические и сессионные данные: cookies, refresh tokens, идентификаторы устройств и socket-сессий, сведения о браузере/устройстве, временные метки и похожие технические логи.'
+    ru: 'Технические и сессионные данные: cookies, refresh tokens, идентификаторы устройств и сессии сокета, сведения о браузере/устройстве, временные метки и похожие технические логи.'
   },
   diagnosticsData: {
     en: 'Support, diagnostic, and security data such as crash/error events and troubleshooting information.',
@@ -71,7 +71,7 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
   },
   section2Text: {
     en: 'We may collect information directly from you, automatically from your browser or device, from your use of the service, from cookies or similar session mechanisms, and from third-party providers you choose to use, such as social login or email delivery providers.',
-    ru: 'Мы можем получать данные напрямую от вас, автоматически от браузера или устройства, из вашего использования сервиса, из cookies и похожих сессионных механизмов, а также от сторонних провайдеров, которых вы решите использовать, например социальных логинов или email-провайдеров.'
+    ru: 'Мы можем получать данные напрямую от вас, автоматически от браузера или устройства, из вашего использования сервиса, из cookies и похожих сессионных механизмов, а также от сторонних провайдеров, которых вы решите использовать, например социальных логинов или провайдеров электронной почты.'
   },
   section3Title: {
     en: '3. How We Use Information',
