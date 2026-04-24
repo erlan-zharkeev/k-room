@@ -12,10 +12,10 @@ import {
   type ISignInWithProviderResponse
 } from 'shared'
 
-import { SHARED_I18N } from '../../shared/config/i18n'
-import { toAppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
-import { runRequestValidation } from '../../shared/lib/run-request-validation'
+import { SHARED_I18N } from 'src/shared/config/i18n'
+import { toAppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
+import { runRequestValidation } from 'src/shared/lib/run-request-validation'
 
 import { RefreshTokenGuard, AccessTokenGuard } from './auth.guard'
 import { AUTH_I18N } from './auth.i18n'
@@ -37,7 +37,7 @@ export class AuthController {
     @Res() response: Response<IBackendResponse<ILoginResponse>>,
     @Body() payload: IAuthLoginPayload
   ) {
-    const language = request.language ?? 'en'
+    const { language } = request
 
     try {
       await runRequestValidation(request, LOGIN_VALIDATION)
@@ -61,7 +61,7 @@ export class AuthController {
     @Res() response: Response<IBackendResponse<ISendConfirmationLinkResponse>>,
     @Body() payload: IAuthRegistrationPayload
   ) {
-    const language = request.language ?? 'en'
+    const { language } = request
 
     try {
       await runRequestValidation(request, REGISTRATION_VALIDATION)
@@ -85,7 +85,7 @@ export class AuthController {
     @Res() response: Response<IBackendResponse<IConfirmEmailResponse>>,
     @Body('token') token: string
   ) {
-    const language = request.language ?? 'en'
+    const { language } = request
 
     try {
       await runRequestValidation(request, CONFIRM_EMAIL_VALIDATION)
@@ -114,7 +114,7 @@ export class AuthController {
     @Res() response: Response<IBackendResponse<ISendConfirmationLinkResponse>>,
     @Body('email') email: string
   ) {
-    const language = request.language ?? 'en'
+    const { language } = request
 
     try {
       const result = await this.authService.sendConfirmationLink(email, language)
@@ -144,7 +144,7 @@ export class AuthController {
     @Res() response: Response<IBackendResponse<ISignInWithProviderResponse>>,
     @Body() payload: ISignInWithProviderPayload
   ) {
-    const language = request.language ?? 'en'
+    const { language } = request
 
     try {
       await runRequestValidation(request, PROVIDER_LOGIN_VALIDATION)
@@ -165,8 +165,7 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.updateTokensPair)
   @UseGuards(RefreshTokenGuard)
   async updateTokensPair(@Req() request: Request, @Res() response: Response<IBackendResponse<null>>) {
-    const language = request.language ?? 'en'
-    const userId = request.authUserId
+    const { language, authUserId: userId } = request
 
     if (!userId) {
       throw toAppError(null, localizedText(AUTH_I18N.nonAuthorized, language), 401)
@@ -186,8 +185,7 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.logout)
   @UseGuards(AccessTokenGuard)
   async logout(@Req() request: Request, @Res() response: Response<IBackendResponse<null>>) {
-    const language = request.language ?? 'en'
-    const userId = request.authUserId
+    const { language, authUserId: userId } = request
 
     try {
       if (!userId) {

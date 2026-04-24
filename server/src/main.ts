@@ -7,13 +7,20 @@ import { NestFactory } from '@nestjs/core'
 import cookieParser from 'cookie-parser'
 import { type NextFunction, type Request, type Response } from 'express'
 
+import { createAdminRouter, getAdminFaviconPath } from './app/adminjs'
 import { AppModule } from './app/app.module'
 import { SERVER_ENV } from './app/config/env'
 import { connectDatabase } from './app/database/connect-database'
 import { AppExceptionFilter } from './app/filters/app-exception.filter'
+import { initSentry, setupSentryErrorHandler } from './app/sentry'
+import { errorToMessage } from './shared/lib/error-to-message'
 import { getRequestLanguage } from './shared/lib/get-request-language'
+import { log } from './shared/lib/log'
+import { serverCaptureSentryException } from './shared/lib/sentry'
 
 const bootstrap = async () => {
+  initSentry()
+
   const app = await NestFactory.create(AppModule, {
     ...(SERVER_ENV.isDev
       ? {
@@ -24,6 +31,8 @@ const bootstrap = async () => {
         }
       : {})
   })
+  const expressApp = app.getHttpAdapter().getInstance()
+  const adminFaviconPath = getAdminFaviconPath()
 
   app.enableCors({
     origin: SERVER_ENV.origins === '*' ? true : SERVER_ENV.origins,
@@ -36,11 +45,34 @@ const bootstrap = async () => {
     next()
   })
   app.useGlobalFilters(new AppExceptionFilter())
+  expressApp.get('/admin-favicon.svg', (_request: Request, response: Response) => {
+    response.sendFile(adminFaviconPath)
+  })
   app.setGlobalPrefix(SERVER_ENV.apiPath.replace(/^\/+|\/+$/g, ''), { exclude: ['health'] })
 
   await connectDatabase()
+  app.use(SERVER_ENV.adminjs.adminRootPath, await createAdminRouter())
+  setupSentryErrorHandler(expressApp)
 
   await app.listen(SERVER_ENV.serverPort)
+  log.success(`-Server listening on port ${SERVER_ENV.serverPort}`)
 }
 
-void bootstrap()
+process.on('unhandledRejection', (error) => {
+  log.error('-Unhandled rejection')
+  log.error(`-${errorToMessage(error)}`)
+  serverCaptureSentryException(error)
+})
+
+process.on('uncaughtException', (error) => {
+  log.error('-Uncaught exception')
+  log.error(`-${errorToMessage(error)}`)
+  serverCaptureSentryException(error)
+})
+
+void bootstrap().catch((error) => {
+  log.error('-Bootstrap failed')
+  log.error(`-${errorToMessage(error)}`)
+  serverCaptureSentryException(error)
+  process.exit(1)
+})

@@ -1,42 +1,50 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
-import { type Response } from 'express'
-import { DEFAULT_APP_LANGUAGE, type AppLanguageType, type IBackendResponse, REQ_STATUS } from 'shared'
+import { type Request, type Response } from 'express'
+import { type IBackendResponse, REQ_STATUS } from 'shared'
 
-import { SHARED_I18N } from '../../shared/config/i18n'
-import { isAppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
+import { SHARED_I18N } from 'src/shared/config/i18n'
+import { isAppError } from 'src/shared/lib/app-error'
+import { errorToMessage } from 'src/shared/lib/error-to-message'
+import { localizedText } from 'src/shared/lib/localized-text'
+import { log } from 'src/shared/lib/log'
+import { serverCaptureSentryException, serverCaptureSentryHttpError } from 'src/shared/lib/sentry'
 
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse<Response<IBackendResponse<null>>>()
-    const request = host.switchToHttp().getRequest<{ language?: AppLanguageType }>()
+    const request = host.switchToHttp().getRequest<Request>()
 
     if (response.headersSent) {
       return
     }
 
-    const language = request.language ?? DEFAULT_APP_LANGUAGE
+    const { language } = request
 
     if (isAppError(error)) {
-      response.status(error.status).json({
+      const { message, silent, status } = error
+
+      serverCaptureSentryHttpError({
+        message,
+        silent,
+        status
+      })
+
+      response.status(status).json({
         payload: null,
         message: {
-          text: error.message,
-          silent: error.silent
+          text: message,
+          silent
         }
       })
 
       return
     }
 
-    if (error instanceof Error) {
-      console.error(error)
-    }
+    log.error('-Unhandled http error')
+    log.error(`-${errorToMessage(error)}`)
 
-    if (error && !(error instanceof Error)) {
-      console.error(error)
-    }
+    serverCaptureSentryException(error)
 
     response.status(REQ_STATUS.server).json({
       payload: null,

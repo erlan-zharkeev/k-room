@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 
-import { SERVER_ENV } from '../../app/config/env'
-import { AppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
+import { SERVER_ENV } from 'src/app/config/env'
+import { AppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
 
 import { AUTH_I18N } from './auth.i18n'
 import { AuthService } from './auth.service'
@@ -28,8 +28,8 @@ export class AccessTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>()
     const response = context.switchToHttp().getResponse<Response>()
-    const language = request.language ?? 'en'
-    const accessToken = request.cookies.jwt
+    const { language, cookies } = request
+    const accessToken = cookies.jwt
 
     if (!accessToken) {
       throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))

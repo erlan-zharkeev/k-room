@@ -4,9 +4,9 @@
   "main": "build/main.js",
   "license": "MIT",
   "scripts": {
-    "serve": "nest start --watch",
-    "start": "nest start",
-    "start:prod": "node build/main.js",
+    "serve": "cross-env TS_NODE_PROJECT=tsconfig.runtime.json nest start --watch --exec \"node -r tsconfig-paths/register\"",
+    "start": "cross-env TS_NODE_PROJECT=tsconfig.runtime.json nest start --exec \"node -r tsconfig-paths/register\"",
+    "start:prod": "cross-env TS_NODE_PROJECT=tsconfig.runtime.json node -r tsconfig-paths/register build/main.js",
     "prebuild": "pnpm --dir ../shared run build",
     "build": "cross-env NODE_ENV=production nest build",
     "pretypecheck": "pnpm --dir ../shared run build",

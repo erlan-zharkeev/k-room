@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { Types } from 'mongoose'
 import { type AppLanguageType, type IFrontendUserData, type ProviderType, REQ_STATUS } from 'shared'
 
-import { AppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
+import { AppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
 
 import type { IUserExistState, IUserSchema } from './types'
 import { USER_I18N } from './user.i18n'

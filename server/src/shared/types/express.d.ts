@@ -3,7 +3,7 @@ import type { AppLanguageType } from 'shared'
 declare global {
   namespace Express {
     interface Request {
-      language?: AppLanguageType
+      language: AppLanguageType
       authUserId?: string
     }
   }

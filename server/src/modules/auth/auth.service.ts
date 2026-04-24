@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import { type Request, type Response, type CookieOptions } from 'express'
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import {
+  type AppLanguageType,
   REQ_STATUS,
   type IAuthLoginPayload,
   type IAuthRegistrationPayload,
@@ -15,9 +16,10 @@ import {
 } from 'shared'
 import { v4 as uuidv4 } from 'uuid'
 
-import { SERVER_ENV } from '../../app/config/env'
-import { AppError } from '../../shared/lib/app-error'
-import { localizedText } from '../../shared/lib/localized-text'
+import { SERVER_ENV } from 'src/app/config/env'
+import { AppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
+
 import { EmailService } from '../email/email.service'
 import { USER_I18N } from '../user/user.i18n'
 import { UserModel } from '../user/user.model'
@@ -31,12 +33,7 @@ import {
   SEND_CONFIRMATION_LINK_INTERVAL
 } from './auth.constants'
 import { AUTH_I18N } from './auth.i18n'
-
-interface ITokenPayload {
-  id: string
-  iat: number
-  exp: number
-}
+import type { ITokenPayload } from './auth.types'
 
 @Injectable()
 export class AuthService {
@@ -91,7 +88,7 @@ export class AuthService {
     return token
   }
 
-  private getUnauthorizedMessage(language: 'en' | 'ru') {
+  private getUnauthorizedMessage(language: AppLanguageType) {
     return localizedText(AUTH_I18N.nonAuthorized, language)
   }
 
@@ -108,8 +105,8 @@ export class AuthService {
   }
 
   async validateRefreshRequest(request: Request) {
-    const language = request.language ?? 'en'
-    const refreshToken = request.cookies['refresh-jwt']
+    const { language, cookies } = request
+    const refreshToken = cookies['refresh-jwt']
 
     if (!refreshToken) {
       throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage(language))
@@ -118,7 +115,7 @@ export class AuthService {
     try {
       const decoded = await this.verifyToken(refreshToken, SERVER_ENV.secret.refreshTokenSecret)
       const user = await this.userService.findById(decoded.id)
-      const deviceId = request.cookies['device-id']
+      const deviceId = cookies['device-id']
       const device = deviceId ? user?.system.device[deviceId] : undefined
 
       if (!user || !deviceId || !device || device.refreshToken !== refreshToken) {
@@ -162,7 +159,7 @@ export class AuthService {
   }
 
   async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<ILoginResponse> {
-    const language = request.language ?? 'en'
+    const { language } = request
     const user = await this.userService.findByEmail(payload.email)
 
     if (!user) {
@@ -183,7 +180,10 @@ export class AuthService {
     return this.userService.mapUserToDto(user)
   }
 
-  async registration(payload: IAuthRegistrationPayload, language: 'en' | 'ru'): Promise<ISendConfirmationLinkResponse> {
+  async registration(
+    payload: IAuthRegistrationPayload,
+    language: AppLanguageType
+  ): Promise<ISendConfirmationLinkResponse> {
     const userExistState = await this.userService.isUserExist({
       username: payload.username,
       email: payload.email
@@ -226,7 +226,7 @@ export class AuthService {
 
   async confirmEmail(
     token: string,
-    language: 'en' | 'ru'
+    language: AppLanguageType
   ): Promise<IConfirmEmailResponse & { alreadyConfirmed: boolean }> {
     const decoded = await this.verifyToken(token, SERVER_ENV.secret.emailConfirmSecret)
 
@@ -248,7 +248,7 @@ export class AuthService {
 
   async sendConfirmationLink(
     email: string,
-    language: 'en' | 'ru'
+    language: AppLanguageType
   ): Promise<ISendConfirmationLinkResponse & { alreadyConfirmed: boolean }> {
     const user = await this.userService.findByEmail(email)
 
@@ -298,6 +298,7 @@ export class AuthService {
     request: Request,
     response: Response
   ): Promise<ISignInWithProviderResponse> {
+    const { language } = request
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await this.userService.createUser({
       username: payload.username,
@@ -308,10 +309,7 @@ export class AuthService {
     const user = newUser ?? (await this.userService.findByEmail(payload.email))
 
     if (!user) {
-      throw new AppError(
-        REQ_STATUS.badRequest,
-        localizedText(AUTH_I18N.signInWithProviderFailed, request.language ?? 'en')
-      )
+      throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.signInWithProviderFailed, language))
     }
 
     await this.updateTokens(String(user._id), request, response)
