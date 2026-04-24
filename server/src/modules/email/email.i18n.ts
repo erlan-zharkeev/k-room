@@ -1,4 +1,4 @@
-import { defineI18n } from 'shared'
+import { defineI18n } from 'global-shared'
 
 export const EMAIL_I18N = defineI18n({
   resendApiKeyMissing: {

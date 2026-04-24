@@ -1,5 +1,5 @@
+import { USER_ROLES } from 'global-shared'
 import { model, Schema } from 'mongoose'
-import { USER_ROLES } from 'shared'
 
 import type { IUserPersonalData, IUserPublicData, IUserSchema, IUserSystemData } from './types'
 

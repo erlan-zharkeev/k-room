@@ -1,6 +1,8 @@
 import { type IncomingHttpHeaders } from 'http'
 
-import { APP_LANGUAGE_HEADER, APP_LANGUAGE_VALUES, DEFAULT_APP_LANGUAGE, type AppLanguageType } from 'shared'
+import { APP_LANGUAGE_HEADER, APP_LANGUAGE_VALUES, DEFAULT_APP_LANGUAGE, type AppLanguageType } from 'global-shared'
+
+import type { SocketInstanceType } from '../types/socket'
 
 const isRequestLanguage = (value?: string): value is AppLanguageType => {
   return APP_LANGUAGE_VALUES.includes(value as AppLanguageType)
@@ -18,4 +20,13 @@ export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguageTyp
   }
 
   return DEFAULT_APP_LANGUAGE
+}
+
+export const getSocketLanguage = (socket: SocketInstanceType): AppLanguageType => {
+  const language =
+    typeof socket.handshake.auth === 'object' && socket.handshake.auth
+      ? Reflect.get(socket.handshake.auth, 'language')
+      : undefined
+
+  return typeof language === 'string' && isRequestLanguage(language) ? language : DEFAULT_APP_LANGUAGE
 }

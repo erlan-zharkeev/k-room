@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
+import { ROUTE_NAMES, type AppLanguageType, REQ_STATUS } from 'global-shared'
 import { Resend } from 'resend'
-import { ROUTE_NAMES, type AppLanguageType, REQ_STATUS } from 'shared'
 
-import { SERVER_ENV } from 'src/app/config/env'
+import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
@@ -86,6 +86,53 @@ export class EmailService {
     }
 
     log.success(`-Confirmation email scheduled for ${email}. Resend id: ${data?.id ?? 'unknown'}`)
+
+    return data
+  }
+
+  async sendPasswordRecoveryEmail({
+    email,
+    code,
+    language,
+    username
+  }: {
+    email: string
+    code: string
+    language: AppLanguageType
+    username?: string
+  }) {
+    if (!email) {
+      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
+    }
+
+    const resend = this.createResendClient(language)
+    const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Password recovery</h2>
+        <p>Hello${username ? `, ${username}` : ''}.</p>
+        <p>Use this code to continue resetting your password:</p>
+        <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</p>
+        <p>If you did not request password recovery, you can ignore this message.</p>
+      </div>
+    `
+
+    if (!resend) {
+      log.warn(`-Mock password recovery email for ${email}: ${code}`)
+      return { id: 'mock-recovery-email-id' }
+    }
+
+    const { data, error } = await resend.emails.send({
+      from: `${this.appName} <no-reply@k-room.space>`,
+      to: email,
+      subject: `${this.appName}: Password recovery code`,
+      html
+    })
+
+    if (error) {
+      throw new AppError(REQ_STATUS.server, error.message, false, error)
+    }
+
+    log.success(`-Password recovery email scheduled for ${email}. Resend id: ${data?.id ?? 'unknown'}`)
 
     return data
   }

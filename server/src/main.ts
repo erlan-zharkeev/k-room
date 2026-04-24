@@ -8,11 +8,12 @@ import cookieParser from 'cookie-parser'
 import { type NextFunction, type Request, type Response } from 'express'
 
 import { createAdminRouter, getAdminFaviconPath } from './app/adminjs'
+import { AppExceptionFilter } from './app/app-exception.filter'
 import { AppModule } from './app/app.module'
-import { SERVER_ENV } from './app/config/env'
-import { connectDatabase } from './app/database/connect-database'
-import { AppExceptionFilter } from './app/filters/app-exception.filter'
+import { connectDatabase } from './app/connect-database'
+import { SERVER_ENV } from './app/env'
 import { initSentry, setupSentryErrorHandler } from './app/sentry'
+import { initIO } from './app/socket'
 import { errorToMessage } from './shared/lib/error-to-message'
 import { getRequestLanguage } from './shared/lib/get-request-language'
 import { log } from './shared/lib/log'
@@ -35,7 +36,7 @@ const bootstrap = async () => {
   const adminFaviconPath = getAdminFaviconPath()
 
   app.enableCors({
-    origin: SERVER_ENV.origins === '*' ? true : SERVER_ENV.origins,
+    origin: SERVER_ENV.origins,
     credentials: true,
     optionsSuccessStatus: 200
   })
@@ -53,6 +54,7 @@ const bootstrap = async () => {
   await connectDatabase()
   app.use(SERVER_ENV.adminjs.adminRootPath, await createAdminRouter())
   setupSentryErrorHandler(expressApp)
+  initIO(app.getHttpServer())
 
   await app.listen(SERVER_ENV.serverPort)
   log.success(`-Server listening on port ${SERVER_ENV.serverPort}`)

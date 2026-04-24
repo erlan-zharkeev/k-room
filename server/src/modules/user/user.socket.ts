@@ -1,0 +1,71 @@
+import type { ChatRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
+
+import { getIO } from 'src/shared/lib/io'
+import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
+import type { SocketInstanceType } from 'src/shared/types/socket'
+
+import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
+import { transformRoomForUser } from '../chat-rooms/chat-rooms.service'
+import { getUserActiveInfoNotifications } from '../info-notifications/info-notifications.service'
+
+import { USER_SOCKET_I18N } from './user.i18n'
+import { UserModel } from './user.model'
+import { getSocketsByUserIds, setLastSeenData, setUserStatus, transformUserToFrontendContact } from './user.service'
+
+export const registerUserSocketHandlers = (socket: SocketInstanceType) => {
+  void socketErrorMiddleware(
+    socket,
+    async () => {
+      await setUserStatus(socket.data.userId, true)
+    },
+    { basicError: USER_SOCKET_I18N.userConnectFailed }
+  )()
+
+  socket.on<SocketActionsType>(
+    'disconnect',
+    socketErrorMiddleware(
+      socket,
+      async () => {
+        const lastSeen = await setLastSeenData(socket.data.userId)
+        await setUserStatus(socket.data.userId, false, lastSeen)
+      },
+      { basicError: USER_SOCKET_I18N.userDisconnectFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'update-language',
+    socketErrorMiddleware(
+      socket,
+      async ({ language }: { language: import('global-shared').AppLanguageType }) => {
+        socket.data.language = language
+      },
+      { basicError: USER_SOCKET_I18N.updateLanguageFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'actualize-user-data',
+    socketErrorMiddleware(
+      socket,
+      async () => {
+        const { userId, language } = socket.data
+        const data = await UserModel.findById(userId).lean()
+        const contacts = data?.personal.contacts
+        const contactResultData: IFrontendContact[] = contacts ? await transformUserToFrontendContact(contacts) : []
+        const roomIds = data?.personal.chatRooms ?? []
+        const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
+        const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
+        const infoNotifications = await getUserActiveInfoNotifications(userId, language)
+        const sockets = await getSocketsByUserIds([userId])
+
+        sockets.forEach((socketId) => {
+          getIO().to(socketId).emit<SocketActionsType>('actual-contacts', contactResultData)
+          getIO().to(socketId).emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
+          getIO().to(socketId).emit<SocketActionsType>('actual-info-notifications', infoNotifications)
+        })
+      },
+      { basicError: USER_SOCKET_I18N.actualizeUserDataFailed }
+    )
+  )
+}

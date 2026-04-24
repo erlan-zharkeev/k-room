@@ -1,0 +1,2 @@
+export { default as MainPage } from './ui/MainPage.vue'
+export { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from './config/constants'

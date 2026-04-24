@@ -1,6 +1,6 @@
 import { type Request } from 'express'
 import { validationResult, type ValidationChain } from 'express-validator'
-import { REQ_STATUS, type LocalizedTextType } from 'shared'
+import { REQ_STATUS, type LocalizedTextType } from 'global-shared'
 
 import { SHARED_I18N } from 'src/shared/config/i18n'
 

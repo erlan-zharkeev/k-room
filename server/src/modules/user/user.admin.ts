@@ -1,9 +1,11 @@
 import bcrypt from 'bcryptjs'
-import { formatHumanDateTime } from 'shared'
+import { DEFAULT_APP_LANGUAGE, formatHumanDateTime } from 'global-shared'
 
+import { localizedText } from 'src/shared/lib/localized-text'
+
+import { LAST_SEEN_PATH } from './user.constants'
+import { USER_ADMIN_I18N } from './user.i18n'
 import { UserModel } from './user.model'
-
-const LAST_SEEN_PATH = 'public.lastSeen'
 
 const formatLastSeenParam = (params?: Record<string, unknown>) => {
   if (!params) {
@@ -64,12 +66,12 @@ const normalizePassword = async (
   throw new ValidationError(
     {
       'system.password': {
-        message: 'Password is required when creating a user from admin panel',
+        message: localizedText(USER_ADMIN_I18N.passwordRequired, DEFAULT_APP_LANGUAGE),
         type: 'required'
       }
     },
     {
-      message: 'User form contains validation errors',
+      message: localizedText(USER_ADMIN_I18N.validationFailed, DEFAULT_APP_LANGUAGE),
       type: 'required'
     }
   )

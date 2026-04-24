@@ -1,4 +1,4 @@
-import { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS, defineI18n } from 'shared'
+import { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS, defineI18n } from 'global-shared'
 
 export const AUTH_I18N = defineI18n({
   nonAuthorized: {

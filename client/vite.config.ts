@@ -2,77 +2,83 @@ import fs from 'fs'
 import path from 'path'
 
 import vue from '@vitejs/plugin-vue'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 
+import { createClientEnvData } from './src/shared/lib/create-client-env-data'
 import { generatePWAConfig } from './vite.pwa.config'
 
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
-  const commonEnv = loadEnv('common', envDir, '')
-  const modeEnv = loadEnv(mode, envDir, '')
-  const isDev = mode === 'development'
-  const isTauriDev = process.env.npm_lifecycle_event === 'serve:tauri'
-  const tauriDevHost = process.env.TAURI_DEV_HOST
-  const clientPort = Number(commonEnv.CLIENT_PORT)
-  const appHost = modeEnv.APP_HOST
-  const themeBg = '#1c1c1c'
+  const { TAURI_ENV_DEBUG, TAURI_ENV_PLATFORM } = process.env
+  const clientEnvData = createClientEnvData(mode, envDir)
 
-  if (!Number.isInteger(clientPort) || clientPort <= 0) {
-    throw new Error('CLIENT_PORT is required in .env.common')
-  }
+  const tauriBuildConfig = TAURI_ENV_PLATFORM
+    ? {
+        target: TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
+        minify: TAURI_ENV_DEBUG ? false : 'esbuild',
+        sourcemap: Boolean(TAURI_ENV_DEBUG)
+      }
+    : {}
 
-  if (!appHost) {
-    throw new Error(`APP_HOST is required in .env.${mode}`)
-  }
+  const httpsConfig =
+    clientEnvData.isDev && !clientEnvData.isTauriDev
+      ? {
+          https: {
+            key: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev-key.pem')),
+            cert: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev.pem'))
+          }
+        }
+      : {}
+
+  const hmr = (() => {
+    if (clientEnvData.tauriDevHost) {
+      return {
+        protocol: 'ws',
+        host: clientEnvData.tauriDevHost,
+        port: clientEnvData.clientPort + 1
+      }
+    }
+
+    if (clientEnvData.isTauriDev) {
+      return undefined
+    }
+
+    return {
+      host: new URL(clientEnvData.appHost).hostname
+    }
+  })()
 
   return {
     clearScreen: false,
     envDir,
     envPrefix: ['VITE_', 'TAURI_ENV_*'],
-    plugins: [vue(), !isDev && generatePWAConfig({ appName: 'K-Room', themeBg })],
+    define: {
+      __CLIENT_ENV_DATA__: JSON.stringify(clientEnvData)
+    },
+    plugins: [
+      vue(),
+      !clientEnvData.isDev && generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg })
+    ],
     resolve: {
       alias: [
         { find: 'src', replacement: path.resolve(__dirname, './src') },
-        { find: /^shared$/, replacement: path.resolve(__dirname, '../shared/src/index.ts') },
-        { find: /^shared\/(.*)$/, replacement: path.resolve(__dirname, '../shared/src/$1') }
+        { find: /^global-shared$/, replacement: path.resolve(__dirname, '../global-shared/src/index.ts') },
+        { find: /^global-shared\/(.*)$/, replacement: path.resolve(__dirname, '../global-shared/src/$1') }
       ]
     },
     build: {
       outDir: './build',
-      ...(process.env.TAURI_ENV_PLATFORM
-        ? {
-            target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
-            minify: process.env.TAURI_ENV_DEBUG ? false : 'esbuild',
-            sourcemap: Boolean(process.env.TAURI_ENV_DEBUG)
-          }
-        : {})
+      ...tauriBuildConfig
     },
     server: {
-      host: tauriDevHost || (isTauriDev ? '127.0.0.1' : true),
-      port: clientPort,
-      strictPort: isTauriDev,
-      hmr: tauriDevHost
-        ? {
-            protocol: 'ws',
-            host: tauriDevHost,
-            port: clientPort + 1
-          }
-        : isTauriDev
-        ? undefined
-        : {
-            host: new URL(appHost).hostname
-          },
+      host: clientEnvData.tauriDevHost || (clientEnvData.isTauriDev ? '127.0.0.1' : true),
+      port: clientEnvData.clientPort,
+      strictPort: clientEnvData.isTauriDev,
+      hmr,
       watch: {
         ignored: ['**/src-tauri/**']
       },
-      ...(isDev && !isTauriDev
-        ? {
-            https: {
-              key: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev-key.pem')),
-              cert: fs.readFileSync(path.resolve(__dirname, '../dev-certs/k-room-dev.pem'))
-            }
-          }
-        : {})
+      ...httpsConfig
     }
   }
 })

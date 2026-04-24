@@ -1,16 +1,26 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Patch, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { type Request, type Response } from 'express'
-import { type IBackendResponse, type IGetUserDataResponse, USER_ENDPOINTS } from 'shared'
+import {
+  type IBackendResponse,
+  type ICreateNewPasswordPayload,
+  type IGetUserDataResponse,
+  USER_ENDPOINTS
+} from 'global-shared'
+import { memoryStorage } from 'multer'
 
 import { SHARED_I18N } from 'src/shared/config/i18n'
-import { AppError } from 'src/shared/lib/app-error'
+import { AppError, toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
+import { runRequestValidation } from 'src/shared/lib/run-request-validation'
 
 import { AccessTokenGuard } from '../auth/auth.guard'
 import { AUTH_I18N } from '../auth/auth.i18n'
 import { AuthService } from '../auth/auth.service'
 
+import { RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
+import { RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
 
 @Controller()
 export class UserController {
@@ -35,5 +45,73 @@ export class UserController {
         silent: true
       }
     })
+  }
+
+  @Post(USER_ENDPOINTS.resetPassword)
+  async resetPassword(
+    @Req() request: Request,
+    @Res() response: Response<IBackendResponse<null>>,
+    @Body() payload: ICreateNewPasswordPayload
+  ) {
+    const { language } = request
+
+    try {
+      await runRequestValidation(request, RESET_PASSWORD_VALIDATION)
+      await this.userService.resetPassword(payload, language)
+
+      return response.json({
+        payload: null,
+        message: {
+          text: localizedText(RESET_PASSWORD_I18N.success, language),
+          silent: true
+        }
+      })
+    } catch (error) {
+      throw toAppError(error, localizedText(RESET_PASSWORD_I18N.failed, language))
+    }
+  }
+
+  @Patch(USER_ENDPOINTS.editUserData)
+  @UseGuards(AccessTokenGuard)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      limits: {
+        fileSize: 1024 * 1024 * 1024
+      }
+    })
+  )
+  async updateUserData(
+    @Req() request: Request,
+    @Res() response: Response<IBackendResponse<null>>,
+    @UploadedFile() file?: Express.Multer.File,
+    @Body() payload?: { username?: string; 'reset-avatar'?: 'reset' | '' }
+  ) {
+    const { language, authUserId: userId } = request
+
+    try {
+      if (!userId) {
+        throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+      }
+
+      await runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
+      await this.userService.updateUserData({
+        userId,
+        username: payload?.username,
+        avatarFileBuffer: file?.buffer,
+        resetAvatar: payload?.['reset-avatar'],
+        language
+      })
+
+      return response.json({
+        payload: null,
+        message: {
+          text: localizedText(SHARED_I18N.success, language),
+          silent: true
+        }
+      })
+    } catch (error) {
+      throw toAppError(error, localizedText(UPDATE_USER_DATA_I18N.failedUpdate, language))
+    }
   }
 }

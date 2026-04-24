@@ -4,33 +4,33 @@ TEMP_CI_CD_AGREEMENTS.md
 .claude
 .vscode
 .DS_Store
-node_modules
-dev-certs
+
+.env.deploy
+dev-certs/
+node_modules/
+**/node_modules/
 pnpm-debug.log*
-.pnpm-store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-client/node_modules
-client/build
-client/eslintcache
+.pnpm-store/
+.turbo/
+**/.turbo/
 
-server/node_modules
-server/package-lock.log
-server/build
-server/eslintcache
-server/.adminjs
-server/tsconfig.tsbuildinfo
+build/
+dist/
+dev-dist/
+**/build/
+**/dist/
+**/dev-dist/
+**/.adminjs/
+**/eslintcache
+**/*.tsbuildinfo
 
-shared/node_modules
-shared/package-lock.log
-shared/dist
-shared/eslintcache
-shared/tsconfig.tsbuildinfo
+package-lock.log
 
-e2e/playwright-report
-e2e/test-results
+e2e/playwright-report/
+e2e/test-results/
 
-legacy/**/build
-legacy/**/dev-dist
-legacy/**/.adminjs
-legacy/**/*.tsbuildinfo
-scripts/deploy/certs
+scripts/deploy/certs/

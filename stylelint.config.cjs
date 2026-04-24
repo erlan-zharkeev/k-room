@@ -8,6 +8,12 @@ module.exports = {
   ],
   rules: {
     'selector-class-pattern': null,
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['deep']
+      }
+    ],
     'no-descending-specificity': null,
     'max-nesting-depth': 2,
     'selector-nested-pattern': [

@@ -1,4 +1,4 @@
-import { REQ_STATUS, type ReqStatusType } from 'shared'
+import { REQ_STATUS, type ReqStatusType } from 'global-shared'
 
 export class AppError extends Error {
   readonly status: ReqStatusType

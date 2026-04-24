@@ -1,6 +1,6 @@
 packages:
   - client
-  - shared
+  - global-shared
   - server
 allowBuilds:
   '@firebase/util': true

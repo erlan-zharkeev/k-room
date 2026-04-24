@@ -32,7 +32,7 @@ const sharedRules = {
     {
       groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
       pathGroups: [
-        { pattern: 'shared', group: 'external', position: 'after' },
+        { pattern: 'global-shared', group: 'external', position: 'after' },
         { pattern: 'src/**', group: 'internal', position: 'before' }
       ],
       alphabetize: {
@@ -108,25 +108,25 @@ module.exports = {
       },
       parserOptions: {
         ...sharedTypeScriptOverride.parserOptions,
-        project: [path.join(__dirname, 'server/tsconfig.json')]
+        project: [path.join(__dirname, 'server/tsconfig.json'), path.join(__dirname, 'server/tsconfig.test.json')]
       },
-      settings: createTypeScriptResolver('server/tsconfig.json')
+      settings: createTypeScriptResolver('server/tsconfig.test.json')
     },
     {
       ...sharedTypeScriptOverride,
-      files: ['shared/**/*.ts'],
+      files: ['global-shared/**/*.ts'],
       env: {
         es2021: true
       },
       parserOptions: {
         ...sharedTypeScriptOverride.parserOptions,
-        project: [path.join(__dirname, 'shared/tsconfig.eslint.json')]
+        project: [path.join(__dirname, 'global-shared/tsconfig.eslint.json')]
       },
-      settings: createTypeScriptResolver('shared/tsconfig.eslint.json')
+      settings: createTypeScriptResolver('global-shared/tsconfig.eslint.json')
     },
     {
       ...sharedTypeScriptOverride,
-      files: ['client/*.config.ts'],
+      files: ['client/*.config.ts', 'client/env.ts', 'client/env.types.ts'],
       env: {
         es2021: true,
         node: true
@@ -148,9 +148,9 @@ module.exports = {
       },
       parserOptions: {
         ...sharedTypeScriptOverride.parserOptions,
-        project: [path.join(__dirname, 'client/tsconfig.json')]
+        project: [path.join(__dirname, 'client/tsconfig.eslint.json')]
       },
-      settings: createTypeScriptResolver('client/tsconfig.json', ['.js', '.ts', '.d.ts', '.vue'])
+      settings: createTypeScriptResolver('client/tsconfig.eslint.json', ['.js', '.ts', '.d.ts', '.vue'])
     },
     {
       ...sharedTypeScriptOverride,
@@ -165,10 +165,10 @@ module.exports = {
         ...sharedTypeScriptOverride.parserOptions,
         parser: '@typescript-eslint/parser',
         extraFileExtensions: ['.vue'],
-        project: [path.join(__dirname, 'client/tsconfig.json')]
+        project: [path.join(__dirname, 'client/tsconfig.eslint.json')]
       },
       plugins: ['@typescript-eslint', 'import', 'vue'],
-      settings: createTypeScriptResolver('client/tsconfig.json', ['.js', '.ts', '.d.ts', '.vue']),
+      settings: createTypeScriptResolver('client/tsconfig.eslint.json', ['.js', '.ts', '.d.ts', '.vue']),
       rules: {
         ...sharedRules,
         'vue/multi-word-component-names': 'off'
