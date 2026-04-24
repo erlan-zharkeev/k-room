@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import { type Request, type Response, type CookieOptions } from 'express'
-import jwt, { type SignOptions } from 'jsonwebtoken'
 import {
   type AppLanguageType,
   REQ_STATUS,
@@ -13,17 +12,18 @@ import {
   type ISignInWithProviderPayload,
   type ISignInWithProviderResponse,
   type ProviderType
-} from 'shared'
+} from 'global-shared'
+import jwt, { type SignOptions } from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 
-import { SERVER_ENV } from 'src/app/config/env'
+import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 
 import { EmailService } from '../email/email.service'
 import { USER_I18N } from '../user/user.i18n'
 import { UserModel } from '../user/user.model'
-import { UserService } from '../user/user.service'
+import { loadGoogleAvatar, updateUserAvatar, UserService } from '../user/user.service'
 
 import {
   EMAIL_CONFIRMATION_LINK_LIFE,
@@ -307,6 +307,14 @@ export class AuthService {
       hashedPassword
     })
     const user = newUser ?? (await this.userService.findByEmail(payload.email))
+
+    if (newUser && payload.avatar) {
+      const buffer = await loadGoogleAvatar(payload.avatar)
+
+      if (buffer) {
+        await updateUserAvatar(buffer, String(newUser._id), language)
+      }
+    }
 
     if (!user) {
       throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.signInWithProviderFailed, language))

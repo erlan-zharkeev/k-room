@@ -1,8 +1,8 @@
 import { init, isInitialized, setupExpressErrorHandler, type NodeOptions } from '@sentry/node'
 import type { Express } from 'express'
-import { shouldIgnoreSentryError } from 'shared'
+import { shouldIgnoreSentryError } from 'global-shared'
 
-import { SERVER_ENV } from './config/env'
+import { SERVER_ENV } from './env'
 
 const SENTRY_BASE_CONFIG = {
   dsn: 'https://ab1874087030df840c3e1feadaee596b@o4511099405139968.ingest.us.sentry.io/4511099731181568',

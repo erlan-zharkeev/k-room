@@ -1,5 +1,5 @@
+import type { ProviderType, UserRoleType } from 'global-shared'
 import type { Types } from 'mongoose'
-import type { ProviderType, UserRoleType } from 'shared'
 
 export interface IUserDevice {
   socketId: string

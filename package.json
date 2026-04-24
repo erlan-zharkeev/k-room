@@ -8,10 +8,14 @@
   "packageManager": "pnpm@10.33.0",
   "workspaces": [
     "client",
-    "shared",
+    "global-shared",
     "server"
   ],
   "pnpm": {
+    "overrides": {
+      "@tiptap/core": "2.27.2",
+      "@tiptap/pm": "2.27.2"
+    },
     "onlyBuiltDependencies": [
       "@firebase/util",
       "@nestjs/core",
@@ -26,22 +30,25 @@
   },
   "scripts": {
     "dev": "zsh scripts/dev.sh",
-    "dev:server-pane": "zsh scripts/dev-pane.sh server",
-    "dev:client-pane": "zsh scripts/dev-pane.sh client",
     "husky-prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:fix": "prettier --write .",
-    "lint:style": "pnpm --dir client run lint:style",
-    "lint:fsd": "pnpm --dir client run lint:fsd",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck typecheck:test",
+    "lint:es": "turbo run lint:es",
+    "lint:style": "turbo run lint:style",
+    "lint:fsd": "turbo run lint:fsd",
+    "lint:all": "turbo run lint:fsd lint:es lint:style",
     "lint:fsd:watch": "pnpm --dir client run lint:fsd:watch",
-    "lint:fix": "pnpm --dir client run lint:fix-es && pnpm --dir client run lint:fix-style && pnpm --dir server run lint:fix-es",
+    "lint:fix": "turbo run lint:fix-es && turbo run lint:fix-style",
     "e2e": "playwright test -c playwright.config.ts",
     "e2e:ui": "playwright test -c playwright.config.ts --ui",
-    "check": "pnpm --dir client run lint:fsd && pnpm --dir client run lint:es && pnpm --dir client run lint:style && pnpm --dir client run build && pnpm --dir server run lint:es && pnpm --dir server run typecheck && pnpm --dir server run build && pnpm run test && prettier --check .",
-    "test": "pnpm --dir server run --if-present test"
+    "check": "turbo run lint:fsd lint:es lint:style typecheck typecheck:test build test && prettier --check .",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@types/lodash": "^4.17.24",
     "@types/node": "^25.5.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
@@ -58,6 +65,12 @@
     "stylelint-config-clean-order": "^8.0.1",
     "stylelint-config-prettier-scss": "^1.0.0",
     "stylelint-config-standard-scss": "^17.0.0",
+    "turbo": "^2.9.6",
     "vue-eslint-parser": "^10.4.0"
+  },
+  "dependencies": {
+    "@tiptap/core": "2.27.2",
+    "@tiptap/pm": "2.27.2",
+    "lodash": "^4.18.1"
   }
 }

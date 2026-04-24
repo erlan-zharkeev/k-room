@@ -2,7 +2,8 @@ import path from 'path'
 
 import MongoStore from 'connect-mongo'
 
-import { SERVER_ENV } from 'src/app/config/env'
+import { SERVER_ENV } from 'src/app/env'
+import { ADMIN_INFO_NOTIFICATION_OPTIONS } from 'src/modules/info-notifications/info-notifications.admin'
 import { ADMIN_USER_OPTIONS } from 'src/modules/user/user.admin'
 
 const adminFaviconPath = path.resolve(process.cwd(), 'public/admin-favicon.svg')
@@ -23,7 +24,7 @@ const ADMIN_JS_CONFIG = {
     companyName: appName,
     favicon: '/admin-favicon.svg'
   },
-  resources: [ADMIN_USER_OPTIONS]
+  resources: [ADMIN_INFO_NOTIFICATION_OPTIONS, ADMIN_USER_OPTIONS]
 }
 
 const createAdmin = async () => {

@@ -2,8 +2,8 @@
   "extends": "./tsconfig.node.json",
   "compilerOptions": {
     "paths": {
-      "shared": ["./shared/src/index.ts"],
-      "shared/*": ["./shared/src/*"],
+      "global-shared": ["./global-shared/src/index.ts"],
+      "global-shared/*": ["./global-shared/src/*"],
       "e2e/*": ["./e2e/*"]
     },
     "types": ["node", "@playwright/test"]

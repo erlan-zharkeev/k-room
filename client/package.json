@@ -25,8 +25,9 @@
     "@primeuix/themes": "^2.0.3",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.5",
-    "shared": "workspace:*",
-    "vue": "^3.5.13"
+    "global-shared": "workspace:*",
+    "vue": "^3.5.13",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@feature-sliced/steiger-plugin": "^0.5.7",

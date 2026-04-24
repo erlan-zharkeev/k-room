@@ -10,7 +10,7 @@ import {
   type ISendConfirmationLinkResponse,
   type ISignInWithProviderPayload,
   type ISignInWithProviderResponse
-} from 'shared'
+} from 'global-shared'
 
 import { SHARED_I18N } from 'src/shared/config/i18n'
 import { toAppError } from 'src/shared/lib/app-error'

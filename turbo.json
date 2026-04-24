@@ -1,0 +1,61 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    ".env.common",
+    ".env.development",
+    ".env.production",
+    ".env.test",
+    ".eslintrc.cjs",
+    "prettier.config.cjs",
+    "stylelint.config.cjs",
+    "tsconfig*.json"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["build/**", "dist/**", ".output/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "typecheck:test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint:es": {
+      "outputs": []
+    },
+    "lint:style": {
+      "outputs": []
+    },
+    "lint:fsd": {
+      "outputs": []
+    },
+    "lint:all": {
+      "dependsOn": ["lint:fsd", "lint:es", "lint:style"],
+      "outputs": []
+    },
+    "lint:fix-es": {
+      "cache": false
+    },
+    "lint:fix-style": {
+      "cache": false
+    },
+    "lint:fix-all": {
+      "cache": false
+    },
+    "serve": {
+      "cache": false,
+      "persistent": true
+    },
+    "serve:tauri": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

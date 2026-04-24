@@ -10,7 +10,7 @@ COPY pnpm-lock.yaml ./pnpm-lock.yaml
 COPY tsconfig.base.json ./tsconfig.base.json
 COPY tsconfig.bundler.json ./tsconfig.bundler.json
 
-COPY shared ./shared
+COPY global-shared ./global-shared
 
 COPY client/package.json ./client/package.json
 COPY client/tsconfig.json ./client/tsconfig.json

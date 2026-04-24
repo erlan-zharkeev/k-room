@@ -1,13 +1,13 @@
 import { check, type ValidationChain } from 'express-validator'
-import { VALIDATION_LIMITS, VALIDATION_PATTERNS, providers } from 'shared'
+import { VALIDATION_LIMITS, VALIDATION_PATTERNS, providers } from 'global-shared'
 
 import { AUTH_I18N } from './auth.i18n'
 
-const requiredStringRule = (field: string, message = AUTH_I18N.fieldIsRequired) => {
+export const requiredStringRule = (field: string, message = AUTH_I18N.fieldIsRequired) => {
   return check(field).notEmpty().withMessage(message)
 }
 
-const emailRule = () => {
+export const emailRule = () => {
   return check('email')
     .notEmpty()
     .withMessage(AUTH_I18N.emailIsRequired)
@@ -16,7 +16,7 @@ const emailRule = () => {
     .withMessage(AUTH_I18N.invalidEmailFormat)
 }
 
-const passwordRule = () => {
+export const passwordRule = () => {
   return check('password')
     .notEmpty()
     .withMessage(AUTH_I18N.passwordIsRequired)
@@ -34,7 +34,7 @@ const passwordRule = () => {
     .withMessage(AUTH_I18N.passwordMustContainOnlyLatin)
 }
 
-const usernameRule = () => {
+export const usernameRule = () => {
   return check('username')
     .isLength({ min: VALIDATION_LIMITS.usernameMinLength })
     .withMessage(AUTH_I18N.usernameTooShort)
@@ -43,7 +43,7 @@ const usernameRule = () => {
     .withMessage(AUTH_I18N.usernameTooLong)
 }
 
-const providerRule = () => {
+export const providerRule = () => {
   return check('provider')
     .exists({ checkNull: true })
     .withMessage(AUTH_I18N.fieldIsRequired)

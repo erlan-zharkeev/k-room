@@ -1,0 +1,80 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+const infoNotificationMock = vi.hoisted(() => ({
+  loadInfoNotificationFixtures: vi.fn()
+}))
+
+const mediaMock = vi.hoisted(() => ({
+  uploadBufferToBucket: vi.fn()
+}))
+
+const userServiceMock = vi.hoisted(() => ({
+  createUser: vi.fn(),
+  isUserExist: vi.fn()
+}))
+
+const userModelMock = vi.hoisted(() => ({
+  db: {
+    collection: vi.fn()
+  },
+  updateOne: vi.fn()
+}))
+
+const chatRoomModelMock = vi.hoisted(() => {
+  class ChatRoomModel {
+    static findOne = vi.fn()
+    static findById = vi.fn()
+    static updateOne = vi.fn()
+
+    id = 'created-room'
+    save = vi.fn().mockResolvedValue(this)
+  }
+
+  return { ChatRoomModel }
+})
+
+const messageModelMock = vi.hoisted(() => ({
+  updateOne: vi.fn()
+}))
+
+const logMock = vi.hoisted(() => ({
+  info: vi.fn(),
+  success: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn()
+}))
+
+vi.mock('../info-notifications/info-notifications.service', () => infoNotificationMock)
+vi.mock('../media/media.service', () => mediaMock)
+vi.mock('../user/user.service', () => userServiceMock)
+vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
+vi.mock('../chat-rooms/chat-rooms.model', () => ({ ChatRoomModel: chatRoomModelMock.ChatRoomModel }))
+vi.mock('../messages/messages.model', () => ({ MessageModel: messageModelMock }))
+vi.mock('../../shared/lib/log', () => ({ log: logMock }))
+
+const { loadFixtures } = await import('./fixtures.service')
+
+describe('fixtures.service', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    userModelMock.db.collection.mockReturnValue({
+      findOne: vi.fn().mockResolvedValue({ _id: 'existing-avatar' })
+    })
+    userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
+    chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
+    chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({
+      messages: Array.from({ length: 101 }, (_, idx) => `fixture-erlan-tolik-${String(idx + 1).padStart(3, '0')}`)
+    })
+  })
+
+  it('loads dev fixtures idempotently without duplicating existing users or room message links', async () => {
+    await loadFixtures()
+
+    expect(infoNotificationMock.loadInfoNotificationFixtures).toHaveBeenCalledTimes(1)
+    expect(userServiceMock.isUserExist).toHaveBeenCalledTimes(33)
+    expect(userServiceMock.createUser).not.toHaveBeenCalled()
+    expect(mediaMock.uploadBufferToBucket).not.toHaveBeenCalled()
+    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(101)
+    expect(chatRoomModelMock.ChatRoomModel.updateOne).not.toHaveBeenCalled()
+  })
+})

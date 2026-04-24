@@ -7,10 +7,10 @@
     "serve": "cross-env TS_NODE_PROJECT=tsconfig.runtime.json nest start --watch --exec \"node -r tsconfig-paths/register\"",
     "start": "cross-env TS_NODE_PROJECT=tsconfig.runtime.json nest start --exec \"node -r tsconfig-paths/register\"",
     "start:prod": "cross-env TS_NODE_PROJECT=tsconfig.runtime.json node -r tsconfig-paths/register build/main.js",
-    "prebuild": "pnpm --dir ../shared run build",
     "build": "cross-env NODE_ENV=production nest build",
-    "pretypecheck": "pnpm --dir ../shared run build",
+    "test": "vitest run --config vitest.config.mts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:test": "tsc -p tsconfig.test.json --noEmit",
     "_typecheck": "Nest build emits code; this keeps a separate noEmit typecheck step",
     "lint:es": "pnpm --dir .. exec eslint --config .eslintrc.cjs \"server/src/**/*.ts\"",
     "lint:fix-es": "pnpm --dir .. exec eslint --config .eslintrc.cjs server/src --ext ts --fix"
@@ -44,8 +44,8 @@
     "reflect-metadata": "^0.2.2",
     "resend": "^4.6.0",
     "rxjs": "^7.8.1",
+    "global-shared": "workspace:*",
     "sharp": "^0.32.1",
-    "shared": "workspace:*",
     "uuid": "^9.0.0"
   },
   "overrides": {
@@ -78,6 +78,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsup": "^8.5.0",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,4 +1,4 @@
-import type { AppLanguageType } from 'shared'
+import type { AppLanguageType } from 'global-shared'
 
 declare global {
   namespace Express {

@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 
-import { SERVER_ENV } from 'src/app/config/env'
+import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 
