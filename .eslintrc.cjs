@@ -120,9 +120,9 @@ module.exports = {
       },
       parserOptions: {
         ...sharedTypeScriptOverride.parserOptions,
-        project: [path.join(__dirname, 'shared/tsconfig.json')]
+        project: [path.join(__dirname, 'shared/tsconfig.eslint.json')]
       },
-      settings: createTypeScriptResolver('shared/tsconfig.json')
+      settings: createTypeScriptResolver('shared/tsconfig.eslint.json')
     },
     {
       ...sharedTypeScriptOverride,

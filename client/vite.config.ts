@@ -4,6 +4,8 @@ import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 
+import { generatePWAConfig } from './vite.pwa.config'
+
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const commonEnv = loadEnv('common', envDir, '')
@@ -13,6 +15,7 @@ export default defineConfig(({ mode }) => {
   const tauriDevHost = process.env.TAURI_DEV_HOST
   const clientPort = Number(commonEnv.CLIENT_PORT)
   const appHost = modeEnv.APP_HOST
+  const themeBg = '#1c1c1c'
 
   if (!Number.isInteger(clientPort) || clientPort <= 0) {
     throw new Error('CLIENT_PORT is required in .env.common')
@@ -26,7 +29,7 @@ export default defineConfig(({ mode }) => {
     clearScreen: false,
     envDir,
     envPrefix: ['VITE_', 'TAURI_ENV_*'],
-    plugins: [vue()],
+    plugins: [vue(), !isDev && generatePWAConfig({ appName: 'K-Room', themeBg })],
     resolve: {
       alias: [
         { find: 'src', replacement: path.resolve(__dirname, './src') },
