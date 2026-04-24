@@ -7,6 +7,7 @@ import {
   type IUserInfoNotification,
   REQ_STATUS,
   type SocketActionsType,
+  type UnknownObject,
   WELCOME_INFO_NOTIFICATION_ID
 } from 'global-shared'
 
@@ -49,7 +50,7 @@ export const getActiveInfoNotifications = async ({
     return []
   }
 
-  const query: Record<string, unknown> = {
+  const query: UnknownObject = {
     isActive: true
   }
 

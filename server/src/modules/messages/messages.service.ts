@@ -1,12 +1,13 @@
-import type {
-  IDBMessage,
-  IEventLoadRoomMessages,
-  IEventMessageDelivered,
-  IEventRoomMessagesLoaded,
-  IEventUpdateMessageStatus,
-  IMessage,
-  MessageStatusType,
-  SocketActionsType
+import {
+  isString,
+  type IDBMessage,
+  type IEventLoadRoomMessages,
+  type IEventMessageDelivered,
+  type IEventRoomMessagesLoaded,
+  type IEventUpdateMessageStatus,
+  type IMessage,
+  type MessageStatusType,
+  type SocketActionsType
 } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -32,7 +33,7 @@ export const transformMessageForUser = (message: IDBMessage, userId: string): IM
     body: message.body,
     createdAt: message.createdAt,
     reactions: message.reactions,
-    images: images.map((image) => (typeof image === 'string' ? { src: image, name: image } : image)),
+    images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
     status,
     isSelf: message.authorId === userId,
     repliedMessage: message.repliedMessage

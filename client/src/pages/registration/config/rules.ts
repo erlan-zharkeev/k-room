@@ -1,20 +1,20 @@
-import { VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'global-shared'
+import {
+  passwordMinLengthRule,
+  requiredAgreementRule,
+  requiredEmailRule,
+  requiredPasswordRule,
+  strongPasswordRule,
+  usernameMaxLengthRule,
+  usernameMinLengthRule,
+  validEmailRule,
+  type FormRulesType
+} from 'src/shared/lib'
+
+import type { RegistrationFormDataType } from '../model/types'
 
 export const REGISTRATION_FORM_RULES = {
-  username: {
-    required: true,
-    minlength: VALIDATION_LIMITS.usernameMinLength,
-    maxlength: VALIDATION_LIMITS.usernameMaxLength
-  },
-  email: {
-    required: true
-  },
-  password: {
-    required: true,
-    minlength: VALIDATION_LIMITS.passwordMinLength,
-    pattern: VALIDATION_PATTERNS.passwordStrong
-  },
-  policy: {
-    required: true
-  }
-} as const
+  username: [usernameMinLengthRule, usernameMaxLengthRule],
+  email: [requiredEmailRule, validEmailRule],
+  password: [requiredPasswordRule, passwordMinLengthRule, strongPasswordRule],
+  policy: [requiredAgreementRule]
+} satisfies FormRulesType<RegistrationFormDataType>

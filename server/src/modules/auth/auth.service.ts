@@ -34,31 +34,11 @@ import {
 } from './auth.constants'
 import { AUTH_I18N } from './auth.i18n'
 import type { ITokenPayload } from './auth.types'
+import { parseTokenExpires } from './lib/parse-token-expires'
 
 @Injectable()
 export class AuthService {
   constructor(private readonly emailService: EmailService, private readonly userService: UserService) {}
-
-  private parseExpires(expires: string | number) {
-    if (typeof expires === 'number') {
-      return expires * 1000
-    }
-
-    const match = expires.match(/^(\d+)([smhd])$/)
-    if (!match) {
-      return 30 * 24 * 60 * 60 * 1000
-    }
-
-    const [, value, unit] = match
-    const multipliers = {
-      s: 1000,
-      m: 60_000,
-      h: 3_600_000,
-      d: 86_400_000
-    }
-
-    return Number(value) * multipliers[unit as keyof typeof multipliers]
-  }
 
   private getCookieOptions(maxAge: number): CookieOptions {
     return {
@@ -83,7 +63,7 @@ export class AuthService {
     expiresIn: string | number
   ) {
     const token = this.signToken(userId, secret, expiresIn)
-    response.cookie(tokenName, token, this.getCookieOptions(this.parseExpires(expiresIn)))
+    response.cookie(tokenName, token, this.getCookieOptions(parseTokenExpires(expiresIn)))
 
     return token
   }

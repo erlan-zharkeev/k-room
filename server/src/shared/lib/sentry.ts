@@ -1,5 +1,5 @@
 import { captureException, captureMessage, isInitialized } from '@sentry/node'
-import { shouldIgnoreSentryError, type ISentryErrorContext } from 'global-shared'
+import { isNumber, shouldIgnoreSentryError, type ISentryErrorContext } from 'global-shared'
 
 export const serverCaptureSentryException = (error: unknown) => {
   if (!isInitialized()) {
@@ -24,7 +24,7 @@ const generateSentryError =
       level: 'error',
       tags: {
         kind,
-        ...(typeof status === 'number' ? { status: String(status) } : {})
+        ...(isNumber(status) ? { status: String(status) } : {})
       }
     })
   }

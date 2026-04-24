@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { DEFAULT_APP_LANGUAGE, formatHumanDateTime } from 'global-shared'
+import { DEFAULT_APP_LANGUAGE, formatHumanDateTime, isNumber, isString, type UnknownObject } from 'global-shared'
 
 import { localizedText } from 'src/shared/lib/localized-text'
 
@@ -7,13 +7,13 @@ import { LAST_SEEN_PATH } from './user.constants'
 import { USER_ADMIN_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
-const formatLastSeenParam = (params?: Record<string, unknown>) => {
+const formatLastSeenParam = (params?: UnknownObject) => {
   if (!params) {
     return
   }
 
   const value = params[LAST_SEEN_PATH]
-  if (typeof value !== 'number' && typeof value !== 'string') {
+  if (!isNumber(value) && !isString(value)) {
     return
   }
 
@@ -21,8 +21,8 @@ const formatLastSeenParam = (params?: Record<string, unknown>) => {
 }
 
 const withFormattedLastSeen = (response: {
-  record?: { params?: Record<string, unknown> }
-  records?: Array<{ params?: Record<string, unknown> }>
+  record?: { params?: UnknownObject }
+  records?: Array<{ params?: UnknownObject }>
 }) => {
   formatLastSeenParam(response.record?.params)
   response.records?.forEach((record) => formatLastSeenParam(record.params))
@@ -33,7 +33,7 @@ const withFormattedLastSeen = (response: {
 const normalizePassword = async (
   request: {
     method?: string
-    payload?: Record<string, unknown>
+    payload?: UnknownObject
   },
   isRequired: boolean
 ) => {
@@ -43,7 +43,7 @@ const normalizePassword = async (
 
   const password = request.payload?.['system.password']
 
-  if (typeof password === 'string' && password.trim()) {
+  if (isString(password) && password.trim()) {
     request.payload = {
       ...request.payload,
       'system.password': await bcrypt.hash(password, 6)
@@ -114,24 +114,18 @@ export const ADMIN_USER_OPTIONS = {
     filterProperties: ['_id', 'public.username', 'personal.email', 'system.role', 'public.online', 'system.provider'],
     actions: {
       new: {
-        before: async (request: { method?: string; payload?: Record<string, unknown> }) =>
-          normalizePassword(request, true)
+        before: async (request: { method?: string; payload?: UnknownObject }) => normalizePassword(request, true)
       },
       edit: {
-        before: async (request: { method?: string; payload?: Record<string, unknown> }) =>
-          normalizePassword(request, false)
+        before: async (request: { method?: string; payload?: UnknownObject }) => normalizePassword(request, false)
       },
       list: {
-        after: async (response: {
-          record?: { params?: Record<string, unknown> }
-          records?: Array<{ params?: Record<string, unknown> }>
-        }) => withFormattedLastSeen(response)
+        after: async (response: { record?: { params?: UnknownObject }; records?: Array<{ params?: UnknownObject }> }) =>
+          withFormattedLastSeen(response)
       },
       show: {
-        after: async (response: {
-          record?: { params?: Record<string, unknown> }
-          records?: Array<{ params?: Record<string, unknown> }>
-        }) => withFormattedLastSeen(response)
+        after: async (response: { record?: { params?: UnknownObject }; records?: Array<{ params?: UnknownObject }> }) =>
+          withFormattedLastSeen(response)
       }
     },
     properties: {

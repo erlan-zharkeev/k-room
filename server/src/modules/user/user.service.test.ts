@@ -1,3 +1,4 @@
+import type { UnknownObject } from 'global-shared'
 import { Types } from 'mongoose'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -31,7 +32,7 @@ const userModelMock = vi.hoisted(() => {
     markModified = vi.fn()
     save = vi.fn()
 
-    constructor(data: Record<string, unknown>) {
+    constructor(data: UnknownObject) {
       Object.assign(this, data)
       this._id = data._id ?? 'generated-id'
       this.createdAt = new Date(1000)

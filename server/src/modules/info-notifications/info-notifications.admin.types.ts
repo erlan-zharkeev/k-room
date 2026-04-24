@@ -1,6 +1,8 @@
+import type { UnknownObject } from 'global-shared'
+
 export interface IInfoNotificationAdminActionRequest {
   method?: string
-  payload?: Record<string, unknown>
+  payload?: UnknownObject
 }
 
 export interface IInfoNotificationAdminRecordType {
