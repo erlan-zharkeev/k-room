@@ -23,11 +23,9 @@ verify:
   image: node:${NODE_VERSION}
   stage: verify
   script:
-    - npm ci
-    - npm --prefix common ci
-    - npm --prefix client ci --legacy-peer-deps
-    - npm --prefix server ci
-    - npm run check
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm run check
 
 publish-images:
   image: docker:${DOCKER_VERSION}
@@ -65,15 +63,15 @@ deploy-production:
   script:
     - >
       ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
-      "mkdir -p $LIGHTSAIL_APP_PATH/deploy-scripts $LIGHTSAIL_APP_PATH/config/nginx $LIGHTSAIL_APP_PATH/deploy-scripts/certs"
+      "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy $LIGHTSAIL_APP_PATH/nginx $LIGHTSAIL_APP_PATH/scripts/deploy/certs"
     - scp compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
     - scp .env.common "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.common"
     - scp .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
-    - scp deploy-scripts/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy-scripts/deploy.sh"
-    - scp deploy-scripts/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy-scripts/sync-certs.sh"
-    - scp deploy-scripts/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/deploy-scripts/install-certbot-renew-hook.sh"
-    - scp config/nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/config/nginx/webserver.conf"
+    - scp scripts/deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/deploy.sh"
+    - scp scripts/deploy/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/sync-certs.sh"
+    - scp scripts/deploy/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/install-certbot-renew-hook.sh"
+    - scp nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/nginx/webserver.conf"
     - >
       ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
       "cd $LIGHTSAIL_APP_PATH
-      && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./deploy-scripts/deploy.sh"
+      && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./scripts/deploy/deploy.sh"

@@ -8,5 +8,5 @@ node_modules
 client/build
 client/dev-dist
 server/build
-common/tsconfig.tsbuildinfo
+shared/tsconfig.tsbuildinfo
 docs

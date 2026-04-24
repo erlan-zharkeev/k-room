@@ -53,8 +53,8 @@ if [ ${#missing_env_vars[@]} -gt 0 ]; then
   exit 1
 fi
 
-npm ci
-npm run husky-prepare
+pnpm install
+pnpm run husky-prepare
 chmod +x .husky/pre-commit
 
 if ! docker ps --format '{{.Names}}' | grep -qx 'db'; then
@@ -79,11 +79,4 @@ if ! docker ps --format '{{.Names}}' | grep -qx 'mongo-express'; then
   fi
 fi
 
-cd ./common
-npm ci
-
-cd ../server/
-npm ci
-
-cd ../client/
-npm ci --legacy-peer-deps
+cd "$ROOT_DIR" || exit $?

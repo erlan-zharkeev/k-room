@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.bundler.json",
+  "compilerOptions": {
+    "declaration": true,
+    "composite": true,
+    "noEmit": false,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "paths": {
+      "shared": ["./src/index.ts"],
+      "shared/*": ["./src/*"]
+    }
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
+}

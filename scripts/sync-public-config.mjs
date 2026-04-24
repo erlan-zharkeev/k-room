@@ -5,8 +5,8 @@ const rootPath = process.cwd()
 const stage = process.argv[2] ?? 'production'
 const commonEnvPath = path.join(rootPath, '.env.common')
 const envPath = path.join(rootPath, `.env.${stage}`)
-const nginxTemplatePath = path.join(rootPath, 'config/nginx/webserver.template.conf')
-const nginxPath = path.join(rootPath, 'config/nginx/webserver.conf')
+const nginxTemplatePath = path.join(rootPath, 'nginx/webserver.template.conf')
+const nginxPath = path.join(rootPath, 'nginx/webserver.conf')
 
 const addTrailingSlash = (value) => (value.endsWith('/') ? value : `${value}/`)
 

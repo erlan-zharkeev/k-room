@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run sync:public-config && npm run lint:fix && npm run format:fix && git add -u && npm run check
+pnpm run sync:public-config && pnpm run lint:fix && pnpm run format:fix && git add -u && pnpm run check

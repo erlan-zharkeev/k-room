@@ -1,0 +1,140 @@
+import { useEffect, useRef, useState } from 'react'
+
+import { handleRuntimeError } from 'src/shared/lib'
+import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
+import { useI18n, useSettings } from 'src/shared/preferences'
+import { AppIconNameType } from 'src/shared/ui'
+
+import { useDevicePermissionRequestAndUpdate } from './use-device-permission-request-and-update'
+
+export const useInputVideoDevice = () => {
+  const { getNotification } = useNotification()
+  const { t } = useI18n()
+
+  const [videoInputDeviceList, setVideoInputDeviceList] = useState([] as MediaDeviceInfo[])
+  const settings = useSettings()
+  const [isVideoLoading, setVideoIsLoading] = useState(false)
+  const [showVideo, setShowVideo] = useState(false)
+  const videoStream = useRef<MediaStream | null>(null)
+  const { requestAndUpdateCamPermission } = useDevicePermissionRequestAndUpdate()
+  const videoEl = useRef<HTMLVideoElement>(null)
+
+  const videoIcon: AppIconNameType = isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
+  const loading = videoInputDeviceList.length < 0
+
+  const changeVideoInputDevice = (value: string = '') => {
+    settings.shallowUpdate({ selectedVideoInputDeviceId: value })
+  }
+
+  const hideVideo = () => {
+    const tracks = videoStream.current?.getTracks()
+    tracks?.forEach((track) => track.stop())
+    setShowVideo(false)
+  }
+
+  const cantAccessDeviceNotification = getNotification({
+    message: t(NOTIFICATION_I18N.cantAccessDevice),
+    messageType: 'error'
+  })
+
+  const videoDevices = videoInputDeviceList.map((device) => ({
+    label: device.label,
+    value: device.deviceId
+  }))
+
+  const updateDeviceList = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    const videoInputs = devices.filter((device) => device.kind === 'videoinput')
+    setVideoInputDeviceList(videoInputs)
+    const selectedStillExists = videoInputs.some((device) => device.deviceId === settings.selectedVideoInputDeviceId)
+
+    if (!selectedStillExists) {
+      changeVideoInputDevice()
+      hideVideo()
+    }
+  }
+
+  const requestInputVideoDeviceList = async () => {
+    try {
+      const permission = await requestAndUpdateCamPermission()
+      if (permission === 'denied') throw new Error('Permission denied')
+      if (permission === 'prompt') {
+        const tempStream = await navigator.mediaDevices.getUserMedia({ video: true })
+        tempStream.getTracks().forEach((track) => track.stop())
+      }
+      updateDeviceList()
+    } catch (error) {
+      handleRuntimeError('Failed to request input video device list', error)
+      cantAccessDeviceNotification.open()
+    }
+  }
+
+  const setVideoStreamHandler = async () => {
+    try {
+      setVideoIsLoading(true)
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Get user media not supported')
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId: settings.selectedVideoInputDeviceId ? { exact: settings.selectedVideoInputDeviceId } : undefined
+        }
+      })
+      videoStream.current = stream
+    } catch (error) {
+      handleRuntimeError('Failed to set video stream', error)
+      cantAccessDeviceNotification.open()
+    } finally {
+      setVideoIsLoading(false)
+    }
+  }
+
+  const testVideo = async () => {
+    if (showVideo) {
+      hideVideo()
+      return
+    }
+
+    await setVideoStreamHandler()
+
+    if (videoStream.current && videoEl.current) {
+      videoEl.current.srcObject = videoStream.current
+      setShowVideo(true)
+    } else {
+      setShowVideo(false)
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      const tracks = videoStream.current?.getTracks()
+      tracks?.forEach((track) => track.stop())
+      setShowVideo(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (videoInputDeviceList.length > 0) {
+      requestAndUpdateCamPermission()
+    }
+  }, [videoInputDeviceList])
+
+  useEffect(() => {
+    navigator.mediaDevices.addEventListener('devicechange', updateDeviceList)
+
+    return () => {
+      navigator.mediaDevices.removeEventListener('devicechange', updateDeviceList)
+    }
+  }, [])
+
+  return {
+    testVideo,
+    videoIcon,
+    videoEl,
+    loading,
+    changeVideoInputDevice,
+    videoDevices,
+    showVideo,
+    requestInputVideoDeviceList
+  }
+}

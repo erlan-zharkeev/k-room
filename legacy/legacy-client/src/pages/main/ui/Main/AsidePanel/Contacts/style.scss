@@ -1,0 +1,94 @@
+.contacts {
+  height: 100%;
+}
+
+.contact-list {
+  height: calc(100% - 90px);
+
+  .contact-list__scroll-controller {
+    padding: 8px 8px 4px 0;
+  }
+
+  .contact-list__items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-list__list-item {
+    padding: 4px;
+    border-radius: 4px;
+    background: var(--main-bg);
+  }
+}
+
+.contact-menu {
+  width: 130px;
+}
+
+.contact-invitation-control-btns {
+  display: flex;
+  grid-gap: 8px;
+  width: 100%;
+  height: 18px;
+}
+
+.delete-contact-confirm-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search-contact {
+  position: sticky;
+
+  .search-contact__dropdown {
+    transform-origin: top center;
+    overflow: hidden;
+    max-height: 420px;
+    transition: max-height 260ms linear;
+  }
+
+  .search-contact__dropdown--open {
+    max-height: 420px;
+  }
+
+  .search-contact__dropdown--closing {
+    pointer-events: none;
+    max-height: 0;
+  }
+
+  .search-contact__found-el-quantity {
+    margin-top: 8px;
+  }
+
+  .search-contact__list {
+    margin-top: 8px;
+    padding: 8px 0 8px 8px;
+    border-radius: 8px;
+    background: var(--main-bg);
+  }
+
+  .search-contact__footer-loader {
+    display: flex;
+    justify-content: center;
+    padding: 8px 8px 0 0;
+  }
+
+  .search-contact__list-element {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 6px 8px 6px 0;
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.search-contact__list-element-interaction-icon {
+  margin-right: 8px;
+}

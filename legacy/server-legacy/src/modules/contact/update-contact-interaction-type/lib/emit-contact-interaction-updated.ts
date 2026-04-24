@@ -1,0 +1,11 @@
+import { IEventUpdateContactInteractionSuccess, InteractionType, SocketActionsType } from 'common'
+
+import { getIO } from 'src/shared/lib/io'
+
+export const emitContactInteractionUpdated = (socketId: string, contactId: string, interaction: InteractionType) => {
+  const payload: IEventUpdateContactInteractionSuccess = {
+    contactId,
+    interaction
+  }
+  getIO().to(socketId).emit<SocketActionsType>('contact-interaction-updated', payload)
+}

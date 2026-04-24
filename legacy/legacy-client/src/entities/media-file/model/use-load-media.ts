@@ -1,0 +1,45 @@
+import { EndpointsType, MEDIA_ENDPOINTS, REQ_STATUS } from 'common'
+
+import { isApiError, useApi } from 'src/shared/api'
+
+import { transformHeadersToMediaData } from '../lib/transform-headers-to-media-data'
+import { useMedia } from './use-media'
+
+export const useLoadMedia = () => {
+  const { doRequest } = useApi()
+  const { put, remove } = useMedia()
+
+  const loadMediaHeaders = async (filename: string) => {
+    const response = await doRequest('head', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType)
+    return transformHeadersToMediaData(response)
+  }
+
+  const requestMedia = (filename: string) => {
+    return doRequest<never, 'blob'>('get', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType, undefined, {
+      responseType: 'blob'
+    })
+  }
+
+  const loadMedia = async (filename: string): Promise<void> => {
+    try {
+      const response = await requestMedia(filename)
+      const mediaData = transformHeadersToMediaData(response)
+      await put({ id: filename, blob: response.data, ...mediaData })
+    } catch (error) {
+      if (isApiError(error) && error.status === REQ_STATUS.notFound) {
+        await remove(filename)
+      }
+    }
+  }
+
+  const getMediaStream = async (filename: string): Promise<Blob | undefined> => {
+    try {
+      const response = await requestMedia(filename)
+      return response.data
+    } catch {
+      return undefined
+    }
+  }
+
+  return { loadMedia, loadMediaHeaders, getMediaStream }
+}
