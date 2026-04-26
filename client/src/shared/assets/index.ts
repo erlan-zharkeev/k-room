@@ -1,1 +1,2 @@
-export { default as MAIN_WALLPAPER } from './img/main-wallpaper.jpeg'
+export { default as DEFAULT_DARK_WALLPAPER } from './img/default-wallpaper-dark.jpeg'
+export { default as DEFAULT_LIGHT_WALLPAPER } from './img/default-wallpaper-light.png'

@@ -8,13 +8,14 @@ import { INITIAL_USER_STORE } from '../config/constants'
 const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
 
 export const useUser = () => {
-  const { ensure, reset, shallowUpdate } = userStore
+  const { ensure, get, reset, shallowUpdate } = userStore
   const user = userStore.use(INITIAL_USER_STORE)
   const isAuthorized = computed(() => Boolean(user.value.id))
 
   return {
     user,
     isAuthorized,
+    get,
     initialize: () => ensure(INITIAL_USER_STORE),
     reset: () => reset(INITIAL_USER_STORE),
     shallowUpdate

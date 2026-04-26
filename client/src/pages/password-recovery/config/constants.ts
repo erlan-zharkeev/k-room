@@ -1,0 +1,9 @@
+export const DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA = {
+  email: ''
+}
+
+export const DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA = {
+  code: ''
+}
+
+export const PASSWORD_RECOVERY_COUNTER_TICK_MS = 1000

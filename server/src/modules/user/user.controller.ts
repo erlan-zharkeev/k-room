@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { type Request, type Response } from 'express'
 import {
   type IBackendResponse,
+  type IChangePasswordPayload,
   type ICreateNewPasswordPayload,
   type IGetUserDataResponse,
   USER_ENDPOINTS
@@ -18,9 +19,9 @@ import { AccessTokenGuard } from '../auth/auth.guard'
 import { AUTH_I18N } from '../auth/auth.i18n'
 import { AuthService } from '../auth/auth.service'
 
-import { RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
+import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
-import { RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
+import { CHANGE_PASSWORD_VALIDATION, RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
 
 @Controller()
 export class UserController {
@@ -112,6 +113,40 @@ export class UserController {
       })
     } catch (error) {
       throw toAppError(error, localizedText(UPDATE_USER_DATA_I18N.failedUpdate, language))
+    }
+  }
+
+  @Patch(USER_ENDPOINTS.changePassword)
+  @UseGuards(AccessTokenGuard)
+  async changePassword(
+    @Req() request: Request,
+    @Res() response: Response<IBackendResponse<null>>,
+    @Body() payload: IChangePasswordPayload
+  ) {
+    const { language, authUserId: userId } = request
+
+    try {
+      if (!userId) {
+        throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+      }
+
+      await runRequestValidation(request, CHANGE_PASSWORD_VALIDATION)
+      await this.userService.changePassword({
+        userId,
+        currentPassword: payload.currentPassword,
+        password: payload.password,
+        language
+      })
+
+      return response.json({
+        payload: null,
+        message: {
+          text: localizedText(CHANGE_PASSWORD_I18N.success, language),
+          silent: false
+        }
+      })
+    } catch (error) {
+      throw toAppError(error, localizedText(CHANGE_PASSWORD_I18N.failed, language))
     }
   }
 }

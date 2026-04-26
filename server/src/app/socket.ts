@@ -18,7 +18,7 @@ const SOCKET_OPTIONS = {
   path: SERVER_ENV.socketPath,
   maxHttpBufferSize: 10 * 1_000_000,
   cors: {
-    origin: SERVER_ENV.isDev ? '*' : SERVER_ENV.origins,
+    origin: SERVER_ENV.origins,
     credentials: true
   }
 } as const

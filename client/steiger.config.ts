@@ -15,5 +15,11 @@ export default defineConfig([
       'fsd/public-api': 'off',
       'fsd/segments-by-purpose': 'off'
     }
+  },
+  {
+    files: ['./src/widgets/theme-settings/**'],
+    rules: {
+      'fsd/insignificant-slice': 'off'
+    }
   }
 ])

@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 
 import App from './app/App.vue'
 import { initApp } from './app/bootstrap/init-app'
-import './app/styles/main.css'
+import './app/styles/base.css'
 
 const app = createApp(App)
 

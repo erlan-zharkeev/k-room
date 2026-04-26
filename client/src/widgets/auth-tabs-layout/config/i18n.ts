@@ -3,10 +3,12 @@ import { defineI18n } from 'global-shared'
 export const AUTH_TABS_LAYOUT_I18N = defineI18n({
   login: {
     en: 'Login',
-    ru: 'Вход'
+    ru: 'Вход',
+    zh: '登录'
   },
   registration: {
     en: 'Registration',
-    ru: 'Регистрация'
+    ru: 'Регистрация',
+    zh: '注册'
   }
 })

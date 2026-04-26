@@ -126,6 +126,19 @@ module.exports = {
     },
     {
       ...sharedTypeScriptOverride,
+      files: ['e2e/**/*.ts', 'playwright.config.ts'],
+      env: {
+        es2021: true,
+        node: true
+      },
+      parserOptions: {
+        ...sharedTypeScriptOverride.parserOptions,
+        project: [path.join(__dirname, 'tsconfig.json')]
+      },
+      settings: createTypeScriptResolver('tsconfig.json')
+    },
+    {
+      ...sharedTypeScriptOverride,
       files: ['client/*.config.ts', 'client/env.ts', 'client/env.types.ts'],
       env: {
         es2021: true,

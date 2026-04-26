@@ -1,1 +1,0 @@
-export { primeVueTheme } from './preset'

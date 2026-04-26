@@ -2,7 +2,7 @@ import type { Table } from 'dexie'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
 
-import { cloneMutable } from './helpers/clone-mutable'
+import { cloneMutable } from './clone-mutable'
 import type { DbTransactionModeType, ICollectionMergeManyOptions, IndexableType, MutableType } from './types'
 import { useDexieLiveQuery } from './use-dexie-live-query'
 

@@ -3,6 +3,7 @@ import Dexie, { type Table } from 'dexie'
 import { CLIENT_ENV } from 'src/shared/config'
 import type {
   DbContactType,
+  DbCallType,
   DbInfoNotificationType,
   DbMessageType,
   DbUserDataType,
@@ -19,6 +20,7 @@ export class KRoomDB extends Dexie {
   contacts!: Table<DbContactType>
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>
+  calls!: Table<DbCallType>
   messages!: Table<DbMessageType>
   'info-notifications'!: Table<DbInfoNotificationType>
 
@@ -30,6 +32,16 @@ export class KRoomDB extends Dexie {
       contacts: '&id',
       media: '&id',
       'chat-rooms': '&id',
+      messages: '&id',
+      'info-notifications': '&id'
+    })
+    this.version(2).stores({
+      settings: '__key',
+      user: '__key',
+      contacts: '&id',
+      media: '&id',
+      'chat-rooms': '&id',
+      calls: '&id',
       messages: '&id',
       'info-notifications': '&id'
     })

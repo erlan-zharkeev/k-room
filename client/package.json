@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "serve": "vite --host",
-    "serve:tauri": "vite --host 127.0.0.1 --strictPort",
+    "serve:tauri": "vite --host ${TAURI_DEV_HOST:-127.0.0.1} --strictPort",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview --host",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
@@ -23,12 +23,17 @@
   },
   "dependencies": {
     "@primeuix/themes": "^2.0.3",
+    "@primevue/forms": "^4.5.5",
+    "@tanstack/vue-virtual": "^3.13.24",
     "axios": "^1.15.2",
     "dexie": "^4.4.2",
+    "emoji-picker-element": "^1.29.1",
+    "emoji-picker-element-data": "^1.8.0",
     "firebase": "^12.12.1",
     "global-shared": "workspace:*",
     "primeicons": "^7.0.0",
     "primevue": "^4.5.5",
+    "socket.io-client": "^4.8.3",
     "vue": "^3.5.13",
     "vue-router": "^4.6.4"
   },

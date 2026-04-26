@@ -1,9 +1,9 @@
 import type { LocalizedTextType } from 'global-shared'
 import { getCurrentInstance } from 'vue'
 
-import { CLIENT_LANGUAGE } from 'src/shared/config'
+import { translate } from './language'
 
-const fallbackTranslate = <T>(value: LocalizedTextType<T>) => value[CLIENT_LANGUAGE]
+const fallbackTranslate = <T>(value: LocalizedTextType<T>) => translate(value)
 
 export const useI18n = () => {
   const instance = getCurrentInstance()

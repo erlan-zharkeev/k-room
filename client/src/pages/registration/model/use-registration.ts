@@ -1,6 +1,5 @@
 import {
   AUTH_ENDPOINTS,
-  REQ_STATUS,
   ROUTE_NAMES,
   type IAuthRegistrationPayload,
   type ISendConfirmationLinkResponse
@@ -23,9 +22,6 @@ export const useRegistration = () => {
 
     try {
       const response = await doRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
-
-      if (response.status !== REQ_STATUS.success) return
-
       const pathname = buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, response.data.payload)
 
       await router.push(pathname)

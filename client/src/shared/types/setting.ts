@@ -1,15 +1,22 @@
 import type { AppLanguageType } from 'global-shared'
 
-export type ThemeType = 'dark' | 'light'
+import type { ICustomThemeSetting, ThemeType } from 'src/shared/types/theme'
+
+export type WallpaperType = 'default' | 'custom'
+
+export type SoundType = 'connection' | 'calling' | 'ding' | 'ring' | 'busy'
+
+export type CustomSoundSettingType = Record<SoundType, string>
 
 export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
-export type ContentTabType = 'info' | AsideBarButtonNameType
+export type ContentTabType = 'info-notifications' | AsideBarButtonNameType
 
 export type HiddenNotificationType = 'audio-context'
 
 export interface IMessageListScrollState {
   firstVisibleItemId: string
+  offsetFromItemStart?: number
 }
 
 export interface IUserSetting {
@@ -19,9 +26,14 @@ export interface IUserSetting {
   language: AppLanguageType
   showNotification: boolean
   theme: ThemeType
+  customTheme: ICustomThemeSetting
   showTooltips: boolean
   soundOn: boolean
+  sound: SoundType
+  customSounds: CustomSoundSettingType
   showWallpaper: boolean
+  wallpaper: WallpaperType
+  customWallpaperDataUrl: string
   selectedAudioInputDeviceId: string
   selectedVideoInputDeviceId: string
   selectedAudioOutputDeviceId: string

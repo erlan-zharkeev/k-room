@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import Toast from 'primevue/toast'
+import { Toast } from 'primevue'
 
-import { useClientData } from './lib/use-client-data'
+import { useThemeProvider } from './providers/use-theme-provider'
 
-const { initializeClientData } = useClientData()
-
-initializeClientData()
+useThemeProvider()
 </script>
 
 <template>

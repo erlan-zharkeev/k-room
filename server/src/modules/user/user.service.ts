@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import {
   type AppLanguageType,
   type IEventStatusContact,
+  type IChangePasswordPayload,
   type IFrontendContact,
   type IFrontendUserData,
   type InteractionType,
@@ -28,7 +29,7 @@ import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.se
 
 import type { IContact, IUserExistState, IUserSchema } from './types'
 import { ALLOWED_GOOGLE_AVATAR_HOSTS } from './user.constants'
-import { RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
+import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
 export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
@@ -324,6 +325,24 @@ export class UserService {
         nextRequestPossibleAt: null
       }
     })
+  }
+
+  async changePassword({
+    userId,
+    currentPassword,
+    password,
+    language
+  }: IChangePasswordPayload & { userId: string; language: AppLanguageType }) {
+    const user = await this.requireUser(userId, language)
+    const passwordIsValid = await bcrypt.compare(currentPassword, user.system.password)
+
+    if (!passwordIsValid) {
+      throw new AppError(REQ_STATUS.badRequest, localizedText(CHANGE_PASSWORD_I18N.currentPasswordInvalid, language))
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 6)
+
+    await user.updateOne({ $set: { 'system.password': hashedPassword } })
   }
 
   async updateUserData({
