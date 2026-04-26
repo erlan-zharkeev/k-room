@@ -6,11 +6,6 @@ export const EMAIL_CONFIRMATION_I18N = defineI18n({
     ru: 'Готово',
     zh: '完成'
   },
-  email: {
-    en: 'Email',
-    ru: 'Email',
-    zh: 'Email'
-  },
   confirmed: {
     en: 'confirmed',
     ru: 'подтверждён',
@@ -25,5 +20,10 @@ export const EMAIL_CONFIRMATION_I18N = defineI18n({
     en: 'Confirming email',
     ru: 'Подтверждаем email',
     zh: '正在确认 email'
+  },
+  failed: {
+    en: 'Email confirmation failed',
+    ru: 'Не удалось подтвердить email',
+    zh: '邮箱确认失败'
   }
 })

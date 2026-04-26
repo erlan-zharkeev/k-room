@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
-import { Button, Card, InputText } from 'primevue'
+import { Button, InputText, Message } from 'primevue'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { CLIENT_ENV } from 'src/shared/config'
+import { AppText } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
 import { usePasswordRecovery } from '../model/use-password-recovery'
 
 const {
+  codeErrorText,
   codeFormData,
   codeResolver,
   codeSent,
@@ -18,11 +19,14 @@ const {
   codeValidationIsLoading,
   counterValue,
   debugCode,
+  emailErrorText,
   emailFormData,
   emailResolver,
   emailSendCodeIsLoading,
   emailValidation,
-  hasPresetEmail,
+  isCodeInvalid,
+  isEmailInputDisabled,
+  isEmailInvalid,
   isSendCodeDisabled,
   isValidateCodeDisabled,
   initializePasswordRecovery,
@@ -34,165 +38,118 @@ onMounted(initializePasswordRecovery)
 </script>
 
 <template>
-  <main class="password-recovery-page">
-    <RouterLink :to="ROUTE_NAMES.login" class="password-recovery-page__logo" :aria-label="CLIENT_ENV.appName">
-      <img src="/img/Logo.svg" :alt="CLIENT_ENV.appName" />
-    </RouterLink>
+  <div class="password-recovery-page">
+    <AppText v-if="!codeSent" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterEmailHint)" />
+    <template v-else>
+      <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.sentToEmail)" />
+      <AppText bold color="accent-color" :text="emailFormData.email" />
+      <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterCodeHint)" />
+    </template>
 
-    <Card class="password-recovery-page__card">
-      <template #title>{{ $t(PASSWORD_RECOVERY_I18N.title) }}</template>
-      <template #content>
-        <Form
-          v-slot="$form"
-          :initial-values="emailFormData"
-          :resolver="emailResolver"
-          class="password-recovery-page__form"
-          @submit="sendEmailCode"
-        >
-          <div class="password-recovery-page__field">
-            <InputText
-              v-model="emailFormData.email"
-              autocomplete="email"
-              :disabled="emailSendCodeIsLoading || hasPresetEmail"
-              :invalid="Boolean($form.email?.invalid || emailValidation.visibleErrors.value.email?.length)"
-              name="email"
-              :placeholder="$t(PASSWORD_RECOVERY_I18N.emailPlaceholder)"
-              type="email"
-              @blur="emailValidation.touchField('email')"
-              @update:model-value="emailValidation.touchField('email')"
-            />
-            <small>{{ $form.email?.error?.message || emailValidation.getFirstErrorText('email') }}</small>
-          </div>
+    <Form
+      :initial-values="emailFormData"
+      :resolver="emailResolver"
+      class="password-recovery-page__form"
+      @submit="sendEmailCode"
+    >
+      <div class="password-recovery-page__field">
+        <InputText
+          v-model="emailFormData.email"
+          autocomplete="email"
+          :disabled="isEmailInputDisabled"
+          fluid
+          :invalid="isEmailInvalid"
+          name="email"
+          :placeholder="$t(PASSWORD_RECOVERY_I18N.emailPlaceholder)"
+          size="small"
+          type="email"
+          @blur="emailValidation.touchField('email')"
+          @update:model-value="emailValidation.touchField('email')"
+        />
+        <Message v-if="emailErrorText" severity="error" size="small" variant="simple">
+          {{ emailErrorText }}
+        </Message>
+      </div>
 
-          <Button
-            :disabled="isSendCodeDisabled"
-            :label="$t(PASSWORD_RECOVERY_I18N.sendCode)"
-            :loading="emailSendCodeIsLoading"
-            type="submit"
-          />
-        </Form>
+      <div class="password-recovery-page__action-btns">
+        <Button
+          :disabled="isSendCodeDisabled"
+          :label="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(PASSWORD_RECOVERY_I18N.sendCode)"
+          :loading="emailSendCodeIsLoading"
+          size="small"
+          type="submit"
+        />
+      </div>
+    </Form>
 
-        <p v-if="counterValue > 0" class="password-recovery-page__hint">
-          {{ $t(PASSWORD_RECOVERY_I18N.resendTimer)(counterValue) }}
-        </p>
+    <AppText v-if="counterValue > 0" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.resendTimer)(counterValue)" />
 
-        <p v-if="debugCode" class="password-recovery-page__hint">
-          {{ $t(PASSWORD_RECOVERY_I18N.debugCode) }}: {{ debugCode }}
-        </p>
+    <AppText v-if="debugCode" tag="p" :text="`${$t(PASSWORD_RECOVERY_I18N.debugCode)}: ${debugCode}`" />
 
-        <Form
-          v-if="codeSent"
-          v-slot="$form"
-          :initial-values="codeFormData"
-          :resolver="codeResolver"
-          class="password-recovery-page__form"
-          @submit="validateCode"
-        >
-          <div class="password-recovery-page__field">
-            <InputText
-              v-model="codeFormData.code"
-              autocomplete="one-time-code"
-              :disabled="codeValidationIsLoading"
-              :invalid="Boolean($form.code?.invalid || codeValidation.visibleErrors.value.code?.length)"
-              name="code"
-              :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"
-              @blur="codeValidation.touchField('code')"
-              @update:model-value="codeValidation.touchField('code')"
-            />
-            <small>{{ $form.code?.error?.message || codeValidation.getFirstErrorText('code') }}</small>
-          </div>
+    <Form
+      v-if="codeSent"
+      :initial-values="codeFormData"
+      :resolver="codeResolver"
+      class="password-recovery-page__form"
+      @submit="validateCode"
+    >
+      <div class="password-recovery-page__field">
+        <InputText
+          v-model="codeFormData.code"
+          autocomplete="one-time-code"
+          :disabled="codeValidationIsLoading"
+          fluid
+          :invalid="isCodeInvalid"
+          name="code"
+          :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"
+          size="small"
+          @blur="codeValidation.touchField('code')"
+          @update:model-value="codeValidation.touchField('code')"
+        />
+        <Message v-if="codeErrorText" severity="error" size="small" variant="simple">
+          {{ codeErrorText }}
+        </Message>
+      </div>
 
-          <Button
-            :disabled="isValidateCodeDisabled"
-            :label="$t(PASSWORD_RECOVERY_I18N.validate)"
-            :loading="codeValidationIsLoading"
-            type="submit"
-          />
-        </Form>
+      <div class="password-recovery-page__action-btns">
+        <Button
+          :disabled="isValidateCodeDisabled"
+          :label="$t(PASSWORD_RECOVERY_I18N.validate)"
+          :loading="codeValidationIsLoading"
+          size="small"
+          type="submit"
+        />
+      </div>
+    </Form>
 
-        <RouterLink class="password-recovery-page__back" :to="ROUTE_NAMES.login">
-          {{ $t(PASSWORD_RECOVERY_I18N.back) }}
-        </RouterLink>
-      </template>
-    </Card>
-  </main>
+    <div class="password-recovery-page__action-btns">
+      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
+        <Button
+          as="a"
+          :href="href"
+          :label="$t(PASSWORD_RECOVERY_I18N.back)"
+          severity="secondary"
+          size="small"
+          @click="navigate"
+        />
+      </RouterLink>
+    </div>
+  </div>
 </template>
 
-<style scoped>
+<style>
 .password-recovery-page {
-  position: relative;
-
   display: grid;
-  place-items: center;
-
-  min-height: 100dvh;
-  padding: 16px;
-}
-
-.password-recovery-page__logo {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-
-  display: grid;
-  place-items: center;
-
-  width: 44px;
-  height: 44px;
-  padding: 6px;
-  border: 1px solid var(--p-content-border-color);
-  border-radius: 12px;
-
-  background: var(--p-content-background);
-  box-shadow: 8px 8px 18px var(--p-app-shadow-outset-start), -8px -8px 18px var(--p-app-shadow-outset-end);
-}
-
-.password-recovery-page__logo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.password-recovery-page__card {
-  width: min(100%, 420px);
-  border: 1px solid var(--p-content-border-color);
-  border-radius: 8px;
-
-  background: var(--p-content-background);
-  box-shadow: 16px 16px 36px var(--p-app-shadow-outset-start), -16px -16px 36px var(--p-app-shadow-outset-end);
+  gap: 12px;
 }
 
 .password-recovery-page__form {
   display: grid;
   gap: 12px;
-  margin-top: 12px;
 }
 
-.password-recovery-page__field {
-  display: grid;
-  gap: 4px;
-}
-
-.password-recovery-page__field :deep(.p-inputtext),
-.password-recovery-page__form :deep(.p-button) {
-  width: 100%;
-}
-
-.password-recovery-page__field small {
-  min-height: 16px;
-  font-size: 0.78rem;
-  color: var(--p-app-error);
-}
-
-.password-recovery-page__hint {
-  margin: 12px 0 0;
-  color: var(--p-app-text-muted);
-}
-
-.password-recovery-page__back {
-  display: inline-block;
-  margin-top: 14px;
-  color: var(--p-primary-color);
-  text-decoration: none;
+.password-recovery-page__action-btns {
+  display: flex;
+  gap: 8px;
 }
 </style>

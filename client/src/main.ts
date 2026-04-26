@@ -1,9 +1,9 @@
 import 'primeicons/primeicons.css'
 import { createApp } from 'vue'
 
-import App from './app/App.vue'
-import { initApp } from './app/bootstrap/init-app'
-import './app/styles/base.css'
+import App from 'src/app/App.vue'
+import { initApp } from 'src/app/bootstrap/init-app'
+import 'src/app/styles/base.css'
 
 const app = createApp(App)
 

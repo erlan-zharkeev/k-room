@@ -1,32 +1,32 @@
 <script setup lang="ts">
 import { CLIENT_ENV } from 'src/shared/config'
-import { PageLayout } from 'src/widgets/page-layout'
+import { AppHeader, AppText } from 'src/shared/ui'
 
 import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
 </script>
 
 <template>
-  <PageLayout :back-label="$t(LEGAL_INFO_PAGE_I18N.back)" card-size="large" variant="document">
-    <h1>{{ $t(LEGAL_INFO_PAGE_I18N.title)(CLIENT_ENV.appName) }}</h1>
+  <div class="privacy-policy-page">
+    <AppHeader tag="h1" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.title)(CLIENT_ENV.appName)" />
 
-    <p>
-      <strong>{{ $t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel) }}</strong>
+    <AppText class="privacy-policy-page__meta" tag="p" color="semi-contrast-color">
+      <AppText bold color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
       June 1, 2026
-    </p>
+    </AppText>
 
-    <p>{{ $t(LEGAL_INFO_PAGE_I18N.intro)(CLIENT_ENV.appName) }}</p>
+    <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.intro)(CLIENT_ENV.appName)" />
 
-    <p>
-      <strong>{{ $t(LEGAL_INFO_PAGE_I18N.warning) }}</strong>
+    <AppText class="privacy-policy-page__warning" tag="p" color="semi-contrast-color">
+      <AppText bold color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.warning)" />
       {{ $t(LEGAL_INFO_PAGE_I18N.warningText)(CLIENT_ENV.appName) }}
-    </p>
+    </AppText>
 
-    <p>{{ $t(LEGAL_INFO_PAGE_I18N.storageRisk) }}</p>
+    <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section1Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section1Intro) }}</p>
-      <ul>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section1Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section1Intro)" />
+      <ul class="privacy-policy-page__list">
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.accountData) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.profileData) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.communicationData) }}</li>
@@ -37,14 +37,14 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
       </ul>
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section2Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section2Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section2Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section2Text)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section3Title) }}</h2>
-      <ul>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section3Title)" />
+      <ul class="privacy-policy-page__list">
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useAccounts) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useAuth) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useFeatures) }}</li>
@@ -55,57 +55,79 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
       </ul>
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section4Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.discloseIntro) }}</p>
-      <ul>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section4Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.discloseIntro)" />
+      <ul class="privacy-policy-page__list">
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseProviders) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseUsers) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseLegal) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseBusiness) }}</li>
       </ul>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.discloseNote) }}</p>
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.discloseNote)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section5Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section5Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section5Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section5Text)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section6Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section6Text1) }}</p>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section6Text2) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section6Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text1)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text2)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section7Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section7Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section7Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section7Text)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section8Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section8Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section8Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section8Text)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section9Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section9Text)(CLIENT_ENV.appName) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section9Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text)(CLIENT_ENV.appName)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section10Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section10Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section10Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section10Text)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section11Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section11Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section11Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section11Text)" />
     </section>
 
-    <section>
-      <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section12Title) }}</h2>
-      <p>{{ $t(LEGAL_INFO_PAGE_I18N.section12Text) }}</p>
+    <section class="privacy-policy-page__section">
+      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section12Title)" />
+      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section12Text)" />
     </section>
-  </PageLayout>
+  </div>
 </template>
+
+<style>
+.privacy-policy-page,
+.privacy-policy-page__section {
+  display: grid;
+  gap: 12px;
+}
+
+.privacy-policy-page {
+  gap: 24px;
+}
+
+.privacy-policy-page__list {
+  display: grid;
+  gap: 8px;
+
+  margin: 0;
+  padding-left: 20px;
+
+  color: var(--p-app-text-semi-contrast);
+}
+</style>

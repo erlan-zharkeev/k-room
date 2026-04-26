@@ -8,6 +8,7 @@
     "serve:tauri": "vite --host ${TAURI_DEV_HOST:-127.0.0.1} --strictPort",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview --host",
+    "test": "pnpm run typecheck",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "lint:fsd": "CHOKIDAR_USEPOLLING=1 steiger ./src",
     "lint:fsd:watch": "CHOKIDAR_USEPOLLING=1 steiger ./src --watch",

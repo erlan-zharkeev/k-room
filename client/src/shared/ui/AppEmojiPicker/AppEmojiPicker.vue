@@ -112,7 +112,7 @@ watch(() => props.language, mountPicker)
   </div>
 </template>
 
-<style scoped>
+<style>
 .app-emoji-picker {
   overflow: hidden;
   display: grid;

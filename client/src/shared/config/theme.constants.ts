@@ -1,4 +1,4 @@
-import { ICustomThemeSetting } from '../types/theme'
+import type { ICustomThemeSetting } from 'src/shared/types/theme'
 
 export const PRIMARY_PALETTE = {
   500: '#418fde'

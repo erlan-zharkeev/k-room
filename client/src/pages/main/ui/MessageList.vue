@@ -4,11 +4,11 @@ import { type IEventAddReaction, type SocketActionsType } from 'global-shared'
 import { Button } from 'primevue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
 
+import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
 import { EMOJI_LIST, type DbMessageType } from 'src/shared/config'
-import { useSettings } from 'src/shared/lib'
-import { AppEmojiPicker, AppIcon } from 'src/shared/ui'
+import { AppEmojiPicker, AppIcon, AppText } from 'src/shared/ui'
 
 import {
   MAIN_PAGE_MESSAGE_ACTIONS,
@@ -304,8 +304,18 @@ onBeforeUnmount(() => {
             class="message-list__message"
             @contextmenu.prevent.stop="openMessageMenu(messages[virtualRow.index], $event)"
           >
-            <strong>{{ messages[virtualRow.index].authorName }}</strong>
-            <p>{{ messages[virtualRow.index].body }}</p>
+            <AppText
+              class="message-list__author"
+              bold
+              color="contrast-color"
+              :text="messages[virtualRow.index].authorName"
+            />
+            <AppText
+              class="message-list__body"
+              tag="p"
+              color="contrast-color"
+              :text="messages[virtualRow.index].body"
+            />
             <div v-if="messages[virtualRow.index].reactions?.length" class="message-list__reactions">
               <span
                 v-for="(reaction, reactionIndex) in messages[virtualRow.index].reactions"
@@ -315,13 +325,17 @@ onBeforeUnmount(() => {
                 {{ getReactionGlyph(reaction.glyphKey) }}
               </span>
             </div>
-            <small>{{ formatRelativeTime(messages[virtualRow.index].createdAt) }}</small>
+            <AppText
+              class="message-list__time"
+              size="small"
+              :text="formatRelativeTime(messages[virtualRow.index].createdAt)"
+            />
           </div>
         </article>
       </template>
     </div>
 
-    <p v-else class="message-list__empty">{{ $t(MAIN_PAGE_I18N.noMessages) }}</p>
+    <AppText v-else class="message-list__empty" tag="p" :text="$t(MAIN_PAGE_I18N.noMessages)" />
 
     <div
       v-if="selectedMessage"
@@ -355,7 +369,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .message-list {
   scrollbar-color: var(--p-app-text-muted) var(--p-content-background);
   scrollbar-gutter: stable;
@@ -439,20 +453,14 @@ onBeforeUnmount(() => {
   border-color: var(--p-primary-color);
 }
 
-.message-list__message p,
-.message-list__empty {
-  margin: 0;
-}
-
-.message-list__message p {
+.message-list__body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.message-list__message small {
+.message-list__time {
   justify-self: end;
-  color: var(--p-app-text-muted);
 }
 
 .message-list__reactions {
@@ -502,12 +510,8 @@ onBeforeUnmount(() => {
 
 .message-list__context-action {
   cursor: pointer;
-
   border: 0;
-
   color: inherit;
-  text-decoration: none;
-
   background: transparent;
 }
 
@@ -537,6 +541,5 @@ onBeforeUnmount(() => {
 
 .message-list__empty {
   padding: 12px;
-  color: var(--p-app-text-muted);
 }
 </style>

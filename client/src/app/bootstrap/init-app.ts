@@ -1,7 +1,6 @@
+import { router } from 'src/app/router'
 import { initClientData } from 'src/features/client-session'
 import { CLIENT_ENV } from 'src/shared/config'
-
-import { router } from '../router'
 
 import { initFirebase } from './init-firebase'
 import { initI18n } from './init-i18n'

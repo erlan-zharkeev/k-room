@@ -6,6 +6,16 @@ export const CREATE_NEW_PASSWORD_I18N = defineI18n({
     ru: 'Создание нового пароля',
     zh: '创建新密码'
   },
+  enterNewPasswordHint: {
+    en: 'Enter a new password for your account.',
+    ru: 'Введите новый пароль для вашего аккаунта.',
+    zh: '请输入您的新密码。'
+  },
+  repeatPasswordHint: {
+    en: 'Repeat the password to confirm the change.',
+    ru: 'Повторите пароль, чтобы подтвердить изменение.',
+    zh: '请再次输入密码以确认修改。'
+  },
   firstPasswordPlaceholder: {
     en: 'Password',
     ru: 'Пароль',
@@ -35,5 +45,10 @@ export const CREATE_NEW_PASSWORD_I18N = defineI18n({
     en: 'Go to login page',
     ru: 'Перейти ко входу',
     zh: '前往登录页'
+  },
+  back: {
+    en: 'Back',
+    ru: 'Назад',
+    zh: '返回'
   }
 })

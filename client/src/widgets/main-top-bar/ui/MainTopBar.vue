@@ -19,14 +19,14 @@ const emit = defineEmits<{
     </AppProfileBasicData>
 
     <div class="main-top-bar__actions">
-      <Button :aria-label="logoutLabel" :loading="isLogoutLoading" rounded text @click="emit('logout')">
+      <Button :aria-label="logoutLabel" :loading="isLogoutLoading" rounded size="small" text @click="emit('logout')">
         <AppIcon name="exit" />
       </Button>
     </div>
   </header>
 </template>
 
-<style scoped>
+<style>
 .main-top-bar {
   isolation: isolate;
   position: relative;

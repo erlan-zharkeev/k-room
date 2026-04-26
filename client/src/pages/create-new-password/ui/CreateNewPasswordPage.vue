@@ -1,100 +1,117 @@
 <script setup lang="ts">
 import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
-import { Button, Password } from 'primevue'
+import { Button, Message, Password } from 'primevue'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { PageLayout } from 'src/widgets/page-layout'
+import { AppText } from 'src/shared/ui'
 
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 import { useCreateNewPassword } from '../model/use-create-new-password'
 
 const {
+  firstPasswordErrorText,
   formData,
-  getFirstErrorText,
   initializeCreateNewPassword,
+  isFirstPasswordInvalid,
   isLoading,
   isPasswordChanged,
+  isSecondPasswordInvalid,
   isSubmitDisabled,
-  passwordMismatchText,
   resolver,
+  secondPasswordErrorText,
   submit,
-  touchField,
-  visibleErrors
+  touchField
 } = useCreateNewPassword()
 
 onMounted(initializeCreateNewPassword)
 </script>
 
 <template>
-  <PageLayout
-    :back-label="$t(CREATE_NEW_PASSWORD_I18N.toLogin)"
-    :fallback-route="ROUTE_NAMES.login"
-    :title="$t(CREATE_NEW_PASSWORD_I18N.title)"
-  >
-    <div v-if="isPasswordChanged" class="create-new-password-page__success">
-      <p>{{ $t(CREATE_NEW_PASSWORD_I18N.success) }}</p>
-      <RouterLink :to="ROUTE_NAMES.login">{{ $t(CREATE_NEW_PASSWORD_I18N.toLogin) }}</RouterLink>
-    </div>
-
-    <Form
-      v-else
-      v-slot="$form"
-      :initial-values="formData"
-      :resolver="resolver"
-      class="create-new-password-page__form"
-      @submit="submit"
-    >
-      <div class="create-new-password-page__field">
-        <Password
-          v-model="formData.firstPassword"
-          autocomplete="new-password"
-          :disabled="isLoading"
-          :feedback="false"
-          :invalid="Boolean($form.firstPassword?.invalid || visibleErrors.firstPassword?.length)"
-          name="firstPassword"
-          :placeholder="$t(CREATE_NEW_PASSWORD_I18N.firstPasswordPlaceholder)"
-          toggle-mask
-          @blur="touchField('firstPassword')"
-          @update:model-value="touchField('firstPassword')"
-        />
-        <small>{{ $form.firstPassword?.error?.message || getFirstErrorText('firstPassword') }}</small>
+  <div class="create-new-password-page">
+    <template v-if="isPasswordChanged">
+      <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.success)" />
+      <div class="create-new-password-page__action-btns">
+        <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
+          <Button as="a" :href="href" :label="$t(CREATE_NEW_PASSWORD_I18N.toLogin)" size="small" @click="navigate" />
+        </RouterLink>
       </div>
+    </template>
 
-      <div class="create-new-password-page__field">
-        <Password
-          v-model="formData.secondPassword"
-          autocomplete="new-password"
-          :disabled="isLoading"
-          :feedback="false"
-          :invalid="
-            Boolean($form.secondPassword?.invalid || visibleErrors.secondPassword?.length || passwordMismatchText)
-          "
-          name="secondPassword"
-          :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
-          toggle-mask
-          @blur="touchField('secondPassword')"
-          @update:model-value="touchField('secondPassword')"
-        />
-        <small>
-          {{ $form.secondPassword?.error?.message || getFirstErrorText('secondPassword') || passwordMismatchText }}
-        </small>
-      </div>
+    <template v-else>
+      <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.enterNewPasswordHint)" />
+      <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint)" />
 
-      <Button
-        :disabled="isSubmitDisabled"
-        :label="$t(CREATE_NEW_PASSWORD_I18N.submit)"
-        :loading="isLoading"
-        type="submit"
-      />
-    </Form>
-  </PageLayout>
+      <Form :initial-values="formData" :resolver="resolver" class="create-new-password-page__form" @submit="submit">
+        <div class="create-new-password-page__field">
+          <Password
+            v-model="formData.firstPassword"
+            autocomplete="new-password"
+            :disabled="isLoading"
+            :feedback="false"
+            fluid
+            :invalid="isFirstPasswordInvalid"
+            name="firstPassword"
+            :placeholder="$t(CREATE_NEW_PASSWORD_I18N.firstPasswordPlaceholder)"
+            size="small"
+            toggle-mask
+            @blur="touchField('firstPassword')"
+            @update:model-value="touchField('firstPassword')"
+          />
+          <Message v-if="firstPasswordErrorText" severity="error" size="small" variant="simple">
+            {{ firstPasswordErrorText }}
+          </Message>
+        </div>
+
+        <div class="create-new-password-page__field">
+          <Password
+            v-model="formData.secondPassword"
+            autocomplete="new-password"
+            :disabled="isLoading"
+            :feedback="false"
+            fluid
+            :invalid="isSecondPasswordInvalid"
+            name="secondPassword"
+            :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
+            size="small"
+            toggle-mask
+            @blur="touchField('secondPassword')"
+            @update:model-value="touchField('secondPassword')"
+          />
+          <Message v-if="secondPasswordErrorText" severity="error" size="small" variant="simple">
+            {{ secondPasswordErrorText }}
+          </Message>
+        </div>
+
+        <div class="create-new-password-page__action-btns">
+          <Button
+            :disabled="isSubmitDisabled"
+            :label="$t(CREATE_NEW_PASSWORD_I18N.submit)"
+            :loading="isLoading"
+            size="small"
+            type="submit"
+          />
+
+          <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
+            <Button
+              as="a"
+              :href="href"
+              :label="$t(CREATE_NEW_PASSWORD_I18N.back)"
+              severity="secondary"
+              size="small"
+              @click="navigate"
+            />
+          </RouterLink>
+        </div>
+      </Form>
+    </template>
+  </div>
 </template>
 
-<style scoped>
-.create-new-password-page__form,
-.create-new-password-page__success {
+<style>
+.create-new-password-page,
+.create-new-password-page__form {
   display: grid;
   gap: 12px;
 }
@@ -104,24 +121,8 @@ onMounted(initializeCreateNewPassword)
   gap: 4px;
 }
 
-.create-new-password-page__field :deep(.p-password),
-.create-new-password-page__field :deep(.p-password-input),
-.create-new-password-page__form :deep(.p-button) {
-  width: 100%;
-}
-
-.create-new-password-page__field small {
-  min-height: 16px;
-  font-size: 0.78rem;
-  color: var(--p-app-error);
-}
-
-.create-new-password-page__success p {
-  margin: 0;
-}
-
-.create-new-password-page__success a {
-  color: var(--p-primary-color);
-  text-decoration: none;
+.create-new-password-page__action-btns {
+  display: flex;
+  gap: 8px;
 }
 </style>

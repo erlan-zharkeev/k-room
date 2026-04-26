@@ -4,7 +4,7 @@ import { Button } from 'primevue'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { PageLayout } from 'src/widgets/page-layout'
+import { AppText } from 'src/shared/ui'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
 import { useWaitEmailConfirm } from '../model/use-wait-email-confirm'
@@ -16,50 +16,46 @@ onMounted(initializeWaitEmailConfirm)
 </script>
 
 <template>
-  <PageLayout
-    :back-label="$t(WAIT_EMAIL_CONFIRM_I18N.back)"
-    card-size="medium"
-    :fallback-route="ROUTE_NAMES.login"
-    :title="$t(WAIT_EMAIL_CONFIRM_I18N.title)"
-  >
-    <div class="wait-email-confirm-page__content">
-      <p>{{ $t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail) }}</p>
-      <strong>{{ email }}</strong>
-      <p>{{ $t(WAIT_EMAIL_CONFIRM_I18N.followLink) }}</p>
-      <p v-if="attempts <= 0">{{ $t(WAIT_EMAIL_CONFIRM_I18N.attemptsExhausted) }}</p>
-      <p v-else>{{ $t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft) }} {{ attempts }}</p>
-      <p>{{ $t(WAIT_EMAIL_CONFIRM_I18N.resendHint) }}</p>
-      <p v-if="counterValue > 0">{{ $t(WAIT_EMAIL_CONFIRM_I18N.resendInSeconds)(counterValue) }}</p>
+  <div class="wait-email-confirm-page">
+    <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail)" />
+    <AppText bold color="accent-color" :text="email" />
+    <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.followLink)" />
+    <AppText v-if="attempts <= 0" tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.attemptsExhausted)" />
+    <AppText v-else tag="p" :text="`${$t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft)} ${attempts}`" />
+    <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.resendHint)" />
+    <AppText v-if="counterValue > 0" tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.resendInSeconds)(counterValue)" />
 
+    <div class="wait-email-confirm-page__action-btns">
       <Button
         :disabled="isResendDisabled"
         :label="$t(WAIT_EMAIL_CONFIRM_I18N.resend)"
         :loading="isLoading"
+        size="small"
         @click="resend"
       />
 
-      <RouterLink :to="ROUTE_NAMES.login">{{ $t(WAIT_EMAIL_CONFIRM_I18N.back) }}</RouterLink>
+      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
+        <Button
+          as="a"
+          :href="href"
+          :label="$t(WAIT_EMAIL_CONFIRM_I18N.back)"
+          severity="secondary"
+          size="small"
+          @click="navigate"
+        />
+      </RouterLink>
     </div>
-  </PageLayout>
+  </div>
 </template>
 
-<style scoped>
-.wait-email-confirm-page__content {
+<style>
+.wait-email-confirm-page {
   display: grid;
   gap: 12px;
 }
 
-.wait-email-confirm-page__content p {
-  margin: 0;
-  color: var(--p-app-text-muted);
-}
-
-.wait-email-confirm-page__content strong,
-.wait-email-confirm-page__content a {
-  color: var(--p-primary-color);
-}
-
-.wait-email-confirm-page__content a {
-  text-decoration: none;
+.wait-email-confirm-page__action-btns {
+  display: flex;
+  gap: 8px;
 }
 </style>

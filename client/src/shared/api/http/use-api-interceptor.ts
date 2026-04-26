@@ -54,8 +54,8 @@ export const useApiInterceptor = () => {
       if (status === REQ_STATUS.notAuth) {
         silent = true
 
-        if (router.currentRoute.value.path.startsWith(ROUTE_NAMES.main)) {
-          await router.push(ROUTE_NAMES.login)
+        if (router.currentRoute.value.path.startsWith(ROUTE_NAMES.app)) {
+          await router.push(ROUTE_NAMES.authLogin)
         }
       }
 

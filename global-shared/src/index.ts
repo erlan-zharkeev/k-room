@@ -10,6 +10,9 @@ export type { ICodes, ICodeValidationPayload } from './codes/types'
 export type { InteractionType, IFrontendContact, FrontendContactMapType } from './contact/types'
 
 export {
+  AUTH_ROUTE_NAMES,
+  LAYOUT_ROUTE_NAMES,
+  PAGE_ROUTE_NAMES,
   ROUTE_NAMES,
   AUTH_ENDPOINTS,
   USER_ENDPOINTS,

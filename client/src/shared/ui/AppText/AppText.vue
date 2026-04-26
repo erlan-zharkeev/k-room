@@ -11,18 +11,19 @@ const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-text',
-    modifiers: [props.color, props.size, props.align]
+    modifiers: [props.color, props.size, props.align, props.bold && 'bold']
   })
 )
 </script>
 
 <template>
   <component :is="props.tag" :class="className">
-    <slot />
+    {{ props.text }}
+    <slot v-if="props.text === undefined" />
   </component>
 </template>
 
-<style scoped>
+<style>
 span.app-text--extra-small,
 p.app-text--extra-small {
   font-size: 11px;
@@ -49,16 +50,24 @@ p.app-text--large {
   color: var(--p-app-text-muted);
 }
 
+.app-text--semi-contrast-color {
+  color: var(--p-app-text-semi-contrast);
+}
+
+.app-text--contrast-color {
+  color: var(--p-app-text-contrast);
+}
+
 .app-text--accent-color {
   color: var(--p-primary-color);
 }
 
-.app-text--error-color {
-  color: var(--p-app-error);
-}
-
 .app-text--warn-color {
   color: var(--p-yellow-500);
+}
+
+.app-text--bold {
+  font-weight: 700;
 }
 
 .app-text--left {

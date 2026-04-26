@@ -14,7 +14,7 @@ const icon = computed(() => APP_ICON_MAP[props.name])
   <span class="app-icon" :class="`app-icon--${props.size}`" aria-hidden="true" v-html="icon" />
 </template>
 
-<style scoped>
+<style>
 .app-icon {
   display: inline-grid;
   place-items: center;

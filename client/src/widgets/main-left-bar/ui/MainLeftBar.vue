@@ -2,7 +2,7 @@
 import { Badge, Button } from 'primevue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { AppIcon } from 'src/shared/ui'
+import { AppIcon, AppLogo } from 'src/shared/ui'
 
 import type { IMainLeftBarProps } from './types'
 
@@ -15,9 +15,7 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
 
 <template>
   <aside class="main-left-bar" :style="wallpaperStyle">
-    <RouterLink :to="navItems[0]?.path ?? '/'" class="main-left-bar__brand" :aria-label="appName">
-      <img src="/img/Logo.svg" :alt="appName" />
-    </RouterLink>
+    <AppLogo class="main-left-bar__brand" />
 
     <nav class="main-left-bar__nav">
       <RouterLink
@@ -36,6 +34,7 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
               isExactActive || (item.id === 'settings' && route.path.startsWith(settingsRoutePrefix))
           }"
           as="a"
+          size="small"
           text
           @click="navigate"
         >
@@ -48,7 +47,7 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
   </aside>
 </template>
 
-<style scoped>
+<style>
 .main-left-bar {
   isolation: isolate;
   position: relative;
@@ -107,12 +106,6 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
   background: var(--p-app-widget-background, var(--p-content-background));
 }
 
-.main-left-bar__brand img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 .main-left-bar__nav {
   display: flex;
   flex-direction: column;
@@ -132,14 +125,11 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
   height: 42px;
   padding: 0;
   border-radius: 8px;
-
-  text-decoration: none;
 }
 
 .main-left-bar__nav :deep(.app-icon) {
   position: relative;
   z-index: 1;
-  text-decoration: none;
 }
 
 .main-left-bar__nav :deep(.p-badge) {

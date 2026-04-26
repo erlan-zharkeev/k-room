@@ -16,17 +16,31 @@ export const useRegistrationForm = (props: IRegistrationFormProps) => {
   )
   const resolver = usePrimeVueFormResolver(REGISTRATION_FORM_RULES)
   const isSubmitDisabled = computed(() => props.isLoading || !isFormValid.value)
+  const isUsernameInvalid = computed(() => Boolean(visibleErrors.value.username?.length))
+  const isEmailInvalid = computed(() => Boolean(visibleErrors.value.email?.length))
+  const isPasswordInvalid = computed(() => Boolean(visibleErrors.value.password?.length))
+  const isPolicyInvalid = computed(() => Boolean(visibleErrors.value.policy?.length))
+  const usernameErrorText = computed(() => getFirstErrorText('username'))
+  const emailErrorText = computed(() => getFirstErrorText('email'))
+  const passwordErrorText = computed(() => getFirstErrorText('password'))
+  const policyErrorText = computed(() => getFirstErrorText('policy'))
   const submit = () => {
     submitForm(() => props.onRegister(formData))
   }
 
   return {
+    emailErrorText,
     formData,
-    getFirstErrorText,
+    isEmailInvalid,
+    isPasswordInvalid,
+    isPolicyInvalid,
     isSubmitDisabled,
+    isUsernameInvalid,
+    passwordErrorText,
+    policyErrorText,
     resolver,
     submit,
     touchField,
-    visibleErrors
+    usernameErrorText
   }
 }

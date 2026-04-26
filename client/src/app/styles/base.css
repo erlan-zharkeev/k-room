@@ -16,12 +16,15 @@
 html,
 body,
 #app {
-  min-height: 100%;
+  height: 100%;
   margin: 0;
+  overflow: hidden;
 }
 
 body {
   min-width: 320px;
+  height: 100dvh;
+  padding: 16px;
 }
 
 button,
@@ -33,4 +36,10 @@ select {
 
 a {
   color: inherit;
+  text-decoration: none;
+}
+
+section {
+  position: relative;
+  height: 100%;
 }

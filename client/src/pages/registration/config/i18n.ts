@@ -6,11 +6,6 @@ export const REGISTRATION_FORM_I18N = defineI18n({
     ru: 'Имя пользователя',
     zh: '用户名'
   },
-  emailPlaceholder: {
-    en: 'Email',
-    ru: 'Email',
-    zh: 'Email'
-  },
   passwordPlaceholder: {
     en: 'Password',
     ru: 'Пароль',

@@ -1,4 +1,4 @@
-import { ICustomThemeSetting, CustomThemeColorType } from '../../types/theme'
+import type { CustomThemeColorType, ICustomThemeSetting } from 'src/shared/types/theme'
 
 export const getCustomThemeColor = (customTheme: ICustomThemeSetting, colorName: CustomThemeColorType) => {
   if (colorName === 'text.contrastText') return customTheme.text.contrastText

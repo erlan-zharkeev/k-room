@@ -16,11 +16,12 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { useMedia } from 'src/entities/media-file'
+import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { socket, useApi } from 'src/shared/api'
 import { CLIENT_ENV, type CustomThemeColorType, type SoundType, type ThemeType } from 'src/shared/config'
-import { formatLocalizedDate, formatLocalizedRelativeTime, getSystemTheme, useI18n, useSettings } from 'src/shared/lib'
-import { AppEmojiPicker, AppIcon } from 'src/shared/ui'
+import { formatLocalizedDate, formatLocalizedRelativeTime, getSystemTheme, useI18n } from 'src/shared/lib'
+import { AppEmojiPicker, AppHeader, AppIcon, AppText } from 'src/shared/ui'
 import { ThemeSettings } from 'src/widgets/theme-settings'
 
 import {
@@ -52,7 +53,7 @@ const { user, shallowUpdate: updateUserData } = useUser()
 const { calls } = useCall()
 const { messages, getById } = useMessage()
 const { doRequest } = useApi()
-const { settings, updateLanguage, updateTheme, updateCustomThemeColor, shallowUpdate } = useSettings()
+const { settings, setByPath, shallowUpdate } = useSettings()
 const { hasMoreMessages, initializeLoadRoomMessages, isLoading, loadRoomMessages, resetRoomMessagesPagination } =
   useLoadRoomMessages()
 const { messageText, sendMessage } = useSendMessage()
@@ -302,20 +303,15 @@ const markInfoNotificationAsRead = (id: string) => {
 const changeLanguage = async (language: unknown) => {
   if (language !== 'en' && language !== 'ru' && language !== 'zh') return
 
-  await updateLanguage(language)
-  socket.auth = {
-    ...(typeof socket.auth === 'object' && socket.auth ? socket.auth : {}),
-    language
-  }
-  socket.emit('update-language', { language })
+  await setByPath('language', language)
 }
 
 const changeTheme = async (theme: ThemeType) => {
-  await updateTheme(theme)
+  await setByPath('theme', theme)
 }
 
 const changeCustomThemeColor = async (colorName: CustomThemeColorType, value: string) => {
-  await updateCustomThemeColor(colorName, value)
+  await setByPath(`customTheme.${colorName}`, value)
 }
 
 const updateWallpaperVisibility = async (showWallpaper: boolean) => {
@@ -807,14 +803,21 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="main-page__body" :class="{ 'main-page--default-wallpaper': isDefaultWallpaperVisible }">
+  <div class="main-workspace-page" :class="{ 'main-workspace-page--default-wallpaper': isDefaultWallpaperVisible }">
     <aside class="main-page__side-panel" :style="widgetWallpaperStyle">
       <div class="main-page__panel-header">
-        <h2>{{ $t(activeNavItem.label) }}</h2>
+        <AppHeader
+          class="main-page__panel-title"
+          tag="h2"
+          size="small"
+          color="contrast-color"
+          :text="$t(activeNavItem.label)"
+        />
         <Button
           v-if="activeNavId === 'contacts' && hasMoreSearchedContacts"
           :aria-label="$t(MAIN_PAGE_I18N.loadMore)"
           rounded
+          size="small"
           text
           @click="searchContacts(nextSearchedContactsOffset)"
         >
@@ -825,8 +828,9 @@ onBeforeUnmount(() => {
       <InputText
         v-if="activeNavId === 'contacts'"
         v-model="contactSearchQuery"
-        class="main-page__search"
+        fluid
         :placeholder="$t(MAIN_PAGE_I18N.search)"
+        size="small"
       />
 
       <div v-if="activeNavId === 'chatRooms'" class="main-page__panel-list">
@@ -839,10 +843,14 @@ onBeforeUnmount(() => {
           @click="updateSelectedRoom(room.id)"
         >
           <span>{{ getRoomTitle(room) }}</span>
-          <small>{{ getRoomLastMessage(room) || $t(MAIN_PAGE_I18N.noMessages) }}</small>
+          <AppText
+            class="main-page__panel-item-meta"
+            size="small"
+            :text="getRoomLastMessage(room) || $t(MAIN_PAGE_I18N.noMessages)"
+          />
           <Badge v-if="getRoomUnreadQuantity(room.id)" :value="getRoomUnreadQuantity(room.id)" />
         </button>
-        <p v-if="!chatRooms.length" class="main-page__empty">{{ $t(MAIN_PAGE_I18N.noRooms) }}</p>
+        <AppText v-if="!chatRooms.length" class="main-page__empty" tag="p" :text="$t(MAIN_PAGE_I18N.noRooms)" />
       </div>
 
       <div v-if="activeNavId === 'contacts'" class="main-page__panel-list">
@@ -855,19 +863,22 @@ onBeforeUnmount(() => {
           @click="selectedContactId = contact.id"
         >
           <span>{{ contact.username }}</span>
-          <small>{{ $t(getContactStatus(contact)) }}</small>
+          <AppText class="main-page__panel-item-meta" size="small" :text="$t(getContactStatus(contact))" />
         </button>
-        <p v-if="!shownContacts.length" class="main-page__empty">
-          {{ $t(isContactsSearchMode ? MAIN_PAGE_I18N.noSearchResults : MAIN_PAGE_I18N.noContacts) }}
-        </p>
+        <AppText
+          v-if="!shownContacts.length"
+          class="main-page__empty"
+          tag="p"
+          :text="$t(isContactsSearchMode ? MAIN_PAGE_I18N.noSearchResults : MAIN_PAGE_I18N.noContacts)"
+        />
       </div>
 
       <div v-if="activeNavId === 'calls'" class="main-page__panel-list">
         <button v-for="call in calls" :key="call.id" class="main-page__panel-item" type="button">
           <span>{{ call.interlocutorName }}</span>
-          <small>{{ formatDate(call.calledAt) }}</small>
+          <AppText class="main-page__panel-item-meta" size="small" :text="formatDate(call.calledAt)" />
         </button>
-        <p v-if="!calls.length" class="main-page__empty">{{ $t(MAIN_PAGE_I18N.callsEmpty) }}</p>
+        <AppText v-if="!calls.length" class="main-page__empty" tag="p" :text="$t(MAIN_PAGE_I18N.callsEmpty)" />
       </div>
 
       <div v-if="activeNavId === 'infoNotifications'" class="main-page__panel-list">
@@ -880,10 +891,15 @@ onBeforeUnmount(() => {
           @click="selectedInfoNotificationId = notification.id"
         >
           <span>{{ $t(notification.title) }}</span>
-          <small>{{ formatDate(notification.createdAt) }}</small>
+          <AppText class="main-page__panel-item-meta" size="small" :text="formatDate(notification.createdAt)" />
           <Badge v-if="notification.status === 'unread'" :value="$t(MAIN_PAGE_I18N.markAsRead)" />
         </button>
-        <p v-if="!infoNotificationList.length" class="main-page__empty">{{ $t(MAIN_PAGE_I18N.noNotifications) }}</p>
+        <AppText
+          v-if="!infoNotificationList.length"
+          class="main-page__empty"
+          tag="p"
+          :text="$t(MAIN_PAGE_I18N.noNotifications)"
+        />
       </div>
     </aside>
 
@@ -894,10 +910,18 @@ onBeforeUnmount(() => {
             <AppIcon name="chat" />
           </div>
           <div>
-            <h1>{{ getRoomTitle() }}</h1>
-            <p>
-              {{ activeRoom ? getRoomLastMessage() || $t(MAIN_PAGE_I18N.noMessages) : $t(MAIN_PAGE_I18N.selectRoom) }}
-            </p>
+            <AppHeader
+              class="main-page__content-title"
+              tag="h1"
+              size="medium"
+              color="contrast-color"
+              :text="getRoomTitle()"
+            />
+            <AppText
+              class="main-page__content-subtitle"
+              tag="p"
+              :text="activeRoom ? getRoomLastMessage() || $t(MAIN_PAGE_I18N.noMessages) : $t(MAIN_PAGE_I18N.selectRoom)"
+            />
           </div>
         </header>
 
@@ -911,7 +935,7 @@ onBeforeUnmount(() => {
           @load-more="loadActiveRoomMessages"
         />
 
-        <p v-else class="main-page__empty">{{ $t(MAIN_PAGE_I18N.selectRoom) }}</p>
+        <AppText v-else class="main-page__empty" tag="p" :text="$t(MAIN_PAGE_I18N.selectRoom)" />
 
         <Form
           v-if="activeRoom"
@@ -920,19 +944,26 @@ onBeforeUnmount(() => {
           @click.stop
           @submit="sendMessage(activeRoom.id)"
         >
-          <Button :aria-label="$t(MAIN_PAGE_I18N.uploadAttachment)" type="button">
+          <Button :aria-label="$t(MAIN_PAGE_I18N.uploadAttachment)" size="small" type="button">
             <AppIcon name="paper-clip" />
           </Button>
           <Button
             :aria-label="$t(MAIN_PAGE_I18N.openEmojiPicker)"
             class="main-page__emoji-button"
+            size="small"
             type="button"
             @click="toggleComposerEmojiPicker"
           >
             <AppIcon name="emoji" />
           </Button>
-          <InputText v-model="messageText" autocomplete="off" :placeholder="$t(MAIN_PAGE_I18N.message)" />
-          <Button :aria-label="$t(MAIN_PAGE_I18N.send)" type="submit">
+          <InputText
+            v-model="messageText"
+            autocomplete="off"
+            fluid
+            :placeholder="$t(MAIN_PAGE_I18N.message)"
+            size="small"
+          />
+          <Button :aria-label="$t(MAIN_PAGE_I18N.send)" size="small" type="submit">
             <AppIcon name="send" />
           </Button>
           <div v-if="isComposerEmojiPickerOpen" class="main-page__emoji-popover" @click.stop>
@@ -951,22 +982,38 @@ onBeforeUnmount(() => {
             <AppIcon name="notification" />
           </div>
           <div>
-            <h1>{{ activeInfoNotification ? $t(activeInfoNotification.title) : $t(MAIN_PAGE_I18N.info) }}</h1>
-            <p>
-              {{
+            <AppHeader
+              class="main-page__content-title"
+              tag="h1"
+              size="medium"
+              color="contrast-color"
+              :text="activeInfoNotification ? $t(activeInfoNotification.title) : $t(MAIN_PAGE_I18N.info)"
+            />
+            <AppText
+              class="main-page__content-subtitle"
+              tag="p"
+              :text="
                 activeInfoNotification
                   ? formatDate(activeInfoNotification.createdAt)
                   : $t(MAIN_PAGE_I18N.noNotifications)
-              }}
-            </p>
+              "
+            />
           </div>
         </header>
 
         <article v-if="activeInfoNotification" class="main-page__document">
-          <p v-for="paragraph in $t(activeInfoNotification.content)" :key="paragraph">{{ paragraph }}</p>
+          <AppText
+            v-for="paragraph in $t(activeInfoNotification.content)"
+            :key="paragraph"
+            class="main-page__document-paragraph"
+            tag="p"
+            color="semi-contrast-color"
+            :text="paragraph"
+          />
           <Button
             v-if="activeInfoNotification.status === 'unread'"
             :label="$t(MAIN_PAGE_I18N.markAsRead)"
+            size="small"
             @click="markInfoNotificationAsRead(activeInfoNotification.id)"
           />
         </article>
@@ -975,7 +1022,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .main-page {
   position: relative;
 
@@ -1019,10 +1066,10 @@ onBeforeUnmount(() => {
   box-shadow: 12px 12px 28px var(--p-app-shadow-outset-start), -12px -12px 28px var(--p-app-shadow-outset-end);
 }
 
-.main-page--default-wallpaper .main-page__left-bar::before,
-.main-page--default-wallpaper .main-page__top-bar::before,
-.main-page--default-wallpaper .main-page__side-panel::before,
-.main-page--default-wallpaper .main-page__content::before {
+.main-workspace-page--default-wallpaper .main-page__left-bar::before,
+.main-workspace-page--default-wallpaper .main-page__top-bar::before,
+.main-workspace-page--default-wallpaper .main-page__side-panel::before,
+.main-workspace-page--default-wallpaper .main-page__content::before {
   pointer-events: none;
   content: '';
 
@@ -1099,18 +1146,11 @@ onBeforeUnmount(() => {
   height: 42px;
   padding: 0;
   border-radius: 8px;
-
-  text-decoration: none;
 }
 
 .main-page__nav :deep(.app-icon) {
   position: relative;
   z-index: 1;
-}
-
-.main-page__nav :deep(.p-button-icon),
-.main-page__nav :deep(.app-icon) {
-  text-decoration: none;
 }
 
 .main-page__nav :deep(.p-badge) {
@@ -1159,18 +1199,10 @@ onBeforeUnmount(() => {
 }
 
 .main-page__panel-item span,
-.main-page__panel-item small {
+.main-page__panel-item-meta {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.main-page__panel-item small,
-.main-page__content-header p,
-.main-page__empty,
-.main-page__contact-card,
-.main-page__content-row {
-  color: var(--p-app-text-muted);
 }
 
 .main-page__top-actions,
@@ -1182,7 +1214,7 @@ onBeforeUnmount(() => {
   font-weight: 500;
 }
 
-.main-page__body {
+.main-workspace-page {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
   gap: 12px;
@@ -1211,19 +1243,8 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 }
 
-.main-page__panel-header h2,
-.main-page__content-header h1,
-.main-page__content-header p {
-  margin: 0;
-}
-
-.main-page__panel-header h2 {
-  font-size: 1rem;
+.main-page__panel-title {
   overflow-wrap: anywhere;
-}
-
-.main-page__search {
-  width: 100%;
 }
 
 .main-page__panel-list,
@@ -1261,7 +1282,7 @@ onBeforeUnmount(() => {
   text-align: left;
 }
 
-.main-page__panel-item small {
+.main-page__panel-item-meta {
   grid-column: 1 / -1;
 }
 
@@ -1289,21 +1310,12 @@ onBeforeUnmount(() => {
   min-height: 0;
 }
 
-.main-page__settings-field :deep(.p-inputtext),
-.main-page__settings-field :deep(.p-password),
-.main-page__settings-field :deep(.p-password-input),
-.main-page__settings-field :deep(.p-select) {
-  width: 100%;
-}
-
 .main-page__settings-submit {
   justify-self: start;
 }
 
 .main-page__settings-hint {
   max-width: 680px;
-  margin: 0;
-  color: var(--p-app-text-muted);
 }
 
 .main-page__account-section {
@@ -1318,11 +1330,6 @@ onBeforeUnmount(() => {
   background: var(--p-app-muted-background);
 }
 
-.main-page__account-section h2 {
-  margin: 0;
-  font-size: 1rem;
-}
-
 .main-page__account-profile,
 .main-page__account-actions {
   display: flex;
@@ -1331,16 +1338,12 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-.main-page__account-profile strong,
-.main-page__account-profile span {
+.main-page__account-name,
+.main-page__account-id {
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.main-page__account-profile span {
-  color: var(--p-app-text-muted);
 }
 
 .main-page__account-avatar {
@@ -1367,10 +1370,6 @@ onBeforeUnmount(() => {
 
 .main-page__account-actions {
   flex-wrap: wrap;
-}
-
-.main-page__field-error {
-  color: var(--p-app-error);
 }
 
 .main-page__switch {
@@ -1613,8 +1612,7 @@ onBeforeUnmount(() => {
   background: var(--p-primary-color);
 }
 
-.main-page__content-header h1 {
-  font-size: 1.15rem;
+.main-page__content-title {
   overflow-wrap: anywhere;
 }
 
@@ -1631,7 +1629,6 @@ onBeforeUnmount(() => {
 }
 
 .main-page__composer :deep(.p-inputtext) {
-  width: 100%;
   height: 42px;
 }
 
@@ -1672,12 +1669,7 @@ onBeforeUnmount(() => {
   gap: 4px;
 }
 
-.main-page__document {
-  color: var(--p-app-text-semi-contrast);
-}
-
 .main-page__empty {
-  margin: 0;
   padding: 12px;
 }
 
@@ -1699,7 +1691,7 @@ onBeforeUnmount(() => {
     margin-block: 0;
   }
 
-  .main-page__body {
+  .main-workspace-page {
     grid-template-columns: 1fr;
   }
 

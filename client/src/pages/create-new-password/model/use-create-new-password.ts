@@ -33,6 +33,12 @@ export const useCreateNewPassword = () => {
   const isSubmitDisabled = computed(
     () => isLoading.value || !isFormValid.value || formData.firstPassword !== formData.secondPassword
   )
+  const isFirstPasswordInvalid = computed(() => Boolean(visibleErrors.value.firstPassword?.length))
+  const isSecondPasswordInvalid = computed(() =>
+    Boolean(visibleErrors.value.secondPassword?.length || passwordMismatchText.value)
+  )
+  const firstPasswordErrorText = computed(() => getFirstErrorText('firstPassword'))
+  const secondPasswordErrorText = computed(() => getFirstErrorText('secondPassword') || passwordMismatchText.value)
 
   const submit = () => {
     isFormTouched.value = true
@@ -59,21 +65,22 @@ export const useCreateNewPassword = () => {
 
   const initializeCreateNewPassword = async () => {
     if (typeof passwordRecoveryCode.value !== 'string') {
-      await router.push(ROUTE_NAMES.main)
+      await router.push(ROUTE_NAMES.app)
     }
   }
 
   return {
+    firstPasswordErrorText,
     formData,
-    getFirstErrorText,
     initializeCreateNewPassword,
+    isFirstPasswordInvalid,
     isLoading,
     isPasswordChanged,
+    isSecondPasswordInvalid,
     isSubmitDisabled,
-    passwordMismatchText,
     resolver,
+    secondPasswordErrorText,
     submit,
-    touchField,
-    visibleErrors
+    touchField
   }
 }

@@ -17,7 +17,7 @@ export const useUserSession = () => {
     const { redirect } = route.query
 
     if (typeof redirect !== 'string' || !redirect.startsWith('/') || redirect.startsWith('//')) {
-      return ROUTE_NAMES.main
+      return ROUTE_NAMES.app
     }
 
     return redirect
