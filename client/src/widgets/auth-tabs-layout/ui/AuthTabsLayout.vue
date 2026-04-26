@@ -67,13 +67,13 @@ const selectAuthTab = async (value: string | number) => {
   width: 44px;
   height: 44px;
   padding: 6px;
-  border: 1px solid var(--dark-gray-transparent-2);
+  border: 1px solid var(--p-content-border-color);
   border-radius: 12px;
 
   text-decoration: none;
 
-  background: var(--surface-card);
-  box-shadow: 8px 8px 18px var(--shadow-outset-start), -8px -8px 18px var(--shadow-outset-end);
+  background: var(--p-content-background);
+  box-shadow: 8px 8px 18px var(--p-app-shadow-outset-start), -8px -8px 18px var(--p-app-shadow-outset-end);
 }
 
 .auth-tabs-layout__logo img {
@@ -84,11 +84,11 @@ const selectAuthTab = async (value: string | number) => {
 
 .auth-tabs-layout__card {
   width: min(100%, 420px);
-  border: 1px solid var(--dark-gray-transparent-2);
+  border: 1px solid var(--p-content-border-color);
   border-radius: 8px;
 
-  background: var(--surface-card);
-  box-shadow: 16px 16px 36px var(--shadow-outset-start), -16px -16px 36px var(--shadow-outset-end);
+  background: var(--p-content-background);
+  box-shadow: 16px 16px 36px var(--p-app-shadow-outset-start), -16px -16px 36px var(--p-app-shadow-outset-end);
 }
 
 .auth-tabs-layout__tabs {

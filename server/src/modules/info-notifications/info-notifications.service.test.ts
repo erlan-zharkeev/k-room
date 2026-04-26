@@ -89,8 +89,8 @@ describe('info-notifications.service', () => {
     const user2 = '68a09410778b70d522ea8fa1'
     const notification = {
       _id: 'notification-1',
-      title: { en: 'Title', ru: 'Заголовок' },
-      content: { en: ['Text'], ru: ['Текст'] },
+      title: { en: 'Title', ru: 'Заголовок', zh: '标题' },
+      content: { en: ['Text'], ru: ['Текст'], zh: ['文本'] },
       isActive: false,
       createdAt: 1,
       updatedAt: 1

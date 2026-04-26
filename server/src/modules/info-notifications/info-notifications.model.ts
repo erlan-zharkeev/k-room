@@ -10,6 +10,10 @@ const localizedTextSchema = {
   ru: {
     type: String,
     required: true
+  },
+  zh: {
+    type: String,
+    required: true
   }
 } as const
 
@@ -20,6 +24,11 @@ const localizedParagraphsSchema = {
     default: []
   },
   ru: {
+    type: [String],
+    required: true,
+    default: []
+  },
+  zh: {
     type: [String],
     required: true,
     default: []

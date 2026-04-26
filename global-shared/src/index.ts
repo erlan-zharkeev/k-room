@@ -50,7 +50,7 @@ export type {
   IMessageSchema
 } from './message/types'
 
-export type { ICreateNewPasswordPayload } from './requests/types'
+export type { IChangePasswordPayload, ICreateNewPasswordPayload } from './requests/types'
 
 export type {
   IConfirmEmailResponse,

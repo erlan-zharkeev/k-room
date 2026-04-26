@@ -37,6 +37,8 @@ const { ADMIN_COOKIE, ADMIN_ROOT_PATH, API_PATH, CLIENT_PORT, SERVER_PORT, SOCKE
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as IPackageData
 
 const isDev = stage !== 'production'
+const clientUrl = isDev ? `${APP_HOST}:${CLIENT_PORT}` : APP_HOST
+const devOrigins = [clientUrl, APP_HOST, `http://127.0.0.1:${CLIENT_PORT}`, `http://localhost:${CLIENT_PORT}`]
 
 export const SERVER_ENV = {
   stage,
@@ -49,8 +51,8 @@ export const SERVER_ENV = {
   serverPort: Number(SERVER_PORT),
   clientPort: Number(CLIENT_PORT),
   serverUrl: isDev ? `${API_HOST}:${SERVER_PORT}${API_PATH}` : `${API_HOST}${API_PATH}`,
-  clientUrl: isDev ? `${APP_HOST}:${CLIENT_PORT}` : APP_HOST,
-  origins: isDev ? '*' : [APP_HOST],
+  clientUrl,
+  origins: isDev ? devOrigins : [APP_HOST],
   secret: {
     accessTokenSecret: ACCESS_TOKEN_SECRET,
     emailConfirmSecret: EMAIL_CONFIRM_SECRET,

@@ -15,7 +15,7 @@ export const imageToBase64 = ({
   reader.readAsDataURL(image)
 
   if (resolutionNotAllowed)
-    warnings.push(t({ ru: 'Недопустимый формат изображения', en: 'Image format is not allowed' }))
+    warnings.push(t({ ru: 'Недопустимый формат изображения', en: 'Image format is not allowed', zh: '图片格式不允许' }))
 
   const isGreaterThanAllowed = image.size / 1024 / 1024 > maxImageSizeInMb
 
@@ -23,7 +23,8 @@ export const imageToBase64 = ({
     warnings.push(
       t({
         ru: `Размер изображения должен быть меньше ${maxImageSizeInMb} МБ`,
-        en: `Image size must be less than ${maxImageSizeInMb} MB`
+        en: `Image size must be less than ${maxImageSizeInMb} MB`,
+        zh: `图片大小必须小于 ${maxImageSizeInMb} MB`
       })
     )
   }

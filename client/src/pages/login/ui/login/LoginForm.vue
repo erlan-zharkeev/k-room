@@ -1,32 +1,36 @@
 <script setup lang="ts">
+import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
 import { Button, Divider, InputText, Password } from 'primevue'
 import { RouterLink } from 'vue-router'
+
+import { AppIcon } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../../config/i18n'
 import type { ILoginFormProps } from '../../model/types'
 import { useLoginForm } from '../../model/use-login-form'
 
 const props = defineProps<ILoginFormProps>()
-const { formData, getFirstErrorText, isFormDisabled, isSubmitDisabled, submit, touchField, visibleErrors } =
+const { formData, getFirstErrorText, isFormDisabled, isSubmitDisabled, resolver, submit, touchField, visibleErrors } =
   useLoginForm(props)
 </script>
 
 <template>
-  <form class="login-form" novalidate @submit.prevent="submit">
+  <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="login-form" @submit="submit">
     <div class="login-form__field">
       <InputText
         v-model="formData.email"
         autocomplete="email"
         :disabled="isFormDisabled"
-        :invalid="Boolean(visibleErrors.email?.length)"
+        :invalid="Boolean($form.email?.invalid || visibleErrors.email?.length)"
+        name="email"
         :placeholder="$t(LOGIN_FORM_I18N.emailPlaceholder)"
         type="email"
         @blur="touchField('email')"
         @update:model-value="touchField('email')"
       />
       <small class="login-form__error">
-        {{ getFirstErrorText('email') }}
+        {{ $form.email?.error?.message || getFirstErrorText('email') }}
       </small>
     </div>
 
@@ -35,15 +39,16 @@ const { formData, getFirstErrorText, isFormDisabled, isSubmitDisabled, submit, t
         v-model="formData.password"
         :disabled="isFormDisabled"
         :feedback="false"
-        :invalid="Boolean(visibleErrors.password?.length)"
+        :invalid="Boolean($form.password?.invalid || visibleErrors.password?.length)"
         autocomplete="current-password"
+        name="password"
         :placeholder="$t(LOGIN_FORM_I18N.passwordPlaceholder)"
         toggle-mask
         @blur="touchField('password')"
         @update:model-value="touchField('password')"
       />
       <small class="login-form__error">
-        {{ getFirstErrorText('password') }}
+        {{ $form.password?.error?.message || getFirstErrorText('password') }}
       </small>
     </div>
 
@@ -56,21 +61,24 @@ const { formData, getFirstErrorText, isFormDisabled, isSubmitDisabled, submit, t
     />
 
     <Button
-      icon="pi pi-google"
       :disabled="props.isLoading"
       :label="$t(LOGIN_FORM_I18N.withGoogle)"
       :loading="props.isFirebaseLoginLoading"
       outlined
       type="button"
       @click="props.onFirebaseLogin('google')"
-    />
+    >
+      <template #icon>
+        <AppIcon name="google" />
+      </template>
+    </Button>
 
     <div class="login-form__forgot">
       <RouterLink :to="ROUTE_NAMES.passwordRecovery">{{ $t(LOGIN_FORM_I18N.forgotPassword) }}</RouterLink>
     </div>
 
     <Divider />
-  </form>
+  </Form>
 </template>
 
 <style scoped>
@@ -99,7 +107,7 @@ const { formData, getFirstErrorText, isFormDisabled, isSubmitDisabled, submit, t
   min-height: 16px;
   font-size: 0.78rem;
   line-height: 1.2;
-  color: var(--error);
+  color: var(--p-app-error);
 }
 
 .login-form__forgot {
@@ -110,7 +118,7 @@ const { formData, getFirstErrorText, isFormDisabled, isSubmitDisabled, submit, t
 
 .login-form__forgot a {
   font-size: 0.9rem;
-  color: var(--accent);
+  color: var(--p-primary-color);
   text-decoration: none;
 }
 

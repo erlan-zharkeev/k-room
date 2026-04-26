@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
 import { Button, Checkbox, InputText, Password } from 'primevue'
 import { RouterLink } from 'vue-router'
@@ -8,23 +9,25 @@ import type { IRegistrationFormProps } from '../../model/types'
 import { useRegistrationForm } from '../../model/use-registration-form'
 
 const props = defineProps<IRegistrationFormProps>()
-const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visibleErrors } = useRegistrationForm(props)
+const { formData, getFirstErrorText, isSubmitDisabled, resolver, submit, touchField, visibleErrors } =
+  useRegistrationForm(props)
 </script>
 
 <template>
-  <form class="registration-form" novalidate @submit.prevent="submit">
+  <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="registration-form" @submit="submit">
     <div class="registration-form__field">
       <InputText
         v-model="formData.username"
         autocomplete="username"
         :disabled="props.isLoading"
-        :invalid="Boolean(visibleErrors.username?.length)"
+        :invalid="Boolean($form.username?.invalid || visibleErrors.username?.length)"
+        name="username"
         :placeholder="$t(REGISTRATION_FORM_I18N.usernamePlaceholder)"
         @blur="touchField('username')"
         @update:model-value="touchField('username')"
       />
       <small class="registration-form__error">
-        {{ getFirstErrorText('username') }}
+        {{ $form.username?.error?.message || getFirstErrorText('username') }}
       </small>
     </div>
 
@@ -33,14 +36,15 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
         v-model="formData.email"
         autocomplete="email"
         :disabled="props.isLoading"
-        :invalid="Boolean(visibleErrors.email?.length)"
+        :invalid="Boolean($form.email?.invalid || visibleErrors.email?.length)"
+        name="email"
         :placeholder="$t(REGISTRATION_FORM_I18N.emailPlaceholder)"
         type="email"
         @blur="touchField('email')"
         @update:model-value="touchField('email')"
       />
       <small class="registration-form__error">
-        {{ getFirstErrorText('email') }}
+        {{ $form.email?.error?.message || getFirstErrorText('email') }}
       </small>
     </div>
 
@@ -49,15 +53,16 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
         v-model="formData.password"
         :disabled="props.isLoading"
         :feedback="false"
-        :invalid="Boolean(visibleErrors.password?.length)"
+        :invalid="Boolean($form.password?.invalid || visibleErrors.password?.length)"
         autocomplete="new-password"
+        name="password"
         :placeholder="$t(REGISTRATION_FORM_I18N.passwordPlaceholder)"
         toggle-mask
         @blur="touchField('password')"
         @update:model-value="touchField('password')"
       />
       <small class="registration-form__error">
-        {{ getFirstErrorText('password') }}
+        {{ $form.password?.error?.message || getFirstErrorText('password') }}
       </small>
     </div>
 
@@ -67,8 +72,9 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
           v-model="formData.policy"
           binary
           :disabled="props.isLoading"
-          :invalid="Boolean(visibleErrors.policy?.length)"
+          :invalid="Boolean($form.policy?.invalid || visibleErrors.policy?.length)"
           input-id="registration-policy"
+          name="policy"
           @change="touchField('policy')"
         />
         <span
@@ -80,7 +86,7 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
         </span>
       </label>
       <small class="registration-form__error">
-        {{ getFirstErrorText('policy') }}
+        {{ $form.policy?.error?.message || getFirstErrorText('policy') }}
       </small>
     </div>
 
@@ -91,7 +97,7 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
       :loading="props.isLoading"
       type="submit"
     />
-  </form>
+  </Form>
 </template>
 
 <style scoped>
@@ -127,12 +133,12 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
   min-height: 16px;
   font-size: 0.78rem;
   line-height: 1.2;
-  color: var(--error);
+  color: var(--p-app-error);
 }
 
 .registration-form__policy-text {
   font-size: 0.9rem;
-  color: var(--text);
+  color: var(--p-app-text-muted);
 }
 
 .registration-form__policy-text--disabled {
@@ -140,7 +146,7 @@ const { formData, getFirstErrorText, isSubmitDisabled, submit, touchField, visib
 }
 
 .registration-form__policy-text a {
-  color: var(--accent);
+  color: var(--p-primary-color);
   text-decoration: none;
 }
 

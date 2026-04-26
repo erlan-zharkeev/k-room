@@ -1,7 +1,7 @@
 import clone from 'lodash/clone'
 import { computed, reactive } from 'vue'
 
-import { useFormValidation } from 'src/shared/lib'
+import { useFormValidation, usePrimeVueFormResolver } from 'src/shared/lib'
 
 import { DEFAULT_REGISTRATION_FORM_DATA } from '../config/constants'
 import { REGISTRATION_FORM_RULES } from '../config/rules'
@@ -14,6 +14,7 @@ export const useRegistrationForm = (props: IRegistrationFormProps) => {
     formData,
     REGISTRATION_FORM_RULES
   )
+  const resolver = usePrimeVueFormResolver(REGISTRATION_FORM_RULES)
   const isSubmitDisabled = computed(() => props.isLoading || !isFormValid.value)
   const submit = () => {
     submitForm(() => props.onRegister(formData))
@@ -23,6 +24,7 @@ export const useRegistrationForm = (props: IRegistrationFormProps) => {
     formData,
     getFirstErrorText,
     isSubmitDisabled,
+    resolver,
     submit,
     touchField,
     visibleErrors

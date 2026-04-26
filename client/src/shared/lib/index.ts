@@ -19,22 +19,32 @@ export {
   strongPasswordRule,
   usernameMaxLengthRule,
   usernameMinLengthRule,
-  validEmailRule,
-  useFormValidation
-} from './form-validation'
+  validEmailRule
+} from './form-validation/rules'
+export { useFormValidation } from './form-validation/use-form-validation'
+export { usePrimeVueFormResolver } from './form-validation/prime-vue-form-resolver'
 export type {
   FormErrorsType,
   FormFieldNameType,
   FormRulesType,
   FormTouchedType,
   FormValidationRuleType
-} from './form-validation'
+} from './form-validation/types'
 export { generateUUIDv4 } from './helpers/generate-uuid-v4'
 export { getLastIdx } from './helpers/get-last-idx'
 export { getRandomNumber } from './helpers/get-random-number'
 export { useI18n } from './i18n/use-i18n'
+export { currentLanguage, setClientLanguage, translate } from './i18n/language'
 export { buildPathWithParams } from './url/build-path-with-params'
-export { db, KRoomDB, dexieCollectionStore, dexieKeyValueStore, useDexieLiveQuery } from './db'
+export { useSettings } from './preferences/use-settings'
+export { getCustomThemeColor } from './theme/get-custom-theme-color'
+export { getSystemTheme, isSystemThemeLight } from './theme/get-system-theme'
+export { isThemeType } from './theme/is-theme-type'
+export { applyPrimeVueTheme, getPrimeVueTheme, primeVueTheme } from './theme/vue-prime-theme-preset'
+export { db, KRoomDB } from './db/db'
+export { dexieCollectionStore } from './db/dexie-collection-store'
+export { dexieKeyValueStore } from './db/dexie-key-value-store'
+export { useDexieLiveQuery } from './db/use-dexie-live-query'
 export type {
   DbTransactionModeType,
   ICollectionMergeManyOptions,
@@ -43,4 +53,4 @@ export type {
   KvItem,
   MutableType,
   UseResult
-} from './db'
+} from './db/types'

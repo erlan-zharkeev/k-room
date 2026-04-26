@@ -1,3 +1,4 @@
+import { initClientData } from 'src/features/client-session'
 import { CLIENT_ENV } from 'src/shared/config'
 
 import { router } from '../router'
@@ -13,4 +14,5 @@ export const initApp = (app: VueAppType) => {
   initI18n(app)
   initPrimeVue(app)
   app.use(router)
+  void app.runWithContext(initClientData)
 }

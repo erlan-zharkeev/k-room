@@ -2,7 +2,7 @@ import type { Table } from 'dexie'
 import set from 'lodash/set'
 import { computed } from 'vue'
 
-import { cloneMutable } from './helpers/clone-mutable'
+import { cloneMutable } from './clone-mutable'
 import type { IndexableType, IUseStateResult, KvItem, MutableType, UseResult } from './types'
 import { useDexieLiveQuery } from './use-dexie-live-query'
 

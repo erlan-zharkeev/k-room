@@ -1,5 +1,6 @@
 module.exports = {
   extends: ['stylelint-config-standard-scss', 'stylelint-config-clean-order', 'stylelint-config-prettier-scss'],
+  ignoreFiles: ['client/src/app/styles/base.css'],
   overrides: [
     {
       files: ['**/*.vue'],

@@ -2,38 +2,21 @@ import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'global-shared'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useChatRoom } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
-import { useInfoNotification } from 'src/entities/info-notification'
-import { useMedia } from 'src/entities/media-file'
-import { useUserSession } from 'src/entities/user'
-import { useApi } from 'src/shared/api'
+import { useResetClientData } from 'src/features/client-session'
+import { socket, useApi } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'
 import { clearCookie, log } from 'src/shared/lib'
 
 export const useLogout = () => {
   const router = useRouter()
   const { doRequest } = useApi()
-  const { resetUserSession } = useUserSession()
-  const chatRoomStore = useChatRoom()
-  const contactStore = useContact()
-  const infoNotificationStore = useInfoNotification()
-  const mediaStore = useMedia()
+  const { resetClientData } = useResetClientData()
   const isLogoutLoading = ref(false)
 
-  const resetStores = async () => {
-    await Promise.all([
-      chatRoomStore.reset(),
-      contactStore.reset(),
-      infoNotificationStore.reset(),
-      mediaStore.reset(),
-      resetUserSession()
-    ])
-  }
-
   const resetClientSession = async () => {
-    await resetStores()
+    await resetClientData()
     clearCookie()
+    socket.disconnect()
     await router.push(ROUTE_NAMES.login)
   }
 

@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { CLIENT_ENV } from 'src/shared/config'
+import { PageLayout } from 'src/widgets/page-layout'
 
 import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
-
-import DocumentLayout from './DocumentLayout/DocumentLayout.vue'
 </script>
 
 <template>
-  <DocumentLayout :back-label="$t(LEGAL_INFO_PAGE_I18N.back)">
+  <PageLayout :back-label="$t(LEGAL_INFO_PAGE_I18N.back)" card-size="large" variant="document">
     <h1>{{ $t(LEGAL_INFO_PAGE_I18N.title)(CLIENT_ENV.appName) }}</h1>
 
     <p>
@@ -108,5 +107,5 @@ import DocumentLayout from './DocumentLayout/DocumentLayout.vue'
       <h2>{{ $t(LEGAL_INFO_PAGE_I18N.section12Title) }}</h2>
       <p>{{ $t(LEGAL_INFO_PAGE_I18N.section12Text) }}</p>
     </section>
-  </DocumentLayout>
+  </PageLayout>
 </template>

@@ -3,18 +3,22 @@ import { defineI18n } from 'global-shared'
 export const CONTACTS_I18N = defineI18n({
   interlocutorPingFailed: {
     en: 'Failed to update interlocutor status',
-    ru: 'Не удалось обновить статус собеседника'
+    ru: 'Не удалось обновить статус собеседника',
+    zh: '更新对方状态失败'
   },
   saveContactFailed: {
     en: 'Failed to save contact',
-    ru: 'Не удалось сохранить контакт'
+    ru: 'Не удалось сохранить контакт',
+    zh: '保存联系人失败'
   },
   searchContactFailed: {
     en: 'Failed to search contacts',
-    ru: 'Не удалось выполнить поиск контактов'
+    ru: 'Не удалось выполнить поиск контактов',
+    zh: '搜索联系人失败'
   },
   updateContactInteractionFailed: {
     en: 'Failed to update contact interaction',
-    ru: 'Не удалось обновить взаимодействие с контактом'
+    ru: 'Не удалось обновить взаимодействие с контактом',
+    zh: '更新联系人交互失败'
   }
 })
