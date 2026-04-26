@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
 import { useInfoNotification } from 'src/entities/info-notification'
+import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import {
   MAIN_PAGE_I18N,
@@ -16,7 +17,7 @@ import {
 } from 'src/pages/main'
 import { socketStatus } from 'src/shared/api'
 import { CLIENT_ENV } from 'src/shared/config'
-import { getSystemTheme, useI18n, useSettings } from 'src/shared/lib'
+import { getSystemTheme, useI18n } from 'src/shared/lib'
 import { MainLeftBar } from 'src/widgets/main-left-bar'
 import { MainTopBar } from 'src/widgets/main-top-bar'
 
@@ -143,7 +144,7 @@ onBeforeUnmount(() => {
   </main>
 </template>
 
-<style scoped>
+<style>
 .main-layout {
   position: relative;
 

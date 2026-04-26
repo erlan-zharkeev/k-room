@@ -48,6 +48,11 @@ export const usePasswordRecovery = () => {
     () => emailSendCodeIsLoading.value || counterValue.value > 0 || !emailValidation.isFormValid.value
   )
   const isValidateCodeDisabled = computed(() => codeValidationIsLoading.value || !codeValidation.isFormValid.value)
+  const isEmailInputDisabled = computed(() => emailSendCodeIsLoading.value || hasPresetEmail.value)
+  const isEmailInvalid = computed(() => Boolean(emailValidation.visibleErrors.value.email?.length))
+  const isCodeInvalid = computed(() => Boolean(codeValidation.visibleErrors.value.code?.length))
+  const emailErrorText = computed(() => emailValidation.getFirstErrorText('email'))
+  const codeErrorText = computed(() => codeValidation.getFirstErrorText('code'))
 
   const stopCounter = () => {
     if (counterInterval) {
@@ -145,6 +150,7 @@ export const usePasswordRecovery = () => {
   onBeforeUnmount(stopCounter)
 
   return {
+    codeErrorText,
     codeFormData,
     codeResolver,
     codeSent,
@@ -152,11 +158,15 @@ export const usePasswordRecovery = () => {
     codeValidationIsLoading,
     counterValue,
     debugCode,
+    emailErrorText,
     emailFormData,
     emailResolver,
     emailSendCodeIsLoading,
     emailValidation,
     hasPresetEmail,
+    isCodeInvalid,
+    isEmailInputDisabled,
+    isEmailInvalid,
     isSendCodeDisabled,
     isValidateCodeDisabled,
     initializePasswordRecovery,

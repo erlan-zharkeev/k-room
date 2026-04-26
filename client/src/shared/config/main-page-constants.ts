@@ -6,12 +6,12 @@ import type { AppIconNameType } from 'src/shared/ui'
 import { MAIN_PAGE_I18N } from './main-page-i18n'
 
 export const MAIN_PAGE_ROUTES = {
-  chatRooms: `${ROUTE_NAMES.main}/chat-rooms`,
-  calls: `${ROUTE_NAMES.main}/calls`,
-  contacts: `${ROUTE_NAMES.main}/contacts`,
-  infoNotifications: `${ROUTE_NAMES.main}/info-notifications`,
-  settings: `${ROUTE_NAMES.main}/settings`,
-  settingsItem: `${ROUTE_NAMES.main}/settings/:settingsId`
+  chatRooms: `${ROUTE_NAMES.app}/chat-rooms`,
+  calls: `${ROUTE_NAMES.app}/calls`,
+  contacts: `${ROUTE_NAMES.app}/contacts`,
+  infoNotifications: `${ROUTE_NAMES.app}/info-notifications`,
+  settings: `${ROUTE_NAMES.app}/settings`,
+  settingsItem: `${ROUTE_NAMES.app}/settings/:settingsId`
 } as const
 
 export const getMainPageSettingsPath = (settingsId: string) => `${MAIN_PAGE_ROUTES.settings}/${settingsId}`

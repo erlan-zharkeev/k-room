@@ -73,7 +73,7 @@ export const useWaitEmailConfirm = () => {
     const nextRequestTime = Number(route.query.nextRequestTime)
 
     if (typeof queryEmail !== 'string') {
-      await router.push(ROUTE_NAMES.registration)
+      await router.push(ROUTE_NAMES.authRegistration)
       return
     }
 

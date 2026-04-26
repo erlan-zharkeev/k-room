@@ -1,13 +1,14 @@
 import { onBeforeUnmount, watch } from 'vue'
 
-import { applyPrimeVueTheme, useSettings } from 'src/shared/lib'
+import { useSettings } from 'src/entities/setting'
+import { applyThemePreset } from 'src/shared/lib'
 
 export const useThemeProvider = () => {
   const { settings } = useSettings()
   const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
 
   const updateSystemTheme = () => {
-    applyPrimeVueTheme('system', settings.value.customTheme)
+    applyThemePreset('system', settings.value.customTheme)
   }
 
   watch(
@@ -23,7 +24,7 @@ export const useThemeProvider = () => {
         return
       }
 
-      applyPrimeVueTheme(theme, settings.value.customTheme)
+      applyThemePreset(theme, settings.value.customTheme)
     },
     { immediate: true }
   )
@@ -33,7 +34,7 @@ export const useThemeProvider = () => {
     (customTheme) => {
       if (settings.value.theme !== 'custom') return
 
-      applyPrimeVueTheme('custom', customTheme)
+      applyThemePreset('custom', customTheme)
     },
     { deep: true }
   )

@@ -1,8 +1,9 @@
 import { USER_ENDPOINTS, type IGetUserDataResponse } from 'global-shared'
 
+import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { isApiError, useApi, useSocketConnect, useSocketConnectionMonitor } from 'src/shared/api'
-import { log, useSettings } from 'src/shared/lib'
+import { log } from 'src/shared/lib'
 
 let clientDataInitPromise: Promise<void> | null = null
 

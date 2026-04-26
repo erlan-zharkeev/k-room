@@ -17,18 +17,24 @@ export const useLoginForm = (props: ILoginFormProps) => {
   const resolver = usePrimeVueFormResolver(LOGIN_FORM_RULES)
   const isFormDisabled = computed(() => props.isLoading || props.isFirebaseLoginLoading)
   const isSubmitDisabled = computed(() => isFormDisabled.value || !isFormValid.value)
+  const isEmailInvalid = computed(() => Boolean(visibleErrors.value.email?.length))
+  const isPasswordInvalid = computed(() => Boolean(visibleErrors.value.password?.length))
+  const emailErrorText = computed(() => getFirstErrorText('email'))
+  const passwordErrorText = computed(() => getFirstErrorText('password'))
   const submit = () => {
     submitForm(() => props.onLogin(formData))
   }
 
   return {
+    emailErrorText,
     formData,
-    getFirstErrorText,
+    isEmailInvalid,
     isFormDisabled,
+    isPasswordInvalid,
+    passwordErrorText,
     isSubmitDisabled,
     resolver,
     submit,
-    touchField,
-    visibleErrors
+    touchField
   }
 }

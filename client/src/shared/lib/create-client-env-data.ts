@@ -4,7 +4,7 @@ import path from 'path'
 import { formatAppName, type IPackageData } from 'global-shared'
 import { loadEnv } from 'vite'
 
-import type { IClientEnv } from '../types/client-env'
+import type { IClientEnv } from 'src/shared/types/client-env'
 
 export const createClientEnvData = (mode: string, envDir: string): IClientEnv => {
   const commonEnv = loadEnv('common', envDir, '')

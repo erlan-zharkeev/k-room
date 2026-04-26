@@ -1,2 +1,2 @@
 export { default as AppHeader } from './AppHeader.vue'
-export type { AppHeaderTagType, IAppHeaderProps } from './types'
+export type { AppHeaderColorType, AppHeaderSizeType, AppHeaderTagType, IAppHeaderProps } from './types'

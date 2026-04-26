@@ -54,7 +54,7 @@ watch(
   <div class="app-profile-basic-data">
     <Avatar size="normal" shape="circle" :image="imageSrc" :alt="props.imageAlt ?? props.title" />
     <div class="app-profile-basic-data__text">
-      <AppHeader class="app-profile-basic-data__title" tag="h4">{{ props.title }}</AppHeader>
+      <AppHeader class="app-profile-basic-data__title" tag="h4" :text="props.title" />
       <slot name="description">
         <AppText class="app-profile-basic-data__label" size="large" />
       </slot>
@@ -62,7 +62,7 @@ watch(
   </div>
 </template>
 
-<style scoped>
+<style>
 .app-profile-basic-data {
   display: flex;
   gap: 10px;

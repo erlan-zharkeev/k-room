@@ -1,8 +1,8 @@
 import type { Virtualizer } from '@tanstack/vue-virtual'
 import { nextTick, onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
+import { useSettings } from 'src/entities/setting'
 import type { DbMessageType, IMessageListScrollState } from 'src/shared/config'
-import { useSettings } from 'src/shared/lib'
 
 import { MESSAGE_SCROLL_SAVE_DEBOUNCE_MS } from '../config/constants'
 

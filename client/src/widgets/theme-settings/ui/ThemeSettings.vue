@@ -38,14 +38,14 @@ const changeCustomThemeColor = (colorName: CustomThemeColorType, event: Event) =
         type="button"
         @click="changeTheme(option.value)"
       >
-        <AppText>{{ $t(option.label) }}</AppText>
+        <AppText :text="$t(option.label)" />
       </button>
     </div>
 
     <div v-if="theme === 'custom'" class="theme-settings__custom">
-      <AppHeader tag="h2">{{ $t(THEME_SETTINGS_I18N.customThemeSettings) }}</AppHeader>
+      <AppHeader tag="h2" :text="$t(THEME_SETTINGS_I18N.customThemeSettings)" />
       <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings__field">
-        <AppText>{{ $t(item.label) }}</AppText>
+        <AppText :text="$t(item.label)" />
         <input
           :value="getCustomThemeColor(customTheme, item.id)"
           type="color"
@@ -56,7 +56,7 @@ const changeCustomThemeColor = (colorName: CustomThemeColorType, event: Event) =
   </div>
 </template>
 
-<style scoped>
+<style>
 .theme-settings,
 .theme-settings__custom {
   display: grid;

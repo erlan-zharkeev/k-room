@@ -4,54 +4,42 @@ import { Button, ProgressSpinner } from 'primevue'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { PageLayout } from 'src/widgets/page-layout'
+import { AppHeader, AppText } from 'src/shared/ui'
 
 import { EMAIL_CONFIRMATION_I18N } from '../config/i18n'
 import { useEmailConfirmation } from '../model/use-email-confirmation'
 
-const { confirmEmail, email, isLoading } = useEmailConfirmation()
+const { confirmEmail, email, isConfirmed, isLoading } = useEmailConfirmation()
 
 onMounted(confirmEmail)
 </script>
 
 <template>
-  <PageLayout
-    :back-label="$t(EMAIL_CONFIRMATION_I18N.back)"
-    :fallback-route="ROUTE_NAMES.login"
-    :title="$t(EMAIL_CONFIRMATION_I18N.title)"
-  >
+  <div class="email-confirmation-page">
     <div v-if="isLoading" class="email-confirmation-page__loader">
       <ProgressSpinner />
-      <span>{{ $t(EMAIL_CONFIRMATION_I18N.loading) }}</span>
+      <AppText :text="$t(EMAIL_CONFIRMATION_I18N.loading)" />
     </div>
 
     <div v-else class="email-confirmation-page__content">
-      <p>
-        {{ $t(EMAIL_CONFIRMATION_I18N.email) }}
-        <strong>{{ email }}</strong>
-        {{ $t(EMAIL_CONFIRMATION_I18N.confirmed) }}
-      </p>
-      <RouterLink :to="ROUTE_NAMES.login">
-        <Button :label="$t(EMAIL_CONFIRMATION_I18N.back)" />
+      <AppHeader :text="$t(isConfirmed ? EMAIL_CONFIRMATION_I18N.title : EMAIL_CONFIRMATION_I18N.failed)" />
+      <AppText v-if="isConfirmed" :text="`Email ${email} ${$t(EMAIL_CONFIRMATION_I18N.confirmed)}`" />
+      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
+        <Button
+          as="a"
+          :href="href"
+          :label="$t(EMAIL_CONFIRMATION_I18N.back)"
+          size="small"
+          class="email-confirmation-page__act-btn"
+          @click="navigate"
+        />
       </RouterLink>
     </div>
-  </PageLayout>
+  </div>
 </template>
 
-<style scoped>
-.email-confirmation-page__loader,
-.email-confirmation-page__content {
-  display: grid;
-  gap: 14px;
-  justify-items: center;
-  text-align: center;
-}
-
-.email-confirmation-page__content p {
-  margin: 0;
-}
-
-.email-confirmation-page__content strong {
-  color: var(--p-primary-color);
+<style>
+.email-confirmation-page__act-btn {
+  gap: 8px;
 }
 </style>

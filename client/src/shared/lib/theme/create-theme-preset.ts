@@ -1,7 +1,7 @@
 import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
 
-import { ICustomThemeSetting } from '../../types/theme'
+import type { ICustomThemeSetting } from 'src/shared/types/theme'
 
 import { createPrimaryPalette } from './create-primary-palette'
 import { createSurfacePalette } from './create-surface-palette'
@@ -11,9 +11,6 @@ export const createThemePreset = (colors: ICustomThemeSetting) =>
     semantic: {
       primary: createPrimaryPalette(colors.accent),
       surface: createSurfacePalette(colors.mainBg),
-      focusRing: {
-        color: colors.accent
-      },
       extend: {
         app: {
           text: {
@@ -25,7 +22,6 @@ export const createThemePreset = (colors: ICustomThemeSetting) =>
           mutedBackground: colors.darkGrayTransparent,
           widgetBackground: colors.surfaceCard,
           widgetBorderColor: colors.darkGrayTransparent,
-          error: '#bf566e',
           shadow: {
             outset: {
               start: colors.shadowOutsetStart,

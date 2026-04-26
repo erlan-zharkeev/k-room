@@ -70,6 +70,13 @@ export default defineConfig(({ mode }) => {
       outDir: './build',
       ...tauriBuildConfig
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "src/app/styles/mixins" as *;'
+        }
+      }
+    },
     server: {
       host: clientEnvData.tauriDevHost || (clientEnvData.isTauriDev ? '127.0.0.1' : true),
       port: clientEnvData.clientPort,

@@ -1,56 +1,100 @@
-import { ROUTE_NAMES } from 'global-shared'
+import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES } from 'global-shared'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useUser } from 'src/entities/user'
 import { initClientData } from 'src/features/client-session'
-import { CreateNewPasswordPage } from 'src/pages/create-new-password'
-import { EmailConfirmationPage } from 'src/pages/email-confirmation'
-import { ErrorPage } from 'src/pages/error'
+import { CREATE_NEW_PASSWORD_PAGE_LAYOUT_PROPS, CreateNewPasswordPage } from 'src/pages/create-new-password'
+import { EMAIL_CONFIRMATION_PAGE_LAYOUT_PROPS, EmailConfirmationPage } from 'src/pages/email-confirmation'
+import { ERROR_PAGE_LAYOUT_PROPS, ErrorPage } from 'src/pages/error'
 import { LoginPage } from 'src/pages/login'
 import { MAIN_PAGE_ROUTES, MainWorkspacePage, getMainPageSettingsPath } from 'src/pages/main'
-import { PasswordRecoveryPage } from 'src/pages/password-recovery'
-import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
+import { PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS, PasswordRecoveryPage } from 'src/pages/password-recovery'
+import { PRIVACY_POLICY_PAGE_LAYOUT_PROPS, PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { SettingsPage } from 'src/pages/settings'
-import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
+import { WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS, WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
 
-import MainLayout from './layouts/main/MainLayout.vue'
+import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
+import MainLayout from './layouts/main-layout/MainLayout.vue'
+import PageLayout from './layouts/page-layout/PageLayout.vue'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: ROUTE_NAMES.main
+    redirect: ROUTE_NAMES.app
   },
   {
-    path: ROUTE_NAMES.login,
-    component: LoginPage,
+    path: LAYOUT_ROUTE_NAMES.auth,
+    component: AuthLayout,
+    redirect: ROUTE_NAMES.authLogin,
     meta: {
       guestOnly: true
-    }
+    },
+    children: [
+      {
+        path: AUTH_ROUTE_NAMES.login,
+        component: LoginPage
+      },
+      {
+        path: AUTH_ROUTE_NAMES.registration,
+        component: RegistrationPage
+      }
+    ]
   },
   {
-    path: ROUTE_NAMES.registration,
-    component: RegistrationPage,
-    meta: {
-      guestOnly: true
-    }
+    path: LAYOUT_ROUTE_NAMES.page,
+    component: PageLayout,
+    redirect: ROUTE_NAMES.notFound,
+    children: [
+      {
+        path: PAGE_ROUTE_NAMES.emailConfirmation,
+        component: EmailConfirmationPage,
+        meta: {
+          pageLayout: EMAIL_CONFIRMATION_PAGE_LAYOUT_PROPS
+        }
+      },
+      {
+        path: PAGE_ROUTE_NAMES.waitEmailConfirm,
+        component: WaitEmailConfirmPage,
+        meta: {
+          guestOnly: true,
+          pageLayout: WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS
+        }
+      },
+      {
+        path: PAGE_ROUTE_NAMES.passwordRecovery,
+        component: PasswordRecoveryPage,
+        meta: {
+          guestOnly: true,
+          pageLayout: PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS
+        }
+      },
+      {
+        path: PAGE_ROUTE_NAMES.createNewPassword,
+        component: CreateNewPasswordPage,
+        meta: {
+          guestOnly: true,
+          pageLayout: CREATE_NEW_PASSWORD_PAGE_LAYOUT_PROPS
+        }
+      },
+      {
+        path: PAGE_ROUTE_NAMES.privacyPolicy,
+        component: PrivacyPolicyPage,
+        meta: {
+          pageLayout: PRIVACY_POLICY_PAGE_LAYOUT_PROPS
+        }
+      },
+      {
+        path: PAGE_ROUTE_NAMES.notFound,
+        component: ErrorPage,
+        meta: {
+          pageLayout: ERROR_PAGE_LAYOUT_PROPS
+        }
+      }
+    ]
   },
   {
-    path: ROUTE_NAMES.emailConfirmation,
-    component: EmailConfirmationPage,
-    meta: {
-      guestOnly: true
-    }
-  },
-  {
-    path: ROUTE_NAMES.waitEmailConfirm,
-    component: WaitEmailConfirmPage,
-    meta: {
-      guestOnly: true
-    }
-  },
-  {
-    path: ROUTE_NAMES.main,
+    path: LAYOUT_ROUTE_NAMES.app,
     component: MainLayout,
     redirect: MAIN_PAGE_ROUTES.chatRooms,
     meta: {
@@ -84,28 +128,6 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: ROUTE_NAMES.passwordRecovery,
-    component: PasswordRecoveryPage,
-    meta: {
-      guestOnly: true
-    }
-  },
-  {
-    path: ROUTE_NAMES.createNewPassword,
-    component: CreateNewPasswordPage,
-    meta: {
-      guestOnly: true
-    }
-  },
-  {
-    path: ROUTE_NAMES.privacyPolicy,
-    component: PrivacyPolicyPage
-  },
-  {
-    path: ROUTE_NAMES.notFound,
-    component: ErrorPage
-  },
-  {
     path: '/:pathMatch(.*)*',
     redirect: ROUTE_NAMES.notFound
   }
@@ -125,7 +147,7 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth && !isUserAuthorized) {
     return {
-      path: ROUTE_NAMES.login,
+      path: ROUTE_NAMES.authLogin,
       query: {
         redirect: to.fullPath
       }
@@ -133,6 +155,6 @@ router.beforeEach(async (to) => {
   }
 
   if (to.meta.guestOnly && isUserAuthorized) {
-    return ROUTE_NAMES.main
+    return ROUTE_NAMES.app
   }
 })

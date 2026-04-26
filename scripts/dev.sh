@@ -14,4 +14,8 @@ echo "Server: ${SERVER_PORT:+https://localhost:$SERVER_PORT}"
 echo "Health: ${SERVER_PORT:+https://localhost:$SERVER_PORT/health}"
 
 pnpm --dir global-shared run build
-pnpm turbo run serve
+pnpm -r --parallel --stream \
+  --filter global-shared \
+  --filter k-room-client \
+  --filter k-room-server \
+  run serve

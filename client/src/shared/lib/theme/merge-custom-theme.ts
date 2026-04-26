@@ -1,5 +1,5 @@
-import { DEFAULT_CUSTOM_THEME } from '../../config/theme.constants'
-import { ICustomThemeSetting } from '../../types/theme'
+import { DEFAULT_CUSTOM_THEME } from 'src/shared/config/theme.constants'
+import type { ICustomThemeSetting } from 'src/shared/types/theme'
 
 export const mergeCustomTheme = (
   customTheme: Partial<ICustomThemeSetting> = DEFAULT_CUSTOM_THEME

@@ -17,7 +17,7 @@ export const useLogout = () => {
     await resetClientData()
     clearCookie()
     socket.disconnect()
-    await router.push(ROUTE_NAMES.login)
+    await router.push(ROUTE_NAMES.authLogin)
   }
 
   const logout = async () => {

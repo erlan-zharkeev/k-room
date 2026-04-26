@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { USER_ENDPOINTS } from 'global-shared'
-import { Button, InputText, Password, Select, ToggleSwitch } from 'primevue'
+import { Button, InputText, Message, Password, Select, ToggleSwitch } from 'primevue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 
 import { useMedia } from 'src/entities/media-file'
+import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
-import { socket, useApi } from 'src/shared/api'
+import { useApi } from 'src/shared/api'
 import {
   CLIENT_ENV,
   MAIN_PAGE_I18N,
@@ -20,8 +21,8 @@ import {
   type SoundType,
   type ThemeType
 } from 'src/shared/config'
-import { getSystemTheme, useI18n, useSettings } from 'src/shared/lib'
-import { AppIcon } from 'src/shared/ui'
+import { getSystemTheme, useI18n } from 'src/shared/lib'
+import { AppHeader, AppIcon, AppText } from 'src/shared/ui'
 import { ThemeSettings } from 'src/widgets/theme-settings'
 
 const route = useRoute()
@@ -30,7 +31,7 @@ const { t } = useI18n()
 const { media, put: putMedia, remove: removeMedia } = useMedia()
 const { user, shallowUpdate: updateUserData } = useUser()
 const { doRequest } = useApi()
-const { settings, updateLanguage, updateTheme, updateCustomThemeColor, shallowUpdate } = useSettings()
+const { settings, setByPath, shallowUpdate } = useSettings()
 
 const selectedSettingsId = ref('account')
 const accountUsername = ref('')
@@ -143,20 +144,15 @@ const updateSelectedSettings = async (settingsId: string) => {
 const changeLanguage = async (language: unknown) => {
   if (language !== 'en' && language !== 'ru' && language !== 'zh') return
 
-  await updateLanguage(language)
-  socket.auth = {
-    ...(typeof socket.auth === 'object' && socket.auth ? socket.auth : {}),
-    language
-  }
-  socket.emit('update-language', { language })
+  await setByPath('language', language)
 }
 
 const changeTheme = async (theme: ThemeType) => {
-  await updateTheme(theme)
+  await setByPath('theme', theme)
 }
 
 const changeCustomThemeColor = async (colorName: CustomThemeColorType, value: string) => {
-  await updateCustomThemeColor(colorName, value)
+  await setByPath(`customTheme.${colorName}`, value)
 }
 
 const clearAccountAvatarPreview = () => {
@@ -590,7 +586,13 @@ onBeforeUnmount(() => {
   <div class="settings-page">
     <aside class="settings-page__side-panel" :style="widgetWallpaperStyle">
       <div class="settings-page__panel-header">
-        <h2>{{ $t(MAIN_PAGE_I18N.settings) }}</h2>
+        <AppHeader
+          class="settings-page__panel-title"
+          tag="h2"
+          size="small"
+          color="contrast-color"
+          :text="$t(MAIN_PAGE_I18N.settings)"
+        />
       </div>
 
       <div class="settings-page__settings">
@@ -603,7 +605,7 @@ onBeforeUnmount(() => {
           @click="updateSelectedSettings(item.id)"
         >
           <span>{{ $t(item.label) }}</span>
-          <small>{{ $t(item.description) }}</small>
+          <AppText class="settings-page__panel-item-description" size="small" :text="$t(item.description)" />
         </button>
       </div>
     </aside>
@@ -614,8 +616,18 @@ onBeforeUnmount(() => {
           <AppIcon name="settings" />
         </div>
         <div>
-          <h1>{{ $t(selectedSettingsItem.label) }}</h1>
-          <p>{{ CLIENT_ENV.appName }} {{ CLIENT_ENV.appVersion }}</p>
+          <AppHeader
+            class="settings-page__content-title"
+            tag="h1"
+            size="medium"
+            color="contrast-color"
+            :text="$t(selectedSettingsItem.label)"
+          />
+          <AppText
+            class="settings-page__content-subtitle"
+            tag="p"
+            :text="`${CLIENT_ENV.appName} ${CLIENT_ENV.appVersion}`"
+          />
         </div>
       </header>
 
@@ -627,8 +639,13 @@ onBeforeUnmount(() => {
               <AppIcon v-else name="user-stub" size="large" />
             </div>
             <div>
-              <strong>{{ user.username || CLIENT_ENV.appName }}</strong>
-              <span>#{{ user.id }}</span>
+              <AppText
+                class="settings-page__account-name"
+                bold
+                color="contrast-color"
+                :text="user.username || CLIENT_ENV.appName"
+              />
+              <AppText class="settings-page__account-id" :text="`#${user.id}`" />
             </div>
           </div>
 
@@ -642,50 +659,78 @@ onBeforeUnmount(() => {
                 @change="uploadAccountAvatar"
               />
             </label>
-            <Button :label="$t(MAIN_PAGE_I18N.resetPhoto)" text type="button" @click="resetAccountAvatar" />
+            <Button
+              :label="$t(MAIN_PAGE_I18N.resetPhoto)"
+              size="small"
+              text
+              type="button"
+              @click="resetAccountAvatar"
+            />
           </div>
 
           <label class="settings-page__settings-field">
             <span>{{ $t(MAIN_PAGE_I18N.username) }}</span>
-            <InputText v-model="accountUsername" autocomplete="username" />
+            <InputText v-model="accountUsername" autocomplete="username" fluid size="small" />
           </label>
 
           <Button
             class="settings-page__settings-submit"
             :label="$t(MAIN_PAGE_I18N.saveAccount)"
             :loading="isAccountSaving"
+            size="small"
             type="button"
             @click="saveAccount"
           />
         </section>
 
         <section class="settings-page__account-section">
-          <h2>{{ $t(MAIN_PAGE_I18N.changePassword) }}</h2>
+          <AppHeader
+            class="settings-page__section-title"
+            tag="h2"
+            size="small"
+            color="contrast-color"
+            :text="$t(MAIN_PAGE_I18N.changePassword)"
+          />
 
           <label class="settings-page__settings-field">
             <span>{{ $t(MAIN_PAGE_I18N.currentPassword) }}</span>
-            <Password v-model="currentPassword" :feedback="false" autocomplete="current-password" toggle-mask />
+            <Password
+              v-model="currentPassword"
+              :feedback="false"
+              autocomplete="current-password"
+              fluid
+              size="small"
+              toggle-mask
+            />
           </label>
 
           <label class="settings-page__settings-field">
             <span>{{ $t(MAIN_PAGE_I18N.newPassword) }}</span>
-            <Password v-model="nextPassword" autocomplete="new-password" toggle-mask />
+            <Password v-model="nextPassword" autocomplete="new-password" fluid size="small" toggle-mask />
           </label>
 
           <label class="settings-page__settings-field">
             <span>{{ $t(MAIN_PAGE_I18N.confirmPassword) }}</span>
-            <Password v-model="repeatPassword" :feedback="false" autocomplete="new-password" toggle-mask />
+            <Password
+              v-model="repeatPassword"
+              :feedback="false"
+              autocomplete="new-password"
+              fluid
+              size="small"
+              toggle-mask
+            />
           </label>
 
-          <small v-if="passwordMismatch" class="settings-page__field-error">
+          <Message v-if="passwordMismatch" severity="error" size="small" variant="simple">
             {{ $t(MAIN_PAGE_I18N.passwordMismatch) }}
-          </small>
+          </Message>
 
           <Button
             class="settings-page__settings-submit"
             :disabled="isPasswordSubmitDisabled"
             :label="$t(MAIN_PAGE_I18N.changePassword)"
             :loading="isPasswordChanging"
+            size="small"
             type="button"
             @click="changePassword"
           />
@@ -706,9 +751,11 @@ onBeforeUnmount(() => {
           <span>{{ $t(MAIN_PAGE_I18N.language) }}</span>
           <Select
             :model-value="settings.language"
+            fluid
             :options="MAIN_PAGE_LANGUAGE_OPTIONS"
             option-label="label"
             option-value="value"
+            size="small"
             @update:model-value="changeLanguage"
           />
         </label>
@@ -769,7 +816,7 @@ onBeforeUnmount(() => {
           <span>{{ $t(MAIN_PAGE_I18N.notificationsEnabled) }}</span>
           <ToggleSwitch :model-value="settings.showNotification" @update:model-value="updateNotificationVisibility" />
         </label>
-        <p class="settings-page__settings-hint">{{ $t(MAIN_PAGE_I18N.notificationsHint) }}</p>
+        <AppText class="settings-page__settings-hint" tag="p" :text="$t(MAIN_PAGE_I18N.notificationsHint)" />
       </div>
 
       <div v-if="selectedSettingsId === 'sound'" class="settings-page__settings-content">
@@ -791,6 +838,7 @@ onBeforeUnmount(() => {
             <div class="settings-page__sound-actions">
               <Button
                 :aria-label="$t(playingSoundId === item.id ? MAIN_PAGE_I18N.stopSound : MAIN_PAGE_I18N.playSound)"
+                size="small"
                 text
                 type="button"
                 @click="previewSound(item.id, item.src)"
@@ -809,6 +857,7 @@ onBeforeUnmount(() => {
               <Button
                 :disabled="!hasCustomSound(item.id)"
                 :label="$t(MAIN_PAGE_I18N.defaultSound)"
+                size="small"
                 text
                 type="button"
                 @click="restoreDefaultSound(item.id)"
@@ -824,15 +873,18 @@ onBeforeUnmount(() => {
           <div class="settings-page__device-control">
             <Select
               :empty-message="$t(MAIN_PAGE_I18N.noDevices)"
+              fluid
               :model-value="settings.selectedAudioInputDeviceId"
               :options="audioInputDeviceOptions"
               option-label="label"
               option-value="value"
+              size="small"
               @update:model-value="updateAudioInputDevice"
               @show="refreshMediaDevices"
             />
             <Button
               :aria-label="$t(isTestingAudioInput ? MAIN_PAGE_I18N.stopDeviceTest : MAIN_PAGE_I18N.testDevice)"
+              size="small"
               text
               type="button"
               @click="testAudioInputDevice"
@@ -850,15 +902,18 @@ onBeforeUnmount(() => {
           <div class="settings-page__device-control">
             <Select
               :empty-message="$t(MAIN_PAGE_I18N.noDevices)"
+              fluid
               :model-value="settings.selectedVideoInputDeviceId"
               :options="videoInputDeviceOptions"
               option-label="label"
               option-value="value"
+              size="small"
               @update:model-value="updateVideoInputDevice"
               @show="refreshMediaDevices"
             />
             <Button
               :aria-label="$t(isTestingVideoInput ? MAIN_PAGE_I18N.stopDeviceTest : MAIN_PAGE_I18N.testDevice)"
+              size="small"
               text
               type="button"
               @click="testVideoInputDevice"
@@ -881,15 +936,18 @@ onBeforeUnmount(() => {
           <div class="settings-page__device-control">
             <Select
               :empty-message="$t(MAIN_PAGE_I18N.noDevices)"
+              fluid
               :model-value="settings.selectedAudioOutputDeviceId"
               :options="audioOutputDeviceOptions"
               option-label="label"
               option-value="value"
+              size="small"
               @update:model-value="updateAudioOutputDevice"
               @show="refreshMediaDevices"
             />
             <Button
               :aria-label="$t(isTestingAudioOutput ? MAIN_PAGE_I18N.stopDeviceTest : MAIN_PAGE_I18N.testDevice)"
+              size="small"
               text
               type="button"
               @click="testAudioOutputDevice"
@@ -904,17 +962,23 @@ onBeforeUnmount(() => {
 
       <div v-if="selectedSettingsId === 'faq'" class="settings-page__settings-content">
         <article class="settings-page__document">
-          <p>{{ $t(MAIN_PAGE_I18N.faqPlaceholder) }}</p>
+          <AppText tag="p" color="semi-contrast-color" :text="$t(MAIN_PAGE_I18N.faqPlaceholder)" />
         </article>
       </div>
 
       <div v-if="selectedSettingsId === 'question'" class="settings-page__settings-content">
         <article class="settings-page__document">
-          <p>{{ $t(MAIN_PAGE_I18N.questionPlaceholder) }}</p>
+          <AppText tag="p" color="semi-contrast-color" :text="$t(MAIN_PAGE_I18N.questionPlaceholder)" />
           <div class="settings-page__content-actions">
-            <Button :label="$t(MAIN_PAGE_I18N.openFaq)" text type="button" @click="updateSelectedSettings('faq')" />
+            <Button
+              :label="$t(MAIN_PAGE_I18N.openFaq)"
+              size="small"
+              text
+              type="button"
+              @click="updateSelectedSettings('faq')"
+            />
             <RouterLink :to="MAIN_PAGE_ROUTES.chatRooms" custom v-slot="{ href, navigate }">
-              <Button :href="href" :label="$t(MAIN_PAGE_I18N.supportChat)" as="a" @click="navigate" />
+              <Button :href="href" :label="$t(MAIN_PAGE_I18N.supportChat)" as="a" size="small" @click="navigate" />
             </RouterLink>
           </div>
         </article>
@@ -923,7 +987,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .settings-page {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
@@ -1007,16 +1071,6 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 }
 
-.settings-page__panel-header h2,
-.settings-page__content-header h1,
-.settings-page__content-header p {
-  margin: 0;
-}
-
-.settings-page__panel-header h2 {
-  font-size: 1rem;
-}
-
 .settings-page__settings,
 .settings-page__settings-content,
 .settings-page__settings-field,
@@ -1058,15 +1112,14 @@ onBeforeUnmount(() => {
 }
 
 .settings-page__panel-item span,
-.settings-page__panel-item small {
+.settings-page__panel-item-description {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.settings-page__panel-item small {
+.settings-page__panel-item-description {
   grid-column: 1 / -1;
-  color: var(--p-app-text-muted);
 }
 
 .settings-page__panel-item:hover,
@@ -1092,15 +1145,8 @@ onBeforeUnmount(() => {
   background: var(--p-primary-color);
 }
 
-.settings-page__content-header h1 {
-  font-size: 1.15rem;
+.settings-page__content-title {
   overflow-wrap: anywhere;
-}
-
-.settings-page__content-header p,
-.settings-page__settings-hint,
-.settings-page__account-profile span {
-  color: var(--p-app-text-muted);
 }
 
 .settings-page__account-section {
@@ -1108,11 +1154,6 @@ onBeforeUnmount(() => {
   gap: 14px;
   align-content: start;
   padding: 14px;
-}
-
-.settings-page__account-section h2 {
-  margin: 0;
-  font-size: 1rem;
 }
 
 .settings-page__account-profile,
@@ -1125,8 +1166,8 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-.settings-page__account-profile strong,
-.settings-page__account-profile span {
+.settings-page__account-name,
+.settings-page__account-id {
   overflow: hidden;
   display: block;
   text-overflow: ellipsis;
@@ -1159,19 +1200,8 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
 }
 
-.settings-page__settings-field :deep(.p-inputtext),
-.settings-page__settings-field :deep(.p-password),
-.settings-page__settings-field :deep(.p-password-input),
-.settings-page__settings-field :deep(.p-select) {
-  width: 100%;
-}
-
 .settings-page__settings-submit {
   justify-self: start;
-}
-
-.settings-page__field-error {
-  color: var(--p-app-error);
 }
 
 .settings-page__switch,
@@ -1370,7 +1400,6 @@ onBeforeUnmount(() => {
 .settings-page__document {
   overflow: auto;
   padding: 14px;
-  color: var(--p-app-text-semi-contrast);
 }
 
 @media (width <= 820px) {

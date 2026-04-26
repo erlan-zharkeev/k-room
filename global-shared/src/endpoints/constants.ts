@@ -1,14 +1,34 @@
+export const LAYOUT_ROUTE_NAMES = {
+  auth: '/authorize',
+  page: '/page',
+  app: '/app'
+} as const
+
+export const AUTH_ROUTE_NAMES = {
+  login: 'login',
+  registration: 'registration'
+} as const
+
+export const PAGE_ROUTE_NAMES = {
+  emailConfirmation: 'email-confirmation',
+  waitEmailConfirm: 'wait-email-confirm',
+  passwordRecovery: 'password-recovery',
+  createNewPassword: 'create-new-password',
+  privacyPolicy: 'privacy-policy',
+  notFound: 'not-found'
+} as const
+
 export const ROUTE_NAMES = {
-  login: '/login',
-  registration: '/registration',
-  emailConfirmation: '/email-confirmation',
-  waitEmailConfirm: '/wait-email-confirm',
-  main: '/app',
-  passwordRecovery: '/password-recovery',
-  createNewPassword: '/create-new-password',
+  authLogin: `${LAYOUT_ROUTE_NAMES.auth}/${AUTH_ROUTE_NAMES.login}`,
+  authRegistration: `${LAYOUT_ROUTE_NAMES.auth}/${AUTH_ROUTE_NAMES.registration}`,
+  emailConfirmation: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.emailConfirmation}`,
+  waitEmailConfirm: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.waitEmailConfirm}`,
+  app: LAYOUT_ROUTE_NAMES.app,
+  passwordRecovery: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.passwordRecovery}`,
+  createNewPassword: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.createNewPassword}`,
   notification: '/notification',
-  privacyPolicy: '/privacy-policy',
-  notFound: '/not-found'
+  privacyPolicy: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.privacyPolicy}`,
+  notFound: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.notFound}`
 } as const
 
 export const AUTH_ENDPOINTS = {
