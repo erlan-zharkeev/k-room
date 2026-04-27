@@ -1,7 +1,6 @@
 import { APP_LANGUAGE } from 'global-shared'
 
-import { DEFAULT_CUSTOM_THEME } from 'src/shared/config/theme.constants'
-import type { IUserSetting } from 'src/shared/types/setting'
+import type { ScreenBreakpointsType } from 'src/shared/types/breakpoint'
 
 const BROWSER_LANGUAGE = navigator.language.toLowerCase()
 
@@ -19,35 +18,16 @@ export const LOCAL_STORAGE_KEY = {
 
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 
-export const API_TOAST_LIFE_MS = 4000
+export const SUCCESS_TOAST_LIFE_MS = 2000
+export const ERROR_TOAST_LIFE_MS = 60000
+export const SOCKET_RECONNECTION_DELAY_MS = 1000
+export const SOCKET_MAX_RECONNECTION_DELAY_MS = 1000
 export const API_SUCCESS_STATUS_START = 200
 export const API_SUCCESS_STATUS_END = 300
 
-export const DEFAULT_CUSTOM_SOUNDS = {
-  connection: '',
-  calling: '',
-  ding: '',
-  ring: '',
-  busy: ''
-}
-
-export const DEFAULT_SETTINGS: IUserSetting = {
-  selectedContentTab: 'contacts',
-  selectedChatRoomId: '',
-  messageScrollByRoom: {},
-  language: CLIENT_LANGUAGE,
-  theme: 'system',
-  customTheme: DEFAULT_CUSTOM_THEME,
-  soundOn: true,
-  showTooltips: false,
-  showNotification: true,
-  showWallpaper: true,
-  wallpaper: 'default',
-  customWallpaperDataUrl: '',
-  sound: 'ding',
-  customSounds: DEFAULT_CUSTOM_SOUNDS,
-  selectedAudioInputDeviceId: '',
-  selectedVideoInputDeviceId: '',
-  selectedAudioOutputDeviceId: '',
-  hiddenNotification: []
-}
+export const SCREEN_BREAKPOINTS = {
+  mobile: 320,
+  'portrait-tablet': 768,
+  tablet: 1024,
+  desktop: 1920
+} satisfies ScreenBreakpointsType

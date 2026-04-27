@@ -25,6 +25,8 @@ import { getSystemTheme, useI18n } from 'src/shared/lib'
 import { AppHeader, AppIcon, AppText } from 'src/shared/ui'
 import { ThemeSettings } from 'src/widgets/theme-settings'
 
+import type { MediaDeviceKindType } from './types'
+
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
@@ -105,7 +107,7 @@ const widgetWallpaperStyle = computed(() => {
   }
 })
 
-const getMediaDeviceOptions = (kind: MediaDeviceKind) =>
+const getMediaDeviceOptions = (kind: MediaDeviceKindType) =>
   computed(() => [
     {
       label: t(MAIN_PAGE_I18N.defaultDevice),
@@ -1402,7 +1404,7 @@ onBeforeUnmount(() => {
   padding: 14px;
 }
 
-@media (width <= 820px) {
+@include screen-until('tablet') {
   .settings-page {
     grid-template-columns: 1fr;
   }

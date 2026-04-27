@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { useResetClientData } from 'src/features/client-session'
 import { socket, useApi } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'
-import { clearCookie, log } from 'src/shared/lib'
+import { clearCookie } from 'src/shared/lib'
 
 export const useLogout = () => {
   const router = useRouter()
@@ -26,9 +26,8 @@ export const useLogout = () => {
     try {
       await doRequest('post', AUTH_ENDPOINTS.logout)
       localStorage.removeItem(LOCAL_STORAGE_KEY.LogoutStatus)
-    } catch (error) {
+    } catch {
       localStorage.setItem(LOCAL_STORAGE_KEY.LogoutStatus, 'failed')
-      log('error', 'Logout failed', error)
     } finally {
       await resetClientSession()
       isLogoutLoading.value = false

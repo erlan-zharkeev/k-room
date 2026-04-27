@@ -29,7 +29,7 @@ export class CodesController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, SEND_PASSWORD_RECOVERY_CODE_VALIDATION)
+      runRequestValidation(request, SEND_PASSWORD_RECOVERY_CODE_VALIDATION)
       const result = await this.codesService.sendPasswordRecoveryCode(email, language)
 
       return response.json({
@@ -62,7 +62,7 @@ export class CodesController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION)
+      runRequestValidation(request, VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION)
       const result = await this.codesService.validatePasswordRecoveryCode(email, code, language)
 
       return response.json({

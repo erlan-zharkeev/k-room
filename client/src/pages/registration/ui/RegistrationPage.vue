@@ -2,51 +2,31 @@
 import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
 import { Button, Checkbox, InputText, Message, Password } from 'primevue'
-import { reactive } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { isFormFieldInvalid } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { PRIVACY_POLICY_SWITCH_I18N, REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration'
-import { useRegistrationForm } from '../model/use-registration-form'
 
-const { isLoading, onRegister } = useRegistration()
-const registrationFormProps = reactive({ isLoading, onRegister })
-const {
-  emailErrorText,
-  formData,
-  isEmailInvalid,
-  isPasswordInvalid,
-  isPolicyInvalid,
-  isSubmitDisabled,
-  isUsernameInvalid,
-  passwordErrorText,
-  policyErrorText,
-  resolver,
-  submit,
-  touchField,
-  usernameErrorText
-} = useRegistrationForm(registrationFormProps)
+const { formData, isLoading, resolver, submit } = useRegistration()
 </script>
 
 <template>
-  <Form :initial-values="formData" :resolver="resolver" class="registration-page" @submit="submit">
+  <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="registration-page" @submit="submit">
     <div class="registration-page__field">
       <InputText
         v-model="formData.username"
         autocomplete="username"
         :disabled="isLoading"
         fluid
-        :invalid="isUsernameInvalid"
         name="username"
         :placeholder="$t(REGISTRATION_FORM_I18N.usernamePlaceholder)"
         size="small"
-        @blur="touchField('username')"
-        @update:model-value="touchField('username')"
       />
-      <Message v-if="usernameErrorText" severity="error" size="small" variant="simple">
-        {{ usernameErrorText }}
+      <Message v-if="isFormFieldInvalid($form.username)" severity="error" size="small" variant="simple">
+        {{ $form.username.error?.message }}
       </Message>
     </div>
 
@@ -56,16 +36,13 @@ const {
         autocomplete="email"
         :disabled="isLoading"
         fluid
-        :invalid="isEmailInvalid"
         name="email"
         placeholder="Email"
         size="small"
         type="email"
-        @blur="touchField('email')"
-        @update:model-value="touchField('email')"
       />
-      <Message v-if="emailErrorText" severity="error" size="small" variant="simple">
-        {{ emailErrorText }}
+      <Message v-if="isFormFieldInvalid($form.email)" severity="error" size="small" variant="simple">
+        {{ $form.email.error?.message }}
       </Message>
     </div>
 
@@ -75,17 +52,14 @@ const {
         :disabled="isLoading"
         :feedback="false"
         fluid
-        :invalid="isPasswordInvalid"
         autocomplete="new-password"
         name="password"
         :placeholder="$t(REGISTRATION_FORM_I18N.passwordPlaceholder)"
         size="small"
         toggle-mask
-        @blur="touchField('password')"
-        @update:model-value="touchField('password')"
       />
-      <Message v-if="passwordErrorText" severity="error" size="small" variant="simple">
-        {{ passwordErrorText }}
+      <Message v-if="isFormFieldInvalid($form.password)" severity="error" size="small" variant="simple">
+        {{ $form.password.error?.message }}
       </Message>
     </div>
 
@@ -95,11 +69,9 @@ const {
           v-model="formData.policy"
           binary
           :disabled="isLoading"
-          :invalid="isPolicyInvalid"
           input-id="registration-policy"
           name="policy"
           size="small"
-          @change="touchField('policy')"
         />
         <AppText
           class="registration-page__policy-text"
@@ -111,14 +83,14 @@ const {
           </RouterLink>
         </AppText>
       </label>
-      <Message v-if="policyErrorText" severity="error" size="small" variant="simple">
-        {{ policyErrorText }}
+      <Message v-if="isFormFieldInvalid($form.policy)" severity="error" size="small" variant="simple">
+        {{ $form.policy.error?.message }}
       </Message>
     </div>
 
     <Button
       class="registration-page__submit"
-      :disabled="isSubmitDisabled"
+      :disabled="isLoading || !$form.valid"
       fluid
       :label="$t(REGISTRATION_FORM_I18N.submit)"
       :loading="isLoading"

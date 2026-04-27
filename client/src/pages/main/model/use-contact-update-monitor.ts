@@ -19,7 +19,7 @@ import { CONTACT_ONLINE_CHECK_INTERVAL_MS, CONTACT_ONLINE_STATUS_TTL_MS } from '
 export const useContactUpdateMonitor = () => {
   const { bulkPut, contacts, get, mergeMany, put, remove } = useContact()
   const { updateContactData } = useUpdateContactData()
-  let onlineCheckInterval: ReturnType<typeof setInterval> | undefined
+  let onlineCheckIntervalId: ReturnType<typeof setInterval> | undefined
 
   const actualizeContacts = async (nextContacts: IFrontendContact[]) => {
     await mergeMany(nextContacts, {
@@ -44,13 +44,13 @@ export const useContactUpdateMonitor = () => {
   const updateStatus = async ({
     interlocutorId,
     online,
-    onlineStatusUpdatedTimestamp,
+    onlineStatusUpdatedTimestamp: onlineStatusUpdatedTimestampMs,
     lastSeen
   }: IEventStatusContact) => {
     await updateContactData(interlocutorId, {
       online,
       lastSeen,
-      onlineStatusSyncedAt: onlineStatusUpdatedTimestamp
+      onlineStatusSyncedAt: onlineStatusUpdatedTimestampMs
     })
   }
 
@@ -80,10 +80,10 @@ export const useContactUpdateMonitor = () => {
   const checkForContactOnline = () => {
     socket.emit<SocketActionsType>('interlocutor-ping')
 
-    const currentTimestamp = Date.now()
+    const currentTimestampMs = Date.now()
 
     contacts.value.forEach((contact) => {
-      if (currentTimestamp - contact.onlineStatusSyncedAt > CONTACT_ONLINE_STATUS_TTL_MS) {
+      if (currentTimestampMs - contact.onlineStatusSyncedAt > CONTACT_ONLINE_STATUS_TTL_MS) {
         updateContactData(contact.id, { online: false })
       }
     })
@@ -100,7 +100,7 @@ export const useContactUpdateMonitor = () => {
     socket.on<SocketActionsType>('invite-received', processInvitation)
     socket.on<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
 
-    onlineCheckInterval = setInterval(checkForContactOnline, CONTACT_ONLINE_CHECK_INTERVAL_MS)
+    onlineCheckIntervalId = setInterval(checkForContactOnline, CONTACT_ONLINE_CHECK_INTERVAL_MS)
   }
 
   const disposeContactUpdateMonitor = () => {
@@ -114,8 +114,8 @@ export const useContactUpdateMonitor = () => {
     socket.off<SocketActionsType>('invite-received', processInvitation)
     socket.off<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
 
-    if (onlineCheckInterval) {
-      clearInterval(onlineCheckInterval)
+    if (onlineCheckIntervalId) {
+      clearInterval(onlineCheckIntervalId)
     }
   }
 

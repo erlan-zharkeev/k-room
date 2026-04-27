@@ -1,4 +1,4 @@
-export { API_TOAST_LIFE_MS } from 'src/shared/config'
+export { ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS } from 'src/shared/config'
 export { createApiError, getHandledErrorMessage, isApiError, isHandledError } from './http/create-api-error'
 export { getHeaderValue } from './http/get-header-value'
 export { useApi } from './http/use-api'

@@ -1,24 +1,27 @@
 import { type Request } from 'express'
-import { validationResult, type ValidationChain } from 'express-validator'
-import { REQ_STATUS, type LocalizedTextType } from 'global-shared'
+import { createValidationMessages, REQ_STATUS, type ValidationMessagesType } from 'global-shared'
+import { getDotPath, safeParse, type GenericSchema } from 'valibot'
 
 import { SHARED_I18N } from 'src/shared/config/i18n'
 
 import { AppError } from './app-error'
 import { localizedText } from './localized-text'
 
-export const runRequestValidation = async (request: Request, validations: ValidationChain[]) => {
+export const runRequestValidation = (
+  request: Request,
+  createSchema: (messages: ValidationMessagesType) => GenericSchema
+) => {
   const { language } = request
+  const messages = createValidationMessages((text) => localizedText(text, language))
+  const result = safeParse(createSchema(messages), request.body, { abortPipeEarly: true })
 
-  await Promise.all(validations.map((validation) => validation.run(request)))
-
-  const errors = validationResult(request)
-  if (errors.isEmpty()) {
+  if (result.success) {
     return
   }
 
-  const messageSource =
-    (errors.array()[0]?.msg as LocalizedTextType<string> | undefined) ?? SHARED_I18N.commonServerError
+  const message =
+    result.issues.find((issue) => Boolean(getDotPath(issue)))?.message ??
+    localizedText(SHARED_I18N.commonServerError, language)
 
-  throw new AppError(REQ_STATUS.badRequest, localizedText(messageSource, language), false)
+  throw new AppError(REQ_STATUS.badRequest, message, false)
 }

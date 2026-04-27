@@ -9,6 +9,7 @@ import type { SocketInstanceType } from 'src/shared/types/socket'
 import { uploadBufferToBucket } from '../media/media.service'
 import { getSocketsByUserIds } from '../user/user.service'
 
+import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
 import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from './chat-rooms.service'
@@ -48,7 +49,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
 
         await setRoomToUsers(String(room._id), users)
         await emitNewRoomToUsers(users, room.toObject())
-        await delay(1000)
+        await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
         const sockets = await getSocketsByUserIds([userId])
 

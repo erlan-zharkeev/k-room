@@ -9,9 +9,9 @@ import { useToast } from 'primevue/usetoast'
 import { ref } from 'vue'
 
 import { useUserSession } from 'src/entities/user'
-import { API_TOAST_LIFE_MS, useApi } from 'src/shared/api'
-import { CLIENT_ENV, CLIENT_LANGUAGE } from 'src/shared/config'
-import { log, useI18n } from 'src/shared/lib'
+import { ERROR_TOAST_LIFE_MS, useApi } from 'src/shared/api'
+import { CLIENT_ENV, CLIENT_LANGUAGE, TOAST_I18N } from 'src/shared/config'
+import { useI18n } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
@@ -59,12 +59,12 @@ export const useFirebase = () => {
         avatar: photoURL ?? undefined,
         provider: normalizedProvider
       }
-    } catch (error) {
-      log('error', 'Firebase login failed', error)
+    } catch {
       toast.add({
         severity: 'error',
-        summary: t(LOGIN_FORM_I18N.failedToLogin),
-        life: API_TOAST_LIFE_MS
+        summary: t(TOAST_I18N.error),
+        detail: t(LOGIN_FORM_I18N.failedToLogin),
+        life: ERROR_TOAST_LIFE_MS
       })
 
       return null
@@ -72,14 +72,10 @@ export const useFirebase = () => {
   }
 
   const signInWithCredential = async (credential: ISignInWithProviderPayload) => {
-    try {
-      const response = await doRequest<ISignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
-      const { payload } = response.data
+    const response = await doRequest<ISignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
+    const { payload } = response.data
 
-      await activateUserSession(payload)
-    } catch (error) {
-      log('error', 'Provider login failed', error)
-    }
+    await activateUserSession(payload)
   }
 
   const onFirebaseLogin = async (provider: FirebaseProviderType) => {

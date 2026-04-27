@@ -187,9 +187,9 @@ export const MAIN_PAGE_SOUND_ITEMS = [
     src: '/sounds/calling.mp3'
   },
   {
-    id: 'ding',
-    label: MAIN_PAGE_I18N.dingSound,
-    src: '/sounds/ding.mp3'
+    id: 'income-message',
+    label: MAIN_PAGE_I18N.incomeMessageSound,
+    src: '/sounds/income-message.mp3'
   },
   {
     id: 'ring',

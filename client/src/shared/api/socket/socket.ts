@@ -1,6 +1,6 @@
 import { io, type Socket } from 'socket.io-client'
 
-import { CLIENT_ENV } from 'src/shared/config'
+import { CLIENT_ENV, SOCKET_MAX_RECONNECTION_DELAY_MS, SOCKET_RECONNECTION_DELAY_MS } from 'src/shared/config'
 
 export const socket: Socket = io(`${CLIENT_ENV.socketBaseUrl}/`, {
   transports: ['websocket'],
@@ -9,8 +9,8 @@ export const socket: Socket = io(`${CLIENT_ENV.socketBaseUrl}/`, {
   autoConnect: false,
   path: CLIENT_ENV.socketPath,
   reconnection: true,
-  reconnectionDelay: 1000,
-  reconnectionDelayMax: 1000,
+  reconnectionDelay: SOCKET_RECONNECTION_DELAY_MS,
+  reconnectionDelayMax: SOCKET_MAX_RECONNECTION_DELAY_MS,
   reconnectionAttempts: 10,
   withCredentials: true
 })

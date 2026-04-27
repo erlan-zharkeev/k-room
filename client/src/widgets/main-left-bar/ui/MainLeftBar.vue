@@ -152,7 +152,7 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
   background: var(--p-primary-color);
 }
 
-@media (width <= 820px) {
+@include screen-until('tablet') {
   .main-left-bar {
     grid-row: 2;
     flex-direction: row;

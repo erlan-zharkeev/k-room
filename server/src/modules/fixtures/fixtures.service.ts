@@ -23,7 +23,7 @@ import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
 
 import {
-  BASE_FIXTURE_TIMESTAMP,
+  BASE_FIXTURE_TIMESTAMP_MS,
   CONTACT_INTERACTION,
   DAY_IN_MS,
   MESSAGE_ACTIONS,
@@ -114,7 +114,7 @@ const buildFixtureMessage = (idx: number) => {
   const isErlanAuthor = idx % 2 !== 0
   const authorId = isErlanAuthor ? ERLAN_ID : TOLIK_ID
   const authorName = isErlanAuthor ? 'erlan' : 'tolik'
-  const createdAt = BASE_FIXTURE_TIMESTAMP + idx * (37 * MINUTE_IN_MS) + Math.floor(idx / 18) * DAY_IN_MS
+  const createdAt = BASE_FIXTURE_TIMESTAMP_MS + idx * (37 * MINUTE_IN_MS) + Math.floor(idx / 18) * DAY_IN_MS
 
   return {
     _id: buildFixtureMessageId(idx),

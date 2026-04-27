@@ -25,6 +25,10 @@ body {
   min-width: 320px;
   height: 100dvh;
   padding: 16px;
+
+  @include screen-until('portrait-tablet') {
+    padding: 8px;
+  }
 }
 
 button,

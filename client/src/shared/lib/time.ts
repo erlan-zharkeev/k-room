@@ -13,8 +13,8 @@ export const formatLocalizedTime = (value: number | string, language: AppLanguag
   }).format(normalizeTimestamp(value) ?? 0)
 
 export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguageType) => {
-  const timestamp = normalizeTimestamp(value) ?? 0
-  const diffInSeconds = Math.round((timestamp - Date.now()) / 1000)
+  const timestampMs = normalizeTimestamp(value) ?? 0
+  const diffInSeconds = Math.round((timestampMs - Date.now()) / 1000)
   const absDiffInSeconds = Math.abs(diffInSeconds)
   const formatter = new Intl.RelativeTimeFormat(getIntlLocale(language), { numeric: 'auto' })
 
@@ -35,4 +35,4 @@ export const formatLocalizedRelativeTime = (value: number | string, language: Ap
   return formatter.format(diffInDays, 'day')
 }
 
-export const getNextReqInterval = (timestamp: number) => (timestamp - Number(Date.now())) / 1000
+export const getNextRequestIntervalSeconds = (timestampMs: number) => (timestampMs - Date.now()) / 1000

@@ -2,28 +2,22 @@
 import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
 import { Button, Message, Password } from 'primevue'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { isFormFieldInvalid, useI18n } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 import { useCreateNewPassword } from '../model/use-create-new-password'
 
-const {
-  firstPasswordErrorText,
-  formData,
-  initializeCreateNewPassword,
-  isFirstPasswordInvalid,
-  isLoading,
-  isPasswordChanged,
-  isSecondPasswordInvalid,
-  isSubmitDisabled,
-  resolver,
-  secondPasswordErrorText,
-  submit,
-  touchField
-} = useCreateNewPassword()
+const { formData, initializeCreateNewPassword, isFormTouched, isLoading, isPasswordChanged, resolver, submit } =
+  useCreateNewPassword()
+const { t } = useI18n()
+const passwordMismatchText = computed(() =>
+  isFormTouched.value && formData.firstPassword !== formData.secondPassword ? t(CREATE_NEW_PASSWORD_I18N.mismatch) : ''
+)
+const isSubmitDisabled = computed(() => isLoading.value || formData.firstPassword !== formData.secondPassword)
 
 onMounted(initializeCreateNewPassword)
 </script>
@@ -43,7 +37,13 @@ onMounted(initializeCreateNewPassword)
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.enterNewPasswordHint)" />
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint)" />
 
-      <Form :initial-values="formData" :resolver="resolver" class="create-new-password-page__form" @submit="submit">
+      <Form
+        v-slot="$form"
+        :initial-values="formData"
+        :resolver="resolver"
+        class="create-new-password-page__form"
+        @submit="submit"
+      >
         <div class="create-new-password-page__field">
           <Password
             v-model="formData.firstPassword"
@@ -51,16 +51,13 @@ onMounted(initializeCreateNewPassword)
             :disabled="isLoading"
             :feedback="false"
             fluid
-            :invalid="isFirstPasswordInvalid"
             name="firstPassword"
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.firstPasswordPlaceholder)"
             size="small"
             toggle-mask
-            @blur="touchField('firstPassword')"
-            @update:model-value="touchField('firstPassword')"
           />
-          <Message v-if="firstPasswordErrorText" severity="error" size="small" variant="simple">
-            {{ firstPasswordErrorText }}
+          <Message v-if="isFormFieldInvalid($form.firstPassword)" severity="error" size="small" variant="simple">
+            {{ $form.firstPassword.error?.message }}
           </Message>
         </div>
 
@@ -71,22 +68,24 @@ onMounted(initializeCreateNewPassword)
             :disabled="isLoading"
             :feedback="false"
             fluid
-            :invalid="isSecondPasswordInvalid"
             name="secondPassword"
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
             size="small"
             toggle-mask
-            @blur="touchField('secondPassword')"
-            @update:model-value="touchField('secondPassword')"
           />
-          <Message v-if="secondPasswordErrorText" severity="error" size="small" variant="simple">
-            {{ secondPasswordErrorText }}
+          <Message
+            v-if="isFormFieldInvalid($form.secondPassword) || passwordMismatchText"
+            severity="error"
+            size="small"
+            variant="simple"
+          >
+            {{ $form.secondPassword?.error?.message || passwordMismatchText }}
           </Message>
         </div>
 
         <div class="create-new-password-page__action-btns">
           <Button
-            :disabled="isSubmitDisabled"
+            :disabled="isSubmitDisabled || !$form.valid"
             :label="$t(CREATE_NEW_PASSWORD_I18N.submit)"
             :loading="isLoading"
             size="small"

@@ -2,77 +2,57 @@
 import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
 import { Button, InputText, Message, Password } from 'primevue'
-import { reactive } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { isFormFieldInvalid } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../config/i18n'
 import { useFirebase } from '../model/use-firebase'
 import { useLogin } from '../model/use-login'
-import { useLoginForm } from '../model/use-login-form'
 
-const { isLoading, onLogin } = useLogin()
 const { isFirebaseLoginLoading, onFirebaseLogin } = useFirebase()
-const loginFormProps = reactive({ isFirebaseLoginLoading, isLoading, onFirebaseLogin, onLogin })
-const {
-  emailErrorText,
-  formData,
-  isEmailInvalid,
-  isFormDisabled,
-  isPasswordInvalid,
-  isSubmitDisabled,
-  passwordErrorText,
-  resolver,
-  submit,
-  touchField
-} = useLoginForm(loginFormProps)
+const { formData, isLoading, resolver, submit } = useLogin()
 </script>
 
 <template>
-  <Form :initial-values="formData" :resolver="resolver" class="login-page" @submit="submit">
+  <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="login-page" @submit="submit">
     <div class="login-page__field">
       <InputText
         v-model="formData.email"
         autocomplete="email"
-        :disabled="isFormDisabled"
+        :disabled="isLoading || isFirebaseLoginLoading"
         fluid
-        :invalid="isEmailInvalid"
         name="email"
         :placeholder="$t(LOGIN_FORM_I18N.emailPlaceholder)"
         size="small"
         type="email"
-        @blur="touchField('email')"
-        @update:model-value="touchField('email')"
       />
-      <Message v-if="emailErrorText" severity="error" size="small" variant="simple">
-        {{ emailErrorText }}
+      <Message v-if="isFormFieldInvalid($form.email)" severity="error" size="small" variant="simple">
+        {{ $form.email.error?.message }}
       </Message>
     </div>
 
     <div class="login-page__field">
       <Password
         v-model="formData.password"
-        :disabled="isFormDisabled"
+        :disabled="isLoading || isFirebaseLoginLoading"
         :feedback="false"
         fluid
-        :invalid="isPasswordInvalid"
         autocomplete="current-password"
         name="password"
         :placeholder="$t(LOGIN_FORM_I18N.passwordPlaceholder)"
         size="small"
         toggle-mask
-        @blur="touchField('password')"
-        @update:model-value="touchField('password')"
       />
-      <Message v-if="passwordErrorText" severity="error" size="small" variant="simple">
-        {{ passwordErrorText }}
+      <Message v-if="isFormFieldInvalid($form.password)" severity="error" size="small" variant="simple">
+        {{ $form.password.error?.message }}
       </Message>
     </div>
 
     <Button
       class="login-page__submit"
-      :disabled="isSubmitDisabled"
+      :disabled="isLoading || isFirebaseLoginLoading || !$form.valid"
       fluid
       :label="$t(LOGIN_FORM_I18N.submit)"
       :loading="isLoading"

@@ -5,5 +5,5 @@ export interface IMessageListProps {
   messages: DbMessageType[]
   hasMoreMessages: boolean
   isLoading: boolean
-  formatRelativeTime: (timestamp?: number) => string
+  formatRelativeTime: (timestampMs?: number) => string
 }

@@ -1,38 +1,23 @@
 <script setup lang="ts">
 import { Form } from '@primevue/forms'
-import {
-  type IEventCreateRoom,
-  type IEventGetSearchedContact,
-  type IEventUpdateInteraction,
-  type IFrontendContact,
-  type InteractionType,
-  USER_ENDPOINTS
-} from 'global-shared'
-import { Badge, Button, InputText, Password, Select, ToggleSwitch } from 'primevue'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { type IEventGetSearchedContact, type IFrontendContact } from 'global-shared'
+import { Badge, Button, InputText } from 'primevue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useInfoNotification } from 'src/entities/info-notification'
-import { useMedia } from 'src/entities/media-file'
 import { useSettings } from 'src/entities/setting'
-import { useUser } from 'src/entities/user'
-import { socket, useApi } from 'src/shared/api'
-import { CLIENT_ENV, type CustomThemeColorType, type SoundType, type ThemeType } from 'src/shared/config'
+import { socket } from 'src/shared/api'
 import { formatLocalizedDate, formatLocalizedRelativeTime, getSystemTheme, useI18n } from 'src/shared/lib'
 import { AppEmojiPicker, AppHeader, AppIcon, AppText } from 'src/shared/ui'
-import { ThemeSettings } from 'src/widgets/theme-settings'
 
 import {
   MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS,
-  MAIN_PAGE_LANGUAGE_OPTIONS,
   MAIN_PAGE_NAV_ITEMS,
   MAIN_PAGE_ROUTES,
-  MAIN_PAGE_SETTINGS_ITEMS,
-  MAIN_PAGE_SOUND_ITEMS,
-  MAIN_PAGE_WALLPAPER_ITEMS,
-  getMainPageSettingsPath
+  MAIN_PAGE_WALLPAPER_ITEMS
 } from '../config/constants'
 import { MAIN_PAGE_I18N } from '../config/i18n'
 import { useCall } from '../model/use-call'
@@ -43,17 +28,13 @@ import { useSendMessage } from '../model/use-send-message'
 import MessageList from './MessageList.vue'
 
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
-const { chatRooms, getPersonalByContactId } = useChatRoom()
+const { chatRooms } = useChatRoom()
 const { contacts } = useContact()
 const { infoNotificationList } = useInfoNotification()
-const { media, put: putMedia, remove: removeMedia } = useMedia()
-const { user, shallowUpdate: updateUserData } = useUser()
 const { calls } = useCall()
 const { messages, getById } = useMessage()
-const { doRequest } = useApi()
-const { settings, setByPath, shallowUpdate } = useSettings()
+const { settings } = useSettings()
 const { hasMoreMessages, initializeLoadRoomMessages, isLoading, loadRoomMessages, resetRoomMessagesPagination } =
   useLoadRoomMessages()
 const { messageText, sendMessage } = useSendMessage()
@@ -61,38 +42,14 @@ const { messageText, sendMessage } = useSendMessage()
 const selectedRoomId = ref('')
 const selectedContactId = ref('')
 const selectedInfoNotificationId = ref('')
-const selectedSettingsId = ref('account')
 const contactSearchQuery = ref('')
 const searchedContacts = ref<IFrontendContact[]>([])
 const hasMoreSearchedContacts = ref(false)
 const nextSearchedContactsOffset = ref<number | undefined>()
-const accountUsername = ref('')
-const accountAvatarFile = ref<File>()
-const accountAvatarPreviewUrl = ref('')
-const accountAvatarWasReset = ref(false)
-const isAccountSaving = ref(false)
-const currentPassword = ref('')
-const nextPassword = ref('')
-const repeatPassword = ref('')
-const isPasswordChanging = ref(false)
-const mediaDevices = ref<MediaDeviceInfo[]>([])
-const playingSoundId = ref<SoundType | ''>('')
-const audioInputLevel = ref(0)
-const isTestingAudioInput = ref(false)
-const isTestingVideoInput = ref(false)
-const isTestingAudioOutput = ref(false)
-const videoPreviewElement = ref<HTMLVideoElement>()
 const composerElement = ref<HTMLElement | { $el?: HTMLElement } | null>(null)
 const isComposerEmojiPickerOpen = ref(false)
 const systemTheme = ref(getSystemTheme())
-let contactSearchTimer: ReturnType<typeof setTimeout> | undefined
-let previewAudio: HTMLAudioElement | undefined
-let accountAvatarPreviewObjectUrl: string | undefined
-let audioInputStream: MediaStream | undefined
-let videoInputStream: MediaStream | undefined
-let audioInputContext: AudioContext | undefined
-let audioInputAnimationFrame: number | undefined
-let audioOutputTest: HTMLAudioElement | undefined
+let contactSearchTimeoutId: ReturnType<typeof setTimeout> | undefined
 const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
 
 const activeNavItem = computed(() => {
@@ -109,21 +66,10 @@ const activeNavItem = computed(() => {
 const activeNavId = computed(() => activeNavItem.value.id)
 const isChatContentVisible = computed(() => ['chatRooms', 'contacts', 'calls'].includes(activeNavId.value))
 const activeRoom = computed(() => chatRooms.value.find(({ id }) => id === selectedRoomId.value))
-const activeContact = computed(() => contacts.value.find(({ id }) => id === selectedContactId.value))
 const activeInfoNotification = computed(() =>
   infoNotificationList.value.find(({ id }) => id === selectedInfoNotificationId.value)
 )
 const activeRoomMessages = computed(() => (activeRoom.value?.messages ?? []).flatMap((id) => getById(id) ?? []))
-const userAvatarId = computed(() => (user.value.id ? `avatar.${user.value.id}` : ''))
-const userAvatarRecord = computed(() => media.value.find((item) => item.id === userAvatarId.value))
-const userAvatarUrl = ref('')
-const accountAvatarUrl = computed(() =>
-  accountAvatarWasReset.value ? '' : accountAvatarPreviewUrl.value || userAvatarUrl.value
-)
-const passwordMismatch = computed(() => Boolean(repeatPassword.value && nextPassword.value !== repeatPassword.value))
-const isPasswordSubmitDisabled = computed(
-  () => !currentPassword.value || !nextPassword.value || !repeatPassword.value || passwordMismatch.value
-)
 const isContactsSearchMode = computed(() => Boolean(contactSearchQuery.value.trim()))
 const shownContacts = computed(() => (isContactsSearchMode.value ? searchedContacts.value : contacts.value))
 const defaultWallpaper = computed(() => {
@@ -153,22 +99,6 @@ const widgetWallpaperStyle = computed(() =>
         }
     : undefined
 )
-const getMediaDeviceOptions = (kind: MediaDeviceKind) =>
-  computed(() => [
-    {
-      label: t(MAIN_PAGE_I18N.defaultDevice),
-      value: ''
-    },
-    ...mediaDevices.value
-      .filter((device) => device.kind === kind)
-      .map((device, index) => ({
-        label: device.label || `${t(MAIN_PAGE_I18N.defaultDevice)} ${index + 1}`,
-        value: device.deviceId
-      }))
-  ])
-const audioInputDeviceOptions = getMediaDeviceOptions('audioinput')
-const videoInputDeviceOptions = getMediaDeviceOptions('videoinput')
-const audioOutputDeviceOptions = getMediaDeviceOptions('audiooutput')
 
 const getContactName = (id: string) => contacts.value.find((contact) => contact.id === id)?.username ?? id
 const getContactStatus = (contact: IFrontendContact) =>
@@ -187,9 +117,10 @@ const getRoomUnreadQuantity = (roomId: string) => {
     (message) => !message.isSelf && message.status === 'delivered' && roomMessageIds.has(message.id)
   ).length
 }
-const formatRelativeTime = (timestamp?: number) =>
-  timestamp ? formatLocalizedRelativeTime(timestamp, settings.value.language) : t(MAIN_PAGE_I18N.offline)
-const formatDate = (timestamp?: number) => (timestamp ? formatLocalizedDate(timestamp, settings.value.language) : '')
+const formatRelativeTime = (timestampMs?: number) =>
+  timestampMs ? formatLocalizedRelativeTime(timestampMs, settings.value.language) : t(MAIN_PAGE_I18N.offline)
+const formatDate = (timestampMs?: number) =>
+  timestampMs ? formatLocalizedDate(timestampMs, settings.value.language) : ''
 
 const loadActiveRoomMessages = () => {
   if (activeRoom.value) {
@@ -241,11 +172,11 @@ const searchContacts = (offset = 0) => {
 }
 
 const scheduleContactSearch = () => {
-  if (contactSearchTimer) {
-    clearTimeout(contactSearchTimer)
+  if (contactSearchTimeoutId) {
+    clearTimeout(contactSearchTimeoutId)
   }
 
-  contactSearchTimer = setTimeout(() => searchContacts(), MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS)
+  contactSearchTimeoutId = setTimeout(() => searchContacts(), MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS)
 }
 
 const handleSearchedContacts = ({
@@ -262,487 +193,15 @@ const handleSearchedContacts = ({
   nextSearchedContactsOffset.value = nextOffset
 }
 
-const updateContactInteraction = (contactId: string, interaction: InteractionType) => {
-  const payload: IEventUpdateInteraction = { contactId, interaction }
-
-  socket.emit('update-contact-interaction-type', payload)
-}
-
-const processContactAction = (contact: IFrontendContact) => {
-  if (contact.interactionType === 'invite-received') {
-    updateContactInteraction(contact.id, 'invite-accepted')
-    return
-  }
-
-  if (contact.interactionType === 'default') {
-    updateContactInteraction(contact.id, 'invited')
-  }
-}
-
-const openContactChat = async (contact: IFrontendContact) => {
-  const existingRoom = getPersonalByContactId(contact.id)
-
-  if (existingRoom) {
-    updateSelectedRoom(existingRoom.id)
-    await router.push(MAIN_PAGE_ROUTES.chatRooms)
-    return
-  }
-
-  socket.once('room-created', async ({ roomId }: { roomId: string }) => {
-    updateSelectedRoom(roomId)
-    await router.push(MAIN_PAGE_ROUTES.chatRooms)
-  })
-
-  socket.emit('create-chat-room', { contactIds: [contact.id] } satisfies IEventCreateRoom)
-}
-
 const markInfoNotificationAsRead = (id: string) => {
   socket.emit('mark-info-notification-as-read', { id })
-}
-
-const changeLanguage = async (language: unknown) => {
-  if (language !== 'en' && language !== 'ru' && language !== 'zh') return
-
-  await setByPath('language', language)
-}
-
-const changeTheme = async (theme: ThemeType) => {
-  await setByPath('theme', theme)
-}
-
-const changeCustomThemeColor = async (colorName: CustomThemeColorType, value: string) => {
-  await setByPath(`customTheme.${colorName}`, value)
-}
-
-const updateWallpaperVisibility = async (showWallpaper: boolean) => {
-  await shallowUpdate({ showWallpaper })
-}
-
-const updateWallpaper = async (wallpaper: 'default' | 'custom') => {
-  await shallowUpdate({ wallpaper })
-}
-
-const updateNotificationVisibility = async (showNotification: boolean) => {
-  await shallowUpdate({ showNotification })
-}
-
-const uploadWallpaper = async (event: Event) => {
-  const { files } = event.target as HTMLInputElement
-  const file = files?.[0]
-
-  if (!file) return
-
-  const reader = new FileReader()
-
-  reader.addEventListener('load', async () => {
-    if (typeof reader.result !== 'string') return
-
-    await shallowUpdate({
-      customWallpaperDataUrl: reader.result,
-      wallpaper: 'custom',
-      showWallpaper: true
-    })
-  })
-  reader.readAsDataURL(file)
-}
-
-const clearAccountAvatarPreview = () => {
-  if (accountAvatarPreviewObjectUrl) {
-    URL.revokeObjectURL(accountAvatarPreviewObjectUrl)
-  }
-
-  accountAvatarPreviewObjectUrl = undefined
-  accountAvatarPreviewUrl.value = ''
-}
-
-const uploadAccountAvatar = (event: Event) => {
-  const { files } = event.target as HTMLInputElement
-  const file = files?.[0]
-
-  if (!file) return
-
-  clearAccountAvatarPreview()
-  accountAvatarFile.value = file
-  accountAvatarWasReset.value = false
-  accountAvatarPreviewObjectUrl = URL.createObjectURL(file)
-  accountAvatarPreviewUrl.value = accountAvatarPreviewObjectUrl
-}
-
-const resetAccountAvatar = () => {
-  accountAvatarFile.value = undefined
-  accountAvatarWasReset.value = true
-  clearAccountAvatarPreview()
-}
-
-const saveAccount = async () => {
-  const username = accountUsername.value.trim()
-
-  if (!user.value.id || !username) return
-
-  const avatarId = userAvatarId.value
-  const formData = new FormData()
-
-  formData.append('username', username)
-  formData.append('reset-avatar', accountAvatarWasReset.value ? 'reset' : '')
-
-  if (accountAvatarFile.value) {
-    formData.append('file', accountAvatarFile.value)
-  }
-
-  try {
-    isAccountSaving.value = true
-    await doRequest<null>('patch', USER_ENDPOINTS.editUserData, formData, {
-      contentType: 'multipart/form-data'
-    })
-    await updateUserData({ username })
-
-    if (avatarId && accountAvatarWasReset.value) {
-      await removeMedia(avatarId)
-    }
-
-    if (avatarId && accountAvatarFile.value) {
-      await putMedia({
-        id: avatarId,
-        blob: accountAvatarFile.value,
-        contentType: accountAvatarFile.value.type,
-        etag: `${Date.now()}`,
-        kind: 'image',
-        lastModified: new Date().toUTCString(),
-        lastChecked: Date.now()
-      })
-    }
-
-    accountAvatarFile.value = undefined
-    accountAvatarWasReset.value = false
-    clearAccountAvatarPreview()
-  } finally {
-    isAccountSaving.value = false
-  }
-}
-
-const changePassword = async () => {
-  if (isPasswordSubmitDisabled.value) return
-
-  try {
-    isPasswordChanging.value = true
-    await doRequest<null>('patch', USER_ENDPOINTS.changePassword, {
-      currentPassword: currentPassword.value,
-      password: nextPassword.value
-    })
-    currentPassword.value = ''
-    nextPassword.value = ''
-    repeatPassword.value = ''
-  } finally {
-    isPasswordChanging.value = false
-  }
-}
-
-const updateSound = async (soundOn: boolean) => {
-  await shallowUpdate({ soundOn })
-}
-
-const updateSoundValue = async (sound: SoundType) => {
-  await shallowUpdate({ sound, soundOn: true })
-}
-
-const getSoundSrc = (sound: SoundType, fallbackSrc: string) => settings.value.customSounds?.[sound] || fallbackSrc
-
-const stopPreviewSound = () => {
-  if (previewAudio) {
-    previewAudio.pause()
-    previewAudio.currentTime = 0
-  }
-
-  previewAudio = undefined
-  playingSoundId.value = ''
-}
-
-const setAudioOutput = async (audio: HTMLAudioElement) => {
-  if (settings.value.selectedAudioOutputDeviceId && typeof audio.setSinkId === 'function') {
-    await audio.setSinkId(settings.value.selectedAudioOutputDeviceId)
-  }
-}
-
-const previewSound = async (sound: SoundType, src: string) => {
-  if (playingSoundId.value === sound) {
-    stopPreviewSound()
-    return
-  }
-
-  stopPreviewSound()
-
-  const audio = new Audio(getSoundSrc(sound, src))
-  previewAudio = audio
-  playingSoundId.value = sound
-
-  await setAudioOutput(audio)
-
-  audio.addEventListener(
-    'ended',
-    () => {
-      if (playingSoundId.value === sound) {
-        stopPreviewSound()
-      }
-    },
-    { once: true }
-  )
-
-  audio.play().catch(stopPreviewSound)
-}
-
-const uploadSound = async (sound: SoundType, event: Event) => {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-
-  if (!file) return
-
-  const reader = new FileReader()
-
-  reader.addEventListener('load', async () => {
-    if (typeof reader.result !== 'string') return
-
-    await shallowUpdate({
-      customSounds: {
-        ...settings.value.customSounds,
-        [sound]: reader.result
-      },
-      sound,
-      soundOn: true
-    })
-    input.value = ''
-  })
-  reader.readAsDataURL(file)
-}
-
-const restoreDefaultSound = async (sound: SoundType) => {
-  if (playingSoundId.value === sound) {
-    stopPreviewSound()
-  }
-
-  await shallowUpdate({
-    customSounds: {
-      ...settings.value.customSounds,
-      [sound]: ''
-    }
-  })
-}
-
-const hasCustomSound = (sound: SoundType) => Boolean(settings.value.customSounds?.[sound])
-
-const refreshMediaDevices = async () => {
-  if (!navigator.mediaDevices?.enumerateDevices) {
-    mediaDevices.value = []
-    return
-  }
-
-  try {
-    mediaDevices.value = await navigator.mediaDevices.enumerateDevices()
-  } catch {
-    mediaDevices.value = []
-  }
-}
-
-const stopAudioInputTest = () => {
-  audioInputStream?.getTracks().forEach((track) => track.stop())
-  audioInputStream = undefined
-
-  if (audioInputAnimationFrame) {
-    cancelAnimationFrame(audioInputAnimationFrame)
-  }
-
-  audioInputContext?.close()
-  audioInputContext = undefined
-  audioInputLevel.value = 0
-  isTestingAudioInput.value = false
-}
-
-const startAudioInputTest = async () => {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    audio: {
-      deviceId: settings.value.selectedAudioInputDeviceId
-        ? { exact: settings.value.selectedAudioInputDeviceId }
-        : undefined
-    }
-  })
-  const context = new AudioContext()
-  const source = context.createMediaStreamSource(stream)
-  const analyser = context.createAnalyser()
-  const data = new Uint8Array(analyser.frequencyBinCount)
-
-  analyser.fftSize = 256
-  source.connect(analyser)
-  audioInputStream = stream
-  audioInputContext = context
-  isTestingAudioInput.value = true
-  await refreshMediaDevices()
-
-  const updateLevel = () => {
-    analyser.getByteFrequencyData(data)
-    audioInputLevel.value = Math.min(100, data.reduce((sum, value) => sum + value, 0) / data.length)
-    audioInputAnimationFrame = requestAnimationFrame(updateLevel)
-  }
-
-  updateLevel()
-}
-
-const testAudioInputDevice = async () => {
-  if (isTestingAudioInput.value) {
-    stopAudioInputTest()
-    return
-  }
-
-  stopAudioInputTest()
-
-  try {
-    await startAudioInputTest()
-  } catch {
-    stopAudioInputTest()
-  }
-}
-
-const stopVideoInputTest = () => {
-  videoInputStream?.getTracks().forEach((track) => track.stop())
-  videoInputStream = undefined
-
-  if (videoPreviewElement.value) {
-    videoPreviewElement.value.srcObject = null
-  }
-
-  isTestingVideoInput.value = false
-}
-
-const testVideoInputDevice = async () => {
-  if (isTestingVideoInput.value) {
-    stopVideoInputTest()
-    return
-  }
-
-  stopVideoInputTest()
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        deviceId: settings.value.selectedVideoInputDeviceId
-          ? { exact: settings.value.selectedVideoInputDeviceId }
-          : undefined
-      }
-    })
-
-    videoInputStream = stream
-    isTestingVideoInput.value = true
-    await refreshMediaDevices()
-    await nextTick()
-
-    if (videoPreviewElement.value) {
-      videoPreviewElement.value.srcObject = stream
-    }
-  } catch {
-    stopVideoInputTest()
-  }
-}
-
-const stopAudioOutputTest = () => {
-  if (audioOutputTest) {
-    audioOutputTest.pause()
-    audioOutputTest.currentTime = 0
-  }
-
-  audioOutputTest = undefined
-  isTestingAudioOutput.value = false
-}
-
-const testAudioOutputDevice = async () => {
-  if (isTestingAudioOutput.value) {
-    stopAudioOutputTest()
-    return
-  }
-
-  stopAudioOutputTest()
-
-  const sound = MAIN_PAGE_SOUND_ITEMS.find((item) => item.id === settings.value.sound) ?? MAIN_PAGE_SOUND_ITEMS[2]
-  const audio = new Audio(getSoundSrc(sound.id, sound.src))
-
-  audioOutputTest = audio
-  isTestingAudioOutput.value = true
-  await setAudioOutput(audio)
-  audio.addEventListener('ended', stopAudioOutputTest, { once: true })
-  audio.play().catch(stopAudioOutputTest)
-}
-
-const updateAudioInputDevice = async (selectedAudioInputDeviceId: unknown) => {
-  if (typeof selectedAudioInputDeviceId !== 'string') return
-
-  stopAudioInputTest()
-  await shallowUpdate({ selectedAudioInputDeviceId })
-}
-
-const updateVideoInputDevice = async (selectedVideoInputDeviceId: unknown) => {
-  if (typeof selectedVideoInputDeviceId !== 'string') return
-
-  stopVideoInputTest()
-  await shallowUpdate({ selectedVideoInputDeviceId })
-}
-
-const updateAudioOutputDevice = async (selectedAudioOutputDeviceId: unknown) => {
-  if (typeof selectedAudioOutputDeviceId !== 'string') return
-
-  stopAudioOutputTest()
-  await shallowUpdate({ selectedAudioOutputDeviceId })
 }
 
 const updateSystemTheme = () => {
   systemTheme.value = getSystemTheme()
 }
 
-const isSettingsId = (settingsId: unknown): settingsId is (typeof MAIN_PAGE_SETTINGS_ITEMS)[number]['id'] =>
-  typeof settingsId === 'string' && MAIN_PAGE_SETTINGS_ITEMS.some(({ id }) => id === settingsId)
-
-const syncSelectedSettingsWithRoute = () => {
-  if (activeNavId.value !== 'settings') return
-
-  const { settingsId } = route.params
-
-  selectedSettingsId.value = isSettingsId(settingsId) ? settingsId : 'account'
-}
-
-const updateSelectedSettings = async (settingsId: string) => {
-  selectedSettingsId.value = settingsId
-  await router.push(getMainPageSettingsPath(settingsId))
-
-  if (settingsId === 'devices') {
-    refreshMediaDevices()
-  }
-}
-
-const handleMediaDeviceChange = () => {
-  refreshMediaDevices()
-}
-
 watch(contactSearchQuery, scheduleContactSearch)
-watch(
-  userAvatarRecord,
-  (record, _previous, onCleanup) => {
-    if (!record?.blob) {
-      userAvatarUrl.value = ''
-      return
-    }
-
-    const url = URL.createObjectURL(record.blob)
-
-    userAvatarUrl.value = url
-    onCleanup(() => {
-      URL.revokeObjectURL(url)
-    })
-  },
-  { immediate: true }
-)
-watch(
-  () => user.value.username,
-  (username) => {
-    accountUsername.value = username
-  },
-  { immediate: true }
-)
 watch(chatRooms, (rooms) => {
   if (!selectedRoomId.value && rooms[0]) {
     updateSelectedRoom(rooms[0].id)
@@ -764,21 +223,14 @@ watch(selectedRoomId, (roomId) => {
     loadRoomMessages(roomId)
   }
 })
-watch(() => route.params.settingsId, syncSelectedSettingsWithRoute)
 
 onMounted(() => {
   updateSystemTheme()
-  syncSelectedSettingsWithRoute()
   initializeLoadRoomMessages()
-  refreshMediaDevices()
   socket.on('get-searched-contact', handleSearchedContacts)
   window.addEventListener('click', handleWindowClick)
   window.addEventListener('keydown', handleWindowKeydown)
   systemThemeQuery?.addEventListener('change', updateSystemTheme)
-
-  if (navigator.mediaDevices?.addEventListener) {
-    navigator.mediaDevices.addEventListener('devicechange', handleMediaDeviceChange)
-  }
 })
 
 onBeforeUnmount(() => {
@@ -786,18 +238,9 @@ onBeforeUnmount(() => {
   window.removeEventListener('click', handleWindowClick)
   window.removeEventListener('keydown', handleWindowKeydown)
   systemThemeQuery?.removeEventListener('change', updateSystemTheme)
-  clearAccountAvatarPreview()
-  stopPreviewSound()
-  stopAudioInputTest()
-  stopVideoInputTest()
-  stopAudioOutputTest()
 
-  if (navigator.mediaDevices?.removeEventListener) {
-    navigator.mediaDevices.removeEventListener('devicechange', handleMediaDeviceChange)
-  }
-
-  if (contactSearchTimer) {
-    clearTimeout(contactSearchTimer)
+  if (contactSearchTimeoutId) {
+    clearTimeout(contactSearchTimeoutId)
   }
 })
 </script>
@@ -1673,7 +1116,7 @@ onBeforeUnmount(() => {
   padding: 12px;
 }
 
-@media (width <= 820px) {
+@include screen-until('tablet') {
   .main-page {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) 62px;

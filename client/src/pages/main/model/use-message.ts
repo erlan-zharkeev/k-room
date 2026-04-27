@@ -9,16 +9,12 @@ export const useMessage = () => {
   const { bulkPut, mutate, put, remove, reset, update } = messageStore
   const messages = messageStore.use()
   const messageMap = computed(() => new Map(messages.value.map((message) => [message.id, message])))
-  const unreadQuantity = computed(
-    () => messages.value.filter(({ isSelf, status }) => !isSelf && status === 'delivered').length
-  )
 
   const getById = (id: string) => messageMap.value.get(id)
   const isExist = (id: string) => messageMap.value.has(id)
 
   return {
     messages,
-    unreadQuantity,
     getById,
     isExist,
     put,

@@ -1,6 +1,4 @@
-import type { ValidationChain } from 'express-validator'
+import { createSendPasswordRecoveryCodeSchema, createValidatePasswordRecoveryCodeSchema } from 'global-shared'
 
-import { emailRule, requiredStringRule } from '../auth/auth.validation'
-
-export const SEND_PASSWORD_RECOVERY_CODE_VALIDATION: ValidationChain[] = [emailRule()]
-export const VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION: ValidationChain[] = [emailRule(), requiredStringRule('code')]
+export const SEND_PASSWORD_RECOVERY_CODE_VALIDATION = createSendPasswordRecoveryCodeSchema
+export const VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION = createValidatePasswordRecoveryCodeSchema
