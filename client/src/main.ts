@@ -3,7 +3,8 @@ import { createApp } from 'vue'
 
 import App from 'src/app/App.vue'
 import { initApp } from 'src/app/bootstrap/init-app'
-import 'src/app/styles/base.css'
+import 'src/app/styles/base.scss'
+import 'src/app/styles/overwrite.scss'
 
 const app = createApp(App)
 

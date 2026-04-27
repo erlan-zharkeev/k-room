@@ -5,9 +5,9 @@ export const formatHumanDateTime = (
   locale = 'en-GB',
   fallback = 'Never'
 ) => {
-  const timestamp = normalizeTimestamp(value)
+  const timestampMs = normalizeTimestamp(value)
 
-  if (timestamp === null) return fallback
+  if (timestampMs === null) return fallback
 
   return new Intl.DateTimeFormat(locale, {
     year: 'numeric',
@@ -17,5 +17,5 @@ export const formatHumanDateTime = (
     minute: '2-digit',
     second: '2-digit',
     hour12: false
-  }).format(timestamp)
+  }).format(timestampMs)
 }

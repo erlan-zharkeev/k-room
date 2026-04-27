@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { socket, useApi } from 'src/shared/api'
-import { clearCookie, log } from 'src/shared/lib'
+import { clearCookie } from 'src/shared/lib'
 
 export const useEmailConfirmation = () => {
   const route = useRoute()
@@ -27,8 +27,6 @@ export const useEmailConfirmation = () => {
       isConfirmed.value = true
       clearCookie()
       socket.disconnect()
-    } catch (error) {
-      log('error', 'Email confirmation failed', error)
     } finally {
       isLoading.value = false
     }

@@ -26,11 +26,12 @@ import { UserModel } from '../user/user.model'
 import { loadGoogleAvatar, updateUserAvatar, UserService } from '../user/user.service'
 
 import {
-  EMAIL_CONFIRMATION_LINK_LIFE,
-  JWT_ACCESS_EXPIRES_INTERVAL,
-  REFRESH_TOKEN_EXPIRES_INTERVAL,
-  REGISTRATION_RESEND_INTERVAL,
-  SEND_CONFIRMATION_LINK_INTERVAL
+  DEVICE_COOKIE_MAX_AGE_MS,
+  EMAIL_CONFIRMATION_LINK_LIFE_SECONDS,
+  JWT_ACCESS_TOKEN_EXPIRES_IN,
+  REFRESH_TOKEN_EXPIRES_IN,
+  REGISTRATION_RESEND_INTERVAL_MS,
+  SEND_CONFIRMATION_LINK_INTERVAL_MS
 } from './auth.constants'
 import { AUTH_I18N } from './auth.i18n'
 import type { ITokenPayload } from './auth.types'
@@ -40,14 +41,14 @@ import { parseTokenExpires } from './lib/parse-token-expires'
 export class AuthService {
   constructor(private readonly emailService: EmailService, private readonly userService: UserService) {}
 
-  private getCookieOptions(maxAge: number): CookieOptions {
+  private getCookieOptions(maxAgeMs: number): CookieOptions {
     return {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
       path: '/',
       ...(SERVER_ENV.domain ? { domain: SERVER_ENV.domain } : {}),
-      maxAge
+      maxAge: maxAgeMs
     }
   }
 
@@ -109,17 +110,17 @@ export class AuthService {
   }
 
   async updateTokens(userId: string, request: Request, response: Response) {
-    this.setToken(response, 'jwt', userId, SERVER_ENV.secret.accessTokenSecret, JWT_ACCESS_EXPIRES_INTERVAL)
+    this.setToken(response, 'jwt', userId, SERVER_ENV.secret.accessTokenSecret, JWT_ACCESS_TOKEN_EXPIRES_IN)
     const refreshToken = this.setToken(
       response,
       'refresh-jwt',
       userId,
       SERVER_ENV.secret.refreshTokenSecret,
-      REFRESH_TOKEN_EXPIRES_INTERVAL
+      REFRESH_TOKEN_EXPIRES_IN
     )
     const deviceId = request.cookies['device-id'] ?? uuidv4()
 
-    response.cookie('device-id', deviceId, this.getCookieOptions(3_153_600_000_000))
+    response.cookie('device-id', deviceId, this.getCookieOptions(DEVICE_COOKIE_MAX_AGE_MS))
 
     const user = await this.userService.findById(userId)
     if (!user) {
@@ -187,7 +188,7 @@ export class AuthService {
     const confirmToken = this.signToken(
       String(user._id),
       SERVER_ENV.secret.emailConfirmSecret,
-      EMAIL_CONFIRMATION_LINK_LIFE
+      EMAIL_CONFIRMATION_LINK_LIFE_SECONDS
     )
 
     await this.emailService.sendEmailConfirmationEmail({
@@ -200,7 +201,7 @@ export class AuthService {
     return {
       email: payload.email,
       attempts: user.system.confirmAttempts,
-      nextRequestTime: Date.now() + REGISTRATION_RESEND_INTERVAL
+      nextRequestTime: Date.now() + REGISTRATION_RESEND_INTERVAL_MS
     }
   }
 
@@ -252,7 +253,7 @@ export class AuthService {
     const confirmToken = this.signToken(
       String(user._id),
       SERVER_ENV.secret.emailConfirmSecret,
-      EMAIL_CONFIRMATION_LINK_LIFE
+      EMAIL_CONFIRMATION_LINK_LIFE_SECONDS
     )
 
     await this.emailService.sendEmailConfirmationEmail({
@@ -268,7 +269,7 @@ export class AuthService {
     return {
       email: user.personal.email,
       attempts: user.system.confirmAttempts,
-      nextRequestTime: Date.now() + SEND_CONFIRMATION_LINK_INTERVAL,
+      nextRequestTime: Date.now() + SEND_CONFIRMATION_LINK_INTERVAL_MS,
       alreadyConfirmed: false
     }
   }

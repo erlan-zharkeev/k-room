@@ -3,11 +3,13 @@ export {
   CLIENT_LANGUAGE,
   API_SUCCESS_STATUS_END,
   API_SUCCESS_STATUS_START,
-  API_TOAST_LIFE_MS,
-  DEFAULT_CUSTOM_SOUNDS,
-  DEFAULT_SETTINGS,
   LOCAL_STORAGE_KEY,
-  ROOM_MESSAGES_PAGE_LIMIT
+  ERROR_TOAST_LIFE_MS,
+  ROOM_MESSAGES_PAGE_LIMIT,
+  SCREEN_BREAKPOINTS,
+  SOCKET_MAX_RECONNECTION_DELAY_MS,
+  SOCKET_RECONNECTION_DELAY_MS,
+  SUCCESS_TOAST_LIFE_MS
 } from './constants'
 export { DARK_THEME_COLORS, DEFAULT_CUSTOM_THEME, LIGHT_THEME_COLORS, PRIMARY_PALETTE } from './theme.constants'
 export {
@@ -32,9 +34,10 @@ export {
 } from './main-page-constants'
 export { MAIN_PAGE_I18N } from './main-page-i18n'
 export { EMOJI_LIST } from './emoji'
-export { API_I18N, FORM_VALIDATION_I18N } from './i18n'
+export { API_I18N, TOAST_I18N } from './i18n'
 export { IMAGE_RESOLUTIONS } from 'src/shared/types/media'
 export type { ContextRefType } from 'src/shared/types/other'
+export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/types/breakpoint'
 export type { FileLoaderValueType, IDbMedia } from 'src/shared/types/media'
 export type {
   CustomThemeColorType,

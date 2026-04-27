@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ROUTE_NAMES } from 'global-shared'
 import { Button } from 'primevue'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { AppText } from 'src/shared/ui'
@@ -9,8 +9,8 @@ import { AppText } from 'src/shared/ui'
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
 import { useWaitEmailConfirm } from '../model/use-wait-email-confirm'
 
-const { attempts, counterValue, email, initializeWaitEmailConfirm, isLoading, isResendDisabled, resend } =
-  useWaitEmailConfirm()
+const { attempts, counterValue, email, initializeWaitEmailConfirm, isLoading, resend } = useWaitEmailConfirm()
+const isResendDisabled = computed(() => isLoading.value || attempts.value <= 0 || counterValue.value > 0)
 
 onMounted(initializeWaitEmailConfirm)
 </script>

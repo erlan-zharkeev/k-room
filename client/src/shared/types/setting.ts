@@ -4,7 +4,7 @@ import type { ICustomThemeSetting, ThemeType } from 'src/shared/types/theme'
 
 export type WallpaperType = 'default' | 'custom'
 
-export type SoundType = 'connection' | 'calling' | 'ding' | 'ring' | 'busy'
+export type SoundType = 'connection' | 'calling' | 'income-message' | 'ring' | 'busy'
 
 export type CustomSoundSettingType = Record<SoundType, string>
 

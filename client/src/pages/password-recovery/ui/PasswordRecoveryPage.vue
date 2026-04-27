@@ -2,37 +2,33 @@
 import { Form } from '@primevue/forms'
 import { ROUTE_NAMES } from 'global-shared'
 import { Button, InputText, Message } from 'primevue'
-import { onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { computed, onMounted } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
+import { isFormFieldInvalid } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
 import { usePasswordRecovery } from '../model/use-password-recovery'
 
 const {
-  codeErrorText,
   codeFormData,
   codeResolver,
   codeSent,
-  codeValidation,
   codeValidationIsLoading,
   counterValue,
   debugCode,
-  emailErrorText,
   emailFormData,
   emailResolver,
   emailSendCodeIsLoading,
-  emailValidation,
-  isCodeInvalid,
-  isEmailInputDisabled,
-  isEmailInvalid,
-  isSendCodeDisabled,
-  isValidateCodeDisabled,
   initializePasswordRecovery,
   sendEmailCode,
   validateCode
 } = usePasswordRecovery()
+const route = useRoute()
+const hasPresetEmail = computed(() => Boolean(route.query['user-email']))
+const isSendCodeBlocked = computed(() => emailSendCodeIsLoading.value || counterValue.value > 0)
+const isEmailInputDisabled = computed(() => emailSendCodeIsLoading.value || hasPresetEmail.value)
 
 onMounted(initializePasswordRecovery)
 </script>
@@ -47,6 +43,7 @@ onMounted(initializePasswordRecovery)
     </template>
 
     <Form
+      v-slot="emailForm"
       :initial-values="emailFormData"
       :resolver="emailResolver"
       class="password-recovery-page__form"
@@ -58,22 +55,19 @@ onMounted(initializePasswordRecovery)
           autocomplete="email"
           :disabled="isEmailInputDisabled"
           fluid
-          :invalid="isEmailInvalid"
           name="email"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.emailPlaceholder)"
           size="small"
           type="email"
-          @blur="emailValidation.touchField('email')"
-          @update:model-value="emailValidation.touchField('email')"
         />
-        <Message v-if="emailErrorText" severity="error" size="small" variant="simple">
-          {{ emailErrorText }}
+        <Message v-if="isFormFieldInvalid(emailForm.email)" severity="error" size="small" variant="simple">
+          {{ emailForm.email.error?.message }}
         </Message>
       </div>
 
       <div class="password-recovery-page__action-btns">
         <Button
-          :disabled="isSendCodeDisabled"
+          :disabled="isSendCodeBlocked || !emailForm.valid"
           :label="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(PASSWORD_RECOVERY_I18N.sendCode)"
           :loading="emailSendCodeIsLoading"
           size="small"
@@ -88,6 +82,7 @@ onMounted(initializePasswordRecovery)
 
     <Form
       v-if="codeSent"
+      v-slot="codeForm"
       :initial-values="codeFormData"
       :resolver="codeResolver"
       class="password-recovery-page__form"
@@ -99,21 +94,18 @@ onMounted(initializePasswordRecovery)
           autocomplete="one-time-code"
           :disabled="codeValidationIsLoading"
           fluid
-          :invalid="isCodeInvalid"
           name="code"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"
           size="small"
-          @blur="codeValidation.touchField('code')"
-          @update:model-value="codeValidation.touchField('code')"
         />
-        <Message v-if="codeErrorText" severity="error" size="small" variant="simple">
-          {{ codeErrorText }}
+        <Message v-if="isFormFieldInvalid(codeForm.code)" severity="error" size="small" variant="simple">
+          {{ codeForm.code.error?.message }}
         </Message>
       </div>
 
       <div class="password-recovery-page__action-btns">
         <Button
-          :disabled="isValidateCodeDisabled"
+          :disabled="codeValidationIsLoading || !codeForm.valid"
           :label="$t(PASSWORD_RECOVERY_I18N.validate)"
           :loading="codeValidationIsLoading"
           size="small"

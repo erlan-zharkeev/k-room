@@ -12,7 +12,7 @@ export const useMessageScrollState = (
   virtualizer: Ref<Virtualizer<HTMLElement, HTMLElement>>
 ) => {
   const { settings, setByPath } = useSettings()
-  let scrollSaveTimer: ReturnType<typeof setTimeout> | undefined
+  let scrollSaveTimeoutId: ReturnType<typeof setTimeout> | undefined
 
   const getScrollState = (): IMessageListScrollState | null => {
     const element = scrollElement.value
@@ -36,11 +36,11 @@ export const useMessageScrollState = (
   }
 
   const schedulePersistScrollState = (roomId: string) => {
-    if (scrollSaveTimer) {
-      clearTimeout(scrollSaveTimer)
+    if (scrollSaveTimeoutId) {
+      clearTimeout(scrollSaveTimeoutId)
     }
 
-    scrollSaveTimer = setTimeout(() => {
+    scrollSaveTimeoutId = setTimeout(() => {
       void persistScrollState(roomId)
     }, MESSAGE_SCROLL_SAVE_DEBOUNCE_MS)
   }
@@ -67,13 +67,13 @@ export const useMessageScrollState = (
     return true
   }
 
-  const clearScrollSaveTimer = () => {
-    if (scrollSaveTimer) {
-      clearTimeout(scrollSaveTimer)
+  const clearScrollSaveTimeout = () => {
+    if (scrollSaveTimeoutId) {
+      clearTimeout(scrollSaveTimeoutId)
     }
   }
 
-  onBeforeUnmount(clearScrollSaveTimer)
+  onBeforeUnmount(clearScrollSaveTimeout)
 
   return {
     getScrollState,

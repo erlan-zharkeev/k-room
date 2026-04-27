@@ -386,10 +386,10 @@ export const MAIN_PAGE_I18N = defineI18n({
     ru: 'Вызов',
     zh: '呼叫'
   },
-  dingSound: {
-    en: 'Ding',
-    ru: 'Ding',
-    zh: '提示音'
+  incomeMessageSound: {
+    en: 'Income message',
+    ru: 'Входящее сообщение',
+    zh: '传入消息'
   },
   ringSound: {
     en: 'Ring',

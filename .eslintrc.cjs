@@ -160,8 +160,7 @@ module.exports = {
         browser: true
       },
       parserOptions: {
-        ...sharedTypeScriptOverride.parserOptions,
-        project: [path.join(__dirname, 'client/tsconfig.eslint.json')]
+        ...sharedTypeScriptOverride.parserOptions
       },
       settings: createTypeScriptResolver('client/tsconfig.eslint.json', ['.js', '.ts', '.d.ts', '.vue'])
     },
@@ -177,8 +176,7 @@ module.exports = {
       parserOptions: {
         ...sharedTypeScriptOverride.parserOptions,
         parser: '@typescript-eslint/parser',
-        extraFileExtensions: ['.vue'],
-        project: [path.join(__dirname, 'client/tsconfig.eslint.json')]
+        extraFileExtensions: ['.vue']
       },
       plugins: ['@typescript-eslint', 'import', 'vue'],
       settings: createTypeScriptResolver('client/tsconfig.eslint.json', ['.js', '.ts', '.d.ts', '.vue']),

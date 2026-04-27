@@ -1,25 +1,25 @@
 import { isNumber } from 'global-shared'
 
 import {
-  DEFAULT_COOKIE_MAX_AGE,
-  MILLISECONDS_IN_SECOND,
+  DEFAULT_COOKIE_MAX_AGE_MS,
+  SECOND_IN_MS,
   TOKEN_EXPIRES_PATTERN,
   TOKEN_EXPIRES_UNIT_TO_MS
 } from '../auth.constants'
 
 export const parseTokenExpires = (expires: string | number) => {
   if (isNumber(expires)) {
-    return expires * MILLISECONDS_IN_SECOND
+    return expires * SECOND_IN_MS
   }
 
   const match = expires.match(TOKEN_EXPIRES_PATTERN)
 
   if (!match) {
-    return DEFAULT_COOKIE_MAX_AGE
+    return DEFAULT_COOKIE_MAX_AGE_MS
   }
 
   const [, value, unit] = match
-  const unitMs = TOKEN_EXPIRES_UNIT_TO_MS[unit as keyof typeof TOKEN_EXPIRES_UNIT_TO_MS]
+  const unitInMs = TOKEN_EXPIRES_UNIT_TO_MS[unit as keyof typeof TOKEN_EXPIRES_UNIT_TO_MS]
 
-  return Number(value) * unitMs
+  return Number(value) * unitInMs
 }

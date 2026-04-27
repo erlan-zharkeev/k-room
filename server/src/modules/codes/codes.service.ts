@@ -16,7 +16,7 @@ import { EmailService } from '../email/email.service'
 import { USER_I18N } from '../user/user.i18n'
 import { UserService } from '../user/user.service'
 
-import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL, isCodeExpired } from './codes.constants'
+import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
 import { VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
 import { CodeModel } from './codes.model'
 
@@ -38,11 +38,11 @@ export class CodesService {
       throw new AppError(REQ_STATUS.badRequest, localizedText(USER_I18N.userNotFound, language))
     }
 
-    const now = Date.now()
+    const nowTimestampMs = Date.now()
     const userId = String(user._id)
     const existingCode = await CodeModel.findById(userId)
 
-    if (existingCode?.nextRequestPossibleAt && existingCode.nextRequestPossibleAt > now) {
+    if (existingCode?.nextRequestPossibleAt && existingCode.nextRequestPossibleAt > nowTimestampMs) {
       return {
         nextTimeRequest: existingCode.nextRequestPossibleAt,
         tooManyRequests: true
@@ -50,17 +50,17 @@ export class CodesService {
     }
 
     const code = buildPasswordRecoveryCode()
-    const nextTimeRequest = now + RESEND_CODE_INTERVAL
+    const nextRequestTimestampMs = nowTimestampMs + RESEND_CODE_INTERVAL_MS
 
     await CodeModel.updateOne(
       { _id: userId },
       {
         $set: {
           'codes.passwordRecovery.email.value': code,
-          'codes.passwordRecovery.email.expiresAt': now + CODE_LIFE_MS,
+          'codes.passwordRecovery.email.expiresAt': nowTimestampMs + CODE_LIFE_MS,
           'codes.passwordRecovery.query.value': '',
           'codes.passwordRecovery.query.expiresAt': 0,
-          nextRequestPossibleAt: nextTimeRequest
+          nextRequestPossibleAt: nextRequestTimestampMs
         }
       },
       { upsert: true }
@@ -74,7 +74,7 @@ export class CodesService {
     })
 
     return {
-      nextTimeRequest,
+      nextTimeRequest: nextRequestTimestampMs,
       ...(SERVER_ENV.isDev ? { debugCode: code } : {}),
       tooManyRequests: false
     }
@@ -101,9 +101,9 @@ export class CodesService {
     }
 
     const currentCode = codeDoc.codes.passwordRecovery.email.value
-    const currentCodeExpiresAt = codeDoc.codes.passwordRecovery.email.expiresAt
+    const currentCodeExpiresAtMs = codeDoc.codes.passwordRecovery.email.expiresAt
 
-    if (isCodeExpired(currentCodeExpiresAt)) {
+    if (isCodeExpired(currentCodeExpiresAtMs)) {
       throw new AppError(
         REQ_STATUS.badRequest,
         localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode, language)

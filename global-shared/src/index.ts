@@ -142,3 +142,23 @@ export { formatHumanDateTime } from './time/lib/format-human-date-time'
 
 export { USER_ROLES } from './user/constants'
 export type { UserRoleType, IBaseFrontendUserData, IFrontendUserData } from './user/types'
+
+export { VALIDATION_I18N } from './validation/i18n'
+export { createValidationMessages } from './validation/messages'
+export {
+  createAuthLoginSchema,
+  createAuthRegistrationFormSchema,
+  createAuthRegistrationSchema,
+  createChangePasswordSchema,
+  createConfirmEmailSchema,
+  createCreateNewPasswordFormSchema,
+  createPasswordRecoveryCodeFormSchema,
+  createPasswordRecoveryEmailFormSchema,
+  createProviderLoginSchema,
+  createResetPasswordSchema,
+  createSendConfirmationLinkSchema,
+  createSendPasswordRecoveryCodeSchema,
+  createUpdateUserDataSchema,
+  createValidatePasswordRecoveryCodeSchema
+} from './validation/schemas'
+export type { ValidationI18nType, ValidationMessagesType } from './validation/types'

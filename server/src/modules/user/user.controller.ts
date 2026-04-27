@@ -57,7 +57,7 @@ export class UserController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, RESET_PASSWORD_VALIDATION)
+      runRequestValidation(request, RESET_PASSWORD_VALIDATION)
       await this.userService.resetPassword(payload, language)
 
       return response.json({
@@ -95,7 +95,7 @@ export class UserController {
         throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
       }
 
-      await runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
+      runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
       await this.userService.updateUserData({
         userId,
         username: payload?.username,
@@ -130,7 +130,7 @@ export class UserController {
         throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
       }
 
-      await runRequestValidation(request, CHANGE_PASSWORD_VALIDATION)
+      runRequestValidation(request, CHANGE_PASSWORD_VALIDATION)
       await this.userService.changePassword({
         userId,
         currentPassword: payload.currentPassword,

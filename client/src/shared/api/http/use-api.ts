@@ -12,10 +12,13 @@ import { useToast } from 'primevue/usetoast'
 import {
   API_SUCCESS_STATUS_END,
   API_SUCCESS_STATUS_START,
-  API_TOAST_LIFE_MS,
   CLIENT_ENV,
-  CLIENT_LANGUAGE
+  CLIENT_LANGUAGE,
+  ERROR_TOAST_LIFE_MS,
+  SUCCESS_TOAST_LIFE_MS,
+  TOAST_I18N
 } from 'src/shared/config'
+import { useI18n } from 'src/shared/lib'
 
 import { apiClient } from './api-client'
 import { getHeaderValue } from './get-header-value'
@@ -26,6 +29,7 @@ const isSuccessStatus = (status: number) => status >= API_SUCCESS_STATUS_START &
 
 export const useApi = () => {
   const toast = useToast()
+  const { t } = useI18n()
   const { interceptError } = useApiInterceptor()
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
@@ -40,8 +44,9 @@ export const useApi = () => {
     if (text && !silent) {
       toast.add({
         severity: isSuccess ? 'success' : 'warn',
-        summary: text,
-        life: API_TOAST_LIFE_MS
+        summary: isSuccess ? t(TOAST_I18N.success) : t(TOAST_I18N.warn),
+        detail: text,
+        life: isSuccess ? SUCCESS_TOAST_LIFE_MS : ERROR_TOAST_LIFE_MS
       })
     }
   }

@@ -1,0 +1,54 @@
+@use 'sass:map';
+
+$screen-breakpoints: (
+  'mobile': 320px,
+  'portrait-tablet': 768px,
+  'tablet': 1024px,
+  'desktop': 1920px
+);
+
+@function screen-breakpoint($name) {
+  @return map.get($screen-breakpoints, $name);
+}
+
+@mixin screen-from($name) {
+  @media (width >= screen-breakpoint($name)) {
+    @content;
+  }
+}
+
+@mixin screen-until($name) {
+  @media (width < screen-breakpoint($name)) {
+    @content;
+  }
+}
+
+@mixin screen-between($from, $until) {
+  @media (width >= screen-breakpoint($from)) and (width < screen-breakpoint($until)) {
+    @content;
+  }
+}
+
+@mixin screen-mobile {
+  @include screen-until('portrait-tablet') {
+    @content;
+  }
+}
+
+@mixin screen-portrait-tablet {
+  @include screen-between('portrait-tablet', 'tablet') {
+    @content;
+  }
+}
+
+@mixin screen-tablet {
+  @include screen-between('tablet', 'desktop') {
+    @content;
+  }
+}
+
+@mixin screen-desktop {
+  @include screen-from('desktop') {
+    @content;
+  }
+}

@@ -1,4 +1,4 @@
-export { UPDATE_MEDIA_INTERVAL } from './config/constants'
+export { UPDATE_MEDIA_INTERVAL_MS } from './config/constants'
 export { acquireUrl, releaseUrl } from './lib/media-url-cache'
 export { syncMedia } from './lib/sync-media'
 export { transformHeadersToMediaData } from './lib/transform-headers-to-media-data'

@@ -1,21 +1,31 @@
+import type { FormProps, FormSubmitEvent } from '@primevue/forms/form'
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import {
   AUTH_ENDPOINTS,
   ROUTE_NAMES,
+  createAuthRegistrationFormSchema,
+  createValidationMessages,
   type IAuthRegistrationPayload,
   type ISendConfirmationLinkResponse
 } from 'global-shared'
-import { ref } from 'vue'
+import clone from 'lodash/clone'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useApi } from 'src/shared/api'
-import { buildPathWithParams, log } from 'src/shared/lib'
+import { buildPathWithParams, useI18n } from 'src/shared/lib'
+
+import { DEFAULT_REGISTRATION_FORM_DATA } from '../config/constants'
 
 import type { RegistrationFormDataType } from './types'
 
 export const useRegistration = () => {
   const router = useRouter()
   const { doRequest } = useApi()
+  const { t } = useI18n()
   const isLoading = ref(false)
+  const formData = reactive(clone(DEFAULT_REGISTRATION_FORM_DATA))
+  const resolver: FormProps['resolver'] = valibotResolver(createAuthRegistrationFormSchema(createValidationMessages(t)))
 
   const register = async (payload: IAuthRegistrationPayload) => {
     isLoading.value = true
@@ -25,20 +35,26 @@ export const useRegistration = () => {
       const pathname = buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, response.data.payload)
 
       await router.push(pathname)
-    } catch (error) {
-      log('error', 'Registration failed', error)
     } finally {
       isLoading.value = false
     }
   }
 
-  const onRegister = ({ email, password, username }: RegistrationFormDataType) => {
+  const submitRegistration = ({ email, password, username }: RegistrationFormDataType) => {
     register({ email, password, username })
   }
 
+  const submit = ({ valid }: FormSubmitEvent) => {
+    if (!valid) return
+
+    submitRegistration(formData)
+  }
+
   return {
-    register,
+    formData,
     isLoading,
-    onRegister
+    register,
+    resolver,
+    submit
   }
 }

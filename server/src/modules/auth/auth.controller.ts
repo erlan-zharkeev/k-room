@@ -24,7 +24,8 @@ import {
   CONFIRM_EMAIL_VALIDATION,
   LOGIN_VALIDATION,
   PROVIDER_LOGIN_VALIDATION,
-  REGISTRATION_VALIDATION
+  REGISTRATION_VALIDATION,
+  SEND_CONFIRMATION_LINK_VALIDATION
 } from './auth.validation'
 
 @Controller()
@@ -40,7 +41,7 @@ export class AuthController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, LOGIN_VALIDATION)
+      runRequestValidation(request, LOGIN_VALIDATION)
       const result = await this.authService.login(payload, request, response)
 
       return response.json({
@@ -64,7 +65,7 @@ export class AuthController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, REGISTRATION_VALIDATION)
+      runRequestValidation(request, REGISTRATION_VALIDATION)
       const result = await this.authService.registration(payload, language)
 
       return response.json({
@@ -88,7 +89,7 @@ export class AuthController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, CONFIRM_EMAIL_VALIDATION)
+      runRequestValidation(request, CONFIRM_EMAIL_VALIDATION)
       const result = await this.authService.confirmEmail(token, language)
 
       return response.json({
@@ -117,6 +118,7 @@ export class AuthController {
     const { language } = request
 
     try {
+      runRequestValidation(request, SEND_CONFIRMATION_LINK_VALIDATION)
       const result = await this.authService.sendConfirmationLink(email, language)
 
       return response.json({
@@ -147,7 +149,7 @@ export class AuthController {
     const { language } = request
 
     try {
-      await runRequestValidation(request, PROVIDER_LOGIN_VALIDATION)
+      runRequestValidation(request, PROVIDER_LOGIN_VALIDATION)
       const result = await this.authService.signInWithProvider(payload, request, response)
 
       return response.json({

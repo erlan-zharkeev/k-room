@@ -1,7 +1,9 @@
 import { computed } from 'vue'
 
-import { DEFAULT_SETTINGS, type DbUserSettingType } from 'src/shared/config'
+import type { DbUserSettingType } from 'src/shared/config'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
+
+import { DEFAULT_SETTINGS } from '../config/constants'
 
 const settingsStore = dexieKeyValueStore<DbUserSettingType>(db.settings, 'settings')
 

@@ -25,8 +25,8 @@ const route = useRoute()
 const { t } = useI18n()
 const { settings } = useSettings()
 const { user } = useUser()
-const { unreadQuantity } = useInfoNotification()
-const { unreadQuantity: unreadMessagesQuantity } = useMessage()
+const { infoNotificationList } = useInfoNotification()
+const { messages } = useMessage()
 const { isLogoutLoading, logout } = useLogout()
 
 useMainMonitors()
@@ -34,6 +34,12 @@ useMainMonitors()
 const selectedSettingsId = ref('account')
 const systemTheme = ref(getSystemTheme())
 const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
+const unreadInfoNotificationQuantity = computed(
+  () => infoNotificationList.value.filter(({ status }) => status === 'unread').length
+)
+const unreadMessagesQuantity = computed(
+  () => messages.value.filter(({ isSelf, status }) => !isSelf && status === 'delivered').length
+)
 
 const activeNavItem = computed(() => {
   const item = MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path)
@@ -122,7 +128,7 @@ onBeforeUnmount(() => {
       :nav-items="MAIN_PAGE_NAV_ITEMS"
       :selected-settings-id="selectedSettingsId"
       :settings-route-prefix="MAIN_PAGE_ROUTES.settings"
-      :unread-info-notifications="unreadQuantity"
+      :unread-info-notifications="unreadInfoNotificationQuantity"
       :unread-messages="unreadMessagesQuantity"
       :wallpaper-style="widgetWallpaperStyle"
     />
@@ -175,7 +181,7 @@ onBeforeUnmount(() => {
   min-height: 0;
 }
 
-@media (width <= 820px) {
+@include screen-until('tablet') {
   .main-layout {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) 62px;
