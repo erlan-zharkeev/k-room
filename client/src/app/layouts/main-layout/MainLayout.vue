@@ -4,9 +4,12 @@ import { RouterView } from 'vue-router'
 
 import { useSettings } from 'src/entities/setting'
 import { useMainMonitors } from 'src/pages/main'
+import { useScreen } from 'src/shared/lib'
 import { MainLeftBar } from 'src/widgets/main-left-bar'
+import MainMobileFooter from 'src/widgets/main-mobile-footer/ui/MainMobileFooter.vue'
 import { MainTopBar } from 'src/widgets/main-top-bar'
 
+const { isMobile } = useScreen()
 const { settings, selectedWallpaper } = useSettings()
 
 useMainMonitors()
@@ -24,16 +27,17 @@ const wallpaperStyle = computed(() => {
     :class="{ 'main-layout--wallpaper': settings.showWallpaper }"
     :style="wallpaperStyle"
   >
-    <MainLeftBar class="widget" />
+    <MainLeftBar v-if="!isMobile" class="widget" />
 
     <section class="main-layout__workspace">
-      <MainTopBar  class="widget"  />
+      <MainTopBar class="widget" />
       <RouterView />
+      <MainMobileFooter v-if="isMobile" class="widget" />
     </section>
   </main>
 </template>
 
-<style>
+<style lang="scss">
 .main-layout {
   --bar-thickness: 64px;
 
@@ -41,12 +45,20 @@ const wallpaperStyle = computed(() => {
   grid-template-columns: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
   height: 100dvh;
+
+  @include screen-until('portrait-tablet') {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .main-layout__workspace {
   display: grid;
   grid-template-rows: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
+
+  @include screen-until('portrait-tablet') {
+    grid-template-rows: var(--bar-thickness) minmax(0, 1fr) var(--bar-thickness);
+  }
 }
 
 .widget {
