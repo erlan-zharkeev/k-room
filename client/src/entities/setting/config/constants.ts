@@ -1,8 +1,6 @@
 import { CLIENT_LANGUAGE, DEFAULT_CUSTOM_THEME } from 'src/shared/config'
 import type { IUserSetting } from 'src/shared/config'
 
-import { getSystemTheme } from '../../../shared/lib'
-
 export const DEFAULT_CUSTOM_SOUNDS = {
   connection: '',
   calling: '',
@@ -11,13 +9,15 @@ export const DEFAULT_CUSTOM_SOUNDS = {
   busy: ''
 }
 
+export const SYSTEM_THEME_QUERY = window.matchMedia?.('(prefers-color-scheme: light)')
+
 export const DEFAULT_SETTINGS: IUserSetting = {
   selectedContentTab: 'contacts',
   selectedChatRoomId: '',
   messageScrollByRoom: {},
   language: CLIENT_LANGUAGE,
   theme: 'system',
-  systemTheme: getSystemTheme(),
+  systemTheme: SYSTEM_THEME_QUERY.matches ? 'light' : 'dark',
   customTheme: DEFAULT_CUSTOM_THEME,
   soundOn: true,
   showTooltips: false,
