@@ -1,9 +1,8 @@
 import { onBeforeUnmount, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
+import { SYSTEM_THEME_QUERY } from 'src/entities/setting/config/constants'
 import { applyThemePreset } from 'src/shared/lib'
-
-import { SYSTEM_THEME_QUERY } from '../../entities/setting/config/constants'
 
 export const useThemeProvider = () => {
   const { settings, shallowUpdate } = useSettings()

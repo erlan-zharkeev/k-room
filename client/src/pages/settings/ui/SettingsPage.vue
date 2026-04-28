@@ -10,7 +10,7 @@ import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 import { AppHeader, AppText } from 'src/shared/ui'
-import { MAIN_PAGE_ROUTES } from 'src/widgets/main-left-bar/config/constants'
+import { MAIN_PAGE_ROUTES } from 'src/widgets/main-nav-bar/config/constants'
 import { ThemeSettings } from 'src/widgets/theme-settings'
 
 import { SoundType, ThemeType, CustomThemeColorType } from '../../../shared/config'
