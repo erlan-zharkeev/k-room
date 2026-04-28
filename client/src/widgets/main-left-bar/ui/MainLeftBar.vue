@@ -1,47 +1,57 @@
 <script setup lang="ts">
-import { Badge, Button } from 'primevue'
+import { isString } from 'global-shared'
+import { Button, OverlayBadge } from 'primevue'
+import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { AppIcon, AppLogo } from 'src/shared/ui'
+import { useChatRoom } from 'src/entities/chat-room'
+import { useInfoNotification } from 'src/entities/info-notification'
+import { AppLogo } from 'src/shared/ui'
 
-import type { IMainLeftBarProps } from './types'
-
-const props = defineProps<IMainLeftBarProps>()
+import { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from '../config/constants'
 
 const route = useRoute()
+const { unreadInfoNotificationQuantity } = useInfoNotification()
+const { unreadMessagesQuantity } = useChatRoom()
 
-const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${settingsId}`
+const selectedSettingsId = computed(() => {
+  const { settingsId } = route.params
+  return isString(settingsId) && settingsId ? settingsId : 'account'
+})
+
+const getBadgeValue = (id: string): number | undefined => {
+  if (id === 'settings') return unreadInfoNotificationQuantity.value || undefined
+  if (id === 'chat-rooms') return unreadMessagesQuantity.value || undefined
+}
 </script>
 
 <template>
-  <aside class="main-left-bar" :style="wallpaperStyle">
-    <AppLogo class="main-left-bar__brand" />
+  <aside class="main-left-bar">
+    <AppLogo />
 
     <nav class="main-left-bar__nav">
       <RouterLink
-        v-for="item in navItems"
+        v-for="item in MAIN_PAGE_NAV_ITEMS"
         :key="item.id"
-        :to="item.id === 'settings' ? getSettingsPath(selectedSettingsId) : item.path"
+        :to="item.id === 'settings' ? `${MAIN_PAGE_ROUTES.settings}/${selectedSettingsId}` : item.path"
         custom
         v-slot="{ href, navigate, isExactActive }"
       >
-        <Button
-          :href="href"
-          :aria-label="$t(item.label)"
-          :aria-current="isExactActive ? 'page' : undefined"
-          :class="{
-            'main-left-bar__nav-button--active':
-              isExactActive || (item.id === 'settings' && route.path.startsWith(settingsRoutePrefix))
-          }"
-          as="a"
-          size="small"
-          text
-          @click="navigate"
-        >
-          <AppIcon :name="item.icon" />
-          <Badge v-if="item.id === 'infoNotifications' && unreadInfoNotifications" :value="unreadInfoNotifications" />
-          <Badge v-if="item.id === 'chatRooms' && unreadMessages" :value="unreadMessages" />
-        </Button>
+        <OverlayBadge :value="getBadgeValue(item.id)" severity="danger">
+          <Button
+            :href="href"
+            :aria-label="$t(item.label)"
+            :class="{
+              'main-left-bar__nav-button--active':
+                isExactActive || (item.id === 'settings' && route.path.startsWith(MAIN_PAGE_ROUTES.settings))
+            }"
+            as="a"
+            text
+            size='large'
+            :icon="item.icon"
+            @click="navigate"
+          />
+        </OverlayBadge>
       </RouterLink>
     </nav>
   </aside>
@@ -49,28 +59,25 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
 
 <style>
 .main-left-bar {
-  isolation: isolate;
-  position: relative;
-
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-
-  min-width: 0;
-  padding: 10px 8px;
-  border: 1px solid var(--p-app-widget-border-color, var(--p-content-border-color));
-  border-radius: 18px;
-
-  background-color: var(--p-app-widget-background, var(--p-content-background));
-  background-repeat: repeat;
-  background-position: 0 0;
-  background-size: 320px auto;
-  box-shadow: 12px 12px 28px var(--p-app-shadow-outset-start), -12px -12px 28px var(--p-app-shadow-outset-end);
 }
 
-.main-left-bar::before {
+.main-left-bar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+
+  margin-block: auto;
+}
+
+/* .main-left-bar__nav-button--active {
+  background: red;
+} */
+
+/* .main-left-bar::before {
   pointer-events: none;
   content: '';
 
@@ -90,79 +97,5 @@ const getSettingsPath = (settingsId: string) => `${props.settingsRoutePrefix}/${
   background-repeat: repeat;
   background-position: 0 0;
   background-size: 280px auto;
-}
-
-.main-left-bar > * {
-  position: relative;
-  z-index: 1;
-}
-
-.main-left-bar__brand {
-  width: 38px;
-  height: 38px;
-  padding: 6px;
-  border-radius: 12px;
-
-  background: var(--p-app-widget-background, var(--p-content-background));
-}
-
-.main-left-bar__nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-
-  margin-block: auto;
-}
-
-.main-left-bar__nav :deep(.p-button) {
-  position: relative;
-
-  display: grid;
-  place-items: center;
-
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  border-radius: 8px;
-}
-
-.main-left-bar__nav :deep(.app-icon) {
-  position: relative;
-  z-index: 1;
-}
-
-.main-left-bar__nav :deep(.p-badge) {
-  position: absolute;
-  z-index: 2;
-  top: 4px;
-  right: 4px;
-
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-
-  font-size: 0.7rem;
-  font-weight: 500;
-  line-height: 16px;
-}
-
-.main-left-bar__nav-button--active {
-  color: var(--p-primary-contrast-color);
-  background: var(--p-primary-color);
-}
-
-@include screen-until('tablet') {
-  .main-left-bar {
-    grid-row: 2;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 8px 10px;
-  }
-
-  .main-left-bar__nav {
-    flex-direction: row;
-    margin-block: 0;
-  }
-}
+} */
 </style>

@@ -7,8 +7,6 @@ import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import {
   MAIN_PAGE_I18N,
-  MAIN_PAGE_NAV_ITEMS,
-  MAIN_PAGE_ROUTES,
   MAIN_PAGE_SETTINGS_ITEMS,
   MAIN_PAGE_WALLPAPER_ITEMS,
   useLogout,
@@ -34,24 +32,20 @@ useMainMonitors()
 const selectedSettingsId = ref('account')
 const systemTheme = ref(getSystemTheme())
 const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
-const unreadInfoNotificationQuantity = computed(
-  () => infoNotificationList.value.filter(({ status }) => status === 'unread').length
-)
-const unreadMessagesQuantity = computed(
-  () => messages.value.filter(({ isSelf, status }) => !isSelf && status === 'delivered').length
-)
 
-const activeNavItem = computed(() => {
-  const item = MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path)
 
-  if (item) return item
 
-  if (route.path.startsWith(MAIN_PAGE_ROUTES.settings)) {
-    return MAIN_PAGE_NAV_ITEMS.find(({ id }) => id === 'settings') ?? MAIN_PAGE_NAV_ITEMS[0]
-  }
+// const activeNavItem = computed(() => {
+//   const item = MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path)
 
-  return MAIN_PAGE_NAV_ITEMS[0]
-})
+//   if (item) return item
+
+//   if (route.path.startsWith(MAIN_PAGE_ROUTES.settings)) {
+//     return MAIN_PAGE_NAV_ITEMS.find(({ id }) => id === 'settings') ?? MAIN_PAGE_NAV_ITEMS[0]
+//   }
+
+//   return MAIN_PAGE_NAV_ITEMS[0]
+// })
 
 const connectionStatus = computed(() => {
   if (socketStatus.isReconnecting.value) return MAIN_PAGE_I18N.reconnecting
@@ -124,10 +118,7 @@ onBeforeUnmount(() => {
 <template>
   <main class="main-layout" :class="{ 'main-layout--wallpaper-hidden': !settings.showWallpaper }">
     <MainLeftBar
-      :app-name="CLIENT_ENV.appName"
-      :nav-items="MAIN_PAGE_NAV_ITEMS"
       :selected-settings-id="selectedSettingsId"
-      :settings-route-prefix="MAIN_PAGE_ROUTES.settings"
       :unread-info-notifications="unreadInfoNotificationQuantity"
       :unread-messages="unreadMessagesQuantity"
       :wallpaper-style="widgetWallpaperStyle"
@@ -139,7 +130,6 @@ onBeforeUnmount(() => {
         :image-id="userAvatarId"
         :is-logout-loading="isLogoutLoading"
         :logout-label="t(MAIN_PAGE_I18N.logout)"
-        :subtitle="`${t(activeNavItem.label)} · ${t(connectionStatus)}`"
         :title="user.username || CLIENT_ENV.appName"
         :wallpaper-style="widgetWallpaperStyle"
         @logout="logout"

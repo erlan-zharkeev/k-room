@@ -2,6 +2,8 @@ import { APP_LANGUAGE } from 'global-shared'
 
 import type { ScreenBreakpointsType } from 'src/shared/types/breakpoint'
 
+export const CLIENT_ENV = __CLIENT_ENV_DATA__
+
 const BROWSER_LANGUAGE = navigator.language.toLowerCase()
 
 export const CLIENT_LANGUAGE = BROWSER_LANGUAGE.startsWith(APP_LANGUAGE.Ru)
@@ -10,13 +12,9 @@ export const CLIENT_LANGUAGE = BROWSER_LANGUAGE.startsWith(APP_LANGUAGE.Ru)
   ? APP_LANGUAGE.Zh
   : APP_LANGUAGE.En
 
-export const CLIENT_ENV = __CLIENT_ENV_DATA__
-
 export const LOCAL_STORAGE_KEY = {
   LogoutStatus: 'logout-status'
 } as const
-
-export const ROOM_MESSAGES_PAGE_LIMIT = 30
 
 export const SUCCESS_TOAST_LIFE_MS = 2000
 export const ERROR_TOAST_LIFE_MS = 60000

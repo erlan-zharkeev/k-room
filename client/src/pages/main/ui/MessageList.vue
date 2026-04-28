@@ -8,7 +8,7 @@ import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
 import { EMOJI_LIST, type DbMessageType } from 'src/shared/config'
-import { AppEmojiPicker, AppIcon, AppText } from 'src/shared/ui'
+import { AppEmojiPicker, AppText } from 'src/shared/ui'
 
 import {
   MAIN_PAGE_MESSAGE_ACTIONS,
@@ -353,18 +353,14 @@ onBeforeUnmount(() => {
         :language="settings.language"
         @select="addReaction"
       />
-
-      <button
-        v-for="action in MAIN_PAGE_MESSAGE_ACTIONS"
+      <Button v-for="action in MAIN_PAGE_MESSAGE_ACTIONS"
         :key="action.id"
-        class="message-list__context-action"
-        role="menuitem"
-        type="button"
-        @click="handleMessageAction(action.id)"
-      >
-        <AppIcon :name="action.icon" size="xs" />
-        <span>{{ $t(action.label) }}</span>
-      </button>
+        class="message-list__context-action"         @click="handleMessageAction(action.id)"
+        :label="$t(action.label)"
+        :severity="action.severity ?? 'secondary'"
+        :icon="action.icon"
+  ></Button>
+
     </div>
   </div>
 </template>

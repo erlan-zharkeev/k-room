@@ -8,22 +8,12 @@ import { useMedia } from 'src/entities/media-file'
 import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
-import {
-  CLIENT_ENV,
-  MAIN_PAGE_I18N,
-  MAIN_PAGE_LANGUAGE_OPTIONS,
-  MAIN_PAGE_ROUTES,
-  MAIN_PAGE_SETTINGS_ITEMS,
-  MAIN_PAGE_SOUND_ITEMS,
-  MAIN_PAGE_WALLPAPER_ITEMS,
-  getMainPageSettingsPath,
-  type CustomThemeColorType,
-  type SoundType,
-  type ThemeType
-} from 'src/shared/config'
 import { getSystemTheme, useI18n } from 'src/shared/lib'
-import { AppHeader, AppIcon, AppText } from 'src/shared/ui'
+import { AppHeader, AppText } from 'src/shared/ui'
 import { ThemeSettings } from 'src/widgets/theme-settings'
+
+import { SoundType, ThemeType, CustomThemeColorType } from '../../../shared/config'
+import { MAIN_PAGE_SETTINGS_ITEMS, MAIN_PAGE_WALLPAPER_ITEMS, MAIN_PAGE_I18N, getMainPageSettingsPath, MAIN_PAGE_SOUND_ITEMS } from '../../main'
 
 import type { MediaDeviceKindType } from './types'
 
@@ -614,9 +604,6 @@ onBeforeUnmount(() => {
 
     <section class="settings-page__content" :style="widgetWallpaperStyle">
       <header class="settings-page__content-header">
-        <div class="settings-page__content-icon">
-          <AppIcon name="settings" />
-        </div>
         <div>
           <AppHeader
             class="settings-page__content-title"
@@ -638,7 +625,7 @@ onBeforeUnmount(() => {
           <div class="settings-page__account-profile">
             <div class="settings-page__account-avatar">
               <img v-if="accountAvatarUrl" :src="accountAvatarUrl" :alt="user.username" />
-              <AppIcon v-else name="user-stub" size="large" />
+              <!-- <AppIcon v-else name="user-stub" size="large" /> -->
             </div>
             <div>
               <AppText
@@ -843,10 +830,9 @@ onBeforeUnmount(() => {
                 size="small"
                 text
                 type="button"
+                :icon="playingSoundId === item.id ? 'pi pi-stop' : 'pi pi-play'"
                 @click="previewSound(item.id, item.src)"
-              >
-                <AppIcon :name="playingSoundId === item.id ? 'dash' : 'phone-call'" size="xs" />
-              </Button>
+              />
               <label class="settings-page__sound-upload">
                 <span>{{ $t(MAIN_PAGE_I18N.uploadSound) }}</span>
                 <input
@@ -891,7 +877,7 @@ onBeforeUnmount(() => {
               type="button"
               @click="testAudioInputDevice"
             >
-              <AppIcon :name="isTestingAudioInput ? 'cross' : 'thunder'" size="xs" />
+              <!-- <AppIcon :name="isTestingAudioInput ? 'cross' : 'thunder'" size="xs" /> -->
             </Button>
           </div>
           <div v-if="isTestingAudioInput" class="settings-page__audio-level">
@@ -920,7 +906,7 @@ onBeforeUnmount(() => {
               type="button"
               @click="testVideoInputDevice"
             >
-              <AppIcon :name="isTestingVideoInput ? 'cross' : 'video-call'" size="xs" />
+              <!-- <AppIcon :name="isTestingVideoInput ? 'cross' : 'video-call'" size="xs" /> -->
             </Button>
           </div>
           <video
@@ -954,7 +940,7 @@ onBeforeUnmount(() => {
               type="button"
               @click="testAudioOutputDevice"
             >
-              <AppIcon :name="isTestingAudioOutput ? 'cross' : 'thunder'" size="xs" />
+              <!-- <AppIcon :name="isTestingAudioOutput ? 'cross' : 'thunder'" size="xs" /> -->
             </Button>
           </div>
         </label>

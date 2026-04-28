@@ -4,9 +4,8 @@ import zhI18n from 'emoji-picker-element/i18n/zh_CN'
 import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE, type AppLanguageType } from 'global-shared'
+import { Button } from 'primevue'
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
-
-import { AppIcon } from '../AppIcon'
 
 const props = defineProps<{
   expandLabel: string
@@ -89,24 +88,11 @@ watch(() => props.language, mountPicker)
 <template>
   <div class="app-emoji-picker" :class="{ 'app-emoji-picker--expanded': isExpanded }">
     <div class="app-emoji-picker__quick-row">
-      <button
-        v-for="emoji in quickEmojiList"
+      <Button v-for="emoji in quickEmojiList"
+      severity="secondary"     @click="emit('select', emoji)"
         :key="emoji"
-        class="app-emoji-picker__quick-button"
-        type="button"
-        @click="emit('select', emoji)"
-      >
-        {{ emoji }}
-      </button>
-      <button
-        v-if="!isExpanded"
-        :aria-label="expandLabel"
-        class="app-emoji-picker__expand-button"
-        type="button"
-        @click="expandPicker"
-      >
-        <AppIcon name="expand" size="xs" />
-      </button>
+        class="app-emoji-picker__quick-button">{{ emoji }}</Button>
+      <Button v-if="!isExpanded" @click="expandPicker" severity='secondary' icon="pi pi-arrow-up-right-and-arrow-down-left-from-center" size="small" />
     </div>
     <div v-if="isExpanded" ref="pickerRoot" class="app-emoji-picker__full" />
   </div>

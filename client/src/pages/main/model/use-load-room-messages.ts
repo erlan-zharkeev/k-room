@@ -2,7 +2,8 @@ import type { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsTyp
 import { onBeforeUnmount, ref } from 'vue'
 
 import { socket } from 'src/shared/api'
-import { ROOM_MESSAGES_PAGE_LIMIT } from 'src/shared/config'
+
+import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 
 import { useMessage } from './use-message'
 
