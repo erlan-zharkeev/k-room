@@ -41,6 +41,10 @@ h4.app-header {
   font-size: 18px;
 }
 
+h5.app-header {
+  font-size: 16px;
+}
+
 .app-header {
   margin-top: 0;
   margin-bottom: 0;

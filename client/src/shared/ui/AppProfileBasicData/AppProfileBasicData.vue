@@ -6,7 +6,6 @@ import { computed, ref, watch } from 'vue'
 import { db } from 'src/shared/lib'
 
 import { AppHeader } from '../AppHeader'
-import { AppText } from '../AppText'
 
 import { APP_PROFILE_BASIC_DATA_DEFAULT_PROPS } from './constants'
 import type { IAppProfileBasicDataProps } from './types'
@@ -23,6 +22,7 @@ const clearLiveImageUrl = () => {
   }
 }
 
+// TODO Отсмотреть потом
 watch(
   () => props.imageId,
   (imageId, _previous, onCleanup) => {
@@ -52,12 +52,10 @@ watch(
 
 <template>
   <div class="app-profile-basic-data">
-    <Avatar class="app-profile-basic-data__avatar" shape='square' :image="imageSrc" :alt="props.imageAlt ?? props.title" />
+    <Avatar class="app-profile-basic-data__avatar" shape='square' size='large' :image="imageSrc" :alt="props.imageAlt ?? props.title" />
     <div class="app-profile-basic-data__content">
-      <AppHeader class="app-profile-basic-data__title" tag="h4" truncate :text="props.title" />
-      <slot name="description">
-        <AppText class="app-profile-basic-data__label" size='small' truncate />
-      </slot>
+      <AppHeader class="app-profile-basic-data__title" tag="h5" truncate :text="props.title" />
+      <slot name="description" />
     </div>
   </div>
 </template>
@@ -66,13 +64,15 @@ watch(
 .app-profile-basic-data {
   display: flex;
   gap: 10px;
-  align-items: center;
+  height: 48px;
 }
 
-/* .app-profile-basic-data__content {
-  display: grid;
-  min-width: 0;
-} */
+.app-profile-basic-data__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 1px;
+}
 
 .app-profile-basic-data__avatar {
   overflow: hidden;
