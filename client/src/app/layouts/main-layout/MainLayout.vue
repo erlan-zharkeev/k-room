@@ -40,10 +40,7 @@ const wallpaperStyle = computed(() => {
   display: grid;
   grid-template-columns: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
-
   height: 100dvh;
-
-  background: var(--p-app-main-bg);
 }
 
 .main-layout__workspace {

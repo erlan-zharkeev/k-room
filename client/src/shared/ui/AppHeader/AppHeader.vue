@@ -12,7 +12,7 @@ const color = computed(() => props.color ?? (props.accent ? 'accent-color' : und
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-header',
-    modifiers: [color.value, props.size, props.bold && 'bold']
+    modifiers: [color.value, props.size, props.bold && 'bold', props.truncate && 'truncate']
   })
 )
 </script>
@@ -65,6 +65,12 @@ h4.app-header {
 
 .app-header--bold {
   font-weight: bold;
+}
+
+.app-header--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .app-header--semi-contrast-color {

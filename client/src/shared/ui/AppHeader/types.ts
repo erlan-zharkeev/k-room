@@ -11,4 +11,5 @@ export interface IAppHeaderProps {
   bold?: boolean
   color?: AppHeaderColorType
   size?: AppHeaderSizeType
+  truncate?: boolean
 }

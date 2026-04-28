@@ -14,7 +14,11 @@ const { isLogoutLoading, logout } = useLogout()
 
 <template>
   <header class="main-top-bar">
-    <AppProfileBasicData :image-alt="user.username" :image-id="avatarId" :title="user.username" />
+    <AppProfileBasicData :image-alt="user.username" :image-id="avatarId" :title="user.username">
+      <template #description>
+        <!--  -->
+      </template>
+    </AppProfileBasicData>
     <div class="main-top-bar__actions">
       <Button :aria-label="t(MAIN_PAGE_I18N.logout)" :loading="isLogoutLoading" rounded size="large" text icon="pi pi-sign-out" @click="logout" />
     </div>
