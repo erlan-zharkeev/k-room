@@ -78,6 +78,11 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
 
   margin-block: auto;
 
+  .p-overlaybadge .p-badge {
+    transform: translate(15%, -50%);
+    scale: .9;
+  }
+
   .nav-button:not(:disabled):hover {
     background: transparent;
   }
