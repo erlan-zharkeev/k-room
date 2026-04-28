@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { isString } from 'global-shared';
-import { OverlayBadge, Button } from 'primevue';
-import { computed, FunctionalComponent, h } from 'vue';
-import { useRoute } from 'vue-router';
+import { isString } from 'global-shared'
+import { OverlayBadge, Button } from 'primevue'
+import { computed, FunctionalComponent, h } from 'vue'
+import { useRoute } from 'vue-router'
 
-import { useChatRoom } from 'src/entities/chat-room';
-import { useInfoNotification } from 'src/entities/info-notification';
+import { useChatRoom } from 'src/entities/chat-room'
+import { useInfoNotification } from 'src/entities/info-notification'
 
-import { MAIN_PAGE_ROUTES, MAIN_PAGE_NAV_ITEMS } from '../config/constants';
+import { MAIN_PAGE_ROUTES, MAIN_PAGE_NAV_ITEMS } from '../config/constants'
+
+const props = defineProps<{ footer?: boolean }>()
 
 const route = useRoute()
 const { unreadInfoNotificationQuantity } = useInfoNotification()
@@ -31,7 +33,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
 </script>
 
 <template>
-  <nav class="main-nav-bar">
+  <nav class="main-nav-bar" :class="{ 'main-nav-bar--footer': props.footer }">
     <RouterLink
       v-for="item in MAIN_PAGE_NAV_ITEMS"
       :key="item.id"
@@ -83,5 +85,11 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
   .nav-button--active.nav-button:not(:disabled):hover {
     background: var(--p-primary-color);
   }
+}
+
+.main-nav-bar--footer {
+  flex-direction: row;
+  justify-content: center;
+  margin-block: 0;
 }
 </style>
