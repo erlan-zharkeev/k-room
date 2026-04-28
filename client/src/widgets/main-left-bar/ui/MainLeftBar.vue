@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isString } from 'global-shared'
 import { Button, OverlayBadge } from 'primevue'
-import { computed } from 'vue'
+import { computed, h, type FunctionalComponent } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -18,11 +18,17 @@ const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
   return isString(settingsId) && settingsId ? settingsId : 'account'
 })
+const navBtnClass = (id: string, isExactActive: boolean) => ({
+  'main-left-bar__nav-button--active': isExactActive || (id === 'settings' && route.path.startsWith(MAIN_PAGE_ROUTES.settings))
+})
 
-const getBadgeValue = (id: string): number | undefined => {
+const getBadgeValue = (id: string) => {
   if (id === 'settings') return unreadInfoNotificationQuantity.value || undefined
   if (id === 'chat-rooms') return unreadMessagesQuantity.value || undefined
 }
+
+const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots }) =>
+  value ? h(OverlayBadge, { value, severity: 'danger' }, slots) : slots.default?.()
 </script>
 
 <template>
@@ -37,21 +43,18 @@ const getBadgeValue = (id: string): number | undefined => {
         custom
         v-slot="{ href, navigate, isExactActive }"
       >
-        <OverlayBadge :value="getBadgeValue(item.id)" severity="danger">
+        <NavBadge :value="getBadgeValue(item.id)">
           <Button
             :href="href"
             :aria-label="$t(item.label)"
-            :class="{
-              'main-left-bar__nav-button--active':
-                isExactActive || (item.id === 'settings' && route.path.startsWith(MAIN_PAGE_ROUTES.settings))
-            }"
+            :class="navBtnClass(item.id, isExactActive)"
             as="a"
             text
-            size='large'
+            size="large"
             :icon="item.icon"
             @click="navigate"
           />
-        </OverlayBadge>
+        </NavBadge>
       </RouterLink>
     </nav>
   </aside>
