@@ -5,7 +5,7 @@ import { E2E_ENV, E2E_TIMEOUTS } from 'e2e/config'
 const SERVER_COMMAND =
   'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && pnpm --dir server run start\''
 const CLIENT_COMMAND =
-  'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && E2E=true pnpm --dir client run serve -- --strictPort\''
+  'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && pnpm --dir client run serve -- --strictPort --mode test\''
 
 export default defineConfig({
   testDir: './e2e',

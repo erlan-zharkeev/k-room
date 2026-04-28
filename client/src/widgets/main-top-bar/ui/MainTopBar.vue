@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from 'primevue'
 
-import { AppIcon, AppProfileBasicData } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import type { IMainTopBarProps } from './types'
 
@@ -19,9 +19,7 @@ const emit = defineEmits<{
     </AppProfileBasicData>
 
     <div class="main-top-bar__actions">
-      <Button :aria-label="logoutLabel" :loading="isLogoutLoading" rounded size="small" text @click="emit('logout')">
-        <AppIcon name="exit" />
-      </Button>
+      <Button :aria-label="logoutLabel" :loading="isLogoutLoading" rounded size="large" text @click="emit('logout')" icon="pi pi-sign-out" />
     </div>
   </header>
 </template>

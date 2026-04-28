@@ -11,12 +11,10 @@ import { useInfoNotification } from 'src/entities/info-notification'
 import { useSettings } from 'src/entities/setting'
 import { socket } from 'src/shared/api'
 import { formatLocalizedDate, formatLocalizedRelativeTime, getSystemTheme, useI18n } from 'src/shared/lib'
-import { AppEmojiPicker, AppHeader, AppIcon, AppText } from 'src/shared/ui'
+import { AppEmojiPicker, AppHeader, AppText } from 'src/shared/ui'
 
 import {
   MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS,
-  MAIN_PAGE_NAV_ITEMS,
-  MAIN_PAGE_ROUTES,
   MAIN_PAGE_WALLPAPER_ITEMS
 } from '../config/constants'
 import { MAIN_PAGE_I18N } from '../config/i18n'
@@ -52,18 +50,18 @@ const systemTheme = ref(getSystemTheme())
 let contactSearchTimeoutId: ReturnType<typeof setTimeout> | undefined
 const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
 
-const activeNavItem = computed(() => {
-  const item = MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path)
+// const activeNavItem = computed(() => {
+//   const item = MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path)
 
-  if (item) return item
+//   if (item) return item
 
-  if (route.path.startsWith(MAIN_PAGE_ROUTES.settings)) {
-    return MAIN_PAGE_NAV_ITEMS.find(({ id }) => id === 'settings') ?? MAIN_PAGE_NAV_ITEMS[0]
-  }
+//   if (route.path.startsWith(MAIN_PAGE_ROUTES.settings)) {
+//     return MAIN_PAGE_NAV_ITEMS.find(({ id }) => id === 'settings') ?? MAIN_PAGE_NAV_ITEMS[0]
+//   }
 
-  return MAIN_PAGE_NAV_ITEMS[0]
-})
-const activeNavId = computed(() => activeNavItem.value.id)
+//   return MAIN_PAGE_NAV_ITEMS[0]
+// })
+// const activeNavId = computed(() => activeNavItem.value.id)
 const isChatContentVisible = computed(() => ['chatRooms', 'contacts', 'calls'].includes(activeNavId.value))
 const activeRoom = computed(() => chatRooms.value.find(({ id }) => id === selectedRoomId.value))
 const activeInfoNotification = computed(() =>
@@ -247,7 +245,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="main-workspace-page" :class="{ 'main-workspace-page--default-wallpaper': isDefaultWallpaperVisible }">
-    <aside class="main-page__side-panel" :style="widgetWallpaperStyle">
+    <!-- <aside class="main-page__side-panel" :style="widgetWallpaperStyle">
       <div class="main-page__panel-header">
         <AppHeader
           class="main-page__panel-title"
@@ -262,10 +260,9 @@ onBeforeUnmount(() => {
           rounded
           size="small"
           text
+          icon="pi pi-arrow-down"
           @click="searchContacts(nextSearchedContactsOffset)"
-        >
-          <AppIcon name="arrow-down" />
-        </Button>
+        />
       </div>
 
       <InputText
@@ -349,9 +346,6 @@ onBeforeUnmount(() => {
     <section class="main-page__content" :style="widgetWallpaperStyle">
       <template v-if="isChatContentVisible">
         <header class="main-page__content-header">
-          <div class="main-page__content-icon">
-            <AppIcon name="chat" />
-          </div>
           <div>
             <AppHeader
               class="main-page__content-title"
@@ -387,18 +381,15 @@ onBeforeUnmount(() => {
           @click.stop
           @submit="sendMessage(activeRoom.id)"
         >
-          <Button :aria-label="$t(MAIN_PAGE_I18N.uploadAttachment)" size="small" type="button">
-            <AppIcon name="paper-clip" />
-          </Button>
+          <Button :aria-label="$t(MAIN_PAGE_I18N.uploadAttachment)" size="small" type="button" icon="pi pi-paperclip" />
           <Button
             :aria-label="$t(MAIN_PAGE_I18N.openEmojiPicker)"
             class="main-page__emoji-button"
             size="small"
             type="button"
+            icon="pi pi-face-smile"
             @click="toggleComposerEmojiPicker"
-          >
-            <AppIcon name="emoji" />
-          </Button>
+          />
           <InputText
             v-model="messageText"
             autocomplete="off"
@@ -406,9 +397,7 @@ onBeforeUnmount(() => {
             :placeholder="$t(MAIN_PAGE_I18N.message)"
             size="small"
           />
-          <Button :aria-label="$t(MAIN_PAGE_I18N.send)" size="small" type="submit">
-            <AppIcon name="send" />
-          </Button>
+          <Button :aria-label="$t(MAIN_PAGE_I18N.send)" size="small" type="submit" icon="pi pi-send" />
           <div v-if="isComposerEmojiPickerOpen" class="main-page__emoji-popover" @click.stop>
             <AppEmojiPicker
               :expand-label="$t(MAIN_PAGE_I18N.expandEmojiPicker)"
@@ -421,9 +410,6 @@ onBeforeUnmount(() => {
 
       <template v-if="activeNavId === 'infoNotifications'">
         <header class="main-page__content-header">
-          <div class="main-page__content-icon">
-            <AppIcon name="notification" />
-          </div>
           <div>
             <AppHeader
               class="main-page__content-title"
@@ -461,7 +447,7 @@ onBeforeUnmount(() => {
           />
         </article>
       </template>
-    </section>
+    </section> -->
   </div>
 </template>
 

@@ -26,10 +26,10 @@ const recoverPassword = async ({
   fromLogin?: boolean
 }) => {
   if (fromLogin) {
-    await page.goto('/login')
-    await page.getByRole('link', { name: 'Forgot password', exact: true }).click()
+    await page.goto('/authorize/login')
+    await page.getByRole('link', { name: 'Forgot password?', exact: true }).click()
   } else {
-    await page.goto(`/password-recovery?user-email=${encodeURIComponent(email)}`)
+    await page.goto(`/page/password-recovery?user-email=${encodeURIComponent(email)}`)
   }
 
   await expect(page).toHaveURL(/\/password-recovery/)
@@ -55,14 +55,14 @@ const recoverPassword = async ({
 
   await expect(page).toHaveURL(/\/create-new-password\?password-recovery=/)
 
-  const passwordInput = page.getByPlaceholder('Password')
+  const passwordInput = page.getByPlaceholder('Password', { exact: true })
   const confirmPasswordInput = page.getByPlaceholder('Confirm password')
 
   await passwordInput.fill(nextPassword)
   await confirmPasswordInput.fill(nextPassword)
   await page.getByRole('button', { name: 'Change password', exact: true }).click()
 
-  await expect(page.getByText('Password changed successfully!')).toBeVisible()
+  await expect(page.getByText('Password changed successfully')).toBeVisible()
 }
 
 test.describe('password recovery', () => {
@@ -77,13 +77,13 @@ test.describe('password recovery', () => {
     })
 
     await page.getByRole('button', { name: 'Go to login page', exact: true }).click()
-    await expect(page).toHaveURL(/\/login$/)
+    await expect(page).toHaveURL(/\/authorize\/login$/)
 
     await page.getByPlaceholder('Enter your email').fill(email)
     await page.getByPlaceholder('Enter your password').fill(nextPassword)
     await page.getByRole('button', { name: 'Login', exact: true }).click()
 
-    await expect(page).toHaveURL(/\/app$/)
+    await expect(page).toHaveURL(/\/app/)
 
     await recoverPassword({
       page,

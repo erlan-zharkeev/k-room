@@ -38,7 +38,14 @@ const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.jso
 
 const isDev = stage !== 'production'
 const clientUrl = isDev ? `${APP_HOST}:${CLIENT_PORT}` : APP_HOST
-const devOrigins = [clientUrl, APP_HOST, `http://127.0.0.1:${CLIENT_PORT}`, `http://localhost:${CLIENT_PORT}`]
+const devOrigins = [
+  clientUrl,
+  APP_HOST,
+  `http://127.0.0.1:${CLIENT_PORT}`,
+  `http://localhost:${CLIENT_PORT}`,
+  `https://127.0.0.1:${CLIENT_PORT}`,
+  `https://localhost:${CLIENT_PORT}`
+]
 
 export const SERVER_ENV = {
   stage,

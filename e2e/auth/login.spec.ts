@@ -4,7 +4,7 @@ import { LOGIN_FIXTURE_USER } from './fixtures'
 
 test.describe('login', () => {
   test('logs in with an existing fixture user', async ({ page }) => {
-    await page.goto('/login')
+    await page.goto('/authorize/login')
 
     const emailInput = page.getByPlaceholder('Enter your email')
     const passwordInput = page.getByPlaceholder('Enter your password')
@@ -24,7 +24,7 @@ test.describe('login', () => {
     await expect(submitButton).toBeEnabled()
     await submitButton.click()
 
-    await page.waitForURL('**/app')
-    await expect(page).toHaveURL(/\/app$/)
+    await page.waitForURL('**/app/**')
+    await expect(page).toHaveURL(/\/app/)
   })
 })

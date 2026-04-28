@@ -6,7 +6,7 @@ test.describe('registration', () => {
   test('registers a new user and redirects to wait email confirmation page', async ({ page }) => {
     const user = buildRegistrationFixtureUser()
 
-    await page.goto('/registration')
+    await page.goto('/authorize/registration')
 
     const usernameInput = page.getByPlaceholder('Username')
     const emailInput = page.getByPlaceholder('Email')
@@ -14,7 +14,7 @@ test.describe('registration', () => {
     const policySwitch = page.locator('input[name="policy"]')
     const submitButton = page.getByRole('button', { name: 'Register', exact: true })
 
-    await expect(page.getByRole('link', { name: 'Register' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Registration' })).toBeVisible()
     await expect(submitButton).toBeVisible()
 
     await usernameInput.fill(user.username)

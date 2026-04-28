@@ -1,7 +1,5 @@
 export { default as MainWorkspacePage } from './ui/MainWorkspacePage.vue'
 export {
-  MAIN_PAGE_NAV_ITEMS,
-  MAIN_PAGE_ROUTES,
   MAIN_PAGE_LANGUAGE_OPTIONS,
   MAIN_PAGE_SETTINGS_ITEMS,
   MAIN_PAGE_SOUND_ITEMS,

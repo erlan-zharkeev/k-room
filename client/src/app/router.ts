@@ -7,12 +7,14 @@ import { CREATE_NEW_PASSWORD_PAGE_LAYOUT_PROPS, CreateNewPasswordPage } from 'sr
 import { EMAIL_CONFIRMATION_PAGE_LAYOUT_PROPS, EmailConfirmationPage } from 'src/pages/email-confirmation'
 import { ERROR_PAGE_LAYOUT_PROPS, ErrorPage } from 'src/pages/error'
 import { LoginPage } from 'src/pages/login'
-import { MAIN_PAGE_ROUTES, MainWorkspacePage, getMainPageSettingsPath } from 'src/pages/main'
+import { MainWorkspacePage, getMainPageSettingsPath } from 'src/pages/main'
 import { PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS, PasswordRecoveryPage } from 'src/pages/password-recovery'
 import { PRIVACY_POLICY_PAGE_LAYOUT_PROPS, PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { SettingsPage } from 'src/pages/settings'
 import { WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS, WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
+
+import { MAIN_PAGE_ROUTES } from '../widgets/main-left-bar/config/constants'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import MainLayout from './layouts/main-layout/MainLayout.vue'

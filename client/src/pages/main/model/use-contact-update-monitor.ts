@@ -14,7 +14,7 @@ import { onBeforeUnmount } from 'vue'
 import { getRequiredContactSystemData, useContact, useUpdateContactData } from 'src/entities/contact'
 import { socket } from 'src/shared/api'
 
-import { CONTACT_ONLINE_CHECK_INTERVAL_MS, CONTACT_ONLINE_STATUS_TTL_MS } from '../config/contacts'
+import { CONTACT_ONLINE_STATUS_TTL_MS, CONTACT_ONLINE_CHECK_INTERVAL_MS } from '../config/constants'
 
 export const useContactUpdateMonitor = () => {
   const { bulkPut, contacts, get, mergeMany, put, remove } = useContact()
