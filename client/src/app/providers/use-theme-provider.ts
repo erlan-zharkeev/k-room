@@ -3,12 +3,15 @@ import { onBeforeUnmount, watch } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { applyThemePreset } from 'src/shared/lib'
 
+const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
+
 export const useThemeProvider = () => {
-  const { settings } = useSettings()
-  const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
+  const { settings, shallowUpdate } = useSettings()
 
   const updateSystemTheme = () => {
-    applyThemePreset('system', settings.value.customTheme)
+    const systemTheme = systemThemeQuery?.matches ? 'light' : 'dark'
+    shallowUpdate({ systemTheme })
+    applyThemePreset(systemTheme)
   }
 
   watch(
@@ -24,17 +27,16 @@ export const useThemeProvider = () => {
         return
       }
 
-      applyThemePreset(theme, settings.value.customTheme)
+      applyThemePreset(theme)
     },
     { immediate: true }
   )
 
   watch(
     () => settings.value.customTheme,
-    (customTheme) => {
+    () => {
       if (settings.value.theme !== 'custom') return
-
-      applyThemePreset('custom', customTheme)
+      applyThemePreset('custom')
     },
     { deep: true }
   )

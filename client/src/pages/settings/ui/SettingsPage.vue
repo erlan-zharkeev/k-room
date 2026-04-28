@@ -8,14 +8,16 @@ import { useMedia } from 'src/entities/media-file'
 import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
-import { getSystemTheme, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 import { AppHeader, AppText } from 'src/shared/ui'
+import { MAIN_PAGE_ROUTES } from 'src/widgets/main-left-bar/config/constants'
 import { ThemeSettings } from 'src/widgets/theme-settings'
 
 import { SoundType, ThemeType, CustomThemeColorType } from '../../../shared/config'
-import { MAIN_PAGE_SETTINGS_ITEMS, MAIN_PAGE_WALLPAPER_ITEMS, MAIN_PAGE_I18N, getMainPageSettingsPath, MAIN_PAGE_SOUND_ITEMS } from '../../main'
+import { MAIN_PAGE_SETTINGS_ITEMS, MAIN_PAGE_LANGUAGE_OPTIONS, MAIN_PAGE_WALLPAPER_ITEMS, MAIN_PAGE_I18N, getMainPageSettingsPath, MAIN_PAGE_SOUND_ITEMS } from '../../main'
 
 import type { MediaDeviceKindType } from './types'
+
 
 const route = useRoute()
 const router = useRouter()
@@ -23,7 +25,7 @@ const { t } = useI18n()
 const { media, put: putMedia, remove: removeMedia } = useMedia()
 const { user, shallowUpdate: updateUserData } = useUser()
 const { doRequest } = useApi()
-const { settings, setByPath, shallowUpdate } = useSettings()
+const { settings, selectedWallpaper, setByPath, shallowUpdate } = useSettings()
 
 const selectedSettingsId = ref('account')
 const accountUsername = ref('')
@@ -42,7 +44,6 @@ const isTestingAudioInput = ref(false)
 const isTestingVideoInput = ref(false)
 const isTestingAudioOutput = ref(false)
 const videoPreviewElement = ref<HTMLVideoElement>()
-const systemTheme = ref(getSystemTheme())
 let accountAvatarPreviewObjectUrl: string | undefined
 let audioInputStream: MediaStream | undefined
 let audioInputContext: AudioContext | undefined
@@ -50,7 +51,6 @@ let audioInputAnimationFrame: number | undefined
 let videoInputStream: MediaStream | undefined
 let audioOutputTest: HTMLAudioElement | undefined
 let previewAudio: HTMLAudioElement | undefined
-const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
 
 const selectedSettingsItem = computed(
   () => MAIN_PAGE_SETTINGS_ITEMS.find((item) => item.id === selectedSettingsId.value) ?? MAIN_PAGE_SETTINGS_ITEMS[0]
@@ -67,16 +67,6 @@ const isPasswordSubmitDisabled = computed(
   () => !currentPassword.value || !nextPassword.value || !repeatPassword.value || passwordMismatch.value
 )
 
-const defaultWallpaper = computed(() => {
-  const item = MAIN_PAGE_WALLPAPER_ITEMS[0]
-  const theme = settings.value.theme === 'system' ? systemTheme.value : settings.value.theme
-
-  return theme === 'light' ? item.lightSrc : item.darkSrc
-})
-
-const selectedWallpaper = computed(() =>
-  settings.value.wallpaper === 'custom' ? settings.value.customWallpaperDataUrl : defaultWallpaper.value
-)
 
 const isDefaultWallpaperVisible = computed(
   () => settings.value.showWallpaper && settings.value.wallpaper === 'default' && Boolean(selectedWallpaper.value)
@@ -517,10 +507,6 @@ const handleMediaDeviceChange = () => {
   refreshMediaDevices()
 }
 
-const updateSystemTheme = () => {
-  systemTheme.value = getSystemTheme()
-}
-
 watch(
   userAvatarRecord,
   (record, _previous, onCleanup) => {
@@ -550,10 +536,8 @@ watch(
 watch(() => route.params.settingsId, syncSelectedSettingsWithRoute)
 
 onMounted(() => {
-  updateSystemTheme()
   syncSelectedSettingsWithRoute()
   refreshMediaDevices()
-  systemThemeQuery?.addEventListener('change', updateSystemTheme)
 
   if (navigator.mediaDevices?.addEventListener) {
     navigator.mediaDevices.addEventListener('devicechange', handleMediaDeviceChange)
@@ -561,7 +545,6 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  systemThemeQuery?.removeEventListener('change', updateSystemTheme)
   clearAccountAvatarPreview()
   stopPreviewSound()
   stopAudioInputTest()
@@ -612,11 +595,11 @@ onBeforeUnmount(() => {
             color="contrast-color"
             :text="$t(selectedSettingsItem.label)"
           />
-          <AppText
+          <!-- <AppText
             class="settings-page__content-subtitle"
             tag="p"
             :text="`${CLIENT_ENV.appName} ${CLIENT_ENV.appVersion}`"
-          />
+          /> -->
         </div>
       </header>
 
@@ -632,7 +615,7 @@ onBeforeUnmount(() => {
                 class="settings-page__account-name"
                 bold
                 color="contrast-color"
-                :text="user.username || CLIENT_ENV.appName"
+                :text="user.username"
               />
               <AppText class="settings-page__account-id" :text="`#${user.id}`" />
             </div>
