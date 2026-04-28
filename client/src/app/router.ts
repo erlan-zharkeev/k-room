@@ -11,7 +11,7 @@ import { MainWorkspacePage, getMainPageSettingsPath } from 'src/pages/main'
 import { PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS, PasswordRecoveryPage } from 'src/pages/password-recovery'
 import { PRIVACY_POLICY_PAGE_LAYOUT_PROPS, PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
-import { SettingsPage } from 'src/pages/settings'
+import { SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS, WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
 
 import { MAIN_PAGE_ROUTES } from '../widgets/main-nav-bar/config/constants'
@@ -105,27 +105,30 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'chat-rooms',
-        component: MainWorkspacePage
+        components: { content: MainWorkspacePage }
       },
       {
         path: 'calls',
-        component: MainWorkspacePage
+        components: { content: MainWorkspacePage }
       },
       {
         path: 'contacts',
-        component: MainWorkspacePage
+        components: { content: MainWorkspacePage }
       },
       {
         path: 'info-notifications',
-        component: MainWorkspacePage
+        components: { content: MainWorkspacePage }
       },
       {
         path: 'settings',
-        redirect: getMainPageSettingsPath('account')
+        redirect: `${MAIN_PAGE_ROUTES.settings}/account`
       },
       {
         path: 'settings/:settingsId',
-        component: SettingsPage
+        components: {
+          'content-navigation': SettingsNavigationPage,
+          content: SettingsContentPage
+        }
       }
     ]
   },
