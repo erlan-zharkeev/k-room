@@ -14,7 +14,7 @@ import { RegistrationPage } from 'src/pages/registration'
 import { SettingsPage } from 'src/pages/settings'
 import { WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS, WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
 
-import { MAIN_PAGE_ROUTES } from '../widgets/main-left-bar/config/constants'
+import { MAIN_PAGE_ROUTES } from '../widgets/main-nav-bar/config/constants'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import MainLayout from './layouts/main-layout/MainLayout.vue'
