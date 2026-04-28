@@ -72,6 +72,9 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
   .p-overlaybadge .p-badge {
     transform: translate(15%, -50%);
     scale: .9;
+    @include screen-until('portrait-tablet') {
+      transform: translate(30%, -20%);
+    }
   }
 
   .nav-button--active {
@@ -91,5 +94,11 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
   flex-direction: row;
   justify-content: center;
   margin-block: 0;
+}
+
+#app {
+  .nav-button--active.nav-button:not(:disabled):hover {
+    background: var(--p-primary-color);
+  }
 }
 </style>

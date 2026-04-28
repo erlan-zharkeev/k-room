@@ -31,7 +31,9 @@ const wallpaperStyle = computed(() => {
 
     <section class="main-layout__workspace">
       <MainTopBar class="widget" />
-      <RouterView />
+      <div class="main-layout__content">
+        <RouterView />
+      </div>
       <MainMobileFooter v-if="isMobile" class="widget" />
     </section>
   </main>
@@ -44,7 +46,7 @@ const wallpaperStyle = computed(() => {
   display: grid;
   grid-template-columns: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
-  height: 100dvh;
+  height: 100%;
 
   @include screen-until('portrait-tablet') {
     grid-template-columns: minmax(0, 1fr);
@@ -59,6 +61,11 @@ const wallpaperStyle = computed(() => {
   @include screen-until('portrait-tablet') {
     grid-template-rows: var(--bar-thickness) minmax(0, 1fr) var(--bar-thickness);
   }
+}
+
+.main-layout__content {
+  overflow: auto;
+  min-height: 0;
 }
 
 .widget {
