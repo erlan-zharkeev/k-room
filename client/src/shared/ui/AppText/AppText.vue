@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-text',
-    modifiers: [props.color, props.size, props.align, props.bold && 'bold']
+    modifiers: [props.color, props.size, props.align, props.bold && 'bold', props.truncate && 'truncate']
   })
 )
 </script>
@@ -68,6 +68,12 @@ p.app-text--large {
 
 .app-text--bold {
   font-weight: 700;
+}
+
+.app-text--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .app-text--left {

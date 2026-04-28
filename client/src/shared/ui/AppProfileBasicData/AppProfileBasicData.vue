@@ -52,11 +52,11 @@ watch(
 
 <template>
   <div class="app-profile-basic-data">
-    <Avatar size="normal" shape="circle" :image="imageSrc" :alt="props.imageAlt ?? props.title" />
-    <div class="app-profile-basic-data__text">
-      <AppHeader class="app-profile-basic-data__title" tag="h4" :text="props.title" />
+    <Avatar class="app-profile-basic-data__avatar" shape='square' :image="imageSrc" :alt="props.imageAlt ?? props.title" />
+    <div class="app-profile-basic-data__content">
+      <AppHeader class="app-profile-basic-data__title" tag="h4" truncate :text="props.title" />
       <slot name="description">
-        <AppText class="app-profile-basic-data__label" size="large" />
+        <AppText class="app-profile-basic-data__label" size='small' truncate />
       </slot>
     </div>
   </div>
@@ -67,31 +67,15 @@ watch(
   display: flex;
   gap: 10px;
   align-items: center;
-  min-width: 0;
 }
 
-.app-profile-basic-data__avatar {
-  display: block;
-  flex: 0 0 auto;
-
-  width: 34px;
-  height: 34px;
-  padding: 5px;
-  border-radius: 12px;
-
-  object-fit: cover;
-  background: var(--p-app-widget-background, var(--p-content-background));
-}
-
-.app-profile-basic-data__text {
+/* .app-profile-basic-data__content {
   display: grid;
   min-width: 0;
-}
+} */
 
-.app-profile-basic-data__title,
-.app-profile-basic-data__label {
+.app-profile-basic-data__avatar {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  border-radius: 8px;
 }
 </style>
