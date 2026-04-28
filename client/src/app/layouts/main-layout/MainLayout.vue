@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { RouterView } from 'vue-router'
+import { computed, watch } from 'vue'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 
 import { useSettings } from 'src/entities/setting'
 import { useMainMonitors } from 'src/pages/main'
@@ -11,14 +11,28 @@ import { MainTopBar } from 'src/widgets/main-top-bar'
 
 const { isMobile } = useScreen()
 const { settings, selectedWallpaper } = useSettings()
+const route = useRoute()
+const router = useRouter()
 
 useMainMonitors()
+
+watch(isMobile, (mobile) => {
+  if (mobile) {
+    router.replace({ query: { ...route.query, view: 'content-navigation' } })
+  } else {
+    const { view: _, ...rest } = route.query
+    router.replace({ query: rest })
+  }
+}, { immediate: true })
 
 const wallpaperStyle = computed(() => {
   if (!settings.value.showWallpaper || !selectedWallpaper.value) return undefined
 
   return { '--main-layout-wallpaper': `url(${selectedWallpaper.value})` }
 })
+
+const showNavigation = computed(() => !isMobile.value || route.query.view === 'content-navigation')
+const showContent = computed(() => !isMobile.value || route.query.view !== 'content-navigation')
 </script>
 
 <template>
@@ -32,8 +46,14 @@ const wallpaperStyle = computed(() => {
     <section class="main-layout__workspace">
       <MainTopBar class="widget" />
       <div class="main-layout__content">
-        <RouterView />
+        <div v-if="showNavigation" class="main-layout__navigation-widget widget">
+          <RouterView name="content-navigation" />
+        </div>
+        <div v-if="showContent" class="main-layout__content-widget widget">
+          <RouterView name="content" />
+        </div>
       </div>
+
       <MainMobileFooter v-if="isMobile" class="widget" />
     </section>
   </main>
@@ -65,8 +85,17 @@ const wallpaperStyle = computed(() => {
 
 .main-layout__content {
   overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr 2.1fr;
+  gap: 12px;
+
   min-height: 0;
+
+  @include screen-until('portrait-tablet') {
+    grid-template-columns: 1fr;
+  }
 }
+
 
 .widget {
   isolation: isolate;
