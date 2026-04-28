@@ -18,6 +18,7 @@ const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
   return isString(settingsId) && settingsId ? settingsId : 'account'
 })
+
 const navBtnClass = (id: string, isExactActive: boolean) => ({
   'main-left-bar__nav-button--active': isExactActive || (id === 'settings' && route.path.startsWith(MAIN_PAGE_ROUTES.settings))
 })

@@ -26,6 +26,7 @@ export interface IUserSetting {
   language: AppLanguageType
   showNotification: boolean
   theme: ThemeType
+  systemTheme: Extract<ThemeType, 'dark' | 'light'>
   customTheme: ICustomThemeSetting
   showTooltips: boolean
   soundOn: boolean

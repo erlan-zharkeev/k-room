@@ -10,13 +10,10 @@ import { useContact } from 'src/entities/contact'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { useSettings } from 'src/entities/setting'
 import { socket } from 'src/shared/api'
-import { formatLocalizedDate, formatLocalizedRelativeTime, getSystemTheme, useI18n } from 'src/shared/lib'
+import { formatLocalizedDate, formatLocalizedRelativeTime, useI18n } from 'src/shared/lib'
 import { AppEmojiPicker, AppHeader, AppText } from 'src/shared/ui'
 
-import {
-  MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS,
-  MAIN_PAGE_WALLPAPER_ITEMS
-} from '../config/constants'
+import { MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS } from '../config/constants'
 import { MAIN_PAGE_I18N } from '../config/i18n'
 import { useCall } from '../model/use-call'
 import { useLoadRoomMessages } from '../model/use-load-room-messages'
@@ -32,7 +29,7 @@ const { contacts } = useContact()
 const { infoNotificationList } = useInfoNotification()
 const { calls } = useCall()
 const { messages, getById } = useMessage()
-const { settings } = useSettings()
+const { selectedWallpaper, settings } = useSettings()
 const { hasMoreMessages, initializeLoadRoomMessages, isLoading, loadRoomMessages, resetRoomMessagesPagination } =
   useLoadRoomMessages()
 const { messageText, sendMessage } = useSendMessage()
@@ -46,9 +43,7 @@ const hasMoreSearchedContacts = ref(false)
 const nextSearchedContactsOffset = ref<number | undefined>()
 const composerElement = ref<HTMLElement | { $el?: HTMLElement } | null>(null)
 const isComposerEmojiPickerOpen = ref(false)
-const systemTheme = ref(getSystemTheme())
 let contactSearchTimeoutId: ReturnType<typeof setTimeout> | undefined
-const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
 
 // const activeNavItem = computed(() => {
 //   const item = MAIN_PAGE_NAV_ITEMS.find(({ path }) => path === route.path)
@@ -70,19 +65,7 @@ const activeInfoNotification = computed(() =>
 const activeRoomMessages = computed(() => (activeRoom.value?.messages ?? []).flatMap((id) => getById(id) ?? []))
 const isContactsSearchMode = computed(() => Boolean(contactSearchQuery.value.trim()))
 const shownContacts = computed(() => (isContactsSearchMode.value ? searchedContacts.value : contacts.value))
-const defaultWallpaper = computed(() => {
-  const item = MAIN_PAGE_WALLPAPER_ITEMS[0]
-  const theme = settings.value.theme === 'system' ? systemTheme.value : settings.value.theme
 
-  return theme === 'light' ? item.lightSrc : item.darkSrc
-})
-const selectedWallpaper = computed(() => {
-  if (settings.value.wallpaper === 'custom') {
-    return settings.value.customWallpaperDataUrl
-  }
-
-  return defaultWallpaper.value
-})
 const isDefaultWallpaperVisible = computed(
   () => settings.value.showWallpaper && settings.value.wallpaper === 'default' && Boolean(selectedWallpaper.value)
 )
@@ -195,10 +178,6 @@ const markInfoNotificationAsRead = (id: string) => {
   socket.emit('mark-info-notification-as-read', { id })
 }
 
-const updateSystemTheme = () => {
-  systemTheme.value = getSystemTheme()
-}
-
 watch(contactSearchQuery, scheduleContactSearch)
 watch(chatRooms, (rooms) => {
   if (!selectedRoomId.value && rooms[0]) {
@@ -223,19 +202,16 @@ watch(selectedRoomId, (roomId) => {
 })
 
 onMounted(() => {
-  updateSystemTheme()
   initializeLoadRoomMessages()
   socket.on('get-searched-contact', handleSearchedContacts)
   window.addEventListener('click', handleWindowClick)
   window.addEventListener('keydown', handleWindowKeydown)
-  systemThemeQuery?.addEventListener('change', updateSystemTheme)
 })
 
 onBeforeUnmount(() => {
   socket.off('get-searched-contact', handleSearchedContacts)
   window.removeEventListener('click', handleWindowClick)
   window.removeEventListener('keydown', handleWindowKeydown)
-  systemThemeQuery?.removeEventListener('change', updateSystemTheme)
 
   if (contactSearchTimeoutId) {
     clearTimeout(contactSearchTimeoutId)
