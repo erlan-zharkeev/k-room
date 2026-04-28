@@ -2,15 +2,19 @@ import { ROUTE_NAMES, type IFrontendUserData } from 'global-shared'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useSocketConnect } from 'src/shared/api'
+import { useResetClientData } from 'src/features/client-session'
+import { socket, useSocketConnect } from 'src/shared/api'
+import { clearCookie } from 'src/shared/lib'
 
 import { useUser } from './use-user'
 
 export const useUserSession = () => {
   const route = useRoute()
   const router = useRouter()
-  const { reset, shallowUpdate, user } = useUser()
+  const { shallowUpdate, user } = useUser()
   const { socketConnect } = useSocketConnect()
+  const { resetClientData } = useResetClientData()
+
   const activeUser = computed(() => (user.value.id ? user.value : null))
 
   const getRedirectPath = () => {
@@ -34,13 +38,16 @@ export const useUserSession = () => {
     }
   }
 
-  const resetUserSession = async () => {
-    await reset()
+  const resetClientSession = async () => {
+    await resetClientData()
+    clearCookie()
+    socket.disconnect()
+    await router.push(ROUTE_NAMES.authLogin)
   }
 
   return {
     activeUser,
     activateUserSession,
-    resetUserSession
+    resetClientSession
   }
 }

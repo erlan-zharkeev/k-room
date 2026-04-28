@@ -83,9 +83,9 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
     scale: .9;
   }
 
-  .nav-button:not(:disabled):hover {
-    background: transparent;
-  }
+  // .nav-button:not(:disabled):hover {
+  //   background: transparent;
+  // }
 
   .nav-button--active {
     background: var(--p-primary-color);

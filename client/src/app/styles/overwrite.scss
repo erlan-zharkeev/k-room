@@ -1,43 +1,52 @@
-.p-message.p-message-simple.p-message-sm.p-message-error {
-  margin-top: 4px;
-}
-
-@include screen-until('portrait-tablet') {
-  .p-toast {
-    left: 8px;
-    right: 8px;
-    width: auto;
-    max-width: calc(100vw - 16px);
+#app {
+  .p-button:not(:disabled):hover {
+    background: transparent;
   }
 
-  .p-toast-message {
-    width: 100%;
+  .p-button-text:not(:disabled):hover {
+    background: transparent;
   }
 
-  .p-toast-message-content {
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 12px;
+  .p-message.p-message-simple.p-message-sm.p-message-error {
+    margin-top: 4px;
   }
 
-  .p-toast-message-text {
-    min-width: 0;
-  }
+  @include screen-until('portrait-tablet') {
+    .p-toast {
+      right: 8px;
+      left: 8px;
+      width: auto;
+      max-width: calc(100vw - 16px);
+    }
 
-  .p-toast-summary,
-  .p-toast-detail {
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
+    .p-toast-message {
+      width: 100%;
+    }
 
-  .p-toast-close-button {
-    flex: 0 0 auto;
-  }
+    .p-toast-message-content {
+      gap: 8px;
+      align-items: flex-start;
+      padding: 10px 12px;
+    }
 
-  input,
-  textarea,
-  select,
-  .p-inputtext {
-    font-size: 16px;
+    .p-toast-message-text {
+      min-width: 0;
+    }
+
+    .p-toast-summary,
+    .p-toast-detail {
+      overflow-wrap: anywhere;
+    }
+
+    .p-toast-close-button {
+      flex: 0 0 auto;
+    }
+
+    input,
+    textarea,
+    select,
+    .p-inputtext {
+      font-size: 16px;
+    }
   }
 }

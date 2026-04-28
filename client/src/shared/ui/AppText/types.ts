@@ -14,4 +14,5 @@ export interface IAppTextProps {
   align?: AppTextAlignType
   bold?: boolean
   truncate?: boolean
+  noLineHeight?: boolean
 }
