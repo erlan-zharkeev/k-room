@@ -1,1 +1,1 @@
-export { systemTheme, useSettings } from './model/use-settings'
+export { useSettings } from './model/use-settings'

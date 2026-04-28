@@ -35,11 +35,10 @@ const wallpaperStyle = computed(() => {
 
 <style>
 .main-layout {
-  position: relative;
+  --bar-thickness: 58px;
 
-  overflow: hidden;
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-columns: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
 
   height: 100dvh;
@@ -49,15 +48,9 @@ const wallpaperStyle = computed(() => {
 }
 
 .main-layout__workspace {
-  position: relative;
-  z-index: 1;
-
   display: grid;
-  grid-template-rows: 58px minmax(0, 1fr);
+  grid-template-rows: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
-
-  min-width: 0;
-  min-height: 0;
 }
 
 .widget {
@@ -93,12 +86,5 @@ const wallpaperStyle = computed(() => {
 
 .main-layout--wallpaper .widget::before {
   display: block;
-}
-
-@include screen-until('tablet') {
-  .main-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) 62px;
-  }
 }
 </style>

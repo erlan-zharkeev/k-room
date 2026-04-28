@@ -14,16 +14,10 @@ export const useSettings = () => {
   const language = computed(() => settings.value.language)
   const theme = computed(() => settings.value.theme)
 
-  const defaultWallpaper = computed(() => {
-    const effectiveTheme = settings.value.theme === 'system' ? settings.value.systemTheme : settings.value.theme
-
-    return effectiveTheme === 'light' ? DEFAULT_LIGHT_WALLPAPER : DEFAULT_DARK_WALLPAPER
-  })
-
   const selectedWallpaper = computed(() => {
     if (settings.value.wallpaper === 'custom') return settings.value.customWallpaperDataUrl
-
-    return defaultWallpaper.value
+    const effectiveTheme = settings.value.theme === 'system' ? settings.value.systemTheme : settings.value.theme
+    return effectiveTheme === 'light' ? DEFAULT_LIGHT_WALLPAPER : DEFAULT_DARK_WALLPAPER
   })
   return {
     settings,

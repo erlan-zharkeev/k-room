@@ -19,9 +19,8 @@ const selectedSettingsId = computed(() => {
   return isString(settingsId) && settingsId ? settingsId : 'account'
 })
 
-const navBtnClass = (id: string, isExactActive: boolean) => ({
-  'main-left-bar__nav-button--active': isExactActive || (id === 'settings' && route.path.startsWith(MAIN_PAGE_ROUTES.settings))
-})
+const isNavBtnActive = (id: string, isExactActive: boolean) =>
+  isExactActive || (id === 'settings' && route.path.startsWith(MAIN_PAGE_ROUTES.settings))
 
 const getBadgeValue = (id: string) => {
   if (id === 'settings') return unreadInfoNotificationQuantity.value || undefined
@@ -48,7 +47,10 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
           <Button
             :href="href"
             :aria-label="$t(item.label)"
-            :class="navBtnClass(item.id, isExactActive)"
+            :pt="{
+              root: { class: ['nav-button', { 'nav-button--active': isNavBtnActive(item.id, isExactActive) }] },
+              icon: { class: { 'nav-button__icon--active': isNavBtnActive(item.id, isExactActive) } }
+            }"
             as="a"
             text
             size="large"
@@ -61,7 +63,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
   </aside>
 </template>
 
-<style>
+<style lang="scss">
 .main-left-bar {
   display: flex;
   flex-direction: column;
@@ -75,31 +77,21 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
   align-items: center;
 
   margin-block: auto;
+
+  .nav-button:not(:disabled):hover {
+    background: transparent;
+  }
+
+  .nav-button--active {
+    background: var(--p-primary-color);
+  }
+
+  .nav-button__icon--active {
+    color: var(--p-primary-contrast-color);
+  }
+
+  .nav-button--active.nav-button:not(:disabled):hover {
+    background: var(--p-primary-color);
+  }
 }
-
-/* .main-left-bar__nav-button--active {
-  background: red;
-} */
-
-/* .main-left-bar::before {
-  pointer-events: none;
-  content: '';
-
-  position: absolute;
-  z-index: 0;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-50deg);
-
-  display: var(--main-layout-wallpaper-pseudo-display, none);
-
-  width: 240vmax;
-  height: 240vmax;
-
-  opacity: 0.3;
-  background-image: var(--main-page-widget-wallpaper);
-  background-repeat: repeat;
-  background-position: 0 0;
-  background-size: 280px auto;
-} */
 </style>

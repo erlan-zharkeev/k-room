@@ -3,31 +3,29 @@ import { onBeforeUnmount, watch } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { applyThemePreset } from 'src/shared/lib'
 
-const systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: light)')
+import { SYSTEM_THEME_QUERY } from '../../entities/setting/config/constants'
 
 export const useThemeProvider = () => {
   const { settings, shallowUpdate } = useSettings()
 
   const updateSystemTheme = () => {
-    const systemTheme = systemThemeQuery?.matches ? 'light' : 'dark'
+    const systemTheme = SYSTEM_THEME_QUERY?.matches ? 'light' : 'dark'
     shallowUpdate({ systemTheme })
-    applyThemePreset(systemTheme)
   }
 
   watch(
     () => settings.value.theme,
     (theme, previousTheme) => {
       if (previousTheme === 'system') {
-        systemThemeQuery?.removeEventListener('change', updateSystemTheme)
+        SYSTEM_THEME_QUERY?.removeEventListener('change', updateSystemTheme)
       }
 
       if (theme === 'system') {
-        systemThemeQuery?.addEventListener('change', updateSystemTheme)
+        SYSTEM_THEME_QUERY?.addEventListener('change', updateSystemTheme)
         updateSystemTheme()
-        return
       }
 
-      applyThemePreset(theme)
+      applyThemePreset()
     },
     { immediate: true }
   )
@@ -36,12 +34,12 @@ export const useThemeProvider = () => {
     () => settings.value.customTheme,
     () => {
       if (settings.value.theme !== 'custom') return
-      applyThemePreset('custom')
+      applyThemePreset()
     },
     { deep: true }
   )
 
   onBeforeUnmount(() => {
-    systemThemeQuery?.removeEventListener('change', updateSystemTheme)
+    SYSTEM_THEME_QUERY?.removeEventListener('change', updateSystemTheme)
   })
 }
