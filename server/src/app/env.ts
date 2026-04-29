@@ -16,8 +16,8 @@ const {
   ACCESS_TOKEN_SECRET,
   ADMIN_PASSWORD,
   ADMIN_USERNAME,
-  API_HOST,
-  APP_HOST,
+  API_HOST: ENV_API_HOST,
+  APP_HOST: ENV_APP_HOST,
   COOKIE_DOMAIN,
   EMAIL_CONFIRM_SECRET,
   FIREBASE_API_KEY,
@@ -32,7 +32,19 @@ const {
   SENTRY_ENVIRONMENT
 } = envs
 
-const { ADMIN_COOKIE, ADMIN_ROOT_PATH, API_PATH, CLIENT_PORT, SERVER_PORT, SOCKET_PATH } = commonEnvs
+const {
+  ADMIN_COOKIE,
+  ADMIN_ROOT_PATH,
+  API_PATH,
+  CLIENT_PORT: ENV_CLIENT_PORT,
+  SERVER_PORT: ENV_SERVER_PORT,
+  SOCKET_PATH
+} = commonEnvs
+
+const APP_HOST = process.env.APP_HOST ?? ENV_APP_HOST
+const API_HOST = process.env.API_HOST ?? ENV_API_HOST
+const CLIENT_PORT = process.env.CLIENT_PORT ?? ENV_CLIENT_PORT
+const SERVER_PORT = process.env.SERVER_PORT ?? ENV_SERVER_PORT
 
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as IPackageData
 

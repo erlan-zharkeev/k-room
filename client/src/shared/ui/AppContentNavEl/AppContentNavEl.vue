@@ -52,16 +52,18 @@ const props = defineProps<IAppContentNavElProps>()
     padding: 12px;
   }
 
-  .app-content-nav-el-btn.p-button-secondary:not(:disabled):hover {
-    background: var(--p-button-secondary-hover-background);
-  }
+  @include screen-from('tablet') {
+    .app-content-nav-el-btn.p-button-secondary:not(:disabled):hover {
+      background: var(--p-button-secondary-hover-background);
+    }
 
-  .app-content-nav-el-btn.app-content-nav-el-btn--active {
-    background: var(--p-button-secondary-hover-background);
-  }
+    .app-content-nav-el-btn.app-content-nav-el-btn--active {
+      background: var(--p-button-secondary-hover-background);
+    }
 
-  .app-content-nav-el-btn.app-content-nav-el-btn--active:not(:disabled):hover {
-    background: var(--p-button-secondary-hover-background);
+    .app-content-nav-el-btn.app-content-nav-el-btn--active:not(:disabled):hover {
+      background: var(--p-button-secondary-hover-background);
+    }
   }
 }
 </style>

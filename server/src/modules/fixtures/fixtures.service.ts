@@ -69,9 +69,38 @@ const loadUserFixture = async (
   const userExistState = await isUserExist({ id: identifier, username, email })
 
   if (userExistState.exists) {
+    const existingUser = await UserModel.findById(identifier)
+    let wasUpdated = false
+
+    if (existingUser) {
+      if (existingUser.personal.email !== email) {
+        existingUser.personal.email = email
+        wasUpdated = true
+      }
+
+      if (existingUser.public.username !== username) {
+        existingUser.public.username = username
+        wasUpdated = true
+      }
+
+      if (!existingUser.system.confirmed) {
+        existingUser.system.confirmed = true
+        wasUpdated = true
+      }
+
+      if (!(await bcrypt.compare(pass, existingUser.system.password))) {
+        existingUser.system.password = await bcrypt.hash(pass, 6)
+        wasUpdated = true
+      }
+
+      if (wasUpdated) {
+        await existingUser.save()
+      }
+    }
+
     const avatarLoaded = await ensureAvatarLoaded(id, avatarPath, language)
 
-    return avatarLoaded ? 'updated' : 'skipped'
+    return avatarLoaded || wasUpdated ? 'updated' : 'skipped'
   }
 
   const hashedPassword = await bcrypt.hash(pass, 6)

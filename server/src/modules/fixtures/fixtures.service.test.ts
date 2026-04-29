@@ -17,6 +17,7 @@ const userModelMock = vi.hoisted(() => ({
   db: {
     collection: vi.fn()
   },
+  findById: vi.fn(),
   updateOne: vi.fn()
 }))
 
@@ -60,6 +61,15 @@ describe('fixtures.service', () => {
     userModelMock.db.collection.mockReturnValue({
       findOne: vi.fn().mockResolvedValue({ _id: 'existing-avatar' })
     })
+    userModelMock.findById.mockResolvedValue({
+      personal: { email: 'fixture@test.com' },
+      public: { username: 'fixture' },
+      system: {
+        confirmed: true,
+        password: '$2b$06$9zZ6buzV0M3MTyS0wJ7ZUudLN4LxZ4XfN0iDHO8Y1koRaSPo6e7iW'
+      },
+      save: vi.fn()
+    })
     userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
     chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
     chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({
@@ -73,6 +83,7 @@ describe('fixtures.service', () => {
     expect(infoNotificationMock.loadInfoNotificationFixtures).toHaveBeenCalledTimes(1)
     expect(userServiceMock.isUserExist).toHaveBeenCalledTimes(33)
     expect(userServiceMock.createUser).not.toHaveBeenCalled()
+    expect(userModelMock.findById).toHaveBeenCalledTimes(33)
     expect(mediaMock.uploadBufferToBucket).not.toHaveBeenCalled()
     expect(messageModelMock.updateOne).toHaveBeenCalledTimes(101)
     expect(chatRoomModelMock.ChatRoomModel.updateOne).not.toHaveBeenCalled()

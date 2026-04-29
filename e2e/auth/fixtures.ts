@@ -4,7 +4,7 @@ export const LOGIN_FIXTURE_USER = {
 } as const
 
 export const PASSWORD_RECOVERY_FIXTURE_USER = {
-  email: 'erlan@gmail.com',
+  email: 'tolik@gmail.com',
   password: 'Asdf1234',
   nextPassword: 'Asdf12345'
 } as const

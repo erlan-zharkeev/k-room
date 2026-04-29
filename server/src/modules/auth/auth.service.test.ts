@@ -170,4 +170,53 @@ describe('AuthService', () => {
       { $set: { 'system.confirmed': true } }
     )
   })
+
+  it('clears auth cookies and removes active device on logout', async () => {
+    const user = await createUser()
+    const response = createResponse()
+    const userService = {
+      findById: vi.fn().mockResolvedValue(user)
+    }
+    const service = new AuthService({} as never, userService as never)
+
+    user.system.device = {
+      'device-1': {
+        refreshToken: 'refresh-token-1',
+        socketId: 'socket-1'
+      },
+      'device-2': {
+        refreshToken: 'refresh-token-2',
+        socketId: 'socket-2'
+      }
+    }
+
+    await service.logout(
+      'user-1',
+      {
+        cookies: {
+          'device-id': 'device-1'
+        }
+      } as never,
+      response as never
+    )
+
+    expect(user.system.device).toEqual({
+      'device-2': {
+        refreshToken: 'refresh-token-2',
+        socketId: 'socket-2'
+      }
+    })
+    expect(user.markModified).toHaveBeenCalledWith('system.device')
+    expect(user.save).toHaveBeenCalled()
+    expect(response.clearCookie).toHaveBeenCalledTimes(3)
+    expect(response.clearCookie).toHaveBeenCalledWith('jwt', expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' }))
+    expect(response.clearCookie).toHaveBeenCalledWith(
+      'refresh-jwt',
+      expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
+    )
+    expect(response.clearCookie).toHaveBeenCalledWith(
+      'device-id',
+      expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
+    )
+  })
 })
