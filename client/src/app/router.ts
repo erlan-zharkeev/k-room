@@ -11,10 +11,9 @@ import { MainWorkspacePage } from 'src/pages/main'
 import { PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS, PasswordRecoveryPage } from 'src/pages/password-recovery'
 import { PRIVACY_POLICY_PAGE_LAYOUT_PROPS, PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
-import { SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
+import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS, WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
-
-import { MAIN_PAGE_ROUTES } from '../widgets/main-nav-bar/config/constants'
+import { MAIN_PAGE_ROUTES } from 'src/shared/config'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import MainLayout from './layouts/main-layout/MainLayout.vue'
@@ -121,7 +120,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'settings',
-        redirect: `${MAIN_PAGE_ROUTES.settings}/account`
+        redirect: `${MAIN_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
       },
       {
         path: 'settings/:settingsId',

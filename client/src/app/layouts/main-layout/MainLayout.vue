@@ -6,7 +6,7 @@ import { useSettings } from 'src/entities/setting'
 import { useMainMonitors } from 'src/pages/main'
 import { useScreen } from 'src/shared/lib'
 import { MainLeftBar } from 'src/widgets/main-left-bar'
-import MainMobileFooter from 'src/widgets/main-mobile-footer/ui/MainMobileFooter.vue'
+import { MainMobileFooter } from 'src/widgets/main-mobile-footer'
 import { MainTopBar } from 'src/widgets/main-top-bar'
 
 import ContentLayout from './../content-layout/ContentLayout.vue'
@@ -87,6 +87,7 @@ const contentTitleKey = computed(() => {
   display: grid;
   grid-template-columns: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
+
   height: 100%;
   min-height: 0;
 
@@ -112,8 +113,8 @@ const contentTitleKey = computed(() => {
   grid-template-columns: 1fr 2.1fr;
   gap: 12px;
 
-  min-height: 0;
   min-width: 0;
+  min-height: 0;
 
   @include screen-until('portrait-tablet') {
     grid-template-columns: 1fr;
@@ -122,8 +123,8 @@ const contentTitleKey = computed(() => {
 
 .main-layout__navigation-widget,
 .main-layout__content-widget {
-  min-height: 0;
   min-width: 0;
+  min-height: 0;
 }
 
 

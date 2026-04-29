@@ -1,5 +1,3 @@
-import { MAIN_PAGE_I18N } from 'src/pages/main/config/i18n'
+import { SETTINGS_CONTENT_TITLE } from 'src/pages/settings'
 
-export const CONTENT_TITLE = {
-  ...MAIN_PAGE_I18N
-} as const
+export const CONTENT_TITLE = SETTINGS_CONTENT_TITLE
