@@ -9,6 +9,12 @@ import { MainLeftBar } from 'src/widgets/main-left-bar'
 import MainMobileFooter from 'src/widgets/main-mobile-footer/ui/MainMobileFooter.vue'
 import { MainTopBar } from 'src/widgets/main-top-bar'
 
+import ContentLayout from './../content-layout/ContentLayout.vue'
+import { isContentTitleKey } from './../content-layout/types'
+import ContentNavigationLayout from './../content-navigation-layout/ContentNavigationLayout.vue'
+import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
+
+
 const { isMobile } = useScreen()
 const { settings, selectedWallpaper } = useSettings()
 const route = useRoute()
@@ -33,6 +39,17 @@ const wallpaperStyle = computed(() => {
 
 const showNavigation = computed(() => !isMobile.value || route.query.view === 'content-navigation')
 const showContent = computed(() => !isMobile.value || route.query.view !== 'content-navigation')
+const segments = route.path.split('/').filter(Boolean)
+const navigationTitleKey = computed(() => {
+  const titleKey = segments[1]
+
+  return isContentNavigationTitleKey(titleKey) ? titleKey : undefined
+})
+const contentTitleKey = computed(() => {
+  const titleKey = segments[2]
+
+  return isContentTitleKey(titleKey) ? titleKey : undefined
+})
 </script>
 
 <template>
@@ -47,10 +64,14 @@ const showContent = computed(() => !isMobile.value || route.query.view !== 'cont
       <MainTopBar class="widget" />
       <div class="main-layout__content">
         <div v-if="showNavigation" class="main-layout__navigation-widget widget">
-          <RouterView name="content-navigation" />
+          <ContentNavigationLayout :title-key="navigationTitleKey">
+            <RouterView name="content-navigation" />
+          </ContentNavigationLayout>
         </div>
         <div v-if="showContent" class="main-layout__content-widget widget">
-          <RouterView name="content" />
+          <ContentLayout :title-key="contentTitleKey">
+            <RouterView name="content" />
+          </ContentLayout>
         </div>
       </div>
 

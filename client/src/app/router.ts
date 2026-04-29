@@ -7,7 +7,7 @@ import { CREATE_NEW_PASSWORD_PAGE_LAYOUT_PROPS, CreateNewPasswordPage } from 'sr
 import { EMAIL_CONFIRMATION_PAGE_LAYOUT_PROPS, EmailConfirmationPage } from 'src/pages/email-confirmation'
 import { ERROR_PAGE_LAYOUT_PROPS, ErrorPage } from 'src/pages/error'
 import { LoginPage } from 'src/pages/login'
-import { MainWorkspacePage, getMainPageSettingsPath } from 'src/pages/main'
+import { MainWorkspacePage } from 'src/pages/main'
 import { PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS, PasswordRecoveryPage } from 'src/pages/password-recovery'
 import { PRIVACY_POLICY_PAGE_LAYOUT_PROPS, PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
