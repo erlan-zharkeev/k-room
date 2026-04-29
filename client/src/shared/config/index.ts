@@ -10,7 +10,7 @@ export {
   SOCKET_RECONNECTION_DELAY_MS,
   SUCCESS_TOAST_LIFE_MS
 } from './constants'
-export { DARK_THEME_COLORS, DEFAULT_CUSTOM_THEME, LIGHT_THEME_COLORS, PRIMARY_PALETTE } from './theme.constants'
+export { DARK_THEME_COLORS, DEFAULT_CUSTOM_THEME, LIGHT_THEME_COLORS } from './theme.constants'
 export { EMOJI_LIST } from './emoji'
 export { API_I18N, TOAST_I18N } from './i18n'
 export { IMAGE_RESOLUTIONS } from 'src/shared/types/media'

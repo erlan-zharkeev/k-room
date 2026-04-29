@@ -9,7 +9,29 @@ const props = defineProps<IContentNavigationLayoutProps>()
 
 <template>
   <section class="content-navigation-layout">
-    <AppHeader v-if="props.titleKey" :text="$t(CONTENT_NAVIGATION_TITLE[props.titleKey])" />
-    <slot />
+    <div class="content-navigation-layout__scroll">
+      <div v-if="props.titleKey" class="content-navigation-layout__header">
+        <AppHeader :text="$t(CONTENT_NAVIGATION_TITLE[props.titleKey])" />
+      </div>
+      <div class="content-navigation-layout__content">
+        <slot />
+      </div>
+    </div>
   </section>
 </template>
+
+<style lang="scss">
+.content-navigation-layout__scroll {
+  overflow: auto;
+  height: 100%;
+  min-height: 0;
+}
+
+.content-navigation-layout__header {
+  margin-bottom: 12px;
+}
+
+.content-navigation-layout__content {
+  padding-right: 8px;
+}
+</style>
