@@ -30,5 +30,41 @@ export const createThemePreset = (colors: ICustomThemeSetting) =>
           }
         }
       }
+    },
+    components: {
+      button: {
+        colorScheme: {
+          light: {
+            root: {
+              secondary: {
+                background: colors.buttonSecondaryBackground,
+                hoverBackground: colors.buttonSecondaryHoverBackground,
+                hoverBorderColor: 'transparent',
+                borderColor: 'transparent'
+              }
+            },
+            text: {
+              primary: {
+                hoverBackground: 'transparent'
+              }
+            }
+          },
+          dark: {
+            root: {
+              secondary: {
+                background: colors.buttonSecondaryBackground,
+                hoverBackground: colors.buttonSecondaryHoverBackground,
+                hoverBorderColor: 'transparent',
+                borderColor: 'transparent'
+              }
+            },
+            text: {
+              primary: {
+                hoverBackground: 'transparent'
+              }
+            }
+          }
+        }
+      }
     }
   })

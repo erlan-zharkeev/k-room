@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from 'primevue'
+import { Button, Divider } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -27,11 +27,11 @@ const handleBack = () => {
         icon="pi pi-angle-left"
         size="small"
         severity="secondary"
-        text
         @click="handleBack"
       />
-      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" />
+      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
     </div>
+    <Divider />
     <slot />
   </section>
 </template>
@@ -41,5 +41,10 @@ const handleBack = () => {
   display: flex;
   gap: 4px;
   align-items: center;
+  justify-content: space-between;
+}
+
+.content-layout__header-text {
+  margin-left: 8px;
 }
 </style>

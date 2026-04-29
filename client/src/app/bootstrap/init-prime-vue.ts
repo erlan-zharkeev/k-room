@@ -7,7 +7,7 @@ import type { VueAppType } from './types'
 
 export const initPrimeVue = (app: VueAppType) => {
   app.use(PrimeVue, {
-    ripple: true,
+    ripple: false,
     theme: {
       preset: getThemePreset()
     }

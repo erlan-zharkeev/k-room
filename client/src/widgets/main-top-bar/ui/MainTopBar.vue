@@ -29,10 +29,14 @@ const { isLogoutLoading, logout } = useLogout()
   </header>
 </template>
 
-<style>
+<style lang="scss">
 .main-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  // .p-button:not(:disabled):hover {
+  //   background: transparent;
+  // }
 }
 </style>

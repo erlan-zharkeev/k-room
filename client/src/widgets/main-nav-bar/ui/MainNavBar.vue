@@ -77,6 +77,10 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
     }
   }
 
+  // .p-button-text:not(:disabled):hover {
+  //   background: transparent;
+  // }
+
   .nav-button--active {
     background: var(--p-primary-color);
   }
@@ -98,7 +102,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
 
 #app {
   .nav-button--active.nav-button:not(:disabled):hover {
-    background: var(--p-primary-color);
+    // background: var(--p-primary-color);
   }
 }
 </style>

@@ -7,6 +7,8 @@ export type CustomThemeColorType =
   | 'text.text'
   | 'surfaceCard'
   | 'accent'
+  | 'buttonSecondaryBackground'
+  | 'buttonSecondaryHoverBackground'
   | 'shadowOutsetStart'
   | 'shadowOutsetEnd'
   | 'darkGrayTransparent'
@@ -22,6 +24,8 @@ export interface ICustomThemeSetting {
   text: ICustomThemeTextSetting
   surfaceCard: string
   accent: string
+  buttonSecondaryBackground: string
+  buttonSecondaryHoverBackground: string
   shadowOutsetStart: string
   shadowOutsetEnd: string
   darkGrayTransparent: string

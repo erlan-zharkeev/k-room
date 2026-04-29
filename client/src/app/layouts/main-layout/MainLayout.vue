@@ -88,6 +88,7 @@ const contentTitleKey = computed(() => {
   grid-template-columns: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
   height: 100%;
+  min-height: 0;
 
   @include screen-until('portrait-tablet') {
     grid-template-columns: minmax(0, 1fr);
@@ -98,6 +99,7 @@ const contentTitleKey = computed(() => {
   display: grid;
   grid-template-rows: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
+  min-height: 0;
 
   @include screen-until('portrait-tablet') {
     grid-template-rows: var(--bar-thickness) minmax(0, 1fr) var(--bar-thickness);
@@ -111,10 +113,17 @@ const contentTitleKey = computed(() => {
   gap: 12px;
 
   min-height: 0;
+  min-width: 0;
 
   @include screen-until('portrait-tablet') {
     grid-template-columns: 1fr;
   }
+}
+
+.main-layout__navigation-widget,
+.main-layout__content-widget {
+  min-height: 0;
+  min-width: 0;
 }
 
 
