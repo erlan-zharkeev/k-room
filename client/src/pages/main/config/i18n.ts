@@ -46,10 +46,15 @@ export const MAIN_PAGE_I18N = defineI18n({
     ru: 'Задать вопрос',
     zh: '提问'
   },
+  question: {
+    en: 'Ask a question',
+    ru: 'Задать вопрос',
+    zh: '提问'
+  },
   askQuestionDescription: {
-    en: 'FAQ and support',
-    ru: 'FAQ и поддержка',
-    zh: 'FAQ 和支持'
+    en: 'Write to support chat',
+    ru: 'Написать в чат поддержки',
+    zh: '联系支持聊天'
   },
   questionPlaceholder: {
     en: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae lectus a nunc elementum feugiat. Praesent tempor, augue id posuere tincidunt, nibh elit posuere justo, sed posuere risus nunc vitae nisl.',
@@ -310,6 +315,11 @@ export const MAIN_PAGE_I18N = defineI18n({
     en: 'Language',
     ru: 'Язык',
     zh: '语言'
+  },
+  wallpaper: {
+    en: 'Wallpaper',
+    ru: 'Обои',
+    zh: '壁纸'
   },
   showWallpaper: {
     en: 'Wallpaper',

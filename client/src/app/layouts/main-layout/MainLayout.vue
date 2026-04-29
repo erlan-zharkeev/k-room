@@ -39,14 +39,14 @@ const wallpaperStyle = computed(() => {
 
 const showNavigation = computed(() => !isMobile.value || route.query.view === 'content-navigation')
 const showContent = computed(() => !isMobile.value || route.query.view !== 'content-navigation')
-const segments = route.path.split('/').filter(Boolean)
+const segments = computed(() => route.path.split('/').filter(Boolean))
 const navigationTitleKey = computed(() => {
-  const titleKey = segments[1]
+  const titleKey = segments.value[1]
 
   return isContentNavigationTitleKey(titleKey) ? titleKey : undefined
 })
 const contentTitleKey = computed(() => {
-  const titleKey = segments[2]
+  const titleKey = segments.value[2]
 
   return isContentTitleKey(titleKey) ? titleKey : undefined
 })

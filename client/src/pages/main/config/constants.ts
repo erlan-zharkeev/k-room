@@ -84,8 +84,8 @@ export const MAIN_PAGE_SETTINGS_ITEMS = [
   },
   {
     id: 'wallpaper',
-    label: MAIN_PAGE_I18N.showWallpaper,
-    description: MAIN_PAGE_I18N.showWallpaper
+    label: MAIN_PAGE_I18N.wallpaper,
+    description: MAIN_PAGE_I18N.wallpaperEnabled
   },
   {
     id: 'notifications',
@@ -114,7 +114,7 @@ export const MAIN_PAGE_SETTINGS_ITEMS = [
   },
   {
     id: 'question',
-    label: MAIN_PAGE_I18N.askQuestion,
+    label: MAIN_PAGE_I18N.question,
     description: MAIN_PAGE_I18N.askQuestionDescription
   }
 ] as const
