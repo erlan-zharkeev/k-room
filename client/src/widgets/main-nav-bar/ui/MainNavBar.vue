@@ -46,11 +46,10 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
           :href="href"
           :aria-label="$t(item.label)"
           :pt="{
-            root: { class: ['nav-button', { 'nav-button--active': isNavBtnActive(item.id, isExactActive) }] },
-            icon: { class: { 'nav-button__icon--active': isNavBtnActive(item.id, isExactActive) } }
+            root: { class: ['app-hoverless-btn'] },
           }"
           as="a"
-          text
+          :text="!isNavBtnActive(item.id, isExactActive)"
           size="large"
           :icon="item.icon"
           @click="navigate"
@@ -76,33 +75,11 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
       transform: translate(30%, -20%);
     }
   }
-
-  // .p-button-text:not(:disabled):hover {
-  //   background: transparent;
-  // }
-
-  .nav-button--active {
-    background: var(--p-primary-color);
-  }
-
-  .nav-button__icon--active {
-    color: var(--p-primary-contrast-color);
-  }
-
-  .nav-button--active.nav-button:not(:disabled):hover {
-    background: var(--p-primary-color);
-  }
 }
 
 .main-nav-bar--footer {
   flex-direction: row;
   justify-content: center;
   margin-block: 0;
-}
-
-#app {
-  .nav-button--active.nav-button:not(:disabled):hover {
-    // background: var(--p-primary-color);
-  }
 }
 </style>

@@ -33,5 +33,6 @@ const props = defineProps<IContentNavigationLayoutProps>()
 
 .content-navigation-layout__content {
   padding-right: 8px;
+  padding-left: 4px;
 }
 </style>
