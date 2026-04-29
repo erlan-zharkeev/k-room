@@ -31,7 +31,7 @@ const handleBack = () => {
       />
       <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
     </div>
-    <Divider />
+    <Divider class="content-layout__divider" />
     <slot />
   </section>
 </template>
@@ -46,5 +46,13 @@ const handleBack = () => {
 
 .content-layout__header-text {
   margin-left: 8px;
+}
+
+.content-layout__divider {
+  border-color: var(--p-app-text-contrast);
+}
+
+.content-layout__divider::before {
+  border-color: var(--p-app-text-contrast);
 }
 </style>

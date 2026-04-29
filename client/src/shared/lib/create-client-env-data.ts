@@ -9,13 +9,14 @@ import type { IClientEnv } from 'src/shared/types/client-env'
 export const createClientEnvData = (mode: string, envDir: string): IClientEnv => {
   const commonEnv = loadEnv('common', envDir, '')
   const modeEnv = loadEnv(mode, envDir, '')
-  const isDev = mode === 'development'
+  const isE2E = mode === 'test'
+  const isDev = mode === 'development' || isE2E
   const isTauriDev = process.env.npm_lifecycle_event === 'serve:tauri'
   const tauriDevHost = process.env.TAURI_DEV_HOST
-  const clientPort = Number(commonEnv.CLIENT_PORT)
-  const serverPort = Number(commonEnv.SERVER_PORT)
-  const appHost = modeEnv.APP_HOST
-  const apiHost = modeEnv.API_HOST
+  const clientPort = Number(process.env.CLIENT_PORT ?? commonEnv.CLIENT_PORT)
+  const serverPort = Number(process.env.SERVER_PORT ?? commonEnv.SERVER_PORT)
+  const appHost = process.env.APP_HOST ?? modeEnv.APP_HOST
+  const apiHost = process.env.API_HOST ?? modeEnv.API_HOST
   const themeBg = '#1c1c1c'
   const themeAccent = '#418fde'
   const themeText = '#ffffff'
@@ -27,7 +28,7 @@ export const createClientEnvData = (mode: string, envDir: string): IClientEnv =>
     socketPath: commonEnv.SOCKET_PATH,
     isDev,
     isTauriDev,
-    isE2E: mode === 'test',
+    isE2E,
     tauriDevHost,
     appName: formatAppName(packageData.name),
     appVersion: packageData.version,
