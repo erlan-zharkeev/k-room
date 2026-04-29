@@ -1,8 +1,7 @@
 import { APP_LANGUAGE } from 'global-shared'
 
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
-
-import { MAIN_PAGE_ROUTES } from '../../../widgets/main-nav-bar/config/constants'
+import { MAIN_PAGE_ROUTES } from 'src/shared/config'
 
 import { MAIN_PAGE_I18N } from './i18n'
 

@@ -2,10 +2,12 @@
 import { Button } from 'primevue'
 
 import { useUser } from 'src/entities/user'
-import { MAIN_PAGE_I18N, useLogout } from 'src/pages/main'
 import { socketStatus } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 import { AppProfileBasicData, AppTag } from 'src/shared/ui'
+
+import { MAIN_TOP_BAR_I18N } from '../config/i18n'
+import { useLogout } from '../model/use-logout'
 
 const { t } = useI18n()
 const { user, avatarId } = useUser()
@@ -24,7 +26,7 @@ const { isLogoutLoading, logout } = useLogout()
       </template>
     </AppProfileBasicData>
     <div class="main-top-bar__actions">
-      <Button :aria-label="t(MAIN_PAGE_I18N.logout)" :pt="{
+      <Button :aria-label="t(MAIN_TOP_BAR_I18N.logout)" :pt="{
             root: { class: ['app-hoverless-btn'] },
           }" :loading="isLogoutLoading" size="large" text icon="pi pi-sign-out" @click="logout" />
     </div>

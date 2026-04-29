@@ -1,13 +1,12 @@
 <script setup lang="ts">
+import { MainNavigation } from 'src/features/main-navigation'
 import { AppLogo } from 'src/shared/ui'
-
-import MainNavBar from '../../main-nav-bar/ui/MainNavBar.vue'
 </script>
 
 <template>
   <aside class="main-left-bar">
     <AppLogo />
-    <MainNavBar />
+    <MainNavigation />
   </aside>
 </template>
 

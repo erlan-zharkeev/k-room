@@ -1,7 +1,7 @@
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
 
-import { getThemePreset } from 'src/shared/lib'
+import { getThemePreset } from '../lib/theme-preset'
 
 import type { VueAppType } from './types'
 

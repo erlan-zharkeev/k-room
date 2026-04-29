@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import MainNavBar from '../../main-nav-bar/ui/MainNavBar.vue'
+import { MainNavigation } from 'src/features/main-navigation'
 </script>
 
 <template>
   <footer class="main-mobile-footer">
-    <MainNavBar footer />
+    <MainNavigation footer />
   </footer>
 </template>
