@@ -40,12 +40,8 @@ export const createThemePreset = (colors: ICustomThemeSetting) =>
                 background: colors.buttonSecondaryBackground,
                 hoverBackground: colors.buttonSecondaryHoverBackground,
                 hoverBorderColor: 'transparent',
-                borderColor: 'transparent'
-              }
-            },
-            text: {
-              primary: {
-                hoverBackground: 'transparent'
+                borderColor: 'transparent',
+                activeBorderColor: 'transparent'
               }
             }
           },
@@ -55,12 +51,8 @@ export const createThemePreset = (colors: ICustomThemeSetting) =>
                 background: colors.buttonSecondaryBackground,
                 hoverBackground: colors.buttonSecondaryHoverBackground,
                 hoverBorderColor: 'transparent',
-                borderColor: 'transparent'
-              }
-            },
-            text: {
-              primary: {
-                hoverBackground: 'transparent'
+                borderColor: 'transparent',
+                activeBorderColor: 'transparent'
               }
             }
           }

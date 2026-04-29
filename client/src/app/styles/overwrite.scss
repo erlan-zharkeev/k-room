@@ -3,6 +3,10 @@
     margin-top: 4px;
   }
 
+  .app-hoverless-btn.p-button-text:not(:disabled):hover {
+    background: transparent;
+  }
+
   @include screen-until('portrait-tablet') {
     .p-toast {
       right: 8px;
