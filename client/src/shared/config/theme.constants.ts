@@ -10,7 +10,7 @@ export const DARK_THEME_COLORS: ICustomThemeSetting = {
   surfaceCard: '#1c1c1c',
   accent: '#418fde',
   buttonSecondaryBackground: '#121212',
-  buttonSecondaryHoverBackground: '#121212',
+  buttonSecondaryHoverBackground: '#1c1c1c',
   shadowOutsetStart: '#0f0f0f',
   shadowOutsetEnd: '#292929',
   darkGrayTransparent: '#252525'
@@ -26,7 +26,7 @@ export const LIGHT_THEME_COLORS: ICustomThemeSetting = {
   surfaceCard: '#f2f2f2',
   accent: '#418fde',
   buttonSecondaryBackground: '#f7f7f7',
-  buttonSecondaryHoverBackground: '#f7f7f7',
+  buttonSecondaryHoverBackground: '#fbfbfb',
   shadowOutsetStart: '#b6b6b6',
   shadowOutsetEnd: '#e8e8e8',
   darkGrayTransparent: '#cacaca'
