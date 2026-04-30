@@ -86,7 +86,7 @@ export class UserController {
     @Req() request: Request,
     @Res() response: Response<IBackendResponse<null>>,
     @UploadedFile() file?: Express.Multer.File,
-    @Body() payload?: { username?: string; 'reset-avatar'?: 'reset' | '' }
+    @Body() payload?: { nickname?: string; 'reset-avatar'?: 'reset' | '' }
   ) {
     const { language, authUserId: userId } = request
 
@@ -98,7 +98,7 @@ export class UserController {
       runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
       await this.userService.updateUserData({
         userId,
-        username: payload?.username,
+        nickname: payload?.nickname,
         avatarFileBuffer: file?.buffer,
         resetAvatar: payload?.['reset-avatar'],
         language

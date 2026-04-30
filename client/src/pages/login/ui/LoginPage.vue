@@ -19,17 +19,17 @@ const { formData, isLoading, resolver, submit } = useLogin()
   <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="login-page" @submit="submit">
     <div class="login-page__field">
       <InputText
-        v-model="formData.email"
-        autocomplete="email"
+        v-model="formData.login"
+        autocomplete="username"
         :disabled="isLoading || isFirebaseLoginLoading"
         fluid
-        name="email"
-        :placeholder="$t(LOGIN_FORM_I18N.emailPlaceholder)"
+        name="login"
+        :placeholder="$t(LOGIN_FORM_I18N.loginPlaceholder)"
         size="small"
-        type="email"
+        type="text"
       />
-      <Message v-if="isFormFieldInvalid($form.email)" severity="error" size="small" variant="simple">
-        {{ $form.email.error?.message }}
+      <Message v-if="isFormFieldInvalid($form.login)" severity="error" size="small" variant="simple">
+        {{ $form.login.error?.message }}
       </Message>
     </div>
 

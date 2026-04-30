@@ -22,7 +22,7 @@ export const useSendMessage = () => {
     const message: IMessage = {
       id: generateUUIDv4(),
       authorId: user.value.id,
-      authorName: user.value.username,
+      authorNickname: user.value.nickname,
       body,
       createdAt: Date.now(),
       isSelf: true,

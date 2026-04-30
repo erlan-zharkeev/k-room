@@ -9,8 +9,9 @@ export type ValidationI18nType = {
   passwordMustBeStrong: LocalizedTextType
   passwordNotContainSpaces: LocalizedTextType
   passwordMustContainOnlyLatin: LocalizedTextType
-  usernameTooLong: LocalizedTextType
-  usernameTooShort: LocalizedTextType
+  nicknameInvalidFormat: LocalizedTextType
+  nicknameTooLong: LocalizedTextType
+  nicknameTooShort: LocalizedTextType
   invalidProvider: LocalizedTextType
 }
 

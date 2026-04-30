@@ -35,7 +35,7 @@ const createUser = async (confirmed = true) => ({
     email: 'user@test.com'
   },
   public: {
-    username: 'tester'
+    nickname: 'tester'
   },
   system: {
     password: await bcrypt.hash('Asdf1234', 6),
@@ -68,19 +68,19 @@ describe('AuthService', () => {
     const user = await createUser()
     const response = createResponse()
     const userService = {
-      findByEmail: vi.fn().mockResolvedValue(user),
+      findByLogin: vi.fn().mockResolvedValue(user),
       findById: vi.fn().mockResolvedValue(user),
-      mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1', email: 'user@test.com', username: 'tester', role: 'user' })
+      mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
     }
     const service = new AuthService({} as never, userService as never)
 
     const result = await service.login(
-      { email: 'user@test.com', password: 'Asdf1234' },
+      { login: '@tester', password: 'Asdf1234' },
       { language: 'en', cookies: { 'device-id': 'device-1' } } as never,
       response as never
     )
 
-    expect(result).toEqual({ id: 'user-1', email: 'user@test.com', username: 'tester', role: 'user' })
+    expect(result).toEqual({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
     expect(response.cookie).toHaveBeenCalledWith('jwt', expect.any(String), expect.objectContaining({ httpOnly: true }))
     expect(response.cookie).toHaveBeenCalledWith(
       'refresh-jwt',
@@ -103,13 +103,13 @@ describe('AuthService', () => {
     const service = new AuthService(
       {} as never,
       {
-        findByEmail: vi.fn().mockResolvedValue(user)
+        findByLogin: vi.fn().mockResolvedValue(user)
       } as never
     )
 
     await expect(
       service.login(
-        { email: 'user@test.com', password: 'Asdf1234' },
+        { login: 'user@test.com', password: 'Asdf1234' },
         { language: 'en', cookies: {} } as never,
         response as never
       )
@@ -135,7 +135,7 @@ describe('AuthService', () => {
     await service.signInWithProvider(
       {
         email: 'user@test.com',
-        username: 'tester',
+        nickname: 'tester',
         provider: 'google',
         avatar: 'https://lh3.googleusercontent.com/avatar.jpg'
       },

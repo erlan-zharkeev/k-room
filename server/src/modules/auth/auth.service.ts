@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import { type Request, type Response, type CookieOptions } from 'express'
 import {
   type AppLanguageType,
+  formatNickname,
   REQ_STATUS,
   type IAuthLoginPayload,
   type IAuthRegistrationPayload,
@@ -141,7 +142,7 @@ export class AuthService {
 
   async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<ILoginResponse> {
     const { language } = request
-    const user = await this.userService.findByEmail(payload.email)
+    const user = await this.userService.findByLogin(payload.login)
 
     if (!user) {
       throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.invalidEmailOrPassword, language))
@@ -166,7 +167,7 @@ export class AuthService {
     language: AppLanguageType
   ): Promise<ISendConfirmationLinkResponse> {
     const userExistState = await this.userService.isUserExist({
-      username: payload.username,
+      nickname: payload.nickname,
       email: payload.email
     })
 
@@ -177,7 +178,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(payload.password, 6)
     const user = await this.userService.createUser({
       email: payload.email,
-      username: payload.username,
+      nickname: payload.nickname,
       hashedPassword
     })
 
@@ -195,7 +196,7 @@ export class AuthService {
       email: payload.email,
       language,
       token: confirmToken,
-      username: payload.username
+      nickname: formatNickname(payload.nickname)
     })
 
     return {
@@ -260,7 +261,7 @@ export class AuthService {
       email: user.personal.email,
       language,
       token: confirmToken,
-      username: user.public.username
+      nickname: formatNickname(user.public.nickname)
     })
 
     user.system.confirmAttempts = Math.max(user.system.confirmAttempts - 1, 0)
@@ -282,7 +283,7 @@ export class AuthService {
     const { language } = request
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await this.userService.createUser({
-      username: payload.username,
+      nickname: payload.nickname,
       email: payload.email,
       provider: payload.provider as ProviderType,
       hashedPassword

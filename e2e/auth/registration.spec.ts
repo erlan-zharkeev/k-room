@@ -8,7 +8,7 @@ test.describe('registration', () => {
 
     await page.goto('/authorize/registration')
 
-    const usernameInput = page.getByPlaceholder('Username')
+    const nicknameInput = page.getByPlaceholder('Nickname')
     const emailInput = page.getByPlaceholder('Email')
     const passwordInput = page.getByPlaceholder('Password')
     const policySwitch = page.locator('input[name="policy"]')
@@ -17,7 +17,7 @@ test.describe('registration', () => {
     await expect(page.getByRole('link', { name: 'Registration' })).toBeVisible()
     await expect(submitButton).toBeVisible()
 
-    await usernameInput.fill(user.username)
+    await nicknameInput.fill(user.nickname)
     await emailInput.fill(user.email)
     await passwordInput.fill(user.password)
     await policySwitch.check()
@@ -29,5 +29,28 @@ test.describe('registration', () => {
     await expect(page).toHaveURL(/\/wait-email-confirm/)
     await expect(page.getByText(user.email, { exact: false })).toBeVisible()
     await expect(page.getByText('Email confirmation')).toBeVisible()
+  })
+
+  test('rejects nickname with uppercase letters and spaces', async ({ page }) => {
+    const user = buildRegistrationFixtureUser()
+
+    await page.goto('/authorize/registration')
+
+    const nicknameInput = page.getByPlaceholder('Nickname')
+    const emailInput = page.getByPlaceholder('Email')
+    const passwordInput = page.getByPlaceholder('Password')
+    const policySwitch = page.locator('input[name="policy"]')
+    const submitButton = page.getByRole('button', { name: 'Register', exact: true })
+
+    await nicknameInput.fill('Bad Nick')
+    await emailInput.fill(user.email)
+    await passwordInput.fill(user.password)
+    await policySwitch.check()
+    await nicknameInput.blur()
+
+    await expect(submitButton).toBeDisabled()
+    await expect(
+      page.getByText('Nickname can contain only lowercase Latin letters, numbers, and single ., -, _ separators')
+    ).toBeVisible()
   })
 })

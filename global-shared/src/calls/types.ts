@@ -8,12 +8,12 @@ export interface ICall {
   id: string
   calledAt?: number
   authorId: string
-  authorName: string
+  authorNickname: string
   startedAt: number
   finishedAt?: number
   length?: number
   interlocutorId: string
-  interlocutorName: string
+  interlocutorNickname: string
   interlocutorAvatarPath?: string
   status?: CallStatusType
   flow: CallFlowType
@@ -33,4 +33,4 @@ export interface IDBCall {
   video: boolean
 }
 
-export interface IDBCallSchema extends IDBCall {}
+export type IDBCallSchema = IDBCall

@@ -3,7 +3,7 @@ import { model, Schema } from 'mongoose'
 
 const reactionSchema = new Schema(
   {
-    username: { type: String, required: true },
+    nickname: { type: String, required: true },
     authorId: { type: String, required: true },
     glyphKey: { type: String, required: true }
   },
@@ -27,7 +27,7 @@ const messageSchema = new Schema<IMessageSchema>({
     type: String,
     required: true
   },
-  authorName: {
+  authorNickname: {
     type: String,
     required: true
   },

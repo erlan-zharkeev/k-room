@@ -7,9 +7,11 @@ import {
   type IFrontendContact,
   type IFrontendUserData,
   type InteractionType,
+  normalizeNicknameKey,
   type ProviderType,
   REQ_STATUS,
   type ICreateNewPasswordPayload,
+  VALIDATION_PATTERNS,
   type SocketActionsType
 } from 'global-shared'
 import { Types } from 'mongoose'
@@ -37,7 +39,7 @@ export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
     id: String(user._id),
     role: user.system.role,
     email: user.personal.email,
-    username: user.public.username
+    nickname: user.public.nickname
   }
 }
 
@@ -47,7 +49,7 @@ export const transformUserToContact = (
 ): IFrontendContact => {
   return {
     id: String(user._id),
-    username: user.public.username,
+    nickname: user.public.nickname,
     interactionType,
     online: user.public.online,
     lastSeen: user.public.lastSeen
@@ -113,19 +115,21 @@ export const setLastSeenData = async (userId: string) => {
 }
 
 export const isUserExist = async ({
-  username,
+  nickname,
   email,
   id
 }: {
-  username: string
+  nickname: string
   email: string
   id?: Types.ObjectId
 }): Promise<IUserExistState> => {
-  const userByName = await UserModel.findOne({ 'public.username': username })
-  if (userByName) {
+  const normalizedNickname = normalizeNicknameKey(nickname)
+  const userByNickname = await UserModel.findOne({ 'public.nickname': normalizedNickname })
+
+  if (userByNickname) {
     return {
       exists: true,
-      reason: 'username'
+      reason: 'nickname'
     }
   }
 
@@ -156,17 +160,19 @@ export const isUserExist = async ({
 export const createUser = async ({
   id,
   email,
-  username,
+  nickname,
   hashedPassword,
   provider = 'app'
 }: {
   id?: Types.ObjectId
   email: string
-  username: string
+  nickname: string
   hashedPassword: string
   provider?: ProviderType
 }) => {
-  const userExistState = await isUserExist({ id, username, email })
+  const normalizedNickname = normalizeNicknameKey(nickname)
+  const userExistState = await isUserExist({ id, nickname: normalizedNickname, email })
+
   if (userExistState.exists) {
     return null
   }
@@ -174,7 +180,7 @@ export const createUser = async ({
   const user = await new UserModel({
     ...(id ? { _id: id } : {}),
     public: {
-      username
+      nickname: normalizedNickname
     },
     personal: {
       email,
@@ -242,40 +248,52 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return UserModel.findOne({ 'personal.email': email })
+    return UserModel.findOne({ 'personal.email': email.trim() })
+  }
+
+  async findByNickname(nickname: string) {
+    return UserModel.findOne({ 'public.nickname': normalizeNicknameKey(nickname) })
+  }
+
+  async findByLogin(login: string) {
+    if (new RegExp(VALIDATION_PATTERNS.email).test(login.trim())) {
+      return this.findByEmail(login)
+    }
+
+    return this.findByNickname(login)
   }
 
   async isUserExist({
-    username,
+    nickname,
     email,
     id
   }: {
-    username: string
+    nickname: string
     email: string
     id?: Types.ObjectId
   }): Promise<IUserExistState> {
-    return isUserExist({ username, email, id })
+    return isUserExist({ nickname, email, id })
   }
 
   async createUser({
     id,
     email,
-    username,
+    nickname,
     hashedPassword,
     provider = 'app'
   }: {
     id?: Types.ObjectId
     email: string
-    username: string
+    nickname: string
     hashedPassword: string
     provider?: ProviderType
   }) {
-    return createUser({ id, email, username, hashedPassword, provider })
+    return createUser({ id, email, nickname, hashedPassword, provider })
   }
 
   getUserExistMessage(reason: IUserExistState['reason'], language: AppLanguageType) {
     switch (reason) {
-      case 'username':
+      case 'nickname':
         return localizedText(USER_I18N.userWithCurrentNameAlreadyExist, language)
       case 'email':
         return localizedText(USER_I18N.userWithCurrentEmailAlreadyExist, language)
@@ -347,25 +365,35 @@ export class UserService {
 
   async updateUserData({
     userId,
-    username,
+    nickname,
     avatarFileBuffer,
     resetAvatar,
     language
   }: {
     userId: string
-    username?: string
+    nickname?: string
     avatarFileBuffer?: Buffer
     resetAvatar?: 'reset' | ''
     language: AppLanguageType
   }) {
-    if (!username && !avatarFileBuffer && resetAvatar !== 'reset') {
+    if (!nickname && !avatarFileBuffer && resetAvatar !== 'reset') {
       throw new AppError(REQ_STATUS.badRequest, localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language))
     }
 
     const user = await this.requireUser(userId, language)
+    const normalizedNickname = nickname ? normalizeNicknameKey(nickname) : ''
 
-    if (username && username !== user.public.username) {
-      await user.updateOne({ $set: { 'public.username': username } })
+    if (normalizedNickname && normalizedNickname !== user.public.nickname) {
+      const userWithSameNickname = await UserModel.findOne({
+        _id: { $ne: userId },
+        'public.nickname': normalizedNickname
+      }).lean()
+
+      if (userWithSameNickname) {
+        throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('nickname', language))
+      }
+
+      await user.updateOne({ $set: { 'public.nickname': normalizedNickname } })
     }
 
     if (avatarFileBuffer) {

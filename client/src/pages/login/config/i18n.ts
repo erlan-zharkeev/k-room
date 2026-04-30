@@ -1,10 +1,10 @@
 import { defineI18n } from 'global-shared'
 
 export const LOGIN_FORM_I18N = defineI18n({
-  emailPlaceholder: {
-    en: 'Enter your email',
-    ru: 'Введите email',
-    zh: '输入 email'
+  loginPlaceholder: {
+    en: 'Enter email or nickname',
+    ru: 'Введите email или никнейм',
+    zh: '输入 email 或昵称'
   },
   passwordPlaceholder: {
     en: 'Enter your password',

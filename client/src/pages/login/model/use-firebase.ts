@@ -11,7 +11,7 @@ import { ref } from 'vue'
 import { useUserSession } from 'src/entities/user'
 import { ERROR_TOAST_LIFE_MS, useApi } from 'src/shared/api'
 import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
-import { currentLanguage, translate, useI18n } from 'src/shared/lib'
+import { currentLanguage, generateUUIDv4, translate, useI18n } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
@@ -54,12 +54,14 @@ export const useFirebase = () => {
       if (!haveFullData) return null
 
       return {
-        username: displayName,
+        nickname: generateUUIDv4().replace(/-/g, ''),
         email,
         avatar: photoURL ?? undefined,
         provider: normalizedProvider
       }
-    } catch {
+    } catch (error) {
+      void error
+
       toast.add({
         severity: 'error',
         summary: translate(TOAST_I18N.error),

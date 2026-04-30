@@ -51,20 +51,20 @@ export const AUTH_I18N = defineI18n({
     ru: 'Неверный провайдер',
     zh: '提供商无效'
   },
-  usernameTooLong: {
-    en: 'Username is too long',
-    ru: 'Имя пользователя слишком длинное',
-    zh: '用户名过长'
+  nicknameTooLong: {
+    en: 'Nickname is too long',
+    ru: 'Никнейм слишком длинный',
+    zh: '昵称过长'
   },
-  usernameTooShort: {
-    en: 'Username is too short',
-    ru: 'Имя пользователя слишком короткое',
-    zh: '用户名过短'
+  nicknameTooShort: {
+    en: 'Nickname is too short',
+    ru: 'Никнейм слишком короткий',
+    zh: '昵称过短'
   },
   invalidEmailOrPassword: {
-    en: 'Invalid email or password',
-    ru: 'Неверный email или пароль',
-    zh: 'Email 或密码不正确'
+    en: 'Invalid login or password',
+    ru: 'Неверный логин или пароль',
+    zh: '登录名或密码不正确'
   },
   emailNotConfirmed: {
     en: 'Please confirm your email. The confirmation email may have ended up in your spam folder',

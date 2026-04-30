@@ -3,6 +3,7 @@ import { randomInt, randomUUID } from 'node:crypto'
 import { Injectable } from '@nestjs/common'
 import {
   type AppLanguageType,
+  formatNickname,
   type ISendPasswordRecoveryCodeResponse,
   type IValidatePasswordRecoveryCodeResponse,
   REQ_STATUS
@@ -70,7 +71,7 @@ export class CodesService {
       email,
       code,
       language,
-      username: user.public.username
+      nickname: formatNickname(user.public.nickname)
     })
 
     return {

@@ -81,10 +81,10 @@ export const MAIN_PAGE_I18N = defineI18n({
     ru: 'Профиль и пароль',
     zh: '资料和密码'
   },
-  username: {
-    en: 'Username',
-    ru: 'Имя пользователя',
-    zh: '用户名'
+  nickname: {
+    en: 'Nickname',
+    ru: 'Никнейм',
+    zh: '昵称'
   },
   uploadPhoto: {
     en: 'Upload photo',

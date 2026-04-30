@@ -10,14 +10,14 @@ export interface IMessageMetaData {
 }
 
 export interface IReaction {
-  username: string
+  nickname: string
   authorId: string
   glyphKey: string
 }
 
 export interface IRepliedMessage {
   id: string
-  authorName: string
+  authorNickname: string
   authorId: string
   body: string
   images?: IImageObject[]
@@ -30,7 +30,7 @@ export interface IMessage {
   isSelf?: boolean
   status?: MessageStatusType
   authorId: string
-  authorName: string
+  authorNickname: string
   body: string
   createdAt?: number
   reactions?: IReaction[]

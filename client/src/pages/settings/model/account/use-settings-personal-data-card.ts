@@ -1,27 +1,50 @@
-import { USER_ENDPOINTS } from 'global-shared'
+import {
+  USER_ENDPOINTS,
+  createUpdateUserDataSchema,
+  createValidationMessages,
+  formatNickname,
+  isNicknameValid,
+  normalizeNickname
+} from 'global-shared'
 import type { FileUploadSelectEvent } from 'primevue/fileupload'
+import { safeParse } from 'valibot'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
+import { useI18n } from 'src/shared/lib'
 
 export const useSettingsPersonalDataCard = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
   const { user, avatarId, update: updateUserData } = useUser()
   const { doRequest } = useApi()
-  const accountUsername = ref('')
+  const { t } = useI18n()
+  const accountNickname = ref('')
   const accountAvatarFile = ref<File>()
   const accountAvatarPreviewUrl = ref('')
   const accountAvatarWasReset = ref(false)
   const isAccountSaving = ref(false)
+  const accountNicknameSchema = createUpdateUserDataSchema(createValidationMessages(t))
 
   let accountAvatarPreviewObjectUrl: string | undefined
 
   const displayedAvatarId = computed(() =>
     accountAvatarPreviewUrl.value || accountAvatarWasReset.value ? undefined : avatarId.value || undefined
   )
-  const isAccountSaveDisabled = computed(() => !user.value.id || !accountUsername.value.trim())
+  const displayedNickname = computed(() => formatNickname(user.value.nickname))
+  const displayedUserId = computed(() => (user.value.id ? `#${user.value.id}` : ''))
+  const isAccountNicknameEmpty = computed(() => !normalizeNickname(accountNickname.value))
+  const accountNicknameError = computed(() => {
+    if (!accountNickname.value) return ''
+
+    const result = safeParse(accountNicknameSchema, { nickname: accountNickname.value }, { abortPipeEarly: true })
+
+    return result.success ? '' : result.issues[0]?.message || ''
+  })
+  const isAccountSaveDisabled = computed(
+    () => !user.value.id || isAccountNicknameEmpty.value || Boolean(accountNicknameError.value)
+  )
 
   const clearAccountAvatarPreview = () => {
     if (!accountAvatarPreviewObjectUrl) return
@@ -49,15 +72,35 @@ export const useSettingsPersonalDataCard = () => {
     clearAccountAvatarPreview()
   }
 
+  const copyUserId = async () => {
+    if (!displayedUserId.value) return
+
+    try {
+      await navigator.clipboard.writeText(displayedUserId.value)
+    } catch (error) {
+      void error
+    }
+  }
+
+  const copyUserNickname = async () => {
+    if (!displayedNickname.value) return
+
+    try {
+      await navigator.clipboard.writeText(displayedNickname.value)
+    } catch (error) {
+      void error
+    }
+  }
+
   const updateAccountData = async () => {
-    const username = accountUsername.value.trim()
+    const nickname = normalizeNickname(accountNickname.value)
     const currentAvatarId = avatarId.value
 
-    if (!user.value.id || !username) return
+    if (!user.value.id || !isNicknameValid(nickname)) return
 
     const formData = new FormData()
 
-    formData.append('username', username)
+    formData.append('nickname', nickname)
     formData.append('reset-avatar', accountAvatarWasReset.value ? 'reset' : '')
 
     if (accountAvatarFile.value) {
@@ -69,7 +112,7 @@ export const useSettingsPersonalDataCard = () => {
       await doRequest<null>('patch', USER_ENDPOINTS.editUserData, formData, {
         contentType: 'multipart/form-data'
       })
-      await updateUserData({ username })
+      await updateUserData({ nickname })
 
       if (currentAvatarId && accountAvatarWasReset.value) {
         await removeMedia(currentAvatarId)
@@ -96,9 +139,9 @@ export const useSettingsPersonalDataCard = () => {
   }
 
   watch(
-    () => user.value.username,
-    (username) => {
-      accountUsername.value = username
+    () => user.value.nickname,
+    (nickname) => {
+      accountNickname.value = nickname
     },
     { immediate: true }
   )
@@ -107,11 +150,16 @@ export const useSettingsPersonalDataCard = () => {
 
   return {
     user,
-    accountUsername,
+    accountNickname,
     accountAvatarPreviewUrl,
     displayedAvatarId,
+    displayedNickname,
+    displayedUserId,
+    accountNicknameError,
     isAccountSaveDisabled,
     isAccountSaving,
+    copyUserId,
+    copyUserNickname,
     resetAccountAvatar,
     updateAccountData,
     uploadAccountAvatar

@@ -59,8 +59,9 @@ const personalSchema = new Schema<IUserPersonalData>(
 
 const publicSchema = new Schema<IUserPublicData>(
   {
-    username: {
+    nickname: {
       type: String,
+      unique: true,
       required: true
     },
     online: {

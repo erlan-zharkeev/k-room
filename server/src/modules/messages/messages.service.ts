@@ -29,7 +29,7 @@ export const transformMessageForUser = (message: IDBMessage, userId: string): IM
   return {
     id: String(message._id),
     authorId: message.authorId,
-    authorName: message.authorName,
+    authorNickname: message.authorNickname,
     body: message.body,
     createdAt: message.createdAt,
     reactions: message.reactions,

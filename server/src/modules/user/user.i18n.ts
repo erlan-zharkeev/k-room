@@ -7,9 +7,9 @@ export const USER_I18N = defineI18n({
     zh: '用户未找到'
   },
   userWithCurrentNameAlreadyExist: {
-    en: 'A user with this username is already exist',
-    ru: 'Пользователь с таким именем уже существует',
-    zh: '该用户名已存在'
+    en: 'A user with this nickname already exists',
+    ru: 'Пользователь с таким никнеймом уже существует',
+    zh: '该昵称已存在'
   },
   userWithCurrentEmailAlreadyExist: {
     en: 'A user with this email address is already exist',

@@ -82,10 +82,10 @@ export const ADMIN_USER_OPTIONS = {
   options: {
     id: 'users',
     navigation: 'Users',
-    listProperties: ['_id', 'public.username', 'personal.email', 'system.role', 'public.online', LAST_SEEN_PATH],
+    listProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'public.online', LAST_SEEN_PATH],
     showProperties: [
       '_id',
-      'public.username',
+      'public.nickname',
       'public.online',
       LAST_SEEN_PATH,
       'personal.email',
@@ -96,7 +96,7 @@ export const ADMIN_USER_OPTIONS = {
       'system.confirmAttempts'
     ],
     newProperties: [
-      'public.username',
+      'public.nickname',
       'personal.email',
       'system.password',
       'system.role',
@@ -104,14 +104,14 @@ export const ADMIN_USER_OPTIONS = {
       'system.confirmed'
     ],
     editProperties: [
-      'public.username',
+      'public.nickname',
       'personal.email',
       'system.password',
       'system.role',
       'system.provider',
       'system.confirmed'
     ],
-    filterProperties: ['_id', 'public.username', 'personal.email', 'system.role', 'public.online', 'system.provider'],
+    filterProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'public.online', 'system.provider'],
     actions: {
       new: {
         before: async (request: { method?: string; payload?: UnknownObject }) => normalizePassword(request, true)
@@ -140,8 +140,8 @@ export const ADMIN_USER_OPTIONS = {
       'personal.contacts': {
         isVisible: false
       },
-      'public.username': {
-        label: 'Username'
+      'public.nickname': {
+        label: 'Nickname'
       },
       'personal.email': {
         label: 'Email'

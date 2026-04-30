@@ -63,7 +63,7 @@ describe('fixtures.service', () => {
     })
     userModelMock.findById.mockResolvedValue({
       personal: { email: 'fixture@test.com' },
-      public: { username: 'fixture' },
+      public: { nickname: 'fixture' },
       system: {
         confirmed: true,
         password: '$2b$06$9zZ6buzV0M3MTyS0wJ7ZUudLN4LxZ4XfN0iDHO8Y1koRaSPo6e7iW'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useVirtualizer } from '@tanstack/vue-virtual'
-import { type IEventAddReaction, type SocketActionsType } from 'global-shared'
+import { formatNickname, type IEventAddReaction, type SocketActionsType } from 'global-shared'
 import { Button } from 'primevue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
 
@@ -104,20 +104,20 @@ const getReactionGlyph = (glyphKey: string) => EMOJI_LIST.find(({ key }) => key 
 
 const addReaction = async (glyphKey: string) => {
   const message = selectedMessage.value
-  const { id: authorId, username } = user.value
+  const { id: authorId, nickname } = user.value
 
   if (!message || !authorId || isSelectedMessageReaction(glyphKey)) return
 
   const reaction = {
     authorId,
-    username,
+    nickname,
     glyphKey
   }
   const payload: IEventAddReaction = {
     glyphKey,
     messageId: message.id,
     roomId,
-    username
+    nickname
   }
 
   await mutateMessage(message.id, (nextMessage) => {
@@ -308,7 +308,7 @@ onBeforeUnmount(() => {
               class="message-list__author"
               bold
               color="contrast-color"
-              :text="messages[virtualRow.index].authorName"
+              :text="formatNickname(messages[virtualRow.index].authorNickname)"
             />
             <AppText
               class="message-list__body"
@@ -353,13 +353,15 @@ onBeforeUnmount(() => {
         :language="settings.language"
         @select="addReaction"
       />
-      <Button v-for="action in MAIN_PAGE_MESSAGE_ACTIONS"
+      <Button
+        v-for="action in MAIN_PAGE_MESSAGE_ACTIONS"
         :key="action.id"
-        class="message-list__context-action"         @click="handleMessageAction(action.id)"
+        class="message-list__context-action"
         :label="$t(action.label)"
-        :severity="action.severity ?? 'secondary'"
+        :severity="action.severity"
         :icon="action.icon"
-  ></Button>
+        @click="handleMessageAction(action.id)"
+      />
 
     </div>
   </div>

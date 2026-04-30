@@ -1,18 +1,18 @@
 import type { ProviderType } from '../shared/types'
 
 export interface IAuthLoginPayload {
-  email: string
+  login: string
   password: string
 }
 
 export interface IAuthRegistrationPayload {
-  username: string
+  nickname: string
   email: string
   password: string
 }
 
 export interface ISignInWithProviderPayload {
-  username: string
+  nickname: string
   email: string
   provider: ProviderType
   avatar?: string
