@@ -76,6 +76,11 @@ export const SETTINGS_PAGE_I18N = defineI18n({
     ru: 'Тема',
     zh: '主题'
   },
+  selectTheme: {
+    en: 'Select theme',
+    ru: 'Выбор темы',
+    zh: '选择主题'
+  },
   brandTheme: {
     en: 'Brand theme',
     ru: 'Фирменная тема',

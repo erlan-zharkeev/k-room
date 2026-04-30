@@ -29,7 +29,7 @@ const {
     :title="$t(SETTINGS_PAGE_I18N.changePassword)"
   >
     <label class="settings-change-password-card__field">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.currentPassword)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.currentPassword)" />
       <Password
         v-model="currentPassword"
         :feedback="false"
@@ -41,7 +41,7 @@ const {
     </label>
 
     <label class="settings-change-password-card__field">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.newPassword)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.newPassword)" />
       <Password v-model="nextPassword" autocomplete="new-password" fluid size="small" toggle-mask />
       <Message v-if="nextPasswordError" severity="error" size="small" variant="simple">
         {{ nextPasswordError }}
@@ -49,7 +49,7 @@ const {
     </label>
 
     <label class="settings-change-password-card__field">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.confirmPassword)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.confirmPassword)" />
       <Password
         v-model="repeatPassword"
         :feedback="false"

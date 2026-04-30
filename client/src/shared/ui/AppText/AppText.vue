@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-text',
-    modifiers: [props.color, props.size, props.align, props.bold && 'bold', props.truncate && 'truncate', props.noLineHeight && 'no-line-height']
+    modifiers: [props.color, props.align, props.bold && 'bold', props.truncate && 'truncate', props.noLineHeight && 'no-line-height']
   })
 )
 </script>
@@ -24,24 +24,17 @@ const className = computed(() =>
 </template>
 
 <style>
-span.app-text--extra-small,
-p.app-text--extra-small {
-  font-size: 11px;
-}
-
-span.app-text--small,
-p.app-text--small {
-  font-size: 12px;
-}
-
-span.app-text--medium,
-p.app-text--medium {
+span.app-text,
+p.app-text {
   font-size: 14px;
 }
 
-span.app-text--large,
-p.app-text--large {
+div.app-text {
   font-size: 16px;
+}
+
+small.app-text {
+  font-size: 12px;
 }
 
 .app-text {

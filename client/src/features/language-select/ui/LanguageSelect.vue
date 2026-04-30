@@ -43,7 +43,7 @@ const selectButtonPt = computed(() => ({
           class="language-select__option"
         >
           <span class="language-select__flag">{{ option.flag }}</span>
-          <AppHeader tag="h5" size='small' v-if="withText" :text="option.label" />
+          <AppHeader v-if="withText" tag="h5" :text="option.label" />
         </div>
       </template>
     </SelectButton>

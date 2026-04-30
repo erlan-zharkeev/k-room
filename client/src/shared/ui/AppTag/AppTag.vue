@@ -16,7 +16,7 @@ const className = computed(() =>
 
 <template>
   <span :class="className">
-    <AppText size="extra-small" tag="span" color='contrast-color'>
+    <AppText tag="small" color='contrast-color'>
       <slot>{{ props.value }}</slot>
     </AppText>
   </span>

@@ -1,4 +1,4 @@
-import type { ISettingsCardProps } from './SettingsCard.types'
+import type { ISettingsCardProps } from './settings-card.types'
 
 export const SETTINGS_CARD_DEFAULT_PROPS = {
   buttonLabel: '',
