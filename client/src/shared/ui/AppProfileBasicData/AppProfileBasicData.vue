@@ -13,7 +13,7 @@ import type { IAppProfileBasicDataProps } from './types'
 const props = withDefaults(defineProps<IAppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
 
 const liveImageUrl = ref('')
-const imageSrc = computed(() => liveImageUrl.value || undefined)
+const imageSrc = computed(() => props.imageSrc || liveImageUrl.value || undefined)
 
 const clearLiveImageUrl = () => {
   if (liveImageUrl.value) {

@@ -26,10 +26,10 @@ export const SETTINGS_PAGE_I18N = defineI18n({
     ru: 'Сбросить фото',
     zh: '重置照片'
   },
-  saveAccount: {
-    en: 'Save account',
-    ru: 'Сохранить аккаунт',
-    zh: '保存账号'
+  updateAccountData: {
+    en: 'Update',
+    ru: 'Обновить',
+    zh: '更新'
   },
   changePassword: {
     en: 'Change password',
