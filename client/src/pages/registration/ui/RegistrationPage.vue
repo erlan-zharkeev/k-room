@@ -17,16 +17,16 @@ const { formData, isLoading, resolver, submit } = useRegistration()
   <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="registration-page" @submit="submit">
     <div class="registration-page__field">
       <InputText
-        v-model="formData.username"
-        autocomplete="username"
+        v-model="formData.nickname"
+        autocomplete="nickname"
         :disabled="isLoading"
         fluid
-        name="username"
-        :placeholder="$t(REGISTRATION_FORM_I18N.usernamePlaceholder)"
+        name="nickname"
+        :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"
         size="small"
       />
-      <Message v-if="isFormFieldInvalid($form.username)" severity="error" size="small" variant="simple">
-        {{ $form.username.error?.message }}
+      <Message v-if="isFormFieldInvalid($form.nickname)" severity="error" size="small" variant="simple">
+        {{ $form.nickname.error?.message }}
       </Message>
     </div>
 

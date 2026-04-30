@@ -28,7 +28,7 @@ export interface IUserPersonalData {
 }
 
 export interface IUserPublicData {
-  username: string
+  nickname: string
   online: boolean
   lastSeen: number
 }
@@ -44,5 +44,5 @@ export interface IUserSchema {
 
 export interface IUserExistState {
   exists: boolean
-  reason: 'username' | 'email' | 'id' | null
+  reason: 'nickname' | 'email' | 'id' | null
 }

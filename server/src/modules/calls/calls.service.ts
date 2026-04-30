@@ -60,9 +60,9 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
     startedAt: call.startedAt ?? 0,
     finishedAt: call.finishedAt,
     authorId: call.authorId,
-    authorName: author.public.username,
+    authorNickname: author.public.nickname,
     interlocutorId,
-    interlocutorName: interlocutor.public.username,
+    interlocutorNickname: interlocutor.public.nickname,
     interlocutorAvatarPath: `avatar.${interlocutorId}`,
     flow: getFlowType(call.answered, userId !== call.authorId),
     video: Boolean(call.video)

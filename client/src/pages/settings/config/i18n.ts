@@ -16,10 +16,20 @@ export const SETTINGS_PAGE_I18N = defineI18n({
     ru: 'Персональные данные',
     zh: '个人资料'
   },
-  username: {
-    en: 'Username',
-    ru: 'Имя пользователя',
-    zh: '用户名'
+  nickname: {
+    en: 'Nickname',
+    ru: 'Никнейм',
+    zh: '昵称'
+  },
+  copyId: {
+    en: 'Copy ID',
+    ru: 'Скопировать ID',
+    zh: '复制 ID'
+  },
+  copyNickname: {
+    en: 'Copy nickname',
+    ru: 'Скопировать никнейм',
+    zh: '复制昵称'
   },
   uploadPhoto: {
     en: 'Upload photo',

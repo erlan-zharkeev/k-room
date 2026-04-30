@@ -45,10 +45,10 @@ const buildFixtureId = (index: number) =>
 
 export const ALLOWED_GOOGLE_AVATAR_HOSTS = ['lh3.googleusercontent.com']
 export const LAST_SEEN_PATH = 'public.lastSeen'
-export const USER_FIXTURES = FIXTURE_USERNAMES.map((username, index) => ({
+export const USER_FIXTURES = FIXTURE_USERNAMES.map((nickname, index) => ({
   id: buildFixtureId(index),
-  email: `${username}@gmail.com`,
-  username,
+  email: `${nickname}@gmail.com`,
+  nickname,
   pass: FIXTURE_PASSWORD,
   avatarPath: FIXTURE_AVATAR_PATHS[index % FIXTURE_AVATAR_PATHS.length]
 }))
@@ -61,21 +61,21 @@ export const FIXTURE_CONTACT_USERNAMES = ['tolik', 'guest', 'alina', 'misha', 'd
 export const FIXTURE_GROUPS = [
   {
     key: 'frontend-core',
-    authorUsername: 'erlan',
+    authorNickname: 'erlan',
     chatName: 'Frontend Core',
-    usernames: ['erlan', 'tolik', 'alina', 'misha', 'dasha']
+    nicknames: ['erlan', 'tolik', 'alina', 'misha', 'dasha']
   },
   {
     key: 'weekend-plans',
-    authorUsername: 'tolik',
+    authorNickname: 'tolik',
     chatName: 'Weekend Plans',
-    usernames: ['erlan', 'tolik', 'roma', 'nina', 'mark', 'lena']
+    nicknames: ['erlan', 'tolik', 'roma', 'nina', 'mark', 'lena']
   },
   {
     key: 'design-review',
-    authorUsername: 'guest',
+    authorNickname: 'guest',
     chatName: 'Design Review',
-    usernames: ['erlan', 'guest', 'sofia', 'marta', 'vika']
+    nicknames: ['erlan', 'guest', 'sofia', 'marta', 'vika']
   }
 ] as const
 export const FIXTURE_MESSAGE_COUNT = 101

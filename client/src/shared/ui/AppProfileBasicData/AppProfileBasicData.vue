@@ -61,8 +61,14 @@ watch(
       :alt="props.imageAlt ?? props.title"
     />
     <div class="app-profile-basic-data__content">
-      <AppHeader class="app-profile-basic-data__title" tag="h5" truncate :text="props.title" />
-      <slot name="description" />
+      <div class="app-profile-basic-data__title">
+        <slot name="title">
+          <AppHeader tag="h5" truncate :text="props.title" />
+        </slot>
+      </div>
+      <div class="app-profile-basic-data__description">
+        <slot name="description" />
+      </div>
     </div>
   </div>
 </template>
@@ -72,13 +78,25 @@ watch(
   display: flex;
   gap: 10px;
   height: 48px;
+  min-width: 0;
 }
 
 .app-profile-basic-data__content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
   margin-bottom: 1px;
+}
+
+.app-profile-basic-data__title {
+  min-width: 0;
+}
+
+.app-profile-basic-data__description {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
 }
 
 .app-profile-basic-data__avatar {

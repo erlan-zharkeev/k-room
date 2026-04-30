@@ -1,13 +1,13 @@
 export const renderEmailConfirmationHtml = ({
   appName,
   confirmUrl,
-  username
+  nickname
 }: {
   appName: string
   confirmUrl: string
-  username?: string
+  nickname?: string
 }) => {
-  const greeting = username ? `Hi, ${username}!` : 'Hi!'
+  const greeting = nickname ? `Hi, ${nickname}!` : 'Hi!'
 
   return `
     <div style="font-family: Arial, sans-serif; color: #101828; line-height: 1.6;">

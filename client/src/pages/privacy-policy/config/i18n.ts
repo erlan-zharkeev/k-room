@@ -48,9 +48,9 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
     zh: '根据你使用服务的方式，我们可能收集或接收以下类别的信息：'
   },
   accountData: {
-    en: 'Account data such as username, email address, password hash, authentication provider, and confirmation status.',
-    ru: 'Данные аккаунта: имя пользователя, email, хэш пароля, провайдер аутентификации и статус подтверждения.',
-    zh: '账户数据，例如用户名、email 地址、密码哈希、认证提供商和确认状态。'
+    en: 'Account data such as nickname, email address, password hash, authentication provider, and confirmation status.',
+    ru: 'Данные аккаунта: никнейм, email, хэш пароля, провайдер аутентификации и статус подтверждения.',
+    zh: '账户数据，例如昵称、email 地址、密码哈希、认证提供商和确认状态。'
   },
   profileData: {
     en: 'Profile and social data such as avatar, contact relationships, chat-room membership, and basic status data such as online/last seen.',
@@ -148,9 +148,9 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
     zh: '向帮助我们运营产品的服务提供商披露，例如托管、数据库、email、认证和错误监控提供商。'
   },
   discloseUsers: {
-    en: 'To other users as part of the normal operation of the product, for example when your username, avatar, messages, reactions, or status are shown in chats and contact flows.',
-    ru: 'Другим пользователям как часть обычной работы продукта, например когда в чатах и контактах отображаются ваше имя, аватар, сообщения, реакции или статус.',
-    zh: '作为产品正常运行的一部分向其他用户披露，例如在聊天和联系人流程中显示你的用户名、头像、消息、回应或状态。'
+    en: 'To other users as part of the normal operation of the product, for example when your nickname, avatar, messages, reactions, or status are shown in chats and contact flows.',
+    ru: 'Другим пользователям как часть обычной работы продукта, например когда в чатах и контактах отображаются ваш никнейм, аватар, сообщения, реакции или статус.',
+    zh: '作为产品正常运行的一部分向其他用户披露，例如在聊天和联系人流程中显示你的昵称、头像、消息、回应或状态。'
   },
   discloseLegal: {
     en: 'When required by law, subpoena, court order, legal process, or a good-faith belief that disclosure is necessary to protect rights, users, or systems.',

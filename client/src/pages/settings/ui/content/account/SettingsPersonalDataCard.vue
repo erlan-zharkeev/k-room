@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Button, FileUpload, InputText } from 'primevue'
-
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
+import { Button, FileUpload, InputText, Message } from 'primevue'
 
 import { SETTINGS_ACCOUNT_AVATAR_ACCEPT, SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../../config/constants'
 import { SETTINGS_PAGE_I18N } from '../../../config/i18n'
@@ -10,11 +9,16 @@ import SettingsCard from '../../SettingsCard.vue'
 
 const {
   user,
-  accountUsername,
+  accountNickname,
   accountAvatarPreviewUrl,
   displayedAvatarId,
+  displayedNickname,
+  displayedUserId,
+  accountNicknameError,
   isAccountSaveDisabled,
   isAccountSaving,
+  copyUserId,
+  copyUserNickname,
   resetAccountAvatar,
   updateAccountData,
   uploadAccountAvatar
@@ -32,13 +36,38 @@ const {
   >
     <div class="settings-personal-data-card__profile">
       <AppProfileBasicData
-        :image-alt="user.username"
+        :image-alt="user.nickname"
         :image-id="displayedAvatarId"
         :image-src="accountAvatarPreviewUrl || undefined"
-        :title="user.username"
+        :title="displayedNickname"
       >
+        <template #title>
+          <div class="settings-personal-data-card__profile-title">
+            <AppHeader tag="h5" truncate :text="displayedNickname" />
+            <Button
+              class="settings-personal-data-card__copy-button"
+              :aria-label="$t(SETTINGS_PAGE_I18N.copyNickname)"
+              icon="pi pi-copy"
+              size="small"
+              text
+              type="button"
+              @click="copyUserNickname"
+            />
+          </div>
+        </template>
         <template #description>
-          <AppText v-if="user.id" size="small" :text="`#${user.id}`" />
+          <div v-if="user.id" class="settings-personal-data-card__profile-description">
+            <AppText size="small" :text="displayedUserId" />
+            <Button
+              class="settings-personal-data-card__copy-button"
+              :aria-label="$t(SETTINGS_PAGE_I18N.copyId)"
+              icon="pi pi-copy"
+              size="small"
+              text
+              type="button"
+              @click="copyUserId"
+            />
+          </div>
         </template>
       </AppProfileBasicData>
     </div>
@@ -70,8 +99,11 @@ const {
     </div>
 
     <label class="settings-personal-data-card__field">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.username)" />
-      <InputText v-model="accountUsername" autocomplete="username" fluid size="small" />
+      <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.nickname)" />
+      <InputText v-model="accountNickname" autocomplete="nickname" fluid size="small" />
+      <Message v-if="accountNicknameError" severity="error" size="small" variant="simple">
+        {{ accountNicknameError }}
+      </Message>
     </label>
   </SettingsCard>
 </template>
@@ -84,6 +116,18 @@ const {
   align-items: center;
 }
 
+.settings-personal-data-card__profile-description {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.settings-personal-data-card__profile-title {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
 .settings-personal-data-card__actions {
   flex-wrap: wrap;
 }
@@ -91,6 +135,10 @@ const {
 .settings-personal-data-card__field {
   display: grid;
   gap: 8px;
+}
+
+.settings-personal-data-card__copy-button {
+  flex: 0 0 auto;
 }
 
 .settings-personal-data-card__file-button {

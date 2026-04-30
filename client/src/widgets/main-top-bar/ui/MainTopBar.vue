@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTimeoutFn } from '@vueuse/core'
+import { formatNickname } from 'global-shared'
 import { Button } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
@@ -65,9 +66,15 @@ watch(
 
 <template>
   <header class="main-top-bar">
-    <AppProfileBasicData :image-alt="user.username" :image-id="avatarId" :title="user.username">
+    <AppProfileBasicData
+      class="main-top-bar__profile"
+      :image-alt="user.nickname"
+      :image-id="avatarId"
+      :title="formatNickname(user.nickname)"
+    >
       <template #description>
         <AppTag
+          class="main-top-bar__status-tag"
           v-if="socketTag"
           :severity="socketTag.severity"
           :value="socketTag.value"
@@ -87,5 +94,15 @@ watch(
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+}
+
+.main-top-bar__profile {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.main-top-bar__actions {
+  flex: 0 0 auto;
 }
 </style>

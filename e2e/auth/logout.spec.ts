@@ -7,9 +7,6 @@ const RESET_STORE_NAMES = ['contacts', 'media', 'chat-rooms', 'info-notification
 
 type DbRow = {
   id?: string
-  email?: string
-  username?: string
-  role?: string
 }
 
 type StoreRows = Record<string, DbRow[]>
@@ -17,13 +14,13 @@ type StoreRows = Record<string, DbRow[]>
 const login = async (page: Page) => {
   await page.goto('/authorize/login')
 
-  const emailInput = page.getByPlaceholder('Enter your email')
+  const loginInput = page.getByPlaceholder('Enter email or nickname')
   const passwordInput = page.getByPlaceholder('Enter your password')
   const submitButton = page.getByRole('button', { name: 'Login', exact: true })
 
-  await emailInput.click()
-  await emailInput.pressSequentially(LOGIN_FIXTURE_USER.email)
-  await emailInput.blur()
+  await loginInput.click()
+  await loginInput.pressSequentially(LOGIN_FIXTURE_USER.email)
+  await loginInput.blur()
 
   await passwordInput.click()
   await passwordInput.pressSequentially(LOGIN_FIXTURE_USER.password)
@@ -50,7 +47,7 @@ const getAppDbName = async (page: Page) => {
           request.onerror = () => resolve(false)
           request.onsuccess = () => {
             const db = request.result
-            const result = db.objectStoreNames.contains('user') && db.objectStoreNames.contains('settings')
+            const result = db.objectStoreNames.contains('settings') && db.objectStoreNames.contains('contacts')
 
             db.close()
             resolve(result)
@@ -142,15 +139,7 @@ test.describe('logout', () => {
     }))
 
     await expect(logoutButton).toBeVisible()
-
-    const storesBeforeLogout = await readStores(page, dbName, ['user'])
-    const [userBeforeLogout] = storesBeforeLogout.user
-
-    expect(userBeforeLogout).toMatchObject({
-      email: LOGIN_FIXTURE_USER.email,
-      username: expect.any(String)
-    })
-    expect(userBeforeLogout.id).toBeTruthy()
+    await expect(page.locator('.main-top-bar')).toContainText('@erlan')
 
     await seedStores(page, dbName, seededItems)
 
@@ -172,18 +161,10 @@ test.describe('logout', () => {
       return AUTH_COOKIE_NAMES.every((cookieName) => !cookieNames.has(cookieName))
     }).toBe(true)
 
-    const storesAfterLogout = await readStores(page, dbName, ['user', ...RESET_STORE_NAMES])
-    const [userAfterLogout] = storesAfterLogout.user
+    const storesAfterLogout = await readStores(page, dbName, RESET_STORE_NAMES)
 
-    expect(userAfterLogout).toMatchObject({
-      id: '',
-      role: 'user',
-      email: '',
-      username: ''
-    })
-
-    RESET_STORE_NAMES.forEach((storeName) => {
-      expect(storesAfterLogout[storeName]).toEqual([])
+    seededItems.forEach(({ storeName, id }) => {
+      expect(storesAfterLogout[storeName].find((item) => item.id === id)).toBeUndefined()
     })
   })
 })

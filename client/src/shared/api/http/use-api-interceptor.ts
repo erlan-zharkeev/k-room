@@ -4,7 +4,7 @@ import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 
 import { API_I18N, ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
-import { log, translate, useI18n } from 'src/shared/lib'
+import { log, useI18n } from 'src/shared/lib'
 
 import { createApiError } from './create-api-error'
 import { isBackendResponse } from './is-backend-response'
@@ -66,7 +66,7 @@ export const useApiInterceptor = () => {
       } else {
         toast.add({
           severity: 'error',
-          summary: translate(TOAST_I18N.error),
+          summary: t(TOAST_I18N.error),
           detail: message,
           life: ERROR_TOAST_LIFE_MS
         })

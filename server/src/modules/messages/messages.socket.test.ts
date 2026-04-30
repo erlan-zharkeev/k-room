@@ -47,7 +47,7 @@ describe('messages.socket', () => {
       message: {
         id: 'message-1',
         authorId: 'user-1',
-        authorName: 'tester',
+        authorNickname: 'tester',
         body: 'hello',
         createdAt: 1,
         images: [],

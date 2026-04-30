@@ -4,5 +4,5 @@ export const INITIAL_USER_STORE: User = {
   id: '',
   role: 'user',
   email: '',
-  username: ''
+  nickname: ''
 }

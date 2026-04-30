@@ -2,6 +2,7 @@ import * as v from 'valibot'
 
 import { VALIDATION_LIMITS, VALIDATION_PATTERNS } from '../auth/constants'
 import { providers } from '../shared/constants'
+import { normalizeNickname } from '../user/lib/nickname'
 
 import type { ValidationMessagesType } from './types'
 
@@ -19,29 +20,31 @@ export const createPasswordSchema = (messages: ValidationMessagesType) =>
     v.regex(new RegExp(VALIDATION_PATTERNS.onlyLatin), messages.passwordMustContainOnlyLatin)
   )
 
-const usernameSchema = (messages: ValidationMessagesType) =>
+const nicknameSchema = (messages: ValidationMessagesType) =>
   v.pipe(
     requiredStringSchema(messages.fieldIsRequired),
-    v.minLength(VALIDATION_LIMITS.usernameMinLength, messages.usernameTooShort),
-    v.maxLength(VALIDATION_LIMITS.usernameMaxLength, messages.usernameTooLong)
+    v.transform(normalizeNickname),
+    v.regex(new RegExp(VALIDATION_PATTERNS.nickname), messages.nicknameInvalidFormat),
+    v.minLength(VALIDATION_LIMITS.nicknameMinLength, messages.nicknameTooShort),
+    v.maxLength(VALIDATION_LIMITS.nicknameMaxLength, messages.nicknameTooLong)
   )
 
 export const createAuthLoginSchema = (messages: ValidationMessagesType) =>
   v.object({
-    email: requiredStringSchema(messages.emailIsRequired),
+    login: requiredStringSchema(messages.fieldIsRequired),
     password: requiredStringSchema(messages.passwordIsRequired)
   })
 
 export const createAuthRegistrationSchema = (messages: ValidationMessagesType) =>
   v.object({
-    username: usernameSchema(messages),
+    nickname: nicknameSchema(messages),
     email: emailSchema(messages),
     password: createPasswordSchema(messages)
   })
 
 export const createAuthRegistrationFormSchema = (messages: ValidationMessagesType) =>
   v.object({
-    username: usernameSchema(messages),
+    nickname: nicknameSchema(messages),
     email: emailSchema(messages),
     password: createPasswordSchema(messages),
     policy: v.literal(true, messages.fieldIsRequired)
@@ -54,7 +57,7 @@ export const createConfirmEmailSchema = (messages: ValidationMessagesType) =>
 
 export const createProviderLoginSchema = (messages: ValidationMessagesType) =>
   v.object({
-    username: requiredStringSchema(messages.fieldIsRequired),
+    nickname: nicknameSchema(messages),
     email: emailSchema(messages),
     provider: v.picklist(providers, messages.invalidProvider)
   })
@@ -86,7 +89,7 @@ export const createChangePasswordSchema = (messages: ValidationMessagesType) =>
 
 export const createUpdateUserDataSchema = (messages: ValidationMessagesType) =>
   v.object({
-    username: v.optional(usernameSchema(messages))
+    nickname: v.optional(nicknameSchema(messages))
   })
 
 export const createCreateNewPasswordFormSchema = (messages: ValidationMessagesType) =>

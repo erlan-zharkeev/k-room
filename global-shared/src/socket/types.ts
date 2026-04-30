@@ -75,7 +75,7 @@ export interface IEventUpdateChatRoom {
 }
 
 export interface IEventUserTyping {
-  authorName: string
+  authorNickname: string
   usersTo: string[]
   isTyping: boolean
 }
@@ -116,7 +116,7 @@ export interface IEventAddReaction {
   glyphKey: string
   messageId: string
   roomId: string
-  username: string
+  nickname: string
 }
 export interface IEventCallUser {
   callId?: string
@@ -124,7 +124,7 @@ export interface IEventCallUser {
   signal: unknown
   from: string
   avatar: string
-  callerName: string
+  callerNickname: string
 }
 export type EventChangeCallSettingsType = IBasicStreamSettings
 export interface IEventCallAccepted {

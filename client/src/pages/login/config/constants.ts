@@ -2,7 +2,7 @@ import { FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth'
 import type { IAuthLoginPayload } from 'global-shared'
 
 export const DEFAULT_LOGIN_FORM_DATA: IAuthLoginPayload = {
-  email: '',
+  login: '',
   password: ''
 }
 

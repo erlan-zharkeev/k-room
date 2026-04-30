@@ -2,7 +2,7 @@ export type InteractionType = 'default' | 'invited' | 'invite-accepted' | 'invit
 
 export interface IFrontendContact {
   id: string
-  username: string
+  nickname: string
   online: boolean
   lastSeen: number
   interactionType: InteractionType

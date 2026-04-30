@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isString } from 'global-shared'
 import { computed, watch } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
@@ -22,13 +23,22 @@ const router = useRouter()
 
 useMainMonitors()
 
+const isSupportedMobileMainLayoutView = (view: unknown) =>
+  isString(view) && ['content', 'content-navigation'].includes(view)
+
 watch(isMobile, (mobile) => {
   if (mobile) {
+    if (isSupportedMobileMainLayoutView(route.query.view)) return
+
     router.replace({ query: { ...route.query, view: 'content-navigation' } })
-  } else {
-    const { view: _, ...rest } = route.query
-    router.replace({ query: rest })
+    return
   }
+
+  if (!('view' in route.query)) return
+
+  const { view: _, ...rest } = route.query
+
+  router.replace({ query: rest })
 }, { immediate: true })
 
 const wallpaperStyle = computed(() => {

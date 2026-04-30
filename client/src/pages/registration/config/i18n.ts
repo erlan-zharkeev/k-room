@@ -1,10 +1,10 @@
 import { defineI18n } from 'global-shared'
 
 export const REGISTRATION_FORM_I18N = defineI18n({
-  usernamePlaceholder: {
-    en: 'Username',
-    ru: 'Имя пользователя',
-    zh: '用户名'
+  nicknamePlaceholder: {
+    en: 'Nickname',
+    ru: 'Никнейм',
+    zh: '昵称'
   },
   passwordPlaceholder: {
     en: 'Password',

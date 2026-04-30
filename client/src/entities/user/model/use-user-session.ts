@@ -25,9 +25,9 @@ export const useUserSession = () => {
   }
 
   const activateUserSession = async (data: IFrontendUserData, shouldRedirect = true) => {
-    const { email, id, role, username } = data
+    const { email, id, role, nickname } = data
 
-    await update({ email, id, role, username })
+    await update({ email, id, role, nickname })
     socketConnect()
 
     if (shouldRedirect) {

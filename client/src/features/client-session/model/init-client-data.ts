@@ -17,9 +17,9 @@ const initializeClientData = async () => {
   const restoreUserSession = async () => {
     try {
       const response = await doRequest<IGetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
-      const { email, id, role, username } = response.data.payload
+      const { email, id, role, nickname } = response.data.payload
 
-      await update({ email, id, role, username })
+      await update({ email, id, role, nickname })
       socketConnect()
     } catch (error) {
       if (isApiError(error) && error.status === 401) {

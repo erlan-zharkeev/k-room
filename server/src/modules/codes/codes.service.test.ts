@@ -40,7 +40,7 @@ describe('CodesService', () => {
       sendPasswordRecoveryEmail: vi.fn()
     }
     const userService = {
-      findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', public: { username: 'tester' } })
+      findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', public: { nickname: 'tester' } })
     }
 
     codeModelMock.findById.mockResolvedValue({ nextRequestPossibleAt: 200_000 })
@@ -60,7 +60,7 @@ describe('CodesService', () => {
     const userService = {
       findByEmail: vi.fn().mockResolvedValue({
         _id: 'user-1',
-        public: { username: 'tester' }
+        public: { nickname: 'tester' }
       })
     }
 
@@ -87,7 +87,7 @@ describe('CodesService', () => {
       email: 'user@test.com',
       code: '123456',
       language: 'en',
-      username: 'tester'
+      nickname: '@tester'
     })
   })
 

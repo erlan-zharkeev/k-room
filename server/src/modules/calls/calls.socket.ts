@@ -53,7 +53,7 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
     'call-user',
     socketErrorMiddleware(
       socket,
-      async ({ signal, userToCall, avatar, callerName }: IEventCallUser) => {
+      async ({ signal, userToCall, avatar, callerNickname }: IEventCallUser) => {
         if (!userToCall) {
           return
         }
@@ -85,7 +85,7 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
               signal,
               from: userId,
               avatar,
-              callerName
+              callerNickname
             })
         })
 

@@ -76,19 +76,22 @@ test.describe('password recovery', () => {
       fromLogin: true
     })
 
-    await page.getByRole('button', { name: 'Go to login page', exact: true }).click()
+    await page.getByRole('link', { name: 'Go to login page', exact: true }).click()
     await expect(page).toHaveURL(/\/authorize\/login$/)
 
-    await page.getByPlaceholder('Enter your email').fill(email)
+    await page.getByPlaceholder('Enter email or nickname').fill(email)
     await page.getByPlaceholder('Enter your password').fill(nextPassword)
     await page.getByRole('button', { name: 'Login', exact: true }).click()
 
     await expect(page).toHaveURL(/\/app/)
+    await page.getByRole('button', { name: 'Logout' }).click()
+    await expect(page).toHaveURL(/\/authorize\/login/)
 
     await recoverPassword({
       page,
       email,
-      nextPassword: password
+      nextPassword: password,
+      fromLogin: true
     })
   })
 })

@@ -26,6 +26,7 @@ const className = computed(() =>
 .app-tag {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
 
   padding: 2px 6px;
   border-radius: 4px;

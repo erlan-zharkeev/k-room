@@ -8,6 +8,7 @@ import type {
   InteractionType,
   SocketActionsType
 } from 'global-shared'
+import { normalizeNickname } from 'global-shared'
 import { Types } from 'mongoose'
 
 import { getIO } from 'src/shared/lib/io'
@@ -22,7 +23,7 @@ export const emitSearchedContacts = (socketId: string, payload: IEventGetSearche
 }
 
 export const searchContacts = async (userId: string, value: string, offset = 0) => {
-  let type: 'name' | 'id' = 'name'
+  let type: 'nickname' | 'id' = 'nickname'
   let validSearch: boolean = true
   const normalizedValue = value.trim()
   let needle = normalizedValue
@@ -34,9 +35,17 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
 
   if (needle.startsWith('#')) {
     needle = needle.slice(1)
-    type = Types.ObjectId.isValid(needle) ? 'id' : 'name'
+    type = Types.ObjectId.isValid(needle) ? 'id' : 'nickname'
 
-    if (type === 'name' && !needle) {
+    if (type === 'nickname' && !needle) {
+      validSearch = false
+    }
+  }
+
+  if (type === 'nickname') {
+    needle = normalizeNickname(needle)
+
+    if (!needle) {
       validSearch = false
     }
   }
@@ -44,9 +53,9 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
   let searchedUsers: IFrontendContact[] = []
 
   if (validSearch) {
-    const searchFilter = type === 'id' ? { _id: needle } : { 'public.username': { $regex: new RegExp(needle, 'i') } }
+    const searchFilter = type === 'id' ? { _id: needle } : { 'public.nickname': { $regex: new RegExp(needle, 'i') } }
     const [users, currentUser] = await Promise.all([
-      UserModel.find(searchFilter).sort({ 'public.username': 1 }).lean(),
+      UserModel.find(searchFilter).sort({ 'public.nickname': 1 }).lean(),
       UserModel.findById(userId, { 'personal.contacts': 1 }).lean()
     ])
     const contactMap = currentUser?.personal?.contacts ?? {}
@@ -62,7 +71,7 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
       .filter((user) => user.id !== userId && user.interactionType !== 'invite-hidden')
       .sort((a, b) => {
         if (a.interactionType === b.interactionType) {
-          return a.username.localeCompare(b.username)
+          return a.nickname.localeCompare(b.nickname)
         }
 
         if (a.interactionType === 'invite-accepted') {
@@ -73,7 +82,7 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
           return -1
         }
 
-        return a.username.localeCompare(b.username)
+        return a.nickname.localeCompare(b.nickname)
       })
   }
 
@@ -233,7 +242,7 @@ export const updateContactInteraction = async (userId: string, contactId: string
 
       const payload: EventInviteReceivedType = {
         id: String(authorData._id),
-        username: authorData.public.username,
+        nickname: authorData.public.nickname,
         online: authorData.public.online,
         lastSeen: authorData.public.lastSeen,
         interactionType: 'invite-received'

@@ -32,9 +32,9 @@ import {
   MINUTE_IN_MS
 } from './fixtures.constants'
 
-const USER_BY_USERNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.username, fixture]))
-const ERLAN_ID = USER_BY_USERNAME.erlan?.id ?? ''
-const TOLIK_ID = USER_BY_USERNAME.tolik?.id ?? ''
+const USER_BY_NICKNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.nickname, fixture]))
+const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
+const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''
 
 const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: AppLanguageType) => {
   const filename = `avatar.${userId}`
@@ -58,15 +58,15 @@ const loadUserFixture = async (
   data: {
     id: string
     email: string
-    username: string
+    nickname: string
     pass: string
     avatarPath: string
   },
   language: AppLanguageType
 ) => {
-  const { id, username, email, pass, avatarPath } = data
+  const { id, nickname, email, pass, avatarPath } = data
   const identifier = new Types.ObjectId(id)
-  const userExistState = await isUserExist({ id: identifier, username, email })
+  const userExistState = await isUserExist({ id: identifier, nickname, email })
 
   if (userExistState.exists) {
     const existingUser = await UserModel.findById(identifier)
@@ -78,8 +78,8 @@ const loadUserFixture = async (
         wasUpdated = true
       }
 
-      if (existingUser.public.username !== username) {
-        existingUser.public.username = username
+      if (existingUser.public.nickname !== nickname) {
+        existingUser.public.nickname = nickname
         wasUpdated = true
       }
 
@@ -104,7 +104,7 @@ const loadUserFixture = async (
   }
 
   const hashedPassword = await bcrypt.hash(pass, 6)
-  const user = await createUser({ id: identifier, email, username, hashedPassword })
+  const user = await createUser({ id: identifier, email, nickname, hashedPassword })
 
   if (!user) {
     return 'failed'
@@ -142,13 +142,13 @@ const buildFixtureMessageBody = (idx: number) => {
 const buildFixtureMessage = (idx: number) => {
   const isErlanAuthor = idx % 2 !== 0
   const authorId = isErlanAuthor ? ERLAN_ID : TOLIK_ID
-  const authorName = isErlanAuthor ? 'erlan' : 'tolik'
+  const authorNickname = isErlanAuthor ? 'erlan' : 'tolik'
   const createdAt = BASE_FIXTURE_TIMESTAMP_MS + idx * (37 * MINUTE_IN_MS) + Math.floor(idx / 18) * DAY_IN_MS
 
   return {
     _id: buildFixtureMessageId(idx),
     authorId,
-    authorName,
+    authorNickname,
     body: buildFixtureMessageBody(idx),
     createdAt,
     reactions: [],
@@ -163,7 +163,7 @@ const buildFixtureMessage = (idx: number) => {
 
 const ensureAcceptedContacts = async () => {
   const updatedAt = Date.now()
-  const erlanContacts = FIXTURE_CONTACT_USERNAMES.map((username) => USER_BY_USERNAME[username]).filter(Boolean)
+  const erlanContacts = FIXTURE_CONTACT_USERNAMES.map((nickname) => USER_BY_NICKNAME[nickname]).filter(Boolean)
 
   await Promise.all(
     erlanContacts.flatMap((fixture) => [
@@ -221,11 +221,11 @@ const ensureDirectRoom = async () => {
 
 const ensureGroupRooms = async () => {
   await Promise.all(
-    FIXTURE_GROUPS.map(async ({ authorUsername, chatName, usernames }) => {
-      const users = usernames.map((username) => USER_BY_USERNAME[username]?.id).filter(Boolean)
-      const authorId = USER_BY_USERNAME[authorUsername]?.id
+    FIXTURE_GROUPS.map(async ({ authorNickname, chatName, nicknames }) => {
+      const users = nicknames.map((nickname) => USER_BY_NICKNAME[nickname]?.id).filter(Boolean)
+      const authorId = USER_BY_NICKNAME[authorNickname]?.id
 
-      if (!authorId || users.length !== usernames.length) {
+      if (!authorId || users.length !== nicknames.length) {
         return
       }
 

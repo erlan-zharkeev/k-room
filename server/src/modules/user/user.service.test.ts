@@ -62,18 +62,31 @@ describe('user.service', () => {
     vi.restoreAllMocks()
   })
 
-  it('detects existing users by username before trying email or id', async () => {
+  it('detects existing users by nickname before trying email or id', async () => {
     userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'by-username' })
 
     const result = await isUserExist({
-      username: 'tester',
+      nickname: 'tester',
       email: 'tester@test.com',
       id: new Types.ObjectId('68a09410778b70d522ea8faa')
     })
 
-    expect(result).toEqual({ exists: true, reason: 'username' })
+    expect(result).toEqual({ exists: true, reason: 'nickname' })
     expect(userModelMock.UserModel.findOne).toHaveBeenCalledTimes(1)
     expect(userModelMock.UserModel.findById).not.toHaveBeenCalled()
+  })
+
+  it('finds user by normalized nickname or trimmed email login', async () => {
+    const service = new UserService()
+
+    userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'user-by-nickname' })
+    userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'user-by-email' })
+
+    await service.findByLogin('@Test-Er')
+    await service.findByLogin('  tester@test.com  ')
+
+    expect(userModelMock.UserModel.findOne).toHaveBeenNthCalledWith(1, { 'public.nickname': 'test-er' })
+    expect(userModelMock.UserModel.findOne).toHaveBeenNthCalledWith(2, { 'personal.email': 'tester@test.com' })
   })
 
   it('creates user with requested fixture id and initializes info notification state', async () => {
@@ -85,7 +98,7 @@ describe('user.service', () => {
     const user = await createUser({
       id,
       email: 'tester@test.com',
-      username: 'tester',
+      nickname: 'tester',
       hashedPassword: 'hashed'
     })
 

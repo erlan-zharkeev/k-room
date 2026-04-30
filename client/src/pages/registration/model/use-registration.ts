@@ -40,8 +40,8 @@ export const useRegistration = () => {
     }
   }
 
-  const submitRegistration = ({ email, password, username }: RegistrationFormDataType) => {
-    register({ email, password, username })
+  const submitRegistration = ({ email, password, nickname }: RegistrationFormDataType) => {
+    register({ email, password, nickname })
   }
 
   const submit = ({ valid }: FormSubmitEvent) => {

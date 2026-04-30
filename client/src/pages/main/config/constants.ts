@@ -35,12 +35,14 @@ export const MAIN_PAGE_MESSAGE_ACTIONS = [
   {
     id: 'reply',
     label: MAIN_PAGE_I18N.replyMessage,
-    icon: 'pi pi-reply'
+    icon: 'pi pi-reply',
+    severity: 'secondary'
   },
   {
     id: 'forward',
     label: MAIN_PAGE_I18N.forwardMessage,
-    icon: 'pi pi-arrow-up'
+    icon: 'pi pi-arrow-up',
+    severity: 'secondary'
   },
   {
     id: 'delete',
@@ -48,7 +50,7 @@ export const MAIN_PAGE_MESSAGE_ACTIONS = [
     icon: 'pi pi-times',
     severity: 'danger'
   }
-]
+] as const
 
 export const MAIN_PAGE_LANGUAGE_OPTIONS = [
   {

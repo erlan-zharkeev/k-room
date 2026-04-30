@@ -47,12 +47,12 @@ export class EmailService {
     email,
     language,
     token,
-    username
+    nickname
   }: {
     email: string
     language: AppLanguageType
     token: string
-    username?: string
+    nickname?: string
   }) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
@@ -77,7 +77,7 @@ export class EmailService {
       html: renderEmailConfirmationHtml({
         appName: this.appName,
         confirmUrl,
-        username
+        nickname
       })
     })
 
@@ -94,12 +94,12 @@ export class EmailService {
     email,
     code,
     language,
-    username
+    nickname
   }: {
     email: string
     code: string
     language: AppLanguageType
-    username?: string
+    nickname?: string
   }) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
@@ -109,7 +109,7 @@ export class EmailService {
     const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
         <h2>Password recovery</h2>
-        <p>Hello${username ? `, ${username}` : ''}.</p>
+        <p>Hello${nickname ? `, ${nickname}` : ''}.</p>
         <p>Use this code to continue resetting your password:</p>
         <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</p>
         <p>If you did not request password recovery, you can ignore this message.</p>

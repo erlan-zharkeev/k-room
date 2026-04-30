@@ -44,15 +44,20 @@ export const VALIDATION_I18N = defineI18n({
     ru: 'Пароль должен содержать только латинские символы',
     zh: '密码只能包含拉丁字符'
   },
-  usernameTooLong: {
-    en: 'Username is too long',
-    ru: 'Имя пользователя слишком длинное',
-    zh: '用户名过长'
+  nicknameInvalidFormat: {
+    en: 'Nickname can contain only lowercase Latin letters, numbers, and single ., -, _ separators',
+    ru: 'Никнейм может содержать только строчные латинские буквы, цифры и одиночные разделители ., -, _',
+    zh: '昵称只能包含小写拉丁字母、数字以及单个 ., -, _ 分隔符'
   },
-  usernameTooShort: {
-    en: 'Username is too short',
-    ru: 'Имя пользователя слишком короткое',
-    zh: '用户名过短'
+  nicknameTooLong: {
+    en: 'Nickname is too long',
+    ru: 'Никнейм слишком длинный',
+    zh: '昵称过长'
+  },
+  nicknameTooShort: {
+    en: 'Nickname is too short',
+    ru: 'Никнейм слишком короткий',
+    zh: '昵称过短'
   },
   invalidProvider: {
     en: 'Invalid provider',
