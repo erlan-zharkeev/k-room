@@ -38,7 +38,8 @@ export { defineI18n } from './language/lib/define-i18n'
 export type { AppLanguageType, LocalizedTextType, LocalizedTextMapType } from './language/types'
 export type { I18nValueConstraintType, I18nRecordConstraintType } from './language/lib/types'
 
-export type { MediaKindType, IImageObject, MediaFileValueType } from './media/types'
+export { MEDIA_BUCKET_NAMES, MEDIA_KIND_ACCEPT_MAP, MEDIA_MB_IN_BYTES, MEDIA_VALIDATION_OPTIONS_MAP } from './media/constants'
+export type { MediaBucketNameType, IMediaValidationOptions, MediaKindType, IImageObject, MediaFileValueType } from './media/types'
 
 export type { IPackageData } from './package/types'
 
