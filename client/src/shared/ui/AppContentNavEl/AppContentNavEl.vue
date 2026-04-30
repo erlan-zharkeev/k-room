@@ -52,6 +52,13 @@ const props = defineProps<IAppContentNavElProps>()
     padding: 12px;
   }
 
+  .app-content-nav-el__text {
+    overflow: hidden;
+    display: grid;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   @include screen-tablet-up {
     .app-content-nav-el-btn.p-button-secondary:not(:disabled):hover {
       background: var(--p-button-secondary-hover-background);
