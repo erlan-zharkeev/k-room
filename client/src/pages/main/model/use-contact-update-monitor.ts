@@ -1,3 +1,4 @@
+import { useIntervalFn } from '@vueuse/core'
 import type {
   EventChangeContactsDataType,
   EventInviteReceivedType,
@@ -19,7 +20,6 @@ import { CONTACT_ONLINE_STATUS_TTL_MS, CONTACT_ONLINE_CHECK_INTERVAL_MS } from '
 export const useContactUpdateMonitor = () => {
   const { bulkPut, contacts, get, mergeMany, put, remove } = useContact()
   const { updateContactData } = useUpdateContactData()
-  let onlineCheckIntervalId: ReturnType<typeof setInterval> | undefined
 
   const actualizeContacts = async (nextContacts: IFrontendContact[]) => {
     await mergeMany(nextContacts, {
@@ -89,6 +89,12 @@ export const useContactUpdateMonitor = () => {
     })
   }
 
+  const { pause: pauseOnlineCheck, resume: resumeOnlineCheck } = useIntervalFn(
+    checkForContactOnline,
+    CONTACT_ONLINE_CHECK_INTERVAL_MS,
+    { immediate: false, immediateCallback: false }
+  )
+
   const initializeContactUpdateMonitor = () => {
     socket.on<SocketActionsType>('actual-contacts', actualizeContacts)
     socket.on<SocketActionsType>('contacts-loaded', bulkPut)
@@ -100,7 +106,8 @@ export const useContactUpdateMonitor = () => {
     socket.on<SocketActionsType>('invite-received', processInvitation)
     socket.on<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
 
-    onlineCheckIntervalId = setInterval(checkForContactOnline, CONTACT_ONLINE_CHECK_INTERVAL_MS)
+    pauseOnlineCheck()
+    resumeOnlineCheck()
   }
 
   const disposeContactUpdateMonitor = () => {
@@ -113,10 +120,7 @@ export const useContactUpdateMonitor = () => {
     socket.off<SocketActionsType>('contact-interaction-updated', updateContactInteractionType)
     socket.off<SocketActionsType>('invite-received', processInvitation)
     socket.off<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
-
-    if (onlineCheckIntervalId) {
-      clearInterval(onlineCheckIntervalId)
-    }
+    pauseOnlineCheck()
   }
 
   onBeforeUnmount(disposeContactUpdateMonitor)

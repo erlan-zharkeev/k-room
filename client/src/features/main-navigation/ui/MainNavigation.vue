@@ -66,7 +66,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
     transform: translate(15%, -50%);
     scale: .9;
 
-    @include screen-until('portrait-tablet') {
+    @include screen-mobile {
       transform: translate(30%, -20%);
     }
   }

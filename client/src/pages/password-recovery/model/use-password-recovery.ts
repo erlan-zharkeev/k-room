@@ -1,3 +1,4 @@
+import { useIntervalFn } from '@vueuse/core'
 import type { FormProps, FormSubmitEvent } from '@primevue/forms/form'
 import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import {
@@ -42,24 +43,24 @@ export const usePasswordRecovery = () => {
   const codeSent = ref(false)
   const counterValue = ref(0)
   const debugCode = ref('')
-  let counterIntervalId: ReturnType<typeof setInterval> | undefined
 
-  const stopCounter = () => {
-    if (counterIntervalId) {
-      clearInterval(counterIntervalId)
-      counterIntervalId = undefined
-    }
-  }
-
-  const startCounter = () => {
-    stopCounter()
-    counterIntervalId = setInterval(() => {
+  const { pause: pauseCounter, resume: resumeCounter } = useIntervalFn(
+    () => {
       counterValue.value = Math.max(counterValue.value - 1, 0)
 
       if (counterValue.value <= 0) {
-        stopCounter()
+        pauseCounter()
       }
-    }, PASSWORD_RECOVERY_COUNTER_TICK_MS)
+    },
+    PASSWORD_RECOVERY_COUNTER_TICK_MS,
+    { immediate: false, immediateCallback: false }
+  )
+
+  const stopCounter = () => pauseCounter()
+
+  const startCounter = () => {
+    stopCounter()
+    resumeCounter()
   }
 
   const syncQuery = async (email: string, nextRequestTimestampMs: number) => {

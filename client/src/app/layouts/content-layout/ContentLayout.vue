@@ -41,11 +41,6 @@ const handleBack = () => {
 </template>
 
 <style lang="scss">
-.content-layout__content {
-  padding-right: 8px;
-  padding-left: 4px;
-}
-
 .content-layout__header {
   display: flex;
   gap: 4px;

@@ -47,6 +47,12 @@ $screen-breakpoints: (
   }
 }
 
+@mixin screen-tablet-up {
+  @include screen-from('tablet') {
+    @content;
+  }
+}
+
 @mixin screen-desktop {
   @include screen-from('desktop') {
     @content;

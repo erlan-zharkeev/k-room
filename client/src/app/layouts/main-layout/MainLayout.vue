@@ -91,7 +91,7 @@ const contentTitleKey = computed(() => {
   height: 100%;
   min-height: 0;
 
-  @include screen-until('portrait-tablet') {
+  @include screen-mobile {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -102,7 +102,7 @@ const contentTitleKey = computed(() => {
   gap: 12px;
   min-height: 0;
 
-  @include screen-until('portrait-tablet') {
+  @include screen-mobile {
     grid-template-rows: var(--bar-thickness) minmax(0, 1fr) var(--bar-thickness);
   }
 }
@@ -116,7 +116,7 @@ const contentTitleKey = computed(() => {
   min-width: 0;
   min-height: 0;
 
-  @include screen-until('portrait-tablet') {
+  @include screen-mobile {
     grid-template-columns: 1fr;
   }
 }

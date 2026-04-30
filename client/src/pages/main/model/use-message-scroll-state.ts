@@ -1,3 +1,4 @@
+import { useTimeoutFn } from '@vueuse/core'
 import type { Virtualizer } from '@tanstack/vue-virtual'
 import { nextTick, onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
@@ -12,7 +13,7 @@ export const useMessageScrollState = (
   virtualizer: Ref<Virtualizer<HTMLElement, HTMLElement>>
 ) => {
   const { settings, setByPath } = useSettings()
-  let scrollSaveTimeoutId: ReturnType<typeof setTimeout> | undefined
+  let roomIdToPersist = ''
 
   const getScrollState = (): IMessageListScrollState | null => {
     const element = scrollElement.value
@@ -35,14 +36,16 @@ export const useMessageScrollState = (
     await setByPath(`messageScrollByRoom.${roomId}`, state)
   }
 
-  const schedulePersistScrollState = (roomId: string) => {
-    if (scrollSaveTimeoutId) {
-      clearTimeout(scrollSaveTimeoutId)
-    }
+  const { start: startScrollSaveTimeout, stop: stopScrollSaveTimeout } = useTimeoutFn(
+    () => void persistScrollState(roomIdToPersist),
+    MESSAGE_SCROLL_SAVE_DEBOUNCE_MS,
+    { immediate: false }
+  )
 
-    scrollSaveTimeoutId = setTimeout(() => {
-      void persistScrollState(roomId)
-    }, MESSAGE_SCROLL_SAVE_DEBOUNCE_MS)
+  const schedulePersistScrollState = (roomId: string) => {
+    roomIdToPersist = roomId
+    stopScrollSaveTimeout()
+    startScrollSaveTimeout()
   }
 
   const restoreScrollState = async (roomId: string, state = settings.value.messageScrollByRoom[roomId]) => {
@@ -67,13 +70,7 @@ export const useMessageScrollState = (
     return true
   }
 
-  const clearScrollSaveTimeout = () => {
-    if (scrollSaveTimeoutId) {
-      clearTimeout(scrollSaveTimeoutId)
-    }
-  }
-
-  onBeforeUnmount(clearScrollSaveTimeout)
+  onBeforeUnmount(stopScrollSaveTimeout)
 
   return {
     getScrollState,

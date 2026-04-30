@@ -7,7 +7,7 @@
     background: transparent;
   }
 
-  @include screen-until('portrait-tablet') {
+  @include screen-mobile {
     .p-toast {
       right: 8px;
       left: 8px;

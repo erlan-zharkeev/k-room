@@ -13,12 +13,11 @@ import {
   API_SUCCESS_STATUS_END,
   API_SUCCESS_STATUS_START,
   CLIENT_ENV,
-  CLIENT_LANGUAGE,
   ERROR_TOAST_LIFE_MS,
   SUCCESS_TOAST_LIFE_MS,
   TOAST_I18N
 } from 'src/shared/config'
-import { useI18n } from 'src/shared/lib'
+import { currentLanguage, translate } from 'src/shared/lib'
 
 import { apiClient } from './api-client'
 import { getHeaderValue } from './get-header-value'
@@ -29,7 +28,6 @@ const isSuccessStatus = (status: number) => status >= API_SUCCESS_STATUS_START &
 
 export const useApi = () => {
   const toast = useToast()
-  const { t } = useI18n()
   const { interceptError } = useApiInterceptor()
 
   const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
@@ -44,7 +42,7 @@ export const useApi = () => {
     if (text && !silent) {
       toast.add({
         severity: isSuccess ? 'success' : 'warn',
-        summary: isSuccess ? t(TOAST_I18N.success) : t(TOAST_I18N.warn),
+        summary: isSuccess ? translate(TOAST_I18N.success) : translate(TOAST_I18N.warn),
         detail: text,
         life: isSuccess ? SUCCESS_TOAST_LIFE_MS : ERROR_TOAST_LIFE_MS
       })
@@ -65,7 +63,7 @@ export const useApi = () => {
       url: `${CLIENT_ENV.apiBaseUrl}${endpoint}`,
       headers: {
         'Content-Type': contentType,
-        [APP_LANGUAGE_HEADER]: CLIENT_LANGUAGE ?? DEFAULT_APP_LANGUAGE
+        [APP_LANGUAGE_HEADER]: currentLanguage.value ?? DEFAULT_APP_LANGUAGE
       },
       responseType,
       ...(type === 'get' ? { params: data } : { data })
@@ -95,7 +93,7 @@ export const useApi = () => {
             url: `${CLIENT_ENV.apiBaseUrl}${AUTH_ENDPOINTS.updateTokensPair}`,
             headers: {
               'Content-Type': 'application/json',
-              [APP_LANGUAGE_HEADER]: CLIENT_LANGUAGE ?? DEFAULT_APP_LANGUAGE
+              [APP_LANGUAGE_HEADER]: currentLanguage.value ?? DEFAULT_APP_LANGUAGE
             },
             responseType: 'json'
           })
