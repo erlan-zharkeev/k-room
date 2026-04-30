@@ -1,4 +1,4 @@
-import { isString } from 'global-shared'
+import { MEDIA_KIND_ACCEPT_MAP, MEDIA_MB_IN_BYTES, MEDIA_VALIDATION_OPTIONS_MAP, isString } from 'global-shared'
 
 import { MAIN_PAGE_ROUTES } from 'src/shared/config'
 
@@ -16,6 +16,11 @@ import SettingsWallpaperContent from '../ui/content/SettingsWallpaperContent.vue
 import { SETTINGS_PAGE_I18N } from './i18n'
 
 export const DEFAULT_SETTINGS_CONTENT_ID = 'account'
+
+const settingsAccountAvatarValidation = MEDIA_VALIDATION_OPTIONS_MAP.avatar
+
+export const SETTINGS_ACCOUNT_AVATAR_ACCEPT = MEDIA_KIND_ACCEPT_MAP[settingsAccountAvatarValidation.supportedKindMediaType]
+export const SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE = settingsAccountAvatarValidation.maxMb * MEDIA_MB_IN_BYTES
 
 export const getSettingsPath = (settingsId: string) => `${MAIN_PAGE_ROUTES.settings}/${settingsId}`
 

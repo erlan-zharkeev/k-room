@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { USER_ENDPOINTS } from 'global-shared'
-import { Button, InputText, Message, Password } from 'primevue'
+import { Button, FileUpload, InputText, Message, Password } from 'primevue'
+import type { FileUploadSelectEvent } from 'primevue/fileupload'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
@@ -8,6 +9,7 @@ import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
+import { SETTINGS_ACCOUNT_AVATAR_ACCEPT, SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants'
 import { SETTINGS_PAGE_I18N } from '../../config/i18n'
 
 const { put: putMedia, remove: removeMedia } = useMedia()
@@ -42,9 +44,8 @@ const clearAccountAvatarPreview = () => {
   accountAvatarPreviewUrl.value = ''
 }
 
-const uploadAccountAvatar = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
+const uploadAccountAvatar = ({ files }: FileUploadSelectEvent) => {
+  const file = Array.isArray(files) ? files[0] : undefined
 
   if (!file) return
 
@@ -61,7 +62,7 @@ const resetAccountAvatar = () => {
   clearAccountAvatarPreview()
 }
 
-const saveAccount = async () => {
+const updateAccountData = async () => {
   const username = accountUsername.value.trim()
   const currentAvatarId = avatarId.value
 
@@ -142,6 +143,7 @@ onBeforeUnmount(clearAccountAvatarPreview)
         <AppProfileBasicData
           :image-alt="user.username"
           :image-id="displayedAvatarId"
+          :image-src="accountAvatarPreviewUrl || undefined"
           :title="user.username"
         >
           <template #description>
@@ -151,16 +153,22 @@ onBeforeUnmount(clearAccountAvatarPreview)
       </div>
 
       <div class="settings-account-content__actions">
-        <label class="settings-account-content__file-button">
-          <AppText color="contrast-color" :text="$t(SETTINGS_PAGE_I18N.uploadPhoto)" />
-          <input
-            class="settings-account-content__file-input"
-            :aria-label="$t(SETTINGS_PAGE_I18N.uploadPhoto)"
-            accept="image/*"
-            type="file"
-            @change="uploadAccountAvatar"
-          />
-        </label>
+        <FileUpload
+          mode="basic"
+          auto
+          :accept="SETTINGS_ACCOUNT_AVATAR_ACCEPT"
+          :max-file-size="SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE"
+          :multiple="false"
+          :choose-label="$t(SETTINGS_PAGE_I18N.uploadPhoto)"
+          class="settings-account-content__file-button"
+          :choose-button-props="{
+            text: true,
+            size: 'small'
+          }"
+          @select="uploadAccountAvatar"
+        >
+          <template #filelabel />
+        </FileUpload>
         <Button
           :label="$t(SETTINGS_PAGE_I18N.resetPhoto)"
           size="small"
@@ -178,11 +186,11 @@ onBeforeUnmount(clearAccountAvatarPreview)
       <Button
         class="settings-account-content__submit"
         :disabled="isAccountSaveDisabled"
-        :label="$t(SETTINGS_PAGE_I18N.saveAccount)"
+        :label="$t(SETTINGS_PAGE_I18N.updateAccountData)"
         :loading="isAccountSaving"
         size="small"
         type="button"
-        @click="saveAccount"
+        @click="updateAccountData"
       />
     </div>
 
@@ -273,30 +281,11 @@ onBeforeUnmount(clearAccountAvatarPreview)
 }
 
 .settings-account-content__file-button {
-  cursor: pointer;
+  display: block;
+}
 
-  position: relative;
-
-  display: grid;
-  place-items: center;
-
+.settings-account-content__file-button :deep(.p-button) {
   min-height: 36px;
-  padding: 0 12px;
-  border: 1px solid var(--p-content-border-color);
-  border-radius: 8px;
-
-  background: var(--p-app-muted-background);
-}
-
-.settings-account-content__file-button:hover {
-  border-color: var(--p-primary-color);
-}
-
-.settings-account-content__file-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
 }
 
 .settings-account-content__submit {

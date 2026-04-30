@@ -96,7 +96,7 @@ export const MAIN_PAGE_I18N = defineI18n({
     ru: 'Сбросить фото',
     zh: '重置照片'
   },
-  saveAccount: {
+  updateAccountData: {
     en: 'Save account',
     ru: 'Сохранить аккаунт',
     zh: '保存账号'
