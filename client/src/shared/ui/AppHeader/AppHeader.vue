@@ -12,7 +12,7 @@ const color = computed(() => props.color ?? (props.accent ? 'accent-color' : und
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-header',
-    modifiers: [color.value, props.size, props.bold && 'bold', props.truncate && 'truncate']
+    modifiers: [color.value, props.bold && 'bold', props.truncate && 'truncate']
   })
 )
 </script>
@@ -49,22 +49,6 @@ h5.app-header {
   margin-top: 0;
   margin-bottom: 0;
   color: var(--p-app-text-muted);
-}
-
-.app-header--small {
-  font-size: 16px;
-}
-
-.app-header--medium {
-  font-size: 18px;
-}
-
-.app-header--large {
-  font-size: 20px;
-}
-
-.app-header--xlarge {
-  font-size: 24px;
 }
 
 .app-header--bold {

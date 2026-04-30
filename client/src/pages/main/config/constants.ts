@@ -1,5 +1,3 @@
-import { APP_LANGUAGE } from 'global-shared'
-
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
 import { MAIN_PAGE_ROUTES } from 'src/shared/config'
 
@@ -51,21 +49,6 @@ export const MAIN_PAGE_MESSAGE_ACTIONS = [
     severity: 'danger'
   }
 ] as const
-
-export const MAIN_PAGE_LANGUAGE_OPTIONS = [
-  {
-    label: 'English',
-    value: APP_LANGUAGE.En
-  },
-  {
-    label: 'Русский',
-    value: APP_LANGUAGE.Ru
-  },
-  {
-    label: '中文',
-    value: APP_LANGUAGE.Zh
-  }
-]
 
 export const MAIN_PAGE_SETTINGS_ITEMS = [
   {

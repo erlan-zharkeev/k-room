@@ -86,6 +86,11 @@ export const SETTINGS_PAGE_I18N = defineI18n({
     ru: 'Язык',
     zh: '语言'
   },
+  selectLanguage: {
+    en: 'Select language',
+    ru: 'Выбор языка',
+    zh: '选择语言'
+  },
   wallpaper: {
     en: 'Wallpaper',
     ru: 'Обои',
