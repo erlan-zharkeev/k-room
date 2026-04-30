@@ -53,10 +53,8 @@ const props = defineProps<IAppContentNavElProps>()
   }
 
   .app-content-nav-el__text {
-    overflow: hidden;
     display: grid;
     flex: 1 1 0;
-    min-width: 0;
   }
 
   @include screen-tablet-up {
