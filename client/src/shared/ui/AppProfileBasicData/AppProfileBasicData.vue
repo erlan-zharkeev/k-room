@@ -13,7 +13,7 @@ import type { IAppProfileBasicDataProps } from './types'
 const props = withDefaults(defineProps<IAppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
 
 const liveImageUrl = ref('')
-const imageSrc = computed(() => liveImageUrl.value || props.fallbackImageSrc)
+const imageSrc = computed(() => liveImageUrl.value || undefined)
 
 const clearLiveImageUrl = () => {
   if (liveImageUrl.value) {
@@ -52,7 +52,14 @@ watch(
 
 <template>
   <div class="app-profile-basic-data">
-    <Avatar class="app-profile-basic-data__avatar" shape='square' size='large' :image="imageSrc" :alt="props.imageAlt ?? props.title" />
+    <Avatar
+      class="app-profile-basic-data__avatar"
+      shape='square'
+      size='large'
+      :image="imageSrc"
+      :label="imageSrc ? undefined : props.title.charAt(0).toUpperCase()"
+      :alt="props.imageAlt ?? props.title"
+    />
     <div class="app-profile-basic-data__content">
       <AppHeader class="app-profile-basic-data__title" tag="h5" truncate :text="props.title" />
       <slot name="description" />

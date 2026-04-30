@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Divider } from 'primevue'
+import { Button } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -21,22 +21,31 @@ const handleBack = () => {
 
 <template>
   <section class="content-layout">
-    <div class="content-layout__header">
-      <Button
-        v-if="isMobile"
-        icon="pi pi-angle-left"
-        size="small"
-        severity="secondary"
-        @click="handleBack"
-      />
-      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
+    <div class="app-scroll-block">
+      <div class="content-layout__header">
+        <Button
+          v-if="isMobile"
+          icon="pi pi-angle-left"
+          size="small"
+          severity="secondary"
+          @click="handleBack"
+        />
+        <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
+      </div>
+      <div class="divider" />
+      <div class="content-layout__content">
+        <slot />
+      </div>
     </div>
-    <Divider class="content-layout__divider" />
-    <slot />
   </section>
 </template>
 
 <style lang="scss">
+.content-layout__content {
+  padding-right: 8px;
+  padding-left: 4px;
+}
+
 .content-layout__header {
   display: flex;
   gap: 4px;
@@ -46,13 +55,5 @@ const handleBack = () => {
 
 .content-layout__header-text {
   margin-left: 8px;
-}
-
-.content-layout__divider {
-  border-color: var(--p-app-text-contrast);
-}
-
-.content-layout__divider::before {
-  border-color: var(--p-app-text-contrast);
 }
 </style>
