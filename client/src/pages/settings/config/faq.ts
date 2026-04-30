@@ -2,7 +2,7 @@ import type { LocalizedTextType } from 'global-shared'
 
 import { SETTINGS_PAGE_I18N } from './i18n'
 
-interface IFaqItem {
+export interface IFaqItem {
   id: number
   question: LocalizedTextType<string>
   answer: LocalizedTextType<string>

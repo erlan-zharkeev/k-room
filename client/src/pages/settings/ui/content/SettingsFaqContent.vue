@@ -1,29 +1,13 @@
 <script setup lang="ts">
 import { Button, InputText } from 'primevue'
-import { computed, ref } from 'vue'
 
-import { useI18n } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
-import { FAQ_ITEMS } from '../../config/faq'
 import { SETTINGS_PAGE_I18N } from '../../config/i18n'
+import { useSettingsFaq } from '../../model/faq/use-settings-faq'
 import SettingsCard from '../SettingsCard.vue'
 
-const { t } = useI18n()
-const searchQuery = ref('')
-
-const filteredItems = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase()
-
-  if (!query) return FAQ_ITEMS
-
-  return FAQ_ITEMS.filter((item) => {
-    const question = t(item.question).toLowerCase()
-    const answer = t(item.answer).toLowerCase()
-
-    return question.includes(query) || answer.includes(query)
-  })
-})
+const { searchQuery, filteredItems } = useSettingsFaq()
 </script>
 
 <template>
@@ -61,12 +45,6 @@ const filteredItems = computed(() => {
 </template>
 
 <style lang="scss">
-.settings-faq-content {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-
 .settings-faq-content__list {
   display: grid;
   gap: 12px;
