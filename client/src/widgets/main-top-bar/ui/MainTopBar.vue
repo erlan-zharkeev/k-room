@@ -36,11 +36,11 @@ const { start: startOfflineStatusTimer, stop: stopOfflineStatusTimer } = useTime
 const socketTag = computed(() => {
   switch (displayedSocketStatus.value) {
     case 'online':
-      return { severity: 'success' as const, value: 'online' }
+      return { severity: 'success' as const, value: t(MAIN_TOP_BAR_I18N.online) }
     case 'reconnecting':
-      return { severity: 'warn' as const, value: 'reconnecting' }
+      return { severity: 'warn' as const, value: t(MAIN_TOP_BAR_I18N.reconnecting) }
     case 'offline':
-      return { severity: 'danger' as const, value: 'offline' }
+      return { severity: 'danger' as const, value: t(MAIN_TOP_BAR_I18N.offline) }
     default:
       return null
   }
@@ -92,14 +92,14 @@ watch(
 <style lang="scss">
 .main-top-bar {
   display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
 }
 
 .main-top-bar__profile {
-  min-width: 0;
   flex: 1 1 auto;
+  min-width: 0;
 }
 
 .main-top-bar__actions {

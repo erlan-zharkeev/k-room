@@ -253,12 +253,12 @@ export const MAIN_PAGE_I18N = defineI18n({
   },
   online: {
     en: 'online',
-    ru: 'online',
+    ru: 'в сети',
     zh: '在线'
   },
   offline: {
     en: 'offline',
-    ru: 'offline',
+    ru: 'не в сети',
     zh: '离线'
   },
   invite: {
@@ -453,7 +453,7 @@ export const MAIN_PAGE_I18N = defineI18n({
   },
   reconnecting: {
     en: 'reconnecting',
-    ru: 'reconnecting',
+    ru: 'переподключение',
     zh: '正在重连'
   },
   connected: {
