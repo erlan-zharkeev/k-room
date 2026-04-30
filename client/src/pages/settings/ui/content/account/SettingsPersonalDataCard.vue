@@ -57,7 +57,7 @@ const {
         </template>
         <template #description>
           <div v-if="user.id" class="settings-personal-data-card__profile-description">
-            <AppText size="small" :text="displayedUserId" />
+            <AppText tag="small" :text="displayedUserId" />
             <Button
               class="settings-personal-data-card__copy-button"
               :aria-label="$t(SETTINGS_PAGE_I18N.copyId)"
@@ -99,7 +99,7 @@ const {
     </div>
 
     <label class="settings-personal-data-card__field">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.nickname)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.nickname)" />
       <InputText v-model="accountNickname" autocomplete="nickname" fluid size="small" />
       <Message v-if="accountNicknameError" severity="error" size="small" variant="simple">
         {{ accountNicknameError }}

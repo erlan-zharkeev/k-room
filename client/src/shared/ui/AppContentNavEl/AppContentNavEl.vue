@@ -32,7 +32,7 @@ const props = defineProps<IAppContentNavElProps>()
       >
         <div class="app-content-nav-el__text">
           <AppHeader tag="h5" truncate :text="props.label" />
-          <AppText tag="p" truncate size="small" color="semi-contrast-color" :text="props.description" />
+          <AppText tag="small" truncate color="semi-contrast-color" :text="props.description" />
         </div>
 
         <i class="pi pi-angle-right app-content-nav-el__icon app-text" aria-hidden="true" />

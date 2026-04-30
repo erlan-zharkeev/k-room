@@ -4,8 +4,8 @@ import { computed, useSlots } from 'vue'
 
 import { AppHeader } from 'src/shared/ui'
 
-import { SETTINGS_CARD_DEFAULT_PROPS } from './SettingsCard.constants'
-import type { ISettingsCardProps } from './SettingsCard.types'
+import { SETTINGS_CARD_DEFAULT_PROPS } from './settings-card.constants'
+import type { ISettingsCardProps } from './settings-card.types'
 
 const props = withDefaults(defineProps<ISettingsCardProps>(), SETTINGS_CARD_DEFAULT_PROPS)
 
@@ -20,7 +20,7 @@ const handleButtonClick = () => {
 <template>
   <div class="settings-card">
     <div class="settings-card__title">
-      <AppHeader tag="h2" size="small" color="contrast-color" :text="title" />
+      <AppHeader tag="h2" color="contrast-color" :text="title" />
     </div>
 
     <div class="settings-card__content">
