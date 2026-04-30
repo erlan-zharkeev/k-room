@@ -57,6 +57,7 @@ h5.app-header {
 
 .app-header--truncate {
   overflow: hidden;
+  min-width: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
