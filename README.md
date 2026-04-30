@@ -243,7 +243,7 @@ Use:
 ```ts
 export type BannerType = 'success' | 'error' | 'info' | 'warning'
 export type AppLanguageType = 'ru' | 'en'
-export type DbContactType = { id: string; username: string }
+export type DbContactType = { id: string; nickname: string }
 ```
 
 Do not use:
@@ -604,7 +604,6 @@ Typical contents of `config`:
 
 ```text
 constants.ts
-types.ts
 message.ts
 schema.ts
 ```
@@ -625,22 +624,7 @@ lib/transform-room-data.ts
 lib/get-message-group-date-label.ts
 ```
 
-5. If a component exists only to split one parent component and is not reused elsewhere, keep it inside that parent component in a `components` directory.
-
-Use:
-
-```text
-ForwardMessageModal/
-  components/
-    ShortChatList/
-      index.ts
-      ShortChatList.tsx
-      style.scss
-      config/
-        index.ts
-        types.ts
-  ForwardMessageModal.tsx
-```
+If a component exists only to split one parent component and is not reused elsewhere, keep it inside that parent component in a `components` directory.
 
 Do not lift such local split-only components to the feature root or neighboring public directories when they are only implementation details of one parent component.
 
