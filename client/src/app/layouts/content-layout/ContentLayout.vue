@@ -23,14 +23,12 @@ const handleBack = () => {
   <section class="content-layout">
     <div class="app-scroll-block">
       <div class="content-layout__header">
-        <Button
-          v-if="isMobile"
-          icon="pi pi-angle-left"
-          size="small"
-          severity="secondary"
-          @click="handleBack"
+        <Button v-if="isMobile" icon="pi pi-angle-left" size="small" severity="secondary" @click="handleBack" />
+        <AppHeader
+          v-if="props.titleKey"
+          :text="$t(CONTENT_TITLE[props.titleKey])"
+          class="content-layout__header-text"
         />
-        <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
       </div>
       <div class="divider" />
       <div class="content-layout__content">

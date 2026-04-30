@@ -9,6 +9,7 @@ import {
   type IAuthRegistrationPayload,
   type IConfirmEmailResponse,
   type ILoginResponse,
+  type ISendConfirmationLinkPayload,
   type ISendConfirmationLinkResponse,
   type ISignInWithProviderPayload,
   type ISignInWithProviderResponse,
@@ -19,9 +20,11 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
+import { getRequestIp } from 'src/shared/lib/get-request-ip'
 import { localizedText } from 'src/shared/lib/localized-text'
 
 import { EmailService } from '../email/email.service'
+import { SecurityService } from '../security/security.service'
 import { USER_I18N } from '../user/user.i18n'
 import { UserModel } from '../user/user.model'
 import { loadGoogleAvatar, updateUserAvatar, UserService } from '../user/user.service'
@@ -40,7 +43,11 @@ import { parseTokenExpires } from './lib/parse-token-expires'
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly emailService: EmailService, private readonly userService: UserService) {}
+  constructor(
+    private readonly emailService: EmailService,
+    private readonly userService: UserService,
+    private readonly securityService: SecurityService
+  ) {}
 
   private getCookieOptions(maxAgeMs: number): CookieOptions {
     return {
@@ -142,14 +149,20 @@ export class AuthService {
 
   async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<ILoginResponse> {
     const { language } = request
+    const ip = getRequestIp(request)
+
+    await this.securityService.assertLoginAllowed(payload.captchaToken, ip, language, payload.login)
+
     const user = await this.userService.findByLogin(payload.login)
 
     if (!user) {
+      await this.securityService.trackLoginFailure(ip, payload.login)
       throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.invalidEmailOrPassword, language))
     }
 
     const isPasswordValid = await bcrypt.compare(payload.password, user.system.password)
     if (!isPasswordValid) {
+      await this.securityService.trackLoginFailure(ip, payload.login)
       throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.invalidEmailOrPassword, language))
     }
 
@@ -157,15 +170,19 @@ export class AuthService {
       throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.emailNotConfirmed, language))
     }
 
+    await this.securityService.clearLoginFailures(payload.login)
     await this.updateTokens(String(user._id), request, response)
 
     return this.userService.mapUserToDto(user)
   }
 
-  async registration(
-    payload: IAuthRegistrationPayload,
-    language: AppLanguageType
-  ): Promise<ISendConfirmationLinkResponse> {
+  async registration(payload: IAuthRegistrationPayload, request: Request): Promise<ISendConfirmationLinkResponse> {
+    const { language } = request
+    const ip = getRequestIp(request)
+
+    await this.securityService.assertRegistrationAllowed(payload.captchaToken, ip, language)
+    await this.securityService.trackRegistrationAttempt(ip)
+
     const userExistState = await this.userService.isUserExist({
       nickname: payload.nickname,
       email: payload.email
@@ -229,21 +246,46 @@ export class AuthService {
   }
 
   async sendConfirmationLink(
-    email: string,
-    language: AppLanguageType
-  ): Promise<ISendConfirmationLinkResponse & { alreadyConfirmed: boolean }> {
+    payload: ISendConfirmationLinkPayload,
+    request: Request
+  ): Promise<ISendConfirmationLinkResponse & { alreadyConfirmed: boolean; rateLimited: boolean }> {
+    const { language } = request
+    const ip = getRequestIp(request)
+    const email = payload.email.trim()
+    const cooldownUntil = await this.securityService.getSendConfirmationLinkCooldown(email)
+
+    if (cooldownUntil) {
+      return {
+        email,
+        attempts: 0,
+        nextRequestTime: cooldownUntil,
+        alreadyConfirmed: false,
+        rateLimited: true
+      }
+    }
+
+    await this.securityService.assertSendConfirmationLinkAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.trackSendConfirmationLinkAttempt(ip, email)
+
     const user = await this.userService.findByEmail(email)
 
     if (!user) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(USER_I18N.userNotFound, language))
+      return {
+        email,
+        attempts: 0,
+        nextRequestTime: Date.now() + SEND_CONFIRMATION_LINK_INTERVAL_MS,
+        alreadyConfirmed: false,
+        rateLimited: false
+      }
     }
 
     if (user.system.confirmed) {
       return {
         email: user.personal.email,
         attempts: user.system.confirmAttempts,
-        nextRequestTime: Date.now(),
-        alreadyConfirmed: true
+        nextRequestTime: Date.now() + SEND_CONFIRMATION_LINK_INTERVAL_MS,
+        alreadyConfirmed: true,
+        rateLimited: false
       }
     }
 
@@ -271,7 +313,8 @@ export class AuthService {
       email: user.personal.email,
       attempts: user.system.confirmAttempts,
       nextRequestTime: Date.now() + SEND_CONFIRMATION_LINK_INTERVAL_MS,
-      alreadyConfirmed: false
+      alreadyConfirmed: false,
+      rateLimited: false
     }
   }
 

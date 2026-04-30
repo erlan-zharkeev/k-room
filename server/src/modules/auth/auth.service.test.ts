@@ -72,7 +72,15 @@ describe('AuthService', () => {
       findById: vi.fn().mockResolvedValue(user),
       mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
     }
-    const service = new AuthService({} as never, userService as never)
+    const service = new AuthService(
+      {} as never,
+      userService as never,
+      {
+        assertLoginAllowed: vi.fn(),
+        clearLoginFailures: vi.fn(),
+        trackLoginFailure: vi.fn()
+      } as never
+    )
 
     const result = await service.login(
       { login: '@tester', password: 'Asdf1234' },
@@ -104,6 +112,11 @@ describe('AuthService', () => {
       {} as never,
       {
         findByLogin: vi.fn().mockResolvedValue(user)
+      } as never,
+      {
+        assertLoginAllowed: vi.fn(),
+        clearLoginFailures: vi.fn(),
+        trackLoginFailure: vi.fn()
       } as never
     )
 
@@ -130,7 +143,7 @@ describe('AuthService', () => {
 
     userServiceExportsMock.loadGoogleAvatar.mockResolvedValue(avatar)
 
-    const service = new AuthService({} as never, userService as never)
+    const service = new AuthService({} as never, userService as never, {} as never)
 
     await service.signInWithProvider(
       {
@@ -154,7 +167,8 @@ describe('AuthService', () => {
       {} as never,
       {
         findById: vi.fn().mockResolvedValue(user)
-      } as never
+      } as never,
+      {} as never
     )
 
     userModelMock.updateOne.mockResolvedValue({ modifiedCount: 0 })
@@ -177,7 +191,7 @@ describe('AuthService', () => {
     const userService = {
       findById: vi.fn().mockResolvedValue(user)
     }
-    const service = new AuthService({} as never, userService as never)
+    const service = new AuthService({} as never, userService as never, {} as never)
 
     user.system.device = {
       'device-1': {
@@ -209,7 +223,10 @@ describe('AuthService', () => {
     expect(user.markModified).toHaveBeenCalledWith('system.device')
     expect(user.save).toHaveBeenCalled()
     expect(response.clearCookie).toHaveBeenCalledTimes(3)
-    expect(response.clearCookie).toHaveBeenCalledWith('jwt', expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' }))
+    expect(response.clearCookie).toHaveBeenCalledWith(
+      'jwt',
+      expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
+    )
     expect(response.clearCookie).toHaveBeenCalledWith(
       'refresh-jwt',
       expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })

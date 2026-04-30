@@ -12,7 +12,7 @@ import clone from 'lodash/clone'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useApi } from 'src/shared/api'
+import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
 import { buildPathWithParams, useI18n } from 'src/shared/lib'
 
 import { DEFAULT_REGISTRATION_FORM_DATA } from '../config/constants'
@@ -26,22 +26,43 @@ export const useRegistration = () => {
   const isLoading = ref(false)
   const formData = reactive(clone(DEFAULT_REGISTRATION_FORM_DATA))
   const resolver: FormProps['resolver'] = valibotResolver(createAuthRegistrationFormSchema(createValidationMessages(t)))
+  const {
+    buildCaptchaPayload,
+    captchaAvailable,
+    captchaRequired,
+    captchaResetKey,
+    captchaToken,
+    handleProtectedActionError,
+    resetCaptcha
+  } = useProtectedActionCaptcha()
 
   const register = async (payload: IAuthRegistrationPayload) => {
     isLoading.value = true
+    const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
       const response = await doRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
       const pathname = buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, response.data.payload)
 
       await router.push(pathname)
+    } catch (error) {
+      handleProtectedActionError(error)
     } finally {
+      if (shouldResetCaptcha) {
+        resetCaptcha()
+      }
+
       isLoading.value = false
     }
   }
 
   const submitRegistration = ({ email, password, nickname }: RegistrationFormDataType) => {
-    register({ email, password, nickname })
+    register({
+      email,
+      nickname,
+      password,
+      ...buildCaptchaPayload()
+    })
   }
 
   const submit = ({ valid }: FormSubmitEvent) => {
@@ -51,6 +72,10 @@ export const useRegistration = () => {
   }
 
   return {
+    captchaAvailable,
+    captchaRequired,
+    captchaResetKey,
+    captchaToken,
     formData,
     isLoading,
     register,

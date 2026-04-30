@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import { formatAppName, IEnvCommonVariables, IEnvVariables } from 'common'
+import { formatAppName, IEnvSharedVariables, IEnvVariables } from 'common'
 import dotenv, { DotenvParseOutput } from 'dotenv'
 
 import { IServerEnv } from '../types/server-env'
 
 const stage = process.env.NODE_ENV ?? 'development'
 const envs = dotenv.config({ path: `../.env.${stage}` }).parsed as DotenvParseOutput | IEnvVariables
-const commonEnvs = dotenv.config({ path: `../.env.common` }).parsed as DotenvParseOutput | IEnvCommonVariables
+const sharedEnvs = dotenv.config({ path: `../.env.shared` }).parsed as DotenvParseOutput | IEnvSharedVariables
 
 const {
   ACCESS_TOKEN_SECRET,
@@ -25,7 +25,7 @@ const {
   COOKIE_DOMAIN
 } = envs
 
-const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, ADMIN_ROOT_PATH, ADMIN_COOKIE } = commonEnvs
+const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, ADMIN_ROOT_PATH, ADMIN_COOKIE } = sharedEnvs
 
 const isDev = stage !== 'production'
 const { version: APP_VERSION, name: APP_NAME } = JSON.parse(

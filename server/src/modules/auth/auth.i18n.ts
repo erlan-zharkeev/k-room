@@ -106,6 +106,11 @@ export const AUTH_I18N = defineI18n({
     ru: 'Ссылка подтверждения отправлена',
     zh: '确认链接已发送'
   },
+  confirmationLinkCooldown: {
+    en: 'Please wait before requesting a new confirmation email',
+    ru: 'Подождите перед повторной отправкой письма с подтверждением',
+    zh: '请稍后再请求新的确认邮件'
+  },
   noConfirmationAttemptsLeft: {
     en: 'No confirmation attempts left',
     ru: 'Попытки подтверждения закончились',

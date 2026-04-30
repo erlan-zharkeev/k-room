@@ -1,9 +1,11 @@
 import { randomInt, randomUUID } from 'node:crypto'
 
 import { Injectable } from '@nestjs/common'
+import { type Request } from 'express'
 import {
-  type AppLanguageType,
+  type ICodeValidationPayload,
   formatNickname,
+  type ISendPasswordRecoveryCodePayload,
   type ISendPasswordRecoveryCodeResponse,
   type IValidatePasswordRecoveryCodeResponse,
   REQ_STATUS
@@ -11,10 +13,11 @@ import {
 
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
+import { getRequestIp } from 'src/shared/lib/get-request-ip'
 import { localizedText } from 'src/shared/lib/localized-text'
 
 import { EmailService } from '../email/email.service'
-import { USER_I18N } from '../user/user.i18n'
+import { SecurityService } from '../security/security.service'
 import { UserService } from '../user/user.service'
 
 import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
@@ -27,19 +30,33 @@ const buildPasswordRecoveryCode = () => {
 
 @Injectable()
 export class CodesService {
-  constructor(private readonly emailService: EmailService, private readonly userService: UserService) {}
+  constructor(
+    private readonly emailService: EmailService,
+    private readonly userService: UserService,
+    private readonly securityService: SecurityService
+  ) {}
 
   async sendPasswordRecoveryCode(
-    email: string,
-    language: AppLanguageType
+    payload: ISendPasswordRecoveryCodePayload,
+    request: Request
   ): Promise<ISendPasswordRecoveryCodeResponse & { tooManyRequests: boolean }> {
+    const { language } = request
+    const ip = getRequestIp(request)
+    const email = payload.email.trim()
+
+    await this.securityService.assertSendPasswordRecoveryAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.trackSendPasswordRecoveryAttempt(ip, email)
+
+    const nowTimestampMs = Date.now()
     const user = await this.userService.findByEmail(email)
 
     if (!user) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(USER_I18N.userNotFound, language))
+      return {
+        nextTimeRequest: nowTimestampMs + RESEND_CODE_INTERVAL_MS,
+        tooManyRequests: false
+      }
     }
 
-    const nowTimestampMs = Date.now()
     const userId = String(user._id)
     const existingCode = await CodeModel.findById(userId)
 
@@ -82,19 +99,30 @@ export class CodesService {
   }
 
   async validatePasswordRecoveryCode(
-    email: string,
-    code: string,
-    language: AppLanguageType
+    payload: ICodeValidationPayload,
+    request: Request
   ): Promise<IValidatePasswordRecoveryCodeResponse> {
+    const { language } = request
+    const ip = getRequestIp(request)
+    const email = payload.email.trim()
+    const code = payload.code.trim()
+
+    await this.securityService.assertValidatePasswordRecoveryCodeAllowed(payload.captchaToken, email, ip, language)
+
     const user = await this.userService.findByEmail(email)
 
     if (!user) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(USER_I18N.userNotFound, language))
+      await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
+      throw new AppError(
+        REQ_STATUS.badRequest,
+        localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
+      )
     }
 
     const codeDoc = await CodeModel.findById(String(user._id))
 
     if (!codeDoc) {
+      await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
       throw new AppError(
         REQ_STATUS.badRequest,
         localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
@@ -112,6 +140,19 @@ export class CodesService {
     }
 
     if (currentCode !== code) {
+      const { blocked } = await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
+
+      if (blocked) {
+        await codeDoc.updateOne({
+          $set: {
+            'codes.passwordRecovery.query.value': '',
+            'codes.passwordRecovery.query.expiresAt': 0,
+            'codes.passwordRecovery.email.value': '',
+            'codes.passwordRecovery.email.expiresAt': 0
+          }
+        })
+      }
+
       throw new AppError(
         REQ_STATUS.badRequest,
         localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
@@ -126,6 +167,7 @@ export class CodesService {
         'codes.passwordRecovery.query.expiresAt': Date.now() + QUERY_LIFE_MS
       }
     })
+    await this.securityService.clearPasswordRecoveryCodeFailures(email)
 
     return {
       query

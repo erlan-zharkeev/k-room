@@ -4,13 +4,15 @@ export class AppError extends Error {
   readonly status: ReqStatusType
   readonly silent: boolean
   readonly cause?: unknown
+  readonly payload?: unknown
 
-  constructor(status: ReqStatusType, message: string, silent = false, cause?: unknown) {
+  constructor(status: ReqStatusType, message: string, silent = false, cause?: unknown, payload?: unknown) {
     super(message)
     this.name = 'AppError'
     this.status = status
     this.silent = silent
     this.cause = cause
+    this.payload = payload
   }
 }
 

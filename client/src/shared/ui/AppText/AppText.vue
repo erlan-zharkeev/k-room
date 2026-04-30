@@ -11,7 +11,13 @@ const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-text',
-    modifiers: [props.color, props.align, props.bold && 'bold', props.truncate && 'truncate', props.noLineHeight && 'no-line-height']
+    modifiers: [
+      props.color,
+      props.align,
+      props.bold && 'bold',
+      props.truncate && 'truncate',
+      props.noLineHeight && 'no-line-height'
+    ]
   })
 )
 </script>

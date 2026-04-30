@@ -88,11 +88,21 @@ watch(() => props.language, mountPicker)
 <template>
   <div class="app-emoji-picker" :class="{ 'app-emoji-picker--expanded': isExpanded }">
     <div class="app-emoji-picker__quick-row">
-      <Button v-for="emoji in quickEmojiList"
-      severity="secondary"     @click="emit('select', emoji)"
+      <Button
+        v-for="emoji in quickEmojiList"
+        severity="secondary"
+        @click="emit('select', emoji)"
         :key="emoji"
-        class="app-emoji-picker__quick-button">{{ emoji }}</Button>
-      <Button v-if="!isExpanded" @click="expandPicker" severity='secondary' icon="pi pi-arrow-up-right-and-arrow-down-left-from-center" size="small" />
+        class="app-emoji-picker__quick-button"
+        >{{ emoji }}</Button
+      >
+      <Button
+        v-if="!isExpanded"
+        @click="expandPicker"
+        severity="secondary"
+        icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
+        size="small"
+      />
     </div>
     <div v-if="isExpanded" ref="pickerRoot" class="app-emoji-picker__full" />
   </div>

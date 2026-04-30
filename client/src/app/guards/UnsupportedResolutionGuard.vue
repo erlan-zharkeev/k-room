@@ -18,17 +18,8 @@ const isUnsupportedResolution = computed(
 
 <template>
   <div v-if="isUnsupportedResolution" class="unsupported-resolution-guard" role="alert">
-    <AppHeader
-      tag="h1"
-      size="xlarge"
-      align="center"
-      :text="t(APP_I18N.unsupportedResolutionTitle)"
-    />
-    <AppText
-      size="large"
-      align="center"
-      :text="t(APP_I18N.unsupportedResolutionDescription)"
-    />
+    <AppHeader tag="h1" size="xlarge" align="center" :text="t(APP_I18N.unsupportedResolutionTitle)" />
+    <AppText size="large" align="center" :text="t(APP_I18N.unsupportedResolutionDescription)" />
   </div>
 </template>
 

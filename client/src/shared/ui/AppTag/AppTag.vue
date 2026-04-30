@@ -9,14 +9,12 @@ import type { IAppTagProps } from './types'
 
 const props = withDefaults(defineProps<IAppTagProps>(), { severity: 'secondary' })
 
-const className = computed(() =>
-  createClassNameWithModifiers({ rootClass: 'app-tag', modifiers: [props.severity] })
-)
+const className = computed(() => createClassNameWithModifiers({ rootClass: 'app-tag', modifiers: [props.severity] }))
 </script>
 
 <template>
   <span :class="className">
-    <AppText tag="small" color='contrast-color'>
+    <AppText tag="small" color="contrast-color">
       <slot>{{ props.value }}</slot>
     </AppText>
   </span>

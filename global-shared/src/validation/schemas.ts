@@ -8,6 +8,9 @@ import type { ValidationMessagesType } from './types'
 
 const requiredStringSchema = (message: string) => v.pipe(v.string(message), v.trim(), v.nonEmpty(message))
 
+const captchaTokenSchema = (messages: ValidationMessagesType) =>
+  v.optional(requiredStringSchema(messages.fieldIsRequired))
+
 const emailSchema = (messages: ValidationMessagesType) =>
   v.pipe(requiredStringSchema(messages.emailIsRequired), v.email(messages.invalidEmailFormat))
 
@@ -32,14 +35,16 @@ const nicknameSchema = (messages: ValidationMessagesType) =>
 export const createAuthLoginSchema = (messages: ValidationMessagesType) =>
   v.object({
     login: requiredStringSchema(messages.fieldIsRequired),
-    password: requiredStringSchema(messages.passwordIsRequired)
+    password: requiredStringSchema(messages.passwordIsRequired),
+    captchaToken: captchaTokenSchema(messages)
   })
 
 export const createAuthRegistrationSchema = (messages: ValidationMessagesType) =>
   v.object({
     nickname: nicknameSchema(messages),
     email: emailSchema(messages),
-    password: createPasswordSchema(messages)
+    password: createPasswordSchema(messages),
+    captchaToken: captchaTokenSchema(messages)
   })
 
 export const createAuthRegistrationFormSchema = (messages: ValidationMessagesType) =>
@@ -64,7 +69,8 @@ export const createProviderLoginSchema = (messages: ValidationMessagesType) =>
 
 export const createSendPasswordRecoveryCodeSchema = (messages: ValidationMessagesType) =>
   v.object({
-    email: emailSchema(messages)
+    email: emailSchema(messages),
+    captchaToken: captchaTokenSchema(messages)
   })
 
 export const createSendConfirmationLinkSchema = createSendPasswordRecoveryCodeSchema
@@ -72,7 +78,8 @@ export const createSendConfirmationLinkSchema = createSendPasswordRecoveryCodeSc
 export const createValidatePasswordRecoveryCodeSchema = (messages: ValidationMessagesType) =>
   v.object({
     email: emailSchema(messages),
-    code: requiredStringSchema(messages.fieldIsRequired)
+    code: requiredStringSchema(messages.fieldIsRequired),
+    captchaToken: captchaTokenSchema(messages)
   })
 
 export const createResetPasswordSchema = (messages: ValidationMessagesType) =>

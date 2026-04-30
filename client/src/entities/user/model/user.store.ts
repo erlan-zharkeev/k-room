@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 import { INITIAL_USER_STORE } from '../config/constants'
+
 import type { User } from './types'
 
 export const useUserStore = defineStore('user', {

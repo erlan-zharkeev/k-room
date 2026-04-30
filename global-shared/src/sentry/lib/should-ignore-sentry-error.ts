@@ -1,7 +1,6 @@
 import { REQ_STATUS } from '../../status/constants'
-import type { ISentryErrorContext } from '../types'
-
 import { SENTRY_IGNORED_SUBSTRINGS } from '../constants'
+import type { ISentryErrorContext } from '../types'
 
 export const isIgnoredSentryStatus = (status?: number | null) => {
   switch (status) {
@@ -9,6 +8,7 @@ export const isIgnoredSentryStatus = (status?: number | null) => {
     case REQ_STATUS.notAuth:
     case REQ_STATUS.forbidden:
     case REQ_STATUS.notFound:
+    case REQ_STATUS.tooManyRequests:
       return true
     default:
       return false

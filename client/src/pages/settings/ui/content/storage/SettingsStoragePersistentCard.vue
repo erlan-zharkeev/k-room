@@ -20,10 +20,6 @@ const emit = defineEmits<{
     :on-button-click="isPersistent ? undefined : () => emit('request')"
   >
     <AppText :text="$t(SETTINGS_PAGE_I18N.storagePersistentDescription)" />
-    <AppText
-      v-if="isPersistent"
-      color="accent-color"
-      :text="$t(SETTINGS_PAGE_I18N.storagePersistentGranted)"
-    />
+    <AppText v-if="isPersistent" color="accent-color" :text="$t(SETTINGS_PAGE_I18N.storagePersistentGranted)" />
   </SettingsCard>
 </template>

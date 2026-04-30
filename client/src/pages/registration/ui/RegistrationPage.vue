@@ -1,23 +1,26 @@
 <script setup lang="ts">
 import { Form } from '@primevue/forms'
-import { ROUTE_NAMES } from 'global-shared'
+import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { Button, Checkbox, InputText, Message, Password } from 'primevue'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { isFormFieldInvalid } from 'src/shared/lib'
-import { AppText } from 'src/shared/ui'
+import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { PRIVACY_POLICY_SWITCH_I18N, REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration'
 
-const { formData, isLoading, resolver, submit } = useRegistration()
+const { captchaRequired, captchaResetKey, captchaToken, formData, isLoading, resolver, submit } = useRegistration()
+const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
+const isSubmitDisabled = computed(() => isLoading.value || isCaptchaBlocked.value)
 </script>
 
 <template>
   <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="registration-page" @submit="submit">
     <div class="registration-page__field">
       <InputText
-        v-model="formData.nickname"
+        v-model.trim="formData.nickname"
         autocomplete="nickname"
         :disabled="isLoading"
         fluid
@@ -32,7 +35,7 @@ const { formData, isLoading, resolver, submit } = useRegistration()
 
     <div class="registration-page__field">
       <InputText
-        v-model="formData.email"
+        v-model.trim="formData.email"
         autocomplete="email"
         :disabled="isLoading"
         fluid
@@ -88,9 +91,16 @@ const { formData, isLoading, resolver, submit } = useRegistration()
       </Message>
     </div>
 
+    <AppCaptcha
+      v-if="captchaRequired"
+      :action="SECURITY_ACTION.registration"
+      v-model="captchaToken"
+      :reset-key="captchaResetKey"
+    />
+
     <Button
       class="registration-page__submit"
-      :disabled="isLoading || !$form.valid"
+      :disabled="isSubmitDisabled || !$form.valid"
       fluid
       :label="$t(REGISTRATION_FORM_I18N.submit)"
       :loading="isLoading"

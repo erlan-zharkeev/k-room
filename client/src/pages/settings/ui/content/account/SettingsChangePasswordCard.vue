@@ -50,14 +50,7 @@ const {
 
     <label class="settings-change-password-card__field">
       <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.confirmPassword)" />
-      <Password
-        v-model="repeatPassword"
-        :feedback="false"
-        autocomplete="new-password"
-        fluid
-        size="small"
-        toggle-mask
-      />
+      <Password v-model="repeatPassword" :feedback="false" autocomplete="new-password" fluid size="small" toggle-mask />
     </label>
 
     <Message v-if="passwordMismatch" severity="error" size="small" variant="simple">

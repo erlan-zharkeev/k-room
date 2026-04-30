@@ -3,8 +3,10 @@ import { type Request, type Response } from 'express'
 import {
   CODES_ENDPOINTS,
   type IBackendResponse,
+  type ICodeValidationPayload,
   isString,
   type ISendPasswordRecoveryCodeResponse,
+  type ISendPasswordRecoveryCodePayload,
   type IValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 
@@ -24,13 +26,13 @@ export class CodesController {
   async sendPasswordRecoveryCode(
     @Req() request: Request,
     @Res() response: Response<IBackendResponse<ISendPasswordRecoveryCodeResponse>>,
-    @Body('email') email: string
+    @Body() payload: ISendPasswordRecoveryCodePayload
   ) {
     const { language } = request
 
     try {
       runRequestValidation(request, SEND_PASSWORD_RECOVERY_CODE_VALIDATION)
-      const result = await this.codesService.sendPasswordRecoveryCode(email, language)
+      const result = await this.codesService.sendPasswordRecoveryCode(payload, request)
 
       return response.json({
         payload: {
@@ -56,14 +58,13 @@ export class CodesController {
   async validatePasswordRecoveryCode(
     @Req() request: Request,
     @Res() response: Response<IBackendResponse<IValidatePasswordRecoveryCodeResponse>>,
-    @Body('email') email: string,
-    @Body('code') code: string
+    @Body() payload: ICodeValidationPayload
   ) {
     const { language } = request
 
     try {
       runRequestValidation(request, VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION)
-      const result = await this.codesService.validatePasswordRecoveryCode(email, code, language)
+      const result = await this.codesService.validatePasswordRecoveryCode(payload, request)
 
       return response.json({
         payload: result,

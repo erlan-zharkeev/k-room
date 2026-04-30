@@ -21,13 +21,8 @@ export const useLogout = () => {
   const { reset: resetUser } = useUser()
   const isLogoutLoading = ref(false)
 
-  const resetClientData = () => Promise.all([
-    resetChatRoom(),
-    resetContact(),
-    resetInfoNotification(),
-    resetMedia(),
-    resetUser()
-  ])
+  const resetClientData = () =>
+    Promise.all([resetChatRoom(), resetContact(), resetInfoNotification(), resetMedia(), resetUser()])
 
   const logout = async () => {
     isLogoutLoading.value = true

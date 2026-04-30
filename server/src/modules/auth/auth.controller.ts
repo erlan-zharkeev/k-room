@@ -7,6 +7,7 @@ import {
   type IBackendResponse,
   type IConfirmEmailResponse,
   type ILoginResponse,
+  type ISendConfirmationLinkPayload,
   type ISendConfirmationLinkResponse,
   type ISignInWithProviderPayload,
   type ISignInWithProviderResponse
@@ -66,7 +67,7 @@ export class AuthController {
 
     try {
       runRequestValidation(request, REGISTRATION_VALIDATION)
-      const result = await this.authService.registration(payload, language)
+      const result = await this.authService.registration(payload, request)
 
       return response.json({
         payload: result,
@@ -113,13 +114,13 @@ export class AuthController {
   async sendConfirmationLink(
     @Req() request: Request,
     @Res() response: Response<IBackendResponse<ISendConfirmationLinkResponse>>,
-    @Body('email') email: string
+    @Body() payload: ISendConfirmationLinkPayload
   ) {
     const { language } = request
 
     try {
       runRequestValidation(request, SEND_CONFIRMATION_LINK_VALIDATION)
-      const result = await this.authService.sendConfirmationLink(email, language)
+      const result = await this.authService.sendConfirmationLink(payload, request)
 
       return response.json({
         payload: {
@@ -129,7 +130,7 @@ export class AuthController {
         },
         message: {
           text: localizedText(
-            result.alreadyConfirmed ? AUTH_I18N.emailAlreadyConfirmed : AUTH_I18N.confirmationLinkSent,
+            result.rateLimited ? AUTH_I18N.confirmationLinkCooldown : AUTH_I18N.confirmationLinkSent,
             language
           ),
           silent: false

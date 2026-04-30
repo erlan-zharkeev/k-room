@@ -15,7 +15,6 @@ import { isContentTitleKey } from './../content-layout/types'
 import ContentNavigationLayout from './../content-navigation-layout/ContentNavigationLayout.vue'
 import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
 
-
 const { isMobile } = useScreen()
 const { settings, selectedWallpaper } = useSettings()
 const route = useRoute()
@@ -26,20 +25,24 @@ useMainMonitors()
 const isSupportedMobileMainLayoutView = (view: unknown) =>
   isString(view) && ['content', 'content-navigation'].includes(view)
 
-watch(isMobile, (mobile) => {
-  if (mobile) {
-    if (isSupportedMobileMainLayoutView(route.query.view)) return
+watch(
+  isMobile,
+  (mobile) => {
+    if (mobile) {
+      if (isSupportedMobileMainLayoutView(route.query.view)) return
 
-    router.replace({ query: { ...route.query, view: 'content-navigation' } })
-    return
-  }
+      router.replace({ query: { ...route.query, view: 'content-navigation' } })
+      return
+    }
 
-  if (!('view' in route.query)) return
+    if (!('view' in route.query)) return
 
-  const { view: _, ...rest } = route.query
+    const { view: _, ...rest } = route.query
 
-  router.replace({ query: rest })
-}, { immediate: true })
+    router.replace({ query: rest })
+  },
+  { immediate: true }
+)
 
 const wallpaperStyle = computed(() => {
   if (!settings.value.showWallpaper || !selectedWallpaper.value) return undefined
@@ -63,11 +66,7 @@ const contentTitleKey = computed(() => {
 </script>
 
 <template>
-  <main
-    class="main-layout"
-    :class="{ 'main-layout--wallpaper': settings.showWallpaper }"
-    :style="wallpaperStyle"
-  >
+  <main class="main-layout" :class="{ 'main-layout--wallpaper': settings.showWallpaper }" :style="wallpaperStyle">
     <MainLeftBar v-if="!isMobile" class="widget" />
 
     <section class="main-layout__workspace">
@@ -136,7 +135,6 @@ const contentTitleKey = computed(() => {
   min-width: 0;
   min-height: 0;
 }
-
 
 .widget {
   isolation: isolate;

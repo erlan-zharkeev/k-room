@@ -40,6 +40,7 @@ const bootstrap = async () => {
     credentials: true,
     optionsSuccessStatus: 200
   })
+  expressApp.set('trust proxy', true)
   app.use(cookieParser())
   app.use((request: Request, _response: Response, next: NextFunction) => {
     request.language = getRequestLanguage(request.headers)

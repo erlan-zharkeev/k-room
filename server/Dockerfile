@@ -12,7 +12,7 @@ COPY tsconfig.node.json ./tsconfig.node.json
 
 COPY global-shared ./global-shared
 
-COPY .env.common ./.env.common
+COPY .env.shared ./.env.shared
 COPY .env.production ./.env.production
 
 COPY server/package.json ./server/package.json
@@ -44,7 +44,7 @@ COPY tsconfig.node.json ./tsconfig.node.json
 
 COPY global-shared ./global-shared
 
-COPY .env.common ./.env.common
+COPY .env.shared ./.env.shared
 COPY .env.production ./.env.production
 
 COPY server/package.json ./server/package.json

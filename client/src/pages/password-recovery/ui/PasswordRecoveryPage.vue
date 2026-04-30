@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Form } from '@primevue/forms'
-import { ROUTE_NAMES } from 'global-shared'
+import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { Button, InputText, Message } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { isFormFieldInvalid } from 'src/shared/lib'
-import { AppText } from 'src/shared/ui'
+import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
 import { usePasswordRecovery } from '../model/use-password-recovery'
@@ -22,13 +22,26 @@ const {
   emailResolver,
   emailSendCodeIsLoading,
   initializePasswordRecovery,
+  sendCaptcha,
   sendEmailCode,
+  validateCaptcha,
   validateCode
 } = usePasswordRecovery()
 const route = useRoute()
 const hasPresetEmail = computed(() => Boolean(route.query['user-email']))
-const isSendCodeBlocked = computed(() => emailSendCodeIsLoading.value || counterValue.value > 0)
+const sendCaptchaRequired = sendCaptcha.captchaRequired
+const sendCaptchaToken = sendCaptcha.captchaToken
+const sendCaptchaResetKey = sendCaptcha.captchaResetKey
+const validateCaptchaRequired = validateCaptcha.captchaRequired
+const validateCaptchaToken = validateCaptcha.captchaToken
+const validateCaptchaResetKey = validateCaptcha.captchaResetKey
 const isEmailInputDisabled = computed(() => emailSendCodeIsLoading.value || hasPresetEmail.value)
+const isSendCodeCaptchaBlocked = computed(() => sendCaptchaRequired.value && !sendCaptchaToken.value)
+const isValidateCodeCaptchaBlocked = computed(() => validateCaptchaRequired.value && !validateCaptchaToken.value)
+const isSendCodeBlocked = computed(
+  () => emailSendCodeIsLoading.value || counterValue.value > 0 || isSendCodeCaptchaBlocked.value
+)
+const isValidateCodeBlocked = computed(() => codeValidationIsLoading.value || isValidateCodeCaptchaBlocked.value)
 
 onMounted(initializePasswordRecovery)
 </script>
@@ -51,7 +64,7 @@ onMounted(initializePasswordRecovery)
     >
       <div class="password-recovery-page__field">
         <InputText
-          v-model="emailFormData.email"
+          v-model.trim="emailFormData.email"
           autocomplete="email"
           :disabled="isEmailInputDisabled"
           fluid
@@ -76,6 +89,13 @@ onMounted(initializePasswordRecovery)
       </div>
     </Form>
 
+    <AppCaptcha
+      v-if="sendCaptchaRequired"
+      :action="SECURITY_ACTION.sendPasswordRecoveryCode"
+      v-model="sendCaptchaToken"
+      :reset-key="sendCaptchaResetKey"
+    />
+
     <AppText v-if="counterValue > 0" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.resendTimer)(counterValue)" />
 
     <AppText v-if="debugCode" tag="p" :text="`${$t(PASSWORD_RECOVERY_I18N.debugCode)}: ${debugCode}`" />
@@ -90,7 +110,7 @@ onMounted(initializePasswordRecovery)
     >
       <div class="password-recovery-page__field">
         <InputText
-          v-model="codeFormData.code"
+          v-model.trim="codeFormData.code"
           autocomplete="one-time-code"
           :disabled="codeValidationIsLoading"
           fluid
@@ -105,7 +125,7 @@ onMounted(initializePasswordRecovery)
 
       <div class="password-recovery-page__action-btns">
         <Button
-          :disabled="codeValidationIsLoading || !codeForm.valid"
+          :disabled="isValidateCodeBlocked || !codeForm.valid"
           :label="$t(PASSWORD_RECOVERY_I18N.validate)"
           :loading="codeValidationIsLoading"
           size="small"
@@ -113,6 +133,13 @@ onMounted(initializePasswordRecovery)
         />
       </div>
     </Form>
+
+    <AppCaptcha
+      v-if="validateCaptchaRequired"
+      :action="SECURITY_ACTION.validatePasswordRecoveryCode"
+      v-model="validateCaptchaToken"
+      :reset-key="validateCaptchaResetKey"
+    />
 
     <div class="password-recovery-page__action-btns">
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">

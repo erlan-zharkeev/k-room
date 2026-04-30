@@ -1,5 +1,5 @@
-import { useTimeoutFn } from '@vueuse/core'
 import type { Virtualizer } from '@tanstack/vue-virtual'
+import { useTimeoutFn } from '@vueuse/core'
 import { nextTick, onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
