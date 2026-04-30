@@ -9,7 +9,7 @@ let clientDataInitPromise: Promise<void> | null = null
 
 const initializeClientData = async () => {
   const { doRequest } = useApi()
-  const { initialize: initializeUser, reset: resetUser, shallowUpdate } = useUser()
+  const { reset: resetUser, update } = useUser()
   const settingsStore = useSettings()
   const { socketConnect } = useSocketConnect()
   const { initializeSocketConnectionMonitor } = useSocketConnectionMonitor()
@@ -19,7 +19,7 @@ const initializeClientData = async () => {
       const response = await doRequest<IGetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
       const { email, id, role, username } = response.data.payload
 
-      await shallowUpdate({ email, id, role, username })
+      await update({ email, id, role, username })
       socketConnect()
     } catch (error) {
       if (isApiError(error) && error.status === 401) {
@@ -33,7 +33,7 @@ const initializeClientData = async () => {
     }
   }
 
-  await Promise.all([settingsStore.initialize(), initializeUser()])
+  await settingsStore.initialize()
   initializeSocketConnectionMonitor()
   await restoreUserSession()
 }

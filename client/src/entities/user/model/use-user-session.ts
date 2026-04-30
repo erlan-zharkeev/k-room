@@ -9,7 +9,7 @@ import { useUser } from './use-user'
 export const useUserSession = () => {
   const route = useRoute()
   const router = useRouter()
-  const { shallowUpdate, user } = useUser()
+  const { update, user } = useUser()
   const { socketConnect } = useSocketConnect()
 
   const activeUser = computed(() => (user.value.id ? user.value : null))
@@ -27,7 +27,7 @@ export const useUserSession = () => {
   const activateUserSession = async (data: IFrontendUserData, shouldRedirect = true) => {
     const { email, id, role, username } = data
 
-    await shallowUpdate({ email, id, role, username })
+    await update({ email, id, role, username })
     socketConnect()
 
     if (shouldRedirect) {

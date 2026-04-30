@@ -6,7 +6,6 @@ import type {
   DbCallType,
   DbInfoNotificationType,
   DbMessageType,
-  DbUserDataType,
   DbUserSettingType,
   FChatRoomType,
   IDbMedia
@@ -16,7 +15,6 @@ import type { KvItem } from './types'
 
 export class KRoomDB extends Dexie {
   settings!: Table<KvItem<DbUserSettingType>>
-  user!: Table<KvItem<DbUserDataType>>
   contacts!: Table<DbContactType>
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>
@@ -44,6 +42,9 @@ export class KRoomDB extends Dexie {
       calls: '&id',
       messages: '&id',
       'info-notifications': '&id'
+    })
+    this.version(3).stores({
+      user: null
     })
   }
 }

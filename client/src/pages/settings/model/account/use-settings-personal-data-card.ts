@@ -8,7 +8,7 @@ import { useApi } from 'src/shared/api'
 
 export const useSettingsPersonalDataCard = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
-  const { user, avatarId, shallowUpdate: updateUserData } = useUser()
+  const { user, avatarId, update: updateUserData } = useUser()
   const { doRequest } = useApi()
   const accountUsername = ref('')
   const accountAvatarFile = ref<File>()
