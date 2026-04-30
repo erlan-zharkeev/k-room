@@ -1,3 +1,4 @@
+import { useIntervalFn } from '@vueuse/core'
 import { AUTH_ENDPOINTS, ROUTE_NAMES, type ISendConfirmationLinkResponse } from 'global-shared'
 import { onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -18,24 +19,24 @@ export const useWaitEmailConfirm = () => {
   const attempts = ref(0)
   const counterValue = ref(0)
   const isLoading = ref(false)
-  let counterIntervalId: ReturnType<typeof setInterval> | undefined
 
-  const stopCounter = () => {
-    if (counterIntervalId) {
-      clearInterval(counterIntervalId)
-      counterIntervalId = undefined
-    }
-  }
-
-  const startCounter = () => {
-    stopCounter()
-    counterIntervalId = setInterval(() => {
+  const { pause: pauseCounter, resume: resumeCounter } = useIntervalFn(
+    () => {
       counterValue.value = Math.max(counterValue.value - 1, 0)
 
       if (counterValue.value <= 0) {
-        stopCounter()
+        pauseCounter()
       }
-    }, WAIT_EMAIL_CONFIRM_COUNTER_TICK_MS)
+    },
+    WAIT_EMAIL_CONFIRM_COUNTER_TICK_MS,
+    { immediate: false, immediateCallback: false }
+  )
+
+  const stopCounter = () => pauseCounter()
+
+  const startCounter = () => {
+    stopCounter()
+    resumeCounter()
   }
 
   const syncQuery = async (payload: ISendConfirmationLinkResponse) => {

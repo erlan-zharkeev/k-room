@@ -52,7 +52,7 @@ const props = defineProps<IAppContentNavElProps>()
     padding: 12px;
   }
 
-  @include screen-from('tablet') {
+  @include screen-tablet-up {
     .app-content-nav-el-btn.p-button-secondary:not(:disabled):hover {
       background: var(--p-button-secondary-hover-background);
     }

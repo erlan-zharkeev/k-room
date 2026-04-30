@@ -11,6 +11,11 @@ export const SETTINGS_PAGE_I18N = defineI18n({
     ru: 'Профиль и пароль',
     zh: '资料和密码'
   },
+  personalData: {
+    en: 'Personal data',
+    ru: 'Персональные данные',
+    zh: '个人资料'
+  },
   username: {
     en: 'Username',
     ru: 'Имя пользователя',
