@@ -27,6 +27,7 @@ export { db, KRoomDB } from './db/db'
 export { dexieCollectionStore } from './db/dexie-collection-store'
 export { dexieKeyValueStore } from './db/dexie-key-value-store'
 export { useDexieLiveQuery } from './db/use-dexie-live-query'
+export { pinia } from './pinia'
 export type {
   DbTransactionModeType,
   ICollectionMergeManyOptions,

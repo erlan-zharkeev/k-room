@@ -10,7 +10,7 @@ const requiredStringSchema = (message: string) => v.pipe(v.string(message), v.tr
 const emailSchema = (messages: ValidationMessagesType) =>
   v.pipe(requiredStringSchema(messages.emailIsRequired), v.email(messages.invalidEmailFormat))
 
-const passwordSchema = (messages: ValidationMessagesType) =>
+export const createPasswordSchema = (messages: ValidationMessagesType) =>
   v.pipe(
     requiredStringSchema(messages.passwordIsRequired),
     v.minLength(VALIDATION_LIMITS.passwordMinLength, messages.passwordMustBeAtLeast),
@@ -36,14 +36,14 @@ export const createAuthRegistrationSchema = (messages: ValidationMessagesType) =
   v.object({
     username: usernameSchema(messages),
     email: emailSchema(messages),
-    password: passwordSchema(messages)
+    password: createPasswordSchema(messages)
   })
 
 export const createAuthRegistrationFormSchema = (messages: ValidationMessagesType) =>
   v.object({
     username: usernameSchema(messages),
     email: emailSchema(messages),
-    password: passwordSchema(messages),
+    password: createPasswordSchema(messages),
     policy: v.literal(true, messages.fieldIsRequired)
   })
 
@@ -75,13 +75,13 @@ export const createValidatePasswordRecoveryCodeSchema = (messages: ValidationMes
 export const createResetPasswordSchema = (messages: ValidationMessagesType) =>
   v.object({
     codeToValidate: requiredStringSchema(messages.fieldIsRequired),
-    password: passwordSchema(messages)
+    password: createPasswordSchema(messages)
   })
 
 export const createChangePasswordSchema = (messages: ValidationMessagesType) =>
   v.object({
     currentPassword: requiredStringSchema(messages.fieldIsRequired),
-    password: passwordSchema(messages)
+    password: createPasswordSchema(messages)
   })
 
 export const createUpdateUserDataSchema = (messages: ValidationMessagesType) =>
@@ -91,8 +91,8 @@ export const createUpdateUserDataSchema = (messages: ValidationMessagesType) =>
 
 export const createCreateNewPasswordFormSchema = (messages: ValidationMessagesType) =>
   v.object({
-    firstPassword: passwordSchema(messages),
-    secondPassword: passwordSchema(messages)
+    firstPassword: createPasswordSchema(messages),
+    secondPassword: createPasswordSchema(messages)
   })
 
 export const createPasswordRecoveryEmailFormSchema = createSendPasswordRecoveryCodeSchema

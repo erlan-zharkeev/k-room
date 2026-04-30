@@ -1,6 +1,7 @@
 import { router } from 'src/app/router'
 import { initClientData } from 'src/features/client-session'
 import { CLIENT_ENV } from 'src/shared/config'
+import { pinia } from 'src/shared/lib'
 
 import { initFirebase } from './init-firebase'
 import { initI18n } from './init-i18n'
@@ -12,6 +13,7 @@ export const initApp = (app: VueAppType) => {
   initFirebase()
   initI18n(app)
   initPrimeVue(app)
+  app.use(pinia)
   app.use(router)
   void app.runWithContext(initClientData)
 }

@@ -13,6 +13,7 @@ const {
   isPasswordChanging,
   isPasswordSubmitDisabled,
   nextPassword,
+  nextPasswordError,
   passwordMismatch,
   repeatPassword
 } = useSettingsChangePasswordCard()
@@ -42,6 +43,9 @@ const {
     <label class="settings-change-password-card__field">
       <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.newPassword)" />
       <Password v-model="nextPassword" autocomplete="new-password" fluid size="small" toggle-mask />
+      <Message v-if="nextPasswordError" severity="error" size="small" variant="simple">
+        {{ nextPasswordError }}
+      </Message>
     </label>
 
     <label class="settings-change-password-card__field">

@@ -153,6 +153,7 @@ export {
   createChangePasswordSchema,
   createConfirmEmailSchema,
   createCreateNewPasswordFormSchema,
+  createPasswordSchema,
   createPasswordRecoveryCodeFormSchema,
   createPasswordRecoveryEmailFormSchema,
   createProviderLoginSchema,

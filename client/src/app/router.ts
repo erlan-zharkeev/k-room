@@ -142,12 +142,11 @@ export const router = createRouter({
   routes
 })
 
-const { get: getUser } = useUser()
+const { user } = useUser()
 
 router.beforeEach(async (to) => {
   await initClientData()
-  const user = await getUser()
-  const isUserAuthorized = Boolean(user?.id)
+  const isUserAuthorized = Boolean(user.value.id)
 
   if (to.meta.requiresAuth && !isUserAuthorized) {
     return {
