@@ -79,4 +79,12 @@ if ! docker ps --format '{{.Names}}' | grep -qx 'mongo-express'; then
   fi
 fi
 
+if ! docker ps --format '{{.Names}}' | grep -qx 'redis'; then
+  if docker ps -a --format '{{.Names}}' | grep -qx 'redis'; then
+    docker start redis >/dev/null
+  else
+    docker run -d -p 6379:6379 --name redis redis:7-alpine >/dev/null
+  fi
+fi
+
 cd "$ROOT_DIR" || exit $?

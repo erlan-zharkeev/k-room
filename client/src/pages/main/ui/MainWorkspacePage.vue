@@ -1,15 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div class="main-workspace-page">
-    <!--  -->
-  </div>
+  <div class="main-workspace-page" />
 </template>
-
-<style>
-.main-workspace-page {
-
-}
-</style>

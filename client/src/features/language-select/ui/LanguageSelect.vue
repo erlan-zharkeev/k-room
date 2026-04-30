@@ -11,7 +11,6 @@ import { useLanguageSelect } from '../model/use-language-select'
 
 import { ILanguageSelectProps } from './types'
 
-
 const props = withDefaults(defineProps<ILanguageSelectProps>(), LANGUAGE_SELECT_DEFAULT_PROPS)
 
 const { t } = useI18n()
@@ -39,9 +38,7 @@ const selectButtonPt = computed(() => ({
       :size="props.size"
     >
       <template #option="{ option }">
-        <div
-          class="language-select__option"
-        >
+        <div class="language-select__option">
           <span class="language-select__flag">{{ option.flag }}</span>
           <AppHeader v-if="withText" tag="h5" :text="option.label" />
         </div>

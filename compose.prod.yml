@@ -21,8 +21,12 @@ services:
       ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
       EMAIL_CONFIRM_SECRET: ${EMAIL_CONFIRM_SECRET}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test:
@@ -49,6 +53,16 @@ services:
       timeout: 10s
       retries: 5
       start_period: 15s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   mongo-express:
     image: mongo-express:latest

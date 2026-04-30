@@ -3,7 +3,7 @@ import path from 'node:path'
 
 const rootPath = process.cwd()
 const stage = process.argv[2] ?? 'production'
-const commonEnvPath = path.join(rootPath, '.env.common')
+const sharedEnvPath = path.join(rootPath, '.env.shared')
 const envPath = path.join(rootPath, `.env.${stage}`)
 const nginxTemplatePath = path.join(rootPath, 'nginx/webserver.template.conf')
 const nginxPath = path.join(rootPath, 'nginx/webserver.conf')
@@ -25,12 +25,12 @@ const parseEnv = (fileContent) =>
       })
   )
 
-if (!fs.existsSync(commonEnvPath)) {
-  throw new Error('.env.common is missing')
+if (!fs.existsSync(sharedEnvPath)) {
+  throw new Error('.env.shared is missing')
 }
 
 const env = {
-  ...parseEnv(fs.readFileSync(commonEnvPath, 'utf8')),
+  ...parseEnv(fs.readFileSync(sharedEnvPath, 'utf8')),
   ...parseEnv(fs.readFileSync(envPath, 'utf8'))
 }
 
@@ -47,11 +47,11 @@ if (env.MONGO_ADMIN_HOST == null || env.MONGO_ADMIN_HOST === '') {
 }
 
 if (env.API_PATH == null || env.API_PATH === '') {
-  throw new Error('API_PATH is missing in .env.common')
+  throw new Error('API_PATH is missing in .env.shared')
 }
 
 if (env.SOCKET_PATH == null || env.SOCKET_PATH === '') {
-  throw new Error('SOCKET_PATH is missing in .env.common')
+  throw new Error('SOCKET_PATH is missing in .env.shared')
 }
 
 const appDomain = new URL(env.APP_HOST).hostname

@@ -1,9 +1,14 @@
 import { useIntervalFn } from '@vueuse/core'
-import { AUTH_ENDPOINTS, ROUTE_NAMES, type ISendConfirmationLinkResponse } from 'global-shared'
+import {
+  AUTH_ENDPOINTS,
+  ROUTE_NAMES,
+  type ISendConfirmationLinkPayload,
+  type ISendConfirmationLinkResponse
+} from 'global-shared'
 import { onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useApi } from 'src/shared/api'
+import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
 import { buildPathWithParams, getNextRequestIntervalSeconds } from 'src/shared/lib'
 
 import { WAIT_EMAIL_CONFIRM_COUNTER_TICK_MS } from '../config/constants'
@@ -19,6 +24,7 @@ export const useWaitEmailConfirm = () => {
   const attempts = ref(0)
   const counterValue = ref(0)
   const isLoading = ref(false)
+  const captcha = useProtectedActionCaptcha()
 
   const { pause: pauseCounter, resume: resumeCounter } = useIntervalFn(
     () => {
@@ -47,12 +53,17 @@ export const useWaitEmailConfirm = () => {
     if (!email.value) return
 
     isLoading.value = true
+    const requestPayload: ISendConfirmationLinkPayload = {
+      email: email.value,
+      ...captcha.buildCaptchaPayload()
+    }
+    const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
       const response = await doRequest<ISendConfirmationLinkResponse>(
         'post',
         AUTH_ENDPOINTS.sendEmailConfirmationLink,
-        { email: email.value }
+        requestPayload
       )
       const payload = response.data.payload
 
@@ -60,7 +71,18 @@ export const useWaitEmailConfirm = () => {
       counterValue.value = getCounterValue(payload.nextRequestTime)
       await syncQuery(payload)
       startCounter()
+    } catch (error) {
+      const payload = captcha.handleProtectedActionError(error)
+
+      if (payload?.nextTryAt) {
+        counterValue.value = getCounterValue(payload.nextTryAt)
+        startCounter()
+      }
     } finally {
+      if (shouldResetCaptcha) {
+        captcha.resetCaptcha()
+      }
+
       isLoading.value = false
     }
   }
@@ -88,6 +110,7 @@ export const useWaitEmailConfirm = () => {
 
   return {
     attempts,
+    captcha,
     counterValue,
     email,
     initializeWaitEmailConfirm,

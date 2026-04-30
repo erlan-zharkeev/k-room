@@ -2,15 +2,15 @@ import fs from 'fs'
 import path from 'path'
 
 import dotenv, { type DotenvParseOutput } from 'dotenv'
-import { formatAppName, IPackageData, type IEnvCommonVariables, type IEnvVariables } from 'global-shared'
+import { formatAppName, IPackageData, type IEnvSharedVariables, type IEnvVariables } from 'global-shared'
 
 const stage = process.env.NODE_ENV ?? 'development'
 const envDir = path.resolve(process.cwd(), '..')
 
 const envs = dotenv.config({ path: path.resolve(envDir, `.env.${stage}`) }).parsed as DotenvParseOutput | IEnvVariables
-const commonEnvs = dotenv.config({ path: path.resolve(envDir, '.env.common') }).parsed as
+const sharedEnvs = dotenv.config({ path: path.resolve(envDir, '.env.shared') }).parsed as
   | DotenvParseOutput
-  | IEnvCommonVariables
+  | IEnvSharedVariables
 
 const {
   ACCESS_TOKEN_SECRET,
@@ -39,7 +39,7 @@ const {
   CLIENT_PORT: ENV_CLIENT_PORT,
   SERVER_PORT: ENV_SERVER_PORT,
   SOCKET_PATH
-} = commonEnvs
+} = sharedEnvs
 
 const APP_HOST = process.env.APP_HOST ?? ENV_APP_HOST
 const API_HOST = process.env.API_HOST ?? ENV_API_HOST
@@ -49,6 +49,13 @@ const SERVER_PORT = process.env.SERVER_PORT ?? ENV_SERVER_PORT
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as IPackageData
 
 const isDev = stage !== 'production'
+const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA'
+const TURNSTILE_TEST_SECRET_KEY = '1x0000000000000000000000000000000AA'
+const redisUrl = process.env.REDIS_URL ?? envs.REDIS_URL ?? (isDev ? 'redis://127.0.0.1:6379' : '')
+const turnstileSiteKey =
+  process.env.TURNSTILE_SITE_KEY ?? envs.TURNSTILE_SITE_KEY ?? (isDev ? TURNSTILE_TEST_SITE_KEY : '')
+const turnstileSecretKey =
+  process.env.TURNSTILE_SECRET_KEY ?? envs.TURNSTILE_SECRET_KEY ?? (isDev ? TURNSTILE_TEST_SECRET_KEY : '')
 const clientUrl = isDev ? `${APP_HOST}:${CLIENT_PORT}` : APP_HOST
 const devOrigins = [
   clientUrl,
@@ -101,5 +108,10 @@ export const SERVER_ENV = {
   sentry: {
     sentryEnvironment: SENTRY_ENVIRONMENT,
     sentryEnabled: SENTRY_ENABLED === 'true'
+  },
+  security: {
+    redisUrl,
+    turnstileSiteKey,
+    turnstileSecretKey
   }
 } as const

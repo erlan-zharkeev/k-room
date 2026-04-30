@@ -1,27 +1,31 @@
 <script setup lang="ts">
 import { Form } from '@primevue/forms'
-import { ROUTE_NAMES } from 'global-shared'
+import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { Button, InputText, Message, Password } from 'primevue'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { isFormFieldInvalid } from 'src/shared/lib'
-import { AppText } from 'src/shared/ui'
+import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../config/i18n'
 import { useFirebase } from '../model/use-firebase'
 import { useLogin } from '../model/use-login'
 
 const { isFirebaseLoginLoading, onFirebaseLogin } = useFirebase()
-const { formData, isLoading, resolver, submit } = useLogin()
+const { captchaRequired, captchaResetKey, captchaToken, formData, isLoading, resolver, submit } = useLogin()
+const isFormDisabled = computed(() => isLoading.value || isFirebaseLoginLoading.value)
+const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
+const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
 </script>
 
 <template>
   <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="login-page" @submit="submit">
     <div class="login-page__field">
       <InputText
-        v-model="formData.login"
+        v-model.trim="formData.login"
         autocomplete="username"
-        :disabled="isLoading || isFirebaseLoginLoading"
+        :disabled="isFormDisabled"
         fluid
         name="login"
         :placeholder="$t(LOGIN_FORM_I18N.loginPlaceholder)"
@@ -36,7 +40,7 @@ const { formData, isLoading, resolver, submit } = useLogin()
     <div class="login-page__field">
       <Password
         v-model="formData.password"
-        :disabled="isLoading || isFirebaseLoginLoading"
+        :disabled="isFormDisabled"
         :feedback="false"
         fluid
         autocomplete="current-password"
@@ -50,9 +54,16 @@ const { formData, isLoading, resolver, submit } = useLogin()
       </Message>
     </div>
 
+    <AppCaptcha
+      v-if="captchaRequired"
+      :action="SECURITY_ACTION.login"
+      v-model="captchaToken"
+      :reset-key="captchaResetKey"
+    />
+
     <Button
       class="login-page__submit"
-      :disabled="isLoading || isFirebaseLoginLoading || !$form.valid"
+      :disabled="isSubmitDisabled || !$form.valid"
       fluid
       :label="$t(LOGIN_FORM_I18N.submit)"
       :loading="isLoading"

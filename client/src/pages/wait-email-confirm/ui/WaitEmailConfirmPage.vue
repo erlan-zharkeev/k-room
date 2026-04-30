@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { ROUTE_NAMES } from 'global-shared'
+import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { Button } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { AppText } from 'src/shared/ui'
+import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
 import { useWaitEmailConfirm } from '../model/use-wait-email-confirm'
 
-const { attempts, counterValue, email, initializeWaitEmailConfirm, isLoading, resend } = useWaitEmailConfirm()
-const isResendDisabled = computed(() => isLoading.value || attempts.value <= 0 || counterValue.value > 0)
+const { attempts, captcha, counterValue, email, initializeWaitEmailConfirm, isLoading, resend } = useWaitEmailConfirm()
+const captchaRequired = captcha.captchaRequired
+const captchaToken = captcha.captchaToken
+const captchaResetKey = captcha.captchaResetKey
+const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
+const isResendDisabled = computed(
+  () => isLoading.value || attempts.value <= 0 || counterValue.value > 0 || isCaptchaBlocked.value
+)
 
 onMounted(initializeWaitEmailConfirm)
 </script>
@@ -24,6 +30,13 @@ onMounted(initializeWaitEmailConfirm)
     <AppText v-else tag="p" :text="`${$t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft)} ${attempts}`" />
     <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.resendHint)" />
     <AppText v-if="counterValue > 0" tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.resendInSeconds)(counterValue)" />
+
+    <AppCaptcha
+      v-if="captchaRequired"
+      :action="SECURITY_ACTION.sendConfirmationLink"
+      v-model="captchaToken"
+      :reset-key="captchaResetKey"
+    />
 
     <div class="wait-email-confirm-page__action-btns">
       <Button

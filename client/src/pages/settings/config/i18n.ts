@@ -157,7 +157,7 @@ export const SETTINGS_PAGE_I18N = defineI18n({
     zh: '持久存储'
   },
   storagePersistentDescription: {
-    en: 'Request the browser to protect app data from automatic cleanup. Without this, the browser may delete messages and media if the device runs low on storage or you haven\'t opened the app for a while.',
+    en: "Request the browser to protect app data from automatic cleanup. Without this, the browser may delete messages and media if the device runs low on storage or you haven't opened the app for a while.",
     ru: 'Запросить у браузера защиту данных приложения от автоматической очистки. Без этого браузер может удалить сообщения и медиафайлы, если на устройстве мало места или вы давно не заходили в приложение.',
     zh: '请求浏览器保护应用数据，防止自动清除。若不启用，当设备存储不足或长时间未使用应用时，浏览器可能会删除消息和媒体文件。'
   },

@@ -26,7 +26,10 @@ export const useChatRoom = () => {
     })
   const allRoomMessageIds = computed(() => new Set(chatRooms.value.flatMap((room) => room.messages)))
   const unreadMessagesQuantity = computed(
-    () => messages.value.filter(({ id, isSelf, status }) => allRoomMessageIds.value.has(id) && !isSelf && status === 'delivered').length
+    () =>
+      messages.value.filter(
+        ({ id, isSelf, status }) => allRoomMessageIds.value.has(id) && !isSelf && status === 'delivered'
+      ).length
   )
 
   return {

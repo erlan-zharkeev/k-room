@@ -22,7 +22,11 @@ export const useSettingsStorageCard = () => {
       usageBytes.value = usage
       quotaBytes.value = quota
       usagePercent.value = quota > 0 ? Math.min(Math.round((usage / quota) * 100), 100) : 0
-    } catch {}
+    } catch {
+      usageBytes.value = 0
+      quotaBytes.value = 0
+      usagePercent.value = 0
+    }
   }
 
   const loadPersistenceStatus = async () => {
@@ -30,7 +34,9 @@ export const useSettingsStorageCard = () => {
 
     try {
       isPersistent.value = await navigator.storage.persisted()
-    } catch {}
+    } catch {
+      isPersistent.value = false
+    }
   }
 
   const requestPersistence = async () => {
@@ -38,7 +44,9 @@ export const useSettingsStorageCard = () => {
 
     try {
       isPersistent.value = await navigator.storage.persist()
-    } catch {}
+    } catch {
+      isPersistent.value = false
+    }
   }
 
   const clearMedia = async () => {

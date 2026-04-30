@@ -15,6 +15,7 @@ export interface IClientEnv {
   appHost: string
   apiHost: string
   firebaseApiKey: string
+  turnstileSiteKey: string
   sentryDsnClient: string
   sentryEnvironment: string
   sentryEnabled: boolean

@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [
-    ".env.common",
+    ".env.shared",
     ".env.development",
     ".env.production",
     ".env.test",

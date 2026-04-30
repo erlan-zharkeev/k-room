@@ -6,17 +6,17 @@ import { defineConfig, loadEnv } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import svgr from 'vite-plugin-svgr'
 
-import type { IEnvCommonVariables } from './../common/env'
+import type { IEnvSharedVariables } from './../common/env'
 import { formatAppName } from './../common/shared'
 import { generatePWAConfig } from './vite.pwa.config'
 
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const env = loadEnv(mode, envDir, '')
-  const commonEnv = loadEnv('common', envDir, '') as Record<string, string> | IEnvCommonVariables
+  const sharedEnv = loadEnv('shared', envDir, '') as Record<string, string> | IEnvSharedVariables
   const isDev = mode === 'development'
   const { APP_HOST, API_HOST, FIREBASE_API_KEY, SENTRY_ENVIRONMENT, SENTRY_ENABLED } = env
-  const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, SUPPORT_EMAIL } = commonEnv
+  const { SERVER_PORT, CLIENT_PORT, SOCKET_PATH, API_PATH, SUPPORT_EMAIL } = sharedEnv
   const { name: APP_NAME, version: APP_VERSION } = JSON.parse(
     fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')
   )

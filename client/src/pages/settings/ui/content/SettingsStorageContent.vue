@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSettingsStorageCard } from '../../model/storage/use-settings-storage-card'
+
 import SettingsStorageClearCard from './storage/SettingsStorageClearCard.vue'
 import SettingsStoragePersistentCard from './storage/SettingsStoragePersistentCard.vue'
 import SettingsStorageUsageCard from './storage/SettingsStorageUsageCard.vue'
@@ -18,11 +19,7 @@ const {
 
 <template>
   <div class="settings-storage-content">
-    <SettingsStorageUsageCard
-      :usage-bytes="usageBytes"
-      :quota-bytes="quotaBytes"
-      :usage-percent="usagePercent"
-    />
+    <SettingsStorageUsageCard :usage-bytes="usageBytes" :quota-bytes="quotaBytes" :usage-percent="usagePercent" />
 
     <SettingsStoragePersistentCard
       v-if="isPersistenceSupported"
@@ -30,10 +27,7 @@ const {
       @request="requestPersistence"
     />
 
-    <SettingsStorageClearCard
-      :is-clearing-media="isClearingMedia"
-      @clear-media="clearMedia"
-    />
+    <SettingsStorageClearCard :is-clearing-media="isClearingMedia" @clear-media="clearMedia" />
   </div>
 </template>
 

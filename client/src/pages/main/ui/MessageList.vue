@@ -362,7 +362,6 @@ onBeforeUnmount(() => {
         :icon="action.icon"
         @click="handleMessageAction(action.id)"
       />
-
     </div>
   </div>
 </template>

@@ -54,8 +54,8 @@ watch(
   <div class="app-profile-basic-data">
     <Avatar
       class="app-profile-basic-data__avatar"
-      shape='square'
-      size='large'
+      shape="square"
+      size="large"
       :image="imageSrc"
       :label="imageSrc ? undefined : props.title.charAt(0).toUpperCase()"
       :alt="props.imageAlt ?? props.title"
@@ -77,14 +77,15 @@ watch(
 .app-profile-basic-data {
   display: flex;
   gap: 10px;
-  height: 48px;
   min-width: 0;
+  height: 48px;
 }
 
 .app-profile-basic-data__content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   min-width: 0;
   margin-bottom: 1px;
 }
@@ -95,8 +96,8 @@ watch(
 
 .app-profile-basic-data__description {
   display: flex;
-  min-width: 0;
   align-items: flex-start;
+  min-width: 0;
 }
 
 .app-profile-basic-data__avatar {

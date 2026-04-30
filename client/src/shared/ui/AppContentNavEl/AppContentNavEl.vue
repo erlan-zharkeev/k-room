@@ -12,11 +12,7 @@ const props = defineProps<IAppContentNavElProps>()
 
 <template>
   <div class="app-content-nav-el">
-    <RouterLink
-      :to="props.to"
-      custom
-      v-slot="{ href, navigate }"
-    >
+    <RouterLink :to="props.to" custom v-slot="{ href, navigate }">
       <Button
         as="a"
         :href="href"
@@ -54,7 +50,6 @@ const props = defineProps<IAppContentNavElProps>()
 
   .app-content-nav-el__text {
     display: grid;
-    flex: 1 1 0;
   }
 
   @include screen-tablet-up {

@@ -33,7 +33,7 @@ const getItemRoute = (settingsId: string) => ({
       :ariaLabel="$t(item.label)"
       :label="$t(item.label)"
       :description="$t(item.description)"
-      />
+    />
   </nav>
 </template>
 

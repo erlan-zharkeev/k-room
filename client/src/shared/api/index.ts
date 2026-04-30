@@ -3,6 +3,7 @@ export { createApiError, getHandledErrorMessage, isApiError, isHandledError } fr
 export { getHeaderValue } from './http/get-header-value'
 export { useApi } from './http/use-api'
 export { useApiInterceptor } from './http/use-api-interceptor'
+export { useProtectedActionCaptcha } from './http/use-protected-action-captcha'
 export { socket } from './socket/socket'
 export { socketStatus } from './socket/socket-status'
 export { useSocketConnect } from './socket/use-socket-connect'

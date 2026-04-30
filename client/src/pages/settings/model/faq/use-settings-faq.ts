@@ -9,7 +9,7 @@ export const useSettingsFaq = () => {
   const searchQuery = ref('')
 
   const filteredItems = computed(() => {
-    const query = searchQuery.value.trim().toLowerCase()
+    const query = searchQuery.value.toLowerCase()
 
     if (!query) return FAQ_ITEMS
 

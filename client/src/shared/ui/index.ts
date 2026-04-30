@@ -1,4 +1,5 @@
 export { AppContentNavEl } from './AppContentNavEl'
+export { AppCaptcha } from './AppCaptcha'
 export { AppEmojiPicker } from './AppEmojiPicker'
 export { AppHeader } from './AppHeader'
 export { AppLogo } from './AppLogo'

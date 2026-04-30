@@ -12,7 +12,7 @@ import { serverCaptureSentryException, serverCaptureSentryHttpError } from 'src/
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
-    const response = host.switchToHttp().getResponse<Response<IBackendResponse<null>>>()
+    const response = host.switchToHttp().getResponse<Response<IBackendResponse<unknown>>>()
     const request = host.switchToHttp().getRequest<Request>()
 
     if (response.headersSent) {
@@ -22,7 +22,7 @@ export class AppExceptionFilter implements ExceptionFilter {
     const { language } = request
 
     if (isAppError(error)) {
-      const { message, silent, status } = error
+      const { message, payload, silent, status } = error
 
       serverCaptureSentryHttpError({
         message,
@@ -31,7 +31,7 @@ export class AppExceptionFilter implements ExceptionFilter {
       })
 
       response.status(status).json({
-        payload: null,
+        payload: payload ?? null,
         message: {
           text: message,
           silent

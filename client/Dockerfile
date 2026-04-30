@@ -9,6 +9,8 @@ COPY pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 COPY tsconfig.base.json ./tsconfig.base.json
 COPY tsconfig.bundler.json ./tsconfig.bundler.json
+COPY .env.shared ./.env.shared
+COPY .env.production ./.env.production
 
 COPY global-shared ./global-shared
 

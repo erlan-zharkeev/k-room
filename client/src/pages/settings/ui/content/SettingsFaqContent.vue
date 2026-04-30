@@ -13,19 +13,10 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 <template>
   <div class="settings-faq-content">
     <SettingsCard :title="$t(SETTINGS_PAGE_I18N.faq)">
-      <InputText
-        v-model="searchQuery"
-        fluid
-        size="small"
-        :placeholder="$t(SETTINGS_PAGE_I18N.faqSearch)"
-      />
+      <InputText v-model.trim="searchQuery" fluid size="small" :placeholder="$t(SETTINGS_PAGE_I18N.faqSearch)" />
 
       <div v-if="filteredItems.length" class="settings-faq-content__list">
-        <div
-          v-for="item in filteredItems"
-          :key="item.id"
-          class="settings-faq-content__item"
-        >
+        <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
           <AppText color="contrast-color" :text="$t(item.question)" />
           <AppText :text="$t(item.answer)" />
         </div>
@@ -35,11 +26,7 @@ const { searchQuery, filteredItems } = useSettingsFaq()
         <AppText :text="$t(SETTINGS_PAGE_I18N.faqNoResults)" />
       </div>
 
-      <Button
-        :label="$t(SETTINGS_PAGE_I18N.faqContactSupport)"
-        size="small"
-        type="button"
-      />
+      <Button :label="$t(SETTINGS_PAGE_I18N.faqContactSupport)" size="small" type="button" />
     </SettingsCard>
   </div>
 </template>

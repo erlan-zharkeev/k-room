@@ -40,7 +40,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
           :href="href"
           :aria-label="$t(item.label)"
           :pt="{
-            root: { class: ['app-hoverless-btn'] },
+            root: { class: ['app-hoverless-btn'] }
           }"
           as="a"
           :text="!isNavBtnActive(item.id, isExactActive, route.path)"
@@ -64,7 +64,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
 
   .p-overlaybadge .p-badge {
     transform: translate(15%, -50%);
-    scale: .9;
+    scale: 0.9;
 
     @include screen-mobile {
       transform: translate(30%, -20%);

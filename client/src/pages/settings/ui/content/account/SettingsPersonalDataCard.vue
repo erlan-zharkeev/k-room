@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 import { Button, FileUpload, InputText, Message } from 'primevue'
+
+import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_AVATAR_ACCEPT, SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../../config/constants'
 import { SETTINGS_PAGE_I18N } from '../../../config/i18n'
@@ -89,18 +90,12 @@ const {
       >
         <template #filelabel />
       </FileUpload>
-      <Button
-        :label="$t(SETTINGS_PAGE_I18N.resetPhoto)"
-        size="small"
-        text
-        type="button"
-        @click="resetAccountAvatar"
-      />
+      <Button :label="$t(SETTINGS_PAGE_I18N.resetPhoto)" size="small" text type="button" @click="resetAccountAvatar" />
     </div>
 
     <label class="settings-personal-data-card__field">
       <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.nickname)" />
-      <InputText v-model="accountNickname" autocomplete="nickname" fluid size="small" />
+      <InputText v-model.trim="accountNickname" autocomplete="nickname" fluid size="small" />
       <Message v-if="accountNicknameError" severity="error" size="small" variant="simple">
         {{ accountNicknameError }}
       </Message>

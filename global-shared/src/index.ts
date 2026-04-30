@@ -1,11 +1,16 @@
 export { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS, VALIDATION_PATTERNS } from './auth/constants'
-export type { IAuthLoginPayload, IAuthRegistrationPayload, ISignInWithProviderPayload } from './auth/types'
+export type {
+  IAuthLoginPayload,
+  IAuthRegistrationPayload,
+  ISendConfirmationLinkPayload,
+  ISignInWithProviderPayload
+} from './auth/types'
 
 export type { CallStatusType, CallFlowType, ICall, IDBCall, IDBCallSchema } from './calls/types'
 
 export type { IChatRoom, ChatRoomsType, IChatRoomSchema } from './chat/types'
 
-export type { ICodes, ICodeValidationPayload } from './codes/types'
+export type { ICodes, ICodeValidationPayload, ISendPasswordRecoveryCodePayload } from './codes/types'
 
 export type { InteractionType, IFrontendContact, FrontendContactMapType } from './contact/types'
 
@@ -22,7 +27,7 @@ export {
 } from './endpoints/constants'
 export type { RouteNameType, EndpointsType } from './endpoints/types'
 
-export type { IEnvVariables, IEnvCommonVariables } from './env/types'
+export type { IEnvVariables, IEnvSharedVariables } from './env/types'
 
 export { INFO_NOTIFICATION_STATUS, WELCOME_INFO_NOTIFICATION_ID } from './info-notification/constants'
 export type {
@@ -38,8 +43,19 @@ export { defineI18n } from './language/lib/define-i18n'
 export type { AppLanguageType, LocalizedTextType, LocalizedTextMapType } from './language/types'
 export type { I18nValueConstraintType, I18nRecordConstraintType } from './language/lib/types'
 
-export { MEDIA_BUCKET_NAMES, MEDIA_KIND_ACCEPT_MAP, MEDIA_MB_IN_BYTES, MEDIA_VALIDATION_OPTIONS_MAP } from './media/constants'
-export type { MediaBucketNameType, IMediaValidationOptions, MediaKindType, IImageObject, MediaFileValueType } from './media/types'
+export {
+  MEDIA_BUCKET_NAMES,
+  MEDIA_KIND_ACCEPT_MAP,
+  MEDIA_MB_IN_BYTES,
+  MEDIA_VALIDATION_OPTIONS_MAP
+} from './media/constants'
+export type {
+  MediaBucketNameType,
+  IMediaValidationOptions,
+  MediaKindType,
+  IImageObject,
+  MediaFileValueType
+} from './media/types'
 
 export type { IPackageData } from './package/types'
 
@@ -69,6 +85,14 @@ export type {
 export { SENTRY_IGNORED_SUBSTRINGS } from './sentry/constants'
 export { isIgnoredSentryStatus, shouldIgnoreSentryError } from './sentry/lib/should-ignore-sentry-error'
 export type { ISentryErrorContext } from './sentry/types'
+
+export { PROTECTED_ACTION_REASON, SECURITY_ACTION } from './security/constants'
+export type {
+  ICaptchaTokenPayload,
+  IProtectedActionResponsePayload,
+  ProtectedActionReasonType,
+  SecurityActionType
+} from './security/types'
 
 export { firebaseProviders, providers } from './shared/constants'
 export { formatAppName } from './shared/lib/format-app-name'

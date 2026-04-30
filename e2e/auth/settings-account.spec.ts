@@ -3,9 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { SETTINGS_FIXTURE_USER } from './fixtures'
 
 const waitForUserDataUpdateResponse = (page: Page) =>
-  page.waitForResponse(
-    (response) => response.url().includes('/users/me') && response.request().method() === 'PATCH'
-  )
+  page.waitForResponse((response) => response.url().includes('/users/me') && response.request().method() === 'PATCH')
 
 const waitForChangePasswordResponse = (page: Page) =>
   page.waitForResponse(
@@ -98,7 +96,9 @@ const ensureOriginalPassword = async (page: Page) => {
   await changePassword(page, SETTINGS_FIXTURE_USER.nextPassword, SETTINGS_FIXTURE_USER.password)
   await logout(page)
 
-  const restoredPassword = await loginWithKnownPassword(page, SETTINGS_FIXTURE_USER.email, [SETTINGS_FIXTURE_USER.password])
+  const restoredPassword = await loginWithKnownPassword(page, SETTINGS_FIXTURE_USER.email, [
+    SETTINGS_FIXTURE_USER.password
+  ])
 
   expect(restoredPassword).toBe(SETTINGS_FIXTURE_USER.password)
 }

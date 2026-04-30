@@ -16,9 +16,12 @@ export interface IEnvVariables {
   ACCESS_TOKEN_SECRET: string
   REFRESH_TOKEN_SECRET: string
   EMAIL_CONFIRM_SECRET: string
+  REDIS_URL?: string
+  TURNSTILE_SITE_KEY?: string
+  TURNSTILE_SECRET_KEY?: string
 }
 
-export interface IEnvCommonVariables {
+export interface IEnvSharedVariables {
   SERVER_PORT: string
   CLIENT_PORT: string
   SOCKET_PATH: string

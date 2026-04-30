@@ -61,7 +61,6 @@ watch(
   },
   { immediate: true }
 )
-
 </script>
 
 <template>
@@ -82,9 +81,17 @@ watch(
       </template>
     </AppProfileBasicData>
     <div class="main-top-bar__actions">
-      <Button :aria-label="t(MAIN_TOP_BAR_I18N.logout)" :pt="{
-            root: { class: ['app-hoverless-btn'] },
-          }" :loading="isLogoutLoading" size="large" text icon="pi pi-sign-out" @click="logout" />
+      <Button
+        :aria-label="t(MAIN_TOP_BAR_I18N.logout)"
+        :pt="{
+          root: { class: ['app-hoverless-btn'] }
+        }"
+        :loading="isLogoutLoading"
+        size="large"
+        text
+        icon="pi pi-sign-out"
+        @click="logout"
+      />
     </div>
   </header>
 </template>
