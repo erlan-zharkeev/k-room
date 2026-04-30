@@ -7,7 +7,6 @@ import SettingsDevicesContent from '../ui/content/SettingsDevicesContent.vue'
 import SettingsFaqContent from '../ui/content/SettingsFaqContent.vue'
 import SettingsLanguageContent from '../ui/content/SettingsLanguageContent.vue'
 import SettingsNotificationsContent from '../ui/content/SettingsNotificationsContent.vue'
-import SettingsQuestionContent from '../ui/content/SettingsQuestionContent.vue'
 import SettingsSoundContent from '../ui/content/SettingsSoundContent.vue'
 import SettingsStorageContent from '../ui/content/SettingsStorageContent.vue'
 import SettingsThemeContent from '../ui/content/SettingsThemeContent.vue'
@@ -69,11 +68,6 @@ export const SETTINGS_NAVIGATION_ITEMS = [
     id: 'faq',
     label: SETTINGS_PAGE_I18N.faq,
     description: SETTINGS_PAGE_I18N.faqDescription
-  },
-  {
-    id: 'question',
-    label: SETTINGS_PAGE_I18N.question,
-    description: SETTINGS_PAGE_I18N.askQuestionDescription
   }
 ] as const
 
@@ -86,8 +80,7 @@ export const SETTINGS_CONTENT_TITLE = {
   sound: SETTINGS_PAGE_I18N.sound,
   devices: SETTINGS_PAGE_I18N.devices,
   storage: SETTINGS_PAGE_I18N.storage,
-  faq: SETTINGS_PAGE_I18N.faq,
-  question: SETTINGS_PAGE_I18N.question
+  faq: SETTINGS_PAGE_I18N.faq
 } as const
 
 export const SETTINGS_CONTENT_COMPONENTS = {
@@ -99,8 +92,7 @@ export const SETTINGS_CONTENT_COMPONENTS = {
   sound: SettingsSoundContent,
   devices: SettingsDevicesContent,
   storage: SettingsStorageContent,
-  faq: SettingsFaqContent,
-  question: SettingsQuestionContent
+  faq: SettingsFaqContent
 } as const
 
 export const isSettingsContentId = (settingsId: unknown): settingsId is keyof typeof SETTINGS_CONTENT_COMPONENTS =>

@@ -44,9 +44,9 @@ export const createAdminRouter = async () => {
   return AdminJSExpress.buildAuthenticatedRouter(
     admin,
     {
-      authenticate: async (username, password) => {
-        if (username === adminUsername && password === adminPassword) {
-          return { username }
+      authenticate: async (nickname, password) => {
+        if (nickname === adminUsername && password === adminPassword) {
+          return { nickname }
         }
 
         return null

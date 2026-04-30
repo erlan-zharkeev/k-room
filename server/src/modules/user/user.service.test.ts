@@ -63,7 +63,7 @@ describe('user.service', () => {
   })
 
   it('detects existing users by nickname before trying email or id', async () => {
-    userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'by-username' })
+    userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'by-nickname' })
 
     const result = await isUserExist({
       nickname: 'tester',
