@@ -14,18 +14,18 @@ export const createThemePreset = (colors: IColorSchema) =>
       extend: {
         app: {
           text: {
-            contrast: colors.text.contrastText,
-            semiContrast: colors.text.semiContrastText,
-            muted: colors.text.text
+            contrast: colors.contrastText,
+            semiContrast: colors.secondaryText,
+            muted: colors.text
           },
           mainBg: colors.mainBg,
-          mutedBackground: colors.darkGrayTransparent,
-          widgetBackground: colors.surfaceCard,
-          widgetBorderColor: colors.darkGrayTransparent,
+          // mutedBackground: colors.darkGrayTransparent,
+          widgetBackground: colors.cardSurface,
+          // widgetBorderColor: colors.darkGrayTransparent,
           shadow: {
             outset: {
-              start: colors.shadowOutsetStart,
-              end: colors.shadowOutsetEnd
+              start: colors.lightShadow,
+              end: colors.darkShadow
             }
           }
         }
@@ -37,8 +37,8 @@ export const createThemePreset = (colors: IColorSchema) =>
           light: {
             root: {
               secondary: {
-                background: colors.buttonSecondaryBackground,
-                hoverBackground: colors.buttonSecondaryHoverBackground,
+                // background: colors.buttonSecondaryBackground,
+                // hoverBackground: colors.buttonSecondaryHoverBackground,
                 hoverBorderColor: 'transparent',
                 borderColor: 'transparent',
                 activeBorderColor: 'transparent'
@@ -48,8 +48,8 @@ export const createThemePreset = (colors: IColorSchema) =>
           dark: {
             root: {
               secondary: {
-                background: colors.buttonSecondaryBackground,
-                hoverBackground: colors.buttonSecondaryHoverBackground,
+                // background: colors.buttonSecondaryBackground,
+                // hoverBackground: colors.buttonSecondaryHoverBackground,
                 hoverBorderColor: 'transparent',
                 borderColor: 'transparent',
                 activeBorderColor: 'transparent'
