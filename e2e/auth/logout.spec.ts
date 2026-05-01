@@ -81,7 +81,7 @@ const readStores = async (page: Page, dbName: string, storeNames: readonly strin
         request.onerror = () => reject(request.error?.message ?? 'Failed to open IndexedDB')
         request.onsuccess = () => {
           const db = request.result
-          const transaction = db.transaction(storeNames, 'readonly')
+          const transaction = db.transaction([...storeNames], 'readonly')
           const result: StoreRows = {}
           let pending = storeNames.length
 

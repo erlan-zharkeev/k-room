@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { E2E_ENV } from 'e2e/config'
+
 import { SETTINGS_FIXTURE_USER } from './fixtures'
 
 const waitForUserDataUpdateResponse = (page: Page) =>
@@ -10,7 +12,27 @@ const waitForChangePasswordResponse = (page: Page) =>
     (response) => response.url().includes('/users/me/password') && response.request().method() === 'PATCH'
   )
 
+const waitForSendChangeEmailCodeResponse = (page: Page) =>
+  page.waitForResponse(
+    (response) => response.url().includes('/codes/email/change-email') && response.request().method() === 'POST'
+  )
+
+const waitForValidateChangeEmailCodeResponse = (page: Page) =>
+  page.waitForResponse(
+    (response) =>
+      response.url().includes('/codes/email/validate-change-email') && response.request().method() === 'POST'
+  )
+
 const buildNextNickname = () => `pw-guest-${Date.now().toString(36)}`
+const buildEmailChangeUser = () => {
+  const suffix = Date.now().toString(36)
+
+  return {
+    nickname: `pw-email-${suffix}`,
+    email: `pw-email-${suffix}@example.com`,
+    nextEmail: `pw-email-next-${suffix}@example.com`
+  }
+}
 
 const attemptLogin = async (page: Page, login: string, password: string) => {
   await page.goto('/authorize/login')
@@ -54,6 +76,18 @@ const openAccountSettings = async (page: Page) => {
   await expect(page).toHaveURL(/\/app\/settings\/account/)
 }
 
+const signInWithProvider = async (page: Page, nickname: string, email: string) => {
+  const response = await page.request.post(`${E2E_ENV.PLAYWRIGHT_API_URL}/auth/provider-login`, {
+    data: {
+      nickname,
+      email,
+      provider: 'google'
+    }
+  })
+
+  expect(response.ok()).toBeTruthy()
+}
+
 const updateNickname = async (page: Page, nickname: string) => {
   const responsePromise = waitForUserDataUpdateResponse(page)
 
@@ -64,6 +98,42 @@ const updateNickname = async (page: Page, nickname: string) => {
 
   expect(response.ok()).toBeTruthy()
   await expect(page.locator('input[autocomplete="nickname"]')).toHaveValue(nickname)
+}
+
+const changeEmail = async (page: Page, currentEmail: string, nextEmail: string) => {
+  const changeEmailCard = page.locator('.settings-card').filter({
+    has: page.getByRole('heading', { name: 'Change email', exact: true })
+  })
+  const sendCodeButton = changeEmailCard.getByRole('button', { name: 'Send code', exact: true })
+  const validateCodeButton = changeEmailCard.getByRole('button', { name: 'Validate code', exact: true })
+
+  await expect(changeEmailCard.getByText(currentEmail, { exact: true })).toBeVisible()
+  await changeEmailCard.locator('input[autocomplete="email"]').fill(nextEmail)
+  await expect(sendCodeButton).toBeEnabled()
+
+  const sendResponsePromise = waitForSendChangeEmailCodeResponse(page)
+  await sendCodeButton.click()
+  const sendResponse = await sendResponsePromise
+  const sendPayload = await sendResponse.json()
+  const debugCode = sendPayload.payload?.debugCode
+
+  expect(sendResponse.ok()).toBeTruthy()
+  expect(debugCode).toMatch(/^\d{6}$/)
+
+  const codeField = changeEmailCard.locator('.settings-change-email-card__field').filter({
+    hasText: 'Code from email'
+  })
+
+  await codeField.locator('input').first().pressSequentially(String(debugCode))
+  await expect(validateCodeButton).toBeEnabled()
+
+  const validateResponsePromise = waitForValidateChangeEmailCodeResponse(page)
+  await validateCodeButton.click()
+  const validateResponse = await validateResponsePromise
+
+  expect(validateResponse.ok()).toBeTruthy()
+  await expect(changeEmailCard.getByText(nextEmail, { exact: true })).toBeVisible()
+  await expect(changeEmailCard.locator('input[autocomplete="email"]')).toHaveValue('')
 }
 
 const changePassword = async (page: Page, currentPassword: string, nextPassword: string) => {
@@ -141,5 +211,20 @@ test.describe('settings account', () => {
     } finally {
       await ensureOriginalPassword(page)
     }
+  })
+
+  test('changes email with email code', async ({ page }) => {
+    const { nickname, email, nextEmail } = buildEmailChangeUser()
+
+    await signInWithProvider(page, nickname, email)
+    await openAccountSettings(page)
+    await changeEmail(page, email, nextEmail)
+    await logout(page)
+    await signInWithProvider(page, nickname, nextEmail)
+    await openAccountSettings(page)
+
+    await expect(
+      page.locator('.settings-card').filter({ hasText: 'Change email' }).getByText(nextEmail, { exact: true })
+    ).toBeVisible()
   })
 })

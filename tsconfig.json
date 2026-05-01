@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.node.json",
   "compilerOptions": {
+    "lib": ["ES2022", "DOM"],
     "paths": {
       "global-shared": ["./global-shared/src/index.ts"],
       "global-shared/*": ["./global-shared/src/*"],
