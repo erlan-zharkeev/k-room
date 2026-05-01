@@ -3,7 +3,7 @@ import { APP_LANGUAGE } from 'global-shared'
 import type { ILanguageSelectOption } from '../types'
 
 export const LANGUAGE_SELECT_DEFAULT_PROPS = {
-  size: 'large'
+  compact: false
 } as const
 
 export const LANGUAGE_SELECT_OPTIONS: ILanguageSelectOption[] = [

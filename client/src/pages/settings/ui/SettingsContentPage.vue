@@ -2,14 +2,15 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { DEFAULT_SETTINGS_CONTENT_ID, isSettingsContentId, SETTINGS_CONTENT_COMPONENTS } from '../config/constants'
+import { SETTINGS_CONTENT_COMPONENTS } from '../config/constants'
+import { getSettingsContentId } from '../lib/get-settings-content-id'
 
 const route = useRoute()
 
 const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
 
-  return isSettingsContentId(settingsId) ? settingsId : DEFAULT_SETTINGS_CONTENT_ID
+  return getSettingsContentId(settingsId)
 })
 
 const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[selectedSettingsId.value])

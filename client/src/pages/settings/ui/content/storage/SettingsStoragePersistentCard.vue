@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_I18N } from '../../../config/i18n'
+import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
 import SettingsCard from '../../SettingsCard.vue'
 
 defineProps<{
@@ -15,11 +15,11 @@ const emit = defineEmits<{
 
 <template>
   <SettingsCard
-    :title="$t(SETTINGS_PAGE_I18N.storagePersistent)"
-    :button-label="isPersistent ? undefined : $t(SETTINGS_PAGE_I18N.storagePersistentRequest)"
+    :title="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistent)"
+    :button-label="isPersistent ? undefined : $t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentRequest)"
     :on-button-click="isPersistent ? undefined : () => emit('request')"
   >
-    <AppText :text="$t(SETTINGS_PAGE_I18N.storagePersistentDescription)" />
-    <AppText v-if="isPersistent" color="accent-color" :text="$t(SETTINGS_PAGE_I18N.storagePersistentGranted)" />
+    <AppText :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)" />
+    <AppText v-if="isPersistent" color="accent-color" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)" />
   </SettingsCard>
 </template>

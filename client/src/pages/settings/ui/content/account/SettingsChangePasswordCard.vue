@@ -3,7 +3,7 @@ import { Message, Password } from 'primevue'
 
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_I18N } from '../../../config/i18n'
+import { SETTINGS_PAGE_ACCOUNT_I18N } from '../../../config/i18n/account'
 import { useSettingsChangePasswordCard } from '../../../model/account/use-settings-change-password-card'
 import SettingsCard from '../../SettingsCard.vue'
 
@@ -21,15 +21,15 @@ const {
 
 <template>
   <SettingsCard
-    :button-aria-label="$t(SETTINGS_PAGE_I18N.changePassword)"
+    :button-aria-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.changePassword)"
     :button-disabled="isPasswordSubmitDisabled"
-    :button-label="$t(SETTINGS_PAGE_I18N.changePassword)"
+    :button-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.changePassword)"
     :button-loading="isPasswordChanging"
     :on-button-click="changePassword"
-    :title="$t(SETTINGS_PAGE_I18N.changePassword)"
+    :title="$t(SETTINGS_PAGE_ACCOUNT_I18N.changePassword)"
   >
     <label class="settings-change-password-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.currentPassword)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_ACCOUNT_I18N.currentPassword)" />
       <Password
         v-model="currentPassword"
         :feedback="false"
@@ -41,7 +41,7 @@ const {
     </label>
 
     <label class="settings-change-password-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.newPassword)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_ACCOUNT_I18N.newPassword)" />
       <Password v-model="nextPassword" autocomplete="new-password" fluid size="small" toggle-mask />
       <Message v-if="nextPasswordError" severity="error" size="small" variant="simple">
         {{ nextPasswordError }}
@@ -49,12 +49,12 @@ const {
     </label>
 
     <label class="settings-change-password-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_PAGE_I18N.confirmPassword)" />
+      <AppText tag="small" :text="$t(SETTINGS_PAGE_ACCOUNT_I18N.confirmPassword)" />
       <Password v-model="repeatPassword" :feedback="false" autocomplete="new-password" fluid size="small" toggle-mask />
     </label>
 
     <Message v-if="passwordMismatch" severity="error" size="small" variant="simple">
-      {{ $t(SETTINGS_PAGE_I18N.passwordMismatch) }}
+      {{ $t(SETTINGS_PAGE_ACCOUNT_I18N.passwordMismatch) }}
     </Message>
   </SettingsCard>
 </template>

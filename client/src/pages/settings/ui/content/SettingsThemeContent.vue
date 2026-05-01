@@ -1,23 +1,26 @@
 <script setup lang="ts">
 import { ThemeSettings } from 'src/widgets/theme-settings'
 
-import { SETTINGS_PAGE_I18N } from '../../config/i18n'
+import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../config/i18n/appearance'
 import { useSettingsThemeCard } from '../../model/theme/use-settings-theme-card'
 import SettingsCard from '../SettingsCard.vue'
 
-const { theme, customTheme, changeTheme, changeCustomThemeColor } = useSettingsThemeCard()
+import SettingsWallpaperCard from './SettingsWallpaperCard.vue'
+
+const { settings, changeCustomThemeColor } = useSettingsThemeCard()
 </script>
 
 <template>
   <div class="settings-theme-content">
-    <SettingsCard :title="$t(SETTINGS_PAGE_I18N.selectTheme)">
+    <SettingsCard :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.selectTheme)">
       <ThemeSettings
-        :theme="theme"
-        :custom-theme="customTheme"
-        @change-theme="changeTheme"
+        :theme="settings.theme"
+        :custom-theme="settings.customTheme"
         @change-custom-theme-color="changeCustomThemeColor"
       />
     </SettingsCard>
+
+    <SettingsWallpaperCard />
   </div>
 </template>
 

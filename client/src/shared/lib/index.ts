@@ -8,6 +8,7 @@ export {
 } from './time'
 export { getViewPort } from './browser/get-view-port'
 export { imageToBase64 } from './browser/image-to-base64'
+export { readFileAsDataUrl } from './browser/read-file-as-data-url'
 export { formatBytes } from './browser/storage-size'
 export { useScreen } from './browser/use-screen'
 export { createClassNameWithModifiers } from './create-class-name-with-modifiers/create-class-name-with-modifiers'

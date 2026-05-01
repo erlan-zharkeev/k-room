@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isString } from 'global-shared'
 import { computed, watch } from 'vue'
-import { RouterView, useRoute, useRouter } from 'vue-router'
+import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-router'
 
 import { useSettings } from 'src/entities/setting'
 import { useMainMonitors } from 'src/pages/main'
@@ -22,7 +22,7 @@ const router = useRouter()
 
 useMainMonitors()
 
-const isSupportedMobileMainLayoutView = (view: unknown) =>
+const isSupportedMobileMainLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
   isString(view) && ['content', 'content-navigation'].includes(view)
 
 watch(
@@ -47,8 +47,16 @@ watch(
 const wallpaperStyle = computed(() => {
   if (!settings.value.showWallpaper || !selectedWallpaper.value) return undefined
 
-  return { '--main-layout-wallpaper': `url(${selectedWallpaper.value})` }
+  return {
+    '--main-layout-wallpaper': `url(${selectedWallpaper.value})`,
+    '--main-layout-wallpaper-brightness':
+      settings.value.theme === 'custom'
+        ? `brightness(${100 - settings.value.customWallpaperDarkness}%)`
+        : 'brightness(100%)'
+  }
 })
+
+const hasWallpaper = computed(() => Boolean(settings.value.showWallpaper && selectedWallpaper.value))
 
 const showNavigation = computed(() => !isMobile.value || route.query.view === 'content-navigation')
 const showContent = computed(() => !isMobile.value || route.query.view !== 'content-navigation')
@@ -66,9 +74,8 @@ const contentTitleKey = computed(() => {
 </script>
 
 <template>
-  <main class="main-layout" :class="{ 'main-layout--wallpaper': settings.showWallpaper }" :style="wallpaperStyle">
+  <main class="main-layout" :class="{ 'main-layout--wallpaper': hasWallpaper }" :style="wallpaperStyle">
     <MainLeftBar v-if="!isMobile" class="widget" />
-
     <section class="main-layout__workspace">
       <MainTopBar class="widget" />
       <div class="main-layout__content">
@@ -83,7 +90,6 @@ const contentTitleKey = computed(() => {
           </ContentLayout>
         </div>
       </div>
-
       <MainMobileFooter v-if="isMobile" class="widget" />
     </section>
   </main>
@@ -119,7 +125,7 @@ const contentTitleKey = computed(() => {
 .main-layout__content {
   overflow: auto;
   display: grid;
-  grid-template-columns: 1fr 2.1fr;
+  grid-template-columns: 1fr 2.5fr;
   gap: 12px;
 
   min-width: 0;
@@ -165,6 +171,7 @@ const contentTitleKey = computed(() => {
   background-image: var(--main-layout-wallpaper);
   background-repeat: repeat;
   background-size: 280px auto;
+  filter: var(--main-layout-wallpaper-brightness);
 }
 
 .main-layout--wallpaper .widget::before {

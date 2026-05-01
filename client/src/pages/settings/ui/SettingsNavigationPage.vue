@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { isString } from 'global-shared'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -7,6 +6,7 @@ import { useScreen } from 'src/shared/lib'
 import { AppContentNavEl } from 'src/shared/ui'
 
 import { getSettingsPath, SETTINGS_NAVIGATION_ITEMS } from '../config/constants'
+import { getSettingsContentId } from '../lib/get-settings-content-id'
 
 const route = useRoute()
 const { isMobile } = useScreen()
@@ -14,7 +14,7 @@ const { isMobile } = useScreen()
 const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
 
-  return isString(settingsId) && settingsId ? settingsId : SETTINGS_NAVIGATION_ITEMS[0].id
+  return getSettingsContentId(settingsId)
 })
 
 const getItemRoute = (settingsId: string) => ({
