@@ -54,6 +54,8 @@ export const MEDIA_ENDPOINTS = {
 } as const
 
 export const CODES_ENDPOINTS = {
+  sendEmailCodeChangeEmail: '/codes/email/change-email',
+  validateEmailCodeChangeEmail: '/codes/email/validate-change-email',
   sendEmailCodePasswordRecovery: '/codes/email/password-recovery',
   validateEmailCodePasswordRecovery: '/codes/email/validate-email-code-password-recovery'
 } as const

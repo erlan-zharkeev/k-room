@@ -45,7 +45,7 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && setti
         <AppText :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
         <SelectButton
           :fluid="isMobile"
-          :model-value="settings.appearance.showWallpaper? 'show' : 'hide'"
+          :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
           :option-value="'value'"
           :options="SETTINGS_WALLPAPER_VISIBILITY_OPTIONS"
           :pt="selectButtonPt"
@@ -67,7 +67,10 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && setti
       </div>
 
       <div class="settings-wallpaper-card__additional" v-if="showAdditionalBlock">
-        <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element" v-if="isSelectedThemeCustom">
+        <div
+          class="settings-wallpaper-card__upload settings-wallpaper-card__input-element"
+          v-if="isSelectedThemeCustom"
+        >
           <div class="settings-wallpaper-card__upload-main">
             <FileUpload
               mode="basic"
