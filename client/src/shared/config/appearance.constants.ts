@@ -41,7 +41,6 @@ export const DEFAULT_CUSTOM_SCHEMA = DARK_COLOR_SCHEMA
 
 export const DEFAULT_WALLPAPER_SETTINGS = {
   show: true,
-  fit: 'repeat',
   angle: -50,
   scale: 100,
   darkness: 0,
@@ -71,7 +70,6 @@ export const CUSTOM_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,
   darkness: 45,
   angle: 0,
-  fit: 'cover',
   url: '',
   filename: ''
 } as const satisfies IWallpaperSettings

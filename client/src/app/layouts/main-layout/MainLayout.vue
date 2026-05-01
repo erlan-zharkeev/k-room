@@ -59,31 +59,23 @@ const contentTitleKey = computed(() => {
   return isContentTitleKey(titleKey) ? titleKey : undefined
 })
 
-// const wallpaperStyle = computed(() => {
-//   if (!settings.value.showWallpaper || !selectedWallpaper.value) return undefined
-
-//   const { angle, scale, darkness, fit } = selectedWallpaperSettings.value
-//   const isRepeatWallpaper = fit === 'repeat'
-
-//   return {
-//     '--main-layout-wallpaper': `url(${selectedWallpaper.value})`,
-//     '--main-layout-wallpaper-top': isSelectedThemeCustom.value ? '0' : '50%',
-//     '--main-layout-wallpaper-left': isSelectedThemeCustom.value ? '0' : '50%',
-//     '--main-layout-wallpaper-width': isSelectedThemeCustom.value ? '100%' : '240vmax',
-//     '--main-layout-wallpaper-height': isSelectedThemeCustom.value ? '100%' : '240vmax',
-//     '--main-layout-wallpaper-transform': `${
-//       isSelectedThemeCustom.value ? '' : 'translate(-50%, -50%) '
-//     }rotate(${angle}deg) scale(${scale / 100})`,
-//     '--main-layout-wallpaper-repeat': isRepeatWallpaper ? 'repeat' : 'no-repeat',
-//     '--main-layout-wallpaper-size': isRepeatWallpaper ? (isSelectedThemeCustom.value ? 'auto' : '280px auto') : fit,
-//     '--main-layout-wallpaper-position': isRepeatWallpaper && isSelectedThemeCustom.value ? 'top left' : 'center',
-//     '--main-layout-wallpaper-brightness': `brightness(${100 - darkness}%)`
-//   }
-// })
+const wallpaperStyle = computed(() => {
+  return {
+    '--main-layout-wallpaper': `url(${effectiveTheme.value.wallpaper.url})`,
+    '--main-layout-wallpaper-transform': `translate(-50%, -50%)rotate(${
+      effectiveTheme.value.wallpaper.angle
+    }deg) scale(${effectiveTheme.value.wallpaper.scale / 100})`,
+    '--main-layout-wallpaper-brightness': `brightness(${100 - effectiveTheme.value.wallpaper.darkness}%)`
+  }
+})
 </script>
 
 <template>
-  <main class="main-layout" :class="{ 'main-layout--wallpaper': effectiveTheme.wallpaper.show }">
+  <main
+    class="main-layout"
+    :class="{ 'main-layout--wallpaper': effectiveTheme.wallpaper.show }"
+    :style="wallpaperStyle"
+  >
     <MainLeftBar v-if="!isMobile" class="widget" />
     <section class="main-layout__workspace">
       <MainTopBar class="widget" />
@@ -167,10 +159,10 @@ const contentTitleKey = computed(() => {
 
   position: absolute;
   z-index: -1;
-  top: var(--main-layout-wallpaper-top, 50%);
-  left: var(--main-layout-wallpaper-left, 50%);
+  top: 50%;
+  left: 50%;
   transform-origin: center;
-  transform: var(--main-layout-wallpaper-transform, translate(-50%, -50%) rotate(-50deg));
+  transform: var(--main-layout-wallpaper-transform, translate(-50%, -50%));
 
   display: none;
 
@@ -179,8 +171,6 @@ const contentTitleKey = computed(() => {
 
   opacity: 0.7;
   background-image: var(--main-layout-wallpaper);
-  background-repeat: var(--main-layout-wallpaper-repeat, repeat);
-  background-position: var(--main-layout-wallpaper-position, center);
   background-size: var(--main-layout-wallpaper-size, 280px auto);
   filter: var(--main-layout-wallpaper-brightness, brightness(100%));
 }

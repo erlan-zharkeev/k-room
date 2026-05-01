@@ -9,7 +9,6 @@ export const useWallpaperSettings = () => {
   const basicPath = computed(() => `appearance.themes.${settings.value.appearance.selectedTheme}.wallpaper.`)
 
   const setWallpaperAppearance = (value: boolean) => setByPath(`${basicPath.value}show`, value)
-  const setFit = (value: number) => setByPath(`${basicPath.value}fit`, value)
   const setAngle = (value: number) => setByPath(`${basicPath.value}angle`, value)
   const setScale = (value: number) => setByPath(`${basicPath.value}scale`, value)
   const setDarkness = (value: number) => setByPath(`${basicPath.value}darkness`, value)
@@ -31,7 +30,6 @@ export const useWallpaperSettings = () => {
 
   return {
     setWallpaperAppearance,
-    setFit,
     setAngle,
     setScale,
     setDarkness,
