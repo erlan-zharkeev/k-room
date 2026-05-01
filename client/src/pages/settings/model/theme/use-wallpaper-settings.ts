@@ -13,7 +13,7 @@ export const useWallpaperSettings = () => {
   const setAngle = (value: number) => setByPath(`${basicPath.value}angle`, value)
   const setScale = (value: number) => setByPath(`${basicPath.value}scale`, value)
   const setDarkness = (value: number) => setByPath(`${basicPath.value}darkness`, value)
-  const setWallpaperFileValue = (path: string, value: string) => setByPath(`${basicPath}${path}`, value)
+  const setWallpaperFileValue = (path: string, value: string) => setByPath(`${basicPath.value}${path}`, value)
 
   const uploadWallpaper = async ({ files }: FileUploadSelectEvent) => {
     const file = Array.isArray(files) ? files[0] : undefined

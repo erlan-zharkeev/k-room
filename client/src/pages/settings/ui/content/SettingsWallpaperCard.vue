@@ -75,22 +75,28 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && effec
 
       <div class="settings-wallpaper-card__additional" v-if="showAdditionalBlock">
         <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element">
-          <FileUpload
-            mode="basic"
-            auto
-            :accept="SETTINGS_WALLPAPER_ACCEPT"
-            :max-file-size="SETTINGS_WALLPAPER_MAX_FILE_SIZE"
-            :multiple="false"
-            :choose-label="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
-            class="settings-wallpaper-card__file-button"
-            :choose-button-props="{
-              text: true,
-              size: 'small'
-            }"
-            @select="uploadWallpaper"
-          >
-            <template #filelabel />
-          </FileUpload>
+          <div class="settings-wallpaper-card__upload-main">
+            <FileUpload
+              mode="basic"
+              auto
+              :accept="SETTINGS_WALLPAPER_ACCEPT"
+              :max-file-size="SETTINGS_WALLPAPER_MAX_FILE_SIZE"
+              :multiple="false"
+              :choose-label="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
+              class="settings-wallpaper-card__file-button"
+              :choose-button-props="{
+                text: true,
+                size: 'small'
+              }"
+              @select="uploadWallpaper"
+            />
+            <AppText
+              tag="small"
+              truncate
+              :text="effectiveTheme.wallpaper.filename"
+              class="settings-wallpaper-card__file-label"
+            />
+          </div>
 
           <Button
             :label="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
@@ -203,6 +209,12 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && effec
 
 .settings-wallpaper-card__input-element {
   margin-bottom: 12px;
+}
+
+.settings-wallpaper-card__upload-main {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .settings-wallpaper-card__slider-header {
