@@ -1,9 +1,9 @@
 import { onBeforeUnmount, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
+import { useThemeSelect } from 'src/features/theme-select'
 import { SYSTEM_THEME_QUERY } from 'src/shared/config'
 
-import { useThemeSelect } from '../../features/theme-select/model/use-theme-select'
 import { applyThemePreset } from '../lib/theme-preset'
 
 export const useThemeProvider = () => {

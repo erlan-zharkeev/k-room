@@ -26,7 +26,6 @@ export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared
 export type { FileLoaderValueType, IDbMedia } from 'src/shared/types/media'
 export type {
   IThemeData,
-  WallpaperFitType,
   SystemTheme,
   EffectiveThemeType,
   IWallpaperSettings,

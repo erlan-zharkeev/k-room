@@ -1,14 +1,11 @@
 export type ThemeType = 'system' | 'dark' | 'light' | 'custom'
 
-export type WallpaperFitType = 'cover' | 'contain' | 'repeat'
-
 export type SystemTheme = Extract<ThemeType, 'dark' | 'light'>
 
 export type EffectiveThemeType = Exclude<ThemeType, 'system'>
 
 export interface IWallpaperSettings {
   show: boolean
-  fit: WallpaperFitType
   angle: number
   scale: number
   darkness: number

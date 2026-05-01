@@ -70,7 +70,6 @@ const processImageWithSharp = async (input: Buffer, presetKey: IUploadOptions['c
     .resize({
       width: preset.dimensions.width ?? undefined,
       height: preset.dimensions.height ?? undefined,
-      fit: 'inside',
       withoutEnlargement: true,
       fastShrinkOnLoad: true
     })

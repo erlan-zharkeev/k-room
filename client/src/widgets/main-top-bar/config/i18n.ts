@@ -7,18 +7,18 @@ export const MAIN_TOP_BAR_I18N = defineI18n({
     zh: '退出登录'
   },
   online: {
-    en: 'online',
-    ru: 'в сети',
+    en: 'Online',
+    ru: 'В сети',
     zh: '在线'
   },
   offline: {
-    en: 'offline',
-    ru: 'не в сети',
+    en: 'Offline',
+    ru: 'Не в сети',
     zh: '离线'
   },
   reconnecting: {
-    en: 'reconnecting',
-    ru: 'переподключение',
+    en: 'Reconnecting',
+    ru: 'Переподключение',
     zh: '正在重连'
   }
 })

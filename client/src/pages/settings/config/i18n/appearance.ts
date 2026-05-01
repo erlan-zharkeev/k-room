@@ -99,11 +99,6 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     ru: 'Contain',
     zh: 'Contain'
   },
-  repeat: {
-    en: 'Repeat',
-    ru: 'Repeat',
-    zh: 'Repeat'
-  },
   wallpaperInvalidFormat: {
     en: 'Image format is not allowed',
     ru: 'Недопустимый формат изображения',

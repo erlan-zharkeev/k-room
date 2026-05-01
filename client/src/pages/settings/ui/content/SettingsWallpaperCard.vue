@@ -11,7 +11,6 @@ import {
   SETTINGS_WALLPAPER_ACCEPT,
   SETTINGS_WALLPAPER_ANGLE_MAX,
   SETTINGS_WALLPAPER_ANGLE_MIN,
-  SETTINGS_WALLPAPER_FIT_OPTIONS,
   SETTINGS_WALLPAPER_MAX_FILE_SIZE,
   SETTINGS_WALLPAPER_SCALE_MAX,
   SETTINGS_WALLPAPER_SCALE_MIN,
@@ -25,7 +24,7 @@ import SettingsCard from '../SettingsCard.vue'
 
 const { t } = useI18n()
 const { isMobile } = useScreen()
-const { setWallpaperAppearance, setFit, setAngle, setScale, setDarkness, uploadWallpaper, resetWallpaper } =
+const { setWallpaperAppearance, setAngle, setScale, setDarkness, uploadWallpaper, resetWallpaper } =
   useWallpaperSettings()
 const { isSelectedThemeSystem, effectiveTheme } = useSettings()
 
@@ -33,13 +32,6 @@ const selectButtonPt = computed(() => ({
   root: {
     class: 'settings-wallpaper-card__visibility-select',
     'aria-label': t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)
-  }
-}))
-
-const fitSelectButtonPt = computed(() => ({
-  root: {
-    class: 'settings-wallpaper-card__fit-select',
-    'aria-label': t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperFit)
   }
 }))
 
@@ -105,32 +97,6 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && effec
             type="button"
             @click="resetWallpaper"
           />
-        </div>
-
-        <div class="settings-wallpaper-card__fit settings-wallpaper-card__input-element">
-          <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperFit)" />
-          <SelectButton
-            :fluid="isMobile"
-            :model-value="effectiveTheme.wallpaper.fit"
-            :option-value="'value'"
-            :options="SETTINGS_WALLPAPER_FIT_OPTIONS"
-            :pt="fitSelectButtonPt"
-            size="small"
-            @update:model-value="setFit"
-          >
-            <template #option="{ option }">
-              <AppHeader
-                tag="h5"
-                :text="
-                  option.value === 'cover'
-                    ? $t(SETTINGS_PAGE_APPEARANCE_I18N.cover)
-                    : option.value === 'contain'
-                    ? $t(SETTINGS_PAGE_APPEARANCE_I18N.contain)
-                    : $t(SETTINGS_PAGE_APPEARANCE_I18N.repeat)
-                "
-              />
-            </template>
-          </SelectButton>
         </div>
 
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
