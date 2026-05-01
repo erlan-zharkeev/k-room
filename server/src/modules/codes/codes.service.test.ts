@@ -111,6 +111,73 @@ describe('CodesService', () => {
     })
   })
 
+  it('stores and sends a change email code in redis with dev debugCode', async () => {
+    const emailService = {
+      sendChangeEmailCodeEmail: vi.fn()
+    }
+    const userService = {
+      requireUser: vi.fn().mockResolvedValue({
+        _id: 'user-1',
+        personal: { email: 'old@test.com' },
+        public: { nickname: 'tester' }
+      }),
+      findByEmail: vi.fn().mockResolvedValue(null)
+    }
+    const securityService = {
+      assertSendChangeEmailCodeAllowed: vi.fn(),
+      getSendChangeEmailCodeCooldown: vi.fn().mockResolvedValue(null),
+      trackSendChangeEmailCodeAttempt: vi.fn(),
+      setChangeEmailCode: vi.fn()
+    }
+
+    const service = new CodesService(emailService as never, userService as never, securityService as never)
+    const result = await service.sendChangeEmailCode('user-1', { email: 'new@test.com' }, {
+      language: 'en',
+      headers: {}
+    } as never)
+
+    expect(result).toEqual({ nextTimeRequest: 280_000, debugCode: '123456', tooManyRequests: false })
+    expect(securityService.setChangeEmailCode).toHaveBeenCalledWith(
+      'user-1',
+      JSON.stringify({ email: 'new@test.com', code: '123456' }),
+      900_000
+    )
+    expect(emailService.sendChangeEmailCodeEmail).toHaveBeenCalledWith({
+      email: 'new@test.com',
+      code: '123456',
+      language: 'en',
+      nickname: '@tester'
+    })
+  })
+
+  it('validates a change email code from redis and updates user email', async () => {
+    const userService = {
+      changeEmail: vi.fn()
+    }
+    const securityService = {
+      assertValidateChangeEmailCodeAllowed: vi.fn(),
+      getChangeEmailCode: vi.fn().mockResolvedValue(JSON.stringify({ email: 'new@test.com', code: '123456' })),
+      clearChangeEmailCode: vi.fn(),
+      clearChangeEmailCodeFailures: vi.fn(),
+      trackInvalidChangeEmailCode: vi.fn()
+    }
+
+    const service = new CodesService({} as never, userService as never, securityService as never)
+    const result = await service.validateChangeEmailCode('user-1', { email: 'new@test.com', code: '123456' }, {
+      language: 'en',
+      headers: {}
+    } as never)
+
+    expect(result).toEqual({ email: 'new@test.com' })
+    expect(userService.changeEmail).toHaveBeenCalledWith({
+      userId: 'user-1',
+      email: 'new@test.com',
+      language: 'en'
+    })
+    expect(securityService.clearChangeEmailCode).toHaveBeenCalledWith('user-1')
+    expect(securityService.clearChangeEmailCodeFailures).toHaveBeenCalledWith('new@test.com')
+  })
+
   it('rejects expired password recovery code without creating query token', async () => {
     const updateOne = vi.fn()
     const service = new CodesService(

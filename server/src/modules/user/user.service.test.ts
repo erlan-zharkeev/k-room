@@ -178,4 +178,30 @@ describe('user.service', () => {
       }
     })
   })
+
+  it('changes user email when target email is free', async () => {
+    const updateOne = vi.fn()
+    const service = new UserService()
+
+    userModelMock.UserModel.findById.mockResolvedValue({
+      personal: { email: 'old@test.com' },
+      updateOne
+    })
+    userModelMock.UserModel.findOne.mockReturnValue({
+      lean: vi.fn().mockResolvedValue(null)
+    })
+
+    await service.changeEmail({ userId: 'user-1', email: 'new@test.com', language: 'en' })
+
+    expect(userModelMock.UserModel.findOne).toHaveBeenCalledWith({
+      _id: { $ne: 'user-1' },
+      'personal.email': 'new@test.com'
+    })
+    expect(updateOne).toHaveBeenCalledWith({
+      $set: {
+        'personal.email': 'new@test.com',
+        'system.confirmed': true
+      }
+    })
+  })
 })

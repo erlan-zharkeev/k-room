@@ -31,10 +31,18 @@ import {
   SEND_CONFIRMATION_LINK_CAPTCHA_EMAIL_THRESHOLD,
   SEND_CONFIRMATION_LINK_CAPTCHA_IP_THRESHOLD,
   SEND_CONFIRMATION_LINK_COOLDOWN_MS,
+  SEND_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD,
+  SEND_CHANGE_EMAIL_BLOCK_IP_THRESHOLD,
+  SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD,
+  SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD,
   SEND_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD,
   SEND_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD,
   SEND_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
   SEND_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD,
+  VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD,
+  VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD,
+  VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD,
+  VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD,
   VALIDATE_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD,
   VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD,
   VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
@@ -53,6 +61,10 @@ export class SecurityService {
 
   private buildKey(action: SecurityActionType, scope: string, value: string) {
     return [SECURITY_REDIS_KEY_PREFIX, action, scope, this.normalizeKeyPart(value)].join(':')
+  }
+
+  private buildChangeEmailCodeKey(userId: string) {
+    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validateChangeEmailCode, 'code', userId].join(':')
   }
 
   private buildPayload(
@@ -245,6 +257,111 @@ export class SecurityService {
       this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
       this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS)
     ])
+  }
+
+  async getSendChangeEmailCodeCooldown(userId: string) {
+    const cooldownKey = this.buildKey(SECURITY_ACTION.sendChangeEmailCode, 'cooldown', userId)
+    const ttlMs = await this.redisService.getTtlMs(cooldownKey)
+
+    return ttlMs > 0 ? Date.now() + ttlMs : null
+  }
+
+  async assertSendChangeEmailCodeAllowed(
+    captchaToken: string | undefined,
+    email: string,
+    ip: string,
+    language: AppLanguageType
+  ) {
+    const action = SECURITY_ACTION.sendChangeEmailCode
+    const emailKey = this.buildKey(action, 'email', email)
+    const ipKey = this.buildKey(action, 'ip', ip)
+    const [emailAttempts, ipAttempts] = await Promise.all([
+      this.redisService.getNumber(emailKey),
+      this.redisService.getNumber(ipKey)
+    ])
+
+    if (
+      emailAttempts >= SEND_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
+      ipAttempts >= SEND_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
+    ) {
+      await this.blockAction(action, language, [emailKey, ipKey])
+    }
+
+    if (
+      emailAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
+      ipAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
+    ) {
+      await this.requireCaptcha(action, language, captchaToken, ip)
+    }
+  }
+
+  async trackSendChangeEmailCodeAttempt(ip: string, email: string, userId: string) {
+    const action = SECURITY_ACTION.sendChangeEmailCode
+
+    await Promise.all([
+      this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
+      this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS),
+      this.redisService.set(this.buildKey(action, 'cooldown', userId), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
+    ])
+  }
+
+  async assertValidateChangeEmailCodeAllowed(
+    captchaToken: string | undefined,
+    email: string,
+    ip: string,
+    language: AppLanguageType
+  ) {
+    const action = SECURITY_ACTION.validateChangeEmailCode
+    const emailKey = this.buildKey(action, 'email', email)
+    const ipKey = this.buildKey(action, 'ip', ip)
+    const [emailFailures, ipFailures] = await Promise.all([
+      this.redisService.getNumber(emailKey),
+      this.redisService.getNumber(ipKey)
+    ])
+
+    if (
+      emailFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
+      ipFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
+    ) {
+      await this.blockAction(action, language, [emailKey, ipKey])
+    }
+
+    if (
+      emailFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
+      ipFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
+    ) {
+      await this.requireCaptcha(action, language, captchaToken, ip)
+    }
+  }
+
+  async trackInvalidChangeEmailCode(ip: string, email: string) {
+    const action = SECURITY_ACTION.validateChangeEmailCode
+    const [emailFailures, ipFailures] = await Promise.all([
+      this.redisService.increment(this.buildKey(action, 'email', email), PASSWORD_RECOVERY_CODE_WINDOW_MS),
+      this.redisService.increment(this.buildKey(action, 'ip', ip), PASSWORD_RECOVERY_CODE_WINDOW_MS)
+    ])
+
+    return {
+      blocked:
+        emailFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
+        ipFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
+    }
+  }
+
+  async clearChangeEmailCodeFailures(email: string) {
+    await this.redisService.delete(this.buildKey(SECURITY_ACTION.validateChangeEmailCode, 'email', email))
+  }
+
+  async getChangeEmailCode(userId: string) {
+    return this.redisService.get(this.buildChangeEmailCodeKey(userId))
+  }
+
+  async setChangeEmailCode(userId: string, value: string, ttlMs: number) {
+    await this.redisService.set(this.buildChangeEmailCodeKey(userId), value, ttlMs)
+  }
+
+  async clearChangeEmailCode(userId: string) {
+    await this.redisService.delete(this.buildChangeEmailCodeKey(userId))
   }
 
   async assertValidatePasswordRecoveryCodeAllowed(

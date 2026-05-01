@@ -6,8 +6,13 @@ import {
   EMAIL_CODE_LENGTH,
   type ICodeValidationPayload,
   formatNickname,
+  isUnknownObject,
+  type ISendChangeEmailCodePayload,
   type ISendPasswordRecoveryCodePayload,
+  type ISendChangeEmailCodeResponse,
   type ISendPasswordRecoveryCodeResponse,
+  type IValidateChangeEmailCodePayload,
+  type IValidateChangeEmailCodeResponse,
   type IValidatePasswordRecoveryCodeResponse,
   REQ_STATUS
 } from 'global-shared'
@@ -22,7 +27,7 @@ import { SecurityService } from '../security/security.service'
 import { UserService } from '../user/user.service'
 
 import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
-import { VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
+import { VALIDATE_CHANGE_EMAIL_CODE_I18N, VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
 import { CodeModel } from './codes.model'
 
 @Injectable()
@@ -92,6 +97,117 @@ export class CodesService {
       nextTimeRequest: nextRequestTimestampMs,
       ...(SERVER_ENV.isDev ? { debugCode: code } : {}),
       tooManyRequests: false
+    }
+  }
+
+  async sendChangeEmailCode(
+    userId: string,
+    payload: ISendChangeEmailCodePayload,
+    request: Request
+  ): Promise<ISendChangeEmailCodeResponse & { tooManyRequests: boolean }> {
+    const { language } = request
+    const ip = getRequestIp(request)
+    const email = payload.email.trim()
+
+    await this.securityService.assertSendChangeEmailCodeAllowed(payload.captchaToken, email, ip, language)
+
+    const nowTimestampMs = Date.now()
+    const cooldownUntil = await this.securityService.getSendChangeEmailCodeCooldown(userId)
+
+    if (cooldownUntil && cooldownUntil > nowTimestampMs) {
+      return {
+        nextTimeRequest: cooldownUntil,
+        tooManyRequests: true
+      }
+    }
+
+    const user = await this.userService.requireUser(userId, language)
+
+    if (email.toLowerCase() === user.personal.email.toLowerCase()) {
+      throw new AppError(
+        REQ_STATUS.badRequest,
+        localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.emailNotChanged, language)
+      )
+    }
+
+    const userWithSameEmail = await this.userService.findByEmail(email)
+
+    if (userWithSameEmail && String(userWithSameEmail._id) !== userId) {
+      throw new AppError(REQ_STATUS.badRequest, this.userService.getUserExistMessage('email', language))
+    }
+
+    const code = String(randomInt(10 ** (EMAIL_CODE_LENGTH - 1), 10 ** EMAIL_CODE_LENGTH))
+    const nextRequestTimestampMs = nowTimestampMs + RESEND_CODE_INTERVAL_MS
+
+    await this.securityService.trackSendChangeEmailCodeAttempt(ip, email, userId)
+    await this.securityService.setChangeEmailCode(userId, JSON.stringify({ email, code }), CODE_LIFE_MS)
+    await this.emailService.sendChangeEmailCodeEmail({
+      email,
+      code,
+      language,
+      nickname: formatNickname(user.public.nickname)
+    })
+
+    return {
+      nextTimeRequest: nextRequestTimestampMs,
+      ...(SERVER_ENV.isDev ? { debugCode: code } : {}),
+      tooManyRequests: false
+    }
+  }
+
+  async validateChangeEmailCode(
+    userId: string,
+    payload: IValidateChangeEmailCodePayload,
+    request: Request
+  ): Promise<IValidateChangeEmailCodeResponse> {
+    const { language } = request
+    const ip = getRequestIp(request)
+    const email = payload.email.trim()
+    const code = payload.code.trim()
+
+    await this.securityService.assertValidateChangeEmailCodeAllowed(payload.captchaToken, email, ip, language)
+
+    const stored = await this.securityService.getChangeEmailCode(userId)
+
+    if (!stored) {
+      await this.securityService.trackInvalidChangeEmailCode(ip, email)
+      throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.expiredCode, language))
+    }
+
+    let parsed: unknown
+
+    try {
+      parsed = JSON.parse(stored)
+    } catch {
+      parsed = null
+    }
+
+    const storedEmail = isUnknownObject(parsed) ? parsed.email : null
+    const storedCode = isUnknownObject(parsed) ? parsed.code : null
+    const isValid =
+      typeof storedEmail === 'string' &&
+      typeof storedCode === 'string' &&
+      storedEmail.toLowerCase() === email.toLowerCase() &&
+      storedCode === code
+
+    if (!isValid) {
+      const { blocked } = await this.securityService.trackInvalidChangeEmailCode(ip, email)
+
+      if (blocked) {
+        await this.securityService.clearChangeEmailCode(userId)
+      }
+
+      throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.invalidCode, language))
+    }
+
+    await this.userService.changeEmail({ userId, email, language })
+    await Promise.all([
+      this.securityService.clearChangeEmailCode(userId),
+      this.securityService.clearChangeEmailCodeFailures(email)
+    ])
+
+    return {
+      email
     }
   }
 

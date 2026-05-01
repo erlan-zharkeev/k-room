@@ -11,7 +11,13 @@ export type { CallStatusType, CallFlowType, ICall, IDBCall, IDBCallSchema } from
 export type { IChatRoom, ChatRoomsType, IChatRoomSchema } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
-export type { ICodes, ICodeValidationPayload, ISendPasswordRecoveryCodePayload } from './codes/types'
+export type {
+  ICodes,
+  ICodeValidationPayload,
+  ISendChangeEmailCodePayload,
+  ISendPasswordRecoveryCodePayload,
+  IValidateChangeEmailCodePayload
+} from './codes/types'
 
 export type { InteractionType, IFrontendContact, FrontendContactMapType } from './contact/types'
 
@@ -79,7 +85,9 @@ export type {
   ISignInWithProviderResponse,
   IGetUserDataResponse,
   ISendConfirmationLinkResponse,
+  ISendChangeEmailCodeResponse,
   ISendPasswordRecoveryCodeResponse,
+  IValidateChangeEmailCodeResponse,
   IValidatePasswordRecoveryCodeResponse
 } from './response/types'
 
@@ -184,8 +192,10 @@ export {
   createPasswordRecoveryEmailFormSchema,
   createProviderLoginSchema,
   createResetPasswordSchema,
+  createSendChangeEmailCodeSchema,
   createSendConfirmationLinkSchema,
   createSendPasswordRecoveryCodeSchema,
+  createValidateChangeEmailCodeSchema,
   createUpdateUserDataSchema,
   createValidatePasswordRecoveryCodeSchema
 } from './validation/schemas'
