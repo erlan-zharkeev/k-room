@@ -16,7 +16,16 @@ export interface ISendPasswordRecoveryCodePayload extends ICaptchaTokenPayload {
   email: string
 }
 
+export interface ISendChangeEmailCodePayload extends ICaptchaTokenPayload {
+  email: string
+}
+
 export interface ICodeValidationPayload extends ICaptchaTokenPayload {
+  email: string
+  code: string
+}
+
+export interface IValidateChangeEmailCodePayload extends ICaptchaTokenPayload {
   email: string
   code: string
 }

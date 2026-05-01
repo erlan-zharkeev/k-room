@@ -1,6 +1,7 @@
 import * as v from 'valibot'
 
 import { VALIDATION_LIMITS, VALIDATION_PATTERNS } from '../auth/constants'
+import { EMAIL_CODE_LENGTH } from '../codes/constants'
 import { providers } from '../shared/constants'
 import { normalizeNickname } from '../user/lib/nickname'
 
@@ -13,6 +14,13 @@ const captchaTokenSchema = (messages: ValidationMessagesType) =>
 
 const emailSchema = (messages: ValidationMessagesType) =>
   v.pipe(requiredStringSchema(messages.emailIsRequired), v.email(messages.invalidEmailFormat))
+
+const emailCodeSchema = (messages: ValidationMessagesType) =>
+  v.pipe(
+    requiredStringSchema(messages.fieldIsRequired),
+    v.length(EMAIL_CODE_LENGTH, messages.fieldIsRequired),
+    v.regex(/^\d+$/, messages.fieldIsRequired)
+  )
 
 export const createPasswordSchema = (messages: ValidationMessagesType) =>
   v.pipe(
@@ -73,14 +81,18 @@ export const createSendPasswordRecoveryCodeSchema = (messages: ValidationMessage
     captchaToken: captchaTokenSchema(messages)
   })
 
+export const createSendChangeEmailCodeSchema = createSendPasswordRecoveryCodeSchema
+
 export const createSendConfirmationLinkSchema = createSendPasswordRecoveryCodeSchema
 
 export const createValidatePasswordRecoveryCodeSchema = (messages: ValidationMessagesType) =>
   v.object({
     email: emailSchema(messages),
-    code: requiredStringSchema(messages.fieldIsRequired),
+    code: emailCodeSchema(messages),
     captchaToken: captchaTokenSchema(messages)
   })
+
+export const createValidateChangeEmailCodeSchema = createValidatePasswordRecoveryCodeSchema
 
 export const createResetPasswordSchema = (messages: ValidationMessagesType) =>
   v.object({

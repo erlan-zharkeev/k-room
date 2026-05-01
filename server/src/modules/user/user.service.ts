@@ -363,6 +363,26 @@ export class UserService {
     await user.updateOne({ $set: { 'system.password': hashedPassword } })
   }
 
+  async changeEmail({ userId, email, language }: { userId: string; email: string; language: AppLanguageType }) {
+    const user = await this.requireUser(userId, language)
+    const normalizedEmail = email.trim()
+
+    if (normalizedEmail === user.personal.email) {
+      return
+    }
+
+    const userWithSameEmail = await UserModel.findOne({
+      _id: { $ne: userId },
+      'personal.email': normalizedEmail
+    }).lean()
+
+    if (userWithSameEmail) {
+      throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('email', language))
+    }
+
+    await user.updateOne({ $set: { 'personal.email': normalizedEmail, 'system.confirmed': true } })
+  }
+
   async updateUserData({
     userId,
     nickname,

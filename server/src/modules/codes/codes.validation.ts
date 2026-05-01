@@ -1,4 +1,11 @@
-import { createSendPasswordRecoveryCodeSchema, createValidatePasswordRecoveryCodeSchema } from 'global-shared'
+import {
+  createSendChangeEmailCodeSchema,
+  createSendPasswordRecoveryCodeSchema,
+  createValidateChangeEmailCodeSchema,
+  createValidatePasswordRecoveryCodeSchema
+} from 'global-shared'
 
+export const SEND_CHANGE_EMAIL_CODE_VALIDATION = createSendChangeEmailCodeSchema
 export const SEND_PASSWORD_RECOVERY_CODE_VALIDATION = createSendPasswordRecoveryCodeSchema
+export const VALIDATE_CHANGE_EMAIL_CODE_VALIDATION = createValidateChangeEmailCodeSchema
 export const VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION = createValidatePasswordRecoveryCodeSchema

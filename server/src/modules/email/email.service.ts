@@ -136,4 +136,51 @@ export class EmailService {
 
     return data
   }
+
+  async sendChangeEmailCodeEmail({
+    email,
+    code,
+    language,
+    nickname
+  }: {
+    email: string
+    code: string
+    language: AppLanguageType
+    nickname?: string
+  }) {
+    if (!email) {
+      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
+    }
+
+    const resend = this.createResendClient(language)
+    const html = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Email change</h2>
+        <p>Hello${nickname ? `, ${nickname}` : ''}.</p>
+        <p>Use this code to confirm your new email address:</p>
+        <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</p>
+        <p>If you did not request an email change, you can ignore this message.</p>
+      </div>
+    `
+
+    if (!resend) {
+      log.warn(`-Mock email change code for ${email}: ${code}`)
+      return { id: 'mock-change-email-id' }
+    }
+
+    const { data, error } = await resend.emails.send({
+      from: `${this.appName} <no-reply@k-room.space>`,
+      to: email,
+      subject: `${this.appName}: Email change code`,
+      html
+    })
+
+    if (error) {
+      throw new AppError(REQ_STATUS.server, error.message, false, error)
+    }
+
+    log.success(`-Email change code scheduled for ${email}. Resend id: ${data?.id ?? 'unknown'}`)
+
+    return data
+  }
 }

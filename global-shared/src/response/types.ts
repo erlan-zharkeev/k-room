@@ -4,11 +4,11 @@ export interface IConfirmEmailResponse {
   email: string
 }
 
-export interface ILoginResponse extends IFrontendUserData {}
+export type ILoginResponse = IFrontendUserData
 
-export interface ISignInWithProviderResponse extends IFrontendUserData {}
+export type ISignInWithProviderResponse = IFrontendUserData
 
-export interface IGetUserDataResponse extends IFrontendUserData {}
+export type IGetUserDataResponse = IFrontendUserData
 
 export interface ISendConfirmationLinkResponse {
   email: string
@@ -21,6 +21,15 @@ export interface ISendPasswordRecoveryCodeResponse {
   debugCode?: string
 }
 
+export interface ISendChangeEmailCodeResponse {
+  nextTimeRequest: number
+  debugCode?: string
+}
+
 export interface IValidatePasswordRecoveryCodeResponse {
   query: string
+}
+
+export interface IValidateChangeEmailCodeResponse {
+  email: string
 }
