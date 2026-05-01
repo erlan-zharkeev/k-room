@@ -26,7 +26,7 @@ const { t } = useI18n()
 const { isMobile } = useScreen()
 const { setWallpaperAppearance, setAngle, setScale, setDarkness, uploadWallpaper, resetWallpaper } =
   useWallpaperSettings()
-const { isSelectedThemeSystem, effectiveTheme } = useSettings()
+const { isSelectedThemeSystem, effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 
 const selectButtonPt = computed(() => ({
   root: {
@@ -35,7 +35,7 @@ const selectButtonPt = computed(() => ({
   }
 }))
 
-const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && effectiveTheme.value.wallpaper.show)
+const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && settings.value.appearance.showWallpaper)
 </script>
 
 <template>
@@ -45,7 +45,7 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && effec
         <AppText :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
         <SelectButton
           :fluid="isMobile"
-          :model-value="effectiveTheme.wallpaper.show ? 'show' : 'hide'"
+          :model-value="settings.appearance.showWallpaper? 'show' : 'hide'"
           :option-value="'value'"
           :options="SETTINGS_WALLPAPER_VISIBILITY_OPTIONS"
           :pt="selectButtonPt"
@@ -66,7 +66,7 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && effec
       </div>
 
       <div class="settings-wallpaper-card__additional" v-if="showAdditionalBlock">
-        <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element">
+        <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element" v-if="isSelectedThemeCustom">
           <div class="settings-wallpaper-card__upload-main">
             <FileUpload
               mode="basic"

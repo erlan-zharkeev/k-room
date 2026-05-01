@@ -5,7 +5,6 @@ export type SystemTheme = Extract<ThemeType, 'dark' | 'light'>
 export type EffectiveThemeType = Exclude<ThemeType, 'system'>
 
 export interface IWallpaperSettings {
-  show: boolean
   angle: number
   scale: number
   darkness: number
@@ -32,5 +31,6 @@ export interface IColorSchema {
 export interface IAppearanceSettings {
   selectedTheme: ThemeType
   systemTheme: SystemTheme
+  showWallpaper: boolean
   themes: Record<EffectiveThemeType, IThemeData>
 }

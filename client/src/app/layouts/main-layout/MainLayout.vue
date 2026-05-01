@@ -16,7 +16,7 @@ import ContentNavigationLayout from './../content-navigation-layout/ContentNavig
 import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
 
 const { isMobile } = useScreen()
-const { effectiveTheme } = useSettings()
+const { effectiveTheme, settings } = useSettings()
 const route = useRoute()
 const router = useRouter()
 
@@ -73,7 +73,7 @@ const wallpaperStyle = computed(() => {
 <template>
   <main
     class="main-layout"
-    :class="{ 'main-layout--wallpaper': effectiveTheme.wallpaper.show }"
+    :class="{ 'main-layout--wallpaper': settings.appearance.showWallpaper }"
     :style="wallpaperStyle"
   >
     <MainLeftBar v-if="!isMobile" class="widget" />

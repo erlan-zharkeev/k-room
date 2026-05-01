@@ -40,7 +40,6 @@ export const CUSTOM_COLOR_SCHEMA = {
 export const DEFAULT_CUSTOM_SCHEMA = DARK_COLOR_SCHEMA
 
 export const DEFAULT_WALLPAPER_SETTINGS = {
-  show: true,
   angle: -50,
   scale: 100,
   darkness: 0,
