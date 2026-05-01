@@ -1,4 +1,6 @@
-import { IColorSchema, IWallpaperSettings } from '../types/appearance.types'
+import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
+
+import type { IColorSchema, IWallpaperSettings } from '../types/appearance.types'
 
 const ACCENT_COLOR = '#418fde'
 
@@ -47,16 +49,22 @@ export const DEFAULT_WALLPAPER_SETTINGS = {
   filename: ''
 } as const satisfies IWallpaperSettings
 
+export const DEFAULT_DARK_WALLPAPER_URL = DEFAULT_DARK_WALLPAPER
+export const DEFAULT_DARK_WALLPAPER_FILENAME = 'default-wallpaper-dark.jpeg'
+
+export const DEFAULT_LIGHT_WALLPAPER_URL = DEFAULT_LIGHT_WALLPAPER
+export const DEFAULT_LIGHT_WALLPAPER_FILENAME = 'default-wallpaper-light.png'
+
 export const DARK_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,
-  url: '',
-  filename: ''
+  url: DEFAULT_DARK_WALLPAPER_URL,
+  filename: DEFAULT_DARK_WALLPAPER_FILENAME
 } as const satisfies IWallpaperSettings
 
 export const LIGHT_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,
-  url: '',
-  filename: ''
+  url: DEFAULT_LIGHT_WALLPAPER_URL,
+  filename: DEFAULT_LIGHT_WALLPAPER_FILENAME
 } as const satisfies IWallpaperSettings
 
 export const CUSTOM_WALLPAPER_SETTINGS = {
