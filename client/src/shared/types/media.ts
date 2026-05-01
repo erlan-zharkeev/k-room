@@ -7,13 +7,15 @@ export const IMAGE_RESOLUTIONS = {
 } as const
 
 export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[] | string | null
+export type DbMediaStatusType = 'missing' | 'ready'
 
 export interface IDbMedia {
   id: string
-  blob: Blob
-  contentType: string
-  etag: string
-  kind: MediaKindType
-  lastModified: string
+  blob?: Blob
+  contentType?: string
+  etag?: string
+  kind?: MediaKindType
+  lastModified?: string
   lastChecked: number
+  status?: DbMediaStatusType
 }

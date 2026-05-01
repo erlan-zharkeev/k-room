@@ -8,7 +8,7 @@ import { useMedia } from './use-media'
 
 export const useLoadMedia = () => {
   const { doRequest } = useApi()
-  const { put, remove } = useMedia()
+  const { put } = useMedia()
 
   const getMediaEndpoint = (filename: string) => `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType
 
@@ -32,8 +32,16 @@ export const useLoadMedia = () => {
       await put({ id: filename, blob: response.data, ...mediaData })
     } catch (error) {
       if (isApiError(error) && error.status === REQ_STATUS.notFound) {
-        await remove(filename)
+        await put({
+          id: filename,
+          lastChecked: Date.now(),
+          status: 'missing'
+        })
+
+        return
       }
+
+      throw error
     }
   }
 

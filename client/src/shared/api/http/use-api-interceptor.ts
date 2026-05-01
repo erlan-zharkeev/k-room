@@ -7,30 +7,8 @@ import { API_I18N, ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
 
 import { createApiError } from './create-api-error'
-import { isBackendResponse } from './is-backend-response'
-
-const extractErrorPayload = async (error: AxiosError) => {
-  const { response } = error
-  if (!response) return null
-
-  const { data } = response
-
-  if (data instanceof Blob) {
-    if (data.type?.includes('application/json')) {
-      try {
-        const parsed = JSON.parse(await data.text())
-
-        return isBackendResponse(parsed) ? parsed : null
-      } catch {
-        return null
-      }
-    }
-
-    return null
-  }
-
-  return isBackendResponse(data) ? data : null
-}
+import { extractErrorPayload } from './extract-error-payload'
+import { isMediaRequestError } from './is-media-request-error'
 
 export const useApiInterceptor = () => {
   const { t } = useI18n()
@@ -38,13 +16,16 @@ export const useApiInterceptor = () => {
   const router = useRouter()
 
   const interceptError = async (error: unknown) => {
-    log('error', 'API request failed', error)
-
     if (error instanceof AxiosError) {
       const status = error.response?.status as ReqStatusType | undefined
+      const mediaRequestError = isMediaRequestError(error)
       const payload = (await extractErrorPayload(error)) as IBackendResponse<unknown> | null
       let text: string | undefined
       let silent: boolean | undefined
+
+      if (!mediaRequestError) {
+        log('error', 'API request failed', error)
+      }
 
       if (payload?.message) {
         text = payload.message.text
@@ -61,16 +42,32 @@ export const useApiInterceptor = () => {
 
       const message = text ?? t(API_I18N.genericError)(error.message)
 
-      if (silent) {
-        log('error', text ?? t(API_I18N.unknownError))
-      } else {
-        toast.add({
-          severity: 'error',
-          summary: t(TOAST_I18N.error),
-          detail: message,
-          life: ERROR_TOAST_LIFE_MS
+      if (mediaRequestError) {
+        return createApiError({
+          message,
+          status,
+          silent: true,
+          payload
         })
       }
+
+      if (silent) {
+        log('error', text ?? t(API_I18N.unknownError))
+
+        return createApiError({
+          message,
+          status,
+          silent,
+          payload
+        })
+      }
+
+      toast.add({
+        severity: 'error',
+        summary: t(TOAST_I18N.error),
+        detail: message,
+        life: ERROR_TOAST_LIFE_MS
+      })
 
       return createApiError({
         message,
@@ -79,6 +76,8 @@ export const useApiInterceptor = () => {
         payload
       })
     }
+
+    log('error', 'API request failed', error)
 
     if (error instanceof Error) {
       return createApiError({ message: error.message })

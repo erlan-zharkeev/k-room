@@ -103,8 +103,8 @@ export const useApi = () => {
           successMessageHandler(response as AxiosResponse<IBackendResponse<unknown>>)
 
           return response as R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>
-        } catch {
-          throw await interceptError(error)
+        } catch (retryError) {
+          throw await interceptError(retryError)
         }
       }
 
