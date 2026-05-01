@@ -6,35 +6,31 @@ export const THEME_SETTINGS_COLOR_ITEMS = [
     label: THEME_SETTINGS_I18N.mainBg
   },
   {
-    id: 'surfaceCard',
-    label: THEME_SETTINGS_I18N.surfaceCard
+    id: 'cardSurface',
+    label: THEME_SETTINGS_I18N.cardSurface
   },
   {
     id: 'accent',
     label: THEME_SETTINGS_I18N.accent
   },
   {
-    id: 'text.contrastText',
+    id: 'text',
     label: THEME_SETTINGS_I18N.contrastText
   },
   {
-    id: 'text.semiContrastText',
-    label: THEME_SETTINGS_I18N.semiContrastText
+    id: 'secondaryText',
+    label: THEME_SETTINGS_I18N.secondaryText
   },
   {
-    id: 'text.text',
+    id: 'contrastText',
     label: THEME_SETTINGS_I18N.text
   },
   {
-    id: 'shadowOutsetStart',
-    label: THEME_SETTINGS_I18N.shadowOutsetStart
+    id: 'darkShadow',
+    label: THEME_SETTINGS_I18N.darkShadow
   },
   {
-    id: 'shadowOutsetEnd',
-    label: THEME_SETTINGS_I18N.shadowOutsetEnd
-  },
-  {
-    id: 'darkGrayTransparent',
-    label: THEME_SETTINGS_I18N.darkGrayTransparent
+    id: 'lightShadow',
+    label: THEME_SETTINGS_I18N.lightShadow
   }
 ] as const

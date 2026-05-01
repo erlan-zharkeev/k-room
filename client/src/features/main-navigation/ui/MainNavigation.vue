@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isString } from 'global-shared'
+import { isString } from 'lodash'
 import { Button, OverlayBadge } from 'primevue'
 import { computed, h, type FunctionalComponent } from 'vue'
 import { useRoute } from 'vue-router'

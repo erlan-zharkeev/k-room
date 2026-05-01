@@ -4,10 +4,10 @@ import {
   APP_LANGUAGE_HEADER,
   APP_LANGUAGE_VALUES,
   DEFAULT_APP_LANGUAGE,
-  isString,
   isUnknownObject,
   type AppLanguageType
 } from 'global-shared'
+import { isString } from 'lodash'
 
 import type { SocketInstanceType } from '../types/socket'
 

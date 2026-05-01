@@ -4,11 +4,11 @@ import {
   CODES_ENDPOINTS,
   type IBackendResponse,
   type ICodeValidationPayload,
-  isString,
   type ISendPasswordRecoveryCodeResponse,
   type ISendPasswordRecoveryCodePayload,
   type IValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
+import { isString } from 'lodash'
 
 import { toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'

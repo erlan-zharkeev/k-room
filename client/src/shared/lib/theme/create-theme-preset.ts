@@ -1,12 +1,12 @@
 import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
 
-import type { ICustomThemeSetting } from 'src/shared/types/theme'
+import { IColorSchema } from '../../config'
 
 import { createPrimaryPalette } from './create-primary-palette'
 import { createSurfacePalette } from './create-surface-palette'
 
-export const createThemePreset = (colors: ICustomThemeSetting) =>
+export const createThemePreset = (colors: IColorSchema) =>
   definePreset(Aura, {
     semantic: {
       primary: createPrimaryPalette(colors.accent),

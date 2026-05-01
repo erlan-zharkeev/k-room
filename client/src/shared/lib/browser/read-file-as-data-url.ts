@@ -1,4 +1,4 @@
-import { isString } from 'global-shared'
+import { isString } from 'lodash'
 
 export const readFileAsDataUrl = (file: File) =>
   new Promise<string | undefined>((resolve) => {

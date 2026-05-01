@@ -1,17 +1,17 @@
 export const SETTINGS_PAGE_APPEARANCE_I18N = {
+  appearance: {
+    en: 'Appearance',
+    ru: 'Оформление',
+    zh: '外观'
+  },
   theme: {
     en: 'Theme',
     ru: 'Тема',
-    zh: '主题'
-  },
-  selectTheme: {
-    en: 'Select theme',
-    ru: 'Выбор темы',
     zh: '选择主题'
   },
   themeDescription: {
-    en: 'Theme and wallpaper',
-    ru: 'Тема и обои',
+    en: 'Themes and wallpaper',
+    ru: 'Темы и обои',
     zh: '主题和壁纸'
   },
   language: {
@@ -73,6 +73,36 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     en: 'Background dimming',
     ru: 'Затемнение фона',
     zh: '背景变暗'
+  },
+  wallpaperAngle: {
+    en: 'Angle',
+    ru: 'Наклон',
+    zh: '角度'
+  },
+  wallpaperScale: {
+    en: 'Scale',
+    ru: 'Масштаб',
+    zh: '缩放'
+  },
+  wallpaperFit: {
+    en: 'Fit',
+    ru: 'Fit',
+    zh: 'Fit'
+  },
+  cover: {
+    en: 'Cover',
+    ru: 'Cover',
+    zh: 'Cover'
+  },
+  contain: {
+    en: 'Contain',
+    ru: 'Contain',
+    zh: 'Contain'
+  },
+  repeat: {
+    en: 'Repeat',
+    ru: 'Repeat',
+    zh: 'Repeat'
   },
   wallpaperInvalidFormat: {
     en: 'Image format is not allowed',

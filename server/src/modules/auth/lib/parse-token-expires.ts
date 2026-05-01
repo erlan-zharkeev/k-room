@@ -1,4 +1,4 @@
-import { isNumber } from 'global-shared'
+import { isNumber } from 'lodash'
 
 import {
   DEFAULT_COOKIE_MAX_AGE_MS,

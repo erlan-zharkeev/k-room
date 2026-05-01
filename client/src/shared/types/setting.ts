@@ -1,8 +1,6 @@
 import type { AppLanguageType } from 'global-shared'
 
-import type { ICustomThemeSetting, ThemeType } from 'src/shared/types/theme'
-
-export type WallpaperType = 'default' | 'custom'
+import type { IAppearanceSettings } from './appearance.types'
 
 export type SoundType = 'connection' | 'calling' | 'income-message' | 'ring' | 'busy'
 
@@ -25,17 +23,11 @@ export interface IUserSetting {
   messageScrollByRoom: Record<string, IMessageListScrollState>
   language: AppLanguageType
   showNotification: boolean
-  theme: ThemeType
-  systemTheme: Extract<ThemeType, 'dark' | 'light'>
-  customTheme: ICustomThemeSetting
+  appearance: IAppearanceSettings
   showTooltips: boolean
   soundOn: boolean
   sound: SoundType
   customSounds: CustomSoundSettingType
-  showWallpaper: boolean
-  wallpaper: WallpaperType
-  customWallpaperDataUrl: string
-  customWallpaperDarkness: number
   selectedAudioInputDeviceId: string
   selectedVideoInputDeviceId: string
   selectedAudioOutputDeviceId: string

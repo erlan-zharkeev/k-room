@@ -1,4 +1,4 @@
-import { isString } from 'global-shared'
+import { isString } from 'lodash'
 
 export const getHeaderValue = (value: unknown): string => {
   if (Array.isArray(value)) {

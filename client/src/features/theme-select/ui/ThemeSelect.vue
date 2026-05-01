@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<IThemeSelectProps>(), THEME_SELECT_DEFAUL
 
 const { t } = useI18n()
 const { settings, changeTheme } = useThemeSelect()
+
 const themeOptions = computed(() =>
   THEME_SELECT_OPTIONS.filter((option) => !props.compact || option.value !== 'custom').map((option) => ({
     ...option,
@@ -35,7 +36,7 @@ const selectButtonPt = computed(() => ({
     <SelectButton
       :data-key="'value'"
       fluid
-      :model-value="settings.theme"
+      :model-value="settings.appearance.selectedTheme"
       :option-label="'label'"
       :option-value="'value'"
       :options="themeOptions"

@@ -1,4 +1,5 @@
-import { isString, isUnknownObject } from 'global-shared'
+import { isUnknownObject } from 'global-shared'
+import { isString } from 'lodash'
 
 import type { ApiErrorType, ICreateApiErrorPayload } from './types'
 

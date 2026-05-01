@@ -302,13 +302,13 @@ export const MAIN_PAGE_I18N = defineI18n({
     zh: '暂无事件'
   },
   theme: {
-    en: 'Theme',
-    ru: 'Тема',
-    zh: '主题'
+    en: 'Appearance',
+    ru: 'Оформление',
+    zh: '外观'
   },
   themeDescription: {
-    en: 'Theme and wallpaper',
-    ru: 'Тема и обои',
+    en: 'Themes and wallpaper',
+    ru: 'Темы и обои',
     zh: '主题和壁纸'
   },
   language: {
