@@ -50,6 +50,7 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && setti
           :options="SETTINGS_WALLPAPER_VISIBILITY_OPTIONS"
           :pt="selectButtonPt"
           size="small"
+          :allow-empty="false"
           @update:model-value="($event) => setWallpaperAppearance($event === 'show')"
         >
           <template #option="{ option }">
