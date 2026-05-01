@@ -35,6 +35,7 @@ export interface IUserSetting {
   showWallpaper: boolean
   wallpaper: WallpaperType
   customWallpaperDataUrl: string
+  customWallpaperDarkness: number
   selectedAudioInputDeviceId: string
   selectedVideoInputDeviceId: string
   selectedAudioOutputDeviceId: string

@@ -3,7 +3,7 @@ import { Button } from 'primevue'
 
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_I18N } from '../../../config/i18n'
+import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
 import SettingsCard from '../../SettingsCard.vue'
 
 defineProps<{
@@ -16,14 +16,14 @@ defineEmits<{
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_I18N.storageClearCache)">
+  <SettingsCard :title="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearCache)">
     <div class="settings-storage-clear-card__row">
       <div class="settings-storage-clear-card__info">
-        <AppText color="contrast-color" :text="$t(SETTINGS_PAGE_I18N.storageClearMedia)" />
-        <AppText size="small" :text="$t(SETTINGS_PAGE_I18N.storageClearMediaDescription)" />
+        <AppText color="contrast-color" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMedia)" />
+        <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMediaDescription)" />
       </div>
       <Button
-        :label="$t(SETTINGS_PAGE_I18N.storageClear)"
+        :label="$t(SETTINGS_PAGE_STORAGE_I18N.storageClear)"
         :loading="isClearingMedia"
         size="small"
         severity="danger"

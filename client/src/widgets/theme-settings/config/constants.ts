@@ -1,24 +1,5 @@
 import { THEME_SETTINGS_I18N } from './i18n'
 
-export const THEME_SETTINGS_OPTIONS = [
-  {
-    label: THEME_SETTINGS_I18N.systemTheme,
-    value: 'system'
-  },
-  {
-    label: THEME_SETTINGS_I18N.darkTheme,
-    value: 'dark'
-  },
-  {
-    label: THEME_SETTINGS_I18N.lightTheme,
-    value: 'light'
-  },
-  {
-    label: THEME_SETTINGS_I18N.customTheme,
-    value: 'custom'
-  }
-] as const
-
 export const THEME_SETTINGS_COLOR_ITEMS = [
   {
     id: 'mainBg',

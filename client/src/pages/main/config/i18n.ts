@@ -306,10 +306,10 @@ export const MAIN_PAGE_I18N = defineI18n({
     ru: 'Тема',
     zh: '主题'
   },
-  brandTheme: {
-    en: 'Brand theme',
-    ru: 'Фирменная тема',
-    zh: '品牌主题'
+  themeDescription: {
+    en: 'Theme and wallpaper',
+    ru: 'Тема и обои',
+    zh: '主题和壁纸'
   },
   language: {
     en: 'Language',

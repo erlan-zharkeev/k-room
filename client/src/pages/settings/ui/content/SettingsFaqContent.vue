@@ -3,7 +3,7 @@ import { Button, InputText } from 'primevue'
 
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_I18N } from '../../config/i18n'
+import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq'
 import { useSettingsFaq } from '../../model/faq/use-settings-faq'
 import SettingsCard from '../SettingsCard.vue'
 
@@ -12,8 +12,8 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 
 <template>
   <div class="settings-faq-content">
-    <SettingsCard :title="$t(SETTINGS_PAGE_I18N.faq)">
-      <InputText v-model.trim="searchQuery" fluid size="small" :placeholder="$t(SETTINGS_PAGE_I18N.faqSearch)" />
+    <SettingsCard :title="$t(SETTINGS_PAGE_FAQ_I18N.faq)">
+      <InputText v-model.trim="searchQuery" fluid size="small" :placeholder="$t(SETTINGS_PAGE_FAQ_I18N.faqSearch)" />
 
       <div v-if="filteredItems.length" class="settings-faq-content__list">
         <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
@@ -23,10 +23,10 @@ const { searchQuery, filteredItems } = useSettingsFaq()
       </div>
 
       <div v-else class="settings-faq-content__empty">
-        <AppText :text="$t(SETTINGS_PAGE_I18N.faqNoResults)" />
+        <AppText :text="$t(SETTINGS_PAGE_FAQ_I18N.faqNoResults)" />
       </div>
 
-      <Button :label="$t(SETTINGS_PAGE_I18N.faqContactSupport)" size="small" type="button" />
+      <Button :label="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" size="small" type="button" />
     </SettingsCard>
   </div>
 </template>

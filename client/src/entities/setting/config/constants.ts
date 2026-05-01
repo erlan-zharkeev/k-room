@@ -25,6 +25,7 @@ export const DEFAULT_SETTINGS: IUserSetting = {
   showWallpaper: true,
   wallpaper: 'default',
   customWallpaperDataUrl: '',
+  customWallpaperDarkness: 45,
   sound: 'income-message',
   customSounds: DEFAULT_CUSTOM_SOUNDS,
   selectedAudioInputDeviceId: '',

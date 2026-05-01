@@ -1,3 +1,3 @@
 export interface ILanguageSelectProps {
-  size?: 'small' | 'large'
+  compact?: boolean
 }

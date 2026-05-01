@@ -3,6 +3,7 @@ import { Card, Tab, TabList, Tabs } from 'primevue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
 import { LanguageSelect } from 'src/features/language-select'
+import { ThemeSelect } from 'src/features/theme-select'
 import { AppLogo } from 'src/shared/ui'
 
 import { AUTH_LAYOUT_TABS } from './constants'
@@ -16,9 +17,9 @@ const route = useRoute()
   <section class="auth-layout">
     <div class="auth-layout__top-side">
       <AppLogo class="auth-layout__logo" />
-
-      <div class="auth-layout__language">
-        <LanguageSelect size="small" />
+      <div class="auth-layout__controls">
+        <LanguageSelect compact class="auth-layout__language" />
+        <ThemeSelect compact />
       </div>
     </div>
 
@@ -38,7 +39,6 @@ const route = useRoute()
             </template>
           </TabList>
         </Tabs>
-
         <RouterView />
       </template>
     </Card>
@@ -78,5 +78,9 @@ const route = useRoute()
 
 .auth-layout__tab-link {
   width: 50%;
+}
+
+.auth-layout__language {
+  margin-bottom: 8px;
 }
 </style>

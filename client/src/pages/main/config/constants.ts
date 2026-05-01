@@ -59,17 +59,12 @@ export const MAIN_PAGE_SETTINGS_ITEMS = [
   {
     id: 'theme',
     label: MAIN_PAGE_I18N.theme,
-    description: MAIN_PAGE_I18N.brandTheme
+    description: MAIN_PAGE_I18N.themeDescription
   },
   {
     id: 'language',
     label: MAIN_PAGE_I18N.language,
     description: MAIN_PAGE_I18N.language
-  },
-  {
-    id: 'wallpaper',
-    label: MAIN_PAGE_I18N.wallpaper,
-    description: MAIN_PAGE_I18N.wallpaperEnabled
   },
   {
     id: 'notifications',

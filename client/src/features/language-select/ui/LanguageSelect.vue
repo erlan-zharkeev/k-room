@@ -14,12 +14,12 @@ import { ILanguageSelectProps } from './types'
 const props = withDefaults(defineProps<ILanguageSelectProps>(), LANGUAGE_SELECT_DEFAULT_PROPS)
 
 const { t } = useI18n()
-const { selectedLanguage } = useLanguageSelect()
-const withText = computed(() => props.size === 'large')
+const { settings, changeLanguage } = useLanguageSelect()
+const withText = computed(() => !props.compact)
 
 const selectButtonPt = computed(() => ({
   root: {
-    class: ['language-select__input', `language-select__input--${props.size}`],
+    class: ['language-select__input'],
     'aria-label': t(LANGUAGE_SELECT_I18N.selectLanguage)
   }
 }))
@@ -28,14 +28,15 @@ const selectButtonPt = computed(() => ({
 <template>
   <div class="language-select">
     <SelectButton
-      v-model="selectedLanguage"
       :data-key="'value'"
       fluid
+      :model-value="settings.language"
       :option-label="'label'"
       :option-value="'value'"
       :options="LANGUAGE_SELECT_OPTIONS"
       :pt="selectButtonPt"
-      :size="props.size"
+      :size="props.compact ? 'small' : 'large'"
+      @update:model-value="changeLanguage"
     >
       <template #option="{ option }">
         <div class="language-select__option">
@@ -54,5 +55,17 @@ const selectButtonPt = computed(() => ({
   gap: 8px;
   align-items: center;
   justify-content: center;
+}
+
+.language-select__flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  font-size: 20px;
+  line-height: 1;
 }
 </style>

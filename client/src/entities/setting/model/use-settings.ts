@@ -11,18 +11,16 @@ const settingsStore = dexieKeyValueStore<DbUserSettingType>(db.settings, 'settin
 export const useSettings = () => {
   const { ensure, reset, setByPath, shallowUpdate } = settingsStore
   const settings = settingsStore.use(DEFAULT_SETTINGS)
-  const language = computed(() => settings.value.language)
-  const theme = computed(() => settings.value.theme)
 
   const selectedWallpaper = computed(() => {
-    if (settings.value.wallpaper === 'custom') return settings.value.customWallpaperDataUrl
+    if (settings.value.theme === 'custom') return settings.value.customWallpaperDataUrl || undefined
+
     const effectiveTheme = settings.value.theme === 'system' ? settings.value.systemTheme : settings.value.theme
+
     return effectiveTheme === 'light' ? DEFAULT_LIGHT_WALLPAPER : DEFAULT_DARK_WALLPAPER
   })
   return {
     settings,
-    language,
-    theme,
     selectedWallpaper,
     initialize: () => ensure(DEFAULT_SETTINGS),
     reset: () => reset(DEFAULT_SETTINGS),
