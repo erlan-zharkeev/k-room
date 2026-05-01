@@ -24,6 +24,5 @@ export const getThemePreset = () => {
 
 export const applyThemePreset = () => {
   const preset = getThemePreset()
-  console.log(preset, 'preset')
   usePreset(preset)
 }

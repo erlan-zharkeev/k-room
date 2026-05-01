@@ -82,6 +82,7 @@ export const SYSTEM_THEME_QUERY = window.matchMedia?.('(prefers-color-scheme: li
 export const DEFAULT_APPEARANCE = {
   selectedTheme: 'system',
   systemTheme: SYSTEM_THEME_QUERY.matches ? 'light' : 'dark',
+  showWallpaper: true,
   themes: {
     dark: APPEARANCE_DARK,
     light: APPEARANCE_LIGHT,

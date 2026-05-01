@@ -3,6 +3,7 @@ import { randomInt, randomUUID } from 'node:crypto'
 import { Injectable } from '@nestjs/common'
 import { type Request } from 'express'
 import {
+  EMAIL_CODE_LENGTH,
   type ICodeValidationPayload,
   formatNickname,
   type ISendPasswordRecoveryCodePayload,
@@ -23,10 +24,6 @@ import { UserService } from '../user/user.service'
 import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
 import { VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
 import { CodeModel } from './codes.model'
-
-const buildPasswordRecoveryCode = () => {
-  return String(randomInt(100000, 1000000))
-}
 
 @Injectable()
 export class CodesService {
@@ -67,7 +64,7 @@ export class CodesService {
       }
     }
 
-    const code = buildPasswordRecoveryCode()
+    const code = String(randomInt(10 ** (EMAIL_CODE_LENGTH - 1), 10 ** EMAIL_CODE_LENGTH))
     const nextRequestTimestampMs = nowTimestampMs + RESEND_CODE_INTERVAL_MS
 
     await CodeModel.updateOne(

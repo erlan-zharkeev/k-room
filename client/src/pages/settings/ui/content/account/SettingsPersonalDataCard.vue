@@ -4,7 +4,7 @@ import { Button, FileUpload, InputText, Message } from 'primevue'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_AVATAR_ACCEPT, SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../../config/constants'
-import { SETTINGS_PAGE_ACCOUNT_I18N } from '../../../config/i18n/account'
+import { SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N } from '../../../config/i18n/account-personal-data-card'
 import { useSettingsPersonalDataCard } from '../../../model/account/use-settings-personal-data-card'
 import SettingsCard from '../../SettingsCard.vue'
 
@@ -28,12 +28,12 @@ const {
 
 <template>
   <SettingsCard
-    :button-aria-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.updateAccountData)"
+    :button-aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.updateAccountData)"
     :button-disabled="isAccountSaveDisabled"
-    :button-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.updateAccountData)"
+    :button-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.updateAccountData)"
     :button-loading="isAccountSaving"
     :on-button-click="updateAccountData"
-    :title="$t(SETTINGS_PAGE_ACCOUNT_I18N.personalData)"
+    :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.personalData)"
   >
     <div class="settings-personal-data-card__profile">
       <AppProfileBasicData
@@ -47,7 +47,7 @@ const {
             <AppHeader tag="h5" truncate :text="displayedNickname" />
             <Button
               class="settings-personal-data-card__copy-button"
-              :aria-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.copyNickname)"
+              :aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.copyNickname)"
               icon="pi pi-copy"
               size="small"
               text
@@ -61,7 +61,7 @@ const {
             <AppText tag="small" :text="displayedUserId" />
             <Button
               class="settings-personal-data-card__copy-button"
-              :aria-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.copyId)"
+              :aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.copyId)"
               icon="pi pi-copy"
               size="small"
               text
@@ -80,7 +80,7 @@ const {
         :accept="SETTINGS_ACCOUNT_AVATAR_ACCEPT"
         :max-file-size="SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE"
         :multiple="false"
-        :choose-label="$t(SETTINGS_PAGE_ACCOUNT_I18N.uploadPhoto)"
+        :choose-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhoto)"
         class="settings-personal-data-card__file-button"
         :choose-button-props="{
           text: true,
@@ -91,7 +91,7 @@ const {
         <template #filelabel />
       </FileUpload>
       <Button
-        :label="$t(SETTINGS_PAGE_ACCOUNT_I18N.resetPhoto)"
+        :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.resetPhoto)"
         size="small"
         text
         type="button"
@@ -100,7 +100,7 @@ const {
     </div>
 
     <label class="settings-personal-data-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_PAGE_ACCOUNT_I18N.nickname)" />
+      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nickname)" />
       <InputText v-model.trim="accountNickname" autocomplete="nickname" fluid size="small" />
       <Message v-if="accountNicknameError" severity="error" size="small" variant="simple">
         {{ accountNicknameError }}

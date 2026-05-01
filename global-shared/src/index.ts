@@ -10,6 +10,7 @@ export type { CallStatusType, CallFlowType, ICall, IDBCall, IDBCallSchema } from
 
 export type { IChatRoom, ChatRoomsType, IChatRoomSchema } from './chat/types'
 
+export { EMAIL_CODE_LENGTH } from './codes/constants'
 export type { ICodes, ICodeValidationPayload, ISendPasswordRecoveryCodePayload } from './codes/types'
 
 export type { InteractionType, IFrontendContact, FrontendContactMapType } from './contact/types'

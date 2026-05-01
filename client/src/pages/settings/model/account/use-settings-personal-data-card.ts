@@ -34,7 +34,13 @@ export const useSettingsPersonalDataCard = () => {
   )
   const displayedNickname = computed(() => formatNickname(user.value.nickname))
   const displayedUserId = computed(() => (user.value.id ? `#${user.value.id}` : ''))
-  const isAccountNicknameEmpty = computed(() => !normalizeNickname(accountNickname.value))
+  const normalizedAccountNickname = computed(() => normalizeNickname(accountNickname.value))
+  const isAccountNicknameEmpty = computed(() => !normalizedAccountNickname.value)
+  const accountNicknameChanged = computed(
+    () => normalizedAccountNickname.value !== normalizeNickname(user.value.nickname)
+  )
+  const accountAvatarChanged = computed(() => Boolean(accountAvatarFile.value || accountAvatarWasReset.value))
+  const hasAccountChanges = computed(() => accountNicknameChanged.value || accountAvatarChanged.value)
   const accountNicknameError = computed(() => {
     if (!accountNickname.value) return ''
 
@@ -43,7 +49,8 @@ export const useSettingsPersonalDataCard = () => {
     return result.success ? '' : result.issues[0]?.message || ''
   })
   const isAccountSaveDisabled = computed(
-    () => !user.value.id || isAccountNicknameEmpty.value || Boolean(accountNicknameError.value)
+    () =>
+      !user.value.id || !hasAccountChanges.value || isAccountNicknameEmpty.value || Boolean(accountNicknameError.value)
   )
 
   const clearAccountAvatarPreview = () => {
@@ -93,10 +100,10 @@ export const useSettingsPersonalDataCard = () => {
   }
 
   const updateAccountData = async () => {
-    const nickname = normalizeNickname(accountNickname.value)
+    const nickname = normalizedAccountNickname.value
     const currentAvatarId = avatarId.value
 
-    if (!user.value.id || !isNicknameValid(nickname)) return
+    if (isAccountSaveDisabled.value || !isNicknameValid(nickname)) return
 
     const formData = new FormData()
 
