@@ -10,6 +10,7 @@ export const transformHeadersToMediaData = (res: AxiosResponse): Omit<IDbMedia, 
     contentType: getHeaderValue(res.headers['content-type']),
     lastModified: getHeaderValue(res.headers['last-modified']),
     lastChecked: Date.now(),
-    kind: getHeaderValue(res.headers.kind) as MediaKindType
+    kind: getHeaderValue(res.headers.kind) as MediaKindType,
+    status: 'ready'
   }
 }

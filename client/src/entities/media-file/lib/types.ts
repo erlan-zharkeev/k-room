@@ -1,5 +1,9 @@
 import type { IDbMedia } from 'src/shared/config'
 
+export type MediaQueueTaskType = () => Promise<void>
+export type MediaHeadersType = Partial<Pick<IDbMedia, 'etag'>>
+export type MediaSyncTaskType = () => Promise<void>
+
 export type MediaUrlCacheValueType = {
   refs: number
   url: string
@@ -7,7 +11,8 @@ export type MediaUrlCacheValueType = {
 
 export interface ISyncMediaDeps {
   mediaGet: (filename: string) => Promise<IDbMedia | undefined>
+  putMedia: (data: IDbMedia) => Promise<void>
   updateMedia: (filename: string, patch: Partial<IDbMedia>) => Promise<number>
   loadMedia: (filename: string) => Promise<void>
-  loadMediaHeaders: (filename: string) => Promise<Partial<Pick<IDbMedia, 'etag'>>>
+  loadMediaHeaders: (filename: string) => Promise<MediaHeadersType>
 }
