@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isString } from 'global-shared'
+import { isString } from 'lodash'
 import { computed, watch } from 'vue'
 import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-router'
 
@@ -16,7 +16,7 @@ import ContentNavigationLayout from './../content-navigation-layout/ContentNavig
 import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
 
 const { isMobile } = useScreen()
-const { settings, selectedWallpaper } = useSettings()
+const { effectiveTheme } = useSettings()
 const route = useRoute()
 const router = useRouter()
 
@@ -44,37 +44,46 @@ watch(
   { immediate: true }
 )
 
-const wallpaperStyle = computed(() => {
-  if (!settings.value.showWallpaper || !selectedWallpaper.value) return undefined
-
-  return {
-    '--main-layout-wallpaper': `url(${selectedWallpaper.value})`,
-    '--main-layout-wallpaper-brightness':
-      settings.value.theme === 'custom'
-        ? `brightness(${100 - settings.value.customWallpaperDarkness}%)`
-        : 'brightness(100%)'
-  }
-})
-
-const hasWallpaper = computed(() => Boolean(settings.value.showWallpaper && selectedWallpaper.value))
-
 const showNavigation = computed(() => !isMobile.value || route.query.view === 'content-navigation')
 const showContent = computed(() => !isMobile.value || route.query.view !== 'content-navigation')
+
 const segments = computed(() => route.path.split('/').filter(Boolean))
+
 const navigationTitleKey = computed(() => {
   const titleKey = segments.value[1]
-
   return isContentNavigationTitleKey(titleKey) ? titleKey : undefined
 })
+
 const contentTitleKey = computed(() => {
   const titleKey = segments.value[2]
-
   return isContentTitleKey(titleKey) ? titleKey : undefined
 })
+
+// const wallpaperStyle = computed(() => {
+//   if (!settings.value.showWallpaper || !selectedWallpaper.value) return undefined
+
+//   const { angle, scale, darkness, fit } = selectedWallpaperSettings.value
+//   const isRepeatWallpaper = fit === 'repeat'
+
+//   return {
+//     '--main-layout-wallpaper': `url(${selectedWallpaper.value})`,
+//     '--main-layout-wallpaper-top': isSelectedThemeCustom.value ? '0' : '50%',
+//     '--main-layout-wallpaper-left': isSelectedThemeCustom.value ? '0' : '50%',
+//     '--main-layout-wallpaper-width': isSelectedThemeCustom.value ? '100%' : '240vmax',
+//     '--main-layout-wallpaper-height': isSelectedThemeCustom.value ? '100%' : '240vmax',
+//     '--main-layout-wallpaper-transform': `${
+//       isSelectedThemeCustom.value ? '' : 'translate(-50%, -50%) '
+//     }rotate(${angle}deg) scale(${scale / 100})`,
+//     '--main-layout-wallpaper-repeat': isRepeatWallpaper ? 'repeat' : 'no-repeat',
+//     '--main-layout-wallpaper-size': isRepeatWallpaper ? (isSelectedThemeCustom.value ? 'auto' : '280px auto') : fit,
+//     '--main-layout-wallpaper-position': isRepeatWallpaper && isSelectedThemeCustom.value ? 'top left' : 'center',
+//     '--main-layout-wallpaper-brightness': `brightness(${100 - darkness}%)`
+//   }
+// })
 </script>
 
 <template>
-  <main class="main-layout" :class="{ 'main-layout--wallpaper': hasWallpaper }" :style="wallpaperStyle">
+  <main class="main-layout" :class="{ 'main-layout--wallpaper': effectiveTheme.wallpaper.show }">
     <MainLeftBar v-if="!isMobile" class="widget" />
     <section class="main-layout__workspace">
       <MainTopBar class="widget" />
@@ -158,20 +167,22 @@ const contentTitleKey = computed(() => {
 
   position: absolute;
   z-index: -1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-50deg);
+  top: var(--main-layout-wallpaper-top, 50%);
+  left: var(--main-layout-wallpaper-left, 50%);
+  transform-origin: center;
+  transform: var(--main-layout-wallpaper-transform, translate(-50%, -50%) rotate(-50deg));
 
   display: none;
 
-  width: 240vmax;
-  height: 240vmax;
+  width: var(--main-layout-wallpaper-width, 240vmax);
+  height: var(--main-layout-wallpaper-height, 240vmax);
 
   opacity: 0.7;
   background-image: var(--main-layout-wallpaper);
-  background-repeat: repeat;
-  background-size: 280px auto;
-  filter: var(--main-layout-wallpaper-brightness);
+  background-repeat: var(--main-layout-wallpaper-repeat, repeat);
+  background-position: var(--main-layout-wallpaper-position, center);
+  background-size: var(--main-layout-wallpaper-size, 280px auto);
+  filter: var(--main-layout-wallpaper-brightness, brightness(100%));
 }
 
 .main-layout--wallpaper .widget::before {

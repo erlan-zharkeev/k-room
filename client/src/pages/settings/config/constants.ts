@@ -39,6 +39,13 @@ export const SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE = settingsAccountAvatarValida
 export const SETTINGS_WALLPAPER_ACCEPT = MEDIA_KIND_ACCEPT_MAP[settingsWallpaperValidation.supportedKindMediaType]
 export const SETTINGS_WALLPAPER_MAX_FILE_SIZE = settingsWallpaperValidation.maxMb * MEDIA_MB_IN_BYTES
 export const SETTINGS_WALLPAPER_VISIBILITY_OPTIONS = [{ value: 'show' }, { value: 'hide' }]
+export const SETTINGS_WALLPAPER_FIT_OPTIONS = [{ value: 'cover' }, { value: 'contain' }, { value: 'repeat' }]
+export const SETTINGS_WALLPAPER_ANGLE_MIN = -180
+export const SETTINGS_WALLPAPER_ANGLE_MAX = 180
+export const SETTINGS_WALLPAPER_SCALE_MIN = 50
+export const SETTINGS_WALLPAPER_SCALE_MAX = 200
+export const SETTINGS_WALLPAPER_DARKNESS_MIN = 0
+export const SETTINGS_WALLPAPER_DARKNESS_MAX = 100
 
 export const getSettingsPath = (settingsId: string) => `${MAIN_PAGE_ROUTES.settings}/${settingsId}`
 
@@ -50,7 +57,7 @@ export const SETTINGS_NAVIGATION_ITEMS = [
   },
   {
     id: 'theme',
-    label: SETTINGS_PAGE_APPEARANCE_I18N.theme,
+    label: SETTINGS_PAGE_APPEARANCE_I18N.appearance,
     description: SETTINGS_PAGE_APPEARANCE_I18N.themeDescription
   },
   {
@@ -87,7 +94,7 @@ export const SETTINGS_NAVIGATION_ITEMS = [
 
 export const SETTINGS_CONTENT_TITLE = {
   account: SETTINGS_PAGE_ACCOUNT_I18N.account,
-  theme: SETTINGS_PAGE_APPEARANCE_I18N.theme,
+  theme: SETTINGS_PAGE_APPEARANCE_I18N.appearance,
   language: SETTINGS_PAGE_APPEARANCE_I18N.language,
   notifications: SETTINGS_PAGE_GENERAL_I18N.notifications,
   sound: SETTINGS_PAGE_GENERAL_I18N.sound,

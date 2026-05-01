@@ -1,4 +1,4 @@
-import { isString } from 'global-shared'
+import { isString } from 'lodash'
 import { Types } from 'mongoose'
 
 import type { MongoIdType } from '../types/mongo'

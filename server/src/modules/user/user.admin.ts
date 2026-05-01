@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
-import { DEFAULT_APP_LANGUAGE, formatHumanDateTime, isNumber, isString, type UnknownObject } from 'global-shared'
+import { DEFAULT_APP_LANGUAGE, formatHumanDateTime, type UnknownObject } from 'global-shared'
+import { isNumber, isString } from 'lodash'
 
 import { localizedText } from 'src/shared/lib/localized-text'
 

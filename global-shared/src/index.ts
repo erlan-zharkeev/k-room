@@ -96,7 +96,7 @@ export type {
 
 export { firebaseProviders, providers } from './shared/constants'
 export { formatAppName } from './shared/lib/format-app-name'
-export { isBoolean, isNumber, isString, isUnknownObject } from './shared/lib/type-guards'
+export { isUnknownObject } from './shared/lib/type-guards'
 export type {
   AuthTokensType,
   FirebaseProviderType,

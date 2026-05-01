@@ -1,9 +1,9 @@
 import { computed } from 'vue'
 
-import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
 import type { DbUserSettingType } from 'src/shared/config'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
 
+import { EffectiveThemeType } from '../../../shared/types/appearance.types'
 import { DEFAULT_SETTINGS } from '../config/constants'
 
 const settingsStore = dexieKeyValueStore<DbUserSettingType>(db.settings, 'settings')
@@ -11,17 +11,18 @@ const settingsStore = dexieKeyValueStore<DbUserSettingType>(db.settings, 'settin
 export const useSettings = () => {
   const { ensure, reset, setByPath, shallowUpdate } = settingsStore
   const settings = settingsStore.use(DEFAULT_SETTINGS)
-
-  const selectedWallpaper = computed(() => {
-    if (settings.value.theme === 'custom') return settings.value.customWallpaperDataUrl || undefined
-
-    const effectiveTheme = settings.value.theme === 'system' ? settings.value.systemTheme : settings.value.theme
-
-    return effectiveTheme === 'light' ? DEFAULT_LIGHT_WALLPAPER : DEFAULT_DARK_WALLPAPER
+  const isSelectedThemeCustom = computed(() => settings.value.appearance.selectedTheme === 'custom')
+  const isSelectedThemeSystem = computed(() => settings.value.appearance.selectedTheme === 'system')
+  const effectiveTheme = computed<EffectiveThemeType>(() => {
+    const { selectedTheme, systemTheme } = settings.value.appearance
+    return selectedTheme === 'system' ? systemTheme : selectedTheme
   })
+
   return {
     settings,
-    selectedWallpaper,
+    isSelectedThemeCustom,
+    isSelectedThemeSystem,
+    effectiveTheme: computed(() => settings.value.appearance.themes[effectiveTheme.value]),
     initialize: () => ensure(DEFAULT_SETTINGS),
     reset: () => reset(DEFAULT_SETTINGS),
     shallowUpdate,

@@ -1,4 +1,5 @@
-import { isString, type LocalizedTextType, REQ_STATUS, type ReqStatusType, type SocketActionsType } from 'global-shared'
+import { type LocalizedTextType, REQ_STATUS, type ReqStatusType, type SocketActionsType } from 'global-shared'
+import { isString } from 'lodash'
 
 import { SHARED_I18N } from '../config/i18n'
 import type { SocketInstanceType } from '../types/socket'

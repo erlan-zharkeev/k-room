@@ -1,11 +1,5 @@
-import {
-  PROTECTED_ACTION_REASON,
-  isBoolean,
-  isNumber,
-  isString,
-  isUnknownObject,
-  type IProtectedActionResponsePayload
-} from 'global-shared'
+import { PROTECTED_ACTION_REASON, isUnknownObject, type IProtectedActionResponsePayload } from 'global-shared'
+import { isBoolean, isNumber, isString } from 'lodash'
 import { computed, ref } from 'vue'
 
 import { CLIENT_ENV } from 'src/shared/config'

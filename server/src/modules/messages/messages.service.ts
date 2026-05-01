@@ -1,5 +1,4 @@
 import {
-  isString,
   type IDBMessage,
   type IEventLoadRoomMessages,
   type IEventMessageDelivered,
@@ -9,6 +8,7 @@ import {
   type MessageStatusType,
   type SocketActionsType
 } from 'global-shared'
+import { isString } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getIO } from 'src/shared/lib/io'

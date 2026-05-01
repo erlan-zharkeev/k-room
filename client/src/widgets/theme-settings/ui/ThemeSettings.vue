@@ -1,34 +1,26 @@
 <script setup lang="ts">
+import { ColorPicker } from 'primevue'
+
+import { useSettings } from 'src/entities/setting'
 import { ThemeSelect } from 'src/features/theme-select'
-import type { CustomThemeColorType } from 'src/shared/config'
-import { getCustomThemeColor } from 'src/shared/lib'
-import { AppHeader, AppText } from 'src/shared/ui'
+import { AppText } from 'src/shared/ui'
 
 import { THEME_SETTINGS_COLOR_ITEMS } from '../config/constants'
-import { THEME_SETTINGS_I18N } from '../config/i18n'
+import { useChangeColorSchema } from '../model/use-change-color-schema'
 
-import type { IThemeSettingsEmits, IThemeSettingsProps } from './types'
-
-const props = defineProps<IThemeSettingsProps>()
-const emit = defineEmits<IThemeSettingsEmits>()
-
-const changeCustomThemeColor = (colorName: CustomThemeColorType, event: Event) => {
-  emit('changeCustomThemeColor', colorName, (event.target as HTMLInputElement).value)
-}
+const { effectiveTheme, isSelectedThemeSystem } = useSettings()
+const { changeThemeColor } = useChangeColorSchema()
 </script>
 
 <template>
   <div class="theme-settings">
     <ThemeSelect />
-
-    <div v-if="props.theme === 'custom'" class="theme-settings__custom">
-      <AppHeader tag="h2" :text="$t(THEME_SETTINGS_I18N.customThemeSettings)" />
+    <div class="theme-settings__pick-color" v-if="!isSelectedThemeSystem">
       <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings__field">
         <AppText :text="$t(item.label)" />
-        <input
-          :value="getCustomThemeColor(props.customTheme, item.id)"
-          type="color"
-          @input="changeCustomThemeColor(item.id, $event)"
+        <ColorPicker
+          :model-value="effectiveTheme.colorSchema[item.id]"
+          @update:model-value="($event) => changeThemeColor(item.id, $event)"
         />
       </label>
     </div>
@@ -36,31 +28,15 @@ const changeCustomThemeColor = (colorName: CustomThemeColorType, event: Event) =
 </template>
 
 <style>
-.theme-settings,
-.theme-settings__custom {
+.theme-settings {
   display: grid;
   gap: 12px;
-  align-content: start;
 }
 
 .theme-settings__field {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px;
-  gap: 12px;
+  display: flex;
   align-items: center;
-
-  min-height: 44px;
-}
-
-.theme-settings__field input {
-  cursor: pointer;
-
-  width: 44px;
-  height: 34px;
-  padding: 0;
-  border: 1px solid var(--p-content-border-color);
-  border-radius: 8px;
-
-  background: transparent;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 </style>

@@ -11,7 +11,13 @@ export {
   SUCCESS_TOAST_LIFE_MS
 } from './constants'
 export { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from './main-navigation'
-export { DARK_THEME_COLORS, DEFAULT_CUSTOM_THEME, LIGHT_THEME_COLORS } from './theme.constants'
+export {
+  DARK_COLOR_SCHEMA,
+  DEFAULT_CUSTOM_SCHEMA,
+  LIGHT_COLOR_SCHEMA,
+  DEFAULT_APPEARANCE,
+  SYSTEM_THEME_QUERY
+} from './appearance.constants'
 export { EMOJI_LIST } from './emoji'
 export { API_I18N, TOAST_I18N } from './i18n'
 export { IMAGE_RESOLUTIONS } from 'src/shared/types/media'
@@ -19,13 +25,16 @@ export type { ContextRefType } from 'src/shared/types/other'
 export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/types/breakpoint'
 export type { FileLoaderValueType, IDbMedia } from 'src/shared/types/media'
 export type {
-  CustomThemeColorType,
-  ICustomThemeSetting,
-  ICustomThemeTextSetting,
-  ThemeType
-} from 'src/shared/types/theme'
+  IThemeData,
+  WallpaperFitType,
+  SystemTheme,
+  EffectiveThemeType,
+  IWallpaperSettings,
+  ThemeType,
+  IColorSchema,
+  IAppearanceSettings
+} from 'src/shared/types/appearance.types'
 export type {
-  WallpaperType,
   SoundType,
   CustomSoundSettingType,
   AsideBarButtonNameType,
@@ -42,3 +51,4 @@ export type { DbCallType } from 'src/shared/types/call'
 export type { DbMessageType } from 'src/shared/types/message'
 export type { IClientEnv } from 'src/shared/types/client-env'
 export type { DbInfoNotificationType } from 'src/shared/types/info-notification'
+export { DEFAULT_CUSTOM_SOUNDS } from './sound.constants'

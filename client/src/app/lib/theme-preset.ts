@@ -1,24 +1,29 @@
 import { usePreset } from '@primeuix/themes'
 
 import { useSettings } from 'src/entities/setting'
-import { DARK_THEME_COLORS, LIGHT_THEME_COLORS } from 'src/shared/config'
+import { DARK_COLOR_SCHEMA, LIGHT_COLOR_SCHEMA } from 'src/shared/config'
 import { createThemePreset, mergeCustomTheme } from 'src/shared/lib'
 
-const darkThemePreset = createThemePreset(DARK_THEME_COLORS)
-const lightThemePreset = createThemePreset(LIGHT_THEME_COLORS)
+const darkThemePreset = createThemePreset(DARK_COLOR_SCHEMA)
+const lightThemePreset = createThemePreset(LIGHT_COLOR_SCHEMA)
 
 export const getThemePreset = () => {
-  const { settings } = useSettings()
-  const source = settings.value.theme === 'system' ? settings.value.systemTheme : settings.value.theme
+  const { settings, isSelectedThemeCustom, isSelectedThemeSystem } = useSettings()
+  const source = isSelectedThemeSystem.value
+    ? settings.value.appearance.systemTheme
+    : settings.value.appearance.selectedTheme
+
   let themeToApply = source === 'light' ? lightThemePreset : darkThemePreset
 
-  if (settings.value.theme === 'custom') {
-    themeToApply = createThemePreset(mergeCustomTheme(settings.value.customTheme))
+  if (isSelectedThemeCustom.value) {
+    themeToApply = createThemePreset(mergeCustomTheme(settings.value.appearance.themes.custom.colorSchema))
   }
 
   return themeToApply
 }
 
 export const applyThemePreset = () => {
-  usePreset(getThemePreset())
+  const preset = getThemePreset()
+  console.log(preset, 'preset')
+  usePreset(preset)
 }
