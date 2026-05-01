@@ -35,6 +35,7 @@ const selectButtonPt = computed(() => ({
       :option-value="'value'"
       :options="LANGUAGE_SELECT_OPTIONS"
       :pt="selectButtonPt"
+      :allow-empty="false"
       :size="props.compact ? 'small' : 'large'"
       @update:model-value="changeLanguage"
     >

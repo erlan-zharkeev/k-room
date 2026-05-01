@@ -41,6 +41,7 @@ const selectButtonPt = computed(() => ({
       :option-value="'value'"
       :options="themeOptions"
       :pt="selectButtonPt"
+      :allow-empty="false"
       :size="props.compact ? 'small' : 'large'"
       @update:model-value="changeTheme"
     >
