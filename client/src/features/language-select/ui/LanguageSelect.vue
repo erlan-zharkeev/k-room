@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { SelectButton } from 'primevue'
-import { computed } from 'vue'
+import { NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
 import { useI18n } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
@@ -9,43 +8,35 @@ import { LANGUAGE_SELECT_DEFAULT_PROPS, LANGUAGE_SELECT_OPTIONS } from '../confi
 import { LANGUAGE_SELECT_I18N } from '../config/i18n'
 import { useLanguageSelect } from '../model/use-language-select'
 
-import { ILanguageSelectProps } from './types'
+import type { ILanguageSelectProps } from './types'
 
 const props = withDefaults(defineProps<ILanguageSelectProps>(), LANGUAGE_SELECT_DEFAULT_PROPS)
 
 const { t } = useI18n()
 const { settings, changeLanguage } = useLanguageSelect()
-const withText = computed(() => !props.compact)
-
-const selectButtonPt = computed(() => ({
-  root: {
-    class: ['language-select__input'],
-    'aria-label': t(LANGUAGE_SELECT_I18N.selectLanguage)
-  }
-}))
 </script>
 
 <template>
-  <div class="language-select">
-    <SelectButton
-      :data-key="'value'"
-      fluid
+  <div :class="['language-select', { 'language-select--compact': props.compact }]">
+    <NmorphSelectButton
+      :aria-label="t(LANGUAGE_SELECT_I18N.selectLanguage)"
+      :class="['language-select__input', { 'language-select__input--compact': props.compact }]"
+      :height="props.compact ? 'default' : 'thick'"
       :model-value="settings.language"
-      :option-label="'label'"
-      :option-value="'value'"
-      :options="LANGUAGE_SELECT_OPTIONS"
-      :pt="selectButtonPt"
-      :allow-empty="false"
-      :size="props.compact ? 'small' : 'large'"
       @update:model-value="changeLanguage"
     >
-      <template #option="{ option }">
+      <NmorphSelectButtonItem
+        v-for="option in LANGUAGE_SELECT_OPTIONS"
+        :key="option.value"
+        :class="['language-select__item', { 'language-select__item--compact': props.compact }]"
+        :value="option.value"
+      >
         <div class="language-select__option">
           <span class="language-select__flag">{{ option.flag }}</span>
-          <AppHeader v-if="withText" tag="h5" :text="option.label" />
+          <AppHeader v-if="!props.compact" tag="h5" :text="option.label" />
         </div>
-      </template>
-    </SelectButton>
+      </NmorphSelectButtonItem>
+    </NmorphSelectButton>
   </div>
 </template>
 

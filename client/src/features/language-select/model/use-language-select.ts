@@ -1,14 +1,16 @@
-import type { AppLanguageType } from 'global-shared'
-
 import { useSettings } from 'src/entities/setting'
+
+import { LANGUAGE_SELECT_OPTIONS } from '../config/constants'
 
 export const useLanguageSelect = () => {
   const { settings, shallowUpdate } = useSettings()
 
-  const changeLanguage = (value: AppLanguageType) => {
-    if (value === settings.value.language) return
+  const changeLanguage = (value: string) => {
+    const option = LANGUAGE_SELECT_OPTIONS.find((item) => item.value === value)
 
-    void shallowUpdate({ language: value })
+    if (!option || option.value === settings.value.language) return
+
+    void shallowUpdate({ language: option.value })
   }
 
   return {
