@@ -26,7 +26,7 @@ const { t } = useI18n()
 const { isMobile } = useScreen()
 const { setWallpaperAppearance, setAngle, setScale, setDarkness, uploadWallpaper, resetWallpaper } =
   useWallpaperSettings()
-const { isSelectedThemeSystem, effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
+const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 
 const selectButtonPt = computed(() => ({
   root: {
@@ -34,8 +34,6 @@ const selectButtonPt = computed(() => ({
     'aria-label': t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)
   }
 }))
-
-const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && settings.value.appearance.showWallpaper)
 </script>
 
 <template>
@@ -66,11 +64,8 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && setti
         </SelectButton>
       </div>
 
-      <div class="settings-wallpaper-card__additional" v-if="showAdditionalBlock">
-        <div
-          class="settings-wallpaper-card__upload settings-wallpaper-card__input-element"
-          v-if="isSelectedThemeCustom"
-        >
+      <div class="settings-wallpaper-card__additional" v-if="isSelectedThemeCustom">
+        <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element">
           <div class="settings-wallpaper-card__upload-main">
             <FileUpload
               mode="basic"
@@ -166,7 +161,6 @@ const showAdditionalBlock = computed(() => !isSelectedThemeSystem.value && setti
 }
 
 .settings-wallpaper-card__visibility,
-.settings-wallpaper-card__fit,
 .settings-wallpaper-card__upload {
   display: flex;
   align-items: center;
