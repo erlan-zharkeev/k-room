@@ -24,27 +24,14 @@ export class KRoomDB extends Dexie {
 
   constructor() {
     super(CLIENT_ENV.appName.toLocaleLowerCase())
-    this.version(1).stores({
+    this.version(4).stores({
       settings: '__key',
-      user: '__key',
-      contacts: '&id',
-      media: '&id',
-      'chat-rooms': '&id',
-      messages: '&id',
-      'info-notifications': '&id'
-    })
-    this.version(2).stores({
-      settings: '__key',
-      user: '__key',
       contacts: '&id',
       media: '&id',
       'chat-rooms': '&id',
       calls: '&id',
       messages: '&id',
       'info-notifications': '&id'
-    })
-    this.version(3).stores({
-      user: null
     })
   }
 }

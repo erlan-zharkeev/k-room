@@ -1,14 +1,25 @@
+import { useNmorph } from '@nmorph/nmorph-ui-kit'
 import { onBeforeUnmount, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useThemeSelect } from 'src/features/theme-select'
 import { SYSTEM_THEME_QUERY } from 'src/shared/config'
 
-import { applyThemePreset } from '../lib/theme-preset'
+import { syncNmorphTheme } from '../lib/nmorph'
 
 export const useThemeProvider = () => {
   const { settings, isSelectedThemeSystem, effectiveTheme } = useSettings()
   const { changeSystemTheme } = useThemeSelect()
+  const { theme: nmorphTheme } = useNmorph()
+
+  const applyAppearanceTheme = () => {
+    const activeTheme = settings.value.appearance.selectedTheme === 'system'
+      ? settings.value.appearance.systemTheme
+      : settings.value.appearance.selectedTheme
+
+    nmorphTheme.setTheme(activeTheme)
+    syncNmorphTheme(activeTheme, settings.value.appearance.themes[activeTheme].colorSchema)
+  }
 
   const updateSystemTheme = () => {
     const systemTheme = SYSTEM_THEME_QUERY?.matches ? 'light' : 'dark'
@@ -27,7 +38,7 @@ export const useThemeProvider = () => {
         updateSystemTheme()
       }
 
-      applyThemePreset(settings.value.appearance)
+      applyAppearanceTheme()
     },
     { immediate: true }
   )
@@ -36,7 +47,7 @@ export const useThemeProvider = () => {
     () => settings.value.appearance.systemTheme,
     () => {
       if (isSelectedThemeSystem.value) {
-        applyThemePreset(settings.value.appearance)
+        applyAppearanceTheme()
       }
     }
   )
@@ -44,7 +55,7 @@ export const useThemeProvider = () => {
   watch(
     () => effectiveTheme.value.colorSchema,
     () => {
-      applyThemePreset(settings.value.appearance)
+      applyAppearanceTheme()
     },
     { deep: true }
   )

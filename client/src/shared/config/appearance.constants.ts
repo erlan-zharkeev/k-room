@@ -1,6 +1,6 @@
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
 
-import type { IColorSchema, IWallpaperSettings } from '../types/appearance.types'
+import type { IColorSchema, IThemeData, IWallpaperSettings, SystemTheme } from '../types/appearance.types'
 
 const ACCENT_COLOR = '#418fde'
 
@@ -38,6 +38,7 @@ export const CUSTOM_COLOR_SCHEMA = {
 } as const satisfies IColorSchema
 
 export const DEFAULT_CUSTOM_SCHEMA = DARK_COLOR_SCHEMA
+export const DEFAULT_CUSTOM_THEME_MODE = 'dark' as const satisfies SystemTheme
 
 export const DEFAULT_WALLPAPER_SETTINGS = {
   angle: -50,
@@ -73,9 +74,21 @@ export const CUSTOM_WALLPAPER_SETTINGS = {
   filename: ''
 } as const satisfies IWallpaperSettings
 
-export const APPEARANCE_DARK = { colorSchema: DARK_COLOR_SCHEMA, wallpaper: DARK_WALLPAPER_SETTINGS } as const
-export const APPEARANCE_LIGHT = { colorSchema: LIGHT_COLOR_SCHEMA, wallpaper: LIGHT_WALLPAPER_SETTINGS } as const
-export const APPEARANCE_CUSTOM = { colorSchema: CUSTOM_COLOR_SCHEMA, wallpaper: CUSTOM_WALLPAPER_SETTINGS } as const
+export const APPEARANCE_DARK = {
+  mode: 'dark',
+  colorSchema: DARK_COLOR_SCHEMA,
+  wallpaper: DARK_WALLPAPER_SETTINGS
+} as const satisfies IThemeData
+export const APPEARANCE_LIGHT = {
+  mode: 'light',
+  colorSchema: LIGHT_COLOR_SCHEMA,
+  wallpaper: LIGHT_WALLPAPER_SETTINGS
+} as const satisfies IThemeData
+export const APPEARANCE_CUSTOM = {
+  mode: DEFAULT_CUSTOM_THEME_MODE,
+  colorSchema: CUSTOM_COLOR_SCHEMA,
+  wallpaper: CUSTOM_WALLPAPER_SETTINGS
+} as const satisfies IThemeData
 
 export const SYSTEM_THEME_QUERY = window.matchMedia?.('(prefers-color-scheme: light)')
 

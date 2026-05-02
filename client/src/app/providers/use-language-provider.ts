@@ -5,6 +5,8 @@ import { useSettings } from 'src/entities/setting'
 import { socket } from 'src/shared/api'
 import { setClientLanguage } from 'src/shared/lib'
 
+import { appI18n } from '../lib/i18n'
+
 const setSocketLanguage = (language: AppLanguageType) => {
   socket.auth = {
     ...(typeof socket.auth === 'object' && socket.auth ? socket.auth : {}),
@@ -24,6 +26,7 @@ export const useLanguageProvider = () => {
     () => settings.value.language,
     (language, previousLanguage) => {
       setClientLanguage(language)
+      appI18n.global.locale.value = language
       setSocketLanguage(language)
 
       if (previousLanguage && previousLanguage !== language) {
