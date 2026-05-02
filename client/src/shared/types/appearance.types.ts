@@ -22,7 +22,7 @@ export interface IColorSchema {
   widgetBg: string
   accent: string
   text: string
-  secondaryText: string
+  semiContrast: string
   contrastText: string
   darkShadow: string
   lightShadow: string

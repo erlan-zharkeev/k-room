@@ -21,10 +21,10 @@ export const THEME_SETTINGS_I18N = defineI18n({
     ru: 'Основной текст',
     zh: '主文本'
   },
-  secondaryText: {
-    en: 'Secondary text',
-    ru: 'Вторичный текст',
-    zh: '次要文本'
+  semiContrast: {
+    en: 'Semi contrast text',
+    ru: 'Полуконтрастный текст',
+    zh: '半对比文本'
   },
   text: {
     en: 'Muted text',
