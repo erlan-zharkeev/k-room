@@ -60,6 +60,7 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
   gap: 10px;
   align-items: center;
 
+  margin-left: 1px;
   margin-block: auto;
 
   .p-overlaybadge .p-badge {
@@ -69,6 +70,10 @@ const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots })
     @include screen-mobile {
       transform: translate(30%, -20%);
     }
+  }
+
+  @include screen-mobile {
+    margin-left: 0;
   }
 }
 

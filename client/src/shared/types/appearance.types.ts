@@ -19,7 +19,7 @@ export interface IThemeData {
 
 export interface IColorSchema {
   mainBg: string
-  cardSurface: string
+  widgetBg: string
   accent: string
   text: string
   secondaryText: string

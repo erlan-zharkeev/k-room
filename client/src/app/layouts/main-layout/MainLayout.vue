@@ -124,7 +124,6 @@ const wallpaperStyle = computed(() => {
 }
 
 .main-layout__content {
-  overflow: auto;
   display: grid;
   grid-template-columns: 1fr 2.5fr;
   gap: 12px;
@@ -151,6 +150,10 @@ const wallpaperStyle = computed(() => {
 
   padding: 8px;
   border-radius: 12px;
+
+  background: var(--p-app-widget-background);
+  box-shadow: -3px -3px 6px color-mix(in srgb, var(--p-app-shadow-outset-start), transparent 20%),
+    4px 4px 8px color-mix(in srgb, var(--p-app-shadow-outset-end), transparent 20%);
 }
 
 .widget::before {

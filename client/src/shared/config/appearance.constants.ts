@@ -6,18 +6,18 @@ const ACCENT_COLOR = '#418fde'
 
 export const DARK_COLOR_SCHEMA = {
   mainBg: '#1c1c1c',
-  cardSurface: '#1c1c1c',
+  widgetBg: '#1c1c1c',
   accent: ACCENT_COLOR,
   text: '#9eabbc',
   secondaryText: '#c8d0dc',
   contrastText: '#f4f7fb',
-  darkShadow: '#0f0f0f',
-  lightShadow: '#626262'
+  darkShadow: '#0e0e0e',
+  lightShadow: '#2a2a2a'
 } as const satisfies IColorSchema
 
 export const LIGHT_COLOR_SCHEMA = {
   mainBg: '#cfcfcf',
-  cardSurface: '#1c1c1c',
+  widgetBg: '#ffffff',
   accent: ACCENT_COLOR,
   text: '#6f6f6f',
   secondaryText: '#656565',
@@ -28,7 +28,7 @@ export const LIGHT_COLOR_SCHEMA = {
 
 export const CUSTOM_COLOR_SCHEMA = {
   mainBg: '#1c1c1c',
-  cardSurface: '#1c1c1c',
+  widgetBg: '#1c1c1c',
   accent: ACCENT_COLOR,
   text: '#9eabbc',
   secondaryText: '#c8d0dc',

@@ -35,6 +35,6 @@ const isUnsupportedResolution = computed(
   align-items: center;
   justify-content: center;
 
-  background: var(--p-content-background);
+  background: var(--p-app-main-bg);
 }
 </style>
