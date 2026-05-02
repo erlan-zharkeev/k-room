@@ -1,13 +1,17 @@
 import { useSettings } from 'src/entities/setting'
 import type { ThemeType } from 'src/shared/config'
 
+import { THEME_SELECT_OPTIONS } from '../config/constants'
+
 export const useThemeSelect = () => {
   const { settings, setByPath } = useSettings()
 
-  const changeTheme = (value: ThemeType) => {
-    if (value === settings.value.appearance.selectedTheme) return
+  const changeTheme = (value: string) => {
+    const option = THEME_SELECT_OPTIONS.find((item) => item.value === value)
 
-    void setByPath('appearance.selectedTheme', value)
+    if (!option || option.value === settings.value.appearance.selectedTheme) return
+
+    void setByPath('appearance.selectedTheme', option.value)
   }
 
   const changeSystemTheme = (value: ThemeType) => {

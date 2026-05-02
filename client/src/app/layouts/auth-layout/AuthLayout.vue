@@ -57,7 +57,7 @@ const route = useRoute()
   left: 0;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 
   width: 100%;
@@ -82,5 +82,11 @@ const route = useRoute()
 
 .auth-layout__language {
   margin-bottom: 8px;
+}
+
+.auth-layout__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 </style>
