@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from 'primevue'
+import { Button, Divider } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -30,7 +30,7 @@ const handleBack = () => {
           class="content-layout__header-text"
         />
       </div>
-      <div class="divider" />
+      <Divider />
       <div class="content-layout__content">
         <slot />
       </div>

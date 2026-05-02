@@ -9,7 +9,7 @@ export const DARK_COLOR_SCHEMA = {
   widgetBg: '#1c1c1c',
   accent: ACCENT_COLOR,
   text: '#9eabbc',
-  secondaryText: '#c8d0dc',
+  semiContrast: '#c8d0dc',
   contrastText: '#f4f7fb',
   darkShadow: '#0e0e0e',
   lightShadow: '#2a2a2a'
@@ -20,7 +20,7 @@ export const LIGHT_COLOR_SCHEMA = {
   widgetBg: '#ffffff',
   accent: ACCENT_COLOR,
   text: '#6f6f6f',
-  secondaryText: '#656565',
+  semiContrast: '#656565',
   contrastText: '#000000',
   darkShadow: '#b6b6b6',
   lightShadow: '#e8e8e8'
@@ -31,10 +31,10 @@ export const CUSTOM_COLOR_SCHEMA = {
   widgetBg: '#1c1c1c',
   accent: ACCENT_COLOR,
   text: '#9eabbc',
-  secondaryText: '#c8d0dc',
+  semiContrast: '#c8d0dc',
   contrastText: '#f4f7fb',
-  darkShadow: '#0f0f0f',
-  lightShadow: '#626262'
+  darkShadow: '#0e0e0e',
+  lightShadow: '#2a2a2a'
 } as const satisfies IColorSchema
 
 export const DEFAULT_CUSTOM_SCHEMA = DARK_COLOR_SCHEMA

@@ -368,7 +368,7 @@ onBeforeUnmount(() => {
 
 <style>
 .message-list {
-  scrollbar-color: var(--p-app-text-muted) var(--p-content-background);
+  scrollbar-color: var(--p-text-hover-muted-color) var(--p-content-background);
   scrollbar-gutter: stable;
 
   overflow: auto;
@@ -393,11 +393,11 @@ onBeforeUnmount(() => {
 .message-list::-webkit-scrollbar-thumb {
   border: 3px solid var(--p-content-background);
   border-radius: 8px;
-  background: var(--p-app-text-muted);
+  background: var(--p-text-hover-muted-color);
 }
 
 .message-list::-webkit-scrollbar-thumb:hover {
-  background: var(--p-app-text-semi-contrast);
+  background: var(--p-text-muted-color);
 }
 
 .message-list__load-more {
@@ -494,7 +494,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--p-content-border-color);
   border-radius: 8px;
 
-  color: var(--p-app-text-contrast);
+  color: var(--p-text-color);
 
   background: var(--p-content-background);
   box-shadow: 0 16px 40px var(--p-app-shadow-outset-start);

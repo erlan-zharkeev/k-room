@@ -124,10 +124,7 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
 .privacy-policy-page__list {
   display: grid;
   gap: 8px;
-
   margin: 0;
   padding-left: 20px;
-
-  color: var(--p-app-text-semi-contrast);
 }
 </style>

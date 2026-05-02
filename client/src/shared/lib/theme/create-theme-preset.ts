@@ -8,7 +8,7 @@ import { createSurfacePalette } from './create-surface-palette'
 import { duplicateThemeModeValue } from './duplicate-theme-mode-value'
 
 export const createThemePreset = (colors: IColorSchema) => {
-  const { widgetBg, mainBg, contrastText, secondaryText, text: mutedText, accent, lightShadow, darkShadow } = colors
+  const { widgetBg, mainBg, contrastText, semiContrast, text: mutedText, accent, lightShadow, darkShadow } = colors
   const borderColor = `color-mix(in srgb, ${widgetBg}, ${mainBg} 32%)`
   const hoverBackground = `color-mix(in srgb, ${widgetBg}, ${mainBg} 12%)`
   const mutedBackground = `color-mix(in srgb, ${widgetBg}, ${mainBg} 20%)`
@@ -17,7 +17,7 @@ export const createThemePreset = (colors: IColorSchema) => {
   const text = {
     color: contrastText,
     hoverColor: contrastText,
-    mutedColor: secondaryText,
+    mutedColor: semiContrast,
     hoverMutedColor: mutedText
   }
 
@@ -57,14 +57,14 @@ export const createThemePreset = (colors: IColorSchema) => {
     hoverBorderColor: borderColor,
     focusBorderColor: accent,
     color: contrastText,
-    disabledColor: secondaryText,
+    disabledColor: semiContrast,
     placeholderColor: mutedText,
     invalidPlaceholderColor: mutedText,
     floatLabelColor: mutedText,
     floatLabelFocusColor: accent,
     floatLabelActiveColor: mutedText,
     floatLabelInvalidColor: mutedText,
-    iconColor: secondaryText,
+    iconColor: semiContrast,
     shadow: 'none'
   }
 
@@ -80,11 +80,6 @@ export const createThemePreset = (colors: IColorSchema) => {
       })),
       extend: {
         app: {
-          text: {
-            contrast: contrastText,
-            semiContrast: secondaryText,
-            muted: mutedText
-          },
           mainBg,
           mutedBackground,
           widgetBackground: widgetBg,

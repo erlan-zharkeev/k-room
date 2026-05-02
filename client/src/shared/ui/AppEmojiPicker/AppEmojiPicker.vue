@@ -143,7 +143,7 @@ watch(() => props.language, mountPicker)
   border: 0;
   border-radius: 6px;
 
-  color: var(--p-app-text-contrast);
+  color: var(--p-text-color);
 
   background: transparent;
 }
@@ -168,14 +168,14 @@ watch(() => props.language, mountPicker)
   --border-radius: 8px;
   --button-active-background: var(--p-content-border-color);
   --button-hover-background: var(--p-app-muted-background);
-  --category-font-color: var(--p-app-text-contrast);
+  --category-font-color: var(--p-text-color);
   --emoji-padding: 0.38rem;
   --emoji-size: 1.35rem;
   --indicator-color: var(--p-primary-color);
   --input-border-color: var(--p-content-border-color);
   --input-border-radius: 8px;
-  --input-font-color: var(--p-app-text-contrast);
-  --input-placeholder-color: var(--p-app-text-muted);
+  --input-font-color: var(--p-text-color);
+  --input-placeholder-color: var(--p-text-hover-muted-color);
   --outline-color: var(--p-primary-color);
 
   width: 100%;

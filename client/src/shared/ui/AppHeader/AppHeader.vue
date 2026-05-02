@@ -48,7 +48,7 @@ h5.app-header {
 .app-header {
   margin-top: 0;
   margin-bottom: 0;
-  color: var(--p-app-text-muted);
+  color: var(--p-text-hover-muted-color);
 }
 
 .app-header--bold {
@@ -63,11 +63,11 @@ h5.app-header {
 }
 
 .app-header--semi-contrast-color {
-  color: var(--p-app-text-semi-contrast);
+  color: var(--p-text-muted-color);
 }
 
 .app-header--contrast-color {
-  color: var(--p-app-text-contrast);
+  color: var(--p-text-color);
 }
 
 .app-header--accent-color {

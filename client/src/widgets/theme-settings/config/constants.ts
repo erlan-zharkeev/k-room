@@ -18,8 +18,8 @@ export const THEME_SETTINGS_COLOR_ITEMS = [
     label: THEME_SETTINGS_I18N.contrastText
   },
   {
-    id: 'secondaryText',
-    label: THEME_SETTINGS_I18N.secondaryText
+    id: 'semiContrast',
+    label: THEME_SETTINGS_I18N.semiContrast
   },
   {
     id: 'contrastText',

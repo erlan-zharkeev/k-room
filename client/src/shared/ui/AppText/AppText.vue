@@ -46,15 +46,15 @@ small.app-text {
 .app-text {
   margin-top: 0;
   margin-bottom: 0;
-  color: var(--p-app-text-muted);
+  color: var(--p-text-hover-muted-color);
 }
 
 .app-text--semi-contrast-color {
-  color: var(--p-app-text-semi-contrast);
+  color: var(--p-text-muted-color);
 }
 
 .app-text--contrast-color {
-  color: var(--p-app-text-contrast);
+  color: var(--p-text-color);
 }
 
 .app-text--accent-color {
