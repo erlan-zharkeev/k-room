@@ -5,119 +5,93 @@ import { IColorSchema } from '../../config'
 
 import { createPrimaryPalette } from './create-primary-palette'
 import { createSurfacePalette } from './create-surface-palette'
+import { duplicateThemeModeValue } from './duplicate-theme-mode-value'
 
 export const createThemePreset = (colors: IColorSchema) => {
-  const borderColor = `color-mix(in srgb, ${colors.widgetBg}, ${colors.mainBg} 32%)`
-  const hoverBackground = `color-mix(in srgb, ${colors.widgetBg}, ${colors.mainBg} 12%)`
-  const mutedBackground = `color-mix(in srgb, ${colors.widgetBg}, ${colors.mainBg} 20%)`
-  const disabledBackground = `color-mix(in srgb, ${colors.widgetBg}, ${colors.mainBg} 16%)`
-  const textColorScheme = {
-    color: colors.contrastText,
-    hoverColor: colors.contrastText,
-    mutedColor: colors.secondaryText,
-    hoverMutedColor: colors.text
+  const { widgetBg, mainBg, contrastText, secondaryText, text: mutedText, accent, lightShadow, darkShadow } = colors
+  const borderColor = `color-mix(in srgb, ${widgetBg}, ${mainBg} 32%)`
+  const hoverBackground = `color-mix(in srgb, ${widgetBg}, ${mainBg} 12%)`
+  const mutedBackground = `color-mix(in srgb, ${widgetBg}, ${mainBg} 20%)`
+  const disabledBackground = `color-mix(in srgb, ${widgetBg}, ${mainBg} 16%)`
+
+  const text = {
+    color: contrastText,
+    hoverColor: contrastText,
+    mutedColor: secondaryText,
+    hoverMutedColor: mutedText
   }
-  const contentColorScheme = {
-    background: colors.widgetBg,
+
+  const content = {
+    background: widgetBg,
     hoverBackground,
     borderColor,
-    color: colors.contrastText,
-    hoverColor: colors.contrastText
+    color: contrastText,
+    hoverColor: contrastText
   }
-  const overlayColorScheme = {
+
+  const overlay = {
     select: {
-      background: colors.widgetBg,
+      background: widgetBg,
       borderColor,
-      color: colors.contrastText
+      color: contrastText
     },
     popover: {
-      background: colors.widgetBg,
+      background: widgetBg,
       borderColor,
-      color: colors.contrastText
+      color: contrastText
     },
     modal: {
-      background: colors.widgetBg,
+      background: widgetBg,
       borderColor,
-      color: colors.contrastText
+      color: contrastText
     }
   }
-  const formFieldColorScheme = {
-    background: colors.widgetBg,
+
+  const formField = {
+    background: widgetBg,
     disabledBackground,
     filledBackground: mutedBackground,
     filledHoverBackground: hoverBackground,
-    filledFocusBackground: colors.widgetBg,
+    filledFocusBackground: widgetBg,
     borderColor,
     hoverBorderColor: borderColor,
-    focusBorderColor: colors.accent,
-    color: colors.contrastText,
-    disabledColor: colors.secondaryText,
-    placeholderColor: colors.text,
-    invalidPlaceholderColor: colors.text,
-    floatLabelColor: colors.text,
-    floatLabelFocusColor: colors.accent,
-    floatLabelActiveColor: colors.text,
-    floatLabelInvalidColor: colors.text,
-    iconColor: colors.secondaryText,
+    focusBorderColor: accent,
+    color: contrastText,
+    disabledColor: secondaryText,
+    placeholderColor: mutedText,
+    invalidPlaceholderColor: mutedText,
+    floatLabelColor: mutedText,
+    floatLabelFocusColor: accent,
+    floatLabelActiveColor: mutedText,
+    floatLabelInvalidColor: mutedText,
+    iconColor: secondaryText,
     shadow: 'none'
   }
 
   return definePreset(Aura, {
     semantic: {
-      primary: createPrimaryPalette(colors.accent),
-      surface: createSurfacePalette(colors.mainBg),
-      colorScheme: {
-        light: {
-          text: { ...textColorScheme },
-          content: { ...contentColorScheme },
-          overlay: { ...overlayColorScheme },
-          formField: { ...formFieldColorScheme }
-        },
-        dark: {
-          text: { ...textColorScheme },
-          content: { ...contentColorScheme },
-          overlay: { ...overlayColorScheme },
-          formField: { ...formFieldColorScheme }
-        }
-      },
+      primary: createPrimaryPalette(accent),
+      surface: createSurfacePalette(mainBg),
+      colorScheme: duplicateThemeModeValue(() => ({
+        text,
+        content,
+        overlay,
+        formField
+      })),
       extend: {
         app: {
           text: {
-            contrast: colors.contrastText,
-            semiContrast: colors.secondaryText,
-            muted: colors.text
+            contrast: contrastText,
+            semiContrast: secondaryText,
+            muted: mutedText
           },
-          mainBg: colors.mainBg,
+          mainBg,
           mutedBackground,
-          widgetBackground: colors.widgetBg,
+          widgetBackground: widgetBg,
           shadow: {
             outset: {
-              start: colors.lightShadow,
-              end: colors.darkShadow
-            }
-          }
-        }
-      }
-    },
-    components: {
-      button: {
-        colorScheme: {
-          light: {
-            root: {
-              secondary: {
-                hoverBorderColor: 'transparent',
-                borderColor: 'transparent',
-                activeBorderColor: 'transparent'
-              }
-            }
-          },
-          dark: {
-            root: {
-              secondary: {
-                hoverBorderColor: 'transparent',
-                borderColor: 'transparent',
-                activeBorderColor: 'transparent'
-              }
+              start: lightShadow,
+              end: darkShadow
             }
           }
         }
