@@ -13,10 +13,10 @@ const { changeThemeColor } = useChangeColorSchema()
 </script>
 
 <template>
-  <div class="theme-settings">
+  <div class="theme-settings-form">
     <ThemeSelect />
-    <div class="theme-settings__pick-color" v-if="isSelectedThemeCustom">
-      <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings__field">
+    <div class="theme-settings-form__pick-color" v-if="isSelectedThemeCustom">
+      <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings-form__field">
         <AppText :text="$t(item.label)" />
         <ColorPicker
           format="hex"
@@ -29,12 +29,12 @@ const { changeThemeColor } = useChangeColorSchema()
 </template>
 
 <style>
-.theme-settings {
+.theme-settings-form {
   display: grid;
   gap: 12px;
 }
 
-.theme-settings__field {
+.theme-settings-form__field {
   display: flex;
   align-items: center;
   justify-content: space-between;
