@@ -1,1 +1,1 @@
-export { default as ThemeSettings } from './ui/ThemeSettings.vue'
+export { default as ThemeSettingsForm } from './ui/ThemeSettingsForm.vue'

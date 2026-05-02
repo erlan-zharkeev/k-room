@@ -9,6 +9,11 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     ru: 'Тема',
     zh: '选择主题'
   },
+  resetTheme: {
+    en: 'Reset theme',
+    ru: 'Сбросить тему',
+    zh: '重置主题'
+  },
   themeDescription: {
     en: 'Themes and wallpaper',
     ru: 'Темы и обои',
