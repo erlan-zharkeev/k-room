@@ -1,3 +1,6 @@
+import { NmorphIconMagicStick, NmorphIconMonitor, NmorphIconMoon, NmorphIconSunny } from '@nmorph/nmorph-ui-kit'
+import type { Component } from 'vue'
+
 import type { IThemeSelectOption } from '../types'
 
 import { THEME_SELECT_I18N } from './i18n'
@@ -8,22 +11,22 @@ export const THEME_SELECT_DEFAULT_PROPS = {
 
 export const THEME_SELECT_OPTIONS: IThemeSelectOption[] = [
   {
-    icon: 'pi pi-desktop',
+    icon: NmorphIconMonitor as unknown as Component,
     label: THEME_SELECT_I18N.systemTheme,
     value: 'system'
   },
   {
-    icon: 'pi pi-moon',
+    icon: NmorphIconMoon as unknown as Component,
     label: THEME_SELECT_I18N.darkTheme,
     value: 'dark'
   },
   {
-    icon: 'pi pi-sun',
+    icon: NmorphIconSunny as unknown as Component,
     label: THEME_SELECT_I18N.lightTheme,
     value: 'light'
   },
   {
-    icon: 'pi pi-palette',
+    icon: NmorphIconMagicStick as unknown as Component,
     label: THEME_SELECT_I18N.customTheme,
     value: 'custom'
   }

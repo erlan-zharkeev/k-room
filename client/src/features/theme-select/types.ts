@@ -1,7 +1,9 @@
 import type { ThemeType } from 'src/shared/config'
 
+import type { Component } from 'vue'
+
 export interface IThemeSelectOption {
-  icon: string
+  icon: Component
   label: {
     en: string
     ru: string
