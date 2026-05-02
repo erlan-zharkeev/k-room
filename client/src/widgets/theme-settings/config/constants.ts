@@ -6,8 +6,8 @@ export const THEME_SETTINGS_COLOR_ITEMS = [
     label: THEME_SETTINGS_I18N.mainBg
   },
   {
-    id: 'cardSurface',
-    label: THEME_SETTINGS_I18N.cardSurface
+    id: 'widgetBg',
+    label: THEME_SETTINGS_I18N.widgetBg
   },
   {
     id: 'accent',

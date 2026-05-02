@@ -19,8 +19,9 @@ const { changeThemeColor } = useChangeColorSchema()
       <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings__field">
         <AppText :text="$t(item.label)" />
         <ColorPicker
+          format="hex"
           :model-value="effectiveTheme.colorSchema[item.id]"
-          @update:model-value="($event) => changeThemeColor(item.id, $event)"
+          @update:model-value="($event) => changeThemeColor(item.id, `#${$event}`)"
         />
       </label>
     </div>

@@ -51,10 +51,7 @@ const handleButtonClick = () => {
   align-content: start;
 
   padding: 14px;
-  border: 1px solid var(--p-content-border-color);
   border-radius: 8px;
-
-  background: var(--p-app-muted-background);
 }
 
 .settings-card__content {

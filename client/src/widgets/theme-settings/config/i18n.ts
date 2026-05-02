@@ -6,10 +6,10 @@ export const THEME_SETTINGS_I18N = defineI18n({
     ru: 'Основной фон',
     zh: '主背景'
   },
-  cardSurface: {
-    en: 'Card color',
-    ru: 'Цвет карточки',
-    zh: '卡片颜色'
+  widgetBg: {
+    en: 'Widget color',
+    ru: 'Цвет виджета',
+    zh: '组件颜色'
   },
   accent: {
     en: 'Accent',
