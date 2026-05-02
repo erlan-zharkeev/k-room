@@ -7,7 +7,7 @@ import { SYSTEM_THEME_QUERY } from 'src/shared/config'
 import { applyThemePreset } from '../lib/theme-preset'
 
 export const useThemeProvider = () => {
-  const { settings, isSelectedThemeCustom, isSelectedThemeSystem } = useSettings()
+  const { settings, isSelectedThemeSystem, effectiveTheme } = useSettings()
   const { changeSystemTheme } = useThemeSelect()
 
   const updateSystemTheme = () => {
@@ -42,11 +42,9 @@ export const useThemeProvider = () => {
   )
 
   watch(
-    () => settings.value.appearance.themes.custom,
+    () => effectiveTheme.value.colorSchema,
     () => {
-      if (isSelectedThemeCustom.value) {
-        applyThemePreset(settings.value.appearance)
-      }
+      applyThemePreset(settings.value.appearance)
     },
     { deep: true }
   )

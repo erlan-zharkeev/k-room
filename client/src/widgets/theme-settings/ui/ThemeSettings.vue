@@ -8,14 +8,14 @@ import { AppText } from 'src/shared/ui'
 import { THEME_SETTINGS_COLOR_ITEMS } from '../config/constants'
 import { useChangeColorSchema } from '../model/use-change-color-schema'
 
-const { effectiveTheme, isSelectedThemeSystem } = useSettings()
+const { effectiveTheme, isSelectedThemeCustom } = useSettings()
 const { changeThemeColor } = useChangeColorSchema()
 </script>
 
 <template>
   <div class="theme-settings">
     <ThemeSelect />
-    <div class="theme-settings__pick-color" v-if="!isSelectedThemeSystem">
+    <div class="theme-settings__pick-color" v-if="isSelectedThemeCustom">
       <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings__field">
         <AppText :text="$t(item.label)" />
         <ColorPicker
