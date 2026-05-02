@@ -1,17 +1,29 @@
 <script setup lang="ts">
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
-import { Card, Tab, TabList, Tabs } from 'primevue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
 import { LanguageSelect } from 'src/features/language-select'
 import { ThemeSelect } from 'src/features/theme-select'
-import { AppLogo } from 'src/shared/ui'
+import { createClassNameWithModifiers } from 'src/shared/lib'
+import { AppLogo, AppText } from 'src/shared/ui'
 
 import { AUTH_LAYOUT_TABS } from './constants'
-import { IAuthLayoutProps } from './types'
+import type { IAuthLayoutProps } from './types'
 
 const props = defineProps<IAuthLayoutProps>()
 const route = useRoute()
+
+const getTabClassName = (path: string) =>
+  createClassNameWithModifiers({
+    rootClass: 'auth-layout__tab',
+    modifiers: [route.path === path && 'active', props.blockNavigation && 'disabled']
+  })
+
+const blockTabNavigation = (event: MouseEvent) => {
+  if (!props.blockNavigation) return
+
+  event.preventDefault()
+}
 </script>
 
 <template>
@@ -24,22 +36,24 @@ const route = useRoute()
       </div>
     </div>
     <div class="auth-layout__card">
-      <NmorphCard >
-        <Tabs class="auth-layout__tabs" :value="route.path">
-            <TabList>
-              <template v-for="tab in AUTH_LAYOUT_TABS" :key="tab.path">
-                <RouterLink v-if="!props.blockNavigation" class="auth-layout__tab-link" :to="tab.path">
-                  <Tab as="div" :value="tab.path" :pt="{ root: { class: 'auth-layout__tab auth-layout__tab--linked' } }">
-                    {{ $t(tab.label) }}
-                  </Tab>
-                </RouterLink>
-                <Tab v-else disabled :value="tab.path">
-                  {{ $t(tab.label) }}
-                </Tab>
-              </template>
-            </TabList>
-          </Tabs>
-          <RouterView />
+      <NmorphCard>
+        <div class="auth-layout__tabs">
+          <RouterLink
+            v-for="tab in AUTH_LAYOUT_TABS"
+            :key="tab.path"
+            :aria-disabled="props.blockNavigation"
+            :class="getTabClassName(tab.path)"
+            :tabindex="props.blockNavigation ? -1 : undefined"
+            :to="tab.path"
+            @click="blockTabNavigation"
+          >
+            <AppText
+              :color="route.path === tab.path ? 'accent-color' : 'contrast-color'"
+              :text="$t(tab.label)"
+            />
+          </RouterLink>
+        </div>
+        <RouterView />
       </NmorphCard>
     </div>
 
@@ -65,20 +79,36 @@ const route = useRoute()
 }
 
 .auth-layout__card {
-  width: min(100%, 420px);
+  width: 100%;
+  max-width: 420px;
 }
 
 .auth-layout__tabs {
-  margin-bottom: 16px;
-}
-
-.auth-layout__tab--linked {
   display: flex;
-  justify-content: center;
+  align-items: stretch;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--p-text-muted-color);
 }
 
-.auth-layout__tab-link {
-  width: 50%;
+.auth-layout__tab {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: -1px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid transparent;
+
+  text-decoration: none;
+}
+
+.auth-layout__tab--active {
+  border-bottom-color: var(--p-primary-color);
+}
+
+.auth-layout__tab--disabled {
+  cursor: default;
 }
 
 .auth-layout__language {

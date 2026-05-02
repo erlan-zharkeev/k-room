@@ -52,7 +52,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
       class="login-page__button"
       :disabled="isSubmitDisabled || !isFormValid"
       fill
-      height="thin"
       :loading="isLoading"
       :text="$t(LOGIN_FORM_I18N.submit)"
       type="submit"
@@ -62,7 +61,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
       class="login-page__button"
       :disabled="isFormDisabled"
       fill
-      height="thin"
       :loading="isFirebaseLoginLoading"
       :text="$t(LOGIN_FORM_I18N.withGoogle)"
       type="button"
