@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { Card, Tab, TabList, Tabs } from 'primevue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
@@ -22,26 +23,26 @@ const route = useRoute()
         <ThemeSelect compact />
       </div>
     </div>
-
-    <Card class="auth-layout__card">
-      <template #content>
+    <div class="auth-layout__card">
+      <NmorphCard >
         <Tabs class="auth-layout__tabs" :value="route.path">
-          <TabList>
-            <template v-for="tab in AUTH_LAYOUT_TABS" :key="tab.path">
-              <RouterLink v-if="!props.blockNavigation" class="auth-layout__tab-link" :to="tab.path">
-                <Tab as="div" :value="tab.path" :pt="{ root: { class: 'auth-layout__tab auth-layout__tab--linked' } }">
+            <TabList>
+              <template v-for="tab in AUTH_LAYOUT_TABS" :key="tab.path">
+                <RouterLink v-if="!props.blockNavigation" class="auth-layout__tab-link" :to="tab.path">
+                  <Tab as="div" :value="tab.path" :pt="{ root: { class: 'auth-layout__tab auth-layout__tab--linked' } }">
+                    {{ $t(tab.label) }}
+                  </Tab>
+                </RouterLink>
+                <Tab v-else disabled :value="tab.path">
                   {{ $t(tab.label) }}
                 </Tab>
-              </RouterLink>
-              <Tab v-else disabled :value="tab.path">
-                {{ $t(tab.label) }}
-              </Tab>
-            </template>
-          </TabList>
-        </Tabs>
-        <RouterView />
-      </template>
-    </Card>
+              </template>
+            </TabList>
+          </Tabs>
+          <RouterView />
+      </NmorphCard>
+    </div>
+
   </section>
 </template>
 
