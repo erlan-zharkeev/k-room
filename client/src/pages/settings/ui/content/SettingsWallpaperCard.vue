@@ -28,6 +28,10 @@ const { setWallpaperAppearance, setAngle, setScale, setDarkness, uploadWallpaper
   useWallpaperSettings()
 const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 
+const visibilityOptions = computed(() =>
+  SETTINGS_WALLPAPER_VISIBILITY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))
+)
+
 const selectButtonPt = computed(() => ({
   root: {
     class: 'settings-wallpaper-card__visibility-select',
@@ -44,22 +48,16 @@ const selectButtonPt = computed(() => ({
         <SelectButton
           :fluid="isMobile"
           :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
+          :option-label="'label'"
           :option-value="'value'"
-          :options="SETTINGS_WALLPAPER_VISIBILITY_OPTIONS"
+          :options="visibilityOptions"
           :pt="selectButtonPt"
           size="small"
           :allow-empty="false"
           @update:model-value="($event) => setWallpaperAppearance($event === 'show')"
         >
           <template #option="{ option }">
-            <AppHeader
-              tag="h5"
-              :text="
-                option.value === 'show'
-                  ? $t(SETTINGS_PAGE_APPEARANCE_I18N.show)
-                  : $t(SETTINGS_PAGE_APPEARANCE_I18N.hide)
-              "
-            />
+            <AppHeader tag="h5" :text="option.label" />
           </template>
         </SelectButton>
       </div>
