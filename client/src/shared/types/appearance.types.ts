@@ -13,6 +13,7 @@ export interface IWallpaperSettings {
 }
 
 export interface IThemeData {
+  mode: SystemTheme
   colorSchema: IColorSchema
   wallpaper: IWallpaperSettings
 }

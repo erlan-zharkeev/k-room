@@ -24,7 +24,6 @@ body {
   min-width: 320px;
   height: 100dvh;
   padding: 16px;
-  background: var(--p-app-main-bg);
 
   @include screen-mobile {
     padding: 8px;
