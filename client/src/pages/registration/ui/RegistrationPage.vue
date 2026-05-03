@@ -1,95 +1,67 @@
 <script setup lang="ts">
-import { Form } from '@primevue/forms'
+import { NmorphButton, NmorphForm, NmorphFormItem, NmorphSwitch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
-import { Button, Checkbox, InputText, Message, Password } from 'primevue'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { isFormFieldInvalid } from 'src/shared/lib'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
-import { PRIVACY_POLICY_SWITCH_I18N, REGISTRATION_FORM_I18N } from '../config/i18n'
+import { REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration'
 
-const { captchaRequired, captchaResetKey, captchaToken, formData, isLoading, resolver, submit } = useRegistration()
+const { captchaRequired, captchaResetKey, captchaToken, formData, formValue, formRef, isFormValid, isLoading, submit } =
+  useRegistration()
+const isFormDisabled = computed(() => isLoading.value)
 const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
-const isSubmitDisabled = computed(() => isLoading.value || isCaptchaBlocked.value)
+const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
 </script>
 
 <template>
-  <Form v-slot="$form" :initial-values="formData" :resolver="resolver" class="registration-page" @submit="submit">
-    <div class="registration-page__field">
-      <InputText
-        v-model.trim="formData.nickname"
-        autocomplete="nickname"
-        :disabled="isLoading"
-        fluid
-        name="nickname"
+  <NmorphForm ref="formRef" :value="formValue" class="registration-page" @submit.prevent="submit">
+    <NmorphFormItem id="nickname" class="registration-page__field" :show-validation-icon="false">
+      <NmorphTextInput
+        v-model="formData.nickname.value"
+        class="registration-page__input"
+        :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"
-        size="small"
+        clearable
+        @on-enter="submit"
       />
-      <Message v-if="isFormFieldInvalid($form.nickname)" severity="error" size="small" variant="simple">
-        {{ $form.nickname.error?.message }}
-      </Message>
-    </div>
+    </NmorphFormItem>
 
-    <div class="registration-page__field">
-      <InputText
-        v-model.trim="formData.email"
-        autocomplete="email"
-        :disabled="isLoading"
-        fluid
-        name="email"
-        placeholder="Email"
-        size="small"
-        type="email"
+    <NmorphFormItem id="email" class="registration-page__field" :show-validation-icon="false">
+      <NmorphTextInput
+        v-model="formData.email.value"
+        class="registration-page__input"
+        :disabled="isFormDisabled"
+        :placeholder="$t(REGISTRATION_FORM_I18N.emailPlaceholder)"
+        clearable
+        @on-enter="submit"
       />
-      <Message v-if="isFormFieldInvalid($form.email)" severity="error" size="small" variant="simple">
-        {{ $form.email.error?.message }}
-      </Message>
-    </div>
+    </NmorphFormItem>
 
-    <div class="registration-page__field">
-      <Password
-        v-model="formData.password"
-        :disabled="isLoading"
-        :feedback="false"
-        fluid
-        autocomplete="new-password"
-        name="password"
+    <NmorphFormItem id="password" class="registration-page__field" :show-validation-icon="false">
+      <NmorphTextInput
+        v-model="formData.password.value"
+        class="registration-page__input"
+        :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.passwordPlaceholder)"
-        size="small"
-        toggle-mask
+        type-password
+        @on-enter="submit"
       />
-      <Message v-if="isFormFieldInvalid($form.password)" severity="error" size="small" variant="simple">
-        {{ $form.password.error?.message }}
-      </Message>
-    </div>
+    </NmorphFormItem>
 
-    <div class="registration-page__field">
-      <label class="registration-page__policy">
-        <Checkbox
-          v-model="formData.policy"
-          binary
-          :disabled="isLoading"
-          input-id="registration-policy"
-          name="policy"
-          size="small"
-        />
-        <AppText
-          class="registration-page__policy-text"
-          :class="{ 'registration-page__policy-text--disabled': isLoading }"
-        >
-          {{ $t(PRIVACY_POLICY_SWITCH_I18N.agreement) }}
-          <RouterLink :to="ROUTE_NAMES.privacyPolicy">
-            <AppText :text="$t(PRIVACY_POLICY_SWITCH_I18N.link)" color="accent-color" />
+    <NmorphFormItem id="policy" class="registration-page__field" :show-validation-icon="false">
+      <div class="registration-page__policy">
+        <NmorphSwitch v-model="formData.policy.value" :disabled="isFormDisabled" />
+        <div class="registration-page__policy-text">
+          <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.agreement)" />
+          <RouterLink class="registration-page__policy-link" :to="ROUTE_NAMES.privacyPolicy">
+            <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.link)" color="accent-color" />
           </RouterLink>
-        </AppText>
-      </label>
-      <Message v-if="isFormFieldInvalid($form.policy)" severity="error" size="small" variant="simple">
-        {{ $form.policy.error?.message }}
-      </Message>
-    </div>
+        </div>
+      </div>
+    </NmorphFormItem>
 
     <AppCaptcha
       v-if="captchaRequired"
@@ -98,31 +70,25 @@ const isSubmitDisabled = computed(() => isLoading.value || isCaptchaBlocked.valu
       :reset-key="captchaResetKey"
     />
 
-    <Button
-      class="registration-page__submit"
-      :disabled="isSubmitDisabled || !$form.valid"
-      fluid
-      :label="$t(REGISTRATION_FORM_I18N.submit)"
+    <NmorphButton
+      class="registration-page__button"
+      :disabled="isSubmitDisabled || !isFormValid"
+      fill
       :loading="isLoading"
-      size="small"
+      :text="$t(REGISTRATION_FORM_I18N.submit)"
       type="submit"
     />
-  </Form>
+  </NmorphForm>
 </template>
 
-<style lang="scss">
+<style>
 .registration-page {
   display: grid;
   gap: 12px;
 }
 
 .registration-page__policy {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
-}
-
-.registration-page__policy-text--disabled {
-  @include disabled-state;
+  display: flex;
+  gap: 12px;
 }
 </style>

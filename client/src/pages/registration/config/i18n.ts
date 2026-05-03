@@ -2,33 +2,25 @@ import { defineI18n } from 'global-shared'
 
 export const REGISTRATION_FORM_I18N = defineI18n({
   nicknamePlaceholder: {
-    en: 'Nickname',
-    ru: 'Никнейм',
-    zh: '昵称'
+    en: 'Enter nickname',
+    ru: 'Введите никнейм',
+    zh: '输入昵称'
+  },
+  emailPlaceholder: {
+    en: 'Enter email',
+    ru: 'Введите email',
+    zh: '输入 email'
   },
   passwordPlaceholder: {
-    en: 'Password',
-    ru: 'Пароль',
-    zh: '密码'
+    en: 'Create password',
+    ru: 'Придумайте пароль',
+    zh: '创建密码'
   },
   submit: {
     en: 'Register',
     ru: 'Зарегистрироваться',
     zh: '注册'
   },
-  read: {
-    en: 'Read',
-    ru: 'Да',
-    zh: '已读'
-  },
-  unread: {
-    en: 'Unread',
-    ru: 'Нет',
-    zh: '未读'
-  }
-})
-
-export const PRIVACY_POLICY_SWITCH_I18N = defineI18n({
   agreement: {
     en: 'I have read and agree',
     ru: 'Я прочитал и принимаю',
