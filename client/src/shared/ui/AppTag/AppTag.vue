@@ -29,26 +29,26 @@ const className = computed(() => createClassNameWithModifiers({ rootClass: 'app-
   padding: 2px 6px;
   border-radius: 4px;
 
-  background: var(--p-secondary-color);
+  background: var(--nmorph-gray-color);
 }
 
 .app-tag--success {
-  background: var(--p-green-600);
+  background: var(--nmorph-success-color);
 }
 
 .app-tag--warn {
-  background: var(--p-yellow-600);
+  background: var(--nmorph-warn-color);
 }
 
 .app-tag--danger {
-  background: var(--p-red-600);
+  background: var(--nmorph-error-color);
 }
 
 .app-tag--info {
-  background: var(--p-blue-600);
+  background: var(--nmorph-info-color);
 }
 
 .app-tag--secondary {
-  background: var(--p-surface-600);
+  background: var(--nmorph-placeholder-text-color);
 }
 </style>

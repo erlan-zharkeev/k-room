@@ -44,6 +44,6 @@ const { searchQuery, filteredItems } = useSettingsFaq()
   padding: 10px 12px;
   border-radius: 6px;
 
-  background: var(--p-content-background);
+  background: var(--app-content-background);
 }
 </style>

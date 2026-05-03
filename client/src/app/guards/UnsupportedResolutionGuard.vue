@@ -33,6 +33,6 @@ const isUnsupportedResolution = computed(
 
   gap: 12px;
 
-  background: var(--p-app-main-bg);
+  background: var(--nmorph-main-color);
 }
 </style>

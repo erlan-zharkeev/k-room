@@ -1,33 +1,24 @@
 <script setup lang="ts">
-import { MeterGroup } from 'primevue'
+import { NmorphProgress } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { formatBytes, useI18n } from 'src/shared/lib'
+import { formatBytes } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
+import { useSettingsStorageUsageCard } from '../../../model/storage/use-settings-storage-usage-card'
 import SettingsCard from '../../SettingsCard.vue'
 
-import type { ISettingsStorageUsageCardProps } from './types'
+const { usageBytes, quotaBytes, usagePercent } = useSettingsStorageUsageCard()
 
-const props = defineProps<ISettingsStorageUsageCardProps>()
-const { t } = useI18n()
-
-const usageFormatted = computed(() => formatBytes(props.usageBytes))
-const availableFormatted = computed(() => formatBytes(props.quotaBytes - props.usageBytes))
-const quotaFormatted = computed(() => formatBytes(props.quotaBytes))
-const meterValue = computed(() => [
-  {
-    label: t(SETTINGS_PAGE_STORAGE_I18N.storageUsed),
-    value: props.usagePercent,
-    color: 'var(--p-primary-color)'
-  }
-])
+const usageFormatted = computed(() => formatBytes(usageBytes.value))
+const availableFormatted = computed(() => formatBytes(quotaBytes.value - usageBytes.value))
+const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
 </script>
 
 <template>
   <SettingsCard :title="$t(SETTINGS_PAGE_STORAGE_I18N.storage)">
-    <MeterGroup :value="meterValue" :max="100" />
+    <NmorphProgress :percentage="usagePercent" :max="100" />
 
     <div class="settings-storage-usage-card__stats">
       <div class="settings-storage-usage-card__stat">
@@ -54,12 +45,6 @@ const meterValue = computed(() => [
 }
 
 .settings-storage-usage-card__stat {
-  display: grid;
-  gap: 2px;
-
-  padding: 8px 10px;
-  border-radius: 6px;
-
-  background: var(--p-content-background);
+  @include flex-column-center;
 }
 </style>

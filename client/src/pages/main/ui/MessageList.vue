@@ -368,7 +368,7 @@ onBeforeUnmount(() => {
 
 <style>
 .message-list {
-  scrollbar-color: var(--p-text-hover-muted-color) var(--p-content-background);
+  scrollbar-color: var(--app-scroll-thumb-color) var(--app-content-background);
   scrollbar-gutter: stable;
 
   overflow: auto;
@@ -385,19 +385,19 @@ onBeforeUnmount(() => {
 }
 
 .message-list::-webkit-scrollbar-track {
-  border: 1px solid var(--p-content-border-color);
+  border: 1px solid var(--app-content-border-color);
   border-radius: 8px;
-  background: var(--p-content-background);
+  background: var(--app-content-background);
 }
 
 .message-list::-webkit-scrollbar-thumb {
-  border: 3px solid var(--p-content-background);
+  border: 3px solid var(--app-content-background);
   border-radius: 8px;
-  background: var(--p-text-hover-muted-color);
+  background: var(--app-scroll-thumb-color);
 }
 
 .message-list::-webkit-scrollbar-thumb:hover {
-  background: var(--p-text-muted-color);
+  background: var(--app-scroll-thumb-hover-color);
 }
 
 .message-list__load-more {
@@ -407,7 +407,7 @@ onBeforeUnmount(() => {
 
   justify-self: center;
 
-  background: var(--p-content-background);
+  background: var(--app-content-background);
 }
 
 .message-list__inner {
@@ -440,14 +440,14 @@ onBeforeUnmount(() => {
 
   width: min(520px, 82%);
   padding: 10px 12px;
-  border: 1px solid var(--p-content-border-color);
+  border: 1px solid var(--app-content-border-color);
   border-radius: 8px;
 
-  background: var(--p-app-muted-background);
+  background: var(--app-muted-background);
 }
 
 .message-list__item--self .message-list__message {
-  border-color: var(--p-primary-color);
+  border-color: var(--nmorph-accent-color);
 }
 
 .message-list__body {
@@ -473,13 +473,13 @@ onBeforeUnmount(() => {
   min-width: 24px;
   min-height: 24px;
   padding: 2px 6px;
-  border: 1px solid var(--p-content-border-color);
+  border: 1px solid var(--app-content-border-color);
   border-radius: 8px;
 
   font-size: 16px;
   line-height: 1;
 
-  background: var(--p-content-background);
+  background: var(--app-content-background);
 }
 
 .message-list__context-menu {
@@ -491,18 +491,18 @@ onBeforeUnmount(() => {
 
   width: 340px;
   padding: 8px;
-  border: 1px solid var(--p-content-border-color);
+  border: 1px solid var(--app-content-border-color);
   border-radius: 8px;
 
-  color: var(--p-text-color);
+  color: var(--nmorph-contrast-text-color);
 
-  background: var(--p-content-background);
-  box-shadow: 0 16px 40px var(--p-app-shadow-outset-start);
+  background: var(--app-content-background);
+  box-shadow: 0 16px 40px var(--app-shadow-outset-start);
 }
 
 .message-list__context-picker {
   margin-bottom: 4px;
-  border-bottom: 1px solid var(--p-content-border-color);
+  border-bottom: 1px solid var(--app-content-border-color);
 }
 
 .message-list__context-action {
@@ -533,7 +533,7 @@ onBeforeUnmount(() => {
 }
 
 .message-list__context-action:hover {
-  background: var(--p-app-muted-background);
+  background: var(--app-muted-background);
 }
 
 .message-list__empty {
