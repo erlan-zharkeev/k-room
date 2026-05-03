@@ -29,11 +29,9 @@ const isUnsupportedResolution = computed(
   z-index: 100000;
   inset: 0;
 
-  display: flex;
-  flex-direction: column;
+  @include flex-column-center;
+
   gap: 12px;
-  align-items: center;
-  justify-content: center;
 
   background: var(--p-app-main-bg);
 }

@@ -76,22 +76,22 @@ const wallpaperStyle = computed(() => {
     :class="{ 'main-layout--wallpaper': settings.appearance.showWallpaper }"
     :style="wallpaperStyle"
   >
-    <MainLeftBar v-if="!isMobile" class="widget" />
+    <MainLeftBar v-if="!isMobile" class="widget nmorph--shadow-outset" />
     <section class="main-layout__workspace">
-      <MainTopBar class="widget" />
+      <MainTopBar class="widget nmorph--shadow-outset" />
       <div class="main-layout__content">
-        <div v-if="showNavigation" class="main-layout__navigation-widget widget">
+        <div v-if="showNavigation" class="main-layout__navigation-widget widget nmorph--shadow-outset">
           <ContentNavigationLayout :title-key="navigationTitleKey">
             <RouterView name="content-navigation" />
           </ContentNavigationLayout>
         </div>
-        <div v-if="showContent" class="main-layout__content-widget widget">
+        <div v-if="showContent" class="main-layout__content-widget widget nmorph--shadow-outset">
           <ContentLayout :title-key="contentTitleKey">
             <RouterView name="content" />
           </ContentLayout>
         </div>
       </div>
-      <MainMobileFooter v-if="isMobile" class="widget" />
+      <MainMobileFooter v-if="isMobile" class="widget nmorph--shadow-outset" />
     </section>
   </main>
 </template>
@@ -145,15 +145,8 @@ const wallpaperStyle = computed(() => {
 .widget {
   isolation: isolate;
   position: relative;
-
   overflow: hidden;
-
   padding: 8px;
-  border-radius: 12px;
-
-  background: var(--p-app-widget-background);
-  box-shadow: -3px -3px 6px color-mix(in srgb, var(--p-app-shadow-outset-start), transparent 20%),
-    4px 4px 8px color-mix(in srgb, var(--p-app-shadow-outset-end), transparent 20%);
 }
 
 .widget::before {

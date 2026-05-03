@@ -42,3 +42,17 @@ const { settings, changeTheme } = useThemeSelect()
     </NmorphSelectButton>
   </div>
 </template>
+
+<style lang="scss">
+.theme-select__option {
+  @include flex-column-center;
+
+  width: 100px;
+}
+
+.theme-select {
+  .nmorph-select-button--thick {
+    --thick-component: 60px;
+  }
+}
+</style>

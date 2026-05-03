@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from 'primevue'
+import { NmorphButton } from '@nmorph/nmorph-ui-kit'
 import { computed, useSlots } from 'vue'
 
 import { AppHeader } from 'src/shared/ui'
@@ -11,14 +11,10 @@ const props = withDefaults(defineProps<ISettingsCardProps>(), SETTINGS_CARD_DEFA
 
 const slots = useSlots()
 const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
-
-const handleButtonClick = () => {
-  props.onButtonClick?.()
-}
 </script>
 
 <template>
-  <div class="settings-card">
+  <div class="settings-card nmorph--shadow-outset">
     <div class="settings-card__title">
       <AppHeader tag="h2" color="contrast-color" :text="title" />
     </div>
@@ -29,16 +25,7 @@ const handleButtonClick = () => {
 
     <div v-if="hasFooter" class="settings-card__footer">
       <slot name="footer">
-        <Button
-          :aria-label="buttonAriaLabel || buttonLabel"
-          :disabled="buttonDisabled"
-          :label="buttonLabel"
-          :loading="buttonLoading"
-          class="settings-card__button"
-          size="small"
-          type="button"
-          @click="handleButtonClick"
-        />
+        <NmorphButton :text="props.buttonLabel" :loading="buttonLoading" @click="props.onButtonClick" />
       </slot>
     </div>
   </div>
@@ -47,9 +34,10 @@ const handleButtonClick = () => {
 <style lang="scss">
 .settings-card {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   align-content: start;
 
+  margin: 16px;
   padding: 14px;
   border-radius: 8px;
 }

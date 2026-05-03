@@ -1,3 +1,10 @@
+import {
+  NmorphIconPhoneFilled,
+  NmorphIconChatLineSquare,
+  NmorphIconSetting,
+  NmorphIconBellFilled,
+  NmorphIconUsers
+} from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, defineI18n } from 'global-shared'
 
 const MAIN_NAVIGATION_I18N = defineI18n({
@@ -42,30 +49,30 @@ export const MAIN_PAGE_NAV_ITEMS = [
     id: 'chat-rooms',
     path: MAIN_PAGE_ROUTES.chatRooms,
     label: MAIN_NAVIGATION_I18N.chatRooms,
-    icon: 'pi pi-comments'
+    icon: NmorphIconChatLineSquare
   },
   {
     id: 'calls',
     path: MAIN_PAGE_ROUTES.calls,
     label: MAIN_NAVIGATION_I18N.calls,
-    icon: 'pi pi-phone'
+    icon: NmorphIconPhoneFilled
   },
   {
     id: 'contacts',
     path: MAIN_PAGE_ROUTES.contacts,
     label: MAIN_NAVIGATION_I18N.contacts,
-    icon: 'pi pi-users'
+    icon: NmorphIconUsers
   },
   {
     id: 'info-notifications',
     path: MAIN_PAGE_ROUTES.infoNotifications,
     label: MAIN_NAVIGATION_I18N.info,
-    icon: 'pi pi-bell'
+    icon: NmorphIconBellFilled
   },
   {
     id: 'settings',
     path: MAIN_PAGE_ROUTES.settings,
     label: MAIN_NAVIGATION_I18N.settings,
-    icon: 'pi pi-cog'
+    icon: NmorphIconSetting
   }
 ] as const

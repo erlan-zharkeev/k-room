@@ -42,5 +42,6 @@ const getItemRoute = (settingsId: string) => ({
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 8px;
 }
 </style>

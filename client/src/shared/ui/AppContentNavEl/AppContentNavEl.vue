@@ -11,7 +11,7 @@ const props = defineProps<IAppContentNavElProps>()
 </script>
 
 <template>
-  <div class="app-content-nav-el">
+  <div class="app-content-nav-el nmorph--shadow-outset">
     <RouterLink :to="props.to" custom v-slot="{ href, navigate }">
       <Button
         as="a"

@@ -9,11 +9,3 @@ import SettingsWallpaperCard from './SettingsWallpaperCard.vue'
     <SettingsWallpaperCard />
   </div>
 </template>
-
-<style lang="scss">
-.settings-theme-content {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-</style>
