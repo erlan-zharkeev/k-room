@@ -7,9 +7,9 @@ import { useRoute } from 'vue-router'
 import { useChatRoom } from 'src/entities/chat-room'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from 'src/shared/config'
+import { AppText } from 'src/shared/ui'
 
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
-
 const props = defineProps<{ footer?: boolean }>()
 
 const route = useRoute()
@@ -18,7 +18,6 @@ const { unreadMessagesQuantity } = useChatRoom()
 
 const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
-
   return isString(settingsId) && settingsId ? settingsId : 'account'
 })
 </script>
@@ -33,9 +32,12 @@ const selectedSettingsId = computed(() => {
       v-slot="{ navigate, isExactActive }"
     >
       <NmorphBadge :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)" :offset-x="12" :offset-y="20">
+        <template #value="{ value }">
+          <AppText :text="value" color='contrast-color' tag="small" />
+        </template>
         <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)">
           <template #label>
-            <NmorphIcon>
+            <NmorphIcon :color="isExactActive ? 'var(--nmorph-accent-color)' : 'var(--nmorph-text-color)'">
               <component :is="item.icon" />
             </NmorphIcon>
           </template>

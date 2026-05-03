@@ -2,22 +2,18 @@
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
+import { useSettingsStoragePersistentCard } from '../../../model/storage/use-settings-storage-persistent-card'
 import SettingsCard from '../../SettingsCard.vue'
 
-defineProps<{
-  isPersistent: boolean
-}>()
-
-const emit = defineEmits<{
-  request: []
-}>()
+const { isPersistenceSupported, isPersistent, requestPersistence } = useSettingsStoragePersistentCard()
 </script>
 
 <template>
   <SettingsCard
+    v-if="isPersistenceSupported"
     :title="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistent)"
     :button-label="isPersistent ? undefined : $t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentRequest)"
-    :on-button-click="isPersistent ? undefined : () => emit('request')"
+    :on-button-click="isPersistent ? undefined : requestPersistence"
   >
     <AppText :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)" />
     <AppText v-if="isPersistent" color="accent-color" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)" />

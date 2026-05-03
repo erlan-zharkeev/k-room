@@ -19,14 +19,27 @@ export interface IThemeData {
 }
 
 export interface IColorSchema {
-  mainBg: string
-  widgetBg: string
-  accent: string
+  main: string
+  darkShade: string
+  lightShade: string
   text: string
-  semiContrast: string
+  accent: string
+  focusText: string
+  placeholderText: string
+  semiContrastText: string
   contrastText: string
-  darkShadow: string
-  lightShadow: string
+  info: string
+  infoText: string
+  success: string
+  successText: string
+  error: string
+  errorText: string
+  warn: string
+  warnText: string
+  gray: string
+  white: string
+  black: string
+  overlay: string
 }
 
 export interface IAppearanceSettings {

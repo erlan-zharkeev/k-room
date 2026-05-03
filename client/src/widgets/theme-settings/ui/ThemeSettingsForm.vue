@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ColorPicker } from 'primevue'
+import { NmorphColorPicker } from '@nmorph/nmorph-ui-kit'
 
 import { useSettings } from 'src/entities/setting'
 import { ThemeSelect } from 'src/features/theme-select'
@@ -18,10 +18,10 @@ const { changeThemeColor } = useChangeColorSchema()
     <div class="theme-settings-form__pick-color" v-if="isSelectedThemeCustom">
       <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings-form__field">
         <AppText :text="$t(item.label)" />
-        <ColorPicker
-          format="hex"
+        <NmorphColorPicker
           :model-value="effectiveTheme.colorSchema[item.id]"
-          @update:model-value="($event) => changeThemeColor(item.id, `#${$event}`)"
+          show-value
+          @update:model-value="($event) => changeThemeColor(item.id, $event)"
         />
       </label>
     </div>

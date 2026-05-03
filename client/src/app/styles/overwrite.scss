@@ -1,3 +1,13 @@
+:root {
+  --app-content-background: var(--nmorph-main-color);
+  --app-content-border-color: color-mix(in srgb, var(--nmorph-main-color), var(--nmorph-contrast-text-color) 20%);
+  --app-hover-background: color-mix(in srgb, var(--nmorph-main-color), var(--nmorph-light-shade-color) 24%);
+  --app-muted-background: color-mix(in srgb, var(--nmorph-main-color), var(--nmorph-light-shade-color) 14%);
+  --app-scroll-thumb-color: var(--nmorph-placeholder-text-color);
+  --app-scroll-thumb-hover-color: var(--nmorph-semi-contrast-text-color);
+  --app-shadow-outset-start: color-mix(in srgb, var(--nmorph-light-shade-color), transparent 20%);
+}
+
 #app {
   .p-message.p-message-simple.p-message-sm.p-message-error {
     margin-top: 4px;

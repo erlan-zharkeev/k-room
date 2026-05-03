@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NmorphIcon, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
 import { Button } from 'primevue'
 import { RouterLink } from 'vue-router'
 
@@ -11,7 +12,7 @@ const props = defineProps<IAppContentNavElProps>()
 </script>
 
 <template>
-  <div class="app-content-nav-el nmorph--shadow-outset">
+  <div :class="['app-content-nav-el', props.active ? 'nmorph--shadow-inset' : 'nmorph--shadow-outset']">
     <RouterLink :to="props.to" custom v-slot="{ href, navigate }">
       <Button
         as="a"
@@ -30,8 +31,10 @@ const props = defineProps<IAppContentNavElProps>()
           <AppHeader tag="h5" truncate :text="props.label" />
           <AppText tag="small" truncate color="semi-contrast-color" :text="props.description" />
         </div>
-
-        <i class="pi pi-angle-right app-content-nav-el__icon app-text" aria-hidden="true" />
+        <NmorphIcon>
+          <NmorphIconArrowRight v-if="props.active" />
+          <NmorphIconArrowDown v-else/>
+        </NmorphIcon>
       </Button>
     </RouterLink>
   </div>
@@ -54,15 +57,15 @@ const props = defineProps<IAppContentNavElProps>()
 
   @include screen-tablet-up {
     .app-content-nav-el-btn.p-button-secondary:not(:disabled):hover {
-      background: var(--p-button-secondary-hover-background);
+      background: var(--app-hover-background);
     }
 
     .app-content-nav-el-btn.app-content-nav-el-btn--active {
-      background: var(--p-button-secondary-hover-background);
+      background: var(--app-hover-background);
     }
 
     .app-content-nav-el-btn.app-content-nav-el-btn--active:not(:disabled):hover {
-      background: var(--p-button-secondary-hover-background);
+      background: var(--app-hover-background);
     }
   }
 }

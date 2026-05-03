@@ -3,41 +3,63 @@ import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/asse
 import type { IColorSchema, IThemeData, IWallpaperSettings, SystemTheme } from '../types/appearance.types'
 
 const ACCENT_COLOR = '#418fde'
+const SHARED_THEME_COLORS = {
+  info: '#d4e5edbb',
+  infoText: '#506c80',
+  success: '#67C23A',
+  successText: '#0b5b1d',
+  error: '#F56C6C',
+  errorText: '#8d3333',
+  warn: '#E6A21C',
+  warnText: '#7a6712',
+  white: '#ffffff',
+  black: '#000000',
+  overlay: '#00000095'
+} as const
 
 export const DARK_COLOR_SCHEMA = {
-  mainBg: '#1c1c1c',
-  widgetBg: '#1c1c1c',
-  accent: ACCENT_COLOR,
+  main: '#1c1c1c',
+  darkShade: '#0e0e0e',
+  lightShade: '#2a2a2a',
   text: '#9eabbc',
-  semiContrast: '#c8d0dc',
+  accent: ACCENT_COLOR,
+  focusText: '#f4f7fb',
+  placeholderText: '#c8d0dc',
+  semiContrastText: '#c8d0dc',
   contrastText: '#f4f7fb',
-  darkShadow: '#0e0e0e',
-  lightShadow: '#2a2a2a'
+  gray: '#c8d0dc',
+  ...SHARED_THEME_COLORS
 } as const satisfies IColorSchema
 
 export const LIGHT_COLOR_SCHEMA = {
-  mainBg: '#cfcfcf',
-  widgetBg: '#ffffff',
-  accent: ACCENT_COLOR,
+  main: '#cfcfcf',
+  darkShade: '#b6b6b6',
+  lightShade: '#e8e8e8',
   text: '#6f6f6f',
-  semiContrast: '#656565',
+  accent: ACCENT_COLOR,
+  focusText: '#000000',
+  placeholderText: '#656565',
+  semiContrastText: '#656565',
   contrastText: '#000000',
-  darkShadow: '#b6b6b6',
-  lightShadow: '#e8e8e8'
+  gray: '#656565',
+  ...SHARED_THEME_COLORS
 } as const satisfies IColorSchema
 
 export const CUSTOM_COLOR_SCHEMA = {
-  mainBg: '#1c1c1c',
-  widgetBg: '#1c1c1c',
-  accent: ACCENT_COLOR,
+  main: '#1c1c1c',
+  darkShade: '#0e0e0e',
+  lightShade: '#2a2a2a',
   text: '#9eabbc',
-  semiContrast: '#c8d0dc',
+  accent: ACCENT_COLOR,
+  focusText: '#f4f7fb',
+  placeholderText: '#c8d0dc',
+  semiContrastText: '#c8d0dc',
   contrastText: '#f4f7fb',
-  darkShadow: '#0e0e0e',
-  lightShadow: '#2a2a2a'
+  gray: '#c8d0dc',
+  ...SHARED_THEME_COLORS
 } as const satisfies IColorSchema
 
-export const DEFAULT_CUSTOM_SCHEMA = DARK_COLOR_SCHEMA
+export const DEFAULT_CUSTOM_SCHEMA = { ...DARK_COLOR_SCHEMA } as const satisfies IColorSchema
 export const DEFAULT_CUSTOM_THEME_MODE = 'dark' as const satisfies SystemTheme
 
 export const DEFAULT_WALLPAPER_SETTINGS = {

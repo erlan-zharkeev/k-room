@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { Button } from 'primevue'
+import { NmorphButton } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
+import { useSettingsStorageClearCard } from '../../../model/storage/use-settings-storage-clear-card'
 import SettingsCard from '../../SettingsCard.vue'
 
-defineProps<{
-  isClearingMedia: boolean
-}>()
-
-defineEmits<{
-  clearMedia: []
-}>()
+const { isClearingMedia, clearMedia } = useSettingsStorageClearCard()
 </script>
 
 <template>
@@ -22,13 +17,10 @@ defineEmits<{
         <AppText color="contrast-color" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMedia)" />
         <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMediaDescription)" />
       </div>
-      <Button
-        :label="$t(SETTINGS_PAGE_STORAGE_I18N.storageClear)"
+      <NmorphButton
+        :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClear)"
         :loading="isClearingMedia"
-        size="small"
-        severity="danger"
-        type="button"
-        @click="$emit('clearMedia')"
+        @click="clearMedia"
       />
     </div>
   </SettingsCard>
@@ -52,7 +44,7 @@ defineEmits<{
     flex-wrap: wrap;
   }
 
-  .settings-storage-clear-card__row .p-button {
+  .settings-storage-clear-card__row .nmorph-button {
     flex: 1 1 100%;
   }
 }

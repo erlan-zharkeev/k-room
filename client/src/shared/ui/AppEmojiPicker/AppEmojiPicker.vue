@@ -113,10 +113,10 @@ watch(() => props.language, mountPicker)
   overflow: hidden;
   display: grid;
 
-  border: 1px solid var(--p-content-border-color);
+  border: 1px solid var(--app-content-border-color);
   border-radius: 8px;
 
-  background: var(--p-content-background);
+  background: var(--app-content-background);
 }
 
 .app-emoji-picker__quick-row {
@@ -143,7 +143,7 @@ watch(() => props.language, mountPicker)
   border: 0;
   border-radius: 6px;
 
-  color: var(--p-text-color);
+  color: var(--nmorph-contrast-text-color);
 
   background: transparent;
 }
@@ -155,28 +155,28 @@ watch(() => props.language, mountPicker)
 
 .app-emoji-picker__quick-button:hover,
 .app-emoji-picker__expand-button:hover {
-  background: var(--p-app-muted-background);
+  background: var(--app-muted-background);
 }
 
 .app-emoji-picker__full {
-  border-top: 1px solid var(--p-content-border-color);
+  border-top: 1px solid var(--app-content-border-color);
 }
 
 .app-emoji-picker :deep(.app-emoji-picker__element) {
-  --background: var(--p-content-background);
-  --border-color: var(--p-content-border-color);
+  --background: var(--app-content-background);
+  --border-color: var(--app-content-border-color);
   --border-radius: 8px;
-  --button-active-background: var(--p-content-border-color);
-  --button-hover-background: var(--p-app-muted-background);
-  --category-font-color: var(--p-text-color);
+  --button-active-background: var(--app-content-border-color);
+  --button-hover-background: var(--app-muted-background);
+  --category-font-color: var(--nmorph-contrast-text-color);
   --emoji-padding: 0.38rem;
   --emoji-size: 1.35rem;
-  --indicator-color: var(--p-primary-color);
-  --input-border-color: var(--p-content-border-color);
+  --indicator-color: var(--nmorph-accent-color);
+  --input-border-color: var(--app-content-border-color);
   --input-border-radius: 8px;
-  --input-font-color: var(--p-text-color);
-  --input-placeholder-color: var(--p-text-hover-muted-color);
-  --outline-color: var(--p-primary-color);
+  --input-font-color: var(--nmorph-contrast-text-color);
+  --input-placeholder-color: var(--nmorph-placeholder-text-color);
+  --outline-color: var(--nmorph-accent-color);
 
   width: 100%;
   height: 360px;
