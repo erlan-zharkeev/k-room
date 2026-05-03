@@ -9,20 +9,15 @@ export const SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N = {
     ru: 'Никнейм',
     zh: '昵称'
   },
-  copyId: {
-    en: 'Copy ID',
-    ru: 'Скопировать ID',
-    zh: '复制 ID'
-  },
-  copyNickname: {
-    en: 'Copy nickname',
-    ru: 'Скопировать никнейм',
-    zh: '复制昵称'
-  },
   uploadPhoto: {
     en: 'Upload photo',
     ru: 'Загрузить фото',
     zh: '上传照片'
+  },
+  uploadPhotoHint: {
+    en: (formats: string, maxMb: number) => `${formats} up to ${maxMb} MB`,
+    ru: (formats: string, maxMb: number) => `${formats} до ${maxMb} МБ`,
+    zh: (formats: string, maxMb: number) => `支持 ${formats}，最大 ${maxMb} MB`
   },
   resetPhoto: {
     en: 'Reset photo',

@@ -12,10 +12,3 @@ import SettingsPersonalDataCard from './account/SettingsPersonalDataCard.vue'
   </div>
 </template>
 
-<style lang="scss">
-.settings-account-content {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-</style>

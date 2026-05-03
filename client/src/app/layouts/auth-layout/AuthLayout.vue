@@ -7,7 +7,7 @@ import { LanguageSelect } from 'src/features/language-select'
 import { ThemeSelect } from 'src/features/theme-select'
 import { AppLogo, AppHeader } from 'src/shared/ui'
 
-import { AUTH_LAYOUT_I18N } from './i18n'
+import { AUTH_LAYOUT_TABS } from './constants'
 import type { IAuthLayoutProps } from './types'
 
 const props = defineProps<IAuthLayoutProps>()
@@ -33,35 +33,22 @@ const route = useRoute()
             ]"
           />
           <RouterLink
+            v-for="tab in AUTH_LAYOUT_TABS"
+            :key="tab.path"
             :aria-disabled="props.blockNavigation"
             :class="[
               'auth-layout__tab',
-              { 'auth-layout__tab--active': route.path === ROUTE_NAMES.authLogin },
+              { 'auth-layout__tab--active': route.path === tab.path },
               { 'auth-layout__tab--disabled': props.blockNavigation }
             ]"
             :tabindex="props.blockNavigation ? -1 : undefined"
-            :to="ROUTE_NAMES.authLogin"
+            :to="tab.path"
             @click.prevent="props.blockNavigation"
           >
             <AppHeader
-              :color="route.path === ROUTE_NAMES.authLogin ? 'accent-color' : 'text-color'"
-              :text="$t(AUTH_LAYOUT_I18N.login)"
-            />
-          </RouterLink>
-          <RouterLink
-            :aria-disabled="props.blockNavigation"
-            :class="[
-              'auth-layout__tab',
-              { 'auth-layout__tab--active': route.path === ROUTE_NAMES.authRegistration },
-              { 'auth-layout__tab--disabled': props.blockNavigation }
-            ]"
-            :tabindex="props.blockNavigation ? -1 : undefined"
-            :to="ROUTE_NAMES.authRegistration"
-            @click.prevent="props.blockNavigation"
-          >
-            <AppHeader
-              :color="route.path === ROUTE_NAMES.authRegistration ? 'accent-color' : 'text-color'"
-              :text="$t(AUTH_LAYOUT_I18N.registration)"
+              tag="h4"
+              :color="route.path === tab.path ? 'accent-color' : 'text-color'"
+              :text="$t(tab.label)"
             />
           </RouterLink>
         </div>

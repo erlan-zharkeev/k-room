@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { EMAIL_CODE_LENGTH } from 'global-shared'
-import { Button, InputOtp, InputText, Message } from 'primevue'
+import { NmorphButton, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
-import { useScreen } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N } from '../../../config/i18n/account-change-email-card'
 import { useSettingsChangeEmailCard } from '../../../model/account/use-settings-change-email-card'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { isMobile } = useScreen()
 const {
   currentEmail,
   emailNotChanged,
@@ -19,6 +16,7 @@ const {
   isValidateCodeDisabled,
   nextEmail,
   otpCode,
+  setOtpCode,
   sendEmailCode,
   validateEmailCode
 } = useSettingsChangeEmailCard()
@@ -33,35 +31,34 @@ const {
 
     <label class="settings-change-email-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.newEmail)" />
-      <InputText v-model.trim="nextEmail" autocomplete="email" fluid size="small" type="email" />
-      <Message v-if="emailNotChanged" severity="error" size="small" variant="simple">
-        {{ $t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailNotChanged) }}
-      </Message>
-      <Button
-        :aria-label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.sendCode)"
+      <NmorphTextInput v-model="nextEmail" :disabled="isEmailCodeSending || isEmailCodeValidating" />
+      <AppText
+        v-if="emailNotChanged"
+        tag="small"
+        color="warn-color"
+        :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailNotChanged)"
+      />
+      <NmorphButton
         class="settings-change-email-card__button"
         :disabled="isSendCodeDisabled"
-        :fluid="isMobile"
-        :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.sendCode)"
         :loading="isEmailCodeSending"
-        size="small"
-        type="button"
+        :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.sendCode)"
         @click="sendEmailCode"
       />
     </label>
 
     <label class="settings-change-email-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailCode)" />
-      <InputOtp v-model="otpCode" :length="EMAIL_CODE_LENGTH" integer-only size="small" />
-      <Button
-        :aria-label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.validateCode)"
+      <NmorphTextInput
+        :model-value="otpCode"
+        :disabled="isEmailCodeSending || isEmailCodeValidating"
+        @update:model-value="setOtpCode"
+      />
+      <NmorphButton
         class="settings-change-email-card__button"
         :disabled="isValidateCodeDisabled"
-        :fluid="isMobile"
-        :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.validateCode)"
         :loading="isEmailCodeValidating"
-        size="small"
-        type="button"
+        :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.validateCode)"
         @click="validateEmailCode"
       />
     </label>
@@ -74,7 +71,4 @@ const {
   gap: 8px;
 }
 
-.settings-change-email-card__button {
-  justify-self: start;
-}
 </style>

@@ -50,6 +50,12 @@ const { settings, changeTheme } = useThemeSelect()
   width: 100px;
 }
 
+.theme-select--compact {
+  .theme-select__option {
+    width: auto;
+  }
+}
+
 .theme-select {
   .nmorph-select-button--thick {
     --thick-component: 60px;

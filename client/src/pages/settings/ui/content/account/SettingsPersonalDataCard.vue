@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { Button, FileUpload, InputText, Message } from 'primevue'
+import { NmorphButton, NmorphFileUpload, NmorphIcon, NmorphIconCopy, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import { SETTINGS_ACCOUNT_AVATAR_ACCEPT, SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../../config/constants'
+import {
+  SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES,
+  SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
+  SETTINGS_ACCOUNT_AVATAR_MAX_MB
+} from '../../../config/constants'
 import { SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N } from '../../../config/i18n/account-personal-data-card'
 import { useSettingsPersonalDataCard } from '../../../model/account/use-settings-personal-data-card'
 import SettingsCard from '../../SettingsCard.vue'
@@ -18,6 +22,7 @@ const {
   accountNicknameError,
   isAccountSaveDisabled,
   isAccountSaving,
+  avatarUploadKey,
   copyUserId,
   copyUserNickname,
   resetAccountAvatar,
@@ -45,66 +50,68 @@ const {
         <template #title>
           <div class="settings-personal-data-card__profile-title">
             <AppHeader tag="h5" truncate :text="displayedNickname" />
-            <Button
+            <NmorphButton
               class="settings-personal-data-card__copy-button"
-              :aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.copyNickname)"
-              icon="pi pi-copy"
-              size="small"
-              text
-              type="button"
+              style-type="transparent"
+              :disabled="isAccountSaving"
               @click="copyUserNickname"
-            />
+            >
+              <template #icon>
+                <NmorphIcon>
+                  <NmorphIconCopy />
+                </NmorphIcon>
+              </template>
+            </NmorphButton>
           </div>
         </template>
         <template #description>
           <div v-if="user.id" class="settings-personal-data-card__profile-description">
             <AppText tag="small" :text="displayedUserId" />
-            <Button
+            <NmorphButton
               class="settings-personal-data-card__copy-button"
-              :aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.copyId)"
-              icon="pi pi-copy"
-              size="small"
-              text
-              type="button"
+              height="thin"
+              style-type="transparent"
+              :disabled="isAccountSaving"
               @click="copyUserId"
-            />
+            >
+              <template #icon>
+                <NmorphIcon>
+                  <NmorphIconCopy />
+                </NmorphIcon>
+              </template>
+            </NmorphButton>
           </div>
         </template>
       </AppProfileBasicData>
     </div>
 
     <div class="settings-personal-data-card__actions">
-      <FileUpload
-        mode="basic"
-        auto
-        :accept="SETTINGS_ACCOUNT_AVATAR_ACCEPT"
-        :max-file-size="SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE"
+      <NmorphFileUpload
+        :key="avatarUploadKey"
+        :allowed-types="SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES"
+        :button-text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhoto)"
+        :disabled="isAccountSaving"
         :multiple="false"
-        :choose-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhoto)"
         class="settings-personal-data-card__file-button"
-        :choose-button-props="{
-          text: true,
-          size: 'small'
-        }"
-        @select="uploadAccountAvatar"
-      >
-        <template #filelabel />
-      </FileUpload>
-      <Button
-        :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.resetPhoto)"
-        size="small"
-        text
-        type="button"
+        @update:model-value="uploadAccountAvatar"
+      />
+      <NmorphButton
+        style-type="transparent"
+        :disabled="isAccountSaving"
+        :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.resetPhoto)"
         @click="resetAccountAvatar"
       />
     </div>
+    <AppText
+      tag="small"
+      color="semi-contrast-color"
+      :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL, SETTINGS_ACCOUNT_AVATAR_MAX_MB)"
+    />
 
     <label class="settings-personal-data-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nickname)" />
-      <InputText v-model.trim="accountNickname" autocomplete="nickname" fluid size="small" />
-      <Message v-if="accountNicknameError" severity="error" size="small" variant="simple">
-        {{ accountNicknameError }}
-      </Message>
+      <NmorphTextInput v-model="accountNickname" :disabled="isAccountSaving" />
+      <AppText v-if="accountNicknameError" tag="small" color="warn-color" :text="accountNicknameError" />
     </label>
   </SettingsCard>
 </template>
@@ -125,7 +132,8 @@ const {
 
 .settings-personal-data-card__profile-title {
   display: flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
 }
 
@@ -140,13 +148,5 @@ const {
 
 .settings-personal-data-card__copy-button {
   flex: 0 0 auto;
-}
-
-.settings-personal-data-card__file-button {
-  display: block;
-}
-
-.settings-personal-data-card__file-button :deep(.p-button) {
-  min-height: 36px;
 }
 </style>

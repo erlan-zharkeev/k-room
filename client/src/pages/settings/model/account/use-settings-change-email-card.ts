@@ -20,6 +20,10 @@ export const useSettingsChangeEmailCard = () => {
   const isSendCodeDisabled = computed(() => !user.value.id || !normalizedNextEmail.value || emailNotChanged.value)
   const isValidateCodeDisabled = computed(() => isSendCodeDisabled.value || otpCode.value.length !== EMAIL_CODE_LENGTH)
 
+  const setOtpCode = (value: string) => {
+    otpCode.value = value.replace(/\D/g, '').slice(0, EMAIL_CODE_LENGTH)
+  }
+
   const sendEmailCode = async () => {
     if (isSendCodeDisabled.value) return
 
@@ -60,6 +64,7 @@ export const useSettingsChangeEmailCard = () => {
     isValidateCodeDisabled,
     nextEmail,
     otpCode,
+    setOtpCode,
     sendEmailCode,
     validateEmailCode
   }

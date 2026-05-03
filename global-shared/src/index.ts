@@ -53,13 +53,16 @@ export type { I18nValueConstraintType, I18nRecordConstraintType } from './langua
 export {
   MEDIA_BUCKET_NAMES,
   MEDIA_KIND_ACCEPT_MAP,
+  MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
   MEDIA_MB_IN_BYTES,
+  MEDIA_UPLOAD_TYPE_LABEL_MAP,
   MEDIA_VALIDATION_OPTIONS_MAP
 } from './media/constants'
 export type {
   MediaBucketNameType,
   IMediaValidationOptions,
   MediaKindType,
+  MediaUploadType,
   IImageObject,
   MediaFileValueType
 } from './media/types'
