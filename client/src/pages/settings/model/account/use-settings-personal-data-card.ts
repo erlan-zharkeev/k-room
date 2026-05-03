@@ -6,7 +6,6 @@ import {
   isNicknameValid,
   normalizeNickname
 } from 'global-shared'
-import type { FileUploadSelectEvent } from 'primevue/fileupload'
 import { safeParse } from 'valibot'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
@@ -14,6 +13,8 @@ import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
+
+import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants'
 
 export const useSettingsPersonalDataCard = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
@@ -25,6 +26,7 @@ export const useSettingsPersonalDataCard = () => {
   const accountAvatarPreviewUrl = ref('')
   const accountAvatarWasReset = ref(false)
   const isAccountSaving = ref(false)
+  const avatarUploadKey = ref(0)
   const accountNicknameSchema = createUpdateUserDataSchema(createValidationMessages(t))
 
   let accountAvatarPreviewObjectUrl: string | undefined
@@ -61,22 +63,41 @@ export const useSettingsPersonalDataCard = () => {
     accountAvatarPreviewUrl.value = ''
   }
 
-  const uploadAccountAvatar = ({ files }: FileUploadSelectEvent) => {
-    const file = Array.isArray(files) ? files[0] : undefined
+  const resetAvatarUpload = () => {
+    avatarUploadKey.value += 1
+  }
 
-    if (!file) return
+  const uploadAccountAvatar = (files: File[]) => {
+    const file = files[files.length - 1]
+
+    if (!file) {
+      accountAvatarFile.value = undefined
+      accountAvatarWasReset.value = false
+      clearAccountAvatarPreview()
+      resetAvatarUpload()
+
+      return
+    }
+
+    if (file.size > SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE) {
+      resetAvatarUpload()
+
+      return
+    }
 
     clearAccountAvatarPreview()
     accountAvatarFile.value = file
     accountAvatarWasReset.value = false
     accountAvatarPreviewObjectUrl = URL.createObjectURL(file)
     accountAvatarPreviewUrl.value = accountAvatarPreviewObjectUrl
+    resetAvatarUpload()
   }
 
   const resetAccountAvatar = () => {
     accountAvatarFile.value = undefined
     accountAvatarWasReset.value = true
     clearAccountAvatarPreview()
+    resetAvatarUpload()
   }
 
   const copyUserId = async () => {
@@ -140,6 +161,7 @@ export const useSettingsPersonalDataCard = () => {
       accountAvatarFile.value = undefined
       accountAvatarWasReset.value = false
       clearAccountAvatarPreview()
+      resetAvatarUpload()
     } finally {
       isAccountSaving.value = false
     }
@@ -165,6 +187,7 @@ export const useSettingsPersonalDataCard = () => {
     accountNicknameError,
     isAccountSaveDisabled,
     isAccountSaving,
+    avatarUploadKey,
     copyUserId,
     copyUserNickname,
     resetAccountAvatar,

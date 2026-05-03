@@ -1,4 +1,10 @@
-import { MEDIA_KIND_ACCEPT_MAP, MEDIA_MB_IN_BYTES, MEDIA_VALIDATION_OPTIONS_MAP } from 'global-shared'
+import {
+  MEDIA_KIND_ACCEPT_MAP,
+  MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
+  MEDIA_MB_IN_BYTES,
+  MEDIA_UPLOAD_TYPE_LABEL_MAP,
+  MEDIA_VALIDATION_OPTIONS_MAP
+} from 'global-shared'
 
 import { MAIN_PAGE_ROUTES } from 'src/shared/config'
 
@@ -33,8 +39,12 @@ export const DEFAULT_SETTINGS_CONTENT_ID = SETTINGS_CONTENT_IDS[0]
 const settingsAccountAvatarValidation = MEDIA_VALIDATION_OPTIONS_MAP.avatar
 const settingsWallpaperValidation = MEDIA_VALIDATION_OPTIONS_MAP.image
 
-export const SETTINGS_ACCOUNT_AVATAR_ACCEPT =
-  MEDIA_KIND_ACCEPT_MAP[settingsAccountAvatarValidation.supportedKindMediaType]
+export const SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES =
+  MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP[settingsAccountAvatarValidation.supportedKindMediaType]
+export const SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL = SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES.map(
+  (type) => MEDIA_UPLOAD_TYPE_LABEL_MAP[type]
+).join(', ')
+export const SETTINGS_ACCOUNT_AVATAR_MAX_MB = settingsAccountAvatarValidation.maxMb
 export const SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE = settingsAccountAvatarValidation.maxMb * MEDIA_MB_IN_BYTES
 export const SETTINGS_WALLPAPER_ACCEPT = MEDIA_KIND_ACCEPT_MAP[settingsWallpaperValidation.supportedKindMediaType]
 export const SETTINGS_WALLPAPER_MAX_FILE_SIZE = settingsWallpaperValidation.maxMb * MEDIA_MB_IN_BYTES

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Message, Password } from 'primevue'
+import { NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -9,13 +9,11 @@ import SettingsCard from '../../SettingsCard.vue'
 
 const {
   changePassword,
-  currentPassword,
+  formData,
   isPasswordChanging,
   isPasswordSubmitDisabled,
-  nextPassword,
   nextPasswordError,
-  passwordMismatch,
-  repeatPassword
+  passwordMismatch
 } = useSettingsChangePasswordCard()
 </script>
 
@@ -28,40 +26,50 @@ const {
     :on-button-click="changePassword"
     :title="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.changePassword)"
   >
-    <label class="settings-change-password-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.currentPassword)" />
-      <Password
-        v-model="currentPassword"
-        :feedback="false"
-        autocomplete="current-password"
-        fluid
-        size="small"
-        toggle-mask
+    <NmorphForm :value="formData" @submit.prevent="changePassword">
+      <NmorphFormItem
+        id="currentPassword"
+        :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.currentPassword)"
+        :show-validation-icon="false"
+      >
+        <NmorphTextInput
+          v-model="formData.currentPassword.value"
+          :disabled="isPasswordChanging"
+          type-password
+        />
+      </NmorphFormItem>
+
+      <NmorphFormItem
+        id="nextPassword"
+        :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.newPassword)"
+        :show-validation-icon="false"
+      >
+        <NmorphTextInput
+          v-model="formData.nextPassword.value"
+          :disabled="isPasswordChanging"
+          type-password
+        />
+        <AppText v-if="nextPasswordError" tag="small" color="warn-color" :text="nextPasswordError" />
+      </NmorphFormItem>
+
+      <NmorphFormItem
+        id="repeatPassword"
+        :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.confirmPassword)"
+        :show-validation-icon="false"
+      >
+        <NmorphTextInput
+          v-model="formData.repeatPassword.value"
+          :disabled="isPasswordChanging"
+          type-password
+        />
+      </NmorphFormItem>
+
+      <AppText
+        v-if="passwordMismatch"
+        tag="small"
+        color="warn-color"
+        :text="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.passwordMismatch)"
       />
-    </label>
-
-    <label class="settings-change-password-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.newPassword)" />
-      <Password v-model="nextPassword" autocomplete="new-password" fluid size="small" toggle-mask />
-      <Message v-if="nextPasswordError" severity="error" size="small" variant="simple">
-        {{ nextPasswordError }}
-      </Message>
-    </label>
-
-    <label class="settings-change-password-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.confirmPassword)" />
-      <Password v-model="repeatPassword" :feedback="false" autocomplete="new-password" fluid size="small" toggle-mask />
-    </label>
-
-    <Message v-if="passwordMismatch" severity="error" size="small" variant="simple">
-      {{ $t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.passwordMismatch) }}
-    </Message>
+    </NmorphForm>
   </SettingsCard>
 </template>
-
-<style lang="scss">
-.settings-change-password-card__field {
-  display: grid;
-  gap: 8px;
-}
-</style>

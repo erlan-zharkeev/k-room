@@ -25,7 +25,12 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 
     <div v-if="hasFooter" class="settings-card__footer">
       <slot name="footer">
-        <NmorphButton :text="props.buttonLabel" :loading="buttonLoading" @click="props.onButtonClick" />
+        <NmorphButton
+          :text="props.buttonLabel"
+          :disabled="buttonDisabled"
+          :loading="buttonLoading"
+          @click="props.onButtonClick"
+        />
       </slot>
     </div>
   </div>
