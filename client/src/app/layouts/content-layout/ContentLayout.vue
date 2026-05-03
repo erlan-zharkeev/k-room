@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Divider } from 'primevue'
+import { NmorphDivider, NmorphButton, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -21,29 +21,43 @@ const handleBack = () => {
 
 <template>
   <section class="content-layout">
-    <div class="app-scroll-block">
-      <div class="content-layout__header">
-        <Button v-if="isMobile" icon="pi pi-angle-left" size="small" severity="secondary" @click="handleBack" />
-        <AppHeader
-          v-if="props.titleKey"
-          :text="$t(CONTENT_TITLE[props.titleKey])"
-          class="content-layout__header-text"
-        />
-      </div>
-      <Divider />
-      <div class="content-layout__content">
-        <slot />
-      </div>
-    </div>
-  </section>
+    <div class="content-layout__header">
+      <NmorphButton v-if="isMobile" @click="handleBack"/>
+    <AppHeader
+      v-if="props.titleKey"
+      :text="$t(CONTENT_TITLE[props.titleKey])"
+      class="content-layout__header-text"
+    />
+  </div>
+  <NmorphDivider />
+  <div class="content-layout__content nmorph--shadow-inset">
+    <NmorphScroll height="100%">
+      <slot />
+    </NmorphScroll>
+  </div>
+</section>
 </template>
 
 <style lang="scss">
+.content-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
 .content-layout__header {
   display: flex;
-  gap: 4px;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.content-layout__content {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  // padding: 8px;
 }
 
 .content-layout__header-text {

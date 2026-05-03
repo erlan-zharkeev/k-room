@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { NmorphBadge, NmorphButton, NmorphIconExit, NmorphIcon,  } from '@nmorph/nmorph-ui-kit'
 import { useTimeoutFn } from '@vueuse/core'
 import { formatNickname } from 'global-shared'
-import { Button } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
 import { socketStatus } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
-import { AppProfileBasicData, AppTag } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import { MAIN_TOP_BAR_OFFLINE_STATUS_DELAY_MS } from '../config/constants'
 import { MAIN_TOP_BAR_I18N } from '../config/i18n'
@@ -21,7 +21,6 @@ const displayedSocketStatus = ref('')
 const socketStatusValue = computed(() => {
   if (socketStatus.isConnected.value) return 'online'
   if (socketStatus.isReconnecting.value) return 'reconnecting'
-
   return 'offline'
 })
 
@@ -36,11 +35,11 @@ const { start: startOfflineStatusTimer, stop: stopOfflineStatusTimer } = useTime
 const socketTag = computed(() => {
   switch (displayedSocketStatus.value) {
     case 'online':
-      return { severity: 'success' as const, value: t(MAIN_TOP_BAR_I18N.online) }
+      return { color: 'var(--nmorph-success-color)' as const, value: t(MAIN_TOP_BAR_I18N.online) }
     case 'reconnecting':
-      return { severity: 'warn' as const, value: t(MAIN_TOP_BAR_I18N.reconnecting) }
+      return { color: 'var(--nmorph-warn-color)' as const, value: t(MAIN_TOP_BAR_I18N.reconnecting) }
     case 'offline':
-      return { severity: 'danger' as const, value: t(MAIN_TOP_BAR_I18N.offline) }
+      return { color: 'var(--nmorph-error-color)' as const, value: t(MAIN_TOP_BAR_I18N.offline) }
     default:
       return null
   }
@@ -72,26 +71,15 @@ watch(
       :title="formatNickname(user.nickname)"
     >
       <template #description>
-        <AppTag
-          class="main-top-bar__status-tag"
-          v-if="socketTag"
-          :severity="socketTag.severity"
-          :value="socketTag.value"
-        />
+        <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" />
       </template>
     </AppProfileBasicData>
-    <div class="main-top-bar__actions">
-      <Button
-        :aria-label="t(MAIN_TOP_BAR_I18N.logout)"
-        :pt="{
-          root: { class: ['app-hoverless-btn'] }
-        }"
-        :loading="isLogoutLoading"
-        size="large"
-        text
-        icon="pi pi-sign-out"
-        @click="logout"
-      />
+    <div class="main-top-bar__actions nmorph--shadow-inset">
+      <NmorphButton @click="logout" :loading="isLogoutLoading">
+        <template #icon>
+          <NmorphIconExit class="main-top-bar__exit-btn" />
+        </template>
+      </NmorphButton>
     </div>
   </header>
 </template>
@@ -110,6 +98,7 @@ watch(
 }
 
 .main-top-bar__actions {
-  flex: 0 0 auto;
+  margin-right: 8px;
+  padding: 8px;
 }
 </style>

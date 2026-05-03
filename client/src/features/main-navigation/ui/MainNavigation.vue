@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { NmorphBadge, NmorphIcon, NmorphRadio } from '@nmorph/nmorph-ui-kit'
 import { isString } from 'lodash'
-import { Button, OverlayBadge } from 'primevue'
-import { computed, h, type FunctionalComponent } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -21,59 +21,40 @@ const selectedSettingsId = computed(() => {
 
   return isString(settingsId) && settingsId ? settingsId : 'account'
 })
-
-const NavBadge: FunctionalComponent<{ value?: number }> = ({ value }, { slots }) =>
-  value ? h(OverlayBadge, { value, severity: 'danger' }, slots) : slots.default?.()
 </script>
 
 <template>
-  <nav class="main-navigation" :class="{ 'main-navigation--footer': props.footer }">
+  <nav class="main-navigation nmorph--shadow-inset" :class="{ 'main-navigation--footer': props.footer }">
     <RouterLink
       v-for="item in MAIN_PAGE_NAV_ITEMS"
       :key="item.id"
       :to="item.id === 'settings' ? `${MAIN_PAGE_ROUTES.settings}/${selectedSettingsId}` : item.path"
       custom
-      v-slot="{ href, navigate, isExactActive }"
+      v-slot="{ navigate, isExactActive }"
     >
-      <NavBadge :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)">
-        <Button
-          :href="href"
-          :aria-label="$t(item.label)"
-          :pt="{
-            root: { class: ['app-hoverless-btn'] }
-          }"
-          as="a"
-          :text="!isNavBtnActive(item.id, isExactActive, route.path)"
-          size="large"
-          :icon="item.icon"
-          @click="navigate"
-        />
-      </NavBadge>
+      <NmorphBadge :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)" :offset-x="12" :offset-y="20">
+        <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)">
+          <template #label>
+            <NmorphIcon>
+              <component :is="item.icon" />
+            </NmorphIcon>
+          </template>
+        </NmorphRadio>
+      </NmorphBadge>
     </RouterLink>
   </nav>
 </template>
 
 <style lang="scss">
 .main-navigation {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-
-  margin-left: 1px;
+  display: grid;
+  gap: 16px;
   margin-block: auto;
+  padding: 8px;
 
-  .p-overlaybadge .p-badge {
-    transform: translate(15%, -50%);
-    scale: 0.9;
-
-    @include screen-mobile {
-      transform: translate(30%, -20%);
-    }
-  }
 
   @include screen-mobile {
-    margin-left: 0;
+    // margin-left: 0;
   }
 }
 

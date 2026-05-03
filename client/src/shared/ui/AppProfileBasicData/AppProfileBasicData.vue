@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { NmorphAvatar } from '@nmorph/nmorph-ui-kit'
 import { liveQuery } from 'dexie'
-import { Avatar } from 'primevue'
 import { computed, ref, watch } from 'vue'
 
 import { db } from 'src/shared/lib'
@@ -52,14 +52,7 @@ watch(
 
 <template>
   <div class="app-profile-basic-data">
-    <Avatar
-      class="app-profile-basic-data__avatar"
-      shape="square"
-      size="large"
-      :image="imageSrc"
-      :label="imageSrc ? undefined : props.title.charAt(0).toUpperCase()"
-      :alt="props.imageAlt ?? props.title"
-    />
+    <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape='square' ></NmorphAvatar>
     <div class="app-profile-basic-data__content">
       <div class="app-profile-basic-data__title">
         <slot name="title">
@@ -78,7 +71,6 @@ watch(
   display: flex;
   gap: 10px;
   min-width: 0;
-  height: 48px;
 }
 
 .app-profile-basic-data__content {
@@ -98,10 +90,5 @@ watch(
   display: flex;
   align-items: flex-start;
   min-width: 0;
-}
-
-.app-profile-basic-data__avatar {
-  overflow: hidden;
-  border-radius: 8px;
 }
 </style>

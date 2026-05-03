@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NmorphSelectButton } from '@nmorph/nmorph-ui-kit'
 import { isNumber } from 'lodash'
 import { FileUpload, SelectButton, Button, Slider } from 'primevue'
 import { computed } from 'vue'
@@ -23,7 +24,6 @@ import { useWallpaperSettings } from '../../model/theme/use-wallpaper-settings'
 import SettingsCard from '../SettingsCard.vue'
 
 const { t } = useI18n()
-const { isMobile } = useScreen()
 const { setWallpaperAppearance, setAngle, setScale, setDarkness, uploadWallpaper, resetWallpaper } =
   useWallpaperSettings()
 const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
@@ -31,13 +31,6 @@ const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 const visibilityOptions = computed(() =>
   SETTINGS_WALLPAPER_VISIBILITY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))
 )
-
-const selectButtonPt = computed(() => ({
-  root: {
-    class: 'settings-wallpaper-card__visibility-select',
-    'aria-label': t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)
-  }
-}))
 </script>
 
 <template>
@@ -45,21 +38,11 @@ const selectButtonPt = computed(() => ({
     <div class="settings-wallpaper-card">
       <div class="settings-wallpaper-card__visibility settings-wallpaper-card__input-element">
         <AppText :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
-        <SelectButton
-          :fluid="isMobile"
-          :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
-          :option-label="'label'"
-          :option-value="'value'"
+        <NmorphSelectButton
           :options="visibilityOptions"
-          :pt="selectButtonPt"
-          size="small"
-          :allow-empty="false"
+          :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
           @update:model-value="($event) => setWallpaperAppearance($event === 'show')"
-        >
-          <template #option="{ option }">
-            <AppHeader tag="h5" :text="option.label" />
-          </template>
-        </SelectButton>
+        />
       </div>
 
       <div class="settings-wallpaper-card__additional" v-if="isSelectedThemeCustom">
