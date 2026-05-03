@@ -11,11 +11,3 @@ import SettingsStorageUsageCard from './storage/SettingsStorageUsageCard.vue'
     <SettingsStorageClearCard />
   </div>
 </template>
-
-<style lang="scss">
-.settings-storage-content {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-</style>
