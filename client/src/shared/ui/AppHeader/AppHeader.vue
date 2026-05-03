@@ -48,7 +48,11 @@ h5.app-header {
 .app-header {
   margin-top: 0;
   margin-bottom: 0;
-  color: var(--p-text-hover-muted-color);
+  color: var(--nmorph-text-color);
+}
+
+.app-header--text-color {
+  color: var(--nmorph-text-color);
 }
 
 .app-header--bold {
@@ -63,18 +67,18 @@ h5.app-header {
 }
 
 .app-header--semi-contrast-color {
-  color: var(--p-text-muted-color);
+  color: var(--nmorph-semi-contrast-text-color);
 }
 
 .app-header--contrast-color {
-  color: var(--p-text-color);
+  color: var(--nmorph-contrast-text-color);
 }
 
 .app-header--accent-color {
-  color: var(--p-primary-color);
+  color: var(--nmorph-accent-color);
 }
 
 .app-header--warn-color {
-  color: var(--p-yellow-500);
+  color: var(--nmorph-warn-color);
 }
 </style>

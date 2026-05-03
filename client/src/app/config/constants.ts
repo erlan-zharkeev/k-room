@@ -1,10 +1,6 @@
 export const MIN_APP_VIEWPORT_WIDTH_PX = 320
 export const MIN_APP_VIEWPORT_HEIGHT_PX = 350
 
-export const NMORPH_DATA_THEME_ATTRIBUTE = 'nmorph-data-theme'
-export const NMORPH_COLOR_SUFFIX = '-color'
-export const NMORPH_CSS_VARIABLE_PREFIX = '--nmorph-'
-
 export const DEFAULT_NMORPH_THEME_STATUS_COLORS = {
   info: '#d4e5edbb',
   infoText: '#506c80',

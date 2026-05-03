@@ -46,23 +46,27 @@ small.app-text {
 .app-text {
   margin-top: 0;
   margin-bottom: 0;
-  color: var(--p-text-hover-muted-color);
+  color: var(--nmorph-text-color);
+}
+
+.app-text--text-color {
+  color: var(--nmorph-text-color);
 }
 
 .app-text--semi-contrast-color {
-  color: var(--p-text-muted-color);
+  color: var(--nmorph-semi-contrast-text-color);
 }
 
 .app-text--contrast-color {
-  color: var(--p-text-color);
+  color: var(--nmorph-contrast-text-color);
 }
 
 .app-text--accent-color {
-  color: var(--p-primary-color);
+  color: var(--nmorph-accent-color);
 }
 
 .app-text--warn-color {
-  color: var(--p-yellow-500);
+  color: var(--nmorph-warn-color);
 }
 
 .app-text--bold {

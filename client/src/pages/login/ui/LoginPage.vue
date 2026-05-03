@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphButton,
+  NmorphForm,
+  NmorphFormItem,
+  NmorphIcon,
+  NmorphIconGoogle,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
@@ -19,7 +26,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 
 <template>
   <NmorphForm ref="formRef" :value="formData" class="login-page" @submit.prevent="submit">
-    <NmorphFormItem id="login" class="login-page__field" static-error-box-space>
+    <NmorphFormItem id="login" class="login-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.login.value"
         class="login-page__input"
@@ -30,7 +37,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
       />
     </NmorphFormItem>
 
-    <NmorphFormItem id="password" class="login-page__field" static-error-box-space>
+    <NmorphFormItem id="password" class="login-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.password.value"
         class="login-page__input"
@@ -49,31 +56,35 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     />
     <div class="login-page__action-btns">
       <NmorphButton
-      class="login-page__button"
-      :disabled="isSubmitDisabled || !isFormValid"
-      fill
-      :loading="isLoading"
-      :text="$t(LOGIN_FORM_I18N.submit)"
-      type="submit"
-    />
+        class="login-page__button"
+        :disabled="isSubmitDisabled || !isFormValid"
+        fill
+        :loading="isLoading"
+        :text="$t(LOGIN_FORM_I18N.submit)"
+        type="submit"
+      />
 
-    <NmorphButton
-      class="login-page__button"
-      :disabled="isFormDisabled"
-      fill
-      :loading="isFirebaseLoginLoading"
-      :text="$t(LOGIN_FORM_I18N.withGoogle)"
-      type="button"
-      @click="onFirebaseLogin('google')"
-    >
-      <i v-if="!isFirebaseLoginLoading" class="pi pi-google login-page__google-icon" aria-hidden="true" />
-    </NmorphButton>
+      <NmorphButton
+        class="login-page__button"
+        :disabled="isFormDisabled"
+        fill
+        :loading="isFirebaseLoginLoading"
+        type="button"
+        @click="onFirebaseLogin('google')"
+      >
+        <div class="login-page__button__google">
+          <NmorphIcon>
+            <NmorphIconGoogle />
+          </NmorphIcon>
+          <AppText :text="$t(LOGIN_FORM_I18N.withGoogle)" />
+        </div>
+      </NmorphButton>
 
-    <div class="login-page__forgot">
-      <RouterLink :to="ROUTE_NAMES.passwordRecovery">
-        <AppText :text="$t(LOGIN_FORM_I18N.forgotPassword)" color="accent-color" />
-      </RouterLink>
-    </div>
+      <div class="login-page__forgot">
+        <RouterLink :to="ROUTE_NAMES.passwordRecovery">
+          <AppText :text="$t(LOGIN_FORM_I18N.forgotPassword)" color="accent-color" />
+        </RouterLink>
+      </div>
     </div>
   </NmorphForm>
 </template>
@@ -84,15 +95,8 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
   gap: 12px;
 }
 
-.login-page__input,
-.login-page__button {
-  width: 100%;
-}
-
 .login-page__google-icon {
   margin-right: 8px;
-  font-size: 14px;
-  color: var(--nmorph-white-color);
 }
 
 .login-page__action-btns {
@@ -102,5 +106,11 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 
 .login-page__forgot {
   text-align: right;
+}
+
+.login-page__button__google {
+  display: flex;
+  gap: 3px;
+  align-items: center;
 }
 </style>

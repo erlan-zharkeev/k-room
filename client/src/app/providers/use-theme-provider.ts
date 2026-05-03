@@ -5,20 +5,18 @@ import { useSettings } from 'src/entities/setting'
 import { useThemeSelect } from 'src/features/theme-select'
 import { SYSTEM_THEME_QUERY } from 'src/shared/config'
 
-import { syncNmorphTheme } from '../lib/nmorph'
-
 export const useThemeProvider = () => {
-  const { settings, isSelectedThemeSystem, effectiveTheme } = useSettings()
+  const { settings, isSelectedThemeSystem } = useSettings()
   const { changeSystemTheme } = useThemeSelect()
   const { theme: nmorphTheme } = useNmorph()
 
   const applyAppearanceTheme = () => {
-    const activeTheme = settings.value.appearance.selectedTheme === 'system'
-      ? settings.value.appearance.systemTheme
-      : settings.value.appearance.selectedTheme
+    const activeTheme =
+      settings.value.appearance.selectedTheme === 'system'
+        ? settings.value.appearance.systemTheme
+        : settings.value.appearance.selectedTheme
 
     nmorphTheme.setTheme(activeTheme)
-    syncNmorphTheme(activeTheme, settings.value.appearance.themes[activeTheme].colorSchema)
   }
 
   const updateSystemTheme = () => {
@@ -50,14 +48,6 @@ export const useThemeProvider = () => {
         applyAppearanceTheme()
       }
     }
-  )
-
-  watch(
-    () => effectiveTheme.value.colorSchema,
-    () => {
-      applyAppearanceTheme()
-    },
-    { deep: true }
   )
 
   onBeforeUnmount(() => {
