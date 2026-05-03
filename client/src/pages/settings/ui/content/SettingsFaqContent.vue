@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, InputText } from 'primevue'
+import { NmorphButton, NmorphDivider, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -13,12 +13,13 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 <template>
   <div class="settings-faq-content">
     <SettingsCard :title="$t(SETTINGS_PAGE_FAQ_I18N.faq)">
-      <InputText v-model.trim="searchQuery" fluid size="small" :placeholder="$t(SETTINGS_PAGE_FAQ_I18N.faqSearch)" />
+      <NmorphTextInput v-model.trim="searchQuery" clearable :placeholder="$t(SETTINGS_PAGE_FAQ_I18N.faqSearch)" />
 
       <div v-if="filteredItems.length" class="settings-faq-content__list">
         <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
           <AppText color="contrast-color" :text="$t(item.question)" />
           <AppText :text="$t(item.answer)" />
+          <NmorphDivider class="settings-faq-content__list-divider" />
         </div>
       </div>
 
@@ -26,24 +27,20 @@ const { searchQuery, filteredItems } = useSettingsFaq()
         <AppText :text="$t(SETTINGS_PAGE_FAQ_I18N.faqNoResults)" />
       </div>
 
-      <Button :label="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" size="small" type="button" />
+      <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" type="button" />
     </SettingsCard>
   </div>
 </template>
 
 <style lang="scss">
-.settings-faq-content__list {
-  display: grid;
-  gap: 12px;
-}
-
 .settings-faq-content__item {
   display: grid;
   gap: 4px;
-
-  padding: 10px 12px;
+  padding: 12px;
   border-radius: 6px;
+}
 
-  background: var(--app-content-background);
+.settings-faq-content__list-divider {
+  margin-top: 8px;
 }
 </style>

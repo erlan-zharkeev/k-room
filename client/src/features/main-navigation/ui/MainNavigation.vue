@@ -9,6 +9,7 @@ import { useInfoNotification } from 'src/entities/info-notification'
 import { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 
+
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 const props = defineProps<{ footer?: boolean }>()
 
