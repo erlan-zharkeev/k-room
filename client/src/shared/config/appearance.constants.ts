@@ -18,29 +18,29 @@ const SHARED_THEME_COLORS = {
 } as const
 
 export const DARK_COLOR_SCHEMA = {
-  main: '#1c1c1c',
-  darkShade: '#0e0e0e',
-  lightShade: '#2a2a2a',
-  text: '#9eabbc',
-  accent: ACCENT_COLOR,
-  focusText: '#f4f7fb',
-  placeholderText: '#c8d0dc',
-  semiContrastText: '#c8d0dc',
-  contrastText: '#f4f7fb',
+  main: '#1c1f21',
+  darkShade: '#0f1112',
+  lightShade: '#292d30',
+  text: '#778288',
+  accent: '#006cb6',
+  focusText: '#ffffff',
+  placeholderText: '#575757',
+  semiContrastText: '#9caab0',
+  contrastText: '#c3cdd1',
   gray: '#c8d0dc',
   ...SHARED_THEME_COLORS
 } as const satisfies IColorSchema
 
 export const LIGHT_COLOR_SCHEMA = {
-  main: '#cfcfcf',
-  darkShade: '#b6b6b6',
-  lightShade: '#e8e8e8',
-  text: '#6f6f6f',
-  accent: ACCENT_COLOR,
-  focusText: '#000000',
-  placeholderText: '#656565',
-  semiContrastText: '#656565',
-  contrastText: '#000000',
+  darkShade: '#c8c9ca',
+  main: '#e9ecec',
+  lightShade: '#fdfdfd',
+  text: '#687b9e',
+  accent: '#4a90e2',
+  focusText: '#ffffff',
+  placeholderText: '#c1c9cf',
+  semiContrastText: '#8a9dc0',
+  contrastText: '#b4c4de',
   gray: '#656565',
   ...SHARED_THEME_COLORS
 } as const satisfies IColorSchema
