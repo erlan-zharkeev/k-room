@@ -11,6 +11,7 @@ import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { useSystem } from 'src/entities/system'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../config/i18n'
@@ -22,6 +23,11 @@ const { captchaRequired, captchaResetKey, captchaToken, formData, formRef, isFor
 const isFormDisabled = computed(() => isLoading.value || isFirebaseLoginLoading.value)
 const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
 const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
+const { hasInteracted } = useSystem()
+const isSubmitBtnDisabled = computed(() => {
+  if (!hasInteracted.value) return false
+  else return isSubmitDisabled.value || !isFormValid
+})
 </script>
 
 <template>
@@ -34,7 +40,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.loginPlaceholder)"
         clearable
-        @on-enter="submit"
       />
     </NmorphFormItem>
 
@@ -46,7 +51,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.passwordPlaceholder)"
         type-password
-        @on-enter="submit"
       />
     </NmorphFormItem>
 
@@ -59,7 +63,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     <div class="login-page__action-btns">
       <NmorphButton
         class="login-page__button"
-        :disabled="isSubmitDisabled || !isFormValid"
+        :disabled="isSubmitBtnDisabled"
         fill
         :loading="isLoading"
         :text="$t(LOGIN_FORM_I18N.submit)"

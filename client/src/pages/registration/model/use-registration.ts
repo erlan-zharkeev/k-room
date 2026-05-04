@@ -1,6 +1,7 @@
 import type { INmorphFromDataExpose, NmorphFormValueType } from '@nmorph/nmorph-ui-kit'
 import {
   AUTH_ENDPOINTS,
+  NON_EMPTY_PATTERN,
   ROUTE_NAMES,
   createValidationMessages,
   normalizeNickname,
@@ -20,7 +21,6 @@ import {
   NICKNAME_MAX_LENGTH_PATTERN,
   NICKNAME_MIN_LENGTH_PATTERN,
   NICKNAME_PATTERN,
-  NON_EMPTY_PATTERN,
   PASSWORD_MIN_LENGTH_PATTERN,
   PASSWORD_NO_SPACES_PATTERN,
   PASSWORD_ONLY_LATIN_PATTERN,

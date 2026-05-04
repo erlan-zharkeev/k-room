@@ -5,9 +5,11 @@ import { EMAIL_CODE_LENGTH } from '../codes/constants'
 import { providers } from '../shared/constants'
 import { normalizeNickname } from '../user/lib/nickname'
 
+import { NON_EMPTY_PATTERN } from './constants'
 import type { ValidationMessagesType } from './types'
 
-const requiredStringSchema = (message: string) => v.pipe(v.string(message), v.trim(), v.nonEmpty(message))
+const requiredStringSchema = (message: string) =>
+  v.pipe(v.string(message), v.regex(NON_EMPTY_PATTERN, message), v.trim())
 
 const captchaTokenSchema = (messages: ValidationMessagesType) =>
   v.optional(requiredStringSchema(messages.fieldIsRequired))
