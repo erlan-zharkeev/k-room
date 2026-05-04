@@ -1,6 +1,11 @@
 import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
-import { AUTH_ENDPOINTS, type IAuthLoginPayload, type ILoginResponse } from 'global-shared'
-import { createValidationMessages } from 'global-shared'
+import {
+  AUTH_ENDPOINTS,
+  NON_EMPTY_PATTERN,
+  createValidationMessages,
+  type IAuthLoginPayload,
+  type ILoginResponse
+} from 'global-shared'
 import { computed, reactive, shallowRef, ref } from 'vue'
 
 import { useUserSession } from 'src/entities/user'
@@ -10,8 +15,6 @@ import { useI18n } from 'src/shared/lib'
 import { DEFAULT_LOGIN_FORM_DATA } from '../config/constants'
 
 import type { ILoginFormData } from './types'
-
-const NON_EMPTY_PATTERN = /^(?!\s*$).+/
 
 export const useLogin = () => {
   const { doRequest } = useApi()
@@ -39,7 +42,8 @@ export const useLogin = () => {
     handleProtectedActionError,
     resetCaptcha
   } = useProtectedActionCaptcha()
-  const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
+
+  const isFormValid = computed(() => formRef.value?.formData.isFormValid.value)
 
   const login = async (payload: IAuthLoginPayload) => {
     isLoading.value = true

@@ -21,10 +21,10 @@ export {
 } from './appearance.constants'
 export { EMOJI_LIST } from './emoji'
 export { API_I18N, TOAST_I18N } from './i18n'
-export { IMAGE_RESOLUTIONS } from 'src/shared/types/media'
-export type { ContextRefType } from 'src/shared/types/other'
-export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/types/breakpoint'
-export type { FileLoaderValueType, IDbMedia } from 'src/shared/types/media'
+export { IMAGE_RESOLUTIONS } from 'src/shared/types'
+export type { ContextRefType } from 'src/shared/types'
+export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/types'
+export type { FileLoaderValueType, IDbMedia } from 'src/shared/types'
 export type {
   IThemeData,
   SystemTheme,
@@ -33,7 +33,7 @@ export type {
   ThemeType,
   IColorSchema,
   IAppearanceSettings
-} from 'src/shared/types/appearance.types'
+} from 'src/shared/types'
 export type {
   SoundType,
   CustomSoundSettingType,
@@ -43,12 +43,12 @@ export type {
   IMessageListScrollState,
   IUserSetting,
   DbUserSettingType
-} from 'src/shared/types/setting'
-export type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/types/contact'
-export type { DbUserDataType } from 'src/shared/types/user'
-export type { FChatRoomType } from 'src/shared/types/chat-room'
-export type { DbCallType } from 'src/shared/types/call'
-export type { DbMessageType } from 'src/shared/types/message'
-export type { IClientEnv } from 'src/shared/types/client-env'
-export type { DbInfoNotificationType } from 'src/shared/types/info-notification'
+} from 'src/shared/types'
+export type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/types'
+export type { DbUserDataType } from 'src/shared/types'
+export type { FChatRoomType } from 'src/shared/types'
+export type { DbCallType } from 'src/shared/types'
+export type { DbMessageType } from 'src/shared/types'
+export type { IClientEnv } from 'src/shared/types'
+export type { DbInfoNotificationType } from 'src/shared/types'
 export { DEFAULT_CUSTOM_SOUNDS } from './sound.constants'

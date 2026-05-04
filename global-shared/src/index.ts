@@ -183,6 +183,7 @@ export type { UserRoleType, IBaseFrontendUserData, IFrontendUserData } from './u
 
 export { VALIDATION_I18N } from './validation/i18n'
 export { createValidationMessages } from './validation/messages'
+export { NON_EMPTY_PATTERN } from './validation/constants'
 export {
   createAuthLoginSchema,
   createAuthRegistrationFormSchema,

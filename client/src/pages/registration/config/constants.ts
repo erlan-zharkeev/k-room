@@ -9,7 +9,6 @@ export const DEFAULT_REGISTRATION_FORM_DATA: IRegistrationInitialFormData = {
   policy: false
 }
 
-export const NON_EMPTY_PATTERN = /^(?!\s*$).+/
 export const NICKNAME_MIN_LENGTH_PATTERN = new RegExp(`^.{${VALIDATION_LIMITS.nicknameMinLength},}$`)
 export const NICKNAME_MAX_LENGTH_PATTERN = new RegExp(`^.{0,${VALIDATION_LIMITS.nicknameMaxLength}}$`)
 export const EMAIL_PATTERN = new RegExp(VALIDATION_PATTERNS.email)
