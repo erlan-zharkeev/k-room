@@ -105,7 +105,12 @@ const {
     <AppText
       tag="small"
       color="semi-contrast-color"
-      :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL, SETTINGS_ACCOUNT_AVATAR_MAX_MB)"
+      :text="
+        $t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(
+          SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
+          SETTINGS_ACCOUNT_AVATAR_MAX_MB
+        )
+      "
     />
 
     <label class="settings-personal-data-card__field">

@@ -13,8 +13,9 @@
   - `dev-certs/k-room-dev.pem`
   - `dev-certs/k-room-dev-key.pem`
 - Add `127.0.0.1 k-room-dev` to `/etc/hosts`
-- Open the client at `https://k-room-dev:43101`
 - Run `pnpm dev`
+- Client opens automatically at `https://k-room-dev:43101`
+- Update `@nmorph/nmorph-ui-kit`: `pnpm update:nmorph`
 
 ## Repository Rules
 

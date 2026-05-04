@@ -21,6 +21,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     <NmorphFormItem id="nickname" class="registration-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.nickname.value"
+        autocomplete="nickname"
         class="registration-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"
@@ -32,6 +33,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     <NmorphFormItem id="email" class="registration-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.email.value"
+        autocomplete="email"
         class="registration-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.emailPlaceholder)"
@@ -43,6 +45,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     <NmorphFormItem id="password" class="registration-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.password.value"
+        autocomplete="new-password"
         class="registration-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.passwordPlaceholder)"

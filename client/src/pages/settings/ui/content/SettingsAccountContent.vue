@@ -11,4 +11,3 @@ import SettingsPersonalDataCard from './account/SettingsPersonalDataCard.vue'
     <SettingsChangePasswordCard />
   </div>
 </template>
-

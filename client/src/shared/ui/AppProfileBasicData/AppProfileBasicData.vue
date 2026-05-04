@@ -52,7 +52,7 @@ watch(
 
 <template>
   <div class="app-profile-basic-data">
-    <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape='square' />
+    <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" />
     <div class="app-profile-basic-data__content">
       <div class="app-profile-basic-data__title">
         <slot name="title">
