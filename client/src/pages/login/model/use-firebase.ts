@@ -5,13 +5,13 @@ import {
   type ISignInWithProviderPayload,
   type ISignInWithProviderResponse
 } from 'global-shared'
-import { useToast } from 'primevue/usetoast'
 import { ref } from 'vue'
 
 import { useUserSession } from 'src/entities/user'
 import { ERROR_TOAST_LIFE_MS, useApi } from 'src/shared/api'
 import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
 import { currentLanguage, generateUUIDv4, translate, useI18n } from 'src/shared/lib'
+import { useAppToast } from 'src/shared/lib/notification'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
@@ -20,7 +20,7 @@ export const useFirebase = () => {
   const { doRequest } = useApi()
   const { activateUserSession } = useUserSession()
   const { t } = useI18n()
-  const toast = useToast()
+  const toast = useAppToast()
   const isFirebaseLoginLoading = ref(false)
 
   const getFirebaseCredential = async (provider: FirebaseProviderType) => {
@@ -63,10 +63,10 @@ export const useFirebase = () => {
       void error
 
       toast.add({
-        severity: 'error',
-        summary: translate(TOAST_I18N.error),
-        detail: t(LOGIN_FORM_I18N.failedToLogin),
-        life: ERROR_TOAST_LIFE_MS
+        type: 'error',
+        title: translate(TOAST_I18N.error),
+        content: t(LOGIN_FORM_I18N.failedToLogin),
+        duration: ERROR_TOAST_LIFE_MS
       })
 
       return null

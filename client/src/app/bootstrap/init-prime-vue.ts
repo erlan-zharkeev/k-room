@@ -1,5 +1,4 @@
 import PrimeVue from 'primevue/config'
-import ToastService from 'primevue/toastservice'
 
 import type { VueAppType } from './types'
 
@@ -8,5 +7,4 @@ export const initPrimeVue = (app: VueAppType) => {
     ripple: false,
     unstyled: true
   })
-  app.use(ToastService)
 }

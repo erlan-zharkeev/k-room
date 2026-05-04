@@ -42,7 +42,6 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
   gap: 12px;
   align-content: start;
 
-  margin: 16px;
   padding: 14px;
   border-radius: 8px;
 }
