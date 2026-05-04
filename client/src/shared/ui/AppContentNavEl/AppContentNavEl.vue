@@ -22,10 +22,12 @@ const props = defineProps<IAppContentNavElProps>()
         <AppHeader tag="h5" truncate :text="props.label" />
         <AppText tag="small" truncate color="semi-contrast-color" :text="props.description" />
       </div>
-      <NmorphIcon>
-        <NmorphIconArrowRight v-if="props.active" />
-        <NmorphIconArrowDown v-else />
-      </NmorphIcon>
+      <div class="app-content-nav-el__icon">
+        <NmorphIcon>
+          <NmorphIconArrowRight v-if="props.active" />
+          <NmorphIconArrowDown v-else />
+        </NmorphIcon>
+      </div>
     </RouterLink>
   </div>
 </template>
@@ -34,9 +36,16 @@ const props = defineProps<IAppContentNavElProps>()
 .app-content-nav-el {
   .app-content-nav-el-btn {
     display: flex;
+    gap: 12px;
     align-items: center;
     justify-content: space-between;
+
     padding: 12px;
   }
+}
+
+.app-content-nav-el__text {
+  display: grid;
+  gap: 6px;
 }
 </style>

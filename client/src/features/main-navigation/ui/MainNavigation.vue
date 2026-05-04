@@ -57,15 +57,9 @@ const selectedSettingsId = computed(() => {
   gap: 16px;
   margin-block: auto;
   padding: 8px;
-
-  @include screen-mobile {
-    // margin-left: 0;
-  }
 }
 
 .main-navigation--footer {
-  flex-direction: row;
-  justify-content: center;
-  margin-block: 0;
+  display: inline-flex;
 }
 </style>

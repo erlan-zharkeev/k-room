@@ -7,3 +7,10 @@ import { MainNavigation } from 'src/features/main-navigation'
     <MainNavigation footer />
   </footer>
 </template>
+
+<style lang="scss">
+.main-mobile-footer {
+  display: flex;
+  justify-content: center;
+}
+</style>

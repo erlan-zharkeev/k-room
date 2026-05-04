@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphDivider, NmorphButton, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { NmorphDivider, NmorphButton, NmorphScroll, NmorphIconBack } from '@nmorph/nmorph-ui-kit'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -22,12 +22,17 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <NmorphButton v-if="isMobile" @click="handleBack" />
+      <div class="content-layout__back-btn nmorph--shadow-inset">
+        <NmorphButton v-if="isMobile" @click="handleBack">
+          <template #icon>
+            <NmorphIconBack />
+          </template>
+        </NmorphButton>
+      </div>
       <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
     </div>
-    <NmorphDivider />
     <div class="content-layout__content nmorph--shadow-inset">
-      <NmorphScroll height="100%">
+      <NmorphScroll>
         <slot />
       </NmorphScroll>
     </div>
@@ -52,11 +57,13 @@ const handleBack = () => {
 .content-layout__content {
   flex: 1 1 auto;
   min-height: 0;
-
-  // padding: 8px;
 }
 
 .content-layout__header-text {
   margin-left: 8px;
+}
+
+.content-layout__back-btn {
+  padding: 8px;
 }
 </style>
