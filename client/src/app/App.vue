@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Toast } from 'primevue'
-
 import UnsupportedResolutionGuard from './guards/UnsupportedResolutionGuard.vue'
+import AppNotificationProvider from './providers/AppNotificationProvider.vue'
 import { useLanguageProvider } from './providers/use-language-provider'
 import { useThemeProvider } from './providers/use-theme-provider'
 import { useUserInteractionProvider } from './providers/use-user-interaction-provider'
@@ -13,7 +12,7 @@ useUserInteractionProvider()
 
 <template>
   <div class="app">
-    <Toast />
+    <AppNotificationProvider />
     <RouterView />
     <UnsupportedResolutionGuard />
   </div>

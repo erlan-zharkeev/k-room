@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios'
 import { REQ_STATUS, ROUTE_NAMES, type IBackendResponse, type ReqStatusType } from 'global-shared'
-import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 
 import { API_I18N, ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
+import { useAppToast } from 'src/shared/lib/notification'
 
 import { createApiError } from './create-api-error'
 import { extractErrorPayload } from './extract-error-payload'
@@ -12,7 +12,7 @@ import { isMediaRequestError } from './is-media-request-error'
 
 export const useApiInterceptor = () => {
   const { t } = useI18n()
-  const toast = useToast()
+  const toast = useAppToast()
   const router = useRouter()
 
   const interceptError = async (error: unknown) => {
@@ -63,10 +63,10 @@ export const useApiInterceptor = () => {
       }
 
       toast.add({
-        severity: 'error',
-        summary: t(TOAST_I18N.error),
-        detail: message,
-        life: ERROR_TOAST_LIFE_MS
+        type: 'error',
+        title: t(TOAST_I18N.error),
+        content: message,
+        duration: ERROR_TOAST_LIFE_MS
       })
 
       return createApiError({

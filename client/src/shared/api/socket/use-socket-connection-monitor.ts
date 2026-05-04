@@ -1,8 +1,8 @@
 import type { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'global-shared'
-import { useToast } from 'primevue/usetoast'
 
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { translate } from 'src/shared/lib'
+import { useAppToast } from 'src/shared/lib/notification'
 
 import { socket } from './socket'
 import { setSocketConnected, setSocketReconnecting } from './socket-status'
@@ -12,7 +12,7 @@ import { useSocketReconnect } from './use-socket-reconnect'
 let isMonitorActive = false
 
 export const useSocketConnectionMonitor = () => {
-  const toast = useToast()
+  const toast = useAppToast()
   const { actualizeSocketData } = useSocketConnect()
   const { socketReconnect } = useSocketReconnect()
 
@@ -33,10 +33,10 @@ export const useSocketConnectionMonitor = () => {
 
     socket.on<SocketActionsType>('error-message', ({ message }: IEventErrorMessage) => {
       toast.add({
-        severity: 'error',
-        summary: translate(TOAST_I18N.error),
-        detail: message,
-        life: ERROR_TOAST_LIFE_MS
+        type: 'error',
+        title: translate(TOAST_I18N.error),
+        content: message,
+        duration: ERROR_TOAST_LIFE_MS
       })
     })
 
