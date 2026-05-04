@@ -30,6 +30,7 @@
   },
   "scripts": {
     "dev": "zsh scripts/dev.sh",
+    "update:nmorph": "pnpm --dir client add @nmorph/nmorph-ui-kit@latest",
     "husky-prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:fix": "prettier --write .",

@@ -9,7 +9,6 @@ import { useInfoNotification } from 'src/entities/info-notification'
 import { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 
-
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 const props = defineProps<{ footer?: boolean }>()
 
@@ -32,9 +31,13 @@ const selectedSettingsId = computed(() => {
       custom
       v-slot="{ navigate, isExactActive }"
     >
-      <NmorphBadge :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)" :offset-x="12" :offset-y="20">
+      <NmorphBadge
+        :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)"
+        :offset-x="12"
+        :offset-y="20"
+      >
         <template #value="{ value }">
-          <AppText :text="value" color='contrast-color' tag="small" />
+          <AppText :text="value" color="contrast-color" tag="small" />
         </template>
         <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)">
           <template #label>
@@ -54,7 +57,6 @@ const selectedSettingsId = computed(() => {
   gap: 16px;
   margin-block: auto;
   padding: 8px;
-
 
   @include screen-mobile {
     // margin-left: 0;

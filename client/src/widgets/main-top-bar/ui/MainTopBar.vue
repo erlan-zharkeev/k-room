@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphButton, NmorphIconExit, NmorphIcon,  } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 import { useTimeoutFn } from '@vueuse/core'
 import { formatNickname } from 'global-shared'
 import { computed, ref, watch } from 'vue'

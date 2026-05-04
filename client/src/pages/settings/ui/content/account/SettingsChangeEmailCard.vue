@@ -70,5 +70,4 @@ const {
   display: grid;
   gap: 8px;
 }
-
 </style>

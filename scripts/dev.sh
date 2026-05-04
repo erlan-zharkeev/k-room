@@ -8,10 +8,12 @@ cd "$ROOT_DIR" || exit $?
 
 SERVER_PORT="$(sed -n 's/^SERVER_PORT=//p' .env.shared | head -n 1)"
 CLIENT_PORT="$(sed -n 's/^CLIENT_PORT=//p' .env.shared | head -n 1)"
+CLIENT_HOST="${APP_HOST:-https://localhost}"
+SERVER_HOST="${API_HOST:-https://localhost}"
 
-echo "Client: ${CLIENT_PORT:+https://localhost:$CLIENT_PORT}"
-echo "Server: ${SERVER_PORT:+https://localhost:$SERVER_PORT}"
-echo "Health: ${SERVER_PORT:+https://localhost:$SERVER_PORT/health}"
+echo "Client: ${CLIENT_PORT:+$CLIENT_HOST:$CLIENT_PORT}"
+echo "Server: ${SERVER_PORT:+$SERVER_HOST:$SERVER_PORT}"
+echo "Health: ${SERVER_PORT:+$SERVER_HOST:$SERVER_PORT/health}"
 
 pnpm --dir global-shared run build
 pnpm -r --parallel --stream \

@@ -22,20 +22,16 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <NmorphButton v-if="isMobile" @click="handleBack"/>
-    <AppHeader
-      v-if="props.titleKey"
-      :text="$t(CONTENT_TITLE[props.titleKey])"
-      class="content-layout__header-text"
-    />
-  </div>
-  <NmorphDivider />
-  <div class="content-layout__content nmorph--shadow-inset">
-    <NmorphScroll height="100%">
-      <slot />
-    </NmorphScroll>
-  </div>
-</section>
+      <NmorphButton v-if="isMobile" @click="handleBack" />
+      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
+    </div>
+    <NmorphDivider />
+    <div class="content-layout__content nmorph--shadow-inset">
+      <NmorphScroll height="100%">
+        <slot />
+      </NmorphScroll>
+    </div>
+  </section>
 </template>
 
 <style lang="scss">

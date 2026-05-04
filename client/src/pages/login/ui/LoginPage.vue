@@ -29,6 +29,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     <NmorphFormItem id="login" class="login-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.login.value"
+        autocomplete="username"
         class="login-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.loginPlaceholder)"
@@ -40,6 +41,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     <NmorphFormItem id="password" class="login-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.password.value"
+        autocomplete="current-password"
         class="login-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.passwordPlaceholder)"

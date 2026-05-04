@@ -7,14 +7,8 @@ import { SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N } from '../../../config/i18n
 import { useSettingsChangePasswordCard } from '../../../model/account/use-settings-change-password-card'
 import SettingsCard from '../../SettingsCard.vue'
 
-const {
-  changePassword,
-  formData,
-  isPasswordChanging,
-  isPasswordSubmitDisabled,
-  nextPasswordError,
-  passwordMismatch
-} = useSettingsChangePasswordCard()
+const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, nextPasswordError, passwordMismatch } =
+  useSettingsChangePasswordCard()
 </script>
 
 <template>
@@ -32,11 +26,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.currentPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput
-          v-model="formData.currentPassword.value"
-          :disabled="isPasswordChanging"
-          type-password
-        />
+        <NmorphTextInput v-model="formData.currentPassword.value" :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -44,11 +34,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.newPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput
-          v-model="formData.nextPassword.value"
-          :disabled="isPasswordChanging"
-          type-password
-        />
+        <NmorphTextInput v-model="formData.nextPassword.value" :disabled="isPasswordChanging" type-password />
         <AppText v-if="nextPasswordError" tag="small" color="warn-color" :text="nextPasswordError" />
       </NmorphFormItem>
 
@@ -57,11 +43,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.confirmPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput
-          v-model="formData.repeatPassword.value"
-          :disabled="isPasswordChanging"
-          type-password
-        />
+        <NmorphTextInput v-model="formData.repeatPassword.value" :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
 
       <AppText
