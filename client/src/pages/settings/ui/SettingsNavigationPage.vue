@@ -39,9 +39,12 @@ const getItemRoute = (settingsId: string) => ({
 
 <style lang="scss">
 .settings-navigation-page {
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  min-width: 0;
   padding: 8px;
 }
 </style>
