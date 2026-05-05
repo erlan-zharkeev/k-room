@@ -36,6 +36,16 @@ export const CREATE_NEW_PASSWORD_I18N = defineI18n({
     ru: 'Пароль успешно изменён',
     zh: '密码修改成功'
   },
+  changePassword: {
+    en: 'Change password',
+    ru: 'Изменить пароль',
+    zh: '修改密码'
+  },
+  back: {
+    en: 'Back',
+    ru: 'Назад',
+    zh: '返回'
+  },
   toLogin: {
     en: 'Go to login page',
     ru: 'Перейти ко входу',

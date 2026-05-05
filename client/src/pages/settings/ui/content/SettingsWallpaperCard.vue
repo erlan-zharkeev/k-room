@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { NmorphSelectButton } from '@nmorph/nmorph-ui-kit'
-import { isNumber } from 'lodash'
-import { FileUpload, SelectButton, Button, Slider } from 'primevue'
+import { NmorphButton, NmorphFileUpload, NmorphSelectButton, NmorphSlider } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { useI18n, useScreen } from 'src/shared/lib'
-import { AppHeader, AppText } from 'src/shared/ui'
+import { useI18n } from 'src/shared/lib'
+import { AppText } from 'src/shared/ui'
 
 import {
-  SETTINGS_WALLPAPER_ACCEPT,
+  SETTINGS_WALLPAPER_ALLOWED_TYPES,
   SETTINGS_WALLPAPER_ANGLE_MAX,
   SETTINGS_WALLPAPER_ANGLE_MIN,
-  SETTINGS_WALLPAPER_MAX_FILE_SIZE,
   SETTINGS_WALLPAPER_SCALE_MAX,
   SETTINGS_WALLPAPER_SCALE_MIN,
   SETTINGS_WALLPAPER_DARKNESS_MAX,
@@ -24,8 +21,16 @@ import { useWallpaperSettings } from '../../model/theme/use-wallpaper-settings'
 import SettingsCard from '../SettingsCard.vue'
 
 const { t } = useI18n()
-const { setWallpaperAppearance, setAngle, setScale, setDarkness, uploadWallpaper, resetWallpaper } =
-  useWallpaperSettings()
+const {
+  uploadKey,
+  setWallpaperAppearance,
+  setAngle,
+  setScale,
+  setDarkness,
+  showUnsupportedWallpaperFormatError,
+  uploadWallpaper,
+  resetWallpaper
+} = useWallpaperSettings()
 const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 
 const visibilityOptions = computed(() =>
@@ -40,28 +45,23 @@ const visibilityOptions = computed(() =>
         <AppText :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
         <NmorphSelectButton
           height="thick"
-          :options="visibilityOptions"
           :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
-          @update:model-value="($event) => setWallpaperAppearance($event === 'show')"
+          :options="visibilityOptions"
+          @update:model-value="setWallpaperAppearance($event === 'show')"
         />
       </div>
 
       <div class="settings-wallpaper-card__additional" v-if="isSelectedThemeCustom">
         <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element">
           <div class="settings-wallpaper-card__upload-main">
-            <FileUpload
-              mode="basic"
-              auto
-              :accept="SETTINGS_WALLPAPER_ACCEPT"
-              :max-file-size="SETTINGS_WALLPAPER_MAX_FILE_SIZE"
+            <NmorphFileUpload
+              :key="uploadKey"
+              :allowed-types="SETTINGS_WALLPAPER_ALLOWED_TYPES"
+              :button-text="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
               :multiple="false"
-              :choose-label="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
               class="settings-wallpaper-card__file-button"
-              :choose-button-props="{
-                text: true,
-                size: 'small'
-              }"
-              @select="uploadWallpaper"
+              @update:model-value="uploadWallpaper"
+              @on-unsupported-file-type-error="showUnsupportedWallpaperFormatError"
             />
             <AppText
               tag="small"
@@ -71,10 +71,10 @@ const visibilityOptions = computed(() =>
             />
           </div>
 
-          <Button
-            :label="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
-            size="small"
-            text
+          <NmorphButton
+            :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
+            height="thin"
+            style-type="transparent"
             type="button"
             @click="resetWallpaper"
           />
@@ -85,16 +85,13 @@ const visibilityOptions = computed(() =>
             <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperAngle)" />
             <AppText tag="small" :text="`${effectiveTheme.wallpaper.angle}deg`" />
           </div>
-          <Slider
+          <NmorphSlider
             :model-value="effectiveTheme.wallpaper.angle"
             :min="SETTINGS_WALLPAPER_ANGLE_MIN"
             :max="SETTINGS_WALLPAPER_ANGLE_MAX"
             :step="1"
-            @update:model-value="
-              ($event) => {
-                isNumber($event) && setAngle($event)
-              }
-            "
+            :show-tooltip="false"
+            @update:model-value="setAngle"
           />
         </label>
 
@@ -103,16 +100,13 @@ const visibilityOptions = computed(() =>
             <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperScale)" />
             <AppText tag="small" :text="`${effectiveTheme.wallpaper.scale}%`" />
           </div>
-          <Slider
+          <NmorphSlider
             :model-value="effectiveTheme.wallpaper.scale"
             :min="SETTINGS_WALLPAPER_SCALE_MIN"
             :max="SETTINGS_WALLPAPER_SCALE_MAX"
             :step="1"
-            @update:model-value="
-              ($event) => {
-                isNumber($event) && setScale($event)
-              }
-            "
+            :show-tooltip="false"
+            @update:model-value="setScale"
           />
         </label>
 
@@ -121,16 +115,13 @@ const visibilityOptions = computed(() =>
             <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperDarkness)" />
             <AppText tag="small" :text="`${effectiveTheme.wallpaper.darkness}%`" />
           </div>
-          <Slider
+          <NmorphSlider
             :model-value="effectiveTheme.wallpaper.darkness"
             :min="SETTINGS_WALLPAPER_DARKNESS_MIN"
             :max="SETTINGS_WALLPAPER_DARKNESS_MAX"
             :step="1"
-            @update:model-value="
-              ($event) => {
-                isNumber($event) && setDarkness($event)
-              }
-            "
+            :show-tooltip="false"
+            @update:model-value="setDarkness"
           />
         </label>
       </div>

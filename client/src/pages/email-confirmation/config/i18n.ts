@@ -20,5 +20,10 @@ export const EMAIL_CONFIRMATION_I18N = defineI18n({
     en: 'Email confirmation failed',
     ru: 'Не удалось подтвердить email',
     zh: '邮箱确认失败'
+  },
+  back: {
+    en: 'Back',
+    ru: 'Назад',
+    zh: '返回'
   }
 })

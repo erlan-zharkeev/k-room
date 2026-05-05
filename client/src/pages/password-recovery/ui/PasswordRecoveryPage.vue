@@ -5,7 +5,6 @@ import { Button, InputText, Message } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { COMMON_I18N } from 'src/shared/config'
 import { isFormFieldInvalid } from 'src/shared/lib'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
@@ -82,7 +81,7 @@ onMounted(initializePasswordRecovery)
       <div class="password-recovery-page__action-btns">
         <Button
           :disabled="isSendCodeBlocked || !emailForm.valid"
-          :label="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(COMMON_I18N.sendCode)"
+          :label="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(PASSWORD_RECOVERY_I18N.sendCode)"
           :loading="emailSendCodeIsLoading"
           size="small"
           type="submit"
@@ -147,7 +146,7 @@ onMounted(initializePasswordRecovery)
         <Button
           as="a"
           :href="href"
-          :label="$t(COMMON_I18N.back)"
+          :label="$t(PASSWORD_RECOVERY_I18N.back)"
           severity="secondary"
           size="small"
           @click="navigate"
