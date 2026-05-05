@@ -29,7 +29,7 @@ export const useAppToast = () => {
   const toastChannels = {
     system: systemToastChannel,
     message: messageToastChannel
-  } satisfies Record<AppToastStackType, ReturnType<typeof createToastChannel>>
+  }
 
   const findToastStackType = (id: string): AppToastStackType | undefined => {
     if (systemToastChannel.toasts.value.some((toast) => toast.id === id)) return 'system'
