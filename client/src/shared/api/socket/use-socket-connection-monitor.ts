@@ -1,7 +1,7 @@
 import type { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'global-shared'
 
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
-import { translate } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib/toast'
 
 import { socket } from './socket'
@@ -12,6 +12,7 @@ import { useSocketReconnect } from './use-socket-reconnect'
 let isMonitorActive = false
 
 export const useSocketConnectionMonitor = () => {
+  const { t } = useI18n()
   const toast = useAppToast()
   const { actualizeSocketData } = useSocketConnect()
   const { socketReconnect } = useSocketReconnect()
@@ -34,7 +35,7 @@ export const useSocketConnectionMonitor = () => {
     socket.on<SocketActionsType>('error-message', ({ message }: IEventErrorMessage) => {
       toast.add({
         type: 'error',
-        title: translate(TOAST_I18N.error),
+        title: t(TOAST_I18N.error),
         content: message,
         duration: ERROR_TOAST_LIFE_MS
       })

@@ -11,11 +11,6 @@ export const EMAIL_CONFIRMATION_I18N = defineI18n({
     ru: 'подтверждён',
     zh: '已确认'
   },
-  back: {
-    en: 'Back',
-    ru: 'Назад',
-    zh: '返回'
-  },
   loading: {
     en: 'Confirming email',
     ru: 'Подтверждаем email',

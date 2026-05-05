@@ -19,3 +19,12 @@ const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[sel
 <template>
   <component :is="selectedSettingsComponent" />
 </template>
+
+<style lang="scss">
+.settings-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+</style>

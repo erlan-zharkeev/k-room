@@ -1,3 +1,3 @@
 <template>
-  <div class="settings-notifications-content" />
+  <div class="settings-notifications-content settings-content-grid" />
 </template>

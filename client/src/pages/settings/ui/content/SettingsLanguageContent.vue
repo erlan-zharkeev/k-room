@@ -6,7 +6,7 @@ import SettingsCard from '../SettingsCard.vue'
 </script>
 
 <template>
-  <div class="settings-language-content">
+  <div class="settings-language-content settings-content-grid">
     <SettingsCard :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.selectLanguage)">
       <LanguageSelect />
     </SettingsCard>

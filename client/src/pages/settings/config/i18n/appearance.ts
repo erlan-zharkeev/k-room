@@ -9,6 +9,11 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     ru: 'Тема',
     zh: '选择主题'
   },
+  themeColors: {
+    en: 'Theme colors',
+    ru: 'Цвета темы',
+    zh: '主题颜色'
+  },
   resetTheme: {
     en: 'Reset theme',
     ru: 'Сбросить тему',

@@ -2,7 +2,6 @@
 import { NmorphColorPicker } from '@nmorph/nmorph-ui-kit'
 
 import { useSettings } from 'src/entities/setting'
-import { ThemeSelect } from 'src/features/theme-select'
 import { AppText } from 'src/shared/ui'
 
 import { THEME_SETTINGS_COLOR_ITEMS } from '../config/constants'
@@ -14,7 +13,6 @@ const { changeThemeColor } = useChangeColorSchema()
 
 <template>
   <div class="theme-settings-form">
-    <ThemeSelect />
     <div class="theme-settings-form__pick-color" v-if="isSelectedThemeCustom">
       <label v-for="item in THEME_SETTINGS_COLOR_ITEMS" :key="item.id" class="theme-settings-form__field">
         <AppText :text="$t(item.label)" />

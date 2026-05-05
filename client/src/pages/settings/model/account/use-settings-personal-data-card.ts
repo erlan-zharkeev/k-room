@@ -12,7 +12,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
-import { translate, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib/toast'
 
 import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants'
@@ -108,7 +108,7 @@ export const useSettingsPersonalDataCard = () => {
 
     try {
       await navigator.clipboard.writeText(displayedUserId.value)
-      toast.add({ content: translate(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.userIdCopied) })
+      toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.userIdCopied) })
     } catch (error) {
       void error
     }
@@ -119,7 +119,7 @@ export const useSettingsPersonalDataCard = () => {
 
     try {
       await navigator.clipboard.writeText(displayedNickname.value)
-      toast.add({ content: translate(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nicknameCopied) })
+      toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nicknameCopied) })
     } catch (error) {
       void error
     }

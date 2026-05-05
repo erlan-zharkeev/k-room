@@ -5,6 +5,7 @@ import { Button, Message, Password } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { COMMON_I18N } from 'src/shared/config'
 import { isFormFieldInvalid, useI18n } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
@@ -86,7 +87,7 @@ onMounted(initializeCreateNewPassword)
         <div class="create-new-password-page__action-btns">
           <Button
             :disabled="isSubmitDisabled || !$form.valid"
-            :label="$t(CREATE_NEW_PASSWORD_I18N.submit)"
+            :label="$t(COMMON_I18N.changePassword)"
             :loading="isLoading"
             size="small"
             type="submit"
@@ -96,7 +97,7 @@ onMounted(initializeCreateNewPassword)
             <Button
               as="a"
               :href="href"
-              :label="$t(CREATE_NEW_PASSWORD_I18N.back)"
+              :label="$t(COMMON_I18N.back)"
               severity="secondary"
               size="small"
               @click="navigate"
