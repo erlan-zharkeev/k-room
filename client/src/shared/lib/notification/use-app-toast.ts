@@ -1,21 +1,74 @@
 import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
+import { useSettings } from 'src/entities/setting'
+import { useUser } from 'src/entities/user'
+
 import { createNotification } from './create-notification'
-import type { IAppNotification, IAppNotificationInput } from './types'
+import type { AppNotificationStackType, IAppNotificationInput } from './types'
 
-const toast = useNmorphNotification()
+const createToastChannel = () => {
+  const notifications = useNmorphNotification()
 
-export const useAppToast = () => {
-  const notifications = computed<IAppNotification[]>(() => toast.notifications.value as IAppNotification[])
+  const toasts = computed(() => notifications.notifications.value)
 
-  const add = (message: IAppNotificationInput) => {
-    toast.notify(createNotification(message))
+  const addToast = (message: IAppNotificationInput) => {
+    notifications.notify(createNotification(message))
   }
 
   return {
-    notifications,
-    add,
-    remove: toast.removeNotification
+    toasts,
+    addToast,
+    removeToast: notifications.removeNotification
+  }
+}
+
+const systemToastChannel = createToastChannel()
+const messageToastChannel = createToastChannel()
+
+export const useAppToast = () => {
+  const { settings } = useSettings()
+  const { isAuthorized } = useUser()
+
+  const isNotificationVisible = computed(() => settings.value.showNotification || !isAuthorized.value)
+
+  const systemToasts = computed(() => {
+    if (!isNotificationVisible.value) return []
+
+    return systemToastChannel.toasts.value
+  })
+
+  const messageToasts = computed(() => {
+    if (!isNotificationVisible.value) return []
+
+    return messageToastChannel.toasts.value
+  })
+
+  const toastChannels = {
+    system: systemToastChannel,
+    message: messageToastChannel
+  } satisfies Record<AppNotificationStackType, ReturnType<typeof createToastChannel>>
+
+  const findToastStackType = (id: string): AppNotificationStackType | undefined => {
+    if (systemToastChannel.toasts.value.some((toast) => toast.id === id)) return 'system'
+    if (messageToastChannel.toasts.value.some((toast) => toast.id === id)) return 'message'
+
+    return undefined
+  }
+
+  return {
+    systemToasts,
+    messageToasts,
+
+    add(message: IAppNotificationInput, stackType: AppNotificationStackType = 'system') {
+      toastChannels[stackType].addToast(message)
+    },
+
+    remove(id: string) {
+      const stackType = findToastStackType(id)
+      if (!stackType) return
+
+      toastChannels[stackType].removeToast(id)
+    }
   }
 }
