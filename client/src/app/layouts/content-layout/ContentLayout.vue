@@ -32,7 +32,7 @@ const handleBack = () => {
       <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
     </div>
     <div class="content-layout__content nmorph--shadow-inset">
-      <NmorphScroll>
+      <NmorphScroll :y-gap-in-px="-6">
         <slot />
       </NmorphScroll>
     </div>
