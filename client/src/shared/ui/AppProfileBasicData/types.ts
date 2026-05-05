@@ -3,4 +3,5 @@ export interface IAppProfileBasicDataProps {
   imageId?: string
   imageSrc?: string
   title: string
+  name?: string
 }

@@ -1,6 +1,12 @@
 export type AppTextTagType = 'span' | 'p' | 'div' | 'small'
 
-export type AppTextColorType = 'text-color' | 'semi-contrast-color' | 'contrast-color' | 'accent-color' | 'warn-color'
+export type AppTextColorType =
+  | 'text-color'
+  | 'semi-contrast-color'
+  | 'contrast-color'
+  | 'accent-color'
+  | 'warn-color'
+  | 'error-color'
 
 export type AppTextAlignType = 'left' | 'center' | 'right'
 

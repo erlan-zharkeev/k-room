@@ -2,7 +2,6 @@ import {
   USER_ENDPOINTS,
   createUpdateUserDataSchema,
   createValidationMessages,
-  formatNickname,
   isNicknameValid,
   normalizeNickname
 } from 'global-shared'
@@ -20,7 +19,7 @@ import { SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N } from '../../config/i18n/acco
 
 export const useSettingsPersonalDataCard = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
-  const { user, avatarId, update: updateUserData } = useUser()
+  const { user, avatarId, update: updateUserData, displayedNickname } = useUser()
   const { doRequest } = useApi()
   const { t } = useI18n()
   const toast = useAppToast()
@@ -37,7 +36,6 @@ export const useSettingsPersonalDataCard = () => {
   const displayedAvatarId = computed(() =>
     accountAvatarPreviewUrl.value || accountAvatarWasReset.value ? undefined : avatarId.value || undefined
   )
-  const displayedNickname = computed(() => formatNickname(user.value.nickname))
   const displayedUserId = computed(() => (user.value.id ? `#${user.value.id}` : ''))
   const normalizedAccountNickname = computed(() => normalizeNickname(accountNickname.value))
   const isAccountNicknameEmpty = computed(() => !normalizedAccountNickname.value)

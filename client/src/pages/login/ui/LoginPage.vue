@@ -75,7 +75,6 @@ const isSubmitBtnDisabled = computed(() => {
         :disabled="isFormDisabled"
         fill
         :loading="isFirebaseLoginLoading"
-        type="button"
         @click="onFirebaseLogin('google')"
       >
         <div class="login-page__button__google">

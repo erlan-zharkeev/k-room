@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import {
+  NmorphButton,
+  NmorphIconArrowUp,
+  NmorphIconBack,
+  NmorphIconDelete
+} from '@nmorph/nmorph-ui-kit'
 import { useVirtualizer } from '@tanstack/vue-virtual'
 import { formatNickname, type IEventAddReaction, type SocketActionsType } from 'global-shared'
-import { Button } from 'primevue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
@@ -280,13 +285,12 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="scrollElement" class="message-list" @scroll="handleScroll">
-    <Button
+    <NmorphButton
       v-if="hasMoreMessages"
       class="message-list__load-more"
       :disabled="isLoading"
-      :label="$t(MAIN_PAGE_I18N.loadMore)"
-      size="small"
-      text
+      :text="$t(MAIN_PAGE_I18N.loadMore)"
+      style-type="transparent"
       @click="loadPreviousMessages"
     />
 
@@ -353,15 +357,22 @@ onBeforeUnmount(() => {
         :language="settings.language"
         @select="addReaction"
       />
-      <Button
+      <NmorphButton
         v-for="action in MAIN_PAGE_MESSAGE_ACTIONS"
         :key="action.id"
         class="message-list__context-action"
-        :label="$t(action.label)"
-        :severity="action.severity"
-        :icon="action.icon"
+        :color="action.id === 'delete' ? 'var(--nmorph-error-text-color)' : undefined"
+        fill
+        style-type="transparent"
+        :text="$t(action.label)"
         @click="handleMessageAction(action.id)"
-      />
+      >
+        <template #icon>
+          <NmorphIconBack v-if="action.id === 'reply'" />
+          <NmorphIconArrowUp v-else-if="action.id === 'forward'" />
+          <NmorphIconDelete v-else />
+        </template>
+      </NmorphButton>
     </div>
   </div>
 </template>
@@ -503,37 +514,6 @@ onBeforeUnmount(() => {
 .message-list__context-picker {
   margin-bottom: 4px;
   border-bottom: 1px solid var(--app-content-border-color);
-}
-
-.message-list__context-action {
-  cursor: pointer;
-  border: 0;
-  color: inherit;
-  background: transparent;
-}
-
-.message-list__context-action {
-  display: grid;
-  grid-template-columns: 20px 1fr;
-  gap: 10px;
-  align-items: center;
-
-  min-height: 36px;
-  padding: 8px;
-  border-radius: 6px;
-
-  font: inherit;
-  text-align: left;
-}
-
-.message-list__context-action span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.message-list__context-action:hover {
-  background: var(--app-muted-background);
 }
 
 .message-list__empty {

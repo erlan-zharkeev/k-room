@@ -73,18 +73,17 @@ const visibilityOptions = computed(() =>
 
           <NmorphButton
             :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
-            height="thin"
             style-type="transparent"
-            type="button"
             @click="resetWallpaper"
           />
         </div>
 
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
-          <div class="settings-wallpaper-card__slider-header">
-            <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperAngle)" />
-            <AppText tag="small" :text="`${effectiveTheme.wallpaper.angle}deg`" />
-          </div>
+          <AppText
+            tag="small"
+            :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperAngle)} ${effectiveTheme.wallpaper.angle}deg`"
+            class="settings-wallpaper-card__slider-label"
+          />
           <NmorphSlider
             :model-value="effectiveTheme.wallpaper.angle"
             :min="SETTINGS_WALLPAPER_ANGLE_MIN"
@@ -96,10 +95,11 @@ const visibilityOptions = computed(() =>
         </label>
 
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
-          <div class="settings-wallpaper-card__slider-header">
-            <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperScale)" />
-            <AppText tag="small" :text="`${effectiveTheme.wallpaper.scale}%`" />
-          </div>
+          <AppText
+            tag="small"
+            :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperScale)} ${effectiveTheme.wallpaper.scale}%`"
+            class="settings-wallpaper-card__slider-label"
+          />
           <NmorphSlider
             :model-value="effectiveTheme.wallpaper.scale"
             :min="SETTINGS_WALLPAPER_SCALE_MIN"
@@ -111,10 +111,11 @@ const visibilityOptions = computed(() =>
         </label>
 
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
-          <div class="settings-wallpaper-card__slider-header">
-            <AppText tag="small" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperDarkness)" />
-            <AppText tag="small" :text="`${effectiveTheme.wallpaper.darkness}%`" />
-          </div>
+          <AppText
+            tag="small"
+            :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperDarkness)} ${effectiveTheme.wallpaper.darkness}%`"
+            class="settings-wallpaper-card__slider-label"
+          />
           <NmorphSlider
             :model-value="effectiveTheme.wallpaper.darkness"
             :min="SETTINGS_WALLPAPER_DARKNESS_MIN"
@@ -154,7 +155,8 @@ const visibilityOptions = computed(() =>
   align-items: center;
 }
 
-.settings-wallpaper-card__slider-header {
+.settings-wallpaper-card__slider-label {
+  display: block;
   margin-bottom: 12px;
   text-align: right;
 }

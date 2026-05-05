@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { Form } from '@primevue/forms'
+import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
-import { Button, Message, Password } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { isFormFieldInvalid, useI18n } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 import { useCreateNewPassword } from '../model/use-create-new-password'
 
-const { formData, initializeCreateNewPassword, isFormTouched, isLoading, isPasswordChanged, resolver, submit } =
-  useCreateNewPassword()
-const { t } = useI18n()
-const passwordMismatchText = computed(() =>
-  isFormTouched.value && formData.firstPassword !== formData.secondPassword ? t(CREATE_NEW_PASSWORD_I18N.mismatch) : ''
-)
-const isSubmitDisabled = computed(() => isLoading.value || formData.firstPassword !== formData.secondPassword)
+const {
+  formData,
+  formRef,
+  initializeCreateNewPassword,
+  isFormValid,
+  isLoading,
+  isPasswordChanged,
+  passwordMismatch,
+  passwordMismatchText,
+  submit
+} = useCreateNewPassword()
+const isSubmitDisabled = computed(() => isLoading.value || passwordMismatch.value || !isFormValid.value)
 
 onMounted(initializeCreateNewPassword)
 </script>
@@ -27,8 +30,11 @@ onMounted(initializeCreateNewPassword)
     <template v-if="isPasswordChanged">
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.success)" />
       <div class="create-new-password-page__action-btns">
-        <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
-          <Button as="a" :href="href" :label="$t(CREATE_NEW_PASSWORD_I18N.toLogin)" size="small" @click="navigate" />
+        <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
+          <NmorphButton
+            :text="$t(CREATE_NEW_PASSWORD_I18N.toLogin)"
+            @click="navigate"
+          />
         </RouterLink>
       </div>
     </template>
@@ -37,73 +43,50 @@ onMounted(initializeCreateNewPassword)
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.enterNewPasswordHint)" />
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint)" />
 
-      <Form
-        v-slot="$form"
-        :initial-values="formData"
-        :resolver="resolver"
+      <NmorphForm
+        ref="formRef"
+        :value="formData"
         class="create-new-password-page__form"
-        @submit="submit"
+        @submit.prevent="submit"
       >
-        <div class="create-new-password-page__field">
-          <Password
-            v-model="formData.firstPassword"
+        <NmorphFormItem id="firstPassword" class="create-new-password-page__field" :show-validation-icon="false">
+          <NmorphTextInput
+            v-model="formData.firstPassword.value"
             autocomplete="new-password"
             :disabled="isLoading"
-            :feedback="false"
-            fluid
-            name="firstPassword"
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.firstPasswordPlaceholder)"
-            size="small"
-            toggle-mask
+            type-password
           />
-          <Message v-if="isFormFieldInvalid($form.firstPassword)" severity="error" size="small" variant="simple">
-            {{ $form.firstPassword.error?.message }}
-          </Message>
-        </div>
+        </NmorphFormItem>
 
-        <div class="create-new-password-page__field">
-          <Password
-            v-model="formData.secondPassword"
+        <NmorphFormItem id="secondPassword" class="create-new-password-page__field" :show-validation-icon="false">
+          <NmorphTextInput
+            v-model="formData.secondPassword.value"
             autocomplete="new-password"
             :disabled="isLoading"
-            :feedback="false"
-            fluid
-            name="secondPassword"
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
-            size="small"
-            toggle-mask
+            type-password
           />
-          <Message
-            v-if="isFormFieldInvalid($form.secondPassword) || passwordMismatchText"
-            severity="error"
-            size="small"
-            variant="simple"
-          >
-            {{ $form.secondPassword?.error?.message || passwordMismatchText }}
-          </Message>
-        </div>
+          <AppText v-if="passwordMismatchText" tag="small" color="error-color" :text="passwordMismatchText" />
+        </NmorphFormItem>
 
         <div class="create-new-password-page__action-btns">
-          <Button
-            :disabled="isSubmitDisabled || !$form.valid"
-            :label="$t(CREATE_NEW_PASSWORD_I18N.changePassword)"
+          <NmorphButton
+            :disabled="isSubmitDisabled"
             :loading="isLoading"
-            size="small"
+            :text="$t(CREATE_NEW_PASSWORD_I18N.changePassword)"
             type="submit"
           />
 
-          <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
-            <Button
-              as="a"
-              :href="href"
-              :label="$t(CREATE_NEW_PASSWORD_I18N.back)"
-              severity="secondary"
-              size="small"
+          <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
+            <NmorphButton
+              :text="$t(CREATE_NEW_PASSWORD_I18N.back)"
+              style-type="transparent"
               @click="navigate"
             />
           </RouterLink>
         </div>
-      </Form>
+      </NmorphForm>
     </template>
   </div>
 </template>

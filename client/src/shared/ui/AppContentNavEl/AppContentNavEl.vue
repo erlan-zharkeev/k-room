@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { NmorphIcon, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
+
+import { useScreen } from 'src/shared/lib'
 
 import { AppHeader } from '../AppHeader'
 import { AppText } from '../AppText'
@@ -8,10 +11,15 @@ import { AppText } from '../AppText'
 import type { IAppContentNavElProps } from './types'
 
 const props = defineProps<IAppContentNavElProps>()
+const { isMobile } = useScreen()
+
+const modifierClass = computed(() => {
+  return props.active && !isMobile.value ? 'nmorph--shadow-inset' : 'nmorph--shadow-outset'
+})
 </script>
 
 <template>
-  <div :class="['app-content-nav-el', props.active ? 'nmorph--shadow-inset' : 'nmorph--shadow-outset']">
+  <div :class="['app-content-nav-el', modifierClass]">
     <RouterLink
       :to="props.to"
       :class="['app-content-nav-el-btn', { 'app-content-nav-el-btn--active': props.active }]"

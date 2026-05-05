@@ -27,20 +27,14 @@ export const MESSAGE_CONTEXT_MENU_VIEWPORT_MARGIN_PX = 12
 export const MAIN_PAGE_MESSAGE_ACTIONS = [
   {
     id: 'reply',
-    label: MAIN_PAGE_I18N.replyMessage,
-    icon: 'pi pi-reply',
-    severity: 'secondary'
+    label: MAIN_PAGE_I18N.replyMessage
   },
   {
     id: 'forward',
-    label: MAIN_PAGE_I18N.forwardMessage,
-    icon: 'pi pi-arrow-up',
-    severity: 'secondary'
+    label: MAIN_PAGE_I18N.forwardMessage
   },
   {
     id: 'delete',
-    label: MAIN_PAGE_I18N.deleteMessage,
-    icon: 'pi pi-times',
-    severity: 'danger'
+    label: MAIN_PAGE_I18N.deleteMessage
   }
 ] as const

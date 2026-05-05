@@ -27,7 +27,7 @@ const { searchQuery, filteredItems } = useSettingsFaq()
         <AppText :text="$t(SETTINGS_PAGE_FAQ_I18N.faqNoResults)" />
       </div>
 
-      <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" type="button" />
+      <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" />
     </SettingsCard>
   </div>
 </template>

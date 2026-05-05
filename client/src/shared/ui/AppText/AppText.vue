@@ -69,6 +69,10 @@ small.app-text {
   color: var(--nmorph-warn-color);
 }
 
+.app-text--error-color {
+  color: var(--nmorph-error-text-color);
+}
+
 .app-text--bold {
   font-weight: 700;
 }
