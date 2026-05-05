@@ -26,11 +26,6 @@ export const PASSWORD_RECOVERY_I18N = defineI18n({
     ru: 'Введите email',
     zh: '输入 email'
   },
-  sendCode: {
-    en: 'Send code',
-    ru: 'Отправить код',
-    zh: '发送验证码'
-  },
   resend: {
     en: 'Resend code',
     ru: 'Отправить код повторно',
@@ -50,11 +45,6 @@ export const PASSWORD_RECOVERY_I18N = defineI18n({
     en: (seconds: number) => `A new code can be sent after ${seconds} seconds.`,
     ru: (seconds: number) => `Новый код можно отправить через ${seconds} сек.`,
     zh: (seconds: number) => `${seconds} 秒后可以发送新验证码。`
-  },
-  back: {
-    en: 'Back',
-    ru: 'Назад',
-    zh: '返回'
   },
   debugCode: {
     en: 'Debug code',

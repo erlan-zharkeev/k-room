@@ -9,4 +9,4 @@ export const setClientLanguage = (language: AppLanguageType) => {
   currentLanguage.value = language
 }
 
-export const translate = <T>(value: LocalizedTextType<T>) => value[currentLanguage.value]
+export const t = <T>(value: LocalizedTextType<T>) => value[currentLanguage.value]

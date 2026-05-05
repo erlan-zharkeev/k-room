@@ -99,7 +99,7 @@ export const SETTINGS_NAVIGATION_ITEMS = [
   {
     id: 'storage',
     label: SETTINGS_PAGE_STORAGE_I18N.storage,
-    description: SETTINGS_PAGE_STORAGE_I18N.storageDescription
+    description: SETTINGS_PAGE_STORAGE_I18N.storage
   },
   {
     id: 'faq',

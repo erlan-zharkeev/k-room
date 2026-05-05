@@ -11,7 +11,7 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 </script>
 
 <template>
-  <div class="settings-faq-content">
+  <div class="settings-faq-content settings-content-grid">
     <SettingsCard :title="$t(SETTINGS_PAGE_FAQ_I18N.faq)">
       <NmorphTextInput v-model.trim="searchQuery" clearable :placeholder="$t(SETTINGS_PAGE_FAQ_I18N.faqSearch)" />
 
@@ -33,6 +33,10 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 </template>
 
 <style lang="scss">
+.settings-faq-content.settings-content-grid  {
+  grid-template-columns: 1fr;
+}
+
 .settings-faq-content__item {
   display: grid;
   gap: 4px;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
+import { COMMON_I18N } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N } from '../../../config/i18n/account-change-password-card'
@@ -13,12 +14,12 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
 
 <template>
   <SettingsCard
-    :button-aria-label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.changePassword)"
+    :button-aria-label="$t(COMMON_I18N.changePassword)"
     :button-disabled="isPasswordSubmitDisabled"
-    :button-label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.changePassword)"
+    :button-label="$t(COMMON_I18N.changePassword)"
     :button-loading="isPasswordChanging"
     :on-button-click="changePassword"
-    :title="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.changePassword)"
+    :title="$t(COMMON_I18N.changePassword)"
   >
     <NmorphForm :value="formData" @submit.prevent="changePassword">
       <NmorphFormItem

@@ -35,3 +35,21 @@ export const TOAST_I18N = defineI18n({
     zh: '错误'
   }
 })
+
+export const COMMON_I18N = defineI18n({
+  back: {
+    en: 'Back',
+    ru: 'Назад',
+    zh: '返回'
+  },
+  changePassword: {
+    en: 'Change password',
+    ru: 'Изменить пароль',
+    zh: '修改密码'
+  },
+  sendCode: {
+    en: 'Send code',
+    ru: 'Отправить код',
+    zh: '发送验证码'
+  }
+})

@@ -4,9 +4,9 @@ import { Button, Card } from 'primevue'
 import { computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
+import { COMMON_I18N } from 'src/shared/config'
 import { AppHeader, AppLogo } from 'src/shared/ui'
 
-import { PAGE_LAYOUT_I18N } from './i18n'
 import type { PageLayoutPropsType } from './types'
 
 const route = useRoute()
@@ -29,7 +29,7 @@ const handleBack = () => {
     <Button
       icon="pi pi-angle-left"
       size="small"
-      :label="$t(PAGE_LAYOUT_I18N.back)"
+      :label="$t(COMMON_I18N.back)"
       severity="secondary"
       @click="handleBack"
     />

@@ -26,11 +26,6 @@ export const CREATE_NEW_PASSWORD_I18N = defineI18n({
     ru: 'Подтвердите пароль',
     zh: '确认密码'
   },
-  submit: {
-    en: 'Change password',
-    ru: 'Изменить пароль',
-    zh: '修改密码'
-  },
   mismatch: {
     en: "Passwords don't match",
     ru: 'Пароли не совпадают',
@@ -45,10 +40,5 @@ export const CREATE_NEW_PASSWORD_I18N = defineI18n({
     en: 'Go to login page',
     ru: 'Перейти ко входу',
     zh: '前往登录页'
-  },
-  back: {
-    en: 'Back',
-    ru: 'Назад',
-    zh: '返回'
   }
 })

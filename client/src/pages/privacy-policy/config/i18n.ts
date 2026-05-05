@@ -254,10 +254,5 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
     en: 'If you have questions or requests related to this Privacy Policy, contact support through the app settings.',
     ru: 'Если у вас есть вопросы или запросы, связанные с этой политикой конфиденциальности, свяжитесь с поддержкой через настройки приложения.',
     zh: '如果你对本隐私政策有问题或请求，请通过应用设置联系支持。'
-  },
-  back: {
-    en: 'Back',
-    ru: 'Назад',
-    zh: '返回'
   }
 })

@@ -10,8 +10,9 @@ const { isSelectedThemeCustom, resetCustomTheme } = useResetCustomTheme()
 
 <template>
   <SettingsCard
-    :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.theme)"
-    :button-label="isSelectedThemeCustom ? $t(SETTINGS_PAGE_APPEARANCE_I18N.resetTheme) : undefined"
+    v-if="isSelectedThemeCustom"
+    :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.themeColors)"
+    :button-label="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetTheme)"
     :on-button-click="resetCustomTheme"
   >
     <ThemeSettingsForm />

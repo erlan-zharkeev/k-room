@@ -4,6 +4,7 @@ import { Button } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { COMMON_I18N } from 'src/shared/config'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
@@ -51,7 +52,7 @@ onMounted(initializeWaitEmailConfirm)
         <Button
           as="a"
           :href="href"
-          :label="$t(WAIT_EMAIL_CONFIRM_I18N.back)"
+          :label="$t(COMMON_I18N.back)"
           severity="secondary"
           size="small"
           @click="navigate"

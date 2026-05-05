@@ -4,11 +4,6 @@ export const SETTINGS_PAGE_STORAGE_I18N = {
     ru: 'Хранилище',
     zh: '存储'
   },
-  storageDescription: {
-    en: 'Storage',
-    ru: 'Хранилище',
-    zh: '存储'
-  },
   storageUsed: {
     en: 'Used',
     ru: 'Занято',
