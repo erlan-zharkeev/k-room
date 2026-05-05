@@ -1,16 +1,18 @@
 import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { createNotification } from './create-notification'
-import type { AppNotificationStackType, IAppNotificationInput } from './types'
+import type { AppToastStackType, IAppToastInput } from './types'
 
 const createToastChannel = () => {
   const notifications = useNmorphNotification()
 
   const toasts = computed(() => notifications.notifications.value)
 
-  const addToast = (message: IAppNotificationInput) => {
-    notifications.notify(createNotification(message))
+  const addToast = (message: IAppToastInput) => {
+    notifications.notify({
+      ...message,
+      type: message.type ?? 'info'
+    })
   }
 
   return {
@@ -27,9 +29,9 @@ export const useAppToast = () => {
   const toastChannels = {
     system: systemToastChannel,
     message: messageToastChannel
-  } satisfies Record<AppNotificationStackType, ReturnType<typeof createToastChannel>>
+  } satisfies Record<AppToastStackType, ReturnType<typeof createToastChannel>>
 
-  const findToastStackType = (id: string): AppNotificationStackType | undefined => {
+  const findToastStackType = (id: string): AppToastStackType | undefined => {
     if (systemToastChannel.toasts.value.some((toast) => toast.id === id)) return 'system'
     if (messageToastChannel.toasts.value.some((toast) => toast.id === id)) return 'message'
 
@@ -40,7 +42,7 @@ export const useAppToast = () => {
     systemToasts: systemToastChannel.toasts,
     messageToasts: messageToastChannel.toasts,
 
-    add(message: IAppNotificationInput, stackType: AppNotificationStackType = 'system') {
+    add(message: IAppToastInput, stackType: AppToastStackType = 'system') {
       toastChannels[stackType].addToast(message)
     },
 

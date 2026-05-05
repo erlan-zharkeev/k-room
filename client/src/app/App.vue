@@ -3,14 +3,14 @@ import { NmorphNotificationProvider } from '@nmorph/nmorph-ui-kit'
 
 import UnsupportedResolutionGuard from './guards/UnsupportedResolutionGuard.vue'
 import { useLanguageProvider } from './providers/use-language-provider'
-import { useNotificationProvider } from './providers/use-notification-provider'
 import { useThemeProvider } from './providers/use-theme-provider'
+import { useToastProvider } from './providers/use-toast-provider'
 import { useUserInteractionProvider } from './providers/use-user-interaction-provider'
 
 useLanguageProvider()
 useThemeProvider()
 useUserInteractionProvider()
-const { systemToasts, messageToasts } = useNotificationProvider()
+const { systemToasts, messageToasts } = useToastProvider()
 </script>
 
 <template>

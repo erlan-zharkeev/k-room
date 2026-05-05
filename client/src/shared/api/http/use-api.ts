@@ -17,7 +17,7 @@ import {
   TOAST_I18N
 } from 'src/shared/config'
 import { currentLanguage, translate } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/notification'
+import { useAppToast } from 'src/shared/lib/toast'
 
 import { apiClient } from './api-client'
 import { getHeaderValue } from './get-header-value'
