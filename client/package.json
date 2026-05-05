@@ -23,7 +23,7 @@
     "tauri:build": "tauri build"
   },
   "dependencies": {
-    "@nmorph/nmorph-ui-kit": "^2.0.2",
+    "@nmorph/nmorph-ui-kit": "^2.0.3",
     "@primevue/forms": "^4.5.5",
     "@tanstack/vue-virtual": "^3.13.24",
     "@vueuse/core": "^14.2.1",

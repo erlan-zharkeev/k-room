@@ -9,7 +9,5 @@ export interface IAppNotificationInput extends INmorphNotification {
 }
 
 export interface IAppNotification extends INmorphNotification {
-  id: string
-  duration: number
   placement: AppNotificationPlacementType
 }
