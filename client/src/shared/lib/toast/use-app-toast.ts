@@ -1,56 +1,25 @@
 import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
+import { APP_TOAST_PLACEMENT } from 'src/shared/config'
+
 import type { AppToastStackType, IAppToastInput } from './types'
 
-const createToastChannel = () => {
-  const notifications = useNmorphNotification()
-
-  const toasts = computed(() => notifications.notifications.value)
-
-  const addToast = (message: IAppToastInput) => {
-    notifications.notify({
-      ...message,
-      type: message.type ?? 'info'
-    })
-  }
-
-  return {
-    toasts,
-    addToast,
-    removeToast: notifications.removeNotification
-  }
-}
-
-const systemToastChannel = createToastChannel()
-const messageToastChannel = createToastChannel()
+const { notifications, notify, removeNotification } = useNmorphNotification()
+const toasts = computed(() => notifications.value)
 
 export const useAppToast = () => {
-  const toastChannels = {
-    system: systemToastChannel,
-    message: messageToastChannel
-  }
-
-  const findToastStackType = (id: string): AppToastStackType | undefined => {
-    if (systemToastChannel.toasts.value.some((toast) => toast.id === id)) return 'system'
-    if (messageToastChannel.toasts.value.some((toast) => toast.id === id)) return 'message'
-
-    return undefined
-  }
-
   return {
-    systemToasts: systemToastChannel.toasts,
-    messageToasts: messageToastChannel.toasts,
+    toasts,
 
     add(message: IAppToastInput, stackType: AppToastStackType = 'system') {
-      toastChannels[stackType].addToast(message)
+      notify({
+        ...message,
+        placement: message.placement ?? APP_TOAST_PLACEMENT[stackType],
+        type: message.type ?? 'info'
+      })
     },
 
-    remove(id: string) {
-      const stackType = findToastStackType(id)
-      if (!stackType) return
-
-      toastChannels[stackType].removeToast(id)
-    }
+    remove: removeNotification
   }
 }

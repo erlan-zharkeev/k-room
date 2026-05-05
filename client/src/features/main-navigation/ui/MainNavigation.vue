@@ -7,10 +7,14 @@ import { useRoute } from 'vue-router'
 import { useChatRoom } from 'src/entities/chat-room'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from 'src/shared/config'
+import { useScreen } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
+
 const props = defineProps<{ footer?: boolean }>()
+
+const { isMobile } = useScreen()
 
 const route = useRoute()
 const { unreadInfoNotificationQuantity } = useInfoNotification()
@@ -34,7 +38,7 @@ const selectedSettingsId = computed(() => {
       <NmorphBadge
         :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)"
         :offset-x="12"
-        :offset-y="20"
+        :offset-y="isMobile ? 14 : 20"
       >
         <template #value="{ value }">
           <AppText :text="value" color="contrast-text" tag="small" />
