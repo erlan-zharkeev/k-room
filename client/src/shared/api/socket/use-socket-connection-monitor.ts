@@ -2,7 +2,7 @@ import type { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'glo
 
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { translate } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/notification'
+import { useAppToast } from 'src/shared/lib/toast'
 
 import { socket } from './socket'
 import { setSocketConnected, setSocketReconnecting } from './socket-status'

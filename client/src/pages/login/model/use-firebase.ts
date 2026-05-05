@@ -11,7 +11,7 @@ import { useUserSession } from 'src/entities/user'
 import { ERROR_TOAST_LIFE_MS, useApi } from 'src/shared/api'
 import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
 import { currentLanguage, generateUUIDv4, translate, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/notification'
+import { useAppToast } from 'src/shared/lib/toast'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'

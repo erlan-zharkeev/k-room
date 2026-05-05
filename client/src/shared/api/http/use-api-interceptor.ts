@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 
 import { API_I18N, ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/notification'
+import { useAppToast } from 'src/shared/lib/toast'
 
 import { createApiError } from './create-api-error'
 import { extractErrorPayload } from './extract-error-payload'
