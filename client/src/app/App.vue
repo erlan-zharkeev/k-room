@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { NmorphNotificationProvider } from '@nmorph/nmorph-ui-kit'
 
-import { useAppToast } from 'src/shared/lib/notification'
-
 import UnsupportedResolutionGuard from './guards/UnsupportedResolutionGuard.vue'
 import { useLanguageProvider } from './providers/use-language-provider'
+import { useNotificationProvider } from './providers/use-notification-provider'
 import { useThemeProvider } from './providers/use-theme-provider'
 import { useUserInteractionProvider } from './providers/use-user-interaction-provider'
 
 useLanguageProvider()
 useThemeProvider()
 useUserInteractionProvider()
-const { systemToasts, messageToasts } = useAppToast()
+const { systemToasts, messageToasts } = useNotificationProvider()
 </script>
 
 <template>

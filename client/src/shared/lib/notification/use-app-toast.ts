@@ -1,9 +1,6 @@
 import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { useSettings } from 'src/entities/setting'
-import { useUser } from 'src/entities/user'
-
 import { createNotification } from './create-notification'
 import type { AppNotificationStackType, IAppNotificationInput } from './types'
 
@@ -27,23 +24,6 @@ const systemToastChannel = createToastChannel()
 const messageToastChannel = createToastChannel()
 
 export const useAppToast = () => {
-  const { settings } = useSettings()
-  const { isAuthorized } = useUser()
-
-  const isNotificationVisible = computed(() => settings.value.showNotification || !isAuthorized.value)
-
-  const systemToasts = computed(() => {
-    if (!isNotificationVisible.value) return []
-
-    return systemToastChannel.toasts.value
-  })
-
-  const messageToasts = computed(() => {
-    if (!isNotificationVisible.value) return []
-
-    return messageToastChannel.toasts.value
-  })
-
   const toastChannels = {
     system: systemToastChannel,
     message: messageToastChannel
@@ -57,8 +37,8 @@ export const useAppToast = () => {
   }
 
   return {
-    systemToasts,
-    messageToasts,
+    systemToasts: systemToastChannel.toasts,
+    messageToasts: messageToastChannel.toasts,
 
     add(message: IAppNotificationInput, stackType: AppNotificationStackType = 'system') {
       toastChannels[stackType].addToast(message)
