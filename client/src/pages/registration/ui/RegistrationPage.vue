@@ -56,7 +56,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
         <div class="registration-page__policy-text">
           <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.agreement)" />
           <RouterLink class="registration-page__policy-link" :to="ROUTE_NAMES.privacyPolicy">
-            <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.link)" color="accent-color" />
+            <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.link)" color="accent" />
           </RouterLink>
         </div>
       </div>

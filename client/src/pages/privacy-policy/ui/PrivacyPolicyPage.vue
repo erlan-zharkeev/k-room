@@ -7,25 +7,25 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
 
 <template>
   <div class="privacy-policy-page">
-    <AppHeader tag="h1" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.title)(CLIENT_ENV.appName)" />
+    <AppHeader tag="h1" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.title)(CLIENT_ENV.appName)" />
 
-    <AppText class="privacy-policy-page__meta" tag="p" color="semi-contrast-color">
-      <AppText bold color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
+    <AppText class="privacy-policy-page__meta" tag="p" color="semi-contrast-text">
+      <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
       June 1, 2026
     </AppText>
 
-    <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.intro)(CLIENT_ENV.appName)" />
+    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro)(CLIENT_ENV.appName)" />
 
-    <AppText class="privacy-policy-page__warning" tag="p" color="semi-contrast-color">
-      <AppText bold color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.warning)" />
+    <AppText class="privacy-policy-page__warning" tag="p" color="semi-contrast-text">
+      <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.warning)" />
       {{ $t(LEGAL_INFO_PAGE_I18N.warningText)(CLIENT_ENV.appName) }}
     </AppText>
 
-    <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
+    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section1Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section1Intro)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section1Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section1Intro)" />
       <ul class="privacy-policy-page__list">
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.accountData) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.profileData) }}</li>
@@ -38,12 +38,12 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section2Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section2Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section2Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section2Text)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section3Title)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section3Title)" />
       <ul class="privacy-policy-page__list">
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useAccounts) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useAuth) }}</li>
@@ -56,56 +56,56 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section4Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.discloseIntro)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section4Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.discloseIntro)" />
       <ul class="privacy-policy-page__list">
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseProviders) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseUsers) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseLegal) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseBusiness) }}</li>
       </ul>
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.discloseNote)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.discloseNote)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section5Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section5Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section5Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section5Text)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section6Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text1)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text2)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text1)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text2)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section7Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section7Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section7Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section7Text)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section8Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section8Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section8Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section8Text)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section9Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text)(CLIENT_ENV.appName)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text)(CLIENT_ENV.appName)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section10Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section10Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section10Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section10Text)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section11Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section11Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section11Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section11Text)" />
     </section>
 
     <section class="privacy-policy-page__section">
-      <AppHeader tag="h2" color="contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section12Title)" />
-      <AppText tag="p" color="semi-contrast-color" :text="$t(LEGAL_INFO_PAGE_I18N.section12Text)" />
+      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section12Title)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section12Text)" />
     </section>
   </div>
 </template>

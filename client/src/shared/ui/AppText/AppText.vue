@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { APP_TEXT_DEFAULT_PROPS } from './constants'
+import { APP_TEXT_COLOR_MODIFIERS, APP_TEXT_DEFAULT_PROPS } from './constants'
 import type { IAppTextProps } from './types'
 
 const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
@@ -12,7 +12,7 @@ const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-text',
     modifiers: [
-      props.color,
+      APP_TEXT_COLOR_MODIFIERS[props.color],
       props.align,
       props.bold && 'bold',
       props.truncate && 'truncate',
@@ -49,27 +49,27 @@ small.app-text {
   color: var(--nmorph-text-color);
 }
 
-.app-text--text-color {
+.app-text--text {
   color: var(--nmorph-text-color);
 }
 
-.app-text--semi-contrast-color {
+.app-text--semi-contrast-text {
   color: var(--nmorph-semi-contrast-text-color);
 }
 
-.app-text--contrast-color {
+.app-text--contrast-text {
   color: var(--nmorph-contrast-text-color);
 }
 
-.app-text--accent-color {
+.app-text--accent {
   color: var(--nmorph-accent-color);
 }
 
-.app-text--warn-color {
+.app-text--warn {
   color: var(--nmorph-warn-color);
 }
 
-.app-text--error-color {
+.app-text--error-text {
   color: var(--nmorph-error-text-color);
 }
 

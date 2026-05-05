@@ -51,7 +51,7 @@ onMounted(initializePasswordRecovery)
     <AppText v-if="!codeSent" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterEmailHint)" />
     <template v-else>
       <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.sentToEmail)" />
-      <AppText bold color="accent-color" :text="emailFormData.email.value" />
+      <AppText bold color="accent" :text="emailFormData.email.value" />
       <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterCodeHint)" />
     </template>
 
@@ -128,11 +128,7 @@ onMounted(initializePasswordRecovery)
 
     <div class="password-recovery-page__action-btns">
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
-        <NmorphButton
-          :text="$t(PASSWORD_RECOVERY_I18N.back)"
-          style-type="transparent"
-          @click="navigate"
-        />
+        <NmorphButton :text="$t(PASSWORD_RECOVERY_I18N.back)" style-type="transparent" @click="navigate" />
       </RouterLink>
     </div>
   </div>

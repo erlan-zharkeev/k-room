@@ -26,11 +26,7 @@ const handleBack = () => {
 
 <template>
   <section class="page-layout">
-    <NmorphButton
-      :text="$t(PAGE_LAYOUT_I18N.back)"
-      style-type="transparent"
-      @click="handleBack"
-    >
+    <NmorphButton :text="$t(PAGE_LAYOUT_I18N.back)" style-type="transparent" @click="handleBack">
       <template #icon>
         <NmorphIconArrowLeft />
       </template>

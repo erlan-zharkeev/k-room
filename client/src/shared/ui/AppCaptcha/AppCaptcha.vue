@@ -20,7 +20,7 @@ const { containerRef, showUnavailable } = useAppCaptcha({
 
 <template>
   <div class="app-captcha">
-    <AppText v-if="showUnavailable" color="warn-color" :text="$t(APP_CAPTCHA_I18N.unavailable)" />
+    <AppText v-if="showUnavailable" color="warn" :text="$t(APP_CAPTCHA_I18N.unavailable)" />
     <div v-else ref="containerRef" class="app-captcha__widget" />
   </div>
 </template>

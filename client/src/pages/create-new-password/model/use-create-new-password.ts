@@ -40,9 +40,7 @@ export const useCreateNewPassword = () => {
   const isPasswordChanged = ref(false)
   const passwordRecoveryCode = computed(() => route.query['password-recovery'])
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
-  const passwordMismatch = computed(
-    () => formData.firstPassword.value !== formData.secondPassword.value
-  )
+  const passwordMismatch = computed(() => formData.firstPassword.value !== formData.secondPassword.value)
   const passwordMismatchText = computed(() =>
     formData.secondPassword.value && passwordMismatch.value ? t(CREATE_NEW_PASSWORD_I18N.mismatch) : ''
   )

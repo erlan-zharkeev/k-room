@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  NmorphButton,
-  NmorphIconArrowUp,
-  NmorphIconBack,
-  NmorphIconDelete
-} from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphIconArrowUp, NmorphIconBack, NmorphIconDelete } from '@nmorph/nmorph-ui-kit'
 import { useVirtualizer } from '@tanstack/vue-virtual'
 import { formatNickname, type IEventAddReaction, type SocketActionsType } from 'global-shared'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type ComponentPublicInstance } from 'vue'
@@ -311,15 +306,10 @@ onBeforeUnmount(() => {
             <AppText
               class="message-list__author"
               bold
-              color="contrast-color"
+              color="contrast-text"
               :text="formatNickname(messages[virtualRow.index].authorNickname)"
             />
-            <AppText
-              class="message-list__body"
-              tag="p"
-              color="contrast-color"
-              :text="messages[virtualRow.index].body"
-            />
+            <AppText class="message-list__body" tag="p" color="contrast-text" :text="messages[virtualRow.index].body" />
             <div v-if="messages[virtualRow.index].reactions?.length" class="message-list__reactions">
               <span
                 v-for="(reaction, reactionIndex) in messages[virtualRow.index].reactions"

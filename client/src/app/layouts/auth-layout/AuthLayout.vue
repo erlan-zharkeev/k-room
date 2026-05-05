@@ -45,11 +45,7 @@ const route = useRoute()
             :to="tab.path"
             @click.prevent="props.blockNavigation"
           >
-            <AppHeader
-              tag="h4"
-              :color="route.path === tab.path ? 'accent-color' : 'text-color'"
-              :text="$t(tab.label)"
-            />
+            <AppHeader tag="h4" :color="route.path === tab.path ? 'accent' : 'text'" :text="$t(tab.label)" />
           </RouterLink>
         </div>
         <RouterView />

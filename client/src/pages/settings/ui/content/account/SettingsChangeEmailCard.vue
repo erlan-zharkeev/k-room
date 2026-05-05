@@ -26,7 +26,7 @@ const {
   <SettingsCard :title="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.changeEmail)">
     <div class="settings-change-email-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.currentEmail)" />
-      <AppText color="contrast-color" truncate :text="currentEmail" />
+      <AppText color="contrast-text" truncate :text="currentEmail" />
     </div>
 
     <label class="settings-change-email-card__field">
@@ -35,7 +35,7 @@ const {
       <AppText
         v-if="emailNotChanged"
         tag="small"
-        color="warn-color"
+        color="warn"
         :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailNotChanged)"
       />
       <NmorphButton

@@ -2,3 +2,9 @@
 .nmorph--shadow-outset {
   border-radius: 8px;
 }
+
+:root {
+  .nmorph-scroll {
+    --thumb-color: var(--nmorph-placeholder-text-color);
+  }
+}

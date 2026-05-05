@@ -14,7 +14,7 @@ const { isClearingMedia, clearMedia } = useSettingsStorageClearCard()
   <SettingsCard :title="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearCache)">
     <div class="settings-storage-clear-card__row">
       <div class="settings-storage-clear-card__info">
-        <AppText color="contrast-color" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMedia)" />
+        <AppText color="contrast-text" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMedia)" />
         <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMediaDescription)" />
       </div>
       <NmorphButton

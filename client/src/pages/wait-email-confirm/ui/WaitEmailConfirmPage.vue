@@ -24,7 +24,7 @@ onMounted(initializeWaitEmailConfirm)
 <template>
   <div class="wait-email-confirm-page">
     <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail)" />
-    <AppText bold color="accent-color" :text="email" />
+    <AppText bold color="accent" :text="email" />
     <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.followLink)" />
     <AppText v-if="attempts <= 0" tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.attemptsExhausted)" />
     <AppText v-else tag="p" :text="`${$t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft)} ${attempts}`" />
@@ -47,11 +47,7 @@ onMounted(initializeWaitEmailConfirm)
       />
 
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
-        <NmorphButton
-          :text="$t(WAIT_EMAIL_CONFIRM_I18N.back)"
-          style-type="transparent"
-          @click="navigate"
-        />
+        <NmorphButton :text="$t(WAIT_EMAIL_CONFIRM_I18N.back)" style-type="transparent" @click="navigate" />
       </RouterLink>
     </div>
   </div>

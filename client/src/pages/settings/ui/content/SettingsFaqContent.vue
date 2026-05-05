@@ -17,7 +17,7 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 
       <div v-if="filteredItems.length" class="settings-faq-content__list">
         <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
-          <AppText color="contrast-color" :text="$t(item.question)" />
+          <AppText color="contrast-text" :text="$t(item.question)" />
           <AppText :text="$t(item.answer)" />
           <NmorphDivider class="settings-faq-content__list-divider" />
         </div>
