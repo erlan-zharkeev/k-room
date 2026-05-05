@@ -1,7 +1,4 @@
-import {
-  DEFAULT_NOTIFICATION_PLACEMENT,
-  NOTIFICATION_PLACEMENT_BY_TYPE
-} from './constants'
+import { DEFAULT_NOTIFICATION_PLACEMENT, NOTIFICATION_PLACEMENT_BY_TYPE } from './constants'
 import type { IAppNotification, IAppNotificationInput } from './types'
 
 export const createNotification = (message: IAppNotificationInput): IAppNotification => {

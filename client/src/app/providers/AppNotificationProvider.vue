@@ -25,12 +25,6 @@ const messageNotifications = computed(() =>
 </script>
 
 <template>
-  <NmorphNotificationProvider
-    :notifications="systemNotifications"
-    placement="top-center"
-  />
-  <NmorphNotificationProvider
-    :notifications="messageNotifications"
-    placement="top-right"
-  />
+  <NmorphNotificationProvider :notifications="systemNotifications" placement="top-center" />
+  <NmorphNotificationProvider :notifications="messageNotifications" placement="top-right" />
 </template>

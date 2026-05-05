@@ -2,12 +2,12 @@ import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { createNotification } from './create-notification'
-import type { IAppNotificationInput } from './types'
+import type { IAppNotification, IAppNotificationInput } from './types'
 
 const toast = useNmorphNotification()
 
 export const useAppToast = () => {
-  const notifications = computed(() => toast.notifications.value)
+  const notifications = computed<IAppNotification[]>(() => toast.notifications.value as IAppNotification[])
 
   const add = (message: IAppNotificationInput) => {
     toast.notify(createNotification(message))
