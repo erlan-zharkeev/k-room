@@ -19,6 +19,11 @@ export const SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N = {
     ru: 'Код из письма',
     zh: '邮件验证码'
   },
+  sendCode: {
+    en: 'Send code',
+    ru: 'Отправить код',
+    zh: '发送验证码'
+  },
   validateCode: {
     en: 'Validate code',
     ru: 'Проверить код',

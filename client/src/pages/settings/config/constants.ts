@@ -1,5 +1,4 @@
 import {
-  MEDIA_KIND_ACCEPT_MAP,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
   MEDIA_MB_IN_BYTES,
   MEDIA_UPLOAD_TYPE_LABEL_MAP,
@@ -46,7 +45,8 @@ export const SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL = SETTINGS_ACCOUNT_AVAT
 ).join(', ')
 export const SETTINGS_ACCOUNT_AVATAR_MAX_MB = settingsAccountAvatarValidation.maxMb
 export const SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE = settingsAccountAvatarValidation.maxMb * MEDIA_MB_IN_BYTES
-export const SETTINGS_WALLPAPER_ACCEPT = MEDIA_KIND_ACCEPT_MAP[settingsWallpaperValidation.supportedKindMediaType]
+export const SETTINGS_WALLPAPER_ALLOWED_TYPES =
+  MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP[settingsWallpaperValidation.supportedKindMediaType]
 export const SETTINGS_WALLPAPER_MAX_FILE_SIZE = settingsWallpaperValidation.maxMb * MEDIA_MB_IN_BYTES
 export const SETTINGS_WALLPAPER_VISIBILITY_OPTIONS = [
   { value: 'show', label: SETTINGS_PAGE_APPEARANCE_I18N.show },

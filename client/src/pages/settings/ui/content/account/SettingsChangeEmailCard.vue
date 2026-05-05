@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
-import { COMMON_I18N } from 'src/shared/config'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N } from '../../../config/i18n/account-change-email-card'
@@ -43,7 +42,7 @@ const {
         class="settings-change-email-card__button"
         :disabled="isSendCodeDisabled"
         :loading="isEmailCodeSending"
-        :text="$t(COMMON_I18N.sendCode)"
+        :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.sendCode)"
         @click="sendEmailCode"
       />
     </label>

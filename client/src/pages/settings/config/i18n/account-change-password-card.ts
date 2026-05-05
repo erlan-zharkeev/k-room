@@ -1,4 +1,9 @@
 export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N = {
+  changePassword: {
+    en: 'Change password',
+    ru: 'Изменить пароль',
+    zh: '修改密码'
+  },
   currentPassword: {
     en: 'Current password',
     ru: 'Текущий пароль',

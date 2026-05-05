@@ -4,7 +4,6 @@ import { Button, ProgressSpinner } from 'primevue'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { COMMON_I18N } from 'src/shared/config'
 import { AppHeader, AppText } from 'src/shared/ui'
 
 import { EMAIL_CONFIRMATION_I18N } from '../config/i18n'
@@ -29,7 +28,7 @@ onMounted(confirmEmail)
         <Button
           as="a"
           :href="href"
-          :label="$t(COMMON_I18N.back)"
+          :label="$t(EMAIL_CONFIRMATION_I18N.back)"
           size="small"
           class="email-confirmation-page__act-btn"
           @click="navigate"

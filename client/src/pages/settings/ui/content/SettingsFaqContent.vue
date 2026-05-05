@@ -33,7 +33,7 @@ const { searchQuery, filteredItems } = useSettingsFaq()
 </template>
 
 <style lang="scss">
-.settings-faq-content.settings-content-grid  {
+.settings-faq-content.settings-content-grid {
   grid-template-columns: 1fr;
 }
 

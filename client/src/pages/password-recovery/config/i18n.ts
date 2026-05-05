@@ -31,6 +31,11 @@ export const PASSWORD_RECOVERY_I18N = defineI18n({
     ru: 'Отправить код повторно',
     zh: '重新发送验证码'
   },
+  sendCode: {
+    en: 'Send code',
+    ru: 'Отправить код',
+    zh: '发送验证码'
+  },
   codePlaceholder: {
     en: 'Enter code from email',
     ru: 'Введите код из письма',
@@ -50,5 +55,10 @@ export const PASSWORD_RECOVERY_I18N = defineI18n({
     en: 'Debug code',
     ru: 'Debug code',
     zh: '调试验证码'
+  },
+  back: {
+    en: 'Back',
+    ru: 'Назад',
+    zh: '返回'
   }
 })
