@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphOTPInput, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { EMAIL_CODE_LENGTH } from 'global-shared'
 
 import { AppText } from 'src/shared/ui'
 
@@ -16,7 +17,6 @@ const {
   isValidateCodeDisabled,
   nextEmail,
   otpCode,
-  setOtpCode,
   sendEmailCode,
   validateEmailCode
 } = useSettingsChangeEmailCard()
@@ -49,10 +49,10 @@ const {
 
     <label class="settings-change-email-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailCode)" />
-      <NmorphTextInput
-        :model-value="otpCode"
+      <NmorphOTPInput
+        v-model="otpCode"
+        :length="EMAIL_CODE_LENGTH"
         :disabled="isEmailCodeSending || isEmailCodeValidating"
-        @update:model-value="setOtpCode"
       />
       <NmorphButton
         class="settings-change-email-card__button"

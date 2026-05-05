@@ -124,7 +124,7 @@ const changeEmail = async (page: Page, currentEmail: string, nextEmail: string) 
     hasText: 'Code from email'
   })
 
-  await codeField.locator('input').first().pressSequentially(String(debugCode))
+  await codeField.locator('input:not([type="hidden"])').first().pressSequentially(String(debugCode))
   await expect(validateCodeButton).toBeEnabled()
 
   const validateResponsePromise = waitForValidateChangeEmailCodeResponse(page)
