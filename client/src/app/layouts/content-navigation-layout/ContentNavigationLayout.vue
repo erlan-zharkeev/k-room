@@ -15,7 +15,7 @@ const props = defineProps<IContentNavigationLayoutProps>()
       <AppHeader :text="$t(CONTENT_NAVIGATION_TITLE[props.titleKey])" />
     </div>
     <div class="content-navigation-layout__content nmorph--shadow-inset">
-      <NmorphScroll>
+      <NmorphScroll :y-gap-in-px="-6">
         <slot />
       </NmorphScroll>
     </div>
