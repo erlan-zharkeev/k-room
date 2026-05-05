@@ -56,7 +56,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
   justify-self: start;
 }
 
-@include screen-mobile {
+@include screen-tablet {
   .settings-card__footer {
     justify-self: stretch;
     width: 100%;

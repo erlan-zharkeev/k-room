@@ -27,7 +27,7 @@ body {
   height: 100dvh;
   padding: 16px;
 
-  @include screen-mobile {
+  @include screen-tablet {
     padding: 8px;
   }
 }

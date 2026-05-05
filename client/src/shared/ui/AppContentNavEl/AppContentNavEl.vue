@@ -10,11 +10,11 @@ import { AppText } from '../AppText'
 import type { IAppContentNavElProps } from './types'
 
 const props = defineProps<IAppContentNavElProps>()
-const { isMobile } = useScreen()
+const { isTablet } = useScreen()
 </script>
 
 <template>
-  <div :class="['app-content-nav-el', props.active && !isMobile ? 'nmorph--shadow-inset' : 'nmorph--shadow-outset']">
+  <div :class="['app-content-nav-el', props.active && !isTablet ? 'nmorph--shadow-inset' : 'nmorph--shadow-outset']">
     <RouterLink
       :to="props.to"
       :class="['app-content-nav-el-btn', { 'app-content-nav-el-btn--active': props.active }]"
@@ -25,7 +25,7 @@ const { isMobile } = useScreen()
         <AppHeader tag="h5" truncate :text="props.label" />
         <AppText tag="small" truncate color="semi-contrast-text" :text="props.description" />
       </div>
-      <div v-if="!isMobile" class="app-content-nav-el__icon">
+      <div v-if="!isTablet" class="app-content-nav-el__icon">
         <NmorphIcon>
           <NmorphIconArrowRight v-if="props.active" />
           <NmorphIconArrowDown v-else />

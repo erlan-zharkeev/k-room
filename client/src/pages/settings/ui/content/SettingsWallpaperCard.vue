@@ -53,6 +53,13 @@ const visibilityOptions = computed(() =>
 
       <div class="settings-wallpaper-card__additional" v-if="isSelectedThemeCustom">
         <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element">
+            <AppText
+              tag="small"
+              truncate
+              :text="effectiveTheme.wallpaper.filename"
+              class="settings-wallpaper-card__file-label"
+              color='accent'
+            />
           <div class="settings-wallpaper-card__upload-main">
             <NmorphFileUpload
               :key="uploadKey"
@@ -63,19 +70,12 @@ const visibilityOptions = computed(() =>
               @update:model-value="uploadWallpaper"
               @on-unsupported-file-type-error="showUnsupportedWallpaperFormatError"
             />
-            <AppText
-              tag="small"
-              truncate
-              :text="effectiveTheme.wallpaper.filename"
-              class="settings-wallpaper-card__file-label"
-            />
+            <!-- <NmorphButton
+              :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
+              style-type="transparent"
+              @click="resetWallpaper"
+            /> -->
           </div>
-
-          <NmorphButton
-            :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
-            style-type="transparent"
-            @click="resetWallpaper"
-          />
         </div>
 
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
@@ -134,12 +134,16 @@ const visibilityOptions = computed(() =>
   display: grid;
 }
 
-.settings-wallpaper-card__visibility,
-.settings-wallpaper-card__upload {
+.settings-wallpaper-card__visibility {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
+.settings-wallpaper-card__upload {
+  display: grid;
+}
+
 
 .settings-wallpaper-card__additional {
   display: grid;
@@ -149,10 +153,14 @@ const visibilityOptions = computed(() =>
   margin-bottom: 12px;
 }
 
+.settings-wallpaper-card__file-label {
+  margin-bottom: 8px;
+}
+
 .settings-wallpaper-card__upload-main {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  // display: flex;
+  // gap: 8px;
+  // align-items: center;
 }
 
 .settings-wallpaper-card__slider-label {
