@@ -28,5 +28,15 @@ export const SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N = {
     en: 'Update',
     ru: 'Обновить',
     zh: '更新'
+  },
+  nicknameCopied: {
+    en: 'Nickname copied to clipboard',
+    ru: 'Никнейм скопирован в буфер обмена',
+    zh: '昵称已复制到剪贴板'
+  },
+  userIdCopied: {
+    en: 'User ID copied to clipboard',
+    ru: 'ID скопирован в буфер обмена',
+    zh: '用户 ID 已复制到剪贴板'
   }
 } as const

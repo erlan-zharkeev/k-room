@@ -12,15 +12,18 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
-import { useI18n } from 'src/shared/lib'
+import { translate, useI18n } from 'src/shared/lib'
+import { useAppToast } from 'src/shared/lib/toast'
 
 import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants'
+import { SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N } from '../../config/i18n/account-personal-data-card'
 
 export const useSettingsPersonalDataCard = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
   const { user, avatarId, update: updateUserData } = useUser()
   const { doRequest } = useApi()
   const { t } = useI18n()
+  const toast = useAppToast()
   const accountNickname = ref('')
   const accountAvatarFile = ref<File>()
   const accountAvatarPreviewUrl = ref('')
@@ -105,6 +108,7 @@ export const useSettingsPersonalDataCard = () => {
 
     try {
       await navigator.clipboard.writeText(displayedUserId.value)
+      toast.add({ content: translate(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.userIdCopied) })
     } catch (error) {
       void error
     }
@@ -115,6 +119,7 @@ export const useSettingsPersonalDataCard = () => {
 
     try {
       await navigator.clipboard.writeText(displayedNickname.value)
+      toast.add({ content: translate(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nicknameCopied) })
     } catch (error) {
       void error
     }
@@ -137,7 +142,7 @@ export const useSettingsPersonalDataCard = () => {
 
     try {
       isAccountSaving.value = true
-      await doRequest<null>('patch', USER_ENDPOINTS.editUserData, formData, {
+      await doRequest('patch', USER_ENDPOINTS.editUserData, formData, {
         contentType: 'multipart/form-data'
       })
       await updateUserData({ nickname })
