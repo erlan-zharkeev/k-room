@@ -46,6 +46,8 @@ const { settings, changeTheme } = useThemeSelect()
 <style lang="scss">
 .theme-select__option {
   @include flex-column-center;
+
+  width: 100px;
 }
 
 .theme-select--compact {

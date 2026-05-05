@@ -4,6 +4,7 @@ export type {
   IAppearanceSettings,
   IColorSchema,
   IThemeData,
+  IThemeShadowSettings,
   IWallpaperSettings,
   EffectiveThemeType,
   SystemTheme,

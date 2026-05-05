@@ -131,7 +131,6 @@ const visibilityOptions = computed(() =>
   display: grid;
 }
 
-
 .settings-wallpaper-card__additional {
   display: grid;
 }

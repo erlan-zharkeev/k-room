@@ -46,6 +46,9 @@ watch(
 
 const showNavigation = computed(() => !isTablet.value || route.query.view === 'content-navigation')
 const showContent = computed(() => !isTablet.value || route.query.view !== 'content-navigation')
+const showWallpaper = computed(
+  () => settings.value.appearance.showWallpaper && Boolean(effectiveTheme.value.wallpaper.url)
+)
 
 const segments = computed(() => route.path.split('/').filter(Boolean))
 
@@ -71,11 +74,7 @@ const wallpaperStyle = computed(() => {
 </script>
 
 <template>
-  <main
-    class="main-layout"
-    :class="{ 'main-layout--wallpaper': settings.appearance.showWallpaper }"
-    :style="wallpaperStyle"
-  >
+  <main class="main-layout" :class="{ 'main-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
     <MainLeftBar v-if="!isTablet" class="widget nmorph--shadow-outset" />
     <section class="main-layout__workspace">
       <MainTopBar class="widget nmorph--shadow-outset" />

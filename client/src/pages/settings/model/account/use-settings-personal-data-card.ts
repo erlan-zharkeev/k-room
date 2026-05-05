@@ -1,3 +1,4 @@
+import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import {
   USER_ENDPOINTS,
   createUpdateUserDataSchema,
@@ -68,8 +69,8 @@ export const useSettingsPersonalDataCard = () => {
     avatarUploadKey.value += 1
   }
 
-  const uploadAccountAvatar = (files: File[]) => {
-    const file = files[files.length - 1]
+  const uploadAccountAvatar = (files: INmorphCustomFileData[]) => {
+    const file = files[files.length - 1]?.data
 
     if (!file) {
       accountAvatarFile.value = undefined

@@ -1,3 +1,4 @@
+import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import { computed, ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
@@ -12,8 +13,13 @@ export const useWallpaperSettings = () => {
   const { effectiveTheme, settings, setByPath } = useSettings()
   const { t } = useI18n()
   const toast = useAppToast()
-  const uploadKey = ref(0)
+  const uploadKeySource = ref(0)
   const basicPath = computed(() => `appearance.themes.${settings.value.appearance.selectedTheme}.wallpaper.`)
+  const uploadKey = computed(() => {
+    const { filename, url } = effectiveTheme.value.wallpaper
+
+    return `${uploadKeySource.value}-${settings.value.appearance.selectedTheme}-${filename}-${url.length}`
+  })
   const wallpaperUploadValue = computed(() => {
     const { filename, url } = effectiveTheme.value.wallpaper
     if (!filename || !url) return []
@@ -50,7 +56,7 @@ export const useWallpaperSettings = () => {
   }
 
   const resetUpload = () => {
-    uploadKey.value += 1
+    uploadKeySource.value += 1
   }
 
   const resetWallpaper = () => {
@@ -59,8 +65,8 @@ export const useWallpaperSettings = () => {
     resetUpload()
   }
 
-  const updateWallpaper = async (files: File[]) => {
-    const file = files[files.length - 1]
+  const updateWallpaper = async (files: INmorphCustomFileData[]) => {
+    const file = files[files.length - 1]?.data
     if (!file) {
       resetWallpaper()
       return

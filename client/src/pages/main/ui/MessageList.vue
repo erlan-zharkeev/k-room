@@ -369,7 +369,7 @@ onBeforeUnmount(() => {
 
 <style>
 .message-list {
-  scrollbar-color: var(--app-scroll-thumb-color) var(--app-content-background);
+  scrollbar-color: var(--nmorph-scroll-thumb-color) var(--app-content-background);
   scrollbar-gutter: stable;
 
   overflow: auto;
@@ -394,11 +394,11 @@ onBeforeUnmount(() => {
 .message-list::-webkit-scrollbar-thumb {
   border: 3px solid var(--app-content-background);
   border-radius: 8px;
-  background: var(--app-scroll-thumb-color);
+  background: var(--nmorph-scroll-thumb-color);
 }
 
 .message-list::-webkit-scrollbar-thumb:hover {
-  background: var(--app-scroll-thumb-hover-color);
+  background: var(--nmorph-scroll-thumb-color);
 }
 
 .message-list__load-more {
