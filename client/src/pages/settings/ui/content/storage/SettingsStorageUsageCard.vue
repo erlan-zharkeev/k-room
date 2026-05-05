@@ -30,7 +30,7 @@ const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
         <AppText color="contrast-color" :text="availableFormatted" />
       </div>
       <div class="settings-storage-usage-card__stat">
-        <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageTotal)" />
+        <AppText align="center" size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageTotal)" />
         <AppText color="contrast-color" :text="quotaFormatted" />
       </div>
     </div>
@@ -42,6 +42,7 @@ const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+  align-items: start;
 }
 
 .settings-storage-usage-card__stat {
