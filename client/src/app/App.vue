@@ -10,14 +10,13 @@ import { useUserInteractionProvider } from './providers/use-user-interaction-pro
 useLanguageProvider()
 useThemeProvider()
 useUserInteractionProvider()
-const { systemToasts, messageToasts } = useToastProvider()
+const { toasts } = useToastProvider()
 </script>
 
 <template>
   <div class="app">
     <UnsupportedResolutionGuard />
-    <NmorphNotificationProvider :notifications="systemToasts" placement="top-center" />
-    <NmorphNotificationProvider :notifications="messageToasts" placement="top-right" />
+    <NmorphNotificationProvider :notifications="toasts" placement="top-center" />
     <RouterView />
   </div>
 </template>

@@ -7,12 +7,11 @@ import { useAppToast } from 'src/shared/lib/toast'
 export const useToastProvider = () => {
   const { settings } = useSettings()
   const { isAuthorized } = useUser()
-  const { systemToasts: rawSystemToasts, messageToasts: rawMessageToasts } = useAppToast()
+  const { toasts: rawToasts } = useAppToast()
 
   const isToastVisible = computed(() => settings.value.showNotification || !isAuthorized.value)
 
-  const systemToasts = computed(() => (isToastVisible.value ? rawSystemToasts.value : []))
-  const messageToasts = computed(() => (isToastVisible.value ? rawMessageToasts.value : []))
+  const toasts = computed(() => (isToastVisible.value ? rawToasts.value : []))
 
-  return { systemToasts, messageToasts }
+  return { toasts }
 }
