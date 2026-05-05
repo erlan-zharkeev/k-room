@@ -12,10 +12,11 @@ export interface IWallpaperSettings {
   filename: string
 }
 
-export interface IThemeData {
-  mode: SystemTheme
-  colorSchema: IColorSchema
-  wallpaper: IWallpaperSettings
+export interface IThemeShadowSettings {
+  darkShadeGeneratorCoefficient: number
+  lightShadeGeneratorCoefficient: number
+  baseShadowWidth: number
+  baseShadowBlurCoefficient: number
 }
 
 export interface IColorSchema {
@@ -37,9 +38,16 @@ export interface IColorSchema {
   warn: string
   warnText: string
   gray: string
+  scrollThumb: string
   white: string
   black: string
   overlay: string
+}
+
+export interface IThemeData extends IThemeShadowSettings {
+  mode: SystemTheme
+  colorSchema: IColorSchema
+  wallpaper: IWallpaperSettings
 }
 
 export interface IAppearanceSettings {

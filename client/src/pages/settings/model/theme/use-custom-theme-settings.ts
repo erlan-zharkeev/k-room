@@ -1,13 +1,16 @@
 import { useSettings } from 'src/entities/setting'
-import { DEFAULT_CUSTOM_SCHEMA, DEFAULT_CUSTOM_THEME_MODE } from 'src/shared/config'
+import { DEFAULT_CUSTOM_SCHEMA, DEFAULT_CUSTOM_THEME_MODE, DEFAULT_THEME_SHADOW_SETTINGS } from 'src/shared/config'
 import type { SystemTheme } from 'src/shared/config'
 
 export const useCustomThemeSettings = () => {
-  const { isSelectedThemeCustom, settings, setByPath } = useSettings()
+  const { isSelectedThemeCustom, mutate, settings, setByPath } = useSettings()
 
   const resetCustomTheme = () => {
-    void setByPath('appearance.themes.custom.colorSchema', { ...DEFAULT_CUSTOM_SCHEMA })
-    void setByPath('appearance.themes.custom.mode', DEFAULT_CUSTOM_THEME_MODE)
+    void mutate((data) => {
+      Object.assign(data.appearance.themes.custom, DEFAULT_THEME_SHADOW_SETTINGS)
+      data.appearance.themes.custom.colorSchema = { ...DEFAULT_CUSTOM_SCHEMA }
+      data.appearance.themes.custom.mode = DEFAULT_CUSTOM_THEME_MODE
+    })
   }
 
   const changeCustomThemeMode = (value: SystemTheme) => {

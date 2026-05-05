@@ -1,6 +1,13 @@
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
 
-import type { IColorSchema, IThemeData, IWallpaperSettings, SystemTheme } from '../types/appearance.types'
+import type {
+  EffectiveThemeType,
+  IColorSchema,
+  IThemeData,
+  IThemeShadowSettings,
+  IWallpaperSettings,
+  SystemTheme
+} from '../types/appearance.types'
 
 const ACCENT_COLOR = '#418fde'
 const SHARED_THEME_COLORS = {
@@ -17,11 +24,25 @@ const SHARED_THEME_COLORS = {
   overlay: '#00000095'
 } as const
 
+export const EFFECTIVE_THEME_VALUES = ['dark', 'light', 'custom'] as const satisfies readonly [
+  EffectiveThemeType,
+  EffectiveThemeType,
+  EffectiveThemeType
+]
+
+export const DEFAULT_THEME_SHADOW_SETTINGS = {
+  darkShadeGeneratorCoefficient: -45,
+  lightShadeGeneratorCoefficient: 45,
+  baseShadowWidth: 3.5,
+  baseShadowBlurCoefficient: 2
+} as const satisfies IThemeShadowSettings
+
 export const DARK_COLOR_SCHEMA = {
   main: '#1c1f21',
   darkShade: '#0f1112',
   lightShade: '#292d30',
   text: '#778288',
+  scrollThumb: '#778288',
   accent: '#006cb6',
   focusText: '#ffffff',
   placeholderText: '#575757',
@@ -37,6 +58,7 @@ export const LIGHT_COLOR_SCHEMA = {
   lightShade: '#fdfdfd',
   text: '#687b9e',
   accent: '#4a90e2',
+  scrollThumb: '#687b9e',
   focusText: '#ffffff',
   placeholderText: '#c1c9cf',
   semiContrastText: '#8a9dc0',
@@ -51,6 +73,7 @@ export const CUSTOM_COLOR_SCHEMA = {
   lightShade: '#2a2a2a',
   text: '#9eabbc',
   accent: ACCENT_COLOR,
+  scrollThumb: '#9eabbc',
   focusText: '#f4f7fb',
   placeholderText: '#c8d0dc',
   semiContrastText: '#c8d0dc',
@@ -98,16 +121,19 @@ export const CUSTOM_WALLPAPER_SETTINGS = {
 
 export const APPEARANCE_DARK = {
   mode: 'dark',
+  ...DEFAULT_THEME_SHADOW_SETTINGS,
   colorSchema: DARK_COLOR_SCHEMA,
   wallpaper: DARK_WALLPAPER_SETTINGS
 } as const satisfies IThemeData
 export const APPEARANCE_LIGHT = {
   mode: 'light',
+  ...DEFAULT_THEME_SHADOW_SETTINGS,
   colorSchema: LIGHT_COLOR_SCHEMA,
   wallpaper: LIGHT_WALLPAPER_SETTINGS
 } as const satisfies IThemeData
 export const APPEARANCE_CUSTOM = {
   mode: DEFAULT_CUSTOM_THEME_MODE,
+  ...DEFAULT_THEME_SHADOW_SETTINGS,
   colorSchema: CUSTOM_COLOR_SCHEMA,
   wallpaper: CUSTOM_WALLPAPER_SETTINGS
 } as const satisfies IThemeData

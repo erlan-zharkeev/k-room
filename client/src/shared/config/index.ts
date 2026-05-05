@@ -13,7 +13,14 @@ export {
 } from './constants'
 export { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from './main-navigation'
 export {
+  CUSTOM_WALLPAPER_SETTINGS,
   DARK_COLOR_SCHEMA,
+  DEFAULT_DARK_WALLPAPER_FILENAME,
+  DEFAULT_DARK_WALLPAPER_URL,
+  DEFAULT_LIGHT_WALLPAPER_FILENAME,
+  DEFAULT_LIGHT_WALLPAPER_URL,
+  DEFAULT_THEME_SHADOW_SETTINGS,
+  EFFECTIVE_THEME_VALUES,
   DEFAULT_CUSTOM_THEME_MODE,
   DEFAULT_CUSTOM_SCHEMA,
   LIGHT_COLOR_SCHEMA,
@@ -28,6 +35,7 @@ export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared
 export type { FileLoaderValueType, IDbMedia } from 'src/shared/types'
 export type {
   IThemeData,
+  IThemeShadowSettings,
   SystemTheme,
   EffectiveThemeType,
   IWallpaperSettings,

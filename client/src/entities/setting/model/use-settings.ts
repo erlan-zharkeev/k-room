@@ -8,7 +8,7 @@ import { DEFAULT_SETTINGS } from '../config/constants'
 const settingsStore = dexieKeyValueStore<DbUserSettingType>(db.settings, 'settings')
 
 export const useSettings = () => {
-  const { ensure, reset, setByPath, shallowUpdate } = settingsStore
+  const { ensure, mutate, reset, setByPath, shallowUpdate } = settingsStore
   const settings = settingsStore.use(DEFAULT_SETTINGS)
   const isSelectedThemeCustom = computed(() => settings.value.appearance.selectedTheme === 'custom')
   const isSelectedThemeSystem = computed(() => settings.value.appearance.selectedTheme === 'system')
@@ -23,6 +23,7 @@ export const useSettings = () => {
     isSelectedThemeSystem,
     effectiveTheme,
     initialize: () => ensure(DEFAULT_SETTINGS),
+    mutate,
     reset: () => reset(DEFAULT_SETTINGS),
     shallowUpdate,
     setByPath

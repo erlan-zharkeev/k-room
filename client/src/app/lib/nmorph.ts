@@ -2,6 +2,7 @@ import { en, ru, zh } from '@nmorph/nmorph-ui-kit'
 import type { AppLanguageType } from 'global-shared'
 
 import { DEFAULT_APPEARANCE } from 'src/shared/config'
+import { getNmorphThemeShadowOptions } from 'src/shared/lib'
 import type { IAppearanceSettings } from 'src/shared/types'
 
 const getEffectiveThemeName = ({ selectedTheme, systemTheme }: IAppearanceSettings) => {
@@ -24,10 +25,9 @@ export const createNmorphOptions = (
       },
       defaultTheme: effectiveThemeName,
       saveCurrentThemeToLS: false,
-      other: {
-        baseShadowWidth: '3.5px',
-        baseShadowBlurCoefficient: '2'
-      }
+      darkShadeGeneratorCoefficient: effectiveTheme.darkShadeGeneratorCoefficient,
+      lightShadeGeneratorCoefficient: effectiveTheme.lightShadeGeneratorCoefficient,
+      other: getNmorphThemeShadowOptions(effectiveTheme)
     },
     i18n: {
       messages: {
