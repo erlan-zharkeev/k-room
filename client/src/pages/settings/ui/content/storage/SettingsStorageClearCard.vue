@@ -39,7 +39,7 @@ const { isClearingMedia, clearMedia } = useSettingsStorageClearCard()
   gap: 2px;
 }
 
-@include screen-mobile {
+@include screen-tablet {
   .settings-storage-clear-card__row {
     flex-wrap: wrap;
   }

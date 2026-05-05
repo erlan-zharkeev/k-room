@@ -14,7 +14,7 @@ import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 
 const props = defineProps<{ footer?: boolean }>()
 
-const { isMobile } = useScreen()
+const { isTablet } = useScreen()
 
 const route = useRoute()
 const { unreadInfoNotificationQuantity } = useInfoNotification()
@@ -38,7 +38,7 @@ const selectedSettingsId = computed(() => {
       <NmorphBadge
         :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)"
         :offset-x="12"
-        :offset-y="isMobile ? 14 : 20"
+        :offset-y="isTablet ? 14 : 20"
       >
         <template #value="{ value }">
           <AppText :text="value" color="contrast-text" tag="small" />

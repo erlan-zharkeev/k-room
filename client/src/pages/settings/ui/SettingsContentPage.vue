@@ -27,7 +27,7 @@ const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[sel
   gap: 12px;
   padding: 16px;
 
-  @include screen-mobile {
+  @include screen-tablet {
     grid-template-columns: 1fr;
   }
 }

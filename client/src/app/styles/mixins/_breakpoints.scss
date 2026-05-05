@@ -29,12 +29,6 @@ $screen-breakpoints: (
   }
 }
 
-@mixin screen-mobile {
-  @include screen-until('portrait-tablet') {
-    @content;
-  }
-}
-
 @mixin screen-portrait-tablet {
   @include screen-between('portrait-tablet', 'tablet') {
     @content;
@@ -42,7 +36,7 @@ $screen-breakpoints: (
 }
 
 @mixin screen-tablet {
-  @include screen-between('tablet', 'desktop') {
+  @include screen-until('tablet') {
     @content;
   }
 }

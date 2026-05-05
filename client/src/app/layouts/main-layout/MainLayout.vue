@@ -15,21 +15,21 @@ import { isContentTitleKey } from './../content-layout/types'
 import ContentNavigationLayout from './../content-navigation-layout/ContentNavigationLayout.vue'
 import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
 
-const { isMobile } = useScreen()
+const { isTablet } = useScreen()
 const { effectiveTheme, settings } = useSettings()
 const route = useRoute()
 const router = useRouter()
 
 useMainMonitors()
 
-const isSupportedMobileMainLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
+const isSupportedTabletMainLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
   isString(view) && ['content', 'content-navigation'].includes(view)
 
 watch(
-  isMobile,
-  (mobile) => {
-    if (mobile) {
-      if (isSupportedMobileMainLayoutView(route.query.view)) return
+  isTablet,
+  (tablet) => {
+    if (tablet) {
+      if (isSupportedTabletMainLayoutView(route.query.view)) return
 
       router.replace({ query: { ...route.query, view: 'content-navigation' } })
       return
@@ -44,8 +44,8 @@ watch(
   { immediate: true }
 )
 
-const showNavigation = computed(() => !isMobile.value || route.query.view === 'content-navigation')
-const showContent = computed(() => !isMobile.value || route.query.view !== 'content-navigation')
+const showNavigation = computed(() => !isTablet.value || route.query.view === 'content-navigation')
+const showContent = computed(() => !isTablet.value || route.query.view !== 'content-navigation')
 
 const segments = computed(() => route.path.split('/').filter(Boolean))
 
@@ -76,7 +76,7 @@ const wallpaperStyle = computed(() => {
     :class="{ 'main-layout--wallpaper': settings.appearance.showWallpaper }"
     :style="wallpaperStyle"
   >
-    <MainLeftBar v-if="!isMobile" class="widget nmorph--shadow-outset" />
+    <MainLeftBar v-if="!isTablet" class="widget nmorph--shadow-outset" />
     <section class="main-layout__workspace">
       <MainTopBar class="widget nmorph--shadow-outset" />
       <div class="main-layout__content">
@@ -91,7 +91,7 @@ const wallpaperStyle = computed(() => {
           </ContentLayout>
         </div>
       </div>
-      <MainMobileFooter v-if="isMobile" class="widget nmorph--shadow-outset" />
+      <MainMobileFooter v-if="isTablet" class="widget nmorph--shadow-outset" />
     </section>
   </main>
 </template>
@@ -107,7 +107,7 @@ const wallpaperStyle = computed(() => {
   height: 100%;
   min-height: 0;
 
-  @include screen-mobile {
+  @include screen-tablet {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -118,7 +118,7 @@ const wallpaperStyle = computed(() => {
   gap: 12px;
   min-height: 0;
 
-  @include screen-mobile {
+  @include screen-tablet {
     grid-template-rows: var(--bar-thickness) minmax(0, 1fr) var(--bar-thickness);
   }
 }
@@ -131,7 +131,7 @@ const wallpaperStyle = computed(() => {
   min-width: 0;
   min-height: 0;
 
-  @include screen-mobile {
+  @include screen-tablet {
     grid-template-columns: 1fr;
   }
 }

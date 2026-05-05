@@ -10,7 +10,7 @@ import { IContentLayoutProps } from './types'
 
 const props = defineProps<IContentLayoutProps>()
 
-const { isMobile } = useScreen()
+const { isTablet } = useScreen()
 const route = useRoute()
 const router = useRouter()
 
@@ -22,7 +22,7 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <div v-if="isMobile" class="content-layout__back-btn nmorph--shadow-inset">
+      <div v-if="isTablet" class="content-layout__back-btn nmorph--shadow-inset">
         <NmorphButton @click="handleBack">
           <template #icon>
             <NmorphIconBack />
