@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { NmorphButton } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
-import { Button } from 'primevue'
 import { RouterLink } from 'vue-router'
 
 import { AppText } from 'src/shared/ui'
@@ -12,8 +12,8 @@ import { ERROR_PAGE_I18N } from '../config/i18n'
   <div class="error-page">
     <AppText class="error-page__description" :text="$t(ERROR_PAGE_I18N.description)" />
 
-    <RouterLink custom :to="ROUTE_NAMES.app" v-slot="{ href, navigate }">
-      <Button as="a" :href="href" :label="$t(ERROR_PAGE_I18N.toMain)" size="small" @click="navigate" />
+    <RouterLink custom :to="ROUTE_NAMES.app" v-slot="{ navigate }">
+      <NmorphButton :text="$t(ERROR_PAGE_I18N.toMain)" @click="navigate" />
     </RouterLink>
   </div>
 </template>

@@ -46,6 +46,7 @@ const {
         :image-id="displayedAvatarId"
         :image-src="accountAvatarPreviewUrl || undefined"
         :title="displayedNickname"
+        :name="user.nickname"
       >
         <template #title>
           <div class="settings-personal-data-card__profile-title">
@@ -69,7 +70,6 @@ const {
             <AppText tag="small" :text="displayedUserId" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
-              height="thin"
               style-type="transparent"
               :disabled="isAccountSaving"
               @click="copyUserId"

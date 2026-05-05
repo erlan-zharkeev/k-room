@@ -1,19 +1,17 @@
-import type { FormProps, FormSubmitEvent } from '@primevue/forms/form'
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
+import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
 import { useIntervalFn } from '@vueuse/core'
 import {
   CODES_ENDPOINTS,
+  NON_EMPTY_PATTERN,
   ROUTE_NAMES,
   type ICodeValidationPayload,
-  createPasswordRecoveryCodeFormSchema,
-  createPasswordRecoveryEmailFormSchema,
   createValidationMessages,
   type ISendPasswordRecoveryCodePayload,
   type ISendPasswordRecoveryCodeResponse,
   type IValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
-import { onBeforeUnmount, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
@@ -22,6 +20,7 @@ import { buildPathWithParams, getNextRequestIntervalSeconds, useI18n } from 'src
 import {
   DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA,
   DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA,
+  EMAIL_PATTERN,
   PASSWORD_RECOVERY_COUNTER_TICK_MS
 } from '../config/constants'
 
@@ -34,12 +33,25 @@ export const usePasswordRecovery = () => {
   const { doRequest } = useApi()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
-  const emailFormData = reactive(clone(DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA))
-  const codeFormData = reactive(clone(DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA))
-  const emailResolver: FormProps['resolver'] = valibotResolver(
-    createPasswordRecoveryEmailFormSchema(validationMessages)
-  )
-  const codeResolver: FormProps['resolver'] = valibotResolver(createPasswordRecoveryCodeFormSchema(validationMessages))
+  const { email } = clone(DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA)
+  const { code } = clone(DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA)
+  const emailFormRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const codeFormRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const emailFormData = reactive({
+    email: {
+      value: email,
+      rules: [
+        { pattern: NON_EMPTY_PATTERN, error: validationMessages.emailIsRequired },
+        { pattern: EMAIL_PATTERN, error: validationMessages.invalidEmailFormat }
+      ]
+    }
+  })
+  const codeFormData = reactive({
+    code: {
+      value: code,
+      rules: [{ pattern: NON_EMPTY_PATTERN, error: validationMessages.fieldIsRequired }]
+    }
+  })
   const emailSendCodeIsLoading = ref(false)
   const codeValidationIsLoading = ref(false)
   const codeSent = ref(false)
@@ -47,6 +59,8 @@ export const usePasswordRecovery = () => {
   const debugCode = ref('')
   const sendCaptcha = useProtectedActionCaptcha()
   const validateCaptcha = useProtectedActionCaptcha()
+  const isEmailFormValid = computed(() => emailFormRef.value?.formData.isFormValid.value ?? false)
+  const isCodeFormValid = computed(() => codeFormRef.value?.formData.isFormValid.value ?? false)
 
   const { pause: pauseCounter, resume: resumeCounter } = useIntervalFn(
     () => {
@@ -77,10 +91,10 @@ export const usePasswordRecovery = () => {
     })
   }
 
-  const sendEmailCode = async ({ valid }: FormSubmitEvent) => {
-    if (!valid) return
+  const sendEmailCode = async () => {
+    if (!isEmailFormValid.value) return
 
-    const { email } = emailFormData
+    const email = emailFormData.email.value
 
     emailSendCodeIsLoading.value = true
     const requestPayload: ISendPasswordRecoveryCodePayload = {
@@ -98,7 +112,7 @@ export const usePasswordRecovery = () => {
       const { nextTimeRequest: nextRequestTimestampMs, debugCode: nextDebugCode } = response.data.payload
 
       codeSent.value = true
-      emailFormData.email = requestPayload.email
+      emailFormData.email.value = requestPayload.email
       debugCode.value = nextDebugCode ?? ''
       counterValue.value = getCounterValue(nextRequestTimestampMs)
       await syncQuery(requestPayload.email, nextRequestTimestampMs)
@@ -120,14 +134,14 @@ export const usePasswordRecovery = () => {
     }
   }
 
-  const validateCode = async ({ valid }: FormSubmitEvent) => {
-    if (!valid) return
+  const validateCode = async () => {
+    if (!isCodeFormValid.value) return
 
-    const { code } = codeFormData
+    const code = codeFormData.code.value
 
     codeValidationIsLoading.value = true
     const requestPayload: ICodeValidationPayload = {
-      email: emailFormData.email,
+      email: emailFormData.email.value,
       code,
       ...validateCaptcha.buildCaptchaPayload()
     }
@@ -158,7 +172,7 @@ export const usePasswordRecovery = () => {
     const nextRequestTimestampMs = Number(route.query['next-time-request'])
 
     if (typeof email === 'string') {
-      emailFormData.email = email
+      emailFormData.email.value = email
       codeSent.value = true
     }
 
@@ -172,15 +186,17 @@ export const usePasswordRecovery = () => {
 
   return {
     codeFormData,
-    codeResolver,
+    codeFormRef,
     codeSent,
     codeValidationIsLoading,
     counterValue,
     debugCode,
     emailFormData,
-    emailResolver,
+    emailFormRef,
     emailSendCodeIsLoading,
     initializePasswordRecovery,
+    isCodeFormValid,
+    isEmailFormValid,
     sendCaptcha,
     sendEmailCode,
     validateCaptcha,

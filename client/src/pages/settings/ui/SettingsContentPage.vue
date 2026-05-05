@@ -26,5 +26,10 @@ const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[sel
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 12px;
   padding: 16px;
+
+  @include screen-mobile {
+    grid-template-columns: 1fr;
+  }
 }
+
 </style>

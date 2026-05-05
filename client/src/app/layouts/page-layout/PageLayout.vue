@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { NmorphButton, NmorphCard, NmorphIconArrowLeft } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
-import { Button, Card } from 'primevue'
 import { computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
@@ -26,26 +26,28 @@ const handleBack = () => {
 
 <template>
   <section class="page-layout">
-    <Button
-      icon="pi pi-angle-left"
-      size="small"
-      :label="$t(PAGE_LAYOUT_I18N.back)"
-      severity="secondary"
+    <NmorphButton
+      :text="$t(PAGE_LAYOUT_I18N.back)"
+      style-type="transparent"
       @click="handleBack"
-    />
-    <Card class="page-layout__card">
-      <template v-if="layoutProps.title" #title>
-        <AppLogo />
-        <AppHeader :text="$t(layoutProps.title)" />
+    >
+      <template #icon>
+        <NmorphIconArrowLeft />
       </template>
-      <template #content>
-        <article class="page-layout__content">
-          <slot>
-            <RouterView />
-          </slot>
-        </article>
+    </NmorphButton>
+    <NmorphCard class="page-layout__card">
+      <template v-if="layoutProps.title" #header>
+        <div class="page-layout__title">
+          <AppLogo />
+          <AppHeader :text="$t(layoutProps.title)" />
+        </div>
       </template>
-    </Card>
+      <article class="page-layout__content">
+        <slot>
+          <RouterView />
+        </slot>
+      </article>
+    </NmorphCard>
   </section>
 </template>
 
@@ -55,5 +57,11 @@ const handleBack = () => {
   max-height: 95%;
   padding: 12px 0;
   @include absolute-center;
+}
+
+.page-layout__title {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
 }
 </style>

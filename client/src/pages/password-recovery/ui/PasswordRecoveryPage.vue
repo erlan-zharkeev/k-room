@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { Form } from '@primevue/forms'
+import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
-import { Button, InputText, Message } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { isFormFieldInvalid } from 'src/shared/lib'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
@@ -13,15 +11,17 @@ import { usePasswordRecovery } from '../model/use-password-recovery'
 
 const {
   codeFormData,
-  codeResolver,
+  codeFormRef,
   codeSent,
   codeValidationIsLoading,
   counterValue,
   debugCode,
   emailFormData,
-  emailResolver,
+  emailFormRef,
   emailSendCodeIsLoading,
   initializePasswordRecovery,
+  isCodeFormValid,
+  isEmailFormValid,
   sendCaptcha,
   sendEmailCode,
   validateCaptcha,
@@ -51,43 +51,36 @@ onMounted(initializePasswordRecovery)
     <AppText v-if="!codeSent" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterEmailHint)" />
     <template v-else>
       <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.sentToEmail)" />
-      <AppText bold color="accent-color" :text="emailFormData.email" />
+      <AppText bold color="accent-color" :text="emailFormData.email.value" />
       <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterCodeHint)" />
     </template>
 
-    <Form
-      v-slot="emailForm"
-      :initial-values="emailFormData"
-      :resolver="emailResolver"
+    <NmorphForm
+      ref="emailFormRef"
+      :value="emailFormData"
       class="password-recovery-page__form"
-      @submit="sendEmailCode"
+      @submit.prevent="sendEmailCode"
     >
-      <div class="password-recovery-page__field">
-        <InputText
-          v-model.trim="emailFormData.email"
+      <NmorphFormItem id="email" class="password-recovery-page__field" :show-validation-icon="false">
+        <NmorphTextInput
+          v-model.trim="emailFormData.email.value"
           autocomplete="email"
           :disabled="isEmailInputDisabled"
-          fluid
-          name="email"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.emailPlaceholder)"
-          size="small"
-          type="email"
+          :input-attrs="{ type: 'email' }"
+          clearable
         />
-        <Message v-if="isFormFieldInvalid(emailForm.email)" severity="error" size="small" variant="simple">
-          {{ emailForm.email.error?.message }}
-        </Message>
-      </div>
+      </NmorphFormItem>
 
       <div class="password-recovery-page__action-btns">
-        <Button
-          :disabled="isSendCodeBlocked || !emailForm.valid"
-          :label="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(PASSWORD_RECOVERY_I18N.sendCode)"
+        <NmorphButton
+          :disabled="isSendCodeBlocked || !isEmailFormValid"
           :loading="emailSendCodeIsLoading"
-          size="small"
+          :text="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(PASSWORD_RECOVERY_I18N.sendCode)"
           type="submit"
         />
       </div>
-    </Form>
+    </NmorphForm>
 
     <AppCaptcha
       v-if="sendCaptchaRequired"
@@ -100,39 +93,31 @@ onMounted(initializePasswordRecovery)
 
     <AppText v-if="debugCode" tag="p" :text="`${$t(PASSWORD_RECOVERY_I18N.debugCode)}: ${debugCode}`" />
 
-    <Form
+    <NmorphForm
       v-if="codeSent"
-      v-slot="codeForm"
-      :initial-values="codeFormData"
-      :resolver="codeResolver"
+      ref="codeFormRef"
+      :value="codeFormData"
       class="password-recovery-page__form"
-      @submit="validateCode"
+      @submit.prevent="validateCode"
     >
-      <div class="password-recovery-page__field">
-        <InputText
-          v-model.trim="codeFormData.code"
+      <NmorphFormItem id="code" class="password-recovery-page__field" :show-validation-icon="false">
+        <NmorphTextInput
+          v-model.trim="codeFormData.code.value"
           autocomplete="one-time-code"
           :disabled="codeValidationIsLoading"
-          fluid
-          name="code"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"
-          size="small"
         />
-        <Message v-if="isFormFieldInvalid(codeForm.code)" severity="error" size="small" variant="simple">
-          {{ codeForm.code.error?.message }}
-        </Message>
-      </div>
+      </NmorphFormItem>
 
       <div class="password-recovery-page__action-btns">
-        <Button
-          :disabled="isValidateCodeBlocked || !codeForm.valid"
-          :label="$t(PASSWORD_RECOVERY_I18N.validate)"
+        <NmorphButton
+          :disabled="isValidateCodeBlocked || !isCodeFormValid"
           :loading="codeValidationIsLoading"
-          size="small"
+          :text="$t(PASSWORD_RECOVERY_I18N.validate)"
           type="submit"
         />
       </div>
-    </Form>
+    </NmorphForm>
 
     <AppCaptcha
       v-if="validateCaptchaRequired"
@@ -142,13 +127,10 @@ onMounted(initializePasswordRecovery)
     />
 
     <div class="password-recovery-page__action-btns">
-      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
-        <Button
-          as="a"
-          :href="href"
-          :label="$t(PASSWORD_RECOVERY_I18N.back)"
-          severity="secondary"
-          size="small"
+      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
+        <NmorphButton
+          :text="$t(PASSWORD_RECOVERY_I18N.back)"
+          style-type="transparent"
           @click="navigate"
         />
       </RouterLink>

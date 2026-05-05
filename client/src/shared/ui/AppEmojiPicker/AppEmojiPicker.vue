@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { NmorphButton, NmorphIconExpand } from '@nmorph/nmorph-ui-kit'
 import ruI18n from 'emoji-picker-element/i18n/ru_RU'
 import zhI18n from 'emoji-picker-element/i18n/zh_CN'
 import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE, type AppLanguageType } from 'global-shared'
-import { Button } from 'primevue'
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
 const props = defineProps<{
@@ -88,21 +88,27 @@ watch(() => props.language, mountPicker)
 <template>
   <div class="app-emoji-picker" :class="{ 'app-emoji-picker--expanded': isExpanded }">
     <div class="app-emoji-picker__quick-row">
-      <Button
+      <NmorphButton
         v-for="emoji in quickEmojiList"
-        severity="secondary"
-        @click="emit('select', emoji)"
         :key="emoji"
         class="app-emoji-picker__quick-button"
-        >{{ emoji }}</Button
-      >
-      <Button
-        v-if="!isExpanded"
-        @click="expandPicker"
-        severity="secondary"
-        icon="pi pi-arrow-up-right-and-arrow-down-left-from-center"
-        size="small"
+        shape="square"
+        style-type="transparent"
+        :text="emoji"
+        @click="emit('select', emoji)"
       />
+      <NmorphButton
+        v-if="!isExpanded"
+        :aria-label="props.expandLabel"
+        class="app-emoji-picker__expand-button"
+        shape="square"
+        style-type="transparent"
+        @click="expandPicker"
+      >
+        <template #icon>
+          <NmorphIconExpand />
+        </template>
+      </NmorphButton>
     </div>
     <div v-if="isExpanded" ref="pickerRoot" class="app-emoji-picker__full" />
   </div>

@@ -1,36 +1,54 @@
-import type { FormProps, FormSubmitEvent } from '@primevue/forms/form'
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
-import { ROUTE_NAMES, USER_ENDPOINTS, type ICreateNewPasswordPayload } from 'global-shared'
-import { createCreateNewPasswordFormSchema, createValidationMessages } from 'global-shared'
+import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import { NON_EMPTY_PATTERN, ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages } from 'global-shared'
+import type { ICreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useApi } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
-import { DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA } from '../config/constants'
+import {
+  DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA,
+  PASSWORD_MIN_LENGTH_PATTERN,
+  PASSWORD_NO_SPACES_PATTERN,
+  PASSWORD_ONLY_LATIN_PATTERN,
+  PASSWORD_STRONG_PATTERN
+} from '../config/constants'
+import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 
 export const useCreateNewPassword = () => {
   const route = useRoute()
   const router = useRouter()
   const { doRequest } = useApi()
   const { t } = useI18n()
-  const formData = reactive(clone(DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA))
-  const resolver: FormProps['resolver'] = valibotResolver(
-    createCreateNewPasswordFormSchema(createValidationMessages(t))
-  )
+  const validationMessages = createValidationMessages(t)
+  const { firstPassword, secondPassword } = clone(DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA)
+  const formRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const passwordRules = [
+    { pattern: NON_EMPTY_PATTERN, error: validationMessages.passwordIsRequired },
+    { pattern: PASSWORD_MIN_LENGTH_PATTERN, error: validationMessages.passwordMustBeAtLeast },
+    { pattern: PASSWORD_STRONG_PATTERN, error: validationMessages.passwordMustBeStrong },
+    { pattern: PASSWORD_NO_SPACES_PATTERN, error: validationMessages.passwordNotContainSpaces },
+    { pattern: PASSWORD_ONLY_LATIN_PATTERN, error: validationMessages.passwordMustContainOnlyLatin }
+  ]
+  const formData = reactive({
+    firstPassword: { value: firstPassword, rules: passwordRules },
+    secondPassword: { value: secondPassword, rules: passwordRules }
+  })
   const isLoading = ref(false)
   const isPasswordChanged = ref(false)
-  const isFormTouched = ref(false)
   const passwordRecoveryCode = computed(() => route.query['password-recovery'])
+  const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
+  const passwordMismatch = computed(
+    () => formData.firstPassword.value !== formData.secondPassword.value
+  )
+  const passwordMismatchText = computed(() =>
+    formData.secondPassword.value && passwordMismatch.value ? t(CREATE_NEW_PASSWORD_I18N.mismatch) : ''
+  )
 
-  const submit = async ({ valid }: FormSubmitEvent) => {
-    isFormTouched.value = true
-
-    const { firstPassword, secondPassword } = formData
-
-    if (!valid || firstPassword !== secondPassword || typeof passwordRecoveryCode.value !== 'string') {
+  const submit = async () => {
+    if (!isFormValid.value || passwordMismatch.value || typeof passwordRecoveryCode.value !== 'string') {
       return
     }
 
@@ -38,7 +56,7 @@ export const useCreateNewPassword = () => {
 
     try {
       const payload: ICreateNewPasswordPayload = {
-        password: secondPassword,
+        password: formData.secondPassword.value,
         codeToValidate: passwordRecoveryCode.value
       }
       await doRequest<null>('post', USER_ENDPOINTS.resetPassword, payload)
@@ -57,11 +75,13 @@ export const useCreateNewPassword = () => {
 
   return {
     formData,
+    formRef,
     initializeCreateNewPassword,
-    isFormTouched,
+    isFormValid,
     isLoading,
     isPasswordChanged,
-    resolver,
+    passwordMismatch,
+    passwordMismatchText,
     submit
   }
 }

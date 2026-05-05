@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { NmorphButton } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
-import { Button } from 'primevue'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
@@ -39,21 +39,17 @@ onMounted(initializeWaitEmailConfirm)
     />
 
     <div class="wait-email-confirm-page__action-btns">
-      <Button
+      <NmorphButton
         :disabled="isResendDisabled"
-        :label="$t(WAIT_EMAIL_CONFIRM_I18N.resend)"
         :loading="isLoading"
-        size="small"
+        :text="$t(WAIT_EMAIL_CONFIRM_I18N.resend)"
         @click="resend"
       />
 
-      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ href, navigate }">
-        <Button
-          as="a"
-          :href="href"
-          :label="$t(WAIT_EMAIL_CONFIRM_I18N.back)"
-          severity="secondary"
-          size="small"
+      <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
+        <NmorphButton
+          :text="$t(WAIT_EMAIL_CONFIRM_I18N.back)"
+          style-type="transparent"
           @click="navigate"
         />
       </RouterLink>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphButton, NmorphIconExit } from '@nmorph/nmorph-ui-kit'
 import { useTimeoutFn } from '@vueuse/core'
-import { formatNickname } from 'global-shared'
 import { computed, ref, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
@@ -14,7 +13,7 @@ import { MAIN_TOP_BAR_I18N } from '../config/i18n'
 import { useLogout } from '../model/use-logout'
 
 const { t } = useI18n()
-const { user, avatarId } = useUser()
+const { user, avatarId, displayedNickname } = useUser()
 const { isLogoutLoading, logout } = useLogout()
 const displayedSocketStatus = ref('')
 
@@ -68,7 +67,8 @@ watch(
       class="main-top-bar__profile"
       :image-alt="user.nickname"
       :image-id="avatarId"
-      :title="formatNickname(user.nickname)"
+      :title="displayedNickname"
+      :name="user.nickname"
     >
       <template #description>
         <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" />
