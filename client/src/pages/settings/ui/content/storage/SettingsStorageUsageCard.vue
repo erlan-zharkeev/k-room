@@ -23,15 +23,15 @@ const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
     <div class="settings-storage-usage-card__stats">
       <div class="settings-storage-usage-card__stat">
         <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageUsed)" />
-        <AppText color="contrast-color" :text="usageFormatted" />
+        <AppText color="contrast-text" :text="usageFormatted" />
       </div>
       <div class="settings-storage-usage-card__stat">
         <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageAvailable)" />
-        <AppText color="contrast-color" :text="availableFormatted" />
+        <AppText color="contrast-text" :text="availableFormatted" />
       </div>
       <div class="settings-storage-usage-card__stat">
         <AppText align="center" size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageTotal)" />
-        <AppText color="contrast-color" :text="quotaFormatted" />
+        <AppText color="contrast-text" :text="quotaFormatted" />
       </div>
     </div>
   </SettingsCard>

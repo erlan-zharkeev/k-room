@@ -16,6 +16,6 @@ const { isPersistenceSupported, isPersistent, requestPersistence } = useSettings
     :on-button-click="isPersistent ? undefined : requestPersistence"
   >
     <AppText :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)" />
-    <AppText v-if="isPersistent" color="accent-color" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)" />
+    <AppText v-if="isPersistent" color="accent" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)" />
   </SettingsCard>
 </template>

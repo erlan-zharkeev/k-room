@@ -37,7 +37,7 @@ const selectedSettingsId = computed(() => {
         :offset-y="20"
       >
         <template #value="{ value }">
-          <AppText :text="value" color="contrast-color" tag="small" />
+          <AppText :text="value" color="contrast-text" tag="small" />
         </template>
         <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)">
           <template #label>

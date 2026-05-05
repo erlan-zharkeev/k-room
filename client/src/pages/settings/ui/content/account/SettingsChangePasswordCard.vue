@@ -35,7 +35,7 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
         :show-validation-icon="false"
       >
         <NmorphTextInput v-model="formData.nextPassword.value" :disabled="isPasswordChanging" type-password />
-        <AppText v-if="nextPasswordError" tag="small" color="warn-color" :text="nextPasswordError" />
+        <AppText v-if="nextPasswordError" tag="small" color="warn" :text="nextPasswordError" />
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -49,7 +49,7 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
       <AppText
         v-if="passwordMismatch"
         tag="small"
-        color="warn-color"
+        color="warn"
         :text="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N.passwordMismatch)"
       />
     </NmorphForm>

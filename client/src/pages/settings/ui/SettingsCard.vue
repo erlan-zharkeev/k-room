@@ -16,7 +16,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 <template>
   <div class="settings-card nmorph--shadow-outset">
     <div class="settings-card__title">
-      <AppHeader tag="h2" color="contrast-color" :text="title" />
+      <AppHeader tag="h2" color="contrast-text" :text="title" />
     </div>
 
     <div class="settings-card__content">

@@ -31,10 +31,7 @@ onMounted(initializeCreateNewPassword)
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.success)" />
       <div class="create-new-password-page__action-btns">
         <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
-          <NmorphButton
-            :text="$t(CREATE_NEW_PASSWORD_I18N.toLogin)"
-            @click="navigate"
-          />
+          <NmorphButton :text="$t(CREATE_NEW_PASSWORD_I18N.toLogin)" @click="navigate" />
         </RouterLink>
       </div>
     </template>
@@ -43,12 +40,7 @@ onMounted(initializeCreateNewPassword)
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.enterNewPasswordHint)" />
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint)" />
 
-      <NmorphForm
-        ref="formRef"
-        :value="formData"
-        class="create-new-password-page__form"
-        @submit.prevent="submit"
-      >
+      <NmorphForm ref="formRef" :value="formData" class="create-new-password-page__form" @submit.prevent="submit">
         <NmorphFormItem id="firstPassword" class="create-new-password-page__field" :show-validation-icon="false">
           <NmorphTextInput
             v-model="formData.firstPassword.value"
@@ -67,7 +59,7 @@ onMounted(initializeCreateNewPassword)
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
             type-password
           />
-          <AppText v-if="passwordMismatchText" tag="small" color="error-color" :text="passwordMismatchText" />
+          <AppText v-if="passwordMismatchText" tag="small" color="error-text" :text="passwordMismatchText" />
         </NmorphFormItem>
 
         <div class="create-new-password-page__action-btns">
@@ -79,11 +71,7 @@ onMounted(initializeCreateNewPassword)
           />
 
           <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
-            <NmorphButton
-              :text="$t(CREATE_NEW_PASSWORD_I18N.back)"
-              style-type="transparent"
-              @click="navigate"
-            />
+            <NmorphButton :text="$t(CREATE_NEW_PASSWORD_I18N.back)" style-type="transparent" @click="navigate" />
           </RouterLink>
         </div>
       </NmorphForm>

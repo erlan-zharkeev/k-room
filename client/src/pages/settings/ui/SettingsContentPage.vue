@@ -31,5 +31,4 @@ const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[sel
     grid-template-columns: 1fr;
   }
 }
-
 </style>

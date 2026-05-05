@@ -1,12 +1,15 @@
+import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
+
+import type { KebabCaseType } from 'src/shared/types'
+
 export type AppTextTagType = 'span' | 'p' | 'div' | 'small'
 
-export type AppTextColorType =
-  | 'text-color'
-  | 'semi-contrast-color'
-  | 'contrast-color'
-  | 'accent-color'
-  | 'warn-color'
-  | 'error-color'
+export type AppTextStaticColorType = keyof Pick<
+  INmorphStaticColors,
+  'text' | 'semiContrastText' | 'contrastText' | 'accent' | 'warn' | 'errorText'
+>
+
+export type AppTextColorType = KebabCaseType<AppTextStaticColorType>
 
 export type AppTextAlignType = 'left' | 'center' | 'right'
 

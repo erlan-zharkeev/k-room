@@ -115,7 +115,7 @@ const {
     <label class="settings-personal-data-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nickname)" />
       <NmorphTextInput v-model="accountNickname" :disabled="isAccountSaving" />
-      <AppText v-if="accountNicknameError" tag="small" color="warn-color" :text="accountNicknameError" />
+      <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
     </label>
   </SettingsCard>
 </template>

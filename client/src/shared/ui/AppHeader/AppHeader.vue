@@ -3,16 +3,20 @@ import { computed } from 'vue'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { APP_HEADER_DEFAULT_PROPS } from './constants'
+import { APP_HEADER_COLOR_MODIFIERS, APP_HEADER_DEFAULT_PROPS } from './constants'
 import type { IAppHeaderProps } from './types'
 
 const props = withDefaults(defineProps<IAppHeaderProps>(), APP_HEADER_DEFAULT_PROPS)
-const color = computed(() => props.color ?? (props.accent ? 'accent-color' : undefined))
+const color = computed(() => props.color ?? (props.accent ? 'accent' : undefined))
 
 const className = computed(() =>
   createClassNameWithModifiers({
     rootClass: 'app-header',
-    modifiers: [color.value, props.bold && 'bold', props.truncate && 'truncate']
+    modifiers: [
+      color.value && APP_HEADER_COLOR_MODIFIERS[color.value],
+      props.bold && 'bold',
+      props.truncate && 'truncate'
+    ]
   })
 )
 </script>
@@ -51,7 +55,7 @@ h5.app-header {
   color: var(--nmorph-text-color);
 }
 
-.app-header--text-color {
+.app-header--text {
   color: var(--nmorph-text-color);
 }
 
@@ -66,19 +70,19 @@ h5.app-header {
   white-space: nowrap;
 }
 
-.app-header--semi-contrast-color {
+.app-header--semi-contrast-text {
   color: var(--nmorph-semi-contrast-text-color);
 }
 
-.app-header--contrast-color {
+.app-header--contrast-text {
   color: var(--nmorph-contrast-text-color);
 }
 
-.app-header--accent-color {
+.app-header--accent {
   color: var(--nmorph-accent-color);
 }
 
-.app-header--warn-color {
+.app-header--warn {
   color: var(--nmorph-warn-color);
 }
 </style>
