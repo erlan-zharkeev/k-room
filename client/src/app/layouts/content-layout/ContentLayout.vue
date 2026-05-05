@@ -22,8 +22,8 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <div class="content-layout__back-btn nmorph--shadow-inset">
-        <NmorphButton v-if="isMobile" @click="handleBack">
+      <div v-if="isMobile" class="content-layout__back-btn nmorph--shadow-inset">
+        <NmorphButton @click="handleBack">
           <template #icon>
             <NmorphIconBack />
           </template>

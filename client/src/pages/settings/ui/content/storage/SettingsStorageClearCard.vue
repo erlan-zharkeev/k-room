@@ -30,7 +30,7 @@ const { isClearingMedia, clearMedia } = useSettingsStorageClearCard()
 .settings-storage-clear-card__row {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .settings-storage-clear-card__info {
