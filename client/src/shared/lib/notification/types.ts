@@ -1,5 +1,7 @@
 import type { INmorphNotification, NmorphNotificationPlacement } from '@nmorph/nmorph-ui-kit'
 
+export type AppNotificationStackType = 'system' | 'message'
+
 export type AppNotificationPlacementType = keyof typeof NmorphNotificationPlacement
 
 export type AppNotificationType = NonNullable<INmorphNotification['type']>
