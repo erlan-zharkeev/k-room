@@ -6,8 +6,10 @@ export {
   formatLocalizedTime,
   getNextRequestIntervalSeconds
 } from './time'
+export { getDataUrlMimeType } from './browser/get-data-url-mime-type'
 export { getViewPort } from './browser/get-view-port'
 export { imageToBase64 } from './browser/image-to-base64'
+export { isEmptyFileWithName } from './browser/is-empty-file-with-name'
 export { readFileAsDataUrl } from './browser/read-file-as-data-url'
 export { formatBytes } from './browser/storage-size'
 export { useScreen } from './browser/use-screen'
