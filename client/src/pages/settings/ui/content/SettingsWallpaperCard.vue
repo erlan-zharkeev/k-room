@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphFileUpload, NmorphSelectButton, NmorphSlider } from '@nmorph/nmorph-ui-kit'
+import { NmorphFileUpload, NmorphSelectButton, NmorphSlider } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
@@ -28,8 +28,8 @@ const {
   setScale,
   setDarkness,
   showUnsupportedWallpaperFormatError,
-  uploadWallpaper,
-  resetWallpaper
+  updateWallpaper,
+  wallpaperUploadValue
 } = useWallpaperSettings()
 const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 
@@ -53,29 +53,16 @@ const visibilityOptions = computed(() =>
 
       <div class="settings-wallpaper-card__additional" v-if="isSelectedThemeCustom">
         <div class="settings-wallpaper-card__upload settings-wallpaper-card__input-element">
-            <AppText
-              tag="small"
-              truncate
-              :text="effectiveTheme.wallpaper.filename"
-              class="settings-wallpaper-card__file-label"
-              color='accent'
-            />
-          <div class="settings-wallpaper-card__upload-main">
-            <NmorphFileUpload
-              :key="uploadKey"
-              :allowed-types="SETTINGS_WALLPAPER_ALLOWED_TYPES"
-              :button-text="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
-              :multiple="false"
-              class="settings-wallpaper-card__file-button"
-              @update:model-value="uploadWallpaper"
-              @on-unsupported-file-type-error="showUnsupportedWallpaperFormatError"
-            />
-            <!-- <NmorphButton
-              :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetWallpaper)"
-              style-type="transparent"
-              @click="resetWallpaper"
-            /> -->
-          </div>
+          <NmorphFileUpload
+            :key="uploadKey"
+            :allowed-types="SETTINGS_WALLPAPER_ALLOWED_TYPES"
+            :button-text="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
+            :model-value="wallpaperUploadValue"
+            :multiple="false"
+            class="settings-wallpaper-card__file-button"
+            @update:model-value="updateWallpaper"
+            @on-unsupported-file-type-error="showUnsupportedWallpaperFormatError"
+          />
         </div>
 
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
@@ -155,12 +142,6 @@ const visibilityOptions = computed(() =>
 
 .settings-wallpaper-card__file-label {
   margin-bottom: 8px;
-}
-
-.settings-wallpaper-card__upload-main {
-  // display: flex;
-  // gap: 8px;
-  // align-items: center;
 }
 
 .settings-wallpaper-card__slider-label {
