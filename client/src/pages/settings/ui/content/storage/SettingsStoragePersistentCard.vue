@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
-import { useSettingsStoragePersistentCard } from '../../../model/storage/use-settings-storage-persistent-card'
+import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
+import { useStoragePersistent } from '../../../model/storage/use-storage-persistent'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { isPersistenceSupported, isPersistent, requestPersistence } = useSettingsStoragePersistentCard()
+const { isPersistenceSupported, isPersistent, requestPersistence } = useStoragePersistent()
 </script>
 
 <template>

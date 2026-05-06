@@ -4,10 +4,10 @@ import { computed, useSlots } from 'vue'
 
 import { AppHeader } from 'src/shared/ui'
 
-import { SETTINGS_CARD_DEFAULT_PROPS } from './settings-card.constants'
-import type { ISettingsCardProps } from './settings-card.types'
+import { CARD_DEFAULT_PROPS } from '../config/constants/card.constants'
+import type { ICardProps } from '../config/types/card.types'
 
-const props = withDefaults(defineProps<ISettingsCardProps>(), SETTINGS_CARD_DEFAULT_PROPS)
+const props = withDefaults(defineProps<ICardProps>(), CARD_DEFAULT_PROPS)
 
 const slots = useSlots()
 const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))

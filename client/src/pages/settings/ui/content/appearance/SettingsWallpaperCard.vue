@@ -15,22 +15,22 @@ import {
   SETTINGS_WALLPAPER_DARKNESS_MAX,
   SETTINGS_WALLPAPER_DARKNESS_MIN,
   SETTINGS_WALLPAPER_VISIBILITY_OPTIONS
-} from '../../config/constants'
-import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../config/i18n/appearance'
-import { useWallpaperSettings } from '../../model/theme/use-wallpaper-settings'
-import SettingsCard from '../SettingsCard.vue'
+} from '../../../config/constants/wallpaper.constants'
+import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance.i18n'
+import { useWallpaper } from '../../../model/appearance/use-wallpaper'
+import SettingsCard from '../../SettingsCard.vue'
 
 const { t } = useI18n()
 const {
   uploadKey,
-  setWallpaperAppearance,
+  setWallpaperVisibility,
   setAngle,
   setScale,
   setDarkness,
   showUnsupportedWallpaperFormatError,
   updateWallpaper,
   wallpaperUploadValue
-} = useWallpaperSettings()
+} = useWallpaper()
 const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
 
 const visibilityOptions = computed(() =>
@@ -47,7 +47,7 @@ const visibilityOptions = computed(() =>
           height="thick"
           :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
           :options="visibilityOptions"
-          @update:model-value="setWallpaperAppearance($event === 'show')"
+          @update:model-value="setWallpaperVisibility($event === 'show')"
         />
       </div>
 

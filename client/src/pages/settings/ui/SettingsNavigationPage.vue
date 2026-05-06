@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'
 import { useScreen } from 'src/shared/lib'
 import { AppContentNavEl } from 'src/shared/ui'
 
-import { getSettingsPath, SETTINGS_NAVIGATION_ITEMS } from '../config/constants'
+import { getSettingsPath, SETTINGS_NAVIGATION_ITEMS } from '../config/constants/content.constants'
 import { getSettingsContentId } from '../lib/get-settings-content-id'
 
 const route = useRoute()

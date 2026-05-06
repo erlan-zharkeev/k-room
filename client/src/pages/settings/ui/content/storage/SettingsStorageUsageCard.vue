@@ -5,11 +5,11 @@ import { computed } from 'vue'
 import { formatBytes } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
-import { useSettingsStorageUsageCard } from '../../../model/storage/use-settings-storage-usage-card'
+import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
+import { useStorageUsage } from '../../../model/storage/use-storage-usage'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { usageBytes, quotaBytes, usagePercent } = useSettingsStorageUsageCard()
+const { usageBytes, quotaBytes, usagePercent } = useStorageUsage()
 
 const usageFormatted = computed(() => formatBytes(usageBytes.value))
 const availableFormatted = computed(() => formatBytes(quotaBytes.value - usageBytes.value))

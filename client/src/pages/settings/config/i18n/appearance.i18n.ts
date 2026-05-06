@@ -14,7 +14,7 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     ru: 'Цвета темы',
     zh: '主题颜色'
   },
-  themeDescription: {
+  appearanceDescription: {
     en: 'Themes and wallpaper',
     ru: 'Темы и обои',
     zh: '主题和壁纸'

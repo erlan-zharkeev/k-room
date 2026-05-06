@@ -1,4 +1,4 @@
-export interface ISettingsCardProps {
+export interface ICardProps {
   title: string
   buttonLabel?: string
   buttonAriaLabel?: string

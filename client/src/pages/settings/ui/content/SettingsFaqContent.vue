@@ -3,11 +3,11 @@ import { NmorphButton, NmorphDivider, NmorphTextInput } from '@nmorph/nmorph-ui-
 
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq'
-import { useSettingsFaq } from '../../model/faq/use-settings-faq'
+import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq.i18n'
+import { useFaq } from '../../model/faq/use-faq'
 import SettingsCard from '../SettingsCard.vue'
 
-const { searchQuery, filteredItems } = useSettingsFaq()
+const { searchQuery, filteredItems } = useFaq()
 </script>
 
 <template>

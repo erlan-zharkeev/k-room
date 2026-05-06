@@ -1,6 +1,6 @@
 import { onMounted, ref } from 'vue'
 
-export const useSettingsStoragePersistentCard = () => {
+export const useStoragePersistent = () => {
   const isPersistenceSupported = Boolean(navigator.storage?.persist)
   const isPersistent = ref(false)
 

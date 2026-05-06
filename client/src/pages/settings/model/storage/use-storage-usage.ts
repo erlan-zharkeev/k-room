@@ -1,6 +1,6 @@
 import { onMounted, ref } from 'vue'
 
-export const useSettingsStorageUsageCard = () => {
+export const useStorageUsage = () => {
   const usageBytes = ref(0)
   const quotaBytes = ref(0)
   const usagePercent = ref(0)

@@ -13,18 +13,18 @@ import { useSettings } from 'src/entities/setting'
 import { AppText } from 'src/shared/ui'
 
 import {
-  THEME_SETTINGS_COLOR_GROUPS,
-  THEME_SETTINGS_RESET_THEME_OPTIONS,
-  THEME_SETTINGS_SHADOW_ITEMS
-} from '../../config/constants'
-import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../config/i18n/appearance'
-import { useChangeColorSchema } from '../../model/theme/use-change-color-schema'
-import { useResetCustomTheme } from '../../model/theme/use-reset-custom-theme'
-import SettingsCard from '../SettingsCard.vue'
+  CUSTOM_THEME_COLOR_GROUPS,
+  CUSTOM_THEME_RESET_OPTIONS,
+  CUSTOM_THEME_SHADOW_ITEMS
+} from '../../../config/constants/custom-theme.constants'
+import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance.i18n'
+import { useCustomThemeReset } from '../../../model/appearance/use-custom-theme-reset'
+import { useCustomThemeSchema } from '../../../model/appearance/use-custom-theme-schema'
+import SettingsCard from '../../SettingsCard.vue'
 
 const { effectiveTheme, isSelectedThemeCustom } = useSettings()
-const { changeThemeColor, changeThemeShadowSetting } = useChangeColorSchema()
-const { resetTheme, changeResetTheme, resetCustomTheme } = useResetCustomTheme()
+const { changeThemeColor, changeThemeShadowSetting } = useCustomThemeSchema()
+const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThemeReset()
 </script>
 
 <template>
@@ -34,11 +34,11 @@ const { resetTheme, changeResetTheme, resetCustomTheme } = useResetCustomTheme()
         <NmorphSelectButton
           class="settings-theme-card__reset-source"
           :aria-label="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetThemeSource)"
-          :model-value="resetTheme"
-          @update:model-value="changeResetTheme"
+          :model-value="resetThemeMode"
+          @update:model-value="changeResetThemeMode"
         >
           <NmorphSelectButtonItem
-            v-for="option in THEME_SETTINGS_RESET_THEME_OPTIONS"
+            v-for="option in CUSTOM_THEME_RESET_OPTIONS"
             :key="option.value"
             :aria-label="$t(option.label)"
             :value="option.value"
@@ -59,7 +59,7 @@ const { resetTheme, changeResetTheme, resetCustomTheme } = useResetCustomTheme()
       <NmorphDivider class="settings-theme-card__divider" />
 
       <div class="settings-theme-card__pick-color">
-        <template v-for="(group, index) in THEME_SETTINGS_COLOR_GROUPS" :key="group.id">
+        <template v-for="(group, index) in CUSTOM_THEME_COLOR_GROUPS" :key="group.id">
           <NmorphDivider v-if="index > 0" class="settings-theme-card__divider" />
 
           <div class="settings-theme-card__group">
@@ -77,7 +77,7 @@ const { resetTheme, changeResetTheme, resetCustomTheme } = useResetCustomTheme()
         <NmorphDivider class="settings-theme-card__divider" />
 
         <div class="settings-theme-card__group">
-          <label v-for="item in THEME_SETTINGS_SHADOW_ITEMS" :key="item.id" class="settings-theme-card__slider">
+          <label v-for="item in CUSTOM_THEME_SHADOW_ITEMS" :key="item.id" class="settings-theme-card__slider">
             <div class="settings-theme-card__slider-label">
               <AppText tag="small" :text="`${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`" />
             </div>

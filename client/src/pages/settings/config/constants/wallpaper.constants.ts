@@ -1,0 +1,23 @@
+import { MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP, MEDIA_MB_IN_BYTES, MEDIA_VALIDATION_OPTIONS_MAP } from 'global-shared'
+
+import { SETTINGS_PAGE_APPEARANCE_I18N } from '../i18n/appearance.i18n'
+
+const wallpaperValidation = MEDIA_VALIDATION_OPTIONS_MAP.image
+
+export const SETTINGS_WALLPAPER_ALLOWED_TYPES =
+  MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP[wallpaperValidation.supportedKindMediaType]
+export const SETTINGS_WALLPAPER_MAX_FILE_SIZE = wallpaperValidation.maxMb * MEDIA_MB_IN_BYTES
+export const SETTINGS_WALLPAPER_VISIBILITY_OPTIONS = [
+  { value: 'show', label: SETTINGS_PAGE_APPEARANCE_I18N.show },
+  { value: 'hide', label: SETTINGS_PAGE_APPEARANCE_I18N.hide }
+]
+export const SETTINGS_WALLPAPER_FIT_OPTIONS = [
+  { value: 'cover', label: SETTINGS_PAGE_APPEARANCE_I18N.cover },
+  { value: 'contain', label: SETTINGS_PAGE_APPEARANCE_I18N.contain }
+]
+export const SETTINGS_WALLPAPER_ANGLE_MIN = -180
+export const SETTINGS_WALLPAPER_ANGLE_MAX = 180
+export const SETTINGS_WALLPAPER_SCALE_MIN = 50
+export const SETTINGS_WALLPAPER_SCALE_MAX = 200
+export const SETTINGS_WALLPAPER_DARKNESS_MIN = 0
+export const SETTINGS_WALLPAPER_DARKNESS_MAX = 100

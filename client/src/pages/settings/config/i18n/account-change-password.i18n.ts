@@ -1,4 +1,4 @@
-export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_CARD_I18N = {
+export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N = {
   changePassword: {
     en: 'Change password',
     ru: 'Изменить пароль',

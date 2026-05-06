@@ -70,8 +70,8 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     zh: '如何更改主题？'
   },
   faqA5: {
-    en: 'Go to Settings → Theme and choose a colour scheme.',
-    ru: 'Перейдите в Настройки → Тема и выберите цветовую схему.',
+    en: 'Go to Settings → Appearance and choose a colour scheme.',
+    ru: 'Перейдите в Настройки → Оформление и выберите цветовую схему.',
     zh: '前往设置 → 主题，选择配色方案。'
   },
   faqQ6: {

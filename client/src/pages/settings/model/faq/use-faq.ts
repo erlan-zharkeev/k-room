@@ -2,9 +2,9 @@ import { computed, ref } from 'vue'
 
 import { useI18n } from 'src/shared/lib'
 
-import { FAQ_ITEMS } from '../../config/faq'
+import { FAQ_ITEMS } from '../../config/constants/faq.constants'
 
-export const useSettingsFaq = () => {
+export const useFaq = () => {
   const { t } = useI18n()
   const searchQuery = ref('')
 

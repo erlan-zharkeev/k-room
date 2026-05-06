@@ -4,7 +4,7 @@ import { useSettings } from 'src/entities/setting'
 import type { IColorSchema, IThemeShadowSettings } from 'src/shared/config'
 import { getNmorphGeneratedColorSchema } from 'src/shared/lib'
 
-export const useChangeColorSchema = () => {
+export const useCustomThemeSchema = () => {
   const { effectiveTheme, mutate } = useSettings()
   const { theme } = useNmorph()
 

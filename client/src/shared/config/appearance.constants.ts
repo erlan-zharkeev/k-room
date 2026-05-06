@@ -1,5 +1,4 @@
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
-
 import type {
   EffectiveThemeType,
   IColorSchema,

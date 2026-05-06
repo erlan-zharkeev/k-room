@@ -16,9 +16,9 @@ import {
   SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES,
   SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
   SETTINGS_ACCOUNT_AVATAR_MAX_MB
-} from '../../../config/constants'
-import { SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N } from '../../../config/i18n/account-personal-data-card'
-import { useSettingsPersonalDataCard } from '../../../model/account/use-settings-personal-data-card'
+} from '../../../config/constants/account.constants'
+import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../../config/i18n/account-personal-data.i18n'
+import { usePersonalData } from '../../../model/account/use-personal-data'
 import SettingsCard from '../../SettingsCard.vue'
 
 const {
@@ -37,17 +37,17 @@ const {
   resetAccountAvatar,
   updateAccountData,
   uploadAccountAvatar
-} = useSettingsPersonalDataCard()
+} = usePersonalData()
 </script>
 
 <template>
   <SettingsCard
-    :button-aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.updateAccountData)"
+    :button-aria-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.updateAccountData)"
     :button-disabled="isAccountSaveDisabled"
-    :button-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.updateAccountData)"
+    :button-label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.updateAccountData)"
     :button-loading="isAccountSaving"
     :on-button-click="updateAccountData"
-    :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.personalData)"
+    :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.personalData)"
   >
     <div class="settings-personal-data-card__profile">
       <AppProfileBasicData
@@ -101,7 +101,7 @@ const {
             <NmorphFileUpload
               :key="avatarUploadKey"
               :allowed-types="SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES"
-              :button-text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhoto)"
+              :button-text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhoto)"
               :disabled="isAccountSaving"
               :multiple="false"
               class="settings-personal-data-card__file-button"
@@ -110,15 +110,15 @@ const {
             <NmorphButton
               style-type="transparent"
               :disabled="isAccountSaving"
-              :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.resetPhoto)"
+              :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.resetPhoto)"
               @click="resetAccountAvatar"
             />
           </div>
           <NmorphCallout
             type="warning"
-            :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoRequirements)"
+            :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoRequirements)"
             :content="
-              $t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(
+              $t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoHint)(
                 SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
                 SETTINGS_ACCOUNT_AVATAR_MAX_MB
               )
@@ -129,7 +129,7 @@ const {
 
       <NmorphFormItem
         id="nickname"
-        :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nickname)"
+        :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nickname)"
         :show-validation-icon="false"
       >
         <NmorphTextInput v-model="formData.nickname.value" :disabled="isAccountSaving" />

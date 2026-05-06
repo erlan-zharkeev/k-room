@@ -1,12 +1,5 @@
-import type { LocalizedTextType } from 'global-shared'
-
-import { SETTINGS_PAGE_FAQ_I18N } from './i18n/faq'
-
-export interface IFaqItem {
-  id: number
-  question: LocalizedTextType<string>
-  answer: LocalizedTextType<string>
-}
+import { SETTINGS_PAGE_FAQ_I18N } from '../i18n/faq.i18n'
+import type { IFaqItem } from '../types/faq.types'
 
 export const FAQ_ITEMS: IFaqItem[] = [
   { id: 1, question: SETTINGS_PAGE_FAQ_I18N.faqQ1, answer: SETTINGS_PAGE_FAQ_I18N.faqA1 },
