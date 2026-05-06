@@ -1,6 +1,5 @@
 import { USER_ENDPOINTS, type IGetUserDataResponse } from 'global-shared'
 
-import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { isApiError, useApi, useSocketConnect, useSocketConnectionMonitor } from 'src/shared/api'
 import { log } from 'src/shared/lib'
@@ -10,7 +9,6 @@ let clientDataInitPromise: Promise<void> | null = null
 const initializeClientData = async () => {
   const { doRequest } = useApi()
   const { reset: resetUser, update } = useUser()
-  const settingsStore = useSettings()
   const { socketConnect } = useSocketConnect()
   const { initializeSocketConnectionMonitor } = useSocketConnectionMonitor()
 
@@ -33,7 +31,6 @@ const initializeClientData = async () => {
     }
   }
 
-  await settingsStore.initialize()
   initializeSocketConnectionMonitor()
   await restoreUserSession()
 }
