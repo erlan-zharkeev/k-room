@@ -10,6 +10,8 @@ import {
   getNmorphThemeShadowCssVariables
 } from 'src/shared/lib'
 
+import { APP_THEME_STYLE_ELEMENT_ID } from '../config/constants'
+
 export const useThemeProvider = () => {
   const { settings } = useSettings()
   const { changeSystemTheme } = useThemeSelect()
@@ -22,6 +24,18 @@ export const useThemeProvider = () => {
         : settings.value.appearance.selectedTheme
 
     return activeTheme
+  }
+
+  const getThemeStyleElement = () => {
+    const element = document.getElementById(APP_THEME_STYLE_ELEMENT_ID)
+
+    if (element instanceof HTMLStyleElement) return element
+
+    const styleElement = document.createElement('style')
+    styleElement.id = APP_THEME_STYLE_ELEMENT_ID
+    document.head.append(styleElement)
+
+    return styleElement
   }
 
   const applyAppearanceTheme = () => {
@@ -39,13 +53,18 @@ export const useThemeProvider = () => {
 
     nmorphTheme.setTheme(activeTheme)
 
-    Object.entries({ ...colorSchema, ...generatedColorSchema }).forEach(([key, color]) => {
-      document.documentElement.style.setProperty(getNmorphColorVariableName(key), color)
+    const colorVariables = Object.entries({ ...colorSchema, ...generatedColorSchema }).map(([key, color]) => [
+      getNmorphColorVariableName(key),
+      color
+    ])
+    const shadowVariables = Object.entries(getNmorphThemeShadowCssVariables(theme))
+    const variables = [...colorVariables, ...shadowVariables]
+
+    variables.forEach(([key]) => {
+      document.documentElement.style.removeProperty(key)
     })
 
-    Object.entries(getNmorphThemeShadowCssVariables(theme)).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(key, value)
-    })
+    getThemeStyleElement().textContent = `:root { ${variables.map(([key, value]) => `${key}: ${value};`).join(' ')} }`
   }
 
   const updateSystemTheme = () => {

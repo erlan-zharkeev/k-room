@@ -1,4 +1,4 @@
-import type { INmorphFromDataExpose, NmorphFormValueType } from '@nmorph/nmorph-ui-kit'
+import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   AUTH_ENDPOINTS,
   NON_EMPTY_PATTERN,
@@ -75,8 +75,6 @@ export const useRegistration = () => {
       ]
     }
   })
-  const formValue = formData as unknown as NmorphFormValueType
-
   watch(
     () => formData.nickname.value,
     (value) => {
@@ -134,7 +132,6 @@ export const useRegistration = () => {
     captchaResetKey,
     captchaToken,
     formData,
-    formValue,
     formRef,
     isFormValid,
     isLoading,

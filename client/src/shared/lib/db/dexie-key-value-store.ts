@@ -3,7 +3,7 @@ import set from 'lodash/set'
 import { computed } from 'vue'
 
 import { cloneMutable } from './clone-mutable'
-import type { IndexableType, IUseStateResult, KvItem, MutableType, UseResult } from './types'
+import type { IUseStateResult, KvItem, MutableType, UseResult } from './types'
 import { useDexieLiveQuery } from './use-dexie-live-query'
 
 export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, keyValue: string) => {
@@ -51,7 +51,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
 
   const setByPath = (path: string, value: unknown) => {
     return mutate((data) => {
-      set(data as unknown as IndexableType, path, value)
+      set(data, path, value)
     })
   }
 

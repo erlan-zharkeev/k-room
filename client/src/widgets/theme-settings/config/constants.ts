@@ -1,16 +1,15 @@
 import { NmorphIconMoon, NmorphIconSunny } from '@nmorph/nmorph-ui-kit'
-import type { Component } from 'vue'
 
 import { THEME_SETTINGS_I18N } from './i18n'
 
 export const THEME_SETTINGS_RESET_THEME_OPTIONS = [
   {
-    icon: NmorphIconSunny as unknown as Component,
+    icon: NmorphIconSunny,
     label: THEME_SETTINGS_I18N.lightTheme,
     value: 'light'
   },
   {
-    icon: NmorphIconMoon as unknown as Component,
+    icon: NmorphIconMoon,
     label: THEME_SETTINGS_I18N.darkTheme,
     value: 'dark'
   }
