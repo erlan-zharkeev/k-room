@@ -13,7 +13,7 @@ import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 
 const props = defineProps<{ footer?: boolean }>()
 
-const { isTablet } = useScreen()
+const { isPortraitTabletOrLess } = useScreen()
 
 const route = useRoute()
 const { unreadInfoNotificationQuantity } = useInfoNotification()
@@ -36,7 +36,7 @@ const selectedSettingsId = computed(() => {
     >
       <NmorphBadge
         :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)"
-        :offset-y="isTablet ? 4 : 10"
+        :offset-y="isPortraitTabletOrLess ? 4 : 10"
         size="tiny"
       >
         <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)">

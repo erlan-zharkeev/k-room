@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
-import { useI18n } from 'src/shared/lib'
+import { useI18n, useScreen } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
 import { LANGUAGE_SELECT_DEFAULT_PROPS, LANGUAGE_SELECT_OPTIONS } from '../config/constants'
@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<ILanguageSelectProps>(), LANGUAGE_SELECT_
 
 const { t } = useI18n()
 const { settings, changeLanguage } = useLanguageSelect()
+const { isPortraitTabletOnly } = useScreen()
 </script>
 
 <template>
@@ -34,7 +35,7 @@ const { settings, changeLanguage } = useLanguageSelect()
       >
         <div class="language-select__option">
           <span class="language-select__flag">{{ option.flag }}</span>
-          <AppHeader v-if="!props.compact" tag="h5" :text="option.label" />
+          <AppHeader v-if="!props.compact && isPortraitTabletOnly" tag="h5" :text="option.label" />
         </div>
       </NmorphSelectButtonItem>
     </NmorphSelectButton>

@@ -15,7 +15,7 @@ import { isContentTitleKey } from './../content-layout/types'
 import ContentNavigationLayout from './../content-navigation-layout/ContentNavigationLayout.vue'
 import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
 
-const { isTablet } = useScreen()
+const { isPortraitTabletOrLess } = useScreen()
 const { effectiveTheme, settings } = useSettings()
 const route = useRoute()
 const router = useRouter()
@@ -26,7 +26,7 @@ const isSupportedTabletMainLayoutView = (view: LocationQueryValue | LocationQuer
   isString(view) && ['content', 'content-navigation'].includes(view)
 
 watch(
-  isTablet,
+  isPortraitTabletOrLess,
   (tablet) => {
     if (tablet) {
       if (isSupportedTabletMainLayoutView(route.query.view)) return
@@ -44,8 +44,8 @@ watch(
   { immediate: true }
 )
 
-const showNavigation = computed(() => !isTablet.value || route.query.view === 'content-navigation')
-const showContent = computed(() => !isTablet.value || route.query.view !== 'content-navigation')
+const showNavigation = computed(() => !isPortraitTabletOrLess.value || route.query.view === 'content-navigation')
+const showContent = computed(() => !isPortraitTabletOrLess.value || route.query.view !== 'content-navigation')
 const showWallpaper = computed(
   () => settings.value.appearance.showWallpaper && Boolean(effectiveTheme.value.wallpaper.url)
 )
@@ -75,7 +75,7 @@ const wallpaperStyle = computed(() => {
 
 <template>
   <main class="main-layout" :class="{ 'main-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
-    <MainLeftBar v-if="!isTablet" class="widget nmorph--shadow-outset" />
+    <MainLeftBar v-if="!isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
     <section class="main-layout__workspace">
       <MainTopBar class="widget nmorph--shadow-outset" />
       <div class="main-layout__content">
@@ -90,7 +90,7 @@ const wallpaperStyle = computed(() => {
           </ContentLayout>
         </div>
       </div>
-      <MainMobileFooter v-if="isTablet" class="widget nmorph--shadow-outset" />
+      <MainMobileFooter v-if="isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
     </section>
   </main>
 </template>

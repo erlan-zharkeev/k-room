@@ -9,7 +9,7 @@ import { getSettingsPath, SETTINGS_NAVIGATION_ITEMS } from '../config/constants'
 import { getSettingsContentId } from '../lib/get-settings-content-id'
 
 const route = useRoute()
-const { isTablet } = useScreen()
+const { isPortraitTabletOrLess } = useScreen()
 
 const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
@@ -19,7 +19,7 @@ const selectedSettingsId = computed(() => {
 
 const getItemRoute = (settingsId: string) => ({
   path: getSettingsPath(settingsId),
-  query: isTablet.value ? { ...route.query, view: 'content' } : route.query
+  query: isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
 })
 </script>
 
