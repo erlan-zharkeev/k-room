@@ -1,41 +1,27 @@
 import { useNmorph } from '@nmorph/nmorph-ui-kit'
 
 import { useSettings } from 'src/entities/setting'
-import type { IColorSchema, IThemeData, IThemeShadowSettings } from 'src/shared/config'
+import type { IColorSchema, IThemeShadowSettings } from 'src/shared/config'
 import { getNmorphGeneratedColorSchema } from 'src/shared/lib'
 
 export const useChangeColorSchema = () => {
-  const { mutate, settings } = useSettings()
+  const { effectiveTheme, mutate } = useSettings()
   const { theme } = useNmorph()
 
-  const getActiveTheme = () => {
-    const { selectedTheme, systemTheme } = settings.value.appearance
-
-    return selectedTheme === 'system' ? systemTheme : selectedTheme
-  }
-
-  const applyShadeGeneratorSettings = ({
-    darkShadeGeneratorCoefficient,
-    lightShadeGeneratorCoefficient
-  }: IThemeData) => {
-    theme.data.darkShadeGeneratorCoefficient = darkShadeGeneratorCoefficient
-    theme.data.lightShadeGeneratorCoefficient = lightShadeGeneratorCoefficient
-  }
-
   const changeThemeColor = (key: keyof IColorSchema, value: string) => {
-    const activeThemeName = getActiveTheme()
-    const activeTheme = settings.value.appearance.themes[activeThemeName]
-    const canGenerateShades = activeThemeName === 'custom'
+    const shouldGenerateColors = key === 'main'
 
-    if (canGenerateShades) {
-      applyShadeGeneratorSettings(activeTheme)
+    if (shouldGenerateColors) {
+      theme.data.darkShadeGeneratorCoefficient = effectiveTheme.value.darkShadeGeneratorCoefficient
+      theme.data.lightShadeGeneratorCoefficient = effectiveTheme.value.lightShadeGeneratorCoefficient
     }
 
-    const generatedColorSchema =
-      canGenerateShades && key === 'main' ? getNmorphGeneratedColorSchema(value, theme.getDynamicColorVariables) : {}
+    const generatedColorSchema = shouldGenerateColors
+      ? getNmorphGeneratedColorSchema(value, theme.getDynamicColorVariables)
+      : {}
 
     void mutate((data) => {
-      const { colorSchema } = data.appearance.themes[activeThemeName]
+      const { colorSchema } = data.appearance.themes.custom
 
       colorSchema[key] = value
       Object.assign(colorSchema, generatedColorSchema)
@@ -43,21 +29,10 @@ export const useChangeColorSchema = () => {
   }
 
   const changeThemeShadowSetting = (key: keyof IThemeShadowSettings, value: number) => {
-    const activeThemeName = getActiveTheme()
-    if (activeThemeName !== 'custom') return
-
     void mutate((data) => {
-      const themeData = data.appearance.themes[activeThemeName]
+      const themeData = data.appearance.themes.custom
 
       themeData[key] = value
-
-      if (key === 'darkShadeGeneratorCoefficient' || key === 'lightShadeGeneratorCoefficient') {
-        applyShadeGeneratorSettings(themeData)
-        Object.assign(
-          themeData.colorSchema,
-          getNmorphGeneratedColorSchema(themeData.colorSchema.main, theme.getDynamicColorVariables)
-        )
-      }
     })
   }
 
