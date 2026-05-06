@@ -1,6 +1,6 @@
 import { APP_LANGUAGE } from 'global-shared'
 
-import type { ScreenBreakpointsType } from 'src/shared/types'
+import type { ScreenBreakpointsType } from 'src/shared/model'
 
 export const CLIENT_ENV = __CLIENT_ENV_DATA__
 

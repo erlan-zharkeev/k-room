@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ThemeSelect } from 'src/features/theme-select'
 
-import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../config/i18n/appearance'
+import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance'
 import SettingsCard from '../SettingsCard.vue'
 
 import SettingsThemeCard from './SettingsThemeCard.vue'

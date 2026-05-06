@@ -29,10 +29,10 @@ export {
 } from './appearance.constants'
 export { EMOJI_LIST } from './emoji'
 export { API_I18N, TOAST_I18N } from './i18n'
-export { IMAGE_RESOLUTIONS } from 'src/shared/types'
-export type { ContextRefType } from 'src/shared/types'
-export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/types'
-export type { FileLoaderValueType, IDbMedia } from 'src/shared/types'
+export { IMAGE_RESOLUTIONS } from 'src/shared/model'
+export type { ContextRefType } from 'src/shared/model'
+export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/model'
+export type { FileLoaderValueType, IDbMedia } from 'src/shared/model'
 export type {
   IThemeData,
   IThemeShadowSettings,
@@ -42,7 +42,7 @@ export type {
   ThemeType,
   IColorSchema,
   IAppearanceSettings
-} from 'src/shared/types'
+} from 'src/shared/model'
 export type {
   SoundType,
   CustomSoundSettingType,
@@ -52,12 +52,12 @@ export type {
   IMessageListScrollState,
   IUserSetting,
   DbUserSettingType
-} from 'src/shared/types'
-export type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/types'
-export type { DbUserDataType } from 'src/shared/types'
-export type { FChatRoomType } from 'src/shared/types'
-export type { DbCallType } from 'src/shared/types'
-export type { DbMessageType } from 'src/shared/types'
-export type { IClientEnv } from 'src/shared/types'
-export type { DbInfoNotificationType } from 'src/shared/types'
+} from 'src/shared/model'
+export type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/model'
+export type { DbUserDataType } from 'src/shared/model'
+export type { FChatRoomType } from 'src/shared/model'
+export type { DbCallType } from 'src/shared/model'
+export type { DbMessageType } from 'src/shared/model'
+export type { IClientEnv } from 'src/shared/model'
+export type { DbInfoNotificationType } from 'src/shared/model'
 export { DEFAULT_CUSTOM_SOUNDS } from './sound.constants'

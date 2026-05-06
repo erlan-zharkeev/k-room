@@ -16,7 +16,7 @@ import SettingsLanguageContent from '../ui/content/SettingsLanguageContent.vue'
 import SettingsNotificationsContent from '../ui/content/SettingsNotificationsContent.vue'
 import SettingsSoundContent from '../ui/content/SettingsSoundContent.vue'
 import SettingsStorageContent from '../ui/content/SettingsStorageContent.vue'
-import SettingsThemeContent from '../ui/content/SettingsThemeContent.vue'
+import SettingsThemeContent from '../ui/content/theme/SettingsThemeContent.vue'
 
 import { SETTINGS_PAGE_ACCOUNT_I18N } from './i18n/account'
 import { SETTINGS_PAGE_APPEARANCE_I18N } from './i18n/appearance'
