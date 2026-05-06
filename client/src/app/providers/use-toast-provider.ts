@@ -9,7 +9,11 @@ export const useToastProvider = () => {
   const { isAuthorized } = useUser()
   const { toasts: rawToasts } = useAppToast()
 
-  const isToastVisible = computed(() => settings.value.showNotification || !isAuthorized.value)
+  const isToastVisible = computed(() => {
+    const { enabled, general } = settings.value.notifications
+
+    return (enabled && general.toast) || !isAuthorized.value
+  })
 
   const toasts = computed(() => (isToastVisible.value ? rawToasts.value : []))
 

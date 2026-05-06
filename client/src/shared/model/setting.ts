@@ -4,13 +4,34 @@ import type { IAppearanceSettings } from './appearance.types'
 
 export type SoundType = 'connection' | 'calling' | 'income-message' | 'ring' | 'busy'
 
-export type CustomSoundSettingType = Record<SoundType, string>
-
 export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
 export type ContentTabType = 'info-notifications' | AsideBarButtonNameType
 
 export type HiddenNotificationType = 'audio-context'
+
+export type NotificationEventGroupType = 'messages' | 'calls'
+
+export type NotificationSettingGroupType = 'general' | NotificationEventGroupType
+
+export type NotificationPushSettingKeyType = 'browserPush' | 'nativePush'
+
+export type NotificationSettingKeyType = 'toast' | 'sound' | 'vibration' | NotificationPushSettingKeyType
+
+export interface INotificationGroupSettings {
+  toast: boolean
+  sound: boolean
+  vibration: boolean
+  browserPush: boolean
+  nativePush: boolean
+}
+
+export interface IUserNotificationSettings {
+  enabled: boolean
+  general: INotificationGroupSettings
+  messages: INotificationGroupSettings
+  calls: INotificationGroupSettings
+}
 
 export interface IMessageListScrollState {
   firstVisibleItemId: string
@@ -22,12 +43,10 @@ export interface IUserSetting {
   selectedChatRoomId: string
   messageScrollByRoom: Record<string, IMessageListScrollState>
   language: AppLanguageType
-  showNotification: boolean
   appearance: IAppearanceSettings
   showTooltips: boolean
-  soundOn: boolean
   sound: SoundType
-  customSounds: CustomSoundSettingType
+  notifications: IUserNotificationSettings
   selectedAudioInputDeviceId: string
   selectedVideoInputDeviceId: string
   selectedAudioOutputDeviceId: string
@@ -35,3 +54,8 @@ export interface IUserSetting {
 }
 
 export type DbUserSettingType = IUserSetting
+
+export interface IUserSettingMigration extends Partial<IUserSetting> {
+  showNotification: boolean
+  soundOn: boolean
+}
