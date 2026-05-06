@@ -31,7 +31,7 @@ const handleBack = () => {
         <NmorphIconArrowLeft />
       </template>
     </NmorphButton>
-    <NmorphCard class="page-layout__card">
+    <NmorphCard class="page-layout__card" shadow-type="inset">
       <template v-if="layoutProps.title" #header>
         <div class="page-layout__title">
           <AppLogo />
@@ -51,6 +51,7 @@ const handleBack = () => {
 .page-layout__card {
   overflow: auto;
   max-height: 95%;
+  margin-top: 8px;
   padding: 12px 0;
   @include absolute-center;
 }

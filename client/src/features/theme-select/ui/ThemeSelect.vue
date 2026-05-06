@@ -23,6 +23,7 @@ const { settings, changeTheme } = useThemeSelect()
       :class="['theme-select__input', { 'theme-select__input--compact': props.compact }]"
       :height="props.compact ? 'default' : 'thick'"
       :model-value="settings.appearance.selectedTheme"
+      fill
       @update:model-value="changeTheme"
     >
       <template v-for="option in THEME_SELECT_OPTIONS" :key="option.value">
@@ -46,8 +47,6 @@ const { settings, changeTheme } = useThemeSelect()
 <style lang="scss">
 .theme-select__option {
   @include flex-column-center;
-
-  width: 100px;
 }
 
 .theme-select--compact {

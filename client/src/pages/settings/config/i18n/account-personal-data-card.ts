@@ -19,6 +19,11 @@ export const SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N = {
     ru: (formats: string, maxMb: number) => `${formats} до ${maxMb} МБ`,
     zh: (formats: string, maxMb: number) => `支持 ${formats}，最大 ${maxMb} MB`
   },
+  uploadPhotoRequirements: {
+    en: 'Photo requirements',
+    ru: 'Требования к фото',
+    zh: '照片要求'
+  },
   resetPhoto: {
     en: 'Reset photo',
     ru: 'Сбросить фото',

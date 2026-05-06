@@ -71,7 +71,7 @@ watch(
       :name="user.nickname"
     >
       <template #description>
-        <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" />
+        <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" size="tiny" />
       </template>
     </AppProfileBasicData>
     <div class="main-top-bar__actions nmorph--shadow-inset">

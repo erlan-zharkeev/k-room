@@ -12,3 +12,9 @@ import SettingsCard from '../SettingsCard.vue'
     </SettingsCard>
   </div>
 </template>
+
+<style lang="scss">
+.settings-language-content.settings-content-grid {
+  grid-template-columns: 1fr;
+}
+</style>
