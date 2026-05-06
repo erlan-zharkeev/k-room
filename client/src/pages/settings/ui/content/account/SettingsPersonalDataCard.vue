@@ -6,7 +6,8 @@ import {
   NmorphFormItem,
   NmorphIcon,
   NmorphIconCopy,
-  NmorphTextInput
+  NmorphTextInput,
+  NmorphCallout
 } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
@@ -113,9 +114,10 @@ const {
               @click="resetAccountAvatar"
             />
           </div>
-          <AppText
-            tag="small"
-            :text="
+          <NmorphCallout
+            type="warning"
+            :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoRequirements)"
+            :content="
               $t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(
                 SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
                 SETTINGS_ACCOUNT_AVATAR_MAX_MB

@@ -8,7 +8,6 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from 'src/shared/config'
 import { useScreen } from 'src/shared/lib'
-import { AppText } from 'src/shared/ui'
 
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 
@@ -37,12 +36,9 @@ const selectedSettingsId = computed(() => {
     >
       <NmorphBadge
         :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)"
-        :offset-x="12"
-        :offset-y="isTablet ? 14 : 20"
+        :offset-y="isTablet ? 4 : 10"
+        size="tiny"
       >
-        <template #value="{ value }">
-          <AppText :text="value" color="contrast-text" tag="small" />
-        </template>
         <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)">
           <template #label>
             <NmorphIcon :color="isExactActive ? 'var(--nmorph-accent-color)' : 'var(--nmorph-text-color)'">

@@ -24,6 +24,7 @@ const { settings, changeLanguage } = useLanguageSelect()
       :height="props.compact ? 'default' : 'thick'"
       :model-value="settings.language"
       @update:model-value="changeLanguage"
+      fill
     >
       <NmorphSelectButtonItem
         v-for="option in LANGUAGE_SELECT_OPTIONS"
