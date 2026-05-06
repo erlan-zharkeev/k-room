@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { NmorphIcon, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { computed } from 'vue'
 
-import { useI18n } from 'src/shared/lib'
+import { useI18n, useScreen } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
 import { THEME_SELECT_DEFAULT_PROPS, THEME_SELECT_OPTIONS } from '../config/constants'
@@ -14,6 +15,8 @@ const props = withDefaults(defineProps<IThemeSelectProps>(), THEME_SELECT_DEFAUL
 
 const { t } = useI18n()
 const { settings, changeTheme } = useThemeSelect()
+const { isPortraitTabletOrLess } = useScreen()
+const themeIconWidth = computed(() => (props.compact || !isPortraitTabletOrLess.value ? '16px' : '24px'))
 </script>
 
 <template>
@@ -33,10 +36,10 @@ const { settings, changeTheme } = useThemeSelect()
           :value="option.value"
         >
           <div class="theme-select__option">
-            <NmorphIcon class="theme-select__icon" size="small" aria-hidden="true">
+            <NmorphIcon class="theme-select__icon" :width="themeIconWidth" aria-hidden="true">
               <component :is="option.icon" />
             </NmorphIcon>
-            <AppHeader v-if="!props.compact" tag="h5" :text="t(option.label)" />
+            <AppHeader v-if="!props.compact && !isPortraitTabletOrLess" tag="h5" :text="t(option.label)" />
           </div>
         </NmorphSelectButtonItem>
       </template>

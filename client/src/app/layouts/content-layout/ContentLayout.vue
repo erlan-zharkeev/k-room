@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphDivider, NmorphButton, NmorphScroll, NmorphIconBack } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphScroll, NmorphIconBack } from '@nmorph/nmorph-ui-kit'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -10,7 +10,7 @@ import { IContentLayoutProps } from './types'
 
 const props = defineProps<IContentLayoutProps>()
 
-const { isTablet } = useScreen()
+const { isPortraitTabletOrLess } = useScreen()
 const route = useRoute()
 const router = useRouter()
 
@@ -22,7 +22,7 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <div v-if="isTablet" class="content-layout__back-btn nmorph--shadow-inset">
+      <div v-if="isPortraitTabletOrLess" class="content-layout__back-btn nmorph--shadow-inset">
         <NmorphButton @click="handleBack">
           <template #icon>
             <NmorphIconBack />
