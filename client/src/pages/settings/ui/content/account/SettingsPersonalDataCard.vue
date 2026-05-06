@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphFileUpload, NmorphIcon, NmorphIconCopy, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphButton,
+  NmorphFileUpload,
+  NmorphForm,
+  NmorphFormItem,
+  NmorphIcon,
+  NmorphIconCopy,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
@@ -14,7 +22,7 @@ import SettingsCard from '../../SettingsCard.vue'
 
 const {
   user,
-  accountNickname,
+  formData,
   accountAvatarPreviewUrl,
   displayedAvatarId,
   displayedNickname,
@@ -85,38 +93,47 @@ const {
       </AppProfileBasicData>
     </div>
 
-    <div class="settings-personal-data-card__actions">
-      <NmorphFileUpload
-        :key="avatarUploadKey"
-        :allowed-types="SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES"
-        :button-text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhoto)"
-        :disabled="isAccountSaving"
-        :multiple="false"
-        class="settings-personal-data-card__file-button"
-        @update:model-value="uploadAccountAvatar"
-      />
-      <NmorphButton
-        style-type="transparent"
-        :disabled="isAccountSaving"
-        :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.resetPhoto)"
-        @click="resetAccountAvatar"
-      />
-    </div>
-    <AppText
-      tag="small"
-      :text="
-        $t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(
-          SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
-          SETTINGS_ACCOUNT_AVATAR_MAX_MB
-        )
-      "
-    />
+    <NmorphForm :value="formData" @submit.prevent="updateAccountData">
+      <NmorphFormItem id="avatar" :show-validation-icon="false">
+        <div class="settings-personal-data-card__avatar-field">
+          <div class="settings-personal-data-card__actions">
+            <NmorphFileUpload
+              :key="avatarUploadKey"
+              :allowed-types="SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES"
+              :button-text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhoto)"
+              :disabled="isAccountSaving"
+              :multiple="false"
+              class="settings-personal-data-card__file-button"
+              @update:model-value="uploadAccountAvatar"
+            />
+            <NmorphButton
+              style-type="transparent"
+              :disabled="isAccountSaving"
+              :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.resetPhoto)"
+              @click="resetAccountAvatar"
+            />
+          </div>
+          <AppText
+            tag="small"
+            :text="
+              $t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.uploadPhotoHint)(
+                SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
+                SETTINGS_ACCOUNT_AVATAR_MAX_MB
+              )
+            "
+          />
+        </div>
+      </NmorphFormItem>
 
-    <label class="settings-personal-data-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nickname)" />
-      <NmorphTextInput v-model="accountNickname" :disabled="isAccountSaving" />
-      <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
-    </label>
+      <NmorphFormItem
+        id="nickname"
+        :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N.nickname)"
+        :show-validation-icon="false"
+      >
+        <NmorphTextInput v-model="formData.nickname.value" :disabled="isAccountSaving" />
+        <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
+      </NmorphFormItem>
+    </NmorphForm>
   </SettingsCard>
 </template>
 
@@ -145,7 +162,7 @@ const {
   flex-wrap: wrap;
 }
 
-.settings-personal-data-card__field {
+.settings-personal-data-card__avatar-field {
   display: grid;
   gap: 8px;
 }

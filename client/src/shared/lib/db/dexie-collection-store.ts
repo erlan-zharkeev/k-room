@@ -131,22 +131,20 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
 
   const setByPath = async (id: ItemId, path: string, value: unknown) => {
     await mutate(id, (draft) => {
-      set(draft as unknown as IndexableType, path, value)
+      set(draft, path, value)
     })
   }
 
   const unsetByPath = async (id: ItemId, path: string) => {
     await mutate(id, (draft) => {
-      unset(draft as unknown as IndexableType, path)
+      unset(draft, path)
     })
   }
 
   const patchByPath = async (id: ItemId, patch: IndexableType) => {
     await mutate(id, (draft) => {
-      const target = draft as unknown as IndexableType
-
       Object.entries(patch).forEach(([path, value]) => {
-        set(target, path, value)
+        set(draft, path, value)
       })
     })
   }

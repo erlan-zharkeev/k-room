@@ -1,24 +1,45 @@
-import { CODES_ENDPOINTS, EMAIL_CODE_LENGTH } from 'global-shared'
-import { computed, ref } from 'vue'
+import type { INmorphFromDataExpose as NmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import { CODES_ENDPOINTS, EMAIL_CODE_LENGTH, NON_EMPTY_PATTERN, createValidationMessages } from 'global-shared'
+import { computed, reactive, ref, shallowRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
+import { useI18n } from 'src/shared/lib'
+
+import { SETTINGS_EMAIL_PATTERN } from '../../config/constants'
 
 export const useSettingsChangeEmailCard = () => {
   const { doRequest } = useApi()
   const { user, update } = useUser()
-  const nextEmail = ref('')
+  const { t } = useI18n()
+  const validationMessages = createValidationMessages(t)
+  const formRef = shallowRef<NmorphFromDataExpose | null>(null)
+  const formData = reactive({
+    currentEmail: { value: '', rules: [] },
+    nextEmail: {
+      value: '',
+      rules: [
+        { pattern: NON_EMPTY_PATTERN, error: validationMessages.emailIsRequired },
+        { pattern: SETTINGS_EMAIL_PATTERN, error: validationMessages.invalidEmailFormat }
+      ]
+    }
+  })
   const otpCode = ref('')
+  const codeSentEmail = ref('')
   const isEmailCodeSending = ref(false)
   const isEmailCodeValidating = ref(false)
   const currentEmail = computed(() => user.value.email)
-  const normalizedNextEmail = computed(() => nextEmail.value.trim())
+  const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
+  const normalizedNextEmail = computed(() => formData.nextEmail.value.trim())
   const emailNotChanged = computed(
     () =>
       Boolean(normalizedNextEmail.value) && normalizedNextEmail.value.toLowerCase() === currentEmail.value.toLowerCase()
   )
-  const isSendCodeDisabled = computed(() => !user.value.id || !normalizedNextEmail.value || emailNotChanged.value)
-  const isValidateCodeDisabled = computed(() => isSendCodeDisabled.value || otpCode.value.length !== EMAIL_CODE_LENGTH)
+  const isSendCodeDisabled = computed(() => !user.value.id || !isFormValid.value || emailNotChanged.value)
+  const isEmailCodeVisible = computed(
+    () => Boolean(codeSentEmail.value) && codeSentEmail.value === normalizedNextEmail.value && !isSendCodeDisabled.value
+  )
+  const isValidateCodeDisabled = computed(() => !isEmailCodeVisible.value || otpCode.value.length !== EMAIL_CODE_LENGTH)
 
   const sendEmailCode = async () => {
     if (isSendCodeDisabled.value) return
@@ -28,6 +49,7 @@ export const useSettingsChangeEmailCard = () => {
       await doRequest<null>('post', CODES_ENDPOINTS.sendEmailCodeChangeEmail, {
         email: normalizedNextEmail.value
       })
+      codeSentEmail.value = normalizedNextEmail.value
       otpCode.value = ''
     } finally {
       isEmailCodeSending.value = false
@@ -44,21 +66,32 @@ export const useSettingsChangeEmailCard = () => {
         code: otpCode.value
       })
       await update({ email: normalizedNextEmail.value })
-      nextEmail.value = ''
+      formData.nextEmail.value = ''
       otpCode.value = ''
+      codeSentEmail.value = ''
     } finally {
       isEmailCodeValidating.value = false
     }
   }
 
+  watch(
+    currentEmail,
+    (email) => {
+      formData.currentEmail.value = email
+    },
+    { immediate: true }
+  )
+
   return {
     currentEmail,
     emailNotChanged,
+    formData,
+    formRef,
+    isEmailCodeVisible,
     isEmailCodeSending,
     isEmailCodeValidating,
     isSendCodeDisabled,
     isValidateCodeDisabled,
-    nextEmail,
     otpCode,
     sendEmailCode,
     validateEmailCode

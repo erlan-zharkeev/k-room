@@ -1,4 +1,4 @@
-import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
+import type { INmorphCustomFileData as NmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import {
   USER_ENDPOINTS,
   createUpdateUserDataSchema,
@@ -7,7 +7,7 @@ import {
   normalizeNickname
 } from 'global-shared'
 import { safeParse } from 'valibot'
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
@@ -24,7 +24,10 @@ export const useSettingsPersonalDataCard = () => {
   const { doRequest } = useApi()
   const { t } = useI18n()
   const toast = useAppToast()
-  const accountNickname = ref('')
+  const formData = reactive({
+    avatar: { value: '', rules: [] },
+    nickname: { value: '', rules: [] }
+  })
   const accountAvatarFile = ref<File>()
   const accountAvatarPreviewUrl = ref('')
   const accountAvatarWasReset = ref(false)
@@ -38,7 +41,7 @@ export const useSettingsPersonalDataCard = () => {
     accountAvatarPreviewUrl.value || accountAvatarWasReset.value ? undefined : avatarId.value || undefined
   )
   const displayedUserId = computed(() => (user.value.id ? `#${user.value.id}` : ''))
-  const normalizedAccountNickname = computed(() => normalizeNickname(accountNickname.value))
+  const normalizedAccountNickname = computed(() => normalizeNickname(formData.nickname.value))
   const isAccountNicknameEmpty = computed(() => !normalizedAccountNickname.value)
   const accountNicknameChanged = computed(
     () => normalizedAccountNickname.value !== normalizeNickname(user.value.nickname)
@@ -46,9 +49,9 @@ export const useSettingsPersonalDataCard = () => {
   const accountAvatarChanged = computed(() => Boolean(accountAvatarFile.value || accountAvatarWasReset.value))
   const hasAccountChanges = computed(() => accountNicknameChanged.value || accountAvatarChanged.value)
   const accountNicknameError = computed(() => {
-    if (!accountNickname.value) return ''
+    if (!formData.nickname.value) return ''
 
-    const result = safeParse(accountNicknameSchema, { nickname: accountNickname.value }, { abortPipeEarly: true })
+    const result = safeParse(accountNicknameSchema, { nickname: formData.nickname.value }, { abortPipeEarly: true })
 
     return result.success ? '' : result.issues[0]?.message || ''
   })
@@ -69,7 +72,7 @@ export const useSettingsPersonalDataCard = () => {
     avatarUploadKey.value += 1
   }
 
-  const uploadAccountAvatar = (files: INmorphCustomFileData[]) => {
+  const uploadAccountAvatar = (files: NmorphCustomFileData[]) => {
     const file = files[files.length - 1]?.data
 
     if (!file) {
@@ -130,18 +133,18 @@ export const useSettingsPersonalDataCard = () => {
 
     if (isAccountSaveDisabled.value || !isNicknameValid(nickname)) return
 
-    const formData = new FormData()
+    const requestFormData = new FormData()
 
-    formData.append('nickname', nickname)
-    formData.append('reset-avatar', accountAvatarWasReset.value ? 'reset' : '')
+    requestFormData.append('nickname', nickname)
+    requestFormData.append('reset-avatar', accountAvatarWasReset.value ? 'reset' : '')
 
     if (accountAvatarFile.value) {
-      formData.append('file', accountAvatarFile.value)
+      requestFormData.append('file', accountAvatarFile.value)
     }
 
     try {
       isAccountSaving.value = true
-      await doRequest('patch', USER_ENDPOINTS.editUserData, formData, {
+      await doRequest('patch', USER_ENDPOINTS.editUserData, requestFormData, {
         contentType: 'multipart/form-data'
       })
       await updateUserData({ nickname })
@@ -174,7 +177,7 @@ export const useSettingsPersonalDataCard = () => {
   watch(
     () => user.value.nickname,
     (nickname) => {
-      accountNickname.value = nickname
+      formData.nickname.value = nickname
     },
     { immediate: true }
   )
@@ -183,7 +186,7 @@ export const useSettingsPersonalDataCard = () => {
 
   return {
     user,
-    accountNickname,
+    formData,
     accountAvatarPreviewUrl,
     displayedAvatarId,
     displayedNickname,

@@ -9,7 +9,7 @@ import { AppCaptcha, AppText } from 'src/shared/ui'
 import { REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration'
 
-const { captchaRequired, captchaResetKey, captchaToken, formData, formValue, formRef, isFormValid, isLoading, submit } =
+const { captchaRequired, captchaResetKey, captchaToken, formData, formRef, isFormValid, isLoading, submit } =
   useRegistration()
 const isFormDisabled = computed(() => isLoading.value)
 const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
@@ -17,7 +17,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 </script>
 
 <template>
-  <NmorphForm ref="formRef" :value="formValue" class="registration-page" @submit.prevent="submit">
+  <NmorphForm ref="formRef" :value="formData" class="registration-page" @submit.prevent="submit">
     <NmorphFormItem id="nickname" class="registration-page__field" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.nickname.value"

@@ -43,6 +43,8 @@ const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   align-items: start;
+
+  margin-right: 24px;
 }
 
 .settings-storage-usage-card__stat {

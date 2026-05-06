@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphOTPInput, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphForm, NmorphFormItem, NmorphOTPInput, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { EMAIL_CODE_LENGTH } from 'global-shared'
 
 import { AppText } from 'src/shared/ui'
@@ -11,11 +11,13 @@ import SettingsCard from '../../SettingsCard.vue'
 const {
   currentEmail,
   emailNotChanged,
+  formData,
+  formRef,
+  isEmailCodeVisible,
   isEmailCodeSending,
   isEmailCodeValidating,
   isSendCodeDisabled,
   isValidateCodeDisabled,
-  nextEmail,
   otpCode,
   sendEmailCode,
   validateEmailCode
@@ -24,30 +26,45 @@ const {
 
 <template>
   <SettingsCard :title="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.changeEmail)">
-    <div class="settings-change-email-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.currentEmail)" />
-      <AppText color="contrast-text" truncate :text="currentEmail" />
-    </div>
+    <NmorphForm ref="formRef" :value="formData" @submit.prevent="sendEmailCode">
+      <NmorphFormItem
+        id="currentEmail"
+        :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.currentEmail)"
+        :show-validation-icon="false"
+      >
+        <AppText color="contrast-text" truncate :text="currentEmail" />
+      </NmorphFormItem>
 
-    <label class="settings-change-email-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.newEmail)" />
-      <NmorphTextInput v-model="nextEmail" :disabled="isEmailCodeSending || isEmailCodeValidating" />
-      <AppText
-        v-if="emailNotChanged"
-        tag="small"
-        color="warn"
-        :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailNotChanged)"
-      />
+      <NmorphFormItem
+        id="nextEmail"
+        :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.newEmail)"
+        :show-validation-icon="false"
+      >
+        <NmorphTextInput
+          v-model="formData.nextEmail.value"
+          autocomplete="email"
+          :disabled="isEmailCodeSending || isEmailCodeValidating"
+          :input-attrs="{ type: 'email' }"
+        />
+        <AppText
+          v-if="emailNotChanged"
+          tag="small"
+          color="warn"
+          :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailNotChanged)"
+        />
+      </NmorphFormItem>
+
       <NmorphButton
+        fill
         class="settings-change-email-card__button"
         :disabled="isSendCodeDisabled"
         :loading="isEmailCodeSending"
         :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.sendCode)"
-        @click="sendEmailCode"
+        type="submit"
       />
-    </label>
+    </NmorphForm>
 
-    <label class="settings-change-email-card__field">
+    <label v-if="isEmailCodeVisible" class="settings-change-email-card__field">
       <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N.emailCode)" />
       <NmorphOTPInput
         v-model="otpCode"

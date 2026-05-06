@@ -26,6 +26,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
     <div v-if="hasFooter" class="settings-card__footer">
       <slot name="footer">
         <NmorphButton
+          fill
           :text="props.buttonLabel"
           :disabled="buttonDisabled"
           :loading="buttonLoading"
@@ -39,7 +40,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 <style lang="scss">
 .settings-card {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   align-content: start;
 
   padding: 14px;
@@ -48,22 +49,6 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 
 .settings-card__content {
   display: grid;
-  gap: 14px;
   align-content: start;
-}
-
-.settings-card__footer {
-  justify-self: start;
-}
-
-@include screen-tablet {
-  .settings-card__footer {
-    justify-self: stretch;
-    width: 100%;
-  }
-
-  .settings-card__button {
-    width: 100%;
-  }
 }
 </style>
