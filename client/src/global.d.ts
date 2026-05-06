@@ -1,6 +1,5 @@
 import type { LocalizedTextType } from 'global-shared'
 
-import type { PageLayoutPropsType } from 'src/app/layouts/page-layout/types'
 import type { ITurnstileApi } from 'src/shared/types'
 
 declare global {
@@ -20,7 +19,6 @@ declare module 'vue' {
 declare module 'vue-router' {
   interface RouteMeta {
     guestOnly?: boolean
-    pageLayout?: PageLayoutPropsType
     requiresAuth?: boolean
   }
 }

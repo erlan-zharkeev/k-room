@@ -4,7 +4,7 @@ import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { computed, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { AppCaptcha, AppText } from 'src/shared/ui'
+import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
 import { usePasswordRecovery } from '../model/use-password-recovery'
@@ -48,6 +48,8 @@ onMounted(initializePasswordRecovery)
 
 <template>
   <div class="password-recovery-page">
+    <AppHeader :text="$t(PASSWORD_RECOVERY_I18N.title)" />
+
     <AppText v-if="!codeSent" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterEmailHint)" />
     <template v-else>
       <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.sentToEmail)" />
