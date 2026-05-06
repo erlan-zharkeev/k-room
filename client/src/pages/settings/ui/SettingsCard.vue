@@ -49,6 +49,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 
 .settings-card__content {
   display: grid;
+  gap: 8px;
   align-content: start;
 }
 </style>

@@ -6,9 +6,9 @@ import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-ro
 import { useSettings } from 'src/entities/setting'
 import { useMainMonitors } from 'src/pages/main'
 import { useScreen } from 'src/shared/lib'
-import { MainLeftBar } from 'src/widgets/main-left-bar'
-import { MainMobileFooter } from 'src/widgets/main-mobile-footer'
-import { MainTopBar } from 'src/widgets/main-top-bar'
+import { MainLeftBar } from 'src/widgets/left-bar'
+import { MainMobileFooter } from 'src/widgets/mobile-footer'
+import { MainTopBar } from 'src/widgets/top-bar'
 
 import ContentLayout from './../content-layout/ContentLayout.vue'
 import { isContentTitleKey } from './../content-layout/types'
