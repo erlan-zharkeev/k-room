@@ -6,5 +6,6 @@ import 'src/app/styles/index.scss'
 
 const app = createApp(App)
 
-initApp(app)
-app.mount('#app')
+initApp(app).then(() => {
+  app.mount('#app')
+})
