@@ -1,3 +1,51 @@
+<script setup lang="ts">
+import { NmorphSwitch } from '@nmorph/nmorph-ui-kit'
+
+import { AppText } from 'src/shared/ui'
+
+import { useNotificationSettings } from '../../model/notifications/use-notification-settings'
+import SettingsCard from '../SettingsCard.vue'
+
+const { sections, optionsBySection, getValue, setValue } = useNotificationSettings()
+</script>
+
 <template>
-  <div class="settings-notifications-content settings-content-grid" />
+  <div class="settings-notifications-content settings-content-grid">
+    <SettingsCard v-for="section in sections" :key="section.id" :title="$t(section.title)">
+      <div class="settings-notifications-content__group">
+        <template v-for="option in optionsBySection[section.id]" :key="option.id">
+          <div class="settings-notifications-content__row">
+            <span class="settings-notifications-content__text">
+              <AppText color="contrast-text" :text="$t(option.label)" />
+              <AppText size="small" :text="$t(option.description)" />
+            </span>
+
+            <NmorphSwitch
+              :aria-label="$t(option.label)"
+              :model-value="getValue(section.id, option.id)"
+              @update:model-value="setValue(section.id, option.id, Boolean($event))"
+            />
+          </div>
+        </template>
+      </div>
+    </SettingsCard>
+  </div>
 </template>
+
+<style lang="scss">
+.settings-notifications-content.settings-content-grid {
+  grid-template-columns: 1fr;
+}
+
+.settings-notifications-content__row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-notifications-content__text {
+  display: grid;
+  gap: 4px;
+}
+</style>

@@ -15,6 +15,7 @@ export type { DbCallType } from './call'
 export type { ITurnstileApi, ITurnstileRenderOptions } from './captcha'
 export type { FChatRoomType } from './chat-room'
 export type { IClientEnv } from './client-env'
+export type { ClientPlatformType } from './client-platform'
 export type { DbContactType, IDbContactRequiredSystemData } from './contact'
 export type { DbInfoNotificationType } from './info-notification'
 export type { KebabCaseType } from './kebab-case'
@@ -24,11 +25,17 @@ export type { ContextRefType } from './other'
 export type {
   AsideBarButtonNameType,
   ContentTabType,
-  CustomSoundSettingType,
   DbUserSettingType,
   HiddenNotificationType,
+  INotificationGroupSettings,
   IMessageListScrollState,
+  IUserNotificationSettings,
   IUserSetting,
+  IUserSettingMigration,
+  NotificationEventGroupType,
+  NotificationPushSettingKeyType,
+  NotificationSettingGroupType,
+  NotificationSettingKeyType,
   SoundType
 } from './setting'
 export type { DbUserDataType } from './user'

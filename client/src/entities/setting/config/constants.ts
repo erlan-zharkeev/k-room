@@ -1,6 +1,7 @@
 import type { IUserSetting } from 'src/shared/config'
 import { CLIENT_LANGUAGE } from 'src/shared/config'
-import { DEFAULT_APPEARANCE, DEFAULT_CUSTOM_SOUNDS } from 'src/shared/config'
+import { DEFAULT_NOTIFICATION_SETTINGS } from 'src/shared/config'
+import { DEFAULT_APPEARANCE } from 'src/shared/config'
 
 export const DEFAULT_SETTINGS: IUserSetting = {
   selectedContentTab: 'contacts',
@@ -9,11 +10,9 @@ export const DEFAULT_SETTINGS: IUserSetting = {
   language: CLIENT_LANGUAGE,
   appearance: DEFAULT_APPEARANCE,
 
-  soundOn: true,
   showTooltips: false,
-  showNotification: true,
   sound: 'income-message',
-  customSounds: DEFAULT_CUSTOM_SOUNDS,
+  notifications: DEFAULT_NOTIFICATION_SETTINGS,
 
   selectedAudioInputDeviceId: '',
   selectedVideoInputDeviceId: '',

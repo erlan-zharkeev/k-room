@@ -11,6 +11,7 @@ export {
   SOCKET_RECONNECTION_DELAY_MS,
   SUCCESS_TOAST_LIFE_MS
 } from './constants'
+export { DEFAULT_NOTIFICATION_GROUP_SETTINGS, DEFAULT_NOTIFICATION_SETTINGS } from './setting.constants'
 export { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from './main-navigation'
 export {
   CUSTOM_WALLPAPER_SETTINGS,
@@ -45,12 +46,18 @@ export type {
 } from 'src/shared/model'
 export type {
   SoundType,
-  CustomSoundSettingType,
   AsideBarButtonNameType,
   ContentTabType,
   HiddenNotificationType,
+  INotificationGroupSettings,
   IMessageListScrollState,
+  IUserNotificationSettings,
   IUserSetting,
+  IUserSettingMigration,
+  NotificationEventGroupType,
+  NotificationPushSettingKeyType,
+  NotificationSettingGroupType,
+  NotificationSettingKeyType,
   DbUserSettingType
 } from 'src/shared/model'
 export type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/model'
@@ -60,4 +67,3 @@ export type { DbCallType } from 'src/shared/model'
 export type { DbMessageType } from 'src/shared/model'
 export type { IClientEnv } from 'src/shared/model'
 export type { DbInfoNotificationType } from 'src/shared/model'
-export { DEFAULT_CUSTOM_SOUNDS } from './sound.constants'
