@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { SETTINGS_CONTENT_COMPONENTS } from '../config/constants'
+import { SETTINGS_CONTENT_COMPONENTS } from '../config/constants/content.constants'
 import { getSettingsContentId } from '../lib/get-settings-content-id'
 
 const route = useRoute()

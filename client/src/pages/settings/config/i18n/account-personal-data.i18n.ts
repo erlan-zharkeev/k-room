@@ -1,4 +1,4 @@
-export const SETTINGS_ACCOUNT_PERSONAL_DATA_CARD_I18N = {
+export const SETTINGS_ACCOUNT_PERSONAL_DATA_I18N = {
   personalData: {
     en: 'Personal data',
     ru: 'Персональные данные',

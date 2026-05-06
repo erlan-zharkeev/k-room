@@ -5,7 +5,7 @@ import { computed, reactive, ref } from 'vue'
 import { useApi } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
-export const useSettingsChangePasswordCard = () => {
+export const useChangePassword = () => {
   const { doRequest } = useApi()
   const { t } = useI18n()
   const isPasswordChanging = ref(false)

@@ -3,11 +3,11 @@ import { NmorphButton } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
-import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage'
-import { useSettingsStorageClearCard } from '../../../model/storage/use-settings-storage-clear-card'
+import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
+import { useStorageClear } from '../../../model/storage/use-storage-clear'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { isClearingMedia, clearMedia } = useSettingsStorageClearCard()
+const { isClearingMedia, clearMedia } = useStorageClear()
 </script>
 
 <template>

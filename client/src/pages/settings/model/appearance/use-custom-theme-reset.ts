@@ -14,20 +14,20 @@ const COLOR_SCHEMAS = {
   light: LIGHT_COLOR_SCHEMA
 } as const
 
-export const useResetCustomTheme = () => {
+export const useCustomThemeReset = () => {
   const { mutate, settings } = useSettings()
-  const resetTheme = ref<SystemTheme>(DEFAULT_CUSTOM_THEME_MODE)
+  const resetThemeMode = ref<SystemTheme>(DEFAULT_CUSTOM_THEME_MODE)
 
-  const changeResetTheme = (value: string) => {
+  const changeResetThemeMode = (value: string) => {
     if (value !== 'dark' && value !== 'light') return
 
-    resetTheme.value = value
+    resetThemeMode.value = value
   }
 
   const resetCustomTheme = () => {
     void mutate((data) => {
-      data.appearance.themes.custom.colorSchema = { ...COLOR_SCHEMAS[resetTheme.value] }
-      data.appearance.themes.custom.mode = resetTheme.value
+      data.appearance.themes.custom.colorSchema = { ...COLOR_SCHEMAS[resetThemeMode.value] }
+      data.appearance.themes.custom.mode = resetThemeMode.value
       Object.assign(data.appearance.themes.custom, DEFAULT_THEME_SHADOW_SETTINGS)
     })
   }
@@ -35,14 +35,14 @@ export const useResetCustomTheme = () => {
   watch(
     () => settings.value.appearance.themes.custom.mode,
     (value) => {
-      resetTheme.value = value
+      resetThemeMode.value = value
     },
     { immediate: true }
   )
 
   return {
-    resetTheme,
-    changeResetTheme,
+    resetThemeMode,
+    changeResetThemeMode,
     resetCustomTheme
   }
 }

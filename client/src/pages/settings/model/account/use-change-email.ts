@@ -6,9 +6,9 @@ import { useUser } from 'src/entities/user'
 import { useApi } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
-import { SETTINGS_EMAIL_PATTERN } from '../../config/constants'
+import { SETTINGS_EMAIL_PATTERN } from '../../config/constants/account.constants'
 
-export const useSettingsChangeEmailCard = () => {
+export const useChangeEmail = () => {
   const { doRequest } = useApi()
   const { user, update } = useUser()
   const { t } = useI18n()

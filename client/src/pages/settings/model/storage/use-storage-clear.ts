@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 
-export const useSettingsStorageClearCard = () => {
+export const useStorageClear = () => {
   const { reset: resetMedia } = useMedia()
 
   const isClearingMedia = ref(false)

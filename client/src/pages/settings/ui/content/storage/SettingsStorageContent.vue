@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SettingsStorageClearCard from './storage/SettingsStorageClearCard.vue'
-import SettingsStoragePersistentCard from './storage/SettingsStoragePersistentCard.vue'
-import SettingsStorageUsageCard from './storage/SettingsStorageUsageCard.vue'
+import SettingsStorageClearCard from './SettingsStorageClearCard.vue'
+import SettingsStoragePersistentCard from './SettingsStoragePersistentCard.vue'
+import SettingsStorageUsageCard from './SettingsStorageUsageCard.vue'
 </script>
 
 <template>

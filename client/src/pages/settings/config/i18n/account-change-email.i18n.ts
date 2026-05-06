@@ -1,4 +1,4 @@
-export const SETTINGS_ACCOUNT_CHANGE_EMAIL_CARD_I18N = {
+export const SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N = {
   changeEmail: {
     en: 'Change email',
     ru: 'Изменить email',
