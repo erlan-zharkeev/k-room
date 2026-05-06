@@ -109,22 +109,3 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
     </section>
   </div>
 </template>
-
-<style>
-.privacy-policy-page,
-.privacy-policy-page__section {
-  display: grid;
-  gap: 12px;
-}
-
-.privacy-policy-page {
-  gap: 24px;
-}
-
-.privacy-policy-page__list {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding-left: 20px;
-}
-</style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCard, NmorphIconArrowLeft } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCard, NmorphIconArrowLeft, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
@@ -40,7 +40,9 @@ const handleBack = () => {
       </template>
       <article class="page-layout__content">
         <slot>
-          <RouterView />
+          <NmorphScroll>
+            <RouterView />
+          </NmorphScroll>
         </slot>
       </article>
     </NmorphCard>
@@ -48,17 +50,15 @@ const handleBack = () => {
 </template>
 
 <style lang="scss">
-.page-layout__card {
-  overflow: auto;
-  max-height: 95%;
-  margin-top: 8px;
-  padding: 12px 0;
-  @include absolute-center;
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
-.page-layout__title {
-  display: grid;
-  gap: 8px;
-  justify-items: center;
+.page-layout__card {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  margin-top: 8px;
 }
 </style>
