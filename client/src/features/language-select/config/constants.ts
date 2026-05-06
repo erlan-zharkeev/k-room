@@ -1,6 +1,6 @@
 import { APP_LANGUAGE } from 'global-shared'
 
-import type { ILanguageSelectOption } from '../types'
+import type { ILanguageSelectOption } from './types'
 
 export const LANGUAGE_SELECT_DEFAULT_PROPS = {
   compact: false

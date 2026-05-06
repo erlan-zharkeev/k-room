@@ -7,7 +7,7 @@ import type {
   IThemeShadowSettings,
   IWallpaperSettings,
   SystemTheme
-} from '../types/appearance.types'
+} from 'src/shared/model'
 
 const ACCENT_COLOR = '#418fde'
 const SHARED_THEME_COLORS = {

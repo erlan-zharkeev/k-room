@@ -1,6 +1,6 @@
 import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
 
-import type { KebabCaseType } from 'src/shared/types'
+import type { KebabCaseType } from 'src/shared/model'
 
 export type AppTextTagType = 'span' | 'p' | 'div' | 'small'
 
