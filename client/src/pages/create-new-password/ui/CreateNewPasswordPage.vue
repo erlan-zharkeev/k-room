@@ -4,7 +4,7 @@ import { ROUTE_NAMES } from 'global-shared'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { AppText } from 'src/shared/ui'
+import { AppHeader, AppText } from 'src/shared/ui'
 
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 import { useCreateNewPassword } from '../model/use-create-new-password'
@@ -27,6 +27,8 @@ onMounted(initializeCreateNewPassword)
 
 <template>
   <div class="create-new-password-page">
+    <AppHeader :text="$t(CREATE_NEW_PASSWORD_I18N.title)" />
+
     <template v-if="isPasswordChanged">
       <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.success)" />
       <div class="create-new-password-page__action-btns">

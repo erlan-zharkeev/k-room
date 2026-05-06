@@ -4,7 +4,7 @@ import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
 import { computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { AppCaptcha, AppText } from 'src/shared/ui'
+import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
 import { useWaitEmailConfirm } from '../model/use-wait-email-confirm'
@@ -23,6 +23,8 @@ onMounted(initializeWaitEmailConfirm)
 
 <template>
   <div class="wait-email-confirm-page">
+    <AppHeader :text="$t(WAIT_EMAIL_CONFIRM_I18N.title)" />
+
     <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail)" />
     <AppText bold color="accent" :text="email" />
     <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.followLink)" />

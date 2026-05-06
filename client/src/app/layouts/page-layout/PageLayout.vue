@@ -1,64 +1,47 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCard, NmorphIconArrowLeft, NmorphScroll } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES } from 'global-shared'
-import { computed } from 'vue'
-import { RouterView, useRoute, useRouter } from 'vue-router'
+import { NmorphCard, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { RouterView } from 'vue-router'
 
-import { AppHeader, AppLogo } from 'src/shared/ui'
-
-import { PAGE_LAYOUT_I18N } from './i18n'
-import type { PageLayoutPropsType } from './types'
-
-const route = useRoute()
-const router = useRouter()
-const layoutProps = computed<PageLayoutPropsType>(() => route.meta.pageLayout ?? {})
-const fallbackRoute = computed(() => layoutProps.value.fallbackRoute ?? ROUTE_NAMES.app)
-
-const handleBack = () => {
-  if (window.history.length > 1) {
-    router.back()
-    return
-  }
-
-  router.replace(fallbackRoute.value)
-}
+import { PageBackButton } from 'src/features/page-back-button'
+import { AppLogo } from 'src/shared/ui'
 </script>
 
 <template>
   <section class="page-layout">
-    <NmorphButton :text="$t(PAGE_LAYOUT_I18N.back)" style-type="transparent" @click="handleBack">
-      <template #icon>
-        <NmorphIconArrowLeft />
-      </template>
-    </NmorphButton>
-    <NmorphCard class="page-layout__card" shadow-type="inset">
-      <template v-if="layoutProps.title" #header>
-        <div class="page-layout__title">
+    <PageBackButton />
+    <div class="page-layout__card">
+      <NmorphCard shadow-type="inset">
+        <template #header>
           <AppLogo />
-          <AppHeader :text="$t(layoutProps.title)" />
-        </div>
-      </template>
-      <article class="page-layout__content">
-        <slot>
-          <NmorphScroll>
-            <RouterView />
-          </NmorphScroll>
-        </slot>
-      </article>
-    </NmorphCard>
+        </template>
+        <article class="page-layout__content">
+          <slot>
+            <NmorphScroll>
+              <div class="page-layout__router-view-wrapper">
+                <RouterView />
+              </div>
+            </NmorphScroll>
+          </slot>
+        </article>
+      </NmorphCard>
+    </div>
   </section>
 </template>
 
 <style lang="scss">
 .page-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
 }
 
 .page-layout__card {
   overflow-y: auto;
-  flex: 1 1 auto;
-  margin-top: 8px;
+  place-self: center;
+  width: min(420px, 100%);
+  min-width: 0;
+}
+
+.page-layout__router-view-wrapper {
+  padding: 8px;
 }
 </style>

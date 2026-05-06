@@ -1,6 +1,7 @@
 export const LAYOUT_ROUTE_NAMES = {
   auth: '/authorize',
   page: '/page',
+  docs: '/docs',
   app: '/app'
 } as const
 
@@ -27,8 +28,8 @@ export const ROUTE_NAMES = {
   passwordRecovery: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.passwordRecovery}`,
   createNewPassword: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.createNewPassword}`,
   notification: '/notification',
-  privacyPolicy: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.privacyPolicy}`,
-  notFound: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.notFound}`
+  privacyPolicy: `${LAYOUT_ROUTE_NAMES.docs}/${PAGE_ROUTE_NAMES.privacyPolicy}`,
+  notFound: `/${PAGE_ROUTE_NAMES.notFound}`
 } as const
 
 export const AUTH_ENDPOINTS = {

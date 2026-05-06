@@ -3,19 +3,20 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useUser } from 'src/entities/user'
 import { initClientData } from 'src/features/client-session'
-import { CREATE_NEW_PASSWORD_PAGE_LAYOUT_PROPS, CreateNewPasswordPage } from 'src/pages/create-new-password'
-import { EMAIL_CONFIRMATION_PAGE_LAYOUT_PROPS, EmailConfirmationPage } from 'src/pages/email-confirmation'
-import { ERROR_PAGE_LAYOUT_PROPS, ErrorPage } from 'src/pages/error'
+import { CreateNewPasswordPage } from 'src/pages/create-new-password'
+import { EmailConfirmationPage } from 'src/pages/email-confirmation'
+import { ErrorPage } from 'src/pages/error'
 import { LoginPage } from 'src/pages/login'
 import { MainWorkspacePage } from 'src/pages/main'
-import { PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS, PasswordRecoveryPage } from 'src/pages/password-recovery'
-import { PRIVACY_POLICY_PAGE_LAYOUT_PROPS, PrivacyPolicyPage } from 'src/pages/privacy-policy'
+import { PasswordRecoveryPage } from 'src/pages/password-recovery'
+import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
-import { WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS, WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
+import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
 import { MAIN_PAGE_ROUTES } from 'src/shared/config'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
+import DocsLayout from './layouts/docs-layout/DocsLayout.vue'
 import MainLayout from './layouts/main-layout/MainLayout.vue'
 import PageLayout from './layouts/page-layout/PageLayout.vue'
 
@@ -49,48 +50,39 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: PAGE_ROUTE_NAMES.emailConfirmation,
-        component: EmailConfirmationPage,
-        meta: {
-          pageLayout: EMAIL_CONFIRMATION_PAGE_LAYOUT_PROPS
-        }
+        component: EmailConfirmationPage
       },
       {
         path: PAGE_ROUTE_NAMES.waitEmailConfirm,
         component: WaitEmailConfirmPage,
         meta: {
-          guestOnly: true,
-          pageLayout: WAIT_EMAIL_CONFIRM_PAGE_LAYOUT_PROPS
+          guestOnly: true
         }
       },
       {
         path: PAGE_ROUTE_NAMES.passwordRecovery,
         component: PasswordRecoveryPage,
         meta: {
-          guestOnly: true,
-          pageLayout: PASSWORD_RECOVERY_PAGE_LAYOUT_PROPS
+          guestOnly: true
         }
       },
       {
         path: PAGE_ROUTE_NAMES.createNewPassword,
         component: CreateNewPasswordPage,
         meta: {
-          guestOnly: true,
-          pageLayout: CREATE_NEW_PASSWORD_PAGE_LAYOUT_PROPS
+          guestOnly: true
         }
-      },
+      }
+    ]
+  },
+  {
+    path: LAYOUT_ROUTE_NAMES.docs,
+    component: DocsLayout,
+    redirect: ROUTE_NAMES.privacyPolicy,
+    children: [
       {
         path: PAGE_ROUTE_NAMES.privacyPolicy,
-        component: PrivacyPolicyPage,
-        meta: {
-          pageLayout: PRIVACY_POLICY_PAGE_LAYOUT_PROPS
-        }
-      },
-      {
-        path: PAGE_ROUTE_NAMES.notFound,
-        component: ErrorPage,
-        meta: {
-          pageLayout: ERROR_PAGE_LAYOUT_PROPS
-        }
+        component: PrivacyPolicyPage
       }
     ]
   },
@@ -133,7 +125,13 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: ROUTE_NAMES.notFound
+    component: PageLayout,
+    children: [
+      {
+        path: '',
+        component: ErrorPage
+      }
+    ]
   }
 ]
 

@@ -1,4 +1,4 @@
-export const PAGE_LAYOUT_I18N = {
+export const PAGE_BACK_BUTTON_I18N = {
   back: {
     en: 'Back',
     ru: 'Назад',
