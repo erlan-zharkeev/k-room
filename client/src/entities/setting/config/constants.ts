@@ -1,5 +1,6 @@
 import type { IUserSetting } from 'src/shared/config'
 import { CLIENT_LANGUAGE } from 'src/shared/config'
+import { DEFAULT_IO_DEVICES_SETTINGS } from 'src/shared/config'
 import { DEFAULT_NOTIFICATION_SETTINGS } from 'src/shared/config'
 import { DEFAULT_APPEARANCE } from 'src/shared/config'
 
@@ -14,8 +15,6 @@ export const DEFAULT_SETTINGS: IUserSetting = {
   sound: 'income-message',
   notifications: DEFAULT_NOTIFICATION_SETTINGS,
 
-  selectedAudioInputDeviceId: '',
-  selectedVideoInputDeviceId: '',
-  selectedAudioOutputDeviceId: '',
+  ioDevices: DEFAULT_IO_DEVICES_SETTINGS,
   hiddenNotification: []
 }

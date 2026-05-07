@@ -6,9 +6,9 @@ import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-ro
 import { useSettings } from 'src/entities/setting'
 import { useMainMonitors } from 'src/pages/main'
 import { useScreen } from 'src/shared/lib'
-import { MainLeftBar } from 'src/widgets/left-bar'
-import { MainMobileFooter } from 'src/widgets/mobile-footer'
-import { MainTopBar } from 'src/widgets/top-bar'
+import { LeftBar } from 'src/widgets/left-bar'
+import { MobileFooter } from 'src/widgets/mobile-footer'
+import { TopBar } from 'src/widgets/top-bar'
 
 import ContentLayout from './../content-layout/ContentLayout.vue'
 import { isContentTitleKey } from './../content-layout/types'
@@ -75,9 +75,9 @@ const wallpaperStyle = computed(() => {
 
 <template>
   <main class="main-layout" :class="{ 'main-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
-    <MainLeftBar v-if="!isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
+    <LeftBar v-if="!isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
     <section class="main-layout__workspace">
-      <MainTopBar class="widget nmorph--shadow-outset" />
+      <TopBar class="widget nmorph--shadow-outset" />
       <div class="main-layout__content">
         <div v-if="showNavigation" class="main-layout__navigation-widget widget nmorph--shadow-outset">
           <ContentNavigationLayout :title-key="navigationTitleKey">
@@ -90,7 +90,7 @@ const wallpaperStyle = computed(() => {
           </ContentLayout>
         </div>
       </div>
-      <MainMobileFooter v-if="isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
+      <MobileFooter v-if="isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
     </section>
   </main>
 </template>
