@@ -7,6 +7,7 @@ export const useScreen = () => {
 
   return {
     activeBreakpoint: breakpoints.active(),
+    isMobileOnly: breakpoints.smaller('portrait-tablet'),
     isPortraitTabletOnly: breakpoints.between('portrait-tablet', 'tablet'),
     isPortraitTabletOrLess: breakpoints.smaller('tablet'),
     isDesktopOrMore: breakpoints.greaterOrEqual('desktop')
