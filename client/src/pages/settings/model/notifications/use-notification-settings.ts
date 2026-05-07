@@ -1,8 +1,8 @@
 import { computed, ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { getClientPlatform, useScreen } from 'src/shared/lib'
 import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/shared/config'
+import { getClientPlatform, useScreen } from 'src/shared/lib'
 
 import {
   NOTIFICATION_CHANNEL_IDS,
@@ -49,11 +49,7 @@ export const useNotificationSettings = () => {
     })
   }
 
-  const setGroup = (
-    groupId: NotificationSettingGroupType,
-    channelId: NotificationSettingKeyType,
-    value: boolean
-  ) => {
+  const setGroup = (groupId: NotificationSettingGroupType, channelId: NotificationSettingKeyType, value: boolean) => {
     return mutate((data) => {
       data.notifications[groupId][channelId] = value
 
