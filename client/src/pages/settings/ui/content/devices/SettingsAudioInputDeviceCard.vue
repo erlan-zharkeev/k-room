@@ -33,6 +33,7 @@ const audioInputCheckLabel = computed(() =>
 
       <div class="settings-audio-input-device-card__control">
         <NmorphSelect
+          :key="settings.selectedAudioInputDeviceId"
           class="settings-audio-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)"
           :model-value="settings.selectedAudioInputDeviceId"

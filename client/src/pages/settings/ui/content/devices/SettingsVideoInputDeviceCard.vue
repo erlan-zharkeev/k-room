@@ -33,6 +33,7 @@ const videoInputCheckLabel = computed(() =>
 
       <div class="settings-video-input-device-card__control">
         <NmorphSelect
+          :key="settings.selectedVideoInputDeviceId"
           class="settings-video-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)"
           :model-value="settings.selectedVideoInputDeviceId"
@@ -90,12 +91,15 @@ const videoInputCheckLabel = computed(() =>
 
 .settings-video-input-device-card__preview-container {
   position: relative;
+  overflow: hidden;
   width: 100%;
+  padding: 8px;
 }
 
 .settings-video-input-device-card__preview {
   aspect-ratio: 16 / 9;
   width: 100%;
+  border-radius: 8px;
   object-fit: cover;
 }
 </style>

@@ -24,6 +24,7 @@ const {
 
       <div class="settings-audio-output-device-card__control">
         <NmorphSelect
+          :key="settings.selectedAudioOutputDeviceId"
           class="settings-audio-output-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)"
           :model-value="settings.selectedAudioOutputDeviceId"
