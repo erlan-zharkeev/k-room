@@ -37,15 +37,19 @@ const { sections, optionsBySection, getValue, setValue } = useNotificationSettin
   grid-template-columns: 1fr;
 }
 
+.settings-notifications-content__group {
+  display: grid;
+  gap: 8px;
+}
+
 .settings-notifications-content__row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .settings-notifications-content__text {
   display: grid;
-  gap: 4px;
 }
 </style>
