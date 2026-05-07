@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { getClientPlatform } from 'src/shared/lib'
+import { getClientPlatform, useScreen } from 'src/shared/lib'
 import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/shared/config'
 
 import {
@@ -14,6 +14,7 @@ import type { SettingsNotificationOptionIdType } from '../../config/types/notifi
 
 export const useNotificationSettings = () => {
   const { settings, mutate } = useSettings()
+  const { isMobileOnly } = useScreen()
   const notificationVisibility = computed(getClientPlatform)
   const sections = ref(SETTINGS_NOTIFICATION_SECTIONS)
   const optionsBySection = computed(() => {
@@ -22,7 +23,10 @@ export const useNotificationSettings = () => {
     return Object.fromEntries(
       sections.value.map(({ id }) => [
         id,
-        SETTINGS_NOTIFICATION_OPTIONS[id].filter((option) => !option.visibility || option.visibility === visibility)
+        SETTINGS_NOTIFICATION_OPTIONS[id].filter(
+          (option) =>
+            (!option.visibility || option.visibility === visibility) && (!option.mobileOnly || isMobileOnly.value)
+        )
       ])
     )
   })

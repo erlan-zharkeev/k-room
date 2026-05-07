@@ -17,4 +17,5 @@ export interface ISettingsNotificationOption {
   label: LocalizedTextType<string>
   description: LocalizedTextType<string>
   visibility?: SettingsNotificationVisibilityType
+  mobileOnly?: boolean
 }

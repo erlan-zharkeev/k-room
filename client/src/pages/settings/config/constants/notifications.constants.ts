@@ -48,7 +48,8 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, ISettingsNotification
     {
       id: 'vibration',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibration,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibrationDescription
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibrationDescription,
+      mobileOnly: true
     },
     {
       id: 'browserPush',
@@ -77,7 +78,8 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, ISettingsNotification
     {
       id: 'vibration',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibration,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibrationDescription
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibrationDescription,
+      mobileOnly: true
     },
     {
       id: 'browserPush',
@@ -106,7 +108,8 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, ISettingsNotification
     {
       id: 'vibration',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibration,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibrationDescription
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibrationDescription,
+      mobileOnly: true
     },
     {
       id: 'browserPush',
