@@ -1,3 +1,5 @@
+import { intlFormat } from 'date-fns'
+
 import { normalizeTimestamp } from './normalize-timestamp'
 
 export const formatHumanDateTime = (
@@ -9,13 +11,19 @@ export const formatHumanDateTime = (
 
   if (timestampMs === null) return fallback
 
-  return new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-  }).format(timestampMs)
+  return intlFormat(
+    timestampMs,
+    {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    },
+    {
+      locale
+    }
+  )
 }

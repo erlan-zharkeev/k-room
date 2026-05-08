@@ -1,9 +1,17 @@
 import { en, ru, zh } from '@nmorph/nmorph-ui-kit'
+import type { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
 import type { AppLanguageType } from 'global-shared'
 
 import { DEFAULT_APPEARANCE } from 'src/shared/config'
 import type { IAppearanceSettings } from 'src/shared/config'
-import { getNmorphThemeShadowOptions } from 'src/shared/lib'
+import type { IThemeShadowSettings } from 'src/shared/config'
+
+export const getNmorphThemeShadowOptions = ({ baseShadowWidth, baseShadowBlurCoefficient }: IThemeShadowSettings) => {
+  return {
+    baseShadowWidth: `${baseShadowWidth}px`,
+    baseShadowBlurCoefficient: String(baseShadowBlurCoefficient)
+  }
+}
 
 const getEffectiveThemeName = ({ selectedTheme, systemTheme }: IAppearanceSettings) => {
   return selectedTheme === 'system' ? systemTheme : selectedTheme

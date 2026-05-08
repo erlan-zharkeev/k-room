@@ -1,13 +1,4 @@
-import type { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
-
-import type { IThemeShadowSettings } from 'src/shared/config'
-
-export const getNmorphThemeShadowOptions = ({ baseShadowWidth, baseShadowBlurCoefficient }: IThemeShadowSettings) => {
-  return {
-    baseShadowWidth: `${baseShadowWidth}px`,
-    baseShadowBlurCoefficient: String(baseShadowBlurCoefficient)
-  }
-}
+import { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
 
 export const getNmorphGeneratedColorSchema = (
   mainColor: string,
