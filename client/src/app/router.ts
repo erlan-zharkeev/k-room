@@ -140,9 +140,9 @@ export const router = createRouter({
   routes
 })
 
-const { user } = useUser()
-
 router.beforeEach(async (to) => {
+  const { user } = useUser()
+
   await initClientData()
   const isUserAuthorized = Boolean(user.value.id)
 

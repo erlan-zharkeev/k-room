@@ -1,11 +1,9 @@
 import { storeToRefs } from 'pinia'
 
-import { pinia } from 'src/shared/lib'
-
 import { useSystemStore } from './system.store'
 
 export const useSystem = () => {
-  const systemStore = useSystemStore(pinia)
+  const systemStore = useSystemStore()
   const { hasInteracted } = storeToRefs(systemStore)
 
   return {

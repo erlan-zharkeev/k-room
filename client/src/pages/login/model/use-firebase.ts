@@ -8,10 +8,11 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
+import { useSettings } from 'src/entities/setting'
 import { useUserSession } from 'src/entities/user'
 import { ERROR_TOAST_LIFE_MS, useHttp } from 'src/shared/api'
 import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
-import { currentLanguage, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
@@ -20,6 +21,7 @@ import { LOGIN_FORM_I18N } from '../config/i18n'
 export const useFirebase = () => {
   const { doHttpRequest } = useHttp()
   const { activateUserSession } = useUserSession()
+  const { settings } = useSettings()
   const { t } = useI18n()
   const toast = useAppToast()
   const isFirebaseLoginLoading = ref(false)
@@ -33,7 +35,7 @@ export const useFirebase = () => {
     const currentProvider = new Provider()
     const auth = getAuth()
 
-    auth.languageCode = currentLanguage.value
+    auth.languageCode = settings.value.language
 
     const result = await signInWithPopup(auth, currentProvider)
     const { displayName, email, photoURL, uid } = result.user

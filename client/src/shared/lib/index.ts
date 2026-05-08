@@ -18,8 +18,15 @@ export {
 } from './browser/browser'
 export { IMAGE_RESOLUTIONS } from './browser/constants'
 export { createClassNameWithModifiers, stopPropagation } from './dom/dom'
-export { buildPathWithParams, firstCharUpperCase, getRandomNumber, isFormFieldInvalid } from './misc'
-export { currentLanguage, setClientLanguage, t, useI18n } from './use-i18n'
+export {
+  buildPathWithParams,
+  firstCharUpperCase,
+  getRandomNumber,
+  isFormFieldInvalid,
+  getNmorphGeneratedColorSchema
+} from './misc'
+export { useI18n } from './i18n/i18n'
+export { I18N_KEY } from './i18n/constants'
 export {
   db,
   dexieCollectionStore,
@@ -28,11 +35,10 @@ export {
   KRoomDB,
   useDexieLiveQuery
 } from './db/db'
-export { pinia } from './pinia'
 export { useAppToast } from './toast/use-app-toast'
-export { getNmorphGeneratedColorSchema } from './theme'
 export type { ClientPlatformType, FileLoaderValueType } from './browser/types'
 export type { ContextRefType, KebabCaseType } from './types'
+export type { I18nTranslateType } from './i18n/i18n.types'
 export type { AppToastStackType, IAppToastInput } from './toast/types'
 export type {
   DbCallType,

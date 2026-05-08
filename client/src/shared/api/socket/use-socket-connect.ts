@@ -1,7 +1,5 @@
 import type { SocketActionsType } from 'global-shared'
 
-import { currentLanguage } from 'src/shared/lib'
-
 import { socket } from './socket'
 import { setSocketConnected, setSocketReconnecting } from './socket-status'
 
@@ -12,10 +10,6 @@ export const useSocketConnect = () => {
   }
 
   const socketConnect = () => {
-    socket.auth = {
-      language: currentLanguage.value
-    }
-
     if (!socket.connected) {
       socket.connect()
     }
