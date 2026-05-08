@@ -6,7 +6,7 @@ export type ProviderType = typeof import('./constants').providers[number]
 export type AvailableCookieType = 'device-id' | AuthTokensType
 
 export type UnknownCallbackType = (...args: unknown[]) => unknown
-export type UnknownObject = { [key: string]: unknown }
+export type UnknownObjectType = { [key: string]: unknown }
 
 export interface IBasicStreamSettings {
   audio: boolean

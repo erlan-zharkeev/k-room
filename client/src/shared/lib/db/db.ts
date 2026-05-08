@@ -16,12 +16,14 @@ import type {
 
 import type {
   DbTransactionModeType,
+  ICollectionIncomingItem,
   ICollectionMergeManyOptions,
+  IDbCollectionItem,
   IndexableType,
   IUseStateResult,
-  KvItem,
+  KvItemType,
   MutableType,
-  UseResult
+  UseResultType
 } from './types'
 
 export const useDexieLiveQuery = <T>(query: () => Promise<T> | T, initialValue: T) => {
@@ -57,7 +59,7 @@ export const initializeDexieCollectionStores = async () => {
   await Promise.all([...collectionInitializers].map((initialize) => initialize()))
 }
 
-export const dexieCollectionStore = <T extends { id: string | number }>(table: Table<T>) => {
+export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T>) => {
   type Item = T
   type ItemId = Item['id']
   let cachedItems: Item[] | undefined
@@ -164,7 +166,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     cachedItems = [...data]
   }
 
-  const mergeMany = async <Incoming extends { id: ItemId }>(
+  const mergeMany = async <Incoming extends ICollectionIncomingItem<ItemId>>(
     data: readonly Incoming[],
     options: ICollectionMergeManyOptions<Item, Incoming>
   ) => {
@@ -290,13 +292,13 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
   }
 }
 
-export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, keyValue: string) => {
+export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<T>>, keyValue: string) => {
   let cached: T | undefined
   let isCached = false
 
-  const wrap = (data: T): KvItem<T> => ({ ...data, __key: keyValue })
+  const wrap = (data: T): KvItemType<T> => ({ ...data, __key: keyValue })
 
-  const unwrap = (data: KvItem<T> | undefined): T | undefined => {
+  const unwrap = (data: KvItemType<T> | undefined): T | undefined => {
     if (!data) return undefined
 
     const { __key: _key, ...value } = data
@@ -363,10 +365,10 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
     const state = useDexieLiveQuery(get, isCached ? cached : undefined)
     const data = computed(() => {
       if (!defaults) {
-        return state.data.value as UseResult<T, D>
+        return state.data.value as UseResultType<T, D>
       }
 
-      return { ...defaults, ...state.data.value } as UseResult<T, D>
+      return { ...defaults, ...state.data.value } as UseResultType<T, D>
     })
 
     return {
@@ -390,7 +392,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
 }
 
 export class KRoomDB extends Dexie {
-  settings!: Table<KvItem<DbUserSettingType>>
+  settings!: Table<KvItemType<DbUserSettingType>>
   contacts!: Table<DbContactType>
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>

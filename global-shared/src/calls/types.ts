@@ -33,4 +33,4 @@ export interface IDBCall {
   video: boolean
 }
 
-export type IDBCallSchema = IDBCall
+export type DbCallSchemaType = IDBCall

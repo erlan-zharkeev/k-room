@@ -1,8 +1,10 @@
-import type { EventGetRoomsType, IEventUpdateChatRoom, SocketActionsType } from 'global-shared'
+import type { EventGetRoomsType, SocketActionsType } from 'global-shared'
 import { onBeforeUnmount } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { socket } from 'src/shared/api'
+
+import type { IEventUpdateChatRoomWithId } from './types'
 
 export const useChatRoomUpdateMonitor = () => {
   const { merge, save } = useChatRoom()
@@ -15,7 +17,7 @@ export const useChatRoomUpdateMonitor = () => {
     await save(room)
   }
 
-  const handleRoomDataUpdate = async (room: IEventUpdateChatRoom & { id?: string }) => {
+  const handleRoomDataUpdate = async (room: IEventUpdateChatRoomWithId) => {
     if (!room.id) return
 
     await save({

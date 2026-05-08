@@ -1,12 +1,6 @@
-export const renderEmailConfirmationHtml = ({
-  appName,
-  confirmUrl,
-  nickname
-}: {
-  appName: string
-  confirmUrl: string
-  nickname?: string
-}) => {
+import type { IRenderEmailConfirmationHtmlParams } from './email.types'
+
+export const renderEmailConfirmationHtml = ({ appName, confirmUrl, nickname }: IRenderEmailConfirmationHtmlParams) => {
   const greeting = nickname ? `Hi, ${nickname}!` : 'Hi!'
 
   return `

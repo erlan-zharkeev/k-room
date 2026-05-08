@@ -5,7 +5,7 @@ import {
   type IBackendResponse,
   type IChangePasswordPayload,
   type ICreateNewPasswordPayload,
-  type IGetUserDataResponse,
+  type GetUserDataResponseType,
   USER_ENDPOINTS
 } from 'global-shared'
 import { memoryStorage } from 'multer'
@@ -19,6 +19,7 @@ import { AccessTokenGuard } from '../auth/auth.guard'
 import { AUTH_I18N } from '../auth/auth.i18n'
 import { AuthService } from '../auth/auth.service'
 
+import type { IUpdateUserDataPayload } from './types'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
 import { CHANGE_PASSWORD_VALIDATION, RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
@@ -29,7 +30,7 @@ export class UserController {
 
   @Get(USER_ENDPOINTS.getUserData)
   @UseGuards(AccessTokenGuard)
-  async getUserData(@Req() request: Request, @Res() response: Response<IBackendResponse<IGetUserDataResponse>>) {
+  async getUserData(@Req() request: Request, @Res() response: Response<IBackendResponse<GetUserDataResponseType>>) {
     const { language, authUserId: userId } = request
 
     if (!userId) {
@@ -86,7 +87,7 @@ export class UserController {
     @Req() request: Request,
     @Res() response: Response<IBackendResponse<null>>,
     @UploadedFile() file?: Express.Multer.File,
-    @Body() payload?: { nickname?: string; 'reset-avatar'?: 'reset' | '' }
+    @Body() payload?: IUpdateUserDataPayload
   ) {
     const { language, authUserId: userId } = request
 

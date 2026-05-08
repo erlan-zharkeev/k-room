@@ -10,7 +10,9 @@ import { useScreen } from 'src/shared/lib'
 
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 
-const props = defineProps<{ footer?: boolean }>()
+import type { IAppNavigationProps } from './types'
+
+const props = defineProps<IAppNavigationProps>()
 
 const { isPortraitTabletOrLess } = useScreen()
 

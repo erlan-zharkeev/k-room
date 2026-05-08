@@ -17,6 +17,7 @@ import { COMMON_MEDIA_I18N, VALIDATE_MEDIA_FILE_I18N } from './media.i18n'
 import type {
   IFileData,
   IFileMetaData,
+  IStreamMediaFileOptions,
   IUploadOptions,
   MediaBucketNameType,
   MongooseGridFSBucketType
@@ -182,7 +183,7 @@ export const streamMediaFile = async (
   id: string,
   response: import('express').Response,
   language: AppLanguageType,
-  options?: { asAttachment?: boolean; revalidateCache?: boolean }
+  options?: IStreamMediaFileOptions
 ) => {
   try {
     const bucket = getRequiredBucket(bucketName, language)
@@ -239,10 +240,7 @@ export class MediaService {
     idParam: string,
     language: AppLanguageType,
     response: import('express').Response,
-    options?: {
-      asAttachment?: boolean
-      revalidateCache?: boolean
-    }
+    options?: IStreamMediaFileOptions
   ) {
     const [bucketName, id] = idParam.split('.', 2)
 

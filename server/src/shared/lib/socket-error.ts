@@ -3,6 +3,7 @@ import { isString } from 'lodash'
 
 import { SHARED_I18N } from '../config/i18n'
 import type { SocketInstanceType } from '../types/socket'
+import type { ISocketErrorMiddlewareOptions, IThrowSocketErrorOptions } from '../types/socket-error'
 
 import { isAppError } from './app-error'
 import { getIO } from './io'
@@ -13,11 +14,7 @@ import { serverCaptureSentryException, serverCaptureSentrySocketError } from './
 export const throwSocketError = (
   socketId: string,
   error?: LocalizedTextType<string> | string,
-  options?: {
-    status?: ReqStatusType
-    silent?: boolean
-    cause?: unknown
-  }
+  options?: IThrowSocketErrorOptions
 ) => {
   const io = getIO()
   const socket = io.sockets.sockets.get(socketId)
@@ -48,11 +45,7 @@ export const socketErrorMiddleware =
   <TPayload = void>(
     socket: SocketInstanceType,
     handler: (payload: TPayload) => void | Promise<void>,
-    options: {
-      basicError: LocalizedTextType<string>
-      status?: ReqStatusType
-      silent?: boolean
-    }
+    options: ISocketErrorMiddlewareOptions
   ) =>
   async (payload: TPayload) => {
     try {

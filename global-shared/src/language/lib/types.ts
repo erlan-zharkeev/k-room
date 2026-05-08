@@ -1,4 +1,4 @@
-import type { UnknownObject } from '../../shared/types'
+import type { UnknownObjectType } from '../../shared/types'
 import type { LocalizedTextType } from '../types'
 
 export type I18nValueConstraintType<T> = T extends (...args: infer Args) => infer Result
@@ -9,6 +9,6 @@ export type I18nValueConstraintType<T> = T extends (...args: infer Args) => infe
   ? T
   : never
 
-export type I18nRecordConstraintType<T extends UnknownObject> = {
+export type I18nRecordConstraintType<T extends UnknownObjectType> = {
   [Key in keyof T]: I18nValueConstraintType<T[Key]>
 }

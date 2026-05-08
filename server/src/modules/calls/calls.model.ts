@@ -1,7 +1,7 @@
-import type { IDBCallSchema } from 'global-shared'
+import type { DbCallSchemaType } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
-const callSchema = new Schema<IDBCallSchema>({
+const callSchema = new Schema<DbCallSchemaType>({
   calledAt: {
     type: Number,
     required: true
@@ -33,4 +33,4 @@ const callSchema = new Schema<IDBCallSchema>({
   }
 })
 
-export const CallModel = model<IDBCallSchema>('Call', callSchema, 'call')
+export const CallModel = model<DbCallSchemaType>('Call', callSchema, 'call')

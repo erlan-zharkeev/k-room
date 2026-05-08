@@ -2,11 +2,11 @@ import { isString } from 'lodash'
 
 import { CONTENT_TITLE } from './constants'
 
-export type ContentTitleKey = keyof typeof CONTENT_TITLE
+export type ContentTitleKeyType = keyof typeof CONTENT_TITLE
 
-export const isContentTitleKey = (titleKey: string | undefined): titleKey is ContentTitleKey =>
+export const isContentTitleKey = (titleKey: string | undefined): titleKey is ContentTitleKeyType =>
   isString(titleKey) && titleKey in CONTENT_TITLE
 
 export interface IContentLayoutProps {
-  titleKey?: ContentTitleKey
+  titleKey?: ContentTitleKeyType
 }

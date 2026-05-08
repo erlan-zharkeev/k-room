@@ -4,6 +4,7 @@ import {
   type IEventMessageDelivered,
   type IEventRoomMessagesLoaded,
   type IEventUpdateMessageStatus,
+  type IImageObject,
   type IMessage,
   type MessageStatusType,
   type SocketActionsType
@@ -19,12 +20,13 @@ import { UserModel } from '../user/user.model'
 import { getSocketsByUserIds } from '../user/user.service'
 
 import { MessageModel } from './messages.model'
+import type { ISendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: IDBMessage, userId: string): IMessage => {
   const readBySomeone = message.usersMetaData.some((data) => data.status === 'read')
   const selfStatus = message.usersMetaData.find((user) => user.id === userId)?.status
   const status = message.authorId === userId ? (readBySomeone ? 'read' : selfStatus) : selfStatus
-  const images = (message.images ?? []) as Array<string | { src: string; name: string }>
+  const images = (message.images ?? []) as Array<string | IImageObject>
 
   return {
     id: String(message._id),
@@ -104,15 +106,7 @@ export const changeMessageStatus = async (
   })
 }
 
-export const sendMessage = async ({
-  roomId,
-  message,
-  language
-}: {
-  roomId: string
-  message: IMessage
-  language: import('global-shared').AppLanguageType
-}) => {
+export const sendMessage = async ({ roomId, message, language }: ISendMessageParams) => {
   const filenames: string[] = []
 
   await Promise.all(

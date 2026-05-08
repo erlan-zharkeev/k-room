@@ -4,11 +4,11 @@ export interface IConfirmEmailResponse {
   email: string
 }
 
-export type ILoginResponse = IFrontendUserData
+export type LoginResponseType = IFrontendUserData
 
-export type ISignInWithProviderResponse = IFrontendUserData
+export type SignInWithProviderResponseType = IFrontendUserData
 
-export type IGetUserDataResponse = IFrontendUserData
+export type GetUserDataResponseType = IFrontendUserData
 
 export interface ISendConfirmationLinkResponse {
   email: string

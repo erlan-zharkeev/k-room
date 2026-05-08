@@ -1,14 +1,15 @@
 import bcrypt from 'bcryptjs'
-import { DEFAULT_APP_LANGUAGE, formatHumanDateTime, type UnknownObject } from 'global-shared'
+import { DEFAULT_APP_LANGUAGE, formatHumanDateTime } from 'global-shared'
 import { isNumber, isString } from 'lodash'
 
 import { localizedText } from 'src/shared/lib/localized-text'
 
+import type { IAdminUserActionRequest, IAdminUserActionResponse, IAdminUserRecord } from './types'
 import { LAST_SEEN_PATH } from './user.constants'
 import { USER_ADMIN_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
-const formatLastSeenParam = (params?: UnknownObject) => {
+const formatLastSeenParam = (params?: IAdminUserRecord['params']) => {
   if (!params) {
     return
   }
@@ -21,23 +22,14 @@ const formatLastSeenParam = (params?: UnknownObject) => {
   params[LAST_SEEN_PATH] = formatHumanDateTime(value)
 }
 
-const withFormattedLastSeen = (response: {
-  record?: { params?: UnknownObject }
-  records?: Array<{ params?: UnknownObject }>
-}) => {
+const withFormattedLastSeen = (response: IAdminUserActionResponse) => {
   formatLastSeenParam(response.record?.params)
   response.records?.forEach((record) => formatLastSeenParam(record.params))
 
   return response
 }
 
-const normalizePassword = async (
-  request: {
-    method?: string
-    payload?: UnknownObject
-  },
-  isRequired: boolean
-) => {
+const normalizePassword = async (request: IAdminUserActionRequest, isRequired: boolean) => {
   if (request.method !== 'post') {
     return request
   }
@@ -115,18 +107,16 @@ export const ADMIN_USER_OPTIONS = {
     filterProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'public.online', 'system.provider'],
     actions: {
       new: {
-        before: async (request: { method?: string; payload?: UnknownObject }) => normalizePassword(request, true)
+        before: async (request: IAdminUserActionRequest) => normalizePassword(request, true)
       },
       edit: {
-        before: async (request: { method?: string; payload?: UnknownObject }) => normalizePassword(request, false)
+        before: async (request: IAdminUserActionRequest) => normalizePassword(request, false)
       },
       list: {
-        after: async (response: { record?: { params?: UnknownObject }; records?: Array<{ params?: UnknownObject }> }) =>
-          withFormattedLastSeen(response)
+        after: async (response: IAdminUserActionResponse) => withFormattedLastSeen(response)
       },
       show: {
-        after: async (response: { record?: { params?: UnknownObject }; records?: Array<{ params?: UnknownObject }> }) =>
-          withFormattedLastSeen(response)
+        after: async (response: IAdminUserActionResponse) => withFormattedLastSeen(response)
       }
     },
     properties: {

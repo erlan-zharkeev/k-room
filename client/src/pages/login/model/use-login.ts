@@ -4,7 +4,7 @@ import {
   NON_EMPTY_PATTERN,
   createValidationMessages,
   type IAuthLoginPayload,
-  type ILoginResponse
+  type LoginResponseType
 } from 'global-shared'
 import { computed, reactive, shallowRef, ref } from 'vue'
 
@@ -50,7 +50,7 @@ export const useLogin = () => {
     const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
-      const response = await doHttpRequest<ILoginResponse>('post', AUTH_ENDPOINTS.login, payload)
+      const response = await doHttpRequest<LoginResponseType>('post', AUTH_ENDPOINTS.login, payload)
       const { payload: user } = response.data
 
       await activateUserSession(user)
