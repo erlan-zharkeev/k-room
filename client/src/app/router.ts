@@ -1,6 +1,8 @@
 import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES } from 'global-shared'
+import { isString } from 'lodash'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { initClientData } from 'src/features/client-session'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
@@ -13,12 +15,13 @@ import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
-import { APP_PAGE_ROUTES } from 'src/shared/config'
+import { APP_PAGE_ROUTES, type DbUserSettingType } from 'src/shared/config'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import DocsLayout from './layouts/docs-layout/DocsLayout.vue'
 import MainLayout from './layouts/main-layout/MainLayout.vue'
 import PageLayout from './layouts/page-layout/PageLayout.vue'
+import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -89,13 +92,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: LAYOUT_ROUTE_NAMES.app,
     component: MainLayout,
-    redirect: APP_PAGE_ROUTES.chatRooms,
     meta: {
       requiresAuth: true
     },
     children: [
       {
-        path: 'chat-rooms',
+        path: 'chat-rooms/:chatRoomId?',
         components: { content: MainWorkspacePage }
       },
       {
@@ -142,6 +144,7 @@ export const router = createRouter({
 
 router.beforeEach(async (to) => {
   const { user } = useUser()
+  const { settings, shallowUpdate } = useSettings()
 
   await initClientData()
   const isUserAuthorized = Boolean(user.value.id)
@@ -157,5 +160,30 @@ router.beforeEach(async (to) => {
 
   if (to.meta.guestOnly && isUserAuthorized) {
     return ROUTE_NAMES.app
+  }
+
+  if (!to.meta.requiresAuth || !isUserAuthorized) return
+
+  if (to.path === ROUTE_NAMES.app) {
+    return getAppPathFromSettings(settings.value)
+  }
+
+  const contentTab = getContentTabFromPath(to.path)
+
+  if (!contentTab) return
+
+  const chatRoomId = contentTab === 'chat-rooms' && isString(to.params.chatRoomId) ? to.params.chatRoomId : ''
+  const changes: Partial<DbUserSettingType> = {}
+
+  if (settings.value.contentTab !== contentTab) {
+    changes.contentTab = contentTab
+  }
+
+  if (contentTab === 'chat-rooms' && settings.value.chatRoomId !== chatRoomId) {
+    changes.chatRoomId = chatRoomId
+  }
+
+  if (Object.keys(changes).length) {
+    await shallowUpdate(changes)
   }
 })

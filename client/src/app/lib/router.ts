@@ -1,0 +1,20 @@
+import { DEFAULT_SETTINGS_CONTENT_ID } from 'src/pages/settings'
+import { APP_PAGE_ROUTES, CONTENT_TAB_IDS, type ContentTabType, type DbUserSettingType } from 'src/shared/config'
+
+export const getAppPathFromSettings = ({ contentTab, chatRoomId }: DbUserSettingType) => {
+  const getChatRoomPath = (id: string) => (id ? `${APP_PAGE_ROUTES.chatRooms}/${id}` : APP_PAGE_ROUTES.chatRooms)
+
+  if (contentTab === 'chat-rooms') return getChatRoomPath(chatRoomId)
+  if (contentTab === 'calls') return APP_PAGE_ROUTES.calls
+  if (contentTab === 'contacts') return APP_PAGE_ROUTES.contacts
+  if (contentTab === 'info-notifications') return APP_PAGE_ROUTES.infoNotifications
+  return `${APP_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
+}
+
+export const getContentTabFromPath = (path: string) => {
+  const isContentTab = (value: string | undefined): value is ContentTabType =>
+    Boolean(value && CONTENT_TAB_IDS.includes(value as ContentTabType))
+  const tab = path.split('/').filter(Boolean)[1]
+
+  return isContentTab(tab) ? tab : undefined
+}

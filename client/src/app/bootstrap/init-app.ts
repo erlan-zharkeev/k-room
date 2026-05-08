@@ -17,7 +17,7 @@ export const initApp = async (app: VueAppType) => {
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)
   const { settings } = useSettings()
-  const { language } = settings.value
+  const { language } = settings.value.localization
 
   setHttpClientLanguage(language)
   setSocketLanguage(language)

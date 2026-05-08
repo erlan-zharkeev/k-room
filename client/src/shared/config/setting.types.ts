@@ -2,7 +2,9 @@ import type { AppLanguageType } from 'global-shared'
 
 import type { IAppearanceSettings } from './appearance.types'
 
-export type SoundType = 'connection' | 'calling' | 'income-message' | 'ring' | 'busy'
+export type DateTimeFormatType = 'auto' | 'dmy-dot-24h' | 'mdy-slash-12h' | 'dmy-slash-24h' | 'ymd-dash-24h'
+
+export type DateTimeFormatPatternMapType = Partial<Record<DateTimeFormatType, string>>
 
 export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
@@ -44,14 +46,17 @@ export interface IIoDevicesSettings {
   audioOutputDeviceId: string
 }
 
-export interface IUserSetting {
-  selectedContentTab: ContentTabType
-  selectedChatRoomId: string
-  messageScrollByRoom: Record<string, IMessageListScrollState>
+export interface IUserLocalizationSettings {
   language: AppLanguageType
+  dateTimeFormat: DateTimeFormatType
+}
+
+export interface IUserSetting {
+  contentTab: ContentTabType
+  chatRoomId: string
+  messageScrollByRoom: Record<string, IMessageListScrollState>
+  localization: IUserLocalizationSettings
   appearance: IAppearanceSettings
-  showTooltips: boolean
-  sound: SoundType
   notifications: IUserNotificationSettings
   ioDevices: IIoDevicesSettings
   hiddenNotification: HiddenNotificationType[]

@@ -9,7 +9,7 @@ export const useLanguageProvider = () => {
   const { settings } = useSettings()
 
   watch(
-    () => settings.value.language,
+    () => settings.value.localization.language,
     (language, previousLanguage) => {
       setI18nLanguage(language)
       setHttpClientLanguage(language)

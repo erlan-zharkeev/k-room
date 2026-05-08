@@ -24,10 +24,50 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     ru: 'Язык',
     zh: '语言'
   },
+  localization: {
+    en: 'Localization',
+    ru: 'Локализация',
+    zh: '本地化'
+  },
   selectLanguage: {
     en: 'Select language',
     ru: 'Выбор языка',
     zh: '选择语言'
+  },
+  dateTimeFormat: {
+    en: 'Date and time format',
+    ru: 'Формат даты и времени',
+    zh: '日期和时间格式'
+  },
+  selectDateTimeFormat: {
+    en: 'Select date and time format',
+    ru: 'Выбор формата даты и времени',
+    zh: '选择日期和时间格式'
+  },
+  dateTimeFormatAuto: {
+    en: 'Automatic',
+    ru: 'Автоматически',
+    zh: '自动'
+  },
+  dateTimeFormatDmyDot24h: {
+    en: '31.12.2026, 18:30',
+    ru: '31.12.2026, 18:30',
+    zh: '31.12.2026, 18:30'
+  },
+  dateTimeFormatMdySlash12h: {
+    en: '12/31/2026, 6:30 PM',
+    ru: '12/31/2026, 6:30 PM',
+    zh: '12/31/2026, 6:30 PM'
+  },
+  dateTimeFormatDmySlash24h: {
+    en: '31/12/2026, 18:30',
+    ru: '31/12/2026, 18:30',
+    zh: '31/12/2026, 18:30'
+  },
+  dateTimeFormatYmdDash24h: {
+    en: '2026-12-31, 18:30',
+    ru: '2026-12-31, 18:30',
+    zh: '2026-12-31, 18:30'
   },
   wallpaper: {
     en: 'Wallpaper',

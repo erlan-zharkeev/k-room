@@ -40,8 +40,8 @@ export const SETTINGS_NAVIGATION_ITEMS = [
   },
   {
     id: 'language',
-    label: SETTINGS_PAGE_APPEARANCE_I18N.language,
-    description: SETTINGS_PAGE_APPEARANCE_I18N.language
+    label: SETTINGS_PAGE_APPEARANCE_I18N.localization,
+    description: SETTINGS_PAGE_APPEARANCE_I18N.localization
   },
   {
     id: 'notifications',
@@ -68,7 +68,7 @@ export const SETTINGS_NAVIGATION_ITEMS = [
 export const SETTINGS_CONTENT_TITLE = {
   account: SETTINGS_PAGE_ACCOUNT_I18N.account,
   appearance: SETTINGS_PAGE_APPEARANCE_I18N.appearance,
-  language: SETTINGS_PAGE_APPEARANCE_I18N.language,
+  language: SETTINGS_PAGE_APPEARANCE_I18N.localization,
   notifications: SETTINGS_PAGE_GENERAL_I18N.notifications,
   devices: SETTINGS_PAGE_GENERAL_I18N.devices,
   storage: SETTINGS_PAGE_STORAGE_I18N.storage,

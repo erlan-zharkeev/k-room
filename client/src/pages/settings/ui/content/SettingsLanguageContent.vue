@@ -3,6 +3,8 @@ import { LanguageSelect } from 'src/features/language-select'
 
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../config/i18n/appearance.i18n'
 import SettingsCard from '../SettingsCard.vue'
+
+import SettingsDateTimeFormatCard from './SettingsDateTimeFormatCard.vue'
 </script>
 
 <template>
@@ -10,6 +12,7 @@ import SettingsCard from '../SettingsCard.vue'
     <SettingsCard :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.selectLanguage)">
       <LanguageSelect />
     </SettingsCard>
+    <SettingsDateTimeFormatCard />
   </div>
 </template>
 

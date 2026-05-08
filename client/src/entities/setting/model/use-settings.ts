@@ -1,4 +1,3 @@
-import type { AppLanguageType } from 'global-shared'
 import { computed } from 'vue'
 
 import type { DbUserSettingType } from 'src/shared/config'
@@ -23,10 +22,6 @@ export const useSettings = () => {
     await get()
   }
 
-  const setClientLanguage = async (language: AppLanguageType) => {
-    await shallowUpdate({ language })
-  }
-
   return {
     settings,
     isSelectedThemeCustom,
@@ -35,7 +30,6 @@ export const useSettings = () => {
     initialize,
     mutate,
     reset: () => reset(DEFAULT_SETTINGS),
-    setClientLanguage,
     shallowUpdate,
     setByPath
   }

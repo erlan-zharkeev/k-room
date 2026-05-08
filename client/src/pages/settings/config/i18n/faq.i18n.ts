@@ -60,9 +60,9 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     zh: '如何切换应用语言？'
   },
   faqA4: {
-    en: 'Go to Settings → Language and select the desired language.',
-    ru: 'Перейдите в Настройки → Язык и выберите нужный язык.',
-    zh: '前往设置 → 语言，选择所需语言。'
+    en: 'Go to Settings → Localization and select the desired language.',
+    ru: 'Перейдите в Настройки → Локализация и выберите нужный язык.',
+    zh: '前往设置 → 本地化，选择所需语言。'
   },
   faqQ5: {
     en: 'How do I change the theme?',

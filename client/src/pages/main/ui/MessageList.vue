@@ -344,7 +344,7 @@ onBeforeUnmount(() => {
       <AppEmojiPicker
         class="message-list__context-picker"
         :expand-label="$t(MAIN_PAGE_I18N.expandEmojiPicker)"
-        :language="settings.language"
+        :language="settings.localization.language"
         @select="addReaction"
       />
       <NmorphButton
