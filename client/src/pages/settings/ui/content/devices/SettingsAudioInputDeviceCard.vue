@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphIconCaretRight, NmorphProgress, NmorphSelect } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphCallout,
+  NmorphCheckbox,
+  NmorphIcon,
+  NmorphIconPlay,
+  NmorphIconStop,
+  NmorphSelect
+} from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { AppText } from 'src/shared/ui'
+import { AppMicrophoneWaveform, AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useAudioInputDevice } from '../../../model/devices/use-audio-input-device'
@@ -12,10 +19,12 @@ const {
   settings,
   audioInputOptions,
   audioInputLoading,
-  audioInputCheckLoading,
-  audioVolume,
+  isAudioInputCheckDisabled,
+  audioInputPermissionCalloutType,
+  audioInputPermissionStatus,
+  audioVolumeDb,
   isAudioInputChecking,
-  toggleAudioInputCheck,
+  setAudioInputChecking,
   setSelectedAudioInputDevice
 } = useAudioInputDevice()
 
@@ -31,12 +40,22 @@ const audioInputCheckLabel = computed(() =>
     <div class="settings-audio-input-device-card">
       <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDeviceDescription)" />
 
+      <div class="settings-audio-input-device-card__permission">
+        <NmorphCallout :type="audioInputPermissionCalloutType" :content="audioInputPermissionStatus" />
+        <AppText
+          v-if="!audioInputLoading && audioInputOptions.length === 0"
+          size="small"
+          color="warn"
+          :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
+        />
+      </div>
+
       <div class="settings-audio-input-device-card__control">
         <NmorphSelect
-          :key="settings.selectedAudioInputDeviceId"
+          :key="settings.ioDevices.audioInputDeviceId"
           class="settings-audio-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)"
-          :model-value="settings.selectedAudioInputDeviceId"
+          :model-value="settings.ioDevices.audioInputDeviceId"
           :options="audioInputOptions"
           :loading="audioInputLoading"
           :disabled="audioInputLoading || audioInputOptions.length === 0"
@@ -45,26 +64,26 @@ const audioInputCheckLabel = computed(() =>
           @update:model-value="setSelectedAudioInputDevice"
         />
 
-        <NmorphButton
+        <NmorphCheckbox
+          :model-value="isAudioInputChecking"
+          design="button"
           :aria-label="$t(audioInputCheckLabel)"
-          :loading="audioInputCheckLoading"
-          :disabled="audioInputLoading || audioInputOptions.length === 0"
-          @click="toggleAudioInputCheck"
+          :disabled="isAudioInputCheckDisabled"
+          @update:model-value="setAudioInputChecking"
         >
-          <template #icon-only>
-            <span v-if="isAudioInputChecking" class="settings-audio-input-device-card__stop-icon" aria-hidden="true" />
-            <NmorphIconCaretRight v-else />
+          <template #label>
+            <NmorphIcon>
+              <NmorphIconStop v-if="isAudioInputChecking" />
+              <NmorphIconPlay v-else />
+            </NmorphIcon>
           </template>
-        </NmorphButton>
+        </NmorphCheckbox>
       </div>
 
-      <NmorphProgress :percentage="audioVolume" :value-right-side="false" />
-
-      <AppText
-        v-if="!audioInputLoading && audioInputOptions.length === 0"
-        size="small"
-        color="warn"
-        :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
+      <AppMicrophoneWaveform
+        v-if="isAudioInputChecking"
+        :volume-db="audioVolumeDb"
+        :label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputLevel)"
       />
     </div>
   </SettingsCard>
@@ -79,5 +98,6 @@ const audioInputCheckLabel = computed(() =>
 .settings-audio-input-device-card__control {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 </style>

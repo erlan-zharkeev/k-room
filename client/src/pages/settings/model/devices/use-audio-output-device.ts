@@ -1,6 +1,7 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
+import { useDevicesList } from '@vueuse/core'
 import { isFunction } from 'lodash'
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
@@ -16,9 +17,9 @@ import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 export const useAudioOutputDevice = () => {
   const { t } = useI18n()
   const toast = useAppToast()
-  const { settings, shallowUpdate } = useSettings()
+  const { settings, setByPath } = useSettings()
+  const { audioOutputs: audioOutputDevices, isSupported: isAudioOutputSupported } = useDevicesList()
 
-  const audioOutputDevices = ref<MediaDeviceInfo[]>([])
   const audioOutputLoading = ref(true)
   const audioOutputTestLoading = ref(false)
   const outputAudio = shallowRef<HTMLAudioElement | null>(null)
@@ -30,6 +31,16 @@ export const useAudioOutputDevice = () => {
       label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel)(index + 1)
     }))
   )
+  const audioOutputPermissionStatus = computed(() =>
+    t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus)(
+      t(
+        isAudioOutputSupported.value
+          ? SETTINGS_PAGE_DEVICES_I18N.permissionBrowserControlled
+          : SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported
+      )
+    )
+  )
+  const audioOutputPermissionCalloutType = computed(() => (isAudioOutputSupported.value ? 'info' : 'warning'))
 
   const normalizeSelectValue = (value: NmorphSelectModelValueType) => (Array.isArray(value) ? value[0] ?? '' : value)
 
@@ -41,14 +52,6 @@ export const useAudioOutputDevice = () => {
       content: t(SETTINGS_PAGE_DEVICES_I18N.cantAccessDevice),
       duration: ERROR_TOAST_LIFE_MS
     })
-  }
-
-  const getMediaDevices = () => {
-    if (!navigator.mediaDevices?.enumerateDevices) {
-      throw new Error(t(SETTINGS_PAGE_DEVICES_I18N.mediaUnsupported))
-    }
-
-    return navigator.mediaDevices
   }
 
   const clearOutputIndicatorTimer = () => {
@@ -68,29 +71,28 @@ export const useAudioOutputDevice = () => {
     }
   }
 
-  const setSelectedAudioOutputDevice = (value: NmorphSelectModelValueType = '') => {
+  const setSelectedAudioOutputDevice = async (value: NmorphSelectModelValueType = '') => {
     stopAudioOutput()
-    shallowUpdate({ selectedAudioOutputDeviceId: normalizeSelectValue(value) })
+    await setByPath('ioDevices.audioOutputDeviceId', normalizeSelectValue(value))
   }
 
   const getSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string) =>
     devices.some((device) => device.deviceId === deviceId) ? deviceId : devices[0]?.deviceId ?? ''
 
+  const syncSelectedAudioOutputDevice = async () => {
+    const deviceId = getSelectedDeviceId(audioOutputDevices.value, settings.value.ioDevices.audioOutputDeviceId)
+
+    if (deviceId !== settings.value.ioDevices.audioOutputDeviceId) {
+      await setByPath('ioDevices.audioOutputDeviceId', deviceId)
+    }
+  }
+
   const requestAudioOutputDevices = async () => {
     try {
       audioOutputLoading.value = true
-
-      const devices = (await getMediaDevices().enumerateDevices()).filter((device) => device.kind === 'audiooutput')
-      const selectedDeviceId = getSelectedDeviceId(devices, settings.value.selectedAudioOutputDeviceId)
-
-      audioOutputDevices.value = devices
-
-      if (selectedDeviceId !== settings.value.selectedAudioOutputDeviceId) {
-        await shallowUpdate({ selectedAudioOutputDeviceId: selectedDeviceId })
-      }
+      await syncSelectedAudioOutputDevice()
     } catch (error) {
-      audioOutputDevices.value = []
-      await shallowUpdate({ selectedAudioOutputDeviceId: '' })
+      await setByPath('ioDevices.audioOutputDeviceId', '')
       stopAudioOutput()
       showDeviceWarning(error)
     } finally {
@@ -106,8 +108,8 @@ export const useAudioOutputDevice = () => {
       const audio = new Audio(SETTINGS_DEVICES_SOUND_SRC)
       outputAudio.value = audio
 
-      if (isFunction(audio.setSinkId) && settings.value.selectedAudioOutputDeviceId) {
-        await audio.setSinkId(settings.value.selectedAudioOutputDeviceId)
+      if (isFunction(audio.setSinkId) && settings.value.ioDevices.audioOutputDeviceId) {
+        await audio.setSinkId(settings.value.ioDevices.audioOutputDeviceId)
       }
 
       audio.addEventListener(
@@ -132,12 +134,14 @@ export const useAudioOutputDevice = () => {
 
   onMounted(() => {
     void requestAudioOutputDevices()
-    navigator.mediaDevices?.addEventListener('devicechange', requestAudioOutputDevices)
   })
 
   onBeforeUnmount(() => {
-    navigator.mediaDevices?.removeEventListener('devicechange', requestAudioOutputDevices)
     stopAudioOutput()
+  })
+
+  watch(audioOutputDevices, () => {
+    void syncSelectedAudioOutputDevice()
   })
 
   return {
@@ -145,6 +149,8 @@ export const useAudioOutputDevice = () => {
     audioOutputOptions,
     audioOutputLoading,
     audioOutputTestLoading,
+    audioOutputPermissionCalloutType,
+    audioOutputPermissionStatus,
     setSelectedAudioOutputDevice,
     testAudioOutput
   }

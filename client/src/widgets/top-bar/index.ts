@@ -1,1 +1,1 @@
-export { default as MainTopBar } from './ui/MainTopBar.vue'
+export { default as TopBar } from './ui/TopBar.vue'

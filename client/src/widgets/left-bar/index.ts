@@ -1,1 +1,1 @@
-export { default as MainLeftBar } from './ui/MainLeftBar.vue'
+export { default as LeftBar } from './ui/LeftBar.vue'

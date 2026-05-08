@@ -9,6 +9,41 @@ export const SETTINGS_PAGE_DEVICES_I18N = {
     ru: 'Микрофон для звонков',
     zh: '通话使用的麦克风'
   },
+  permissionStatus: {
+    en: (status: string) => `Permission: ${status}`,
+    ru: (status: string) => `Разрешение: ${status}`,
+    zh: (status: string) => `权限：${status}`
+  },
+  permissionGranted: {
+    en: 'granted',
+    ru: 'разрешено',
+    zh: '已允许'
+  },
+  permissionDenied: {
+    en: 'denied',
+    ru: 'запрещено',
+    zh: '已拒绝'
+  },
+  permissionPrompt: {
+    en: 'not requested',
+    ru: 'не запрошено',
+    zh: '未请求'
+  },
+  permissionUnsupported: {
+    en: 'unsupported',
+    ru: 'не поддерживается',
+    zh: '不支持'
+  },
+  permissionBrowserControlled: {
+    en: 'browser controlled',
+    ru: 'управляется браузером',
+    zh: '由浏览器控制'
+  },
+  permissionUnknown: {
+    en: 'unknown',
+    ru: 'неизвестно',
+    zh: '未知'
+  },
   testAudioInput: {
     en: 'Test microphone',
     ru: 'Проверить микрофон',
@@ -18,6 +53,11 @@ export const SETTINGS_PAGE_DEVICES_I18N = {
     en: 'Stop microphone check',
     ru: 'Остановить проверку микрофона',
     zh: '停止麦克风测试'
+  },
+  audioInputLevel: {
+    en: 'Microphone input level',
+    ru: 'Уровень входа микрофона',
+    zh: '麦克风输入音量'
   },
   videoInputDevice: {
     en: 'Video input device',

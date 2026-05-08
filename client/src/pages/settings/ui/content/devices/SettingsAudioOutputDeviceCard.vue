@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphIconCaretRight, NmorphSelect } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCallout, NmorphIconPlay, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -12,6 +12,8 @@ const {
   audioOutputOptions,
   audioOutputLoading,
   audioOutputTestLoading,
+  audioOutputPermissionCalloutType,
+  audioOutputPermissionStatus,
   setSelectedAudioOutputDevice,
   testAudioOutput
 } = useAudioOutputDevice()
@@ -22,12 +24,22 @@ const {
     <div class="settings-audio-output-device-card">
       <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDeviceDescription)" />
 
+      <div class="settings-audio-output-device-card__permission">
+        <NmorphCallout :type="audioOutputPermissionCalloutType" :content="audioOutputPermissionStatus" />
+        <AppText
+          v-if="!audioOutputLoading && audioOutputOptions.length === 0"
+          size="small"
+          color="warn"
+          :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
+        />
+      </div>
+
       <div class="settings-audio-output-device-card__control">
         <NmorphSelect
-          :key="settings.selectedAudioOutputDeviceId"
+          :key="settings.ioDevices.audioOutputDeviceId"
           class="settings-audio-output-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)"
-          :model-value="settings.selectedAudioOutputDeviceId"
+          :model-value="settings.ioDevices.audioOutputDeviceId"
           :options="audioOutputOptions"
           :loading="audioOutputLoading"
           :disabled="audioOutputLoading || audioOutputOptions.length === 0"
@@ -43,17 +55,10 @@ const {
           @click="testAudioOutput"
         >
           <template #icon-only>
-            <NmorphIconCaretRight />
+            <NmorphIconPlay />
           </template>
         </NmorphButton>
       </div>
-
-      <AppText
-        v-if="!audioOutputLoading && audioOutputOptions.length === 0"
-        size="small"
-        color="warn"
-        :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
-      />
     </div>
   </SettingsCard>
 </template>
