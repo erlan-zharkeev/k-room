@@ -1,4 +1,4 @@
-import { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
+import type { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
 
 import type { IFormFieldValidationState } from './types'
 

@@ -15,11 +15,11 @@ export default defineConfig(({ mode }) => {
   const shouldOpenClientOnStart = mode === 'development' && !clientEnvData.isTauriDev
 
   const tauriBuildConfig = TAURI_ENV_PLATFORM
-    ? {
+    ? ({
         target: TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
         minify: TAURI_ENV_DEBUG ? false : 'esbuild',
         sourcemap: Boolean(TAURI_ENV_DEBUG)
-      }
+      } as const)
     : {}
 
   const httpsConfig =

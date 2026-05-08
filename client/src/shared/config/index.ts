@@ -26,7 +26,7 @@ export {
 export { EMOJI_LIST } from './emoji.constants'
 export { TOAST_I18N } from './toast.i18n'
 export { IMAGE_RESOLUTIONS } from 'src/shared/lib/browser/constants'
-export type { ContextRefType } from 'src/shared/lib/types'
+export type { ContextRefType } from 'src/shared/lib/misc/types'
 export type { ScreenBreakpointNameType, ScreenBreakpointsType } from './breakpoint.types'
 export type { FileLoaderValueType } from 'src/shared/lib/browser/types'
 export type {
