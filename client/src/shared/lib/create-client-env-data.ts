@@ -19,9 +19,9 @@ export const createClientEnvData = (mode: string, envDir: string): IClientEnv =>
   const apiHost = process.env.API_HOST ?? modeEnv.API_HOST
   const turnstileSiteKey =
     process.env.TURNSTILE_SITE_KEY ?? modeEnv.TURNSTILE_SITE_KEY ?? (isDev ? '1x00000000000000000000AA' : '')
-  const themeBg = '#1c1c1c'
-  const themeAccent = '#418fde'
-  const themeText = '#ffffff'
+  const themeBg = '#1c1f21'
+  const themeAccent = '#006cb6'
+  const themeText = '#778288'
   const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as IPackageData
 
   return {
