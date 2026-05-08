@@ -1,88 +1,12 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphIconExpand } from '@nmorph/nmorph-ui-kit'
-import ruI18n from 'emoji-picker-element/i18n/ru_RU'
-import zhI18n from 'emoji-picker-element/i18n/zh_CN'
-import Picker from 'emoji-picker-element/picker'
-import type { EmojiClickEvent } from 'emoji-picker-element/shared'
-import { APP_LANGUAGE, type AppLanguageType } from 'global-shared'
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
-const props = defineProps<{
-  expandLabel: string
-  language: AppLanguageType
-}>()
-const emit = defineEmits<{
-  select: [value: string]
-}>()
+import type { IAppEmojiPickerEmits, IAppEmojiPickerProps } from './types'
+import { useAppEmojiPicker } from './use-app-emoji-picker.model'
 
-const pickerRoot = ref<HTMLElement | null>(null)
-const isExpanded = ref(false)
-let pickerElement: Picker | undefined
-
-const quickEmojiList = ['😀', '😂', '😍', '👍', '🙏', '🔥', '🎉', '❤️']
-
-const dataSourceMap = {
-  [APP_LANGUAGE.En]: '/emoji/en.json',
-  [APP_LANGUAGE.Ru]: '/emoji/ru.json',
-  [APP_LANGUAGE.Zh]: '/emoji/zh.json'
-}
-
-const i18nMap = {
-  [APP_LANGUAGE.Ru]: ruI18n,
-  [APP_LANGUAGE.Zh]: zhI18n
-}
-
-const handleEmojiClick = ({ detail }: EmojiClickEvent) => {
-  const value = detail.unicode ?? ('unicode' in detail.emoji ? detail.emoji.unicode : '')
-
-  if (value) {
-    emit('select', value)
-  }
-}
-
-const destroyPicker = () => {
-  pickerElement?.removeEventListener('emoji-click', handleEmojiClick)
-  pickerElement?.remove()
-  pickerElement = undefined
-}
-
-const mountPicker = () => {
-  destroyPicker()
-
-  if (!isExpanded.value) return
-
-  const root = pickerRoot.value
-
-  if (!root) return
-
-  const options = {
-    dataSource: dataSourceMap[props.language],
-    locale: props.language
-  }
-
-  pickerElement = new Picker(
-    props.language === APP_LANGUAGE.En
-      ? options
-      : {
-          ...options,
-          i18n: i18nMap[props.language]
-        }
-  )
-
-  pickerElement.classList.add('app-emoji-picker__element')
-  pickerElement.addEventListener('emoji-click', handleEmojiClick)
-  root.append(pickerElement)
-}
-
-const expandPicker = async () => {
-  isExpanded.value = true
-  await nextTick()
-  mountPicker()
-}
-
-onBeforeUnmount(destroyPicker)
-
-watch(() => props.language, mountPicker)
+const props = defineProps<IAppEmojiPickerProps>()
+const emit = defineEmits<IAppEmojiPickerEmits>()
+const { expandPicker, isExpanded, pickerRoot, quickEmojiList } = useAppEmojiPicker(props, emit)
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
 
-import type { KebabCaseType } from 'src/shared/model'
+import type { KebabCaseType } from 'src/shared/lib'
 
 export type AppHeaderTagType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
 

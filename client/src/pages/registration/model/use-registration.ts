@@ -12,7 +12,7 @@ import clone from 'lodash/clone'
 import { computed, reactive, ref, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
+import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
 import { buildPathWithParams, useI18n } from 'src/shared/lib'
 
 import {
@@ -31,7 +31,7 @@ import type { IRegistrationFormData } from './types'
 
 export const useRegistration = () => {
   const router = useRouter()
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
@@ -101,7 +101,7 @@ export const useRegistration = () => {
     const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
-      const response = await doRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
+      const response = await doHttpRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
       const pathname = buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, response.data.payload)
 
       await router.push(pathname)

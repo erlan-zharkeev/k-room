@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 
 import { CLIENT_ENV } from 'src/shared/config'
 
-import { isApiError } from './create-api-error'
+import { isHttpError } from './create-http-error'
 
 const isProtectedActionResponsePayload = (value: unknown): value is IProtectedActionResponsePayload => {
   if (!isUnknownObject(value)) {
@@ -22,7 +22,7 @@ const isProtectedActionResponsePayload = (value: unknown): value is IProtectedAc
 }
 
 const getProtectedActionPayload = (error: unknown) => {
-  if (!isApiError(error)) {
+  if (!isHttpError(error)) {
     return null
   }
 

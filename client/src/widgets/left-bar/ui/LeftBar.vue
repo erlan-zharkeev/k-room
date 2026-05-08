@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { MainNavigation } from 'src/features/main-navigation'
+import { AppNavigation } from 'src/features/app-navigation'
 import { AppLogo } from 'src/shared/ui'
 </script>
 
 <template>
   <aside class="left-bar">
     <AppLogo />
-    <MainNavigation />
+    <AppNavigation />
   </aside>
 </template>
 

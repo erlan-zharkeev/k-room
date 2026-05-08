@@ -1,5 +1,14 @@
 import type { TransactionMode } from 'dexie'
-import type { UnknownObject } from 'global-shared'
+import type {
+  ICall,
+  IChatRoom,
+  IFrontendContact,
+  IFrontendUserData,
+  IMessage,
+  IUserInfoNotification,
+  MediaKindType,
+  UnknownObject
+} from 'global-shared'
 import type { Ref } from 'vue'
 
 export type MutableType<T> = { -readonly [K in keyof T]: T[K] }
@@ -18,3 +27,28 @@ export interface ICollectionMergeManyOptions<T extends { id: string | number }, 
 }
 
 export type DbTransactionModeType = TransactionMode
+
+export type DbCallType = ICall
+export type DbMessageType = IMessage
+export type DbInfoNotificationType = IUserInfoNotification
+export type FChatRoomType = IChatRoom & { avatarId: string }
+export type DbUserDataType = Required<Pick<IFrontendUserData, 'id' | 'role' | 'email' | 'nickname'>>
+export type DbContactType = IFrontendContact & IDbContactRequiredSystemData
+export type DbMediaStatusType = 'missing' | 'ready'
+
+export interface IDbContactRequiredSystemData {
+  savedAt: number
+  onlineStatusSyncedAt: number
+  isTyping: boolean
+}
+
+export interface IDbMedia {
+  id: string
+  blob?: Blob
+  contentType?: string
+  etag?: string
+  kind?: MediaKindType
+  lastModified?: string
+  lastChecked: number
+  status?: DbMediaStatusType
+}

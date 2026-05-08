@@ -1,9 +1,10 @@
 import type { LocalizedTextType } from 'global-shared'
 
-import type { ITurnstileApi } from 'src/shared/model'
+import type { IClientEnv } from 'src/shared/config/client-env.types'
+import type { ITurnstileApi } from 'src/shared/ui/AppCaptcha/types'
 
 declare global {
-  const __CLIENT_ENV_DATA__: import('src/shared/model').IClientEnv
+  const __CLIENT_ENV_DATA__: IClientEnv
 
   interface Window {
     turnstile?: ITurnstileApi

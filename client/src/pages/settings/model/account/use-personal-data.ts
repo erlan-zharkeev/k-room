@@ -11,9 +11,9 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
-import { useApi } from 'src/shared/api'
+import { useHttp } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/toast'
+import { useAppToast } from 'src/shared/lib'
 
 import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants/account.constants'
 import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../config/i18n/account-personal-data.i18n'
@@ -21,7 +21,7 @@ import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../config/i18n/account-p
 export const usePersonalData = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
   const { user, avatarId, update: updateUserData, displayedNickname } = useUser()
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { t } = useI18n()
   const toast = useAppToast()
   const formData = reactive({
@@ -144,7 +144,7 @@ export const usePersonalData = () => {
 
     try {
       isAccountSaving.value = true
-      await doRequest('patch', USER_ENDPOINTS.editUserData, requestFormData, {
+      await doHttpRequest('patch', USER_ENDPOINTS.editUserData, requestFormData, {
         contentType: 'multipart/form-data'
       })
       await updateUserData({ nickname })

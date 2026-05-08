@@ -14,7 +14,7 @@ import clone from 'lodash/clone'
 import { computed, onBeforeUnmount, reactive, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
+import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
 import { buildPathWithParams, getNextRequestIntervalSeconds, useI18n } from 'src/shared/lib'
 
 import {
@@ -30,7 +30,7 @@ const getCounterValue = (nextRequestTimestampMs: number) =>
 export const usePasswordRecovery = () => {
   const route = useRoute()
   const router = useRouter()
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const { email } = clone(DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA)
@@ -104,7 +104,7 @@ export const usePasswordRecovery = () => {
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doRequest<ISendPasswordRecoveryCodeResponse>(
+      const response = await doHttpRequest<ISendPasswordRecoveryCodeResponse>(
         'post',
         CODES_ENDPOINTS.sendEmailCodePasswordRecovery,
         requestPayload
@@ -148,7 +148,7 @@ export const usePasswordRecovery = () => {
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doRequest<IValidatePasswordRecoveryCodeResponse>(
+      const response = await doHttpRequest<IValidatePasswordRecoveryCodeResponse>(
         'post',
         CODES_ENDPOINTS.validateEmailCodePasswordRecovery,
         requestPayload

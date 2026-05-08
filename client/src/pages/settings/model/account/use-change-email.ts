@@ -3,13 +3,13 @@ import { CODES_ENDPOINTS, EMAIL_CODE_LENGTH, NON_EMPTY_PATTERN, createValidation
 import { computed, reactive, ref, shallowRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
-import { useApi } from 'src/shared/api'
+import { useHttp } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 import { SETTINGS_EMAIL_PATTERN } from '../../config/constants/account.constants'
 
 export const useChangeEmail = () => {
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { user, update } = useUser()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
@@ -46,7 +46,7 @@ export const useChangeEmail = () => {
 
     try {
       isEmailCodeSending.value = true
-      await doRequest<null>('post', CODES_ENDPOINTS.sendEmailCodeChangeEmail, {
+      await doHttpRequest<null>('post', CODES_ENDPOINTS.sendEmailCodeChangeEmail, {
         email: normalizedNextEmail.value
       })
       codeSentEmail.value = normalizedNextEmail.value
@@ -61,7 +61,7 @@ export const useChangeEmail = () => {
 
     try {
       isEmailCodeValidating.value = true
-      await doRequest<null>('post', CODES_ENDPOINTS.validateEmailCodeChangeEmail, {
+      await doHttpRequest<null>('post', CODES_ENDPOINTS.validateEmailCodeChangeEmail, {
         email: normalizedNextEmail.value,
         code: otpCode.value
       })

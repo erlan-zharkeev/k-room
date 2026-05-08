@@ -9,7 +9,7 @@ import {
 import { computed, reactive, shallowRef, ref } from 'vue'
 
 import { useUserSession } from 'src/entities/user'
-import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
+import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 import { DEFAULT_LOGIN_FORM_DATA } from '../config/constants'
@@ -17,7 +17,7 @@ import { DEFAULT_LOGIN_FORM_DATA } from '../config/constants'
 import type { ILoginFormData } from './types'
 
 export const useLogin = () => {
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { activateUserSession } = useUserSession()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
@@ -50,7 +50,7 @@ export const useLogin = () => {
     const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
-      const response = await doRequest<ILoginResponse>('post', AUTH_ENDPOINTS.login, payload)
+      const response = await doHttpRequest<ILoginResponse>('post', AUTH_ENDPOINTS.login, payload)
       const { payload: user } = response.data
 
       await activateUserSession(user)

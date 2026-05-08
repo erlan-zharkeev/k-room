@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { MainNavigation } from 'src/features/main-navigation'
+import { AppNavigation } from 'src/features/app-navigation'
 </script>
 
 <template>
   <footer class="mobile-footer">
-    <MainNavigation footer />
+    <AppNavigation footer />
   </footer>
 </template>
 

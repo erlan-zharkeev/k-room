@@ -2,8 +2,8 @@ import { en, ru, zh } from '@nmorph/nmorph-ui-kit'
 import type { AppLanguageType } from 'global-shared'
 
 import { DEFAULT_APPEARANCE } from 'src/shared/config'
+import type { IAppearanceSettings } from 'src/shared/config'
 import { getNmorphThemeShadowOptions } from 'src/shared/lib'
-import type { IAppearanceSettings } from 'src/shared/model'
 
 const getEffectiveThemeName = ({ selectedTheme, systemTheme }: IAppearanceSettings) => {
   return selectedTheme === 'system' ? systemTheme : selectedTheme

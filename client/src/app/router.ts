@@ -13,7 +13,7 @@ import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
-import { MAIN_PAGE_ROUTES } from 'src/shared/config'
+import { APP_PAGE_ROUTES } from 'src/shared/config'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import DocsLayout from './layouts/docs-layout/DocsLayout.vue'
@@ -89,7 +89,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: LAYOUT_ROUTE_NAMES.app,
     component: MainLayout,
-    redirect: MAIN_PAGE_ROUTES.chatRooms,
+    redirect: APP_PAGE_ROUTES.chatRooms,
     meta: {
       requiresAuth: true
     },
@@ -112,7 +112,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'settings',
-        redirect: `${MAIN_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
+        redirect: `${APP_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
       },
       {
         path: 'settings/:settingsId',

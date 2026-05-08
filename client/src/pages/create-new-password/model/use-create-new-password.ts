@@ -5,7 +5,7 @@ import clone from 'lodash/clone'
 import { computed, reactive, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useApi } from 'src/shared/api'
+import { useHttp } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 import {
@@ -20,7 +20,7 @@ import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 export const useCreateNewPassword = () => {
   const route = useRoute()
   const router = useRouter()
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const { firstPassword, secondPassword } = clone(DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA)
@@ -57,7 +57,7 @@ export const useCreateNewPassword = () => {
         password: formData.secondPassword.value,
         codeToValidate: passwordRecoveryCode.value
       }
-      await doRequest<null>('post', USER_ENDPOINTS.resetPassword, payload)
+      await doHttpRequest<null>('post', USER_ENDPOINTS.resetPassword, payload)
 
       isPasswordChanged.value = true
     } finally {

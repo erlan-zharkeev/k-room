@@ -1,6 +1,6 @@
 import { REQ_STATUS } from 'global-shared'
 
-import { isApiError } from 'src/shared/api'
+import { isHttpError } from 'src/shared/api'
 
 import { MISSING_MEDIA_RETRY_INTERVAL_MS, UPDATE_MEDIA_INTERVAL_MS } from '../config/constants'
 
@@ -37,7 +37,7 @@ export const syncMedia = async (filename: string, deps: ISyncMediaDeps) => {
     try {
       meta = await deps.loadMediaHeaders(filename)
     } catch (error) {
-      if (isApiError(error) && error.status === REQ_STATUS.notFound) {
+      if (isHttpError(error) && error.status === REQ_STATUS.notFound) {
         await markMissing()
 
         return

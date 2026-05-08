@@ -1,53 +1,14 @@
 <script setup lang="ts">
 import { NmorphAvatar } from '@nmorph/nmorph-ui-kit'
-import { liveQuery } from 'dexie'
-import { computed, ref, watch } from 'vue'
-
-import { db } from 'src/shared/lib'
 
 import { AppHeader } from '../AppHeader'
 
 import { APP_PROFILE_BASIC_DATA_DEFAULT_PROPS } from './constants'
 import type { IAppProfileBasicDataProps } from './types'
+import { useAppProfileBasicData } from './use-app-profile-basic-data.model'
 
 const props = withDefaults(defineProps<IAppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
-
-const liveImageUrl = ref('')
-const imageSrc = computed(() => props.imageSrc || liveImageUrl.value || undefined)
-
-const clearLiveImageUrl = () => {
-  if (liveImageUrl.value) {
-    URL.revokeObjectURL(liveImageUrl.value)
-    liveImageUrl.value = ''
-  }
-}
-
-// TODO Отсмотреть потом
-watch(
-  () => props.imageId,
-  (imageId, _previous, onCleanup) => {
-    clearLiveImageUrl()
-
-    if (!imageId) return
-
-    const subscription = liveQuery(() => db.media.get(imageId)).subscribe({
-      next: (record) => {
-        clearLiveImageUrl()
-
-        if (record?.blob) {
-          liveImageUrl.value = URL.createObjectURL(record.blob)
-        }
-      },
-      error: clearLiveImageUrl
-    })
-
-    onCleanup(() => {
-      subscription.unsubscribe()
-      clearLiveImageUrl()
-    })
-  },
-  { immediate: true }
-)
+const { imageSrc } = useAppProfileBasicData(props)
 </script>
 
 <template>

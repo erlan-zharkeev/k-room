@@ -1,22 +1,13 @@
-export {
-  CLIENT_ENV,
-  CLIENT_LANGUAGE,
-  API_SUCCESS_STATUS_END,
-  API_SUCCESS_STATUS_START,
-  APP_TOAST_PLACEMENT,
-  LOCAL_STORAGE_KEY,
-  ERROR_TOAST_LIFE_MS,
-  SCREEN_BREAKPOINTS,
-  SOCKET_MAX_RECONNECTION_DELAY_MS,
-  SOCKET_RECONNECTION_DELAY_MS,
-  SUCCESS_TOAST_LIFE_MS
-} from './constants'
+export { CLIENT_ENV, LOCAL_STORAGE_KEY } from './constants'
+export { CLIENT_LANGUAGE } from './language.constants'
+export { TOAST_PLACEMENT, ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS } from './toast.constants'
+export { SCREEN_BREAKPOINTS } from './breakpoint.constants'
 export {
   DEFAULT_IO_DEVICES_SETTINGS,
   DEFAULT_NOTIFICATION_GROUP_SETTINGS,
   DEFAULT_NOTIFICATION_SETTINGS
 } from './setting.constants'
-export { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from './main-navigation'
+export { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from './app-navigation.constants'
 export {
   CUSTOM_WALLPAPER_SETTINGS,
   DARK_COLOR_SCHEMA,
@@ -32,12 +23,12 @@ export {
   DEFAULT_APPEARANCE,
   SYSTEM_THEME_QUERY
 } from './appearance.constants'
-export { EMOJI_LIST } from './emoji'
-export { API_I18N, TOAST_I18N } from './i18n'
-export { IMAGE_RESOLUTIONS } from 'src/shared/model'
-export type { ContextRefType } from 'src/shared/model'
-export type { ScreenBreakpointNameType, ScreenBreakpointsType } from 'src/shared/model'
-export type { FileLoaderValueType, IDbMedia } from 'src/shared/model'
+export { EMOJI_LIST } from './emoji.constants'
+export { TOAST_I18N } from './toast.i18n'
+export { IMAGE_RESOLUTIONS } from 'src/shared/lib/browser/constants'
+export type { ContextRefType } from 'src/shared/lib/types'
+export type { ScreenBreakpointNameType, ScreenBreakpointsType } from './breakpoint.types'
+export type { FileLoaderValueType } from 'src/shared/lib/browser/types'
 export type {
   IThemeData,
   IThemeShadowSettings,
@@ -47,7 +38,7 @@ export type {
   ThemeType,
   IColorSchema,
   IAppearanceSettings
-} from 'src/shared/model'
+} from './appearance.types'
 export type {
   SoundType,
   AsideBarButtonNameType,
@@ -63,11 +54,16 @@ export type {
   NotificationSettingGroupType,
   NotificationSettingKeyType,
   DbUserSettingType
-} from 'src/shared/model'
-export type { DbContactType, IDbContactRequiredSystemData } from 'src/shared/model'
-export type { DbUserDataType } from 'src/shared/model'
-export type { FChatRoomType } from 'src/shared/model'
-export type { DbCallType } from 'src/shared/model'
-export type { DbMessageType } from 'src/shared/model'
-export type { IClientEnv } from 'src/shared/model'
-export type { DbInfoNotificationType } from 'src/shared/model'
+} from './setting.types'
+export type { IClientEnv } from './client-env.types'
+export type {
+  DbCallType,
+  DbContactType,
+  DbInfoNotificationType,
+  DbMediaStatusType,
+  DbMessageType,
+  DbUserDataType,
+  FChatRoomType,
+  IDbContactRequiredSystemData,
+  IDbMedia
+} from 'src/shared/lib/db/types'

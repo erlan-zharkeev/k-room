@@ -2,7 +2,7 @@ import { computed } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
-import { useAppToast } from 'src/shared/lib/toast'
+import { useAppToast } from 'src/shared/lib'
 
 export const useToastProvider = () => {
   const { settings } = useSettings()
