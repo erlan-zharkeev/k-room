@@ -38,6 +38,12 @@ export interface IMessageListScrollState {
   offsetFromItemStart?: number
 }
 
+export interface IIoDevicesSettings {
+  audioInputDeviceId: string
+  videoInputDeviceId: string
+  audioOutputDeviceId: string
+}
+
 export interface IUserSetting {
   selectedContentTab: ContentTabType
   selectedChatRoomId: string
@@ -47,15 +53,8 @@ export interface IUserSetting {
   showTooltips: boolean
   sound: SoundType
   notifications: IUserNotificationSettings
-  selectedAudioInputDeviceId: string
-  selectedVideoInputDeviceId: string
-  selectedAudioOutputDeviceId: string
+  ioDevices: IIoDevicesSettings
   hiddenNotification: HiddenNotificationType[]
 }
 
 export type DbUserSettingType = IUserSetting
-
-export interface IUserSettingMigration extends Partial<IUserSetting> {
-  showNotification: boolean
-  soundOn: boolean
-}

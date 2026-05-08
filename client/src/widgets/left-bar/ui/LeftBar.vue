@@ -4,14 +4,14 @@ import { AppLogo } from 'src/shared/ui'
 </script>
 
 <template>
-  <aside class="main-left-bar">
+  <aside class="left-bar">
     <AppLogo />
     <MainNavigation />
   </aside>
 </template>
 
 <style lang="scss">
-.main-left-bar {
+.left-bar {
   display: flex;
   flex-direction: column;
   align-items: center;

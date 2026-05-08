@@ -1,1 +1,1 @@
-export { default as MainMobileFooter } from './ui/MainMobileFooter.vue'
+export { default as MobileFooter } from './ui/MobileFooter.vue'

@@ -11,7 +11,11 @@ export {
   SOCKET_RECONNECTION_DELAY_MS,
   SUCCESS_TOAST_LIFE_MS
 } from './constants'
-export { DEFAULT_NOTIFICATION_GROUP_SETTINGS, DEFAULT_NOTIFICATION_SETTINGS } from './setting.constants'
+export {
+  DEFAULT_IO_DEVICES_SETTINGS,
+  DEFAULT_NOTIFICATION_GROUP_SETTINGS,
+  DEFAULT_NOTIFICATION_SETTINGS
+} from './setting.constants'
 export { MAIN_PAGE_NAV_ITEMS, MAIN_PAGE_ROUTES } from './main-navigation'
 export {
   CUSTOM_WALLPAPER_SETTINGS,
@@ -49,11 +53,11 @@ export type {
   AsideBarButtonNameType,
   ContentTabType,
   HiddenNotificationType,
+  IIoDevicesSettings,
   INotificationGroupSettings,
   IMessageListScrollState,
   IUserNotificationSettings,
   IUserSetting,
-  IUserSettingMigration,
   NotificationEventGroupType,
   NotificationPushSettingKeyType,
   NotificationSettingGroupType,

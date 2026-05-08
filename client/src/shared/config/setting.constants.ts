@@ -1,4 +1,4 @@
-import type { IUserNotificationSettings } from 'src/shared/model'
+import type { IIoDevicesSettings, IUserNotificationSettings } from 'src/shared/model'
 
 export const DEFAULT_NOTIFICATION_GROUP_SETTINGS = {
   toast: true,
@@ -13,4 +13,10 @@ export const DEFAULT_NOTIFICATION_SETTINGS: IUserNotificationSettings = {
   general: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS },
   messages: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS },
   calls: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS }
+}
+
+export const DEFAULT_IO_DEVICES_SETTINGS: IIoDevicesSettings = {
+  audioInputDeviceId: '',
+  videoInputDeviceId: '',
+  audioOutputDeviceId: ''
 }

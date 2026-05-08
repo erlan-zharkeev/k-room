@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCallout, NmorphIconCaretRight, NmorphSelect } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphCallout,
+  NmorphCheckbox,
+  NmorphIcon,
+  NmorphIconPlay,
+  NmorphIconStop,
+  NmorphSelect
+} from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { AppText } from 'src/shared/ui'
@@ -12,10 +19,12 @@ const {
   settings,
   videoInputOptions,
   videoInputLoading,
-  videoInputCheckLoading,
+  isVideoInputCheckDisabled,
+  videoInputPermissionCalloutType,
+  videoInputPermissionStatus,
   videoElement,
   isVideoInputChecking,
-  toggleVideoInputCheck,
+  setVideoInputChecking,
   setSelectedVideoInputDevice
 } = useVideoInputDevice()
 
@@ -31,12 +40,21 @@ const videoInputCheckLabel = computed(() =>
     <div class="settings-video-input-device-card">
       <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDeviceDescription)" />
 
+      <div class="settings-video-input-device-card__permission">
+        <NmorphCallout :type="videoInputPermissionCalloutType" :content="videoInputPermissionStatus" />
+        <NmorphCallout
+          v-if="!videoInputLoading && videoInputOptions.length === 0"
+          type="warning"
+          :content="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
+        />
+      </div>
+
       <div class="settings-video-input-device-card__control">
         <NmorphSelect
-          :key="settings.selectedVideoInputDeviceId"
+          :key="settings.ioDevices.videoInputDeviceId"
           class="settings-video-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)"
-          :model-value="settings.selectedVideoInputDeviceId"
+          :model-value="settings.ioDevices.videoInputDeviceId"
           :options="videoInputOptions"
           :loading="videoInputLoading"
           :disabled="videoInputLoading || videoInputOptions.length === 0"
@@ -45,20 +63,23 @@ const videoInputCheckLabel = computed(() =>
           @update:model-value="setSelectedVideoInputDevice"
         />
 
-        <NmorphButton
+        <NmorphCheckbox
+          :model-value="isVideoInputChecking"
+          design="button"
           :aria-label="$t(videoInputCheckLabel)"
-          :loading="videoInputCheckLoading"
-          :disabled="videoInputLoading || videoInputOptions.length === 0"
-          @click="toggleVideoInputCheck"
+          :disabled="isVideoInputCheckDisabled"
+          @update:model-value="setVideoInputChecking"
         >
-          <template #icon-only>
-            <span v-if="isVideoInputChecking" class="settings-video-input-device-card__stop-icon" aria-hidden="true" />
-            <NmorphIconCaretRight v-else />
+          <template #label>
+            <NmorphIcon>
+              <NmorphIconStop v-if="isVideoInputChecking" />
+              <NmorphIconPlay v-else />
+            </NmorphIcon>
           </template>
-        </NmorphButton>
+        </NmorphCheckbox>
       </div>
 
-      <div class="settings-video-input-device-card__preview-container nmorph--shadow-inset">
+      <div v-if="isVideoInputChecking" class="settings-video-input-device-card__preview-container nmorph--shadow-inset">
         <video
           ref="videoElement"
           class="settings-video-input-device-card__preview"
@@ -68,12 +89,6 @@ const videoInputCheckLabel = computed(() =>
           playsinline
         />
       </div>
-
-      <NmorphCallout
-        v-if="!videoInputLoading && videoInputOptions.length === 0"
-        type="warning"
-        :content="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
-      />
     </div>
   </SettingsCard>
 </template>
@@ -87,6 +102,12 @@ const videoInputCheckLabel = computed(() =>
 .settings-video-input-device-card__control {
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+.settings-video-input-device-card__permission {
+  display: grid;
+  gap: 4px;
 }
 
 .settings-video-input-device-card__preview-container {
@@ -97,9 +118,12 @@ const videoInputCheckLabel = computed(() =>
 }
 
 .settings-video-input-device-card__preview {
+  transform: scaleX(-1);
+
   aspect-ratio: 16 / 9;
   width: 100%;
   border-radius: 8px;
+
   object-fit: cover;
 }
 </style>

@@ -1,30 +1,39 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
+import { useDevicesList, usePermission, useUserMedia } from '@vueuse/core'
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib/toast'
 
-import { SETTINGS_DEVICES_AUDIO_VOLUME_SCALE } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
-
-const stopStream = (stream: MediaStream | null) => {
-  stream?.getTracks().forEach((track) => track.stop())
-}
+import type { DevicePermissionStatus } from '../../config/types/devices.types'
+import { getDevicePermissionCalloutType } from '../../lib/get-device-permission-callout-type'
 
 export const useAudioInputDevice = () => {
   const { t } = useI18n()
   const toast = useAppToast()
-  const { settings, shallowUpdate } = useSettings()
+  const { settings, setByPath } = useSettings()
+  const audioInputPermission = usePermission('microphone')
+  const {
+    audioInputs: audioInputDevices,
+    devices: audioInputAllDevices,
+    isSupported: isAudioInputSupported
+  } = useDevicesList({
+    constraints: { audio: true, video: false }
+  })
+  const audioInputUserMedia = useUserMedia({
+    autoSwitch: false,
+    constraints: { audio: false, video: false }
+  })
 
-  const audioInputDevices = ref<MediaDeviceInfo[]>([])
-  const audioInputLoading = ref(true)
+  const audioInputLoading = ref(false)
   const audioInputCheckLoading = ref(false)
-  const audioVolume = ref(0)
+  const audioVolumeDb = ref(Number.NEGATIVE_INFINITY)
   const audioFrameId = ref(0)
-  const audioInputStream = shallowRef<MediaStream | null>(null)
   const audioContext = shallowRef<AudioContext | null>(null)
+  const audioInputStream = audioInputUserMedia.stream
 
   const audioInputOptions = computed(() =>
     audioInputDevices.value.map(({ deviceId, label }, index) => ({
@@ -32,7 +41,28 @@ export const useAudioInputDevice = () => {
       label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel)(index + 1)
     }))
   )
+
+  const getPermissionStatusText = (status: DevicePermissionStatus) => {
+    if (!isAudioInputSupported.value) return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported)
+    if (status === 'granted') return t(SETTINGS_PAGE_DEVICES_I18N.permissionGranted)
+    if (status === 'denied') return t(SETTINGS_PAGE_DEVICES_I18N.permissionDenied)
+    if (status === 'prompt') return t(SETTINGS_PAGE_DEVICES_I18N.permissionPrompt)
+
+    return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnknown)
+  }
   const isAudioInputChecking = computed(() => Boolean(audioInputStream.value))
+  const isAudioInputCheckDisabled = computed(
+    () =>
+      audioInputCheckLoading.value ||
+      !isAudioInputSupported.value ||
+      (audioInputPermission.value === 'granted' && audioInputDevices.value.length === 0)
+  )
+  const audioInputPermissionCalloutType = computed(() =>
+    isAudioInputSupported.value ? getDevicePermissionCalloutType(audioInputPermission.value) : 'warning'
+  )
+  const audioInputPermissionStatus = computed(() =>
+    t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus)(getPermissionStatusText(audioInputPermission.value))
+  )
 
   const normalizeSelectValue = (value: NmorphSelectModelValueType) => (Array.isArray(value) ? value[0] ?? '' : value)
 
@@ -46,42 +76,13 @@ export const useAudioInputDevice = () => {
     })
   }
 
-  const getMediaDevices = () => {
-    if (!navigator.mediaDevices?.enumerateDevices || !navigator.mediaDevices?.getUserMedia) {
-      throw new Error(t(SETTINGS_PAGE_DEVICES_I18N.mediaUnsupported))
-    }
-
-    return navigator.mediaDevices
-  }
-
-  const requestAudioInputPermission = async () => {
-    try {
-      if (!navigator.permissions?.query) return
-
-      const permission = await navigator.permissions.query({ name: 'microphone' } as PermissionDescriptor)
-
-      if (permission.state === 'denied') {
-        throw new Error('Permission denied')
-      }
-
-      if (permission.state !== 'prompt') return
-    } catch (error) {
-      if (error instanceof Error && error.message === 'Permission denied') {
-        throw error
-      }
-    }
-
-    const stream = await getMediaDevices().getUserMedia({ audio: true })
-    stopStream(stream)
-  }
-
   const stopAudioVolume = () => {
     if (audioFrameId.value) {
       window.cancelAnimationFrame(audioFrameId.value)
       audioFrameId.value = 0
     }
 
-    audioVolume.value = 0
+    audioVolumeDb.value = Number.NEGATIVE_INFINITY
 
     if (audioContext.value) {
       audioContext.value.close().catch((error) => log('warn', 'Failed to close audio context', error))
@@ -89,13 +90,16 @@ export const useAudioInputDevice = () => {
     }
   }
 
-  const updateAudioVolume = (analyser: AnalyserNode, data: Uint8Array<ArrayBuffer>) => {
-    analyser.getByteFrequencyData(data)
+  const updateAudioVolume = (analyser: AnalyserNode, data: Float32Array<ArrayBuffer>) => {
+    analyser.getFloatTimeDomainData(data)
 
-    const sum = data.reduce((total, item) => total + item, 0)
-    const nextVolume = (sum / data.length) * SETTINGS_DEVICES_AUDIO_VOLUME_SCALE
+    const squareSum = data.reduce((result, item) => {
+      return result + item * item
+    }, 0)
+    const rms = Math.sqrt(squareSum / data.length)
+    const db = 20 * Math.log10(Math.max(rms, Number.EPSILON))
+    audioVolumeDb.value = db
 
-    audioVolume.value = Math.min(nextVolume, 100)
     audioFrameId.value = window.requestAnimationFrame(() => updateAudioVolume(analyser, data))
   }
 
@@ -105,36 +109,45 @@ export const useAudioInputDevice = () => {
     const context = new AudioContext()
     const source = context.createMediaStreamSource(stream)
     const analyser = context.createAnalyser()
-    const data: Uint8Array<ArrayBuffer> = new Uint8Array(analyser.frequencyBinCount)
 
-    analyser.fftSize = 256
+    analyser.fftSize = 512
+    analyser.smoothingTimeConstant = 0
+    const data: Float32Array<ArrayBuffer> = new Float32Array(analyser.fftSize)
+
     source.connect(analyser)
     audioContext.value = context
     updateAudioVolume(analyser, data)
   }
 
   const stopAudioInputCheck = () => {
-    stopStream(audioInputStream.value)
-    audioInputStream.value = null
+    audioInputUserMedia.stop()
     stopAudioVolume()
   }
 
-  const startAudioInputCheck = async (deviceId = settings.value.selectedAudioInputDeviceId) => {
-    stopAudioInputCheck()
+  const getAudioInputConstraints = (deviceId: string) => {
+    if (deviceId && audioInputDevices.value.some((device) => device.deviceId === deviceId)) {
+      return { deviceId: { exact: deviceId } }
+    }
 
-    if (audioInputDevices.value.length === 0) return
+    return true
+  }
+
+  const startAudioInputCheck = async (deviceId = settings.value.ioDevices.audioInputDeviceId) => {
+    stopAudioInputCheck()
 
     try {
       audioInputCheckLoading.value = true
+      audioInputUserMedia.constraints.value = {
+        audio: getAudioInputConstraints(deviceId),
+        video: false
+      }
 
-      const stream = await getMediaDevices().getUserMedia({
-        audio: {
-          deviceId: deviceId ? { exact: deviceId } : undefined
-        }
-      })
+      const stream = await audioInputUserMedia.start()
 
-      audioInputStream.value = stream
-      startAudioVolume(stream)
+      if (stream) {
+        await refreshAudioInputDevices(true)
+        startAudioVolume(stream)
+      }
     } catch (error) {
       stopAudioInputCheck()
       showDeviceWarning(error)
@@ -143,8 +156,8 @@ export const useAudioInputDevice = () => {
     }
   }
 
-  const toggleAudioInputCheck = async () => {
-    if (isAudioInputChecking.value) {
+  const setAudioInputChecking = async (value: boolean) => {
+    if (!value) {
       stopAudioInputCheck()
       return
     }
@@ -152,33 +165,34 @@ export const useAudioInputDevice = () => {
     await startAudioInputCheck()
   }
 
-  const getSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string) =>
-    devices.some((device) => device.deviceId === deviceId) ? deviceId : devices[0]?.deviceId ?? ''
+  const getSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string, emptyDeviceId = '') => {
+    if (devices.length === 0) return emptyDeviceId
 
-  const requestAudioInputDevices = async () => {
-    const shouldRestartCheck = isAudioInputChecking.value
+    return devices.some((device) => device.deviceId === deviceId) ? deviceId : devices[0]?.deviceId ?? ''
+  }
 
+  const syncSelectedAudioInputDevice = async (clearMissing = false) => {
+    const deviceId = getSelectedDeviceId(
+      audioInputDevices.value,
+      settings.value.ioDevices.audioInputDeviceId,
+      clearMissing ? '' : settings.value.ioDevices.audioInputDeviceId
+    )
+
+    if (deviceId !== settings.value.ioDevices.audioInputDeviceId) {
+      await setByPath('ioDevices.audioInputDeviceId', deviceId)
+    }
+
+    return deviceId
+  }
+
+  const refreshAudioInputDevices = async (clearMissing = false) => {
     try {
       audioInputLoading.value = true
-      await requestAudioInputPermission()
-
-      const devices = (await getMediaDevices().enumerateDevices()).filter((device) => device.kind === 'audioinput')
-      const selectedDeviceId = getSelectedDeviceId(devices, settings.value.selectedAudioInputDeviceId)
-
-      audioInputDevices.value = devices
-
-      if (selectedDeviceId !== settings.value.selectedAudioInputDeviceId) {
-        await shallowUpdate({ selectedAudioInputDeviceId: selectedDeviceId })
+      if (isAudioInputSupported.value) {
+        audioInputAllDevices.value = await navigator.mediaDevices.enumerateDevices()
       }
 
-      if (shouldRestartCheck) {
-        await startAudioInputCheck(selectedDeviceId)
-      }
-    } catch (error) {
-      audioInputDevices.value = []
-      await shallowUpdate({ selectedAudioInputDeviceId: '' })
-      stopAudioInputCheck()
-      showDeviceWarning(error)
+      return await syncSelectedAudioInputDevice(clearMissing)
     } finally {
       audioInputLoading.value = false
     }
@@ -188,31 +202,31 @@ export const useAudioInputDevice = () => {
     const deviceId = normalizeSelectValue(value)
     const shouldRestartCheck = isAudioInputChecking.value
 
-    await shallowUpdate({ selectedAudioInputDeviceId: deviceId })
+    await setByPath('ioDevices.audioInputDeviceId', deviceId)
 
     if (shouldRestartCheck) {
       await startAudioInputCheck(deviceId)
     }
   }
 
-  onMounted(() => {
-    void requestAudioInputDevices()
-    navigator.mediaDevices?.addEventListener('devicechange', requestAudioInputDevices)
+  onBeforeUnmount(() => {
+    stopAudioInputCheck()
   })
 
-  onBeforeUnmount(() => {
-    navigator.mediaDevices?.removeEventListener('devicechange', requestAudioInputDevices)
-    stopAudioInputCheck()
+  watch(audioInputDevices, () => {
+    void syncSelectedAudioInputDevice(audioInputPermission.value === 'granted')
   })
 
   return {
     settings,
     audioInputOptions,
     audioInputLoading,
-    audioInputCheckLoading,
-    audioVolume,
+    isAudioInputCheckDisabled,
+    audioInputPermissionCalloutType,
+    audioInputPermissionStatus,
+    audioVolumeDb,
     isAudioInputChecking,
-    toggleAudioInputCheck,
+    setAudioInputChecking,
     setSelectedAudioInputDevice
   }
 }

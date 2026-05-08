@@ -1,5 +1,6 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
+import { useDevicesList, usePermission, useUserMedia } from '@vueuse/core'
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
@@ -7,20 +8,29 @@ import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib/toast'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
-
-const stopStream = (stream: MediaStream | null) => {
-  stream?.getTracks().forEach((track) => track.stop())
-}
+import type { DevicePermissionStatus } from '../../config/types/devices.types'
+import { getDevicePermissionCalloutType } from '../../lib/get-device-permission-callout-type'
 
 export const useVideoInputDevice = () => {
   const { t } = useI18n()
   const toast = useAppToast()
-  const { settings, shallowUpdate } = useSettings()
+  const { settings, setByPath } = useSettings()
+  const videoInputPermission = usePermission('camera')
+  const {
+    devices: videoInputAllDevices,
+    isSupported: isVideoInputSupported,
+    videoInputs: videoInputDevices
+  } = useDevicesList({
+    constraints: { audio: false, video: true }
+  })
+  const videoInputUserMedia = useUserMedia({
+    autoSwitch: false,
+    constraints: { audio: false, video: false }
+  })
 
-  const videoInputDevices = ref<MediaDeviceInfo[]>([])
-  const videoInputLoading = ref(true)
+  const videoInputLoading = ref(false)
   const videoInputCheckLoading = ref(false)
-  const videoInputStream = shallowRef<MediaStream | null>(null)
+  const videoInputStream = videoInputUserMedia.stream
   const videoElement = shallowRef<HTMLVideoElement | null>(null)
 
   const videoInputOptions = computed(() =>
@@ -29,7 +39,28 @@ export const useVideoInputDevice = () => {
       label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel)(index + 1)
     }))
   )
+
+  const getPermissionStatusText = (status: DevicePermissionStatus) => {
+    if (!isVideoInputSupported.value) return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported)
+    if (status === 'granted') return t(SETTINGS_PAGE_DEVICES_I18N.permissionGranted)
+    if (status === 'denied') return t(SETTINGS_PAGE_DEVICES_I18N.permissionDenied)
+    if (status === 'prompt') return t(SETTINGS_PAGE_DEVICES_I18N.permissionPrompt)
+
+    return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnknown)
+  }
   const isVideoInputChecking = computed(() => Boolean(videoInputStream.value))
+  const isVideoInputCheckDisabled = computed(
+    () =>
+      videoInputCheckLoading.value ||
+      !isVideoInputSupported.value ||
+      (videoInputPermission.value === 'granted' && videoInputDevices.value.length === 0)
+  )
+  const videoInputPermissionCalloutType = computed(() =>
+    isVideoInputSupported.value ? getDevicePermissionCalloutType(videoInputPermission.value) : 'warning'
+  )
+  const videoInputPermissionStatus = computed(() =>
+    t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus)(getPermissionStatusText(videoInputPermission.value))
+  )
 
   const normalizeSelectValue = (value: NmorphSelectModelValueType) => (Array.isArray(value) ? value[0] ?? '' : value)
 
@@ -43,62 +74,32 @@ export const useVideoInputDevice = () => {
     })
   }
 
-  const getMediaDevices = () => {
-    if (!navigator.mediaDevices?.enumerateDevices || !navigator.mediaDevices?.getUserMedia) {
-      throw new Error(t(SETTINGS_PAGE_DEVICES_I18N.mediaUnsupported))
-    }
-
-    return navigator.mediaDevices
-  }
-
-  const requestVideoInputPermission = async () => {
-    try {
-      if (!navigator.permissions?.query) return
-
-      const permission = await navigator.permissions.query({ name: 'camera' } as PermissionDescriptor)
-
-      if (permission.state === 'denied') {
-        throw new Error('Permission denied')
-      }
-
-      if (permission.state !== 'prompt') return
-    } catch (error) {
-      if (error instanceof Error && error.message === 'Permission denied') {
-        throw error
-      }
-    }
-
-    const stream = await getMediaDevices().getUserMedia({ video: true })
-    stopStream(stream)
-  }
-
   const stopVideoInputCheck = () => {
-    stopStream(videoInputStream.value)
-    videoInputStream.value = null
-
-    if (videoElement.value) {
-      videoElement.value.srcObject = null
-    }
+    videoInputUserMedia.stop()
   }
 
-  const startVideoInputCheck = async (deviceId = settings.value.selectedVideoInputDeviceId) => {
-    stopVideoInputCheck()
+  const getVideoInputConstraints = (deviceId: string) => {
+    if (deviceId && videoInputDevices.value.some((device) => device.deviceId === deviceId)) {
+      return { deviceId: { exact: deviceId } }
+    }
 
-    if (videoInputDevices.value.length === 0) return
+    return true
+  }
+
+  const startVideoInputCheck = async (deviceId = settings.value.ioDevices.videoInputDeviceId) => {
+    stopVideoInputCheck()
 
     try {
       videoInputCheckLoading.value = true
+      videoInputUserMedia.constraints.value = {
+        audio: false,
+        video: getVideoInputConstraints(deviceId)
+      }
 
-      const stream = await getMediaDevices().getUserMedia({
-        video: {
-          deviceId: deviceId ? { exact: deviceId } : undefined
-        }
-      })
+      const stream = await videoInputUserMedia.start()
 
-      videoInputStream.value = stream
-
-      if (videoElement.value) {
-        videoElement.value.srcObject = stream
+      if (stream) {
+        await refreshVideoInputDevices(true)
       }
     } catch (error) {
       stopVideoInputCheck()
@@ -108,8 +109,8 @@ export const useVideoInputDevice = () => {
     }
   }
 
-  const toggleVideoInputCheck = async () => {
-    if (isVideoInputChecking.value) {
+  const setVideoInputChecking = async (value: boolean) => {
+    if (!value) {
       stopVideoInputCheck()
       return
     }
@@ -117,33 +118,34 @@ export const useVideoInputDevice = () => {
     await startVideoInputCheck()
   }
 
-  const getSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string) =>
-    devices.some((device) => device.deviceId === deviceId) ? deviceId : devices[0]?.deviceId ?? ''
+  const getSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string, emptyDeviceId = '') => {
+    if (devices.length === 0) return emptyDeviceId
 
-  const requestVideoInputDevices = async () => {
-    const shouldRestartCheck = isVideoInputChecking.value
+    return devices.some((device) => device.deviceId === deviceId) ? deviceId : devices[0]?.deviceId ?? ''
+  }
 
+  const syncSelectedVideoInputDevice = async (clearMissing = false) => {
+    const deviceId = getSelectedDeviceId(
+      videoInputDevices.value,
+      settings.value.ioDevices.videoInputDeviceId,
+      clearMissing ? '' : settings.value.ioDevices.videoInputDeviceId
+    )
+
+    if (deviceId !== settings.value.ioDevices.videoInputDeviceId) {
+      await setByPath('ioDevices.videoInputDeviceId', deviceId)
+    }
+
+    return deviceId
+  }
+
+  const refreshVideoInputDevices = async (clearMissing = false) => {
     try {
       videoInputLoading.value = true
-      await requestVideoInputPermission()
-
-      const devices = (await getMediaDevices().enumerateDevices()).filter((device) => device.kind === 'videoinput')
-      const selectedDeviceId = getSelectedDeviceId(devices, settings.value.selectedVideoInputDeviceId)
-
-      videoInputDevices.value = devices
-
-      if (selectedDeviceId !== settings.value.selectedVideoInputDeviceId) {
-        await shallowUpdate({ selectedVideoInputDeviceId: selectedDeviceId })
+      if (isVideoInputSupported.value) {
+        videoInputAllDevices.value = await navigator.mediaDevices.enumerateDevices()
       }
 
-      if (shouldRestartCheck) {
-        await startVideoInputCheck(selectedDeviceId)
-      }
-    } catch (error) {
-      videoInputDevices.value = []
-      await shallowUpdate({ selectedVideoInputDeviceId: '' })
-      stopVideoInputCheck()
-      showDeviceWarning(error)
+      return await syncSelectedVideoInputDevice(clearMissing)
     } finally {
       videoInputLoading.value = false
     }
@@ -153,31 +155,37 @@ export const useVideoInputDevice = () => {
     const deviceId = normalizeSelectValue(value)
     const shouldRestartCheck = isVideoInputChecking.value
 
-    await shallowUpdate({ selectedVideoInputDeviceId: deviceId })
+    await setByPath('ioDevices.videoInputDeviceId', deviceId)
 
     if (shouldRestartCheck) {
       await startVideoInputCheck(deviceId)
     }
   }
 
-  onMounted(() => {
-    void requestVideoInputDevices()
-    navigator.mediaDevices?.addEventListener('devicechange', requestVideoInputDevices)
+  onBeforeUnmount(() => {
+    stopVideoInputCheck()
   })
 
-  onBeforeUnmount(() => {
-    navigator.mediaDevices?.removeEventListener('devicechange', requestVideoInputDevices)
-    stopVideoInputCheck()
+  watch(videoInputDevices, () => {
+    void syncSelectedVideoInputDevice(videoInputPermission.value === 'granted')
+  })
+
+  watch([videoInputStream, videoElement], () => {
+    if (videoElement.value) {
+      videoElement.value.srcObject = videoInputStream.value ?? null
+    }
   })
 
   return {
     settings,
     videoInputOptions,
     videoInputLoading,
-    videoInputCheckLoading,
+    isVideoInputCheckDisabled,
+    videoInputPermissionCalloutType,
+    videoInputPermissionStatus,
     videoElement,
     isVideoInputChecking,
-    toggleVideoInputCheck,
+    setVideoInputChecking,
     setSelectedVideoInputDevice
   }
 }

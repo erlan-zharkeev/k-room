@@ -3,13 +3,13 @@ import { MainNavigation } from 'src/features/main-navigation'
 </script>
 
 <template>
-  <footer class="main-mobile-footer">
+  <footer class="mobile-footer">
     <MainNavigation footer />
   </footer>
 </template>
 
 <style lang="scss">
-.main-mobile-footer {
+.mobile-footer {
   display: flex;
   justify-content: center;
 }
