@@ -58,6 +58,11 @@ export default defineConfig(({ mode }) => {
       __CLIENT_ENV_DATA__: JSON.stringify(clientEnvData)
     },
     plugins: [
+      {
+        name: 'inject-client-html-data',
+        transformIndexHtml: (html) =>
+          html.replaceAll('__THEME_BG__', clientEnvData.themeBg).replaceAll('__APP_NAME__', clientEnvData.appName)
+      },
       vue(),
       !clientEnvData.isDev && generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg })
     ],
