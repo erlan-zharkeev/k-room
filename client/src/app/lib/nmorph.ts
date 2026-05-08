@@ -1,5 +1,4 @@
 import { en, ru, zh } from '@nmorph/nmorph-ui-kit'
-import type { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
 import type { AppLanguageType } from 'global-shared'
 
 import { DEFAULT_APPEARANCE } from 'src/shared/config'
