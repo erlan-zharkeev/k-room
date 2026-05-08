@@ -175,23 +175,6 @@ Use:
 
 3. Use project Sentry wrappers instead of raw SDK calls in feature code.
 
-## Commits
-
-Use [Conventional Commits](https://www.conventionalcommits.org/) format:
-
-```text
-type(scope?): description
-```
-
-Types:
-
-- `feat` - new feature
-- `fix` - bug fix
-- `chore` - tooling, config, dependencies
-- `refactor` - code restructuring without feature or fix
-- `test` - adding or updating tests
-- `docs` - documentation only
-
 Rules:
 
 - Description is lowercase, no period at the end
