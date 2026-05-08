@@ -16,11 +16,6 @@ export const APP_NAVIGATION_I18N = defineI18n({
     ru: 'Контакты',
     zh: '联系人'
   },
-  info: {
-    en: 'Events',
-    ru: 'События',
-    zh: '事件'
-  },
   settings: {
     en: 'Settings',
     ru: 'Настройки',

@@ -2,11 +2,6 @@ import type { UnknownObject } from 'global-shared'
 import { Types } from 'mongoose'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const infoNotificationMock = vi.hoisted(() => ({
-  createInfoNotificationState: vi.fn(),
-  getInitialInfoNotificationMap: vi.fn()
-}))
-
 const mediaMock = vi.hoisted(() => ({
   deleteBucketFilesByName: vi.fn(),
   uploadBufferToBucket: vi.fn()
@@ -43,7 +38,6 @@ const userModelMock = vi.hoisted(() => {
   return { UserModel }
 })
 
-vi.mock('../info-notifications/info-notifications.service', () => infoNotificationMock)
 vi.mock('../media/media.service', () => mediaMock)
 vi.mock('../codes/codes.model', () => ({ CodeModel: codeModelMock }))
 vi.mock('./user.model', () => ({ UserModel: userModelMock.UserModel }))
@@ -54,7 +48,6 @@ const { UserService, createUser, isUserExist, loadGoogleAvatar, updateUserAvatar
 describe('user.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    infoNotificationMock.getInitialInfoNotificationMap.mockResolvedValue({ welcome: 'unread' })
   })
 
   afterEach(() => {
@@ -89,7 +82,7 @@ describe('user.service', () => {
     expect(userModelMock.UserModel.findOne).toHaveBeenNthCalledWith(2, { 'personal.email': 'tester@test.com' })
   })
 
-  it('creates user with requested fixture id and initializes info notification state', async () => {
+  it('creates user with requested fixture id', async () => {
     const id = new Types.ObjectId('68a09410778b70d522ea8faa')
 
     userModelMock.UserModel.findOne.mockResolvedValue(null)
@@ -109,11 +102,6 @@ describe('user.service', () => {
       provider: 'app',
       confirmed: false,
       confirmAttempts: 3
-    })
-    expect(infoNotificationMock.getInitialInfoNotificationMap).toHaveBeenCalledWith(1000)
-    expect(infoNotificationMock.createInfoNotificationState).toHaveBeenCalledWith({
-      userId: id,
-      infoNotifications: { welcome: 'unread' }
     })
   })
 

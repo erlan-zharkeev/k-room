@@ -7,7 +7,6 @@ export const getAppPathFromSettings = ({ contentTab, chatRoomId }: DbUserSetting
   if (contentTab === 'chat-rooms') return getChatRoomPath(chatRoomId)
   if (contentTab === 'calls') return APP_PAGE_ROUTES.calls
   if (contentTab === 'contacts') return APP_PAGE_ROUTES.contacts
-  if (contentTab === 'info-notifications') return APP_PAGE_ROUTES.infoNotifications
   return `${APP_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
 }
 

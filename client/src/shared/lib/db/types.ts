@@ -5,7 +5,6 @@ import type {
   IFrontendContact,
   IFrontendUserData,
   IMessage,
-  IUserInfoNotification,
   MediaKindType,
   UnknownObject
 } from 'global-shared'
@@ -30,7 +29,6 @@ export type DbTransactionModeType = TransactionMode
 
 export type DbCallType = ICall
 export type DbMessageType = IMessage
-export type DbInfoNotificationType = IUserInfoNotification
 export type FChatRoomType = IChatRoom & { avatarId: string }
 export type DbUserDataType = Required<Pick<IFrontendUserData, 'id' | 'role' | 'email' | 'nickname'>>
 export type DbContactType = IFrontendContact & IDbContactRequiredSystemData

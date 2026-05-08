@@ -1,9 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const infoNotificationMock = vi.hoisted(() => ({
-  loadInfoNotificationFixtures: vi.fn()
-}))
-
 const mediaMock = vi.hoisted(() => ({
   uploadBufferToBucket: vi.fn()
 }))
@@ -45,7 +41,6 @@ const logMock = vi.hoisted(() => ({
   error: vi.fn()
 }))
 
-vi.mock('../info-notifications/info-notifications.service', () => infoNotificationMock)
 vi.mock('../media/media.service', () => mediaMock)
 vi.mock('../user/user.service', () => userServiceMock)
 vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
@@ -80,7 +75,6 @@ describe('fixtures.service', () => {
   it('loads dev fixtures idempotently without duplicating existing users or room message links', async () => {
     await loadFixtures()
 
-    expect(infoNotificationMock.loadInfoNotificationFixtures).toHaveBeenCalledTimes(1)
     expect(userServiceMock.isUserExist).toHaveBeenCalledTimes(33)
     expect(userServiceMock.createUser).not.toHaveBeenCalled()
     expect(userModelMock.findById).toHaveBeenCalledTimes(33)

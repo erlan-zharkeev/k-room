@@ -13,7 +13,7 @@ import { Settings } from '../Settings/Settings'
 export const AsidePanel = () => {
   const { showAsidePanel, selectedContentTab } = useSettings()
 
-  const TAB_COMPONENTS_MAP: Record<Exclude<ContentTabType, 'info'>, ReactElement> = {
+  const TAB_COMPONENTS_MAP: Record<ContentTabType, ReactElement> = {
     contacts: <Contacts />,
     'chat-rooms': <ChatRooms />,
     calls: <Calls />,

@@ -18,7 +18,7 @@ export const DATE_TIME_FORMAT = {
 
 export const DEFAULT_DATE_TIME_FORMAT: DateTimeFormatType = DATE_TIME_FORMAT.auto
 
-export const CONTENT_TAB_IDS: ContentTabType[] = ['chat-rooms', 'calls', 'contacts', 'info-notifications', 'settings']
+export const CONTENT_TAB_IDS: ContentTabType[] = ['chat-rooms', 'calls', 'contacts', 'settings']
 
 export const DEFAULT_LOCALIZATION_SETTINGS: IUserLocalizationSettings = {
   language: CLIENT_LANGUAGE,

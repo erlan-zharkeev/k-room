@@ -4,7 +4,7 @@ export type ThemeType = 'dark' | 'light'
 
 export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
-export type ContentTabType = 'info' | AsideBarButtonNameType
+export type ContentTabType = AsideBarButtonNameType
 
 export type HiddenNotificationType = 'audio-context'
 

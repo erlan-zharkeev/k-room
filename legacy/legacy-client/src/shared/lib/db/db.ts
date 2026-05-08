@@ -7,8 +7,7 @@ import {
   IDbMedia,
   DbUserDataType,
   DbMessageType,
-  FChatRoomType,
-  DbInfoNotificationType
+  FChatRoomType
 } from 'src/shared/config'
 
 export class KRoomDB extends Dexie {
@@ -18,18 +17,16 @@ export class KRoomDB extends Dexie {
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>
   messages!: Table<DbMessageType>
-  'info-notifications'!: Table<DbInfoNotificationType>
 
   constructor() {
     super(CLIENT_ENV.appName.toLocaleLowerCase())
-    this.version(1).stores({
+    this.version(2).stores({
       settings: '__key',
       user: '__key',
       contacts: '&id',
       media: '&id',
       'chat-rooms': '&id',
-      messages: '&id',
-      'info-notifications': '&id'
+      messages: '&id'
     })
   }
 }

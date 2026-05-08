@@ -5,7 +5,6 @@ export const isNavBtnActive = (id: string, isExactActive: boolean, routePath: st
   (id === 'chat-rooms' && routePath.startsWith(APP_PAGE_ROUTES.chatRooms)) ||
   (id === 'settings' && routePath.startsWith(APP_PAGE_ROUTES.settings))
 
-export const getBadgeValue = (id: string, unreadInfoNotificationQuantity?: number, unreadMessagesQuantity?: number) => {
-  if (id === 'info-notifications') return unreadInfoNotificationQuantity || undefined
+export const getBadgeValue = (id: string, unreadMessagesQuantity?: number) => {
   if (id === 'chat-rooms') return unreadMessagesQuantity || undefined
 }

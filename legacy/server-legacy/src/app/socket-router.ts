@@ -13,7 +13,6 @@ import {
   searchContactController,
   updateContactInteractionTypeController
 } from 'src/modules/contact'
-import { markInfoNotificationAsReadController } from 'src/modules/info-notification'
 import { changeMessageStatusController, loadRoomMessagesController, sendMessageController } from 'src/modules/message'
 import {
   actualizeUserDataController,
@@ -29,7 +28,6 @@ const socketControllers = [
   userDisconnectController,
   updateLanguageController,
   actualizeUserDataController,
-  markInfoNotificationAsReadController,
   createChatRoomController,
   searchContactController,
   saveContactController,

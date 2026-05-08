@@ -8,7 +8,7 @@ export type DateTimeFormatPatternMapType = Partial<Record<DateTimeFormatType, st
 
 export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
-export type ContentTabType = 'info-notifications' | AsideBarButtonNameType
+export type ContentTabType = AsideBarButtonNameType
 
 export type HiddenNotificationType = 'audio-context'
 
