@@ -19,7 +19,6 @@ export {
 export { IMAGE_RESOLUTIONS } from './browser/constants'
 export { createClassNameWithModifiers, stopPropagation } from './dom/dom'
 export { buildPathWithParams, firstCharUpperCase, getRandomNumber, isFormFieldInvalid } from './misc'
-export { getNmorphGeneratedColorSchema, getNmorphThemeShadowOptions } from './nmorph'
 export { currentLanguage, setClientLanguage, t, useI18n } from './use-i18n'
 export {
   db,
@@ -31,6 +30,7 @@ export {
 } from './db/db'
 export { pinia } from './pinia'
 export { useAppToast } from './toast/use-app-toast'
+export { getNmorphGeneratedColorSchema } from './theme'
 export type { ClientPlatformType, FileLoaderValueType } from './browser/types'
 export type { ContextRefType, KebabCaseType } from './types'
 export type { AppToastStackType, IAppToastInput } from './toast/types'

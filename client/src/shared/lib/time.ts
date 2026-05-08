@@ -1,38 +1,42 @@
+import { differenceInMilliseconds, intlFormat, intlFormatDistance } from 'date-fns'
 import { APP_LANGUAGE, normalizeTimestamp, type AppLanguageType } from 'global-shared'
 
-const getIntlLocale = (language: AppLanguageType) => (language === APP_LANGUAGE.Ru ? 'ru-RU' : 'en-US')
+const INTL_LOCALE_BY_LANGUAGE = {
+  [APP_LANGUAGE.En]: 'en-US',
+  [APP_LANGUAGE.Ru]: 'ru-RU',
+  [APP_LANGUAGE.Zh]: 'zh-CN'
+} satisfies Record<AppLanguageType, string>
+
+const getIntlLocale = (language: AppLanguageType) => INTL_LOCALE_BY_LANGUAGE[language]
+const getTimeValue = (value: number | string) => normalizeTimestamp(value) ?? 0
 
 export const formatLocalizedDate = (value: number | string, language: AppLanguageType) =>
-  new Intl.DateTimeFormat(getIntlLocale(language), {
-    dateStyle: 'long'
-  }).format(normalizeTimestamp(value) ?? 0)
+  intlFormat(
+    getTimeValue(value),
+    {
+      dateStyle: 'long'
+    },
+    {
+      locale: getIntlLocale(language)
+    }
+  )
 
 export const formatLocalizedTime = (value: number | string, language: AppLanguageType) =>
-  new Intl.DateTimeFormat(getIntlLocale(language), {
-    timeStyle: 'short'
-  }).format(normalizeTimestamp(value) ?? 0)
+  intlFormat(
+    getTimeValue(value),
+    {
+      timeStyle: 'short'
+    },
+    {
+      locale: getIntlLocale(language)
+    }
+  )
 
-export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguageType) => {
-  const timestampMs = normalizeTimestamp(value) ?? 0
-  const diffInSeconds = Math.round((timestampMs - Date.now()) / 1000)
-  const absDiffInSeconds = Math.abs(diffInSeconds)
-  const formatter = new Intl.RelativeTimeFormat(getIntlLocale(language), { numeric: 'auto' })
+export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguageType) =>
+  intlFormatDistance(getTimeValue(value), Date.now(), {
+    locale: getIntlLocale(language),
+    numeric: 'auto'
+  })
 
-  if (absDiffInSeconds < 60) return formatter.format(diffInSeconds, 'second')
-
-  const diffInMinutes = Math.round(diffInSeconds / 60)
-  const absDiffInMinutes = Math.abs(diffInMinutes)
-
-  if (absDiffInMinutes < 60) return formatter.format(diffInMinutes, 'minute')
-
-  const diffInHours = Math.round(diffInMinutes / 60)
-  const absDiffInHours = Math.abs(diffInHours)
-
-  if (absDiffInHours < 24) return formatter.format(diffInHours, 'hour')
-
-  const diffInDays = Math.round(diffInHours / 24)
-
-  return formatter.format(diffInDays, 'day')
-}
-
-export const getNextRequestIntervalSeconds = (timestampMs: number) => (timestampMs - Date.now()) / 1000
+export const getNextRequestIntervalSeconds = (timestampMs: number) =>
+  differenceInMilliseconds(timestampMs, Date.now()) / 1000

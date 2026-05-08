@@ -4,7 +4,8 @@ import { onBeforeUnmount, watch } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { useThemeSelect } from 'src/features/theme-select'
 import { SYSTEM_THEME_QUERY } from 'src/shared/config'
-import { getNmorphThemeShadowOptions } from 'src/shared/lib'
+
+import { getNmorphThemeShadowOptions } from '../lib/nmorph'
 
 export const useThemeProvider = () => {
   const { effectiveTheme, settings, isSelectedThemeSystem } = useSettings()
