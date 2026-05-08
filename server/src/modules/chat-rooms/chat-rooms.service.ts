@@ -1,10 +1,11 @@
 import type { IChatRoom, IChatRoomSchema, SocketActionsType } from 'global-shared'
-import type { ObjectId } from 'mongoose'
 
 import { getIO } from 'src/shared/lib/io'
 
 import { UserModel } from '../user/user.model'
 import { getSocketsByUserIds } from '../user/user.service'
+
+import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
@@ -33,8 +34,8 @@ export const setRoomToUsers = async (roomId: string, userIds: string[]) => {
   )
 }
 
-export const transformRoomForUser = ({ userId, room }: { userId: string; room: IChatRoomSchema }) => {
-  const normalizedRoom = room as IChatRoomSchema & { _id: ObjectId }
+export const transformRoomForUser = ({ userId, room }: ITransformRoomForUserParams) => {
+  const normalizedRoom = room as IChatRoomSchemaWithObjectId
   const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
 
   return {

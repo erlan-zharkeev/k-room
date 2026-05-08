@@ -30,6 +30,7 @@ import {
   MESSAGE_SUBJECTS,
   MINUTE_IN_MS
 } from './fixtures.constants'
+import type { IFixtureUserData } from './fixtures.types'
 
 const USER_BY_NICKNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.nickname, fixture]))
 const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
@@ -53,16 +54,7 @@ const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: 
   return true
 }
 
-const loadUserFixture = async (
-  data: {
-    id: string
-    email: string
-    nickname: string
-    pass: string
-    avatarPath: string
-  },
-  language: AppLanguageType
-) => {
+const loadUserFixture = async (data: IFixtureUserData, language: AppLanguageType) => {
   const { id, nickname, email, pass, avatarPath } = data
   const identifier = new Types.ObjectId(id)
   const userExistState = await isUserExist({ id: identifier, nickname, email })

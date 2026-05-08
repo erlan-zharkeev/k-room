@@ -8,7 +8,7 @@ import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
-import type { DevicePermissionStatus } from '../../config/types/devices.types'
+import type { DevicePermissionStatusType } from '../../config/types/devices.types'
 import { getDevicePermissionCalloutType } from '../../lib/get-device-permission-callout-type'
 
 export const useAudioInputDevice = () => {
@@ -42,7 +42,7 @@ export const useAudioInputDevice = () => {
     }))
   )
 
-  const getPermissionStatusText = (status: DevicePermissionStatus) => {
+  const getPermissionStatusText = (status: DevicePermissionStatusType) => {
     if (!isAudioInputSupported.value) return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported)
     if (status === 'granted') return t(SETTINGS_PAGE_DEVICES_I18N.permissionGranted)
     if (status === 'denied') return t(SETTINGS_PAGE_DEVICES_I18N.permissionDenied)

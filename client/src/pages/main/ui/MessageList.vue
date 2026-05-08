@@ -25,10 +25,10 @@ import { useMessage } from '../model/use-message'
 import { useMessageReadObserver } from '../model/use-message-read-observer'
 import { useMessageScrollState } from '../model/use-message-scroll-state'
 
-import type { IMessageListProps } from './types'
+import type { IMessageListEmits, IMessageListProps } from './types'
 
 const { roomId, messages, hasMoreMessages, isLoading, formatRelativeTime } = defineProps<IMessageListProps>()
-const emit = defineEmits(['loadMore', 'reply', 'forward', 'delete', 'addReaction'])
+const emit = defineEmits<IMessageListEmits>()
 
 const scrollElement = ref<HTMLElement | null>(null)
 const messageMenuElement = ref<HTMLElement | null>(null)
@@ -142,7 +142,18 @@ const handleMessageAction = (actionId: (typeof MAIN_PAGE_MESSAGE_ACTIONS)[number
 
   if (!message) return
 
-  emit(actionId, message)
+  if (actionId === 'reply') {
+    emit('reply', message)
+  }
+
+  if (actionId === 'forward') {
+    emit('forward', message)
+  }
+
+  if (actionId === 'delete') {
+    emit('delete', message)
+  }
+
   closeMessageMenu()
 }
 

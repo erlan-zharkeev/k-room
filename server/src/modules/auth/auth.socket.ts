@@ -8,6 +8,8 @@ import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { UserModel } from '../user/user.model'
 
+import type { ISocketTokenPayload } from './auth.types'
+
 const emitAuthError = (socket: SocketInstanceType) => {
   socket.emit<SocketActionsType>('auth-error', {
     event: 'connection',
@@ -17,13 +19,13 @@ const emitAuthError = (socket: SocketInstanceType) => {
 }
 
 const verifySocketToken = async (token: string) => {
-  return new Promise<{ id: string }>((resolve, reject) => {
+  return new Promise<ISocketTokenPayload>((resolve, reject) => {
     jwt.verify(token, SERVER_ENV.secret.accessTokenSecret, (error, decoded) => {
       if (error) {
         return reject(error)
       }
 
-      return resolve(decoded as { id: string })
+      return resolve(decoded as ISocketTokenPayload)
     })
   })
 }

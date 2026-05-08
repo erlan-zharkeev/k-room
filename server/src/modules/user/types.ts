@@ -1,4 +1,10 @@
-import type { ProviderType, UserRoleType } from 'global-shared'
+import type {
+  AppLanguageType,
+  IChangePasswordPayload,
+  ProviderType,
+  UnknownObjectType,
+  UserRoleType
+} from 'global-shared'
 import type { Types } from 'mongoose'
 
 export interface IUserDevice {
@@ -45,4 +51,60 @@ export interface IUserSchema {
 export interface IUserExistState {
   exists: boolean
   reason: 'nickname' | 'email' | 'id' | null
+}
+
+export interface IUserExistParams {
+  nickname: string
+  email: string
+  id?: Types.ObjectId
+}
+
+export interface ICreateUserParams {
+  id?: Types.ObjectId
+  email: string
+  nickname: string
+  hashedPassword: string
+  provider?: ProviderType
+}
+
+export interface IChangePasswordParams extends IChangePasswordPayload {
+  userId: string
+  language: AppLanguageType
+}
+
+export interface IChangeEmailParams {
+  userId: string
+  email: string
+  language: AppLanguageType
+}
+
+export interface IUpdateUserDataParams {
+  userId: string
+  nickname?: string
+  avatarFileBuffer?: Buffer
+  resetAvatar?: 'reset' | ''
+  language: AppLanguageType
+}
+
+export interface IUpdateUserDataPayload {
+  nickname?: string
+  'reset-avatar'?: 'reset' | ''
+}
+
+export interface IAdminUserRecord {
+  params?: UnknownObjectType
+}
+
+export interface IAdminUserActionRequest {
+  method?: string
+  payload?: UnknownObjectType
+}
+
+export interface IAdminUserActionResponse {
+  record?: IAdminUserRecord
+  records?: IAdminUserRecord[]
+}
+
+export interface IUpdateLanguagePayload {
+  language: AppLanguageType
 }

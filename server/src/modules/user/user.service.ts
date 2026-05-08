@@ -3,18 +3,15 @@ import bcrypt from 'bcryptjs'
 import {
   type AppLanguageType,
   type IEventStatusContact,
-  type IChangePasswordPayload,
   type IFrontendContact,
   type IFrontendUserData,
   type InteractionType,
   normalizeNicknameKey,
-  type ProviderType,
   REQ_STATUS,
   type ICreateNewPasswordPayload,
   VALIDATION_PATTERNS,
   type SocketActionsType
 } from 'global-shared'
-import { Types } from 'mongoose'
 
 import { AppError } from 'src/shared/lib/app-error'
 import { getIO } from 'src/shared/lib/io'
@@ -25,7 +22,16 @@ import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
 import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.service'
 
-import type { IContact, IUserExistState, IUserSchema } from './types'
+import type {
+  IChangeEmailParams,
+  IChangePasswordParams,
+  IContact,
+  ICreateUserParams,
+  IUpdateUserDataParams,
+  IUserExistParams,
+  IUserExistState,
+  IUserSchema
+} from './types'
 import { ALLOWED_GOOGLE_AVATAR_HOSTS } from './user.constants'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
 import { UserModel } from './user.model'
@@ -110,15 +116,7 @@ export const setLastSeenData = async (userId: string) => {
   return lastSeen
 }
 
-export const isUserExist = async ({
-  nickname,
-  email,
-  id
-}: {
-  nickname: string
-  email: string
-  id?: Types.ObjectId
-}): Promise<IUserExistState> => {
+export const isUserExist = async ({ nickname, email, id }: IUserExistParams): Promise<IUserExistState> => {
   const normalizedNickname = normalizeNicknameKey(nickname)
   const userByNickname = await UserModel.findOne({ 'public.nickname': normalizedNickname })
 
@@ -153,19 +151,7 @@ export const isUserExist = async ({
   }
 }
 
-export const createUser = async ({
-  id,
-  email,
-  nickname,
-  hashedPassword,
-  provider = 'app'
-}: {
-  id?: Types.ObjectId
-  email: string
-  nickname: string
-  hashedPassword: string
-  provider?: ProviderType
-}) => {
+export const createUser = async ({ id, email, nickname, hashedPassword, provider = 'app' }: ICreateUserParams) => {
   const normalizedNickname = normalizeNicknameKey(nickname)
   const userExistState = await isUserExist({ id, nickname: normalizedNickname, email })
 
@@ -252,31 +238,11 @@ export class UserService {
     return this.findByNickname(login)
   }
 
-  async isUserExist({
-    nickname,
-    email,
-    id
-  }: {
-    nickname: string
-    email: string
-    id?: Types.ObjectId
-  }): Promise<IUserExistState> {
+  async isUserExist({ nickname, email, id }: IUserExistParams): Promise<IUserExistState> {
     return isUserExist({ nickname, email, id })
   }
 
-  async createUser({
-    id,
-    email,
-    nickname,
-    hashedPassword,
-    provider = 'app'
-  }: {
-    id?: Types.ObjectId
-    email: string
-    nickname: string
-    hashedPassword: string
-    provider?: ProviderType
-  }) {
+  async createUser({ id, email, nickname, hashedPassword, provider = 'app' }: ICreateUserParams) {
     return createUser({ id, email, nickname, hashedPassword, provider })
   }
 
@@ -334,12 +300,7 @@ export class UserService {
     })
   }
 
-  async changePassword({
-    userId,
-    currentPassword,
-    password,
-    language
-  }: IChangePasswordPayload & { userId: string; language: AppLanguageType }) {
+  async changePassword({ userId, currentPassword, password, language }: IChangePasswordParams) {
     const user = await this.requireUser(userId, language)
     const passwordIsValid = await bcrypt.compare(currentPassword, user.system.password)
 
@@ -352,7 +313,7 @@ export class UserService {
     await user.updateOne({ $set: { 'system.password': hashedPassword } })
   }
 
-  async changeEmail({ userId, email, language }: { userId: string; email: string; language: AppLanguageType }) {
+  async changeEmail({ userId, email, language }: IChangeEmailParams) {
     const user = await this.requireUser(userId, language)
     const normalizedEmail = email.trim()
 
@@ -372,19 +333,7 @@ export class UserService {
     await user.updateOne({ $set: { 'personal.email': normalizedEmail, 'system.confirmed': true } })
   }
 
-  async updateUserData({
-    userId,
-    nickname,
-    avatarFileBuffer,
-    resetAvatar,
-    language
-  }: {
-    userId: string
-    nickname?: string
-    avatarFileBuffer?: Buffer
-    resetAvatar?: 'reset' | ''
-    language: AppLanguageType
-  }) {
+  async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar, language }: IUpdateUserDataParams) {
     if (!nickname && !avatarFileBuffer && resetAvatar !== 'reset') {
       throw new AppError(REQ_STATUS.badRequest, localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language))
     }

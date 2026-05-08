@@ -1,6 +1,3 @@
-import type { Server as HttpServer } from 'http'
-import type { Server as HttpsServer } from 'https'
-
 import { Server } from 'socket.io'
 
 import { socketAuthMiddleware } from 'src/modules/auth/auth.socket'
@@ -11,8 +8,7 @@ import { serverCaptureSentryException } from 'src/shared/lib/sentry'
 
 import { SERVER_ENV } from './env'
 import { socketRouter } from './socket-router'
-
-type SocketServerType = HttpServer | HttpsServer
+import type { SocketServerType } from './types'
 
 const SOCKET_OPTIONS = {
   path: SERVER_ENV.socketPath,

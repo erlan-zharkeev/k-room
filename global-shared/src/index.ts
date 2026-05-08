@@ -6,7 +6,7 @@ export type {
   ISignInWithProviderPayload
 } from './auth/types'
 
-export type { CallStatusType, CallFlowType, ICall, IDBCall, IDBCallSchema } from './calls/types'
+export type { CallStatusType, CallFlowType, ICall, IDBCall, DbCallSchemaType } from './calls/types'
 
 export type { IChatRoom, ChatRoomsType, IChatRoomSchema } from './chat/types'
 
@@ -75,9 +75,9 @@ export type { IChangePasswordPayload, ICreateNewPasswordPayload } from './reques
 
 export type {
   IConfirmEmailResponse,
-  ILoginResponse,
-  ISignInWithProviderResponse,
-  IGetUserDataResponse,
+  LoginResponseType,
+  SignInWithProviderResponseType,
+  GetUserDataResponseType,
   ISendConfirmationLinkResponse,
   ISendChangeEmailCodeResponse,
   ISendPasswordRecoveryCodeResponse,
@@ -106,7 +106,7 @@ export type {
   ProviderType,
   AvailableCookieType,
   UnknownCallbackType,
-  UnknownObject,
+  UnknownObjectType,
   IBasicStreamSettings,
   IStreamSettings,
   IBackendMessage,

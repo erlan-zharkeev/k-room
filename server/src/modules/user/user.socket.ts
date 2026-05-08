@@ -7,6 +7,7 @@ import type { SocketInstanceType } from 'src/shared/types/socket'
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { transformRoomForUser } from '../chat-rooms/chat-rooms.service'
 
+import type { IUpdateLanguagePayload } from './types'
 import { USER_SOCKET_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 import { getSocketsByUserIds, setLastSeenData, setUserStatus, transformUserToFrontendContact } from './user.service'
@@ -36,7 +37,7 @@ export const registerUserSocketHandlers = (socket: SocketInstanceType) => {
     'update-language',
     socketErrorMiddleware(
       socket,
-      async ({ language }: { language: import('global-shared').AppLanguageType }) => {
+      async ({ language }: IUpdateLanguagePayload) => {
         socket.data.language = language
       },
       { basicError: USER_SOCKET_I18N.updateLanguageFailed }

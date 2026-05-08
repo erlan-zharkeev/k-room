@@ -37,4 +37,9 @@ export interface IUploadOptions {
   compression?: SharpSettingsKeyType
 }
 
+export interface IStreamMediaFileOptions {
+  asAttachment?: boolean
+  revalidateCache?: boolean
+}
+
 export type MongooseGridFSBucketType = InstanceType<typeof mongoose.mongo.GridFSBucket>

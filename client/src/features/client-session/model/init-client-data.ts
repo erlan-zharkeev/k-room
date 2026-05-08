@@ -1,4 +1,4 @@
-import { USER_ENDPOINTS, type IGetUserDataResponse } from 'global-shared'
+import { USER_ENDPOINTS, type GetUserDataResponseType } from 'global-shared'
 
 import { useUser } from 'src/entities/user'
 import { isHttpError, useHttp, useSocketConnect, useSocketConnectionMonitor } from 'src/shared/api'
@@ -14,7 +14,7 @@ const initializeClientData = async () => {
 
   const restoreUserSession = async () => {
     try {
-      const response = await doHttpRequest<IGetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
+      const response = await doHttpRequest<GetUserDataResponseType>('get', USER_ENDPOINTS.getUserData)
       const { email, id, role, nickname } = response.data.payload
 
       await update({ email, id, role, nickname })

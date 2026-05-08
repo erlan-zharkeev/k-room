@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import type { IUserDevice } from '../user/types'
+
 const envMock = vi.hoisted(() => ({
   SERVER_ENV: {
     domain: '',
@@ -41,7 +43,7 @@ const createUser = async (confirmed = true) => ({
     password: await bcrypt.hash('Asdf1234', 6),
     confirmed,
     confirmAttempts: 3,
-    device: {} as Record<string, { refreshToken: string; socketId: string }>
+    device: {} as Record<string, IUserDevice>
   },
   markModified: vi.fn(),
   save: vi.fn()

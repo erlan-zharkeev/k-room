@@ -7,12 +7,11 @@ import {
   REQ_STATUS,
   type IAuthLoginPayload,
   type IAuthRegistrationPayload,
-  type IConfirmEmailResponse,
-  type ILoginResponse,
+  type LoginResponseType,
   type ISendConfirmationLinkPayload,
   type ISendConfirmationLinkResponse,
   type ISignInWithProviderPayload,
-  type ISignInWithProviderResponse,
+  type SignInWithProviderResponseType,
   type ProviderType
 } from 'global-shared'
 import jwt, { type SignOptions } from 'jsonwebtoken'
@@ -38,7 +37,7 @@ import {
   SEND_CONFIRMATION_LINK_INTERVAL_MS
 } from './auth.constants'
 import { AUTH_I18N } from './auth.i18n'
-import type { ITokenPayload } from './auth.types'
+import type { IConfirmEmailResult, ISendConfirmationLinkResult, ITokenPayload } from './auth.types'
 import { parseTokenExpires } from './lib/parse-token-expires'
 
 @Injectable()
@@ -147,7 +146,7 @@ export class AuthService {
     await user.save()
   }
 
-  async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<ILoginResponse> {
+  async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<LoginResponseType> {
     const { language } = request
     const ip = getRequestIp(request)
 
@@ -223,10 +222,7 @@ export class AuthService {
     }
   }
 
-  async confirmEmail(
-    token: string,
-    language: AppLanguageType
-  ): Promise<IConfirmEmailResponse & { alreadyConfirmed: boolean }> {
+  async confirmEmail(token: string, language: AppLanguageType): Promise<IConfirmEmailResult> {
     const decoded = await this.verifyToken(token, SERVER_ENV.secret.emailConfirmSecret)
 
     const updateResult = await UserModel.updateOne(
@@ -248,7 +244,7 @@ export class AuthService {
   async sendConfirmationLink(
     payload: ISendConfirmationLinkPayload,
     request: Request
-  ): Promise<ISendConfirmationLinkResponse & { alreadyConfirmed: boolean; rateLimited: boolean }> {
+  ): Promise<ISendConfirmationLinkResult> {
     const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
@@ -322,7 +318,7 @@ export class AuthService {
     payload: ISignInWithProviderPayload,
     request: Request,
     response: Response
-  ): Promise<ISignInWithProviderResponse> {
+  ): Promise<SignInWithProviderResponseType> {
     const { language } = request
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await this.userService.createUser({

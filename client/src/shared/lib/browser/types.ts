@@ -10,3 +10,8 @@ export interface IImageToBase64Params {
   t: <T>(texts: LocalizedTextType<T>) => T
   maxImageSizeInMb?: number
 }
+
+export interface IConsoleColor {
+  bg: string
+  text: string
+}

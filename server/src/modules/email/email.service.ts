@@ -8,6 +8,7 @@ import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
 
 import { EMAIL_I18N } from './email.i18n'
+import type { ISendEmailCodeEmailPayload, ISendEmailConfirmationEmailPayload } from './email.types'
 import { renderEmailConfirmationHtml } from './render-email-confirmation-html'
 
 let resendClient: Resend | null = null
@@ -43,17 +44,7 @@ export class EmailService {
     return confirmUrl.toString()
   }
 
-  async sendEmailConfirmationEmail({
-    email,
-    language,
-    token,
-    nickname
-  }: {
-    email: string
-    language: AppLanguageType
-    token: string
-    nickname?: string
-  }) {
+  async sendEmailConfirmationEmail({ email, language, token, nickname }: ISendEmailConfirmationEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
     }
@@ -90,17 +81,7 @@ export class EmailService {
     return data
   }
 
-  async sendPasswordRecoveryEmail({
-    email,
-    code,
-    language,
-    nickname
-  }: {
-    email: string
-    code: string
-    language: AppLanguageType
-    nickname?: string
-  }) {
+  async sendPasswordRecoveryEmail({ email, code, language, nickname }: ISendEmailCodeEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
     }
@@ -137,17 +118,7 @@ export class EmailService {
     return data
   }
 
-  async sendChangeEmailCodeEmail({
-    email,
-    code,
-    language,
-    nickname
-  }: {
-    email: string
-    code: string
-    language: AppLanguageType
-    nickname?: string
-  }) {
+  async sendChangeEmailCodeEmail({ email, code, language, nickname }: ISendEmailCodeEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
     }

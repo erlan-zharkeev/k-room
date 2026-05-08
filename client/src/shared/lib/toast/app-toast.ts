@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import { TOAST_PLACEMENT } from 'src/shared/config'
 
-import type { AppToastStackType, IAppToastInput } from './types'
+import type { AppToastStackType, AppToastInputType } from './types'
 
 const { notifications, notify, removeNotification } = useNmorphNotification()
 const toasts = computed(() => notifications.value)
@@ -12,7 +12,7 @@ export const useAppToast = () => {
   return {
     toasts,
 
-    add(message: IAppToastInput, stackType: AppToastStackType = 'system') {
+    add(message: AppToastInputType, stackType: AppToastStackType = 'system') {
       notify({
         ...message,
         placement: message.placement ?? TOAST_PLACEMENT[stackType],

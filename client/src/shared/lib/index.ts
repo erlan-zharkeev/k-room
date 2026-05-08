@@ -40,7 +40,7 @@ export { useAppToast } from './toast/app-toast'
 export type { ClientPlatformType, FileLoaderValueType } from './browser/types'
 export type { ContextRefType, KebabCaseType } from './misc/types'
 export type { I18nTranslateType } from './i18n/i18n.types'
-export type { AppToastStackType, IAppToastInput } from './toast/types'
+export type { AppToastStackType, AppToastInputType } from './toast/types'
 export type {
   DbCallType,
   DbContactType,
@@ -54,7 +54,7 @@ export type {
   IDbMedia,
   IndexableType,
   IUseStateResult,
-  KvItem,
+  KvItemType,
   MutableType,
-  UseResult
+  UseResultType
 } from './db/types'

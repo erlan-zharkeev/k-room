@@ -9,8 +9,6 @@ import {
   isUnknownObject,
   type ISendChangeEmailCodePayload,
   type ISendPasswordRecoveryCodePayload,
-  type ISendChangeEmailCodeResponse,
-  type ISendPasswordRecoveryCodeResponse,
   type IValidateChangeEmailCodePayload,
   type IValidateChangeEmailCodeResponse,
   type IValidatePasswordRecoveryCodeResponse,
@@ -29,6 +27,7 @@ import { UserService } from '../user/user.service'
 import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
 import { VALIDATE_CHANGE_EMAIL_CODE_I18N, VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
 import { CodeModel } from './codes.model'
+import type { ISendChangeEmailCodeResult, ISendPasswordRecoveryCodeResult } from './codes.types'
 
 @Injectable()
 export class CodesService {
@@ -41,7 +40,7 @@ export class CodesService {
   async sendPasswordRecoveryCode(
     payload: ISendPasswordRecoveryCodePayload,
     request: Request
-  ): Promise<ISendPasswordRecoveryCodeResponse & { tooManyRequests: boolean }> {
+  ): Promise<ISendPasswordRecoveryCodeResult> {
     const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
@@ -104,7 +103,7 @@ export class CodesService {
     userId: string,
     payload: ISendChangeEmailCodePayload,
     request: Request
-  ): Promise<ISendChangeEmailCodeResponse & { tooManyRequests: boolean }> {
+  ): Promise<ISendChangeEmailCodeResult> {
     const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
