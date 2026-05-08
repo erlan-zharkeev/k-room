@@ -5,7 +5,6 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useInfoNotification } from 'src/entities/info-notification'
 import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from 'src/shared/config'
 import { useScreen } from 'src/shared/lib'
 
@@ -16,7 +15,6 @@ const props = defineProps<{ footer?: boolean }>()
 const { isPortraitTabletOrLess } = useScreen()
 
 const route = useRoute()
-const { unreadInfoNotificationQuantity } = useInfoNotification()
 const { unreadMessagesQuantity } = useChatRoom()
 
 const selectedSettingsId = computed(() => {
@@ -35,7 +33,7 @@ const selectedSettingsId = computed(() => {
       v-slot="{ navigate, isExactActive }"
     >
       <NmorphBadge
-        :value="getBadgeValue(item.id, unreadInfoNotificationQuantity, unreadMessagesQuantity)"
+        :value="getBadgeValue(item.id, unreadMessagesQuantity)"
         :offset-y="isPortraitTabletOrLess ? 4 : 10"
         size="tiny"
       >

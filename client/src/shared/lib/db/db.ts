@@ -8,7 +8,6 @@ import { CLIENT_ENV } from 'src/shared/config'
 import type {
   DbContactType,
   DbCallType,
-  DbInfoNotificationType,
   DbMessageType,
   DbUserSettingType,
   FChatRoomType,
@@ -397,18 +396,16 @@ export class KRoomDB extends Dexie {
   'chat-rooms'!: Table<FChatRoomType>
   calls!: Table<DbCallType>
   messages!: Table<DbMessageType>
-  'info-notifications'!: Table<DbInfoNotificationType>
 
   constructor() {
     super(CLIENT_ENV.appName.toLocaleLowerCase())
-    this.version(16).stores({
+    this.version(17).stores({
       settings: '__key',
       contacts: '&id',
       media: '&id',
       'chat-rooms': '&id',
       calls: '&id',
-      messages: '&id',
-      'info-notifications': '&id'
+      messages: '&id'
     })
   }
 }

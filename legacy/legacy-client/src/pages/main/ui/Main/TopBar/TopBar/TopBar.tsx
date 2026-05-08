@@ -8,8 +8,6 @@ import { UserProfile, useUser } from 'src/entities/user'
 
 import { WidgetWrapper } from 'src/shared/ui'
 
-import { InfoNotificationButton } from './InfoNotificationButton/InfoNotificationButton'
-
 export const TopBar = ({ children }: { children?: ReactNode }) => {
   const { id } = useUser()
   const avatarPath = useLiveMediaUrl(`avatar.${id}`)
@@ -20,7 +18,6 @@ export const TopBar = ({ children }: { children?: ReactNode }) => {
         <UserProfile avatarPath={avatarPath} />
         <div className="top-bar__action-btns">
           {children}
-          <InfoNotificationButton />
           <LogoutButton />
         </div>
       </div>

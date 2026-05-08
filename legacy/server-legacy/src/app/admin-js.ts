@@ -3,7 +3,6 @@ import type { Router } from 'express'
 
 import { SERVER_ENV } from 'src/shared/config'
 
-import { ADMIN_INFO_NOTIFICATION_OPTIONS } from '../modules/info-notification'
 import { ADMIN_USER_OPTIONS } from '../modules/user'
 
 const ADMIN_JS_CONFIG = {
@@ -14,7 +13,7 @@ const ADMIN_JS_CONFIG = {
     companyName: SERVER_ENV.appName,
     favicon: '/admin-favicon.svg'
   },
-  resources: [ADMIN_INFO_NOTIFICATION_OPTIONS, ADMIN_USER_OPTIONS]
+  resources: [ADMIN_USER_OPTIONS]
 }
 
 const createAdmin = async () => {

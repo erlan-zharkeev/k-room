@@ -831,13 +831,11 @@ This file is used to store implementation plans, follow-up tasks, and temporary 
 13. Fix `removeAllListeners()` in `use-socket-connection-monitor.ts` — replace with targeted `.off()` calls per listener to avoid killing other socket hooks.
 14. Add error handling to all server socket event controllers — wrap async logic in try-catch and call the error handler in catch.
 15. Replace `as` casts with `satisfies` for socket event payloads across the codebase.
-16. Rename client features so names start with a verb (e.g. `monitor-info-notification-update` → `monitor-...` is fine, but non-verb prefixes like `info-notification-actualize` should become `actualize-info-notification`).
-17. Fix `get-initial-info-notification-map.ts` — default param `createdAfter = Date.now()` looks inverted.
-18. Remove commented-out Howl code in `use-make-call.ts` (lines 74, 141, 165, 171, 178, 196).
-19. Wire `unAnsweredCalls` in `CallsButton.tsx` to real state instead of hardcoded `0`.
-20. Validate `language` from socket handshake against `APP_LANGUAGE_VALUES` in `socket-auth-middleware.ts`.
-21. Resolve TODO in `shared/socket/types.ts:74` — replace `IEventUpdateChatRoom` with `IEventCreateRoom`.
-22. Resolve TODO in `image.model.ts` — remove redundant `src` or `name` field.
-23. Distribute payload typings in `shared` across proper layers (e.g. socket event payload types should live next to their domain, not in a flat shared/socket file).
-24. проверить флоу что с чатом если удалить пользака что будет с чатом уже созданным как груповым так и индивидуальным.
-25. что же там с картинками и их кэшем
+16. Remove commented-out Howl code in `use-make-call.ts` (lines 74, 141, 165, 171, 178, 196).
+17. Wire `unAnsweredCalls` in `CallsButton.tsx` to real state instead of hardcoded `0`.
+18. Validate `language` from socket handshake against `APP_LANGUAGE_VALUES` in `socket-auth-middleware.ts`.
+19. Resolve TODO in `shared/socket/types.ts:74` — replace `IEventUpdateChatRoom` with `IEventCreateRoom`.
+20. Resolve TODO in `image.model.ts` — remove redundant `src` or `name` field.
+21. Distribute payload typings in `shared` across proper layers (e.g. socket event payload types should live next to their domain, not in a flat shared/socket file).
+22. проверить флоу что с чатом если удалить пользака что будет с чатом уже созданным как груповым так и индивидуальным.
+23. что же там с картинками и их кэшем

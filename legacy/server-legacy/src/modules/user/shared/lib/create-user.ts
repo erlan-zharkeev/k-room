@@ -1,9 +1,6 @@
 import { ProviderType } from 'common'
 import mongoose from 'mongoose'
 
-import { getInitialInfoNotificationMap } from 'src/modules/info-notification'
-import { createInfoNotificationState } from 'src/modules/info-notification'
-
 import { UserModel } from '../../user.model'
 
 import { isUserExist } from './is-user-exist'
@@ -33,13 +30,6 @@ export const createUser = async ({
     personal: { email },
     system: { role: 'user', password: hashedPassword, provider, device: {} }
   }).save()
-
-  const infoNotifications = await getInitialInfoNotificationMap(user.createdAt?.getTime())
-
-  await createInfoNotificationState({
-    userId: user._id,
-    infoNotifications
-  })
 
   return user
 }

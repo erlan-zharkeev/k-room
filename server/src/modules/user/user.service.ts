@@ -23,10 +23,6 @@ import type { MongoIdType } from 'src/shared/types/mongo'
 
 import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
-import {
-  createInfoNotificationState,
-  getInitialInfoNotificationMap
-} from '../info-notifications/info-notifications.service'
 import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.service'
 
 import type { IContact, IUserExistState, IUserSchema } from './types'
@@ -196,13 +192,6 @@ export const createUser = async ({
       confirmAttempts: 3
     }
   }).save()
-
-  const infoNotifications = await getInitialInfoNotificationMap(user.createdAt?.getTime())
-
-  await createInfoNotificationState({
-    userId: user._id,
-    infoNotifications
-  })
 
   return user
 }

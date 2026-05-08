@@ -67,7 +67,6 @@ export type { IClientEnv } from './client-env.types'
 export type {
   DbCallType,
   DbContactType,
-  DbInfoNotificationType,
   DbMediaStatusType,
   DbMessageType,
   DbUserDataType,

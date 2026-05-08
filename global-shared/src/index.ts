@@ -36,15 +36,6 @@ export type { RouteNameType, EndpointsType } from './endpoints/types'
 
 export type { IEnvVariables, IEnvSharedVariables } from './env/types'
 
-export { INFO_NOTIFICATION_STATUS, WELCOME_INFO_NOTIFICATION_ID } from './info-notification/constants'
-export type {
-  InfoNotificationStatusType,
-  IInfoNotification,
-  InfoNotificationMapType,
-  IUserInfoNotification,
-  IMarkInfoNotificationAsReadPayload
-} from './info-notification/types'
-
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/constants'
 export { defineI18n } from './language/lib/define-i18n'
 export type { AppLanguageType, LocalizedTextType, LocalizedTextMapType } from './language/types'
@@ -131,7 +122,6 @@ export type {
   IEventStatusContact,
   EventChangeContactsDataType,
   EventGetContactsType,
-  EventGetInfoNotificationsType,
   EventCallUpdatedType,
   EventCallsUpdatedType,
   IEventSaveContact,
@@ -166,8 +156,6 @@ export type {
   IEventDeleteContactSuccess,
   IEventAuthError,
   IEventUpdateLanguage,
-  IEventInfoNotificationStatusUpdated,
-  EventInfoNotificationReceivedType,
   SocketActionsType
 } from './socket/types'
 

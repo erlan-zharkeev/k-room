@@ -109,10 +109,6 @@ const routes: RouteRecordRaw[] = [
         components: { content: MainWorkspacePage }
       },
       {
-        path: 'info-notifications',
-        components: { content: MainWorkspacePage }
-      },
-      {
         path: 'settings',
         redirect: `${APP_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
       },

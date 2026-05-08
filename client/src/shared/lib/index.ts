@@ -44,7 +44,6 @@ export type { AppToastStackType, IAppToastInput } from './toast/types'
 export type {
   DbCallType,
   DbContactType,
-  DbInfoNotificationType,
   DbMediaStatusType,
   DbMessageType,
   DbTransactionModeType,

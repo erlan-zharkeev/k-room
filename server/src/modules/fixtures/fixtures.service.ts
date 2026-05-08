@@ -6,7 +6,6 @@ import { type AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'global-s
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
-import { loadInfoNotificationFixtures } from 'src/modules/info-notifications/info-notifications.service'
 import { uploadBufferToBucket } from 'src/modules/media/media.service'
 import { MessageModel } from 'src/modules/messages/messages.model'
 import {
@@ -285,7 +284,6 @@ const loadDialogFixtures = async () => {
 }
 
 export const loadFixtures = async () => {
-  await loadInfoNotificationFixtures()
   await loadUserFixtures(DEFAULT_APP_LANGUAGE)
   await loadDialogFixtures()
 }
