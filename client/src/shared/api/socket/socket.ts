@@ -1,6 +1,8 @@
 import { io, type Socket } from 'socket.io-client'
 
-import { CLIENT_ENV, SOCKET_MAX_RECONNECTION_DELAY_MS, SOCKET_RECONNECTION_DELAY_MS } from 'src/shared/config'
+import { CLIENT_ENV } from 'src/shared/config'
+
+import { SOCKET_MAX_RECONNECTION_DELAY_MS, SOCKET_RECONNECTION_DELAY_MS } from './constants'
 
 export const socket: Socket = io(`${CLIENT_ENV.socketBaseUrl}/`, {
   transports: ['websocket'],

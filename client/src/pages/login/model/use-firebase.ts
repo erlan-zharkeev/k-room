@@ -5,19 +5,20 @@ import {
   type ISignInWithProviderPayload,
   type ISignInWithProviderResponse
 } from 'global-shared'
+import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
 import { useUserSession } from 'src/entities/user'
-import { ERROR_TOAST_LIFE_MS, useApi } from 'src/shared/api'
+import { ERROR_TOAST_LIFE_MS, useHttp } from 'src/shared/api'
 import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
-import { currentLanguage, generateUUIDv4, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/toast'
+import { currentLanguage, useI18n } from 'src/shared/lib'
+import { useAppToast } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
 
 export const useFirebase = () => {
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { activateUserSession } = useUserSession()
   const { t } = useI18n()
   const toast = useAppToast()
@@ -54,7 +55,7 @@ export const useFirebase = () => {
       if (!haveFullData) return null
 
       return {
-        nickname: generateUUIDv4().replace(/-/g, ''),
+        nickname: uuidv4().replace(/-/g, ''),
         email,
         avatar: photoURL ?? undefined,
         provider: normalizedProvider
@@ -74,7 +75,7 @@ export const useFirebase = () => {
   }
 
   const signInWithCredential = async (credential: ISignInWithProviderPayload) => {
-    const response = await doRequest<ISignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
+    const response = await doHttpRequest<ISignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
     const { payload } = response.data
 
     await activateUserSession(payload)

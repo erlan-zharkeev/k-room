@@ -1,8 +1,8 @@
 export { ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS } from 'src/shared/config'
-export { createApiError, getHandledErrorMessage, isApiError, isHandledError } from './http/create-api-error'
+export { createHttpError, getHandledErrorMessage, isHttpError, isHandledError } from './http/create-http-error'
 export { getHeaderValue } from './http/get-header-value'
-export { useApi } from './http/use-api'
-export { useApiInterceptor } from './http/use-api-interceptor'
+export { useHttp } from './http/use-http'
+export { useHttpInterceptor } from './http/use-http-interceptor'
 export { useProtectedActionCaptcha } from './http/use-protected-action-captcha'
 export { socket } from './socket/socket'
 export { socketStatus } from './socket/socket-status'
@@ -10,10 +10,10 @@ export { useSocketConnect } from './socket/use-socket-connect'
 export { useSocketConnectionMonitor } from './socket/use-socket-connection-monitor'
 export { useSocketReconnect } from './socket/use-socket-reconnect'
 export type {
-  ApiErrorType,
-  DoRequestType,
-  ICreateApiErrorPayload,
-  IDoRequestOptions,
-  RequestPayloadType,
-  RequestType
+  HttpErrorType,
+  DoHttpRequestType,
+  ICreateHttpErrorPayload,
+  IHttpRequestOptions,
+  HttpRequestPayloadType,
+  HttpRequestType
 } from './http/types'

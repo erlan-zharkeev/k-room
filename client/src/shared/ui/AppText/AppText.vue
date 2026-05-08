@@ -1,25 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
-import { createClassNameWithModifiers } from 'src/shared/lib'
-
-import { APP_TEXT_COLOR_MODIFIERS, APP_TEXT_DEFAULT_PROPS } from './constants'
+import { APP_TEXT_DEFAULT_PROPS } from './constants'
 import type { IAppTextProps } from './types'
+import { useAppText } from './use-app-text.model'
 
 const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
-
-const className = computed(() =>
-  createClassNameWithModifiers({
-    rootClass: 'app-text',
-    modifiers: [
-      APP_TEXT_COLOR_MODIFIERS[props.color],
-      props.align,
-      props.bold && 'bold',
-      props.truncate && 'truncate',
-      props.noLineHeight && 'no-line-height'
-    ]
-  })
-)
+const { className } = useAppText(props)
 </script>
 
 <template>

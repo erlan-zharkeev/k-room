@@ -1,7 +1,7 @@
 import type { LocalizedTextType } from 'global-shared'
 
 import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/shared/config'
-import type { ClientPlatformType } from 'src/shared/model'
+import type { ClientPlatformType } from 'src/shared/lib'
 
 export type SettingsNotificationOptionIdType = 'enabled' | NotificationSettingKeyType
 

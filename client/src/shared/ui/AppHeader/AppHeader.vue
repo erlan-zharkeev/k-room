@@ -1,24 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
-import { createClassNameWithModifiers } from 'src/shared/lib'
-
-import { APP_HEADER_COLOR_MODIFIERS, APP_HEADER_DEFAULT_PROPS } from './constants'
+import { APP_HEADER_DEFAULT_PROPS } from './constants'
 import type { IAppHeaderProps } from './types'
+import { useAppHeader } from './use-app-header.model'
 
 const props = withDefaults(defineProps<IAppHeaderProps>(), APP_HEADER_DEFAULT_PROPS)
-const color = computed(() => props.color ?? (props.accent ? 'accent' : undefined))
-
-const className = computed(() =>
-  createClassNameWithModifiers({
-    rootClass: 'app-header',
-    modifiers: [
-      color.value && APP_HEADER_COLOR_MODIFIERS[color.value],
-      props.bold && 'bold',
-      props.truncate && 'truncate'
-    ]
-  })
-)
+const { className } = useAppHeader(props)
 </script>
 
 <template>

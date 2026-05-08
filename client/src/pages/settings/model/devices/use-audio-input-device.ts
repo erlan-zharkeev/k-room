@@ -5,7 +5,7 @@ import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/toast'
+import { useAppToast } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import type { DevicePermissionStatus } from '../../config/types/devices.types'

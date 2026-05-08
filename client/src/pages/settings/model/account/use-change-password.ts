@@ -2,11 +2,11 @@ import { createPasswordSchema, createValidationMessages, USER_ENDPOINTS } from '
 import * as v from 'valibot'
 import { computed, reactive, ref } from 'vue'
 
-import { useApi } from 'src/shared/api'
+import { useHttp } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 export const useChangePassword = () => {
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { t } = useI18n()
   const isPasswordChanging = ref(false)
   const passwordSchema = createPasswordSchema(createValidationMessages(t))
@@ -40,7 +40,7 @@ export const useChangePassword = () => {
 
     try {
       isPasswordChanging.value = true
-      await doRequest<null>('patch', USER_ENDPOINTS.changePassword, {
+      await doHttpRequest<null>('patch', USER_ENDPOINTS.changePassword, {
         currentPassword: formData.currentPassword.value,
         password: formData.nextPassword.value
       })

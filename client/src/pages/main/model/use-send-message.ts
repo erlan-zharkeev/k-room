@@ -1,10 +1,10 @@
 import type { IEventSendMessage, IMessage, SocketActionsType } from 'global-shared'
+import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
-import { generateUUIDv4 } from 'src/shared/lib'
 
 import { useMessage } from './use-message'
 
@@ -20,7 +20,7 @@ export const useSendMessage = () => {
     if (!body || !user.value.id) return
 
     const message: IMessage = {
-      id: generateUUIDv4(),
+      id: uuidv4(),
       authorId: user.value.id,
       authorNickname: user.value.nickname,
       body,

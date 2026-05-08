@@ -1,33 +1,33 @@
 import type { AxiosResponse, Method, ResponseType } from 'axios'
 import type { EndpointsType, IBackendResponse, ReqStatusType } from 'global-shared'
 
-export type RequestType = Method
+export type HttpRequestType = Method
 
-export type RequestPayloadType = object | FormData | URLSearchParams | string | null | undefined
+export type HttpRequestPayloadType = object | FormData | URLSearchParams | string | null | undefined
 
-export interface IDoRequestOptions<R extends ResponseType = ResponseType> {
+export interface IHttpRequestOptions<R extends ResponseType = ResponseType> {
   contentType?: string
   responseType?: R
 }
 
-export interface ICreateApiErrorPayload {
+export interface ICreateHttpErrorPayload {
   message: string
   status?: ReqStatusType
   silent?: boolean
   payload?: IBackendResponse<unknown> | null
 }
 
-export type ApiErrorType = Error & {
-  type: 'api-error'
+export type HttpErrorType = Error & {
+  type: 'http-error'
   message: string
   status?: ReqStatusType
   silent: boolean
   payload: IBackendResponse<unknown> | null
 }
 
-export type DoRequestType = <T = unknown, R extends ResponseType = 'json'>(
-  type: RequestType,
+export type DoHttpRequestType = <T = unknown, R extends ResponseType = 'json'>(
+  type: HttpRequestType,
   endpoint: EndpointsType,
-  data?: RequestPayloadType,
-  opts?: IDoRequestOptions<R>
+  data?: HttpRequestPayloadType,
+  opts?: IHttpRequestOptions<R>
 ) => Promise<R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>>

@@ -1,7 +1,7 @@
 import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { APP_TOAST_PLACEMENT } from 'src/shared/config'
+import { TOAST_PLACEMENT } from 'src/shared/config'
 
 import type { AppToastStackType, IAppToastInput } from './types'
 
@@ -15,7 +15,7 @@ export const useAppToast = () => {
     add(message: IAppToastInput, stackType: AppToastStackType = 'system') {
       notify({
         ...message,
-        placement: message.placement ?? APP_TOAST_PLACEMENT[stackType],
+        placement: message.placement ?? TOAST_PLACEMENT[stackType],
         type: message.type ?? 'info'
       })
     },

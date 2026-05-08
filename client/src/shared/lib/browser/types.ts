@@ -1,4 +1,8 @@
-import type { LocalizedTextType } from 'global-shared'
+import type { LocalizedTextType, MediaFileValueType } from 'global-shared'
+
+export type ClientPlatformType = 'browser' | 'native'
+
+export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[] | string | null
 
 export interface IImageToBase64Params {
   image: File

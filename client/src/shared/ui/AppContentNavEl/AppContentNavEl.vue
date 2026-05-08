@@ -2,27 +2,21 @@
 import { NmorphIcon, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
 import { RouterLink } from 'vue-router'
 
-import { useScreen } from 'src/shared/lib'
-
 import { AppHeader } from '../AppHeader'
 import { AppText } from '../AppText'
 
 import type { IAppContentNavElProps } from './types'
+import { useAppContentNavEl } from './use-app-content-nav-el.model'
 
 const props = defineProps<IAppContentNavElProps>()
-const { isPortraitTabletOrLess } = useScreen()
+const { buttonClass, rootClass, showIcon } = useAppContentNavEl(props)
 </script>
 
 <template>
-  <div
-    :class="[
-      'app-content-nav-el',
-      props.active && !isPortraitTabletOrLess ? 'nmorph--shadow-inset' : 'nmorph--shadow-outset'
-    ]"
-  >
+  <div :class="rootClass">
     <RouterLink
       :to="props.to"
-      :class="['app-content-nav-el-btn', { 'app-content-nav-el-btn--active': props.active }]"
+      :class="buttonClass"
       :aria-current="props.active ? 'page' : undefined"
       :aria-label="props.ariaLabel"
     >
@@ -30,7 +24,7 @@ const { isPortraitTabletOrLess } = useScreen()
         <AppHeader tag="h5" truncate :text="props.label" />
         <AppText tag="small" truncate color="semi-contrast-text" :text="props.description" />
       </div>
-      <div v-if="!isPortraitTabletOrLess" class="app-content-nav-el__icon">
+      <div v-if="showIcon" class="app-content-nav-el__icon">
         <NmorphIcon>
           <NmorphIconArrowRight v-if="props.active" />
           <NmorphIconArrowDown v-else />

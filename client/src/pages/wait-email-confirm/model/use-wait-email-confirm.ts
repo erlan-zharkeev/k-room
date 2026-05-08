@@ -8,7 +8,7 @@ import {
 import { onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useApi, useProtectedActionCaptcha } from 'src/shared/api'
+import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
 import { buildPathWithParams, getNextRequestIntervalSeconds } from 'src/shared/lib'
 
 import { WAIT_EMAIL_CONFIRM_COUNTER_TICK_MS } from '../config/constants'
@@ -19,7 +19,7 @@ const getCounterValue = (nextRequestTimestampMs: number) =>
 export const useWaitEmailConfirm = () => {
   const route = useRoute()
   const router = useRouter()
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const email = ref('')
   const attempts = ref(0)
   const counterValue = ref(0)
@@ -60,7 +60,7 @@ export const useWaitEmailConfirm = () => {
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doRequest<ISendConfirmationLinkResponse>(
+      const response = await doHttpRequest<ISendConfirmationLinkResponse>(
         'post',
         AUTH_ENDPOINTS.sendEmailConfirmationLink,
         requestPayload

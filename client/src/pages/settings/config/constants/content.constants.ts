@@ -1,4 +1,4 @@
-import { MAIN_PAGE_ROUTES } from 'src/shared/config'
+import { APP_PAGE_ROUTES } from 'src/shared/config'
 
 import SettingsAccountContent from '../../ui/content/account/SettingsAccountContent.vue'
 import SettingsAppearanceContent from '../../ui/content/appearance/SettingsAppearanceContent.vue'
@@ -25,7 +25,7 @@ export const SETTINGS_CONTENT_IDS = [
 
 export const DEFAULT_SETTINGS_CONTENT_ID = SETTINGS_CONTENT_IDS[0]
 
-export const getSettingsPath = (settingsId: string) => `${MAIN_PAGE_ROUTES.settings}/${settingsId}`
+export const getSettingsPath = (settingsId: string) => `${APP_PAGE_ROUTES.settings}/${settingsId}`
 
 export const SETTINGS_NAVIGATION_ITEMS = [
   {

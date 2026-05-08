@@ -6,7 +6,7 @@ import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vu
 import { useSettings } from 'src/entities/setting'
 import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/toast'
+import { useAppToast } from 'src/shared/lib'
 
 import {
   SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS,

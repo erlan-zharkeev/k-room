@@ -1,4 +1,4 @@
-import type { IIoDevicesSettings, IUserNotificationSettings } from 'src/shared/model'
+import type { IIoDevicesSettings, IUserNotificationSettings } from './setting.types'
 
 export const DEFAULT_NOTIFICATION_GROUP_SETTINGS = {
   toast: true,

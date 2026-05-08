@@ -1,25 +1,25 @@
 import { MEDIA_ENDPOINTS, REQ_STATUS, type EndpointsType } from 'global-shared'
 
-import { isApiError, useApi } from 'src/shared/api'
+import { isHttpError, useHttp } from 'src/shared/api'
 
 import { transformHeadersToMediaData } from '../lib/transform-headers-to-media-data'
 
 import { useMedia } from './use-media'
 
 export const useLoadMedia = () => {
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { put } = useMedia()
 
   const getMediaEndpoint = (filename: string) => `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType
 
   const loadMediaHeaders = async (filename: string) => {
-    const response = await doRequest('head', getMediaEndpoint(filename))
+    const response = await doHttpRequest('head', getMediaEndpoint(filename))
 
     return transformHeadersToMediaData(response)
   }
 
   const requestMedia = (filename: string) => {
-    return doRequest<never, 'blob'>('get', getMediaEndpoint(filename), undefined, {
+    return doHttpRequest<never, 'blob'>('get', getMediaEndpoint(filename), undefined, {
       responseType: 'blob'
     })
   }
@@ -31,7 +31,7 @@ export const useLoadMedia = () => {
 
       await put({ id: filename, blob: response.data, ...mediaData })
     } catch (error) {
-      if (isApiError(error) && error.status === REQ_STATUS.notFound) {
+      if (isHttpError(error) && error.status === REQ_STATUS.notFound) {
         await put({
           id: filename,
           lastChecked: Date.now(),

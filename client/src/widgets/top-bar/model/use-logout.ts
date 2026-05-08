@@ -7,13 +7,13 @@ import { useContact } from 'src/entities/contact'
 import { useInfoNotification } from 'src/entities/info-notification'
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
-import { useApi, socket } from 'src/shared/api'
+import { useHttp, socket } from 'src/shared/api'
 import { LOCAL_STORAGE_KEY } from 'src/shared/config'
 import { clearCookie } from 'src/shared/lib'
 
 export const useLogout = () => {
   const router = useRouter()
-  const { doRequest } = useApi()
+  const { doHttpRequest } = useHttp()
   const { reset: resetChatRoom } = useChatRoom()
   const { reset: resetContact } = useContact()
   const { reset: resetInfoNotification } = useInfoNotification()
@@ -28,7 +28,7 @@ export const useLogout = () => {
     isLogoutLoading.value = true
 
     try {
-      await doRequest('post', AUTH_ENDPOINTS.logout)
+      await doHttpRequest('post', AUTH_ENDPOINTS.logout)
       localStorage.removeItem(LOCAL_STORAGE_KEY.LogoutStatus)
     } catch {
       localStorage.setItem(LOCAL_STORAGE_KEY.LogoutStatus, 'failed')

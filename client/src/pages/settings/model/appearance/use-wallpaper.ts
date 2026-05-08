@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { TOAST_I18N } from 'src/shared/config'
 import { getDataUrlMimeType, isEmptyFileWithName, readFileAsDataUrl, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib/toast'
+import { useAppToast } from 'src/shared/lib'
 
 import { SETTINGS_WALLPAPER_MAX_FILE_SIZE } from '../../config/constants/wallpaper.constants'
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../config/i18n/appearance.i18n'

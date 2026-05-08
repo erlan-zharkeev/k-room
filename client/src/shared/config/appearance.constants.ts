@@ -1,4 +1,5 @@
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
+
 import type {
   EffectiveThemeType,
   IColorSchema,
@@ -6,7 +7,7 @@ import type {
   IThemeShadowSettings,
   IWallpaperSettings,
   SystemTheme
-} from 'src/shared/model'
+} from './appearance.types'
 
 const ACCENT_COLOR = '#418fde'
 const SHARED_THEME_COLORS = {

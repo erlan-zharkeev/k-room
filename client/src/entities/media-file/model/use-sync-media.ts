@@ -1,4 +1,4 @@
-import { isApiError } from 'src/shared/api'
+import { isHttpError } from 'src/shared/api'
 
 import { enqueueMediaSync } from '../lib/media-sync-queue'
 import { syncMedia } from '../lib/sync-media'
@@ -23,7 +23,7 @@ export const useSyncMedia = () => {
           })
         )
       } catch (error) {
-        if (isApiError(error)) return
+        if (isHttpError(error)) return
 
         console.error(error)
       }
