@@ -2,13 +2,11 @@ import { formatNickname } from 'global-shared'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import { pinia } from 'src/shared/lib'
-
 import type { User } from './types'
 import { useUserStore } from './user.store'
 
 export const useUser = () => {
-  const userStore = useUserStore(pinia)
+  const userStore = useUserStore()
   const { user } = storeToRefs(userStore)
   const isAuthorized = computed(() => Boolean(user.value.id))
 

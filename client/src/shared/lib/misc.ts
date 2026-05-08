@@ -1,3 +1,5 @@
+import { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
+
 import type { IFormFieldValidationState } from './types'
 
 export const buildPathWithParams = <T extends object>(basePath: string, params: T) => {
@@ -18,3 +20,14 @@ export const getRandomNumber = (min: number, max: number): number => Math.floor(
 
 export const isFormFieldInvalid = (field?: IFormFieldValidationState) =>
   Boolean(field?.invalid && (field.dirty || field.touched))
+
+export const getNmorphGeneratedColorSchema = (
+  mainColor: string,
+  getDynamicColorVariables: INmorphThemeInstance['getDynamicColorVariables']
+) => {
+  const variables = getDynamicColorVariables(mainColor) ?? []
+  const darkShade = variables.find(({ name }) => name === '--nmorph-dark-shade-color')?.color
+  const lightShade = variables.find(({ name }) => name === '--nmorph-light-shade-color')?.color
+
+  return darkShade && lightShade ? { darkShade, lightShade } : {}
+}

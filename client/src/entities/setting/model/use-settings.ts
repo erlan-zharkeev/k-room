@@ -1,3 +1,4 @@
+import type { AppLanguageType } from 'global-shared'
 import { computed } from 'vue'
 
 import type { DbUserSettingType } from 'src/shared/config'
@@ -8,7 +9,7 @@ import { DEFAULT_SETTINGS } from '../config/constants'
 const settingsStore = dexieKeyValueStore<DbUserSettingType>(db.settings, 'settings')
 
 export const useSettings = () => {
-  const { ensure, mutate, reset, setByPath, shallowUpdate } = settingsStore
+  const { ensure, get, mutate, reset, setByPath, shallowUpdate } = settingsStore
   const settings = settingsStore.use(DEFAULT_SETTINGS)
   const isSelectedThemeCustom = computed(() => settings.value.appearance.selectedTheme === 'custom')
   const isSelectedThemeSystem = computed(() => settings.value.appearance.selectedTheme === 'system')
@@ -17,14 +18,24 @@ export const useSettings = () => {
     return themes[selectedTheme === 'system' ? systemTheme : selectedTheme]
   })
 
+  const initialize = async () => {
+    await ensure(DEFAULT_SETTINGS)
+    await get()
+  }
+
+  const setClientLanguage = async (language: AppLanguageType) => {
+    await shallowUpdate({ language })
+  }
+
   return {
     settings,
     isSelectedThemeCustom,
     isSelectedThemeSystem,
     effectiveTheme,
-    initialize: () => ensure(DEFAULT_SETTINGS),
+    initialize,
     mutate,
     reset: () => reset(DEFAULT_SETTINGS),
+    setClientLanguage,
     shallowUpdate,
     setByPath
   }

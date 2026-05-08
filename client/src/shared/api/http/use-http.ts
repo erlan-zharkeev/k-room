@@ -1,15 +1,8 @@
 import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type ResponseType } from 'axios'
-import {
-  APP_LANGUAGE_HEADER,
-  AUTH_ENDPOINTS,
-  DEFAULT_APP_LANGUAGE,
-  REQ_STATUS,
-  type EndpointsType,
-  type IBackendResponse
-} from 'global-shared'
+import { AUTH_ENDPOINTS, REQ_STATUS, type EndpointsType, type IBackendResponse } from 'global-shared'
 
 import { CLIENT_ENV, ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
-import { currentLanguage, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import { HTTP_SUCCESS_STATUS_END, HTTP_SUCCESS_STATUS_START } from './constants'
@@ -57,8 +50,7 @@ export const useHttp = () => {
       method: type,
       url: `${CLIENT_ENV.apiBaseUrl}${endpoint}`,
       headers: {
-        'Content-Type': contentType,
-        [APP_LANGUAGE_HEADER]: currentLanguage.value ?? DEFAULT_APP_LANGUAGE
+        'Content-Type': contentType
       },
       responseType,
       ...(type === 'get' ? { params: data } : { data })
@@ -87,8 +79,7 @@ export const useHttp = () => {
             method: 'post',
             url: `${CLIENT_ENV.apiBaseUrl}${AUTH_ENDPOINTS.updateTokensPair}`,
             headers: {
-              'Content-Type': 'application/json',
-              [APP_LANGUAGE_HEADER]: currentLanguage.value ?? DEFAULT_APP_LANGUAGE
+              'Content-Type': 'application/json'
             },
             responseType: 'json'
           })
