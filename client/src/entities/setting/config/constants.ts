@@ -1,18 +1,18 @@
-import type { IUserSetting } from 'src/shared/config'
-import { CLIENT_LANGUAGE } from 'src/shared/config'
-import { DEFAULT_IO_DEVICES_SETTINGS } from 'src/shared/config'
-import { DEFAULT_NOTIFICATION_SETTINGS } from 'src/shared/config'
-import { DEFAULT_APPEARANCE } from 'src/shared/config'
+import {
+  DEFAULT_APPEARANCE,
+  DEFAULT_IO_DEVICES_SETTINGS,
+  DEFAULT_LOCALIZATION_SETTINGS,
+  DEFAULT_NOTIFICATION_SETTINGS,
+  type IUserSetting
+} from 'src/shared/config'
 
 export const DEFAULT_SETTINGS: IUserSetting = {
-  selectedContentTab: 'contacts',
-  selectedChatRoomId: '',
+  contentTab: 'contacts',
+  chatRoomId: '',
   messageScrollByRoom: {},
-  language: CLIENT_LANGUAGE,
+  localization: DEFAULT_LOCALIZATION_SETTINGS,
   appearance: DEFAULT_APPEARANCE,
 
-  showTooltips: false,
-  sound: 'income-message',
   notifications: DEFAULT_NOTIFICATION_SETTINGS,
 
   ioDevices: DEFAULT_IO_DEVICES_SETTINGS,

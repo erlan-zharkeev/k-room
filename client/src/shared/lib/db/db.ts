@@ -401,7 +401,7 @@ export class KRoomDB extends Dexie {
 
   constructor() {
     super(CLIENT_ENV.appName.toLocaleLowerCase())
-    this.version(11).stores({
+    this.version(16).stores({
       settings: '__key',
       contacts: '&id',
       media: '&id',

@@ -1,5 +1,6 @@
 export {
   formatLocalizedDate,
+  formatLocalizedDateTime,
   formatLocalizedRelativeTime,
   formatLocalizedTime,
   getNextRequestIntervalSeconds

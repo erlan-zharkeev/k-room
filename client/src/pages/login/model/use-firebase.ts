@@ -35,7 +35,7 @@ export const useFirebase = () => {
     const currentProvider = new Provider()
     const auth = getAuth()
 
-    auth.languageCode = settings.value.language
+    auth.languageCode = settings.value.localization.language
 
     const result = await signInWithPopup(auth, currentProvider)
     const { displayName, email, photoURL, uid } = result.user
