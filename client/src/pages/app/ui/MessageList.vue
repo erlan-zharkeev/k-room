@@ -11,7 +11,7 @@ import { type DbMessageType } from 'src/shared/lib'
 import { AppEmojiPicker, AppText } from 'src/shared/ui'
 
 import {
-  MAIN_PAGE_MESSAGE_ACTIONS,
+  APP_PAGE_MESSAGE_ACTIONS,
   MESSAGE_CONTEXT_MENU_HEIGHT_PX,
   MESSAGE_CONTEXT_MENU_VIEWPORT_MARGIN_PX,
   MESSAGE_CONTEXT_MENU_WIDTH_PX,
@@ -20,7 +20,7 @@ import {
   MESSAGE_VIRTUAL_ITEM_ESTIMATED_SIZE_PX,
   MESSAGE_VIRTUAL_LIST_OVERSCAN
 } from '../config/constants'
-import { MAIN_PAGE_I18N } from '../config/i18n'
+import { APP_PAGE_I18N } from '../config/i18n'
 import { useMessageReadObserver } from '../model/use-message-read-observer.model'
 import { useMessageScrollState } from '../model/use-message-scroll-state.model'
 import { useMessage } from '../model/use-message.model'
@@ -138,7 +138,7 @@ const addReaction = async (glyphKey: string) => {
   closeMessageMenu()
 }
 
-const handleMessageAction = (actionId: (typeof MAIN_PAGE_MESSAGE_ACTIONS)[number]['id']) => {
+const handleMessageAction = (actionId: (typeof APP_PAGE_MESSAGE_ACTIONS)[number]['id']) => {
   const message = selectedMessage.value
 
   if (!message) return
@@ -296,7 +296,7 @@ onBeforeUnmount(() => {
       v-if="hasMoreMessages"
       class="message-list__load-more"
       :disabled="isLoading"
-      :text="$t(MAIN_PAGE_I18N.loadMore)"
+      :text="$t(APP_PAGE_I18N.loadMore)"
       style-type="transparent"
       @click="loadPreviousMessages"
     />
@@ -341,13 +341,13 @@ onBeforeUnmount(() => {
       </template>
     </div>
 
-    <AppText v-else class="message-list__empty" tag="p" :text="$t(MAIN_PAGE_I18N.noMessages)" />
+    <AppText v-else class="message-list__empty" tag="p" :text="$t(APP_PAGE_I18N.noMessages)" />
 
     <div
       v-if="selectedMessage"
       ref="messageMenuElement"
       class="message-list__context-menu"
-      :aria-label="$t(MAIN_PAGE_I18N.messageActions)"
+      :aria-label="$t(APP_PAGE_I18N.messageActions)"
       role="menu"
       :style="{ left: `${messageMenuPosition.x}px`, top: `${messageMenuPosition.y}px` }"
       @click.stop
@@ -355,12 +355,12 @@ onBeforeUnmount(() => {
     >
       <AppEmojiPicker
         class="message-list__context-picker"
-        :expand-label="$t(MAIN_PAGE_I18N.expandEmojiPicker)"
+        :expand-label="$t(APP_PAGE_I18N.expandEmojiPicker)"
         :language="settings.localization.language"
         @select="addReaction"
       />
       <NmorphButton
-        v-for="action in MAIN_PAGE_MESSAGE_ACTIONS"
+        v-for="action in APP_PAGE_MESSAGE_ACTIONS"
         :key="action.id"
         class="message-list__context-action"
         :color="action.id === 'delete' ? 'var(--nmorph-error-text-color)' : undefined"

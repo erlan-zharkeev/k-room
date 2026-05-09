@@ -4,7 +4,7 @@ import { computed, watch } from 'vue'
 import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-router'
 
 import { useSettings } from 'src/entities/setting'
-import { useMainMonitors } from 'src/pages/main'
+import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
 import { MobileFooter } from 'src/widgets/mobile-footer'
@@ -20,16 +20,16 @@ const { effectiveTheme, settings } = useSettings()
 const route = useRoute()
 const router = useRouter()
 
-useMainMonitors()
+useAppMonitors()
 
-const isSupportedTabletMainLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
+const isSupportedTabletAppLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
   isString(view) && ['content', 'content-navigation'].includes(view)
 
 watch(
   isPortraitTabletOrLess,
   (tablet) => {
     if (tablet) {
-      if (isSupportedTabletMainLayoutView(route.query.view)) return
+      if (isSupportedTabletAppLayoutView(route.query.view)) return
 
       router.replace({ query: { ...route.query, view: 'content-navigation' } })
       return
@@ -64,27 +64,27 @@ const contentTitleKey = computed(() => {
 
 const wallpaperStyle = computed(() => {
   return {
-    '--main-layout-wallpaper': `url(${effectiveTheme.value.wallpaper.url})`,
-    '--main-layout-wallpaper-transform': `translate(-50%, -50%)rotate(${
+    '--app-layout-wallpaper': `url(${effectiveTheme.value.wallpaper.url})`,
+    '--app-layout-wallpaper-transform': `translate(-50%, -50%)rotate(${
       effectiveTheme.value.wallpaper.angle
     }deg) scale(${effectiveTheme.value.wallpaper.scale / 100})`,
-    '--main-layout-wallpaper-brightness': `brightness(${100 - effectiveTheme.value.wallpaper.darkness}%)`
+    '--app-layout-wallpaper-brightness': `brightness(${100 - effectiveTheme.value.wallpaper.darkness}%)`
   }
 })
 </script>
 
 <template>
-  <main class="main-layout" :class="{ 'main-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
+  <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
     <LeftBar v-if="!isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
-    <section class="main-layout__workspace">
+    <section class="app-layout__workspace">
       <TopBar class="widget nmorph--shadow-outset" />
-      <div class="main-layout__content">
-        <div v-if="showNavigation" class="main-layout__navigation-widget widget nmorph--shadow-outset">
+      <div class="app-layout__content">
+        <div v-if="showNavigation" class="app-layout__navigation-widget widget nmorph--shadow-outset">
           <ContentNavigationLayout :title-key="navigationTitleKey">
             <RouterView name="content-navigation" />
           </ContentNavigationLayout>
         </div>
-        <div v-if="showContent" class="main-layout__content-widget widget nmorph--shadow-outset">
+        <div v-if="showContent" class="app-layout__content-widget widget nmorph--shadow-outset">
           <ContentLayout :title-key="contentTitleKey">
             <RouterView name="content" />
           </ContentLayout>
@@ -96,7 +96,7 @@ const wallpaperStyle = computed(() => {
 </template>
 
 <style lang="scss">
-.main-layout {
+.app-layout {
   --bar-thickness: 64px;
 
   display: grid;
@@ -111,7 +111,7 @@ const wallpaperStyle = computed(() => {
   }
 }
 
-.main-layout__workspace {
+.app-layout__workspace {
   display: grid;
   grid-template-rows: var(--bar-thickness) minmax(0, 1fr);
   gap: 12px;
@@ -122,7 +122,7 @@ const wallpaperStyle = computed(() => {
   }
 }
 
-.main-layout__content {
+.app-layout__content {
   display: grid;
   grid-template-columns: 1fr 2.5fr;
   gap: 12px;
@@ -135,8 +135,8 @@ const wallpaperStyle = computed(() => {
   }
 }
 
-.main-layout__navigation-widget,
-.main-layout__content-widget {
+.app-layout__navigation-widget,
+.app-layout__content-widget {
   min-width: 0;
   min-height: 0;
 }
@@ -157,20 +157,20 @@ const wallpaperStyle = computed(() => {
   top: 50%;
   left: 50%;
   transform-origin: center;
-  transform: var(--main-layout-wallpaper-transform, translate(-50%, -50%));
+  transform: var(--app-layout-wallpaper-transform, translate(-50%, -50%));
 
   display: none;
 
-  width: var(--main-layout-wallpaper-width, 240vmax);
-  height: var(--main-layout-wallpaper-height, 240vmax);
+  width: var(--app-layout-wallpaper-width, 240vmax);
+  height: var(--app-layout-wallpaper-height, 240vmax);
 
   opacity: 0.7;
-  background-image: var(--main-layout-wallpaper);
-  background-size: var(--main-layout-wallpaper-size, 280px auto);
-  filter: var(--main-layout-wallpaper-brightness, brightness(100%));
+  background-image: var(--app-layout-wallpaper);
+  background-size: var(--app-layout-wallpaper-size, 280px auto);
+  filter: var(--app-layout-wallpaper-brightness, brightness(100%));
 }
 
-.main-layout--wallpaper .widget::before {
+.app-layout--wallpaper .widget::before {
   display: block;
 }
 </style>
