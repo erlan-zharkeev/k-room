@@ -42,7 +42,7 @@ export {
   KRoomDB,
   useDexieLiveQuery
 } from './db/db'
-export { useAppToast } from './toast/app-toast'
+export { useAppToast } from './toast/toast'
 export { TOAST_LIFE_MS, TOAST_PLACEMENT } from './toast/constants'
 export { TOAST_I18N } from './toast/i18n'
 export type { ClientPlatformType, FileLoaderValueType } from './browser/types'
