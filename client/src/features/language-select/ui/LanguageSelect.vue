@@ -22,7 +22,7 @@ const { isPortraitTabletOnly } = useScreen()
     <NmorphSelectButton
       :aria-label="t(LANGUAGE_SELECT_I18N.selectLanguage)"
       :class="['language-select__input', { 'language-select__input--compact': props.compact }]"
-      :height="props.compact ? 'default' : 'thick'"
+      :height="props.compact ? 'basic' : 'thick'"
       :model-value="settings.localization.language"
       @update:model-value="changeLanguage"
       fill

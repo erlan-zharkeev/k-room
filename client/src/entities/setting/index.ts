@@ -34,7 +34,7 @@ export type { DbUserSettingType, IUserSetting } from './config/types'
 export type { HiddenNotificationType } from './config/hidden-notification.types'
 export type { IIoDevicesSettings } from './config/io-devices.types'
 export type { IUserLocalizationSettings } from './config/localization.types'
-export type { IMessageListScrollState } from './config/message.types'
+export type { IMessageScrollState } from './config/message.types'
 export type {
   INotificationGroupSettings,
   IUserNotificationSettings,

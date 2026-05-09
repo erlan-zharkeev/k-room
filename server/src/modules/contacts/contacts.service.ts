@@ -258,6 +258,9 @@ export const updateContactInteraction = async (userId: string, contactId: string
       await updateAuthorContactInteraction()
       await handleUpdateContactInteraction()
       break
+    case 'invite-hidden':
+      await updateAuthorContactInteraction()
+      break
   }
 }
 
