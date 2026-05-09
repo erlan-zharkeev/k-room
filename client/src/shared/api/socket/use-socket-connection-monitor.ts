@@ -1,6 +1,6 @@
 import type { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'global-shared'
 
-import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
+import { TOAST_I18N } from 'src/shared/config'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
@@ -36,8 +36,7 @@ export const useSocketConnectionMonitor = () => {
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: message,
-        duration: ERROR_TOAST_LIFE_MS
+        content: message
       })
     })
 

@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import { REQ_STATUS, ROUTE_NAMES, type IBackendResponse, type ReqStatusType } from 'global-shared'
 import { useRouter } from 'vue-router'
 
-import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
+import { TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
@@ -66,8 +66,7 @@ export const useHttpInterceptor = () => {
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: message,
-        duration: ERROR_TOAST_LIFE_MS
+        content: message
       })
 
       return createHttpError({

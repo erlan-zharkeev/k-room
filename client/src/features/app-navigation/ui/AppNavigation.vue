@@ -5,9 +5,9 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from 'src/shared/config'
 import { useScreen } from 'src/shared/lib'
 
+import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from '../config/constants'
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 
 import type { IAppNavigationProps } from './types'

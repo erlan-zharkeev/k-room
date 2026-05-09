@@ -1,4 +1,4 @@
-import { APP_PAGE_ROUTES } from 'src/shared/config'
+import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 
 import SettingsAccountContent from '../../ui/content/account/SettingsAccountContent.vue'
 import SettingsAppearanceContent from '../../ui/content/appearance/SettingsAppearanceContent.vue'

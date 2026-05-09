@@ -2,13 +2,10 @@ import { useBreakpoints } from '@vueuse/core'
 import { MEDIA_MB_IN_BYTES } from 'global-shared'
 import { isString } from 'lodash'
 
-import { SCREEN_BREAKPOINTS } from 'src/shared/config'
-
-import { CONSOLE_COLOR_MAP, IMAGE_RESOLUTIONS } from './constants'
+import { CONSOLE_COLOR_MAP, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
+import { BROWSER_I18N } from './i18n'
 import type { ClientPlatformType } from './types'
 import type { IImageToBase64Params } from './types'
-
-const GB = MEDIA_MB_IN_BYTES * 1024
 
 export const getClientPlatform = (): ClientPlatformType => {
   return '__TAURI_INTERNALS__' in window ? 'native' : 'browser'
@@ -37,19 +34,12 @@ export const imageToBase64 = ({
 
   reader.readAsDataURL(image)
 
-  if (resolutionNotAllowed)
-    warnings.push(t({ ru: 'Недопустимый формат изображения', en: 'Image format is not allowed', zh: '图片格式不允许' }))
+  if (resolutionNotAllowed) warnings.push(t(BROWSER_I18N.imageFormatNotAllowed))
 
   const isGreaterThanAllowed = image.size / 1024 / 1024 > maxImageSizeInMb
 
   if (isGreaterThanAllowed) {
-    warnings.push(
-      t({
-        ru: `Размер изображения должен быть меньше ${maxImageSizeInMb} МБ`,
-        en: `Image size must be less than ${maxImageSizeInMb} MB`,
-        zh: `图片大小必须小于 ${maxImageSizeInMb} MB`
-      })
-    )
+    warnings.push(t(BROWSER_I18N.imageSizeMustBeLess)(maxImageSizeInMb))
   }
 
   if (warnings.length) return
@@ -67,6 +57,8 @@ export const readFileAsDataUrl = (file: File) =>
     reader.addEventListener('error', () => resolve(undefined))
     reader.readAsDataURL(file)
   })
+
+const GB = MEDIA_MB_IN_BYTES * 1024
 
 export const formatBytes = (bytes: number): string => {
   if (bytes >= GB) {

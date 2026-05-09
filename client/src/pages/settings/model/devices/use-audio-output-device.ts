@@ -4,7 +4,7 @@ import { isFunction } from 'lodash'
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { ERROR_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
+import { TOAST_I18N } from 'src/shared/config'
 import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
@@ -49,8 +49,7 @@ export const useAudioOutputDevice = () => {
     toast.add({
       type: 'warning',
       title: t(TOAST_I18N.warn),
-      content: t(SETTINGS_PAGE_DEVICES_I18N.cantAccessDevice),
-      duration: ERROR_TOAST_LIFE_MS
+      content: t(SETTINGS_PAGE_DEVICES_I18N.cantAccessDevice)
     })
   }
 

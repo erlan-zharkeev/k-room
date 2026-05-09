@@ -10,7 +10,7 @@ import { ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useUserSession } from 'src/entities/user'
-import { ERROR_TOAST_LIFE_MS, useHttp } from 'src/shared/api'
+import { useHttp } from 'src/shared/api'
 import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
@@ -68,8 +68,7 @@ export const useFirebase = () => {
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: t(LOGIN_FORM_I18N.failedToLogin),
-        duration: ERROR_TOAST_LIFE_MS
+        content: t(LOGIN_FORM_I18N.failedToLogin)
       })
 
       return null

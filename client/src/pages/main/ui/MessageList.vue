@@ -7,7 +7,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type Compon
 import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
-import { EMOJI_LIST, type DbMessageType } from 'src/shared/config'
+import { type DbMessageType } from 'src/shared/config'
 import { AppEmojiPicker, AppText } from 'src/shared/ui'
 
 import {
@@ -100,7 +100,8 @@ const isSelectedMessageReaction = (glyphKey: string) => {
   return selectedMessage.value ? isOwnReaction(selectedMessage.value, glyphKey) : false
 }
 
-const getReactionGlyph = (glyphKey: string) => EMOJI_LIST.find(({ key }) => key === glyphKey)?.glyph ?? glyphKey
+const getReactionGlyph = (glyphKey: string) =>
+  [{ glyph: '😀', key: 'test' }].find(({ key }) => key === glyphKey)?.glyph ?? glyphKey
 
 const addReaction = async (glyphKey: string) => {
   const message = selectedMessage.value
