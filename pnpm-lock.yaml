@@ -95,8 +95,8 @@ importers:
   client:
     dependencies:
       '@nmorph/nmorph-ui-kit':
-        specifier: ^2.2.6
-        version: 2.2.6(typescript@5.9.3)
+        specifier: ^2.2.12
+        version: 2.2.12(typescript@5.9.3)
       '@tanstack/vue-virtual':
         specifier: ^3.13.24
         version: 3.13.24(vue@3.5.33(typescript@5.9.3))
@@ -1986,9 +1986,14 @@ packages:
       '@nestjs/platform-socket.io':
         optional: true
 
-  '@nmorph/nmorph-ui-kit@2.2.6':
-    resolution: {integrity: sha512-k7IPCgijxvaJtnzuilGODHBb8mRFqr4Clo6RG/+obwpyjnCwhiuj+gmAmZVikULgsQ5sxvc7+3iWhGWzOktz8Q==}
+  '@nmorph/nmorph-ui-kit@2.2.12':
+    resolution: {integrity: sha512-gSZ+gqLlygroTztslk4T2GzL46IpGYDjkHDygMmd6MPvJCks2uk//bkpU7gE9F9+x7FJk6qNPHvH1j6YvWQduQ==}
     engines: {node: '>=18.13.0', npm: '>=8.19.3'}
+    peerDependencies:
+      nuxt: '>=3.0.0'
+    peerDependenciesMeta:
+      nuxt:
+        optional: true
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -3512,11 +3517,6 @@ packages:
 
   '@volar/typescript@2.4.15':
     resolution: {integrity: sha512-2aZ8i0cqPGjXb4BhkMsPYDkkuc2ZQ6yOpqwAuNwUoncELqoy5fRgOQtLR9gB0g902iS0NAkvpIzs27geVyVdPg==}
-
-  '@vue-styled-components/core@1.13.3':
-    resolution: {integrity: sha512-N7eNsUprMzlq00j+PayHEuL9Y09RnJgIWWqkPSTsOdQvTxXsRMfi8oD91f3ztlwi5rnOgnKpjqy56t4J1VwfkQ==}
-    peerDependencies:
-      vue: '>=3.2.0'
 
   '@vue/compiler-core@3.5.33':
     resolution: {integrity: sha512-3PZLQwFw4Za3TC8t0FvTy3wI16Kt+pmwcgNZca4Pj9iWL2E72a/gZlpBtAJvEdDMdCxdG/qq0C7PN0bsJuv0Rw==}
@@ -7268,9 +7268,6 @@ packages:
   stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
 
-  stylis@4.4.0:
-    resolution: {integrity: sha512-5Z9ZpRzfuH6l/UAvCPAPUo3665Nk2wLaZU3x+TLHKVzIz33+sbJqbtrYoC3KD4/uVOr2Zp+L0LySezP9OHV9yA==}
-
   sucrase@3.35.1:
     resolution: {integrity: sha512-DhuTmvZWux4H1UOnWMB3sk0sbaCVOoQZjv8u1rDoTV0HTdGem9hkAZtl4JZy8P2z4Bg0nT+YMeOFyVr4zcG5Tw==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -9980,9 +9977,8 @@ snapshots:
     optionalDependencies:
       '@nestjs/platform-socket.io': 10.4.22(@nestjs/common@10.4.22(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/websockets@10.4.22)(rxjs@7.8.2)
 
-  '@nmorph/nmorph-ui-kit@2.2.6(typescript@5.9.3)':
+  '@nmorph/nmorph-ui-kit@2.2.12(typescript@5.9.3)':
     dependencies:
-      '@vue-styled-components/core': 1.13.3(vue@3.5.33(typescript@5.9.3))
       vue: 3.5.33(typescript@5.9.3)
       vue-i18n: 9.14.5(vue@3.5.33(typescript@5.9.3))
     transitivePeerDependencies:
@@ -11458,12 +11454,6 @@ snapshots:
       '@volar/language-core': 2.4.15
       path-browserify: 1.0.1
       vscode-uri: 3.1.0
-
-  '@vue-styled-components/core@1.13.3(vue@3.5.33(typescript@5.9.3))':
-    dependencies:
-      lodash-es: 4.18.1
-      stylis: 4.4.0
-      vue: 3.5.33(typescript@5.9.3)
 
   '@vue/compiler-core@3.5.33':
     dependencies:
@@ -15907,8 +15897,6 @@ snapshots:
       - typescript
 
   stylis@4.2.0: {}
-
-  stylis@4.4.0: {}
 
   sucrase@3.35.1:
     dependencies:

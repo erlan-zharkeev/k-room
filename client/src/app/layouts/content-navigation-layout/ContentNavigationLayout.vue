@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { NmorphScroll } from '@nmorph/nmorph-ui-kit'
-
 import { AppHeader } from 'src/shared/ui'
 
 import { CONTENT_NAVIGATION_TITLE } from './constants'
@@ -15,9 +13,7 @@ const props = defineProps<IContentNavigationLayoutProps>()
       <AppHeader :text="$t(CONTENT_NAVIGATION_TITLE[props.titleKey])" />
     </div>
     <div class="content-navigation-layout__content nmorph--shadow-inset">
-      <NmorphScroll :y-gap-in-px="-6">
-        <slot />
-      </NmorphScroll>
+      <slot />
     </div>
   </section>
 </template>

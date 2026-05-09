@@ -24,7 +24,7 @@ const themeIconWidth = computed(() => (props.compact || !isPortraitTabletOrLess.
     <NmorphSelectButton
       :aria-label="t(THEME_SELECT_I18N.selectTheme)"
       :class="['theme-select__input', { 'theme-select__input--compact': props.compact }]"
-      :height="props.compact ? 'default' : 'thick'"
+      :height="props.compact ? 'basic' : 'thick'"
       :model-value="settings.appearance.selectedTheme"
       fill
       @update:model-value="changeTheme"

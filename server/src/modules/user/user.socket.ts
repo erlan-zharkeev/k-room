@@ -1,6 +1,5 @@
 import type { ChatRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
 
-import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
@@ -10,7 +9,7 @@ import { transformRoomForUser } from '../chat-rooms/chat-rooms.service'
 import type { IUpdateLanguagePayload } from './types'
 import { USER_SOCKET_I18N } from './user.i18n'
 import { UserModel } from './user.model'
-import { getSocketsByUserIds, setLastSeenData, setUserStatus, transformUserToFrontendContact } from './user.service'
+import { setLastSeenData, setUserStatus, transformUserToFrontendContact } from './user.service'
 
 export const registerUserSocketHandlers = (socket: SocketInstanceType) => {
   void socketErrorMiddleware(
@@ -56,12 +55,9 @@ export const registerUserSocketHandlers = (socket: SocketInstanceType) => {
         const roomIds = data?.personal.chatRooms ?? []
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
         const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
-        const sockets = await getSocketsByUserIds([userId])
 
-        sockets.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('actual-contacts', contactResultData)
-          getIO().to(socketId).emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
-        })
+        socket.emit<SocketActionsType>('actual-contacts', contactResultData)
+        socket.emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
       },
       { basicError: USER_SOCKET_I18N.actualizeUserDataFailed }
     )
