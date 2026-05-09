@@ -1,6 +1,6 @@
 import type { IEventAddReaction } from 'global-shared'
 
-import type { DbMessageType } from 'src/shared/config'
+import type { DbMessageType } from 'src/shared/lib'
 
 export interface IMessageListProps {
   roomId: string

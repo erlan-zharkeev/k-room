@@ -7,7 +7,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, type Compon
 import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
-import { type DbMessageType } from 'src/shared/config'
+import { type DbMessageType } from 'src/shared/lib'
 import { AppEmojiPicker, AppText } from 'src/shared/ui'
 
 import {
@@ -21,9 +21,9 @@ import {
   MESSAGE_VIRTUAL_LIST_OVERSCAN
 } from '../config/constants'
 import { MAIN_PAGE_I18N } from '../config/i18n'
-import { useMessage } from '../model/use-message'
-import { useMessageReadObserver } from '../model/use-message-read-observer'
-import { useMessageScrollState } from '../model/use-message-scroll-state'
+import { useMessageReadObserver } from '../model/use-message-read-observer.model'
+import { useMessageScrollState } from '../model/use-message-scroll-state.model'
+import { useMessage } from '../model/use-message.model'
 
 import type { IMessageListEmits, IMessageListProps } from './types'
 

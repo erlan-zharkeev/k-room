@@ -1,10 +1,8 @@
-import {
-  DEFAULT_APPEARANCE,
-  DEFAULT_IO_DEVICES_SETTINGS,
-  DEFAULT_LOCALIZATION_SETTINGS,
-  DEFAULT_NOTIFICATION_SETTINGS,
-  type IUserSetting
-} from 'src/shared/config'
+import { DEFAULT_APPEARANCE } from './appearance.constants'
+import { DEFAULT_IO_DEVICES_SETTINGS } from './io-devices.constants'
+import { DEFAULT_LOCALIZATION_SETTINGS } from './localization.constants'
+import { DEFAULT_NOTIFICATION_SETTINGS } from './notification.constants'
+import type { IUserSetting } from './types'
 
 export const DEFAULT_SETTINGS: IUserSetting = {
   contentTab: 'contacts',

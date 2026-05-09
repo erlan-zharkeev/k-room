@@ -1,6 +1,6 @@
+import { CONTENT_TAB_IDS, type ContentTabType, type DbUserSettingType } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { DEFAULT_SETTINGS_CONTENT_ID } from 'src/pages/settings'
-import { CONTENT_TAB_IDS, type ContentTabType, type DbUserSettingType } from 'src/shared/config'
 
 export const getAppPathFromSettings = ({ contentTab, chatRoomId }: DbUserSettingType) => {
   const getChatRoomPath = (id: string) => (id ? `${APP_PAGE_ROUTES.chatRooms}/${id}` : APP_PAGE_ROUTES.chatRooms)

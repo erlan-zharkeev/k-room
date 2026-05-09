@@ -4,7 +4,7 @@ import { NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-k
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N } from '../../../config/i18n/account-change-password.i18n'
-import { useChangePassword } from '../../../model/account/use-change-password'
+import { useChangePassword } from '../../../model/account/use-change-password.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, nextPasswordError, passwordMismatch } =

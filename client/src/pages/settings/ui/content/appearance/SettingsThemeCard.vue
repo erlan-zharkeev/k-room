@@ -18,8 +18,8 @@ import {
   CUSTOM_THEME_SHADOW_ITEMS
 } from '../../../config/constants/custom-theme.constants'
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance.i18n'
-import { useCustomThemeReset } from '../../../model/appearance/use-custom-theme-reset'
-import { useCustomThemeSchema } from '../../../model/appearance/use-custom-theme-schema'
+import { useCustomThemeReset } from '../../../model/appearance/use-custom-theme-reset.model'
+import { useCustomThemeSchema } from '../../../model/appearance/use-custom-theme-schema.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const { effectiveTheme, isSelectedThemeCustom } = useSettings()

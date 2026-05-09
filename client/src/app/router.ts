@@ -2,7 +2,7 @@ import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES } f
 import { isString } from 'lodash'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-import { useSettings } from 'src/entities/setting'
+import { useSettings, type DbUserSettingType } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
@@ -16,7 +16,6 @@ import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
-import { type DbUserSettingType } from 'src/shared/config'
 
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import DocsLayout from './layouts/docs-layout/DocsLayout.vue'

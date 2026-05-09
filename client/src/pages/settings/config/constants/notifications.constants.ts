@@ -1,4 +1,4 @@
-import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/shared/config'
+import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/entities/setting'
 
 import { SETTINGS_PAGE_NOTIFICATIONS_I18N } from '../i18n/notifications.i18n'
 import type { ISettingsNotificationOption, ISettingsNotificationSection } from '../types/notifications.types'

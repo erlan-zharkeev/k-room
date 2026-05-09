@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import { REQ_STATUS, ROUTE_NAMES, type IBackendResponse, type ReqStatusType } from 'global-shared'
 import { useRouter } from 'vue-router'
 
-import { TOAST_I18N } from 'src/shared/config'
+import { TOAST_I18N } from 'src/shared/lib'
 import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 

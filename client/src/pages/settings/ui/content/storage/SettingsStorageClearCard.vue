@@ -4,7 +4,7 @@ import { NmorphButton } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
-import { useStorageClear } from '../../../model/storage/use-storage-clear'
+import { useStorageClear } from '../../../model/storage/use-storage-clear.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const { isClearingMedia, clearMedia } = useStorageClear()

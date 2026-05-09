@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
 import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
-import { useWaitEmailConfirm } from '../model/use-wait-email-confirm'
+import { useWaitEmailConfirm } from '../model/use-wait-email-confirm.model'
 
 const { attempts, captcha, counterValue, email, initializeWaitEmailConfirm, isLoading, resend } = useWaitEmailConfirm()
 const captchaRequired = captcha.captchaRequired

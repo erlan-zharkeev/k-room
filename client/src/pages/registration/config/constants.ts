@@ -1,6 +1,6 @@
 import { VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'global-shared'
 
-import type { IRegistrationInitialFormData } from '../model/types'
+import type { IRegistrationInitialFormData } from '../model/types.model'
 
 export const DEFAULT_REGISTRATION_FORM_DATA: IRegistrationInitialFormData = {
   nickname: '',

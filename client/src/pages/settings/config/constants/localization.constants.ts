@@ -1,4 +1,4 @@
-import { DATE_TIME_FORMAT } from 'src/shared/config'
+import { DATE_TIME_FORMAT } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../i18n/appearance.i18n'
 import type { ISettingsDateTimeFormatOption } from '../types/localization.types'

@@ -2,7 +2,6 @@ import { router } from 'src/app/router'
 import { useSettings } from 'src/entities/setting'
 import { initClientData, initClientIndexedDbData } from 'src/features/client-session'
 import { setHttpClientLanguage, setSocketLanguage } from 'src/shared/api'
-import { CLIENT_ENV } from 'src/shared/config'
 
 import { pinia } from '../providers/pinia'
 
@@ -12,7 +11,7 @@ import { initNmorphUi } from './init-nmorph-ui'
 import type { VueAppType } from './types'
 
 export const initApp = async (app: VueAppType) => {
-  document.title = CLIENT_ENV.appName
+  document.title = __CLIENT_ENV_DATA__.appName
   initFirebase()
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)

@@ -1,6 +1,6 @@
 import type { Component } from 'vue'
 
-import type { ThemeType } from 'src/shared/config'
+import type { ThemeType } from 'src/entities/setting'
 
 export interface IThemeSelectOption {
   icon: Component | string

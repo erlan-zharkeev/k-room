@@ -2,8 +2,6 @@ import { PROTECTED_ACTION_REASON, isUnknownObject, type IProtectedActionResponse
 import { isBoolean, isNumber, isString } from 'lodash'
 import { computed, ref } from 'vue'
 
-import { CLIENT_ENV } from 'src/shared/config'
-
 import { isHttpError } from './create-http-error'
 
 const isProtectedActionResponsePayload = (value: unknown): value is IProtectedActionResponsePayload => {
@@ -35,7 +33,7 @@ export const useProtectedActionCaptcha = () => {
   const captchaRequired = ref(false)
   const captchaResetKey = ref(0)
   const captchaToken = ref('')
-  const captchaAvailable = computed(() => Boolean(CLIENT_ENV.turnstileSiteKey))
+  const captchaAvailable = computed(() => Boolean(__CLIENT_ENV_DATA__.turnstileSiteKey))
 
   const resetCaptcha = () => {
     captchaToken.value = ''

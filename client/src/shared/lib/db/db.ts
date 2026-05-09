@@ -4,18 +4,13 @@ import set from 'lodash/set'
 import unset from 'lodash/unset'
 import { computed, getCurrentScope, onScopeDispose, shallowRef, type Ref } from 'vue'
 
-import { CLIENT_ENV } from 'src/shared/config'
 import type {
   DbContactType,
   DbCallType,
   DbMessageType,
-  DbUserSettingType,
-  FChatRoomType,
-  IDbMedia
-} from 'src/shared/config'
-
-import type {
   DbTransactionModeType,
+  FChatRoomType,
+  IDbMedia,
   ICollectionIncomingItem,
   ICollectionMergeManyOptions,
   IDbCollectionItem,
@@ -292,13 +287,13 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
   }
 }
 
-export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<T>>, keyValue: string) => {
+export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<object>>, keyValue: string) => {
   let cached: T | undefined
   let isCached = false
 
-  const wrap = (data: T): KvItemType<T> => ({ ...data, __key: keyValue })
+  const wrap = (data: T): KvItemType<object> => ({ ...data, __key: keyValue })
 
-  const unwrap = (data: KvItemType<T> | undefined): T | undefined => {
+  const unwrap = (data: KvItemType<object> | undefined): T | undefined => {
     if (!data) return undefined
 
     const { __key: _key, ...value } = data
@@ -392,7 +387,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<T>>
 }
 
 export class KRoomDB extends Dexie {
-  settings!: Table<KvItemType<DbUserSettingType>>
+  settings!: Table<KvItemType<object>>
   contacts!: Table<DbContactType>
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>
@@ -400,7 +395,7 @@ export class KRoomDB extends Dexie {
   messages!: Table<DbMessageType>
 
   constructor() {
-    super(CLIENT_ENV.appName.toLocaleLowerCase())
+    super(__CLIENT_ENV_DATA__.appName.toLocaleLowerCase())
     this.version(17).stores({
       settings: '__key',
       contacts: '&id',

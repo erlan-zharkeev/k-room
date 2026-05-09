@@ -12,7 +12,7 @@ import { computed } from 'vue'
 import { AppMicrophoneWaveform, AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
-import { useAudioInputDevice } from '../../../model/devices/use-audio-input-device'
+import { useAudioInputDevice } from '../../../model/devices/use-audio-input-device.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const {

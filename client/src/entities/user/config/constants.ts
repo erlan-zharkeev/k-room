@@ -1,4 +1,4 @@
-import type { User } from '../model/types'
+import type { User } from '../model/types.model'
 
 export const INITIAL_USER_STORE: User = {
   id: '',

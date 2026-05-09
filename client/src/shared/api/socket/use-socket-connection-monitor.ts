@@ -1,6 +1,6 @@
 import type { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'global-shared'
 
-import { TOAST_I18N } from 'src/shared/config'
+import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 

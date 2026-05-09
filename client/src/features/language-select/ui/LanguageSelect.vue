@@ -6,7 +6,7 @@ import { AppHeader } from 'src/shared/ui'
 
 import { LANGUAGE_SELECT_DEFAULT_PROPS, LANGUAGE_SELECT_OPTIONS } from '../config/constants'
 import { LANGUAGE_SELECT_I18N } from '../config/i18n'
-import { useLanguageSelect } from '../model/use-language-select'
+import { useLanguageSelect } from '../model/use-language-select.model'
 
 import type { ILanguageSelectProps } from './types'
 

@@ -7,7 +7,7 @@ import { RouterLink, useRoute } from 'vue-router'
 import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
-import { usePasswordRecovery } from '../model/use-password-recovery'
+import { usePasswordRecovery } from '../model/use-password-recovery.model'
 
 const {
   codeFormData,

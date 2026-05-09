@@ -7,7 +7,7 @@ import { AppHeader } from 'src/shared/ui'
 
 import { THEME_SELECT_DEFAULT_PROPS, THEME_SELECT_OPTIONS } from '../config/constants'
 import { THEME_SELECT_I18N } from '../config/i18n'
-import { useThemeSelect } from '../model/use-theme-select'
+import { useThemeSelect } from '../model/use-theme-select.model'
 
 import type { IThemeSelectProps } from './types'
 

@@ -1,8 +1,7 @@
 import { useNmorphNotification } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { TOAST_LIFE_MS, TOAST_PLACEMENT } from 'src/shared/config'
-
+import { TOAST_LIFE_MS, TOAST_PLACEMENT } from './constants'
 import type { AppToastStackType, AppToastInputType } from './types'
 
 const { notifications, notify, removeNotification } = useNmorphNotification()
