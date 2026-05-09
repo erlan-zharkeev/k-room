@@ -139,7 +139,7 @@ module.exports = {
     },
     {
       ...sharedTypeScriptOverride,
-      files: ['client/*.config.ts', 'client/env.ts', 'client/env.types.ts'],
+      files: ['client/*.ts'],
       env: {
         es2021: true,
         node: true
