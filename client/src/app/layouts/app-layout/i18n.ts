@@ -1,6 +1,6 @@
 import { defineI18n } from 'global-shared'
 
-export const MAIN_LAYOUT_I18N = defineI18n({
+export const APP_LAYOUT_I18N = defineI18n({
   chatRooms: {
     en: 'Chats',
     ru: 'Чаты',

@@ -6,20 +6,20 @@ import { useSettings, type DbUserSettingType } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
+import { AppNavigationPage, AppWorkspacePage } from 'src/pages/app'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
 import { EmailConfirmationPage } from 'src/pages/email-confirmation'
 import { ErrorPage } from 'src/pages/error'
 import { LoginPage } from 'src/pages/login'
-import { MainWorkspacePage } from 'src/pages/main'
 import { PasswordRecoveryPage } from 'src/pages/password-recovery'
 import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
 
+import AppLayout from './layouts/app-layout/AppLayout.vue'
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import DocsLayout from './layouts/docs-layout/DocsLayout.vue'
-import MainLayout from './layouts/main-layout/MainLayout.vue'
 import PageLayout from './layouts/page-layout/PageLayout.vue'
 import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
 
@@ -91,22 +91,31 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: LAYOUT_ROUTE_NAMES.app,
-    component: MainLayout,
+    component: AppLayout,
     meta: {
       requiresAuth: true
     },
     children: [
       {
         path: 'chat-rooms/:chatRoomId?',
-        components: { content: MainWorkspacePage }
+        components: {
+          'content-navigation': AppNavigationPage,
+          content: AppWorkspacePage
+        }
       },
       {
         path: 'calls',
-        components: { content: MainWorkspacePage }
+        components: {
+          'content-navigation': AppNavigationPage,
+          content: AppWorkspacePage
+        }
       },
       {
         path: 'contacts',
-        components: { content: MainWorkspacePage }
+        components: {
+          'content-navigation': AppNavigationPage,
+          content: AppWorkspacePage
+        }
       },
       {
         path: 'settings',

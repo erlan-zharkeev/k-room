@@ -1,10 +1,10 @@
-import { MAIN_PAGE_I18N } from './i18n'
+import { APP_PAGE_I18N } from './i18n'
 
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 export const CONTACT_ONLINE_CHECK_INTERVAL_MS = 10_000
 export const CONTACT_ONLINE_STATUS_TTL_MS = 30_000
 
-export const MAIN_PAGE_CONTACT_SEARCH_DEBOUNCE_MS = 300
+export const APP_PAGE_CONTACT_SEARCH_DEBOUNCE_MS = 300
 
 export const MESSAGE_VIRTUAL_ITEM_ESTIMATED_SIZE_PX = 74
 
@@ -24,17 +24,17 @@ export const MESSAGE_CONTEXT_MENU_HEIGHT_PX = 520
 
 export const MESSAGE_CONTEXT_MENU_VIEWPORT_MARGIN_PX = 12
 
-export const MAIN_PAGE_MESSAGE_ACTIONS = [
+export const APP_PAGE_MESSAGE_ACTIONS = [
   {
     id: 'reply',
-    label: MAIN_PAGE_I18N.replyMessage
+    label: APP_PAGE_I18N.replyMessage
   },
   {
     id: 'forward',
-    label: MAIN_PAGE_I18N.forwardMessage
+    label: APP_PAGE_I18N.forwardMessage
   },
   {
     id: 'delete',
-    label: MAIN_PAGE_I18N.deleteMessage
+    label: APP_PAGE_I18N.deleteMessage
   }
 ] as const
