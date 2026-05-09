@@ -18,7 +18,7 @@ import {
   SETTINGS_ACCOUNT_AVATAR_MAX_MB
 } from '../../../config/constants/account.constants'
 import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../../config/i18n/account-personal-data.i18n'
-import { usePersonalData } from '../../../model/account/use-personal-data'
+import { usePersonalData } from '../../../model/account/use-personal-data.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const {

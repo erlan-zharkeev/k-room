@@ -4,7 +4,7 @@ import { NmorphButton, NmorphCallout, NmorphIconPlay, NmorphSelect } from '@nmor
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
-import { useAudioOutputDevice } from '../../../model/devices/use-audio-output-device'
+import { useAudioOutputDevice } from '../../../model/devices/use-audio-output-device.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const {

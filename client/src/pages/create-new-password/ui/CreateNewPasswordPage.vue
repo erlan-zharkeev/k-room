@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
 import { AppHeader, AppText } from 'src/shared/ui'
 
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
-import { useCreateNewPassword } from '../model/use-create-new-password'
+import { useCreateNewPassword } from '../model/use-create-new-password.model'
 
 const {
   formData,

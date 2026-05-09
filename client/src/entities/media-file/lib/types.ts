@@ -1,4 +1,4 @@
-import type { IDbMedia } from 'src/shared/config'
+import type { IDbMedia } from 'src/shared/lib'
 
 export type MediaQueueTaskType = () => Promise<void>
 export type MediaHeadersType = Partial<Pick<IDbMedia, 'etag'>>

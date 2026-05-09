@@ -1,4 +1,4 @@
-import type { IDbContactRequiredSystemData } from 'src/shared/config'
+import type { IDbContactRequiredSystemData } from 'src/shared/lib'
 
 export const getRequiredContactSystemData = (): IDbContactRequiredSystemData => ({
   savedAt: Date.now(),

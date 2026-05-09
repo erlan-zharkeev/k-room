@@ -1,12 +1,10 @@
 import { getApps, initializeApp } from 'firebase/app'
 
-import { CLIENT_ENV } from 'src/shared/config'
-
 export const initFirebase = () => {
   if (getApps().length) return
 
   initializeApp({
-    apiKey: CLIENT_ENV.firebaseApiKey,
+    apiKey: __CLIENT_ENV_DATA__.firebaseApiKey,
     authDomain: 'k-room-3a49a.firebaseapp.com',
     projectId: 'k-room-3a49a',
     storageBucket: 'k-room-3a49a.appspot.com',

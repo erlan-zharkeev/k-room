@@ -63,6 +63,9 @@ const createTypeScriptResolver = (project, extensions = ['.js', '.ts', '.d.ts'])
 
 const sharedTypeScriptOverride = {
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  globals: {
+    __CLIENT_ENV_DATA__: 'readonly'
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

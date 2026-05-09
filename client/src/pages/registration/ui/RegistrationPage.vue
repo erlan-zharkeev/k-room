@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { REGISTRATION_FORM_I18N } from '../config/i18n'
-import { useRegistration } from '../model/use-registration'
+import { useRegistration } from '../model/use-registration.model'
 
 const { captchaRequired, captchaResetKey, captchaToken, formData, formRef, isFormValid, isLoading, submit } =
   useRegistration()

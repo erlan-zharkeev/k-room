@@ -1,7 +1,7 @@
 import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type ResponseType } from 'axios'
 import { AUTH_ENDPOINTS, REQ_STATUS, type EndpointsType, type IBackendResponse } from 'global-shared'
 
-import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
+import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
@@ -47,7 +47,7 @@ export const useHttp = () => {
 
     const requestConfig: AxiosRequestConfig<HttpRequestPayloadType> = {
       method: type,
-      url: `${CLIENT_ENV.apiBaseUrl}${endpoint}`,
+      url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${endpoint}`,
       headers: {
         'Content-Type': contentType
       },
@@ -76,7 +76,7 @@ export const useHttp = () => {
         try {
           await httpClient.request({
             method: 'post',
-            url: `${CLIENT_ENV.apiBaseUrl}${AUTH_ENDPOINTS.updateTokensPair}`,
+            url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${AUTH_ENDPOINTS.updateTokensPair}`,
             headers: {
               'Content-Type': 'application/json'
             },

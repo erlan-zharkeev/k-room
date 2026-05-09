@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import { CLIENT_ENV } from 'src/shared/config'
 import { AppHeader, AppText } from 'src/shared/ui'
 
 import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
+
+const appName = __CLIENT_ENV_DATA__.appName
 </script>
 
 <template>
   <div class="privacy-policy-page">
-    <AppHeader tag="h1" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.title)(CLIENT_ENV.appName)" />
+    <AppHeader tag="h1" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.title)(appName)" />
 
     <AppText class="privacy-policy-page__meta" tag="p" color="semi-contrast-text">
       <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
       June 1, 2026
     </AppText>
 
-    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro)(CLIENT_ENV.appName)" />
+    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro)(appName)" />
 
     <AppText class="privacy-policy-page__warning" tag="p" color="semi-contrast-text">
       <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.warning)" />
-      {{ $t(LEGAL_INFO_PAGE_I18N.warningText)(CLIENT_ENV.appName) }}
+      {{ $t(LEGAL_INFO_PAGE_I18N.warningText)(appName) }}
     </AppText>
 
     <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
@@ -90,7 +91,7 @@ import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
 
     <section class="privacy-policy-page__section">
       <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text)(CLIENT_ENV.appName)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text)(appName)" />
     </section>
 
     <section class="privacy-policy-page__section">

@@ -15,8 +15,8 @@ import { useSystem } from 'src/entities/system'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../config/i18n'
-import { useFirebase } from '../model/use-firebase'
-import { useLogin } from '../model/use-login'
+import { useFirebase } from '../model/use-firebase.model'
+import { useLogin } from '../model/use-login.model'
 
 const { isFirebaseLoginLoading, onFirebaseLogin } = useFirebase()
 const { captchaRequired, captchaResetKey, captchaToken, formData, formRef, isFormValid, isLoading, submit } = useLogin()

@@ -17,7 +17,7 @@ import {
   SETTINGS_WALLPAPER_VISIBILITY_OPTIONS
 } from '../../../config/constants/wallpaper.constants'
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance.i18n'
-import { useWallpaper } from '../../../model/appearance/use-wallpaper'
+import { useWallpaper } from '../../../model/appearance/use-wallpaper.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const { t } = useI18n()

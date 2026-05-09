@@ -2,7 +2,7 @@ import type { AxiosResponse } from 'axios'
 import type { MediaKindType } from 'global-shared'
 
 import { getHeaderValue } from 'src/shared/api'
-import type { IDbMedia } from 'src/shared/config'
+import type { IDbMedia } from 'src/shared/lib'
 
 export const transformHeadersToMediaData = (res: AxiosResponse): Omit<IDbMedia, 'blob' | 'id'> => {
   return {

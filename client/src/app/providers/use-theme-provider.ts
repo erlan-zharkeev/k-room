@@ -1,9 +1,8 @@
 import { useNmorph } from '@nmorph/nmorph-ui-kit'
 import { onBeforeUnmount, watch } from 'vue'
 
-import { useSettings } from 'src/entities/setting'
+import { SYSTEM_THEME_QUERY, useSettings } from 'src/entities/setting'
 import { useThemeSelect } from 'src/features/theme-select'
-import { SYSTEM_THEME_QUERY } from 'src/shared/config'
 
 import { getNmorphThemeShadowOptions } from '../lib/nmorph'
 

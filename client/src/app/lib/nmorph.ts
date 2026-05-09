@@ -1,9 +1,8 @@
 import { en, ru, zh } from '@nmorph/nmorph-ui-kit'
 import type { AppLanguageType } from 'global-shared'
 
-import { DEFAULT_APPEARANCE } from 'src/shared/config'
-import type { IAppearanceSettings } from 'src/shared/config'
-import type { IThemeShadowSettings } from 'src/shared/config'
+import { DEFAULT_APPEARANCE } from 'src/entities/setting'
+import type { IAppearanceSettings, IThemeShadowSettings } from 'src/entities/setting'
 
 export const getNmorphThemeShadowOptions = ({ baseShadowWidth, baseShadowBlurCoefficient }: IThemeShadowSettings) => {
   return {

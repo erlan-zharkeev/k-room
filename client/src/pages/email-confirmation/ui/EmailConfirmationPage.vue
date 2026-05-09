@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
 import { AppHeader, AppText } from 'src/shared/ui'
 
 import { EMAIL_CONFIRMATION_I18N } from '../config/i18n'
-import { useEmailConfirmation } from '../model/use-email-confirmation'
+import { useEmailConfirmation } from '../model/use-email-confirmation.model'
 
 const { confirmEmail, email, isConfirmed, isLoading } = useEmailConfirmation()
 

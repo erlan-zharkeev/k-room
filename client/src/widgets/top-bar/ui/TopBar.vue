@@ -10,7 +10,7 @@ import { AppProfileBasicData } from 'src/shared/ui'
 
 import { TOP_BAR_OFFLINE_STATUS_DELAY_MS } from '../config/constants'
 import { TOP_BAR_I18N } from '../config/i18n'
-import { useLogout } from '../model/use-logout'
+import { useLogout } from '../model/use-logout.model'
 
 const { t } = useI18n()
 const { user, avatarId, displayedNickname } = useUser()

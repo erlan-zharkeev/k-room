@@ -5,7 +5,7 @@ import { EMAIL_CODE_LENGTH } from 'global-shared'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N } from '../../../config/i18n/account-change-email.i18n'
-import { useChangeEmail } from '../../../model/account/use-change-email'
+import { useChangeEmail } from '../../../model/account/use-change-email.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const {

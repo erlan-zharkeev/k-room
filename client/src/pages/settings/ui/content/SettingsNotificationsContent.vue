@@ -3,7 +3,7 @@ import { NmorphSwitch } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
-import { useNotificationSettings } from '../../model/notifications/use-notification-settings'
+import { useNotificationSettings } from '../../model/notifications/use-notification-settings.model'
 import SettingsCard from '../SettingsCard.vue'
 
 const { sections, optionsBySection, getValue, setValue } = useNotificationSettings()

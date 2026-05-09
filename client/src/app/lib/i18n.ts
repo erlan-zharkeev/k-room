@@ -1,7 +1,7 @@
 import type { AppLanguageType } from 'global-shared'
 import { createI18n } from 'vue-i18n'
 
-import { CLIENT_LANGUAGE } from 'src/shared/config'
+import { CLIENT_LANGUAGE } from 'src/shared/lib'
 import type { I18nTranslateType } from 'src/shared/lib'
 
 export const appI18n = createI18n({

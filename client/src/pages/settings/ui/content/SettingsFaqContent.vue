@@ -4,7 +4,7 @@ import { NmorphButton, NmorphDivider, NmorphTextInput } from '@nmorph/nmorph-ui-
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq.i18n'
-import { useFaq } from '../../model/faq/use-faq'
+import { useFaq } from '../../model/faq/use-faq.model'
 import SettingsCard from '../SettingsCard.vue'
 
 const { searchQuery, filteredItems } = useFaq()

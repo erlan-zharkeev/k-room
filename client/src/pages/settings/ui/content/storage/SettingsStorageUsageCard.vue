@@ -6,7 +6,7 @@ import { formatBytes } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
-import { useStorageUsage } from '../../../model/storage/use-storage-usage'
+import { useStorageUsage } from '../../../model/storage/use-storage-usage.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const { usageBytes, quotaBytes, usagePercent } = useStorageUsage()

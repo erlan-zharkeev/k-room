@@ -12,7 +12,7 @@ import { computed } from 'vue'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
-import { useVideoInputDevice } from '../../../model/devices/use-video-input-device'
+import { useVideoInputDevice } from '../../../model/devices/use-video-input-device.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const {

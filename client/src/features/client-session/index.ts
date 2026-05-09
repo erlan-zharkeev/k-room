@@ -1,2 +1,2 @@
-export { initClientIndexedDbData } from './model/init-client-indexed-db-data'
-export { initClientData } from './model/init-client-data'
+export { initClientIndexedDbData } from './model/init-client-indexed-db-data.model'
+export { initClientData } from './model/init-client-data.model'
