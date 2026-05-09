@@ -10,7 +10,7 @@ const { sections, optionsBySection, getValue, setValue } = useNotificationSettin
 </script>
 
 <template>
-  <div class="settings-notifications-content settings-content-grid">
+  <div class="settings-notifications-content settings-content-grid settings-content-grid--compact-cards">
     <SettingsCard v-for="section in sections" :key="section.id" :title="$t(section.title)">
       <div class="settings-notifications-content__group">
         <template v-for="option in optionsBySection[section.id]" :key="option.id">
@@ -33,10 +33,6 @@ const { sections, optionsBySection, getValue, setValue } = useNotificationSettin
 </template>
 
 <style lang="scss">
-.settings-notifications-content.settings-content-grid {
-  grid-template-columns: 1fr;
-}
-
 .settings-notifications-content__group {
   display: grid;
   gap: 8px;

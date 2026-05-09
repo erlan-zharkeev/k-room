@@ -17,9 +17,3 @@ import SettingsWallpaperCard from './SettingsWallpaperCard.vue'
     <SettingsWallpaperCard />
   </div>
 </template>
-
-<style lang="scss">
-.settings-appearance-content.settings-content-grid {
-  grid-template-columns: 1fr;
-}
-</style>

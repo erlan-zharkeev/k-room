@@ -5,7 +5,7 @@ import SettingsStorageUsageCard from './SettingsStorageUsageCard.vue'
 </script>
 
 <template>
-  <div class="settings-storage-content settings-content-grid">
+  <div class="settings-storage-content settings-content-grid settings-content-grid--compact-cards">
     <SettingsStorageUsageCard />
     <SettingsStoragePersistentCard />
     <SettingsStorageClearCard />

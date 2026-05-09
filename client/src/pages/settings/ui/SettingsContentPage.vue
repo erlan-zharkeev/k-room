@@ -23,9 +23,13 @@ const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[sel
 <style lang="scss">
 .settings-content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
   padding: 16px;
+}
+
+.settings-content-grid--compact-cards {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 
   @include screen-tablet {
     grid-template-columns: 1fr;
