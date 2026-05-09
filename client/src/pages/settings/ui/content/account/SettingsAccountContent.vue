@@ -5,7 +5,7 @@ import SettingsPersonalDataCard from './SettingsPersonalDataCard.vue'
 </script>
 
 <template>
-  <div class="settings-account-content settings-content-grid">
+  <div class="settings-account-content settings-content-grid settings-content-grid--compact-cards">
     <SettingsPersonalDataCard />
     <SettingsChangeEmailCard />
     <SettingsChangePasswordCard />

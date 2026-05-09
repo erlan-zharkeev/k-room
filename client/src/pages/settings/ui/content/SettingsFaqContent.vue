@@ -33,10 +33,6 @@ const { searchQuery, filteredItems } = useFaq()
 </template>
 
 <style lang="scss">
-.settings-faq-content.settings-content-grid {
-  grid-template-columns: 1fr;
-}
-
 .settings-faq-content__item {
   display: grid;
   gap: 4px;
