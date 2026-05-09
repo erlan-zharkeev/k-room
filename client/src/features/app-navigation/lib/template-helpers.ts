@@ -1,4 +1,4 @@
-import { APP_PAGE_ROUTES } from 'src/shared/config'
+import { APP_PAGE_ROUTES } from '../config/constants'
 
 export const isNavBtnActive = (id: string, isExactActive: boolean, routePath: string) =>
   isExactActive ||

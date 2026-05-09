@@ -1,7 +1,6 @@
 export { CLIENT_ENV, LOCAL_STORAGE_KEY } from './constants'
 export { CLIENT_LANGUAGE } from './language.constants'
-export { TOAST_PLACEMENT, ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS } from './toast.constants'
-export { SCREEN_BREAKPOINTS } from './breakpoint.constants'
+export { TOAST_LIFE_MS, TOAST_PLACEMENT } from '../lib/toast/constants'
 export {
   CONTENT_TAB_IDS,
   DATE_TIME_FORMAT,
@@ -13,7 +12,6 @@ export {
   DEFAULT_NOTIFICATION_SETTINGS,
   TIME_PATTERN_BY_DATE_TIME_FORMAT
 } from './setting.constants'
-export { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from './app-navigation.constants'
 export {
   CUSTOM_WALLPAPER_SETTINGS,
   DARK_COLOR_SCHEMA,
@@ -29,11 +27,9 @@ export {
   DEFAULT_APPEARANCE,
   SYSTEM_THEME_QUERY
 } from './appearance.constants'
-export { EMOJI_LIST } from './emoji.constants'
-export { TOAST_I18N } from './toast.i18n'
+export { TOAST_I18N } from '../lib/toast/i18n'
 export { IMAGE_RESOLUTIONS } from 'src/shared/lib/browser/constants'
 export type { ContextRefType } from 'src/shared/lib/misc/types'
-export type { ScreenBreakpointNameType, ScreenBreakpointsType } from './breakpoint.types'
 export type { FileLoaderValueType } from 'src/shared/lib/browser/types'
 export type {
   IThemeData,

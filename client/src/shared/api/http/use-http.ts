@@ -1,7 +1,7 @@
 import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type ResponseType } from 'axios'
 import { AUTH_ENDPOINTS, REQ_STATUS, type EndpointsType, type IBackendResponse } from 'global-shared'
 
-import { CLIENT_ENV, ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS, TOAST_I18N } from 'src/shared/config'
+import { CLIENT_ENV, TOAST_I18N } from 'src/shared/config'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
@@ -31,8 +31,7 @@ export const useHttp = () => {
       toast.add({
         type: isSuccess ? 'success' : 'warning',
         title: isSuccess ? t(TOAST_I18N.success) : t(TOAST_I18N.warn),
-        content: text,
-        duration: isSuccess ? SUCCESS_TOAST_LIFE_MS : ERROR_TOAST_LIFE_MS
+        content: text
       })
     }
   }

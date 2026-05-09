@@ -1,4 +1,3 @@
-export { ERROR_TOAST_LIFE_MS, SUCCESS_TOAST_LIFE_MS } from 'src/shared/config'
 export { createHttpError, getHandledErrorMessage, isHttpError, isHandledError } from './http/create-http-error'
 export { getHeaderValue } from './http/get-header-value'
 export { setHttpClientLanguage } from './http/http-client'

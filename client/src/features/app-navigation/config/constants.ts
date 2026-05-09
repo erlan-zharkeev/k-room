@@ -6,7 +6,7 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 
-import { APP_NAVIGATION_I18N } from './app-navigation.i18n'
+import { APP_NAVIGATION_I18N } from './i18n'
 
 export const APP_PAGE_ROUTES = {
   chatRooms: `${ROUTE_NAMES.app}/chat-rooms`,
