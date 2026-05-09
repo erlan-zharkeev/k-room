@@ -1,7 +1,7 @@
 export { CLIENT_ENV, LOCAL_STORAGE_KEY } from './constants'
-export { CLIENT_LANGUAGE } from './language.constants'
 export { TOAST_LIFE_MS, TOAST_PLACEMENT } from '../lib/toast/constants'
 export {
+  CLIENT_LANGUAGE,
   CONTENT_TAB_IDS,
   DATE_TIME_FORMAT,
   DATE_PATTERN_BY_DATE_TIME_FORMAT,
@@ -59,7 +59,7 @@ export type {
   NotificationSettingKeyType,
   DbUserSettingType
 } from './setting.types'
-export type { IClientEnv } from './client-env.types'
+export type { IClientEnv } from '../../../client-env.types'
 export type {
   DbCallType,
   DbContactType,

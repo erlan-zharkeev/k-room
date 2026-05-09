@@ -4,7 +4,7 @@ import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
-import { createClientEnvData } from './src/shared/lib/create-client-env-data'
+import { createClientEnvData } from './create-client-env-data'
 import { generatePWAConfig } from './vite.pwa.config'
 
 export default defineConfig(({ mode }) => {
