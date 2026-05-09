@@ -14,16 +14,7 @@ const { toasts } = useToastProvider()
 </script>
 
 <template>
-  <div class="app">
-    <UnsupportedResolutionGuard />
-    <NmorphNotificationProvider :notifications="toasts" placement="top-center" />
-    <RouterView />
-  </div>
+  <UnsupportedResolutionGuard />
+  <NmorphNotificationProvider :notifications="toasts" placement="top-center" />
+  <RouterView />
 </template>
-
-<style lang="scss">
-.app {
-  height: 100%;
-  min-height: 0;
-}
-</style>
