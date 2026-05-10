@@ -1,83 +1,15 @@
 import { useDebounceFn } from '@vueuse/core'
 import type { IEventGetSearchedContact, IEventSearchContact, IFrontendContact, SocketActionsType } from 'global-shared'
-import { isString } from 'lodash'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 
 import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
 import { socket } from 'src/shared/api'
-import type { DbContactType } from 'src/shared/lib'
 
-import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS, CONTACTS_PAGE_SEARCH_QUERY_KEY } from '../config/constants'
-import { CONTACTS_PAGE_I18N } from '../config/i18n'
+import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS } from '../config/constants'
 import { getContactAvatarId } from '../lib/get-contact-avatar-id'
 
-export const useContactSearchQuery = () => {
-  const route = useRoute()
-  const router = useRouter()
-
-  const getSearchQuery = () => {
-    const value = route.query[CONTACTS_PAGE_SEARCH_QUERY_KEY]
-
-    return isString(value) ? value : ''
-  }
-  const searchQuery = ref(getSearchQuery())
-  const hasSearchQuery = computed(() => Boolean(searchQuery.value))
-  const updateSearchRouteQuery = (value: string) => {
-    const nextQuery = { ...route.query }
-
-    if (value) {
-      nextQuery[CONTACTS_PAGE_SEARCH_QUERY_KEY] = value
-    } else {
-      delete nextQuery[CONTACTS_PAGE_SEARCH_QUERY_KEY]
-    }
-
-    if (getSearchQuery() === value) return
-
-    router.replace({ query: nextQuery })
-  }
-
-  watch(
-    () => route.query[CONTACTS_PAGE_SEARCH_QUERY_KEY],
-    () => {
-      const value = getSearchQuery()
-
-      if (searchQuery.value !== value) {
-        searchQuery.value = value
-      }
-    }
-  )
-  watch(searchQuery, updateSearchRouteQuery)
-
-  return {
-    searchQuery,
-    hasSearchQuery
-  }
-}
-
-export const useContactListSearch = () => {
-  const { contacts } = useContact()
-  const { searchQuery, hasSearchQuery } = useContactSearchQuery()
-  const normalizedSearchQuery = computed(() => searchQuery.value.toLowerCase())
-  const matchesSearchQuery = ({ nickname }: DbContactType) => {
-    const query = normalizedSearchQuery.value
-
-    return !query || nickname.toLowerCase().includes(query)
-  }
-  const contactList = computed(() =>
-    [...contacts.value].filter(matchesSearchQuery).sort((a, b) => (b.savedAt ?? 0) - (a.savedAt ?? 0))
-  )
-  const contactListEmptyText = computed(() =>
-    hasSearchQuery.value ? CONTACTS_PAGE_I18N.searchEmpty : CONTACTS_PAGE_I18N.listEmpty
-  )
-
-  return {
-    searchQuery,
-    contactList,
-    contactListEmptyText
-  }
-}
+import { useContactSearchQuery } from './use-contact-search-query.model'
 
 export const useContactSearch = () => {
   const { searchQuery } = useContactSearchQuery()

@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphButton, NmorphIconChatLineSquare, NmorphIconPostCard } from '@nmorph/nmorph-ui-kit'
+import { computed } from 'vue'
 
 import { AppHeader, AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactListEmits, IContactListProps } from '../config/types'
-import { useContactList } from '../model/use-contact-list.model'
+import { getContactActivityTagColor } from '../lib/get-contact-activity-tag-color'
+import { getContactAvatarId } from '../lib/get-contact-avatar-id'
+import { getContactStatusTagColor } from '../lib/get-contact-status-tag-color'
+import { hasContactChatRoom } from '../lib/has-contact-chat-room'
 
 import ContactContextMenu from './ContactContextMenu.vue'
 
 const props = defineProps<IContactListProps>()
 const emit = defineEmits<IContactListEmits>()
-const {
-  getContactAvatarId,
-  getContactStatusTagColor,
-  getContactActivityTagColor,
-  inviteContact,
-  deleteContact,
-  updateContactInteraction,
-  hasContactChatRoom,
-  goToContactChat,
-  createContactChat
-} = useContactList(props, emit)
+const contactChatRoomIdList = computed(() =>
+  props.contactList
+    .filter(
+      ({ id, interactionType }) =>
+        interactionType === 'invite-accepted' && hasContactChatRoom(props.getPersonalChatRoomId(id))
+    )
+    .map(({ id }) => id)
+)
 </script>
 
 <template>
@@ -64,17 +65,17 @@ const {
           shape="square"
           :loading="props.loadingContactIds.has(contact.id)"
           :aria-label="$t(CONTACTS_PAGE_I18N.invite)"
-          @click="inviteContact(contact.id)"
+          @click="emit('update-interaction', contact.id, 'invited')"
         >
           <template #icon>
             <NmorphIconPostCard />
           </template>
         </NmorphButton>
         <NmorphButton
-          v-else-if="contact.interactionType === 'invite-accepted' && hasContactChatRoom(contact.id)"
+          v-else-if="contactChatRoomIdList.includes(contact.id)"
           shape="square"
           :aria-label="$t(CONTACTS_PAGE_I18N.write)"
-          @click="goToContactChat(contact.id)"
+          @click="emit('go-to-chat', props.getPersonalChatRoomId(contact.id))"
         >
           <template #icon>
             <NmorphIconChatLineSquare />
@@ -85,13 +86,17 @@ const {
           shape="square"
           :loading="props.creatingChatContactIds.has(contact.id)"
           :aria-label="$t(CONTACTS_PAGE_I18N.createChat)"
-          @click="createContactChat(contact.id)"
+          @click="emit('create-chat', contact.id)"
         >
           <template #icon>
             <NmorphIconChatLineSquare />
           </template>
         </NmorphButton>
-        <ContactContextMenu :contact="contact" @delete="deleteContact" @update-interaction="updateContactInteraction" />
+        <ContactContextMenu
+          :contact="contact"
+          @delete="emit('delete', $event)"
+          @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
+        />
       </div>
     </div>
   </div>

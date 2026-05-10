@@ -4,7 +4,7 @@ import { NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { AppHeader, AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import { useContactListSearch } from '../model/use-contact-search.model'
+import { useContactListSearch } from '../model/use-contact-list-search.model'
 import { useContactsPage } from '../model/use-contacts-page.model'
 
 import ContactList from './ContactList.vue'
