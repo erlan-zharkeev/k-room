@@ -87,7 +87,7 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
               :max="item.max"
               :step="item.step"
               :show-tooltip="false"
-              @update:model-value="($event) => changeThemeShadowSetting(item.id, $event)"
+              @update:model-value="changeThemeShadowSetting(item.id, Number($event))"
             />
           </label>
         </div>

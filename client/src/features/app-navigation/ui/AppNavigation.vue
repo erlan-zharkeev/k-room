@@ -5,7 +5,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useScreen } from 'src/shared/lib'
+import { useContact } from 'src/entities/contact'
 
 import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from '../config/constants'
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
@@ -14,10 +14,9 @@ import type { IAppNavigationProps } from './types'
 
 const props = defineProps<IAppNavigationProps>()
 
-const { isPortraitTabletOrLess } = useScreen()
-
 const route = useRoute()
 const { unreadMessagesQuantity } = useChatRoom()
+const { invitationsQuantity } = useContact()
 
 const selectedSettingsId = computed(() => {
   const { settingsId } = route.params
@@ -35,8 +34,8 @@ const selectedSettingsId = computed(() => {
       v-slot="{ navigate, isExactActive }"
     >
       <NmorphBadge
-        :value="getBadgeValue(item.id, unreadMessagesQuantity)"
-        :offset-y="isPortraitTabletOrLess ? 4 : 10"
+        :value="getBadgeValue(item.id, unreadMessagesQuantity, invitationsQuantity)"
+        :offset-y="4"
         size="tiny"
       >
         <NmorphRadio
