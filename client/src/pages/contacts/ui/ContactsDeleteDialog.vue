@@ -14,7 +14,7 @@ const emit = defineEmits<IContactsDeleteDialogEmits>()
   <NmorphDialog
     :model-value="props.modelValue"
     :title="$t(CONTACTS_PAGE_I18N.deleteTitle)"
-    @update:model-value="($event) => emit('update:modelValue', $event)"
+    @update:model-value="($event) => emit('update:model-value', $event)"
   >
     <div class="contacts-delete-dialog">
       <AppText :text="$t(CONTACTS_PAGE_I18N.deleteConfirm)" />

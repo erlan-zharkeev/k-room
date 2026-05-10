@@ -26,10 +26,10 @@ export interface IContactListProps {
 }
 
 export interface IContactListEmits {
-  createChat: [id: string]
+  'create-chat': [id: string]
   delete: [id: string]
-  goToChat: [id: string]
-  updateInteraction: [id: string, interaction: DbContactType['interactionType']]
+  'go-to-chat': [id?: string]
+  'update-interaction': [id: string, interaction: DbContactType['interactionType']]
 }
 
 export interface IContactContextMenuProps {
@@ -38,7 +38,7 @@ export interface IContactContextMenuProps {
 
 export interface IContactContextMenuEmits {
   delete: [id: string]
-  updateInteraction: [id: string, interaction: DbContactType['interactionType']]
+  'update-interaction': [id: string, interaction: DbContactType['interactionType']]
 }
 
 export interface IContactsDeleteDialogProps {
@@ -46,19 +46,7 @@ export interface IContactsDeleteDialogProps {
 }
 
 export interface IContactsDeleteDialogEmits {
-  'update:modelValue': [value: boolean]
+  'update:model-value': [value: boolean]
   cancel: []
   confirm: []
-}
-
-export type ContactListEmitType = {
-  (event: 'createChat', id: string): void
-  (event: 'delete', id: string): void
-  (event: 'goToChat', id: string): void
-  (event: 'updateInteraction', id: string, interaction: DbContactType['interactionType']): void
-}
-
-export type ContactContextMenuEmitType = {
-  (event: 'delete', id: string): void
-  (event: 'updateInteraction', id: string, interaction: DbContactType['interactionType']): void
 }
