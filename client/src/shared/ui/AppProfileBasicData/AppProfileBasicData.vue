@@ -36,6 +36,7 @@ const { imageSrc } = useAppProfileBasicData(props)
 
 .app-profile-basic-data__content {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   justify-content: space-between;
 
