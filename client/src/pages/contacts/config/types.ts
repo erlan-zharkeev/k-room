@@ -30,3 +30,10 @@ export interface IContactListEmits {
   goToChat: [id: string]
   updateInteraction: [id: string, interaction: DbContactType['interactionType']]
 }
+
+export type ContactListEmitType = {
+  (event: 'createChat', id: string): void
+  (event: 'delete', id: string): void
+  (event: 'goToChat', id: string): void
+  (event: 'updateInteraction', id: string, interaction: DbContactType['interactionType']): void
+}

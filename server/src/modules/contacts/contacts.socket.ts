@@ -1,4 +1,10 @@
-import type { IEventSaveContact, IEventSearchContact, IEventUpdateInteraction, SocketActionsType } from 'global-shared'
+import type {
+  IEventDeleteContact,
+  IEventSaveContact,
+  IEventSearchContact,
+  IEventUpdateInteraction,
+  SocketActionsType
+} from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
@@ -9,6 +15,7 @@ import {
   deleteContactById,
   emitContactInteractionUpdated,
   emitSearchedContacts,
+  getContactInteraction,
   saveContact,
   searchContacts,
   updateContactInteraction,
@@ -57,6 +64,17 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType) => {
   )
 
   socket.on<SocketActionsType>(
+    'delete-contact',
+    socketErrorMiddleware(
+      socket,
+      async ({ deletingUserId }: IEventDeleteContact) => {
+        await deleteContactById(socket.data.userId, deletingUserId, socket.id)
+      },
+      { basicError: CONTACTS_I18N.updateContactInteractionFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
     'update-contact-interaction-type',
     socketErrorMiddleware(
       socket,
@@ -64,12 +82,32 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType) => {
         const { userId } = socket.data
 
         if (interaction === 'default') {
+          const currentInteraction = await getContactInteraction(userId, contactId)
+
+          if (currentInteraction === 'blocked') {
+            const updated = await updateContactInteraction(userId, contactId, interaction)
+
+            if (updated) {
+              emitContactInteractionUpdated(socket.id, contactId, interaction)
+            }
+
+            return
+          }
+
           await deleteContactById(userId, contactId, socket.id)
-        } else {
-          await updateContactInteraction(userId, contactId, interaction)
+          emitContactInteractionUpdated(socket.id, contactId, interaction)
+          return
         }
 
-        emitContactInteractionUpdated(socket.id, contactId, interaction)
+        const updated = await updateContactInteraction(userId, contactId, interaction)
+
+        if (updated) {
+          emitContactInteractionUpdated(socket.id, contactId, interaction)
+        } else {
+          const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'
+
+          emitContactInteractionUpdated(socket.id, contactId, currentInteraction)
+        }
       },
       { basicError: CONTACTS_I18N.updateContactInteractionFailed }
     )

@@ -1,4 +1,4 @@
-export type InteractionType = 'default' | 'invited' | 'invite-accepted' | 'invite-hidden' | 'invite-received'
+export type InteractionType = 'default' | 'invited' | 'invite-accepted' | 'invite-received' | 'blocked'
 
 export interface IFrontendContact {
   id: string

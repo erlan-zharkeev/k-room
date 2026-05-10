@@ -1,6 +1,7 @@
 import type {
   AppLanguageType,
   IChangePasswordPayload,
+  InteractionType,
   ProviderType,
   UnknownObjectType,
   UserRoleType
@@ -14,7 +15,7 @@ export interface IUserDevice {
 
 export interface IContact {
   id: string
-  interaction: 'default' | 'invited' | 'invite-accepted' | 'invite-hidden' | 'invite-received'
+  interaction: InteractionType
   updatedAt: number
 }
 

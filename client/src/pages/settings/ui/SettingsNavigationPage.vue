@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -25,21 +26,30 @@ const getItemRoute = (settingsId: string) => ({
 
 <template>
   <nav class="settings-navigation-page">
-    <AppContentNavEl
-      v-for="item in SETTINGS_NAVIGATION_ITEMS"
-      :key="item.id"
-      :to="getItemRoute(item.id)"
-      :active="selectedSettingsId === item.id"
-      :ariaLabel="$t(item.label)"
-      :label="$t(item.label)"
-      :description="$t(item.description)"
-    />
+    <NmorphScroll :y-gap-in-px="-6">
+      <div class="settings-navigation-page__list">
+        <AppContentNavEl
+          v-for="item in SETTINGS_NAVIGATION_ITEMS"
+          :key="item.id"
+          :to="getItemRoute(item.id)"
+          :active="selectedSettingsId === item.id"
+          :ariaLabel="$t(item.label)"
+          :label="$t(item.label)"
+          :description="$t(item.description)"
+        />
+      </div>
+    </NmorphScroll>
   </nav>
 </template>
 
 <style lang="scss">
 .settings-navigation-page {
   overflow-x: hidden;
+  height: 100%;
+  min-height: 0;
+}
+
+.settings-navigation-page__list {
   display: flex;
   flex-direction: column;
   gap: 8px;

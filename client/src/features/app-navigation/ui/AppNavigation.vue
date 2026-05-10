@@ -39,7 +39,11 @@ const selectedSettingsId = computed(() => {
         :offset-y="isPortraitTabletOrLess ? 4 : 10"
         size="tiny"
       >
-        <NmorphRadio @click="() => navigate()" :checked="isNavBtnActive(item.id, isExactActive, route.path)" height='basic'>
+        <NmorphRadio
+          @click="() => navigate()"
+          :checked="isNavBtnActive(item.id, isExactActive, route.path)"
+          height="basic"
+        >
           <template #label>
             <NmorphIcon :color="isExactActive ? 'var(--nmorph-accent-color)' : 'var(--nmorph-text-color)'">
               <component :is="item.icon" />

@@ -74,7 +74,7 @@ watch(
     </AppProfileBasicData>
     <div class="top-bar__actions nmorph--shadow-inset">
       <NmorphButton @click="logout" :loading="isLogoutLoading">
-        <NmorphIcon width="18px">
+        <NmorphIcon width="18px" height="18px">
           <NmorphIconExit class="top-bar__exit-btn" />
         </NmorphIcon>
       </NmorphButton>
@@ -96,7 +96,6 @@ watch(
 }
 
 .top-bar__actions {
-  margin-right: 8px;
   padding: 8px;
 }
 </style>
