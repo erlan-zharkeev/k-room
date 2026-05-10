@@ -1,21 +1,36 @@
 import { useDebounceFn } from '@vueuse/core'
 import type { IEventGetSearchedContact, IEventSearchContact, IFrontendContact, SocketActionsType } from 'global-shared'
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { isString } from 'lodash'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
+import { useSyncMedia } from 'src/entities/media-file'
 import { socket } from 'src/shared/api'
 
-import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS } from '../config/constants'
-import type { IUseContactSearchParams } from '../config/types'
+import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS, CONTACTS_PAGE_SEARCH_QUERY_KEY } from '../config/constants'
+import { getContactAvatarId } from '../lib/get-contact-avatar-id'
 
-export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
-  const { mergeMany } = useContact()
+export const useContactSearch = () => {
+  const route = useRoute()
+  const { mergeMany, isExist } = useContact()
+  const { sync } = useSyncMedia()
+  const syncedAvatarIds = new Set<string>()
   const searchedContacts = ref<IFrontendContact[]>([])
   const searchHasMore = ref(false)
   const searchNextOffset = ref(0)
   const searchValue = ref('')
   const isSearchLoading = ref(false)
   const isSearchLoadingMore = ref(false)
+  const searchQuery = computed(() => {
+    const value = route.query[CONTACTS_PAGE_SEARCH_QUERY_KEY]
+
+    return isString(value) ? value : ''
+  })
+  const foundContactList = computed(() => searchedContacts.value.filter(({ id }) => !isExist(id)))
+  const showSearchResults = computed(
+    () => Boolean(searchQuery.value) && (isSearchLoading.value || Boolean(foundContactList.value.length))
+  )
 
   const resetSearchResults = () => {
     searchedContacts.value = []
@@ -72,6 +87,17 @@ export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
     })
   }
 
+  const syncContactAvatars = (contacts: IFrontendContact[]) => {
+    contacts.forEach(({ id }) => {
+      const avatarId = getContactAvatarId(id)
+
+      if (syncedAvatarIds.has(avatarId)) return
+
+      syncedAvatarIds.add(avatarId)
+      sync(avatarId)
+    })
+  }
+
   const handleSearchedContacts = async (payload: IEventGetSearchedContact) => {
     if (payload.value !== searchValue.value) return
 
@@ -82,6 +108,7 @@ export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
         : [...searchedContacts.value, ...payload.contacts.filter(({ id }) => !knownIds.has(id))]
 
     await syncSavedContacts(nextContacts)
+    syncContactAvatars(payload.contacts)
 
     searchedContacts.value = nextContacts
     searchHasMore.value = payload.hasMore
@@ -99,7 +126,8 @@ export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
   })
 
   return {
-    searchedContacts,
+    foundContactList,
+    showSearchResults,
     searchHasMore,
     isSearchLoading,
     isSearchLoadingMore,

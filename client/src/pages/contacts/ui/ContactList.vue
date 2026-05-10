@@ -1,38 +1,23 @@
 <script setup lang="ts">
-import {
-  NmorphButton,
-  NmorphDropdown,
-  NmorphIcon,
-  NmorphIconChatLineSquare,
-  NmorphIconCheck,
-  NmorphIconClose,
-  NmorphIconDelete,
-  NmorphIconEyeBlocked,
-  NmorphIconMore,
-  NmorphIconPostCard
-} from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphButton, NmorphIconChatLineSquare, NmorphIconPostCard } from '@nmorph/nmorph-ui-kit'
 
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppHeader, AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactListEmits, IContactListProps } from '../config/types'
 import { useContactList } from '../model/use-contact-list.model'
 
+import ContactContextMenu from './ContactContextMenu.vue'
+
 const props = defineProps<IContactListProps>()
 const emit = defineEmits<IContactListEmits>()
 const {
-  openedContactMenuId,
   getContactAvatarId,
-  setContactMenuButtonRef,
-  getContactMenuRelativeElement,
-  closeContactMenu,
-  toggleContactMenu,
+  getContactStatusTagColor,
+  getContactActivityTagColor,
   inviteContact,
-  acceptContactInvite,
-  declineContactInvite,
   deleteContact,
-  blockContact,
-  unblockContact,
+  updateContactInteraction,
   hasContactChatRoom,
   goToContactChat,
   createContactChat
@@ -43,65 +28,34 @@ const {
   <div class="contact-list">
     <div v-for="contact in props.contactList" :key="contact.id" class="contact-list__item nmorph--shadow-inset">
       <AppProfileBasicData
+        class="contact-list__profile"
         :image-id="getContactAvatarId(contact.id)"
         :title="contact.nickname"
         :name="contact.nickname"
       >
-        <template #description>
-          <AppText
-            v-if="props.getContactDescription(contact)"
-            tag="small"
-            :color="contact.interactionType === 'blocked' ? 'warn' : contact.online ? 'accent' : 'semi-contrast-text'"
-            truncate
-            :text="props.getContactDescription(contact)"
-          />
-          <div
-            v-else-if="contact.interactionType === 'invited' || contact.interactionType === 'invite-received'"
-            class="contact-list__invite-controls"
-          >
-            <AppText
-              v-if="contact.interactionType === 'invited'"
-              tag="small"
-              color="accent"
-              :text="$t(CONTACTS_PAGE_I18N.invited)"
+        <template #title>
+          <div class="contact-list__title">
+            <div class="contact-list__name">
+              <AppHeader tag="h5" truncate :text="contact.nickname" />
+            </div>
+            <NmorphBadge
+              v-if="props.getContactStatus(contact)"
+              class="contact-list__status"
+              is-tag
+              size="tiny"
+              :color="getContactStatusTagColor(contact)"
+              :value="props.getContactStatus(contact)"
             />
-            <template v-else-if="contact.interactionType === 'invite-received'">
-              <NmorphButton
-                height="thin"
-                shape="square"
-                :loading="props.loadingContactIds.has(contact.id)"
-                :aria-label="$t(CONTACTS_PAGE_I18N.accept)"
-                @click="acceptContactInvite(contact.id)"
-              >
-                <template #icon>
-                  <NmorphIconCheck />
-                </template>
-              </NmorphButton>
-              <NmorphButton
-                height="thin"
-                shape="square"
-                color="var(--nmorph-error-text-color)"
-                :loading="props.loadingContactIds.has(contact.id)"
-                :aria-label="$t(CONTACTS_PAGE_I18N.decline)"
-                @click="declineContactInvite(contact.id)"
-              >
-                <template #icon>
-                  <NmorphIconClose />
-                </template>
-              </NmorphButton>
-              <NmorphButton
-                height="thin"
-                shape="square"
-                :loading="props.loadingContactIds.has(contact.id)"
-                :aria-label="$t(CONTACTS_PAGE_I18N.block)"
-                @click="blockContact(contact.id)"
-              >
-                <template #icon>
-                  <NmorphIconEyeBlocked />
-                </template>
-              </NmorphButton>
-            </template>
           </div>
+        </template>
+        <template #description>
+          <NmorphBadge
+            v-if="props.getContactActivity(contact)"
+            is-tag
+            size="tiny"
+            :color="getContactActivityTagColor(contact)"
+            :value="props.getContactActivity(contact)"
+          />
         </template>
       </AppProfileBasicData>
       <div class="contact-list__actions">
@@ -137,52 +91,7 @@ const {
             <NmorphIconChatLineSquare />
           </template>
         </NmorphButton>
-        <div :ref="(element) => setContactMenuButtonRef(contact.id, element)" class="contact-list__menu-wrapper">
-          <NmorphButton
-            shape="square"
-            :aria-label="$t(CONTACTS_PAGE_I18N.contactActions)"
-            @click="toggleContactMenu(contact.id)"
-          >
-            <template #icon>
-              <NmorphIconMore class="contact-list__menu-icon" />
-            </template>
-          </NmorphButton>
-          <NmorphDropdown
-            v-if="openedContactMenuId === contact.id"
-            open
-            :relative-element="getContactMenuRelativeElement(contact.id)"
-            :width="176"
-            :fill-width="false"
-            :y-offset="8"
-            @on-outside-click="closeContactMenu"
-          >
-            <div class="contact-list__menu">
-              <button class="contact-list__menu-item" type="button" @click="deleteContact(contact.id)">
-                <NmorphIcon color="var(--nmorph-error-text-color)">
-                  <NmorphIconDelete />
-                </NmorphIcon>
-                <AppText tag="span" color="error-text" :text="$t(CONTACTS_PAGE_I18N.delete)" />
-              </button>
-              <button
-                v-if="contact.interactionType === 'blocked'"
-                class="contact-list__menu-item"
-                type="button"
-                @click="unblockContact(contact.id)"
-              >
-                <NmorphIcon>
-                  <NmorphIconClose />
-                </NmorphIcon>
-                <AppText tag="span" :text="$t(CONTACTS_PAGE_I18N.unblock)" />
-              </button>
-              <button v-else class="contact-list__menu-item" type="button" @click="blockContact(contact.id)">
-                <NmorphIcon>
-                  <NmorphIconEyeBlocked />
-                </NmorphIcon>
-                <AppText tag="span" :text="$t(CONTACTS_PAGE_I18N.block)" />
-              </button>
-            </div>
-          </NmorphDropdown>
-        </div>
+        <ContactContextMenu :contact="contact" @delete="deleteContact" @update-interaction="updateContactInteraction" />
       </div>
     </div>
   </div>
@@ -200,57 +109,22 @@ const {
   align-items: center;
   justify-content: space-between;
 
-  min-width: 0;
   padding: 8px;
-  border: 1px solid var(--app-content-border-color);
-  border-radius: 6px;
-
-  background: var(--app-content-background);
 }
 
-.contact-list__invite-controls,
-.contact-list__actions {
+.contact-list__title {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.contact-list__actions {
+.contact-list__status {
   flex: 0 0 auto;
 }
 
-.contact-list__menu-wrapper {
-  display: flex;
-}
-
-.contact-list__menu-icon {
-  transform: rotate(90deg);
-}
-
-.contact-list__menu {
-  display: grid;
-  gap: 4px;
-  padding: 6px;
-}
-
-.contact-list__menu-item {
-  cursor: pointer;
-
+.contact-list__actions {
   display: flex;
   gap: 8px;
   align-items: center;
-
-  width: 100%;
-  padding: 8px;
-  border: 0;
-  border-radius: 4px;
-
-  text-align: left;
-
-  background: transparent;
-}
-
-.contact-list__menu-item:hover {
-  background: var(--app-content-background);
 }
 </style>

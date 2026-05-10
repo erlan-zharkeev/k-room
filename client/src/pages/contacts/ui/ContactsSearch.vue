@@ -7,26 +7,35 @@ import { CONTACTS_SEARCH_BADGE_BY_INTERACTION } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactsSearchEmits, IContactsSearchProps } from '../config/types'
 import { getContactAvatarId } from '../lib/get-contact-avatar-id'
+import { useContactSearch } from '../model/use-contact-search.model'
 
-const props = defineProps<IContactsSearchProps>()
+const { loadingContactIds } = defineProps<IContactsSearchProps>()
 const emit = defineEmits<IContactsSearchEmits>()
+const {
+  foundContactList,
+  showSearchResults,
+  searchHasMore,
+  isSearchLoading,
+  isSearchLoadingMore,
+  loadMoreSearchedContacts
+} = useContactSearch()
 </script>
 
 <template>
   <div class="contacts-search">
     <NmorphScroll>
       <div class="contacts-search__scroll-container">
-        <div v-if="props.showSearchResults" class="contacts-search__results">
+        <div v-if="showSearchResults" class="contacts-search__results">
           <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.globalSearch)" />
           <AppText
-            v-if="props.isSearchLoading"
+            v-if="isSearchLoading"
             tag="small"
             color="semi-contrast-text"
             :text="$t(CONTACTS_PAGE_I18N.loading)"
           />
           <div v-else class="contacts-search__list">
             <div
-              v-for="contact in props.contactList"
+              v-for="contact in foundContactList"
               :key="contact.id"
               class="contacts-search__item nmorph--shadow-inset"
             >
@@ -56,7 +65,7 @@ const emit = defineEmits<IContactsSearchEmits>()
               <NmorphButton
                 v-if="contact.interactionType === 'default'"
                 shape="square"
-                :loading="props.loadingContactIds.has(contact.id)"
+                :loading="loadingContactIds.has(contact.id)"
                 :aria-label="$t(CONTACTS_PAGE_I18N.add)"
                 @click="emit('add', contact.id)"
               >
@@ -66,13 +75,13 @@ const emit = defineEmits<IContactsSearchEmits>()
               </NmorphButton>
             </div>
             <NmorphButton
-              v-if="props.searchHasMore"
+              v-if="searchHasMore"
               class="contacts-search__load-more"
               :text="$t(CONTACTS_PAGE_I18N.loadMore) + '...'"
               fill
               style-type="transparent"
-              :loading="props.isSearchLoadingMore"
-              @click="emit('loadMore')"
+              :loading="isSearchLoadingMore"
+              @click="loadMoreSearchedContacts"
             />
           </div>
         </div>
