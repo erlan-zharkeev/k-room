@@ -1,47 +1,27 @@
-import { reactive, ref } from 'vue'
+import type { InteractionType } from 'global-shared'
+
+import type { DbContactType } from 'src/shared/lib'
 
 import type { ContactListEmitType, IContactListProps } from '../config/types'
 import { getContactAvatarId } from '../lib/get-contact-avatar-id'
 
 export const useContactList = (props: IContactListProps, emit: ContactListEmitType) => {
-  const openedContactMenuId = ref('')
-  const contactMenuButtonElements = reactive(new Map<string, HTMLElement>())
+  const getContactStatusTagColor = ({ interactionType }: DbContactType) => {
+    if (interactionType === 'blocked') return 'var(--nmorph-warn-color)'
+    if (interactionType === 'invited' || interactionType === 'invite-received') return 'var(--nmorph-accent-color)'
 
-  const setContactMenuButtonRef = (id: string, element: unknown) => {
-    if (element instanceof HTMLElement) {
-      contactMenuButtonElements.set(id, element)
-      return
-    }
-
-    contactMenuButtonElements.delete(id)
+    return 'var(--nmorph-semi-contrast-text-color)'
   }
-  const getContactMenuRelativeElement = (id: string) => contactMenuButtonElements.get(id) ?? null
-  const closeContactMenu = () => {
-    openedContactMenuId.value = ''
-  }
-  const toggleContactMenu = (id: string) => {
-    openedContactMenuId.value = openedContactMenuId.value === id ? '' : id
-  }
+  const getContactActivityTagColor = ({ online }: DbContactType) =>
+    online ? 'var(--nmorph-success-color)' : 'var(--nmorph-semi-contrast-text-color)'
   const inviteContact = (id: string) => {
     emit('updateInteraction', id, 'invited')
   }
-  const acceptContactInvite = (id: string) => {
-    emit('updateInteraction', id, 'invite-accepted')
-  }
-  const declineContactInvite = (id: string) => {
-    emit('updateInteraction', id, 'default')
-  }
   const deleteContact = (id: string) => {
-    closeContactMenu()
     emit('delete', id)
   }
-  const blockContact = (id: string) => {
-    closeContactMenu()
-    emit('updateInteraction', id, 'blocked')
-  }
-  const unblockContact = (id: string) => {
-    closeContactMenu()
-    emit('updateInteraction', id, 'default')
+  const updateContactInteraction = (id: string, interaction: InteractionType) => {
+    emit('updateInteraction', id, interaction)
   }
   const hasContactChatRoom = (id: string) => Boolean(props.getPersonalChatRoomId(id))
   const goToContactChat = (id: string) => {
@@ -56,18 +36,12 @@ export const useContactList = (props: IContactListProps, emit: ContactListEmitTy
   }
 
   return {
-    openedContactMenuId,
     getContactAvatarId,
-    setContactMenuButtonRef,
-    getContactMenuRelativeElement,
-    closeContactMenu,
-    toggleContactMenu,
+    getContactStatusTagColor,
+    getContactActivityTagColor,
     inviteContact,
-    acceptContactInvite,
-    declineContactInvite,
     deleteContact,
-    blockContact,
-    unblockContact,
+    updateContactInteraction,
     hasContactChatRoom,
     goToContactChat,
     createContactChat

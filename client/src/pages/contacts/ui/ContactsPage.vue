@@ -18,7 +18,6 @@ const {
   loadingContactIds,
   creatingChatContactIds,
   isDeleteDialogOpen,
-  isExist,
   getContactActivity,
   getContactStatus,
   getPersonalChatRoomId,
@@ -50,13 +49,7 @@ const contactListEmptyText = computed(() =>
         </template>
       </NmorphTextInput>
     </div>
-    <ContactsSearch
-      class="contacts-page__list"
-      :search-query="searchQuery"
-      :loading-contact-ids="loadingContactIds"
-      :is-contact-exist="isExist"
-      @add="addContact"
-    >
+    <ContactsSearch class="contacts-page__list" :loading-contact-ids="loadingContactIds" @add="addContact">
       <div class="contacts-page__block">
         <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.listTitle)" />
         <AppText v-if="!contactList.length" color="semi-contrast-text" :text="$t(contactListEmptyText)" />

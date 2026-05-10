@@ -25,7 +25,7 @@ import { CONTACTS_PAGE_I18N } from '../config/i18n'
 export const useContactsPage = () => {
   const route = useRoute()
   const router = useRouter()
-  const { contacts, isExist } = useContact()
+  const { contacts } = useContact()
   const { getPersonalByContactId } = useChatRoom()
   const { settings } = useSettings()
   const { t } = useI18n()
@@ -65,8 +65,7 @@ export const useContactsPage = () => {
     [...contacts.value].filter(matchesSearchQuery).sort((a, b) => (b.savedAt ?? 0) - (a.savedAt ?? 0))
   )
 
-  const getContactDescription = ({ interactionType, lastSeen, online }: DbContactType) => {
-    if (interactionType === 'blocked') return t(CONTACTS_PAGE_I18N.blocked)
+  const getContactActivity = ({ interactionType, lastSeen, online }: DbContactType) => {
     if (interactionType !== 'invite-accepted') return ''
     if (online) return t(CONTACTS_PAGE_I18N.online)
 
@@ -78,6 +77,19 @@ export const useContactsPage = () => {
       normalized,
       settings.value.localization.language
     )}`
+  }
+
+  const getContactStatus = ({ interactionType }: DbContactType) => {
+    switch (interactionType) {
+      case 'blocked':
+        return t(CONTACTS_PAGE_I18N.blocked)
+      case 'invited':
+        return t(CONTACTS_PAGE_I18N.invited)
+      case 'invite-received':
+        return t(CONTACTS_PAGE_I18N.inviteReceived)
+      default:
+        return ''
+    }
   }
 
   const getPersonalChatRoomId = (id: string) => getPersonalByContactId(id)?.id
@@ -173,8 +185,8 @@ export const useContactsPage = () => {
     loadingContactIds,
     creatingChatContactIds,
     isDeleteDialogOpen,
-    isExist,
-    getContactDescription,
+    getContactActivity,
+    getContactStatus,
     getPersonalChatRoomId,
     addContact,
     updateInteraction,
