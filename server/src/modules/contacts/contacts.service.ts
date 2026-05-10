@@ -68,7 +68,7 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
             'default'
         )
       )
-      .filter((user) => user.id !== userId && user.interactionType !== 'invite-hidden')
+      .filter((user) => user.id !== userId)
       .sort((a, b) => {
         if (a.interactionType === b.interactionType) {
           return a.nickname.localeCompare(b.nickname)
@@ -155,6 +155,12 @@ export const setContactInteraction = async (docId: string, contactId: string, in
   )
 }
 
+export const getContactInteraction = async (docId: string, contactId: string) => {
+  const user = await UserModel.findOne({ _id: docId }, { [`personal.contacts.${contactId}.interaction`]: 1 }).lean()
+
+  return user?.personal.contacts?.[contactId]?.interaction
+}
+
 export const emitContactInteractionUpdated = (socketId: string, contactId: string, interaction: InteractionType) => {
   getIO()
     .to(socketId)
@@ -191,7 +197,7 @@ export const deleteContactById = async (
   const deletingUserInteractionType = deletingContact.personal.contacts[userId].interaction
   const deletingContactSockets = await getSocketsByUserIds([deletingContact._id])
 
-  if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invite-hidden') {
+  if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invited') {
     await Promise.all(
       deletingContactSockets.map(async (socketId) => {
         await deleteContactById(deletingUserId, userId, socketId, true)
@@ -214,6 +220,18 @@ export const deleteContactById = async (
 export const updateContactInteraction = async (userId: string, contactId: string, interaction: InteractionType) => {
   const updateAuthorContactInteraction = async () => setContactInteraction(userId, contactId, interaction)
   const updateContactSide = async () => setContactInteraction(contactId, userId, interaction)
+  const [currentInteraction, contactSideInteraction] = await Promise.all([
+    getContactInteraction(userId, contactId),
+    getContactInteraction(contactId, userId)
+  ])
+
+  if (currentInteraction === 'blocked' && interaction !== 'default') {
+    return false
+  }
+
+  if (contactSideInteraction === 'blocked' && interaction !== 'default' && interaction !== 'blocked') {
+    return false
+  }
 
   const handleUpdateContactInteraction = async () => {
     const updatedContact = await updateContactSide()
@@ -230,6 +248,10 @@ export const updateContactInteraction = async (userId: string, contactId: string
   }
 
   switch (interaction) {
+    case 'default':
+    case 'blocked':
+      await updateAuthorContactInteraction()
+      break
     case 'invited': {
       const [contactData, authorData] = await Promise.all([
         createContactInteraction(contactId, userId, 'invite-received'),
@@ -258,10 +280,9 @@ export const updateContactInteraction = async (userId: string, contactId: string
       await updateAuthorContactInteraction()
       await handleUpdateContactInteraction()
       break
-    case 'invite-hidden':
-      await updateAuthorContactInteraction()
-      break
   }
+
+  return true
 }
 
 export const updateInterlocutorStatus = async (userId: string) => {

@@ -71,11 +71,6 @@ export const CONTACTS_PAGE_I18N = defineI18n({
     ru: 'Отклонить',
     zh: '拒绝'
   },
-  hide: {
-    en: 'Hide',
-    ru: 'Скрыть',
-    zh: '隐藏'
-  },
   add: {
     en: 'Add contact',
     ru: 'Добавить контакт',
@@ -100,6 +95,16 @@ export const CONTACTS_PAGE_I18N = defineI18n({
     en: 'Block',
     ru: 'Заблокировать',
     zh: '拉黑'
+  },
+  blocked: {
+    en: 'Blocked',
+    ru: 'Заблокирован',
+    zh: '已拉黑'
+  },
+  unblock: {
+    en: 'Unblock',
+    ru: 'Разблокировать',
+    zh: '取消拉黑'
   },
   contactActions: {
     en: 'Contact actions',
