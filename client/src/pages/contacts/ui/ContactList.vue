@@ -112,10 +112,20 @@ const {
   padding: 8px;
 }
 
+.contact-list__profile {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .contact-list__title {
   display: flex;
   gap: 8px;
   align-items: center;
+  justify-content: space-between;
+}
+
+.contact-list__name {
+  min-width: 0;
 }
 
 .contact-list__status {

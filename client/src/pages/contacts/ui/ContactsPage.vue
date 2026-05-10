@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
 import { AppHeader, AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
+import { useContactListSearch } from '../model/use-contact-search.model'
 import { useContactsPage } from '../model/use-contacts-page.model'
 
 import ContactList from './ContactList.vue'
@@ -12,9 +12,6 @@ import ContactsDeleteDialog from './ContactsDeleteDialog.vue'
 import ContactsSearch from './ContactsSearch.vue'
 
 const {
-  searchQuery,
-  hasSearchQuery,
-  contactList,
   loadingContactIds,
   creatingChatContactIds,
   isDeleteDialogOpen,
@@ -29,10 +26,7 @@ const {
   closeDeleteDialog,
   deleteContact
 } = useContactsPage()
-
-const contactListEmptyText = computed(() =>
-  hasSearchQuery.value ? CONTACTS_PAGE_I18N.searchEmpty : CONTACTS_PAGE_I18N.listEmpty
-)
+const { searchQuery, contactList, contactListEmptyText } = useContactListSearch()
 </script>
 
 <template>
@@ -52,9 +46,8 @@ const contactListEmptyText = computed(() =>
     <ContactsSearch class="contacts-page__list" :loading-contact-ids="loadingContactIds" @add="addContact">
       <div class="contacts-page__block">
         <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.listTitle)" />
-        <AppText v-if="!contactList.length" color="semi-contrast-text" :text="$t(contactListEmptyText)" />
         <ContactList
-          v-else
+          v-if="contactList.length"
           :contact-list="contactList"
           :creating-chat-contact-ids="creatingChatContactIds"
           :get-contact-activity="getContactActivity"
@@ -66,6 +59,7 @@ const contactListEmptyText = computed(() =>
           @go-to-chat="goToChatRoom"
           @update-interaction="updateInteraction"
         />
+        <AppText v-else color="semi-contrast-text" :text="$t(contactListEmptyText)" />
       </div>
     </ContactsSearch>
     <ContactsDeleteDialog v-model="isDeleteDialogOpen" @cancel="closeDeleteDialog" @confirm="deleteContact" />
@@ -77,6 +71,7 @@ const contactListEmptyText = computed(() =>
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-top: 4px;
 }
 
 .contacts-page__list {
