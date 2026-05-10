@@ -95,6 +95,7 @@ const {
 .contacts-search__scroll-container {
   display: grid;
   gap: 8px;
+  padding: 0 12px 0 4px;
 }
 
 .contacts-search__results {

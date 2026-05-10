@@ -8,62 +8,27 @@ import {
   type InteractionType,
   type SocketActionsType
 } from 'global-shared'
-import { isString } from 'lodash'
-import { computed, reactive, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { reactive, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
 import { useSettings } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { socket } from 'src/shared/api'
 import { formatLocalizedRelativeTime, useI18n, type DbContactType } from 'src/shared/lib'
 
-import { CONTACTS_PAGE_SEARCH_QUERY_KEY } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 
 export const useContactsPage = () => {
-  const route = useRoute()
   const router = useRouter()
-  const { contacts } = useContact()
   const { getPersonalByContactId } = useChatRoom()
   const { settings } = useSettings()
   const { t } = useI18n()
 
   const contactToDeleteId = ref('')
   const isDeleteDialogOpen = ref(false)
-  const getRouteSearchQuery = () => {
-    const value = route.query[CONTACTS_PAGE_SEARCH_QUERY_KEY]
-
-    return isString(value) ? value : ''
-  }
-  const updateSearchRouteQuery = (value: string) => {
-    const nextQuery = { ...route.query }
-
-    if (value) {
-      nextQuery[CONTACTS_PAGE_SEARCH_QUERY_KEY] = value
-    } else {
-      delete nextQuery[CONTACTS_PAGE_SEARCH_QUERY_KEY]
-    }
-
-    if (getRouteSearchQuery() === value) return
-
-    router.replace({ query: nextQuery })
-  }
-  const searchQuery = ref(getRouteSearchQuery())
   const loadingContactIds = reactive(new Set<string>())
   const creatingChatContactIds = reactive(new Set<string>())
-  const hasSearchQuery = computed(() => Boolean(searchQuery.value))
-  const normalizedSearchQuery = computed(() => searchQuery.value.toLowerCase())
-  const matchesSearchQuery = ({ nickname }: DbContactType) => {
-    const query = normalizedSearchQuery.value
-
-    return !query || nickname.toLowerCase().includes(query)
-  }
-
-  const contactList = computed(() =>
-    [...contacts.value].filter(matchesSearchQuery).sort((a, b) => (b.savedAt ?? 0) - (a.savedAt ?? 0))
-  )
 
   const getContactActivity = ({ interactionType, lastSeen, online }: DbContactType) => {
     if (interactionType !== 'invite-accepted') return ''
@@ -161,17 +126,6 @@ export const useContactsPage = () => {
     closeDeleteDialog()
   }
 
-  watch(
-    () => route.query[CONTACTS_PAGE_SEARCH_QUERY_KEY],
-    () => {
-      const value = getRouteSearchQuery()
-
-      if (searchQuery.value !== value) {
-        searchQuery.value = value
-      }
-    }
-  )
-  watch(searchQuery, updateSearchRouteQuery)
   watch(isDeleteDialogOpen, (value) => {
     if (!value) {
       contactToDeleteId.value = ''
@@ -179,9 +133,6 @@ export const useContactsPage = () => {
   })
 
   return {
-    searchQuery,
-    hasSearchQuery,
-    contactList,
     loadingContactIds,
     creatingChatContactIds,
     isDeleteDialogOpen,
