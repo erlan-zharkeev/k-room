@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphDialog, NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { AppHeader, AppText } from 'src/shared/ui'
@@ -8,6 +8,7 @@ import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import { useContactsPage } from '../model/use-contacts-page.model'
 
 import ContactList from './ContactList.vue'
+import ContactsDeleteDialog from './ContactsDeleteDialog.vue'
 import ContactsSearch from './ContactsSearch.vue'
 
 const {
@@ -18,7 +19,8 @@ const {
   creatingChatContactIds,
   isDeleteDialogOpen,
   isExist,
-  getContactDescription,
+  getContactActivity,
+  getContactStatus,
   getPersonalChatRoomId,
   addContact,
   updateInteraction,
@@ -62,7 +64,8 @@ const contactListEmptyText = computed(() =>
           v-else
           :contact-list="contactList"
           :creating-chat-contact-ids="creatingChatContactIds"
-          :get-contact-description="getContactDescription"
+          :get-contact-activity="getContactActivity"
+          :get-contact-status="getContactStatus"
           :get-personal-chat-room-id="getPersonalChatRoomId"
           :loading-contact-ids="loadingContactIds"
           @create-chat="createPrivateChat"
@@ -72,19 +75,7 @@ const contactListEmptyText = computed(() =>
         />
       </div>
     </ContactsSearch>
-    <NmorphDialog v-model="isDeleteDialogOpen" :title="$t(CONTACTS_PAGE_I18N.deleteTitle)">
-      <div class="contacts-page__delete-dialog">
-        <AppText :text="$t(CONTACTS_PAGE_I18N.deleteConfirm)" />
-        <div class="contacts-page__delete-actions">
-          <NmorphButton :text="$t(CONTACTS_PAGE_I18N.cancel)" style-type="transparent" @click="closeDeleteDialog" />
-          <NmorphButton
-            color="var(--nmorph-error-text-color)"
-            :text="$t(CONTACTS_PAGE_I18N.delete)"
-            @click="deleteContact"
-          />
-        </div>
-      </div>
-    </NmorphDialog>
+    <ContactsDeleteDialog v-model="isDeleteDialogOpen" @cancel="closeDeleteDialog" @confirm="deleteContact" />
   </section>
 </template>
 

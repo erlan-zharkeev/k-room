@@ -26,11 +26,7 @@ body,
 body {
   min-width: 320px;
   height: 100dvh;
-  padding: 16px;
-
-  @include screen-tablet {
-    padding: 8px;
-  }
+  padding: 8px;
 }
 
 button,

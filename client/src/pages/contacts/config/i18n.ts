@@ -42,13 +42,13 @@ export const CONTACTS_PAGE_I18N = defineI18n({
     zh: '黑名单为空'
   },
   online: {
-    en: 'online',
-    ru: 'в сети',
+    en: 'Online',
+    ru: 'В сети',
     zh: '在线'
   },
   lastSeen: {
-    en: 'last seen',
-    ru: 'был(а) в сети',
+    en: 'Last seen',
+    ru: 'Был(а) в сети',
     zh: '最后在线'
   },
   invite: {
@@ -60,6 +60,11 @@ export const CONTACTS_PAGE_I18N = defineI18n({
     en: 'Invited',
     ru: 'Приглашен',
     zh: '已邀请'
+  },
+  inviteReceived: {
+    en: 'Invite received',
+    ru: 'Приглашение',
+    zh: '收到邀请'
   },
   accept: {
     en: 'Accept',

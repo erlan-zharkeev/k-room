@@ -2,12 +2,14 @@ import { useDebounceFn } from '@vueuse/core'
 import type { IEventGetSearchedContact, IEventSearchContact, IFrontendContact, SocketActionsType } from 'global-shared'
 import { onBeforeUnmount, ref, watch } from 'vue'
 
+import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
 import { socket } from 'src/shared/api'
 
 import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS } from '../config/constants'
 import type { IUseContactSearchParams } from '../config/types'
 
 export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
+  const { mergeMany } = useContact()
   const searchedContacts = ref<IFrontendContact[]>([])
   const searchHasMore = ref(false)
   const searchNextOffset = ref(0)
@@ -56,7 +58,21 @@ export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
     fetchContacts(searchValue.value, searchNextOffset.value)
   }
 
-  const handleSearchedContacts = (payload: IEventGetSearchedContact) => {
+  const syncSavedContacts = async (contacts: IFrontendContact[]) => {
+    const savedContacts = contacts.filter(({ interactionType }) => interactionType !== 'default')
+
+    await mergeMany(savedContacts, {
+      merge: (current, incoming) => ({
+        ...getRequiredContactSystemData(),
+        ...current,
+        ...incoming,
+        savedAt: current?.savedAt ?? Date.now(),
+        onlineStatusSyncedAt: Date.now()
+      })
+    })
+  }
+
+  const handleSearchedContacts = async (payload: IEventGetSearchedContact) => {
     if (payload.value !== searchValue.value) return
 
     const knownIds = new Set(searchedContacts.value.map(({ id }) => id))
@@ -64,6 +80,8 @@ export const useContactSearch = ({ searchQuery }: IUseContactSearchParams) => {
       payload.offset === 0
         ? payload.contacts
         : [...searchedContacts.value, ...payload.contacts.filter(({ id }) => !knownIds.has(id))]
+
+    await syncSavedContacts(nextContacts)
 
     searchedContacts.value = nextContacts
     searchHasMore.value = payload.hasMore
