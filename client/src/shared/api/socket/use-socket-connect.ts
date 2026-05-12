@@ -5,6 +5,8 @@ import { setSocketConnected, setSocketReconnecting } from './socket-status'
 
 export const useSocketConnect = () => {
   const actualizeSocketData = () => {
+    if (!socket.connected) return
+
     socket.emit<SocketActionsType>('initialize')
     socket.emit<SocketActionsType>('actualize-user-data')
   }
@@ -14,7 +16,6 @@ export const useSocketConnect = () => {
       socket.connect()
     }
 
-    actualizeSocketData()
     setSocketConnected(socket.connected)
     setSocketReconnecting(false)
   }
