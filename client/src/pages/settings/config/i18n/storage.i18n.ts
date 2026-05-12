@@ -34,6 +34,21 @@ export const SETTINGS_PAGE_STORAGE_I18N = {
     ru: 'Разрешено',
     zh: '已授权'
   },
+  storagePersistentRequestGranted: {
+    en: 'Persistent storage was enabled.',
+    ru: 'Постоянное хранилище включено.',
+    zh: '持久存储已启用。'
+  },
+  storagePersistentRequestDenied: {
+    en: 'The browser did not grant persistent storage. It may allow it later after more app usage or installation.',
+    ru: 'Браузер не выдал постоянное хранилище. Он может разрешить его позже после более частого использования или установки приложения.',
+    zh: '浏览器未授予持久存储权限。更多使用或安装应用后，浏览器可能稍后允许。'
+  },
+  storagePersistentRequestFailed: {
+    en: 'Failed to request persistent storage.',
+    ru: 'Не удалось запросить постоянное хранилище.',
+    zh: '无法请求持久存储。'
+  },
   storagePersistentRequest: {
     en: 'Request',
     ru: 'Запросить',

@@ -8,6 +8,7 @@ node_modules
 **/.turbo
 .env.development
 .env.test
+.env.secret
 dev-certs
 scripts/deploy/certs
 **/build

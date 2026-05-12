@@ -8,8 +8,8 @@ import { useAudioOutputDevice } from '../../../model/devices/use-audio-output-de
 import SettingsCard from '../../SettingsCard.vue'
 
 const {
-  settings,
   audioOutputOptions,
+  audioOutputSelectValue,
   audioOutputLoading,
   audioOutputTestLoading,
   audioOutputPermissionCalloutType,
@@ -36,10 +36,10 @@ const {
 
       <div class="settings-audio-output-device-card__control">
         <NmorphSelect
-          :key="settings.ioDevices.audioOutputDeviceId"
+          :key="audioOutputSelectValue"
           class="settings-audio-output-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)"
-          :model-value="settings.ioDevices.audioOutputDeviceId"
+          :model-value="audioOutputSelectValue"
           :options="audioOutputOptions"
           :loading="audioOutputLoading"
           :disabled="audioOutputLoading || audioOutputOptions.length === 0"

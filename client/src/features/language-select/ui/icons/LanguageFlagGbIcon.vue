@@ -1,0 +1,13 @@
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 24" aria-hidden="true" focusable="false">
+    <rect x="0" y="0" width="32" height="24" fill="#012169" />
+    <rect x="-4" y="10" width="40" height="4" fill="#fff" transform="rotate(36.87 16 12)" />
+    <rect x="-4" y="10" width="40" height="4" fill="#fff" transform="rotate(-36.87 16 12)" />
+    <rect x="-4" y="11" width="40" height="2" fill="#c8102e" transform="rotate(36.87 16 12)" />
+    <rect x="-4" y="11" width="40" height="2" fill="#c8102e" transform="rotate(-36.87 16 12)" />
+    <rect x="0" y="9" width="32" height="6" fill="#fff" />
+    <rect x="13" y="0" width="6" height="24" fill="#fff" />
+    <rect x="0" y="10.5" width="32" height="3" fill="#c8102e" />
+    <rect x="14.5" y="0" width="3" height="24" fill="#c8102e" />
+  </svg>
+</template>

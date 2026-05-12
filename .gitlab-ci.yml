@@ -56,7 +56,12 @@ deploy-production:
     - apk add --no-cache openssh-client
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" | base64 -d | tr -d '\r' > ~/.ssh/id_ed25519
+    - |
+      if [ -n "${LIGHTSAIL_SSH_PRIVATE_KEY_FILE:-}" ]; then
+        tr -d '\r' < "$LIGHTSAIL_SSH_PRIVATE_KEY_FILE" > ~/.ssh/id_ed25519
+      else
+        printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" | base64 -d | tr -d '\r' > ~/.ssh/id_ed25519
+      fi
     - chmod 600 ~/.ssh/id_ed25519
     - ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
     - ssh-keyscan -H "$LIGHTSAIL_HOST" >> ~/.ssh/known_hosts
@@ -65,8 +70,12 @@ deploy-production:
       ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
       "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy $LIGHTSAIL_APP_PATH/nginx $LIGHTSAIL_APP_PATH/scripts/deploy/certs"
     - scp compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
-    - scp .env.common "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.common"
+    - scp .env.shared "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.shared"
     - scp .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
+    - |
+      if [ -n "${ENV_SECRET_FILE:-}" ]; then
+        scp "$ENV_SECRET_FILE" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.secret"
+      fi
     - scp scripts/deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/deploy.sh"
     - scp scripts/deploy/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/sync-certs.sh"
     - scp scripts/deploy/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/install-certbot-renew-hook.sh"

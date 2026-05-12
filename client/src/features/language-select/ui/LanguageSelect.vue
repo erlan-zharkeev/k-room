@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { NmorphIcon, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { computed } from 'vue'
 
-import { useI18n, useScreen } from 'src/shared/lib'
-import { AppHeader } from 'src/shared/ui'
+import { useI18n } from 'src/shared/lib'
 
-import { LANGUAGE_SELECT_DEFAULT_PROPS, LANGUAGE_SELECT_OPTIONS } from '../config/constants'
+import {
+  LANGUAGE_SELECT_DEFAULT_PROPS,
+  LANGUAGE_SELECT_FLAG_ICON_MAP,
+  LANGUAGE_SELECT_FLAG_SIZE,
+  LANGUAGE_SELECT_OPTIONS
+} from '../config/constants'
 import { LANGUAGE_SELECT_I18N } from '../config/i18n'
 import { useLanguageSelect } from '../model/use-language-select.model'
 
@@ -14,7 +19,9 @@ const props = withDefaults(defineProps<ILanguageSelectProps>(), LANGUAGE_SELECT_
 
 const { t } = useI18n()
 const { settings, changeLanguage } = useLanguageSelect()
-const { isPortraitTabletOnly } = useScreen()
+const languageSelectFlagSize = computed(() =>
+  props.compact ? LANGUAGE_SELECT_FLAG_SIZE.COMPACT : LANGUAGE_SELECT_FLAG_SIZE.DEFAULT
+)
 </script>
 
 <template>
@@ -27,15 +34,15 @@ const { isPortraitTabletOnly } = useScreen()
       @update:model-value="changeLanguage"
       fill
     >
-      <NmorphSelectButtonItem
-        v-for="option in LANGUAGE_SELECT_OPTIONS"
-        :key="option.value"
-        :class="['language-select__item', { 'language-select__item--compact': props.compact }]"
-        :value="option.value"
-      >
+      <NmorphSelectButtonItem v-for="option in LANGUAGE_SELECT_OPTIONS" :key="option.value" :value="option.value">
         <div class="language-select__option">
-          <span class="language-select__flag">{{ option.flag }}</span>
-          <AppHeader v-if="!props.compact && isPortraitTabletOnly" tag="h5" :text="option.label" />
+          <NmorphIcon
+            class="language-select__flag"
+            :width="languageSelectFlagSize.WIDTH"
+            :height="languageSelectFlagSize.HEIGHT"
+          >
+            <component :is="LANGUAGE_SELECT_FLAG_ICON_MAP[option.flag]" />
+          </NmorphIcon>
         </div>
       </NmorphSelectButtonItem>
     </NmorphSelectButton>
@@ -49,17 +56,5 @@ const { isPortraitTabletOnly } = useScreen()
   gap: 8px;
   align-items: center;
   justify-content: center;
-}
-
-.language-select__flag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 24px;
-  height: 24px;
-
-  font-size: 20px;
-  line-height: 1;
 }
 </style>

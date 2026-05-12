@@ -9,6 +9,7 @@ import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import {
+  DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
   SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS,
   SETTINGS_DEVICES_SOUND_SRC
 } from '../../config/constants/devices.constants'
@@ -27,9 +28,14 @@ export const useAudioOutputDevice = () => {
 
   const audioOutputOptions = computed(() =>
     audioOutputDevices.value.map(({ deviceId, label }, index) => ({
-      value: deviceId,
+      value: deviceId || DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
       label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel)(index + 1)
     }))
+  )
+  const audioOutputSelectValue = computed(() =>
+    settings.value.ioDevices.audioOutputDeviceId || audioOutputOptions.value.length > 0
+      ? settings.value.ioDevices.audioOutputDeviceId || DEFAULT_AUDIO_OUTPUT_SELECT_VALUE
+      : ''
   )
   const audioOutputPermissionStatus = computed(() =>
     t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus)(
@@ -42,7 +48,11 @@ export const useAudioOutputDevice = () => {
   )
   const audioOutputPermissionCalloutType = computed(() => (isAudioOutputSupported.value ? 'info' : 'warning'))
 
-  const normalizeSelectValue = (value: NmorphSelectModelValueType) => (Array.isArray(value) ? value[0] ?? '' : value)
+  const normalizeSelectValue = (value: NmorphSelectModelValueType) => {
+    const deviceId = Array.isArray(value) ? value[0] ?? '' : value
+
+    return deviceId === DEFAULT_AUDIO_OUTPUT_SELECT_VALUE ? '' : deviceId
+  }
 
   const showDeviceWarning = (error: unknown) => {
     log('warn', 'Audio output device request failed', error)
@@ -146,6 +156,7 @@ export const useAudioOutputDevice = () => {
   return {
     settings,
     audioOutputOptions,
+    audioOutputSelectValue,
     audioOutputLoading,
     audioOutputTestLoading,
     audioOutputPermissionCalloutType,
