@@ -5,7 +5,7 @@ import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
 import { useStoragePersistent } from '../../../model/storage/use-storage-persistent.model'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { isPersistenceSupported, isPersistent, requestPersistence } = useStoragePersistent()
+const { isPersistenceSupported, isPersistent, isPersistenceLoading, requestPersistence } = useStoragePersistent()
 </script>
 
 <template>
@@ -13,6 +13,7 @@ const { isPersistenceSupported, isPersistent, requestPersistence } = useStorageP
     v-if="isPersistenceSupported"
     :title="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistent)"
     :button-label="isPersistent ? undefined : $t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentRequest)"
+    :button-loading="isPersistenceLoading"
     :on-button-click="isPersistent ? undefined : requestPersistence"
   >
     <AppText :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)" />

@@ -5,7 +5,14 @@ ROOT_DIR="${0:A:h:h}"
 cd "$ROOT_DIR" || exit $?
 . "$ROOT_DIR/scripts/use-node-version.sh" || exit $?
 
-if [ -f ".env.development" ]; then
+load_env_file() {
+  local file_name="$1"
+  local fill_empty_only="${2:-false}"
+
+  if [ ! -f "$file_name" ]; then
+    return
+  fi
+
   while IFS= read -r line; do
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
     [[ -z "${line// }" ]] && continue
@@ -13,11 +20,19 @@ if [ -f ".env.development" ]; then
     value="${line#*=}"
     value="${value%\'}"
     value="${value#\'}"
+
+    if [[ "$fill_empty_only" == "true" && -z "$value" ]]; then
+      continue
+    fi
+
     if [[ -z "${(P)key}" ]]; then
       export "$key"="$value"
     fi
-  done < .env.development
-fi
+  done < "$file_name"
+}
+
+load_env_file ".env.development"
+load_env_file ".env.secret" "true"
 
 required_env_vars=(
   "RESEND_API_KEY"
@@ -34,7 +49,7 @@ for env_var_name in "${required_env_vars[@]}"; do
 done
 
 if [ ${#missing_env_vars[@]} -gt 0 ]; then
-  echo "Cannot start development environment. Missing required variables in .env.development:" >&2
+  echo "Cannot start development environment. Missing required variables in .env.development or .env.secret:" >&2
 
   for env_var_name in "${missing_env_vars[@]}"; do
     case "$env_var_name" in

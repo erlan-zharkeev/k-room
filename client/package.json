@@ -10,8 +10,8 @@
     "preview": "vite preview --host",
     "test": "pnpm run typecheck",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
-    "lint:fsd": "CHOKIDAR_USEPOLLING=1 steiger ./src",
-    "lint:fsd:watch": "CHOKIDAR_USEPOLLING=1 steiger ./src --watch",
+    "lint:fsd": "cross-env CHOKIDAR_USEPOLLING=1 steiger ./src",
+    "lint:fsd:watch": "cross-env CHOKIDAR_USEPOLLING=1 steiger ./src --watch",
     "lint:style": "pnpm --dir .. exec stylelint \"client/src/**/*.{css,vue}\"",
     "lint:fix-style": "pnpm --dir .. exec stylelint \"client/src/**/*.{css,vue}\" --fix",
     "lint:es": "pnpm --dir .. exec eslint --config .eslintrc.cjs \"client/src/**/*.{ts,vue}\"",
@@ -23,7 +23,7 @@
     "tauri:build": "tauri build"
   },
   "dependencies": {
-    "@nmorph/nmorph-ui-kit": "^2.2.18",
+    "@nmorph/nmorph-ui-kit": "^2.2.19",
     "@tanstack/vue-virtual": "^3.13.24",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.15.2",
@@ -44,6 +44,7 @@
     "@tauri-apps/cli": "2.10.1",
     "@types/node": "^25.5.0",
     "@vitejs/plugin-vue": "^5.2.1",
+    "cross-env": "7.0.3",
     "steiger": "^0.5.11",
     "typescript": "^5.9.2",
     "vite": "^5.4.10",

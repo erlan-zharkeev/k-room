@@ -114,7 +114,7 @@ const contactChatRoomIdList = computed(() =>
   align-items: center;
   justify-content: space-between;
 
-  padding: 8px;
+  padding: 8px 12px 8px 8px;
 }
 
 .contact-list__profile {

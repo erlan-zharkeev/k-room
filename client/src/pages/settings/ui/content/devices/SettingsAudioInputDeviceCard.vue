@@ -66,7 +66,7 @@ const audioInputCheckLabel = computed(() =>
 
         <NmorphCheckbox
           :model-value="isAudioInputChecking"
-          design="button"
+          height="basic"
           :aria-label="$t(audioInputCheckLabel)"
           :disabled="isAudioInputCheckDisabled"
           @update:model-value="setAudioInputChecking"

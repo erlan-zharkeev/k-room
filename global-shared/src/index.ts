@@ -35,6 +35,8 @@ export {
 export type { RouteNameType, EndpointsType } from './endpoints/types'
 
 export type { IEnvVariables, IEnvSharedVariables } from './env/types'
+export { parseEnvContent, readEnv, readSecretEnv } from './env/lib/read-env'
+export type { EnvSourceType, IReadEnvOptions, ISecretEnvFileReader } from './env/lib/read-env'
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/constants'
 export { defineI18n } from './language/lib/define-i18n'

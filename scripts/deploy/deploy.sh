@@ -6,7 +6,45 @@ ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 COMPOSE_FILE="${COMPOSE_FILE:-$ROOT_DIR/compose.prod.yml}"
 SHARED_ENV_FILE="${SHARED_ENV_FILE:-$ROOT_DIR/.env.shared}"
 ENV_FILE="${ENV_FILE:-$ROOT_DIR/.env.production}"
+SECRET_ENV_FILE="${SECRET_ENV_FILE:-$ROOT_DIR/.env.secret}"
 MERGED_ENV_FILE="$ROOT_DIR/.env.deploy"
+
+load_env_fallback_file() {
+  file_path="$1"
+
+  if [ ! -f "$file_path" ]; then
+    return
+  fi
+
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      '' | \#*) continue ;;
+      *=*) ;;
+      *) continue ;;
+    esac
+
+    key="${line%%=*}"
+    value="${line#*=}"
+    case "$key" in
+      [A-Za-z_]* ) ;;
+      *) continue ;;
+    esac
+    case "$key" in
+      *[!A-Za-z0-9_]* ) continue ;;
+    esac
+
+    value="${value#\"}"
+    value="${value%\"}"
+    value="${value#\'}"
+    value="${value%\'}"
+
+    eval "current_value=\${$key:-}"
+
+    if [ -z "$current_value" ] && [ -n "$value" ]; then
+      export "$key=$value"
+    fi
+  done < "$file_path"
+}
 
 require_env() {
   var_name="$1"
@@ -17,6 +55,8 @@ require_env() {
     exit 1
   fi
 }
+
+load_env_fallback_file "$SECRET_ENV_FILE"
 
 require_env DOCKERHUB_USERNAME
 require_env DOCKERHUB_TOKEN
@@ -46,6 +86,13 @@ fi
 mkdir -p "$ROOT_DIR/scripts/deploy/certs"
 
 cat "$SHARED_ENV_FILE" "$ENV_FILE" > "$MERGED_ENV_FILE"
+printf '\n' >> "$MERGED_ENV_FILE"
+for env_name in MONGO_ADMIN_PASSWORD RESEND_API_KEY ADMIN_PASSWORD ACCESS_TOKEN_SECRET REFRESH_TOKEN_SECRET EMAIL_CONFIRM_SECRET TURNSTILE_SECRET_KEY REDIS_URL; do
+  eval "env_value=\${$env_name:-}"
+  if [ -n "$env_value" ]; then
+    printf '%s=%s\n' "$env_name" "$env_value" >> "$MERGED_ENV_FILE"
+  fi
+done
 trap 'rm -f "$MERGED_ENV_FILE"' EXIT
 
 APP_HOST="$(grep '^APP_HOST=' "$ENV_FILE" | head -n 1 | cut -d '=' -f 2- | sed "s/^'//; s/'$//; s/^\"//; s/\"$//")"
