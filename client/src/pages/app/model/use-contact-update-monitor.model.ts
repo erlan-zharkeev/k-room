@@ -18,10 +18,11 @@ import { socket } from 'src/shared/api'
 import { CONTACT_ONLINE_STATUS_TTL_MS, CONTACT_ONLINE_CHECK_INTERVAL_MS } from '../config/constants'
 
 export const useContactUpdateMonitor = () => {
-  const { bulkPut, contacts, get, mergeMany, put, remove } = useContact()
+  const { contacts, get, mergeMany, put, remove } = useContact()
   const { updateContactData } = useUpdateContactData()
 
   const actualizeContacts = async (nextContacts: IFrontendContact[]) => {
+    console.log(nextContacts, 'next')
     await mergeMany(nextContacts, {
       merge: (current, incoming) => ({
         ...getRequiredContactSystemData(),
@@ -97,7 +98,6 @@ export const useContactUpdateMonitor = () => {
 
   const initializeContactUpdateMonitor = () => {
     socket.on<SocketActionsType>('actual-contacts', actualizeContacts)
-    socket.on<SocketActionsType>('contacts-loaded', bulkPut)
     socket.on<SocketActionsType>('contact-delete-success', deleteContact)
     socket.on<SocketActionsType>('contact-add-success', addContact)
     socket.on<SocketActionsType>('contact-status-updated', updateStatus)
@@ -112,7 +112,6 @@ export const useContactUpdateMonitor = () => {
 
   const disposeContactUpdateMonitor = () => {
     socket.off<SocketActionsType>('actual-contacts', actualizeContacts)
-    socket.off<SocketActionsType>('contacts-loaded', bulkPut)
     socket.off<SocketActionsType>('contact-delete-success', deleteContact)
     socket.off<SocketActionsType>('contact-add-success', addContact)
     socket.off<SocketActionsType>('contact-status-updated', updateStatus)
