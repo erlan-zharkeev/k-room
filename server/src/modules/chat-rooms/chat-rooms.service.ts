@@ -1,6 +1,6 @@
 import type { IChatRoom, IChatRoomSchema } from 'global-shared'
 
-import { emitToUsers } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'

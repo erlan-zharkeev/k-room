@@ -6,7 +6,7 @@ import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { uploadBufferToBucket } from '../media/media.service'
-import { emitToUsers } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'

@@ -2,25 +2,23 @@ import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
   type AppLanguageType,
-  type IEventStatusContact,
   type IFrontendContact,
   type IFrontendUserData,
   type InteractionType,
   normalizeNicknameKey,
   REQ_STATUS,
   type ICreateNewPasswordPayload,
-  VALIDATION_PATTERNS,
-  type SocketActionsType
+  VALIDATION_PATTERNS
 } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
-import { getIO } from 'src/shared/lib/io'
 import { localizedText } from 'src/shared/lib/localized-text'
-import type { MongoIdType } from 'src/shared/types/mongo'
 
 import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
 import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.service'
+import type { PresenceService } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 
 import type {
   IChangeEmailParams,
@@ -47,73 +45,34 @@ export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
 
 export const transformUserToContact = (
   user: IUserSchema,
-  interactionType: InteractionType = 'default'
+  interactionType: InteractionType = 'default',
+  online = false
 ): IFrontendContact => {
   return {
     id: String(user._id),
     nickname: user.public.nickname,
     interactionType,
-    online: user.public.online,
+    online,
     lastSeen: user.public.lastSeen
   }
 }
 
 export const transformUserToFrontendContact = async (
-  contacts: Record<string, IContact>
+  contacts: Record<string, IContact>,
+  presenceService: PresenceService
 ): Promise<IFrontendContact[]> => {
-  const result: IFrontendContact[] = []
+  const ids = Object.keys(contacts)
+  const [users, onlineMap] = await Promise.all([
+    UserModel.find({ _id: { $in: ids } }).lean<IUserSchema[]>(),
+    presenceService.onlineMapByUserIds(ids)
+  ])
 
-  for (const [id, data] of Object.entries(contacts)) {
-    const user = await UserModel.findById(id).lean<IUserSchema | null>()
+  return users.map((user) => {
+    const userId = String(user._id)
+    const interactionType = contacts[userId]?.interaction ?? 'default'
 
-    if (user) {
-      result.push(transformUserToContact(user, data.interaction))
-    }
-  }
-
-  return result
-}
-
-export const getSocketsByUserIds = async (ids: MongoIdType[]) => {
-  const users = await UserModel.find({ _id: { $in: ids } }, { _id: 1, 'system.device': 1 }).lean()
-
-  return users.flatMap((user) => {
-    return Object.values(user.system.device ?? {})
-      .map((device) => device.socketId)
-      .filter((socketId): socketId is string => Boolean(socketId))
+    return transformUserToContact(user, interactionType, onlineMap.get(userId) ?? false)
   })
-}
-
-export const emitUserStatusToAll = async (interlocutorId: string, online: boolean, lastSeen?: number) => {
-  const users = await UserModel.find({ [`personal.contacts.${interlocutorId}`]: { $exists: true } }, { _id: 1 }).lean()
-
-  if (!users.length) {
-    return
-  }
-
-  const sockets = await getSocketsByUserIds(users.map((user) => user._id))
-  const payload: IEventStatusContact = {
-    interlocutorId,
-    online,
-    onlineStatusUpdatedTimestamp: Date.now(),
-    lastSeen
-  }
-
-  sockets.forEach((socketId) => {
-    getIO().to(socketId).emit<SocketActionsType>('contact-status-updated', payload)
-  })
-}
-
-export const setUserStatus = async (userId: string, status: boolean, lastSeen?: number) => {
-  await UserModel.updateOne({ _id: userId }, { $set: { 'public.online': status } })
-  await emitUserStatusToAll(userId, status, lastSeen)
-}
-
-export const setLastSeenData = async (userId: string) => {
-  const lastSeen = Date.now()
-  await UserModel.updateOne({ _id: userId }, { $set: { 'public.lastSeen': lastSeen } })
-
-  return lastSeen
 }
 
 export const isUserExist = async ({ nickname, email, id }: IUserExistParams): Promise<IUserExistState> => {
@@ -375,10 +334,9 @@ export class UserService {
       return
     }
 
-    const sockets = await getSocketsByUserIds(ids)
-
-    sockets.forEach((socketId) => {
-      getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
+    emitToUsers(ids, 'contact-data-changed', {
+      id: String(updatedUserData._id),
+      nickname: updatedUserData.public.nickname
     })
   }
 }

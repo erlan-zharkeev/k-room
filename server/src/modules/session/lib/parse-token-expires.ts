@@ -1,11 +1,6 @@
 import { isNumber } from 'lodash'
 
-import {
-  DEFAULT_COOKIE_MAX_AGE_MS,
-  SECOND_IN_MS,
-  TOKEN_EXPIRES_PATTERN,
-  TOKEN_EXPIRES_UNIT_TO_MS
-} from '../auth.constants'
+import { DEFAULT_COOKIE_MAX_AGE_MS, SECOND_IN_MS, TOKEN_EXPIRES_PATTERN, TOKEN_EXPIRES_UNIT_TO_MS } from '../constants'
 
 export const parseTokenExpires = (expires: string | number) => {
   if (isNumber(expires)) {

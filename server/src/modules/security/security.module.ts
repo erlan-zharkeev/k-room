@@ -6,6 +6,6 @@ import { SecurityService } from './security.service'
 
 @Module({
   providers: [CaptchaService, RedisService, SecurityService],
-  exports: [CaptchaService, RedisService, SecurityService]
+  exports: [RedisService, SecurityService]
 })
 export class SecurityModule {}

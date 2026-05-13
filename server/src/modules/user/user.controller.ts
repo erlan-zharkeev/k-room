@@ -10,14 +10,13 @@ import {
 } from 'global-shared'
 import { memoryStorage } from 'multer'
 
-import { SHARED_I18N } from 'src/shared/config/i18n'
+import { SHARED_I18N } from 'src/shared/i18n'
 import { AppError, toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { runRequestValidation } from 'src/shared/lib/run-request-validation'
 
-import { AccessTokenGuard } from '../auth/auth.guard'
-import { AUTH_I18N } from '../auth/auth.i18n'
-import { AuthService } from '../auth/auth.service'
+import { AccessTokenGuard } from '../session/session.guard'
+import { SessionService } from '../session/session.service'
 
 import type { IUpdateUserDataPayload } from './types'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
@@ -26,7 +25,7 @@ import { CHANGE_PASSWORD_VALIDATION, RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA
 
 @Controller()
 export class UserController {
-  constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+  constructor(private readonly sessionService: SessionService, private readonly userService: UserService) {}
 
   @Get(USER_ENDPOINTS.getUserData)
   @UseGuards(AccessTokenGuard)
@@ -34,11 +33,11 @@ export class UserController {
     const { language, authUserId: userId } = request
 
     if (!userId) {
-      throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+      throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
     }
 
     const user = await this.userService.requireUser(userId, language)
-    await this.authService.updateTokens(userId, request, response)
+    await this.sessionService.updateTokens(userId, request, response)
 
     return response.json({
       payload: this.userService.mapUserToDto(user),
@@ -93,7 +92,7 @@ export class UserController {
 
     try {
       if (!userId) {
-        throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+        throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
       }
 
       runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
@@ -128,7 +127,7 @@ export class UserController {
 
     try {
       if (!userId) {
-        throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+        throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
       }
 
       runRequestValidation(request, CHANGE_PASSWORD_VALIDATION)

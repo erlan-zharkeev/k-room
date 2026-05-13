@@ -1,8 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { IUserDevice } from '../user/types'
-
 const envMock = vi.hoisted(() => ({
   SERVER_ENV: {
     domain: '',
@@ -43,7 +41,7 @@ const createUser = async (confirmed = true) => ({
     password: await bcrypt.hash('Asdf1234', 6),
     confirmed,
     confirmAttempts: 3,
-    device: {} as Record<string, IUserDevice>
+    device: {}
   },
   markModified: vi.fn(),
   save: vi.fn()
@@ -66,12 +64,14 @@ describe('AuthService', () => {
     vi.clearAllMocks()
   })
 
-  it('logs in confirmed user and persists refresh token per device', async () => {
+  it('logs in confirmed user and delegates token update to session service', async () => {
     const user = await createUser()
     const response = createResponse()
+    const sessionService = {
+      updateTokens: vi.fn()
+    }
     const userService = {
       findByLogin: vi.fn().mockResolvedValue(user),
-      findById: vi.fn().mockResolvedValue(user),
       mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
     }
     const service = new AuthService(
@@ -81,7 +81,8 @@ describe('AuthService', () => {
         assertLoginAllowed: vi.fn(),
         clearLoginFailures: vi.fn(),
         trackLoginFailure: vi.fn()
-      } as never
+      } as never,
+      sessionService as never
     )
 
     const result = await service.login(
@@ -91,25 +92,15 @@ describe('AuthService', () => {
     )
 
     expect(result).toEqual({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
-    expect(response.cookie).toHaveBeenCalledWith('jwt', expect.any(String), expect.objectContaining({ httpOnly: true }))
-    expect(response.cookie).toHaveBeenCalledWith(
-      'refresh-jwt',
-      expect.any(String),
-      expect.objectContaining({ httpOnly: true })
-    )
-    expect(response.cookie).toHaveBeenCalledWith(
-      'device-id',
-      'device-1',
-      expect.objectContaining({ maxAge: 3153600000000 })
-    )
-    expect(user.system.device['device-1'].refreshToken).toEqual(expect.any(String))
-    expect(user.markModified).toHaveBeenCalledWith('system.device')
-    expect(user.save).toHaveBeenCalled()
+    expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
   })
 
   it('does not issue tokens for unconfirmed user', async () => {
     const user = await createUser(false)
     const response = createResponse()
+    const sessionService = {
+      updateTokens: vi.fn()
+    }
     const service = new AuthService(
       {} as never,
       {
@@ -119,7 +110,8 @@ describe('AuthService', () => {
         assertLoginAllowed: vi.fn(),
         clearLoginFailures: vi.fn(),
         trackLoginFailure: vi.fn()
-      } as never
+      } as never,
+      sessionService as never
     )
 
     await expect(
@@ -129,23 +121,25 @@ describe('AuthService', () => {
         response as never
       )
     ).rejects.toMatchObject({ status: 400 })
-    expect(response.cookie).not.toHaveBeenCalled()
+    expect(sessionService.updateTokens).not.toHaveBeenCalled()
   })
 
   it('loads provider avatar only for newly created provider users', async () => {
     const user = await createUser()
     const avatar = Buffer.from('avatar')
     const response = createResponse()
+    const sessionService = {
+      updateTokens: vi.fn()
+    }
     const userService = {
       createUser: vi.fn().mockResolvedValue(user),
       findByEmail: vi.fn(),
-      findById: vi.fn().mockResolvedValue(user),
       mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1' })
     }
 
     userServiceExportsMock.loadGoogleAvatar.mockResolvedValue(avatar)
 
-    const service = new AuthService({} as never, userService as never, {} as never)
+    const service = new AuthService({} as never, userService as never, {} as never, sessionService as never)
 
     await service.signInWithProvider(
       {
@@ -161,78 +155,32 @@ describe('AuthService', () => {
     expect(userService.findByEmail).not.toHaveBeenCalled()
     expect(userServiceExportsMock.loadGoogleAvatar).toHaveBeenCalledWith('https://lh3.googleusercontent.com/avatar.jpg')
     expect(userServiceExportsMock.updateUserAvatar).toHaveBeenCalledWith(avatar, 'user-1', 'en')
+    expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
   })
 
   it('returns alreadyConfirmed when email token was already consumed', async () => {
     const user = await createUser()
+    const sessionService = {
+      verifyToken: vi.fn().mockResolvedValue({ id: 'user-1' })
+    }
     const service = new AuthService(
       {} as never,
       {
         findById: vi.fn().mockResolvedValue(user)
       } as never,
-      {} as never
+      {} as never,
+      sessionService as never
     )
 
     userModelMock.updateOne.mockResolvedValue({ modifiedCount: 0 })
 
-    const result = await service.confirmEmail(
-      (await import('jsonwebtoken')).default.sign({ id: 'user-1' }, 'confirm-secret'),
-      'en'
-    )
+    const result = await service.confirmEmail('confirm-token', 'en')
 
     expect(result).toEqual({ email: 'user@test.com', alreadyConfirmed: true })
+    expect(sessionService.verifyToken).toHaveBeenCalledWith('confirm-token', 'confirm-secret')
     expect(userModelMock.updateOne).toHaveBeenCalledWith(
       { _id: 'user-1', 'system.confirmed': { $ne: true } },
       { $set: { 'system.confirmed': true } }
-    )
-  })
-
-  it('clears auth cookies and removes active device on logout', async () => {
-    const user = await createUser()
-    const response = createResponse()
-    const userService = {
-      findById: vi.fn().mockResolvedValue(user)
-    }
-    const service = new AuthService({} as never, userService as never, {} as never)
-
-    user.system.device = {
-      'device-1': {
-        refreshToken: 'refresh-token-1'
-      },
-      'device-2': {
-        refreshToken: 'refresh-token-2'
-      }
-    }
-
-    await service.logout(
-      'user-1',
-      {
-        cookies: {
-          'device-id': 'device-1'
-        }
-      } as never,
-      response as never
-    )
-
-    expect(user.system.device).toEqual({
-      'device-2': {
-        refreshToken: 'refresh-token-2'
-      }
-    })
-    expect(user.markModified).toHaveBeenCalledWith('system.device')
-    expect(user.save).toHaveBeenCalled()
-    expect(response.clearCookie).toHaveBeenCalledTimes(3)
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      'jwt',
-      expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
-    )
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      'refresh-jwt',
-      expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
-    )
-    expect(response.clearCookie).toHaveBeenCalledWith(
-      'device-id',
-      expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
     )
   })
 })

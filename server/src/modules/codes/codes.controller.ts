@@ -18,8 +18,8 @@ import { AppError, toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { runRequestValidation } from 'src/shared/lib/run-request-validation'
 
-import { AccessTokenGuard } from '../auth/auth.guard'
-import { AUTH_I18N } from '../auth/auth.i18n'
+import { AccessTokenGuard } from '../session/session.guard'
+import { SESSION_I18N } from '../session/session.i18n'
 
 import {
   SEND_CHANGE_EMAIL_CODE_I18N,
@@ -50,7 +50,7 @@ export class CodesController {
 
     try {
       if (!userId) {
-        throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+        throw new AppError(401, localizedText(SESSION_I18N.nonAuthorized, language))
       }
 
       runRequestValidation(request, SEND_CHANGE_EMAIL_CODE_VALIDATION)
@@ -85,7 +85,7 @@ export class CodesController {
 
     try {
       if (!userId) {
-        throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+        throw new AppError(401, localizedText(SESSION_I18N.nonAuthorized, language))
       }
 
       runRequestValidation(request, VALIDATE_CHANGE_EMAIL_CODE_VALIDATION)

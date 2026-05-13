@@ -1,6 +1,6 @@
 import type { CallFlowType, EventCallUpdatedType, EventCallsUpdatedType, ICall } from 'global-shared'
 
-import { emitToUsers } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { CallModel } from './calls.model'

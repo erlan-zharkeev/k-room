@@ -2,7 +2,7 @@ import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 import { type IBackendResponse, REQ_STATUS } from 'global-shared'
 
-import { SHARED_I18N } from 'src/shared/config/i18n'
+import { SHARED_I18N } from 'src/shared/i18n'
 import { isAppError } from 'src/shared/lib/app-error'
 import { errorToMessage } from 'src/shared/lib/error-to-message'
 import { localizedText } from 'src/shared/lib/localized-text'

@@ -2,7 +2,7 @@ import { type Request } from 'express'
 import { createValidationMessages, REQ_STATUS, type ValidationMessagesType } from 'global-shared'
 import { getDotPath, safeParse, type GenericSchema } from 'valibot'
 
-import { SHARED_I18N } from 'src/shared/config/i18n'
+import { SHARED_I18N } from 'src/shared/i18n'
 
 import { AppError } from './app-error'
 import { localizedText } from './localized-text'

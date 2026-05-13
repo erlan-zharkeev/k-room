@@ -13,16 +13,23 @@ import { Types } from 'mongoose'
 
 import { getIO } from 'src/shared/lib/io'
 
+import type { PresenceService } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
-import { transformUserToContact, getSocketsByUserIds, setUserStatus } from '../user/user.service'
+import { transformUserToContact } from '../user/user.service'
 
-const SEARCH_CONTACT_RESULT_LIMIT = 10
+import { SEARCH_CONTACT_RESULT_LIMIT } from './constants'
 
 export const emitSearchedContacts = (socketId: string, payload: IEventGetSearchedContact) => {
   getIO().to(socketId).emit<SocketActionsType>('get-searched-contact', payload)
 }
 
-export const searchContacts = async (userId: string, value: string, offset = 0) => {
+export const searchContacts = async (
+  userId: string,
+  value: string,
+  offset: number,
+  presenceService: PresenceService
+) => {
   let type: 'nickname' | 'id' = 'nickname'
   let validSearch: boolean = true
   const normalizedValue = value.trim()
@@ -60,12 +67,15 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
     ])
     const contactMap = currentUser?.personal?.contacts ?? {}
 
+    const onlineMap = await presenceService.onlineMapByUserIds(users.map((user) => user._id))
+
     searchedUsers = users
       .map((user) =>
         transformUserToContact(
           user,
           (contactMap instanceof Map ? contactMap.get(String(user._id)) : contactMap[String(user._id)])?.interaction ??
-            'default'
+            'default',
+          onlineMap.get(String(user._id)) ?? false
         )
       )
       .filter((user) => user.id !== userId)
@@ -99,7 +109,7 @@ export const searchContacts = async (userId: string, value: string, offset = 0) 
   } satisfies IEventGetSearchedContact
 }
 
-export const saveContact = async (userId: string, interlocutorId: string) => {
+export const saveContact = async (userId: string, interlocutorId: string, presenceService: PresenceService) => {
   const [selfContact, contactCandidate] = await Promise.all([
     UserModel.findOneAndUpdate(
       { _id: userId },
@@ -122,7 +132,11 @@ export const saveContact = async (userId: string, interlocutorId: string) => {
   }
 
   return {
-    contactData: transformUserToContact(contactCandidate)
+    contactData: transformUserToContact(
+      contactCandidate,
+      'default',
+      await presenceService.isUserOnline(contactCandidate._id)
+    )
   } satisfies IEventContactAddSuccess
 }
 
@@ -161,29 +175,20 @@ export const getContactInteraction = async (docId: string, contactId: string) =>
   return user?.personal.contacts?.[contactId]?.interaction
 }
 
-export const emitContactInteractionUpdated = (socketId: string, contactId: string, interaction: InteractionType) => {
-  getIO()
-    .to(socketId)
-    .emit<SocketActionsType>('contact-interaction-updated', {
-      contactId,
-      interaction
-    } satisfies IEventUpdateContactInteractionSuccess)
+export const emitContactInteractionUpdated = (userId: string, contactId: string, interaction: InteractionType) => {
+  emitToUsers([userId], 'contact-interaction-updated', {
+    contactId,
+    interaction
+  } satisfies IEventUpdateContactInteractionSuccess)
 }
 
-export const deleteContactById = async (
-  userId: string,
-  deletingUserId: string,
-  userSocketId: string,
-  silent = false
-) => {
+export const deleteContactById = async (userId: string, deletingUserId: string, silent = false) => {
   await UserModel.updateOne({ _id: userId }, { $unset: { [`personal.contacts.${deletingUserId}`]: '' } })
 
-  getIO()
-    .to(userSocketId)
-    .emit<SocketActionsType>('contact-delete-success', {
-      deletedContactId: deletingUserId,
-      silent
-    } satisfies IEventDeleteContactSuccess)
+  emitToUsers([userId], 'contact-delete-success', {
+    deletedContactId: deletingUserId,
+    silent
+  } satisfies IEventDeleteContactSuccess)
 
   const deletingContact = await UserModel.findOne(
     { _id: deletingUserId },
@@ -195,14 +200,9 @@ export const deleteContactById = async (
   }
 
   const deletingUserInteractionType = deletingContact.personal.contacts[userId].interaction
-  const deletingContactSockets = await getSocketsByUserIds([deletingContact._id])
 
   if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invited') {
-    await Promise.all(
-      deletingContactSockets.map(async (socketId) => {
-        await deleteContactById(deletingUserId, userId, socketId, true)
-      })
-    )
+    await deleteContactById(deletingUserId, userId, true)
   }
 
   if (deletingUserInteractionType === 'invite-accepted') {
@@ -211,13 +211,16 @@ export const deleteContactById = async (
       { $set: { [`personal.contacts.${userId}.interaction`]: 'default' } }
     )
 
-    deletingContactSockets.forEach((socketId) => {
-      emitContactInteractionUpdated(socketId, userId, 'default')
-    })
+    emitContactInteractionUpdated(String(deletingContact._id), userId, 'default')
   }
 }
 
-export const updateContactInteraction = async (userId: string, contactId: string, interaction: InteractionType) => {
+export const updateContactInteraction = async (
+  userId: string,
+  contactId: string,
+  interaction: InteractionType,
+  presenceService: PresenceService
+) => {
   const updateAuthorContactInteraction = async () => setContactInteraction(userId, contactId, interaction)
   const updateContactSide = async () => setContactInteraction(contactId, userId, interaction)
   const [currentInteraction, contactSideInteraction] = await Promise.all([
@@ -240,11 +243,7 @@ export const updateContactInteraction = async (userId: string, contactId: string
       return
     }
 
-    const sockets = await getSocketsByUserIds([updatedContact._id])
-
-    sockets.forEach((socketId) => {
-      emitContactInteractionUpdated(socketId, userId, interaction)
-    })
+    emitContactInteractionUpdated(String(updatedContact._id), userId, interaction)
   }
 
   switch (interaction) {
@@ -265,15 +264,12 @@ export const updateContactInteraction = async (userId: string, contactId: string
       const payload: EventInviteReceivedType = {
         id: String(authorData._id),
         nickname: authorData.public.nickname,
-        online: authorData.public.online,
+        online: await presenceService.isUserOnline(authorData._id),
         lastSeen: authorData.public.lastSeen,
         interactionType: 'invite-received'
       }
-      const sockets = await getSocketsByUserIds([contactData._id])
 
-      sockets.forEach((socketId) => {
-        getIO().to(socketId).emit<SocketActionsType>('invite-received', payload)
-      })
+      emitToUsers([contactData._id], 'invite-received', payload)
       break
     }
     case 'invite-accepted':
@@ -283,8 +279,4 @@ export const updateContactInteraction = async (userId: string, contactId: string
   }
 
   return true
-}
-
-export const updateInterlocutorStatus = async (userId: string) => {
-  await setUserStatus(userId, true)
 }
