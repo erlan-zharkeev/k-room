@@ -27,12 +27,18 @@ const { imageSrc } = useAppProfileBasicData(props)
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .app-profile-basic-data {
   display: flex;
   gap: 10px;
   align-items: center;
   min-width: 0;
+}
+
+.app-profile-basic-data {
+  .nmorph-avatar {
+    flex: 0 0 auto;
+  }
 }
 
 .app-profile-basic-data__content {
