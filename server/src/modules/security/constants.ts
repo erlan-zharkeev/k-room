@@ -1,6 +1,6 @@
 import { PROTECTED_ACTION_REASON, SECURITY_ACTION } from 'global-shared'
 
-import { SEND_CONFIRMATION_LINK_INTERVAL_MS } from '../../auth/auth.constants'
+import { SEND_CONFIRMATION_LINK_INTERVAL_MS } from '../auth/auth.constants'
 
 export const SECURITY_REDIS_KEY_PREFIX = 'security'
 export const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'

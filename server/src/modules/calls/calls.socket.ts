@@ -12,7 +12,7 @@ import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
-import { emitToUsers } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { CALLS_I18N } from './calls.i18n'

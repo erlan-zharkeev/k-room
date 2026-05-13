@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { uploadBufferToBucket } from '../media/media.service'
-import { emitToUsers } from '../presence/presence.service'
+import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { MessageModel } from './messages.model'

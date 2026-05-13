@@ -5,7 +5,7 @@ import { MEDIA_ENDPOINTS, type IBackendResponse, REQ_STATUS } from 'global-share
 import { toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 
-import { AccessTokenGuard } from '../auth/auth.guard'
+import { AccessTokenGuard } from '../session/session.guard'
 
 import { GET_MEDIA_FILE_I18N } from './media.i18n'
 import { MediaService } from './media.service'

@@ -13,12 +13,14 @@ import {
   type SignInWithProviderResponseType
 } from 'global-shared'
 
-import { SHARED_I18N } from 'src/shared/config/i18n'
+import { SHARED_I18N } from 'src/shared/i18n'
 import { toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { runRequestValidation } from 'src/shared/lib/run-request-validation'
 
-import { RefreshTokenGuard, AccessTokenGuard } from './auth.guard'
+import { AccessTokenGuard, RefreshTokenGuard } from '../session/session.guard'
+import { SessionService } from '../session/session.service'
+
 import { AUTH_I18N } from './auth.i18n'
 import { AuthService } from './auth.service'
 import {
@@ -31,7 +33,7 @@ import {
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly sessionService: SessionService) {}
 
   @Post(AUTH_ENDPOINTS.login)
   async login(
@@ -171,10 +173,10 @@ export class AuthController {
     const { language, authUserId: userId } = request
 
     if (!userId) {
-      throw toAppError(null, localizedText(AUTH_I18N.nonAuthorized, language), 401)
+      throw toAppError(null, this.sessionService.getUnauthorizedMessage(language), 401)
     }
 
-    await this.authService.updateTokens(userId, request, response)
+    await this.sessionService.updateTokens(userId, request, response)
 
     return response.json({
       payload: null,
@@ -192,10 +194,10 @@ export class AuthController {
 
     try {
       if (!userId) {
-        throw toAppError(null, localizedText(AUTH_I18N.nonAuthorized, language), 401)
+        throw toAppError(null, this.sessionService.getUnauthorizedMessage(language), 401)
       }
 
-      await this.authService.logout(userId, request, response)
+      await this.sessionService.clearSession(userId, request, response)
 
       return response.json({
         payload: null,

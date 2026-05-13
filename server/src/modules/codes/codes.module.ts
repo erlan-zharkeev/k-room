@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common'
 
-import { AuthModule } from '../auth/auth.module'
 import { EmailService } from '../email/email.service'
 import { SecurityModule } from '../security/security.module'
+import { SessionModule } from '../session/session.module'
+import { UserModule } from '../user/user.module'
 
 import { CodesController } from './codes.controller'
 import { CodesService } from './codes.service'
 
 @Module({
-  imports: [AuthModule, SecurityModule],
+  imports: [SecurityModule, SessionModule, UserModule],
   controllers: [CodesController],
   providers: [CodesService, EmailService]
 })

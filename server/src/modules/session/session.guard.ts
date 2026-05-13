@@ -3,18 +3,16 @@ import { type Request, type Response } from 'express'
 
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 
-import { AUTH_I18N } from './auth.i18n'
-import { AuthService } from './auth.service'
+import { SessionService } from './session.service'
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly sessionService: SessionService) {}
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>()
-    const userId = await this.authService.validateRefreshRequest(request)
+    const userId = await this.sessionService.validateRefreshRequest(request)
     request.authUserId = userId
 
     return true
@@ -23,7 +21,7 @@ export class RefreshTokenGuard implements CanActivate {
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly sessionService: SessionService) {}
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>()
@@ -32,17 +30,17 @@ export class AccessTokenGuard implements CanActivate {
     const accessToken = cookies.jwt
 
     if (!accessToken) {
-      throw new AppError(401, localizedText(AUTH_I18N.nonAuthorized, language))
+      throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
     }
 
     try {
-      const decoded = await this.authService.verifyToken(accessToken, SERVER_ENV.secret.accessTokenSecret)
+      const decoded = await this.sessionService.verifyToken(accessToken, SERVER_ENV.secret.accessTokenSecret)
       request.authUserId = decoded.id
 
       return true
     } catch {
-      const userId = await this.authService.validateRefreshRequest(request)
-      await this.authService.updateTokens(userId, request, response)
+      const userId = await this.sessionService.validateRefreshRequest(request)
+      await this.sessionService.updateTokens(userId, request, response)
       request.authUserId = userId
 
       return true

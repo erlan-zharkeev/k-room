@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common'
 
 import { SERVER_ENV } from 'src/app/env'
 
-import { TURNSTILE_VERIFY_TIMEOUT_MS, TURNSTILE_VERIFY_URL } from './config/constants'
+import { TURNSTILE_VERIFY_TIMEOUT_MS, TURNSTILE_VERIFY_URL } from './constants'
 import type { ITurnstileVerificationResponse } from './types'
 
 @Injectable()

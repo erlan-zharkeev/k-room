@@ -47,7 +47,7 @@ import {
   VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD,
   VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
   VALIDATE_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
-} from './config/constants'
+} from './constants'
 import { RedisService } from './redis.service'
 import { SECURITY_I18N } from './security.i18n'
 
@@ -81,7 +81,7 @@ export class SecurityService {
   }
 
   private async getNextTryAt(keys: string[]) {
-    const ttlMsValues = await Promise.all(keys.map((key) => this.redisService.getTtlMs(key)))
+    const ttlMsValues = await Promise.all(keys.map((key) => this.redisService.ttlMs(key)))
     const ttlMs = Math.max(...ttlMsValues, 0)
 
     return ttlMs > 0 ? Date.now() + ttlMs : undefined
@@ -131,8 +131,8 @@ export class SecurityService {
     const accountKey = this.buildKey(action, 'account', login)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [accountFailures, ipFailures] = await Promise.all([
-      this.redisService.getNumber(accountKey),
-      this.redisService.getNumber(ipKey)
+      this.redisService.readNumber(accountKey),
+      this.redisService.readNumber(ipKey)
     ])
 
     if (accountFailures >= LOGIN_BLOCK_ACCOUNT_THRESHOLD || ipFailures >= LOGIN_BLOCK_IP_THRESHOLD) {
@@ -154,13 +154,13 @@ export class SecurityService {
   }
 
   async clearLoginFailures(login: string) {
-    await this.redisService.delete(this.buildKey(SECURITY_ACTION.login, 'account', login))
+    await this.redisService.remove(this.buildKey(SECURITY_ACTION.login, 'account', login))
   }
 
   async assertRegistrationAllowed(captchaToken: string | undefined, ip: string, language: AppLanguageType) {
     const action = SECURITY_ACTION.registration
     const ipKey = this.buildKey(action, 'ip', ip)
-    const ipAttempts = await this.redisService.getNumber(ipKey)
+    const ipAttempts = await this.redisService.readNumber(ipKey)
 
     if (ipAttempts >= REGISTRATION_BLOCK_IP_THRESHOLD) {
       await this.blockAction(action, language, [ipKey])
@@ -177,7 +177,7 @@ export class SecurityService {
 
   async getSendConfirmationLinkCooldown(email: string) {
     const cooldownKey = this.buildKey(SECURITY_ACTION.sendConfirmationLink, 'cooldown', email)
-    const ttlMs = await this.redisService.getTtlMs(cooldownKey)
+    const ttlMs = await this.redisService.ttlMs(cooldownKey)
 
     return ttlMs > 0 ? Date.now() + ttlMs : null
   }
@@ -192,8 +192,8 @@ export class SecurityService {
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [emailAttempts, ipAttempts] = await Promise.all([
-      this.redisService.getNumber(emailKey),
-      this.redisService.getNumber(ipKey)
+      this.redisService.readNumber(emailKey),
+      this.redisService.readNumber(ipKey)
     ])
 
     if (
@@ -217,7 +217,7 @@ export class SecurityService {
     await Promise.all([
       this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
       this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS),
-      this.redisService.set(this.buildKey(action, 'cooldown', email), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
+      this.redisService.write(this.buildKey(action, 'cooldown', email), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
     ])
   }
 
@@ -231,8 +231,8 @@ export class SecurityService {
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [emailAttempts, ipAttempts] = await Promise.all([
-      this.redisService.getNumber(emailKey),
-      this.redisService.getNumber(ipKey)
+      this.redisService.readNumber(emailKey),
+      this.redisService.readNumber(ipKey)
     ])
 
     if (
@@ -261,7 +261,7 @@ export class SecurityService {
 
   async getSendChangeEmailCodeCooldown(userId: string) {
     const cooldownKey = this.buildKey(SECURITY_ACTION.sendChangeEmailCode, 'cooldown', userId)
-    const ttlMs = await this.redisService.getTtlMs(cooldownKey)
+    const ttlMs = await this.redisService.ttlMs(cooldownKey)
 
     return ttlMs > 0 ? Date.now() + ttlMs : null
   }
@@ -276,8 +276,8 @@ export class SecurityService {
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [emailAttempts, ipAttempts] = await Promise.all([
-      this.redisService.getNumber(emailKey),
-      this.redisService.getNumber(ipKey)
+      this.redisService.readNumber(emailKey),
+      this.redisService.readNumber(ipKey)
     ])
 
     if (
@@ -301,7 +301,7 @@ export class SecurityService {
     await Promise.all([
       this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
       this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS),
-      this.redisService.set(this.buildKey(action, 'cooldown', userId), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
+      this.redisService.write(this.buildKey(action, 'cooldown', userId), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
     ])
   }
 
@@ -315,8 +315,8 @@ export class SecurityService {
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [emailFailures, ipFailures] = await Promise.all([
-      this.redisService.getNumber(emailKey),
-      this.redisService.getNumber(ipKey)
+      this.redisService.readNumber(emailKey),
+      this.redisService.readNumber(ipKey)
     ])
 
     if (
@@ -349,19 +349,19 @@ export class SecurityService {
   }
 
   async clearChangeEmailCodeFailures(email: string) {
-    await this.redisService.delete(this.buildKey(SECURITY_ACTION.validateChangeEmailCode, 'email', email))
+    await this.redisService.remove(this.buildKey(SECURITY_ACTION.validateChangeEmailCode, 'email', email))
   }
 
   async getChangeEmailCode(userId: string) {
-    return this.redisService.get(this.buildChangeEmailCodeKey(userId))
+    return this.redisService.read(this.buildChangeEmailCodeKey(userId))
   }
 
   async setChangeEmailCode(userId: string, value: string, ttlMs: number) {
-    await this.redisService.set(this.buildChangeEmailCodeKey(userId), value, ttlMs)
+    await this.redisService.write(this.buildChangeEmailCodeKey(userId), value, ttlMs)
   }
 
   async clearChangeEmailCode(userId: string) {
-    await this.redisService.delete(this.buildChangeEmailCodeKey(userId))
+    await this.redisService.remove(this.buildChangeEmailCodeKey(userId))
   }
 
   async assertValidatePasswordRecoveryCodeAllowed(
@@ -374,8 +374,8 @@ export class SecurityService {
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [emailFailures, ipFailures] = await Promise.all([
-      this.redisService.getNumber(emailKey),
-      this.redisService.getNumber(ipKey)
+      this.redisService.readNumber(emailKey),
+      this.redisService.readNumber(ipKey)
     ])
 
     if (
@@ -408,6 +408,6 @@ export class SecurityService {
   }
 
   async clearPasswordRecoveryCodeFailures(email: string) {
-    await this.redisService.delete(this.buildKey(SECURITY_ACTION.validatePasswordRecoveryCode, 'email', email))
+    await this.redisService.remove(this.buildKey(SECURITY_ACTION.validatePasswordRecoveryCode, 'email', email))
   }
 }

@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common'
 
-import { AuthModule } from '../auth/auth.module'
+import { SessionModule } from '../session/session.module'
 
 import { MediaController } from './media.controller'
 import { MediaService } from './media.service'
 
 @Module({
-  imports: [AuthModule],
+  imports: [SessionModule],
   controllers: [MediaController],
-  providers: [MediaService],
-  exports: [MediaService]
+  providers: [MediaService]
 })
 export class MediaModule {}
