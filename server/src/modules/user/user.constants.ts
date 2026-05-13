@@ -1,17 +1,27 @@
+import { USER_NICKNAME_MAX_LENGTH } from 'global-shared'
+
 const FIXTURE_PASSWORD = 'Asdf1234'
 const FIXTURE_AVATAR_PATHS = [
   'src/modules/fixtures/images/erlan.jpg',
   'src/modules/fixtures/images/tolik.jpg',
   'src/modules/fixtures/images/guest.jpg'
 ] as const
+const createMaxLengthFixtureNickname = (prefix: string) => prefix.padEnd(USER_NICKNAME_MAX_LENGTH, '0')
+
+export const FIXTURE_MAX_LENGTH_NICKNAMES = {
+  alina: createMaxLengthFixtureNickname('alina-max-nickname-'),
+  misha: createMaxLengthFixtureNickname('misha-max-nickname-'),
+  dasha: createMaxLengthFixtureNickname('dasha-max-nickname-'),
+  roma: createMaxLengthFixtureNickname('roma-max-nickname-')
+} as const
 const FIXTURE_USERNAMES = [
   'erlan',
   'tolik',
   'guest',
-  'alina',
-  'misha',
-  'dasha',
-  'roma',
+  FIXTURE_MAX_LENGTH_NICKNAMES.alina,
+  FIXTURE_MAX_LENGTH_NICKNAMES.misha,
+  FIXTURE_MAX_LENGTH_NICKNAMES.dasha,
+  FIXTURE_MAX_LENGTH_NICKNAMES.roma,
   'nina',
   'mark',
   'lena',
@@ -62,13 +72,19 @@ export const FIXTURE_GROUPS = [
     key: 'frontend-core',
     authorNickname: 'erlan',
     chatName: 'Frontend Core',
-    nicknames: ['erlan', 'tolik', 'alina', 'misha', 'dasha']
+    nicknames: [
+      'erlan',
+      'tolik',
+      FIXTURE_MAX_LENGTH_NICKNAMES.alina,
+      FIXTURE_MAX_LENGTH_NICKNAMES.misha,
+      FIXTURE_MAX_LENGTH_NICKNAMES.dasha
+    ]
   },
   {
     key: 'weekend-plans',
     authorNickname: 'tolik',
     chatName: 'Weekend Plans',
-    nicknames: ['erlan', 'tolik', 'roma', 'nina', 'mark', 'lena']
+    nicknames: ['erlan', 'tolik', FIXTURE_MAX_LENGTH_NICKNAMES.roma, 'nina', 'mark', 'lena']
   },
   {
     key: 'design-review',

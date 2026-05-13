@@ -1,4 +1,4 @@
-import { USER_ROLES } from 'global-shared'
+import { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 import type { IUserPersonalData, IUserPublicData, IUserSchema, IUserSystemData } from './types'
@@ -62,7 +62,9 @@ const publicSchema = new Schema<IUserPublicData>(
     nickname: {
       type: String,
       unique: true,
-      required: true
+      required: true,
+      minlength: USER_NICKNAME_MIN_LENGTH,
+      maxlength: USER_NICKNAME_MAX_LENGTH
     },
     lastSeen: {
       type: Number,

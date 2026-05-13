@@ -64,7 +64,10 @@ small.app-text {
 
 .app-text--truncate {
   overflow: hidden;
+  display: block;
+
   min-width: 0;
+
   text-overflow: ellipsis;
   white-space: nowrap;
 }

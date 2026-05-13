@@ -165,7 +165,7 @@ export type { ReqStatusType } from './status/types'
 export { normalizeTimestamp } from './time/lib/normalize-timestamp'
 export { formatHumanDateTime } from './time/lib/format-human-date-time'
 
-export { USER_ROLES } from './user/constants'
+export { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from './user/constants'
 export { formatNickname, isNicknameValid, normalizeNickname, normalizeNicknameKey } from './user/lib/nickname'
 export type { UserRoleType, IBaseFrontendUserData, IFrontendUserData } from './user/types'
 

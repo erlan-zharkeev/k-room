@@ -51,6 +51,11 @@ export const CONTACTS_PAGE_I18N = defineI18n({
     ru: 'Был(а) в сети',
     zh: '最后在线'
   },
+  lastSeenRecently: {
+    en: 'Was recently',
+    ru: 'Был(а) недавно',
+    zh: '最近在线'
+  },
   invite: {
     en: 'Invite',
     ru: 'Пригласить',

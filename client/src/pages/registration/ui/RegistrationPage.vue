@@ -6,6 +6,7 @@ import { RouterLink } from 'vue-router'
 
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
+import { REGISTRATION_NICKNAME_INPUT_ATTRS } from '../config/constants'
 import { REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration.model'
 
@@ -23,6 +24,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
         v-model="formData.nickname.value"
         class="registration-page__input"
         :disabled="isFormDisabled"
+        :input-attrs="REGISTRATION_NICKNAME_INPUT_ATTRS"
         :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"
         clearable
       />
