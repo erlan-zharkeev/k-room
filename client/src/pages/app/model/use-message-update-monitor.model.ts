@@ -8,9 +8,8 @@ import type {
 import { onBeforeUnmount } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
+import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
-
-import { useMessage } from './use-message.model'
 
 export const useMessageUpdateMonitor = () => {
   const { mutate: mutateRoom } = useChatRoom()

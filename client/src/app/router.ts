@@ -6,7 +6,7 @@ import { useSettings, type DbUserSettingType } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
-import { ChatRoomPage } from 'src/pages/chat-room'
+import { ChatRoomPage, ChatRoomsNavigationPage } from 'src/pages/chat-room'
 import { ContactsPage } from 'src/pages/contacts'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
 import { EmailConfirmationPage } from 'src/pages/email-confirmation'
@@ -100,6 +100,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'chat-rooms/:chatRoomId?',
         components: {
+          'content-navigation': ChatRoomsNavigationPage,
           content: ChatRoomPage
         }
       },
