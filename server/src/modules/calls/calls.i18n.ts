@@ -25,10 +25,5 @@ export const CALLS_I18N = defineI18n({
     en: 'Failed to update call mode',
     ru: 'Не удалось обновить режим звонка',
     zh: '更新通话模式失败'
-  },
-  updateCallSignalFailed: {
-    en: 'Failed to update call signal',
-    ru: 'Не удалось обновить сигнал звонка',
-    zh: '更新通话信号失败'
   }
 })

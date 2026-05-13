@@ -134,12 +134,10 @@ export class AuthService {
       return
     }
 
-    const currentDevice = user.system.device[deviceId]
     user.system.device = {
       ...user.system.device,
       [deviceId]: {
-        refreshToken,
-        socketId: currentDevice?.socketId ?? ''
+        refreshToken
       }
     }
     user.markModified('system.device')

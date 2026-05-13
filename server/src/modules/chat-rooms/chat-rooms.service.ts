@@ -1,9 +1,7 @@
-import type { IChatRoom, IChatRoomSchema, SocketActionsType } from 'global-shared'
+import type { IChatRoom, IChatRoomSchema } from 'global-shared'
 
-import { getIO } from 'src/shared/lib/io'
-
+import { emitToUsers } from '../presence/presence.service'
 import { UserModel } from '../user/user.model'
-import { getSocketsByUserIds } from '../user/user.service'
 
 import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'
 
@@ -57,12 +55,9 @@ export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchem
         return
       }
 
-      const sockets = await getSocketsByUserIds([userId])
       const transformedRoom = transformRoomForUser({ userId, room })
 
-      sockets.forEach((socketId) => {
-        getIO().to(socketId).emit<SocketActionsType>('new-room-added', transformedRoom)
-      })
+      emitToUsers([userId], 'new-room-added', transformedRoom)
     })
   )
 }

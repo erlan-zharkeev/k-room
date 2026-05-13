@@ -5,7 +5,6 @@ import type {
   IEventCallEnded,
   IEventCallUser,
   IEventMarkCallAsVideo,
-  IEventUpdateSignal,
   SocketActionsType
 } from 'global-shared'
 
@@ -13,18 +12,12 @@ import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
+import { emitToUsers } from '../presence/presence.service'
 import { UserModel } from '../user/user.model'
-import { getSocketsByUserIds } from '../user/user.service'
 
 import { CALLS_I18N } from './calls.i18n'
 import { CallModel } from './calls.model'
-import {
-  clearActiveCallInterlocutor,
-  emitCallDataToInterlocutors,
-  emitCallsToUser,
-  getActiveCallInterlocutor,
-  setActiveCallInterlocutor
-} from './calls.service'
+import { emitCallDataToInterlocutors, emitCallsToUser } from './calls.service'
 
 export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
@@ -72,21 +65,12 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
           answered: false
         }).save()
 
-        setActiveCallInterlocutor(userId, userToCall)
-        setActiveCallInterlocutor(userToCall, userId)
-
-        const sockets = await getSocketsByUserIds([userToCall])
-
-        sockets.forEach((socketId) => {
-          getIO()
-            .to(socketId)
-            .emit<SocketActionsType>('call-user', {
-              callId: String(call._id),
-              signal,
-              from: userId,
-              avatar,
-              callerNickname
-            })
+        emitToUsers([userToCall], 'call-user', {
+          callId: String(call._id),
+          signal,
+          from: userId,
+          avatar,
+          callerNickname
         })
 
         await emitCallDataToInterlocutors([userId, userToCall], String(call._id), true)
@@ -96,38 +80,13 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
   )
 
   socket.on<SocketActionsType>(
-    'update-call-signal',
-    socketErrorMiddleware(
-      socket,
-      async ({ signal }: IEventUpdateSignal) => {
-        const interlocutorId = getActiveCallInterlocutor(socket.data.userId)
-
-        if (!interlocutorId) {
-          return
-        }
-
-        const sockets = await getSocketsByUserIds([interlocutorId])
-
-        sockets.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('interlocutor-update-signal', { signal })
-        })
-      },
-      { basicError: CALLS_I18N.updateCallSignalFailed }
-    )
-  )
-
-  socket.on<SocketActionsType>(
     'answer-call',
     socketErrorMiddleware(
       socket,
       async ({ to, signal, selfSocketId, callId }: IEventAnswerCall) => {
-        const { userId } = socket.data
-        const sockets = await getSocketsByUserIds([to])
         const payload: IEventCallAccepted = { signal }
 
-        sockets.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('call-accepted', payload)
-        })
+        emitToUsers([to], 'call-accepted', payload)
 
         const call = await CallModel.findOneAndUpdate(
           { _id: callId },
@@ -139,16 +98,11 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
           return
         }
 
-        setActiveCallInterlocutor(userId, to)
-        setActiveCallInterlocutor(to, userId)
         await emitCallDataToInterlocutors(call.interlocutors, String(call._id))
 
         const startedAtPayload: EventCallStartedAtType = Date.now()
 
-        sockets.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('call-started-at', startedAtPayload)
-        })
-
+        emitToUsers([to], 'call-started-at', startedAtPayload)
         getIO().to(selfSocketId).emit<SocketActionsType>('call-started-at', startedAtPayload)
       },
       { basicError: CALLS_I18N.answerCallFailed }
@@ -160,15 +114,7 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
     socketErrorMiddleware(
       socket,
       async ({ callerId, callId }: IEventCallEnded) => {
-        const { userId } = socket.data
-        const sockets = await getSocketsByUserIds([callerId])
-
-        sockets.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('call-ended')
-        })
-
-        clearActiveCallInterlocutor(userId)
-        clearActiveCallInterlocutor(callerId)
+        emitToUsers([callerId], 'call-ended')
 
         const call = await CallModel.findOneAndUpdate({ _id: callId }, { finishedAt: Date.now() }, { new: true }).lean()
 

@@ -116,8 +116,6 @@ export type {
 } from './shared/types'
 
 export type {
-  IEventInterlocutorUpdateSignal,
-  IEventUpdateSignal,
   IEventMarkCallAsVideo,
   IEventMessageDelivered,
   EventGetRoomsType,

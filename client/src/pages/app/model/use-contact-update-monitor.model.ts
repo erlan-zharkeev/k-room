@@ -1,4 +1,3 @@
-import { useIntervalFn } from '@vueuse/core'
 import type {
   EventChangeContactsDataType,
   EventInviteReceivedType,
@@ -15,14 +14,11 @@ import { onBeforeUnmount } from 'vue'
 import { getRequiredContactSystemData, useContact, useUpdateContactData } from 'src/entities/contact'
 import { socket } from 'src/shared/api'
 
-import { CONTACT_ONLINE_STATUS_TTL_MS, CONTACT_ONLINE_CHECK_INTERVAL_MS } from '../config/constants'
-
 export const useContactUpdateMonitor = () => {
-  const { contacts, get, mergeMany, put, remove } = useContact()
+  const { get, mergeMany, put, remove } = useContact()
   const { updateContactData } = useUpdateContactData()
 
   const actualizeContacts = async (nextContacts: IFrontendContact[]) => {
-    console.log(nextContacts, 'next')
     await mergeMany(nextContacts, {
       merge: (current, incoming) => ({
         ...getRequiredContactSystemData(),
@@ -78,24 +74,6 @@ export const useContactUpdateMonitor = () => {
     await updateContactData(contactId, { isTyping })
   }
 
-  const checkForContactOnline = () => {
-    socket.emit<SocketActionsType>('interlocutor-ping')
-
-    const currentTimestampMs = Date.now()
-
-    contacts.value.forEach((contact) => {
-      if (currentTimestampMs - contact.onlineStatusSyncedAt > CONTACT_ONLINE_STATUS_TTL_MS) {
-        updateContactData(contact.id, { online: false })
-      }
-    })
-  }
-
-  const { pause: pauseOnlineCheck, resume: resumeOnlineCheck } = useIntervalFn(
-    checkForContactOnline,
-    CONTACT_ONLINE_CHECK_INTERVAL_MS,
-    { immediate: false, immediateCallback: false }
-  )
-
   const initializeContactUpdateMonitor = () => {
     socket.on<SocketActionsType>('actual-contacts', actualizeContacts)
     socket.on<SocketActionsType>('contact-delete-success', deleteContact)
@@ -105,9 +83,6 @@ export const useContactUpdateMonitor = () => {
     socket.on<SocketActionsType>('contact-interaction-updated', updateContactInteractionType)
     socket.on<SocketActionsType>('invite-received', processInvitation)
     socket.on<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
-
-    pauseOnlineCheck()
-    resumeOnlineCheck()
   }
 
   const disposeContactUpdateMonitor = () => {
@@ -119,7 +94,6 @@ export const useContactUpdateMonitor = () => {
     socket.off<SocketActionsType>('contact-interaction-updated', updateContactInteractionType)
     socket.off<SocketActionsType>('invite-received', processInvitation)
     socket.off<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
-    pauseOnlineCheck()
   }
 
   onBeforeUnmount(disposeContactUpdateMonitor)

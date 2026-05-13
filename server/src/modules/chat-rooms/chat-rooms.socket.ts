@@ -2,12 +2,11 @@ import { setTimeout as delay } from 'timers/promises'
 
 import type { IChatRoomSchema, IEventCreateRoom, SocketActionsType } from 'global-shared'
 
-import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { uploadBufferToBucket } from '../media/media.service'
-import { getSocketsByUserIds } from '../user/user.service'
+import { emitToUsers } from '../presence/presence.service'
 
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
@@ -51,13 +50,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         await emitNewRoomToUsers(users, room.toObject())
         await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
-        const sockets = await getSocketsByUserIds([userId])
-
-        sockets.forEach((socketId) => {
-          getIO()
-            .to(socketId)
-            .emit<SocketActionsType>('room-created', { roomId: String(room._id) })
-        })
+        emitToUsers([userId], 'room-created', { roomId: String(room._id) })
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
     )
