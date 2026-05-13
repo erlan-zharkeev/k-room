@@ -57,7 +57,6 @@ export const PRIMARY_FIXTURE_USERNAMES = {
   tolik: 'tolik',
   guest: 'guest'
 } as const
-export const FIXTURE_CONTACT_USERNAMES = ['tolik', 'guest', 'alina', 'misha', 'dasha', 'roma', 'nina', 'mark'] as const
 export const FIXTURE_GROUPS = [
   {
     key: 'frontend-core',

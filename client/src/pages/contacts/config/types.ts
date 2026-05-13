@@ -41,6 +41,17 @@ export interface IContactContextMenuEmits {
   'update-interaction': [id: string, interaction: DbContactType['interactionType']]
 }
 
+export interface IContactContextMenuOption {
+  label: string
+  value: 'accept' | 'block' | 'delete' | 'unblock'
+  color?: string
+}
+
+export interface IContactContextMenuEmitFn {
+  (event: 'delete', id: string): void
+  (event: 'update-interaction', id: string, interaction: DbContactType['interactionType']): void
+}
+
 export interface IContactsDeleteDialogProps {
   modelValue: boolean
 }

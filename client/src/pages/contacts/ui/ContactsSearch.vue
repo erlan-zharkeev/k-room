@@ -23,7 +23,7 @@ const {
 
 <template>
   <div class="contacts-search">
-    <NmorphScroll>
+    <NmorphScroll scroll-x-prop="hidden">
       <div class="contacts-search__scroll-container">
         <div v-if="showSearchResults" class="contacts-search__results">
           <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.globalSearch)" />
@@ -49,7 +49,7 @@ const {
                 <template #title>
                   <div class="contacts-search__title">
                     <div class="contacts-search__name">
-                      <AppHeader tag="h5" truncate :text="contact.nickname" />
+                      <AppText truncate :text="contact.nickname" />
                     </div>
                     <NmorphBadge
                       v-if="CONTACTS_SEARCH_BADGE_BY_INTERACTION[contact.interactionType].visible"

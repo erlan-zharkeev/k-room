@@ -26,7 +26,7 @@ const getItemRoute = (settingsId: string) => ({
 
 <template>
   <nav class="settings-navigation-page">
-    <NmorphScroll :y-gap-in-px="-6">
+    <NmorphScroll scroll-x-prop="hidden">
       <div class="settings-navigation-page__list">
         <AppContentNavEl
           v-for="item in SETTINGS_NAVIGATION_ITEMS"
@@ -53,8 +53,6 @@ const getItemRoute = (settingsId: string) => ({
   display: flex;
   flex-direction: column;
   gap: 8px;
-
   min-width: 0;
-  padding: 8px;
 }
 </style>
