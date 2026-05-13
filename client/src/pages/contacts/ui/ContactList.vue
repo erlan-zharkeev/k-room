@@ -2,7 +2,7 @@
 import { NmorphBadge, NmorphButton, NmorphIconChatLineSquare, NmorphIconPostCard } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { AppHeader, AppProfileBasicData } from 'src/shared/ui'
+import { AppText, AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactListEmits, IContactListProps } from '../config/types'
@@ -37,7 +37,7 @@ const contactChatRoomIdList = computed(() =>
         <template #title>
           <div class="contact-list__title">
             <div class="contact-list__name">
-              <AppHeader tag="h5" truncate :text="contact.nickname" />
+              <AppText truncate :text="contact.nickname" />
             </div>
             <NmorphBadge
               v-if="props.getContactStatus(contact)"

@@ -1,7 +1,47 @@
+import type { IFixtureContactData } from './fixtures.types'
+
 export const DAY_IN_MS = 1000 * 60 * 60 * 24
 export const MINUTE_IN_MS = 1000 * 60
 export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 1, 1, 8, 0, 0)
-export const CONTACT_INTERACTION = 'invite-accepted'
+export const FIXTURE_CONTACTS = [
+  {
+    nickname: 'tolik',
+    interaction: 'invite-accepted',
+    reverseInteraction: 'invite-accepted'
+  },
+  {
+    nickname: 'guest',
+    interaction: 'default'
+  },
+  {
+    nickname: 'alina',
+    interaction: 'invited',
+    reverseInteraction: 'invite-received'
+  },
+  {
+    nickname: 'misha',
+    interaction: 'invite-received',
+    reverseInteraction: 'invited'
+  },
+  {
+    nickname: 'dasha',
+    interaction: 'blocked'
+  },
+  {
+    nickname: 'roma',
+    interaction: 'invite-accepted',
+    reverseInteraction: 'invite-accepted'
+  },
+  {
+    nickname: 'nina',
+    interaction: 'invited',
+    reverseInteraction: 'invite-received'
+  },
+  {
+    nickname: 'mark',
+    interaction: 'blocked'
+  }
+] as const satisfies IFixtureContactData[]
 export const MESSAGE_SUBJECTS = [
   'search contacts',
   'socket reconnect flow',

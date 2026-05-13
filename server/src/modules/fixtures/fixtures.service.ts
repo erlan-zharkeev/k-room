@@ -8,12 +8,7 @@ import { Types } from 'mongoose'
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
 import { uploadBufferToBucket } from 'src/modules/media/media.service'
 import { MessageModel } from 'src/modules/messages/messages.model'
-import {
-  FIXTURE_CONTACT_USERNAMES,
-  FIXTURE_GROUPS,
-  FIXTURE_MESSAGE_COUNT,
-  USER_FIXTURES
-} from 'src/modules/user/user.constants'
+import { FIXTURE_GROUPS, FIXTURE_MESSAGE_COUNT, USER_FIXTURES } from 'src/modules/user/user.constants'
 import { USER_I18N } from 'src/modules/user/user.i18n'
 import { UserModel } from 'src/modules/user/user.model'
 import { createUser, isUserExist } from 'src/modules/user/user.service'
@@ -23,14 +18,14 @@ import { log } from 'src/shared/lib/log'
 
 import {
   BASE_FIXTURE_TIMESTAMP_MS,
-  CONTACT_INTERACTION,
   DAY_IN_MS,
+  FIXTURE_CONTACTS,
   MESSAGE_ACTIONS,
   MESSAGE_QUALIFIERS,
   MESSAGE_SUBJECTS,
   MINUTE_IN_MS
 } from './fixtures.constants'
-import type { IFixtureUserData } from './fixtures.types'
+import type { IFixtureContactData, IFixtureUserData } from './fixtures.types'
 
 const USER_BY_NICKNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.nickname, fixture]))
 const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
@@ -152,38 +147,48 @@ const buildFixtureMessage = (idx: number) => {
   }
 }
 
-const ensureAcceptedContacts = async () => {
-  const updatedAt = Date.now()
-  const erlanContacts = FIXTURE_CONTACT_USERNAMES.map((nickname) => USER_BY_NICKNAME[nickname]).filter(Boolean)
-
-  await Promise.all(
-    erlanContacts.flatMap((fixture) => [
-      UserModel.updateOne(
-        { _id: ERLAN_ID },
-        {
-          $set: {
-            [`personal.contacts.${fixture.id}`]: {
-              id: fixture.id,
-              interaction: CONTACT_INTERACTION,
-              updatedAt
-            }
-          }
+const setFixtureContact = async (
+  userId: string,
+  contactId: string,
+  interaction: IFixtureContactData['interaction']
+) => {
+  await UserModel.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        [`personal.contacts.${contactId}`]: {
+          id: contactId,
+          interaction,
+          updatedAt: Date.now()
         }
-      ),
-      UserModel.updateOne(
-        { _id: fixture.id },
-        {
-          $set: {
-            [`personal.contacts.${ERLAN_ID}`]: {
-              id: ERLAN_ID,
-              interaction: CONTACT_INTERACTION,
-              updatedAt
-            }
-          }
-        }
-      )
-    ])
+      }
+    }
   )
+}
+
+const removeFixtureContact = async (userId: string, contactId: string) => {
+  await UserModel.updateOne({ _id: userId }, { $unset: { [`personal.contacts.${contactId}`]: '' } })
+}
+
+const ensureFixtureContact = async ({ nickname, interaction, reverseInteraction }: IFixtureContactData) => {
+  const fixture = USER_BY_NICKNAME[nickname]
+
+  if (!fixture) {
+    return
+  }
+
+  await setFixtureContact(ERLAN_ID, fixture.id, interaction)
+
+  if (reverseInteraction) {
+    await setFixtureContact(fixture.id, ERLAN_ID, reverseInteraction)
+    return
+  }
+
+  await removeFixtureContact(fixture.id, ERLAN_ID)
+}
+
+const ensureFixtureContacts = async () => {
+  await Promise.all(FIXTURE_CONTACTS.map(ensureFixtureContact))
 }
 
 const ensureDirectRoom = async () => {
@@ -268,7 +273,7 @@ const loadDialogFixtures = async () => {
     throw new AppError(REQ_STATUS.server, localizedText(USER_I18N.userNotFound, DEFAULT_APP_LANGUAGE))
   }
 
-  await ensureAcceptedContacts()
+  await ensureFixtureContacts()
   const directRoom = await ensureDirectRoom()
 
   await ensureMessages(directRoom.id)

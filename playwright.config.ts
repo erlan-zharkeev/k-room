@@ -6,6 +6,12 @@ const SERVER_COMMAND =
   'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && export APP_HOST="https://localhost" API_HOST="https://localhost" CLIENT_PORT="43111" SERVER_PORT="43117" && pnpm --dir server run start\''
 const CLIENT_COMMAND =
   'bash -lc \'export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" && . "$NVM_DIR/nvm.sh" && nvm use >/dev/null && export APP_HOST="https://localhost" API_HOST="https://localhost" CLIENT_PORT="43111" SERVER_PORT="43117" && pnpm --dir client exec vite --host --strictPort --mode test\''
+const WINDOWS_SERVER_COMMAND =
+  "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"$env:APP_HOST='https://localhost'; $env:API_HOST='https://localhost'; $env:CLIENT_PORT='43111'; $env:SERVER_PORT='43117'; pnpm.cmd --dir server run start\""
+const WINDOWS_CLIENT_COMMAND =
+  "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"$env:APP_HOST='https://localhost'; $env:API_HOST='https://localhost'; $env:CLIENT_PORT='43111'; $env:SERVER_PORT='43117'; pnpm.cmd --dir client exec vite --host --strictPort --mode test\""
+const TEST_SERVER_COMMAND = process.platform === 'win32' ? WINDOWS_SERVER_COMMAND : SERVER_COMMAND
+const TEST_CLIENT_COMMAND = process.platform === 'win32' ? WINDOWS_CLIENT_COMMAND : CLIENT_COMMAND
 
 export default defineConfig({
   testDir: './e2e',
@@ -33,7 +39,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: SERVER_COMMAND,
+      command: TEST_SERVER_COMMAND,
       url: E2E_ENV.PLAYWRIGHT_SERVER_URL,
       timeout: E2E_TIMEOUTS.webServer,
       reuseExistingServer: false,
@@ -42,7 +48,7 @@ export default defineConfig({
       stderr: 'pipe'
     },
     {
-      command: CLIENT_COMMAND,
+      command: TEST_CLIENT_COMMAND,
       url: `${E2E_ENV.PLAYWRIGHT_BASE_URL}/login`,
       timeout: E2E_TIMEOUTS.webServer,
       reuseExistingServer: false,
