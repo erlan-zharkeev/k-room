@@ -1,4 +1,4 @@
-import { type LocalizedTextType, REQ_STATUS, type SocketActionsType } from 'global-shared'
+import { type LocalizedTextType, REQ_STATUS, type SocketAckResponseType, type SocketActionsType } from 'global-shared'
 import { isString } from 'lodash'
 
 import { SHARED_I18N } from '../i18n'
@@ -64,5 +64,40 @@ export const socketErrorMiddleware =
         silent: options.silent,
         cause: error
       })
+    }
+  }
+
+export const socketAckMiddleware =
+  <TPayload = void, TResponsePayload = void, TReason extends string = string>(
+    socket: SocketInstanceType,
+    handler: (
+      payload: TPayload
+    ) =>
+      | void
+      | SocketAckResponseType<TResponsePayload, TReason>
+      | Promise<void | SocketAckResponseType<TResponsePayload, TReason>>,
+    options: ISocketErrorMiddlewareOptions
+  ) =>
+  async (payload: TPayload, ack?: (response: SocketAckResponseType<TResponsePayload, TReason>) => void) => {
+    try {
+      const response = await handler(payload)
+
+      ack?.(response ?? ({ ok: true } as SocketAckResponseType<TResponsePayload, TReason>))
+    } catch (error) {
+      if (isAppError(error)) {
+        throwSocketError(socket.id, error.message, {
+          status: error.status,
+          silent: error.silent,
+          cause: error.cause
+        })
+      } else {
+        throwSocketError(socket.id, options.basicError, {
+          status: options.status,
+          silent: options.silent,
+          cause: error
+        })
+      }
+
+      ack?.({ ok: false, handledByGlobalError: true })
     }
   }

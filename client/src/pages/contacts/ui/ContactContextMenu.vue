@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCheckbox, NmorphContextMenu, NmorphIcon, NmorphIconMore } from '@nmorph/nmorph-ui-kit'
 
-import { useScreen } from 'src/shared/lib';
+import { useScreen } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactContextMenuEmits, IContactContextMenuProps } from '../config/types'
@@ -16,7 +16,7 @@ const { isPortraitTabletOrLess } = useScreen()
 
 <template>
   <NmorphContextMenu
-    :placement='isPortraitTabletOrLess ? "bottom-end" : "bottom-end"'
+    :placement="isPortraitTabletOrLess ? 'bottom-end' : 'bottom-end'"
     :model-value="isContextMenuOpen"
     class="contact-context-menu"
     trigger="click"

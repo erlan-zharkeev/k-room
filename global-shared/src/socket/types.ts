@@ -7,6 +7,26 @@ import type { IMessage, IReaction, MessageStatusType } from '../message/types'
 import type { IBasicStreamSettings } from '../shared/types'
 import type { IBaseFrontendUserData } from '../user/types'
 
+import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './constants'
+
+export type ContactInteractionUpdateFailedReasonType =
+  (typeof CONTACT_INTERACTION_UPDATE_FAILED_REASONS)[keyof typeof CONTACT_INTERACTION_UPDATE_FAILED_REASONS]
+
+export interface ISocketAckSuccess<TPayload = void> {
+  ok: true
+  payload?: TPayload
+}
+
+export interface ISocketAckFailure<TReason extends string = string> {
+  ok: false
+  reason?: TReason
+  handledByGlobalError?: boolean
+}
+
+export type SocketAckResponseType<TPayload = void, TReason extends string = string> =
+  | ISocketAckSuccess<TPayload>
+  | ISocketAckFailure<TReason>
+
 export interface IEventMarkCallAsVideo {
   callId: string
 }
@@ -145,7 +165,7 @@ export interface IEventUpdatedMessageReactions {
   messageId: string
   reaction: IReaction
 }
-export interface IEventRoomCreated {
+export interface ICreateRoomAckPayload {
   roomId: string
 }
 export interface IEventUpdateInteraction {
@@ -188,7 +208,6 @@ export type SocketActionsType =
   | 'new-room-added'
   | 'send-message'
   | 'message-delivered'
-  | 'room-created'
   | 'search-contact'
   | 'get-searched-contact'
   | 'contact-status-updated'

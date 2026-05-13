@@ -8,7 +8,7 @@ import type {
   InteractionType,
   SocketActionsType
 } from 'global-shared'
-import { normalizeNickname } from 'global-shared'
+import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS, normalizeNickname } from 'global-shared'
 import { Types } from 'mongoose'
 
 import { getIO } from 'src/shared/lib/io'
@@ -229,11 +229,14 @@ export const updateContactInteraction = async (
   ])
 
   if (currentInteraction === 'blocked' && interaction !== 'default') {
-    return false
+    return { success: false } as const
   }
 
   if (contactSideInteraction === 'blocked' && interaction !== 'default' && interaction !== 'blocked') {
-    return false
+    return {
+      success: false,
+      reason: CONTACT_INTERACTION_UPDATE_FAILED_REASONS.INVITATION_RESTRICTED
+    } as const
   }
 
   const handleUpdateContactInteraction = async () => {
@@ -278,5 +281,5 @@ export const updateContactInteraction = async (
       break
   }
 
-  return true
+  return { success: true } as const
 }
