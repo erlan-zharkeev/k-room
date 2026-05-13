@@ -24,6 +24,7 @@
     "@nestjs/platform-socket.io": "^10.0.0",
     "@nestjs/websockets": "^10.0.0",
     "@sentry/node": "^10.45.0",
+    "@socket.io/redis-adapter": "8.3.0",
     "adminjs": "^7.8.17",
     "bcryptjs": "^3.0.2",
     "connect-mongo": "^5.1.0",

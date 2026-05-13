@@ -6,18 +6,15 @@ import {
   type IEventUpdateMessageStatus,
   type IImageObject,
   type IMessage,
-  type MessageStatusType,
-  type SocketActionsType
+  type MessageStatusType
 } from 'global-shared'
 import { isString } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getIO } from 'src/shared/lib/io'
-
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { uploadBufferToBucket } from '../media/media.service'
+import { emitToUsers } from '../presence/presence.service'
 import { UserModel } from '../user/user.model'
-import { getSocketsByUserIds } from '../user/user.service'
 
 import { MessageModel } from './messages.model'
 import type { ISendMessageParams } from './messages.types'
@@ -94,16 +91,13 @@ export const changeMessageStatus = async (
     return
   }
 
-  const sockets = await getSocketsByUserIds(room.users)
   const payload: IEventUpdateMessageStatus = {
     roomId,
     messageId,
     status
   }
 
-  sockets.forEach((socketId) => {
-    getIO().to(socketId).emit<SocketActionsType>('message-status-updated', payload)
-  })
+  emitToUsers(room.users, 'message-status-updated', payload)
 }
 
 export const sendMessage = async ({ roomId, message, language }: ISendMessageParams) => {
@@ -146,7 +140,6 @@ export const sendMessage = async ({ roomId, message, language }: ISendMessagePar
         return
       }
 
-      const sockets = await getSocketsByUserIds([user._id])
       const payload: IEventMessageDelivered = {
         roomId,
         message: {
@@ -158,9 +151,7 @@ export const sendMessage = async ({ roomId, message, language }: ISendMessagePar
         }
       }
 
-      sockets.forEach((socketId) => {
-        getIO().to(socketId).emit<SocketActionsType>('message-delivered', payload)
-      })
+      emitToUsers([user._id], 'message-delivered', payload)
     })
   )
 }

@@ -6,8 +6,6 @@ import { SERVER_ENV } from 'src/app/env'
 import { getSocketLanguage } from 'src/shared/lib/get-request-language'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
-import { UserModel } from '../user/user.model'
-
 import type { ISocketTokenPayload } from './auth.types'
 
 const emitAuthError = (socket: SocketInstanceType) => {
@@ -49,17 +47,6 @@ export const socketAuthMiddleware = async (socket: SocketInstanceType) => {
       userId: decoded.id,
       deviceId,
       language
-    }
-
-    if (deviceId) {
-      await UserModel.updateOne(
-        { _id: decoded.id },
-        {
-          $set: {
-            [`system.device.${deviceId}.socketId`]: socket.id
-          }
-        }
-      )
     }
 
     return true

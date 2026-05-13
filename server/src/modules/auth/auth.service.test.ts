@@ -197,12 +197,10 @@ describe('AuthService', () => {
 
     user.system.device = {
       'device-1': {
-        refreshToken: 'refresh-token-1',
-        socketId: 'socket-1'
+        refreshToken: 'refresh-token-1'
       },
       'device-2': {
-        refreshToken: 'refresh-token-2',
-        socketId: 'socket-2'
+        refreshToken: 'refresh-token-2'
       }
     }
 
@@ -218,8 +216,7 @@ describe('AuthService', () => {
 
     expect(user.system.device).toEqual({
       'device-2': {
-        refreshToken: 'refresh-token-2',
-        socketId: 'socket-2'
+        refreshToken: 'refresh-token-2'
       }
     })
     expect(user.markModified).toHaveBeenCalledWith('system.device')

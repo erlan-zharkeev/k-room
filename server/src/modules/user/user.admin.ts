@@ -75,11 +75,10 @@ export const ADMIN_USER_OPTIONS = {
   options: {
     id: 'users',
     navigation: 'Users',
-    listProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'public.online', LAST_SEEN_PATH],
+    listProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', LAST_SEEN_PATH],
     showProperties: [
       '_id',
       'public.nickname',
-      'public.online',
       LAST_SEEN_PATH,
       'personal.email',
       'personal.chatRooms',
@@ -104,7 +103,7 @@ export const ADMIN_USER_OPTIONS = {
       'system.provider',
       'system.confirmed'
     ],
-    filterProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'public.online', 'system.provider'],
+    filterProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'system.provider'],
     actions: {
       new: {
         before: async (request: IAdminUserActionRequest) => normalizePassword(request, true)
@@ -139,9 +138,6 @@ export const ADMIN_USER_OPTIONS = {
       },
       'system.role': {
         label: 'Role'
-      },
-      'public.online': {
-        label: 'Online'
       },
       [LAST_SEEN_PATH]: {
         label: 'Last Seen'

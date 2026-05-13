@@ -9,7 +9,6 @@ import type {
 import type { Types } from 'mongoose'
 
 export interface IUserDevice {
-  socketId: string
   refreshToken: string
 }
 
@@ -36,7 +35,6 @@ export interface IUserPersonalData {
 
 export interface IUserPublicData {
   nickname: string
-  online: boolean
   lastSeen: number
 }
 

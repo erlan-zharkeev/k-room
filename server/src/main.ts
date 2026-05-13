@@ -13,7 +13,6 @@ import { AppModule } from './app/app.module'
 import { connectDatabase } from './app/connect-database'
 import { SERVER_ENV } from './app/env'
 import { initSentry, setupSentryErrorHandler } from './app/sentry'
-import { initIO } from './app/socket'
 import { errorToMessage } from './shared/lib/error-to-message'
 import { getRequestLanguage } from './shared/lib/get-request-language'
 import { log } from './shared/lib/log'
@@ -55,7 +54,6 @@ const bootstrap = async () => {
   await connectDatabase()
   app.use(SERVER_ENV.adminjs.adminRootPath, await createAdminRouter())
   setupSentryErrorHandler(expressApp)
-  initIO(app.getHttpServer())
 
   await app.listen(SERVER_ENV.serverPort)
   log.success(`-Server listening on port ${SERVER_ENV.serverPort}`)

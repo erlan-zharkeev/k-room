@@ -1,8 +1,9 @@
 import type { ProtectedActionReasonType, SecurityActionType } from 'global-shared'
+import type { RedisClientType } from 'redis'
 
-export interface IRedisMemoryValue {
-  value: string
-  expiresAt: number
+export interface IRedisAdapterClients {
+  publishClient: RedisClientType
+  subscribeClient: RedisClientType
 }
 
 export interface IProtectedActionDecision {

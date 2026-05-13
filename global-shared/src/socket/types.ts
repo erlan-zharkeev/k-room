@@ -7,14 +7,6 @@ import type { IMessage, IReaction, MessageStatusType } from '../message/types'
 import type { IBasicStreamSettings } from '../shared/types'
 import type { IBaseFrontendUserData } from '../user/types'
 
-export interface IEventInterlocutorUpdateSignal {
-  signal: unknown
-}
-
-export interface IEventUpdateSignal {
-  signal: unknown
-}
-
 export interface IEventMarkCallAsVideo {
   callId: string
 }
@@ -227,10 +219,7 @@ export type SocketActionsType =
   | 'call-data-changed'
   | 'contact-removed'
   | 'mark-call-as-video'
-  | 'update-call-signal'
-  | 'interlocutor-update-signal'
   | 'actual-chat-rooms'
-  | 'interlocutor-ping'
   | 'update-interaction-type'
   | 'update-contact-success'
   | 'invite-received'

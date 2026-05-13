@@ -64,11 +64,6 @@ const publicSchema = new Schema<IUserPublicData>(
       unique: true,
       required: true
     },
-    online: {
-      type: Boolean,
-      required: true,
-      default: false
-    },
     lastSeen: {
       type: Number,
       required: true,
