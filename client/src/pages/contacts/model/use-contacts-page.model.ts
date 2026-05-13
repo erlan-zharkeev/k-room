@@ -1,12 +1,12 @@
 import {
+  type ContactInteractionUpdateFailedReasonType,
+  type ICreateRoomAckPayload,
   normalizeTimestamp,
   type IEventCreateRoom,
   type IEventDeleteContact,
-  type IEventRoomCreated,
   type IEventSaveContact,
   type IEventUpdateInteraction,
-  type InteractionType,
-  type SocketActionsType
+  type InteractionType
 } from 'global-shared'
 import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -14,9 +14,10 @@ import { useRouter } from 'vue-router'
 import { useChatRoom } from 'src/entities/chat-room'
 import { useSettings } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
-import { socket } from 'src/shared/api'
-import { formatLocalizedRelativeTime, useI18n, type DbContactType } from 'src/shared/lib'
+import { useSocketAction } from 'src/shared/api'
+import { formatLocalizedRelativeTime, TOAST_I18N, useAppToast, useI18n, type DbContactType } from 'src/shared/lib'
 
+import { CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 
 export const useContactsPage = () => {
@@ -24,6 +25,8 @@ export const useContactsPage = () => {
   const { getPersonalByContactId } = useChatRoom()
   const { settings } = useSettings()
   const { t } = useI18n()
+  const toast = useAppToast()
+  const { emitSocketAction } = useSocketAction()
 
   const contactToDeleteId = ref('')
   const isDeleteDialogOpen = ref(false)
@@ -65,9 +68,10 @@ export const useContactsPage = () => {
     const payload: IEventSaveContact = { interlocutorId }
 
     loadingContactIds.add(interlocutorId)
-    socket.emit<SocketActionsType>('save-contact', payload)
-    socket.once<SocketActionsType>('contact-add-success', () => {
-      loadingContactIds.delete(interlocutorId)
+    void emitSocketAction<IEventSaveContact>('save-contact', payload, {
+      onSettled: () => {
+        loadingContactIds.delete(interlocutorId)
+      }
     })
   }
 
@@ -76,11 +80,31 @@ export const useContactsPage = () => {
 
     const payload: IEventUpdateInteraction = { contactId, interaction }
 
+    function showInteractionUpdateFailure(reason?: ContactInteractionUpdateFailedReasonType) {
+      if (!reason) return
+
+      toast.add({
+        type: 'warning',
+        title: t(TOAST_I18N.warn),
+        content: t(CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON[reason])
+      })
+    }
+
     loadingContactIds.add(contactId)
-    socket.emit<SocketActionsType>('update-contact-interaction-type', payload)
-    socket.once<SocketActionsType>('contact-interaction-updated', () => {
-      loadingContactIds.delete(contactId)
-    })
+    void emitSocketAction<IEventUpdateInteraction, void, ContactInteractionUpdateFailedReasonType>(
+      'update-contact-interaction-type',
+      payload,
+      {
+        onFailure: ({ handledByGlobalError, reason }) => {
+          if (handledByGlobalError) return
+
+          showInteractionUpdateFailure(reason)
+        },
+        onSettled: () => {
+          loadingContactIds.delete(contactId)
+        }
+      }
+    )
   }
 
   const goToChatRoom = (roomId?: string) => {
@@ -95,10 +119,13 @@ export const useContactsPage = () => {
     const payload: IEventCreateRoom = { contactIds: [contactId] }
 
     creatingChatContactIds.add(contactId)
-    socket.emit<SocketActionsType>('create-chat-room', payload)
-    socket.once<SocketActionsType>('room-created', ({ roomId }: IEventRoomCreated) => {
-      creatingChatContactIds.delete(contactId)
-      goToChatRoom(roomId)
+    void emitSocketAction<IEventCreateRoom, ICreateRoomAckPayload>('create-chat-room', payload, {
+      onSuccess: ({ payload: responsePayload }) => {
+        goToChatRoom(responsePayload?.roomId)
+      },
+      onSettled: () => {
+        creatingChatContactIds.delete(contactId)
+      }
     })
   }
 
@@ -119,9 +146,10 @@ export const useContactsPage = () => {
     const payload: IEventDeleteContact = { deletingUserId }
 
     loadingContactIds.add(deletingUserId)
-    socket.emit<SocketActionsType>('delete-contact', payload)
-    socket.once<SocketActionsType>('contact-delete-success', () => {
-      loadingContactIds.delete(deletingUserId)
+    void emitSocketAction<IEventDeleteContact>('delete-contact', payload, {
+      onSettled: () => {
+        loadingContactIds.delete(deletingUserId)
+      }
     })
     closeDeleteDialog()
   }

@@ -10,6 +10,7 @@ export { setSocketLanguage, updateSocketLanguage } from './socket/use-socket-lan
 export { useSocketConnect } from './socket/use-socket-connect'
 export { useSocketConnectionMonitor } from './socket/use-socket-connection-monitor'
 export { useSocketReconnect } from './socket/use-socket-reconnect'
+export { useSocketAction } from './socket/use-socket-action'
 export type {
   HttpErrorType,
   DoHttpRequestType,
@@ -18,3 +19,4 @@ export type {
   HttpRequestPayloadType,
   HttpRequestType
 } from './http/types'
+export type { IEmitSocketActionOptions } from './socket/types'

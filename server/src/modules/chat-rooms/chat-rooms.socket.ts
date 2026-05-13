@@ -1,12 +1,11 @@
 import { setTimeout as delay } from 'timers/promises'
 
-import type { IChatRoomSchema, IEventCreateRoom, SocketActionsType } from 'global-shared'
+import type { IChatRoomSchema, ICreateRoomAckPayload, IEventCreateRoom, SocketActionsType } from 'global-shared'
 
-import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
+import { socketAckMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { uploadBufferToBucket } from '../media/media.service'
-import { emitToUsers } from '../presence/presence.utils'
 
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
@@ -16,9 +15,9 @@ import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from './ch
 export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
     'create-chat-room',
-    socketErrorMiddleware(
+    socketAckMiddleware<IEventCreateRoom, ICreateRoomAckPayload>(
       socket,
-      async ({ contactIds, chatName, avatarFile }: IEventCreateRoom) => {
+      async ({ contactIds, chatName, avatarFile }) => {
         const { userId, language } = socket.data
         const usersAccepted = await checkContactsExistence(userId, contactIds)
 
@@ -50,7 +49,10 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         await emitNewRoomToUsers(users, room.toObject())
         await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
-        emitToUsers([userId], 'room-created', { roomId: String(room._id) })
+        return {
+          ok: true,
+          payload: { roomId: String(room._id) }
+        }
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
     )

@@ -100,6 +100,7 @@ export type {
 } from './security/types'
 
 export { firebaseProviders, providers } from './shared/constants'
+export { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './socket/constants'
 export { formatAppName } from './shared/lib/format-app-name'
 export { isUnknownObject } from './shared/lib/type-guards'
 export type {
@@ -148,10 +149,14 @@ export type {
   IEventErrorMessage,
   IEventMessageDeleted,
   IEventUpdatedMessageReactions,
-  IEventRoomCreated,
+  ICreateRoomAckPayload,
   IEventUpdateInteraction,
   EventInviteReceivedType,
   IEventUpdateContactInteractionSuccess,
+  ContactInteractionUpdateFailedReasonType,
+  ISocketAckSuccess,
+  ISocketAckFailure,
+  SocketAckResponseType,
   IEventContactAddSuccess,
   IEventDeleteContactSuccess,
   IEventAuthError,

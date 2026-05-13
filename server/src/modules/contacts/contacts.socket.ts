@@ -1,14 +1,16 @@
 import type {
+  ContactInteractionUpdateFailedReasonType,
   IEventDeleteContact,
   IEventSaveContact,
   IEventSearchContact,
   IEventUpdateInteraction,
+  SocketAckResponseType,
   SocketActionsType
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { emitToUsers } from 'src/modules/presence/presence.utils'
-import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
+import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { CONTACTS_I18N } from './contacts.i18n'
@@ -37,9 +39,9 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
 
   socket.on<SocketActionsType>(
     'save-contact',
-    socketErrorMiddleware(
+    socketAckMiddleware<IEventSaveContact>(
       socket,
-      async ({ interlocutorId }: IEventSaveContact) => {
+      async ({ interlocutorId }) => {
         const payload = await saveContact(socket.data.userId, interlocutorId, presenceService)
 
         if (!payload) {
@@ -54,9 +56,9 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
 
   socket.on<SocketActionsType>(
     'delete-contact',
-    socketErrorMiddleware(
+    socketAckMiddleware<IEventDeleteContact>(
       socket,
-      async ({ deletingUserId }: IEventDeleteContact) => {
+      async ({ deletingUserId }) => {
         await deleteContactById(socket.data.userId, deletingUserId)
       },
       { basicError: CONTACTS_I18N.updateContactInteractionFailed }
@@ -65,18 +67,18 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
 
   socket.on<SocketActionsType>(
     'update-contact-interaction-type',
-    socketErrorMiddleware(
+    socketAckMiddleware<IEventUpdateInteraction, void, ContactInteractionUpdateFailedReasonType>(
       socket,
-      async ({ contactId, interaction }: IEventUpdateInteraction) => {
+      async ({ contactId, interaction }) => {
         const { userId } = socket.data
 
         if (interaction === 'default') {
           const currentInteraction = await getContactInteraction(userId, contactId)
 
           if (currentInteraction === 'blocked') {
-            const updated = await updateContactInteraction(userId, contactId, interaction, presenceService)
+            const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
 
-            if (updated) {
+            if (result.success) {
               emitContactInteractionUpdated(userId, contactId, interaction)
             }
 
@@ -88,15 +90,23 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
           return
         }
 
-        const updated = await updateContactInteraction(userId, contactId, interaction, presenceService)
+        const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
 
-        if (updated) {
+        if (result.success) {
           emitContactInteractionUpdated(userId, contactId, interaction)
-        } else {
-          const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'
-
-          emitContactInteractionUpdated(userId, contactId, currentInteraction)
+          return
         }
+
+        if (result.reason) {
+          return {
+            ok: false,
+            reason: result.reason
+          } satisfies SocketAckResponseType<void, ContactInteractionUpdateFailedReasonType>
+        }
+
+        const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'
+
+        emitContactInteractionUpdated(userId, contactId, currentInteraction)
       },
       { basicError: CONTACTS_I18N.updateContactInteractionFailed }
     )
