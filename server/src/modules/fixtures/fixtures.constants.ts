@@ -1,3 +1,5 @@
+import { FIXTURE_MAX_LENGTH_NICKNAMES } from '../user/user.constants'
+
 import type { IFixtureContactData } from './fixtures.types'
 
 export const DAY_IN_MS = 1000 * 60 * 60 * 24
@@ -14,21 +16,21 @@ export const FIXTURE_CONTACTS = [
     interaction: 'default'
   },
   {
-    nickname: 'alina',
+    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.alina,
     interaction: 'invited',
     reverseInteraction: 'invite-received'
   },
   {
-    nickname: 'misha',
+    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.misha,
     interaction: 'invite-received',
     reverseInteraction: 'invited'
   },
   {
-    nickname: 'dasha',
+    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.dasha,
     interaction: 'blocked'
   },
   {
-    nickname: 'roma',
+    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.roma,
     interaction: 'invite-accepted',
     reverseInteraction: 'invite-accepted'
   },

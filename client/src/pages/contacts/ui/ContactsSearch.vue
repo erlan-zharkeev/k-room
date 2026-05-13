@@ -62,17 +62,19 @@ const {
                   </div>
                 </template>
               </AppProfileBasicData>
-              <NmorphButton
-                v-if="contact.interactionType === 'default'"
-                shape="square"
-                :loading="loadingContactIds.has(contact.id)"
-                :aria-label="$t(CONTACTS_PAGE_I18N.add)"
-                @click="emit('add', contact.id)"
-              >
-                <template #icon>
-                  <NmorphIconPlusThin />
-                </template>
-              </NmorphButton>
+              <div class="contacts-search__actions">
+                <NmorphButton
+                  v-if="contact.interactionType === 'default'"
+                  shape="square"
+                  :loading="loadingContactIds.has(contact.id)"
+                  :aria-label="$t(CONTACTS_PAGE_I18N.add)"
+                  @click="emit('add', contact.id)"
+                >
+                  <template #icon>
+                    <NmorphIconPlusThin />
+                  </template>
+                </NmorphButton>
+              </div>
             </div>
             <NmorphButton
               v-if="searchHasMore"
@@ -109,11 +111,16 @@ const {
 }
 
 .contacts-search__item {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
-  justify-content: space-between;
 
   padding: 8px;
+}
+
+.contacts-search__name {
+  flex: 1 1 56px;
+  min-width: 0;
 }
 </style>

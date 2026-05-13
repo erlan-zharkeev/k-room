@@ -1,7 +1,9 @@
+import { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH } from '../user/constants'
+
 export const VALIDATION_LIMITS = {
   passwordMinLength: 6,
-  nicknameMinLength: 2,
-  nicknameMaxLength: 32
+  nicknameMinLength: USER_NICKNAME_MIN_LENGTH,
+  nicknameMaxLength: USER_NICKNAME_MAX_LENGTH
 }
 
 export const PASSWORD_SPECIAL_CHARACTERS = '@$!%*?&'

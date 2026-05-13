@@ -36,7 +36,7 @@ export const useContactsPage = () => {
 
     const normalized = normalizeTimestamp(lastSeen)
 
-    if (!normalized) return ''
+    if (!normalized) return t(CONTACTS_PAGE_I18N.lastSeenRecently)
 
     return `${t(CONTACTS_PAGE_I18N.lastSeen)} ${formatLocalizedRelativeTime(
       normalized,

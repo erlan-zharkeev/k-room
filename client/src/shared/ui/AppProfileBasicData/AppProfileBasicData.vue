@@ -31,6 +31,7 @@ const { imageSrc } = useAppProfileBasicData(props)
 .app-profile-basic-data {
   display: flex;
   gap: 10px;
+  align-items: center;
   min-width: 0;
 }
 

@@ -1,4 +1,4 @@
-import { VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'global-shared'
+import { USER_NICKNAME_MAX_LENGTH, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'global-shared'
 
 import type { IRegistrationInitialFormData } from '../model/types.model'
 
@@ -17,3 +17,6 @@ export const PASSWORD_MIN_LENGTH_PATTERN = new RegExp(`^.{${VALIDATION_LIMITS.pa
 export const PASSWORD_STRONG_PATTERN = new RegExp(VALIDATION_PATTERNS.passwordStrong)
 export const PASSWORD_NO_SPACES_PATTERN = new RegExp(`^${VALIDATION_PATTERNS.noSpaces}$`)
 export const PASSWORD_ONLY_LATIN_PATTERN = new RegExp(VALIDATION_PATTERNS.onlyLatin)
+export const REGISTRATION_NICKNAME_INPUT_ATTRS = {
+  maxLength: USER_NICKNAME_MAX_LENGTH
+}

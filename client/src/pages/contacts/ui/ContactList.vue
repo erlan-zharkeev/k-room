@@ -109,32 +109,35 @@ const contactChatRoomIdList = computed(() =>
 }
 
 .contact-list__item {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
-  justify-content: space-between;
 
   padding: 8px 12px 8px 8px;
 }
 
 .contact-list__profile {
-  flex: 1 1 auto;
   min-width: 0;
+}
+
+.contact-list__profile .app-profile-basic-data__content {
+  gap: 4px;
+}
+
+.contact-list__profile .app-profile-basic-data__description:empty {
+  display: none;
 }
 
 .contact-list__title {
   display: flex;
   gap: 8px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .contact-list__name {
+  flex: 1 1 56px;
   min-width: 0;
-}
-
-.contact-list__status {
-  flex: 0 0 auto;
 }
 
 .contact-list__actions {
