@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphIcon, NmorphRadio } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphCard, NmorphIcon, NmorphRadio } from '@nmorph/nmorph-ui-kit'
 import { isString } from 'lodash'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -25,7 +25,13 @@ const selectedSettingsId = computed(() => {
 </script>
 
 <template>
-  <nav class="app-navigation nmorph--shadow-inset" :class="{ 'app-navigation--footer': props.footer }">
+  <NmorphCard
+    tag="nav"
+    :fill="false"
+    shadow-type="inset"
+    class="app-navigation"
+    :class="{ 'app-navigation--footer': props.footer }"
+  >
     <RouterLink
       v-for="item in APP_PAGE_NAV_ITEMS"
       :key="item.id"
@@ -51,18 +57,22 @@ const selectedSettingsId = computed(() => {
         </NmorphRadio>
       </NmorphBadge>
     </RouterLink>
-  </nav>
+  </NmorphCard>
 </template>
 
 <style lang="scss">
 .app-navigation {
-  display: grid;
-  gap: 16px;
   margin-block: auto;
-  padding: 8px;
+
+  .nmorph-card__content {
+    display: grid;
+    gap: 16px;
+  }
 }
 
 .app-navigation--footer {
-  display: inline-flex;
+  .nmorph-card__content {
+    display: inline-flex;
+  }
 }
 </style>

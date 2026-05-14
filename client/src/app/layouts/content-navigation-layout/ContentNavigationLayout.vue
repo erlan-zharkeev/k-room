@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { NmorphCard } from '@nmorph/nmorph-ui-kit';
+
 import { AppHeader } from 'src/shared/ui'
 
 import { CONTENT_NAVIGATION_TITLE } from './constants'
@@ -12,9 +14,9 @@ const props = defineProps<IContentNavigationLayoutProps>()
     <div v-if="props.titleKey" class="content-navigation-layout__header">
       <AppHeader :text="$t(CONTENT_NAVIGATION_TITLE[props.titleKey])" />
     </div>
-    <div class="content-navigation-layout__content nmorph--shadow-inset">
+    <NmorphCard shadow-type="inset" class="content-navigation-layout__content">
       <slot />
-    </div>
+    </NmorphCard>
   </section>
 </template>
 

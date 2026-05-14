@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphIcon, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
+import { NmorphIcon, NmorphCard, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
 import { RouterLink } from 'vue-router'
 
 import { AppHeader } from '../AppHeader'
@@ -9,11 +9,11 @@ import type { IAppContentNavElProps } from './types'
 import { useAppContentNavEl } from './use-app-content-nav-el.model'
 
 const props = defineProps<IAppContentNavElProps>()
-const { buttonClass, rootClass, showIcon } = useAppContentNavEl(props)
+const { buttonClass, showIcon } = useAppContentNavEl(props)
 </script>
 
 <template>
-  <div :class="rootClass">
+  <NmorphCard :shadow-type="props.active && showIcon ? 'inset' : 'outset'" class="app-content-nav-el">
     <RouterLink
       :to="props.to"
       :class="buttonClass"
@@ -31,7 +31,7 @@ const { buttonClass, rootClass, showIcon } = useAppContentNavEl(props)
         </NmorphIcon>
       </div>
     </RouterLink>
-  </div>
+  </NmorphCard>
 </template>
 
 <style lang="scss">

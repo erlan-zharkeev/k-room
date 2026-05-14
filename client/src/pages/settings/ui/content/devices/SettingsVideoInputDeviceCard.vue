@@ -5,7 +5,8 @@ import {
   NmorphIcon,
   NmorphIconPlay,
   NmorphIconStop,
-  NmorphSelect
+  NmorphSelect,
+  NmorphCard
 } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
@@ -79,7 +80,7 @@ const videoInputCheckLabel = computed(() =>
         </NmorphCheckbox>
       </div>
 
-      <div v-if="isVideoInputChecking" class="settings-video-input-device-card__preview-container nmorph--shadow-inset">
+      <NmorphCard shadow-type="inset" v-if="isVideoInputChecking" class="settings-video-input-device-card__preview-container">
         <video
           ref="videoElement"
           class="settings-video-input-device-card__preview"
@@ -88,7 +89,7 @@ const videoInputCheckLabel = computed(() =>
           muted
           playsinline
         />
-      </div>
+      </NmorphCard>
     </div>
   </SettingsCard>
 </template>
@@ -96,7 +97,7 @@ const videoInputCheckLabel = computed(() =>
 <style lang="scss">
 .settings-video-input-device-card {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .settings-video-input-device-card__control {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 import { useTimeoutFn } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 
@@ -60,7 +60,7 @@ watch(
 </script>
 
 <template>
-  <header class="top-bar">
+  <NmorphCard tag="header" class="top-bar">
     <AppProfileBasicData
       class="top-bar__profile"
       :image-alt="user.nickname"
@@ -72,30 +72,23 @@ watch(
         <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" size="tiny" />
       </template>
     </AppProfileBasicData>
-    <div class="top-bar__actions nmorph--shadow-inset">
+    <NmorphCard shadow-type="inset" class="top-bar__actions" :fill="false">
       <NmorphButton @click="logout" :loading="isLogoutLoading">
         <NmorphIcon width="18px" height="18px">
           <NmorphIconExit class="top-bar__exit-btn" />
         </NmorphIcon>
       </NmorphButton>
-    </div>
-  </header>
+    </NmorphCard>
+  </NmorphCard>
 </template>
 
 <style lang="scss">
 .top-bar {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.top-bar__profile {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.top-bar__actions {
-  padding: 8px;
+  .nmorph-card__content {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 </style>

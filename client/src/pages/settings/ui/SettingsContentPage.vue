@@ -25,7 +25,7 @@ const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[sel
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
-  padding: 16px;
+  padding: 8px;
 }
 
 .settings-content-grid--compact-cards {

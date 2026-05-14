@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphScroll, NmorphIconBack } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphScroll, NmorphIconBack, NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -22,20 +22,20 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <div v-if="isPortraitTabletOrLess" class="content-layout__back-btn nmorph--shadow-inset">
+      <NmorphCard shadow-type="inset" v-if="isPortraitTabletOrLess" class="content-layout__back-btn">
         <NmorphButton @click="handleBack">
           <template #icon>
             <NmorphIconBack />
           </template>
         </NmorphButton>
-      </div>
+      </NmorphCard>
       <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
     </div>
-    <div class="content-layout__content nmorph--shadow-inset">
+    <NmorphCard shadow-type="inset" class="content-layout__content">
       <NmorphScroll :y-gap-in-px="-6">
         <slot />
       </NmorphScroll>
-    </div>
+    </NmorphCard>
   </section>
 </template>
 

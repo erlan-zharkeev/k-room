@@ -54,10 +54,4 @@ const { imageSrc } = useAppProfileBasicData(props)
 .app-profile-basic-data__title {
   min-width: 0;
 }
-
-.app-profile-basic-data__description {
-  display: flex;
-  align-items: flex-start;
-  min-width: 0;
-}
 </style>

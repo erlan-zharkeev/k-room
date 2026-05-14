@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {NmorphCard} from "@nmorph/nmorph-ui-kit";
 import { isString } from 'lodash'
 import { computed, watch } from 'vue'
 import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-router'
@@ -75,22 +76,22 @@ const wallpaperStyle = computed(() => {
 
 <template>
   <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
-    <LeftBar v-if="!isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
+    <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />
     <section class="app-layout__workspace">
-      <TopBar class="widget nmorph--shadow-outset" />
+      <TopBar class="widget" />
       <div class="app-layout__content">
-        <div v-if="showNavigation" class="app-layout__navigation-widget widget nmorph--shadow-outset">
+        <NmorphCard v-if="showNavigation" class="app-layout__navigation-widget widget">
           <ContentNavigationLayout :title-key="navigationTitleKey">
             <RouterView name="content-navigation" />
           </ContentNavigationLayout>
-        </div>
-        <div v-if="showContent" class="app-layout__content-widget widget nmorph--shadow-outset">
+        </NmorphCard>
+        <NmorphCard v-if="showContent" class="app-layout__content-widget widget">
           <ContentLayout :title-key="contentTitleKey">
             <RouterView name="content" />
           </ContentLayout>
-        </div>
+        </NmorphCard>
       </div>
-      <MobileFooter v-if="isPortraitTabletOrLess" class="widget nmorph--shadow-outset" />
+      <MobileFooter v-if="isPortraitTabletOrLess" class="widget" />
     </section>
   </main>
 </template>
@@ -145,7 +146,6 @@ const wallpaperStyle = computed(() => {
   isolation: isolate;
   position: relative;
   overflow: hidden;
-  padding: 8px;
 }
 
 .widget::before {

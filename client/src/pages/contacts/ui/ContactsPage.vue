@@ -71,7 +71,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 4px;
+  padding: 8px;
 }
 
 .contacts-page__list {
