@@ -1,16 +1,20 @@
 <script setup lang="ts">
+import { NmorphCard } from '@nmorph/nmorph-ui-kit'
+
 import { AppNavigation } from 'src/features/app-navigation'
 </script>
 
 <template>
-  <footer class="mobile-footer">
+  <NmorphCard tag="footer" class="mobile-footer">
     <AppNavigation footer />
-  </footer>
+  </NmorphCard>
 </template>
 
 <style lang="scss">
 .mobile-footer {
-  display: flex;
-  justify-content: center;
+  .nmorph-card__content {
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>

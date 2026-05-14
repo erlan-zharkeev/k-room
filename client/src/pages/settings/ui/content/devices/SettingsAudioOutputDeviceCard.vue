@@ -66,7 +66,7 @@ const {
 <style lang="scss">
 .settings-audio-output-device-card {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .settings-audio-output-device-card__control {

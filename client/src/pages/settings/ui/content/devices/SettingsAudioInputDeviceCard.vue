@@ -92,7 +92,7 @@ const audioInputCheckLabel = computed(() =>
 <style lang="scss">
 .settings-audio-input-device-card {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .settings-audio-input-device-card__control {

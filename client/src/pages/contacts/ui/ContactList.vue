@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphButton, NmorphIconChatLineSquare, NmorphIconPostCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconChatLineSquare, NmorphIconPostCard } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
@@ -27,7 +27,7 @@ const contactChatRoomIdList = computed(() =>
 
 <template>
   <div class="contact-list">
-    <div v-for="contact in props.contactList" :key="contact.id" class="contact-list__item nmorph--shadow-inset">
+    <NmorphCard v-for="contact in props.contactList" :key="contact.id" class="contact-list__item" shadow-type="inset">
       <AppProfileBasicData
         class="contact-list__profile"
         :image-id="getContactAvatarId(contact.id)"
@@ -98,7 +98,7 @@ const contactChatRoomIdList = computed(() =>
           @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
         />
       </div>
-    </div>
+    </NmorphCard>
   </div>
 </template>
 
@@ -109,12 +109,13 @@ const contactChatRoomIdList = computed(() =>
 }
 
 .contact-list__item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content;
-  gap: 8px;
-  align-items: center;
-
-  padding: 8px 12px 8px 8px;
+  .nmorph-card__content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: 8px;
+    align-items: center;
+    padding-right: 4px;
+  }
 }
 
 .contact-list__profile {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphCard,NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
@@ -34,11 +34,11 @@ const {
             :text="$t(CONTACTS_PAGE_I18N.loading)"
           />
           <div v-else class="contacts-search__list">
-            <div
-              v-for="contact in foundContactList"
+            <NmorphCard v-for="contact in foundContactList"
+              shadow-type="inset"
               :key="contact.id"
-              class="contacts-search__item nmorph--shadow-inset"
-            >
+              class="contacts-search__item">
+
               <AppProfileBasicData
                 class="contacts-search__profile"
                 avatar-shape="circle"
@@ -75,7 +75,7 @@ const {
                   </template>
                 </NmorphButton>
               </div>
-            </div>
+            </NmorphCard>
             <NmorphButton
               v-if="searchHasMore"
               class="contacts-search__load-more"
@@ -97,7 +97,6 @@ const {
 .contacts-search__scroll-container {
   display: grid;
   gap: 8px;
-  padding: 0 12px 0 4px;
 }
 
 .contacts-search__results {

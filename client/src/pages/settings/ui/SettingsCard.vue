@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { computed, useSlots } from 'vue'
 
 import { AppHeader } from 'src/shared/ui'
@@ -14,7 +14,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 </script>
 
 <template>
-  <div class="settings-card nmorph--shadow-outset">
+  <NmorphCard class="settings-card">
     <div class="settings-card__title">
       <AppHeader tag="h2" color="contrast-text" :text="title" />
     </div>
@@ -34,7 +34,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
         />
       </slot>
     </div>
-  </div>
+  </NmorphCard>
 </template>
 
 <style lang="scss">

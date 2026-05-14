@@ -1,19 +1,23 @@
 <script setup lang="ts">
+import { NmorphCard } from '@nmorph/nmorph-ui-kit'
+
 import { AppNavigation } from 'src/features/app-navigation'
 import { AppLogo } from 'src/shared/ui'
 </script>
 
 <template>
-  <aside class="left-bar">
+  <NmorphCard tag="aside" class="left-bar">
     <AppLogo />
     <AppNavigation />
-  </aside>
+  </NmorphCard>
 </template>
 
 <style lang="scss">
 .left-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  .nmorph-card__content {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>
