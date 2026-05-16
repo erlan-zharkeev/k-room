@@ -31,16 +31,8 @@ export interface IChatRoomListItemProps {
   item: IChatRoomNavigationItem
 }
 
-export interface IChatRoomHeaderProps {
-  room: FChatRoomType
-}
-
 export interface IChatRoomMessagesProps {
   room: FChatRoomType
-}
-
-export interface IChatRoomComposerProps {
-  roomId: string
 }
 
 export interface IMessageBodyProps {
