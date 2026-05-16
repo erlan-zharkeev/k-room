@@ -1,4 +1,4 @@
-import type { IChatRoom, IChatRoomSchema } from 'global-shared'
+import { CHAT_KIND, type IChatRoom, type IChatRoomSchema } from 'global-shared'
 
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
@@ -40,6 +40,7 @@ export const transformRoomForUser = ({ userId, room }: ITransformRoomForUserPara
     id: String(normalizedRoom._id),
     authorId: normalizedRoom.authorId,
     chatName: normalizedRoom.chatName,
+    chatKind: normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT),
     lastMessageId: normalizedRoom.messages[normalizedRoom.messages.length - 1] ?? null,
     users,
     messages: normalizedRoom.messages

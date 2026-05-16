@@ -13,7 +13,7 @@ const { imageSrc } = useAppProfileBasicData(props)
 
 <template>
   <div class="app-profile-basic-data">
-    <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" :shape="props.avatarShape" :name="props.name" preview />
+    <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
     <div class="app-profile-basic-data__content">
       <div class="app-profile-basic-data__title">
         <slot name="title">

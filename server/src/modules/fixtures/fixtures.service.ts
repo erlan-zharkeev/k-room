@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { type AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'global-shared'
+import { CHAT_KIND, type AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'global-shared'
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
@@ -293,6 +293,7 @@ const ensureDirectRoom = async () => {
 
   const room = await new ChatRoomModel({
     authorId: ERLAN_ID,
+    chatKind: CHAT_KIND.DIRECT,
     users: [ERLAN_ID, TOLIK_ID],
     chatName: '',
     messages: []
@@ -322,6 +323,7 @@ const ensureGroupRooms = async () => {
         existingRoom ??
         (await new ChatRoomModel({
           authorId,
+          chatKind: CHAT_KIND.GROUP,
           users,
           chatName,
           messages: []

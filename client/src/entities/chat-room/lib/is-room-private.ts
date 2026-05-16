@@ -1,3 +1,3 @@
-import type { IChatRoom } from 'global-shared'
+import { CHAT_KIND, type IChatRoom } from 'global-shared'
 
-export const isRoomPrivate = (room: IChatRoom | undefined) => Boolean(room && room.users.length === 1)
+export const isRoomPrivate = (room: IChatRoom | undefined) => room?.chatKind === CHAT_KIND.DIRECT

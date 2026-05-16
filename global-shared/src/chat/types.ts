@@ -1,7 +1,12 @@
+import { CHAT_KIND } from './constants'
+
+export type ChatKindType = (typeof CHAT_KIND)[keyof typeof CHAT_KIND]
+
 export interface IChatRoom {
   id: string
   authorId: string
   chatName?: string
+  chatKind: ChatKindType
   lastMessageId: string | null
   users: string[]
   messages: string[]

@@ -1,4 +1,4 @@
-import type { IChatRoomSchema } from 'global-shared'
+import { CHAT_KIND, type IChatRoomSchema } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 const chatRoomSchema = new Schema<IChatRoomSchema>({
@@ -9,6 +9,11 @@ const chatRoomSchema = new Schema<IChatRoomSchema>({
   },
   authorId: {
     type: String,
+    required: true
+  },
+  chatKind: {
+    type: String,
+    enum: Object.values(CHAT_KIND),
     required: true
   },
   users: {

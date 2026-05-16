@@ -20,7 +20,6 @@ const props = defineProps<IChatRoomListItemProps>()
     >
       <AppProfileBasicData
         class="chat-room-list-item__profile"
-        :avatar-shape="props.item.avatarShape"
         :image-id="props.item.imageId"
         :title="props.item.title"
         :name="props.item.title"

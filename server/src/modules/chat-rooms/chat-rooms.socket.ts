@@ -1,6 +1,12 @@
 import { setTimeout as delay } from 'timers/promises'
 
-import type { IChatRoomSchema, ICreateRoomAckPayload, IEventCreateRoom, SocketActionsType } from 'global-shared'
+import {
+  CHAT_KIND,
+  type IChatRoomSchema,
+  type ICreateRoomAckPayload,
+  type IEventCreateRoom,
+  type SocketActionsType
+} from 'global-shared'
 
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
@@ -29,6 +35,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         const roomData: Omit<IChatRoomSchema, 'id'> = {
           users,
           authorId: userId,
+          chatKind: contactIds.length > 1 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
           messages: []
         }
 
