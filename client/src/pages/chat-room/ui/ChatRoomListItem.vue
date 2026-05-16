@@ -13,6 +13,7 @@ const props = defineProps<IChatRoomListItemProps>()
   <RouterLink custom :to="props.item.to" v-slot="{ href, navigate }">
     <NmorphCard
       tag="a"
+      class="chat-room-list-item"
       :href="href"
       @click="navigate"
       :shadow-type="props.item.selected ? 'inset' : 'outset'"
@@ -23,11 +24,21 @@ const props = defineProps<IChatRoomListItemProps>()
         :image-id="props.item.imageId"
         :title="props.item.title"
         :name="props.item.title"
+        :show-online="props.item.online"
       >
         <template #title>
           <div class="chat-room-list-item__title">
-            <AppText truncate :selectable="false" :text="props.item.title" />
-            <span v-if="props.item.online" class="chat-room-list-item__online" aria-hidden="true" />
+            <div class="chat-room-list-item__name">
+              <AppText truncate :selectable="false" :text="props.item.title" />
+            </div>
+            <NmorphBadge
+              v-if="props.item.unreadMessagesQuantity"
+              class="chat-room-list-item__badge"
+              :value="props.item.unreadMessagesQuantity"
+              is-tag
+              size="tiny"
+              color="var(--nmorph-warn-color)"
+            />
           </div>
         </template>
         <template #description>
@@ -41,12 +52,22 @@ const props = defineProps<IChatRoomListItemProps>()
           />
         </template>
       </AppProfileBasicData>
-      <NmorphBadge
-        v-if="props.item.unreadMessagesQuantity"
-        :value="props.item.unreadMessagesQuantity"
-        size="tiny"
-        color="var(--nmorph-accent-color)"
-      />
     </NmorphCard>
   </RouterLink>
 </template>
+
+<style lang="scss">
+.chat-room-list-item__title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.chat-room-list-item__name {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+</style>
