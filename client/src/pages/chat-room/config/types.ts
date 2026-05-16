@@ -32,13 +32,20 @@ export interface IChatRoomListItemProps {
 
 export interface IChatRoomMessagesProps {
   room: FChatRoomType
+  isPrivateRoom: boolean
 }
 
 export interface IChatRoomContentProps {
   selectedChatRoom?: FChatRoomType
+  selectedChatRoomIsPrivate: boolean
 }
 
 export interface IChatRoomHeaderProps {
+  room: FChatRoomType
+  isPrivateRoom: boolean
+}
+
+export interface IChatRoomFooterProps {
   room: FChatRoomType
 }
 

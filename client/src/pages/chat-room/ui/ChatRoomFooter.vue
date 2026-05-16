@@ -2,10 +2,10 @@
 import { NmorphButton, NmorphCard, NmorphIconArrowUp, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
-import type { IChatRoomHeaderProps } from '../config/types'
+import type { IChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
-const props = defineProps<IChatRoomHeaderProps>()
+const props = defineProps<IChatRoomFooterProps>()
 const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
 </script>
 

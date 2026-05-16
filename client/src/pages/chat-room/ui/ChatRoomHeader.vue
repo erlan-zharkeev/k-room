@@ -9,7 +9,7 @@ import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
 const props = defineProps<IChatRoomHeaderProps>()
 const room = toRef(props, 'room')
-const { title, typingContactNames } = useChatRoomHeader(room)
+const { title, typingContactNames } = useChatRoomHeader(room, props.isPrivateRoom)
 </script>
 
 <template>
