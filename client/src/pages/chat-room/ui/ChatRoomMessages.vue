@@ -3,7 +3,8 @@ import { NmorphButton, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
-import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
+import { MESSAGE_ID_DATA_ATTRIBUTE } from '../config/constants'
+import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomMessagesProps } from '../config/types'
 import { useChatRoomMessages } from '../model/use-chat-room-messages.model'
 
@@ -45,6 +46,7 @@ const { messagesScroll, hasMessages, isLoading, hasMoreMessages, messageList, lo
         v-else
         class="chat-room-messages__message"
         :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
+        :[MESSAGE_ID_DATA_ATTRIBUTE]="item.message.id"
       >
         <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" />
       </div>

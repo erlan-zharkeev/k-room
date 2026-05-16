@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphCard, NmorphIconArrowUp, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
-import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
+import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
