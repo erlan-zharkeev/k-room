@@ -13,7 +13,8 @@ export const useAppHeader = (props: IAppHeaderProps) => {
       modifiers: [
         color.value && APP_HEADER_COLOR_MODIFIERS[color.value],
         props.bold && 'bold',
-        props.truncate && 'truncate'
+        props.truncate && 'truncate',
+        props.selectable === false && 'not-selectable'
       ]
     })
   )

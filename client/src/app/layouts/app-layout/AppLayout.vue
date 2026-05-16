@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import {NmorphCard} from "@nmorph/nmorph-ui-kit";
-import { isString } from 'lodash'
-import { computed, watch } from 'vue'
-import { RouterView, useRoute, useRouter, type LocationQueryValue } from 'vue-router'
+import { NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { RouterView } from 'vue-router'
 
-import { useSettings } from 'src/entities/setting'
 import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
@@ -12,66 +9,22 @@ import { MobileFooter } from 'src/widgets/mobile-footer'
 import { TopBar } from 'src/widgets/top-bar'
 
 import ContentLayout from './../content-layout/ContentLayout.vue'
-import { isContentTitleKey } from './../content-layout/types'
 import ContentNavigationLayout from './../content-navigation-layout/ContentNavigationLayout.vue'
-import { isContentNavigationTitleKey } from './../content-navigation-layout/types'
-
-const { isPortraitTabletOrLess } = useScreen()
-const { effectiveTheme, settings } = useSettings()
-const route = useRoute()
-const router = useRouter()
+import { CONTENT_FOOTER_ROUTER_VIEW_NAME, CONTENT_HEADER_ROUTER_VIEW_NAME } from './constants'
+import { useAppLayout } from './use-app-layout.model'
 
 useAppMonitors()
-
-const isSupportedTabletAppLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
-  isString(view) && ['content', 'content-navigation'].includes(view)
-
-watch(
-  isPortraitTabletOrLess,
-  (tablet) => {
-    if (tablet) {
-      if (isSupportedTabletAppLayoutView(route.query.view)) return
-
-      router.replace({ query: { ...route.query, view: 'content-navigation' } })
-      return
-    }
-
-    if (!('view' in route.query)) return
-
-    const { view: _, ...rest } = route.query
-
-    router.replace({ query: rest })
-  },
-  { immediate: true }
-)
-
-const showNavigation = computed(() => !isPortraitTabletOrLess.value || route.query.view === 'content-navigation')
-const showContent = computed(() => !isPortraitTabletOrLess.value || route.query.view !== 'content-navigation')
-const showWallpaper = computed(
-  () => settings.value.appearance.showWallpaper && Boolean(effectiveTheme.value.wallpaper.url)
-)
-
-const segments = computed(() => route.path.split('/').filter(Boolean))
-
-const navigationTitleKey = computed(() => {
-  const titleKey = segments.value[1]
-  return isContentNavigationTitleKey(titleKey) ? titleKey : undefined
-})
-
-const contentTitleKey = computed(() => {
-  const titleKey = segments.value[2]
-  return isContentTitleKey(titleKey) ? titleKey : undefined
-})
-
-const wallpaperStyle = computed(() => {
-  return {
-    '--app-layout-wallpaper': `url(${effectiveTheme.value.wallpaper.url})`,
-    '--app-layout-wallpaper-transform': `translate(-50%, -50%)rotate(${
-      effectiveTheme.value.wallpaper.angle
-    }deg) scale(${effectiveTheme.value.wallpaper.scale / 100})`,
-    '--app-layout-wallpaper-brightness': `brightness(${100 - effectiveTheme.value.wallpaper.darkness}%)`
-  }
-})
+const { isPortraitTabletOrLess } = useScreen()
+const {
+  showWallpaper,
+  wallpaperStyle,
+  showNavigation,
+  showContent,
+  contentTitleKey,
+  navigationTitleKey,
+  hasContentFooter,
+  hasContentHeader
+} = useAppLayout()
 </script>
 
 <template>
@@ -87,7 +40,13 @@ const wallpaperStyle = computed(() => {
         </NmorphCard>
         <NmorphCard v-if="showContent" class="app-layout__content-widget widget">
           <ContentLayout :title-key="contentTitleKey">
+            <template v-if="hasContentHeader" #header>
+              <RouterView :name="CONTENT_HEADER_ROUTER_VIEW_NAME" />
+            </template>
             <RouterView name="content" />
+            <template v-if="hasContentFooter" #footer>
+              <RouterView :name="CONTENT_FOOTER_ROUTER_VIEW_NAME" />
+            </template>
           </ContentLayout>
         </NmorphCard>
       </div>

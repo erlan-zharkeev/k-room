@@ -14,7 +14,8 @@ export const useAppText = (props: IAppTextProps) => {
         props.align,
         props.bold && 'bold',
         props.truncate && 'truncate',
-        props.noLineHeight && 'no-line-height'
+        props.noLineHeight && 'no-line-height',
+        props.selectable === false && 'not-selectable'
       ]
     })
   )

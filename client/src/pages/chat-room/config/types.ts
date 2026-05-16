@@ -1,8 +1,11 @@
+import type { RouteLocationRaw } from 'vue-router'
+
 import type { FChatRoomType } from 'src/shared/lib'
 import type { DbMessageType } from 'src/shared/lib'
 
 export interface IChatRoomNavigationItem {
   id: string
+  to: RouteLocationRaw
   title: string
   description: string
   imageId: string
@@ -24,16 +27,8 @@ export interface IChatRoomListProps {
   items: IChatRoomNavigationItem[]
 }
 
-export interface IChatRoomListEmits {
-  select: [roomId: string]
-}
-
 export interface IChatRoomListItemProps {
   item: IChatRoomNavigationItem
-}
-
-export interface IChatRoomListItemEmits {
-  select: [roomId: string]
 }
 
 export interface IChatRoomHeaderProps {

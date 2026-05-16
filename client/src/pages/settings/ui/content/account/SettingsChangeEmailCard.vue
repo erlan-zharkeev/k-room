@@ -65,7 +65,7 @@ const {
     </NmorphForm>
 
     <label v-if="isEmailCodeVisible" class="settings-change-email-card__field">
-      <AppText tag="small" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.emailCode)" />
+      <AppText tag="small" :selectable="false" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.emailCode)" />
       <NmorphOTPInput
         v-model="otpCode"
         :length="EMAIL_CODE_LENGTH"

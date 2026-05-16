@@ -16,7 +16,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 <template>
   <NmorphCard class="settings-card">
     <div class="settings-card__title">
-      <AppHeader tag="h2" color="contrast-text" :text="title" />
+      <AppHeader tag="h2" color="contrast-text" :selectable="false" :text="title" />
     </div>
 
     <div class="settings-card__content">

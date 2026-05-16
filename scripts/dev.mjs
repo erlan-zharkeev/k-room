@@ -3,11 +3,19 @@ import { chmod } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { spawn, spawnSync } from 'node:child_process'
+import { request as httpRequest } from 'node:http'
+import { request as httpsRequest } from 'node:https'
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const isWindows = process.platform === 'win32'
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm'
 const isLan = process.argv.includes('--lan')
+const DOCKER_START_TIMEOUT_MS = 120_000
+const DOCKER_POLL_INTERVAL_MS = 2_000
+const DOCKER_STATUS_TIMEOUT_MS = 15_000
+const SERVER_READY_TIMEOUT_MS = 120_000
+const SERVER_READY_POLL_INTERVAL_MS = 1_000
+const SERVER_READY_REQUEST_TIMEOUT_MS = 3_000
 
 if (isLan) {
   process.env.APP_HOST = 'https://192.168.8.7'
@@ -39,6 +47,7 @@ async function runWindowsDev() {
   run(pnpmCommand, ['run', 'husky-prepare'])
   await makeHookExecutableIfPossible()
   ensureDevCertificates()
+  await ensureDockerAvailable()
 
   ensureDockerContainer({
     name: 'db',
@@ -75,25 +84,14 @@ async function runWindowsDev() {
   const clientPort = sharedEnv.CLIENT_PORT ?? ''
   const clientHost = process.env.APP_HOST ?? 'https://localhost'
   const serverHost = process.env.API_HOST ?? 'https://localhost'
+  const serverHealthUrl = serverPort ? `${serverHost}:${serverPort}/health` : ''
 
   console.log(`Client: ${clientPort ? `${clientHost}:${clientPort}` : ''}`)
   console.log(`Server: ${serverPort ? `${serverHost}:${serverPort}` : ''}`)
-  console.log(`Health: ${serverPort ? `${serverHost}:${serverPort}/health` : ''}`)
+  console.log(`Health: ${serverHealthUrl}`)
 
   run(pnpmCommand, ['--dir', 'global-shared', 'run', 'build'])
-  await runPersistent(pnpmCommand, [
-    '-r',
-    '--parallel',
-    '--stream',
-    '--filter',
-    'global-shared',
-    '--filter',
-    'k-room-client',
-    '--filter',
-    'k-room-server',
-    'run',
-    'serve'
-  ])
+  await runDevServices(serverHealthUrl)
 }
 
 function commandExists(command) {
@@ -241,6 +239,107 @@ function findOpenSslCommand() {
   return candidates.find((candidate) => existsSync(candidate))
 }
 
+async function ensureDockerAvailable() {
+  const status = dockerStatus()
+
+  if (status.isReady) return
+
+  if (status.isMissing) {
+    console.error('Cannot start development environment because Docker was not found.')
+    console.error('Install Docker Desktop, then run pnpm dev again.')
+    process.exit(1)
+  }
+
+  if (!isWindows || !startDockerDesktopIfPossible()) {
+    reportDockerUnavailable(status.message)
+    process.exit(1)
+  }
+
+  console.log('Docker Desktop is starting. Waiting for the Docker daemon...')
+
+  const deadline = Date.now() + DOCKER_START_TIMEOUT_MS
+
+  while (Date.now() < deadline) {
+    await wait(DOCKER_POLL_INTERVAL_MS)
+
+    if (dockerStatus().isReady) return
+  }
+
+  console.error('Docker Desktop did not become ready within 120 seconds.')
+  console.error('Open Docker Desktop, wait until it finishes starting, then run pnpm dev again.')
+  process.exit(1)
+}
+
+function dockerStatus() {
+  const result = spawnSync('docker', ['info'], {
+    cwd: rootDir,
+    encoding: 'utf8',
+    timeout: DOCKER_STATUS_TIMEOUT_MS
+  })
+
+  if (result.error) {
+    return {
+      isReady: false,
+      isMissing: result.error.code === 'ENOENT',
+      message: result.error.message
+    }
+  }
+
+  if (result.status === 0) {
+    return {
+      isReady: true,
+      isMissing: false,
+      message: ''
+    }
+  }
+
+  return {
+    isReady: false,
+    isMissing: false,
+    message: (result.stderr || result.stdout).trim()
+  }
+}
+
+function startDockerDesktopIfPossible() {
+  const candidates = [
+    process.env.ProgramFiles ? join(process.env.ProgramFiles, 'Docker', 'Docker', 'Docker Desktop.exe') : '',
+    process.env['ProgramFiles(x86)']
+      ? join(process.env['ProgramFiles(x86)'], 'Docker', 'Docker', 'Docker Desktop.exe')
+      : '',
+    process.env.LOCALAPPDATA ? join(process.env.LOCALAPPDATA, 'Docker', 'Docker Desktop.exe') : ''
+  ]
+
+  const executablePath = candidates.find((candidate) => candidate && existsSync(candidate))
+
+  if (!executablePath) return false
+
+  const child = spawn(executablePath, [], {
+    detached: true,
+    stdio: 'ignore'
+  })
+
+  child.on('error', () => {})
+  child.unref()
+
+  return true
+}
+
+function reportDockerUnavailable(message) {
+  console.error('Cannot start development environment because the Docker daemon is not running.')
+
+  if (message) {
+    console.error(`Docker reported: ${message}`)
+  }
+
+  console.error('Start Docker Desktop, wait until it is ready, then run pnpm dev again.')
+}
+
+function wait(duration) {
+  return new Promise((resolveTimeout) => {
+    setTimeout(resolveTimeout, duration)
+  })
+}
+
 function ensureDockerContainer({ name, image, args }) {
   if (isDockerContainerRunning(name)) return
 
@@ -295,24 +394,165 @@ function run(command, args) {
   }
 }
 
-function runPersistent(command, args) {
-  return new Promise((resolveProcess) => {
-    const child = spawn(command, args, {
-      cwd: rootDir,
-      env: process.env,
-      shell: shouldUseShell(command),
-      stdio: 'inherit'
+async function runDevServices(serverHealthUrl) {
+  const services = []
+  let isShuttingDown = false
+
+  const shutdown = (code) => {
+    if (isShuttingDown) return
+
+    isShuttingDown = true
+    stopDevServices(services)
+    process.exit(code)
+  }
+
+  process.once('SIGINT', () => shutdown(130))
+  process.once('SIGTERM', () => shutdown(143))
+
+  services.push(startDevService('global-shared', pnpmCommand, ['--dir', 'global-shared', 'run', 'serve']))
+  services.push(startDevService('client', pnpmCommand, ['--dir', 'client', 'run', 'serve']))
+  services.push(startDevService('server', pnpmCommand, ['--dir', 'server', 'run', 'serve']))
+
+  const startupResult = await Promise.race([
+    waitForServerReady(serverHealthUrl).then((isReady) => ({ type: 'server-ready', isReady })),
+    waitForDevServiceExit(services).then((exit) => ({ type: 'service-exit', exit }))
+  ])
+
+  if (startupResult.type === 'service-exit') {
+    reportDevServiceExit(startupResult.exit)
+    shutdown(exitCodeFromDevServiceExit(startupResult.exit))
+    return
+  }
+
+  if (!startupResult.isReady) {
+    console.error('Server did not become ready within 120 seconds.')
+    console.error('Check the server logs above, then run pnpm dev again.')
+    shutdown(1)
+    return
+  }
+
+  const exit = await waitForDevServiceExit(services)
+  reportDevServiceExit(exit)
+  shutdown(exitCodeFromDevServiceExit(exit))
+}
+
+function startDevService(name, command, args) {
+  console.log(`Starting ${name}...`)
+
+  const child = spawn(command, args, {
+    cwd: rootDir,
+    env: process.env,
+    shell: shouldUseShell(command),
+    stdio: 'inherit'
+  })
+
+  return {
+    name,
+    child,
+    exitPromise: new Promise((resolveExit) => {
+      child.on('error', (error) => {
+        resolveExit({ name, code: 1, signal: null, error })
+      })
+
+      child.on('exit', (code, signal) => {
+        resolveExit({ name, code, signal, error: null })
+      })
+    })
+  }
+}
+
+function waitForDevServiceExit(services) {
+  return Promise.race(services.map((service) => service.exitPromise))
+}
+
+function reportDevServiceExit(exit) {
+  if (exit.error) {
+    console.error(`${exit.name} failed: ${exit.error.message}`)
+    return
+  }
+
+  if (exit.signal) {
+    console.error(`${exit.name} stopped with signal ${exit.signal}.`)
+    return
+  }
+
+  console.error(`${exit.name} exited with code ${exit.code ?? 1}.`)
+}
+
+function exitCodeFromDevServiceExit(exit) {
+  if (exit.signal === 'SIGINT') return 130
+  if (exit.signal === 'SIGTERM') return 143
+
+  return exit.code ?? 1
+}
+
+function stopDevServices(services) {
+  services.forEach(({ child }) => {
+    if (!child.pid) return
+    if (child.exitCode !== null || child.signalCode !== null) return
+
+    if (isWindows) {
+      spawnSync('taskkill', ['/pid', String(child.pid), '/t', '/f'], {
+        stdio: 'ignore'
+      })
+      return
+    }
+
+    child.kill('SIGTERM')
+  })
+}
+
+async function waitForServerReady(serverHealthUrl) {
+  if (!serverHealthUrl) {
+    console.error('Cannot wait for server readiness because SERVER_PORT is missing in .env.shared.')
+    return false
+  }
+
+  const deadline = Date.now() + SERVER_READY_TIMEOUT_MS
+
+  while (Date.now() < deadline) {
+    if (await requestServerHealth(serverHealthUrl)) return true
+
+    await wait(SERVER_READY_POLL_INTERVAL_MS)
+  }
+
+  return false
+}
+
+function requestServerHealth(serverHealthUrl) {
+  return new Promise((resolveHealth) => {
+    let url
+
+    try {
+      url = new URL(serverHealthUrl)
+    } catch {
+      resolveHealth(false)
+      return
+    }
+
+    const requestClient = url.protocol === 'http:' ? httpRequest : httpsRequest
+    const requestOptions =
+      url.protocol === 'https:'
+        ? {
+            method: 'GET',
+            rejectUnauthorized: false,
+            timeout: SERVER_READY_REQUEST_TIMEOUT_MS
+          }
+        : {
+            method: 'GET',
+            timeout: SERVER_READY_REQUEST_TIMEOUT_MS
+          }
+    const request = requestClient(url, requestOptions, (response) => {
+      response.resume()
+      resolveHealth(response.statusCode === 200)
     })
 
-    child.on('error', (error) => {
-      console.error(error.message)
-      process.exit(1)
+    request.on('error', () => resolveHealth(false))
+    request.on('timeout', () => {
+      request.destroy()
+      resolveHealth(false)
     })
-
-    child.on('exit', (code, signal) => {
-      if (signal) process.kill(process.pid, signal)
-      process.exit(code ?? 1)
-    })
+    request.end()
   })
 }
 

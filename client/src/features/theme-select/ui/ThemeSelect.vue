@@ -39,7 +39,12 @@ const themeIconWidth = computed(() => (props.compact || !isPortraitTabletOrLess.
             <NmorphIcon class="theme-select__icon" :width="themeIconWidth" aria-hidden="true">
               <component :is="option.icon" />
             </NmorphIcon>
-            <AppHeader v-if="!props.compact && !isPortraitTabletOrLess" tag="h5" :text="t(option.label)" />
+            <AppHeader
+              v-if="!props.compact && !isPortraitTabletOrLess"
+              tag="h5"
+              :selectable="false"
+              :text="t(option.label)"
+            />
           </div>
         </NmorphSelectButtonItem>
       </template>

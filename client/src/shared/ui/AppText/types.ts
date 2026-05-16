@@ -21,4 +21,5 @@ export interface IAppTextProps {
   bold?: boolean
   truncate?: boolean
   noLineHeight?: boolean
+  selectable?: boolean
 }

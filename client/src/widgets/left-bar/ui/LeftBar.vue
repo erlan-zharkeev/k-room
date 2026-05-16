@@ -14,7 +14,6 @@ import { AppLogo } from 'src/shared/ui'
 
 <style lang="scss">
 .left-bar {
-
   .nmorph-card__content {
     display: flex;
     flex-direction: column;

@@ -64,7 +64,7 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
 
           <div class="settings-theme-card__group">
             <label v-for="item in group.items" :key="item.id" class="settings-theme-card__field">
-              <AppText :text="$t(item.label)" />
+              <AppText :selectable="false" :text="$t(item.label)" />
               <NmorphColorPicker
                 :model-value="effectiveTheme.colorSchema[item.id]"
                 show-value
@@ -79,7 +79,11 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
         <div class="settings-theme-card__group">
           <label v-for="item in CUSTOM_THEME_SHADOW_ITEMS" :key="item.id" class="settings-theme-card__slider">
             <div class="settings-theme-card__slider-label">
-              <AppText tag="small" :text="`${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`" />
+              <AppText
+                tag="small"
+                :selectable="false"
+                :text="`${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`"
+              />
             </div>
             <NmorphSlider
               :model-value="effectiveTheme[item.id]"

@@ -91,6 +91,20 @@ export const FIXTURE_GROUPS = [
     authorNickname: 'guest',
     chatName: 'Design Review',
     nicknames: ['erlan', 'guest', 'sofia', 'marta', 'vika']
-  }
+  },
+  ...Array.from({ length: 20 }, (_, index) => {
+    const ROOM_NUMBER = index + 1
+
+    return {
+      key: `empty-room-${String(ROOM_NUMBER).padStart(2, '0')}`,
+      authorNickname: 'erlan',
+      chatName: `Empty Room ${String(ROOM_NUMBER).padStart(2, '0')}`,
+      nicknames: [
+        'erlan',
+        FIXTURE_USERNAMES[(index % (FIXTURE_USERNAMES.length - 1)) + 1],
+        FIXTURE_USERNAMES[((index + 7) % (FIXTURE_USERNAMES.length - 1)) + 1]
+      ]
+    }
+  })
 ] as const
 export const FIXTURE_MESSAGE_COUNT = 101

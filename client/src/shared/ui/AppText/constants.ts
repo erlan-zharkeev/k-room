@@ -5,7 +5,8 @@ export const APP_TEXT_DEFAULT_PROPS = {
   tag: 'span',
   color: 'text',
   align: 'left',
-  bold: false
+  bold: false,
+  selectable: true
 } satisfies Partial<IAppTextProps>
 
 export const APP_TEXT_COLOR_MODIFIERS = {

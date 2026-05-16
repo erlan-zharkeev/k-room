@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphCard } from '@nmorph/nmorph-ui-kit';
+import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader } from 'src/shared/ui'
 

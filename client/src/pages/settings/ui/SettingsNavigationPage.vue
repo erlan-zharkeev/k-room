@@ -53,6 +53,7 @@ const getItemRoute = (settingsId: string) => ({
   display: flex;
   flex-direction: column;
   gap: 8px;
+
   min-width: 0;
   padding: 8px;
 }

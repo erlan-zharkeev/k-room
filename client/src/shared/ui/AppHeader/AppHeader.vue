@@ -56,6 +56,10 @@ h5.app-header {
   white-space: nowrap;
 }
 
+.app-header--not-selectable {
+  user-select: none;
+}
+
 .app-header--semi-contrast-text {
   color: var(--nmorph-semi-contrast-text-color);
 }

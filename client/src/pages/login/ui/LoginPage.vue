@@ -81,13 +81,13 @@ const isSubmitBtnDisabled = computed(() => {
           <NmorphIcon>
             <NmorphIconGoogle />
           </NmorphIcon>
-          <AppText :text="$t(LOGIN_FORM_I18N.withGoogle)" />
+          <AppText :selectable="false" :text="$t(LOGIN_FORM_I18N.withGoogle)" />
         </div>
       </NmorphButton>
 
       <div class="login-page__forgot">
         <RouterLink :to="ROUTE_NAMES.passwordRecovery">
-          <AppText :text="$t(LOGIN_FORM_I18N.forgotPassword)" color="accent" />
+          <AppText :selectable="false" :text="$t(LOGIN_FORM_I18N.forgotPassword)" color="accent" />
         </RouterLink>
       </div>
     </div>

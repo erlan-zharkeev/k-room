@@ -32,7 +32,6 @@ const {
   canCreateChat,
   showNoSearchResults,
   showNoChats,
-  openChatRoom,
   openCreateChatDialog,
   closeCreateChatDialog,
   toggleContactSelection,
@@ -57,18 +56,24 @@ const {
         <template #icon>
           <NmorphIconPlusThin />
         </template>
-        <AppText :text="$t(CHAT_ROOM_PAGE_I18N.createChat)" />
+        <AppText :selectable="false" :text="$t(CHAT_ROOM_PAGE_I18N.createChat)" />
       </NmorphButton>
     </div>
 
-    <AppText v-if="showNoChats" color="semi-contrast-text" :text="$t(CHAT_ROOM_PAGE_I18N.noChats)" />
+    <AppText
+      v-if="showNoChats"
+      color="semi-contrast-text"
+      :selectable="false"
+      :text="$t(CHAT_ROOM_PAGE_I18N.noChats)"
+    />
     <AppText
       v-else-if="showNoSearchResults"
       color="semi-contrast-text"
+      :selectable="false"
       :text="$t(CHAT_ROOM_PAGE_I18N.noSearchResults)"
     />
     <NmorphScroll v-else scroll-x-prop="hidden" class="chat-rooms-navigation__scroll">
-      <ChatRoomList :items="chatRoomList" @select="openChatRoom" />
+      <ChatRoomList :items="chatRoomList" />
     </NmorphScroll>
 
     <NmorphDialog
@@ -94,17 +99,29 @@ const {
           </template>
         </NmorphTextInput>
         <div class="create-chat-room-dialog__meta">
-          <AppText tag="small" color="semi-contrast-text" :text="$t(CHAT_ROOM_PAGE_I18N.contacts)" />
           <AppText
             tag="small"
             color="semi-contrast-text"
+            :selectable="false"
+            :text="$t(CHAT_ROOM_PAGE_I18N.contacts)"
+          />
+          <AppText
+            tag="small"
+            color="semi-contrast-text"
+            :selectable="false"
             :text="`${$t(CHAT_ROOM_PAGE_I18N.selectedContacts)}: ${selectedContactIds.length}`"
           />
         </div>
-        <AppText v-if="isPrivateChatAlreadyExists" color="warn" :text="$t(CHAT_ROOM_PAGE_I18N.privateChatExists)" />
+        <AppText
+          v-if="isPrivateChatAlreadyExists"
+          color="warn"
+          :selectable="false"
+          :text="$t(CHAT_ROOM_PAGE_I18N.privateChatExists)"
+        />
         <AppText
           v-if="!acceptedContacts.length"
           color="semi-contrast-text"
+          :selectable="false"
           :text="$t(CHAT_ROOM_PAGE_I18N.noContacts)"
         />
         <NmorphScroll v-else scroll-x-prop="hidden" class="create-chat-room-dialog__contacts">
@@ -122,6 +139,7 @@ const {
                 :image-id="contact.imageId"
                 :title="contact.title"
                 :name="contact.title"
+                :selectable="false"
               />
               <NmorphCheckbox
                 :model-value="contact.selected"
