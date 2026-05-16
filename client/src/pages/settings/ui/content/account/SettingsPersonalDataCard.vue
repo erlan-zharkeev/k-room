@@ -60,7 +60,7 @@ const {
       >
         <template #title>
           <div class="settings-personal-data-card__profile-title">
-            <AppHeader tag="h5" truncate :text="displayedNickname" />
+            <AppHeader tag="h5" truncate :selectable="false" :text="displayedNickname" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
@@ -77,7 +77,7 @@ const {
         </template>
         <template #description>
           <div v-if="user.id" class="settings-personal-data-card__profile-description">
-            <AppText tag="small" :text="displayedUserId" />
+            <AppText tag="small" :selectable="false" :text="displayedUserId" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"

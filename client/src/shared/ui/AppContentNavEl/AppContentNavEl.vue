@@ -21,8 +21,8 @@ const { buttonClass, showIcon } = useAppContentNavEl(props)
       :aria-label="props.ariaLabel"
     >
       <div class="app-content-nav-el__text">
-        <AppHeader tag="h5" truncate :text="props.label" />
-        <AppText tag="small" truncate color="semi-contrast-text" :text="props.description" />
+        <AppHeader tag="h5" truncate :selectable="false" :text="props.label" />
+        <AppText tag="small" truncate color="semi-contrast-text" :selectable="false" :text="props.description" />
       </div>
       <div v-if="showIcon" class="app-content-nav-el__icon">
         <NmorphIcon>

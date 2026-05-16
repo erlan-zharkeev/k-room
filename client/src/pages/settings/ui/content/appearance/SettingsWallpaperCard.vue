@@ -42,7 +42,7 @@ const visibilityOptions = computed(() =>
   <SettingsCard :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaper)">
     <div class="settings-wallpaper-card">
       <div class="settings-wallpaper-card__visibility settings-wallpaper-card__input-element">
-        <AppText :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
+        <AppText :selectable="false" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
         <NmorphSelectButton
           height="thick"
           :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
@@ -68,6 +68,7 @@ const visibilityOptions = computed(() =>
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
           <AppText
             tag="small"
+            :selectable="false"
             :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperAngle)} ${effectiveTheme.wallpaper.angle}deg`"
             class="settings-wallpaper-card__slider-label"
           />
@@ -84,6 +85,7 @@ const visibilityOptions = computed(() =>
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
           <AppText
             tag="small"
+            :selectable="false"
             :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperScale)} ${effectiveTheme.wallpaper.scale}%`"
             class="settings-wallpaper-card__slider-label"
           />
@@ -100,6 +102,7 @@ const visibilityOptions = computed(() =>
         <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
           <AppText
             tag="small"
+            :selectable="false"
             :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperDarkness)} ${effectiveTheme.wallpaper.darkness}%`"
             class="settings-wallpaper-card__slider-label"
           />

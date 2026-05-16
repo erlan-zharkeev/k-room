@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconChatLineSquare, NmorphIconPostCard } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphBadge,
+  NmorphCard,
+  NmorphButton,
+  NmorphIconChatLineSquare,
+  NmorphIconPostCard
+} from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
@@ -114,6 +120,7 @@ const contactChatRoomIdList = computed(() =>
     grid-template-columns: minmax(0, 1fr) max-content;
     gap: 8px;
     align-items: center;
+
     padding-right: 4px;
   }
 }

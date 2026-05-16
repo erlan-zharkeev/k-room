@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphIcon,NmorphCard, NmorphIconMicrophone } from '@nmorph/nmorph-ui-kit'
+import { NmorphIcon, NmorphCard, NmorphIconMicrophone } from '@nmorph/nmorph-ui-kit'
 
 import { APP_MICROPHONE_WAVEFORM_DEFAULT_PROPS } from './constants'
 import type { IAppMicrophoneWaveformProps } from './types'
@@ -10,7 +10,8 @@ const { volumeValue, waveformBars, waveformColor, waveformStyle } = useAppMicrop
 </script>
 
 <template>
-  <NmorphCard shadow-type="inset"
+  <NmorphCard
+    shadow-type="inset"
     class="app-microphone-waveform"
     :style="waveformStyle"
     role="meter"

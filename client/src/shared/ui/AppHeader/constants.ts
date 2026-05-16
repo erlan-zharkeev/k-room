@@ -4,7 +4,8 @@ import type { AppHeaderColorType } from './types'
 export const APP_HEADER_DEFAULT_PROPS = {
   tag: 'h3',
   accent: false,
-  bold: true
+  bold: true,
+  selectable: true
 } satisfies Partial<IAppHeaderProps>
 
 export const APP_HEADER_COLOR_MODIFIERS = {

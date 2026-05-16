@@ -76,6 +76,10 @@ small.app-text {
   line-height: 0;
 }
 
+.app-text--not-selectable {
+  user-select: none;
+}
+
 .app-text--left {
   text-align: left;
 }

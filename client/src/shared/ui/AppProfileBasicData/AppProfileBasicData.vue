@@ -17,7 +17,7 @@ const { imageSrc } = useAppProfileBasicData(props)
     <div class="app-profile-basic-data__content">
       <div class="app-profile-basic-data__title">
         <slot name="title">
-          <AppHeader tag="h5" truncate :text="props.title" />
+          <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
         </slot>
       </div>
       <div class="app-profile-basic-data__description">

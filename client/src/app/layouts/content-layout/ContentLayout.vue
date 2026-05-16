@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphScroll, NmorphIconBack, NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCard, NmorphIconBack, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
@@ -22,20 +22,27 @@ const handleBack = () => {
 <template>
   <section class="content-layout">
     <div class="content-layout__header">
-      <NmorphCard shadow-type="inset" v-if="isPortraitTabletOrLess" class="content-layout__back-btn">
+      <NmorphCard shadow-type="inset" :fill="false" v-if="isPortraitTabletOrLess" class="content-layout__back-btn">
         <NmorphButton @click="handleBack">
           <template #icon>
             <NmorphIconBack />
           </template>
         </NmorphButton>
       </NmorphCard>
-      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" class="content-layout__header-text" />
+      <div class="content-layout__header-body">
+        <slot name="header">
+          <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" />
+        </slot>
+      </div>
     </div>
     <NmorphCard shadow-type="inset" class="content-layout__content">
-      <NmorphScroll :y-gap-in-px="-6">
+      <NmorphScroll>
         <slot />
       </NmorphScroll>
     </NmorphCard>
+    <div v-if="$slots.footer" class="content-layout__footer">
+      <slot name="footer" />
+    </div>
   </section>
 </template>
 
@@ -49,8 +56,8 @@ const handleBack = () => {
 
 .content-layout__header {
   display: flex;
+  gap: 8px;
   align-items: center;
-  justify-content: space-between;
   margin-bottom: 12px;
 }
 
@@ -59,8 +66,8 @@ const handleBack = () => {
   min-height: 0;
 }
 
-.content-layout__header-text {
-  margin-left: 8px;
+.content-layout__footer {
+  margin-top: 12px;
 }
 
 .content-layout__back-btn {

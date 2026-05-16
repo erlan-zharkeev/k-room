@@ -80,7 +80,11 @@ const videoInputCheckLabel = computed(() =>
         </NmorphCheckbox>
       </div>
 
-      <NmorphCard shadow-type="inset" v-if="isVideoInputChecking" class="settings-video-input-device-card__preview-container">
+      <NmorphCard
+        shadow-type="inset"
+        v-if="isVideoInputChecking"
+        class="settings-video-input-device-card__preview-container"
+      >
         <video
           ref="videoElement"
           class="settings-video-input-device-card__preview"

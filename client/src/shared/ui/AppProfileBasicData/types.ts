@@ -5,4 +5,5 @@ export interface IAppProfileBasicDataProps {
   imageSrc?: string
   title: string
   name?: string
+  selectable?: boolean
 }
