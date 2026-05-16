@@ -11,7 +11,7 @@ import DateSeparator from './DateSeparator.vue'
 import MessageBody from './MessageBody.vue'
 
 const props = defineProps<IChatRoomMessagesProps>()
-const { messagesScroll, isPrivateRoom, hasMessages, isLoading, hasMoreMessages, messageList, loadOlderMessages } =
+const { messagesScroll, hasMessages, isLoading, hasMoreMessages, messageList, loadOlderMessages } =
   useChatRoomMessages(props)
 </script>
 
@@ -46,7 +46,7 @@ const { messagesScroll, isPrivateRoom, hasMessages, isLoading, hasMoreMessages, 
         class="chat-room-messages__message"
         :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
       >
-        <MessageBody :message="item.message" :is-private-room="isPrivateRoom" />
+        <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" />
       </div>
     </template>
   </NmorphScroll>

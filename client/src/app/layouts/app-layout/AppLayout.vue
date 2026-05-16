@@ -31,11 +31,14 @@ const {
   hasContentHeader
 } = useAppLayout()
 
-const { selectedChatRoom } = useChatRoomPage()
+const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomPage()
 
 const chatRoomViewProps = computed(() =>
   route.path.startsWith(APP_PAGE_ROUTES.chatRooms)
-    ? { selectedChatRoom: selectedChatRoom.value }
+    ? {
+        selectedChatRoom: selectedChatRoom.value,
+        selectedChatRoomIsPrivate: selectedChatRoomIsPrivate.value
+      }
     : {}
 )
 </script>

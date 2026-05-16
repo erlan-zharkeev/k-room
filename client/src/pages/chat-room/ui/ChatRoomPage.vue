@@ -9,8 +9,11 @@ const props = defineProps<IChatRoomContentProps>()
 
 <template>
   <section class="chat-room-page">
-    <ChatRoomMessages v-if="props.selectedChatRoom" :room="props.selectedChatRoom" />
+    <ChatRoomMessages
+      v-if="props.selectedChatRoom"
+      :room="props.selectedChatRoom"
+      :is-private-room="props.selectedChatRoomIsPrivate"
+    />
     <ChatRoomStub v-else />
   </section>
 </template>
-
