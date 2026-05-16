@@ -48,7 +48,9 @@ export const registerUserSocketHandlers = (socket: SocketInstanceType, presenceS
           : []
         const roomIds = data?.personal.chatRooms ?? []
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-        const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
+        const roomsResultData: ChatRoomsType = await Promise.all(
+          rooms.map((room) => transformRoomForUser({ userId, room }))
+        )
 
         socket.emit<SocketActionsType>('actual-contacts', contactResultData)
         socket.emit<SocketActionsType>('actual-chat-rooms', roomsResultData)

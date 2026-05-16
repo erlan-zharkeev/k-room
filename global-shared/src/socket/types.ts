@@ -102,6 +102,7 @@ export interface IEventUpdateMessageStatus {
   roomId: string
   messageId: string
   status: MessageStatusType
+  userId: string
 }
 export interface IEventChangeMessageStatus {
   roomId: string
