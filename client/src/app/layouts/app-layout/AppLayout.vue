@@ -22,6 +22,7 @@ const {
   showContent,
   contentTitleKey,
   navigationTitleKey,
+  isContentScrollable,
   hasContentFooter,
   hasContentHeader
 } = useAppLayout()
@@ -39,7 +40,7 @@ const {
           </ContentNavigationLayout>
         </NmorphCard>
         <NmorphCard v-if="showContent" class="app-layout__content-widget widget">
-          <ContentLayout :title-key="contentTitleKey">
+          <ContentLayout :title-key="contentTitleKey" :scrollable="isContentScrollable">
             <template v-if="hasContentHeader" #header>
               <RouterView :name="CONTENT_HEADER_ROUTER_VIEW_NAME" />
             </template>
