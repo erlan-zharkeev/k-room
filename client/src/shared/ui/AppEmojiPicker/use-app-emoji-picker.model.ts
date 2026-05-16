@@ -1,7 +1,7 @@
 import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE } from 'global-shared'
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 
 import {
   APP_EMOJI_PICKER_DATA_SOURCE_MAP,
@@ -11,7 +11,7 @@ import {
 import type { AppEmojiPickerEmitType, IAppEmojiPickerProps } from './types'
 
 export const useAppEmojiPicker = (props: IAppEmojiPickerProps, emit: AppEmojiPickerEmitType) => {
-  const pickerRoot = ref<HTMLElement | null>(null)
+  const pickerRoot = useTemplateRef<HTMLElement>('pickerRoot')
   const isExpanded = ref(false)
   let pickerElement: Picker | undefined
 

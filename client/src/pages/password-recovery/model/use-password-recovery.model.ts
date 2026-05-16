@@ -11,7 +11,7 @@ import {
   type IValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, onBeforeUnmount, reactive, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
@@ -35,8 +35,8 @@ export const usePasswordRecovery = () => {
   const validationMessages = createValidationMessages(t)
   const { email } = clone(DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA)
   const { code } = clone(DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA)
-  const emailFormRef = shallowRef<INmorphFromDataExpose | null>(null)
-  const codeFormRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const emailFormRef = useTemplateRef<INmorphFromDataExpose>('emailFormRef')
+  const codeFormRef = useTemplateRef<INmorphFromDataExpose>('codeFormRef')
   const emailFormData = reactive({
     email: {
       value: email,

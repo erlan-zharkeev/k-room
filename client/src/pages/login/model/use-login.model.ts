@@ -6,7 +6,7 @@ import {
   type IAuthLoginPayload,
   type LoginResponseType
 } from 'global-shared'
-import { computed, reactive, shallowRef, ref } from 'vue'
+import { computed, reactive, ref, useTemplateRef } from 'vue'
 
 import { useUserSession } from 'src/entities/user'
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
@@ -22,7 +22,7 @@ export const useLogin = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
-  const formRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
   const formData = reactive<ILoginFormData>({
     login: {
       value: DEFAULT_LOGIN_FORM_DATA.login,

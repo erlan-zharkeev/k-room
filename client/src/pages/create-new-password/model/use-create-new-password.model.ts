@@ -2,7 +2,7 @@ import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
 import { NON_EMPTY_PATTERN, ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages } from 'global-shared'
 import type { ICreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, reactive, ref, shallowRef } from 'vue'
+import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp } from 'src/shared/api'
@@ -24,7 +24,7 @@ export const useCreateNewPassword = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const { firstPassword, secondPassword } = clone(DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA)
-  const formRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
   const passwordRules = [
     { pattern: NON_EMPTY_PATTERN, error: validationMessages.passwordIsRequired },
     { pattern: PASSWORD_MIN_LENGTH_PATTERN, error: validationMessages.passwordMustBeAtLeast },
