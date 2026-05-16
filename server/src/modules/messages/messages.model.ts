@@ -58,7 +58,7 @@ const messageSchema = new Schema<IMessageSchema>({
     default: []
   },
   repliedMessage: {
-    type: {},
+    type: Schema.Types.Mixed,
     required: false,
     default: null
   }

@@ -1,6 +1,7 @@
 import { defineI18n } from 'global-shared'
 
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
+export const MESSAGE_MEDIA_IMAGE_FILENAME_PREFIX = 'image.'
 
 export const CHAT_ROOM_PAGE_I18N = defineI18n({
   roomsTitle: {
