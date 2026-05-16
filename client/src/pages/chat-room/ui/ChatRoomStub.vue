@@ -11,7 +11,7 @@ import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
     <NmorphIcon size="large">
       <NmorphIconChatLineSquare />
     </NmorphIcon>
-    <AppText align="center" :selectable="false" :text="$t(CHAT_ROOM_PAGE_I18N.noRoomSelected)" />
+    <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_PAGE_I18N.noRoomSelected)" />
   </div>
 </template>
 

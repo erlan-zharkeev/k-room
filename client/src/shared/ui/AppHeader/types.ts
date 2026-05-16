@@ -11,12 +11,15 @@ export type AppHeaderStaticColorType = keyof Pick<
 
 export type AppHeaderColorType = KebabCaseType<AppHeaderStaticColorType>
 
+export type AppHeaderAlignmentType = 'left' | 'center' | 'right'
+
 export interface IAppHeaderProps {
   text?: string | number
   tag?: AppHeaderTagType
   accent?: boolean
   bold?: boolean
   color?: AppHeaderColorType
+  alignment?: AppHeaderAlignmentType
   truncate?: boolean
   selectable?: boolean
 }

@@ -12,6 +12,7 @@ export const useAppHeader = (props: IAppHeaderProps) => {
       rootClass: 'app-header',
       modifiers: [
         color.value && APP_HEADER_COLOR_MODIFIERS[color.value],
+        props.alignment,
         props.bold && 'bold',
         props.truncate && 'truncate',
         props.selectable === false && 'not-selectable'

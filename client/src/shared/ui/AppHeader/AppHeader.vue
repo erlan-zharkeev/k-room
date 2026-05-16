@@ -75,4 +75,16 @@ h5.app-header {
 .app-header--warn {
   color: var(--nmorph-warn-color);
 }
+
+.app-header--left {
+  text-align: left;
+}
+
+.app-header--center {
+  text-align: center;
+}
+
+.app-header--right {
+  text-align: right;
+}
 </style>

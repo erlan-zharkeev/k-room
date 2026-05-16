@@ -4,7 +4,7 @@ import type { AppTextColorType } from './types'
 export const APP_TEXT_DEFAULT_PROPS = {
   tag: 'span',
   color: 'text',
-  align: 'left',
+  alignment: 'left',
   bold: false,
   selectable: true
 } satisfies Partial<IAppTextProps>
