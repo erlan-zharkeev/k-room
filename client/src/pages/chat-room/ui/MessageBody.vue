@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {NmorphImagePreview}from '@nmorph/nmorph-ui-kit'
+import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -65,14 +65,17 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
 .message-body {
   position: relative;
 
+  overflow: hidden;
   display: grid;
   gap: 4px;
+
   max-width: min(72%, 620px);
   padding: 8px 12px;
   border-radius: 8px;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 20%);
+
   overflow-wrap: anywhere;
+
+  background: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 20%);
 }
 
 @include screen-tablet {
@@ -86,10 +89,10 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
 }
 
 .message-body--sending {
-  border: 1.5px solid color-mix(in srgb, var(--nmorph-accent-color), transparent 54%);
-  animation: message-body-sending-pulse 1.8s ease-in-out infinite;
-  opacity: 60%;
   pointer-events: none;
+  border: 1.5px solid color-mix(in srgb, var(--nmorph-accent-color), transparent 54%);
+  opacity: 0.6;
+  animation: message-body-sending-pulse 1.8s ease-in-out infinite;
 }
 
 @keyframes message-body-sending-pulse {
@@ -102,18 +105,17 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
 
 .message-body__reply {
   display: grid;
+  margin-bottom: 8px;
   padding-left: 8px;
   border-left: 2px solid var(--nmorph-accent-color);
-  margin-bottom: 8px;
 }
 
 .message-body__reply-text {
   overflow: hidden;
   display: -webkit-box;
-
-  line-clamp: 2;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .message-body__images {

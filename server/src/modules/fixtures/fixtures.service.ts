@@ -30,6 +30,11 @@ import {
   FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX,
   FRONTEND_CORE_FIXTURE_GROUP_KEY,
   FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX,
+  LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME,
+  LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS,
+  LONG_PRIVATE_FIXTURE_MESSAGE_BODY,
+  LONG_PRIVATE_FIXTURE_MESSAGE_COUNT,
+  LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX,
   MESSAGE_ACTIONS,
   MESSAGE_QUALIFIERS,
   MESSAGE_SUBJECTS,
@@ -209,7 +214,11 @@ const buildFixtureMessage = (
   }
 }
 
-const buildFixtureSendingMessage = (prefix: string, roomUserIds: readonly string[], roomNicknames: readonly string[]) => {
+const buildFixtureSendingMessage = (
+  prefix: string,
+  roomUserIds: readonly string[],
+  roomNicknames: readonly string[]
+) => {
   const createdAt =
     BASE_FIXTURE_TIMESTAMP_MS +
     FIXTURE_SENDING_MESSAGE_INDEX * (37 * MINUTE_IN_MS) +
@@ -228,13 +237,29 @@ const buildFixtureSendingMessage = (prefix: string, roomUserIds: readonly string
   }
 }
 
-const buildFixtureMessages = (prefix: string, roomUserIds: readonly string[], roomNicknames: readonly string[]) =>
-  [
-    ...Array.from({ length: FIXTURE_MESSAGE_COUNT }, (_, idx) =>
-      buildFixtureMessage(idx + 1, prefix, roomUserIds, roomNicknames)
-    ),
-    buildFixtureSendingMessage(prefix, roomUserIds, roomNicknames)
-  ]
+const buildFixtureMessages = (prefix: string, roomUserIds: readonly string[], roomNicknames: readonly string[]) => [
+  ...Array.from({ length: FIXTURE_MESSAGE_COUNT }, (_, idx) =>
+    buildFixtureMessage(idx + 1, prefix, roomUserIds, roomNicknames)
+  ),
+  buildFixtureSendingMessage(prefix, roomUserIds, roomNicknames)
+]
+
+const buildLongPrivateFixtureMessage = (idx: number, contactId: string, contactNickname: string) => ({
+  _id: buildFixtureMessageId(LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX, idx),
+  authorId: contactId,
+  authorNickname: contactNickname,
+  body: `${LONG_PRIVATE_FIXTURE_MESSAGE_BODY} ${String(idx).padStart(2, '0')}.`,
+  createdAt: BASE_FIXTURE_TIMESTAMP_MS + LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS + idx * MINUTE_IN_MS,
+  reactions: [],
+  images: [],
+  usersMetaData: [ERLAN_ID, contactId].map((id) => ({ id, status: 'delivered' })),
+  repliedMessage: null
+})
+
+const buildLongPrivateFixtureMessages = (contactId: string, contactNickname: string) =>
+  Array.from({ length: LONG_PRIVATE_FIXTURE_MESSAGE_COUNT }, (_, idx) =>
+    buildLongPrivateFixtureMessage(idx + 1, contactId, contactNickname)
+  )
 
 const setFixtureContact = async (
   userId: string,
@@ -301,6 +326,31 @@ const ensureDirectRoom = async () => {
 
   await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': room.id } })
   await UserModel.updateOne({ _id: TOLIK_ID }, { $addToSet: { 'personal.chatRooms': room.id } })
+
+  return room
+}
+
+const ensureLongPrivateFixtureRoom = async (contactId: string) => {
+  const existingRoom = await ChatRoomModel.findOne({
+    users: { $all: [ERLAN_ID, contactId], $size: 2 }
+  })
+
+  if (existingRoom) {
+    await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
+    await UserModel.updateOne({ _id: contactId }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
+    return existingRoom
+  }
+
+  const room = await new ChatRoomModel({
+    authorId: ERLAN_ID,
+    chatKind: CHAT_KIND.DIRECT,
+    users: [ERLAN_ID, contactId],
+    chatName: '',
+    messages: []
+  }).save()
+
+  await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': room.id } })
+  await UserModel.updateOne({ _id: contactId }, { $addToSet: { 'personal.chatRooms': room.id } })
 
   return room
 }
@@ -374,6 +424,7 @@ const loadDialogFixtures = async () => {
 
   await ensureFixtureContacts()
   const directRoom = await ensureDirectRoom()
+  const longPrivateFixtureContact = USER_BY_NICKNAME[LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME]
 
   await ensureFixtureMessageImagesLoaded(DEFAULT_APP_LANGUAGE)
   await ensureMessages(
@@ -381,17 +432,22 @@ const loadDialogFixtures = async () => {
     buildFixtureMessages(DIRECT_FIXTURE_MESSAGE_ID_PREFIX, [ERLAN_ID, TOLIK_ID], ['erlan', 'tolik'])
   )
 
+  if (longPrivateFixtureContact) {
+    const longPrivateRoom = await ensureLongPrivateFixtureRoom(longPrivateFixtureContact.id)
+
+    await ensureMessages(
+      longPrivateRoom.id,
+      buildLongPrivateFixtureMessages(longPrivateFixtureContact.id, longPrivateFixtureContact.nickname)
+    )
+  }
+
   const groupRooms = await ensureGroupRooms()
   const frontendCoreRoom = groupRooms.find(({ key }) => key === FRONTEND_CORE_FIXTURE_GROUP_KEY)
 
   if (frontendCoreRoom) {
     await ensureMessages(
       frontendCoreRoom.room.id,
-      buildFixtureMessages(
-        FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX,
-        frontendCoreRoom.users,
-        frontendCoreRoom.nicknames
-      )
+      buildFixtureMessages(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, frontendCoreRoom.users, frontendCoreRoom.nicknames)
     )
   }
 }

@@ -58,6 +58,10 @@ const FRONTEND_CORE_FIXTURE_MESSAGE_IDS = Array.from(
   { length: 102 },
   (_, idx) => `fixture-frontend-core-${String(idx + 1).padStart(3, '0')}`
 )
+const LONG_PRIVATE_FIXTURE_MESSAGE_IDS = Array.from(
+  { length: 14 },
+  (_, idx) => `fixture-long-private-${String(idx + 1).padStart(3, '0')}`
+)
 
 describe('fixtures.service', () => {
   beforeEach(() => {
@@ -77,7 +81,7 @@ describe('fixtures.service', () => {
     userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
     chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
     chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({
-      messages: [...DIRECT_FIXTURE_MESSAGE_IDS, ...FRONTEND_CORE_FIXTURE_MESSAGE_IDS]
+      messages: [...DIRECT_FIXTURE_MESSAGE_IDS, ...FRONTEND_CORE_FIXTURE_MESSAGE_IDS, ...LONG_PRIVATE_FIXTURE_MESSAGE_IDS]
     })
   })
 
@@ -88,7 +92,7 @@ describe('fixtures.service', () => {
     expect(userServiceMock.createUser).not.toHaveBeenCalled()
     expect(userModelMock.findById).toHaveBeenCalledTimes(33)
     expect(mediaMock.uploadBufferToBucket).not.toHaveBeenCalled()
-    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(204)
+    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(218)
     expect(messageModelMock.updateOne).toHaveBeenCalledWith(
       { _id: 'fixture-erlan-tolik-100' },
       expect.objectContaining({
@@ -97,6 +101,14 @@ describe('fixtures.service', () => {
           authorNickname: 'tolik',
           body: expect.any(String)
         })
+      }),
+      { upsert: true }
+    )
+    expect(messageModelMock.updateOne).toHaveBeenCalledWith(
+      { _id: 'fixture-long-private-014' },
+      expect.objectContaining({
+        authorNickname: expect.stringContaining('roma-max-nickname-'),
+        usersMetaData: expect.arrayContaining([expect.objectContaining({ status: 'delivered' })])
       }),
       { upsert: true }
     )
