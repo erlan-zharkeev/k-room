@@ -176,5 +176,6 @@ const {
 .chat-rooms-navigation__toolbar {
   display: grid;
   gap: 8px;
+  padding: 8px;
 }
 </style>
