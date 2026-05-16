@@ -69,10 +69,6 @@ const handleBack = () => {
   min-height: 0;
 }
 
-.content-layout__footer {
-  margin-top: 12px;
-}
-
 .content-layout__back-btn {
   padding: 8px;
 }

@@ -32,8 +32,8 @@ export const initIO = async (
         return
       }
 
-      await presenceService.markSocketConnected(socket)
       socketRouter(socket, presenceService)
+      await presenceService.markSocketConnected(socket)
     } catch (error) {
       log.error('-Socket connection failed')
       log.error(`-${errorToMessage(error)}`)
