@@ -8,6 +8,12 @@ export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 1, 1, 8, 0, 0)
 export const DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-erlan-tolik'
 export const FRONTEND_CORE_FIXTURE_GROUP_KEY = 'frontend-core'
 export const FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-frontend-core'
+export const LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME = FIXTURE_MAX_LENGTH_NICKNAMES.roma
+export const LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-long-private'
+export const LONG_PRIVATE_FIXTURE_MESSAGE_COUNT = 14
+export const LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS = 14 * DAY_IN_MS
+export const LONG_PRIVATE_FIXTURE_MESSAGE_BODY =
+  'Unread private fixture message for checking chat list title truncation next to the unread tag.'
 export const FIXTURE_SENDING_MESSAGE_INDEX = 102
 export const FIXTURE_REPLIED_MESSAGE_INDEX = 100
 export const FIXTURE_REPLY_TARGET_MESSAGE_INDEX = 96

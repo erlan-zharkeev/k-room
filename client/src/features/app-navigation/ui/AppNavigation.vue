@@ -28,6 +28,7 @@ const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuanti
     >
       <NmorphBadge
         :value="getBadgeValue(item.id, unreadMessagesQuantity, invitationsQuantity)"
+        color="var(--nmorph-warn-color)"
         :offset-y="4"
         size="tiny"
       >

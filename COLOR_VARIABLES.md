@@ -91,11 +91,11 @@ From `client/src/entities/setting/config/appearance.constants.ts`.
 ```scss
 --nmorph-info-color: #d4e5edbb;
 --nmorph-info-text-color: #506c80;
---nmorph-success-color: #67C23A;
+--nmorph-success-color: #67c23a;
 --nmorph-success-text-color: #0b5b1d;
---nmorph-error-color: #F56C6C;
+--nmorph-error-color: #f56c6c;
 --nmorph-error-text-color: #8d3333;
---nmorph-warn-color: #E6A21C;
+--nmorph-warn-color: #e6a21c;
 --nmorph-warn-text-color: #7a6712;
 --nmorph-white-color: #ffffff;
 --nmorph-black-color: #000000;

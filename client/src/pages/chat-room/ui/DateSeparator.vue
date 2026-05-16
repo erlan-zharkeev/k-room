@@ -6,5 +6,5 @@ const props = defineProps<IDateSeparatorProps>()
 </script>
 
 <template>
-  <AppText :text="props.label" alignment="center" color='contrast-text' />
+  <AppText :text="props.label" alignment="center" color="contrast-text" />
 </template>
