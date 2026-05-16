@@ -62,7 +62,7 @@ const {
 
     <AppText
       v-if="showNoChats"
-      color="semi-contrast-text"
+      alignment="center"
       :selectable="false"
       :text="$t(CHAT_ROOM_PAGE_I18N.noChats)"
     />

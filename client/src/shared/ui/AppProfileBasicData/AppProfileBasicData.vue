@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphAvatar } from '@nmorph/nmorph-ui-kit'
+import { NmorphAvatar, NmorphBadge } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader } from '../AppHeader'
 
@@ -13,7 +13,18 @@ const { imageSrc } = useAppProfileBasicData(props)
 
 <template>
   <div class="app-profile-basic-data">
-    <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
+    <NmorphBadge
+      v-if="props.showOnline"
+      class="app-profile-basic-data__avatar-badge"
+      is-dot
+      color="var(--nmorph-success-color)"
+      :dot-size="8"
+      :offset-x="-1"
+      :offset-y="-1"
+    >
+      <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
+    </NmorphBadge>
+    <NmorphAvatar v-else :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
     <div class="app-profile-basic-data__content">
       <div class="app-profile-basic-data__title">
         <slot name="title">
