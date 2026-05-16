@@ -9,7 +9,7 @@ import {
   type ISendConfirmationLinkResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, reactive, ref, shallowRef, watch } from 'vue'
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
@@ -35,7 +35,7 @@ export const useRegistration = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
-  const formRef = shallowRef<INmorphFromDataExpose | null>(null)
+  const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
   const { email, nickname, password, policy } = clone(DEFAULT_REGISTRATION_FORM_DATA)
   const formData = reactive<IRegistrationFormData>({
     nickname: {

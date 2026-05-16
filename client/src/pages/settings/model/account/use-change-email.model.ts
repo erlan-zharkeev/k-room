@@ -1,6 +1,6 @@
 import type { INmorphFromDataExpose as NmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
 import { CODES_ENDPOINTS, EMAIL_CODE_LENGTH, NON_EMPTY_PATTERN, createValidationMessages } from 'global-shared'
-import { computed, reactive, ref, shallowRef, watch } from 'vue'
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
 import { useHttp } from 'src/shared/api'
@@ -13,7 +13,7 @@ export const useChangeEmail = () => {
   const { user, update } = useUser()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
-  const formRef = shallowRef<NmorphFromDataExpose | null>(null)
+  const formRef = useTemplateRef<NmorphFromDataExpose>('formRef')
   const formData = reactive({
     currentEmail: { value: '', rules: [] },
     nextEmail: {

@@ -1,10 +1,10 @@
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 
 import { loadTurnstile } from './load-turnstile'
 import type { IUseAppCaptchaParams } from './types'
 
 export const useAppCaptcha = ({ action, model, resetKey }: IUseAppCaptchaParams) => {
-  const containerRef = ref<HTMLElement | null>(null)
+  const containerRef = useTemplateRef<HTMLElement>('containerRef')
   const widgetId = ref('')
   const widgetFailed = ref(false)
   const showUnavailable = computed(() => !__CLIENT_ENV_DATA__.turnstileSiteKey || widgetFailed.value)

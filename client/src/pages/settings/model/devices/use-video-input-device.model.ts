@@ -1,6 +1,6 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
 import { useDevicesList, usePermission, useUserMedia } from '@vueuse/core'
-import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { TOAST_I18N } from 'src/shared/lib'
@@ -31,7 +31,7 @@ export const useVideoInputDevice = () => {
   const videoInputLoading = ref(false)
   const videoInputCheckLoading = ref(false)
   const videoInputStream = videoInputUserMedia.stream
-  const videoElement = shallowRef<HTMLVideoElement | null>(null)
+  const videoElement = useTemplateRef<HTMLVideoElement>('videoElement')
 
   const videoInputOptions = computed(() =>
     videoInputDevices.value.map(({ deviceId, label }, index) => ({
