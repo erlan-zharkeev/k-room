@@ -94,7 +94,8 @@ export const changeMessageStatus = async (
   const payload: IEventUpdateMessageStatus = {
     roomId,
     messageId,
-    status
+    status,
+    userId
   }
 
   emitToUsers(room.users, 'message-status-updated', payload)

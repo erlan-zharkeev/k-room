@@ -9,12 +9,14 @@ export interface IChatRoom {
   chatKind: ChatKindType
   avatarId: string
   lastMessageId: string | null
+  unreadMessagesQuantity: number
   users: string[]
   messages: string[]
 }
 
 export type ChatRoomsType = IChatRoom[]
 
-export interface IChatRoomSchema extends Omit<IChatRoom, 'users' | 'avatarId' | 'lastMessageId'> {
+export interface IChatRoomSchema
+  extends Omit<IChatRoom, 'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity'> {
   users: string[]
 }

@@ -9,11 +9,19 @@ import { onBeforeUnmount } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
+import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
 
 export const useMessageMonitor = () => {
   const { mutate: mutateRoom } = useChatRoom()
-  const { mutate: mutateMessage, put, remove, update } = useMessage()
+  const { getById, mutate: mutateMessage, put, remove, update } = useMessage()
+  const { user } = useUser()
+
+  const decreaseUnreadMessagesQuantity = async (roomId: string) => {
+    await mutateRoom(roomId, (room) => {
+      room.unreadMessagesQuantity = Math.max(0, (room.unreadMessagesQuantity ?? 0) - 1)
+    })
+  }
 
   const handleDeliveredMessage = async ({ roomId, message }: IEventMessageDelivered) => {
     await put(message)
@@ -21,14 +29,28 @@ export const useMessageMonitor = () => {
       if (room.messages[room.messages.length - 1] !== message.id) {
         room.messages.push(message.id)
       }
+
+      if (!message.isSelf && message.status === 'delivered') {
+        room.unreadMessagesQuantity = (room.unreadMessagesQuantity ?? 0) + 1
+      }
     })
   }
 
-  const updateMessageStatus = async ({ messageId, status }: IEventUpdateMessageStatus) => {
+  const updateMessageStatus = async ({ roomId, messageId, status, userId }: IEventUpdateMessageStatus) => {
+    const message = getById(messageId)
+    const currentUserReadIncomingUnreadMessage =
+      userId === user.value.id && status === 'read' && message?.status === 'delivered' && !message.isSelf
+
     await update(messageId, { status })
+
+    if (currentUserReadIncomingUnreadMessage) {
+      await decreaseUnreadMessagesQuantity(roomId)
+    }
   }
 
   const handleMessageDeleted = async ({ messageId, roomId }: IEventMessageDeleted) => {
+    const message = getById(messageId)
+
     await remove(messageId)
     await mutateRoom(roomId, (room) => {
       room.messages = room.messages.filter((id) => id !== messageId)
@@ -37,6 +59,10 @@ export const useMessageMonitor = () => {
         room.lastMessageId = room.messages[room.messages.length - 1] ?? null
       }
     })
+
+    if (message?.status === 'delivered' && !message.isSelf) {
+      await decreaseUnreadMessagesQuantity(roomId)
+    }
   }
 
   const handleMessageReactionUpdate = async ({ messageId, reaction }: IEventUpdatedMessageReactions) => {
