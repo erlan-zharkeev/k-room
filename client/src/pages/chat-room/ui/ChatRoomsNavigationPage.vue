@@ -12,7 +12,7 @@ import {
 
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
+import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import { useChatRoomsNavigation } from '../model/use-chat-rooms-navigation.model'
 
 import ChatRoomList from './ChatRoomList.vue'

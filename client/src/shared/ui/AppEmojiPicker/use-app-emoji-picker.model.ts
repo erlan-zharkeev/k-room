@@ -3,11 +3,8 @@ import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE } from 'global-shared'
 import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 
-import {
-  APP_EMOJI_PICKER_DATA_SOURCE_MAP,
-  APP_EMOJI_PICKER_I18N_MAP,
-  APP_EMOJI_PICKER_QUICK_EMOJI_LIST
-} from './constants'
+import { APP_EMOJI_PICKER_DATA_SOURCE_MAP, APP_EMOJI_PICKER_QUICK_EMOJI_LIST } from './constants'
+import { APP_EMOJI_PICKER_I18N_MAP } from './i18n'
 import type { AppEmojiPickerEmitType, IAppEmojiPickerProps } from './types'
 
 export const useAppEmojiPicker = (props: IAppEmojiPickerProps, emit: AppEmojiPickerEmitType) => {

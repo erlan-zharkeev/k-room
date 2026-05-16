@@ -3,7 +3,7 @@ import { NmorphIcon, NmorphIconChatLineSquare } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
-import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
+import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 </script>
 
 <template>

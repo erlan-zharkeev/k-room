@@ -3,7 +3,7 @@ import { toRef } from 'vue'
 
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
+import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
