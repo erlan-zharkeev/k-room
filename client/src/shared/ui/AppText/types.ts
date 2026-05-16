@@ -11,13 +11,13 @@ export type AppTextStaticColorType = keyof Pick<
 
 export type AppTextColorType = KebabCaseType<AppTextStaticColorType>
 
-export type AppTextAlignType = 'left' | 'center' | 'right'
+export type AppTextAlignmentType = 'left' | 'center' | 'right'
 
 export interface IAppTextProps {
   text?: string | number
   tag?: AppTextTagType
   color?: AppTextColorType
-  align?: AppTextAlignType
+  alignment?: AppTextAlignmentType
   bold?: boolean
   truncate?: boolean
   noLineHeight?: boolean

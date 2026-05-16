@@ -11,7 +11,7 @@ export const useAppText = (props: IAppTextProps) => {
       rootClass: 'app-text',
       modifiers: [
         APP_TEXT_COLOR_MODIFIERS[props.color ?? APP_TEXT_DEFAULT_PROPS.color],
-        props.align,
+        props.alignment,
         props.bold && 'bold',
         props.truncate && 'truncate',
         props.noLineHeight && 'no-line-height',
