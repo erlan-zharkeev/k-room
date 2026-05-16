@@ -26,7 +26,12 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
     />
     <div v-if="props.message.repliedMessage" class="message-body__reply">
       <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
-      <AppText tag="small" color="semi-contrast-text" :text="props.message.repliedMessage.body" truncate />
+      <AppText
+        class="message-body__reply-text"
+        tag="small"
+        color="semi-contrast-text"
+        :text="props.message.repliedMessage.body"
+      />
     </div>
     <div v-if="messageImageList.length" class="message-body__images">
       <NmorphImagePreview
@@ -100,6 +105,15 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
   padding-left: 8px;
   border-left: 2px solid var(--nmorph-accent-color);
   margin-bottom: 8px;
+}
+
+.message-body__reply-text {
+  overflow: hidden;
+  display: -webkit-box;
+
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .message-body__images {
