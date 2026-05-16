@@ -135,7 +135,6 @@ const {
             >
               <AppProfileBasicData
                 class="create-chat-room-dialog__profile"
-                avatar-shape="circle"
                 :image-id="contact.imageId"
                 :title="contact.title"
                 :name="contact.title"

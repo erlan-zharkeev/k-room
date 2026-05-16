@@ -1,5 +1,5 @@
 import type { ICall } from '../calls/types'
-import type { IChatRoom } from '../chat/types'
+import type { ChatKindType, IChatRoom } from '../chat/types'
 import type { FrontendContactMapType, IFrontendContact, InteractionType } from '../contact/types'
 import type { AppLanguageType } from '../language/types'
 import type { MediaFileValueType } from '../media/types'
@@ -80,6 +80,7 @@ export interface IEventUpdateChatRoom {
   users: string[]
   roomId: string
   chatName: string
+  chatKind: ChatKindType
   avatar: string
   avatarFile?: MediaFileValueType // TODO change to IEventCreateRoom
 }

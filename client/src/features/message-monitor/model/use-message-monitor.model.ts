@@ -11,16 +11,13 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
 
-export const useMessageUpdateMonitor = () => {
+export const useMessageMonitor = () => {
   const { mutate: mutateRoom } = useChatRoom()
   const { mutate: mutateMessage, put, remove, update } = useMessage()
 
   const handleDeliveredMessage = async ({ roomId, message }: IEventMessageDelivered) => {
     await put(message)
     await mutateRoom(roomId, (room) => {
-      room.messages = Array.isArray(room.messages) ? room.messages : []
-      room.lastMessageId = message.id
-
       if (room.messages[room.messages.length - 1] !== message.id) {
         room.messages.push(message.id)
       }
@@ -55,24 +52,24 @@ export const useMessageUpdateMonitor = () => {
     })
   }
 
-  const initializeMessageUpdateMonitor = () => {
+  const initializeMessageMonitor = () => {
     socket.on<SocketActionsType>('message-deleted', handleMessageDeleted)
     socket.on<SocketActionsType>('message-delivered', handleDeliveredMessage)
     socket.on<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
     socket.on<SocketActionsType>('message-status-updated', updateMessageStatus)
   }
 
-  const disposeMessageUpdateMonitor = () => {
+  const disposeMessageMonitor = () => {
     socket.off<SocketActionsType>('message-deleted', handleMessageDeleted)
     socket.off<SocketActionsType>('message-delivered', handleDeliveredMessage)
     socket.off<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
     socket.off<SocketActionsType>('message-status-updated', updateMessageStatus)
   }
 
-  onBeforeUnmount(disposeMessageUpdateMonitor)
+  onBeforeUnmount(disposeMessageMonitor)
 
   return {
-    initializeMessageUpdateMonitor,
-    disposeMessageUpdateMonitor
+    initializeMessageMonitor,
+    disposeMessageMonitor
   }
 }

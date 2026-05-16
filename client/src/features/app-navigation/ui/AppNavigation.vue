@@ -1,27 +1,14 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphIcon, NmorphRadio } from '@nmorph/nmorph-ui-kit'
-import { isString } from 'lodash'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-
-import { useChatRoom } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
 
 import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from '../config/constants'
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
+import { useAppNavigation } from '../model/use-app-navigation.model'
 
 import type { IAppNavigationProps } from './types'
 
 const props = defineProps<IAppNavigationProps>()
-
-const route = useRoute()
-const { unreadMessagesQuantity } = useChatRoom()
-const { invitationsQuantity } = useContact()
-
-const selectedSettingsId = computed(() => {
-  const { settingsId } = route.params
-  return isString(settingsId) && settingsId ? settingsId : 'account'
-})
+const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuantity } = useAppNavigation()
 </script>
 
 <template>
@@ -46,7 +33,7 @@ const selectedSettingsId = computed(() => {
       >
         <NmorphRadio
           @click="() => navigate()"
-          :checked="isNavBtnActive(item.id, isExactActive, route.path)"
+          :checked="isNavBtnActive(item.id, isExactActive, routePath)"
           height="basic"
         >
           <template #label>

@@ -8,7 +8,8 @@ export type {
 
 export type { CallStatusType, CallFlowType, ICall, IDBCall, DbCallSchemaType } from './calls/types'
 
-export type { IChatRoom, ChatRoomsType, IChatRoomSchema } from './chat/types'
+export { CHAT_KIND } from './chat/constants'
+export type { IChatRoom, ChatRoomsType, IChatRoomSchema, ChatKindType } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
 export type {

@@ -24,6 +24,7 @@ export const useChatRoomUpdateMonitor = () => {
       id: room.id,
       authorId: room.users[0] ?? '',
       chatName: room.chatName,
+      chatKind: room.chatKind,
       lastMessageId: null,
       users: room.users,
       messages: []

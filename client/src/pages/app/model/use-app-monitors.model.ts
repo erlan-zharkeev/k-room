@@ -1,11 +1,11 @@
 import { onMounted } from 'vue'
 
+import { useMessageMonitor } from 'src/features/message-monitor'
 import { useSocketConnect } from 'src/shared/api'
 
 import { useCallDataUpdateMonitor } from './use-call-data-update-monitor.model'
 import { useChatRoomUpdateMonitor } from './use-chat-room-update-monitor.model'
 import { useContactUpdateMonitor } from './use-contact-update-monitor.model'
-import { useMessageUpdateMonitor } from './use-message-update-monitor.model'
 import { useSyncAvatars } from './use-sync-avatars.model'
 
 export const useAppMonitors = () => {
@@ -13,14 +13,14 @@ export const useAppMonitors = () => {
   const { initializeCallDataUpdateMonitor } = useCallDataUpdateMonitor()
   const { initializeChatRoomUpdateMonitor } = useChatRoomUpdateMonitor()
   const { initializeContactUpdateMonitor } = useContactUpdateMonitor()
-  const { initializeMessageUpdateMonitor } = useMessageUpdateMonitor()
+  const { initializeMessageMonitor } = useMessageMonitor()
   useSyncAvatars()
 
   onMounted(() => {
     initializeCallDataUpdateMonitor()
     initializeChatRoomUpdateMonitor()
     initializeContactUpdateMonitor()
-    initializeMessageUpdateMonitor()
+    initializeMessageMonitor()
     actualizeSocketData()
   })
 }

@@ -9,7 +9,6 @@ export interface IChatRoomNavigationItem {
   title: string
   description: string
   imageId: string
-  avatarShape: 'square' | 'circle'
   online: boolean
   selected: boolean
   lastMessageCreatedAt: number
@@ -32,6 +31,14 @@ export interface IChatRoomListItemProps {
 }
 
 export interface IChatRoomMessagesProps {
+  room: FChatRoomType
+}
+
+export interface IChatRoomContentProps {
+  selectedChatRoom?: FChatRoomType
+}
+
+export interface IChatRoomHeaderProps {
   room: FChatRoomType
 }
 

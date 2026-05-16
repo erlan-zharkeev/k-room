@@ -42,7 +42,6 @@ const {
             >
               <AppProfileBasicData
                 class="contacts-search__profile"
-                avatar-shape="circle"
                 :image-id="getContactAvatarId(contact.id)"
                 :title="contact.nickname"
                 :name="contact.nickname"

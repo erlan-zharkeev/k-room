@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
-import { RouterView } from 'vue-router'
+import { computed } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
 
+import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useAppMonitors } from 'src/pages/app'
+import { useChatRoomPage } from 'src/pages/chat-room'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
 import { MobileFooter } from 'src/widgets/mobile-footer'
@@ -14,6 +17,7 @@ import { CONTENT_FOOTER_ROUTER_VIEW_NAME, CONTENT_HEADER_ROUTER_VIEW_NAME } from
 import { useAppLayout } from './use-app-layout.model'
 
 useAppMonitors()
+const route = useRoute()
 const { isPortraitTabletOrLess } = useScreen()
 const {
   showWallpaper,
@@ -26,6 +30,14 @@ const {
   hasContentFooter,
   hasContentHeader
 } = useAppLayout()
+
+const { selectedChatRoom } = useChatRoomPage()
+
+const chatRoomViewProps = computed(() =>
+  route.path.startsWith(APP_PAGE_ROUTES.chatRooms)
+    ? { selectedChatRoom: selectedChatRoom.value }
+    : {}
+)
 </script>
 
 <template>
@@ -42,11 +54,17 @@ const {
         <NmorphCard v-if="showContent" class="app-layout__content-widget widget">
           <ContentLayout :title-key="contentTitleKey" :scrollable="isContentScrollable">
             <template v-if="hasContentHeader" #header>
-              <RouterView :name="CONTENT_HEADER_ROUTER_VIEW_NAME" />
+              <RouterView v-slot="{ Component }" :name="CONTENT_HEADER_ROUTER_VIEW_NAME">
+                <component :is="Component" v-bind="chatRoomViewProps" />
+              </RouterView>
             </template>
-            <RouterView name="content" />
+            <RouterView v-slot="{ Component }" name="content">
+              <component :is="Component" v-bind="chatRoomViewProps" />
+            </RouterView>
             <template v-if="hasContentFooter" #footer>
-              <RouterView :name="CONTENT_FOOTER_ROUTER_VIEW_NAME" />
+              <RouterView v-slot="{ Component }" :name="CONTENT_FOOTER_ROUTER_VIEW_NAME">
+                <component :is="Component" v-bind="chatRoomViewProps" />
+              </RouterView>
             </template>
           </ContentLayout>
         </NmorphCard>
