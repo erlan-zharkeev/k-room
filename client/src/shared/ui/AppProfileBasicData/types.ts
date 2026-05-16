@@ -5,4 +5,5 @@ export interface IAppProfileBasicDataProps {
   title: string
   name?: string
   selectable?: boolean
+  showOnline?: boolean
 }

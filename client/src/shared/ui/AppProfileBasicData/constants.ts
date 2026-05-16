@@ -5,5 +5,6 @@ export const APP_PROFILE_BASIC_DATA_DEFAULT_PROPS = {
   imageId: '',
   imageSrc: '',
   name: '',
-  selectable: true
+  selectable: true,
+  showOnline: false
 } satisfies Partial<IAppProfileBasicDataProps>
