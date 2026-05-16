@@ -27,6 +27,7 @@ export const useChatRoomUpdateMonitor = () => {
       chatKind: room.chatKind,
       avatarId: room.avatar,
       lastMessageId: null,
+      unreadMessagesQuantity: 0,
       users: room.users,
       messages: []
     })
