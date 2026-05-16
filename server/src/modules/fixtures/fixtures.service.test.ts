@@ -50,6 +50,15 @@ vi.mock('../../shared/lib/log', () => ({ log: logMock }))
 
 const { loadFixtures } = await import('./fixtures.service')
 
+const DIRECT_FIXTURE_MESSAGE_IDS = Array.from(
+  { length: 102 },
+  (_, idx) => `fixture-erlan-tolik-${String(idx + 1).padStart(3, '0')}`
+)
+const FRONTEND_CORE_FIXTURE_MESSAGE_IDS = Array.from(
+  { length: 102 },
+  (_, idx) => `fixture-frontend-core-${String(idx + 1).padStart(3, '0')}`
+)
+
 describe('fixtures.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -68,7 +77,7 @@ describe('fixtures.service', () => {
     userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
     chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
     chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({
-      messages: Array.from({ length: 101 }, (_, idx) => `fixture-erlan-tolik-${String(idx + 1).padStart(3, '0')}`)
+      messages: [...DIRECT_FIXTURE_MESSAGE_IDS, ...FRONTEND_CORE_FIXTURE_MESSAGE_IDS]
     })
   })
 
@@ -79,7 +88,18 @@ describe('fixtures.service', () => {
     expect(userServiceMock.createUser).not.toHaveBeenCalled()
     expect(userModelMock.findById).toHaveBeenCalledTimes(33)
     expect(mediaMock.uploadBufferToBucket).not.toHaveBeenCalled()
-    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(101)
+    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(204)
+    expect(messageModelMock.updateOne).toHaveBeenCalledWith(
+      { _id: 'fixture-erlan-tolik-100' },
+      expect.objectContaining({
+        repliedMessage: expect.objectContaining({
+          id: 'fixture-erlan-tolik-096',
+          authorNickname: 'tolik',
+          body: expect.any(String)
+        })
+      }),
+      { upsert: true }
+    )
     expect(chatRoomModelMock.ChatRoomModel.updateOne).not.toHaveBeenCalled()
   })
 })
