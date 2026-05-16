@@ -2,11 +2,11 @@
 import { NmorphButton, NmorphCard, NmorphIconArrowUp, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/constants'
-import { useChatRoomComposer } from '../model/use-chat-room-composer.model'
+import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 import { useChatRoomPage } from '../model/use-chat-room-page.model'
 
 const { selectedChatRoom } = useChatRoomPage()
-const { messageText, isSendDisabled, sendMessage } = useChatRoomComposer()
+const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
 </script>
 
 <template>
