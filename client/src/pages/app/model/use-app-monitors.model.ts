@@ -9,7 +9,7 @@ import { useContactUpdateMonitor } from './use-contact-update-monitor.model'
 import { useSyncAvatars } from './use-sync-avatars.model'
 
 export const useAppMonitors = () => {
-  const { actualizeSocketData } = useSocketConnect()
+  const { actualizeSocketData, socketConnect } = useSocketConnect()
   const { initializeCallDataUpdateMonitor } = useCallDataUpdateMonitor()
   const { initializeChatRoomUpdateMonitor } = useChatRoomUpdateMonitor()
   const { initializeContactUpdateMonitor } = useContactUpdateMonitor()
@@ -21,6 +21,7 @@ export const useAppMonitors = () => {
     initializeChatRoomUpdateMonitor()
     initializeContactUpdateMonitor()
     initializeMessageMonitor()
+    socketConnect()
     actualizeSocketData()
   })
 }
