@@ -8,7 +8,9 @@ import { AppHeader } from 'src/shared/ui'
 import { CONTENT_TITLE } from './constants'
 import { IContentLayoutProps } from './types'
 
-const props = defineProps<IContentLayoutProps>()
+const props = withDefaults(defineProps<IContentLayoutProps>(), {
+  scrollable: true
+})
 
 const { isPortraitTabletOrLess } = useScreen()
 const route = useRoute()
@@ -36,9 +38,10 @@ const handleBack = () => {
       </div>
     </div>
     <NmorphCard shadow-type="inset" class="content-layout__content">
-      <NmorphScroll>
+      <NmorphScroll v-if="props.scrollable">
         <slot />
       </NmorphScroll>
+      <slot v-else />
     </NmorphCard>
     <div v-if="$slots.footer" class="content-layout__footer">
       <slot name="footer" />

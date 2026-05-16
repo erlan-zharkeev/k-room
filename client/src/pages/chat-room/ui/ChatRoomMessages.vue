@@ -16,53 +16,44 @@ const { messagesScroll, isPrivateRoom, hasMessages, isLoading, hasMoreMessages, 
 </script>
 
 <template>
-  <section class="chat-room-messages">
-    <NmorphScroll
-      ref="messagesScroll"
-      class="chat-room-messages__scroll"
-      scroll-x-prop="hidden"
-      css-scroll-behavior="auto"
-    >
-      <div class="chat-room-messages__wrapper">
-        <NmorphButton
-          v-if="hasMoreMessages"
-          class="chat-room-messages__load-older"
-          style-type="transparent"
-          :loading="isLoading"
-          :text="$t(CHAT_ROOM_PAGE_I18N.loadOlderMessages)"
-          @click="loadOlderMessages"
-        />
-        <AppText
-          v-if="isLoading && !hasMessages"
-          alignment="center"
-          color="semi-contrast-text"
-          :selectable="false"
-          :text="$t(CHAT_ROOM_PAGE_I18N.loadingMessages)"
-        />
-        <AppText
-          v-else-if="!hasMessages"
-          alignment="center"
-          color="semi-contrast-text"
-          :selectable="false"
-          :text="$t(CHAT_ROOM_PAGE_I18N.noMessages)"
-        />
-        <template v-for="item in messageList" :key="item.id">
-          <DateSeparator v-if="item.type === 'date-separator'" :label="item.label" />
-          <div
-            v-else
-            class="chat-room-messages__message"
-            :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
-          >
-            <MessageBody :message="item.message" :is-private-room="isPrivateRoom" />
-          </div>
-        </template>
+  <NmorphScroll ref="messagesScroll" class="chat-room-messages" scroll-x-prop="hidden" css-scroll-behavior="auto">
+    <NmorphButton
+      v-if="hasMoreMessages"
+      class="chat-room-messages__load-older"
+      style-type="transparent"
+      :loading="isLoading"
+      :text="$t(CHAT_ROOM_PAGE_I18N.loadOlderMessages)"
+      @click="loadOlderMessages"
+    />
+    <AppText
+      v-if="isLoading && !hasMessages"
+      alignment="center"
+      color="semi-contrast-text"
+      :selectable="false"
+      :text="$t(CHAT_ROOM_PAGE_I18N.loadingMessages)"
+    />
+    <AppText
+      v-else-if="!hasMessages"
+      alignment="center"
+      color="semi-contrast-text"
+      :selectable="false"
+      :text="$t(CHAT_ROOM_PAGE_I18N.noMessages)"
+    />
+    <template v-for="item in messageList" :key="item.id">
+      <DateSeparator v-if="item.type === 'date-separator'" :label="item.label" />
+      <div
+        v-else
+        class="chat-room-messages__message"
+        :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
+      >
+        <MessageBody :message="item.message" :is-private-room="isPrivateRoom" />
       </div>
-    </NmorphScroll>
-  </section>
+    </template>
+  </NmorphScroll>
 </template>
 
 <style lang="scss">
-.chat-room-messages__wrapper {
+.chat-room-messages {
   display: grid;
   gap: 4px;
 }
