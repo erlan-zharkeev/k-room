@@ -5,7 +5,6 @@ import type { FChatRoomType } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
 import { isRoomPrivate } from '../lib/is-room-private'
-import { transformRoomData } from '../lib/transform-room-data'
 
 const chatRoomStore = dexieCollectionStore<FChatRoomType>(db['chat-rooms'])
 
@@ -17,10 +16,9 @@ export const useChatRoom = () => {
   const getPersonalByContactId = (id: string) =>
     chatRooms.value.find((room) => isRoomPrivate(room) && room.users[0] === id)
   const isPrivate = (id: string) => isRoomPrivate(getById(id))
-  const save = (room: IChatRoom) => put(transformRoomData(room))
   const merge = (rooms: IChatRoom[]) =>
     mergeMany(rooms, {
-      merge: (_current, incoming) => transformRoomData(incoming)
+      merge: (_current, incoming) => incoming
     })
 
   return {
@@ -29,7 +27,6 @@ export const useChatRoom = () => {
     getById,
     getPersonalByContactId,
     isPrivate,
-    save,
     put,
     update,
     mutate,

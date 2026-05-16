@@ -7,6 +7,7 @@ export interface IChatRoom {
   authorId: string
   chatName?: string
   chatKind: ChatKindType
+  avatarId: string
   lastMessageId: string | null
   users: string[]
   messages: string[]
@@ -14,6 +15,6 @@ export interface IChatRoom {
 
 export type ChatRoomsType = IChatRoom[]
 
-export interface IChatRoomSchema extends Omit<IChatRoom, 'users' | 'lastMessageId'> {
+export interface IChatRoomSchema extends Omit<IChatRoom, 'users' | 'avatarId' | 'lastMessageId'> {
   users: string[]
 }
