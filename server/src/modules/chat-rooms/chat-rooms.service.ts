@@ -34,13 +34,17 @@ export const setRoomToUsers = async (roomId: string, userIds: string[]) => {
 
 export const transformRoomForUser = ({ userId, room }: ITransformRoomForUserParams) => {
   const normalizedRoom = room as IChatRoomSchemaWithObjectId
+  const roomId = String(normalizedRoom._id)
   const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
+  const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
+  const avatarId = `avatar.${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
 
   return {
-    id: String(normalizedRoom._id),
+    id: roomId,
     authorId: normalizedRoom.authorId,
     chatName: normalizedRoom.chatName,
-    chatKind: normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT),
+    chatKind,
+    avatarId,
     lastMessageId: normalizedRoom.messages[normalizedRoom.messages.length - 1] ?? null,
     users,
     messages: normalizedRoom.messages

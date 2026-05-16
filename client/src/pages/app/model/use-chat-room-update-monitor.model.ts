@@ -7,24 +7,25 @@ import { socket } from 'src/shared/api'
 import type { IEventUpdateChatRoomWithId } from './types.model'
 
 export const useChatRoomUpdateMonitor = () => {
-  const { merge, save } = useChatRoom()
+  const { merge, put } = useChatRoom()
 
   const actualizeChatRooms = async (rooms: EventGetRoomsType) => {
     await merge(rooms)
   }
 
   const handleRoomAddition = async (room: EventGetRoomsType[number]) => {
-    await save(room)
+    await put(room)
   }
 
   const handleRoomDataUpdate = async (room: IEventUpdateChatRoomWithId) => {
     if (!room.id) return
 
-    await save({
+    await put({
       id: room.id,
       authorId: room.users[0] ?? '',
       chatName: room.chatName,
       chatKind: room.chatKind,
+      avatarId: room.avatar,
       lastMessageId: null,
       users: room.users,
       messages: []

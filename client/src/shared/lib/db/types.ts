@@ -42,7 +42,7 @@ export type DbTransactionModeType = TransactionMode
 
 export type DbCallType = ICall
 export type DbMessageType = IMessage
-export type FChatRoomType = IChatRoom & { avatarId: string }
+export type FChatRoomType = IChatRoom
 export type DbUserDataType = Required<Pick<IFrontendUserData, 'id' | 'role' | 'email' | 'nickname'>>
 export type DbContactType = IFrontendContact & IDbContactRequiredSystemData
 export type DbMediaStatusType = 'missing' | 'ready'
