@@ -1,3 +1,4 @@
+import type { VirtualItem } from '@tanstack/vue-virtual'
 import type { RouteLocationRaw } from 'vue-router'
 
 import type { FChatRoomType } from 'src/shared/lib'
@@ -60,6 +61,10 @@ export interface IDateSeparatorProps {
 
 export type MessageListItemType =
   | {
+      type: 'load-older'
+      id: string
+    }
+  | {
       type: 'date-separator'
       id: string
       label: string
@@ -69,3 +74,8 @@ export type MessageListItemType =
       id: string
       message: DbMessageType
     }
+
+export interface IMessageVirtualListItem {
+  item: MessageListItemType
+  virtualItem: VirtualItem
+}

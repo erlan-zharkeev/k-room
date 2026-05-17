@@ -12,20 +12,50 @@ import DateSeparator from './DateSeparator.vue'
 import MessageBody from './MessageBody.vue'
 
 const props = defineProps<IChatRoomMessagesProps>()
-const { messagesScroll, hasMessages, isLoading, hasMoreMessages, messageList, loadOlderMessages } =
-  useChatRoomMessages(props)
+const {
+  messagesScroll,
+  hasMessages,
+  isLoading,
+  measureMessageListItemElement,
+  messageVirtualListStyle,
+  messageVirtualListItems,
+  loadOlderMessages
+} = useChatRoomMessages(props)
 </script>
 
 <template>
   <NmorphScroll ref="messagesScroll" class="chat-room-messages" scroll-x-prop="hidden" css-scroll-behavior="auto">
-    <NmorphButton
-      v-if="hasMoreMessages"
-      class="chat-room-messages__load-older"
-      style-type="transparent"
-      :loading="isLoading"
-      :text="$t(CHAT_ROOM_PAGE_I18N.loadOlderMessages)"
-      @click="loadOlderMessages"
-    />
+    <div
+      v-if="messageVirtualListItems.length"
+      class="chat-room-messages__virtual"
+      :style="messageVirtualListStyle"
+    >
+      <div
+        v-for="{ item, virtualItem } in messageVirtualListItems"
+        :key="item.id"
+        :ref="measureMessageListItemElement"
+        class="chat-room-messages__virtual-item"
+        :data-index="virtualItem.index"
+      >
+        <NmorphButton
+          v-if="item.type === 'load-older'"
+          class="chat-room-messages__load-older"
+          style-type="transparent"
+          :loading="isLoading"
+          :text="$t(CHAT_ROOM_PAGE_I18N.loadOlderMessages)"
+          @click="loadOlderMessages"
+        />
+        <DateSeparator v-else-if="item.type === 'date-separator'" :label="item.label" />
+        <div
+          v-else
+          class="chat-room-messages__message"
+          :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
+          :[MESSAGE_ID_DATA_ATTRIBUTE]="item.message.id"
+        >
+          <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" />
+        </div>
+      </div>
+    </div>
     <AppText
       v-if="isLoading && !hasMessages"
       alignment="center"
@@ -40,28 +70,17 @@ const { messagesScroll, hasMessages, isLoading, hasMoreMessages, messageList, lo
       :selectable="false"
       :text="$t(CHAT_ROOM_PAGE_I18N.noMessages)"
     />
-    <template v-for="item in messageList" :key="item.id">
-      <DateSeparator v-if="item.type === 'date-separator'" :label="item.label" />
-      <div
-        v-else
-        class="chat-room-messages__message"
-        :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
-        :[MESSAGE_ID_DATA_ATTRIBUTE]="item.message.id"
-      >
-        <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" />
-      </div>
-    </template>
   </NmorphScroll>
 </template>
 
 <style lang="scss">
-.chat-room-messages {
+.chat-room-messages__virtual {
   display: grid;
-  gap: 4px;
+  gap: var(--message-virtual-gap);
 }
 
 .chat-room-messages__load-older {
-  justify-self: center;
+  display: block;
 }
 
 .chat-room-messages__message {
