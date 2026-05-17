@@ -1,6 +1,5 @@
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 export const MESSAGE_MEDIA_IMAGE_FILENAME_PREFIX = 'image.'
-export const MESSAGE_ID_DATA_ATTRIBUTE = 'data-message-id'
 export const MESSAGE_READ_VISIBILITY_RATIO = 0.5
 export const MESSAGE_VIRTUAL_ESTIMATED_HEIGHT = 96
 export const MESSAGE_VIRTUAL_GAP = 4

@@ -50,7 +50,7 @@ const {
           v-else
           class="chat-room-messages__message"
           :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
-          :[MESSAGE_ID_DATA_ATTRIBUTE]="item.message.id"
+          :[MESSAGE_ID_DATA_ATTRIBUTE]="item.messageId"
         >
           <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" />
         </div>

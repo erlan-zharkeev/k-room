@@ -1,3 +1,5 @@
+import { computed } from 'vue'
+
 import type { DbMessageType } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
@@ -6,12 +8,14 @@ const messageStore = dexieCollectionStore<DbMessageType>(db.messages)
 export const useMessage = () => {
   const { bulkPut, mutate, put, remove, reset, update } = messageStore
   const messages = messageStore.use()
+  const messageById = computed(() => new Map(messages.value.map((message) => [message.id, message])))
 
-  const getById = (id: string) => messages.value.find((message) => message.id === id)
-  const isExist = (id: string) => messages.value.some((message) => message.id === id)
+  const getById = (id: string) => messageById.value.get(id)
+  const isExist = (id: string) => messageById.value.has(id)
 
   return {
     messages,
+    messageById,
     getById,
     isExist,
     put,

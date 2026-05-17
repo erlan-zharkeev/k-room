@@ -9,5 +9,4 @@ export const isContentTitleKey = (titleKey: string | undefined): titleKey is Con
 
 export interface IContentLayoutProps {
   titleKey?: ContentTitleKeyType
-  scrollable?: boolean
 }

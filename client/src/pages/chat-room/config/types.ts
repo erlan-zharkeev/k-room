@@ -36,11 +36,6 @@ export interface IChatRoomMessagesProps {
   isPrivateRoom: boolean
 }
 
-export interface IChatRoomContentProps {
-  selectedChatRoom?: FChatRoomType
-  selectedChatRoomIsPrivate: boolean
-}
-
 export interface IChatRoomHeaderProps {
   room: FChatRoomType
   isPrivateRoom: boolean
@@ -59,23 +54,38 @@ export interface IDateSeparatorProps {
   label: string
 }
 
+export interface IMessageListLoadOlderItem {
+  type: 'load-older'
+  id: string
+}
+
+export interface IMessageListDateSeparatorItem {
+  type: 'date-separator'
+  id: string
+  label: string
+}
+
+export interface IMessageListMessageItem {
+  type: 'message'
+  id: string
+  messageId: string
+}
+
+export interface IMessageVirtualListMessageItem extends IMessageListMessageItem {
+  message: DbMessageType
+}
+
 export type MessageListItemType =
-  | {
-      type: 'load-older'
-      id: string
-    }
-  | {
-      type: 'date-separator'
-      id: string
-      label: string
-    }
-  | {
-      type: 'message'
-      id: string
-      message: DbMessageType
-    }
+  | IMessageListLoadOlderItem
+  | IMessageListDateSeparatorItem
+  | IMessageListMessageItem
+
+export type MessageVirtualListItemType =
+  | IMessageListLoadOlderItem
+  | IMessageListDateSeparatorItem
+  | IMessageVirtualListMessageItem
 
 export interface IMessageVirtualListItem {
-  item: MessageListItemType
+  item: MessageVirtualListItemType
   virtualItem: VirtualItem
 }

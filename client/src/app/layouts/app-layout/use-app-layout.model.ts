@@ -8,11 +8,7 @@ import { useScreen } from 'src/shared/lib'
 import { isContentTitleKey } from '../content-layout/types'
 import { isContentNavigationTitleKey } from '../content-navigation-layout/types'
 
-import {
-  CONTENT_FOOTER_ROUTER_VIEW_NAME,
-  CONTENT_HEADER_ROUTER_VIEW_NAME,
-  CONTENT_LAYOUT_DIRECT_SCROLL_ROUTE_SEGMENTS
-} from './constants'
+import { CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS } from './constants'
 
 export const useAppLayout = () => {
   const router = useRouter()
@@ -59,19 +55,11 @@ export const useAppLayout = () => {
   const showWallpaper = computed(
     () => settings.value.appearance.showWallpaper && Boolean(effectiveTheme.value.wallpaper.url)
   )
-  const isContentScrollable = computed(() => {
+  const isContentLayoutEnabled = computed(() => {
     const contentRouteSegment = segments.value[1]
 
-    return !contentRouteSegment || !CONTENT_LAYOUT_DIRECT_SCROLL_ROUTE_SEGMENTS.includes(contentRouteSegment)
+    return !contentRouteSegment || !CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS.includes(contentRouteSegment)
   })
-
-  const hasContentHeader = computed(() =>
-    route.matched.some(({ components }) => Boolean(components?.[CONTENT_HEADER_ROUTER_VIEW_NAME]))
-  )
-
-  const hasContentFooter = computed(() =>
-    route.matched.some(({ components }) => Boolean(components?.[CONTENT_FOOTER_ROUTER_VIEW_NAME]))
-  )
 
   const wallpaperStyle = computed(() => {
     return {
@@ -89,9 +77,7 @@ export const useAppLayout = () => {
     showNavigation,
     showContent,
     showWallpaper,
-    isContentScrollable,
-    hasContentHeader,
-    hasContentFooter,
+    isContentLayoutEnabled,
     wallpaperStyle
   }
 }
