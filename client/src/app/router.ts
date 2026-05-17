@@ -6,12 +6,7 @@ import { useSettings, type DbUserSettingType } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
-import {
-  ChatRoomContentFooter,
-  ChatRoomContentHeader,
-  ChatRoomPage,
-  ChatRoomsNavigationPage
-} from 'src/pages/chat-room'
+import { ChatRoomPage, ChatRoomsNavigationPage } from 'src/pages/chat-room'
 import { ContactsPage } from 'src/pages/contacts'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
 import { EmailConfirmationPage } from 'src/pages/email-confirmation'
@@ -24,7 +19,6 @@ import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPag
 import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
 
 import AppLayout from './layouts/app-layout/AppLayout.vue'
-import { CONTENT_FOOTER_ROUTER_VIEW_NAME, CONTENT_HEADER_ROUTER_VIEW_NAME } from './layouts/app-layout/constants'
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
 import DocsLayout from './layouts/docs-layout/DocsLayout.vue'
 import PageLayout from './layouts/page-layout/PageLayout.vue'
@@ -107,8 +101,6 @@ const routes: RouteRecordRaw[] = [
         path: 'chat-rooms/:chatRoomId?',
         components: {
           'content-navigation': ChatRoomsNavigationPage,
-          [CONTENT_HEADER_ROUTER_VIEW_NAME]: ChatRoomContentHeader,
-          [CONTENT_FOOTER_ROUTER_VIEW_NAME]: ChatRoomContentFooter,
           content: ChatRoomPage
         }
       },
