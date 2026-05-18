@@ -1,6 +1,7 @@
-import { CHAT_KIND, type IChatRoom, type IChatRoomSchema } from 'global-shared'
+import { CHAT_KIND, type IChatRoomSchema, type IDBMessage, type IEventGetRoom } from 'global-shared'
 
 import { MessageModel } from '../messages/messages.model'
+import { transformMessageForUser } from '../messages/messages.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
@@ -48,13 +49,18 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
   })
 }
 
-export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUserParams) => {
+export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUserParams): Promise<IEventGetRoom> => {
   const normalizedRoom = room as IChatRoomSchemaWithObjectId
   const roomId = String(normalizedRoom._id)
   const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
   const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
   const avatarId = `avatar.${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
   const messages = normalizedRoom.messages ?? []
+  const lastMessageId = messages[messages.length - 1] ?? null
+  const [unreadMessagesQuantity, previewMessage] = await Promise.all([
+    countUnreadRoomMessages(userId, messages),
+    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<IDBMessage>() : null
+  ])
 
   return {
     id: roomId,
@@ -62,11 +68,12 @@ export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUs
     chatName: normalizedRoom.chatName,
     chatKind,
     avatarId,
-    lastMessageId: messages[messages.length - 1] ?? null,
-    unreadMessagesQuantity: await countUnreadRoomMessages(userId, messages),
+    lastMessageId,
+    unreadMessagesQuantity,
     users,
-    messages
-  } satisfies IChatRoom
+    messages,
+    previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null
+  } satisfies IEventGetRoom
 }
 
 export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchema) => {

@@ -36,7 +36,11 @@ export interface IEventMessageDelivered {
   message: IMessage
 }
 
-export type EventGetRoomsType = IChatRoom[]
+export interface IEventGetRoom extends IChatRoom {
+  previewMessage?: IMessage | null
+}
+
+export type EventGetRoomsType = IEventGetRoom[]
 
 export interface IEventStatusContact {
   interlocutorId: string

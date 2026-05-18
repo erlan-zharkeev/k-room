@@ -1,4 +1,4 @@
-import type { ChatRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
+import type { EventGetRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
@@ -48,7 +48,7 @@ export const registerUserSocketHandlers = (socket: SocketInstanceType, presenceS
           : []
         const roomIds = data?.personal.chatRooms ?? []
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-        const roomsResultData: ChatRoomsType = await Promise.all(
+        const roomsResultData: EventGetRoomsType = await Promise.all(
           rooms.map((room) => transformRoomForUser({ userId, room }))
         )
 
