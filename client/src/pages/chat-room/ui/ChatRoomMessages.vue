@@ -12,23 +12,18 @@ import MessageBody from './MessageBody.vue'
 
 const props = defineProps<IChatRoomMessagesProps>()
 const {
-  messagesScroll,
   hasMessages,
   isLoading,
   measureMessageListItemElement,
   messageVirtualListStyle,
   messageVirtualListItems,
-  loadOlderMessages
+  loadMessages
 } = useChatRoomMessages(props)
 </script>
 
 <template>
   <NmorphScroll ref="messagesScroll" class="chat-room-messages" scroll-x-prop="hidden" css-scroll-behavior="auto">
-    <div
-      v-if="messageVirtualListItems.length"
-      class="chat-room-messages__virtual"
-      :style="messageVirtualListStyle"
-    >
+    <div v-if="messageVirtualListItems.length" class="chat-room-messages__virtual" :style="messageVirtualListStyle">
       <div
         v-for="{ item, virtualItem } in messageVirtualListItems"
         :key="item.id"
@@ -42,7 +37,7 @@ const {
           style-type="transparent"
           :loading="isLoading"
           :text="$t(CHAT_ROOM_PAGE_I18N.loadOlderMessages)"
-          @click="loadOlderMessages"
+          @click="loadMessages"
         />
         <DateSeparator v-else-if="item.type === 'date-separator'" :label="item.label" />
         <div
