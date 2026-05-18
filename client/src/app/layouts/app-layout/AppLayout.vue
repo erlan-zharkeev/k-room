@@ -81,7 +81,7 @@ const {
 
 .app-layout__content {
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
+  grid-template-columns: 1.2fr 2.5fr;
   gap: 12px;
 
   min-width: 0;
