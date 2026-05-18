@@ -120,6 +120,7 @@ export type {
 export type {
   IEventMarkCallAsVideo,
   IEventMessageDelivered,
+  IEventGetRoom,
   EventGetRoomsType,
   IEventStatusContact,
   EventChangeContactsDataType,
