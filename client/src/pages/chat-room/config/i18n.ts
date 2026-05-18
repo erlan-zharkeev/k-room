@@ -86,6 +86,16 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Message',
     zh: 'Message'
   },
+  attachFile: {
+    en: 'Attach file',
+    ru: 'Attach file',
+    zh: 'Attach file'
+  },
+  selectEmoji: {
+    en: 'Select emoji',
+    ru: 'Select emoji',
+    zh: 'Select emoji'
+  },
   sendMessage: {
     en: 'Send message',
     ru: 'Send message',

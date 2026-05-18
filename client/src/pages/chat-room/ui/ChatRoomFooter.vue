@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCard, NmorphIconArrowUp, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphButton,
+  NmorphCard,
+  NmorphIconPaperclip,
+  NmorphIconSendFilled,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomFooterProps } from '../config/types'
@@ -11,6 +17,11 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
 
 <template>
   <NmorphCard tag="footer" class="chat-room-content-footer" shadow-type="combined">
+    <NmorphButton shape="square" :aria-label="$t(CHAT_ROOM_PAGE_I18N.attachFile)">
+      <template #icon>
+        <NmorphIconPaperclip />
+      </template>
+    </NmorphButton>
     <NmorphTextInput
       v-model="messageText"
       :placeholder="$t(CHAT_ROOM_PAGE_I18N.messagePlaceholder)"
@@ -19,12 +30,17 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
     />
     <NmorphButton
       shape="square"
+      :aria-label="$t(CHAT_ROOM_PAGE_I18N.selectEmoji)"
+      :text="'\u{1F60A}'"
+    />
+    <NmorphButton
+      shape="square"
       :disabled="isSendDisabled"
       :aria-label="$t(CHAT_ROOM_PAGE_I18N.sendMessage)"
       @click="sendMessage(props.room.id)"
     >
       <template #icon>
-        <NmorphIconArrowUp />
+        <NmorphIconSendFilled />
       </template>
     </NmorphButton>
   </NmorphCard>
@@ -33,9 +49,7 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
 <style lang="scss">
 .chat-room-content-footer {
   .nmorph-card__content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content;
-    flex: 0 0 auto;
+    display: flex;
     gap: 8px;
   }
 }
