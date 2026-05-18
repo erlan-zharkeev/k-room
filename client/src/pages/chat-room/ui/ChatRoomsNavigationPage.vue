@@ -170,7 +170,6 @@ const {
 .chat-rooms-navigation {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .chat-rooms-navigation__toolbar {
