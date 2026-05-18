@@ -2,8 +2,8 @@ import { computed, type ComputedRef, type Ref } from 'vue'
 
 import { getRoomDisplayedLastMessageId } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
-import { useSettings } from 'src/entities/setting'
-import { formatLocalizedDate, type FChatRoomType } from 'src/shared/lib'
+import { useLocalizedDateTime } from 'src/entities/setting'
+import type { FChatRoomType } from 'src/shared/lib'
 
 import type { MessageListItemType } from '../config/types'
 
@@ -11,8 +11,8 @@ export const useChatRoomMessageList = (
   room: Ref<FChatRoomType>,
   hasMoreLoadedMessages: ComputedRef<boolean>
 ) => {
-  const { settings } = useSettings()
   const { messageById } = useMessage()
+  const { formatDate } = useLocalizedDateTime()
 
   const displayedLastMessageId = computed(() => getRoomDisplayedLastMessageId(room.value))
   const hasMessages = computed(() => room.value.messages.length > 0)
@@ -32,9 +32,7 @@ export const useChatRoomMessageList = (
 
       if (!message) return
 
-      const label = message.createdAt
-        ? formatLocalizedDate(message.createdAt, settings.value.localization.language)
-        : ''
+      const label = message.createdAt ? formatDate(message.createdAt) : ''
 
       if (label && previousLabel !== label) {
         items.push({

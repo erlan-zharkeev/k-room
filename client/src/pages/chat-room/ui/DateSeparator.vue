@@ -6,5 +6,11 @@ const props = defineProps<IDateSeparatorProps>()
 </script>
 
 <template>
-  <AppText :text="props.label" alignment="center" color="contrast-text" />
+  <AppText :text="props.label" alignment="center" color="contrast-text" class="date-separator" />
 </template>
+
+<style lang="scss">
+.date-separator {
+  display: block;
+}
+</style>
