@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router'
 import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
-import { MobileFooter } from 'src/widgets/mobile-footer'
+import { MobileNavFooter } from 'src/widgets/mobile-nav-footer'
 import { TopBar } from 'src/widgets/top-bar'
 
 import ContentLayout from './../content-layout/ContentLayout.vue'
@@ -47,7 +47,7 @@ const {
           </RouterView>
         </NmorphCard>
       </div>
-      <MobileFooter v-if="isPortraitTabletOrLess" class="widget" />
+      <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" />
     </section>
   </main>
 </template>

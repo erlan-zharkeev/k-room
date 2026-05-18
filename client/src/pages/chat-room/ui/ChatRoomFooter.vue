@@ -4,7 +4,8 @@ import {
   NmorphCard,
   NmorphIconPaperclip,
   NmorphIconSendFilled,
-  NmorphTextInput
+  NmorphTextInput,
+  NmorphIconSmile
 } from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
@@ -28,11 +29,11 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
       :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.messagePlaceholder) }"
       @keydown.enter.prevent="sendMessage(props.room.id)"
     />
-    <NmorphButton
-      shape="square"
-      :aria-label="$t(CHAT_ROOM_PAGE_I18N.selectEmoji)"
-      :text="'\u{1F60A}'"
-    />
+    <NmorphButton shape="square" :aria-label="$t(CHAT_ROOM_PAGE_I18N.selectEmoji)">
+      <template #icon>
+        <NmorphIconSmile />
+      </template>
+    </NmorphButton>
     <NmorphButton
       shape="square"
       :disabled="isSendDisabled"

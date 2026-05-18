@@ -2,7 +2,6 @@ import { differenceInMilliseconds, format, intlFormat, intlFormatDistance } from
 import { normalizeTimestamp, type AppLanguageType } from 'global-shared'
 
 import {
-  DEFAULT_DATE_TIME_FORMAT,
   DATE_PATTERN_BY_DATE_TIME_FORMAT,
   TIME_PATTERN_BY_DATE_TIME_FORMAT,
   INTL_LOCALE_BY_LANGUAGE
@@ -16,7 +15,7 @@ const getPatternValue = (value: number | string, pattern: string) => format(getT
 export const formatLocalizedDate = (
   value: number | string,
   language: AppLanguageType,
-  dateTimeFormat: DateTimeFormatType = DEFAULT_DATE_TIME_FORMAT
+  dateTimeFormat: DateTimeFormatType
 ) => {
   const pattern = DATE_PATTERN_BY_DATE_TIME_FORMAT[dateTimeFormat]
 
@@ -38,7 +37,7 @@ export const formatLocalizedDate = (
 export const formatLocalizedTime = (
   value: number | string,
   language: AppLanguageType,
-  dateTimeFormat: DateTimeFormatType = DEFAULT_DATE_TIME_FORMAT
+  dateTimeFormat: DateTimeFormatType
 ) => {
   const pattern = TIME_PATTERN_BY_DATE_TIME_FORMAT[dateTimeFormat]
 
@@ -60,7 +59,7 @@ export const formatLocalizedTime = (
 export const formatLocalizedDateTime = (
   value: number | string,
   language: AppLanguageType,
-  dateTimeFormat: DateTimeFormatType = DEFAULT_DATE_TIME_FORMAT
+  dateTimeFormat: DateTimeFormatType
 ) => {
   const date = formatLocalizedDate(value, language, dateTimeFormat)
   const time = formatLocalizedTime(value, language, dateTimeFormat)
