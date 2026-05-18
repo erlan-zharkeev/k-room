@@ -1,4 +1,3 @@
-import { useChatRoomPreviewMessages } from './use-chat-room-preview-messages.model'
 import { useChatRoomsList } from './use-chat-rooms-list.model'
 import { useCreateChatRoomDialog } from './use-create-chat-room-dialog.model'
 
@@ -21,8 +20,6 @@ export const useChatRoomsNavigationPage = () => {
     toggleContactSelection,
     createChatRoom
   } = useCreateChatRoomDialog(openChatRoom)
-
-  useChatRoomPreviewMessages()
 
   return {
     searchQuery,
