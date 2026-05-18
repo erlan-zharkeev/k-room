@@ -31,7 +31,7 @@ export const useVideoInputDevice = () => {
   const videoInputLoading = ref(false)
   const videoInputCheckLoading = ref(false)
   const videoInputStream = videoInputUserMedia.stream
-  const videoElement = useTemplateRef<HTMLVideoElement>('videoElement')
+  const videoElementRef = useTemplateRef<HTMLVideoElement>('videoElement')
 
   const videoInputOptions = computed(() =>
     videoInputDevices.value.map(({ deviceId, label }, index) => ({
@@ -169,9 +169,9 @@ export const useVideoInputDevice = () => {
     void syncSelectedVideoInputDevice(videoInputPermission.value === 'granted')
   })
 
-  watch([videoInputStream, videoElement], () => {
-    if (videoElement.value) {
-      videoElement.value.srcObject = videoInputStream.value ?? null
+  watch([videoInputStream, videoElementRef], () => {
+    if (videoElementRef.value) {
+      videoElementRef.value.srcObject = videoInputStream.value ?? null
     }
   })
 
@@ -182,7 +182,6 @@ export const useVideoInputDevice = () => {
     isVideoInputCheckDisabled,
     videoInputPermissionCalloutType,
     videoInputPermissionStatus,
-    videoElement,
     isVideoInputChecking,
     setVideoInputChecking,
     setSelectedVideoInputDevice

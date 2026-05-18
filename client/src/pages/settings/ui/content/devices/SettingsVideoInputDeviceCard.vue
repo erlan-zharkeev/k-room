@@ -23,7 +23,6 @@ const {
   isVideoInputCheckDisabled,
   videoInputPermissionCalloutType,
   videoInputPermissionStatus,
-  videoElement,
   isVideoInputChecking,
   setVideoInputChecking,
   setSelectedVideoInputDevice

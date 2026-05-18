@@ -8,7 +8,7 @@ import { APP_EMOJI_PICKER_I18N_MAP } from './i18n'
 import type { AppEmojiPickerEmitType, IAppEmojiPickerProps } from './types'
 
 export const useAppEmojiPicker = (props: IAppEmojiPickerProps, emit: AppEmojiPickerEmitType) => {
-  const pickerRoot = useTemplateRef<HTMLElement>('pickerRoot')
+  const pickerRootRef = useTemplateRef<HTMLElement>('pickerRoot')
   const isExpanded = ref(false)
   let pickerElement: Picker | undefined
 
@@ -31,7 +31,7 @@ export const useAppEmojiPicker = (props: IAppEmojiPickerProps, emit: AppEmojiPic
 
     if (!isExpanded.value) return
 
-    const root = pickerRoot.value
+    const root = pickerRootRef.value
 
     if (!root) return
 
@@ -67,7 +67,6 @@ export const useAppEmojiPicker = (props: IAppEmojiPickerProps, emit: AppEmojiPic
   return {
     expandPicker,
     isExpanded,
-    pickerRoot,
     quickEmojiList: APP_EMOJI_PICKER_QUICK_EMOJI_LIST
   }
 }
