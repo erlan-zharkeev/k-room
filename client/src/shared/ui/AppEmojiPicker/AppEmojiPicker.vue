@@ -6,7 +6,7 @@ import { useAppEmojiPicker } from './use-app-emoji-picker.model'
 
 const props = defineProps<IAppEmojiPickerProps>()
 const emit = defineEmits<IAppEmojiPickerEmits>()
-const { expandPicker, isExpanded, pickerRoot, quickEmojiList } = useAppEmojiPicker(props, emit)
+const { expandPicker, isExpanded, quickEmojiList } = useAppEmojiPicker(props, emit)
 </script>
 
 <template>
