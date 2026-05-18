@@ -2,19 +2,29 @@ import type { EventGetRoomsType, SocketActionsType } from 'global-shared'
 import { onBeforeUnmount } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
+import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
+
+import { filterRoomPreviewMessage } from '../lib/filter-room-preview-message'
 
 import type { IEventUpdateChatRoomWithId } from './types.model'
 
 export const useChatRoomUpdateMonitor = () => {
   const { merge, put } = useChatRoom()
+  const { bulkPut } = useMessage()
+
+  const saveRoomPreviewMessages = async (rooms: EventGetRoomsType) => {
+    await bulkPut(rooms.flatMap((room) => (room.previewMessage ? [room.previewMessage] : [])))
+  }
 
   const actualizeChatRooms = async (rooms: EventGetRoomsType) => {
-    await merge(rooms)
+    await saveRoomPreviewMessages(rooms)
+    await merge(rooms.map(filterRoomPreviewMessage))
   }
 
   const handleRoomAddition = async (room: EventGetRoomsType[number]) => {
-    await put(room)
+    await saveRoomPreviewMessages([room])
+    await put(filterRoomPreviewMessage(room))
   }
 
   const handleRoomDataUpdate = async (room: IEventUpdateChatRoomWithId) => {
