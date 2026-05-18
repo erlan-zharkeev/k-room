@@ -12,10 +12,10 @@ import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useSettings } from 'src/entities/setting'
+import { useLocalizedDateTime } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
-import { formatLocalizedRelativeTime, TOAST_I18N, useAppToast, useI18n, type DbContactType } from 'src/shared/lib'
+import { TOAST_I18N, useAppToast, useI18n, type DbContactType } from 'src/shared/lib'
 
 import { CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
@@ -23,7 +23,7 @@ import { CONTACTS_PAGE_I18N } from '../config/i18n'
 export const useContactsPage = () => {
   const router = useRouter()
   const { getPersonalByContactId } = useChatRoom()
-  const { settings } = useSettings()
+  const { formatRelativeTime } = useLocalizedDateTime()
   const { t } = useI18n()
   const toast = useAppToast()
   const { emitSocketAction } = useSocketAction()
@@ -41,10 +41,7 @@ export const useContactsPage = () => {
 
     if (!normalized) return t(CONTACTS_PAGE_I18N.lastSeenRecently)
 
-    return `${t(CONTACTS_PAGE_I18N.lastSeen)} ${formatLocalizedRelativeTime(
-      normalized,
-      settings.value.localization.language
-    )}`
+    return `${t(CONTACTS_PAGE_I18N.lastSeen)} ${formatRelativeTime(normalized)}`
   }
 
   const getContactStatus = ({ interactionType }: DbContactType) => {
