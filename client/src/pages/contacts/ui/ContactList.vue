@@ -39,7 +39,11 @@ const contactChatRoomIdList = computed(() =>
       class="contact-list__status-badge"
       :value="props.getContactStatus(contact)"
       hide-on-falsy-value
+      type="ribbon"
+      :ribbon-tilt="false"
       size="tiny"
+      ribbon-corner="bottom-left"
+      :offset-y="4"
       :color="getContactStatusTagColor(contact)"
     >
       <NmorphCard
