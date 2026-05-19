@@ -33,84 +33,84 @@ const contactChatRoomIdList = computed(() =>
 
 <template>
   <div class="contact-list">
-    <NmorphCard
+    <NmorphBadge
       v-for="contact in props.contactList"
       :key="contact.id"
-      class="contact-list__item"
-      content-class="contact-list__item-content"
-      shadow-type="inset"
+      class="contact-list__status-badge"
+      :value="props.getContactStatus(contact)"
+      hide-on-falsy-value
+      size="tiny"
+      :color="getContactStatusTagColor(contact)"
     >
-      <AppProfileBasicData
-        class="contact-list__profile"
-        :image-id="getAvatarId(contact.id)"
-        :title="contact.nickname"
-        :name="contact.nickname"
+      <NmorphCard
+        class="contact-list__item"
+        content-class="contact-list__item-content"
+        shadow-type="inset"
       >
-        <template #title>
-          <div class="contact-list__title">
-            <div class="contact-list__name">
-              <AppText truncate :text="contact.nickname" />
+        <AppProfileBasicData
+          class="contact-list__profile"
+          :image-id="getAvatarId(contact.id)"
+          :title="contact.nickname"
+          :name="contact.nickname"
+        >
+          <template #title>
+            <div class="contact-list__title">
+              <div class="contact-list__name">
+                <AppText truncate :text="contact.nickname" />
+              </div>
             </div>
+          </template>
+          <template #description>
             <NmorphBadge
-              v-if="props.getContactStatus(contact)"
-              class="contact-list__status"
+              v-if="props.getContactActivity(contact)"
               is-tag
               size="tiny"
-              :color="getContactStatusTagColor(contact)"
-              :value="props.getContactStatus(contact)"
+              :color="getContactActivityTagColor(contact)"
+              :value="props.getContactActivity(contact)"
             />
-          </div>
-        </template>
-        <template #description>
-          <NmorphBadge
-            v-if="props.getContactActivity(contact)"
-            is-tag
-            size="tiny"
-            :color="getContactActivityTagColor(contact)"
-            :value="props.getContactActivity(contact)"
+          </template>
+        </AppProfileBasicData>
+        <div class="contact-list__actions">
+          <NmorphButton
+            v-if="contact.interactionType === 'default'"
+            shape="square"
+            :loading="props.loadingContactIds.has(contact.id)"
+            :aria-label="$t(CONTACTS_PAGE_I18N.invite)"
+            @click="emit('update-interaction', contact.id, 'invited')"
+          >
+            <template #icon>
+              <NmorphIconPostCard />
+            </template>
+          </NmorphButton>
+          <NmorphButton
+            v-else-if="contactChatRoomIdList.includes(contact.id)"
+            shape="square"
+            :aria-label="$t(CONTACTS_PAGE_I18N.write)"
+            @click="emit('go-to-chat', props.getPersonalChatRoomId(contact.id))"
+          >
+            <template #icon>
+              <NmorphIconChatLineSquare />
+            </template>
+          </NmorphButton>
+          <NmorphButton
+            v-else-if="contact.interactionType === 'invite-accepted'"
+            shape="square"
+            :loading="props.creatingChatContactIds.has(contact.id)"
+            :aria-label="$t(CONTACTS_PAGE_I18N.createChat)"
+            @click="emit('create-chat', contact.id)"
+          >
+            <template #icon>
+              <NmorphIconChatLineSquare />
+            </template>
+          </NmorphButton>
+          <ContactContextMenu
+            :contact="contact"
+            @delete="emit('delete', $event)"
+            @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
           />
-        </template>
-      </AppProfileBasicData>
-      <div class="contact-list__actions">
-        <NmorphButton
-          v-if="contact.interactionType === 'default'"
-          shape="square"
-          :loading="props.loadingContactIds.has(contact.id)"
-          :aria-label="$t(CONTACTS_PAGE_I18N.invite)"
-          @click="emit('update-interaction', contact.id, 'invited')"
-        >
-          <template #icon>
-            <NmorphIconPostCard />
-          </template>
-        </NmorphButton>
-        <NmorphButton
-          v-else-if="contactChatRoomIdList.includes(contact.id)"
-          shape="square"
-          :aria-label="$t(CONTACTS_PAGE_I18N.write)"
-          @click="emit('go-to-chat', props.getPersonalChatRoomId(contact.id))"
-        >
-          <template #icon>
-            <NmorphIconChatLineSquare />
-          </template>
-        </NmorphButton>
-        <NmorphButton
-          v-else-if="contact.interactionType === 'invite-accepted'"
-          shape="square"
-          :loading="props.creatingChatContactIds.has(contact.id)"
-          :aria-label="$t(CONTACTS_PAGE_I18N.createChat)"
-          @click="emit('create-chat', contact.id)"
-        >
-          <template #icon>
-            <NmorphIconChatLineSquare />
-          </template>
-        </NmorphButton>
-        <ContactContextMenu
-          :contact="contact"
-          @delete="emit('delete', $event)"
-          @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
-        />
-      </div>
-    </NmorphCard>
+        </div>
+      </NmorphCard>
+    </NmorphBadge>
   </div>
 </template>
 

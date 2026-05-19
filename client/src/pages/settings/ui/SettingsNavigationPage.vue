@@ -4,10 +4,11 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useScreen } from 'src/shared/lib'
-import { AppContentNavEl } from 'src/shared/ui'
 
 import { getSettingsPath, SETTINGS_NAVIGATION_ITEMS } from '../config/constants/content.constants'
 import { getSettingsContentId } from '../lib/get-settings-content-id'
+
+import { SettingsNavigationItem } from './SettingsNavigationItem'
 
 const route = useRoute()
 const { isPortraitTabletOrLess } = useScreen()
@@ -28,7 +29,7 @@ const getItemRoute = (settingsId: string) => ({
   <nav class="settings-navigation-page">
     <NmorphScroll scroll-x-prop="hidden">
       <div class="settings-navigation-page__list">
-        <AppContentNavEl
+        <SettingsNavigationItem
           v-for="item in SETTINGS_NAVIGATION_ITEMS"
           :key="item.id"
           :to="getItemRoute(item.id)"

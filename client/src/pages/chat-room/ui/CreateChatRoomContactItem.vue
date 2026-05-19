@@ -19,7 +19,7 @@ const { avatarSrc } = useCreateChatRoomContactItem(props)
       :size="28"
       shape="square"
     />
-    <AppText class="create-chat-room-contact-item__name" truncate :selectable="false" :text="props.nickname" />
+    <AppText truncate :selectable="false" :text="props.nickname" />
   </div>
 </template>
 
@@ -28,5 +28,6 @@ const { avatarSrc } = useCreateChatRoomContactItem(props)
   display: flex;
   gap: 8px;
   align-items: center;
+  width: 230px;
 }
 </style>

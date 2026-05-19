@@ -4,7 +4,6 @@ import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconPlusThin, NmorphScroll
 import { getAvatarId } from 'src/shared/lib'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import { CONTACTS_SEARCH_BADGE_BY_INTERACTION } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactsSearchEmits, IContactsSearchProps } from '../config/types'
 import { useContactSearch } from '../model/use-contact-search.model'
@@ -17,6 +16,8 @@ const {
   searchHasMore,
   isSearchLoading,
   isSearchLoadingMore,
+  getSearchedContactStatus,
+  getSearchedContactStatusColor,
   loadMoreSearchedContacts
 } = useContactSearch()
 </script>
@@ -34,48 +35,47 @@ const {
             :text="$t(CONTACTS_PAGE_I18N.loading)"
           />
           <div v-else class="contacts-search__list">
-            <NmorphCard
+            <NmorphBadge
               v-for="contact in foundContactList"
-              shadow-type="inset"
               :key="contact.id"
-              class="contacts-search__item"
+              class="contacts-search__status-badge"
+              :value="getSearchedContactStatus(contact)"
+              hide-on-falsy-value
+              size="tiny"
+              :color="getSearchedContactStatusColor(contact)"
+              type="ribbon"
+              ribbon-corner="bottom-left"
             >
-              <AppProfileBasicData
-                class="contacts-search__profile"
-                :image-id="getAvatarId(contact.id)"
-                :title="contact.nickname"
-                :name="contact.nickname"
-              >
-                <template #title>
-                  <div class="contacts-search__title">
-                    <div class="contacts-search__name">
-                      <AppText truncate :text="contact.nickname" />
-                    </div>
-                    <NmorphBadge
-                      v-if="CONTACTS_SEARCH_BADGE_BY_INTERACTION[contact.interactionType].visible"
-                      class="contacts-search__status"
-                      is-tag
-                      size="tiny"
-                      :color="CONTACTS_SEARCH_BADGE_BY_INTERACTION[contact.interactionType].color"
-                      :value="$t(CONTACTS_SEARCH_BADGE_BY_INTERACTION[contact.interactionType].label)"
-                    />
-                  </div>
-                </template>
-              </AppProfileBasicData>
-              <div class="contacts-search__actions">
-                <NmorphButton
-                  v-if="contact.interactionType === 'default'"
-                  shape="square"
-                  :loading="loadingContactIds.has(contact.id)"
-                  :aria-label="$t(CONTACTS_PAGE_I18N.add)"
-                  @click="emit('add', contact.id)"
+              <NmorphCard shadow-type="inset" content-class="contacts-search__item">
+                <AppProfileBasicData
+                  class="contacts-search__profile"
+                  :image-id="getAvatarId(contact.id)"
+                  :title="contact.nickname"
+                  :name="contact.nickname"
                 >
-                  <template #icon>
-                    <NmorphIconPlusThin />
+                  <template #title>
+                    <div class="contacts-search__title">
+                      <div class="contacts-search__name">
+                        <AppText truncate :text="contact.nickname" />
+                      </div>
+                    </div>
                   </template>
-                </NmorphButton>
-              </div>
-            </NmorphCard>
+                </AppProfileBasicData>
+                <div class="contacts-search__actions">
+                  <NmorphButton
+                    v-if="contact.interactionType === 'default'"
+                    shape="square"
+                    :loading="loadingContactIds.has(contact.id)"
+                    :aria-label="$t(CONTACTS_PAGE_I18N.add)"
+                    @click="emit('add', contact.id)"
+                  >
+                    <template #icon>
+                      <NmorphIconPlusThin />
+                    </template>
+                  </NmorphButton>
+                </div>
+              </NmorphCard>
+            </NmorphBadge>
             <NmorphButton
               v-if="searchHasMore"
               class="contacts-search__load-more"
@@ -115,7 +115,6 @@ const {
   gap: 8px;
   align-items: center;
 
-  padding: 8px;
 }
 
 .contacts-search__name {

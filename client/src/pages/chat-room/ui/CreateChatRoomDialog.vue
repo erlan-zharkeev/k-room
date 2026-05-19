@@ -114,7 +114,6 @@ const {
               :id="contact.id"
               :key="contact.id"
               design="checkbox"
-              class="create-chat-room-dialog__contact"
             >
               <CreateChatRoomContactItem :contact-id="contact.id" :nickname="contact.nickname" />
             </NmorphCheckbox>

@@ -32,7 +32,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.currentEmail)"
         :show-validation-icon="false"
       >
-        <AppText color="contrast-text" truncate :text="currentEmail" />
+        <AppText :text="currentEmail" />
       </NmorphFormItem>
 
       <NmorphFormItem
