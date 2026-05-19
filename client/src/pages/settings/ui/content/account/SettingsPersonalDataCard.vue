@@ -60,10 +60,11 @@ const {
       >
         <template #title>
           <div class="settings-personal-data-card__profile-title">
-            <AppHeader tag="h5" :selectable="false" :text="displayedNickname" />
+            <AppText bold :selectable="false" :text="displayedNickname" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
+              height='thin'
               :disabled="isAccountSaving"
               @click="copyUserNickname"
             >
@@ -81,6 +82,7 @@ const {
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
+              height='thin'
               :disabled="isAccountSaving"
               @click="copyUserId"
             >
@@ -117,13 +119,9 @@ const {
           </div>
           <NmorphCallout
             type="warning"
-            :title="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoRequirements)"
-            :content="
-              $t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoHint)(
-                SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
-                SETTINGS_ACCOUNT_AVATAR_MAX_MB
-              )
-            "
+            :content="`${$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoRequirements)} ${$t(
+              SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoHint
+            )(SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL, SETTINGS_ACCOUNT_AVATAR_MAX_MB)}`"
           />
         </div>
       </NmorphFormItem>
