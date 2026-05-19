@@ -17,7 +17,12 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
 </script>
 
 <template>
-  <NmorphCard tag="footer" class="chat-room-content-footer" shadow-type="combined">
+  <NmorphCard
+    tag="footer"
+    class="chat-room-content-footer"
+    content-class="chat-room-content-footer__content"
+    shadow-type="combined"
+  >
     <NmorphButton shape="square" :aria-label="$t(CHAT_ROOM_PAGE_I18N.attachFile)">
       <template #icon>
         <NmorphIconPaperclip />
@@ -48,10 +53,8 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
 </template>
 
 <style lang="scss">
-.chat-room-content-footer {
-  .nmorph-card__content {
-    display: flex;
-    gap: 8px;
-  }
+.chat-room-content-footer__content {
+  display: flex;
+  gap: 8px;
 }
 </style>

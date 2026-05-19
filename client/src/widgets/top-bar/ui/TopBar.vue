@@ -60,7 +60,7 @@ watch(
 </script>
 
 <template>
-  <NmorphCard tag="header" class="top-bar">
+  <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
     <AppProfileBasicData
       class="top-bar__profile"
       :image-alt="user.nickname"
@@ -83,12 +83,10 @@ watch(
 </template>
 
 <style lang="scss">
-.top-bar {
-  .nmorph-card__content {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: space-between;
-  }
+.top-bar__content {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

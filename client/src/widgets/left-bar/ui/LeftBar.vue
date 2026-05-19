@@ -6,17 +6,15 @@ import { AppLogo } from 'src/shared/ui'
 </script>
 
 <template>
-  <NmorphCard tag="aside" class="left-bar">
+  <NmorphCard tag="aside" class="left-bar" content-class="left-bar__content">
     <AppLogo />
     <AppNavigation />
   </NmorphCard>
 </template>
 
 <style lang="scss">
-.left-bar {
-  .nmorph-card__content {
-    display: flex;
-    flex-direction: column;
-  }
+.left-bar__content {
+  display: flex;
+  flex-direction: column;
 }
 </style>

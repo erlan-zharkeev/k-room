@@ -33,7 +33,13 @@ const contactChatRoomIdList = computed(() =>
 
 <template>
   <div class="contact-list">
-    <NmorphCard v-for="contact in props.contactList" :key="contact.id" class="contact-list__item" shadow-type="inset">
+    <NmorphCard
+      v-for="contact in props.contactList"
+      :key="contact.id"
+      class="contact-list__item"
+      content-class="contact-list__item-content"
+      shadow-type="inset"
+    >
       <AppProfileBasicData
         class="contact-list__profile"
         :image-id="getContactAvatarId(contact.id)"
@@ -114,15 +120,13 @@ const contactChatRoomIdList = computed(() =>
   gap: 8px;
 }
 
-.contact-list__item {
-  .nmorph-card__content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) max-content;
-    gap: 8px;
-    align-items: center;
+.contact-list__item-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 8px;
+  align-items: center;
 
-    padding-right: 4px;
-  }
+  padding-right: 4px;
 }
 
 .contact-list__profile {

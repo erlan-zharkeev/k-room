@@ -18,6 +18,7 @@ const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuanti
     shadow-type="inset"
     class="app-navigation"
     :class="{ 'app-navigation--footer': props.footer }"
+    content-class="app-navigation__content"
   >
     <RouterLink
       v-for="item in APP_PAGE_NAV_ITEMS"
@@ -51,16 +52,14 @@ const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuanti
 <style lang="scss">
 .app-navigation {
   margin-block: auto;
-
-  .nmorph-card__content {
-    display: grid;
-    gap: 16px;
-  }
 }
 
-.app-navigation--footer {
-  .nmorph-card__content {
-    display: inline-flex;
-  }
+.app-navigation__content {
+  display: grid;
+  gap: 16px;
+}
+
+.app-navigation--footer .app-navigation__content {
+  display: inline-flex;
 }
 </style>
