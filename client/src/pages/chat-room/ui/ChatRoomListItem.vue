@@ -14,6 +14,7 @@ const props = defineProps<IChatRoomListItemProps>()
     <NmorphBadge
       class="chat-room-list-item-badge"
       :value="props.item.unreadMessagesQuantity"
+      hide-on-falsy-value
       size="tiny"
       color="var(--nmorph-warn-color)"
       type="ribbon"

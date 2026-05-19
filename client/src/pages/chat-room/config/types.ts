@@ -30,7 +30,7 @@ export interface ICreateChatRoomContactItemProps {
 }
 
 export type CreateChatRoomDialogEmitType = {
-  (event: 'created', roomId: string): void
+  (event: 'open-room', roomId: string): void
 }
 
 export interface IChatRoomMessagesProps {
