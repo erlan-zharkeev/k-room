@@ -53,7 +53,7 @@ export const PASSWORD_RECOVERY_I18N = defineI18n({
   },
   debugCode: {
     en: 'Debug code',
-    ru: 'Debug code',
+    ru: 'Отладочный код',
     zh: '调试验证码'
   },
   back: {

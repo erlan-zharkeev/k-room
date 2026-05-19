@@ -58,7 +58,7 @@ const {
       <ChatRoomList :items="chatRoomList" />
     </NmorphScroll>
 
-    <CreateChatRoomDialog v-model="isCreateChatDialogOpen" @created="openChatRoom" />
+    <CreateChatRoomDialog v-model="isCreateChatDialogOpen" @open-room="openChatRoom" />
   </section>
 </template>
 
