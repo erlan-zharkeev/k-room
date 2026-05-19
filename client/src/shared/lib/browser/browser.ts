@@ -58,6 +58,16 @@ export const readFileAsDataUrl = (file: File) =>
     reader.readAsDataURL(file)
   })
 
+export const revokeObjectUrl = (url?: string) => {
+  if (!url) return
+
+  URL.revokeObjectURL(url)
+}
+
+export const revokeObjectUrls = (urls: Iterable<string | undefined>) => {
+  Array.from(urls).forEach(revokeObjectUrl)
+}
+
 const GB = MEDIA_MB_IN_BYTES * 1024
 
 export const formatBytes = (bytes: number): string => {

@@ -62,7 +62,6 @@ const { imageSrc } = useAppProfileBasicData(props)
   margin-bottom: 1px;
 }
 
-
 .app-profile-basic-data__description {
   min-width: 0;
 }

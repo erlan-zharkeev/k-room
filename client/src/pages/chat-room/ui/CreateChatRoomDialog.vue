@@ -24,7 +24,6 @@ const isOpen = defineModel<boolean>({ required: true })
 const emit = defineEmits<CreateChatRoomDialogEmitType>()
 
 const {
-  chatAvatarUploadKey,
   chatAvatarUploadValue,
   createChatNameInputValue,
   contactSearchQuery,
@@ -61,7 +60,6 @@ const {
         @update:model-value="updateCreateChatName"
       />
       <NmorphFileUpload
-        :key="chatAvatarUploadKey"
         :allowed-types="CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES"
         :button-text="$t(CHAT_ROOM_PAGE_I18N.uploadChatImage)"
         :disabled="!isGroupChat || isCreatingChat"

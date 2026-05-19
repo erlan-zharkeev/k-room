@@ -25,6 +25,7 @@ import SettingsCard from '../../SettingsCard.vue'
 const {
   user,
   formData,
+  accountAvatarUploadValue,
   accountAvatarPreviewUrl,
   displayedAvatarId,
   displayedNickname,
@@ -32,7 +33,6 @@ const {
   accountNicknameError,
   isAccountSaveDisabled,
   isAccountSaving,
-  avatarUploadKey,
   copyUserId,
   copyUserNickname,
   resetAccountAvatar,
@@ -64,7 +64,7 @@ const {
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
-              height='thin'
+              height="thin"
               :disabled="isAccountSaving"
               @click="copyUserNickname"
             >
@@ -82,7 +82,7 @@ const {
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
-              height='thin'
+              height="thin"
               :disabled="isAccountSaving"
               @click="copyUserId"
             >
@@ -102,10 +102,10 @@ const {
         <div class="settings-personal-data-card__avatar-field">
           <div class="settings-personal-data-card__actions">
             <NmorphFileUpload
-              :key="avatarUploadKey"
               :allowed-types="SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES"
               :button-text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhoto)"
               :disabled="isAccountSaving"
+              :model-value="accountAvatarUploadValue"
               :multiple="false"
               class="settings-personal-data-card__file-button"
               @update:model-value="uploadAccountAvatar"

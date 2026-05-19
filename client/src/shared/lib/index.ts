@@ -21,6 +21,8 @@ export {
   isEmptyFileWithName,
   log,
   readFileAsDataUrl,
+  revokeObjectUrl,
+  revokeObjectUrls,
   useScreen
 } from './browser/browser'
 export { IMAGE_RESOLUTIONS } from './browser/constants'

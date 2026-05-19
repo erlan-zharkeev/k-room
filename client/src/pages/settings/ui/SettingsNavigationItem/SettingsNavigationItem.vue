@@ -48,7 +48,6 @@ const { buttonClass, showIcon } = useSettingsNavigationItem(props)
 .settings-navigation-item__text {
   display: grid;
   gap: 6px;
-
   width: 100%;
   min-width: 0;
 }
