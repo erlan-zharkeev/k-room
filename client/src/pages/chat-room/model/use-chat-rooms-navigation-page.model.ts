@@ -5,40 +5,48 @@ export const useChatRoomsNavigationPage = () => {
   const { searchQuery, chatRoomList, showNoSearchResults, showNoChats, openChatRoom } = useChatRoomsList()
 
   const {
+    chatAvatarUploadKey,
+    chatAvatarUploadValue,
+    createChatNameInputValue,
     contactSearchQuery,
-    createChatName,
     isCreateChatDialogOpen,
     isCreatingChat,
     selectedContactIds,
-    contactPickerList,
     acceptedContacts,
-    isPrivateChatAlreadyExists,
+    filteredAcceptedContacts,
     isGroupChat,
     canCreateChat,
+    showNoContactSearchResults,
     openCreateChatDialog,
     closeCreateChatDialog,
-    toggleContactSelection,
+    updateCreateChatName,
+    updateChatAvatar,
+    showUnsupportedChatAvatarFormatError,
     createChatRoom
   } = useCreateChatRoomDialog(openChatRoom)
 
   return {
     searchQuery,
+    chatAvatarUploadKey,
+    chatAvatarUploadValue,
+    createChatNameInputValue,
     contactSearchQuery,
-    createChatName,
     isCreateChatDialogOpen,
     isCreatingChat,
     selectedContactIds,
     chatRoomList,
-    contactPickerList,
     acceptedContacts,
-    isPrivateChatAlreadyExists,
+    filteredAcceptedContacts,
     isGroupChat,
     canCreateChat,
+    showNoContactSearchResults,
     showNoSearchResults,
     showNoChats,
     openCreateChatDialog,
     closeCreateChatDialog,
-    toggleContactSelection,
+    updateCreateChatName,
+    updateChatAvatar,
+    showUnsupportedChatAvatarFormatError,
     createChatRoom
   }
 }

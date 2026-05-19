@@ -11,48 +11,50 @@ const props = defineProps<IChatRoomListItemProps>()
 
 <template>
   <RouterLink custom :to="props.item.to" v-slot="{ href, navigate }">
-    <NmorphCard
-      tag="a"
-      class="chat-room-list-item"
-      :href="href"
-      @click="navigate"
-      :shadow-type="props.item.selected ? 'inset' : 'outset'"
-      :aria-current="props.item.selected ? 'page' : undefined"
-    >
-      <AppProfileBasicData
-        class="chat-room-list-item__profile"
-        :image-id="props.item.imageId"
-        :title="props.item.title"
-        :name="props.item.title"
-        :show-online="props.item.online"
+    <NmorphBadge
+      v-if="props.item.unreadMessagesQuantity"
+      class="chat-room-list-item__badge"
+      :value="props.item.unreadMessagesQuantity"
+      size="tiny"
+      color="var(--nmorph-warn-color)"
+      type="ribbon"
       >
-        <template #title>
-          <div class="chat-room-list-item__title">
-            <div class="chat-room-list-item__name">
-              <AppText truncate :selectable="false" :text="props.item.title" />
+      <NmorphCard
+        tag="a"
+        class="chat-room-list-item"
+        :href="href"
+        @click="navigate"
+        :shadow-type="props.item.selected ? 'inset' : 'outset'"
+        :aria-current="props.item.selected ? 'page' : undefined"
+      >
+        <AppProfileBasicData
+          class="chat-room-list-item__profile"
+          :image-id="props.item.imageId"
+          :title="props.item.title"
+          :name="props.item.title"
+          :show-online="props.item.online"
+        >
+          <template #title>
+            <div class="chat-room-list-item__title">
+              <div class="chat-room-list-item__name">
+                <AppText truncate :selectable="false" :text="props.item.title" />
+              </div>
+
             </div>
-            <NmorphBadge
-              v-if="props.item.unreadMessagesQuantity"
-              class="chat-room-list-item__badge"
-              :value="props.item.unreadMessagesQuantity"
-              is-tag
-              size="tiny"
-              color="var(--nmorph-warn-color)"
+          </template>
+          <template #description>
+            <AppText
+              v-if="props.item.description"
+              tag="small"
+              truncate
+              color="semi-contrast-text"
+              :selectable="false"
+              :text="props.item.description"
             />
-          </div>
-        </template>
-        <template #description>
-          <AppText
-            v-if="props.item.description"
-            tag="small"
-            truncate
-            color="semi-contrast-text"
-            :selectable="false"
-            :text="props.item.description"
-          />
-        </template>
-      </AppProfileBasicData>
-    </NmorphCard>
+          </template>
+        </AppProfileBasicData>
+      </NmorphCard>
+    </NmorphBadge>
   </RouterLink>
 </template>
 
