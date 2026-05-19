@@ -70,7 +70,6 @@ const props = defineProps<IChatRoomListItemProps>()
   flex: 1 1 auto;
   gap: 6px;
   align-items: center;
-
   min-width: 0;
 }
 

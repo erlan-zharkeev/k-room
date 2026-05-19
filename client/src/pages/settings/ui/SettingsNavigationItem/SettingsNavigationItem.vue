@@ -2,29 +2,28 @@
 import { NmorphIcon, NmorphCard, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
 import { RouterLink } from 'vue-router'
 
-import { AppHeader } from '../AppHeader'
-import { AppText } from '../AppText'
+import { AppHeader, AppText } from 'src/shared/ui'
 
-import type { IAppContentNavElProps } from './types'
-import { useAppContentNavEl } from './use-app-content-nav-el.model'
+import type { ISettingsNavigationItemProps } from './types'
+import { useSettingsNavigationItem } from './use-settings-navigation-item.model'
 
-const props = defineProps<IAppContentNavElProps>()
-const { buttonClass, showIcon } = useAppContentNavEl(props)
+const props = defineProps<ISettingsNavigationItemProps>()
+const { buttonClass, showIcon } = useSettingsNavigationItem(props)
 </script>
 
 <template>
-  <NmorphCard :shadow-type="props.active && showIcon ? 'inset' : 'outset'" class="app-content-nav-el">
+  <NmorphCard :shadow-type="props.active && showIcon ? 'inset' : 'outset'" class="settings-navigation-item">
     <RouterLink
       :to="props.to"
       :class="buttonClass"
       :aria-current="props.active ? 'page' : undefined"
       :aria-label="props.ariaLabel"
     >
-      <div class="app-content-nav-el__text">
+      <div class="settings-navigation-item__text">
         <AppHeader tag="h5" truncate :selectable="false" :text="props.label" />
         <AppText tag="small" truncate color="semi-contrast-text" :selectable="false" :text="props.description" />
       </div>
-      <div v-if="showIcon" class="app-content-nav-el__icon">
+      <div v-if="showIcon" class="settings-navigation-item__icon">
         <NmorphIcon>
           <NmorphIconArrowRight v-if="props.active" />
           <NmorphIconArrowDown v-else />
@@ -35,8 +34,8 @@ const { buttonClass, showIcon } = useAppContentNavEl(props)
 </template>
 
 <style lang="scss">
-.app-content-nav-el {
-  .app-content-nav-el-btn {
+.settings-navigation-item {
+  .settings-navigation-item-btn {
     display: flex;
     gap: 12px;
     align-items: center;
@@ -46,8 +45,11 @@ const { buttonClass, showIcon } = useAppContentNavEl(props)
   }
 }
 
-.app-content-nav-el__text {
+.settings-navigation-item__text {
   display: grid;
   gap: 6px;
+
+  width: 100%;
+  min-width: 0;
 }
 </style>

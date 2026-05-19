@@ -60,7 +60,7 @@ const {
       >
         <template #title>
           <div class="settings-personal-data-card__profile-title">
-            <AppHeader tag="h5" truncate :selectable="false" :text="displayedNickname" />
+            <AppHeader tag="h5" :selectable="false" :text="displayedNickname" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
