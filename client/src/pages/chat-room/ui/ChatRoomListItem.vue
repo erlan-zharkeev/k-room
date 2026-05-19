@@ -12,13 +12,13 @@ const props = defineProps<IChatRoomListItemProps>()
 <template>
   <RouterLink custom :to="props.item.to" v-slot="{ href, navigate }">
     <NmorphBadge
-      v-if="props.item.unreadMessagesQuantity"
-      class="chat-room-list-item__badge"
+      class="chat-room-list-item-badge"
       :value="props.item.unreadMessagesQuantity"
       size="tiny"
       color="var(--nmorph-warn-color)"
       type="ribbon"
-      >
+      ribbon-corner="bottom-left"
+    >
       <NmorphCard
         tag="a"
         class="chat-room-list-item"
@@ -39,7 +39,6 @@ const props = defineProps<IChatRoomListItemProps>()
               <div class="chat-room-list-item__name">
                 <AppText truncate :selectable="false" :text="props.item.title" />
               </div>
-
             </div>
           </template>
           <template #description>
@@ -70,6 +69,11 @@ const props = defineProps<IChatRoomListItemProps>()
   flex: 1 1 auto;
   gap: 6px;
   align-items: center;
+
   min-width: 0;
+}
+
+.chat-room-list-item-badge.nmorph-badge {
+  --nmorph-badge-ribbon-corner-size: 20px
 }
 </style>
