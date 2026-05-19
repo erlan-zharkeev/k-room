@@ -49,24 +49,37 @@ const {
         </div>
       </div>
     </div>
-    <AppText
-      v-if="isLoading && !hasMessages"
-      alignment="center"
-      color="semi-contrast-text"
-      :selectable="false"
-      :text="$t(CHAT_ROOM_PAGE_I18N.loadingMessages)"
-    />
-    <AppText
-      v-else-if="!hasMessages"
-      alignment="center"
-      color="semi-contrast-text"
-      :selectable="false"
-      :text="$t(CHAT_ROOM_PAGE_I18N.noMessages)"
-    />
+    <div v-if="isLoading && !hasMessages" class="chat-room-messages__empty">
+      <AppText
+        alignment="center"
+        color="semi-contrast-text"
+        :selectable="false"
+        :text="$t(CHAT_ROOM_PAGE_I18N.loadingMessages)"
+      />
+    </div>
+    <div v-else-if="!hasMessages" class="chat-room-messages__empty">
+      <AppText
+        alignment="center"
+        color="semi-contrast-text"
+        :selectable="false"
+        :text="$t(CHAT_ROOM_PAGE_I18N.noMessages)"
+      />
+    </div>
   </NmorphScroll>
 </template>
 
 <style lang="scss">
+.chat-room-messages {
+  position: relative;
+}
+
+.chat-room-messages__empty {
+  @include flex-column-center;
+  @include absolute-center;
+
+  gap: 8px;
+}
+
 .chat-room-messages__virtual {
   display: grid;
   gap: var(--message-virtual-gap);

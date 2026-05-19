@@ -26,6 +26,26 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Chat name',
     zh: 'Chat name'
   },
+  uploadChatImage: {
+    en: 'Upload chat image',
+    ru: 'Upload chat image',
+    zh: 'Upload chat image'
+  },
+  chatImageInvalidFormat: {
+    en: 'Only image files are supported',
+    ru: 'Only image files are supported',
+    zh: 'Only image files are supported'
+  },
+  chatImageInvalidSize: {
+    en: (size: number) => `Chat image must be less than ${size} MB`,
+    ru: (size: number) => `Chat image must be less than ${size} MB`,
+    zh: (size: number) => `Chat image must be less than ${size} MB`
+  },
+  chatImageReadFailed: {
+    en: 'Failed to prepare chat image',
+    ru: 'Failed to prepare chat image',
+    zh: 'Failed to prepare chat image'
+  },
   contactSearch: {
     en: 'Search contacts',
     ru: 'Search contacts',
@@ -36,11 +56,6 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Contacts',
     zh: 'Contacts'
   },
-  selectedContacts: {
-    en: 'Selected',
-    ru: 'Selected',
-    zh: 'Selected'
-  },
   privateChatExists: {
     en: 'Private chat already exists',
     ru: 'Private chat already exists',
@@ -50,6 +65,11 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     en: 'No accepted contacts',
     ru: 'No accepted contacts',
     zh: 'No accepted contacts'
+  },
+  noContactSearchResults: {
+    en: 'No contacts found',
+    ru: 'No contacts found',
+    zh: 'No contacts found'
   },
   noChats: {
     en: 'There are no chats yet',

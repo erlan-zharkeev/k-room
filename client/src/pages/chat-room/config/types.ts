@@ -16,19 +16,17 @@ export interface IChatRoomNavigationItem {
   unreadMessagesQuantity: number
 }
 
-export interface IChatRoomContactPickerItem {
-  id: string
-  title: string
-  imageId: string
-  selected: boolean
-}
-
 export interface IChatRoomListProps {
   items: IChatRoomNavigationItem[]
 }
 
 export interface IChatRoomListItemProps {
   item: IChatRoomNavigationItem
+}
+
+export interface ICreateChatRoomContactItemProps {
+  contactId: string
+  nickname: string
 }
 
 export interface IChatRoomMessagesProps {
