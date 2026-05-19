@@ -70,7 +70,7 @@ const {
 
 .chat-rooms-navigation__toolbar {
   display: grid;
-  gap: 8px;
+  gap: 12px;
   padding: 8px;
 }
 </style>
