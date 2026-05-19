@@ -1,4 +1,6 @@
+import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
+import type { IFrontendContact } from 'global-shared'
 import type { RouteLocationRaw } from 'vue-router'
 
 import type { FChatRoomType } from 'src/shared/lib'
@@ -27,6 +29,32 @@ export interface IChatRoomListItemProps {
 export interface ICreateChatRoomContactItemProps {
   contactId: string
   nickname: string
+}
+
+export interface ICreateChatRoomDialogProps {
+  modelValue: boolean
+  chatAvatarUploadKey: number
+  chatAvatarUploadValue: INmorphCustomFileData[]
+  createChatNameInputValue: string
+  contactSearchQuery: string
+  isCreatingChat: boolean
+  selectedContactIds: string[]
+  acceptedContacts: IFrontendContact[]
+  filteredAcceptedContacts: IFrontendContact[]
+  isGroupChat: boolean
+  canCreateChat: boolean
+  showNoContactSearchResults: boolean
+}
+
+export type CreateChatRoomDialogEmitType = {
+  (event: 'update:model-value', value: boolean): void
+  (event: 'update:create-chat-name', value: string): void
+  (event: 'update:contact-search-query', value: string): void
+  (event: 'update:selected-contact-ids', value: string[]): void
+  (event: 'update:chat-avatar', value: INmorphCustomFileData[]): void
+  (event: 'unsupported-chat-avatar-format'): void
+  (event: 'cancel'): void
+  (event: 'create'): void
 }
 
 export interface IChatRoomMessagesProps {
@@ -73,10 +101,7 @@ export interface IMessageVirtualListMessageItem extends IMessageListMessageItem 
   message: DbMessageType
 }
 
-export type MessageListItemType =
-  | IMessageListLoadOlderItem
-  | IMessageListDateSeparatorItem
-  | IMessageListMessageItem
+export type MessageListItemType = IMessageListLoadOlderItem | IMessageListDateSeparatorItem | IMessageListMessageItem
 
 export type MessageVirtualListItemType =
   | IMessageListLoadOlderItem

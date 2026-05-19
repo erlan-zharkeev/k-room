@@ -81,7 +81,11 @@ describe('fixtures.service', () => {
     userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
     chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
     chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({
-      messages: [...DIRECT_FIXTURE_MESSAGE_IDS, ...FRONTEND_CORE_FIXTURE_MESSAGE_IDS, ...LONG_PRIVATE_FIXTURE_MESSAGE_IDS]
+      messages: [
+        ...DIRECT_FIXTURE_MESSAGE_IDS,
+        ...FRONTEND_CORE_FIXTURE_MESSAGE_IDS,
+        ...LONG_PRIVATE_FIXTURE_MESSAGE_IDS
+      ]
     })
   })
 
