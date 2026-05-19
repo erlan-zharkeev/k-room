@@ -1,7 +1,5 @@
 import type { IDbMedia } from 'src/shared/lib'
-import { db, dexieCollectionStore } from 'src/shared/lib'
-
-import { useLiveMediaUrl } from './use-live-media-url.model'
+import { db, dexieCollectionStore, useLiveMediaUrl } from 'src/shared/lib'
 
 const mediaStore = dexieCollectionStore<IDbMedia>(db.media)
 

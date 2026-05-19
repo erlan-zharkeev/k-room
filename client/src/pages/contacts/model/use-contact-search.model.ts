@@ -5,9 +5,9 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
 import { socket } from 'src/shared/api'
+import { getAvatarId } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS } from '../config/constants'
-import { getContactAvatarId } from '../lib/get-contact-avatar-id'
 
 import { useContactSearchQuery } from './use-contact-search-query.model'
 
@@ -84,7 +84,7 @@ export const useContactSearch = () => {
 
   const syncContactAvatars = (contacts: IFrontendContact[]) => {
     contacts.forEach(({ id }) => {
-      const avatarId = getContactAvatarId(id)
+      const avatarId = getAvatarId(id)
 
       if (syncedAvatarIds.has(avatarId)) return
 

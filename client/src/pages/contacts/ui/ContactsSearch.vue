@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
+import { getAvatarId } from 'src/shared/lib'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { CONTACTS_SEARCH_BADGE_BY_INTERACTION } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactsSearchEmits, IContactsSearchProps } from '../config/types'
-import { getContactAvatarId } from '../lib/get-contact-avatar-id'
 import { useContactSearch } from '../model/use-contact-search.model'
 
 const { loadingContactIds } = defineProps<IContactsSearchProps>()
@@ -42,7 +42,7 @@ const {
             >
               <AppProfileBasicData
                 class="contacts-search__profile"
-                :image-id="getContactAvatarId(contact.id)"
+                :image-id="getAvatarId(contact.id)"
                 :title="contact.nickname"
                 :name="contact.nickname"
               >

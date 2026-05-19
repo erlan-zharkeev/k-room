@@ -55,6 +55,7 @@ const {
       <NmorphTextInput
         :model-value="createChatNameInputValue"
         :disabled="!isGroupChat"
+        clearable
         :placeholder="$t(CHAT_ROOM_PAGE_I18N.chatName)"
         :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.chatName) }"
         @update:model-value="updateCreateChatName"

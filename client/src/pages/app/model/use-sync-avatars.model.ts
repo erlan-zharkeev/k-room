@@ -4,6 +4,7 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
+import { getAvatarId } from 'src/shared/lib'
 
 export const useSyncAvatars = () => {
   const { chatRooms } = useChatRoom()
@@ -15,11 +16,11 @@ export const useSyncAvatars = () => {
     const avatarIds = new Set<string>()
 
     if (user.value.id) {
-      avatarIds.add(`avatar.${user.value.id}`)
+      avatarIds.add(getAvatarId(user.value.id))
     }
 
     contacts.value.forEach(({ id }) => {
-      avatarIds.add(`avatar.${id}`)
+      avatarIds.add(getAvatarId(id))
     })
 
     chatRooms.value.forEach(({ avatarId }) => {

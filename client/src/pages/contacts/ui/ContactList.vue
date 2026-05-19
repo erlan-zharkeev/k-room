@@ -8,12 +8,12 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
+import { getAvatarId } from 'src/shared/lib'
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { IContactListEmits, IContactListProps } from '../config/types'
 import { getContactActivityTagColor } from '../lib/get-contact-activity-tag-color'
-import { getContactAvatarId } from '../lib/get-contact-avatar-id'
 import { getContactStatusTagColor } from '../lib/get-contact-status-tag-color'
 import { hasContactChatRoom } from '../lib/has-contact-chat-room'
 
@@ -42,7 +42,7 @@ const contactChatRoomIdList = computed(() =>
     >
       <AppProfileBasicData
         class="contact-list__profile"
-        :image-id="getContactAvatarId(contact.id)"
+        :image-id="getAvatarId(contact.id)"
         :title="contact.nickname"
         :name="contact.nickname"
       >
