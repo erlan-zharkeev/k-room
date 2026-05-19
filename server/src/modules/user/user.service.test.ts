@@ -108,14 +108,14 @@ describe('user.service', () => {
   it('uploads and deletes user avatar through media bucket helpers', async () => {
     const buffer = Buffer.from('avatar')
 
-    await updateUserAvatar(buffer, 'user-1', 'en')
-    await updateUserAvatar(null, 'user-1', 'en')
+    await updateUserAvatar(buffer, 'user-1')
+    await updateUserAvatar(null, 'user-1')
 
-    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledWith(buffer, 'avatar.user-1', 'avatar', 'en', {
+    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledWith(buffer, 'avatar.user-1', 'avatar', {
       overwrite: true,
       compression: 'avatar'
     })
-    expect(mediaMock.deleteBucketFilesByName).toHaveBeenCalledWith('avatar', 'avatar.user-1', 'en')
+    expect(mediaMock.deleteBucketFilesByName).toHaveBeenCalledWith('avatar', 'avatar.user-1')
   })
 
   it('loads only allowed Google avatar hosts', async () => {
@@ -150,7 +150,7 @@ describe('user.service', () => {
       updateOne
     })
 
-    await service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' }, 'en')
+    await service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' })
 
     expect(userModelMock.UserModel.findOneAndUpdate).toHaveBeenCalledWith(
       { _id: 'user-1' },
@@ -179,7 +179,7 @@ describe('user.service', () => {
       lean: vi.fn().mockResolvedValue(null)
     })
 
-    await service.changeEmail({ userId: 'user-1', email: 'new@test.com', language: 'en' })
+    await service.changeEmail({ userId: 'user-1', email: 'new@test.com' })
 
     expect(userModelMock.UserModel.findOne).toHaveBeenCalledWith({
       _id: { $ne: 'user-1' },

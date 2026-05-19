@@ -2,14 +2,12 @@ import { Injectable } from '@nestjs/common'
 import {
   REQ_STATUS,
   SECURITY_ACTION,
-  type AppLanguageType,
   type IProtectedActionResponsePayload,
   type ProtectedActionReasonType,
   type SecurityActionType
 } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 
 import { CaptchaService } from './captcha.service'
 import {
@@ -87,16 +85,11 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : undefined
   }
 
-  private async requireCaptcha(
-    action: SecurityActionType,
-    language: AppLanguageType,
-    captchaToken: string | undefined,
-    ip: string
-  ) {
+  private async requireCaptcha(action: SecurityActionType, captchaToken: string | undefined, ip: string) {
     if (!captchaToken) {
       throw new AppError(
         REQ_STATUS.forbidden,
-        localizedText(SECURITY_I18N.captchaRequired, language),
+        SECURITY_I18N.captchaRequired,
         false,
         undefined,
         this.buildPayload(action, SECURITY_CAPTCHA_REASON)
@@ -108,7 +101,7 @@ export class SecurityService {
     if (!validated) {
       throw new AppError(
         REQ_STATUS.forbidden,
-        localizedText(SECURITY_I18N.captchaFailed, language),
+        SECURITY_I18N.captchaFailed,
         false,
         undefined,
         this.buildPayload(action, SECURITY_CAPTCHA_REASON)
@@ -116,17 +109,17 @@ export class SecurityService {
     }
   }
 
-  private async blockAction(action: SecurityActionType, language: AppLanguageType, keys: string[]) {
+  private async blockAction(action: SecurityActionType, keys: string[]) {
     throw new AppError(
       REQ_STATUS.tooManyRequests,
-      localizedText(SECURITY_I18N.temporarilyBlocked, language),
+      SECURITY_I18N.temporarilyBlocked,
       false,
       undefined,
       this.buildPayload(action, SECURITY_BLOCK_REASON, await this.getNextTryAt(keys))
     )
   }
 
-  async assertLoginAllowed(captchaToken: string | undefined, ip: string, language: AppLanguageType, login: string) {
+  async assertLoginAllowed(captchaToken: string | undefined, ip: string, login: string) {
     const action = SECURITY_ACTION.login
     const accountKey = this.buildKey(action, 'account', login)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -136,11 +129,11 @@ export class SecurityService {
     ])
 
     if (accountFailures >= LOGIN_BLOCK_ACCOUNT_THRESHOLD || ipFailures >= LOGIN_BLOCK_IP_THRESHOLD) {
-      await this.blockAction(action, language, [accountKey, ipKey])
+      await this.blockAction(action, [accountKey, ipKey])
     }
 
     if (accountFailures >= LOGIN_CAPTCHA_ACCOUNT_THRESHOLD || ipFailures >= LOGIN_CAPTCHA_IP_THRESHOLD) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 
@@ -157,17 +150,17 @@ export class SecurityService {
     await this.redisService.remove(this.buildKey(SECURITY_ACTION.login, 'account', login))
   }
 
-  async assertRegistrationAllowed(captchaToken: string | undefined, ip: string, language: AppLanguageType) {
+  async assertRegistrationAllowed(captchaToken: string | undefined, ip: string) {
     const action = SECURITY_ACTION.registration
     const ipKey = this.buildKey(action, 'ip', ip)
     const ipAttempts = await this.redisService.readNumber(ipKey)
 
     if (ipAttempts >= REGISTRATION_BLOCK_IP_THRESHOLD) {
-      await this.blockAction(action, language, [ipKey])
+      await this.blockAction(action, [ipKey])
     }
 
     if (ipAttempts >= REGISTRATION_CAPTCHA_IP_THRESHOLD) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 
@@ -182,12 +175,7 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : null
   }
 
-  async assertSendConfirmationLinkAllowed(
-    captchaToken: string | undefined,
-    email: string,
-    ip: string,
-    language: AppLanguageType
-  ) {
+  async assertSendConfirmationLinkAllowed(captchaToken: string | undefined, email: string, ip: string) {
     const action = SECURITY_ACTION.sendConfirmationLink
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -200,14 +188,14 @@ export class SecurityService {
       emailAttempts >= SEND_CONFIRMATION_LINK_BLOCK_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_CONFIRMATION_LINK_BLOCK_IP_THRESHOLD
     ) {
-      await this.blockAction(action, language, [emailKey, ipKey])
+      await this.blockAction(action, [emailKey, ipKey])
     }
 
     if (
       emailAttempts >= SEND_CONFIRMATION_LINK_CAPTCHA_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_CONFIRMATION_LINK_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 
@@ -221,12 +209,7 @@ export class SecurityService {
     ])
   }
 
-  async assertSendPasswordRecoveryAllowed(
-    captchaToken: string | undefined,
-    email: string,
-    ip: string,
-    language: AppLanguageType
-  ) {
+  async assertSendPasswordRecoveryAllowed(captchaToken: string | undefined, email: string, ip: string) {
     const action = SECURITY_ACTION.sendPasswordRecoveryCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -239,14 +222,14 @@ export class SecurityService {
       emailAttempts >= SEND_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
     ) {
-      await this.blockAction(action, language, [emailKey, ipKey])
+      await this.blockAction(action, [emailKey, ipKey])
     }
 
     if (
       emailAttempts >= SEND_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 
@@ -266,12 +249,7 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : null
   }
 
-  async assertSendChangeEmailCodeAllowed(
-    captchaToken: string | undefined,
-    email: string,
-    ip: string,
-    language: AppLanguageType
-  ) {
+  async assertSendChangeEmailCodeAllowed(captchaToken: string | undefined, email: string, ip: string) {
     const action = SECURITY_ACTION.sendChangeEmailCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -284,14 +262,14 @@ export class SecurityService {
       emailAttempts >= SEND_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
     ) {
-      await this.blockAction(action, language, [emailKey, ipKey])
+      await this.blockAction(action, [emailKey, ipKey])
     }
 
     if (
       emailAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 
@@ -305,12 +283,7 @@ export class SecurityService {
     ])
   }
 
-  async assertValidateChangeEmailCodeAllowed(
-    captchaToken: string | undefined,
-    email: string,
-    ip: string,
-    language: AppLanguageType
-  ) {
+  async assertValidateChangeEmailCodeAllowed(captchaToken: string | undefined, email: string, ip: string) {
     const action = SECURITY_ACTION.validateChangeEmailCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -323,14 +296,14 @@ export class SecurityService {
       emailFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
       ipFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
     ) {
-      await this.blockAction(action, language, [emailKey, ipKey])
+      await this.blockAction(action, [emailKey, ipKey])
     }
 
     if (
       emailFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
       ipFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 
@@ -364,12 +337,7 @@ export class SecurityService {
     await this.redisService.remove(this.buildChangeEmailCodeKey(userId))
   }
 
-  async assertValidatePasswordRecoveryCodeAllowed(
-    captchaToken: string | undefined,
-    email: string,
-    ip: string,
-    language: AppLanguageType
-  ) {
+  async assertValidatePasswordRecoveryCodeAllowed(captchaToken: string | undefined, email: string, ip: string) {
     const action = SECURITY_ACTION.validatePasswordRecoveryCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -382,14 +350,14 @@ export class SecurityService {
       emailFailures >= VALIDATE_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD ||
       ipFailures >= VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
     ) {
-      await this.blockAction(action, language, [emailKey, ipKey])
+      await this.blockAction(action, [emailKey, ipKey])
     }
 
     if (
       emailFailures >= VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD ||
       ipFailures >= VALIDATE_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, language, captchaToken, ip)
+      await this.requireCaptcha(action, captchaToken, ip)
     }
   }
 

@@ -101,7 +101,7 @@ export const changeMessageStatus = async (
   emitToUsers(room.users, 'message-status-updated', payload)
 }
 
-export const sendMessage = async ({ roomId, message, language }: ISendMessageParams) => {
+export const sendMessage = async ({ roomId, message }: ISendMessageParams) => {
   const filenames: string[] = []
 
   await Promise.all(
@@ -113,7 +113,7 @@ export const sendMessage = async ({ roomId, message, language }: ISendMessagePar
       const filename = `image.${uuidv4()}`
 
       filenames.push(filename)
-      await uploadBufferToBucket(image.fileBuffer, filename, 'image', language, {
+      await uploadBufferToBucket(image.fileBuffer, filename, 'image', {
         compression: message.imageCompression ? 'common-compressed' : 'common-uncompressed'
       })
     })

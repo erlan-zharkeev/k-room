@@ -106,7 +106,6 @@ describe('CodesService', () => {
     expect(emailService.sendPasswordRecoveryEmail).toHaveBeenCalledWith({
       email: 'user@test.com',
       code: '123456',
-      language: 'en',
       nickname: '@tester'
     })
   })
@@ -145,7 +144,6 @@ describe('CodesService', () => {
     expect(emailService.sendChangeEmailCodeEmail).toHaveBeenCalledWith({
       email: 'new@test.com',
       code: '123456',
-      language: 'en',
       nickname: '@tester'
     })
   })
@@ -171,8 +169,7 @@ describe('CodesService', () => {
     expect(result).toEqual({ email: 'new@test.com' })
     expect(userService.changeEmail).toHaveBeenCalledWith({
       userId: 'user-1',
-      email: 'new@test.com',
-      language: 'en'
+      email: 'new@test.com'
     })
     expect(securityService.clearChangeEmailCode).toHaveBeenCalledWith('user-1')
     expect(securityService.clearChangeEmailCodeFailures).toHaveBeenCalledWith('new@test.com')

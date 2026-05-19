@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { CHAT_KIND, type AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'global-shared'
+import { CHAT_KIND, REQ_STATUS } from 'global-shared'
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
@@ -13,7 +13,6 @@ import { USER_I18N } from 'src/modules/user/user.i18n'
 import { UserModel } from 'src/modules/user/user.model'
 import { createUser, isUserExist } from 'src/modules/user/user.service'
 import { AppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
 
 import {
@@ -46,7 +45,7 @@ const USER_BY_NICKNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixt
 const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
 const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''
 
-const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: AppLanguageType) => {
+const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
   const filename = `avatar.${userId}`
   const existingAvatar = await UserModel.db.collection('avatar.files').findOne({ filename })
 
@@ -56,7 +55,7 @@ const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: 
 
   const buffer = await fs.readFile(path.resolve(avatarPath))
 
-  await uploadBufferToBucket(buffer, filename, 'avatar', language, {
+  await uploadBufferToBucket(buffer, filename, 'avatar', {
     overwrite: true,
     compression: 'avatar'
   })
@@ -64,7 +63,7 @@ const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: 
   return true
 }
 
-const loadUserFixture = async (data: IFixtureUserData, language: AppLanguageType) => {
+const loadUserFixture = async (data: IFixtureUserData) => {
   const { id, nickname, email, pass, avatarPath } = data
   const identifier = new Types.ObjectId(id)
   const userExistState = await isUserExist({ id: identifier, nickname, email })
@@ -99,7 +98,7 @@ const loadUserFixture = async (data: IFixtureUserData, language: AppLanguageType
       }
     }
 
-    const avatarLoaded = await ensureAvatarLoaded(id, avatarPath, language)
+    const avatarLoaded = await ensureAvatarLoaded(id, avatarPath)
 
     return avatarLoaded || wasUpdated ? 'updated' : 'skipped'
   }
@@ -112,13 +111,13 @@ const loadUserFixture = async (data: IFixtureUserData, language: AppLanguageType
   }
 
   await user.set('system.confirmed', true).save()
-  await ensureAvatarLoaded(id, avatarPath, language)
+  await ensureAvatarLoaded(id, avatarPath)
 
   return 'created'
 }
 
-const loadUserFixtures = async (language: AppLanguageType = DEFAULT_APP_LANGUAGE) => {
-  const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data, language)))
+const loadUserFixtures = async () => {
+  const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data)))
   const created = results.filter((result) => result === 'created').length
   const updated = results.filter((result) => result === 'updated').length
   const skipped = results.filter((result) => result === 'skipped').length
@@ -129,7 +128,7 @@ const loadUserFixtures = async (language: AppLanguageType = DEFAULT_APP_LANGUAGE
 
 const buildFixtureMessageId = (prefix: string, idx: number) => `${prefix}-${String(idx).padStart(3, '0')}`
 
-const ensureMessageImageLoaded = async (filename: string, imagePath: string, language: AppLanguageType) => {
+const ensureMessageImageLoaded = async (filename: string, imagePath: string) => {
   const existingImage = await UserModel.db.collection('image.files').findOne({ filename })
 
   if (existingImage) {
@@ -138,7 +137,7 @@ const ensureMessageImageLoaded = async (filename: string, imagePath: string, lan
 
   const buffer = await fs.readFile(path.resolve(imagePath))
 
-  await uploadBufferToBucket(buffer, filename, 'image', language, {
+  await uploadBufferToBucket(buffer, filename, 'image', {
     overwrite: true,
     compression: 'common-compressed'
   })
@@ -146,10 +145,8 @@ const ensureMessageImageLoaded = async (filename: string, imagePath: string, lan
   return true
 }
 
-const ensureFixtureMessageImagesLoaded = async (language: AppLanguageType = DEFAULT_APP_LANGUAGE) => {
-  await Promise.all(
-    FIXTURE_MESSAGE_IMAGE_FILES.map((image) => ensureMessageImageLoaded(image.filename, image.path, language))
-  )
+const ensureFixtureMessageImagesLoaded = async () => {
+  await Promise.all(FIXTURE_MESSAGE_IMAGE_FILES.map((image) => ensureMessageImageLoaded(image.filename, image.path)))
 }
 
 const buildFixtureMessageBody = (idx: number) => {
@@ -419,14 +416,14 @@ const ensureMessages = async (roomId: string, fixtureMessages: ReturnType<typeof
 
 const loadDialogFixtures = async () => {
   if (!ERLAN_ID || !TOLIK_ID) {
-    throw new AppError(REQ_STATUS.server, localizedText(USER_I18N.userNotFound, DEFAULT_APP_LANGUAGE))
+    throw new AppError(REQ_STATUS.server, USER_I18N.userNotFound)
   }
 
   await ensureFixtureContacts()
   const directRoom = await ensureDirectRoom()
   const longPrivateFixtureContact = USER_BY_NICKNAME[LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME]
 
-  await ensureFixtureMessageImagesLoaded(DEFAULT_APP_LANGUAGE)
+  await ensureFixtureMessageImagesLoaded()
   await ensureMessages(
     directRoom.id,
     buildFixtureMessages(DIRECT_FIXTURE_MESSAGE_ID_PREFIX, [ERLAN_ID, TOLIK_ID], ['erlan', 'tolik'])
@@ -453,6 +450,6 @@ const loadDialogFixtures = async () => {
 }
 
 export const loadFixtures = async () => {
-  await loadUserFixtures(DEFAULT_APP_LANGUAGE)
+  await loadUserFixtures()
   await loadDialogFixtures()
 }

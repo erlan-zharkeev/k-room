@@ -18,7 +18,6 @@ import {
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { getRequestIp } from 'src/shared/lib/get-request-ip'
-import { localizedText } from 'src/shared/lib/localized-text'
 
 import { EmailService } from '../email/email.service'
 import { SecurityService } from '../security/security.service'
@@ -41,11 +40,10 @@ export class CodesService {
     payload: ISendPasswordRecoveryCodePayload,
     request: Request
   ): Promise<ISendPasswordRecoveryCodeResult> {
-    const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
 
-    await this.securityService.assertSendPasswordRecoveryAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.assertSendPasswordRecoveryAllowed(payload.captchaToken, email, ip)
     await this.securityService.trackSendPasswordRecoveryAttempt(ip, email)
 
     const nowTimestampMs = Date.now()
@@ -88,7 +86,6 @@ export class CodesService {
     await this.emailService.sendPasswordRecoveryEmail({
       email,
       code,
-      language,
       nickname: formatNickname(user.public.nickname)
     })
 
@@ -104,11 +101,10 @@ export class CodesService {
     payload: ISendChangeEmailCodePayload,
     request: Request
   ): Promise<ISendChangeEmailCodeResult> {
-    const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
 
-    await this.securityService.assertSendChangeEmailCodeAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.assertSendChangeEmailCodeAllowed(payload.captchaToken, email, ip)
 
     const nowTimestampMs = Date.now()
     const cooldownUntil = await this.securityService.getSendChangeEmailCodeCooldown(userId)
@@ -120,19 +116,16 @@ export class CodesService {
       }
     }
 
-    const user = await this.userService.requireUser(userId, language)
+    const user = await this.userService.requireUser(userId)
 
     if (email.toLowerCase() === user.personal.email.toLowerCase()) {
-      throw new AppError(
-        REQ_STATUS.badRequest,
-        localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.emailNotChanged, language)
-      )
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_CHANGE_EMAIL_CODE_I18N.emailNotChanged)
     }
 
     const userWithSameEmail = await this.userService.findByEmail(email)
 
     if (userWithSameEmail && String(userWithSameEmail._id) !== userId) {
-      throw new AppError(REQ_STATUS.badRequest, this.userService.getUserExistMessage('email', language))
+      throw new AppError(REQ_STATUS.badRequest, this.userService.getUserExistMessage('email'))
     }
 
     const code = String(randomInt(10 ** (EMAIL_CODE_LENGTH - 1), 10 ** EMAIL_CODE_LENGTH))
@@ -143,7 +136,6 @@ export class CodesService {
     await this.emailService.sendChangeEmailCodeEmail({
       email,
       code,
-      language,
       nickname: formatNickname(user.public.nickname)
     })
 
@@ -159,18 +151,17 @@ export class CodesService {
     payload: IValidateChangeEmailCodePayload,
     request: Request
   ): Promise<IValidateChangeEmailCodeResponse> {
-    const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
     const code = payload.code.trim()
 
-    await this.securityService.assertValidateChangeEmailCodeAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.assertValidateChangeEmailCodeAllowed(payload.captchaToken, email, ip)
 
     const stored = await this.securityService.getChangeEmailCode(userId)
 
     if (!stored) {
       await this.securityService.trackInvalidChangeEmailCode(ip, email)
-      throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.expiredCode, language))
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_CHANGE_EMAIL_CODE_I18N.expiredCode)
     }
 
     let parsed: unknown
@@ -196,10 +187,10 @@ export class CodesService {
         await this.securityService.clearChangeEmailCode(userId)
       }
 
-      throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.invalidCode, language))
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_CHANGE_EMAIL_CODE_I18N.invalidCode)
     }
 
-    await this.userService.changeEmail({ userId, email, language })
+    await this.userService.changeEmail({ userId, email })
     await Promise.all([
       this.securityService.clearChangeEmailCode(userId),
       this.securityService.clearChangeEmailCodeFailures(email)
@@ -214,41 +205,31 @@ export class CodesService {
     payload: ICodeValidationPayload,
     request: Request
   ): Promise<IValidatePasswordRecoveryCodeResponse> {
-    const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
     const code = payload.code.trim()
 
-    await this.securityService.assertValidatePasswordRecoveryCodeAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.assertValidatePasswordRecoveryCodeAllowed(payload.captchaToken, email, ip)
 
     const user = await this.userService.findByEmail(email)
 
     if (!user) {
       await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
-      throw new AppError(
-        REQ_STATUS.badRequest,
-        localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
-      )
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
     }
 
     const codeDoc = await CodeModel.findById(String(user._id))
 
     if (!codeDoc) {
       await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
-      throw new AppError(
-        REQ_STATUS.badRequest,
-        localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
-      )
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
     }
 
     const currentCode = codeDoc.codes.passwordRecovery.email.value
     const currentCodeExpiresAtMs = codeDoc.codes.passwordRecovery.email.expiresAt
 
     if (isCodeExpired(currentCodeExpiresAtMs)) {
-      throw new AppError(
-        REQ_STATUS.badRequest,
-        localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode, language)
-      )
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode)
     }
 
     if (currentCode !== code) {
@@ -265,10 +246,7 @@ export class CodesService {
         })
       }
 
-      throw new AppError(
-        REQ_STATUS.badRequest,
-        localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode, language)
-      )
+      throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
     }
 
     const query = randomUUID()

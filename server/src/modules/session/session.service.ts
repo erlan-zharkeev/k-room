@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { type CookieOptions, type Request, type Response } from 'express'
-import type { AppLanguageType } from 'global-shared'
 import { REQ_STATUS } from 'global-shared'
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
 
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 
 import { UserModel } from '../user/user.model'
 
@@ -44,8 +42,8 @@ export class SessionService {
     }
   }
 
-  getUnauthorizedMessage(language: AppLanguageType) {
-    return localizedText(SESSION_I18N.nonAuthorized, language)
+  getUnauthorizedMessage() {
+    return SESSION_I18N.nonAuthorized
   }
 
   signToken(id: string, secret: string, expiresIn: string | number) {
@@ -78,11 +76,11 @@ export class SessionService {
   }
 
   async validateRefreshRequest(request: Request) {
-    const { language, cookies } = request
+    const { cookies } = request
     const refreshToken = cookies['refresh-jwt']
 
     if (!refreshToken) {
-      throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage(language))
+      throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage())
     }
 
     try {
@@ -92,12 +90,12 @@ export class SessionService {
       const device = deviceId ? user?.system.device[deviceId] : undefined
 
       if (!user || !deviceId || !device || device.refreshToken !== refreshToken) {
-        throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage(language))
+        throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage())
       }
 
       return decoded.id
     } catch {
-      throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage(language))
+      throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage())
     }
   }
 

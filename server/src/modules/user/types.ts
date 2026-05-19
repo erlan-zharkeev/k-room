@@ -68,13 +68,11 @@ export interface ICreateUserParams {
 
 export interface IChangePasswordParams extends IChangePasswordPayload {
   userId: string
-  language: AppLanguageType
 }
 
 export interface IChangeEmailParams {
   userId: string
   email: string
-  language: AppLanguageType
 }
 
 export interface IUpdateUserDataParams {
@@ -82,7 +80,6 @@ export interface IUpdateUserDataParams {
   nickname?: string
   avatarFileBuffer?: Buffer
   resetAvatar?: 'reset' | ''
-  language: AppLanguageType
 }
 
 export interface IUpdateUserDataPayload {

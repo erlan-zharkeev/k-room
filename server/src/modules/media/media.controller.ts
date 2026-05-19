@@ -2,8 +2,7 @@ import { Controller, Get, Query, Req, Res, UseGuards } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 import { MEDIA_ENDPOINTS, type IBackendResponse, REQ_STATUS } from 'global-shared'
 
-import { toAppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
+import { AppError, toAppError } from 'src/shared/lib/app-error'
 
 import { AccessTokenGuard } from '../session/session.guard'
 
@@ -22,20 +21,20 @@ export class MediaController {
     @Query('download') download?: string,
     @Query('revalidate') revalidate?: string
   ) {
-    const { language, params } = request
+    const { params } = request
     const id = String(params.id ?? '')
 
     try {
       if (!id) {
-        throw toAppError(null, localizedText(GET_MEDIA_FILE_I18N.idNotProvideOrNotValid, language), REQ_STATUS.notFound)
+        throw new AppError(REQ_STATUS.notFound, GET_MEDIA_FILE_I18N.idNotProvideOrNotValid)
       }
 
-      await this.mediaService.getMediaFile(id, language, response, {
+      await this.mediaService.getMediaFile(id, response, {
         asAttachment: ['1', 'true', 'yes'].includes(String(download ?? '').toLowerCase()),
         revalidateCache: Boolean(revalidate)
       })
     } catch (error) {
-      throw toAppError(error, localizedText(GET_MEDIA_FILE_I18N.failedToProvideMedia, language))
+      throw toAppError(error, GET_MEDIA_FILE_I18N.failedToProvideMedia)
     }
   }
 }

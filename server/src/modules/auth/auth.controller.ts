@@ -55,7 +55,7 @@ export class AuthController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(AUTH_I18N.loginFailed, language))
+      throw toAppError(error, AUTH_I18N.loginFailed)
     }
   }
 
@@ -79,7 +79,7 @@ export class AuthController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(AUTH_I18N.registrationFailed, language))
+      throw toAppError(error, AUTH_I18N.registrationFailed)
     }
   }
 
@@ -93,7 +93,7 @@ export class AuthController {
 
     try {
       runRequestValidation(request, CONFIRM_EMAIL_VALIDATION)
-      const result = await this.authService.confirmEmail(token, language)
+      const result = await this.authService.confirmEmail(token)
 
       return response.json({
         payload: {
@@ -108,7 +108,7 @@ export class AuthController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(AUTH_I18N.emailConfirmationFailed, language))
+      throw toAppError(error, AUTH_I18N.emailConfirmationFailed)
     }
   }
 
@@ -139,7 +139,7 @@ export class AuthController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(AUTH_I18N.sendConfirmationLinkFailed, language))
+      throw toAppError(error, AUTH_I18N.sendConfirmationLinkFailed)
     }
   }
 
@@ -163,7 +163,7 @@ export class AuthController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(AUTH_I18N.signInWithProviderFailed, language))
+      throw toAppError(error, AUTH_I18N.signInWithProviderFailed)
     }
   }
 
@@ -173,7 +173,7 @@ export class AuthController {
     const { language, authUserId: userId } = request
 
     if (!userId) {
-      throw toAppError(null, this.sessionService.getUnauthorizedMessage(language), 401)
+      throw toAppError(null, this.sessionService.getUnauthorizedMessage(), 401)
     }
 
     await this.sessionService.updateTokens(userId, request, response)
@@ -194,7 +194,7 @@ export class AuthController {
 
     try {
       if (!userId) {
-        throw toAppError(null, this.sessionService.getUnauthorizedMessage(language), 401)
+        throw toAppError(null, this.sessionService.getUnauthorizedMessage(), 401)
       }
 
       await this.sessionService.clearSession(userId, request, response)
@@ -207,7 +207,7 @@ export class AuthController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(AUTH_I18N.logoutFailed, language))
+      throw toAppError(error, AUTH_I18N.logoutFailed)
     }
   }
 }

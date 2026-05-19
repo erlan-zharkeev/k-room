@@ -33,10 +33,10 @@ export class UserController {
     const { language, authUserId: userId } = request
 
     if (!userId) {
-      throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
+      throw new AppError(401, this.sessionService.getUnauthorizedMessage())
     }
 
-    const user = await this.userService.requireUser(userId, language)
+    const user = await this.userService.requireUser(userId)
     await this.sessionService.updateTokens(userId, request, response)
 
     return response.json({
@@ -58,7 +58,7 @@ export class UserController {
 
     try {
       runRequestValidation(request, RESET_PASSWORD_VALIDATION)
-      await this.userService.resetPassword(payload, language)
+      await this.userService.resetPassword(payload)
 
       return response.json({
         payload: null,
@@ -68,7 +68,7 @@ export class UserController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(RESET_PASSWORD_I18N.failed, language))
+      throw toAppError(error, RESET_PASSWORD_I18N.failed)
     }
   }
 
@@ -92,7 +92,7 @@ export class UserController {
 
     try {
       if (!userId) {
-        throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
+        throw new AppError(401, this.sessionService.getUnauthorizedMessage())
       }
 
       runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
@@ -100,8 +100,7 @@ export class UserController {
         userId,
         nickname: payload?.nickname,
         avatarFileBuffer: file?.buffer,
-        resetAvatar: payload?.['reset-avatar'],
-        language
+        resetAvatar: payload?.['reset-avatar']
       })
 
       return response.json({
@@ -112,7 +111,7 @@ export class UserController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(UPDATE_USER_DATA_I18N.failedUpdate, language))
+      throw toAppError(error, UPDATE_USER_DATA_I18N.failedUpdate)
     }
   }
 
@@ -127,15 +126,14 @@ export class UserController {
 
     try {
       if (!userId) {
-        throw new AppError(401, this.sessionService.getUnauthorizedMessage(language))
+        throw new AppError(401, this.sessionService.getUnauthorizedMessage())
       }
 
       runRequestValidation(request, CHANGE_PASSWORD_VALIDATION)
       await this.userService.changePassword({
         userId,
         currentPassword: payload.currentPassword,
-        password: payload.password,
-        language
+        password: payload.password
       })
 
       return response.json({
@@ -146,7 +144,7 @@ export class UserController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(CHANGE_PASSWORD_I18N.failed, language))
+      throw toAppError(error, CHANGE_PASSWORD_I18N.failed)
     }
   }
 }
