@@ -5,9 +5,9 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
 import { socket } from 'src/shared/api'
-import { getAvatarId } from 'src/shared/lib'
+import { getAvatarId, useI18n } from 'src/shared/lib'
 
-import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS } from '../config/constants'
+import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS, CONTACTS_SEARCH_BADGE_BY_INTERACTION } from '../config/constants'
 
 import { useContactSearchQuery } from './use-contact-search-query.model'
 
@@ -15,6 +15,7 @@ export const useContactSearch = () => {
   const { searchQuery } = useContactSearchQuery()
   const { mergeMany, isExist } = useContact()
   const { sync } = useSyncMedia()
+  const { t } = useI18n()
   const syncedAvatarIds = new Set<string>()
   const searchedContacts = ref<IFrontendContact[]>([])
   const searchHasMore = ref(false)
@@ -67,6 +68,17 @@ export const useContactSearch = () => {
     isSearchLoadingMore.value = true
     fetchContacts(searchValue.value, searchNextOffset.value)
   }
+
+  const getSearchedContactStatus = ({ interactionType }: IFrontendContact) => {
+    const badge = CONTACTS_SEARCH_BADGE_BY_INTERACTION[interactionType]
+
+    if (!badge.visible) return ''
+
+    return t(badge.label)
+  }
+
+  const getSearchedContactStatusColor = ({ interactionType }: IFrontendContact) =>
+    CONTACTS_SEARCH_BADGE_BY_INTERACTION[interactionType].color
 
   const syncSavedContacts = async (contacts: IFrontendContact[]) => {
     const savedContacts = contacts.filter(({ interactionType }) => interactionType !== 'default')
@@ -126,6 +138,8 @@ export const useContactSearch = () => {
     searchHasMore,
     isSearchLoading,
     isSearchLoadingMore,
+    getSearchedContactStatus,
+    getSearchedContactStatusColor,
     loadMoreSearchedContacts
   }
 }
