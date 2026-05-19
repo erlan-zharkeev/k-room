@@ -4,11 +4,6 @@ export type MediaQueueTaskType = () => Promise<void>
 export type MediaHeadersType = Partial<Pick<IDbMedia, 'etag'>>
 export type MediaSyncTaskType = () => Promise<void>
 
-export type MediaUrlCacheValueType = {
-  refs: number
-  url: string
-}
-
 export interface ISyncMediaDeps {
   mediaGet: (filename: string) => Promise<IDbMedia | undefined>
   putMedia: (data: IDbMedia) => Promise<void>

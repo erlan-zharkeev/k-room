@@ -32,6 +32,7 @@ export {
   isFormFieldInvalid,
   getNmorphGeneratedColorSchema
 } from './misc/misc'
+export { acquireUrl, getAvatarId, releaseUrl, useLiveMediaUrl } from './media/media'
 export { useI18n } from './i18n/i18n'
 export { CLIENT_LANGUAGE, I18N_KEY } from './i18n/constants'
 export {
