@@ -5,16 +5,14 @@ import { AppNavigation } from 'src/features/app-navigation'
 </script>
 
 <template>
-  <NmorphCard tag="footer" class="mobile-nav-footer">
+  <NmorphCard tag="footer" class="mobile-nav-footer" content-class="mobile-nav-footer__content">
     <AppNavigation footer />
   </NmorphCard>
 </template>
 
 <style lang="scss">
-.mobile-nav-footer {
-  .nmorph-card__content {
-    display: flex;
-    justify-content: center;
-  }
+.mobile-nav-footer__content {
+  display: flex;
+  justify-content: center;
 }
 </style>
