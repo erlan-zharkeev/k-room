@@ -20,6 +20,14 @@ export const useChatRoomsList = () => {
   const searchQuery = ref('')
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
 
+  const getRoomFallbackActivityAt = (roomId: string) => {
+    const objectIdTimestamp = roomId.slice(0, 8)
+
+    if (!/^[\da-f]{8}$/i.test(objectIdTimestamp)) return 0
+
+    return Number.parseInt(objectIdTimestamp, 16) * 1000
+  }
+
   const buildChatRoomRoute = (roomId: string) => {
     const query = isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
 
@@ -45,7 +53,7 @@ export const useChatRoomsList = () => {
         imageId: room.avatarId,
         online: Boolean(privateContact?.online),
         selected: route.params.chatRoomId === room.id,
-        lastMessageCreatedAt: lastMessage?.createdAt ?? 0,
+        lastMessageCreatedAt: lastMessage?.createdAt ?? getRoomFallbackActivityAt(room.id),
         unreadMessagesQuantity: room.unreadMessagesQuantity ?? 0
       }
     })
