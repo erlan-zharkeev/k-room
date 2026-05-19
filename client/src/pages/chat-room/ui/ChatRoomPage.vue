@@ -55,7 +55,6 @@ const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomPage()
   }
 }
 
-
 .chat-room-page__messages,
 .chat-room-page__stub {
   flex: 1 1 auto;
