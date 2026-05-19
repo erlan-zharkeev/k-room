@@ -43,22 +43,24 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
           roomData.chatName = chatName
         }
 
-        if (avatarFile?.fileBuffer) {
-          await uploadBufferToBucket(avatarFile.fileBuffer, `avatar.${userId}`, 'avatar', {
+        const room = new ChatRoomModel(roomData)
+        const roomId = String(room._id)
+
+        if (roomData.chatKind === CHAT_KIND.GROUP && avatarFile?.fileBuffer) {
+          await uploadBufferToBucket(avatarFile.fileBuffer, `avatar.${roomId}`, 'avatar', {
             compression: 'avatar',
             overwrite: true
           })
         }
 
-        const room = await new ChatRoomModel(roomData).save()
-
-        await setRoomToUsers(String(room._id), users)
+        await room.save()
+        await setRoomToUsers(roomId, users)
         await emitNewRoomToUsers(users, room.toObject())
         await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
         return {
           ok: true,
-          payload: { roomId: String(room._id) }
+          payload: { roomId }
         }
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
