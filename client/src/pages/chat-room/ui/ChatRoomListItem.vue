@@ -70,10 +70,11 @@ const props = defineProps<IChatRoomListItemProps>()
   flex: 1 1 auto;
   gap: 6px;
   align-items: center;
+
   min-width: 0;
 }
 
 .chat-room-list-item-badge.nmorph-badge {
-  --nmorph-badge-ribbon-corner-size: 20px
+  --nmorph-badge-ribbon-corner-size: 20px;
 }
 </style>

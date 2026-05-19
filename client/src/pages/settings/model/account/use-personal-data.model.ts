@@ -12,8 +12,7 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { useHttp } from 'src/shared/api'
-import { useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib'
+import { revokeObjectUrl, revokeObjectUrls, useAppToast, useI18n } from 'src/shared/lib'
 
 import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants/account.constants'
 import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../config/i18n/account-personal-data.i18n'
@@ -29,10 +28,10 @@ export const usePersonalData = () => {
     nickname: { value: '', rules: [] }
   })
   const accountAvatarFile = ref<File>()
+  const accountAvatarUploadValue = ref<NmorphCustomFileData[]>([])
   const accountAvatarPreviewUrl = ref('')
   const accountAvatarWasReset = ref(false)
   const isAccountSaving = ref(false)
-  const avatarUploadKey = ref(0)
   const accountNicknameSchema = createUpdateUserDataSchema(createValidationMessages(t))
 
   let accountAvatarPreviewObjectUrl: string | undefined
@@ -63,46 +62,52 @@ export const usePersonalData = () => {
   const clearAccountAvatarPreview = () => {
     if (!accountAvatarPreviewObjectUrl) return
 
-    URL.revokeObjectURL(accountAvatarPreviewObjectUrl)
+    revokeObjectUrl(accountAvatarPreviewObjectUrl)
     accountAvatarPreviewObjectUrl = undefined
     accountAvatarPreviewUrl.value = ''
   }
 
-  const resetAvatarUpload = () => {
-    avatarUploadKey.value += 1
+  const clearAccountAvatarUploadValue = () => {
+    revokeObjectUrls(accountAvatarUploadValue.value.map(({ previewUrl }) => previewUrl))
+    accountAvatarUploadValue.value = []
   }
 
   const uploadAccountAvatar = (files: NmorphCustomFileData[]) => {
-    const file = files[files.length - 1]?.data
+    const uploadedFile = files[files.length - 1]
+    const file = uploadedFile?.data
 
     if (!file) {
+      clearAccountAvatarUploadValue()
       accountAvatarFile.value = undefined
       accountAvatarWasReset.value = false
       clearAccountAvatarPreview()
-      resetAvatarUpload()
 
       return
     }
 
     if (file.size > SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE) {
-      resetAvatarUpload()
+      revokeObjectUrl(uploadedFile.previewUrl)
+      clearAccountAvatarUploadValue()
 
       return
     }
 
+    accountAvatarUploadValue.value
+      .filter(({ previewUrl }) => previewUrl !== uploadedFile.previewUrl)
+      .forEach(({ previewUrl }) => revokeObjectUrl(previewUrl))
+    accountAvatarUploadValue.value = [uploadedFile]
     clearAccountAvatarPreview()
     accountAvatarFile.value = file
     accountAvatarWasReset.value = false
     accountAvatarPreviewObjectUrl = URL.createObjectURL(file)
     accountAvatarPreviewUrl.value = accountAvatarPreviewObjectUrl
-    resetAvatarUpload()
   }
 
   const resetAccountAvatar = () => {
+    clearAccountAvatarUploadValue()
     accountAvatarFile.value = undefined
     accountAvatarWasReset.value = true
     clearAccountAvatarPreview()
-    resetAvatarUpload()
   }
 
   const copyUserId = async () => {
@@ -167,8 +172,8 @@ export const usePersonalData = () => {
 
       accountAvatarFile.value = undefined
       accountAvatarWasReset.value = false
+      clearAccountAvatarUploadValue()
       clearAccountAvatarPreview()
-      resetAvatarUpload()
     } finally {
       isAccountSaving.value = false
     }
@@ -182,11 +187,15 @@ export const usePersonalData = () => {
     { immediate: true }
   )
 
-  onBeforeUnmount(clearAccountAvatarPreview)
+  onBeforeUnmount(() => {
+    clearAccountAvatarUploadValue()
+    clearAccountAvatarPreview()
+  })
 
   return {
     user,
     formData,
+    accountAvatarUploadValue,
     accountAvatarPreviewUrl,
     displayedAvatarId,
     displayedNickname,
@@ -194,7 +203,6 @@ export const usePersonalData = () => {
     accountNicknameError,
     isAccountSaveDisabled,
     isAccountSaving,
-    avatarUploadKey,
     copyUserId,
     copyUserNickname,
     resetAccountAvatar,

@@ -114,7 +114,6 @@ const {
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
-
 }
 
 .contacts-search__name {

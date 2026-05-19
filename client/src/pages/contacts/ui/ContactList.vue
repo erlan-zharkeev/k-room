@@ -46,11 +46,7 @@ const contactChatRoomIdList = computed(() =>
       :offset-y="4"
       :color="getContactStatusTagColor(contact)"
     >
-      <NmorphCard
-        class="contact-list__item"
-        content-class="contact-list__item-content"
-        shadow-type="inset"
-      >
+      <NmorphCard class="contact-list__item" content-class="contact-list__item-content" shadow-type="inset">
         <AppProfileBasicData
           class="contact-list__profile"
           :image-id="getAvatarId(contact.id)"

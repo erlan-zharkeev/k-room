@@ -9,6 +9,9 @@ export const useContact = () => {
   const { bulkPut, get, mergeMany, put, remove, reset, update } = contactStore
   const contacts = contactStore.use()
   const contactMap = computed(() => new Map(contacts.value.map((contact) => [contact.id, contact])))
+  const acceptedContacts = computed(() =>
+    contacts.value.filter(({ interactionType }) => interactionType === 'invite-accepted')
+  )
   const invitationsQuantity = computed(
     () => contacts.value.filter(({ interactionType }) => interactionType === 'invite-received').length
   )
@@ -18,6 +21,7 @@ export const useContact = () => {
 
   return {
     contacts,
+    acceptedContacts,
     invitationsQuantity,
     isExist,
     getByIds,
