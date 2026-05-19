@@ -19,9 +19,7 @@ export const runRequestValidation = (
     return
   }
 
-  const message =
-    result.issues.find((issue) => Boolean(getDotPath(issue)))?.message ??
-    localizedText(SHARED_I18N.commonServerError, language)
+  const message = result.issues.find((issue) => Boolean(getDotPath(issue)))?.message ?? SHARED_I18N.commonServerError
 
   throw new AppError(REQ_STATUS.badRequest, message, false)
 }

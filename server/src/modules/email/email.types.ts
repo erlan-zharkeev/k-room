@@ -1,5 +1,3 @@
-import type { AppLanguageType } from 'global-shared'
-
 export interface IRenderEmailConfirmationHtmlParams {
   appName: string
   confirmUrl: string
@@ -8,7 +6,6 @@ export interface IRenderEmailConfirmationHtmlParams {
 
 export interface ISendEmailConfirmationEmailPayload {
   email: string
-  language: AppLanguageType
   token: string
   nickname?: string
 }
@@ -16,6 +13,5 @@ export interface ISendEmailConfirmationEmailPayload {
 export interface ISendEmailCodeEmailPayload {
   email: string
   code: string
-  language: AppLanguageType
   nickname?: string
 }

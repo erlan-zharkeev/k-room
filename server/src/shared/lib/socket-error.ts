@@ -52,7 +52,7 @@ export const socketErrorMiddleware =
       await handler(payload)
     } catch (error) {
       if (isAppError(error)) {
-        return throwSocketError(socket.id, error.message, {
+        return throwSocketError(socket.id, error.messageSource, {
           status: error.status,
           silent: error.silent,
           cause: error.cause
@@ -85,7 +85,7 @@ export const socketAckMiddleware =
       ack?.(response ?? ({ ok: true } as SocketAckResponseType<TResponsePayload, TReason>))
     } catch (error) {
       if (isAppError(error)) {
-        throwSocketError(socket.id, error.message, {
+        throwSocketError(socket.id, error.messageSource, {
           status: error.status,
           silent: error.silent,
           cause: error.cause

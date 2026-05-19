@@ -27,7 +27,7 @@ describe('messages.socket', () => {
     ioMock.to.mockReturnValue({ emit: ioMock.emit })
   })
 
-  it('wires send-message payload to service with socket language', async () => {
+  it('wires send-message payload to service', async () => {
     const handlers: Record<string, (payload: never) => Promise<void>> = {}
     const socket = {
       id: 'socket-1',
@@ -58,8 +58,7 @@ describe('messages.socket', () => {
 
     expect(messagesServiceMock.sendMessage).toHaveBeenCalledWith({
       roomId: 'room-1',
-      message: expect.objectContaining({ id: 'message-1' }),
-      language: 'ru'
+      message: expect.objectContaining({ id: 'message-1' })
     })
   })
 

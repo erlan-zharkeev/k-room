@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 
 import { Injectable } from '@nestjs/common'
 import fileTypeDep from 'file-type'
-import { type AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'global-shared'
+import { MEDIA_MB_IN_BYTES, REQ_STATUS } from 'global-shared'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 import mongoose from 'mongoose'
@@ -78,26 +78,28 @@ const processImageWithSharp = async (input: Buffer, presetKey: IUploadOptions['c
     .toBuffer()
 }
 
-const getRequiredBucket = (bucketName: MediaBucketNameType, language: AppLanguageType = DEFAULT_APP_LANGUAGE) => {
+const getResponseLanguage = (response: import('express').Response) => response.req.language
+
+const getRequiredBucket = (bucketName: MediaBucketNameType) => {
   const bucket = mediaBuckets[bucketName]
 
   if (!bucket) {
-    throw new AppError(REQ_STATUS.notFound, localizedText(COMMON_MEDIA_I18N.failedToFindBucket, language))
+    throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.failedToFindBucket)
   }
 
   return bucket
 }
 
-const validateFileMetaData = (fileData: IFileData, bucketName: MediaBucketNameType, language: AppLanguageType) => {
+const validateFileMetaData = (fileData: IFileData, bucketName: MediaBucketNameType) => {
   const { maxMb, supportedKindMediaType } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
-  const maxBytes = maxMb * 1024 * 1024
+  const maxBytes = maxMb * MEDIA_MB_IN_BYTES
 
   if (fileData.metadata.size > maxBytes) {
-    throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge, language))
+    throw new AppError(REQ_STATUS.badRequest, VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge)
   }
 
   if (fileData.metadata.kind !== supportedKindMediaType) {
-    throw new AppError(REQ_STATUS.badRequest, localizedText(VALIDATE_MEDIA_FILE_I18N.extNotSupported, language))
+    throw new AppError(REQ_STATUS.badRequest, VALIDATE_MEDIA_FILE_I18N.extNotSupported)
   }
 }
 
@@ -113,12 +115,8 @@ export const initMediaBuckets = () => {
   })
 }
 
-export const deleteBucketFilesByName = async (
-  bucketName: MediaBucketNameType,
-  filename: string,
-  language: AppLanguageType = DEFAULT_APP_LANGUAGE
-) => {
-  const bucket = getRequiredBucket(bucketName, language)
+export const deleteBucketFilesByName = async (bucketName: MediaBucketNameType, filename: string) => {
+  const bucket = getRequiredBucket(bucketName)
   const existing = await bucket.find({ filename }).toArray()
 
   if (!existing.length) {
@@ -132,11 +130,10 @@ export const uploadBufferToBucket = async (
   buffer: Buffer | ArrayBuffer,
   filename: string,
   bucketName: MediaBucketNameType,
-  language: AppLanguageType,
   options?: IUploadOptions
 ) => {
   try {
-    const bucket = getRequiredBucket(bucketName, language)
+    const bucket = getRequiredBucket(bucketName)
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
     const outputBuffer =
       bucketName === 'avatar' || bucketName === 'image'
@@ -144,18 +141,15 @@ export const uploadBufferToBucket = async (
         : normalizedBuffer
     const fileData = await buildFileData(outputBuffer, filename)
 
-    validateFileMetaData(fileData, bucketName, language)
+    validateFileMetaData(fileData, bucketName)
 
     if (options?.overwrite) {
-      await deleteBucketFilesByName(bucketName, fileData.filename, language)
+      await deleteBucketFilesByName(bucketName, fileData.filename)
     } else {
       const existing = await bucket.find({ filename: fileData.filename }).toArray()
 
       if (existing.length) {
-        throw new AppError(
-          REQ_STATUS.server,
-          localizedText(VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists, language)
-        )
+        throw new AppError(REQ_STATUS.server, VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists)
       }
     }
 
@@ -174,7 +168,7 @@ export const uploadBufferToBucket = async (
       throw error
     }
 
-    throw new AppError(REQ_STATUS.server, localizedText(VALIDATE_MEDIA_FILE_I18N.uploadFailed, language), false, error)
+    throw new AppError(REQ_STATUS.server, VALIDATE_MEDIA_FILE_I18N.uploadFailed, false, error)
   }
 }
 
@@ -182,16 +176,15 @@ export const streamMediaFile = async (
   bucketName: MediaBucketNameType,
   id: string,
   response: import('express').Response,
-  language: AppLanguageType,
   options?: IStreamMediaFileOptions
 ) => {
   try {
-    const bucket = getRequiredBucket(bucketName, language)
+    const bucket = getRequiredBucket(bucketName)
     const filename = `${bucketName}.${id}`
     const file = await bucket.find({ filename }).next()
 
     if (!file) {
-      throw new AppError(REQ_STATUS.notFound, localizedText(COMMON_MEDIA_I18N.fileNotFound, language), true)
+      throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound, true)
     }
 
     response.setHeader('Content-Type', file.contentType ?? 'application/octet-stream')
@@ -218,7 +211,7 @@ export const streamMediaFile = async (
           response.status(REQ_STATUS.notFound).json({
             payload: null,
             message: {
-              text: localizedText(COMMON_MEDIA_I18N.fileNotFound, language),
+              text: localizedText(COMMON_MEDIA_I18N.fileNotFound, getResponseLanguage(response)),
               silent: false
             }
           })
@@ -230,24 +223,19 @@ export const streamMediaFile = async (
       throw error
     }
 
-    throw new AppError(REQ_STATUS.server, localizedText(COMMON_MEDIA_I18N.failedToStreamFile, language), false, error)
+    throw new AppError(REQ_STATUS.server, COMMON_MEDIA_I18N.failedToStreamFile, false, error)
   }
 }
 
 @Injectable()
 export class MediaService {
-  async getMediaFile(
-    idParam: string,
-    language: AppLanguageType,
-    response: import('express').Response,
-    options?: IStreamMediaFileOptions
-  ) {
+  async getMediaFile(idParam: string, response: import('express').Response, options?: IStreamMediaFileOptions) {
     const [bucketName, id] = idParam.split('.', 2)
 
     if (!bucketName || !id) {
-      throw new AppError(REQ_STATUS.notFound, localizedText(COMMON_MEDIA_I18N.fileNotFound, language))
+      throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound)
     }
 
-    await streamMediaFile(bucketName as MediaBucketNameType, id, response, language, options)
+    await streamMediaFile(bucketName as MediaBucketNameType, id, response, options)
   }
 }

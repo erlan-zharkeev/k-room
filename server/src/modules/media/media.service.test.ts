@@ -83,7 +83,7 @@ describe('media.service', () => {
   })
 
   it('overwrites existing avatar file and stores processed image metadata', async () => {
-    const result = await mediaService.uploadBufferToBucket(Buffer.from('raw'), 'avatar.user-1', 'avatar', 'en', {
+    const result = await mediaService.uploadBufferToBucket(Buffer.from('raw'), 'avatar.user-1', 'avatar', {
       overwrite: true,
       compression: 'avatar'
     })
@@ -108,9 +108,9 @@ describe('media.service', () => {
     fileTypeMock.fromBuffer.mockResolvedValue(null)
     mimeLookupMock.mockReturnValue('text/plain')
 
-    await expect(
-      mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image.bad.txt', 'image', 'en')
-    ).rejects.toMatchObject({ status: 400 })
+    await expect(mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image.bad.txt', 'image')).rejects.toMatchObject(
+      { status: 400 }
+    )
 
     expect(mongooseMock.bucket.openUploadStream).not.toHaveBeenCalled()
   })

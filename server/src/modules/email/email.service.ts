@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common'
-import { ROUTE_NAMES, type AppLanguageType, REQ_STATUS } from 'global-shared'
+import { ROUTE_NAMES, REQ_STATUS } from 'global-shared'
 import { Resend } from 'resend'
 
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
 
 import { EMAIL_I18N } from './email.i18n'
@@ -19,7 +18,7 @@ export class EmailService {
     return SERVER_ENV.info.appName
   }
 
-  private createResendClient(language: AppLanguageType) {
+  private createResendClient() {
     if (resendClient) {
       return resendClient
     }
@@ -29,7 +28,7 @@ export class EmailService {
         return null
       }
 
-      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.resendApiKeyMissing, language))
+      throw new AppError(REQ_STATUS.server, EMAIL_I18N.resendApiKeyMissing)
     }
 
     resendClient = new Resend(SERVER_ENV.secret.resendApiKey)
@@ -44,16 +43,16 @@ export class EmailService {
     return confirmUrl.toString()
   }
 
-  async sendEmailConfirmationEmail({ email, language, token, nickname }: ISendEmailConfirmationEmailPayload) {
+  async sendEmailConfirmationEmail({ email, token, nickname }: ISendEmailConfirmationEmailPayload) {
     if (!email) {
-      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
+      throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
 
     if (!token) {
-      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailConfirmationTokenMissing, language))
+      throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailConfirmationTokenMissing)
     }
 
-    const resend = this.createResendClient(language)
+    const resend = this.createResendClient()
     const confirmUrl = this.buildEmailConfirmationLink(token)
 
     if (!resend) {
@@ -81,12 +80,12 @@ export class EmailService {
     return data
   }
 
-  async sendPasswordRecoveryEmail({ email, code, language, nickname }: ISendEmailCodeEmailPayload) {
+  async sendPasswordRecoveryEmail({ email, code, nickname }: ISendEmailCodeEmailPayload) {
     if (!email) {
-      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
+      throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
 
-    const resend = this.createResendClient(language)
+    const resend = this.createResendClient()
     const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
         <h2>Password recovery</h2>
@@ -118,12 +117,12 @@ export class EmailService {
     return data
   }
 
-  async sendChangeEmailCodeEmail({ email, code, language, nickname }: ISendEmailCodeEmailPayload) {
+  async sendChangeEmailCodeEmail({ email, code, nickname }: ISendEmailCodeEmailPayload) {
     if (!email) {
-      throw new AppError(REQ_STATUS.server, localizedText(EMAIL_I18N.emailRecipientMissing, language))
+      throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
 
-    const resend = this.createResendClient(language)
+    const resend = this.createResendClient()
     const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
         <h2>Email change</h2>

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
-  type AppLanguageType,
   type IFrontendContact,
   type IFrontendUserData,
   type InteractionType,
@@ -12,7 +11,6 @@ import {
 } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 
 import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
@@ -157,15 +155,15 @@ export const loadGoogleAvatar = async (avatar: string) => {
   }
 }
 
-export const updateUserAvatar = async (buffer: Buffer | null, userId: string, language: AppLanguageType) => {
+export const updateUserAvatar = async (buffer: Buffer | null, userId: string) => {
   const filename = `avatar.${userId}`
 
   if (buffer === null) {
-    await deleteBucketFilesByName('avatar', filename, language)
+    await deleteBucketFilesByName('avatar', filename)
     return
   }
 
-  await uploadBufferToBucket(buffer, filename, 'avatar', language, {
+  await uploadBufferToBucket(buffer, filename, 'avatar', {
     overwrite: true,
     compression: 'avatar'
   })
@@ -205,44 +203,44 @@ export class UserService {
     return createUser({ id, email, nickname, hashedPassword, provider })
   }
 
-  getUserExistMessage(reason: IUserExistState['reason'], language: AppLanguageType) {
+  getUserExistMessage(reason: IUserExistState['reason']) {
     switch (reason) {
       case 'nickname':
-        return localizedText(USER_I18N.userWithCurrentNameAlreadyExist, language)
+        return USER_I18N.userWithCurrentNameAlreadyExist
       case 'email':
-        return localizedText(USER_I18N.userWithCurrentEmailAlreadyExist, language)
+        return USER_I18N.userWithCurrentEmailAlreadyExist
       case 'id':
-        return localizedText(USER_I18N.userWithCurrentIdAlreadyExist, language)
+        return USER_I18N.userWithCurrentIdAlreadyExist
       default:
-        return localizedText(USER_I18N.userNotFound, language)
+        return USER_I18N.userNotFound
     }
   }
 
-  async requireUser(userId: string, language: AppLanguageType) {
+  async requireUser(userId: string) {
     const user = await this.findById(userId)
 
     if (!user) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(USER_I18N.userNotFound, language))
+      throw new AppError(REQ_STATUS.badRequest, USER_I18N.userNotFound)
     }
 
     return user
   }
 
-  async resetPassword({ codeToValidate, password }: ICreateNewPasswordPayload, language: AppLanguageType) {
+  async resetPassword({ codeToValidate, password }: ICreateNewPasswordPayload) {
     const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
 
     if (!code) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(RESET_PASSWORD_I18N.failed, language))
+      throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.failed)
     }
 
     const { value, expiresAt } = code.codes.passwordRecovery.query
 
     if (isCodeExpired(expiresAt)) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(RESET_PASSWORD_I18N.codeExpired, language))
+      throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.codeExpired)
     }
 
     if (value !== codeToValidate) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(RESET_PASSWORD_I18N.codeNotValid, language))
+      throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.codeNotValid)
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -259,12 +257,12 @@ export class UserService {
     })
   }
 
-  async changePassword({ userId, currentPassword, password, language }: IChangePasswordParams) {
-    const user = await this.requireUser(userId, language)
+  async changePassword({ userId, currentPassword, password }: IChangePasswordParams) {
+    const user = await this.requireUser(userId)
     const passwordIsValid = await bcrypt.compare(currentPassword, user.system.password)
 
     if (!passwordIsValid) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(CHANGE_PASSWORD_I18N.currentPasswordInvalid, language))
+      throw new AppError(REQ_STATUS.badRequest, CHANGE_PASSWORD_I18N.currentPasswordInvalid)
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -272,8 +270,8 @@ export class UserService {
     await user.updateOne({ $set: { 'system.password': hashedPassword } })
   }
 
-  async changeEmail({ userId, email, language }: IChangeEmailParams) {
-    const user = await this.requireUser(userId, language)
+  async changeEmail({ userId, email }: IChangeEmailParams) {
+    const user = await this.requireUser(userId)
     const normalizedEmail = email.trim()
 
     if (normalizedEmail === user.personal.email) {
@@ -286,18 +284,18 @@ export class UserService {
     }).lean()
 
     if (userWithSameEmail) {
-      throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('email', language))
+      throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('email'))
     }
 
     await user.updateOne({ $set: { 'personal.email': normalizedEmail, 'system.confirmed': true } })
   }
 
-  async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar, language }: IUpdateUserDataParams) {
+  async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar }: IUpdateUserDataParams) {
     if (!nickname && !avatarFileBuffer && resetAvatar !== 'reset') {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(UPDATE_USER_DATA_I18N.nothingToUpdate, language))
+      throw new AppError(REQ_STATUS.badRequest, UPDATE_USER_DATA_I18N.nothingToUpdate)
     }
 
-    const user = await this.requireUser(userId, language)
+    const user = await this.requireUser(userId)
     const normalizedNickname = nickname ? normalizeNicknameKey(nickname) : ''
 
     if (normalizedNickname && normalizedNickname !== user.public.nickname) {
@@ -307,18 +305,18 @@ export class UserService {
       }).lean()
 
       if (userWithSameNickname) {
-        throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('nickname', language))
+        throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('nickname'))
       }
 
       await user.updateOne({ $set: { 'public.nickname': normalizedNickname } })
     }
 
     if (avatarFileBuffer) {
-      await updateUserAvatar(avatarFileBuffer, userId, language)
+      await updateUserAvatar(avatarFileBuffer, userId)
     }
 
     if (resetAvatar === 'reset') {
-      await updateUserAvatar(null, userId, language)
+      await updateUserAvatar(null, userId)
     }
 
     const contacts = await UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean()

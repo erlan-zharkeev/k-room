@@ -20,8 +20,7 @@ export const registerMessagesSocketHandlers = (socket: SocketInstanceType) => {
       async ({ roomId, message }: IEventSendMessage) => {
         await sendMessage({
           roomId,
-          message,
-          language: socket.data.language
+          message
         })
       },
       { basicError: MESSAGES_I18N.sendMessageFailed }

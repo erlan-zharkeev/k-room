@@ -3,7 +3,7 @@ import { type Request, type Response } from 'express'
 import { type IBackendResponse, REQ_STATUS } from 'global-shared'
 
 import { SHARED_I18N } from 'src/shared/i18n'
-import { isAppError } from 'src/shared/lib/app-error'
+import { getAppErrorMessage, isAppError } from 'src/shared/lib/app-error'
 import { errorToMessage } from 'src/shared/lib/error-to-message'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
@@ -22,7 +22,8 @@ export class AppExceptionFilter implements ExceptionFilter {
     const { language } = request
 
     if (isAppError(error)) {
-      const { message, payload, silent, status } = error
+      const { payload, silent, status } = error
+      const message = getAppErrorMessage(error, language)
 
       serverCaptureSentryHttpError({
         message,

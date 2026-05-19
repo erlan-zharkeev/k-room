@@ -154,7 +154,7 @@ describe('AuthService', () => {
 
     expect(userService.findByEmail).not.toHaveBeenCalled()
     expect(userServiceExportsMock.loadGoogleAvatar).toHaveBeenCalledWith('https://lh3.googleusercontent.com/avatar.jpg')
-    expect(userServiceExportsMock.updateUserAvatar).toHaveBeenCalledWith(avatar, 'user-1', 'en')
+    expect(userServiceExportsMock.updateUserAvatar).toHaveBeenCalledWith(avatar, 'user-1')
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
   })
 
@@ -174,7 +174,7 @@ describe('AuthService', () => {
 
     userModelMock.updateOne.mockResolvedValue({ modifiedCount: 0 })
 
-    const result = await service.confirmEmail('confirm-token', 'en')
+    const result = await service.confirmEmail('confirm-token')
 
     expect(result).toEqual({ email: 'user@test.com', alreadyConfirmed: true })
     expect(sessionService.verifyToken).toHaveBeenCalledWith('confirm-token', 'confirm-secret')

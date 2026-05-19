@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import { type Request, type Response } from 'express'
 import {
-  type AppLanguageType,
   formatNickname,
   REQ_STATUS,
   type IAuthLoginPayload,
@@ -19,7 +18,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { getRequestIp } from 'src/shared/lib/get-request-ip'
-import { localizedText } from 'src/shared/lib/localized-text'
 
 import { EmailService } from '../email/email.service'
 import { SecurityService } from '../security/security.service'
@@ -46,26 +44,25 @@ export class AuthService {
   ) {}
 
   async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<LoginResponseType> {
-    const { language } = request
     const ip = getRequestIp(request)
 
-    await this.securityService.assertLoginAllowed(payload.captchaToken, ip, language, payload.login)
+    await this.securityService.assertLoginAllowed(payload.captchaToken, ip, payload.login)
 
     const user = await this.userService.findByLogin(payload.login)
 
     if (!user) {
       await this.securityService.trackLoginFailure(ip, payload.login)
-      throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.invalidEmailOrPassword, language))
+      throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.invalidEmailOrPassword)
     }
 
     const isPasswordValid = await bcrypt.compare(payload.password, user.system.password)
     if (!isPasswordValid) {
       await this.securityService.trackLoginFailure(ip, payload.login)
-      throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.invalidEmailOrPassword, language))
+      throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.invalidEmailOrPassword)
     }
 
     if (!user.system.confirmed) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.emailNotConfirmed, language))
+      throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.emailNotConfirmed)
     }
 
     await this.securityService.clearLoginFailures(payload.login)
@@ -75,10 +72,9 @@ export class AuthService {
   }
 
   async registration(payload: IAuthRegistrationPayload, request: Request): Promise<ISendConfirmationLinkResponse> {
-    const { language } = request
     const ip = getRequestIp(request)
 
-    await this.securityService.assertRegistrationAllowed(payload.captchaToken, ip, language)
+    await this.securityService.assertRegistrationAllowed(payload.captchaToken, ip)
     await this.securityService.trackRegistrationAttempt(ip)
 
     const userExistState = await this.userService.isUserExist({
@@ -87,7 +83,7 @@ export class AuthService {
     })
 
     if (userExistState.exists) {
-      throw new AppError(REQ_STATUS.badRequest, this.userService.getUserExistMessage(userExistState.reason, language))
+      throw new AppError(REQ_STATUS.badRequest, this.userService.getUserExistMessage(userExistState.reason))
     }
 
     const hashedPassword = await bcrypt.hash(payload.password, 6)
@@ -98,7 +94,7 @@ export class AuthService {
     })
 
     if (!user) {
-      throw new AppError(REQ_STATUS.server, localizedText(AUTH_I18N.registrationFailed, language))
+      throw new AppError(REQ_STATUS.server, AUTH_I18N.registrationFailed)
     }
 
     const confirmToken = this.sessionService.signToken(
@@ -109,7 +105,6 @@ export class AuthService {
 
     await this.emailService.sendEmailConfirmationEmail({
       email: payload.email,
-      language,
       token: confirmToken,
       nickname: formatNickname(payload.nickname)
     })
@@ -121,7 +116,7 @@ export class AuthService {
     }
   }
 
-  async confirmEmail(token: string, language: AppLanguageType): Promise<IConfirmEmailResult> {
+  async confirmEmail(token: string): Promise<IConfirmEmailResult> {
     const decoded = await this.sessionService.verifyToken(token, SERVER_ENV.secret.emailConfirmSecret)
 
     const updateResult = await UserModel.updateOne(
@@ -131,7 +126,7 @@ export class AuthService {
 
     const user = await this.userService.findById(decoded.id)
     if (!user) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(USER_I18N.userNotFound, language))
+      throw new AppError(REQ_STATUS.badRequest, USER_I18N.userNotFound)
     }
 
     return {
@@ -144,7 +139,6 @@ export class AuthService {
     payload: ISendConfirmationLinkPayload,
     request: Request
   ): Promise<ISendConfirmationLinkResult> {
-    const { language } = request
     const ip = getRequestIp(request)
     const email = payload.email.trim()
     const cooldownUntil = await this.securityService.getSendConfirmationLinkCooldown(email)
@@ -159,7 +153,7 @@ export class AuthService {
       }
     }
 
-    await this.securityService.assertSendConfirmationLinkAllowed(payload.captchaToken, email, ip, language)
+    await this.securityService.assertSendConfirmationLinkAllowed(payload.captchaToken, email, ip)
     await this.securityService.trackSendConfirmationLinkAttempt(ip, email)
 
     const user = await this.userService.findByEmail(email)
@@ -185,7 +179,7 @@ export class AuthService {
     }
 
     if (user.system.confirmAttempts <= 0) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.noConfirmationAttemptsLeft, language))
+      throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.noConfirmationAttemptsLeft)
     }
 
     const confirmToken = this.sessionService.signToken(
@@ -196,7 +190,6 @@ export class AuthService {
 
     await this.emailService.sendEmailConfirmationEmail({
       email: user.personal.email,
-      language,
       token: confirmToken,
       nickname: formatNickname(user.public.nickname)
     })
@@ -218,7 +211,6 @@ export class AuthService {
     request: Request,
     response: Response
   ): Promise<SignInWithProviderResponseType> {
-    const { language } = request
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await this.userService.createUser({
       nickname: payload.nickname,
@@ -232,12 +224,12 @@ export class AuthService {
       const buffer = await loadGoogleAvatar(payload.avatar)
 
       if (buffer) {
-        await updateUserAvatar(buffer, String(newUser._id), language)
+        await updateUserAvatar(buffer, String(newUser._id))
       }
     }
 
     if (!user) {
-      throw new AppError(REQ_STATUS.badRequest, localizedText(AUTH_I18N.signInWithProviderFailed, language))
+      throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.signInWithProviderFailed)
     }
 
     await this.sessionService.updateTokens(String(user._id), request, response)

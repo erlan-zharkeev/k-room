@@ -24,7 +24,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
     socketAckMiddleware<IEventCreateRoom, ICreateRoomAckPayload>(
       socket,
       async ({ contactIds, chatName, avatarFile }) => {
-        const { userId, language } = socket.data
+        const { userId } = socket.data
         const usersAccepted = await checkContactsExistence(userId, contactIds)
 
         if (!usersAccepted) {
@@ -44,7 +44,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         }
 
         if (avatarFile?.fileBuffer) {
-          await uploadBufferToBucket(avatarFile.fileBuffer, `avatar.${userId}`, 'avatar', language, {
+          await uploadBufferToBucket(avatarFile.fileBuffer, `avatar.${userId}`, 'avatar', {
             compression: 'avatar',
             overwrite: true
           })

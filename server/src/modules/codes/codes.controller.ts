@@ -50,7 +50,7 @@ export class CodesController {
 
     try {
       if (!userId) {
-        throw new AppError(401, localizedText(SESSION_I18N.nonAuthorized, language))
+        throw new AppError(401, SESSION_I18N.nonAuthorized)
       }
 
       runRequestValidation(request, SEND_CHANGE_EMAIL_CODE_VALIDATION)
@@ -70,7 +70,7 @@ export class CodesController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(SEND_CHANGE_EMAIL_CODE_I18N.sendFailed, language))
+      throw toAppError(error, SEND_CHANGE_EMAIL_CODE_I18N.sendFailed)
     }
   }
 
@@ -85,7 +85,7 @@ export class CodesController {
 
     try {
       if (!userId) {
-        throw new AppError(401, localizedText(SESSION_I18N.nonAuthorized, language))
+        throw new AppError(401, SESSION_I18N.nonAuthorized)
       }
 
       runRequestValidation(request, VALIDATE_CHANGE_EMAIL_CODE_VALIDATION)
@@ -99,7 +99,7 @@ export class CodesController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.validationFailed, language))
+      throw toAppError(error, VALIDATE_CHANGE_EMAIL_CODE_I18N.validationFailed)
     }
   }
 
@@ -131,7 +131,7 @@ export class CodesController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language))
+      throw toAppError(error, SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed)
     }
   }
 
@@ -155,7 +155,7 @@ export class CodesController {
         }
       })
     } catch (error) {
-      throw toAppError(error, localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed, language))
+      throw toAppError(error, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed)
     }
   }
 }
