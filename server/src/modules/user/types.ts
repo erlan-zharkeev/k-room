@@ -31,6 +31,7 @@ export interface IUserPersonalData {
   email: string
   contacts: Record<string, IContact>
   chatRooms: string[]
+  pinnedChatRoomIds: string[]
 }
 
 export interface IUserPublicData {

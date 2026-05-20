@@ -125,7 +125,8 @@ export const createUser = async ({ id, email, nickname, hashedPassword, provider
     personal: {
       email,
       contacts: {},
-      chatRooms: []
+      chatRooms: [],
+      pinnedChatRoomIds: []
     },
     system: {
       role: 'user',

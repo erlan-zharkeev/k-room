@@ -5,6 +5,7 @@ import {
   type IChatRoomSchema,
   type ICreateRoomAckPayload,
   type IEventCreateRoom,
+  type IEventUpdatePinnedChatRoom,
   MEDIA_AVATAR_FILENAME_PREFIX,
   type SocketActionsType
 } from 'global-shared'
@@ -17,7 +18,12 @@ import { uploadBufferToBucket } from '../media/media.service'
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
-import { checkContactsExistence, emitNewRoomToUsers, setRoomToUsers } from './chat-rooms.service'
+import {
+  checkContactsExistence,
+  emitNewRoomToUsers,
+  setRoomToUsers,
+  updatePinnedChatRoom
+} from './chat-rooms.service'
 
 export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
@@ -65,6 +71,17 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         }
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'update-pinned-chat-room',
+    socketAckMiddleware<IEventUpdatePinnedChatRoom>(
+      socket,
+      async (payload) => {
+        await updatePinnedChatRoom(socket.data.userId, payload)
+      },
+      { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
     )
   )
 }

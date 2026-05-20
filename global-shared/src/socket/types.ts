@@ -89,6 +89,17 @@ export interface IEventUpdateChatRoom {
   avatarFile?: MediaFileValueType // TODO change to IEventCreateRoom
 }
 
+export interface IEventUpdatePinnedChatRoom {
+  roomId: string
+  isPinned: boolean
+}
+
+export interface IEventPinnedChatRoomsUpdated {
+  roomId: string
+  isPinned: boolean
+  pinnedChatRoomIds: string[]
+}
+
 export interface IEventUserTyping {
   authorNickname: string
   usersTo: string[]
@@ -246,7 +257,9 @@ export type SocketActionsType =
   | 'change-call-settings'
   | 'call-started-at'
   | 'update-chat-room'
+  | 'update-pinned-chat-room'
   | 'room-data-updated'
+  | 'pinned-chat-rooms-updated'
   | 'add-reaction'
   | 'message-reaction-updated'
   | 'message-deleted'

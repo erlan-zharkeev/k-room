@@ -10,13 +10,17 @@ export interface IChatRoom {
   avatarId: string
   lastMessageId: string | null
   unreadMessagesQuantity: number
+  isPinned: boolean
+  pinnedOrder: number | null
   users: string[]
   messages: string[]
 }
 
 export type ChatRoomsType = IChatRoom[]
 
-export interface IChatRoomSchema
-  extends Omit<IChatRoom, 'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity'> {
+export interface IChatRoomSchema extends Omit<
+  IChatRoom,
+  'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder'
+> {
   users: string[]
 }

@@ -38,6 +38,8 @@ export const useChatRoomUpdateMonitor = () => {
       avatarId: room.avatar,
       lastMessageId: null,
       unreadMessagesQuantity: 0,
+      isPinned: false,
+      pinnedOrder: null,
       users: room.users,
       messages: []
     })
