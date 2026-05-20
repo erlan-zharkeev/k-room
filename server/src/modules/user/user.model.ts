@@ -52,6 +52,11 @@ const personalSchema = new Schema<IUserPersonalData>(
       type: [String],
       required: true,
       default: []
+    },
+    pinnedChatRoomIds: {
+      type: [String],
+      required: true,
+      default: []
     }
   },
   { _id: false }

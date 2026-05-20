@@ -135,6 +135,8 @@ export type {
   IEventGetSearchedContact,
   IEventCreateRoom,
   IEventUpdateChatRoom,
+  IEventUpdatePinnedChatRoom,
+  IEventPinnedChatRoomsUpdated,
   IEventUserTyping,
   IEventGetContactTypingStatus,
   IEventSendMessage,

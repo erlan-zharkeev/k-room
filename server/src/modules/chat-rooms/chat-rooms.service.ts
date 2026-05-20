@@ -3,6 +3,8 @@ import {
   type IChatRoomSchema,
   type IDBMessage,
   type IEventGetRoom,
+  type IEventPinnedChatRoomsUpdated,
+  type IEventUpdatePinnedChatRoom,
   MEDIA_AVATAR_FILENAME_PREFIX
 } from 'global-shared'
 
@@ -55,7 +57,43 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
   })
 }
 
-export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUserParams): Promise<IEventGetRoom> => {
+const resolvePinnedChatRoomIds = (currentIds: string[], roomId: string, isPinned: boolean) => {
+  if (!isPinned) return currentIds.filter((id) => id !== roomId)
+
+  return [roomId, ...currentIds.filter((id) => id !== roomId)]
+}
+
+export const updatePinnedChatRoom = async (
+  userId: string,
+  { roomId, isPinned }: IEventUpdatePinnedChatRoom
+) => {
+  const user = await UserModel.findOne(
+    { _id: userId, 'personal.chatRooms': roomId },
+    { 'personal.pinnedChatRoomIds': 1 }
+  ).lean()
+
+  if (!user) {
+    return
+  }
+
+  const pinnedChatRoomIds = resolvePinnedChatRoomIds(user.personal.pinnedChatRoomIds ?? [], roomId, isPinned)
+
+  await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': pinnedChatRoomIds } })
+
+  const payload: IEventPinnedChatRoomsUpdated = {
+    roomId,
+    isPinned,
+    pinnedChatRoomIds
+  }
+
+  emitToUsers([userId], 'pinned-chat-rooms-updated', payload)
+}
+
+export const transformRoomForUser = async ({
+  userId,
+  room,
+  pinnedChatRoomIds = []
+}: ITransformRoomForUserParams): Promise<IEventGetRoom> => {
   const normalizedRoom = room as IChatRoomSchemaWithObjectId
   const roomId = String(normalizedRoom._id)
   const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
@@ -63,6 +101,7 @@ export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUs
   const avatarId = `${MEDIA_AVATAR_FILENAME_PREFIX}${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
   const messages = normalizedRoom.messages ?? []
   const lastMessageId = messages[messages.length - 1] ?? null
+  const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([
     countUnreadRoomMessages(userId, messages),
     lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<IDBMessage>() : null
@@ -76,6 +115,8 @@ export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUs
     avatarId,
     lastMessageId,
     unreadMessagesQuantity,
+    isPinned: pinnedOrder !== -1,
+    pinnedOrder: pinnedOrder === -1 ? null : pinnedOrder,
     users,
     messages,
     previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null
@@ -91,7 +132,11 @@ export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchem
         return
       }
 
-      const transformedRoom = await transformRoomForUser({ userId, room })
+      const transformedRoom = await transformRoomForUser({
+        userId,
+        room,
+        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
+      })
 
       emitToUsers([userId], 'new-room-added', transformedRoom)
     })
