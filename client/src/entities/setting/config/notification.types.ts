@@ -14,7 +14,7 @@ export interface INotificationGroupSettings {
   nativePush: boolean
 }
 
-export interface IUserNotificationSettings {
+export interface IDeviceNotificationSettings {
   enabled: boolean
   general: INotificationGroupSettings
   messages: INotificationGroupSettings

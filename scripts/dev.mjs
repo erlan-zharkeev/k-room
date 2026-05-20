@@ -16,6 +16,7 @@ const DOCKER_STATUS_TIMEOUT_MS = 15_000
 const SERVER_READY_TIMEOUT_MS = 120_000
 const SERVER_READY_POLL_INTERVAL_MS = 1_000
 const SERVER_READY_REQUEST_TIMEOUT_MS = 3_000
+const DEV_SERVICE_RESTART_DELAY_MS = 1_000
 
 if (isLan) {
   process.env.APP_HOST = 'https://192.168.8.7'
@@ -411,7 +412,11 @@ async function runDevServices(serverHealthUrl) {
 
   services.push(startDevService('global-shared', pnpmCommand, ['--dir', 'global-shared', 'run', 'serve']))
   services.push(startDevService('client', pnpmCommand, ['--dir', 'client', 'run', 'serve']))
-  services.push(startDevService('server', pnpmCommand, ['--dir', 'server', 'run', 'serve']))
+  services.push(
+    startDevService('server', pnpmCommand, ['--dir', 'server', 'run', 'serve'], {
+      restartOnExit: true
+    })
+  )
 
   const startupResult = await Promise.race([
     waitForServerReady(serverHealthUrl).then((isReady) => ({ type: 'server-ready', isReady })),
@@ -436,28 +441,57 @@ async function runDevServices(serverHealthUrl) {
   shutdown(exitCodeFromDevServiceExit(exit))
 }
 
-function startDevService(name, command, args) {
-  console.log(`Starting ${name}...`)
+function startDevService(name, command, args, { restartOnExit = false } = {}) {
+  let child
+  let isStopping = false
+  let startedOnce = false
+  let resolveExit
 
-  const child = spawn(command, args, {
-    cwd: rootDir,
-    env: process.env,
-    shell: shouldUseShell(command),
-    stdio: 'inherit'
+  const exitPromise = new Promise((resolve) => {
+    resolveExit = resolve
   })
+
+  const startChild = () => {
+    console.log(`${startedOnce ? 'Restarting' : 'Starting'} ${name}...`)
+    startedOnce = true
+
+    child = spawn(command, args, {
+      cwd: rootDir,
+      env: process.env,
+      shell: shouldUseShell(command),
+      stdio: 'inherit'
+    })
+
+    child.on('error', (error) => {
+      handleExit({ name, code: 1, signal: null, error })
+    })
+
+    child.on('exit', (code, signal) => {
+      handleExit({ name, code, signal, error: null })
+    })
+  }
+
+  const handleExit = (exit) => {
+    if (isStopping || !restartOnExit) {
+      resolveExit(exit)
+      return
+    }
+
+    reportDevServiceExit(exit)
+    setTimeout(startChild, DEV_SERVICE_RESTART_DELAY_MS)
+  }
+
+  startChild()
 
   return {
     name,
-    child,
-    exitPromise: new Promise((resolveExit) => {
-      child.on('error', (error) => {
-        resolveExit({ name, code: 1, signal: null, error })
-      })
-
-      child.on('exit', (code, signal) => {
-        resolveExit({ name, code, signal, error: null })
-      })
-    })
+    get child() {
+      return child
+    },
+    stop() {
+      isStopping = true
+    },
+    exitPromise
   }
 }
 
@@ -487,8 +521,12 @@ function exitCodeFromDevServiceExit(exit) {
 }
 
 function stopDevServices(services) {
-  services.forEach(({ child }) => {
-    if (!child.pid) return
+  services.forEach((service) => {
+    service.stop?.()
+
+    const { child } = service
+
+    if (!child?.pid) return
     if (child.exitCode !== null || child.signalCode !== null) return
 
     if (isWindows) {

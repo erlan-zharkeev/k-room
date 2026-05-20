@@ -2,7 +2,7 @@ import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES } f
 import { isString } from 'lodash'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-import { useSettings, type DbUserSettingType } from 'src/entities/setting'
+import { useSettings, type DbDeviceSettingType } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
@@ -178,7 +178,7 @@ router.beforeEach(async (to) => {
   if (!contentTab) return
 
   const chatRoomId = contentTab === 'chat-rooms' && isString(to.params.chatRoomId) ? to.params.chatRoomId : ''
-  const changes: Partial<DbUserSettingType> = {}
+  const changes: Partial<DbDeviceSettingType> = {}
 
   if (settings.value.contentTab !== contentTab) {
     changes.contentTab = contentTab

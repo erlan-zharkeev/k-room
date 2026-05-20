@@ -245,7 +245,6 @@ export type SocketActionsType =
   | 'call-ended'
   | 'change-call-settings'
   | 'call-started-at'
-  | 'update-user-settings'
   | 'update-chat-room'
   | 'room-data-updated'
   | 'add-reaction'
