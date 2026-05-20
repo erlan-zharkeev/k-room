@@ -7,6 +7,7 @@ import {
   normalizeNicknameKey,
   REQ_STATUS,
   type ICreateNewPasswordPayload,
+  MEDIA_AVATAR_FILENAME_PREFIX,
   VALIDATION_PATTERNS
 } from 'global-shared'
 
@@ -156,7 +157,7 @@ export const loadGoogleAvatar = async (avatar: string) => {
 }
 
 export const updateUserAvatar = async (buffer: Buffer | null, userId: string) => {
-  const filename = `avatar.${userId}`
+  const filename = `${MEDIA_AVATAR_FILENAME_PREFIX}${userId}`
 
   if (buffer === null) {
     await deleteBucketFilesByName('avatar', filename)

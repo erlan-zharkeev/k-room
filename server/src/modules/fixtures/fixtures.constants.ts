@@ -1,3 +1,5 @@
+import { MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
+
 import { FIXTURE_MAX_LENGTH_NICKNAMES } from '../user/user.constants'
 
 import type { IFixtureContactData } from './fixtures.types'
@@ -21,23 +23,23 @@ export const FIXTURE_LONG_REPLIED_MESSAGE_BODY =
   'Reply preview stress case: this quoted message is intentionally long so the chat bubble can show how replied content behaves with wrapping, spacing, contrast, and overflow in the compact message layout across desktop and mobile widths. It should remain readable without breaking the bubble geometry or footer alignment.'
 export const FIXTURE_MESSAGE_IMAGE_FILES = [
   {
-    filename: 'image.fixture-tolik-room-snapshot',
+    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-room-snapshot`,
     path: 'src/modules/fixtures/images/tolik.jpg'
   },
   {
-    filename: 'image.fixture-tolik-review-reference',
+    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-review-reference`,
     path: 'src/modules/fixtures/images/guest.jpg'
   },
   {
-    filename: 'image.fixture-tolik-erlan-reference',
+    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-erlan-reference`,
     path: 'src/modules/fixtures/images/erlan.jpg'
   },
   {
-    filename: 'image.fixture-tolik-second-snapshot',
+    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-second-snapshot`,
     path: 'src/modules/fixtures/images/tolik.jpg'
   },
   {
-    filename: 'image.fixture-tolik-second-reference',
+    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-second-reference`,
     path: 'src/modules/fixtures/images/guest.jpg'
   }
 ] as const

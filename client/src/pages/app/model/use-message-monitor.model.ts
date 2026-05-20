@@ -1,6 +1,7 @@
 import type {
   IEventMessageDeleted,
   IEventMessageDelivered,
+  IEventMessagesStatusUpdated,
   IEventUpdateMessageStatus,
   IEventUpdatedMessageReactions,
   SocketActionsType
@@ -14,12 +15,12 @@ import { socket } from 'src/shared/api'
 
 export const useMessageMonitor = () => {
   const { mutate: mutateRoom } = useChatRoom()
-  const { getById, mutate: mutateMessage, put, remove, update } = useMessage()
+  const { bulkUpdate, getById, messageById, mutate: mutateMessage, put, remove, update } = useMessage()
   const { user } = useUser()
 
-  const decreaseUnreadMessagesQuantity = async (roomId: string) => {
+  const decreaseUnreadMessagesQuantity = async (roomId: string, quantity = 1) => {
     await mutateRoom(roomId, (room) => {
-      room.unreadMessagesQuantity = Math.max(0, (room.unreadMessagesQuantity ?? 0) - 1)
+      room.unreadMessagesQuantity = Math.max(0, (room.unreadMessagesQuantity ?? 0) - quantity)
     })
   }
 
@@ -37,14 +38,30 @@ export const useMessageMonitor = () => {
   }
 
   const updateMessageStatus = async ({ roomId, messageId, status, userId }: IEventUpdateMessageStatus) => {
-    const message = getById(messageId)
-    const currentUserReadIncomingUnreadMessage =
-      userId === user.value.id && status === 'read' && message?.status === 'delivered' && !message.isSelf
+    const shouldDecreaseUnreadMessagesQuantity = userId === user.value.id && status === 'read'
 
     await update(messageId, { status })
 
-    if (currentUserReadIncomingUnreadMessage) {
+    if (shouldDecreaseUnreadMessagesQuantity) {
       await decreaseUnreadMessagesQuantity(roomId)
+    }
+  }
+
+  const updateMessagesStatus = async ({
+    roomId,
+    messageIds,
+    status,
+    userId,
+    updatedMessagesQuantity
+  }: IEventMessagesStatusUpdated) => {
+    const loadedMessageIds = messageIds.filter((messageId) => messageById.value.has(messageId))
+    const isCurrentUserStatusUpdate = userId === user.value.id
+    const isReadStatusUpdate = status === 'read'
+
+    await bulkUpdate(loadedMessageIds.map((id) => ({ id, changes: { status } })))
+
+    if (isCurrentUserStatusUpdate && isReadStatusUpdate) {
+      await decreaseUnreadMessagesQuantity(roomId, updatedMessagesQuantity)
     }
   }
 
@@ -83,6 +100,7 @@ export const useMessageMonitor = () => {
     socket.on<SocketActionsType>('message-delivered', handleDeliveredMessage)
     socket.on<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
     socket.on<SocketActionsType>('message-status-updated', updateMessageStatus)
+    socket.on<SocketActionsType>('messages-status-updated', updateMessagesStatus)
   }
 
   const disposeMessageMonitor = () => {
@@ -90,6 +108,7 @@ export const useMessageMonitor = () => {
     socket.off<SocketActionsType>('message-delivered', handleDeliveredMessage)
     socket.off<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
     socket.off<SocketActionsType>('message-status-updated', updateMessageStatus)
+    socket.off<SocketActionsType>('messages-status-updated', updateMessagesStatus)
   }
 
   onBeforeUnmount(disposeMessageMonitor)

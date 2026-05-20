@@ -24,6 +24,16 @@ export interface IChatRoomListItemProps {
   item: IChatRoomNavigationItem
 }
 
+export interface IChatRoomContextMenuProps {
+  item: IChatRoomNavigationItem
+}
+
+export interface IChatRoomContextMenuOption {
+  label: string
+  value: 'mark-as-read'
+  disabled?: boolean
+}
+
 export interface ICreateChatRoomContactItemProps {
   contactId: string
   nickname: string

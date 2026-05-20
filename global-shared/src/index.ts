@@ -45,7 +45,9 @@ export type { AppLanguageType, LocalizedTextType, LocalizedTextMapType } from '.
 export type { I18nValueConstraintType, I18nRecordConstraintType } from './language/lib/types'
 
 export {
+  MEDIA_AVATAR_FILENAME_PREFIX,
   MEDIA_BUCKET_NAMES,
+  MEDIA_IMAGE_FILENAME_PREFIX,
   MEDIA_KIND_ACCEPT_MAP,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
   MEDIA_MB_IN_BYTES,
@@ -137,7 +139,9 @@ export type {
   IEventGetContactTypingStatus,
   IEventSendMessage,
   IEventUpdateMessageStatus,
+  IEventMessagesStatusUpdated,
   IEventChangeMessageStatus,
+  IEventMarkRoomAsRead,
   IEventLoadRoomMessages,
   IEventRoomMessagesLoaded,
   IEventDeleteMessage,

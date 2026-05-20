@@ -5,6 +5,7 @@ import {
   type IChatRoomSchema,
   type ICreateRoomAckPayload,
   type IEventCreateRoom,
+  MEDIA_AVATAR_FILENAME_PREFIX,
   type SocketActionsType
 } from 'global-shared'
 
@@ -47,7 +48,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         const roomId = String(room._id)
 
         if (roomData.chatKind === CHAT_KIND.GROUP && avatarFile?.fileBuffer) {
-          await uploadBufferToBucket(avatarFile.fileBuffer, `avatar.${roomId}`, 'avatar', {
+          await uploadBufferToBucket(avatarFile.fileBuffer, `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}`, 'avatar', {
             compression: 'avatar',
             overwrite: true
           })

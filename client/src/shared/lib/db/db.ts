@@ -129,6 +129,29 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
     return updated
   }
 
+  const bulkUpdate = async (data: readonly { id: ItemId; changes: Partial<Item> }[]) => {
+    if (!data.length) return 0
+
+    const updated = await table.bulkUpdate(
+      data.map(({ id, changes }) => ({
+        key: id as never,
+        changes: changes as never
+      }))
+    )
+
+    if (updated && cachedItems) {
+      const changesById = new Map<ItemId, Partial<Item>>(data.map(({ id, changes }) => [id, changes]))
+
+      cachedItems = cachedItems.map((item) => {
+        const changes = changesById.get(item.id)
+
+        return changes ? ({ ...item, ...changes } as Item) : item
+      })
+    }
+
+    return updated
+  }
+
   const deleteById = async (id: ItemId) => {
     await table.delete(id as never)
     removeCachedItems([id])
@@ -272,6 +295,7 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
     put,
     bulkPut,
     update,
+    bulkUpdate,
     updateShallow,
     setByPath,
     unsetByPath,

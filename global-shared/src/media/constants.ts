@@ -1,6 +1,8 @@
 import type { IMediaValidationOptions, MediaBucketNameType, MediaKindType, MediaUploadType } from './types'
 
 export const MEDIA_MB_IN_BYTES = 1024 * 1024
+export const MEDIA_AVATAR_FILENAME_PREFIX = 'avatar.'
+export const MEDIA_IMAGE_FILENAME_PREFIX = 'image.'
 
 export const MEDIA_BUCKET_NAMES = ['avatar', 'doc', 'image', 'audio', 'video'] as const satisfies MediaBucketNameType[]
 

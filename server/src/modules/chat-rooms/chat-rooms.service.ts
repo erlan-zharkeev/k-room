@@ -1,4 +1,10 @@
-import { CHAT_KIND, type IChatRoomSchema, type IDBMessage, type IEventGetRoom } from 'global-shared'
+import {
+  CHAT_KIND,
+  type IChatRoomSchema,
+  type IDBMessage,
+  type IEventGetRoom,
+  MEDIA_AVATAR_FILENAME_PREFIX
+} from 'global-shared'
 
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
@@ -54,7 +60,7 @@ export const transformRoomForUser = async ({ userId, room }: ITransformRoomForUs
   const roomId = String(normalizedRoom._id)
   const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
   const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
-  const avatarId = `avatar.${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
+  const avatarId = `${MEDIA_AVATAR_FILENAME_PREFIX}${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
   const messages = normalizedRoom.messages ?? []
   const lastMessageId = messages[messages.length - 1] ?? null
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([

@@ -6,26 +6,30 @@ import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import type { IChatRoomListItemProps } from '../config/types'
 
+import ChatRoomContextMenu from './ChatRoomContextMenu.vue'
+
 const props = defineProps<IChatRoomListItemProps>()
 </script>
 
 <template>
-  <RouterLink custom :to="props.item.to" v-slot="{ href, navigate }">
-    <NmorphBadge
-      class="chat-room-list-item-badge"
-      :value="props.item.unreadMessagesQuantity"
-      hide-on-falsy-value
-      size="tiny"
-      color="var(--nmorph-warn-color)"
-      type="ribbon"
-      ribbon-corner="bottom-left"
+  <NmorphBadge
+    class="chat-room-list-item-badge"
+    :value="props.item.unreadMessagesQuantity"
+    hide-on-falsy-value
+    size="tiny"
+    color="var(--nmorph-warn-color)"
+    type="ribbon"
+    ribbon-corner="bottom-left"
+  >
+    <NmorphCard
+      tag="div"
+      class="chat-room-list-item"
+      content-class="chat-room-list-item__content"
+      :shadow-type="props.item.selected ? 'inset' : 'outset'"
     >
-      <NmorphCard
-        tag="a"
-        class="chat-room-list-item"
-        :href="href"
-        @click="navigate"
-        :shadow-type="props.item.selected ? 'inset' : 'outset'"
+      <RouterLink
+        class="chat-room-list-item__link"
+        :to="props.item.to"
         :aria-current="props.item.selected ? 'page' : undefined"
       >
         <AppProfileBasicData
@@ -53,12 +57,24 @@ const props = defineProps<IChatRoomListItemProps>()
             />
           </template>
         </AppProfileBasicData>
-      </NmorphCard>
-    </NmorphBadge>
-  </RouterLink>
+      </RouterLink>
+      <div class="chat-room-list-item__actions">
+        <ChatRoomContextMenu :item="props.item" />
+      </div>
+    </NmorphCard>
+  </NmorphBadge>
 </template>
 
 <style lang="scss">
+.chat-room-list-item__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 8px;
+  align-items: center;
+
+  padding-right: 4px;
+}
+
 .chat-room-list-item__title {
   display: flex;
   gap: 8px;
