@@ -1,16 +1,17 @@
 import type {
   IEventChangeMessageStatus,
   IEventLoadRoomMessages,
+  IEventMarkRoomAsRead,
   IEventSendMessage,
   SocketActionsType
 } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
-import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
+import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { MESSAGES_I18N } from './messages.i18n'
-import { changeMessageStatus, loadRoomMessages, sendMessage } from './messages.service'
+import { changeMessageStatus, loadRoomMessages, markRoomAsRead, sendMessage } from './messages.service'
 
 export const registerMessagesSocketHandlers = (socket: SocketInstanceType) => {
   socket.on<SocketActionsType>(
@@ -52,6 +53,17 @@ export const registerMessagesSocketHandlers = (socket: SocketInstanceType) => {
         await changeMessageStatus(messageId, status, socket.data.userId, roomId)
       },
       { basicError: MESSAGES_I18N.changeMessageStatusFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'mark-room-as-read',
+    socketAckMiddleware<IEventMarkRoomAsRead>(
+      socket,
+      async ({ roomId }) => {
+        await markRoomAsRead(roomId, socket.data.userId)
+      },
+      { basicError: MESSAGES_I18N.markRoomAsReadFailed }
     )
   )
 }

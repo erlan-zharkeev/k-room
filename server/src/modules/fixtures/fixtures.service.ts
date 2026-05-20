@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { CHAT_KIND, REQ_STATUS } from 'global-shared'
+import { CHAT_KIND, MEDIA_AVATAR_FILENAME_PREFIX, REQ_STATUS } from 'global-shared'
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
@@ -46,7 +46,7 @@ const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
 const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''
 
 const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
-  const filename = `avatar.${userId}`
+  const filename = `${MEDIA_AVATAR_FILENAME_PREFIX}${userId}`
   const existingAvatar = await UserModel.db.collection('avatar.files').findOne({ filename })
 
   if (existingAvatar) {

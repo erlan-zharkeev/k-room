@@ -108,10 +108,20 @@ export interface IEventUpdateMessageStatus {
   status: MessageStatusType
   userId: string
 }
+export interface IEventMessagesStatusUpdated {
+  roomId: string
+  messageIds: string[]
+  status: MessageStatusType
+  userId: string
+  updatedMessagesQuantity: number
+}
 export interface IEventChangeMessageStatus {
   roomId: string
   messageId: string
   status: MessageStatusType
+}
+export interface IEventMarkRoomAsRead {
+  roomId: string
 }
 export interface IEventLoadRoomMessages {
   roomId: string
@@ -225,7 +235,9 @@ export type SocketActionsType =
   | 'load-room-messages'
   | 'room-messages-loaded'
   | 'change-message-status'
+  | 'mark-room-as-read'
   | 'message-status-updated'
+  | 'messages-status-updated'
   | 'contact-data-changed'
   | 'call-user'
   | 'answer-call'

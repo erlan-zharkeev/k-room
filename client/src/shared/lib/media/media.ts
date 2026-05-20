@@ -1,4 +1,5 @@
 import { liveQuery } from 'dexie'
+import { MEDIA_AVATAR_FILENAME_PREFIX } from 'global-shared'
 import { getCurrentScope, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
 import { db } from '../db/db'
@@ -7,7 +8,7 @@ import type { MediaUrlCacheValueType } from './types'
 
 const cache = new Map<string, MediaUrlCacheValueType>()
 
-export const getAvatarId = (id: string) => `avatar.${id}`
+export const getAvatarId = (id: string) => `${MEDIA_AVATAR_FILENAME_PREFIX}${id}`
 
 export const acquireUrl = (key: string, blob: Blob) => {
   const hit = cache.get(key)

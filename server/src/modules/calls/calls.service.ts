@@ -1,4 +1,10 @@
-import type { CallFlowType, EventCallUpdatedType, EventCallsUpdatedType, ICall } from 'global-shared'
+import {
+  type CallFlowType,
+  type EventCallUpdatedType,
+  type EventCallsUpdatedType,
+  type ICall,
+  MEDIA_AVATAR_FILENAME_PREFIX
+} from 'global-shared'
 
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
@@ -47,7 +53,7 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
     authorNickname: author.public.nickname,
     interlocutorId,
     interlocutorNickname: interlocutor.public.nickname,
-    interlocutorAvatarPath: `avatar.${interlocutorId}`,
+    interlocutorAvatarPath: `${MEDIA_AVATAR_FILENAME_PREFIX}${interlocutorId}`,
     flow: resolveFlowType(call.answered, userId !== call.authorId),
     video: Boolean(call.video)
   }

@@ -26,6 +26,16 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Открыть чат',
     zh: '打开聊天'
   },
+  chatActions: {
+    en: 'Chat actions',
+    ru: 'Действия чата',
+    zh: '聊天操作'
+  },
+  markAsRead: {
+    en: 'Mark as read',
+    ru: 'Отметить прочитанным',
+    zh: '标为已读'
+  },
   createChatTitle: {
     en: 'New chat',
     ru: 'Новый чат',

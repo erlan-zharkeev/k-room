@@ -2,11 +2,13 @@ import {
   type IDBMessage,
   type IEventLoadRoomMessages,
   type IEventMessageDelivered,
+  type IEventMessagesStatusUpdated,
   type IEventRoomMessagesLoaded,
   type IEventUpdateMessageStatus,
   type IImageObject,
   type IMessage,
-  type MessageStatusType
+  type MessageStatusType,
+  MEDIA_IMAGE_FILENAME_PREFIX
 } from 'global-shared'
 import { isString } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
@@ -76,18 +78,31 @@ export const changeMessageStatus = async (
   userId: string,
   roomId: string
 ) => {
+  if (status !== 'read') {
+    return
+  }
+
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+
+  if (!room) {
+    return
+  }
+
   const message = await MessageModel.findOneAndUpdate(
-    { _id: messageId, 'usersMetaData.id': userId },
+    {
+      _id: messageId,
+      authorId: { $ne: userId },
+      usersMetaData: {
+        $elemMatch: {
+          id: userId,
+          status: 'delivered'
+        }
+      }
+    },
     { $set: { 'usersMetaData.$.status': status } }
   )
 
   if (!message) {
-    return
-  }
-
-  const room = await ChatRoomModel.findById(roomId).lean()
-
-  if (!room) {
     return
   }
 
@@ -101,6 +116,58 @@ export const changeMessageStatus = async (
   emitToUsers(room.users, 'message-status-updated', payload)
 }
 
+export const markRoomAsRead = async (roomId: string, userId: string) => {
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
+
+  if (!room?.messages.length) {
+    return
+  }
+
+  const unreadMessages = await MessageModel.find({
+    _id: { $in: room.messages },
+    authorId: { $ne: userId },
+    usersMetaData: {
+      $elemMatch: {
+        id: userId,
+        status: 'delivered'
+      }
+    }
+  })
+    .select('_id')
+    .lean<Array<{ _id: string }>>()
+  const messageIds = unreadMessages.map(({ _id }) => String(_id))
+
+  if (!messageIds.length) {
+    return
+  }
+
+  const updateResult = await MessageModel.updateMany(
+    {
+      _id: { $in: messageIds },
+      'usersMetaData.id': userId
+    },
+    {
+      $set: {
+        'usersMetaData.$.status': 'read'
+      }
+    }
+  )
+
+  if (updateResult.modifiedCount <= 0) {
+    return
+  }
+
+  const payload: IEventMessagesStatusUpdated = {
+    roomId,
+    messageIds,
+    status: 'read',
+    userId,
+    updatedMessagesQuantity: updateResult.modifiedCount
+  }
+
+  emitToUsers(room.users, 'messages-status-updated', payload)
+}
+
 export const sendMessage = async ({ roomId, message }: ISendMessageParams) => {
   const filenames: string[] = []
 
@@ -110,7 +177,7 @@ export const sendMessage = async ({ roomId, message }: ISendMessageParams) => {
         return
       }
 
-      const filename = `image.${uuidv4()}`
+      const filename = `${MEDIA_IMAGE_FILENAME_PREFIX}${uuidv4()}`
 
       filenames.push(filename)
       await uploadBufferToBucket(image.fileBuffer, filename, 'image', {

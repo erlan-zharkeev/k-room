@@ -43,7 +43,7 @@ const contactChatRoomIdList = computed(() =>
       :ribbon-tilt="false"
       size="tiny"
       ribbon-corner="bottom-left"
-      :offset-y="4"
+      :offset-y="2"
       :color="getContactStatusTagColor(contact)"
     >
       <NmorphCard class="contact-list__item" content-class="contact-list__item-content" shadow-type="inset">
@@ -156,5 +156,9 @@ const contactChatRoomIdList = computed(() =>
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.nmorph-badge .nmorph-badge__ribbon-corner--flat .nmorph-badge__container--ribbon {
+  border-top-right-radius: 8px;
 }
 </style>

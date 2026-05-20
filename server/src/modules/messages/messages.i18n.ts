@@ -6,6 +6,11 @@ export const MESSAGES_I18N = defineI18n({
     ru: 'Не удалось обновить статус сообщения',
     zh: '更新消息状态失败'
   },
+  markRoomAsReadFailed: {
+    en: 'Failed to mark chat as read',
+    ru: 'Не удалось отметить чат прочитанным',
+    zh: '无法将聊天标为已读'
+  },
   loadRoomMessagesFailed: {
     en: 'Failed to load room messages',
     ru: 'Не удалось загрузить сообщения комнаты',

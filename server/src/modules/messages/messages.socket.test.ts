@@ -8,13 +8,15 @@ const ioMock = vi.hoisted(() => ({
 const messagesServiceMock = vi.hoisted(() => ({
   sendMessage: vi.fn(),
   loadRoomMessages: vi.fn(),
-  changeMessageStatus: vi.fn()
+  changeMessageStatus: vi.fn(),
+  markRoomAsRead: vi.fn()
 }))
 
 vi.mock('../../shared/lib/io', () => ({
   getIO: () => ioMock
 }))
 vi.mock('../../shared/lib/socket-error', () => ({
+  socketAckMiddleware: (_socket: unknown, handler: unknown) => handler,
   socketErrorMiddleware: (_socket: unknown, handler: unknown) => handler
 }))
 vi.mock('./messages.service', () => messagesServiceMock)

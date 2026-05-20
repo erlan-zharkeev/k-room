@@ -1,9 +1,7 @@
-import { MEDIA_ENDPOINTS } from 'global-shared'
-
-import { MESSAGE_MEDIA_IMAGE_FILENAME_PREFIX } from '../config/constants'
+import { MEDIA_ENDPOINTS, MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
 
 export const resolveMessageImageSrc = (src: string) => {
-  if (!src.startsWith(MESSAGE_MEDIA_IMAGE_FILENAME_PREFIX)) {
+  if (!src.startsWith(MEDIA_IMAGE_FILENAME_PREFIX)) {
     return src
   }
 
