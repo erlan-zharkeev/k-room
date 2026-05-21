@@ -9,7 +9,7 @@ import { isRoomPrivate } from '../lib/is-room-private'
 const chatRoomStore = dexieCollectionStore<FChatRoomType>(db['chat-rooms'])
 
 export const useChatRoom = () => {
-  const { mergeMany, mutate, put, remove, reset, update } = chatRoomStore
+  const { bulkUpdate, mergeMany, mutate, put, remove, reset, update } = chatRoomStore
   const chatRooms = chatRoomStore.use()
   const hasChatRooms = computed(() => chatRooms.value.length > 0)
   const getById = (id: string) => chatRooms.value.find((room) => room.id === id)
@@ -29,6 +29,7 @@ export const useChatRoom = () => {
     isPrivate,
     put,
     update,
+    bulkUpdate,
     mutate,
     merge,
     mergeMany,

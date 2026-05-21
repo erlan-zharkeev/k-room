@@ -93,10 +93,13 @@ export interface IEventUpdatePinnedChatRoom {
   roomId: string
   isPinned: boolean
 }
+export interface IEventUpdatePinnedChatRoomOrder {
+  pinnedChatRoomIds: string[]
+}
 
 export interface IEventPinnedChatRoomsUpdated {
-  roomId: string
-  isPinned: boolean
+  roomId?: string
+  isPinned?: boolean
   pinnedChatRoomIds: string[]
 }
 
@@ -258,6 +261,7 @@ export type SocketActionsType =
   | 'call-started-at'
   | 'update-chat-room'
   | 'update-pinned-chat-room'
+  | 'update-pinned-chat-room-order'
   | 'room-data-updated'
   | 'pinned-chat-rooms-updated'
   | 'add-reaction'

@@ -136,6 +136,7 @@ export type {
   IEventCreateRoom,
   IEventUpdateChatRoom,
   IEventUpdatePinnedChatRoom,
+  IEventUpdatePinnedChatRoomOrder,
   IEventPinnedChatRoomsUpdated,
   IEventUserTyping,
   IEventGetContactTypingStatus,

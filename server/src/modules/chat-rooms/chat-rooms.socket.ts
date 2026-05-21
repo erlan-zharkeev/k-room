@@ -6,6 +6,7 @@ import {
   type ICreateRoomAckPayload,
   type IEventCreateRoom,
   type IEventUpdatePinnedChatRoom,
+  type IEventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
   type SocketActionsType
 } from 'global-shared'
@@ -22,7 +23,8 @@ import {
   checkContactsExistence,
   emitNewRoomToUsers,
   setRoomToUsers,
-  updatePinnedChatRoom
+  updatePinnedChatRoom,
+  updatePinnedChatRoomOrder
 } from './chat-rooms.service'
 
 export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
@@ -80,6 +82,17 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
       socket,
       async (payload) => {
         await updatePinnedChatRoom(socket.data.userId, payload)
+      },
+      { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'update-pinned-chat-room-order',
+    socketAckMiddleware<IEventUpdatePinnedChatRoomOrder>(
+      socket,
+      async (payload) => {
+        await updatePinnedChatRoomOrder(socket.data.userId, payload)
       },
       { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
     )
