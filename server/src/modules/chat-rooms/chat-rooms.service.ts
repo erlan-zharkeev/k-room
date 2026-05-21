@@ -2,23 +2,31 @@ import {
   CHAT_KIND,
   type IChatRoomSchema,
   type IEventChatRoomDeleted,
+  type IEventChatRoomLeft,
   type IEventDeleteChatRoom,
+  type IEventLeaveChatRoom,
+  type IFrontendRoomMemberContact,
   type IDBMessage,
   type IEventGetRoom,
   type IEventPinnedChatRoomsUpdated,
   type IEventUpdatePinnedChatRoom,
   type IEventUpdatePinnedChatRoomOrder,
-  MEDIA_AVATAR_FILENAME_PREFIX
+  MEDIA_AVATAR_FILENAME_PREFIX,
+  REQ_STATUS
 } from 'global-shared'
+
+import { AppError } from 'src/shared/lib/app-error'
 
 import { deleteBucketFilesByName } from '../media/media.service'
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
+import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { ChatRoomModel } from './chat-rooms.model'
 import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'
+import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
@@ -73,6 +81,47 @@ const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[])
   return [...new Set([...orderedIds, ...currentIds])]
 }
 
+export const resolveRoomMemberContacts = async (
+  userIds: string[],
+  presenceService: PresenceService
+): Promise<IFrontendRoomMemberContact[]> => {
+  if (!userIds.length) return []
+
+  const [users, onlineMap] = await Promise.all([
+    UserModel.find({ _id: { $in: userIds } }, { 'public.nickname': 1, 'public.lastSeen': 1 }).lean(),
+    presenceService.onlineMapByUserIds(userIds)
+  ])
+  const userById = new Map(users.map((user) => [String(user._id), user]))
+
+  return userIds.flatMap((id) => {
+    const user = userById.get(id)
+
+    if (!user) return []
+
+    return [
+      {
+        id,
+        nickname: user.public.nickname,
+        online: onlineMap.get(id) ?? false,
+        lastSeen: user.public.lastSeen
+      }
+    ]
+  })
+}
+
+const emitRoomMemberContactsToUser = async (
+  userId: string,
+  roomUserIds: string[],
+  presenceService: PresenceService
+) => {
+  const roomMembers = await resolveRoomMemberContacts(
+    roomUserIds.filter((id) => id !== userId),
+    presenceService
+  )
+
+  emitToUsers([userId], 'room-member-contacts-updated', roomMembers)
+}
+
 export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: IEventUpdatePinnedChatRoom) => {
   const user = await UserModel.findOne(
     { _id: userId, 'personal.chatRooms': roomId },
@@ -119,7 +168,7 @@ export const deleteChatRoom = async (userId: string, { roomId }: IEventDeleteCha
   const room = await ChatRoomModel.findOne({
     _id: roomId,
     users: userId,
-    authorId: userId,
+    adminId: userId,
     chatKind: CHAT_KIND.GROUP
   })
     .select('users messages')
@@ -169,7 +218,7 @@ export const transformRoomForUser = async ({
 
   return {
     id: roomId,
-    authorId: normalizedRoom.authorId,
+    adminId: normalizedRoom.adminId,
     chatName: normalizedRoom.chatName,
     chatKind,
     avatarId,
@@ -183,7 +232,11 @@ export const transformRoomForUser = async ({
   } satisfies IEventGetRoom
 }
 
-export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchema) => {
+export const emitRoomDataToUsers = async (
+  userIds: string[],
+  room: IChatRoomSchema,
+  presenceService: PresenceService
+) => {
   await Promise.all(
     userIds.map(async (userId) => {
       const userData = await UserModel.findById(userId).lean()
@@ -198,6 +251,96 @@ export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchem
         pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
       })
 
+      await emitRoomMemberContactsToUser(userId, room.users, presenceService)
+      emitToUsers([userId], 'room-data-updated', transformedRoom)
+    })
+  )
+}
+
+export const leaveChatRoom = async (
+  userId: string,
+  { roomId, nextAdminId }: IEventLeaveChatRoom,
+  presenceService: PresenceService
+) => {
+  const room = await ChatRoomModel.findOne({
+    _id: roomId,
+    users: userId,
+    chatKind: CHAT_KIND.GROUP
+  })
+    .select('-__v')
+    .lean<IChatRoomSchemaWithObjectId>()
+
+  if (!room) {
+    return
+  }
+
+  const userIds = room.users.map(String)
+  const remainingUserIds = userIds.filter((id) => id !== userId)
+  const isAdminLeaving = room.adminId === userId
+
+  let nextRoomAdminId = room.adminId
+
+  if (isAdminLeaving) {
+    if (!nextAdminId) {
+      throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.leaveChatRoomNewAdminRequired)
+    }
+
+    if (!remainingUserIds.includes(nextAdminId)) {
+      throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.leaveChatRoomInvalidNewAdmin)
+    }
+
+    nextRoomAdminId = nextAdminId
+  }
+
+  const [updatedRoom] = await Promise.all([
+    ChatRoomModel.findOneAndUpdate(
+      { _id: roomId },
+      {
+        $set: {
+          adminId: nextRoomAdminId,
+          users: remainingUserIds
+        }
+      },
+      { new: true }
+    )
+      .select('-__v')
+      .lean<IChatRoomSchemaWithObjectId>(),
+    UserModel.updateOne(
+      { _id: userId },
+      { $pull: { 'personal.chatRooms': roomId, 'personal.pinnedChatRoomIds': roomId } }
+    )
+  ])
+  const payload: IEventChatRoomLeft = {
+    roomId
+  }
+
+  emitToUsers([userId], 'chat-room-left', payload)
+
+  if (updatedRoom) {
+    await emitRoomDataToUsers(remainingUserIds, updatedRoom, presenceService)
+  }
+}
+
+export const emitNewRoomToUsers = async (
+  userIds: string[],
+  room: IChatRoomSchema,
+  presenceService: PresenceService
+) => {
+  await Promise.all(
+    userIds.map(async (userId) => {
+      const userData = await UserModel.findById(userId).lean()
+
+      if (!userData) {
+        return
+      }
+
+      const transformedRoom = await transformRoomForUser({
+        userId,
+        room,
+        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
+      })
+
+      await emitRoomMemberContactsToUser(userId, room.users, presenceService)
       emitToUsers([userId], 'new-room-added', transformedRoom)
     })
   )

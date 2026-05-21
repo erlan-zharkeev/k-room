@@ -20,5 +20,15 @@ export const CHAT_ROOMS_I18N = defineI18n({
     en: 'Failed to leave chat room',
     ru: 'Failed to leave chat room',
     zh: 'Failed to leave chat room'
+  },
+  leaveChatRoomNewAdminRequired: {
+    en: 'Select a new group administrator',
+    ru: 'Select a new group administrator',
+    zh: 'Select a new group administrator'
+  },
+  leaveChatRoomInvalidNewAdmin: {
+    en: 'Selected administrator is not a group member',
+    ru: 'Selected administrator is not a group member',
+    zh: 'Selected administrator is not a group member'
   }
 })
