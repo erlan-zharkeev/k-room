@@ -4,10 +4,15 @@ import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { ChatRoomDeleteDialogEmitType } from '../config/types'
+import type { IChatRoomDeleteDialogProps } from '../config/types'
+import { useChatRoomDelete } from '../model/use-chat-room-delete.model'
 
 const model = defineModel<boolean>({ required: true })
-const emit = defineEmits<ChatRoomDeleteDialogEmitType>()
+const props = defineProps<IChatRoomDeleteDialogProps>()
+const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, isDeletingChatRoom } = useChatRoomDelete(
+  props,
+  model
+)
 </script>
 
 <template>
@@ -15,12 +20,19 @@ const emit = defineEmits<ChatRoomDeleteDialogEmitType>()
     <div class="chat-room-delete-dialog">
       <AppText :text="$t(CHAT_ROOM_PAGE_I18N.deleteChatConfirm)" />
       <div class="chat-room-delete-dialog__actions">
-        <NmorphButton :text="$t(CHAT_ROOM_PAGE_I18N.cancel)" style-type="transparent" @click="emit('cancel')" />
+        <NmorphButton
+          :text="$t(CHAT_ROOM_PAGE_I18N.cancel)"
+          style-type="transparent"
+          :disabled="isDeletingChatRoom"
+          @click="closeDeleteChatRoomDialog"
+        />
         <NmorphButton
           style-type="transparent"
           color="var(--nmorph-error-text-color)"
           :text="$t(CHAT_ROOM_PAGE_I18N.deleteChat)"
-          @click="emit('confirm')"
+          :disabled="!canDeleteChatRoom"
+          :loading="isDeletingChatRoom"
+          @click="deleteChatRoom"
         />
       </div>
     </div>

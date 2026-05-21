@@ -8,7 +8,7 @@ import type { SocketInstanceType } from 'src/shared/types/socket'
 
 export const socketRouter = (socket: SocketInstanceType, presenceService: PresenceService) => {
   registerUserSocketHandlers(socket, presenceService)
-  registerChatRoomsSocketHandlers(socket)
+  registerChatRoomsSocketHandlers(socket, presenceService)
   registerContactsSocketHandlers(socket, presenceService)
   registerMessagesSocketHandlers(socket)
   registerCallSocketHandlers(socket)

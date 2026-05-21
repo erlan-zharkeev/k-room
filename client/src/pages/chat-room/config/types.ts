@@ -4,7 +4,6 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import type { FChatRoomType } from 'src/shared/lib'
 import type { DbMessageType } from 'src/shared/lib'
-import type { IAppUserPickerItem } from 'src/shared/ui'
 
 export interface IChatRoomNavigationItem {
   id: string
@@ -36,21 +35,12 @@ export interface IChatRoomContextMenuOption {
   disabled?: boolean
 }
 
-export type ChatRoomDeleteDialogEmitType = {
-  (event: 'cancel'): void
-  (event: 'confirm'): void
+export interface IChatRoomDeleteDialogProps {
+  item: IChatRoomNavigationItem
 }
 
 export interface IChatRoomLeaveDialogProps {
-  canConfirm: boolean
-  isLeaving: boolean
-  newAdminItems: IAppUserPickerItem[]
-  showNewAdminPicker: boolean
-}
-
-export type ChatRoomLeaveDialogEmitType = {
-  (event: 'cancel'): void
-  (event: 'confirm'): void
+  item: IChatRoomNavigationItem
 }
 
 export type CreateChatRoomDialogEmitType = {

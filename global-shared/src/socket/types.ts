@@ -1,6 +1,6 @@
 import type { ICall } from '../calls/types'
 import type { ChatKindType, IChatRoom } from '../chat/types'
-import type { FrontendContactMapType, IFrontendContact, InteractionType } from '../contact/types'
+import type { IFrontendContact, IFrontendRoomMemberContact, InteractionType } from '../contact/types'
 import type { AppLanguageType } from '../language/types'
 import type { MediaFileValueType } from '../media/types'
 import type { IMessage, IReaction, MessageStatusType } from '../message/types'
@@ -51,7 +51,13 @@ export interface IEventStatusContact {
 
 export type EventChangeContactsDataType = IBaseFrontendUserData
 
-export type EventGetContactsType = FrontendContactMapType
+export interface IEventGetContacts {
+  contacts: IFrontendContact[]
+  roomMembers: IFrontendRoomMemberContact[]
+}
+
+export type EventGetContactsType = IEventGetContacts
+export type EventRoomMemberContactsUpdatedType = IFrontendRoomMemberContact[]
 export type EventCallUpdatedType = ICall
 export type EventCallsUpdatedType = ICall[]
 
@@ -270,6 +276,7 @@ export type SocketActionsType =
   | 'message-status-updated'
   | 'messages-status-updated'
   | 'contact-data-changed'
+  | 'room-member-contacts-updated'
   | 'call-user'
   | 'answer-call'
   | 'call-accepted'
