@@ -4,18 +4,14 @@ import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import type { IContactsDeleteDialogEmits, IContactsDeleteDialogProps } from '../config/types'
+import type { IContactsDeleteDialogEmits } from '../config/types'
 
-const props = defineProps<IContactsDeleteDialogProps>()
+const model = defineModel<boolean>({ required: true })
 const emit = defineEmits<IContactsDeleteDialogEmits>()
 </script>
 
 <template>
-  <NmorphDialog
-    :model-value="props.modelValue"
-    :title="$t(CONTACTS_PAGE_I18N.deleteTitle)"
-    @update:model-value="($event) => emit('update:model-value', $event)"
-  >
+  <NmorphDialog v-model="model" :title="$t(CONTACTS_PAGE_I18N.deleteTitle)">
     <div class="contacts-delete-dialog">
       <AppText :text="$t(CONTACTS_PAGE_I18N.deleteConfirm)" />
       <div class="contacts-delete-dialog__actions">

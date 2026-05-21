@@ -52,12 +52,7 @@ export interface IContactContextMenuEmitFn {
   (event: 'update-interaction', id: string, interaction: DbContactType['interactionType']): void
 }
 
-export interface IContactsDeleteDialogProps {
-  modelValue: boolean
-}
-
 export interface IContactsDeleteDialogEmits {
-  'update:model-value': [value: boolean]
   cancel: []
   confirm: []
 }
