@@ -18,7 +18,8 @@ export const useChatRoom = () => {
   const isPrivate = (id: string) => isRoomPrivate(getById(id))
   const merge = (rooms: IChatRoom[]) =>
     mergeMany(rooms, {
-      merge: (_current, incoming) => incoming
+      merge: (_current, incoming) => incoming,
+      removeMissing: true
     })
 
   return {
