@@ -7,13 +7,20 @@ import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomContextMenuOption, IChatRoomContextMenuProps } from '../config/types'
 
 import { useChatRoomMarkAsRead } from './use-chat-room-mark-as-read.model'
+import { useChatRoomPin } from './use-chat-room-pin.model'
 
 export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
   const { t } = useI18n()
   const item = toRef(props, 'item')
   const { canMarkChatRoomAsRead, markChatRoomAsRead } = useChatRoomMarkAsRead(item)
+  const { canUpdatePinnedChatRoom, togglePinnedChatRoom } = useChatRoomPin(item)
   const isContextMenuOpen = ref(false)
   const contextMenuOptions = computed<IChatRoomContextMenuOption[]>(() => [
+    {
+      label: item.value.isPinned ? t(CHAT_ROOM_PAGE_I18N.unpinChat) : t(CHAT_ROOM_PAGE_I18N.pinChat),
+      value: item.value.isPinned ? 'unpin-chat' : 'pin-chat',
+      disabled: !canUpdatePinnedChatRoom.value
+    },
     {
       label: t(CHAT_ROOM_PAGE_I18N.markAsRead),
       value: 'mark-as-read',
@@ -28,8 +35,14 @@ export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
   const selectChatRoomAction = (option: unknown) => {
     if (!isUnknownObject(option)) return
 
-    if (option.value === 'mark-as-read') {
-      markChatRoomAsRead()
+    switch (option.value) {
+      case 'mark-as-read':
+        markChatRoomAsRead()
+        break
+      case 'pin-chat':
+      case 'unpin-chat':
+        togglePinnedChatRoom()
+        break
     }
   }
 
