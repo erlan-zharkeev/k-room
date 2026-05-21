@@ -18,9 +18,10 @@ export interface IChatRoom {
 
 export type ChatRoomsType = IChatRoom[]
 
-export interface IChatRoomSchema extends Omit<
-  IChatRoom,
-  'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder'
-> {
+export interface IChatRoomSchema
+  extends Omit<
+    IChatRoom,
+    'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder'
+  > {
   users: string[]
 }
