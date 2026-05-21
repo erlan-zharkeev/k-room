@@ -15,7 +15,7 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useLocalizedDateTime } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
-import { TOAST_I18N, useAppToast, useI18n, type DbContactType } from 'src/shared/lib'
+import { TOAST_I18N, useAppToast, useI18n, type DbUserContactType } from 'src/shared/lib'
 
 import { CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
@@ -33,7 +33,7 @@ export const useContactsPage = () => {
   const loadingContactIds = reactive(new Set<string>())
   const creatingChatContactIds = reactive(new Set<string>())
 
-  const getContactActivity = ({ interactionType, lastSeen, online }: DbContactType) => {
+  const getContactActivity = ({ interactionType, lastSeen, online }: DbUserContactType) => {
     if (interactionType !== 'invite-accepted') return ''
     if (online) return t(CONTACTS_PAGE_I18N.online)
 
@@ -44,7 +44,7 @@ export const useContactsPage = () => {
     return `${t(CONTACTS_PAGE_I18N.lastSeen)} ${formatRelativeTime(normalized)}`
   }
 
-  const getContactStatus = ({ interactionType }: DbContactType) => {
+  const getContactStatus = ({ interactionType }: DbUserContactType) => {
     switch (interactionType) {
       case 'blocked':
         return t(CONTACTS_PAGE_I18N.blocked)

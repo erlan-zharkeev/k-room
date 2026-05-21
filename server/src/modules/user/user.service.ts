@@ -13,6 +13,7 @@ import {
 
 import { AppError } from 'src/shared/lib/app-error'
 
+import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
 import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.service'
@@ -321,8 +322,17 @@ export class UserService {
       await updateUserAvatar(null, userId)
     }
 
-    const contacts = await UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean()
-    const ids = contacts.map((contact) => String(contact._id))
+    const [contacts, rooms] = await Promise.all([
+      UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
+      ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
+    ])
+
+    const ids = [
+      ...new Set([
+        ...contacts.map((contact) => String(contact._id)),
+        ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
+      ])
+    ]
 
     if (!ids.length) {
       return

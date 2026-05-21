@@ -92,6 +92,18 @@ export const FIXTURE_GROUPS = [
     chatName: 'Design Review',
     nicknames: ['erlan', 'guest', 'sofia', 'marta', 'vika']
   },
+  {
+    key: 'admin-leave-alpha',
+    adminNickname: 'erlan',
+    chatName: 'Admin Leave Test Alpha',
+    nicknames: ['erlan', 'nina', 'denis', 'sofia']
+  },
+  {
+    key: 'admin-leave-beta',
+    adminNickname: 'erlan',
+    chatName: 'Admin Leave Test Beta',
+    nicknames: ['erlan', 'pavel', 'marta', 'yarik', 'vika']
+  },
   ...Array.from({ length: 20 }, (_, index) => {
     const ROOM_NUMBER = index + 1
 

@@ -13,7 +13,7 @@ import { useContactSearchQuery } from './use-contact-search-query.model'
 
 export const useContactSearch = () => {
   const { searchQuery } = useContactSearchQuery()
-  const { mergeMany, isExist } = useContact()
+  const { mergeMany, isUserContact, isUserContactExist } = useContact()
   const { sync } = useSyncMedia()
   const { t } = useI18n()
   const syncedAvatarIds = new Set<string>()
@@ -23,7 +23,7 @@ export const useContactSearch = () => {
   const searchValue = ref('')
   const isSearchLoading = ref(false)
   const isSearchLoadingMore = ref(false)
-  const foundContactList = computed(() => searchedContacts.value.filter(({ id }) => !isExist(id)))
+  const foundContactList = computed(() => searchedContacts.value.filter(({ id }) => !isUserContactExist(id)))
   const showSearchResults = computed(
     () => Boolean(searchQuery.value) && (isSearchLoading.value || Boolean(foundContactList.value.length))
   )
@@ -86,10 +86,9 @@ export const useContactSearch = () => {
     await mergeMany(savedContacts, {
       merge: (current, incoming) => ({
         ...getRequiredContactSystemData(),
-        ...current,
+        ...(current && isUserContact(current) ? current : {}),
         ...incoming,
-        savedAt: current?.savedAt ?? Date.now(),
-        onlineStatusSyncedAt: Date.now()
+        savedAt: current && isUserContact(current) ? current.savedAt : Date.now()
       })
     })
   }
