@@ -7,6 +7,7 @@ import { log } from 'src/shared/lib/log'
 import type { MongoIdType } from 'src/shared/types/mongo'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
+import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { RedisService } from '../security/redis.service'
 import { UserModel } from '../user/user.model'
 
@@ -145,9 +146,18 @@ export class PresenceService implements OnModuleDestroy {
   }
 
   private async emitContactStatus(userId: string, online: boolean, lastSeen?: number) {
-    const users = await UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean()
+    const [users, rooms] = await Promise.all([
+      UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
+      ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
+    ])
+    const userIds = [
+      ...new Set([
+        ...users.map((user) => String(user._id)),
+        ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
+      ])
+    ]
 
-    if (!users.length) {
+    if (!userIds.length) {
       return
     }
 
@@ -158,11 +168,7 @@ export class PresenceService implements OnModuleDestroy {
       lastSeen
     }
 
-    emitToUsers(
-      users.map((user) => user._id),
-      'contact-status-updated',
-      payload
-    )
+    emitToUsers(userIds, 'contact-status-updated', payload)
   }
 
   private async markUserOffline(userId: string) {

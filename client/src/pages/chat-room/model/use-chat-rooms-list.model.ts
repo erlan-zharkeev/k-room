@@ -53,7 +53,7 @@ export const useChatRoomsList = () => {
 
       return {
         id: room.id,
-        authorId: room.authorId,
+        adminId: room.adminId,
         chatKind: room.chatKind,
         to: buildChatRoomRoute(room.id),
         title,
