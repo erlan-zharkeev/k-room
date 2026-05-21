@@ -1,5 +1,3 @@
-export { createRoomMemberContact } from './lib/create-room-member-contact'
 export { getRequiredContactSystemData } from './lib/get-required-contact-system-data'
-export { isUserContact } from './lib/is-user-contact'
 export { useContact } from './model/use-contact.model'
 export { useUpdateContactData } from './model/use-update-contact-data.model'
