@@ -18,45 +18,47 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
       props.message.status ? `message-body--${props.message.status}` : ''
     ]"
   >
-    <AppText
-      v-if="showAuthorNickname"
-      class="message-body__author"
-      color="accent"
-      :text="props.message.authorNickname"
-    />
-    <div v-if="props.message.repliedMessage" class="message-body__reply">
-      <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
+    <div class="message-body__content">
       <AppText
-        class="message-body__reply-text"
-        tag="small"
-        color="semi-contrast-text"
-        :text="props.message.repliedMessage.body"
+        v-if="showAuthorNickname"
+        class="message-body__author"
+        color="accent"
+        :text="props.message.authorNickname"
       />
-    </div>
-    <div v-if="messageImageList.length" class="message-body__images">
-      <NmorphImagePreview
-        v-for="image in messageImageList"
-        :key="image.name"
-        class="message-body__image"
-        :src="image.previewSrc"
-        :alt="image.name"
-        width="100%"
-        height="220px"
-      />
-    </div>
-    <AppText tag="p" :text="props.message.body" />
-    <div class="message-body__footer">
-      <div v-if="reactionList.length" class="message-body__reactions">
-        <span
-          v-for="reaction in reactionList"
-          :key="reaction.glyphKey"
-          class="message-body__reaction"
-          :title="reaction.nicknames.join(', ')"
-        >
-          {{ reaction.glyphKey }}
-        </span>
+      <div v-if="props.message.repliedMessage" class="message-body__reply">
+        <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
+        <AppText
+          class="message-body__reply-text"
+          tag="small"
+          color="semi-contrast-text"
+          :text="props.message.repliedMessage.body"
+        />
       </div>
-      <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
+      <div v-if="messageImageList.length" class="message-body__images">
+        <NmorphImagePreview
+          v-for="image in messageImageList"
+          :key="image.name"
+          class="message-body__image"
+          :src="image.previewSrc"
+          :alt="image.name"
+          width="100%"
+          height="220px"
+        />
+      </div>
+      <AppText tag="p" :text="props.message.body" />
+      <div class="message-body__footer">
+        <div v-if="reactionList.length" class="message-body__reactions">
+          <span
+            v-for="reaction in reactionList"
+            :key="reaction.glyphKey"
+            class="message-body__reaction"
+            :title="reaction.nicknames.join(', ')"
+          >
+            {{ reaction.glyphKey }}
+          </span>
+        </div>
+        <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
+      </div>
     </div>
   </article>
 </template>
@@ -91,8 +93,12 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
 .message-body--sending {
   pointer-events: none;
   border: 1.5px solid color-mix(in srgb, var(--nmorph-accent-color), transparent 54%);
-  opacity: 0.6;
+  opacity: 0.5;
   animation: message-body-sending-pulse 1.8s ease-in-out infinite;
+}
+
+.message-body--sending .message-body__content {
+  filter: grayscale(1);
 }
 
 @keyframes message-body-sending-pulse {
