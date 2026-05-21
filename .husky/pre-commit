@@ -1,4 +1,20 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm run sync:public-config && pnpm run lint:fix && pnpm run format:fix && git add -u && pnpm run check
+STAGED_FILES="$(mktemp)"
+
+cleanup() {
+  rm -f "$STAGED_FILES"
+}
+
+trap cleanup EXIT INT TERM
+
+git diff --cached --name-only -z > "$STAGED_FILES"
+
+pnpm run sync:public-config &&
+  pnpm run lint:fix &&
+  pnpm run format:fix &&
+  if [ -s "$STAGED_FILES" ]; then
+    git add --pathspec-from-file="$STAGED_FILES" --pathspec-file-nul
+  fi &&
+  pnpm run check

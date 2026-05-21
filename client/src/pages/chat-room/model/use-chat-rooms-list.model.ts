@@ -53,6 +53,8 @@ export const useChatRoomsList = () => {
 
       return {
         id: room.id,
+        authorId: room.authorId,
+        chatKind: room.chatKind,
         to: buildChatRoomRoute(room.id),
         title,
         description: lastMessage?.body ?? '',
