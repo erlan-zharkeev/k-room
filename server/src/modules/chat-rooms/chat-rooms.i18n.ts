@@ -15,5 +15,10 @@ export const CHAT_ROOMS_I18N = defineI18n({
     en: 'Failed to delete chat room',
     ru: 'Failed to delete chat room',
     zh: 'Failed to delete chat room'
+  },
+  leaveChatRoomFailed: {
+    en: 'Failed to leave chat room',
+    ru: 'Failed to leave chat room',
+    zh: 'Failed to leave chat room'
   }
 })

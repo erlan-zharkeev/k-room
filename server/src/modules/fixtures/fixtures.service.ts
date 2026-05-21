@@ -314,7 +314,7 @@ const ensureDirectRoom = async () => {
   }
 
   const room = await new ChatRoomModel({
-    authorId: ERLAN_ID,
+    adminId: ERLAN_ID,
     chatKind: CHAT_KIND.DIRECT,
     users: [ERLAN_ID, TOLIK_ID],
     chatName: '',
@@ -339,7 +339,7 @@ const ensureLongPrivateFixtureRoom = async (contactId: string) => {
   }
 
   const room = await new ChatRoomModel({
-    authorId: ERLAN_ID,
+    adminId: ERLAN_ID,
     chatKind: CHAT_KIND.DIRECT,
     users: [ERLAN_ID, contactId],
     chatName: '',
@@ -354,11 +354,11 @@ const ensureLongPrivateFixtureRoom = async (contactId: string) => {
 
 const ensureGroupRooms = async () => {
   const rooms = await Promise.all(
-    FIXTURE_GROUPS.map(async ({ key, authorNickname, chatName, nicknames }) => {
+    FIXTURE_GROUPS.map(async ({ key, adminNickname, chatName, nicknames }) => {
       const users = nicknames.map((nickname) => USER_BY_NICKNAME[nickname]?.id).filter(Boolean)
-      const authorId = USER_BY_NICKNAME[authorNickname]?.id
+      const adminId = USER_BY_NICKNAME[adminNickname]?.id
 
-      if (!authorId || users.length !== nicknames.length) {
+      if (!adminId || users.length !== nicknames.length) {
         return null
       }
 
@@ -369,7 +369,7 @@ const ensureGroupRooms = async () => {
       const room =
         existingRoom ??
         (await new ChatRoomModel({
-          authorId,
+          adminId,
           chatKind: CHAT_KIND.GROUP,
           users,
           chatName,

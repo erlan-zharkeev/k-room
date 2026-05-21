@@ -6,6 +6,7 @@ import {
   type ICreateRoomAckPayload,
   type IEventCreateRoom,
   type IEventDeleteChatRoom,
+  type IEventLeaveChatRoom,
   type IEventUpdatePinnedChatRoom,
   type IEventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
@@ -24,6 +25,7 @@ import {
   checkContactsExistence,
   deleteChatRoom,
   emitNewRoomToUsers,
+  leaveChatRoom,
   setRoomToUsers,
   updatePinnedChatRoom,
   updatePinnedChatRoomOrder
@@ -45,7 +47,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         const users = [userId, ...contactIds]
         const roomData: Omit<IChatRoomSchema, 'id'> = {
           users,
-          authorId: userId,
+          adminId: userId,
           chatKind: contactIds.length > 1 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
           messages: []
         }
@@ -86,6 +88,17 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         await deleteChatRoom(socket.data.userId, payload)
       },
       { basicError: CHAT_ROOMS_I18N.deleteChatRoomFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'leave-chat-room',
+    socketAckMiddleware<IEventLeaveChatRoom>(
+      socket,
+      async (payload) => {
+        await leaveChatRoom(socket.data.userId, payload)
+      },
+      { basicError: CHAT_ROOMS_I18N.leaveChatRoomFailed }
     )
   )
 

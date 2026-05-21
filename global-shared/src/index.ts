@@ -137,6 +137,8 @@ export type {
   IEventUpdateChatRoom,
   IEventDeleteChatRoom,
   IEventChatRoomDeleted,
+  IEventLeaveChatRoom,
+  IEventChatRoomLeft,
   IEventUpdatePinnedChatRoom,
   IEventUpdatePinnedChatRoomOrder,
   IEventPinnedChatRoomsUpdated,
