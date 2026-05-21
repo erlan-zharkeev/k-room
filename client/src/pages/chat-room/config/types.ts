@@ -4,10 +4,11 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import type { FChatRoomType } from 'src/shared/lib'
 import type { DbMessageType } from 'src/shared/lib'
+import type { IAppUserPickerItem } from 'src/shared/ui'
 
 export interface IChatRoomNavigationItem {
   id: string
-  authorId: string
+  adminId: string
   chatKind: ChatKindType
   to: RouteLocationRaw
   title: string
@@ -31,7 +32,7 @@ export interface IChatRoomContextMenuProps {
 
 export interface IChatRoomContextMenuOption {
   label: string
-  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'delete-chat'
+  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'delete-chat' | 'leave-group'
   disabled?: boolean
 }
 
@@ -40,9 +41,16 @@ export type ChatRoomDeleteDialogEmitType = {
   (event: 'confirm'): void
 }
 
-export interface ICreateChatRoomContactItemProps {
-  contactId: string
-  nickname: string
+export interface IChatRoomLeaveDialogProps {
+  canConfirm: boolean
+  isLeaving: boolean
+  newAdminItems: IAppUserPickerItem[]
+  showNewAdminPicker: boolean
+}
+
+export type ChatRoomLeaveDialogEmitType = {
+  (event: 'cancel'): void
+  (event: 'confirm'): void
 }
 
 export type CreateChatRoomDialogEmitType = {

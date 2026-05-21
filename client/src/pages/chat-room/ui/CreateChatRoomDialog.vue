@@ -2,23 +2,18 @@
 import {
   NmorphButton,
   NmorphCard,
-  NmorphCheckbox,
-  NmorphCheckboxGroup,
   NmorphDialog,
   NmorphFileUpload,
   NmorphIconSearch,
-  NmorphScroll,
   NmorphTextInput
 } from '@nmorph/nmorph-ui-kit'
 
-import { AppText } from 'src/shared/ui'
+import { AppText, AppUserPicker } from 'src/shared/ui'
 
 import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { CreateChatRoomDialogEmitType } from '../config/types'
 import { useCreateChatRoomDialog } from '../model/use-create-chat-room-dialog.model'
-
-import CreateChatRoomContactItem from './CreateChatRoomContactItem.vue'
 
 const isOpen = defineModel<boolean>({ required: true })
 const emit = defineEmits<CreateChatRoomDialogEmitType>()
@@ -94,29 +89,7 @@ const {
           :selectable="false"
           :text="$t(CHAT_ROOM_PAGE_I18N.noContactSearchResults)"
         />
-        <NmorphScroll
-          v-else
-          scroll-x-prop="hidden"
-          height="224px"
-          max-height="34vh"
-          class="create-chat-room-dialog__contacts-scroll"
-        >
-          <NmorphCheckboxGroup
-            :model-value="selectedContactIds"
-            direction="column"
-            design="checkbox"
-            @update:model-value="selectedContactIds = $event"
-          >
-            <NmorphCheckbox
-              v-for="contact in filteredAcceptedContacts"
-              :id="contact.id"
-              :key="contact.id"
-              design="checkbox"
-            >
-              <CreateChatRoomContactItem :contact-id="contact.id" :nickname="contact.nickname" />
-            </NmorphCheckbox>
-          </NmorphCheckboxGroup>
-        </NmorphScroll>
+        <AppUserPicker v-else v-model="selectedContactIds" :items="filteredAcceptedContacts" />
       </NmorphCard>
       <div class="create-chat-room-dialog__actions">
         <NmorphButton

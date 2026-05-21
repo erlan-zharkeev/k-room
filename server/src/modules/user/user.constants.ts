@@ -70,7 +70,7 @@ export const PRIMARY_FIXTURE_USERNAMES = {
 export const FIXTURE_GROUPS = [
   {
     key: 'frontend-core',
-    authorNickname: 'erlan',
+    adminNickname: 'erlan',
     chatName: 'Frontend Core',
     nicknames: [
       'erlan',
@@ -82,13 +82,13 @@ export const FIXTURE_GROUPS = [
   },
   {
     key: 'weekend-plans',
-    authorNickname: 'tolik',
+    adminNickname: 'tolik',
     chatName: 'Weekend Plans',
     nicknames: ['erlan', 'tolik', FIXTURE_MAX_LENGTH_NICKNAMES.roma, 'nina', 'mark', 'lena']
   },
   {
     key: 'design-review',
-    authorNickname: 'guest',
+    adminNickname: 'guest',
     chatName: 'Design Review',
     nicknames: ['erlan', 'guest', 'sofia', 'marta', 'vika']
   },
@@ -97,7 +97,7 @@ export const FIXTURE_GROUPS = [
 
     return {
       key: `empty-room-${String(ROOM_NUMBER).padStart(2, '0')}`,
-      authorNickname: 'erlan',
+      adminNickname: 'erlan',
       chatName: `Empty Room ${String(ROOM_NUMBER).padStart(2, '0')}`,
       nicknames: [
         'erlan',

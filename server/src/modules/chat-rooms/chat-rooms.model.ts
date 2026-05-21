@@ -7,7 +7,7 @@ const chatRoomSchema = new Schema<IChatRoomSchema>({
     required: false,
     default: ''
   },
-  authorId: {
+  adminId: {
     type: String,
     required: true
   },

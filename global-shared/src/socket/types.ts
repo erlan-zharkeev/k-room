@@ -97,6 +97,15 @@ export interface IEventChatRoomDeleted {
   roomId: string
 }
 
+export interface IEventLeaveChatRoom {
+  roomId: string
+  nextAdminId?: string
+}
+
+export interface IEventChatRoomLeft {
+  roomId: string
+}
+
 export interface IEventUpdatePinnedChatRoom {
   roomId: string
   isPinned: boolean
@@ -288,6 +297,8 @@ export type SocketActionsType =
   | 'contact-add-success'
   | 'delete-chat-room'
   | 'chat-room-deleted'
+  | 'leave-chat-room'
+  | 'chat-room-left'
   | 'update-contact-interaction-type'
   | 'contact-interaction-updated'
   | 'actual-contacts'
