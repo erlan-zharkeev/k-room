@@ -1,4 +1,5 @@
 import type { VirtualItem } from '@tanstack/vue-virtual'
+import type { ChatKindType } from 'global-shared'
 import type { RouteLocationRaw } from 'vue-router'
 
 import type { FChatRoomType } from 'src/shared/lib'
@@ -6,6 +7,8 @@ import type { DbMessageType } from 'src/shared/lib'
 
 export interface IChatRoomNavigationItem {
   id: string
+  authorId: string
+  chatKind: ChatKindType
   to: RouteLocationRaw
   title: string
   description: string
@@ -28,8 +31,13 @@ export interface IChatRoomContextMenuProps {
 
 export interface IChatRoomContextMenuOption {
   label: string
-  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat'
+  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'delete-chat'
   disabled?: boolean
+}
+
+export type ChatRoomDeleteDialogEmitType = {
+  (event: 'cancel'): void
+  (event: 'confirm'): void
 }
 
 export interface ICreateChatRoomContactItemProps {

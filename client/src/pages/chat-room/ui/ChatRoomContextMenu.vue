@@ -7,9 +7,18 @@ import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomContextMenuProps } from '../config/types'
 import { useChatRoomContextMenu } from '../model/use-chat-room-context-menu.model'
 
+import ChatRoomDeleteDialog from './ChatRoomDeleteDialog.vue'
+
 const props = defineProps<IChatRoomContextMenuProps>()
-const { isContextMenuOpen, contextMenuOptions, setContextMenuOpen, selectChatRoomAction } =
-  useChatRoomContextMenu(props)
+const {
+  closeDeleteChatRoomDialog,
+  contextMenuOptions,
+  deleteChatRoom,
+  isContextMenuOpen,
+  isDeleteChatRoomDialogOpen,
+  selectChatRoomAction,
+  setContextMenuOpen
+} = useChatRoomContextMenu(props)
 const { isPortraitTabletOrLess } = useScreen()
 </script>
 
@@ -38,4 +47,10 @@ const { isPortraitTabletOrLess } = useScreen()
       </template>
     </NmorphCheckbox>
   </NmorphContextMenu>
+
+  <ChatRoomDeleteDialog
+    v-model="isDeleteChatRoomDialogOpen"
+    @cancel="closeDeleteChatRoomDialog"
+    @confirm="deleteChatRoom"
+  />
 </template>

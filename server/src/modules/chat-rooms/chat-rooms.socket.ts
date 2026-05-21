@@ -5,6 +5,7 @@ import {
   type IChatRoomSchema,
   type ICreateRoomAckPayload,
   type IEventCreateRoom,
+  type IEventDeleteChatRoom,
   type IEventUpdatePinnedChatRoom,
   type IEventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
@@ -21,6 +22,7 @@ import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
 import {
   checkContactsExistence,
+  deleteChatRoom,
   emitNewRoomToUsers,
   setRoomToUsers,
   updatePinnedChatRoom,
@@ -73,6 +75,17 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
         }
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
+    )
+  )
+
+  socket.on<SocketActionsType>(
+    'delete-chat-room',
+    socketAckMiddleware<IEventDeleteChatRoom>(
+      socket,
+      async (payload) => {
+        await deleteChatRoom(socket.data.userId, payload)
+      },
+      { basicError: CHAT_ROOMS_I18N.deleteChatRoomFailed }
     )
   )
 

@@ -135,6 +135,8 @@ export type {
   IEventGetSearchedContact,
   IEventCreateRoom,
   IEventUpdateChatRoom,
+  IEventDeleteChatRoom,
+  IEventChatRoomDeleted,
   IEventUpdatePinnedChatRoom,
   IEventUpdatePinnedChatRoomOrder,
   IEventPinnedChatRoomsUpdated,

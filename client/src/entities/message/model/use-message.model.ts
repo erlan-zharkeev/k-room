@@ -6,7 +6,7 @@ import { db, dexieCollectionStore } from 'src/shared/lib'
 const messageStore = dexieCollectionStore<DbMessageType>(db.messages)
 
 export const useMessage = () => {
-  const { bulkPut, bulkUpdate, mutate, put, remove, reset, update } = messageStore
+  const { bulkDelete, bulkPut, bulkUpdate, mutate, put, remove, reset, update } = messageStore
   const messages = messageStore.use()
   const messageById = computed(() => new Map(messages.value.map((message) => [message.id, message])))
 
@@ -21,6 +21,7 @@ export const useMessage = () => {
     put,
     bulkPut,
     bulkUpdate,
+    bulkDelete,
     update,
     mutate,
     remove,
