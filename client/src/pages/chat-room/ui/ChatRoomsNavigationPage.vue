@@ -15,14 +15,8 @@ import { useChatRoomsNavigationPage } from '../model/use-chat-rooms-navigation-p
 import ChatRoomList from './ChatRoomList.vue'
 import CreateChatRoomDialog from './CreateChatRoomDialog.vue'
 
-const {
-  searchQuery,
-  isCreateChatDialogOpen,
-  showNoSearchResults,
-  showNoChats,
-  openCreateChatDialog,
-  openChatRoom
-} = useChatRoomsNavigationPage()
+const { searchQuery, isCreateChatDialogOpen, showNoSearchResults, showNoChats, openCreateChatDialog, openChatRoom } =
+  useChatRoomsNavigationPage()
 </script>
 
 <template>

@@ -29,7 +29,6 @@ const props = defineProps<IChatRoomListItemProps>()
       color="var(--nmorph-accent-color)"
       type="ribbon"
       ribbon-corner="top-right"
-
       :ribbon-tilt="false"
     >
       <template #value>
@@ -114,11 +113,14 @@ const props = defineProps<IChatRoomListItemProps>()
 
 .chat-room-list-item-badge.nmorph-badge {
   --nmorph-badge-ribbon-corner-size: 20px;
+
   cursor: grab;
 }
 
 .chat-room-list-item-pinned-badge.nmorph-badge {
   --nmorph-badge-ribbon-width: 32px;
   --nmorph-badge-ribbon-height: 16px;
+
+  width: 100%;
 }
 </style>
