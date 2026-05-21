@@ -18,7 +18,6 @@ import CreateChatRoomDialog from './CreateChatRoomDialog.vue'
 const {
   searchQuery,
   isCreateChatDialogOpen,
-  chatRoomList,
   showNoSearchResults,
   showNoChats,
   openCreateChatDialog,
@@ -55,7 +54,7 @@ const {
       :text="$t(CHAT_ROOM_PAGE_I18N.noSearchResults)"
     />
     <NmorphScroll v-else scroll-x-prop="hidden" class="chat-rooms-navigation__scroll">
-      <ChatRoomList :items="chatRoomList" />
+      <ChatRoomList />
     </NmorphScroll>
 
     <CreateChatRoomDialog v-model="isCreateChatDialogOpen" @open-room="openChatRoom" />

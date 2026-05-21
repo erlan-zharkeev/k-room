@@ -1,3 +1,4 @@
+import type { IEventUpdatePinnedChatRoomOrder, SocketActionsType } from 'global-shared'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -5,9 +6,13 @@ import { getRoomDisplayedLastMessageId, isRoomPrivate, useChatRoom } from 'src/e
 import { useContact } from 'src/entities/contact'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
+import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
+import { socket, useSocketAction } from 'src/shared/api'
 import { useScreen } from 'src/shared/lib'
 
 import type { IChatRoomNavigationItem } from '../config/types'
+
+const searchQuery = ref('')
 
 export const useChatRoomsList = () => {
   const router = useRouter()
@@ -16,8 +21,9 @@ export const useChatRoomsList = () => {
   const { chatRooms } = useChatRoom()
   const { contacts } = useContact()
   const { getById } = useMessage()
+  const { emitSocketAction } = useSocketAction()
+  const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
-  const searchQuery = ref('')
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
 
   const getRoomFallbackActivityAt = (roomId: string) => {
@@ -54,7 +60,9 @@ export const useChatRoomsList = () => {
         online: Boolean(privateContact?.online),
         selected: route.params.chatRoomId === room.id,
         lastMessageCreatedAt: lastMessage?.createdAt ?? getRoomFallbackActivityAt(room.id),
-        unreadMessagesQuantity: room.unreadMessagesQuantity ?? 0
+        unreadMessagesQuantity: room.unreadMessagesQuantity ?? 0,
+        isPinned: room.isPinned,
+        pinnedOrder: room.pinnedOrder
       }
     })
 
@@ -62,7 +70,17 @@ export const useChatRoomsList = () => {
       ? items.filter(({ title }) => title.toLowerCase().includes(normalizedSearchQuery.value))
       : items
 
-    return filteredItems.sort((current, next) => next.lastMessageCreatedAt - current.lastMessageCreatedAt)
+    return filteredItems.sort((current, next) => {
+      if (current.isPinned && next.isPinned) {
+        return (current.pinnedOrder ?? 0) - (next.pinnedOrder ?? 0)
+      }
+
+      if (current.isPinned !== next.isPinned) {
+        return current.isPinned ? -1 : 1
+      }
+
+      return next.lastMessageCreatedAt - current.lastMessageCreatedAt
+    })
   })
 
   const showNoSearchResults = computed(() => Boolean(normalizedSearchQuery.value) && chatRoomList.value.length === 0)
@@ -72,11 +90,27 @@ export const useChatRoomsList = () => {
     router.push(buildChatRoomRoute(roomId))
   }
 
+  const reorderPinnedChatRooms = async (items: IChatRoomNavigationItem[]) => {
+    const pinnedChatRoomIds = items.map(({ id }) => id)
+
+    await updatePinnedOrder(pinnedChatRoomIds)
+    void emitSocketAction<IEventUpdatePinnedChatRoomOrder>(
+      'update-pinned-chat-room-order',
+      { pinnedChatRoomIds },
+      {
+        onFailure: () => {
+          socket.emit<SocketActionsType>('actualize-user-data')
+        }
+      }
+    )
+  }
+
   return {
     searchQuery,
     chatRoomList,
     showNoSearchResults,
     showNoChats,
-    openChatRoom
+    openChatRoom,
+    reorderPinnedChatRooms
   }
 }

@@ -1,8 +1,9 @@
-import type { EventGetRoomsType, SocketActionsType } from 'global-shared'
+import type { EventGetRoomsType, IEventPinnedChatRoomsUpdated, SocketActionsType } from 'global-shared'
 import { onBeforeUnmount } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
+import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
 import { socket } from 'src/shared/api'
 
 import { filterRoomPreviewMessage } from '../lib/filter-room-preview-message'
@@ -10,8 +11,9 @@ import { filterRoomPreviewMessage } from '../lib/filter-room-preview-message'
 import type { IEventUpdateChatRoomWithId } from './types.model'
 
 export const useChatRoomUpdateMonitor = () => {
-  const { merge, put } = useChatRoom()
+  const { getById, merge, put } = useChatRoom()
   const { bulkPut } = useMessage()
+  const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
   const saveRoomPreviewMessages = async (rooms: EventGetRoomsType) => {
     await bulkPut(rooms.flatMap((room) => (room.previewMessage ? [room.previewMessage] : [])))
@@ -27,8 +29,14 @@ export const useChatRoomUpdateMonitor = () => {
     await put(filterRoomPreviewMessage(room))
   }
 
+  const handlePinnedChatRoomsUpdate = async ({ pinnedChatRoomIds }: IEventPinnedChatRoomsUpdated) => {
+    await updatePinnedOrder(pinnedChatRoomIds)
+  }
+
   const handleRoomDataUpdate = async (room: IEventUpdateChatRoomWithId) => {
     if (!room.id) return
+
+    const currentRoom = getById(room.id)
 
     await put({
       id: room.id,
@@ -38,8 +46,8 @@ export const useChatRoomUpdateMonitor = () => {
       avatarId: room.avatar,
       lastMessageId: null,
       unreadMessagesQuantity: 0,
-      isPinned: false,
-      pinnedOrder: null,
+      isPinned: currentRoom?.isPinned ?? false,
+      pinnedOrder: currentRoom?.pinnedOrder ?? null,
       users: room.users,
       messages: []
     })
@@ -49,12 +57,14 @@ export const useChatRoomUpdateMonitor = () => {
     socket.on<SocketActionsType>('actual-chat-rooms', actualizeChatRooms)
     socket.on<SocketActionsType>('new-room-added', handleRoomAddition)
     socket.on<SocketActionsType>('room-data-updated', handleRoomDataUpdate)
+    socket.on<SocketActionsType>('pinned-chat-rooms-updated', handlePinnedChatRoomsUpdate)
   }
 
   const disposeChatRoomUpdateMonitor = () => {
     socket.off<SocketActionsType>('actual-chat-rooms', actualizeChatRooms)
     socket.off<SocketActionsType>('new-room-added', handleRoomAddition)
     socket.off<SocketActionsType>('room-data-updated', handleRoomDataUpdate)
+    socket.off<SocketActionsType>('pinned-chat-rooms-updated', handlePinnedChatRoomsUpdate)
   }
 
   onBeforeUnmount(disposeChatRoomUpdateMonitor)

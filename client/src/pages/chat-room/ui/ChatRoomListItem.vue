@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
 import { RouterLink } from 'vue-router'
 
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
@@ -21,47 +21,69 @@ const props = defineProps<IChatRoomListItemProps>()
     type="ribbon"
     ribbon-corner="bottom-left"
   >
-    <NmorphCard
-      tag="div"
-      class="chat-room-list-item"
-      content-class="chat-room-list-item__content"
-      :shadow-type="props.item.selected ? 'inset' : 'outset'"
+    <NmorphBadge
+      class="chat-room-list-item-pinned-badge"
+      :hidden="!props.item.isPinned"
+      value="pinned"
+      size="tiny"
+      color="var(--nmorph-accent-color)"
+      type="ribbon"
+      ribbon-corner="top-right"
+
+      :ribbon-tilt="false"
     >
-      <RouterLink
-        class="chat-room-list-item__link"
-        :to="props.item.to"
-        :aria-current="props.item.selected ? 'page' : undefined"
-      >
-        <AppProfileBasicData
-          class="chat-room-list-item__profile"
-          :image-id="props.item.imageId"
-          :title="props.item.title"
-          :name="props.item.title"
-          :show-online="props.item.online"
+      <template #value>
+        <NmorphIcon
+          class="chat-room-list-item-pinned-badge__icon"
+          width="12px"
+          color="var(--nmorph-contrast-text-color)"
+          aria-hidden="true"
         >
-          <template #title>
-            <div class="chat-room-list-item__title">
-              <div class="chat-room-list-item__name">
-                <AppText truncate :selectable="false" :text="props.item.title" />
+          <NmorphIconPin />
+        </NmorphIcon>
+      </template>
+      <NmorphCard
+        tag="div"
+        class="chat-room-list-item"
+        content-class="chat-room-list-item__content"
+        :shadow-type="props.item.selected ? 'inset' : 'outset'"
+      >
+        <RouterLink
+          class="chat-room-list-item__link"
+          :to="props.item.to"
+          :aria-current="props.item.selected ? 'page' : undefined"
+        >
+          <AppProfileBasicData
+            class="chat-room-list-item__profile"
+            :image-id="props.item.imageId"
+            :title="props.item.title"
+            :name="props.item.title"
+            :show-online="props.item.online"
+          >
+            <template #title>
+              <div class="chat-room-list-item__title">
+                <div class="chat-room-list-item__name">
+                  <AppText truncate :selectable="false" :text="props.item.title" />
+                </div>
               </div>
-            </div>
-          </template>
-          <template #description>
-            <AppText
-              v-if="props.item.description"
-              tag="small"
-              truncate
-              color="semi-contrast-text"
-              :selectable="false"
-              :text="props.item.description"
-            />
-          </template>
-        </AppProfileBasicData>
-      </RouterLink>
-      <div class="chat-room-list-item__actions">
-        <ChatRoomContextMenu :item="props.item" />
-      </div>
-    </NmorphCard>
+            </template>
+            <template #description>
+              <AppText
+                v-if="props.item.description"
+                tag="small"
+                truncate
+                color="semi-contrast-text"
+                :selectable="false"
+                :text="props.item.description"
+              />
+            </template>
+          </AppProfileBasicData>
+        </RouterLink>
+        <div class="chat-room-list-item__actions">
+          <ChatRoomContextMenu :item="props.item" />
+        </div>
+      </NmorphCard>
+    </NmorphBadge>
   </NmorphBadge>
 </template>
 
@@ -92,5 +114,11 @@ const props = defineProps<IChatRoomListItemProps>()
 
 .chat-room-list-item-badge.nmorph-badge {
   --nmorph-badge-ribbon-corner-size: 20px;
+  cursor: grab;
+}
+
+.chat-room-list-item-pinned-badge.nmorph-badge {
+  --nmorph-badge-ribbon-width: 32px;
+  --nmorph-badge-ribbon-height: 16px;
 }
 </style>

@@ -5,6 +5,7 @@ import {
   type IEventGetRoom,
   type IEventPinnedChatRoomsUpdated,
   type IEventUpdatePinnedChatRoom,
+  type IEventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX
 } from 'global-shared'
 
@@ -63,10 +64,12 @@ const resolvePinnedChatRoomIds = (currentIds: string[], roomId: string, isPinned
   return [roomId, ...currentIds.filter((id) => id !== roomId)]
 }
 
-export const updatePinnedChatRoom = async (
-  userId: string,
-  { roomId, isPinned }: IEventUpdatePinnedChatRoom
-) => {
+const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[]) => {
+  const orderedIds = incomingIds.filter((id) => currentIds.includes(id))
+  return [...new Set([...orderedIds, ...currentIds])]
+}
+
+export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: IEventUpdatePinnedChatRoom) => {
   const user = await UserModel.findOne(
     { _id: userId, 'personal.chatRooms': roomId },
     { 'personal.pinnedChatRoomIds': 1 }
@@ -87,6 +90,25 @@ export const updatePinnedChatRoom = async (
   }
 
   emitToUsers([userId], 'pinned-chat-rooms-updated', payload)
+}
+
+export const updatePinnedChatRoomOrder = async (
+  userId: string,
+  { pinnedChatRoomIds }: IEventUpdatePinnedChatRoomOrder
+) => {
+  const user = await UserModel.findById(userId, { 'personal.pinnedChatRoomIds': 1 }).lean()
+
+  if (!user) {
+    return
+  }
+
+  const nextPinnedChatRoomIds = resolvePinnedChatRoomOrder(user.personal.pinnedChatRoomIds ?? [], pinnedChatRoomIds)
+
+  await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': nextPinnedChatRoomIds } })
+
+  emitToUsers([userId], 'pinned-chat-rooms-updated', {
+    pinnedChatRoomIds: nextPinnedChatRoomIds
+  })
 }
 
 export const transformRoomForUser = async ({

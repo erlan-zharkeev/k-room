@@ -18,16 +18,6 @@ export interface IChatRoomNavigationItem {
   pinnedOrder: number | null
 }
 
-export interface IChatRoomListProps {
-  pinnedItems: IChatRoomNavigationItem[]
-  regularItems: IChatRoomNavigationItem[]
-  canReorderPinnedItems: boolean
-}
-
-export interface IChatRoomListEmits {
-  'reorder-pinned-chat-rooms': [items: IChatRoomNavigationItem[]]
-}
-
 export interface IChatRoomListItemProps {
   item: IChatRoomNavigationItem
 }
