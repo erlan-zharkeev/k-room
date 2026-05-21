@@ -14,10 +14,18 @@ export interface IChatRoomNavigationItem {
   selected: boolean
   lastMessageCreatedAt: number
   unreadMessagesQuantity: number
+  isPinned: boolean
+  pinnedOrder: number | null
 }
 
 export interface IChatRoomListProps {
-  items: IChatRoomNavigationItem[]
+  pinnedItems: IChatRoomNavigationItem[]
+  regularItems: IChatRoomNavigationItem[]
+  canReorderPinnedItems: boolean
+}
+
+export interface IChatRoomListEmits {
+  'reorder-pinned-chat-rooms': [items: IChatRoomNavigationItem[]]
 }
 
 export interface IChatRoomListItemProps {
@@ -30,7 +38,7 @@ export interface IChatRoomContextMenuProps {
 
 export interface IChatRoomContextMenuOption {
   label: string
-  value: 'mark-as-read'
+  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat'
   disabled?: boolean
 }
 

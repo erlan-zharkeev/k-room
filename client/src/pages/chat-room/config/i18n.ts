@@ -36,6 +36,16 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Отметить прочитанным',
     zh: '标为已读'
   },
+  pinChat: {
+    en: 'Pin chat',
+    ru: 'Закрепить чат',
+    zh: '置顶聊天'
+  },
+  unpinChat: {
+    en: 'Unpin chat',
+    ru: 'Открепить чат',
+    zh: '取消置顶'
+  },
   createChatTitle: {
     en: 'New chat',
     ru: 'Новый чат',
