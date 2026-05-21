@@ -89,6 +89,14 @@ export interface IEventUpdateChatRoom {
   avatarFile?: MediaFileValueType // TODO change to IEventCreateRoom
 }
 
+export interface IEventDeleteChatRoom {
+  roomId: string
+}
+
+export interface IEventChatRoomDeleted {
+  roomId: string
+}
+
 export interface IEventUpdatePinnedChatRoom {
   roomId: string
   isPinned: boolean
@@ -278,6 +286,8 @@ export type SocketActionsType =
   | 'invite-received'
   | 'contact-delete-success'
   | 'contact-add-success'
+  | 'delete-chat-room'
+  | 'chat-room-deleted'
   | 'update-contact-interaction-type'
   | 'contact-interaction-updated'
   | 'actual-contacts'

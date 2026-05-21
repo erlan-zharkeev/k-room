@@ -10,5 +10,10 @@ export const CHAT_ROOMS_I18N = defineI18n({
     en: 'Failed to update pinned chat room',
     ru: 'Failed to update pinned chat room',
     zh: 'Failed to update pinned chat room'
+  },
+  deleteChatRoomFailed: {
+    en: 'Failed to delete chat room',
+    ru: 'Failed to delete chat room',
+    zh: 'Failed to delete chat room'
   }
 })

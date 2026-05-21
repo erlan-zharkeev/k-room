@@ -1,6 +1,8 @@
 import {
   CHAT_KIND,
   type IChatRoomSchema,
+  type IEventChatRoomDeleted,
+  type IEventDeleteChatRoom,
   type IDBMessage,
   type IEventGetRoom,
   type IEventPinnedChatRoomsUpdated,
@@ -9,11 +11,13 @@ import {
   MEDIA_AVATAR_FILENAME_PREFIX
 } from 'global-shared'
 
+import { deleteBucketFilesByName } from '../media/media.service'
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
+import { ChatRoomModel } from './chat-rooms.model'
 import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
@@ -109,6 +113,40 @@ export const updatePinnedChatRoomOrder = async (
   emitToUsers([userId], 'pinned-chat-rooms-updated', {
     pinnedChatRoomIds: nextPinnedChatRoomIds
   })
+}
+
+export const deleteChatRoom = async (userId: string, { roomId }: IEventDeleteChatRoom) => {
+  const room = await ChatRoomModel.findOne({
+    _id: roomId,
+    users: userId,
+    authorId: userId,
+    chatKind: CHAT_KIND.GROUP
+  })
+    .select('users messages')
+    .lean()
+
+  if (!room) {
+    return
+  }
+
+  const userIds = room.users.map(String)
+  const messageIds = (room.messages ?? []).map(String)
+
+  await Promise.all([
+    ChatRoomModel.deleteOne({ _id: roomId }),
+    MessageModel.deleteMany({ _id: { $in: messageIds } }),
+    UserModel.updateMany(
+      { _id: { $in: userIds } },
+      { $pull: { 'personal.chatRooms': roomId, 'personal.pinnedChatRoomIds': roomId } }
+    ),
+    deleteBucketFilesByName('avatar', `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}`)
+  ])
+
+  const payload: IEventChatRoomDeleted = {
+    roomId
+  }
+
+  emitToUsers(userIds, 'chat-room-deleted', payload)
 }
 
 export const transformRoomForUser = async ({
