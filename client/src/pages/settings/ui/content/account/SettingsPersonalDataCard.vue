@@ -10,7 +10,7 @@ import {
   NmorphCallout
 } from '@nmorph/nmorph-ui-kit'
 
-import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import {
   SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES,
