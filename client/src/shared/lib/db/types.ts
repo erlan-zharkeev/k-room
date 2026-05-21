@@ -3,6 +3,7 @@ import type {
   ICall,
   IChatRoom,
   IFrontendContact,
+  IFrontendRoomMemberContact,
   IFrontendUserData,
   IMessage,
   MediaKindType,
@@ -44,13 +45,18 @@ export type DbCallType = ICall
 export type DbMessageType = IMessage
 export type FChatRoomType = IChatRoom
 export type DbUserDataType = Required<Pick<IFrontendUserData, 'id' | 'role' | 'email' | 'nickname'>>
-export type DbContactType = IFrontendContact & IDbContactRequiredSystemData
+export type DbUserContactType = IFrontendContact & IDbContactRequiredSystemData
+export type DbContactType = DbUserContactType | IDbRoomMemberContact
 export type DbMediaStatusType = 'missing' | 'ready'
 
 export interface IDbContactRequiredSystemData {
   savedAt: number
-  onlineStatusSyncedAt: number
   isTyping: boolean
+}
+
+export interface IDbRoomMemberContact extends IFrontendRoomMemberContact {
+  isTyping: boolean
+  isRoomMember: true
 }
 
 export interface IDbMedia {

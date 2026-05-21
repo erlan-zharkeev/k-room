@@ -6,7 +6,7 @@ import { socket } from 'src/shared/api'
 import { useChatRoomSync } from './use-chat-room-sync.model'
 
 export const useChatRoomUpdateMonitor = () => {
-  const { actualizeChatRooms, addChatRoom, deleteChatRoom, updateChatRoomData, updatePinnedChatRooms } =
+  const { actualizeChatRooms, addChatRoom, removeChatRoom, updateChatRoomData, updatePinnedChatRooms } =
     useChatRoomSync()
 
   const initializeChatRoomUpdateMonitor = () => {
@@ -14,7 +14,8 @@ export const useChatRoomUpdateMonitor = () => {
     socket.on<SocketActionsType>('new-room-added', addChatRoom)
     socket.on<SocketActionsType>('room-data-updated', updateChatRoomData)
     socket.on<SocketActionsType>('pinned-chat-rooms-updated', updatePinnedChatRooms)
-    socket.on<SocketActionsType>('chat-room-deleted', deleteChatRoom)
+    socket.on<SocketActionsType>('chat-room-deleted', removeChatRoom)
+    socket.on<SocketActionsType>('chat-room-left', removeChatRoom)
   }
 
   const disposeChatRoomUpdateMonitor = () => {
@@ -22,7 +23,8 @@ export const useChatRoomUpdateMonitor = () => {
     socket.off<SocketActionsType>('new-room-added', addChatRoom)
     socket.off<SocketActionsType>('room-data-updated', updateChatRoomData)
     socket.off<SocketActionsType>('pinned-chat-rooms-updated', updatePinnedChatRooms)
-    socket.off<SocketActionsType>('chat-room-deleted', deleteChatRoom)
+    socket.off<SocketActionsType>('chat-room-deleted', removeChatRoom)
+    socket.off<SocketActionsType>('chat-room-left', removeChatRoom)
   }
 
   onBeforeUnmount(disposeChatRoomUpdateMonitor)

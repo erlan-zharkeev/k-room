@@ -20,7 +20,12 @@ export type {
   IValidateChangeEmailCodePayload
 } from './codes/types'
 
-export type { InteractionType, IFrontendContact, FrontendContactMapType } from './contact/types'
+export type {
+  InteractionType,
+  IFrontendContact,
+  IFrontendRoomMemberContact,
+  FrontendContactMapType
+} from './contact/types'
 
 export {
   AUTH_ROUTE_NAMES,
@@ -126,7 +131,9 @@ export type {
   EventGetRoomsType,
   IEventStatusContact,
   EventChangeContactsDataType,
+  IEventGetContacts,
   EventGetContactsType,
+  EventRoomMemberContactsUpdatedType,
   EventCallUpdatedType,
   EventCallsUpdatedType,
   IEventSaveContact,

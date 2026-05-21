@@ -13,6 +13,7 @@ import {
   type SocketActionsType
 } from 'global-shared'
 
+import type { PresenceService } from 'src/modules/presence/presence.service'
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
@@ -31,7 +32,7 @@ import {
   updatePinnedChatRoomOrder
 } from './chat-rooms.service'
 
-export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
+export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, presenceService: PresenceService) => {
   socket.on<SocketActionsType>(
     'create-chat-room',
     socketAckMiddleware<IEventCreateRoom, ICreateRoomAckPayload>(
@@ -68,7 +69,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
 
         await room.save()
         await setRoomToUsers(roomId, users)
-        await emitNewRoomToUsers(users, room.toObject())
+        await emitNewRoomToUsers(users, room.toObject(), presenceService)
         await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
         return {
@@ -96,7 +97,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType) => {
     socketAckMiddleware<IEventLeaveChatRoom>(
       socket,
       async (payload) => {
-        await leaveChatRoom(socket.data.userId, payload)
+        await leaveChatRoom(socket.data.userId, payload, presenceService)
       },
       { basicError: CHAT_ROOMS_I18N.leaveChatRoomFailed }
     )

@@ -2,6 +2,7 @@ import {
   MEDIA_AVATAR_FILENAME_PREFIX,
   type EventGetRoomsType,
   type IEventChatRoomDeleted,
+  type IEventChatRoomLeft,
   type IEventPinnedChatRoomsUpdated
 } from 'global-shared'
 import { useRoute, useRouter } from 'vue-router'
@@ -13,8 +14,6 @@ import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
 
 import { filterRoomPreviewMessage } from '../lib/filter-room-preview-message'
-
-import type { IEventUpdateChatRoomWithId } from './types.model'
 
 export const useChatRoomSync = () => {
   const route = useRoute()
@@ -48,7 +47,7 @@ export const useChatRoomSync = () => {
     await updatePinnedOrder(pinnedChatRoomIds)
   }
 
-  const deleteChatRoom = async ({ roomId }: IEventChatRoomDeleted) => {
+  const removeChatRoom = async ({ roomId }: IEventChatRoomDeleted | IEventChatRoomLeft) => {
     const room = getById(roomId)
     const messageIds = room?.messages ?? []
     const avatarId = room?.avatarId
@@ -64,24 +63,9 @@ export const useChatRoomSync = () => {
     }
   }
 
-  const updateChatRoomData = async (room: IEventUpdateChatRoomWithId) => {
-    if (!room.id) return
-
-    const currentRoom = getById(room.id)
-
-    await put({
-      id: room.id,
-      authorId: room.users[0] ?? '',
-      chatName: room.chatName,
-      chatKind: room.chatKind,
-      avatarId: room.avatar,
-      lastMessageId: null,
-      unreadMessagesQuantity: 0,
-      isPinned: currentRoom?.isPinned ?? false,
-      pinnedOrder: currentRoom?.pinnedOrder ?? null,
-      users: room.users,
-      messages: []
-    })
+  const updateChatRoomData = async (room: EventGetRoomsType[number]) => {
+    await saveRoomPreviewMessages([room])
+    await put(filterRoomPreviewMessage(room))
   }
 
   return {
@@ -89,6 +73,6 @@ export const useChatRoomSync = () => {
     addChatRoom,
     updateChatRoomData,
     updatePinnedChatRooms,
-    deleteChatRoom
+    removeChatRoom
   }
 }

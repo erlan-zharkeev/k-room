@@ -1,26 +1,18 @@
-import { CHAT_KIND, type IEventDeleteChatRoom } from 'global-shared'
-import { computed, ref, type Ref } from 'vue'
+import type { IEventDeleteChatRoom } from 'global-shared'
+import { computed, ref, toRef, type Ref } from 'vue'
 
-import { useUser } from 'src/entities/user'
 import { useSocketAction } from 'src/shared/api'
 
-import type { IChatRoomNavigationItem } from '../config/types'
+import type { IChatRoomDeleteDialogProps } from '../config/types'
 
-export const useChatRoomDelete = (item: Ref<IChatRoomNavigationItem>) => {
-  const { user } = useUser()
+import { useChatRoomPermissions } from './use-chat-room-permissions.model'
+
+export const useChatRoomDelete = (props: IChatRoomDeleteDialogProps, isDeleteChatRoomDialogOpen: Ref<boolean>) => {
+  const item = toRef(props, 'item')
   const { emitSocketAction } = useSocketAction()
   const isDeletingChatRoom = ref(false)
-  const isDeleteChatRoomDialogOpen = ref(false)
-  const isDeleteChatRoomAvailable = computed(
-    () => item.value.chatKind === CHAT_KIND.GROUP && item.value.authorId === user.value.id
-  )
-  const canDeleteChatRoom = computed(() => isDeleteChatRoomAvailable.value && !isDeletingChatRoom.value)
-
-  const openDeleteChatRoomDialog = () => {
-    if (!canDeleteChatRoom.value) return
-
-    isDeleteChatRoomDialogOpen.value = true
-  }
+  const { canShowDeleteChatRoom } = useChatRoomPermissions(item)
+  const canDeleteChatRoom = computed(() => canShowDeleteChatRoom.value && !isDeletingChatRoom.value)
 
   const closeDeleteChatRoomDialog = () => {
     isDeleteChatRoomDialogOpen.value = false
@@ -42,10 +34,7 @@ export const useChatRoomDelete = (item: Ref<IChatRoomNavigationItem>) => {
 
   return {
     isDeletingChatRoom,
-    isDeleteChatRoomDialogOpen,
-    isDeleteChatRoomAvailable,
     canDeleteChatRoom,
-    openDeleteChatRoomDialog,
     closeDeleteChatRoomDialog,
     deleteChatRoom
   }

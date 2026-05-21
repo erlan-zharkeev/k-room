@@ -1,11 +1,11 @@
-import type { EventGetRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
+import type { EventGetContactsType, EventGetRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
-import { transformRoomForUser } from '../chat-rooms/chat-rooms.service'
+import { resolveRoomMemberContacts, transformRoomForUser } from '../chat-rooms/chat-rooms.service'
 
 import type { IUpdateLanguagePayload } from './types'
 import { USER_SOCKET_I18N } from './user.i18n'
@@ -49,11 +49,19 @@ export const registerUserSocketHandlers = (socket: SocketInstanceType, presenceS
         const roomIds = data?.personal.chatRooms ?? []
         const pinnedChatRoomIds = data?.personal.pinnedChatRoomIds ?? []
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
+        const roomMemberIds = [
+          ...new Set(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))
+        ]
+        const roomMembers = await resolveRoomMemberContacts(roomMemberIds, presenceService)
+        const contactsPayload: EventGetContactsType = {
+          contacts: contactResultData,
+          roomMembers
+        }
         const roomsResultData: EventGetRoomsType = await Promise.all(
           rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds }))
         )
 
-        socket.emit<SocketActionsType>('actual-contacts', contactResultData)
+        socket.emit<SocketActionsType>('actual-contacts', contactsPayload)
         socket.emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
       },
       { basicError: USER_SOCKET_I18N.actualizeUserDataFailed }

@@ -6,8 +6,8 @@ import { useI18n } from 'src/shared/lib'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { IChatRoomContextMenuOption, IChatRoomContextMenuProps } from '../config/types'
 
-import { useChatRoomDelete } from './use-chat-room-delete.model'
 import { useChatRoomMarkAsRead } from './use-chat-room-mark-as-read.model'
+import { useChatRoomPermissions } from './use-chat-room-permissions.model'
 import { useChatRoomPin } from './use-chat-room-pin.model'
 
 export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
@@ -15,15 +15,10 @@ export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
   const item = toRef(props, 'item')
   const { canMarkChatRoomAsRead, markChatRoomAsRead } = useChatRoomMarkAsRead(item)
   const { canUpdatePinnedChatRoom, togglePinnedChatRoom } = useChatRoomPin(item)
-  const {
-    canDeleteChatRoom,
-    closeDeleteChatRoomDialog,
-    deleteChatRoom,
-    isDeleteChatRoomAvailable,
-    isDeleteChatRoomDialogOpen,
-    openDeleteChatRoomDialog
-  } = useChatRoomDelete(item)
+  const { canShowDeleteChatRoom, canShowLeaveChatRoom } = useChatRoomPermissions(item)
   const isContextMenuOpen = ref(false)
+  const isDeleteChatRoomDialogOpen = ref(false)
+  const isLeaveChatRoomDialogOpen = ref(false)
   const contextMenuOptions = computed<IChatRoomContextMenuOption[]>(() => {
     const options: IChatRoomContextMenuOption[] = [
       {
@@ -38,11 +33,17 @@ export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
       }
     ]
 
-    if (isDeleteChatRoomAvailable.value) {
+    if (canShowDeleteChatRoom.value) {
       options.push({
         label: t(CHAT_ROOM_PAGE_I18N.deleteChat),
-        value: 'delete-chat',
-        disabled: !canDeleteChatRoom.value
+        value: 'delete-chat'
+      })
+    }
+
+    if (canShowLeaveChatRoom.value) {
+      options.push({
+        label: t(CHAT_ROOM_PAGE_I18N.leaveGroup),
+        value: 'leave-group'
       })
     }
 
@@ -65,7 +66,10 @@ export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
         togglePinnedChatRoom()
         break
       case 'delete-chat':
-        openDeleteChatRoomDialog()
+        isDeleteChatRoomDialogOpen.value = true
+        break
+      case 'leave-group':
+        isLeaveChatRoomDialogOpen.value = true
         break
     }
   }
@@ -73,10 +77,9 @@ export const useChatRoomContextMenu = (props: IChatRoomContextMenuProps) => {
   return {
     isContextMenuOpen,
     isDeleteChatRoomDialogOpen,
+    isLeaveChatRoomDialogOpen,
     contextMenuOptions,
     setContextMenuOpen,
-    closeDeleteChatRoomDialog,
-    deleteChatRoom,
     selectChatRoomAction
   }
 }
