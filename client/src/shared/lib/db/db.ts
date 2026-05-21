@@ -7,6 +7,7 @@ import { computed, getCurrentScope, onScopeDispose, shallowRef, type Ref } from 
 import type {
   DbContactType,
   DbCallType,
+  DbKnownUserType,
   DbMessageType,
   DbTransactionModeType,
   FChatRoomType,
@@ -413,6 +414,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<obj
 export class KRoomDB extends Dexie {
   settings!: Table<KvItemType<object>>
   contacts!: Table<DbContactType>
+  'known-users'!: Table<DbKnownUserType>
   media!: Table<IDbMedia>
   'chat-rooms'!: Table<FChatRoomType>
   calls!: Table<DbCallType>
@@ -420,9 +422,10 @@ export class KRoomDB extends Dexie {
 
   constructor() {
     super(__CLIENT_ENV_DATA__.appName.toLocaleLowerCase())
-    this.version(17).stores({
+    this.version(18).stores({
       settings: '__key',
       contacts: '&id',
+      'known-users': '&id',
       media: '&id',
       'chat-rooms': '&id',
       calls: '&id',
