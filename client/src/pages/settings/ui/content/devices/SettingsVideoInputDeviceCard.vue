@@ -23,6 +23,7 @@ const {
   isVideoInputCheckDisabled,
   videoInputPermissionCalloutType,
   videoInputPermissionStatus,
+  hasVideoInputPermissionWarning,
   isVideoInputChecking,
   setVideoInputChecking,
   setSelectedVideoInputDevice
@@ -36,7 +37,7 @@ const videoInputCheckLabel = computed(() =>
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)">
+  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)" :has-warning="hasVideoInputPermissionWarning">
     <div class="settings-video-input-device-card">
       <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDeviceDescription)" />
 

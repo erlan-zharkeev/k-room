@@ -1,12 +1,12 @@
 import { onScopeDispose } from 'vue'
 
-import { DB_QUOTA_I18N, subscribeDexieQuotaEvents, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
+import { DB_QUOTA_I18N, subscribeDexieCacheTrimEvents, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
-export const useDbQuotaToastProvider = () => {
+export const useDexieCacheTrimProvider = () => {
   const { t } = useI18n()
   const toast = useAppToast()
 
-  const unsubscribe = subscribeDexieQuotaEvents(({ type }) => {
+  const unsubscribe = subscribeDexieCacheTrimEvents(({ type }) => {
     const isTrimmed = type === 'cache-trimmed'
 
     toast.add({

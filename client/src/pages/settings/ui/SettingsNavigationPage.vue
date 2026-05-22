@@ -1,28 +1,12 @@
 <script setup lang="ts">
 import { NmorphScroll } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 
-import { useScreen } from 'src/shared/lib'
-
-import { getSettingsPath, SETTINGS_NAVIGATION_ITEMS } from '../config/constants/content.constants'
-import { getSettingsContentId } from '../lib/get-settings-content-id'
+import { SETTINGS_NAVIGATION_ITEMS } from '../config/constants/content.constants'
+import { useSettingsNavigationPage } from '../model/use-settings-navigation-page.model'
 
 import { SettingsNavigationItem } from './SettingsNavigationItem'
 
-const route = useRoute()
-const { isPortraitTabletOrLess } = useScreen()
-
-const selectedSettingsId = computed(() => {
-  const { settingsId } = route.params
-
-  return getSettingsContentId(settingsId)
-})
-
-const getItemRoute = (settingsId: string) => ({
-  path: getSettingsPath(settingsId),
-  query: isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
-})
+const { selectedSettingsId, hasContentWarning, buildItemRoute } = useSettingsNavigationPage()
 </script>
 
 <template>
@@ -32,11 +16,12 @@ const getItemRoute = (settingsId: string) => ({
         <SettingsNavigationItem
           v-for="item in SETTINGS_NAVIGATION_ITEMS"
           :key="item.id"
-          :to="getItemRoute(item.id)"
+          :to="buildItemRoute(item.id)"
           :active="selectedSettingsId === item.id"
           :ariaLabel="$t(item.label)"
           :label="$t(item.label)"
           :description="$t(item.description)"
+          :has-warning="hasContentWarning(item.id)"
         />
       </div>
     </NmorphScroll>

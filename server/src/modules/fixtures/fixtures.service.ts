@@ -173,13 +173,12 @@ const buildFixtureMessageReactions = (idx: number, roomNicknames: readonly strin
 }
 
 const buildFixtureRepliedMessage = (prefix: string) => {
-  const targetAuthorId = TOLIK_ID
   const targetAuthorNickname = 'tolik'
 
   return {
     id: buildFixtureMessageId(prefix, FIXTURE_REPLY_TARGET_MESSAGE_INDEX),
     authorNickname: targetAuthorNickname,
-    authorId: targetAuthorId,
+    authorId: TOLIK_ID,
     body: FIXTURE_LONG_REPLIED_MESSAGE_BODY,
     images: [...(FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[FIXTURE_REPLY_TARGET_MESSAGE_INDEX] ?? [])]
   }
