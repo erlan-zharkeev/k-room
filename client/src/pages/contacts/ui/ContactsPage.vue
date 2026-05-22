@@ -3,6 +3,7 @@ import { NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader, AppText } from 'src/shared/ui'
 
+import { CONTACTS_SEARCH_INPUT_ATTRS } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import { useContactListSearch } from '../model/use-contact-list-search.model'
 import { useContactsPage } from '../model/use-contacts-page.model'
@@ -36,7 +37,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
         v-model="searchQuery"
         clearable
         :placeholder="$t(CONTACTS_PAGE_I18N.search)"
-        :input-attrs="{ 'aria-label': $t(CONTACTS_PAGE_I18N.search) }"
+        :input-attrs="{ ...CONTACTS_SEARCH_INPUT_ATTRS, 'aria-label': $t(CONTACTS_PAGE_I18N.search) }"
       >
         <template #prepend-icon>
           <NmorphIconSearch />

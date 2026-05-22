@@ -6,6 +6,26 @@ export const CHAT_ROOMS_I18N = defineI18n({
     ru: 'Не удалось создать чат',
     zh: '创建聊天失败'
   },
+  chatRoomLimitReached: {
+    en: 'Chat limit reached',
+    ru: 'Chat limit reached',
+    zh: 'Chat limit reached'
+  },
+  pinnedChatRoomLimitReached: {
+    en: 'Pinned chat limit reached',
+    ru: 'Pinned chat limit reached',
+    zh: 'Pinned chat limit reached'
+  },
+  chatRoomMemberLimitReached: {
+    en: 'Group member limit reached',
+    ru: 'Group member limit reached',
+    zh: 'Group member limit reached'
+  },
+  chatRoomNameTooLong: {
+    en: 'Chat name is too long',
+    ru: 'Chat name is too long',
+    zh: 'Chat name is too long'
+  },
   updatePinnedChatRoomFailed: {
     en: 'Failed to update pinned chat room',
     ru: 'Failed to update pinned chat room',

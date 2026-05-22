@@ -1,4 +1,4 @@
-import { MESSAGE_STATUS, type MessageSchema } from 'global-shared'
+import { MESSAGE_BODY_MAX_LENGTH, MESSAGE_STATUS, type MessageSchema } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 const reactionSchema = new Schema(
@@ -33,7 +33,8 @@ const messageSchema = new Schema<MessageSchema>({
   },
   body: {
     type: String,
-    required: false
+    required: false,
+    maxlength: MESSAGE_BODY_MAX_LENGTH
   },
   createdAt: {
     type: Number,

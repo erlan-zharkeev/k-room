@@ -1,10 +1,11 @@
-import { CHAT_KIND, type ChatRoomSchema } from 'global-shared'
+import { CHAT_KIND, CHAT_ROOM_NAME_MAX_LENGTH, type ChatRoomSchema } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 const chatRoomSchema = new Schema<ChatRoomSchema>({
   chatName: {
     type: String,
     required: false,
+    maxlength: CHAT_ROOM_NAME_MAX_LENGTH,
     default: ''
   },
   adminId: {
