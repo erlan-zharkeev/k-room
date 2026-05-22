@@ -16,7 +16,7 @@ export const useAppLayout = () => {
   const { isPortraitTabletOrLess } = useScreen()
   const { effectiveTheme, settings } = useSettings()
 
-  const isSupportedTabletAppLayoutView = (view: LocationQueryValue | LocationQueryValue[] | undefined) =>
+  const isSupportedTabletAppLayoutView = (view?: LocationQueryValue | LocationQueryValue[]) =>
     isString(view) && ['content', 'content-navigation'].includes(view)
 
   watch(

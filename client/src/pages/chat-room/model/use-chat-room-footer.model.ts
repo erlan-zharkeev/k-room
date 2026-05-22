@@ -1,4 +1,4 @@
-import type { IEventSendMessage, IMessage, SocketActionsType } from 'global-shared'
+import type { IEventSendMessage, MessageType, SocketActionsType } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, ref } from 'vue'
 
@@ -19,7 +19,7 @@ export const useChatRoomFooter = () => {
 
     if (!body || !user.value.id) return
 
-    const message: IMessage = {
+    const message: MessageType = {
       id: uuidv4(),
       authorId: user.value.id,
       authorNickname: user.value.nickname,

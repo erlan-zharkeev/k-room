@@ -1,6 +1,6 @@
-import type { IFrontendKnownUser } from 'global-shared'
+import type { KnownUserType } from 'global-shared'
 
-import type { DbKnownUserType } from 'src/shared/lib'
+import type { KnownUserRecordType } from 'src/shared/lib'
 
 export const createKnownUser = ({
   id,
@@ -8,7 +8,7 @@ export const createKnownUser = ({
   online,
   lastSeen,
   isTyping = false
-}: IFrontendKnownUser & Partial<Pick<DbKnownUserType, 'isTyping'>>): DbKnownUserType => ({
+}: KnownUserType & Partial<Pick<KnownUserRecordType, 'isTyping'>>): KnownUserRecordType => ({
   id,
   nickname,
   online,

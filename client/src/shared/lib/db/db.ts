@@ -5,18 +5,18 @@ import unset from 'lodash/unset'
 import { computed, getCurrentScope, onScopeDispose, shallowRef, type Ref } from 'vue'
 
 import type {
-  DbContactType,
-  DbCallType,
-  DbKnownUserType,
-  DbMessageType,
-  DbTransactionModeType,
-  FChatRoomType,
-  IDbMedia,
+  CallRecordType,
+  MessageRecordType,
+  DexieTransactionModeType,
+  ChatRoomRecordType,
+  ContactRecordType,
+  MediaRecordType,
   ICollectionIncomingItem,
   ICollectionMergeManyOptions,
   IDbCollectionItem,
   IndexableType,
   IUseStateResult,
+  KnownUserRecordType,
   KvItemType,
   MutableType,
   UseResultType
@@ -97,7 +97,20 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
 
   const use = (defaults: Item[] = []) => useDexieLiveQuery(getAll, cachedItems ?? defaults).data
 
-  const useById = <D = Item | undefined>(id: ItemId | null | undefined, defaults?: D) => {
+  const useIndexedList = (defaults: Item[] = []) => {
+    const items = use(defaults)
+    const itemMap = computed(() => new Map(items.value.map((item) => [item.id, item])))
+    const getByIds = (ids: readonly ItemId[]) => ids.flatMap((id) => itemMap.value.get(id) ?? [])
+    const hasById = (id: ItemId) => itemMap.value.has(id)
+
+    return {
+      items,
+      getByIds,
+      hasById
+    }
+  }
+
+  const useById = <D = Item | undefined>(id?: ItemId | null, defaults?: D) => {
     const initialValue =
       id == null ? defaults : (cachedItems?.find((item) => item.id === id) as D | undefined) ?? defaults
 
@@ -170,7 +183,7 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
     cachedItems = []
   }
 
-  const transaction = async <R>(mode: DbTransactionModeType, callback: () => Promise<R> | R) => {
+  const transaction = async <R>(mode: DexieTransactionModeType, callback: () => Promise<R> | R) => {
     return table.db.transaction(mode, table, callback)
   }
 
@@ -292,6 +305,7 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
     bulkGet,
     getAll,
     use,
+    useIndexedList,
     useById,
     put,
     bulkPut,
@@ -318,7 +332,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<obj
 
   const wrap = (data: T): KvItemType<object> => ({ ...data, __key: keyValue })
 
-  const unwrap = (data: KvItemType<object> | undefined): T | undefined => {
+  const unwrap = (data?: KvItemType<object>): T | undefined => {
     if (!data) return undefined
 
     const { __key: _key, ...value } = data
@@ -413,12 +427,12 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItemType<obj
 
 export class KRoomDB extends Dexie {
   settings!: Table<KvItemType<object>>
-  contacts!: Table<DbContactType>
-  'known-users'!: Table<DbKnownUserType>
-  media!: Table<IDbMedia>
-  'chat-rooms'!: Table<FChatRoomType>
-  calls!: Table<DbCallType>
-  messages!: Table<DbMessageType>
+  contacts!: Table<ContactRecordType>
+  'known-users'!: Table<KnownUserRecordType>
+  media!: Table<MediaRecordType>
+  'chat-rooms'!: Table<ChatRoomRecordType>
+  calls!: Table<CallRecordType>
+  messages!: Table<MessageRecordType>
 
   constructor() {
     super(__CLIENT_ENV_DATA__.appName.toLocaleLowerCase())

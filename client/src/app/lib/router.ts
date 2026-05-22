@@ -12,7 +12,7 @@ export const getAppPathFromSettings = ({ contentTab, chatRoomId }: DbDeviceSetti
 }
 
 export const getContentTabFromPath = (path: string) => {
-  const isContentTab = (value: string | undefined): value is ContentTabType =>
+  const isContentTab = (value?: string): value is ContentTabType =>
     Boolean(value && CONTENT_TAB_IDS.includes(value as ContentTabType))
   const tab = path.split('/').filter(Boolean)[1]
 

@@ -26,7 +26,9 @@ const {
       <AppText
         :text="
           $t(
-            isCurrentUserChatRoomAdmin ? CHAT_ROOM_PAGE_I18N.leaveGroupAdminConfirm : CHAT_ROOM_PAGE_I18N.leaveGroupConfirm
+            isCurrentUserChatRoomAdmin
+              ? CHAT_ROOM_PAGE_I18N.leaveGroupAdminConfirm
+              : CHAT_ROOM_PAGE_I18N.leaveGroupConfirm
           )
         "
       />

@@ -3,11 +3,11 @@ import { computed, type ComputedRef, type Ref } from 'vue'
 import { getRoomDisplayedLastMessageId } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useLocalizedDateTime } from 'src/entities/setting'
-import type { FChatRoomType } from 'src/shared/lib'
+import type { ChatRoomRecordType } from 'src/shared/lib'
 
 import type { MessageListItemType } from '../config/types'
 
-export const useChatRoomMessageList = (room: Ref<FChatRoomType>, hasMoreLoadedMessages: ComputedRef<boolean>) => {
+export const useChatRoomMessageList = (room: Ref<ChatRoomRecordType>, hasMoreLoadedMessages: ComputedRef<boolean>) => {
   const { messageById } = useMessage()
   const { formatDate } = useLocalizedDateTime()
 

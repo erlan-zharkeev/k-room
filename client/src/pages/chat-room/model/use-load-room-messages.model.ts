@@ -3,11 +3,11 @@ import { computed, onBeforeUnmount, reactive, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
-import type { FChatRoomType } from 'src/shared/lib'
+import type { ChatRoomRecordType } from 'src/shared/lib'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 
-export const useLoadRoomMessages = (room?: Ref<FChatRoomType>) => {
+export const useLoadRoomMessages = (room?: Ref<ChatRoomRecordType>) => {
   const { bulkPut } = useMessage()
   const loadingRoomIds = reactive(new Set<string>())
   const hasMoreMessagesByRoomId = reactive<Record<string, boolean | undefined>>({})

@@ -1,4 +1,4 @@
-import type { DbUserContactType } from 'src/shared/lib'
+import type { ContactRecordType } from 'src/shared/lib'
 
-export const getContactActivityTagColor = ({ online }: DbUserContactType) =>
+export const getContactActivityTagColor = ({ online }: ContactRecordType) =>
   online ? 'var(--nmorph-success-color)' : 'var(--nmorph-semi-contrast-text-color)'

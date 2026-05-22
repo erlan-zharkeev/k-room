@@ -1,11 +1,11 @@
 import type { TransactionMode } from 'dexie'
 import type {
-  ICall,
-  IChatRoom,
-  IFrontendContact,
-  IFrontendRoomMemberContact,
-  IFrontendUserData,
-  IMessage,
+  CallType,
+  ChatRoomType,
+  ContactType,
+  KnownUserType,
+  UserDataType,
+  MessageType,
   MediaKindType,
   UnknownObjectType
 } from 'global-shared'
@@ -39,27 +39,26 @@ export interface ICollectionMergeManyOptions<
   removeMissing?: boolean
 }
 
-export type DbTransactionModeType = TransactionMode
+export type DexieTransactionModeType = TransactionMode
 
-export type DbCallType = ICall
-export type DbMessageType = IMessage
-export type FChatRoomType = IChatRoom
-export type DbUserDataType = Required<Pick<IFrontendUserData, 'id' | 'role' | 'email' | 'nickname'>>
-export type DbUserContactType = IFrontendContact & IDbContactRequiredSystemData
-export type DbContactType = DbUserContactType | IDbRoomMemberContact
-export type DbMediaStatusType = 'missing' | 'ready'
+export type CallRecordType = CallType
+export type MessageRecordType = MessageType
+export type ChatRoomRecordType = ChatRoomType
+export type UserRecordType = Required<Pick<UserDataType, 'id' | 'role' | 'email' | 'nickname'>>
+export type ContactRecordType = ContactType & ContactLocalStateType
+export type KnownUserRecordType = KnownUserType & KnownUserLocalStateType
+export type MediaRecordStatusType = 'missing' | 'ready'
 
-export interface IDbContactRequiredSystemData {
+export type ContactLocalStateType = {
   savedAt: number
   isTyping: boolean
 }
 
-export interface IDbRoomMemberContact extends IFrontendRoomMemberContact {
+export type KnownUserLocalStateType = {
   isTyping: boolean
-  isRoomMember: true
 }
 
-export interface IDbMedia {
+export interface MediaRecordType {
   id: string
   blob?: Blob
   contentType?: string
@@ -67,5 +66,5 @@ export interface IDbMedia {
   kind?: MediaKindType
   lastModified?: string
   lastChecked: number
-  status?: DbMediaStatusType
+  status?: MediaRecordStatusType
 }

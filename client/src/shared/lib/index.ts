@@ -54,21 +54,21 @@ export type { I18nTranslateType } from './i18n/i18n.types'
 export type { DateTimeFormatPatternMapType, DateTimeFormatType } from './time/types'
 export type { AppToastStackType, AppToastInputType } from './toast/types'
 export type {
-  DbCallType,
-  DbContactType,
-  DbKnownUserType,
-  DbMediaStatusType,
-  DbMessageType,
-  DbTransactionModeType,
-  DbUserDataType,
-  FChatRoomType,
+  ContactLocalStateType,
+  ContactRecordType,
+  CallRecordType,
+  MediaRecordStatusType,
+  MessageRecordType,
+  DexieTransactionModeType,
+  ChatRoomRecordType,
   ICollectionMergeManyOptions,
-  IDbContactRequiredSystemData,
-  IDbKnownUserRequiredSystemData,
-  IDbMedia,
+  MediaRecordType,
   IndexableType,
   IUseStateResult,
+  KnownUserLocalStateType,
+  KnownUserRecordType,
   KvItemType,
   MutableType,
+  UserRecordType,
   UseResultType
 } from './db/types'

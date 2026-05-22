@@ -1,3 +1,3 @@
-import { CHAT_KIND, type IChatRoom } from 'global-shared'
+import { CHAT_KIND, type ChatRoomType } from 'global-shared'
 
-export const isRoomGroup = (room: Pick<IChatRoom, 'chatKind'> | undefined) => room?.chatKind === CHAT_KIND.GROUP
+export const isRoomGroup = (room?: Pick<ChatRoomType, 'chatKind'>) => room?.chatKind === CHAT_KIND.GROUP

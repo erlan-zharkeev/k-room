@@ -6,10 +6,10 @@ export type {
   ISignInWithProviderPayload
 } from './auth/types'
 
-export type { CallStatusType, CallFlowType, ICall, IDBCall, DbCallSchemaType } from './calls/types'
+export type { CallStatusType, CallFlowType, CallType, CallDocumentType, CallSchemaType } from './calls/types'
 
 export { CHAT_KIND } from './chat/constants'
-export type { IChatRoom, ChatRoomsType, IChatRoomSchema, ChatKindType } from './chat/types'
+export type { ChatRoomType, ChatRoomsType, ChatRoomSchemaType, ChatKindType } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
 export type {
@@ -20,12 +20,7 @@ export type {
   IValidateChangeEmailCodePayload
 } from './codes/types'
 
-export type {
-  InteractionType,
-  IFrontendContact,
-  IFrontendRoomMemberContact,
-  FrontendContactMapType
-} from './contact/types'
+export type { InteractionType, ContactType, KnownUserType, ContactMapType } from './contact/types'
 
 export {
   AUTH_ROUTE_NAMES,
@@ -61,10 +56,10 @@ export {
 } from './media/constants'
 export type {
   MediaBucketNameType,
-  IMediaValidationOptions,
+  MediaValidationOptionsType,
   MediaKindType,
   MediaUploadType,
-  IImageObject,
+  ImageObjectType,
   MediaFileValueType
 } from './media/types'
 
@@ -73,12 +68,12 @@ export type { IPackageData } from './package/types'
 export { MESSAGE_STATUS } from './message/constants'
 export type {
   MessageStatusType,
-  IMessageMetaData,
-  IReaction,
-  IRepliedMessage,
-  IMessage,
-  IDBMessage,
-  IMessageSchema
+  MessageMetadataType,
+  MessageReactionType,
+  RepliedMessageType,
+  MessageType,
+  MessageDocumentType,
+  MessageSchemaType
 } from './message/types'
 
 export type { IChangePasswordPayload, ICreateNewPasswordPayload } from './requests/types'
@@ -118,8 +113,8 @@ export type {
   AvailableCookieType,
   UnknownCallbackType,
   UnknownObjectType,
-  IBasicStreamSettings,
-  IStreamSettings,
+  BasicStreamSettingsType,
+  StreamSettingsType,
   IBackendMessage,
   IBackendResponse
 } from './shared/types'
@@ -133,7 +128,7 @@ export type {
   EventChangeContactsDataType,
   IEventGetContacts,
   EventGetContactsType,
-  EventRoomMemberContactsUpdatedType,
+  EventKnownUsersUpdatedType,
   EventCallUpdatedType,
   EventCallsUpdatedType,
   IEventSaveContact,
@@ -192,7 +187,7 @@ export { formatHumanDateTime } from './time/lib/format-human-date-time'
 
 export { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from './user/constants'
 export { formatNickname, isNicknameValid, normalizeNickname, normalizeNicknameKey } from './user/lib/nickname'
-export type { UserRoleType, IBaseFrontendUserData, IFrontendUserData } from './user/types'
+export type { UserRoleType, UserPreviewType, UserDataType } from './user/types'
 
 export { VALIDATION_I18N } from './validation/i18n'
 export { createValidationMessages } from './validation/messages'
