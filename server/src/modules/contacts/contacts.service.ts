@@ -4,7 +4,7 @@ import type {
   IEventDeleteContactSuccess,
   IEventGetSearchedContact,
   IEventUpdateContactInteractionSuccess,
-  IFrontendContact,
+  ContactType,
   InteractionType,
   SocketActionsType
 } from 'global-shared'
@@ -57,7 +57,7 @@ export const searchContacts = async (
     }
   }
 
-  let searchedUsers: IFrontendContact[] = []
+  let searchedUsers: ContactType[] = []
 
   if (validSearch) {
     const searchFilter = type === 'id' ? { _id: needle } : { 'public.nickname': { $regex: new RegExp(needle, 'i') } }

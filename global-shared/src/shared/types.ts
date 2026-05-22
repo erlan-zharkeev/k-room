@@ -8,12 +8,12 @@ export type AvailableCookieType = 'device-id' | AuthTokensType
 export type UnknownCallbackType = (...args: unknown[]) => unknown
 export type UnknownObjectType = { [key: string]: unknown }
 
-export interface IBasicStreamSettings {
+export interface BasicStreamSettingsType {
   audio: boolean
   video: boolean
 }
 
-export interface IStreamSettings extends IBasicStreamSettings {
+export interface StreamSettingsType extends BasicStreamSettingsType {
   streamLoading: boolean
 }
 

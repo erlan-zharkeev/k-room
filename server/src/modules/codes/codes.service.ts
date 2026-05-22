@@ -43,7 +43,7 @@ export class CodesService {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
 
-    await this.securityService.assertSendPasswordRecoveryAllowed(payload.captchaToken, email, ip)
+    await this.securityService.assertSendPasswordRecoveryAllowed(email, ip, payload.captchaToken)
     await this.securityService.trackSendPasswordRecoveryAttempt(ip, email)
 
     const nowTimestampMs = Date.now()
@@ -104,7 +104,7 @@ export class CodesService {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
 
-    await this.securityService.assertSendChangeEmailCodeAllowed(payload.captchaToken, email, ip)
+    await this.securityService.assertSendChangeEmailCodeAllowed(email, ip, payload.captchaToken)
 
     const nowTimestampMs = Date.now()
     const cooldownUntil = await this.securityService.getSendChangeEmailCodeCooldown(userId)
@@ -155,7 +155,7 @@ export class CodesService {
     const email = payload.email.trim()
     const code = payload.code.trim()
 
-    await this.securityService.assertValidateChangeEmailCodeAllowed(payload.captchaToken, email, ip)
+    await this.securityService.assertValidateChangeEmailCodeAllowed(email, ip, payload.captchaToken)
 
     const stored = await this.securityService.getChangeEmailCode(userId)
 
@@ -209,7 +209,7 @@ export class CodesService {
     const email = payload.email.trim()
     const code = payload.code.trim()
 
-    await this.securityService.assertValidatePasswordRecoveryCodeAllowed(payload.captchaToken, email, ip)
+    await this.securityService.assertValidatePasswordRecoveryCodeAllowed(email, ip, payload.captchaToken)
 
     const user = await this.userService.findByEmail(email)
 

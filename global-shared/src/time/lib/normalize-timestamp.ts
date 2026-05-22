@@ -1,6 +1,6 @@
 import { getTime, isValid, toDate } from 'date-fns'
 
-export const normalizeTimestamp = (value: number | string | null | undefined): number | null => {
+export const normalizeTimestamp = (value?: number | string | null): number | null => {
   if (value === null || value === undefined || value === '') return null
 
   const dateValue = typeof value === 'string' && !Number.isNaN(Number(value)) ? Number(value) : value

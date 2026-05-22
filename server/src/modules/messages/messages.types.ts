@@ -1,6 +1,6 @@
-import type { IMessage } from 'global-shared'
+import type { MessageType } from 'global-shared'
 
 export interface ISendMessageParams {
   roomId: string
-  message: IMessage
+  message: MessageType
 }

@@ -2,11 +2,7 @@ import { intlFormat } from 'date-fns'
 
 import { normalizeTimestamp } from './normalize-timestamp'
 
-export const formatHumanDateTime = (
-  value: number | string | null | undefined,
-  locale = 'en-GB',
-  fallback = 'Never'
-) => {
+export const formatHumanDateTime = (value?: number | string | null, locale = 'en-US', fallback = 'Never') => {
   const timestampMs = normalizeTimestamp(value)
 
   if (timestampMs === null) return fallback

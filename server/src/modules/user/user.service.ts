@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
-  type IFrontendContact,
-  type IFrontendUserData,
+  type ContactType,
+  type UserDataType,
   type InteractionType,
   normalizeNicknameKey,
   REQ_STATUS,
@@ -34,7 +34,7 @@ import { ALLOWED_GOOGLE_AVATAR_HOSTS } from './user.constants'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
-export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
+export const mapUserToDto = (user: IUserSchema): UserDataType => {
   return {
     id: String(user._id),
     role: user.system.role,
@@ -47,7 +47,7 @@ export const transformUserToContact = (
   user: IUserSchema,
   interactionType: InteractionType = 'default',
   online = false
-): IFrontendContact => {
+): ContactType => {
   return {
     id: String(user._id),
     nickname: user.public.nickname,
@@ -60,7 +60,7 @@ export const transformUserToContact = (
 export const transformUserToFrontendContact = async (
   contacts: Record<string, IContact>,
   presenceService: PresenceService
-): Promise<IFrontendContact[]> => {
+): Promise<ContactType[]> => {
   const ids = Object.keys(contacts)
   const [users, onlineMap] = await Promise.all([
     UserModel.find({ _id: { $in: ids } }).lean<IUserSchema[]>(),
@@ -174,7 +174,7 @@ export const updateUserAvatar = async (buffer: Buffer | null, userId: string) =>
 
 @Injectable()
 export class UserService {
-  mapUserToDto(user: IUserSchema): IFrontendUserData {
+  mapUserToDto(user: IUserSchema): UserDataType {
     return mapUserToDto(user)
   }
 
