@@ -7,10 +7,14 @@ import {
   NmorphIconSearch,
   NmorphTextInput
 } from '@nmorph/nmorph-ui-kit'
+import { CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 
 import { AppText, AppUserPicker } from 'src/shared/ui'
 
-import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
+import {
+  CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES,
+  CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT
+} from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { CreateChatRoomDialogEmit } from '../config/types'
 import { useCreateChatRoomDialog } from '../model/use-create-chat-room-dialog.model'
@@ -51,7 +55,7 @@ const {
         :disabled="!isGroupChat"
         clearable
         :placeholder="$t(CHAT_ROOM_PAGE_I18N.chatName)"
-        :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.chatName) }"
+        :input-attrs="{ maxLength: CHAT_ROOM_NAME_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_PAGE_I18N.chatName) }"
         @update:model-value="updateCreateChatName"
       />
       <NmorphFileUpload
@@ -89,7 +93,12 @@ const {
           :selectable="false"
           :text="$t(CHAT_ROOM_PAGE_I18N.noContactSearchResults)"
         />
-        <AppUserPicker v-else v-model="selectedContactIds" :items="filteredAcceptedContacts" />
+        <AppUserPicker
+          v-else
+          v-model="selectedContactIds"
+          :items="filteredAcceptedContacts"
+          :max-selected="CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT"
+        />
       </NmorphCard>
       <div class="create-chat-room-dialog__actions">
         <NmorphButton

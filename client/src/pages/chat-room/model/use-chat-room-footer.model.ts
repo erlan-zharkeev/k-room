@@ -1,4 +1,4 @@
-import type { EventSendMessage, Message, SocketActions } from 'global-shared'
+import { MESSAGE_BODY_MAX_LENGTH, type EventSendMessage, type Message, type SocketActions } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, ref } from 'vue'
 
@@ -12,7 +12,9 @@ export const useChatRoomFooter = () => {
   const { put } = useMessage()
   const { user } = useUser()
   const messageText = ref('')
-  const isSendDisabled = computed(() => !messageText.value.trim() || !user.value.id)
+  const isSendDisabled = computed(
+    () => !messageText.value.trim() || messageText.value.length > MESSAGE_BODY_MAX_LENGTH || !user.value.id
+  )
 
   const sendMessage = async (roomId: string) => {
     const body = messageText.value.trim()

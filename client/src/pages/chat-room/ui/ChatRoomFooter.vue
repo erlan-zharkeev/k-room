@@ -7,6 +7,7 @@ import {
   NmorphTextInput,
   NmorphIconSmile
 } from '@nmorph/nmorph-ui-kit'
+import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomFooterProps } from '../config/types'
@@ -31,7 +32,7 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
     <NmorphTextInput
       v-model="messageText"
       :placeholder="$t(CHAT_ROOM_PAGE_I18N.messagePlaceholder)"
-      :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.messagePlaceholder) }"
+      :input-attrs="{ maxLength: MESSAGE_BODY_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_PAGE_I18N.messagePlaceholder) }"
       @keydown.enter.prevent="sendMessage(props.room.id)"
     />
     <NmorphButton shape="square" :aria-label="$t(CHAT_ROOM_PAGE_I18N.selectEmoji)">

@@ -103,6 +103,15 @@ const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName) =
   }
 }
 
+const validateRawFileSize = (size: number, bucketName: MediaBucketName) => {
+  const { maxMb } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
+  const maxBytes = maxMb * MEDIA_MB_IN_BYTES
+
+  if (size > maxBytes) {
+    throw new AppError(REQ_STATUS.badRequest, VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge)
+  }
+}
+
 export const initMediaBuckets = () => {
   const db = mongoose.connection.db
 
@@ -135,6 +144,9 @@ export const uploadBufferToBucket = async (
   try {
     const bucket = getRequiredBucket(bucketName)
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
+
+    validateRawFileSize(normalizedBuffer.length, bucketName)
+
     const outputBuffer =
       bucketName === 'avatar' || bucketName === 'image'
         ? await processImageWithSharp(normalizedBuffer, options?.compression ?? 'common-compressed')

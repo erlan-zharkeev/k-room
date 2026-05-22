@@ -1,3 +1,4 @@
+import { CONTACT_SEARCH_QUERY_MAX_LENGTH } from 'global-shared'
 import { isString } from 'lodash'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -11,7 +12,7 @@ export const useContactSearchQuery = () => {
   const getSearchQuery = () => {
     const value = route.query[CONTACTS_PAGE_SEARCH_QUERY_KEY]
 
-    return isString(value) ? value : ''
+    return isString(value) ? value.slice(0, CONTACT_SEARCH_QUERY_MAX_LENGTH) : ''
   }
   const searchQuery = ref(getSearchQuery())
   const hasSearchQuery = computed(() => Boolean(searchQuery.value))

@@ -13,7 +13,9 @@ export const useAppUserPicker = (props: AppUserPickerProps, selectedUserIds: Ref
   )
 
   const selectUsers = (userIds: string[]) => {
-    selectedUserIds.value = props.multiple ? userIds : userIds.slice(-1)
+    const nextUserIds = props.multiple ? userIds : userIds.slice(-1)
+
+    selectedUserIds.value = props.maxSelected ? nextUserIds.slice(0, props.maxSelected) : nextUserIds
   }
 
   return {

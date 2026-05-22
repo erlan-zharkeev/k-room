@@ -1,5 +1,5 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import type { CreateRoomAckPayload, EventCreateRoom } from 'global-shared'
+import { USER_CHAT_ROOM_LIMIT, type CreateRoomAckPayload, type EventCreateRoom } from 'global-shared'
 import { computed, onBeforeUnmount, ref, type Ref, watch } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -7,14 +7,18 @@ import { useContact } from 'src/entities/contact'
 import { useSocketAction } from 'src/shared/api'
 import { revokeObjectUrl, revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
-import { CREATE_CHAT_ROOM_AVATAR_MAX_FILE_SIZE, CREATE_CHAT_ROOM_AVATAR_MAX_MB } from '../config/constants'
+import {
+  CREATE_CHAT_ROOM_AVATAR_MAX_FILE_SIZE,
+  CREATE_CHAT_ROOM_AVATAR_MAX_MB,
+  CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT
+} from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 
 export const useCreateChatRoomDialog = (
   isCreateChatDialogOpen: Ref<boolean>,
   openChatRoom: (roomId: string) => void
 ) => {
-  const { getPersonalByContactId } = useChatRoom()
+  const { chatRooms, getPersonalByContactId } = useChatRoom()
   const { acceptedContacts } = useContact()
   const { emitSocketAction } = useSocketAction()
   const { t } = useI18n()
@@ -55,10 +59,13 @@ export const useCreateChatRoomDialog = (
   const existingPrivateChatRoom = computed(() =>
     selectedContactIds.value.length === 1 ? getPersonalByContactId(selectedContactIds.value[0]) : undefined
   )
+  const canCreateMoreChats = computed(() => chatRooms.value.length < USER_CHAT_ROOM_LIMIT)
   const canSubmitChat = computed(
     () =>
       selectedContactIds.value.length > 0 &&
-      (Boolean(existingPrivateChatRoom.value) || !isGroupChat.value || Boolean(createChatNameInputValue.value.trim()))
+      selectedContactIds.value.length <= CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT &&
+      (Boolean(existingPrivateChatRoom.value) ||
+        (canCreateMoreChats.value && (!isGroupChat.value || Boolean(createChatNameInputValue.value.trim()))))
   )
   const submitChatButtonI18n = computed(() =>
     existingPrivateChatRoom.value ? CHAT_ROOM_PAGE_I18N.openChat : CHAT_ROOM_PAGE_I18N.createChat
