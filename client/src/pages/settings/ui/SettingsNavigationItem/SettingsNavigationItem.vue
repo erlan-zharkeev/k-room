@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphIcon, NmorphCard, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphIcon, NmorphCard, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
 import { RouterLink } from 'vue-router'
 
 import { AppHeader, AppText } from 'src/shared/ui'
@@ -12,28 +12,40 @@ const { buttonClass, showIcon } = useSettingsNavigationItem(props)
 </script>
 
 <template>
-  <NmorphCard :shadow-type="props.active && showIcon ? 'inset' : 'outset'" class="settings-navigation-item">
-    <RouterLink
-      :to="props.to"
-      :class="buttonClass"
-      :aria-current="props.active ? 'page' : undefined"
-      :aria-label="props.ariaLabel"
-    >
-      <div class="settings-navigation-item__text">
-        <AppHeader tag="h5" truncate :selectable="false" :text="props.label" />
-        <AppText tag="small" truncate color="semi-contrast-text" :selectable="false" :text="props.description" />
-      </div>
-      <div v-if="showIcon" class="settings-navigation-item__icon">
-        <NmorphIcon>
-          <NmorphIconArrowRight v-if="props.active" />
-          <NmorphIconArrowDown v-else />
-        </NmorphIcon>
-      </div>
-    </RouterLink>
-  </NmorphCard>
+  <NmorphBadge
+    class="settings-navigation-item-badge"
+    :value="props.hasWarning ? '!' : undefined"
+    color="var(--nmorph-warn-color)"
+    type="ribbon"
+    ribbon-corner="top-right"
+  >
+    <NmorphCard :shadow-type="props.active && showIcon ? 'inset' : 'outset'" class="settings-navigation-item">
+      <RouterLink
+        :to="props.to"
+        :class="buttonClass"
+        :aria-current="props.active ? 'page' : undefined"
+        :aria-label="props.ariaLabel"
+      >
+        <div class="settings-navigation-item__text">
+          <AppHeader tag="h5" truncate :selectable="false" :text="props.label" />
+          <AppText tag="small" truncate color="semi-contrast-text" :selectable="false" :text="props.description" />
+        </div>
+        <div v-if="showIcon" class="settings-navigation-item__icon">
+          <NmorphIcon>
+            <NmorphIconArrowRight v-if="props.active" />
+            <NmorphIconArrowDown v-else />
+          </NmorphIcon>
+        </div>
+      </RouterLink>
+    </NmorphCard>
+  </NmorphBadge>
 </template>
 
 <style lang="scss">
+.settings-navigation-item-badge.nmorph-badge {
+  --nmorph-badge-ribbon-corner-size: 30px;
+}
+
 .settings-navigation-item {
   .settings-navigation-item-btn {
     display: flex;

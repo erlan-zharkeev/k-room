@@ -9,7 +9,7 @@ import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
 import { useStorageUsage } from '../../../model/storage/use-storage-usage.model'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { usageBytes, quotaBytes, usagePercent } = useStorageUsage()
+const { usageBytes, quotaBytes, usagePercent, isStorageUsageWarning } = useStorageUsage()
 
 const usageFormatted = computed(() => formatBytes(usageBytes.value))
 const availableFormatted = computed(() => formatBytes(quotaBytes.value - usageBytes.value))
@@ -17,7 +17,7 @@ const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_STORAGE_I18N.storage)">
+  <SettingsCard :title="$t(SETTINGS_PAGE_STORAGE_I18N.storage)" :has-warning="isStorageUsageWarning">
     <NmorphProgress :percentage="usagePercent" :max="100" />
 
     <div class="settings-storage-usage-card__stats">

@@ -22,6 +22,7 @@ const {
   isAudioInputCheckDisabled,
   audioInputPermissionCalloutType,
   audioInputPermissionStatus,
+  hasAudioInputPermissionWarning,
   audioVolumeDb,
   isAudioInputChecking,
   setAudioInputChecking,
@@ -36,7 +37,7 @@ const audioInputCheckLabel = computed(() =>
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)">
+  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)" :has-warning="hasAudioInputPermissionWarning">
     <div class="settings-audio-input-device-card">
       <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDeviceDescription)" />
 

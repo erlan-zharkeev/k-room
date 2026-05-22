@@ -4,6 +4,7 @@ import set from 'lodash/set'
 import unset from 'lodash/unset'
 import { computed, getCurrentScope, onScopeDispose, shallowRef, type Ref } from 'vue'
 
+import { runDexieCacheTrimGuard } from './cache-trim'
 import type {
   DexieTransactionMode,
   CollectionIncomingItem,
@@ -113,19 +114,19 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
   }
 
   const put = async (data: T) => {
-    await table.put(data)
+    await runDexieCacheTrimGuard(() => table.put(data))
     updateCachedItems([data])
   }
 
   const bulkPut = async (data: readonly T[]) => {
     if (!data.length) return
 
-    await table.bulkPut(data as T[])
+    await runDexieCacheTrimGuard(() => table.bulkPut(data as T[]))
     updateCachedItems(data)
   }
 
   const update = async (id: T['id'], changes: Partial<T>) => {
-    const updated = await table.update(id as never, changes as never)
+    const updated = await runDexieCacheTrimGuard(() => table.update(id as never, changes as never))
 
     if (updated && cachedItems) {
       cachedItems = cachedItems.map((item) => (item.id === id ? ({ ...item, ...changes } as T) : item))
@@ -137,11 +138,13 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
   const bulkUpdate = async (data: readonly { id: T['id']; changes: Partial<T> }[]) => {
     if (!data.length) return 0
 
-    const updated = await table.bulkUpdate(
-      data.map(({ id, changes }) => ({
-        key: id as never,
-        changes: changes as never
-      }))
+    const updated = await runDexieCacheTrimGuard(() =>
+      table.bulkUpdate(
+        data.map(({ id, changes }) => ({
+          key: id as never,
+          changes: changes as never
+        }))
+      )
     )
 
     if (updated && cachedItems) {
@@ -158,24 +161,24 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
   }
 
   const deleteById = async (id: T['id']) => {
-    await table.delete(id as never)
+    await runDexieCacheTrimGuard(() => table.delete(id as never))
     removeCachedItems([id])
   }
 
   const bulkDelete = async (ids: readonly T['id'][]) => {
     if (!ids.length) return
 
-    await table.bulkDelete(ids as never[])
+    await runDexieCacheTrimGuard(() => table.bulkDelete(ids as never[]))
     removeCachedItems(ids)
   }
 
   const clear = async () => {
-    await table.clear()
+    await runDexieCacheTrimGuard(() => table.clear())
     cachedItems = []
   }
 
   const transaction = async <R>(mode: DexieTransactionMode, callback: () => Promise<R> | R) => {
-    return table.db.transaction(mode, table, callback)
+    return runDexieCacheTrimGuard(() => table.db.transaction(mode, table, callback))
   }
 
   const replaceAll = async (data: readonly T[]) => {
@@ -339,7 +342,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<object>
   }
 
   const reset = async (defaults: T) => {
-    await table.put(wrap(defaults))
+    await runDexieCacheTrimGuard(() => table.put(wrap(defaults)))
     cached = defaults
     isCached = true
   }
@@ -348,7 +351,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<object>
     const exists = await table.get(keyValue as never)
 
     if (!exists) {
-      await table.put(wrap(defaults))
+      await runDexieCacheTrimGuard(() => table.put(wrap(defaults)))
       cached = defaults
       isCached = true
       return
@@ -361,15 +364,17 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<object>
   const mutate = async (mutator: (draft: Mutable<T>) => void) => {
     let nextValue: T | undefined
 
-    await table.db.transaction('rw', table, async () => {
-      const current = unwrap(await table.get(keyValue as never))
-      const base = current ?? ({} as T)
-      const draft = cloneMutable(base)
+    await runDexieCacheTrimGuard(() =>
+      table.db.transaction('rw', table, async () => {
+        const current = unwrap(await table.get(keyValue as never))
+        const base = current ?? ({} as T)
+        const draft = cloneMutable(base)
 
-      mutator(draft)
-      nextValue = draft as T
-      await table.put(wrap(nextValue))
-    })
+        mutator(draft)
+        nextValue = draft as T
+        await table.put(wrap(nextValue))
+      })
+    )
 
     cached = nextValue
     isCached = true

@@ -29,6 +29,27 @@ export interface CollectionMergeManyOptions<
 }
 
 export type DexieTransactionMode = TransactionMode
+export type DexieCacheTrimEventType = 'cache-trimmed' | 'cache-trim-failed'
+
+export interface DexieCacheTrimResult {
+  trimmed: boolean
+}
+
+export interface DexieCacheTrimmer {
+  id: string
+  priority: number
+  trim: () => Promise<DexieCacheTrimResult>
+}
+
+export interface DexieErrorLike extends UnknownObject {
+  failures?: unknown
+  inner?: unknown
+  name?: unknown
+}
+
+export interface DexieCacheTrimEvent {
+  type: DexieCacheTrimEventType
+}
 
 export type CallRecord = Call
 export type MessageRecord = Message

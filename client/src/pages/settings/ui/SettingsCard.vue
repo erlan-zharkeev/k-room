@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { computed, useSlots } from 'vue'
 
 import { AppHeader } from 'src/shared/ui'
@@ -14,30 +14,42 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
 </script>
 
 <template>
-  <NmorphCard class="settings-card">
-    <div class="settings-card__title">
-      <AppHeader tag="h2" color="contrast-text" :selectable="false" :text="title" />
-    </div>
+  <NmorphBadge
+    class="settings-card-badge"
+    :value="props.hasWarning ? '!' : undefined"
+    color="var(--nmorph-warn-color)"
+    type="ribbon"
+    ribbon-corner="top-right"
+  >
+    <NmorphCard class="settings-card" :card-padding="12">
+      <div class="settings-card__title">
+        <AppHeader tag="h5" color="contrast-text" :selectable="false" :text="title" />
+      </div>
 
-    <div class="settings-card__content">
-      <slot />
-    </div>
+      <div class="settings-card__content">
+        <slot />
+      </div>
 
-    <div v-if="hasFooter" class="settings-card__footer">
-      <slot name="footer">
-        <NmorphButton
-          fill
-          :text="props.buttonLabel"
-          :disabled="buttonDisabled"
-          :loading="buttonLoading"
-          @click="props.onButtonClick"
-        />
-      </slot>
-    </div>
-  </NmorphCard>
+      <div v-if="hasFooter" class="settings-card__footer">
+        <slot name="footer">
+          <NmorphButton
+            fill
+            :text="props.buttonLabel"
+            :disabled="buttonDisabled"
+            :loading="buttonLoading"
+            @click="props.onButtonClick"
+          />
+        </slot>
+      </div>
+    </NmorphCard>
+  </NmorphBadge>
 </template>
 
 <style lang="scss">
+.settings-card-badge.nmorph-badge {
+  --nmorph-badge-ribbon-corner-size: 30px;
+}
+
 .settings-card {
   display: grid;
   gap: 8px;
@@ -51,5 +63,9 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
   display: grid;
   gap: 8px;
   align-content: start;
+}
+
+.settings-card__title {
+  margin-bottom: 4px;
 }
 </style>
