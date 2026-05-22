@@ -1,23 +1,23 @@
 import { en, ru, zh } from '@nmorph/nmorph-ui-kit'
-import type { AppLanguageType } from 'global-shared'
+import type { AppLanguage } from 'global-shared'
 
 import { DEFAULT_APPEARANCE } from 'src/entities/setting'
-import type { IAppearanceSettings, IThemeShadowSettings } from 'src/entities/setting'
+import type { AppearanceSettings, ThemeShadowSettings } from 'src/entities/setting'
 
-export const getNmorphThemeShadowOptions = ({ baseShadowWidth, baseShadowBlurCoefficient }: IThemeShadowSettings) => {
+export const getNmorphThemeShadowOptions = ({ baseShadowWidth, baseShadowBlurCoefficient }: ThemeShadowSettings) => {
   return {
     baseShadowWidth: `${baseShadowWidth}px`,
     baseShadowBlurCoefficient: String(baseShadowBlurCoefficient)
   }
 }
 
-const getEffectiveThemeName = ({ selectedTheme, systemTheme }: IAppearanceSettings) => {
+const getEffectiveThemeName = ({ selectedTheme, systemTheme }: AppearanceSettings) => {
   return selectedTheme === 'system' ? systemTheme : selectedTheme
 }
 
 export const createNmorphOptions = (
-  language: AppLanguageType = 'en',
-  appearance: IAppearanceSettings = DEFAULT_APPEARANCE
+  language: AppLanguage = 'en',
+  appearance: AppearanceSettings = DEFAULT_APPEARANCE
 ) => {
   const effectiveThemeName = getEffectiveThemeName(appearance)
   const effectiveTheme = appearance.themes[effectiveThemeName]

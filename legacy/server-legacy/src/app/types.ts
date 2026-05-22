@@ -1,4 +1,4 @@
 import { Server as HttpServer } from 'http'
 import { Server as HttpsServer } from 'https'
 
-export type SocketServerType = HttpServer | HttpsServer
+export type SocketServer = HttpServer | HttpsServer

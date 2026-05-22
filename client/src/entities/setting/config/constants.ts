@@ -2,9 +2,9 @@ import { DEFAULT_APPEARANCE } from './appearance.constants'
 import { DEFAULT_IO_DEVICES_SETTINGS } from './io-devices.constants'
 import { DEFAULT_LOCALIZATION_SETTINGS } from './localization.constants'
 import { DEFAULT_NOTIFICATION_SETTINGS } from './notification.constants'
-import type { IDeviceSetting } from './types'
+import type { DeviceSetting } from './types'
 
-export const DEFAULT_SETTINGS: IDeviceSetting = {
+export const DEFAULT_SETTINGS: DeviceSetting = {
   contentTab: 'contacts',
   chatRoomId: '',
   messageScrollByRoom: {},

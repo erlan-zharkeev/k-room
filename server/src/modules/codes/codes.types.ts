@@ -1,30 +1,30 @@
-import type { ISendChangeEmailCodeResponse, ISendPasswordRecoveryCodeResponse } from 'global-shared'
+import type { SendChangeEmailCodeResponse, SendPasswordRecoveryCodeResponse } from 'global-shared'
 
-export interface ICodeElement {
+export interface CodeElement {
   value: string
   expiresAt: number
 }
 
-export interface ICodeMethod {
-  query: ICodeElement
-  email: ICodeElement
-  sms: ICodeElement
+export interface CodeMethod {
+  query: CodeElement
+  email: CodeElement
+  sms: CodeElement
 }
 
-export interface ICodePurpose {
-  passwordRecovery: ICodeMethod
+export interface CodePurpose {
+  passwordRecovery: CodeMethod
 }
 
-export interface ICodeSchema {
+export interface CodeSchema {
   _id?: string
-  codes: ICodePurpose
+  codes: CodePurpose
   nextRequestPossibleAt: number
 }
 
-export interface ISendPasswordRecoveryCodeResult extends ISendPasswordRecoveryCodeResponse {
+export interface SendPasswordRecoveryCodeResult extends SendPasswordRecoveryCodeResponse {
   tooManyRequests: boolean
 }
 
-export interface ISendChangeEmailCodeResult extends ISendChangeEmailCodeResponse {
+export interface SendChangeEmailCodeResult extends SendChangeEmailCodeResponse {
   tooManyRequests: boolean
 }

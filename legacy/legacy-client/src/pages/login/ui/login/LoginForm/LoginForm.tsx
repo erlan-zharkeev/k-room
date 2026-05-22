@@ -6,9 +6,9 @@ import { useI18n } from 'src/shared/preferences'
 import { AppButton, AppForm, AppLink } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from './internals/i18n'
-import { ILoginFormProps } from './types'
+import { LoginFormProps } from './types'
 
-export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: ILoginFormProps) => {
+export const LoginForm = ({ onLogin, isLoading, onFirebaseLogin, isFirebaseLoginLoading }: LoginFormProps) => {
   const { t } = useI18n()
 
   return (

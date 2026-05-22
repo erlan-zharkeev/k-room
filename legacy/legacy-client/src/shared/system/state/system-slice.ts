@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { IRepliedMessage } from 'common'
 
-import { IContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/shared/context-menu'
+import { ContextMenu, CONTEXT_MENU_HEIGHT, CONTEXT_MENU_WIDTH } from 'src/shared/context-menu'
 
 import {
   INITIAL_VIEWPORT,
@@ -11,15 +11,15 @@ import {
   CLICKED_OBJECT_INITIAL_STATE,
   INITIAL_REPLIED_MESSAGE_DATA
 } from '../internals/constants'
-import { AuthStatusType, IMessageInputData, ISystemStore, IViewPort } from '../internals/types'
+import { AuthStatus, MessageInputData, SystemStore, ViewPort } from '../internals/types'
 
-const initialState: ISystemStore = INITIAL_SYSTEM_STORE
+const initialState: SystemStore = INITIAL_SYSTEM_STORE
 
 export const systemSlice = createSlice({
   name: 'system',
   initialState,
   reducers: {
-    setAuth: (state, { payload }: { payload: AuthStatusType }) => {
+    setAuth: (state, { payload }: { payload: AuthStatus }) => {
       state.auth = payload
     },
     setOnline: (state, { payload }: { payload: boolean }) => {
@@ -49,10 +49,10 @@ export const systemSlice = createSlice({
     setHasInteraction(state, { payload }: { payload: boolean }) {
       state.hasInteracted = payload
     },
-    setViewPort(state, { payload }: { payload: IViewPort }) {
+    setViewPort(state, { payload }: { payload: ViewPort }) {
       state.viewPort = payload
     },
-    setContextMenu(state, { payload }: { payload: IContextMenu }) {
+    setContextMenu(state, { payload }: { payload: ContextMenu }) {
       const { coord, name, contextClickedObject } = payload
       state.contextMenu.name = name
       const currentClickedObject = state.contextMenu.contextClickedObject
@@ -77,7 +77,7 @@ export const systemSlice = createSlice({
     resetContextMenuToInitial(state) {
       state.contextMenu = INITIAL_CONTEXT_MENU
     },
-    updateMessageInputData(state, { payload }: { payload: Partial<IMessageInputData> }) {
+    updateMessageInputData(state, { payload }: { payload: Partial<MessageInputData> }) {
       state.messageInputData = {
         ...state.messageInputData,
         ...payload

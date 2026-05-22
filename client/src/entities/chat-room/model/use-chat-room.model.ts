@@ -1,12 +1,12 @@
-import type { ChatRoomType } from 'global-shared'
+import type { ChatRoom } from 'global-shared'
 import { computed } from 'vue'
 
-import type { ChatRoomRecordType } from 'src/shared/lib'
+import type { ChatRoomRecord } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
 import { isRoomPrivate } from '../lib/is-room-private'
 
-const chatRoomStore = dexieCollectionStore<ChatRoomRecordType>(db['chat-rooms'])
+const chatRoomStore = dexieCollectionStore<ChatRoomRecord>(db['chat-rooms'])
 
 export const useChatRoom = () => {
   const { bulkUpdate, mergeMany, mutate, put, remove, reset, update } = chatRoomStore
@@ -16,7 +16,7 @@ export const useChatRoom = () => {
   const getPersonalByContactId = (id: string) =>
     chatRooms.value.find((room) => isRoomPrivate(room) && room.users[0] === id)
   const isPrivate = (id: string) => isRoomPrivate(getById(id))
-  const merge = (rooms: ChatRoomType[]) =>
+  const merge = (rooms: ChatRoom[]) =>
     mergeMany(rooms, {
       merge: (_current, incoming) => incoming,
       removeMissing: true

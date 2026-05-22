@@ -1,4 +1,4 @@
-import { AuthTokensType } from 'common'
+import { AuthTokens } from 'common'
 import { Response } from 'express'
 
 import { parseExpires, setCookie } from 'src/modules/cookie'
@@ -9,7 +9,7 @@ import { generateToken } from './generate-token'
 
 export const setToken = (
   res: Response,
-  tokenName: AuthTokensType,
+  tokenName: AuthTokens,
   id: string,
   secret: string,
   expiresAt: number | string

@@ -1,4 +1,4 @@
-import { ProviderType } from 'common'
+import { Provider } from 'common'
 import mongoose from 'mongoose'
 
 import { UserModel } from '../../user.model'
@@ -16,7 +16,7 @@ export const createUser = async ({
   email: string
   username: string
   hashedPassword: string
-  provider?: ProviderType
+  provider?: Provider
 }) => {
   if (!id) return null
   const idCandidate = new mongoose.Types.ObjectId(id)

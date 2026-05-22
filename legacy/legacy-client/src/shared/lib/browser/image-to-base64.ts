@@ -1,7 +1,7 @@
-import { LocalizedTextType } from 'common'
+import { LocalizedText } from 'common'
 
 import { IMAGE_RESOLUTIONS } from 'src/shared/config'
-import { NOTIFICATION_I18N, UseNotificationType } from 'src/shared/notification'
+import { NOTIFICATION_I18N, UseNotification } from 'src/shared/notification'
 
 export const imageToBase64 = ({
   image,
@@ -12,8 +12,8 @@ export const imageToBase64 = ({
 }: {
   image: File
   allowedResolutions?: string[]
-  notifications: UseNotificationType
-  t: <T>(texts: LocalizedTextType<T>) => T
+  notifications: UseNotification
+  t: <T>(texts: LocalizedText<T>) => T
   maxImageSizeInMb?: number
 }) => {
   const reader = new FileReader()

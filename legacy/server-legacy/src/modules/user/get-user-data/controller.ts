@@ -2,7 +2,7 @@ import { IGetUserDataResponse, REQ_STATUS } from 'common'
 
 import { updateTokens } from 'src/modules/auth'
 
-import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
+import { AppResponse, AppRequest, SHARED_I18N } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -12,7 +12,7 @@ import { UserModel } from '../user.model'
 
 import { GET_USER_DATA_I18N } from './i18n'
 
-export const getUserDataController = async (req: IAppRequest, res: AppResponseType<IGetUserDataResponse>) => {
+export const getUserDataController = async (req: AppRequest, res: AppResponse<IGetUserDataResponse>) => {
   const { language } = req
   const basicError = localizedText(GET_USER_DATA_I18N.failedGetUserData, language)
 

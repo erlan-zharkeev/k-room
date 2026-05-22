@@ -1,14 +1,14 @@
-import type { InteractionType } from 'global-shared'
+import type { Interaction } from 'global-shared'
 
-export type ContactE2EUserRoleType = 'author' | 'interlocutor'
+export type ContactE2EUserRole = 'author' | 'interlocutor'
 
-export interface IContactE2EUser {
+export interface ContactE2EUser {
   id: string
   nickname: string
   email: string
 }
 
-export interface IContactE2EProviderLoginResponse {
+export interface ContactE2EProviderLoginResponse {
   payload: {
     id: string
     nickname: string
@@ -16,13 +16,13 @@ export interface IContactE2EProviderLoginResponse {
   }
 }
 
-export interface IContactE2EIndexedDbContact {
+export interface ContactE2EIndexedDbContact {
   id: string
   nickname: string
-  interactionType: InteractionType
+  interactionType: Interaction
 }
 
-export interface IContactE2EIndexedDbChatRoom {
+export interface ContactE2EIndexedDbChatRoom {
   id: string
   users: string[]
 }

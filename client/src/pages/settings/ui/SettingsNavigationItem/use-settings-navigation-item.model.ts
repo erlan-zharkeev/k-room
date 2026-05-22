@@ -2,9 +2,9 @@ import { computed } from 'vue'
 
 import { useScreen } from 'src/shared/lib'
 
-import type { ISettingsNavigationItemProps } from './types'
+import type { SettingsNavigationItemProps } from './types'
 
-export const useSettingsNavigationItem = (props: ISettingsNavigationItemProps) => {
+export const useSettingsNavigationItem = (props: SettingsNavigationItemProps) => {
   const { isPortraitTabletOrLess } = useScreen()
   const showIcon = computed(() => !isPortraitTabletOrLess.value)
   const buttonClass = computed(() => [

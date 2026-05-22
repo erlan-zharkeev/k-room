@@ -1,22 +1,18 @@
 import { differenceInMilliseconds, format, intlFormat, intlFormatDistance } from 'date-fns'
-import { normalizeTimestamp, type AppLanguageType } from 'global-shared'
+import { normalizeTimestamp, type AppLanguage } from 'global-shared'
 
 import {
   DATE_PATTERN_BY_DATE_TIME_FORMAT,
   TIME_PATTERN_BY_DATE_TIME_FORMAT,
   INTL_LOCALE_BY_LANGUAGE
 } from './constants'
-import type { DateTimeFormatType } from './types'
+import type { DateTimeFormat } from './types'
 
-const getIntlLocale = (language: AppLanguageType) => INTL_LOCALE_BY_LANGUAGE[language]
+const getIntlLocale = (language: AppLanguage) => INTL_LOCALE_BY_LANGUAGE[language]
 const getTimeValue = (value: number | string) => normalizeTimestamp(value) ?? 0
 const getPatternValue = (value: number | string, pattern: string) => format(getTimeValue(value), pattern)
 
-export const formatLocalizedDate = (
-  value: number | string,
-  language: AppLanguageType,
-  dateTimeFormat: DateTimeFormatType
-) => {
+export const formatLocalizedDate = (value: number | string, language: AppLanguage, dateTimeFormat: DateTimeFormat) => {
   const pattern = DATE_PATTERN_BY_DATE_TIME_FORMAT[dateTimeFormat]
 
   if (pattern) {
@@ -34,11 +30,7 @@ export const formatLocalizedDate = (
   )
 }
 
-export const formatLocalizedTime = (
-  value: number | string,
-  language: AppLanguageType,
-  dateTimeFormat: DateTimeFormatType
-) => {
+export const formatLocalizedTime = (value: number | string, language: AppLanguage, dateTimeFormat: DateTimeFormat) => {
   const pattern = TIME_PATTERN_BY_DATE_TIME_FORMAT[dateTimeFormat]
 
   if (pattern) {
@@ -58,8 +50,8 @@ export const formatLocalizedTime = (
 
 export const formatLocalizedDateTime = (
   value: number | string,
-  language: AppLanguageType,
-  dateTimeFormat: DateTimeFormatType
+  language: AppLanguage,
+  dateTimeFormat: DateTimeFormat
 ) => {
   const date = formatLocalizedDate(value, language, dateTimeFormat)
   const time = formatLocalizedTime(value, language, dateTimeFormat)
@@ -67,7 +59,7 @@ export const formatLocalizedDateTime = (
   return `${date}, ${time}`
 }
 
-export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguageType) =>
+export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguage) =>
   intlFormatDistance(getTimeValue(value), Date.now(), {
     locale: getIntlLocale(language),
     numeric: 'auto'

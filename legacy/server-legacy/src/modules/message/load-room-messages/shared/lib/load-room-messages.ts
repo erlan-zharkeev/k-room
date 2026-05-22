@@ -1,4 +1,4 @@
-import { IDBMessage, IEventLoadRoomMessages, IEventRoomMessagesLoaded } from 'common'
+import { IDBMessage, EventLoadRoomMessages, EventRoomMessagesLoaded } from 'common'
 
 import { ChatRoomModel } from 'src/modules/chat-room'
 
@@ -7,8 +7,8 @@ import { transformMessageForUser } from '../../../shared/lib/transform-message-f
 
 export const loadRoomMessages = async (
   userId: string,
-  payload: IEventLoadRoomMessages
-): Promise<IEventRoomMessagesLoaded | null> => {
+  payload: EventLoadRoomMessages
+): Promise<EventRoomMessagesLoaded | null> => {
   const { roomId, limit, beforeCreatedAt } = payload
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('messages').lean()
 

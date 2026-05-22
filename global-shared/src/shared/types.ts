@@ -1,30 +1,30 @@
-export type AuthTokensType = 'jwt' | 'refresh-jwt'
+export type AuthTokens = 'jwt' | 'refresh-jwt'
 
-export type FirebaseProviderType = typeof import('./constants').firebaseProviders[number]
-export type ProviderType = typeof import('./constants').providers[number]
+export type FirebaseProvider = typeof import('./constants').firebaseProviders[number]
+export type Provider = typeof import('./constants').providers[number]
 
-export type AvailableCookieType = 'device-id' | AuthTokensType
+export type AvailableCookie = 'device-id' | AuthTokens
 
-export type UnknownCallbackType = (...args: unknown[]) => unknown
-export type UnknownObjectType = { [key: string]: unknown }
+export type UnknownCallback = (...args: unknown[]) => unknown
+export type UnknownObject = { [key: string]: unknown }
 
-export interface BasicStreamSettingsType {
+export interface BasicStreamSettings {
   audio: boolean
   video: boolean
 }
 
-export interface StreamSettingsType extends BasicStreamSettingsType {
+export interface StreamSettings extends BasicStreamSettings {
   streamLoading: boolean
 }
 
-export interface IBackendMessage {
+export interface BackendMessage {
   text: string
   silent: boolean
 }
 
-export interface IBackendResponse<T> {
+export interface BackendResponse<T> {
   payload: T
-  message: IBackendMessage
+  message: BackendMessage
 }
 
-export type { RouteNameType, EndpointsType } from '../endpoints/types'
+export type { RouteName, Endpoints } from '../endpoints/types'

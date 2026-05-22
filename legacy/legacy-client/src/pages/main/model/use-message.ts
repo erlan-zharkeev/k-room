@@ -1,7 +1,7 @@
-import { DbMessageType } from 'src/shared/config'
+import { DbMessage } from 'src/shared/config'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
-const messageStore = dexieCollectionStore<DbMessageType>(db.messages)
+const messageStore = dexieCollectionStore<DbMessage>(db.messages)
 
 export const useMessage = () => {
   const { put, bulkPut, update, reset } = messageStore

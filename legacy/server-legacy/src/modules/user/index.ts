@@ -9,15 +9,15 @@ export {
 } from './config/constants'
 export { USER_ADMIN_I18N, USER_SOCKET_I18N } from './config/i18n'
 export type {
-  IAdminActionRequest,
-  IAdminActionResponse,
-  IAdminRecord,
-  IContact,
-  IUserDevice,
-  IUserPersonalData,
-  IUserPublicData,
-  IUserSchema,
-  IUserSystemData
+  AdminActionRequest,
+  AdminActionResponse,
+  AdminRecord,
+  UserContact,
+  UserDevice,
+  UserPersonalData,
+  UserPublicData,
+  UserSchema,
+  UserSystemData
 } from './types'
 export { actualizeUserDataController } from './actualize-user-data/controller'
 export { contactSchema } from './contact.model'
@@ -40,7 +40,7 @@ export { mapUserToDto } from './shared/lib/map-user-to-dto'
 export { setLastSeenData } from './shared/lib/set-last-seen-data'
 export { setUserStatus } from './shared/lib/set-user-status'
 export { transformUserToContact } from './shared/lib/transform-user-to-frontend-contact'
-export type { UserExistReasonType, UserExistResultType } from './shared/lib/types'
+export type { UserExistReason, UserExistResult } from './shared/lib/types'
 export { systemSchema } from './system.model'
 export { updateLanguageController } from './update-language/controller'
 export { updateOnlineStatusController } from './update-online-status/controller'

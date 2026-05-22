@@ -1,9 +1,9 @@
 import { DATE_TIME_FORMAT } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../i18n/appearance.i18n'
-import type { ISettingsDateTimeFormatOption } from '../types/localization.types'
+import type { SettingsDateTimeFormatOption } from '../types/localization.types'
 
-export const SETTINGS_DATE_TIME_FORMAT_OPTIONS: ISettingsDateTimeFormatOption[] = [
+export const SETTINGS_DATE_TIME_FORMAT_OPTIONS: SettingsDateTimeFormatOption[] = [
   {
     label: SETTINGS_PAGE_APPEARANCE_I18N.dateTimeFormatAuto,
     value: DATE_TIME_FORMAT.auto

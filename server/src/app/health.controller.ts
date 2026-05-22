@@ -1,11 +1,11 @@
 import { Controller, Get } from '@nestjs/common'
 
-import type { IHealthResponse } from './types'
+import type { HealthResponse } from './types'
 
 @Controller()
 export class HealthController {
   @Get('health')
-  getHealth(): IHealthResponse {
+  getHealth(): HealthResponse {
     return { ok: true }
   }
 }

@@ -1,10 +1,10 @@
 import { ReactElement } from 'react'
 
-export interface IEmojiDropdownProps {
+export interface EmojiDropdownProps {
   setEmoji?: (value: string) => void
 }
 
-export interface IEmojiItems {
+export interface EmojiItems {
   key: string
   label?: ReactElement
   glyph: string

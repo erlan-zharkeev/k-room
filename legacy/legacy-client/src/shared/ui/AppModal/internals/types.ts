@@ -1,24 +1,24 @@
 import { ReactNode } from 'react'
 
-import { IButtonProps } from 'src/shared/ui/AppButton/internals/types'
+import { ButtonProps } from 'src/shared/ui/AppButton/internals/types'
 
-export interface IAppModalAction {
+export interface AppModalAction {
   text?: string
   onClick: () => void
   loading?: boolean
   disabled?: boolean
-  color?: IButtonProps['color']
-  htmltype?: IButtonProps['htmltype']
+  color?: ButtonProps['color']
+  htmltype?: ButtonProps['htmltype']
 }
 
-export interface IAppModalProps {
+export interface AppModalProps {
   title?: ReactNode
   open: boolean
   onClose: () => void
   children: ReactNode
   headerExtra?: ReactNode
   className?: string
-  okAction?: IAppModalAction
-  cancelAction?: IAppModalAction
+  okAction?: AppModalAction
+  cancelAction?: AppModalAction
   actions?: ReactNode
 }

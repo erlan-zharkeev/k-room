@@ -1,7 +1,7 @@
-export type MediaKindType = 'image' | 'video' | 'audio' | 'pdf' | 'unknown'
+export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'unknown'
 
-export type MediaBucketNameType = 'avatar' | 'doc' | 'image' | 'audio' | 'video'
-export type MediaUploadType =
+export type MediaBucketName = 'avatar' | 'doc' | 'image' | 'audio' | 'video'
+export type MediaUpload =
   | 'zip'
   | 'rar'
   | '7z'
@@ -25,15 +25,15 @@ export type MediaUploadType =
   | 'svg-xml'
   | 'webp'
 
-export interface MediaValidationOptionsType {
-  supportedKindMediaType: MediaKindType
+export interface MediaValidationOptions {
+  supportedKindMediaType: MediaKind
   maxMb: number
 }
 
-export interface ImageObjectType {
+export interface ImageObject {
   src: string
   name: string
   fileBuffer?: ArrayBuffer
 }
 
-export type MediaFileValueType = ImageObjectType
+export type MediaFileValue = ImageObject

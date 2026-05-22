@@ -1,3 +1,3 @@
-export interface ISystemStore {
+export interface SystemStore {
   hasInteracted: boolean
 }

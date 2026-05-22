@@ -2,10 +2,10 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
-import { AppDispatchType } from 'src/shared/store'
+import { AppDispatch } from 'src/shared/store'
 import { resetSystemStore } from 'src/shared/system'
 
-export const useResetAllStores = (dispatch: AppDispatchType) => {
+export const useResetAllStores = (dispatch: AppDispatch) => {
   const userStore = useUser()
   const contactStore = useContact()
   const mediaStore = useMedia()

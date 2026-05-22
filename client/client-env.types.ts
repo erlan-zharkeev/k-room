@@ -1,4 +1,4 @@
-export interface IClientEnv {
+export interface ClientEnv {
   apiPath: string
   apiBaseUrl: string
   socketPath: string

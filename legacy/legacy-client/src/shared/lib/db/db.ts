@@ -1,22 +1,14 @@
 import Dexie, { Table } from 'dexie'
 
-import {
-  CLIENT_ENV,
-  DbUserSettingType,
-  DbContactType,
-  IDbMedia,
-  DbUserDataType,
-  DbMessageType,
-  FChatRoomType
-} from 'src/shared/config'
+import { CLIENT_ENV, DbUserSetting, DbContact, DbMedia, DbUserData, DbMessage, FChatRoom } from 'src/shared/config'
 
 export class KRoomDB extends Dexie {
-  settings!: Table<DbUserSettingType & { __key: string }>
-  user!: Table<DbUserDataType & { __key: string }>
-  contacts!: Table<DbContactType>
-  media!: Table<IDbMedia>
-  'chat-rooms'!: Table<FChatRoomType>
-  messages!: Table<DbMessageType>
+  settings!: Table<DbUserSetting & { __key: string }>
+  user!: Table<DbUserData & { __key: string }>
+  contacts!: Table<DbContact>
+  media!: Table<DbMedia>
+  'chat-rooms'!: Table<FChatRoom>
+  messages!: Table<DbMessage>
 
   constructor() {
     super(CLIENT_ENV.appName.toLocaleLowerCase())

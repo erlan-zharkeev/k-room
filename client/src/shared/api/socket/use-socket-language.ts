@@ -1,15 +1,15 @@
-import { isUnknownObject, type AppLanguageType } from 'global-shared'
+import { isUnknownObject, type AppLanguage } from 'global-shared'
 
 import { socket } from './socket'
 
-export const setSocketLanguage = (language: AppLanguageType) => {
+export const setSocketLanguage = (language: AppLanguage) => {
   socket.auth = {
     ...(isUnknownObject(socket.auth) ? socket.auth : {}),
     language
   }
 }
 
-export const updateSocketLanguage = (language: AppLanguageType) => {
+export const updateSocketLanguage = (language: AppLanguage) => {
   setSocketLanguage(language)
   socket.emit('update-language', { language })
 }

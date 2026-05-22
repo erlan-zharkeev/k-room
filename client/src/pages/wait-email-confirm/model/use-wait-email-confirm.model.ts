@@ -2,8 +2,8 @@ import { useIntervalFn } from '@vueuse/core'
 import {
   AUTH_ENDPOINTS,
   ROUTE_NAMES,
-  type ISendConfirmationLinkPayload,
-  type ISendConfirmationLinkResponse
+  type SendConfirmationLinkPayload,
+  type SendConfirmationLinkResponse
 } from 'global-shared'
 import { onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -45,7 +45,7 @@ export const useWaitEmailConfirm = () => {
     resumeCounter()
   }
 
-  const syncQuery = async (payload: ISendConfirmationLinkResponse) => {
+  const syncQuery = async (payload: SendConfirmationLinkResponse) => {
     await router.replace(buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, payload))
   }
 
@@ -53,14 +53,14 @@ export const useWaitEmailConfirm = () => {
     if (!email.value) return
 
     isLoading.value = true
-    const requestPayload: ISendConfirmationLinkPayload = {
+    const requestPayload: SendConfirmationLinkPayload = {
       email: email.value,
       ...captcha.buildCaptchaPayload()
     }
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doHttpRequest<ISendConfirmationLinkResponse>(
+      const response = await doHttpRequest<SendConfirmationLinkResponse>(
         'post',
         AUTH_ENDPOINTS.sendEmailConfirmationLink,
         requestPayload

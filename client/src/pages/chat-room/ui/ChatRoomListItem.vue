@@ -4,11 +4,11 @@ import { RouterLink } from 'vue-router'
 
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import type { IChatRoomListItemProps } from '../config/types'
+import type { ChatRoomListItemProps } from '../config/types'
 
 import ChatRoomContextMenu from './ChatRoomContextMenu.vue'
 
-const props = defineProps<IChatRoomListItemProps>()
+const props = defineProps<ChatRoomListItemProps>()
 </script>
 
 <template>

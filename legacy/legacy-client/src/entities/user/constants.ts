@@ -1,6 +1,6 @@
-import { DbUserDataType } from 'src/shared/config'
+import { DbUserData } from 'src/shared/config'
 
-export const INITIAL_USER_STORE: DbUserDataType = {
+export const INITIAL_USER_STORE: DbUserData = {
   id: '',
   role: 'user',
   email: '',

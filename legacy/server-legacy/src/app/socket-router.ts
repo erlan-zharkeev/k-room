@@ -21,7 +21,7 @@ import {
   userDisconnectController
 } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 
 const socketControllers = [
   userConnectController,
@@ -44,6 +44,6 @@ const socketControllers = [
   endCallController
 ]
 
-export const socketRouter = (socket: SocketInstanceType) => {
+export const socketRouter = (socket: SocketInstance) => {
   socketControllers.forEach((controller) => controller(socket))
 }

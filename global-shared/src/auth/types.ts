@@ -1,24 +1,24 @@
-import type { ICaptchaTokenPayload } from '../security/types'
-import type { ProviderType } from '../shared/types'
+import type { CaptchaTokenPayload } from '../security/types'
+import type { Provider } from '../shared/types'
 
-export interface IAuthLoginPayload extends ICaptchaTokenPayload {
+export interface AuthLoginPayload extends CaptchaTokenPayload {
   login: string
   password: string
 }
 
-export interface IAuthRegistrationPayload extends ICaptchaTokenPayload {
+export interface AuthRegistrationPayload extends CaptchaTokenPayload {
   nickname: string
   email: string
   password: string
 }
 
-export interface ISendConfirmationLinkPayload extends ICaptchaTokenPayload {
+export interface SendConfirmationLinkPayload extends CaptchaTokenPayload {
   email: string
 }
 
-export interface ISignInWithProviderPayload {
+export interface SignInWithProviderPayload {
   nickname: string
   email: string
-  provider: ProviderType
+  provider: Provider
   avatar?: string
 }

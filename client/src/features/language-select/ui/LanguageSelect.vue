@@ -13,9 +13,9 @@ import {
 import { LANGUAGE_SELECT_I18N } from '../config/i18n'
 import { useLanguageSelect } from '../model/use-language-select.model'
 
-import type { ILanguageSelectProps } from './types'
+import type { LanguageSelectProps } from './types'
 
-const props = withDefaults(defineProps<ILanguageSelectProps>(), LANGUAGE_SELECT_DEFAULT_PROPS)
+const props = withDefaults(defineProps<LanguageSelectProps>(), LANGUAGE_SELECT_DEFAULT_PROPS)
 
 const { t } = useI18n()
 const { settings, changeLanguage } = useLanguageSelect()

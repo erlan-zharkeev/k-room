@@ -1,34 +1,34 @@
-import { MediaKindType } from 'common'
+import { MediaKind } from 'common'
 import { NextFunction, Request, Response } from 'express'
 import mongoose from 'mongoose'
 
-import { SharpSettingsKeyType } from '../shared/types/sharp'
+import { SharpSettingsKey } from '../shared/types/sharp'
 
 import { MEDIA_BUCKET_NAMES } from './config/constants'
 
-export type MulterHandlerType = (req: Request, res: Response, next: NextFunction) => void
+export type MulterHandler = (req: Request, res: Response, next: NextFunction) => void
 
-export type RequestMulterFileType = Express.Multer.File & {
+export type RequestMulterFile = Express.Multer.File & {
   id?: string
   filename?: string
   contentType?: string
   bucketName?: string
 }
 
-export type MediaBucketNameType = (typeof MEDIA_BUCKET_NAMES)[number]
+export type MediaBucketName = (typeof MEDIA_BUCKET_NAMES)[number]
 
-export type MulterErrorCodeType = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
+export type MulterErrorCode = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
 
-export interface IMediaBucketOptions {
-  supportedKindMediaType: MediaKindType
+export interface MediaBucketOptions {
+  supportedKindMediaType: MediaKind
   maxMb: number
 }
 
-export type ValidateFileMetaOptionsMapType = Record<MediaBucketNameType, IMediaBucketOptions>
+export type ValidateFileMetaOptionsMap = Record<MediaBucketName, MediaBucketOptions>
 
-export type MongooseGridFSBucketType = InstanceType<typeof mongoose.mongo.GridFSBucket>
+export type MongooseGridFSBucket = InstanceType<typeof mongoose.mongo.GridFSBucket>
 
-export interface IFileMetaData {
+export interface FileMetaData {
   size: number
   sha256: string
   detectedMime?: string
@@ -39,13 +39,13 @@ export interface IFileMetaData {
   orientation?: 'landscape' | 'portrait'
 }
 
-export interface IFileData {
+export interface FileData {
   filename: string
   contentType?: string
-  metadata: IFileMetaData
+  metadata: FileMetaData
 }
 
-export interface IUploadOptions {
+export interface UploadOptions {
   overwrite?: boolean
-  compression?: SharpSettingsKeyType
+  compression?: SharpSettingsKey
 }

@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react'
 
-import { IEventChangeMessageStatus, SocketActionsType } from 'common'
+import { EventChangeMessageStatus, SocketActions } from 'common'
 
 import { socket } from 'src/shared/api'
 import { useSettings } from 'src/shared/preferences'
 
 import { MESSAGE_LIST_SCROLL_SAVE_DEBOUNCE_MS } from './message-list/constants.ts'
-import { MessageListItemType } from './message-list.types.ts'
+import { MessageListItem } from './message-list.types.ts'
 
-export const useMessageList = ({ roomId, items }: { roomId: string; items: MessageListItemType[] }) => {
+export const useMessageList = ({ roomId, items }: { roomId: string; items: MessageListItem[] }) => {
   const pendingReadIdsRef = useRef<Set<string>>(new Set())
   const saveScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pendingFirstVisibleItemIdRef = useRef<string | null>(null)
@@ -72,14 +72,14 @@ export const useMessageList = ({ roomId, items }: { roomId: string; items: Messa
       }
       if (isSelfMessage || alreadyRequested) return
 
-      const payload: IEventChangeMessageStatus = {
+      const payload: EventChangeMessageStatus = {
         roomId,
         messageId,
         status: 'read'
       }
 
       pendingReadIdsRef.current.add(messageId)
-      socket.emit<SocketActionsType>('change-message-status', payload)
+      socket.emit<SocketActions>('change-message-status', payload)
     })
   }
 

@@ -1,1 +1,1 @@
-export type ProfileInfoAvatarSizeType = 'small' | 'large'
+export type ProfileInfoAvatarSize = 'small' | 'large'

@@ -8,7 +8,7 @@ import { ContactsButton } from 'src/entities/contact'
 import { SettingsButton } from 'src/shared/preferences'
 import { AppButton } from 'src/shared/ui'
 
-import { IContentTabButton } from './content-tab.types.ts'
+import { ContentTabButton } from './content-tab.types.ts'
 import { useMessage } from '../../../../model/use-message'
 
 const ChatRoomsTabButton = () => {
@@ -22,7 +22,7 @@ const ChatRoomsTabButton = () => {
   )
 }
 
-export const BUTTONS: IContentTabButton[] = [
+export const BUTTONS: ContentTabButton[] = [
   { Component: ContactsButton, value: 'contacts' },
   { Component: ChatRoomsTabButton, value: 'chat-rooms' },
   // { Component: CallsButton, value: 'calls' },

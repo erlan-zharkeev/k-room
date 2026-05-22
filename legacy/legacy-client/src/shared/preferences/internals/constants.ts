@@ -1,10 +1,10 @@
-import { ContentTabType, IUserSetting } from 'src/shared/config'
+import { ContentTab, UserSetting } from 'src/shared/config'
 
 import { getBrowserLanguage } from '../helpers/language'
 
-export const FULL_CONTENT_ELEMENTS: ContentTabType[] = []
+export const FULL_CONTENT_ELEMENTS: ContentTab[] = []
 
-export const DEFAULT_SETTINGS: IUserSetting = {
+export const DEFAULT_SETTINGS: UserSetting = {
   selectedContentTab: 'contacts',
   selectedChatRoomId: '',
   messageScrollByRoom: {},

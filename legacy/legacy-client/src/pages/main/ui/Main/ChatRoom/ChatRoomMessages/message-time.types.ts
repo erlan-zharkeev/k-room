@@ -1,3 +1,3 @@
-export interface IMessageTimeProps {
+export interface MessageTimeProps {
   createdAt?: number
 }

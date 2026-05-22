@@ -1,4 +1,4 @@
-import type { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'global-shared'
+import type { EventAuthError, EventErrorMessage, SocketActions } from 'global-shared'
 
 import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
@@ -28,11 +28,11 @@ export const useSocketConnectionMonitor = () => {
       actualizeSocketData()
     })
 
-    socket.on<SocketActionsType>('disconnect', () => {
+    socket.on<SocketActions>('disconnect', () => {
       setSocketConnected(false)
     })
 
-    socket.on<SocketActionsType>('error-message', ({ message }: IEventErrorMessage) => {
+    socket.on<SocketActions>('error-message', ({ message }: EventErrorMessage) => {
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
@@ -40,7 +40,7 @@ export const useSocketConnectionMonitor = () => {
       })
     })
 
-    socket.on<SocketActionsType>('auth-error', async ({ event, payload }: IEventAuthError) => {
+    socket.on<SocketActions>('auth-error', async ({ event, payload }: EventAuthError) => {
       await socketReconnect()
       socket.emit(event, payload)
     })

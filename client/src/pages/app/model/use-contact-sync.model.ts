@@ -1,14 +1,14 @@
 import type {
-  EventChangeContactsDataType,
-  EventGetContactsType,
-  EventKnownUsersUpdatedType,
-  EventInviteReceivedType,
-  IEventContactAddSuccess,
-  IEventDeleteContactSuccess,
-  IEventGetContactTypingStatus,
-  IEventStatusContact,
-  IEventUpdateContactInteractionSuccess,
-  ContactType
+  EventChangeContactsData,
+  EventGetContacts,
+  EventKnownUsersUpdated,
+  EventInviteReceived,
+  EventContactAddSuccess,
+  EventDeleteContactSuccess,
+  EventGetContactTypingStatus,
+  EventStatusContact,
+  EventUpdateContactInteractionSuccess,
+  Contact
 } from 'global-shared'
 
 import { getRequiredContactSystemData, useContact, useUpdateContactData } from 'src/entities/contact'
@@ -19,7 +19,7 @@ export const useContactSync = () => {
   const { get: getKnownUser, mergeMany: mergeKnownUsers, update: updateKnownUser } = useKnownUser()
   const { updateContactData: updateStoredContactData } = useUpdateContactData()
 
-  const mergeKnownUserData = async (knownUsers: EventKnownUsersUpdatedType, removeMissing = false) => {
+  const mergeKnownUserData = async (knownUsers: EventKnownUsersUpdated, removeMissing = false) => {
     await mergeKnownUsers(knownUsers, {
       merge: (current, incoming) =>
         createKnownUser({
@@ -30,11 +30,11 @@ export const useContactSync = () => {
     })
   }
 
-  const syncKnownUsers = async (knownUsers: EventKnownUsersUpdatedType) => {
+  const syncKnownUsers = async (knownUsers: EventKnownUsersUpdated) => {
     await mergeKnownUserData(knownUsers)
   }
 
-  const syncUserContacts = async (nextContacts: ContactType[]) => {
+  const syncUserContacts = async (nextContacts: Contact[]) => {
     await mergeContacts(nextContacts, {
       merge: (current, incoming) => {
         const systemData = getRequiredContactSystemData()
@@ -49,20 +49,20 @@ export const useContactSync = () => {
     })
   }
 
-  const actualizeContacts = async ({ contacts: nextContacts, knownUsers }: EventGetContactsType) => {
+  const actualizeContacts = async ({ contacts: nextContacts, knownUsers }: EventGetContacts) => {
     await syncUserContacts(nextContacts)
     await mergeKnownUserData(knownUsers, true)
   }
 
-  const deleteContact = async ({ deletedContactId }: IEventDeleteContactSuccess) => {
+  const deleteContact = async ({ deletedContactId }: EventDeleteContactSuccess) => {
     await removeContact(deletedContactId)
   }
 
-  const addContact = async ({ contactData }: IEventContactAddSuccess) => {
+  const addContact = async ({ contactData }: EventContactAddSuccess) => {
     await putContact({ ...contactData, ...getRequiredContactSystemData() })
   }
 
-  const updateStatus = async ({ interlocutorId, online, lastSeen }: IEventStatusContact) => {
+  const updateStatus = async ({ interlocutorId, online, lastSeen }: EventStatusContact) => {
     const [existingContact, existingKnownUser] = await Promise.all([
       getContact(interlocutorId),
       getKnownUser(interlocutorId)
@@ -81,7 +81,7 @@ export const useContactSync = () => {
     }
   }
 
-  const updateContactData = async (payload: EventChangeContactsDataType) => {
+  const updateContactData = async (payload: EventChangeContactsData) => {
     const [existingContact, existingKnownUser] = await Promise.all([getContact(payload.id), getKnownUser(payload.id)])
     const changes = {
       nickname: payload.nickname
@@ -96,7 +96,7 @@ export const useContactSync = () => {
     }
   }
 
-  const updateContactInteractionType = async ({ contactId, interaction }: IEventUpdateContactInteractionSuccess) => {
+  const updateContactInteractionType = async ({ contactId, interaction }: EventUpdateContactInteractionSuccess) => {
     const existingContact = await getContact(contactId)
 
     if (!existingContact) return
@@ -104,7 +104,7 @@ export const useContactSync = () => {
     await updateStoredContactData(contactId, { interactionType: interaction })
   }
 
-  const processInvitation = async (payload: EventInviteReceivedType) => {
+  const processInvitation = async (payload: EventInviteReceived) => {
     const existingContact = await getContact(payload.id)
     const systemData = getRequiredContactSystemData()
 
@@ -115,7 +115,7 @@ export const useContactSync = () => {
     })
   }
 
-  const updateContactTypingStatus = async ({ contactId, isTyping }: IEventGetContactTypingStatus) => {
+  const updateContactTypingStatus = async ({ contactId, isTyping }: EventGetContactTypingStatus) => {
     const [existingContact, existingKnownUser] = await Promise.all([getContact(contactId), getKnownUser(contactId)])
 
     if (existingContact) {

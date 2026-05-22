@@ -7,9 +7,9 @@ import { useScreen } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
 import { CONTENT_TITLE } from './constants'
-import { IContentLayoutProps } from './types'
+import { ContentLayoutProps } from './types'
 
-const props = defineProps<IContentLayoutProps>()
+const props = defineProps<ContentLayoutProps>()
 
 const { isPortraitTabletOrLess } = useScreen()
 const showHeader = computed(() => isPortraitTabletOrLess.value || Boolean(props.titleKey))

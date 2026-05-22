@@ -5,14 +5,14 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 
 import {
-  AppLanguageType,
+  AppLanguage,
   IFrontendContact,
-  IEventGetSearchedContact,
-  IEventSearchContact,
-  IEventUpdateInteraction,
-  InteractionType,
+  EventGetSearchedContact,
+  EventSearchContact,
+  EventUpdateInteraction,
+  Interaction,
   MEDIA_ENDPOINTS,
-  SocketActionsType,
+  SocketActions,
   normalizeTimestamp
 } from 'common'
 
@@ -22,7 +22,7 @@ import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
-import { DbContactType } from 'src/shared/config'
+import { DbContact } from 'src/shared/config'
 import {
   createClassNameWithModifiers,
   formatLocalizedRelativeTime,
@@ -77,7 +77,7 @@ const NOT_DEFAULT_CONTACT_INFO_BUTTON_MAP = {
   }
 } as const
 
-const lastSeen = (timestamp: number | undefined, language: AppLanguageType) => {
+const lastSeen = (timestamp: number | undefined, language: AppLanguage) => {
   const normalizedTimestamp = normalizeTimestamp(timestamp)
 
   return normalizedTimestamp
@@ -85,7 +85,7 @@ const lastSeen = (timestamp: number | undefined, language: AppLanguageType) => {
     : ''
 }
 
-const getContactDescription = (contact: DbContactType, language: AppLanguageType) => {
+const getContactDescription = (contact: DbContact, language: AppLanguage) => {
   const { online, interactionType, lastSeen: timestamp } = contact
 
   if (interactionType === 'invite-accepted') {
@@ -106,8 +106,8 @@ const useCreateChatRoom = ({
 
   const createChatRoom = ({ contactIds }: { contactIds: string[] }) => {
     setIsLoading(true)
-    socket.emit<SocketActionsType>('create-chat-room', { contactIds })
-    socket.once<SocketActionsType>('room-created', ({ roomId }: { roomId: string }) => {
+    socket.emit<SocketActions>('create-chat-room', { contactIds })
+    socket.once<SocketActions>('room-created', ({ roomId }: { roomId: string }) => {
       onRoomCreated?.(roomId)
       setIsLoading(false)
       onSuccess?.()
@@ -129,8 +129,8 @@ const useAddContact = () => {
     if (!interlocutorId) return
 
     setLoading(true)
-    socket.emit<SocketActionsType>('save-contact', { userId: id, interlocutorId })
-    socket.once<SocketActionsType>('contact-add-success', () => {
+    socket.emit<SocketActions>('save-contact', { userId: id, interlocutorId })
+    socket.once<SocketActions>('contact-add-success', () => {
       startTimeout(() => setLoading(false), 400)
     })
   }
@@ -147,8 +147,8 @@ const useDeleteContact = () => {
 
   const deleteUserHandler = (contactId: string) => {
     setLoading(true)
-    socket.emit<SocketActionsType>('update-contact-interaction-type', { contactId, interaction: 'default' })
-    socket.once<SocketActionsType>('contact-delete-success', () => {
+    socket.emit<SocketActions>('update-contact-interaction-type', { contactId, interaction: 'default' })
+    socket.once<SocketActions>('contact-delete-success', () => {
       startTimeout(() => setLoading(false), 400)
     })
   }
@@ -175,12 +175,12 @@ const useContactInvitationControls = () => {
   const { startTimeout: inviteTimer } = useTimeout()
   const { startTimeout: contactsUpdatedTimer } = useTimeout()
 
-  const updateInteractionType = (contactId: string, interaction: InteractionType) => {
+  const updateInteractionType = (contactId: string, interaction: Interaction) => {
     setLoaders((prev) => ({ ...prev, [contactId]: true }))
-    const payload: IEventUpdateInteraction = { contactId, interaction }
+    const payload: EventUpdateInteraction = { contactId, interaction }
 
     inviteTimer(() => {
-      socket.emit<SocketActionsType>('update-contact-interaction-type', payload)
+      socket.emit<SocketActions>('update-contact-interaction-type', payload)
     }, 1000)
   }
 
@@ -229,7 +229,7 @@ const useSearchContact = () => {
   }
 
   useEffect(() => {
-    const handleSearchedContacts = (payload: IEventGetSearchedContact | IFrontendContact[]) => {
+    const handleSearchedContacts = (payload: EventGetSearchedContact | IFrontendContact[]) => {
       if (Array.isArray(payload)) {
         setSearchedContacts(payload)
         setTotal(null)
@@ -257,20 +257,20 @@ const useSearchContact = () => {
       setIsLoadingMore(false)
     }
 
-    socket.on<SocketActionsType>('get-searched-contact', handleSearchedContacts)
+    socket.on<SocketActions>('get-searched-contact', handleSearchedContacts)
 
     return () => {
-      socket.off<SocketActionsType>('get-searched-contact', handleSearchedContacts)
+      socket.off<SocketActions>('get-searched-contact', handleSearchedContacts)
     }
   }, [])
 
   const fetchUsers = ({ value, offset = 0 }: { value: string; offset?: number }) => {
-    const payload: IEventSearchContact = {
+    const payload: EventSearchContact = {
       value,
       offset
     }
 
-    socket.emit<SocketActionsType>('search-contact', payload)
+    socket.emit<SocketActions>('search-contact', payload)
   }
 
   const debouncedSearch = useDebounce(fetchUsers, 500)
@@ -453,7 +453,7 @@ const SearchContact = ({
   )
 }
 
-const ContactInvitationControlBtns = ({ contactData }: { contactData: DbContactType }) => {
+const ContactInvitationControlBtns = ({ contactData }: { contactData: DbContact }) => {
   const { t } = useI18n()
   const { loaders, updateInteractionType } = useContactInvitationControls()
 
@@ -542,7 +542,7 @@ const DeleteContactConfirmModal = ({
   )
 }
 
-const ContactActions = ({ contactData }: { contactData: DbContactType }) => {
+const ContactActions = ({ contactData }: { contactData: DbContact }) => {
   const { deleteUserHandler, loading } = useDeleteContact()
   const { delay } = useTimeout()
   const { isLoading: isChatCreating, createChatRoom } = useCreateChatRoom()
@@ -629,7 +629,7 @@ const ContactActions = ({ contactData }: { contactData: DbContactType }) => {
   )
 }
 
-const ContactListItem = ({ contactData }: { contactData: DbContactType }) => {
+const ContactListItem = ({ contactData }: { contactData: DbContact }) => {
   const { getLiveMediaUrl } = useMedia()
   const { language } = useI18n()
 

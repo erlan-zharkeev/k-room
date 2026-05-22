@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react'
 
 import './style.scss'
 
-import { APP_LANGUAGE, MediaFileValueType, USER_ENDPOINTS } from 'common'
+import { APP_LANGUAGE, MediaFileValue, USER_ENDPOINTS } from 'common'
 
 import { PasswordRecoveryLink } from 'src/features/password-recovery'
 import { ThemeSwitcher } from 'src/features/update-theme'
@@ -16,7 +16,7 @@ import { useI18n, useSettings } from 'src/shared/preferences'
 import { useSystem } from 'src/shared/system'
 import {
   AppForm,
-  AppFormDataType,
+  AppFormData,
   AppLink,
   AppModal,
   AppSwitch,
@@ -40,8 +40,8 @@ const useEditUserData = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
     avatar: avatarPath
   }
 
-  const editUserData = async (fields: AppFormDataType) => {
-    const { username: nextUsername, avatar } = fields as { username: string; avatar: MediaFileValueType }
+  const editUserData = async (fields: AppFormData) => {
+    const { username: nextUsername, avatar } = fields as { username: string; avatar: MediaFileValue }
 
     const payloadFormData = new FormData()
     payloadFormData.append('username', nextUsername)

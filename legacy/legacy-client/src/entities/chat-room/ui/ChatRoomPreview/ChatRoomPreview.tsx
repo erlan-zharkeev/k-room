@@ -1,7 +1,7 @@
-import { UnknownCallbackType } from 'common'
+import { UnknownCallback } from 'common'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { BaseSizeModifierType, ProfileInfo } from 'src/shared/ui'
+import { BaseSizeModifier, ProfileInfo } from 'src/shared/ui'
 
 export const ChatRoomPreview = ({
   avatar,
@@ -18,9 +18,9 @@ export const ChatRoomPreview = ({
   title: string
   description?: string
   online?: boolean
-  onClick?: UnknownCallbackType
+  onClick?: UnknownCallback
   headerMode?: boolean
-  titleSize?: BaseSizeModifierType
+  titleSize?: BaseSizeModifier
   isPrivate?: boolean
   isRoomSelected?: boolean
 }) => {

@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose'
 
 import { codeMethodSchema } from './code-method.model'
-import { ICodePurpose } from './types'
+import { CodePurpose } from './types'
 
-export const codePurposeSchema = new Schema<ICodePurpose>(
+export const codePurposeSchema = new Schema<CodePurpose>(
   {
     passwordRecovery: { type: codeMethodSchema, required: true, default: {} }
   },

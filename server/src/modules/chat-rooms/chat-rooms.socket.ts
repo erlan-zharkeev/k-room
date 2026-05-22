@@ -2,20 +2,20 @@ import { setTimeout as delay } from 'timers/promises'
 
 import {
   CHAT_KIND,
-  type ChatRoomSchemaType,
-  type ICreateRoomAckPayload,
-  type IEventCreateRoom,
-  type IEventDeleteChatRoom,
-  type IEventLeaveChatRoom,
-  type IEventUpdatePinnedChatRoom,
-  type IEventUpdatePinnedChatRoomOrder,
+  type ChatRoomSchema,
+  type CreateRoomAckPayload,
+  type EventCreateRoom,
+  type EventDeleteChatRoom,
+  type EventLeaveChatRoom,
+  type EventUpdatePinnedChatRoom,
+  type EventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
-  type SocketActionsType
+  type SocketActions
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstanceType } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types/socket'
 
 import { uploadBufferToBucket } from '../media/media.service'
 
@@ -32,10 +32,10 @@ import {
   updatePinnedChatRoomOrder
 } from './chat-rooms.service'
 
-export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, presenceService: PresenceService) => {
-  socket.on<SocketActionsType>(
+export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presenceService: PresenceService) => {
+  socket.on<SocketActions>(
     'create-chat-room',
-    socketAckMiddleware<IEventCreateRoom, ICreateRoomAckPayload>(
+    socketAckMiddleware<EventCreateRoom, CreateRoomAckPayload>(
       socket,
       async ({ contactIds, chatName, avatarFile }) => {
         const { userId } = socket.data
@@ -46,7 +46,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
         }
 
         const users = [userId, ...contactIds]
-        const roomData: Omit<ChatRoomSchemaType, 'id'> = {
+        const roomData: Omit<ChatRoomSchema, 'id'> = {
           users,
           adminId: userId,
           createdAt: Date.now(),
@@ -82,9 +82,9 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'delete-chat-room',
-    socketAckMiddleware<IEventDeleteChatRoom>(
+    socketAckMiddleware<EventDeleteChatRoom>(
       socket,
       async (payload) => {
         await deleteChatRoom(socket.data.userId, payload)
@@ -93,9 +93,9 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'leave-chat-room',
-    socketAckMiddleware<IEventLeaveChatRoom>(
+    socketAckMiddleware<EventLeaveChatRoom>(
       socket,
       async (payload) => {
         await leaveChatRoom(socket.data.userId, payload, presenceService)
@@ -104,9 +104,9 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'update-pinned-chat-room',
-    socketAckMiddleware<IEventUpdatePinnedChatRoom>(
+    socketAckMiddleware<EventUpdatePinnedChatRoom>(
       socket,
       async (payload) => {
         await updatePinnedChatRoom(socket.data.userId, payload)
@@ -115,9 +115,9 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'update-pinned-chat-room-order',
-    socketAckMiddleware<IEventUpdatePinnedChatRoomOrder>(
+    socketAckMiddleware<EventUpdatePinnedChatRoomOrder>(
       socket,
       async (payload) => {
         await updatePinnedChatRoomOrder(socket.data.userId, payload)

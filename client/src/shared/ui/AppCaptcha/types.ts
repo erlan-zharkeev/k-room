@@ -1,27 +1,27 @@
-import type { SecurityActionType } from 'global-shared'
+import type { SecurityAction } from 'global-shared'
 import type { Ref } from 'vue'
 
-export interface IAppCaptchaProps {
-  action: SecurityActionType
+export interface AppCaptchaProps {
+  action: SecurityAction
   resetKey?: number
 }
 
-export interface IUseAppCaptchaParams {
-  action: SecurityActionType
+export interface UseAppCaptchaParams {
+  action: SecurityAction
   model: Ref<string>
   resetKey: Ref<number>
 }
 
-export interface ITurnstileRenderOptions {
+export interface TurnstileRenderOptions {
   sitekey: string
-  action?: SecurityActionType
+  action?: SecurityAction
   callback?: (token: string) => void
   'expired-callback'?: () => void
   'error-callback'?: () => void
 }
 
-export interface ITurnstileApi {
-  render: (container: HTMLElement, options: ITurnstileRenderOptions) => string
+export interface TurnstileApi {
+  render: (container: HTMLElement, options: TurnstileRenderOptions) => string
   reset: (widgetId?: string) => void
   remove: (widgetId: string) => void
 }

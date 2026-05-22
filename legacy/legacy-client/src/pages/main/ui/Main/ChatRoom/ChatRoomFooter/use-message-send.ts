@@ -2,13 +2,13 @@ import { useRef } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { IEventSendMessage, IMessage, SocketActionsType } from 'common'
+import { EventSendMessage, IMessage, SocketActions } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
-import { FileLoaderValueType } from 'src/shared/config'
+import { FileLoaderValue } from 'src/shared/config'
 import { generateUUIDv4 } from 'src/shared/lib'
 import { resetRepliedMessage, updateMessageInputData, useSystem } from 'src/shared/system'
 
@@ -36,7 +36,7 @@ export const useMessageSend = () => {
     setBody(el.value)
   }
 
-  const setImages = (imagesFiles: FileLoaderValueType) => {
+  const setImages = (imagesFiles: FileLoaderValue) => {
     const normalizedImages = (Array.isArray(imagesFiles) ? imagesFiles : imagesFiles ? [imagesFiles] : []).filter(
       (image): image is Exclude<typeof image, string> => typeof image !== 'string'
     )
@@ -57,12 +57,12 @@ export const useMessageSend = () => {
       repliedMessage: repliedMessageData.id ? repliedMessageData : null
     }
 
-    const payload: IEventSendMessage = {
+    const payload: EventSendMessage = {
       roomId,
       message: messageData
     }
 
-    socket.emit<SocketActionsType>('send-message', payload)
+    socket.emit<SocketActions>('send-message', payload)
     void put(messageData)
     void mutate(roomId, (room) => {
       room.messages = Array.isArray(room.messages) ? room.messages : []

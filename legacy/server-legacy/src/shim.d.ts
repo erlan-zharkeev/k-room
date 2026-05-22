@@ -1,7 +1,7 @@
-import { AppLanguageType } from 'common'
+import { AppLanguage } from 'common'
 
 declare module 'express-serve-static-core' {
   interface Request {
-    language: AppLanguageType
+    language: AppLanguage
   }
 }

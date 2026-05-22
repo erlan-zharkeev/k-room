@@ -5,9 +5,9 @@ import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 
 import { APP_EMOJI_PICKER_DATA_SOURCE_MAP, APP_EMOJI_PICKER_QUICK_EMOJI_LIST } from './constants'
 import { APP_EMOJI_PICKER_I18N_MAP } from './i18n'
-import type { AppEmojiPickerEmitType, IAppEmojiPickerProps } from './types'
+import type { AppEmojiPickerEmit, AppEmojiPickerProps } from './types'
 
-export const useAppEmojiPicker = (props: IAppEmojiPickerProps, emit: AppEmojiPickerEmitType) => {
+export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPickerEmit) => {
   const pickerRootRef = useTemplateRef<HTMLElement>('pickerRoot')
   const isExpanded = ref(false)
   let pickerElement: Picker | undefined

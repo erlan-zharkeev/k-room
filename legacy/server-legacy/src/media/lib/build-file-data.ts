@@ -2,15 +2,15 @@ import fileTypeDep from 'file-type'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 
-import { IFileData, IFileMetaData } from '../types'
+import { FileData, FileMetaData } from '../types'
 
 import { createSha256FromBuffer } from './create-sha-from-buffer'
 
-export const buildFileData = async (buffer: Buffer, filename: string): Promise<IFileData> => {
+export const buildFileData = async (buffer: Buffer, filename: string): Promise<FileData> => {
   const fileType = await fileTypeDep.fromBuffer(buffer).catch(() => null)
   const contentType = fileType?.mime ?? (filename ? mimeLookup(filename) || undefined : undefined)
 
-  const meta: IFileMetaData = {
+  const meta: FileMetaData = {
     size: buffer.length,
     sha256: createSha256FromBuffer(buffer),
     detectedMime: fileType?.mime,

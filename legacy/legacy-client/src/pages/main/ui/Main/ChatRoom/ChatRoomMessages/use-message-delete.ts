@@ -1,10 +1,10 @@
-import { SocketActionsType, IEventMessageDeleted } from 'common'
+import { SocketActions, EventMessageDeleted } from 'common'
 
 import { socket } from 'src/shared/api'
 
 export const useMessageDelete = () => {
   const monitorMessageDeletion = () => {
-    socket.on<SocketActionsType>('message-deleted', (_payload: IEventMessageDeleted) => {
+    socket.on<SocketActions>('message-deleted', (_payload: EventMessageDeleted) => {
       // dispatch(deleteMessage(payload))
     })
   }
@@ -13,7 +13,7 @@ export const useMessageDelete = () => {
     if (!roomId) return undefined
 
     // dispatch(updateMessageStatus({ roomId, messageId, status: 'sending' }))
-    // socket.emit<SocketActionsType>('delete-message', { roomId, messageId })
+    // socket.emit<SocketActions>('delete-message', { roomId, messageId })
   }
 
   return {

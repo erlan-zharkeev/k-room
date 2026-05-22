@@ -1,1 +1,1 @@
-export type ContextRefType<T = never> = React.MutableRefObject<T>
+export type ContextRef<T = never> = React.MutableRefObject<T>

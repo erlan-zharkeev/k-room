@@ -4,7 +4,7 @@ import { IMessage } from 'common'
 
 import { getNotificationIcon } from 'src/shared/notification/helpers/get-notification-icon'
 import { ERROR_NOTIFICATION_DURATION_IN_SEC } from 'src/shared/notification/internals/constants'
-import { IAppNotification, NotificationType } from 'src/shared/notification/types'
+import { AppNotification, Notification } from 'src/shared/notification/types'
 import { useSettings } from 'src/shared/preferences'
 import { useSystem } from 'src/shared/system'
 import { AppLogoIcon } from 'src/shared/ui'
@@ -13,7 +13,7 @@ export const useNotification = () => {
   const { showNotification } = useSettings()
   const { auth } = useSystem()
 
-  const basicNotificationData: IAppNotification = {
+  const basicNotificationData: AppNotification = {
     key: '',
     message: '',
     description: '',
@@ -23,8 +23,8 @@ export const useNotification = () => {
     icon: getNotificationIcon('info')
   }
 
-  const getNotification = (notification: IAppNotification) => {
-    const messageType = notification.messageType ?? (basicNotificationData.messageType as NotificationType)
+  const getNotification = (notification: AppNotification) => {
+    const messageType = notification.messageType ?? (basicNotificationData.messageType as Notification)
     const isError = messageType === 'error'
     const isInfo = messageType === 'info'
     const placement = notification.placement ?? (isInfo ? 'bottomRight' : 'top')
@@ -38,7 +38,7 @@ export const useNotification = () => {
       duration = notification.duration
     }
 
-    const notificationData: IAppNotification = {
+    const notificationData: AppNotification = {
       ...basicNotificationData,
       ...notification,
       messageType,

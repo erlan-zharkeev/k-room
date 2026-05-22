@@ -1,11 +1,11 @@
-import { ReqStatusType } from 'common'
+import { ReqStatus } from 'common'
 
 export class AppError extends Error {
-  readonly status: ReqStatusType
+  readonly status: ReqStatus
   readonly silent: boolean
   readonly cause?: unknown
 
-  constructor(status: ReqStatusType, message: string, silent: boolean = false, cause?: unknown) {
+  constructor(status: ReqStatus, message: string, silent: boolean = false, cause?: unknown) {
     super(message)
 
     this.name = 'AppError'

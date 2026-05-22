@@ -1,21 +1,21 @@
-import type { LocalizedTextType, MediaFileValueType } from 'global-shared'
+import type { LocalizedText, MediaFileValue } from 'global-shared'
 
-export type ClientPlatformType = 'browser' | 'native'
+export type ClientPlatform = 'browser' | 'native'
 
-export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[] | string | null
+export type FileLoaderValue = MediaFileValue | MediaFileValue[] | string | null
 
-export interface IImageToBase64Params {
+export interface ImageToBase64Params {
   image: File
   allowedResolutions?: string[]
-  t: <T>(texts: LocalizedTextType<T>) => T
+  t: <T>(texts: LocalizedText<T>) => T
   maxImageSizeInMb?: number
 }
 
-export interface IConsoleColor {
+export interface ConsoleColor {
   bg: string
   text: string
 }
 
-export type ScreenBreakpointNameType = 'mobile' | 'portrait-tablet' | 'tablet' | 'desktop'
+export type ScreenBreakpointName = 'mobile' | 'portrait-tablet' | 'tablet' | 'desktop'
 
-export type ScreenBreakpointsType = Record<ScreenBreakpointNameType, number>
+export type ScreenBreakpoints = Record<ScreenBreakpointName, number>

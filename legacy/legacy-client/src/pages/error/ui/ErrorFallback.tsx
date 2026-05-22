@@ -1,11 +1,11 @@
-import { AppLanguageType } from 'common'
+import { AppLanguage } from 'common'
 
 import { CLIENT_ENV } from 'src/shared/config'
 import { getBrowserLanguage, normalizeAppLanguage } from 'src/shared/preferences'
 
 import { ERROR_FALLBACK_I18N } from '../i18n'
 
-const getPreferredLanguage = (): AppLanguageType => {
+const getPreferredLanguage = (): AppLanguage => {
   const documentLanguage = typeof document === 'undefined' ? null : normalizeAppLanguage(document.documentElement.lang)
 
   return documentLanguage ?? getBrowserLanguage()

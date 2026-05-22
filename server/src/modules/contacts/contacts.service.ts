@@ -1,12 +1,12 @@
 import type {
-  EventInviteReceivedType,
-  IEventContactAddSuccess,
-  IEventDeleteContactSuccess,
-  IEventGetSearchedContact,
-  IEventUpdateContactInteractionSuccess,
-  ContactType,
-  InteractionType,
-  SocketActionsType
+  EventInviteReceived,
+  EventContactAddSuccess,
+  EventDeleteContactSuccess,
+  EventGetSearchedContact,
+  EventUpdateContactInteractionSuccess,
+  Contact,
+  Interaction,
+  SocketActions
 } from 'global-shared'
 import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS, normalizeNickname } from 'global-shared'
 import { Types } from 'mongoose'
@@ -20,8 +20,8 @@ import { transformUserToContact } from '../user/user.service'
 
 import { SEARCH_CONTACT_RESULT_LIMIT } from './constants'
 
-export const emitSearchedContacts = (socketId: string, payload: IEventGetSearchedContact) => {
-  getIO().to(socketId).emit<SocketActionsType>('get-searched-contact', payload)
+export const emitSearchedContacts = (socketId: string, payload: EventGetSearchedContact) => {
+  getIO().to(socketId).emit<SocketActions>('get-searched-contact', payload)
 }
 
 export const searchContacts = async (
@@ -57,7 +57,7 @@ export const searchContacts = async (
     }
   }
 
-  let searchedUsers: ContactType[] = []
+  let searchedUsers: Contact[] = []
 
   if (validSearch) {
     const searchFilter = type === 'id' ? { _id: needle } : { 'public.nickname': { $regex: new RegExp(needle, 'i') } }
@@ -106,7 +106,7 @@ export const searchContacts = async (
     total: searchedUsers.length,
     hasMore,
     nextOffset: hasMore ? safeOffset + contacts.length : undefined
-  } satisfies IEventGetSearchedContact
+  } satisfies EventGetSearchedContact
 }
 
 export const saveContact = async (userId: string, interlocutorId: string, presenceService: PresenceService) => {
@@ -137,10 +137,10 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
       'default',
       await presenceService.isUserOnline(contactCandidate._id)
     )
-  } satisfies IEventContactAddSuccess
+  } satisfies EventContactAddSuccess
 }
 
-export const createContactInteraction = async (docId: string, contactId: string, interaction: InteractionType) => {
+export const createContactInteraction = async (docId: string, contactId: string, interaction: Interaction) => {
   return UserModel.findOneAndUpdate(
     { _id: docId },
     {
@@ -156,7 +156,7 @@ export const createContactInteraction = async (docId: string, contactId: string,
   )
 }
 
-export const setContactInteraction = async (docId: string, contactId: string, interaction: InteractionType) => {
+export const setContactInteraction = async (docId: string, contactId: string, interaction: Interaction) => {
   return UserModel.findOneAndUpdate(
     { _id: docId, [`personal.contacts.${contactId}`]: { $exists: true } },
     {
@@ -175,11 +175,11 @@ export const getContactInteraction = async (docId: string, contactId: string) =>
   return user?.personal.contacts?.[contactId]?.interaction
 }
 
-export const emitContactInteractionUpdated = (userId: string, contactId: string, interaction: InteractionType) => {
+export const emitContactInteractionUpdated = (userId: string, contactId: string, interaction: Interaction) => {
   emitToUsers([userId], 'contact-interaction-updated', {
     contactId,
     interaction
-  } satisfies IEventUpdateContactInteractionSuccess)
+  } satisfies EventUpdateContactInteractionSuccess)
 }
 
 export const deleteContactById = async (userId: string, deletingUserId: string, silent = false) => {
@@ -188,7 +188,7 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
   emitToUsers([userId], 'contact-delete-success', {
     deletedContactId: deletingUserId,
     silent
-  } satisfies IEventDeleteContactSuccess)
+  } satisfies EventDeleteContactSuccess)
 
   const deletingContact = await UserModel.findOne(
     { _id: deletingUserId },
@@ -218,7 +218,7 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
 export const updateContactInteraction = async (
   userId: string,
   contactId: string,
-  interaction: InteractionType,
+  interaction: Interaction,
   presenceService: PresenceService
 ) => {
   const updateAuthorContactInteraction = async () => setContactInteraction(userId, contactId, interaction)
@@ -264,7 +264,7 @@ export const updateContactInteraction = async (
         break
       }
 
-      const payload: EventInviteReceivedType = {
+      const payload: EventInviteReceived = {
         id: String(authorData._id),
         nickname: authorData.public.nickname,
         online: await presenceService.isUserOnline(authorData._id),

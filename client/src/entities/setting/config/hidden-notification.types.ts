@@ -1,1 +1,1 @@
-export type HiddenNotificationType = 'audio-context'
+export type HiddenNotification = 'audio-context'

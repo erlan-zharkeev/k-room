@@ -8,9 +8,9 @@ import {
   APP_MICROPHONE_WAVEFORM_MIN_BAR_SCALE,
   APP_MICROPHONE_WAVEFORM_SMOOTHING
 } from './constants'
-import type { IAppMicrophoneWaveformProps } from './types'
+import type { AppMicrophoneWaveformProps } from './types'
 
-export const useAppMicrophoneWaveform = (props: IAppMicrophoneWaveformProps) => {
+export const useAppMicrophoneWaveform = (props: AppMicrophoneWaveformProps) => {
   const displayedVolume = ref(0)
 
   const normalizeVolumeDb = (value: number) => {

@@ -1,9 +1,9 @@
 import { REQ_STATUS } from 'common'
 
-import { MediaBucketNameType } from 'src/media'
+import { MediaBucketName } from 'src/media'
 import { streamMediaFile } from 'src/media'
 
-import { AppResponseType, IAppRequest } from 'src/shared/config'
+import { AppResponse, AppRequest } from 'src/shared/config'
 import { isAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
@@ -11,7 +11,7 @@ import { throwHTTPError } from 'src/shared/lib/throw-error'
 import { GET_MEDIA_FILE_I18N } from './i18n'
 import { parseBucketNameFromId } from './lib/parse-bucket-name-from-id'
 
-export const getMediaFileController = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const getMediaFileController = async (req: AppRequest, res: AppResponse<null>) => {
   const { language } = req
   const basicError = localizedText(GET_MEDIA_FILE_I18N.failedToProvideMedia, language)
 
@@ -30,7 +30,7 @@ export const getMediaFileController = async (req: IAppRequest, res: AppResponseT
     const { bucketName, id } = parseBucketNameFromId(idParam)
     const asAttachment = ['1', 'true', 'yes'].includes(String(req.query.download || '').toLowerCase())
 
-    await streamMediaFile(bucketName as MediaBucketNameType, id, res, language, { asAttachment, revalidateCache })
+    await streamMediaFile(bucketName as MediaBucketName, id, res, language, { asAttachment, revalidateCache })
     return
   } catch (error) {
     if (isAppError(error)) {

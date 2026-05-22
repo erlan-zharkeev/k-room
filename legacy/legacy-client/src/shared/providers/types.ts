@@ -2,14 +2,14 @@ import { SignalData } from 'simple-peer'
 
 import { IFrontendUserData } from 'common'
 
-import { ContextRefType } from 'src/shared/config'
+import { ContextRef } from 'src/shared/config'
 
-export interface IRefsContext {
-  interlocutorVideoDom: ContextRefType<HTMLVideoElement | null>
-  selfVideoDom: ContextRefType<HTMLVideoElement | null>
+export interface RefsContext {
+  interlocutorVideoDom: ContextRef<HTMLVideoElement | null>
+  selfVideoDom: ContextRef<HTMLVideoElement | null>
 }
 
-export interface ICallService {
+export interface CallService {
   calling: (callerId: string, callerSignalData: SignalData) => void
   leaveCall: (callId: string) => void
   answerCall: (callId: string) => Promise<void>
@@ -28,6 +28,6 @@ export interface ICallService {
   closeConnection: (silent?: boolean) => void
 }
 
-export interface IAdditionalServiceContext {
-  call: ContextRefType<ICallService | null>
+export interface AdditionalServiceContext {
+  call: ContextRef<CallService | null>
 }

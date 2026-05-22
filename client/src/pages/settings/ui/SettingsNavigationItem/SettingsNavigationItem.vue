@@ -4,10 +4,10 @@ import { RouterLink } from 'vue-router'
 
 import { AppHeader, AppText } from 'src/shared/ui'
 
-import type { ISettingsNavigationItemProps } from './types'
+import type { SettingsNavigationItemProps } from './types'
 import { useSettingsNavigationItem } from './use-settings-navigation-item.model'
 
-const props = defineProps<ISettingsNavigationItemProps>()
+const props = defineProps<SettingsNavigationItemProps>()
 const { buttonClass, showIcon } = useSettingsNavigationItem(props)
 </script>
 

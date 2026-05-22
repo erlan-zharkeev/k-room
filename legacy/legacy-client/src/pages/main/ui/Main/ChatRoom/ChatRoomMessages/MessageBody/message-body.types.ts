@@ -1,10 +1,10 @@
 import { IBaseFrontendUserData, IMessage } from 'common'
 
-export interface IMessageBodyProps {
+export interface MessageBodyProps {
   message: IMessage
 }
 
-export interface IMessageBodyReaction {
+export interface MessageBodyReaction {
   authors: IBaseFrontendUserData[]
   glyph: string
 }

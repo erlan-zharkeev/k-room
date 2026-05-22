@@ -4,9 +4,9 @@ import { registerContactsSocketHandlers } from 'src/modules/contacts/contacts.so
 import { registerMessagesSocketHandlers } from 'src/modules/messages/messages.socket'
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { registerUserSocketHandlers } from 'src/modules/user/user.socket'
-import type { SocketInstanceType } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types/socket'
 
-export const socketRouter = (socket: SocketInstanceType, presenceService: PresenceService) => {
+export const socketRouter = (socket: SocketInstance, presenceService: PresenceService) => {
   registerUserSocketHandlers(socket, presenceService)
   registerChatRoomsSocketHandlers(socket, presenceService)
   registerContactsSocketHandlers(socket, presenceService)

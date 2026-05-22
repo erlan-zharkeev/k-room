@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Req, Res, UseGuards } from '@nestjs/common'
 import { type Request, type Response } from 'express'
-import { MEDIA_ENDPOINTS, type IBackendResponse, REQ_STATUS } from 'global-shared'
+import { MEDIA_ENDPOINTS, type BackendResponse, REQ_STATUS } from 'global-shared'
 
 import { AppError, toAppError } from 'src/shared/lib/app-error'
 
@@ -17,7 +17,7 @@ export class MediaController {
   @UseGuards(AccessTokenGuard)
   async getMediaFile(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<null>>,
+    @Res() response: Response<BackendResponse<null>>,
     @Query('download') download?: string,
     @Query('revalidate') revalidate?: string
   ) {

@@ -1,2 +1,2 @@
 export { default as AppUserPicker } from './AppUserPicker.vue'
-export type { IAppUserPickerItem, IAppUserPickerProps } from './types'
+export type { AppUserPickerItem, AppUserPickerProps } from './types'

@@ -1,32 +1,32 @@
-export interface IRegistrationTextRule {
+export interface RegistrationTextRule {
   pattern?: RegExp
   error: string
 }
 
-export interface IRegistrationBooleanRule {
+export interface RegistrationBooleanRule {
   booleanCompareType: 'eq' | 'not-eq'
   compareValue: boolean
   error: string
 }
 
-export interface IRegistrationTextField {
+export interface RegistrationTextField {
   value: string
-  rules: IRegistrationTextRule[]
+  rules: RegistrationTextRule[]
 }
 
-export interface IRegistrationBooleanField {
+export interface RegistrationBooleanField {
   value: boolean
-  rules: IRegistrationBooleanRule[]
+  rules: RegistrationBooleanRule[]
 }
 
-export interface IRegistrationFormData {
-  nickname: IRegistrationTextField
-  email: IRegistrationTextField
-  password: IRegistrationTextField
-  policy: IRegistrationBooleanField
+export interface RegistrationFormData {
+  nickname: RegistrationTextField
+  email: RegistrationTextField
+  password: RegistrationTextField
+  policy: RegistrationBooleanField
 }
 
-export interface IRegistrationInitialFormData {
+export interface RegistrationInitialFormData {
   nickname: string
   email: string
   password: string

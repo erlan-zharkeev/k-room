@@ -1,8 +1,8 @@
-import { InteractionType } from 'common'
+import { Interaction } from 'common'
 
 import { UserModel } from 'src/modules/user'
 
-export const setContactInteraction = async (docId: string, contactId: string, interaction: InteractionType) => {
+export const setContactInteraction = async (docId: string, contactId: string, interaction: Interaction) => {
   return UserModel.findOneAndUpdate(
     { _id: docId, [`personal.contacts.${contactId}`]: { $exists: true } },
     {

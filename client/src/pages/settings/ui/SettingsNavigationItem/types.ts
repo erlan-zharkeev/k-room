@@ -1,6 +1,6 @@
 import type { RouteLocationRaw } from 'vue-router'
 
-export interface ISettingsNavigationItemProps {
+export interface SettingsNavigationItemProps {
   active?: boolean
   ariaLabel: string
   description: string

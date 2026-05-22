@@ -1,3 +1,3 @@
-export interface ITokenPayload {
+export interface TokenPayload {
   id: string
 }

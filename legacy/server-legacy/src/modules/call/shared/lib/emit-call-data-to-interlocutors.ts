@@ -1,4 +1,4 @@
-import { EventCallUpdatedType, SocketActionsType } from 'common'
+import { EventCallUpdated, SocketActions } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 
@@ -13,7 +13,7 @@ export const emitCallDataToInterlocutors = async (interlocutors: string[], callI
 
       if (!transformedCall) return
 
-      const payload: EventCallUpdatedType = {
+      const payload: EventCallUpdated = {
         ...transformedCall,
         setId
       }
@@ -21,7 +21,7 @@ export const emitCallDataToInterlocutors = async (interlocutors: string[], callI
       const socketIds = await getSocketsByUserIds([interlocutorId])
 
       socketIds.forEach((socketId) => {
-        getIO().to(socketId).emit<SocketActionsType>('call-data-changed', payload)
+        getIO().to(socketId).emit<SocketActions>('call-data-changed', payload)
       })
     })
   )

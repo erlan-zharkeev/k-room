@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { Form } from 'antd'
 
-import { IEventUpdateChatRoom, MediaFileValueType, SocketActionsType } from 'common'
+import { EventUpdateChatRoom, MediaFileValue, SocketActions } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
@@ -14,11 +14,11 @@ import { useSettings, useI18n } from 'src/shared/preferences'
 import { AppAvatar, AppAvatarLoader, AppButton, AppHeader } from 'src/shared/ui'
 
 import { CHAT_ROOM_SETTINGS_MODAL_I18N } from './i18n.ts'
-import { IChatRoomSettingsModalProps } from './chat-room-settings-modal.types.ts'
+import { ChatRoomSettingsModalProps } from './chat-room-settings-modal.types.ts'
 
 // import { validateRules } from 'src/shared/lib'
 
-export const ChatRoomSettingsModal = ({ onClose }: IChatRoomSettingsModalProps) => {
+export const ChatRoomSettingsModal = ({ onClose }: ChatRoomSettingsModalProps) => {
   const { chatRooms } = useChatRoom()
   const { getByIds } = useContact()
   const { selectedChatRoomId } = useSettings()
@@ -26,7 +26,7 @@ export const ChatRoomSettingsModal = ({ onClose }: IChatRoomSettingsModalProps) 
   const chatRoomData = chatRooms.find((room) => room.id === selectedChatRoomId)
   const members = chatRoomData ? getByIds(chatRoomData.users) : []
   const [imagePath, setNewImagePath] = useState<string | null | undefined>(chatRoomData?.avatarId)
-  const [avatarFile, setFile] = useState<File | MediaFileValueType | null>(null)
+  const [avatarFile, setFile] = useState<File | MediaFileValue | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const isUserAuthor = chatRoomData?.authorId === id
   const { t } = useI18n()
@@ -36,17 +36,17 @@ export const ChatRoomSettingsModal = ({ onClose }: IChatRoomSettingsModalProps) 
 
   const onFinish = async (values: { 'chat-name': string }) => {
     const userIds = chatRoomData?.users ?? []
-    const updatedValues: IEventUpdateChatRoom = {
+    const updatedValues: EventUpdateChatRoom = {
       roomId: selectedChatRoomId,
       users: userIds,
       chatName: values['chat-name'],
       avatar: imagePath ?? '',
-      avatarFile: avatarFile as IEventUpdateChatRoom['avatarFile']
+      avatarFile: avatarFile as EventUpdateChatRoom['avatarFile']
     }
     setIsLoading(true)
 
-    socket.emit<SocketActionsType>('update-chat-room', updatedValues)
-    socket.once<SocketActionsType>('room-data-updated', () => {
+    socket.emit<SocketActions>('update-chat-room', updatedValues)
+    socket.once<SocketActions>('room-data-updated', () => {
       setIsLoading(false)
       onClose()
     })

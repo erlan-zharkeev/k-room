@@ -1,20 +1,20 @@
-import type { IAppearanceSettings } from './appearance.types'
-import type { ContentTabType } from './content.types'
-import type { HiddenNotificationType } from './hidden-notification.types'
-import type { IIoDevicesSettings } from './io-devices.types'
-import type { IDeviceLocalizationSettings } from './localization.types'
-import type { IMessageListScrollState } from './message.types'
-import type { IDeviceNotificationSettings } from './notification.types'
+import type { AppearanceSettings } from './appearance.types'
+import type { ContentTab } from './content.types'
+import type { HiddenNotification } from './hidden-notification.types'
+import type { IoDevicesSettings } from './io-devices.types'
+import type { DeviceLocalizationSettings } from './localization.types'
+import type { MessageListScrollState } from './message.types'
+import type { DeviceNotificationSettings } from './notification.types'
 
-export interface IDeviceSetting {
-  contentTab: ContentTabType
+export interface DeviceSetting {
+  contentTab: ContentTab
   chatRoomId: string
-  messageScrollByRoom: Record<string, IMessageListScrollState>
-  localization: IDeviceLocalizationSettings
-  appearance: IAppearanceSettings
-  notifications: IDeviceNotificationSettings
-  ioDevices: IIoDevicesSettings
-  hiddenNotification: HiddenNotificationType[]
+  messageScrollByRoom: Record<string, MessageListScrollState>
+  localization: DeviceLocalizationSettings
+  appearance: AppearanceSettings
+  notifications: DeviceNotificationSettings
+  ioDevices: IoDevicesSettings
+  hiddenNotification: HiddenNotification[]
 }
 
-export type DbDeviceSettingType = IDeviceSetting
+export type DbDeviceSetting = DeviceSetting

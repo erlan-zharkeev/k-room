@@ -39,7 +39,7 @@ import {
   MESSAGE_SUBJECTS,
   MINUTE_IN_MS
 } from './fixtures.constants'
-import type { IFixtureContactData, IFixtureUserData } from './fixtures.types'
+import type { FixtureContactData, FixtureUserData } from './fixtures.types'
 
 const USER_BY_NICKNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.nickname, fixture]))
 const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
@@ -63,7 +63,7 @@ const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
   return true
 }
 
-const loadUserFixture = async (data: IFixtureUserData) => {
+const loadUserFixture = async (data: FixtureUserData) => {
   const { id, nickname, email, pass, avatarPath } = data
   const identifier = new Types.ObjectId(id)
   const userExistState = await isUserExist({ id: identifier, nickname, email })
@@ -258,11 +258,7 @@ const buildLongPrivateFixtureMessages = (contactId: string, contactNickname: str
     buildLongPrivateFixtureMessage(idx + 1, contactId, contactNickname)
   )
 
-const setFixtureContact = async (
-  userId: string,
-  contactId: string,
-  interaction: IFixtureContactData['interaction']
-) => {
+const setFixtureContact = async (userId: string, contactId: string, interaction: FixtureContactData['interaction']) => {
   await UserModel.updateOne(
     { _id: userId },
     {
@@ -281,7 +277,7 @@ const removeFixtureContact = async (userId: string, contactId: string) => {
   await UserModel.updateOne({ _id: userId }, { $unset: { [`personal.contacts.${contactId}`]: '' } })
 }
 
-const ensureFixtureContact = async ({ nickname, interaction, reverseInteraction }: IFixtureContactData) => {
+const ensureFixtureContact = async ({ nickname, interaction, reverseInteraction }: FixtureContactData) => {
   const fixture = USER_BY_NICKNAME[nickname]
 
   if (!fixture) {

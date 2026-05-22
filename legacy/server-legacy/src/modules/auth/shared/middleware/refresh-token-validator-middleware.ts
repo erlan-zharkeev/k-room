@@ -3,7 +3,7 @@ import { NextFunction, Response } from 'express'
 
 import { UserModel } from 'src/modules/user'
 
-import { IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -11,10 +11,10 @@ import { AUTH_I18N } from '../config/i18n'
 import { updateTokens } from '../lib/update-token'
 import { verifyToken } from '../lib/verify-token'
 
-const haveNotRightsError = (req: IAppRequest, res: Response, silent = true) =>
+const haveNotRightsError = (req: AppRequest, res: Response, silent = true) =>
   throwHTTPError(REQ_STATUS.notAuth, res, localizedText(AUTH_I18N.nonAuthorized, req.language), silent)
 
-export const refreshTokenValidatorMiddleware = async (req: IAppRequest, res: Response, next: NextFunction) => {
+export const refreshTokenValidatorMiddleware = async (req: AppRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies['refresh-jwt']
 
   if (!refreshToken) {

@@ -1,4 +1,4 @@
-import { MEDIA_ENDPOINTS, REQ_STATUS, type EndpointsType } from 'global-shared'
+import { MEDIA_ENDPOINTS, REQ_STATUS, type Endpoints } from 'global-shared'
 
 import { isHttpError, useHttp } from 'src/shared/api'
 
@@ -10,7 +10,7 @@ export const useLoadMedia = () => {
   const { doHttpRequest } = useHttp()
   const { put } = useMedia()
 
-  const getMediaEndpoint = (filename: string) => `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType
+  const getMediaEndpoint = (filename: string) => `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as Endpoints
 
   const loadMediaHeaders = async (filename: string) => {
     const response = await doHttpRequest('head', getMediaEndpoint(filename))

@@ -1,3 +1,3 @@
-export interface IErrorBucketProps {
+export interface ErrorBucketProps {
   errors: string[]
 }

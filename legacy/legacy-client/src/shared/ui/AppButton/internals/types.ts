@@ -1,28 +1,28 @@
-import { UnknownCallbackType } from 'common'
+import { UnknownCallback } from 'common'
 
-import { ColorModifierType } from 'src/shared/ui/internals/types'
-import { AppIconNameType, AppIconSizeType } from 'src/shared/ui/AppIcon/internals/types'
+import { ColorModifier } from 'src/shared/ui/internals/types'
+import { AppIconName, AppIconSize } from 'src/shared/ui/AppIcon/internals/types'
 
-export interface IButtonProps {
+export interface ButtonProps {
   htmltype?: 'button' | 'submit'
-  color?: ColorModifierType
+  color?: ColorModifier
   text?: string
   ariaLabel?: string
   ariaControls?: string
   ariaExpanded?: boolean
   ariaHaspopup?: React.AriaAttributes['aria-haspopup']
-  iconSize?: AppIconSizeType
+  iconSize?: AppIconSize
   borderless?: boolean
-  prefixIconName?: AppIconNameType
+  prefixIconName?: AppIconName
   loading?: boolean
   disabled?: boolean
   hoverless?: boolean
   showTooltips?: boolean
-  onClick?: UnknownCallbackType
+  onClick?: UnknownCallback
   additionalClassName?: string
   children?: React.ReactNode
   small?: boolean
   fill?: boolean
-  onSubmit?: UnknownCallbackType
+  onSubmit?: UnknownCallback
   info?: boolean
 }

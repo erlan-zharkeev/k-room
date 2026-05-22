@@ -21,26 +21,26 @@ export { DEFAULT_IO_DEVICES_SETTINGS } from './config/io-devices.constants'
 export { DEFAULT_LOCALIZATION_SETTINGS } from './config/localization.constants'
 export { DEFAULT_NOTIFICATION_GROUP_SETTINGS, DEFAULT_NOTIFICATION_SETTINGS } from './config/notification.constants'
 export type {
-  EffectiveThemeType,
-  IAppearanceSettings,
-  IColorSchema,
-  IThemeData,
-  IThemeShadowSettings,
-  IWallpaperSettings,
+  EffectiveTheme,
+  AppearanceSettings,
+  ColorSchema,
+  ThemeData,
+  ThemeShadowSettings,
+  WallpaperSettings,
   SystemTheme,
-  ThemeType
+  Theme
 } from './config/appearance.types'
-export type { AsideBarButtonNameType, ContentTabType } from './config/content.types'
-export type { DbDeviceSettingType, IDeviceSetting } from './config/types'
-export type { HiddenNotificationType } from './config/hidden-notification.types'
-export type { IIoDevicesSettings } from './config/io-devices.types'
-export type { IDeviceLocalizationSettings } from './config/localization.types'
-export type { IMessageListScrollState } from './config/message.types'
+export type { AsideBarButtonName, ContentTab } from './config/content.types'
+export type { DbDeviceSetting, DeviceSetting } from './config/types'
+export type { HiddenNotification } from './config/hidden-notification.types'
+export type { IoDevicesSettings } from './config/io-devices.types'
+export type { DeviceLocalizationSettings } from './config/localization.types'
+export type { MessageListScrollState } from './config/message.types'
 export type {
-  INotificationGroupSettings,
-  IDeviceNotificationSettings,
-  NotificationEventGroupType,
-  NotificationPushSettingKeyType,
-  NotificationSettingGroupType,
-  NotificationSettingKeyType
+  NotificationGroupSettings,
+  DeviceNotificationSettings,
+  NotificationEventGroup,
+  NotificationPushSettingKey,
+  NotificationSettingGroup,
+  NotificationSettingKey
 } from './config/notification.types'

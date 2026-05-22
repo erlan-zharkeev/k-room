@@ -2,14 +2,14 @@ import './style.scss'
 import { useEffect, useRef, useState } from 'react'
 
 import { useTimeout, createClassNameWithModifiers } from 'src/shared/lib'
-import { IAppScrollContainerProps } from 'src/shared/ui/AppScrollContainer/internals/types'
+import { AppScrollContainerProps } from 'src/shared/ui/AppScrollContainer/internals/types'
 
 export const AppScrollContainer = ({
   height = '300px',
   children,
   additionalClassName,
   id
-}: IAppScrollContainerProps) => {
+}: AppScrollContainerProps) => {
   const [showScrollbar, setShowScrollbar] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { startTimeout } = useTimeout()

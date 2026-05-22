@@ -1,12 +1,12 @@
 import { randomInt } from 'node:crypto'
 
-import { ISendPasswordRecoveryCodeResponse, REQ_STATUS } from 'common'
+import { SendPasswordRecoveryCodeResponse, REQ_STATUS } from 'common'
 
 import { sendPasswordRecoveryEmail } from 'src/modules/email'
 import { USER_I18N } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppResponse, AppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -18,8 +18,8 @@ import { SEND_PASSWORD_RECOVERY_CODE_I18N } from './config/i18n'
 const buildPasswordRecoveryCode = () => String(randomInt(100000, 1000000))
 
 export const sendPasswordRecoveryCodeController = async (
-  req: IAppRequest,
-  res: AppResponseType<ISendPasswordRecoveryCodeResponse>
+  req: AppRequest,
+  res: AppResponse<SendPasswordRecoveryCodeResponse>
 ) => {
   const { language } = req
   const basicError = localizedText(SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed, language)

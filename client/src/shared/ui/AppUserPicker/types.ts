@@ -1,12 +1,12 @@
-export interface IAppUserPickerItem {
+export interface AppUserPickerItem {
   id: string
   imageId?: string
   nickname: string
   online?: boolean
 }
 
-export interface IAppUserPickerProps {
-  items: IAppUserPickerItem[]
+export interface AppUserPickerProps {
+  items: AppUserPickerItem[]
   multiple?: boolean
   height?: string
   maxHeight?: string

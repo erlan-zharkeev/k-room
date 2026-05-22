@@ -1,10 +1,10 @@
-import type { StreamSettingsType } from '../shared/types'
+import type { StreamSettings } from '../shared/types'
 
-export type CallStatusType = 'calling' | 'in-progress' | 'finished'
+export type CallStatus = 'calling' | 'in-progress' | 'finished'
 
-export type CallFlowType = 'incoming' | 'outgoing' | 'missed' | 'not-answered'
+export type CallFlow = 'incoming' | 'outgoing' | 'missed' | 'not-answered'
 
-export interface CallType {
+export interface Call {
   id: string
   calledAt?: number
   authorId: string
@@ -15,14 +15,14 @@ export interface CallType {
   interlocutorId: string
   interlocutorNickname: string
   interlocutorAvatarPath?: string
-  status?: CallStatusType
-  flow: CallFlowType
+  status?: CallStatus
+  flow: CallFlow
   video: boolean
-  interlocutorSettings?: StreamSettingsType
+  interlocutorSettings?: StreamSettings
   setId?: boolean
 }
 
-export interface CallDocumentType {
+export interface CallDocument {
   _id: string
   calledAt: number
   startedAt: number
@@ -33,4 +33,4 @@ export interface CallDocumentType {
   video: boolean
 }
 
-export type CallSchemaType = CallDocumentType
+export type CallSchema = CallDocument

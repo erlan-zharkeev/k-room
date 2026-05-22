@@ -1,7 +1,7 @@
 import { SETTINGS_PAGE_FAQ_I18N } from '../i18n/faq.i18n'
-import type { IFaqItem } from '../types/faq.types'
+import type { FaqItem } from '../types/faq.types'
 
-export const FAQ_ITEMS: IFaqItem[] = [
+export const FAQ_ITEMS: FaqItem[] = [
   { id: 1, question: SETTINGS_PAGE_FAQ_I18N.faqQ1, answer: SETTINGS_PAGE_FAQ_I18N.faqA1 },
   { id: 2, question: SETTINGS_PAGE_FAQ_I18N.faqQ2, answer: SETTINGS_PAGE_FAQ_I18N.faqA2 },
   { id: 3, question: SETTINGS_PAGE_FAQ_I18N.faqQ3, answer: SETTINGS_PAGE_FAQ_I18N.faqA3 },

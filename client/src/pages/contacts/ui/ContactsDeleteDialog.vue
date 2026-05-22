@@ -4,10 +4,10 @@ import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import type { IContactsDeleteDialogEmits } from '../config/types'
+import type { ContactsDeleteDialogEmits } from '../config/types'
 
 const model = defineModel<boolean>({ required: true })
-const emit = defineEmits<IContactsDeleteDialogEmits>()
+const emit = defineEmits<ContactsDeleteDialogEmits>()
 </script>
 
 <template>

@@ -1,23 +1,23 @@
 import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
 
-import type { KebabCaseType } from 'src/shared/lib'
+import type { KebabCase } from 'src/shared/lib'
 
-export type AppTextTagType = 'span' | 'p' | 'div' | 'small'
+export type AppTextTag = 'span' | 'p' | 'div' | 'small'
 
-export type AppTextStaticColorType = keyof Pick<
+export type AppTextStaticColor = keyof Pick<
   INmorphStaticColors,
   'text' | 'semiContrastText' | 'contrastText' | 'accent' | 'warn' | 'errorText'
 >
 
-export type AppTextColorType = KebabCaseType<AppTextStaticColorType>
+export type AppTextColor = KebabCase<AppTextStaticColor>
 
-export type AppTextAlignmentType = 'left' | 'center' | 'right'
+export type AppTextAlignment = 'left' | 'center' | 'right'
 
-export interface IAppTextProps {
+export interface AppTextProps {
   text?: string | number
-  tag?: AppTextTagType
-  color?: AppTextColorType
-  alignment?: AppTextAlignmentType
+  tag?: AppTextTag
+  color?: AppTextColor
+  alignment?: AppTextAlignment
   bold?: boolean
   truncate?: boolean
   noLineHeight?: boolean

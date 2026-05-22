@@ -1,10 +1,10 @@
 import { isRoomPrivate } from 'src/entities/chat-room/lib/is-room-private'
 
-import { FChatRoomType } from 'src/shared/config'
+import { FChatRoom } from 'src/shared/config'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 import { useSettings } from 'src/shared/preferences'
 
-const chatRoomStore = dexieCollectionStore<FChatRoomType>(db['chat-rooms'])
+const chatRoomStore = dexieCollectionStore<FChatRoom>(db['chat-rooms'])
 
 export const useChatRoom = () => {
   const { put, update, mutate, mergeMany, reset } = chatRoomStore

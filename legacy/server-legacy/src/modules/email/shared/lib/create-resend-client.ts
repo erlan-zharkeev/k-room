@@ -1,4 +1,4 @@
-import { AppLanguageType, REQ_STATUS } from 'common'
+import { AppLanguage, REQ_STATUS } from 'common'
 import { Resend } from 'resend'
 
 import { SERVER_ENV } from 'src/shared/config'
@@ -9,7 +9,7 @@ import { EMAIL_I18N } from '../config/i18n'
 
 let resendClient: Resend | null = null
 
-export const createResendClient = (language: AppLanguageType) => {
+export const createResendClient = (language: AppLanguage) => {
   if (resendClient) return resendClient
 
   if (!SERVER_ENV.resendApiKey) {

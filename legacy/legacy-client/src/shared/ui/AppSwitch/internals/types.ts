@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
 
-export interface IAppSwitchProps {
+export interface AppSwitchProps {
   name: string
   value: boolean
   onText?: string

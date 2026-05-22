@@ -1,11 +1,11 @@
 import { randomUUID } from 'crypto'
 
 import { Injectable, OnModuleDestroy } from '@nestjs/common'
-import type { IEventStatusContact } from 'global-shared'
+import type { EventStatusContact } from 'global-shared'
 
 import { log } from 'src/shared/lib/log'
-import type { MongoIdType } from 'src/shared/types/mongo'
-import type { SocketInstanceType } from 'src/shared/types/socket'
+import type { MongoId } from 'src/shared/types/mongo'
+import type { SocketInstance } from 'src/shared/types/socket'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { RedisService } from '../security/redis.service'
@@ -39,7 +39,7 @@ export class PresenceService implements OnModuleDestroy {
     this.refreshTimers.clear()
   }
 
-  private buildUserSocketsKey(userId: MongoIdType | string) {
+  private buildUserSocketsKey(userId: MongoId | string) {
     return [PRESENCE_REDIS_KEY_PREFIX, 'user', String(userId), 'sockets'].join(':')
   }
 
@@ -47,11 +47,11 @@ export class PresenceService implements OnModuleDestroy {
     return [PRESENCE_REDIS_KEY_PREFIX, 'socket', socketId].join(':')
   }
 
-  private buildOfflineLockKey(userId: MongoIdType | string) {
+  private buildOfflineLockKey(userId: MongoId | string) {
     return [PRESENCE_REDIS_KEY_PREFIX, 'offline-lock', String(userId)].join(':')
   }
 
-  private async joinUserSocketRoom(socket: SocketInstanceType) {
+  private async joinUserSocketRoom(socket: SocketInstance) {
     await socket.join(buildUserRoomName(socket.data.userId))
   }
 
@@ -84,7 +84,7 @@ export class PresenceService implements OnModuleDestroy {
     ])
   }
 
-  private startPresenceRefresh(socket: SocketInstanceType) {
+  private startPresenceRefresh(socket: SocketInstance) {
     this.stopPresenceRefresh(socket.id)
 
     const timer = setInterval(() => {
@@ -128,11 +128,11 @@ export class PresenceService implements OnModuleDestroy {
     return aliveSocketIds
   }
 
-  async isUserOnline(userId: MongoIdType | string) {
+  async isUserOnline(userId: MongoId | string) {
     return (await this.activeSocketIdsByUser(String(userId))).length > 0
   }
 
-  async onlineMapByUserIds(userIds: Array<MongoIdType | string>) {
+  async onlineMapByUserIds(userIds: Array<MongoId | string>) {
     const uniqueUserIds = [...new Set(userIds.map((userId) => String(userId)))]
     const result = new Map<string, boolean>()
 
@@ -161,7 +161,7 @@ export class PresenceService implements OnModuleDestroy {
       return
     }
 
-    const payload: IEventStatusContact = {
+    const payload: EventStatusContact = {
       interlocutorId: userId,
       online,
       onlineStatusUpdatedTimestamp: Date.now(),
@@ -205,7 +205,7 @@ export class PresenceService implements OnModuleDestroy {
     )
   }
 
-  async markSocketConnected(socket: SocketInstanceType) {
+  async markSocketConnected(socket: SocketInstance) {
     const { userId } = socket.data
     const wasOnline = await this.isUserOnline(userId)
 
@@ -221,7 +221,7 @@ export class PresenceService implements OnModuleDestroy {
     }
   }
 
-  async markSocketDisconnected(socket: SocketInstanceType) {
+  async markSocketDisconnected(socket: SocketInstance) {
     const { userId } = socket.data
 
     this.stopPresenceRefresh(socket.id)

@@ -1,10 +1,10 @@
-import type { MediaValidationOptionsType, MediaBucketNameType, MediaKindType, MediaUploadType } from './types'
+import type { MediaValidationOptions, MediaBucketName, MediaKind, MediaUpload } from './types'
 
 export const MEDIA_MB_IN_BYTES = 1024 * 1024
 export const MEDIA_AVATAR_FILENAME_PREFIX = 'avatar.'
 export const MEDIA_IMAGE_FILENAME_PREFIX = 'image.'
 
-export const MEDIA_BUCKET_NAMES = ['avatar', 'doc', 'image', 'audio', 'video'] as const satisfies MediaBucketNameType[]
+export const MEDIA_BUCKET_NAMES = ['avatar', 'doc', 'image', 'audio', 'video'] as const satisfies MediaBucketName[]
 
 export const MEDIA_KIND_ACCEPT_MAP = {
   image: 'image/*',
@@ -12,7 +12,7 @@ export const MEDIA_KIND_ACCEPT_MAP = {
   audio: 'audio/*',
   pdf: 'application/pdf',
   unknown: ''
-} as const satisfies Record<MediaKindType, string>
+} as const satisfies Record<MediaKind, string>
 
 export const MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP = {
   image: ['jpg', 'jpeg', 'png', 'gif', 'svg-xml', 'webp'],
@@ -20,7 +20,7 @@ export const MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP = {
   audio: ['mpeg', 'audio-ogg', 'wav'],
   pdf: ['pdf'],
   unknown: []
-} as const satisfies Record<MediaKindType, MediaUploadType[]>
+} as const satisfies Record<MediaKind, MediaUpload[]>
 
 export const MEDIA_UPLOAD_TYPE_LABEL_MAP = {
   zip: 'ZIP',
@@ -45,7 +45,7 @@ export const MEDIA_UPLOAD_TYPE_LABEL_MAP = {
   gif: 'GIF',
   'svg-xml': 'SVG',
   webp: 'WEBP'
-} as const satisfies Record<MediaUploadType, string>
+} as const satisfies Record<MediaUpload, string>
 
 export const MEDIA_VALIDATION_OPTIONS_MAP = {
   avatar: {
@@ -68,4 +68,4 @@ export const MEDIA_VALIDATION_OPTIONS_MAP = {
     maxMb: 50,
     supportedKindMediaType: 'video'
   }
-} as const satisfies Record<MediaBucketNameType, MediaValidationOptionsType>
+} as const satisfies Record<MediaBucketName, MediaValidationOptions>

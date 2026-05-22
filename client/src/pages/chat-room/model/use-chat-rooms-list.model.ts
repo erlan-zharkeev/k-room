@@ -1,4 +1,4 @@
-import type { IEventUpdatePinnedChatRoomOrder, SocketActionsType } from 'global-shared'
+import type { EventUpdatePinnedChatRoomOrder, SocketActions } from 'global-shared'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -9,7 +9,7 @@ import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
 import { socket, useSocketAction } from 'src/shared/api'
 import { useScreen } from 'src/shared/lib'
 
-import type { IChatRoomNavigationItem } from '../config/types'
+import type { ChatRoomNavigationItem } from '../config/types'
 
 import { useChatRoomContactLookup } from './use-chat-room-contact-lookup.model'
 
@@ -36,7 +36,7 @@ export const useChatRoomsList = () => {
     }
   }
 
-  const chatRoomList = computed<IChatRoomNavigationItem[]>(() => {
+  const chatRoomList = computed<ChatRoomNavigationItem[]>(() => {
     const items = chatRooms.value.map((room) => {
       const privateContact = getChatRoomPrivateContact(room)
       const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
@@ -84,16 +84,16 @@ export const useChatRoomsList = () => {
     router.push(buildChatRoomRoute(roomId))
   }
 
-  const reorderPinnedChatRooms = async (items: IChatRoomNavigationItem[]) => {
+  const reorderPinnedChatRooms = async (items: ChatRoomNavigationItem[]) => {
     const pinnedChatRoomIds = items.map(({ id }) => id)
 
     await updatePinnedOrder(pinnedChatRoomIds)
-    void emitSocketAction<IEventUpdatePinnedChatRoomOrder>(
+    void emitSocketAction<EventUpdatePinnedChatRoomOrder>(
       'update-pinned-chat-room-order',
       { pinnedChatRoomIds },
       {
         onFailure: () => {
-          socket.emit<SocketActionsType>('actualize-user-data')
+          socket.emit<SocketActions>('actualize-user-data')
         }
       }
     )

@@ -1,7 +1,7 @@
 import './style.scss'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import { ROUTE_NAMES as R, RouteNameType } from 'common'
+import { ROUTE_NAMES as R, RouteName } from 'common'
 
 import { PAGE_LAYOUT_I18N } from 'src/widgets/page-layout/i18n'
 
@@ -13,8 +13,8 @@ export const PageLayout = () => {
   const { pathname } = useLocation()
   const { t } = useI18n()
 
-  const hiddenBackRoutes = new Set<RouteNameType>([R.login, R.registration])
-  const showBack = !hiddenBackRoutes.has(pathname as RouteNameType)
+  const hiddenBackRoutes = new Set<RouteName>([R.login, R.registration])
+  const showBack = !hiddenBackRoutes.has(pathname as RouteName)
 
   const handleBack = () => {
     if (window.history.length > 1) navigate(-1)

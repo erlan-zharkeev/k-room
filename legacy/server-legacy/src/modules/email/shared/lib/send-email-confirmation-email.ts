@@ -1,4 +1,4 @@
-import { AppLanguageType, REQ_STATUS } from 'common'
+import { AppLanguage, REQ_STATUS } from 'common'
 
 import { AppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
@@ -18,7 +18,7 @@ export const sendEmailConfirmationEmail = async ({
   username
 }: {
   email: string
-  language: AppLanguageType
+  language: AppLanguage
   token: string
   username?: string
 }) => {

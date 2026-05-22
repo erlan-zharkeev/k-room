@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 
-import { useSettings, type NotificationSettingGroupType, type NotificationSettingKeyType } from 'src/entities/setting'
+import { useSettings, type NotificationSettingGroup, type NotificationSettingKey } from 'src/entities/setting'
 import { getClientPlatform, useScreen } from 'src/shared/lib'
 
 import {
@@ -9,7 +9,7 @@ import {
   SETTINGS_NOTIFICATION_OPTIONS,
   SETTINGS_NOTIFICATION_SECTIONS
 } from '../../config/constants/notifications.constants'
-import type { SettingsNotificationOptionIdType } from '../../config/types/notifications.types'
+import type { SettingsNotificationOptionId } from '../../config/types/notifications.types'
 
 export const useNotificationSettings = () => {
   const { settings, mutate } = useSettings()
@@ -30,7 +30,7 @@ export const useNotificationSettings = () => {
     )
   })
 
-  const getValue = (groupId: NotificationSettingGroupType, optionId: SettingsNotificationOptionIdType) => {
+  const getValue = (groupId: NotificationSettingGroup, optionId: SettingsNotificationOptionId) => {
     if (optionId === 'enabled') return settings.value.notifications.enabled
 
     return settings.value.notifications[groupId][optionId]
@@ -48,7 +48,7 @@ export const useNotificationSettings = () => {
     })
   }
 
-  const setGroup = (groupId: NotificationSettingGroupType, channelId: NotificationSettingKeyType, value: boolean) => {
+  const setGroup = (groupId: NotificationSettingGroup, channelId: NotificationSettingKey, value: boolean) => {
     return mutate((data) => {
       data.notifications[groupId][channelId] = value
 
@@ -59,11 +59,7 @@ export const useNotificationSettings = () => {
     })
   }
 
-  const setValue = (
-    groupId: NotificationSettingGroupType,
-    optionId: SettingsNotificationOptionIdType,
-    value: boolean
-  ) => {
+  const setValue = (groupId: NotificationSettingGroup, optionId: SettingsNotificationOptionId, value: boolean) => {
     if (optionId === 'enabled') return setAll(value)
 
     return setGroup(groupId, optionId, value)

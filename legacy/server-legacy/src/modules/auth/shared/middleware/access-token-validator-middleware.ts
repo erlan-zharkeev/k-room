@@ -1,7 +1,7 @@
 import { REQ_STATUS } from 'common'
 import { NextFunction, Response } from 'express'
 
-import { IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -10,7 +10,7 @@ import { verifyToken } from '../lib/verify-token'
 
 import { refreshTokenValidatorMiddleware } from './refresh-token-validator-middleware'
 
-export const accessTokenValidatorMiddleware = async (req: IAppRequest, res: Response, next: NextFunction) => {
+export const accessTokenValidatorMiddleware = async (req: AppRequest, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.jwt
 
   if (!accessToken) {

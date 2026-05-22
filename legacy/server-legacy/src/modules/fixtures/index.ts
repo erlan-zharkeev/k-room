@@ -9,5 +9,5 @@ export {
 } from './load-fixtures/constants'
 export { USER_BY_USERNAME, ERLAN_ID, TOLIK_ID } from './load-fixtures/lib/constants'
 export { loadDialogFixtures } from './load-fixtures/lib/load-dialog-fixtures'
-export type { FixtureUserByUsernameType } from './load-fixtures/lib/types'
+export type { FixtureUserByUsername } from './load-fixtures/lib/types'
 export { loadFixtures } from './load-fixtures/load-fixtures'

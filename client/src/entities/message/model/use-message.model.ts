@@ -1,9 +1,9 @@
 import { computed } from 'vue'
 
-import type { MessageRecordType } from 'src/shared/lib'
+import type { MessageRecord } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
-const messageStore = dexieCollectionStore<MessageRecordType>(db.messages)
+const messageStore = dexieCollectionStore<MessageRecord>(db.messages)
 
 export const useMessage = () => {
   const { bulkDelete, bulkPut, bulkUpdate, mutate, put, remove, reset, update } = messageStore

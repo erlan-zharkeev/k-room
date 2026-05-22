@@ -1,9 +1,9 @@
 import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { IAppBannerProps } from './internals/types'
+import { AppBannerProps } from './internals/types'
 
-export const AppBanner = ({ message, type = 'info' }: IAppBannerProps) => {
+export const AppBanner = ({ message, type = 'info' }: AppBannerProps) => {
   const className = createClassNameWithModifiers({ rootClass: 'app-banner', modifiers: [type] })
 
   return (

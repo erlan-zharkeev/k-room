@@ -5,10 +5,10 @@ import { AppText } from 'src/shared/ui'
 
 import { APP_CAPTCHA_DEFAULT_PROPS } from './constants'
 import { APP_CAPTCHA_I18N } from './i18n'
-import type { IAppCaptchaProps } from './types'
+import type { AppCaptchaProps } from './types'
 import { useAppCaptcha } from './use-app-captcha.model'
 
-const props = withDefaults(defineProps<IAppCaptchaProps>(), APP_CAPTCHA_DEFAULT_PROPS)
+const props = withDefaults(defineProps<AppCaptchaProps>(), APP_CAPTCHA_DEFAULT_PROPS)
 const model = defineModel<string>({ default: '' })
 
 const { containerRef, showUnavailable } = useAppCaptcha({

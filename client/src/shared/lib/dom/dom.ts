@@ -1,11 +1,11 @@
-import type { ICreateClassNameWithModifiersParams } from './types'
-import type { StoppableEventType } from './types'
+import type { CreateClassNameWithModifiersParams } from './types'
+import type { StoppableEvent } from './types'
 
 export const createClassNameWithModifiers = ({
   rootClass,
   modifiers,
   additionalClassName
-}: ICreateClassNameWithModifiersParams): string => {
+}: CreateClassNameWithModifiersParams): string => {
   const filteredModifiers = modifiers.filter((modifier) => modifier !== undefined && modifier !== false) as string[]
   const result = filteredModifiers.map((modifier) => `${rootClass}--${modifier}`)
 
@@ -15,7 +15,7 @@ export const createClassNameWithModifiers = ({
   return result.filter(Boolean).join(' ')
 }
 
-export const stopPropagation = (evt: StoppableEventType) => {
+export const stopPropagation = (evt: StoppableEvent) => {
   const nativeEvent = 'domEvent' in evt ? evt.domEvent : evt
 
   nativeEvent.stopPropagation()

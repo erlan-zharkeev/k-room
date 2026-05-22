@@ -1,4 +1,4 @@
-import { IEventUpdateMessageStatus, MessageStatusType, SocketActionsType } from 'common'
+import { EventUpdateMessageStatus, MessageStatus, SocketActions } from 'common'
 
 import { ChatRoomModel } from 'src/modules/chat-room'
 import { getSocketsByUserIds } from 'src/modules/user'
@@ -7,12 +7,7 @@ import { getIO } from 'src/shared/lib/io'
 
 import { MessageModel } from '../../../message.model'
 
-export const changeMessageStatus = async (
-  messageId: string,
-  status: MessageStatusType,
-  userId: string,
-  roomId: string
-) => {
+export const changeMessageStatus = async (messageId: string, status: MessageStatus, userId: string, roomId: string) => {
   const message = await MessageModel.findOneAndUpdate(
     { _id: messageId, 'usersMetaData.id': userId },
     { $set: { 'usersMetaData.$.status': status } }
@@ -24,13 +19,13 @@ export const changeMessageStatus = async (
 
   const sockets = await getSocketsByUserIds(room.users)
 
-  const payload: IEventUpdateMessageStatus = {
+  const payload: EventUpdateMessageStatus = {
     roomId,
     messageId,
     status
   }
 
   sockets.forEach((socketId: string) => {
-    getIO().to(socketId).emit<SocketActionsType>('message-status-updated', payload)
+    getIO().to(socketId).emit<SocketActions>('message-status-updated', payload)
   })
 }

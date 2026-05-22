@@ -1,17 +1,17 @@
 import type { VirtualItem, Virtualizer } from '@tanstack/vue-virtual'
-import type { IEventChangeMessageStatus, SocketActionsType } from 'global-shared'
+import type { EventChangeMessageStatus, SocketActions } from 'global-shared'
 import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
-import type { ChatRoomRecordType } from 'src/shared/lib'
+import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { MESSAGE_READ_VISIBILITY_RATIO } from '../config/constants'
-import type { MessageListItemType } from '../config/types'
+import type { MessageListItem } from '../config/types'
 
 export const useChatRoomMessageReadStatus = (
-  room: Ref<ChatRoomRecordType>,
-  messageList: ComputedRef<MessageListItemType[]>
+  room: Ref<ChatRoomRecord>,
+  messageList: ComputedRef<MessageListItem[]>
 ) => {
   const pendingReadMessageIds = new Set<string>()
   const { messageById } = useMessage()
@@ -30,14 +30,14 @@ export const useChatRoomMessageReadStatus = (
       return
     }
 
-    const payload: IEventChangeMessageStatus = {
+    const payload: EventChangeMessageStatus = {
       roomId: room.value.id,
       messageId: message.id,
       status: 'read'
     }
 
     pendingReadMessageIds.add(message.id)
-    socket.emit<SocketActionsType>('change-message-status', payload)
+    socket.emit<SocketActions>('change-message-status', payload)
   }
 
   const isVirtualItemVisible = (virtualItem: VirtualItem, scrollOffset: number, viewportHeight: number) => {

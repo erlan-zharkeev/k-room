@@ -1,13 +1,13 @@
-import { MediaFileValueType } from 'common'
+import { MediaFileValue } from 'common'
 
-import { AvatarShapeModifierType } from 'src/shared/ui/internals/types'
-import { AppIconNameType } from 'src/shared/ui/AppIcon/internals/types'
+import { AvatarShapeModifier } from 'src/shared/ui/internals/types'
+import { AppIconName } from 'src/shared/ui/AppIcon/internals/types'
 
-export interface IAvatarLoaderProps {
+export interface AvatarLoaderProps {
   path: string | null | undefined
   setImage: React.Dispatch<React.SetStateAction<string | null | undefined>>
-  setFile: React.Dispatch<React.SetStateAction<File | MediaFileValueType | null>>
+  setFile: React.Dispatch<React.SetStateAction<File | MediaFileValue | null>>
   updated?: () => void
-  stubIconName?: AppIconNameType
-  shape?: AvatarShapeModifierType
+  stubIconName?: AppIconName
+  shape?: AvatarShapeModifier
 }

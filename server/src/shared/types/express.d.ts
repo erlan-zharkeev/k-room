@@ -1,9 +1,9 @@
-import type { AppLanguageType } from 'global-shared'
+import type { AppLanguage } from 'global-shared'
 
 declare global {
   namespace Express {
     interface Request {
-      language: AppLanguageType
+      language: AppLanguage
       authUserId?: string
     }
   }

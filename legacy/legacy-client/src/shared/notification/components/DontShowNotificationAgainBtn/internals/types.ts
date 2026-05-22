@@ -1,5 +1,5 @@
-import { HiddenNotificationType } from 'src/shared/config'
+import { HiddenNotification } from 'src/shared/config'
 
-export interface IDontShowNotificationAgainBtnProps {
-  notificationName: HiddenNotificationType
+export interface DontShowNotificationAgainBtnProps {
+  notificationName: HiddenNotification
 }

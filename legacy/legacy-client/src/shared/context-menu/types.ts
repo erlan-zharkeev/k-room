@@ -1,17 +1,17 @@
 import { IMessage } from 'common'
 
-export type ContextMenuNameType = '' | 'message'
+export type ContextMenuName = '' | 'message'
 
-export interface ICoord {
+export interface Coord {
   x: number
   y: number
 }
 
-export interface IContextMenu {
-  name: ContextMenuNameType
-  coord: ICoord
-  contextClickedObject: IContextClickedObject
+export interface ContextMenu {
+  name: ContextMenuName
+  coord: Coord
+  contextClickedObject: ContextClickedObject
 }
-export interface IContextClickedObject {
+export interface ContextClickedObject {
   message: IMessage
 }

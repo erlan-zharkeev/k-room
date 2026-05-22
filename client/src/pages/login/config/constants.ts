@@ -1,7 +1,7 @@
 import { FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth'
-import type { IAuthLoginPayload } from 'global-shared'
+import type { AuthLoginPayload } from 'global-shared'
 
-export const DEFAULT_LOGIN_FORM_DATA: IAuthLoginPayload = {
+export const DEFAULT_LOGIN_FORM_DATA: AuthLoginPayload = {
   login: '',
   password: ''
 }

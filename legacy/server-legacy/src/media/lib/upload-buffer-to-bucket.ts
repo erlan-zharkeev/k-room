@@ -1,24 +1,24 @@
 import { Buffer } from 'node:buffer'
 
-import { AppLanguageType, REQ_STATUS } from 'common'
+import { AppLanguage, REQ_STATUS } from 'common'
 
 import { AppError, isAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 
 import { VALIDATE_MEDIA_FILE_I18N } from '../config/i18n'
-import { IUploadOptions, MediaBucketNameType, MongooseGridFSBucketType } from '../types'
+import { UploadOptions, MediaBucketName, MongooseGridFSBucket } from '../types'
 
 import { buildFileData } from './build-file-data'
 import { processImageWithSharp } from './process-image'
 import { validateFileMetaData } from './validate-file-meta-data'
 
 export const uploadBufferToBucket = async (
-  bucket: MongooseGridFSBucketType,
+  bucket: MongooseGridFSBucket,
   buffer: Buffer | ArrayBuffer,
   filename: string,
-  bucketName: MediaBucketNameType,
-  language: AppLanguageType,
-  options?: IUploadOptions
+  bucketName: MediaBucketName,
+  language: AppLanguage,
+  options?: UploadOptions
 ) => {
   try {
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))

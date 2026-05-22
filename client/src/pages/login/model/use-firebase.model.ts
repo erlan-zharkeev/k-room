@@ -1,9 +1,9 @@
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import {
   AUTH_ENDPOINTS,
-  type FirebaseProviderType,
-  type ISignInWithProviderPayload,
-  type SignInWithProviderResponseType
+  type FirebaseProvider,
+  type SignInWithProviderPayload,
+  type SignInWithProviderResponse
 } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
@@ -26,7 +26,7 @@ export const useFirebase = () => {
   const toast = useAppToast()
   const isFirebaseLoginLoading = ref(false)
 
-  const getFirebaseCredential = async (provider: FirebaseProviderType) => {
+  const getFirebaseCredential = async (provider: FirebaseProvider) => {
     if (__CLIENT_ENV_DATA__.isE2E) {
       return E2E_FIREBASE_AUTH_RESULT
     }
@@ -49,7 +49,7 @@ export const useFirebase = () => {
     }
   }
 
-  const buildCredential = async (provider: FirebaseProviderType): Promise<ISignInWithProviderPayload | null> => {
+  const buildCredential = async (provider: FirebaseProvider): Promise<SignInWithProviderPayload | null> => {
     try {
       const { displayName, email, photoURL, uid, provider: normalizedProvider } = await getFirebaseCredential(provider)
       const haveFullData = displayName && email && uid && normalizedProvider
@@ -75,18 +75,14 @@ export const useFirebase = () => {
     }
   }
 
-  const signInWithCredential = async (credential: ISignInWithProviderPayload) => {
-    const response = await doHttpRequest<SignInWithProviderResponseType>(
-      'post',
-      AUTH_ENDPOINTS.providerLogin,
-      credential
-    )
+  const signInWithCredential = async (credential: SignInWithProviderPayload) => {
+    const response = await doHttpRequest<SignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
     const { payload } = response.data
 
     await activateUserSession(payload)
   }
 
-  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
+  const onFirebaseLogin = async (provider: FirebaseProvider) => {
     isFirebaseLoginLoading.value = true
 
     try {

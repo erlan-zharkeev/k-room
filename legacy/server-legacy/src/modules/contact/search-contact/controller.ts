@@ -1,10 +1,10 @@
-import { IEventSearchContact, IFrontendContact, InteractionType, SocketActionsType } from 'common'
+import { EventSearchContact, IFrontendContact, Interaction, SocketActions } from 'common'
 import { Types } from 'mongoose'
 
 import { transformUserToContact } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
 import { CONTACT_I18N } from '../i18n'
@@ -12,12 +12,12 @@ import { CONTACT_I18N } from '../i18n'
 import { SEARCH_CONTACT_RESULT_LIMIT } from './constants'
 import { emitSearchedContacts } from './lib/emit-searched-contacts'
 
-export const searchContactController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const searchContactController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'search-contact',
     socketErrorMiddleware(
       socket,
-      async ({ value, offset = 0 }: IEventSearchContact) => {
+      async ({ value, offset = 0 }: EventSearchContact) => {
         let type: 'name' | 'id' = 'name'
         let validSearch = true
         const normalizedValue = value?.trim() || ''
@@ -55,7 +55,7 @@ export const searchContactController = (socket: SocketInstanceType) => {
           ])
 
           const contactInteractionMap = currentUser?.personal?.contacts ?? {}
-          const getInteractionType = (contactId: string): InteractionType => {
+          const getInteractionType = (contactId: string): Interaction => {
             const contactData =
               contactInteractionMap instanceof Map
                 ? contactInteractionMap.get(contactId)

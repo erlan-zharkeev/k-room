@@ -1,4 +1,4 @@
-import { AppLanguageType, REQ_STATUS } from 'common'
+import { AppLanguage, REQ_STATUS } from 'common'
 
 import { SERVER_ENV } from 'src/shared/config'
 import { AppError } from 'src/shared/lib/app-error'
@@ -15,7 +15,7 @@ export const sendPasswordRecoveryEmail = async ({
 }: {
   email: string
   code: string
-  language: AppLanguageType
+  language: AppLanguage
   username?: string
 }) => {
   const resend = createResendClient(language)

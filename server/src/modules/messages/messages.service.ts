@@ -1,13 +1,13 @@
 import {
-  type MessageDocumentType,
-  type IEventLoadRoomMessages,
-  type IEventMessageDelivered,
-  type IEventMessagesStatusUpdated,
-  type IEventRoomMessagesLoaded,
-  type IEventUpdateMessageStatus,
-  type ImageObjectType,
-  type MessageType,
-  type MessageStatusType,
+  type MessageDocument,
+  type EventLoadRoomMessages,
+  type EventMessageDelivered,
+  type EventMessagesStatusUpdated,
+  type EventRoomMessagesLoaded,
+  type EventUpdateMessageStatus,
+  type ImageObject,
+  type Message,
+  type MessageStatus,
   MEDIA_IMAGE_FILENAME_PREFIX
 } from 'global-shared'
 import { isString } from 'lodash'
@@ -19,13 +19,13 @@ import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { MessageModel } from './messages.model'
-import type { ISendMessageParams } from './messages.types'
+import type { SendMessageParams } from './messages.types'
 
-export const transformMessageForUser = (message: MessageDocumentType, userId: string): MessageType => {
+export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
   const readBySomeone = message.usersMetaData.some((data) => data.status === 'read')
   const selfStatus = message.usersMetaData.find((user) => user.id === userId)?.status
   const status = message.authorId === userId ? (readBySomeone ? 'read' : selfStatus) : selfStatus
-  const images = (message.images ?? []) as Array<string | ImageObjectType>
+  const images = (message.images ?? []) as Array<string | ImageObject>
 
   return {
     id: String(message._id),
@@ -43,8 +43,8 @@ export const transformMessageForUser = (message: MessageDocumentType, userId: st
 
 export const loadRoomMessages = async (
   userId: string,
-  payload: IEventLoadRoomMessages
-): Promise<IEventRoomMessagesLoaded | null> => {
+  payload: EventLoadRoomMessages
+): Promise<EventRoomMessagesLoaded | null> => {
   const room = await ChatRoomModel.findOne({ _id: payload.roomId, users: userId }).select('messages').lean()
 
   if (!room) {
@@ -59,7 +59,7 @@ export const loadRoomMessages = async (
     .sort({ createdAt: -1 })
     .limit(payload.limit + 1)
     .select('-__v')
-    .lean<MessageDocumentType[]>()
+    .lean<MessageDocument[]>()
   const hasMore = messages.length > payload.limit
   const page = hasMore ? messages.slice(0, payload.limit) : messages
   const normalizedMessages = page.reverse().map((message) => transformMessageForUser(message, userId))
@@ -72,12 +72,7 @@ export const loadRoomMessages = async (
   }
 }
 
-export const changeMessageStatus = async (
-  messageId: string,
-  status: MessageStatusType,
-  userId: string,
-  roomId: string
-) => {
+export const changeMessageStatus = async (messageId: string, status: MessageStatus, userId: string, roomId: string) => {
   if (status !== 'read') {
     return
   }
@@ -106,7 +101,7 @@ export const changeMessageStatus = async (
     return
   }
 
-  const payload: IEventUpdateMessageStatus = {
+  const payload: EventUpdateMessageStatus = {
     roomId,
     messageId,
     status,
@@ -157,7 +152,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     return
   }
 
-  const payload: IEventMessagesStatusUpdated = {
+  const payload: EventMessagesStatusUpdated = {
     roomId,
     messageIds,
     status: 'read',
@@ -168,7 +163,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   emitToUsers(room.users, 'messages-status-updated', payload)
 }
 
-export const sendMessage = async ({ roomId, message }: ISendMessageParams) => {
+export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
   const filenames: string[] = []
 
   await Promise.all(
@@ -208,7 +203,7 @@ export const sendMessage = async ({ roomId, message }: ISendMessageParams) => {
         return
       }
 
-      const payload: IEventMessageDelivered = {
+      const payload: EventMessageDelivered = {
         roomId,
         message: {
           ...message,

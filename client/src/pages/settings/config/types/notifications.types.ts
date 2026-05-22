@@ -1,21 +1,21 @@
-import type { LocalizedTextType } from 'global-shared'
+import type { LocalizedText } from 'global-shared'
 
-import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/entities/setting'
-import type { ClientPlatformType } from 'src/shared/lib'
+import type { NotificationSettingGroup, NotificationSettingKey } from 'src/entities/setting'
+import type { ClientPlatform } from 'src/shared/lib'
 
-export type SettingsNotificationOptionIdType = 'enabled' | NotificationSettingKeyType
+export type SettingsNotificationOptionId = 'enabled' | NotificationSettingKey
 
-export type SettingsNotificationVisibilityType = ClientPlatformType
+export type SettingsNotificationVisibility = ClientPlatform
 
-export interface ISettingsNotificationSection {
-  id: NotificationSettingGroupType
-  title: LocalizedTextType<string>
+export interface SettingsNotificationSection {
+  id: NotificationSettingGroup
+  title: LocalizedText<string>
 }
 
-export interface ISettingsNotificationOption {
-  id: SettingsNotificationOptionIdType
-  label: LocalizedTextType<string>
-  description: LocalizedTextType<string>
-  visibility?: SettingsNotificationVisibilityType
+export interface SettingsNotificationOption {
+  id: SettingsNotificationOptionId
+  label: LocalizedText<string>
+  description: LocalizedText<string>
+  visibility?: SettingsNotificationVisibility
   mobileOnly?: boolean
 }

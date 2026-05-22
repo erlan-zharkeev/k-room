@@ -2,7 +2,7 @@ import './style.scss'
 import { createElement } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
-import { IAppTextProps } from 'src/shared/ui/AppText/internals/types'
+import { AppTextProps } from 'src/shared/ui/AppText/internals/types'
 
 export const AppText = ({
   tag = 'span',
@@ -12,7 +12,7 @@ export const AppText = ({
   size = 'medium',
   align = 'left',
   onClick
-}: IAppTextProps) => {
+}: AppTextProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-text',
     modifiers: [color, size, align],

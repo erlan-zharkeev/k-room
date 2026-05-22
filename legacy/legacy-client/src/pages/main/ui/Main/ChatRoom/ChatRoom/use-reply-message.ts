@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux'
 
 import { IMessage } from 'common'
 
-import { AppDispatchType } from 'src/shared/store'
+import { AppDispatch } from 'src/shared/store'
 import { useSystem, resetContextClickedObject } from 'src/shared/system'
 
 export const useReplyMessage = () => {
   const { repliedMessageData } = useSystem()
 
-  const dispatch = useDispatch<AppDispatchType>()
+  const dispatch = useDispatch<AppDispatch>()
 
   const closeReplyMessage = () => {
     dispatch(resetContextClickedObject())

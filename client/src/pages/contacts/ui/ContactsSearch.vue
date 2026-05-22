@@ -5,11 +5,11 @@ import { getAvatarId } from 'src/shared/lib'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import type { IContactsSearchEmits, IContactsSearchProps } from '../config/types'
+import type { ContactsSearchEmits, ContactsSearchProps } from '../config/types'
 import { useContactSearch } from '../model/use-contact-search.model'
 
-const { loadingContactIds } = defineProps<IContactsSearchProps>()
-const emit = defineEmits<IContactsSearchEmits>()
+const { loadingContactIds } = defineProps<ContactsSearchProps>()
+const emit = defineEmits<ContactsSearchEmits>()
 const {
   foundContactList,
   showSearchResults,

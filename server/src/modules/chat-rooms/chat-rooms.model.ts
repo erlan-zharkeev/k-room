@@ -1,7 +1,7 @@
-import { CHAT_KIND, type ChatRoomSchemaType } from 'global-shared'
+import { CHAT_KIND, type ChatRoomSchema } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
-const chatRoomSchema = new Schema<ChatRoomSchemaType>({
+const chatRoomSchema = new Schema<ChatRoomSchema>({
   chatName: {
     type: String,
     required: false,
@@ -33,4 +33,4 @@ const chatRoomSchema = new Schema<ChatRoomSchemaType>({
   }
 })
 
-export const ChatRoomModel = model<ChatRoomSchemaType>('IChatRoom', chatRoomSchema, 'chat-room')
+export const ChatRoomModel = model<ChatRoomSchema>('ChatRoom', chatRoomSchema, 'chat-room')

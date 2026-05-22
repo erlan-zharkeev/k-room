@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
 
-import { formatAppName, IEnvSharedVariables, IEnvVariables } from 'common'
+import { formatAppName, EnvSharedVariables, EnvVariables } from 'common'
 import dotenv, { DotenvParseOutput } from 'dotenv'
 
-import { IServerEnv } from '../types/server-env'
+import { ServerEnv } from '../types/server-env'
 
 const stage = process.env.NODE_ENV ?? 'development'
-const envs = dotenv.config({ path: `../.env.${stage}` }).parsed as DotenvParseOutput | IEnvVariables
-const sharedEnvs = dotenv.config({ path: `../.env.shared` }).parsed as DotenvParseOutput | IEnvSharedVariables
+const envs = dotenv.config({ path: `../.env.${stage}` }).parsed as DotenvParseOutput | EnvVariables
+const sharedEnvs = dotenv.config({ path: `../.env.shared` }).parsed as DotenvParseOutput | EnvSharedVariables
 
 const {
   ACCESS_TOKEN_SECRET,
@@ -32,7 +32,7 @@ const { version: APP_VERSION, name: APP_NAME } = JSON.parse(
   fs.readFileSync(path.resolve(process.cwd(), '../package.json'), 'utf-8')
 ) as { version: string; name: string }
 
-export const SERVER_ENV: IServerEnv = {
+export const SERVER_ENV: ServerEnv = {
   appName: formatAppName(APP_NAME),
   appVersion: APP_VERSION,
   isDev,

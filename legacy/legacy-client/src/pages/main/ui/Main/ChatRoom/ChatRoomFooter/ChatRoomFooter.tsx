@@ -10,7 +10,7 @@ import { AppButton, AppForm, AppImagePreview, AppModal } from 'src/shared/ui'
 
 import { EmojiDropdown } from './EmojiDropdown/EmojiDropdown'
 import { CHAT_ROOM_FOOTER_I18N } from './i18n.ts'
-import { IChatRoomFooterProps } from './types'
+import { ChatRoomFooterProps } from './types'
 import { useContactTyping } from './use-contact-typing'
 import { useMessageSend } from './use-message-send'
 
@@ -105,7 +105,7 @@ const ComposerInput = ({
   )
 }
 
-export const ChatRoomFooter = ({ roomId, prependChildren }: IChatRoomFooterProps) => {
+export const ChatRoomFooter = ({ roomId, prependChildren }: ChatRoomFooterProps) => {
   return (
     <div className="chat-room-footer">
       {prependChildren}

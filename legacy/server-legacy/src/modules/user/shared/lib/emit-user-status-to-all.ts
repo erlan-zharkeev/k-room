@@ -1,4 +1,4 @@
-import { IEventStatusContact, SocketActionsType } from 'common'
+import { EventStatusContact, SocketActions } from 'common'
 
 import { getIO } from 'src/shared/lib/io'
 
@@ -13,7 +13,7 @@ export const emitUserStatusToAll = async (interlocutorId: string, online: boolea
 
   const userIds = users.map((user) => user._id)
   const sockets = await getSocketsByUserIds(userIds)
-  const payload: IEventStatusContact = {
+  const payload: EventStatusContact = {
     interlocutorId,
     online,
     onlineStatusUpdatedTimestamp: Date.now(),
@@ -21,6 +21,6 @@ export const emitUserStatusToAll = async (interlocutorId: string, online: boolea
   }
 
   sockets.forEach((socketId) => {
-    getIO().to(socketId).emit<SocketActionsType>('contact-status-updated', payload)
+    getIO().to(socketId).emit<SocketActions>('contact-status-updated', payload)
   })
 }

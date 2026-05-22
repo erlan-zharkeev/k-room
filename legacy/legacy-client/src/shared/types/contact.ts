@@ -1,8 +1,8 @@
 import { IFrontendContact } from 'common'
 
-export type DbContactType = IFrontendContact & IDbContactRequiredSystemData
+export type DbContact = IFrontendContact & DbContactRequiredSystemData
 
-export interface IDbContactRequiredSystemData {
+export interface DbContactRequiredSystemData {
   savedAt: number
   onlineStatusSyncedAt: number
   isTyping: boolean

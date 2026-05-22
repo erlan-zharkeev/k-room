@@ -1,5 +1,5 @@
-import type { IEventUpdateChatRoom } from 'global-shared'
+import type { EventUpdateChatRoom } from 'global-shared'
 
-export interface IEventUpdateChatRoomWithId extends IEventUpdateChatRoom {
+export interface EventUpdateChatRoomWithId extends EventUpdateChatRoom {
   id?: string
 }

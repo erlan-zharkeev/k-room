@@ -1,10 +1,10 @@
-import { CallFlowType, ICall } from 'common'
+import { CallFlow, ICall } from 'common'
 
 import { UserModel } from 'src/modules/user'
 
 import { CallModel } from '../../call.model'
 
-const getFlowType = (answered: boolean, isIncoming: boolean): CallFlowType => {
+const getFlowType = (answered: boolean, isIncoming: boolean): CallFlow => {
   if (answered) {
     return isIncoming ? 'incoming' : 'outgoing'
   }

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 
-import { IAppClickOutsideProps } from 'src/shared/ui/AppClickOutside/internals/types'
+import { AppClickOutsideProps } from 'src/shared/ui/AppClickOutside/internals/types'
 
 export const AppClickOutside = ({
   children,
   onClickOutside,
   active = true,
   additionalClassName
-}: IAppClickOutsideProps) => {
+}: AppClickOutsideProps) => {
   const rootRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {

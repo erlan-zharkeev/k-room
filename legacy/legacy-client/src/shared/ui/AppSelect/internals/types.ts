@@ -1,10 +1,10 @@
-export interface IAppSelectOption {
+export interface AppSelectOption {
   label: string
   value: string
 }
 
-export type IAppSelectProps<TMultiple extends boolean = false> = {
-  options: IAppSelectOption[]
+export type AppSelectProps<TMultiple extends boolean = false> = {
+  options: AppSelectOption[]
   multiple?: TMultiple
   loading?: boolean
   disabled?: boolean

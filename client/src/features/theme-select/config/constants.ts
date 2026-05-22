@@ -1,13 +1,13 @@
 import { NmorphIconMagicStick, NmorphIconMonitor, NmorphIconMoon, NmorphIconSunny } from '@nmorph/nmorph-ui-kit'
 
 import { THEME_SELECT_I18N } from './i18n'
-import type { IThemeSelectOption } from './types'
+import type { ThemeSelectOption } from './types'
 
 export const THEME_SELECT_DEFAULT_PROPS = {
   compact: false
 } as const
 
-export const THEME_SELECT_OPTIONS: IThemeSelectOption[] = [
+export const THEME_SELECT_OPTIONS: ThemeSelectOption[] = [
   {
     icon: NmorphIconMonitor,
     label: THEME_SELECT_I18N.systemTheme,

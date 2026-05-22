@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 import { UserModel } from '../../user.model'
 
-import { UserExistResultType } from './types'
+import { UserExistResult } from './types'
 
 export const isUserExist = async ({
   username,
@@ -12,8 +12,8 @@ export const isUserExist = async ({
   username: string
   email: string
   id?: mongoose.Types.ObjectId
-}): Promise<UserExistResultType> => {
-  let result: UserExistResultType = {
+}): Promise<UserExistResult> => {
+  let result: UserExistResult = {
     exists: false,
     reason: null
   }

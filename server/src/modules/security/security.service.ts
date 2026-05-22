@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common'
 import {
   REQ_STATUS,
   SECURITY_ACTION,
-  type IProtectedActionResponsePayload,
-  type ProtectedActionReasonType,
-  type SecurityActionType
+  type ProtectedActionResponsePayload,
+  type ProtectedActionReason,
+  type SecurityAction
 } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
@@ -57,7 +57,7 @@ export class SecurityService {
     return value.trim().toLowerCase()
   }
 
-  private buildKey(action: SecurityActionType, scope: string, value: string) {
+  private buildKey(action: SecurityAction, scope: string, value: string) {
     return [SECURITY_REDIS_KEY_PREFIX, action, scope, this.normalizeKeyPart(value)].join(':')
   }
 
@@ -66,10 +66,10 @@ export class SecurityService {
   }
 
   private buildPayload(
-    action: SecurityActionType,
-    reason: ProtectedActionReasonType,
+    action: SecurityAction,
+    reason: ProtectedActionReason,
     nextTryAt?: number
-  ): IProtectedActionResponsePayload {
+  ): ProtectedActionResponsePayload {
     return {
       action,
       reason,
@@ -85,7 +85,7 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : undefined
   }
 
-  private async requireCaptcha(action: SecurityActionType, ip: string, captchaToken?: string) {
+  private async requireCaptcha(action: SecurityAction, ip: string, captchaToken?: string) {
     if (!captchaToken) {
       throw new AppError(
         REQ_STATUS.forbidden,
@@ -109,7 +109,7 @@ export class SecurityService {
     }
   }
 
-  private async blockAction(action: SecurityActionType, keys: string[]) {
+  private async blockAction(action: SecurityAction, keys: string[]) {
     throw new AppError(
       REQ_STATUS.tooManyRequests,
       SECURITY_I18N.temporarilyBlocked,

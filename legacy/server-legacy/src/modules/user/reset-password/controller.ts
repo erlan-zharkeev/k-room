@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs'
-import { ICreateNewPasswordPayload, REQ_STATUS } from 'common'
+import { CreateNewPasswordPayload, REQ_STATUS } from 'common'
 
 import { isCodeExpired } from 'src/modules/code'
 import { CodeModel } from 'src/modules/code'
 
-import { AppResponseType, IAppRequest } from 'src/shared/config'
+import { AppResponse, AppRequest } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -12,12 +12,12 @@ import { UserModel } from '../user.model'
 
 import { RESET_PASSWORD_I18N } from './i18n'
 
-export const resetPasswordController = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const resetPasswordController = async (req: AppRequest, res: AppResponse<null>) => {
   const { language } = req
   const basicError = localizedText(RESET_PASSWORD_I18N.failed, language)
 
   try {
-    const { codeToValidate, password }: ICreateNewPasswordPayload = req.body
+    const { codeToValidate, password }: CreateNewPasswordPayload = req.body
     const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
 
     if (!code) {

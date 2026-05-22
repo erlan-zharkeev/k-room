@@ -1,4 +1,4 @@
-import { AppLanguageType, REQ_STATUS } from 'common'
+import { AppLanguage, REQ_STATUS } from 'common'
 import { Response } from 'express'
 
 import { AppError, isAppError } from 'src/shared/lib/app-error'
@@ -6,14 +6,14 @@ import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
 import { COMMON_MEDIA_I18N } from '../config/i18n'
-import { MediaBucketNameType } from '../types'
+import { MediaBucketName } from '../types'
 import { mediaBuckets } from '../media-bucket'
 
 export const streamMediaFile = async (
-  bucketName: MediaBucketNameType,
+  bucketName: MediaBucketName,
   id: string,
   res: Response,
-  language: AppLanguageType,
+  language: AppLanguage,
   opts?: { asAttachment?: boolean; revalidateCache?: boolean }
 ) => {
   try {

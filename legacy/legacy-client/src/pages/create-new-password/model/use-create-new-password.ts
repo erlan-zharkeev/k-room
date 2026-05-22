@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { USER_ENDPOINTS, REQ_STATUS, ROUTE_NAMES, ICreateNewPasswordPayload } from 'common'
+import { USER_ENDPOINTS, REQ_STATUS, ROUTE_NAMES, CreateNewPasswordPayload } from 'common'
 
 import { useApi } from 'src/shared/api'
-import { AppFormDataType } from 'src/shared/ui'
+import { AppFormData } from 'src/shared/ui'
 
 export const useCreateNewPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -24,19 +24,19 @@ export const useCreateNewPassword = () => {
     setPasswordRestoreCode(currentPasswordRestoreQuery)
   }, [])
 
-  const checkPassMatch = (payload: AppFormDataType) => {
+  const checkPassMatch = (payload: AppFormData) => {
     setIsFormTouched(true)
     const { firstPassword, secondPassword } = payload
     const matched = firstPassword === secondPassword
     setPassMatched(matched)
   }
 
-  const onSubmit = async (payload: AppFormDataType) => {
+  const onSubmit = async (payload: AppFormData) => {
     try {
       checkPassMatch(payload)
       setIsLoading(true)
       const password = typeof payload.secondPassword === 'string' ? payload.secondPassword : ''
-      const formData: ICreateNewPasswordPayload = {
+      const formData: CreateNewPasswordPayload = {
         password,
         codeToValidate: passwordRestoreCode
       }

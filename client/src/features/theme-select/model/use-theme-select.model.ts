@@ -1,5 +1,5 @@
 import { useSettings } from 'src/entities/setting'
-import type { ThemeType } from 'src/entities/setting'
+import type { Theme } from 'src/entities/setting'
 
 import { THEME_SELECT_OPTIONS } from '../config/constants'
 
@@ -14,7 +14,7 @@ export const useThemeSelect = () => {
     void setByPath('appearance.selectedTheme', option.value)
   }
 
-  const changeSystemTheme = (value: ThemeType) => {
+  const changeSystemTheme = (value: Theme) => {
     void setByPath('appearance.systemTheme', value)
   }
 

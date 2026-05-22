@@ -1,3 +1,3 @@
-import { CHAT_KIND, type ChatRoomType } from 'global-shared'
+import { CHAT_KIND, type ChatRoom } from 'global-shared'
 
-export const isRoomPrivate = (room?: ChatRoomType) => room?.chatKind === CHAT_KIND.DIRECT
+export const isRoomPrivate = (room?: ChatRoom) => room?.chatKind === CHAT_KIND.DIRECT

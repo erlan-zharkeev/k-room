@@ -5,10 +5,10 @@ import { computed, nextTick, type ComputedRef, useTemplateRef } from 'vue'
 import { useMessage } from 'src/entities/message'
 
 import { MESSAGE_VIRTUAL_ESTIMATED_HEIGHT, MESSAGE_VIRTUAL_GAP, MESSAGE_VIRTUAL_OVERSCAN } from '../config/constants'
-import type { IMessageVirtualListItem, MessageListItemType } from '../config/types'
+import type { MessageVirtualListItemProps, MessageListItem } from '../config/types'
 
 export const useChatRoomMessageVirtualizer = (
-  messageList: ComputedRef<MessageListItemType[]>,
+  messageList: ComputedRef<MessageListItem[]>,
   markVisibleMessagesAsRead: (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => void
 ) => {
   const messagesScrollRef = useTemplateRef<INmorphScrollExpose>('messagesScroll')
@@ -37,7 +37,7 @@ export const useChatRoomMessageVirtualizer = (
       paddingBottom: `${Math.max(bottomOffset, 0)}px`
     }
   })
-  const messageVirtualListItems = computed<IMessageVirtualListItem[]>(() =>
+  const messageVirtualListItems = computed<MessageVirtualListItemProps[]>(() =>
     messageVirtualItems.value.flatMap((virtualItem) => {
       const item = messageList.value[virtualItem.index]
 

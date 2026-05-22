@@ -2,15 +2,15 @@ import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 import {
   AUTH_ENDPOINTS,
-  type IAuthLoginPayload,
-  type IAuthRegistrationPayload,
-  type IBackendResponse,
-  type IConfirmEmailResponse,
-  type LoginResponseType,
-  type ISendConfirmationLinkPayload,
-  type ISendConfirmationLinkResponse,
-  type ISignInWithProviderPayload,
-  type SignInWithProviderResponseType
+  type AuthLoginPayload,
+  type AuthRegistrationPayload,
+  type BackendResponse,
+  type ConfirmEmailResponse,
+  type LoginResponse,
+  type SendConfirmationLinkPayload,
+  type SendConfirmationLinkResponse,
+  type SignInWithProviderPayload,
+  type SignInWithProviderResponse
 } from 'global-shared'
 
 import { SHARED_I18N } from 'src/shared/i18n'
@@ -38,8 +38,8 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.login)
   async login(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<LoginResponseType>>,
-    @Body() payload: IAuthLoginPayload
+    @Res() response: Response<BackendResponse<LoginResponse>>,
+    @Body() payload: AuthLoginPayload
   ) {
     const { language } = request
 
@@ -62,8 +62,8 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.registration)
   async registration(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<ISendConfirmationLinkResponse>>,
-    @Body() payload: IAuthRegistrationPayload
+    @Res() response: Response<BackendResponse<SendConfirmationLinkResponse>>,
+    @Body() payload: AuthRegistrationPayload
   ) {
     const { language } = request
 
@@ -86,7 +86,7 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.confirmEmail)
   async confirmEmail(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<IConfirmEmailResponse>>,
+    @Res() response: Response<BackendResponse<ConfirmEmailResponse>>,
     @Body('token') token: string
   ) {
     const { language } = request
@@ -115,8 +115,8 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.sendEmailConfirmationLink)
   async sendConfirmationLink(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<ISendConfirmationLinkResponse>>,
-    @Body() payload: ISendConfirmationLinkPayload
+    @Res() response: Response<BackendResponse<SendConfirmationLinkResponse>>,
+    @Body() payload: SendConfirmationLinkPayload
   ) {
     const { language } = request
 
@@ -146,8 +146,8 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.providerLogin)
   async signInWithProvider(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<SignInWithProviderResponseType>>,
-    @Body() payload: ISignInWithProviderPayload
+    @Res() response: Response<BackendResponse<SignInWithProviderResponse>>,
+    @Body() payload: SignInWithProviderPayload
   ) {
     const { language } = request
 
@@ -169,7 +169,7 @@ export class AuthController {
 
   @Post(AUTH_ENDPOINTS.updateTokensPair)
   @UseGuards(RefreshTokenGuard)
-  async updateTokensPair(@Req() request: Request, @Res() response: Response<IBackendResponse<null>>) {
+  async updateTokensPair(@Req() request: Request, @Res() response: Response<BackendResponse<null>>) {
     const { language, authUserId: userId } = request
 
     if (!userId) {
@@ -189,7 +189,7 @@ export class AuthController {
 
   @Post(AUTH_ENDPOINTS.logout)
   @UseGuards(AccessTokenGuard)
-  async logout(@Req() request: Request, @Res() response: Response<IBackendResponse<null>>) {
+  async logout(@Req() request: Request, @Res() response: Response<BackendResponse<null>>) {
     const { language, authUserId: userId } = request
 
     try {

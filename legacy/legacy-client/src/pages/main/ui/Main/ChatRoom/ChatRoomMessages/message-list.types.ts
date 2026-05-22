@@ -1,6 +1,6 @@
 import { IMessage } from 'common'
 
-export type MessageListItemType =
+export type MessageListItem =
   | {
       type: 'message'
       id: string

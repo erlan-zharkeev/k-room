@@ -1,14 +1,14 @@
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type { ChatKindType } from 'global-shared'
+import type { ChatKind } from 'global-shared'
 import type { RouteLocationRaw } from 'vue-router'
 
-import type { ChatRoomRecordType } from 'src/shared/lib'
-import type { MessageRecordType } from 'src/shared/lib'
+import type { ChatRoomRecord } from 'src/shared/lib'
+import type { MessageRecord } from 'src/shared/lib'
 
-export interface IChatRoomNavigationItem {
+export interface ChatRoomNavigationItem {
   id: string
   adminId: string
-  chatKind: ChatKindType
+  chatKind: ChatKind
   to: RouteLocationRaw
   title: string
   description: string
@@ -21,84 +21,84 @@ export interface IChatRoomNavigationItem {
   pinnedOrder: number | null
 }
 
-export interface IChatRoomListItemProps {
-  item: IChatRoomNavigationItem
+export interface ChatRoomListItemProps {
+  item: ChatRoomNavigationItem
 }
 
-export interface IChatRoomContextMenuProps {
-  item: IChatRoomNavigationItem
+export interface ChatRoomContextMenuProps {
+  item: ChatRoomNavigationItem
 }
 
-export interface IChatRoomContextMenuOption {
+export interface ChatRoomContextMenuOption {
   label: string
   value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'delete-chat' | 'leave-group'
   disabled?: boolean
 }
 
-export interface IChatRoomDeleteDialogProps {
-  item: IChatRoomNavigationItem
+export interface ChatRoomDeleteDialogProps {
+  item: ChatRoomNavigationItem
 }
 
-export interface IChatRoomLeaveDialogProps {
-  item: IChatRoomNavigationItem
+export interface ChatRoomLeaveDialogProps {
+  item: ChatRoomNavigationItem
 }
 
-export type CreateChatRoomDialogEmitType = {
+export type CreateChatRoomDialogEmit = {
   (event: 'open-room', roomId: string): void
 }
 
-export interface IChatRoomMessagesProps {
-  room: ChatRoomRecordType
+export interface ChatRoomMessagesProps {
+  room: ChatRoomRecord
   isPrivateRoom: boolean
 }
 
-export interface IChatRoomHeaderProps {
-  room: ChatRoomRecordType
+export interface ChatRoomHeaderProps {
+  room: ChatRoomRecord
   isPrivateRoom: boolean
 }
 
-export interface IChatRoomFooterProps {
-  room: ChatRoomRecordType
+export interface ChatRoomFooterProps {
+  room: ChatRoomRecord
 }
 
-export interface IMessageBodyProps {
+export interface MessageBodyProps {
   isPrivateRoom: boolean
-  message: MessageRecordType
+  message: MessageRecord
 }
 
-export interface IDateSeparatorProps {
+export interface DateSeparatorProps {
   label: string
 }
 
-export interface IMessageListLoadOlderItem {
+export interface MessageListLoadOlderItem {
   type: 'load-older'
   id: string
 }
 
-export interface IMessageListDateSeparatorItem {
+export interface MessageListDateSeparatorItem {
   type: 'date-separator'
   id: string
   label: string
 }
 
-export interface IMessageListMessageItem {
+export interface MessageListMessageItem {
   type: 'message'
   id: string
   messageId: string
 }
 
-export interface IMessageVirtualListMessageItem extends IMessageListMessageItem {
-  message: MessageRecordType
+export interface MessageVirtualListMessageItem extends MessageListMessageItem {
+  message: MessageRecord
 }
 
-export type MessageListItemType = IMessageListLoadOlderItem | IMessageListDateSeparatorItem | IMessageListMessageItem
+export type MessageListItem = MessageListLoadOlderItem | MessageListDateSeparatorItem | MessageListMessageItem
 
-export type MessageVirtualListItemType =
-  | IMessageListLoadOlderItem
-  | IMessageListDateSeparatorItem
-  | IMessageVirtualListMessageItem
+export type MessageVirtualListItem =
+  | MessageListLoadOlderItem
+  | MessageListDateSeparatorItem
+  | MessageVirtualListMessageItem
 
-export interface IMessageVirtualListItem {
-  item: MessageVirtualListItemType
+export interface MessageVirtualListItemProps {
+  item: MessageVirtualListItem
   virtualItem: VirtualItem
 }

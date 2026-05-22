@@ -1,9 +1,9 @@
-import { type LocalizedTextType, REQ_STATUS, type SocketAckResponseType, type SocketActionsType } from 'global-shared'
+import { type LocalizedText, REQ_STATUS, type SocketAckResponse, type SocketActions } from 'global-shared'
 import { isString } from 'lodash'
 
 import { SHARED_I18N } from '../i18n'
-import type { SocketInstanceType } from '../types/socket'
-import type { ISocketErrorMiddlewareOptions, IThrowSocketErrorOptions } from '../types/socket-error'
+import type { SocketInstance } from '../types/socket'
+import type { SocketErrorMiddlewareOptions, ThrowSocketErrorOptions } from '../types/socket-error'
 
 import { isAppError } from './app-error'
 import { getIO } from './io'
@@ -13,8 +13,8 @@ import { serverCaptureSentryException, serverCaptureSentrySocketError } from './
 
 export const throwSocketError = (
   socketId: string,
-  error?: LocalizedTextType<string> | string,
-  options?: IThrowSocketErrorOptions
+  error?: LocalizedText<string> | string,
+  options?: ThrowSocketErrorOptions
 ) => {
   const io = getIO()
   const socket = io.sockets.sockets.get(socketId)
@@ -34,7 +34,7 @@ export const throwSocketError = (
     serverCaptureSentrySocketError({ message: logMessage, silent, status })
   }
 
-  io.to(socketId).emit<SocketActionsType>('error-message', {
+  io.to(socketId).emit<SocketActions>('error-message', {
     message: userMessage,
     silent,
     status
@@ -43,9 +43,9 @@ export const throwSocketError = (
 
 export const socketErrorMiddleware =
   <TPayload = void>(
-    socket: SocketInstanceType,
+    socket: SocketInstance,
     handler: (payload: TPayload) => void | Promise<void>,
-    options: ISocketErrorMiddlewareOptions
+    options: SocketErrorMiddlewareOptions
   ) =>
   async (payload: TPayload) => {
     try {
@@ -69,20 +69,20 @@ export const socketErrorMiddleware =
 
 export const socketAckMiddleware =
   <TPayload = void, TResponsePayload = void, TReason extends string = string>(
-    socket: SocketInstanceType,
+    socket: SocketInstance,
     handler: (
       payload: TPayload
     ) =>
       | void
-      | SocketAckResponseType<TResponsePayload, TReason>
-      | Promise<void | SocketAckResponseType<TResponsePayload, TReason>>,
-    options: ISocketErrorMiddlewareOptions
+      | SocketAckResponse<TResponsePayload, TReason>
+      | Promise<void | SocketAckResponse<TResponsePayload, TReason>>,
+    options: SocketErrorMiddlewareOptions
   ) =>
-  async (payload: TPayload, ack?: (response: SocketAckResponseType<TResponsePayload, TReason>) => void) => {
+  async (payload: TPayload, ack?: (response: SocketAckResponse<TResponsePayload, TReason>) => void) => {
     try {
       const response = await handler(payload)
 
-      ack?.(response ?? ({ ok: true } as SocketAckResponseType<TResponsePayload, TReason>))
+      ack?.(response ?? ({ ok: true } as SocketAckResponse<TResponsePayload, TReason>))
     } catch (error) {
       if (isAppError(error)) {
         throwSocketError(socket.id, error.messageSource, {

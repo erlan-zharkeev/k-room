@@ -1,8 +1,8 @@
-import type { LocalizedTextType } from 'global-shared'
+import type { LocalizedText } from 'global-shared'
 
-import type { DateTimeFormatType } from 'src/shared/lib'
+import type { DateTimeFormat } from 'src/shared/lib'
 
-export interface ISettingsDateTimeFormatOption {
-  label: LocalizedTextType<string>
-  value: DateTimeFormatType
+export interface SettingsDateTimeFormatOption {
+  label: LocalizedText<string>
+  value: DateTimeFormat
 }

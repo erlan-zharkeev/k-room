@@ -1,4 +1,4 @@
-export interface IAppProfileBasicDataProps {
+export interface AppProfileBasicDataProps {
   imageAlt?: string
   imageId?: string
   imageSrc?: string

@@ -1,10 +1,10 @@
 import { IFrontendContact } from 'common'
 
-import { IContact } from '../../types'
+import { UserContact } from '../../types'
 import { UserModel } from '../../user.model'
 
 export const transformUserToFrontendContact = async (
-  contacts: Record<string, IContact>
+  contacts: Record<string, UserContact>
 ): Promise<IFrontendContact[]> => {
   const result: IFrontendContact[] = []
   for (const [id, data] of Object.entries(contacts)) {

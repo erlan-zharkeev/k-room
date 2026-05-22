@@ -4,16 +4,16 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import type { IContactContextMenuEmitFn, IContactContextMenuOption, IContactContextMenuProps } from '../config/types'
+import type { ContactContextMenuEmitFn, ContactContextMenuOption, ContactContextMenuProps } from '../config/types'
 
-export const useContactContextMenu = (props: IContactContextMenuProps, emit: IContactContextMenuEmitFn) => {
+export const useContactContextMenu = (props: ContactContextMenuProps, emit: ContactContextMenuEmitFn) => {
   const { t } = useI18n()
   const isContextMenuOpen = ref(false)
   const contactActionBadgeValue = computed(() =>
     props.contact.interactionType === 'invite-received' ? '!' : undefined
   )
-  const contextMenuOptions = computed<IContactContextMenuOption[]>(() => {
-    const options: IContactContextMenuOption[] = []
+  const contextMenuOptions = computed<ContactContextMenuOption[]>(() => {
+    const options: ContactContextMenuOption[] = []
     const { interactionType } = props.contact
 
     if (interactionType === 'invite-received') {

@@ -1,6 +1,6 @@
-import { ContentTabType } from 'src/shared/config'
+import { ContentTab } from 'src/shared/config'
 
-export interface IContentTabButton {
+export interface ContentTabButton {
   Component: () => JSX.Element | null
-  value: ContentTabType
+  value: ContentTab
 }

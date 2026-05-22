@@ -6,4 +6,4 @@ export interface SharpConfig {
   }
 }
 
-export type SharpSettingsKeyType = 'avatar' | 'common-compressed' | 'common-uncompressed'
+export type SharpSettingsKey = 'avatar' | 'common-compressed' | 'common-uncompressed'

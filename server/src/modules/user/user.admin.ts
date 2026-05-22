@@ -4,12 +4,12 @@ import { isNumber, isString } from 'lodash'
 
 import { localizedText } from 'src/shared/lib/localized-text'
 
-import type { IAdminUserActionRequest, IAdminUserActionResponse, IAdminUserRecord } from './types'
+import type { AdminUserActionRequest, AdminUserActionResponse, AdminUserRecord } from './types'
 import { LAST_SEEN_PATH } from './user.constants'
 import { USER_ADMIN_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
-const formatLastSeenParam = (params?: IAdminUserRecord['params']) => {
+const formatLastSeenParam = (params?: AdminUserRecord['params']) => {
   if (!params) {
     return
   }
@@ -22,14 +22,14 @@ const formatLastSeenParam = (params?: IAdminUserRecord['params']) => {
   params[LAST_SEEN_PATH] = formatHumanDateTime(value)
 }
 
-const withFormattedLastSeen = (response: IAdminUserActionResponse) => {
+const withFormattedLastSeen = (response: AdminUserActionResponse) => {
   formatLastSeenParam(response.record?.params)
   response.records?.forEach((record) => formatLastSeenParam(record.params))
 
   return response
 }
 
-const normalizePassword = async (request: IAdminUserActionRequest, isRequired: boolean) => {
+const normalizePassword = async (request: AdminUserActionRequest, isRequired: boolean) => {
   if (request.method !== 'post') {
     return request
   }
@@ -107,16 +107,16 @@ export const ADMIN_USER_OPTIONS = {
     filterProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'system.provider'],
     actions: {
       new: {
-        before: async (request: IAdminUserActionRequest) => normalizePassword(request, true)
+        before: async (request: AdminUserActionRequest) => normalizePassword(request, true)
       },
       edit: {
-        before: async (request: IAdminUserActionRequest) => normalizePassword(request, false)
+        before: async (request: AdminUserActionRequest) => normalizePassword(request, false)
       },
       list: {
-        after: async (response: IAdminUserActionResponse) => withFormattedLastSeen(response)
+        after: async (response: AdminUserActionResponse) => withFormattedLastSeen(response)
       },
       show: {
-        after: async (response: IAdminUserActionResponse) => withFormattedLastSeen(response)
+        after: async (response: AdminUserActionResponse) => withFormattedLastSeen(response)
       }
     },
     properties: {

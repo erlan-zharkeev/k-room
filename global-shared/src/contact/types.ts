@@ -1,13 +1,13 @@
-import type { UserPreviewType } from '../user/types'
+import type { UserPreview } from '../user/types'
 
-export type InteractionType = 'default' | 'invited' | 'invite-accepted' | 'invite-received' | 'blocked'
+export type Interaction = 'default' | 'invited' | 'invite-accepted' | 'invite-received' | 'blocked'
 
-export type ContactType = UserPreviewType & {
+export type Contact = UserPreview & {
   online: boolean
   lastSeen: number
-  interactionType: InteractionType
+  interactionType: Interaction
 }
 
-export type KnownUserType = Omit<ContactType, 'interactionType'>
+export type KnownUser = Omit<Contact, 'interactionType'>
 
-export type ContactMapType = Record<string, ContactType>
+export type ContactMap = Record<string, Contact>

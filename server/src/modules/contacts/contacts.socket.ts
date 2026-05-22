@@ -1,17 +1,17 @@
 import type {
-  ContactInteractionUpdateFailedReasonType,
-  IEventDeleteContact,
-  IEventSaveContact,
-  IEventSearchContact,
-  IEventUpdateInteraction,
-  SocketAckResponseType,
-  SocketActionsType
+  ContactInteractionUpdateFailedReason,
+  EventDeleteContact,
+  EventSaveContact,
+  EventSearchContact,
+  EventUpdateInteraction,
+  SocketAckResponse,
+  SocketActions
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { emitToUsers } from 'src/modules/presence/presence.utils'
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstanceType } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types/socket'
 
 import { CONTACTS_I18N } from './contacts.i18n'
 import {
@@ -24,12 +24,12 @@ import {
   updateContactInteraction
 } from './contacts.service'
 
-export const registerContactsSocketHandlers = (socket: SocketInstanceType, presenceService: PresenceService) => {
-  socket.on<SocketActionsType>(
+export const registerContactsSocketHandlers = (socket: SocketInstance, presenceService: PresenceService) => {
+  socket.on<SocketActions>(
     'search-contact',
     socketErrorMiddleware(
       socket,
-      async ({ value, offset = 0 }: IEventSearchContact) => {
+      async ({ value, offset = 0 }: EventSearchContact) => {
         const payload = await searchContacts(socket.data.userId, value, offset, presenceService)
         emitSearchedContacts(socket.id, payload)
       },
@@ -37,9 +37,9 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'save-contact',
-    socketAckMiddleware<IEventSaveContact>(
+    socketAckMiddleware<EventSaveContact>(
       socket,
       async ({ interlocutorId }) => {
         const payload = await saveContact(socket.data.userId, interlocutorId, presenceService)
@@ -54,9 +54,9 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'delete-contact',
-    socketAckMiddleware<IEventDeleteContact>(
+    socketAckMiddleware<EventDeleteContact>(
       socket,
       async ({ deletingUserId }) => {
         await deleteContactById(socket.data.userId, deletingUserId)
@@ -65,9 +65,9 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'update-contact-interaction-type',
-    socketAckMiddleware<IEventUpdateInteraction, void, ContactInteractionUpdateFailedReasonType>(
+    socketAckMiddleware<EventUpdateInteraction, void, ContactInteractionUpdateFailedReason>(
       socket,
       async ({ contactId, interaction }) => {
         const { userId } = socket.data
@@ -101,7 +101,7 @@ export const registerContactsSocketHandlers = (socket: SocketInstanceType, prese
           return {
             ok: false,
             reason: result.reason
-          } satisfies SocketAckResponseType<void, ContactInteractionUpdateFailedReasonType>
+          } satisfies SocketAckResponse<void, ContactInteractionUpdateFailedReason>
         }
 
         const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'

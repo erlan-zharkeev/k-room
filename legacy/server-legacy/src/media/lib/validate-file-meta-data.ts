@@ -1,17 +1,13 @@
-import { AppLanguageType, REQ_STATUS } from 'common'
+import { AppLanguage, REQ_STATUS } from 'common'
 
 import { AppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 
 import { VALIDATION_MEDIA_OPTIONS_MAP } from '../config/constants'
 import { VALIDATE_MEDIA_FILE_I18N } from '../config/i18n'
-import { IFileData, MediaBucketNameType } from '../types'
+import { FileData, MediaBucketName } from '../types'
 
-export const validateFileMetaData = (
-  filedata: IFileData,
-  bucketName: MediaBucketNameType,
-  language: AppLanguageType
-) => {
+export const validateFileMetaData = (filedata: FileData, bucketName: MediaBucketName, language: AppLanguage) => {
   const { maxMb, supportedKindMediaType } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
 
   const maxBytes = maxMb * 1024 * 1024

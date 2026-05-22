@@ -37,38 +37,32 @@ export {
 export { acquireUrl, getAvatarId, releaseUrl, useLiveMediaUrl } from './media/media'
 export { useI18n } from './i18n/i18n'
 export { CLIENT_LANGUAGE, I18N_KEY } from './i18n/constants'
-export {
-  db,
-  dexieCollectionStore,
-  dexieKeyValueStore,
-  initializeDexieCollectionStores,
-  KRoomDB,
-  useDexieLiveQuery
-} from './db/db'
+export { dexieCollectionStore, dexieKeyValueStore, initializeDexieCollectionStores, useDexieLiveQuery } from './db/lib'
+export { db, KRoomDB } from './db/db'
 export { useAppToast } from './toast/toast'
 export { TOAST_LIFE_MS, TOAST_PLACEMENT } from './toast/constants'
 export { TOAST_I18N } from './toast/i18n'
-export type { ClientPlatformType, FileLoaderValueType } from './browser/types'
-export type { ContextRefType, KebabCaseType } from './misc/types'
-export type { I18nTranslateType } from './i18n/i18n.types'
-export type { DateTimeFormatPatternMapType, DateTimeFormatType } from './time/types'
-export type { AppToastStackType, AppToastInputType } from './toast/types'
+export type { ClientPlatform, FileLoaderValue } from './browser/types'
+export type { ContextRef, KebabCase } from './misc/types'
+export type { I18nTranslate } from './i18n/i18n.types'
+export type { DateTimeFormatPatternMap, DateTimeFormat } from './time/types'
+export type { AppToastStack, AppToastInput } from './toast/types'
 export type {
-  ContactLocalStateType,
-  ContactRecordType,
-  CallRecordType,
-  MediaRecordStatusType,
-  MessageRecordType,
-  DexieTransactionModeType,
-  ChatRoomRecordType,
-  ICollectionMergeManyOptions,
-  MediaRecordType,
-  IndexableType,
-  IUseStateResult,
-  KnownUserLocalStateType,
-  KnownUserRecordType,
-  KvItemType,
-  MutableType,
-  UserRecordType,
-  UseResultType
+  ContactLocalState,
+  ContactRecord,
+  CallRecord,
+  MediaRecordStatus,
+  MessageRecord,
+  DexieTransactionMode,
+  ChatRoomRecord,
+  CollectionMergeManyOptions,
+  MediaRecord,
+  Indexable,
+  UseStateResult,
+  KnownUserLocalState,
+  KnownUserRecord,
+  KvItem,
+  Mutable,
+  UserRecord,
+  UseResult
 } from './db/types'

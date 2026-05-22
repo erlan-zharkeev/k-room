@@ -1,6 +1,6 @@
-export type UserExistReasonType = 'username' | 'email' | 'id'
+export type UserExistReason = 'username' | 'email' | 'id'
 
-export type UserExistResultType = {
+export type UserExistResult = {
   exists: boolean
-  reason: UserExistReasonType | null
+  reason: UserExistReason | null
 }

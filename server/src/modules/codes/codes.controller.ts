@@ -2,15 +2,15 @@ import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 import {
   CODES_ENDPOINTS,
-  type IBackendResponse,
-  type ICodeValidationPayload,
-  type ISendChangeEmailCodePayload,
-  type ISendChangeEmailCodeResponse,
-  type ISendPasswordRecoveryCodeResponse,
-  type ISendPasswordRecoveryCodePayload,
-  type IValidateChangeEmailCodePayload,
-  type IValidateChangeEmailCodeResponse,
-  type IValidatePasswordRecoveryCodeResponse
+  type BackendResponse,
+  type CodeValidationPayload,
+  type SendChangeEmailCodePayload,
+  type SendChangeEmailCodeResponse,
+  type SendPasswordRecoveryCodeResponse,
+  type SendPasswordRecoveryCodePayload,
+  type ValidateChangeEmailCodePayload,
+  type ValidateChangeEmailCodeResponse,
+  type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import { isString } from 'lodash'
 
@@ -43,8 +43,8 @@ export class CodesController {
   @UseGuards(AccessTokenGuard)
   async sendChangeEmailCode(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<ISendChangeEmailCodeResponse>>,
-    @Body() payload: ISendChangeEmailCodePayload
+    @Res() response: Response<BackendResponse<SendChangeEmailCodeResponse>>,
+    @Body() payload: SendChangeEmailCodePayload
   ) {
     const { language, authUserId: userId } = request
 
@@ -78,8 +78,8 @@ export class CodesController {
   @UseGuards(AccessTokenGuard)
   async validateChangeEmailCode(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<IValidateChangeEmailCodeResponse>>,
-    @Body() payload: IValidateChangeEmailCodePayload
+    @Res() response: Response<BackendResponse<ValidateChangeEmailCodeResponse>>,
+    @Body() payload: ValidateChangeEmailCodePayload
   ) {
     const { language, authUserId: userId } = request
 
@@ -106,8 +106,8 @@ export class CodesController {
   @Post(CODES_ENDPOINTS.sendEmailCodePasswordRecovery)
   async sendPasswordRecoveryCode(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<ISendPasswordRecoveryCodeResponse>>,
-    @Body() payload: ISendPasswordRecoveryCodePayload
+    @Res() response: Response<BackendResponse<SendPasswordRecoveryCodeResponse>>,
+    @Body() payload: SendPasswordRecoveryCodePayload
   ) {
     const { language } = request
 
@@ -138,8 +138,8 @@ export class CodesController {
   @Post(CODES_ENDPOINTS.validateEmailCodePasswordRecovery)
   async validatePasswordRecoveryCode(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<IValidatePasswordRecoveryCodeResponse>>,
-    @Body() payload: ICodeValidationPayload
+    @Res() response: Response<BackendResponse<ValidatePasswordRecoveryCodeResponse>>,
+    @Body() payload: CodeValidationPayload
   ) {
     const { language } = request
 

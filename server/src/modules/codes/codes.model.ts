@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose'
 
-import type { ICodeSchema } from './codes.types'
+import type { CodeSchema } from './codes.types'
 
 const codeElementSchema = new Schema(
   {
@@ -50,7 +50,7 @@ const codePurposeSchema = new Schema(
   { _id: false }
 )
 
-const codeSchema = new Schema<ICodeSchema>({
+const codeSchema = new Schema<CodeSchema>({
   _id: {
     type: String,
     required: true
@@ -67,4 +67,4 @@ const codeSchema = new Schema<ICodeSchema>({
   }
 })
 
-export const CodeModel = model<ICodeSchema>('Code', codeSchema, 'code')
+export const CodeModel = model<CodeSchema>('Code', codeSchema, 'code')

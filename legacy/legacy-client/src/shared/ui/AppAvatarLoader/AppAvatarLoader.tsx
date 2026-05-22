@@ -6,7 +6,7 @@ import { useI18n } from 'src/shared/preferences'
 import { APP_AVATAR_LOADER_I18N } from 'src/shared/ui/AppAvatarLoader/internals/i18n'
 import { AppAvatar } from 'src/shared/ui/AppAvatar/AppAvatar'
 import { AppButton } from 'src/shared/ui/AppButton/AppButton'
-import { IAvatarLoaderProps } from 'src/shared/ui/AppAvatarLoader/internals/types'
+import { AvatarLoaderProps } from 'src/shared/ui/AppAvatarLoader/internals/types'
 
 export const AppAvatarLoader = ({
   path,
@@ -15,7 +15,7 @@ export const AppAvatarLoader = ({
   updated,
   stubIconName,
   shape = 'circle-shape'
-}: IAvatarLoaderProps) => {
+}: AvatarLoaderProps) => {
   const notifications = useNotification()
   const { t } = useI18n()
   const className = createClassNameWithModifiers({

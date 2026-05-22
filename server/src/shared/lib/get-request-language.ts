@@ -5,17 +5,17 @@ import {
   APP_LANGUAGE_VALUES,
   DEFAULT_APP_LANGUAGE,
   isUnknownObject,
-  type AppLanguageType
+  type AppLanguage
 } from 'global-shared'
 import { isString } from 'lodash'
 
-import type { SocketInstanceType } from '../types/socket'
+import type { SocketInstance } from '../types/socket'
 
-const isRequestLanguage = (value?: string): value is AppLanguageType => {
-  return APP_LANGUAGE_VALUES.includes(value as AppLanguageType)
+const isRequestLanguage = (value?: string): value is AppLanguage => {
+  return APP_LANGUAGE_VALUES.includes(value as AppLanguage)
 }
 
-export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguageType => {
+export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguage => {
   const language = headers[APP_LANGUAGE_HEADER]
 
   if (isString(language) && isRequestLanguage(language)) {
@@ -29,7 +29,7 @@ export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguageTyp
   return DEFAULT_APP_LANGUAGE
 }
 
-export const getSocketLanguage = (socket: SocketInstanceType): AppLanguageType => {
+export const getSocketLanguage = (socket: SocketInstance): AppLanguage => {
   const language = isUnknownObject(socket.handshake.auth) ? Reflect.get(socket.handshake.auth, 'language') : undefined
 
   return isString(language) && isRequestLanguage(language) ? language : DEFAULT_APP_LANGUAGE

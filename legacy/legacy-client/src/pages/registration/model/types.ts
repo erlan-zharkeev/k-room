@@ -1,5 +1,5 @@
-import { IAuthRegistrationPayload } from 'common'
+import { AuthRegistrationPayload } from 'common'
 
-export type RegistrationFormDataType = IAuthRegistrationPayload & {
+export type RegistrationFormData = AuthRegistrationPayload & {
   policy: boolean
 }

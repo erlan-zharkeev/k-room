@@ -1,4 +1,4 @@
-import { EndpointsType, MEDIA_ENDPOINTS, REQ_STATUS } from 'common'
+import { Endpoints, MEDIA_ENDPOINTS, REQ_STATUS } from 'common'
 
 import { isApiError, useApi } from 'src/shared/api'
 
@@ -10,12 +10,12 @@ export const useLoadMedia = () => {
   const { put, remove } = useMedia()
 
   const loadMediaHeaders = async (filename: string) => {
-    const response = await doRequest('head', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType)
+    const response = await doRequest('head', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as Endpoints)
     return transformHeadersToMediaData(response)
   }
 
   const requestMedia = (filename: string) => {
-    return doRequest<never, 'blob'>('get', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as EndpointsType, undefined, {
+    return doRequest<never, 'blob'>('get', `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as Endpoints, undefined, {
       responseType: 'blob'
     })
   }

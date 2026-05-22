@@ -4,10 +4,10 @@ import { toRef } from 'vue'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { IChatRoomHeaderProps } from '../config/types'
+import type { ChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
-const props = defineProps<IChatRoomHeaderProps>()
+const props = defineProps<ChatRoomHeaderProps>()
 const room = toRef(props, 'room')
 const { title, typingContactNames } = useChatRoomHeader(room, props.isPrivateRoom)
 </script>

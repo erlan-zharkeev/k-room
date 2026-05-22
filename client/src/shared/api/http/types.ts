@@ -1,33 +1,33 @@
 import type { AxiosResponse, Method, ResponseType } from 'axios'
-import type { EndpointsType, IBackendResponse, ReqStatusType } from 'global-shared'
+import type { Endpoints, BackendResponse, ReqStatus } from 'global-shared'
 
-export type HttpRequestType = Method
+export type HttpRequest = Method
 
-export type HttpRequestPayloadType = object | FormData | URLSearchParams | string | null | undefined
+export type HttpRequestPayload = object | FormData | URLSearchParams | string | null | undefined
 
-export interface IHttpRequestOptions<R extends ResponseType = ResponseType> {
+export interface HttpRequestOptions<R extends ResponseType = ResponseType> {
   contentType?: string
   responseType?: R
 }
 
-export interface ICreateHttpErrorPayload {
+export interface CreateHttpErrorPayload {
   message: string
-  status?: ReqStatusType
+  status?: ReqStatus
   silent?: boolean
-  payload?: IBackendResponse<unknown> | null
+  payload?: BackendResponse<unknown> | null
 }
 
-export type HttpErrorType = Error & {
+export type HttpError = Error & {
   type: 'http-error'
   message: string
-  status?: ReqStatusType
+  status?: ReqStatus
   silent: boolean
-  payload: IBackendResponse<unknown> | null
+  payload: BackendResponse<unknown> | null
 }
 
-export type DoHttpRequestType = <T = unknown, R extends ResponseType = 'json'>(
-  type: HttpRequestType,
-  endpoint: EndpointsType,
-  data?: HttpRequestPayloadType,
-  opts?: IHttpRequestOptions<R>
-) => Promise<R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>>
+export type DoHttpRequest = <T = unknown, R extends ResponseType = 'json'>(
+  type: HttpRequest,
+  endpoint: Endpoints,
+  data?: HttpRequestPayload,
+  opts?: HttpRequestOptions<R>
+) => Promise<R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>>

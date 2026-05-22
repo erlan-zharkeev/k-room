@@ -1,2 +1,2 @@
 export { default as AppText } from './AppText.vue'
-export type { AppTextAlignmentType, AppTextColorType, AppTextTagType, IAppTextProps } from './types'
+export type { AppTextAlignment, AppTextColor, AppTextTag, AppTextProps } from './types'

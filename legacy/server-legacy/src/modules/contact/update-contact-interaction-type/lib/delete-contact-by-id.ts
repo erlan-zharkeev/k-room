@@ -1,4 +1,4 @@
-import { IEventDeleteContactSuccess, IEventUpdateContactInteractionSuccess, SocketActionsType } from 'common'
+import { EventDeleteContactSuccess, EventUpdateContactInteractionSuccess, SocketActions } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
@@ -13,8 +13,8 @@ export const deleteContactById = async (
 ) => {
   await UserModel.updateOne({ _id: userId }, { $unset: { [`personal.contacts.${deletingUserId}`]: '' } })
 
-  const payload: IEventDeleteContactSuccess = { deletedContactId: deletingUserId, silent }
-  getIO().to(userSocketId).emit<SocketActionsType>('contact-delete-success', payload)
+  const payload: EventDeleteContactSuccess = { deletedContactId: deletingUserId, silent }
+  getIO().to(userSocketId).emit<SocketActions>('contact-delete-success', payload)
 
   const deletingContact = await UserModel.findOne(
     { _id: deletingUserId },
@@ -37,13 +37,13 @@ export const deleteContactById = async (
       { _id: deletingUserId },
       { $set: { [`personal.contacts.${userId}.interaction`]: 'default' } }
     )
-    const payload: IEventUpdateContactInteractionSuccess = {
+    const payload: EventUpdateContactInteractionSuccess = {
       contactId: userId,
       interaction: 'default'
     }
     const deletingContactSockets = await getSocketsByUserIds([deletingContact._id])
     deletingContactSockets.forEach((socketId: string) => {
-      getIO().to(socketId).emit<SocketActionsType>('contact-interaction-updated', payload)
+      getIO().to(socketId).emit<SocketActions>('contact-interaction-updated', payload)
     })
   }
 }

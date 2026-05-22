@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphIconExpand } from '@nmorph/nmorph-ui-kit'
 
-import type { IAppEmojiPickerEmits, IAppEmojiPickerProps } from './types'
+import type { AppEmojiPickerEmits, AppEmojiPickerProps } from './types'
 import { useAppEmojiPicker } from './use-app-emoji-picker.model'
 
-const props = defineProps<IAppEmojiPickerProps>()
-const emit = defineEmits<IAppEmojiPickerEmits>()
+const props = defineProps<AppEmojiPickerProps>()
+const emit = defineEmits<AppEmojiPickerEmits>()
 const { expandPicker, isExpanded, quickEmojiList } = useAppEmojiPicker(props, emit)
 </script>
 

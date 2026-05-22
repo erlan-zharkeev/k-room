@@ -1,4 +1,4 @@
-export interface IPackageData {
+export interface PackageData {
   name: string
   version: string
 }

@@ -1,5 +1,5 @@
 import { IMessage } from 'common'
 
-export interface IMessageImagesProps {
+export interface MessageImagesProps {
   message: IMessage
 }

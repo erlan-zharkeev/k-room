@@ -1,7 +1,7 @@
-import { ProfileInfoAvatarSizeType } from 'src/shared/ui'
+import { ProfileInfoAvatarSize } from 'src/shared/ui'
 
-export interface IUserProfileProps {
+export interface UserProfileProps {
   avatarPath?: string
   horizontal?: boolean
-  avatarSize?: ProfileInfoAvatarSizeType
+  avatarSize?: ProfileInfoAvatarSize
 }

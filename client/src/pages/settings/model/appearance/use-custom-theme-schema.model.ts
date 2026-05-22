@@ -1,14 +1,14 @@
 import { useNmorph } from '@nmorph/nmorph-ui-kit'
 
 import { useSettings } from 'src/entities/setting'
-import type { IColorSchema, IThemeShadowSettings } from 'src/entities/setting'
+import type { ColorSchema, ThemeShadowSettings } from 'src/entities/setting'
 import { getNmorphGeneratedColorSchema } from 'src/shared/lib'
 
 export const useCustomThemeSchema = () => {
   const { effectiveTheme, mutate } = useSettings()
   const { theme } = useNmorph()
 
-  const changeThemeColor = (key: keyof IColorSchema, value: string) => {
+  const changeThemeColor = (key: keyof ColorSchema, value: string) => {
     const shouldGenerateColors = key === 'main'
 
     if (shouldGenerateColors) {
@@ -28,7 +28,7 @@ export const useCustomThemeSchema = () => {
     })
   }
 
-  const changeThemeShadowSetting = (key: keyof IThemeShadowSettings, value: number) => {
+  const changeThemeShadowSetting = (key: keyof ThemeShadowSettings, value: number) => {
     void mutate((data) => {
       const themeData = data.appearance.themes.custom
 

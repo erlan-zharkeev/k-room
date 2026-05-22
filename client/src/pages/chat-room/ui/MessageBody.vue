@@ -3,10 +3,10 @@ import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
-import type { IMessageBodyProps } from '../config/types'
+import type { MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 
-const props = defineProps<IMessageBodyProps>()
+const props = defineProps<MessageBodyProps>()
 const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessageBody(props)
 </script>
 

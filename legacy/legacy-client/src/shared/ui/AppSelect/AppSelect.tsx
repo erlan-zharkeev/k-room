@@ -1,8 +1,8 @@
 import './style.scss'
 
-import { IAppSelectProps } from './internals/types'
+import { AppSelectProps } from './internals/types'
 
-export const AppSelect = ({ options, value, onChange, multiple = false, disabled = false }: IAppSelectProps) => {
+export const AppSelect = ({ options, value, onChange, multiple = false, disabled = false }: AppSelectProps) => {
   return (
     <select
       className="app-select"

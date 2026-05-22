@@ -6,9 +6,9 @@ import { Badge, Image } from 'antd'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppIcon } from 'src/shared/ui/AppIcon/AppIcon'
 
-import { IAppAvatarProps, IAvatarBodyProps, IBadgeWrapperProps } from './internals/types'
+import { AppAvatarProps, AvatarBodyProps, BadgeWrapperProps } from './internals/types'
 
-const AvatarBody = ({ src, stubIconName, haveSource, setHaveSource, preview = true }: IAvatarBodyProps) => {
+const AvatarBody = ({ src, stubIconName, haveSource, setHaveSource, preview = true }: AvatarBodyProps) => {
   return !haveSource ? (
     <div className="app-avatar__image">
       <AppIcon name={stubIconName} size="fill" />
@@ -24,7 +24,7 @@ const AvatarBody = ({ src, stubIconName, haveSource, setHaveSource, preview = tr
   )
 }
 
-const BadgeWrapper = ({ children, online, ribbon, ribbonPlacement }: IBadgeWrapperProps) =>
+const BadgeWrapper = ({ children, online, ribbon, ribbonPlacement }: BadgeWrapperProps) =>
   ribbon ? (
     <Badge.Ribbon text="G" placement={ribbonPlacement === 'up' ? 'start' : 'end'}>
       {children}
@@ -47,7 +47,7 @@ export const AppAvatar = ({
   shape = 'circle-shape',
   preview = true,
   borderless = false
-}: IAppAvatarProps) => {
+}: AppAvatarProps) => {
   const [haveSource, setHaveSource] = useState(Boolean(src))
 
   useEffect(() => {

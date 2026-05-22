@@ -7,9 +7,9 @@ import { useTimeout, createClassNameWithModifiers } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui/AppHeader/AppHeader'
 import { AppIcon } from 'src/shared/ui/AppIcon/AppIcon'
 
-import { IAppCollapseProps } from './internals/types'
+import { AppCollapseProps } from './internals/types'
 
-export const AppCollapseList = ({ items, onClickCollapseEl }: IAppCollapseProps) => {
+export const AppCollapseList = ({ items, onClickCollapseEl }: AppCollapseProps) => {
   const [openElId, setOpenIElId] = useState<string | null>(null)
   const [delayedOverflowIndex, setDelayedOverflowIndex] = useState<string | null>(null)
   const { startTimeout } = useTimeout()

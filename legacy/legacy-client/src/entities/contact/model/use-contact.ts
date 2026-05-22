@@ -1,16 +1,16 @@
-import { DbContactType } from 'src/shared/config'
+import { DbContact } from 'src/shared/config'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
-const contactStore = dexieCollectionStore<DbContactType>(db.contacts)
+const contactStore = dexieCollectionStore<DbContact>(db.contacts)
 
 export const useContact = () => {
   const { get, put, bulkPut, update, remove, mergeMany, reset } = contactStore
   const contacts = contactStore.use()
 
-  const getByIds = (ids: string[]): DbContactType[] => {
+  const getByIds = (ids: string[]): DbContact[] => {
     if (!ids?.length) return []
     const map = new Map(contacts.map((c) => [c.id, c]))
-    const result: DbContactType[] = []
+    const result: DbContact[] = []
     for (const id of ids) {
       const c = map.get(id)
       if (c) result.push(c)

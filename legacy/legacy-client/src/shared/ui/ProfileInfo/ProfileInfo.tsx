@@ -2,16 +2,16 @@ import './style.scss'
 
 import { ReactNode } from 'react'
 
-import { UnknownCallbackType } from 'common'
+import { UnknownCallback } from 'common'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import { AppAvatar } from '../AppAvatar/AppAvatar'
-import { AppIconNameType } from '../AppIcon/internals/types'
+import { AppIconName } from '../AppIcon/internals/types'
 import { AppText } from '../AppText/AppText'
-import { AvatarShapeModifierType, BaseSizeModifierType } from '../internals/types'
+import { AvatarShapeModifier, BaseSizeModifier } from '../internals/types'
 
-import { ProfileInfoAvatarSizeType } from './types'
+import { ProfileInfoAvatarSize } from './types'
 
 export const ProfileInfo = ({
   avatar,
@@ -35,11 +35,11 @@ export const ProfileInfo = ({
   online?: boolean
   showBadge?: boolean
   horizontal?: boolean
-  avatarSize?: ProfileInfoAvatarSizeType
-  shape?: AvatarShapeModifierType
-  stubIconName?: AppIconNameType
-  onClick?: UnknownCallbackType
-  titleSize?: BaseSizeModifierType
+  avatarSize?: ProfileInfoAvatarSize
+  shape?: AvatarShapeModifier
+  stubIconName?: AppIconName
+  onClick?: UnknownCallback
+  titleSize?: BaseSizeModifier
   children?: ReactNode
   isDescriptionAccent?: boolean
   descriptionNode?: ReactNode

@@ -3,7 +3,7 @@ import './style.scss'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { IAppIconListElement, IAppIconProps } from './internals/types'
+import { AppIconListElement, AppIconProps } from './internals/types'
 import LogoIcon from './internals/icons/app-logo.svg?react'
 import ArrowDownIcon from './internals/icons/arrow-down.svg?react'
 import ArrowLeftIcon from './internals/icons/arrow-left.svg?react'
@@ -48,7 +48,7 @@ import VideoCallIcon from './internals/icons/video-call.svg?react'
 import VideoCancel from './internals/icons/video-cancel.svg?react'
 import WarnIcon from './internals/icons/warn.svg?react'
 
-export const IconList: IAppIconListElement[] = [
+export const IconList: AppIconListElement[] = [
   { name: 'logo', AppIcon: LogoIcon },
   { name: 'shield', AppIcon: ShieldIcon },
   { name: 'contacts', AppIcon: ContactsIcon },
@@ -94,7 +94,7 @@ export const IconList: IAppIconListElement[] = [
   { name: 'three-vertical-dots', AppIcon: ThreeVerticalsDotsIcon }
 ]
 
-export const AppIcon = ({ name, color = 'text-color', size = 'small' }: IAppIconProps) => {
+export const AppIcon = ({ name, color = 'text-color', size = 'small' }: AppIconProps) => {
   const AppIcon = IconList.find((IconElement) => IconElement.name === name)?.AppIcon
 
   const className = createClassNameWithModifiers({ rootClass: 'app-icon', modifiers: [name, size, color] })

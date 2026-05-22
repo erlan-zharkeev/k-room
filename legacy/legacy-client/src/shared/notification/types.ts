@@ -2,15 +2,15 @@ import { ReactNode } from 'react'
 
 import { useNotification } from './hooks/use-notification'
 
-export type NotificationType = 'success' | 'error' | 'info' | 'warning'
+export type Notification = 'success' | 'error' | 'info' | 'warning'
 
-export type UseNotificationType = ReturnType<typeof useNotification>
+export type UseNotification = ReturnType<typeof useNotification>
 
-export interface IAppNotification {
+export interface AppNotification {
   key?: string
   message: string | '' | ReactNode
   description?: string
-  messageType?: NotificationType
+  messageType?: Notification
   duration?: number
   placement?: 'top' | 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
   icon?: JSX.Element

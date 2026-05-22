@@ -1,5 +1,5 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import type { ICreateRoomAckPayload, IEventCreateRoom } from 'global-shared'
+import type { CreateRoomAckPayload, EventCreateRoom } from 'global-shared'
 import { computed, onBeforeUnmount, ref, type Ref, watch } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -202,13 +202,13 @@ export const useCreateChatRoomDialog = (
       return
     }
 
-    const payload: IEventCreateRoom = {
+    const payload: EventCreateRoom = {
       contactIds: selectedContactIds.value,
       ...(isGroupChat.value ? { chatName: createChatNameInputValue.value.trim() } : {}),
       ...(avatarFile ? { avatarFile } : {})
     }
 
-    const response = await emitSocketAction<IEventCreateRoom, ICreateRoomAckPayload>('create-chat-room', payload)
+    const response = await emitSocketAction<EventCreateRoom, CreateRoomAckPayload>('create-chat-room', payload)
 
     isCreatingChat.value = false
 

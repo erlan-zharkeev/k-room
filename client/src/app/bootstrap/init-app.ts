@@ -8,9 +8,9 @@ import { pinia } from '../providers/pinia'
 import { initFirebase } from './init-firebase'
 import { initI18n } from './init-i18n'
 import { initNmorphUi } from './init-nmorph-ui'
-import type { VueAppType } from './types'
+import type { VueApp } from './types'
 
-export const initApp = async (app: VueAppType) => {
+export const initApp = async (app: VueApp) => {
   document.title = __CLIENT_ENV_DATA__.appName
   initFirebase()
   app.use(pinia)

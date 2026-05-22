@@ -10,7 +10,7 @@ import { AppButton } from 'src/shared/ui/AppButton/AppButton'
 import { AppHeader } from 'src/shared/ui/AppHeader/AppHeader'
 import { APP_MODAL_I18N } from 'src/shared/ui/AppModal/internals/i18n'
 import { MODAL_WIDTH } from 'src/shared/ui/AppModal/internals/constants'
-import { IAppModalProps } from 'src/shared/ui/AppModal/internals/types'
+import { AppModalProps } from 'src/shared/ui/AppModal/internals/types'
 
 import { useViewport } from '../../system/index'
 
@@ -24,7 +24,7 @@ export const AppModal = ({
   okAction,
   cancelAction,
   actions
-}: IAppModalProps) => {
+}: AppModalProps) => {
   const { lessOrEqualPhone } = useViewport()
   const { t } = useI18n()
   const titleId = useId()

@@ -1,16 +1,16 @@
 import type { AxiosResponse } from 'axios'
-import type { MediaKindType } from 'global-shared'
+import type { MediaKind } from 'global-shared'
 
 import { getHeaderValue } from 'src/shared/api'
-import type { MediaRecordType } from 'src/shared/lib'
+import type { MediaRecord } from 'src/shared/lib'
 
-export const transformHeadersToMediaData = (res: AxiosResponse): Omit<MediaRecordType, 'blob' | 'id'> => {
+export const transformHeadersToMediaData = (res: AxiosResponse): Omit<MediaRecord, 'blob' | 'id'> => {
   return {
     etag: getHeaderValue(res.headers.etag),
     contentType: getHeaderValue(res.headers['content-type']),
     lastModified: getHeaderValue(res.headers['last-modified']),
     lastChecked: Date.now(),
-    kind: getHeaderValue(res.headers.kind) as MediaKindType,
+    kind: getHeaderValue(res.headers.kind) as MediaKind,
     status: 'ready'
   }
 }

@@ -1,31 +1,31 @@
-import { AppLanguageType } from 'common'
+import { AppLanguage } from 'common'
 
-export type ThemeType = 'dark' | 'light'
+export type Theme = 'dark' | 'light'
 
-export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
+export type AsideBarButtonName = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
-export type ContentTabType = AsideBarButtonNameType
+export type ContentTab = AsideBarButtonName
 
-export type HiddenNotificationType = 'audio-context'
+export type HiddenNotification = 'audio-context'
 
-export interface IMessageListScrollState {
+export interface MessageListScrollState {
   firstVisibleItemId: string
 }
 
-export interface IUserSetting {
-  selectedContentTab: ContentTabType
+export interface UserSetting {
+  selectedContentTab: ContentTab
   selectedChatRoomId: string
-  messageScrollByRoom: Record<string, IMessageListScrollState>
-  language: AppLanguageType
+  messageScrollByRoom: Record<string, MessageListScrollState>
+  language: AppLanguage
   showNotification: boolean
-  theme: ThemeType
+  theme: Theme
   showTooltips: boolean
   soundOn: boolean
   showWallpaper: boolean
   selectedAudioInputDeviceId: string
   selectedVideoInputDeviceId: string
   selectedAudioOutputDeviceId: string
-  hiddenNotification: HiddenNotificationType[]
+  hiddenNotification: HiddenNotification[]
 }
 
-export type DbUserSettingType = IUserSetting
+export type DbUserSetting = UserSetting

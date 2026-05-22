@@ -1,6 +1,6 @@
 import './content-tab.scss'
 
-import { ContentTabType } from 'src/shared/config'
+import { ContentTab } from 'src/shared/config'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { useContentTabSelect, useSettings } from 'src/shared/preferences'
 
@@ -10,7 +10,7 @@ export const ContentTab = () => {
   const { selectedContentTab } = useSettings()
   const { selectContentTab } = useContentTabSelect()
 
-  const tabElementClass = (value: ContentTabType) =>
+  const tabElementClass = (value: ContentTab) =>
     createClassNameWithModifiers({
       rootClass: 'content-tab__button-el',
       modifiers: [value === selectedContentTab && 'active']

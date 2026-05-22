@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common'
 import { SERVER_ENV } from 'src/app/env'
 
 import { TURNSTILE_VERIFY_TIMEOUT_MS, TURNSTILE_VERIFY_URL } from './constants'
-import type { ITurnstileVerificationResponse } from './types'
+import type { TurnstileVerificationResponse } from './types'
 
 @Injectable()
 export class CaptchaService {
@@ -30,7 +30,7 @@ export class CaptchaService {
       body,
       signal: AbortSignal.timeout(TURNSTILE_VERIFY_TIMEOUT_MS)
     })
-    const result = (await response.json()) as ITurnstileVerificationResponse
+    const result = (await response.json()) as TurnstileVerificationResponse
 
     if (!result.success) {
       return false

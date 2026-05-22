@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs'
-import { IAuthLoginPayload, ILoginResponse, REQ_STATUS } from 'common'
+import { AuthLoginPayload, ILoginResponse, REQ_STATUS } from 'common'
 
 import { mapUserToDto } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
+import { AppResponse, AppRequest, SHARED_I18N } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -12,12 +12,12 @@ import { updateTokens } from '../shared/lib/update-token'
 
 import { LOGIN_I18N } from './i18n'
 
-export const loginController = async (req: IAppRequest, res: AppResponseType<ILoginResponse>) => {
+export const loginController = async (req: AppRequest, res: AppResponse<ILoginResponse>) => {
   const { language } = req
   const basicError = localizedText(LOGIN_I18N.failed, language)
 
   try {
-    const { email: inputEmail, password }: IAuthLoginPayload = req.body
+    const { email: inputEmail, password }: AuthLoginPayload = req.body
     const user = await UserModel.findOne({ 'personal.email': inputEmail })
 
     if (!user) {

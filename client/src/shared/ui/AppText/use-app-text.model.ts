@@ -3,9 +3,9 @@ import { computed } from 'vue'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
 import { APP_TEXT_COLOR_MODIFIERS, APP_TEXT_DEFAULT_PROPS } from './constants'
-import type { IAppTextProps } from './types'
+import type { AppTextProps } from './types'
 
-export const useAppText = (props: IAppTextProps) => {
+export const useAppText = (props: AppTextProps) => {
   const className = computed(() =>
     createClassNameWithModifiers({
       rootClass: 'app-text',

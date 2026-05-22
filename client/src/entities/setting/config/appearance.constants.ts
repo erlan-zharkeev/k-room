@@ -1,11 +1,11 @@
 import { DEFAULT_DARK_WALLPAPER, DEFAULT_LIGHT_WALLPAPER } from 'src/shared/assets'
 
 import type {
-  EffectiveThemeType,
-  IColorSchema,
-  IThemeData,
-  IThemeShadowSettings,
-  IWallpaperSettings,
+  EffectiveTheme,
+  ColorSchema,
+  ThemeData,
+  ThemeShadowSettings,
+  WallpaperSettings,
   SystemTheme
 } from './appearance.types'
 
@@ -25,9 +25,9 @@ const SHARED_THEME_COLORS = {
 } as const
 
 export const EFFECTIVE_THEME_VALUES = ['dark', 'light', 'custom'] as const satisfies readonly [
-  EffectiveThemeType,
-  EffectiveThemeType,
-  EffectiveThemeType
+  EffectiveTheme,
+  EffectiveTheme,
+  EffectiveTheme
 ]
 
 export const DEFAULT_THEME_SHADOW_SETTINGS = {
@@ -35,7 +35,7 @@ export const DEFAULT_THEME_SHADOW_SETTINGS = {
   lightShadeGeneratorCoefficient: 45,
   baseShadowWidth: 3.5,
   baseShadowBlurCoefficient: 2
-} as const satisfies IThemeShadowSettings
+} as const satisfies ThemeShadowSettings
 
 export const DARK_COLOR_SCHEMA = {
   main: '#1c1f21',
@@ -50,7 +50,7 @@ export const DARK_COLOR_SCHEMA = {
   contrastText: '#c3cdd1',
   gray: '#c8d0dc',
   ...SHARED_THEME_COLORS
-} as const satisfies IColorSchema
+} as const satisfies ColorSchema
 
 export const LIGHT_COLOR_SCHEMA = {
   darkShade: '#c8c9ca',
@@ -65,7 +65,7 @@ export const LIGHT_COLOR_SCHEMA = {
   contrastText: '#b4c4de',
   gray: '#656565',
   ...SHARED_THEME_COLORS
-} as const satisfies IColorSchema
+} as const satisfies ColorSchema
 
 export const CUSTOM_COLOR_SCHEMA = {
   main: '#1c1c1c',
@@ -80,9 +80,9 @@ export const CUSTOM_COLOR_SCHEMA = {
   contrastText: '#f4f7fb',
   gray: '#c8d0dc',
   ...SHARED_THEME_COLORS
-} as const satisfies IColorSchema
+} as const satisfies ColorSchema
 
-export const DEFAULT_CUSTOM_SCHEMA = { ...DARK_COLOR_SCHEMA } as const satisfies IColorSchema
+export const DEFAULT_CUSTOM_SCHEMA = { ...DARK_COLOR_SCHEMA } as const satisfies ColorSchema
 export const DEFAULT_CUSTOM_THEME_MODE = 'dark' as const satisfies SystemTheme
 
 export const DEFAULT_WALLPAPER_SETTINGS = {
@@ -91,7 +91,7 @@ export const DEFAULT_WALLPAPER_SETTINGS = {
   darkness: 0,
   url: '',
   filename: ''
-} as const satisfies IWallpaperSettings
+} as const satisfies WallpaperSettings
 
 export const DEFAULT_DARK_WALLPAPER_URL = DEFAULT_DARK_WALLPAPER
 export const DEFAULT_DARK_WALLPAPER_FILENAME = 'default-wallpaper-dark.jpeg'
@@ -103,13 +103,13 @@ export const DARK_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,
   url: DEFAULT_DARK_WALLPAPER_URL,
   filename: DEFAULT_DARK_WALLPAPER_FILENAME
-} as const satisfies IWallpaperSettings
+} as const satisfies WallpaperSettings
 
 export const LIGHT_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,
   url: DEFAULT_LIGHT_WALLPAPER_URL,
   filename: DEFAULT_LIGHT_WALLPAPER_FILENAME
-} as const satisfies IWallpaperSettings
+} as const satisfies WallpaperSettings
 
 export const CUSTOM_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,
@@ -117,28 +117,28 @@ export const CUSTOM_WALLPAPER_SETTINGS = {
   angle: 0,
   url: '',
   filename: ''
-} as const satisfies IWallpaperSettings
+} as const satisfies WallpaperSettings
 
 export const APPEARANCE_DARK = {
   mode: 'dark',
   ...DEFAULT_THEME_SHADOW_SETTINGS,
   colorSchema: DARK_COLOR_SCHEMA,
   wallpaper: DARK_WALLPAPER_SETTINGS
-} as const satisfies IThemeData
+} as const satisfies ThemeData
 
 export const APPEARANCE_LIGHT = {
   mode: 'light',
   ...DEFAULT_THEME_SHADOW_SETTINGS,
   colorSchema: LIGHT_COLOR_SCHEMA,
   wallpaper: LIGHT_WALLPAPER_SETTINGS
-} as const satisfies IThemeData
+} as const satisfies ThemeData
 
 export const APPEARANCE_CUSTOM = {
   mode: DEFAULT_CUSTOM_THEME_MODE,
   ...DEFAULT_THEME_SHADOW_SETTINGS,
   colorSchema: CUSTOM_COLOR_SCHEMA,
   wallpaper: CUSTOM_WALLPAPER_SETTINGS
-} as const satisfies IThemeData
+} as const satisfies ThemeData
 
 export const SYSTEM_THEME_QUERY = window.matchMedia?.('(prefers-color-scheme: light)')
 

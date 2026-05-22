@@ -1,13 +1,13 @@
 import { CHAT_KIND } from './constants'
 
-export type ChatKindType = (typeof CHAT_KIND)[keyof typeof CHAT_KIND]
+export type ChatKind = (typeof CHAT_KIND)[keyof typeof CHAT_KIND]
 
-export interface ChatRoomType {
+export interface ChatRoom {
   id: string
   adminId: string
   createdAt: number
   chatName?: string
-  chatKind: ChatKindType
+  chatKind: ChatKind
   avatarId: string
   lastMessageId: string | null
   unreadMessagesQuantity: number
@@ -17,11 +17,11 @@ export interface ChatRoomType {
   messages: string[]
 }
 
-export type ChatRoomsType = ChatRoomType[]
+export type ChatRooms = ChatRoom[]
 
-export interface ChatRoomSchemaType
+export interface ChatRoomSchema
   extends Omit<
-    ChatRoomType,
+    ChatRoom,
     'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder'
   > {
   users: string[]

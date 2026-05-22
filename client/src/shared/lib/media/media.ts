@@ -4,9 +4,9 @@ import { getCurrentScope, onScopeDispose, shallowRef, toValue, watch, type Maybe
 
 import { db } from '../db/db'
 
-import type { MediaUrlCacheValueType } from './types'
+import type { MediaUrlCacheValue } from './types'
 
-const cache = new Map<string, MediaUrlCacheValueType>()
+const cache = new Map<string, MediaUrlCacheValue>()
 
 export const getAvatarId = (id: string) => `${MEDIA_AVATAR_FILENAME_PREFIX}${id}`
 

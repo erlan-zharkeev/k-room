@@ -1,4 +1,4 @@
-export type { IUserProfileProps } from './ui/UserProfile/types'
+export type { UserProfileProps } from './ui/UserProfile/types'
 export { UserProfile } from './ui/UserProfile/UserProfile'
 export { useUser } from './model/use-user'
 export { useActivateUserSession } from './model/use-activate-user-session'

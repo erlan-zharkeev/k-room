@@ -1,107 +1,100 @@
-import type {
-  AppLanguageType,
-  IChangePasswordPayload,
-  InteractionType,
-  ProviderType,
-  UnknownObjectType,
-  UserRoleType
-} from 'global-shared'
+import type { AppLanguage, ChangePasswordPayload, Interaction, Provider, UnknownObject, UserRole } from 'global-shared'
 import type { Types } from 'mongoose'
 
-export interface IUserDevice {
+export interface UserDevice {
   refreshToken: string
 }
 
-export interface IContact {
+export interface UserContact {
   id: string
-  interaction: InteractionType
+  interaction: Interaction
   updatedAt: number
 }
 
-export interface IUserSystemData {
-  role: UserRoleType
-  device: Record<string, IUserDevice>
+export interface UserSystemData {
+  role: UserRole
+  device: Record<string, UserDevice>
   confirmed: boolean
   confirmAttempts: number
   password: string
-  provider?: ProviderType
+  provider?: Provider
 }
 
-export interface IUserPersonalData {
+export interface UserPersonalData {
   email: string
-  contacts: Record<string, IContact>
+  contacts: Record<string, UserContact>
   chatRooms: string[]
   pinnedChatRoomIds: string[]
 }
 
-export interface IUserPublicData {
+export interface UserPublicData {
   nickname: string
   lastSeen: number
 }
 
-export interface IUserSchema {
+export interface UserSchema {
   _id: Types.ObjectId
-  system: IUserSystemData
-  personal: IUserPersonalData
-  public: IUserPublicData
+  system: UserSystemData
+  personal: UserPersonalData
+  public: UserPublicData
   createdAt?: Date
   updatedAt?: Date
 }
 
-export interface IUserExistState {
+export interface UserExistState {
   exists: boolean
   reason: 'nickname' | 'email' | 'id' | null
 }
 
-export interface IUserExistParams {
+export interface UserExistParams {
   nickname: string
   email: string
   id?: Types.ObjectId
 }
 
-export interface ICreateUserParams {
+export interface CreateUserParams {
   id?: Types.ObjectId
   email: string
   nickname: string
   hashedPassword: string
-  provider?: ProviderType
+  provider?: Provider
 }
 
-export interface IChangePasswordParams extends IChangePasswordPayload {
+export interface ChangePasswordParams extends ChangePasswordPayload {
   userId: string
 }
 
-export interface IChangeEmailParams {
+export interface ChangeEmailParams {
   userId: string
   email: string
 }
 
-export interface IUpdateUserDataParams {
+export interface UpdateUserDataParams {
   userId: string
   nickname?: string
   avatarFileBuffer?: Buffer
   resetAvatar?: 'reset' | ''
 }
 
-export interface IUpdateUserDataPayload {
+export interface UpdateUserDataPayload {
   nickname?: string
   'reset-avatar'?: 'reset' | ''
 }
 
-export interface IAdminUserRecord {
-  params?: UnknownObjectType
+export interface AdminUserRecord {
+  params?: UnknownObject
 }
 
-export interface IAdminUserActionRequest {
+export interface AdminUserActionRequest {
   method?: string
-  payload?: UnknownObjectType
+  payload?: UnknownObject
 }
 
-export interface IAdminUserActionResponse {
-  record?: IAdminUserRecord
-  records?: IAdminUserRecord[]
+export interface AdminUserActionResponse {
+  record?: AdminUserRecord
+  records?: AdminUserRecord[]
 }
 
-export interface IUpdateLanguagePayload {
-  language: AppLanguageType
+export interface UpdateLanguagePayload {
+  language: AppLanguage
 }

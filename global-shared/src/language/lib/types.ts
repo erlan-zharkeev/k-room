@@ -1,14 +1,14 @@
-import type { UnknownObjectType } from '../../shared/types'
-import type { LocalizedTextType } from '../types'
+import type { UnknownObject } from '../../shared/types'
+import type { LocalizedText } from '../types'
 
-export type I18nValueConstraintType<T> = T extends (...args: infer Args) => infer Result
-  ? Result extends LocalizedTextType<unknown>
+export type I18nValueConstraint<T> = T extends (...args: infer Args) => infer Result
+  ? Result extends LocalizedText<unknown>
     ? (...args: Args) => Result
     : never
-  : T extends LocalizedTextType<unknown>
+  : T extends LocalizedText<unknown>
   ? T
   : never
 
-export type I18nRecordConstraintType<T extends UnknownObjectType> = {
-  [Key in keyof T]: I18nValueConstraintType<T[Key]>
+export type I18nRecordConstraint<T extends UnknownObject> = {
+  [Key in keyof T]: I18nValueConstraint<T[Key]>
 }

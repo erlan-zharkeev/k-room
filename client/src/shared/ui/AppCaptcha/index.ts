@@ -1,2 +1,2 @@
 export { default as AppCaptcha } from './AppCaptcha.vue'
-export type { IAppCaptchaProps, ITurnstileApi, ITurnstileRenderOptions } from './types'
+export type { AppCaptchaProps, TurnstileApi, TurnstileRenderOptions } from './types'

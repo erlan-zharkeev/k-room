@@ -3,7 +3,7 @@ import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppIcon } from 'src/shared/ui/AppIcon/AppIcon'
 
-import { IButtonProps } from './internals/types'
+import { ButtonProps } from './internals/types'
 
 export const AppButton = ({
   htmltype = 'button',
@@ -26,7 +26,7 @@ export const AppButton = ({
   fill = false,
   onSubmit = () => {},
   info = false
-}: IButtonProps) => {
+}: ButtonProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-button',
     modifiers: [

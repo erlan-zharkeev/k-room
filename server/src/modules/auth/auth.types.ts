@@ -1,14 +1,14 @@
-import type { IConfirmEmailResponse, ISendConfirmationLinkResponse } from 'global-shared'
+import type { ConfirmEmailResponse, SendConfirmationLinkResponse } from 'global-shared'
 
-export interface ISocketTokenPayload {
+export interface SocketTokenPayload {
   id: string
 }
 
-export interface IConfirmEmailResult extends IConfirmEmailResponse {
+export interface ConfirmEmailResult extends ConfirmEmailResponse {
   alreadyConfirmed: boolean
 }
 
-export interface ISendConfirmationLinkResult extends ISendConfirmationLinkResponse {
+export interface SendConfirmationLinkResult extends SendConfirmationLinkResponse {
   alreadyConfirmed: boolean
   rateLimited: boolean
 }

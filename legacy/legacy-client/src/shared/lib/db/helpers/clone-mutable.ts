@@ -1,8 +1,8 @@
-import { MutableType } from '../internals/types'
+import { Mutable } from '../internals/types'
 
-export const cloneMutable = <T extends object>(value: T): MutableType<T> => {
+export const cloneMutable = <T extends object>(value: T): Mutable<T> => {
   if (typeof structuredClone === 'function') {
-    return structuredClone(value) as MutableType<T>
+    return structuredClone(value) as Mutable<T>
   }
-  return JSON.parse(JSON.stringify(value)) as MutableType<T>
+  return JSON.parse(JSON.stringify(value)) as Mutable<T>
 }

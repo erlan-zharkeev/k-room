@@ -1,8 +1,8 @@
 import './style.scss'
 import React, { useEffect, useState } from 'react'
 
-import { FileLoaderValueType } from 'src/shared/config'
-import { useValidate, ValidateRuleType } from 'src/shared/lib'
+import { FileLoaderValue } from 'src/shared/config'
+import { useValidate, ValidateRule } from 'src/shared/lib'
 import { AppButton } from 'src/shared/ui/AppButton/AppButton'
 import { AppElementPicker } from 'src/shared/ui/AppElementPicker/AppElementPicker'
 import { AppFileLoader } from 'src/shared/ui/AppFileLoader/AppFileLoader'
@@ -11,20 +11,20 @@ import { AppHeader } from 'src/shared/ui/AppHeader/AppHeader'
 import { AppInput } from 'src/shared/ui/AppInput/AppInput'
 import { AppSwitch } from 'src/shared/ui/AppSwitch/AppSwitch'
 
-import { AppFormDataType, AppFormFieldType, AppFormFieldValueType, IAppFormProps } from './internals/types'
+import { AppFormData, AppFormField, AppFormFieldValue, AppFormProps } from './internals/types'
 
 export type {
-  AppFormFieldValueType,
-  AppFormSwitchFieldType,
-  AppFormTextInputFieldType,
-  AppFormFileInputFieldType,
-  AppFormPickElementFieldType,
-  AppFormFieldType,
-  AppFormDataType,
-  IAppFormProps
+  AppFormFieldValue,
+  AppFormSwitchField,
+  AppFormTextInputField,
+  AppFormFileInputField,
+  AppFormPickElementField,
+  AppFormField,
+  AppFormData,
+  AppFormProps
 } from './internals/types'
 
-const getDefaultValue = (inputType: AppFormFieldType['inputType']): AppFormFieldValueType => {
+const getDefaultValue = (inputType: AppFormField['inputType']): AppFormFieldValue => {
   switch (inputType) {
     case 'switch':
       return false
@@ -36,7 +36,7 @@ const getDefaultValue = (inputType: AppFormFieldType['inputType']): AppFormField
   }
 }
 
-export const AppForm = <TFormData extends object = AppFormDataType>({
+export const AppForm = <TFormData extends object = AppFormData>({
   onSubmit,
   fields,
   submitBtnText,
@@ -48,8 +48,8 @@ export const AppForm = <TFormData extends object = AppFormDataType>({
   onBlur = () => {},
   disabled = false,
   disabledActionBtn = false
-}: IAppFormProps<TFormData>) => {
-  const initialState: Record<string, AppFormFieldValueType> = {}
+}: AppFormProps<TFormData>) => {
+  const initialState: Record<string, AppFormFieldValue> = {}
   Object.keys(fields).forEach((key) => {
     initialState[key] = fields[key].value ?? getDefaultValue(fields[key].inputType)
   })
@@ -58,8 +58,8 @@ export const AppForm = <TFormData extends object = AppFormDataType>({
   const { touchedFields, validateField, errors, isFormTotalValid } = useValidate(form)
 
   const handleChange = (
-    inputOrPatch: React.ChangeEvent<HTMLInputElement> | { name: string; value: AppFormFieldValueType },
-    rule?: ValidateRuleType
+    inputOrPatch: React.ChangeEvent<HTMLInputElement> | { name: string; value: AppFormFieldValue },
+    rule?: ValidateRule
   ) => {
     const name = 'target' in inputOrPatch ? inputOrPatch.target.name : inputOrPatch.name
     const value = 'target' in inputOrPatch ? inputOrPatch.target.value : inputOrPatch.value
@@ -82,7 +82,7 @@ export const AppForm = <TFormData extends object = AppFormDataType>({
 
   useEffect(() => {
     validateAllFields()
-    const next: Record<string, AppFormFieldValueType> = {}
+    const next: Record<string, AppFormFieldValue> = {}
     for (const [k, f] of Object.entries(fields)) {
       next[k] = f.value ?? getDefaultValue(f.inputType)
     }
@@ -102,7 +102,7 @@ export const AppForm = <TFormData extends object = AppFormDataType>({
     if (onSubmit) onSubmit(form as TFormData)
   }
 
-  const renderField = (key: string, field: AppFormFieldType) => {
+  const renderField = (key: string, field: AppFormField) => {
     const commonProps = {
       name: key,
       disabled: actionProcessing ?? disabled
@@ -155,7 +155,7 @@ export const AppForm = <TFormData extends object = AppFormDataType>({
             multiple={field.multiple}
             allowedResolutions={field.allowedResolutions}
             showPreview={field.showPreview}
-            value={form[key] as FileLoaderValueType}
+            value={form[key] as FileLoaderValue}
             onChange={(images) => {
               if (field.onChange) field.onChange({ name: key, value: images })
               handleChange({ name: key, value: images })

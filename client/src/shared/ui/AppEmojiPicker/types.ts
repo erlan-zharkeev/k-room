@@ -1,12 +1,12 @@
-import type { AppLanguageType } from 'global-shared'
+import type { AppLanguage } from 'global-shared'
 
-export interface IAppEmojiPickerProps {
+export interface AppEmojiPickerProps {
   expandLabel: string
-  language: AppLanguageType
+  language: AppLanguage
 }
 
-export interface IAppEmojiPickerEmits {
+export interface AppEmojiPickerEmits {
   select: [value: string]
 }
 
-export type AppEmojiPickerEmitType = (event: 'select', value: string) => void
+export type AppEmojiPickerEmit = (event: 'select', value: string) => void

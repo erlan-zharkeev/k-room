@@ -12,15 +12,15 @@ import { getAvatarId } from 'src/shared/lib'
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import type { IContactListEmits, IContactListProps } from '../config/types'
+import type { ContactListEmits, ContactListProps } from '../config/types'
 import { getContactActivityTagColor } from '../lib/get-contact-activity-tag-color'
 import { getContactStatusTagColor } from '../lib/get-contact-status-tag-color'
 import { hasContactChatRoom } from '../lib/has-contact-chat-room'
 
 import ContactContextMenu from './ContactContextMenu.vue'
 
-const props = defineProps<IContactListProps>()
-const emit = defineEmits<IContactListEmits>()
+const props = defineProps<ContactListProps>()
+const emit = defineEmits<ContactListEmits>()
 const contactChatRoomIdList = computed(() =>
   props.contactList
     .filter(

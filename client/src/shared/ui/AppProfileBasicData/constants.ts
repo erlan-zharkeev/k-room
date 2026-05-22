@@ -1,4 +1,4 @@
-import type { IAppProfileBasicDataProps } from './types'
+import type { AppProfileBasicDataProps } from './types'
 
 export const APP_PROFILE_BASIC_DATA_DEFAULT_PROPS = {
   imageAlt: '',
@@ -7,4 +7,4 @@ export const APP_PROFILE_BASIC_DATA_DEFAULT_PROPS = {
   name: '',
   selectable: true,
   showOnline: false
-} satisfies Partial<IAppProfileBasicDataProps>
+} satisfies Partial<AppProfileBasicDataProps>

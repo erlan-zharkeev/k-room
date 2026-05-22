@@ -1,6 +1,6 @@
-import { MediaBucketNameType, MongooseGridFSBucketType } from './types'
+import { MediaBucketName, MongooseGridFSBucket } from './types'
 
-export const mediaBuckets: Record<MediaBucketNameType, MongooseGridFSBucketType | null> = {
+export const mediaBuckets: Record<MediaBucketName, MongooseGridFSBucket | null> = {
   avatar: null,
   doc: null,
   image: null,

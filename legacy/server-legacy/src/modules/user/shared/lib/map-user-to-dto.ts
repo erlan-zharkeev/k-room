@@ -1,8 +1,8 @@
 import { IFrontendUserData } from 'common'
 
-import { IUserSchema } from '../../types'
+import { UserSchema } from '../../types'
 
-export const mapUserToDto = (user: IUserSchema): IFrontendUserData => {
+export const mapUserToDto = (user: UserSchema): IFrontendUserData => {
   const { _id } = user
   const { email } = user.personal
   const { username } = user.public

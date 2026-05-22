@@ -7,27 +7,27 @@ export { useDebounce } from './hooks/use-debounce'
 export { useIntervalRerender } from './hooks/use-interval-rerender'
 export { useQuery } from './hooks/use-query'
 export type {
-  ISwitchValidateRule,
-  ITextInputValidateRule,
-  IFileInputValidateRule,
-  IElementPickerValidateRule,
-  ValidateRuleType
+  SwitchValidateRule,
+  TextInputValidateRule,
+  FileInputValidateRule,
+  ElementPickerValidateRule,
+  ValidateRule
 } from './hooks/use-validate/types'
 export { booleanValidateRules, stringValidateRules, arrayValidateRules } from './hooks/use-validate/rules'
 export { useValidate } from './hooks/use-validate/use-validate'
 export { useTimeout } from './hooks/use-timeout'
-export type { AnimatedListItemStateType, IAnimatedListItem } from './hooks/internals/types'
+export type { AnimatedListItemState, AnimatedListItem } from './hooks/internals/types'
 export { KRoomDB, db } from './db/db'
 export type {
-  MutableType,
-  IndexableType,
-  IKvOptions,
-  IIdOptions,
+  Mutable,
+  Indexable,
+  KvOptions,
+  IdOptions,
   KvItem,
   UseResult,
-  IUseStateResult,
-  IKvQueryState,
-  ICollectionMergeManyOptions
+  UseStateResult,
+  KvQueryState,
+  CollectionMergeManyOptions
 } from './db/internals/types'
 export { cloneMutable } from './db/helpers/clone-mutable'
 export { dexieCollectionStore } from './db/dexie-collection-store'

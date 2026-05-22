@@ -1,8 +1,8 @@
-import { IUserSetting } from 'src/shared/config'
+import { UserSetting } from 'src/shared/config'
 import { dexieKeyValueStore, db } from 'src/shared/lib'
 import { DEFAULT_SETTINGS, FULL_CONTENT_ELEMENTS } from 'src/shared/preferences/internals/constants'
 
-const settingsStore = dexieKeyValueStore<IUserSetting>(db.settings, 'settings')
+const settingsStore = dexieKeyValueStore<UserSetting>(db.settings, 'settings')
 
 export const useSettings = () => {
   const { shallowUpdate } = settingsStore

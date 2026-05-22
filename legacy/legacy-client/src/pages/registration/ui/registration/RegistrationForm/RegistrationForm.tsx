@@ -3,17 +3,17 @@ import './registration-form.scss'
 import { useI18n } from 'src/shared/preferences'
 import { AppForm } from 'src/shared/ui'
 
-import { RegistrationFormDataType } from '../../../model/types'
+import { RegistrationFormData } from '../../../model/types'
 import { PrivacyPolicySwitch } from '../PrivacyPolicySwitch/PrivacyPolicySwitch'
 import { REGISTRATION_FORM_I18N } from './internals/i18n'
-import { IRegistrationFormProps } from '../types'
+import { RegistrationFormProps } from '../types'
 
-export const RegistrationForm = ({ onRegister, isLoading }: IRegistrationFormProps) => {
+export const RegistrationForm = ({ onRegister, isLoading }: RegistrationFormProps) => {
   const { t } = useI18n()
 
   return (
     <div className="registration-form">
-      <AppForm<RegistrationFormDataType>
+      <AppForm<RegistrationFormData>
         onSubmit={onRegister}
         fields={{
           username: {

@@ -9,9 +9,9 @@ import { THEME_SELECT_DEFAULT_PROPS, THEME_SELECT_OPTIONS } from '../config/cons
 import { THEME_SELECT_I18N } from '../config/i18n'
 import { useThemeSelect } from '../model/use-theme-select.model'
 
-import type { IThemeSelectProps } from './types'
+import type { ThemeSelectProps } from './types'
 
-const props = withDefaults(defineProps<IThemeSelectProps>(), THEME_SELECT_DEFAULT_PROPS)
+const props = withDefaults(defineProps<ThemeSelectProps>(), THEME_SELECT_DEFAULT_PROPS)
 
 const { t } = useI18n()
 const { settings, changeTheme } = useThemeSelect()

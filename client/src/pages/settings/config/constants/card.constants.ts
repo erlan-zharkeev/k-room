@@ -1,4 +1,4 @@
-import type { ICardProps } from '../types/card.types'
+import type { CardProps } from '../types/card.types'
 
 export const CARD_DEFAULT_PROPS = {
   buttonLabel: '',
@@ -6,4 +6,4 @@ export const CARD_DEFAULT_PROPS = {
   buttonDisabled: false,
   buttonLoading: false,
   onButtonClick: undefined
-} satisfies Partial<ICardProps>
+} satisfies Partial<CardProps>

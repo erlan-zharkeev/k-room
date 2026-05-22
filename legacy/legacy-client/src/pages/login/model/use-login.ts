@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { AUTH_ENDPOINTS, IAuthLoginPayload, ILoginResponse } from 'common'
+import { AUTH_ENDPOINTS, AuthLoginPayload, ILoginResponse } from 'common'
 
 import { useActivateUserSession } from 'src/entities/user'
 
@@ -11,7 +11,7 @@ export const useLogin = () => {
   const { activateUserSession } = useActivateUserSession()
   const [isLoading, setIsLoading] = useState(false)
 
-  const login = async (fields: IAuthLoginPayload) => {
+  const login = async (fields: AuthLoginPayload) => {
     setIsLoading(true)
     try {
       const response = await doRequest<ILoginResponse>('post', AUTH_ENDPOINTS.login, fields)
@@ -25,7 +25,7 @@ export const useLogin = () => {
   }
 
   const onLogin = (payload: unknown) => {
-    const formData = payload as IAuthLoginPayload
+    const formData = payload as AuthLoginPayload
     login(formData)
   }
 

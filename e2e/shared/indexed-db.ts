@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test'
 
-import type { IndexedDbSeedItemType, IndexedDbStoresDataType } from './types'
+import type { IndexedDbSeedItem, IndexedDbStoresData } from './types'
 
 export const getAppDbName = async (page: Page) => {
   for (let attempt = 0; attempt < 20; attempt += 1) {
@@ -44,14 +44,14 @@ export const getAppDbName = async (page: Page) => {
 export const readStores = async (page: Page, dbName: string, storeNames: readonly string[]) => {
   return page.evaluate(
     ({ dbName, storeNames }) => {
-      return new Promise<IndexedDbStoresDataType>((resolve, reject) => {
+      return new Promise<IndexedDbStoresData>((resolve, reject) => {
         const request = indexedDB.open(dbName)
 
         request.onerror = () => reject(request.error?.message ?? 'Failed to open IndexedDB')
         request.onsuccess = () => {
           const db = request.result
           const transaction = db.transaction([...storeNames], 'readonly')
-          const result: IndexedDbStoresDataType = {}
+          const result: IndexedDbStoresData = {}
           let pending = storeNames.length
 
           storeNames.forEach((storeName) => {
@@ -75,7 +75,7 @@ export const readStores = async (page: Page, dbName: string, storeNames: readonl
   )
 }
 
-export const seedStores = async (page: Page, dbName: string, items: IndexedDbSeedItemType[]) => {
+export const seedStores = async (page: Page, dbName: string, items: IndexedDbSeedItem[]) => {
   await page.evaluate(
     ({ dbName, items }) => {
       return new Promise((resolve, reject) => {

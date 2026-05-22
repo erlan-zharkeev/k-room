@@ -1,5 +1,5 @@
 import { type Request } from 'express'
-import { createValidationMessages, REQ_STATUS, type ValidationMessagesType } from 'global-shared'
+import { createValidationMessages, REQ_STATUS, type ValidationMessages } from 'global-shared'
 import { getDotPath, safeParse, type GenericSchema } from 'valibot'
 
 import { SHARED_I18N } from 'src/shared/i18n'
@@ -9,7 +9,7 @@ import { localizedText } from './localized-text'
 
 export const runRequestValidation = (
   request: Request,
-  createSchema: (messages: ValidationMessagesType) => GenericSchema
+  createSchema: (messages: ValidationMessages) => GenericSchema
 ) => {
   const { language } = request
   const messages = createValidationMessages((text) => localizedText(text, language))

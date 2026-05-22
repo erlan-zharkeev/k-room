@@ -1,18 +1,18 @@
-import type { LocalizedTextType } from '../language/types'
+import type { LocalizedText } from '../language/types'
 
-export type ValidationI18nType = {
-  fieldIsRequired: LocalizedTextType
-  emailIsRequired: LocalizedTextType
-  passwordIsRequired: LocalizedTextType
-  invalidEmailFormat: LocalizedTextType
-  passwordMustBeAtLeast: LocalizedTextType
-  passwordMustBeStrong: LocalizedTextType
-  passwordNotContainSpaces: LocalizedTextType
-  passwordMustContainOnlyLatin: LocalizedTextType
-  nicknameInvalidFormat: LocalizedTextType
-  nicknameTooLong: LocalizedTextType
-  nicknameTooShort: LocalizedTextType
-  invalidProvider: LocalizedTextType
+export type ValidationI18n = {
+  fieldIsRequired: LocalizedText
+  emailIsRequired: LocalizedText
+  passwordIsRequired: LocalizedText
+  invalidEmailFormat: LocalizedText
+  passwordMustBeAtLeast: LocalizedText
+  passwordMustBeStrong: LocalizedText
+  passwordNotContainSpaces: LocalizedText
+  passwordMustContainOnlyLatin: LocalizedText
+  nicknameInvalidFormat: LocalizedText
+  nicknameTooLong: LocalizedText
+  nicknameTooShort: LocalizedText
+  invalidProvider: LocalizedText
 }
 
-export type ValidationMessagesType = Record<keyof ValidationI18nType, string>
+export type ValidationMessages = Record<keyof ValidationI18n, string>

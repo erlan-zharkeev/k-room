@@ -1,4 +1,4 @@
-import { IChatRoomSchema, SocketActionsType } from 'common'
+import { IChatRoomSchema, SocketActions } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
@@ -14,7 +14,7 @@ export const emitNewRoomToUsers = async (userIds: string[], room: IChatRoomSchem
     const transformedRoom = transformRoomForUser({ userId, room })
     const sockets = await getSocketsByUserIds([userId])
     sockets.forEach((socketId) => {
-      getIO().to(socketId).emit<SocketActionsType>('new-room-added', transformedRoom)
+      getIO().to(socketId).emit<SocketActions>('new-room-added', transformedRoom)
     })
   })
 }

@@ -1,4 +1,4 @@
-import { AUTH_ENDPOINTS, type IConfirmEmailResponse } from 'global-shared'
+import { AUTH_ENDPOINTS, type ConfirmEmailResponse } from 'global-shared'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -21,7 +21,7 @@ export const useEmailConfirmation = () => {
     }
 
     try {
-      const response = await doHttpRequest<IConfirmEmailResponse>('post', AUTH_ENDPOINTS.confirmEmail, { token })
+      const response = await doHttpRequest<ConfirmEmailResponse>('post', AUTH_ENDPOINTS.confirmEmail, { token })
 
       email.value = response.data.payload.email
       isConfirmed.value = true

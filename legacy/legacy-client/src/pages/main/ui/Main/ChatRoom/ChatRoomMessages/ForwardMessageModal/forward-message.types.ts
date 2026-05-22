@@ -1,3 +1,3 @@
-export interface IForwardMessageModalProps {
+export interface ForwardMessageModalProps {
   onClose: () => void
 }

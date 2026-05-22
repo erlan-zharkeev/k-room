@@ -1,10 +1,10 @@
 import { NmorphLibrary } from '@nmorph/nmorph-ui-kit'
-import type { AppLanguageType } from 'global-shared'
+import type { AppLanguage } from 'global-shared'
 
 import { createNmorphOptions } from '../lib/nmorph'
 
-import type { VueAppType } from './types'
+import type { VueApp } from './types'
 
-export const initNmorphUi = (app: VueAppType, language: AppLanguageType) => {
+export const initNmorphUi = (app: VueApp, language: AppLanguage) => {
   app.use(NmorphLibrary, createNmorphOptions(language))
 }

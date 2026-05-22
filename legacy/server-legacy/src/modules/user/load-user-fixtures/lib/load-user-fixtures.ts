@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { AppLanguageType, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'common'
+import { AppLanguage, DEFAULT_APP_LANGUAGE, REQ_STATUS } from 'common'
 import mongoose from 'mongoose'
 
 import { COMMON_MEDIA_I18N, mediaBuckets } from 'src/media'
@@ -16,7 +16,7 @@ import { createUser } from '../../shared/lib/create-user'
 import { isUserExist } from '../../shared/lib/is-user-exist'
 import { updateUserAvatar } from '../../update-user-data/lib/update-user-avatar'
 
-const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: AppLanguageType) => {
+const ensureAvatarLoaded = async (userId: string, avatarPath: string, language: AppLanguage) => {
   const bucket = mediaBuckets.avatar
 
   if (!bucket) {
@@ -44,7 +44,7 @@ const loadUserFixture = async (
     pass: string
     avatarPath: string
   },
-  language: AppLanguageType
+  language: AppLanguage
 ) => {
   const { id, username, email, pass, avatarPath } = data
   const identifier = new mongoose.Types.ObjectId(id)
@@ -68,7 +68,7 @@ const loadUserFixture = async (
   return 'created'
 }
 
-export const loadUserFixtures = async (language: AppLanguageType = DEFAULT_APP_LANGUAGE) => {
+export const loadUserFixtures = async (language: AppLanguage = DEFAULT_APP_LANGUAGE) => {
   const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data, language)))
 
   const created = results.filter((result) => result === 'created').length

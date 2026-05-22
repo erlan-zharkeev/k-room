@@ -1,6 +1,6 @@
 import { ReactNode, CSSProperties } from 'react'
 
-export interface IAppScrollContainerProps {
+export interface AppScrollContainerProps {
   height?: string
   additionalClassName?: string
   id?: string

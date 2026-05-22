@@ -1,4 +1,4 @@
-export interface IServerEnv {
+export interface ServerEnv {
   appName: string
   appVersion: string
   isDev: boolean

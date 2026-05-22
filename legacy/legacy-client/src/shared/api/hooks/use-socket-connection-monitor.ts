@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { IEventAuthError, IEventErrorMessage, SocketActionsType } from 'common'
+import { EventAuthError, EventErrorMessage, SocketActions } from 'common'
 
 import { log } from 'src/shared/lib'
 import { useNotification } from 'src/shared/notification'
@@ -17,39 +17,39 @@ export const useSocketConnectionMonitor = () => {
   const { socketReconnect } = useSocketReconnect()
 
   useEffect(() => {
-    socket.emit<SocketActionsType>('initialize')
+    socket.emit<SocketActions>('initialize')
 
-    socket.on<SocketActionsType>('connection', () => {
+    socket.on<SocketActions>('connection', () => {
       log('success', 'Socket connected')
     })
 
-    socket.on<SocketActionsType>('disconnect', () => {
+    socket.on<SocketActions>('disconnect', () => {
       log('error', 'Socket disconnected')
     })
 
-    socket.on<SocketActionsType>('error-message', ({ message }: IEventErrorMessage) => {
+    socket.on<SocketActions>('error-message', ({ message }: EventErrorMessage) => {
       const errorMessageNotification = notifications.getNotification({ messageType: 'error', message })
       errorMessageNotification.open()
     })
 
-    socket.on<SocketActionsType>('auth-error', async ({ event, payload }: IEventAuthError) => {
+    socket.on<SocketActions>('auth-error', async ({ event, payload }: EventAuthError) => {
       await socketReconnect()
       socket.emit(event, payload)
     })
 
-    socket.on<SocketActionsType>('reconnect', (attempt: number) => {
+    socket.on<SocketActions>('reconnect', (attempt: number) => {
       log('success', `Socket reconnected on attempt: ${attempt}`)
-      socket.emit<SocketActionsType>('initialize')
-      socket.emit<SocketActionsType>('actualize-user-data')
+      socket.emit<SocketActions>('initialize')
+      socket.emit<SocketActions>('actualize-user-data')
       dispatch(setReconnectingStatus(false))
     })
 
-    socket.on<SocketActionsType>('reconnect_attempt', (attempt: number) => {
+    socket.on<SocketActions>('reconnect_attempt', (attempt: number) => {
       log('warn', `Socket reconnecting. Attempt: ${attempt}`)
       dispatch(setReconnectingStatus(true))
     })
 
-    socket.on<SocketActionsType>('reconnect_failed', () => {
+    socket.on<SocketActions>('reconnect_failed', () => {
       dispatch(setReconnectingStatus(false))
     })
 

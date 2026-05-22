@@ -2,9 +2,9 @@ import './style.scss'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui/AppText/AppText'
 
-import { IAppFormItemProps } from './internals/types'
+import { AppFormItemProps } from './internals/types'
 
-export const AppFormItem = ({ children, label, errors = [], required }: IAppFormItemProps) => {
+export const AppFormItem = ({ children, label, errors = [], required }: AppFormItemProps) => {
   const error = errors.length > 0 && errors[0]
   const errorClassName = createClassNameWithModifiers({
     rootClass: 'app-form-item__error',

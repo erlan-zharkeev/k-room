@@ -1,10 +1,10 @@
-export type IndexedDbRowType = {
+export type IndexedDbRow = {
   id?: string
 }
 
-export type IndexedDbStoresDataType = Record<string, IndexedDbRowType[]>
+export type IndexedDbStoresData = Record<string, IndexedDbRow[]>
 
-export type IndexedDbSeedItemType = {
+export type IndexedDbSeedItem = {
   id: string
   storeName: string
 }

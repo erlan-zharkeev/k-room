@@ -12,11 +12,11 @@ import { AppText, AppUserPicker } from 'src/shared/ui'
 
 import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { CreateChatRoomDialogEmitType } from '../config/types'
+import type { CreateChatRoomDialogEmit } from '../config/types'
 import { useCreateChatRoomDialog } from '../model/use-create-chat-room-dialog.model'
 
 const isOpen = defineModel<boolean>({ required: true })
-const emit = defineEmits<CreateChatRoomDialogEmitType>()
+const emit = defineEmits<CreateChatRoomDialogEmit>()
 
 const {
   chatAvatarUploadValue,

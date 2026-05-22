@@ -1,11 +1,11 @@
-import type { IEventMarkRoomAsRead } from 'global-shared'
+import type { EventMarkRoomAsRead } from 'global-shared'
 import { computed, ref, type Ref } from 'vue'
 
 import { useSocketAction } from 'src/shared/api'
 
-import type { IChatRoomNavigationItem } from '../config/types'
+import type { ChatRoomNavigationItem } from '../config/types'
 
-export const useChatRoomMarkAsRead = (item: Ref<IChatRoomNavigationItem>) => {
+export const useChatRoomMarkAsRead = (item: Ref<ChatRoomNavigationItem>) => {
   const { emitSocketAction } = useSocketAction()
   const isMarkingChatRoomAsRead = ref(false)
   const canMarkChatRoomAsRead = computed(() => item.value.unreadMessagesQuantity > 0 && !isMarkingChatRoomAsRead.value)
@@ -13,10 +13,10 @@ export const useChatRoomMarkAsRead = (item: Ref<IChatRoomNavigationItem>) => {
   const markChatRoomAsRead = () => {
     if (!canMarkChatRoomAsRead.value) return
 
-    const payload: IEventMarkRoomAsRead = { roomId: item.value.id }
+    const payload: EventMarkRoomAsRead = { roomId: item.value.id }
 
     isMarkingChatRoomAsRead.value = true
-    void emitSocketAction<IEventMarkRoomAsRead>('mark-room-as-read', payload, {
+    void emitSocketAction<EventMarkRoomAsRead>('mark-room-as-read', payload, {
       onSettled: () => {
         isMarkingChatRoomAsRead.value = false
       }

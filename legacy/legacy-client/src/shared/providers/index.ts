@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
-import { IAdditionalServiceContext, IRefsContext } from './types'
+import { AdditionalServiceContext, RefsContext } from './types'
 
-export const RefsContext = createContext<IRefsContext>({} as IRefsContext)
-export const AdditionalServiceContext = createContext<IAdditionalServiceContext>({} as IAdditionalServiceContext)
-export type { IRefsContext, ICallService, IAdditionalServiceContext } from './types'
+export const RefsContext = createContext<RefsContext>({} as RefsContext)
+export const AdditionalServiceContext = createContext<AdditionalServiceContext>({} as AdditionalServiceContext)
+export type { RefsContext, CallService, AdditionalServiceContext } from './types'

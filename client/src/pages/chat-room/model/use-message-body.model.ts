@@ -2,10 +2,10 @@ import { computed, toRef } from 'vue'
 
 import { useLocalizedDateTime } from 'src/entities/setting'
 
-import type { IMessageBodyProps } from '../config/types'
+import type { MessageBodyProps } from '../config/types'
 import { resolveMessageImageSrc } from '../lib/resolve-message-image-src'
 
-export const useMessageBody = (props: IMessageBodyProps) => {
+export const useMessageBody = (props: MessageBodyProps) => {
   const message = toRef(props, 'message')
   const { formatTime } = useLocalizedDateTime()
 

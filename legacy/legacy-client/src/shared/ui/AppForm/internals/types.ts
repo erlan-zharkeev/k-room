@@ -1,22 +1,22 @@
 import { ChangeEvent } from 'react'
 
-import { UnknownCallbackType } from 'common'
+import { UnknownCallback } from 'common'
 
-import { FileLoaderValueType } from 'src/shared/config'
+import { FileLoaderValue } from 'src/shared/config'
 import {
-  ISwitchValidateRule,
-  ITextInputValidateRule,
-  IFileInputValidateRule,
-  IElementPickerValidateRule
+  SwitchValidateRule,
+  TextInputValidateRule,
+  FileInputValidateRule,
+  ElementPickerValidateRule
 } from 'src/shared/lib'
-import { IAppSwitchProps } from 'src/shared/ui/AppSwitch/internals/types'
-import { IAppInputProps } from 'src/shared/ui/AppInput/internals/types'
-import { IAppFileLoaderProps } from 'src/shared/ui/AppFileLoader/internals/types'
-import { IAppElementPickerProps } from 'src/shared/ui/AppElementPicker/internals/types'
+import { AppSwitchProps } from 'src/shared/ui/AppSwitch/internals/types'
+import { AppInputProps } from 'src/shared/ui/AppInput/internals/types'
+import { AppFileLoaderProps } from 'src/shared/ui/AppFileLoader/internals/types'
+import { AppElementPickerProps } from 'src/shared/ui/AppElementPicker/internals/types'
 
-export type AppFormFieldValueType = string | boolean | FileLoaderValueType | string[]
+export type AppFormFieldValue = string | boolean | FileLoaderValue | string[]
 
-type BaseAppFormFieldType<T extends string, V = AppFormFieldValueType> = {
+type BaseAppFormField<T extends string, V = AppFormFieldValue> = {
   inputType: T
   label?: string
   hide?: boolean
@@ -24,49 +24,45 @@ type BaseAppFormFieldType<T extends string, V = AppFormFieldValueType> = {
   value?: V
 } & { [key: string]: unknown }
 
-export type AppFormSwitchFieldType = BaseAppFormFieldType<'switch', boolean> &
-  Omit<IAppSwitchProps, 'name'> & {
-    rule?: ISwitchValidateRule
+export type AppFormSwitchField = BaseAppFormField<'switch', boolean> &
+  Omit<AppSwitchProps, 'name'> & {
+    rule?: SwitchValidateRule
     children?: React.ReactNode
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void
   }
 
-export type AppFormTextInputFieldType = BaseAppFormFieldType<'text', string> &
-  Omit<IAppInputProps, 'name'> & {
-    rule?: ITextInputValidateRule
+export type AppFormTextInputField = BaseAppFormField<'text', string> &
+  Omit<AppInputProps, 'name'> & {
+    rule?: TextInputValidateRule
     onChange?: (event: ChangeEvent<HTMLInputElement>) => Promise<void> | void
   }
 
-export type AppFormFileInputFieldType = BaseAppFormFieldType<'file', FileLoaderValueType> &
-  Omit<IAppFileLoaderProps, 'name' | 'onChange'> & {
-    rule?: IFileInputValidateRule
-    onChange?: (fieldData: { name: string; value: FileLoaderValueType }) => void
+export type AppFormFileInputField = BaseAppFormField<'file', FileLoaderValue> &
+  Omit<AppFileLoaderProps, 'name' | 'onChange'> & {
+    rule?: FileInputValidateRule
+    onChange?: (fieldData: { name: string; value: FileLoaderValue }) => void
   }
 
-export type AppFormPickElementFieldType = BaseAppFormFieldType<'element-picker'> &
-  Omit<IAppElementPickerProps, 'name' | 'setPickedElementIds'> & {
-    rule?: IElementPickerValidateRule
+export type AppFormPickElementField = BaseAppFormField<'element-picker'> &
+  Omit<AppElementPickerProps, 'name' | 'setPickedElementIds'> & {
+    rule?: ElementPickerValidateRule
     onChange?: (fieldData: { name: string; value: string[] }) => void
   }
 
-export type AppFormFieldType =
-  | AppFormTextInputFieldType
-  | AppFormSwitchFieldType
-  | AppFormFileInputFieldType
-  | AppFormPickElementFieldType
+export type AppFormField = AppFormTextInputField | AppFormSwitchField | AppFormFileInputField | AppFormPickElementField
 
-export type AppFormDataType = Record<string, AppFormFieldValueType>
+export type AppFormData = Record<string, AppFormFieldValue>
 
-export interface IAppFormProps<TFormData extends object = AppFormDataType> {
+export interface AppFormProps<TFormData extends object = AppFormData> {
   title?: string
   disabled?: boolean
   onChange?: (formData: TFormData) => void
   onSubmit?: (formData: TFormData) => void
-  fields: Record<string, AppFormFieldType>
+  fields: Record<string, AppFormField>
   submitBtnText?: string
   actionProcessing?: boolean
   prefixSlot?: React.ReactNode
   children?: React.ReactNode
   disabledActionBtn?: boolean
-  onBlur?: UnknownCallbackType
+  onBlur?: UnknownCallback
 }
