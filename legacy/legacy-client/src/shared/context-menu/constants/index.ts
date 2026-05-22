@@ -1,2 +1,0 @@
-export const CONTEXT_MENU_WIDTH = 150
-export const CONTEXT_MENU_HEIGHT = 150

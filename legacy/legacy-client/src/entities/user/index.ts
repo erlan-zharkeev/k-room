@@ -1,5 +1,0 @@
-export type { UserProfileProps } from './ui/UserProfile/types'
-export { UserProfile } from './ui/UserProfile/UserProfile'
-export { useUser } from './model/use-user'
-export { useActivateUserSession } from './model/use-activate-user-session'
-export { INITIAL_USER_STORE } from './constants'

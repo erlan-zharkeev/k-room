@@ -1,6 +1,0 @@
-export { ChatRoomModel } from './chat-room.model'
-export { createChatRoomController } from './create-chat-room/controller'
-export { checkContactsExistence } from './shared/lib/check-contacts-existence'
-export { emitNewRoomToUsers } from './shared/lib/emit-new-room-to-users'
-export { setRoomToUsers } from './shared/lib/set-room-to-users'
-export { transformRoomForUser } from './shared/lib/transform-room-for-user'

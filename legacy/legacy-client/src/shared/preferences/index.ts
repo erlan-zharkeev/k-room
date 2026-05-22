@@ -1,7 +1,0 @@
-export { useSettings } from './hooks/use-settings'
-export { useI18n } from './hooks/use-i18n'
-export { useContentTabSelect } from './hooks/use-content-tab-select'
-export { SettingsButton } from './components/SettingsButton/SettingsButton'
-export { FULL_CONTENT_ELEMENTS, DEFAULT_SETTINGS } from './internals/constants'
-export { normalizeAppLanguage, getBrowserLanguage } from './helpers/language'
-export { setThemeToDom } from './helpers/theme'

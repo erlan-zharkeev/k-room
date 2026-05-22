@@ -1,9 +1,0 @@
-@use '~/global/index' as *;
-
-.password-recovery {
-  @include absolute-center-form;
-
-  .password-recovery__title {
-    margin-bottom: 8px;
-  }
-}
