@@ -100,12 +100,11 @@ export const dexieCollectionStore = <T extends IDbCollectionItem>(table: Table<T
   const useIndexedList = (defaults: Item[] = []) => {
     const items = use(defaults)
     const itemMap = computed(() => new Map(items.value.map((item) => [item.id, item])))
-    const getByIds = (ids: readonly ItemId[]) => ids.flatMap((id) => itemMap.value.get(id) ?? [])
     const hasById = (id: ItemId) => itemMap.value.has(id)
 
     return {
       items,
-      getByIds,
+      itemMap,
       hasById
     }
   }

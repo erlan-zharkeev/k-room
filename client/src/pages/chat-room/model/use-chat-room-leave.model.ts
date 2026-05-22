@@ -2,45 +2,47 @@ import type { IEventLeaveChatRoom } from 'global-shared'
 import { computed, ref, toRef, watch, type Ref } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
 import { useSocketAction } from 'src/shared/api'
 import type { IAppUserPickerItem } from 'src/shared/ui'
 
 import type { IChatRoomLeaveDialogProps } from '../config/types'
 
 import { useChatRoomPermissions } from './use-chat-room-permissions.model'
+import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
 export const useChatRoomLeave = (props: IChatRoomLeaveDialogProps, isLeaveChatRoomDialogOpen: Ref<boolean>) => {
   const item = toRef(props, 'item')
   const { getById } = useChatRoom()
-  const { getByIds } = useContact()
+  const { getUserById } = useChatRoomUserLookup()
   const { emitSocketAction } = useSocketAction()
   const selectedNewAdminIds = ref<string[]>([])
   const isLeavingChatRoom = ref(false)
   const { canShowLeaveChatRoom, isCurrentUserChatRoomAdmin } = useChatRoomPermissions(item)
   const newAdminItems = computed(() => {
     const room = getById(item.value.id)
-    const userDataMap = new Map(getByIds(room?.users ?? []).map((userData) => [userData.id, userData]))
+    const roomUserIds = room?.users ?? []
 
-    return (room?.users ?? []).reduce<IAppUserPickerItem[]>((items, userId) => {
+    return roomUserIds.reduce<IAppUserPickerItem[]>((items, userId) => {
       if (userId === item.value.adminId) return items
 
-      const userData = userDataMap.get(userId)
+      const userData = getUserById(userId)
+
+      if (!userData) return items
 
       items.push({
         id: userId,
-        nickname: userData?.nickname ?? userId
+        nickname: userData.nickname
       })
 
       return items
     }, [])
   })
-  const canLeaveChatRoom = computed(
-    () =>
-      canShowLeaveChatRoom.value &&
-      !isLeavingChatRoom.value &&
-      (!isCurrentUserChatRoomAdmin.value || selectedNewAdminIds.value.length === 1)
+
+  const isReadyToLeaveChatRoom = computed(() => canShowLeaveChatRoom.value && !isLeavingChatRoom.value)
+  const canCurrentAdminLeaveChatRoom = computed(
+    () => !isCurrentUserChatRoomAdmin.value || selectedNewAdminIds.value.length === 1
   )
+  const canLeaveChatRoom = computed(() => isReadyToLeaveChatRoom.value && canCurrentAdminLeaveChatRoom.value)
 
   const closeLeaveChatRoomDialog = () => {
     isLeaveChatRoomDialogOpen.value = false
