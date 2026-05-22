@@ -42,12 +42,15 @@ export const registerUserSocketHandlers = (socket: SocketInstance, presenceServi
       async () => {
         const { userId } = socket.data
         const data = await UserModel.findById(userId).lean()
-        const contacts = data?.personal.contacts
-        const contactResultData: Contact[] = contacts
-          ? await transformUserToFrontendContact(contacts, presenceService)
-          : []
-        const roomIds = data?.personal.chatRooms ?? []
-        const pinnedChatRoomIds = data?.personal.pinnedChatRoomIds ?? []
+
+        if (!data) {
+          return
+        }
+
+        const contacts = data.personal.contacts
+        const contactResultData: Contact[] = await transformUserToFrontendContact(contacts, presenceService)
+        const roomIds = data.personal.chatRooms
+        const pinnedChatRoomIds = data.personal.pinnedChatRoomIds
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
         const knownUserIds = [...new Set(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))]
         const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)

@@ -20,9 +20,12 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
   const { canShowLeaveChatRoom, isCurrentUserChatRoomAdmin } = useChatRoomPermissions(item)
   const newAdminItems = computed(() => {
     const room = getById(item.value.id)
-    const roomUserIds = room?.users ?? []
 
-    return roomUserIds.reduce<AppUserPickerItem[]>((items, userId) => {
+    if (!room) {
+      return []
+    }
+
+    return room.users.reduce<AppUserPickerItem[]>((items, userId) => {
       if (userId === item.value.adminId) return items
 
       const userData = getUserById(userId)

@@ -8,9 +8,16 @@ import type {
   Interaction,
   SocketActions
 } from 'global-shared'
-import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS, normalizeNickname } from 'global-shared'
+import {
+  CONTACT_INTERACTION_UPDATE_FAILED_REASONS,
+  CONTACT_SEARCH_QUERY_MAX_LENGTH,
+  CONTACT_SEARCH_RESULT_LIMIT,
+  normalizeNickname,
+  REQ_STATUS
+} from 'global-shared'
 import { Types } from 'mongoose'
 
+import { AppError } from 'src/shared/lib/app-error'
 import { getIO } from 'src/shared/lib/io'
 
 import type { PresenceService } from '../presence/presence.service'
@@ -18,7 +25,8 @@ import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 import { transformUserToContact } from '../user/user.service'
 
-import { SEARCH_CONTACT_RESULT_LIMIT } from './constants'
+import { CONTACTS_I18N } from './contacts.i18n'
+import { assertContactLimit } from './contacts.utils'
 
 export const emitSearchedContacts = (socketId: string, payload: EventGetSearchedContact) => {
   getIO().to(socketId).emit<SocketActions>('get-searched-contact', payload)
@@ -35,6 +43,10 @@ export const searchContacts = async (
   const normalizedValue = value.trim()
   let needle = normalizedValue
   const safeOffset = Math.max(0, offset)
+
+  if (normalizedValue.length > CONTACT_SEARCH_QUERY_MAX_LENGTH) {
+    throw new AppError(REQ_STATUS.badRequest, CONTACTS_I18N.searchQueryTooLong)
+  }
 
   if (!needle) {
     validSearch = false
@@ -65,7 +77,12 @@ export const searchContacts = async (
       UserModel.find(searchFilter).sort({ 'public.nickname': 1 }).lean(),
       UserModel.findById(userId, { 'personal.contacts': 1 }).lean()
     ])
-    const contactMap = currentUser?.personal?.contacts ?? {}
+
+    if (!currentUser) {
+      throw new AppError(REQ_STATUS.notFound, CONTACTS_I18N.searchContactFailed)
+    }
+
+    const contactMap = currentUser.personal.contacts
 
     const onlineMap = await presenceService.onlineMapByUserIds(users.map((user) => user._id))
 
@@ -96,8 +113,8 @@ export const searchContacts = async (
       })
   }
 
-  const contacts = searchedUsers.slice(safeOffset, safeOffset + SEARCH_CONTACT_RESULT_LIMIT)
-  const hasMore = searchedUsers.length > safeOffset + SEARCH_CONTACT_RESULT_LIMIT
+  const contacts = searchedUsers.slice(safeOffset, safeOffset + CONTACT_SEARCH_RESULT_LIMIT)
+  const hasMore = searchedUsers.length > safeOffset + CONTACT_SEARCH_RESULT_LIMIT
 
   return {
     value: normalizedValue,
@@ -111,25 +128,28 @@ export const searchContacts = async (
 
 export const saveContact = async (userId: string, interlocutorId: string, presenceService: PresenceService) => {
   const [selfContact, contactCandidate] = await Promise.all([
-    UserModel.findOneAndUpdate(
-      { _id: userId },
-      {
-        $set: {
-          [`personal.contacts.${interlocutorId}`]: {
-            id: interlocutorId,
-            interaction: 'default',
-            updatedAt: Date.now()
-          }
-        }
-      },
-      { new: true }
-    ),
+    UserModel.findById(userId, { 'personal.contacts': 1 }).lean(),
     UserModel.findById(interlocutorId).lean()
   ])
 
   if (!selfContact || !contactCandidate) {
     return null
   }
+
+  assertContactLimit(selfContact.personal.contacts, interlocutorId)
+
+  await UserModel.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        [`personal.contacts.${interlocutorId}`]: {
+          id: interlocutorId,
+          interaction: 'default',
+          updatedAt: Date.now()
+        }
+      }
+    }
+  )
 
   return {
     contactData: transformUserToContact(
@@ -140,9 +160,17 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
   } satisfies EventContactAddSuccess
 }
 
-export const createContactInteraction = async (docId: string, contactId: string, interaction: Interaction) => {
+export const createContactInteraction = async (userId: string, contactId: string, interaction: Interaction) => {
+  const user = await UserModel.findById(userId, { 'personal.contacts': 1 }).lean()
+
+  if (!user) {
+    return null
+  }
+
+  assertContactLimit(user.personal.contacts, contactId)
+
   return UserModel.findOneAndUpdate(
-    { _id: docId },
+    { _id: userId },
     {
       $set: {
         [`personal.contacts.${contactId}`]: {
@@ -156,9 +184,9 @@ export const createContactInteraction = async (docId: string, contactId: string,
   )
 }
 
-export const setContactInteraction = async (docId: string, contactId: string, interaction: Interaction) => {
+export const setContactInteraction = async (userId: string, contactId: string, interaction: Interaction) => {
   return UserModel.findOneAndUpdate(
-    { _id: docId, [`personal.contacts.${contactId}`]: { $exists: true } },
+    { _id: userId, [`personal.contacts.${contactId}`]: { $exists: true } },
     {
       $set: {
         [`personal.contacts.${contactId}.interaction`]: interaction,
@@ -169,10 +197,14 @@ export const setContactInteraction = async (docId: string, contactId: string, in
   )
 }
 
-export const getContactInteraction = async (docId: string, contactId: string) => {
-  const user = await UserModel.findOne({ _id: docId }, { [`personal.contacts.${contactId}.interaction`]: 1 }).lean()
+export const getContactInteraction = async (userId: string, contactId: string) => {
+  const user = await UserModel.findOne({ _id: userId }, { [`personal.contacts.${contactId}.interaction`]: 1 }).lean()
 
-  return user?.personal.contacts?.[contactId]?.interaction
+  if (!user) {
+    return
+  }
+
+  return user.personal.contacts[contactId]?.interaction
 }
 
 export const emitContactInteractionUpdated = (userId: string, contactId: string, interaction: Interaction) => {
@@ -195,11 +227,17 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
     { [`personal.contacts.${userId}.interaction`]: 1 }
   )
 
-  if (!deletingContact?.personal.contacts?.[userId]?.interaction) {
+  if (!deletingContact) {
     return
   }
 
-  const deletingUserInteractionType = deletingContact.personal.contacts[userId].interaction
+  const deletingUserContact = deletingContact.personal.contacts[userId]
+
+  if (!deletingUserContact) {
+    return
+  }
+
+  const deletingUserInteractionType = deletingUserContact.interaction
 
   if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invited') {
     await deleteContactById(deletingUserId, userId, true)

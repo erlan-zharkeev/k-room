@@ -49,8 +49,19 @@ export const useChatRoomSync = () => {
 
   const removeChatRoom = async ({ roomId }: EventChatRoomDeleted | EventChatRoomLeft) => {
     const room = getById(roomId)
-    const messageIds = room?.messages ?? []
-    const avatarId = room?.avatarId
+
+    if (!room) {
+      await remove(roomId)
+
+      if (route.params.chatRoomId === roomId) {
+        await router.push(APP_PAGE_ROUTES.chatRooms)
+      }
+
+      return
+    }
+
+    const messageIds = room.messages
+    const avatarId = room.avatarId
 
     await Promise.all([
       remove(roomId),
