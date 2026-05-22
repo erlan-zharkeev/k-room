@@ -215,6 +215,7 @@ export const transformRoomForUser = async ({
   return {
     id: roomId,
     adminId: normalizedRoom.adminId,
+    createdAt: normalizedRoom.createdAt,
     chatName: normalizedRoom.chatName,
     chatKind,
     avatarId,

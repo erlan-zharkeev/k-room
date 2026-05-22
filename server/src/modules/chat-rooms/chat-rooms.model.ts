@@ -11,6 +11,11 @@ const chatRoomSchema = new Schema<ChatRoomSchemaType>({
     type: String,
     required: true
   },
+  createdAt: {
+    type: Number,
+    required: true,
+    default: Date.now
+  },
   chatKind: {
     type: String,
     enum: Object.values(CHAT_KIND),

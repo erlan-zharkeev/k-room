@@ -49,6 +49,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
         const roomData: Omit<ChatRoomSchemaType, 'id'> = {
           users,
           adminId: userId,
+          createdAt: Date.now(),
           chatKind: contactIds.length > 1 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
           messages: []
         }

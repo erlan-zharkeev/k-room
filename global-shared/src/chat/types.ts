@@ -5,6 +5,7 @@ export type ChatKindType = (typeof CHAT_KIND)[keyof typeof CHAT_KIND]
 export interface ChatRoomType {
   id: string
   adminId: string
+  createdAt: number
   chatName?: string
   chatKind: ChatKindType
   avatarId: string
