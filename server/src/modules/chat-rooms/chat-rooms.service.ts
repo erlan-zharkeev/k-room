@@ -1,5 +1,7 @@
 import {
   CHAT_KIND,
+  CHAT_ROOM_GROUP_MEMBER_LIMIT,
+  CHAT_ROOM_NAME_MAX_LENGTH,
   type ChatRoomSchema,
   type EventChatRoomDeleted,
   type EventChatRoomLeft,
@@ -12,6 +14,8 @@ import {
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
+  PINNED_CHAT_ROOM_LIMIT,
+  USER_CHAT_ROOM_LIMIT,
   REQ_STATUS
 } from 'global-shared'
 
@@ -38,13 +42,35 @@ export const checkContactsExistence = async (selfId: string, contactIds: string[
     return false
   }
 
+  const contactById = new Map(contacts.map((contact) => [String(contact._id), contact]))
+
   return contactIds.every((contactId) => {
-    const selfContact = self.personal.contacts?.[contactId]
-    const user = contacts.find((contact) => String(contact._id) === contactId)
-    const userContact = user?.personal.contacts?.[selfId]
+    const selfContact = self.personal.contacts[contactId]
+    const user = contactById.get(contactId)
+
+    if (!user) return false
+
+    const userContact = user.personal.contacts[selfId]
 
     return selfContact?.interaction === 'invite-accepted' && userContact?.interaction === 'invite-accepted'
   })
+}
+
+export const validateCreateChatRoomLimits = async (userIds: string[], chatName?: string) => {
+  const users = await UserModel.find({ _id: { $in: userIds } }, { 'personal.chatRooms': 1 }).lean()
+  const isLimitReached = users.some((user) => user.personal.chatRooms.length >= USER_CHAT_ROOM_LIMIT)
+
+  if (isLimitReached) {
+    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomLimitReached)
+  }
+
+  if (userIds.length > CHAT_ROOM_GROUP_MEMBER_LIMIT) {
+    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomMemberLimitReached)
+  }
+
+  if (chatName && chatName.length > CHAT_ROOM_NAME_MAX_LENGTH) {
+    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomNameTooLong)
+  }
 }
 
 export const setRoomToUsers = async (roomId: string, userIds: string[]) => {
@@ -125,7 +151,14 @@ export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }:
     return
   }
 
-  const pinnedChatRoomIds = resolvePinnedChatRoomIds(user.personal.pinnedChatRoomIds ?? [], roomId, isPinned)
+  const currentPinnedChatRoomIds = user.personal.pinnedChatRoomIds
+  const isAlreadyPinned = currentPinnedChatRoomIds.includes(roomId)
+
+  if (isPinned && !isAlreadyPinned && currentPinnedChatRoomIds.length >= PINNED_CHAT_ROOM_LIMIT) {
+    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.pinnedChatRoomLimitReached)
+  }
+
+  const pinnedChatRoomIds = resolvePinnedChatRoomIds(currentPinnedChatRoomIds, roomId, isPinned)
 
   await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': pinnedChatRoomIds } })
 
@@ -142,13 +175,17 @@ export const updatePinnedChatRoomOrder = async (
   userId: string,
   { pinnedChatRoomIds }: EventUpdatePinnedChatRoomOrder
 ) => {
+  if (pinnedChatRoomIds.length > PINNED_CHAT_ROOM_LIMIT) {
+    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.pinnedChatRoomLimitReached)
+  }
+
   const user = await UserModel.findById(userId, { 'personal.pinnedChatRoomIds': 1 }).lean()
 
   if (!user) {
     return
   }
 
-  const nextPinnedChatRoomIds = resolvePinnedChatRoomOrder(user.personal.pinnedChatRoomIds ?? [], pinnedChatRoomIds)
+  const nextPinnedChatRoomIds = resolvePinnedChatRoomOrder(user.personal.pinnedChatRoomIds, pinnedChatRoomIds)
 
   await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': nextPinnedChatRoomIds } })
 
@@ -172,7 +209,7 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
   }
 
   const userIds = room.users.map(String)
-  const messageIds = (room.messages ?? []).map(String)
+  const messageIds = room.messages.map(String)
 
   await Promise.all([
     ChatRoomModel.deleteOne({ _id: roomId }),
@@ -198,10 +235,10 @@ export const transformRoomForUser = async ({
 }: TransformRoomForUserParams): Promise<EventGetRoom> => {
   const normalizedRoom = room as ChatRoomSchemaWithObjectId
   const roomId = String(normalizedRoom._id)
-  const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
+  const users = normalizedRoom.users.map((id) => String(id)).filter((id) => id !== userId)
   const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
   const avatarId = `${MEDIA_AVATAR_FILENAME_PREFIX}${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
-  const messages = normalizedRoom.messages ?? []
+  const messages = normalizedRoom.messages
   const lastMessageId = messages[messages.length - 1] ?? null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([
@@ -242,7 +279,7 @@ export const emitRoomDataToUsers = async (
       const transformedRoom = await transformRoomForUser({
         userId,
         room,
-        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
+        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds
       })
 
       await emitKnownUsersToUser(userId, room.users, presenceService)
@@ -327,7 +364,7 @@ export const emitNewRoomToUsers = async (userIds: string[], room: ChatRoomSchema
       const transformedRoom = await transformRoomForUser({
         userId,
         room,
-        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
+        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds
       })
 
       await emitKnownUsersToUser(userId, room.users, presenceService)

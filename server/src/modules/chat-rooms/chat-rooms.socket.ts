@@ -29,7 +29,8 @@ import {
   leaveChatRoom,
   setRoomToUsers,
   updatePinnedChatRoom,
-  updatePinnedChatRoomOrder
+  updatePinnedChatRoomOrder,
+  validateCreateChatRoomLimits
 } from './chat-rooms.service'
 
 export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presenceService: PresenceService) => {
@@ -39,13 +40,15 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presence
       socket,
       async ({ contactIds, chatName, avatarFile }) => {
         const { userId } = socket.data
+        const users = [userId, ...contactIds]
+        await validateCreateChatRoomLimits(users, chatName)
+
         const usersAccepted = await checkContactsExistence(userId, contactIds)
 
         if (!usersAccepted) {
           return
         }
 
-        const users = [userId, ...contactIds]
         const roomData: Omit<ChatRoomSchema, 'id'> = {
           users,
           adminId: userId,

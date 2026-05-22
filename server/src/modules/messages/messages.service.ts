@@ -8,16 +8,23 @@ import {
   type ImageObject,
   type Message,
   type MessageStatus,
-  MEDIA_IMAGE_FILENAME_PREFIX
+  MESSAGE_BODY_MAX_LENGTH,
+  MESSAGE_IMAGE_LIMIT,
+  MESSAGE_LOAD_LIMIT_MAX,
+  MEDIA_IMAGE_FILENAME_PREFIX,
+  REQ_STATUS
 } from 'global-shared'
 import { isString } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
+
+import { AppError } from 'src/shared/lib/app-error'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { uploadBufferToBucket } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
+import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
 import type { SendMessageParams } from './messages.types'
 
@@ -45,6 +52,10 @@ export const loadRoomMessages = async (
   userId: string,
   payload: EventLoadRoomMessages
 ): Promise<EventRoomMessagesLoaded | null> => {
+  if (payload.limit > MESSAGE_LOAD_LIMIT_MAX) {
+    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageLoadLimitExceeded)
+  }
+
   const room = await ChatRoomModel.findOne({ _id: payload.roomId, users: userId }).select('messages').lean()
 
   if (!room) {
@@ -114,7 +125,11 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
 export const markRoomAsRead = async (roomId: string, userId: string) => {
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
 
-  if (!room?.messages.length) {
+  if (!room) {
+    return
+  }
+
+  if (!room.messages.length) {
     return
   }
 
@@ -164,6 +179,14 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
 }
 
 export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
+  if (message.body.length > MESSAGE_BODY_MAX_LENGTH) {
+    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageBodyTooLong)
+  }
+
+  if ((message.images ?? []).length > MESSAGE_IMAGE_LIMIT) {
+    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageImageLimitReached)
+  }
+
   const filenames: string[] = []
 
   await Promise.all(
@@ -190,8 +213,12 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
   }).save()
   const room = await ChatRoomModel.findOneAndUpdate({ _id: roomId }, { $push: { messages: newDbMessage.id } })
 
+  if (!room) {
+    return
+  }
+
   await Promise.all(
-    (room?.users ?? []).map(async (userId) => {
+    room.users.map(async (userId) => {
       await MessageModel.updateOne(
         { _id: newDbMessage.id },
         { $push: { usersMetaData: { id: userId, status: 'delivered' } } }
