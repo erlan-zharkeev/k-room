@@ -85,7 +85,7 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : undefined
   }
 
-  private async requireCaptcha(action: SecurityActionType, captchaToken: string | undefined, ip: string) {
+  private async requireCaptcha(action: SecurityActionType, ip: string, captchaToken?: string) {
     if (!captchaToken) {
       throw new AppError(
         REQ_STATUS.forbidden,
@@ -119,7 +119,7 @@ export class SecurityService {
     )
   }
 
-  async assertLoginAllowed(captchaToken: string | undefined, ip: string, login: string) {
+  async assertLoginAllowed(ip: string, login: string, captchaToken?: string) {
     const action = SECURITY_ACTION.login
     const accountKey = this.buildKey(action, 'account', login)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -133,7 +133,7 @@ export class SecurityService {
     }
 
     if (accountFailures >= LOGIN_CAPTCHA_ACCOUNT_THRESHOLD || ipFailures >= LOGIN_CAPTCHA_IP_THRESHOLD) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 
@@ -150,7 +150,7 @@ export class SecurityService {
     await this.redisService.remove(this.buildKey(SECURITY_ACTION.login, 'account', login))
   }
 
-  async assertRegistrationAllowed(captchaToken: string | undefined, ip: string) {
+  async assertRegistrationAllowed(ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.registration
     const ipKey = this.buildKey(action, 'ip', ip)
     const ipAttempts = await this.redisService.readNumber(ipKey)
@@ -160,7 +160,7 @@ export class SecurityService {
     }
 
     if (ipAttempts >= REGISTRATION_CAPTCHA_IP_THRESHOLD) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 
@@ -175,7 +175,7 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : null
   }
 
-  async assertSendConfirmationLinkAllowed(captchaToken: string | undefined, email: string, ip: string) {
+  async assertSendConfirmationLinkAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.sendConfirmationLink
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -195,7 +195,7 @@ export class SecurityService {
       emailAttempts >= SEND_CONFIRMATION_LINK_CAPTCHA_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_CONFIRMATION_LINK_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 
@@ -209,7 +209,7 @@ export class SecurityService {
     ])
   }
 
-  async assertSendPasswordRecoveryAllowed(captchaToken: string | undefined, email: string, ip: string) {
+  async assertSendPasswordRecoveryAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.sendPasswordRecoveryCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -229,7 +229,7 @@ export class SecurityService {
       emailAttempts >= SEND_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 
@@ -249,7 +249,7 @@ export class SecurityService {
     return ttlMs > 0 ? Date.now() + ttlMs : null
   }
 
-  async assertSendChangeEmailCodeAllowed(captchaToken: string | undefined, email: string, ip: string) {
+  async assertSendChangeEmailCodeAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.sendChangeEmailCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -269,7 +269,7 @@ export class SecurityService {
       emailAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
       ipAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 
@@ -283,7 +283,7 @@ export class SecurityService {
     ])
   }
 
-  async assertValidateChangeEmailCodeAllowed(captchaToken: string | undefined, email: string, ip: string) {
+  async assertValidateChangeEmailCodeAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.validateChangeEmailCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -303,7 +303,7 @@ export class SecurityService {
       emailFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
       ipFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 
@@ -337,7 +337,7 @@ export class SecurityService {
     await this.redisService.remove(this.buildChangeEmailCodeKey(userId))
   }
 
-  async assertValidatePasswordRecoveryCodeAllowed(captchaToken: string | undefined, email: string, ip: string) {
+  async assertValidatePasswordRecoveryCodeAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.validatePasswordRecoveryCode
     const emailKey = this.buildKey(action, 'email', email)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -357,7 +357,7 @@ export class SecurityService {
       emailFailures >= VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD ||
       ipFailures >= VALIDATE_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
     ) {
-      await this.requireCaptcha(action, captchaToken, ip)
+      await this.requireCaptcha(action, ip, captchaToken)
     }
   }
 

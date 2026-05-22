@@ -25,15 +25,15 @@ export type MediaUploadType =
   | 'svg-xml'
   | 'webp'
 
-export interface IMediaValidationOptions {
+export interface MediaValidationOptionsType {
   supportedKindMediaType: MediaKindType
   maxMb: number
 }
 
-export interface IImageObject {
+export interface ImageObjectType {
   src: string
   name: string
   fileBuffer?: ArrayBuffer
 }
 
-export type MediaFileValueType = IImageObject
+export type MediaFileValueType = ImageObjectType

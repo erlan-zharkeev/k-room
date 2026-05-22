@@ -2,7 +2,7 @@ import {
   type CallFlowType,
   type EventCallUpdatedType,
   type EventCallsUpdatedType,
-  type ICall,
+  type CallType,
   MEDIA_AVATAR_FILENAME_PREFIX
 } from 'global-shared'
 
@@ -19,7 +19,7 @@ const resolveFlowType = (answered: boolean, isIncoming: boolean): CallFlowType =
   return isIncoming ? 'missed' : 'not-answered'
 }
 
-export const transformCallForUser = async (userId: string, callId: string): Promise<ICall | null> => {
+export const transformCallForUser = async (userId: string, callId: string): Promise<CallType | null> => {
   const call = await CallModel.findById(callId).lean()
 
   if (!call) {

@@ -1,4 +1,4 @@
-import { MESSAGE_STATUS, type IMessageSchema } from 'global-shared'
+import { MESSAGE_STATUS, type MessageSchemaType } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 const reactionSchema = new Schema(
@@ -18,7 +18,7 @@ const messageMetaDataSchema = new Schema(
   { _id: false }
 )
 
-const messageSchema = new Schema<IMessageSchema>({
+const messageSchema = new Schema<MessageSchemaType>({
   _id: {
     type: String,
     required: true
@@ -64,4 +64,4 @@ const messageSchema = new Schema<IMessageSchema>({
   }
 })
 
-export const MessageModel = model<IMessageSchema>('IMessage', messageSchema, 'message')
+export const MessageModel = model<MessageSchemaType>('IMessage', messageSchema, 'message')

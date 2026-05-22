@@ -1,12 +1,12 @@
 import {
-  type IDBMessage,
+  type MessageDocumentType,
   type IEventLoadRoomMessages,
   type IEventMessageDelivered,
   type IEventMessagesStatusUpdated,
   type IEventRoomMessagesLoaded,
   type IEventUpdateMessageStatus,
-  type IImageObject,
-  type IMessage,
+  type ImageObjectType,
+  type MessageType,
   type MessageStatusType,
   MEDIA_IMAGE_FILENAME_PREFIX
 } from 'global-shared'
@@ -21,11 +21,11 @@ import { UserModel } from '../user/user.model'
 import { MessageModel } from './messages.model'
 import type { ISendMessageParams } from './messages.types'
 
-export const transformMessageForUser = (message: IDBMessage, userId: string): IMessage => {
+export const transformMessageForUser = (message: MessageDocumentType, userId: string): MessageType => {
   const readBySomeone = message.usersMetaData.some((data) => data.status === 'read')
   const selfStatus = message.usersMetaData.find((user) => user.id === userId)?.status
   const status = message.authorId === userId ? (readBySomeone ? 'read' : selfStatus) : selfStatus
-  const images = (message.images ?? []) as Array<string | IImageObject>
+  const images = (message.images ?? []) as Array<string | ImageObjectType>
 
   return {
     id: String(message._id),
@@ -59,7 +59,7 @@ export const loadRoomMessages = async (
     .sort({ createdAt: -1 })
     .limit(payload.limit + 1)
     .select('-__v')
-    .lean<IDBMessage[]>()
+    .lean<MessageDocumentType[]>()
   const hasMore = messages.length > payload.limit
   const page = hasMore ? messages.slice(0, payload.limit) : messages
   const normalizedMessages = page.reverse().map((message) => transformMessageForUser(message, userId))

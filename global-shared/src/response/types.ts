@@ -1,14 +1,14 @@
-import type { IFrontendUserData } from '../user/types'
+import type { UserDataType } from '../user/types'
 
 export interface IConfirmEmailResponse {
   email: string
 }
 
-export type LoginResponseType = IFrontendUserData
+export type LoginResponseType = UserDataType
 
-export type SignInWithProviderResponseType = IFrontendUserData
+export type SignInWithProviderResponseType = UserDataType
 
-export type GetUserDataResponseType = IFrontendUserData
+export type GetUserDataResponseType = UserDataType
 
 export interface ISendConfirmationLinkResponse {
   email: string

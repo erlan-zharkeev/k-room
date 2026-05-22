@@ -2,12 +2,12 @@ import { USER_ROLES } from './constants'
 
 export type UserRoleType = (typeof USER_ROLES)[number]
 
-export interface IBaseFrontendUserData {
+export type UserPreviewType = {
   id: string
   nickname: string
 }
 
-export interface IFrontendUserData extends IBaseFrontendUserData {
+export type UserDataType = UserPreviewType & {
   role: UserRoleType
   email: string
 }

@@ -2,7 +2,7 @@ import { setTimeout as delay } from 'timers/promises'
 
 import {
   CHAT_KIND,
-  type IChatRoomSchema,
+  type ChatRoomSchemaType,
   type ICreateRoomAckPayload,
   type IEventCreateRoom,
   type IEventDeleteChatRoom,
@@ -46,7 +46,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstanceType, pres
         }
 
         const users = [userId, ...contactIds]
-        const roomData: Omit<IChatRoomSchema, 'id'> = {
+        const roomData: Omit<ChatRoomSchemaType, 'id'> = {
           users,
           adminId: userId,
           chatKind: contactIds.length > 1 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,

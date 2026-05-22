@@ -1,7 +1,7 @@
 import type { Request } from 'express'
 import { isString } from 'lodash'
 
-const getHeaderIp = (value: string | string[] | undefined) => {
+const getHeaderIp = (value?: string | string[]) => {
   if (Array.isArray(value)) {
     return getHeaderIp(value[0])
   }

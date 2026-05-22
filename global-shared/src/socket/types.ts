@@ -1,11 +1,11 @@
-import type { ICall } from '../calls/types'
-import type { ChatKindType, IChatRoom } from '../chat/types'
-import type { IFrontendContact, IFrontendRoomMemberContact, InteractionType } from '../contact/types'
+import type { CallType } from '../calls/types'
+import type { ChatKindType, ChatRoomType } from '../chat/types'
+import type { ContactType, KnownUserType, InteractionType } from '../contact/types'
 import type { AppLanguageType } from '../language/types'
 import type { MediaFileValueType } from '../media/types'
-import type { IMessage, IReaction, MessageStatusType } from '../message/types'
-import type { IBasicStreamSettings } from '../shared/types'
-import type { IBaseFrontendUserData } from '../user/types'
+import type { MessageType, MessageReactionType, MessageStatusType } from '../message/types'
+import type { BasicStreamSettingsType } from '../shared/types'
+import type { UserPreviewType } from '../user/types'
 
 import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './constants'
 
@@ -33,11 +33,11 @@ export interface IEventMarkCallAsVideo {
 
 export interface IEventMessageDelivered {
   roomId: string
-  message: IMessage
+  message: MessageType
 }
 
-export interface IEventGetRoom extends IChatRoom {
-  previewMessage?: IMessage | null
+export interface IEventGetRoom extends ChatRoomType {
+  previewMessage?: MessageType | null
 }
 
 export type EventGetRoomsType = IEventGetRoom[]
@@ -49,17 +49,17 @@ export interface IEventStatusContact {
   lastSeen?: number
 }
 
-export type EventChangeContactsDataType = IBaseFrontendUserData
+export type EventChangeContactsDataType = UserPreviewType
 
 export interface IEventGetContacts {
-  contacts: IFrontendContact[]
-  roomMembers: IFrontendRoomMemberContact[]
+  contacts: ContactType[]
+  knownUsers: KnownUserType[]
 }
 
 export type EventGetContactsType = IEventGetContacts
-export type EventRoomMemberContactsUpdatedType = IFrontendRoomMemberContact[]
-export type EventCallUpdatedType = ICall
-export type EventCallsUpdatedType = ICall[]
+export type EventKnownUsersUpdatedType = KnownUserType[]
+export type EventCallUpdatedType = CallType
+export type EventCallsUpdatedType = CallType[]
 
 export interface IEventSaveContact {
   interlocutorId: string
@@ -74,7 +74,7 @@ export interface IEventSearchContact {
 export interface IEventGetSearchedContact {
   value: string
   offset: number
-  contacts: IFrontendContact[]
+  contacts: ContactType[]
   total: number
   hasMore: boolean
   nextOffset?: number
@@ -137,7 +137,7 @@ export interface IEventGetContactTypingStatus {
 }
 export interface IEventSendMessage {
   roomId: string
-  message: IMessage
+  message: MessageType
 }
 export interface IEventUpdateMessageStatus {
   roomId: string
@@ -167,7 +167,7 @@ export interface IEventLoadRoomMessages {
 }
 export interface IEventRoomMessagesLoaded {
   roomId: string
-  messages: IMessage[]
+  messages: MessageType[]
   hasMore: boolean
   nextBeforeCreatedAt?: number
 }
@@ -189,7 +189,7 @@ export interface IEventCallUser {
   avatar: string
   callerNickname: string
 }
-export type EventChangeCallSettingsType = IBasicStreamSettings
+export type EventChangeCallSettingsType = BasicStreamSettingsType
 export interface IEventCallAccepted {
   signal: unknown
 }
@@ -216,7 +216,7 @@ export interface IEventMessageDeleted {
 export interface IEventUpdatedMessageReactions {
   roomId: string
   messageId: string
-  reaction: IReaction
+  reaction: MessageReactionType
 }
 export interface ICreateRoomAckPayload {
   roomId: string
@@ -226,14 +226,14 @@ export interface IEventUpdateInteraction {
   interaction: InteractionType
 }
 
-export type EventInviteReceivedType = IFrontendContact
+export type EventInviteReceivedType = ContactType
 
 export interface IEventUpdateContactInteractionSuccess {
   contactId: string
   interaction: InteractionType
 }
 export interface IEventContactAddSuccess {
-  contactData: IFrontendContact
+  contactData: ContactType
 }
 export interface IEventDeleteContactSuccess {
   deletedContactId: string
@@ -276,7 +276,7 @@ export type SocketActionsType =
   | 'message-status-updated'
   | 'messages-status-updated'
   | 'contact-data-changed'
-  | 'room-member-contacts-updated'
+  | 'known-users-updated'
   | 'call-user'
   | 'answer-call'
   | 'call-accepted'
