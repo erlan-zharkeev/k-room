@@ -1,6 +1,5 @@
 import type { MediaValidationOptions, MediaBucketName, MediaKind, MediaUpload } from './types'
 
-export const MEDIA_MB_IN_BYTES = 1024 * 1024
 export const MEDIA_AVATAR_FILENAME_PREFIX = 'avatar.'
 export const MEDIA_IMAGE_FILENAME_PREFIX = 'image.'
 

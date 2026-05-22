@@ -1,14 +1,14 @@
-import { MEDIA_MB_IN_BYTES } from 'global-shared'
+import { MB_IN_BYTES } from 'global-shared'
 
 import type { ConsoleColor, ScreenBreakpoints } from './types'
+
+export const GB = MB_IN_BYTES * 1024
 
 export const IMAGE_RESOLUTIONS = {
   png: 'image/png',
   jpeg: 'image/jpeg',
   jpg: 'image/jpg'
 } as const
-
-export const GB = MEDIA_MB_IN_BYTES * 1024
 
 export const CONSOLE_COLOR_MAP: Record<string, ConsoleColor> = {
   error: {

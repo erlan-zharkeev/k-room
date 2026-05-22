@@ -1,3 +1,4 @@
+import { SECOND_IN_MS } from 'global-shared'
 import mongoose from 'mongoose'
 
 import { loadFixtures } from 'src/modules/fixtures/fixtures.service'
@@ -9,9 +10,9 @@ import { serverCaptureSentryException } from 'src/shared/lib/sentry'
 import { SERVER_ENV } from './env'
 
 const MONGO_CONNECTION_OPTIONS = {
-  serverSelectionTimeoutMS: 15000,
-  connectTimeoutMS: 15000,
-  socketTimeoutMS: 45000,
+  serverSelectionTimeoutMS: 15 * SECOND_IN_MS,
+  connectTimeoutMS: 15 * SECOND_IN_MS,
+  socketTimeoutMS: 45 * SECOND_IN_MS,
   maxPoolSize: 10,
   minPoolSize: 1
 } as const

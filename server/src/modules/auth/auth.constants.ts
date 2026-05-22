@@ -1,6 +1,6 @@
-import { MINUTE_IN_MS } from '../session/constants'
+import { DAY_IN_SEC, MINUTE_IN_MS } from 'global-shared'
 
-export const EMAIL_CONFIRMATION_LINK_LIFE_SECONDS = 86_400
+export const EMAIL_CONFIRMATION_LINK_LIFE_SEC = 1 * DAY_IN_SEC
 
 export const REGISTRATION_RESEND_INTERVAL_MS = 3 * MINUTE_IN_MS
 export const SEND_CONFIRMATION_LINK_INTERVAL_MS = 3 * MINUTE_IN_MS

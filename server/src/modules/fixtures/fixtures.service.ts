@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { CHAT_KIND, MEDIA_AVATAR_FILENAME_PREFIX, REQ_STATUS } from 'global-shared'
+import { CHAT_KIND, DAY_IN_MS, MEDIA_AVATAR_FILENAME_PREFIX, MINUTE_IN_MS, REQ_STATUS } from 'global-shared'
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
@@ -17,7 +17,6 @@ import { log } from 'src/shared/lib/log'
 
 import {
   BASE_FIXTURE_TIMESTAMP_MS,
-  DAY_IN_MS,
   DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
   FIXTURE_CONTACTS,
   FIXTURE_LONG_REPLIED_MESSAGE_BODY,
@@ -36,8 +35,7 @@ import {
   LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX,
   MESSAGE_ACTIONS,
   MESSAGE_QUALIFIERS,
-  MESSAGE_SUBJECTS,
-  MINUTE_IN_MS
+  MESSAGE_SUBJECTS
 } from './fixtures.constants'
 import type { FixtureContactData, FixtureUserData } from './fixtures.types'
 

@@ -9,12 +9,12 @@ import { onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
-import { buildPathWithParams, getNextRequestIntervalSeconds } from 'src/shared/lib'
+import { buildPathWithParams, getNextRequestIntervalSec } from 'src/shared/lib'
 
 import { WAIT_EMAIL_CONFIRM_COUNTER_TICK_MS } from '../config/constants'
 
 const getCounterValue = (nextRequestTimestampMs: number) =>
-  Math.max(0, Math.round(getNextRequestIntervalSeconds(nextRequestTimestampMs)))
+  Math.max(0, Math.round(getNextRequestIntervalSec(nextRequestTimestampMs)))
 
 export const useWaitEmailConfirm = () => {
   const route = useRoute()

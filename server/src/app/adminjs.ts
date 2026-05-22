@@ -1,12 +1,12 @@
 import path from 'path'
 
 import MongoStore from 'connect-mongo'
+import { WEEK_IN_MS } from 'global-shared'
 
 import { SERVER_ENV } from 'src/app/env'
 import { ADMIN_USER_OPTIONS } from 'src/modules/user/user.admin'
 
 const adminFaviconPath = path.resolve(process.cwd(), 'public/admin-favicon.svg')
-const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000
 const {
   adminjs: { adminRootPath, adminLoginPath, adminLogoutPath, adminUsername, adminPassword, adminCookie },
   secret: { refreshTokenSecret },

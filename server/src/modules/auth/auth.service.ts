@@ -27,7 +27,7 @@ import { UserModel } from '../user/user.model'
 import { loadGoogleAvatar, updateUserAvatar, UserService } from '../user/user.service'
 
 import {
-  EMAIL_CONFIRMATION_LINK_LIFE_SECONDS,
+  EMAIL_CONFIRMATION_LINK_LIFE_SEC,
   REGISTRATION_RESEND_INTERVAL_MS,
   SEND_CONFIRMATION_LINK_INTERVAL_MS
 } from './auth.constants'
@@ -100,7 +100,7 @@ export class AuthService {
     const confirmToken = this.sessionService.signToken(
       String(user._id),
       SERVER_ENV.secret.emailConfirmSecret,
-      EMAIL_CONFIRMATION_LINK_LIFE_SECONDS
+      EMAIL_CONFIRMATION_LINK_LIFE_SEC
     )
 
     await this.emailService.sendEmailConfirmationEmail({
@@ -185,7 +185,7 @@ export class AuthService {
     const confirmToken = this.sessionService.signToken(
       String(user._id),
       SERVER_ENV.secret.emailConfirmSecret,
-      EMAIL_CONFIRMATION_LINK_LIFE_SECONDS
+      EMAIL_CONFIRMATION_LINK_LIFE_SEC
     )
 
     await this.emailService.sendEmailConfirmationEmail({

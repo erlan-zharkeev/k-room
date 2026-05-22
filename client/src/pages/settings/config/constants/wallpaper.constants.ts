@@ -1,4 +1,4 @@
-import { MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP, MEDIA_MB_IN_BYTES, MEDIA_VALIDATION_OPTIONS_MAP } from 'global-shared'
+import { MB_IN_BYTES, MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP, MEDIA_VALIDATION_OPTIONS_MAP } from 'global-shared'
 
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../i18n/appearance.i18n'
 
@@ -6,7 +6,7 @@ const wallpaperValidation = MEDIA_VALIDATION_OPTIONS_MAP.image
 
 export const SETTINGS_WALLPAPER_ALLOWED_TYPES =
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP[wallpaperValidation.supportedKindMediaType]
-export const SETTINGS_WALLPAPER_MAX_FILE_SIZE = wallpaperValidation.maxMb * MEDIA_MB_IN_BYTES
+export const SETTINGS_WALLPAPER_MAX_FILE_SIZE = wallpaperValidation.maxMb * MB_IN_BYTES
 export const SETTINGS_WALLPAPER_VISIBILITY_OPTIONS = [
   { value: 'show', label: SETTINGS_PAGE_APPEARANCE_I18N.show },
   { value: 'hide', label: SETTINGS_PAGE_APPEARANCE_I18N.hide }
