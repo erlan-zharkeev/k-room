@@ -5,11 +5,11 @@ const knownUserStore = dexieCollectionStore<KnownUserRecordType>(db['known-users
 
 export const useKnownUser = () => {
   const { bulkPut, get, mergeMany, put, remove, reset, update } = knownUserStore
-  const { items: knownUsers, getByIds } = knownUserStore.useIndexedList()
+  const { items: knownUsers, itemMap: knownUserById } = knownUserStore.useIndexedList()
 
   return {
     knownUsers,
-    getByIds,
+    knownUserById,
     get,
     put,
     bulkPut,

@@ -1,5 +1,5 @@
 import type { ChatRoomSchemaType } from 'global-shared'
-import type { ObjectId } from 'mongoose'
+import type { Types } from 'mongoose'
 
 export interface ITransformRoomForUserParams {
   userId: string
@@ -8,5 +8,5 @@ export interface ITransformRoomForUserParams {
 }
 
 export interface IChatRoomSchemaWithObjectId extends ChatRoomSchemaType {
-  _id: ObjectId
+  _id: Types.ObjectId
 }

@@ -2,8 +2,7 @@ import type { IEventUpdatePinnedChatRoomOrder, SocketActionsType } from 'global-
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { getRoomDisplayedLastMessageId, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
+import { getRoomDisplayedLastMessageId, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
@@ -12,6 +11,8 @@ import { useScreen } from 'src/shared/lib'
 
 import type { IChatRoomNavigationItem } from '../config/types'
 
+import { useChatRoomContactLookup } from './use-chat-room-contact-lookup.model'
+
 const searchQuery = ref('')
 
 export const useChatRoomsList = () => {
@@ -19,20 +20,12 @@ export const useChatRoomsList = () => {
   const route = useRoute()
   const { isPortraitTabletOrLess } = useScreen()
   const { chatRooms } = useChatRoom()
-  const { contacts } = useContact()
+  const { getChatRoomPrivateContact } = useChatRoomContactLookup()
   const { getById } = useMessage()
   const { emitSocketAction } = useSocketAction()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
-
-  const getRoomFallbackActivityAt = (roomId: string) => {
-    const objectIdTimestamp = roomId.slice(0, 8)
-
-    if (!/^[\da-f]{8}$/i.test(objectIdTimestamp)) return 0
-
-    return Number.parseInt(objectIdTimestamp, 16) * 1000
-  }
 
   const buildChatRoomRoute = (roomId: string) => {
     const query = isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
@@ -45,8 +38,7 @@ export const useChatRoomsList = () => {
 
   const chatRoomList = computed<IChatRoomNavigationItem[]>(() => {
     const items = chatRooms.value.map((room) => {
-      const privateRoom = isRoomPrivate(room)
-      const privateContact = privateRoom ? contacts.value.find(({ id }) => id === room.users[0]) : undefined
+      const privateContact = getChatRoomPrivateContact(room)
       const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
       const lastMessage = displayedLastMessageId ? getById(displayedLastMessageId) : undefined
       const title = room.chatName || privateContact?.nickname || ''
@@ -61,7 +53,7 @@ export const useChatRoomsList = () => {
         imageId: room.avatarId,
         online: Boolean(privateContact?.online),
         selected: route.params.chatRoomId === room.id,
-        lastMessageCreatedAt: lastMessage?.createdAt ?? getRoomFallbackActivityAt(room.id),
+        lastMessageCreatedAt: lastMessage?.createdAt ?? room.createdAt,
         unreadMessagesQuantity: room.unreadMessagesQuantity ?? 0,
         isPinned: room.isPinned,
         pinnedOrder: room.pinnedOrder

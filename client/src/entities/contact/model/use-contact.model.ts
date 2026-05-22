@@ -7,7 +7,7 @@ const contactStore = dexieCollectionStore<ContactRecordType>(db.contacts)
 
 export const useContact = () => {
   const { bulkPut, get, mergeMany, put, remove, reset, update } = contactStore
-  const { items: contacts, getByIds, hasById } = contactStore.useIndexedList()
+  const { items: contacts, itemMap: contactById, hasById } = contactStore.useIndexedList()
   const acceptedContacts = computed(() =>
     contacts.value.filter(({ interactionType }) => interactionType === 'invite-accepted')
   )
@@ -19,10 +19,10 @@ export const useContact = () => {
 
   return {
     contacts,
+    contactById,
     acceptedContacts,
     invitationsQuantity,
     isContactExist,
-    getByIds,
     get,
     put,
     bulkPut,
