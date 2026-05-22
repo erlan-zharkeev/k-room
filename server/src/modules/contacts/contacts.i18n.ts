@@ -6,6 +6,16 @@ export const CONTACTS_I18N = defineI18n({
     ru: 'Не удалось сохранить контакт',
     zh: '保存联系人失败'
   },
+  contactLimitReached: {
+    en: 'Contact limit reached',
+    ru: 'Contact limit reached',
+    zh: 'Contact limit reached'
+  },
+  searchQueryTooLong: {
+    en: 'Search query is too long',
+    ru: 'Search query is too long',
+    zh: 'Search query is too long'
+  },
   searchContactFailed: {
     en: 'Failed to search contacts',
     ru: 'Не удалось выполнить поиск контактов',

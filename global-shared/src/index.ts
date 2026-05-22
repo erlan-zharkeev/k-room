@@ -8,7 +8,13 @@ export type {
 
 export type { CallStatus, CallFlow, Call, CallDocument, CallSchema } from './calls/types'
 
-export { CHAT_KIND } from './chat/constants'
+export {
+  CHAT_KIND,
+  CHAT_ROOM_GROUP_MEMBER_LIMIT,
+  CHAT_ROOM_NAME_MAX_LENGTH,
+  PINNED_CHAT_ROOM_LIMIT,
+  USER_CHAT_ROOM_LIMIT
+} from './chat/constants'
 export type { ChatRoom, ChatRooms, ChatRoomSchema, ChatKind } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
@@ -21,6 +27,7 @@ export type {
 } from './codes/types'
 
 export type { Interaction, Contact, KnownUser, ContactMap } from './contact/types'
+export { CONTACT_LIMIT, CONTACT_SEARCH_QUERY_MAX_LENGTH, CONTACT_SEARCH_RESULT_LIMIT } from './contact/constants'
 
 export {
   AUTH_ROUTE_NAMES,
@@ -47,6 +54,7 @@ export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/t
 export {
   MEDIA_AVATAR_FILENAME_PREFIX,
   MEDIA_BUCKET_NAMES,
+  MEDIA_CACHE_RECORD_LIMIT,
   MEDIA_IMAGE_FILENAME_PREFIX,
   MEDIA_KIND_ACCEPT_MAP,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
@@ -65,7 +73,12 @@ export type {
 
 export type { PackageData } from './package/types'
 
-export { MESSAGE_STATUS } from './message/constants'
+export {
+  MESSAGE_BODY_MAX_LENGTH,
+  MESSAGE_IMAGE_LIMIT,
+  MESSAGE_LOAD_LIMIT_MAX,
+  MESSAGE_STATUS
+} from './message/constants'
 export type {
   MessageStatus,
   MessageMetadata,

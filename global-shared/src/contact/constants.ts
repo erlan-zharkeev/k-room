@@ -1,0 +1,3 @@
+export const CONTACT_LIMIT = 500
+export const CONTACT_SEARCH_QUERY_MAX_LENGTH = 64
+export const CONTACT_SEARCH_RESULT_LIMIT = 10

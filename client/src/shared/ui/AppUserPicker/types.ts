@@ -8,6 +8,7 @@ export interface AppUserPickerItem {
 export interface AppUserPickerProps {
   items: AppUserPickerItem[]
   multiple?: boolean
+  maxSelected?: number
   height?: string
   maxHeight?: string
 }
