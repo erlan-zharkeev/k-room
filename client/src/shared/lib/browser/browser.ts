@@ -1,6 +1,7 @@
-import { useBreakpoints } from '@vueuse/core'
+import { useBreakpoints, usePermission } from '@vueuse/core'
 import { MB_IN_BYTES } from 'global-shared'
 import { isString } from 'lodash'
+import { computed } from 'vue'
 
 import { CONSOLE_COLOR_MAP, GB, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
 import { BROWSER_I18N } from './i18n'
@@ -86,6 +87,37 @@ export const useScreen = () => {
     isPortraitTabletOrLess: breakpoints.smaller('tablet'),
     isDesktopOrMore: breakpoints.greaterOrEqual('desktop')
   }
+}
+
+const isMediaDevicePermissionWarning = (permission: PermissionState | undefined) => permission !== 'granted'
+
+const createMediaDevicePermission = () => {
+  const audioInputPermission = usePermission('microphone')
+  const videoInputPermission = usePermission('camera')
+
+  const hasAudioInputPermissionWarning = computed(() => isMediaDevicePermissionWarning(audioInputPermission.value))
+  const hasVideoInputPermissionWarning = computed(() => isMediaDevicePermissionWarning(videoInputPermission.value))
+  const hasMediaDevicePermissionWarning = computed(
+    () => hasAudioInputPermissionWarning.value || hasVideoInputPermissionWarning.value
+  )
+
+  return {
+    audioInputPermission,
+    videoInputPermission,
+    hasAudioInputPermissionWarning,
+    hasVideoInputPermissionWarning,
+    hasMediaDevicePermissionWarning
+  }
+}
+
+let mediaDevicePermission: ReturnType<typeof createMediaDevicePermission> | undefined
+
+export const useMediaDevicePermission = () => {
+  if (!mediaDevicePermission) {
+    mediaDevicePermission = createMediaDevicePermission()
+  }
+
+  return mediaDevicePermission
 }
 
 export const clearCookie = () => {

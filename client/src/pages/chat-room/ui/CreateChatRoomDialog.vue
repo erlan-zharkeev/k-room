@@ -11,10 +11,7 @@ import { CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 
 import { AppText, AppUserPicker } from 'src/shared/ui'
 
-import {
-  CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES,
-  CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT
-} from '../config/constants'
+import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES, CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT } from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { CreateChatRoomDialogEmit } from '../config/types'
 import { useCreateChatRoomDialog } from '../model/use-create-chat-room-dialog.model'

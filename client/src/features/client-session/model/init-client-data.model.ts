@@ -36,7 +36,9 @@ const initializeClientData = async () => {
 }
 
 export const initClientData = () => {
-  clientDataInitPromise ??= initializeClientData()
+  if (!clientDataInitPromise) {
+    clientDataInitPromise = initializeClientData()
+  }
 
   return clientDataInitPromise
 }

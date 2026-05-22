@@ -1,11 +1,9 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { useDevicesList, usePermission, useUserMedia } from '@vueuse/core'
+import { useDevicesList, useUserMedia } from '@vueuse/core'
 import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { TOAST_I18N } from 'src/shared/lib'
-import { log, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib'
+import { log, TOAST_I18N, useAppToast, useI18n, useMediaDevicePermission } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import type { DevicePermissionStatus } from '../../config/types/devices.types'
@@ -15,7 +13,7 @@ export const useVideoInputDevice = () => {
   const { t } = useI18n()
   const toast = useAppToast()
   const { settings, setByPath } = useSettings()
-  const videoInputPermission = usePermission('camera')
+  const { videoInputPermission, hasVideoInputPermissionWarning } = useMediaDevicePermission()
   const {
     devices: videoInputAllDevices,
     isSupported: isVideoInputSupported,
@@ -182,6 +180,7 @@ export const useVideoInputDevice = () => {
     isVideoInputCheckDisabled,
     videoInputPermissionCalloutType,
     videoInputPermissionStatus,
+    hasVideoInputPermissionWarning,
     isVideoInputChecking,
     setVideoInputChecking,
     setSelectedVideoInputDevice

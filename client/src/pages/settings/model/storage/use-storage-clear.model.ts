@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
+import { loadStorageEstimate } from 'src/shared/lib'
 
 export const useStorageClear = () => {
   const { reset: resetMedia } = useMedia()
@@ -12,6 +13,7 @@ export const useStorageClear = () => {
 
     try {
       await resetMedia()
+      await loadStorageEstimate()
     } finally {
       isClearingMedia.value = false
     }

@@ -100,9 +100,9 @@ export const SETTINGS_PAGE_DEVICES_I18N = {
     zh: '未授予权限或未检测到设备。'
   },
   cantAccessDevice: {
-    en: 'Can’t get access to requested device, check browser permissions',
-    ru: 'Не удалось получить доступ к устройству, проверьте разрешения браузера',
-    zh: '无法访问请求的设备，请检查浏览器权限'
+    en: 'Can’t get access to requested device, check browser permissions. You can change them in the site settings from the browser address bar.',
+    ru: 'Не удалось получить доступ к устройству, проверьте разрешения браузера. Разрешения можно изменить в настройках сайта в адресной строке браузера.',
+    zh: '无法访问请求的设备，请检查浏览器权限。你可以在浏览器地址栏中的网站设置里更改权限。'
   },
   mediaUnsupported: {
     en: 'Media devices are not supported in this environment',

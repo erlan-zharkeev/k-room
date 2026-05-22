@@ -4,5 +4,6 @@ export interface CardProps {
   buttonAriaLabel?: string
   buttonDisabled?: boolean
   buttonLoading?: boolean
+  hasWarning?: boolean
   onButtonClick?: () => void
 }

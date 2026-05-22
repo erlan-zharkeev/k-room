@@ -4,6 +4,8 @@ import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { useAppToast } from 'src/shared/lib'
 
+const isCriticalToast = (toast: object) => 'isCritical' in toast && toast.isCritical === true
+
 export const useToastProvider = () => {
   const { settings } = useSettings()
   const { isAuthorized } = useUser()
@@ -15,9 +17,7 @@ export const useToastProvider = () => {
     return (enabled && general.toast) || !isAuthorized.value
   })
 
-  const toasts = computed(() =>
-    isToastVisible.value ? rawToasts.value : rawToasts.value.filter(({ isCritical }) => isCritical)
-  )
+  const toasts = computed(() => (isToastVisible.value ? rawToasts.value : rawToasts.value.filter(isCriticalToast)))
 
   return { toasts }
 }
