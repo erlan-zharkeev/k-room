@@ -12,11 +12,11 @@ export { useSocketConnectionMonitor } from './socket/use-socket-connection-monit
 export { useSocketReconnect } from './socket/use-socket-reconnect'
 export { useSocketAction } from './socket/use-socket-action'
 export type {
-  HttpErrorType,
-  DoHttpRequestType,
-  ICreateHttpErrorPayload,
-  IHttpRequestOptions,
-  HttpRequestPayloadType,
-  HttpRequestType
+  HttpError,
+  DoHttpRequest,
+  CreateHttpErrorPayload,
+  HttpRequestOptions,
+  HttpRequestPayload,
+  HttpRequest
 } from './http/types'
-export type { IEmitSocketActionOptions } from './socket/types'
+export type { EmitSocketActionOptions } from './socket/types'

@@ -2,14 +2,14 @@ import { REQ_STATUS } from 'common'
 
 import { UserModel } from 'src/modules/user'
 
-import { AppResponseType, IAppRequest, SERVER_ENV, SHARED_I18N } from 'src/shared/config'
+import { AppResponse, AppRequest, SERVER_ENV, SHARED_I18N } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
 import { LOGOUT_I18N } from './i18n'
 
-export const logoutController = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const logoutController = async (req: AppRequest, res: AppResponse<null>) => {
   const { language } = req
   const basicError = localizedText(LOGOUT_I18N.failed, language)
 

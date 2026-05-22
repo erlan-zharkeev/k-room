@@ -1,5 +1,5 @@
-import type { IAppTextProps } from './types'
-import type { AppTextColorType } from './types'
+import type { AppTextProps } from './types'
+import type { AppTextColor } from './types'
 
 export const APP_TEXT_DEFAULT_PROPS = {
   tag: 'span',
@@ -7,7 +7,7 @@ export const APP_TEXT_DEFAULT_PROPS = {
   alignment: 'left',
   bold: false,
   selectable: true
-} satisfies Partial<IAppTextProps>
+} satisfies Partial<AppTextProps>
 
 export const APP_TEXT_COLOR_MODIFIERS = {
   text: 'text',
@@ -16,4 +16,4 @@ export const APP_TEXT_COLOR_MODIFIERS = {
   accent: 'accent',
   warn: 'warn',
   'error-text': 'error-text'
-} satisfies Record<AppTextColorType, AppTextColorType>
+} satisfies Record<AppTextColor, AppTextColor>

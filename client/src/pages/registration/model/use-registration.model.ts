@@ -5,8 +5,8 @@ import {
   ROUTE_NAMES,
   createValidationMessages,
   normalizeNickname,
-  type IAuthRegistrationPayload,
-  type ISendConfirmationLinkResponse
+  type AuthRegistrationPayload,
+  type SendConfirmationLinkResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
@@ -27,7 +27,7 @@ import {
   PASSWORD_STRONG_PATTERN
 } from '../config/constants'
 
-import type { IRegistrationFormData } from './types.model'
+import type { RegistrationFormData } from './types.model'
 
 export const useRegistration = () => {
   const router = useRouter()
@@ -37,7 +37,7 @@ export const useRegistration = () => {
   const isLoading = ref(false)
   const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
   const { email, nickname, password, policy } = clone(DEFAULT_REGISTRATION_FORM_DATA)
-  const formData = reactive<IRegistrationFormData>({
+  const formData = reactive<RegistrationFormData>({
     nickname: {
       value: nickname,
       rules: [
@@ -96,12 +96,12 @@ export const useRegistration = () => {
   } = useProtectedActionCaptcha()
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
 
-  const register = async (payload: IAuthRegistrationPayload) => {
+  const register = async (payload: AuthRegistrationPayload) => {
     isLoading.value = true
     const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
-      const response = await doHttpRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
+      const response = await doHttpRequest<SendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
       const pathname = buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, response.data.payload)
 
       await router.push(pathname)

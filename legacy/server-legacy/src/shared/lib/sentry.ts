@@ -1,5 +1,5 @@
 import { captureException, captureMessage, isInitialized } from '@sentry/node'
-import { ISentryErrorContext, shouldIgnoreSentryError } from 'common'
+import { SentryErrorContext, shouldIgnoreSentryError } from 'common'
 
 export const serverCaptureSentryException = (error: unknown) => {
   if (!isInitialized()) return
@@ -9,7 +9,7 @@ export const serverCaptureSentryException = (error: unknown) => {
 
 export const generateSentryError =
   (kind: 'http-error' | 'socket-error') =>
-  ({ message, silent, status }: ISentryErrorContext) => {
+  ({ message, silent, status }: SentryErrorContext) => {
     if (!isInitialized()) return
 
     if (shouldIgnoreSentryError({ message, silent, status })) {

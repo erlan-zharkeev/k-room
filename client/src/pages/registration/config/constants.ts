@@ -1,8 +1,8 @@
 import { USER_NICKNAME_MAX_LENGTH, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'global-shared'
 
-import type { IRegistrationInitialFormData } from '../model/types.model'
+import type { RegistrationInitialFormData } from '../model/types.model'
 
-export const DEFAULT_REGISTRATION_FORM_DATA: IRegistrationInitialFormData = {
+export const DEFAULT_REGISTRATION_FORM_DATA: RegistrationInitialFormData = {
   nickname: '',
   email: '',
   password: '',

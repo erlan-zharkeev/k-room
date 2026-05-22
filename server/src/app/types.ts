@@ -1,8 +1,8 @@
 import type { Server as HttpServer } from 'http'
 import type { Server as HttpsServer } from 'https'
 
-export type SocketServerType = HttpServer | HttpsServer
+export type SocketServer = HttpServer | HttpsServer
 
-export interface IHealthResponse {
+export interface HealthResponse {
   ok: true
 }

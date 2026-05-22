@@ -1,1 +1,1 @@
-export type SoundType = 'message-delivered' | 'calling' | 'busy' | 'connection' | 'ring'
+export type Sound = 'message-delivered' | 'calling' | 'busy' | 'connection' | 'ring'

@@ -1,5 +1,5 @@
 import { useDebounceFn } from '@vueuse/core'
-import type { ContactType, IEventGetSearchedContact, IEventSearchContact, SocketActionsType } from 'global-shared'
+import type { Contact, EventGetSearchedContact, EventSearchContact, SocketActions } from 'global-shared'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
@@ -17,7 +17,7 @@ export const useContactSearch = () => {
   const { sync } = useSyncMedia()
   const { t } = useI18n()
   const syncedAvatarIds = new Set<string>()
-  const searchedContacts = ref<ContactType[]>([])
+  const searchedContacts = ref<Contact[]>([])
   const searchHasMore = ref(false)
   const searchNextOffset = ref(0)
   const searchValue = ref('')
@@ -37,12 +37,12 @@ export const useContactSearch = () => {
   }
 
   const fetchContacts = (value: string, offset = 0) => {
-    const payload: IEventSearchContact = {
+    const payload: EventSearchContact = {
       value,
       offset
     }
 
-    socket.emit<SocketActionsType>('search-contact', payload)
+    socket.emit<SocketActions>('search-contact', payload)
   }
 
   const debouncedFetchContacts = useDebounceFn(fetchContacts, CONTACTS_PAGE_SEARCH_DEBOUNCE_MS)
@@ -69,7 +69,7 @@ export const useContactSearch = () => {
     fetchContacts(searchValue.value, searchNextOffset.value)
   }
 
-  const getSearchedContactStatus = ({ interactionType }: ContactType) => {
+  const getSearchedContactStatus = ({ interactionType }: Contact) => {
     const badge = CONTACTS_SEARCH_BADGE_BY_INTERACTION[interactionType]
 
     if (!badge.visible) return ''
@@ -77,10 +77,10 @@ export const useContactSearch = () => {
     return t(badge.label)
   }
 
-  const getSearchedContactStatusColor = ({ interactionType }: ContactType) =>
+  const getSearchedContactStatusColor = ({ interactionType }: Contact) =>
     CONTACTS_SEARCH_BADGE_BY_INTERACTION[interactionType].color
 
-  const syncSavedContacts = async (contacts: ContactType[]) => {
+  const syncSavedContacts = async (contacts: Contact[]) => {
     const savedContacts = contacts.filter(({ interactionType }) => interactionType !== 'default')
 
     await mergeMany(savedContacts, {
@@ -96,7 +96,7 @@ export const useContactSearch = () => {
     })
   }
 
-  const syncContactAvatars = (contacts: ContactType[]) => {
+  const syncContactAvatars = (contacts: Contact[]) => {
     contacts.forEach(({ id }) => {
       const avatarId = getAvatarId(id)
 
@@ -107,7 +107,7 @@ export const useContactSearch = () => {
     })
   }
 
-  const handleSearchedContacts = async (payload: IEventGetSearchedContact) => {
+  const handleSearchedContacts = async (payload: EventGetSearchedContact) => {
     if (payload.value !== searchValue.value) return
 
     const knownIds = new Set(searchedContacts.value.map(({ id }) => id))
@@ -126,12 +126,12 @@ export const useContactSearch = () => {
     isSearchLoadingMore.value = false
   }
 
-  socket.on<SocketActionsType>('get-searched-contact', handleSearchedContacts)
+  socket.on<SocketActions>('get-searched-contact', handleSearchedContacts)
 
   watch(searchQuery, () => searchContacts(), { immediate: true })
 
   onBeforeUnmount(() => {
-    socket.off<SocketActionsType>('get-searched-contact', handleSearchedContacts)
+    socket.off<SocketActions>('get-searched-contact', handleSearchedContacts)
   })
 
   return {

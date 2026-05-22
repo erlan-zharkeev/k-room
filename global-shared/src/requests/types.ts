@@ -1,9 +1,9 @@
-export interface ICreateNewPasswordPayload {
+export interface CreateNewPasswordPayload {
   password: string
   codeToValidate: string
 }
 
-export interface IChangePasswordPayload {
+export interface ChangePasswordPayload {
   currentPassword: string
   password: string
 }

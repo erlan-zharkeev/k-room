@@ -1,7 +1,7 @@
-import { isUnknownObject, type IBackendResponse } from 'global-shared'
+import { isUnknownObject, type BackendResponse } from 'global-shared'
 import { isBoolean, isString } from 'lodash'
 
-export const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
+export const isBackendResponse = (data: unknown): data is BackendResponse<unknown> => {
   if (!isUnknownObject(data)) return false
 
   const { message } = data

@@ -1,32 +1,32 @@
 import { IBaseFrontendUserData, ICall } from 'common'
 
-export interface IConstraint {
+export interface Constraint {
   loading: boolean
   value: boolean
 }
 
-export type CallMediaType = 'audio' | 'video'
+export type CallMedia = 'audio' | 'video'
 
-export interface IStreamConstraints {
-  audio: IConstraint
-  video: IConstraint
+export interface StreamConstraints {
+  audio: Constraint
+  video: Constraint
 }
 
-export interface ICallsState {
+export interface CallsState {
   showCallModal: boolean
   isMinified: boolean
   currentCall: ICall
   list: ICall[]
-  settings: IStreamConstraints
+  settings: StreamConstraints
 }
 
-export interface IModalOptions {
+export interface ModalOptions {
   width: number
   height: number
   x: number
   y: number
 }
 
-export interface ICallInterlocutor extends IBaseFrontendUserData {
+export interface CallInterlocutor extends IBaseFrontendUserData {
   avatar?: string
 }

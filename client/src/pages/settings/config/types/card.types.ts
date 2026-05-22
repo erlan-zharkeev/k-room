@@ -1,4 +1,4 @@
-export interface ICardProps {
+export interface CardProps {
   title: string
   buttonLabel?: string
   buttonAriaLabel?: string

@@ -1,9 +1,9 @@
-import { IEventCallUser, SocketActionsType } from 'common'
+import { EventCallUser, SocketActions } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
@@ -12,12 +12,12 @@ import { CALL_I18N } from '../i18n'
 import { setActiveCallInterlocutor } from '../shared/lib/active-call-map'
 import { emitCallDataToInterlocutors } from '../shared/lib/emit-call-data-to-interlocutors'
 
-export const callUserController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const callUserController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'call-user',
     socketErrorMiddleware(
       socket,
-      async ({ signal, userToCall, avatar, callerName }: IEventCallUser) => {
+      async ({ signal, userToCall, avatar, callerName }: EventCallUser) => {
         if (!userToCall) return
 
         const { userId } = socket.data
@@ -35,7 +35,7 @@ export const callUserController = (socket: SocketInstanceType) => {
         setActiveCallInterlocutor(userId, userToCall)
         setActiveCallInterlocutor(userToCall, userId)
 
-        const payload: IEventCallUser = {
+        const payload: EventCallUser = {
           callId: String(call._id),
           signal,
           from: userId,
@@ -46,7 +46,7 @@ export const callUserController = (socket: SocketInstanceType) => {
         const socketIds = await getSocketsByUserIds([userToCall])
 
         socketIds.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('call-user', payload)
+          getIO().to(socketId).emit<SocketActions>('call-user', payload)
         })
 
         await emitCallDataToInterlocutors([userId, userToCall], String(call._id), true)

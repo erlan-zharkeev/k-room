@@ -1,10 +1,10 @@
-export type { ICollapseItem, IAppCollapseProps } from 'src/shared/ui/AppCollapseList/internals/types'
-export type { IAppTag, IAppTagsProps } from 'src/shared/ui/AppTags/internals/types'
+export type { CollapseItem, AppCollapseProps } from 'src/shared/ui/AppCollapseList/internals/types'
+export type { AppTag, AppTagsProps } from 'src/shared/ui/AppTags/internals/types'
 
-export type BaseSizeModifierType = 'small' | 'medium' | 'large'
-export type ExtendedSizeModifierType = BaseSizeModifierType | 'extra-small' | 'extra-large'
-export type ShapeModifierType = 'square-shape' | 'default-shape' | 'circle-shape'
-export type ColorModifierType =
+export type BaseSizeModifier = 'small' | 'medium' | 'large'
+export type ExtendedSizeModifier = BaseSizeModifier | 'extra-small' | 'extra-large'
+export type ShapeModifier = 'square-shape' | 'default-shape' | 'circle-shape'
+export type ColorModifier =
   | 'text-color'
   | 'accent-color'
   | 'success-color'
@@ -12,4 +12,4 @@ export type ColorModifierType =
   | 'warn-color'
   | 'white-color'
   | 'black-color'
-export type AvatarShapeModifierType = Extract<ShapeModifierType, 'square-shape' | 'circle-shape'>
+export type AvatarShapeModifier = Extract<ShapeModifier, 'square-shape' | 'circle-shape'>

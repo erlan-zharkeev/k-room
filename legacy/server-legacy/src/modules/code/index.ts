@@ -1,4 +1,4 @@
-export type { ICodeElement, ICodeMethod, ICodePurpose, ICodeSchema } from './types'
+export type { CodeElement, CodeMethod, CodePurpose, CodeSchema } from './types'
 export { CodeModel } from './code.model'
 export { codeElementSchema } from './code-element.model'
 export { codeMethodSchema } from './code-method.model'

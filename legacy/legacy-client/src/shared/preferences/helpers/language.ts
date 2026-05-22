@@ -1,6 +1,6 @@
-import { APP_LANGUAGE, DEFAULT_APP_LANGUAGE, AppLanguageType } from 'common'
+import { APP_LANGUAGE, DEFAULT_APP_LANGUAGE, AppLanguage } from 'common'
 
-export const normalizeAppLanguage = (value: string | null | undefined): AppLanguageType | null => {
+export const normalizeAppLanguage = (value: string | null | undefined): AppLanguage | null => {
   if (!value) return null
   const normalizedValue = value.toLowerCase()
   if (normalizedValue.startsWith(APP_LANGUAGE.Ru)) return APP_LANGUAGE.Ru
@@ -8,7 +8,7 @@ export const normalizeAppLanguage = (value: string | null | undefined): AppLangu
   return null
 }
 
-export const getBrowserLanguage = (): AppLanguageType => {
+export const getBrowserLanguage = (): AppLanguage => {
   if (typeof navigator === 'undefined') return DEFAULT_APP_LANGUAGE
   const candidateLanguage = navigator.languages?.[0] ?? navigator.language
   return normalizeAppLanguage(candidateLanguage) ?? DEFAULT_APP_LANGUAGE

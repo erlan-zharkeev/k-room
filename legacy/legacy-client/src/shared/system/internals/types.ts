@@ -1,8 +1,8 @@
 import { IImageObject, IRepliedMessage } from 'common'
 
-import { IContextMenu } from 'src/shared/context-menu'
+import { ContextMenu } from 'src/shared/context-menu'
 
-export interface IViewPort {
+export interface ViewPort {
   width: number
   height: number
 }
@@ -13,23 +13,23 @@ export const VIEW_PORT_WIDTH = {
   Phone: 576
 } as const
 
-export type AuthStatusType = 'authorized' | 'unauthorized' | 'loading'
+export type AuthStatus = 'authorized' | 'unauthorized' | 'loading'
 
-export interface IMessageInputData {
+export interface MessageInputData {
   body: string
   images: IImageObject[]
   imageCompression: boolean
 }
 
-export interface ISystemStore {
-  auth: AuthStatusType
+export interface SystemStore {
+  auth: AuthStatus
   online: boolean
   reconnecting: boolean
-  contextMenu: IContextMenu
-  viewPort: IViewPort
+  contextMenu: ContextMenu
+  viewPort: ViewPort
   hasInteracted: boolean
   camPermission?: PermissionState
   micPermission?: PermissionState
   repliedMessageData: IRepliedMessage
-  messageInputData: IMessageInputData
+  messageInputData: MessageInputData
 }

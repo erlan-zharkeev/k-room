@@ -4,14 +4,14 @@ import { Injectable } from '@nestjs/common'
 import { type Request } from 'express'
 import {
   EMAIL_CODE_LENGTH,
-  type ICodeValidationPayload,
+  type CodeValidationPayload,
   formatNickname,
   isUnknownObject,
-  type ISendChangeEmailCodePayload,
-  type ISendPasswordRecoveryCodePayload,
-  type IValidateChangeEmailCodePayload,
-  type IValidateChangeEmailCodeResponse,
-  type IValidatePasswordRecoveryCodeResponse,
+  type SendChangeEmailCodePayload,
+  type SendPasswordRecoveryCodePayload,
+  type ValidateChangeEmailCodePayload,
+  type ValidateChangeEmailCodeResponse,
+  type ValidatePasswordRecoveryCodeResponse,
   REQ_STATUS
 } from 'global-shared'
 
@@ -26,7 +26,7 @@ import { UserService } from '../user/user.service'
 import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
 import { VALIDATE_CHANGE_EMAIL_CODE_I18N, VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
 import { CodeModel } from './codes.model'
-import type { ISendChangeEmailCodeResult, ISendPasswordRecoveryCodeResult } from './codes.types'
+import type { SendChangeEmailCodeResult, SendPasswordRecoveryCodeResult } from './codes.types'
 
 @Injectable()
 export class CodesService {
@@ -37,9 +37,9 @@ export class CodesService {
   ) {}
 
   async sendPasswordRecoveryCode(
-    payload: ISendPasswordRecoveryCodePayload,
+    payload: SendPasswordRecoveryCodePayload,
     request: Request
-  ): Promise<ISendPasswordRecoveryCodeResult> {
+  ): Promise<SendPasswordRecoveryCodeResult> {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
 
@@ -98,9 +98,9 @@ export class CodesService {
 
   async sendChangeEmailCode(
     userId: string,
-    payload: ISendChangeEmailCodePayload,
+    payload: SendChangeEmailCodePayload,
     request: Request
-  ): Promise<ISendChangeEmailCodeResult> {
+  ): Promise<SendChangeEmailCodeResult> {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
 
@@ -148,9 +148,9 @@ export class CodesService {
 
   async validateChangeEmailCode(
     userId: string,
-    payload: IValidateChangeEmailCodePayload,
+    payload: ValidateChangeEmailCodePayload,
     request: Request
-  ): Promise<IValidateChangeEmailCodeResponse> {
+  ): Promise<ValidateChangeEmailCodeResponse> {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
     const code = payload.code.trim()
@@ -202,9 +202,9 @@ export class CodesService {
   }
 
   async validatePasswordRecoveryCode(
-    payload: ICodeValidationPayload,
+    payload: CodeValidationPayload,
     request: Request
-  ): Promise<IValidatePasswordRecoveryCodeResponse> {
+  ): Promise<ValidatePasswordRecoveryCodeResponse> {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
     const code = payload.code.trim()

@@ -1,25 +1,25 @@
 import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
 
-import type { KebabCaseType } from 'src/shared/lib'
+import type { KebabCase } from 'src/shared/lib'
 
-export type AppHeaderTagType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
+export type AppHeaderTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
 
-export type AppHeaderStaticColorType = keyof Pick<
+export type AppHeaderStaticColor = keyof Pick<
   INmorphStaticColors,
   'text' | 'semiContrastText' | 'contrastText' | 'accent' | 'warn'
 >
 
-export type AppHeaderColorType = KebabCaseType<AppHeaderStaticColorType>
+export type AppHeaderColor = KebabCase<AppHeaderStaticColor>
 
-export type AppHeaderAlignmentType = 'left' | 'center' | 'right'
+export type AppHeaderAlignment = 'left' | 'center' | 'right'
 
-export interface IAppHeaderProps {
+export interface AppHeaderProps {
   text?: string | number
-  tag?: AppHeaderTagType
+  tag?: AppHeaderTag
   accent?: boolean
   bold?: boolean
-  color?: AppHeaderColorType
-  alignment?: AppHeaderAlignmentType
+  color?: AppHeaderColor
+  alignment?: AppHeaderAlignment
   truncate?: boolean
   selectable?: boolean
 }

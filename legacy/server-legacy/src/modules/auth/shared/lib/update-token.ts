@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { setCookie } from 'src/modules/cookie'
 import { UserModel } from 'src/modules/user'
 
-import { IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppRequest, SERVER_ENV } from 'src/shared/config'
 import { log } from 'src/shared/lib/log'
 import { serverCaptureSentryException } from 'src/shared/lib/sentry'
 
@@ -12,7 +12,7 @@ import { JWT_ACCESS_EXPIRES_INTERVAL, JWTR_ACCESS_EXPIRES_INTERVAL } from '../co
 
 import { setToken } from './set-token'
 
-export const updateTokens = async (id: string, req: IAppRequest, res: Response) => {
+export const updateTokens = async (id: string, req: AppRequest, res: Response) => {
   setToken(res, 'jwt', id, SERVER_ENV.accessTokenSecret, JWT_ACCESS_EXPIRES_INTERVAL)
   const refreshToken = setToken(res, 'refresh-jwt', id, SERVER_ENV.refreshTokenSecret, JWTR_ACCESS_EXPIRES_INTERVAL)
   const deviceId = req.cookies['device-id'] ?? uuidv4()

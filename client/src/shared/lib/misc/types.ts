@@ -1,18 +1,18 @@
 import type { Ref } from 'vue'
 
-export type ContextRefType<T = never> = Ref<T>
+export type ContextRef<T = never> = Ref<T>
 
-type KebabCaseTailType<T extends string> = T extends `${infer Head}${infer Tail}`
+type KebabCaseTail<T extends string> = T extends `${infer Head}${infer Tail}`
   ? Head extends Lowercase<Head>
-    ? `${Head}${KebabCaseTailType<Tail>}`
-    : `-${Lowercase<Head>}${KebabCaseTailType<Tail>}`
+    ? `${Head}${KebabCaseTail<Tail>}`
+    : `-${Lowercase<Head>}${KebabCaseTail<Tail>}`
   : T
 
-export type KebabCaseType<T extends string> = T extends `${infer Head}${infer Tail}`
-  ? `${Lowercase<Head>}${KebabCaseTailType<Tail>}`
+export type KebabCase<T extends string> = T extends `${infer Head}${infer Tail}`
+  ? `${Lowercase<Head>}${KebabCaseTail<Tail>}`
   : T
 
-export interface IFormFieldValidationState {
+export interface FormFieldValidationState {
   invalid?: boolean
   dirty?: boolean
   touched?: boolean

@@ -1,9 +1,9 @@
-import type { AppLanguageType } from 'global-shared'
+import type { AppLanguage } from 'global-shared'
 import type { DefaultEventsMap, Socket } from 'socket.io'
 
-export type SocketInstanceType = Socket<
+export type SocketInstance = Socket<
   DefaultEventsMap,
   DefaultEventsMap,
   DefaultEventsMap,
-  { userId: string; deviceId: string; language: AppLanguageType }
+  { userId: string; deviceId: string; language: AppLanguage }
 >

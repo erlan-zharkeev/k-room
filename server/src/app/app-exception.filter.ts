@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
 import { type Request, type Response } from 'express'
-import { type IBackendResponse, REQ_STATUS } from 'global-shared'
+import { type BackendResponse, REQ_STATUS } from 'global-shared'
 
 import { SHARED_I18N } from 'src/shared/i18n'
 import { getAppErrorMessage, isAppError } from 'src/shared/lib/app-error'
@@ -12,7 +12,7 @@ import { serverCaptureSentryException, serverCaptureSentryHttpError } from 'src/
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {
   catch(error: unknown, host: ArgumentsHost) {
-    const response = host.switchToHttp().getResponse<Response<IBackendResponse<unknown>>>()
+    const response = host.switchToHttp().getResponse<Response<BackendResponse<unknown>>>()
     const request = host.switchToHttp().getRequest<Request>()
 
     if (response.headersSent) {

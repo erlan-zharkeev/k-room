@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { ICall, EventCallStartedAtType, EventCallsUpdatedType, EventCallUpdatedType, IEventCallUser } from 'common'
+import { ICall, EventCallStartedAt, EventCallsUpdated, EventCallUpdated, EventCallUser } from 'common'
 
-import { CallMediaType, ICallInterlocutor, ICallsState, IStreamConstraints } from '../internals/types'
+import { CallMedia, CallInterlocutor, CallsState, StreamConstraints } from '../internals/types'
 
 const initialCurrentCall: ICall = {
   id: '',
@@ -34,7 +34,7 @@ const initialCallSettings = {
   }
 }
 
-const initialState: ICallsState = {
+const initialState: CallsState = {
   showCallModal: false,
   isMinified: false,
   settings: initialCallSettings,
@@ -56,7 +56,7 @@ export const callsSlice = createSlice({
     updateAllList(state, { payload }: { payload: ICall[] }) {
       state.list = payload
     },
-    initModalToCall(state, { payload }: { payload: ICallInterlocutor }) {
+    initModalToCall(state, { payload }: { payload: CallInterlocutor }) {
       state.showCallModal = true
       const { id, avatar, username } = payload
       state.currentCall.interlocutorId = id
@@ -73,19 +73,19 @@ export const callsSlice = createSlice({
         ...payload
       }
     },
-    toggleSelfStreamIsLoading(state, { payload }: { payload: IStreamConstraints }) {
+    toggleSelfStreamIsLoading(state, { payload }: { payload: StreamConstraints }) {
       state.settings = payload
     },
     setCurrentCallAccepted(state) {
       state.currentCall.status = 'in-progress'
     },
-    setShowCallModal(state, { payload }: { payload: IEventCallUser }) {
+    setShowCallModal(state, { payload }: { payload: EventCallUser }) {
       state.showCallModal = true
       state.currentCall.interlocutorName = payload.callerName
       state.currentCall.interlocutorAvatarPath = payload.avatar
       state.currentCall.flow = 'incoming'
     },
-    setCallStartedAt(state, { payload }: { payload: EventCallStartedAtType }) {
+    setCallStartedAt(state, { payload }: { payload: EventCallStartedAt }) {
       state.currentCall.startedAt = payload
     },
     closeCallModal(state) {
@@ -106,17 +106,17 @@ export const callsSlice = createSlice({
     setCallAudio(state, { payload }) {
       state.settings.audio.value = payload
     },
-    setCallSettingsLoading(state, { payload }: { payload: { type: CallMediaType; value: boolean } }) {
+    setCallSettingsLoading(state, { payload }: { payload: { type: CallMedia; value: boolean } }) {
       const { type, value } = payload
       state.settings[type].loading = value
     },
     setCallId(state, { payload }: { payload: string }) {
       state.currentCall.id = payload
     },
-    updateCalls(state, { payload }: { payload: EventCallsUpdatedType }) {
+    updateCalls(state, { payload }: { payload: EventCallsUpdated }) {
       state.list = payload
     },
-    updateCall(state, { payload }: { payload: EventCallUpdatedType }) {
+    updateCall(state, { payload }: { payload: EventCallUpdated }) {
       const call = payload
       const listClone = [...state.list]
       const index = listClone.findIndex((stateCall) => stateCall.id === call.id)

@@ -4,7 +4,7 @@ import { createClient, type RedisClientType } from 'redis'
 import { SERVER_ENV } from 'src/app/env'
 import { log } from 'src/shared/lib/log'
 
-import type { IRedisAdapterClients } from './types'
+import type { RedisAdapterClients } from './types'
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
@@ -60,7 +60,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     return this.connectClient()
   }
 
-  async createAdapterClients(): Promise<IRedisAdapterClients> {
+  async createAdapterClients(): Promise<RedisAdapterClients> {
     const client = await this.clientOrThrow()
     const publishClient = client.duplicate()
     const subscribeClient = client.duplicate()

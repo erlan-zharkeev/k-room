@@ -1,12 +1,12 @@
 import {
-  type ContactInteractionUpdateFailedReasonType,
-  type ICreateRoomAckPayload,
+  type ContactInteractionUpdateFailedReason,
+  type CreateRoomAckPayload,
   normalizeTimestamp,
-  type IEventCreateRoom,
-  type IEventDeleteContact,
-  type IEventSaveContact,
-  type IEventUpdateInteraction,
-  type InteractionType
+  type EventCreateRoom,
+  type EventDeleteContact,
+  type EventSaveContact,
+  type EventUpdateInteraction,
+  type Interaction
 } from 'global-shared'
 import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -15,7 +15,7 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useLocalizedDateTime } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
-import { TOAST_I18N, useAppToast, useI18n, type ContactRecordType } from 'src/shared/lib'
+import { TOAST_I18N, useAppToast, useI18n, type ContactRecord } from 'src/shared/lib'
 
 import { CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
@@ -33,7 +33,7 @@ export const useContactsPage = () => {
   const loadingContactIds = reactive(new Set<string>())
   const creatingChatContactIds = reactive(new Set<string>())
 
-  const getContactActivity = ({ interactionType, lastSeen, online }: ContactRecordType) => {
+  const getContactActivity = ({ interactionType, lastSeen, online }: ContactRecord) => {
     if (interactionType !== 'invite-accepted') return ''
     if (online) return t(CONTACTS_PAGE_I18N.online)
 
@@ -44,7 +44,7 @@ export const useContactsPage = () => {
     return `${t(CONTACTS_PAGE_I18N.lastSeen)} ${formatRelativeTime(normalized)}`
   }
 
-  const getContactStatus = ({ interactionType }: ContactRecordType) => {
+  const getContactStatus = ({ interactionType }: ContactRecord) => {
     switch (interactionType) {
       case 'blocked':
         return t(CONTACTS_PAGE_I18N.blocked)
@@ -62,22 +62,22 @@ export const useContactsPage = () => {
   const addContact = (interlocutorId: string) => {
     if (loadingContactIds.has(interlocutorId)) return
 
-    const payload: IEventSaveContact = { interlocutorId }
+    const payload: EventSaveContact = { interlocutorId }
 
     loadingContactIds.add(interlocutorId)
-    void emitSocketAction<IEventSaveContact>('save-contact', payload, {
+    void emitSocketAction<EventSaveContact>('save-contact', payload, {
       onSettled: () => {
         loadingContactIds.delete(interlocutorId)
       }
     })
   }
 
-  const updateInteraction = (contactId: string, interaction: InteractionType) => {
+  const updateInteraction = (contactId: string, interaction: Interaction) => {
     if (loadingContactIds.has(contactId)) return
 
-    const payload: IEventUpdateInteraction = { contactId, interaction }
+    const payload: EventUpdateInteraction = { contactId, interaction }
 
-    function showInteractionUpdateFailure(reason?: ContactInteractionUpdateFailedReasonType) {
+    function showInteractionUpdateFailure(reason?: ContactInteractionUpdateFailedReason) {
       if (!reason) return
 
       toast.add({
@@ -88,7 +88,7 @@ export const useContactsPage = () => {
     }
 
     loadingContactIds.add(contactId)
-    void emitSocketAction<IEventUpdateInteraction, void, ContactInteractionUpdateFailedReasonType>(
+    void emitSocketAction<EventUpdateInteraction, void, ContactInteractionUpdateFailedReason>(
       'update-contact-interaction-type',
       payload,
       {
@@ -113,10 +113,10 @@ export const useContactsPage = () => {
   const createPrivateChat = (contactId: string) => {
     if (creatingChatContactIds.has(contactId)) return
 
-    const payload: IEventCreateRoom = { contactIds: [contactId] }
+    const payload: EventCreateRoom = { contactIds: [contactId] }
 
     creatingChatContactIds.add(contactId)
-    void emitSocketAction<IEventCreateRoom, ICreateRoomAckPayload>('create-chat-room', payload, {
+    void emitSocketAction<EventCreateRoom, CreateRoomAckPayload>('create-chat-room', payload, {
       onSuccess: ({ payload: responsePayload }) => {
         goToChatRoom(responsePayload?.roomId)
       },
@@ -140,10 +140,10 @@ export const useContactsPage = () => {
     if (!contactToDeleteId.value) return
 
     const deletingUserId = contactToDeleteId.value
-    const payload: IEventDeleteContact = { deletingUserId }
+    const payload: EventDeleteContact = { deletingUserId }
 
     loadingContactIds.add(deletingUserId)
-    void emitSocketAction<IEventDeleteContact>('delete-contact', payload, {
+    void emitSocketAction<EventDeleteContact>('delete-contact', payload, {
       onSettled: () => {
         loadingContactIds.delete(deletingUserId)
       }

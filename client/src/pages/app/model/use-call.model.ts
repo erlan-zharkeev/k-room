@@ -1,7 +1,7 @@
-import type { CallRecordType } from 'src/shared/lib'
+import type { CallRecord } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
-const callStore = dexieCollectionStore<CallRecordType>(db.calls)
+const callStore = dexieCollectionStore<CallRecord>(db.calls)
 
 export const useCall = () => {
   const { bulkPut, put, reset } = callStore

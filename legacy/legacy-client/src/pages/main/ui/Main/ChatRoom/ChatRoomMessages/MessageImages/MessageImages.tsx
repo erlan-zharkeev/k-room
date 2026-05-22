@@ -2,9 +2,9 @@ import './message-images.scss'
 
 import { Image } from 'antd'
 
-import { IMessageImagesProps } from './message-images.types.ts'
+import { MessageImagesProps } from './message-images.types.ts'
 
-export const MessageImages = ({ message }: IMessageImagesProps) => {
+export const MessageImages = ({ message }: MessageImagesProps) => {
   if (!message.images || message.images.length <= 0) return null
 
   return (

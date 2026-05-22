@@ -1,2 +1,2 @@
 export { default as AppMicrophoneWaveform } from './AppMicrophoneWaveform.vue'
-export type { IAppMicrophoneWaveformProps } from './types'
+export type { AppMicrophoneWaveformProps } from './types'

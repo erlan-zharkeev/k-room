@@ -1,13 +1,13 @@
 import { USER_ROLES } from './constants'
 
-export type UserRoleType = (typeof USER_ROLES)[number]
+export type UserRole = (typeof USER_ROLES)[number]
 
-export type UserPreviewType = {
+export type UserPreview = {
   id: string
   nickname: string
 }
 
-export type UserDataType = UserPreviewType & {
-  role: UserRoleType
+export type UserData = UserPreview & {
+  role: UserRole
   email: string
 }

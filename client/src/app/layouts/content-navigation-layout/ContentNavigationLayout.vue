@@ -4,9 +4,9 @@ import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { AppHeader } from 'src/shared/ui'
 
 import { CONTENT_NAVIGATION_TITLE } from './constants'
-import { IContentNavigationLayoutProps } from './types'
+import { ContentNavigationLayoutProps } from './types'
 
-const props = defineProps<IContentNavigationLayoutProps>()
+const props = defineProps<ContentNavigationLayoutProps>()
 </script>
 
 <template>

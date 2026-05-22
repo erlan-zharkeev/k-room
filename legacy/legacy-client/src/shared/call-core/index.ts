@@ -1,11 +1,11 @@
 export { callCounter, getCallLength, callDate, callTime } from './shared/helpers/time-helpers'
 export type {
-  IConstraint,
-  CallMediaType,
-  IStreamConstraints,
-  ICallsState,
-  IModalOptions,
-  ICallInterlocutor
+  Constraint,
+  CallMedia,
+  StreamConstraints,
+  CallsState,
+  ModalOptions,
+  CallInterlocutor
 } from './internals/types'
 export {
   callsSlice,

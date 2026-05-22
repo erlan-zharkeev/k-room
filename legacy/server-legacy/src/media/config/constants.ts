@@ -1,12 +1,12 @@
-import { SharpSettingsKeyType } from 'src/shared/config'
+import { SharpSettingsKey } from 'src/shared/config'
 
-import { ValidateFileMetaOptionsMapType } from '../types'
+import { ValidateFileMetaOptionsMap } from '../types'
 
 export const ALLOWED_CONTENT_TYPES = ['image/', 'audio/', 'video/', 'application/pdf'] as const
 
 export const MEDIA_BUCKET_NAMES = ['avatar', 'doc', 'image', 'audio', 'video'] as const
 
-export const VALIDATION_MEDIA_OPTIONS_MAP: ValidateFileMetaOptionsMapType = {
+export const VALIDATION_MEDIA_OPTIONS_MAP: ValidateFileMetaOptionsMap = {
   avatar: {
     maxMb: 10,
     supportedKindMediaType: 'image'
@@ -30,7 +30,7 @@ export const VALIDATION_MEDIA_OPTIONS_MAP: ValidateFileMetaOptionsMapType = {
 }
 
 export const SHARP_PRESETS: Record<
-  SharpSettingsKeyType,
+  SharpSettingsKey,
   { quality: number; dimensions: { width: number | null; height: number | null } }
 > = {
   avatar: {

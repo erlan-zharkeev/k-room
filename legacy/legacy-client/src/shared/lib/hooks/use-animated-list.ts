@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { IAnimatedListItem } from './internals/types'
+import { AnimatedListItem } from './internals/types'
 
 export const useAnimatedList = <T extends object>(
   items: T[],
@@ -13,7 +13,7 @@ export const useAnimatedList = <T extends object>(
     exitDuration?: number
   } = {}
 ) => {
-  const [renderedItems, setRenderedItems] = useState<Array<IAnimatedListItem<T>>>([])
+  const [renderedItems, setRenderedItems] = useState<Array<AnimatedListItem<T>>>([])
   const initializedRef = useRef(false)
   const enterTimersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
   const exitTimersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
@@ -38,7 +38,7 @@ export const useAnimatedList = <T extends object>(
           item,
           key,
           state: initializedRef.current ? 'entering' : 'present'
-        } satisfies IAnimatedListItem<T>
+        } satisfies AnimatedListItem<T>
       })
 
       const exitingEntries = prev

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { AppText } from 'src/shared/ui'
 
-import type { IDateSeparatorProps } from '../config/types'
-const props = defineProps<IDateSeparatorProps>()
+import type { DateSeparatorProps } from '../config/types'
+const props = defineProps<DateSeparatorProps>()
 </script>
 
 <template>

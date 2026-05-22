@@ -1,6 +1,6 @@
-export type BannerType = 'success' | 'error' | 'info' | 'warning'
+export type Banner = 'success' | 'error' | 'info' | 'warning'
 
-export interface IAppBannerProps {
+export interface AppBannerProps {
   message: string
-  type?: BannerType
+  type?: Banner
 }

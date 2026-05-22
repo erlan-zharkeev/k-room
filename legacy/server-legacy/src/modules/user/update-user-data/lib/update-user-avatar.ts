@@ -1,13 +1,13 @@
-import { AppLanguageType, DEFAULT_APP_LANGUAGE } from 'common'
+import { AppLanguage, DEFAULT_APP_LANGUAGE } from 'common'
 
-import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/media'
+import { mediaBuckets, MongooseGridFSBucket, uploadBufferToBucket } from 'src/media'
 
 export const updateUserAvatar = async (
   buffer: Buffer | null,
   userId: string,
-  language: AppLanguageType = DEFAULT_APP_LANGUAGE
+  language: AppLanguage = DEFAULT_APP_LANGUAGE
 ) => {
-  const bucket = mediaBuckets.avatar as MongooseGridFSBucketType
+  const bucket = mediaBuckets.avatar as MongooseGridFSBucket
   const filename = `avatar.${String(userId)}`
 
   if (buffer === null) {

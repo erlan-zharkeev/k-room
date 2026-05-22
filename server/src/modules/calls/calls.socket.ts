@@ -1,16 +1,16 @@
 import type {
-  EventCallStartedAtType,
-  IEventAnswerCall,
-  IEventCallAccepted,
-  IEventCallEnded,
-  IEventCallUser,
-  IEventMarkCallAsVideo,
-  SocketActionsType
+  EventCallStartedAt,
+  EventAnswerCall,
+  EventCallAccepted,
+  EventCallEnded,
+  EventCallUser,
+  EventMarkCallAsVideo,
+  SocketActions
 } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstanceType } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types/socket'
 
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
@@ -19,8 +19,8 @@ import { CALLS_I18N } from './calls.i18n'
 import { CallModel } from './calls.model'
 import { emitCallDataToInterlocutors, emitCallsToUser } from './calls.service'
 
-export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const registerCallSocketHandlers = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'initialize',
     socketErrorMiddleware(
       socket,
@@ -31,22 +31,22 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'mark-call-as-video',
     socketErrorMiddleware(
       socket,
-      async ({ callId }: IEventMarkCallAsVideo) => {
+      async ({ callId }: EventMarkCallAsVideo) => {
         await CallModel.updateOne({ _id: callId }, { video: true })
       },
       { basicError: CALLS_I18N.markCallAsVideoFailed }
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'call-user',
     socketErrorMiddleware(
       socket,
-      async ({ signal, userToCall, avatar, callerNickname }: IEventCallUser) => {
+      async ({ signal, userToCall, avatar, callerNickname }: EventCallUser) => {
         if (!userToCall) {
           return
         }
@@ -79,12 +79,12 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'answer-call',
     socketErrorMiddleware(
       socket,
-      async ({ to, signal, selfSocketId, callId }: IEventAnswerCall) => {
-        const payload: IEventCallAccepted = { signal }
+      async ({ to, signal, selfSocketId, callId }: EventAnswerCall) => {
+        const payload: EventCallAccepted = { signal }
 
         emitToUsers([to], 'call-accepted', payload)
 
@@ -100,20 +100,20 @@ export const registerCallSocketHandlers = (socket: SocketInstanceType) => {
 
         await emitCallDataToInterlocutors(call.interlocutors, String(call._id))
 
-        const startedAtPayload: EventCallStartedAtType = Date.now()
+        const startedAtPayload: EventCallStartedAt = Date.now()
 
         emitToUsers([to], 'call-started-at', startedAtPayload)
-        getIO().to(selfSocketId).emit<SocketActionsType>('call-started-at', startedAtPayload)
+        getIO().to(selfSocketId).emit<SocketActions>('call-started-at', startedAtPayload)
       },
       { basicError: CALLS_I18N.answerCallFailed }
     )
   )
 
-  socket.on<SocketActionsType>(
+  socket.on<SocketActions>(
     'call-ended',
     socketErrorMiddleware(
       socket,
-      async ({ callerId, callId }: IEventCallEnded) => {
+      async ({ callerId, callId }: EventCallEnded) => {
         emitToUsers([callerId], 'call-ended')
 
         const call = await CallModel.findOneAndUpdate({ _id: callId }, { finishedAt: Date.now() }, { new: true }).lean()

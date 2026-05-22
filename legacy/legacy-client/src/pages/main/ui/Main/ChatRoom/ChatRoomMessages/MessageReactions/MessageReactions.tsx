@@ -4,18 +4,18 @@ import { useEffect, useState } from 'react'
 import { Tooltip } from 'antd'
 
 import { EMOJI_LIST } from 'src/shared/config'
-import { IMessageBodyReaction, IMessageReactionsProps } from './message-reactions.types.ts'
+import { MessageBodyReaction, MessageReactionsProps } from './message-reactions.types.ts'
 
-export const MessageReactions = ({ message }: IMessageReactionsProps) => {
-  const [reactions, setReactions] = useState<IMessageBodyReaction[]>([])
+export const MessageReactions = ({ message }: MessageReactionsProps) => {
+  const [reactions, setReactions] = useState<MessageBodyReaction[]>([])
 
-  const getReactionAuthorTooltip = (authors: IMessageBodyReaction['authors']) =>
+  const getReactionAuthorTooltip = (authors: MessageBodyReaction['authors']) =>
     authors.map((author) => author.username).join(', ')
 
   const getReactionGlyphByName = (name: string) => EMOJI_LIST.find((emoji) => name === emoji.key)?.glyph
 
   useEffect(() => {
-    const reactionMap: Record<string, IMessageBodyReaction> = {}
+    const reactionMap: Record<string, MessageBodyReaction> = {}
 
     message.reactions?.forEach((reaction) => {
       const authors = reactionMap[reaction.glyphKey] ? reactionMap[reaction.glyphKey].authors : []

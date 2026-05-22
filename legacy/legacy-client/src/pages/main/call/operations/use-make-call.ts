@@ -4,15 +4,15 @@ import { useDispatch } from 'react-redux'
 import Peer, { SignalData } from 'simple-peer'
 
 import {
-  SocketActionsType,
+  SocketActions,
   IFrontendUserData,
   IBasicStreamSettings,
-  IEventCallUser,
-  IEventAnswerCall,
+  EventCallUser,
+  EventAnswerCall,
   IEventUpdateSignal,
-  IEventCallAccepted,
-  IEventMarkCallAsVideo,
-  IEventCallEnded
+  EventCallAccepted,
+  EventMarkCallAsVideo,
+  EventCallEnded
 } from 'common'
 
 import {
@@ -28,7 +28,7 @@ import { frontCaptureSentryException, log } from 'src/shared/lib'
 import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
 import { useI18n } from 'src/shared/preferences'
 import { RefsContext } from 'src/shared/providers'
-import { useTypedSelector, AppDispatchType } from 'src/shared/store'
+import { useTypedSelector, AppDispatch } from 'src/shared/store'
 
 const parsePeerData = (data: unknown) => {
   if (typeof data === 'string') return JSON.parse(data) as { settings?: { audio?: boolean; video?: boolean } }
@@ -45,36 +45,36 @@ const parsePeerData = (data: unknown) => {
 }
 
 const emitCall = (userToCall: string, signal: SignalData, from: string, avatar: string, callerName: string) => {
-  const payload: IEventCallUser = {
+  const payload: EventCallUser = {
     userToCall,
     signal,
     from,
     avatar,
     callerName
   }
-  socket.emit<SocketActionsType>('call-user', payload)
+  socket.emit<SocketActions>('call-user', payload)
 }
 
 const emitCallAnswer = (signal: SignalData, to: string, selfSocketId: string, callId: string) => {
-  const payload: IEventAnswerCall = {
+  const payload: EventAnswerCall = {
     signal,
     to,
     selfSocketId,
     callId
   }
-  socket.emit<SocketActionsType>('answer-call', payload)
+  socket.emit<SocketActions>('answer-call', payload)
 }
 
 const emitUpdateSignal = (signal: SignalData) => {
   const payload: IEventUpdateSignal = { signal }
-  socket.emit<SocketActionsType>('update-call-signal', payload)
+  socket.emit<SocketActions>('update-call-signal', payload)
 }
 
 export const useMakeCall = () => {
   // const soundConnection = useRef<Howl>(useSound('connection', true))
   // const soundCalling = useRef<Howl>(useSound('ring', true))
   const { settings } = useTypedSelector((state) => state.calls)
-  const dispatch = useDispatch<AppDispatchType>()
+  const dispatch = useDispatch<AppDispatch>()
 
   const { interlocutorVideoDom, selfVideoDom } = useContext(RefsContext)
 
@@ -167,7 +167,7 @@ export const useMakeCall = () => {
       if (connection.current?.connected) return emitUpdateSignal(data)
       emitCall(interlocutorData.id, data, selfId, selfAvatarPath, callerName)
     })
-    socket.on<SocketActionsType>('call-accepted', (data: IEventCallAccepted) => {
+    socket.on<SocketActions>('call-accepted', (data: EventCallAccepted) => {
       // soundConnection.current.stop()
       dispatch(setCurrentCallAccepted())
       connection.current?.signal(data.signal as SignalData)
@@ -241,8 +241,8 @@ export const useMakeCall = () => {
       connection.current?.addTrack(newVideoTrack, selfStream.current)
       applyStreamToHtmlVideoTag()
       dispatch(markCurrentCallAsVideo())
-      const payload: IEventMarkCallAsVideo = { callId }
-      socket.emit<SocketActionsType>('mark-call-as-video', payload)
+      const payload: EventMarkCallAsVideo = { callId }
+      socket.emit<SocketActions>('mark-call-as-video', payload)
     }
     const data = { settings: { video: true } }
     connection.current?.send(JSON.stringify(data))
@@ -265,11 +265,11 @@ export const useMakeCall = () => {
     }
     closeConnection(true)
     if (!callId) return
-    const payload: IEventCallEnded = {
+    const payload: EventCallEnded = {
       callerId: interlocutorId.current,
       callId
     }
-    socket.emit<SocketActionsType>('call-ended', payload)
+    socket.emit<SocketActions>('call-ended', payload)
   }
 
   return {

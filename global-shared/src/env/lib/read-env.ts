@@ -1,11 +1,11 @@
-export type EnvSourceType = Record<string, string | undefined>
+export type EnvSource = Record<string, string | undefined>
 
-export interface IReadEnvOptions {
-  runtimeEnv?: EnvSourceType
-  secretEnv?: EnvSourceType
+export interface ReadEnvOptions {
+  runtimeEnv?: EnvSource
+  secretEnv?: EnvSource
 }
 
-export interface ISecretEnvFileReader {
+export interface SecretEnvFileReader {
   existsSync(path: string): boolean
   readFileSync(path: string, encoding: 'utf-8'): string
 }
@@ -25,12 +25,12 @@ export const parseEnvContent = (content: string): Record<string, string> =>
       })
   )
 
-export const readSecretEnv = (secretEnvPath: string, fileReader: ISecretEnvFileReader): Record<string, string> => {
+export const readSecretEnv = (secretEnvPath: string, fileReader: SecretEnvFileReader): Record<string, string> => {
   if (!fileReader.existsSync(secretEnvPath)) return {}
 
   return parseEnvContent(fileReader.readFileSync(secretEnvPath, 'utf-8'))
 }
 
-export const readEnv = (key: string, source: EnvSourceType, options: IReadEnvOptions = {}) =>
+export const readEnv = (key: string, source: EnvSource, options: ReadEnvOptions = {}) =>
   [options.runtimeEnv?.[key], source[key], options.secretEnv?.[key]].find((value) => value != null && value !== '') ??
   ''

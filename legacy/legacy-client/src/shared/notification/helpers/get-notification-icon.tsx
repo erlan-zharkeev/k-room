@@ -1,7 +1,7 @@
-import { NotificationType } from 'src/shared/notification/types'
-import { AppIconNameType, ColorModifierType, AppIcon } from 'src/shared/ui'
+import { Notification } from 'src/shared/notification/types'
+import { AppIconName, ColorModifier, AppIcon } from 'src/shared/ui'
 
-const notificationIconMap: Record<NotificationType, { name: AppIconNameType; color: ColorModifierType }> = {
+const notificationIconMap: Record<Notification, { name: AppIconName; color: ColorModifier }> = {
   success: {
     name: 'success',
     color: 'success-color'
@@ -20,6 +20,6 @@ const notificationIconMap: Record<NotificationType, { name: AppIconNameType; col
   }
 }
 
-export const getNotificationIcon = (messageType: NotificationType) => (
+export const getNotificationIcon = (messageType: Notification) => (
   <AppIcon name={notificationIconMap[messageType].name} color={notificationIconMap[messageType].color} />
 )

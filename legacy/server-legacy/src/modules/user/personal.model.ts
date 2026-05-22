@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose'
 
-import { IUserPersonalData } from './types'
+import { UserPersonalData } from './types'
 import { contactSchema } from './contact.model'
 
-export const personalSchema = new Schema<IUserPersonalData>(
+export const personalSchema = new Schema<UserPersonalData>(
   {
     email: {
       type: String,

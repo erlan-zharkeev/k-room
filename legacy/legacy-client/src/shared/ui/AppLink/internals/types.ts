@@ -2,15 +2,15 @@ import { HTMLAttributeAnchorTarget } from 'react'
 
 import { To } from 'react-router-dom'
 
-import { UnknownCallbackType } from 'common'
+import { UnknownCallback } from 'common'
 
-import { ColorModifierType } from 'src/shared/ui/internals/types'
+import { ColorModifier } from 'src/shared/ui/internals/types'
 
-export interface IAppLinkProps {
+export interface AppLinkProps {
   text: string
-  color?: ColorModifierType
+  color?: ColorModifier
   target?: HTMLAttributeAnchorTarget
-  onClick?: UnknownCallbackType
+  onClick?: UnknownCallback
   disabled?: boolean
   prevent?: boolean
   to?: To

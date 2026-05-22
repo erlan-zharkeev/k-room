@@ -6,9 +6,9 @@ import { AppIcon } from 'src/shared/ui/AppIcon/AppIcon'
 import { AppScrollContainer } from 'src/shared/ui/AppScrollContainer/AppScrollContainer'
 import { AppText } from 'src/shared/ui/AppText/AppText'
 
-import { IAppTagsProps } from './internals/types'
+import { AppTagsProps } from './internals/types'
 
-export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedIds, disabled }: IAppTagsProps) => {
+export const AppTags = ({ tags, onRemove, onElementClick, title, name, selectedIds, disabled }: AppTagsProps) => {
   const classNames = createClassNameWithModifiers({ rootClass: 'app-tags', modifiers: [onElementClick && 'clickable'] })
   const tagClassName = createClassNameWithModifiers({ rootClass: 'app-tags__tag', modifiers: [disabled && 'disabled'] })
 

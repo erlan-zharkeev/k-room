@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import dotenv, { type DotenvParseOutput } from 'dotenv'
-import { formatAppName, readEnv, readSecretEnv, type IPackageData } from 'global-shared'
+import { formatAppName, readEnv, readSecretEnv, type PackageData } from 'global-shared'
 
 const stage = process.env.NODE_ENV ?? 'development'
 const envDir = path.resolve(process.cwd(), '..')
@@ -38,7 +38,7 @@ const CLIENT_PORT = getEnv('CLIENT_PORT', sharedEnvs)
 const SERVER_PORT = getEnv('SERVER_PORT', sharedEnvs)
 const SOCKET_PATH = getEnv('SOCKET_PATH', sharedEnvs)
 
-const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as IPackageData
+const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
 
 const isDev = stage !== 'production'
 const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA'

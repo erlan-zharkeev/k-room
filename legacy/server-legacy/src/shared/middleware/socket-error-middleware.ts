@@ -1,17 +1,17 @@
-import { LocalizedTextType, ReqStatusType } from 'common'
+import { LocalizedText, ReqStatus } from 'common'
 
-import { SHARED_I18N, SocketInstanceType } from 'src/shared/config'
+import { SHARED_I18N, SocketInstance } from 'src/shared/config'
 
 import { isAppError } from '../lib/app-error'
 import { throwSocketError } from '../lib/throw-error'
 
 export const socketErrorMiddleware =
   <TPayload = void>(
-    socket: SocketInstanceType,
+    socket: SocketInstance,
     handler: (payload: TPayload) => void | Promise<void>,
     options: {
-      basicError: LocalizedTextType<string>
-      status?: ReqStatusType
+      basicError: LocalizedText<string>
+      status?: ReqStatus
       silent?: boolean
     }
   ) =>

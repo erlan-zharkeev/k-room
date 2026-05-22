@@ -1,11 +1,11 @@
-import type { NotificationSettingGroupType, NotificationSettingKeyType } from 'src/entities/setting'
+import type { NotificationSettingGroup, NotificationSettingKey } from 'src/entities/setting'
 
 import { SETTINGS_PAGE_NOTIFICATIONS_I18N } from '../i18n/notifications.i18n'
-import type { ISettingsNotificationOption, ISettingsNotificationSection } from '../types/notifications.types'
+import type { SettingsNotificationOption, SettingsNotificationSection } from '../types/notifications.types'
 
-export const NOTIFICATION_GROUP_IDS: NotificationSettingGroupType[] = ['general', 'messages', 'calls']
+export const NOTIFICATION_GROUP_IDS: NotificationSettingGroup[] = ['general', 'messages', 'calls']
 
-export const NOTIFICATION_CHANNEL_IDS: NotificationSettingKeyType[] = [
+export const NOTIFICATION_CHANNEL_IDS: NotificationSettingKey[] = [
   'toast',
   'sound',
   'vibration',
@@ -13,7 +13,7 @@ export const NOTIFICATION_CHANNEL_IDS: NotificationSettingKeyType[] = [
   'nativePush'
 ]
 
-export const SETTINGS_NOTIFICATION_SECTIONS: ISettingsNotificationSection[] = [
+export const SETTINGS_NOTIFICATION_SECTIONS: SettingsNotificationSection[] = [
   {
     id: 'general',
     title: SETTINGS_PAGE_NOTIFICATIONS_I18N.general
@@ -28,7 +28,7 @@ export const SETTINGS_NOTIFICATION_SECTIONS: ISettingsNotificationSection[] = [
   }
 ]
 
-export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, ISettingsNotificationOption[]> = {
+export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, SettingsNotificationOption[]> = {
   general: [
     {
       id: 'enabled',

@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { CODES_ENDPOINTS, ICodeValidationPayload, ROUTE_NAMES } from 'common'
+import { CODES_ENDPOINTS, CodeValidationPayload, ROUTE_NAMES } from 'common'
 
 import { useApi } from 'src/shared/api'
 import { useCounter, useQuery, getNextReqInterval } from 'src/shared/lib'
-import { AppFormDataType } from 'src/shared/ui'
+import { AppFormData } from 'src/shared/ui'
 
 export const usePasswordRecovery = () => {
   const navigate = useNavigate()
@@ -39,7 +39,7 @@ export const usePasswordRecovery = () => {
     }
   }, [counterValue])
 
-  const sendEmailCodeToPasswordRecovery = async (fields?: AppFormDataType) => {
+  const sendEmailCodeToPasswordRecovery = async (fields?: AppFormData) => {
     try {
       const nextEmail = typeof fields?.email === 'string' ? fields.email.trim() : email.trim()
       if (!nextEmail) return
@@ -68,11 +68,11 @@ export const usePasswordRecovery = () => {
     }
   }
 
-  const validateCodeToRecoveryPassword = async (fields: AppFormDataType) => {
+  const validateCodeToRecoveryPassword = async (fields: AppFormData) => {
     try {
       const { code } = fields as { code: string }
       setCodeValidationIsLoading(true)
-      const payload: ICodeValidationPayload = {
+      const payload: CodeValidationPayload = {
         email: email.trim(),
         code
       }

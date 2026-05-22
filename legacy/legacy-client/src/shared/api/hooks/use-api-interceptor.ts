@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-import { IBackendResponse, ROUTE_NAMES, REQ_STATUS, ReqStatusType } from 'common'
+import { BackendResponse, ROUTE_NAMES, REQ_STATUS, ReqStatus } from 'common'
 
 import { API_I18N } from 'src/shared/api/internals/i18n'
 import { createApiError } from 'src/shared/api/internals/types'
@@ -10,7 +10,7 @@ import { useI18n, useSettings } from 'src/shared/preferences'
 
 import { useNotification } from '../../notification/index'
 
-const isBackendResponse = (data: unknown): data is IBackendResponse<unknown> => {
+const isBackendResponse = (data: unknown): data is BackendResponse<unknown> => {
   if (!data || typeof data !== 'object') return false
 
   const candidate = data as Record<string, unknown>
@@ -54,7 +54,7 @@ export const useApiInterceptor = () => {
   const interceptError = async (error: unknown) => {
     frontCaptureSentryException(error)
     if (error instanceof AxiosError) {
-      const status = error.response?.status as ReqStatusType | undefined
+      const status = error.response?.status as ReqStatus | undefined
 
       const payload = await extractErrorPayload(error)
       let text: string | undefined

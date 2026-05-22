@@ -1,4 +1,3 @@
-import type { EventGetRoomsType, ChatRoomType } from 'global-shared'
+import type { EventGetRooms, ChatRoom } from 'global-shared'
 
-export const filterRoomPreviewMessage = ({ previewMessage: _, ...room }: EventGetRoomsType[number]): ChatRoomType =>
-  room
+export const filterRoomPreviewMessage = ({ previewMessage: _, ...room }: EventGetRooms[number]): ChatRoom => room

@@ -1,9 +1,9 @@
-import { ChatRoomsType, IFrontendContact, SocketActionsType } from 'common'
+import { ChatRooms, IFrontendContact, SocketActions } from 'common'
 
 import { transformRoomForUser } from 'src/modules/chat-room'
 import { ChatRoomModel } from 'src/modules/chat-room'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
@@ -13,8 +13,8 @@ import { UserModel } from '../user.model'
 
 import { transformUserToFrontendContact } from './lib/transform-user-to-frontend-contact'
 
-export const actualizeUserDataController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const actualizeUserDataController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'actualize-user-data',
     socketErrorMiddleware(
       socket,
@@ -28,11 +28,11 @@ export const actualizeUserDataController = (socket: SocketInstanceType) => {
         }
         const roomIds = data?.personal.chatRooms
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-        const roomsResultData: ChatRoomsType = rooms.map((room) => transformRoomForUser({ userId, room }))
+        const roomsResultData: ChatRooms = rooms.map((room) => transformRoomForUser({ userId, room }))
         const sockets = await getSocketsByUserIds([userId])
         sockets.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('actual-contacts', contactResultData)
-          getIO().to(socketId).emit<SocketActionsType>('actual-chat-rooms', roomsResultData)
+          getIO().to(socketId).emit<SocketActions>('actual-contacts', contactResultData)
+          getIO().to(socketId).emit<SocketActions>('actual-chat-rooms', roomsResultData)
         })
       },
       { basicError: USER_SOCKET_I18N.actualizeUserDataFailed }

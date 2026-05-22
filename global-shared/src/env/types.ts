@@ -1,4 +1,4 @@
-export interface IEnvVariables {
+export interface EnvVariables {
   APP_HOST: string
   API_HOST: string
   MONGO_ADMIN_HOST: string
@@ -21,7 +21,7 @@ export interface IEnvVariables {
   TURNSTILE_SECRET_KEY?: string
 }
 
-export interface IEnvSharedVariables {
+export interface EnvSharedVariables {
   SERVER_PORT: string
   CLIENT_PORT: string
   SOCKET_PATH: string

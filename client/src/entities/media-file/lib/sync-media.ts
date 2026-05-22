@@ -4,11 +4,11 @@ import { isHttpError } from 'src/shared/api'
 
 import { MISSING_MEDIA_RETRY_INTERVAL_MS, UPDATE_MEDIA_INTERVAL_MS } from '../config/constants'
 
-import type { ISyncMediaDeps, MediaHeadersType } from './types'
+import type { SyncMediaDeps, MediaHeaders } from './types'
 
 const isRecentlyChecked = (lastChecked: number, interval: number) => Date.now() - lastChecked < interval
 
-export const syncMedia = async (filename: string, deps: ISyncMediaDeps) => {
+export const syncMedia = async (filename: string, deps: SyncMediaDeps) => {
   const record = await deps.mediaGet(filename)
 
   if (record?.status === 'missing' && isRecentlyChecked(record.lastChecked, MISSING_MEDIA_RETRY_INTERVAL_MS)) {
@@ -32,7 +32,7 @@ export const syncMedia = async (filename: string, deps: ISyncMediaDeps) => {
   }
 
   const refreshCheck = async () => {
-    let meta: MediaHeadersType
+    let meta: MediaHeaders
 
     try {
       meta = await deps.loadMediaHeaders(filename)

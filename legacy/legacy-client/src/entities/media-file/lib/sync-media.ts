@@ -1,13 +1,13 @@
-import { IDbMedia } from 'src/shared/config'
+import { DbMedia } from 'src/shared/config'
 
-export interface ISyncMediaDeps {
-  mediaGet: (filename: string) => Promise<IDbMedia | undefined>
-  updateMedia: (filename: string, patch: Partial<IDbMedia>) => Promise<number>
+export interface SyncMediaDeps {
+  mediaGet: (filename: string) => Promise<DbMedia | undefined>
+  updateMedia: (filename: string, patch: Partial<DbMedia>) => Promise<number>
   loadMedia: (filename: string) => Promise<void>
   loadMediaHeaders: (filename: string) => Promise<{ etag?: string }>
 }
 
-export const syncMedia = async (filename: string, deps: ISyncMediaDeps) => {
+export const syncMedia = async (filename: string, deps: SyncMediaDeps) => {
   const record = await deps.mediaGet(filename)
 
   const refreshCheck = async () => {

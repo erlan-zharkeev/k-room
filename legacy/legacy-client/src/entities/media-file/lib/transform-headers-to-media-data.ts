@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios'
 
-import { MediaKindType } from 'common'
+import { MediaKind } from 'common'
 
-import { IDbMedia } from 'src/shared/config'
+import { DbMedia } from 'src/shared/config'
 
 const getHeaderValue = (value: AxiosResponse['headers'][string]): string => {
   if (Array.isArray(value)) {
@@ -12,12 +12,12 @@ const getHeaderValue = (value: AxiosResponse['headers'][string]): string => {
   return typeof value === 'string' ? value : ''
 }
 
-export const transformHeadersToMediaData = (res: AxiosResponse): Omit<IDbMedia, 'id' | 'blob'> => {
+export const transformHeadersToMediaData = (res: AxiosResponse): Omit<DbMedia, 'id' | 'blob'> => {
   return {
     etag: getHeaderValue(res.headers.etag),
     contentType: getHeaderValue(res.headers['content-type']),
     lastModified: getHeaderValue(res.headers['last-modified']),
     lastChecked: Date.now(),
-    kind: getHeaderValue(res.headers.kind) as MediaKindType
+    kind: getHeaderValue(res.headers.kind) as MediaKind
   }
 }

@@ -1,5 +1,5 @@
-import type { ISystemStore } from '../model/types.model'
+import type { SystemStore } from '../model/types.model'
 
-export const INITIAL_SYSTEM_STORE: ISystemStore = {
+export const INITIAL_SYSTEM_STORE: SystemStore = {
   hasInteracted: false
 }

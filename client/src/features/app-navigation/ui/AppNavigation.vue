@@ -5,9 +5,9 @@ import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from '../config/constants'
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 import { useAppNavigation } from '../model/use-app-navigation.model'
 
-import type { IAppNavigationProps } from './types'
+import type { AppNavigationProps } from './types'
 
-const props = defineProps<IAppNavigationProps>()
+const props = defineProps<AppNavigationProps>()
 const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuantity } = useAppNavigation()
 </script>
 

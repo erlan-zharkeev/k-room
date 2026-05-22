@@ -1,3 +1,3 @@
-export interface IAppNavigationProps {
+export interface AppNavigationProps {
   footer?: boolean
 }

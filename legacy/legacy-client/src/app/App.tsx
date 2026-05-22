@@ -24,7 +24,7 @@ import { ErrorFallback } from '../pages/error'
 
 import { useInitFirebase } from './bootstrap/use-init-firebase'
 import { useInitSentry } from './bootstrap/use-init-sentry'
-import { IContextProviderProps } from './types'
+import { ContextProviderProps } from './types'
 
 useInitSentry()
 useInitFirebase()
@@ -32,12 +32,12 @@ useInitFirebase()
 // Some browser-side dependencies still expect a global `process` shim at runtime.
 window.process = process
 
-const AdditionalServiceProvider = ({ children }: IContextProviderProps) => {
+const AdditionalServiceProvider = ({ children }: ContextProviderProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <AdditionalServiceContext.Provider value={{} as any}>{children}</AdditionalServiceContext.Provider>
 }
 
-const RefsProvider = ({ children }: IContextProviderProps) => {
+const RefsProvider = ({ children }: ContextProviderProps) => {
   const interlocutorVideoDom = useRef<HTMLVideoElement>(null)
   const selfVideoDom = useRef<HTMLVideoElement>(null)
   const refs = { interlocutorVideoDom, selfVideoDom }

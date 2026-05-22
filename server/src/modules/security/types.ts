@@ -1,18 +1,18 @@
-import type { ProtectedActionReasonType, SecurityActionType } from 'global-shared'
+import type { ProtectedActionReason, SecurityAction } from 'global-shared'
 import type { RedisClientType } from 'redis'
 
-export interface IRedisAdapterClients {
+export interface RedisAdapterClients {
   publishClient: RedisClientType
   subscribeClient: RedisClientType
 }
 
-export interface IProtectedActionDecision {
-  action: SecurityActionType
-  reason: ProtectedActionReasonType
+export interface ProtectedActionDecision {
+  action: SecurityAction
+  reason: ProtectedActionReason
   nextTryAt?: number
 }
 
-export interface ITurnstileVerificationResponse {
+export interface TurnstileVerificationResponse {
   success: boolean
   action?: string
   hostname?: string

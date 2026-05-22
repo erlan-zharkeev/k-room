@@ -1,13 +1,13 @@
-import type { IEventDeleteChatRoom } from 'global-shared'
+import type { EventDeleteChatRoom } from 'global-shared'
 import { computed, ref, toRef, type Ref } from 'vue'
 
 import { useSocketAction } from 'src/shared/api'
 
-import type { IChatRoomDeleteDialogProps } from '../config/types'
+import type { ChatRoomDeleteDialogProps } from '../config/types'
 
 import { useChatRoomPermissions } from './use-chat-room-permissions.model'
 
-export const useChatRoomDelete = (props: IChatRoomDeleteDialogProps, isDeleteChatRoomDialogOpen: Ref<boolean>) => {
+export const useChatRoomDelete = (props: ChatRoomDeleteDialogProps, isDeleteChatRoomDialogOpen: Ref<boolean>) => {
   const item = toRef(props, 'item')
   const { emitSocketAction } = useSocketAction()
   const isDeletingChatRoom = ref(false)
@@ -21,10 +21,10 @@ export const useChatRoomDelete = (props: IChatRoomDeleteDialogProps, isDeleteCha
   const deleteChatRoom = () => {
     if (!canDeleteChatRoom.value) return
 
-    const payload: IEventDeleteChatRoom = { roomId: item.value.id }
+    const payload: EventDeleteChatRoom = { roomId: item.value.id }
 
     isDeletingChatRoom.value = true
-    void emitSocketAction<IEventDeleteChatRoom>('delete-chat-room', payload, {
+    void emitSocketAction<EventDeleteChatRoom>('delete-chat-room', payload, {
       onSettled: () => {
         isDeletingChatRoom.value = false
       }

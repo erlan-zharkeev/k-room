@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export interface IAppFormItemProps {
+export interface AppFormItemProps {
   name: string
   children: ReactNode
   label?: string

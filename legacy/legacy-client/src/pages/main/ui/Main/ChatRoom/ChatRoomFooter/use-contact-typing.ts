@@ -1,4 +1,4 @@
-import { IEventUserTyping, SocketActionsType } from 'common'
+import { EventUserTyping, SocketActions } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
@@ -12,12 +12,12 @@ export const useContactTyping = () => {
 
   const sendUserTypingStatus = (isTyping: boolean) => {
     if (!chatRoomData.selectedChatRoom) return
-    const payload: IEventUserTyping = {
+    const payload: EventUserTyping = {
       authorName: username,
       usersTo: chatRoomData.selectedChatRoom.users,
       isTyping
     }
-    socket.emit<SocketActionsType>('client-typing', payload)
+    socket.emit<SocketActions>('client-typing', payload)
   }
 
   const debouncedChangeTypeStatus = useDebounce(sendUserTypingStatus, 2000)

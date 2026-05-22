@@ -1,6 +1,6 @@
-export interface ICreateClassNameWithModifiersParams {
+export interface CreateClassNameWithModifiersParams {
   rootClass: string
   modifiers: (string | boolean | undefined)[]
   additionalClassName?: string
 }
-export type StoppableEventType = Event | { domEvent: Event }
+export type StoppableEvent = Event | { domEvent: Event }

@@ -1,5 +1,5 @@
 import { IMessage } from 'common'
 
-export interface IRepliedMessageProps {
+export interface RepliedMessageProps {
   message: IMessage
 }

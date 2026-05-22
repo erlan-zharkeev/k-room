@@ -1,9 +1,9 @@
 import { MEDIA_SYNC_CONCURRENCY } from '../config/constants'
 
-import type { MediaQueueTaskType, MediaSyncTaskType } from './types'
+import type { MediaQueueTask, MediaSyncTask } from './types'
 
 const inFlight = new Map<string, Promise<void>>()
-const pending: MediaQueueTaskType[] = []
+const pending: MediaQueueTask[] = []
 let activeCount = 0
 
 const runNext = () => {
@@ -16,7 +16,7 @@ const runNext = () => {
   void task()
 }
 
-const runQueued = (task: MediaSyncTaskType) => {
+const runQueued = (task: MediaSyncTask) => {
   return new Promise<void>((resolve, reject) => {
     const run = async () => {
       activeCount += 1
@@ -42,7 +42,7 @@ const runQueued = (task: MediaSyncTaskType) => {
   })
 }
 
-export const enqueueMediaSync = async (filename: string, task: MediaSyncTaskType) => {
+export const enqueueMediaSync = async (filename: string, task: MediaSyncTask) => {
   const current = inFlight.get(filename)
 
   if (current) {

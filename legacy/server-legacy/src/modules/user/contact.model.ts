@@ -1,17 +1,11 @@
-import { InteractionType } from 'common'
+import { Interaction } from 'common'
 import { Schema } from 'mongoose'
 
-import { IContact } from './types'
+import { UserContact } from './types'
 
-const interactionValues: InteractionType[] = [
-  'default',
-  'invited',
-  'invite-accepted',
-  'invite-hidden',
-  'invite-received'
-]
+const interactionValues: Interaction[] = ['default', 'invited', 'invite-accepted', 'invite-hidden', 'invite-received']
 
-export const contactSchema = new Schema<IContact>(
+export const contactSchema = new Schema<UserContact>(
   {
     id: {
       type: String,

@@ -1,12 +1,12 @@
-import type { ChatRoomSchemaType } from 'global-shared'
+import type { ChatRoomSchema } from 'global-shared'
 import type { Types } from 'mongoose'
 
-export interface ITransformRoomForUserParams {
+export interface TransformRoomForUserParams {
   userId: string
-  room: ChatRoomSchemaType
+  room: ChatRoomSchema
   pinnedChatRoomIds?: string[]
 }
 
-export interface IChatRoomSchemaWithObjectId extends ChatRoomSchemaType {
+export interface ChatRoomSchemaWithObjectId extends ChatRoomSchema {
   _id: Types.ObjectId
 }

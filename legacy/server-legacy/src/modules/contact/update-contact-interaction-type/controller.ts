@@ -1,13 +1,13 @@
 import {
-  EventInviteReceivedType,
-  IEventUpdateContactInteractionSuccess,
-  IEventUpdateInteraction,
-  SocketActionsType
+  EventInviteReceived,
+  EventUpdateContactInteractionSuccess,
+  EventUpdateInteraction,
+  SocketActions
 } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
@@ -18,12 +18,12 @@ import { deleteContactById } from './lib/delete-contact-by-id'
 import { emitContactInteractionUpdated } from './lib/emit-contact-interaction-updated'
 import { setContactInteraction } from './lib/set-contact-interaction'
 
-export const updateContactInteractionTypeController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const updateContactInteractionTypeController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'update-contact-interaction-type',
     socketErrorMiddleware(
       socket,
-      async ({ contactId, interaction }: IEventUpdateInteraction) => {
+      async ({ contactId, interaction }: EventUpdateInteraction) => {
         const { userId } = socket.data
         const updateAuthorContactInteraction = async () => setContactInteraction(userId, contactId, interaction)
         const updateContactInteraction = async () => setContactInteraction(contactId, userId, interaction)
@@ -47,7 +47,7 @@ export const updateContactInteractionTypeController = (socket: SocketInstanceTyp
             const authorData = await updateAuthorContactInteraction()
             if (!contactData || !authorData) return
             const { username, lastSeen, online } = authorData.public
-            const payload: EventInviteReceivedType = {
+            const payload: EventInviteReceived = {
               id: String(authorData._id),
               username,
               online,
@@ -56,7 +56,7 @@ export const updateContactInteractionTypeController = (socket: SocketInstanceTyp
             }
             const contactSockets = await getSocketsByUserIds([contactData._id])
             contactSockets.forEach((socketId) => {
-              getIO().to(socketId).emit<SocketActionsType>('invite-received', payload)
+              getIO().to(socketId).emit<SocketActions>('invite-received', payload)
             })
             break
           }
@@ -67,8 +67,8 @@ export const updateContactInteractionTypeController = (socket: SocketInstanceTyp
           }
         }
 
-        const payload: IEventUpdateContactInteractionSuccess = { contactId, interaction }
-        getIO().to(socket.id).emit<SocketActionsType>('contact-interaction-updated', payload)
+        const payload: EventUpdateContactInteractionSuccess = { contactId, interaction }
+        getIO().to(socket.id).emit<SocketActions>('contact-interaction-updated', payload)
       },
       { basicError: CONTACT_I18N.updateContactInteractionFailed }
     )

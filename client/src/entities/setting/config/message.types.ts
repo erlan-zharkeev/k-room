@@ -1,4 +1,4 @@
-export interface IMessageListScrollState {
+export interface MessageListScrollState {
   firstVisibleItemId: string
   offsetFromItemStart?: number
 }

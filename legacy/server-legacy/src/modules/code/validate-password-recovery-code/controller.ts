@@ -1,11 +1,11 @@
 import { randomUUID } from 'node:crypto'
 
-import { IValidatePasswordRecoveryCodeResponse, REQ_STATUS } from 'common'
+import { ValidatePasswordRecoveryCodeResponse, REQ_STATUS } from 'common'
 
 import { USER_I18N } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { AppResponseType, IAppRequest } from 'src/shared/config'
+import { AppResponse, AppRequest } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -16,8 +16,8 @@ import { QUERY_LIFE_MS } from './config/constants'
 import { VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './config/i18n'
 
 export const validatePasswordRecoveryCodeController = async (
-  req: IAppRequest,
-  res: AppResponseType<IValidatePasswordRecoveryCodeResponse>
+  req: AppRequest,
+  res: AppResponse<ValidatePasswordRecoveryCodeResponse>
 ) => {
   const { language } = req
   const basicError = localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed, language)

@@ -1,20 +1,20 @@
-import { IEventContactAddSuccess, IEventSaveContact, SocketActionsType } from 'common'
+import { EventContactAddSuccess, EventSaveContact, SocketActions } from 'common'
 
 import { transformUserToContact } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
 import { CONTACT_I18N } from '../i18n'
 
-export const saveContactController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const saveContactController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'save-contact',
     socketErrorMiddleware(
       socket,
-      async ({ interlocutorId }: IEventSaveContact) => {
+      async ({ interlocutorId }: EventSaveContact) => {
         const { userId } = socket.data
         const selfContact = await UserModel.findOneAndUpdate(
           { _id: userId },
@@ -31,10 +31,10 @@ export const saveContactController = (socket: SocketInstanceType) => {
         )
         const contactCandidate = await UserModel.findOne({ _id: interlocutorId })
         if (selfContact && contactCandidate) {
-          const payload: IEventContactAddSuccess = {
+          const payload: EventContactAddSuccess = {
             contactData: transformUserToContact(contactCandidate)
           }
-          getIO().to(socket.id).emit<SocketActionsType>('contact-add-success', payload)
+          getIO().to(socket.id).emit<SocketActions>('contact-add-success', payload)
         }
       },
       { basicError: CONTACT_I18N.saveContactFailed }

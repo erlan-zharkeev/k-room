@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose'
 
 import { codeElementSchema } from './code-element.model'
-import { ICodeMethod } from './types'
+import { CodeMethod } from './types'
 
-export const codeMethodSchema = new Schema<ICodeMethod>(
+export const codeMethodSchema = new Schema<CodeMethod>(
   {
     query: codeElementSchema,
     email: codeElementSchema,

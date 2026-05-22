@@ -1,16 +1,16 @@
-import type { IEventLeaveChatRoom } from 'global-shared'
+import type { EventLeaveChatRoom } from 'global-shared'
 import { computed, ref, toRef, watch, type Ref } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useSocketAction } from 'src/shared/api'
-import type { IAppUserPickerItem } from 'src/shared/ui'
+import type { AppUserPickerItem } from 'src/shared/ui'
 
-import type { IChatRoomLeaveDialogProps } from '../config/types'
+import type { ChatRoomLeaveDialogProps } from '../config/types'
 
 import { useChatRoomPermissions } from './use-chat-room-permissions.model'
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
-export const useChatRoomLeave = (props: IChatRoomLeaveDialogProps, isLeaveChatRoomDialogOpen: Ref<boolean>) => {
+export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoomDialogOpen: Ref<boolean>) => {
   const item = toRef(props, 'item')
   const { getById } = useChatRoom()
   const { getUserById } = useChatRoomUserLookup()
@@ -22,7 +22,7 @@ export const useChatRoomLeave = (props: IChatRoomLeaveDialogProps, isLeaveChatRo
     const room = getById(item.value.id)
     const roomUserIds = room?.users ?? []
 
-    return roomUserIds.reduce<IAppUserPickerItem[]>((items, userId) => {
+    return roomUserIds.reduce<AppUserPickerItem[]>((items, userId) => {
       if (userId === item.value.adminId) return items
 
       const userData = getUserById(userId)
@@ -52,13 +52,13 @@ export const useChatRoomLeave = (props: IChatRoomLeaveDialogProps, isLeaveChatRo
     if (!canLeaveChatRoom.value) return
 
     const nextAdminId = selectedNewAdminIds.value[0]
-    const payload: IEventLeaveChatRoom = {
+    const payload: EventLeaveChatRoom = {
       roomId: item.value.id,
       ...(isCurrentUserChatRoomAdmin.value ? { nextAdminId } : {})
     }
 
     isLeavingChatRoom.value = true
-    void emitSocketAction<IEventLeaveChatRoom>('leave-chat-room', payload, {
+    void emitSocketAction<EventLeaveChatRoom>('leave-chat-room', payload, {
       onSettled: () => {
         isLeavingChatRoom.value = false
       }

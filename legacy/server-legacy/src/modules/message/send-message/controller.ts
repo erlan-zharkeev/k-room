@@ -1,34 +1,34 @@
-import { IEventMessageDelivered, IEventSendMessage, IMessage, SocketActionsType } from 'common'
+import { EventMessageDelivered, EventSendMessage, IMessage, SocketActions } from 'common'
 import { v4 as uuidv4 } from 'uuid'
 
-import { mediaBuckets, MongooseGridFSBucketType, uploadBufferToBucket } from 'src/media'
+import { mediaBuckets, MongooseGridFSBucket, uploadBufferToBucket } from 'src/media'
 
 import { ChatRoomModel } from 'src/modules/chat-room'
 import { getSocketsByUserIds } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { SharpSettingsKeyType, SocketInstanceType } from 'src/shared/config'
+import { SharpSettingsKey, SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
 import { MESSAGE_I18N } from '../i18n'
 import { MessageModel } from '../message.model'
 
-export const sendMessageController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const sendMessageController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'send-message',
     socketErrorMiddleware(
       socket,
-      async (data: IEventSendMessage) => {
+      async (data: EventSendMessage) => {
         const { message, roomId } = data
         const filenames: string[] = []
-        const bucket = mediaBuckets.image as MongooseGridFSBucketType
+        const bucket = mediaBuckets.image as MongooseGridFSBucket
         await Promise.all(
           (message.images ?? []).map(async (imageData) => {
             if (imageData.fileBuffer) {
               const filename = `image.${uuidv4()}`
               filenames.push(filename)
-              const compression: SharpSettingsKeyType = message.imageCompression
+              const compression: SharpSettingsKey = message.imageCompression
                 ? 'common-compressed'
                 : 'common-uncompressed'
               await uploadBufferToBucket(bucket, imageData.fileBuffer, filename, 'image', socket.data.language, {
@@ -68,13 +68,13 @@ export const sendMessageController = (socket: SocketInstanceType) => {
               status: 'delivered'
             }
 
-            const payload: IEventMessageDelivered = {
+            const payload: EventMessageDelivered = {
               roomId,
               message: messageForUser
             }
 
             sockets.forEach((socketId) => {
-              getIO().to(socketId).emit<SocketActionsType>('message-delivered', payload)
+              getIO().to(socketId).emit<SocketActions>('message-delivered', payload)
             })
           })
         )

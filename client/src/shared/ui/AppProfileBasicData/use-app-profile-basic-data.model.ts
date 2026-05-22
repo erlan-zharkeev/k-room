@@ -2,9 +2,9 @@ import { computed } from 'vue'
 
 import { useLiveMediaUrl } from 'src/shared/lib'
 
-import type { IAppProfileBasicDataProps } from './types'
+import type { AppProfileBasicDataProps } from './types'
 
-export const useAppProfileBasicData = (props: IAppProfileBasicDataProps) => {
+export const useAppProfileBasicData = (props: AppProfileBasicDataProps) => {
   const liveImageUrl = useLiveMediaUrl(() => props.imageId)
   const imageSrc = computed(() => props.imageSrc || liveImageUrl.value || undefined)
 

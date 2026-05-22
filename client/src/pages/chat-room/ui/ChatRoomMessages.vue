@@ -4,13 +4,13 @@ import { NmorphButton, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { IChatRoomMessagesProps } from '../config/types'
+import type { ChatRoomMessagesProps } from '../config/types'
 import { useChatRoomMessages } from '../model/use-chat-room-messages.model'
 
 import DateSeparator from './DateSeparator.vue'
 import MessageBody from './MessageBody.vue'
 
-const props = defineProps<IChatRoomMessagesProps>()
+const props = defineProps<ChatRoomMessagesProps>()
 const {
   hasMessages,
   isLoading,

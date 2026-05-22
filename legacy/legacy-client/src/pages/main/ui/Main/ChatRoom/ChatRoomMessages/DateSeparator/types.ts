@@ -1,3 +1,3 @@
-export interface IDateSeparatorProps {
+export interface DateSeparatorProps {
   label: string
 }

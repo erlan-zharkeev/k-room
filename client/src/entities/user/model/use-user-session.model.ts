@@ -1,4 +1,4 @@
-import { ROUTE_NAMES, type UserDataType } from 'global-shared'
+import { ROUTE_NAMES, type UserData } from 'global-shared'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -24,7 +24,7 @@ export const useUserSession = () => {
     return redirect
   }
 
-  const activateUserSession = async (data: UserDataType, shouldRedirect = true) => {
+  const activateUserSession = async (data: UserData, shouldRedirect = true) => {
     const { email, id, role, nickname } = data
 
     await update({ email, id, role, nickname })

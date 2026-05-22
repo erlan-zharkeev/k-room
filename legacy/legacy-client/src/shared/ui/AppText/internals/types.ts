@@ -1,11 +1,11 @@
-import { ColorModifierType, ExtendedSizeModifierType } from 'src/shared/ui/internals/types'
+import { ColorModifier, ExtendedSizeModifier } from 'src/shared/ui/internals/types'
 
-export interface IAppTextProps {
+export interface AppTextProps {
   tag?: 'span' | 'p' | 'div'
   children?: React.ReactNode
   additionalClassName?: string
-  color?: ColorModifierType
-  size?: ExtendedSizeModifierType
+  color?: ColorModifier
+  size?: ExtendedSizeModifier
   align?: 'left' | 'center' | 'right'
   onClick?: (e: React.MouseEvent<HTMLElement>) => void | Promise<void>
 }

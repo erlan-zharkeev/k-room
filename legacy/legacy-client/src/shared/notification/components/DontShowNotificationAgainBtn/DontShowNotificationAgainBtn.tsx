@@ -4,11 +4,11 @@ import './style.scss'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { DONT_SHOW_NOTIFICATION_AGAIN_BTN_I18N } from 'src/shared/notification/components/DontShowNotificationAgainBtn/internals/i18n'
-import { IDontShowNotificationAgainBtnProps } from 'src/shared/notification/components/DontShowNotificationAgainBtn/internals/types'
+import { DontShowNotificationAgainBtnProps } from 'src/shared/notification/components/DontShowNotificationAgainBtn/internals/types'
 import { useSettings, useI18n } from 'src/shared/preferences'
 import { AppButton } from 'src/shared/ui'
 
-export const DontShowNotificationAgainBtn = ({ notificationName }: IDontShowNotificationAgainBtnProps) => {
+export const DontShowNotificationAgainBtn = ({ notificationName }: DontShowNotificationAgainBtnProps) => {
   const settings = useSettings()
   const [clicked, setClicked] = useState(false)
   const { t } = useI18n()

@@ -1,13 +1,13 @@
 import { IncomingHttpHeaders } from 'http'
 
-import { APP_LANGUAGE_HEADER, APP_LANGUAGE_VALUES, AppLanguageType, DEFAULT_APP_LANGUAGE } from 'common'
+import { APP_LANGUAGE_HEADER, APP_LANGUAGE_VALUES, AppLanguage, DEFAULT_APP_LANGUAGE } from 'common'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 
-const isRequestLanguageValid = (language?: string): language is AppLanguageType =>
-  APP_LANGUAGE_VALUES.includes(language as AppLanguageType)
+const isRequestLanguageValid = (language?: string): language is AppLanguage =>
+  APP_LANGUAGE_VALUES.includes(language as AppLanguage)
 
-export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguageType => {
+export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguage => {
   const languageHeader = headers[APP_LANGUAGE_HEADER]
   let preResult
   if (typeof languageHeader === 'string') preResult = languageHeader
@@ -15,7 +15,7 @@ export const getRequestLanguage = (headers: IncomingHttpHeaders): AppLanguageTyp
   return isRequestLanguageValid(preResult) ? preResult : DEFAULT_APP_LANGUAGE
 }
 
-export const getSocketLanguage = (socket: SocketInstanceType): AppLanguageType => {
+export const getSocketLanguage = (socket: SocketInstance): AppLanguage => {
   const authLanguage =
     typeof socket.handshake.auth === 'object' && socket.handshake.auth
       ? Reflect.get(socket.handshake.auth, 'language')

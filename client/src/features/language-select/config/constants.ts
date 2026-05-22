@@ -5,7 +5,7 @@ import LanguageFlagCnIcon from '../ui/icons/LanguageFlagCnIcon.vue'
 import LanguageFlagGbIcon from '../ui/icons/LanguageFlagGbIcon.vue'
 import LanguageFlagRuIcon from '../ui/icons/LanguageFlagRuIcon.vue'
 
-import type { ILanguageSelectOption, LanguageSelectFlagType } from './types'
+import type { LanguageSelectOption, LanguageSelectFlag } from './types'
 
 export const LANGUAGE_SELECT_DEFAULT_PROPS = {
   compact: false
@@ -22,7 +22,7 @@ export const LANGUAGE_SELECT_FLAG_SIZE = {
   }
 } as const
 
-export const LANGUAGE_SELECT_OPTIONS: ILanguageSelectOption[] = [
+export const LANGUAGE_SELECT_OPTIONS: LanguageSelectOption[] = [
   {
     flag: 'gb',
     label: 'English',
@@ -44,4 +44,4 @@ export const LANGUAGE_SELECT_FLAG_ICON_MAP = {
   gb: LanguageFlagGbIcon,
   ru: LanguageFlagRuIcon,
   cn: LanguageFlagCnIcon
-} satisfies Record<LanguageSelectFlagType, Component>
+} satisfies Record<LanguageSelectFlag, Component>

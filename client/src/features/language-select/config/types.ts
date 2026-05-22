@@ -1,9 +1,9 @@
-import type { AppLanguageType } from 'global-shared'
+import type { AppLanguage } from 'global-shared'
 
-export type LanguageSelectFlagType = 'gb' | 'ru' | 'cn'
+export type LanguageSelectFlag = 'gb' | 'ru' | 'cn'
 
-export interface ILanguageSelectOption {
-  flag: LanguageSelectFlagType
+export interface LanguageSelectOption {
+  flag: LanguageSelectFlag
   label: string
-  value: AppLanguageType
+  value: AppLanguage
 }

@@ -1,7 +1,7 @@
-export type AnimatedListItemStateType = 'entering' | 'present' | 'exiting'
+export type AnimatedListItemState = 'entering' | 'present' | 'exiting'
 
-export interface IAnimatedListItem<T> {
+export interface AnimatedListItem<T> {
   item: T
   key: string
-  state: AnimatedListItemStateType
+  state: AnimatedListItemState
 }

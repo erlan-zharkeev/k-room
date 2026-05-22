@@ -8,9 +8,9 @@ import { ThemeSelect } from 'src/features/theme-select'
 import { AppLogo, AppHeader } from 'src/shared/ui'
 
 import { AUTH_LAYOUT_TABS } from './constants'
-import type { IAuthLayoutProps } from './types'
+import type { AuthLayoutProps } from './types'
 
-const props = defineProps<IAuthLayoutProps>()
+const props = defineProps<AuthLayoutProps>()
 const route = useRoute()
 </script>
 

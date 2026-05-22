@@ -4,11 +4,11 @@ import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 import { AppText, AppUserPicker } from 'src/shared/ui'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { IChatRoomLeaveDialogProps } from '../config/types'
+import type { ChatRoomLeaveDialogProps } from '../config/types'
 import { useChatRoomLeave } from '../model/use-chat-room-leave.model'
 
 const model = defineModel<boolean>({ required: true })
-const props = defineProps<IChatRoomLeaveDialogProps>()
+const props = defineProps<ChatRoomLeaveDialogProps>()
 const {
   canLeaveChatRoom,
   closeLeaveChatRoomDialog,

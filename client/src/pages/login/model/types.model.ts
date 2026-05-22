@@ -1,14 +1,14 @@
-export interface ILoginFormRule {
+export interface LoginFormRule {
   pattern: RegExp
   error: string
 }
 
-export interface ILoginFormField {
+export interface LoginFormField {
   value: string
-  rules: ILoginFormRule[]
+  rules: LoginFormRule[]
 }
 
-export interface ILoginFormData {
-  login: ILoginFormField
-  password: ILoginFormField
+export interface LoginFormData {
+  login: LoginFormField
+  password: LoginFormField
 }

@@ -1,5 +1,5 @@
 import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type ResponseType } from 'axios'
-import { AUTH_ENDPOINTS, REQ_STATUS, type EndpointsType, type IBackendResponse } from 'global-shared'
+import { AUTH_ENDPOINTS, REQ_STATUS, type Endpoints, type BackendResponse } from 'global-shared'
 
 import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
@@ -8,7 +8,7 @@ import { useAppToast } from 'src/shared/lib'
 import { HTTP_SUCCESS_STATUS_END, HTTP_SUCCESS_STATUS_START } from './constants'
 import { getHeaderValue } from './get-header-value'
 import { httpClient } from './http-client'
-import type { IHttpRequestOptions, HttpRequestPayloadType, HttpRequestType } from './types'
+import type { HttpRequestOptions, HttpRequestPayload, HttpRequest } from './types'
 import { useHttpInterceptor } from './use-http-interceptor'
 
 const isSuccessStatus = (status: number) => status >= HTTP_SUCCESS_STATUS_START && status < HTTP_SUCCESS_STATUS_END
@@ -18,7 +18,7 @@ export const useHttp = () => {
   const toast = useAppToast()
   const { interceptError } = useHttpInterceptor()
 
-  const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
+  const successMessageHandler = (response: AxiosResponse<BackendResponse<unknown>>) => {
     const contentType = getHeaderValue(response.headers?.['content-type'])
     const isJson = contentType.includes('application/json')
 
@@ -37,15 +37,15 @@ export const useHttp = () => {
   }
 
   const doHttpRequest = async <T, R extends ResponseType = 'json'>(
-    type: HttpRequestType,
-    endpoint: EndpointsType,
-    data: HttpRequestPayloadType = {},
-    opts: IHttpRequestOptions<R> = {}
-  ): Promise<R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>> => {
+    type: HttpRequest,
+    endpoint: Endpoints,
+    data: HttpRequestPayload = {},
+    opts: HttpRequestOptions<R> = {}
+  ): Promise<R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>> => {
     const { contentType = 'application/json' } = opts
     const responseType = (opts.responseType ?? 'json') as ResponseType
 
-    const requestConfig: AxiosRequestConfig<HttpRequestPayloadType> = {
+    const requestConfig: AxiosRequestConfig<HttpRequestPayload> = {
       method: type,
       url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${endpoint}`,
       headers: {
@@ -64,9 +64,9 @@ export const useHttp = () => {
         throw new Error('No response')
       }
 
-      successMessageHandler(response as AxiosResponse<IBackendResponse<unknown>>)
+      successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>)
 
-      return response as R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>
+      return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
     } catch (error) {
       if (
         error instanceof AxiosError &&
@@ -85,9 +85,9 @@ export const useHttp = () => {
 
           const response = await request()
 
-          successMessageHandler(response as AxiosResponse<IBackendResponse<unknown>>)
+          successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>)
 
-          return response as R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>
+          return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
         } catch (retryError) {
           throw await interceptError(retryError)
         }

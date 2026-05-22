@@ -1,13 +1,13 @@
-import type { LocalizedTextType, ReqStatusType } from 'global-shared'
+import type { LocalizedText, ReqStatus } from 'global-shared'
 
-export interface IThrowSocketErrorOptions {
-  status?: ReqStatusType
+export interface ThrowSocketErrorOptions {
+  status?: ReqStatus
   silent?: boolean
   cause?: unknown
 }
 
-export interface ISocketErrorMiddlewareOptions {
-  basicError: LocalizedTextType<string>
-  status?: ReqStatusType
+export interface SocketErrorMiddlewareOptions {
+  basicError: LocalizedText<string>
+  status?: ReqStatus
   silent?: boolean
 }

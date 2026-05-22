@@ -1,4 +1,4 @@
-export interface IAppMicrophoneWaveformProps {
+export interface AppMicrophoneWaveformProps {
   volumeDb: number
   label: string
   showIcon?: boolean

@@ -1,3 +1,3 @@
-export interface IChatRoomSettingsModalProps {
+export interface ChatRoomSettingsModalProps {
   onClose: () => void
 }

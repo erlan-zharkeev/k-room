@@ -4,14 +4,14 @@ import { type Request, type Response } from 'express'
 import {
   formatNickname,
   REQ_STATUS,
-  type IAuthLoginPayload,
-  type IAuthRegistrationPayload,
-  type LoginResponseType,
-  type ISendConfirmationLinkPayload,
-  type ISendConfirmationLinkResponse,
-  type ISignInWithProviderPayload,
-  type SignInWithProviderResponseType,
-  type ProviderType
+  type AuthLoginPayload,
+  type AuthRegistrationPayload,
+  type LoginResponse,
+  type SendConfirmationLinkPayload,
+  type SendConfirmationLinkResponse,
+  type SignInWithProviderPayload,
+  type SignInWithProviderResponse,
+  type Provider
 } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -32,7 +32,7 @@ import {
   SEND_CONFIRMATION_LINK_INTERVAL_MS
 } from './auth.constants'
 import { AUTH_I18N } from './auth.i18n'
-import type { IConfirmEmailResult, ISendConfirmationLinkResult } from './auth.types'
+import type { ConfirmEmailResult, SendConfirmationLinkResult } from './auth.types'
 
 @Injectable()
 export class AuthService {
@@ -43,7 +43,7 @@ export class AuthService {
     private readonly sessionService: SessionService
   ) {}
 
-  async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<LoginResponseType> {
+  async login(payload: AuthLoginPayload, request: Request, response: Response): Promise<LoginResponse> {
     const ip = getRequestIp(request)
 
     await this.securityService.assertLoginAllowed(ip, payload.login, payload.captchaToken)
@@ -71,7 +71,7 @@ export class AuthService {
     return this.userService.mapUserToDto(user)
   }
 
-  async registration(payload: IAuthRegistrationPayload, request: Request): Promise<ISendConfirmationLinkResponse> {
+  async registration(payload: AuthRegistrationPayload, request: Request): Promise<SendConfirmationLinkResponse> {
     const ip = getRequestIp(request)
 
     await this.securityService.assertRegistrationAllowed(ip, payload.captchaToken)
@@ -116,7 +116,7 @@ export class AuthService {
     }
   }
 
-  async confirmEmail(token: string): Promise<IConfirmEmailResult> {
+  async confirmEmail(token: string): Promise<ConfirmEmailResult> {
     const decoded = await this.sessionService.verifyToken(token, SERVER_ENV.secret.emailConfirmSecret)
 
     const updateResult = await UserModel.updateOne(
@@ -136,9 +136,9 @@ export class AuthService {
   }
 
   async sendConfirmationLink(
-    payload: ISendConfirmationLinkPayload,
+    payload: SendConfirmationLinkPayload,
     request: Request
-  ): Promise<ISendConfirmationLinkResult> {
+  ): Promise<SendConfirmationLinkResult> {
     const ip = getRequestIp(request)
     const email = payload.email.trim()
     const cooldownUntil = await this.securityService.getSendConfirmationLinkCooldown(email)
@@ -207,15 +207,15 @@ export class AuthService {
   }
 
   async signInWithProvider(
-    payload: ISignInWithProviderPayload,
+    payload: SignInWithProviderPayload,
     request: Request,
     response: Response
-  ): Promise<SignInWithProviderResponseType> {
+  ): Promise<SignInWithProviderResponse> {
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await this.userService.createUser({
       nickname: payload.nickname,
       email: payload.email,
-      provider: payload.provider as ProviderType,
+      provider: payload.provider as Provider,
       hashedPassword
     })
     const user = newUser ?? (await this.userService.findByEmail(payload.email))

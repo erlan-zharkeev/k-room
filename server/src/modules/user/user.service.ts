@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
-  type ContactType,
-  type UserDataType,
-  type InteractionType,
+  type Contact,
+  type UserData,
+  type Interaction,
   normalizeNicknameKey,
   REQ_STATUS,
-  type ICreateNewPasswordPayload,
+  type CreateNewPasswordPayload,
   MEDIA_AVATAR_FILENAME_PREFIX,
   VALIDATION_PATTERNS
 } from 'global-shared'
@@ -21,20 +21,20 @@ import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 
 import type {
-  IChangeEmailParams,
-  IChangePasswordParams,
-  IContact,
-  ICreateUserParams,
-  IUpdateUserDataParams,
-  IUserExistParams,
-  IUserExistState,
-  IUserSchema
+  ChangeEmailParams,
+  ChangePasswordParams,
+  UserContact,
+  CreateUserParams,
+  UpdateUserDataParams,
+  UserExistParams,
+  UserExistState,
+  UserSchema
 } from './types'
 import { ALLOWED_GOOGLE_AVATAR_HOSTS } from './user.constants'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
-export const mapUserToDto = (user: IUserSchema): UserDataType => {
+export const mapUserToDto = (user: UserSchema): UserData => {
   return {
     id: String(user._id),
     role: user.system.role,
@@ -44,10 +44,10 @@ export const mapUserToDto = (user: IUserSchema): UserDataType => {
 }
 
 export const transformUserToContact = (
-  user: IUserSchema,
-  interactionType: InteractionType = 'default',
+  user: UserSchema,
+  interactionType: Interaction = 'default',
   online = false
-): ContactType => {
+): Contact => {
   return {
     id: String(user._id),
     nickname: user.public.nickname,
@@ -58,12 +58,12 @@ export const transformUserToContact = (
 }
 
 export const transformUserToFrontendContact = async (
-  contacts: Record<string, IContact>,
+  contacts: Record<string, UserContact>,
   presenceService: PresenceService
-): Promise<ContactType[]> => {
+): Promise<Contact[]> => {
   const ids = Object.keys(contacts)
   const [users, onlineMap] = await Promise.all([
-    UserModel.find({ _id: { $in: ids } }).lean<IUserSchema[]>(),
+    UserModel.find({ _id: { $in: ids } }).lean<UserSchema[]>(),
     presenceService.onlineMapByUserIds(ids)
   ])
 
@@ -75,7 +75,7 @@ export const transformUserToFrontendContact = async (
   })
 }
 
-export const isUserExist = async ({ nickname, email, id }: IUserExistParams): Promise<IUserExistState> => {
+export const isUserExist = async ({ nickname, email, id }: UserExistParams): Promise<UserExistState> => {
   const normalizedNickname = normalizeNicknameKey(nickname)
   const userByNickname = await UserModel.findOne({ 'public.nickname': normalizedNickname })
 
@@ -110,7 +110,7 @@ export const isUserExist = async ({ nickname, email, id }: IUserExistParams): Pr
   }
 }
 
-export const createUser = async ({ id, email, nickname, hashedPassword, provider = 'app' }: ICreateUserParams) => {
+export const createUser = async ({ id, email, nickname, hashedPassword, provider = 'app' }: CreateUserParams) => {
   const normalizedNickname = normalizeNicknameKey(nickname)
   const userExistState = await isUserExist({ id, nickname: normalizedNickname, email })
 
@@ -174,7 +174,7 @@ export const updateUserAvatar = async (buffer: Buffer | null, userId: string) =>
 
 @Injectable()
 export class UserService {
-  mapUserToDto(user: IUserSchema): UserDataType {
+  mapUserToDto(user: UserSchema): UserData {
     return mapUserToDto(user)
   }
 
@@ -198,15 +198,15 @@ export class UserService {
     return this.findByNickname(login)
   }
 
-  async isUserExist({ nickname, email, id }: IUserExistParams): Promise<IUserExistState> {
+  async isUserExist({ nickname, email, id }: UserExistParams): Promise<UserExistState> {
     return isUserExist({ nickname, email, id })
   }
 
-  async createUser({ id, email, nickname, hashedPassword, provider = 'app' }: ICreateUserParams) {
+  async createUser({ id, email, nickname, hashedPassword, provider = 'app' }: CreateUserParams) {
     return createUser({ id, email, nickname, hashedPassword, provider })
   }
 
-  getUserExistMessage(reason: IUserExistState['reason']) {
+  getUserExistMessage(reason: UserExistState['reason']) {
     switch (reason) {
       case 'nickname':
         return USER_I18N.userWithCurrentNameAlreadyExist
@@ -229,7 +229,7 @@ export class UserService {
     return user
   }
 
-  async resetPassword({ codeToValidate, password }: ICreateNewPasswordPayload) {
+  async resetPassword({ codeToValidate, password }: CreateNewPasswordPayload) {
     const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
 
     if (!code) {
@@ -260,7 +260,7 @@ export class UserService {
     })
   }
 
-  async changePassword({ userId, currentPassword, password }: IChangePasswordParams) {
+  async changePassword({ userId, currentPassword, password }: ChangePasswordParams) {
     const user = await this.requireUser(userId)
     const passwordIsValid = await bcrypt.compare(currentPassword, user.system.password)
 
@@ -273,7 +273,7 @@ export class UserService {
     await user.updateOne({ $set: { 'system.password': hashedPassword } })
   }
 
-  async changeEmail({ userId, email }: IChangeEmailParams) {
+  async changeEmail({ userId, email }: ChangeEmailParams) {
     const user = await this.requireUser(userId)
     const normalizedEmail = email.trim()
 
@@ -293,7 +293,7 @@ export class UserService {
     await user.updateOne({ $set: { 'personal.email': normalizedEmail, 'system.confirmed': true } })
   }
 
-  async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar }: IUpdateUserDataParams) {
+  async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar }: UpdateUserDataParams) {
     if (!nickname && !avatarFileBuffer && resetAvatar !== 'reset') {
       throw new AppError(REQ_STATUS.badRequest, UPDATE_USER_DATA_I18N.nothingToUpdate)
     }
@@ -338,7 +338,7 @@ export class UserService {
       return
     }
 
-    const updatedUserData = await UserModel.findById(userId).lean<IUserSchema | null>()
+    const updatedUserData = await UserModel.findById(userId).lean<UserSchema | null>()
 
     if (!updatedUserData) {
       return

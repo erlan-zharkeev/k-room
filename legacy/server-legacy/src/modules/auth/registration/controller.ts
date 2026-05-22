@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs'
-import { IAuthRegistrationPayload, ISendConfirmationLinkResponse, REQ_STATUS } from 'common'
+import { AuthRegistrationPayload, SendConfirmationLinkResponse, REQ_STATUS } from 'common'
 
 import { sendEmailConfirmationEmail } from 'src/modules/email'
 import { createUser, isUserExist } from 'src/modules/user'
 
-import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppResponse, AppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -15,12 +15,12 @@ import { REGISTRATION_RESEND_INTERVAL_MINUTES } from './config/constants'
 import { REGISTRATION_I18N } from './config/i18n'
 import { getUserExistMessage } from './lib/get-user-exist-message'
 
-export const registrationController = async (req: IAppRequest, res: AppResponseType<ISendConfirmationLinkResponse>) => {
+export const registrationController = async (req: AppRequest, res: AppResponse<SendConfirmationLinkResponse>) => {
   const { language } = req
   const basicError = localizedText(REGISTRATION_I18N.failedRegistration, language)
 
   try {
-    const { username, email, password }: IAuthRegistrationPayload = req.body
+    const { username, email, password }: AuthRegistrationPayload = req.body
 
     const userExistState = await isUserExist({ username, email })
 

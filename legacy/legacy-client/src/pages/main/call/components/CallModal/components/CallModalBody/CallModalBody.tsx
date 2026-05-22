@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { SignalData } from 'simple-peer'
 
-import { EventCallStartedAtType, IEventCallUser, IEventInterlocutorUpdateSignal, SocketActionsType } from 'common'
+import { EventCallStartedAt, EventCallUser, IEventInterlocutorUpdateSignal, SocketActions } from 'common'
 
 import {
   setCallStartedAt,
@@ -21,16 +21,16 @@ import { callCounter } from 'src/shared/call-core'
 import { useCounter } from 'src/shared/lib'
 import { useI18n } from 'src/shared/preferences'
 import { RefsContext, AdditionalServiceContext } from 'src/shared/providers'
-import { AppDispatchType, useTypedSelector } from 'src/shared/store'
+import { AppDispatch, useTypedSelector } from 'src/shared/store'
 import { AppButton, AppAvatar } from 'src/shared/ui'
 
 import { CallDots } from './components/CallDots/CallDots'
 import { CallModalVideo } from './components/CallModalVideo/CallModalVideo'
 import { CALL_MODAL_BODY_I18N } from './internals/i18n'
-import { ICallModalBodyProps } from './types'
+import { CallModalBodyProps } from './types'
 
-export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
-  const dispatch = useDispatch<AppDispatchType>()
+export const CallModalBody = ({ toggleExpandModal }: CallModalBodyProps) => {
+  const dispatch = useDispatch<AppDispatch>()
   const { settings, currentCall } = useTypedSelector((state) => state.calls)
   const [isAnswerLoading, setIsAnswerLoading] = useState(false)
   const { selfVideoDom } = useContext(RefsContext)
@@ -42,13 +42,13 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
   const [counterValue, , startCounter, stopCounter] = useCounter(1, false)
 
   useEffect(() => {
-    const handleCallStartedAt = (timeStamp: EventCallStartedAtType) => {
+    const handleCallStartedAt = (timeStamp: EventCallStartedAt) => {
       dispatch(setCallStartedAt(timeStamp))
       stopCounter()
       startCounter()
     }
 
-    const handleCallUser = (data: IEventCallUser) => {
+    const handleCallUser = (data: EventCallUser) => {
       dispatch(setShowCallModal(data))
       const { from, signal, callId } = data
       if (callId) dispatch(setCallId(callId))
@@ -64,16 +64,16 @@ export const CallModalBody = ({ toggleExpandModal }: ICallModalBodyProps) => {
       callService?.updateCallerSignal(data.signal as SignalData)
     }
 
-    socket.on<SocketActionsType>('call-started-at', handleCallStartedAt)
-    socket.on<SocketActionsType>('call-user', handleCallUser)
-    socket.on<SocketActionsType>('call-ended', handleCallEnded)
-    socket.on<SocketActionsType>('interlocutor-update-signal', handleInterlocutorUpdateSignal)
+    socket.on<SocketActions>('call-started-at', handleCallStartedAt)
+    socket.on<SocketActions>('call-user', handleCallUser)
+    socket.on<SocketActions>('call-ended', handleCallEnded)
+    socket.on<SocketActions>('interlocutor-update-signal', handleInterlocutorUpdateSignal)
 
     return () => {
-      socket.off<SocketActionsType>('call-started-at', handleCallStartedAt)
-      socket.off<SocketActionsType>('call-user', handleCallUser)
-      socket.off<SocketActionsType>('call-ended', handleCallEnded)
-      socket.off<SocketActionsType>('interlocutor-update-signal', handleInterlocutorUpdateSignal)
+      socket.off<SocketActions>('call-started-at', handleCallStartedAt)
+      socket.off<SocketActions>('call-user', handleCallUser)
+      socket.off<SocketActions>('call-ended', handleCallEnded)
+      socket.off<SocketActions>('interlocutor-update-signal', handleInterlocutorUpdateSignal)
     }
   }, [callService, currentCall.id, dispatch, startCounter, stopCounter])
 

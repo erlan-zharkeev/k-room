@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { APP_HEADER_DEFAULT_PROPS } from './constants'
-import type { IAppHeaderProps } from './types'
+import type { AppHeaderProps } from './types'
 import { useAppHeader } from './use-app-header.model'
 
-const props = withDefaults(defineProps<IAppHeaderProps>(), APP_HEADER_DEFAULT_PROPS)
+const props = withDefaults(defineProps<AppHeaderProps>(), APP_HEADER_DEFAULT_PROPS)
 const { className } = useAppHeader(props)
 </script>
 

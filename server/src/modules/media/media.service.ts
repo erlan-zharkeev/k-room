@@ -15,15 +15,15 @@ import { localizedText } from 'src/shared/lib/localized-text'
 import { MEDIA_BUCKET_NAMES, SHARP_PRESETS, VALIDATION_MEDIA_OPTIONS_MAP } from './media.constants'
 import { COMMON_MEDIA_I18N, VALIDATE_MEDIA_FILE_I18N } from './media.i18n'
 import type {
-  IFileData,
-  IFileMetaData,
-  IStreamMediaFileOptions,
-  IUploadOptions,
-  MediaBucketNameType,
-  MongooseGridFSBucketType
+  FileData,
+  FileMetaData,
+  StreamMediaFileOptions,
+  UploadOptions,
+  MediaBucketName,
+  MongooseGridFSBucket
 } from './media.types'
 
-const mediaBuckets: Record<MediaBucketNameType, MongooseGridFSBucketType | null> = {
+const mediaBuckets: Record<MediaBucketName, MongooseGridFSBucket | null> = {
   avatar: null,
   doc: null,
   image: null,
@@ -35,10 +35,10 @@ const createSha256FromBuffer = (buffer: Buffer) => {
   return createHash('sha256').update(buffer).digest('hex')
 }
 
-const buildFileData = async (buffer: Buffer, filename: string): Promise<IFileData> => {
+const buildFileData = async (buffer: Buffer, filename: string): Promise<FileData> => {
   const fileType = await fileTypeDep.fromBuffer(buffer).catch(() => null)
   const contentType = fileType?.mime ?? (filename ? mimeLookup(filename) || undefined : undefined)
-  const metadata: IFileMetaData = {
+  const metadata: FileMetaData = {
     size: buffer.length,
     sha256: createSha256FromBuffer(buffer),
     detectedMime: fileType?.mime,
@@ -63,7 +63,7 @@ const buildFileData = async (buffer: Buffer, filename: string): Promise<IFileDat
   }
 }
 
-const processImageWithSharp = async (input: Buffer, presetKey: IUploadOptions['compression']) => {
+const processImageWithSharp = async (input: Buffer, presetKey: UploadOptions['compression']) => {
   const preset = SHARP_PRESETS[presetKey ?? 'common-compressed']
 
   return sharp(input, { failOn: 'none' })
@@ -80,7 +80,7 @@ const processImageWithSharp = async (input: Buffer, presetKey: IUploadOptions['c
 
 const getResponseLanguage = (response: import('express').Response) => response.req.language
 
-const getRequiredBucket = (bucketName: MediaBucketNameType) => {
+const getRequiredBucket = (bucketName: MediaBucketName) => {
   const bucket = mediaBuckets[bucketName]
 
   if (!bucket) {
@@ -90,7 +90,7 @@ const getRequiredBucket = (bucketName: MediaBucketNameType) => {
   return bucket
 }
 
-const validateFileMetaData = (fileData: IFileData, bucketName: MediaBucketNameType) => {
+const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName) => {
   const { maxMb, supportedKindMediaType } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
   const maxBytes = maxMb * MEDIA_MB_IN_BYTES
 
@@ -115,7 +115,7 @@ export const initMediaBuckets = () => {
   })
 }
 
-export const deleteBucketFilesByName = async (bucketName: MediaBucketNameType, filename: string) => {
+export const deleteBucketFilesByName = async (bucketName: MediaBucketName, filename: string) => {
   const bucket = getRequiredBucket(bucketName)
   const existing = await bucket.find({ filename }).toArray()
 
@@ -129,8 +129,8 @@ export const deleteBucketFilesByName = async (bucketName: MediaBucketNameType, f
 export const uploadBufferToBucket = async (
   buffer: Buffer | ArrayBuffer,
   filename: string,
-  bucketName: MediaBucketNameType,
-  options?: IUploadOptions
+  bucketName: MediaBucketName,
+  options?: UploadOptions
 ) => {
   try {
     const bucket = getRequiredBucket(bucketName)
@@ -173,10 +173,10 @@ export const uploadBufferToBucket = async (
 }
 
 export const streamMediaFile = async (
-  bucketName: MediaBucketNameType,
+  bucketName: MediaBucketName,
   id: string,
   response: import('express').Response,
-  options?: IStreamMediaFileOptions
+  options?: StreamMediaFileOptions
 ) => {
   try {
     const bucket = getRequiredBucket(bucketName)
@@ -229,13 +229,13 @@ export const streamMediaFile = async (
 
 @Injectable()
 export class MediaService {
-  async getMediaFile(idParam: string, response: import('express').Response, options?: IStreamMediaFileOptions) {
+  async getMediaFile(idParam: string, response: import('express').Response, options?: StreamMediaFileOptions) {
     const [bucketName, id] = idParam.split('.', 2)
 
     if (!bucketName || !id) {
       throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound)
     }
 
-    await streamMediaFile(bucketName as MediaBucketNameType, id, response, options)
+    await streamMediaFile(bucketName as MediaBucketName, id, response, options)
   }
 }

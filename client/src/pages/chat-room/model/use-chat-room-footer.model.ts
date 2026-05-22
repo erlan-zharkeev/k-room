@@ -1,4 +1,4 @@
-import type { IEventSendMessage, MessageType, SocketActionsType } from 'global-shared'
+import type { EventSendMessage, Message, SocketActions } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, ref } from 'vue'
 
@@ -19,7 +19,7 @@ export const useChatRoomFooter = () => {
 
     if (!body || !user.value.id) return
 
-    const message: MessageType = {
+    const message: Message = {
       id: uuidv4(),
       authorId: user.value.id,
       authorNickname: user.value.nickname,
@@ -31,7 +31,7 @@ export const useChatRoomFooter = () => {
       images: []
     }
 
-    const payload: IEventSendMessage = {
+    const payload: EventSendMessage = {
       roomId,
       message
     }
@@ -41,7 +41,7 @@ export const useChatRoomFooter = () => {
       room.messages.push(message.id)
     })
 
-    socket.emit<SocketActionsType>('send-message', payload)
+    socket.emit<SocketActions>('send-message', payload)
     messageText.value = ''
   }
 

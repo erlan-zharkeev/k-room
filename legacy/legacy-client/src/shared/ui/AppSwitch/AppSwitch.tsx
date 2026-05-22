@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from 'react'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { IAppSwitchProps } from './internals/types'
+import { AppSwitchProps } from './internals/types'
 
 export const AppSwitch = ({
   name,
@@ -13,7 +13,7 @@ export const AppSwitch = ({
   offText = 'Off',
   onChange,
   disabled = false
-}: IAppSwitchProps) => {
+}: AppSwitchProps) => {
   const [val, setVal] = useState(value)
   const [focused, setFocused] = useState(false)
 

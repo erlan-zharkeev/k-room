@@ -6,25 +6,24 @@ import { providers } from '../shared/constants'
 import { normalizeNickname } from '../user/lib/nickname'
 
 import { NON_EMPTY_PATTERN } from './constants'
-import type { ValidationMessagesType } from './types'
+import type { ValidationMessages } from './types'
 
 const requiredStringSchema = (message: string) =>
   v.pipe(v.string(message), v.regex(NON_EMPTY_PATTERN, message), v.trim())
 
-const captchaTokenSchema = (messages: ValidationMessagesType) =>
-  v.optional(requiredStringSchema(messages.fieldIsRequired))
+const captchaTokenSchema = (messages: ValidationMessages) => v.optional(requiredStringSchema(messages.fieldIsRequired))
 
-const emailSchema = (messages: ValidationMessagesType) =>
+const emailSchema = (messages: ValidationMessages) =>
   v.pipe(requiredStringSchema(messages.emailIsRequired), v.email(messages.invalidEmailFormat))
 
-const emailCodeSchema = (messages: ValidationMessagesType) =>
+const emailCodeSchema = (messages: ValidationMessages) =>
   v.pipe(
     requiredStringSchema(messages.fieldIsRequired),
     v.length(EMAIL_CODE_LENGTH, messages.fieldIsRequired),
     v.regex(/^\d+$/, messages.fieldIsRequired)
   )
 
-export const createPasswordSchema = (messages: ValidationMessagesType) =>
+export const createPasswordSchema = (messages: ValidationMessages) =>
   v.pipe(
     requiredStringSchema(messages.passwordIsRequired),
     v.minLength(VALIDATION_LIMITS.passwordMinLength, messages.passwordMustBeAtLeast),
@@ -33,7 +32,7 @@ export const createPasswordSchema = (messages: ValidationMessagesType) =>
     v.regex(new RegExp(VALIDATION_PATTERNS.onlyLatin), messages.passwordMustContainOnlyLatin)
   )
 
-const nicknameSchema = (messages: ValidationMessagesType) =>
+const nicknameSchema = (messages: ValidationMessages) =>
   v.pipe(
     requiredStringSchema(messages.fieldIsRequired),
     v.transform(normalizeNickname),
@@ -42,14 +41,14 @@ const nicknameSchema = (messages: ValidationMessagesType) =>
     v.maxLength(VALIDATION_LIMITS.nicknameMaxLength, messages.nicknameTooLong)
   )
 
-export const createAuthLoginSchema = (messages: ValidationMessagesType) =>
+export const createAuthLoginSchema = (messages: ValidationMessages) =>
   v.object({
     login: requiredStringSchema(messages.fieldIsRequired),
     password: requiredStringSchema(messages.passwordIsRequired),
     captchaToken: captchaTokenSchema(messages)
   })
 
-export const createAuthRegistrationSchema = (messages: ValidationMessagesType) =>
+export const createAuthRegistrationSchema = (messages: ValidationMessages) =>
   v.object({
     nickname: nicknameSchema(messages),
     email: emailSchema(messages),
@@ -57,7 +56,7 @@ export const createAuthRegistrationSchema = (messages: ValidationMessagesType) =
     captchaToken: captchaTokenSchema(messages)
   })
 
-export const createAuthRegistrationFormSchema = (messages: ValidationMessagesType) =>
+export const createAuthRegistrationFormSchema = (messages: ValidationMessages) =>
   v.object({
     nickname: nicknameSchema(messages),
     email: emailSchema(messages),
@@ -65,19 +64,19 @@ export const createAuthRegistrationFormSchema = (messages: ValidationMessagesTyp
     policy: v.literal(true, messages.fieldIsRequired)
   })
 
-export const createConfirmEmailSchema = (messages: ValidationMessagesType) =>
+export const createConfirmEmailSchema = (messages: ValidationMessages) =>
   v.object({
     token: requiredStringSchema(messages.fieldIsRequired)
   })
 
-export const createProviderLoginSchema = (messages: ValidationMessagesType) =>
+export const createProviderLoginSchema = (messages: ValidationMessages) =>
   v.object({
     nickname: nicknameSchema(messages),
     email: emailSchema(messages),
     provider: v.picklist(providers, messages.invalidProvider)
   })
 
-export const createSendPasswordRecoveryCodeSchema = (messages: ValidationMessagesType) =>
+export const createSendPasswordRecoveryCodeSchema = (messages: ValidationMessages) =>
   v.object({
     email: emailSchema(messages),
     captchaToken: captchaTokenSchema(messages)
@@ -87,7 +86,7 @@ export const createSendChangeEmailCodeSchema = createSendPasswordRecoveryCodeSch
 
 export const createSendConfirmationLinkSchema = createSendPasswordRecoveryCodeSchema
 
-export const createValidatePasswordRecoveryCodeSchema = (messages: ValidationMessagesType) =>
+export const createValidatePasswordRecoveryCodeSchema = (messages: ValidationMessages) =>
   v.object({
     email: emailSchema(messages),
     code: emailCodeSchema(messages),
@@ -96,24 +95,24 @@ export const createValidatePasswordRecoveryCodeSchema = (messages: ValidationMes
 
 export const createValidateChangeEmailCodeSchema = createValidatePasswordRecoveryCodeSchema
 
-export const createResetPasswordSchema = (messages: ValidationMessagesType) =>
+export const createResetPasswordSchema = (messages: ValidationMessages) =>
   v.object({
     codeToValidate: requiredStringSchema(messages.fieldIsRequired),
     password: createPasswordSchema(messages)
   })
 
-export const createChangePasswordSchema = (messages: ValidationMessagesType) =>
+export const createChangePasswordSchema = (messages: ValidationMessages) =>
   v.object({
     currentPassword: requiredStringSchema(messages.fieldIsRequired),
     password: createPasswordSchema(messages)
   })
 
-export const createUpdateUserDataSchema = (messages: ValidationMessagesType) =>
+export const createUpdateUserDataSchema = (messages: ValidationMessages) =>
   v.object({
     nickname: v.optional(nicknameSchema(messages))
   })
 
-export const createCreateNewPasswordFormSchema = (messages: ValidationMessagesType) =>
+export const createCreateNewPasswordFormSchema = (messages: ValidationMessages) =>
   v.object({
     firstPassword: createPasswordSchema(messages),
     secondPassword: createPasswordSchema(messages)
@@ -121,7 +120,7 @@ export const createCreateNewPasswordFormSchema = (messages: ValidationMessagesTy
 
 export const createPasswordRecoveryEmailFormSchema = createSendPasswordRecoveryCodeSchema
 
-export const createPasswordRecoveryCodeFormSchema = (messages: ValidationMessagesType) =>
+export const createPasswordRecoveryCodeFormSchema = (messages: ValidationMessages) =>
   v.object({
     code: requiredStringSchema(messages.fieldIsRequired)
   })

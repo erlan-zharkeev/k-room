@@ -1,9 +1,9 @@
 import { INITIAL_USER_STORE } from 'src/entities/user/constants'
 
-import { DbUserDataType } from 'src/shared/config'
+import { DbUserData } from 'src/shared/config'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
 
-const userStore = dexieKeyValueStore<DbUserDataType>(db.user, 'user')
+const userStore = dexieKeyValueStore<DbUserData>(db.user, 'user')
 
 export const useUser = () => {
   const { shallowUpdate } = userStore

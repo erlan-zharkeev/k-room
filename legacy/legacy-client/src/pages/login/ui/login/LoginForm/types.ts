@@ -1,8 +1,8 @@
-import { FirebaseProviderType } from 'common'
+import { FirebaseProvider } from 'common'
 
-export interface ILoginFormProps {
+export interface LoginFormProps {
   onLogin: (payload: unknown) => void
   isLoading: boolean
-  onFirebaseLogin: (provider: FirebaseProviderType) => void | Promise<void>
+  onFirebaseLogin: (provider: FirebaseProvider) => void | Promise<void>
   isFirebaseLoginLoading: boolean
 }

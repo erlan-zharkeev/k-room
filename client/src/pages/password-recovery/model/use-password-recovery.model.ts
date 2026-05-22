@@ -4,11 +4,11 @@ import {
   CODES_ENDPOINTS,
   NON_EMPTY_PATTERN,
   ROUTE_NAMES,
-  type ICodeValidationPayload,
+  type CodeValidationPayload,
   createValidationMessages,
-  type ISendPasswordRecoveryCodePayload,
-  type ISendPasswordRecoveryCodeResponse,
-  type IValidatePasswordRecoveryCodeResponse
+  type SendPasswordRecoveryCodePayload,
+  type SendPasswordRecoveryCodeResponse,
+  type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
 import { computed, onBeforeUnmount, reactive, ref, useTemplateRef } from 'vue'
@@ -97,14 +97,14 @@ export const usePasswordRecovery = () => {
     const email = emailFormData.email.value
 
     emailSendCodeIsLoading.value = true
-    const requestPayload: ISendPasswordRecoveryCodePayload = {
+    const requestPayload: SendPasswordRecoveryCodePayload = {
       email,
       ...sendCaptcha.buildCaptchaPayload()
     }
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doHttpRequest<ISendPasswordRecoveryCodeResponse>(
+      const response = await doHttpRequest<SendPasswordRecoveryCodeResponse>(
         'post',
         CODES_ENDPOINTS.sendEmailCodePasswordRecovery,
         requestPayload
@@ -140,7 +140,7 @@ export const usePasswordRecovery = () => {
     const code = codeFormData.code.value
 
     codeValidationIsLoading.value = true
-    const requestPayload: ICodeValidationPayload = {
+    const requestPayload: CodeValidationPayload = {
       email: emailFormData.email.value,
       code,
       ...validateCaptcha.buildCaptchaPayload()
@@ -148,7 +148,7 @@ export const usePasswordRecovery = () => {
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doHttpRequest<IValidatePasswordRecoveryCodeResponse>(
+      const response = await doHttpRequest<ValidatePasswordRecoveryCodeResponse>(
         'post',
         CODES_ENDPOINTS.validateEmailCodePasswordRecovery,
         requestPayload

@@ -4,11 +4,11 @@ import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { IChatRoomDeleteDialogProps } from '../config/types'
+import type { ChatRoomDeleteDialogProps } from '../config/types'
 import { useChatRoomDelete } from '../model/use-chat-room-delete.model'
 
 const model = defineModel<boolean>({ required: true })
-const props = defineProps<IChatRoomDeleteDialogProps>()
+const props = defineProps<ChatRoomDeleteDialogProps>()
 const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, isDeletingChatRoom } = useChatRoomDelete(
   props,
   model

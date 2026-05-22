@@ -1,4 +1,4 @@
-import { AppLanguageType } from 'common'
+import { AppLanguage } from 'common'
 
 import { USER_I18N } from 'src/modules/user'
 
@@ -6,7 +6,7 @@ import { localizedText } from 'src/shared/lib/localized-text'
 
 import { REGISTRATION_I18N } from '../config/i18n'
 
-export const getUserExistMessage = (reason: string | null, language: AppLanguageType): string => {
+export const getUserExistMessage = (reason: string | null, language: AppLanguage): string => {
   switch (reason) {
     case 'username':
       return localizedText(USER_I18N.userWithCurrentNameAlreadyExist, language)

@@ -1,6 +1,6 @@
-import type { ICaptchaTokenPayload } from '../security/types'
+import type { CaptchaTokenPayload } from '../security/types'
 
-export interface ICodes {
+export interface Codes {
   passwordRecovery: {
     query: {
       value: string
@@ -12,20 +12,20 @@ export interface ICodes {
   nextRequestPossibleAt: string
 }
 
-export interface ISendPasswordRecoveryCodePayload extends ICaptchaTokenPayload {
+export interface SendPasswordRecoveryCodePayload extends CaptchaTokenPayload {
   email: string
 }
 
-export interface ISendChangeEmailCodePayload extends ICaptchaTokenPayload {
+export interface SendChangeEmailCodePayload extends CaptchaTokenPayload {
   email: string
 }
 
-export interface ICodeValidationPayload extends ICaptchaTokenPayload {
+export interface CodeValidationPayload extends CaptchaTokenPayload {
   email: string
   code: string
 }
 
-export interface IValidateChangeEmailCodePayload extends ICaptchaTokenPayload {
+export interface ValidateChangeEmailCodePayload extends CaptchaTokenPayload {
   email: string
   code: string
 }

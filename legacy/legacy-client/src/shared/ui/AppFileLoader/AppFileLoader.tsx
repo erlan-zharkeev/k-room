@@ -12,7 +12,7 @@ import { AppButton } from 'src/shared/ui/AppButton/AppButton'
 import { AppIcon } from 'src/shared/ui/AppIcon/AppIcon'
 import { AppImagePreview } from 'src/shared/ui/AppImagePreview/AppImagePreview'
 import { APP_FILE_LOADER_I18N } from 'src/shared/ui/AppFileLoader/internals/i18n'
-import { IAppFileLoaderProps } from 'src/shared/ui/AppFileLoader/internals/types'
+import { AppFileLoaderProps } from 'src/shared/ui/AppFileLoader/internals/types'
 
 export const AppFileLoader = ({
   name,
@@ -29,7 +29,7 @@ export const AppFileLoader = ({
   avatarBorderless,
   showTextLabel = true,
   resetText = 'Reset'
-}: IAppFileLoaderProps) => {
+}: AppFileLoaderProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const notifications = useNotification()
   const { t } = useI18n()

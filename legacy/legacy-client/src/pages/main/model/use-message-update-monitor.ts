@@ -1,6 +1,6 @@
 import { Fragment, createElement, useEffect } from 'react'
 
-import { IEventAddReaction, IEventMessageDelivered, IEventUpdateMessageStatus, SocketActionsType } from 'common'
+import { EventAddReaction, EventMessageDelivered, EventUpdateMessageStatus, SocketActions } from 'common'
 
 import { useChatRoom } from 'src/entities/chat-room'
 
@@ -17,7 +17,7 @@ export const useMessageUpdateMonitor = () => {
   const { getNotification, openBrowserNotification } = useNotification()
   const { play } = useSound()
 
-  const handleDeliveredMessage = async (payload: IEventMessageDelivered) => {
+  const handleDeliveredMessage = async (payload: EventMessageDelivered) => {
     const { roomId, message } = payload
     const existingMessage = getById(message.id)
 
@@ -55,7 +55,7 @@ export const useMessageUpdateMonitor = () => {
     play('message-delivered')
   }
 
-  const updateMessageStatus = async (payload: IEventUpdateMessageStatus) => {
+  const updateMessageStatus = async (payload: EventUpdateMessageStatus) => {
     await update(payload.messageId, { status: payload.status })
   }
 
@@ -63,21 +63,21 @@ export const useMessageUpdateMonitor = () => {
     // TODO restore message deletion flow when backend payload is finalized.
   }
 
-  const handleMessageReactionUpdate = (_payload: IEventAddReaction) => {
+  const handleMessageReactionUpdate = (_payload: EventAddReaction) => {
     // TODO restore reaction updates in the local message store.
   }
 
   useEffect(() => {
-    socket.on<SocketActionsType>('message-deleted', handleMessageDeleted)
-    socket.on<SocketActionsType>('message-delivered', handleDeliveredMessage)
-    socket.on<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.on<SocketActionsType>('message-status-updated', updateMessageStatus)
+    socket.on<SocketActions>('message-deleted', handleMessageDeleted)
+    socket.on<SocketActions>('message-delivered', handleDeliveredMessage)
+    socket.on<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
+    socket.on<SocketActions>('message-status-updated', updateMessageStatus)
 
     return () => {
-      socket.off<SocketActionsType>('message-deleted', handleMessageDeleted)
-      socket.off<SocketActionsType>('message-delivered', handleDeliveredMessage)
-      socket.off<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
-      socket.off<SocketActionsType>('message-status-updated', updateMessageStatus)
+      socket.off<SocketActions>('message-deleted', handleMessageDeleted)
+      socket.off<SocketActions>('message-delivered', handleDeliveredMessage)
+      socket.off<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
+      socket.off<SocketActions>('message-status-updated', updateMessageStatus)
     }
   }, [getById, getNotification, getRoomById, mutate, openBrowserNotification, play, put, update])
 }

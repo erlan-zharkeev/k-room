@@ -1,11 +1,11 @@
 import { model, Schema } from 'mongoose'
 
-import { IUserSchema } from './types'
+import { UserSchema } from './types'
 import { personalSchema } from './personal.model'
 import { publicSchema } from './public.model'
 import { systemSchema } from './system.model'
 
-const userSchema = new Schema<IUserSchema>(
+const userSchema = new Schema<UserSchema>(
   {
     system: systemSchema,
     personal: personalSchema,

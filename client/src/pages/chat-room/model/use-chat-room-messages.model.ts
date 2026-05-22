@@ -2,14 +2,14 @@ import { computed, nextTick, toRef, watch } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 
-import type { IChatRoomMessagesProps } from '../config/types'
+import type { ChatRoomMessagesProps } from '../config/types'
 
 import { useChatRoomMessageList } from './use-chat-room-message-list.model'
 import { useChatRoomMessageReadStatus } from './use-chat-room-message-read-status.model'
 import { useChatRoomMessageVirtualizer } from './use-chat-room-message-virtualizer.model'
 import { useLoadRoomMessages } from './use-load-room-messages.model'
 
-export const useChatRoomMessages = (props: IChatRoomMessagesProps) => {
+export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   const room = toRef(props, 'room')
   const { messageById } = useMessage()
   const {

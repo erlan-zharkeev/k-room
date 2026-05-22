@@ -4,9 +4,9 @@ import { AppText } from 'src/shared/ui'
 import { MessageImages } from '../MessageImages/MessageImages'
 import styles from './RepliedMessage.module.scss'
 import { REPLIED_MESSAGE_I18N } from './i18n'
-import { IRepliedMessageProps } from './types'
+import { RepliedMessageProps } from './types'
 
-export const RepliedMessage = ({ message }: IRepliedMessageProps) => {
+export const RepliedMessage = ({ message }: RepliedMessageProps) => {
   if (!message.repliedMessage?.id) return null
 
   const { authorName, body } = message.repliedMessage

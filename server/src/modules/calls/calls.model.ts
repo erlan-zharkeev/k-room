@@ -1,7 +1,7 @@
-import type { CallSchemaType } from 'global-shared'
+import type { CallSchema } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
-const callSchema = new Schema<CallSchemaType>({
+const callSchema = new Schema<CallSchema>({
   calledAt: {
     type: Number,
     required: true
@@ -33,4 +33,4 @@ const callSchema = new Schema<CallSchemaType>({
   }
 })
 
-export const CallModel = model<CallSchemaType>('Call', callSchema, 'call')
+export const CallModel = model<CallSchema>('Call', callSchema, 'call')

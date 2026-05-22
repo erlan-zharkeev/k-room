@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 
 import { acquireUrl, releaseUrl } from 'src/entities/media-file/lib/media-url-cache'
 
-import { IDbMedia } from 'src/shared/config'
+import { DbMedia } from 'src/shared/config'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
-const mediaStore = dexieCollectionStore<IDbMedia>(db.media)
+const mediaStore = dexieCollectionStore<DbMedia>(db.media)
 
 export const useLiveMediaUrl = (id: string) => {
   const currentRecord = mediaStore.useById(id)

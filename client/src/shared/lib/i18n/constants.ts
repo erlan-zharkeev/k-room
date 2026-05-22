@@ -1,9 +1,9 @@
 import { APP_LANGUAGE } from 'global-shared'
 import { InjectionKey } from 'vue'
 
-import type { I18nTranslateType } from './i18n.types'
+import type { I18nTranslate } from './i18n.types'
 
-export const I18N_KEY: InjectionKey<I18nTranslateType> = Symbol('i18n')
+export const I18N_KEY: InjectionKey<I18nTranslate> = Symbol('i18n')
 
 const BROWSER_LANGUAGE = navigator.language.toLowerCase()
 

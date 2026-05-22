@@ -1,3 +1,3 @@
-import type { UserRecordType } from 'src/shared/lib'
+import type { UserRecord } from 'src/shared/lib'
 
-export type User = UserRecordType
+export type User = UserRecord

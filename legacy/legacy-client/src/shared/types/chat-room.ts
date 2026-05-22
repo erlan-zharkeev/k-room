@@ -1,3 +1,3 @@
 import { IChatRoom } from 'common'
 
-export type FChatRoomType = IChatRoom & { avatarId: string }
+export type FChatRoom = IChatRoom & { avatarId: string }

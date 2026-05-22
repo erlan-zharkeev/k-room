@@ -1,7 +1,7 @@
-import type { ISocketAckFailure, ISocketAckSuccess } from 'global-shared'
+import type { SocketAckFailure, SocketAckSuccess } from 'global-shared'
 
-export interface IEmitSocketActionOptions<TResponsePayload = void, TReason extends string = string> {
-  onSuccess?: (response: ISocketAckSuccess<TResponsePayload>) => void
-  onFailure?: (response: ISocketAckFailure<TReason>) => void
+export interface EmitSocketActionOptions<TResponsePayload = void, TReason extends string = string> {
+  onSuccess?: (response: SocketAckSuccess<TResponsePayload>) => void
+  onFailure?: (response: SocketAckFailure<TReason>) => void
   onSettled?: () => void
 }

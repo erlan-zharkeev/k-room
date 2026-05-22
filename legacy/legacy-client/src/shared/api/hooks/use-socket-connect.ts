@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 
-import { SocketActionsType } from 'common'
+import { SocketActions } from 'common'
 
 import { useSettings } from 'src/shared/preferences'
 import { setReconnectingStatus } from 'src/shared/system'
@@ -16,8 +16,8 @@ export const useSocketConnect = () => {
       language
     }
     socket.connect()
-    socket.emit<SocketActionsType>('initialize')
-    socket.emit<SocketActionsType>('actualize-user-data')
+    socket.emit<SocketActions>('initialize')
+    socket.emit<SocketActions>('actualize-user-data')
     dispatch(setReconnectingStatus(false))
   }
 

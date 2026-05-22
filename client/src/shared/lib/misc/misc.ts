@@ -1,6 +1,6 @@
 import type { INmorphThemeInstance } from '@nmorph/nmorph-ui-kit'
 
-import type { IFormFieldValidationState } from './types'
+import type { FormFieldValidationState } from './types'
 
 export const buildPathWithParams = <T extends object>(basePath: string, params: T) => {
   const searchParams = new URLSearchParams()
@@ -18,7 +18,7 @@ export const firstCharUpperCase = (string: string) => string.charAt(0).toUpperCa
 
 export const getRandomNumber = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min
 
-export const isFormFieldInvalid = (field?: IFormFieldValidationState) =>
+export const isFormFieldInvalid = (field?: FormFieldValidationState) =>
   Boolean(field?.invalid && (field.dirty || field.touched))
 
 export const getNmorphGeneratedColorSchema = (

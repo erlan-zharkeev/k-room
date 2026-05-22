@@ -17,7 +17,7 @@ import {
 } from './constants'
 import { parseTokenExpires } from './lib/parse-token-expires'
 import { SESSION_I18N } from './session.i18n'
-import type { ITokenPayload } from './types'
+import type { TokenPayload } from './types'
 
 @Injectable()
 export class SessionService {
@@ -51,13 +51,13 @@ export class SessionService {
   }
 
   async verifyToken(token: string, secret: string) {
-    return new Promise<ITokenPayload>((resolve, reject) => {
+    return new Promise<TokenPayload>((resolve, reject) => {
       jwt.verify(token, secret, (error, decoded) => {
         if (error) {
           return reject(error)
         }
 
-        return resolve(decoded as ITokenPayload)
+        return resolve(decoded as TokenPayload)
       })
     })
   }

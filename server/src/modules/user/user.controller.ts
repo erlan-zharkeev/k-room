@@ -2,10 +2,10 @@ import { Body, Controller, Get, Patch, Post, Req, Res, UploadedFile, UseGuards, 
 import { FileInterceptor } from '@nestjs/platform-express'
 import { type Request, type Response } from 'express'
 import {
-  type IBackendResponse,
-  type IChangePasswordPayload,
-  type ICreateNewPasswordPayload,
-  type GetUserDataResponseType,
+  type BackendResponse,
+  type ChangePasswordPayload,
+  type CreateNewPasswordPayload,
+  type GetUserDataResponse,
   USER_ENDPOINTS
 } from 'global-shared'
 import { memoryStorage } from 'multer'
@@ -18,7 +18,7 @@ import { runRequestValidation } from 'src/shared/lib/run-request-validation'
 import { AccessTokenGuard } from '../session/session.guard'
 import { SessionService } from '../session/session.service'
 
-import type { IUpdateUserDataPayload } from './types'
+import type { UpdateUserDataPayload } from './types'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
 import { CHANGE_PASSWORD_VALIDATION, RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
@@ -29,7 +29,7 @@ export class UserController {
 
   @Get(USER_ENDPOINTS.getUserData)
   @UseGuards(AccessTokenGuard)
-  async getUserData(@Req() request: Request, @Res() response: Response<IBackendResponse<GetUserDataResponseType>>) {
+  async getUserData(@Req() request: Request, @Res() response: Response<BackendResponse<GetUserDataResponse>>) {
     const { language, authUserId: userId } = request
 
     if (!userId) {
@@ -51,8 +51,8 @@ export class UserController {
   @Post(USER_ENDPOINTS.resetPassword)
   async resetPassword(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<null>>,
-    @Body() payload: ICreateNewPasswordPayload
+    @Res() response: Response<BackendResponse<null>>,
+    @Body() payload: CreateNewPasswordPayload
   ) {
     const { language } = request
 
@@ -84,9 +84,9 @@ export class UserController {
   )
   async updateUserData(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<null>>,
+    @Res() response: Response<BackendResponse<null>>,
     @UploadedFile() file?: Express.Multer.File,
-    @Body() payload?: IUpdateUserDataPayload
+    @Body() payload?: UpdateUserDataPayload
   ) {
     const { language, authUserId: userId } = request
 
@@ -119,8 +119,8 @@ export class UserController {
   @UseGuards(AccessTokenGuard)
   async changePassword(
     @Req() request: Request,
-    @Res() response: Response<IBackendResponse<null>>,
-    @Body() payload: IChangePasswordPayload
+    @Res() response: Response<BackendResponse<null>>,
+    @Body() payload: ChangePasswordPayload
   ) {
     const { language, authUserId: userId } = request
 

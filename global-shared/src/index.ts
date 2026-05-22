@@ -1,26 +1,26 @@
 export { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS, VALIDATION_PATTERNS } from './auth/constants'
 export type {
-  IAuthLoginPayload,
-  IAuthRegistrationPayload,
-  ISendConfirmationLinkPayload,
-  ISignInWithProviderPayload
+  AuthLoginPayload,
+  AuthRegistrationPayload,
+  SendConfirmationLinkPayload,
+  SignInWithProviderPayload
 } from './auth/types'
 
-export type { CallStatusType, CallFlowType, CallType, CallDocumentType, CallSchemaType } from './calls/types'
+export type { CallStatus, CallFlow, Call, CallDocument, CallSchema } from './calls/types'
 
 export { CHAT_KIND } from './chat/constants'
-export type { ChatRoomType, ChatRoomsType, ChatRoomSchemaType, ChatKindType } from './chat/types'
+export type { ChatRoom, ChatRooms, ChatRoomSchema, ChatKind } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
 export type {
-  ICodes,
-  ICodeValidationPayload,
-  ISendChangeEmailCodePayload,
-  ISendPasswordRecoveryCodePayload,
-  IValidateChangeEmailCodePayload
+  Codes,
+  CodeValidationPayload,
+  SendChangeEmailCodePayload,
+  SendPasswordRecoveryCodePayload,
+  ValidateChangeEmailCodePayload
 } from './codes/types'
 
-export type { InteractionType, ContactType, KnownUserType, ContactMapType } from './contact/types'
+export type { Interaction, Contact, KnownUser, ContactMap } from './contact/types'
 
 export {
   AUTH_ROUTE_NAMES,
@@ -33,16 +33,16 @@ export {
   CODES_ENDPOINTS,
   ADMIN_ENDPOINTS
 } from './endpoints/constants'
-export type { RouteNameType, EndpointsType } from './endpoints/types'
+export type { RouteName, Endpoints } from './endpoints/types'
 
-export type { IEnvVariables, IEnvSharedVariables } from './env/types'
+export type { EnvVariables, EnvSharedVariables } from './env/types'
 export { parseEnvContent, readEnv, readSecretEnv } from './env/lib/read-env'
-export type { EnvSourceType, IReadEnvOptions, ISecretEnvFileReader } from './env/lib/read-env'
+export type { EnvSource, ReadEnvOptions, SecretEnvFileReader } from './env/lib/read-env'
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/constants'
 export { defineI18n } from './language/lib/define-i18n'
-export type { AppLanguageType, LocalizedTextType, LocalizedTextMapType } from './language/types'
-export type { I18nValueConstraintType, I18nRecordConstraintType } from './language/lib/types'
+export type { AppLanguage, LocalizedText, LocalizedTextMap } from './language/types'
+export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/types'
 
 export {
   MEDIA_AVATAR_FILENAME_PREFIX,
@@ -55,51 +55,51 @@ export {
   MEDIA_VALIDATION_OPTIONS_MAP
 } from './media/constants'
 export type {
-  MediaBucketNameType,
-  MediaValidationOptionsType,
-  MediaKindType,
-  MediaUploadType,
-  ImageObjectType,
-  MediaFileValueType
+  MediaBucketName,
+  MediaValidationOptions,
+  MediaKind,
+  MediaUpload,
+  ImageObject,
+  MediaFileValue
 } from './media/types'
 
-export type { IPackageData } from './package/types'
+export type { PackageData } from './package/types'
 
 export { MESSAGE_STATUS } from './message/constants'
 export type {
-  MessageStatusType,
-  MessageMetadataType,
-  MessageReactionType,
-  RepliedMessageType,
-  MessageType,
-  MessageDocumentType,
-  MessageSchemaType
+  MessageStatus,
+  MessageMetadata,
+  MessageReaction,
+  RepliedMessage,
+  Message,
+  MessageDocument,
+  MessageSchema
 } from './message/types'
 
-export type { IChangePasswordPayload, ICreateNewPasswordPayload } from './requests/types'
+export type { ChangePasswordPayload, CreateNewPasswordPayload } from './requests/types'
 
 export type {
-  IConfirmEmailResponse,
-  LoginResponseType,
-  SignInWithProviderResponseType,
-  GetUserDataResponseType,
-  ISendConfirmationLinkResponse,
-  ISendChangeEmailCodeResponse,
-  ISendPasswordRecoveryCodeResponse,
-  IValidateChangeEmailCodeResponse,
-  IValidatePasswordRecoveryCodeResponse
+  ConfirmEmailResponse,
+  LoginResponse,
+  SignInWithProviderResponse,
+  GetUserDataResponse,
+  SendConfirmationLinkResponse,
+  SendChangeEmailCodeResponse,
+  SendPasswordRecoveryCodeResponse,
+  ValidateChangeEmailCodeResponse,
+  ValidatePasswordRecoveryCodeResponse
 } from './response/types'
 
 export { SENTRY_IGNORED_SUBSTRINGS } from './sentry/constants'
 export { isIgnoredSentryStatus, shouldIgnoreSentryError } from './sentry/lib/should-ignore-sentry-error'
-export type { ISentryErrorContext } from './sentry/types'
+export type { SentryErrorContext } from './sentry/types'
 
 export { PROTECTED_ACTION_REASON, SECURITY_ACTION } from './security/constants'
 export type {
-  ICaptchaTokenPayload,
-  IProtectedActionResponsePayload,
-  ProtectedActionReasonType,
-  SecurityActionType
+  CaptchaTokenPayload,
+  ProtectedActionResponsePayload,
+  ProtectedActionReason,
+  SecurityAction
 } from './security/types'
 
 export { firebaseProviders, providers } from './shared/constants'
@@ -107,87 +107,86 @@ export { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './socket/constants'
 export { formatAppName } from './shared/lib/format-app-name'
 export { isUnknownObject } from './shared/lib/type-guards'
 export type {
-  AuthTokensType,
-  FirebaseProviderType,
-  ProviderType,
-  AvailableCookieType,
-  UnknownCallbackType,
-  UnknownObjectType,
-  BasicStreamSettingsType,
-  StreamSettingsType,
-  IBackendMessage,
-  IBackendResponse
+  AuthTokens,
+  FirebaseProvider,
+  Provider,
+  AvailableCookie,
+  UnknownCallback,
+  UnknownObject,
+  BasicStreamSettings,
+  StreamSettings,
+  BackendMessage,
+  BackendResponse
 } from './shared/types'
 
 export type {
-  IEventMarkCallAsVideo,
-  IEventMessageDelivered,
-  IEventGetRoom,
-  EventGetRoomsType,
-  IEventStatusContact,
-  EventChangeContactsDataType,
-  IEventGetContacts,
-  EventGetContactsType,
-  EventKnownUsersUpdatedType,
-  EventCallUpdatedType,
-  EventCallsUpdatedType,
-  IEventSaveContact,
-  IEventDeleteContact,
-  IEventSearchContact,
-  IEventGetSearchedContact,
-  IEventCreateRoom,
-  IEventUpdateChatRoom,
-  IEventDeleteChatRoom,
-  IEventChatRoomDeleted,
-  IEventLeaveChatRoom,
-  IEventChatRoomLeft,
-  IEventUpdatePinnedChatRoom,
-  IEventUpdatePinnedChatRoomOrder,
-  IEventPinnedChatRoomsUpdated,
-  IEventUserTyping,
-  IEventGetContactTypingStatus,
-  IEventSendMessage,
-  IEventUpdateMessageStatus,
-  IEventMessagesStatusUpdated,
-  IEventChangeMessageStatus,
-  IEventMarkRoomAsRead,
-  IEventLoadRoomMessages,
-  IEventRoomMessagesLoaded,
-  IEventDeleteMessage,
-  IEventAddReaction,
-  IEventCallUser,
-  EventChangeCallSettingsType,
-  IEventCallAccepted,
-  IEventAnswerCall,
-  EventCallStartedAtType,
-  IEventCallEnded,
-  IEventErrorMessage,
-  IEventMessageDeleted,
-  IEventUpdatedMessageReactions,
-  ICreateRoomAckPayload,
-  IEventUpdateInteraction,
-  EventInviteReceivedType,
-  IEventUpdateContactInteractionSuccess,
-  ContactInteractionUpdateFailedReasonType,
-  ISocketAckSuccess,
-  ISocketAckFailure,
-  SocketAckResponseType,
-  IEventContactAddSuccess,
-  IEventDeleteContactSuccess,
-  IEventAuthError,
-  IEventUpdateLanguage,
-  SocketActionsType
+  EventMarkCallAsVideo,
+  EventMessageDelivered,
+  EventGetRoom,
+  EventGetRooms,
+  EventStatusContact,
+  EventChangeContactsData,
+  EventGetContacts,
+  EventKnownUsersUpdated,
+  EventCallUpdated,
+  EventCallsUpdated,
+  EventSaveContact,
+  EventDeleteContact,
+  EventSearchContact,
+  EventGetSearchedContact,
+  EventCreateRoom,
+  EventUpdateChatRoom,
+  EventDeleteChatRoom,
+  EventChatRoomDeleted,
+  EventLeaveChatRoom,
+  EventChatRoomLeft,
+  EventUpdatePinnedChatRoom,
+  EventUpdatePinnedChatRoomOrder,
+  EventPinnedChatRoomsUpdated,
+  EventUserTyping,
+  EventGetContactTypingStatus,
+  EventSendMessage,
+  EventUpdateMessageStatus,
+  EventMessagesStatusUpdated,
+  EventChangeMessageStatus,
+  EventMarkRoomAsRead,
+  EventLoadRoomMessages,
+  EventRoomMessagesLoaded,
+  EventDeleteMessage,
+  EventAddReaction,
+  EventCallUser,
+  EventChangeCallSettings,
+  EventCallAccepted,
+  EventAnswerCall,
+  EventCallStartedAt,
+  EventCallEnded,
+  EventErrorMessage,
+  EventMessageDeleted,
+  EventUpdatedMessageReactions,
+  CreateRoomAckPayload,
+  EventUpdateInteraction,
+  EventInviteReceived,
+  EventUpdateContactInteractionSuccess,
+  ContactInteractionUpdateFailedReason,
+  SocketAckSuccess,
+  SocketAckFailure,
+  SocketAckResponse,
+  EventContactAddSuccess,
+  EventDeleteContactSuccess,
+  EventAuthError,
+  EventUpdateLanguage,
+  SocketActions
 } from './socket/types'
 
 export { REQ_STATUS } from './status/constants'
-export type { ReqStatusType } from './status/types'
+export type { ReqStatus } from './status/types'
 
 export { normalizeTimestamp } from './time/lib/normalize-timestamp'
 export { formatHumanDateTime } from './time/lib/format-human-date-time'
 
 export { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from './user/constants'
 export { formatNickname, isNicknameValid, normalizeNickname, normalizeNicknameKey } from './user/lib/nickname'
-export type { UserRoleType, UserPreviewType, UserDataType } from './user/types'
+export type { UserRole, UserPreview, UserData } from './user/types'
 
 export { VALIDATION_I18N } from './validation/i18n'
 export { createValidationMessages } from './validation/messages'
@@ -211,4 +210,4 @@ export {
   createUpdateUserDataSchema,
   createValidatePasswordRecoveryCodeSchema
 } from './validation/schemas'
-export type { ValidationI18nType, ValidationMessagesType } from './validation/types'
+export type { ValidationI18n, ValidationMessages } from './validation/types'

@@ -1,8 +1,8 @@
-import { AvailableCookieType, IBackendResponse } from 'common'
+import { AvailableCookie, BackendResponse } from 'common'
 import { Request, Response } from 'express'
 
-export interface IAppRequest extends Request {
-  cookies: Partial<Record<AvailableCookieType, string>>
+export interface AppRequest extends Request {
+  cookies: Partial<Record<AvailableCookie, string>>
 }
 
-export type AppResponseType<T> = Response<IBackendResponse<T>>
+export type AppResponse<T> = Response<BackendResponse<T>>

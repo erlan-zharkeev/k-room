@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { handleRuntimeError } from 'src/shared/lib'
 import { NOTIFICATION_I18N, useNotification } from 'src/shared/notification'
 import { useI18n, useSettings } from 'src/shared/preferences'
-import { AppIconNameType } from 'src/shared/ui'
+import { AppIconName } from 'src/shared/ui'
 
 import { useDevicePermissionRequestAndUpdate } from './use-device-permission-request-and-update'
 
@@ -19,7 +19,7 @@ export const useInputVideoDevice = () => {
   const { requestAndUpdateCamPermission } = useDevicePermissionRequestAndUpdate()
   const videoEl = useRef<HTMLVideoElement>(null)
 
-  const videoIcon: AppIconNameType = isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
+  const videoIcon: AppIconName = isVideoLoading ? 'loader' : showVideo ? 'cross' : 'thunder'
   const loading = videoInputDeviceList.length < 0
 
   const changeVideoInputDevice = (value: string = '') => {

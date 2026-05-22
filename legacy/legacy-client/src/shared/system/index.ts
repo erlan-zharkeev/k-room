@@ -29,5 +29,5 @@ export {
   INITIAL_REPLIED_MESSAGE_DATA,
   INITIAL_SYSTEM_STORE
 } from './internals/constants'
-export type { IViewPort, AuthStatusType, IMessageInputData, ISystemStore } from './internals/types'
+export type { ViewPort, AuthStatus, MessageInputData, SystemStore } from './internals/types'
 export { VIEW_PORT_WIDTH } from './internals/types'

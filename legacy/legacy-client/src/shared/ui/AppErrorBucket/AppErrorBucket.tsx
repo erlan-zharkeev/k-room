@@ -1,7 +1,7 @@
 import './style.scss'
-import { IErrorBucketProps } from './internals/types'
+import { ErrorBucketProps } from './internals/types'
 
-export const AppErrorBucket = ({ errors }: IErrorBucketProps) => {
+export const AppErrorBucket = ({ errors }: ErrorBucketProps) => {
   return (
     <div className="app-error-bucket">
       {errors &&

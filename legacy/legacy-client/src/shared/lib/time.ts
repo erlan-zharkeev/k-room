@@ -1,22 +1,22 @@
 import moment from 'moment'
 
-import { APP_LANGUAGE, AppLanguageType, normalizeTimestamp } from 'common'
+import { APP_LANGUAGE, AppLanguage, normalizeTimestamp } from 'common'
 
 import 'moment/locale/ru'
 
-const getMomentLocale = (language: AppLanguageType) => (language === APP_LANGUAGE.Ru ? 'ru' : 'en')
+const getMomentLocale = (language: AppLanguage) => (language === APP_LANGUAGE.Ru ? 'ru' : 'en')
 
-export const formatLocalizedDate = (value: number | string, language: AppLanguageType, format = 'LL') =>
+export const formatLocalizedDate = (value: number | string, language: AppLanguage, format = 'LL') =>
   moment(normalizeTimestamp(value) ?? 0)
     .locale(getMomentLocale(language))
     .format(format)
 
-export const formatLocalizedTime = (value: number | string, language: AppLanguageType, format = 'LT') =>
+export const formatLocalizedTime = (value: number | string, language: AppLanguage, format = 'LT') =>
   moment(normalizeTimestamp(value) ?? 0)
     .locale(getMomentLocale(language))
     .format(format)
 
-export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguageType) =>
+export const formatLocalizedRelativeTime = (value: number | string, language: AppLanguage) =>
   moment(normalizeTimestamp(value) ?? 0)
     .locale(getMomentLocale(language))
     .startOf('minutes')

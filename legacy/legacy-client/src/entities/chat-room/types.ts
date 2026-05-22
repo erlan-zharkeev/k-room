@@ -1,9 +1,9 @@
 import { IChatRoom } from 'common'
 
-export interface IAppChatRoom extends IChatRoom {
+export interface AppChatRoom extends IChatRoom {
   lastScrolledMessageId?: string
 }
 
-export interface IRoomState {
-  chatRooms: IAppChatRoom[]
+export interface RoomState {
+  chatRooms: AppChatRoom[]
 }

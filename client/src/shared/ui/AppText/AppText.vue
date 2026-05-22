@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { APP_TEXT_DEFAULT_PROPS } from './constants'
-import type { IAppTextProps } from './types'
+import type { AppTextProps } from './types'
 import { useAppText } from './use-app-text.model'
 
-const props = withDefaults(defineProps<IAppTextProps>(), APP_TEXT_DEFAULT_PROPS)
+const props = withDefaults(defineProps<AppTextProps>(), APP_TEXT_DEFAULT_PROPS)
 const { className } = useAppText(props)
 </script>
 

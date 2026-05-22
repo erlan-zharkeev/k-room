@@ -1,9 +1,9 @@
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 
 import { loadTurnstile } from './load-turnstile'
-import type { IUseAppCaptchaParams } from './types'
+import type { UseAppCaptchaParams } from './types'
 
-export const useAppCaptcha = ({ action, model, resetKey }: IUseAppCaptchaParams) => {
+export const useAppCaptcha = ({ action, model, resetKey }: UseAppCaptchaParams) => {
   const containerRef = useTemplateRef<HTMLElement>('containerRef')
   const widgetId = ref('')
   const widgetFailed = ref(false)

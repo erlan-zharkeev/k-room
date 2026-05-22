@@ -1,6 +1,6 @@
-import type { IIoDevicesSettings } from './io-devices.types'
+import type { IoDevicesSettings } from './io-devices.types'
 
-export const DEFAULT_IO_DEVICES_SETTINGS: IIoDevicesSettings = {
+export const DEFAULT_IO_DEVICES_SETTINGS: IoDevicesSettings = {
   audioInputDeviceId: '',
   videoInputDeviceId: '',
   audioOutputDeviceId: ''

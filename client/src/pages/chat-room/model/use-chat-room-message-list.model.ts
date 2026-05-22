@@ -3,18 +3,18 @@ import { computed, type ComputedRef, type Ref } from 'vue'
 import { getRoomDisplayedLastMessageId } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useLocalizedDateTime } from 'src/entities/setting'
-import type { ChatRoomRecordType } from 'src/shared/lib'
+import type { ChatRoomRecord } from 'src/shared/lib'
 
-import type { MessageListItemType } from '../config/types'
+import type { MessageListItem } from '../config/types'
 
-export const useChatRoomMessageList = (room: Ref<ChatRoomRecordType>, hasMoreLoadedMessages: ComputedRef<boolean>) => {
+export const useChatRoomMessageList = (room: Ref<ChatRoomRecord>, hasMoreLoadedMessages: ComputedRef<boolean>) => {
   const { messageById } = useMessage()
   const { formatDate } = useLocalizedDateTime()
 
   const displayedLastMessageId = computed(() => getRoomDisplayedLastMessageId(room.value))
   const hasMessages = computed(() => room.value.messages.length > 0)
-  const messageList = computed<MessageListItemType[]>(() => {
-    const items: MessageListItemType[] = []
+  const messageList = computed<MessageListItem[]>(() => {
+    const items: MessageListItem[] = []
     let previousLabel = ''
 
     if (hasMoreLoadedMessages.value) {

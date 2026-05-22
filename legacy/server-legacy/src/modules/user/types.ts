@@ -1,56 +1,56 @@
-import { InteractionType, ProviderType, UserRoleType } from 'common'
+import { Interaction, Provider, UserRole } from 'common'
 
-export interface IUserDevice {
+export interface UserDevice {
   socketId: string
   refreshToken: string
 }
 
-export interface IUserSystemData {
-  role: UserRoleType
-  device: Record<string, IUserDevice>
+export interface UserSystemData {
+  role: UserRole
+  device: Record<string, UserDevice>
   confirmed: boolean
   confirmAttempts: number
   password: string
-  provider?: ProviderType
+  provider?: Provider
 }
 
-export interface IContact {
+export interface UserContact {
   id: string
-  interaction: InteractionType
+  interaction: Interaction
   updatedAt: number
 }
 
-export interface IUserPersonalData {
+export interface UserPersonalData {
   email: string
-  contacts: Record<string, IContact>
+  contacts: Record<string, UserContact>
   chatRooms: string[]
 }
 
-export interface IUserPublicData {
+export interface UserPublicData {
   username: string
   online: boolean
   lastSeen: number
 }
 
-export interface IUserSchema {
+export interface UserSchema {
   _id: string
-  system: IUserSystemData
-  personal: IUserPersonalData
-  public: IUserPublicData
+  system: UserSystemData
+  personal: UserPersonalData
+  public: UserPublicData
   createdAt?: Date
   updatedAt?: Date
 }
 
-export interface IAdminRecord {
+export interface AdminRecord {
   params?: Record<string, unknown>
 }
 
-export interface IAdminActionResponse {
-  record?: IAdminRecord
-  records?: IAdminRecord[]
+export interface AdminActionResponse {
+  record?: AdminRecord
+  records?: AdminRecord[]
 }
 
-export interface IAdminActionRequest {
+export interface AdminActionRequest {
   method?: string
   payload?: Record<string, unknown>
 }

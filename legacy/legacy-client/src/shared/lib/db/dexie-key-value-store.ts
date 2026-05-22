@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 
 import { cloneMutable } from './helpers/clone-mutable'
-import { MutableType, IndexableType, KvItem, IKvQueryState, UseResult, IUseStateResult } from './internals/types'
+import { Mutable, Indexable, KvItem, KvQueryState, UseResult, UseStateResult } from './internals/types'
 
 export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, keyValue: string) => {
   const wrap = (data: T): KvItem<T> => ({ ...data, __key: keyValue })
@@ -31,7 +31,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
     }
   }
 
-  const mutate = async (mutator: (draft: MutableType<T>) => void) => {
+  const mutate = async (mutator: (draft: Mutable<T>) => void) => {
     await table.db.transaction('rw', table, async () => {
       const current = unwrap(await table.get(keyValue as unknown as never))
       const base = current ?? ({} as T)
@@ -46,10 +46,10 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
       Object.assign(obj, changes)
     })
 
-  const setByPath = (path: string, value: unknown) => mutate((obj) => set(obj as unknown as IndexableType, path, value))
+  const setByPath = (path: string, value: unknown) => mutate((obj) => set(obj as unknown as Indexable, path, value))
 
   const useQueryState = () => {
-    return useLiveQuery<IKvQueryState<T> | undefined>(async () => {
+    return useLiveQuery<KvQueryState<T> | undefined>(async () => {
       return {
         data: await get(),
         isReady: true
@@ -72,7 +72,7 @@ export const dexieKeyValueStore = <T extends object>(table: Table<KvItem<T>>, ke
     return { ...defaults, ...data } as UseResult<T, D>
   }
 
-  const useState = <D extends Partial<T> | undefined = undefined>(defaults?: D): IUseStateResult<T, D> => {
+  const useState = <D extends Partial<T> | undefined = undefined>(defaults?: D): UseStateResult<T, D> => {
     const state = useQueryState()
     const entry = state?.data
 

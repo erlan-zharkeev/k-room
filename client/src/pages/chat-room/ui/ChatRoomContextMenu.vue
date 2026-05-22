@@ -4,13 +4,13 @@ import { NmorphCheckbox, NmorphContextMenu, NmorphIcon, NmorphIconMore } from '@
 import { useScreen } from 'src/shared/lib'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
-import type { IChatRoomContextMenuProps } from '../config/types'
+import type { ChatRoomContextMenuProps } from '../config/types'
 import { useChatRoomContextMenu } from '../model/use-chat-room-context-menu.model'
 
 import ChatRoomDeleteDialog from './ChatRoomDeleteDialog.vue'
 import ChatRoomLeaveDialog from './ChatRoomLeaveDialog.vue'
 
-const props = defineProps<IChatRoomContextMenuProps>()
+const props = defineProps<ChatRoomContextMenuProps>()
 const {
   contextMenuOptions,
   isContextMenuOpen,

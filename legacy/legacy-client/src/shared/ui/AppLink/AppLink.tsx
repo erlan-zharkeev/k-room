@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { IAppLinkProps } from './internals/types'
+import { AppLinkProps } from './internals/types'
 
 export const AppLink = ({
   text,
@@ -15,7 +15,7 @@ export const AppLink = ({
   prevent = false,
   to,
   href = ''
-}: IAppLinkProps) => {
+}: AppLinkProps) => {
   const className = createClassNameWithModifiers({
     rootClass: 'app-link',
     modifiers: [disabled && 'disabled', color]

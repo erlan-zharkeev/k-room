@@ -1,5 +1,5 @@
 import { captureException, captureMessage, isInitialized } from '@sentry/node'
-import { shouldIgnoreSentryError, type ISentryErrorContext } from 'global-shared'
+import { shouldIgnoreSentryError, type SentryErrorContext } from 'global-shared'
 import { isNumber } from 'lodash'
 
 export const serverCaptureSentryException = (error: unknown) => {
@@ -12,7 +12,7 @@ export const serverCaptureSentryException = (error: unknown) => {
 
 const generateSentryError =
   (kind: 'http-error' | 'socket-error') =>
-  ({ message, silent, status }: ISentryErrorContext) => {
+  ({ message, silent, status }: SentryErrorContext) => {
     if (!isInitialized()) {
       return
     }

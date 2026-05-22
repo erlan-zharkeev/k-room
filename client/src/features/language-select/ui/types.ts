@@ -1,3 +1,3 @@
-export interface ILanguageSelectProps {
+export interface LanguageSelectProps {
   compact?: boolean
 }

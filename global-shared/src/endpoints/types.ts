@@ -7,12 +7,12 @@ import type {
   USER_ENDPOINTS
 } from './constants'
 
-type ValueOfType<T> = T[keyof T]
+type ValueOf<T> = T[keyof T]
 
-export type RouteNameType = ValueOfType<typeof ROUTE_NAMES>
-export type EndpointsType =
-  | ValueOfType<typeof AUTH_ENDPOINTS>
-  | ValueOfType<typeof USER_ENDPOINTS>
-  | ValueOfType<typeof CODES_ENDPOINTS>
-  | ValueOfType<typeof ADMIN_ENDPOINTS>
-  | ValueOfType<typeof MEDIA_ENDPOINTS>
+export type RouteName = ValueOf<typeof ROUTE_NAMES>
+export type Endpoints =
+  | ValueOf<typeof AUTH_ENDPOINTS>
+  | ValueOf<typeof USER_ENDPOINTS>
+  | ValueOf<typeof CODES_ENDPOINTS>
+  | ValueOf<typeof ADMIN_ENDPOINTS>
+  | ValueOf<typeof MEDIA_ENDPOINTS>

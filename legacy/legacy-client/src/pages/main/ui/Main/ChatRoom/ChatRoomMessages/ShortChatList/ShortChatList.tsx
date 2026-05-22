@@ -6,9 +6,9 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/shared/preferences'
 
 import { SHORT_CHAT_LIST_I18N } from './i18n.ts'
-import { IShortChatListProps } from './short-chat-list.types.ts'
+import { ShortChatListProps } from './short-chat-list.types.ts'
 
-export const ShortChatList = ({ searchString, clickChat }: IShortChatListProps) => {
+export const ShortChatList = ({ searchString, clickChat }: ShortChatListProps) => {
   const { chatRooms, selectedChatRoom } = useChatRoom()
   const [filteredRooms, setFilteredRooms] = useState(chatRooms)
   const { t } = useI18n()

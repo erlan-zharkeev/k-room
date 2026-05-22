@@ -1,17 +1,17 @@
 import { useMemo, useState } from 'react'
 
-import { AppFormFieldValueType } from 'src/shared/ui'
+import { AppFormFieldValue } from 'src/shared/ui'
 
 import { stringValidateRules, booleanValidateRules, arrayValidateRules } from './rules'
 import {
-  IElementPickerValidateRule,
-  IFileInputValidateRule,
-  ISwitchValidateRule,
-  ITextInputValidateRule,
-  ValidateRuleType
+  ElementPickerValidateRule,
+  FileInputValidateRule,
+  SwitchValidateRule,
+  TextInputValidateRule,
+  ValidateRule
 } from './types'
 
-export const useValidate = (form: Record<string, AppFormFieldValueType>) => {
+export const useValidate = (form: Record<string, AppFormFieldValue>) => {
   const initialErrorFields = Object.fromEntries(Object.keys(form).map((field) => [field, []]))
   const [errors, setErrors] = useState<Record<string, string[]>>(initialErrorFields)
   const initialTouchedFields = Object.fromEntries(Object.keys(form).map((field) => [field, false]))
@@ -25,7 +25,7 @@ export const useValidate = (form: Record<string, AppFormFieldValueType>) => {
     return isValid
   }, [errors, touchedFields])
 
-  const validateField = (value: AppFormFieldValueType, fieldName: string, silent = false, rule?: ValidateRuleType) => {
+  const validateField = (value: AppFormFieldValue, fieldName: string, silent = false, rule?: ValidateRule) => {
     if (!silent && !touchedFields[fieldName]) {
       setTouchedFields((touchedFields) => ({ ...touchedFields, [fieldName]: true }))
     }
@@ -34,21 +34,21 @@ export const useValidate = (form: Record<string, AppFormFieldValueType>) => {
     let currentErrors: string[] = []
     if (typeof value === 'string') {
       if (rule.name in stringValidateRules) {
-        const inferredRule = rule as ITextInputValidateRule
+        const inferredRule = rule as TextInputValidateRule
         currentErrors = stringValidateRules[inferredRule.name](value, inferredRule)
       } else {
         console.warn(`Unknown string validation rule: ${rule.name}`)
       }
     } else if (typeof value === 'boolean') {
       if (rule.name in booleanValidateRules) {
-        const inferredRule = rule as ISwitchValidateRule | IFileInputValidateRule
+        const inferredRule = rule as SwitchValidateRule | FileInputValidateRule
         currentErrors = booleanValidateRules[inferredRule.name](value)
       } else {
         console.warn(`Unknown boolean validation rule: ${rule.name}`)
       }
     } else if (Array.isArray(value)) {
       if (rule.name in arrayValidateRules) {
-        const inferredRule = rule as IElementPickerValidateRule
+        const inferredRule = rule as ElementPickerValidateRule
         currentErrors = arrayValidateRules[inferredRule.name](value)
       }
     }

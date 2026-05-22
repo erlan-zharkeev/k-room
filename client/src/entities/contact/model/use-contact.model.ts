@@ -1,9 +1,9 @@
 import { computed } from 'vue'
 
-import type { ContactRecordType } from 'src/shared/lib'
+import type { ContactRecord } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
 
-const contactStore = dexieCollectionStore<ContactRecordType>(db.contacts)
+const contactStore = dexieCollectionStore<ContactRecord>(db.contacts)
 
 export const useContact = () => {
   const { bulkPut, get, mergeMany, put, remove, reset, update } = contactStore

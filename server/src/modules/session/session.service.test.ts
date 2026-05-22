@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { IUserDevice } from '../user/types'
+import type { UserDevice } from '../user/types'
 
 const envMock = vi.hoisted(() => ({
   SERVER_ENV: {
@@ -23,7 +23,7 @@ const { SessionService } = await import('./session.service')
 
 const createUser = () => ({
   system: {
-    device: {} as Record<string, IUserDevice>
+    device: {} as Record<string, UserDevice>
   },
   markModified: vi.fn(),
   save: vi.fn()

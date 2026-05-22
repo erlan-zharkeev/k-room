@@ -1,13 +1,13 @@
-import type { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsType } from 'global-shared'
+import type { EventLoadRoomMessages, EventRoomMessagesLoaded, SocketActions } from 'global-shared'
 import { computed, onBeforeUnmount, reactive, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
-import type { ChatRoomRecordType } from 'src/shared/lib'
+import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 
-export const useLoadRoomMessages = (room?: Ref<ChatRoomRecordType>) => {
+export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
   const { bulkPut } = useMessage()
   const loadingRoomIds = reactive(new Set<string>())
   const hasMoreMessagesByRoomId = reactive<Record<string, boolean | undefined>>({})
@@ -22,14 +22,14 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecordType>) => {
   const loadRoomMessages = (roomId: string, beforeCreatedAt = nextBeforeCreatedAtByRoomId[roomId]) => {
     if (isRoomMessagesLoading(roomId) || !hasMoreRoomMessages(roomId)) return
 
-    const payload: IEventLoadRoomMessages = {
+    const payload: EventLoadRoomMessages = {
       roomId,
       limit: ROOM_MESSAGES_PAGE_LIMIT,
       ...(beforeCreatedAt ? { beforeCreatedAt } : {})
     }
 
     loadingRoomIds.add(roomId)
-    socket.emit<SocketActionsType>('load-room-messages', payload)
+    socket.emit<SocketActions>('load-room-messages', payload)
   }
 
   const loadMessages = (beforeCreatedAt = nextBeforeCreatedAtByRoomId[roomId.value]) => {
@@ -42,7 +42,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecordType>) => {
     messages,
     hasMore,
     nextBeforeCreatedAt: nextPage
-  }: IEventRoomMessagesLoaded) => {
+  }: EventRoomMessagesLoaded) => {
     await bulkPut(messages)
     hasMoreMessagesByRoomId[roomId] = hasMore
     nextBeforeCreatedAtByRoomId[roomId] = nextPage
@@ -65,11 +65,11 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecordType>) => {
   }
 
   const initializeLoadRoomMessages = () => {
-    socket.on<SocketActionsType>('room-messages-loaded', handleRoomMessagesLoaded)
+    socket.on<SocketActions>('room-messages-loaded', handleRoomMessagesLoaded)
   }
 
   const disposeLoadRoomMessages = () => {
-    socket.off<SocketActionsType>('room-messages-loaded', handleRoomMessagesLoaded)
+    socket.off<SocketActions>('room-messages-loaded', handleRoomMessagesLoaded)
   }
 
   onBeforeUnmount(disposeLoadRoomMessages)

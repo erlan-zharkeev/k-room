@@ -1,10 +1,10 @@
-import { ISendConfirmationLinkResponse, REQ_STATUS } from 'common'
+import { SendConfirmationLinkResponse, REQ_STATUS } from 'common'
 
 import { sendEmailConfirmationEmail } from 'src/modules/email'
 import { USER_I18N } from 'src/modules/user'
 import { UserModel } from 'src/modules/user'
 
-import { AppResponseType, IAppRequest, SERVER_ENV } from 'src/shared/config'
+import { AppResponse, AppRequest, SERVER_ENV } from 'src/shared/config'
 import { localizedText } from 'src/shared/lib/localized-text'
 import { throwHTTPError } from 'src/shared/lib/throw-error'
 
@@ -15,8 +15,8 @@ import { SEND_CONFIRMATION_LINK_INTERVAL_MINUTES } from './config/constants'
 import { SEND_CONFIRMATION_LINK_I18N } from './config/i18n'
 
 export const sendConfirmationLinkController = async (
-  req: IAppRequest,
-  res: AppResponseType<ISendConfirmationLinkResponse>
+  req: AppRequest,
+  res: AppResponse<SendConfirmationLinkResponse>
 ) => {
   const { language } = req
   const basicError = localizedText(SEND_CONFIRMATION_LINK_I18N.failedSendEmailConfirmationLink, language)

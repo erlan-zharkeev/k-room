@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose'
 
-import { IUserDevice } from './types'
+import { UserDevice } from './types'
 
-export const deviceSchema = new Schema<IUserDevice>(
+export const deviceSchema = new Schema<UserDevice>(
   {
     refreshToken: {
       type: String,

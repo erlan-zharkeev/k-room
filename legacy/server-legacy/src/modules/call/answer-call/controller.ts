@@ -1,8 +1,8 @@
-import { EventCallStartedAtType, IEventAnswerCall, IEventCallAccepted, SocketActionsType } from 'common'
+import { EventCallStartedAt, EventAnswerCall, EventCallAccepted, SocketActions } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
@@ -11,18 +11,18 @@ import { CALL_I18N } from '../i18n'
 import { setActiveCallInterlocutor } from '../shared/lib/active-call-map'
 import { emitCallDataToInterlocutors } from '../shared/lib/emit-call-data-to-interlocutors'
 
-export const answerCallController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const answerCallController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'answer-call',
     socketErrorMiddleware(
       socket,
-      async ({ to, signal, selfSocketId, callId }: IEventAnswerCall) => {
+      async ({ to, signal, selfSocketId, callId }: EventAnswerCall) => {
         const { userId } = socket.data
-        const payload: IEventCallAccepted = { signal }
+        const payload: EventCallAccepted = { signal }
         const interlocutorSocketIds = await getSocketsByUserIds([to])
 
         interlocutorSocketIds.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('call-accepted', payload)
+          getIO().to(socketId).emit<SocketActions>('call-accepted', payload)
         })
 
         const call = await CallModel.findOneAndUpdate(
@@ -38,13 +38,13 @@ export const answerCallController = (socket: SocketInstanceType) => {
 
         await emitCallDataToInterlocutors(call.interlocutors, String(call._id))
 
-        const startedAtPayload: EventCallStartedAtType = Date.now()
+        const startedAtPayload: EventCallStartedAt = Date.now()
 
         interlocutorSocketIds.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('call-started-at', startedAtPayload)
+          getIO().to(socketId).emit<SocketActions>('call-started-at', startedAtPayload)
         })
 
-        getIO().to(selfSocketId).emit<SocketActionsType>('call-started-at', startedAtPayload)
+        getIO().to(selfSocketId).emit<SocketActions>('call-started-at', startedAtPayload)
       },
       { basicError: CALL_I18N.answerCallFailed }
     )

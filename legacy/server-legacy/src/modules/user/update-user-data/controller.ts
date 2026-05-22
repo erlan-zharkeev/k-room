@@ -1,6 +1,6 @@
-import { SocketActionsType, REQ_STATUS } from 'common'
+import { SocketActions, REQ_STATUS } from 'common'
 
-import { AppResponseType, IAppRequest, SHARED_I18N } from 'src/shared/config'
+import { AppResponse, AppRequest, SHARED_I18N } from 'src/shared/config'
 import { isAppError } from 'src/shared/lib/app-error'
 import { getIO } from 'src/shared/lib/io'
 import { localizedText } from 'src/shared/lib/localized-text'
@@ -14,7 +14,7 @@ import { UserModel } from '../user.model'
 import { UPDATE_USER_DATA_I18N } from './config/i18n'
 import { updateUserAvatar } from './lib/update-user-avatar'
 
-export const updateUserDataController = async (req: IAppRequest, res: AppResponseType<null>) => {
+export const updateUserDataController = async (req: AppRequest, res: AppResponse<null>) => {
   const { language } = req
   const basicError = localizedText(UPDATE_USER_DATA_I18N.failedUpdate, language)
 
@@ -54,7 +54,7 @@ export const updateUserDataController = async (req: IAppRequest, res: AppRespons
       const updatedUserData = await UserModel.findById(userId).lean()
       if (!updatedUserData) return
       socketIds.forEach((socketId) => {
-        getIO().to(socketId).emit<SocketActionsType>('contact-data-changed', transformUserToContact(updatedUserData))
+        getIO().to(socketId).emit<SocketActions>('contact-data-changed', transformUserToContact(updatedUserData))
       })
     }
 

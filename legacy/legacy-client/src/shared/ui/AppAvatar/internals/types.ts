@@ -1,31 +1,31 @@
 import { ReactNode } from 'react'
 
-import { AppIconNameType } from 'src/shared/ui/AppIcon/internals/types'
-import { BaseSizeModifierType, AvatarShapeModifierType } from 'src/shared/ui/internals/types'
+import { AppIconName } from 'src/shared/ui/AppIcon/internals/types'
+import { BaseSizeModifier, AvatarShapeModifier } from 'src/shared/ui/internals/types'
 
-export interface IAppAvatarProps {
+export interface AppAvatarProps {
   online?: boolean
   src?: string
-  size?: BaseSizeModifierType
+  size?: BaseSizeModifier
   showBadge?: boolean
-  stubIconName?: AppIconNameType
+  stubIconName?: AppIconName
   ribbon?: boolean
   ribbonPlacement?: 'up' | 'down'
   dotPlacement?: 'up' | 'down'
-  shape?: AvatarShapeModifierType
+  shape?: AvatarShapeModifier
   preview?: boolean
   borderless?: boolean
 }
 
-export interface IAvatarBodyProps {
+export interface AvatarBodyProps {
   src?: string
-  stubIconName: AppIconNameType
+  stubIconName: AppIconName
   haveSource: boolean
   setHaveSource: (value: boolean) => void
   preview?: boolean
 }
 
-export interface IBadgeWrapperProps {
+export interface BadgeWrapperProps {
   children: ReactNode
   online?: boolean
   ribbon?: boolean

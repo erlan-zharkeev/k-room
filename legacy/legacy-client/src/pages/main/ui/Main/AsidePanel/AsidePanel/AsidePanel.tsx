@@ -1,7 +1,7 @@
 import './style.scss'
 import { ReactElement } from 'react'
 
-import { ContentTabType } from 'src/shared/config'
+import { ContentTab } from 'src/shared/config'
 import { useSettings } from 'src/shared/preferences'
 import { WidgetWrapper } from 'src/shared/ui'
 
@@ -13,7 +13,7 @@ import { Settings } from '../Settings/Settings'
 export const AsidePanel = () => {
   const { showAsidePanel, selectedContentTab } = useSettings()
 
-  const TAB_COMPONENTS_MAP: Record<ContentTabType, ReactElement> = {
+  const TAB_COMPONENTS_MAP: Record<ContentTab, ReactElement> = {
     contacts: <Contacts />,
     'chat-rooms': <ChatRooms />,
     calls: <Calls />,

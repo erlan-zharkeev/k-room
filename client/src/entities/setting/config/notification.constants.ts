@@ -1,4 +1,4 @@
-import type { IDeviceNotificationSettings } from './notification.types'
+import type { DeviceNotificationSettings } from './notification.types'
 
 export const DEFAULT_NOTIFICATION_GROUP_SETTINGS = {
   toast: true,
@@ -8,7 +8,7 @@ export const DEFAULT_NOTIFICATION_GROUP_SETTINGS = {
   nativePush: true
 }
 
-export const DEFAULT_NOTIFICATION_SETTINGS: IDeviceNotificationSettings = {
+export const DEFAULT_NOTIFICATION_SETTINGS: DeviceNotificationSettings = {
   enabled: true,
   general: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS },
   messages: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS },

@@ -1,3 +1,3 @@
-export interface ICallModalBodyProps {
+export interface CallModalBodyProps {
   toggleExpandModal: () => void
 }

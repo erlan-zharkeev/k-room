@@ -1,16 +1,16 @@
 import {
   CHAT_KIND,
-  type ChatRoomSchemaType,
-  type IEventChatRoomDeleted,
-  type IEventChatRoomLeft,
-  type IEventDeleteChatRoom,
-  type IEventLeaveChatRoom,
-  type KnownUserType,
-  type MessageDocumentType,
-  type IEventGetRoom,
-  type IEventPinnedChatRoomsUpdated,
-  type IEventUpdatePinnedChatRoom,
-  type IEventUpdatePinnedChatRoomOrder,
+  type ChatRoomSchema,
+  type EventChatRoomDeleted,
+  type EventChatRoomLeft,
+  type EventDeleteChatRoom,
+  type EventLeaveChatRoom,
+  type KnownUser,
+  type MessageDocument,
+  type EventGetRoom,
+  type EventPinnedChatRoomsUpdated,
+  type EventUpdatePinnedChatRoom,
+  type EventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
   REQ_STATUS
 } from 'global-shared'
@@ -26,7 +26,7 @@ import { UserModel } from '../user/user.model'
 
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
-import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'
+import type { ChatRoomSchemaWithObjectId, TransformRoomForUserParams } from './chat-rooms.types'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
@@ -81,10 +81,7 @@ const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[])
   return [...new Set([...orderedIds, ...currentIds])]
 }
 
-export const resolveKnownUsers = async (
-  userIds: string[],
-  presenceService: PresenceService
-): Promise<KnownUserType[]> => {
+export const resolveKnownUsers = async (userIds: string[], presenceService: PresenceService): Promise<KnownUser[]> => {
   if (!userIds.length) return []
 
   const [users, onlineMap] = await Promise.all([
@@ -118,7 +115,7 @@ const emitKnownUsersToUser = async (userId: string, roomUserIds: string[], prese
   emitToUsers([userId], 'known-users-updated', knownUsers)
 }
 
-export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: IEventUpdatePinnedChatRoom) => {
+export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: EventUpdatePinnedChatRoom) => {
   const user = await UserModel.findOne(
     { _id: userId, 'personal.chatRooms': roomId },
     { 'personal.pinnedChatRoomIds': 1 }
@@ -132,7 +129,7 @@ export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }:
 
   await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': pinnedChatRoomIds } })
 
-  const payload: IEventPinnedChatRoomsUpdated = {
+  const payload: EventPinnedChatRoomsUpdated = {
     roomId,
     isPinned,
     pinnedChatRoomIds
@@ -143,7 +140,7 @@ export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }:
 
 export const updatePinnedChatRoomOrder = async (
   userId: string,
-  { pinnedChatRoomIds }: IEventUpdatePinnedChatRoomOrder
+  { pinnedChatRoomIds }: EventUpdatePinnedChatRoomOrder
 ) => {
   const user = await UserModel.findById(userId, { 'personal.pinnedChatRoomIds': 1 }).lean()
 
@@ -160,7 +157,7 @@ export const updatePinnedChatRoomOrder = async (
   })
 }
 
-export const deleteChatRoom = async (userId: string, { roomId }: IEventDeleteChatRoom) => {
+export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChatRoom) => {
   const room = await ChatRoomModel.findOne({
     _id: roomId,
     users: userId,
@@ -187,7 +184,7 @@ export const deleteChatRoom = async (userId: string, { roomId }: IEventDeleteCha
     deleteBucketFilesByName('avatar', `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}`)
   ])
 
-  const payload: IEventChatRoomDeleted = {
+  const payload: EventChatRoomDeleted = {
     roomId
   }
 
@@ -198,8 +195,8 @@ export const transformRoomForUser = async ({
   userId,
   room,
   pinnedChatRoomIds = []
-}: ITransformRoomForUserParams): Promise<IEventGetRoom> => {
-  const normalizedRoom = room as IChatRoomSchemaWithObjectId
+}: TransformRoomForUserParams): Promise<EventGetRoom> => {
+  const normalizedRoom = room as ChatRoomSchemaWithObjectId
   const roomId = String(normalizedRoom._id)
   const users = (normalizedRoom.users ?? []).map((id) => String(id)).filter((id) => id !== userId)
   const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
@@ -209,7 +206,7 @@ export const transformRoomForUser = async ({
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([
     countUnreadRoomMessages(userId, messages),
-    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocumentType>() : null
+    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocument>() : null
   ])
 
   return {
@@ -226,12 +223,12 @@ export const transformRoomForUser = async ({
     users,
     messages,
     previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null
-  } satisfies IEventGetRoom
+  } satisfies EventGetRoom
 }
 
 export const emitRoomDataToUsers = async (
   userIds: string[],
-  room: ChatRoomSchemaType,
+  room: ChatRoomSchema,
   presenceService: PresenceService
 ) => {
   await Promise.all(
@@ -256,7 +253,7 @@ export const emitRoomDataToUsers = async (
 
 export const leaveChatRoom = async (
   userId: string,
-  { roomId, nextAdminId }: IEventLeaveChatRoom,
+  { roomId, nextAdminId }: EventLeaveChatRoom,
   presenceService: PresenceService
 ) => {
   const room = await ChatRoomModel.findOne({
@@ -265,7 +262,7 @@ export const leaveChatRoom = async (
     chatKind: CHAT_KIND.GROUP
   })
     .select('-__v')
-    .lean<IChatRoomSchemaWithObjectId>()
+    .lean<ChatRoomSchemaWithObjectId>()
 
   if (!room) {
     return
@@ -301,13 +298,13 @@ export const leaveChatRoom = async (
       { new: true }
     )
       .select('-__v')
-      .lean<IChatRoomSchemaWithObjectId>(),
+      .lean<ChatRoomSchemaWithObjectId>(),
     UserModel.updateOne(
       { _id: userId },
       { $pull: { 'personal.chatRooms': roomId, 'personal.pinnedChatRoomIds': roomId } }
     )
   ])
-  const payload: IEventChatRoomLeft = {
+  const payload: EventChatRoomLeft = {
     roomId
   }
 
@@ -318,11 +315,7 @@ export const leaveChatRoom = async (
   }
 }
 
-export const emitNewRoomToUsers = async (
-  userIds: string[],
-  room: ChatRoomSchemaType,
-  presenceService: PresenceService
-) => {
+export const emitNewRoomToUsers = async (userIds: string[], room: ChatRoomSchema, presenceService: PresenceService) => {
   await Promise.all(
     userIds.map(async (userId) => {
       const userData = await UserModel.findById(userId).lean()

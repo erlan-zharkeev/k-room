@@ -3,13 +3,13 @@ import './message-body.scss'
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
-import { IMessageBodyProps } from './message-body.types.ts'
+import { MessageBodyProps } from './message-body.types.ts'
 import { MessageImages } from '../MessageImages/MessageImages'
 import { MessageReactions } from '../MessageReactions/MessageReactions'
 import { MessageTime } from '../MessageTime'
 import { RepliedMessage } from '../RepliedMessage/RepliedMessage'
 
-export const MessageBody = ({ message, isRoomPrivate = false }: IMessageBodyProps & { isRoomPrivate?: boolean }) => {
+export const MessageBody = ({ message, isRoomPrivate = false }: MessageBodyProps & { isRoomPrivate?: boolean }) => {
   const showAuthorName = !isRoomPrivate && !message.isSelf
 
   const className = createClassNameWithModifiers({ rootClass: 'message-body', modifiers: [message.status] })

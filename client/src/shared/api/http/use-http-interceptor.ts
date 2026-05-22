@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { REQ_STATUS, ROUTE_NAMES, type IBackendResponse, type ReqStatusType } from 'global-shared'
+import { REQ_STATUS, ROUTE_NAMES, type BackendResponse, type ReqStatus } from 'global-shared'
 import { useRouter } from 'vue-router'
 
 import { TOAST_I18N } from 'src/shared/lib'
@@ -18,9 +18,9 @@ export const useHttpInterceptor = () => {
 
   const interceptError = async (error: unknown) => {
     if (error instanceof AxiosError) {
-      const status = error.response?.status as ReqStatusType | undefined
+      const status = error.response?.status as ReqStatus | undefined
       const mediaRequestError = isMediaRequestError(error)
-      const payload = (await extractErrorPayload(error)) as IBackendResponse<unknown> | null
+      const payload = (await extractErrorPayload(error)) as BackendResponse<unknown> | null
       let text: string | undefined
       let silent: boolean | undefined
 

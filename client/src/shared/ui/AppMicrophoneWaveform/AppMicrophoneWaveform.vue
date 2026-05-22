@@ -2,10 +2,10 @@
 import { NmorphIcon, NmorphCard, NmorphIconMicrophone } from '@nmorph/nmorph-ui-kit'
 
 import { APP_MICROPHONE_WAVEFORM_DEFAULT_PROPS } from './constants'
-import type { IAppMicrophoneWaveformProps } from './types'
+import type { AppMicrophoneWaveformProps } from './types'
 import { useAppMicrophoneWaveform } from './use-app-microphone-waveform.model'
 
-const props = withDefaults(defineProps<IAppMicrophoneWaveformProps>(), APP_MICROPHONE_WAVEFORM_DEFAULT_PROPS)
+const props = withDefaults(defineProps<AppMicrophoneWaveformProps>(), APP_MICROPHONE_WAVEFORM_DEFAULT_PROPS)
 const { volumeValue, waveformBars, waveformColor, waveformStyle } = useAppMicrophoneWaveform(props)
 </script>
 

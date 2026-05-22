@@ -4,14 +4,14 @@ import { useMemo, useState } from 'react'
 
 import { Badge } from 'antd'
 
-import { SocketActionsType } from 'common'
+import { SocketActions } from 'common'
 
 import { ChatRoomPreview, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useLiveMediaUrl } from 'src/entities/media-file'
 
 import { socket } from 'src/shared/api'
-import { FChatRoomType } from 'src/shared/config'
+import { FChatRoom } from 'src/shared/config'
 import { chatRoomUnreadMessagesCount, createClassNameWithModifiers, useAnimatedList } from 'src/shared/lib'
 import { useI18n, useSettings } from 'src/shared/preferences'
 import { AppAvatar, AppButton, AppForm, AppHeader, AppModal, AppScrollContainer, AppText } from 'src/shared/ui'
@@ -79,8 +79,8 @@ const useCreateChatRoom = ({
     setIsLoading(true)
     const { avatarFile, chatName, contactIds } = formData
 
-    socket.emit<SocketActionsType>('create-chat-room', { avatarFile, chatName, contactIds })
-    socket.once<SocketActionsType>('room-created', ({ roomId }: { roomId: string }) => {
+    socket.emit<SocketActions>('create-chat-room', { avatarFile, chatName, contactIds })
+    socket.once<SocketActions>('room-created', ({ roomId }: { roomId: string }) => {
       onRoomCreated?.(roomId)
       setIsLoading(false)
       onSuccess?.()
@@ -184,7 +184,7 @@ const CreateChatRoomButton = ({ onRoomCreated }: { onRoomCreated?: (roomId: stri
   )
 }
 
-const ChatRoomListItemPreview = ({ room, isRoomSelected }: { room: FChatRoomType; isRoomSelected: boolean }) => {
+const ChatRoomListItemPreview = ({ room, isRoomSelected }: { room: FChatRoom; isRoomSelected: boolean }) => {
   const { contacts } = useContact()
   const { getById } = useMessage()
   const avatar = useLiveMediaUrl(room.avatarId)

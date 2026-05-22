@@ -1,4 +1,4 @@
-import { MediaFileValueType, MediaKindType } from 'common'
+import { MediaFileValue, MediaKind } from 'common'
 
 export const IMAGE_RESOLUTIONS = {
   png: 'image/png',
@@ -6,14 +6,14 @@ export const IMAGE_RESOLUTIONS = {
   jpg: 'image/jpg'
 } as const
 
-export type FileLoaderValueType = MediaFileValueType | MediaFileValueType[] | string | null
+export type FileLoaderValue = MediaFileValue | MediaFileValue[] | string | null
 
-export interface IDbMedia {
+export interface DbMedia {
   id: string
   blob: Blob
   contentType: string
   etag: string
-  kind: MediaKindType
+  kind: MediaKind
   lastModified: string
   lastChecked: number
 }

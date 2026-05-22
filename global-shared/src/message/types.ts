@@ -1,50 +1,50 @@
-import type { ImageObjectType } from '../media/types'
+import type { ImageObject } from '../media/types'
 
 import { MESSAGE_STATUS } from './constants'
 
-export type MessageStatusType = (typeof MESSAGE_STATUS)[number]
+export type MessageStatus = (typeof MESSAGE_STATUS)[number]
 
-export interface MessageMetadataType {
+export interface MessageMetadata {
   id: string
-  status: MessageStatusType
+  status: MessageStatus
 }
 
-export interface MessageReactionType {
+export interface MessageReaction {
   nickname: string
   authorId: string
   glyphKey: string
 }
 
-export interface RepliedMessageType {
+export interface RepliedMessage {
   id: string
   authorNickname: string
   authorId: string
   body: string
-  images?: ImageObjectType[]
+  images?: ImageObject[]
   forward?: boolean
 }
 
-export interface MessageType {
+export interface Message {
   id: string
   tempId?: string
   isSelf?: boolean
-  status?: MessageStatusType
+  status?: MessageStatus
   authorId: string
   authorNickname: string
   body: string
   createdAt?: number
-  reactions?: MessageReactionType[]
-  images?: ImageObjectType[]
+  reactions?: MessageReaction[]
+  images?: ImageObject[]
   imageCompression?: boolean
-  repliedMessage?: RepliedMessageType | null
+  repliedMessage?: RepliedMessage | null
 }
 
-export interface MessageDocumentType extends MessageType {
+export interface MessageDocument extends Message {
   _id: string
-  usersMetaData: MessageMetadataType[]
+  usersMetaData: MessageMetadata[]
 }
 
-export interface MessageSchemaType extends Omit<MessageType, 'id' | 'tempId' | 'isSelf' | 'status'> {
+export interface MessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status'> {
   _id?: string
-  usersMetaData?: MessageMetadataType[]
+  usersMetaData?: MessageMetadata[]
 }

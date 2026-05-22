@@ -1,8 +1,8 @@
 export type {
-  IConstraint,
-  CallMediaType,
-  IStreamConstraints,
-  ICallsState,
-  IModalOptions,
-  ICallInterlocutor
+  Constraint,
+  CallMedia,
+  StreamConstraints,
+  CallsState,
+  ModalOptions,
+  CallInterlocutor
 } from 'src/shared/call-core'

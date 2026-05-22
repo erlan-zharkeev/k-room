@@ -1,10 +1,10 @@
-import { PROTECTED_ACTION_REASON, isUnknownObject, type IProtectedActionResponsePayload } from 'global-shared'
+import { PROTECTED_ACTION_REASON, isUnknownObject, type ProtectedActionResponsePayload } from 'global-shared'
 import { isBoolean, isNumber, isString } from 'lodash'
 import { computed, ref } from 'vue'
 
 import { isHttpError } from './create-http-error'
 
-const isProtectedActionResponsePayload = (value: unknown): value is IProtectedActionResponsePayload => {
+const isProtectedActionResponsePayload = (value: unknown): value is ProtectedActionResponsePayload => {
   if (!isUnknownObject(value)) {
     return false
   }

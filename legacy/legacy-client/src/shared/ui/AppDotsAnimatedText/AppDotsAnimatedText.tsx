@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import { useTimeout } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui/AppText/AppText'
 
-import { IDotsAnimatedTextProps } from './internals/types'
+import { DotsAnimatedTextProps } from './internals/types'
 
-export const AppDotsAnimatedText = ({ text, maxDots = 3, interval = 500, textSize }: IDotsAnimatedTextProps) => {
+export const AppDotsAnimatedText = ({ text, maxDots = 3, interval = 500, textSize }: DotsAnimatedTextProps) => {
   const [dots, setDots] = useState(0)
   const { startTimeout } = useTimeout()
 

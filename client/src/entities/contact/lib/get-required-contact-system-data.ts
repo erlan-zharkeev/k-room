@@ -1,6 +1,6 @@
-import type { ContactLocalStateType } from 'src/shared/lib'
+import type { ContactLocalState } from 'src/shared/lib'
 
-export const getRequiredContactSystemData = (): ContactLocalStateType => ({
+export const getRequiredContactSystemData = (): ContactLocalState => ({
   savedAt: Date.now(),
   isTyping: false
 })

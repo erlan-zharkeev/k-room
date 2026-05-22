@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterEach } from 'vitest'
 
-import { IClientEnv } from 'src/shared/config'
+import { ClientEnv } from 'src/shared/config'
 
 Object.assign(globalThis, {
   CLIENT_ENV_DATA: {
@@ -27,7 +27,7 @@ Object.assign(globalThis, {
     themeBg: '#020202',
     themeAccent: '#418fde',
     themeText: 'rgb(177 177 177 / 60%)'
-  } satisfies IClientEnv
+  } satisfies ClientEnv
 })
 
 afterEach(cleanup)

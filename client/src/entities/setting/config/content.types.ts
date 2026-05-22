@@ -1,3 +1,3 @@
-export type AsideBarButtonNameType = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
+export type AsideBarButtonName = 'contacts' | 'chat-rooms' | 'calls' | 'settings'
 
-export type ContentTabType = AsideBarButtonNameType
+export type ContentTab = AsideBarButtonName

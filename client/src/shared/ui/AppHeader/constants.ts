@@ -1,5 +1,5 @@
-import type { IAppHeaderProps } from './types'
-import type { AppHeaderColorType } from './types'
+import type { AppHeaderProps } from './types'
+import type { AppHeaderColor } from './types'
 
 export const APP_HEADER_DEFAULT_PROPS = {
   tag: 'h3',
@@ -7,7 +7,7 @@ export const APP_HEADER_DEFAULT_PROPS = {
   bold: true,
   alignment: 'left',
   selectable: true
-} satisfies Partial<IAppHeaderProps>
+} satisfies Partial<AppHeaderProps>
 
 export const APP_HEADER_COLOR_MODIFIERS = {
   text: 'text',
@@ -15,4 +15,4 @@ export const APP_HEADER_COLOR_MODIFIERS = {
   'contrast-text': 'contrast-text',
   accent: 'accent',
   warn: 'warn'
-} satisfies Record<AppHeaderColorType, AppHeaderColorType>
+} satisfies Record<AppHeaderColor, AppHeaderColor>

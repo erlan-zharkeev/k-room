@@ -4,13 +4,13 @@ import { ReactNode, useMemo } from 'react'
 
 import { Virtuoso } from 'react-virtuoso'
 
-import { IEventAddReaction, IMessage, SocketActionsType } from 'common'
+import { EventAddReaction, IMessage, SocketActions } from 'common'
 
 import { isRoomPrivate } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
 
 import { socket } from 'src/shared/api'
-import { EMOJI_LIST, FChatRoomType } from 'src/shared/config'
+import { EMOJI_LIST, FChatRoom } from 'src/shared/config'
 import { createClassNameWithModifiers, stopPropagation } from 'src/shared/lib'
 import { useI18n, useSettings } from 'src/shared/preferences'
 import { AppDropdown, AppModal, AppScrollDownButton, AppText } from 'src/shared/ui'
@@ -23,7 +23,7 @@ import { DateSeparator } from './DateSeparator/DateSeparator'
 import { ForwardMessageModal } from './ForwardMessageModal/ForwardMessageModal'
 import { getMessageGroupDateLabel } from './get-message-group-date-label'
 import { CHAT_ROOM_MESSAGES_I18N } from './i18n.ts'
-import { MessageListItemType } from './message-list.types.ts'
+import { MessageListItem } from './message-list.types.ts'
 import { MessageBody } from './MessageBody/MessageBody'
 import { MessageListLoader } from './MessageListLoader'
 import { NoMessagesPlaceholder } from './NoMessagesPlaceholder/NoMessagesPlaceholder'
@@ -55,14 +55,14 @@ const MessageMenuReactions = ({
   const isDisabled = (glyphKey: string) => (selfReactions.includes(glyphKey) ? 'disabled' : 'default')
 
   const addReactionToMessage = (key: string) => {
-    const payload: IEventAddReaction = {
+    const payload: EventAddReaction = {
       glyphKey: key,
       messageId: message.id,
       roomId: selectedChatRoomId,
       username
     }
 
-    socket.emit<SocketActionsType>('add-reaction', payload)
+    socket.emit<SocketActions>('add-reaction', payload)
   }
 
   return (
@@ -170,7 +170,7 @@ const MessageListItem = ({ message, isPrivate }: { message: IMessage; isPrivate:
   )
 }
 
-export const ChatRoomMessages = ({ room }: { room: FChatRoomType }) => {
+export const ChatRoomMessages = ({ room }: { room: FChatRoom }) => {
   const isCurrentRoomPrivate = isRoomPrivate(room)
   const { getById } = useMessage()
   const { loadOlderMessages } = useLoadRoomMessages()
@@ -185,7 +185,7 @@ export const ChatRoomMessages = ({ room }: { room: FChatRoomType }) => {
   )
 
   const virtualizedMessages = useMemo(() => {
-    const nextItems: MessageListItemType[] = []
+    const nextItems: MessageListItem[] = []
     let previousGroupDateLabel = ''
 
     roomMessages.forEach((message) => {

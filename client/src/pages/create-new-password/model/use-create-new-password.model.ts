@@ -1,6 +1,6 @@
 import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
 import { NON_EMPTY_PATTERN, ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages } from 'global-shared'
-import type { ICreateNewPasswordPayload } from 'global-shared'
+import type { CreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -53,7 +53,7 @@ export const useCreateNewPassword = () => {
     isLoading.value = true
 
     try {
-      const payload: ICreateNewPasswordPayload = {
+      const payload: CreateNewPasswordPayload = {
         password: formData.secondPassword.value,
         codeToValidate: passwordRecoveryCode.value
       }

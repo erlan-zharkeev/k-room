@@ -1,10 +1,10 @@
-export type ThemeType = 'system' | 'dark' | 'light' | 'custom'
+export type Theme = 'system' | 'dark' | 'light' | 'custom'
 
-export type SystemTheme = Extract<ThemeType, 'dark' | 'light'>
+export type SystemTheme = Extract<Theme, 'dark' | 'light'>
 
-export type EffectiveThemeType = Exclude<ThemeType, 'system'>
+export type EffectiveTheme = Exclude<Theme, 'system'>
 
-export interface IWallpaperSettings {
+export interface WallpaperSettings {
   angle: number
   scale: number
   darkness: number
@@ -12,14 +12,14 @@ export interface IWallpaperSettings {
   filename: string
 }
 
-export interface IThemeShadowSettings {
+export interface ThemeShadowSettings {
   darkShadeGeneratorCoefficient: number
   lightShadeGeneratorCoefficient: number
   baseShadowWidth: number
   baseShadowBlurCoefficient: number
 }
 
-export interface IColorSchema {
+export interface ColorSchema {
   main: string
   darkShade: string
   lightShade: string
@@ -44,15 +44,15 @@ export interface IColorSchema {
   overlay: string
 }
 
-export interface IThemeData extends IThemeShadowSettings {
+export interface ThemeData extends ThemeShadowSettings {
   mode: SystemTheme
-  colorSchema: IColorSchema
-  wallpaper: IWallpaperSettings
+  colorSchema: ColorSchema
+  wallpaper: WallpaperSettings
 }
 
-export interface IAppearanceSettings {
-  selectedTheme: ThemeType
+export interface AppearanceSettings {
+  selectedTheme: Theme
   systemTheme: SystemTheme
   showWallpaper: boolean
-  themes: Record<EffectiveThemeType, IThemeData>
+  themes: Record<EffectiveTheme, ThemeData>
 }

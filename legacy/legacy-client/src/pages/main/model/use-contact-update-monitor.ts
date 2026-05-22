@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react'
 
 import {
-  EventChangeContactsDataType,
-  EventInviteReceivedType,
-  IEventContactAddSuccess,
-  IEventDeleteContactSuccess,
-  IEventGetContactTypingStatus,
-  IEventStatusContact,
-  IEventUpdateContactInteractionSuccess,
+  EventChangeContactsData,
+  EventInviteReceived,
+  EventContactAddSuccess,
+  EventDeleteContactSuccess,
+  EventGetContactTypingStatus,
+  EventStatusContact,
+  EventUpdateContactInteractionSuccess,
   IFrontendContact,
-  SocketActionsType
+  SocketActions
 } from 'common'
 
 import { getRequiredContactSystemData, useContact, useUpdateContactData } from 'src/entities/contact'
@@ -49,15 +49,15 @@ export const useContactUpdateMonitor = () => {
     })
   }
 
-  const deleteContact = async (payload: IEventDeleteContactSuccess) => {
+  const deleteContact = async (payload: EventDeleteContactSuccess) => {
     await remove(payload.deletedContactId)
   }
 
-  const addContact = async (payload: IEventContactAddSuccess) => {
+  const addContact = async (payload: EventContactAddSuccess) => {
     await put({ ...payload.contactData, ...getRequiredContactSystemData() })
   }
 
-  const updateStatus = (payload: IEventStatusContact) => {
+  const updateStatus = (payload: EventStatusContact) => {
     const { interlocutorId, online, onlineStatusUpdatedTimestamp, lastSeen } = payload
     updateContactData(interlocutorId, {
       online,
@@ -66,15 +66,15 @@ export const useContactUpdateMonitor = () => {
     })
   }
 
-  const updateContactDataHandler = async (payload: EventChangeContactsDataType) => {
+  const updateContactDataHandler = async (payload: EventChangeContactsData) => {
     updateContactData(payload.id, payload)
   }
 
-  const updateContactInteractionType = async (payload: IEventUpdateContactInteractionSuccess) => {
+  const updateContactInteractionType = async (payload: EventUpdateContactInteractionSuccess) => {
     await updateContactData(payload.contactId, { interactionType: payload.interaction })
   }
 
-  const processInvitation = async (payload: EventInviteReceivedType) => {
+  const processInvitation = async (payload: EventInviteReceived) => {
     const existingContact = await get(payload.id)
     const data = existingContact
       ? {
@@ -96,12 +96,12 @@ export const useContactUpdateMonitor = () => {
     })
   }
 
-  const updateContactTypingStatus = async (payload: IEventGetContactTypingStatus) => {
+  const updateContactTypingStatus = async (payload: EventGetContactTypingStatus) => {
     await updateContactData(payload.contactId, { isTyping: payload.isTyping })
   }
 
   const checkForContactOnline = () => {
-    socket.emit<SocketActionsType>('interlocutor-ping')
+    socket.emit<SocketActions>('interlocutor-ping')
 
     const currentTimestamp = Date.now()
     const maxDiffSeconds = 30
@@ -116,28 +116,28 @@ export const useContactUpdateMonitor = () => {
   }
 
   useEffect(() => {
-    socket.on<SocketActionsType>('actual-contacts', actualizeContacts)
-    socket.on<SocketActionsType>('contacts-loaded', bulkPut)
-    socket.on<SocketActionsType>('contact-delete-success', deleteContact)
-    socket.on<SocketActionsType>('contact-add-success', addContact)
-    socket.on<SocketActionsType>('contact-status-updated', updateStatus)
-    socket.on<SocketActionsType>('contact-data-changed', updateContactDataHandler)
-    socket.on<SocketActionsType>('contact-interaction-updated', updateContactInteractionType)
-    socket.on<SocketActionsType>('invite-received', processInvitation)
-    socket.on<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
+    socket.on<SocketActions>('actual-contacts', actualizeContacts)
+    socket.on<SocketActions>('contacts-loaded', bulkPut)
+    socket.on<SocketActions>('contact-delete-success', deleteContact)
+    socket.on<SocketActions>('contact-add-success', addContact)
+    socket.on<SocketActions>('contact-status-updated', updateStatus)
+    socket.on<SocketActions>('contact-data-changed', updateContactDataHandler)
+    socket.on<SocketActions>('contact-interaction-updated', updateContactInteractionType)
+    socket.on<SocketActions>('invite-received', processInvitation)
+    socket.on<SocketActions>('get-contact-typing-status', updateContactTypingStatus)
 
     startInterval(checkForContactOnline, 10_000)
 
     return () => {
-      socket.off<SocketActionsType>('actual-contacts', actualizeContacts)
-      socket.off<SocketActionsType>('contacts-loaded', bulkPut)
-      socket.off<SocketActionsType>('contact-delete-success', deleteContact)
-      socket.off<SocketActionsType>('contact-add-success', addContact)
-      socket.off<SocketActionsType>('contact-status-updated', updateStatus)
-      socket.off<SocketActionsType>('contact-data-changed', updateContactDataHandler)
-      socket.off<SocketActionsType>('contact-interaction-updated', updateContactInteractionType)
-      socket.off<SocketActionsType>('invite-received', processInvitation)
-      socket.off<SocketActionsType>('get-contact-typing-status', updateContactTypingStatus)
+      socket.off<SocketActions>('actual-contacts', actualizeContacts)
+      socket.off<SocketActions>('contacts-loaded', bulkPut)
+      socket.off<SocketActions>('contact-delete-success', deleteContact)
+      socket.off<SocketActions>('contact-add-success', addContact)
+      socket.off<SocketActions>('contact-status-updated', updateStatus)
+      socket.off<SocketActions>('contact-data-changed', updateContactDataHandler)
+      socket.off<SocketActions>('contact-interaction-updated', updateContactInteractionType)
+      socket.off<SocketActions>('invite-received', processInvitation)
+      socket.off<SocketActions>('get-contact-typing-status', updateContactTypingStatus)
       stopInterval()
     }
   }, [bulkPut, contactsRef, mergeMany, openBrowserNotification, remove, startInterval, stopInterval, updateContactData])

@@ -2,7 +2,7 @@ import { MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
 
 import { FIXTURE_MAX_LENGTH_NICKNAMES } from '../user/user.constants'
 
-import type { IFixtureContactData } from './fixtures.types'
+import type { FixtureContactData } from './fixtures.types'
 
 export const DAY_IN_MS = 1000 * 60 * 60 * 24
 export const MINUTE_IN_MS = 1000 * 60
@@ -100,7 +100,7 @@ export const FIXTURE_CONTACTS = [
     nickname: 'mark',
     interaction: 'blocked'
   }
-] as const satisfies IFixtureContactData[]
+] as const satisfies FixtureContactData[]
 export const MESSAGE_SUBJECTS = [
   'search contacts',
   'socket reconnect flow',

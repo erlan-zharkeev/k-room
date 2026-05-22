@@ -1,12 +1,12 @@
-export type NotificationEventGroupType = 'messages' | 'calls'
+export type NotificationEventGroup = 'messages' | 'calls'
 
-export type NotificationSettingGroupType = 'general' | NotificationEventGroupType
+export type NotificationSettingGroup = 'general' | NotificationEventGroup
 
-export type NotificationPushSettingKeyType = 'browserPush' | 'nativePush'
+export type NotificationPushSettingKey = 'browserPush' | 'nativePush'
 
-export type NotificationSettingKeyType = 'toast' | 'sound' | 'vibration' | NotificationPushSettingKeyType
+export type NotificationSettingKey = 'toast' | 'sound' | 'vibration' | NotificationPushSettingKey
 
-export interface INotificationGroupSettings {
+export interface NotificationGroupSettings {
   toast: boolean
   sound: boolean
   vibration: boolean
@@ -14,9 +14,9 @@ export interface INotificationGroupSettings {
   nativePush: boolean
 }
 
-export interface IDeviceNotificationSettings {
+export interface DeviceNotificationSettings {
   enabled: boolean
-  general: INotificationGroupSettings
-  messages: INotificationGroupSettings
-  calls: INotificationGroupSettings
+  general: NotificationGroupSettings
+  messages: NotificationGroupSettings
+  calls: NotificationGroupSettings
 }

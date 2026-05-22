@@ -4,10 +4,10 @@ import { isString } from 'lodash'
 
 import { CONSOLE_COLOR_MAP, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
 import { BROWSER_I18N } from './i18n'
-import type { ClientPlatformType } from './types'
-import type { IImageToBase64Params } from './types'
+import type { ClientPlatform } from './types'
+import type { ImageToBase64Params } from './types'
 
-export const getClientPlatform = (): ClientPlatformType => {
+export const getClientPlatform = (): ClientPlatform => {
   return '__TAURI_INTERNALS__' in window ? 'native' : 'browser'
 }
 
@@ -27,7 +27,7 @@ export const imageToBase64 = ({
   allowedResolutions = Object.values(IMAGE_RESOLUTIONS),
   t,
   maxImageSizeInMb = 5
-}: IImageToBase64Params) => {
+}: ImageToBase64Params) => {
   const reader = new FileReader()
   const warnings = []
   const resolutionNotAllowed = !allowedResolutions.includes(image.type)

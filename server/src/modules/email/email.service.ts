@@ -7,7 +7,7 @@ import { AppError } from 'src/shared/lib/app-error'
 import { log } from 'src/shared/lib/log'
 
 import { EMAIL_I18N } from './email.i18n'
-import type { ISendEmailCodeEmailPayload, ISendEmailConfirmationEmailPayload } from './email.types'
+import type { SendEmailCodeEmailPayload, SendEmailConfirmationEmailPayload } from './email.types'
 import { renderEmailConfirmationHtml } from './render-email-confirmation-html'
 
 let resendClient: Resend | null = null
@@ -43,7 +43,7 @@ export class EmailService {
     return confirmUrl.toString()
   }
 
-  async sendEmailConfirmationEmail({ email, token, nickname }: ISendEmailConfirmationEmailPayload) {
+  async sendEmailConfirmationEmail({ email, token, nickname }: SendEmailConfirmationEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
@@ -80,7 +80,7 @@ export class EmailService {
     return data
   }
 
-  async sendPasswordRecoveryEmail({ email, code, nickname }: ISendEmailCodeEmailPayload) {
+  async sendPasswordRecoveryEmail({ email, code, nickname }: SendEmailCodeEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
@@ -117,7 +117,7 @@ export class EmailService {
     return data
   }
 
-  async sendChangeEmailCodeEmail({ email, code, nickname }: ISendEmailCodeEmailPayload) {
+  async sendChangeEmailCodeEmail({ email, code, nickname }: SendEmailCodeEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }

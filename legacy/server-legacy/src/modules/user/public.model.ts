@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose'
 
-import { IUserPublicData } from './types'
+import { UserPublicData } from './types'
 
-export const publicSchema = new Schema<IUserPublicData>(
+export const publicSchema = new Schema<UserPublicData>(
   {
     username: {
       type: String,

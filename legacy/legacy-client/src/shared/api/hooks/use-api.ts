@@ -1,11 +1,11 @@
 import { AxiosResponse, ResponseType } from 'axios'
 
-import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, EndpointsType, IBackendResponse, REQ_STATUS } from 'common'
+import { APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE, Endpoints, BackendResponse, REQ_STATUS } from 'common'
 
 import { useApiInterceptor } from 'src/shared/api/hooks/use-api-interceptor'
 import { axios } from 'src/shared/api/internals/api'
-import { IDoRequestOpts } from 'src/shared/api/internals/types'
-import { RequestPayloadType, RequestType } from 'src/shared/api/types'
+import { DoRequestOpts } from 'src/shared/api/internals/types'
+import { RequestPayload, Request } from 'src/shared/api/types'
 import { CLIENT_ENV } from 'src/shared/config'
 import { useNotification } from 'src/shared/notification'
 import { useSettings } from 'src/shared/preferences'
@@ -23,7 +23,7 @@ export const useApi = () => {
   const { language } = useSettings()
   const { interceptError } = useApiInterceptor()
 
-  const successMessageHandler = (response: AxiosResponse<IBackendResponse<unknown>>) => {
+  const successMessageHandler = (response: AxiosResponse<BackendResponse<unknown>>) => {
     if (!response) return
     const ct = getHeaderValue(response.headers?.['content-type'])
     const isJson = ct.includes('application/json')
@@ -41,11 +41,11 @@ export const useApi = () => {
   }
 
   const doRequest = async <T, R extends ResponseType = 'json'>(
-    type: RequestType,
-    endpoint: EndpointsType,
-    data: RequestPayloadType = {},
-    opts: IDoRequestOpts<R> = {}
-  ): Promise<R extends 'json' ? AxiosResponse<IBackendResponse<T>> : AxiosResponse<Blob>> => {
+    type: Request,
+    endpoint: Endpoints,
+    data: RequestPayload = {},
+    opts: DoRequestOpts<R> = {}
+  ): Promise<R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>> => {
     const { contentType = 'application/json', responseType = 'json' } = opts || {}
 
     try {

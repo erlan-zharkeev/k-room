@@ -1,11 +1,11 @@
 import { isString } from 'lodash'
 
 import { DEFAULT_SETTINGS_CONTENT_ID, SETTINGS_CONTENT_COMPONENTS } from '../config/constants/content.constants'
-import type { SettingsContentIdType } from '../config/types/content.types'
+import type { SettingsContentId } from '../config/types/content.types'
 
-const isSettingsContentId = (settingsId?: string | string[]): settingsId is SettingsContentIdType =>
+const isSettingsContentId = (settingsId?: string | string[]): settingsId is SettingsContentId =>
   isString(settingsId) && settingsId in SETTINGS_CONTENT_COMPONENTS
 
-export const getSettingsContentId = (settingsId?: string | string[]): SettingsContentIdType => {
+export const getSettingsContentId = (settingsId?: string | string[]): SettingsContentId => {
   return isSettingsContentId(settingsId) ? settingsId : DEFAULT_SETTINGS_CONTENT_ID
 }

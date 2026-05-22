@@ -1,7 +1,7 @@
 import { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS } from '../auth/constants'
 import { defineI18n } from '../language/lib/define-i18n'
 
-import type { ValidationI18nType } from './types'
+import type { ValidationI18n } from './types'
 
 export const VALIDATION_I18N = defineI18n({
   fieldIsRequired: {
@@ -64,4 +64,4 @@ export const VALIDATION_I18N = defineI18n({
     ru: 'Неверный провайдер',
     zh: '提供商无效'
   }
-} satisfies ValidationI18nType)
+} satisfies ValidationI18n)

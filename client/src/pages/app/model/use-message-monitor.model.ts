@@ -1,10 +1,10 @@
 import type {
-  IEventMessageDeleted,
-  IEventMessageDelivered,
-  IEventMessagesStatusUpdated,
-  IEventUpdateMessageStatus,
-  IEventUpdatedMessageReactions,
-  SocketActionsType
+  EventMessageDeleted,
+  EventMessageDelivered,
+  EventMessagesStatusUpdated,
+  EventUpdateMessageStatus,
+  EventUpdatedMessageReactions,
+  SocketActions
 } from 'global-shared'
 import { onBeforeUnmount } from 'vue'
 
@@ -24,7 +24,7 @@ export const useMessageMonitor = () => {
     })
   }
 
-  const handleDeliveredMessage = async ({ roomId, message }: IEventMessageDelivered) => {
+  const handleDeliveredMessage = async ({ roomId, message }: EventMessageDelivered) => {
     await put(message)
     await mutateRoom(roomId, (room) => {
       if (room.messages[room.messages.length - 1] !== message.id) {
@@ -37,7 +37,7 @@ export const useMessageMonitor = () => {
     })
   }
 
-  const updateMessageStatus = async ({ roomId, messageId, status, userId }: IEventUpdateMessageStatus) => {
+  const updateMessageStatus = async ({ roomId, messageId, status, userId }: EventUpdateMessageStatus) => {
     const shouldDecreaseUnreadMessagesQuantity = userId === user.value.id && status === 'read'
 
     await update(messageId, { status })
@@ -53,7 +53,7 @@ export const useMessageMonitor = () => {
     status,
     userId,
     updatedMessagesQuantity
-  }: IEventMessagesStatusUpdated) => {
+  }: EventMessagesStatusUpdated) => {
     const loadedMessageIds = messageIds.filter((messageId) => messageById.value.has(messageId))
     const isCurrentUserStatusUpdate = userId === user.value.id
     const isReadStatusUpdate = status === 'read'
@@ -65,7 +65,7 @@ export const useMessageMonitor = () => {
     }
   }
 
-  const handleMessageDeleted = async ({ messageId, roomId }: IEventMessageDeleted) => {
+  const handleMessageDeleted = async ({ messageId, roomId }: EventMessageDeleted) => {
     const message = getById(messageId)
 
     await remove(messageId)
@@ -82,7 +82,7 @@ export const useMessageMonitor = () => {
     }
   }
 
-  const handleMessageReactionUpdate = async ({ messageId, reaction }: IEventUpdatedMessageReactions) => {
+  const handleMessageReactionUpdate = async ({ messageId, reaction }: EventUpdatedMessageReactions) => {
     await mutateMessage(messageId, (message) => {
       const reactions = message.reactions ?? []
       const isExistingReaction = reactions.some(
@@ -96,19 +96,19 @@ export const useMessageMonitor = () => {
   }
 
   const initializeMessageMonitor = () => {
-    socket.on<SocketActionsType>('message-deleted', handleMessageDeleted)
-    socket.on<SocketActionsType>('message-delivered', handleDeliveredMessage)
-    socket.on<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.on<SocketActionsType>('message-status-updated', updateMessageStatus)
-    socket.on<SocketActionsType>('messages-status-updated', updateMessagesStatus)
+    socket.on<SocketActions>('message-deleted', handleMessageDeleted)
+    socket.on<SocketActions>('message-delivered', handleDeliveredMessage)
+    socket.on<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
+    socket.on<SocketActions>('message-status-updated', updateMessageStatus)
+    socket.on<SocketActions>('messages-status-updated', updateMessagesStatus)
   }
 
   const disposeMessageMonitor = () => {
-    socket.off<SocketActionsType>('message-deleted', handleMessageDeleted)
-    socket.off<SocketActionsType>('message-delivered', handleDeliveredMessage)
-    socket.off<SocketActionsType>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.off<SocketActionsType>('message-status-updated', updateMessageStatus)
-    socket.off<SocketActionsType>('messages-status-updated', updateMessagesStatus)
+    socket.off<SocketActions>('message-deleted', handleMessageDeleted)
+    socket.off<SocketActions>('message-delivered', handleDeliveredMessage)
+    socket.off<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
+    socket.off<SocketActions>('message-status-updated', updateMessageStatus)
+    socket.off<SocketActions>('messages-status-updated', updateMessagesStatus)
   }
 
   onBeforeUnmount(disposeMessageMonitor)

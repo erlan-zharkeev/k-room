@@ -1,7 +1,7 @@
-import type { LocalizedTextType } from 'global-shared'
+import type { LocalizedText } from 'global-shared'
 
-export interface IFaqItem {
+export interface FaqItem {
   id: number
-  question: LocalizedTextType<string>
-  answer: LocalizedTextType<string>
+  question: LocalizedText<string>
+  answer: LocalizedText<string>
 }

@@ -1,5 +1,5 @@
-import { IContextMenu } from '../../context-menu/index'
-import { ISystemStore } from './types'
+import { ContextMenu } from '../../context-menu/index'
+import { SystemStore } from './types'
 
 export const CLICKED_OBJECT_INITIAL_STATE = {
   message: {
@@ -20,7 +20,7 @@ export const INITIAL_VIEWPORT = {
   height: 1080
 } as const
 
-export const INITIAL_CONTEXT_MENU: IContextMenu = {
+export const INITIAL_CONTEXT_MENU: ContextMenu = {
   name: '',
   coord: {
     x: 0,
@@ -55,4 +55,4 @@ export const INITIAL_SYSTEM_STORE = {
   micPermission: undefined,
   repliedMessageData: INITIAL_REPLIED_MESSAGE_DATA,
   messageInputData: INITIAL_MESSAGE_INPUT_DATA
-} satisfies ISystemStore
+} satisfies SystemStore

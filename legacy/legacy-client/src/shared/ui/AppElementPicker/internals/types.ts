@@ -1,9 +1,9 @@
-import { IAppTag } from 'src/shared/ui/AppTags/internals/types'
+import { AppTag } from 'src/shared/ui/AppTags/internals/types'
 
-export interface IAppElementPickerProps {
+export interface AppElementPickerProps {
   fromTitle: string
   toTitle: string
-  availableElements: IAppTag[]
+  availableElements: AppTag[]
   name: string
   setPickedElementIds: (ids: string[]) => void
   value?: string[]

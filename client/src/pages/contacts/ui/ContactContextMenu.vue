@@ -4,11 +4,11 @@ import { NmorphBadge, NmorphCheckbox, NmorphContextMenu, NmorphIcon, NmorphIconM
 import { useScreen } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
-import type { IContactContextMenuEmits, IContactContextMenuProps } from '../config/types'
+import type { ContactContextMenuEmits, ContactContextMenuProps } from '../config/types'
 import { useContactContextMenu } from '../model/use-contact-context-menu.model'
 
-const props = defineProps<IContactContextMenuProps>()
-const emit = defineEmits<IContactContextMenuEmits>()
+const props = defineProps<ContactContextMenuProps>()
+const emit = defineEmits<ContactContextMenuEmits>()
 const { isContextMenuOpen, contactActionBadgeValue, contextMenuOptions, setContextMenuOpen, selectContactAction } =
   useContactContextMenu(props, emit)
 const { isPortraitTabletOrLess } = useScreen()

@@ -4,11 +4,11 @@ import { NmorphCheckbox, NmorphCheckboxGroup, NmorphScroll } from '@nmorph/nmorp
 import { AppProfileBasicData } from '../AppProfileBasicData'
 import { AppText } from '../AppText'
 
-import type { IAppUserPickerProps } from './types'
+import type { AppUserPickerProps } from './types'
 import { useAppUserPicker } from './use-app-user-picker.model'
 
 const selectedUserIds = defineModel<string[]>({ required: true })
-const props = withDefaults(defineProps<IAppUserPickerProps>(), {
+const props = withDefaults(defineProps<AppUserPickerProps>(), {
   height: '224px',
   maxHeight: '34vh',
   multiple: true

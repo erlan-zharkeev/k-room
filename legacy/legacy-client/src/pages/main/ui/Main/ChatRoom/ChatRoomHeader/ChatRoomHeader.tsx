@@ -1,17 +1,17 @@
 import './style.scss'
 
-import { UnknownCallbackType } from 'common'
+import { UnknownCallback } from 'common'
 
 import { ChatRoomPreview, isRoomPrivate } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useLiveMediaUrl } from 'src/entities/media-file'
 
-import { FChatRoomType } from 'src/shared/config'
+import { FChatRoom } from 'src/shared/config'
 import { AppButton } from 'src/shared/ui'
 
 import { RoomTypingContact } from '../RoomTypingContact/RoomTypingContact'
 
-const ChatRoomHeaderPreview = ({ room, onClick }: { room: FChatRoomType; onClick: UnknownCallbackType }) => {
+const ChatRoomHeaderPreview = ({ room, onClick }: { room: FChatRoom; onClick: UnknownCallback }) => {
   const { contacts } = useContact()
   const avatar = useLiveMediaUrl(room.avatarId)
   const privateRoom = isRoomPrivate(room)
@@ -35,9 +35,9 @@ export const ChatRoomHeader = ({
   onClickChatRoomSettings,
   onResetChatRoomSelection
 }: {
-  room: FChatRoomType
-  onClickChatRoomSettings: UnknownCallbackType
-  onResetChatRoomSelection: UnknownCallbackType
+  room: FChatRoom
+  onClickChatRoomSettings: UnknownCallback
+  onResetChatRoomSelection: UnknownCallback
 }) => {
   return (
     <div className="chat-room-header">

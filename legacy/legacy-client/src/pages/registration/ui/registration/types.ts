@@ -1,10 +1,10 @@
-import { RegistrationFormDataType } from '../../model/types'
+import { RegistrationFormData } from '../../model/types'
 
-export interface IRegistrationFormProps {
-  onRegister: (payload: RegistrationFormDataType) => void
+export interface RegistrationFormProps {
+  onRegister: (payload: RegistrationFormData) => void
   isLoading: boolean
 }
 
-export interface IPrivacyPolicySwitchProps {
+export interface PrivacyPolicySwitchProps {
   disabled: boolean
 }

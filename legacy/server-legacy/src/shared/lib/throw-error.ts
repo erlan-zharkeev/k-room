@@ -1,11 +1,4 @@
-import {
-  DEFAULT_APP_LANGUAGE,
-  IBackendResponse,
-  LocalizedTextType,
-  SocketActionsType,
-  REQ_STATUS,
-  ReqStatusType
-} from 'common'
+import { DEFAULT_APP_LANGUAGE, BackendResponse, LocalizedText, SocketActions, REQ_STATUS, ReqStatus } from 'common'
 import { Response } from 'express'
 
 import { getIO } from 'src/shared/lib/io'
@@ -20,7 +13,7 @@ import {
 import { SHARED_I18N } from '../config/i18n'
 
 export const throwHTTPError = (
-  status: ReqStatusType,
+  status: ReqStatus,
   res: Response | null,
   message: string,
   silent: boolean = false,
@@ -41,7 +34,7 @@ export const throwHTTPError = (
     return
   }
 
-  const payload: IBackendResponse<null> = {
+  const payload: BackendResponse<null> = {
     payload: null,
     message: {
       text: message,
@@ -54,9 +47,9 @@ export const throwHTTPError = (
 
 export const throwSocketError = (
   socketId: string,
-  error?: LocalizedTextType<string> | string,
+  error?: LocalizedText<string> | string,
   options?: {
-    status?: ReqStatusType
+    status?: ReqStatus
     silent?: boolean
     cause?: unknown
   }
@@ -80,5 +73,5 @@ export const throwSocketError = (
     serverCaptureSentrySocketError({ message: logErrorMessage, silent, status })
   }
 
-  io.to(socketId).emit<SocketActionsType>('error-message', { message: userMessage, silent, status })
+  io.to(socketId).emit<SocketActions>('error-message', { message: userMessage, silent, status })
 }

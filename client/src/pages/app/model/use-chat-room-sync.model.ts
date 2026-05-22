@@ -1,9 +1,9 @@
 import {
   MEDIA_AVATAR_FILENAME_PREFIX,
-  type EventGetRoomsType,
-  type IEventChatRoomDeleted,
-  type IEventChatRoomLeft,
-  type IEventPinnedChatRoomsUpdated
+  type EventGetRooms,
+  type EventChatRoomDeleted,
+  type EventChatRoomLeft,
+  type EventPinnedChatRoomsUpdated
 } from 'global-shared'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -23,11 +23,11 @@ export const useChatRoomSync = () => {
   const { bulkDelete, bulkPut } = useMessage()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
-  const saveRoomPreviewMessages = async (rooms: EventGetRoomsType) => {
+  const saveRoomPreviewMessages = async (rooms: EventGetRooms) => {
     await bulkPut(rooms.flatMap((room) => (room.previewMessage ? [room.previewMessage] : [])))
   }
 
-  const actualizeChatRooms = async (rooms: EventGetRoomsType) => {
+  const actualizeChatRooms = async (rooms: EventGetRooms) => {
     const incomingRoomIds = new Set(rooms.map(({ id }) => id))
     const removedChatAvatarIds = chatRooms.value
       .filter(({ id }) => !incomingRoomIds.has(id))
@@ -38,16 +38,16 @@ export const useChatRoomSync = () => {
     await Promise.all(removedChatAvatarIds.map(deleteMedia))
   }
 
-  const addChatRoom = async (room: EventGetRoomsType[number]) => {
+  const addChatRoom = async (room: EventGetRooms[number]) => {
     await saveRoomPreviewMessages([room])
     await put(filterRoomPreviewMessage(room))
   }
 
-  const updatePinnedChatRooms = async ({ pinnedChatRoomIds }: IEventPinnedChatRoomsUpdated) => {
+  const updatePinnedChatRooms = async ({ pinnedChatRoomIds }: EventPinnedChatRoomsUpdated) => {
     await updatePinnedOrder(pinnedChatRoomIds)
   }
 
-  const removeChatRoom = async ({ roomId }: IEventChatRoomDeleted | IEventChatRoomLeft) => {
+  const removeChatRoom = async ({ roomId }: EventChatRoomDeleted | EventChatRoomLeft) => {
     const room = getById(roomId)
     const messageIds = room?.messages ?? []
     const avatarId = room?.avatarId
@@ -63,7 +63,7 @@ export const useChatRoomSync = () => {
     }
   }
 
-  const updateChatRoomData = async (room: EventGetRoomsType[number]) => {
+  const updateChatRoomData = async (room: EventGetRooms[number]) => {
     await saveRoomPreviewMessages([room])
     await put(filterRoomPreviewMessage(room))
   }

@@ -2,9 +2,9 @@ import { computed, type Ref } from 'vue'
 
 import { getAvatarId } from 'src/shared/lib'
 
-import type { IAppUserPickerProps } from './types'
+import type { AppUserPickerProps } from './types'
 
-export const useAppUserPicker = (props: IAppUserPickerProps, selectedUserIds: Ref<string[]>) => {
+export const useAppUserPicker = (props: AppUserPickerProps, selectedUserIds: Ref<string[]>) => {
   const userItems = computed(() =>
     props.items.map((item) => ({
       ...item,

@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { formatAppName, readEnv, readSecretEnv, type IPackageData } from 'global-shared'
+import { formatAppName, readEnv, readSecretEnv, type PackageData } from 'global-shared'
 import { loadEnv } from 'vite'
 
-import type { IClientEnv } from './client-env.types'
+import type { ClientEnv } from './client-env.types'
 
-export const createClientEnvData = (mode: string, envDir: string): IClientEnv => {
+export const createClientEnvData = (mode: string, envDir: string): ClientEnv => {
   const sharedEnv = loadEnv('shared', envDir, '')
   const modeEnv = loadEnv(mode, envDir, '')
   const secretEnv = readSecretEnv(path.resolve(envDir, '.env.secret'), fs)
@@ -26,7 +26,7 @@ export const createClientEnvData = (mode: string, envDir: string): IClientEnv =>
   const themeBg = '#1c1f21'
   const themeAccent = '#006cb6'
   const themeText = '#778288'
-  const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as IPackageData
+  const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
 
   return {
     apiPath,

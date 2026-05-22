@@ -1,9 +1,9 @@
 import { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
-import type { IUserPersonalData, IUserPublicData, IUserSchema, IUserSystemData } from './types'
+import type { UserPersonalData, UserPublicData, UserSchema, UserSystemData } from './types'
 
-const systemSchema = new Schema<IUserSystemData>(
+const systemSchema = new Schema<UserSystemData>(
   {
     role: {
       type: String,
@@ -37,7 +37,7 @@ const systemSchema = new Schema<IUserSystemData>(
   { _id: false }
 )
 
-const personalSchema = new Schema<IUserPersonalData>(
+const personalSchema = new Schema<UserPersonalData>(
   {
     email: {
       type: String,
@@ -62,7 +62,7 @@ const personalSchema = new Schema<IUserPersonalData>(
   { _id: false }
 )
 
-const publicSchema = new Schema<IUserPublicData>(
+const publicSchema = new Schema<UserPublicData>(
   {
     nickname: {
       type: String,
@@ -80,7 +80,7 @@ const publicSchema = new Schema<IUserPublicData>(
   { _id: false }
 )
 
-const userSchema = new Schema<IUserSchema>(
+const userSchema = new Schema<UserSchema>(
   {
     system: systemSchema,
     personal: personalSchema,
@@ -89,4 +89,4 @@ const userSchema = new Schema<IUserSchema>(
   { timestamps: true }
 )
 
-export const UserModel = model<IUserSchema>('User', userSchema, 'user')
+export const UserModel = model<UserSchema>('User', userSchema, 'user')

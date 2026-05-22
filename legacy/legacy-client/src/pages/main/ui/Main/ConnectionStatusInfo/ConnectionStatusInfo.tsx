@@ -10,14 +10,14 @@ import { AppText } from 'src/shared/ui'
 
 import { CONNECTION_STATUS_INFO_I18N } from './i18n'
 
-type DisconnectedStatusType = 'disconnected' | 'offline'
+type DisconnectedStatus = 'disconnected' | 'offline'
 
 export const ConnectionStatusInfo = () => {
   const { reconnecting, online } = useSystem()
   const { t } = useI18n()
   const [showDisconnected, setShowDisconnected] = useState(false)
   const { delay } = useTimeout()
-  const [disconnectedStatus, setDisconnectedStatus] = useState<DisconnectedStatusType>('disconnected')
+  const [disconnectedStatus, setDisconnectedStatus] = useState<DisconnectedStatus>('disconnected')
 
   const checkDisconnected = async () => {
     if (online) {

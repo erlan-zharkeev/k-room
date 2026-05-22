@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { getAuth, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
 
-import { AUTH_ENDPOINTS, ROUTE_NAMES, FirebaseProviderType, ISignInWithProviderResponse } from 'common'
+import { AUTH_ENDPOINTS, ROUTE_NAMES, FirebaseProvider, ISignInWithProviderResponse } from 'common'
 
 import { useActivateUserSession } from 'src/entities/user'
 
@@ -29,7 +29,7 @@ export const useFirebase = () => {
     messageType: 'error'
   })
 
-  const getFirebaseCredential = async (provider: FirebaseProviderType) => {
+  const getFirebaseCredential = async (provider: FirebaseProvider) => {
     if (CLIENT_ENV.isE2E) {
       return E2E_FIREBASE_AUTH_RESULT
     }
@@ -49,7 +49,7 @@ export const useFirebase = () => {
     }
   }
 
-  const buildCredential = async (provider: FirebaseProviderType) => {
+  const buildCredential = async (provider: FirebaseProvider) => {
     try {
       const { displayName, email, photoURL, uid, provider: normalizedProvider } = await getFirebaseCredential(provider)
       const haveFullData = displayName && email && uid && normalizedProvider
@@ -73,7 +73,7 @@ export const useFirebase = () => {
     }
   }
 
-  const onFirebaseLogin = async (provider: FirebaseProviderType) => {
+  const onFirebaseLogin = async (provider: FirebaseProvider) => {
     try {
       setFirebaseLoginLoading(true)
       const credential = await buildCredential(provider)

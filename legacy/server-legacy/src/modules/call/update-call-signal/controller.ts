@@ -1,16 +1,16 @@
-import { IEventUpdateSignal, SocketActionsType } from 'common'
+import { IEventUpdateSignal, SocketActions } from 'common'
 
 import { getSocketsByUserIds } from 'src/modules/user'
 
-import { SocketInstanceType } from 'src/shared/config'
+import { SocketInstance } from 'src/shared/config'
 import { getIO } from 'src/shared/lib/io'
 import { socketErrorMiddleware } from 'src/shared/middleware/socket-error-middleware'
 
 import { CALL_I18N } from '../i18n'
 import { getActiveCallInterlocutor } from '../shared/lib/active-call-map'
 
-export const updateCallSignalController = (socket: SocketInstanceType) => {
-  socket.on<SocketActionsType>(
+export const updateCallSignalController = (socket: SocketInstance) => {
+  socket.on<SocketActions>(
     'update-call-signal',
     socketErrorMiddleware(
       socket,
@@ -23,7 +23,7 @@ export const updateCallSignalController = (socket: SocketInstanceType) => {
         const socketIds = await getSocketsByUserIds([interlocutorId])
 
         socketIds.forEach((socketId) => {
-          getIO().to(socketId).emit<SocketActionsType>('interlocutor-update-signal', { signal })
+          getIO().to(socketId).emit<SocketActions>('interlocutor-update-signal', { signal })
         })
       },
       { basicError: CALL_I18N.updateCallSignalFailed }

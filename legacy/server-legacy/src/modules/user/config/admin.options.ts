@@ -6,7 +6,7 @@ import { UserModel } from '../user.model'
 
 import { LAST_SEEN_PATH } from './constants'
 import { USER_ADMIN_I18N } from './i18n'
-import { IAdminActionRequest, IAdminActionResponse } from '../types'
+import { AdminActionRequest, AdminActionResponse } from '../types'
 
 const formatLastSeenParam = (params?: Record<string, unknown>) => {
   if (!params) return
@@ -17,14 +17,14 @@ const formatLastSeenParam = (params?: Record<string, unknown>) => {
   params[LAST_SEEN_PATH] = formatHumanDateTime(value)
 }
 
-const withFormattedLastSeen = <T extends IAdminActionResponse>(response: T) => {
+const withFormattedLastSeen = <T extends AdminActionResponse>(response: T) => {
   formatLastSeenParam(response.record?.params)
   response.records?.forEach((record) => formatLastSeenParam(record.params))
 
   return response
 }
 
-const validateUserCreateRequest = async (request: IAdminActionRequest) => {
+const validateUserCreateRequest = async (request: AdminActionRequest) => {
   if (request.method !== 'post') return request
 
   const password = request.payload?.['system.password']
@@ -87,10 +87,10 @@ export const ADMIN_USER_OPTIONS = {
         before: validateUserCreateRequest
       },
       list: {
-        after: async (response: IAdminActionResponse) => withFormattedLastSeen(response)
+        after: async (response: AdminActionResponse) => withFormattedLastSeen(response)
       },
       show: {
-        after: async (response: IAdminActionResponse) => withFormattedLastSeen(response)
+        after: async (response: AdminActionResponse) => withFormattedLastSeen(response)
       }
     },
     properties: {

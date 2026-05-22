@@ -4,10 +4,10 @@ import { NmorphAvatar, NmorphBadge } from '@nmorph/nmorph-ui-kit'
 import { AppHeader } from '../AppHeader'
 
 import { APP_PROFILE_BASIC_DATA_DEFAULT_PROPS } from './constants'
-import type { IAppProfileBasicDataProps } from './types'
+import type { AppProfileBasicDataProps } from './types'
 import { useAppProfileBasicData } from './use-app-profile-basic-data.model'
 
-const props = withDefaults(defineProps<IAppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
+const props = withDefaults(defineProps<AppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
 const { imageSrc } = useAppProfileBasicData(props)
 </script>
 

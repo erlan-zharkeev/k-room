@@ -1,3 +1,3 @@
-export interface IThemeSelectProps {
+export interface ThemeSelectProps {
   compact?: boolean
 }

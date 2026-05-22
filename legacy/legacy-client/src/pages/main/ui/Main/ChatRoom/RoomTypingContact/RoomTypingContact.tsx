@@ -4,9 +4,9 @@ import { useContact } from 'src/entities/contact'
 
 import { AppDotsAnimatedText } from 'src/shared/ui'
 
-import { IRoomTypingContactProps } from './types'
+import { RoomTypingContactProps } from './types'
 
-export const RoomTypingContact = ({ room }: IRoomTypingContactProps) => {
+export const RoomTypingContact = ({ room }: RoomTypingContactProps) => {
   const { getByIds } = useContact()
   const searchedContacts = getByIds(room.users)
 

@@ -5,9 +5,9 @@ import { Dropdown, MenuProps } from 'antd'
 import { AppButton } from 'src/shared/ui'
 import { EMOJI_LIST } from 'src/shared/config'
 
-import { IEmojiDropdownProps } from './emoji-dropdown.types.ts'
+import { EmojiDropdownProps } from './emoji-dropdown.types.ts'
 
-export const EmojiDropdown = ({ setEmoji = () => {} }: IEmojiDropdownProps) => {
+export const EmojiDropdown = ({ setEmoji = () => {} }: EmojiDropdownProps) => {
   const items: MenuProps['items'] = EMOJI_LIST.map((el) => {
     return {
       key: el.key,

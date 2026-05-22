@@ -1,27 +1,27 @@
 import { booleanValidateRules, stringValidateRules, arrayValidateRules } from './rules'
 
-type ValidateBooleanRuleType = keyof typeof booleanValidateRules
-type ValidateTextRuleType = keyof typeof stringValidateRules
-type ValidateArrayRuleType = keyof typeof arrayValidateRules
+type ValidateBooleanRule = keyof typeof booleanValidateRules
+type ValidateTextRule = keyof typeof stringValidateRules
+type ValidateArrayRule = keyof typeof arrayValidateRules
 
-export interface ISwitchValidateRule {
-  name: ValidateBooleanRuleType
+export interface SwitchValidateRule {
+  name: ValidateBooleanRule
 }
-export interface ITextInputValidateRule {
-  name: ValidateTextRuleType
+export interface TextInputValidateRule {
+  name: ValidateTextRule
   quantity?: number
 }
 
-export interface IFileInputValidateRule {
-  name: ValidateBooleanRuleType
+export interface FileInputValidateRule {
+  name: ValidateBooleanRule
 }
 
-export interface IElementPickerValidateRule {
-  name: ValidateArrayRuleType
+export interface ElementPickerValidateRule {
+  name: ValidateArrayRule
 }
 
-export type ValidateRuleType =
-  | ISwitchValidateRule
-  | ITextInputValidateRule
-  | IFileInputValidateRule
-  | IElementPickerValidateRule
+export type ValidateRule =
+  | SwitchValidateRule
+  | TextInputValidateRule
+  | FileInputValidateRule
+  | ElementPickerValidateRule

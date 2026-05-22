@@ -1,6 +1,6 @@
 import { REQ_STATUS } from '../../status/constants'
 import { SENTRY_IGNORED_SUBSTRINGS } from '../constants'
-import type { ISentryErrorContext } from '../types'
+import type { SentryErrorContext } from '../types'
 
 export const isIgnoredSentryStatus = (status?: number | null) => {
   switch (status) {
@@ -15,7 +15,7 @@ export const isIgnoredSentryStatus = (status?: number | null) => {
   }
 }
 
-export const shouldIgnoreSentryError = ({ message, silent, status }: ISentryErrorContext) => {
+export const shouldIgnoreSentryError = ({ message, silent, status }: SentryErrorContext) => {
   if (silent) return true
   if (isIgnoredSentryStatus(status)) return true
   if (!message) return false

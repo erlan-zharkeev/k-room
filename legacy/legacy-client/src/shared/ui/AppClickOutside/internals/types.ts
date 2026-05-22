@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 
-export interface IAppClickOutsideProps extends PropsWithChildren {
+export interface AppClickOutsideProps extends PropsWithChildren {
   onClickOutside: () => void
   active?: boolean
   additionalClassName?: string

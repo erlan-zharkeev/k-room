@@ -1,10 +1,10 @@
 import { USER_ROLES } from 'common'
 import { Schema } from 'mongoose'
 
-import { IUserSystemData } from './types'
+import { UserSystemData } from './types'
 import { deviceSchema } from './device.model'
 
-export const systemSchema = new Schema<IUserSystemData>(
+export const systemSchema = new Schema<UserSystemData>(
   {
     role: {
       type: String,

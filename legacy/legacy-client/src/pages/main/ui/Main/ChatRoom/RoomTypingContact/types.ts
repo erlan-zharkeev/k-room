@@ -1,5 +1,5 @@
 import { IChatRoom } from 'common'
 
-export interface IRoomTypingContactProps {
+export interface RoomTypingContactProps {
   room: IChatRoom
 }

@@ -2,18 +2,12 @@ import { useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
-import {
-  AUTH_ENDPOINTS,
-  IAuthRegistrationPayload,
-  ISendConfirmationLinkResponse,
-  ROUTE_NAMES,
-  REQ_STATUS
-} from 'common'
+import { AUTH_ENDPOINTS, AuthRegistrationPayload, SendConfirmationLinkResponse, ROUTE_NAMES, REQ_STATUS } from 'common'
 
 import { useApi } from 'src/shared/api'
 import { useQuery } from 'src/shared/lib'
 
-import { RegistrationFormDataType } from './types'
+import { RegistrationFormData } from './types'
 
 export const useRegistration = () => {
   const [policySwitch, setPolicySwitch] = useState(false)
@@ -29,10 +23,10 @@ export const useRegistration = () => {
     setPolicyTouched(true)
   }
 
-  const register = async (fields: IAuthRegistrationPayload) => {
+  const register = async (fields: AuthRegistrationPayload) => {
     try {
       setIsLoading(true)
-      const response = await doRequest<ISendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, fields)
+      const response = await doRequest<SendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, fields)
 
       if (!response || response.status !== REQ_STATUS.success) return
 
@@ -46,7 +40,7 @@ export const useRegistration = () => {
     }
   }
 
-  const onRegister = ({ email, password, username }: RegistrationFormDataType) => {
+  const onRegister = ({ email, password, username }: RegistrationFormData) => {
     register({ email, password, username })
   }
 

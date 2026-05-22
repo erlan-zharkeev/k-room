@@ -11,13 +11,9 @@ import { serverCaptureSentryException } from 'src/shared/lib/sentry'
 
 import { SOCKET_OPTIONS } from './constants'
 import { socketRouter } from './socket-router'
-import type { SocketServerType } from './types'
+import type { SocketServer } from './types'
 
-export const initIO = async (
-  server: SocketServerType,
-  redisService: RedisService,
-  presenceService: PresenceService
-) => {
+export const initIO = async (server: SocketServer, redisService: RedisService, presenceService: PresenceService) => {
   const io = new Server(server, SOCKET_OPTIONS)
   const { publishClient, subscribeClient } = await redisService.createAdapterClients()
 

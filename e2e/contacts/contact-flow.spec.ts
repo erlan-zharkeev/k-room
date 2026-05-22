@@ -24,14 +24,14 @@ import {
   INVITED_CONTACT_STATUS
 } from './constants'
 import type {
-  ContactE2EUserRoleType,
-  IContactE2EIndexedDbChatRoom,
-  IContactE2EIndexedDbContact,
-  IContactE2EProviderLoginResponse,
-  IContactE2EUser
+  ContactE2EUserRole,
+  ContactE2EIndexedDbChatRoom,
+  ContactE2EIndexedDbContact,
+  ContactE2EProviderLoginResponse,
+  ContactE2EUser
 } from './types'
 
-const buildContactUser = (role: ContactE2EUserRoleType): Omit<IContactE2EUser, 'id'> => {
+const buildContactUser = (role: ContactE2EUserRole): Omit<ContactE2EUser, 'id'> => {
   const roleKey = role === 'author' ? 'a' : 'i'
   const suffix = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
   const nickname = `${CONTACT_E2E_NICKNAME_PREFIX}-${roleKey}-${suffix}`
@@ -42,7 +42,7 @@ const buildContactUser = (role: ContactE2EUserRoleType): Omit<IContactE2EUser, '
   }
 }
 
-const signInWithProvider = async (page: Page, role: ContactE2EUserRoleType): Promise<IContactE2EUser> => {
+const signInWithProvider = async (page: Page, role: ContactE2EUserRole): Promise<ContactE2EUser> => {
   const user = buildContactUser(role)
   const response = await page.request.post(`${E2E_ENV.PLAYWRIGHT_API_URL}/auth/provider-login`, {
     data: {
@@ -53,7 +53,7 @@ const signInWithProvider = async (page: Page, role: ContactE2EUserRoleType): Pro
 
   expect(response.ok()).toBeTruthy()
 
-  const body = (await response.json()) as IContactE2EProviderLoginResponse
+  const body = (await response.json()) as ContactE2EProviderLoginResponse
 
   expect(body.payload).toEqual(expect.objectContaining(user))
 
@@ -100,13 +100,13 @@ const clickIconButton = async (root: Page | Locator, name: string) => {
 const readContacts = async (page: Page, dbName: string) => {
   const stores = await readStores(page, dbName, [CONTACTS_DB_STORE_NAME])
 
-  return stores[CONTACTS_DB_STORE_NAME] as IContactE2EIndexedDbContact[]
+  return stores[CONTACTS_DB_STORE_NAME] as ContactE2EIndexedDbContact[]
 }
 
 const readChatRooms = async (page: Page, dbName: string) => {
   const stores = await readStores(page, dbName, [CHAT_ROOMS_DB_STORE_NAME])
 
-  return stores[CHAT_ROOMS_DB_STORE_NAME] as IContactE2EIndexedDbChatRoom[]
+  return stores[CHAT_ROOMS_DB_STORE_NAME] as ContactE2EIndexedDbChatRoom[]
 }
 
 const getStoredContact = async (page: Page, dbName: string, contactId: string) => {
@@ -119,7 +119,7 @@ const expectStoredContactInteraction = async (
   page: Page,
   dbName: string,
   contactId: string,
-  interactionType: IContactE2EIndexedDbContact['interactionType'] | null
+  interactionType: ContactE2EIndexedDbContact['interactionType'] | null
 ) => {
   await expect
     .poll(
@@ -146,7 +146,7 @@ const expectStoredPrivateChatRoom = async (page: Page, dbName: string, contactId
     .toBe(true)
 }
 
-const addContactFromSearch = async (page: Page, contact: IContactE2EUser) => {
+const addContactFromSearch = async (page: Page, contact: ContactE2EUser) => {
   await page.getByPlaceholder(CONTACTS_SEARCH_PLACEHOLDER).fill(contact.nickname)
 
   const searchRow = getContactSearchRow(page, contact.nickname)
@@ -158,14 +158,14 @@ const addContactFromSearch = async (page: Page, contact: IContactE2EUser) => {
   await expect(getContactListRow(page, contact.nickname)).toBeVisible()
 }
 
-const inviteContact = async (page: Page, contact: IContactE2EUser) => {
+const inviteContact = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
 
   await clickIconButton(row, INVITE_BUTTON_NAME)
   await expect(row).toContainText(INVITED_CONTACT_STATUS)
 }
 
-const acceptInvite = async (page: Page, contact: IContactE2EUser) => {
+const acceptInvite = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
 
   await expect(row).toContainText(INVITE_RECEIVED_CONTACT_STATUS)
@@ -174,7 +174,7 @@ const acceptInvite = async (page: Page, contact: IContactE2EUser) => {
   await expect(row).not.toContainText(INVITE_RECEIVED_CONTACT_STATUS)
 }
 
-const createPrivateChat = async (page: Page, contact: IContactE2EUser) => {
+const createPrivateChat = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
 
   await expect(row.locator(`[aria-label="${CREATE_CHAT_BUTTON_NAME}"]`)).toBeVisible()
@@ -182,7 +182,7 @@ const createPrivateChat = async (page: Page, contact: IContactE2EUser) => {
   await page.waitForURL(CHAT_ROOM_ROUTE_PATTERN)
 }
 
-const deleteContact = async (page: Page, contact: IContactE2EUser) => {
+const deleteContact = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
 
   await clickIconButton(row, CONTACT_ACTIONS_BUTTON_NAME)

@@ -1,19 +1,19 @@
-export interface ICodeElement {
+export interface CodeElement {
   value: string
   expiresAt: number
 }
 
-export interface ICodeMethod {
-  query: ICodeElement
-  email: ICodeElement
-  sms: ICodeElement
+export interface CodeMethod {
+  query: CodeElement
+  email: CodeElement
+  sms: CodeElement
 }
 
-export interface ICodePurpose {
-  passwordRecovery: ICodeMethod
+export interface CodePurpose {
+  passwordRecovery: CodeMethod
 }
 
-export interface ICodeSchema {
-  codes: ICodePurpose
+export interface CodeSchema {
+  codes: CodePurpose
   nextRequestPossibleAt: number
 }

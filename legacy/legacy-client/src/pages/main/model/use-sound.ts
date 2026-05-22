@@ -6,16 +6,16 @@ import { useSettings } from 'src/shared/preferences'
 import { useSystem } from 'src/shared/system'
 
 import { SOUND_SRC } from './sound/constants.ts'
-import { SoundType } from './sound/types.ts'
+import { Sound } from './sound/types.ts'
 
 export const useSound = () => {
   const { soundOn } = useSettings()
   const { hasInteracted } = useSystem()
   const { selectedAudioOutputDeviceId } = useSettings()
 
-  const soundInstances = useRef<Partial<Record<SoundType, Howl>>>({})
+  const soundInstances = useRef<Partial<Record<Sound, Howl>>>({})
 
-  const play = (key: SoundType, loop = false) => {
+  const play = (key: Sound, loop = false) => {
     if (!soundOn || !hasInteracted) return
 
     if (soundInstances.current[key]) {
@@ -46,7 +46,7 @@ export const useSound = () => {
     sound.play()
   }
 
-  const stop = (key: SoundType) => {
+  const stop = (key: Sound) => {
     const sound = soundInstances.current[key]
     if (sound) {
       sound.stop()

@@ -7,9 +7,9 @@ import { APP_INPUT_I18N } from 'src/shared/ui/AppInput/internals/i18n'
 import { AppButton } from 'src/shared/ui/AppButton/AppButton'
 import { AppIcon } from 'src/shared/ui/AppIcon/AppIcon'
 
-import { IAppInputProps } from './internals/types'
+import { AppInputProps } from './internals/types'
 
-export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
+export const AppInput = forwardRef<HTMLInputElement, AppInputProps>(
   (
     {
       name,
@@ -23,7 +23,7 @@ export const AppInput = forwardRef<HTMLInputElement, IAppInputProps>(
       showClearButton = false,
       prefixSlot = undefined,
       loading = false
-    }: IAppInputProps,
+    }: AppInputProps,
     ref: ForwardedRef<HTMLInputElement>
   ) => {
     const { t } = useI18n()

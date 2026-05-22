@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Rnd } from 'react-rnd'
 
 import { CALL_MODAL_INITIAL_SIZE } from '../../call-modal/constants.ts'
-import type { IModalOptions } from '../../call.types.ts'
+import type { ModalOptions } from '../../call.types.ts'
 
 import { CallModalBody } from './components/CallModalBody/CallModalBody'
 
@@ -35,7 +35,7 @@ export const CallModal = () => {
     setModalPositionY(initialPosition.y)
   }, [showCallModal])
 
-  const setModalOptions = ({ width, height, x, y }: IModalOptions) => {
+  const setModalOptions = ({ width, height, x, y }: ModalOptions) => {
     setModalWidth(width)
     setModalHeight(height)
     setModalPositionX(x)

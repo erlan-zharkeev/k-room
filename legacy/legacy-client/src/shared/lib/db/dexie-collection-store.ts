@@ -3,7 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
 
-import { ICollectionMergeManyOptions, IndexableType, MutableType } from 'src/shared/lib/db/internals/types'
+import { CollectionMergeManyOptions, Indexable, Mutable } from 'src/shared/lib/db/internals/types'
 
 import { cloneMutable } from './helpers/clone-mutable'
 
@@ -69,7 +69,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
 
   const mergeMany = async <Incoming extends { id: ItemId }>(
     data: readonly Incoming[],
-    options: ICollectionMergeManyOptions<Item, Incoming>
+    options: CollectionMergeManyOptions<Item, Incoming>
   ) => {
     const { merge, removeMissing = false } = options
 
@@ -114,7 +114,7 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
     })
   }
 
-  const mutate = async (id: ItemId, mutator: (draft: MutableType<Item>) => void) => {
+  const mutate = async (id: ItemId, mutator: (draft: Mutable<Item>) => void) => {
     await transaction('rw', async () => {
       const current = await get(id)
       if (!current) return
@@ -134,19 +134,19 @@ export const dexieCollectionStore = <T extends { id: string | number }>(table: T
 
   const setByPath = async (id: ItemId, path: string, value: unknown) => {
     await mutate(id, (draft) => {
-      set(draft as unknown as IndexableType, path, value)
+      set(draft as unknown as Indexable, path, value)
     })
   }
 
   const unsetByPath = async (id: ItemId, path: string) => {
     await mutate(id, (draft) => {
-      unset(draft as unknown as IndexableType, path)
+      unset(draft as unknown as Indexable, path)
     })
   }
 
   const patchByPath = async (id: ItemId, patch: Record<string, unknown>) => {
     await mutate(id, (draft) => {
-      const target = draft as unknown as IndexableType
+      const target = draft as unknown as Indexable
 
       for (const [path, value] of Object.entries(patch)) {
         set(target, path, value)

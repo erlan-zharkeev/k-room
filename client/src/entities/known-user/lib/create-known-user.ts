@@ -1,6 +1,6 @@
-import type { KnownUserType } from 'global-shared'
+import type { KnownUser } from 'global-shared'
 
-import type { KnownUserRecordType } from 'src/shared/lib'
+import type { KnownUserRecord } from 'src/shared/lib'
 
 export const createKnownUser = ({
   id,
@@ -8,7 +8,7 @@ export const createKnownUser = ({
   online,
   lastSeen,
   isTyping = false
-}: KnownUserType & Partial<Pick<KnownUserRecordType, 'isTyping'>>): KnownUserRecordType => ({
+}: KnownUser & Partial<Pick<KnownUserRecord, 'isTyping'>>): KnownUserRecord => ({
   id,
   nickname,
   online,

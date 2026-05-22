@@ -2,7 +2,7 @@ import './style.scss'
 
 import { ReactElement } from 'react'
 import { useSocketConnectionMonitor } from 'src/shared/api'
-import { ContentTabType } from 'src/shared/config'
+import { ContentTab } from 'src/shared/config'
 import { useSettings } from 'src/shared/preferences'
 import { useViewport } from 'src/shared/system'
 
@@ -26,7 +26,7 @@ export const Main = () => {
   const { greaterOrEqualTablet, lessThanTablet } = useViewport()
   const { selectedContentTab } = useSettings()
 
-  const contentByTab: Record<ContentTabType, ReactElement> = {
+  const contentByTab: Record<ContentTab, ReactElement> = {
     'chat-rooms': <ChatRoom />,
     calls: <ChatRoom />,
     contacts: <ChatRoom />,

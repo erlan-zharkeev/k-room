@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { IEventLoadRoomMessages, IEventRoomMessagesLoaded, SocketActionsType } from 'common'
+import { EventLoadRoomMessages, EventRoomMessagesLoaded, SocketActions } from 'common'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from './room-messages/constants.ts'
 
@@ -16,8 +16,8 @@ export const useLoadRoomMessages = () => {
   const nextBeforeCreatedAtRef = useRef<Record<string, number | undefined>>({})
   const hasMoreMessagesRef = useRef<Record<string, boolean>>({})
 
-  const loadRoomMessages = (payload: IEventLoadRoomMessages) => {
-    socket.emit<SocketActionsType>('load-room-messages', payload)
+  const loadRoomMessages = (payload: EventLoadRoomMessages) => {
+    socket.emit<SocketActions>('load-room-messages', payload)
   }
 
   const loadOlderMessages = (roomId: string) => {
@@ -38,7 +38,7 @@ export const useLoadRoomMessages = () => {
     messages,
     hasMore,
     nextBeforeCreatedAt
-  }: IEventRoomMessagesLoaded) => {
+  }: EventRoomMessagesLoaded) => {
     hasMoreMessagesRef.current[roomId] = hasMore
     nextBeforeCreatedAtRef.current[roomId] = nextBeforeCreatedAt
 
@@ -48,10 +48,10 @@ export const useLoadRoomMessages = () => {
   }
 
   useEffect(() => {
-    socket.on<SocketActionsType>('room-messages-loaded', handleRoomMessagesLoaded)
+    socket.on<SocketActions>('room-messages-loaded', handleRoomMessagesLoaded)
 
     return () => {
-      socket.off<SocketActionsType>('room-messages-loaded', handleRoomMessagesLoaded)
+      socket.off<SocketActions>('room-messages-loaded', handleRoomMessagesLoaded)
     }
   }, [])
 

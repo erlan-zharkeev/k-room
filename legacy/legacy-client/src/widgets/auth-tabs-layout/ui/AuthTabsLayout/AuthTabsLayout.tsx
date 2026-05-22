@@ -4,14 +4,14 @@ import { Link, useLocation } from 'react-router-dom'
 
 import { ROUTE_NAMES } from 'common'
 
-import { IAuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout/ui/AuthTabsLayout/types'
+import { AuthTabsLayoutProps } from 'src/widgets/auth-tabs-layout/ui/AuthTabsLayout/types'
 import { AUTH_TABS_LAYOUT_I18N } from 'src/widgets/auth-tabs-layout/i18n'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 import { useI18n } from 'src/shared/preferences'
 import { AppHeader } from 'src/shared/ui'
 
-export const AuthTabsLayout = ({ children, blockNavigation }: IAuthTabsLayoutProps) => {
+export const AuthTabsLayout = ({ children, blockNavigation }: AuthTabsLayoutProps) => {
   const location = useLocation()
   const { t } = useI18n()
   const path = location.pathname

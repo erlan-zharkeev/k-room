@@ -1,8 +1,8 @@
 import {
-  type CallFlowType,
-  type EventCallUpdatedType,
-  type EventCallsUpdatedType,
-  type CallType,
+  type CallFlow,
+  type EventCallUpdated,
+  type EventCallsUpdated,
+  type Call,
   MEDIA_AVATAR_FILENAME_PREFIX
 } from 'global-shared'
 
@@ -11,7 +11,7 @@ import { UserModel } from '../user/user.model'
 
 import { CallModel } from './calls.model'
 
-const resolveFlowType = (answered: boolean, isIncoming: boolean): CallFlowType => {
+const resolveFlowType = (answered: boolean, isIncoming: boolean): CallFlow => {
   if (answered) {
     return isIncoming ? 'incoming' : 'outgoing'
   }
@@ -19,7 +19,7 @@ const resolveFlowType = (answered: boolean, isIncoming: boolean): CallFlowType =
   return isIncoming ? 'missed' : 'not-answered'
 }
 
-export const transformCallForUser = async (userId: string, callId: string): Promise<CallType | null> => {
+export const transformCallForUser = async (userId: string, callId: string): Promise<Call | null> => {
   const call = await CallModel.findById(callId).lean()
 
   if (!call) {
@@ -66,7 +66,7 @@ export const emitCallsToUser = async (userId: string) => {
   const transformedCalls = await Promise.all(calls.map(async (call) => transformCallForUser(userId, String(call._id))))
   const payload = transformedCalls.filter(
     (call): call is NonNullable<typeof call> => call !== null
-  ) as EventCallsUpdatedType
+  ) as EventCallsUpdated
   emitToUsers([userId], 'calls-data-loaded', payload)
 }
 
@@ -79,7 +79,7 @@ export const emitCallDataToInterlocutors = async (interlocutors: string[], callI
         return
       }
 
-      const payload: EventCallUpdatedType = {
+      const payload: EventCallUpdated = {
         ...transformedCall,
         setId
       }

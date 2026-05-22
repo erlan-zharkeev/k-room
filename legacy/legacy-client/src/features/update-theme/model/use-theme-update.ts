@@ -1,10 +1,10 @@
-import { ThemeType } from 'src/shared/config'
+import { Theme } from 'src/shared/config'
 import { setThemeToDom, useSettings } from 'src/shared/preferences'
 
 export const useThemeUpdate = () => {
   const settings = useSettings()
 
-  const updateThemeByName = (value: ThemeType) => {
+  const updateThemeByName = (value: Theme) => {
     settings.shallowUpdate({ theme: value })
     setThemeToDom(value)
   }

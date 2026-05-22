@@ -1,16 +1,16 @@
-import { IBackendResponse, ReqStatusType } from 'common'
+import { BackendResponse, ReqStatus } from 'common'
 
-export interface IDoRequestOpts<R> {
+export interface DoRequestOpts<R> {
   contentType?: string
   responseType?: R
 }
 
-export type ApiErrorType = Error & {
+export type ApiError = Error & {
   type: 'api-error'
   message: string
-  status?: ReqStatusType
+  status?: ReqStatus
   silent: boolean
-  payload: IBackendResponse<unknown> | null
+  payload: BackendResponse<unknown> | null
 }
 
 export const createApiError = ({
@@ -20,10 +20,10 @@ export const createApiError = ({
   payload = null
 }: {
   message: string
-  status?: ReqStatusType
+  status?: ReqStatus
   silent?: boolean
-  payload?: IBackendResponse<unknown> | null
-}): ApiErrorType =>
+  payload?: BackendResponse<unknown> | null
+}): ApiError =>
   Object.assign(new Error(message), {
     type: 'api-error' as const,
     status,
@@ -31,12 +31,11 @@ export const createApiError = ({
     payload
   })
 
-export const isApiError = (error: unknown): error is ApiErrorType => {
+export const isApiError = (error: unknown): error is ApiError => {
   if (!error || typeof error !== 'object') return false
   const candidate = error as Record<string, unknown>
   return candidate.type === 'api-error' && typeof candidate.message === 'string'
 }
 
-export const isHandledError = (error: unknown): error is ApiErrorType | Error =>
-  isApiError(error) || error instanceof Error
+export const isHandledError = (error: unknown): error is ApiError | Error => isApiError(error) || error instanceof Error
 export const getHandledErrorMessage = (error: unknown) => (isHandledError(error) ? error.message : 'Unknown error')

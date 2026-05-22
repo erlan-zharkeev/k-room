@@ -1,58 +1,58 @@
-import type { LocalizedTextType } from 'global-shared'
+import type { LocalizedText } from 'global-shared'
 
-import type { ContactRecordType } from 'src/shared/lib'
+import type { ContactRecord } from 'src/shared/lib'
 
-export interface IContactsSearchProps {
+export interface ContactsSearchProps {
   loadingContactIds: Set<string>
 }
 
-export interface IContactsSearchEmits {
+export interface ContactsSearchEmits {
   add: [id: string]
 }
 
-export interface IContactsSearchBadgeData {
+export interface ContactsSearchBadgeData {
   color: string
-  label: LocalizedTextType
+  label: LocalizedText
   visible: boolean
 }
 
-export interface IContactListProps {
-  contactList: ContactRecordType[]
+export interface ContactListProps {
+  contactList: ContactRecord[]
   creatingChatContactIds: Set<string>
-  getContactActivity: (contact: ContactRecordType) => string
+  getContactActivity: (contact: ContactRecord) => string
   getPersonalChatRoomId: (id: string) => string | undefined
-  getContactStatus: (contact: ContactRecordType) => string
+  getContactStatus: (contact: ContactRecord) => string
   loadingContactIds: Set<string>
 }
 
-export interface IContactListEmits {
+export interface ContactListEmits {
   'create-chat': [id: string]
   delete: [id: string]
   'go-to-chat': [id?: string]
-  'update-interaction': [id: string, interaction: ContactRecordType['interactionType']]
+  'update-interaction': [id: string, interaction: ContactRecord['interactionType']]
 }
 
-export interface IContactContextMenuProps {
-  contact: ContactRecordType
+export interface ContactContextMenuProps {
+  contact: ContactRecord
 }
 
-export interface IContactContextMenuEmits {
+export interface ContactContextMenuEmits {
   delete: [id: string]
-  'update-interaction': [id: string, interaction: ContactRecordType['interactionType']]
+  'update-interaction': [id: string, interaction: ContactRecord['interactionType']]
 }
 
-export interface IContactContextMenuOption {
+export interface ContactContextMenuOption {
   label: string
   value: 'accept' | 'block' | 'delete' | 'unblock'
   color?: string
 }
 
-export interface IContactContextMenuEmitFn {
+export interface ContactContextMenuEmitFn {
   (event: 'delete', id: string): void
-  (event: 'update-interaction', id: string, interaction: ContactRecordType['interactionType']): void
+  (event: 'update-interaction', id: string, interaction: ContactRecord['interactionType']): void
 }
 
-export interface IContactsDeleteDialogEmits {
+export interface ContactsDeleteDialogEmits {
   cancel: []
   confirm: []
 }

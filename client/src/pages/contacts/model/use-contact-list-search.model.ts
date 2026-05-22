@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 
 import { useContact } from 'src/entities/contact'
-import type { ContactRecordType } from 'src/shared/lib'
+import type { ContactRecord } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 
@@ -11,7 +11,7 @@ export const useContactListSearch = () => {
   const { contacts } = useContact()
   const { searchQuery, hasSearchQuery } = useContactSearchQuery()
   const normalizedSearchQuery = computed(() => searchQuery.value.toLowerCase())
-  const matchesSearchQuery = ({ nickname }: ContactRecordType) => {
+  const matchesSearchQuery = ({ nickname }: ContactRecord) => {
     const query = normalizedSearchQuery.value
 
     return !query || nickname.toLowerCase().includes(query)

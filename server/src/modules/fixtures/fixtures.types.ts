@@ -1,6 +1,6 @@
-import type { InteractionType } from 'global-shared'
+import type { Interaction } from 'global-shared'
 
-export interface IFixtureUserData {
+export interface FixtureUserData {
   id: string
   email: string
   nickname: string
@@ -8,8 +8,8 @@ export interface IFixtureUserData {
   avatarPath: string
 }
 
-export interface IFixtureContactData {
+export interface FixtureContactData {
   nickname: string
-  interaction: InteractionType
-  reverseInteraction?: InteractionType
+  interaction: Interaction
+  reverseInteraction?: Interaction
 }
