@@ -2,8 +2,8 @@ import type { VirtualItem } from '@tanstack/vue-virtual'
 import type { ChatKindType } from 'global-shared'
 import type { RouteLocationRaw } from 'vue-router'
 
-import type { FChatRoomType } from 'src/shared/lib'
-import type { DbMessageType } from 'src/shared/lib'
+import type { ChatRoomRecordType } from 'src/shared/lib'
+import type { MessageRecordType } from 'src/shared/lib'
 
 export interface IChatRoomNavigationItem {
   id: string
@@ -48,22 +48,22 @@ export type CreateChatRoomDialogEmitType = {
 }
 
 export interface IChatRoomMessagesProps {
-  room: FChatRoomType
+  room: ChatRoomRecordType
   isPrivateRoom: boolean
 }
 
 export interface IChatRoomHeaderProps {
-  room: FChatRoomType
+  room: ChatRoomRecordType
   isPrivateRoom: boolean
 }
 
 export interface IChatRoomFooterProps {
-  room: FChatRoomType
+  room: ChatRoomRecordType
 }
 
 export interface IMessageBodyProps {
   isPrivateRoom: boolean
-  message: DbMessageType
+  message: MessageRecordType
 }
 
 export interface IDateSeparatorProps {
@@ -88,7 +88,7 @@ export interface IMessageListMessageItem {
 }
 
 export interface IMessageVirtualListMessageItem extends IMessageListMessageItem {
-  message: DbMessageType
+  message: MessageRecordType
 }
 
 export type MessageListItemType = IMessageListLoadOlderItem | IMessageListDateSeparatorItem | IMessageListMessageItem

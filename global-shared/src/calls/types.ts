@@ -1,10 +1,10 @@
-import type { IStreamSettings } from '../shared/types'
+import type { StreamSettingsType } from '../shared/types'
 
 export type CallStatusType = 'calling' | 'in-progress' | 'finished'
 
 export type CallFlowType = 'incoming' | 'outgoing' | 'missed' | 'not-answered'
 
-export interface ICall {
+export interface CallType {
   id: string
   calledAt?: number
   authorId: string
@@ -18,11 +18,11 @@ export interface ICall {
   status?: CallStatusType
   flow: CallFlowType
   video: boolean
-  interlocutorSettings?: IStreamSettings
+  interlocutorSettings?: StreamSettingsType
   setId?: boolean
 }
 
-export interface IDBCall {
+export interface CallDocumentType {
   _id: string
   calledAt: number
   startedAt: number
@@ -33,4 +33,4 @@ export interface IDBCall {
   video: boolean
 }
 
-export type DbCallSchemaType = IDBCall
+export type CallSchemaType = CallDocumentType

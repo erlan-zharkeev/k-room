@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
+import { useKnownUser } from 'src/entities/known-user'
 import { useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
@@ -17,13 +18,14 @@ export const useLogout = () => {
   const { doHttpRequest } = useHttp()
   const { reset: resetChatRoom } = useChatRoom()
   const { reset: resetContact } = useContact()
+  const { reset: resetKnownUser } = useKnownUser()
   const { reset: resetMedia } = useMedia()
   const { reset: resetMessage } = useMessage()
   const { reset: resetUser } = useUser()
   const isLogoutLoading = ref(false)
 
   const resetClientData = () =>
-    Promise.all([resetChatRoom(), resetContact(), resetMedia(), resetMessage(), resetUser()])
+    Promise.all([resetChatRoom(), resetContact(), resetKnownUser(), resetMedia(), resetMessage(), resetUser()])
 
   const logout = async () => {
     isLogoutLoading.value = true

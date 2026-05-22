@@ -4,13 +4,13 @@ import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
-import type { FChatRoomType } from 'src/shared/lib'
+import type { ChatRoomRecordType } from 'src/shared/lib'
 
 import { MESSAGE_READ_VISIBILITY_RATIO } from '../config/constants'
 import type { MessageListItemType } from '../config/types'
 
 export const useChatRoomMessageReadStatus = (
-  room: Ref<FChatRoomType>,
+  room: Ref<ChatRoomRecordType>,
   messageList: ComputedRef<MessageListItemType[]>
 ) => {
   const pendingReadMessageIds = new Set<string>()

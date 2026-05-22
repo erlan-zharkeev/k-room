@@ -2,6 +2,7 @@ import { watchEffect } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
+import { useKnownUser } from 'src/entities/known-user'
 import { useSyncMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { getAvatarId } from 'src/shared/lib'
@@ -9,6 +10,7 @@ import { getAvatarId } from 'src/shared/lib'
 export const useSyncAvatars = () => {
   const { chatRooms } = useChatRoom()
   const { contacts } = useContact()
+  const { knownUsers } = useKnownUser()
   const { sync } = useSyncMedia()
   const { user } = useUser()
 
@@ -20,6 +22,10 @@ export const useSyncAvatars = () => {
     }
 
     contacts.value.forEach(({ id }) => {
+      avatarIds.add(getAvatarId(id))
+    })
+
+    knownUsers.value.forEach(({ id }) => {
       avatarIds.add(getAvatarId(id))
     })
 

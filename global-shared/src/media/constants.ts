@@ -1,4 +1,4 @@
-import type { IMediaValidationOptions, MediaBucketNameType, MediaKindType, MediaUploadType } from './types'
+import type { MediaValidationOptionsType, MediaBucketNameType, MediaKindType, MediaUploadType } from './types'
 
 export const MEDIA_MB_IN_BYTES = 1024 * 1024
 export const MEDIA_AVATAR_FILENAME_PREFIX = 'avatar.'
@@ -68,4 +68,4 @@ export const MEDIA_VALIDATION_OPTIONS_MAP = {
     maxMb: 50,
     supportedKindMediaType: 'video'
   }
-} as const satisfies Record<MediaBucketNameType, IMediaValidationOptions>
+} as const satisfies Record<MediaBucketNameType, MediaValidationOptionsType>

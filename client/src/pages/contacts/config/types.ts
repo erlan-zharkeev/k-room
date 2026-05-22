@@ -1,6 +1,6 @@
 import type { LocalizedTextType } from 'global-shared'
 
-import type { DbUserContactType } from 'src/shared/lib'
+import type { ContactRecordType } from 'src/shared/lib'
 
 export interface IContactsSearchProps {
   loadingContactIds: Set<string>
@@ -17,11 +17,11 @@ export interface IContactsSearchBadgeData {
 }
 
 export interface IContactListProps {
-  contactList: DbUserContactType[]
+  contactList: ContactRecordType[]
   creatingChatContactIds: Set<string>
-  getContactActivity: (contact: DbUserContactType) => string
+  getContactActivity: (contact: ContactRecordType) => string
   getPersonalChatRoomId: (id: string) => string | undefined
-  getContactStatus: (contact: DbUserContactType) => string
+  getContactStatus: (contact: ContactRecordType) => string
   loadingContactIds: Set<string>
 }
 
@@ -29,16 +29,16 @@ export interface IContactListEmits {
   'create-chat': [id: string]
   delete: [id: string]
   'go-to-chat': [id?: string]
-  'update-interaction': [id: string, interaction: DbUserContactType['interactionType']]
+  'update-interaction': [id: string, interaction: ContactRecordType['interactionType']]
 }
 
 export interface IContactContextMenuProps {
-  contact: DbUserContactType
+  contact: ContactRecordType
 }
 
 export interface IContactContextMenuEmits {
   delete: [id: string]
-  'update-interaction': [id: string, interaction: DbUserContactType['interactionType']]
+  'update-interaction': [id: string, interaction: ContactRecordType['interactionType']]
 }
 
 export interface IContactContextMenuOption {
@@ -49,7 +49,7 @@ export interface IContactContextMenuOption {
 
 export interface IContactContextMenuEmitFn {
   (event: 'delete', id: string): void
-  (event: 'update-interaction', id: string, interaction: DbUserContactType['interactionType']): void
+  (event: 'update-interaction', id: string, interaction: ContactRecordType['interactionType']): void
 }
 
 export interface IContactsDeleteDialogEmits {
