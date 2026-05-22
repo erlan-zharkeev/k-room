@@ -1,12 +1,12 @@
 import {
   CHAT_KIND,
-  type IChatRoomSchema,
+  type ChatRoomSchemaType,
   type IEventChatRoomDeleted,
   type IEventChatRoomLeft,
   type IEventDeleteChatRoom,
   type IEventLeaveChatRoom,
-  type IFrontendRoomMemberContact,
-  type IDBMessage,
+  type KnownUserType,
+  type MessageDocumentType,
   type IEventGetRoom,
   type IEventPinnedChatRoomsUpdated,
   type IEventUpdatePinnedChatRoom,
@@ -24,9 +24,9 @@ import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
+import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
 import type { IChatRoomSchemaWithObjectId, ITransformRoomForUserParams } from './chat-rooms.types'
-import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
@@ -81,10 +81,10 @@ const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[])
   return [...new Set([...orderedIds, ...currentIds])]
 }
 
-export const resolveRoomMemberContacts = async (
+export const resolveKnownUsers = async (
   userIds: string[],
   presenceService: PresenceService
-): Promise<IFrontendRoomMemberContact[]> => {
+): Promise<KnownUserType[]> => {
   if (!userIds.length) return []
 
   const [users, onlineMap] = await Promise.all([
@@ -109,17 +109,13 @@ export const resolveRoomMemberContacts = async (
   })
 }
 
-const emitRoomMemberContactsToUser = async (
-  userId: string,
-  roomUserIds: string[],
-  presenceService: PresenceService
-) => {
-  const roomMembers = await resolveRoomMemberContacts(
+const emitKnownUsersToUser = async (userId: string, roomUserIds: string[], presenceService: PresenceService) => {
+  const knownUsers = await resolveKnownUsers(
     roomUserIds.filter((id) => id !== userId),
     presenceService
   )
 
-  emitToUsers([userId], 'room-member-contacts-updated', roomMembers)
+  emitToUsers([userId], 'known-users-updated', knownUsers)
 }
 
 export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: IEventUpdatePinnedChatRoom) => {
@@ -213,7 +209,7 @@ export const transformRoomForUser = async ({
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([
     countUnreadRoomMessages(userId, messages),
-    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<IDBMessage>() : null
+    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocumentType>() : null
   ])
 
   return {
@@ -234,7 +230,7 @@ export const transformRoomForUser = async ({
 
 export const emitRoomDataToUsers = async (
   userIds: string[],
-  room: IChatRoomSchema,
+  room: ChatRoomSchemaType,
   presenceService: PresenceService
 ) => {
   await Promise.all(
@@ -251,7 +247,7 @@ export const emitRoomDataToUsers = async (
         pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
       })
 
-      await emitRoomMemberContactsToUser(userId, room.users, presenceService)
+      await emitKnownUsersToUser(userId, room.users, presenceService)
       emitToUsers([userId], 'room-data-updated', transformedRoom)
     })
   )
@@ -323,7 +319,7 @@ export const leaveChatRoom = async (
 
 export const emitNewRoomToUsers = async (
   userIds: string[],
-  room: IChatRoomSchema,
+  room: ChatRoomSchemaType,
   presenceService: PresenceService
 ) => {
   await Promise.all(
@@ -340,7 +336,7 @@ export const emitNewRoomToUsers = async (
         pinnedChatRoomIds: userData.personal.pinnedChatRoomIds ?? []
       })
 
-      await emitRoomMemberContactsToUser(userId, room.users, presenceService)
+      await emitKnownUsersToUser(userId, room.users, presenceService)
       emitToUsers([userId], 'new-room-added', transformedRoom)
     })
   )

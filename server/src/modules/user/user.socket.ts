@@ -1,11 +1,11 @@
-import type { EventGetContactsType, EventGetRoomsType, IFrontendContact, SocketActionsType } from 'global-shared'
+import type { ContactType, EventGetContactsType, EventGetRoomsType, SocketActionsType } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstanceType } from 'src/shared/types/socket'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
-import { resolveRoomMemberContacts, transformRoomForUser } from '../chat-rooms/chat-rooms.service'
+import { resolveKnownUsers, transformRoomForUser } from '../chat-rooms/chat-rooms.service'
 
 import type { IUpdateLanguagePayload } from './types'
 import { USER_SOCKET_I18N } from './user.i18n'
@@ -43,19 +43,17 @@ export const registerUserSocketHandlers = (socket: SocketInstanceType, presenceS
         const { userId } = socket.data
         const data = await UserModel.findById(userId).lean()
         const contacts = data?.personal.contacts
-        const contactResultData: IFrontendContact[] = contacts
+        const contactResultData: ContactType[] = contacts
           ? await transformUserToFrontendContact(contacts, presenceService)
           : []
         const roomIds = data?.personal.chatRooms ?? []
         const pinnedChatRoomIds = data?.personal.pinnedChatRoomIds ?? []
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-        const roomMemberIds = [
-          ...new Set(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))
-        ]
-        const roomMembers = await resolveRoomMemberContacts(roomMemberIds, presenceService)
+        const knownUserIds = [...new Set(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))]
+        const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)
         const contactsPayload: EventGetContactsType = {
           contacts: contactResultData,
-          roomMembers
+          knownUsers
         }
         const roomsResultData: EventGetRoomsType = await Promise.all(
           rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds }))

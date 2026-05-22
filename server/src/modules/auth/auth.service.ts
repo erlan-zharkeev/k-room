@@ -46,7 +46,7 @@ export class AuthService {
   async login(payload: IAuthLoginPayload, request: Request, response: Response): Promise<LoginResponseType> {
     const ip = getRequestIp(request)
 
-    await this.securityService.assertLoginAllowed(payload.captchaToken, ip, payload.login)
+    await this.securityService.assertLoginAllowed(ip, payload.login, payload.captchaToken)
 
     const user = await this.userService.findByLogin(payload.login)
 
@@ -74,7 +74,7 @@ export class AuthService {
   async registration(payload: IAuthRegistrationPayload, request: Request): Promise<ISendConfirmationLinkResponse> {
     const ip = getRequestIp(request)
 
-    await this.securityService.assertRegistrationAllowed(payload.captchaToken, ip)
+    await this.securityService.assertRegistrationAllowed(ip, payload.captchaToken)
     await this.securityService.trackRegistrationAttempt(ip)
 
     const userExistState = await this.userService.isUserExist({
@@ -153,7 +153,7 @@ export class AuthService {
       }
     }
 
-    await this.securityService.assertSendConfirmationLinkAllowed(payload.captchaToken, email, ip)
+    await this.securityService.assertSendConfirmationLinkAllowed(email, ip, payload.captchaToken)
     await this.securityService.trackSendConfirmationLinkAttempt(ip, email)
 
     const user = await this.userService.findByEmail(email)
