@@ -15,7 +15,9 @@ export const useToastProvider = () => {
     return (enabled && general.toast) || !isAuthorized.value
   })
 
-  const toasts = computed(() => (isToastVisible.value ? rawToasts.value : []))
+  const toasts = computed(() =>
+    isToastVisible.value ? rawToasts.value : rawToasts.value.filter(({ isCritical }) => isCritical)
+  )
 
   return { toasts }
 }
