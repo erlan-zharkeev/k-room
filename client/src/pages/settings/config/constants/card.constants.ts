@@ -5,5 +5,6 @@ export const CARD_DEFAULT_PROPS = {
   buttonAriaLabel: '',
   buttonDisabled: false,
   buttonLoading: false,
+  hasWarning: false,
   onButtonClick: undefined
 } satisfies Partial<CardProps>

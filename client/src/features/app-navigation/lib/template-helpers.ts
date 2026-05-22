@@ -9,9 +9,9 @@ export const getBadgeValue = (
   id: string,
   unreadMessagesQuantity?: number,
   invitationsQuantity?: number,
-  settingsWarningBadgeValue?: string
+  hasSettingsWarning?: boolean
 ) => {
   if (id === 'chat-rooms') return unreadMessagesQuantity || undefined
   if (id === 'contacts') return invitationsQuantity || undefined
-  if (id === 'settings') return settingsWarningBadgeValue
+  if (id === 'settings') return hasSettingsWarning ? '!' : undefined
 }

@@ -15,14 +15,12 @@ export const useContact = () => {
     () => contacts.value.filter(({ interactionType }) => interactionType === 'invite-received').length
   )
 
-  const isContactExist = hasById
-
   return {
     contacts,
     contactById,
     acceptedContacts,
     invitationsQuantity,
-    isContactExist,
+    isContactExist: hasById,
     get,
     put,
     bulkPut,
