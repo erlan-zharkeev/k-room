@@ -1,5 +1,5 @@
 import { differenceInMilliseconds, format, intlFormat, intlFormatDistance } from 'date-fns'
-import { normalizeTimestamp, type AppLanguage } from 'global-shared'
+import { normalizeTimestamp, SECOND_IN_MS, type AppLanguage } from 'global-shared'
 
 import {
   DATE_PATTERN_BY_DATE_TIME_FORMAT,
@@ -65,5 +65,5 @@ export const formatLocalizedRelativeTime = (value: number | string, language: Ap
     numeric: 'auto'
   })
 
-export const getNextRequestIntervalSeconds = (timestampMs: number) =>
-  differenceInMilliseconds(timestampMs, Date.now()) / 1000
+export const getNextRequestIntervalSec = (timestampMs: number) =>
+  differenceInMilliseconds(timestampMs, Date.now()) / SECOND_IN_MS

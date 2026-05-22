@@ -1,8 +1,8 @@
 import { useBreakpoints } from '@vueuse/core'
-import { MEDIA_MB_IN_BYTES } from 'global-shared'
+import { MB_IN_BYTES } from 'global-shared'
 import { isString } from 'lodash'
 
-import { CONSOLE_COLOR_MAP, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
+import { CONSOLE_COLOR_MAP, GB, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
 import { BROWSER_I18N } from './i18n'
 import type { ClientPlatform } from './types'
 import type { ImageToBase64Params } from './types'
@@ -36,7 +36,7 @@ export const imageToBase64 = ({
 
   if (resolutionNotAllowed) warnings.push(t(BROWSER_I18N.imageFormatNotAllowed))
 
-  const isGreaterThanAllowed = image.size / 1024 / 1024 > maxImageSizeInMb
+  const isGreaterThanAllowed = image.size / MB_IN_BYTES > maxImageSizeInMb
 
   if (isGreaterThanAllowed) {
     warnings.push(t(BROWSER_I18N.imageSizeMustBeLess)(maxImageSizeInMb))
@@ -68,14 +68,12 @@ export const revokeObjectUrls = (urls: Iterable<string | undefined>) => {
   Array.from(urls).forEach(revokeObjectUrl)
 }
 
-const GB = MEDIA_MB_IN_BYTES * 1024
-
 export const formatBytes = (bytes: number): string => {
   if (bytes >= GB) {
     return `${(bytes / GB).toFixed(2)} GB`
   }
 
-  return `${Math.round(bytes / MEDIA_MB_IN_BYTES)} MB`
+  return `${Math.round(bytes / MB_IN_BYTES)} MB`
 }
 
 export const useScreen = () => {

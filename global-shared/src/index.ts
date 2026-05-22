@@ -57,7 +57,6 @@ export {
   MEDIA_IMAGE_FILENAME_PREFIX,
   MEDIA_KIND_ACCEPT_MAP,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
-  MEDIA_MB_IN_BYTES,
   MEDIA_UPLOAD_TYPE_LABEL_MAP,
   MEDIA_VALIDATION_OPTIONS_MAP
 } from './media/constants'
@@ -114,7 +113,19 @@ export type {
   SecurityAction
 } from './security/types'
 
-export { firebaseProviders, providers } from './shared/constants'
+export {
+  DAY_IN_MS,
+  DAY_IN_SEC,
+  firebaseProviders,
+  HOUR_IN_MS,
+  HOUR_IN_SEC,
+  MB_IN_BYTES,
+  MINUTE_IN_MS,
+  MINUTE_IN_SEC,
+  providers,
+  SECOND_IN_MS,
+  WEEK_IN_MS
+} from './shared/constants'
 export { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './socket/constants'
 export { formatAppName } from './shared/lib/format-app-name'
 export { isUnknownObject } from './shared/lib/type-guards'

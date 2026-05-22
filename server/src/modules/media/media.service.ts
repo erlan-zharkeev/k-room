@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 
 import { Injectable } from '@nestjs/common'
 import fileTypeDep from 'file-type'
-import { MEDIA_MB_IN_BYTES, REQ_STATUS } from 'global-shared'
+import { MB_IN_BYTES, REQ_STATUS } from 'global-shared'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 import mongoose from 'mongoose'
@@ -92,7 +92,7 @@ const getRequiredBucket = (bucketName: MediaBucketName) => {
 
 const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName) => {
   const { maxMb, supportedKindMediaType } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
-  const maxBytes = maxMb * MEDIA_MB_IN_BYTES
+  const maxBytes = maxMb * MB_IN_BYTES
 
   if (fileData.metadata.size > maxBytes) {
     throw new AppError(REQ_STATUS.badRequest, VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge)
@@ -105,7 +105,7 @@ const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName) =
 
 const validateRawFileSize = (size: number, bucketName: MediaBucketName) => {
   const { maxMb } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
-  const maxBytes = maxMb * MEDIA_MB_IN_BYTES
+  const maxBytes = maxMb * MB_IN_BYTES
 
   if (size > maxBytes) {
     throw new AppError(REQ_STATUS.badRequest, VALIDATE_MEDIA_FILE_I18N.fileIsTooLarge)

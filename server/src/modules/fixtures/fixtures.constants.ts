@@ -1,11 +1,9 @@
-import { MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
+import { DAY_IN_MS, MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
 
 import { FIXTURE_MAX_LENGTH_NICKNAMES } from '../user/user.constants'
 
 import type { FixtureContactData } from './fixtures.types'
 
-export const DAY_IN_MS = 1000 * 60 * 60 * 24
-export const MINUTE_IN_MS = 1000 * 60
 export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 1, 1, 8, 0, 0)
 export const DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-erlan-tolik'
 export const FRONTEND_CORE_FIXTURE_GROUP_KEY = 'frontend-core'

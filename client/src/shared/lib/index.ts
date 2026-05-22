@@ -3,7 +3,7 @@ export {
   formatLocalizedDateTime,
   formatLocalizedRelativeTime,
   formatLocalizedTime,
-  getNextRequestIntervalSeconds
+  getNextRequestIntervalSec
 } from './time/time'
 export {
   DATE_PATTERN_BY_DATE_TIME_FORMAT,
