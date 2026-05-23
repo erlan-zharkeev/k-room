@@ -9,9 +9,10 @@ import {
   type EventLeaveChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
-  MEDIA_AVATAR_FILENAME_PREFIX,
   REQ_STATUS,
-  type SocketActions
+  buildAvatarId,
+  type SocketActions,
+  isRoomGroup
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
@@ -66,8 +67,8 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presence
         const room = new ChatRoomModel(roomData)
         const roomId = String(room._id)
 
-        if (roomData.chatKind === CHAT_KIND.GROUP && avatarFile?.fileBuffer) {
-          await uploadBufferToBucket(avatarFile.fileBuffer, `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}`, 'avatar', {
+        if (isRoomGroup(roomData) && avatarFile?.fileBuffer) {
+          await uploadBufferToBucket(avatarFile.fileBuffer, buildAvatarId(roomId), 'avatar', {
             compression: 'avatar',
             overwrite: true
           })

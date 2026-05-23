@@ -5,7 +5,11 @@ import {
   type EventDeleteContact,
   type EventSaveContact,
   type EventUpdateInteraction,
-  type Interaction
+  type Interaction,
+  isAcceptedContactInteraction,
+  isBlockedContactInteraction,
+  isInvitedContactInteraction,
+  isInviteReceivedContactInteraction
 } from 'global-shared'
 import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -31,7 +35,7 @@ export const useContactsPage = () => {
   const creatingChatContactIds = reactive(new Set<string>())
 
   const getContactActivity = ({ interactionType, lastSeen, online }: ContactRecord) => {
-    if (interactionType !== 'invite-accepted') return ''
+    if (!isAcceptedContactInteraction(interactionType)) return ''
     if (online) return t(CONTACTS_PAGE_I18N.online)
 
     const normalized = normalizeTimestamp(lastSeen)
@@ -42,16 +46,11 @@ export const useContactsPage = () => {
   }
 
   const getContactStatus = ({ interactionType }: ContactRecord) => {
-    switch (interactionType) {
-      case 'blocked':
-        return t(CONTACTS_PAGE_I18N.blocked)
-      case 'invited':
-        return t(CONTACTS_PAGE_I18N.invited)
-      case 'invite-received':
-        return t(CONTACTS_PAGE_I18N.inviteReceived)
-      default:
-        return ''
-    }
+    if (isBlockedContactInteraction(interactionType)) return t(CONTACTS_PAGE_I18N.blocked)
+    if (isInvitedContactInteraction(interactionType)) return t(CONTACTS_PAGE_I18N.invited)
+    if (isInviteReceivedContactInteraction(interactionType)) return t(CONTACTS_PAGE_I18N.inviteReceived)
+
+    return ''
   }
 
   const getPersonalChatRoomId = (id: string) => getPersonalByContactId(id)?.id

@@ -1,4 +1,3 @@
 export { getRoomDisplayedLastMessageId } from './lib/get-room-displayed-last-message-id'
-export { isRoomGroup } from './lib/is-room-group'
-export { isRoomPrivate } from './lib/is-room-private'
+export { isRoomAdmin, isRoomGroup, isRoomPrivate } from 'global-shared'
 export { useChatRoom } from './model/use-chat-room.model'

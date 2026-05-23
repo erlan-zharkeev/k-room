@@ -1,16 +1,19 @@
-import type {
-  EventInviteReceived,
-  EventContactAddSuccess,
-  EventDeleteContactSuccess,
-  EventGetSearchedContact,
-  EventUpdateContactInteractionSuccess,
-  Contact,
-  Interaction,
-  SocketActions
-} from 'global-shared'
 import {
+  CONTACT_INTERACTION,
   CONTACT_SEARCH_QUERY_MAX_LENGTH,
   CONTACT_SEARCH_RESULT_LIMIT,
+  type Contact,
+  type EventContactAddSuccess,
+  type EventDeleteContactSuccess,
+  type EventGetSearchedContact,
+  type EventInviteReceived,
+  type EventUpdateContactInteractionSuccess,
+  type Interaction,
+  type SocketActions,
+  isAcceptedContactInteraction,
+  isBlockedContactInteraction,
+  isDefaultContactInteraction,
+  isPendingContactInteraction,
   normalizeNickname,
   REQ_STATUS
 } from 'global-shared'
@@ -90,7 +93,7 @@ export const searchContacts = async (
         transformUserToContact(
           user,
           (contactMap instanceof Map ? contactMap.get(String(user._id)) : contactMap[String(user._id)])?.interaction ??
-            'default',
+            CONTACT_INTERACTION.DEFAULT,
           onlineMap.get(String(user._id)) ?? false
         )
       )
@@ -100,11 +103,11 @@ export const searchContacts = async (
           return a.nickname.localeCompare(b.nickname)
         }
 
-        if (a.interactionType === 'invite-accepted') {
+        if (isAcceptedContactInteraction(a.interactionType)) {
           return 1
         }
 
-        if (b.interactionType === 'invite-accepted') {
+        if (isAcceptedContactInteraction(b.interactionType)) {
           return -1
         }
 
@@ -143,7 +146,7 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
       $set: {
         [`personal.contacts.${interlocutorId}`]: {
           id: interlocutorId,
-          interaction: 'default',
+          interaction: CONTACT_INTERACTION.DEFAULT,
           updatedAt: Date.now()
         }
       }
@@ -153,7 +156,7 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
   return {
     contactData: transformUserToContact(
       contactCandidate,
-      'default',
+      CONTACT_INTERACTION.DEFAULT,
       await presenceService.isUserOnline(contactCandidate._id)
     )
   } satisfies EventContactAddSuccess
@@ -238,17 +241,17 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
 
   const deletingUserInteractionType = deletingUserContact.interaction
 
-  if (deletingUserInteractionType === 'invite-received' || deletingUserInteractionType === 'invited') {
+  if (isPendingContactInteraction(deletingUserInteractionType)) {
     await deleteContactById(deletingUserId, userId, true)
   }
 
-  if (deletingUserInteractionType === 'invite-accepted') {
+  if (isAcceptedContactInteraction(deletingUserInteractionType)) {
     await UserModel.updateOne(
       { _id: deletingUserId },
-      { $set: { [`personal.contacts.${userId}.interaction`]: 'default' } }
+      { $set: { [`personal.contacts.${userId}.interaction`]: CONTACT_INTERACTION.DEFAULT } }
     )
 
-    emitContactInteractionUpdated(String(deletingContact._id), userId, 'default')
+    emitContactInteractionUpdated(String(deletingContact._id), userId, CONTACT_INTERACTION.DEFAULT)
   }
 }
 
@@ -265,11 +268,15 @@ export const updateContactInteraction = async (
     getContactInteraction(contactId, userId)
   ])
 
-  if (currentInteraction === 'blocked' && interaction !== 'default') {
+  if (isBlockedContactInteraction(currentInteraction) && !isDefaultContactInteraction(interaction)) {
     return { success: false } as const
   }
 
-  if (contactSideInteraction === 'blocked' && interaction !== 'default' && interaction !== 'blocked') {
+  if (
+    isBlockedContactInteraction(contactSideInteraction) &&
+    !isDefaultContactInteraction(interaction) &&
+    !isBlockedContactInteraction(interaction)
+  ) {
     throw new AppError(REQ_STATUS.badRequest, CONTACTS_I18N.invitationRestricted)
   }
 
@@ -284,13 +291,13 @@ export const updateContactInteraction = async (
   }
 
   switch (interaction) {
-    case 'default':
-    case 'blocked':
+    case CONTACT_INTERACTION.DEFAULT:
+    case CONTACT_INTERACTION.BLOCKED:
       await updateAuthorContactInteraction()
       break
-    case 'invited': {
+    case CONTACT_INTERACTION.INVITED: {
       const [contactData, authorData] = await Promise.all([
-        createContactInteraction(contactId, userId, 'invite-received'),
+        createContactInteraction(contactId, userId, CONTACT_INTERACTION.INVITE_RECEIVED),
         updateAuthorContactInteraction()
       ])
 
@@ -303,13 +310,13 @@ export const updateContactInteraction = async (
         nickname: authorData.public.nickname,
         online: await presenceService.isUserOnline(authorData._id),
         lastSeen: authorData.public.lastSeen,
-        interactionType: 'invite-received'
+        interactionType: CONTACT_INTERACTION.INVITE_RECEIVED
       }
 
       emitToUsers([contactData._id], 'invite-received', payload)
       break
     }
-    case 'invite-accepted':
+    case CONTACT_INTERACTION.INVITE_ACCEPTED:
       await updateAuthorContactInteraction()
       await handleUpdateContactInteraction()
       break

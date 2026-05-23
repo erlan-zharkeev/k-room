@@ -13,10 +13,15 @@ import {
   type EventPinnedChatRoomsUpdated,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
-  MEDIA_AVATAR_FILENAME_PREFIX,
+  MESSAGE_STATUS_VALUE,
   PINNED_CHAT_ROOM_LIMIT,
+  REQ_STATUS,
   USER_CHAT_ROOM_LIMIT,
-  REQ_STATUS
+  buildAvatarId,
+  isAcceptedContactInteraction,
+  isRoomAdmin,
+  isRoomGroup,
+  isRoomPrivate
 } from 'global-shared'
 import intersection from 'lodash/intersection'
 import union from 'lodash/union'
@@ -54,8 +59,10 @@ export const checkContactsExistence = async (selfId: string, contactIds: string[
     if (!user) return false
 
     const userContact = user.personal.contacts[selfId]
+    const isSelfContactAccepted = isAcceptedContactInteraction(selfContact?.interaction)
+    const isUserContactAccepted = isAcceptedContactInteraction(userContact?.interaction)
 
-    return selfContact?.interaction === 'invite-accepted' && userContact?.interaction === 'invite-accepted'
+    return isSelfContactAccepted && isUserContactAccepted
   })
 }
 
@@ -93,7 +100,7 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
     usersMetaData: {
       $elemMatch: {
         id: userId,
-        status: 'delivered'
+        status: MESSAGE_STATUS_VALUE.DELIVERED
       }
     }
   })
@@ -200,29 +207,40 @@ export const updatePinnedChatRoomOrder = async (
 export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChatRoom) => {
   const room = await ChatRoomModel.findOne({
     _id: roomId,
-    users: userId,
-    adminId: userId,
-    chatKind: CHAT_KIND.GROUP
+    users: userId
   })
-    .select('users messages')
+    .select('adminId chatKind users messages')
     .lean()
 
   if (!room) {
     return
   }
 
+  const isGroupChatRoom = isRoomGroup(room)
+  const isDirectChatRoom = isRoomPrivate(room)
+  const canDeleteGroupChatRoom = isGroupChatRoom && isRoomAdmin(room, userId)
+  const canDeleteDirectChatRoom = isDirectChatRoom
+
+  if (!canDeleteGroupChatRoom && !canDeleteDirectChatRoom) {
+    return
+  }
+
   const userIds = room.users.map(String)
   const messageIds = room.messages.map(String)
-
-  await Promise.all([
-    ChatRoomModel.deleteOne({ _id: roomId }),
-    MessageModel.deleteMany({ _id: { $in: messageIds } }),
+  const deleteChatRoomTasks: Array<Promise<unknown>> = [
+    ChatRoomModel.deleteOne({ _id: roomId }).exec(),
+    MessageModel.deleteMany({ _id: { $in: messageIds } }).exec(),
     UserModel.updateMany(
       { _id: { $in: userIds } },
       { $pull: { 'personal.chatRooms': roomId, 'personal.pinnedChatRoomIds': roomId } }
-    ),
-    deleteBucketFilesByName('avatar', `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}`)
-  ])
+    ).exec()
+  ]
+
+  if (isGroupChatRoom) {
+    deleteChatRoomTasks.push(deleteBucketFilesByName('avatar', buildAvatarId(roomId)))
+  }
+
+  await Promise.all(deleteChatRoomTasks)
 
   const payload: EventChatRoomDeleted = {
     roomId
@@ -240,7 +258,7 @@ export const transformRoomForUser = async ({
   const roomId = String(normalizedRoom._id)
   const users = normalizedRoom.users.map((id) => String(id)).filter((id) => id !== userId)
   const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
-  const avatarId = `${MEDIA_AVATAR_FILENAME_PREFIX}${chatKind === CHAT_KIND.DIRECT ? users[0] : roomId}`
+  const avatarId = buildAvatarId(isRoomPrivate({ chatKind }) ? users[0] : roomId)
   const messages = normalizedRoom.messages
   const lastMessageId = messages[messages.length - 1] ?? null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
@@ -319,7 +337,7 @@ export const leaveChatRoom = async (
 
   const userIds = room.users.map(String)
   const remainingUserIds = userIds.filter((id) => id !== userId)
-  const isAdminLeaving = room.adminId === userId
+  const isAdminLeaving = isRoomAdmin(room, userId)
 
   let nextRoomAdminId = room.adminId
 

@@ -11,8 +11,11 @@ import {
   MESSAGE_BODY_MAX_LENGTH,
   MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_LIMIT_MAX,
+  MESSAGE_STATUS_VALUE,
   MEDIA_IMAGE_FILENAME_PREFIX,
   REQ_STATUS,
+  isMessageAuthor,
+  isMessageReadStatus,
   isString
 } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
@@ -29,9 +32,9 @@ import { MessageModel } from './messages.model'
 import type { SendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
-  const readBySomeone = message.usersMetaData.some((data) => data.status === 'read')
+  const readBySomeone = message.usersMetaData.some((data) => isMessageReadStatus(data.status))
   const selfStatus = message.usersMetaData.find((user) => user.id === userId)?.status
-  const status = message.authorId === userId ? (readBySomeone ? 'read' : selfStatus) : selfStatus
+  const status = isMessageAuthor(message, userId) && readBySomeone ? MESSAGE_STATUS_VALUE.READ : selfStatus
   const images = (message.images ?? []) as Array<string | ImageObject>
 
   return {
@@ -43,7 +46,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     reactions: message.reactions,
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
     status,
-    isSelf: message.authorId === userId,
+    isSelf: isMessageAuthor(message, userId),
     repliedMessage: message.repliedMessage
   }
 }
@@ -84,7 +87,7 @@ export const loadRoomMessages = async (
 }
 
 export const changeMessageStatus = async (messageId: string, status: MessageStatus, userId: string, roomId: string) => {
-  if (status !== 'read') {
+  if (!isMessageReadStatus(status)) {
     return
   }
 
@@ -101,7 +104,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
       usersMetaData: {
         $elemMatch: {
           id: userId,
-          status: 'delivered'
+          status: MESSAGE_STATUS_VALUE.DELIVERED
         }
       }
     },
@@ -139,7 +142,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     usersMetaData: {
       $elemMatch: {
         id: userId,
-        status: 'delivered'
+        status: MESSAGE_STATUS_VALUE.DELIVERED
       }
     }
   })
@@ -158,7 +161,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     },
     {
       $set: {
-        'usersMetaData.$.status': 'read'
+        'usersMetaData.$.status': MESSAGE_STATUS_VALUE.READ
       }
     }
   )
@@ -170,7 +173,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   const payload: EventMessagesStatusUpdated = {
     roomId,
     messageIds,
-    status: 'read',
+    status: MESSAGE_STATUS_VALUE.READ,
     userId,
     updatedMessagesQuantity: updateResult.modifiedCount
   }
@@ -221,7 +224,7 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
     room.users.map(async (userId) => {
       await MessageModel.updateOne(
         { _id: newDbMessage.id },
-        { $push: { usersMetaData: { id: userId, status: 'delivered' } } }
+        { $push: { usersMetaData: { id: userId, status: MESSAGE_STATUS_VALUE.DELIVERED } } }
       )
 
       const user = await UserModel.findById(userId).lean()
@@ -236,8 +239,8 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
           ...message,
           id: newDbMessage.id,
           images: filenames.map((filename) => ({ src: filename, name: filename })),
-          isSelf: String(user._id) === message.authorId,
-          status: 'delivered'
+          isSelf: isMessageAuthor(message, String(user._id)),
+          status: MESSAGE_STATUS_VALUE.DELIVERED
         }
       }
 

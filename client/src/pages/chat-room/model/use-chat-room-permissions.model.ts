@@ -1,19 +1,20 @@
 import { computed, type Ref } from 'vue'
 
-import { isRoomGroup } from 'src/entities/chat-room'
+import { isRoomAdmin, isRoomGroup, isRoomPrivate } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
 
 import type { ChatRoomNavigationItem } from '../config/types'
 
 export const useChatRoomPermissions = (item: Ref<ChatRoomNavigationItem>) => {
   const { user } = useUser()
-  const isGroupChat = computed(() => isRoomGroup(item.value))
-  const isCurrentUserChatRoomAdmin = computed(() => item.value.adminId === user.value.id)
-  const canShowDeleteChatRoom = computed(() => isGroupChat.value && isCurrentUserChatRoomAdmin.value)
+  const isCurrentUserChatRoomAdmin = computed(() => isRoomAdmin(item.value, user.value.id))
+  const canDeleteGroupChatRoom = computed(() => isRoomGroup(item.value) && isCurrentUserChatRoomAdmin.value)
+  const canShowDeleteChatRoom = computed(() => isRoomPrivate(item.value) || canDeleteGroupChatRoom.value)
+  const canShowLeaveChatRoom = computed(() => isRoomGroup(item.value))
 
   return {
     canShowDeleteChatRoom,
-    canShowLeaveChatRoom: isGroupChat,
+    canShowLeaveChatRoom,
     isCurrentUserChatRoomAdmin
   }
 }

@@ -1,9 +1,9 @@
 import {
-  MEDIA_AVATAR_FILENAME_PREFIX,
   type EventGetRooms,
   type EventChatRoomDeleted,
   type EventChatRoomLeft,
-  type EventPinnedChatRoomsUpdated
+  type EventPinnedChatRoomsUpdated,
+  isAvatarIdFor
 } from 'global-shared'
 import compact from 'lodash/compact'
 import { useRoute, useRouter } from 'vue-router'
@@ -33,7 +33,7 @@ export const useChatRoomSync = () => {
     const removedChatAvatarIds = compact(
       chatRooms.value
         .filter(({ id }) => !incomingRoomIds.has(id))
-        .map(({ avatarId, id }) => avatarId === `${MEDIA_AVATAR_FILENAME_PREFIX}${id}` && avatarId)
+        .map(({ avatarId, id }) => isAvatarIdFor(avatarId, id) && avatarId)
     )
 
     await saveRoomPreviewMessages(rooms)
@@ -69,7 +69,7 @@ export const useChatRoomSync = () => {
     await Promise.all([
       remove(roomId),
       bulkDelete(messageIds),
-      avatarId === `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}` && removeMedia(avatarId)
+      isAvatarIdFor(avatarId, roomId) && removeMedia(avatarId)
     ])
 
     if (route.params.chatRoomId === roomId) {

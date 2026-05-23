@@ -1,5 +1,11 @@
 import type { VirtualItem, Virtualizer } from '@tanstack/vue-virtual'
-import type { EventChangeMessageStatus, SocketActions } from 'global-shared'
+import {
+  MESSAGE_STATUS_VALUE,
+  isMessageReadStatus,
+  isMessageSendingStatus,
+  type EventChangeMessageStatus,
+  type SocketActions
+} from 'global-shared'
 import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
@@ -23,8 +29,8 @@ export const useChatRoomMessageReadStatus = (
 
     if (
       message.isSelf ||
-      message.status === 'read' ||
-      message.status === 'sending' ||
+      isMessageReadStatus(message.status) ||
+      isMessageSendingStatus(message.status) ||
       pendingReadMessageIds.has(message.id)
     ) {
       return
@@ -33,7 +39,7 @@ export const useChatRoomMessageReadStatus = (
     const payload: EventChangeMessageStatus = {
       roomId: room.value.id,
       messageId: message.id,
-      status: 'read'
+      status: MESSAGE_STATUS_VALUE.READ
     }
 
     pendingReadMessageIds.add(message.id)

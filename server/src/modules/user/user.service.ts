@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
+  CONTACT_INTERACTION,
   type Contact,
-  type UserData,
-  type Interaction,
-  normalizeNicknameKey,
-  REQ_STATUS,
   type CreateNewPasswordPayload,
-  MEDIA_AVATAR_FILENAME_PREFIX,
-  VALIDATION_PATTERNS
+  type Interaction,
+  type UserData,
+  VALIDATION_PATTERNS,
+  buildAvatarId,
+  normalizeNicknameKey,
+  REQ_STATUS
 } from 'global-shared'
 import uniq from 'lodash/uniq'
 
@@ -46,7 +47,7 @@ export const mapUserToDto = (user: UserSchema): UserData => {
 
 export const transformUserToContact = (
   user: UserSchema,
-  interactionType: Interaction = 'default',
+  interactionType: Interaction = CONTACT_INTERACTION.DEFAULT,
   online = false
 ): Contact => {
   return {
@@ -70,7 +71,7 @@ export const transformUserToFrontendContact = async (
 
   return users.map((user) => {
     const userId = String(user._id)
-    const interactionType = contacts[userId]?.interaction ?? 'default'
+    const interactionType = contacts[userId]?.interaction ?? CONTACT_INTERACTION.DEFAULT
 
     return transformUserToContact(user, interactionType, onlineMap.get(userId) ?? false)
   })
@@ -160,7 +161,7 @@ export const loadGoogleAvatar = async (avatar: string) => {
 }
 
 export const updateUserAvatar = async (buffer: Buffer | null, userId: string) => {
-  const filename = `${MEDIA_AVATAR_FILENAME_PREFIX}${userId}`
+  const filename = buildAvatarId(userId)
 
   if (buffer === null) {
     await deleteBucketFilesByName('avatar', filename)

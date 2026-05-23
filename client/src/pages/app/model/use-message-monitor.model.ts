@@ -1,10 +1,12 @@
-import type {
-  EventMessageDeleted,
-  EventMessageDelivered,
-  EventMessagesStatusUpdated,
-  SocketActions,
-  EventUpdateMessageStatus,
-  EventUpdatedMessageReactions
+import {
+  type EventMessageDeleted,
+  type EventMessageDelivered,
+  type EventMessagesStatusUpdated,
+  type EventUpdateMessageStatus,
+  type EventUpdatedMessageReactions,
+  type SocketActions,
+  isMessageStatusDelivered,
+  isMessageReadStatus
 } from 'global-shared'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -30,14 +32,14 @@ export const useMessageMonitor = () => {
         room.messages.push(message.id)
       }
 
-      if (!message.isSelf && message.status === 'delivered') {
+      if (!message.isSelf && isMessageStatusDelivered(message.status)) {
         room.unreadMessagesQuantity = (room.unreadMessagesQuantity ?? 0) + 1
       }
     })
   }
 
   const updateMessageStatus = async ({ roomId, messageId, status, userId }: EventUpdateMessageStatus) => {
-    const shouldDecreaseUnreadMessagesQuantity = userId === user.value.id && status === 'read'
+    const shouldDecreaseUnreadMessagesQuantity = userId === user.value.id && isMessageReadStatus(status)
 
     await update(messageId, { status })
 
@@ -55,7 +57,7 @@ export const useMessageMonitor = () => {
   }: EventMessagesStatusUpdated) => {
     const loadedMessageIds = messageIds.filter((messageId) => messageById.value.has(messageId))
     const isCurrentUserStatusUpdate = userId === user.value.id
-    const isReadStatusUpdate = status === 'read'
+    const isReadStatusUpdate = isMessageReadStatus(status)
 
     await bulkUpdate(loadedMessageIds.map((id) => ({ id, changes: { status } })))
 
@@ -76,7 +78,7 @@ export const useMessageMonitor = () => {
       }
     })
 
-    if (message?.status === 'delivered' && !message.isSelf) {
+    if (isMessageStatusDelivered(message?.status) && !message.isSelf) {
       await decreaseUnreadMessagesQuantity(roomId)
     }
   }

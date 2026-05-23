@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { isDefaultContactInteraction } from 'global-shared'
 
 import { getAvatarId } from 'src/shared/lib'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
@@ -58,7 +59,7 @@ const {
                   </template>
                 </AppProfileBasicData>
                 <NmorphButton
-                  v-if="contact.interactionType === 'default'"
+                  v-if="isDefaultContactInteraction(contact.interactionType)"
                   shape="square"
                   :loading="loadingContactIds.has(contact.id)"
                   :aria-label="$t(CONTACTS_PAGE_I18N.add)"

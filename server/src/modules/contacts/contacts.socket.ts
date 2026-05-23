@@ -1,9 +1,12 @@
-import type {
-  EventDeleteContact,
-  EventSaveContact,
-  EventSearchContact,
-  EventUpdateInteraction,
-  SocketActions
+import {
+  CONTACT_INTERACTION,
+  type EventDeleteContact,
+  type EventSaveContact,
+  type EventSearchContact,
+  type EventUpdateInteraction,
+  type SocketActions,
+  isBlockedContactInteraction,
+  isDefaultContactInteraction
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
@@ -70,10 +73,10 @@ export const registerContactsSocketHandlers = (socket: SocketInstance, presenceS
       async ({ contactId, interaction }) => {
         const { userId } = socket.data
 
-        if (interaction === 'default') {
+        if (isDefaultContactInteraction(interaction)) {
           const currentInteraction = await getContactInteraction(userId, contactId)
 
-          if (currentInteraction === 'blocked') {
+          if (isBlockedContactInteraction(currentInteraction)) {
             const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
 
             if (result.success) {
@@ -95,7 +98,7 @@ export const registerContactsSocketHandlers = (socket: SocketInstance, presenceS
           return
         }
 
-        const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'
+        const currentInteraction = (await getContactInteraction(userId, contactId)) ?? CONTACT_INTERACTION.DEFAULT
 
         emitContactInteractionUpdated(userId, contactId, currentInteraction)
       },

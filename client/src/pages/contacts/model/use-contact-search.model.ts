@@ -1,5 +1,11 @@
 import { useDebounceFn } from '@vueuse/core'
-import type { Contact, EventGetSearchedContact, EventSearchContact, SocketActions } from 'global-shared'
+import {
+  isDefaultContactInteraction,
+  type Contact,
+  type EventGetSearchedContact,
+  type EventSearchContact,
+  type SocketActions
+} from 'global-shared'
 import unionBy from 'lodash/unionBy'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
@@ -82,7 +88,7 @@ export const useContactSearch = () => {
     CONTACTS_SEARCH_BADGE_BY_INTERACTION[interactionType].color
 
   const syncSavedContacts = async (contacts: Contact[]) => {
-    const savedContacts = contacts.filter(({ interactionType }) => interactionType !== 'default')
+    const savedContacts = contacts.filter(({ interactionType }) => !isDefaultContactInteraction(interactionType))
 
     await mergeMany(savedContacts, {
       merge: mergeContactLocalState
