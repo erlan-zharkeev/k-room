@@ -10,10 +10,12 @@ import {
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_FILENAME_PREFIX,
+  REQ_STATUS,
   type SocketActions
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
+import { AppError } from 'src/shared/lib/app-error'
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
 
@@ -46,7 +48,7 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presence
         const usersAccepted = await checkContactsExistence(userId, contactIds)
 
         if (!usersAccepted) {
-          return
+          throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.createChatRoomFailed)
         }
 
         const roomData: Omit<ChatRoomSchema, 'id'> = {

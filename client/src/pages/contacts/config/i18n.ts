@@ -71,11 +71,6 @@ export const CONTACTS_PAGE_I18N = defineI18n({
     ru: 'Приглашение',
     zh: '收到邀请'
   },
-  invitationRestricted: {
-    en: 'User restricted invitations',
-    ru: 'Пользователь ограничил отправку приглашений',
-    zh: '用户限制了邀请发送'
-  },
   accept: {
     en: 'Accept',
     ru: 'Принять',

@@ -11,7 +11,6 @@ export { useSocketConnect } from './socket/use-socket-connect'
 export { useSocketConnectionMonitor } from './socket/use-socket-connection-monitor'
 export { useSocketReconnect } from './socket/use-socket-reconnect'
 export { useSocketAction } from './socket/use-socket-action'
-export { useSocketEventListeners } from './socket/use-socket-event-listeners'
 export type {
   HttpError,
   DoHttpRequest,
@@ -20,4 +19,4 @@ export type {
   HttpRequestPayload,
   HttpRequest
 } from './http/types'
-export type { EmitSocketActionOptions, SocketEventListener } from './socket/types'
+export type { EmitSocketActionOptions } from './socket/types'

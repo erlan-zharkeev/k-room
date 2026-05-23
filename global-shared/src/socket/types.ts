@@ -5,12 +5,8 @@ import type { AppLanguage } from '../language/types'
 import type { MediaFileValue } from '../media/types'
 import type { Message, MessageReaction, MessageStatus } from '../message/types'
 import type { BasicStreamSettings } from '../shared/types'
+import type { ReqStatus } from '../status/types'
 import type { UserPreview } from '../user/types'
-
-import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './constants'
-
-export type ContactInteractionUpdateFailedReason =
-  (typeof CONTACT_INTERACTION_UPDATE_FAILED_REASONS)[keyof typeof CONTACT_INTERACTION_UPDATE_FAILED_REASONS]
 
 export interface SocketAckSuccess<TPayload = void> {
   ok: true
@@ -207,6 +203,8 @@ export interface EventCallEnded {
 export interface EventErrorMessage {
   messageType?: string
   message: string
+  silent?: boolean
+  status?: ReqStatus
 }
 export interface EventMessageDeleted {
   messageId: string
