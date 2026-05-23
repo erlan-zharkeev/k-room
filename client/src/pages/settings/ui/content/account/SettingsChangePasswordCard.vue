@@ -26,7 +26,7 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.currentPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput v-model="formData.currentPassword.value" :disabled="isPasswordChanging" type-password />
+        <NmorphTextInput :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -34,7 +34,7 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.newPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput v-model="formData.nextPassword.value" :disabled="isPasswordChanging" type-password />
+        <NmorphTextInput :disabled="isPasswordChanging" type-password />
         <AppText v-if="nextPasswordError" tag="small" color="warn" :text="nextPasswordError" />
       </NmorphFormItem>
 
@@ -43,7 +43,7 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.confirmPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput v-model="formData.repeatPassword.value" :disabled="isPasswordChanging" type-password />
+        <NmorphTextInput :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
 
       <AppText

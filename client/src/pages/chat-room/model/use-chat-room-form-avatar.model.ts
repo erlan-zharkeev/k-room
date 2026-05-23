@@ -1,7 +1,14 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 
 import { useLoadMedia, useMedia } from 'src/entities/media-file'
-import { revokeObjectUrl, revokeObjectUrls, TOAST_I18N, type ChatRoomRecord, useAppToast, useI18n } from 'src/shared/lib'
+import {
+  revokeObjectUrl,
+  revokeObjectUrls,
+  TOAST_I18N,
+  type ChatRoomRecord,
+  useAppToast,
+  useI18n
+} from 'src/shared/lib'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomFormAvatarParams } from '../config/types'

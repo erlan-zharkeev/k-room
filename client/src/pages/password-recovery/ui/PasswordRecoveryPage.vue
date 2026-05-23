@@ -69,7 +69,6 @@ onMounted(initializePasswordRecovery)
     >
       <NmorphFormItem id="email" :show-validation-icon="false">
         <NmorphTextInput
-          v-model.trim="emailFormData.email.value"
           autocomplete="email"
           :disabled="isEmailInputDisabled"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.emailPlaceholder)"
@@ -108,7 +107,6 @@ onMounted(initializePasswordRecovery)
     >
       <NmorphFormItem id="code" :show-validation-icon="false">
         <NmorphTextInput
-          v-model.trim="codeFormData.code.value"
           autocomplete="one-time-code"
           :disabled="codeValidationIsLoading"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"

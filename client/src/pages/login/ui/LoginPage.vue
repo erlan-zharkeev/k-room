@@ -34,7 +34,6 @@ const isSubmitBtnDisabled = computed(() => {
   <NmorphForm ref="formRef" :value="formData" class="login-page" @submit.prevent="submit">
     <NmorphFormItem id="login" :show-validation-icon="false">
       <NmorphTextInput
-        v-model="formData.login.value"
         autocomplete="username"
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.loginPlaceholder)"
@@ -44,7 +43,6 @@ const isSubmitBtnDisabled = computed(() => {
 
     <NmorphFormItem id="password" :show-validation-icon="false">
       <NmorphTextInput
-        v-model="formData.password.value"
         autocomplete="current-password"
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.passwordPlaceholder)"

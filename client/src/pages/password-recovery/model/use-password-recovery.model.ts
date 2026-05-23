@@ -72,7 +72,7 @@ export const usePasswordRecovery = () => {
   const sendEmailCode = async () => {
     if (!isEmailFormValid.value) return
 
-    const email = emailFormData.email.value
+    const email = emailFormData.email.value.trim()
 
     emailSendCodeIsLoading.value = true
     const requestPayload: SendPasswordRecoveryCodePayload = {
@@ -113,7 +113,7 @@ export const usePasswordRecovery = () => {
   const validateCode = async () => {
     if (!isCodeFormValid.value) return
 
-    const code = codeFormData.code.value
+    const code = codeFormData.code.value.trim()
 
     codeValidationIsLoading.value = true
     const requestPayload: CodeValidationPayload = {

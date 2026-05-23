@@ -14,6 +14,7 @@ const userModelMock = vi.hoisted(() => ({
     collection: vi.fn()
   },
   findById: vi.fn(),
+  updateMany: vi.fn(),
   updateOne: vi.fn()
 }))
 
@@ -78,6 +79,7 @@ describe('fixtures.service', () => {
       },
       save: vi.fn()
     })
+    userModelMock.updateMany.mockResolvedValue({ modifiedCount: 0 })
     userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
     chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
     chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({

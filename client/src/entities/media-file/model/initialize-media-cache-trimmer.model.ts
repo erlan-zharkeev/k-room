@@ -1,8 +1,4 @@
-import {
-  DEXIE_CACHE_TRIMMER_IDS,
-  DEXIE_CACHE_TRIMMER_PRIORITIES,
-  registerDexieCacheTrimmer
-} from 'src/shared/lib'
+import { DEXIE_CACHE_TRIMMER_IDS, DEXIE_CACHE_TRIMMER_PRIORITIES, registerDexieCacheTrimmer } from 'src/shared/lib'
 
 import { trimMediaCache } from '../lib/trim-media-cache'
 
