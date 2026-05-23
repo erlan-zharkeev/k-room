@@ -67,8 +67,7 @@ export const isDexieQuotaError = (error: unknown): boolean => {
 
   if (!data) return false
 
-  const errorName = data.name
-  const errorFailures = data.failures
+  const { name: errorName, failures: errorFailures } = data
   const isErrorNameString = isString(errorName)
   const isKnownQuotaErrorName = isErrorNameString && DEXIE_QUOTA_ERROR_NAME_SET.has(errorName)
   const hasQuotaErrorInner = isDexieQuotaError(data.inner)

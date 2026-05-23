@@ -10,9 +10,7 @@ import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
 import { useWaitEmailConfirm } from '../model/use-wait-email-confirm.model'
 
 const { attempts, captcha, counterValue, email, initializeWaitEmailConfirm, isLoading, resend } = useWaitEmailConfirm()
-const captchaRequired = captcha.captchaRequired
-const captchaToken = captcha.captchaToken
-const captchaResetKey = captcha.captchaResetKey
+const { captchaRequired, captchaToken, captchaResetKey } = captcha
 const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
 const isResendDisabled = computed(
   () => isLoading.value || attempts.value <= 0 || counterValue.value > 0 || isCaptchaBlocked.value

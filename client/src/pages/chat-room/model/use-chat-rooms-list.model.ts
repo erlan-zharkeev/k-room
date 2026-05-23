@@ -39,26 +39,38 @@ export const useChatRoomsList = () => {
 
   const chatRoomList = computed<ChatRoomNavigationItem[]>(() => {
     const items = chatRooms.value.map((room) => {
+      const {
+        id,
+        adminId,
+        chatKind,
+        chatName,
+        avatarId,
+        createdAt,
+        unreadMessagesQuantity,
+        isPinned,
+        pinnedOrder,
+        isMuted
+      } = room
       const privateContact = getChatRoomPrivateContact(room)
       const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
       const lastMessage = displayedLastMessageId ? getById(displayedLastMessageId) : undefined
-      const title = room.chatName || privateContact?.nickname || ''
+      const title = chatName || privateContact?.nickname || ''
 
       return {
-        id: room.id,
-        adminId: room.adminId,
-        chatKind: room.chatKind,
-        to: buildChatRoomRoute(room.id),
+        id,
+        adminId,
+        chatKind,
+        to: buildChatRoomRoute(id),
         title,
         description: lastMessage?.body ?? '',
-        imageId: room.avatarId,
+        imageId: avatarId,
         online: Boolean(privateContact?.online),
-        selected: route.params.chatRoomId === room.id,
-        lastMessageCreatedAt: lastMessage?.createdAt ?? room.createdAt,
-        unreadMessagesQuantity: room.unreadMessagesQuantity ?? 0,
-        isPinned: room.isPinned,
-        pinnedOrder: room.pinnedOrder,
-        isMuted: room.isMuted
+        selected: route.params.chatRoomId === id,
+        lastMessageCreatedAt: lastMessage?.createdAt ?? createdAt,
+        unreadMessagesQuantity: unreadMessagesQuantity ?? 0,
+        isPinned,
+        pinnedOrder,
+        isMuted
       }
     })
 

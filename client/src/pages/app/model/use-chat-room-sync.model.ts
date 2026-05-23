@@ -75,8 +75,7 @@ export const useChatRoomSync = () => {
       return
     }
 
-    const messageIds = room.messages
-    const avatarId = room.avatarId
+    const { messages: messageIds, avatarId } = room
 
     await Promise.all([
       remove(roomId),

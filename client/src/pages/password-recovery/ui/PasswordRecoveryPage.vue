@@ -29,12 +29,16 @@ const {
 } = usePasswordRecovery()
 const route = useRoute()
 const hasPresetEmail = computed(() => Boolean(route.query['user-email']))
-const sendCaptchaRequired = sendCaptcha.captchaRequired
-const sendCaptchaToken = sendCaptcha.captchaToken
-const sendCaptchaResetKey = sendCaptcha.captchaResetKey
-const validateCaptchaRequired = validateCaptcha.captchaRequired
-const validateCaptchaToken = validateCaptcha.captchaToken
-const validateCaptchaResetKey = validateCaptcha.captchaResetKey
+const {
+  captchaRequired: sendCaptchaRequired,
+  captchaToken: sendCaptchaToken,
+  captchaResetKey: sendCaptchaResetKey
+} = sendCaptcha
+const {
+  captchaRequired: validateCaptchaRequired,
+  captchaToken: validateCaptchaToken,
+  captchaResetKey: validateCaptchaResetKey
+} = validateCaptcha
 const isEmailInputDisabled = computed(() => emailSendCodeIsLoading.value || hasPresetEmail.value)
 const isSendCodeCaptchaBlocked = computed(() => sendCaptchaRequired.value && !sendCaptchaToken.value)
 const isValidateCodeCaptchaBlocked = computed(() => validateCaptchaRequired.value && !validateCaptchaToken.value)

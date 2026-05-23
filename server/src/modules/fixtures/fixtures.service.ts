@@ -118,10 +118,7 @@ const loadUserFixture = async (data: FixtureUserData) => {
 const loadUserFixtures = async () => {
   const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data)))
   const resultCount = countBy(results)
-  const created = resultCount.created ?? 0
-  const updated = resultCount.updated ?? 0
-  const skipped = resultCount.skipped ?? 0
-  const failed = resultCount.failed ?? 0
+  const { created = 0, updated = 0, skipped = 0, failed = 0 } = resultCount
 
   log.info(`-User fixtures processed: created=${created}, updated=${updated}, skipped=${skipped}, failed=${failed}`)
 }

@@ -48,11 +48,8 @@ export const registerUserSocketHandlers = (socket: SocketInstance, presenceServi
           return
         }
 
-        const contacts = data.personal.contacts
+        const { contacts, chatRooms: roomIds, pinnedChatRoomIds, mutedChatRoomIds } = data.personal
         const contactResultData: Contact[] = await transformUserToFrontendContact(contacts, presenceService)
-        const roomIds = data.personal.chatRooms
-        const pinnedChatRoomIds = data.personal.pinnedChatRoomIds
-        const mutedChatRoomIds = data.personal.mutedChatRoomIds
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
         const knownUserIds = uniq(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))
         const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)
