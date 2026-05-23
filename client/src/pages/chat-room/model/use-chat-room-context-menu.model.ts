@@ -17,8 +17,9 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
   const { canMarkChatRoomAsRead, markChatRoomAsRead } = useChatRoomMarkAsRead(item)
   const { canUpdateMutedChatRoom, toggleMutedChatRoom } = useChatRoomMute(item)
   const { canUpdatePinnedChatRoom, togglePinnedChatRoom } = useChatRoomPin(item)
-  const { canShowDeleteChatRoom, canShowLeaveChatRoom } = useChatRoomPermissions(item)
+  const { canEditGroupChatRoom, canShowDeleteChatRoom, canShowLeaveChatRoom } = useChatRoomPermissions(item)
   const isContextMenuOpen = ref(false)
+  const isChatRoomFormDialogOpen = ref(false)
   const isDeleteChatRoomDialogOpen = ref(false)
   const isLeaveChatRoomDialogOpen = ref(false)
   const contextMenuOptions = computed<ChatRoomContextMenuOption[]>(() => {
@@ -39,6 +40,13 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
         disabled: !canMarkChatRoomAsRead.value
       }
     ]
+
+    if (canEditGroupChatRoom.value) {
+      options.push({
+        label: t(CHAT_ROOM_PAGE_I18N.editGroup),
+        value: 'edit-group'
+      })
+    }
 
     if (canShowDeleteChatRoom.value) {
       options.push({
@@ -76,6 +84,9 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
       case 'unmute-chat':
         toggleMutedChatRoom()
         break
+      case 'edit-group':
+        isChatRoomFormDialogOpen.value = true
+        break
       case 'delete-chat':
         isDeleteChatRoomDialogOpen.value = true
         break
@@ -87,6 +98,7 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
 
   return {
     isContextMenuOpen,
+    isChatRoomFormDialogOpen,
     isDeleteChatRoomDialogOpen,
     isLeaveChatRoomDialogOpen,
     contextMenuOptions,

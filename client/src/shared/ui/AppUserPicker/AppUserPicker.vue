@@ -4,15 +4,12 @@ import { NmorphCheckbox, NmorphCheckboxGroup, NmorphScroll } from '@nmorph/nmorp
 import { AppProfileBasicData } from '../AppProfileBasicData'
 import { AppText } from '../AppText'
 
+import { APP_USER_PICKER_PROPS_DEFAULTS } from './constants'
 import type { AppUserPickerProps } from './types'
 import { useAppUserPicker } from './use-app-user-picker.model'
 
 const selectedUserIds = defineModel<string[]>({ required: true })
-const props = withDefaults(defineProps<AppUserPickerProps>(), {
-  height: '224px',
-  maxHeight: '34vh',
-  multiple: true
-})
+const props = withDefaults(defineProps<AppUserPickerProps>(), APP_USER_PICKER_PROPS_DEFAULTS)
 const { selectUsers, userItems } = useAppUserPicker(props, selectedUserIds)
 </script>
 
@@ -24,7 +21,13 @@ const { selectUsers, userItems } = useAppUserPicker(props, selectedUserIds)
       design="checkbox"
       @update:model-value="selectUsers"
     >
-      <NmorphCheckbox v-for="item in userItems" :id="item.id" :key="item.id" design="checkbox">
+      <NmorphCheckbox
+        v-for="item in userItems"
+        :id="item.id"
+        :key="item.id"
+        :disabled="item.isLocked"
+        design="checkbox"
+      >
         <AppProfileBasicData
           class="app-user-picker__item"
           :image-id="item.imageId"

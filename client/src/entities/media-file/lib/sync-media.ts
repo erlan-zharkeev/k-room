@@ -1,25 +1,33 @@
-import { REQ_STATUS } from 'global-shared'
+import { REQ_STATUS, isNumber } from 'global-shared'
 
 import { isHttpError } from 'src/shared/api'
 
 import { MISSING_MEDIA_RETRY_INTERVAL_MS, UPDATE_MEDIA_INTERVAL_MS } from '../config/constants'
 
-import type { SyncMediaDeps, MediaHeaders } from './types'
+import type { SyncMediaDeps, MediaHeaders, SyncMediaOptions } from './types'
 
 const isRecentlyChecked = (lastChecked: number, interval: number) => Date.now() - lastChecked < interval
 
-export const syncMedia = async (filename: string, deps: SyncMediaDeps) => {
+export const syncMedia = async (filename: string, deps: SyncMediaDeps, options: SyncMediaOptions = {}) => {
   const record = await deps.mediaGet(filename)
+  const lastChecked = record?.lastChecked
+  const shouldRespectCacheInterval = !options.force
+  const hasLastChecked = isNumber(lastChecked)
+  const isMissingRecentlyChecked =
+    shouldRespectCacheInterval &&
+    record?.status === 'missing' &&
+    isRecentlyChecked(record.lastChecked, MISSING_MEDIA_RETRY_INTERVAL_MS)
+  const isReadyRecentlyChecked =
+    shouldRespectCacheInterval &&
+    record?.status !== 'missing' &&
+    hasLastChecked &&
+    isRecentlyChecked(lastChecked, UPDATE_MEDIA_INTERVAL_MS)
 
-  if (record?.status === 'missing' && isRecentlyChecked(record.lastChecked, MISSING_MEDIA_RETRY_INTERVAL_MS)) {
+  if (isMissingRecentlyChecked) {
     return
   }
 
-  if (
-    record?.status !== 'missing' &&
-    record?.lastChecked &&
-    isRecentlyChecked(record.lastChecked, UPDATE_MEDIA_INTERVAL_MS)
-  ) {
+  if (isReadyRecentlyChecked) {
     return
   }
 

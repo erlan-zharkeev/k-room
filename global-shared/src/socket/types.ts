@@ -1,5 +1,5 @@
 import type { Call } from '../calls/types'
-import type { ChatKind, ChatRoom } from '../chat/types'
+import type { ChatRoom } from '../chat/types'
 import type { Contact, KnownUser, Interaction } from '../contact/types'
 import type { AppLanguage } from '../language/types'
 import type { MediaFileValue } from '../media/types'
@@ -76,18 +76,16 @@ export interface EventGetSearchedContact {
 }
 
 export interface EventCreateRoom {
-  contactIds: string[]
+  memberIds: string[]
   chatName?: string
   avatarFile?: MediaFileValue
 }
 
 export interface EventUpdateChatRoom {
-  users: string[]
   roomId: string
+  memberIds: string[]
   chatName: string
-  chatKind: ChatKind
-  avatar: string
-  avatarFile?: MediaFileValue // TODO change to EventCreateRoom
+  avatarFile?: MediaFileValue
 }
 
 export interface EventDeleteChatRoom {

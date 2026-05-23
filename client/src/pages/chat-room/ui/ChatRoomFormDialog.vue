@@ -11,7 +11,7 @@ import { CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 
 import { AppText, AppUserPicker } from 'src/shared/ui'
 
-import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES, CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT } from '../config/constants'
+import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomFormDialogEmit, ChatRoomFormDialogProps } from '../config/types'
 import { useChatRoomFormDialog } from '../model/use-chat-room-form-dialog.model'
@@ -25,9 +25,11 @@ const {
   chatRoomNameInputValue,
   contactSearchQuery,
   isSavingChatRoom,
-  selectedContactIds,
+  selectedMemberIds,
   contactPickerItems,
   filteredContactPickerItems,
+  lockedMemberIds,
+  maxSelectedMemberIds,
   isChatRoomNameEditable,
   isChatRoomAvatarEditable,
   canSubmitChatRoom,
@@ -90,9 +92,10 @@ const {
         />
         <AppUserPicker
           v-else
-          v-model="selectedContactIds"
+          v-model="selectedMemberIds"
           :items="filteredContactPickerItems"
-          :max-selected="CREATE_CHAT_ROOM_CONTACT_PICKER_LIMIT"
+          :locked-ids="lockedMemberIds"
+          :max-selected="maxSelectedMemberIds"
         />
       </NmorphCard>
       <div class="chat-room-form-dialog__actions">
@@ -105,6 +108,8 @@ const {
         />
         <NmorphButton
           fill
+          style-type="transparent"
+          color="var(--nmorph-accent-color)"
           :text="$t(submitChatRoomButtonI18n)"
           :loading="isSavingChatRoom"
           :disabled="!canSubmitChatRoom"

@@ -16,6 +16,7 @@ import { useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useLocalizedDateTime } from 'src/entities/setting'
+import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
 import { useI18n, type ContactRecord } from 'src/shared/lib'
@@ -25,6 +26,7 @@ import { CONTACTS_PAGE_I18N } from '../config/i18n'
 export const useContactsPage = () => {
   const router = useRouter()
   const { getPersonalByContactId } = useChatRoom()
+  const { user } = useUser()
   const { formatRelativeTime } = useLocalizedDateTime()
   const { t } = useI18n()
   const { emitSocketAction } = useSocketAction()
@@ -90,7 +92,7 @@ export const useContactsPage = () => {
   const createPrivateChat = (contactId: string) => {
     if (creatingChatContactIds.has(contactId)) return
 
-    const payload: EventCreateRoom = { contactIds: [contactId] }
+    const payload: EventCreateRoom = { memberIds: [user.value.id, contactId] }
 
     creatingChatContactIds.add(contactId)
     void emitSocketAction<EventCreateRoom, CreateRoomAckPayload>('create-chat-room', payload, {

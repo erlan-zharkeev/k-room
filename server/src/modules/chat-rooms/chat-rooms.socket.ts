@@ -1,8 +1,4 @@
-import { setTimeout as delay } from 'timers/promises'
-
 import {
-  CHAT_KIND,
-  type ChatRoomSchema,
   type CreateRoomAckPayload,
   type EventCreateRoom,
   type EventDeleteChatRoom,
@@ -11,33 +7,22 @@ import {
   type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
-  REQ_STATUS,
-  buildAvatarId,
-  type SocketActions,
-  isRoomGroup
+  type SocketActions
 } from 'global-shared'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
-import { AppError } from 'src/shared/lib/app-error'
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
 
-import { uploadBufferToBucket } from '../media/media.service'
-
-import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
-import { ChatRoomModel } from './chat-rooms.model'
 import {
-  checkContactsExistence,
+  createChatRoom,
   deleteChatRoom,
-  emitNewRoomToUsers,
   leaveChatRoom,
-  setRoomToUsers,
   updateChatRoom,
   updateMutedChatRoom,
   updatePinnedChatRoom,
-  updatePinnedChatRoomOrder,
-  validateCreateChatRoomLimits
+  updatePinnedChatRoomOrder
 } from './chat-rooms.service'
 
 export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presenceService: PresenceService) => {
@@ -45,47 +30,12 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presence
     'create-chat-room',
     socketAckMiddleware<EventCreateRoom, CreateRoomAckPayload>(
       socket,
-      async ({ contactIds, chatName, avatarFile }) => {
-        const { userId } = socket.data
-        const users = [userId, ...contactIds]
-        await validateCreateChatRoomLimits(users, chatName)
-
-        const usersAccepted = await checkContactsExistence(userId, contactIds)
-
-        if (!usersAccepted) {
-          throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.createChatRoomFailed)
-        }
-
-        const roomData: Omit<ChatRoomSchema, 'id'> = {
-          users,
-          adminId: userId,
-          createdAt: Date.now(),
-          chatKind: contactIds.length > 1 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
-          messages: []
-        }
-
-        if (chatName) {
-          roomData.chatName = chatName
-        }
-
-        const room = new ChatRoomModel(roomData)
-        const roomId = String(room._id)
-
-        if (isRoomGroup(roomData) && avatarFile?.fileBuffer) {
-          await uploadBufferToBucket(avatarFile.fileBuffer, buildAvatarId(roomId), 'avatar', {
-            compression: 'avatar',
-            overwrite: true
-          })
-        }
-
-        await room.save()
-        await setRoomToUsers(roomId, users)
-        await emitNewRoomToUsers(users, room.toObject(), presenceService)
-        await delay(ROOM_CREATED_EVENT_DELAY_MS)
+      async (payload) => {
+        const responsePayload = await createChatRoom(socket.data.userId, payload, presenceService)
 
         return {
           ok: true,
-          payload: { roomId }
+          payload: responsePayload
         }
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }

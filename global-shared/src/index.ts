@@ -18,6 +18,7 @@ export {
 export { isRoomAdmin } from './chat/lib/is-room-admin'
 export { isRoomGroup } from './chat/lib/is-room-group'
 export { isRoomPrivate } from './chat/lib/is-room-private'
+export { getRoomInterlocutorId, getRoomOtherUserIds } from './chat/lib/get-room-user-ids'
 export type { ChatRoom, ChatRooms, ChatRoomSchema, ChatKind } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
