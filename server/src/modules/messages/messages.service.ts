@@ -32,22 +32,23 @@ import { MessageModel } from './messages.model'
 import type { SendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
-  const readBySomeone = message.usersMetaData.some((data) => isMessageReadStatus(data.status))
-  const selfStatus = message.usersMetaData.find((user) => user.id === userId)?.status
+  const { _id, authorId, authorNickname, body, createdAt, reactions, repliedMessage, usersMetaData } = message
+  const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
+  const selfStatus = usersMetaData.find((user) => user.id === userId)?.status
   const status = isMessageAuthor(message, userId) && readBySomeone ? MESSAGE_STATUS_VALUE.READ : selfStatus
   const images = (message.images ?? []) as Array<string | ImageObject>
 
   return {
-    id: String(message._id),
-    authorId: message.authorId,
-    authorNickname: message.authorNickname,
-    body: message.body,
-    createdAt: message.createdAt,
-    reactions: message.reactions,
+    id: String(_id),
+    authorId,
+    authorNickname,
+    body,
+    createdAt,
+    reactions,
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
     status,
     isSelf: isMessageAuthor(message, userId),
-    repliedMessage: message.repliedMessage
+    repliedMessage
   }
 }
 
@@ -65,9 +66,10 @@ export const loadRoomMessages = async (
     return null
   }
 
+  const { messages: roomMessageIds } = room
   const query = payload.beforeCreatedAt
-    ? { _id: { $in: room.messages }, createdAt: { $lt: payload.beforeCreatedAt } }
-    : { _id: { $in: room.messages } }
+    ? { _id: { $in: roomMessageIds }, createdAt: { $lt: payload.beforeCreatedAt } }
+    : { _id: { $in: roomMessageIds } }
 
   const messages = await MessageModel.find(query)
     .sort({ createdAt: -1 })
@@ -115,6 +117,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     return
   }
 
+  const { users } = room
   const payload: EventUpdateMessageStatus = {
     roomId,
     messageId,
@@ -122,7 +125,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     userId
   }
 
-  emitToUsers(room.users, 'message-status-updated', payload)
+  emitToUsers(users, 'message-status-updated', payload)
 }
 
 export const markRoomAsRead = async (roomId: string, userId: string) => {
@@ -132,12 +135,14 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     return
   }
 
-  if (!room.messages.length) {
+  const { users, messages } = room
+
+  if (!messages.length) {
     return
   }
 
   const unreadMessages = await MessageModel.find({
-    _id: { $in: room.messages },
+    _id: { $in: messages },
     authorId: { $ne: userId },
     usersMetaData: {
       $elemMatch: {
@@ -178,7 +183,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     updatedMessagesQuantity: updateResult.modifiedCount
   }
 
-  emitToUsers(room.users, 'messages-status-updated', payload)
+  emitToUsers(users, 'messages-status-updated', payload)
 }
 
 export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
@@ -220,8 +225,10 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
     return
   }
 
+  const { users } = room
+
   await Promise.all(
-    room.users.map(async (userId) => {
+    users.map(async (userId) => {
       await MessageModel.updateOne(
         { _id: newDbMessage.id },
         { $push: { usersMetaData: { id: userId, status: MESSAGE_STATUS_VALUE.DELIVERED } } }

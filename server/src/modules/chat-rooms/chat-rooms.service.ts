@@ -257,8 +257,9 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
     return
   }
 
-  const userIds = room.users.map(String)
-  const messageIds = room.messages.map(String)
+  const { users, messages } = room
+  const userIds = users.map(String)
+  const messageIds = messages.map(String)
   const deleteChatRoomTasks: Array<Promise<unknown>> = [
     ChatRoomModel.deleteOne({ _id: roomId }).exec(),
     MessageModel.deleteMany({ _id: { $in: messageIds } }).exec(),
@@ -294,11 +295,11 @@ export const transformRoomForUser = async ({
   mutedChatRoomIds
 }: TransformRoomForUserParams): Promise<EventGetRoom> => {
   const normalizedRoom = room as ChatRoomSchemaWithObjectId
-  const roomId = String(normalizedRoom._id)
-  const users = normalizedRoom.users.map((id) => String(id)).filter((id) => id !== userId)
-  const chatKind = normalizedRoom.chatKind ?? (normalizedRoom.users.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
+  const { _id, users: roomUsers, chatKind: roomChatKind, messages } = normalizedRoom
+  const roomId = String(_id)
+  const users = roomUsers.map((id) => String(id)).filter((id) => id !== userId)
+  const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
   const avatarId = buildAvatarId(isRoomPrivate({ chatKind }) ? users[0] : roomId)
-  const messages = normalizedRoom.messages
   const lastMessageId = messages[messages.length - 1] ?? null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([
@@ -376,11 +377,12 @@ export const leaveChatRoom = async (
     return
   }
 
-  const userIds = room.users.map(String)
+  const { users, adminId } = room
+  const userIds = users.map(String)
   const remainingUserIds = userIds.filter((id) => id !== userId)
   const isAdminLeaving = isRoomAdmin(room, userId)
 
-  let nextRoomAdminId = room.adminId
+  let nextRoomAdminId = adminId
 
   if (isAdminLeaving) {
     if (!nextAdminId) {

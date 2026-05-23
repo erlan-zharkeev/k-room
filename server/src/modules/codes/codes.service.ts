@@ -226,8 +226,7 @@ export class CodesService {
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
     }
 
-    const currentCode = codeDoc.codes.passwordRecovery.email.value
-    const currentCodeExpiresAtMs = codeDoc.codes.passwordRecovery.email.expiresAt
+    const { value: currentCode, expiresAt: currentCodeExpiresAtMs } = codeDoc.codes.passwordRecovery.email
 
     if (isCodeExpired(currentCodeExpiresAtMs)) {
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode)

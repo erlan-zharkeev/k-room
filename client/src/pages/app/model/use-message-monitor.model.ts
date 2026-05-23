@@ -28,8 +28,10 @@ export const useMessageMonitor = () => {
   const handleDeliveredMessage = async ({ roomId, message }: EventMessageDelivered) => {
     await put(message)
     await mutateRoom(roomId, (room) => {
-      if (room.messages[room.messages.length - 1] !== message.id) {
-        room.messages.push(message.id)
+      const { messages } = room
+
+      if (messages[messages.length - 1] !== message.id) {
+        messages.push(message.id)
       }
 
       if (!message.isSelf && isMessageStatusDelivered(message.status)) {
@@ -71,10 +73,12 @@ export const useMessageMonitor = () => {
 
     await remove(messageId)
     await mutateRoom(roomId, (room) => {
-      room.messages = room.messages.filter((id) => id !== messageId)
+      const messages = room.messages.filter((id) => id !== messageId)
+
+      room.messages = messages
 
       if (room.lastMessageId === messageId) {
-        room.lastMessageId = room.messages[room.messages.length - 1] ?? null
+        room.lastMessageId = messages[messages.length - 1] ?? null
       }
     })
 
