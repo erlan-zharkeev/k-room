@@ -4,6 +4,8 @@ import {
   NmorphCard,
   NmorphDialog,
   NmorphFileUpload,
+  NmorphForm,
+  NmorphFormItem,
   NmorphIconSearch,
   NmorphTextInput
 } from '@nmorph/nmorph-ui-kit'
@@ -21,6 +23,7 @@ const props = defineProps<ChatRoomFormDialogProps>()
 const emit = defineEmits<ChatRoomFormDialogEmit>()
 
 const {
+  chatRoomFormValidationData,
   chatAvatarUploadValue,
   chatRoomNameInputValue,
   contactSearchQuery,
@@ -47,60 +50,68 @@ const {
 
 <template>
   <NmorphDialog :model-value="isOpen" :title="$t(dialogTitleI18n)" @update:model-value="updateChatRoomFormDialogOpen">
-    <div class="chat-room-form-dialog">
-      <NmorphTextInput
-        :model-value="chatRoomNameInputValue"
-        :disabled="!isChatRoomNameEditable"
-        clearable
-        :placeholder="$t(CHAT_ROOM_PAGE_I18N.chatName)"
-        :input-attrs="{ maxLength: CHAT_ROOM_NAME_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_PAGE_I18N.chatName) }"
-        @update:model-value="updateChatRoomName"
-      />
-      <NmorphFileUpload
-        :allowed-types="CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES"
-        :button-text="$t(CHAT_ROOM_PAGE_I18N.uploadChatImage)"
-        :disabled="!isChatRoomAvatarEditable || isSavingChatRoom"
-        :model-value="chatAvatarUploadValue"
-        :multiple="false"
-        @update:model-value="updateChatAvatar"
-        @on-unsupported-file-type-error="showUnsupportedChatAvatarFormatError"
-      />
-      <NmorphTextInput
-        v-if="contactPickerItems.length"
-        :model-value="contactSearchQuery"
-        clearable
-        :placeholder="$t(CHAT_ROOM_PAGE_I18N.contactSearch)"
-        :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.contactSearch) }"
-        @update:model-value="contactSearchQuery = $event"
-      >
-        <template #prepend-icon>
-          <NmorphIconSearch />
-        </template>
-      </NmorphTextInput>
-      <AppText
-        v-if="!contactPickerItems.length"
-        color="semi-contrast-text"
-        :selectable="false"
-        :text="$t(CHAT_ROOM_PAGE_I18N.noContacts)"
-      />
-      <NmorphCard v-else shadow-type="inset" class="chat-room-form-dialog__contacts-card">
+    <NmorphForm :value="chatRoomFormValidationData" class="chat-room-form-dialog" @submit.prevent="submitChatRoom">
+      <NmorphFormItem id="chatName" :show-validation-icon="false">
+        <NmorphTextInput
+          :model-value="chatRoomNameInputValue"
+          :disabled="!isChatRoomNameEditable"
+          clearable
+          :placeholder="$t(CHAT_ROOM_PAGE_I18N.chatName)"
+          :input-attrs="{ maxLength: CHAT_ROOM_NAME_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_PAGE_I18N.chatName) }"
+          @update:model-value="updateChatRoomName"
+        />
+      </NmorphFormItem>
+      <NmorphFormItem id="avatar" :show-validation-icon="false">
+        <NmorphFileUpload
+          :allowed-types="CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES"
+          :button-text="$t(CHAT_ROOM_PAGE_I18N.uploadChatImage)"
+          :disabled="!isChatRoomAvatarEditable || isSavingChatRoom"
+          :model-value="chatAvatarUploadValue"
+          :multiple="false"
+          @update:model-value="updateChatAvatar"
+          @on-unsupported-file-type-error="showUnsupportedChatAvatarFormatError"
+        />
+      </NmorphFormItem>
+      <NmorphFormItem v-if="contactPickerItems.length" id="contactSearch" :show-validation-icon="false">
+        <NmorphTextInput
+          :model-value="contactSearchQuery"
+          clearable
+          :placeholder="$t(CHAT_ROOM_PAGE_I18N.contactSearch)"
+          :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.contactSearch) }"
+          @update:model-value="contactSearchQuery = $event"
+        >
+          <template #prepend-icon>
+            <NmorphIconSearch />
+          </template>
+        </NmorphTextInput>
+      </NmorphFormItem>
+      <NmorphFormItem id="members" :show-validation-icon="false">
         <AppText
-          v-if="showNoContactSearchResults"
+          v-if="!contactPickerItems.length"
           color="semi-contrast-text"
           :selectable="false"
-          :text="$t(CHAT_ROOM_PAGE_I18N.noContactSearchResults)"
+          :text="$t(CHAT_ROOM_PAGE_I18N.noContacts)"
         />
-        <AppUserPicker
-          v-else
-          v-model="selectedMemberIds"
-          :items="filteredContactPickerItems"
-          :locked-ids="lockedMemberIds"
-          :max-selected="maxSelectedMemberIds"
-        />
-      </NmorphCard>
+        <NmorphCard v-else shadow-type="inset" class="chat-room-form-dialog__contacts-card">
+          <AppText
+            v-if="showNoContactSearchResults"
+            color="semi-contrast-text"
+            :selectable="false"
+            :text="$t(CHAT_ROOM_PAGE_I18N.noContactSearchResults)"
+          />
+          <AppUserPicker
+            v-else
+            v-model="selectedMemberIds"
+            :items="filteredContactPickerItems"
+            :locked-ids="lockedMemberIds"
+            :max-selected="maxSelectedMemberIds"
+          />
+        </NmorphCard>
+      </NmorphFormItem>
       <div class="chat-room-form-dialog__actions">
         <NmorphButton
           style-type="transparent"
+          type="button"
           :text="$t(CHAT_ROOM_PAGE_I18N.cancel)"
           :disabled="isSavingChatRoom"
           @click="closeChatRoomFormDialog"
@@ -113,10 +124,10 @@ const {
           :text="$t(submitChatRoomButtonI18n)"
           :loading="isSavingChatRoom"
           :disabled="!canSubmitChatRoom"
-          @click="submitChatRoom"
+          type="submit"
         />
       </div>
-    </div>
+    </NmorphForm>
   </NmorphDialog>
 </template>
 

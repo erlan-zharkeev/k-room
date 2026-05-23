@@ -32,7 +32,6 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
           v-for="image in messageImageList"
           :key="image.name"
           :media-id="image.mediaId"
-          :src="image.src"
           :alt="image.name"
           width="100%"
           height="220px"

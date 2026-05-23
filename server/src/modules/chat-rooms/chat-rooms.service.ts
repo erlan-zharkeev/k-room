@@ -351,6 +351,7 @@ export const updateChatRoom = async (
   const nextChatName = chatName.trim()
   const addedUserIds = memberIds.filter((id) => !currentMemberIds.includes(id))
   const removedUserIds = currentMemberIds.filter((id) => !memberIds.includes(id))
+  const affectedMemberIds = union(currentMemberIds, memberIds)
   const usersAccepted = await checkContactsExistence(userId, addedUserIds)
 
   if (!usersAccepted) {
@@ -358,6 +359,13 @@ export const updateChatRoom = async (
   }
 
   await validateUpdateChatRoomData(userId, addedUserIds, memberIds, nextChatName)
+
+  const deletedAvatarId = avatarFile === null && buildAvatarId(roomId)
+
+  if (deletedAvatarId) {
+    await deleteBucketFilesByName('avatar', deletedAvatarId)
+    emitToUsers(affectedMemberIds, 'media-files-deleted', { mediaIds: [deletedAvatarId] })
+  }
 
   if (avatarFile?.fileBuffer) {
     await uploadBufferToBucket(avatarFile.fileBuffer, buildAvatarId(roomId), 'avatar', {

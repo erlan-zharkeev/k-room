@@ -1,4 +1,4 @@
-import type { AxiosResponse, Method, ResponseType } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse, Method, ResponseType } from 'axios'
 import type { Endpoints, BackendResponse, ReqStatus } from 'global-shared'
 
 export type HttpRequest = Method
@@ -7,6 +7,7 @@ export type HttpRequestPayload = object | FormData | URLSearchParams | string | 
 
 export interface HttpRequestOptions<R extends ResponseType = ResponseType> {
   contentType?: string
+  headers?: AxiosRequestConfig['headers']
   responseType?: R
 }
 

@@ -1,20 +1,34 @@
-import { computed, toRef } from 'vue'
+import { MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
+import { computed, toRef, watch } from 'vue'
 
+import { useSyncMedia } from 'src/entities/media-file'
 import { useLocalizedDateTime } from 'src/entities/setting'
 
 import type { MessageBodyProps } from '../config/types'
-import { resolveMessageImageSrc } from '../lib/resolve-message-image-src'
 
 export const useMessageBody = (props: MessageBodyProps) => {
   const message = toRef(props, 'message')
   const { formatTime } = useLocalizedDateTime()
+  const { sync } = useSyncMedia()
 
   const showAuthorNickname = computed(() => !props.isPrivateRoom && !message.value.isSelf)
   const messageImageList = computed(() =>
-    (message.value.images ?? []).map((image) => ({
-      ...image,
-      previewSrc: resolveMessageImageSrc(image.src)
-    }))
+    (message.value.images ?? [])
+      .filter((image) => image.src.startsWith(MEDIA_IMAGE_FILENAME_PREFIX))
+      .map((image) => ({
+        ...image,
+        mediaId: image.src
+      }))
+  )
+
+  watch(
+    messageImageList,
+    (images) => {
+      images.forEach(({ mediaId }) => {
+        sync(mediaId)
+      })
+    },
+    { immediate: true }
   )
 
   const sentAt = computed(() => {
