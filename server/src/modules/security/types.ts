@@ -12,6 +12,21 @@ export interface ProtectedActionDecision {
   nextTryAt?: number
 }
 
+export interface SecurityEmailIpActionLimits {
+  captchaEmailThreshold: number
+  blockEmailThreshold: number
+  captchaIpThreshold: number
+  blockIpThreshold: number
+}
+
+export interface SecurityEmailIpActionParams {
+  action: SecurityAction
+  email: string
+  ip: string
+  captchaToken?: string
+  limits: SecurityEmailIpActionLimits
+}
+
 export interface TurnstileVerificationResponse {
   success: boolean
   action?: string

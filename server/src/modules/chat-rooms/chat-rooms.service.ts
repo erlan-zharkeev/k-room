@@ -263,10 +263,11 @@ export const transformRoomForUser = async ({
   } satisfies EventGetRoom
 }
 
-export const emitRoomDataToUsers = async (
+const emitRoomToUsers = async (
   userIds: string[],
   room: ChatRoomSchema,
-  presenceService: PresenceService
+  presenceService: PresenceService,
+  eventName: 'room-data-updated' | 'new-room-added'
 ) => {
   await Promise.all(
     userIds.map(async (userId) => {
@@ -283,9 +284,17 @@ export const emitRoomDataToUsers = async (
       })
 
       await emitKnownUsersToUser(userId, room.users, presenceService)
-      emitToUsers([userId], 'room-data-updated', transformedRoom)
+      emitToUsers([userId], eventName, transformedRoom)
     })
   )
+}
+
+export const emitRoomDataToUsers = async (
+  userIds: string[],
+  room: ChatRoomSchema,
+  presenceService: PresenceService
+) => {
+  await emitRoomToUsers(userIds, room, presenceService, 'room-data-updated')
 }
 
 export const leaveChatRoom = async (
@@ -353,22 +362,5 @@ export const leaveChatRoom = async (
 }
 
 export const emitNewRoomToUsers = async (userIds: string[], room: ChatRoomSchema, presenceService: PresenceService) => {
-  await Promise.all(
-    userIds.map(async (userId) => {
-      const userData = await UserModel.findById(userId).lean()
-
-      if (!userData) {
-        return
-      }
-
-      const transformedRoom = await transformRoomForUser({
-        userId,
-        room,
-        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds
-      })
-
-      await emitKnownUsersToUser(userId, room.users, presenceService)
-      emitToUsers([userId], 'new-room-added', transformedRoom)
-    })
-  )
+  await emitRoomToUsers(userIds, room, presenceService, 'new-room-added')
 }

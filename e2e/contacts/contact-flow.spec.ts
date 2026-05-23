@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Locator, type Page } from '@playwright/test'
 
 import { E2E_ENV } from 'e2e/config'
+import { signInWithProvider as signInWithProviderRequest } from 'e2e/shared/auth'
 import { getAppDbName, readStores } from 'e2e/shared/indexed-db'
 
 import {
@@ -44,15 +45,7 @@ const buildContactUser = (role: ContactE2EUserRole): Omit<ContactE2EUser, 'id'> 
 
 const signInWithProvider = async (page: Page, role: ContactE2EUserRole): Promise<ContactE2EUser> => {
   const user = buildContactUser(role)
-  const response = await page.request.post(`${E2E_ENV.PLAYWRIGHT_API_URL}/auth/provider-login`, {
-    data: {
-      ...user,
-      provider: CONTACT_E2E_PROVIDER
-    }
-  })
-
-  expect(response.ok()).toBeTruthy()
-
+  const response = await signInWithProviderRequest(page, user.nickname, user.email, CONTACT_E2E_PROVIDER)
   const body = (await response.json()) as ContactE2EProviderLoginResponse
 
   expect(body.payload).toEqual(expect.objectContaining(user))
