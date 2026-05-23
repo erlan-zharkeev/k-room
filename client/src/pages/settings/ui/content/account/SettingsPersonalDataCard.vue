@@ -130,11 +130,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nickname)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput
-          v-model="formData.nickname.value"
-          :disabled="isAccountSaving"
-          :input-attrs="SETTINGS_ACCOUNT_NICKNAME_INPUT_ATTRS"
-        />
+        <NmorphTextInput :disabled="isAccountSaving" :input-attrs="SETTINGS_ACCOUNT_NICKNAME_INPUT_ATTRS" />
         <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
       </NmorphFormItem>
     </NmorphForm>

@@ -21,7 +21,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
   <NmorphForm ref="formRef" :value="formData" class="registration-page" @submit.prevent="submit">
     <NmorphFormItem id="nickname" :show-validation-icon="false">
       <NmorphTextInput
-        v-model="formData.nickname.value"
         :disabled="isFormDisabled"
         :input-attrs="REGISTRATION_NICKNAME_INPUT_ATTRS"
         :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"
@@ -31,7 +30,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 
     <NmorphFormItem id="email" :show-validation-icon="false">
       <NmorphTextInput
-        v-model="formData.email.value"
         autocomplete="email"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.emailPlaceholder)"
@@ -41,7 +39,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 
     <NmorphFormItem id="password" :show-validation-icon="false">
       <NmorphTextInput
-        v-model="formData.password.value"
         autocomplete="new-password"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.passwordPlaceholder)"
@@ -51,7 +48,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 
     <NmorphFormItem id="policy" :show-validation-icon="false">
       <div class="registration-page__policy">
-        <NmorphSwitch v-model="formData.policy.value" :disabled="isFormDisabled" />
+        <NmorphSwitch :disabled="isFormDisabled" />
         <span>
           <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.agreement)" />
           <RouterLink :to="ROUTE_NAMES.privacyPolicy">

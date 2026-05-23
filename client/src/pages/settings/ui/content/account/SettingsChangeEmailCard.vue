@@ -41,7 +41,6 @@ const {
         :show-validation-icon="false"
       >
         <NmorphTextInput
-          v-model="formData.nextEmail.value"
           autocomplete="email"
           :disabled="isEmailCodeSending || isEmailCodeValidating"
           :input-attrs="{ type: 'email' }"

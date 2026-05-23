@@ -45,7 +45,6 @@ onMounted(initializeCreateNewPassword)
       <NmorphForm ref="formRef" :value="formData" class="create-new-password-page__form" @submit.prevent="submit">
         <NmorphFormItem id="firstPassword" class="create-new-password-page__field" :show-validation-icon="false">
           <NmorphTextInput
-            v-model="formData.firstPassword.value"
             autocomplete="new-password"
             :disabled="isLoading"
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.firstPasswordPlaceholder)"
@@ -55,7 +54,6 @@ onMounted(initializeCreateNewPassword)
 
         <NmorphFormItem id="secondPassword" class="create-new-password-page__field" :show-validation-icon="false">
           <NmorphTextInput
-            v-model="formData.secondPassword.value"
             autocomplete="new-password"
             :disabled="isLoading"
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
