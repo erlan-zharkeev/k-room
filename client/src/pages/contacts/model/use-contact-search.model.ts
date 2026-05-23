@@ -2,7 +2,7 @@ import { useDebounceFn } from '@vueuse/core'
 import type { Contact, EventGetSearchedContact, EventSearchContact, SocketActions } from 'global-shared'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
-import { getRequiredContactSystemData, useContact } from 'src/entities/contact'
+import { mergeContactLocalState, useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
 import { socket } from 'src/shared/api'
 import { getAvatarId, useI18n } from 'src/shared/lib'
@@ -84,15 +84,7 @@ export const useContactSearch = () => {
     const savedContacts = contacts.filter(({ interactionType }) => interactionType !== 'default')
 
     await mergeMany(savedContacts, {
-      merge: (current, incoming) => {
-        const systemData = getRequiredContactSystemData()
-
-        return {
-          ...incoming,
-          savedAt: current?.savedAt ?? systemData.savedAt,
-          isTyping: current?.isTyping ?? systemData.isTyping
-        }
-      }
+      merge: mergeContactLocalState
     })
   }
 

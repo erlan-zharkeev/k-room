@@ -3,17 +3,22 @@ import { useDevicesList, useUserMedia } from '@vueuse/core'
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { log, TOAST_I18N, useAppToast, useI18n, useMediaDevicePermission } from 'src/shared/lib'
+import { log, useI18n, useMediaDevicePermission } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
-import type { DevicePermissionStatus } from '../../config/types/devices.types'
-import { getDevicePermissionCalloutType } from '../../lib/get-device-permission-callout-type'
+
+import {
+  normalizeDeviceSelectValue,
+  syncSelectedDeviceId,
+  useDevicePermissionStatus,
+  useDeviceWarning
+} from './use-device-settings.model'
 
 export const useAudioInputDevice = () => {
   const { t } = useI18n()
-  const toast = useAppToast()
   const { settings, setByPath } = useSettings()
   const { audioInputPermission, hasAudioInputPermissionWarning } = useMediaDevicePermission()
+  const { showDeviceWarning } = useDeviceWarning('Audio input device request failed')
   const {
     audioInputs: audioInputDevices,
     devices: audioInputAllDevices,
@@ -33,6 +38,10 @@ export const useAudioInputDevice = () => {
   const audioContext = shallowRef<AudioContext | null>(null)
   const audioInputStream = audioInputUserMedia.stream
 
+  const {
+    permissionCalloutType: audioInputPermissionCalloutType,
+    permissionStatus: audioInputPermissionStatus
+  } = useDevicePermissionStatus(isAudioInputSupported, audioInputPermission)
   const audioInputOptions = computed(() =>
     audioInputDevices.value.map(({ deviceId, label }, index) => ({
       value: deviceId,
@@ -40,14 +49,6 @@ export const useAudioInputDevice = () => {
     }))
   )
 
-  const getPermissionStatusText = (status: DevicePermissionStatus) => {
-    if (!isAudioInputSupported.value) return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported)
-    if (status === 'granted') return t(SETTINGS_PAGE_DEVICES_I18N.permissionGranted)
-    if (status === 'denied') return t(SETTINGS_PAGE_DEVICES_I18N.permissionDenied)
-    if (status === 'prompt') return t(SETTINGS_PAGE_DEVICES_I18N.permissionPrompt)
-
-    return t(SETTINGS_PAGE_DEVICES_I18N.permissionUnknown)
-  }
   const isAudioInputChecking = computed(() => Boolean(audioInputStream.value))
   const isAudioInputCheckDisabled = computed(
     () =>
@@ -55,23 +56,6 @@ export const useAudioInputDevice = () => {
       !isAudioInputSupported.value ||
       (audioInputPermission.value === 'granted' && audioInputDevices.value.length === 0)
   )
-  const audioInputPermissionCalloutType = computed(() =>
-    isAudioInputSupported.value ? getDevicePermissionCalloutType(audioInputPermission.value) : 'warning'
-  )
-  const audioInputPermissionStatus = computed(() =>
-    t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus)(getPermissionStatusText(audioInputPermission.value))
-  )
-
-  const normalizeSelectValue = (value: NmorphSelectModelValueType) => (Array.isArray(value) ? value[0] ?? '' : value)
-
-  const showDeviceWarning = (error: unknown) => {
-    log('warn', 'Audio input device request failed', error)
-    toast.add({
-      type: 'warning',
-      title: t(TOAST_I18N.warn),
-      content: t(SETTINGS_PAGE_DEVICES_I18N.cantAccessDevice)
-    })
-  }
 
   const stopAudioVolume = () => {
     if (audioFrameId.value) {
@@ -162,24 +146,13 @@ export const useAudioInputDevice = () => {
     await startAudioInputCheck()
   }
 
-  const getSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string, emptyDeviceId = '') => {
-    if (devices.length === 0) return emptyDeviceId
-
-    return devices.some((device) => device.deviceId === deviceId) ? deviceId : devices[0]?.deviceId ?? ''
-  }
-
   const syncSelectedAudioInputDevice = async (clearMissing = false) => {
-    const deviceId = getSelectedDeviceId(
+    return syncSelectedDeviceId(
       audioInputDevices.value,
       settings.value.ioDevices.audioInputDeviceId,
-      clearMissing ? '' : settings.value.ioDevices.audioInputDeviceId
+      clearMissing ? '' : settings.value.ioDevices.audioInputDeviceId,
+      (deviceId) => setByPath('ioDevices.audioInputDeviceId', deviceId)
     )
-
-    if (deviceId !== settings.value.ioDevices.audioInputDeviceId) {
-      await setByPath('ioDevices.audioInputDeviceId', deviceId)
-    }
-
-    return deviceId
   }
 
   const refreshAudioInputDevices = async (clearMissing = false) => {
@@ -196,7 +169,7 @@ export const useAudioInputDevice = () => {
   }
 
   const setSelectedAudioInputDevice = async (value: NmorphSelectModelValueType = '') => {
-    const deviceId = normalizeSelectValue(value)
+    const deviceId = normalizeDeviceSelectValue(value)
     const shouldRestartCheck = isAudioInputChecking.value
 
     await setByPath('ioDevices.audioInputDeviceId', deviceId)
