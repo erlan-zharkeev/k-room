@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 
 import { Injectable, OnModuleDestroy } from '@nestjs/common'
-import type { EventStatusContact } from 'global-shared'
+import { getRoomOtherUserIds, type EventStatusContact } from 'global-shared'
 import uniq from 'lodash/uniq'
 
 import { log } from 'src/shared/lib/log'
@@ -153,7 +153,7 @@ export class PresenceService implements OnModuleDestroy {
     ])
     const userIds = uniq([
       ...users.map((user) => String(user._id)),
-      ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
+      ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
     ])
 
     if (!userIds.length) {

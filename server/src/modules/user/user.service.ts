@@ -8,6 +8,7 @@ import {
   type UserData,
   VALIDATION_PATTERNS,
   buildAvatarId,
+  getRoomOtherUserIds,
   normalizeNicknameKey,
   REQ_STATUS
 } from 'global-shared'
@@ -332,7 +333,7 @@ export class UserService {
 
     const ids = uniq([
       ...contacts.map((contact) => String(contact._id)),
-      ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
+      ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
     ])
 
     if (!ids.length) {

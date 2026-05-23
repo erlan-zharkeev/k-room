@@ -12,7 +12,7 @@ export const useChatRoom = () => {
   const hasChatRooms = computed(() => chatRooms.value.length > 0)
   const getById = (id: string) => chatRooms.value.find((room) => room.id === id)
   const getPersonalByContactId = (id: string) =>
-    chatRooms.value.find((room) => isRoomPrivate(room) && room.users[0] === id)
+    chatRooms.value.find((room) => isRoomPrivate(room) && room.users.includes(id))
   const isPrivate = (id: string) => isRoomPrivate(getById(id))
   const merge = (rooms: ChatRoom[]) =>
     mergeMany(rooms, {

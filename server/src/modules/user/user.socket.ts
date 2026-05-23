@@ -1,4 +1,10 @@
-import type { Contact, EventGetContacts, EventGetRooms, SocketActions } from 'global-shared'
+import {
+  getRoomOtherUserIds,
+  type Contact,
+  type EventGetContacts,
+  type EventGetRooms,
+  type SocketActions
+} from 'global-shared'
 import uniq from 'lodash/uniq'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
@@ -51,7 +57,7 @@ export const registerUserSocketHandlers = (socket: SocketInstance, presenceServi
         const { contacts, chatRooms: roomIds, pinnedChatRoomIds, mutedChatRoomIds } = data.personal
         const contactResultData: Contact[] = await transformUserToFrontendContact(contacts, presenceService)
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-        const knownUserIds = uniq(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))
+        const knownUserIds = uniq(rooms.flatMap((room) => getRoomOtherUserIds(room, userId)))
         const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)
         const contactsPayload: EventGetContacts = {
           contacts: contactResultData,
