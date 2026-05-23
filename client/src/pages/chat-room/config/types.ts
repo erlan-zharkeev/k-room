@@ -1,5 +1,7 @@
+import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type { ChatKind } from 'global-shared'
+import type { Ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import type { ChatRoomRecord } from 'src/shared/lib'
@@ -54,6 +56,27 @@ export interface ChatRoomLeaveDialogProps {
 
 export interface ChatRoomFormDialogProps {
   roomId?: string
+}
+
+export interface ChatRoomFormData {
+  chatRoomName?: string
+  chatAvatarFile?: File
+  selectedMemberIds: string[]
+}
+
+export interface ChatRoomFormState {
+  chatAvatarUploadValue: INmorphCustomFileData[]
+  hasInitialChatAvatar: boolean
+  chatAvatarWasDeleted: boolean
+  isSavingChatRoom: boolean
+}
+
+export interface ChatRoomFormAvatarParams {
+  chatRoomFormData: ChatRoomFormData
+  chatRoomFormState: ChatRoomFormState
+  isChatRoomFormDialogOpen: Ref<boolean>
+  isEditMode: Readonly<Ref<boolean>>
+  roomId: Ref<string | undefined>
 }
 
 export type ChatRoomFormDialogEmit = {
