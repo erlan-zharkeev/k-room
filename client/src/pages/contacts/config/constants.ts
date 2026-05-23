@@ -1,5 +1,4 @@
-import { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from 'global-shared'
-import type { ContactInteractionUpdateFailedReason, Interaction, LocalizedText } from 'global-shared'
+import type { Interaction } from 'global-shared'
 
 import { CONTACTS_PAGE_I18N } from './i18n'
 import type { ContactsSearchBadgeData } from './types'
@@ -34,7 +33,3 @@ export const CONTACTS_SEARCH_BADGE_BY_INTERACTION = {
     visible: true
   }
 } as const satisfies Record<Interaction, ContactsSearchBadgeData>
-
-export const CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON = {
-  [CONTACT_INTERACTION_UPDATE_FAILED_REASONS.INVITATION_RESTRICTED]: CONTACTS_PAGE_I18N.invitationRestricted
-} as const satisfies Record<ContactInteractionUpdateFailedReason, LocalizedText>

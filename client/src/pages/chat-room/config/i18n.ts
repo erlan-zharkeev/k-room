@@ -16,11 +16,6 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Создать чат',
     zh: '创建聊天'
   },
-  createChatFailed: {
-    en: 'Failed to create chat',
-    ru: 'Не удалось создать чат',
-    zh: '无法创建聊天'
-  },
   openChat: {
     en: 'Open chat',
     ru: 'Открыть чат',

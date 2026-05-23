@@ -1,6 +1,6 @@
-import type { EventCallsUpdated, EventCallUpdated } from 'global-shared'
+import type { EventCallsUpdated, EventCallUpdated, SocketActions } from 'global-shared'
 
-import { useSocketEventListeners } from 'src/shared/api'
+import { socket } from 'src/shared/api'
 
 import { useCall } from './use-call.model'
 
@@ -14,13 +14,19 @@ export const useCallDataUpdateMonitor = () => {
   const handleCallChanged = async (call: EventCallUpdated) => {
     await put(call)
   }
-  const { initializeSocketEventListeners, disposeSocketEventListeners } = useSocketEventListeners([
-    { action: 'calls-data-loaded', handler: handleCallsLoaded },
-    { action: 'call-data-changed', handler: handleCallChanged }
-  ])
+
+  const initializeCallDataUpdateMonitor = () => {
+    socket.on<SocketActions>('calls-data-loaded', handleCallsLoaded)
+    socket.on<SocketActions>('call-data-changed', handleCallChanged)
+  }
+
+  const disposeCallDataUpdateMonitor = () => {
+    socket.off<SocketActions>('calls-data-loaded', handleCallsLoaded)
+    socket.off<SocketActions>('call-data-changed', handleCallChanged)
+  }
 
   return {
-    initializeCallDataUpdateMonitor: initializeSocketEventListeners,
-    disposeCallDataUpdateMonitor: disposeSocketEventListeners
+    initializeCallDataUpdateMonitor,
+    disposeCallDataUpdateMonitor
   }
 }

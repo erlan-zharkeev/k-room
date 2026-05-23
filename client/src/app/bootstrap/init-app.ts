@@ -1,9 +1,9 @@
-import { router } from 'src/app/router'
 import { useSettings } from 'src/entities/setting'
 import { initClientData, initClientIndexedDbData } from 'src/features/client-session'
 import { setHttpClientLanguage, setSocketLanguage } from 'src/shared/api'
 
 import { pinia } from '../providers/pinia'
+import { router } from '../router'
 
 import { initFirebase } from './init-firebase'
 import { initI18n } from './init-i18n'

@@ -1,5 +1,4 @@
 import {
-  type ContactInteractionUpdateFailedReason,
   type CreateRoomAckPayload,
   normalizeTimestamp,
   type EventCreateRoom,
@@ -15,9 +14,8 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useLocalizedDateTime } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
-import { TOAST_I18N, useAppToast, useI18n, type ContactRecord } from 'src/shared/lib'
+import { useI18n, type ContactRecord } from 'src/shared/lib'
 
-import { CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON } from '../config/constants'
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 
 export const useContactsPage = () => {
@@ -25,7 +23,6 @@ export const useContactsPage = () => {
   const { getPersonalByContactId } = useChatRoom()
   const { formatRelativeTime } = useLocalizedDateTime()
   const { t } = useI18n()
-  const toast = useAppToast()
   const { emitSocketAction } = useSocketAction()
 
   const contactToDeleteId = ref('')
@@ -77,31 +74,12 @@ export const useContactsPage = () => {
 
     const payload: EventUpdateInteraction = { contactId, interaction }
 
-    function showInteractionUpdateFailure(reason?: ContactInteractionUpdateFailedReason) {
-      if (!reason) return
-
-      toast.add({
-        type: 'warning',
-        title: t(TOAST_I18N.warn),
-        content: t(CONTACT_INTERACTION_UPDATE_FAILED_MESSAGE_BY_REASON[reason])
-      })
-    }
-
     loadingContactIds.add(contactId)
-    void emitSocketAction<EventUpdateInteraction, void, ContactInteractionUpdateFailedReason>(
-      'update-contact-interaction-type',
-      payload,
-      {
-        onFailure: ({ handledByGlobalError, reason }) => {
-          if (handledByGlobalError) return
-
-          showInteractionUpdateFailure(reason)
-        },
-        onSettled: () => {
-          loadingContactIds.delete(contactId)
-        }
+    void emitSocketAction<EventUpdateInteraction>('update-contact-interaction-type', payload, {
+      onSettled: () => {
+        loadingContactIds.delete(contactId)
       }
-    )
+    })
   }
 
   const goToChatRoom = (roomId?: string) => {

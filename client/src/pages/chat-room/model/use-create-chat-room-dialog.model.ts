@@ -121,14 +121,6 @@ export const useCreateChatRoomDialog = (
     })
   }
 
-  const showCreateChatFailedError = () => {
-    toast.add({
-      type: 'error',
-      title: t(TOAST_I18N.error),
-      content: t(CHAT_ROOM_PAGE_I18N.createChatFailed)
-    })
-  }
-
   const updateChatAvatar = (files: INmorphCustomFileData[]) => {
     const file = files[files.length - 1]
 
@@ -219,11 +211,7 @@ export const useCreateChatRoomDialog = (
 
     isCreatingChat.value = false
 
-    if (!response.ok || !response.payload?.roomId) {
-      showCreateChatFailedError()
-
-      return
-    }
+    if (!response.ok || !response.payload?.roomId) return
 
     const { roomId } = response.payload
 
