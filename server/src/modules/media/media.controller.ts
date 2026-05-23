@@ -18,8 +18,7 @@ export class MediaController {
   async getMediaFile(
     @Req() request: Request,
     @Res() response: Response<BackendResponse<null>>,
-    @Query('download') download?: string,
-    @Query('revalidate') revalidate?: string
+    @Query('download') download?: string
   ) {
     const { params } = request
     const id = String(params.id ?? '')
@@ -30,8 +29,7 @@ export class MediaController {
       }
 
       await this.mediaService.getMediaFile(id, response, {
-        asAttachment: ['1', 'true', 'yes'].includes(String(download ?? '').toLowerCase()),
-        revalidateCache: Boolean(revalidate)
+        asAttachment: ['1', 'true', 'yes'].includes(String(download ?? '').toLowerCase())
       })
     } catch (error) {
       throw toAppError(error, GET_MEDIA_FILE_I18N.failedToProvideMedia)

@@ -85,7 +85,7 @@ export interface EventUpdateChatRoom {
   roomId: string
   memberIds: string[]
   chatName: string
-  avatarFile?: MediaFileValue
+  avatarFile?: MediaFileValue | null
 }
 
 export interface EventDeleteChatRoom {
@@ -128,6 +128,10 @@ export interface EventMutedChatRoomsUpdated {
   roomId?: string
   isMuted?: boolean
   mutedChatRoomIds: string[]
+}
+
+export interface EventMediaFilesDeleted {
+  mediaIds: string[]
 }
 
 export interface EventUserTyping {
@@ -294,6 +298,7 @@ export type SocketActions =
   | 'update-pinned-chat-room-order'
   | 'update-muted-chat-room'
   | 'room-data-updated'
+  | 'media-files-deleted'
   | 'pinned-chat-rooms-updated'
   | 'muted-chat-rooms-updated'
   | 'add-reaction'

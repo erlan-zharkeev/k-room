@@ -42,14 +42,15 @@ export const useHttp = () => {
     data: HttpRequestPayload = {},
     opts: HttpRequestOptions<R> = {}
   ): Promise<R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>> => {
-    const { contentType = 'application/json' } = opts
+    const { contentType = 'application/json', headers = {} } = opts
     const responseType = (opts.responseType ?? 'json') as ResponseType
 
     const requestConfig: AxiosRequestConfig<HttpRequestPayload> = {
       method: type,
       url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${endpoint}`,
       headers: {
-        'Content-Type': contentType
+        'Content-Type': contentType,
+        ...headers
       },
       responseType,
       ...(type === 'get' ? { params: data } : { data })

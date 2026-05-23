@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { AppMediaImage, AppText } from 'src/shared/ui'
 
 import type { MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
@@ -30,10 +28,11 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
         />
       </div>
       <div v-if="messageImageList.length" class="message-body__images">
-        <NmorphImagePreview
+        <AppMediaImage
           v-for="image in messageImageList"
           :key="image.name"
-          :src="image.previewSrc"
+          :media-id="image.mediaId"
+          :src="image.src"
           :alt="image.name"
           width="100%"
           height="220px"

@@ -39,7 +39,6 @@ export interface UploadOptions {
 
 export interface StreamMediaFileOptions {
   asAttachment?: boolean
-  revalidateCache?: boolean
 }
 
 export type MongooseGridFSBucket = InstanceType<typeof mongoose.mongo.GridFSBucket>

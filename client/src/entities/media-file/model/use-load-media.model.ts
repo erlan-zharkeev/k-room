@@ -2,6 +2,7 @@ import { MEDIA_ENDPOINTS, REQ_STATUS, type Endpoints } from 'global-shared'
 
 import { isHttpError, useHttp } from 'src/shared/api'
 
+import { MEDIA_NO_CACHE_REQUEST_HEADERS } from '../config/constants'
 import { transformHeadersToMediaData } from '../lib/transform-headers-to-media-data'
 
 import { useMedia } from './use-media.model'
@@ -13,13 +14,16 @@ export const useLoadMedia = () => {
   const getMediaEndpoint = (filename: string) => `${MEDIA_ENDPOINTS.getMediaFile}/${filename}` as Endpoints
 
   const loadMediaHeaders = async (filename: string) => {
-    const response = await doHttpRequest('head', getMediaEndpoint(filename))
+    const response = await doHttpRequest('head', getMediaEndpoint(filename), undefined, {
+      headers: MEDIA_NO_CACHE_REQUEST_HEADERS
+    })
 
     return transformHeadersToMediaData(response)
   }
 
   const requestMedia = (filename: string) => {
     return doHttpRequest<never, 'blob'>('get', getMediaEndpoint(filename), undefined, {
+      headers: MEDIA_NO_CACHE_REQUEST_HEADERS,
       responseType: 'blob'
     })
   }
