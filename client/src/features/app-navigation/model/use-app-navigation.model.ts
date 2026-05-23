@@ -1,4 +1,5 @@
 import { isString } from 'global-shared'
+import sumBy from 'lodash/sumBy'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -18,9 +19,7 @@ export const useAppNavigation = () => {
     return isString(settingsId) && settingsId ? settingsId : 'account'
   })
   const routePath = computed(() => route.path)
-  const unreadMessagesQuantity = computed(() =>
-    chatRooms.value.reduce((quantity, room) => quantity + (room.unreadMessagesQuantity ?? 0), 0)
-  )
+  const unreadMessagesQuantity = computed(() => sumBy(chatRooms.value, 'unreadMessagesQuantity'))
   const hasSettingsWarning = computed(() => isStorageUsageWarning.value || hasMediaDevicePermissionWarning.value)
 
   return {

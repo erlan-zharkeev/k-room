@@ -18,6 +18,9 @@ import {
   USER_CHAT_ROOM_LIMIT,
   REQ_STATUS
 } from 'global-shared'
+import intersection from 'lodash/intersection'
+import union from 'lodash/union'
+import without from 'lodash/without'
 
 import { AppError } from 'src/shared/lib/app-error'
 
@@ -97,14 +100,14 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
 }
 
 const resolvePinnedChatRoomIds = (currentIds: string[], roomId: string, isPinned: boolean) => {
-  if (!isPinned) return currentIds.filter((id) => id !== roomId)
+  if (!isPinned) return without(currentIds, roomId)
 
-  return [roomId, ...currentIds.filter((id) => id !== roomId)]
+  return [roomId, ...without(currentIds, roomId)]
 }
 
 const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[]) => {
-  const orderedIds = incomingIds.filter((id) => currentIds.includes(id))
-  return [...new Set([...orderedIds, ...currentIds])]
+  const orderedIds = intersection(incomingIds, currentIds)
+  return union(orderedIds, currentIds)
 }
 
 export const resolveKnownUsers = async (userIds: string[], presenceService: PresenceService): Promise<KnownUser[]> => {

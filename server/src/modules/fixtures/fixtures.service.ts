@@ -3,6 +3,9 @@ import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
 import { CHAT_KIND, DAY_IN_MS, MEDIA_AVATAR_FILENAME_PREFIX, MINUTE_IN_MS, REQ_STATUS } from 'global-shared'
+import compact from 'lodash/compact'
+import countBy from 'lodash/countBy'
+import keyBy from 'lodash/keyBy'
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
@@ -39,7 +42,7 @@ import {
 } from './fixtures.constants'
 import type { FixtureContactData, FixtureUserData } from './fixtures.types'
 
-const USER_BY_NICKNAME = Object.fromEntries(USER_FIXTURES.map((fixture) => [fixture.nickname, fixture]))
+const USER_BY_NICKNAME = keyBy(USER_FIXTURES, 'nickname')
 const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
 const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''
 
@@ -116,10 +119,11 @@ const loadUserFixture = async (data: FixtureUserData) => {
 
 const loadUserFixtures = async () => {
   const results = await Promise.all(USER_FIXTURES.map((data) => loadUserFixture(data)))
-  const created = results.filter((result) => result === 'created').length
-  const updated = results.filter((result) => result === 'updated').length
-  const skipped = results.filter((result) => result === 'skipped').length
-  const failed = results.filter((result) => result === 'failed').length
+  const resultCount = countBy(results)
+  const created = resultCount.created ?? 0
+  const updated = resultCount.updated ?? 0
+  const skipped = resultCount.skipped ?? 0
+  const failed = resultCount.failed ?? 0
 
   log.info(`-User fixtures processed: created=${created}, updated=${updated}, skipped=${skipped}, failed=${failed}`)
 }
@@ -348,7 +352,7 @@ const ensureLongPrivateFixtureRoom = async (contactId: string) => {
 const ensureGroupRooms = async () => {
   const rooms = await Promise.all(
     FIXTURE_GROUPS.map(async ({ key, adminNickname, chatName, nicknames }) => {
-      const users = nicknames.map((nickname) => USER_BY_NICKNAME[nickname]?.id).filter(Boolean)
+      const users = compact(nicknames.map((nickname) => USER_BY_NICKNAME[nickname]?.id))
       const adminId = USER_BY_NICKNAME[adminNickname]?.id
 
       if (!adminId || users.length !== nicknames.length) {
@@ -384,7 +388,7 @@ const ensureGroupRooms = async () => {
     })
   )
 
-  return rooms.flatMap((room) => (room ? [room] : []))
+  return compact(rooms)
 }
 
 const ensureMessages = async (roomId: string, fixtureMessages: ReturnType<typeof buildFixtureMessages>) => {

@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 
 import { Injectable, OnModuleDestroy } from '@nestjs/common'
 import type { EventStatusContact } from 'global-shared'
+import uniq from 'lodash/uniq'
 
 import { log } from 'src/shared/lib/log'
 import type { MongoId } from 'src/shared/types/mongo'
@@ -133,7 +134,7 @@ export class PresenceService implements OnModuleDestroy {
   }
 
   async onlineMapByUserIds(userIds: Array<MongoId | string>) {
-    const uniqueUserIds = [...new Set(userIds.map((userId) => String(userId)))]
+    const uniqueUserIds = uniq(userIds.map((userId) => String(userId)))
     const result = new Map<string, boolean>()
 
     await Promise.all(
@@ -150,12 +151,10 @@ export class PresenceService implements OnModuleDestroy {
       UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
       ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
     ])
-    const userIds = [
-      ...new Set([
-        ...users.map((user) => String(user._id)),
-        ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
-      ])
-    ]
+    const userIds = uniq([
+      ...users.map((user) => String(user._id)),
+      ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
+    ])
 
     if (!userIds.length) {
       return

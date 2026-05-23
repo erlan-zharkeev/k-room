@@ -1,4 +1,5 @@
 import type { EventUpdatePinnedChatRoomOrder, SocketActions } from 'global-shared'
+import partition from 'lodash/partition'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -77,8 +78,19 @@ export const useChatRoomsList = () => {
     })
   })
 
+  const chatRoomListGroups = computed(() => {
+    const [pinnedChatRoomList, regularChatRoomList] = partition(chatRoomList.value, ({ isPinned }) => isPinned)
+
+    return {
+      pinnedChatRoomList,
+      regularChatRoomList
+    }
+  })
   const showNoSearchResults = computed(() => Boolean(normalizedSearchQuery.value) && chatRoomList.value.length === 0)
   const showNoChats = computed(() => !normalizedSearchQuery.value && chatRooms.value.length === 0)
+  const canReorderPinnedChatRooms = computed(
+    () => !searchQuery.value.trim() && chatRoomListGroups.value.pinnedChatRoomList.length > 1
+  )
 
   const openChatRoom = (roomId: string) => {
     router.push(buildChatRoomRoute(roomId))
@@ -102,8 +114,10 @@ export const useChatRoomsList = () => {
   return {
     searchQuery,
     chatRoomList,
+    chatRoomListGroups,
     showNoSearchResults,
     showNoChats,
+    canReorderPinnedChatRooms,
     openChatRoom,
     reorderPinnedChatRooms
   }
