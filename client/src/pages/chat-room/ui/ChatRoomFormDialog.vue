@@ -25,8 +25,6 @@ const emit = defineEmits<ChatRoomFormDialogEmit>()
 const {
   chatRoomFormValidationData,
   chatAvatarUploadValue,
-  chatRoomNameInputValue,
-  contactSearchQuery,
   isSavingChatRoom,
   selectedMemberIds,
   contactPickerItems,
@@ -42,6 +40,7 @@ const {
   closeChatRoomFormDialog,
   updateChatRoomFormDialogOpen,
   updateChatRoomName,
+  updateSelectedMemberIds,
   updateChatAvatar,
   showUnsupportedChatAvatarFormatError,
   submitChatRoom
@@ -53,7 +52,6 @@ const {
     <NmorphForm :value="chatRoomFormValidationData" class="chat-room-form-dialog" @submit.prevent="submitChatRoom">
       <NmorphFormItem id="chatName" :show-validation-icon="false">
         <NmorphTextInput
-          :model-value="chatRoomNameInputValue"
           :disabled="!isChatRoomNameEditable"
           clearable
           :placeholder="$t(CHAT_ROOM_PAGE_I18N.chatName)"
@@ -74,11 +72,9 @@ const {
       </NmorphFormItem>
       <NmorphFormItem v-if="contactPickerItems.length" id="contactSearch" :show-validation-icon="false">
         <NmorphTextInput
-          :model-value="contactSearchQuery"
           clearable
           :placeholder="$t(CHAT_ROOM_PAGE_I18N.contactSearch)"
           :input-attrs="{ 'aria-label': $t(CHAT_ROOM_PAGE_I18N.contactSearch) }"
-          @update:model-value="contactSearchQuery = $event"
         >
           <template #prepend-icon>
             <NmorphIconSearch />
@@ -101,10 +97,11 @@ const {
           />
           <AppUserPicker
             v-else
-            v-model="selectedMemberIds"
+            :model-value="selectedMemberIds"
             :items="filteredContactPickerItems"
             :locked-ids="lockedMemberIds"
             :max-selected="maxSelectedMemberIds"
+            @update:model-value="updateSelectedMemberIds"
           />
         </NmorphCard>
       </NmorphFormItem>

@@ -1,4 +1,3 @@
-import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import {
   CHAT_ROOM_GROUP_MEMBER_LIMIT,
   USER_CHAT_ROOM_LIMIT,
@@ -6,26 +5,22 @@ import {
   type EventCreateRoom,
   type EventUpdateChatRoom
 } from 'global-shared'
-import { computed, onBeforeUnmount, ref, toRef, type Ref, watch } from 'vue'
+import { computed, onBeforeUnmount, toRef, toRefs, type Ref, watch } from 'vue'
 
 import { getRoomOtherUserIds, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useUser } from 'src/entities/user'
 import { useSocketAction } from 'src/shared/api'
-import {
-  revokeObjectUrl,
-  revokeObjectUrls,
-  TOAST_I18N,
-  useAppToast,
-  useI18n,
-  type ChatRoomRecord
-} from 'src/shared/lib'
+import type { ChatRoomRecord } from 'src/shared/lib'
 import type { AppUserPickerItem } from 'src/shared/ui'
 
-import { CREATE_CHAT_ROOM_AVATAR_MAX_FILE_SIZE, CREATE_CHAT_ROOM_AVATAR_MAX_MB } from '../config/constants'
+import { CHAT_ROOM_NAME_MAX_LENGTH_PATTERN } from '../config/constants'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomFormDialogProps } from '../config/types'
+
+import { useChatRoomFormAvatar } from './use-chat-room-form-avatar.model'
+import { useChatRoomFormState } from './use-chat-room-form-state.model'
 
 export const useChatRoomFormDialog = (
   props: ChatRoomFormDialogProps,
@@ -38,22 +33,39 @@ export const useChatRoomFormDialog = (
   const { knownUserById } = useKnownUser()
   const { user } = useUser()
   const { emitSocketAction } = useSocketAction()
-  const { t } = useI18n()
-  const toast = useAppToast()
-
-  const chatRoomName = ref<string>()
-  const chatAvatarUploadValue = ref<INmorphCustomFileData[]>([])
-  const contactSearchQuery = ref('')
-  const isSavingChatRoom = ref(false)
-  const selectedMemberIds = ref<string[]>([])
+  const {
+    chatRoomFormData,
+    chatRoomFormState,
+    chatRoomFormValidationData,
+    resetChatRoomFormData,
+    resetChatRoomFormState
+  } = useChatRoomFormState()
 
   const editedChatRoom = computed(() => (roomId.value ? getById(roomId.value) : undefined))
   const isEditMode = computed(() => Boolean(roomId.value))
-  const selectedOtherMemberIds = computed(() => getRoomOtherUserIds({ users: selectedMemberIds.value }, user.value.id))
+  const {
+    buildChatAvatarFile,
+    clearChatAvatarUpload,
+    loadCurrentChatAvatar,
+    saveChatAvatarMedia,
+    showUnsupportedChatAvatarFormatError,
+    updateChatAvatar
+  } = useChatRoomFormAvatar({
+    chatRoomFormData,
+    chatRoomFormState,
+    isChatRoomFormDialogOpen,
+    isEditMode,
+    roomId
+  })
+  const selectedOtherMemberIds = computed(() =>
+    getRoomOtherUserIds({ users: chatRoomFormData.selectedMemberIds }, user.value.id)
+  )
   const isGroupChat = computed(() => isEditMode.value || selectedOtherMemberIds.value.length > 1)
   const isChatRoomNameEditable = computed(() => isGroupChat.value)
   const isChatRoomAvatarEditable = computed(() => isGroupChat.value)
-  const normalizedContactSearchQuery = computed(() => contactSearchQuery.value.trim().toLowerCase())
+  const normalizedContactSearchQuery = computed(() =>
+    chatRoomFormValidationData.contactSearch.value.trim().toLowerCase()
+  )
   const contactPickerItems = computed<AppUserPickerItem[]>(() => {
     const itemsById = new Map<string, AppUserPickerItem>()
 
@@ -104,13 +116,14 @@ export const useChatRoomFormDialog = (
       .filter((nickname) => nickname)
       .join(', ')
   )
-  const chatRoomNameInputValue = computed(() => {
-    if (isEditMode.value) return chatRoomName.value ?? editedChatRoom.value?.chatName ?? ''
+  const resolvedChatRoomName = computed(() => {
+    if (isEditMode.value) return chatRoomFormData.chatRoomName ?? editedChatRoom.value?.chatName ?? ''
 
     return isGroupChat.value
-      ? chatRoomName.value ?? defaultGroupChatName.value
+      ? chatRoomFormData.chatRoomName ?? defaultGroupChatName.value
       : selectedPrivateContact.value?.nickname ?? ''
   })
+  const chatRoomNameInputValue = computed(() => chatRoomFormValidationData.chatName.value)
   const existingPrivateChatRoom = computed(() =>
     !isEditMode.value && selectedOtherMemberIds.value.length === 1
       ? getPersonalByContactId(selectedOtherMemberIds.value[0])
@@ -121,14 +134,15 @@ export const useChatRoomFormDialog = (
   const canCreateMoreChats = computed(() => chatRooms.value.length < USER_CHAT_ROOM_LIMIT)
   const canSubmitChatRoom = computed(() => {
     const hasSelectedMembers = selectedOtherMemberIds.value.length > 0
-    const hasValidMembersLimit = selectedMemberIds.value.length <= maxSelectedMemberIds
+    const hasValidMembersLimit = chatRoomFormData.selectedMemberIds.length <= maxSelectedMemberIds
     const hasValidSelectedMembers = hasSelectedMembers && hasValidMembersLimit
     const hasChatName = Boolean(chatRoomNameInputValue.value.trim())
+    const hasValidChatNameLength = CHAT_ROOM_NAME_MAX_LENGTH_PATTERN.test(chatRoomNameInputValue.value)
     const canOpenExistingPrivateChat = Boolean(existingPrivateChatRoom.value)
-    const hasValidGroupChatName = !isGroupChat.value || hasChatName
+    const hasValidGroupChatName = !isGroupChat.value || (hasChatName && hasValidChatNameLength)
     const canCreateNewChat = canCreateMoreChats.value && hasValidGroupChatName
     const canSubmitCreateChatRoom = hasValidSelectedMembers && (canOpenExistingPrivateChat || canCreateNewChat)
-    const hasEditableChatName = Boolean(editedChatRoom.value) && hasChatName
+    const hasEditableChatName = Boolean(editedChatRoom.value) && hasChatName && hasValidChatNameLength
     const canSubmitEditedChatRoom = hasEditableChatName && hasValidSelectedMembers
 
     return isEditMode.value ? canSubmitEditedChatRoom : canSubmitCreateChatRoom
@@ -146,27 +160,23 @@ export const useChatRoomFormDialog = (
     () => Boolean(normalizedContactSearchQuery.value) && filteredContactPickerItems.value.length === 0
   )
 
-  const clearChatAvatarUploadValue = () => {
-    revokeObjectUrls(chatAvatarUploadValue.value.map(({ previewUrl }) => previewUrl))
-    chatAvatarUploadValue.value = []
-  }
-
-  const clearChatAvatarUpload = () => {
-    clearChatAvatarUploadValue()
+  const syncChatRoomNameInputValue = () => {
+    chatRoomFormValidationData.chatName.value = resolvedChatRoomName.value
   }
 
   const resetChatRoomForm = () => {
-    selectedMemberIds.value = []
-    chatRoomName.value = undefined
-    contactSearchQuery.value = ''
+    resetChatRoomFormData()
+    resetChatRoomFormState()
     clearChatAvatarUpload()
+    syncChatRoomNameInputValue()
   }
 
-  const initializeChatRoomForm = () => {
+  const initializeChatRoomForm = async () => {
     resetChatRoomForm()
 
     if (!isEditMode.value) {
-      selectedMemberIds.value = [user.value.id]
+      chatRoomFormData.selectedMemberIds = [user.value.id]
+      syncChatRoomNameInputValue()
 
       return
     }
@@ -175,8 +185,10 @@ export const useChatRoomFormDialog = (
 
     if (!room) return
 
-    selectedMemberIds.value = [...room.users]
-    chatRoomName.value = room.chatName ?? ''
+    chatRoomFormData.selectedMemberIds = [...room.users]
+    chatRoomFormData.chatRoomName = room.chatName ?? ''
+    syncChatRoomNameInputValue()
+    await loadCurrentChatAvatar(room)
   }
 
   watch(isGroupChat, (isGroup) => {
@@ -188,56 +200,25 @@ export const useChatRoomFormDialog = (
   watch([isChatRoomFormDialogOpen, roomId], ([isOpen]) => {
     if (!isOpen) return
 
-    initializeChatRoomForm()
+    void initializeChatRoomForm()
   })
 
   const updateChatRoomName = (value: string) => {
     if (!isChatRoomNameEditable.value) return
 
-    chatRoomName.value = value
+    chatRoomFormData.chatRoomName = value
   }
 
-  const showUnsupportedChatAvatarFormatError = () => {
-    toast.add({
-      type: 'error',
-      title: t(TOAST_I18N.error),
-      content: t(CHAT_ROOM_PAGE_I18N.chatImageInvalidFormat)
-    })
-  }
+  const updateSelectedMemberIds = (memberIds: string[]) => {
+    chatRoomFormData.selectedMemberIds = memberIds
 
-  const showChatAvatarInvalidSizeError = () => {
-    toast.add({
-      type: 'error',
-      title: t(TOAST_I18N.error),
-      content: t(CHAT_ROOM_PAGE_I18N.chatImageInvalidSize)(CREATE_CHAT_ROOM_AVATAR_MAX_MB)
-    })
-  }
+    if (chatRoomFormData.chatRoomName !== undefined) return
 
-  const updateChatAvatar = (files: INmorphCustomFileData[]) => {
-    const file = files[files.length - 1]
-
-    if (!file) {
-      clearChatAvatarUpload()
-
-      return
-    }
-
-    if (file.data.size > CREATE_CHAT_ROOM_AVATAR_MAX_FILE_SIZE) {
-      revokeObjectUrl(file.previewUrl)
-      clearChatAvatarUpload()
-      showChatAvatarInvalidSizeError()
-
-      return
-    }
-
-    chatAvatarUploadValue.value
-      .filter(({ previewUrl }) => previewUrl !== file.previewUrl)
-      .forEach(({ previewUrl }) => revokeObjectUrl(previewUrl))
-    chatAvatarUploadValue.value = [file]
+    syncChatRoomNameInputValue()
   }
 
   const closeChatRoomFormDialog = () => {
-    if (isSavingChatRoom.value) return
+    if (chatRoomFormState.isSavingChatRoom) return
 
     isChatRoomFormDialogOpen.value = false
     resetChatRoomForm()
@@ -253,52 +234,28 @@ export const useChatRoomFormDialog = (
     closeChatRoomFormDialog()
   }
 
-  const buildChatAvatarFile = async () => {
-    const file = chatAvatarUploadValue.value[0]?.data
-
-    if (!file) return undefined
-
-    try {
-      return {
-        src: file.name,
-        name: file.name,
-        fileBuffer: await file.arrayBuffer()
-      }
-    } catch (error) {
-      void error
-
-      toast.add({
-        type: 'error',
-        title: t(TOAST_I18N.error),
-        content: t(CHAT_ROOM_PAGE_I18N.chatImageReadFailed)
-      })
-
-      return null
-    }
-  }
-
   const createChatRoom = async () => {
-    if (!canCreateChat.value || isSavingChatRoom.value) return
+    if (!canCreateChat.value || chatRoomFormState.isSavingChatRoom) return
 
-    isSavingChatRoom.value = true
+    chatRoomFormState.isSavingChatRoom = true
 
     const avatarFile = isGroupChat.value ? await buildChatAvatarFile() : undefined
 
     if (avatarFile === null) {
-      isSavingChatRoom.value = false
+      chatRoomFormState.isSavingChatRoom = false
 
       return
     }
 
     const payload: EventCreateRoom = {
-      memberIds: selectedMemberIds.value,
+      memberIds: chatRoomFormData.selectedMemberIds,
       ...(isGroupChat.value ? { chatName: chatRoomNameInputValue.value.trim() } : {}),
       ...(avatarFile ? { avatarFile } : {})
     }
 
     const response = await emitSocketAction<EventCreateRoom, CreateRoomAckPayload>('create-chat-room', payload)
 
-    isSavingChatRoom.value = false
+    chatRoomFormState.isSavingChatRoom = false
 
     if (!response.ok || !response.payload?.roomId) return
 
@@ -309,30 +266,33 @@ export const useChatRoomFormDialog = (
   }
 
   const updateChatRoom = async (room: ChatRoomRecord) => {
-    if (!canSubmitChatRoom.value || isSavingChatRoom.value) return
+    if (!canSubmitChatRoom.value || chatRoomFormState.isSavingChatRoom) return
 
-    isSavingChatRoom.value = true
+    chatRoomFormState.isSavingChatRoom = true
 
     const avatarFile = await buildChatAvatarFile()
 
     if (avatarFile === null) {
-      isSavingChatRoom.value = false
+      chatRoomFormState.isSavingChatRoom = false
 
       return
     }
 
     const payload: EventUpdateChatRoom = {
       roomId: room.id,
-      memberIds: selectedMemberIds.value,
+      memberIds: chatRoomFormData.selectedMemberIds,
       chatName: chatRoomNameInputValue.value.trim(),
+      ...(chatRoomFormState.chatAvatarWasDeleted ? { avatarFile: null } : {}),
       ...(avatarFile ? { avatarFile } : {})
     }
 
     const response = await emitSocketAction<EventUpdateChatRoom>('update-chat-room', payload)
 
-    isSavingChatRoom.value = false
+    chatRoomFormState.isSavingChatRoom = false
 
     if (!response.ok) return
+
+    await saveChatAvatarMedia(room)
 
     closeChatRoomFormDialog()
   }
@@ -359,10 +319,13 @@ export const useChatRoomFormDialog = (
 
   onBeforeUnmount(clearChatAvatarUpload)
 
+  const { selectedMemberIds } = toRefs(chatRoomFormData)
+  const { chatAvatarUploadValue, isSavingChatRoom } = toRefs(chatRoomFormState)
+
   return {
+    chatRoomFormValidationData,
     chatAvatarUploadValue,
     chatRoomNameInputValue,
-    contactSearchQuery,
     isSavingChatRoom,
     selectedMemberIds,
     contactPickerItems,
@@ -378,6 +341,7 @@ export const useChatRoomFormDialog = (
     closeChatRoomFormDialog,
     updateChatRoomFormDialogOpen,
     updateChatRoomName,
+    updateSelectedMemberIds,
     updateChatAvatar,
     showUnsupportedChatAvatarFormatError,
     submitChatRoom

@@ -23,7 +23,7 @@
     "tauri:build": "tauri build"
   },
   "dependencies": {
-    "@nmorph/nmorph-ui-kit": "^2.2.35",
+    "@nmorph/nmorph-ui-kit": "^2.2.38",
     "@tanstack/vue-virtual": "^3.13.24",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.15.2",
