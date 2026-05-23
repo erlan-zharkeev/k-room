@@ -7,10 +7,12 @@ import {
   type EventChatRoomLeft,
   type EventDeleteChatRoom,
   type EventLeaveChatRoom,
+  type EventMutedChatRoomsUpdated,
   type KnownUser,
   type MessageDocument,
   type EventGetRoom,
   type EventPinnedChatRoomsUpdated,
+  type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
   MESSAGE_STATUS_VALUE,
@@ -112,6 +114,12 @@ const resolvePinnedChatRoomIds = (currentIds: string[], roomId: string, isPinned
   return [roomId, ...without(currentIds, roomId)]
 }
 
+const resolveMutedChatRoomIds = (currentIds: string[], roomId: string, isMuted: boolean) => {
+  if (!isMuted) return without(currentIds, roomId)
+
+  return [roomId, ...without(currentIds, roomId)]
+}
+
 const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[]) => {
   const orderedIds = intersection(incomingIds, currentIds)
   return union(orderedIds, currentIds)
@@ -204,6 +212,30 @@ export const updatePinnedChatRoomOrder = async (
   })
 }
 
+export const updateMutedChatRoom = async (userId: string, { roomId, isMuted }: EventUpdateMutedChatRoom) => {
+  const user = await UserModel.findOne(
+    { _id: userId, 'personal.chatRooms': roomId },
+    { 'personal.mutedChatRoomIds': 1 }
+  ).lean()
+
+  if (!user) {
+    return
+  }
+
+  const currentMutedChatRoomIds = user.personal.mutedChatRoomIds
+  const mutedChatRoomIds = resolveMutedChatRoomIds(currentMutedChatRoomIds, roomId, isMuted)
+
+  await UserModel.updateOne({ _id: userId }, { $set: { 'personal.mutedChatRoomIds': mutedChatRoomIds } })
+
+  const payload: EventMutedChatRoomsUpdated = {
+    roomId,
+    isMuted,
+    mutedChatRoomIds
+  }
+
+  emitToUsers([userId], 'muted-chat-rooms-updated', payload)
+}
+
 export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChatRoom) => {
   const room = await ChatRoomModel.findOne({
     _id: roomId,
@@ -232,7 +264,13 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
     MessageModel.deleteMany({ _id: { $in: messageIds } }).exec(),
     UserModel.updateMany(
       { _id: { $in: userIds } },
-      { $pull: { 'personal.chatRooms': roomId, 'personal.pinnedChatRoomIds': roomId } }
+      {
+        $pull: {
+          'personal.chatRooms': roomId,
+          'personal.pinnedChatRoomIds': roomId,
+          'personal.mutedChatRoomIds': roomId
+        }
+      }
     ).exec()
   ]
 
@@ -252,7 +290,8 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
 export const transformRoomForUser = async ({
   userId,
   room,
-  pinnedChatRoomIds = []
+  pinnedChatRoomIds,
+  mutedChatRoomIds
 }: TransformRoomForUserParams): Promise<EventGetRoom> => {
   const normalizedRoom = room as ChatRoomSchemaWithObjectId
   const roomId = String(normalizedRoom._id)
@@ -278,6 +317,7 @@ export const transformRoomForUser = async ({
     unreadMessagesQuantity,
     isPinned: pinnedOrder !== -1,
     pinnedOrder: pinnedOrder === -1 ? null : pinnedOrder,
+    isMuted: mutedChatRoomIds.includes(roomId),
     users,
     messages,
     previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null
@@ -301,7 +341,8 @@ const emitRoomToUsers = async (
       const transformedRoom = await transformRoomForUser({
         userId,
         room,
-        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds
+        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds,
+        mutedChatRoomIds: userData.personal.mutedChatRoomIds
       })
 
       await emitKnownUsersToUser(userId, room.users, presenceService)
@@ -368,7 +409,13 @@ export const leaveChatRoom = async (
       .lean<ChatRoomSchemaWithObjectId>(),
     UserModel.updateOne(
       { _id: userId },
-      { $pull: { 'personal.chatRooms': roomId, 'personal.pinnedChatRoomIds': roomId } }
+      {
+        $pull: {
+          'personal.chatRooms': roomId,
+          'personal.pinnedChatRoomIds': roomId,
+          'personal.mutedChatRoomIds': roomId
+        }
+      }
     )
   ])
   const payload: EventChatRoomLeft = {

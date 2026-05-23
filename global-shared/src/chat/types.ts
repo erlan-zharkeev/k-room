@@ -13,6 +13,7 @@ export interface ChatRoom {
   unreadMessagesQuantity: number
   isPinned: boolean
   pinnedOrder: number | null
+  isMuted: boolean
   users: string[]
   messages: string[]
 }
@@ -22,7 +23,7 @@ export type ChatRooms = ChatRoom[]
 export interface ChatRoomSchema
   extends Omit<
     ChatRoom,
-    'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder'
+    'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder' | 'isMuted'
   > {
   users: string[]
 }

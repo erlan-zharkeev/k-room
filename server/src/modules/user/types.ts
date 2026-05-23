@@ -25,6 +25,7 @@ export interface UserPersonalData {
   contacts: Record<string, UserContact>
   chatRooms: string[]
   pinnedChatRoomIds: string[]
+  mutedChatRoomIds: string[]
 }
 
 export interface UserPublicData {

@@ -7,6 +7,7 @@ import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomContextMenuOption, ChatRoomContextMenuProps } from '../config/types'
 
 import { useChatRoomMarkAsRead } from './use-chat-room-mark-as-read.model'
+import { useChatRoomMute } from './use-chat-room-mute.model'
 import { useChatRoomPermissions } from './use-chat-room-permissions.model'
 import { useChatRoomPin } from './use-chat-room-pin.model'
 
@@ -14,6 +15,7 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
   const { t } = useI18n()
   const item = toRef(props, 'item')
   const { canMarkChatRoomAsRead, markChatRoomAsRead } = useChatRoomMarkAsRead(item)
+  const { canUpdateMutedChatRoom, toggleMutedChatRoom } = useChatRoomMute(item)
   const { canUpdatePinnedChatRoom, togglePinnedChatRoom } = useChatRoomPin(item)
   const { canShowDeleteChatRoom, canShowLeaveChatRoom } = useChatRoomPermissions(item)
   const isContextMenuOpen = ref(false)
@@ -25,6 +27,11 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
         label: item.value.isPinned ? t(CHAT_ROOM_PAGE_I18N.unpinChat) : t(CHAT_ROOM_PAGE_I18N.pinChat),
         value: item.value.isPinned ? 'unpin-chat' : 'pin-chat',
         disabled: !canUpdatePinnedChatRoom.value
+      },
+      {
+        label: item.value.isMuted ? t(CHAT_ROOM_PAGE_I18N.unmuteChat) : t(CHAT_ROOM_PAGE_I18N.muteChat),
+        value: item.value.isMuted ? 'unmute-chat' : 'mute-chat',
+        disabled: !canUpdateMutedChatRoom.value
       },
       {
         label: t(CHAT_ROOM_PAGE_I18N.markAsRead),
@@ -64,6 +71,10 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps) => {
       case 'pin-chat':
       case 'unpin-chat':
         togglePinnedChatRoom()
+        break
+      case 'mute-chat':
+      case 'unmute-chat':
+        toggleMutedChatRoom()
         break
       case 'delete-chat':
         isDeleteChatRoomDialogOpen.value = true

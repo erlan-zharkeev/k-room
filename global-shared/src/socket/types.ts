@@ -121,6 +121,17 @@ export interface EventPinnedChatRoomsUpdated {
   pinnedChatRoomIds: string[]
 }
 
+export interface EventUpdateMutedChatRoom {
+  roomId: string
+  isMuted: boolean
+}
+
+export interface EventMutedChatRoomsUpdated {
+  roomId?: string
+  isMuted?: boolean
+  mutedChatRoomIds: string[]
+}
+
 export interface EventUserTyping {
   authorNickname: string
   usersTo: string[]
@@ -283,8 +294,10 @@ export type SocketActions =
   | 'update-chat-room'
   | 'update-pinned-chat-room'
   | 'update-pinned-chat-room-order'
+  | 'update-muted-chat-room'
   | 'room-data-updated'
   | 'pinned-chat-rooms-updated'
+  | 'muted-chat-rooms-updated'
   | 'add-reaction'
   | 'message-reaction-updated'
   | 'message-deleted'

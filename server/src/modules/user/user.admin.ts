@@ -82,6 +82,7 @@ export const ADMIN_USER_OPTIONS = {
       'personal.email',
       'personal.chatRooms',
       'personal.pinnedChatRoomIds',
+      'personal.mutedChatRoomIds',
       'system.role',
       'system.provider',
       'system.confirmed',
@@ -147,6 +148,9 @@ export const ADMIN_USER_OPTIONS = {
       },
       'personal.pinnedChatRoomIds': {
         label: 'Pinned Chat Room IDs'
+      },
+      'personal.mutedChatRoomIds': {
+        label: 'Muted Chat Room IDs'
       },
       'system.provider': {
         label: 'Provider'

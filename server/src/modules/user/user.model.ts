@@ -57,6 +57,11 @@ const personalSchema = new Schema<UserPersonalData>(
       type: [String],
       required: true,
       default: []
+    },
+    mutedChatRoomIds: {
+      type: [String],
+      required: true,
+      default: []
     }
   },
   { _id: false }

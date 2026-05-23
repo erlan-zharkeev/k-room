@@ -52,6 +52,7 @@ export const registerUserSocketHandlers = (socket: SocketInstance, presenceServi
         const contactResultData: Contact[] = await transformUserToFrontendContact(contacts, presenceService)
         const roomIds = data.personal.chatRooms
         const pinnedChatRoomIds = data.personal.pinnedChatRoomIds
+        const mutedChatRoomIds = data.personal.mutedChatRoomIds
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
         const knownUserIds = uniq(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))
         const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)
@@ -60,7 +61,7 @@ export const registerUserSocketHandlers = (socket: SocketInstance, presenceServi
           knownUsers
         }
         const roomsResultData: EventGetRooms = await Promise.all(
-          rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds }))
+          rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds, mutedChatRoomIds }))
         )
 
         socket.emit<SocketActions>('actual-contacts', contactsPayload)

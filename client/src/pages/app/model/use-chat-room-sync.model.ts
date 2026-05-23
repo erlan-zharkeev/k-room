@@ -2,6 +2,7 @@ import {
   type EventGetRooms,
   type EventChatRoomDeleted,
   type EventChatRoomLeft,
+  type EventMutedChatRoomsUpdated,
   type EventPinnedChatRoomsUpdated,
   isAvatarIdFor
 } from 'global-shared'
@@ -19,7 +20,7 @@ import { filterRoomPreviewMessage } from '../lib/filter-room-preview-message'
 export const useChatRoomSync = () => {
   const route = useRoute()
   const router = useRouter()
-  const { chatRooms, getById, merge, put, remove } = useChatRoom()
+  const { bulkUpdate, chatRooms, getById, merge, put, remove } = useChatRoom()
   const { remove: removeMedia } = useMedia()
   const { bulkDelete, bulkPut } = useMessage()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
@@ -48,6 +49,17 @@ export const useChatRoomSync = () => {
 
   const updatePinnedChatRooms = async ({ pinnedChatRoomIds }: EventPinnedChatRoomsUpdated) => {
     await updatePinnedOrder(pinnedChatRoomIds)
+  }
+
+  const updateMutedChatRooms = async ({ mutedChatRoomIds }: EventMutedChatRoomsUpdated) => {
+    await bulkUpdate(
+      chatRooms.value.map(({ id }) => ({
+        id,
+        changes: {
+          isMuted: mutedChatRoomIds.includes(id)
+        }
+      }))
+    )
   }
 
   const removeChatRoom = async ({ roomId }: EventChatRoomDeleted | EventChatRoomLeft) => {
@@ -86,6 +98,7 @@ export const useChatRoomSync = () => {
     actualizeChatRooms,
     addChatRoom,
     updateChatRoomData,
+    updateMutedChatRooms,
     updatePinnedChatRooms,
     removeChatRoom
   }

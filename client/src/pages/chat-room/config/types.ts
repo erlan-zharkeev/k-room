@@ -19,6 +19,7 @@ export interface ChatRoomNavigationItem {
   unreadMessagesQuantity: number
   isPinned: boolean
   pinnedOrder: number | null
+  isMuted: boolean
 }
 
 export interface ChatRoomListItemProps {
@@ -31,7 +32,7 @@ export interface ChatRoomContextMenuProps {
 
 export interface ChatRoomContextMenuOption {
   label: string
-  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'delete-chat' | 'leave-group'
+  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'mute-chat' | 'unmute-chat' | 'delete-chat' | 'leave-group'
   disabled?: boolean
 }
 

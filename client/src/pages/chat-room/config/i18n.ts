@@ -41,6 +41,16 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Открепить чат',
     zh: '取消置顶'
   },
+  muteChat: {
+    en: 'Mute chat',
+    ru: 'Выключить уведомления',
+    zh: '静音聊天'
+  },
+  unmuteChat: {
+    en: 'Unmute chat',
+    ru: 'Включить уведомления',
+    zh: '取消静音'
+  },
   deleteChat: {
     en: 'Delete chat',
     ru: 'Удалить чат',
