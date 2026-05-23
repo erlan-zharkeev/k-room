@@ -10,6 +10,7 @@ import {
   MEDIA_AVATAR_FILENAME_PREFIX,
   VALIDATION_PATTERNS
 } from 'global-shared'
+import uniq from 'lodash/uniq'
 
 import { AppError } from 'src/shared/lib/app-error'
 
@@ -327,12 +328,10 @@ export class UserService {
       ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
     ])
 
-    const ids = [
-      ...new Set([
-        ...contacts.map((contact) => String(contact._id)),
-        ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
-      ])
-    ]
+    const ids = uniq([
+      ...contacts.map((contact) => String(contact._id)),
+      ...rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId)
+    ])
 
     if (!ids.length) {
       return

@@ -1,27 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import Draggable from 'vuedraggable'
 
 import { useChatRoomsList } from '../model/use-chat-rooms-list.model'
 
 import ChatRoomListItem from './ChatRoomListItem.vue'
 
-const { chatRoomList, searchQuery, reorderPinnedChatRooms } = useChatRoomsList()
-const pinnedItems = computed(() => chatRoomList.value.filter(({ isPinned }) => isPinned))
-const regularItems = computed(() => chatRoomList.value.filter(({ isPinned }) => !isPinned))
-const canReorderPinnedItems = computed(() => !searchQuery.value.trim() && pinnedItems.value.length > 1)
+const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } = useChatRoomsList()
 </script>
 
 <template>
   <div class="chat-room-list">
     <Draggable
-      v-if="pinnedItems.length"
+      v-if="chatRoomListGroups.pinnedChatRoomList.length"
       class="chat-room-list__pinned"
-      :model-value="pinnedItems"
+      :model-value="chatRoomListGroups.pinnedChatRoomList"
       item-key="id"
       handle=".chat-room-list-item-pinned-badge"
       :animation="180"
-      :disabled="!canReorderPinnedItems"
+      :disabled="!canReorderPinnedChatRooms"
       ghost-class="chat-room-list__drag-ghost"
       chosen-class="chat-room-list__drag-chosen"
       drag-class="chat-room-list__drag-item"
@@ -32,8 +28,8 @@ const canReorderPinnedItems = computed(() => !searchQuery.value.trim() && pinned
       </template>
     </Draggable>
 
-    <div v-if="regularItems.length" class="chat-room-list__regular">
-      <ChatRoomListItem v-for="item in regularItems" :key="item.id" :item="item" />
+    <div v-if="chatRoomListGroups.regularChatRoomList.length" class="chat-room-list__regular">
+      <ChatRoomListItem v-for="item in chatRoomListGroups.regularChatRoomList" :key="item.id" :item="item" />
     </div>
   </div>
 </template>

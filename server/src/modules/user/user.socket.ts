@@ -1,4 +1,5 @@
 import type { Contact, EventGetContacts, EventGetRooms, SocketActions } from 'global-shared'
+import uniq from 'lodash/uniq'
 
 import type { PresenceService } from 'src/modules/presence/presence.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
@@ -52,7 +53,7 @@ export const registerUserSocketHandlers = (socket: SocketInstance, presenceServi
         const roomIds = data.personal.chatRooms
         const pinnedChatRoomIds = data.personal.pinnedChatRoomIds
         const rooms = await ChatRoomModel.find({ _id: { $in: roomIds } }).lean()
-        const knownUserIds = [...new Set(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))]
+        const knownUserIds = uniq(rooms.flatMap((room) => room.users.map(String)).filter((id) => id !== userId))
         const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)
         const contactsPayload: EventGetContacts = {
           contacts: contactResultData,

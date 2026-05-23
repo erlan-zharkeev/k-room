@@ -1,5 +1,6 @@
 import { useDebounceFn } from '@vueuse/core'
 import type { Contact, EventGetSearchedContact, EventSearchContact, SocketActions } from 'global-shared'
+import unionBy from 'lodash/unionBy'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { mergeContactLocalState, useContact } from 'src/entities/contact'
@@ -102,11 +103,8 @@ export const useContactSearch = () => {
   const handleSearchedContacts = async (payload: EventGetSearchedContact) => {
     if (payload.value !== searchValue.value) return
 
-    const knownIds = new Set(searchedContacts.value.map(({ id }) => id))
     const nextContacts =
-      payload.offset === 0
-        ? payload.contacts
-        : [...searchedContacts.value, ...payload.contacts.filter(({ id }) => !knownIds.has(id))]
+      payload.offset === 0 ? payload.contacts : unionBy(searchedContacts.value, payload.contacts, 'id')
 
     await syncSavedContacts(nextContacts)
     syncContactAvatars(payload.contacts)

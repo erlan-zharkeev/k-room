@@ -1,3 +1,4 @@
+import orderBy from 'lodash/orderBy'
 import { computed } from 'vue'
 
 import { useContact } from 'src/entities/contact'
@@ -16,9 +17,7 @@ export const useContactListSearch = () => {
 
     return !query || nickname.toLowerCase().includes(query)
   }
-  const contactList = computed(() =>
-    [...contacts.value].filter(matchesSearchQuery).sort((a, b) => (b.savedAt ?? 0) - (a.savedAt ?? 0))
-  )
+  const contactList = computed(() => orderBy(contacts.value.filter(matchesSearchQuery), 'savedAt', 'desc'))
   const contactListEmptyText = computed(() =>
     hasSearchQuery.value ? CONTACTS_PAGE_I18N.searchEmpty : CONTACTS_PAGE_I18N.listEmpty
   )

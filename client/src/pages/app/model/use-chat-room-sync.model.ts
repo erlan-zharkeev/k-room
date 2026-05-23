@@ -5,6 +5,7 @@ import {
   type EventChatRoomLeft,
   type EventPinnedChatRoomsUpdated
 } from 'global-shared'
+import compact from 'lodash/compact'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -24,14 +25,16 @@ export const useChatRoomSync = () => {
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
   const saveRoomPreviewMessages = async (rooms: EventGetRooms) => {
-    await bulkPut(rooms.flatMap((room) => (room.previewMessage ? [room.previewMessage] : [])))
+    await bulkPut(compact(rooms.map((room) => room.previewMessage)))
   }
 
   const actualizeChatRooms = async (rooms: EventGetRooms) => {
     const incomingRoomIds = new Set(rooms.map(({ id }) => id))
-    const removedChatAvatarIds = chatRooms.value
-      .filter(({ id }) => !incomingRoomIds.has(id))
-      .flatMap(({ avatarId, id }) => (avatarId === `${MEDIA_AVATAR_FILENAME_PREFIX}${id}` ? [avatarId] : []))
+    const removedChatAvatarIds = compact(
+      chatRooms.value
+        .filter(({ id }) => !incomingRoomIds.has(id))
+        .map(({ avatarId, id }) => avatarId === `${MEDIA_AVATAR_FILENAME_PREFIX}${id}` && avatarId)
+    )
 
     await saveRoomPreviewMessages(rooms)
     await merge(rooms.map(filterRoomPreviewMessage))
