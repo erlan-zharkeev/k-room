@@ -1,5 +1,6 @@
 import { useDebounceFn } from '@vueuse/core'
 import {
+  buildAvatarId,
   isDefaultContactInteraction,
   type Contact,
   type EventGetSearchedContact,
@@ -12,7 +13,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { mergeContactLocalState, useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
 import { socket } from 'src/shared/api'
-import { getAvatarId, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS, CONTACTS_SEARCH_BADGE_BY_INTERACTION } from '../config/constants'
 
@@ -97,7 +98,7 @@ export const useContactSearch = () => {
 
   const syncContactAvatars = (contacts: Contact[]) => {
     contacts.forEach(({ id }) => {
-      const avatarId = getAvatarId(id)
+      const avatarId = buildAvatarId(id)
 
       if (syncedAvatarIds.has(avatarId)) return
 

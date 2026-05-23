@@ -4,7 +4,8 @@ import type { Types } from 'mongoose'
 export interface TransformRoomForUserParams {
   userId: string
   room: ChatRoomSchema
-  pinnedChatRoomIds?: string[]
+  pinnedChatRoomIds: string[]
+  mutedChatRoomIds: string[]
 }
 
 export interface ChatRoomSchemaWithObjectId extends ChatRoomSchema {

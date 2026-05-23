@@ -8,47 +8,52 @@ export const CHAT_ROOMS_I18N = defineI18n({
   },
   chatRoomLimitReached: {
     en: 'Chat limit reached',
-    ru: 'Chat limit reached',
-    zh: 'Chat limit reached'
+    ru: 'Достигнут лимит чатов',
+    zh: '已达到聊天数量限制'
   },
   pinnedChatRoomLimitReached: {
     en: 'Pinned chat limit reached',
-    ru: 'Pinned chat limit reached',
-    zh: 'Pinned chat limit reached'
+    ru: 'Достигнут лимит закрепленных чатов',
+    zh: '已达到置顶聊天数量限制'
   },
   chatRoomMemberLimitReached: {
     en: 'Group member limit reached',
-    ru: 'Group member limit reached',
-    zh: 'Group member limit reached'
+    ru: 'Достигнут лимит участников группы',
+    zh: '已达到群组成员数量限制'
   },
   chatRoomNameTooLong: {
     en: 'Chat name is too long',
-    ru: 'Chat name is too long',
-    zh: 'Chat name is too long'
+    ru: 'Название чата слишком длинное',
+    zh: '聊天名称过长'
   },
   updatePinnedChatRoomFailed: {
     en: 'Failed to update pinned chat room',
-    ru: 'Failed to update pinned chat room',
-    zh: 'Failed to update pinned chat room'
+    ru: 'Не удалось обновить закрепление чата',
+    zh: '更新置顶聊天失败'
+  },
+  updateMutedChatRoomFailed: {
+    en: 'Failed to update muted chat room',
+    ru: 'Не удалось обновить уведомления чата',
+    zh: '更新聊天通知设置失败'
   },
   deleteChatRoomFailed: {
     en: 'Failed to delete chat room',
-    ru: 'Failed to delete chat room',
-    zh: 'Failed to delete chat room'
+    ru: 'Не удалось удалить чат',
+    zh: '删除聊天失败'
   },
   leaveChatRoomFailed: {
     en: 'Failed to leave chat room',
-    ru: 'Failed to leave chat room',
-    zh: 'Failed to leave chat room'
+    ru: 'Не удалось выйти из чата',
+    zh: '退出聊天失败'
   },
   leaveChatRoomNewAdminRequired: {
     en: 'Select a new group administrator',
-    ru: 'Select a new group administrator',
-    zh: 'Select a new group administrator'
+    ru: 'Выберите нового администратора группы',
+    zh: '请选择新的群组管理员'
   },
   leaveChatRoomInvalidNewAdmin: {
     en: 'Selected administrator is not a group member',
-    ru: 'Selected administrator is not a group member',
-    zh: 'Selected administrator is not a group member'
+    ru: 'Выбранный администратор не является участником группы',
+    zh: '所选管理员不是群组成员'
   }
 })

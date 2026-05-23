@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
-import { isDefaultContactInteraction } from 'global-shared'
+import { buildAvatarId, isDefaultContactInteraction } from 'global-shared'
 
-import { getAvatarId } from 'src/shared/lib'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
@@ -48,7 +47,7 @@ const {
             >
               <NmorphCard shadow-type="inset" content-class="contacts-search__item">
                 <AppProfileBasicData
-                  :image-id="getAvatarId(contact.id)"
+                  :image-id="buildAvatarId(contact.id)"
                   :title="contact.nickname"
                   :name="contact.nickname"
                 >

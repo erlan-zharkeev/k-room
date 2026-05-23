@@ -1,6 +1,5 @@
+import { buildAvatarId } from 'global-shared'
 import { computed, type Ref } from 'vue'
-
-import { getAvatarId } from 'src/shared/lib'
 
 import type { AppUserPickerProps } from './types'
 
@@ -8,7 +7,7 @@ export const useAppUserPicker = (props: AppUserPickerProps, selectedUserIds: Ref
   const userItems = computed(() =>
     props.items.map((item) => ({
       ...item,
-      imageId: item.imageId ?? getAvatarId(item.id)
+      imageId: item.imageId ?? buildAvatarId(item.id)
     }))
   )
 

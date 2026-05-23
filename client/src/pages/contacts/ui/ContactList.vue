@@ -6,10 +6,14 @@ import {
   NmorphIconChatLineSquare,
   NmorphIconPostCard
 } from '@nmorph/nmorph-ui-kit'
-import { CONTACT_INTERACTION, isAcceptedContactInteraction, isDefaultContactInteraction } from 'global-shared'
+import {
+  CONTACT_INTERACTION,
+  buildAvatarId,
+  isAcceptedContactInteraction,
+  isDefaultContactInteraction
+} from 'global-shared'
 import { computed } from 'vue'
 
-import { getAvatarId } from 'src/shared/lib'
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
@@ -49,7 +53,7 @@ const contactChatRoomIdList = computed(() =>
       <NmorphCard class="contact-list__item" content-class="contact-list__item-content" shadow-type="inset">
         <AppProfileBasicData
           class="contact-list__profile"
-          :image-id="getAvatarId(contact.id)"
+          :image-id="buildAvatarId(contact.id)"
           :title="contact.nickname"
           :name="contact.nickname"
         >

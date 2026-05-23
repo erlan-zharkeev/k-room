@@ -57,7 +57,8 @@ export const useChatRoomsList = () => {
         lastMessageCreatedAt: lastMessage?.createdAt ?? room.createdAt,
         unreadMessagesQuantity: room.unreadMessagesQuantity ?? 0,
         isPinned: room.isPinned,
-        pinnedOrder: room.pinnedOrder
+        pinnedOrder: room.pinnedOrder,
+        isMuted: room.isMuted
       }
     })
 

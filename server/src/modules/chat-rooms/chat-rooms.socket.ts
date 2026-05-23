@@ -7,6 +7,7 @@ import {
   type EventCreateRoom,
   type EventDeleteChatRoom,
   type EventLeaveChatRoom,
+  type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
   REQ_STATUS,
@@ -31,6 +32,7 @@ import {
   emitNewRoomToUsers,
   leaveChatRoom,
   setRoomToUsers,
+  updateMutedChatRoom,
   updatePinnedChatRoom,
   updatePinnedChatRoomOrder,
   validateCreateChatRoomLimits
@@ -129,6 +131,17 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presence
         await updatePinnedChatRoomOrder(socket.data.userId, payload)
       },
       { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'update-muted-chat-room',
+    socketAckMiddleware<EventUpdateMutedChatRoom>(
+      socket,
+      async (payload) => {
+        await updateMutedChatRoom(socket.data.userId, payload)
+      },
+      { basicError: CHAT_ROOMS_I18N.updateMutedChatRoomFailed }
     )
   )
 }

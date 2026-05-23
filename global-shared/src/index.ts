@@ -185,6 +185,8 @@ export type {
   EventUpdatePinnedChatRoom,
   EventUpdatePinnedChatRoomOrder,
   EventPinnedChatRoomsUpdated,
+  EventUpdateMutedChatRoom,
+  EventMutedChatRoomsUpdated,
   EventUserTyping,
   EventGetContactTypingStatus,
   EventSendMessage,
