@@ -26,6 +26,21 @@ export const CHAT_ROOMS_I18N = defineI18n({
     ru: 'Название чата слишком длинное',
     zh: '聊天名称过长'
   },
+  chatRoomNameRequired: {
+    en: 'Chat name is required',
+    ru: 'Укажите название чата',
+    zh: '请输入聊天名称'
+  },
+  chatRoomMemberRequired: {
+    en: 'Select at least one group member',
+    ru: 'Выберите хотя бы одного участника группы',
+    zh: '请至少选择一名群组成员'
+  },
+  updateChatRoomFailed: {
+    en: 'Failed to update chat room',
+    ru: 'Не удалось обновить чат',
+    zh: '更新聊天失败'
+  },
   updatePinnedChatRoomFailed: {
     en: 'Failed to update pinned chat room',
     ru: 'Не удалось обновить закрепление чата',

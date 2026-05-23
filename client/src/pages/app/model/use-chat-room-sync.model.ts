@@ -10,7 +10,7 @@ import compact from 'lodash/compact'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useMedia } from 'src/entities/media-file'
+import { useMedia, useSyncMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
@@ -22,6 +22,7 @@ export const useChatRoomSync = () => {
   const router = useRouter()
   const { bulkUpdate, chatRooms, getById, merge, put, remove } = useChatRoom()
   const { remove: removeMedia } = useMedia()
+  const { syncWithOptions } = useSyncMedia()
   const { bulkDelete, bulkPut } = useMessage()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
@@ -90,6 +91,7 @@ export const useChatRoomSync = () => {
 
   const updateChatRoomData = async (room: EventGetRooms[number]) => {
     await saveRoomPreviewMessages([room])
+    syncWithOptions(room.avatarId, { force: true })
     await put(filterRoomPreviewMessage(room))
   }
 

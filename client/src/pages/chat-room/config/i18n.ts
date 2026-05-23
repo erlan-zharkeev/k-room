@@ -51,6 +51,11 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Включить уведомления',
     zh: '取消静音'
   },
+  editGroup: {
+    en: 'Edit group',
+    ru: 'Редактировать группу',
+    zh: '编辑群组'
+  },
   deleteChat: {
     en: 'Delete chat',
     ru: 'Удалить чат',
@@ -100,6 +105,16 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     en: 'New chat',
     ru: 'Новый чат',
     zh: '新聊天'
+  },
+  editGroupTitle: {
+    en: 'Edit group',
+    ru: 'Редактирование группы',
+    zh: '编辑群组'
+  },
+  saveChat: {
+    en: 'Save',
+    ru: 'Сохранить',
+    zh: '保存'
   },
   chatName: {
     en: 'Chat name',
