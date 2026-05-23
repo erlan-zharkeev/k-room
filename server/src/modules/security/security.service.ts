@@ -98,10 +98,7 @@ export class SecurityService {
   private async trackEmailIpAction(action: SecurityAction, email: string, ip: string, windowMs: number) {
     const { emailKey, ipKey } = this.buildEmailIpActionKeys(action, email, ip)
 
-    await Promise.all([
-      this.redisService.increment(emailKey, windowMs),
-      this.redisService.increment(ipKey, windowMs)
-    ])
+    await Promise.all([this.redisService.increment(emailKey, windowMs), this.redisService.increment(ipKey, windowMs)])
   }
 
   private async trackEmailIpFailure(

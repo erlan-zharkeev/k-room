@@ -38,10 +38,8 @@ export const useAudioInputDevice = () => {
   const audioContext = shallowRef<AudioContext | null>(null)
   const audioInputStream = audioInputUserMedia.stream
 
-  const {
-    permissionCalloutType: audioInputPermissionCalloutType,
-    permissionStatus: audioInputPermissionStatus
-  } = useDevicePermissionStatus(isAudioInputSupported, audioInputPermission)
+  const { permissionCalloutType: audioInputPermissionCalloutType, permissionStatus: audioInputPermissionStatus } =
+    useDevicePermissionStatus(isAudioInputSupported, audioInputPermission)
   const audioInputOptions = computed(() =>
     audioInputDevices.value.map(({ deviceId, label }, index) => ({
       value: deviceId,
