@@ -15,7 +15,6 @@ const { imageSrc } = useAppProfileBasicData(props)
   <div class="app-profile-basic-data">
     <NmorphBadge
       v-if="props.showOnline"
-      class="app-profile-basic-data__avatar-badge"
       is-dot
       color="var(--nmorph-success-color)"
       :dot-size="8"
@@ -26,11 +25,9 @@ const { imageSrc } = useAppProfileBasicData(props)
     </NmorphBadge>
     <NmorphAvatar v-else :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
     <div class="app-profile-basic-data__content">
-      <div class="app-profile-basic-data__title">
-        <slot name="title">
-          <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
-        </slot>
-      </div>
+      <slot name="title">
+        <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
+      </slot>
       <div class="app-profile-basic-data__description">
         <slot name="description" />
       </div>

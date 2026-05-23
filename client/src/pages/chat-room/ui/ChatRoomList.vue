@@ -18,9 +18,6 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
       handle=".chat-room-list-item-pinned-badge"
       :animation="180"
       :disabled="!canReorderPinnedChatRooms"
-      ghost-class="chat-room-list__drag-ghost"
-      chosen-class="chat-room-list__drag-chosen"
-      drag-class="chat-room-list__drag-item"
       @update:model-value="reorderPinnedChatRooms"
     >
       <template #item="{ element }">

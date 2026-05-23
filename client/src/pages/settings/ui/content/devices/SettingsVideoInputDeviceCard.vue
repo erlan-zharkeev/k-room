@@ -53,7 +53,6 @@ const videoInputCheckLabel = computed(() =>
       <div class="settings-video-input-device-card__control">
         <NmorphSelect
           :key="settings.ioDevices.videoInputDeviceId"
-          class="settings-video-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)"
           :model-value="settings.ioDevices.videoInputDeviceId"
           :options="videoInputOptions"

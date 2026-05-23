@@ -32,18 +32,16 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
 
 <template>
   <section class="contacts-page">
-    <div class="contacts-page__search">
-      <NmorphTextInput
-        v-model="searchQuery"
-        clearable
-        :placeholder="$t(CONTACTS_PAGE_I18N.search)"
-        :input-attrs="{ maxLength: CONTACT_SEARCH_QUERY_MAX_LENGTH, 'aria-label': $t(CONTACTS_PAGE_I18N.search) }"
-      >
-        <template #prepend-icon>
-          <NmorphIconSearch />
-        </template>
-      </NmorphTextInput>
-    </div>
+    <NmorphTextInput
+      v-model="searchQuery"
+      clearable
+      :placeholder="$t(CONTACTS_PAGE_I18N.search)"
+      :input-attrs="{ maxLength: CONTACT_SEARCH_QUERY_MAX_LENGTH, 'aria-label': $t(CONTACTS_PAGE_I18N.search) }"
+    >
+      <template #prepend-icon>
+        <NmorphIconSearch />
+      </template>
+    </NmorphTextInput>
     <ContactsSearch class="contacts-page__list" :loading-contact-ids="loadingContactIds" @add="addContact">
       <div class="contacts-page__block">
         <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.listTitle)" />

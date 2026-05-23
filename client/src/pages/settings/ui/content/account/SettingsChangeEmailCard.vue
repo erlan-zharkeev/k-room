@@ -56,7 +56,6 @@ const {
 
       <NmorphButton
         fill
-        class="settings-change-email-card__button"
         :disabled="isSendCodeDisabled"
         :loading="isEmailCodeSending"
         :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.sendCode)"
@@ -72,7 +71,6 @@ const {
         :disabled="isEmailCodeSending || isEmailCodeValidating"
       />
       <NmorphButton
-        class="settings-change-email-card__button"
         :disabled="isValidateCodeDisabled"
         :loading="isEmailCodeValidating"
         :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.validateCode)"

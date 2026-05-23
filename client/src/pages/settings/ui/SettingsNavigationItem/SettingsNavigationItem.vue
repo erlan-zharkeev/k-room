@@ -30,12 +30,10 @@ const { buttonClass, showIcon } = useSettingsNavigationItem(props)
           <AppHeader tag="h5" truncate :selectable="false" :text="props.label" />
           <AppText tag="small" truncate color="semi-contrast-text" :selectable="false" :text="props.description" />
         </div>
-        <div v-if="showIcon" class="settings-navigation-item__icon">
-          <NmorphIcon>
-            <NmorphIconArrowRight v-if="props.active" />
-            <NmorphIconArrowDown v-else />
-          </NmorphIcon>
-        </div>
+        <NmorphIcon v-if="showIcon">
+          <NmorphIconArrowRight v-if="props.active" />
+          <NmorphIconArrowDown v-else />
+        </NmorphIcon>
       </RouterLink>
     </NmorphCard>
   </NmorphBadge>

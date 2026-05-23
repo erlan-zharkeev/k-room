@@ -14,7 +14,7 @@ import { AppLogo } from 'src/shared/ui'
         <template #header>
           <AppLogo />
         </template>
-        <article class="page-layout__content">
+        <article>
           <slot>
             <NmorphScroll>
               <div class="page-layout__router-view-wrapper">

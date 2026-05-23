@@ -19,12 +19,7 @@ const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomPage()
   <section class="chat-room-page">
     <div class="chat-room-page__header">
       <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
-      <ChatRoomHeader
-        v-if="selectedChatRoom"
-        class="chat-room-page__header-body"
-        :room="selectedChatRoom"
-        :is-private-room="selectedChatRoomIsPrivate"
-      />
+      <ChatRoomHeader v-if="selectedChatRoom" :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
     </div>
     <template v-if="selectedChatRoom">
       <NmorphCard shadow-type="inset" class="chat-room-page__messages">

@@ -23,20 +23,15 @@ const themeIconWidth = computed(() => (props.compact || !isPortraitTabletOrLess.
   <div :class="['theme-select', { 'theme-select--compact': props.compact }]">
     <NmorphSelectButton
       :aria-label="t(THEME_SELECT_I18N.selectTheme)"
-      :class="['theme-select__input', { 'theme-select__input--compact': props.compact }]"
       :height="props.compact ? 'basic' : 'thick'"
       :model-value="settings.appearance.selectedTheme"
       fill
       @update:model-value="changeTheme"
     >
       <template v-for="option in THEME_SELECT_OPTIONS" :key="option.value">
-        <NmorphSelectButtonItem
-          v-if="!props.compact || option.value !== 'custom'"
-          :class="['theme-select__item', { 'theme-select__item--compact': props.compact }]"
-          :value="option.value"
-        >
+        <NmorphSelectButtonItem v-if="!props.compact || option.value !== 'custom'" :value="option.value">
           <div class="theme-select__option">
-            <NmorphIcon class="theme-select__icon" :width="themeIconWidth" aria-hidden="true">
+            <NmorphIcon :width="themeIconWidth" aria-hidden="true">
               <component :is="option.icon" />
             </NmorphIcon>
             <AppHeader

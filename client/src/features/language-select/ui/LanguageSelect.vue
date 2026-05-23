@@ -25,10 +25,9 @@ const languageSelectFlagSize = computed(() =>
 </script>
 
 <template>
-  <div :class="['language-select', { 'language-select--compact': props.compact }]">
+  <div class="language-select">
     <NmorphSelectButton
       :aria-label="t(LANGUAGE_SELECT_I18N.selectLanguage)"
-      :class="['language-select__input', { 'language-select__input--compact': props.compact }]"
       :height="props.compact ? 'basic' : 'thick'"
       :model-value="settings.localization.language"
       @update:model-value="changeLanguage"
@@ -36,11 +35,7 @@ const languageSelectFlagSize = computed(() =>
     >
       <NmorphSelectButtonItem v-for="option in LANGUAGE_SELECT_OPTIONS" :key="option.value" :value="option.value">
         <div class="language-select__option">
-          <NmorphIcon
-            class="language-select__flag"
-            :width="languageSelectFlagSize.WIDTH"
-            :height="languageSelectFlagSize.HEIGHT"
-          >
+          <NmorphIcon :width="languageSelectFlagSize.WIDTH" :height="languageSelectFlagSize.HEIGHT">
             <component :is="LANGUAGE_SELECT_FLAG_ICON_MAP[option.flag]" />
           </NmorphIcon>
         </div>

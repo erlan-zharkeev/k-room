@@ -24,20 +24,17 @@ const {
     <div class="settings-audio-output-device-card">
       <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDeviceDescription)" />
 
-      <div class="settings-audio-output-device-card__permission">
-        <NmorphCallout :type="audioOutputPermissionCalloutType" :content="audioOutputPermissionStatus" />
-        <AppText
-          v-if="!audioOutputLoading && audioOutputOptions.length === 0"
-          size="small"
-          color="warn"
-          :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
-        />
-      </div>
+      <NmorphCallout :type="audioOutputPermissionCalloutType" :content="audioOutputPermissionStatus" />
+      <AppText
+        v-if="!audioOutputLoading && audioOutputOptions.length === 0"
+        size="small"
+        color="warn"
+        :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
+      />
 
       <div class="settings-audio-output-device-card__control">
         <NmorphSelect
           :key="audioOutputSelectValue"
-          class="settings-audio-output-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)"
           :model-value="audioOutputSelectValue"
           :options="audioOutputOptions"

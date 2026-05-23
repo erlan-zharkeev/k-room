@@ -16,14 +16,14 @@ onMounted(confirmEmail)
 
 <template>
   <div class="email-confirmation-page">
-    <div v-if="isLoading" class="email-confirmation-page__loader">
+    <template v-if="isLoading">
       <NmorphProgress type="circle" :percentage="35" :circle-size="64" indeterminate>
         <template #circle-inner-part />
       </NmorphProgress>
       <AppText :text="$t(EMAIL_CONFIRMATION_I18N.loading)" />
-    </div>
+    </template>
 
-    <div v-else class="email-confirmation-page__content">
+    <template v-else>
       <AppHeader :text="isConfirmed ? $t(EMAIL_CONFIRMATION_I18N.title) : failureMessage" />
       <AppText v-if="isConfirmed" :text="`Email ${email} ${$t(EMAIL_CONFIRMATION_I18N.confirmed)}`" />
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
@@ -33,7 +33,7 @@ onMounted(confirmEmail)
           @click="navigate"
         />
       </RouterLink>
-    </div>
+    </template>
   </div>
 </template>
 

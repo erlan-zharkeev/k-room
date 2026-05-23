@@ -30,7 +30,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
         <slot />
       </div>
 
-      <div v-if="hasFooter" class="settings-card__footer">
+      <template v-if="hasFooter">
         <slot name="footer">
           <NmorphButton
             fill
@@ -40,7 +40,7 @@ const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
             @click="props.onButtonClick"
           />
         </slot>
-      </div>
+      </template>
     </NmorphCard>
   </NmorphBadge>
 </template>

@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs'
 import { CHAT_KIND, DAY_IN_MS, MEDIA_AVATAR_FILENAME_PREFIX, MINUTE_IN_MS, REQ_STATUS } from 'global-shared'
 import compact from 'lodash/compact'
 import countBy from 'lodash/countBy'
-import keyBy from 'lodash/keyBy'
 import { Types } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
@@ -21,6 +20,7 @@ import { log } from 'src/shared/lib/log'
 import {
   BASE_FIXTURE_TIMESTAMP_MS,
   DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+  ERLAN_ID,
   FIXTURE_CONTACTS,
   FIXTURE_LONG_REPLIED_MESSAGE_BODY,
   FIXTURE_MESSAGE_IMAGE_FILES,
@@ -38,13 +38,11 @@ import {
   LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX,
   MESSAGE_ACTIONS,
   MESSAGE_QUALIFIERS,
-  MESSAGE_SUBJECTS
+  MESSAGE_SUBJECTS,
+  TOLIK_ID,
+  USER_BY_NICKNAME
 } from './fixtures.constants'
 import type { FixtureContactData, FixtureUserData } from './fixtures.types'
-
-const USER_BY_NICKNAME = keyBy(USER_FIXTURES, 'nickname')
-const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
-const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''
 
 const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
   const filename = `${MEDIA_AVATAR_FILENAME_PREFIX}${userId}`
