@@ -2,6 +2,9 @@ import { DAY_IN_MS, MB_IN_BYTES, MINUTE_IN_MS } from 'global-shared'
 
 export const MEDIA_CACHE_TRIM_MIN_RECORDS = 16
 export const MEDIA_CACHE_TRIM_TARGET_BYTES = 64 * MB_IN_BYTES
+export const MEDIA_NO_CACHE_REQUEST_HEADERS = {
+  'Cache-Control': 'no-cache'
+}
 export const MEDIA_SYNC_CONCURRENCY = 4
 export const MISSING_MEDIA_RETRY_INTERVAL_MS = 10 * MINUTE_IN_MS
 export const UPDATE_MEDIA_INTERVAL_MS = 1 * DAY_IN_MS

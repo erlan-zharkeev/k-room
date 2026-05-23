@@ -206,10 +206,7 @@ export const streamMediaFile = async (
     }
 
     response.setHeader('ETag', `W/"sha256-${file?.metadata?.sha256}"`)
-    response.setHeader(
-      'Cache-Control',
-      options?.revalidateCache ? 'public, max-age=0, must-revalidate' : 'public, max-age=31536000, immutable'
-    )
+    response.setHeader('Cache-Control', 'no-store')
     response.setHeader('X-Media-Kind', file.metadata?.kind ?? '')
 
     if (options?.asAttachment) {

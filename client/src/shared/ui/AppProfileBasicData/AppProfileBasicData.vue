@@ -2,28 +2,31 @@
 import { NmorphAvatar, NmorphBadge } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader } from '../AppHeader'
+import { AppMediaImage } from '../AppMediaImage'
 
 import { APP_PROFILE_BASIC_DATA_DEFAULT_PROPS } from './constants'
 import type { AppProfileBasicDataProps } from './types'
-import { useAppProfileBasicData } from './use-app-profile-basic-data.model'
 
 const props = withDefaults(defineProps<AppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
-const { imageSrc } = useAppProfileBasicData(props)
 </script>
 
 <template>
   <div class="app-profile-basic-data">
-    <NmorphBadge
-      v-if="props.showOnline"
-      is-dot
-      color="var(--nmorph-success-color)"
-      :dot-size="8"
-      :offset-x="-1"
-      :offset-y="-1"
-    >
-      <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
-    </NmorphBadge>
-    <NmorphAvatar v-else :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
+    <AppMediaImage :media-id="props.imageId" :src="props.imageSrc">
+      <template #default="{ src }">
+        <NmorphBadge
+          v-if="props.showOnline"
+          is-dot
+          color="var(--nmorph-success-color)"
+          :dot-size="8"
+          :offset-x="-1"
+          :offset-y="-1"
+        >
+          <NmorphAvatar :src="src" :alt="props.imageAlt" shape="square" :name="props.name" preview />
+        </NmorphBadge>
+        <NmorphAvatar v-else :src="src" :alt="props.imageAlt" shape="square" :name="props.name" preview />
+      </template>
+    </AppMediaImage>
     <div class="app-profile-basic-data__content">
       <slot name="title">
         <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
