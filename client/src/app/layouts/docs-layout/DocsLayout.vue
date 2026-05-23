@@ -9,7 +9,7 @@ import { PageBackButton } from 'src/features/page-back-button'
   <section class="docs-layout">
     <PageBackButton />
     <NmorphCard class="docs-layout__card" shadow-type="inset">
-      <article class="docs-layout__content">
+      <article>
         <slot>
           <NmorphScroll>
             <RouterView />

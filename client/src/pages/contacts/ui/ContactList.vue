@@ -36,7 +36,6 @@ const contactChatRoomIdList = computed(() =>
     <NmorphBadge
       v-for="contact in props.contactList"
       :key="contact.id"
-      class="contact-list__status-badge"
       :value="props.getContactStatus(contact)"
       hide-on-falsy-value
       type="ribbon"

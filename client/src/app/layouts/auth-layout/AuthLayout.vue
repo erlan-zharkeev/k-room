@@ -17,7 +17,7 @@ const route = useRoute()
 <template>
   <section class="auth-layout">
     <div class="auth-layout__top-side">
-      <AppLogo class="auth-layout__logo" />
+      <AppLogo />
       <div class="auth-layout__controls">
         <LanguageSelect compact class="auth-layout__language" />
         <ThemeSelect compact />

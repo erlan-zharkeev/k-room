@@ -61,7 +61,6 @@ const {
         :disabled="!isGroupChat || isCreatingChat"
         :model-value="chatAvatarUploadValue"
         :multiple="false"
-        class="create-chat-room-dialog__avatar-upload"
         @update:model-value="updateChatAvatar"
         @on-unsupported-file-type-error="showUnsupportedChatAvatarFormatError"
       />
@@ -107,7 +106,6 @@ const {
         />
         <NmorphButton
           fill
-          class="create-chat-room-dialog__submit"
           :text="$t(submitChatButtonI18n)"
           :loading="isCreatingChat"
           :disabled="!canSubmitChat"

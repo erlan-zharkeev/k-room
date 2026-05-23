@@ -11,7 +11,7 @@ import { ERROR_PAGE_I18N } from '../config/i18n'
 <template>
   <div class="error-page">
     <AppHeader :text="$t(ERROR_PAGE_I18N.title)" />
-    <AppText class="error-page__description" :text="$t(ERROR_PAGE_I18N.description)" />
+    <AppText :text="$t(ERROR_PAGE_I18N.description)" />
 
     <RouterLink custom :to="ROUTE_NAMES.app" v-slot="{ navigate }">
       <NmorphButton :text="$t(ERROR_PAGE_I18N.toMain)" @click="navigate" />

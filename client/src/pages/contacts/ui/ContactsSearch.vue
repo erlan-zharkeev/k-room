@@ -38,7 +38,6 @@ const {
             <NmorphBadge
               v-for="contact in foundContactList"
               :key="contact.id"
-              class="contacts-search__status-badge"
               :value="getSearchedContactStatus(contact)"
               hide-on-falsy-value
               size="tiny"
@@ -48,37 +47,31 @@ const {
             >
               <NmorphCard shadow-type="inset" content-class="contacts-search__item">
                 <AppProfileBasicData
-                  class="contacts-search__profile"
                   :image-id="getAvatarId(contact.id)"
                   :title="contact.nickname"
                   :name="contact.nickname"
                 >
                   <template #title>
-                    <div class="contacts-search__title">
-                      <div class="contacts-search__name">
-                        <AppText truncate :text="contact.nickname" />
-                      </div>
+                    <div class="contacts-search__name">
+                      <AppText truncate :text="contact.nickname" />
                     </div>
                   </template>
                 </AppProfileBasicData>
-                <div class="contacts-search__actions">
-                  <NmorphButton
-                    v-if="contact.interactionType === 'default'"
-                    shape="square"
-                    :loading="loadingContactIds.has(contact.id)"
-                    :aria-label="$t(CONTACTS_PAGE_I18N.add)"
-                    @click="emit('add', contact.id)"
-                  >
-                    <template #icon>
-                      <NmorphIconPlusThin />
-                    </template>
-                  </NmorphButton>
-                </div>
+                <NmorphButton
+                  v-if="contact.interactionType === 'default'"
+                  shape="square"
+                  :loading="loadingContactIds.has(contact.id)"
+                  :aria-label="$t(CONTACTS_PAGE_I18N.add)"
+                  @click="emit('add', contact.id)"
+                >
+                  <template #icon>
+                    <NmorphIconPlusThin />
+                  </template>
+                </NmorphButton>
               </NmorphCard>
             </NmorphBadge>
             <NmorphButton
               v-if="searchHasMore"
-              class="contacts-search__load-more"
               :text="$t(CONTACTS_PAGE_I18N.loadMore) + '...'"
               fill
               style-type="transparent"

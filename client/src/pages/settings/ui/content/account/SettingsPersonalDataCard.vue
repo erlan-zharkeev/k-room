@@ -107,7 +107,6 @@ const {
               :disabled="isAccountSaving"
               :model-value="accountAvatarUploadValue"
               :multiple="false"
-              class="settings-personal-data-card__file-button"
               @update:model-value="uploadAccountAvatar"
             />
             <NmorphButton

@@ -19,9 +19,7 @@ const showHeader = computed(() => isPortraitTabletOrLess.value || Boolean(props.
   <section class="content-layout">
     <div v-if="showHeader" class="content-layout__header">
       <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
-      <div v-if="props.titleKey" class="content-layout__header-body">
-        <AppHeader :text="$t(CONTENT_TITLE[props.titleKey])" />
-      </div>
+      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" />
     </div>
     <NmorphCard shadow-type="inset" class="content-layout__content">
       <NmorphScroll>

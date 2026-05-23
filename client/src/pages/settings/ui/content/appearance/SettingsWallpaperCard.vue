@@ -59,13 +59,12 @@ const visibilityOptions = computed(() =>
             :button-text="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
             :model-value="wallpaperUploadValue"
             :multiple="false"
-            class="settings-wallpaper-card__file-button"
             @update:model-value="updateWallpaper"
             @on-unsupported-file-type-error="showUnsupportedWallpaperFormatError"
           />
         </div>
 
-        <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
+        <label class="settings-wallpaper-card__input-element">
           <AppText
             tag="small"
             :selectable="false"
@@ -82,7 +81,7 @@ const visibilityOptions = computed(() =>
           />
         </label>
 
-        <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
+        <label class="settings-wallpaper-card__input-element">
           <AppText
             tag="small"
             :selectable="false"
@@ -99,7 +98,7 @@ const visibilityOptions = computed(() =>
           />
         </label>
 
-        <label class="settings-wallpaper-card__slider settings-wallpaper-card__input-element">
+        <label class="settings-wallpaper-card__input-element">
           <AppText
             tag="small"
             :selectable="false"
@@ -140,10 +139,6 @@ const visibilityOptions = computed(() =>
 
 .settings-wallpaper-card__input-element {
   margin-bottom: 12px;
-}
-
-.settings-wallpaper-card__file-label {
-  margin-bottom: 8px;
 }
 
 .settings-wallpaper-card__slider-label {

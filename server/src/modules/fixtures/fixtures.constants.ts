@@ -1,6 +1,7 @@
 import { DAY_IN_MS, MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
+import keyBy from 'lodash/keyBy'
 
-import { FIXTURE_MAX_LENGTH_NICKNAMES } from '../user/user.constants'
+import { FIXTURE_MAX_LENGTH_NICKNAMES, USER_FIXTURES } from '../user/user.constants'
 
 import type { FixtureContactData } from './fixtures.types'
 
@@ -135,3 +136,6 @@ export const MESSAGE_QUALIFIERS = [
   'when the modal is opened twice',
   'while the websocket reconnects'
 ] as const
+export const USER_BY_NICKNAME = keyBy(USER_FIXTURES, 'nickname')
+export const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
+export const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''

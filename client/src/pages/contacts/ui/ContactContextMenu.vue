@@ -27,7 +27,6 @@ const { isPortraitTabletOrLess } = useScreen()
   >
     <NmorphBadge :value="contactActionBadgeValue" color="var(--nmorph-warn-color)" size="tiny" :offset-x="-2">
       <NmorphCheckbox
-        class="contact-context-menu__trigger"
         design="button"
         height="basic"
         :model-value="isContextMenuOpen"

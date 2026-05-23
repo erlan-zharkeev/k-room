@@ -34,7 +34,6 @@ const { isPortraitTabletOrLess } = useScreen()
     @select="selectChatRoomAction"
   >
     <NmorphCheckbox
-      class="chat-room-context-menu__trigger"
       design="button"
       height="basic"
       :model-value="isContextMenuOpen"

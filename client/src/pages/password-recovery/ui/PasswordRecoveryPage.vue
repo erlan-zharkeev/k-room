@@ -63,7 +63,7 @@ onMounted(initializePasswordRecovery)
       class="password-recovery-page__form"
       @submit.prevent="sendEmailCode"
     >
-      <NmorphFormItem id="email" class="password-recovery-page__field" :show-validation-icon="false">
+      <NmorphFormItem id="email" :show-validation-icon="false">
         <NmorphTextInput
           v-model.trim="emailFormData.email.value"
           autocomplete="email"
@@ -102,7 +102,7 @@ onMounted(initializePasswordRecovery)
       class="password-recovery-page__form"
       @submit.prevent="validateCode"
     >
-      <NmorphFormItem id="code" class="password-recovery-page__field" :show-validation-icon="false">
+      <NmorphFormItem id="code" :show-validation-icon="false">
         <NmorphTextInput
           v-model.trim="codeFormData.code.value"
           autocomplete="one-time-code"

@@ -32,7 +32,6 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
     <div class="settings-theme-card">
       <div class="settings-theme-card__reset">
         <NmorphSelectButton
-          class="settings-theme-card__reset-source"
           :aria-label="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetThemeSource)"
           :model-value="resetThemeMode"
           @update:model-value="changeResetThemeMode"
@@ -49,53 +48,39 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
           </NmorphSelectButtonItem>
         </NmorphSelectButton>
 
-        <NmorphButton
-          class="settings-theme-card__reset-button"
-          :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetTheme)"
-          @click="resetCustomTheme"
-        />
+        <NmorphButton :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.resetTheme)" @click="resetCustomTheme" />
       </div>
 
       <NmorphDivider class="settings-theme-card__divider" />
 
-      <div class="settings-theme-card__pick-color">
-        <template v-for="(group, index) in CUSTOM_THEME_COLOR_GROUPS" :key="group.id">
-          <NmorphDivider v-if="index > 0" class="settings-theme-card__divider" />
+      <template v-for="(group, index) in CUSTOM_THEME_COLOR_GROUPS" :key="group.id">
+        <NmorphDivider v-if="index > 0" class="settings-theme-card__divider" />
 
-          <div class="settings-theme-card__group">
-            <label v-for="item in group.items" :key="item.id" class="settings-theme-card__field">
-              <AppText :selectable="false" :text="$t(item.label)" />
-              <NmorphColorPicker
-                :model-value="effectiveTheme.colorSchema[item.id]"
-                show-value
-                @update:model-value="($event) => changeThemeColor(item.id, $event)"
-              />
-            </label>
-          </div>
-        </template>
+        <label v-for="item in group.items" :key="item.id" class="settings-theme-card__field">
+          <AppText :selectable="false" :text="$t(item.label)" />
+          <NmorphColorPicker
+            :model-value="effectiveTheme.colorSchema[item.id]"
+            show-value
+            @update:model-value="($event) => changeThemeColor(item.id, $event)"
+          />
+        </label>
+      </template>
 
-        <NmorphDivider class="settings-theme-card__divider" />
+      <NmorphDivider class="settings-theme-card__divider" />
 
-        <div class="settings-theme-card__group">
-          <label v-for="item in CUSTOM_THEME_SHADOW_ITEMS" :key="item.id" class="settings-theme-card__slider">
-            <div class="settings-theme-card__slider-label">
-              <AppText
-                tag="small"
-                :selectable="false"
-                :text="`${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`"
-              />
-            </div>
-            <NmorphSlider
-              :model-value="effectiveTheme[item.id]"
-              :min="item.min"
-              :max="item.max"
-              :step="item.step"
-              :show-tooltip="false"
-              @update:model-value="changeThemeShadowSetting(item.id, Number($event))"
-            />
-          </label>
+      <label v-for="item in CUSTOM_THEME_SHADOW_ITEMS" :key="item.id" class="settings-theme-card__slider">
+        <div class="settings-theme-card__slider-label">
+          <AppText tag="small" :selectable="false" :text="`${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`" />
         </div>
-      </div>
+        <NmorphSlider
+          :model-value="effectiveTheme[item.id]"
+          :min="item.min"
+          :max="item.max"
+          :step="item.step"
+          :show-tooltip="false"
+          @update:model-value="changeThemeShadowSetting(item.id, Number($event))"
+        />
+      </label>
     </div>
   </SettingsCard>
 </template>

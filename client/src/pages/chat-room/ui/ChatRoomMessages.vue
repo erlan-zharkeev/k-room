@@ -28,7 +28,6 @@ const {
         v-for="{ item, virtualItem } in messageVirtualListItems"
         :key="item.id"
         :ref="measureMessageListItemElement"
-        class="chat-room-messages__virtual-item"
         :data-index="virtualItem.index"
       >
         <NmorphButton

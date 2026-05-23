@@ -62,7 +62,6 @@ watch(
 <template>
   <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
     <AppProfileBasicData
-      class="top-bar__profile"
       :image-alt="user.nickname"
       :image-id="avatarId"
       :title="displayedNickname"
@@ -72,10 +71,10 @@ watch(
         <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" size="tiny" />
       </template>
     </AppProfileBasicData>
-    <NmorphCard shadow-type="inset" class="top-bar__actions" :fill="false">
+    <NmorphCard shadow-type="inset" :fill="false">
       <NmorphButton @click="logout" :loading="isLogoutLoading">
         <NmorphIcon width="18px" height="18px">
-          <NmorphIconExit class="top-bar__exit-btn" />
+          <NmorphIconExit />
         </NmorphIcon>
       </NmorphButton>
     </NmorphCard>

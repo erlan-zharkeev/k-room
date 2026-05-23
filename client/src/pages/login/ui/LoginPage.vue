@@ -32,22 +32,20 @@ const isSubmitBtnDisabled = computed(() => {
 
 <template>
   <NmorphForm ref="formRef" :value="formData" class="login-page" @submit.prevent="submit">
-    <NmorphFormItem id="login" class="login-page__field" :show-validation-icon="false">
+    <NmorphFormItem id="login" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.login.value"
         autocomplete="username"
-        class="login-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.loginPlaceholder)"
         clearable
       />
     </NmorphFormItem>
 
-    <NmorphFormItem id="password" class="login-page__field" :show-validation-icon="false">
+    <NmorphFormItem id="password" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.password.value"
         autocomplete="current-password"
-        class="login-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(LOGIN_FORM_I18N.passwordPlaceholder)"
         type-password
@@ -62,7 +60,6 @@ const isSubmitBtnDisabled = computed(() => {
     />
     <div class="login-page__action-btns">
       <NmorphButton
-        class="login-page__button"
         :disabled="isSubmitBtnDisabled"
         fill
         :loading="isLoading"
@@ -71,7 +68,6 @@ const isSubmitBtnDisabled = computed(() => {
       />
 
       <NmorphButton
-        class="login-page__button"
         :disabled="isFormDisabled"
         fill
         :loading="isFirebaseLoginLoading"
@@ -98,10 +94,6 @@ const isSubmitBtnDisabled = computed(() => {
 .login-page {
   display: grid;
   gap: 12px;
-}
-
-.login-page__google-icon {
-  margin-right: 8px;
 }
 
 .login-page__action-btns {

@@ -15,7 +15,7 @@ const { searchQuery, filteredItems } = useFaq()
     <SettingsCard :title="$t(SETTINGS_PAGE_FAQ_I18N.faq)">
       <NmorphTextInput v-model.trim="searchQuery" clearable :placeholder="$t(SETTINGS_PAGE_FAQ_I18N.faqSearch)" />
 
-      <div v-if="filteredItems.length" class="settings-faq-content__list">
+      <div v-if="filteredItems.length">
         <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
           <AppText color="contrast-text" :text="$t(item.question)" />
           <AppText :text="$t(item.answer)" />
@@ -23,9 +23,7 @@ const { searchQuery, filteredItems } = useFaq()
         </div>
       </div>
 
-      <div v-else class="settings-faq-content__empty">
-        <AppText :text="$t(SETTINGS_PAGE_FAQ_I18N.faqNoResults)" />
-      </div>
+      <AppText v-else :text="$t(SETTINGS_PAGE_FAQ_I18N.faqNoResults)" />
 
       <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" />
     </SettingsCard>

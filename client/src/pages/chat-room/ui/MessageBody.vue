@@ -14,17 +14,12 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
   <article
     class="message-body"
     :class="[
-      props.message.isSelf ? 'message-body--self' : 'message-body--interlocutor',
-      props.message.status ? `message-body--${props.message.status}` : ''
+      props.message.isSelf && 'message-body--self',
+      props.message.status && `message-body--${props.message.status}`
     ]"
   >
     <div class="message-body__content">
-      <AppText
-        v-if="showAuthorNickname"
-        class="message-body__author"
-        color="accent"
-        :text="props.message.authorNickname"
-      />
+      <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
       <div v-if="props.message.repliedMessage" class="message-body__reply">
         <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
         <AppText
@@ -38,7 +33,6 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
         <NmorphImagePreview
           v-for="image in messageImageList"
           :key="image.name"
-          class="message-body__image"
           :src="image.previewSrc"
           :alt="image.name"
           width="100%"
@@ -47,16 +41,11 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
       </div>
       <AppText tag="p" :text="props.message.body" />
       <div class="message-body__footer">
-        <div v-if="reactionList.length" class="message-body__reactions">
-          <span
-            v-for="reaction in reactionList"
-            :key="reaction.glyphKey"
-            class="message-body__reaction"
-            :title="reaction.nicknames.join(', ')"
-          >
+        <template v-if="reactionList.length">
+          <span v-for="reaction in reactionList" :key="reaction.glyphKey" :title="reaction.nicknames.join(', ')">
             {{ reaction.glyphKey }}
           </span>
-        </div>
+        </template>
         <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
       </div>
     </div>

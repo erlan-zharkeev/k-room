@@ -32,12 +32,7 @@ const props = defineProps<ChatRoomListItemProps>()
       :ribbon-tilt="false"
     >
       <template #value>
-        <NmorphIcon
-          class="chat-room-list-item-pinned-badge__icon"
-          width="12px"
-          color="var(--nmorph-contrast-text-color)"
-          aria-hidden="true"
-        >
+        <NmorphIcon width="12px" color="var(--nmorph-contrast-text-color)" aria-hidden="true">
           <NmorphIconPin />
         </NmorphIcon>
       </template>
@@ -47,13 +42,8 @@ const props = defineProps<ChatRoomListItemProps>()
         content-class="chat-room-list-item__content"
         :shadow-type="props.item.selected ? 'inset' : 'outset'"
       >
-        <RouterLink
-          class="chat-room-list-item__link"
-          :to="props.item.to"
-          :aria-current="props.item.selected ? 'page' : undefined"
-        >
+        <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
           <AppProfileBasicData
-            class="chat-room-list-item__profile"
             :image-id="props.item.imageId"
             :title="props.item.title"
             :name="props.item.title"
@@ -78,9 +68,7 @@ const props = defineProps<ChatRoomListItemProps>()
             </template>
           </AppProfileBasicData>
         </RouterLink>
-        <div class="chat-room-list-item__actions">
-          <ChatRoomContextMenu :item="props.item" />
-        </div>
+        <ChatRoomContextMenu :item="props.item" />
       </NmorphCard>
     </NmorphBadge>
   </NmorphBadge>

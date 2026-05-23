@@ -14,13 +14,7 @@ const { title, typingContactNames } = useChatRoomHeader(room, props.isPrivateRoo
 
 <template>
   <header class="chat-room-content-header">
-    <AppProfileBasicData
-      class="chat-room-content-header__profile"
-      :image-id="props.room.avatarId"
-      :title="title"
-      :name="title"
-      :selectable="false"
-    >
+    <AppProfileBasicData :image-id="props.room.avatarId" :title="title" :name="title" :selectable="false">
       <template #description>
         <AppText
           v-if="typingContactNames.length"

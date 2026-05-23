@@ -19,10 +19,9 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 
 <template>
   <NmorphForm ref="formRef" :value="formData" class="registration-page" @submit.prevent="submit">
-    <NmorphFormItem id="nickname" class="registration-page__field" :show-validation-icon="false">
+    <NmorphFormItem id="nickname" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.nickname.value"
-        class="registration-page__input"
         :disabled="isFormDisabled"
         :input-attrs="REGISTRATION_NICKNAME_INPUT_ATTRS"
         :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"
@@ -30,37 +29,35 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
       />
     </NmorphFormItem>
 
-    <NmorphFormItem id="email" class="registration-page__field" :show-validation-icon="false">
+    <NmorphFormItem id="email" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.email.value"
         autocomplete="email"
-        class="registration-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.emailPlaceholder)"
         clearable
       />
     </NmorphFormItem>
 
-    <NmorphFormItem id="password" class="registration-page__field" :show-validation-icon="false">
+    <NmorphFormItem id="password" :show-validation-icon="false">
       <NmorphTextInput
         v-model="formData.password.value"
         autocomplete="new-password"
-        class="registration-page__input"
         :disabled="isFormDisabled"
         :placeholder="$t(REGISTRATION_FORM_I18N.passwordPlaceholder)"
         type-password
       />
     </NmorphFormItem>
 
-    <NmorphFormItem id="policy" class="registration-page__field" :show-validation-icon="false">
+    <NmorphFormItem id="policy" :show-validation-icon="false">
       <div class="registration-page__policy">
         <NmorphSwitch v-model="formData.policy.value" :disabled="isFormDisabled" />
-        <div class="registration-page__policy-text">
+        <span>
           <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.agreement)" />
-          <RouterLink class="registration-page__policy-link" :to="ROUTE_NAMES.privacyPolicy">
+          <RouterLink :to="ROUTE_NAMES.privacyPolicy">
             <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.link)" color="accent" />
           </RouterLink>
-        </div>
+        </span>
       </div>
     </NmorphFormItem>
 
@@ -72,7 +69,6 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
     />
 
     <NmorphButton
-      class="registration-page__button"
       :disabled="isSubmitDisabled || !isFormValid"
       fill
       :loading="isLoading"
