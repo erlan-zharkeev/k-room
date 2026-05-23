@@ -12,8 +12,8 @@ import { AppText } from 'src/shared/ui'
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import { useChatRoomsNavigationPage } from '../model/use-chat-rooms-navigation-page.model'
 
+import ChatRoomFormDialog from './ChatRoomFormDialog.vue'
 import ChatRoomList from './ChatRoomList.vue'
-import CreateChatRoomDialog from './CreateChatRoomDialog.vue'
 
 const { searchQuery, isCreateChatDialogOpen, showNoSearchResults, showNoChats, openCreateChatDialog, openChatRoom } =
   useChatRoomsNavigationPage()
@@ -51,7 +51,7 @@ const { searchQuery, isCreateChatDialogOpen, showNoSearchResults, showNoChats, o
       <ChatRoomList />
     </NmorphScroll>
 
-    <CreateChatRoomDialog v-model="isCreateChatDialogOpen" @open-room="openChatRoom" />
+    <ChatRoomFormDialog v-model="isCreateChatDialogOpen" @open-room="openChatRoom" />
   </section>
 </template>
 

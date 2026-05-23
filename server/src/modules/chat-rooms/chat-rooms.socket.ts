@@ -7,6 +7,7 @@ import {
   type EventCreateRoom,
   type EventDeleteChatRoom,
   type EventLeaveChatRoom,
+  type EventUpdateChatRoom,
   type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
@@ -32,6 +33,7 @@ import {
   emitNewRoomToUsers,
   leaveChatRoom,
   setRoomToUsers,
+  updateChatRoom,
   updateMutedChatRoom,
   updatePinnedChatRoom,
   updatePinnedChatRoomOrder,
@@ -87,6 +89,17 @@ export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presence
         }
       },
       { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'update-chat-room',
+    socketAckMiddleware<EventUpdateChatRoom>(
+      socket,
+      async (payload) => {
+        await updateChatRoom(socket.data.userId, payload, presenceService)
+      },
+      { basicError: CHAT_ROOMS_I18N.updateChatRoomFailed }
     )
   )
 

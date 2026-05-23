@@ -12,6 +12,10 @@ export interface SyncMediaDeps {
   loadMediaHeaders: (filename: string) => Promise<MediaHeaders>
 }
 
+export interface SyncMediaOptions {
+  force?: boolean
+}
+
 export interface TrimMediaCacheDeps {
   deleteMediaRecords: (ids: readonly string[]) => Promise<void>
   loadMediaRecords: () => Promise<MediaRecord[]>

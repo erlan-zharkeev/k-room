@@ -32,7 +32,15 @@ export interface ChatRoomContextMenuProps {
 
 export interface ChatRoomContextMenuOption {
   label: string
-  value: 'mark-as-read' | 'pin-chat' | 'unpin-chat' | 'mute-chat' | 'unmute-chat' | 'delete-chat' | 'leave-group'
+  value:
+    | 'mark-as-read'
+    | 'pin-chat'
+    | 'unpin-chat'
+    | 'mute-chat'
+    | 'unmute-chat'
+    | 'edit-group'
+    | 'delete-chat'
+    | 'leave-group'
   disabled?: boolean
 }
 
@@ -44,7 +52,11 @@ export interface ChatRoomLeaveDialogProps {
   item: ChatRoomNavigationItem
 }
 
-export type CreateChatRoomDialogEmit = {
+export interface ChatRoomFormDialogProps {
+  roomId?: string
+}
+
+export type ChatRoomFormDialogEmit = {
   (event: 'open-room', roomId: string): void
 }
 
