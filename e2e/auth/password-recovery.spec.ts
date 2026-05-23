@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { loginByCredentials } from 'e2e/shared/auth'
+
 import { PASSWORD_RECOVERY_FIXTURE_USER } from './fixtures'
 
 const getRecoverySendResponse = (page: Page) =>
@@ -79,10 +81,7 @@ test.describe('password recovery', () => {
     await page.getByRole('link', { name: 'Go to login page', exact: true }).click()
     await expect(page).toHaveURL(/\/authorize\/login$/)
 
-    await page.getByPlaceholder('Enter email or nickname').fill(email)
-    await page.getByPlaceholder('Enter your password').fill(nextPassword)
-    await page.getByRole('button', { name: 'Login', exact: true }).click()
-
+    await loginByCredentials(page, email, nextPassword)
     await expect(page).toHaveURL(/\/app/)
     await page.getByRole('button', { name: 'Logout' }).click()
     await expect(page).toHaveURL(/\/authorize\/login/)

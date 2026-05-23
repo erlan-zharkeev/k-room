@@ -1,6 +1,14 @@
-import { HOUR_IN_MS, MINUTE_IN_MS, PROTECTED_ACTION_REASON, SECOND_IN_MS, SECURITY_ACTION } from 'global-shared'
+import {
+  HOUR_IN_MS,
+  MINUTE_IN_MS,
+  SECOND_IN_MS,
+  SECURITY_ACTION,
+  type SecurityAction
+} from 'global-shared'
 
 import { SEND_CONFIRMATION_LINK_INTERVAL_MS } from '../auth/auth.constants'
+
+import type { SecurityEmailIpActionLimits } from './types'
 
 export const SECURITY_REDIS_KEY_PREFIX = 'security'
 export const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
@@ -37,8 +45,35 @@ export const VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD = 8
 export const VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD = 10
 export const VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD = 15
 
-export const SECURITY_BLOCK_REASON = PROTECTED_ACTION_REASON.temporarilyBlocked
-export const SECURITY_CAPTCHA_REASON = PROTECTED_ACTION_REASON.captchaRequired
-export const SECURITY_RATE_LIMIT_REASON = PROTECTED_ACTION_REASON.rateLimited
-
-export const PROTECTED_SECURITY_ACTION = SECURITY_ACTION
+export const SECURITY_EMAIL_IP_ACTION_LIMITS = {
+  [SECURITY_ACTION.sendConfirmationLink]: {
+    captchaEmailThreshold: SEND_CONFIRMATION_LINK_CAPTCHA_EMAIL_THRESHOLD,
+    blockEmailThreshold: SEND_CONFIRMATION_LINK_BLOCK_EMAIL_THRESHOLD,
+    captchaIpThreshold: SEND_CONFIRMATION_LINK_CAPTCHA_IP_THRESHOLD,
+    blockIpThreshold: SEND_CONFIRMATION_LINK_BLOCK_IP_THRESHOLD
+  },
+  [SECURITY_ACTION.sendPasswordRecoveryCode]: {
+    captchaEmailThreshold: SEND_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
+    blockEmailThreshold: SEND_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD,
+    captchaIpThreshold: SEND_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD,
+    blockIpThreshold: SEND_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
+  },
+  [SECURITY_ACTION.sendChangeEmailCode]: {
+    captchaEmailThreshold: SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD,
+    blockEmailThreshold: SEND_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD,
+    captchaIpThreshold: SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD,
+    blockIpThreshold: SEND_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
+  },
+  [SECURITY_ACTION.validateChangeEmailCode]: {
+    captchaEmailThreshold: VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD,
+    blockEmailThreshold: VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD,
+    captchaIpThreshold: VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD,
+    blockIpThreshold: VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
+  },
+  [SECURITY_ACTION.validatePasswordRecoveryCode]: {
+    captchaEmailThreshold: VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
+    blockEmailThreshold: VALIDATE_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD,
+    captchaIpThreshold: VALIDATE_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD,
+    blockIpThreshold: VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
+  }
+} satisfies Partial<Record<SecurityAction, SecurityEmailIpActionLimits>>

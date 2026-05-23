@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { E2E_ENV } from 'e2e/config'
+import { loginByCredentials, signInWithProvider } from 'e2e/shared/auth'
 
 import { SETTINGS_FIXTURE_USER } from './fixtures'
 
@@ -35,14 +35,8 @@ const buildEmailChangeUser = () => {
 }
 
 const attemptLogin = async (page: Page, login: string, password: string) => {
-  await page.goto('/authorize/login')
-
-  await page.getByPlaceholder('Enter email or nickname').fill(login)
-  await page.getByPlaceholder('Enter your password').fill(password)
-  await page.getByRole('button', { name: 'Login', exact: true }).click()
-
   try {
-    await page.waitForURL('**/app/**', { timeout: 5_000 })
+    await loginByCredentials(page, login, password, 5_000)
 
     return true
   } catch (error) {
@@ -74,18 +68,6 @@ const logout = async (page: Page) => {
 const openAccountSettings = async (page: Page) => {
   await page.goto('/app/settings/account')
   await expect(page).toHaveURL(/\/app\/settings\/account/)
-}
-
-const signInWithProvider = async (page: Page, nickname: string, email: string) => {
-  const response = await page.request.post(`${E2E_ENV.PLAYWRIGHT_API_URL}/auth/provider-login`, {
-    data: {
-      nickname,
-      email,
-      provider: 'google'
-    }
-  })
-
-  expect(response.ok()).toBeTruthy()
 }
 
 const updateNickname = async (page: Page, nickname: string) => {

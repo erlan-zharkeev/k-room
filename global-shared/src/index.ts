@@ -213,7 +213,17 @@ export type { UserRole, UserPreview, UserData } from './user/types'
 
 export { VALIDATION_I18N } from './validation/i18n'
 export { createValidationMessages } from './validation/messages'
-export { NON_EMPTY_PATTERN } from './validation/constants'
+export {
+  EMAIL_PATTERN,
+  NICKNAME_MAX_LENGTH_PATTERN,
+  NICKNAME_MIN_LENGTH_PATTERN,
+  NICKNAME_PATTERN,
+  NON_EMPTY_PATTERN,
+  PASSWORD_MIN_LENGTH_PATTERN,
+  PASSWORD_NO_SPACES_PATTERN,
+  PASSWORD_ONLY_LATIN_PATTERN,
+  PASSWORD_STRONG_PATTERN
+} from './validation/constants'
 export {
   createAuthLoginSchema,
   createAuthRegistrationFormSchema,

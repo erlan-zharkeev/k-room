@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-import { E2E_ENV } from 'e2e/config'
+import { signInWithProvider as signInWithProviderRequest } from 'e2e/shared/auth'
 import { getAppDbName, readStores } from 'e2e/shared/indexed-db'
 
 const MEDIA_STORE_NAME = 'media'
@@ -14,17 +14,9 @@ const buildStorageUser = () => {
   }
 }
 
-const signInWithProvider = async (page: Page) => {
+const signInStorageUser = async (page: Page) => {
   const { nickname, email } = buildStorageUser()
-  const response = await page.request.post(`${E2E_ENV.PLAYWRIGHT_API_URL}/auth/provider-login`, {
-    data: {
-      nickname,
-      email,
-      provider: 'google'
-    }
-  })
-
-  expect(response.ok()).toBeTruthy()
+  await signInWithProviderRequest(page, nickname, email)
 }
 
 const openStorageSettings = async (page: Page) => {
@@ -74,7 +66,7 @@ const getCachedMedia = async (page: Page, dbName: string) => {
 
 test.describe('settings storage', () => {
   test('clears downloaded media cache', async ({ page }) => {
-    await signInWithProvider(page)
+    await signInStorageUser(page)
     await openStorageSettings(page)
 
     const dbName = await getAppDbName(page)

@@ -1,4 +1,4 @@
-import { USER_NICKNAME_MAX_LENGTH, VALIDATION_LIMITS, VALIDATION_PATTERNS } from 'global-shared'
+import { USER_NICKNAME_MAX_LENGTH } from 'global-shared'
 
 import type { RegistrationInitialFormData } from '../model/types.model'
 
@@ -9,14 +9,6 @@ export const DEFAULT_REGISTRATION_FORM_DATA: RegistrationInitialFormData = {
   policy: false
 }
 
-export const NICKNAME_MIN_LENGTH_PATTERN = new RegExp(`^.{${VALIDATION_LIMITS.nicknameMinLength},}$`)
-export const NICKNAME_MAX_LENGTH_PATTERN = new RegExp(`^.{0,${VALIDATION_LIMITS.nicknameMaxLength}}$`)
-export const EMAIL_PATTERN = new RegExp(VALIDATION_PATTERNS.email)
-export const NICKNAME_PATTERN = new RegExp(VALIDATION_PATTERNS.nickname)
-export const PASSWORD_MIN_LENGTH_PATTERN = new RegExp(`^.{${VALIDATION_LIMITS.passwordMinLength},}$`)
-export const PASSWORD_STRONG_PATTERN = new RegExp(VALIDATION_PATTERNS.passwordStrong)
-export const PASSWORD_NO_SPACES_PATTERN = new RegExp(`^${VALIDATION_PATTERNS.noSpaces}$`)
-export const PASSWORD_ONLY_LATIN_PATTERN = new RegExp(VALIDATION_PATTERNS.onlyLatin)
 export const REGISTRATION_NICKNAME_INPUT_ATTRS = {
   maxLength: USER_NICKNAME_MAX_LENGTH
 }

@@ -11,8 +11,6 @@ export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const { TAURI_ENV_DEBUG, TAURI_ENV_PLATFORM } = process.env
   const clientEnvData = createClientEnvData(mode, envDir)
-  const clientUrl = `${clientEnvData.appHost}:${clientEnvData.clientPort}`
-  const shouldOpenClientOnStart = mode === 'development' && !clientEnvData.isTauriDev
 
   const tauriBuildConfig = TAURI_ENV_PLATFORM
     ? ({
@@ -89,7 +87,7 @@ export default defineConfig(({ mode }) => {
       host: clientEnvData.tauriDevHost || (clientEnvData.isTauriDev ? '127.0.0.1' : true),
       port: clientEnvData.clientPort,
       strictPort: clientEnvData.isTauriDev,
-      open: shouldOpenClientOnStart ? clientUrl : false,
+      open: false,
       hmr,
       watch: {
         ignored: ['**/src-tauri/**']
