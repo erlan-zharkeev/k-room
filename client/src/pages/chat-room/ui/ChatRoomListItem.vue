@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
+import { useScreen } from '../../../shared/lib'
 import type { ChatRoomListItemProps } from '../config/types'
 
 import ChatRoomContextMenu from './ChatRoomContextMenu.vue'
 
 const props = defineProps<ChatRoomListItemProps>()
+const { isPortraitTabletOrLess } = useScreen()
+const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.value)
 </script>
 
 <template>
@@ -40,7 +44,7 @@ const props = defineProps<ChatRoomListItemProps>()
         tag="div"
         class="chat-room-list-item"
         content-class="chat-room-list-item__content"
-        :shadow-type="props.item.selected ? 'inset' : 'outset'"
+        :shadow-type="isPressed ? 'inset' : 'outset'"
       >
         <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
           <AppProfileBasicData
