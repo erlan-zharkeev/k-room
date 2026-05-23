@@ -8,7 +8,7 @@ import {
 import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useDeleteMedia } from 'src/entities/media-file'
+import { useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
@@ -19,7 +19,7 @@ export const useChatRoomSync = () => {
   const route = useRoute()
   const router = useRouter()
   const { chatRooms, getById, merge, put, remove } = useChatRoom()
-  const { deleteMedia } = useDeleteMedia()
+  const { remove: removeMedia } = useMedia()
   const { bulkDelete, bulkPut } = useMessage()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
@@ -35,7 +35,7 @@ export const useChatRoomSync = () => {
 
     await saveRoomPreviewMessages(rooms)
     await merge(rooms.map(filterRoomPreviewMessage))
-    await Promise.all(removedChatAvatarIds.map(deleteMedia))
+    await Promise.all(removedChatAvatarIds.map(removeMedia))
   }
 
   const addChatRoom = async (room: EventGetRooms[number]) => {
@@ -66,7 +66,7 @@ export const useChatRoomSync = () => {
     await Promise.all([
       remove(roomId),
       bulkDelete(messageIds),
-      avatarId === `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}` && deleteMedia(avatarId)
+      avatarId === `${MEDIA_AVATAR_FILENAME_PREFIX}${roomId}` && removeMedia(avatarId)
     ])
 
     if (route.params.chatRoomId === roomId) {

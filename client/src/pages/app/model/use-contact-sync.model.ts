@@ -11,13 +11,18 @@ import type {
   Contact
 } from 'global-shared'
 
-import { getRequiredContactSystemData, useContact, useUpdateContactData } from 'src/entities/contact'
+import { getRequiredContactSystemData, mergeContactLocalState, useContact } from 'src/entities/contact'
 import { createKnownUser, useKnownUser } from 'src/entities/known-user'
 
 export const useContactSync = () => {
-  const { get: getContact, mergeMany: mergeContacts, put: putContact, remove: removeContact } = useContact()
+  const {
+    get: getContact,
+    mergeMany: mergeContacts,
+    put: putContact,
+    remove: removeContact,
+    update: updateStoredContactData
+  } = useContact()
   const { get: getKnownUser, mergeMany: mergeKnownUsers, update: updateKnownUser } = useKnownUser()
-  const { updateContactData: updateStoredContactData } = useUpdateContactData()
 
   const mergeKnownUserData = async (knownUsers: EventKnownUsersUpdated, removeMissing = false) => {
     await mergeKnownUsers(knownUsers, {
@@ -36,15 +41,7 @@ export const useContactSync = () => {
 
   const syncUserContacts = async (nextContacts: Contact[]) => {
     await mergeContacts(nextContacts, {
-      merge: (current, incoming) => {
-        const systemData = getRequiredContactSystemData()
-
-        return {
-          ...incoming,
-          savedAt: current?.savedAt ?? systemData.savedAt,
-          isTyping: current?.isTyping ?? systemData.isTyping
-        }
-      },
+      merge: mergeContactLocalState,
       removeMissing: true
     })
   }

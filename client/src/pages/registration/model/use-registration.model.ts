@@ -1,6 +1,10 @@
 import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   AUTH_ENDPOINTS,
+  EMAIL_PATTERN,
+  NICKNAME_MAX_LENGTH_PATTERN,
+  NICKNAME_MIN_LENGTH_PATTERN,
+  NICKNAME_PATTERN,
   NON_EMPTY_PATTERN,
   ROUTE_NAMES,
   createValidationMessages,
@@ -13,19 +17,9 @@ import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
-import { buildPathWithParams, useI18n } from 'src/shared/lib'
+import { buildPathWithParams, createPasswordValidationRules, useI18n } from 'src/shared/lib'
 
-import {
-  DEFAULT_REGISTRATION_FORM_DATA,
-  EMAIL_PATTERN,
-  NICKNAME_MAX_LENGTH_PATTERN,
-  NICKNAME_MIN_LENGTH_PATTERN,
-  NICKNAME_PATTERN,
-  PASSWORD_MIN_LENGTH_PATTERN,
-  PASSWORD_NO_SPACES_PATTERN,
-  PASSWORD_ONLY_LATIN_PATTERN,
-  PASSWORD_STRONG_PATTERN
-} from '../config/constants'
+import { DEFAULT_REGISTRATION_FORM_DATA } from '../config/constants'
 
 import type { RegistrationFormData } from './types.model'
 
@@ -56,13 +50,7 @@ export const useRegistration = () => {
     },
     password: {
       value: password,
-      rules: [
-        { pattern: NON_EMPTY_PATTERN, error: validationMessages.passwordIsRequired },
-        { pattern: PASSWORD_MIN_LENGTH_PATTERN, error: validationMessages.passwordMustBeAtLeast },
-        { pattern: PASSWORD_STRONG_PATTERN, error: validationMessages.passwordMustBeStrong },
-        { pattern: PASSWORD_NO_SPACES_PATTERN, error: validationMessages.passwordNotContainSpaces },
-        { pattern: PASSWORD_ONLY_LATIN_PATTERN, error: validationMessages.passwordMustContainOnlyLatin }
-      ]
+      rules: createPasswordValidationRules(validationMessages)
     },
     policy: {
       value: policy,

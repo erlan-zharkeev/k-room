@@ -1,7 +1,6 @@
-import type { EventCallsUpdated, EventCallUpdated, SocketActions } from 'global-shared'
-import { onBeforeUnmount } from 'vue'
+import type { EventCallsUpdated, EventCallUpdated } from 'global-shared'
 
-import { socket } from 'src/shared/api'
+import { useSocketEventListeners } from 'src/shared/api'
 
 import { useCall } from './use-call.model'
 
@@ -15,21 +14,13 @@ export const useCallDataUpdateMonitor = () => {
   const handleCallChanged = async (call: EventCallUpdated) => {
     await put(call)
   }
-
-  const initializeCallDataUpdateMonitor = () => {
-    socket.on<SocketActions>('calls-data-loaded', handleCallsLoaded)
-    socket.on<SocketActions>('call-data-changed', handleCallChanged)
-  }
-
-  const disposeCallDataUpdateMonitor = () => {
-    socket.off<SocketActions>('calls-data-loaded', handleCallsLoaded)
-    socket.off<SocketActions>('call-data-changed', handleCallChanged)
-  }
-
-  onBeforeUnmount(disposeCallDataUpdateMonitor)
+  const { initializeSocketEventListeners, disposeSocketEventListeners } = useSocketEventListeners([
+    { action: 'calls-data-loaded', handler: handleCallsLoaded },
+    { action: 'call-data-changed', handler: handleCallChanged }
+  ])
 
   return {
-    initializeCallDataUpdateMonitor,
-    disposeCallDataUpdateMonitor
+    initializeCallDataUpdateMonitor: initializeSocketEventListeners,
+    disposeCallDataUpdateMonitor: disposeSocketEventListeners
   }
 }

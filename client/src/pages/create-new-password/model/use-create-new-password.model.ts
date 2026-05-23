@@ -1,20 +1,14 @@
 import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
-import { NON_EMPTY_PATTERN, ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages } from 'global-shared'
+import { ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages } from 'global-shared'
 import type { CreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp } from 'src/shared/api'
-import { useI18n } from 'src/shared/lib'
+import { createPasswordValidationRules, useI18n } from 'src/shared/lib'
 
-import {
-  DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA,
-  PASSWORD_MIN_LENGTH_PATTERN,
-  PASSWORD_NO_SPACES_PATTERN,
-  PASSWORD_ONLY_LATIN_PATTERN,
-  PASSWORD_STRONG_PATTERN
-} from '../config/constants'
+import { DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA } from '../config/constants'
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 
 export const useCreateNewPassword = () => {
@@ -25,13 +19,7 @@ export const useCreateNewPassword = () => {
   const validationMessages = createValidationMessages(t)
   const { firstPassword, secondPassword } = clone(DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA)
   const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
-  const passwordRules = [
-    { pattern: NON_EMPTY_PATTERN, error: validationMessages.passwordIsRequired },
-    { pattern: PASSWORD_MIN_LENGTH_PATTERN, error: validationMessages.passwordMustBeAtLeast },
-    { pattern: PASSWORD_STRONG_PATTERN, error: validationMessages.passwordMustBeStrong },
-    { pattern: PASSWORD_NO_SPACES_PATTERN, error: validationMessages.passwordNotContainSpaces },
-    { pattern: PASSWORD_ONLY_LATIN_PATTERN, error: validationMessages.passwordMustContainOnlyLatin }
-  ]
+  const passwordRules = createPasswordValidationRules(validationMessages)
   const formData = reactive({
     firstPassword: { value: firstPassword, rules: passwordRules },
     secondPassword: { value: secondPassword, rules: passwordRules }

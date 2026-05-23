@@ -1,5 +1,4 @@
 import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
-import { useIntervalFn } from '@vueuse/core'
 import {
   CODES_ENDPOINTS,
   NON_EMPTY_PATTERN,
@@ -11,11 +10,11 @@ import {
   type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, onBeforeUnmount, reactive, ref, useTemplateRef } from 'vue'
+import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
-import { buildPathWithParams, getNextRequestIntervalSec, useI18n } from 'src/shared/lib'
+import { buildPathWithParams, useI18n, useRequestCooldownCounter } from 'src/shared/lib'
 
 import {
   DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA,
@@ -23,9 +22,6 @@ import {
   EMAIL_PATTERN,
   PASSWORD_RECOVERY_COUNTER_TICK_MS
 } from '../config/constants'
-
-const getCounterValue = (nextRequestTimestampMs: number) =>
-  Math.max(0, Math.round(getNextRequestIntervalSec(nextRequestTimestampMs)))
 
 export const usePasswordRecovery = () => {
   const route = useRoute()
@@ -55,31 +51,12 @@ export const usePasswordRecovery = () => {
   const emailSendCodeIsLoading = ref(false)
   const codeValidationIsLoading = ref(false)
   const codeSent = ref(false)
-  const counterValue = ref(0)
   const debugCode = ref('')
   const sendCaptcha = useProtectedActionCaptcha()
   const validateCaptcha = useProtectedActionCaptcha()
   const isEmailFormValid = computed(() => emailFormRef.value?.formData.isFormValid.value ?? false)
   const isCodeFormValid = computed(() => codeFormRef.value?.formData.isFormValid.value ?? false)
-
-  const { pause: pauseCounter, resume: resumeCounter } = useIntervalFn(
-    () => {
-      counterValue.value = Math.max(counterValue.value - 1, 0)
-
-      if (counterValue.value <= 0) {
-        pauseCounter()
-      }
-    },
-    PASSWORD_RECOVERY_COUNTER_TICK_MS,
-    { immediate: false, immediateCallback: false }
-  )
-
-  const stopCounter = () => pauseCounter()
-
-  const startCounter = () => {
-    stopCounter()
-    resumeCounter()
-  }
+  const { counterValue, syncCounterValue } = useRequestCooldownCounter(PASSWORD_RECOVERY_COUNTER_TICK_MS)
 
   const syncQuery = async (email: string, nextRequestTimestampMs: number) => {
     await router.replace({
@@ -114,16 +91,14 @@ export const usePasswordRecovery = () => {
       codeSent.value = true
       emailFormData.email.value = requestPayload.email
       debugCode.value = nextDebugCode ?? ''
-      counterValue.value = getCounterValue(nextRequestTimestampMs)
       await syncQuery(requestPayload.email, nextRequestTimestampMs)
-      startCounter()
+      syncCounterValue(nextRequestTimestampMs)
     } catch (error) {
       const payload = sendCaptcha.handleProtectedActionError(error)
 
       if (payload?.nextTryAt) {
-        counterValue.value = getCounterValue(payload.nextTryAt)
         await syncQuery(requestPayload.email, payload.nextTryAt)
-        startCounter()
+        syncCounterValue(payload.nextTryAt)
       }
     } finally {
       if (shouldResetCaptcha) {
@@ -177,12 +152,9 @@ export const usePasswordRecovery = () => {
     }
 
     if (nextRequestTimestampMs) {
-      counterValue.value = getCounterValue(nextRequestTimestampMs)
-      startCounter()
+      syncCounterValue(nextRequestTimestampMs)
     }
   }
-
-  onBeforeUnmount(stopCounter)
 
   return {
     codeFormData,

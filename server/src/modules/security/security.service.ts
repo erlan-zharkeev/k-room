@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import {
+  PROTECTED_ACTION_REASON,
   REQ_STATUS,
   SECURITY_ACTION,
   type ProtectedActionResponsePayload,
@@ -21,33 +22,13 @@ import {
   REGISTRATION_BLOCK_IP_THRESHOLD,
   REGISTRATION_CAPTCHA_IP_THRESHOLD,
   REGISTRATION_WINDOW_MS,
-  SECURITY_BLOCK_REASON,
-  SECURITY_CAPTCHA_REASON,
+  SECURITY_EMAIL_IP_ACTION_LIMITS,
   SECURITY_REDIS_KEY_PREFIX,
-  SEND_CONFIRMATION_LINK_BLOCK_EMAIL_THRESHOLD,
-  SEND_CONFIRMATION_LINK_BLOCK_IP_THRESHOLD,
-  SEND_CONFIRMATION_LINK_CAPTCHA_EMAIL_THRESHOLD,
-  SEND_CONFIRMATION_LINK_CAPTCHA_IP_THRESHOLD,
-  SEND_CONFIRMATION_LINK_COOLDOWN_MS,
-  SEND_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD,
-  SEND_CHANGE_EMAIL_BLOCK_IP_THRESHOLD,
-  SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD,
-  SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD,
-  SEND_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD,
-  SEND_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD,
-  SEND_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
-  SEND_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD,
-  VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD,
-  VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD,
-  VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD,
-  VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD,
-  VALIDATE_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD,
-  VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD,
-  VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD,
-  VALIDATE_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
+  SEND_CONFIRMATION_LINK_COOLDOWN_MS
 } from './constants'
 import { RedisService } from './redis.service'
 import { SECURITY_I18N } from './security.i18n'
+import type { SecurityEmailIpActionLimits, SecurityEmailIpActionParams } from './types'
 
 @Injectable()
 export class SecurityService {
@@ -78,11 +59,71 @@ export class SecurityService {
     }
   }
 
-  private async getNextTryAt(keys: string[]) {
+  private async resolveNextTryAt(keys: string[]) {
     const ttlMsValues = await Promise.all(keys.map((key) => this.redisService.ttlMs(key)))
     const ttlMs = Math.max(...ttlMsValues, 0)
 
     return ttlMs > 0 ? Date.now() + ttlMs : undefined
+  }
+
+  private async resolveActionCooldownUntil(action: SecurityAction, scope: string, value: string) {
+    const ttlMs = await this.redisService.ttlMs(this.buildKey(action, scope, value))
+
+    return ttlMs > 0 ? Date.now() + ttlMs : null
+  }
+
+  private buildEmailIpActionKeys(action: SecurityAction, email: string, ip: string) {
+    return {
+      emailKey: this.buildKey(action, 'email', email),
+      ipKey: this.buildKey(action, 'ip', ip)
+    }
+  }
+
+  private async assertEmailIpActionAllowed({ action, email, ip, captchaToken, limits }: SecurityEmailIpActionParams) {
+    const { emailKey, ipKey } = this.buildEmailIpActionKeys(action, email, ip)
+    const [emailAttempts, ipAttempts] = await Promise.all([
+      this.redisService.readNumber(emailKey),
+      this.redisService.readNumber(ipKey)
+    ])
+
+    if (emailAttempts >= limits.blockEmailThreshold || ipAttempts >= limits.blockIpThreshold) {
+      await this.blockAction(action, [emailKey, ipKey])
+    }
+
+    if (emailAttempts >= limits.captchaEmailThreshold || ipAttempts >= limits.captchaIpThreshold) {
+      await this.requireCaptcha(action, ip, captchaToken)
+    }
+  }
+
+  private async trackEmailIpAction(action: SecurityAction, email: string, ip: string, windowMs: number) {
+    const { emailKey, ipKey } = this.buildEmailIpActionKeys(action, email, ip)
+
+    await Promise.all([
+      this.redisService.increment(emailKey, windowMs),
+      this.redisService.increment(ipKey, windowMs)
+    ])
+  }
+
+  private async trackEmailIpFailure(
+    action: SecurityAction,
+    email: string,
+    ip: string,
+    windowMs: number,
+    limits: SecurityEmailIpActionLimits
+  ) {
+    const { emailKey, ipKey } = this.buildEmailIpActionKeys(action, email, ip)
+    const [emailFailures, ipFailures] = await Promise.all([
+      this.redisService.increment(emailKey, windowMs),
+      this.redisService.increment(ipKey, windowMs)
+    ])
+
+    return {
+      blocked: emailFailures >= limits.blockEmailThreshold || ipFailures >= limits.blockIpThreshold
+    }
+  }
+
+  private async clearEmailIpFailures(action: SecurityAction, email: string) {
+    await this.redisService.remove(this.buildKey(action, 'email', email))
   }
 
   private async requireCaptcha(action: SecurityAction, ip: string, captchaToken?: string) {
@@ -92,7 +133,7 @@ export class SecurityService {
         SECURITY_I18N.captchaRequired,
         false,
         undefined,
-        this.buildPayload(action, SECURITY_CAPTCHA_REASON)
+        this.buildPayload(action, PROTECTED_ACTION_REASON.captchaRequired)
       )
     }
 
@@ -104,7 +145,7 @@ export class SecurityService {
         SECURITY_I18N.captchaFailed,
         false,
         undefined,
-        this.buildPayload(action, SECURITY_CAPTCHA_REASON)
+        this.buildPayload(action, PROTECTED_ACTION_REASON.captchaRequired)
       )
     }
   }
@@ -115,7 +156,7 @@ export class SecurityService {
       SECURITY_I18N.temporarilyBlocked,
       false,
       undefined,
-      this.buildPayload(action, SECURITY_BLOCK_REASON, await this.getNextTryAt(keys))
+      this.buildPayload(action, PROTECTED_ACTION_REASON.temporarilyBlocked, await this.resolveNextTryAt(keys))
     )
   }
 
@@ -169,160 +210,97 @@ export class SecurityService {
   }
 
   async getSendConfirmationLinkCooldown(email: string) {
-    const cooldownKey = this.buildKey(SECURITY_ACTION.sendConfirmationLink, 'cooldown', email)
-    const ttlMs = await this.redisService.ttlMs(cooldownKey)
-
-    return ttlMs > 0 ? Date.now() + ttlMs : null
+    return this.resolveActionCooldownUntil(SECURITY_ACTION.sendConfirmationLink, 'cooldown', email)
   }
 
   async assertSendConfirmationLinkAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.sendConfirmationLink
-    const emailKey = this.buildKey(action, 'email', email)
-    const ipKey = this.buildKey(action, 'ip', ip)
-    const [emailAttempts, ipAttempts] = await Promise.all([
-      this.redisService.readNumber(emailKey),
-      this.redisService.readNumber(ipKey)
-    ])
 
-    if (
-      emailAttempts >= SEND_CONFIRMATION_LINK_BLOCK_EMAIL_THRESHOLD ||
-      ipAttempts >= SEND_CONFIRMATION_LINK_BLOCK_IP_THRESHOLD
-    ) {
-      await this.blockAction(action, [emailKey, ipKey])
-    }
-
-    if (
-      emailAttempts >= SEND_CONFIRMATION_LINK_CAPTCHA_EMAIL_THRESHOLD ||
-      ipAttempts >= SEND_CONFIRMATION_LINK_CAPTCHA_IP_THRESHOLD
-    ) {
-      await this.requireCaptcha(action, ip, captchaToken)
-    }
+    await this.assertEmailIpActionAllowed({
+      action,
+      email,
+      ip,
+      captchaToken,
+      limits: SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    })
   }
 
   async trackSendConfirmationLinkAttempt(ip: string, email: string) {
     const action = SECURITY_ACTION.sendConfirmationLink
 
     await Promise.all([
-      this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
-      this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS),
+      this.trackEmailIpAction(action, email, ip, EMAIL_ACTION_WINDOW_MS),
       this.redisService.write(this.buildKey(action, 'cooldown', email), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
     ])
   }
 
   async assertSendPasswordRecoveryAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.sendPasswordRecoveryCode
-    const emailKey = this.buildKey(action, 'email', email)
-    const ipKey = this.buildKey(action, 'ip', ip)
-    const [emailAttempts, ipAttempts] = await Promise.all([
-      this.redisService.readNumber(emailKey),
-      this.redisService.readNumber(ipKey)
-    ])
 
-    if (
-      emailAttempts >= SEND_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD ||
-      ipAttempts >= SEND_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
-    ) {
-      await this.blockAction(action, [emailKey, ipKey])
-    }
-
-    if (
-      emailAttempts >= SEND_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD ||
-      ipAttempts >= SEND_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
-    ) {
-      await this.requireCaptcha(action, ip, captchaToken)
-    }
+    await this.assertEmailIpActionAllowed({
+      action,
+      email,
+      ip,
+      captchaToken,
+      limits: SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    })
   }
 
   async trackSendPasswordRecoveryAttempt(ip: string, email: string) {
-    const action = SECURITY_ACTION.sendPasswordRecoveryCode
-
-    await Promise.all([
-      this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
-      this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS)
-    ])
+    await this.trackEmailIpAction(SECURITY_ACTION.sendPasswordRecoveryCode, email, ip, EMAIL_ACTION_WINDOW_MS)
   }
 
   async getSendChangeEmailCodeCooldown(userId: string) {
-    const cooldownKey = this.buildKey(SECURITY_ACTION.sendChangeEmailCode, 'cooldown', userId)
-    const ttlMs = await this.redisService.ttlMs(cooldownKey)
-
-    return ttlMs > 0 ? Date.now() + ttlMs : null
+    return this.resolveActionCooldownUntil(SECURITY_ACTION.sendChangeEmailCode, 'cooldown', userId)
   }
 
   async assertSendChangeEmailCodeAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.sendChangeEmailCode
-    const emailKey = this.buildKey(action, 'email', email)
-    const ipKey = this.buildKey(action, 'ip', ip)
-    const [emailAttempts, ipAttempts] = await Promise.all([
-      this.redisService.readNumber(emailKey),
-      this.redisService.readNumber(ipKey)
-    ])
 
-    if (
-      emailAttempts >= SEND_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
-      ipAttempts >= SEND_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
-    ) {
-      await this.blockAction(action, [emailKey, ipKey])
-    }
-
-    if (
-      emailAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
-      ipAttempts >= SEND_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
-    ) {
-      await this.requireCaptcha(action, ip, captchaToken)
-    }
+    await this.assertEmailIpActionAllowed({
+      action,
+      email,
+      ip,
+      captchaToken,
+      limits: SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    })
   }
 
   async trackSendChangeEmailCodeAttempt(ip: string, email: string, userId: string) {
     const action = SECURITY_ACTION.sendChangeEmailCode
 
     await Promise.all([
-      this.redisService.increment(this.buildKey(action, 'email', email), EMAIL_ACTION_WINDOW_MS),
-      this.redisService.increment(this.buildKey(action, 'ip', ip), EMAIL_ACTION_WINDOW_MS),
+      this.trackEmailIpAction(action, email, ip, EMAIL_ACTION_WINDOW_MS),
       this.redisService.write(this.buildKey(action, 'cooldown', userId), '1', SEND_CONFIRMATION_LINK_COOLDOWN_MS)
     ])
   }
 
   async assertValidateChangeEmailCodeAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.validateChangeEmailCode
-    const emailKey = this.buildKey(action, 'email', email)
-    const ipKey = this.buildKey(action, 'ip', ip)
-    const [emailFailures, ipFailures] = await Promise.all([
-      this.redisService.readNumber(emailKey),
-      this.redisService.readNumber(ipKey)
-    ])
 
-    if (
-      emailFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
-      ipFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
-    ) {
-      await this.blockAction(action, [emailKey, ipKey])
-    }
-
-    if (
-      emailFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_EMAIL_THRESHOLD ||
-      ipFailures >= VALIDATE_CHANGE_EMAIL_CAPTCHA_IP_THRESHOLD
-    ) {
-      await this.requireCaptcha(action, ip, captchaToken)
-    }
+    await this.assertEmailIpActionAllowed({
+      action,
+      email,
+      ip,
+      captchaToken,
+      limits: SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    })
   }
 
   async trackInvalidChangeEmailCode(ip: string, email: string) {
     const action = SECURITY_ACTION.validateChangeEmailCode
-    const [emailFailures, ipFailures] = await Promise.all([
-      this.redisService.increment(this.buildKey(action, 'email', email), PASSWORD_RECOVERY_CODE_WINDOW_MS),
-      this.redisService.increment(this.buildKey(action, 'ip', ip), PASSWORD_RECOVERY_CODE_WINDOW_MS)
-    ])
 
-    return {
-      blocked:
-        emailFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_EMAIL_THRESHOLD ||
-        ipFailures >= VALIDATE_CHANGE_EMAIL_BLOCK_IP_THRESHOLD
-    }
+    return this.trackEmailIpFailure(
+      action,
+      email,
+      ip,
+      PASSWORD_RECOVERY_CODE_WINDOW_MS,
+      SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    )
   }
 
   async clearChangeEmailCodeFailures(email: string) {
-    await this.redisService.remove(this.buildKey(SECURITY_ACTION.validateChangeEmailCode, 'email', email))
+    await this.clearEmailIpFailures(SECURITY_ACTION.validateChangeEmailCode, email)
   }
 
   async getChangeEmailCode(userId: string) {
@@ -339,43 +317,29 @@ export class SecurityService {
 
   async assertValidatePasswordRecoveryCodeAllowed(email: string, ip: string, captchaToken?: string) {
     const action = SECURITY_ACTION.validatePasswordRecoveryCode
-    const emailKey = this.buildKey(action, 'email', email)
-    const ipKey = this.buildKey(action, 'ip', ip)
-    const [emailFailures, ipFailures] = await Promise.all([
-      this.redisService.readNumber(emailKey),
-      this.redisService.readNumber(ipKey)
-    ])
 
-    if (
-      emailFailures >= VALIDATE_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD ||
-      ipFailures >= VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
-    ) {
-      await this.blockAction(action, [emailKey, ipKey])
-    }
-
-    if (
-      emailFailures >= VALIDATE_PASSWORD_RECOVERY_CAPTCHA_EMAIL_THRESHOLD ||
-      ipFailures >= VALIDATE_PASSWORD_RECOVERY_CAPTCHA_IP_THRESHOLD
-    ) {
-      await this.requireCaptcha(action, ip, captchaToken)
-    }
+    await this.assertEmailIpActionAllowed({
+      action,
+      email,
+      ip,
+      captchaToken,
+      limits: SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    })
   }
 
   async trackInvalidPasswordRecoveryCode(ip: string, email: string) {
     const action = SECURITY_ACTION.validatePasswordRecoveryCode
-    const [emailFailures, ipFailures] = await Promise.all([
-      this.redisService.increment(this.buildKey(action, 'email', email), PASSWORD_RECOVERY_CODE_WINDOW_MS),
-      this.redisService.increment(this.buildKey(action, 'ip', ip), PASSWORD_RECOVERY_CODE_WINDOW_MS)
-    ])
 
-    return {
-      blocked:
-        emailFailures >= VALIDATE_PASSWORD_RECOVERY_BLOCK_EMAIL_THRESHOLD ||
-        ipFailures >= VALIDATE_PASSWORD_RECOVERY_BLOCK_IP_THRESHOLD
-    }
+    return this.trackEmailIpFailure(
+      action,
+      email,
+      ip,
+      PASSWORD_RECOVERY_CODE_WINDOW_MS,
+      SECURITY_EMAIL_IP_ACTION_LIMITS[action]
+    )
   }
 
   async clearPasswordRecoveryCodeFailures(email: string) {
-    await this.redisService.remove(this.buildKey(SECURITY_ACTION.validatePasswordRecoveryCode, 'email', email))
+    await this.clearEmailIpFailures(SECURITY_ACTION.validatePasswordRecoveryCode, email)
   }
 }

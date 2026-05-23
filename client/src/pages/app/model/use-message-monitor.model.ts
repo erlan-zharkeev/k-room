@@ -3,15 +3,13 @@ import type {
   EventMessageDelivered,
   EventMessagesStatusUpdated,
   EventUpdateMessageStatus,
-  EventUpdatedMessageReactions,
-  SocketActions
+  EventUpdatedMessageReactions
 } from 'global-shared'
-import { onBeforeUnmount } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
-import { socket } from 'src/shared/api'
+import { useSocketEventListeners } from 'src/shared/api'
 
 export const useMessageMonitor = () => {
   const { mutate: mutateRoom } = useChatRoom()
@@ -94,27 +92,16 @@ export const useMessageMonitor = () => {
       message.reactions = [...reactions, reaction]
     })
   }
-
-  const initializeMessageMonitor = () => {
-    socket.on<SocketActions>('message-deleted', handleMessageDeleted)
-    socket.on<SocketActions>('message-delivered', handleDeliveredMessage)
-    socket.on<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.on<SocketActions>('message-status-updated', updateMessageStatus)
-    socket.on<SocketActions>('messages-status-updated', updateMessagesStatus)
-  }
-
-  const disposeMessageMonitor = () => {
-    socket.off<SocketActions>('message-deleted', handleMessageDeleted)
-    socket.off<SocketActions>('message-delivered', handleDeliveredMessage)
-    socket.off<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.off<SocketActions>('message-status-updated', updateMessageStatus)
-    socket.off<SocketActions>('messages-status-updated', updateMessagesStatus)
-  }
-
-  onBeforeUnmount(disposeMessageMonitor)
+  const { initializeSocketEventListeners, disposeSocketEventListeners } = useSocketEventListeners([
+    { action: 'message-deleted', handler: handleMessageDeleted },
+    { action: 'message-delivered', handler: handleDeliveredMessage },
+    { action: 'message-reaction-updated', handler: handleMessageReactionUpdate },
+    { action: 'message-status-updated', handler: updateMessageStatus },
+    { action: 'messages-status-updated', handler: updateMessagesStatus }
+  ])
 
   return {
-    initializeMessageMonitor,
-    disposeMessageMonitor
+    initializeMessageMonitor: initializeSocketEventListeners,
+    disposeMessageMonitor: disposeSocketEventListeners
   }
 }
