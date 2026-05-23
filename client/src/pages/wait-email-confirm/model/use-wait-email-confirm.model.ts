@@ -1,6 +1,7 @@
 import {
   AUTH_ENDPOINTS,
   ROUTE_NAMES,
+  isString,
   type SendConfirmationLinkPayload,
   type SendConfirmationLinkResponse
 } from 'global-shared'
@@ -67,7 +68,7 @@ export const useWaitEmailConfirm = () => {
     const queryAttempts = Number(route.query.attempts)
     const nextRequestTimestampMs = Number(route.query.nextRequestTime)
 
-    if (typeof queryEmail !== 'string') {
+    if (!isString(queryEmail)) {
       await router.push(ROUTE_NAMES.authRegistration)
       return
     }

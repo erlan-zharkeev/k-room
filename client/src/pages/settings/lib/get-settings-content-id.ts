@@ -1,4 +1,4 @@
-import { isString } from 'lodash'
+import { isString } from 'global-shared'
 
 import { DEFAULT_SETTINGS_CONTENT_ID, SETTINGS_CONTENT_COMPONENTS } from '../config/constants/content.constants'
 import type { SettingsContentId } from '../config/types/content.types'

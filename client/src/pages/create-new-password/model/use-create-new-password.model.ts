@@ -1,5 +1,5 @@
 import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages } from 'global-shared'
+import { ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages, isString } from 'global-shared'
 import type { CreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
 import { computed, reactive, ref, useTemplateRef } from 'vue'
@@ -34,7 +34,7 @@ export const useCreateNewPassword = () => {
   )
 
   const submit = async () => {
-    if (!isFormValid.value || passwordMismatch.value || typeof passwordRecoveryCode.value !== 'string') {
+    if (!isFormValid.value || passwordMismatch.value || !isString(passwordRecoveryCode.value)) {
       return
     }
 
@@ -54,7 +54,7 @@ export const useCreateNewPassword = () => {
   }
 
   const initializeCreateNewPassword = async () => {
-    if (typeof passwordRecoveryCode.value !== 'string') {
+    if (!isString(passwordRecoveryCode.value)) {
       await router.push(ROUTE_NAMES.app)
     }
   }

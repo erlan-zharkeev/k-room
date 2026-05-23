@@ -8,11 +8,11 @@ import {
   type SendChangeEmailCodeResponse,
   type SendPasswordRecoveryCodeResponse,
   type SendPasswordRecoveryCodePayload,
+  isString,
   type ValidateChangeEmailCodePayload,
   type ValidateChangeEmailCodeResponse,
   type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
-import { isString } from 'lodash'
 
 import { AppError, toAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'

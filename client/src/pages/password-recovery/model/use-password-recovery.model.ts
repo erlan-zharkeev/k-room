@@ -5,6 +5,7 @@ import {
   ROUTE_NAMES,
   type CodeValidationPayload,
   createValidationMessages,
+  isString,
   type SendPasswordRecoveryCodePayload,
   type SendPasswordRecoveryCodeResponse,
   type ValidatePasswordRecoveryCodeResponse
@@ -146,7 +147,7 @@ export const usePasswordRecovery = () => {
     const email = route.query['user-email']
     const nextRequestTimestampMs = Number(route.query['next-time-request'])
 
-    if (typeof email === 'string') {
+    if (isString(email)) {
       emailFormData.email.value = email
       codeSent.value = true
     }

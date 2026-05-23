@@ -6,6 +6,7 @@ import {
   EMAIL_CODE_LENGTH,
   type CodeValidationPayload,
   formatNickname,
+  isString,
   isUnknownObject,
   type SendChangeEmailCodePayload,
   type SendPasswordRecoveryCodePayload,
@@ -175,8 +176,8 @@ export class CodesService {
     const storedEmail = isUnknownObject(parsed) ? parsed.email : null
     const storedCode = isUnknownObject(parsed) ? parsed.code : null
     const isValid =
-      typeof storedEmail === 'string' &&
-      typeof storedCode === 'string' &&
+      isString(storedEmail) &&
+      isString(storedCode) &&
       storedEmail.toLowerCase() === email.toLowerCase() &&
       storedCode === code
 

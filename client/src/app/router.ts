@@ -1,5 +1,4 @@
-import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES } from 'global-shared'
-import { isString } from 'lodash'
+import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES, isString } from 'global-shared'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useSettings, type DbDeviceSetting } from 'src/entities/setting'

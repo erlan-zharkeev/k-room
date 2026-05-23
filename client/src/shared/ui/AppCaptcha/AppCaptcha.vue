@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
 
-import { AppText } from 'src/shared/ui'
+import { AppText } from '../AppText'
 
 import { APP_CAPTCHA_DEFAULT_PROPS } from './constants'
 import { APP_CAPTCHA_I18N } from './i18n'

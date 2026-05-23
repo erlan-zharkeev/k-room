@@ -1,5 +1,4 @@
-import { isUnknownObject } from 'global-shared'
-import { isString } from 'lodash'
+import { isString, isUnknownObject } from 'global-shared'
 
 import type { HttpError, CreateHttpErrorPayload } from './types'
 

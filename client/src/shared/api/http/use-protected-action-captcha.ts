@@ -1,5 +1,11 @@
-import { PROTECTED_ACTION_REASON, isUnknownObject, type ProtectedActionResponsePayload } from 'global-shared'
-import { isBoolean, isNumber, isString } from 'lodash'
+import {
+  PROTECTED_ACTION_REASON,
+  isBoolean,
+  isNumber,
+  isString,
+  isUnknownObject,
+  type ProtectedActionResponsePayload
+} from 'global-shared'
 import { computed, ref } from 'vue'
 
 import { isHttpError } from './create-http-error'

@@ -1,4 +1,4 @@
-import { ROUTE_NAMES, type UserData } from 'global-shared'
+import { isString, ROUTE_NAMES, type UserData } from 'global-shared'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -17,7 +17,7 @@ export const useUserSession = () => {
   const getRedirectPath = () => {
     const { redirect } = route.query
 
-    if (typeof redirect !== 'string' || !redirect.startsWith('/') || redirect.startsWith('//')) {
+    if (!isString(redirect) || !redirect.startsWith('/') || redirect.startsWith('//')) {
       return ROUTE_NAMES.app
     }
 

@@ -1,10 +1,8 @@
 import type {
-  ContactInteractionUpdateFailedReason,
   EventDeleteContact,
   EventSaveContact,
   EventSearchContact,
   EventUpdateInteraction,
-  SocketAckResponse,
   SocketActions
 } from 'global-shared'
 
@@ -67,7 +65,7 @@ export const registerContactsSocketHandlers = (socket: SocketInstance, presenceS
 
   socket.on<SocketActions>(
     'update-contact-interaction-type',
-    socketAckMiddleware<EventUpdateInteraction, void, ContactInteractionUpdateFailedReason>(
+    socketAckMiddleware<EventUpdateInteraction>(
       socket,
       async ({ contactId, interaction }) => {
         const { userId } = socket.data
@@ -95,13 +93,6 @@ export const registerContactsSocketHandlers = (socket: SocketInstance, presenceS
         if (result.success) {
           emitContactInteractionUpdated(userId, contactId, interaction)
           return
-        }
-
-        if (result.reason) {
-          return {
-            ok: false,
-            reason: result.reason
-          } satisfies SocketAckResponse<void, ContactInteractionUpdateFailedReason>
         }
 
         const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'
