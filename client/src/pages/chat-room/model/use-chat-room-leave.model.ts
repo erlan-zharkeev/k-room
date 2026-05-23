@@ -1,7 +1,7 @@
 import type { EventLeaveChatRoom } from 'global-shared'
 import { computed, ref, toRef, watch, type Ref } from 'vue'
 
-import { useChatRoom } from 'src/entities/chat-room'
+import { isRoomAdmin, useChatRoom } from 'src/entities/chat-room'
 import { useSocketAction } from 'src/shared/api'
 import type { AppUserPickerItem } from 'src/shared/ui'
 
@@ -26,7 +26,7 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
     }
 
     return room.users.reduce<AppUserPickerItem[]>((items, userId) => {
-      if (userId === item.value.adminId) return items
+      if (isRoomAdmin(item.value, userId)) return items
 
       const userData = getUserById(userId)
 

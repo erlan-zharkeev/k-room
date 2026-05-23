@@ -1,10 +1,8 @@
-import type { ChatRoom } from 'global-shared'
+import { isRoomPrivate, type ChatRoom } from 'global-shared'
 import { computed } from 'vue'
 
 import type { ChatRoomRecord } from 'src/shared/lib'
 import { db, dexieCollectionStore } from 'src/shared/lib'
-
-import { isRoomPrivate } from '../lib/is-room-private'
 
 const chatRoomStore = dexieCollectionStore<ChatRoomRecord>(db['chat-rooms'])
 

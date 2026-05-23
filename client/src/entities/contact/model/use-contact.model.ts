@@ -1,3 +1,4 @@
+import { isAcceptedContactInteraction, isInviteReceivedContactInteraction } from 'global-shared'
 import { computed } from 'vue'
 
 import type { ContactRecord } from 'src/shared/lib'
@@ -9,10 +10,10 @@ export const useContact = () => {
   const { bulkPut, get, mergeMany, put, remove, reset, update } = contactStore
   const { items: contacts, itemMap: contactById, hasById } = contactStore.useIndexedList()
   const acceptedContacts = computed(() =>
-    contacts.value.filter(({ interactionType }) => interactionType === 'invite-accepted')
+    contacts.value.filter(({ interactionType }) => isAcceptedContactInteraction(interactionType))
   )
   const invitationsQuantity = computed(
-    () => contacts.value.filter(({ interactionType }) => interactionType === 'invite-received').length
+    () => contacts.value.filter(({ interactionType }) => isInviteReceivedContactInteraction(interactionType)).length
   )
 
   return {

@@ -1,4 +1,9 @@
-import { isUnknownObject } from 'global-shared'
+import {
+  CONTACT_INTERACTION,
+  isBlockedContactInteraction,
+  isInviteReceivedContactInteraction,
+  isUnknownObject
+} from 'global-shared'
 import { computed, ref } from 'vue'
 
 import { useI18n } from 'src/shared/lib'
@@ -10,13 +15,13 @@ export const useContactContextMenu = (props: ContactContextMenuProps, emit: Cont
   const { t } = useI18n()
   const isContextMenuOpen = ref(false)
   const contactActionBadgeValue = computed(() =>
-    props.contact.interactionType === 'invite-received' ? '!' : undefined
+    isInviteReceivedContactInteraction(props.contact.interactionType) ? '!' : undefined
   )
   const contextMenuOptions = computed<ContactContextMenuOption[]>(() => {
     const options: ContactContextMenuOption[] = []
     const { interactionType } = props.contact
 
-    if (interactionType === 'invite-received') {
+    if (isInviteReceivedContactInteraction(interactionType)) {
       options.push({
         label: t(CONTACTS_PAGE_I18N.accept),
         value: 'accept'
@@ -24,7 +29,7 @@ export const useContactContextMenu = (props: ContactContextMenuProps, emit: Cont
     }
 
     options.push(
-      interactionType === 'blocked'
+      isBlockedContactInteraction(interactionType)
         ? {
             label: t(CONTACTS_PAGE_I18N.unblock),
             value: 'unblock'
@@ -55,13 +60,13 @@ export const useContactContextMenu = (props: ContactContextMenuProps, emit: Cont
 
     switch (option.value) {
       case 'accept':
-        emit('update-interaction', id, 'invite-accepted')
+        emit('update-interaction', id, CONTACT_INTERACTION.INVITE_ACCEPTED)
         break
       case 'block':
-        emit('update-interaction', id, 'blocked')
+        emit('update-interaction', id, CONTACT_INTERACTION.BLOCKED)
         break
       case 'unblock':
-        emit('update-interaction', id, 'default')
+        emit('update-interaction', id, CONTACT_INTERACTION.DEFAULT)
         break
       case 'delete':
         emit('delete', id)

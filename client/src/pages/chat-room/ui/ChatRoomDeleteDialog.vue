@@ -9,16 +9,14 @@ import { useChatRoomDelete } from '../model/use-chat-room-delete.model'
 
 const model = defineModel<boolean>({ required: true })
 const props = defineProps<ChatRoomDeleteDialogProps>()
-const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, isDeletingChatRoom } = useChatRoomDelete(
-  props,
-  model
-)
+const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, deleteChatRoomConfirmText, isDeletingChatRoom } =
+  useChatRoomDelete(props, model)
 </script>
 
 <template>
   <NmorphDialog v-model="model" :title="$t(CHAT_ROOM_PAGE_I18N.deleteChatTitle)">
     <div class="chat-room-delete-dialog">
-      <AppText :text="$t(CHAT_ROOM_PAGE_I18N.deleteChatConfirm)" />
+      <AppText :text="deleteChatRoomConfirmText" />
       <div class="chat-room-delete-dialog__actions">
         <NmorphButton
           :text="$t(CHAT_ROOM_PAGE_I18N.cancel)"

@@ -6,6 +6,7 @@ import {
   NmorphIconChatLineSquare,
   NmorphIconPostCard
 } from '@nmorph/nmorph-ui-kit'
+import { CONTACT_INTERACTION, isAcceptedContactInteraction, isDefaultContactInteraction } from 'global-shared'
 import { computed } from 'vue'
 
 import { getAvatarId } from 'src/shared/lib'
@@ -25,7 +26,7 @@ const contactChatRoomIdList = computed(() =>
   props.contactList
     .filter(
       ({ id, interactionType }) =>
-        interactionType === 'invite-accepted' && hasContactChatRoom(props.getPersonalChatRoomId(id))
+        isAcceptedContactInteraction(interactionType) && hasContactChatRoom(props.getPersonalChatRoomId(id))
     )
     .map(({ id }) => id)
 )
@@ -71,11 +72,11 @@ const contactChatRoomIdList = computed(() =>
         </AppProfileBasicData>
         <div class="contact-list__actions">
           <NmorphButton
-            v-if="contact.interactionType === 'default'"
+            v-if="isDefaultContactInteraction(contact.interactionType)"
             shape="square"
             :loading="props.loadingContactIds.has(contact.id)"
             :aria-label="$t(CONTACTS_PAGE_I18N.invite)"
-            @click="emit('update-interaction', contact.id, 'invited')"
+            @click="emit('update-interaction', contact.id, CONTACT_INTERACTION.INVITED)"
           >
             <template #icon>
               <NmorphIconPostCard />
@@ -92,7 +93,7 @@ const contactChatRoomIdList = computed(() =>
             </template>
           </NmorphButton>
           <NmorphButton
-            v-else-if="contact.interactionType === 'invite-accepted'"
+            v-else-if="isAcceptedContactInteraction(contact.interactionType)"
             shape="square"
             :loading="props.creatingChatContactIds.has(contact.id)"
             :aria-label="$t(CONTACTS_PAGE_I18N.createChat)"

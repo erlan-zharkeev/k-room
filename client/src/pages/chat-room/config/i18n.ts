@@ -56,6 +56,11 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Вы уверены, что хотите удалить этот чат?',
     zh: '确定要删除此聊天吗？'
   },
+  deletePrivateChatConfirm: {
+    en: 'This action is irreversible. The chat and all messages will be deleted for both participants.',
+    ru: 'Это действие необратимо. Чат и все сообщения будут удалены у обоих участников.',
+    zh: '此操作无法撤销。聊天和所有消息将从双方删除。'
+  },
   leaveGroup: {
     en: 'Leave group',
     ru: 'Покинуть группу',

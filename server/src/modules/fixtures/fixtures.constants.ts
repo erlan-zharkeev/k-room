@@ -1,4 +1,4 @@
-import { DAY_IN_MS, MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
+import { CONTACT_INTERACTION, DAY_IN_MS, MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
 import keyBy from 'lodash/keyBy'
 
 import { FIXTURE_MAX_LENGTH_NICKNAMES, USER_FIXTURES } from '../user/user.constants'
@@ -64,40 +64,40 @@ export const FIXTURE_MESSAGE_REACTIONS_BY_INDEX: Record<number, readonly { nickn
 export const FIXTURE_CONTACTS = [
   {
     nickname: 'tolik',
-    interaction: 'invite-accepted',
-    reverseInteraction: 'invite-accepted'
+    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
+    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
   },
   {
     nickname: 'guest',
-    interaction: 'default'
+    interaction: CONTACT_INTERACTION.DEFAULT
   },
   {
     nickname: FIXTURE_MAX_LENGTH_NICKNAMES.alina,
-    interaction: 'invited',
-    reverseInteraction: 'invite-received'
+    interaction: CONTACT_INTERACTION.INVITED,
+    reverseInteraction: CONTACT_INTERACTION.INVITE_RECEIVED
   },
   {
     nickname: FIXTURE_MAX_LENGTH_NICKNAMES.misha,
-    interaction: 'invite-received',
-    reverseInteraction: 'invited'
+    interaction: CONTACT_INTERACTION.INVITE_RECEIVED,
+    reverseInteraction: CONTACT_INTERACTION.INVITED
   },
   {
     nickname: FIXTURE_MAX_LENGTH_NICKNAMES.dasha,
-    interaction: 'blocked'
+    interaction: CONTACT_INTERACTION.BLOCKED
   },
   {
     nickname: FIXTURE_MAX_LENGTH_NICKNAMES.roma,
-    interaction: 'invite-accepted',
-    reverseInteraction: 'invite-accepted'
+    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
+    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
   },
   {
     nickname: 'nina',
-    interaction: 'invited',
-    reverseInteraction: 'invite-received'
+    interaction: CONTACT_INTERACTION.INVITED,
+    reverseInteraction: CONTACT_INTERACTION.INVITE_RECEIVED
   },
   {
     nickname: 'mark',
-    interaction: 'blocked'
+    interaction: CONTACT_INTERACTION.BLOCKED
   }
 ] as const satisfies FixtureContactData[]
 export const MESSAGE_SUBJECTS = [

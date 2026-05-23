@@ -15,6 +15,9 @@ export {
   PINNED_CHAT_ROOM_LIMIT,
   USER_CHAT_ROOM_LIMIT
 } from './chat/constants'
+export { isRoomAdmin } from './chat/lib/is-room-admin'
+export { isRoomGroup } from './chat/lib/is-room-group'
+export { isRoomPrivate } from './chat/lib/is-room-private'
 export type { ChatRoom, ChatRooms, ChatRoomSchema, ChatKind } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
@@ -27,7 +30,20 @@ export type {
 } from './codes/types'
 
 export type { Interaction, Contact, KnownUser, ContactMap } from './contact/types'
-export { CONTACT_LIMIT, CONTACT_SEARCH_QUERY_MAX_LENGTH, CONTACT_SEARCH_RESULT_LIMIT } from './contact/constants'
+export {
+  CONTACT_INTERACTION,
+  CONTACT_LIMIT,
+  CONTACT_SEARCH_QUERY_MAX_LENGTH,
+  CONTACT_SEARCH_RESULT_LIMIT
+} from './contact/constants'
+export {
+  isAcceptedContactInteraction,
+  isBlockedContactInteraction,
+  isDefaultContactInteraction,
+  isInvitedContactInteraction,
+  isInviteReceivedContactInteraction,
+  isPendingContactInteraction
+} from './contact/lib/contact-interaction'
 
 export {
   AUTH_ROUTE_NAMES,
@@ -60,6 +76,7 @@ export {
   MEDIA_UPLOAD_TYPE_LABEL_MAP,
   MEDIA_VALIDATION_OPTIONS_MAP
 } from './media/constants'
+export { buildAvatarId, isAvatarIdFor } from './media/lib/avatar-id'
 export type {
   MediaBucketName,
   MediaValidationOptions,
@@ -75,8 +92,11 @@ export {
   MESSAGE_BODY_MAX_LENGTH,
   MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_LIMIT_MAX,
-  MESSAGE_STATUS
+  MESSAGE_STATUS,
+  MESSAGE_STATUS_VALUE
 } from './message/constants'
+export { isMessageAuthor } from './message/lib/message-author'
+export { isMessageStatusDelivered, isMessageReadStatus, isMessageSendingStatus } from './message/lib/message-status'
 export type {
   MessageStatus,
   MessageMetadata,

@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { CHAT_KIND, DAY_IN_MS, MEDIA_AVATAR_FILENAME_PREFIX, MINUTE_IN_MS, REQ_STATUS } from 'global-shared'
+import { CHAT_KIND, DAY_IN_MS, MESSAGE_STATUS_VALUE, MINUTE_IN_MS, REQ_STATUS, buildAvatarId } from 'global-shared'
 import compact from 'lodash/compact'
 import countBy from 'lodash/countBy'
 import { Types } from 'mongoose'
@@ -45,7 +45,7 @@ import {
 import type { FixtureContactData, FixtureUserData } from './fixtures.types'
 
 const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
-  const filename = `${MEDIA_AVATAR_FILENAME_PREFIX}${userId}`
+  const filename = buildAvatarId(userId)
   const existingAvatar = await UserModel.db.collection('avatar.files').findOne({ filename })
 
   if (existingAvatar) {
@@ -205,7 +205,7 @@ const buildFixtureMessage = (
     createdAt,
     reactions: buildFixtureMessageReactions(idx, roomNicknames),
     images: [...(FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[idx] ?? [])],
-    usersMetaData: roomUserIds.map((id) => ({ id, status: 'delivered' })),
+    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
     repliedMessage: idx === FIXTURE_REPLIED_MESSAGE_INDEX ? buildFixtureRepliedMessage(prefix) : null
   }
 }
@@ -228,7 +228,7 @@ const buildFixtureSendingMessage = (
     createdAt,
     reactions: buildFixtureMessageReactions(100, roomNicknames),
     images: FIXTURE_MESSAGE_IMAGE_FILES.map(({ filename }) => filename),
-    usersMetaData: roomUserIds.map((id) => ({ id, status: 'sending' })),
+    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.SENDING })),
     repliedMessage: null
   }
 }
@@ -248,7 +248,7 @@ const buildLongPrivateFixtureMessage = (idx: number, contactId: string, contactN
   createdAt: BASE_FIXTURE_TIMESTAMP_MS + LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS + idx * MINUTE_IN_MS,
   reactions: [],
   images: [],
-  usersMetaData: [ERLAN_ID, contactId].map((id) => ({ id, status: 'delivered' })),
+  usersMetaData: [ERLAN_ID, contactId].map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
   repliedMessage: null
 })
 
