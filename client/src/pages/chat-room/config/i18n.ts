@@ -121,6 +121,11 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Название чата',
     zh: '聊天名称'
   },
+  chatNameTooLong: {
+    en: 'Chat name is too long',
+    ru: 'Название чата слишком длинное',
+    zh: '聊天名称过长'
+  },
   uploadChatImage: {
     en: 'Upload chat image',
     ru: 'Загрузить изображение чата',

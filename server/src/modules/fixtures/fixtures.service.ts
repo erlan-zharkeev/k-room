@@ -123,6 +123,24 @@ const loadUserFixtures = async () => {
   log.info(`-User fixtures processed: created=${created}, updated=${updated}, skipped=${skipped}, failed=${failed}`)
 }
 
+const ensureUserPersonalChatRoomState = async () => {
+  const [pinnedResult, mutedResult] = await Promise.all([
+    UserModel.updateMany(
+      { 'personal.pinnedChatRoomIds': { $exists: false } },
+      { $set: { 'personal.pinnedChatRoomIds': [] } }
+    ),
+    UserModel.updateMany(
+      { 'personal.mutedChatRoomIds': { $exists: false } },
+      { $set: { 'personal.mutedChatRoomIds': [] } }
+    )
+  ])
+  const updatedCount = pinnedResult.modifiedCount + mutedResult.modifiedCount
+
+  if (!updatedCount) return
+
+  log.info(`-User personal chat room state normalized: updated=${updatedCount}`)
+}
+
 const buildFixtureMessageId = (prefix: string, idx: number) => `${prefix}-${String(idx).padStart(3, '0')}`
 
 const ensureMessageImageLoaded = async (filename: string, imagePath: string) => {
@@ -443,5 +461,6 @@ const loadDialogFixtures = async () => {
 
 export const loadFixtures = async () => {
   await loadUserFixtures()
+  await ensureUserPersonalChatRoomState()
   await loadDialogFixtures()
 }
