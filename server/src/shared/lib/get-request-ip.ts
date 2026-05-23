@@ -1,5 +1,5 @@
 import type { Request } from 'express'
-import { isString } from 'lodash'
+import { isString } from 'global-shared'
 
 const getHeaderIp = (value?: string | string[]) => {
   if (Array.isArray(value)) {

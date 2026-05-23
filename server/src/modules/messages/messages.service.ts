@@ -12,9 +12,9 @@ import {
   MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_LIMIT_MAX,
   MEDIA_IMAGE_FILENAME_PREFIX,
-  REQ_STATUS
+  REQ_STATUS,
+  isString
 } from 'global-shared'
-import { isString } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 import { AppError } from 'src/shared/lib/app-error'

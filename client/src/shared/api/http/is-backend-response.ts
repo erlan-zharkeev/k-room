@@ -1,5 +1,4 @@
-import { isUnknownObject, type BackendResponse } from 'global-shared'
-import { isBoolean, isString } from 'lodash'
+import { isBoolean, isString, isUnknownObject, type BackendResponse } from 'global-shared'
 
 export const isBackendResponse = (data: unknown): data is BackendResponse<unknown> => {
   if (!isUnknownObject(data)) return false

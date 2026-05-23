@@ -1,4 +1,4 @@
-import { type LocalizedText, REQ_STATUS, type ReqStatus } from 'global-shared'
+import { isString, type LocalizedText, REQ_STATUS, type ReqStatus } from 'global-shared'
 
 import { localizedText } from './localized-text'
 
@@ -16,7 +16,7 @@ export class AppError extends Error {
     cause?: unknown,
     payload?: unknown
   ) {
-    super(typeof messageSource === 'string' ? messageSource : localizedText(messageSource))
+    super(isString(messageSource) ? messageSource : localizedText(messageSource))
     this.name = 'AppError'
     this.status = status
     this.silent = silent
@@ -29,7 +29,7 @@ export class AppError extends Error {
 export const isAppError = (error: unknown): error is AppError => error instanceof AppError
 
 export const getAppErrorMessage = (error: AppError, language?: Parameters<typeof localizedText>[1]) =>
-  typeof error.messageSource === 'string' ? error.messageSource : localizedText(error.messageSource, language)
+  isString(error.messageSource) ? error.messageSource : localizedText(error.messageSource, language)
 
 export const toAppError = (
   error: unknown,

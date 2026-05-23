@@ -1,4 +1,4 @@
-import { isString } from 'lodash'
+import { isString } from 'global-shared'
 
 export const errorToMessage = (error: unknown, fallbackMessage = 'Unknown error') => {
   if (error instanceof Error) {

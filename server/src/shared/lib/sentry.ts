@@ -1,6 +1,5 @@
 import { captureException, captureMessage, isInitialized } from '@sentry/node'
-import { shouldIgnoreSentryError, type SentryErrorContext } from 'global-shared'
-import { isNumber } from 'lodash'
+import { isNumber, shouldIgnoreSentryError, type SentryErrorContext } from 'global-shared'
 
 export const serverCaptureSentryException = (error: unknown) => {
   if (!isInitialized()) {

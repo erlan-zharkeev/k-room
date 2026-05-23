@@ -9,7 +9,6 @@ import type {
   SocketActions
 } from 'global-shared'
 import {
-  CONTACT_INTERACTION_UPDATE_FAILED_REASONS,
   CONTACT_SEARCH_QUERY_MAX_LENGTH,
   CONTACT_SEARCH_RESULT_LIMIT,
   normalizeNickname,
@@ -271,10 +270,7 @@ export const updateContactInteraction = async (
   }
 
   if (contactSideInteraction === 'blocked' && interaction !== 'default' && interaction !== 'blocked') {
-    return {
-      success: false,
-      reason: CONTACT_INTERACTION_UPDATE_FAILED_REASONS.INVITATION_RESTRICTED
-    } as const
+    throw new AppError(REQ_STATUS.badRequest, CONTACTS_I18N.invitationRestricted)
   }
 
   const handleUpdateContactInteraction = async () => {

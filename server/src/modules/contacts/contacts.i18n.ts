@@ -25,5 +25,10 @@ export const CONTACTS_I18N = defineI18n({
     en: 'Failed to update contact interaction',
     ru: 'Не удалось обновить взаимодействие с контактом',
     zh: '更新联系人交互失败'
+  },
+  invitationRestricted: {
+    en: 'User restricted invitations',
+    ru: 'User restricted invitations',
+    zh: 'User restricted invitations'
   }
 })

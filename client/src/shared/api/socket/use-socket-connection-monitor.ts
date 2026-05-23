@@ -32,7 +32,9 @@ export const useSocketConnectionMonitor = () => {
       setSocketConnected(false)
     })
 
-    socket.on<SocketActions>('error-message', ({ message }: EventErrorMessage) => {
+    socket.on<SocketActions>('error-message', ({ message, silent }: EventErrorMessage) => {
+      if (silent) return
+
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),

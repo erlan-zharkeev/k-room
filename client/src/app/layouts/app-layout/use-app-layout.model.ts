@@ -1,4 +1,4 @@
-import { isString } from 'lodash'
+import { isString } from 'global-shared'
 import { computed, watch } from 'vue'
 import { useRouter, LocationQueryValue, useRoute } from 'vue-router'
 

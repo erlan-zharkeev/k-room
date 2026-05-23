@@ -1,6 +1,5 @@
 import { useBreakpoints, usePermission } from '@vueuse/core'
-import { MB_IN_BYTES } from 'global-shared'
-import { isString } from 'lodash'
+import { isString, MB_IN_BYTES } from 'global-shared'
 import { computed } from 'vue'
 
 import { CONSOLE_COLOR_MAP, GB, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'

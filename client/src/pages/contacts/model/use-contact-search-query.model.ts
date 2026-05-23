@@ -1,5 +1,4 @@
-import { CONTACT_SEARCH_QUERY_MAX_LENGTH } from 'global-shared'
-import { isString } from 'lodash'
+import { CONTACT_SEARCH_QUERY_MAX_LENGTH, isString } from 'global-shared'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 

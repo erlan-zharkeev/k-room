@@ -5,6 +5,7 @@ export {
   formatLocalizedTime,
   getNextRequestIntervalSec
 } from './time/time'
+export { useCounter } from './time/use-counter'
 export { useRequestCooldownCounter } from './time/use-request-cooldown-counter'
 export {
   DATE_PATTERN_BY_DATE_TIME_FORMAT,

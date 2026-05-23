@@ -126,9 +126,8 @@ export {
   SECOND_IN_MS,
   WEEK_IN_MS
 } from './shared/constants'
-export { CONTACT_INTERACTION_UPDATE_FAILED_REASONS } from './socket/constants'
 export { formatAppName } from './shared/lib/format-app-name'
-export { isUnknownObject } from './shared/lib/type-guards'
+export { isBoolean, isFunction, isNumber, isString, isUnknownObject } from './shared/lib/type-guards'
 export type {
   AuthTokens,
   FirebaseProvider,
@@ -190,7 +189,6 @@ export type {
   EventUpdateInteraction,
   EventInviteReceived,
   EventUpdateContactInteractionSuccess,
-  ContactInteractionUpdateFailedReason,
   SocketAckSuccess,
   SocketAckFailure,
   SocketAckResponse,

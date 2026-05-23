@@ -1,6 +1,6 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
 import { useDevicesList } from '@vueuse/core'
-import { isFunction } from 'lodash'
+import { isFunction } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'

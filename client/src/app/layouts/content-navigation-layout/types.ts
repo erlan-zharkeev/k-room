@@ -1,4 +1,4 @@
-import { isString } from 'lodash'
+import { isString } from 'global-shared'
 
 import { CONTENT_NAVIGATION_TITLE } from './constants'
 

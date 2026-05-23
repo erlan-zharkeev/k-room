@@ -1,5 +1,4 @@
-import { type LocalizedText, REQ_STATUS, type SocketAckResponse, type SocketActions } from 'global-shared'
-import { isString } from 'lodash'
+import { isString, type LocalizedText, REQ_STATUS, type SocketAckResponse, type SocketActions } from 'global-shared'
 
 import { SHARED_I18N } from '../i18n'
 import type { SocketInstance } from '../types/socket'
