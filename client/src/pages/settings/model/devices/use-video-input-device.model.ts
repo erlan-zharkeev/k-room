@@ -36,10 +36,8 @@ export const useVideoInputDevice = () => {
   const videoInputStream = videoInputUserMedia.stream
   const videoElementRef = useTemplateRef<HTMLVideoElement>('videoElement')
 
-  const {
-    permissionCalloutType: videoInputPermissionCalloutType,
-    permissionStatus: videoInputPermissionStatus
-  } = useDevicePermissionStatus(isVideoInputSupported, videoInputPermission)
+  const { permissionCalloutType: videoInputPermissionCalloutType, permissionStatus: videoInputPermissionStatus } =
+    useDevicePermissionStatus(isVideoInputSupported, videoInputPermission)
   const videoInputOptions = computed(() =>
     videoInputDevices.value.map(({ deviceId, label }, index) => ({
       value: deviceId,

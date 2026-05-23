@@ -1,10 +1,4 @@
-import {
-  HOUR_IN_MS,
-  MINUTE_IN_MS,
-  SECOND_IN_MS,
-  SECURITY_ACTION,
-  type SecurityAction
-} from 'global-shared'
+import { HOUR_IN_MS, MINUTE_IN_MS, SECOND_IN_MS, SECURITY_ACTION, type SecurityAction } from 'global-shared'
 
 import { SEND_CONFIRMATION_LINK_INTERVAL_MS } from '../auth/auth.constants'
 
