@@ -9,6 +9,8 @@ export interface HttpRequestOptions<R extends ResponseType = ResponseType> {
   contentType?: string
   headers?: AxiosRequestConfig['headers']
   responseType?: R
+  skipAuthRefresh?: boolean
+  signal?: AxiosRequestConfig['signal']
 }
 
 export interface CreateHttpErrorPayload {

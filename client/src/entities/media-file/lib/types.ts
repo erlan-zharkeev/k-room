@@ -4,6 +4,11 @@ export type MediaQueueTask = () => Promise<void>
 export type MediaHeaders = Partial<Pick<MediaRecord, 'etag'>>
 export type MediaSyncTask = () => Promise<void>
 
+export interface MediaQueuedSyncTask {
+  run: MediaQueueTask
+  resolve: () => void
+}
+
 export interface SyncMediaDeps {
   mediaGet: (filename: string) => Promise<MediaRecord | undefined>
   putMedia: (data: MediaRecord) => Promise<void>

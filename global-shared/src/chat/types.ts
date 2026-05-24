@@ -1,3 +1,5 @@
+import type { MediaId } from '../media/types'
+
 import { CHAT_KIND } from './constants'
 
 export type ChatKind = (typeof CHAT_KIND)[keyof typeof CHAT_KIND]
@@ -8,7 +10,7 @@ export interface ChatRoom {
   createdAt: number
   chatName?: string
   chatKind: ChatKind
-  avatarId: string
+  avatarId: MediaId
   lastMessageId: string | null
   unreadMessagesQuantity: number
   isPinned: boolean

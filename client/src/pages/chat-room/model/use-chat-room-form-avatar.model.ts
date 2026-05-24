@@ -1,6 +1,7 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
+import { buildAvatarId } from 'global-shared'
 
-import { useLoadMedia, useMedia } from 'src/entities/media-file'
+import { useMedia } from 'src/entities/media-file'
 import {
   revokeObjectUrl,
   revokeObjectUrls,
@@ -20,8 +21,7 @@ export const useChatRoomFormAvatar = ({
   isEditMode,
   roomId
 }: ChatRoomFormAvatarParams) => {
-  const { getMediaStream } = useLoadMedia()
-  const { put: putMedia, remove: removeMedia } = useMedia()
+  const { get: getMedia, put: putMedia, remove: removeMedia } = useMedia()
   const { t } = useI18n()
   const toast = useAppToast()
 
@@ -44,7 +44,10 @@ export const useChatRoomFormAvatar = ({
   }
 
   const loadCurrentChatAvatar = async (room: ChatRoomRecord) => {
-    const blob = await getMediaStream(room.avatarId)
+    if (!room.avatarId) return
+
+    const record = await getMedia(room.avatarId)
+    const blob = record?.blob
     const dialogWasClosed = !isChatRoomFormDialogOpen.value
     const roomWasChanged = roomId.value !== room.id
     const shouldSkipAvatarLoad = !blob || dialogWasClosed || roomWasChanged
@@ -110,14 +113,16 @@ export const useChatRoomFormAvatar = ({
   }
 
   const saveChatAvatarMedia = async (room: ChatRoomRecord) => {
-    if (chatRoomFormState.chatAvatarWasDeleted) {
+    if (chatRoomFormState.chatAvatarWasDeleted && room.avatarId) {
       await removeMedia(room.avatarId)
     }
 
     if (!chatRoomFormData.chatAvatarFile) return
 
+    const avatarId = buildAvatarId(room.id)
+
     await putMedia({
-      id: room.avatarId,
+      id: avatarId,
       blob: chatRoomFormData.chatAvatarFile,
       contentType: chatRoomFormData.chatAvatarFile.type,
       etag: `${Date.now()}`,

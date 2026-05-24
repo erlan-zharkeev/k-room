@@ -1,6 +1,8 @@
+import type { MediaId } from 'global-shared'
+
 export interface AppUserPickerItem {
   id: string
-  imageId?: string
+  imageId?: MediaId
   nickname: string
   online?: boolean
 }
