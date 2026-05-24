@@ -38,7 +38,7 @@ import without from 'lodash/without'
 
 import { AppError } from 'src/shared/lib/app-error'
 
-import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.service'
+import { deleteBucketFilesByName, resolveAvatarId, uploadBufferToBucket } from '../media/media.service'
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
 import type { PresenceService } from '../presence/presence.service'
@@ -472,7 +472,8 @@ export const transformRoomForUser = async ({
   const roomId = String(_id)
   const users = roomUsers.map((id) => String(id))
   const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
-  const avatarId = buildAvatarId(isRoomPrivate({ chatKind }) ? getRoomInterlocutorId({ users }, userId) : roomId)
+  const avatarOwnerId = isRoomPrivate({ chatKind }) ? getRoomInterlocutorId({ users }, userId) : roomId
+  const avatarId = await resolveAvatarId(avatarOwnerId)
   const lastMessageId = messages[messages.length - 1] ?? null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([

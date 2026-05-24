@@ -1,18 +1,17 @@
-import { AUTH_ENDPOINTS } from 'global-shared'
-
 import { log } from 'src/shared/lib'
 
-import { useHttp } from '../http/use-http'
+import { refreshAuthTokens, shouldSkipAuthRefresh } from '../http/auth-refresh'
 
 import { useSocketConnect } from './use-socket-connect'
 
 export const useSocketReconnect = () => {
-  const { doHttpRequest } = useHttp()
   const { socketConnect } = useSocketConnect()
 
   const socketReconnect = async () => {
+    if (shouldSkipAuthRefresh()) return
+
     try {
-      await doHttpRequest('post', AUTH_ENDPOINTS.updateTokensPair)
+      await refreshAuthTokens()
       socketConnect()
     } catch (error) {
       log('error', 'Socket reconnect failed', error)
