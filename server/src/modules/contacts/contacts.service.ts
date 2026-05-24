@@ -88,15 +88,15 @@ export const searchContacts = async (
 
     const onlineMap = await presenceService.onlineMapByUserIds(users.map((user) => user._id))
 
-    searchedUsers = users
-      .map((user) =>
-        transformUserToContact(
-          user,
-          (contactMap instanceof Map ? contactMap.get(String(user._id)) : contactMap[String(user._id)])?.interaction ??
-            CONTACT_INTERACTION.DEFAULT,
-          onlineMap.get(String(user._id)) ?? false
-        )
+    searchedUsers = users.map((user) =>
+      transformUserToContact(
+        user,
+        (contactMap instanceof Map ? contactMap.get(String(user._id)) : contactMap[String(user._id)])?.interaction ??
+          CONTACT_INTERACTION.DEFAULT,
+        onlineMap.get(String(user._id)) ?? false
       )
+    )
+    searchedUsers = searchedUsers
       .filter((user) => user.id !== userId)
       .sort((a, b) => {
         if (a.interactionType === b.interactionType) {
@@ -305,13 +305,11 @@ export const updateContactInteraction = async (
         break
       }
 
-      const payload: EventInviteReceived = {
-        id: String(authorData._id),
-        nickname: authorData.public.nickname,
-        online: await presenceService.isUserOnline(authorData._id),
-        lastSeen: authorData.public.lastSeen,
-        interactionType: CONTACT_INTERACTION.INVITE_RECEIVED
-      }
+      const payload: EventInviteReceived = transformUserToContact(
+        authorData,
+        CONTACT_INTERACTION.INVITE_RECEIVED,
+        await presenceService.isUserOnline(authorData._id)
+      )
 
       emitToUsers([contactData._id], 'invite-received', payload)
       break

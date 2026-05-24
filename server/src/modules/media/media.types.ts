@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import type { MediaKind, MediaValidationOptions } from 'global-shared'
+import type { MediaBucketName, MediaKind, MediaValidationOptions } from 'global-shared'
 import type mongoose from 'mongoose'
 
 export type SharpSettingsKey = 'avatar' | 'common-compressed' | 'common-uncompressed'
@@ -35,6 +35,15 @@ export interface UploadOptions {
   id?: string
   overwrite?: boolean
   validation?: MediaValidationOptions
+}
+
+export type TrackUploadedMedia = (bucketName: MediaBucketName, id: string) => void
+
+export type UploadedMediaCleanupCallback<TResult> = (trackUploadedMedia: TrackUploadedMedia) => Promise<TResult>
+
+export interface UploadedMediaCleanupItem {
+  bucketName: MediaBucketName
+  id: string
 }
 
 export interface StreamMediaFileOptions {
