@@ -1,4 +1,3 @@
-import { buildAvatarId } from 'global-shared'
 import { watchEffect } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -17,19 +16,25 @@ export const useSyncAvatars = () => {
   watchEffect(() => {
     const avatarIds = new Set<string>()
 
-    if (user.value.id) {
-      avatarIds.add(buildAvatarId(user.value.id))
+    if (user.value.avatarId) {
+      avatarIds.add(user.value.avatarId)
     }
 
-    contacts.value.forEach(({ id }) => {
-      avatarIds.add(buildAvatarId(id))
+    contacts.value.forEach(({ avatarId }) => {
+      if (!avatarId) return
+
+      avatarIds.add(avatarId)
     })
 
-    knownUsers.value.forEach(({ id }) => {
-      avatarIds.add(buildAvatarId(id))
+    knownUsers.value.forEach(({ avatarId }) => {
+      if (!avatarId) return
+
+      avatarIds.add(avatarId)
     })
 
     chatRooms.value.forEach(({ avatarId }) => {
+      if (!avatarId) return
+
       avatarIds.add(avatarId)
     })
 

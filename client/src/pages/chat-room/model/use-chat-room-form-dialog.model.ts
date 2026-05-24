@@ -47,7 +47,6 @@ export const useChatRoomFormDialog = (
     buildChatAvatarFile,
     clearChatAvatarUpload,
     loadCurrentChatAvatar,
-    saveChatAvatarMedia,
     showUnsupportedChatAvatarFormatError,
     updateChatAvatar
   } = useChatRoomFormAvatar({
@@ -69,8 +68,8 @@ export const useChatRoomFormDialog = (
   const contactPickerItems = computed<AppUserPickerItem[]>(() => {
     const itemsById = new Map<string, AppUserPickerItem>()
 
-    acceptedContacts.value.forEach(({ id, nickname, online }) => {
-      itemsById.set(id, { id, nickname, online })
+    acceptedContacts.value.forEach(({ avatarId, id, nickname, online }) => {
+      itemsById.set(id, { imageId: avatarId, id, nickname, online })
     })
 
     if (editedChatRoom.value) {
@@ -79,6 +78,7 @@ export const useChatRoomFormDialog = (
 
         if (userData) {
           itemsById.set(id, {
+            imageId: userData.avatarId,
             id: userData.id,
             nickname: userData.nickname,
             online: userData.online
@@ -90,6 +90,7 @@ export const useChatRoomFormDialog = (
         if (id !== user.value.id) return
 
         itemsById.set(id, {
+          imageId: user.value.avatarId,
           id: user.value.id,
           nickname: user.value.nickname
         })
@@ -291,8 +292,6 @@ export const useChatRoomFormDialog = (
     chatRoomFormState.isSavingChatRoom = false
 
     if (!response.ok) return
-
-    await saveChatAvatarMedia(room)
 
     closeChatRoomFormDialog()
   }

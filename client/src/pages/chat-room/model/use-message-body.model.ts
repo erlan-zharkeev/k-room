@@ -1,4 +1,3 @@
-import { MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
 import { computed, toRef, watch } from 'vue'
 
 import { useSyncMedia } from 'src/entities/media-file'
@@ -13,12 +12,10 @@ export const useMessageBody = (props: MessageBodyProps) => {
 
   const showAuthorNickname = computed(() => !props.isPrivateRoom && !message.value.isSelf)
   const messageImageList = computed(() =>
-    (message.value.images ?? [])
-      .filter((image) => image.src.startsWith(MEDIA_IMAGE_FILENAME_PREFIX))
-      .map((image) => ({
-        ...image,
-        mediaId: image.src
-      }))
+    (message.value.images ?? []).map((image) => ({
+      ...image,
+      mediaId: image.src
+    }))
   )
 
   watch(

@@ -224,7 +224,8 @@ export class AuthService {
       const buffer = await loadGoogleAvatar(payload.avatar)
 
       if (buffer) {
-        await updateUserAvatar(buffer, String(newUser._id))
+        newUser.public.avatarId = await updateUserAvatar(buffer, newUser.public.avatarId)
+        await newUser.save()
       }
     }
 

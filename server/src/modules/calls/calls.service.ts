@@ -1,4 +1,4 @@
-import { type CallFlow, type EventCallUpdated, type EventCallsUpdated, type Call, buildAvatarId } from 'global-shared'
+import type { CallFlow, EventCallUpdated, EventCallsUpdated, Call } from 'global-shared'
 
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
@@ -47,7 +47,7 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
     authorNickname: author.public.nickname,
     interlocutorId,
     interlocutorNickname: interlocutor.public.nickname,
-    interlocutorAvatarPath: buildAvatarId(interlocutorId),
+    interlocutorAvatarId: interlocutor.public.avatarId,
     flow: resolveFlowType(call.answered, userId !== call.authorId),
     video: Boolean(call.video)
   }

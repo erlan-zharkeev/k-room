@@ -1,5 +1,4 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import { buildAvatarId } from 'global-shared'
 
 import { useMedia } from 'src/entities/media-file'
 import {
@@ -21,7 +20,7 @@ export const useChatRoomFormAvatar = ({
   isEditMode,
   roomId
 }: ChatRoomFormAvatarParams) => {
-  const { get: getMedia, put: putMedia, remove: removeMedia } = useMedia()
+  const { get: getMedia } = useMedia()
   const { t } = useI18n()
   const toast = useAppToast()
 
@@ -112,31 +111,10 @@ export const useChatRoomFormAvatar = ({
     }
   }
 
-  const saveChatAvatarMedia = async (room: ChatRoomRecord) => {
-    if (chatRoomFormState.chatAvatarWasDeleted && room.avatarId) {
-      await removeMedia(room.avatarId)
-    }
-
-    if (!chatRoomFormData.chatAvatarFile) return
-
-    const avatarId = buildAvatarId(room.id)
-
-    await putMedia({
-      id: avatarId,
-      blob: chatRoomFormData.chatAvatarFile,
-      contentType: chatRoomFormData.chatAvatarFile.type,
-      etag: `${Date.now()}`,
-      kind: 'image',
-      lastModified: new Date().toUTCString(),
-      lastChecked: Date.now()
-    })
-  }
-
   return {
     buildChatAvatarFile,
     clearChatAvatarUpload,
     loadCurrentChatAvatar,
-    saveChatAvatarMedia,
     showUnsupportedChatAvatarFormatError,
     updateChatAvatar
   }
