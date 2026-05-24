@@ -34,6 +34,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
   <section class="contacts-page">
     <NmorphTextInput
       v-model="searchQuery"
+      class="contacts-page__search"
       clearable
       :placeholder="$t(CONTACTS_PAGE_I18N.search)"
       :input-attrs="{ maxLength: CONTACT_SEARCH_QUERY_MAX_LENGTH, 'aria-label': $t(CONTACTS_PAGE_I18N.search) }"
@@ -76,6 +77,10 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
 .contacts-page__list {
   flex: 1 1 auto;
   min-height: 0;
+}
+
+.contacts-page__search {
+  flex: 0 0 auto;
 }
 
 .contacts-page__block {
