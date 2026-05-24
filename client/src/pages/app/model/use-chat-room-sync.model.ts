@@ -68,10 +68,7 @@ export const useChatRoomSync = () => {
 
     const { messages: messageIds } = room
 
-    await Promise.all([
-      remove(roomId),
-      bulkDelete(messageIds)
-    ])
+    await Promise.all([remove(roomId), bulkDelete(messageIds)])
 
     if (route.params.chatRoomId === roomId) {
       await router.push(APP_PAGE_ROUTES.chatRooms)

@@ -6,11 +6,7 @@ import {
   NmorphIconChatLineSquare,
   NmorphIconPostCard
 } from '@nmorph/nmorph-ui-kit'
-import {
-  CONTACT_INTERACTION,
-  isAcceptedContactInteraction,
-  isDefaultContactInteraction
-} from 'global-shared'
+import { CONTACT_INTERACTION, isAcceptedContactInteraction, isDefaultContactInteraction } from 'global-shared'
 import { computed } from 'vue'
 
 import { AppText, AppProfileBasicData } from 'src/shared/ui'

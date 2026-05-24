@@ -12,13 +12,11 @@ import {
   MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_STATUS_VALUE,
-  MEDIA_IMAGE_FILENAME_PREFIX,
   REQ_STATUS,
   isMessageAuthor,
   isMessageReadStatus,
   isString
 } from 'global-shared'
-import { v4 as uuidv4 } from 'uuid'
 
 import { AppError } from 'src/shared/lib/app-error'
 
@@ -195,28 +193,29 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
     throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageImageLimitReached)
   }
 
-  const filenames: string[] = []
-
-  await Promise.all(
+  const uploadedImages = await Promise.all(
     (message.images ?? []).map(async (image) => {
       if (!image.fileBuffer) {
-        return
+        return null
       }
 
-      const filename = `${MEDIA_IMAGE_FILENAME_PREFIX}${uuidv4()}`
-
-      filenames.push(filename)
-      await uploadBufferToBucket(image.fileBuffer, filename, 'image', {
+      const src = await uploadBufferToBucket(image.fileBuffer, 'image', {
         compression: message.imageCompression ? 'common-compressed' : 'common-uncompressed'
       })
+
+      return {
+        src,
+        name: image.name || src
+      } satisfies ImageObject
     })
   )
+  const images = uploadedImages.filter((image): image is ImageObject => Boolean(image))
 
   const newDbMessage = await new MessageModel({
     _id: message.id,
     ...message,
     reactions: [],
-    images: filenames,
+    images,
     usersMetaData: []
   }).save()
   const room = await ChatRoomModel.findOneAndUpdate({ _id: roomId }, { $push: { messages: newDbMessage.id } })
@@ -245,7 +244,7 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
         message: {
           ...message,
           id: newDbMessage.id,
-          images: filenames.map((filename) => ({ src: filename, name: filename })),
+          images,
           isSelf: isMessageAuthor(message, String(user._id)),
           status: MESSAGE_STATUS_VALUE.DELIVERED
         }

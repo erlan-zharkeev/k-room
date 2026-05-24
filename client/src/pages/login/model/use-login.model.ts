@@ -8,7 +8,7 @@ import {
 } from 'global-shared'
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 
-import { useUserSession } from 'src/entities/user'
+import { useClientSession } from 'src/features/client-session'
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
@@ -18,7 +18,7 @@ import type { LoginFormData } from './types.model'
 
 export const useLogin = () => {
   const { doHttpRequest } = useHttp()
-  const { activateUserSession } = useUserSession()
+  const { activateClientSession } = useClientSession()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
@@ -53,7 +53,7 @@ export const useLogin = () => {
       const response = await doHttpRequest<LoginResponse>('post', AUTH_ENDPOINTS.login, payload)
       const { payload: user } = response.data
 
-      await activateUserSession(user)
+      await activateClientSession(user)
     } catch (error) {
       handleProtectedActionError(error)
     } finally {

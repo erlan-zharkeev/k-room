@@ -5,9 +5,10 @@ import {
   type Contact,
   type CreateNewPasswordPayload,
   type Interaction,
+  type MediaId,
   type UserData,
+  MEDIA_AVATAR_VALIDATION_OPTIONS,
   VALIDATION_PATTERNS,
-  buildAvatarId,
   getRoomOtherUserIds,
   normalizeNicknameKey,
   REQ_STATUS
@@ -19,7 +20,7 @@ import { AppError } from 'src/shared/lib/app-error'
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
-import { deleteBucketFilesByName, uploadBufferToBucket } from '../media/media.service'
+import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 
@@ -37,12 +38,21 @@ import { ALLOWED_GOOGLE_AVATAR_HOSTS } from './user.constants'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
 import { UserModel } from './user.model'
 
+export const transformUserToPreview = (user: UserSchema) => {
+  const userId = String(user._id)
+
+  return {
+    avatarId: user.public.avatarId,
+    id: userId,
+    nickname: user.public.nickname
+  }
+}
+
 export const mapUserToDto = (user: UserSchema): UserData => {
   return {
-    id: String(user._id),
+    ...transformUserToPreview(user),
     role: user.system.role,
-    email: user.personal.email,
-    nickname: user.public.nickname
+    email: user.personal.email
   }
 }
 
@@ -52,8 +62,7 @@ export const transformUserToContact = (
   online = false
 ): Contact => {
   return {
-    id: String(user._id),
-    nickname: user.public.nickname,
+    ...transformUserToPreview(user),
     interactionType,
     online,
     lastSeen: user.public.lastSeen
@@ -124,6 +133,7 @@ export const createUser = async ({ id, email, nickname, hashedPassword, provider
   const user = await new UserModel({
     ...(id ? { _id: id } : {}),
     public: {
+      avatarId: null,
       nickname: normalizedNickname
     },
     personal: {
@@ -162,17 +172,20 @@ export const loadGoogleAvatar = async (avatar: string) => {
   }
 }
 
-export const updateUserAvatar = async (buffer: Buffer | null, userId: string) => {
-  const filename = buildAvatarId(userId)
-
+export function updateUserAvatar(buffer: Buffer, currentAvatarId: MediaId): Promise<string>
+export function updateUserAvatar(buffer: null, currentAvatarId: MediaId): Promise<null>
+export async function updateUserAvatar(buffer: Buffer | null, currentAvatarId: MediaId) {
   if (buffer === null) {
-    await deleteBucketFilesByName('avatar', filename)
-    return
+    if (currentAvatarId) {
+      await deleteBucketFileById('image', currentAvatarId)
+    }
+
+    return null
   }
 
-  await uploadBufferToBucket(buffer, filename, 'avatar', {
-    overwrite: true,
-    compression: 'avatar'
+  return uploadBufferToBucket(buffer, 'image', {
+    compression: 'avatar',
+    validation: MEDIA_AVATAR_VALIDATION_OPTIONS
   })
 }
 
@@ -298,12 +311,16 @@ export class UserService {
   }
 
   async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar }: UpdateUserDataParams) {
-    if (!nickname && !avatarFileBuffer && resetAvatar !== 'reset') {
+    const shouldResetAvatar = resetAvatar === 'reset'
+
+    if (!nickname && !avatarFileBuffer && !shouldResetAvatar) {
       throw new AppError(REQ_STATUS.badRequest, UPDATE_USER_DATA_I18N.nothingToUpdate)
     }
 
     const user = await this.requireUser(userId)
     const normalizedNickname = nickname ? normalizeNicknameKey(nickname) : ''
+    let avatarIdAfterUpdate: MediaId | undefined
+    const updatedPublicData: Partial<UserSchema['public']> = {}
 
     if (normalizedNickname && normalizedNickname !== user.public.nickname) {
       const userWithSameNickname = await UserModel.findOne({
@@ -315,16 +332,37 @@ export class UserService {
         throw new AppError(REQ_STATUS.badRequest, this.getUserExistMessage('nickname'))
       }
 
-      await user.updateOne({ $set: { 'public.nickname': normalizedNickname } })
+      updatedPublicData.nickname = normalizedNickname
     }
 
-    if (avatarFileBuffer) {
-      await updateUserAvatar(avatarFileBuffer, userId)
-    }
+    const updatedUserData = await withUploadedMediaCleanup(async (trackUploadedMedia) => {
+      if (shouldResetAvatar) {
+        avatarIdAfterUpdate = null
+      }
 
-    if (resetAvatar === 'reset') {
-      await updateUserAvatar(null, userId)
-    }
+      if (avatarFileBuffer && !shouldResetAvatar) {
+        avatarIdAfterUpdate = await updateUserAvatar(avatarFileBuffer, user.public.avatarId)
+        trackUploadedMedia('image', avatarIdAfterUpdate)
+      }
+
+      if (avatarIdAfterUpdate !== undefined) {
+        updatedPublicData.avatarId = avatarIdAfterUpdate
+      }
+
+      if (Object.keys(updatedPublicData).length) {
+        await user.updateOne({
+          $set: Object.fromEntries(Object.entries(updatedPublicData).map(([key, value]) => [`public.${key}`, value]))
+        })
+      }
+
+      const userData = await UserModel.findById(userId).lean<UserSchema | null>()
+
+      if (!userData) {
+        throw new AppError(REQ_STATUS.server, UPDATE_USER_DATA_I18N.failedUpdate)
+      }
+
+      return userData
+    })
 
     const [contacts, rooms] = await Promise.all([
       UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
@@ -335,20 +373,19 @@ export class UserService {
       ...contacts.map((contact) => String(contact._id)),
       ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
     ])
+    const avatarWasChanged = avatarIdAfterUpdate !== undefined
+    const deletedAvatarId =
+      avatarWasChanged && user.public.avatarId !== avatarIdAfterUpdate ? user.public.avatarId : null
 
-    if (!ids.length) {
-      return
+    if (deletedAvatarId) {
+      await deleteBucketFileById('image', deletedAvatarId)
+      emitToUsers([...ids, userId], 'media-files-deleted', { mediaIds: [deletedAvatarId] })
     }
 
-    const updatedUserData = await UserModel.findById(userId).lean<UserSchema | null>()
-
-    if (!updatedUserData) {
-      return
+    if (ids.length) {
+      emitToUsers(ids, 'contact-data-changed', transformUserToPreview(updatedUserData))
     }
 
-    emitToUsers(ids, 'contact-data-changed', {
-      id: String(updatedUserData._id),
-      nickname: updatedUserData.public.nickname
-    })
+    return mapUserToDto(updatedUserData)
   }
 }
