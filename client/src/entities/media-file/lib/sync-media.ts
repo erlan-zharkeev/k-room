@@ -8,8 +8,8 @@ import type { SyncMediaDeps, MediaHeaders, SyncMediaOptions } from './types'
 
 const isRecentlyChecked = (lastChecked: number, interval: number) => Date.now() - lastChecked < interval
 
-export const syncMedia = async (filename: string, deps: SyncMediaDeps, options: SyncMediaOptions = {}) => {
-  const record = await deps.mediaGet(filename)
+export const syncMedia = async (mediaId: string, deps: SyncMediaDeps, options: SyncMediaOptions = {}) => {
+  const record = await deps.mediaGet(mediaId)
   const lastChecked = record?.lastChecked
   const shouldRespectCacheInterval = !options.force
   const hasLastChecked = isNumber(lastChecked)
@@ -33,7 +33,7 @@ export const syncMedia = async (filename: string, deps: SyncMediaDeps, options: 
 
   const markMissing = async () => {
     await deps.putMedia({
-      id: filename,
+      id: mediaId,
       lastChecked: Date.now(),
       status: 'missing'
     })
@@ -43,7 +43,7 @@ export const syncMedia = async (filename: string, deps: SyncMediaDeps, options: 
     let meta: MediaHeaders
 
     try {
-      meta = await deps.loadMediaHeaders(filename)
+      meta = await deps.loadMediaHeaders(mediaId)
     } catch (error) {
       if (isHttpError(error) && error.status === REQ_STATUS.notFound) {
         await markMissing()
@@ -55,13 +55,13 @@ export const syncMedia = async (filename: string, deps: SyncMediaDeps, options: 
     }
 
     if (meta.etag && record?.etag && meta.etag === record.etag) {
-      await deps.updateMedia(filename, { lastChecked: Date.now(), status: 'ready' })
+      await deps.updateMedia(mediaId, { lastChecked: Date.now(), status: 'ready' })
 
       return
     }
 
-    await deps.loadMedia(filename)
-    await deps.updateMedia(filename, { lastChecked: Date.now() })
+    await deps.loadMedia(mediaId)
+    await deps.updateMedia(mediaId, { lastChecked: Date.now() })
   }
 
   if (record) {
@@ -70,6 +70,6 @@ export const syncMedia = async (filename: string, deps: SyncMediaDeps, options: 
     return
   }
 
-  await deps.loadMedia(filename)
-  await deps.updateMedia(filename, { lastChecked: Date.now() })
+  await deps.loadMedia(mediaId)
+  await deps.updateMedia(mediaId, { lastChecked: Date.now() })
 }

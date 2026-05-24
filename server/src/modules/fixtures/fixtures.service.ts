@@ -2,14 +2,22 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import { CHAT_KIND, DAY_IN_MS, MESSAGE_STATUS_VALUE, MINUTE_IN_MS, REQ_STATUS, buildAvatarId } from 'global-shared'
+import {
+  CHAT_KIND,
+  DAY_IN_MS,
+  MEDIA_AVATAR_VALIDATION_OPTIONS,
+  MESSAGE_STATUS_VALUE,
+  MINUTE_IN_MS,
+  REQ_STATUS
+} from 'global-shared'
 import compact from 'lodash/compact'
 import countBy from 'lodash/countBy'
-import { Types } from 'mongoose'
+import { Types, type HydratedDocument } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
 import { uploadBufferToBucket } from 'src/modules/media/media.service'
 import { MessageModel } from 'src/modules/messages/messages.model'
+import type { UserSchema } from 'src/modules/user/types'
 import { FIXTURE_GROUPS, FIXTURE_MESSAGE_COUNT, USER_FIXTURES } from 'src/modules/user/user.constants'
 import { USER_I18N } from 'src/modules/user/user.i18n'
 import { UserModel } from 'src/modules/user/user.model'
@@ -44,20 +52,22 @@ import {
 } from './fixtures.constants'
 import type { FixtureContactData, FixtureUserData } from './fixtures.types'
 
-const ensureAvatarLoaded = async (userId: string, avatarPath: string) => {
-  const filename = buildAvatarId(userId)
-  const existingAvatar = await UserModel.db.collection('avatar.files').findOne({ filename })
-
-  if (existingAvatar) {
+const ensureAvatarLoaded = async (
+  user: HydratedDocument<UserSchema>,
+  avatarPath: string
+) => {
+  if (user.public.avatarId) {
     return false
   }
 
   const buffer = await fs.readFile(path.resolve(avatarPath))
-
-  await uploadBufferToBucket(buffer, filename, 'avatar', {
-    overwrite: true,
-    compression: 'avatar'
+  const avatarId = await uploadBufferToBucket(buffer, 'image', {
+    compression: 'avatar',
+    validation: MEDIA_AVATAR_VALIDATION_OPTIONS
   })
+
+  user.public.avatarId = avatarId
+  await user.save()
 
   return true
 }
@@ -95,11 +105,13 @@ const loadUserFixture = async (data: FixtureUserData) => {
       if (wasUpdated) {
         await existingUser.save()
       }
+
+      const avatarLoaded = await ensureAvatarLoaded(existingUser, avatarPath)
+
+      return avatarLoaded || wasUpdated ? 'updated' : 'skipped'
     }
 
-    const avatarLoaded = await ensureAvatarLoaded(id, avatarPath)
-
-    return avatarLoaded || wasUpdated ? 'updated' : 'skipped'
+    return 'failed'
   }
 
   const hashedPassword = await bcrypt.hash(pass, 6)
@@ -110,7 +122,7 @@ const loadUserFixture = async (data: FixtureUserData) => {
   }
 
   await user.set('system.confirmed', true).save()
-  await ensureAvatarLoaded(id, avatarPath)
+  await ensureAvatarLoaded(user, avatarPath)
 
   return 'created'
 }
@@ -141,10 +153,21 @@ const ensureUserPersonalChatRoomState = async () => {
   log.info(`-User personal chat room state normalized: updated=${updatedCount}`)
 }
 
+const ensureChatRoomAvatarState = async () => {
+  const result = await ChatRoomModel.updateMany(
+    { avatarId: { $exists: false } },
+    { $set: { avatarId: null } }
+  )
+
+  if (!result.modifiedCount) return
+
+  log.info(`-Chat room avatar state normalized: updated=${result.modifiedCount}`)
+}
+
 const buildFixtureMessageId = (prefix: string, idx: number) => `${prefix}-${String(idx).padStart(3, '0')}`
 
-const ensureMessageImageLoaded = async (filename: string, imagePath: string) => {
-  const existingImage = await UserModel.db.collection('image.files').findOne({ filename })
+const ensureMessageImageLoaded = async (id: string, imagePath: string) => {
+  const existingImage = await UserModel.db.collection('image.files').findOne({ _id: new Types.ObjectId(id) })
 
   if (existingImage) {
     return false
@@ -152,7 +175,8 @@ const ensureMessageImageLoaded = async (filename: string, imagePath: string) => 
 
   const buffer = await fs.readFile(path.resolve(imagePath))
 
-  await uploadBufferToBucket(buffer, filename, 'image', {
+  await uploadBufferToBucket(buffer, 'image', {
+    id,
     overwrite: true,
     compression: 'common-compressed'
   })
@@ -161,7 +185,7 @@ const ensureMessageImageLoaded = async (filename: string, imagePath: string) => 
 }
 
 const ensureFixtureMessageImagesLoaded = async () => {
-  await Promise.all(FIXTURE_MESSAGE_IMAGE_FILES.map((image) => ensureMessageImageLoaded(image.filename, image.path)))
+  await Promise.all(FIXTURE_MESSAGE_IMAGE_FILES.map((image) => ensureMessageImageLoaded(image.id, image.path)))
 }
 
 const buildFixtureMessageBody = (idx: number) => {
@@ -242,7 +266,7 @@ const buildFixtureSendingMessage = (
     body: buildFixtureMessageBody(100),
     createdAt,
     reactions: buildFixtureMessageReactions(100, roomNicknames),
-    images: FIXTURE_MESSAGE_IMAGE_FILES.map(({ filename }) => filename),
+    images: FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id),
     usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.SENDING })),
     repliedMessage: null
   }
@@ -462,5 +486,6 @@ const loadDialogFixtures = async () => {
 export const loadFixtures = async () => {
   await loadUserFixtures()
   await ensureUserPersonalChatRoomState()
+  await ensureChatRoomAvatarState()
   await loadDialogFixtures()
 }
