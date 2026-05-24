@@ -11,18 +11,18 @@ export const useSyncMedia = () => {
   const { get, put, update } = useMedia()
   const { loadMedia, loadMediaHeaders } = useLoadMedia()
 
-  const syncWithOptions = (filename: string, options: SyncMediaOptions = {}) => {
+  const syncWithOptions = (mediaId: string, options: SyncMediaOptions = {}) => {
     const run = async () => {
       try {
-        await enqueueMediaSync(filename, () =>
+        await enqueueMediaSync(mediaId, () =>
           syncMedia(
-            filename,
+            mediaId,
             {
-              mediaGet: (fileName) => get(fileName),
+              mediaGet: (id) => get(id),
               putMedia: (data) => put(data),
-              updateMedia: (fileName, patch) => update(fileName, patch),
-              loadMedia: (fileName) => loadMedia(fileName),
-              loadMediaHeaders: (fileName) => loadMediaHeaders(fileName)
+              updateMedia: (id, patch) => update(id, patch),
+              loadMedia: (id) => loadMedia(id),
+              loadMediaHeaders: (id) => loadMediaHeaders(id)
             },
             options
           )
@@ -36,8 +36,8 @@ export const useSyncMedia = () => {
 
     void run()
   }
-  const sync = (filename: string) => {
-    syncWithOptions(filename)
+  const sync = (mediaId: string) => {
+    syncWithOptions(mediaId)
   }
 
   return { sync, syncWithOptions }

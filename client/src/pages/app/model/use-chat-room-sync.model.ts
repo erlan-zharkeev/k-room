@@ -3,14 +3,13 @@ import {
   type EventChatRoomDeleted,
   type EventChatRoomLeft,
   type EventMutedChatRoomsUpdated,
-  type EventPinnedChatRoomsUpdated,
-  isAvatarIdFor
+  type EventPinnedChatRoomsUpdated
 } from 'global-shared'
 import compact from 'lodash/compact'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useMedia, useSyncMedia } from 'src/entities/media-file'
+import { useSyncMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
@@ -21,7 +20,6 @@ export const useChatRoomSync = () => {
   const route = useRoute()
   const router = useRouter()
   const { bulkUpdate, chatRooms, getById, merge, put, remove } = useChatRoom()
-  const { remove: removeMedia } = useMedia()
   const { syncWithOptions } = useSyncMedia()
   const { bulkDelete, bulkPut } = useMessage()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
@@ -31,16 +29,8 @@ export const useChatRoomSync = () => {
   }
 
   const actualizeChatRooms = async (rooms: EventGetRooms) => {
-    const incomingRoomIds = new Set(rooms.map(({ id }) => id))
-    const removedChatAvatarIds = compact(
-      chatRooms.value
-        .filter(({ id }) => !incomingRoomIds.has(id))
-        .map(({ avatarId, id }) => isAvatarIdFor(avatarId, id) && avatarId)
-    )
-
     await saveRoomPreviewMessages(rooms)
     await merge(rooms.map(filterRoomPreviewMessage))
-    await Promise.all(removedChatAvatarIds.map(removeMedia))
   }
 
   const addChatRoom = async (room: EventGetRooms[number]) => {
@@ -76,12 +66,11 @@ export const useChatRoomSync = () => {
       return
     }
 
-    const { messages: messageIds, avatarId } = room
+    const { messages: messageIds } = room
 
     await Promise.all([
       remove(roomId),
-      bulkDelete(messageIds),
-      isAvatarIdFor(avatarId, roomId) && removeMedia(avatarId)
+      bulkDelete(messageIds)
     ])
 
     if (route.params.chatRoomId === roomId) {
@@ -91,7 +80,11 @@ export const useChatRoomSync = () => {
 
   const updateChatRoomData = async (room: EventGetRooms[number]) => {
     await saveRoomPreviewMessages([room])
-    syncWithOptions(room.avatarId, { force: true })
+
+    if (room.avatarId) {
+      syncWithOptions(room.avatarId, { force: true })
+    }
+
     await put(filterRoomPreviewMessage(room))
   }
 
