@@ -129,9 +129,7 @@ describe('media.service', () => {
     fileTypeMock.fromBuffer.mockResolvedValue(null)
     mimeLookupMock.mockReturnValue('text/plain')
 
-    await expect(mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image')).rejects.toMatchObject(
-      { status: 400 }
-    )
+    await expect(mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image')).rejects.toMatchObject({ status: 400 })
 
     expect(mongooseMock.bucket.openUploadStreamWithId).not.toHaveBeenCalled()
   })

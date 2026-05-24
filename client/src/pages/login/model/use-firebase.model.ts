@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { useUserSession } from 'src/entities/user'
+import { useClientSession } from 'src/features/client-session'
 import { useHttp } from 'src/shared/api'
 import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
@@ -20,7 +20,7 @@ import { LOGIN_FORM_I18N } from '../config/i18n'
 
 export const useFirebase = () => {
   const { doHttpRequest } = useHttp()
-  const { activateUserSession } = useUserSession()
+  const { activateClientSession } = useClientSession()
   const { settings } = useSettings()
   const { t } = useI18n()
   const toast = useAppToast()
@@ -79,7 +79,7 @@ export const useFirebase = () => {
     const response = await doHttpRequest<SignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
     const { payload } = response.data
 
-    await activateUserSession(payload)
+    await activateClientSession(payload)
   }
 
   const onFirebaseLogin = async (provider: FirebaseProvider) => {

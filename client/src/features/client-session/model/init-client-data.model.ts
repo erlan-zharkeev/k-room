@@ -1,24 +1,24 @@
 import { USER_ENDPOINTS, type GetUserDataResponse } from 'global-shared'
 
 import { useUser } from 'src/entities/user'
-import { isHttpError, useHttp, useSocketConnect, useSocketConnectionMonitor } from 'src/shared/api'
+import { isHttpError, useHttp, useSocketConnectionMonitor } from 'src/shared/api'
 import { log } from 'src/shared/lib'
+
+import { useClientSession } from './use-client-session.model'
 
 let clientDataInitPromise: Promise<void> | null = null
 
 const initializeClientData = async () => {
   const { doHttpRequest } = useHttp()
-  const { reset: resetUser, update } = useUser()
-  const { socketConnect } = useSocketConnect()
+  const { reset: resetUser } = useUser()
+  const { activateClientSession } = useClientSession()
   const { initializeSocketConnectionMonitor } = useSocketConnectionMonitor()
 
   const restoreUserSession = async () => {
     try {
       const response = await doHttpRequest<GetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
-      const { avatarId, email, id, role, nickname } = response.data.payload
 
-      await update({ avatarId, email, id, role, nickname })
-      socketConnect()
+      await activateClientSession(response.data.payload, false)
     } catch (error) {
       if (isHttpError(error) && error.status === 401) {
         await resetUser()

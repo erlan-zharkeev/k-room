@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 
 import { Injectable } from '@nestjs/common'
 import fileTypeDep from 'file-type'
-import { MB_IN_BYTES, REQ_STATUS, buildAvatarId } from 'global-shared'
+import { MB_IN_BYTES, REQ_STATUS, type MediaBucketName } from 'global-shared'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 import mongoose from 'mongoose'
@@ -19,12 +19,12 @@ import type {
   FileMetaData,
   StreamMediaFileOptions,
   UploadOptions,
-  MediaBucketName,
+  UploadedMediaCleanupCallback,
+  UploadedMediaCleanupItem,
   MongooseGridFSBucket
 } from './media.types'
 
 const mediaBuckets: Record<MediaBucketName, MongooseGridFSBucket | null> = {
-  avatar: null,
   doc: null,
   image: null,
   audio: null,
@@ -90,8 +90,8 @@ const getRequiredBucket = (bucketName: MediaBucketName) => {
   return bucket
 }
 
-const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName) => {
-  const { maxMb, supportedKindMediaType } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
+const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName, options?: UploadOptions) => {
+  const { maxMb, supportedKindMediaType } = options?.validation ?? VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
   const maxBytes = maxMb * MB_IN_BYTES
 
   if (fileData.metadata.size > maxBytes) {
@@ -103,8 +103,8 @@ const validateFileMetaData = (fileData: FileData, bucketName: MediaBucketName) =
   }
 }
 
-const validateRawFileSize = (size: number, bucketName: MediaBucketName) => {
-  const { maxMb } = VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
+const validateRawFileSize = (size: number, bucketName: MediaBucketName, options?: UploadOptions) => {
+  const { maxMb } = options?.validation ?? VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
   const maxBytes = maxMb * MB_IN_BYTES
 
   if (size > maxBytes) {
@@ -124,68 +124,66 @@ export const initMediaBuckets = () => {
   })
 }
 
-export const deleteBucketFilesByName = async (bucketName: MediaBucketName, filename: string) => {
+export const deleteBucketFileById = async (bucketName: MediaBucketName, id: string) => {
   const bucket = getRequiredBucket(bucketName)
-  const existing = await bucket.find({ filename }).toArray()
+  const fileId = new mongoose.Types.ObjectId(id)
+  const file = await bucket.find({ _id: fileId }).next()
 
-  if (!existing.length) {
+  if (!file) {
     return
   }
 
-  await Promise.all(existing.map((file) => bucket.delete(file._id)))
+  await bucket.delete(fileId)
 }
 
-export const bucketFileExistsByName = async (bucketName: MediaBucketName, filename: string) => {
-  const bucket = getRequiredBucket(bucketName)
-  const file = await bucket.find({ filename }).next()
+export const withUploadedMediaCleanup = async <TResult>(
+  callback: UploadedMediaCleanupCallback<TResult>
+): Promise<TResult> => {
+  const uploadedMedia: UploadedMediaCleanupItem[] = []
 
-  return Boolean(file)
-}
+  try {
+    return await callback((bucketName, id) => {
+      uploadedMedia.push({ bucketName, id })
+    })
+  } catch (error) {
+    await Promise.allSettled(uploadedMedia.map(({ bucketName, id }) => deleteBucketFileById(bucketName, id)))
 
-export const resolveAvatarId = async (avatarOwnerId: string) => {
-  const avatarId = buildAvatarId(avatarOwnerId)
-  const avatarExists = await bucketFileExistsByName('avatar', avatarId)
-
-  return avatarExists ? avatarId : null
+    throw error
+  }
 }
 
 export const uploadBufferToBucket = async (
   buffer: Buffer | ArrayBuffer,
-  filename: string,
   bucketName: MediaBucketName,
   options?: UploadOptions
 ) => {
   try {
     const bucket = getRequiredBucket(bucketName)
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
+    const fileId = options?.id ? new mongoose.Types.ObjectId(options.id) : new mongoose.Types.ObjectId()
+    const filename = String(fileId)
 
-    validateRawFileSize(normalizedBuffer.length, bucketName)
+    validateRawFileSize(normalizedBuffer.length, bucketName, options)
 
     const outputBuffer =
-      bucketName === 'avatar' || bucketName === 'image'
+      bucketName === 'image'
         ? await processImageWithSharp(normalizedBuffer, options?.compression ?? 'common-compressed')
         : normalizedBuffer
     const fileData = await buildFileData(outputBuffer, filename)
 
-    validateFileMetaData(fileData, bucketName)
+    validateFileMetaData(fileData, bucketName, options)
 
     if (options?.overwrite) {
-      await deleteBucketFilesByName(bucketName, fileData.filename)
-    } else {
-      const existing = await bucket.find({ filename: fileData.filename }).toArray()
-
-      if (existing.length) {
-        throw new AppError(REQ_STATUS.server, VALIDATE_MEDIA_FILE_I18N.fileWithThisNameAlreadyExists)
-      }
+      await deleteBucketFileById(bucketName, filename)
     }
 
-    return new Promise((resolve, reject) => {
-      const stream = bucket.openUploadStream(fileData.filename, {
+    return new Promise<string>((resolve, reject) => {
+      const stream = bucket.openUploadStreamWithId(fileId, fileData.filename, {
         contentType: fileData.contentType,
         metadata: fileData.metadata
       })
 
-      stream.once('finish', () => resolve(stream.id))
+      stream.once('finish', () => resolve(filename))
       stream.once('error', reject)
       stream.end(outputBuffer)
     })
@@ -206,8 +204,13 @@ export const streamMediaFile = async (
 ) => {
   try {
     const bucket = getRequiredBucket(bucketName)
-    const filename = `${bucketName}.${id}`
-    const file = await bucket.find({ filename }).next()
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound, true)
+    }
+
+    const fileId = new mongoose.Types.ObjectId(id)
+    const file = await bucket.find({ _id: fileId }).next()
 
     if (!file) {
       throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound, true)
@@ -228,7 +231,7 @@ export const streamMediaFile = async (
     }
 
     bucket
-      .openDownloadStreamByName(filename)
+      .openDownloadStream(fileId)
       .on('error', () => {
         if (!response.headersSent) {
           response.status(REQ_STATUS.notFound).json({
@@ -253,12 +256,10 @@ export const streamMediaFile = async (
 @Injectable()
 export class MediaService {
   async getMediaFile(idParam: string, response: import('express').Response, options?: StreamMediaFileOptions) {
-    const [bucketName, id] = idParam.split('.', 2)
-
-    if (!bucketName || !id) {
+    if (!idParam) {
       throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound)
     }
 
-    await streamMediaFile(bucketName as MediaBucketName, id, response, options)
+    await streamMediaFile('image', idParam, response, options)
   }
 }

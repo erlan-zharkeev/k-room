@@ -52,10 +52,7 @@ import {
 } from './fixtures.constants'
 import type { FixtureContactData, FixtureUserData } from './fixtures.types'
 
-const ensureAvatarLoaded = async (
-  user: HydratedDocument<UserSchema>,
-  avatarPath: string
-) => {
+const ensureAvatarLoaded = async (user: HydratedDocument<UserSchema>, avatarPath: string) => {
   if (user.public.avatarId) {
     return false
   }
@@ -154,10 +151,7 @@ const ensureUserPersonalChatRoomState = async () => {
 }
 
 const ensureChatRoomAvatarState = async () => {
-  const result = await ChatRoomModel.updateMany(
-    { avatarId: { $exists: false } },
-    { $set: { avatarId: null } }
-  )
+  const result = await ChatRoomModel.updateMany({ avatarId: { $exists: false } }, { $set: { avatarId: null } })
 
   if (!result.modifiedCount) return
 

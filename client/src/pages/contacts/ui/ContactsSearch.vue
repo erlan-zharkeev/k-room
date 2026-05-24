@@ -46,11 +46,7 @@ const {
               ribbon-corner="bottom-left"
             >
               <NmorphCard shadow-type="inset" content-class="contacts-search__item">
-                <AppProfileBasicData
-                  :image-id="contact.avatarId"
-                  :title="contact.nickname"
-                  :name="contact.nickname"
-                >
+                <AppProfileBasicData :image-id="contact.avatarId" :title="contact.nickname" :name="contact.nickname">
                   <template #title>
                     <div class="contacts-search__name">
                       <AppText truncate :text="contact.nickname" />

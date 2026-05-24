@@ -1,45 +1,13 @@
-import { isString, ROUTE_NAMES, type UserData } from 'global-shared'
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
-import { allowMediaSync } from 'src/entities/media-file'
-import { allowAuthRefresh, useSocketConnect } from 'src/shared/api'
 
 import { useUser } from './use-user.model'
 
 export const useUserSession = () => {
-  const route = useRoute()
-  const router = useRouter()
-  const { update, user } = useUser()
-  const { socketConnect } = useSocketConnect()
+  const { user } = useUser()
 
   const activeUser = computed(() => (user.value.id ? user.value : null))
 
-  const getRedirectPath = () => {
-    const { redirect } = route.query
-
-    if (!isString(redirect) || !redirect.startsWith('/') || redirect.startsWith('//')) {
-      return ROUTE_NAMES.app
-    }
-
-    return redirect
-  }
-
-  const activateUserSession = async (data: UserData, shouldRedirect = true) => {
-    const { avatarId, email, id, role, nickname } = data
-
-    allowAuthRefresh()
-    allowMediaSync()
-    await update({ avatarId, email, id, role, nickname })
-    socketConnect()
-
-    if (shouldRedirect) {
-      await router.push(getRedirectPath())
-    }
-  }
-
   return {
-    activeUser,
-    activateUserSession
+    activeUser
   }
 }
