@@ -15,8 +15,7 @@ import { AppProfileBasicData, AppText } from 'src/shared/ui'
 import {
   SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES,
   SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL,
-  SETTINGS_ACCOUNT_AVATAR_MAX_MB,
-  SETTINGS_ACCOUNT_NICKNAME_INPUT_ATTRS
+  SETTINGS_ACCOUNT_AVATAR_MAX_MB
 } from '../../../config/constants/account.constants'
 import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../../config/i18n/account-personal-data.i18n'
 import { usePersonalData } from '../../../model/account/use-personal-data.model'
@@ -130,7 +129,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nickname)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput :disabled="isAccountSaving" :input-attrs="SETTINGS_ACCOUNT_NICKNAME_INPUT_ATTRS" />
+        <NmorphTextInput :disabled="isAccountSaving" />
         <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
       </NmorphFormItem>
     </NmorphForm>

@@ -22,6 +22,11 @@ const chatRoomSchema = new Schema<ChatRoomSchema>({
     enum: Object.values(CHAT_KIND),
     required: true
   },
+  avatarId: {
+    type: String,
+    required: false,
+    default: null
+  },
   users: {
     type: [String],
     required: true,

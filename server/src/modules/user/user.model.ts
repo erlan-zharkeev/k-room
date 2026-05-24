@@ -69,6 +69,11 @@ const personalSchema = new Schema<UserPersonalData>(
 
 const publicSchema = new Schema<UserPublicData>(
   {
+    avatarId: {
+      type: String,
+      required: false,
+      default: null
+    },
     nickname: {
       type: String,
       unique: true,
