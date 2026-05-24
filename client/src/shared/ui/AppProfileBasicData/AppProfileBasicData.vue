@@ -28,7 +28,7 @@ const { imageSrc } = useAppProfileBasicData(props)
       <slot name="title">
         <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
       </slot>
-      <div class="app-profile-basic-data__description">
+      <div v-if="$slots.description" class="app-profile-basic-data__description">
         <slot name="description" />
       </div>
     </div>
@@ -53,7 +53,8 @@ const { imageSrc } = useAppProfileBasicData(props)
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 4px;
+  justify-content: center;
 
   min-width: 0;
   margin-bottom: 1px;
@@ -61,5 +62,9 @@ const { imageSrc } = useAppProfileBasicData(props)
 
 .app-profile-basic-data__description {
   min-width: 0;
+}
+
+.app-profile-basic-data__description:empty {
+  display: none;
 }
 </style>

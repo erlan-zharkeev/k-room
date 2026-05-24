@@ -13,6 +13,7 @@ const { volumeValue, waveformBars, waveformColor, waveformStyle } = useAppMicrop
   <NmorphCard
     shadow-type="inset"
     class="app-microphone-waveform"
+    content-class="app-microphone-waveform__content"
     :style="waveformStyle"
     role="meter"
     :aria-label="props.label"
@@ -37,13 +38,15 @@ const { volumeValue, waveformBars, waveformColor, waveformStyle } = useAppMicrop
 
 <style lang="scss">
 .app-microphone-waveform {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-
   width: max-content;
   min-height: 42px;
   padding: 8px 12px;
+}
+
+.app-microphone-waveform__content {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .app-microphone-waveform__bars {

@@ -56,6 +56,7 @@ const {
                 <NmorphButton
                   v-if="isDefaultContactInteraction(contact.interactionType)"
                   shape="square"
+                  style-type="transparent"
                   :loading="loadingContactIds.has(contact.id)"
                   :aria-label="$t(CONTACTS_PAGE_I18N.add)"
                   @click="emit('add', contact.id)"
@@ -106,7 +107,6 @@ const {
 }
 
 .contacts-search__name {
-  flex: 1 1 56px;
   min-width: 0;
 }
 </style>

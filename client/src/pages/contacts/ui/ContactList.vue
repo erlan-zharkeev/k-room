@@ -87,14 +87,6 @@ const emit = defineEmits<ContactListEmits>()
   min-width: 0;
 }
 
-.contact-list__profile .app-profile-basic-data__content {
-  gap: 4px;
-}
-
-.contact-list__profile .app-profile-basic-data__description:empty {
-  display: none;
-}
-
 .contact-list__title {
   display: flex;
   gap: 8px;
