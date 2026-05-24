@@ -15,9 +15,13 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
       class="chat-room-list__pinned"
       :model-value="chatRoomListGroups.pinnedChatRoomList"
       item-key="id"
-      handle=".chat-room-list-item-pinned-badge"
+      handle=".chat-room-list-item__pin"
       :animation="180"
       :disabled="!canReorderPinnedChatRooms"
+      :force-fallback="true"
+      :fallback-on-body="true"
+      fallback-class="chat-room-list__drag-preview"
+      ghost-class="chat-room-list__drop-placeholder"
       @update:model-value="reorderPinnedChatRooms"
     >
       <template #item="{ element }">
@@ -41,6 +45,10 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
 }
 
 .chat-room-list {
-  padding: 8px;
+  padding: 8px 0 8px 8px;
+}
+
+.chat-room-list__pinned {
+  user-select: none;
 }
 </style>

@@ -25,61 +25,55 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
     type="ribbon"
     ribbon-corner="bottom-left"
   >
-    <NmorphBadge
-      class="chat-room-list-item-pinned-badge"
-      :hidden="!props.item.isPinned"
-      value="pinned"
-      size="tiny"
-      color="var(--nmorph-accent-color)"
-      type="ribbon"
-      ribbon-corner="top-right"
-      :ribbon-tilt="false"
+    <NmorphCard
+      tag="div"
+      class="chat-room-list-item"
+      content-class="chat-room-list-item__content"
+      :shadow-type="isPressed ? 'inset' : 'outset'"
     >
-      <template #value>
-        <NmorphIcon width="12px" color="var(--nmorph-contrast-text-color)" aria-hidden="true">
-          <NmorphIconPin />
-        </NmorphIcon>
-      </template>
-      <NmorphCard
-        tag="div"
-        class="chat-room-list-item"
-        content-class="chat-room-list-item__content"
-        :shadow-type="isPressed ? 'inset' : 'outset'"
+      <NmorphIcon
+        v-if="props.item.isPinned"
+        class="chat-room-list-item__pin"
+        color="var(--nmorph-accent-color)"
+        aria-hidden="true"
       >
-        <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
-          <AppProfileBasicData
-            :image-id="props.item.imageId"
-            :title="props.item.title"
-            :name="props.item.title"
-            :show-online="props.item.online"
-          >
-            <template #title>
-              <div class="chat-room-list-item__title">
-                <div class="chat-room-list-item__name">
-                  <AppText truncate :selectable="false" :text="props.item.title" />
-                </div>
+        <NmorphIconPin />
+      </NmorphIcon>
+      <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
+        <AppProfileBasicData
+          :image-id="props.item.imageId"
+          :title="props.item.title"
+          :name="props.item.title"
+          :show-online="props.item.online"
+        >
+          <template #title>
+            <div class="chat-room-list-item__title">
+              <div class="chat-room-list-item__name">
+                <AppText truncate :selectable="false" :text="props.item.title" />
               </div>
-            </template>
-            <template #description>
-              <AppText
-                v-if="props.item.description"
-                tag="small"
-                truncate
-                color="semi-contrast-text"
-                :selectable="false"
-                :text="props.item.description"
-              />
-            </template>
-          </AppProfileBasicData>
-        </RouterLink>
-        <ChatRoomContextMenu :item="props.item" />
-      </NmorphCard>
-    </NmorphBadge>
+            </div>
+          </template>
+          <template #description>
+            <AppText
+              v-if="props.item.description"
+              tag="small"
+              truncate
+              color="semi-contrast-text"
+              :selectable="false"
+              :text="props.item.description"
+            />
+          </template>
+        </AppProfileBasicData>
+      </RouterLink>
+      <ChatRoomContextMenu :item="props.item" />
+    </NmorphCard>
   </NmorphBadge>
 </template>
 
 <style lang="scss">
 .chat-room-list-item__content {
+  position: relative;
+
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
@@ -103,16 +97,22 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
   min-width: 0;
 }
 
-.chat-room-list-item-badge.nmorph-badge {
-  --nmorph-badge-ribbon-corner-size: 20px;
-
+.chat-room-list-item__pin {
   cursor: grab;
+
+  position: absolute;
+  top: -8px;
+  right: -8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
 }
 
-.chat-room-list-item-pinned-badge.nmorph-badge {
-  --nmorph-badge-ribbon-width: 32px;
-  --nmorph-badge-ribbon-height: 16px;
-
-  width: 100%;
+.chat-room-list-item-badge.nmorph-badge {
+  --nmorph-badge-ribbon-corner-size: 20px;
 }
 </style>

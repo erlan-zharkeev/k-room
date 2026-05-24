@@ -1,34 +1,16 @@
 <script setup lang="ts">
-import {
-  NmorphBadge,
-  NmorphCard,
-  NmorphButton,
-  NmorphIconChatLineSquare,
-  NmorphIconPostCard
-} from '@nmorph/nmorph-ui-kit'
-import { CONTACT_INTERACTION, isAcceptedContactInteraction, isDefaultContactInteraction } from 'global-shared'
-import { computed } from 'vue'
+import { NmorphBadge, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
 
-import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { ContactListEmits, ContactListProps } from '../config/types'
 import { getContactActivityTagColor } from '../lib/get-contact-activity-tag-color'
 import { getContactStatusTagColor } from '../lib/get-contact-status-tag-color'
-import { hasContactChatRoom } from '../lib/has-contact-chat-room'
 
 import ContactContextMenu from './ContactContextMenu.vue'
 
 const props = defineProps<ContactListProps>()
 const emit = defineEmits<ContactListEmits>()
-const contactChatRoomIdList = computed(() =>
-  props.contactList
-    .filter(
-      ({ id, interactionType }) =>
-        isAcceptedContactInteraction(interactionType) && hasContactChatRoom(props.getPersonalChatRoomId(id))
-    )
-    .map(({ id }) => id)
-)
 </script>
 
 <template>
@@ -70,41 +52,14 @@ const contactChatRoomIdList = computed(() =>
           </template>
         </AppProfileBasicData>
         <div class="contact-list__actions">
-          <NmorphButton
-            v-if="isDefaultContactInteraction(contact.interactionType)"
-            shape="square"
-            :loading="props.loadingContactIds.has(contact.id)"
-            :aria-label="$t(CONTACTS_PAGE_I18N.invite)"
-            @click="emit('update-interaction', contact.id, CONTACT_INTERACTION.INVITED)"
-          >
-            <template #icon>
-              <NmorphIconPostCard />
-            </template>
-          </NmorphButton>
-          <NmorphButton
-            v-else-if="contactChatRoomIdList.includes(contact.id)"
-            shape="square"
-            :aria-label="$t(CONTACTS_PAGE_I18N.write)"
-            @click="emit('go-to-chat', props.getPersonalChatRoomId(contact.id))"
-          >
-            <template #icon>
-              <NmorphIconChatLineSquare />
-            </template>
-          </NmorphButton>
-          <NmorphButton
-            v-else-if="isAcceptedContactInteraction(contact.interactionType)"
-            shape="square"
-            :loading="props.creatingChatContactIds.has(contact.id)"
-            :aria-label="$t(CONTACTS_PAGE_I18N.createChat)"
-            @click="emit('create-chat', contact.id)"
-          >
-            <template #icon>
-              <NmorphIconChatLineSquare />
-            </template>
-          </NmorphButton>
           <ContactContextMenu
             :contact="contact"
+            :is-creating-chat="props.creatingChatContactIds.has(contact.id)"
+            :is-updating-contact="props.loadingContactIds.has(contact.id)"
+            :personal-chat-room-id="props.getPersonalChatRoomId(contact.id)"
+            @create-chat="emit('create-chat', $event)"
             @delete="emit('delete', $event)"
+            @go-to-chat="emit('go-to-chat', $event)"
             @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
           />
         </div>

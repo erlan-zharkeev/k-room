@@ -1,6 +1,8 @@
 import {
   CONTACT_INTERACTION,
+  isAcceptedContactInteraction,
   isBlockedContactInteraction,
+  isDefaultContactInteraction,
   isInviteReceivedContactInteraction,
   isUnknownObject
 } from 'global-shared'
@@ -14,12 +16,33 @@ import type { ContactContextMenuEmitFn, ContactContextMenuOption, ContactContext
 export const useContactContextMenu = (props: ContactContextMenuProps, emit: ContactContextMenuEmitFn) => {
   const { t } = useI18n()
   const isContextMenuOpen = ref(false)
-  const contactActionBadgeValue = computed(() =>
-    isInviteReceivedContactInteraction(props.contact.interactionType) ? '!' : undefined
-  )
+  const showContactActionBadge = computed(() => isInviteReceivedContactInteraction(props.contact.interactionType))
   const contextMenuOptions = computed<ContactContextMenuOption[]>(() => {
     const options: ContactContextMenuOption[] = []
     const { interactionType } = props.contact
+
+    if (isDefaultContactInteraction(interactionType)) {
+      options.push({
+        label: t(CONTACTS_PAGE_I18N.invite),
+        value: 'invite',
+        disabled: props.isUpdatingContact
+      })
+    }
+
+    if (isAcceptedContactInteraction(interactionType)) {
+      if (props.personalChatRoomId) {
+        options.push({
+          label: t(CONTACTS_PAGE_I18N.write),
+          value: 'go-to-chat'
+        })
+      } else {
+        options.push({
+          label: t(CONTACTS_PAGE_I18N.createChat),
+          value: 'create-chat',
+          disabled: props.isCreatingChat
+        })
+      }
+    }
 
     if (isInviteReceivedContactInteraction(interactionType)) {
       options.push({
@@ -59,6 +82,15 @@ export const useContactContextMenu = (props: ContactContextMenuProps, emit: Cont
     const { id } = props.contact
 
     switch (option.value) {
+      case 'invite':
+        emit('update-interaction', id, CONTACT_INTERACTION.INVITED)
+        break
+      case 'go-to-chat':
+        emit('go-to-chat', props.personalChatRoomId)
+        break
+      case 'create-chat':
+        emit('create-chat', id)
+        break
       case 'accept':
         emit('update-interaction', id, CONTACT_INTERACTION.INVITE_ACCEPTED)
         break
@@ -76,7 +108,7 @@ export const useContactContextMenu = (props: ContactContextMenuProps, emit: Cont
 
   return {
     isContextMenuOpen,
-    contactActionBadgeValue,
+    showContactActionBadge,
     contextMenuOptions,
     setContextMenuOpen,
     selectContactAction
