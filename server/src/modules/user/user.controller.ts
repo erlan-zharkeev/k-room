@@ -84,7 +84,7 @@ export class UserController {
   )
   async updateUserData(
     @Req() request: Request,
-    @Res() response: Response<BackendResponse<null>>,
+    @Res() response: Response<BackendResponse<GetUserDataResponse>>,
     @UploadedFile() file?: Express.Multer.File,
     @Body() payload?: UpdateUserDataPayload
   ) {
@@ -96,7 +96,7 @@ export class UserController {
       }
 
       runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
-      await this.userService.updateUserData({
+      const userData = await this.userService.updateUserData({
         userId,
         nickname: payload?.nickname,
         avatarFileBuffer: file?.buffer,
@@ -104,7 +104,7 @@ export class UserController {
       })
 
       return response.json({
-        payload: null,
+        payload: userData,
         message: {
           text: localizedText(SHARED_I18N.success, language),
           silent: true

@@ -78,18 +78,19 @@ export const useContactSync = () => {
     }
   }
 
-  const updateContactData = async (payload: EventChangeContactsData) => {
-    const [existingContact, existingKnownUser] = await Promise.all([getContact(payload.id), getKnownUser(payload.id)])
+  const updateContactData = async ({ avatarId, id, nickname }: EventChangeContactsData) => {
+    const [existingContact, existingKnownUser] = await Promise.all([getContact(id), getKnownUser(id)])
     const changes = {
-      nickname: payload.nickname
+      avatarId,
+      nickname
     }
 
     if (existingContact) {
-      await updateStoredContactData(payload.id, changes)
+      await updateStoredContactData(id, changes)
     }
 
     if (existingKnownUser) {
-      await updateKnownUser(payload.id, changes)
+      await updateKnownUser(id, changes)
     }
   }
 

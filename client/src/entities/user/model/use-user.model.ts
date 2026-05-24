@@ -1,4 +1,4 @@
-import { buildAvatarId, formatNickname } from 'global-shared'
+import { formatNickname } from 'global-shared'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
@@ -10,7 +10,7 @@ export const useUser = () => {
   const { user } = storeToRefs(userStore)
   const isAuthorized = computed(() => Boolean(user.value.id))
 
-  const avatarId = computed(() => (user.value.id ? buildAvatarId(user.value.id) : ''))
+  const avatarId = computed(() => user.value.avatarId)
   const displayedNickname = computed(() => formatNickname(user.value.nickname))
 
   return {

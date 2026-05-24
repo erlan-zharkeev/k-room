@@ -15,9 +15,9 @@ const initializeClientData = async () => {
   const restoreUserSession = async () => {
     try {
       const response = await doHttpRequest<GetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
-      const { email, id, role, nickname } = response.data.payload
+      const { avatarId, email, id, role, nickname } = response.data.payload
 
-      await update({ email, id, role, nickname })
+      await update({ avatarId, email, id, role, nickname })
       socketConnect()
     } catch (error) {
       if (isHttpError(error) && error.status === 401) {

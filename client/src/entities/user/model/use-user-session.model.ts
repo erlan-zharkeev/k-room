@@ -2,6 +2,7 @@ import { isString, ROUTE_NAMES, type UserData } from 'global-shared'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import { allowMediaSync } from 'src/entities/media-file'
 import { allowAuthRefresh, useSocketConnect } from 'src/shared/api'
 
 import { useUser } from './use-user.model'
@@ -25,10 +26,11 @@ export const useUserSession = () => {
   }
 
   const activateUserSession = async (data: UserData, shouldRedirect = true) => {
-    const { email, id, role, nickname } = data
+    const { avatarId, email, id, role, nickname } = data
 
     allowAuthRefresh()
-    await update({ email, id, role, nickname })
+    allowMediaSync()
+    await update({ avatarId, email, id, role, nickname })
     socketConnect()
 
     if (shouldRedirect) {
