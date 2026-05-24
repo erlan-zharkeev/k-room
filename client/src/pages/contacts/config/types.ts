@@ -34,21 +34,29 @@ export interface ContactListEmits {
 
 export interface ContactContextMenuProps {
   contact: ContactRecord
+  isCreatingChat: boolean
+  isUpdatingContact: boolean
+  personalChatRoomId?: string
 }
 
 export interface ContactContextMenuEmits {
+  'create-chat': [id: string]
   delete: [id: string]
+  'go-to-chat': [id?: string]
   'update-interaction': [id: string, interaction: ContactRecord['interactionType']]
 }
 
 export interface ContactContextMenuOption {
   label: string
-  value: 'accept' | 'block' | 'delete' | 'unblock'
+  value: 'accept' | 'block' | 'create-chat' | 'delete' | 'go-to-chat' | 'invite' | 'unblock'
   color?: string
+  disabled?: boolean
 }
 
 export interface ContactContextMenuEmitFn {
+  (event: 'create-chat', id: string): void
   (event: 'delete', id: string): void
+  (event: 'go-to-chat', id?: string): void
   (event: 'update-interaction', id: string, interaction: ContactRecord['interactionType']): void
 }
 
