@@ -10,11 +10,11 @@ export interface MediaQueuedSyncTask {
 }
 
 export interface SyncMediaDeps {
-  mediaGet: (filename: string) => Promise<MediaRecord | undefined>
+  mediaGet: (mediaId: string) => Promise<MediaRecord | undefined>
   putMedia: (data: MediaRecord) => Promise<void>
-  updateMedia: (filename: string, patch: Partial<MediaRecord>) => Promise<number>
-  loadMedia: (filename: string) => Promise<void>
-  loadMediaHeaders: (filename: string) => Promise<MediaHeaders>
+  updateMedia: (mediaId: string, patch: Partial<MediaRecord>) => Promise<number>
+  loadMedia: (mediaId: string) => Promise<void>
+  loadMediaHeaders: (mediaId: string) => Promise<MediaHeaders>
 }
 
 export interface SyncMediaOptions {

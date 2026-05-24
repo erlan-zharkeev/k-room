@@ -69,15 +69,13 @@ export type { AppLanguage, LocalizedText, LocalizedTextMap } from './language/ty
 export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/types'
 
 export {
-  MEDIA_AVATAR_FILENAME_PREFIX,
+  MEDIA_AVATAR_VALIDATION_OPTIONS,
   MEDIA_BUCKET_NAMES,
-  MEDIA_IMAGE_FILENAME_PREFIX,
   MEDIA_KIND_ACCEPT_MAP,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
   MEDIA_UPLOAD_TYPE_LABEL_MAP,
   MEDIA_VALIDATION_OPTIONS_MAP
 } from './media/constants'
-export { buildAvatarId, isAvatarIdFor } from './media/lib/avatar-id'
 export type {
   MediaBucketName,
   MediaId,

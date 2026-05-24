@@ -1,6 +1,6 @@
 export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'unknown'
 
-export type MediaBucketName = 'avatar' | 'doc' | 'image' | 'audio' | 'video'
+export type MediaBucketName = 'doc' | 'image' | 'audio' | 'video'
 export type MediaId = string | null
 export type MediaUpload =
   | 'zip'

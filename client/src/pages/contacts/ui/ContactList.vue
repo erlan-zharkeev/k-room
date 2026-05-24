@@ -8,7 +8,6 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import {
   CONTACT_INTERACTION,
-  buildAvatarId,
   isAcceptedContactInteraction,
   isDefaultContactInteraction
 } from 'global-shared'
@@ -53,7 +52,7 @@ const contactChatRoomIdList = computed(() =>
       <NmorphCard class="contact-list__item" content-class="contact-list__item-content" shadow-type="inset">
         <AppProfileBasicData
           class="contact-list__profile"
-          :image-id="buildAvatarId(contact.id)"
+          :image-id="contact.avatarId"
           :title="contact.nickname"
           :name="contact.nickname"
         >

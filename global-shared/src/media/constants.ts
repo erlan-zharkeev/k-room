@@ -1,9 +1,11 @@
 import type { MediaValidationOptions, MediaBucketName, MediaKind, MediaUpload } from './types'
 
-export const MEDIA_AVATAR_FILENAME_PREFIX = 'avatar.'
-export const MEDIA_IMAGE_FILENAME_PREFIX = 'image.'
+export const MEDIA_BUCKET_NAMES = ['doc', 'image', 'audio', 'video'] as const satisfies MediaBucketName[]
 
-export const MEDIA_BUCKET_NAMES = ['avatar', 'doc', 'image', 'audio', 'video'] as const satisfies MediaBucketName[]
+export const MEDIA_AVATAR_VALIDATION_OPTIONS = {
+  maxMb: 10,
+  supportedKindMediaType: 'image'
+} as const satisfies MediaValidationOptions
 
 export const MEDIA_KIND_ACCEPT_MAP = {
   image: 'image/*',
@@ -47,10 +49,6 @@ export const MEDIA_UPLOAD_TYPE_LABEL_MAP = {
 } as const satisfies Record<MediaUpload, string>
 
 export const MEDIA_VALIDATION_OPTIONS_MAP = {
-  avatar: {
-    maxMb: 10,
-    supportedKindMediaType: 'image'
-  },
   doc: {
     maxMb: 10,
     supportedKindMediaType: 'pdf'
