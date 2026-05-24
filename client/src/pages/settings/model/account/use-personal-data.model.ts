@@ -1,5 +1,6 @@
 import type { INmorphCustomFileData as NmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import {
+  type GetUserDataResponse,
   USER_ENDPOINTS,
   createUpdateUserDataSchema,
   createValidationMessages,
@@ -149,18 +150,21 @@ export const usePersonalData = () => {
 
     try {
       isAccountSaving.value = true
-      await doHttpRequest('patch', USER_ENDPOINTS.editUserData, requestFormData, {
+      const response = await doHttpRequest<GetUserDataResponse>('patch', USER_ENDPOINTS.editUserData, requestFormData, {
         contentType: 'multipart/form-data'
       })
-      await updateUserData({ nickname })
+      const updatedUserData = response.data.payload
+      const { avatarId } = updatedUserData
 
-      if (currentAvatarId && accountAvatarWasReset.value) {
+      await updateUserData(updatedUserData)
+
+      if (currentAvatarId && currentAvatarId !== avatarId) {
         await removeMedia(currentAvatarId)
       }
 
-      if (currentAvatarId && accountAvatarFile.value) {
+      if (avatarId && accountAvatarFile.value) {
         await putMedia({
-          id: currentAvatarId,
+          id: avatarId,
           blob: accountAvatarFile.value,
           contentType: accountAvatarFile.value.type,
           etag: `${Date.now()}`,

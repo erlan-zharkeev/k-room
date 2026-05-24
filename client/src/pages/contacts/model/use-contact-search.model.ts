@@ -1,6 +1,5 @@
 import { useDebounceFn } from '@vueuse/core'
 import {
-  buildAvatarId,
   isDefaultContactInteraction,
   type Contact,
   type EventGetSearchedContact,
@@ -97,8 +96,8 @@ export const useContactSearch = () => {
   }
 
   const syncContactAvatars = (contacts: Contact[]) => {
-    contacts.forEach(({ id }) => {
-      const avatarId = buildAvatarId(id)
+    contacts.forEach(({ avatarId }) => {
+      if (!avatarId) return
 
       if (syncedAvatarIds.has(avatarId)) return
 
