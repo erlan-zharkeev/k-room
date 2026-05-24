@@ -64,7 +64,7 @@ const personalSchema = new Schema<UserPersonalData>(
       default: []
     }
   },
-  { _id: false }
+  { _id: false, minimize: false }
 )
 
 const publicSchema = new Schema<UserPublicData>(
@@ -96,7 +96,7 @@ const userSchema = new Schema<UserSchema>(
     personal: personalSchema,
     public: publicSchema
   },
-  { timestamps: true }
+  { timestamps: true, minimize: false }
 )
 
 export const UserModel = model<UserSchema>('User', userSchema, 'user')

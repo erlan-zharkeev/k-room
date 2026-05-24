@@ -8,6 +8,8 @@ export const CONTACTS_PAGE_PATH = '/app/contacts'
 export const CONTACTS_SEARCH_PLACEHOLDER = 'Search contact'
 export const CONTACTS_DB_STORE_NAME = 'contacts'
 export const CHAT_ROOMS_DB_STORE_NAME = 'chat-rooms'
+export const CONTACT_LIST_BADGE_SELECTOR = '.contact-list > .nmorph-badge'
+export const APP_PROFILE_BASIC_DATA_DESCRIPTION_SELECTOR = '.app-profile-basic-data__description'
 
 export const ADD_CONTACT_BUTTON_NAME = 'Add contact'
 export const INVITE_BUTTON_NAME = 'Invite'

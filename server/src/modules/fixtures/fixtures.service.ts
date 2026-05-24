@@ -150,6 +150,17 @@ const ensureUserPersonalChatRoomState = async () => {
   log.info(`-User personal chat room state normalized: updated=${updatedCount}`)
 }
 
+const ensureUserPersonalContactsState = async () => {
+  const result = await UserModel.updateMany(
+    { 'personal.contacts': { $exists: false } },
+    { $set: { 'personal.contacts': {} } }
+  )
+
+  if (!result.modifiedCount) return
+
+  log.info(`-User personal contacts state normalized: updated=${result.modifiedCount}`)
+}
+
 const ensureChatRoomAvatarState = async () => {
   const result = await ChatRoomModel.updateMany({ avatarId: { $exists: false } }, { $set: { avatarId: null } })
 
@@ -479,6 +490,7 @@ const loadDialogFixtures = async () => {
 
 export const loadFixtures = async () => {
   await loadUserFixtures()
+  await ensureUserPersonalContactsState()
   await ensureUserPersonalChatRoomState()
   await ensureChatRoomAvatarState()
   await loadDialogFixtures()
