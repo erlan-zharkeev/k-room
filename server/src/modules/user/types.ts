@@ -1,4 +1,12 @@
-import type { AppLanguage, ChangePasswordPayload, Interaction, Provider, UnknownObject, UserRole } from 'global-shared'
+import type {
+  AppLanguage,
+  ChangePasswordPayload,
+  Interaction,
+  MediaId,
+  Provider,
+  UnknownObject,
+  UserRole
+} from 'global-shared'
 import type { Types } from 'mongoose'
 
 export interface UserDevice {
@@ -29,6 +37,7 @@ export interface UserPersonalData {
 }
 
 export interface UserPublicData {
+  avatarId: MediaId
   nickname: string
   lastSeen: number
 }

@@ -25,7 +25,7 @@ export type ChatRooms = ChatRoom[]
 export interface ChatRoomSchema
   extends Omit<
     ChatRoom,
-    'users' | 'avatarId' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder' | 'isMuted'
+    'users' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder' | 'isMuted'
   > {
   users: string[]
 }

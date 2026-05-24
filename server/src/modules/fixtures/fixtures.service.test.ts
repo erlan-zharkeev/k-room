@@ -22,6 +22,7 @@ const chatRoomModelMock = vi.hoisted(() => {
   class ChatRoomModel {
     static findOne = vi.fn()
     static findById = vi.fn()
+    static updateMany = vi.fn()
     static updateOne = vi.fn()
 
     id = 'created-room'
@@ -72,7 +73,7 @@ describe('fixtures.service', () => {
     })
     userModelMock.findById.mockResolvedValue({
       personal: { email: 'fixture@test.com' },
-      public: { nickname: 'fixture' },
+      public: { avatarId: 'existing-avatar-id', nickname: 'fixture' },
       system: {
         confirmed: true,
         password: '$2b$06$9zZ6buzV0M3MTyS0wJ7ZUudLN4LxZ4XfN0iDHO8Y1koRaSPo6e7iW'
@@ -80,6 +81,7 @@ describe('fixtures.service', () => {
       save: vi.fn()
     })
     userModelMock.updateMany.mockResolvedValue({ modifiedCount: 0 })
+    chatRoomModelMock.ChatRoomModel.updateMany.mockResolvedValue({ modifiedCount: 0 })
     userServiceMock.isUserExist.mockResolvedValue({ exists: true, reason: 'email' })
     chatRoomModelMock.ChatRoomModel.findOne.mockResolvedValue({ id: 'room-1' })
     chatRoomModelMock.ChatRoomModel.findById.mockResolvedValue({

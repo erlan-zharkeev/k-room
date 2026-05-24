@@ -35,6 +35,7 @@ const createUser = async (confirmed = true) => ({
     email: 'user@test.com'
   },
   public: {
+    avatarId: null,
     nickname: 'tester'
   },
   system: {
@@ -62,6 +63,7 @@ const createResponse = () => {
 describe('AuthService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    userServiceExportsMock.updateUserAvatar.mockResolvedValue('uploaded-avatar-id')
   })
 
   it('logs in confirmed user and delegates token update to session service', async () => {
@@ -154,7 +156,9 @@ describe('AuthService', () => {
 
     expect(userService.findByEmail).not.toHaveBeenCalled()
     expect(userServiceExportsMock.loadGoogleAvatar).toHaveBeenCalledWith('https://lh3.googleusercontent.com/avatar.jpg')
-    expect(userServiceExportsMock.updateUserAvatar).toHaveBeenCalledWith(avatar, 'user-1')
+    expect(userServiceExportsMock.updateUserAvatar).toHaveBeenCalledWith(avatar, null)
+    expect(user.public.avatarId).toBe('uploaded-avatar-id')
+    expect(user.save).toHaveBeenCalled()
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
   })
 

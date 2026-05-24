@@ -54,7 +54,7 @@ export interface DexieCacheTrimEvent {
 export type CallRecord = Call
 export type MessageRecord = Message
 export type ChatRoomRecord = ChatRoom
-export type UserRecord = Required<Pick<UserData, 'id' | 'role' | 'email' | 'nickname'>>
+export type UserRecord = Required<Pick<UserData, 'avatarId' | 'id' | 'role' | 'email' | 'nickname'>>
 export type ContactRecord = Contact & ContactLocalState
 export type KnownUserRecord = KnownUser & KnownUserLocalState
 export type MediaRecordStatus = 'missing' | 'ready'

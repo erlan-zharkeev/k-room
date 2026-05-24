@@ -30,7 +30,7 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
       <div v-if="messageImageList.length" class="message-body__images">
         <AppMediaImage
           v-for="image in messageImageList"
-          :key="image.name"
+          :key="image.mediaId"
           :media-id="image.mediaId"
           :alt="image.name"
           width="100%"

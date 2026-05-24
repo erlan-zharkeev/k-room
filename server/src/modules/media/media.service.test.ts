@@ -4,9 +4,24 @@ const mongooseMock = vi.hoisted(() => ({
   bucket: {
     find: vi.fn(),
     delete: vi.fn(),
-    openUploadStream: vi.fn()
+    openUploadStreamWithId: vi.fn()
   },
-  GridFSBucket: vi.fn()
+  GridFSBucket: vi.fn(),
+  ObjectId: class {
+    value: string
+
+    constructor(value?: string) {
+      this.value = value ?? '68f000000000000000000099'
+    }
+
+    static isValid() {
+      return true
+    }
+
+    toString() {
+      return this.value
+    }
+  }
 }))
 
 const fileTypeMock = vi.hoisted(() => ({
@@ -24,6 +39,9 @@ vi.mock('mongoose', () => ({
     },
     mongo: {
       GridFSBucket: mongooseMock.GridFSBucket
+    },
+    Types: {
+      ObjectId: mongooseMock.ObjectId
     }
   }
 }))
@@ -63,9 +81,9 @@ describe('media.service', () => {
     vi.clearAllMocks()
     mongooseMock.GridFSBucket.mockReturnValue(mongooseMock.bucket)
     mongooseMock.bucket.find.mockReturnValue({
-      toArray: vi.fn().mockResolvedValue([{ _id: 'old-file' }])
+      next: vi.fn().mockResolvedValue({ _id: 'old-file' })
     })
-    mongooseMock.bucket.openUploadStream.mockImplementation(() => createUploadStream())
+    mongooseMock.bucket.openUploadStreamWithId.mockImplementation(() => createUploadStream())
     fileTypeMock.fromBuffer.mockResolvedValue({ mime: 'image/webp', ext: 'webp' })
     imageSizeMock.mockReturnValue({ width: 10, height: 20 })
     mimeLookupMock.mockReturnValue('image/webp')
@@ -82,16 +100,19 @@ describe('media.service', () => {
     mediaService.initMediaBuckets()
   })
 
-  it('overwrites existing avatar file and stores processed image metadata', async () => {
-    const result = await mediaService.uploadBufferToBucket(Buffer.from('raw'), 'avatar.user-1', 'avatar', {
+  it('overwrites existing image file and stores processed image metadata', async () => {
+    const fileId = '68f000000000000000000010'
+    const result = await mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image', {
+      id: fileId,
       overwrite: true,
       compression: 'avatar'
     })
 
-    expect(result).toBe('stored-file-id')
-    expect(mongooseMock.bucket.delete).toHaveBeenCalledWith('old-file')
-    expect(mongooseMock.bucket.openUploadStream).toHaveBeenCalledWith(
-      'avatar.user-1',
+    expect(result).toBe(fileId)
+    expect(mongooseMock.bucket.delete).toHaveBeenCalledWith(expect.any(mongooseMock.ObjectId))
+    expect(mongooseMock.bucket.openUploadStreamWithId).toHaveBeenCalledWith(
+      expect.any(mongooseMock.ObjectId),
+      fileId,
       expect.objectContaining({
         contentType: 'image/webp',
         metadata: expect.objectContaining({
@@ -108,10 +129,10 @@ describe('media.service', () => {
     fileTypeMock.fromBuffer.mockResolvedValue(null)
     mimeLookupMock.mockReturnValue('text/plain')
 
-    await expect(mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image.bad.txt', 'image')).rejects.toMatchObject(
+    await expect(mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image')).rejects.toMatchObject(
       { status: 400 }
     )
 
-    expect(mongooseMock.bucket.openUploadStream).not.toHaveBeenCalled()
+    expect(mongooseMock.bucket.openUploadStreamWithId).not.toHaveBeenCalled()
   })
 })

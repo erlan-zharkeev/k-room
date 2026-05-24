@@ -1,4 +1,5 @@
 import type { StreamSettings } from '../shared/types'
+import type { MediaId } from '../media/types'
 
 export type CallStatus = 'calling' | 'in-progress' | 'finished'
 
@@ -14,7 +15,7 @@ export interface Call {
   length?: number
   interlocutorId: string
   interlocutorNickname: string
-  interlocutorAvatarPath?: string
+  interlocutorAvatarId?: MediaId
   status?: CallStatus
   flow: CallFlow
   video: boolean

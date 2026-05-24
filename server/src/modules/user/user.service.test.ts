@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mediaMock = vi.hoisted(() => ({
-  deleteBucketFilesByName: vi.fn(),
+  deleteBucketFileById: vi.fn(),
   uploadBufferToBucket: vi.fn()
 }))
 
@@ -48,6 +48,7 @@ const { UserService, createUser, isUserExist, loadGoogleAvatar, updateUserAvatar
 describe('user.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mediaMock.uploadBufferToBucket.mockResolvedValue('uploaded-avatar-id')
   })
 
   afterEach(() => {
@@ -108,14 +109,18 @@ describe('user.service', () => {
   it('uploads and deletes user avatar through media bucket helpers', async () => {
     const buffer = Buffer.from('avatar')
 
-    await updateUserAvatar(buffer, 'user-1')
-    await updateUserAvatar(null, 'user-1')
+    const avatarId = await updateUserAvatar(buffer, null)
+    await updateUserAvatar(null, 'uploaded-avatar-id')
 
-    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledWith(buffer, 'avatar.user-1', 'avatar', {
-      overwrite: true,
-      compression: 'avatar'
+    expect(avatarId).toBe('uploaded-avatar-id')
+    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledWith(buffer, 'image', {
+      compression: 'avatar',
+      validation: {
+        maxMb: 10,
+        supportedKindMediaType: 'image'
+      }
     })
-    expect(mediaMock.deleteBucketFilesByName).toHaveBeenCalledWith('avatar', 'avatar.user-1')
+    expect(mediaMock.deleteBucketFileById).toHaveBeenCalledWith('image', 'uploaded-avatar-id')
   })
 
   it('loads only allowed Google avatar hosts', async () => {
