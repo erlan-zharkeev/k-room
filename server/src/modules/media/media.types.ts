@@ -1,12 +1,10 @@
 import type { NextFunction, Request, Response } from 'express'
-import type { MediaKind } from 'global-shared'
+import type { MediaKind, MediaValidationOptions } from 'global-shared'
 import type mongoose from 'mongoose'
 
 export type SharpSettingsKey = 'avatar' | 'common-compressed' | 'common-uncompressed'
 
 export type MulterHandler = (req: Request, res: Response, next: NextFunction) => void
-
-export type MediaBucketName = 'avatar' | 'doc' | 'image' | 'audio' | 'video'
 
 export type MulterErrorCode = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
 
@@ -33,8 +31,10 @@ export interface FileData {
 }
 
 export interface UploadOptions {
-  overwrite?: boolean
   compression?: SharpSettingsKey
+  id?: string
+  overwrite?: boolean
+  validation?: MediaValidationOptions
 }
 
 export interface StreamMediaFileOptions {

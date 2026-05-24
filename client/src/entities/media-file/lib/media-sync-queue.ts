@@ -65,10 +65,10 @@ export const allowMediaSyncQueue = () => {
   isBlocked = false
 }
 
-export const enqueueMediaSync = async (filename: string, task: MediaSyncTask) => {
+export const enqueueMediaSync = async (mediaId: string, task: MediaSyncTask) => {
   if (isBlocked) return
 
-  const current = inFlight.get(filename)
+  const current = inFlight.get(mediaId)
 
   if (current) {
     await current
@@ -78,11 +78,11 @@ export const enqueueMediaSync = async (filename: string, task: MediaSyncTask) =>
 
   const request = runQueued(task)
 
-  inFlight.set(filename, request)
+  inFlight.set(mediaId, request)
 
   try {
     await request
   } finally {
-    inFlight.delete(filename)
+    inFlight.delete(mediaId)
   }
 }

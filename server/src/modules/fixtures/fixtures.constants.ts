@@ -1,4 +1,4 @@
-import { CONTACT_INTERACTION, DAY_IN_MS, MEDIA_IMAGE_FILENAME_PREFIX } from 'global-shared'
+import { CONTACT_INTERACTION, DAY_IN_MS } from 'global-shared'
 import keyBy from 'lodash/keyBy'
 
 import { FIXTURE_MAX_LENGTH_NICKNAMES, USER_FIXTURES } from '../user/user.constants'
@@ -22,29 +22,29 @@ export const FIXTURE_LONG_REPLIED_MESSAGE_BODY =
   'Reply preview stress case: this quoted message is intentionally long so the chat bubble can show how replied content behaves with wrapping, spacing, contrast, and overflow in the compact message layout across desktop and mobile widths. It should remain readable without breaking the bubble geometry or footer alignment.'
 export const FIXTURE_MESSAGE_IMAGE_FILES = [
   {
-    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-room-snapshot`,
+    id: '68f000000000000000000001',
     path: 'src/modules/fixtures/images/tolik.jpg'
   },
   {
-    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-review-reference`,
+    id: '68f000000000000000000002',
     path: 'src/modules/fixtures/images/guest.jpg'
   },
   {
-    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-erlan-reference`,
+    id: '68f000000000000000000003',
     path: 'src/modules/fixtures/images/erlan.jpg'
   },
   {
-    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-second-snapshot`,
+    id: '68f000000000000000000004',
     path: 'src/modules/fixtures/images/tolik.jpg'
   },
   {
-    filename: `${MEDIA_IMAGE_FILENAME_PREFIX}fixture-tolik-second-reference`,
+    id: '68f000000000000000000005',
     path: 'src/modules/fixtures/images/guest.jpg'
   }
 ] as const
 export const FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX: Record<number, readonly string[]> = {
-  96: [FIXTURE_MESSAGE_IMAGE_FILES[0].filename],
-  100: FIXTURE_MESSAGE_IMAGE_FILES.map(({ filename }) => filename)
+  96: [FIXTURE_MESSAGE_IMAGE_FILES[0].id],
+  100: FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id)
 }
 export const FIXTURE_MESSAGE_REACTIONS_BY_INDEX: Record<number, readonly { nickname: string; glyphKey: string }[]> = {
   92: [
