@@ -135,4 +135,16 @@ describe('media.service', () => {
 
     expect(mongooseMock.bucket.openUploadStreamWithId).not.toHaveBeenCalled()
   })
+
+  it('removes tracked uploaded media when scoped work fails', async () => {
+    await expect(
+      mediaService.withUploadedMediaCleanup(async (trackUploadedMedia) => {
+        trackUploadedMedia('image', '68f000000000000000000011')
+
+        throw new Error('failed after upload')
+      })
+    ).rejects.toThrow('failed after upload')
+
+    expect(mongooseMock.bucket.delete).toHaveBeenCalledWith(expect.any(mongooseMock.ObjectId))
+  })
 })

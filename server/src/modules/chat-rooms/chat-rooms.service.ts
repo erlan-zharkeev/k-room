@@ -20,11 +20,11 @@ import {
   type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
+  MEDIA_AVATAR_VALIDATION_OPTIONS,
   MESSAGE_STATUS_VALUE,
   PINNED_CHAT_ROOM_LIMIT,
   REQ_STATUS,
   USER_CHAT_ROOM_LIMIT,
-  buildAvatarId,
   getRoomInterlocutorId,
   getRoomOtherUserIds,
   isAcceptedContactInteraction,
@@ -38,7 +38,7 @@ import without from 'lodash/without'
 
 import { AppError } from 'src/shared/lib/app-error'
 
-import { deleteBucketFilesByName, resolveAvatarId, uploadBufferToBucket } from '../media/media.service'
+import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
 import type { PresenceService } from '../presence/presence.service'
@@ -164,6 +164,7 @@ export const createChatRoom = async (
     adminId: userId,
     createdAt: Date.now(),
     chatKind: memberIds.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
+    avatarId: null,
     messages: []
   }
 
@@ -174,14 +175,17 @@ export const createChatRoom = async (
   const room = new ChatRoomModel(roomData)
   const roomId = String(room._id)
 
-  if (isRoomGroup(roomData) && avatarFile?.fileBuffer) {
-    await uploadBufferToBucket(avatarFile.fileBuffer, buildAvatarId(roomId), 'avatar', {
-      compression: 'avatar',
-      overwrite: true
-    })
-  }
+  await withUploadedMediaCleanup(async (trackUploadedMedia) => {
+    if (isRoomGroup(room) && avatarFile?.fileBuffer) {
+      room.avatarId = await uploadBufferToBucket(avatarFile.fileBuffer, 'image', {
+        compression: 'avatar',
+        validation: MEDIA_AVATAR_VALIDATION_OPTIONS
+      })
+      trackUploadedMedia('image', room.avatarId)
+    }
 
-  await room.save()
+    await room.save()
+  })
   await setRoomToUsers(roomId, memberIds)
   await emitNewRoomToUsers(memberIds, room.toObject(), presenceService)
   await delay(ROOM_CREATED_EVENT_DELAY_MS)
@@ -225,25 +229,29 @@ export const resolveKnownUsers = async (userIds: string[], presenceService: Pres
   if (!userIds.length) return []
 
   const [users, onlineMap] = await Promise.all([
-    UserModel.find({ _id: { $in: userIds } }, { 'public.nickname': 1, 'public.lastSeen': 1 }).lean(),
+    UserModel.find(
+      { _id: { $in: userIds } },
+      { 'public.avatarId': 1, 'public.nickname': 1, 'public.lastSeen': 1 }
+    ).lean(),
     presenceService.onlineMapByUserIds(userIds)
   ])
   const userById = new Map(users.map((user) => [String(user._id), user]))
 
-  return userIds.flatMap((id) => {
+  const knownUsers = userIds.map((id) => {
     const user = userById.get(id)
 
-    if (!user) return []
+    if (!user) return null
 
-    return [
-      {
-        id,
-        nickname: user.public.nickname,
-        online: onlineMap.get(id) ?? false,
-        lastSeen: user.public.lastSeen
-      }
-    ]
+    return {
+      avatarId: user.public.avatarId,
+      id,
+      nickname: user.public.nickname,
+      online: onlineMap.get(id) ?? false,
+      lastSeen: user.public.lastSeen
+    } satisfies KnownUser
   })
+
+  return knownUsers.filter((user): user is KnownUser => Boolean(user))
 }
 
 const emitKnownUsersToUser = async (userId: string, roomUserIds: string[], presenceService: PresenceService) => {
@@ -353,6 +361,8 @@ export const updateChatRoom = async (
   const removedUserIds = currentMemberIds.filter((id) => !memberIds.includes(id))
   const affectedMemberIds = union(currentMemberIds, memberIds)
   const usersAccepted = await checkContactsExistence(userId, addedUserIds)
+  const currentAvatarId = room.avatarId
+  let nextAvatarId = currentAvatarId
 
   if (!usersAccepted) {
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.updateChatRoomFailed)
@@ -360,25 +370,24 @@ export const updateChatRoom = async (
 
   await validateUpdateChatRoomData(userId, addedUserIds, memberIds, nextChatName)
 
-  const deletedAvatarId = avatarFile === null && buildAvatarId(roomId)
-
-  if (deletedAvatarId) {
-    await deleteBucketFilesByName('avatar', deletedAvatarId)
-    emitToUsers(affectedMemberIds, 'media-files-deleted', { mediaIds: [deletedAvatarId] })
+  if (avatarFile === null) {
+    nextAvatarId = null
   }
 
-  if (avatarFile?.fileBuffer) {
-    await uploadBufferToBucket(avatarFile.fileBuffer, buildAvatarId(roomId), 'avatar', {
-      compression: 'avatar',
-      overwrite: true
-    })
-  }
+  const updatedRoom = await withUploadedMediaCleanup(async (trackUploadedMedia) => {
+    if (avatarFile?.fileBuffer) {
+      nextAvatarId = await uploadBufferToBucket(avatarFile.fileBuffer, 'image', {
+        compression: 'avatar',
+        validation: MEDIA_AVATAR_VALIDATION_OPTIONS
+      })
+      trackUploadedMedia('image', nextAvatarId)
+    }
 
-  const [updatedRoom] = await Promise.all([
-    ChatRoomModel.findOneAndUpdate(
+    return ChatRoomModel.findOneAndUpdate(
       { _id: roomId },
       {
         $set: {
+          avatarId: nextAvatarId,
           chatName: nextChatName,
           users: memberIds
         }
@@ -386,7 +395,11 @@ export const updateChatRoom = async (
       { new: true }
     )
       .select('-__v')
-      .lean<ChatRoomSchemaWithObjectId>(),
+      .lean<ChatRoomSchemaWithObjectId>()
+  })
+  const deletedAvatarId = currentAvatarId && currentAvatarId !== nextAvatarId ? currentAvatarId : null
+
+  await Promise.all([
     UserModel.updateMany({ _id: { $in: addedUserIds } }, { $push: { 'personal.chatRooms': roomId } }),
     UserModel.updateMany(
       { _id: { $in: removedUserIds } },
@@ -407,6 +420,11 @@ export const updateChatRoom = async (
   if (updatedRoom) {
     await emitRoomDataToUsers(memberIds, updatedRoom, presenceService)
   }
+
+  if (deletedAvatarId) {
+    await deleteBucketFileById('image', deletedAvatarId)
+    emitToUsers(affectedMemberIds, 'media-files-deleted', { mediaIds: [deletedAvatarId] })
+  }
 }
 
 export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChatRoom) => {
@@ -414,7 +432,7 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
     _id: roomId,
     users: userId
   })
-    .select('adminId chatKind users messages')
+    .select('adminId avatarId chatKind users messages')
     .lean()
 
   if (!room) {
@@ -433,6 +451,7 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
   const { users, messages } = room
   const userIds = users.map(String)
   const messageIds = messages.map(String)
+  const deletedAvatarId = isGroupChatRoom ? room.avatarId : null
   const deleteChatRoomTasks: Array<Promise<unknown>> = [
     ChatRoomModel.deleteOne({ _id: roomId }).exec(),
     MessageModel.deleteMany({ _id: { $in: messageIds } }).exec(),
@@ -448,8 +467,8 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
     ).exec()
   ]
 
-  if (isGroupChatRoom) {
-    deleteChatRoomTasks.push(deleteBucketFilesByName('avatar', buildAvatarId(roomId)))
+  if (deletedAvatarId) {
+    deleteChatRoomTasks.push(deleteBucketFileById('image', deletedAvatarId))
   }
 
   await Promise.all(deleteChatRoomTasks)
@@ -459,6 +478,10 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
   }
 
   emitToUsers(userIds, 'chat-room-deleted', payload)
+
+  if (deletedAvatarId) {
+    emitToUsers(userIds, 'media-files-deleted', { mediaIds: [deletedAvatarId] })
+  }
 }
 
 export const transformRoomForUser = async ({
@@ -472,8 +495,10 @@ export const transformRoomForUser = async ({
   const roomId = String(_id)
   const users = roomUsers.map((id) => String(id))
   const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
-  const avatarOwnerId = isRoomPrivate({ chatKind }) ? getRoomInterlocutorId({ users }, userId) : roomId
-  const avatarId = await resolveAvatarId(avatarOwnerId)
+  const isDirectRoom = isRoomPrivate({ chatKind })
+  const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
+  const interlocutor = isDirectRoom ? await UserModel.findById(interlocutorId, { 'public.avatarId': 1 }).lean() : null
+  const avatarId = isDirectRoom ? interlocutor?.public.avatarId ?? null : normalizedRoom.avatarId
   const lastMessageId = messages[messages.length - 1] ?? null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([

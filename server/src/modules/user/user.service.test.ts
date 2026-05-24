@@ -4,7 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mediaMock = vi.hoisted(() => ({
   deleteBucketFileById: vi.fn(),
-  uploadBufferToBucket: vi.fn()
+  uploadBufferToBucket: vi.fn(),
+  withUploadedMediaCleanup: vi.fn(async (callback) => callback(vi.fn()))
 }))
 
 const codeModelMock = vi.hoisted(() => ({
