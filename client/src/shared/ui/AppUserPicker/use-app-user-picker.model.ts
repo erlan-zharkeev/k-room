@@ -7,7 +7,7 @@ export const useAppUserPicker = (props: AppUserPickerModelProps, selectedUserIds
   const userItems = computed(() =>
     props.items.map((item) => ({
       ...item,
-      imageId: item.imageId ?? buildAvatarId(item.id),
+      imageId: item.imageId === undefined ? buildAvatarId(item.id) : item.imageId,
       isLocked: props.lockedIds.includes(item.id)
     }))
   )

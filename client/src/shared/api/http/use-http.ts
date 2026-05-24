@@ -5,6 +5,7 @@ import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
+import { refreshAuthTokens, shouldSkipAuthRefresh } from './auth-refresh'
 import { HTTP_SUCCESS_STATUS_END, HTTP_SUCCESS_STATUS_START } from './constants'
 import { getHeaderValue } from './get-header-value'
 import { httpClient } from './http-client'
@@ -42,7 +43,7 @@ export const useHttp = () => {
     data: HttpRequestPayload = {},
     opts: HttpRequestOptions<R> = {}
   ): Promise<R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>> => {
-    const { contentType = 'application/json', headers = {} } = opts
+    const { contentType = 'application/json', headers = {}, signal, skipAuthRefresh = false } = opts
     const responseType = (opts.responseType ?? 'json') as ResponseType
 
     const requestConfig: AxiosRequestConfig<HttpRequestPayload> = {
@@ -53,6 +54,7 @@ export const useHttp = () => {
         ...headers
       },
       responseType,
+      signal,
       ...(type === 'get' ? { params: data } : { data })
     }
 
@@ -69,20 +71,14 @@ export const useHttp = () => {
 
       return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
     } catch (error) {
-      if (
-        error instanceof AxiosError &&
-        error.response?.status === REQ_STATUS.notAuth &&
-        endpoint !== AUTH_ENDPOINTS.updateTokensPair
-      ) {
+      const isAxiosError = error instanceof AxiosError
+      const isUnauthorized = isAxiosError && error.response?.status === REQ_STATUS.notAuth
+      const isAuthRefreshRequest = endpoint === AUTH_ENDPOINTS.updateTokensPair
+      const canRefreshAuth = !skipAuthRefresh && !shouldSkipAuthRefresh()
+
+      if (isUnauthorized && !isAuthRefreshRequest && canRefreshAuth) {
         try {
-          await httpClient.request({
-            method: 'post',
-            url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${AUTH_ENDPOINTS.updateTokensPair}`,
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            responseType: 'json'
-          })
+          await refreshAuthTokens()
 
           const response = await request()
 

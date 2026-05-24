@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 
 import { Injectable } from '@nestjs/common'
 import fileTypeDep from 'file-type'
-import { MB_IN_BYTES, REQ_STATUS } from 'global-shared'
+import { MB_IN_BYTES, REQ_STATUS, buildAvatarId } from 'global-shared'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 import mongoose from 'mongoose'
@@ -133,6 +133,20 @@ export const deleteBucketFilesByName = async (bucketName: MediaBucketName, filen
   }
 
   await Promise.all(existing.map((file) => bucket.delete(file._id)))
+}
+
+export const bucketFileExistsByName = async (bucketName: MediaBucketName, filename: string) => {
+  const bucket = getRequiredBucket(bucketName)
+  const file = await bucket.find({ filename }).next()
+
+  return Boolean(file)
+}
+
+export const resolveAvatarId = async (avatarOwnerId: string) => {
+  const avatarId = buildAvatarId(avatarOwnerId)
+  const avatarExists = await bucketFileExistsByName('avatar', avatarId)
+
+  return avatarExists ? avatarId : null
 }
 
 export const uploadBufferToBucket = async (

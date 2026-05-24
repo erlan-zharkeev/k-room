@@ -5,10 +5,10 @@ import { useRouter } from 'vue-router'
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
-import { useMedia } from 'src/entities/media-file'
+import { blockMediaSync, useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
-import { useHttp, socket } from 'src/shared/api'
+import { blockAuthRefresh, useHttp, socket } from 'src/shared/api'
 import { clearCookie } from 'src/shared/lib'
 
 import { LOCAL_STORAGE_KEY } from '../config/constants'
@@ -29,6 +29,8 @@ export const useLogout = () => {
 
   const logout = async () => {
     isLogoutLoading.value = true
+    blockAuthRefresh()
+    blockMediaSync()
 
     try {
       await doHttpRequest('post', AUTH_ENDPOINTS.logout)
