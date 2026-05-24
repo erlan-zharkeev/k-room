@@ -1,4 +1,5 @@
 import { expect, test, type Browser, type Locator, type Page } from '@playwright/test'
+import { CHAT_KIND } from 'global-shared'
 
 import { E2E_ENV } from 'e2e/config'
 import { signInWithProvider as signInWithProviderRequest } from 'e2e/shared/auth'
@@ -7,6 +8,7 @@ import { getAppDbName, readStores } from 'e2e/shared/indexed-db'
 import {
   ACCEPT_CONTACT_ACTION,
   ADD_CONTACT_BUTTON_NAME,
+  APP_PROFILE_BASIC_DATA_DESCRIPTION_SELECTOR,
   CHAT_ROOM_ROUTE_PATTERN,
   CHAT_ROOMS_DB_STORE_NAME,
   CONTACT_ACTIONS_BUTTON_NAME,
@@ -15,6 +17,7 @@ import {
   CONTACT_E2E_NICKNAME_PREFIX,
   CONTACT_E2E_PROVIDER,
   CONTACT_E2E_SOCKET_SYNC_TIMEOUT_MS,
+  CONTACT_LIST_BADGE_SELECTOR,
   CONTACTS_DB_STORE_NAME,
   CONTACTS_PAGE_PATH,
   CONTACTS_SEARCH_PLACEHOLDER,
@@ -75,6 +78,9 @@ const openContactsPage = async (page: Page) => {
 const getContactListRow = (page: Page, nickname: string) =>
   page.locator('.contact-list__item').filter({ hasText: nickname })
 
+const getContactListBadge = (page: Page, nickname: string) =>
+  page.locator(CONTACT_LIST_BADGE_SELECTOR).filter({ hasText: nickname })
+
 const getContactSearchRow = (page: Page, nickname: string) =>
   page.locator('.contacts-search__item').filter({ hasText: nickname })
 
@@ -88,6 +94,17 @@ const clickIconButton = async (root: Page | Locator, name: string) => {
   }
 
   await control.click()
+}
+
+const selectContextMenuAction = async (page: Page, row: Locator, actionName: string) => {
+  await clickIconButton(row, CONTACT_ACTIONS_BUTTON_NAME)
+  await page.getByRole('menuitem', { name: actionName }).click()
+}
+
+const expectContextMenuAction = async (page: Page, row: Locator, actionName: string) => {
+  await clickIconButton(row, CONTACT_ACTIONS_BUTTON_NAME)
+  await expect(page.getByRole('menuitem', { name: actionName })).toBeVisible()
+  await page.keyboard.press('Escape')
 }
 
 const readContacts = async (page: Page, dbName: string) => {
@@ -126,13 +143,16 @@ const expectStoredContactInteraction = async (
     .toBe(interactionType)
 }
 
-const expectStoredPrivateChatRoom = async (page: Page, dbName: string, contactId: string) => {
+const expectStoredPrivateChatRoom = async (page: Page, dbName: string, userId: string, contactId: string) => {
   await expect
     .poll(
       async () => {
         const rooms = await readChatRooms(page, dbName)
 
-        return rooms.some(({ users }) => users.length === 1 && users[0] === contactId)
+        return rooms.some(
+          ({ chatKind, users }) =>
+            chatKind === CHAT_KIND.DIRECT && users.length === 2 && users.includes(userId) && users.includes(contactId)
+        )
       },
       { timeout: CONTACT_E2E_SOCKET_SYNC_TIMEOUT_MS }
     )
@@ -145,6 +165,7 @@ const addContactFromSearch = async (page: Page, contact: ContactE2EUser) => {
   const searchRow = getContactSearchRow(page, contact.nickname)
 
   await expect(searchRow).toBeVisible()
+  await expect(searchRow.locator(APP_PROFILE_BASIC_DATA_DESCRIPTION_SELECTOR)).toHaveCount(0)
   await clickIconButton(searchRow, ADD_CONTACT_BUTTON_NAME)
 
   await expect(searchRow).toHaveCount(0)
@@ -154,24 +175,24 @@ const addContactFromSearch = async (page: Page, contact: ContactE2EUser) => {
 const inviteContact = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
 
-  await clickIconButton(row, INVITE_BUTTON_NAME)
-  await expect(row).toContainText(INVITED_CONTACT_STATUS)
+  await selectContextMenuAction(page, row, INVITE_BUTTON_NAME)
+  await expect(getContactListBadge(page, contact.nickname)).toContainText(INVITED_CONTACT_STATUS)
 }
 
 const acceptInvite = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
+  const badge = getContactListBadge(page, contact.nickname)
 
-  await expect(row).toContainText(INVITE_RECEIVED_CONTACT_STATUS)
+  await expect(badge).toContainText(INVITE_RECEIVED_CONTACT_STATUS)
   await clickIconButton(row, CONTACT_ACTIONS_BUTTON_NAME)
   await page.getByRole('menuitem', { name: ACCEPT_CONTACT_ACTION }).click()
-  await expect(row).not.toContainText(INVITE_RECEIVED_CONTACT_STATUS)
+  await expect(badge).not.toContainText(INVITE_RECEIVED_CONTACT_STATUS)
 }
 
 const createPrivateChat = async (page: Page, contact: ContactE2EUser) => {
   const row = getContactListRow(page, contact.nickname)
 
-  await expect(row.locator(`[aria-label="${CREATE_CHAT_BUTTON_NAME}"]`)).toBeVisible()
-  await clickIconButton(row, CREATE_CHAT_BUTTON_NAME)
+  await selectContextMenuAction(page, row, CREATE_CHAT_BUTTON_NAME)
   await page.waitForURL(CHAT_ROOM_ROUTE_PATTERN)
 }
 
@@ -215,16 +236,18 @@ test.describe('contacts e2e flow', () => {
       await expectStoredContactInteraction(secondUserPage.page, interlocutorDbName, author.id, 'invite-accepted')
 
       await createPrivateChat(page, interlocutor)
-      await expectStoredPrivateChatRoom(page, authorDbName, interlocutor.id)
-      await expectStoredPrivateChatRoom(secondUserPage.page, interlocutorDbName, author.id)
+      await expectStoredPrivateChatRoom(page, authorDbName, author.id, interlocutor.id)
+      await expectStoredPrivateChatRoom(secondUserPage.page, interlocutorDbName, interlocutor.id, author.id)
 
       await openContactsPage(page)
       await deleteContact(page, interlocutor)
       await expectStoredContactInteraction(page, authorDbName, interlocutor.id, null)
       await expectStoredContactInteraction(secondUserPage.page, interlocutorDbName, author.id, 'default')
-      await expect(
-        getContactListRow(secondUserPage.page, author.nickname).locator(`[aria-label="${INVITE_BUTTON_NAME}"]`)
-      ).toBeVisible()
+      await expectContextMenuAction(
+        secondUserPage.page,
+        getContactListRow(secondUserPage.page, author.nickname),
+        INVITE_BUTTON_NAME
+      )
     } finally {
       await secondUserPage.context.close()
     }

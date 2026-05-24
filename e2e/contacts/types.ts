@@ -1,4 +1,4 @@
-import type { Interaction } from 'global-shared'
+import type { ChatKind, Interaction } from 'global-shared'
 
 export type ContactE2EUserRole = 'author' | 'interlocutor'
 
@@ -24,5 +24,6 @@ export interface ContactE2EIndexedDbContact {
 
 export interface ContactE2EIndexedDbChatRoom {
   id: string
+  chatKind: ChatKind
   users: string[]
 }
