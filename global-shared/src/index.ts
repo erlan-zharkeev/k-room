@@ -80,6 +80,7 @@ export {
 export { buildAvatarId, isAvatarIdFor } from './media/lib/avatar-id'
 export type {
   MediaBucketName,
+  MediaId,
   MediaValidationOptions,
   MediaKind,
   MediaUpload,

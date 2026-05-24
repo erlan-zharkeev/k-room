@@ -1,6 +1,8 @@
+import type { MediaId } from 'global-shared'
+
 export interface AppProfileBasicDataProps {
   imageAlt?: string
-  imageId?: string
+  imageId?: MediaId
   imageSrc?: string
   title: string
   name?: string

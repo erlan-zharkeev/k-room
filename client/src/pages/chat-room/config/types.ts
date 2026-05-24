@@ -1,6 +1,6 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type { ChatKind } from 'global-shared'
+import type { ChatKind, MediaId } from 'global-shared'
 import type { Ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -14,7 +14,7 @@ export interface ChatRoomNavigationItem {
   to: RouteLocationRaw
   title: string
   description: string
-  imageId: string
+  imageId: MediaId
   online: boolean
   selected: boolean
   lastMessageCreatedAt: number

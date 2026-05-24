@@ -7,6 +7,16 @@ import { transformHeadersToMediaData } from '../lib/transform-headers-to-media-d
 
 import { useMedia } from './use-media.model'
 
+let mediaRequestAbortController = new AbortController()
+
+export const abortMediaRequests = () => {
+  mediaRequestAbortController.abort()
+}
+
+export const resetMediaRequests = () => {
+  mediaRequestAbortController = new AbortController()
+}
+
 export const useLoadMedia = () => {
   const { doHttpRequest } = useHttp()
   const { put } = useMedia()
@@ -15,7 +25,8 @@ export const useLoadMedia = () => {
 
   const loadMediaHeaders = async (filename: string) => {
     const response = await doHttpRequest('head', getMediaEndpoint(filename), undefined, {
-      headers: MEDIA_NO_CACHE_REQUEST_HEADERS
+      headers: MEDIA_NO_CACHE_REQUEST_HEADERS,
+      signal: mediaRequestAbortController.signal
     })
 
     return transformHeadersToMediaData(response)
@@ -24,7 +35,8 @@ export const useLoadMedia = () => {
   const requestMedia = (filename: string) => {
     return doHttpRequest<never, 'blob'>('get', getMediaEndpoint(filename), undefined, {
       headers: MEDIA_NO_CACHE_REQUEST_HEADERS,
-      responseType: 'blob'
+      responseType: 'blob',
+      signal: mediaRequestAbortController.signal
     })
   }
 

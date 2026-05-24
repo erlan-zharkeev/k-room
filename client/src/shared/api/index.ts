@@ -1,4 +1,5 @@
 export { createHttpError, getHandledErrorMessage, isHttpError, isHandledError } from './http/create-http-error'
+export { allowAuthRefresh, blockAuthRefresh } from './http/auth-refresh'
 export { getHeaderValue } from './http/get-header-value'
 export { setHttpClientLanguage } from './http/http-client'
 export { useHttp } from './http/use-http'
