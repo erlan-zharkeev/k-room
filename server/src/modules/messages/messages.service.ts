@@ -1,5 +1,7 @@
 import {
+  type EventDeleteMessage,
   type EventLoadRoomMessages,
+  type EventMessageDeleted,
   type EventMessageDelivered,
   type EventMessagesStatusUpdated,
   type EventRoomTypingStatus,
@@ -69,8 +71,12 @@ export const loadRoomMessages = async (
 
   const { messages: roomMessageIds } = room
   const query = payload.beforeCreatedAt
-    ? { _id: { $in: roomMessageIds }, createdAt: { $lt: payload.beforeCreatedAt } }
-    : { _id: { $in: roomMessageIds } }
+    ? {
+        _id: { $in: roomMessageIds },
+        createdAt: { $lt: payload.beforeCreatedAt },
+        deletedForUserIds: { $ne: userId }
+      }
+    : { _id: { $in: roomMessageIds }, deletedForUserIds: { $ne: userId } }
 
   const messages = await MessageModel.find(query)
     .sort({ createdAt: -1 })
@@ -145,6 +151,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   const unreadMessages = await MessageModel.find({
     _id: { $in: messages },
     authorId: { $ne: userId },
+    deletedForUserIds: { $ne: userId },
     usersMetaData: {
       $elemMatch: {
         id: userId,
@@ -185,6 +192,41 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   }
 
   emitToUsers(users, 'messages-status-updated', payload)
+}
+
+export const deleteMessage = async (userId: string, { deleteForEveryone, roomId, messageId }: EventDeleteMessage) => {
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+
+  if (!room) {
+    return
+  }
+
+  const userIds = stringifyMongoIds(room.users)
+  const payload: EventMessageDeleted = {
+    roomId,
+    messageId
+  }
+
+  if (!deleteForEveryone) {
+    const updateResult = await MessageModel.updateOne({ _id: messageId }, { $addToSet: { deletedForUserIds: userId } })
+
+    if (updateResult.modifiedCount <= 0) {
+      return
+    }
+
+    emitToUsers([userId], 'message-deleted', payload)
+
+    return
+  }
+
+  const deletedMessage = await MessageModel.findOneAndDelete({ _id: messageId, authorId: userId }).select('_id').lean()
+
+  if (!deletedMessage) {
+    return
+  }
+
+  await ChatRoomModel.updateOne({ _id: roomId }, { $pull: { messages: messageId } })
+  emitToUsers(userIds, 'message-deleted', payload)
 }
 
 export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }: EventUserTyping) => {
