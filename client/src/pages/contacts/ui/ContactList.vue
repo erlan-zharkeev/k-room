@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
+import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppText, AppProfileBasicData } from 'src/shared/ui'
 
 import type { ContactListEmits, ContactListProps } from '../config/types'
-import { getContactActivityTagColor } from '../lib/get-contact-activity-tag-color'
 import { getContactStatusTagColor } from '../lib/get-contact-status-tag-color'
 
 import ContactContextMenu from './ContactContextMenu.vue'
@@ -42,12 +42,10 @@ const emit = defineEmits<ContactListEmits>()
             </div>
           </template>
           <template #description>
-            <NmorphBadge
-              v-if="props.getContactActivity(contact)"
-              is-tag
-              size="tiny"
-              :color="getContactActivityTagColor(contact)"
-              :value="props.getContactActivity(contact)"
+            <UserActivityStatus
+              v-if="props.isContactActivityVisible(contact)"
+              :online="contact.online"
+              :last-seen="contact.lastSeen"
             />
           </template>
         </AppProfileBasicData>

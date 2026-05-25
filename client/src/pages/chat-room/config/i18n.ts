@@ -216,6 +216,22 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Отправить сообщение',
     zh: '发送消息'
   },
+  membersQuantity: {
+    en: (quantity: number) => `${quantity} ${quantity === 1 ? 'member' : 'members'}`,
+    ru: (quantity: number) => {
+      const remainderByHundred = quantity % 100
+      const remainderByTen = quantity % 10
+      const hasSingleMemberForm = remainderByTen === 1 && remainderByHundred !== 11
+      const hasFewMembersForm = remainderByTen >= 2 && remainderByTen <= 4
+      const hasTeenMembersForm = remainderByHundred >= 12 && remainderByHundred <= 14
+
+      if (hasSingleMemberForm) return `${quantity} участник`
+      if (hasFewMembersForm && !hasTeenMembersForm) return `${quantity} участника`
+
+      return `${quantity} участников`
+    },
+    zh: (quantity: number) => `${quantity} 名成员`
+  },
   cancel: {
     en: 'Cancel',
     ru: 'Отмена',

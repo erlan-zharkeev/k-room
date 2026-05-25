@@ -1,6 +1,5 @@
 import {
   type CreateRoomAckPayload,
-  normalizeTimestamp,
   type EventCreateRoom,
   type EventDeleteContact,
   type EventSaveContact,
@@ -15,7 +14,6 @@ import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useLocalizedDateTime } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
@@ -27,7 +25,6 @@ export const useContactsPage = () => {
   const router = useRouter()
   const { getPersonalByContactId } = useChatRoom()
   const { user } = useUser()
-  const { formatRelativeTime } = useLocalizedDateTime()
   const { t } = useI18n()
   const { emitSocketAction } = useSocketAction()
 
@@ -36,16 +33,7 @@ export const useContactsPage = () => {
   const loadingContactIds = reactive(new Set<string>())
   const creatingChatContactIds = reactive(new Set<string>())
 
-  const getContactActivity = ({ interactionType, lastSeen, online }: ContactRecord) => {
-    if (!isAcceptedContactInteraction(interactionType)) return ''
-    if (online) return t(CONTACTS_PAGE_I18N.online)
-
-    const normalized = normalizeTimestamp(lastSeen)
-
-    if (!normalized) return t(CONTACTS_PAGE_I18N.lastSeenRecently)
-
-    return `${t(CONTACTS_PAGE_I18N.lastSeen)} ${formatRelativeTime(normalized)}`
-  }
+  const isContactActivityVisible = ({ interactionType }: ContactRecord) => isAcceptedContactInteraction(interactionType)
 
   const getContactStatus = ({ interactionType }: ContactRecord) => {
     if (isBlockedContactInteraction(interactionType)) return t(CONTACTS_PAGE_I18N.blocked)
@@ -140,7 +128,7 @@ export const useContactsPage = () => {
     loadingContactIds,
     creatingChatContactIds,
     isDeleteDialogOpen,
-    getContactActivity,
+    isContactActivityVisible,
     getContactStatus,
     getPersonalChatRoomId,
     addContact,
