@@ -20,18 +20,8 @@ export const useChatRoomHeader = (room: Ref<ChatRoomRecord>, isPrivateRoom: bool
   const interlocutor = computed(() => getRoomInterlocutor(room.value, user.value.id))
   const membersQuantityText = computed(() => t(CHAT_ROOM_CONTENT_I18N.membersQuantity)(room.value.users.length))
   const title = computed(() => buildChatRoomTitle(room.value, users.value, isPrivateRoom))
-  const contentClass = computed(() => {
-    const classes = ['chat-room-content-header']
-
-    if (isPortraitTabletOrLess.value) {
-      classes.push('chat-room-content-header--with-back')
-    }
-
-    return classes.join(' ')
-  })
 
   return {
-    contentClass,
     interlocutor,
     isPortraitTabletOrLess,
     membersQuantityText,
