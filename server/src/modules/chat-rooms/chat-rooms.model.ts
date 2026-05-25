@@ -1,5 +1,7 @@
-import { CHAT_KIND, CHAT_ROOM_NAME_MAX_LENGTH, type ChatRoomSchema } from 'global-shared'
+import { CHAT_KIND, CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 import { model, Schema } from 'mongoose'
+
+import type { ChatRoomSchema } from './chat-rooms.types'
 
 const chatRoomSchema = new Schema<ChatRoomSchema>({
   chatName: {

@@ -1,5 +1,5 @@
-import type { StreamSettings } from '../shared/types'
 import type { MediaId } from '../media/types'
+import type { StreamSettings } from '../shared/types'
 
 export type CallStatus = 'calling' | 'in-progress' | 'finished'
 
@@ -22,16 +22,3 @@ export interface Call {
   interlocutorSettings?: StreamSettings
   setId?: boolean
 }
-
-export interface CallDocument {
-  _id: string
-  calledAt: number
-  startedAt: number
-  finishedAt: number
-  authorId: string
-  interlocutors: string[]
-  answered: boolean
-  video: boolean
-}
-
-export type CallSchema = CallDocument
