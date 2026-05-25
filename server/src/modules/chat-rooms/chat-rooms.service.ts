@@ -35,6 +35,7 @@ import union from 'lodash/union'
 import without from 'lodash/without'
 
 import { AppError } from 'src/shared/lib/app-error'
+import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
 import { MessageModel } from '../messages/messages.model'
@@ -59,7 +60,7 @@ export const checkContactsExistence = async (selfId: string, contactIds: string[
     return false
   }
 
-  const contactById = new Map(contacts.map((contact) => [String(contact._id), contact]))
+  const contactById = new Map(contacts.map((contact) => [stringifyMongoId(contact._id), contact]))
 
   return contactIds.every((contactId) => {
     const selfContact = self.personal.contacts[contactId]
@@ -172,7 +173,7 @@ export const createChatRoom = async (
   }
 
   const room = new ChatRoomModel(roomData)
-  const roomId = String(room._id)
+  const roomId = stringifyMongoId(room._id)
 
   await withUploadedMediaCleanup(async (trackUploadedMedia) => {
     if (isRoomGroup(room) && avatarFile?.fileBuffer) {
@@ -234,7 +235,7 @@ export const resolveKnownUsers = async (userIds: string[], presenceService: Pres
     ).lean(),
     presenceService.onlineMapByUserIds(userIds)
   ])
-  const userById = new Map(users.map((user) => [String(user._id), user]))
+  const userById = new Map(users.map((user) => [stringifyMongoId(user._id), user]))
 
   const knownUsers = userIds.map((id) => {
     const user = userById.get(id)
@@ -354,7 +355,7 @@ export const updateChatRoom = async (
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.updateChatRoomFailed)
   }
 
-  const currentMemberIds = room.users.map(String)
+  const currentMemberIds = stringifyMongoIds(room.users)
   const nextChatName = chatName.trim()
   const addedUserIds = memberIds.filter((id) => !currentMemberIds.includes(id))
   const removedUserIds = currentMemberIds.filter((id) => !memberIds.includes(id))
@@ -448,8 +449,8 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
   }
 
   const { users, messages } = room
-  const userIds = users.map(String)
-  const messageIds = messages.map(String)
+  const userIds = stringifyMongoIds(users)
+  const messageIds = stringifyMongoIds(messages)
   const deletedAvatarId = isGroupChatRoom ? room.avatarId : null
   const deleteChatRoomTasks: Array<Promise<unknown>> = [
     ChatRoomModel.deleteOne({ _id: roomId }).exec(),
@@ -491,8 +492,8 @@ export const transformRoomForUser = async ({
 }: TransformRoomForUserParams): Promise<EventGetRoom> => {
   const normalizedRoom = room
   const { _id, users: roomUsers, chatKind: roomChatKind, messages } = normalizedRoom
-  const roomId = String(_id)
-  const users = roomUsers.map((id) => String(id))
+  const roomId = stringifyMongoId(_id)
+  const users = stringifyMongoIds(roomUsers)
   const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
   const isDirectRoom = isRoomPrivate({ chatKind })
   const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
@@ -576,7 +577,7 @@ export const leaveChatRoom = async (
   }
 
   const { users, adminId } = room
-  const userIds = users.map(String)
+  const userIds = stringifyMongoIds(users)
   const remainingUserIds = getRoomOtherUserIds({ users: userIds }, userId)
   const isAdminLeaving = isRoomAdmin(room, userId)
 

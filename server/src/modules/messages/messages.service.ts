@@ -21,6 +21,7 @@ import {
 } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
+import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { uploadBufferToBucket } from '../media/media.service'
@@ -39,7 +40,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
   const images = (message.images ?? []) as Array<string | ImageObject>
 
   return {
-    id: String(_id),
+    id: stringifyMongoId(_id),
     authorId,
     authorNickname,
     body,
@@ -153,7 +154,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   })
     .select('_id')
     .lean<Array<{ _id: string }>>()
-  const messageIds = unreadMessages.map(({ _id }) => String(_id))
+  const messageIds = unreadMessages.map(({ _id }) => stringifyMongoId(_id))
 
   if (!messageIds.length) {
     return
@@ -193,7 +194,7 @@ export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }:
     return
   }
 
-  const userIds = room.users.map(String)
+  const userIds = stringifyMongoIds(room.users)
   const payload: EventRoomTypingStatus = {
     roomId,
     contactId: userId,
@@ -264,7 +265,7 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
           ...message,
           id: newDbMessage.id,
           images,
-          isSelf: isMessageAuthor(message, String(user._id)),
+          isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),
           status: MESSAGE_STATUS_VALUE.DELIVERED
         }
       }

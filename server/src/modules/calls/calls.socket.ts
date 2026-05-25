@@ -9,6 +9,7 @@ import type {
 } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
+import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
 
@@ -66,15 +67,17 @@ export const registerCallSocketHandlers = (socket: SocketInstance) => {
           answered: false
         }).save()
 
+        const callId = stringifyMongoId(call._id)
+
         emitToUsers([userToCall], 'call-user', {
-          callId: String(call._id),
+          callId,
           signal,
           from: userId,
           avatar,
           callerNickname
         })
 
-        await emitCallDataToInterlocutors([userId, userToCall], String(call._id), true)
+        await emitCallDataToInterlocutors([userId, userToCall], callId, true)
       },
       { basicError: CALLS_I18N.callUserFailed }
     )
@@ -99,7 +102,7 @@ export const registerCallSocketHandlers = (socket: SocketInstance) => {
           return
         }
 
-        await emitCallDataToInterlocutors(call.interlocutors, String(call._id))
+        await emitCallDataToInterlocutors(call.interlocutors, stringifyMongoId(call._id))
 
         const startedAtPayload: EventCallStartedAt = Date.now()
 
@@ -127,7 +130,7 @@ export const registerCallSocketHandlers = (socket: SocketInstance) => {
           return
         }
 
-        await emitCallDataToInterlocutors(call.interlocutors, String(call._id))
+        await emitCallDataToInterlocutors(call.interlocutors, stringifyMongoId(call._id))
       },
       { basicError: CALLS_I18N.endCallFailed }
     )

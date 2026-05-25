@@ -24,6 +24,7 @@ import { UserModel } from 'src/modules/user/user.model'
 import { createUser, isUserExist } from 'src/modules/user/user.service'
 import { AppError } from 'src/shared/lib/app-error'
 import { log } from 'src/shared/lib/log'
+import { stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import {
   BASE_FIXTURE_TIMESTAMP_MS,
@@ -443,7 +444,7 @@ const ensureMessages = async (roomId: string, fixtureMessages: ReturnType<typeof
   )
 
   const room = await ChatRoomModel.findById(roomId)
-  const roomMessageIds = new Set((room?.messages ?? []).map((id) => String(id)))
+  const roomMessageIds = new Set(stringifyMongoIds(room?.messages ?? []))
   const missingRoomMessageIds = fixtureMessageIds.filter((id) => !roomMessageIds.has(id))
 
   if (!missingRoomMessageIds.length) {
