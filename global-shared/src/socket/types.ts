@@ -3,7 +3,7 @@ import type { ChatRoom } from '../chat/types'
 import type { Contact, KnownUser, Interaction } from '../contact/types'
 import type { AppLanguage } from '../language/types'
 import type { MediaFileValue } from '../media/types'
-import type { Message, MessageReaction, MessageStatus } from '../message/types'
+import type { Message, MessageLoadDirection, MessageReaction, MessageStatus } from '../message/types'
 import type { BasicStreamSettings } from '../shared/types'
 import type { ReqStatus } from '../status/types'
 import type { UserPreview } from '../user/types'
@@ -34,6 +34,7 @@ export interface EventMessageDelivered {
 
 export interface EventGetRoom extends ChatRoom {
   previewMessage?: Message | null
+  pinnedMessage?: Message | null
 }
 
 export type EventGetRooms = EventGetRoom[]
@@ -175,13 +176,24 @@ export interface EventMarkRoomAsRead {
 export interface EventLoadRoomMessages {
   roomId: string
   limit: number
-  beforeCreatedAt?: number
+  direction: MessageLoadDirection
+  anchorMessageId?: string
 }
 export interface EventRoomMessagesLoaded {
   roomId: string
   messages: Message[]
-  hasMore: boolean
-  nextBeforeCreatedAt?: number
+  rangeStartMessageId: string | null
+  rangeEndMessageId: string | null
+}
+export interface EventUpdatePinnedMessage {
+  roomId: string
+  messageId: string
+  isPinned: boolean
+}
+export interface EventPinnedMessageUpdated {
+  roomId: string
+  pinnedMessageId: string | null
+  pinnedMessage?: Message | null
 }
 export interface EventDeleteMessage {
   deleteForEveryone: boolean
@@ -286,6 +298,8 @@ export type SocketActions =
   | 'room-typing-status'
   | 'get-contact-typing-status'
   | 'load-room-messages'
+  | 'update-pinned-message'
+  | 'pinned-message-updated'
   | 'change-message-status'
   | 'mark-room-as-read'
   | 'message-status-updated'

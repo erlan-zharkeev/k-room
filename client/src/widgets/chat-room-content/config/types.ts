@@ -18,22 +18,39 @@ export interface ChatRoomFooterProps {
   room: ChatRoomRecord
 }
 
+export interface ChatRoomPinnedMessageProps {
+  room: ChatRoomRecord
+}
+
+export interface ChatRoomPinnedMessageEmits {
+  select: [messageId: string]
+}
+
+export interface ChatRoomMessagesExpose {
+  loadAndScrollToMessage: (messageId: string) => Promise<void>
+}
+
 export interface MessageBodyProps {
   isPrivateRoom: boolean
   message: MessageRecord
-  roomId: string
+  room: ChatRoomRecord
 }
 
 export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
 
 export interface MessageContextMenuProps {
   message: MessageRecord
-  roomId: string
+  room: ChatRoomRecord
 }
 
 export interface MessageDeleteDialogProps {
   message: MessageRecord
   roomId: string
+}
+
+export interface MessageLoadedRange {
+  startIndex: number
+  endIndex: number
 }
 
 export interface MessageContextMenuOption {
@@ -46,8 +63,8 @@ export interface DateSeparatorProps {
   label: string
 }
 
-export interface MessageListLoadOlderItem {
-  type: 'load-older'
+export interface MessageListGapItem {
+  type: 'message-gap'
   id: string
 }
 
@@ -67,12 +84,9 @@ export interface MessageVirtualListMessageItem extends MessageListMessageItem {
   message: MessageRecord
 }
 
-export type MessageListItem = MessageListLoadOlderItem | MessageListDateSeparatorItem | MessageListMessageItem
+export type MessageListItem = MessageListGapItem | MessageListDateSeparatorItem | MessageListMessageItem
 
-export type MessageVirtualListItem =
-  | MessageListLoadOlderItem
-  | MessageListDateSeparatorItem
-  | MessageVirtualListMessageItem
+export type MessageVirtualListItem = MessageListGapItem | MessageListDateSeparatorItem | MessageVirtualListMessageItem
 
 export interface MessageVirtualListItemProps {
   item: MessageVirtualListItem

@@ -8,12 +8,15 @@ import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageContextMenuOption, MessageContextMenuProps } from '../config/types'
 
 import { useMessageCopyText } from './use-message-copy-text.model'
+import { useMessagePin } from './use-message-pin.model'
 
 export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const message = toRef(props, 'message')
+  const room = toRef(props, 'room')
   const { isTouchInput } = useTouchInput()
   const { t } = useI18n()
   const { canCopyMessageText, copyMessageText } = useMessageCopyText(message)
+  const { canUpdatePinnedMessage, isMessagePinned, togglePinnedMessage } = useMessagePin(message, room)
   const isMessageContextMenuOpen = ref(false)
   const isDeleteMessageDialogOpen = ref(false)
   const isMessageContextMenuDisabled = computed(() => isTouchInput.value)
@@ -25,6 +28,14 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         disabled: !canCopyMessageText.value
       }
     ]
+
+    options.push({
+      label: isMessagePinned.value ? t(CHAT_ROOM_CONTENT_I18N.unpinMessage) : t(CHAT_ROOM_CONTENT_I18N.pinMessage),
+      value: isMessagePinned.value
+        ? MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE
+        : MESSAGE_CONTEXT_MENU_ACTION.PIN_MESSAGE,
+      disabled: !canUpdatePinnedMessage.value
+    })
 
     options.push({
       label: t(CHAT_ROOM_CONTENT_I18N.deleteMessage),
@@ -48,6 +59,10 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
     switch (option.value) {
       case MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT:
         void copyMessageText()
+        break
+      case MESSAGE_CONTEXT_MENU_ACTION.PIN_MESSAGE:
+      case MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE:
+        togglePinnedMessage()
         break
       case MESSAGE_CONTEXT_MENU_ACTION.DELETE_MESSAGE:
         openDeleteMessageDialog()

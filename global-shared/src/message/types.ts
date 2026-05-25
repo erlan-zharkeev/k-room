@@ -1,8 +1,9 @@
 import type { ImageObject } from '../media/types'
 
-import { MESSAGE_STATUS } from './constants'
+import { MESSAGE_LOAD_DIRECTION, MESSAGE_STATUS } from './constants'
 
 export type MessageStatus = (typeof MESSAGE_STATUS)[number]
+export type MessageLoadDirection = (typeof MESSAGE_LOAD_DIRECTION)[keyof typeof MESSAGE_LOAD_DIRECTION]
 
 export interface MessageMetadata {
   id: string

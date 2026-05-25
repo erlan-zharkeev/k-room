@@ -36,6 +36,21 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Текст сообщения скопирован',
     zh: '消息文本已复制'
   },
+  pinMessage: {
+    en: 'Pin message',
+    ru: 'Pin message',
+    zh: 'Pin message'
+  },
+  unpinMessage: {
+    en: 'Unpin message',
+    ru: 'Unpin message',
+    zh: 'Unpin message'
+  },
+  pinnedMessage: {
+    en: 'Pinned message',
+    ru: 'Pinned message',
+    zh: 'Pinned message'
+  },
   deleteMessage: {
     en: 'Delete message',
     ru: 'Удалить сообщение',

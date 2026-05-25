@@ -12,6 +12,7 @@ export interface ChatRoom {
   chatKind: ChatKind
   avatarId: MediaId
   lastMessageId: string | null
+  pinnedMessageId: string | null
   unreadMessagesQuantity: number
   isPinned: boolean
   pinnedOrder: number | null

@@ -1,12 +1,15 @@
 import { isString } from 'global-shared'
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 
+import type { ChatRoomMessagesExpose } from '../config/types'
+
 export const useChatRoomContent = () => {
   const route = useRoute()
   const { chatRooms } = useChatRoom()
+  const chatRoomMessages = useTemplateRef<ChatRoomMessagesExpose>('chatRoomMessages')
 
   const selectedChatRoomId = computed(() => {
     const { chatRoomId } = route.params
@@ -15,8 +18,12 @@ export const useChatRoomContent = () => {
   })
   const selectedChatRoom = computed(() => chatRooms.value.find((room) => room.id === selectedChatRoomId.value))
   const selectedChatRoomIsPrivate = computed(() => isRoomPrivate(selectedChatRoom.value))
+  const selectPinnedMessage = (messageId: string) => {
+    void chatRoomMessages.value?.loadAndScrollToMessage(messageId)
+  }
 
   return {
+    selectPinnedMessage,
     selectedChatRoom,
     selectedChatRoomIsPrivate
   }
