@@ -1,10 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const ioMock = vi.hoisted(() => ({
-  emit: vi.fn(),
-  to: vi.fn()
-}))
-
 const messagesServiceMock = vi.hoisted(() => ({
   sendMessage: vi.fn(),
   loadRoomMessages: vi.fn(),
@@ -13,9 +8,6 @@ const messagesServiceMock = vi.hoisted(() => ({
   markRoomAsRead: vi.fn()
 }))
 
-vi.mock('../../shared/lib/io', () => ({
-  getIO: () => ioMock
-}))
 vi.mock('../../shared/lib/socket-error', () => ({
   socketAckMiddleware: (_socket: unknown, handler: unknown) => handler,
   socketErrorMiddleware: (_socket: unknown, handler: unknown) => handler
@@ -27,7 +19,6 @@ const { registerMessagesSocketHandlers } = await import('./messages.socket')
 describe('messages.socket', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    ioMock.to.mockReturnValue({ emit: ioMock.emit })
   })
 
   it('wires send-message payload to service', async () => {
@@ -65,8 +56,8 @@ describe('messages.socket', () => {
     })
   })
 
-  it('emits loaded room messages only to requester socket', async () => {
-    const handlers: Record<string, (payload: never) => Promise<void>> = {}
+  it('acks loaded room messages', async () => {
+    const handlers: Record<string, (payload: never) => Promise<unknown>> = {}
     const payload = {
       roomId: 'room-1',
       messages: [{ id: 'message-1' }],
@@ -87,11 +78,34 @@ describe('messages.socket', () => {
     messagesServiceMock.loadRoomMessages.mockResolvedValue(payload)
     registerMessagesSocketHandlers(socket as never)
 
-    await handlers['load-room-messages']({ roomId: 'room-1', limit: 20 } as never)
+    const response = await handlers['load-room-messages']({ roomId: 'room-1', limit: 20 } as never)
 
     expect(messagesServiceMock.loadRoomMessages).toHaveBeenCalledWith('user-1', { roomId: 'room-1', limit: 20 })
-    expect(ioMock.to).toHaveBeenCalledWith('socket-1')
-    expect(ioMock.emit).toHaveBeenCalledWith('room-messages-loaded', payload)
+    expect(response).toEqual({
+      ok: true,
+      payload
+    })
+  })
+
+  it('acks failed room message load when room data is missing', async () => {
+    const handlers: Record<string, (payload: never) => Promise<unknown>> = {}
+    const socket = {
+      id: 'socket-1',
+      data: {
+        userId: 'user-1',
+        language: 'en'
+      },
+      on: vi.fn((event: string, handler: (payload: never) => Promise<unknown>) => {
+        handlers[event] = handler
+      })
+    }
+
+    messagesServiceMock.loadRoomMessages.mockResolvedValue(null)
+    registerMessagesSocketHandlers(socket as never)
+
+    const response = await handlers['load-room-messages']({ roomId: 'room-1', limit: 20 } as never)
+
+    expect(response).toEqual({ ok: false })
   })
 
   it('wires client-typing payload to service', async () => {

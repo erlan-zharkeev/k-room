@@ -12,12 +12,7 @@ import { useLoadRoomMessages } from './use-load-room-messages.model'
 export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   const room = toRef(props, 'room')
   const { messageById } = useMessage()
-  const {
-    hasMoreMessages: hasMoreLoadedMessages,
-    initializeLoadRoomMessages,
-    isLoading,
-    loadMessages
-  } = useLoadRoomMessages(room)
+  const { hasMoreMessages: hasMoreLoadedMessages, isLoading, loadMessages } = useLoadRoomMessages(room)
 
   const { displayedLastMessageId, hasMessages, messageList } = useChatRoomMessageList(room, hasMoreLoadedMessages)
 
@@ -40,8 +35,6 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
     })
   )
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
-
-  initializeLoadRoomMessages()
 
   watch(
     () => room.value.id,

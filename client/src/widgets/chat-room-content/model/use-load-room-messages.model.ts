@@ -1,14 +1,15 @@
-import type { EventLoadRoomMessages, EventRoomMessagesLoaded, SocketActions } from 'global-shared'
-import { computed, onBeforeUnmount, reactive, type Ref } from 'vue'
+import type { EventLoadRoomMessages, EventRoomMessagesLoaded } from 'global-shared'
+import { computed, reactive, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
-import { socket } from 'src/shared/api'
+import { useSocketAction } from 'src/shared/api'
 import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 
 export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
   const { bulkPut } = useMessage()
+  const { emitSocketAction } = useSocketAction()
   const loadingRoomIds = reactive(new Set<string>())
   const hasMoreMessagesByRoomId = reactive<Record<string, boolean | undefined>>({})
   const nextBeforeCreatedAtByRoomId = reactive<Record<string, number | undefined>>({})
@@ -19,7 +20,18 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
   const isLoading = computed(() => (roomId.value ? isRoomMessagesLoading(roomId.value) : false))
   const hasMoreMessages = computed(() => (roomId.value ? hasMoreRoomMessages(roomId.value) : true))
 
-  const loadRoomMessages = (roomId: string, beforeCreatedAt = nextBeforeCreatedAtByRoomId[roomId]) => {
+  const saveLoadedRoomMessages = async ({
+    roomId,
+    messages,
+    hasMore,
+    nextBeforeCreatedAt
+  }: EventRoomMessagesLoaded) => {
+    await bulkPut(messages)
+    hasMoreMessagesByRoomId[roomId] = hasMore
+    nextBeforeCreatedAtByRoomId[roomId] = nextBeforeCreatedAt
+  }
+
+  const loadRoomMessages = async (roomId: string, beforeCreatedAt = nextBeforeCreatedAtByRoomId[roomId]) => {
     if (isRoomMessagesLoading(roomId) || !hasMoreRoomMessages(roomId)) return
 
     const payload: EventLoadRoomMessages = {
@@ -29,24 +41,29 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     }
 
     loadingRoomIds.add(roomId)
-    socket.emit<SocketActions>('load-room-messages', payload)
+
+    try {
+      const response = await emitSocketAction<EventLoadRoomMessages, EventRoomMessagesLoaded>(
+        'load-room-messages',
+        payload
+      )
+
+      if (response.ok && response.payload) {
+        await saveLoadedRoomMessages(response.payload)
+      }
+    } finally {
+      loadingRoomIds.delete(roomId)
+    }
   }
 
-  const loadMessages = (beforeCreatedAt = nextBeforeCreatedAtByRoomId[roomId.value]) => {
-    if (!roomId.value) return
-    loadRoomMessages(roomId.value, beforeCreatedAt)
-  }
+  const loadMessages = () => {
+    const selectedRoomId = roomId.value
 
-  const handleRoomMessagesLoaded = async ({
-    roomId,
-    messages,
-    hasMore,
-    nextBeforeCreatedAt: nextPage
-  }: EventRoomMessagesLoaded) => {
-    await bulkPut(messages)
-    hasMoreMessagesByRoomId[roomId] = hasMore
-    nextBeforeCreatedAtByRoomId[roomId] = nextPage
-    loadingRoomIds.delete(roomId)
+    if (!selectedRoomId) return
+
+    const beforeCreatedAt = nextBeforeCreatedAtByRoomId[selectedRoomId]
+
+    void loadRoomMessages(selectedRoomId, beforeCreatedAt)
   }
 
   const resetRoomMessagesPagination = (roomId?: string) => {
@@ -64,16 +81,6 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     loadingRoomIds.delete(roomId)
   }
 
-  const initializeLoadRoomMessages = () => {
-    socket.on<SocketActions>('room-messages-loaded', handleRoomMessagesLoaded)
-  }
-
-  const disposeLoadRoomMessages = () => {
-    socket.off<SocketActions>('room-messages-loaded', handleRoomMessagesLoaded)
-  }
-
-  onBeforeUnmount(disposeLoadRoomMessages)
-
   return {
     loadingRoomIds,
     isLoading,
@@ -82,8 +89,6 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     isRoomMessagesLoading,
     hasMoreRoomMessages,
     loadRoomMessages,
-    resetRoomMessagesPagination,
-    initializeLoadRoomMessages,
-    disposeLoadRoomMessages
+    resetRoomMessagesPagination
   }
 }

@@ -2,12 +2,12 @@ import type {
   EventChangeMessageStatus,
   EventLoadRoomMessages,
   EventMarkRoomAsRead,
+  EventRoomMessagesLoaded,
   EventSendMessage,
   EventUserTyping,
   SocketActions
 } from 'global-shared'
 
-import { getIO } from 'src/shared/lib/io'
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
 
@@ -37,16 +37,19 @@ export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
 
   socket.on<SocketActions>(
     'load-room-messages',
-    socketErrorMiddleware(
+    socketAckMiddleware<EventLoadRoomMessages, EventRoomMessagesLoaded>(
       socket,
       async (payload: EventLoadRoomMessages) => {
         const roomMessagesData = await loadRoomMessages(socket.data.userId, payload)
 
         if (!roomMessagesData) {
-          return
+          return { ok: false }
         }
 
-        getIO().to(socket.id).emit<SocketActions>('room-messages-loaded', roomMessagesData)
+        return {
+          ok: true,
+          payload: roomMessagesData
+        }
       },
       { basicError: MESSAGES_I18N.loadRoomMessagesFailed }
     )
