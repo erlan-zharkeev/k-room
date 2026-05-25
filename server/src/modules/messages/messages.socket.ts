@@ -5,6 +5,7 @@ import type {
   EventMarkRoomAsRead,
   EventRoomMessagesLoaded,
   EventSendMessage,
+  EventUpdatePinnedMessage,
   EventUserTyping,
   SocketActions
 } from 'global-shared'
@@ -19,7 +20,8 @@ import {
   emitRoomTypingStatus,
   loadRoomMessages,
   markRoomAsRead,
-  sendMessage
+  sendMessage,
+  updatePinnedMessage
 } from './messages.service'
 
 export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
@@ -65,6 +67,17 @@ export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
         await emitRoomTypingStatus(socket.data.userId, payload)
       },
       { basicError: MESSAGES_I18N.updateTypingStatusFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'update-pinned-message',
+    socketAckMiddleware<EventUpdatePinnedMessage>(
+      socket,
+      async (payload: EventUpdatePinnedMessage) => {
+        await updatePinnedMessage(socket.data.userId, payload)
+      },
+      { basicError: MESSAGES_I18N.updatePinnedMessageFailed }
     )
   )
 

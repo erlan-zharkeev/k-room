@@ -91,13 +91,21 @@ export type { PackageData } from './package/types'
 export {
   MESSAGE_BODY_MAX_LENGTH,
   MESSAGE_IMAGE_LIMIT,
+  MESSAGE_LOAD_DIRECTION,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_STATUS,
   MESSAGE_STATUS_VALUE
 } from './message/constants'
 export { isMessageAuthor } from './message/lib/message-author'
 export { isMessageStatusDelivered, isMessageReadStatus, isMessageSendingStatus } from './message/lib/message-status'
-export type { MessageStatus, MessageMetadata, MessageReaction, RepliedMessage, Message } from './message/types'
+export type {
+  MessageStatus,
+  MessageLoadDirection,
+  MessageMetadata,
+  MessageReaction,
+  RepliedMessage,
+  Message
+} from './message/types'
 
 export type { ChangePasswordPayload, CreateNewPasswordPayload } from './requests/types'
 
@@ -190,6 +198,8 @@ export type {
   EventMarkRoomAsRead,
   EventLoadRoomMessages,
   EventRoomMessagesLoaded,
+  EventUpdatePinnedMessage,
+  EventPinnedMessageUpdated,
   EventDeleteMessage,
   EventAddReaction,
   EventCallUser,

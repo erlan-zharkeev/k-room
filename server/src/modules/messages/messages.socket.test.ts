@@ -6,6 +6,7 @@ const messagesServiceMock = vi.hoisted(() => ({
   emitRoomTypingStatus: vi.fn(),
   changeMessageStatus: vi.fn(),
   markRoomAsRead: vi.fn(),
+  updatePinnedMessage: vi.fn(),
   deleteMessage: vi.fn()
 }))
 
@@ -62,8 +63,8 @@ describe('messages.socket', () => {
     const payload = {
       roomId: 'room-1',
       messages: [{ id: 'message-1' }],
-      hasMore: false,
-      nextBeforeCreatedAt: 1
+      rangeStartMessageId: 'message-1',
+      rangeEndMessageId: 'message-1'
     }
     const socket = {
       id: 'socket-1',
@@ -79,9 +80,14 @@ describe('messages.socket', () => {
     messagesServiceMock.loadRoomMessages.mockResolvedValue(payload)
     registerMessagesSocketHandlers(socket as never)
 
-    const response = await handlers['load-room-messages']({ roomId: 'room-1', limit: 20 } as never)
+    const requestPayload = {
+      roomId: 'room-1',
+      limit: 20,
+      direction: 'latest'
+    }
+    const response = await handlers['load-room-messages'](requestPayload as never)
 
-    expect(messagesServiceMock.loadRoomMessages).toHaveBeenCalledWith('user-1', { roomId: 'room-1', limit: 20 })
+    expect(messagesServiceMock.loadRoomMessages).toHaveBeenCalledWith('user-1', requestPayload)
     expect(response).toEqual({
       ok: true,
       payload
@@ -104,7 +110,7 @@ describe('messages.socket', () => {
     messagesServiceMock.loadRoomMessages.mockResolvedValue(null)
     registerMessagesSocketHandlers(socket as never)
 
-    const response = await handlers['load-room-messages']({ roomId: 'room-1', limit: 20 } as never)
+    const response = await handlers['load-room-messages']({ roomId: 'room-1', limit: 20, direction: 'latest' } as never)
 
     expect(response).toEqual({ ok: false })
   })
@@ -156,5 +162,30 @@ describe('messages.socket', () => {
     await handlers['delete-message'](payload as never)
 
     expect(messagesServiceMock.deleteMessage).toHaveBeenCalledWith('user-1', payload)
+  })
+
+  it('wires update-pinned-message payload to service', async () => {
+    const handlers: Record<string, (payload: never) => Promise<void>> = {}
+    const socket = {
+      id: 'socket-1',
+      data: {
+        userId: 'user-1',
+        language: 'en'
+      },
+      on: vi.fn((event: string, handler: (payload: never) => Promise<void>) => {
+        handlers[event] = handler
+      })
+    }
+    const payload = {
+      isPinned: true,
+      roomId: 'room-1',
+      messageId: 'message-1'
+    }
+
+    registerMessagesSocketHandlers(socket as never)
+
+    await handlers['update-pinned-message'](payload as never)
+
+    expect(messagesServiceMock.updatePinnedMessage).toHaveBeenCalledWith('user-1', payload)
   })
 })

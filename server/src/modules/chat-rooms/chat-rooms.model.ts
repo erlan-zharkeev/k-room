@@ -38,6 +38,11 @@ const chatRoomSchema = new Schema<ChatRoomSchema>({
     type: [String],
     required: true,
     default: []
+  },
+  pinnedMessageId: {
+    type: String,
+    required: false,
+    default: null
   }
 })
 

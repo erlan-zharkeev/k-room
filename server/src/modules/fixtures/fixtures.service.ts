@@ -358,6 +358,7 @@ const ensureDirectRoom = async () => {
     chatKind: CHAT_KIND.DIRECT,
     users: [ERLAN_ID, TOLIK_ID],
     chatName: '',
+    pinnedMessageId: null,
     messages: []
   }).save()
 
@@ -383,6 +384,7 @@ const ensureLongPrivateFixtureRoom = async (contactId: string) => {
     chatKind: CHAT_KIND.DIRECT,
     users: [ERLAN_ID, contactId],
     chatName: '',
+    pinnedMessageId: null,
     messages: []
   }).save()
 
@@ -413,6 +415,7 @@ const ensureGroupRooms = async () => {
           chatKind: CHAT_KIND.GROUP,
           users,
           chatName,
+          pinnedMessageId: null,
           messages: []
         }).save())
 

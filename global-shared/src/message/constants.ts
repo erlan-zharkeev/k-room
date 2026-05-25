@@ -15,3 +15,9 @@ export const MESSAGE_STATUS = [
 export const MESSAGE_BODY_MAX_LENGTH = 5000
 export const MESSAGE_IMAGE_LIMIT = 8
 export const MESSAGE_LOAD_LIMIT_MAX = 50
+export const MESSAGE_LOAD_DIRECTION = {
+  LATEST: 'latest',
+  BEFORE: 'before',
+  AFTER: 'after',
+  AROUND: 'around'
+} as const
