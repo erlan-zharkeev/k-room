@@ -19,7 +19,7 @@ export interface ContactsSearchBadgeData {
 export interface ContactListProps {
   contactList: ContactRecord[]
   creatingChatContactIds: Set<string>
-  getContactActivity: (contact: ContactRecord) => string
+  isContactActivityVisible: (contact: ContactRecord) => boolean
   getPersonalChatRoomId: (id: string) => string | undefined
   getContactStatus: (contact: ContactRecord) => string
   loadingContactIds: Set<string>

@@ -16,7 +16,7 @@ const {
   loadingContactIds,
   creatingChatContactIds,
   isDeleteDialogOpen,
-  getContactActivity,
+  isContactActivityVisible,
   getContactStatus,
   getPersonalChatRoomId,
   addContact,
@@ -50,7 +50,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
           v-if="contactList.length"
           :contact-list="contactList"
           :creating-chat-contact-ids="creatingChatContactIds"
-          :get-contact-activity="getContactActivity"
+          :is-contact-activity-visible="isContactActivityVisible"
           :get-contact-status="getContactStatus"
           :get-personal-chat-room-id="getPersonalChatRoomId"
           :loading-contact-ids="loadingContactIds"
