@@ -5,7 +5,6 @@ import { useSettings, type DbDeviceSetting } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
-import { ChatRoomPage, ChatRoomsNavigationPage } from 'src/pages/chat-room'
 import { ContactsPage } from 'src/pages/contacts'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
 import { EmailConfirmationPage } from 'src/pages/email-confirmation'
@@ -16,6 +15,8 @@ import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
 import { RegistrationPage } from 'src/pages/registration'
 import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
 import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
+import { ChatRoomContent } from 'src/widgets/chat-room-content'
+import { ChatRoomsNavigation } from 'src/widgets/chat-rooms-navigation'
 
 import AppLayout from './layouts/app-layout/AppLayout.vue'
 import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
@@ -99,21 +100,21 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'chat-rooms/:chatRoomId?',
         components: {
-          'content-navigation': ChatRoomsNavigationPage,
-          content: ChatRoomPage
+          'content-navigation': ChatRoomsNavigation,
+          content: ChatRoomContent
         }
       },
       {
         path: 'calls',
         components: {
-          content: ChatRoomPage
+          content: ChatRoomContent
         }
       },
       {
         path: 'contacts',
         components: {
           'content-navigation': ContactsPage,
-          content: ChatRoomPage
+          content: ChatRoomContent
         }
       },
       {
