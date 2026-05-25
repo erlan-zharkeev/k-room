@@ -184,6 +184,7 @@ export interface EventRoomMessagesLoaded {
   nextBeforeCreatedAt?: number
 }
 export interface EventDeleteMessage {
+  deleteForEveryone: boolean
   messageId: string
   roomId: string
 }
@@ -305,6 +306,7 @@ export type SocketActions =
   | 'media-files-deleted'
   | 'pinned-chat-rooms-updated'
   | 'muted-chat-rooms-updated'
+  | 'delete-message'
   | 'add-reaction'
   | 'message-reaction-updated'
   | 'message-deleted'

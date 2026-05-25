@@ -82,7 +82,7 @@ export const useMessageMonitor = () => {
       }
     })
 
-    if (isMessageStatusDelivered(message?.status) && !message.isSelf) {
+    if (message && isMessageStatusDelivered(message.status) && !message.isSelf) {
       await decreaseUnreadMessagesQuantity(roomId)
     }
   }

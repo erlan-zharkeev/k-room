@@ -53,6 +53,11 @@ const messageSchema = new Schema<MessageSchema>({
     required: false,
     default: true
   },
+  deletedForUserIds: {
+    type: [String],
+    required: false,
+    default: []
+  },
   usersMetaData: {
     type: [messageMetaDataSchema],
     required: false,

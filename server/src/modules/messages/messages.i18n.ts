@@ -11,6 +11,11 @@ export const MESSAGES_I18N = defineI18n({
     ru: 'Не удалось отметить чат прочитанным',
     zh: '无法将聊天标为已读'
   },
+  deleteMessageFailed: {
+    en: 'Failed to delete message',
+    ru: 'Не удалось удалить сообщение',
+    zh: '删除消息失败'
+  },
   updateTypingStatusFailed: {
     en: 'Failed to update typing status',
     ru: 'Не удалось обновить статус набора',

@@ -1,5 +1,6 @@
 import type {
   EventChangeMessageStatus,
+  EventDeleteMessage,
   EventLoadRoomMessages,
   EventMarkRoomAsRead,
   EventRoomMessagesLoaded,
@@ -14,6 +15,7 @@ import type { SocketInstance } from 'src/shared/types/socket'
 import { MESSAGES_I18N } from './messages.i18n'
 import {
   changeMessageStatus,
+  deleteMessage,
   emitRoomTypingStatus,
   loadRoomMessages,
   markRoomAsRead,
@@ -85,6 +87,17 @@ export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
         await markRoomAsRead(roomId, socket.data.userId)
       },
       { basicError: MESSAGES_I18N.markRoomAsReadFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'delete-message',
+    socketAckMiddleware<EventDeleteMessage>(
+      socket,
+      async (payload: EventDeleteMessage) => {
+        await deleteMessage(socket.data.userId, payload)
+      },
+      { basicError: MESSAGES_I18N.deleteMessageFailed }
     )
   )
 }
