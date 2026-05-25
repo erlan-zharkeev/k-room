@@ -36,7 +36,7 @@ const {
           style-type="transparent"
           :loading="isLoading"
           :text="$t(CHAT_ROOM_CONTENT_I18N.loadOlderMessages)"
-          @click="loadMessages"
+          @click="() => loadMessages()"
         />
         <DateSeparator v-else-if="item.type === 'date-separator'" :label="item.label" />
         <div

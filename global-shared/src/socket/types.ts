@@ -285,7 +285,6 @@ export type SocketActions =
   | 'room-typing-status'
   | 'get-contact-typing-status'
   | 'load-room-messages'
-  | 'room-messages-loaded'
   | 'change-message-status'
   | 'mark-room-as-read'
   | 'message-status-updated'
