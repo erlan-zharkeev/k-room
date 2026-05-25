@@ -13,56 +13,66 @@ import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
 const props = defineProps<ChatRoomHeaderProps>()
 const room = toRef(props, 'room')
-const { contentClass, interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = useChatRoomHeader(
+const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = useChatRoomHeader(
   room,
   props.isPrivateRoom
 )
 </script>
-
 <template>
-  <NmorphCard tag="header" shadow-type="inset" :content-class="contentClass">
-    <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
-    <AppProfileBasicData
-      :image-id="props.room.avatarId"
-      :avatar-size="41"
-      :title="title"
-      :name="title"
-      :selectable="false"
-      class="chat-room-content-header__profile"
+  <section class="chat-room-header">
+    <ContentNavigationBackButton v-if="isPortraitTabletOrLess" class="chat-room-header__back" />
+    <NmorphCard
+      card-padding="4px"
+      tag="header"
+      shadow-type="inset"
+      class="chat-room-content-header"
+      content-class="chat-room-content-header__content"
     >
-      <template #description>
-        <ChatRoomTypingStatus :room-id="props.room.id">
-          <UserActivityStatus
-            v-if="props.isPrivateRoom && interlocutor"
-            :online="interlocutor.online"
-            :last-seen="interlocutor.lastSeen"
-          />
-          <AppText
-            v-else-if="!props.isPrivateRoom"
-            tag="small"
-            color="semi-contrast-text"
-            :selectable="false"
-            :text="membersQuantityText"
-          />
-        </ChatRoomTypingStatus>
-      </template>
-    </AppProfileBasicData>
-    <ChatRoomContextMenu :item="props.room" />
-  </NmorphCard>
+      <AppProfileBasicData
+        :image-id="props.room.avatarId"
+        :avatar-size="41"
+        :title="title"
+        :name="title"
+        :selectable="false"
+        class="chat-room-content-header__profile"
+      >
+        <template #description>
+          <ChatRoomTypingStatus :room-id="props.room.id">
+            <UserActivityStatus
+              v-if="props.isPrivateRoom && interlocutor"
+              :online="interlocutor.online"
+              :last-seen="interlocutor.lastSeen"
+            />
+            <AppText
+              v-else-if="!props.isPrivateRoom"
+              tag="small"
+              color="semi-contrast-text"
+              :selectable="false"
+              :text="membersQuantityText"
+            />
+          </ChatRoomTypingStatus>
+        </template>
+      </AppProfileBasicData>
+      <ChatRoomContextMenu :item="props.room" />
+    </NmorphCard>
+  </section>
 </template>
 
 <style lang="scss">
-.chat-room-content-header {
+.chat-room-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  height: auto;
+}
+
+.chat-room-content-header__content {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
 
   width: 100%;
-}
-
-.chat-room-content-header--with-back {
-  grid-template-columns: max-content minmax(0, 1fr) max-content;
 }
 
 .chat-room-content-header__profile {
