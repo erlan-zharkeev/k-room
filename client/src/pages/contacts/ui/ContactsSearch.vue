@@ -2,6 +2,7 @@
 import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { isDefaultContactInteraction } from 'global-shared'
 
+import { useContentNavigationScroll } from 'src/features/content-navigation-scroll'
 import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
@@ -10,6 +11,7 @@ import { useContactSearch } from '../model/use-contact-search.model'
 
 const { loadingContactIds } = defineProps<ContactsSearchProps>()
 const emit = defineEmits<ContactsSearchEmits>()
+const { saveContentNavigationScrollState } = useContentNavigationScroll('contacts')
 const {
   foundContactList,
   showSearchResults,
@@ -24,7 +26,13 @@ const {
 
 <template>
   <div class="contacts-search">
-    <NmorphScroll scroll-x-prop="hidden">
+    <NmorphScroll
+      ref="contentNavigationScroll"
+      scroll-x-prop="hidden"
+      css-scroll-behavior="auto"
+      update-only-on-scroll-end
+      @update:model-value="saveContentNavigationScrollState"
+    >
       <div class="contacts-search__scroll-container">
         <div v-if="showSearchResults" class="contacts-search__results">
           <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.globalSearch)" />

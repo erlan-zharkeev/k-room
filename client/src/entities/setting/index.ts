@@ -31,7 +31,13 @@ export type {
   Theme
 } from './config/appearance.types'
 export type { AsideBarButtonName, ContentTab } from './config/content.types'
-export type { DbDeviceSetting, DeviceSetting } from './config/types'
+export type {
+  ContentNavigationScrollByTab,
+  ContentNavigationScrollState,
+  ContentNavigationScrollTab,
+  DbDeviceSetting,
+  DeviceSetting
+} from './config/types'
 export type { HiddenNotification } from './config/hidden-notification.types'
 export type { IoDevicesSettings } from './config/io-devices.types'
 export type { DeviceLocalizationSettings } from './config/localization.types'
