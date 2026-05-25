@@ -52,7 +52,7 @@ const {
           class="chat-room-messages__message"
           :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
         >
-          <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" />
+          <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" :room-id="props.room.id" />
         </div>
       </div>
     </div>

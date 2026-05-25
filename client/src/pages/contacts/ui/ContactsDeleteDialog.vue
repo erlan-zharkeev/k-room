@@ -12,9 +12,9 @@ const emit = defineEmits<ContactsDeleteDialogEmits>()
 
 <template>
   <NmorphDialog v-model="model" :title="$t(CONTACTS_PAGE_I18N.deleteTitle)">
-    <div class="contacts-delete-dialog">
+    <div class="app-dialog-stack contacts-delete-dialog">
       <AppText :text="$t(CONTACTS_PAGE_I18N.deleteConfirm)" />
-      <div class="contacts-delete-dialog__actions">
+      <div class="app-dialog-actions">
         <NmorphButton :text="$t(CONTACTS_PAGE_I18N.cancel)" style-type="transparent" @click="emit('cancel')" />
         <NmorphButton
           style-type="transparent"
@@ -29,14 +29,6 @@ const emit = defineEmits<ContactsDeleteDialogEmits>()
 
 <style lang="scss">
 .contacts-delete-dialog {
-  display: grid;
   gap: 16px;
-}
-
-.contacts-delete-dialog__actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: flex-end;
 }
 </style>

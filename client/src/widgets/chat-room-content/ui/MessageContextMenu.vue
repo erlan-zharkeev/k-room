@@ -5,8 +5,11 @@ import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageContextMenuProps } from '../config/types'
 import { useMessageContextMenu } from '../model/use-message-context-menu.model'
 
+import MessageDeleteDialog from './MessageDeleteDialog.vue'
+
 const props = defineProps<MessageContextMenuProps>()
 const {
+  isDeleteMessageDialogOpen,
   isMessageContextMenuOpen,
   isMessageContextMenuDisabled,
   messageContextMenuOptions,
@@ -30,6 +33,8 @@ const {
   >
     <slot />
   </NmorphContextMenu>
+
+  <MessageDeleteDialog v-model="isDeleteMessageDialogOpen" :message="props.message" :room-id="props.roomId" />
 </template>
 
 <style lang="scss">
