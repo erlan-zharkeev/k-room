@@ -11,7 +11,6 @@ import { useCreateNewPassword } from '../model/use-create-new-password.model'
 
 const {
   formData,
-  formRef,
   initializeCreateNewPassword,
   isFormValid,
   isLoading,

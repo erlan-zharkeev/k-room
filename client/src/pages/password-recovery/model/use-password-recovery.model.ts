@@ -159,13 +159,11 @@ export const usePasswordRecovery = () => {
 
   return {
     codeFormData,
-    codeFormRef,
     codeSent,
     codeValidationIsLoading,
     counterValue,
     debugCode,
     emailFormData,
-    emailFormRef,
     emailSendCodeIsLoading,
     initializePasswordRecovery,
     isCodeFormValid,

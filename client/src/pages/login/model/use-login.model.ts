@@ -81,7 +81,6 @@ export const useLogin = () => {
     captchaResetKey,
     captchaToken,
     formData,
-    formRef,
     isLoading,
     isFormValid,
     login,

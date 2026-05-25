@@ -61,7 +61,6 @@ export const useCreateNewPassword = () => {
 
   return {
     formData,
-    formRef,
     initializeCreateNewPassword,
     isFormValid,
     isLoading,
