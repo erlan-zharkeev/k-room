@@ -199,6 +199,7 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
   return MessageModel.countDocuments({
     _id: { $in: messageIds },
     authorId: { $ne: userId },
+    deletedForUserIds: { $ne: userId },
     usersMetaData: {
       $elemMatch: {
         id: userId,
@@ -206,6 +207,20 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
       }
     }
   })
+}
+
+const resolveVisibleMessageIds = async (userId: string, messageIds: string[]) => {
+  if (!messageIds.length) return []
+
+  const visibleMessages = await MessageModel.find({
+    _id: { $in: messageIds },
+    deletedForUserIds: { $ne: userId }
+  })
+    .select('_id')
+    .lean<Array<{ _id: string }>>()
+  const visibleMessageIds = new Set(visibleMessages.map(({ _id }) => stringifyMongoId(_id)))
+
+  return messageIds.filter((id) => visibleMessageIds.has(id))
 }
 
 const resolvePinnedChatRoomIds = (currentIds: string[], roomId: string, isPinned: boolean) => {
@@ -499,10 +514,11 @@ export const transformRoomForUser = async ({
   const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
   const interlocutor = isDirectRoom ? await UserModel.findById(interlocutorId, { 'public.avatarId': 1 }).lean() : null
   const avatarId = isDirectRoom ? interlocutor?.public.avatarId ?? null : normalizedRoom.avatarId
-  const lastMessageId = messages[messages.length - 1] ?? null
+  const visibleMessageIds = await resolveVisibleMessageIds(userId, messages)
+  const lastMessageId = visibleMessageIds[visibleMessageIds.length - 1] ?? null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage] = await Promise.all([
-    countUnreadRoomMessages(userId, messages),
+    countUnreadRoomMessages(userId, visibleMessageIds),
     lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocument>() : null
   ])
 
@@ -519,7 +535,7 @@ export const transformRoomForUser = async ({
     pinnedOrder: pinnedOrder === -1 ? null : pinnedOrder,
     isMuted: mutedChatRoomIds.includes(roomId),
     users,
-    messages,
+    messages: visibleMessageIds,
     previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null
   } satisfies EventGetRoom
 }
