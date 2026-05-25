@@ -1,5 +1,6 @@
 import { useNmorph } from '@nmorph/nmorph-ui-kit'
-import { onBeforeUnmount, watch } from 'vue'
+import { useEventListener } from '@vueuse/core'
+import { computed, watch } from 'vue'
 
 import { SYSTEM_THEME_QUERY, useSettings } from 'src/entities/setting'
 import { useThemeSelect } from 'src/features/theme-select'
@@ -10,6 +11,7 @@ export const useThemeProvider = () => {
   const { effectiveTheme, settings, isSelectedThemeSystem } = useSettings()
   const { changeSystemTheme } = useThemeSelect()
   const { theme: nmorphTheme } = useNmorph()
+  const systemThemeTarget = computed(() => (isSelectedThemeSystem.value ? SYSTEM_THEME_QUERY : null))
 
   const applyAppearanceTheme = (themeName: string, theme = effectiveTheme.value) => {
     const { colorSchema } = theme
@@ -29,15 +31,12 @@ export const useThemeProvider = () => {
     }
   }
 
-  watch(
-    () => settings.value.appearance.selectedTheme,
-    (theme, previousTheme) => {
-      if (previousTheme === 'system') {
-        SYSTEM_THEME_QUERY?.removeEventListener('change', updateSystemTheme)
-      }
+  useEventListener(systemThemeTarget, 'change', updateSystemTheme)
 
-      if (theme === 'system') {
-        SYSTEM_THEME_QUERY?.addEventListener('change', updateSystemTheme)
+  watch(
+    isSelectedThemeSystem,
+    (isSystem) => {
+      if (isSystem) {
         updateSystemTheme()
       }
     },
@@ -56,8 +55,4 @@ export const useThemeProvider = () => {
       deep: true
     }
   )
-
-  onBeforeUnmount(() => {
-    SYSTEM_THEME_QUERY?.removeEventListener('change', updateSystemTheme)
-  })
 }

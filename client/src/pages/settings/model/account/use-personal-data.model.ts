@@ -1,4 +1,5 @@
 import type { INmorphCustomFileData as NmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
+import { useClipboard } from '@vueuse/core'
 import {
   type GetUserDataResponse,
   USER_ENDPOINTS,
@@ -22,6 +23,7 @@ export const usePersonalData = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
   const { user, avatarId, update: updateUserData, displayedNickname } = useUser()
   const { doHttpRequest } = useHttp()
+  const { copy, isSupported: isClipboardSupported } = useClipboard()
   const { t } = useI18n()
   const toast = useAppToast()
   const formData = reactive({
@@ -112,25 +114,17 @@ export const usePersonalData = () => {
   }
 
   const copyUserId = async () => {
-    if (!displayedUserId.value) return
+    if (!displayedUserId.value || !isClipboardSupported.value) return
 
-    try {
-      await navigator.clipboard.writeText(displayedUserId.value)
-      toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.userIdCopied) })
-    } catch (error) {
-      void error
-    }
+    await copy(displayedUserId.value)
+    toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.userIdCopied) })
   }
 
   const copyUserNickname = async () => {
-    if (!displayedNickname.value) return
+    if (!displayedNickname.value || !isClipboardSupported.value) return
 
-    try {
-      await navigator.clipboard.writeText(displayedNickname.value)
-      toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nicknameCopied) })
-    } catch (error) {
-      void error
-    }
+    await copy(displayedNickname.value)
+    toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nicknameCopied) })
   }
 
   const updateAccountData = async () => {

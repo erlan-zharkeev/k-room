@@ -1,5 +1,5 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { useDevicesList } from '@vueuse/core'
+import { useDevicesList, useEventListener, useTimeoutFn } from '@vueuse/core'
 import { isFunction } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
@@ -24,7 +24,11 @@ export const useAudioOutputDevice = () => {
   const audioOutputLoading = ref(true)
   const audioOutputTestLoading = ref(false)
   const outputAudio = shallowRef<HTMLAudioElement | null>(null)
-  const outputIndicatorTimerId = ref<number>()
+  const { start: startOutputIndicatorTimer, stop: stopOutputIndicatorTimer } = useTimeoutFn(
+    () => {},
+    SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS,
+    { immediate: false }
+  )
 
   const audioOutputOptions = computed(() =>
     audioOutputDevices.value.map(({ deviceId, label }, index) => ({
@@ -48,15 +52,8 @@ export const useAudioOutputDevice = () => {
   )
   const audioOutputPermissionCalloutType = computed(() => (isAudioOutputSupported.value ? 'info' : 'warning'))
 
-  const clearOutputIndicatorTimer = () => {
-    if (outputIndicatorTimerId.value) {
-      window.clearTimeout(outputIndicatorTimerId.value)
-      outputIndicatorTimerId.value = undefined
-    }
-  }
-
   const stopAudioOutput = () => {
-    clearOutputIndicatorTimer()
+    stopOutputIndicatorTimer()
 
     if (outputAudio.value) {
       outputAudio.value.pause()
@@ -104,18 +101,8 @@ export const useAudioOutputDevice = () => {
         await audio.setSinkId(settings.value.ioDevices.audioOutputDeviceId)
       }
 
-      audio.addEventListener(
-        'ended',
-        () => {
-          if (outputAudio.value === audio) {
-            outputAudio.value = null
-          }
-        },
-        { once: true }
-      )
-
       await audio.play()
-      outputIndicatorTimerId.value = window.setTimeout(() => {}, SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS)
+      startOutputIndicatorTimer()
     } catch (error) {
       stopAudioOutput()
       showDeviceWarning(error)
@@ -123,6 +110,15 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = false
     }
   }
+
+  useEventListener(
+    outputAudio,
+    'ended',
+    () => {
+      outputAudio.value = null
+    },
+    { once: true }
+  )
 
   onMounted(() => {
     void requestAudioOutputDevices()
