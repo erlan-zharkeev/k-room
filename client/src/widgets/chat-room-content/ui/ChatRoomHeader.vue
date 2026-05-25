@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { toRef } from 'vue'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
+import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
 import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
@@ -11,13 +13,18 @@ import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
 const props = defineProps<ChatRoomHeaderProps>()
 const room = toRef(props, 'room')
-const { interlocutor, membersQuantityText, title } = useChatRoomHeader(room, props.isPrivateRoom)
+const { contentClass, interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = useChatRoomHeader(
+  room,
+  props.isPrivateRoom
+)
 </script>
 
 <template>
-  <header class="chat-room-content-header">
+  <NmorphCard tag="header" shadow-type="inset" :content-class="contentClass">
+    <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
     <AppProfileBasicData
       :image-id="props.room.avatarId"
+      :avatar-size="41"
       :title="title"
       :name="title"
       :selectable="false"
@@ -40,9 +47,8 @@ const { interlocutor, membersQuantityText, title } = useChatRoomHeader(room, pro
         </ChatRoomTypingStatus>
       </template>
     </AppProfileBasicData>
-
     <ChatRoomContextMenu :item="props.room" />
-  </header>
+  </NmorphCard>
 </template>
 
 <style lang="scss">
@@ -53,6 +59,10 @@ const { interlocutor, membersQuantityText, title } = useChatRoomHeader(room, pro
   align-items: center;
 
   width: 100%;
+}
+
+.chat-room-content-header--with-back {
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
 }
 
 .chat-room-content-header__profile {

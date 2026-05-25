@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
-import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
-import { useScreen } from 'src/shared/lib'
-
 import { useChatRoomContent } from '../model/use-chat-room-content.model'
 
 import ChatRoomFooter from './ChatRoomFooter.vue'
@@ -11,16 +8,12 @@ import ChatRoomHeader from './ChatRoomHeader.vue'
 import ChatRoomMessages from './ChatRoomMessages.vue'
 import ChatRoomStub from './ChatRoomStub.vue'
 
-const { isPortraitTabletOrLess } = useScreen()
 const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
 </script>
 
 <template>
   <section class="chat-room-page">
-    <div class="chat-room-page__header">
-      <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
-      <ChatRoomHeader v-if="selectedChatRoom" :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
-    </div>
+    <ChatRoomHeader v-if="selectedChatRoom" :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
     <template v-if="selectedChatRoom">
       <NmorphCard shadow-type="inset" class="chat-room-page__messages">
         <ChatRoomMessages :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
@@ -38,16 +31,6 @@ const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.chat-room-page__header {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-
-  &:empty {
-    display: none;
-  }
 }
 
 .chat-room-page__messages,

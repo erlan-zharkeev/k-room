@@ -21,7 +21,14 @@ const { imageSrc } = useAppProfileBasicData(props)
       :offset-x="-1"
       :offset-y="-1"
     >
-      <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
+      <NmorphAvatar
+        :src="imageSrc"
+        :alt="props.imageAlt"
+        :size="props.avatarSize"
+        shape="square"
+        :name="props.name"
+        preview
+      />
     </NmorphBadge>
     <div class="app-profile-basic-data__content">
       <slot name="title">
@@ -52,7 +59,6 @@ const { imageSrc } = useAppProfileBasicData(props)
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 4px;
   justify-content: center;
 
   min-width: 0;

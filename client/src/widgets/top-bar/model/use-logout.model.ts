@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@vueuse/core'
 import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'global-shared'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -23,6 +24,7 @@ export const useLogout = () => {
   const { reset: resetMessage } = useMessage()
   const { reset: resetUser } = useUser()
   const isLogoutLoading = ref(false)
+  const logoutStatus = useLocalStorage<string | null>(LOCAL_STORAGE_KEY.LogoutStatus, null)
 
   const resetClientData = () =>
     Promise.all([resetChatRoom(), resetContact(), resetKnownUser(), resetMedia(), resetMessage(), resetUser()])
@@ -34,9 +36,9 @@ export const useLogout = () => {
 
     try {
       await doHttpRequest('post', AUTH_ENDPOINTS.logout)
-      localStorage.removeItem(LOCAL_STORAGE_KEY.LogoutStatus)
+      logoutStatus.value = null
     } catch {
-      localStorage.setItem(LOCAL_STORAGE_KEY.LogoutStatus, 'failed')
+      logoutStatus.value = 'failed'
     } finally {
       await resetClientData()
       clearCookie()
