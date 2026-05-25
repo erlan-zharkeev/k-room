@@ -33,7 +33,6 @@ export type {
 export type { AsideBarButtonName, ContentTab } from './config/content.types'
 export type {
   ContentNavigationScrollByTab,
-  ContentNavigationScrollState,
   ContentNavigationScrollTab,
   DbDeviceSetting,
   DeviceSetting
@@ -41,7 +40,6 @@ export type {
 export type { HiddenNotification } from './config/hidden-notification.types'
 export type { IoDevicesSettings } from './config/io-devices.types'
 export type { DeviceLocalizationSettings } from './config/localization.types'
-export type { MessageListScrollState } from './config/message.types'
 export type {
   NotificationGroupSettings,
   DeviceNotificationSettings,
