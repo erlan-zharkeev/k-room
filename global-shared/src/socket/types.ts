@@ -135,8 +135,12 @@ export interface EventMediaFilesDeleted {
 }
 
 export interface EventUserTyping {
-  authorNickname: string
-  usersTo: string[]
+  roomId: string
+  isTyping: boolean
+}
+export interface EventRoomTypingStatus {
+  roomId: string
+  contactId: string
   isTyping: boolean
 }
 export interface EventGetContactTypingStatus {
@@ -278,6 +282,7 @@ export type SocketActions =
   | 'save-contact'
   | 'delete-contact'
   | 'client-typing'
+  | 'room-typing-status'
   | 'get-contact-typing-status'
   | 'load-room-messages'
   | 'room-messages-loaded'

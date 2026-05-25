@@ -1,28 +1,22 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
 
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
+import { AppProfileBasicData } from 'src/shared/ui'
 
-import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
 const props = defineProps<ChatRoomHeaderProps>()
 const room = toRef(props, 'room')
-const { title, typingContactNames } = useChatRoomHeader(room, props.isPrivateRoom)
+const { title } = useChatRoomHeader(room, props.isPrivateRoom)
 </script>
 
 <template>
   <header class="chat-room-content-header">
     <AppProfileBasicData :image-id="props.room.avatarId" :title="title" :name="title" :selectable="false">
       <template #description>
-        <AppText
-          v-if="typingContactNames.length"
-          tag="small"
-          color="accent"
-          :selectable="false"
-          :text="`${typingContactNames.join(', ')} ${$t(CHAT_ROOM_PAGE_I18N.typing)}...`"
-        />
+        <ChatRoomTypingStatus :room-id="props.room.id" />
       </template>
     </AppProfileBasicData>
   </header>

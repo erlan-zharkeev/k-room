@@ -189,6 +189,7 @@ export type {
   EventMutedChatRoomsUpdated,
   EventMediaFilesDeleted,
   EventUserTyping,
+  EventRoomTypingStatus,
   EventGetContactTypingStatus,
   EventSendMessage,
   EventUpdateMessageStatus,

@@ -3,6 +3,7 @@ import type {
   EventLoadRoomMessages,
   EventMarkRoomAsRead,
   EventSendMessage,
+  EventUserTyping,
   SocketActions
 } from 'global-shared'
 
@@ -11,7 +12,13 @@ import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socke
 import type { SocketInstance } from 'src/shared/types/socket'
 
 import { MESSAGES_I18N } from './messages.i18n'
-import { changeMessageStatus, loadRoomMessages, markRoomAsRead, sendMessage } from './messages.service'
+import {
+  changeMessageStatus,
+  emitRoomTypingStatus,
+  loadRoomMessages,
+  markRoomAsRead,
+  sendMessage
+} from './messages.service'
 
 export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
   socket.on<SocketActions>(
@@ -42,6 +49,17 @@ export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
         getIO().to(socket.id).emit<SocketActions>('room-messages-loaded', roomMessagesData)
       },
       { basicError: MESSAGES_I18N.loadRoomMessagesFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'client-typing',
+    socketErrorMiddleware(
+      socket,
+      async (payload: EventUserTyping) => {
+        await emitRoomTypingStatus(socket.data.userId, payload)
+      },
+      { basicError: MESSAGES_I18N.updateTypingStatusFailed }
     )
   )
 

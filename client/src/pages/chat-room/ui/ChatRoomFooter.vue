@@ -8,13 +8,15 @@ import {
   NmorphIconSmile
 } from '@nmorph/nmorph-ui-kit'
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
+import { toRef } from 'vue'
 
 import { CHAT_ROOM_PAGE_I18N } from '../config/i18n'
 import type { ChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
 const props = defineProps<ChatRoomFooterProps>()
-const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter()
+const room = toRef(props, 'room')
+const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter(room)
 </script>
 
 <template>

@@ -1,5 +1,6 @@
 import type { SocketActions } from 'global-shared'
 
+import { updateRoomTypingStatus } from 'src/features/chat-room-typing'
 import { socket } from 'src/shared/api'
 
 import { useChatRoomSync } from './use-chat-room-sync.model'
@@ -22,6 +23,7 @@ export const useChatRoomUpdateMonitor = () => {
     socket.on<SocketActions>('pinned-chat-rooms-updated', updatePinnedChatRooms)
     socket.on<SocketActions>('chat-room-deleted', removeChatRoom)
     socket.on<SocketActions>('chat-room-left', removeChatRoom)
+    socket.on<SocketActions>('room-typing-status', updateRoomTypingStatus)
   }
 
   const disposeChatRoomUpdateMonitor = () => {
@@ -32,6 +34,7 @@ export const useChatRoomUpdateMonitor = () => {
     socket.off<SocketActions>('pinned-chat-rooms-updated', updatePinnedChatRooms)
     socket.off<SocketActions>('chat-room-deleted', removeChatRoom)
     socket.off<SocketActions>('chat-room-left', removeChatRoom)
+    socket.off<SocketActions>('room-typing-status', updateRoomTypingStatus)
   }
 
   return {

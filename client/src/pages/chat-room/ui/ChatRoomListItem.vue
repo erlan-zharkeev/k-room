@@ -3,6 +3,7 @@ import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconPin } from '@nmorph/nmor
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import { useScreen } from '../../../shared/lib'
@@ -54,14 +55,16 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
             </div>
           </template>
           <template #description>
-            <AppText
-              v-if="props.item.description"
-              tag="small"
-              truncate
-              color="semi-contrast-text"
-              :selectable="false"
-              :text="props.item.description"
-            />
+            <ChatRoomTypingStatus :room-id="props.item.id" truncate>
+              <AppText
+                v-if="props.item.description"
+                tag="small"
+                truncate
+                color="semi-contrast-text"
+                :selectable="false"
+                :text="props.item.description"
+              />
+            </ChatRoomTypingStatus>
           </template>
         </AppProfileBasicData>
       </RouterLink>
