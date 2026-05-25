@@ -1,5 +1,7 @@
 import type { CallFlow, EventCallUpdated, EventCallsUpdated, Call } from 'global-shared'
 
+import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
+
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
@@ -40,7 +42,7 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
   }
 
   return {
-    id: String(call._id),
+    id: stringifyMongoId(call._id),
     calledAt: call.calledAt,
     startedAt: call.startedAt ?? 0,
     finishedAt: call.finishedAt,
@@ -58,7 +60,9 @@ export const emitCallsToUser = async (userId: string) => {
   const calls = await CallModel.find({ interlocutors: { $in: [userId] } })
     .sort({ calledAt: -1 })
     .lean<CallDocument[]>()
-  const transformedCalls = await Promise.all(calls.map(async (call) => transformCallForUser(userId, String(call._id))))
+  const transformedCalls = await Promise.all(
+    calls.map(async (call) => transformCallForUser(userId, stringifyMongoId(call._id)))
+  )
   const payload = transformedCalls.filter(
     (call): call is NonNullable<typeof call> => call !== null
   ) as EventCallsUpdated

@@ -6,3 +6,7 @@ import type { MongoId } from '../types/mongo'
 export const normalizeObjectId = (value: MongoId) => {
   return isString(value) ? new Types.ObjectId(value) : value
 }
+
+export const stringifyMongoId = (value: MongoId) => String(value)
+
+export const stringifyMongoIds = (values: readonly MongoId[]) => values.map(stringifyMongoId)

@@ -16,6 +16,7 @@ import {
 import uniq from 'lodash/uniq'
 
 import { AppError } from 'src/shared/lib/app-error'
+import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { isCodeExpired } from '../codes/codes.constants'
@@ -39,7 +40,7 @@ import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_
 import { UserModel } from './user.model'
 
 export const transformUserToPreview = (user: UserSchema) => {
-  const userId = String(user._id)
+  const userId = stringifyMongoId(user._id)
 
   return {
     avatarId: user.public.avatarId,
@@ -80,7 +81,7 @@ export const transformUserToFrontendContact = async (
   ])
 
   return users.map((user) => {
-    const userId = String(user._id)
+    const userId = stringifyMongoId(user._id)
     const interactionType = contacts[userId]?.interaction ?? CONTACT_INTERACTION.DEFAULT
 
     return transformUserToContact(user, interactionType, onlineMap.get(userId) ?? false)
@@ -370,7 +371,7 @@ export class UserService {
     ])
 
     const ids = uniq([
-      ...contacts.map((contact) => String(contact._id)),
+      ...contacts.map((contact) => stringifyMongoId(contact._id)),
       ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
     ])
     const avatarWasChanged = avatarIdAfterUpdate !== undefined

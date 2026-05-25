@@ -5,6 +5,7 @@ import { getRoomOtherUserIds, type EventStatusContact } from 'global-shared'
 import uniq from 'lodash/uniq'
 
 import { log } from 'src/shared/lib/log'
+import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 import type { MongoId } from 'src/shared/types/mongo'
 import type { SocketInstance } from 'src/shared/types/socket'
 
@@ -130,11 +131,11 @@ export class PresenceService implements OnModuleDestroy {
   }
 
   async isUserOnline(userId: MongoId | string) {
-    return (await this.activeSocketIdsByUser(String(userId))).length > 0
+    return (await this.activeSocketIdsByUser(stringifyMongoId(userId))).length > 0
   }
 
   async onlineMapByUserIds(userIds: Array<MongoId | string>) {
-    const uniqueUserIds = uniq(userIds.map((userId) => String(userId)))
+    const uniqueUserIds = uniq(stringifyMongoIds(userIds))
     const result = new Map<string, boolean>()
 
     await Promise.all(
@@ -152,7 +153,7 @@ export class PresenceService implements OnModuleDestroy {
       ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
     ])
     const userIds = uniq([
-      ...users.map((user) => String(user._id)),
+      ...users.map((user) => stringifyMongoId(user._id)),
       ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
     ])
 
