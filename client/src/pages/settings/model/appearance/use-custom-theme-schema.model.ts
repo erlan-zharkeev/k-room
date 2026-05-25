@@ -5,7 +5,7 @@ import type { ColorSchema, ThemeShadowSettings } from 'src/entities/setting'
 import { getNmorphGeneratedColorSchema } from 'src/shared/lib'
 
 export const useCustomThemeSchema = () => {
-  const { effectiveTheme, mutate } = useSettings()
+  const { effectiveTheme, mutate, setByPath } = useSettings()
   const { theme } = useNmorph()
 
   const changeThemeColor = (key: keyof ColorSchema, value: string) => {
@@ -29,11 +29,7 @@ export const useCustomThemeSchema = () => {
   }
 
   const changeThemeShadowSetting = (key: keyof ThemeShadowSettings, value: number) => {
-    void mutate((data) => {
-      const themeData = data.appearance.themes.custom
-
-      themeData[key] = value
-    })
+    void setByPath(`appearance.themes.custom.${key}`, value)
   }
 
   return {
