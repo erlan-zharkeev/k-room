@@ -6,9 +6,18 @@ import type { DeviceLocalizationSettings } from './localization.types'
 import type { MessageListScrollState } from './message.types'
 import type { DeviceNotificationSettings } from './notification.types'
 
+export interface ContentNavigationScrollState {
+  x: number
+  y: number
+}
+
+export type ContentNavigationScrollTab = Extract<ContentTab, 'chat-rooms' | 'contacts'>
+export type ContentNavigationScrollByTab = Record<ContentNavigationScrollTab, ContentNavigationScrollState>
+
 export interface DeviceSetting {
   contentTab: ContentTab
   chatRoomId: string
+  contentNavigationScrollByTab: ContentNavigationScrollByTab
   messageScrollByRoom: Record<string, MessageListScrollState>
   localization: DeviceLocalizationSettings
   appearance: AppearanceSettings

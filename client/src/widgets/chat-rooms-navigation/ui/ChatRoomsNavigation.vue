@@ -8,6 +8,7 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 
 import { ChatRoomFormDialog } from 'src/features/chat-room-context-menu'
+import { useContentNavigationScroll } from 'src/features/content-navigation-scroll'
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOMS_NAVIGATION_I18N } from '../config/i18n'
@@ -17,6 +18,7 @@ import ChatRoomList from './ChatRoomList.vue'
 
 const { searchQuery, isCreateChatDialogOpen, showNoSearchResults, showNoChats, openCreateChatDialog, openChatRoom } =
   useChatRoomsNavigation()
+const { saveContentNavigationScrollState } = useContentNavigationScroll('chat-rooms')
 </script>
 
 <template>
@@ -47,7 +49,15 @@ const { searchQuery, isCreateChatDialogOpen, showNoSearchResults, showNoChats, o
       :selectable="false"
       :text="$t(CHAT_ROOMS_NAVIGATION_I18N.noSearchResults)"
     />
-    <NmorphScroll v-else scroll-x-prop="hidden" :y-gap-in-px="-6">
+    <NmorphScroll
+      v-else
+      ref="contentNavigationScroll"
+      scroll-x-prop="hidden"
+      css-scroll-behavior="auto"
+      update-only-on-scroll-end
+      :y-gap-in-px="-6"
+      @update:model-value="saveContentNavigationScrollState"
+    >
       <ChatRoomList />
     </NmorphScroll>
 
