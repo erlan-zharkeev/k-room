@@ -6,18 +6,21 @@ import {
   type SocketActions
 } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
-import { computed, ref } from 'vue'
+import { computed, type Ref, ref } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
+import { useChatRoomTypingEmitter } from 'src/features/chat-room-typing'
 import { socket } from 'src/shared/api'
+import type { ChatRoomRecord } from 'src/shared/lib'
 
-export const useChatRoomFooter = () => {
+export const useChatRoomFooter = (room: Ref<ChatRoomRecord>) => {
   const { mutate } = useChatRoom()
   const { put } = useMessage()
   const { user } = useUser()
   const messageText = ref('')
+  const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
   const isSendDisabled = computed(
     () => !messageText.value.trim() || messageText.value.length > MESSAGE_BODY_MAX_LENGTH || !user.value.id
   )
@@ -50,6 +53,7 @@ export const useChatRoomFooter = () => {
     })
 
     socket.emit<SocketActions>('send-message', payload)
+    stopTyping()
     messageText.value = ''
   }
 

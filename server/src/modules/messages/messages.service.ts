@@ -3,8 +3,10 @@ import {
   type EventLoadRoomMessages,
   type EventMessageDelivered,
   type EventMessagesStatusUpdated,
+  type EventRoomTypingStatus,
   type EventRoomMessagesLoaded,
   type EventUpdateMessageStatus,
+  type EventUserTyping,
   type ImageObject,
   type Message,
   type MessageStatus,
@@ -13,6 +15,7 @@ import {
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_STATUS_VALUE,
   REQ_STATUS,
+  getRoomOtherUserIds,
   isMessageAuthor,
   isMessageReadStatus,
   isString
@@ -182,6 +185,23 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   }
 
   emitToUsers(users, 'messages-status-updated', payload)
+}
+
+export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }: EventUserTyping) => {
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users -_id').lean()
+
+  if (!room) {
+    return
+  }
+
+  const userIds = room.users.map(String)
+  const payload: EventRoomTypingStatus = {
+    roomId,
+    contactId: userId,
+    isTyping
+  }
+
+  emitToUsers(getRoomOtherUserIds({ users: userIds }, userId), 'room-typing-status', payload)
 }
 
 export const sendMessage = async ({ roomId, message }: SendMessageParams) => {

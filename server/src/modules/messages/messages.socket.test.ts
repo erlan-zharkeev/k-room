@@ -8,6 +8,7 @@ const ioMock = vi.hoisted(() => ({
 const messagesServiceMock = vi.hoisted(() => ({
   sendMessage: vi.fn(),
   loadRoomMessages: vi.fn(),
+  emitRoomTypingStatus: vi.fn(),
   changeMessageStatus: vi.fn(),
   markRoomAsRead: vi.fn()
 }))
@@ -91,5 +92,29 @@ describe('messages.socket', () => {
     expect(messagesServiceMock.loadRoomMessages).toHaveBeenCalledWith('user-1', { roomId: 'room-1', limit: 20 })
     expect(ioMock.to).toHaveBeenCalledWith('socket-1')
     expect(ioMock.emit).toHaveBeenCalledWith('room-messages-loaded', payload)
+  })
+
+  it('wires client-typing payload to service', async () => {
+    const handlers: Record<string, (payload: never) => Promise<void>> = {}
+    const socket = {
+      id: 'socket-1',
+      data: {
+        userId: 'user-1',
+        language: 'en'
+      },
+      on: vi.fn((event: string, handler: (payload: never) => Promise<void>) => {
+        handlers[event] = handler
+      })
+    }
+    const payload = {
+      roomId: 'room-1',
+      isTyping: true
+    }
+
+    registerMessagesSocketHandlers(socket as never)
+
+    await handlers['client-typing'](payload as never)
+
+    expect(messagesServiceMock.emitRoomTypingStatus).toHaveBeenCalledWith('user-1', payload)
   })
 })

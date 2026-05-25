@@ -15,12 +15,8 @@ export const useChatRoomHeader = (room: Ref<ChatRoomRecord>, isPrivateRoom: bool
   const otherUserIds = computed(() => getRoomOtherUserIds(room.value, user.value.id))
   const users = computed(() => getUsersByIds(otherUserIds.value))
   const title = computed(() => buildChatRoomTitle(room.value, users.value, isPrivateRoom))
-  const typingContactNames = computed(() =>
-    users.value.filter(({ isTyping }) => isTyping).map(({ nickname }) => nickname)
-  )
 
   return {
-    title,
-    typingContactNames
+    title
   }
 }

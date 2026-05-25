@@ -1,0 +1,1 @@
+export const CHAT_ROOM_TYPING_IDLE_TIMEOUT_MS = 3000

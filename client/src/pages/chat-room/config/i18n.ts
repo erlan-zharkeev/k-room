@@ -216,11 +216,6 @@ export const CHAT_ROOM_PAGE_I18N = defineI18n({
     ru: 'Отправить сообщение',
     zh: '发送消息'
   },
-  typing: {
-    en: 'typing',
-    ru: 'печатает',
-    zh: '正在输入'
-  },
   cancel: {
     en: 'Cancel',
     ru: 'Отмена',
