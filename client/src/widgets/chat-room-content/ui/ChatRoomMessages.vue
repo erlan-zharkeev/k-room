@@ -17,12 +17,20 @@ const {
   measureMessageListItemElement,
   messageVirtualListStyle,
   messageVirtualListItems,
-  loadMessages
+  loadMessages,
+  saveMessagesScrollState
 } = useChatRoomMessages(props)
 </script>
 
 <template>
-  <NmorphScroll ref="messagesScroll" class="chat-room-messages" scroll-x-prop="hidden" css-scroll-behavior="auto">
+  <NmorphScroll
+    ref="messagesScroll"
+    class="chat-room-messages"
+    scroll-x-prop="hidden"
+    css-scroll-behavior="auto"
+    update-only-on-scroll-end
+    @update:model-value="saveMessagesScrollState"
+  >
     <div v-if="messageVirtualListItems.length" class="chat-room-messages__virtual" :style="messageVirtualListStyle">
       <div
         v-for="{ item, virtualItem } in messageVirtualListItems"

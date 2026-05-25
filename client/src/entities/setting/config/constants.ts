@@ -8,14 +8,8 @@ export const DEFAULT_SETTINGS: DeviceSetting = {
   contentTab: 'contacts',
   chatRoomId: '',
   contentNavigationScrollByTab: {
-    'chat-rooms': {
-      x: 0,
-      y: 0
-    },
-    contacts: {
-      x: 0,
-      y: 0
-    }
+    'chat-rooms': 0,
+    contacts: 0
   },
   messageScrollByRoom: {},
   localization: DEFAULT_LOCALIZATION_SETTINGS,
