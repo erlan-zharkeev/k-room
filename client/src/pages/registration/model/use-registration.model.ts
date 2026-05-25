@@ -120,7 +120,6 @@ export const useRegistration = () => {
     captchaResetKey,
     captchaToken,
     formData,
-    formRef,
     isFormValid,
     isLoading,
     register,

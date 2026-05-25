@@ -11,13 +11,11 @@ import { usePasswordRecovery } from '../model/use-password-recovery.model'
 
 const {
   codeFormData,
-  codeFormRef,
   codeSent,
   codeValidationIsLoading,
   counterValue,
   debugCode,
   emailFormData,
-  emailFormRef,
   emailSendCodeIsLoading,
   initializePasswordRecovery,
   isCodeFormValid,

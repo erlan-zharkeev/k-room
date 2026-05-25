@@ -10,8 +10,7 @@ import { REGISTRATION_NICKNAME_INPUT_ATTRS } from '../config/constants'
 import { REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration.model'
 
-const { captchaRequired, captchaResetKey, captchaToken, formData, formRef, isFormValid, isLoading, submit } =
-  useRegistration()
+const { captchaRequired, captchaResetKey, captchaToken, formData, isFormValid, isLoading, submit } = useRegistration()
 const isFormDisabled = computed(() => isLoading.value)
 const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
 const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)

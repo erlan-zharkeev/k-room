@@ -64,7 +64,6 @@ export const useAppCaptcha = ({ action, model, resetKey }: UseAppCaptchaParams) 
   watch(resetKey, resetWidget)
 
   return {
-    containerRef,
     showUnavailable
   }
 }

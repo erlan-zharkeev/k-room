@@ -19,7 +19,7 @@ import { useFirebase } from '../model/use-firebase.model'
 import { useLogin } from '../model/use-login.model'
 
 const { isFirebaseLoginLoading, onFirebaseLogin } = useFirebase()
-const { captchaRequired, captchaResetKey, captchaToken, formData, formRef, isFormValid, isLoading, submit } = useLogin()
+const { captchaRequired, captchaResetKey, captchaToken, formData, isFormValid, isLoading, submit } = useLogin()
 const isFormDisabled = computed(() => isLoading.value || isFirebaseLoginLoading.value)
 const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
 const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)

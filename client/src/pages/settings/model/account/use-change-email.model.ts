@@ -86,7 +86,6 @@ export const useChangeEmail = () => {
     currentEmail,
     emailNotChanged,
     formData,
-    formRef,
     isEmailCodeVisible,
     isEmailCodeSending,
     isEmailCodeValidating,

@@ -12,7 +12,6 @@ const {
   currentEmail,
   emailNotChanged,
   formData,
-  formRef,
   isEmailCodeVisible,
   isEmailCodeSending,
   isEmailCodeValidating,

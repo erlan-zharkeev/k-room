@@ -11,7 +11,7 @@ import { useAppCaptcha } from './use-app-captcha.model'
 const props = withDefaults(defineProps<AppCaptchaProps>(), APP_CAPTCHA_DEFAULT_PROPS)
 const model = defineModel<string>({ default: '' })
 
-const { containerRef, showUnavailable } = useAppCaptcha({
+const { showUnavailable } = useAppCaptcha({
   action: props.action,
   model,
   resetKey: toRef(props, 'resetKey')

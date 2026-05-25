@@ -1,4 +1,4 @@
-import { computed, nextTick, toRef, watch } from 'vue'
+import { computed, toRef, watch } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 
@@ -19,7 +19,6 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   const { clearPendingReadMessageIds, markVisibleMessagesAsRead } = useChatRoomMessageReadStatus(room, messageList)
 
   const {
-    messagesScrollRef,
     messageVirtualizer,
     measureMessageListItemElement,
     messageVirtualListStyle,
@@ -61,12 +60,6 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   watch(
     () => displayedLastMessageId.value,
     () => void scrollMessagesToBottom(),
-    { immediate: true }
-  )
-
-  watch(
-    () => messagesScrollRef.value?.scrollDOMContainer,
-    () => void nextTick(() => markVisibleMessagesAsRead(messageVirtualizer.value)),
     { immediate: true }
   )
 

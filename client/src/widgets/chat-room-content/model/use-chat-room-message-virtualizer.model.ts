@@ -1,6 +1,6 @@
 import type { INmorphScrollExpose } from '@nmorph/nmorph-ui-kit'
 import { useVirtualizer, type Virtualizer } from '@tanstack/vue-virtual'
-import { computed, nextTick, type ComputedRef, useTemplateRef } from 'vue'
+import { computed, nextTick, type ComputedRef, useTemplateRef, watch } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 
@@ -76,8 +76,13 @@ export const useChatRoomMessageVirtualizer = (
     messageVirtualizer.value.scrollToIndex(messageList.value.length - 1, { align: 'end', behavior: 'auto' })
   }
 
+  watch(
+    () => messagesScrollRef.value?.scrollDOMContainer,
+    () => void nextTick(() => markVisibleMessagesAsRead(messageVirtualizer.value)),
+    { immediate: true }
+  )
+
   return {
-    messagesScrollRef,
     messageVirtualizer,
     measureMessageListItemElement,
     messageVirtualListStyle,
