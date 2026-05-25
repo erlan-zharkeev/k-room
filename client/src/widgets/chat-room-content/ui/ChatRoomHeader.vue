@@ -19,10 +19,9 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = use
 )
 </script>
 <template>
-  <section class="chat-room-header">
+  <section class="chat-room-header" :class="{ 'chat-room-header--with-back': isPortraitTabletOrLess }">
     <ContentNavigationBackButton v-if="isPortraitTabletOrLess" class="chat-room-header__back" />
     <NmorphCard
-      card-padding="4px"
       tag="header"
       shadow-type="inset"
       class="chat-room-content-header"
@@ -60,10 +59,17 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = use
 
 <style lang="scss">
 .chat-room-header {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  align-items: center;
   gap: 8px;
-  height: auto;
+}
+
+.chat-room-header--with-back {
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+.chat-room-content-header {
+  min-width: 0;
 }
 
 .chat-room-content-header__content {
