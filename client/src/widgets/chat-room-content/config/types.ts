@@ -21,6 +21,7 @@ export interface ChatRoomFooterProps {
 export interface MessageBodyProps {
   isPrivateRoom: boolean
   message: MessageRecord
+  roomId: string
 }
 
 export type MessageContextMenuAction =
@@ -28,6 +29,12 @@ export type MessageContextMenuAction =
 
 export interface MessageContextMenuProps {
   message: MessageRecord
+  roomId: string
+}
+
+export interface MessageDeleteDialogProps {
+  message: MessageRecord
+  roomId: string
 }
 
 export interface MessageContextMenuOption {

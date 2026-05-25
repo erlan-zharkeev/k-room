@@ -36,6 +36,36 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Текст сообщения скопирован',
     zh: '消息文本已复制'
   },
+  deleteMessage: {
+    en: 'Delete message',
+    ru: 'Удалить сообщение',
+    zh: '删除消息'
+  },
+  deleteMessageTitle: {
+    en: 'Delete message',
+    ru: 'Удалить сообщение',
+    zh: '删除消息'
+  },
+  deleteMessageConfirm: {
+    en: 'Choose how to delete this message. This action cannot be undone.',
+    ru: 'Выберите, как удалить это сообщение. Это действие нельзя отменить.',
+    zh: '选择如何删除此消息。此操作无法撤销。'
+  },
+  deleteMessageForMe: {
+    en: 'For me',
+    ru: 'У себя',
+    zh: '仅自己'
+  },
+  deleteMessageForEveryone: {
+    en: 'For everyone',
+    ru: 'У всех',
+    zh: '所有人'
+  },
+  cancel: {
+    en: 'Cancel',
+    ru: 'Отмена',
+    zh: '取消'
+  },
   messagePlaceholder: {
     en: 'Message',
     ru: 'Сообщение',
