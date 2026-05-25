@@ -137,6 +137,10 @@ const {
 
 .chat-room-form-dialog__contacts-card {
   min-width: 0;
+
+  .nmorph-checkbox-group__content {
+    padding: 1px 0;
+  }
 }
 
 .chat-room-form-dialog__actions {

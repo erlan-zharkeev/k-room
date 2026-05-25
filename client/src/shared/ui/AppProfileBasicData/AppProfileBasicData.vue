@@ -14,16 +14,15 @@ const { imageSrc } = useAppProfileBasicData(props)
 <template>
   <div class="app-profile-basic-data">
     <NmorphBadge
-      v-if="props.showOnline"
       type="dot"
       size="base"
       color="var(--nmorph-success-color)"
+      :hidden="!props.showOnline"
       :offset-x="-1"
       :offset-y="-1"
     >
       <NmorphAvatar :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
     </NmorphBadge>
-    <NmorphAvatar v-else :src="imageSrc" :alt="props.imageAlt" shape="square" :name="props.name" preview />
     <div class="app-profile-basic-data__content">
       <slot name="title">
         <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
