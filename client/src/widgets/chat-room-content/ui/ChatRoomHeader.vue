@@ -63,6 +63,7 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = use
   grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   align-items: center;
+
   height: auto;
 }
 
