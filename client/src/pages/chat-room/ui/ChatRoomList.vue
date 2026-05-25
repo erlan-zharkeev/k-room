@@ -45,7 +45,7 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
 }
 
 .chat-room-list {
-  padding: 8px 0 8px 8px;
+  padding: 8px;
 }
 
 .chat-room-list__pinned {

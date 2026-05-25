@@ -47,7 +47,7 @@ const { searchQuery, isCreateChatDialogOpen, showNoSearchResults, showNoChats, o
       :selectable="false"
       :text="$t(CHAT_ROOM_PAGE_I18N.noSearchResults)"
     />
-    <NmorphScroll v-else scroll-x-prop="hidden">
+    <NmorphScroll v-else scroll-x-prop="hidden" :y-gap-in-px="-6">
       <ChatRoomList />
     </NmorphScroll>
 
