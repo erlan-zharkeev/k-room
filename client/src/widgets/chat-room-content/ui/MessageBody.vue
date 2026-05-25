@@ -4,50 +4,54 @@ import { AppMediaImage, AppText } from 'src/shared/ui'
 import type { MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 
+import MessageContextMenu from './MessageContextMenu.vue'
+
 const props = defineProps<MessageBodyProps>()
 const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessageBody(props)
 </script>
 
 <template>
-  <article
-    class="message-body"
-    :class="[
-      props.message.isSelf && 'message-body--self',
-      props.message.status && `message-body--${props.message.status}`
-    ]"
-  >
-    <div class="message-body__content">
-      <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
-      <div v-if="props.message.repliedMessage" class="message-body__reply">
-        <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
-        <AppText
-          class="message-body__reply-text"
-          tag="small"
-          color="semi-contrast-text"
-          :text="props.message.repliedMessage.body"
-        />
+  <MessageContextMenu :message="props.message">
+    <article
+      class="message-body"
+      :class="[
+        props.message.isSelf && 'message-body--self',
+        props.message.status && `message-body--${props.message.status}`
+      ]"
+    >
+      <div class="message-body__content">
+        <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
+        <div v-if="props.message.repliedMessage" class="message-body__reply">
+          <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
+          <AppText
+            class="message-body__reply-text"
+            tag="small"
+            color="semi-contrast-text"
+            :text="props.message.repliedMessage.body"
+          />
+        </div>
+        <div v-if="messageImageList.length" class="message-body__images">
+          <AppMediaImage
+            v-for="image in messageImageList"
+            :key="image.mediaId"
+            :media-id="image.mediaId"
+            :alt="image.name"
+            width="100%"
+            height="220px"
+          />
+        </div>
+        <AppText tag="p" :text="props.message.body" />
+        <div class="message-body__footer">
+          <template v-if="reactionList.length">
+            <span v-for="reaction in reactionList" :key="reaction.glyphKey" :title="reaction.nicknames.join(', ')">
+              {{ reaction.glyphKey }}
+            </span>
+          </template>
+          <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
+        </div>
       </div>
-      <div v-if="messageImageList.length" class="message-body__images">
-        <AppMediaImage
-          v-for="image in messageImageList"
-          :key="image.mediaId"
-          :media-id="image.mediaId"
-          :alt="image.name"
-          width="100%"
-          height="220px"
-        />
-      </div>
-      <AppText tag="p" :text="props.message.body" />
-      <div class="message-body__footer">
-        <template v-if="reactionList.length">
-          <span v-for="reaction in reactionList" :key="reaction.glyphKey" :title="reaction.nicknames.join(', ')">
-            {{ reaction.glyphKey }}
-          </span>
-        </template>
-        <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
-      </div>
-    </div>
-  </article>
+    </article>
+  </MessageContextMenu>
 </template>
 
 <style lang="scss">

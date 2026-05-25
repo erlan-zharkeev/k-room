@@ -1,4 +1,4 @@
-import { useBreakpoints, usePermission } from '@vueuse/core'
+import { useBreakpoints, useMediaQuery, usePermission } from '@vueuse/core'
 import { isString, MB_IN_BYTES } from 'global-shared'
 import { computed } from 'vue'
 
@@ -85,6 +85,21 @@ export const useScreen = () => {
     isPortraitTabletOnly: breakpoints.between('portrait-tablet', 'tablet'),
     isPortraitTabletOrLess: breakpoints.smaller('tablet'),
     isDesktopOrMore: breakpoints.greaterOrEqual('desktop')
+  }
+}
+
+export const useTouchInput = () => {
+  const isCoarsePointer = useMediaQuery('(pointer: coarse)')
+  const hasHover = useMediaQuery('(hover: hover)')
+  const isTouchAvailable = computed(() => navigator.maxTouchPoints > 0)
+  const hasPrimaryTouchSignals = computed(() => isTouchAvailable.value && isCoarsePointer.value)
+  const isTouchInput = computed(() => hasPrimaryTouchSignals.value && !hasHover.value)
+
+  return {
+    hasHover,
+    isCoarsePointer,
+    isTouchAvailable,
+    isTouchInput
   }
 }
 

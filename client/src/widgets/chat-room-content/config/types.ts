@@ -2,6 +2,8 @@ import type { VirtualItem } from '@tanstack/vue-virtual'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
+import type { MESSAGE_CONTEXT_MENU_ACTION } from './constants'
+
 export interface ChatRoomMessagesProps {
   room: ChatRoomRecord
   isPrivateRoom: boolean
@@ -19,6 +21,19 @@ export interface ChatRoomFooterProps {
 export interface MessageBodyProps {
   isPrivateRoom: boolean
   message: MessageRecord
+}
+
+export type MessageContextMenuAction =
+  (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
+
+export interface MessageContextMenuProps {
+  message: MessageRecord
+}
+
+export interface MessageContextMenuOption {
+  label: string
+  value: MessageContextMenuAction
+  disabled?: boolean
 }
 
 export interface DateSeparatorProps {
