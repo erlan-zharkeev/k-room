@@ -1,4 +1,5 @@
-import { onBeforeUnmount, onMounted, watch } from 'vue'
+import { useEventListener } from '@vueuse/core'
+import { computed } from 'vue'
 
 import { useSystem } from 'src/entities/system'
 
@@ -6,31 +7,13 @@ import { INTERACTION_EVENTS } from '../config/constants'
 
 export const useUserInteractionProvider = () => {
   const { hasInteracted, setHasInteracted } = useSystem()
+  const interactionTarget = computed(() => (hasInteracted.value ? null : window))
 
-  function removeListeners() {
-    INTERACTION_EVENTS.forEach((eventName) => {
-      window.removeEventListener(eventName, handleInteraction)
-    })
-  }
-
-  function handleInteraction() {
-    removeListeners()
+  const handleInteraction = () => {
     setHasInteracted(true)
   }
 
-  watch(hasInteracted, (interacted) => {
-    if (interacted) {
-      removeListeners()
-    }
+  INTERACTION_EVENTS.forEach((eventName) => {
+    useEventListener(interactionTarget, eventName, handleInteraction)
   })
-
-  onMounted(() => {
-    if (hasInteracted.value) return
-
-    INTERACTION_EVENTS.forEach((eventName) => {
-      window.addEventListener(eventName, handleInteraction)
-    })
-  })
-
-  onBeforeUnmount(removeListeners)
 }

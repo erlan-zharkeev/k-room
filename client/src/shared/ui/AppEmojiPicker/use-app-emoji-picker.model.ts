@@ -1,7 +1,8 @@
+import { useEventListener } from '@vueuse/core'
 import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE } from 'global-shared'
-import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
+import { nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue'
 
 import { APP_EMOJI_PICKER_DATA_SOURCE_MAP, APP_EMOJI_PICKER_QUICK_EMOJI_LIST } from './constants'
 import { APP_EMOJI_PICKER_I18N_MAP } from './i18n'
@@ -10,7 +11,7 @@ import type { AppEmojiPickerEmit, AppEmojiPickerProps } from './types'
 export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPickerEmit) => {
   const pickerRootRef = useTemplateRef<HTMLElement>('pickerRoot')
   const isExpanded = ref(false)
-  let pickerElement: Picker | undefined
+  const pickerElement = shallowRef<Picker | null>(null)
 
   const handleEmojiClick = ({ detail }: EmojiClickEvent) => {
     const value = detail.unicode ?? ('unicode' in detail.emoji ? detail.emoji.unicode : '')
@@ -21,9 +22,8 @@ export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPick
   }
 
   const destroyPicker = () => {
-    pickerElement?.removeEventListener('emoji-click', handleEmojiClick)
-    pickerElement?.remove()
-    pickerElement = undefined
+    pickerElement.value?.remove()
+    pickerElement.value = null
   }
 
   const mountPicker = () => {
@@ -40,7 +40,7 @@ export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPick
       locale: props.language
     }
 
-    pickerElement = new Picker(
+    const picker = new Picker(
       props.language === APP_LANGUAGE.En
         ? options
         : {
@@ -49,9 +49,9 @@ export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPick
           }
     )
 
-    pickerElement.classList.add('app-emoji-picker__element')
-    pickerElement.addEventListener('emoji-click', handleEmojiClick)
-    root.append(pickerElement)
+    picker.classList.add('app-emoji-picker__element')
+    pickerElement.value = picker
+    root.append(picker)
   }
 
   const expandPicker = async () => {
@@ -61,6 +61,7 @@ export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPick
   }
 
   onBeforeUnmount(destroyPicker)
+  useEventListener<EmojiClickEvent>(pickerElement, 'emoji-click', handleEmojiClick)
 
   watch(() => props.language, mountPicker)
 
