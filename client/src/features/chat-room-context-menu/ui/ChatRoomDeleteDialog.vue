@@ -15,9 +15,9 @@ const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, deleteChat
 
 <template>
   <NmorphDialog v-model="model" :title="$t(CHAT_ROOM_CONTEXT_MENU_I18N.deleteChatTitle)">
-    <div class="chat-room-delete-dialog">
+    <div class="app-dialog-stack">
       <AppText :text="deleteChatRoomConfirmText" />
-      <div class="chat-room-delete-dialog__actions">
+      <div class="app-dialog-actions">
         <NmorphButton
           :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.cancel)"
           style-type="transparent"
@@ -36,17 +36,3 @@ const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, deleteChat
     </div>
   </NmorphDialog>
 </template>
-
-<style lang="scss">
-.chat-room-delete-dialog {
-  display: grid;
-  gap: 8px;
-}
-
-.chat-room-delete-dialog__actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: flex-end;
-}
-</style>

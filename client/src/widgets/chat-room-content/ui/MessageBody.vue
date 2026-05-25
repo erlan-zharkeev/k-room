@@ -11,7 +11,7 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
 </script>
 
 <template>
-  <MessageContextMenu :message="props.message">
+  <MessageContextMenu :message="props.message" :room-id="props.roomId">
     <article
       class="message-body"
       :class="[

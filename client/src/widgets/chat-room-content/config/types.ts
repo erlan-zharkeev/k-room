@@ -24,8 +24,7 @@ export interface MessageBodyProps {
   roomId: string
 }
 
-export type MessageContextMenuAction =
-  (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
+export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
 
 export interface MessageContextMenuProps {
   message: MessageRecord
