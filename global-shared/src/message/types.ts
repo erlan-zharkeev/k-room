@@ -38,13 +38,3 @@ export interface Message {
   imageCompression?: boolean
   repliedMessage?: RepliedMessage | null
 }
-
-export interface MessageDocument extends Message {
-  _id: string
-  usersMetaData: MessageMetadata[]
-}
-
-export interface MessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status'> {
-  _id?: string
-  usersMetaData?: MessageMetadata[]
-}

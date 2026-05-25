@@ -1,5 +1,4 @@
 import {
-  type MessageDocument,
   type EventLoadRoomMessages,
   type EventMessageDelivered,
   type EventMessagesStatusUpdated,
@@ -30,7 +29,7 @@ import { UserModel } from '../user/user.model'
 
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
-import type { SendMessageParams } from './messages.types'
+import type { MessageDocument, SendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
   const { _id, authorId, authorNickname, body, createdAt, reactions, repliedMessage, usersMetaData } = message

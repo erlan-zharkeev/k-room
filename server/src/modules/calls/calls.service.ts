@@ -4,6 +4,7 @@ import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { CallModel } from './calls.model'
+import type { CallDocument } from './calls.types'
 
 const resolveFlowType = (answered: boolean, isIncoming: boolean): CallFlow => {
   if (answered) {
@@ -14,7 +15,7 @@ const resolveFlowType = (answered: boolean, isIncoming: boolean): CallFlow => {
 }
 
 export const transformCallForUser = async (userId: string, callId: string): Promise<Call | null> => {
-  const call = await CallModel.findById(callId).lean()
+  const call = await CallModel.findById(callId).lean<CallDocument>()
 
   if (!call) {
     return null
@@ -56,7 +57,7 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
 export const emitCallsToUser = async (userId: string) => {
   const calls = await CallModel.find({ interlocutors: { $in: [userId] } })
     .sort({ calledAt: -1 })
-    .lean()
+    .lean<CallDocument[]>()
   const transformedCalls = await Promise.all(calls.map(async (call) => transformCallForUser(userId, String(call._id))))
   const payload = transformedCalls.filter(
     (call): call is NonNullable<typeof call> => call !== null

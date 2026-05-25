@@ -18,6 +18,7 @@ import { UserModel } from '../user/user.model'
 import { CALLS_I18N } from './calls.i18n'
 import { CallModel } from './calls.model'
 import { emitCallDataToInterlocutors, emitCallsToUser } from './calls.service'
+import type { CallDocument } from './calls.types'
 
 export const registerCallSocketHandlers = (socket: SocketInstance) => {
   socket.on<SocketActions>(
@@ -92,7 +93,7 @@ export const registerCallSocketHandlers = (socket: SocketInstance) => {
           { _id: callId },
           { startedAt: Date.now(), answered: true },
           { new: true }
-        ).lean()
+        ).lean<CallDocument>()
 
         if (!call) {
           return
@@ -116,7 +117,11 @@ export const registerCallSocketHandlers = (socket: SocketInstance) => {
       async ({ callerId, callId }: EventCallEnded) => {
         emitToUsers([callerId], 'call-ended')
 
-        const call = await CallModel.findOneAndUpdate({ _id: callId }, { finishedAt: Date.now() }, { new: true }).lean()
+        const call = await CallModel.findOneAndUpdate(
+          { _id: callId },
+          { finishedAt: Date.now() },
+          { new: true }
+        ).lean<CallDocument>()
 
         if (!call) {
           return

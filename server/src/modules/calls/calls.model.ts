@@ -1,5 +1,6 @@
-import type { CallSchema } from 'global-shared'
 import { model, Schema } from 'mongoose'
+
+import type { CallSchema } from './calls.types'
 
 const callSchema = new Schema<CallSchema>({
   calledAt: {

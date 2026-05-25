@@ -4,7 +4,6 @@ import {
   CHAT_KIND,
   CHAT_ROOM_GROUP_MEMBER_LIMIT,
   CHAT_ROOM_NAME_MAX_LENGTH,
-  type ChatRoomSchema,
   type CreateRoomAckPayload,
   type EventChatRoomDeleted,
   type EventCreateRoom,
@@ -14,7 +13,6 @@ import {
   type EventMutedChatRoomsUpdated,
   type EventUpdateChatRoom,
   type KnownUser,
-  type MessageDocument,
   type EventGetRoom,
   type EventPinnedChatRoomsUpdated,
   type EventUpdateMutedChatRoom,
@@ -41,6 +39,7 @@ import { AppError } from 'src/shared/lib/app-error'
 import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
+import type { MessageDocument } from '../messages/messages.types'
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
@@ -48,7 +47,7 @@ import { UserModel } from '../user/user.model'
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
-import type { ChatRoomSchemaWithObjectId, TransformRoomForUserParams } from './chat-rooms.types'
+import type { ChatRoomDocument, ChatRoomSchema, TransformRoomForUserParams } from './chat-rooms.types'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
@@ -159,7 +158,7 @@ export const createChatRoom = async (
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.createChatRoomFailed)
   }
 
-  const roomData: Omit<ChatRoomSchema, 'id'> = {
+  const roomData: ChatRoomSchema = {
     users: memberIds,
     adminId: userId,
     createdAt: Date.now(),
@@ -349,7 +348,7 @@ export const updateChatRoom = async (
     chatKind: CHAT_KIND.GROUP
   })
     .select('-__v')
-    .lean<ChatRoomSchemaWithObjectId>()
+    .lean<ChatRoomDocument>()
 
   if (!room) {
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.updateChatRoomFailed)
@@ -395,7 +394,7 @@ export const updateChatRoom = async (
       { new: true }
     )
       .select('-__v')
-      .lean<ChatRoomSchemaWithObjectId>()
+      .lean<ChatRoomDocument>()
   })
   const deletedAvatarId = currentAvatarId && currentAvatarId !== nextAvatarId ? currentAvatarId : null
 
@@ -490,7 +489,7 @@ export const transformRoomForUser = async ({
   pinnedChatRoomIds,
   mutedChatRoomIds
 }: TransformRoomForUserParams): Promise<EventGetRoom> => {
-  const normalizedRoom = room as ChatRoomSchemaWithObjectId
+  const normalizedRoom = room
   const { _id, users: roomUsers, chatKind: roomChatKind, messages } = normalizedRoom
   const roomId = String(_id)
   const users = roomUsers.map((id) => String(id))
@@ -526,7 +525,7 @@ export const transformRoomForUser = async ({
 
 const emitRoomToUsers = async (
   userIds: string[],
-  room: ChatRoomSchema,
+  room: ChatRoomDocument,
   presenceService: PresenceService,
   eventName: 'room-data-updated' | 'new-room-added'
 ) => {
@@ -553,7 +552,7 @@ const emitRoomToUsers = async (
 
 export const emitRoomDataToUsers = async (
   userIds: string[],
-  room: ChatRoomSchema,
+  room: ChatRoomDocument,
   presenceService: PresenceService
 ) => {
   await emitRoomToUsers(userIds, room, presenceService, 'room-data-updated')
@@ -570,7 +569,7 @@ export const leaveChatRoom = async (
     chatKind: CHAT_KIND.GROUP
   })
     .select('-__v')
-    .lean<ChatRoomSchemaWithObjectId>()
+    .lean<ChatRoomDocument>()
 
   if (!room) {
     return
@@ -607,7 +606,7 @@ export const leaveChatRoom = async (
       { new: true }
     )
       .select('-__v')
-      .lean<ChatRoomSchemaWithObjectId>(),
+      .lean<ChatRoomDocument>(),
     UserModel.updateOne(
       { _id: userId },
       {
@@ -630,6 +629,10 @@ export const leaveChatRoom = async (
   }
 }
 
-export const emitNewRoomToUsers = async (userIds: string[], room: ChatRoomSchema, presenceService: PresenceService) => {
+export const emitNewRoomToUsers = async (
+  userIds: string[],
+  room: ChatRoomDocument,
+  presenceService: PresenceService
+) => {
   await emitRoomToUsers(userIds, room, presenceService, 'new-room-added')
 }

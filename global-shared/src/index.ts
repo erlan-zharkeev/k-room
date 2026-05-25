@@ -6,7 +6,7 @@ export type {
   SignInWithProviderPayload
 } from './auth/types'
 
-export type { CallStatus, CallFlow, Call, CallDocument, CallSchema } from './calls/types'
+export type { CallStatus, CallFlow, Call } from './calls/types'
 
 export {
   CHAT_KIND,
@@ -19,7 +19,7 @@ export { isRoomAdmin } from './chat/lib/is-room-admin'
 export { isRoomGroup } from './chat/lib/is-room-group'
 export { isRoomPrivate } from './chat/lib/is-room-private'
 export { getRoomInterlocutorId, getRoomOtherUserIds } from './chat/lib/get-room-user-ids'
-export type { ChatRoom, ChatRooms, ChatRoomSchema, ChatKind } from './chat/types'
+export type { ChatRoom, ChatRooms, ChatKind } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
 export type {
@@ -97,15 +97,7 @@ export {
 } from './message/constants'
 export { isMessageAuthor } from './message/lib/message-author'
 export { isMessageStatusDelivered, isMessageReadStatus, isMessageSendingStatus } from './message/lib/message-status'
-export type {
-  MessageStatus,
-  MessageMetadata,
-  MessageReaction,
-  RepliedMessage,
-  Message,
-  MessageDocument,
-  MessageSchema
-} from './message/types'
+export type { MessageStatus, MessageMetadata, MessageReaction, RepliedMessage, Message } from './message/types'
 
 export type { ChangePasswordPayload, CreateNewPasswordPayload } from './requests/types'
 
