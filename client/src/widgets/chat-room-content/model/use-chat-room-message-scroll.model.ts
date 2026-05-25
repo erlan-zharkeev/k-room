@@ -7,7 +7,8 @@ import type { ChatRoomRecord } from 'src/shared/lib'
 
 export const useChatRoomMessageScroll = (
   room: Ref<ChatRoomRecord>,
-  messageVirtualizer: Ref<Virtualizer<HTMLElement, HTMLElement>>
+  messageVirtualizer: Ref<Virtualizer<HTMLElement, HTMLElement>>,
+  scrollMessagesToBottom: () => Promise<void>
 ) => {
   const { settings, setByPath } = useSettings()
 
@@ -49,12 +50,20 @@ export const useChatRoomMessageScroll = (
     return true
   }
 
+  const scrollMessagesToInitialPosition = async (roomId: string) => {
+    if (hasSavedMessagesScrollState(roomId)) {
+      await restoreMessagesScrollState(roomId)
+      return
+    }
+
+    await scrollMessagesToBottom()
+  }
+
   onBeforeUnmount(saveCurrentMessagesScrollState)
 
   return {
-    hasSavedMessagesScrollState,
-    restoreMessagesScrollState,
     saveCurrentMessagesScrollState,
-    saveMessagesScrollState
+    saveMessagesScrollState,
+    scrollMessagesToInitialPosition
   }
 }

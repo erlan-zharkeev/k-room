@@ -56,14 +56,14 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     }
   }
 
-  const loadMessages = () => {
+  const loadMessages = async () => {
     const selectedRoomId = roomId.value
 
     if (!selectedRoomId) return
 
     const beforeCreatedAt = nextBeforeCreatedAtByRoomId[selectedRoomId]
 
-    void loadRoomMessages(selectedRoomId, beforeCreatedAt)
+    await loadRoomMessages(selectedRoomId, beforeCreatedAt)
   }
 
   const resetRoomMessagesPagination = (roomId?: string) => {
