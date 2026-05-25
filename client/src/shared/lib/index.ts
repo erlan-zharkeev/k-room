@@ -26,7 +26,8 @@ export {
   revokeObjectUrl,
   revokeObjectUrls,
   useMediaDevicePermission,
-  useScreen
+  useScreen,
+  useTouchInput
 } from './browser/browser'
 export { IMAGE_RESOLUTIONS } from './browser/constants'
 export { createClassNameWithModifiers, stopPropagation } from './dom/dom'

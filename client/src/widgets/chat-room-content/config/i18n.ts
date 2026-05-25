@@ -21,6 +21,21 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Загрузить предыдущие сообщения',
     zh: '加载更早的消息'
   },
+  messageActions: {
+    en: 'Message actions',
+    ru: 'Действия сообщения',
+    zh: '消息操作'
+  },
+  copyMessageText: {
+    en: 'Copy text',
+    ru: 'Скопировать текст',
+    zh: '复制文本'
+  },
+  messageTextCopied: {
+    en: 'Message text copied',
+    ru: 'Текст сообщения скопирован',
+    zh: '消息文本已复制'
+  },
   messagePlaceholder: {
     en: 'Message',
     ru: 'Сообщение',
