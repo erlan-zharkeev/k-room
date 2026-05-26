@@ -21,6 +21,11 @@ export const MESSAGES_I18N = defineI18n({
     ru: 'Failed to update pinned message',
     zh: 'Failed to update pinned message'
   },
+  updateMessageReactionFailed: {
+    en: 'Failed to update message reaction',
+    ru: 'Failed to update message reaction',
+    zh: 'Failed to update message reaction'
+  },
   updateTypingStatusFailed: {
     en: 'Failed to update typing status',
     ru: 'Не удалось обновить статус набора',
