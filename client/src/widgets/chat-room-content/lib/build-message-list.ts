@@ -10,7 +10,12 @@ const appendDateSeparator = (items: MessageListItem[], messageId: string, label:
   return label
 }
 
-const appendMessage = (items: MessageListItem[], messageId: string, previousLabel: string, params: MessageListBuildParams) => {
+const appendMessage = (
+  items: MessageListItem[],
+  messageId: string,
+  previousLabel: string,
+  params: MessageListBuildParams
+) => {
   const message = params.messageById.get(messageId)
 
   if (!message) return previousLabel

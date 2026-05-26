@@ -116,7 +116,9 @@ const reconcileLoadedMessageRanges = (roomId: string, previousMessageIds: string
     currentMessageIds.slice(previousLastCurrentIndex + 1).forEach((messageId) => loadedMessageIds.add(messageId))
   }
 
-  const loadedIndexes = currentMessageIds.flatMap((messageId, index) => (loadedMessageIds.has(messageId) ? [index] : []))
+  const loadedIndexes = currentMessageIds.flatMap((messageId, index) =>
+    loadedMessageIds.has(messageId) ? [index] : []
+  )
 
   loadedMessageRangesByRoomId[roomId] = createLoadedRangesFromIndexes(loadedIndexes)
 }

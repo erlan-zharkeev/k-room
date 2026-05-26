@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphIcon, NmorphIconClose,NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphIcon, NmorphIconClose, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomPinnedMessageEmits, ChatRoomPinnedMessageProps } from '../config/types'
@@ -14,7 +14,13 @@ const { canUpdatePinnedMessage, isUpdatingPinnedMessage, pinnedMessage, pinnedMe
 </script>
 
 <template>
-  <NmorphCard tag="button" v-if="pinnedMessage" content-class="chat-room-pinned-message" shadow-type="inset" @click="emit('select', pinnedMessage.id)">
+  <NmorphCard
+    tag="button"
+    v-if="pinnedMessage"
+    content-class="chat-room-pinned-message"
+    shadow-type="inset"
+    @click="emit('select', pinnedMessage.id)"
+  >
     <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.pinnedMessage)" :text="pinnedMessageText" />
     <NmorphButton
       style-type="transparent"
@@ -36,10 +42,11 @@ const { canUpdatePinnedMessage, isUpdatingPinnedMessage, pinnedMessage, pinnedMe
 
 <style lang="scss">
 .chat-room-pinned-message {
+  cursor: pointer;
+
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
-  cursor: pointer;
 }
 </style>
