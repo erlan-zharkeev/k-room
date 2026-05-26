@@ -6,8 +6,10 @@ import { useI18n, useTouchInput } from 'src/shared/lib'
 import { MESSAGE_CONTEXT_MENU_ACTION } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageContextMenuOption, MessageContextMenuProps } from '../config/types'
+import MessageReactionPicker from '../ui/MessageReactionPicker.vue'
 
 import { useMessageCopyText } from './use-message-copy-text.model'
+import { useMessageDeleteDialog } from './use-message-delete-dialog.model'
 import { useMessagePin } from './use-message-pin.model'
 
 export const useMessageContextMenu = (props: MessageContextMenuProps) => {
@@ -17,11 +19,30 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const { t } = useI18n()
   const { canCopyMessageText, copyMessageText } = useMessageCopyText(message)
   const { canUpdatePinnedMessage, isMessagePinned, togglePinnedMessage } = useMessagePin(message, room)
+  const { isDeleteMessageDialogOpen, openDeleteMessageDialog } = useMessageDeleteDialog()
   const isMessageContextMenuOpen = ref(false)
-  const isDeleteMessageDialogOpen = ref(false)
   const isMessageContextMenuDisabled = computed(() => isTouchInput.value)
+
+  const updateMessageContextMenuOpen = (value: boolean) => {
+    isMessageContextMenuOpen.value = value
+  }
+
+  const closeMessageContextMenu = () => {
+    updateMessageContextMenuOpen(false)
+  }
+
   const messageContextMenuOptions = computed<MessageContextMenuOption[]>(() => {
     const options: MessageContextMenuOption[] = [
+      {
+        value: MESSAGE_CONTEXT_MENU_ACTION.REACTION_PICKER,
+        component: MessageReactionPicker,
+        componentProps: {
+          message: message.value,
+          room: room.value,
+          onSelect: closeMessageContextMenu
+        },
+        closeOnClick: false
+      },
       {
         label: t(CHAT_ROOM_CONTENT_I18N.copyMessageText),
         value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT,
@@ -44,14 +65,6 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
 
     return options
   })
-
-  const updateMessageContextMenuOpen = (value: boolean) => {
-    isMessageContextMenuOpen.value = value
-  }
-
-  const openDeleteMessageDialog = () => {
-    isDeleteMessageDialogOpen.value = true
-  }
 
   const selectMessageContextMenuAction = (option: unknown) => {
     if (!isUnknownObject(option)) return

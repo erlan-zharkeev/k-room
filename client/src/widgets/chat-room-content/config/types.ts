@@ -1,4 +1,5 @@
 import type { VirtualItem } from '@tanstack/vue-virtual'
+import type { Component } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
@@ -67,10 +68,24 @@ export interface MessageListBuildParams {
 }
 
 export interface MessageContextMenuOption {
-  label: string
+  label?: string
   value: MessageContextMenuAction
+  component?: Component
+  componentProps?: Record<string, unknown>
+  closeOnClick?: boolean
   disabled?: boolean
 }
+
+export interface MessageReactionPickerProps {
+  message: MessageRecord
+  room: ChatRoomRecord
+}
+
+export interface MessageReactionPickerEmits {
+  select: []
+}
+
+export type MessageReactionPickerEmit = (event: 'select') => void
 
 export interface DateSeparatorProps {
   label: string

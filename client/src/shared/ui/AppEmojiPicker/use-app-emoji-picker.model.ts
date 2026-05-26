@@ -1,17 +1,17 @@
-import { useEventListener } from '@vueuse/core'
-import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE } from 'global-shared'
-import { onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue'
+import { computed, ref } from 'vue'
 
 import { APP_EMOJI_PICKER_DATA_SOURCE_MAP, APP_EMOJI_PICKER_QUICK_EMOJI_LIST } from './constants'
 import { APP_EMOJI_PICKER_I18N_MAP } from './i18n'
 import type { AppEmojiPickerEmit, AppEmojiPickerProps } from './types'
 
 export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPickerEmit) => {
-  const pickerRootRef = useTemplateRef<HTMLElement>('pickerRoot')
   const isExpanded = ref(false)
-  const pickerElement = shallowRef<Picker | null>(null)
+  const pickerDataSource = computed(() => APP_EMOJI_PICKER_DATA_SOURCE_MAP[props.language])
+  const pickerI18n = computed(() =>
+    props.language === APP_LANGUAGE.En ? undefined : APP_EMOJI_PICKER_I18N_MAP[props.language]
+  )
 
   const handleEmojiClick = ({ detail }: EmojiClickEvent) => {
     const value = detail.unicode ?? ('unicode' in detail.emoji ? detail.emoji.unicode : '')
@@ -21,52 +21,16 @@ export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPick
     }
   }
 
-  const destroyPicker = () => {
-    pickerElement.value?.remove()
-    pickerElement.value = null
-  }
-
-  const mountPicker = () => {
-    destroyPicker()
-
-    if (!isExpanded.value) return
-
-    const root = pickerRootRef.value
-
-    if (!root) return
-
-    const options = {
-      dataSource: APP_EMOJI_PICKER_DATA_SOURCE_MAP[props.language],
-      locale: props.language
-    }
-
-    const picker = new Picker(
-      props.language === APP_LANGUAGE.En
-        ? options
-        : {
-            ...options,
-            i18n: APP_EMOJI_PICKER_I18N_MAP[props.language]
-          }
-    )
-
-    picker.classList.add('app-emoji-picker__element')
-    pickerElement.value = picker
-    root.append(picker)
-  }
-
   const expandPicker = () => {
     isExpanded.value = true
   }
 
-  onBeforeUnmount(destroyPicker)
-  useEventListener<EmojiClickEvent>(pickerElement, 'emoji-click', handleEmojiClick)
-
-  watch(isExpanded, mountPicker, { flush: 'post' })
-  watch(() => props.language, mountPicker, { flush: 'post' })
-
   return {
     expandPicker,
+    handleEmojiClick,
     isExpanded,
+    pickerDataSource,
+    pickerI18n,
     quickEmojiList: APP_EMOJI_PICKER_QUICK_EMOJI_LIST
   }
 }

@@ -99,7 +99,7 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
 
 .message-body__content {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .message-body__images {
