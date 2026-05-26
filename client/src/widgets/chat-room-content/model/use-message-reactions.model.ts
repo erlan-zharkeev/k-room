@@ -1,10 +1,6 @@
 import { computed, toRef } from 'vue'
 
-import type {
-  MessageReactionGroup,
-  MessageReactionTagItem,
-  MessageReactionsProps
-} from '../config/types'
+import type { MessageReactionGroup, MessageReactionTagItem, MessageReactionsProps } from '../config/types'
 
 export const useMessageReactions = (props: MessageReactionsProps) => {
   const message = toRef(props, 'message')
@@ -34,7 +30,7 @@ export const useMessageReactions = (props: MessageReactionsProps) => {
 
     return [...reactionMap.values()]
   })
-
+  // Todo Удалить height и common и цвета через пропсы прокинуть.
   const reactionTagList = computed<MessageReactionTagItem[]>(() =>
     reactionList.value.map((reaction) => ({
       value: reaction.glyphKey,
