@@ -3,7 +3,13 @@ import type { ChatRoom } from '../chat/types'
 import type { Contact, KnownUser, Interaction } from '../contact/types'
 import type { AppLanguage } from '../language/types'
 import type { MediaFileValue } from '../media/types'
-import type { Message, MessageLoadDirection, MessageReaction, MessageStatus } from '../message/types'
+import type {
+  Message,
+  MessageLoadDirection,
+  MessageReaction,
+  MessageReactionUpdateAction,
+  MessageStatus
+} from '../message/types'
 import type { BasicStreamSettings } from '../shared/types'
 import type { ReqStatus } from '../status/types'
 import type { UserPreview } from '../user/types'
@@ -242,7 +248,8 @@ export interface EventMessageDeleted {
 export interface EventUpdatedMessageReactions {
   roomId: string
   messageId: string
-  reactions: MessageReaction[]
+  action: MessageReactionUpdateAction
+  reaction: MessageReaction
 }
 export interface CreateRoomAckPayload {
   roomId: string

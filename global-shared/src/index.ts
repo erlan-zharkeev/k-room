@@ -93,6 +93,8 @@ export {
   MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_DIRECTION,
   MESSAGE_LOAD_LIMIT_MAX,
+  MESSAGE_REACTION_LIMIT_PER_USER,
+  MESSAGE_REACTION_UPDATE_ACTION,
   MESSAGE_STATUS,
   MESSAGE_STATUS_VALUE
 } from './message/constants'
@@ -101,6 +103,7 @@ export { isMessageStatusDelivered, isMessageReadStatus, isMessageSendingStatus }
 export type {
   MessageStatus,
   MessageLoadDirection,
+  MessageReactionUpdateAction,
   MessageMetadata,
   MessageReaction,
   RepliedMessage,

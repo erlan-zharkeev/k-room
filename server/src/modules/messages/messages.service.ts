@@ -18,6 +18,8 @@ import {
   MESSAGE_BODY_MAX_LENGTH,
   MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_LIMIT_MAX,
+  MESSAGE_REACTION_LIMIT_PER_USER,
+  MESSAGE_REACTION_UPDATE_ACTION,
   MESSAGE_STATUS_VALUE,
   REQ_STATUS,
   getRoomOtherUserIds,
@@ -326,46 +328,62 @@ export const updatePinnedMessage = async (
 }
 
 export const toggleMessageReaction = async (userId: string, { glyphKey, messageId, roomId }: EventAddReaction) => {
-  const [room, message, user] = await Promise.all([
+  const [room, user] = await Promise.all([
     ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean(),
-    MessageModel.findOne({ _id: messageId, deletedForUserIds: { $ne: userId } })
-      .select('reactions')
-      .lean<MessageDocument>(),
     UserModel.findById(userId).select('public.nickname').lean()
   ])
 
-  if (!room || !message || !user) return
+  if (!room || !user) return
 
-  const reactions = message.reactions ?? []
-  const hasExistingReaction = reactions.some(
-    (reaction) => reaction.authorId === userId && reaction.glyphKey === glyphKey
-  )
   const reaction = {
     authorId: userId,
     nickname: user.public.nickname,
     glyphKey
   }
-  const update = hasExistingReaction
-    ? { $pull: { reactions: { authorId: userId, glyphKey } } }
-    : { $addToSet: { reactions: reaction } }
-
-  // Отправляем итоговый список, чтобы клиенты одинаково обработали добавление и удаление.
-  const updatedMessage = await MessageModel.findOneAndUpdate(
+  const removeResult = await MessageModel.updateOne(
     { _id: messageId, deletedForUserIds: { $ne: userId } },
-    update,
-    { new: true }
+    { $pull: { reactions: { authorId: userId, glyphKey } } }
   )
-    .select('reactions')
-    .lean<MessageDocument>()
 
-  if (!updatedMessage) {
+  if (removeResult.modifiedCount > 0) {
+    const payload: EventUpdatedMessageReactions = {
+      roomId,
+      messageId,
+      action: MESSAGE_REACTION_UPDATE_ACTION.REMOVE,
+      reaction
+    }
+
+    emitToUsers(stringifyMongoIds(room.users), 'message-reaction-updated', payload)
+
     return
   }
+
+  // Считаем реакции пользователя в Mongo-запросе, чтобы лимит не зависел от локального снимка.
+  const userReactionCountExpression = {
+    $size: {
+      $filter: {
+        input: { $ifNull: ['$reactions', []] },
+        as: 'reaction',
+        cond: { $eq: ['$$reaction.authorId', userId] }
+      }
+    }
+  }
+  const addResult = await MessageModel.updateOne(
+    {
+      _id: messageId,
+      deletedForUserIds: { $ne: userId },
+      $expr: { $lt: [userReactionCountExpression, MESSAGE_REACTION_LIMIT_PER_USER] }
+    },
+    { $addToSet: { reactions: reaction } }
+  )
+
+  if (addResult.modifiedCount <= 0) return
 
   const payload: EventUpdatedMessageReactions = {
     roomId,
     messageId,
-    reactions: updatedMessage.reactions ?? []
+    action: MESSAGE_REACTION_UPDATE_ACTION.ADD,
+    reaction
   }
 
   emitToUsers(stringifyMongoIds(room.users), 'message-reaction-updated', payload)
