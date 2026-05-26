@@ -59,7 +59,12 @@ export interface MessageReactionTagItem {
   text: string
   removable: false
   height: 'thin'
-  color?: string
+  style: MessageReactionTagItemStyle
+}
+
+export interface MessageReactionTagItemStyle {
+  '--tag-item-background-color': string
+  '--tag-item-content-color': string
 }
 
 export interface MessagePreviewProps {

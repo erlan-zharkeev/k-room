@@ -1,8 +1,7 @@
-import { computed, nextTick, ref, toRef } from 'vue'
+import { computed, toRef } from 'vue'
 
 import { useUser } from 'src/entities/user'
 
-import { MESSAGE_REACTION_SELECTED_TAG_COLOR } from '../config/constants'
 import type { MessageReactionGroup, MessageReactionTagItem, MessageReactionsProps } from '../config/types'
 
 import { useMessageReaction } from './use-message-reaction.model'
@@ -12,20 +11,10 @@ export const useMessageReactions = (props: MessageReactionsProps) => {
   const room = toRef(props, 'room')
   const { user } = useUser()
   const { toggleMessageReaction } = useMessageReaction(message, room)
-  const lastSelectedReactionGlyphKey = ref<string | null>(null)
-  const selectedReactionGlyphKey = computed<string | null>({
-    get: () => null,
-    set: (glyphKey) => {
-      if (glyphKey === null) return
-      if (lastSelectedReactionGlyphKey.value === glyphKey) return
 
-      lastSelectedReactionGlyphKey.value = glyphKey
-      void nextTick(() => {
-        lastSelectedReactionGlyphKey.value = null
-      })
-      toggleMessageReaction(glyphKey)
-    }
-  })
+  const selectMessageReaction = (glyphKey: string) => {
+    toggleMessageReaction(glyphKey)
+  }
 
   const reactionList = computed<MessageReactionGroup[]>(() => {
     const reactionMap = new Map<string, MessageReactionGroup>()
@@ -58,26 +47,31 @@ export const useMessageReactions = (props: MessageReactionsProps) => {
 
   const reactionTagList = computed<MessageReactionTagItem[]>(() =>
     reactionList.value.map((reaction) => {
-      const selectedColor = reaction.isSelected ? MESSAGE_REACTION_SELECTED_TAG_COLOR : undefined
+      const backgroundColor = reaction.isSelected ? 'var(--app-accent-surface-soft)' : 'var(--app-muted-surface-soft)'
 
       return {
         value: reaction.glyphKey,
         text: reaction.count > 1 ? `${reaction.glyphKey} ${reaction.count}` : reaction.glyphKey,
         removable: false,
         height: 'thin',
-        color: selectedColor
+        style: {
+          '--tag-item-background-color': backgroundColor,
+          '--tag-item-content-color': 'var(--nmorph-contrast-text-color)'
+        }
       }
     })
   )
 
   const reactionTagListKey = computed(() =>
-    reactionTagList.value.map((reaction) => `${reaction.value}:${reaction.text}:${reaction.color || ''}`).join('|')
+    reactionTagList.value
+      .map((reaction) => `${reaction.value}:${reaction.text}:${reaction.style['--tag-item-background-color']}`)
+      .join('|')
   )
 
   return {
     reactionList,
     reactionTagList,
     reactionTagListKey,
-    selectedReactionGlyphKey
+    selectMessageReaction
   }
 }

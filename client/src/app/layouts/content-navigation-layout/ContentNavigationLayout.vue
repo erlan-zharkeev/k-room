@@ -3,7 +3,8 @@ import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader } from 'src/shared/ui'
 
-import { CONTENT_NAVIGATION_TITLE } from './constants'
+import { ROUTE_TITLE_MAP } from '../app-layout/constants'
+
 import { ContentNavigationLayoutProps } from './types'
 
 const props = defineProps<ContentNavigationLayoutProps>()
@@ -12,7 +13,7 @@ const props = defineProps<ContentNavigationLayoutProps>()
 <template>
   <section class="content-navigation-layout">
     <div v-if="props.titleKey" class="content-navigation-layout__header">
-      <AppHeader :text="$t(CONTENT_NAVIGATION_TITLE[props.titleKey])" />
+      <AppHeader :text="$t(ROUTE_TITLE_MAP[props.titleKey])" />
     </div>
     <NmorphCard shadow-type="inset" class="content-navigation-layout__content">
       <slot />

@@ -2,7 +2,6 @@ import { computed } from 'vue'
 
 import { createClassNameWithModifiers } from 'src/shared/lib'
 
-import { APP_HEADER_COLOR_MODIFIERS } from './constants'
 import type { AppHeaderProps } from './types'
 
 export const useAppHeader = (props: AppHeaderProps) => {
@@ -11,7 +10,7 @@ export const useAppHeader = (props: AppHeaderProps) => {
     createClassNameWithModifiers({
       rootClass: 'app-header',
       modifiers: [
-        color.value && APP_HEADER_COLOR_MODIFIERS[color.value],
+        color.value,
         props.alignment,
         props.bold && 'bold',
         props.truncate && 'truncate',

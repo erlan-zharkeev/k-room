@@ -1,0 +1,11 @@
+:root {
+  --app-accent-border-soft: color-mix(in srgb, var(--nmorph-accent-color), transparent 54%);
+  --app-accent-border-strong: color-mix(in srgb, var(--nmorph-accent-color), transparent 24%);
+  --app-accent-surface-soft: color-mix(in srgb, var(--nmorph-accent-color), transparent 72%);
+  --app-accent-surface-subtle: color-mix(in srgb, var(--nmorph-accent-color), transparent 88%);
+  --app-accent-on-dark-surface-soft: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-accent-color) 12%);
+  --app-message-surface: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 20%);
+  --app-muted-surface-soft: color-mix(in srgb, var(--nmorph-placeholder-text-color), transparent 78%);
+  --app-shadow-dark: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 20%);
+  --app-shadow-dark-soft: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 32%);
+}

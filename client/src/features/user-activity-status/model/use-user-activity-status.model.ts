@@ -4,7 +4,6 @@ import { computed } from 'vue'
 import { useLocalizedDateTime } from 'src/entities/setting'
 import { useI18n } from 'src/shared/lib'
 
-import { USER_ACTIVITY_LAST_SEEN_STATUS_COLOR, USER_ACTIVITY_ONLINE_STATUS_COLOR } from '../config/constants'
 import { USER_ACTIVITY_STATUS_I18N } from '../config/i18n'
 import type { UserActivityStatusProps } from '../config/types'
 
@@ -21,7 +20,7 @@ export const useUserActivityStatus = (props: UserActivityStatusProps) => {
     return `${t(USER_ACTIVITY_STATUS_I18N.lastSeen)} ${formatRelativeTime(normalizedLastSeen)}`
   })
   const color = computed(() =>
-    props.online ? USER_ACTIVITY_ONLINE_STATUS_COLOR : USER_ACTIVITY_LAST_SEEN_STATUS_COLOR
+    props.online ? 'var(--nmorph-success-color)' : 'var(--nmorph-semi-contrast-text-color)'
   )
 
   return {
