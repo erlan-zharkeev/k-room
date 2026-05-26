@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
-import type { ChatRoomMessagesProps } from '../config/types'
+import type { ChatRoomMessagesExpose, ChatRoomMessagesProps } from '../config/types'
 import { useChatRoomMessages } from '../model/use-chat-room-messages.model'
 
 import DateSeparator from './DateSeparator.vue'
@@ -12,14 +12,19 @@ import MessageBody from './MessageBody.vue'
 
 const props = defineProps<ChatRoomMessagesProps>()
 const {
+  hasLoadedMessages,
   hasMessages,
   isLoading,
   measureMessageListItemElement,
   messageVirtualListStyle,
   messageVirtualListItems,
-  loadMessages,
+  loadAndScrollToMessage,
   saveMessagesScrollState
 } = useChatRoomMessages(props)
+
+defineExpose<ChatRoomMessagesExpose>({
+  loadAndScrollToMessage
+})
 </script>
 
 <template>
@@ -38,25 +43,18 @@ const {
         :ref="measureMessageListItemElement"
         :data-index="virtualItem.index"
       >
-        <NmorphButton
-          v-if="item.type === 'load-older'"
-          class="chat-room-messages__load-older"
-          style-type="transparent"
-          :loading="isLoading"
-          :text="$t(CHAT_ROOM_CONTENT_I18N.loadOlderMessages)"
-          @click="() => loadMessages()"
-        />
+        <div v-if="item.type === 'message-gap'" class="chat-room-messages__gap" />
         <DateSeparator v-else-if="item.type === 'date-separator'" :label="item.label" />
         <div
           v-else
           class="chat-room-messages__message"
           :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
         >
-          <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" :room-id="props.room.id" />
+          <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" :room="props.room" />
         </div>
       </div>
     </div>
-    <div v-if="isLoading && !hasMessages" class="chat-room-messages__empty">
+    <div v-if="isLoading && !hasLoadedMessages" class="chat-room-messages__empty">
       <AppText
         alignment="center"
         color="semi-contrast-text"
@@ -92,8 +90,8 @@ const {
   gap: var(--message-virtual-gap);
 }
 
-.chat-room-messages__load-older {
-  display: block;
+.chat-room-messages__gap {
+  height: var(--message-range-gap-height);
 }
 
 .chat-room-messages__message {

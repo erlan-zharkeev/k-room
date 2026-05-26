@@ -36,6 +36,11 @@ export interface MessageBodyProps {
   room: ChatRoomRecord
 }
 
+export interface MessagePreviewProps {
+  title: string
+  text: string
+}
+
 export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
 
 export interface MessageContextMenuProps {

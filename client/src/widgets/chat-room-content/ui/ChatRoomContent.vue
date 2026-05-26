@@ -6,17 +6,23 @@ import { useChatRoomContent } from '../model/use-chat-room-content.model'
 import ChatRoomFooter from './ChatRoomFooter.vue'
 import ChatRoomHeader from './ChatRoomHeader.vue'
 import ChatRoomMessages from './ChatRoomMessages.vue'
+import ChatRoomPinnedMessage from './ChatRoomPinnedMessage.vue'
 import ChatRoomStub from './ChatRoomStub.vue'
 
-const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
+const { selectPinnedMessage, selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
 </script>
 
 <template>
   <section class="chat-room-page">
     <ChatRoomHeader v-if="selectedChatRoom" :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
     <template v-if="selectedChatRoom">
+      <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectPinnedMessage" />
       <NmorphCard shadow-type="inset" class="chat-room-page__messages">
-        <ChatRoomMessages :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
+        <ChatRoomMessages
+          ref="chatRoomMessages"
+          :room="selectedChatRoom"
+          :is-private-room="selectedChatRoomIsPrivate"
+        />
       </NmorphCard>
       <ChatRoomFooter :room="selectedChatRoom" />
     </template>
@@ -30,7 +36,7 @@ const { selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
 .chat-room-page {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .chat-room-page__messages,

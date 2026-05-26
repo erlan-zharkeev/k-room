@@ -5,13 +5,14 @@ import type { MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 
 import MessageContextMenu from './MessageContextMenu.vue'
+import MessagePreview from './MessagePreview.vue'
 
 const props = defineProps<MessageBodyProps>()
 const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessageBody(props)
 </script>
 
 <template>
-  <MessageContextMenu :message="props.message" :room-id="props.roomId">
+  <MessageContextMenu :message="props.message" :room="props.room">
     <article
       class="message-body"
       :class="[
@@ -21,15 +22,11 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
     >
       <div class="message-body__content">
         <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
-        <div v-if="props.message.repliedMessage" class="message-body__reply">
-          <AppText color="accent" :text="props.message.repliedMessage.authorNickname" truncate />
-          <AppText
-            class="message-body__reply-text"
-            tag="small"
-            color="semi-contrast-text"
-            :text="props.message.repliedMessage.body"
-          />
-        </div>
+        <MessagePreview
+          v-if="props.message.repliedMessage"
+          :title="props.message.repliedMessage.authorNickname"
+          :text="props.message.repliedMessage.body"
+        />
         <div v-if="messageImageList.length" class="message-body__images">
           <AppMediaImage
             v-for="image in messageImageList"
@@ -100,19 +97,9 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
   }
 }
 
-.message-body__reply {
+.message-body__content {
   display: grid;
-  margin-bottom: 8px;
-  padding-left: 8px;
-  border-left: 2px solid var(--nmorph-accent-color);
-}
-
-.message-body__reply-text {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  gap: 8px;
 }
 
 .message-body__images {
