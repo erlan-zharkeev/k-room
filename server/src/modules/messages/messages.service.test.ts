@@ -1,3 +1,4 @@
+import { MESSAGE_REACTION_LIMIT_PER_USER, MESSAGE_REACTION_UPDATE_ACTION } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const chatRoomModelMock = vi.hoisted(() => ({
@@ -5,8 +6,7 @@ const chatRoomModelMock = vi.hoisted(() => ({
 }))
 
 const messageModelMock = vi.hoisted(() => ({
-  findOne: vi.fn(),
-  findOneAndUpdate: vi.fn()
+  updateOne: vi.fn()
 }))
 
 const userModelMock = vi.hoisted(() => ({
@@ -39,7 +39,7 @@ describe('messages.service', () => {
     vi.clearAllMocks()
   })
 
-  it('adds reaction and emits final reactions list', async () => {
+  it('adds reaction and emits reaction update', async () => {
     const reaction = {
       authorId: 'user-1',
       nickname: 'tester',
@@ -52,9 +52,9 @@ describe('messages.service', () => {
     }
 
     chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
-    messageModelMock.findOne.mockReturnValue(createLeanQuery({ reactions: [] }))
     userModelMock.findById.mockReturnValue(createLeanQuery({ public: { nickname: reaction.nickname } }))
-    messageModelMock.findOneAndUpdate.mockReturnValue(createLeanQuery({ reactions: [reaction] }))
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 0 })
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
 
     await toggleMessageReaction('user-1', payload)
 
@@ -63,19 +63,31 @@ describe('messages.service', () => {
       users: 'user-1',
       messages: payload.messageId
     })
-    expect(messageModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+    expect(messageModelMock.updateOne).toHaveBeenNthCalledWith(
+      1,
       { _id: payload.messageId, deletedForUserIds: { $ne: 'user-1' } },
-      { $addToSet: { reactions: reaction } },
-      { new: true }
+      { $pull: { reactions: { authorId: 'user-1', glyphKey: reaction.glyphKey } } }
+    )
+    expect(messageModelMock.updateOne).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        _id: payload.messageId,
+        deletedForUserIds: { $ne: 'user-1' },
+        $expr: {
+          $lt: [expect.any(Object), MESSAGE_REACTION_LIMIT_PER_USER]
+        }
+      }),
+      { $addToSet: { reactions: reaction } }
     )
     expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1', 'user-2'], 'message-reaction-updated', {
       roomId: payload.roomId,
       messageId: payload.messageId,
-      reactions: [reaction]
+      action: MESSAGE_REACTION_UPDATE_ACTION.ADD,
+      reaction
     })
   })
 
-  it('removes existing reaction and emits final reactions list', async () => {
+  it('removes existing reaction and emits reaction update', async () => {
     const reaction = {
       authorId: 'user-1',
       nickname: 'tester',
@@ -88,21 +100,53 @@ describe('messages.service', () => {
     }
 
     chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
-    messageModelMock.findOne.mockReturnValue(createLeanQuery({ reactions: [reaction] }))
     userModelMock.findById.mockReturnValue(createLeanQuery({ public: { nickname: reaction.nickname } }))
-    messageModelMock.findOneAndUpdate.mockReturnValue(createLeanQuery({ reactions: [] }))
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
 
     await toggleMessageReaction('user-1', payload)
 
-    expect(messageModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(1)
+    expect(messageModelMock.updateOne).toHaveBeenCalledWith(
       { _id: payload.messageId, deletedForUserIds: { $ne: 'user-1' } },
-      { $pull: { reactions: { authorId: 'user-1', glyphKey: reaction.glyphKey } } },
-      { new: true }
+      { $pull: { reactions: { authorId: 'user-1', glyphKey: reaction.glyphKey } } }
     )
     expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1', 'user-2'], 'message-reaction-updated', {
       roomId: payload.roomId,
       messageId: payload.messageId,
-      reactions: []
+      action: MESSAGE_REACTION_UPDATE_ACTION.REMOVE,
+      reaction
     })
+  })
+
+  it('does not emit reaction update when user reaction limit is reached', async () => {
+    const reaction = {
+      authorId: 'user-1',
+      nickname: 'tester',
+      glyphKey: '\u{1F44D}'
+    }
+    const payload = {
+      roomId: 'room-1',
+      messageId: 'message-1',
+      glyphKey: reaction.glyphKey
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
+    userModelMock.findById.mockReturnValue(createLeanQuery({ public: { nickname: reaction.nickname } }))
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 0 })
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 0 })
+
+    await toggleMessageReaction('user-1', payload)
+
+    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(2)
+    expect(messageModelMock.updateOne).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        $expr: {
+          $lt: [expect.any(Object), MESSAGE_REACTION_LIMIT_PER_USER]
+        }
+      }),
+      { $addToSet: { reactions: reaction } }
+    )
+    expect(presenceMock.emitToUsers).not.toHaveBeenCalled()
   })
 })

@@ -5,6 +5,7 @@ import {
   type EventPinnedMessageUpdated,
   type EventUpdateMessageStatus,
   type EventUpdatedMessageReactions,
+  MESSAGE_REACTION_UPDATE_ACTION,
   isMessageReadStatus,
   isMessageStatusDelivered
 } from 'global-shared'
@@ -96,9 +97,27 @@ export const useMessageSync = () => {
     }
   }
 
-  const handleMessageReactionUpdate = async ({ messageId, reactions }: EventUpdatedMessageReactions) => {
+  const handleMessageReactionUpdate = async ({ messageId, action, reaction }: EventUpdatedMessageReactions) => {
     await mutateMessage(messageId, (message) => {
-      message.reactions = reactions
+      const reactions = message.reactions ?? []
+
+      switch (action) {
+        case MESSAGE_REACTION_UPDATE_ACTION.ADD: {
+          const hasReaction = reactions.some(
+            ({ authorId, glyphKey }) => authorId === reaction.authorId && glyphKey === reaction.glyphKey
+          )
+
+          if (hasReaction) return
+
+          message.reactions = [...reactions, reaction]
+          break
+        }
+        case MESSAGE_REACTION_UPDATE_ACTION.REMOVE:
+          message.reactions = reactions.filter(
+            ({ authorId, glyphKey }) => authorId !== reaction.authorId || glyphKey !== reaction.glyphKey
+          )
+          break
+      }
     })
   }
 
