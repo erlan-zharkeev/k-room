@@ -3,10 +3,10 @@ import { NmorphCard, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
 import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
+import { SETTINGS_CONTENT_TITLE } from 'src/pages/settings'
 import { useScreen } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
-import { CONTENT_TITLE } from './constants'
 import { ContentLayoutProps } from './types'
 
 const props = defineProps<ContentLayoutProps>()
@@ -19,7 +19,7 @@ const showHeader = computed(() => isPortraitTabletOrLess.value || Boolean(props.
   <section class="content-layout">
     <div v-if="showHeader" class="content-layout__header">
       <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
-      <AppHeader v-if="props.titleKey" :text="$t(CONTENT_TITLE[props.titleKey])" />
+      <AppHeader v-if="props.titleKey" :text="$t(SETTINGS_CONTENT_TITLE[props.titleKey])" />
     </div>
     <NmorphCard shadow-type="inset" class="content-layout__content">
       <NmorphScroll>

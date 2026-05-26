@@ -62,7 +62,7 @@ const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
 
   overflow-wrap: anywhere;
 
-  background: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 20%);
+  background: var(--app-message-surface);
 }
 
 @include screen-tablet {
@@ -77,7 +77,7 @@ const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
 
 .message-body--sending {
   pointer-events: none;
-  border: 1.5px solid color-mix(in srgb, var(--nmorph-accent-color), transparent 54%);
+  border: 1.5px solid var(--app-accent-border-soft);
   opacity: 0.5;
   animation: message-body-sending-pulse 1.8s ease-in-out infinite;
 }
@@ -88,9 +88,9 @@ const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
 
 @keyframes message-body-sending-pulse {
   50% {
-    border-color: color-mix(in srgb, var(--nmorph-accent-color), transparent 24%);
-    background: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-accent-color) 12%);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--nmorph-accent-color), transparent 88%);
+    border-color: var(--app-accent-border-strong);
+    background: var(--app-accent-on-dark-surface-soft);
+    box-shadow: 0 0 0 3px var(--app-accent-surface-subtle);
   }
 }
 
