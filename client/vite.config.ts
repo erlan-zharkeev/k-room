@@ -61,7 +61,13 @@ export default defineConfig(({ mode }) => {
         transformIndexHtml: (html) =>
           html.replaceAll('__THEME_BG__', clientEnvData.themeBg).replaceAll('__APP_NAME__', clientEnvData.appName)
       },
-      vue(),
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => tag === 'emoji-picker'
+          }
+        }
+      }),
       !clientEnvData.isDev && generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg })
     ],
     resolve: {

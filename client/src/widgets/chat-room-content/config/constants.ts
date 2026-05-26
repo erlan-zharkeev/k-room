@@ -7,6 +7,7 @@ export const MESSAGE_VIRTUAL_GAP = 4
 export const MESSAGE_VIRTUAL_OVERSCAN = 8
 export const MESSAGE_CONTEXT_MENU_ACTION = {
   COPY_TEXT: 'copy-text',
+  REACTION_PICKER: 'reaction-picker',
   PIN_MESSAGE: 'pin-message',
   UNPIN_MESSAGE: 'unpin-message',
   DELETE_MESSAGE: 'delete-message'
