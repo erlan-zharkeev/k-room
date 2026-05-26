@@ -34,7 +34,7 @@ const {
     <slot />
   </NmorphContextMenu>
 
-  <MessageDeleteDialog v-model="isDeleteMessageDialogOpen" :message="props.message" :room-id="props.roomId" />
+  <MessageDeleteDialog v-model="isDeleteMessageDialogOpen" :message="props.message" :room-id="props.room.id" />
 </template>
 
 <style lang="scss">

@@ -29,7 +29,6 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = use
     >
       <AppProfileBasicData
         :image-id="props.room.avatarId"
-        :avatar-size="41"
         :title="title"
         :name="title"
         :selectable="false"
