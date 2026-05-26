@@ -9,12 +9,7 @@ const props = defineProps<MessagePreviewProps>()
 <template>
   <div class="message-preview">
     <AppText color="accent" :text="props.title" truncate />
-    <AppText
-      class="message-preview__text"
-      tag="small"
-      color="semi-contrast-text"
-      :text="props.text"
-    />
+    <AppText class="message-preview__text" tag="small" color="semi-contrast-text" :text="props.text" />
   </div>
 </template>
 
