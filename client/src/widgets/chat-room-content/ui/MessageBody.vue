@@ -6,9 +6,10 @@ import { useMessageBody } from '../model/use-message-body.model'
 
 import MessageContextMenu from './MessageContextMenu.vue'
 import MessagePreview from './MessagePreview.vue'
+import MessageReactions from './MessageReactions.vue'
 
 const props = defineProps<MessageBodyProps>()
-const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessageBody(props)
+const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
 </script>
 
 <template>
@@ -39,11 +40,7 @@ const { showAuthorNickname, messageImageList, sentAt, reactionList } = useMessag
         </div>
         <AppText tag="p" :text="props.message.body" />
         <div class="message-body__footer">
-          <template v-if="reactionList.length">
-            <span v-for="reaction in reactionList" :key="reaction.glyphKey" :title="reaction.nicknames.join(', ')">
-              {{ reaction.glyphKey }}
-            </span>
-          </template>
+          <MessageReactions :message="props.message" />
           <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
         </div>
       </div>

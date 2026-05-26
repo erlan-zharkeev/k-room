@@ -37,6 +37,29 @@ export interface MessageBodyProps {
   room: ChatRoomRecord
 }
 
+export interface MessageReactionsProps {
+  message: MessageRecord
+}
+
+export interface MessageReactionGroupUser {
+  authorId: string
+  nickname: string
+}
+
+export interface MessageReactionGroup {
+  glyphKey: string
+  users: MessageReactionGroupUser[]
+  count: number
+}
+
+export interface MessageReactionTagItem {
+  value: string
+  text: string
+  removable: false
+  height: 'thin'
+  design: 'common'
+}
+
 export interface MessagePreviewProps {
   title: string
   text: string
