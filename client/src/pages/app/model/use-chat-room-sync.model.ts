@@ -14,7 +14,7 @@ import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
 
-import { filterRoomPreviewMessage } from '../lib/filter-room-preview-message'
+import { filterRoomPayloadMessages } from '../lib/filter-room-payload-messages'
 
 export const useChatRoomSync = () => {
   const route = useRoute()
@@ -24,18 +24,18 @@ export const useChatRoomSync = () => {
   const { bulkDelete, bulkPut } = useMessage()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
-  const saveRoomPreviewMessages = async (rooms: EventGetRooms) => {
-    await bulkPut(compact(rooms.map((room) => room.previewMessage)))
+  const saveRoomPayloadMessages = async (rooms: EventGetRooms) => {
+    await bulkPut(compact(rooms.flatMap((room) => [room.previewMessage, room.pinnedMessage])))
   }
 
   const actualizeChatRooms = async (rooms: EventGetRooms) => {
-    await saveRoomPreviewMessages(rooms)
-    await merge(rooms.map(filterRoomPreviewMessage))
+    await saveRoomPayloadMessages(rooms)
+    await merge(rooms.map(filterRoomPayloadMessages))
   }
 
   const addChatRoom = async (room: EventGetRooms[number]) => {
-    await saveRoomPreviewMessages([room])
-    await put(filterRoomPreviewMessage(room))
+    await saveRoomPayloadMessages([room])
+    await put(filterRoomPayloadMessages(room))
   }
 
   const updatePinnedChatRooms = async ({ pinnedChatRoomIds }: EventPinnedChatRoomsUpdated) => {
@@ -76,13 +76,13 @@ export const useChatRoomSync = () => {
   }
 
   const updateChatRoomData = async (room: EventGetRooms[number]) => {
-    await saveRoomPreviewMessages([room])
+    await saveRoomPayloadMessages([room])
 
     if (room.avatarId) {
       syncWithOptions(room.avatarId, { force: true })
     }
 
-    await put(filterRoomPreviewMessage(room))
+    await put(filterRoomPayloadMessages(room))
   }
 
   return {
