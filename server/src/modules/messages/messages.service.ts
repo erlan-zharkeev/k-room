@@ -4,8 +4,10 @@ import {
   type EventMessageDeleted,
   type EventMessageDelivered,
   type EventMessagesStatusUpdated,
+  type EventPinnedMessageUpdated,
   type EventRoomTypingStatus,
   type EventRoomMessagesLoaded,
+  type EventUpdatePinnedMessage,
   type EventUpdateMessageStatus,
   type EventUserTyping,
   type ImageObject,
@@ -30,6 +32,7 @@ import { uploadBufferToBucket } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
+import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
 import type { MessageDocument, SendMessageParams } from './messages.types'
@@ -55,6 +58,20 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
   }
 }
 
+const resolveVisibleMessageIds = async (userId: string, messageIds: string[]) => {
+  if (!messageIds.length) return []
+
+  const visibleMessages = await MessageModel.find({
+    _id: { $in: messageIds },
+    deletedForUserIds: { $ne: userId }
+  })
+    .select('_id')
+    .lean<Array<{ _id: string }>>()
+  const visibleMessageIds = new Set(visibleMessages.map(({ _id }) => stringifyMongoId(_id)))
+
+  return messageIds.filter((id) => visibleMessageIds.has(id))
+}
+
 export const loadRoomMessages = async (
   userId: string,
   payload: EventLoadRoomMessages
@@ -70,28 +87,38 @@ export const loadRoomMessages = async (
   }
 
   const { messages: roomMessageIds } = room
-  const query = payload.beforeCreatedAt
-    ? {
-        _id: { $in: roomMessageIds },
-        createdAt: { $lt: payload.beforeCreatedAt },
-        deletedForUserIds: { $ne: userId }
-      }
-    : { _id: { $in: roomMessageIds }, deletedForUserIds: { $ne: userId } }
+  const visibleMessageIds = await resolveVisibleMessageIds(userId, roomMessageIds)
+  const requestedMessageIds = resolveRoomMessageWindowIds(visibleMessageIds, payload)
 
-  const messages = await MessageModel.find(query)
-    .sort({ createdAt: -1 })
-    .limit(payload.limit + 1)
+  if (!requestedMessageIds.length) {
+    return {
+      roomId: payload.roomId,
+      messages: [],
+      rangeStartMessageId: null,
+      rangeEndMessageId: null
+    }
+  }
+
+  const messages = await MessageModel.find({
+    _id: { $in: requestedMessageIds },
+    deletedForUserIds: { $ne: userId }
+  })
     .select('-__v')
     .lean<MessageDocument[]>()
-  const hasMore = messages.length > payload.limit
-  const page = hasMore ? messages.slice(0, payload.limit) : messages
-  const normalizedMessages = page.reverse().map((message) => transformMessageForUser(message, userId))
+  const messageById = new Map(messages.map((message) => [stringifyMongoId(message._id), message]))
+  const normalizedMessages = requestedMessageIds.flatMap((messageId) => {
+    const message = messageById.get(messageId)
+
+    return message ? [transformMessageForUser(message, userId)] : []
+  })
+  const rangeStartMessage = normalizedMessages[0]
+  const rangeEndMessage = normalizedMessages[normalizedMessages.length - 1]
 
   return {
     roomId: payload.roomId,
     messages: normalizedMessages,
-    hasMore,
-    nextBeforeCreatedAt: normalizedMessages[0]?.createdAt
+    rangeStartMessageId: rangeStartMessage?.id ?? null,
+    rangeEndMessageId: rangeEndMessage?.id ?? null
   }
 }
 
@@ -225,8 +252,75 @@ export const deleteMessage = async (userId: string, { deleteForEveryone, roomId,
     return
   }
 
-  await ChatRoomModel.updateOne({ _id: roomId }, { $pull: { messages: messageId } })
+  await Promise.all([
+    ChatRoomModel.updateOne({ _id: roomId }, { $pull: { messages: messageId } }),
+    ChatRoomModel.updateOne({ _id: roomId, pinnedMessageId: messageId }, { $set: { pinnedMessageId: null } })
+  ])
   emitToUsers(userIds, 'message-deleted', payload)
+}
+
+const resolvePinnedMessageUpdatedPayload = async (
+  userId: string,
+  roomId: string,
+  pinnedMessageId: string | null
+): Promise<EventPinnedMessageUpdated> => {
+  if (!pinnedMessageId) {
+    return {
+      roomId,
+      pinnedMessageId: null,
+      pinnedMessage: null
+    }
+  }
+
+  const pinnedMessage = await MessageModel.findOne({
+    _id: pinnedMessageId,
+    deletedForUserIds: { $ne: userId }
+  })
+    .select('-__v')
+    .lean<MessageDocument>()
+
+  return {
+    roomId,
+    pinnedMessageId: pinnedMessage ? pinnedMessageId : null,
+    pinnedMessage: pinnedMessage ? transformMessageForUser(pinnedMessage, userId) : null
+  }
+}
+
+export const updatePinnedMessage = async (
+  userId: string,
+  { isPinned, messageId, roomId }: EventUpdatePinnedMessage
+) => {
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+
+  if (!room) {
+    return
+  }
+
+  if (isPinned) {
+    const message = await MessageModel.findOne({ _id: messageId, deletedForUserIds: { $ne: userId } })
+      .select('_id')
+      .lean()
+
+    if (!message) return
+  }
+
+  const pinnedMessageId = isPinned ? messageId : null
+  const query = isPinned ? { _id: roomId } : { _id: roomId, pinnedMessageId: messageId }
+  const updateResult = await ChatRoomModel.updateOne(query, { $set: { pinnedMessageId } })
+
+  if (updateResult.modifiedCount <= 0) {
+    return
+  }
+
+  const userIds = stringifyMongoIds(room.users)
+
+  await Promise.all(
+    userIds.map(async (targetUserId) => {
+      const payload = await resolvePinnedMessageUpdatedPayload(targetUserId, roomId, pinnedMessageId)
+
+      emitToUsers([targetUserId], 'pinned-message-updated', payload)
+    })
+  )
 }
 
 export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }: EventUserTyping) => {

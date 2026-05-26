@@ -5,50 +5,27 @@ import { useMessage } from 'src/entities/message'
 import { useLocalizedDateTime } from 'src/entities/setting'
 import type { ChatRoomRecord } from 'src/shared/lib'
 
-import type { MessageListItem } from '../config/types'
+import type { MessageLoadedRange } from '../config/types'
+import { buildMessageList } from '../lib/build-message-list'
 
-export const useChatRoomMessageList = (room: Ref<ChatRoomRecord>, hasMoreLoadedMessages: ComputedRef<boolean>) => {
+export const useChatRoomMessageList = (
+  room: Ref<ChatRoomRecord>,
+  loadedMessageRanges: ComputedRef<MessageLoadedRange[]>
+) => {
   const { messageById } = useMessage()
   const { formatDate } = useLocalizedDateTime()
 
   const displayedLastMessageId = computed(() => getRoomDisplayedLastMessageId(room.value))
   const hasMessages = computed(() => room.value.messages.length > 0)
-  const messageList = computed<MessageListItem[]>(() => {
-    const items: MessageListItem[] = []
-    let previousLabel = ''
-
-    if (hasMoreLoadedMessages.value) {
-      items.push({
-        type: 'load-older',
-        id: `load-older-${room.value.id}`
-      })
-    }
-
-    room.value.messages.forEach((messageId) => {
-      const message = messageById.value.get(messageId)
-
-      if (!message) return
-
-      const label = message.createdAt ? formatDate(message.createdAt) : ''
-
-      if (label && previousLabel !== label) {
-        items.push({
-          type: 'date-separator',
-          id: `date-separator-${message.id}`,
-          label
-        })
-        previousLabel = label
-      }
-
-      items.push({
-        type: 'message',
-        id: messageId,
-        messageId
-      })
+  const messageList = computed(() =>
+    buildMessageList({
+      roomId: room.value.id,
+      messageIds: room.value.messages,
+      loadedMessageRanges: loadedMessageRanges.value,
+      messageById: messageById.value,
+      formatDate
     })
-
-    return items
-  })
+  )
 
   return {
     displayedLastMessageId,

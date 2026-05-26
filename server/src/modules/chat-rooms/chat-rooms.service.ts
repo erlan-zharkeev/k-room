@@ -165,6 +165,7 @@ export const createChatRoom = async (
     createdAt: Date.now(),
     chatKind: memberIds.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
     avatarId: null,
+    pinnedMessageId: null,
     messages: []
   }
 
@@ -506,37 +507,52 @@ export const transformRoomForUser = async ({
   mutedChatRoomIds
 }: TransformRoomForUserParams): Promise<EventGetRoom> => {
   const normalizedRoom = room
-  const { _id, users: roomUsers, chatKind: roomChatKind, messages } = normalizedRoom
+  const {
+    _id,
+    adminId,
+    avatarId: roomAvatarId,
+    chatKind: roomChatKind,
+    chatName,
+    createdAt,
+    messages,
+    pinnedMessageId: roomPinnedMessageId,
+    users: roomUsers
+  } = normalizedRoom
   const roomId = stringifyMongoId(_id)
   const users = stringifyMongoIds(roomUsers)
   const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
   const isDirectRoom = isRoomPrivate({ chatKind })
   const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
   const interlocutor = isDirectRoom ? await UserModel.findById(interlocutorId, { 'public.avatarId': 1 }).lean() : null
-  const avatarId = isDirectRoom ? interlocutor?.public.avatarId ?? null : normalizedRoom.avatarId
+  const avatarId = isDirectRoom ? interlocutor?.public.avatarId ?? null : roomAvatarId
   const visibleMessageIds = await resolveVisibleMessageIds(userId, messages)
   const lastMessageId = visibleMessageIds[visibleMessageIds.length - 1] ?? null
+  const pinnedMessageId =
+    roomPinnedMessageId && visibleMessageIds.includes(roomPinnedMessageId) ? roomPinnedMessageId : null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
-  const [unreadMessagesQuantity, previewMessage] = await Promise.all([
+  const [unreadMessagesQuantity, previewMessage, pinnedMessage] = await Promise.all([
     countUnreadRoomMessages(userId, visibleMessageIds),
-    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocument>() : null
+    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocument>() : null,
+    pinnedMessageId ? MessageModel.findById(pinnedMessageId).select('-__v').lean<MessageDocument>() : null
   ])
 
   return {
     id: roomId,
-    adminId: normalizedRoom.adminId,
-    createdAt: normalizedRoom.createdAt,
-    chatName: normalizedRoom.chatName,
+    adminId,
+    createdAt,
+    chatName,
     chatKind,
     avatarId,
     lastMessageId,
+    pinnedMessageId,
     unreadMessagesQuantity,
     isPinned: pinnedOrder !== -1,
     pinnedOrder: pinnedOrder === -1 ? null : pinnedOrder,
     isMuted: mutedChatRoomIds.includes(roomId),
     users,
     messages: visibleMessageIds,
-    previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null
+    previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null,
+    pinnedMessage: pinnedMessage ? transformMessageForUser(pinnedMessage, userId) : null
   } satisfies EventGetRoom
 }
 

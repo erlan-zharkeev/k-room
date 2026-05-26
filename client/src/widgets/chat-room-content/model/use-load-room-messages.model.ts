@@ -1,4 +1,9 @@
-import type { EventLoadRoomMessages, EventRoomMessagesLoaded } from 'global-shared'
+import {
+  MESSAGE_LOAD_DIRECTION,
+  type EventLoadRoomMessages,
+  type EventRoomMessagesLoaded,
+  type MessageLoadDirection
+} from 'global-shared'
 import { computed, reactive, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
@@ -6,41 +11,146 @@ import { useSocketAction } from 'src/shared/api'
 import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
+import type { MessageLoadedRange } from '../config/types'
+
+const loadingRoomMessageRanges = reactive(new Set<string>())
+const loadedMessageRangesByRoomId = reactive<Record<string, MessageLoadedRange[] | undefined>>({})
+
+const createLoadKey = (roomId: string, direction: MessageLoadDirection, anchorMessageId = '') =>
+  `${roomId}:${direction}:${anchorMessageId}`
+
+const createLoadedRangesFromIndexes = (indexes: number[]) => {
+  const sortedIndexes = [...new Set(indexes)].sort((current, next) => current - next)
+
+  return sortedIndexes.reduce<MessageLoadedRange[]>((ranges, index) => {
+    const currentRange = ranges[ranges.length - 1]
+
+    if (currentRange && index <= currentRange.endIndex + 1) {
+      currentRange.endIndex = Math.max(currentRange.endIndex, index)
+
+      return ranges
+    }
+
+    ranges.push({
+      startIndex: index,
+      endIndex: index
+    })
+
+    return ranges
+  }, [])
+}
+
+const normalizeLoadedMessageRanges = (ranges: MessageLoadedRange[]) => {
+  const sortedRanges = [...ranges].sort((current, next) => current.startIndex - next.startIndex)
+
+  return sortedRanges.reduce<MessageLoadedRange[]>((normalizedRanges, range) => {
+    const currentRange = normalizedRanges[normalizedRanges.length - 1]
+
+    if (currentRange && range.startIndex <= currentRange.endIndex + 1) {
+      currentRange.endIndex = Math.max(currentRange.endIndex, range.endIndex)
+
+      return normalizedRanges
+    }
+
+    normalizedRanges.push({ ...range })
+
+    return normalizedRanges
+  }, [])
+}
+
+const selectLoadedMessageRanges = (roomId: string) => loadedMessageRangesByRoomId[roomId] ?? []
+
+const updateLoadedMessageRanges = (roomId: string, indexes: number[]) => {
+  if (!indexes.length) return
+
+  const currentRanges = selectLoadedMessageRanges(roomId)
+  const loadedRanges = createLoadedRangesFromIndexes(indexes)
+
+  loadedMessageRangesByRoomId[roomId] = normalizeLoadedMessageRanges([...currentRanges, ...loadedRanges])
+}
+
+const resolveMessageIndexes = (room: ChatRoomRecord, messages: EventRoomMessagesLoaded['messages']) =>
+  messages.flatMap(({ id }) => {
+    const index = room.messages.indexOf(id)
+
+    return index === -1 ? [] : [index]
+  })
+
+const findLoadedRangeByMessageIndex = (roomId: string, index: number) =>
+  selectLoadedMessageRanges(roomId).find((range) => index >= range.startIndex && index <= range.endIndex)
+
+const isMessageIndexLoaded = (roomId: string, index: number) => Boolean(findLoadedRangeByMessageIndex(roomId, index))
+
+const isRoomMessagesLoading = (roomId: string) =>
+  Array.from(loadingRoomMessageRanges).some((key) => key.startsWith(`${roomId}:`))
+
+const reconcileLoadedMessageRanges = (roomId: string, previousMessageIds: string[], currentMessageIds: string[]) => {
+  const currentRanges = selectLoadedMessageRanges(roomId)
+  const hasCurrentRanges = Boolean(currentRanges.length)
+  const hadMessages = Boolean(previousMessageIds.length)
+  const hasCurrentMessages = Boolean(currentMessageIds.length)
+  const shouldCreateInitialRange = !hasCurrentRanges && !hadMessages && hasCurrentMessages
+
+  if (shouldCreateInitialRange) {
+    loadedMessageRangesByRoomId[roomId] = [
+      {
+        startIndex: 0,
+        endIndex: currentMessageIds.length - 1
+      }
+    ]
+
+    return
+  }
+
+  if (!hasCurrentRanges) return
+
+  const loadedMessageIds = new Set(
+    currentRanges.flatMap(({ startIndex, endIndex }) => previousMessageIds.slice(startIndex, endIndex + 1))
+  )
+  const previousLastMessageIndex = previousMessageIds.length - 1
+  const previousLastMessageId = previousMessageIds[previousLastMessageIndex]
+  const previousLastCurrentIndex = previousLastMessageId ? currentMessageIds.indexOf(previousLastMessageId) : -1
+  const isPreviousLastMessageLoaded = isMessageIndexLoaded(roomId, previousLastMessageIndex)
+
+  if (isPreviousLastMessageLoaded && previousLastCurrentIndex !== -1) {
+    currentMessageIds.slice(previousLastCurrentIndex + 1).forEach((messageId) => loadedMessageIds.add(messageId))
+  }
+
+  const loadedIndexes = currentMessageIds.flatMap((messageId, index) => (loadedMessageIds.has(messageId) ? [index] : []))
+
+  loadedMessageRangesByRoomId[roomId] = createLoadedRangesFromIndexes(loadedIndexes)
+}
 
 export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
   const { bulkPut } = useMessage()
   const { emitSocketAction } = useSocketAction()
-  const loadingRoomIds = reactive(new Set<string>())
-  const hasMoreMessagesByRoomId = reactive<Record<string, boolean | undefined>>({})
-  const nextBeforeCreatedAtByRoomId = reactive<Record<string, number | undefined>>({})
   const roomId = computed(() => room?.value.id ?? '')
-
-  const isRoomMessagesLoading = (roomId: string) => loadingRoomIds.has(roomId)
-  const hasMoreRoomMessages = (roomId: string) => hasMoreMessagesByRoomId[roomId] ?? true
+  const loadedMessageRanges = computed(() => selectLoadedMessageRanges(roomId.value))
   const isLoading = computed(() => (roomId.value ? isRoomMessagesLoading(roomId.value) : false))
-  const hasMoreMessages = computed(() => (roomId.value ? hasMoreRoomMessages(roomId.value) : true))
+  const hasLoadedMessages = computed(() => Boolean(loadedMessageRanges.value.length))
 
-  const saveLoadedRoomMessages = async ({
-    roomId,
-    messages,
-    hasMore,
-    nextBeforeCreatedAt
-  }: EventRoomMessagesLoaded) => {
-    await bulkPut(messages)
-    hasMoreMessagesByRoomId[roomId] = hasMore
-    nextBeforeCreatedAtByRoomId[roomId] = nextBeforeCreatedAt
+  const saveLoadedRoomMessages = async (targetRoom: ChatRoomRecord, payload: EventRoomMessagesLoaded) => {
+    await bulkPut(payload.messages)
+    updateLoadedMessageRanges(targetRoom.id, resolveMessageIndexes(targetRoom, payload.messages))
   }
 
-  const loadRoomMessages = async (roomId: string, beforeCreatedAt = nextBeforeCreatedAtByRoomId[roomId]) => {
-    if (isRoomMessagesLoading(roomId) || !hasMoreRoomMessages(roomId)) return
+  const loadRoomMessages = async (
+    targetRoom: ChatRoomRecord,
+    direction: MessageLoadDirection,
+    anchorMessageId?: string
+  ) => {
+    const loadKey = createLoadKey(targetRoom.id, direction, anchorMessageId)
+
+    if (loadingRoomMessageRanges.has(loadKey)) return
 
     const payload: EventLoadRoomMessages = {
-      roomId,
+      roomId: targetRoom.id,
       limit: ROOM_MESSAGES_PAGE_LIMIT,
-      ...(beforeCreatedAt ? { beforeCreatedAt } : {})
+      direction,
+      ...(anchorMessageId && { anchorMessageId })
     }
 
-    loadingRoomIds.add(roomId)
+    loadingRoomMessageRanges.add(loadKey)
 
     try {
       const response = await emitSocketAction<EventLoadRoomMessages, EventRoomMessagesLoaded>(
@@ -49,46 +159,67 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
       )
 
       if (response.ok && response.payload) {
-        await saveLoadedRoomMessages(response.payload)
+        await saveLoadedRoomMessages(targetRoom, response.payload)
       }
     } finally {
-      loadingRoomIds.delete(roomId)
+      loadingRoomMessageRanges.delete(loadKey)
     }
   }
 
-  const loadMessages = async () => {
-    const selectedRoomId = roomId.value
+  const loadLatestMessages = async () => {
+    if (!room?.value) return
 
-    if (!selectedRoomId) return
-
-    const beforeCreatedAt = nextBeforeCreatedAtByRoomId[selectedRoomId]
-
-    await loadRoomMessages(selectedRoomId, beforeCreatedAt)
+    await loadRoomMessages(room.value, MESSAGE_LOAD_DIRECTION.LATEST)
   }
 
-  const resetRoomMessagesPagination = (roomId?: string) => {
+  const loadMessagesBeforeRange = (targetRoom: ChatRoomRecord, range: MessageLoadedRange) => {
+    const anchorMessageId = targetRoom.messages[range.startIndex]
+
+    if (!anchorMessageId) return Promise.resolve()
+
+    return loadRoomMessages(targetRoom, MESSAGE_LOAD_DIRECTION.BEFORE, anchorMessageId)
+  }
+
+  const loadMessagesAfterRange = (targetRoom: ChatRoomRecord, range: MessageLoadedRange) => {
+    const anchorMessageId = targetRoom.messages[range.endIndex]
+
+    if (!anchorMessageId) return Promise.resolve()
+
+    return loadRoomMessages(targetRoom, MESSAGE_LOAD_DIRECTION.AFTER, anchorMessageId)
+  }
+
+  const loadMessagesAround = async (messageId: string) => {
+    if (!room?.value) return
+
+    await loadRoomMessages(room.value, MESSAGE_LOAD_DIRECTION.AROUND, messageId)
+  }
+
+  const resetLoadedMessageRanges = (roomId?: string) => {
     if (!roomId) {
-      Object.keys(hasMoreMessagesByRoomId).forEach((id) => {
-        delete hasMoreMessagesByRoomId[id]
-        delete nextBeforeCreatedAtByRoomId[id]
+      Object.keys(loadedMessageRangesByRoomId).forEach((id) => {
+        delete loadedMessageRangesByRoomId[id]
       })
-      loadingRoomIds.clear()
+      loadingRoomMessageRanges.clear()
       return
     }
 
-    delete hasMoreMessagesByRoomId[roomId]
-    delete nextBeforeCreatedAtByRoomId[roomId]
-    loadingRoomIds.delete(roomId)
+    delete loadedMessageRangesByRoomId[roomId]
+    Array.from(loadingRoomMessageRanges)
+      .filter((key) => key.startsWith(`${roomId}:`))
+      .forEach((key) => loadingRoomMessageRanges.delete(key))
   }
 
   return {
-    loadingRoomIds,
+    loadedMessageRanges,
     isLoading,
-    hasMoreMessages,
-    loadMessages,
+    hasLoadedMessages,
+    findLoadedRangeByMessageIndex,
     isRoomMessagesLoading,
-    hasMoreRoomMessages,
-    loadRoomMessages,
-    resetRoomMessagesPagination
+    loadLatestMessages,
+    loadMessagesAfterRange,
+    loadMessagesAround,
+    loadMessagesBeforeRange,
+    reconcileLoadedMessageRanges,
+    resetLoadedMessageRanges
   }
 }
