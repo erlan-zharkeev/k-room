@@ -1,5 +1,5 @@
 import type { INmorphScrollExpose, NmorphCoordsType } from '@nmorph/nmorph-ui-kit'
-import { nextTick, onBeforeUnmount, onMounted, useTemplateRef } from 'vue'
+import { onBeforeUnmount, useTemplateRef, watch } from 'vue'
 
 import { useSettings, type ContentNavigationScrollTab } from 'src/entities/setting'
 
@@ -37,10 +37,9 @@ export const useContentNavigationScroll = (tab: ContentNavigationScrollTab) => {
     void saveContentNavigationScrollTop(scrollElement.scrollTop)
   }
 
-  onMounted(async () => {
-    await nextTick()
-
-    restoreContentNavigationScrollState()
+  watch(() => contentNavigationScrollRef.value?.scrollDOMContainer, restoreContentNavigationScrollState, {
+    flush: 'post',
+    immediate: true
   })
   onBeforeUnmount(saveCurrentContentNavigationScrollState)
 

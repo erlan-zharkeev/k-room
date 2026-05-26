@@ -109,8 +109,8 @@ export const useChatRoomMessageVirtualizer = (
 
   watch(
     () => messagesScrollRef.value?.scrollDOMContainer,
-    () => void nextTick(() => handleMessageVirtualizerChange(messageVirtualizer.value)),
-    { immediate: true }
+    () => handleMessageVirtualizerChange(messageVirtualizer.value),
+    { flush: 'post', immediate: true }
   )
 
   return {

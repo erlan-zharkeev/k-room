@@ -2,7 +2,7 @@ import { useEventListener } from '@vueuse/core'
 import Picker from 'emoji-picker-element/picker'
 import type { EmojiClickEvent } from 'emoji-picker-element/shared'
 import { APP_LANGUAGE } from 'global-shared'
-import { nextTick, onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue'
+import { onBeforeUnmount, ref, shallowRef, useTemplateRef, watch } from 'vue'
 
 import { APP_EMOJI_PICKER_DATA_SOURCE_MAP, APP_EMOJI_PICKER_QUICK_EMOJI_LIST } from './constants'
 import { APP_EMOJI_PICKER_I18N_MAP } from './i18n'
@@ -54,16 +54,15 @@ export const useAppEmojiPicker = (props: AppEmojiPickerProps, emit: AppEmojiPick
     root.append(picker)
   }
 
-  const expandPicker = async () => {
+  const expandPicker = () => {
     isExpanded.value = true
-    await nextTick()
-    mountPicker()
   }
 
   onBeforeUnmount(destroyPicker)
   useEventListener<EmojiClickEvent>(pickerElement, 'emoji-click', handleEmojiClick)
 
-  watch(() => props.language, mountPicker)
+  watch(isExpanded, mountPicker, { flush: 'post' })
+  watch(() => props.language, mountPicker, { flush: 'post' })
 
   return {
     expandPicker,
