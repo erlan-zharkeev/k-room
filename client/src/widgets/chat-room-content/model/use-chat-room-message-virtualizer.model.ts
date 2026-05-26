@@ -4,12 +4,17 @@ import { computed, nextTick, type ComputedRef, useTemplateRef, watch } from 'vue
 
 import { useMessage } from 'src/entities/message'
 
-import { MESSAGE_VIRTUAL_ESTIMATED_HEIGHT, MESSAGE_VIRTUAL_GAP, MESSAGE_VIRTUAL_OVERSCAN } from '../config/constants'
+import {
+  MESSAGE_RANGE_GAP_HEIGHT,
+  MESSAGE_VIRTUAL_ESTIMATED_HEIGHT,
+  MESSAGE_VIRTUAL_GAP,
+  MESSAGE_VIRTUAL_OVERSCAN
+} from '../config/constants'
 import type { MessageVirtualListItemProps, MessageListItem } from '../config/types'
 
 export const useChatRoomMessageVirtualizer = (
   messageList: ComputedRef<MessageListItem[]>,
-  markVisibleMessagesAsRead: (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => void
+  handleMessageVirtualizerChange: (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => void
 ) => {
   const messagesScrollRef = useTemplateRef<INmorphScrollExpose>('messagesScroll')
   const { messageById } = useMessage()
@@ -21,7 +26,7 @@ export const useChatRoomMessageVirtualizer = (
       gap: MESSAGE_VIRTUAL_GAP,
       getItemKey: (index: number) => messageList.value[index]?.id ?? index,
       getScrollElement: () => messagesScrollRef.value?.scrollDOMContainer ?? null,
-      onChange: markVisibleMessagesAsRead,
+      onChange: handleMessageVirtualizerChange,
       overscan: MESSAGE_VIRTUAL_OVERSCAN
     }))
   )
@@ -32,6 +37,7 @@ export const useChatRoomMessageVirtualizer = (
     const bottomOffset = lastItem ? messageVirtualizer.value.getTotalSize() - lastItem.end : 0
 
     return {
+      '--message-range-gap-height': `${MESSAGE_RANGE_GAP_HEIGHT}px`,
       '--message-virtual-gap': `${MESSAGE_VIRTUAL_GAP}px`,
       paddingTop: `${firstItem?.start ?? 0}px`,
       paddingBottom: `${Math.max(bottomOffset, 0)}px`
@@ -76,9 +82,34 @@ export const useChatRoomMessageVirtualizer = (
     messageVirtualizer.value.scrollToIndex(messageList.value.length - 1, { align: 'end', behavior: 'auto' })
   }
 
+  const scrollToMessage = async (messageId: string) => {
+    await nextTick()
+
+    const messageIndex = messageList.value.findIndex((item) => item.type === 'message' && item.messageId === messageId)
+
+    if (messageIndex === -1) return
+
+    messageVirtualizer.value.scrollToIndex(messageIndex, { align: 'center', behavior: 'auto' })
+  }
+
+  const preserveMessagesScrollPosition = async (action: () => Promise<void>) => {
+    const scrollElement = messagesScrollRef.value?.scrollDOMContainer
+    const scrollHeight = scrollElement?.scrollHeight ?? 0
+    const scrollTop = scrollElement?.scrollTop ?? 0
+
+    await action()
+    await nextTick()
+
+    if (!scrollElement) return
+
+    const scrollHeightDelta = scrollElement.scrollHeight - scrollHeight
+
+    messageVirtualizer.value.scrollToOffset(scrollTop + scrollHeightDelta, { behavior: 'auto' })
+  }
+
   watch(
     () => messagesScrollRef.value?.scrollDOMContainer,
-    () => void nextTick(() => markVisibleMessagesAsRead(messageVirtualizer.value)),
+    () => void nextTick(() => handleMessageVirtualizerChange(messageVirtualizer.value)),
     { immediate: true }
   )
 
@@ -87,6 +118,8 @@ export const useChatRoomMessageVirtualizer = (
     measureMessageListItemElement,
     messageVirtualListStyle,
     messageVirtualListItems,
+    preserveMessagesScrollPosition,
+    scrollToMessage,
     scrollMessagesToBottom
   }
 }

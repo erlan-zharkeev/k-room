@@ -58,6 +58,14 @@ export interface MessageLoadedRange {
   endIndex: number
 }
 
+export interface MessageListBuildParams {
+  roomId: string
+  messageIds: string[]
+  loadedMessageRanges: MessageLoadedRange[]
+  messageById: Map<string, MessageRecord>
+  formatDate: (timestamp: number) => string
+}
+
 export interface MessageContextMenuOption {
   label: string
   value: MessageContextMenuAction
