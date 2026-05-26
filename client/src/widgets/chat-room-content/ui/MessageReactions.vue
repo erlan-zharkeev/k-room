@@ -5,7 +5,7 @@ import type { MessageReactionsProps } from '../config/types'
 import { useMessageReactions } from '../model/use-message-reactions.model'
 
 const props = defineProps<MessageReactionsProps>()
-const { reactionTagList, reactionTagListKey } = useMessageReactions(props)
+const { reactionTagList, reactionTagListKey, selectMessageReaction } = useMessageReactions(props)
 </script>
 
 <template>
@@ -14,5 +14,6 @@ const { reactionTagList, reactionTagListKey } = useMessageReactions(props)
     :key="reactionTagListKey"
     class="message-reactions"
     :model-value="reactionTagList"
+    @click="selectMessageReaction"
   />
 </template>

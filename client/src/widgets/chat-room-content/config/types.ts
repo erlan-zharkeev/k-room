@@ -39,6 +39,7 @@ export interface MessageBodyProps {
 
 export interface MessageReactionsProps {
   message: MessageRecord
+  room: ChatRoomRecord
 }
 
 export interface MessageReactionGroupUser {
