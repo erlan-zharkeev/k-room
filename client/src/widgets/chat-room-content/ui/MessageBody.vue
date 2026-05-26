@@ -40,7 +40,7 @@ const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
         </div>
         <AppText tag="p" :text="props.message.body" />
         <div class="message-body__footer">
-          <MessageReactions :message="props.message" />
+          <MessageReactions :message="props.message" :room="props.room" />
           <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
         </div>
       </div>
