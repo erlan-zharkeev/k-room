@@ -51,6 +51,7 @@ export interface MessageReactionGroup {
   glyphKey: string
   users: MessageReactionGroupUser[]
   count: number
+  isSelected: boolean
 }
 
 export interface MessageReactionTagItem {
@@ -58,7 +59,7 @@ export interface MessageReactionTagItem {
   text: string
   removable: false
   height: 'thin'
-  design: 'common'
+  color?: string
 }
 
 export interface MessagePreviewProps {
