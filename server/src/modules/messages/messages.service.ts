@@ -1,4 +1,5 @@
 import {
+  type EventAddReaction,
   type EventDeleteMessage,
   type EventLoadRoomMessages,
   type EventMessageDeleted,
@@ -7,6 +8,7 @@ import {
   type EventPinnedMessageUpdated,
   type EventRoomTypingStatus,
   type EventRoomMessagesLoaded,
+  type EventUpdatedMessageReactions,
   type EventUpdatePinnedMessage,
   type EventUpdateMessageStatus,
   type EventUserTyping,
@@ -321,6 +323,52 @@ export const updatePinnedMessage = async (
       emitToUsers([targetUserId], 'pinned-message-updated', payload)
     })
   )
+}
+
+export const toggleMessageReaction = async (userId: string, { glyphKey, messageId, roomId }: EventAddReaction) => {
+  const [room, message, user] = await Promise.all([
+    ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean(),
+    MessageModel.findOne({ _id: messageId, deletedForUserIds: { $ne: userId } })
+      .select('reactions')
+      .lean<MessageDocument>(),
+    UserModel.findById(userId).select('public.nickname').lean()
+  ])
+
+  if (!room || !message || !user) return
+
+  const reactions = message.reactions ?? []
+  const hasExistingReaction = reactions.some(
+    (reaction) => reaction.authorId === userId && reaction.glyphKey === glyphKey
+  )
+  const reaction = {
+    authorId: userId,
+    nickname: user.public.nickname,
+    glyphKey
+  }
+  const update = hasExistingReaction
+    ? { $pull: { reactions: { authorId: userId, glyphKey } } }
+    : { $addToSet: { reactions: reaction } }
+
+  // Отправляем итоговый список, чтобы клиенты одинаково обработали добавление и удаление.
+  const updatedMessage = await MessageModel.findOneAndUpdate(
+    { _id: messageId, deletedForUserIds: { $ne: userId } },
+    update,
+    { new: true }
+  )
+    .select('reactions')
+    .lean<MessageDocument>()
+
+  if (!updatedMessage) {
+    return
+  }
+
+  const payload: EventUpdatedMessageReactions = {
+    roomId,
+    messageId,
+    reactions: updatedMessage.reactions ?? []
+  }
+
+  emitToUsers(stringifyMongoIds(room.users), 'message-reaction-updated', payload)
 }
 
 export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }: EventUserTyping) => {

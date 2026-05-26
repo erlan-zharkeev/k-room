@@ -204,7 +204,6 @@ export interface EventAddReaction {
   glyphKey: string
   messageId: string
   roomId: string
-  nickname: string
 }
 export interface EventCallUser {
   callId?: string
@@ -243,7 +242,7 @@ export interface EventMessageDeleted {
 export interface EventUpdatedMessageReactions {
   roomId: string
   messageId: string
-  reaction: MessageReaction
+  reactions: MessageReaction[]
 }
 export interface CreateRoomAckPayload {
   roomId: string

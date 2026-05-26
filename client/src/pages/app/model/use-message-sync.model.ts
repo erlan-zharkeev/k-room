@@ -96,16 +96,9 @@ export const useMessageSync = () => {
     }
   }
 
-  const handleMessageReactionUpdate = async ({ messageId, reaction }: EventUpdatedMessageReactions) => {
+  const handleMessageReactionUpdate = async ({ messageId, reactions }: EventUpdatedMessageReactions) => {
     await mutateMessage(messageId, (message) => {
-      const reactions = message.reactions ?? []
-      const isExistingReaction = reactions.some(
-        ({ authorId, glyphKey }) => authorId === reaction.authorId && glyphKey === reaction.glyphKey
-      )
-
-      if (isExistingReaction) return
-
-      message.reactions = [...reactions, reaction]
+      message.reactions = reactions
     })
   }
 

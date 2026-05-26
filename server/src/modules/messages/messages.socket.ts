@@ -1,4 +1,5 @@
 import type {
+  EventAddReaction,
   EventChangeMessageStatus,
   EventDeleteMessage,
   EventLoadRoomMessages,
@@ -21,6 +22,7 @@ import {
   loadRoomMessages,
   markRoomAsRead,
   sendMessage,
+  toggleMessageReaction,
   updatePinnedMessage
 } from './messages.service'
 
@@ -111,6 +113,17 @@ export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
         await deleteMessage(socket.data.userId, payload)
       },
       { basicError: MESSAGES_I18N.deleteMessageFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'add-reaction',
+    socketAckMiddleware<EventAddReaction>(
+      socket,
+      async (payload: EventAddReaction) => {
+        await toggleMessageReaction(socket.data.userId, payload)
+      },
+      { basicError: MESSAGES_I18N.updateMessageReactionFailed }
     )
   )
 }

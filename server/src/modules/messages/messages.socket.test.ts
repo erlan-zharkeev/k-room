@@ -7,6 +7,7 @@ const messagesServiceMock = vi.hoisted(() => ({
   changeMessageStatus: vi.fn(),
   markRoomAsRead: vi.fn(),
   updatePinnedMessage: vi.fn(),
+  toggleMessageReaction: vi.fn(),
   deleteMessage: vi.fn()
 }))
 
@@ -162,6 +163,31 @@ describe('messages.socket', () => {
     await handlers['delete-message'](payload as never)
 
     expect(messagesServiceMock.deleteMessage).toHaveBeenCalledWith('user-1', payload)
+  })
+
+  it('wires add-reaction payload to service', async () => {
+    const handlers: Record<string, (payload: never) => Promise<void>> = {}
+    const socket = {
+      id: 'socket-1',
+      data: {
+        userId: 'user-1',
+        language: 'en'
+      },
+      on: vi.fn((event: string, handler: (payload: never) => Promise<void>) => {
+        handlers[event] = handler
+      })
+    }
+    const payload = {
+      roomId: 'room-1',
+      messageId: 'message-1',
+      glyphKey: '\u{1F44D}'
+    }
+
+    registerMessagesSocketHandlers(socket as never)
+
+    await handlers['add-reaction'](payload as never)
+
+    expect(messagesServiceMock.toggleMessageReaction).toHaveBeenCalledWith('user-1', payload)
   })
 
   it('wires update-pinned-message payload to service', async () => {
