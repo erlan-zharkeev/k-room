@@ -1,4 +1,4 @@
-import { NmorphIconCopy, NmorphIconDelete, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
+import { NmorphIconCopy, NmorphIconDelete, NmorphIconEdit, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
 import { isUnknownObject } from 'global-shared'
 import { computed, ref, toRef } from 'vue'
 import type { Component } from 'vue'
@@ -12,6 +12,7 @@ import MessageReactionPicker from '../ui/MessageReactionPicker.vue'
 
 import { useMessageCopyText } from './use-message-copy-text.model'
 import { useMessageDeleteDialog } from './use-message-delete-dialog.model'
+import { useMessageEdit } from './use-message-edit.model'
 import { useMessagePin } from './use-message-pin.model'
 
 export const useMessageContextMenu = (props: MessageContextMenuProps) => {
@@ -20,6 +21,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const { isTouchInput } = useTouchInput()
   const { t } = useI18n()
   const { canCopyMessageText, copyMessageText } = useMessageCopyText(message)
+  const { canStartMessageEdit, startMessageEdit } = useMessageEdit()
   const { canUpdatePinnedMessage, isMessagePinned, togglePinnedMessage } = useMessagePin(message, room)
   const { isDeleteMessageDialogOpen, openDeleteMessageDialog } = useMessageDeleteDialog()
   const isMessageContextMenuOpen = ref(false)
@@ -50,6 +52,12 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT,
         icon: NmorphIconCopy as unknown as Component,
         disabled: !canCopyMessageText.value
+      },
+      {
+        label: t(CHAT_ROOM_CONTENT_I18N.editMessage),
+        value: MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE,
+        icon: NmorphIconEdit as unknown as Component,
+        disabled: !canStartMessageEdit(message.value)
       }
     ]
 
@@ -77,6 +85,10 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
     switch (option.value) {
       case MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT:
         void copyMessageText()
+        break
+      case MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE:
+        startMessageEdit(message.value, room.value.id)
+        closeMessageContextMenu()
         break
       case MESSAGE_CONTEXT_MENU_ACTION.PIN_MESSAGE:
       case MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE:

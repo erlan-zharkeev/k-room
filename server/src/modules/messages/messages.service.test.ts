@@ -27,7 +27,7 @@ vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
 vi.mock('../media/media.service', () => mediaMock)
 vi.mock('../presence/presence.utils', () => presenceMock)
 
-const { toggleMessageReaction } = await import('./messages.service')
+const { editMessage, toggleMessageReaction } = await import('./messages.service')
 
 const createLeanQuery = (value: unknown) => ({
   select: vi.fn().mockReturnThis(),
@@ -37,6 +37,45 @@ const createLeanQuery = (value: unknown) => ({
 describe('messages.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  it('edits own message and emits message update', async () => {
+    const payload = {
+      roomId: 'room-1',
+      messageId: 'message-1',
+      body: ' updated message '
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
+
+    await editMessage('user-1', payload)
+
+    expect(chatRoomModelMock.findOne).toHaveBeenCalledWith({
+      _id: payload.roomId,
+      users: 'user-1',
+      messages: payload.messageId
+    })
+    expect(messageModelMock.updateOne).toHaveBeenCalledWith(
+      {
+        _id: payload.messageId,
+        authorId: 'user-1',
+        body: { $ne: 'updated message' },
+        deletedForUserIds: { $ne: 'user-1' }
+      },
+      {
+        $set: {
+          body: 'updated message',
+          editedAt: expect.any(Number)
+        }
+      }
+    )
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1', 'user-2'], 'message-edited', {
+      roomId: payload.roomId,
+      messageId: payload.messageId,
+      body: 'updated message',
+      editedAt: expect.any(Number)
+    })
   })
 
   it('adds reaction and emits reaction update', async () => {

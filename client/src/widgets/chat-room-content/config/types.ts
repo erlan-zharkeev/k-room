@@ -21,6 +21,12 @@ export interface ChatRoomFooterProps {
   room: ChatRoomRecord
 }
 
+export interface EditingMessageState {
+  roomId: string
+  messageId: string
+  initialBody: string
+}
+
 export interface ChatRoomPinnedMessageProps {
   room: ChatRoomRecord
 }

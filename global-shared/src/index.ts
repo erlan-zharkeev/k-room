@@ -195,6 +195,8 @@ export type {
   EventRoomTypingStatus,
   EventGetContactTypingStatus,
   EventSendMessage,
+  EventEditMessage,
+  EventMessageEdited,
   EventUpdateMessageStatus,
   EventMessagesStatusUpdated,
   EventChangeMessageStatus,

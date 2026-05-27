@@ -3,6 +3,7 @@ import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
+import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 
@@ -43,6 +44,12 @@ const { showAuthorNickname, messageImagePreviewUrlList, sentAt } = useMessageBod
         <AppText tag="p" :text="props.message.body" />
         <div class="message-body__footer">
           <MessageReactions :message="props.message" :room="props.room" />
+          <AppText
+            v-if="props.message.editedAt"
+            tag="small"
+            color="semi-contrast-text"
+            :text="$t(CHAT_ROOM_CONTENT_I18N.editedMessage)"
+          />
           <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
         </div>
       </div>

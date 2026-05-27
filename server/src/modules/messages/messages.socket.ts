@@ -2,6 +2,7 @@ import type {
   EventAddReaction,
   EventChangeMessageStatus,
   EventDeleteMessage,
+  EventEditMessage,
   EventLoadRoomMessages,
   EventMarkRoomAsRead,
   EventRoomMessagesLoaded,
@@ -18,6 +19,7 @@ import { MESSAGES_I18N } from './messages.i18n'
 import {
   changeMessageStatus,
   deleteMessage,
+  editMessage,
   emitRoomTypingStatus,
   loadRoomMessages,
   markRoomAsRead,
@@ -38,6 +40,17 @@ export const registerMessagesSocketHandlers = (socket: SocketInstance) => {
         })
       },
       { basicError: MESSAGES_I18N.sendMessageFailed }
+    )
+  )
+
+  socket.on<SocketActions>(
+    'edit-message',
+    socketAckMiddleware<EventEditMessage>(
+      socket,
+      async (payload: EventEditMessage) => {
+        await editMessage(socket.data.userId, payload)
+      },
+      { basicError: MESSAGES_I18N.editMessageFailed }
     )
   )
 
