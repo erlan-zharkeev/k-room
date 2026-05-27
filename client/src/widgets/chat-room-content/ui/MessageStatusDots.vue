@@ -43,4 +43,14 @@ const { dotCount, isBlinking, isVisible, tone } = useMessageStatusDots(message)
 .message-status-dots--error .message-status-dots__dot {
   background: var(--nmorph-error-text-color);
 }
+
+.message-status-dots--blinking .message-status-dots__dot {
+  animation: message-status-dots-blink 1.8s ease-in-out infinite;
+}
+
+@keyframes message-status-dots-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
 </style>
