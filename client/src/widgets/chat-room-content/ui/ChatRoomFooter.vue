@@ -73,7 +73,10 @@ const {
         v-else
         v-model="messageText"
         :placeholder="$t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder)"
-        :input-attrs="{ maxLength: MESSAGE_BODY_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder) }"
+        :input-attrs="{
+          maxLength: MESSAGE_BODY_MAX_LENGTH,
+          'aria-label': $t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder)
+        }"
         @keydown.enter.prevent="sendMessage(props.room.id)"
       />
       <NmorphButton

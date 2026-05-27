@@ -57,7 +57,7 @@ const DIRECT_FIXTURE_MESSAGE_IDS = Array.from(
   (_, idx) => `fixture-erlan-tolik-${String(idx + 1).padStart(3, '0')}`
 )
 const FRONTEND_CORE_FIXTURE_MESSAGE_IDS = Array.from(
-  { length: 102 },
+  { length: 103 },
   (_, idx) => `fixture-frontend-core-${String(idx + 1).padStart(3, '0')}`
 )
 const LONG_PRIVATE_FIXTURE_MESSAGE_IDS = Array.from(
@@ -100,7 +100,7 @@ describe('fixtures.service', () => {
     expect(userServiceMock.createUser).not.toHaveBeenCalled()
     expect(userModelMock.findById).toHaveBeenCalledTimes(33)
     expect(mediaMock.uploadBufferToBucket).not.toHaveBeenCalled()
-    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(218)
+    expect(messageModelMock.updateOne).toHaveBeenCalledTimes(219)
     expect(messageModelMock.updateOne).toHaveBeenCalledWith(
       { _id: 'fixture-erlan-tolik-100' },
       expect.objectContaining({

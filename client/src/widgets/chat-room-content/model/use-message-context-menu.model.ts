@@ -52,14 +52,16 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT,
         icon: NmorphIconCopy as unknown as Component,
         disabled: !canCopyMessageText.value
-      },
-      {
-        label: t(CHAT_ROOM_CONTENT_I18N.editMessage),
-        value: MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE,
-        icon: NmorphIconEdit as unknown as Component,
-        disabled: !canStartMessageEdit(message.value)
       }
     ]
+
+    if (canStartMessageEdit(message.value)) {
+      options.push({
+        label: t(CHAT_ROOM_CONTENT_I18N.editMessage),
+        value: MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE,
+        icon: NmorphIconEdit as unknown as Component
+      })
+    }
 
     options.push({
       label: isMessagePinned.value ? t(CHAT_ROOM_CONTENT_I18N.unpinMessage) : t(CHAT_ROOM_CONTENT_I18N.pinMessage),
