@@ -9,6 +9,7 @@ export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 1, 1, 8, 0, 0)
 export const DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-erlan-tolik'
 export const FRONTEND_CORE_FIXTURE_GROUP_KEY = 'frontend-core'
 export const FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-frontend-core'
+export const FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX = 103
 export const LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME = FIXTURE_MAX_LENGTH_NICKNAMES.roma
 export const LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-long-private'
 export const LONG_PRIVATE_FIXTURE_MESSAGE_COUNT = 14

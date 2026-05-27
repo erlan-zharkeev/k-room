@@ -19,6 +19,7 @@ export interface AppTextProps {
   color?: AppTextColor
   alignment?: AppTextAlignment
   bold?: boolean
+  italic?: boolean
   truncate?: boolean
   noLineHeight?: boolean
   selectable?: boolean

@@ -47,7 +47,7 @@ const { showAuthorNickname, messageImagePreviewUrlList, sentAt } = useMessageBod
           <AppText
             v-if="props.message.editedAt"
             tag="small"
-            color="semi-contrast-text"
+            italic
             :text="$t(CHAT_ROOM_CONTENT_I18N.editedMessage)"
           />
           <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />

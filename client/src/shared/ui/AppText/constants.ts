@@ -5,5 +5,6 @@ export const APP_TEXT_DEFAULT_PROPS = {
   color: 'text',
   alignment: 'left',
   bold: false,
+  italic: false,
   selectable: true
 } satisfies Partial<AppTextProps>
