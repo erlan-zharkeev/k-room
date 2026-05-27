@@ -3,9 +3,23 @@ import { getCurrentScope, onScopeDispose, shallowRef, toValue, watch, type Maybe
 
 import { db } from '../db/db'
 
-import type { MediaUrlCacheValue } from './types'
+import type { MediaUrlCacheKeyParams, MediaUrlCacheValue } from './types'
 
 const cache = new Map<string, MediaUrlCacheValue>()
+
+const buildMediaUrlCacheKey = ({ mediaId, etag, lastChecked, lastModified }: MediaUrlCacheKeyParams) => {
+  const version = etag ?? lastModified ?? String(lastChecked)
+
+  return `${mediaId}:${version}`
+}
+
+const hasMediaUrlCacheKeyChanges = (currentKeys: string[], nextKeys: string[]) => {
+  const hasDifferentLength = currentKeys.length !== nextKeys.length
+
+  if (hasDifferentLength) return true
+
+  return currentKeys.some((key, index) => key !== nextKeys[index])
+}
 
 export const acquireUrl = (key: string, blob: Blob) => {
   const hit = cache.get(key)
@@ -67,14 +81,14 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
             return
           }
 
-          const version = record.etag ?? record.lastModified ?? String(record.lastChecked)
-          const key = `${mediaId}:${version}`
+          const { blob, etag, lastChecked, lastModified } = record
+          const key = buildMediaUrlCacheKey({ mediaId, etag, lastChecked, lastModified })
 
           if (currentKey === key) return
 
           clearUrl()
           currentKey = key
-          url.value = acquireUrl(key, record.blob)
+          url.value = acquireUrl(key, blob)
         },
         error: clearUrl
       })
@@ -92,4 +106,64 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
   }
 
   return url
+}
+
+export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
+  const urls = shallowRef<string[]>([])
+  let currentKeys: string[] = []
+
+  const clearUrls = () => {
+    if (!currentKeys.length) {
+      urls.value = []
+
+      return
+    }
+
+    currentKeys.forEach((key) => releaseUrl(key))
+    currentKeys = []
+    urls.value = []
+  }
+
+  const stop = watch(
+    () => [...toValue(ids)],
+    (mediaIds, _previous, onCleanup) => {
+      clearUrls()
+
+      if (!mediaIds.length) return
+
+      const subscription = liveQuery(() => db.media.bulkGet(mediaIds)).subscribe({
+        next: (records) => {
+          const entries = records.flatMap((record, index) => {
+            if (!record?.blob) return []
+
+            const mediaId = mediaIds[index]
+            const { blob, etag, lastChecked, lastModified } = record
+            const key = buildMediaUrlCacheKey({ mediaId, etag, lastChecked, lastModified })
+
+            return [{ blob, key }]
+          })
+          const nextKeys = entries.map(({ key }) => key)
+
+          if (!hasMediaUrlCacheKeyChanges(currentKeys, nextKeys)) return
+
+          clearUrls()
+          currentKeys = nextKeys
+          urls.value = entries.map(({ blob, key }) => acquireUrl(key, blob))
+        },
+        error: clearUrls
+      })
+
+      onCleanup(() => {
+        subscription.unsubscribe()
+        clearUrls()
+      })
+    },
+    { immediate: true }
+  )
+
+  if (getCurrentScope()) {
+    onScopeDispose(stop)
+  }
+
+  return urls
 }

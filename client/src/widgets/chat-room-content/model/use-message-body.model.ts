@@ -2,6 +2,7 @@ import { computed, toRef, watch } from 'vue'
 
 import { useSyncMedia } from 'src/entities/media-file'
 import { useLocalizedDateTime } from 'src/entities/setting'
+import { useLiveMediaUrls } from 'src/shared/lib'
 
 import type { MessageBodyProps } from '../config/types'
 
@@ -17,11 +18,13 @@ export const useMessageBody = (props: MessageBodyProps) => {
       mediaId: image.src
     }))
   )
+  const resolveMessageImageIds = () => messageImageList.value.map(({ mediaId }) => mediaId)
+  const messageImagePreviewUrlList = useLiveMediaUrls(resolveMessageImageIds)
 
   watch(
-    messageImageList,
-    (images) => {
-      images.forEach(({ mediaId }) => {
+    resolveMessageImageIds,
+    (mediaIds) => {
+      mediaIds.forEach((mediaId) => {
         sync(mediaId)
       })
     },
@@ -35,7 +38,7 @@ export const useMessageBody = (props: MessageBodyProps) => {
 
   return {
     showAuthorNickname,
-    messageImageList,
+    messageImagePreviewUrlList,
     sentAt
   }
 }
