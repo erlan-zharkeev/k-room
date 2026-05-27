@@ -19,6 +19,7 @@ const { selectPinnedMessage, selectedChatRoom, selectedChatRoomIsPrivate } = use
       <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectPinnedMessage" />
       <NmorphCard shadow-type="inset" class="chat-room-page__messages">
         <ChatRoomMessages
+          :key="selectedChatRoom.id"
           ref="chatRoomMessages"
           :room="selectedChatRoom"
           :is-private-room="selectedChatRoomIsPrivate"

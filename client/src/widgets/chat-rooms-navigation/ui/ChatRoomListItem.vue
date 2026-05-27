@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
+import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconMuteNotification, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
@@ -31,14 +31,24 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
       content-class="chat-room-list-item__content"
       :shadow-type="isPressed ? 'inset' : 'outset'"
     >
-      <NmorphIcon
-        v-if="props.item.isPinned"
-        class="chat-room-list-item__pin"
-        color="var(--nmorph-accent-color)"
-        aria-hidden="true"
-      >
-        <NmorphIconPin />
-      </NmorphIcon>
+      <div v-if="props.item.isPinned || props.item.isMuted" class="chat-room-list-item__status-icons">
+        <NmorphIcon
+          v-if="props.item.isMuted"
+          class="chat-room-list-item__status-icon"
+          color="var(--nmorph-accent-color)"
+          aria-hidden="true"
+        >
+          <NmorphIconMuteNotification />
+        </NmorphIcon>
+        <NmorphIcon
+          v-if="props.item.isPinned"
+          class="chat-room-list-item__status-icon chat-room-list-item__pin"
+          color="var(--nmorph-accent-color)"
+          aria-hidden="true"
+        >
+          <NmorphIconPin />
+        </NmorphIcon>
+      </div>
       <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
         <AppProfileBasicData
           :image-id="props.item.imageId"
@@ -99,19 +109,24 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
   min-width: 0;
 }
 
-.chat-room-list-item__pin {
-  cursor: grab;
-
+.chat-room-list-item__status-icons {
   position: absolute;
   top: -8px;
   right: -8px;
 
   display: flex;
+  gap: 2px;
   align-items: center;
   justify-content: center;
+}
 
+.chat-room-list-item__status-icon {
   width: 24px;
   height: 24px;
+}
+
+.chat-room-list-item__pin {
+  cursor: grab;
 }
 
 .chat-room-list-item-badge.nmorph-badge {
