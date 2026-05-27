@@ -41,8 +41,8 @@ export const useMessageSync = () => {
     })
   }
 
-  const handleMessageEdited = async ({ body, editedAt, messageId }: EventMessageEdited) => {
-    await update(messageId, { body, editedAt })
+  const handleMessageEdited = async ({ body, editedAt, images, messageId }: EventMessageEdited) => {
+    await update(messageId, { body, editedAt, images })
   }
 
   const updateMessageStatus = async ({ roomId, messageId, status, userId }: EventUpdateMessageStatus) => {
