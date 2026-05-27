@@ -65,7 +65,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
   }
 }
 
-export const editMessage = async (userId: string, { body, messageId, roomId }: EventEditMessage) => {
+export const editMessage = async (userId: string, { body, images, messageId, roomId }: EventEditMessage) => {
   const normalizedBody = body.trim()
 
   if (!normalizedBody) {
@@ -76,6 +76,10 @@ export const editMessage = async (userId: string, { body, messageId, roomId }: E
     throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageBodyTooLong)
   }
 
+  if (images.length > MESSAGE_IMAGE_LIMIT) {
+    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageImageLimitReached)
+  }
+
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
 
   if (!room) {
@@ -83,20 +87,26 @@ export const editMessage = async (userId: string, { body, messageId, roomId }: E
   }
 
   const editedAt = Date.now()
-  const updateResult = await MessageModel.updateOne(
-    {
-      _id: messageId,
-      authorId: userId,
-      body: { $ne: normalizedBody },
-      deletedForUserIds: { $ne: userId }
-    },
-    {
-      $set: {
-        body: normalizedBody,
-        editedAt
-      }
+  const imageUpdateConditions = images.map(({ src }) => ({
+    $or: [{ images: src }, { images: { $elemMatch: { src } } }]
+  }))
+  const updateQuery = {
+    _id: messageId,
+    authorId: userId,
+    deletedForUserIds: { $ne: userId }
+  }
+
+  if (imageUpdateConditions.length) {
+    Object.assign(updateQuery, { $and: imageUpdateConditions })
+  }
+
+  const updateResult = await MessageModel.updateOne(updateQuery, {
+    $set: {
+      body: normalizedBody,
+      images,
+      editedAt
     }
-  )
+  })
 
   if (updateResult.modifiedCount <= 0) {
     return
@@ -106,6 +116,7 @@ export const editMessage = async (userId: string, { body, messageId, roomId }: E
     roomId,
     messageId,
     body: normalizedBody,
+    images,
     editedAt
   }
 

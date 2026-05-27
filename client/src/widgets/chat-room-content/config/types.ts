@@ -1,6 +1,6 @@
 import type { INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type { MediaId, MessageReaction } from 'global-shared'
+import type { ImageObject, MediaId, MessageReaction } from 'global-shared'
 import type { Component } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
@@ -31,6 +31,7 @@ export interface EditingMessageState {
   roomId: string
   messageId: string
   initialBody: string
+  initialImages: ImageObject[]
 }
 
 export interface ChatRoomPinnedMessageProps {

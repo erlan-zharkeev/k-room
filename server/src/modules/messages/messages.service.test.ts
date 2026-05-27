@@ -43,7 +43,8 @@ describe('messages.service', () => {
     const payload = {
       roomId: 'room-1',
       messageId: 'message-1',
-      body: ' updated message '
+      body: ' updated message ',
+      images: [{ src: 'image-1', name: 'image-1' }]
     }
 
     chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
@@ -60,12 +61,13 @@ describe('messages.service', () => {
       {
         _id: payload.messageId,
         authorId: 'user-1',
-        body: { $ne: 'updated message' },
-        deletedForUserIds: { $ne: 'user-1' }
+        deletedForUserIds: { $ne: 'user-1' },
+        $and: [{ $or: [{ images: 'image-1' }, { images: { $elemMatch: { src: 'image-1' } } }] }]
       },
       {
         $set: {
           body: 'updated message',
+          images: payload.images,
           editedAt: expect.any(Number)
         }
       }
@@ -74,6 +76,7 @@ describe('messages.service', () => {
       roomId: payload.roomId,
       messageId: payload.messageId,
       body: 'updated message',
+      images: payload.images,
       editedAt: expect.any(Number)
     })
   })

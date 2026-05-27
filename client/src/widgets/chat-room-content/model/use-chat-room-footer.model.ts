@@ -30,12 +30,14 @@ export const useChatRoomFooter = (
   const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
   const {
     editingMessageId,
+    editingMessageImages,
     editingMessagePreviewText,
     messageEditText,
     canSubmitMessageEdit,
     cancelMessageEdit,
     isEditingRoomMessage,
     isUpdatingEditedMessage,
+    removeEditingMessageImage,
     submitMessageEdit
   } = useMessageEdit()
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
@@ -93,12 +95,14 @@ export const useChatRoomFooter = (
   return {
     messageText,
     editingMessagePreviewText,
+    editingMessageImages,
     messageEditText,
     isSendDisabled,
     canSubmitMessageEdit,
     isEditingCurrentRoomMessage,
     isUpdatingEditedMessage,
     cancelMessageEdit,
+    removeEditingMessageImage,
     selectEditingMessage,
     sendMessage,
     submitMessageEdit

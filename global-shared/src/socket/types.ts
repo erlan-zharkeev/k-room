@@ -2,7 +2,7 @@ import type { Call } from '../calls/types'
 import type { ChatRoom } from '../chat/types'
 import type { Contact, KnownUser, Interaction } from '../contact/types'
 import type { AppLanguage } from '../language/types'
-import type { MediaFileValue } from '../media/types'
+import type { ImageObject, MediaFileValue } from '../media/types'
 import type {
   Message,
   MessageLoadDirection,
@@ -162,11 +162,13 @@ export interface EventEditMessage {
   roomId: string
   messageId: string
   body: string
+  images: ImageObject[]
 }
 export interface EventMessageEdited {
   roomId: string
   messageId: string
   body: string
+  images: ImageObject[]
   editedAt: number
 }
 export interface EventUpdateMessageStatus {

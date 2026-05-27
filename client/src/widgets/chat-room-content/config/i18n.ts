@@ -56,6 +56,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Сохранить изменения',
     zh: '保存更改'
   },
+  removeMessageImage: {
+    en: 'Remove image',
+    ru: 'Удалить изображение',
+    zh: '删除图片'
+  },
   messageTextCopied: {
     en: 'Message text copied',
     ru: 'Текст сообщения скопирован',
