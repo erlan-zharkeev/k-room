@@ -1,4 +1,5 @@
 import type { VirtualItem } from '@tanstack/vue-virtual'
+import type { MediaId, MessageReaction } from 'global-shared'
 import type { Component } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
@@ -44,27 +45,34 @@ export interface MessageReactionsProps {
 
 export interface MessageReactionGroupUser {
   authorId: string
+  avatarId?: MediaId | null
   nickname: string
 }
 
 export interface MessageReactionGroup {
   glyphKey: string
   users: MessageReactionGroupUser[]
+  visibleUsers: MessageReactionGroupUser[]
   count: number
   isSelected: boolean
 }
 
-export interface MessageReactionTagItem {
-  value: string
-  text: string
-  removable: false
-  height: 'thin'
-  style: MessageReactionTagItemStyle
+export interface BuildMessageReactionGroupsParams {
+  currentUserId: string
+  getUserAvatarId: (authorId: string) => MediaId | null | undefined
+  reactions?: MessageReaction[]
+  visibleUserLimit: number
 }
 
-export interface MessageReactionTagItemStyle {
-  '--tag-item-background-color': string
-  '--tag-item-content-color': string
+export interface CanToggleMessageReactionParams {
+  currentUserId: string
+  glyphKey: string
+  limit: number
+  reactions?: MessageReaction[]
+}
+
+export interface MessageReactionAvatarProps {
+  user: MessageReactionGroupUser
 }
 
 export interface MessagePreviewProps {
