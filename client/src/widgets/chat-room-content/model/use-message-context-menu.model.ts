@@ -1,5 +1,7 @@
+import { NmorphIconCopy, NmorphIconDelete, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
 import { isUnknownObject } from 'global-shared'
 import { computed, ref, toRef } from 'vue'
+import type { Component } from 'vue'
 
 import { useI18n, useTouchInput } from 'src/shared/lib'
 
@@ -46,6 +48,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
       {
         label: t(CHAT_ROOM_CONTENT_I18N.copyMessageText),
         value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT,
+        icon: NmorphIconCopy as unknown as Component,
         disabled: !canCopyMessageText.value
       }
     ]
@@ -55,12 +58,14 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
       value: isMessagePinned.value
         ? MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE
         : MESSAGE_CONTEXT_MENU_ACTION.PIN_MESSAGE,
+      icon: NmorphIconPin as unknown as Component,
       disabled: !canUpdatePinnedMessage.value
     })
 
     options.push({
       label: t(CHAT_ROOM_CONTENT_I18N.deleteMessage),
-      value: MESSAGE_CONTEXT_MENU_ACTION.DELETE_MESSAGE
+      value: MESSAGE_CONTEXT_MENU_ACTION.DELETE_MESSAGE,
+      icon: NmorphIconDelete as unknown as Component
     })
 
     return options
