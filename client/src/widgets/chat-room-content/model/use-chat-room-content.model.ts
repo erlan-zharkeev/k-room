@@ -18,12 +18,12 @@ export const useChatRoomContent = () => {
   })
   const selectedChatRoom = computed(() => chatRooms.value.find((room) => room.id === selectedChatRoomId.value))
   const selectedChatRoomIsPrivate = computed(() => isRoomPrivate(selectedChatRoom.value))
-  const selectPinnedMessage = (messageId: string) => {
+  const selectMessage = (messageId: string) => {
     void chatRoomMessages.value?.loadAndScrollToMessage(messageId)
   }
 
   return {
-    selectPinnedMessage,
+    selectMessage,
     selectedChatRoom,
     selectedChatRoomIsPrivate
   }
