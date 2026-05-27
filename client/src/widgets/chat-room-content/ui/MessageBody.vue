@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { AppMediaImage, AppText } from 'src/shared/ui'
+import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
+
+import { AppText } from 'src/shared/ui'
 
 import type { MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
@@ -9,7 +11,7 @@ import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
 
 const props = defineProps<MessageBodyProps>()
-const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
+const { showAuthorNickname, messageImagePreviewUrlList, sentAt } = useMessageBody(props)
 </script>
 
 <template>
@@ -28,14 +30,14 @@ const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
           :title="props.message.repliedMessage.authorNickname"
           :text="props.message.repliedMessage.body"
         />
-        <div v-if="messageImageList.length" class="message-body__images">
-          <AppMediaImage
-            v-for="image in messageImageList"
-            :key="image.mediaId"
-            :media-id="image.mediaId"
-            :alt="image.name"
+        <div v-if="messageImagePreviewUrlList.length" class="message-body__images">
+          <NmorphImagePreview
+            :src="messageImagePreviewUrlList"
             width="100%"
             height="220px"
+            radius="4px"
+            trigger-view="gallery"
+            trigger-gap="6px"
           />
         </div>
         <AppText tag="p" :text="props.message.body" />
@@ -99,10 +101,9 @@ const { showAuthorNickname, messageImageList, sentAt } = useMessageBody(props)
   gap: 4px;
 }
 
-.message-body__images {
+.message-body__images .nmorph-image-preview.nmorph-image-preview--gallery-trigger .nmorph-image-preview__trigger {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 6px;
 }
 
 .message-body__footer {

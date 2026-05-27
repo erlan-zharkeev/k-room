@@ -35,7 +35,7 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
         <NmorphIcon
           v-if="props.item.isMuted"
           class="chat-room-list-item__status-icon"
-          color="var(--nmorph-accent-color)"
+          color="var(--nmorph-contrast-text-color)"
           aria-hidden="true"
         >
           <NmorphIconMuteNotification />
@@ -43,7 +43,7 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
         <NmorphIcon
           v-if="props.item.isPinned"
           class="chat-room-list-item__status-icon chat-room-list-item__pin"
-          color="var(--nmorph-accent-color)"
+          color="var(--nmorph-contrast-text-color)"
           aria-hidden="true"
         >
           <NmorphIconPin />
@@ -112,17 +112,21 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
 .chat-room-list-item__status-icons {
   position: absolute;
   top: -8px;
-  right: -8px;
+  right: 0;
 
   display: flex;
-  gap: 2px;
+  gap: 4px;
   align-items: center;
   justify-content: center;
 }
 
 .chat-room-list-item__status-icon {
-  width: 24px;
-  height: 24px;
+  width: 12px;
+  height: 12px;
+  padding: 8px;
+  border-radius: 2px;
+
+  background: var(--nmorph-accent-color);
 }
 
 .chat-room-list-item__pin {
