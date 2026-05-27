@@ -106,6 +106,7 @@ const {
               :disabled="isAccountSaving"
               :model-value="accountAvatarUploadValue"
               :multiple="false"
+              file-name-width="174px"
               @update:model-value="uploadAccountAvatar"
             />
             <NmorphButton

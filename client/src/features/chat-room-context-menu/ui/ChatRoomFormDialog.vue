@@ -69,6 +69,7 @@ const {
           :disabled="!isChatRoomAvatarEditable || isSavingChatRoom"
           :model-value="chatAvatarUploadValue"
           :multiple="false"
+          file-name-width="174px"
           @update:model-value="updateChatAvatar"
           @on-unsupported-file-type-error="showUnsupportedChatAvatarFormatError"
         />

@@ -6,7 +6,7 @@ import {
   NmorphIconPlay,
   NmorphIconStop,
   NmorphSelect,
-  NmorphCard
+  NmorphMediaTile
 } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
@@ -24,6 +24,7 @@ const {
   videoInputPermissionCalloutType,
   videoInputPermissionStatus,
   hasVideoInputPermissionWarning,
+  videoInputStream,
   isVideoInputChecking,
   setVideoInputChecking,
   setSelectedVideoInputDevice
@@ -79,20 +80,13 @@ const videoInputCheckLabel = computed(() =>
         </NmorphCheckbox>
       </div>
 
-      <NmorphCard
-        shadow-type="inset"
+      <NmorphMediaTile
         v-if="isVideoInputChecking"
-        class="settings-video-input-device-card__preview-container"
-      >
-        <video
-          ref="videoElement"
-          class="settings-video-input-device-card__preview"
-          :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.videoPreview)"
-          autoplay
-          muted
-          playsinline
-        />
-      </NmorphCard>
+        class="settings-video-input-device-card__preview"
+        :src-object="videoInputStream"
+        :name="$t(SETTINGS_PAGE_DEVICES_I18N.videoPreview)"
+        mirrored
+      />
     </div>
   </SettingsCard>
 </template>
@@ -114,20 +108,7 @@ const videoInputCheckLabel = computed(() =>
   gap: 4px;
 }
 
-.settings-video-input-device-card__preview-container {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding: 8px;
-}
-
 .settings-video-input-device-card__preview {
-  transform: scaleX(-1);
-
-  aspect-ratio: 16 / 9;
   width: 100%;
-  border-radius: 8px;
-
-  object-fit: cover;
 }
 </style>

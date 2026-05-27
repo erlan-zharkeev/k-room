@@ -13,7 +13,7 @@ import {
 } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 
-import { normalizeDeviceSelectValue, syncSelectedDeviceId, useDeviceWarning } from './use-device-settings.model'
+import { resolveSingleSelectValue, syncSelectedDeviceId, useDeviceWarning } from './use-device-settings.model'
 
 export const useAudioOutputDevice = () => {
   const { t } = useI18n()
@@ -64,10 +64,10 @@ export const useAudioOutputDevice = () => {
 
   const setSelectedAudioOutputDevice = async (value: NmorphSelectModelValueType = '') => {
     stopAudioOutput()
-    await setByPath(
-      'ioDevices.audioOutputDeviceId',
-      normalizeDeviceSelectValue(value, DEFAULT_AUDIO_OUTPUT_SELECT_VALUE)
-    )
+
+    const deviceId = resolveSingleSelectValue(value, DEFAULT_AUDIO_OUTPUT_SELECT_VALUE)
+
+    await setByPath('ioDevices.audioOutputDeviceId', deviceId)
   }
 
   const syncSelectedAudioOutputDevice = async () => {
