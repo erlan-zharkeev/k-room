@@ -57,6 +57,10 @@ export interface MessageReactionsProps {
   room: ChatRoomRecord
 }
 
+export interface MessageStatusDotsProps {
+  message: MessageRecord
+}
+
 export interface MessageReactionGroupUser {
   authorId: string
   avatarId?: MediaId | null
