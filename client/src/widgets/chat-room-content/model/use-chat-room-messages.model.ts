@@ -8,7 +8,7 @@ import type { ChatRoomMessagesProps } from '../config/types'
 
 import { useChatRoomMessageList } from './use-chat-room-message-list.model'
 import { useChatRoomMessageReadStatus } from './use-chat-room-message-read-status.model'
-import { useChatRoomMessageScroll } from './use-chat-room-message-scroll.model'
+import { useChatRoomMessageScrollManager } from './use-chat-room-message-scroll-manager.model'
 import { useChatRoomMessageVirtualizer } from './use-chat-room-message-virtualizer.model'
 import { useLoadRoomMessages } from './use-load-room-messages.model'
 
@@ -30,6 +30,16 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   const { displayedLastMessageId, hasMessages, messageList } = useChatRoomMessageList(room, loadedMessageRanges)
 
   const { clearPendingReadMessageIds, markVisibleMessagesAsRead } = useChatRoomMessageReadStatus(room, messageList)
+  const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
+  const {
+    getMessagesScrollElement,
+    runInitialMessagesScroll,
+    saveMessagesScrollState,
+    scrollMessagesToBottom,
+    setMessageVirtualizer,
+    showBackToBottomButton,
+    updateBackToBottomButtonVisibility
+  } = useChatRoomMessageScrollManager(room, displayedLastMessageId, messageItemsQuantity)
   let preserveMessagesScrollPosition = (action: () => Promise<void>) => action()
 
   const findVisibleMessageItem = (virtualizer: Virtualizer<HTMLElement, HTMLElement>, edge: 'start' | 'end') => {
@@ -89,22 +99,25 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   }
 
   const handleMessageVirtualizerChange = (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => {
+    updateBackToBottomButtonVisibility()
     markVisibleMessagesAsRead(virtualizer)
     preloadAdjacentMessages(virtualizer)
   }
 
-  const messageVirtualizerApi = useChatRoomMessageVirtualizer(messageList, handleMessageVirtualizerChange)
+  const messageVirtualizerApi = useChatRoomMessageVirtualizer(
+    messageList,
+    handleMessageVirtualizerChange,
+    getMessagesScrollElement
+  )
   const {
     messageVirtualizer,
     measureMessageListItemElement,
     messageVirtualListStyle,
     messageVirtualListItems,
-    scrollMessagesToBottom,
     scrollToMessage
   } = messageVirtualizerApi
   preserveMessagesScrollPosition = messageVirtualizerApi.preserveMessagesScrollPosition
-  const { saveCurrentMessagesScrollState, saveMessagesScrollState, scrollMessagesToInitialPosition } =
-    useChatRoomMessageScroll(room, messageVirtualizer, scrollMessagesToBottom)
+  setMessageVirtualizer(messageVirtualizer)
 
   const messageStatusKeys = computed(() =>
     room.value.messages.map((messageId) => {
@@ -113,7 +126,6 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
       return message ? `${message.id}:${message.status}` : messageId
     })
   )
-  const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
 
   const loadAndScrollToMessage = async (messageId: string) => {
     const messageIndex = room.value.messages.indexOf(messageId)
@@ -132,19 +144,9 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   watch(
     () => room.value.id,
     async (roomId, previousRoomId) => {
-      if (previousRoomId) {
-        saveCurrentMessagesScrollState(previousRoomId)
-      }
-
       clearPendingReadMessageIds()
 
-      try {
-        await loadLatestMessages()
-      } finally {
-        if (room.value.id === roomId) {
-          void scrollMessagesToInitialPosition(roomId)
-        }
-      }
+      await runInitialMessagesScroll(roomId, previousRoomId, loadLatestMessages)
     },
     { immediate: true }
   )
@@ -163,32 +165,6 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
 
   watch(messageStatusKeys, () => markVisibleMessagesAsRead(messageVirtualizer.value), { immediate: true })
 
-  watch(
-    messageItemsQuantity,
-    (length, previousLength) => {
-      if (length && !previousLength) {
-        void scrollMessagesToInitialPosition(room.value.id)
-      }
-    },
-    { immediate: true }
-  )
-
-  watch(
-    () => ({
-      displayedLastMessageId: displayedLastMessageId.value,
-      roomId: room.value.id
-    }),
-    ({ displayedLastMessageId, roomId }, previous) => {
-      const isSameRoom = previous?.roomId === roomId
-      const hasDisplayedLastMessageChanged = previous?.displayedLastMessageId !== displayedLastMessageId
-
-      if (isSameRoom && hasDisplayedLastMessageChanged) {
-        void scrollMessagesToBottom()
-      }
-    },
-    { immediate: true }
-  )
-
   return {
     hasLoadedMessages,
     hasMessages,
@@ -197,6 +173,8 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
     messageVirtualListStyle,
     messageVirtualListItems,
     loadAndScrollToMessage,
-    saveMessagesScrollState
+    saveMessagesScrollState,
+    scrollMessagesToBottom,
+    showBackToBottomButton
   }
 }

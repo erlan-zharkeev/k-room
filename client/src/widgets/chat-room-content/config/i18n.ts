@@ -21,6 +21,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Загрузить предыдущие сообщения',
     zh: '加载更早的消息'
   },
+  backToBottom: {
+    en: 'Back to bottom',
+    ru: 'К последнему сообщению',
+    zh: '回到底部'
+  },
   messageActions: {
     en: 'Message actions',
     ru: 'Действия сообщения',

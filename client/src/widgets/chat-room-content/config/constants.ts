@@ -5,6 +5,7 @@ export const MESSAGE_RANGE_GAP_HEIGHT = 24
 export const MESSAGE_VIRTUAL_ESTIMATED_HEIGHT = 96
 export const MESSAGE_VIRTUAL_GAP = 4
 export const MESSAGE_VIRTUAL_OVERSCAN = 8
+export const MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET = 120
 export const MESSAGE_CONTEXT_MENU_ACTION = {
   COPY_TEXT: 'copy-text',
   REACTION_PICKER: 'reaction-picker',

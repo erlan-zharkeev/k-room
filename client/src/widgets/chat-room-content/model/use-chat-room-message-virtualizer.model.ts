@@ -1,6 +1,5 @@
-import type { INmorphScrollExpose } from '@nmorph/nmorph-ui-kit'
 import { useVirtualizer, type Virtualizer } from '@tanstack/vue-virtual'
-import { computed, nextTick, type ComputedRef, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, type ComputedRef, watch } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 
@@ -14,9 +13,9 @@ import type { MessageVirtualListItemProps, MessageListItem } from '../config/typ
 
 export const useChatRoomMessageVirtualizer = (
   messageList: ComputedRef<MessageListItem[]>,
-  handleMessageVirtualizerChange: (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => void
+  handleMessageVirtualizerChange: (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => void,
+  getMessagesScrollElement: () => HTMLElement | null
 ) => {
-  const messagesScrollRef = useTemplateRef<INmorphScrollExpose>('messagesScroll')
   const { messageById } = useMessage()
 
   const messageVirtualizer = useVirtualizer<HTMLElement, HTMLElement>(
@@ -25,7 +24,7 @@ export const useChatRoomMessageVirtualizer = (
       estimateSize: () => MESSAGE_VIRTUAL_ESTIMATED_HEIGHT,
       gap: MESSAGE_VIRTUAL_GAP,
       getItemKey: (index: number) => messageList.value[index]?.id ?? index,
-      getScrollElement: () => messagesScrollRef.value?.scrollDOMContainer ?? null,
+      getScrollElement: getMessagesScrollElement,
       onChange: handleMessageVirtualizerChange,
       overscan: MESSAGE_VIRTUAL_OVERSCAN
     }))
@@ -74,14 +73,6 @@ export const useChatRoomMessageVirtualizer = (
     messageVirtualizer.value.measureElement(element instanceof HTMLElement ? element : null)
   }
 
-  const scrollMessagesToBottom = async () => {
-    await nextTick()
-
-    if (!messageList.value.length) return
-
-    messageVirtualizer.value.scrollToIndex(messageList.value.length - 1, { align: 'end', behavior: 'auto' })
-  }
-
   const scrollToMessage = async (messageId: string) => {
     await nextTick()
 
@@ -93,7 +84,7 @@ export const useChatRoomMessageVirtualizer = (
   }
 
   const preserveMessagesScrollPosition = async (action: () => Promise<void>) => {
-    const scrollElement = messagesScrollRef.value?.scrollDOMContainer
+    const scrollElement = getMessagesScrollElement()
     const scrollHeight = scrollElement?.scrollHeight ?? 0
     const scrollTop = scrollElement?.scrollTop ?? 0
 
@@ -107,11 +98,10 @@ export const useChatRoomMessageVirtualizer = (
     messageVirtualizer.value.scrollToOffset(scrollTop + scrollHeightDelta, { behavior: 'auto' })
   }
 
-  watch(
-    () => messagesScrollRef.value?.scrollDOMContainer,
-    () => handleMessageVirtualizerChange(messageVirtualizer.value),
-    { flush: 'post', immediate: true }
-  )
+  watch(getMessagesScrollElement, () => handleMessageVirtualizerChange(messageVirtualizer.value), {
+    flush: 'post',
+    immediate: true
+  })
 
   return {
     messageVirtualizer,
@@ -119,7 +109,6 @@ export const useChatRoomMessageVirtualizer = (
     messageVirtualListStyle,
     messageVirtualListItems,
     preserveMessagesScrollPosition,
-    scrollToMessage,
-    scrollMessagesToBottom
+    scrollToMessage
   }
 }
