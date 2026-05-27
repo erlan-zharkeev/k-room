@@ -1,6 +1,8 @@
 import {
   type EventAddReaction,
   type EventDeleteMessage,
+  type EventEditMessage,
+  type EventMessageEdited,
   type EventLoadRoomMessages,
   type EventMessageDeleted,
   type EventMessageDelivered,
@@ -42,7 +44,7 @@ import { MessageModel } from './messages.model'
 import type { MessageDocument, SendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
-  const { _id, authorId, authorNickname, body, createdAt, reactions, repliedMessage, usersMetaData } = message
+  const { _id, authorId, authorNickname, body, createdAt, editedAt, reactions, repliedMessage, usersMetaData } = message
   const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
   const selfStatus = usersMetaData.find((user) => user.id === userId)?.status
   const status = isMessageAuthor(message, userId) && readBySomeone ? MESSAGE_STATUS_VALUE.READ : selfStatus
@@ -54,12 +56,60 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     authorNickname,
     body,
     createdAt,
+    editedAt,
     reactions,
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
     status,
     isSelf: isMessageAuthor(message, userId),
     repliedMessage
   }
+}
+
+export const editMessage = async (userId: string, { body, messageId, roomId }: EventEditMessage) => {
+  const normalizedBody = body.trim()
+
+  if (!normalizedBody) {
+    return
+  }
+
+  if (normalizedBody.length > MESSAGE_BODY_MAX_LENGTH) {
+    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageBodyTooLong)
+  }
+
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+
+  if (!room) {
+    return
+  }
+
+  const editedAt = Date.now()
+  const updateResult = await MessageModel.updateOne(
+    {
+      _id: messageId,
+      authorId: userId,
+      body: { $ne: normalizedBody },
+      deletedForUserIds: { $ne: userId }
+    },
+    {
+      $set: {
+        body: normalizedBody,
+        editedAt
+      }
+    }
+  )
+
+  if (updateResult.modifiedCount <= 0) {
+    return
+  }
+
+  const payload: EventMessageEdited = {
+    roomId,
+    messageId,
+    body: normalizedBody,
+    editedAt
+  }
+
+  emitToUsers(stringifyMongoIds(room.users), 'message-edited', payload)
 }
 
 const resolveVisibleMessageIds = async (userId: string, messageIds: string[]) => {

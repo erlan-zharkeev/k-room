@@ -15,25 +15,43 @@ import { useChatRoomTypingEmitter } from 'src/features/chat-room-typing'
 import { socket } from 'src/shared/api'
 import type { ChatRoomRecord } from 'src/shared/lib'
 
+import { useMessageEdit } from './use-message-edit.model'
+
 export const useChatRoomFooter = (room: Ref<ChatRoomRecord>) => {
   const { mutate } = useChatRoom()
   const { put } = useMessage()
   const { user } = useUser()
   const messageText = ref('')
   const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
-  const isSendDisabled = computed(
-    () => !messageText.value.trim() || messageText.value.length > MESSAGE_BODY_MAX_LENGTH || !user.value.id
-  )
+  const {
+    editingMessagePreviewText,
+    messageEditText,
+    canSubmitMessageEdit,
+    cancelMessageEdit,
+    isEditingRoomMessage,
+    isUpdatingEditedMessage,
+    submitMessageEdit
+  } = useMessageEdit()
+  const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
+  const isSendDisabled = computed(() => {
+    const hasMessageBody = Boolean(messageText.value.trim())
+    const hasValidLength = messageText.value.length <= MESSAGE_BODY_MAX_LENGTH
+    const hasUserId = Boolean(user.value.id)
+    const canSendMessage = hasMessageBody && hasValidLength
+
+    return !canSendMessage || !hasUserId
+  })
 
   const sendMessage = async (roomId: string) => {
     const body = messageText.value.trim()
+    const { id: authorId, nickname: authorNickname } = user.value
 
-    if (!body || !user.value.id) return
+    if (!body || !authorId) return
 
     const message: Message = {
       id: uuidv4(),
-      authorId: user.value.id,
-      authorNickname: user.value.nickname,
+      authorId,
+      authorNickname,
       body,
       createdAt: Date.now(),
       isSelf: true,
@@ -59,7 +77,14 @@ export const useChatRoomFooter = (room: Ref<ChatRoomRecord>) => {
 
   return {
     messageText,
+    editingMessagePreviewText,
+    messageEditText,
     isSendDisabled,
-    sendMessage
+    canSubmitMessageEdit,
+    isEditingCurrentRoomMessage,
+    isUpdatingEditedMessage,
+    cancelMessageEdit,
+    sendMessage,
+    submitMessageEdit
   }
 }
