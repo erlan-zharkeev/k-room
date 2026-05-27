@@ -42,6 +42,10 @@ const messageSchema = new Schema<MessageSchema>({
     type: Number,
     required: true
   },
+  editedAt: {
+    type: Number,
+    required: false
+  },
   reactions: {
     type: [reactionSchema],
     required: false

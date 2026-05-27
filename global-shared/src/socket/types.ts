@@ -158,6 +158,17 @@ export interface EventSendMessage {
   roomId: string
   message: Message
 }
+export interface EventEditMessage {
+  roomId: string
+  messageId: string
+  body: string
+}
+export interface EventMessageEdited {
+  roomId: string
+  messageId: string
+  body: string
+  editedAt: number
+}
 export interface EventUpdateMessageStatus {
   roomId: string
   messageId: string
@@ -293,6 +304,8 @@ export type SocketActions =
   | 'create-chat-room'
   | 'new-room-added'
   | 'send-message'
+  | 'edit-message'
+  | 'message-edited'
   | 'message-delivered'
   | 'search-contact'
   | 'get-searched-contact'

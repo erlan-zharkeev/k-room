@@ -6,6 +6,7 @@ export interface MessageSchema {
   authorNickname: string
   body: string
   createdAt?: number
+  editedAt?: number
   reactions?: MessageReaction[]
   images?: Array<string | ImageObject>
   imageCompression?: boolean

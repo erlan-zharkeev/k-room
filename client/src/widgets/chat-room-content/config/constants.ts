@@ -8,6 +8,7 @@ export const MESSAGE_VIRTUAL_OVERSCAN = 8
 export const MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET = 120
 export const MESSAGE_CONTEXT_MENU_ACTION = {
   COPY_TEXT: 'copy-text',
+  EDIT_MESSAGE: 'edit-message',
   REACTION_PICKER: 'reaction-picker',
   PIN_MESSAGE: 'pin-message',
   UNPIN_MESSAGE: 'unpin-message',

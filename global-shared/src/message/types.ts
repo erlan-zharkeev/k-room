@@ -36,6 +36,7 @@ export interface Message {
   authorNickname: string
   body: string
   createdAt?: number
+  editedAt?: number
   reactions?: MessageReaction[]
   images?: ImageObject[]
   imageCompression?: boolean
