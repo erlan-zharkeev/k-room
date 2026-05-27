@@ -6,12 +6,16 @@ import { useLiveMediaUrls } from 'src/shared/lib'
 
 import type { MessageBodyProps } from '../config/types'
 
+import { useMessageEdit } from './use-message-edit.model'
+
 export const useMessageBody = (props: MessageBodyProps) => {
   const message = toRef(props, 'message')
   const { formatTime } = useLocalizedDateTime()
   const { sync } = useSyncMedia()
+  const { isEditingMessage } = useMessageEdit()
 
   const showAuthorNickname = computed(() => !props.isPrivateRoom && !message.value.isSelf)
+  const isMessageEditing = computed(() => isEditingMessage(props.room.id, message.value.id))
   const messageImageList = computed(() =>
     (message.value.images ?? []).map((image) => ({
       ...image,
@@ -38,6 +42,7 @@ export const useMessageBody = (props: MessageBodyProps) => {
 
   return {
     showAuthorNickname,
+    isMessageEditing,
     messageImagePreviewUrlList,
     sentAt
   }

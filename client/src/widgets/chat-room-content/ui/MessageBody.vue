@@ -12,7 +12,7 @@ import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
 
 const props = defineProps<MessageBodyProps>()
-const { showAuthorNickname, messageImagePreviewUrlList, sentAt } = useMessageBody(props)
+const { showAuthorNickname, isMessageEditing, messageImagePreviewUrlList, sentAt } = useMessageBody(props)
 </script>
 
 <template>
@@ -21,7 +21,8 @@ const { showAuthorNickname, messageImagePreviewUrlList, sentAt } = useMessageBod
       class="message-body"
       :class="[
         props.message.isSelf && 'message-body--self',
-        props.message.status && `message-body--${props.message.status}`
+        props.message.status && `message-body--${props.message.status}`,
+        isMessageEditing && 'message-body--editing'
       ]"
     >
       <div class="message-body__content">
@@ -77,6 +78,11 @@ const { showAuthorNickname, messageImagePreviewUrlList, sentAt } = useMessageBod
 
 .message-body--self {
   background: var(--nmorph-dark-shade-color);
+}
+
+.message-body--editing {
+  outline: 2px solid var(--nmorph-accent-color);
+  outline-offset: 2px;
 }
 
 .message-body--sending {
