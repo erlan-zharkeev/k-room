@@ -14,6 +14,7 @@ export const useMessageEdit = () => {
   const { emitSocketAction } = useSocketAction()
   const isMessageEditActive = computed(() => Boolean(editingMessageState.value))
   const editingMessagePreviewText = computed(() => editingMessageState.value?.initialBody ?? '')
+  const editingMessageId = computed(() => editingMessageState.value?.messageId)
   const canSubmitMessageEdit = computed(() => {
     const state = editingMessageState.value
 
@@ -79,6 +80,7 @@ export const useMessageEdit = () => {
   return {
     editingMessageState,
     editingMessagePreviewText,
+    editingMessageId,
     messageEditText,
     isMessageEditActive,
     isUpdatingEditedMessage,

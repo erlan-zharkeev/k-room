@@ -15,15 +15,21 @@ import { useChatRoomTypingEmitter } from 'src/features/chat-room-typing'
 import { socket } from 'src/shared/api'
 import type { ChatRoomRecord } from 'src/shared/lib'
 
+import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
+
 import { useMessageEdit } from './use-message-edit.model'
 
-export const useChatRoomFooter = (room: Ref<ChatRoomRecord>) => {
+export const useChatRoomFooter = (
+  room: Ref<ChatRoomRecord>,
+  onSelectEditingMessage: ChatRoomFooterSelectEditingMessage
+) => {
   const { mutate } = useChatRoom()
   const { put } = useMessage()
   const { user } = useUser()
   const messageText = ref('')
   const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
   const {
+    editingMessageId,
     editingMessagePreviewText,
     messageEditText,
     canSubmitMessageEdit,
@@ -41,6 +47,15 @@ export const useChatRoomFooter = (room: Ref<ChatRoomRecord>) => {
 
     return !canSendMessage || !hasUserId
   })
+
+  const selectEditingMessage = () => {
+    const messageId = editingMessageId.value
+    const isEditingCurrentRoom = isEditingCurrentRoomMessage.value
+
+    if (!messageId || !isEditingCurrentRoom) return
+
+    onSelectEditingMessage(messageId)
+  }
 
   const sendMessage = async (roomId: string) => {
     const body = messageText.value.trim()
@@ -84,6 +99,7 @@ export const useChatRoomFooter = (room: Ref<ChatRoomRecord>) => {
     isEditingCurrentRoomMessage,
     isUpdatingEditedMessage,
     cancelMessageEdit,
+    selectEditingMessage,
     sendMessage,
     submitMessageEdit
   }

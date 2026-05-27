@@ -9,14 +9,14 @@ import ChatRoomMessages from './ChatRoomMessages.vue'
 import ChatRoomPinnedMessage from './ChatRoomPinnedMessage.vue'
 import ChatRoomStub from './ChatRoomStub.vue'
 
-const { selectPinnedMessage, selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
+const { selectMessage, selectedChatRoom, selectedChatRoomIsPrivate } = useChatRoomContent()
 </script>
 
 <template>
   <section class="chat-room-page">
     <ChatRoomHeader v-if="selectedChatRoom" :room="selectedChatRoom" :is-private-room="selectedChatRoomIsPrivate" />
     <template v-if="selectedChatRoom">
-      <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectPinnedMessage" />
+      <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectMessage" />
       <NmorphCard shadow-type="inset" class="chat-room-page__messages">
         <ChatRoomMessages
           :key="selectedChatRoom.id"
@@ -25,7 +25,7 @@ const { selectPinnedMessage, selectedChatRoom, selectedChatRoomIsPrivate } = use
           :is-private-room="selectedChatRoomIsPrivate"
         />
       </NmorphCard>
-      <ChatRoomFooter :room="selectedChatRoom" />
+      <ChatRoomFooter :room="selectedChatRoom" @select-editing-message="selectMessage" />
     </template>
     <NmorphCard v-else shadow-type="inset" class="chat-room-page__stub">
       <ChatRoomStub />

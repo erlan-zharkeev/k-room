@@ -21,6 +21,12 @@ export interface ChatRoomFooterProps {
   room: ChatRoomRecord
 }
 
+export interface ChatRoomFooterEmits {
+  'select-editing-message': [messageId: string]
+}
+
+export type ChatRoomFooterSelectEditingMessage = (messageId: string) => void
+
 export interface EditingMessageState {
   roomId: string
   messageId: string

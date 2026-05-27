@@ -13,12 +13,13 @@ import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
 import { toRef } from 'vue'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
-import type { ChatRoomFooterProps } from '../config/types'
+import type { ChatRoomFooterEmits, ChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
 import MessagePreview from './MessagePreview.vue'
 
 const props = defineProps<ChatRoomFooterProps>()
+const emit = defineEmits<ChatRoomFooterEmits>()
 const room = toRef(props, 'room')
 const {
   messageText,
@@ -29,9 +30,10 @@ const {
   isEditingCurrentRoomMessage,
   isUpdatingEditedMessage,
   cancelMessageEdit,
+  selectEditingMessage,
   sendMessage,
   submitMessageEdit
-} = useChatRoomFooter(room)
+} = useChatRoomFooter(room, (messageId) => emit('select-editing-message', messageId))
 </script>
 
 <template>
@@ -41,9 +43,14 @@ const {
     content-class="chat-room-content-footer__content"
     shadow-type="combined"
   >
-    <div v-if="isEditingCurrentRoomMessage">
+    <button
+      v-if="isEditingCurrentRoomMessage"
+      type="button"
+      class="chat-room-content-footer__edit-preview"
+      @click="selectEditingMessage"
+    >
       <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.editingMessage)" :text="editingMessagePreviewText" />
-    </div>
+    </button>
     <div class="chat-room-content-footer__controls">
       <NmorphButton
         v-if="isEditingCurrentRoomMessage"
@@ -119,6 +126,11 @@ const {
 .chat-room-content-footer__content {
   display: grid;
   gap: 8px;
+}
+
+.chat-room-content-footer__edit-preview {
+  cursor: pointer;
+  padding: 0 8px 4px 0;
 }
 
 .chat-room-content-footer__controls {
