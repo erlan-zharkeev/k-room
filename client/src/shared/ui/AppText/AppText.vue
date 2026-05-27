@@ -62,6 +62,10 @@ small.app-text {
   font-weight: 700;
 }
 
+.app-text--italic {
+  font-style: italic;
+}
+
 .app-text--truncate {
   overflow: hidden;
   display: block;

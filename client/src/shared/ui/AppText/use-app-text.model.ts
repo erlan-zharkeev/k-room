@@ -13,6 +13,7 @@ export const useAppText = (props: AppTextProps) => {
         props.color ?? APP_TEXT_DEFAULT_PROPS.color,
         props.alignment,
         props.bold && 'bold',
+        props.italic && 'italic',
         props.truncate && 'truncate',
         props.noLineHeight && 'no-line-height',
         props.selectable === false && 'not-selectable'

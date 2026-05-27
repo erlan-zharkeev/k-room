@@ -1,4 +1,5 @@
 import {
+  type EventMessageEdited,
   type EventMessageDeleted,
   type EventMessageDelivered,
   type EventMessagesStatusUpdated,
@@ -38,6 +39,10 @@ export const useMessageSync = () => {
         room.unreadMessagesQuantity = (room.unreadMessagesQuantity ?? 0) + 1
       }
     })
+  }
+
+  const handleMessageEdited = async ({ body, editedAt, messageId }: EventMessageEdited) => {
+    await update(messageId, { body, editedAt })
   }
 
   const updateMessageStatus = async ({ roomId, messageId, status, userId }: EventUpdateMessageStatus) => {
@@ -133,6 +138,7 @@ export const useMessageSync = () => {
 
   return {
     handleDeliveredMessage,
+    handleMessageEdited,
     handleMessageDeleted,
     handleMessageReactionUpdate,
     handlePinnedMessageUpdated,

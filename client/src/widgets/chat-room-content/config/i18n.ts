@@ -38,18 +38,23 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
   },
   editMessage: {
     en: 'Edit message',
-    ru: 'Edit message',
-    zh: 'Edit message'
+    ru: 'Редактировать сообщение',
+    zh: '编辑消息'
+  },
+  editingMessage: {
+    en: 'Editing message',
+    ru: 'Редактирование сообщения',
+    zh: '正在编辑消息'
   },
   editedMessage: {
     en: 'edited',
-    ru: 'edited',
-    zh: 'edited'
+    ru: 'изменено',
+    zh: '已编辑'
   },
   saveMessageEdit: {
     en: 'Save changes',
-    ru: 'Save changes',
-    zh: 'Save changes'
+    ru: 'Сохранить изменения',
+    zh: '保存更改'
   },
   messageTextCopied: {
     en: 'Message text copied',

@@ -40,6 +40,7 @@ import {
   FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX,
   FRONTEND_CORE_FIXTURE_GROUP_KEY,
   FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX,
+  FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX,
   LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME,
   LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS,
   LONG_PRIVATE_FIXTURE_MESSAGE_BODY,
@@ -285,6 +286,30 @@ const buildFixtureMessages = (prefix: string, roomUserIds: readonly string[], ro
   buildFixtureSendingMessage(prefix, roomUserIds, roomNicknames)
 ]
 
+const buildFrontendCoreSelfPhotoMessage = (roomUserIds: readonly string[]) => {
+  const createdAt =
+    BASE_FIXTURE_TIMESTAMP_MS +
+    FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX * (37 * MINUTE_IN_MS) +
+    Math.floor(FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX / 18) * DAY_IN_MS
+
+  return {
+    _id: buildFixtureMessageId(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX),
+    authorId: ERLAN_ID,
+    authorNickname: 'erlan',
+    body: buildFixtureMessageBody(FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX),
+    createdAt,
+    reactions: [],
+    images: [FIXTURE_MESSAGE_IMAGE_FILES[2].id],
+    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
+    repliedMessage: null
+  }
+}
+
+const buildFrontendCoreFixtureMessages = (roomUserIds: readonly string[], roomNicknames: readonly string[]) => [
+  ...buildFixtureMessages(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, roomUserIds, roomNicknames),
+  buildFrontendCoreSelfPhotoMessage(roomUserIds)
+]
+
 const buildLongPrivateFixtureMessage = (idx: number, contactId: string, contactNickname: string) => ({
   _id: buildFixtureMessageId(LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX, idx),
   authorId: contactId,
@@ -487,7 +512,7 @@ const loadDialogFixtures = async () => {
   if (frontendCoreRoom) {
     await ensureMessages(
       frontendCoreRoom.room.id,
-      buildFixtureMessages(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, frontendCoreRoom.users, frontendCoreRoom.nicknames)
+      buildFrontendCoreFixtureMessages(frontendCoreRoom.users, frontendCoreRoom.nicknames)
     )
   }
 }

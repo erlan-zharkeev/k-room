@@ -2,6 +2,8 @@
 import {
   NmorphButton,
   NmorphCard,
+  NmorphIconCheck,
+  NmorphIconClose,
   NmorphIconPaperclip,
   NmorphIconSendFilled,
   NmorphTextInput,
@@ -14,9 +16,22 @@ import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
+import MessagePreview from './MessagePreview.vue'
+
 const props = defineProps<ChatRoomFooterProps>()
 const room = toRef(props, 'room')
-const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter(room)
+const {
+  messageText,
+  editingMessagePreviewText,
+  messageEditText,
+  isSendDisabled,
+  canSubmitMessageEdit,
+  isEditingCurrentRoomMessage,
+  isUpdatingEditedMessage,
+  cancelMessageEdit,
+  sendMessage,
+  submitMessageEdit
+} = useChatRoomFooter(room)
 </script>
 
 <template>
@@ -26,37 +41,84 @@ const { messageText, isSendDisabled, sendMessage } = useChatRoomFooter(room)
     content-class="chat-room-content-footer__content"
     shadow-type="combined"
   >
-    <NmorphButton shape="square" :aria-label="$t(CHAT_ROOM_CONTENT_I18N.attachFile)">
-      <template #icon>
-        <NmorphIconPaperclip />
-      </template>
-    </NmorphButton>
-    <NmorphTextInput
-      v-model="messageText"
-      :placeholder="$t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder)"
-      :input-attrs="{ maxLength: MESSAGE_BODY_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder) }"
-      @keydown.enter.prevent="sendMessage(props.room.id)"
-    />
-    <NmorphButton shape="square" :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectEmoji)">
-      <template #icon>
-        <NmorphIconSmile />
-      </template>
-    </NmorphButton>
-    <NmorphButton
-      shape="square"
-      :disabled="isSendDisabled"
-      :aria-label="$t(CHAT_ROOM_CONTENT_I18N.sendMessage)"
-      @click="sendMessage(props.room.id)"
-    >
-      <template #icon>
-        <NmorphIconSendFilled />
-      </template>
-    </NmorphButton>
+    <div v-if="isEditingCurrentRoomMessage">
+      <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.editingMessage)" :text="editingMessagePreviewText" />
+    </div>
+    <div class="chat-room-content-footer__controls">
+      <NmorphButton
+        v-if="isEditingCurrentRoomMessage"
+        shape="square"
+        :aria-label="$t(CHAT_ROOM_CONTENT_I18N.cancel)"
+        :disabled="isUpdatingEditedMessage"
+        @click="cancelMessageEdit"
+      >
+        <template #icon>
+          <NmorphIconClose />
+        </template>
+      </NmorphButton>
+      <NmorphButton v-else shape="square" :aria-label="$t(CHAT_ROOM_CONTENT_I18N.attachFile)">
+        <template #icon>
+          <NmorphIconPaperclip />
+        </template>
+      </NmorphButton>
+      <NmorphTextInput
+        v-if="isEditingCurrentRoomMessage"
+        v-model="messageEditText"
+        :placeholder="$t(CHAT_ROOM_CONTENT_I18N.editMessage)"
+        :input-attrs="{ maxLength: MESSAGE_BODY_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_CONTENT_I18N.editMessage) }"
+        @keydown.enter.prevent="submitMessageEdit"
+        @keydown.escape.prevent="cancelMessageEdit"
+      />
+      <NmorphTextInput
+        v-else
+        v-model="messageText"
+        :placeholder="$t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder)"
+        :input-attrs="{ maxLength: MESSAGE_BODY_MAX_LENGTH, 'aria-label': $t(CHAT_ROOM_CONTENT_I18N.messagePlaceholder) }"
+        @keydown.enter.prevent="sendMessage(props.room.id)"
+      />
+      <NmorphButton
+        v-if="!isEditingCurrentRoomMessage"
+        shape="square"
+        :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectEmoji)"
+      >
+        <template #icon>
+          <NmorphIconSmile />
+        </template>
+      </NmorphButton>
+      <NmorphButton
+        v-if="isEditingCurrentRoomMessage"
+        shape="square"
+        :disabled="!canSubmitMessageEdit"
+        :loading="isUpdatingEditedMessage"
+        :aria-label="$t(CHAT_ROOM_CONTENT_I18N.saveMessageEdit)"
+        @click="submitMessageEdit"
+      >
+        <template #icon>
+          <NmorphIconCheck />
+        </template>
+      </NmorphButton>
+      <NmorphButton
+        v-else
+        shape="square"
+        :disabled="isSendDisabled"
+        :aria-label="$t(CHAT_ROOM_CONTENT_I18N.sendMessage)"
+        @click="sendMessage(props.room.id)"
+      >
+        <template #icon>
+          <NmorphIconSendFilled />
+        </template>
+      </NmorphButton>
+    </div>
   </NmorphCard>
 </template>
 
 <style lang="scss">
 .chat-room-content-footer__content {
+  display: grid;
+  gap: 8px;
+}
+
+.chat-room-content-footer__controls {
   display: flex;
   gap: 8px;
 }
