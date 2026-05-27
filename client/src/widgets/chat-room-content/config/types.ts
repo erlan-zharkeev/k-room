@@ -5,7 +5,7 @@ import type { Component } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
-import type { MESSAGE_CONTEXT_MENU_ACTION } from './constants'
+import type { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_STATUS_DOT_TONE } from './constants'
 
 export interface ChatRoomMessagesProps {
   room: ChatRoomRecord
@@ -102,6 +102,7 @@ export interface MessagePreviewProps {
 }
 
 export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
+export type MessageStatusDotTone = (typeof MESSAGE_STATUS_DOT_TONE)[keyof typeof MESSAGE_STATUS_DOT_TONE]
 
 export interface MessageContextMenuProps {
   message: MessageRecord
