@@ -116,6 +116,7 @@ export interface MessageListBuildParams {
 export interface MessageContextMenuOption {
   label?: string
   value: MessageContextMenuAction
+  icon?: Component
   component?: Component
   componentProps?: Record<string, unknown>
   closeOnClick?: boolean

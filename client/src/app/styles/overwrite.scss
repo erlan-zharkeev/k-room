@@ -9,3 +9,7 @@
     calc(var(--base-shadow-width) * -1) calc(var(--base-shadow-width) * -1) var(--base-shadow-blur)
       var(--app-shadow-dark-soft);
 }
+
+.nmorph-context-menu__item {
+  gap: 12px;
+}
