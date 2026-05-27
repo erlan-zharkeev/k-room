@@ -54,6 +54,13 @@ export const useMessageEdit = () => {
   }
 
   const isEditingRoomMessage = (roomId: string) => editingMessageState.value?.roomId === roomId
+  const isEditingMessage = (roomId: string, messageId: string) => {
+    const state = editingMessageState.value
+
+    if (!state) return false
+
+    return state.roomId === roomId && state.messageId === messageId
+  }
 
   const submitMessageEdit = () => {
     const state = editingMessageState.value
@@ -89,6 +96,7 @@ export const useMessageEdit = () => {
     startMessageEdit,
     cancelMessageEdit,
     isEditingRoomMessage,
+    isEditingMessage,
     submitMessageEdit
   }
 }
