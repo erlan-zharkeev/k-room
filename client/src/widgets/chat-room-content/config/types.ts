@@ -1,3 +1,4 @@
+import type { INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type { MediaId, MessageReaction } from 'global-shared'
 import type { Component } from 'vue'
@@ -55,6 +56,13 @@ export interface MessageReactionGroup {
   visibleUsers: MessageReactionGroupUser[]
   count: number
   isSelected: boolean
+}
+
+export interface MessageReactionTagItem extends MessageReactionGroup, INmorphTagItemProps {
+  color: string
+  height: 'thin'
+  removable: false
+  value: string
 }
 
 export interface BuildMessageReactionGroupsParams {

@@ -7,10 +7,12 @@ import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import type { DevicePermissionStatus } from '../../config/types/devices.types'
 import { getDevicePermissionCalloutType } from '../../lib/get-device-permission-callout-type'
 
-export const normalizeDeviceSelectValue = (value: NmorphSelectModelValueType, emptyValue = '') => {
-  const deviceId = Array.isArray(value) ? value[0] ?? '' : value
+export const resolveSingleSelectValue = (value: NmorphSelectModelValueType, emptyValue = '') => {
+  const deviceId = Array.isArray(value) ? value[0] : value
 
-  return deviceId === emptyValue ? '' : deviceId
+  if (!deviceId || deviceId === emptyValue) return ''
+
+  return deviceId
 }
 
 export const resolveSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string, emptyDeviceId = '') => {

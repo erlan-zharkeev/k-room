@@ -8,7 +8,7 @@ import { log, useI18n, useMediaDevicePermission } from 'src/shared/lib'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 
 import {
-  normalizeDeviceSelectValue,
+  resolveSingleSelectValue,
   syncSelectedDeviceId,
   useDevicePermissionStatus,
   useDeviceWarning
@@ -167,7 +167,7 @@ export const useAudioInputDevice = () => {
   }
 
   const setSelectedAudioInputDevice = async (value: NmorphSelectModelValueType = '') => {
-    const deviceId = normalizeDeviceSelectValue(value)
+    const deviceId = resolveSingleSelectValue(value)
     const shouldRestartCheck = isAudioInputChecking.value
 
     await setByPath('ioDevices.audioInputDeviceId', deviceId)

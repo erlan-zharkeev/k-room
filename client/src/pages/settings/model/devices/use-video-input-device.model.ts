@@ -1,6 +1,6 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
 import { useDevicesList, useUserMedia } from '@vueuse/core'
-import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useI18n, useMediaDevicePermission } from 'src/shared/lib'
@@ -8,7 +8,7 @@ import { useI18n, useMediaDevicePermission } from 'src/shared/lib'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 
 import {
-  normalizeDeviceSelectValue,
+  resolveSingleSelectValue,
   syncSelectedDeviceId,
   useDevicePermissionStatus,
   useDeviceWarning
@@ -34,7 +34,6 @@ export const useVideoInputDevice = () => {
   const videoInputLoading = ref(false)
   const videoInputCheckLoading = ref(false)
   const videoInputStream = videoInputUserMedia.stream
-  const videoElementRef = useTemplateRef<HTMLVideoElement>('videoElement')
 
   const { permissionCalloutType: videoInputPermissionCalloutType, permissionStatus: videoInputPermissionStatus } =
     useDevicePermissionStatus(isVideoInputSupported, videoInputPermission)
@@ -120,7 +119,7 @@ export const useVideoInputDevice = () => {
   }
 
   const setSelectedVideoInputDevice = async (value: NmorphSelectModelValueType = '') => {
-    const deviceId = normalizeDeviceSelectValue(value)
+    const deviceId = resolveSingleSelectValue(value)
     const shouldRestartCheck = isVideoInputChecking.value
 
     await setByPath('ioDevices.videoInputDeviceId', deviceId)
@@ -138,12 +137,6 @@ export const useVideoInputDevice = () => {
     void syncSelectedVideoInputDevice(videoInputPermission.value === 'granted')
   })
 
-  watch([videoInputStream, videoElementRef], () => {
-    if (videoElementRef.value) {
-      videoElementRef.value.srcObject = videoInputStream.value ?? null
-    }
-  })
-
   return {
     settings,
     videoInputOptions,
@@ -152,6 +145,7 @@ export const useVideoInputDevice = () => {
     videoInputPermissionCalloutType,
     videoInputPermissionStatus,
     hasVideoInputPermissionWarning,
+    videoInputStream,
     isVideoInputChecking,
     setVideoInputChecking,
     setSelectedVideoInputDevice

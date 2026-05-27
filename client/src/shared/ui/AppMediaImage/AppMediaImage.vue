@@ -11,6 +11,6 @@ const { imageSrc } = useAppMediaImage(props)
 
 <template>
   <slot :src="imageSrc">
-    <NmorphImagePreview :src="imageSrc" :alt="props.alt" :width="props.width" :height="props.height" />
+    <NmorphImagePreview :src="imageSrc" :alt="props.alt" :width="props.width" :height="props.height" radius="4px" />
   </slot>
 </template>

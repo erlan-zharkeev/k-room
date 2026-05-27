@@ -59,6 +59,7 @@ const visibilityOptions = computed(() =>
             :button-text="$t(SETTINGS_PAGE_APPEARANCE_I18N.uploadWallpaper)"
             :model-value="wallpaperUploadValue"
             :multiple="false"
+            file-name-width="174px"
             @update:model-value="updateWallpaper"
             @on-unsupported-file-type-error="showUnsupportedWallpaperFormatError"
           />

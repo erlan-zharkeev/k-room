@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { NmorphTagList } from '@nmorph/nmorph-ui-kit'
+
 import { AppText } from 'src/shared/ui'
 
 import type { MessageReactionsProps } from '../config/types'
@@ -11,22 +13,15 @@ const { reactionList, selectMessageReaction } = useMessageReactions(props)
 </script>
 
 <template>
-  <div v-if="reactionList.length" class="message-reactions">
-    <div
-      v-for="reaction in reactionList"
-      :key="reaction.glyphKey"
-      class="message-reactions__item"
-      role="button"
-      tabindex="0"
-      :style="{
-        '--message-reaction-background': reaction.isSelected
-          ? 'var(--app-accent-surface-soft)'
-          : 'var(--app-muted-surface-soft)'
-      }"
-      @click="selectMessageReaction(reaction.glyphKey)"
-      @keydown.enter="selectMessageReaction(reaction.glyphKey)"
-      @keydown.space.prevent="selectMessageReaction(reaction.glyphKey)"
-    >
+  <NmorphTagList
+    v-if="reactionList.length"
+    class="message-reactions"
+    :model-value="reactionList"
+    design="common"
+    color="var(--app-muted-surface-soft)"
+    @click="selectMessageReaction"
+  >
+    <template #item="{ item: reaction }">
       <span class="message-reactions__glyph">{{ reaction.glyphKey }}</span>
       <AppText
         v-if="reaction.count > 1"
@@ -45,42 +40,29 @@ const { reactionList, selectMessageReaction } = useMessageReactions(props)
           <MessageReactionAvatar :user="reactionUser" />
         </span>
       </span>
-    </div>
-  </div>
+    </template>
+  </NmorphTagList>
 </template>
 
 <style lang="scss">
-.message-reactions {
+.message-reactions.nmorph-list {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   align-items: center;
 }
 
-.message-reactions__item {
+.message-reactions .nmorph-tag-item {
   cursor: pointer;
-  user-select: none;
 
-  display: inline-flex;
-  gap: 3px;
-  align-items: center;
-
-  min-height: 24px;
+  height: 28px;
+  margin-right: 0;
   padding: 2px 5px;
   border-radius: 999px;
-
-  color: var(--nmorph-contrast-text-color);
-
-  background: var(--message-reaction-background);
 }
 
-.message-reactions__item:hover {
+.message-reactions .nmorph-tag-item:hover {
   filter: brightness(1.12);
-}
-
-.message-reactions__item:focus-visible {
-  outline: 2px solid var(--nmorph-accent-color);
-  outline-offset: 2px;
 }
 
 .message-reactions__avatars {
@@ -90,10 +72,26 @@ const { reactionList, selectMessageReaction } = useMessageReactions(props)
 }
 
 .message-reactions__avatar {
-  width: 22px;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 16px;
+  min-width: 0;
+
+  .nmorph-image {
+    padding: 0;
+  }
 }
 
 .message-reactions__avatar:last-child {
-  width: 28px;
+  flex-basis: 22px;
+}
+
+.message-reactions__avatar:not(:first-child) {
+  z-index: 1;
+}
+
+.message-reactions__tooltip {
+  display: flex;
+  align-items: center;
 }
 </style>

@@ -2,6 +2,7 @@
 import {
   NmorphCallout,
   NmorphCheckbox,
+  NmorphAudioMeter,
   NmorphIcon,
   NmorphIconPlay,
   NmorphIconStop,
@@ -9,7 +10,7 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import { computed } from 'vue'
 
-import { AppMicrophoneWaveform, AppText } from 'src/shared/ui'
+import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useAudioInputDevice } from '../../../model/devices/use-audio-input-device.model'
@@ -78,10 +79,11 @@ const audioInputCheckLabel = computed(() =>
         </NmorphCheckbox>
       </div>
 
-      <AppMicrophoneWaveform
+      <NmorphAudioMeter
         v-if="isAudioInputChecking"
-        :volume-db="audioVolumeDb"
         :label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputLevel)"
+        :volume-db="audioVolumeDb"
+        :bars="7"
       />
     </div>
   </SettingsCard>

@@ -3,18 +3,9 @@
   border-radius: 8px;
 }
 
-.nmorph-image-preview {
-  overflow: hidden;
-  border-radius: 4px;
-}
-
 .nmorph-context-menu__dropdown.nmorph-dropdown--hide-shadow {
   box-shadow: calc(var(--base-shadow-width) * 2) calc(var(--base-shadow-width) * 2) calc(var(--base-shadow-blur) * 2)
       var(--app-shadow-dark),
     calc(var(--base-shadow-width) * -1) calc(var(--base-shadow-width) * -1) var(--base-shadow-blur)
       var(--app-shadow-dark-soft);
-}
-
-.nmorph-file-upload .nmorph-file-upload__file-name {
-  width: 174px; // TODO удалить позже
 }
