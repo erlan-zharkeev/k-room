@@ -6,5 +6,6 @@ export const MEDIA_NO_CACHE_REQUEST_HEADERS = {
   'Cache-Control': 'no-cache'
 }
 export const MEDIA_SYNC_CONCURRENCY = 4
+export const MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX = 'message-image-draft'
 export const MISSING_MEDIA_RETRY_INTERVAL_MS = 10 * MINUTE_IN_MS
 export const UPDATE_MEDIA_INTERVAL_MS = 1 * DAY_IN_MS

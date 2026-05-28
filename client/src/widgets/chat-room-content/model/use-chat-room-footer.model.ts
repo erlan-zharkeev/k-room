@@ -42,6 +42,9 @@ export const useChatRoomFooter = (
     submitMessageEdit
   } = useMessageEdit()
   const {
+    buildMessageImageDraftPayload,
+    clearSentMessageImageDraft,
+    hasMessageImageDraft,
     messageImageDraftImages,
     messageImageDraftUploadValue,
     openMessageImageUpload,
@@ -52,9 +55,10 @@ export const useChatRoomFooter = (
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
+    const hasMessageDraft = hasMessageImageDraft.value
     const hasValidLength = messageText.value.length <= MESSAGE_BODY_MAX_LENGTH
     const hasUserId = Boolean(user.value.id)
-    const canSendMessage = hasMessageBody && hasValidLength
+    const canSendMessage = (hasMessageBody || hasMessageDraft) && hasValidLength
 
     return !canSendMessage || !hasUserId
   })
@@ -70,9 +74,13 @@ export const useChatRoomFooter = (
 
   const sendMessage = async (roomId: string) => {
     const body = messageText.value.trim()
+    const images = messageImageDraftImages.value.map((image) => ({ ...image }))
+    const hasMessageDraft = Boolean(images.length)
     const { id: authorId, nickname: authorNickname } = user.value
 
-    if (!body || !authorId) return
+    if ((!body && !hasMessageDraft) || !authorId) return
+
+    const payloadImages = await buildMessageImageDraftPayload()
 
     const message: Message = {
       id: uuidv4(),
@@ -83,12 +91,15 @@ export const useChatRoomFooter = (
       isSelf: true,
       status: MESSAGE_STATUS_VALUE.SENDING,
       reactions: [],
-      images: []
+      images
     }
 
     const payload: EventSendMessage = {
       roomId,
-      message
+      message: {
+        ...message,
+        images: payloadImages
+      }
     }
 
     await put(message)
@@ -99,6 +110,7 @@ export const useChatRoomFooter = (
     socket.emit<SocketActions>('send-message', payload)
     stopTyping()
     messageText.value = ''
+    clearSentMessageImageDraft()
   }
 
   return {

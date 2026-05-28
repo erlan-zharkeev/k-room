@@ -12,6 +12,7 @@ import {
 } from 'global-shared'
 
 import { useChatRoom } from 'src/entities/chat-room'
+import { MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX, useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 
@@ -19,6 +20,7 @@ import { useMessageNotification } from './use-message-notification.model'
 
 export const useMessageSync = () => {
   const { mutate: mutateRoom } = useChatRoom()
+  const { bulkDelete: bulkDeleteMedia } = useMedia()
   const { bulkUpdate, getById, messageById, mutate: mutateMessage, put, remove, update } = useMessage()
   const { user } = useUser()
   const { playDeliveredMessageSound, showDeliveredMessageToast } = useMessageNotification()
@@ -29,8 +31,25 @@ export const useMessageSync = () => {
     })
   }
 
+  const isMessageImageDraftMediaId = (mediaId: string) => mediaId.startsWith(MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX)
+
+  const resolveMessageImageDraftMediaIds = (messageId: string) => {
+    const currentMessage = getById(messageId)
+
+    if (!currentMessage?.images?.length) return []
+
+    return currentMessage.images.map(({ src }) => src).filter(isMessageImageDraftMediaId)
+  }
+
   const handleDeliveredMessage = async ({ roomId, message }: EventMessageDelivered) => {
+    const draftMediaIds = resolveMessageImageDraftMediaIds(message.id)
+
     await put(message)
+
+    if (draftMediaIds.length) {
+      await bulkDeleteMedia(draftMediaIds)
+    }
+
     await mutateRoom(roomId, (room) => {
       const { messages } = room
 

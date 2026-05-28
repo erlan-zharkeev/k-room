@@ -3,14 +3,10 @@ import { MESSAGE_IMAGE_LIMIT, type ImageObject } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue'
 
-import { useMedia } from 'src/entities/media-file'
+import { MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX, useMedia } from 'src/entities/media-file'
 import { revokeObjectUrl, revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
-import {
-  MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
-  MESSAGE_IMAGE_MAX_FILE_SIZE,
-  MESSAGE_IMAGE_MAX_MB
-} from '../config/constants'
+import { MESSAGE_IMAGE_MAX_FILE_SIZE, MESSAGE_IMAGE_MAX_MB } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageImageDraftItem, MessageImageUploadRef } from '../config/types'
 
@@ -136,6 +132,15 @@ export const useMessageImageDraft = () => {
     await deleteMessageImageDraftItems(items)
   }
 
+  const clearSentMessageImageDraft = () => {
+    const items = messageImageDraftItems.value
+
+    if (!items.length) return
+
+    messageImageDraftItems.value = []
+    revokeObjectUrls(items.map(({ uploadValue }) => uploadValue.previewUrl))
+  }
+
   const buildMessageImageDraftPayload = () =>
     Promise.all(
       messageImageDraftItems.value.map(
@@ -158,6 +163,7 @@ export const useMessageImageDraft = () => {
     hasMessageImageDraft,
     buildMessageImageDraftPayload,
     clearMessageImageDraft,
+    clearSentMessageImageDraft,
     openMessageImageUpload,
     removeMessageImageDraft,
     showUnsupportedMessageImageFormatError,
