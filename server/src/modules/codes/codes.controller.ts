@@ -14,10 +14,11 @@ import {
   type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 
-import { AppError, toAppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
+import { toAppError } from 'src/shared/lib/app-error'
 import { runRequestValidation } from 'src/shared/lib/run-request-validation'
+import { sendResponse } from 'src/shared/lib/send-response'
 
+import { requireAuthUserId } from '../session/lib/require-auth-user-id'
 import { AccessTokenGuard } from '../session/session.guard'
 import { SESSION_I18N } from '../session/session.i18n'
 
@@ -46,29 +47,24 @@ export class CodesController {
     @Res() response: Response<BackendResponse<SendChangeEmailCodeResponse>>,
     @Body() payload: SendChangeEmailCodePayload
   ) {
-    const { language, authUserId: userId } = request
+    const { language } = request
 
     try {
-      if (!userId) {
-        throw new AppError(401, SESSION_I18N.nonAuthorized)
-      }
+      const userId = requireAuthUserId(request, SESSION_I18N.nonAuthorized)
 
       runRequestValidation(request, SEND_CHANGE_EMAIL_CODE_VALIDATION)
       const result = await this.codesService.sendChangeEmailCode(userId, payload, request)
 
-      return response.json({
-        payload: {
+      return sendResponse(
+        response,
+        language,
+        {
           nextTimeRequest: result.nextTimeRequest,
           ...(isString(result.debugCode) ? { debugCode: result.debugCode } : {})
         },
-        message: {
-          text: localizedText(
-            result.tooManyRequests ? SEND_CHANGE_EMAIL_CODE_I18N.tooManyRequests : SEND_CHANGE_EMAIL_CODE_I18N.codeSent,
-            language
-          ),
-          silent: false
-        }
-      })
+        result.tooManyRequests ? SEND_CHANGE_EMAIL_CODE_I18N.tooManyRequests : SEND_CHANGE_EMAIL_CODE_I18N.codeSent,
+        false
+      )
     } catch (error) {
       throw toAppError(error, SEND_CHANGE_EMAIL_CODE_I18N.sendFailed)
     }
@@ -81,23 +77,15 @@ export class CodesController {
     @Res() response: Response<BackendResponse<ValidateChangeEmailCodeResponse>>,
     @Body() payload: ValidateChangeEmailCodePayload
   ) {
-    const { language, authUserId: userId } = request
+    const { language } = request
 
     try {
-      if (!userId) {
-        throw new AppError(401, SESSION_I18N.nonAuthorized)
-      }
+      const userId = requireAuthUserId(request, SESSION_I18N.nonAuthorized)
 
       runRequestValidation(request, VALIDATE_CHANGE_EMAIL_CODE_VALIDATION)
       const result = await this.codesService.validateChangeEmailCode(userId, payload, request)
 
-      return response.json({
-        payload: result,
-        message: {
-          text: localizedText(VALIDATE_CHANGE_EMAIL_CODE_I18N.validated, language),
-          silent: false
-        }
-      })
+      return sendResponse(response, language, result, VALIDATE_CHANGE_EMAIL_CODE_I18N.validated, false)
     } catch (error) {
       throw toAppError(error, VALIDATE_CHANGE_EMAIL_CODE_I18N.validationFailed)
     }
@@ -115,21 +103,18 @@ export class CodesController {
       runRequestValidation(request, SEND_PASSWORD_RECOVERY_CODE_VALIDATION)
       const result = await this.codesService.sendPasswordRecoveryCode(payload, request)
 
-      return response.json({
-        payload: {
+      return sendResponse(
+        response,
+        language,
+        {
           nextTimeRequest: result.nextTimeRequest,
           ...(isString(result.debugCode) ? { debugCode: result.debugCode } : {})
         },
-        message: {
-          text: localizedText(
-            result.tooManyRequests
-              ? SEND_PASSWORD_RECOVERY_CODE_I18N.tooManyRequests
-              : SEND_PASSWORD_RECOVERY_CODE_I18N.codeSent,
-            language
-          ),
-          silent: false
-        }
-      })
+        result.tooManyRequests
+          ? SEND_PASSWORD_RECOVERY_CODE_I18N.tooManyRequests
+          : SEND_PASSWORD_RECOVERY_CODE_I18N.codeSent,
+        false
+      )
     } catch (error) {
       throw toAppError(error, SEND_PASSWORD_RECOVERY_CODE_I18N.sendFailed)
     }
@@ -147,13 +132,7 @@ export class CodesController {
       runRequestValidation(request, VALIDATE_PASSWORD_RECOVERY_CODE_VALIDATION)
       const result = await this.codesService.validatePasswordRecoveryCode(payload, request)
 
-      return response.json({
-        payload: result,
-        message: {
-          text: localizedText(VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validated, language),
-          silent: true
-        }
-      })
+      return sendResponse(response, language, result, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validated, true)
     } catch (error) {
       throw toAppError(error, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.validationFailed)
     }

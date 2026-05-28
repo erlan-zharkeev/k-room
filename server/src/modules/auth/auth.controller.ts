@@ -15,9 +15,10 @@ import {
 
 import { SHARED_I18N } from 'src/shared/i18n'
 import { toAppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
 import { runRequestValidation } from 'src/shared/lib/run-request-validation'
+import { sendResponse } from 'src/shared/lib/send-response'
 
+import { requireAuthUserId } from '../session/lib/require-auth-user-id'
 import { AccessTokenGuard, RefreshTokenGuard } from '../session/session.guard'
 import { SessionService } from '../session/session.service'
 
@@ -47,13 +48,7 @@ export class AuthController {
       runRequestValidation(request, LOGIN_VALIDATION)
       const result = await this.authService.login(payload, request, response)
 
-      return response.json({
-        payload: result,
-        message: {
-          text: localizedText(SHARED_I18N.success, language),
-          silent: true
-        }
-      })
+      return sendResponse(response, language, result, SHARED_I18N.success, true)
     } catch (error) {
       throw toAppError(error, AUTH_I18N.loginFailed)
     }
@@ -71,13 +66,7 @@ export class AuthController {
       runRequestValidation(request, REGISTRATION_VALIDATION)
       const result = await this.authService.registration(payload, request)
 
-      return response.json({
-        payload: result,
-        message: {
-          text: localizedText(AUTH_I18N.registrationSuccess, language),
-          silent: false
-        }
-      })
+      return sendResponse(response, language, result, AUTH_I18N.registrationSuccess, false)
     } catch (error) {
       throw toAppError(error, AUTH_I18N.registrationFailed)
     }
@@ -95,18 +84,15 @@ export class AuthController {
       runRequestValidation(request, CONFIRM_EMAIL_VALIDATION)
       const result = await this.authService.confirmEmail(token)
 
-      return response.json({
-        payload: {
+      return sendResponse(
+        response,
+        language,
+        {
           email: result.email
         },
-        message: {
-          text: localizedText(
-            result.alreadyConfirmed ? AUTH_I18N.emailAlreadyConfirmed : AUTH_I18N.emailConfirmed,
-            language
-          ),
-          silent: false
-        }
-      })
+        result.alreadyConfirmed ? AUTH_I18N.emailAlreadyConfirmed : AUTH_I18N.emailConfirmed,
+        false
+      )
     } catch (error) {
       throw toAppError(error, AUTH_I18N.emailConfirmationFailed)
     }
@@ -124,20 +110,17 @@ export class AuthController {
       runRequestValidation(request, SEND_CONFIRMATION_LINK_VALIDATION)
       const result = await this.authService.sendConfirmationLink(payload, request)
 
-      return response.json({
-        payload: {
+      return sendResponse(
+        response,
+        language,
+        {
           email: result.email,
           attempts: result.attempts,
           nextRequestTime: result.nextRequestTime
         },
-        message: {
-          text: localizedText(
-            result.rateLimited ? AUTH_I18N.confirmationLinkCooldown : AUTH_I18N.confirmationLinkSent,
-            language
-          ),
-          silent: false
-        }
-      })
+        result.rateLimited ? AUTH_I18N.confirmationLinkCooldown : AUTH_I18N.confirmationLinkSent,
+        false
+      )
     } catch (error) {
       throw toAppError(error, AUTH_I18N.sendConfirmationLinkFailed)
     }
@@ -155,13 +138,7 @@ export class AuthController {
       runRequestValidation(request, PROVIDER_LOGIN_VALIDATION)
       const result = await this.authService.signInWithProvider(payload, request, response)
 
-      return response.json({
-        payload: result,
-        message: {
-          text: localizedText(SHARED_I18N.success, language),
-          silent: true
-        }
-      })
+      return sendResponse(response, language, result, SHARED_I18N.success, true)
     } catch (error) {
       throw toAppError(error, AUTH_I18N.signInWithProviderFailed)
     }
@@ -170,42 +147,26 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.updateTokensPair)
   @UseGuards(RefreshTokenGuard)
   async updateTokensPair(@Req() request: Request, @Res() response: Response<BackendResponse<null>>) {
-    const { language, authUserId: userId } = request
+    const { language } = request
 
-    if (!userId) {
-      throw toAppError(null, this.sessionService.getUnauthorizedMessage(), 401)
-    }
+    const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
 
     await this.sessionService.updateTokens(userId, request, response)
 
-    return response.json({
-      payload: null,
-      message: {
-        text: localizedText(AUTH_I18N.tokensPairUpdated, language),
-        silent: true
-      }
-    })
+    return sendResponse(response, language, null, AUTH_I18N.tokensPairUpdated, true)
   }
 
   @Post(AUTH_ENDPOINTS.logout)
   @UseGuards(AccessTokenGuard)
   async logout(@Req() request: Request, @Res() response: Response<BackendResponse<null>>) {
-    const { language, authUserId: userId } = request
+    const { language } = request
 
     try {
-      if (!userId) {
-        throw toAppError(null, this.sessionService.getUnauthorizedMessage(), 401)
-      }
+      const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
 
       await this.sessionService.clearSession(userId, request, response)
 
-      return response.json({
-        payload: null,
-        message: {
-          text: localizedText(SHARED_I18N.success, language),
-          silent: true
-        }
-      })
+      return sendResponse(response, language, null, SHARED_I18N.success, true)
     } catch (error) {
       throw toAppError(error, AUTH_I18N.logoutFailed)
     }

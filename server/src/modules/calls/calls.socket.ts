@@ -1,138 +1,68 @@
-import type {
-  EventCallStartedAt,
-  EventAnswerCall,
-  EventCallAccepted,
-  EventCallEnded,
-  EventCallUser,
-  EventMarkCallAsVideo,
-  SocketActions
-} from 'global-shared'
+import { Injectable } from '@nestjs/common'
+import type { EventAnswerCall, EventCallEnded, EventCallUser, EventMarkCallAsVideo, SocketActions } from 'global-shared'
 
-import { getIO } from 'src/shared/lib/io'
-import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
 
-import { emitToUsers } from '../presence/presence.utils'
-import { UserModel } from '../user/user.model'
-
 import { CALLS_I18N } from './calls.i18n'
-import { CallModel } from './calls.model'
-import { emitCallDataToInterlocutors, emitCallsToUser } from './calls.service'
-import type { CallDocument } from './calls.types'
+import { answerCall, callUser, emitCallsToUser, endCall, markCallAsVideo } from './calls.service'
 
-export const registerCallSocketHandlers = (socket: SocketInstance) => {
-  socket.on<SocketActions>(
-    'initialize',
-    socketErrorMiddleware(
-      socket,
-      async () => {
-        await emitCallsToUser(socket.data.userId)
-      },
-      { basicError: CALLS_I18N.loadCallDataFailed }
+@Injectable()
+export class CallsSocketService {
+  register(socket: SocketInstance) {
+    socket.on<SocketActions>(
+      'initialize',
+      socketErrorMiddleware(
+        socket,
+        async () => {
+          await emitCallsToUser(socket.data.userId)
+        },
+        { basicError: CALLS_I18N.loadCallDataFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'mark-call-as-video',
-    socketErrorMiddleware(
-      socket,
-      async ({ callId }: EventMarkCallAsVideo) => {
-        await CallModel.updateOne({ _id: callId }, { video: true })
-      },
-      { basicError: CALLS_I18N.markCallAsVideoFailed }
+    socket.on<SocketActions>(
+      'mark-call-as-video',
+      socketErrorMiddleware(
+        socket,
+        async ({ callId }: EventMarkCallAsVideo) => {
+          await markCallAsVideo(callId)
+        },
+        { basicError: CALLS_I18N.markCallAsVideoFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'call-user',
-    socketErrorMiddleware(
-      socket,
-      async ({ signal, userToCall, avatar, callerNickname }: EventCallUser) => {
-        if (!userToCall) {
-          return
-        }
-
-        const { userId } = socket.data
-        const interlocutor = await UserModel.findById(userToCall).lean()
-
-        if (!interlocutor) {
-          return
-        }
-
-        const call = await new CallModel({
-          calledAt: Date.now(),
-          authorId: userId,
-          interlocutors: [userId, userToCall],
-          answered: false
-        }).save()
-
-        const callId = stringifyMongoId(call._id)
-
-        emitToUsers([userToCall], 'call-user', {
-          callId,
-          signal,
-          from: userId,
-          avatar,
-          callerNickname
-        })
-
-        await emitCallDataToInterlocutors([userId, userToCall], callId, true)
-      },
-      { basicError: CALLS_I18N.callUserFailed }
+    socket.on<SocketActions>(
+      'call-user',
+      socketErrorMiddleware(
+        socket,
+        async (payload: EventCallUser) => {
+          await callUser(socket.data.userId, payload)
+        },
+        { basicError: CALLS_I18N.callUserFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'answer-call',
-    socketErrorMiddleware(
-      socket,
-      async ({ to, signal, selfSocketId, callId }: EventAnswerCall) => {
-        const payload: EventCallAccepted = { signal }
-
-        emitToUsers([to], 'call-accepted', payload)
-
-        const call = await CallModel.findOneAndUpdate(
-          { _id: callId },
-          { startedAt: Date.now(), answered: true },
-          { new: true }
-        ).lean<CallDocument>()
-
-        if (!call) {
-          return
-        }
-
-        await emitCallDataToInterlocutors(call.interlocutors, stringifyMongoId(call._id))
-
-        const startedAtPayload: EventCallStartedAt = Date.now()
-
-        emitToUsers([to], 'call-started-at', startedAtPayload)
-        getIO().to(selfSocketId).emit<SocketActions>('call-started-at', startedAtPayload)
-      },
-      { basicError: CALLS_I18N.answerCallFailed }
+    socket.on<SocketActions>(
+      'answer-call',
+      socketErrorMiddleware(
+        socket,
+        async (payload: EventAnswerCall) => {
+          await answerCall(payload)
+        },
+        { basicError: CALLS_I18N.answerCallFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'call-ended',
-    socketErrorMiddleware(
-      socket,
-      async ({ callerId, callId }: EventCallEnded) => {
-        emitToUsers([callerId], 'call-ended')
-
-        const call = await CallModel.findOneAndUpdate(
-          { _id: callId },
-          { finishedAt: Date.now() },
-          { new: true }
-        ).lean<CallDocument>()
-
-        if (!call) {
-          return
-        }
-
-        await emitCallDataToInterlocutors(call.interlocutors, stringifyMongoId(call._id))
-      },
-      { basicError: CALLS_I18N.endCallFailed }
+    socket.on<SocketActions>(
+      'call-ended',
+      socketErrorMiddleware(
+        socket,
+        async (payload: EventCallEnded) => {
+          await endCall(payload)
+        },
+        { basicError: CALLS_I18N.endCallFailed }
+      )
     )
-  )
+  }
 }

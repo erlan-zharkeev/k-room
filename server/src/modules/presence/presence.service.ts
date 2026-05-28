@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto'
 
 import { Injectable, OnModuleDestroy } from '@nestjs/common'
-import { getRoomOtherUserIds, type EventStatusContact } from 'global-shared'
+import { type EventStatusContact } from 'global-shared'
 import uniq from 'lodash/uniq'
 
 import { log } from 'src/shared/lib/log'
@@ -9,8 +9,8 @@ import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-ob
 import type { MongoId } from 'src/shared/types/mongo'
 import type { SocketInstance } from 'src/shared/types/socket'
 
-import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { RedisService } from '../security/redis.service'
+import { resolveUserRelatedRecipientIds } from '../user/lib/resolve-user-recipient-ids'
 import { UserModel } from '../user/user.model'
 
 import {
@@ -148,14 +148,7 @@ export class PresenceService implements OnModuleDestroy {
   }
 
   private async emitContactStatus(userId: string, online: boolean, lastSeen?: number) {
-    const [users, rooms] = await Promise.all([
-      UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
-      ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
-    ])
-    const userIds = uniq([
-      ...users.map((user) => stringifyMongoId(user._id)),
-      ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
-    ])
+    const userIds = await resolveUserRelatedRecipientIds(userId)
 
     if (!userIds.length) {
       return

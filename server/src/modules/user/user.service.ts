@@ -1,194 +1,36 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
-  CONTACT_INTERACTION,
-  type Contact,
   type CreateNewPasswordPayload,
-  type Interaction,
   type MediaId,
   type UserData,
-  MEDIA_AVATAR_VALIDATION_OPTIONS,
   VALIDATION_PATTERNS,
-  getRoomOtherUserIds,
   normalizeNicknameKey,
   REQ_STATUS
 } from 'global-shared'
-import uniq from 'lodash/uniq'
 
 import { AppError } from 'src/shared/lib/app-error'
-import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
-import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
-import { isCodeExpired } from '../codes/codes.constants'
 import { CodeModel } from '../codes/codes.model'
-import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
-import type { PresenceService } from '../presence/presence.service'
+import { isCodeExpired } from '../codes/lib/is-code-expired'
+import { deleteBucketFileById, withUploadedMediaCleanup } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
 
+import { resolveUserRelatedRecipientIds } from './lib/resolve-user-recipient-ids'
+import { mapUserToDto, transformUserToPreview } from './lib/transform-user'
+import { updateUserAvatar } from './lib/update-user-avatar'
+import { createUser, isUserExist } from './lib/user-existence'
 import type {
   ChangeEmailParams,
   ChangePasswordParams,
-  UserContact,
   CreateUserParams,
   UpdateUserDataParams,
   UserExistParams,
   UserExistState,
   UserSchema
 } from './types'
-import { ALLOWED_GOOGLE_AVATAR_HOSTS } from './user.constants'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
 import { UserModel } from './user.model'
-
-export const transformUserToPreview = (user: UserSchema) => {
-  const userId = stringifyMongoId(user._id)
-
-  return {
-    avatarId: user.public.avatarId,
-    id: userId,
-    nickname: user.public.nickname
-  }
-}
-
-export const mapUserToDto = (user: UserSchema): UserData => {
-  return {
-    ...transformUserToPreview(user),
-    role: user.system.role,
-    email: user.personal.email
-  }
-}
-
-export const transformUserToContact = (
-  user: UserSchema,
-  interactionType: Interaction = CONTACT_INTERACTION.DEFAULT,
-  online = false
-): Contact => {
-  return {
-    ...transformUserToPreview(user),
-    interactionType,
-    online,
-    lastSeen: user.public.lastSeen
-  }
-}
-
-export const transformUserToFrontendContact = async (
-  contacts: Record<string, UserContact>,
-  presenceService: PresenceService
-): Promise<Contact[]> => {
-  const ids = Object.keys(contacts)
-  const [users, onlineMap] = await Promise.all([
-    UserModel.find({ _id: { $in: ids } }).lean<UserSchema[]>(),
-    presenceService.onlineMapByUserIds(ids)
-  ])
-
-  return users.map((user) => {
-    const userId = stringifyMongoId(user._id)
-    const interactionType = contacts[userId]?.interaction ?? CONTACT_INTERACTION.DEFAULT
-
-    return transformUserToContact(user, interactionType, onlineMap.get(userId) ?? false)
-  })
-}
-
-export const isUserExist = async ({ nickname, email, id }: UserExistParams): Promise<UserExistState> => {
-  const normalizedNickname = normalizeNicknameKey(nickname)
-  const userByNickname = await UserModel.findOne({ 'public.nickname': normalizedNickname })
-
-  if (userByNickname) {
-    return {
-      exists: true,
-      reason: 'nickname'
-    }
-  }
-
-  const userByEmail = await UserModel.findOne({ 'personal.email': email })
-  if (userByEmail) {
-    return {
-      exists: true,
-      reason: 'email'
-    }
-  }
-
-  if (id) {
-    const userById = await UserModel.findById(id)
-    if (userById) {
-      return {
-        exists: true,
-        reason: 'id'
-      }
-    }
-  }
-
-  return {
-    exists: false,
-    reason: null
-  }
-}
-
-export const createUser = async ({ id, email, nickname, hashedPassword, provider = 'app' }: CreateUserParams) => {
-  const normalizedNickname = normalizeNicknameKey(nickname)
-  const userExistState = await isUserExist({ id, nickname: normalizedNickname, email })
-
-  if (userExistState.exists) {
-    return null
-  }
-
-  const user = await new UserModel({
-    ...(id ? { _id: id } : {}),
-    public: {
-      avatarId: null,
-      nickname: normalizedNickname
-    },
-    personal: {
-      email,
-      contacts: {},
-      chatRooms: [],
-      pinnedChatRoomIds: [],
-      mutedChatRoomIds: []
-    },
-    system: {
-      role: 'user',
-      password: hashedPassword,
-      provider,
-      device: {},
-      confirmed: provider !== 'app',
-      confirmAttempts: 3
-    }
-  }).save()
-
-  return user
-}
-
-export const loadGoogleAvatar = async (avatar: string) => {
-  try {
-    const avatarUrl = new URL(avatar)
-
-    if (!ALLOWED_GOOGLE_AVATAR_HOSTS.includes(avatarUrl.hostname)) {
-      return
-    }
-
-    const response = await fetch(avatar)
-
-    return Buffer.from(await response.arrayBuffer())
-  } catch {
-    return undefined
-  }
-}
-
-export function updateUserAvatar(buffer: Buffer, currentAvatarId: MediaId): Promise<string>
-export function updateUserAvatar(buffer: null, currentAvatarId: MediaId): Promise<null>
-export async function updateUserAvatar(buffer: Buffer | null, currentAvatarId: MediaId) {
-  if (buffer === null) {
-    if (currentAvatarId) {
-      await deleteBucketFileById('image', currentAvatarId)
-    }
-
-    return null
-  }
-
-  return uploadBufferToBucket(buffer, 'image', {
-    compression: 'avatar',
-    validation: MEDIA_AVATAR_VALIDATION_OPTIONS
-  })
-}
 
 @Injectable()
 export class UserService {
@@ -365,15 +207,7 @@ export class UserService {
       return userData
     })
 
-    const [contacts, rooms] = await Promise.all([
-      UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
-      ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
-    ])
-
-    const ids = uniq([
-      ...contacts.map((contact) => stringifyMongoId(contact._id)),
-      ...rooms.flatMap((room) => getRoomOtherUserIds(room, userId))
-    ])
+    const ids = await resolveUserRelatedRecipientIds(userId)
     const avatarWasChanged = avatarIdAfterUpdate !== undefined
     const deletedAvatarId =
       avatarWasChanged && user.public.avatarId !== avatarIdAfterUpdate ? user.public.avatarId : null

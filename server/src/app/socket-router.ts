@@ -1,15 +1,27 @@
-import { registerCallSocketHandlers } from 'src/modules/calls/calls.socket'
-import { registerChatRoomsSocketHandlers } from 'src/modules/chat-rooms/chat-rooms.socket'
-import { registerContactsSocketHandlers } from 'src/modules/contacts/contacts.socket'
-import { registerMessagesSocketHandlers } from 'src/modules/messages/messages.socket'
-import type { PresenceService } from 'src/modules/presence/presence.service'
-import { registerUserSocketHandlers } from 'src/modules/user/user.socket'
+import { Injectable } from '@nestjs/common'
+
+import { CallsSocketService } from 'src/modules/calls/calls.socket'
+import { ChatRoomsSocketService } from 'src/modules/chat-rooms/chat-rooms.socket'
+import { ContactsSocketService } from 'src/modules/contacts/contacts.socket'
+import { MessagesSocketService } from 'src/modules/messages/messages.socket'
+import { UserSocketService } from 'src/modules/user/user.socket'
 import type { SocketInstance } from 'src/shared/types/socket'
 
-export const socketRouter = (socket: SocketInstance, presenceService: PresenceService) => {
-  registerUserSocketHandlers(socket, presenceService)
-  registerChatRoomsSocketHandlers(socket, presenceService)
-  registerContactsSocketHandlers(socket, presenceService)
-  registerMessagesSocketHandlers(socket)
-  registerCallSocketHandlers(socket)
+@Injectable()
+export class SocketRouter {
+  constructor(
+    private readonly userSocketService: UserSocketService,
+    private readonly chatRoomsSocketService: ChatRoomsSocketService,
+    private readonly contactsSocketService: ContactsSocketService,
+    private readonly messagesSocketService: MessagesSocketService,
+    private readonly callsSocketService: CallsSocketService
+  ) {}
+
+  register(socket: SocketInstance) {
+    this.userSocketService.register(socket)
+    this.chatRoomsSocketService.register(socket)
+    this.contactsSocketService.register(socket)
+    this.messagesSocketService.register(socket)
+    this.callsSocketService.register(socket)
+  }
 }

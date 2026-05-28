@@ -17,14 +17,22 @@ const userModelMock = vi.hoisted(() => ({
 }))
 
 const userServiceExportsMock = vi.hoisted(() => ({
-  loadGoogleAvatar: vi.fn(),
-  updateUserAvatar: vi.fn(),
   UserService: class UserService {}
+}))
+
+const googleAvatarMock = vi.hoisted(() => ({
+  loadGoogleAvatar: vi.fn()
+}))
+
+const userAvatarMock = vi.hoisted(() => ({
+  updateUserAvatar: vi.fn()
 }))
 
 vi.mock('../../app/env', () => envMock)
 vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
 vi.mock('../user/user.service', () => userServiceExportsMock)
+vi.mock('../user/lib/load-google-avatar', () => googleAvatarMock)
+vi.mock('../user/lib/update-user-avatar', () => userAvatarMock)
 
 const { AuthService } = await import('./auth.service')
 
@@ -63,7 +71,7 @@ const createResponse = () => {
 describe('AuthService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    userServiceExportsMock.updateUserAvatar.mockResolvedValue('uploaded-avatar-id')
+    userAvatarMock.updateUserAvatar.mockResolvedValue('uploaded-avatar-id')
   })
 
   it('logs in confirmed user and delegates token update to session service', async () => {
@@ -139,7 +147,7 @@ describe('AuthService', () => {
       mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1' })
     }
 
-    userServiceExportsMock.loadGoogleAvatar.mockResolvedValue(avatar)
+    googleAvatarMock.loadGoogleAvatar.mockResolvedValue(avatar)
 
     const service = new AuthService({} as never, userService as never, {} as never, sessionService as never)
 
@@ -155,8 +163,8 @@ describe('AuthService', () => {
     )
 
     expect(userService.findByEmail).not.toHaveBeenCalled()
-    expect(userServiceExportsMock.loadGoogleAvatar).toHaveBeenCalledWith('https://lh3.googleusercontent.com/avatar.jpg')
-    expect(userServiceExportsMock.updateUserAvatar).toHaveBeenCalledWith(avatar, null)
+    expect(googleAvatarMock.loadGoogleAvatar).toHaveBeenCalledWith('https://lh3.googleusercontent.com/avatar.jpg')
+    expect(userAvatarMock.updateUserAvatar).toHaveBeenCalledWith(avatar, null)
     expect(user.public.avatarId).toBe('uploaded-avatar-id')
     expect(user.save).toHaveBeenCalled()
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
