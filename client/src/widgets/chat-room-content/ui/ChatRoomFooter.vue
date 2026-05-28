@@ -4,6 +4,7 @@ import {
   NmorphCard,
   NmorphIconCheck,
   NmorphIconClose,
+  NmorphFileUpload,
   NmorphIconPaperclip,
   NmorphIconSendFilled,
   NmorphTextInput,
@@ -12,6 +13,7 @@ import {
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
 import { toRef } from 'vue'
 
+import { MESSAGE_IMAGE_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomFooterEmits, ChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
@@ -24,6 +26,8 @@ const emit = defineEmits<ChatRoomFooterEmits>()
 const room = toRef(props, 'room')
 const {
   messageText,
+  messageImageDraftImages,
+  messageImageDraftUploadValue,
   editingMessagePreviewText,
   editingMessageImages,
   messageEditText,
@@ -32,9 +36,13 @@ const {
   isEditingCurrentRoomMessage,
   isUpdatingEditedMessage,
   cancelMessageEdit,
+  openMessageImageUpload,
   removeEditingMessageImage,
+  removeMessageImageDraft,
   selectEditingMessage,
   sendMessage,
+  showUnsupportedMessageImageFormatError,
+  updateMessageImageDraft,
   submitMessageEdit
 } = useChatRoomFooter(room, (messageId) => emit('select-editing-message', messageId))
 </script>
@@ -55,9 +63,16 @@ const {
       <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.editingMessage)" :text="editingMessagePreviewText" />
     </button>
     <MessageImageDraftList
+      v-if="isEditingCurrentRoomMessage"
       :images="editingMessageImages"
       :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageImage)"
       @remove="removeEditingMessageImage"
+    />
+    <MessageImageDraftList
+      v-else
+      :images="messageImageDraftImages"
+      :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageImage)"
+      @remove="removeMessageImageDraft"
     />
     <div class="chat-room-content-footer__controls">
       <NmorphButton
@@ -71,11 +86,31 @@ const {
           <NmorphIconClose />
         </template>
       </NmorphButton>
-      <NmorphButton v-else shape="square" :aria-label="$t(CHAT_ROOM_CONTENT_I18N.attachFile)">
-        <template #icon>
-          <NmorphIconPaperclip />
+      <NmorphFileUpload
+        v-else
+        ref="messageImageUpload"
+        class="chat-room-content-footer__attach-upload"
+        :allowed-types="MESSAGE_IMAGE_ALLOWED_TYPES"
+        :model-value="messageImageDraftUploadValue"
+        :multiple="true"
+        :photo-with-preview="false"
+        compact
+        layout="inline"
+        @update:model-value="updateMessageImageDraft"
+        @on-unsupported-file-type-error="showUnsupportedMessageImageFormatError"
+      >
+        <template #trigger>
+          <NmorphButton
+            shape="square"
+            :aria-label="$t(CHAT_ROOM_CONTENT_I18N.attachFile)"
+            @click="openMessageImageUpload"
+          >
+            <template #icon>
+              <NmorphIconPaperclip />
+            </template>
+          </NmorphButton>
         </template>
-      </NmorphButton>
+      </NmorphFileUpload>
       <NmorphTextInput
         v-if="isEditingCurrentRoomMessage"
         v-model="messageEditText"
@@ -139,6 +174,15 @@ const {
 .chat-room-content-footer__edit-preview {
   cursor: pointer;
   padding: 0 8px 4px 0;
+}
+
+.chat-room-content-footer__attach-upload {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.chat-room-content-footer__attach-upload .nmorph-file-upload__list {
+  display: none;
 }
 
 .chat-room-content-footer__controls {

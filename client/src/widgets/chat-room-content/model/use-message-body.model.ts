@@ -16,6 +16,7 @@ export const useMessageBody = (props: MessageBodyProps) => {
 
   const showAuthorNickname = computed(() => !props.isPrivateRoom && !message.value.isSelf)
   const isMessageEditing = computed(() => isEditingMessage(props.room.id, message.value.id))
+  const hasMessageBody = computed(() => Boolean(message.value.body.trim()))
   const messageImageList = computed(() =>
     (message.value.images ?? []).map((image) => ({
       ...image,
@@ -43,6 +44,7 @@ export const useMessageBody = (props: MessageBodyProps) => {
   return {
     showAuthorNickname,
     isMessageEditing,
+    hasMessageBody,
     messageImagePreviewUrlList,
     sentAt
   }

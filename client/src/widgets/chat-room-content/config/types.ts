@@ -27,7 +27,7 @@ export interface ChatRoomFooterEmits {
 
 export type ChatRoomFooterSelectEditingMessage = (messageId: string) => void
 
-export interface MessageImageUploadRef {
+export interface MessageImageUploadExpose {
   inputDOMRef?: HTMLInputElement
 }
 

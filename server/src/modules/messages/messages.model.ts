@@ -51,7 +51,7 @@ const messageSchema = new Schema<MessageSchema>({
     required: false
   },
   images: {
-    type: [String],
+    type: [Schema.Types.Mixed],
     required: false
   },
   imageCompression: {
