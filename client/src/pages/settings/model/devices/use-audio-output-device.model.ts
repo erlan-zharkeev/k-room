@@ -4,12 +4,11 @@ import { isFunction } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { useI18n } from 'src/shared/lib'
+import { MESSAGE_NOTIFICATION_SOUND_SRC, useI18n } from 'src/shared/lib'
 
 import {
   DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
-  SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS,
-  SETTINGS_DEVICES_SOUND_SRC
+  SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS
 } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 
@@ -94,7 +93,7 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = true
       stopAudioOutput()
 
-      const audio = new Audio(SETTINGS_DEVICES_SOUND_SRC)
+      const audio = new Audio(MESSAGE_NOTIFICATION_SOUND_SRC)
       outputAudio.value = audio
 
       if (isFunction(audio.setSinkId) && settings.value.ioDevices.audioOutputDeviceId) {
