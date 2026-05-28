@@ -31,24 +31,6 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
       content-class="chat-room-list-item__content"
       :shadow-type="isPressed ? 'inset' : 'outset'"
     >
-      <div v-if="props.item.isPinned || props.item.isMuted" class="chat-room-list-item__status-icons">
-        <NmorphIcon
-          v-if="props.item.isMuted"
-          class="chat-room-list-item__status-icon"
-          color="var(--nmorph-contrast-text-color)"
-          aria-hidden="true"
-        >
-          <NmorphIconMuteNotification />
-        </NmorphIcon>
-        <NmorphIcon
-          v-if="props.item.isPinned"
-          class="chat-room-list-item__status-icon chat-room-list-item__pin"
-          color="var(--nmorph-contrast-text-color)"
-          aria-hidden="true"
-        >
-          <NmorphIconPin />
-        </NmorphIcon>
-      </div>
       <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
         <AppProfileBasicData
           :image-id="props.item.imageId"
@@ -77,6 +59,24 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
           </template>
         </AppProfileBasicData>
       </RouterLink>
+      <div v-if="props.item.isPinned || props.item.isMuted" class="chat-room-list-item__status-icons">
+        <NmorphIcon
+          v-if="props.item.isMuted"
+          class="chat-room-list-item__status-icon"
+          color="var(--nmorph-contrast-text-color)"
+          aria-hidden="true"
+        >
+          <NmorphIconMuteNotification />
+        </NmorphIcon>
+        <NmorphIcon
+          v-if="props.item.isPinned"
+          class="chat-room-list-item__status-icon chat-room-list-item__pin"
+          color="var(--nmorph-contrast-text-color)"
+          aria-hidden="true"
+        >
+          <NmorphIconPin />
+        </NmorphIcon>
+      </div>
       <ChatRoomContextMenu :item="props.item" />
     </NmorphCard>
   </NmorphBadge>
@@ -87,8 +87,8 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
   position: relative;
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto max-content;
+  gap: 4px;
   align-items: center;
 
   padding-right: 4px;
@@ -110,14 +110,13 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
 }
 
 .chat-room-list-item__status-icons {
-  position: absolute;
-  top: -8px;
-  right: 0;
-
   display: flex;
+  flex-direction: column;
   gap: 4px;
   align-items: center;
   justify-content: center;
+
+  height: 100%;
 }
 
 .chat-room-list-item__status-icon {

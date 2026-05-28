@@ -47,7 +47,56 @@ export const FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX: Record<number, readonly stri
   96: [FIXTURE_MESSAGE_IMAGE_FILES[0].id],
   100: FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id)
 }
+const FIXTURE_REACTION_STRESS_GLYPH_KEYS = [
+  '\u{1F44D}',
+  '\u{1F525}',
+  '\u{1F440}',
+  '\u{1F600}',
+  '\u{1F604}',
+  '\u{1F60E}',
+  '\u{1F914}',
+  '\u{1F389}',
+  '\u{1F680}',
+  '\u{2728}',
+  '\u{1F4AF}',
+  '\u{1F64C}',
+  '\u{1F44F}',
+  '\u{1F9E0}',
+  '\u{1F4A1}',
+  '\u{1F6E0}',
+  '\u{1F9EA}',
+  '\u{1F4CC}',
+  '\u{1F4CE}',
+  '\u{1F4F8}',
+  '\u{1F3AF}',
+  '\u{1F4A5}',
+  '\u{1F48E}',
+  '\u{1F9CA}',
+  '\u{1F331}',
+  '\u{1F4AC}',
+  '\u{1F4DD}',
+  '\u{1F50D}',
+  '\u{1F511}',
+  '\u{1F512}',
+  '\u{1F9F2}',
+  '\u{1F9ED}',
+  '\u{1F9F9}'
+] as const
+const FIXTURE_REACTION_STRESS_OFFSETS = [0, 1, 2] as const
+const FIXTURE_REACTION_STRESS_NICKNAMES = USER_FIXTURES.map(({ nickname }) => nickname)
+const FIXTURE_WIDE_REACTIONS = FIXTURE_REACTION_STRESS_NICKNAMES.map((nickname, index) => ({
+  nickname,
+  glyphKey: FIXTURE_REACTION_STRESS_GLYPH_KEYS[index]
+}))
+const FIXTURE_DENSE_REACTIONS = FIXTURE_REACTION_STRESS_NICKNAMES.flatMap((nickname, index) =>
+  FIXTURE_REACTION_STRESS_OFFSETS.map((offset) => ({
+    nickname,
+    glyphKey: FIXTURE_REACTION_STRESS_GLYPH_KEYS[(index + offset) % FIXTURE_REACTION_STRESS_GLYPH_KEYS.length]
+  }))
+)
 export const FIXTURE_MESSAGE_REACTIONS_BY_INDEX: Record<number, readonly { nickname: string; glyphKey: string }[]> = {
+  88: FIXTURE_WIDE_REACTIONS,
+  89: FIXTURE_DENSE_REACTIONS,
   92: [
     { nickname: 'erlan', glyphKey: '\u{1F44D}' },
     { nickname: 'tolik', glyphKey: '\u{1F44D}' }
