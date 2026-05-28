@@ -12,12 +12,11 @@ import {
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
 import { toRef } from 'vue'
 
-import { AppMediaImage } from 'src/shared/ui'
-
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomFooterEmits, ChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
+import MessageImageDraftList from './MessageImageDraftList.vue'
 import MessagePreview from './MessagePreview.vue'
 
 const props = defineProps<ChatRoomFooterProps>()
@@ -55,22 +54,11 @@ const {
     >
       <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.editingMessage)" :text="editingMessagePreviewText" />
     </button>
-    <div v-if="editingMessageImages.length" class="chat-room-content-footer__edit-images">
-      <div v-for="image in editingMessageImages" :key="image.src" class="chat-room-content-footer__edit-image">
-        <AppMediaImage :media-id="image.src" :alt="image.name" width="56px" height="56px" />
-        <NmorphButton
-          class="chat-room-content-footer__edit-image-remove"
-          shape="circle"
-          style-type="transparent"
-          :aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageImage)"
-          @click="removeEditingMessageImage(image.src)"
-        >
-          <template #icon-only>
-            <NmorphIconClose />
-          </template>
-        </NmorphButton>
-      </div>
-    </div>
+    <MessageImageDraftList
+      :images="editingMessageImages"
+      :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageImage)"
+      @remove="removeEditingMessageImage"
+    />
     <div class="chat-room-content-footer__controls">
       <NmorphButton
         v-if="isEditingCurrentRoomMessage"
@@ -151,25 +139,6 @@ const {
 .chat-room-content-footer__edit-preview {
   cursor: pointer;
   padding: 0 8px 4px 0;
-}
-
-.chat-room-content-footer__edit-images {
-  display: flex;
-  gap: 8px;
-}
-
-.chat-room-content-footer__edit-image {
-  position: relative;
-}
-
-.chat-room-content-footer__edit-image-remove {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-
-  border-radius: 2px;
-
-  background: var(--nmorph-overlay-color);
 }
 
 .chat-room-content-footer__controls {
