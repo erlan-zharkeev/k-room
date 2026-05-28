@@ -121,6 +121,21 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Прикрепить файл',
     zh: '添加附件'
   },
+  messageImageInvalidFormat: {
+    en: 'Only image files are supported',
+    ru: 'Поддерживаются только изображения',
+    zh: '仅支持图片文件'
+  },
+  messageImageInvalidSize: {
+    en: (size: number) => `Image must be less than ${size} MB`,
+    ru: (size: number) => `Изображение должно быть меньше ${size} МБ`,
+    zh: (size: number) => `图片必须小于 ${size} MB`
+  },
+  messageImageLimitReached: {
+    en: (limit: number) => `You can attach up to ${limit} images. The list was reduced to ${limit} images.`,
+    ru: (limit: number) => `Можно прикрепить до ${limit} изображений. Список сокращен до ${limit} изображений.`,
+    zh: (limit: number) => `最多可附加 ${limit} 张图片。列表已缩减为 ${limit} 张图片。`
+  },
   selectEmoji: {
     en: 'Select emoji',
     ru: 'Выбрать эмодзи',

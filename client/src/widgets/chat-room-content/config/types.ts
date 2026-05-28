@@ -1,4 +1,4 @@
-import type { INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
+import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type { ImageObject, MediaId, MessageReaction } from 'global-shared'
 import type { Component } from 'vue'
@@ -26,6 +26,10 @@ export interface ChatRoomFooterEmits {
 }
 
 export type ChatRoomFooterSelectEditingMessage = (messageId: string) => void
+
+export interface MessageImageUploadRef {
+  inputDOMRef?: HTMLInputElement
+}
 
 export interface EditingMessageState {
   roomId: string
@@ -109,6 +113,21 @@ export interface MessageReactionAvatarProps {
 export interface MessagePreviewProps {
   title: string
   text: string
+}
+
+export interface MessageImageDraftListProps {
+  images: ImageObject[]
+  removeAriaLabel: string
+}
+
+export interface MessageImageDraftListEmits {
+  remove: [imageSrc: string]
+}
+
+export interface MessageImageDraftItem {
+  id: string
+  file: File
+  uploadValue: INmorphCustomFileData
 }
 
 export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]

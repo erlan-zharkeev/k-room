@@ -18,6 +18,7 @@ import type { ChatRoomRecord } from 'src/shared/lib'
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 
 import { useMessageEdit } from './use-message-edit.model'
+import { useMessageImageDraft } from './use-message-image-draft.model'
 
 export const useChatRoomFooter = (
   room: Ref<ChatRoomRecord>,
@@ -40,6 +41,14 @@ export const useChatRoomFooter = (
     removeEditingMessageImage,
     submitMessageEdit
   } = useMessageEdit()
+  const {
+    messageImageDraftImages,
+    messageImageDraftUploadValue,
+    openMessageImageUpload,
+    removeMessageImageDraft,
+    showUnsupportedMessageImageFormatError,
+    updateMessageImageDraft
+  } = useMessageImageDraft()
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
@@ -94,6 +103,8 @@ export const useChatRoomFooter = (
 
   return {
     messageText,
+    messageImageDraftImages,
+    messageImageDraftUploadValue,
     editingMessagePreviewText,
     editingMessageImages,
     messageEditText,
@@ -102,9 +113,13 @@ export const useChatRoomFooter = (
     isEditingCurrentRoomMessage,
     isUpdatingEditedMessage,
     cancelMessageEdit,
+    openMessageImageUpload,
     removeEditingMessageImage,
+    removeMessageImageDraft,
     selectEditingMessage,
     sendMessage,
-    submitMessageEdit
+    showUnsupportedMessageImageFormatError,
+    submitMessageEdit,
+    updateMessageImageDraft
   }
 }
