@@ -24,10 +24,11 @@ import { EmailService } from '../email/email.service'
 import { SecurityService } from '../security/security.service'
 import { UserService } from '../user/user.service'
 
-import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS, isCodeExpired } from './codes.constants'
+import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS } from './codes.constants'
 import { VALIDATE_CHANGE_EMAIL_CODE_I18N, VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
 import { CodeModel } from './codes.model'
 import type { SendChangeEmailCodeResult, SendPasswordRecoveryCodeResult } from './codes.types'
+import { isCodeExpired } from './lib/is-code-expired'
 
 @Injectable()
 export class CodesService {

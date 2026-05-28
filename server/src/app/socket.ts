@@ -10,10 +10,15 @@ import { log } from 'src/shared/lib/log'
 import { serverCaptureSentryException } from 'src/shared/lib/sentry'
 
 import { SOCKET_OPTIONS } from './constants'
-import { socketRouter } from './socket-router'
+import { SocketRouter } from './socket-router'
 import type { SocketServer } from './types'
 
-export const initIO = async (server: SocketServer, redisService: RedisService, presenceService: PresenceService) => {
+export const initIO = async (
+  server: SocketServer,
+  redisService: RedisService,
+  presenceService: PresenceService,
+  socketRouter: SocketRouter
+) => {
   const io = new Server(server, SOCKET_OPTIONS)
   const { publishClient, subscribeClient } = await redisService.createAdapterClients()
 
@@ -28,7 +33,7 @@ export const initIO = async (server: SocketServer, redisService: RedisService, p
         return
       }
 
-      socketRouter(socket, presenceService)
+      socketRouter.register(socket)
       await presenceService.markSocketConnected(socket)
     } catch (error) {
       log.error('-Socket connection failed')

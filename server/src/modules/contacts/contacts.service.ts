@@ -24,8 +24,8 @@ import { getIO } from 'src/shared/lib/io'
 
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
+import { transformUserToContact } from '../user/lib/transform-user'
 import { UserModel } from '../user/user.model'
-import { transformUserToContact } from '../user/user.service'
 
 import { CONTACTS_I18N } from './contacts.i18n'
 import { assertContactLimit } from './contacts.utils'
@@ -321,4 +321,42 @@ export const updateContactInteraction = async (
   }
 
   return { success: true } as const
+}
+
+export const updateContactInteractionType = async (
+  userId: string,
+  contactId: string,
+  interaction: Interaction,
+  presenceService: PresenceService
+) => {
+  if (isDefaultContactInteraction(interaction)) {
+    const currentInteraction = await getContactInteraction(userId, contactId)
+
+    if (isBlockedContactInteraction(currentInteraction)) {
+      const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
+
+      if (result.success) {
+        emitContactInteractionUpdated(userId, contactId, interaction)
+      }
+
+      return
+    }
+
+    await deleteContactById(userId, contactId)
+    emitContactInteractionUpdated(userId, contactId, interaction)
+
+    return
+  }
+
+  const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
+
+  if (result.success) {
+    emitContactInteractionUpdated(userId, contactId, interaction)
+
+    return
+  }
+
+  const currentInteraction = (await getContactInteraction(userId, contactId)) ?? CONTACT_INTERACTION.DEFAULT
+
+  emitContactInteractionUpdated(userId, contactId, currentInteraction)
 }

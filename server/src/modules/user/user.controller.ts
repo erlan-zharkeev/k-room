@@ -11,10 +11,11 @@ import {
 import { memoryStorage } from 'multer'
 
 import { SHARED_I18N } from 'src/shared/i18n'
-import { AppError, toAppError } from 'src/shared/lib/app-error'
-import { localizedText } from 'src/shared/lib/localized-text'
+import { toAppError } from 'src/shared/lib/app-error'
 import { runRequestValidation } from 'src/shared/lib/run-request-validation'
+import { sendResponse } from 'src/shared/lib/send-response'
 
+import { requireAuthUserId } from '../session/lib/require-auth-user-id'
 import { AccessTokenGuard } from '../session/session.guard'
 import { SessionService } from '../session/session.service'
 
@@ -30,22 +31,13 @@ export class UserController {
   @Get(USER_ENDPOINTS.getUserData)
   @UseGuards(AccessTokenGuard)
   async getUserData(@Req() request: Request, @Res() response: Response<BackendResponse<GetUserDataResponse>>) {
-    const { language, authUserId: userId } = request
-
-    if (!userId) {
-      throw new AppError(401, this.sessionService.getUnauthorizedMessage())
-    }
+    const { language } = request
+    const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
 
     const user = await this.userService.requireUser(userId)
     await this.sessionService.updateTokens(userId, request, response)
 
-    return response.json({
-      payload: this.userService.mapUserToDto(user),
-      message: {
-        text: localizedText(SHARED_I18N.success, language),
-        silent: true
-      }
-    })
+    return sendResponse(response, language, this.userService.mapUserToDto(user), SHARED_I18N.success, true)
   }
 
   @Post(USER_ENDPOINTS.resetPassword)
@@ -60,13 +52,7 @@ export class UserController {
       runRequestValidation(request, RESET_PASSWORD_VALIDATION)
       await this.userService.resetPassword(payload)
 
-      return response.json({
-        payload: null,
-        message: {
-          text: localizedText(RESET_PASSWORD_I18N.success, language),
-          silent: true
-        }
-      })
+      return sendResponse(response, language, null, RESET_PASSWORD_I18N.success, true)
     } catch (error) {
       throw toAppError(error, RESET_PASSWORD_I18N.failed)
     }
@@ -88,12 +74,10 @@ export class UserController {
     @UploadedFile() file?: Express.Multer.File,
     @Body() payload?: UpdateUserDataPayload
   ) {
-    const { language, authUserId: userId } = request
+    const { language } = request
 
     try {
-      if (!userId) {
-        throw new AppError(401, this.sessionService.getUnauthorizedMessage())
-      }
+      const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
 
       runRequestValidation(request, UPDATE_USER_DATA_VALIDATION)
       const userData = await this.userService.updateUserData({
@@ -103,13 +87,7 @@ export class UserController {
         resetAvatar: payload?.['reset-avatar']
       })
 
-      return response.json({
-        payload: userData,
-        message: {
-          text: localizedText(SHARED_I18N.success, language),
-          silent: true
-        }
-      })
+      return sendResponse(response, language, userData, SHARED_I18N.success, true)
     } catch (error) {
       throw toAppError(error, UPDATE_USER_DATA_I18N.failedUpdate)
     }
@@ -122,12 +100,10 @@ export class UserController {
     @Res() response: Response<BackendResponse<null>>,
     @Body() payload: ChangePasswordPayload
   ) {
-    const { language, authUserId: userId } = request
+    const { language } = request
 
     try {
-      if (!userId) {
-        throw new AppError(401, this.sessionService.getUnauthorizedMessage())
-      }
+      const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
 
       runRequestValidation(request, CHANGE_PASSWORD_VALIDATION)
       await this.userService.changePassword({
@@ -136,13 +112,7 @@ export class UserController {
         password: payload.password
       })
 
-      return response.json({
-        payload: null,
-        message: {
-          text: localizedText(CHANGE_PASSWORD_I18N.success, language),
-          silent: false
-        }
-      })
+      return sendResponse(response, language, null, CHANGE_PASSWORD_I18N.success, false)
     } catch (error) {
       throw toAppError(error, CHANGE_PASSWORD_I18N.failed)
     }

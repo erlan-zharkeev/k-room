@@ -5,6 +5,7 @@ import { PresenceService } from 'src/modules/presence/presence.service'
 import { RedisService } from 'src/modules/security/redis.service'
 
 import { initIO } from './socket'
+import { SocketRouter } from './socket-router'
 
 @Injectable()
 export class SocketService implements OnApplicationBootstrap {
@@ -13,7 +14,8 @@ export class SocketService implements OnApplicationBootstrap {
   constructor(
     private readonly httpAdapterHost: HttpAdapterHost,
     private readonly redisService: RedisService,
-    private readonly presenceService: PresenceService
+    private readonly presenceService: PresenceService,
+    private readonly socketRouter: SocketRouter
   ) {}
 
   async onApplicationBootstrap() {
@@ -21,7 +23,12 @@ export class SocketService implements OnApplicationBootstrap {
       return
     }
 
-    await initIO(this.httpAdapterHost.httpAdapter.getHttpServer(), this.redisService, this.presenceService)
+    await initIO(
+      this.httpAdapterHost.httpAdapter.getHttpServer(),
+      this.redisService,
+      this.presenceService,
+      this.socketRouter
+    )
     this.presenceService.startPresenceMonitoring()
     this.initialized = true
   }

@@ -17,8 +17,6 @@ import {
   type ImageObject,
   type Message,
   type MessageStatus,
-  MESSAGE_BODY_MAX_LENGTH,
-  MESSAGE_IMAGE_LIMIT,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_REACTION_LIMIT_PER_USER,
   MESSAGE_REACTION_UPDATE_ACTION,
@@ -38,7 +36,9 @@ import { uploadBufferToBucket } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
+import { assertMessageContentLimits } from './lib/assert-message-content-limits'
 import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
+import { resolveVisibleMessageIds } from './lib/resolve-visible-message-ids'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
 import type { MessageDocument, SendMessageParams } from './messages.types'
@@ -72,13 +72,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
     return
   }
 
-  if (normalizedBody.length > MESSAGE_BODY_MAX_LENGTH) {
-    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageBodyTooLong)
-  }
-
-  if (images.length > MESSAGE_IMAGE_LIMIT) {
-    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageImageLimitReached)
-  }
+  assertMessageContentLimits(normalizedBody, images)
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
 
@@ -121,20 +115,6 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
   }
 
   emitToUsers(stringifyMongoIds(room.users), 'message-edited', payload)
-}
-
-const resolveVisibleMessageIds = async (userId: string, messageIds: string[]) => {
-  if (!messageIds.length) return []
-
-  const visibleMessages = await MessageModel.find({
-    _id: { $in: messageIds },
-    deletedForUserIds: { $ne: userId }
-  })
-    .select('_id')
-    .lean<Array<{ _id: string }>>()
-  const visibleMessageIds = new Set(visibleMessages.map(({ _id }) => stringifyMongoId(_id)))
-
-  return messageIds.filter((id) => visibleMessageIds.has(id))
 }
 
 export const loadRoomMessages = async (
@@ -468,16 +448,12 @@ export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }:
 }
 
 export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
-  if (message.body.length > MESSAGE_BODY_MAX_LENGTH) {
-    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageBodyTooLong)
-  }
+  const messageImages = message.images ?? []
 
-  if ((message.images ?? []).length > MESSAGE_IMAGE_LIMIT) {
-    throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageImageLimitReached)
-  }
+  assertMessageContentLimits(message.body, messageImages)
 
   const uploadedImages = await Promise.all(
-    (message.images ?? []).map(async (image) => {
+    messageImages.map(async (image) => {
       if (!image.fileBuffer) {
         return null
       }

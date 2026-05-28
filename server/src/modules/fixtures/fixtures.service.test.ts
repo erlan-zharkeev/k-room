@@ -44,7 +44,7 @@ const logMock = vi.hoisted(() => ({
 }))
 
 vi.mock('../media/media.service', () => mediaMock)
-vi.mock('../user/user.service', () => userServiceMock)
+vi.mock('../user/lib/user-existence', () => userServiceMock)
 vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
 vi.mock('../chat-rooms/chat-rooms.model', () => ({ ChatRoomModel: chatRoomModelMock.ChatRoomModel }))
 vi.mock('../messages/messages.model', () => ({ MessageModel: messageModelMock }))

@@ -44,7 +44,13 @@ vi.mock('../codes/codes.model', () => ({ CodeModel: codeModelMock }))
 vi.mock('./user.model', () => ({ UserModel: userModelMock.UserModel }))
 
 const userServiceModule = await import('./user.service')
-const { UserService, createUser, isUserExist, loadGoogleAvatar, updateUserAvatar } = userServiceModule
+const userExistenceModule = await import('./lib/user-existence')
+const googleAvatarModule = await import('./lib/load-google-avatar')
+const userAvatarModule = await import('./lib/update-user-avatar')
+const { UserService } = userServiceModule
+const { createUser, isUserExist } = userExistenceModule
+const { loadGoogleAvatar } = googleAvatarModule
+const { updateUserAvatar } = userAvatarModule
 
 describe('user.service', () => {
   beforeEach(() => {

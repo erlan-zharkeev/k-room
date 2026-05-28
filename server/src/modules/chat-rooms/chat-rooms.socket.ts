@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common'
 import {
   type CreateRoomAckPayload,
   type EventCreateRoom,
@@ -10,7 +11,7 @@ import {
   type SocketActions
 } from 'global-shared'
 
-import type { PresenceService } from 'src/modules/presence/presence.service'
+import { PresenceService } from 'src/modules/presence/presence.service'
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
 
@@ -25,86 +26,91 @@ import {
   updatePinnedChatRoomOrder
 } from './chat-rooms.service'
 
-export const registerChatRoomsSocketHandlers = (socket: SocketInstance, presenceService: PresenceService) => {
-  socket.on<SocketActions>(
-    'create-chat-room',
-    socketAckMiddleware<EventCreateRoom, CreateRoomAckPayload>(
-      socket,
-      async (payload) => {
-        const responsePayload = await createChatRoom(socket.data.userId, payload, presenceService)
+@Injectable()
+export class ChatRoomsSocketService {
+  constructor(private readonly presenceService: PresenceService) {}
 
-        return {
-          ok: true,
-          payload: responsePayload
-        }
-      },
-      { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
-    )
-  )
+  register(socket: SocketInstance) {
+    socket.on<SocketActions>(
+      'create-chat-room',
+      socketAckMiddleware<EventCreateRoom, CreateRoomAckPayload>(
+        socket,
+        async (payload) => {
+          const responsePayload = await createChatRoom(socket.data.userId, payload, this.presenceService)
 
-  socket.on<SocketActions>(
-    'update-chat-room',
-    socketAckMiddleware<EventUpdateChatRoom>(
-      socket,
-      async (payload) => {
-        await updateChatRoom(socket.data.userId, payload, presenceService)
-      },
-      { basicError: CHAT_ROOMS_I18N.updateChatRoomFailed }
+          return {
+            ok: true,
+            payload: responsePayload
+          }
+        },
+        { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'delete-chat-room',
-    socketAckMiddleware<EventDeleteChatRoom>(
-      socket,
-      async (payload) => {
-        await deleteChatRoom(socket.data.userId, payload)
-      },
-      { basicError: CHAT_ROOMS_I18N.deleteChatRoomFailed }
+    socket.on<SocketActions>(
+      'update-chat-room',
+      socketAckMiddleware<EventUpdateChatRoom>(
+        socket,
+        async (payload) => {
+          await updateChatRoom(socket.data.userId, payload, this.presenceService)
+        },
+        { basicError: CHAT_ROOMS_I18N.updateChatRoomFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'leave-chat-room',
-    socketAckMiddleware<EventLeaveChatRoom>(
-      socket,
-      async (payload) => {
-        await leaveChatRoom(socket.data.userId, payload, presenceService)
-      },
-      { basicError: CHAT_ROOMS_I18N.leaveChatRoomFailed }
+    socket.on<SocketActions>(
+      'delete-chat-room',
+      socketAckMiddleware<EventDeleteChatRoom>(
+        socket,
+        async (payload) => {
+          await deleteChatRoom(socket.data.userId, payload)
+        },
+        { basicError: CHAT_ROOMS_I18N.deleteChatRoomFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'update-pinned-chat-room',
-    socketAckMiddleware<EventUpdatePinnedChatRoom>(
-      socket,
-      async (payload) => {
-        await updatePinnedChatRoom(socket.data.userId, payload)
-      },
-      { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
+    socket.on<SocketActions>(
+      'leave-chat-room',
+      socketAckMiddleware<EventLeaveChatRoom>(
+        socket,
+        async (payload) => {
+          await leaveChatRoom(socket.data.userId, payload, this.presenceService)
+        },
+        { basicError: CHAT_ROOMS_I18N.leaveChatRoomFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'update-pinned-chat-room-order',
-    socketAckMiddleware<EventUpdatePinnedChatRoomOrder>(
-      socket,
-      async (payload) => {
-        await updatePinnedChatRoomOrder(socket.data.userId, payload)
-      },
-      { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
+    socket.on<SocketActions>(
+      'update-pinned-chat-room',
+      socketAckMiddleware<EventUpdatePinnedChatRoom>(
+        socket,
+        async (payload) => {
+          await updatePinnedChatRoom(socket.data.userId, payload)
+        },
+        { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
+      )
     )
-  )
 
-  socket.on<SocketActions>(
-    'update-muted-chat-room',
-    socketAckMiddleware<EventUpdateMutedChatRoom>(
-      socket,
-      async (payload) => {
-        await updateMutedChatRoom(socket.data.userId, payload)
-      },
-      { basicError: CHAT_ROOMS_I18N.updateMutedChatRoomFailed }
+    socket.on<SocketActions>(
+      'update-pinned-chat-room-order',
+      socketAckMiddleware<EventUpdatePinnedChatRoomOrder>(
+        socket,
+        async (payload) => {
+          await updatePinnedChatRoomOrder(socket.data.userId, payload)
+        },
+        { basicError: CHAT_ROOMS_I18N.updatePinnedChatRoomFailed }
+      )
     )
-  )
+
+    socket.on<SocketActions>(
+      'update-muted-chat-room',
+      socketAckMiddleware<EventUpdateMutedChatRoom>(
+        socket,
+        async (payload) => {
+          await updateMutedChatRoom(socket.data.userId, payload)
+        },
+        { basicError: CHAT_ROOMS_I18N.updateMutedChatRoomFailed }
+      )
+    )
+  }
 }

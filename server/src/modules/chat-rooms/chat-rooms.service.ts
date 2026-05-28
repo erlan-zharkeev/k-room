@@ -2,8 +2,6 @@ import { setTimeout as delay } from 'timers/promises'
 
 import {
   CHAT_KIND,
-  CHAT_ROOM_GROUP_MEMBER_LIMIT,
-  CHAT_ROOM_NAME_MAX_LENGTH,
   type CreateRoomAckPayload,
   type EventChatRoomDeleted,
   type EventCreateRoom,
@@ -22,7 +20,6 @@ import {
   MESSAGE_STATUS_VALUE,
   PINNED_CHAT_ROOM_LIMIT,
   REQ_STATUS,
-  USER_CHAT_ROOM_LIMIT,
   getRoomInterlocutorId,
   getRoomOtherUserIds,
   isAcceptedContactInteraction,
@@ -30,14 +27,13 @@ import {
   isRoomGroup,
   isRoomPrivate
 } from 'global-shared'
-import intersection from 'lodash/intersection'
 import union from 'lodash/union'
-import without from 'lodash/without'
 
 import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
+import { resolveVisibleMessageIds } from '../messages/lib/resolve-visible-message-ids'
 import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
 import type { MessageDocument } from '../messages/messages.types'
@@ -49,6 +45,8 @@ import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
 import type { ChatRoomDocument, ChatRoomSchema, TransformRoomForUserParams } from './chat-rooms.types'
+import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/assert-chat-room-limits'
+import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
 
 export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
@@ -76,61 +74,6 @@ export const checkContactsExistence = async (selfId: string, contactIds: string[
   })
 }
 
-export const validateCreateChatRoomLimits = async (userIds: string[], chatName?: string) => {
-  const users = await UserModel.find({ _id: { $in: userIds } }, { 'personal.chatRooms': 1 }).lean()
-  const isLimitReached = users.some((user) => user.personal.chatRooms.length >= USER_CHAT_ROOM_LIMIT)
-
-  if (isLimitReached) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomLimitReached)
-  }
-
-  if (userIds.length > CHAT_ROOM_GROUP_MEMBER_LIMIT) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomMemberLimitReached)
-  }
-
-  if (chatName && chatName.length > CHAT_ROOM_NAME_MAX_LENGTH) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomNameTooLong)
-  }
-}
-
-const validateUpdateChatRoomData = async (
-  userId: string,
-  addedUserIds: string[],
-  nextMemberIds: string[],
-  chatName: string
-) => {
-  const hasCurrentUser = nextMemberIds.includes(userId)
-
-  if (!hasCurrentUser) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.updateChatRoomFailed)
-  }
-
-  if (!chatName) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomNameRequired)
-  }
-
-  if (nextMemberIds.length <= 1) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomMemberRequired)
-  }
-
-  if (nextMemberIds.length > CHAT_ROOM_GROUP_MEMBER_LIMIT) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomMemberLimitReached)
-  }
-
-  if (chatName.length > CHAT_ROOM_NAME_MAX_LENGTH) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomNameTooLong)
-  }
-
-  if (!addedUserIds.length) return
-
-  const addedUsers = await UserModel.find({ _id: { $in: addedUserIds } }, { 'personal.chatRooms': 1 }).lean()
-  const isLimitReached = addedUsers.some((user) => user.personal.chatRooms.length >= USER_CHAT_ROOM_LIMIT)
-
-  if (isLimitReached) {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomLimitReached)
-  }
-}
-
 export const setRoomToUsers = async (roomId: string, userIds: string[]) => {
   await Promise.all(
     userIds.map(async (userId) => {
@@ -151,7 +94,7 @@ export const createChatRoom = async (
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.createChatRoomFailed)
   }
 
-  await validateCreateChatRoomLimits(memberIds, chatName)
+  await assertCreateChatRoomLimits(memberIds, chatName)
 
   const usersAccepted = await checkContactsExistence(userId, otherMemberIds)
 
@@ -210,37 +153,6 @@ const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => 
   })
 }
 
-const resolveVisibleMessageIds = async (userId: string, messageIds: string[]) => {
-  if (!messageIds.length) return []
-
-  const visibleMessages = await MessageModel.find({
-    _id: { $in: messageIds },
-    deletedForUserIds: { $ne: userId }
-  })
-    .select('_id')
-    .lean<Array<{ _id: string }>>()
-  const visibleMessageIds = new Set(visibleMessages.map(({ _id }) => stringifyMongoId(_id)))
-
-  return messageIds.filter((id) => visibleMessageIds.has(id))
-}
-
-const resolvePinnedChatRoomIds = (currentIds: string[], roomId: string, isPinned: boolean) => {
-  if (!isPinned) return without(currentIds, roomId)
-
-  return [roomId, ...without(currentIds, roomId)]
-}
-
-const resolveMutedChatRoomIds = (currentIds: string[], roomId: string, isMuted: boolean) => {
-  if (!isMuted) return without(currentIds, roomId)
-
-  return [roomId, ...without(currentIds, roomId)]
-}
-
-const resolvePinnedChatRoomOrder = (currentIds: string[], incomingIds: string[]) => {
-  const orderedIds = intersection(incomingIds, currentIds)
-  return union(orderedIds, currentIds)
-}
-
 export const resolveKnownUsers = async (userIds: string[], presenceService: PresenceService): Promise<KnownUser[]> => {
   if (!userIds.length) return []
 
@@ -294,7 +206,7 @@ export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }:
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.pinnedChatRoomLimitReached)
   }
 
-  const pinnedChatRoomIds = resolvePinnedChatRoomIds(currentPinnedChatRoomIds, roomId, isPinned)
+  const pinnedChatRoomIds = resolveToggledRoomIds(currentPinnedChatRoomIds, roomId, isPinned)
 
   await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': pinnedChatRoomIds } })
 
@@ -341,7 +253,7 @@ export const updateMutedChatRoom = async (userId: string, { roomId, isMuted }: E
   }
 
   const currentMutedChatRoomIds = user.personal.mutedChatRoomIds
-  const mutedChatRoomIds = resolveMutedChatRoomIds(currentMutedChatRoomIds, roomId, isMuted)
+  const mutedChatRoomIds = resolveToggledRoomIds(currentMutedChatRoomIds, roomId, isMuted)
 
   await UserModel.updateOne({ _id: userId }, { $set: { 'personal.mutedChatRoomIds': mutedChatRoomIds } })
 
@@ -384,7 +296,7 @@ export const updateChatRoom = async (
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.updateChatRoomFailed)
   }
 
-  await validateUpdateChatRoomData(userId, addedUserIds, memberIds, nextChatName)
+  await assertUpdateChatRoomData(userId, addedUserIds, memberIds, nextChatName)
 
   if (avatarFile === null) {
     nextAvatarId = null

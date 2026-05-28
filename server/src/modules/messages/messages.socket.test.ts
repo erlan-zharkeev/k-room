@@ -17,7 +17,11 @@ vi.mock('../../shared/lib/socket-error', () => ({
 }))
 vi.mock('./messages.service', () => messagesServiceMock)
 
-const { registerMessagesSocketHandlers } = await import('./messages.socket')
+const { MessagesSocketService } = await import('./messages.socket')
+
+const registerMessagesSocketHandlers = (socket: never) => {
+  new MessagesSocketService().register(socket)
+}
 
 describe('messages.socket', () => {
   beforeEach(() => {

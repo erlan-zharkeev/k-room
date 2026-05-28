@@ -22,9 +22,11 @@ import { getRequestIp } from 'src/shared/lib/get-request-ip'
 import { EmailService } from '../email/email.service'
 import { SecurityService } from '../security/security.service'
 import { SessionService } from '../session/session.service'
+import { loadGoogleAvatar } from '../user/lib/load-google-avatar'
+import { updateUserAvatar } from '../user/lib/update-user-avatar'
 import { USER_I18N } from '../user/user.i18n'
 import { UserModel } from '../user/user.model'
-import { loadGoogleAvatar, updateUserAvatar, UserService } from '../user/user.service'
+import { UserService } from '../user/user.service'
 
 import {
   EMAIL_CONFIRMATION_LINK_LIFE_SEC,
