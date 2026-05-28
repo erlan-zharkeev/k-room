@@ -1,3 +1,5 @@
+import { DEFAULT_EMOJI_PICKER_QUICK_LIST } from 'src/shared/lib'
+
 import { DEFAULT_APPEARANCE } from './appearance.constants'
 import { DEFAULT_IO_DEVICES_SETTINGS } from './io-devices.constants'
 import { DEFAULT_LOCALIZATION_SETTINGS } from './localization.constants'
@@ -12,6 +14,7 @@ export const DEFAULT_SETTINGS: DeviceSetting = {
     contacts: 0
   },
   messageScrollByRoom: {},
+  quickReactions: DEFAULT_EMOJI_PICKER_QUICK_LIST,
   localization: DEFAULT_LOCALIZATION_SETTINGS,
   appearance: DEFAULT_APPEARANCE,
 

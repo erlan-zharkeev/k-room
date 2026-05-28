@@ -89,8 +89,8 @@ importers:
   client:
     dependencies:
       '@nmorph/nmorph-ui-kit':
-        specifier: ^2.2.44
-        version: 2.2.44(typescript@5.9.3)
+        specifier: ^2.2.45
+        version: 2.2.45(typescript@5.9.3)
       '@tanstack/vue-virtual':
         specifier: ^3.13.24
         version: 3.13.24(vue@3.5.33(typescript@5.9.3))
@@ -103,12 +103,6 @@ importers:
       dexie:
         specifier: ^4.4.2
         version: 4.4.2
-      emoji-picker-element:
-        specifier: ^1.29.1
-        version: 1.29.1
-      emoji-picker-element-data:
-        specifier: ^1.8.0
-        version: 1.8.0
       firebase:
         specifier: ^12.12.1
         version: 12.12.1
@@ -2001,8 +1995,8 @@ packages:
       '@nestjs/platform-socket.io':
         optional: true
 
-  '@nmorph/nmorph-ui-kit@2.2.44':
-    resolution: {integrity: sha512-ecDKFGGuvdXh7MH0KVJfCRcUcylp0wnVvyhTJAq13XEtdcq4+mznuerXe4qKD85G0OpPrNi/Uh9xIw/XghizfQ==}
+  '@nmorph/nmorph-ui-kit@2.2.45':
+    resolution: {integrity: sha512-/XiF/IcSyzMcYgYl7u+ZHOg5h8GdYps3EyetKB/42L6AXl7BN/L2mun4Sd/T6cTRQSrml9zKsdWyPclAro9++w==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       nuxt: '>=3.0.0'
@@ -4549,12 +4543,6 @@ packages:
 
   electron-to-chromium@1.5.344:
     resolution: {integrity: sha512-4MxfbmNDm+KPh066EZy+eUnkcDPcZ35wNmOWzFuh/ijvHsve6kbLTLURy88uCNK5FbpN+yk2nQY6BYh1GEt+wg==}
-
-  emoji-picker-element-data@1.8.0:
-    resolution: {integrity: sha512-VfRuRJNEDLS1JKlNS4olaqhjX5S1nnZ+ZHG73b/dV8QeZyi0yPruTPEE72EmF6XO3k/9hj3lybMIYMOYXb/57A==}
-
-  emoji-picker-element@1.29.1:
-    resolution: {integrity: sha512-TOiHzu9Dqib3x4MwcAi3wi3RdyT4SoeB4b15AvH1ks4SBwTl7DeebhZ0d3x6dNi4XfNU7IGRZ7NBQllj0RqwrQ==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -10013,7 +10001,7 @@ snapshots:
     optionalDependencies:
       '@nestjs/platform-socket.io': 10.4.22(@nestjs/common@10.4.22(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/websockets@10.4.22)(rxjs@7.8.2)
 
-  '@nmorph/nmorph-ui-kit@2.2.44(typescript@5.9.3)':
+  '@nmorph/nmorph-ui-kit@2.2.45(typescript@5.9.3)':
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
       vue-i18n: 9.14.5(vue@3.5.33(typescript@5.9.3))
@@ -12642,10 +12630,6 @@ snapshots:
       jake: 10.9.4
 
   electron-to-chromium@1.5.344: {}
-
-  emoji-picker-element-data@1.8.0: {}
-
-  emoji-picker-element@1.29.1: {}
 
   emoji-regex@8.0.0: {}
 

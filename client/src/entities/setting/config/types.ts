@@ -13,6 +13,7 @@ export interface DeviceSetting {
   chatRoomId: string
   contentNavigationScrollByTab: ContentNavigationScrollByTab
   messageScrollByRoom: Record<string, number>
+  quickReactions: string[]
   localization: DeviceLocalizationSettings
   appearance: AppearanceSettings
   notifications: DeviceNotificationSettings
