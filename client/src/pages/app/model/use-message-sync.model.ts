@@ -15,10 +15,13 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 
+import { useMessageNotification } from './use-message-notification.model'
+
 export const useMessageSync = () => {
   const { mutate: mutateRoom } = useChatRoom()
   const { bulkUpdate, getById, messageById, mutate: mutateMessage, put, remove, update } = useMessage()
   const { user } = useUser()
+  const { playDeliveredMessageSound, showDeliveredMessageToast } = useMessageNotification()
 
   const decreaseUnreadMessagesQuantity = async (roomId: string, quantity = 1) => {
     await mutateRoom(roomId, (room) => {
@@ -39,6 +42,8 @@ export const useMessageSync = () => {
         room.unreadMessagesQuantity = (room.unreadMessagesQuantity ?? 0) + 1
       }
     })
+    showDeliveredMessageToast({ roomId, message })
+    void playDeliveredMessageSound({ roomId, message })
   }
 
   const handleMessageEdited = async ({ body, editedAt, images, messageId }: EventMessageEdited) => {
