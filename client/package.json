@@ -23,13 +23,11 @@
     "tauri:build": "tauri build"
   },
   "dependencies": {
-    "@nmorph/nmorph-ui-kit": "^2.2.44",
+    "@nmorph/nmorph-ui-kit": "^2.2.45",
     "@tanstack/vue-virtual": "^3.13.24",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.15.2",
     "dexie": "^4.4.2",
-    "emoji-picker-element": "^1.29.1",
-    "emoji-picker-element-data": "^1.8.0",
     "firebase": "^12.12.1",
     "global-shared": "workspace:*",
     "lodash": "^4.18.1",

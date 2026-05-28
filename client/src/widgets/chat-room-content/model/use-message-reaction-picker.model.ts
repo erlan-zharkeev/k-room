@@ -1,28 +1,35 @@
-import { toRef } from 'vue'
+import { computed, toRef } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { useI18n } from 'src/shared/lib'
+import { useNmorphEmojiPicker } from 'src/shared/lib'
 
-import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageReactionPickerEmit, MessageReactionPickerProps } from '../config/types'
 
+import { useEmojiPickerQuickList } from './use-emoji-picker-quick-list.model'
 import { useMessageReaction } from './use-message-reaction.model'
 
 export const useMessageReactionPicker = (props: MessageReactionPickerProps, emit: MessageReactionPickerEmit) => {
   const message = toRef(props, 'message')
   const room = toRef(props, 'room')
-  const { t } = useI18n()
   const { settings } = useSettings()
-  const { toggleMessageReaction } = useMessageReaction(message, room)
+  const { emojiPickerQuickList, saveEmojiPickerQuickReaction } = useEmojiPickerQuickList()
+  const { canUpdateMessageReaction, toggleMessageReaction } = useMessageReaction(message, room)
+  const emojiPickerLanguage = computed(() => settings.value.localization.language)
+  const { emojiPickerDataSource, emojiPickerI18n } = useNmorphEmojiPicker(emojiPickerLanguage)
 
   const selectMessageReaction = (glyphKey: string) => {
+    if (!canUpdateMessageReaction.value) return
+
+    void saveEmojiPickerQuickReaction(glyphKey)
     toggleMessageReaction(glyphKey)
     emit('select')
   }
 
   return {
-    expandLabel: t(CHAT_ROOM_CONTENT_I18N.selectEmoji),
-    language: settings.value.localization.language,
+    emojiPickerDataSource,
+    emojiPickerI18n,
+    emojiPickerLanguage,
+    emojiPickerQuickList,
     selectMessageReaction
   }
 }

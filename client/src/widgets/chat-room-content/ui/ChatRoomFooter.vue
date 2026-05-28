@@ -2,6 +2,8 @@
 import {
   NmorphButton,
   NmorphCard,
+  NmorphDropdown,
+  NmorphEmojiPicker,
   NmorphIconCheck,
   NmorphIconClose,
   NmorphFileUpload,
@@ -26,22 +28,31 @@ const emit = defineEmits<ChatRoomFooterEmits>()
 const room = toRef(props, 'room')
 const {
   messageText,
+  messageEmojiDropdownAnchor,
   messageImageDraftImages,
   messageImageDraftUploadValue,
+  emojiPickerDataSource,
+  emojiPickerI18n,
+  emojiPickerLanguage,
+  emojiPickerQuickList,
   editingMessagePreviewText,
   editingMessageImages,
   messageEditText,
+  isMessageEmojiDropdownOpen,
   isSendDisabled,
   canSubmitMessageEdit,
   isEditingCurrentRoomMessage,
   isUpdatingEditedMessage,
   cancelMessageEdit,
+  closeMessageEmojiDropdown,
   openMessageImageUpload,
   removeEditingMessageImage,
   removeMessageImageDraft,
+  selectMessageEmoji,
   selectEditingMessage,
   sendMessage,
   showUnsupportedMessageImageFormatError,
+  toggleMessageEmojiDropdown,
   updateMessageImageDraft,
   submitMessageEdit
 } = useChatRoomFooter(room, (messageId) => emit('select-editing-message', messageId))
@@ -129,15 +140,41 @@ const {
         }"
         @keydown.enter.prevent="sendMessage(props.room.id)"
       />
-      <NmorphButton
-        v-if="!isEditingCurrentRoomMessage"
-        shape="square"
-        :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectEmoji)"
+      <span v-if="!isEditingCurrentRoomMessage" ref="messageEmojiDropdownAnchor">
+        <NmorphButton
+          shape="square"
+          :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectEmoji)"
+          @click.stop="toggleMessageEmojiDropdown"
+        >
+          <template #icon>
+            <NmorphIconSmile />
+          </template>
+        </NmorphButton>
+      </span>
+      <NmorphDropdown
+        v-if="!isEditingCurrentRoomMessage && messageEmojiDropdownAnchor"
+        :open="isMessageEmojiDropdownOpen"
+        :relative-element="messageEmojiDropdownAnchor"
+        placement="top-end"
+        role="dialog"
+        :width="300"
+        :max-width="340"
+        :fill-width="false"
+        :restore-focus="false"
+        @on-outside-click="closeMessageEmojiDropdown"
+        @on-escape-keydown="closeMessageEmojiDropdown"
       >
-        <template #icon>
-          <NmorphIconSmile />
-        </template>
-      </NmorphButton>
+        <div @click.stop>
+          <NmorphEmojiPicker
+            :data-source="emojiPickerDataSource"
+            :i18n="emojiPickerI18n"
+            initial-expanded
+            :language="emojiPickerLanguage"
+            :quick-list="emojiPickerQuickList"
+            @select="selectMessageEmoji"
+          />
+        </div>
+      </NmorphDropdown>
       <NmorphButton
         v-if="isEditingCurrentRoomMessage"
         shape="square"

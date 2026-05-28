@@ -17,6 +17,7 @@ import type { ChatRoomRecord } from 'src/shared/lib'
 
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 
+import { useChatRoomMessageEmojiPicker } from './use-chat-room-message-emoji-picker.model'
 import { useMessageEdit } from './use-message-edit.model'
 import { useMessageImageDraft } from './use-message-image-draft.model'
 
@@ -29,6 +30,17 @@ export const useChatRoomFooter = (
   const { user } = useUser()
   const messageText = ref('')
   const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
+  const {
+    messageEmojiDropdownAnchor,
+    emojiPickerDataSource,
+    emojiPickerI18n,
+    emojiPickerLanguage,
+    emojiPickerQuickList,
+    isMessageEmojiDropdownOpen,
+    closeMessageEmojiDropdown,
+    selectMessageEmoji,
+    toggleMessageEmojiDropdown
+  } = useChatRoomMessageEmojiPicker(messageText)
   const {
     editingMessageId,
     editingMessageImages,
@@ -111,27 +123,37 @@ export const useChatRoomFooter = (
     stopTyping()
     messageText.value = ''
     clearSentMessageImageDraft()
+    closeMessageEmojiDropdown()
   }
 
   return {
     messageText,
+    messageEmojiDropdownAnchor,
     messageImageDraftImages,
     messageImageDraftUploadValue,
+    emojiPickerDataSource,
+    emojiPickerI18n,
+    emojiPickerLanguage,
+    emojiPickerQuickList,
     editingMessagePreviewText,
     editingMessageImages,
     messageEditText,
+    isMessageEmojiDropdownOpen,
     isSendDisabled,
     canSubmitMessageEdit,
     isEditingCurrentRoomMessage,
     isUpdatingEditedMessage,
     cancelMessageEdit,
+    closeMessageEmojiDropdown,
     openMessageImageUpload,
     removeEditingMessageImage,
     removeMessageImageDraft,
+    selectMessageEmoji,
     selectEditingMessage,
     sendMessage,
     showUnsupportedMessageImageFormatError,
     submitMessageEdit,
+    toggleMessageEmojiDropdown,
     updateMessageImageDraft
   }
 }
