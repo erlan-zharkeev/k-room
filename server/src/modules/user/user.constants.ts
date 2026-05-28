@@ -72,13 +72,7 @@ export const FIXTURE_GROUPS = [
     key: 'frontend-core',
     adminNickname: 'erlan',
     chatName: 'Frontend Core',
-    nicknames: [
-      'erlan',
-      'tolik',
-      FIXTURE_MAX_LENGTH_NICKNAMES.alina,
-      FIXTURE_MAX_LENGTH_NICKNAMES.misha,
-      FIXTURE_MAX_LENGTH_NICKNAMES.dasha
-    ]
+    nicknames: FIXTURE_USERNAMES
   },
   {
     key: 'weekend-plans',

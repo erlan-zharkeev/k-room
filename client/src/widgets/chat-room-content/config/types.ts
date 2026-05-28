@@ -82,6 +82,12 @@ export interface MessageReactionTagItem extends MessageReactionGroup, INmorphTag
   value: string
 }
 
+export interface MessageReactionDetailsItem {
+  id: string
+  glyphKey: string
+  user: MessageReactionGroupUser
+}
+
 export interface BuildMessageReactionGroupsParams {
   currentUserId: string
   getUserAvatarId: (authorId: string) => MediaId | null | undefined
