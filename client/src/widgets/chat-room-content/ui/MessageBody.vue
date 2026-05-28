@@ -13,7 +13,8 @@ import MessageReactions from './MessageReactions.vue'
 import MessageStatusDots from './MessageStatusDots.vue'
 
 const props = defineProps<MessageBodyProps>()
-const { showAuthorNickname, isMessageEditing, messageImagePreviewUrlList, sentAt } = useMessageBody(props)
+const { showAuthorNickname, isMessageEditing, hasMessageBody, messageImagePreviewUrlList, sentAt } =
+  useMessageBody(props)
 </script>
 
 <template>
@@ -43,7 +44,7 @@ const { showAuthorNickname, isMessageEditing, messageImagePreviewUrlList, sentAt
             trigger-gap="6px"
           />
         </div>
-        <AppText tag="p" :text="props.message.body" />
+        <AppText v-if="hasMessageBody" tag="p" :text="props.message.body" />
         <div class="message-body__footer">
           <MessageReactions :message="props.message" :room="props.room" />
           <AppText v-if="props.message.editedAt" tag="small" italic :text="$t(CHAT_ROOM_CONTENT_I18N.editedMessage)" />

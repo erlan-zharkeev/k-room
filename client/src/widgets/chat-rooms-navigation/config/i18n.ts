@@ -20,5 +20,10 @@ export const CHAT_ROOMS_NAVIGATION_I18N = defineI18n({
     en: 'No chats found',
     ru: 'Чаты не найдены',
     zh: '未找到聊天'
+  },
+  imageMessage: {
+    en: 'Photo',
+    ru: 'Фото',
+    zh: '图片'
   }
 })

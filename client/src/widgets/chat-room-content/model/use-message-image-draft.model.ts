@@ -8,7 +8,7 @@ import { revokeObjectUrl, revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } f
 
 import { MESSAGE_IMAGE_MAX_FILE_SIZE, MESSAGE_IMAGE_MAX_MB } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
-import type { MessageImageDraftItem, MessageImageUploadRef } from '../config/types'
+import type { MessageImageDraftItem, MessageImageUploadExpose } from '../config/types'
 
 const buildMessageImageDraftMediaId = () => `${MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX}-${uuidv4()}`
 
@@ -16,7 +16,7 @@ export const useMessageImageDraft = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
   const { t } = useI18n()
   const toast = useAppToast()
-  const messageImageUploadRef = useTemplateRef<MessageImageUploadRef>('messageImageUpload')
+  const messageImageUploadRef = useTemplateRef<MessageImageUploadExpose>('messageImageUpload')
   const messageImageDraftItems = ref<MessageImageDraftItem[]>([])
   const messageImageDraftImages = computed<ImageObject[]>(() =>
     messageImageDraftItems.value.map(({ file, id }) => ({
