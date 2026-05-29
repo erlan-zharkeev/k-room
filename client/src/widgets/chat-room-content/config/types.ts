@@ -1,11 +1,11 @@
 import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type { ImageObject, MediaId, MessageReaction } from 'global-shared'
+import type { ImageObject, MediaId, MessageReaction, RepliedMessage } from 'global-shared'
 import type { Component } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
-import type { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_STATUS_DOT_TONE } from './constants'
+import type { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_DRAFT_REFERENCE_KIND, MESSAGE_STATUS_DOT_TONE } from './constants'
 
 export interface ChatRoomMessagesProps {
   room: ChatRoomRecord
@@ -36,6 +36,14 @@ export interface EditingMessageState {
   messageId: string
   initialBody: string
   initialImages: ImageObject[]
+}
+
+export type MessageDraftReferenceKind = (typeof MESSAGE_DRAFT_REFERENCE_KIND)[keyof typeof MESSAGE_DRAFT_REFERENCE_KIND]
+
+export interface MessageDraftReferenceState {
+  roomId: string
+  kind: MessageDraftReferenceKind
+  message: RepliedMessage
 }
 
 export interface ChatRoomPinnedMessageProps {
