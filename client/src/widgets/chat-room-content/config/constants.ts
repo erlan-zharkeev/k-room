@@ -23,6 +23,8 @@ export const MESSAGE_IMAGE_MAX_FILE_SIZE = MESSAGE_IMAGE_MAX_MB * MB_IN_BYTES
 export const MESSAGE_CONTEXT_MENU_ACTION = {
   COPY_TEXT: 'copy-text',
   EDIT_MESSAGE: 'edit-message',
+  REPLY_MESSAGE: 'reply-message',
+  FORWARD_MESSAGE: 'forward-message',
   REACTION_PICKER: 'reaction-picker',
   PIN_MESSAGE: 'pin-message',
   UNPIN_MESSAGE: 'unpin-message',

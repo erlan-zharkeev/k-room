@@ -1,4 +1,11 @@
-import { NmorphIconCopy, NmorphIconDelete, NmorphIconEdit, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphIconCopy,
+  NmorphIconDelete,
+  NmorphIconEdit,
+  NmorphIconForward,
+  NmorphIconPin,
+  NmorphIconReply
+} from '@nmorph/nmorph-ui-kit'
 import { isUnknownObject } from 'global-shared'
 import { computed, ref, toRef } from 'vue'
 import type { Component } from 'vue'
@@ -12,6 +19,7 @@ import MessageReactionPicker from '../ui/MessageReactionPicker.vue'
 
 import { useMessageCopyText } from './use-message-copy-text.model'
 import { useMessageDeleteDialog } from './use-message-delete-dialog.model'
+import { useMessageDraftReference } from './use-message-draft-reference.model'
 import { useMessageEdit } from './use-message-edit.model'
 import { useMessagePin } from './use-message-pin.model'
 
@@ -21,6 +29,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const { isTouchInput } = useTouchInput()
   const { t } = useI18n()
   const { canCopyMessageText, copyMessageText } = useMessageCopyText(message)
+  const { startMessageForward, startMessageReply } = useMessageDraftReference()
   const { canStartMessageEdit, startMessageEdit } = useMessageEdit()
   const { canUpdatePinnedMessage, isMessagePinned, togglePinnedMessage } = useMessagePin(message, room)
   const { isDeleteMessageDialogOpen, openDeleteMessageDialog } = useMessageDeleteDialog()
@@ -52,6 +61,16 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT,
         icon: NmorphIconCopy as unknown as Component,
         disabled: !canCopyMessageText.value
+      },
+      {
+        label: t(CHAT_ROOM_CONTENT_I18N.replyMessage),
+        value: MESSAGE_CONTEXT_MENU_ACTION.REPLY_MESSAGE,
+        icon: NmorphIconReply as unknown as Component
+      },
+      {
+        label: t(CHAT_ROOM_CONTENT_I18N.forwardMessage),
+        value: MESSAGE_CONTEXT_MENU_ACTION.FORWARD_MESSAGE,
+        icon: NmorphIconForward as unknown as Component
       }
     ]
 
@@ -87,6 +106,14 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
     switch (option.value) {
       case MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT:
         void copyMessageText()
+        break
+      case MESSAGE_CONTEXT_MENU_ACTION.REPLY_MESSAGE:
+        startMessageReply(message.value, room.value.id)
+        closeMessageContextMenu()
+        break
+      case MESSAGE_CONTEXT_MENU_ACTION.FORWARD_MESSAGE:
+        startMessageForward(message.value, room.value.id)
+        closeMessageContextMenu()
         break
       case MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE:
         startMessageEdit(message.value, room.value.id)

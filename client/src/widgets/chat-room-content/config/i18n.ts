@@ -36,6 +36,16 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Скопировать текст',
     zh: '复制文本'
   },
+  replyMessage: {
+    en: 'Reply',
+    ru: 'Ответить',
+    zh: '回复'
+  },
+  forwardMessage: {
+    en: 'Forward',
+    ru: 'Переслать',
+    zh: '转发'
+  },
   editMessage: {
     en: 'Edit message',
     ru: 'Редактировать сообщение',
