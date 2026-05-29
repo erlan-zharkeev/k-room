@@ -65,6 +65,7 @@ export const useChatRoomFooter = (
   } = useMessageImageDraft()
   const {
     messageDraftReference,
+    messageDraftReferenceId,
     messageDraftReferencePreviewText,
     messageDraftReferenceTitle,
     buildMessageDraftReferencePayload,
@@ -91,6 +92,12 @@ export const useChatRoomFooter = (
     if (!messageId || !isEditingCurrentRoom) return
 
     onSelectEditingMessage(messageId)
+  }
+
+  const selectMessageDraftReference = () => {
+    if (!messageDraftReferenceId.value || !isMessageDraftReferenceCurrentRoom.value) return
+
+    onSelectEditingMessage(messageDraftReferenceId.value)
   }
 
   const sendMessage = async (roomId: string) => {
@@ -170,6 +177,7 @@ export const useChatRoomFooter = (
     removeMessageImageDraft,
     selectMessageEmoji,
     selectEditingMessage,
+    selectMessageDraftReference,
     sendMessage,
     showUnsupportedMessageImageFormatError,
     submitMessageEdit,

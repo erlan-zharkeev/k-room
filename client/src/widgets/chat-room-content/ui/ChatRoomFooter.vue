@@ -53,6 +53,7 @@ const {
   removeMessageImageDraft,
   selectMessageEmoji,
   selectEditingMessage,
+  selectMessageDraftReference,
   sendMessage,
   showUnsupportedMessageImageFormatError,
   toggleMessageEmojiDropdown,
@@ -80,7 +81,13 @@ const {
       v-else-if="isMessageDraftReferenceCurrentRoom && messageDraftReference"
       class="chat-room-content-footer__draft-reference-preview"
     >
-      <MessagePreview :title="messageDraftReferenceTitle" :text="messageDraftReferencePreviewText" />
+      <button
+        type="button"
+        class="chat-room-content-footer__draft-reference-select"
+        @click="selectMessageDraftReference"
+      >
+        <MessagePreview :title="messageDraftReferenceTitle" :text="messageDraftReferencePreviewText" />
+      </button>
       <NmorphButton
         style-type="transparent"
         shape="square"
@@ -238,6 +245,14 @@ const {
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
+}
+
+.chat-room-content-footer__draft-reference-select {
+  cursor: pointer;
+  padding: 0 8px 4px 0;
+  border: 0;
+  color: inherit;
+  text-align: left;
 }
 
 .chat-room-content-footer__attach-upload {

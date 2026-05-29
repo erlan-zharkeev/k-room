@@ -13,6 +13,7 @@ export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
   const { t } = useI18n()
   const messageDraftReference = computed(() => messageDraftReferenceState.value?.message ?? null)
   const messageDraftReferenceKind = computed(() => messageDraftReferenceState.value?.kind ?? null)
+  const messageDraftReferenceId = computed(() => messageDraftReference.value?.id ?? '')
   const isMessageDraftReferenceActive = computed(() => Boolean(messageDraftReferenceState.value))
   const isMessageDraftReferenceCurrentRoom = computed(() => {
     const state = messageDraftReferenceState.value
@@ -73,6 +74,7 @@ export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
   return {
     messageDraftReference,
     messageDraftReferenceKind,
+    messageDraftReferenceId,
     isMessageDraftReferenceActive,
     isMessageDraftReferenceCurrentRoom,
     messageDraftReferencePreviewText,
