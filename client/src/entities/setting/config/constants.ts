@@ -1,4 +1,4 @@
-import { DEFAULT_EMOJI_PICKER_QUICK_LIST } from 'src/shared/lib'
+import { nmorphEmojiQuickList } from '@nmorph/nmorph-ui-kit/emoji'
 
 import { DEFAULT_APPEARANCE } from './appearance.constants'
 import { DEFAULT_IO_DEVICES_SETTINGS } from './io-devices.constants'
@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS: DeviceSetting = {
     contacts: 0
   },
   messageScrollByRoom: {},
-  quickReactions: DEFAULT_EMOJI_PICKER_QUICK_LIST,
+  quickReactions: nmorphEmojiQuickList,
   localization: DEFAULT_LOCALIZATION_SETTINGS,
   appearance: DEFAULT_APPEARANCE,
 

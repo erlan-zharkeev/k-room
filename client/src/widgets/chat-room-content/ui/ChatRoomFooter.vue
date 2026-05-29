@@ -31,9 +31,7 @@ const {
   messageEmojiDropdownAnchor,
   messageImageDraftImages,
   messageImageDraftUploadValue,
-  emojiPickerDataSource,
-  emojiPickerI18n,
-  emojiPickerLanguage,
+  emojiPickerLocale,
   emojiPickerQuickList,
   editingMessagePreviewText,
   editingMessageImages,
@@ -166,10 +164,11 @@ const {
       >
         <div @click.stop>
           <NmorphEmojiPicker
-            :data-source="emojiPickerDataSource"
-            :i18n="emojiPickerI18n"
+            v-if="emojiPickerLocale"
+            :data-source="emojiPickerLocale.data"
+            :i18n="emojiPickerLocale.i18n"
             initial-expanded
-            :language="emojiPickerLanguage"
+            :language="emojiPickerLocale.language"
             :quick-list="emojiPickerQuickList"
             @select="selectMessageEmoji"
           />
