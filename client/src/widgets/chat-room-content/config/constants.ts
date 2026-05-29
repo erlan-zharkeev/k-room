@@ -28,6 +28,10 @@ export const MESSAGE_CONTEXT_MENU_ACTION = {
   UNPIN_MESSAGE: 'unpin-message',
   DELETE_MESSAGE: 'delete-message'
 } as const
+export const MESSAGE_DRAFT_REFERENCE_KIND = {
+  REPLY: 'reply',
+  FORWARD: 'forward'
+} as const
 export const MESSAGE_STATUS_DOT_TONE = {
   TEXT: 'text',
   ACCENT: 'accent',
