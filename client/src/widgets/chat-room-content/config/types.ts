@@ -64,6 +64,12 @@ export interface MessageBodyProps {
   room: ChatRoomRecord
 }
 
+export interface MessageBodyEmits {
+  'select-message': [messageId: string]
+}
+
+export type MessageBodySelectMessage = (messageId: string) => void
+
 export interface MessageReactionsProps {
   message: MessageRecord
   room: ChatRoomRecord

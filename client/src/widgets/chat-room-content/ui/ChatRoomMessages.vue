@@ -53,7 +53,12 @@ defineExpose<ChatRoomMessagesExpose>({
             class="chat-room-messages__message"
             :class="{ 'chat-room-messages__message--self': item.message.isSelf }"
           >
-            <MessageBody :message="item.message" :is-private-room="props.isPrivateRoom" :room="props.room" />
+            <MessageBody
+              :message="item.message"
+              :is-private-room="props.isPrivateRoom"
+              :room="props.room"
+              @select-message="loadAndScrollToMessage"
+            />
           </div>
         </div>
       </div>
