@@ -58,7 +58,12 @@ export const useChatRoomsList = () => {
       const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
       const lastMessage = displayedLastMessageId ? getById(displayedLastMessageId) : undefined
       const title = chatName || privateContact?.nickname || ''
-      const description = resolveLastMessageDescription(lastMessage, t(CHAT_ROOMS_NAVIGATION_I18N.imageMessage))
+      const description = resolveLastMessageDescription(
+        lastMessage,
+        t(CHAT_ROOMS_NAVIGATION_I18N.imageMessage),
+        t(CHAT_ROOMS_NAVIGATION_I18N.replyMessage),
+        t(CHAT_ROOMS_NAVIGATION_I18N.forwardMessage)
+      )
 
       return {
         id,

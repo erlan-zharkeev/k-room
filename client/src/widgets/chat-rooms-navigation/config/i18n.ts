@@ -25,5 +25,15 @@ export const CHAT_ROOMS_NAVIGATION_I18N = defineI18n({
     en: 'Photo',
     ru: 'Фото',
     zh: '图片'
+  },
+  replyMessage: {
+    en: 'Reply',
+    ru: 'Ответ',
+    zh: '回复'
+  },
+  forwardMessage: {
+    en: 'Forward',
+    ru: 'Переслано',
+    zh: '转发'
   }
 })
