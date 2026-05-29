@@ -30,6 +30,7 @@ const {
       ref="contentNavigationScroll"
       scroll-x-prop="hidden"
       css-scroll-behavior="auto"
+      :y-gap-in-px="6"
       update-only-on-scroll-end
       @update:model-value="saveContentNavigationScrollState"
     >

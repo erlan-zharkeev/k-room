@@ -55,7 +55,7 @@ const { saveContentNavigationScrollState } = useContentNavigationScroll('chat-ro
       scroll-x-prop="hidden"
       css-scroll-behavior="auto"
       update-only-on-scroll-end
-      :y-gap-in-px="-6"
+      :y-gap-in-px="0"
       @update:model-value="saveContentNavigationScrollState"
     >
       <ChatRoomList />
