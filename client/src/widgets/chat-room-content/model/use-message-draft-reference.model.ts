@@ -1,17 +1,48 @@
-import { computed, ref } from 'vue'
+import { computed, type Ref, ref } from 'vue'
 
-import type { MessageRecord } from 'src/shared/lib'
+import { useI18n, type ChatRoomRecord, type MessageRecord } from 'src/shared/lib'
 
 import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
+import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageDraftReferenceKind, MessageDraftReferenceState } from '../config/types'
 import { buildRepliedMessage, cloneRepliedMessage } from '../lib/build-replied-message'
 
 const messageDraftReferenceState = ref<MessageDraftReferenceState | null>(null)
 
-export const useMessageDraftReference = () => {
+export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
+  const { t } = useI18n()
   const messageDraftReference = computed(() => messageDraftReferenceState.value?.message ?? null)
   const messageDraftReferenceKind = computed(() => messageDraftReferenceState.value?.kind ?? null)
   const isMessageDraftReferenceActive = computed(() => Boolean(messageDraftReferenceState.value))
+  const isMessageDraftReferenceCurrentRoom = computed(() => {
+    const state = messageDraftReferenceState.value
+
+    if (!state || !room) return false
+
+    return state.roomId === room.value.id
+  })
+  const messageDraftReferenceTitle = computed(() => {
+    const kind = messageDraftReferenceKind.value
+
+    if (!kind) return ''
+
+    const isForwardReference = kind === MESSAGE_DRAFT_REFERENCE_KIND.FORWARD
+
+    return t(isForwardReference ? CHAT_ROOM_CONTENT_I18N.forwardMessage : CHAT_ROOM_CONTENT_I18N.replyMessage)
+  })
+  const messageDraftReferencePreviewText = computed(() => {
+    const reference = messageDraftReference.value
+
+    if (!reference) return ''
+
+    const hasBody = Boolean(reference.body.trim())
+    const firstImage = reference.images?.[0]
+
+    if (hasBody) return reference.body
+    if (firstImage) return firstImage.name
+
+    return ''
+  })
 
   const startMessageDraftReference = (message: MessageRecord, roomId: string, kind: MessageDraftReferenceKind) => {
     messageDraftReferenceState.value = {
@@ -33,8 +64,6 @@ export const useMessageDraftReference = () => {
     messageDraftReferenceState.value = null
   }
 
-  const isMessageDraftReferenceRoom = (roomId: string) => messageDraftReferenceState.value?.roomId === roomId
-
   const buildMessageDraftReferencePayload = (roomId: string) => {
     const state = messageDraftReferenceState.value
     if (!state || state.roomId !== roomId) return null
@@ -45,10 +74,12 @@ export const useMessageDraftReference = () => {
     messageDraftReference,
     messageDraftReferenceKind,
     isMessageDraftReferenceActive,
+    isMessageDraftReferenceCurrentRoom,
+    messageDraftReferencePreviewText,
+    messageDraftReferenceTitle,
     startMessageReply,
     startMessageForward,
     cancelMessageDraftReference,
-    isMessageDraftReferenceRoom,
     buildMessageDraftReferencePayload
   }
 }

@@ -2,9 +2,9 @@ import {
   NmorphIconCopy,
   NmorphIconDelete,
   NmorphIconEdit,
-  NmorphIconForward,
+  NmorphIconForwardFilled,
   NmorphIconPin,
-  NmorphIconReply
+  NmorphIconReplyFilled
 } from '@nmorph/nmorph-ui-kit'
 import { isUnknownObject } from 'global-shared'
 import { computed, ref, toRef } from 'vue'
@@ -65,12 +65,12 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
       {
         label: t(CHAT_ROOM_CONTENT_I18N.replyMessage),
         value: MESSAGE_CONTEXT_MENU_ACTION.REPLY_MESSAGE,
-        icon: NmorphIconReply as unknown as Component
+        icon: NmorphIconReplyFilled as unknown as Component
       },
       {
         label: t(CHAT_ROOM_CONTENT_I18N.forwardMessage),
         value: MESSAGE_CONTEXT_MENU_ACTION.FORWARD_MESSAGE,
-        icon: NmorphIconForward as unknown as Component
+        icon: NmorphIconForwardFilled as unknown as Component
       }
     ]
 

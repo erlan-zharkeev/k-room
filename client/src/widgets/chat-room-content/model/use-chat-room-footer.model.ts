@@ -18,6 +18,7 @@ import type { ChatRoomRecord } from 'src/shared/lib'
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 
 import { useChatRoomMessageEmojiPicker } from './use-chat-room-message-emoji-picker.model'
+import { useMessageDraftReference } from './use-message-draft-reference.model'
 import { useMessageEdit } from './use-message-edit.model'
 import { useMessageImageDraft } from './use-message-image-draft.model'
 
@@ -62,6 +63,14 @@ export const useChatRoomFooter = (
     showUnsupportedMessageImageFormatError,
     updateMessageImageDraft
   } = useMessageImageDraft()
+  const {
+    messageDraftReference,
+    messageDraftReferencePreviewText,
+    messageDraftReferenceTitle,
+    buildMessageDraftReferencePayload,
+    cancelMessageDraftReference,
+    isMessageDraftReferenceCurrentRoom
+  } = useMessageDraftReference(room)
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
@@ -91,6 +100,7 @@ export const useChatRoomFooter = (
     if ((!body && !hasMessageDraft) || !authorId) return
 
     const payloadImages = await buildMessageImageDraftPayload()
+    const repliedMessage = buildMessageDraftReferencePayload(roomId)
 
     const message: Message = {
       id: uuidv4(),
@@ -101,7 +111,8 @@ export const useChatRoomFooter = (
       isSelf: true,
       status: MESSAGE_STATUS_VALUE.SENDING,
       reactions: [],
-      images
+      images,
+      ...(repliedMessage && { repliedMessage })
     }
 
     const payload: EventSendMessage = {
@@ -120,6 +131,9 @@ export const useChatRoomFooter = (
     socket.emit<SocketActions>('send-message', payload)
     stopTyping()
     messageText.value = ''
+    if (repliedMessage) {
+      cancelMessageDraftReference()
+    }
     clearSentMessageImageDraft()
     closeMessageEmojiDropdown()
   }
@@ -133,13 +147,18 @@ export const useChatRoomFooter = (
     emojiPickerQuickList,
     editingMessagePreviewText,
     editingMessageImages,
+    messageDraftReference,
+    messageDraftReferencePreviewText,
+    messageDraftReferenceTitle,
     messageEditText,
     isMessageEmojiDropdownOpen,
     isSendDisabled,
     canSubmitMessageEdit,
     isEditingCurrentRoomMessage,
+    isMessageDraftReferenceCurrentRoom,
     isUpdatingEditedMessage,
     cancelMessageEdit,
+    cancelMessageDraftReference,
     closeMessageEmojiDropdown,
     openMessageImageUpload,
     removeEditingMessageImage,
