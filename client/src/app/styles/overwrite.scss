@@ -3,7 +3,8 @@
   border-radius: 8px;
 }
 
-.nmorph-dropdown.nmorph-dropdown--hide-shadow {
+.nmorph-dropdown.nmorph-dropdown--hide-shadow,
+.nmorph-dropdown {
   box-shadow: calc(var(--base-shadow-width) * 2) calc(var(--base-shadow-width) * 2) calc(var(--base-shadow-blur) * 2)
       var(--app-shadow-dark),
     calc(var(--base-shadow-width) * -1) calc(var(--base-shadow-width) * -1) var(--base-shadow-blur)

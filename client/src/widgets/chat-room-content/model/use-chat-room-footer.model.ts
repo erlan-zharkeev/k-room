@@ -32,9 +32,7 @@ export const useChatRoomFooter = (
   const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
   const {
     messageEmojiDropdownAnchor,
-    emojiPickerDataSource,
-    emojiPickerI18n,
-    emojiPickerLanguage,
+    emojiPickerLocale,
     emojiPickerQuickList,
     isMessageEmojiDropdownOpen,
     closeMessageEmojiDropdown,
@@ -131,9 +129,7 @@ export const useChatRoomFooter = (
     messageEmojiDropdownAnchor,
     messageImageDraftImages,
     messageImageDraftUploadValue,
-    emojiPickerDataSource,
-    emojiPickerI18n,
-    emojiPickerLanguage,
+    emojiPickerLocale,
     emojiPickerQuickList,
     editingMessagePreviewText,
     editingMessageImages,

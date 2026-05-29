@@ -1,18 +1,14 @@
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
-import { computed, type Ref, ref, useTemplateRef } from 'vue'
-
-import { useSettings } from 'src/entities/setting'
-import { useNmorphEmojiPicker } from 'src/shared/lib'
+import { type Ref, ref, useTemplateRef } from 'vue'
 
 import { useEmojiPickerQuickList } from './use-emoji-picker-quick-list.model'
+import { useNmorphEmojiPicker } from './use-nmorph-emoji-picker.model'
 
 export const useChatRoomMessageEmojiPicker = (messageText: Ref<string>) => {
-  const { settings } = useSettings()
   const { emojiPickerQuickList, saveEmojiPickerQuickReaction } = useEmojiPickerQuickList()
   const messageEmojiDropdownAnchor = useTemplateRef<HTMLElement>('messageEmojiDropdownAnchor')
   const isMessageEmojiDropdownOpen = ref(false)
-  const emojiPickerLanguage = computed(() => settings.value.localization.language)
-  const { emojiPickerDataSource, emojiPickerI18n } = useNmorphEmojiPicker(emojiPickerLanguage)
+  const { emojiPickerLocale } = useNmorphEmojiPicker()
 
   const toggleMessageEmojiDropdown = () => {
     isMessageEmojiDropdownOpen.value = !isMessageEmojiDropdownOpen.value
@@ -34,9 +30,7 @@ export const useChatRoomMessageEmojiPicker = (messageText: Ref<string>) => {
 
   return {
     messageEmojiDropdownAnchor,
-    emojiPickerDataSource,
-    emojiPickerI18n,
-    emojiPickerLanguage,
+    emojiPickerLocale,
     emojiPickerQuickList,
     isMessageEmojiDropdownOpen,
     closeMessageEmojiDropdown,

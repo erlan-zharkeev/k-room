@@ -89,8 +89,8 @@ importers:
   client:
     dependencies:
       '@nmorph/nmorph-ui-kit':
-        specifier: ^2.2.45
-        version: 2.2.45(typescript@5.9.3)
+        specifier: ^2.2.46
+        version: 2.2.46(typescript@5.9.3)
       '@tanstack/vue-virtual':
         specifier: ^3.13.24
         version: 3.13.24(vue@3.5.33(typescript@5.9.3))
@@ -1995,8 +1995,8 @@ packages:
       '@nestjs/platform-socket.io':
         optional: true
 
-  '@nmorph/nmorph-ui-kit@2.2.45':
-    resolution: {integrity: sha512-/XiF/IcSyzMcYgYl7u+ZHOg5h8GdYps3EyetKB/42L6AXl7BN/L2mun4Sd/T6cTRQSrml9zKsdWyPclAro9++w==}
+  '@nmorph/nmorph-ui-kit@2.2.46':
+    resolution: {integrity: sha512-aNqOyv/0kWxc0h9CgkM+K8rkq9XOBwIQmZsnbx0kwwHVg+ZLRa26Wss8VDqS6Q0IS1zoYTrN05lGtlhO2VsVdA==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       nuxt: '>=3.0.0'
@@ -10001,7 +10001,7 @@ snapshots:
     optionalDependencies:
       '@nestjs/platform-socket.io': 10.4.22(@nestjs/common@10.4.22(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/websockets@10.4.22)(rxjs@7.8.2)
 
-  '@nmorph/nmorph-ui-kit@2.2.45(typescript@5.9.3)':
+  '@nmorph/nmorph-ui-kit@2.2.46(typescript@5.9.3)':
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
       vue-i18n: 9.14.5(vue@3.5.33(typescript@5.9.3))
