@@ -75,9 +75,11 @@ export const useChatRoomFooter = (
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
     const hasMessageDraft = hasMessageImageDraft.value
+    const hasMessageReference = isMessageDraftReferenceCurrentRoom.value
+    const hasMessageContent = hasMessageBody || hasMessageDraft || hasMessageReference
     const hasValidLength = messageText.value.length <= MESSAGE_BODY_MAX_LENGTH
     const hasUserId = Boolean(user.value.id)
-    const canSendMessage = (hasMessageBody || hasMessageDraft) && hasValidLength
+    const canSendMessage = hasMessageContent && hasValidLength
 
     return !canSendMessage || !hasUserId
   })
@@ -96,11 +98,14 @@ export const useChatRoomFooter = (
     const images = messageImageDraftImages.value.map((image) => ({ ...image }))
     const hasMessageDraft = Boolean(images.length)
     const { id: authorId, nickname: authorNickname } = user.value
+    const repliedMessage = buildMessageDraftReferencePayload(roomId)
+    const hasMessageBody = Boolean(body)
+    const hasMessageReference = Boolean(repliedMessage)
+    const hasMessageContent = hasMessageBody || hasMessageDraft || hasMessageReference
 
-    if ((!body && !hasMessageDraft) || !authorId) return
+    if (!hasMessageContent || !authorId) return
 
     const payloadImages = await buildMessageImageDraftPayload()
-    const repliedMessage = buildMessageDraftReferencePayload(roomId)
 
     const message: Message = {
       id: uuidv4(),
