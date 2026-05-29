@@ -4,7 +4,7 @@ import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
-import type { MessageBodyProps } from '../config/types'
+import type { MessageBodyEmits, MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 
 import MessageContextMenu from './MessageContextMenu.vue'
@@ -13,8 +13,18 @@ import MessageReactions from './MessageReactions.vue'
 import MessageStatusDots from './MessageStatusDots.vue'
 
 const props = defineProps<MessageBodyProps>()
-const { showAuthorNickname, isMessageEditing, hasMessageBody, messageImagePreviewUrlList, sentAt } =
-  useMessageBody(props)
+const emit = defineEmits<MessageBodyEmits>()
+const {
+  showAuthorNickname,
+  isMessageEditing,
+  hasMessageBody,
+  repliedMessage,
+  repliedMessagePreviewText,
+  repliedMessagePreviewTitle,
+  messageImagePreviewUrlList,
+  selectRepliedMessage,
+  sentAt
+} = useMessageBody(props, (messageId) => emit('select-message', messageId))
 </script>
 
 <template>
@@ -29,11 +39,14 @@ const { showAuthorNickname, isMessageEditing, hasMessageBody, messageImagePrevie
     >
       <div class="message-body__content">
         <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
-        <MessagePreview
-          v-if="props.message.repliedMessage"
-          :title="props.message.repliedMessage.authorNickname"
-          :text="props.message.repliedMessage.body"
-        />
+        <button
+          v-if="repliedMessage"
+          type="button"
+          class="message-body__replied-preview"
+          @click.stop="selectRepliedMessage"
+        >
+          <MessagePreview :title="repliedMessagePreviewTitle" :text="repliedMessagePreviewText" />
+        </button>
         <div v-if="messageImagePreviewUrlList.length" class="message-body__images">
           <NmorphImagePreview
             :src="messageImagePreviewUrlList"
@@ -110,6 +123,14 @@ const { showAuthorNickname, isMessageEditing, hasMessageBody, messageImagePrevie
 .message-body__content {
   display: grid;
   gap: 4px;
+}
+
+.message-body__replied-preview {
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  text-align: left;
 }
 
 .message-body__images .nmorph-image-preview.nmorph-image-preview--gallery-trigger .nmorph-image-preview__trigger {
