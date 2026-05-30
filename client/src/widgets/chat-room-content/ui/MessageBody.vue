@@ -12,6 +12,7 @@ import MessageContextMenu from './MessageContextMenu.vue'
 import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
 import MessageStatusDots from './MessageStatusDots.vue'
+import MessageText from './MessageText.vue'
 
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
@@ -59,7 +60,7 @@ const {
             trigger-gap="6px"
           />
         </div>
-        <AppText v-if="hasMessageBody" tag="p" :text="props.message.body" />
+        <MessageText v-if="hasMessageBody" :text="props.message.body" />
         <div class="message-body__footer">
           <MessageReactions :message="props.message" :room="props.room" />
           <AppText v-if="props.message.editedAt" tag="small" italic :text="$t(CHAT_ROOM_CONTENT_I18N.editedMessage)" />

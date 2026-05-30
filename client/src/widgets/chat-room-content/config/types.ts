@@ -5,7 +5,12 @@ import type { Component, Ref } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
-import type { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_DRAFT_REFERENCE_KIND, MESSAGE_STATUS_DOT_TONE } from './constants'
+import type {
+  MESSAGE_CONTEXT_MENU_ACTION,
+  MESSAGE_DRAFT_REFERENCE_KIND,
+  MESSAGE_STATUS_DOT_TONE,
+  MESSAGE_TEXT_SEGMENT_KIND
+} from './constants'
 
 export interface ChatRoomMessagesProps {
   room: ChatRoomRecord
@@ -78,6 +83,27 @@ export interface MessageBodyEmits {
 }
 
 export type MessageBodySelectMessage = (selection: ChatRoomMessageSelection) => void
+
+export interface MessageTextProps {
+  text: string
+}
+
+export type MessageTextSegmentKind = (typeof MESSAGE_TEXT_SEGMENT_KIND)[keyof typeof MESSAGE_TEXT_SEGMENT_KIND]
+
+export interface MessageTextPlainSegment {
+  id: string
+  kind: typeof MESSAGE_TEXT_SEGMENT_KIND.TEXT
+  text: string
+}
+
+export interface MessageTextLinkSegment {
+  id: string
+  kind: typeof MESSAGE_TEXT_SEGMENT_KIND.LINK
+  text: string
+  href: string
+}
+
+export type MessageTextSegment = MessageTextPlainSegment | MessageTextLinkSegment
 
 export interface MessageReactionsProps {
   message: MessageRecord

@@ -43,6 +43,10 @@ export const MESSAGE_STATUS_DOT_TONE = {
   ACCENT: 'accent',
   ERROR: 'error'
 } as const
+export const MESSAGE_TEXT_SEGMENT_KIND = {
+  TEXT: 'text',
+  LINK: 'link'
+} as const
 export const MESSAGE_STATUS_DOT_COUNT_BY_STATUS = {
   [MESSAGE_STATUS_VALUE.SENDING]: 1,
   [MESSAGE_STATUS_VALUE.UNDELIVERED]: 1,
