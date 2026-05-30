@@ -12,7 +12,7 @@ import type { Component } from 'vue'
 
 import { useI18n, useTouchInput } from 'src/shared/lib'
 
-import { MESSAGE_CONTEXT_MENU_ACTION } from '../config/constants'
+import { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_CONTEXT_MENU_TRIGGER } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageContextMenuOption, MessageContextMenuProps } from '../config/types'
 import MessageReactionPicker from '../ui/MessageReactionPicker.vue'
@@ -35,7 +35,9 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const { isDeleteMessageDialogOpen, openDeleteMessageDialog } = useMessageDeleteDialog()
   const isMessageForwardDialogOpen = ref(false)
   const isMessageContextMenuOpen = ref(false)
-  const isMessageContextMenuDisabled = computed(() => isTouchInput.value)
+  const messageContextMenuTrigger = computed(() =>
+    isTouchInput.value ? MESSAGE_CONTEXT_MENU_TRIGGER.LONG_PRESS : MESSAGE_CONTEXT_MENU_TRIGGER.CONTEXT_MENU
+  )
 
   const updateMessageContextMenuOpen = (value: boolean) => {
     isMessageContextMenuOpen.value = value
@@ -138,7 +140,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
     isDeleteMessageDialogOpen,
     isMessageForwardDialogOpen,
     isMessageContextMenuOpen,
-    isMessageContextMenuDisabled,
+    messageContextMenuTrigger,
     messageContextMenuOptions,
     updateMessageContextMenuOpen,
     selectMessageContextMenuAction

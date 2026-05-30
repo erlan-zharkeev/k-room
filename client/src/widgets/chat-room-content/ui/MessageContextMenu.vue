@@ -14,7 +14,7 @@ const {
   isDeleteMessageDialogOpen,
   isMessageForwardDialogOpen,
   isMessageContextMenuOpen,
-  isMessageContextMenuDisabled,
+  messageContextMenuTrigger,
   messageContextMenuOptions,
   updateMessageContextMenuOpen,
   selectMessageContextMenuAction
@@ -26,11 +26,10 @@ const {
     placement="bottom-start"
     :model-value="isMessageContextMenuOpen"
     class="message-context-menu"
-    trigger="contextmenu"
+    :trigger="messageContextMenuTrigger"
     :width="MESSAGE_CONTEXT_MENU_WIDTH"
     :options="messageContextMenuOptions"
     :aria-label="$t(CHAT_ROOM_CONTENT_I18N.messageActions)"
-    :disabled="isMessageContextMenuDisabled"
     :close-on-scroll="false"
     hide-shadow
     @update:model-value="updateMessageContextMenuOpen"
