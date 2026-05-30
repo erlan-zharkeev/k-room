@@ -101,9 +101,7 @@ export const useChatRoomFormDialog = (
   })
   const filteredContactPickerItems = computed(() =>
     normalizedContactSearchQuery.value
-      ? contactPickerItems.value.filter(({ title }) =>
-          title.toLowerCase().includes(normalizedContactSearchQuery.value)
-        )
+      ? contactPickerItems.value.filter(({ title }) => title.toLowerCase().includes(normalizedContactSearchQuery.value))
       : contactPickerItems.value
   )
   const selectedPrivateContact = computed(() =>
