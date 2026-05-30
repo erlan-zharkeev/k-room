@@ -204,6 +204,7 @@ export type {
   EventSendMessage,
   EventEditMessage,
   EventMessageEdited,
+  EventMessageLinkPreviewUpdated,
   EventUpdateMessageStatus,
   EventMessagesStatusUpdated,
   EventChangeMessageStatus,

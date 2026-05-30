@@ -133,7 +133,12 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
   }
 
   emitToUsers(stringifyMongoIds(room.users), 'message-edited', payload)
-  refreshMessageLinkPreview(messageId, linkPreview)
+  refreshMessageLinkPreview({
+    linkPreview,
+    messageId,
+    roomId,
+    userIds: stringifyMongoIds(room.users)
+  })
 }
 
 export const loadRoomMessages = async (
@@ -552,5 +557,10 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
       emitToUsers([user._id], 'message-delivered', payload)
     })
   )
-  refreshMessageLinkPreview(newDbMessage.id, linkPreview)
+  refreshMessageLinkPreview({
+    linkPreview,
+    messageId: newDbMessage.id,
+    roomId,
+    userIds: stringifyMongoIds(users)
+  })
 }
