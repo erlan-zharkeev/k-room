@@ -59,6 +59,7 @@ describe('messages.socket', () => {
 
     expect(messagesServiceMock.sendMessage).toHaveBeenCalledWith({
       roomId: 'room-1',
+      userId: 'user-1',
       message: expect.objectContaining({ id: 'message-1' })
     })
   })

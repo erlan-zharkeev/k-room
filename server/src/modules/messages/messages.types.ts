@@ -22,5 +22,12 @@ export interface MessageDocument extends MessageSchema {
 
 export interface SendMessageParams {
   roomId: string
+  userId: string
   message: Message
+}
+
+export interface ResolveRepliedMessageParams {
+  repliedMessage?: RepliedMessage | null
+  roomMessageIds: string[]
+  userId: string
 }

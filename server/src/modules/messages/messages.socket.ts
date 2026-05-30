@@ -39,6 +39,7 @@ export class MessagesSocketService {
         async ({ roomId, message }: EventSendMessage) => {
           await sendMessage({
             roomId,
+            userId: socket.data.userId,
             message
           })
         },
