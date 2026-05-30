@@ -32,10 +32,6 @@ export const MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_PREFIXES = [
   'feb',
   'ff'
 ] as const
-export const MESSAGE_LINK_PREVIEW_REDIRECT_STATUS_MIN = 300
-export const MESSAGE_LINK_PREVIEW_REDIRECT_STATUS_MAX = 399
-export const MESSAGE_LINK_PREVIEW_SUCCESS_STATUS_MIN = 200
-export const MESSAGE_LINK_PREVIEW_SUCCESS_STATUS_MAX = 299
 export const MESSAGE_LINK_PREVIEW_META_TAG_PATTERN = /<meta\s+[^>]*>/giu
 export const MESSAGE_LINK_PREVIEW_ATTRIBUTE_PATTERN = /([:\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/giu
 export const MESSAGE_LINK_PREVIEW_TITLE_TAG_PATTERN = /<title[^>]*>([\s\S]*?)<\/title>/iu
