@@ -31,10 +31,17 @@ export interface MediaValidationOptions {
   maxMb: number
 }
 
-export interface ImageObject {
+export interface MediaObject {
   src: string
   name: string
   fileBuffer?: ArrayBuffer
+}
+
+export type ImageObject = MediaObject
+
+export interface DocumentObject extends MediaObject {
+  contentType?: string
+  size?: number
 }
 
 export type MediaFileValue = ImageObject

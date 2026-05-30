@@ -82,6 +82,8 @@ export type {
   MediaValidationOptions,
   MediaKind,
   MediaUpload,
+  MediaObject,
+  DocumentObject,
   ImageObject,
   MediaFileValue
 } from './media/types'
