@@ -10,11 +10,16 @@ export const cloneRepliedMessage = (message: RepliedMessage): RepliedMessage => 
   ...(message.images && { images: message.images.map((image) => ({ ...image })) })
 })
 
-export const buildRepliedMessage = (message: MessageRecord, kind: MessageDraftReferenceKind): RepliedMessage => {
+export const buildRepliedMessage = (
+  message: MessageRecord,
+  kind: MessageDraftReferenceKind,
+  roomId: string
+): RepliedMessage => {
   const { id, authorId, authorNickname, body, images } = message
 
   return {
     id,
+    roomId,
     authorId,
     authorNickname,
     body,

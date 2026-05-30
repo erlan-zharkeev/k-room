@@ -58,6 +58,15 @@ export interface ChatRoomMessagesExpose {
   loadAndScrollToMessage: (messageId: string) => Promise<void>
 }
 
+export interface ChatRoomMessageSelection {
+  roomId: string
+  messageId: string
+}
+
+export interface ChatRoomMessagesEmits {
+  'select-message': [selection: ChatRoomMessageSelection]
+}
+
 export interface MessageBodyProps {
   isPrivateRoom: boolean
   message: MessageRecord
@@ -65,10 +74,10 @@ export interface MessageBodyProps {
 }
 
 export interface MessageBodyEmits {
-  'select-message': [messageId: string]
+  'select-message': [selection: ChatRoomMessageSelection]
 }
 
-export type MessageBodySelectMessage = (messageId: string) => void
+export type MessageBodySelectMessage = (selection: ChatRoomMessageSelection) => void
 
 export interface MessageReactionsProps {
   message: MessageRecord
@@ -155,6 +164,11 @@ export interface MessageContextMenuProps {
 export interface MessageDeleteDialogProps {
   message: MessageRecord
   roomId: string
+}
+
+export interface MessageForwardDialogProps {
+  message: MessageRecord
+  sourceRoomId: string
 }
 
 export interface MessageLoadedRange {

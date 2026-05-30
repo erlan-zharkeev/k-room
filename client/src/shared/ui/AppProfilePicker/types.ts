@@ -1,14 +1,15 @@
 import type { MediaId } from 'global-shared'
 
-export interface AppUserPickerItem {
+export interface AppProfilePickerItem {
   id: string
   imageId?: MediaId
-  nickname: string
+  title: string
+  description?: string
   online?: boolean
 }
 
-export interface AppUserPickerProps {
-  items: AppUserPickerItem[]
+export interface AppProfilePickerProps {
+  items: AppProfilePickerItem[]
   multiple?: boolean
   maxSelected?: number
   lockedIds?: string[]
@@ -16,6 +17,6 @@ export interface AppUserPickerProps {
   maxHeight?: string
 }
 
-export interface AppUserPickerModelProps extends AppUserPickerProps {
+export interface AppProfilePickerModelProps extends AppProfilePickerProps {
   lockedIds: string[]
 }

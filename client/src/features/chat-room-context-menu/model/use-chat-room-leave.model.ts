@@ -5,7 +5,7 @@ import { isRoomAdmin, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useSocketAction } from 'src/shared/api'
-import type { AppUserPickerItem } from 'src/shared/ui'
+import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import type { ChatRoomLeaveDialogProps } from '../config/types'
 
@@ -27,7 +27,7 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
       return []
     }
 
-    return room.users.reduce<AppUserPickerItem[]>((items, userId) => {
+    return room.users.reduce<AppProfilePickerItem[]>((items, userId) => {
       if (isRoomAdmin(item.value, userId)) return items
 
       const userData = contactById.value.get(userId) ?? knownUserById.value.get(userId)
@@ -36,7 +36,7 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
 
       items.push({
         id: userId,
-        nickname: userData.nickname
+        title: userData.nickname
       })
 
       return items
