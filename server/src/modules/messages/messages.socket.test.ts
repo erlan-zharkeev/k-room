@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const messagesServiceMock = vi.hoisted(() => ({
   sendMessage: vi.fn(),
   loadRoomMessages: vi.fn(),
+  editMessage: vi.fn(),
   emitRoomTypingStatus: vi.fn(),
   changeMessageStatus: vi.fn(),
   markRoomAsRead: vi.fn(),
@@ -143,6 +144,32 @@ describe('messages.socket', () => {
     await handlers['client-typing'](payload as never)
 
     expect(messagesServiceMock.emitRoomTypingStatus).toHaveBeenCalledWith('user-1', payload)
+  })
+
+  it('wires edit-message payload to service', async () => {
+    const handlers: Record<string, (payload: never) => Promise<void>> = {}
+    const socket = {
+      id: 'socket-1',
+      data: {
+        userId: 'user-1',
+        language: 'en'
+      },
+      on: vi.fn((event: string, handler: (payload: never) => Promise<void>) => {
+        handlers[event] = handler
+      })
+    }
+    const payload = {
+      roomId: 'room-1',
+      messageId: 'message-1',
+      body: 'updated',
+      images: []
+    }
+
+    registerMessagesSocketHandlers(socket as never)
+
+    await handlers['edit-message'](payload as never)
+
+    expect(messagesServiceMock.editMessage).toHaveBeenCalledWith('user-1', payload)
   })
 
   it('wires delete-message payload to service', async () => {

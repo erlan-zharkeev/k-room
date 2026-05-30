@@ -1,4 +1,8 @@
-import { MESSAGE_REACTION_LIMIT_PER_USER, MESSAGE_REACTION_UPDATE_ACTION } from 'global-shared'
+import {
+  MESSAGE_LINK_PREVIEW_STATUS,
+  MESSAGE_REACTION_LIMIT_PER_USER,
+  MESSAGE_REACTION_UPDATE_ACTION
+} from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const chatRoomModelMock = vi.hoisted(() => ({
@@ -21,13 +25,18 @@ const presenceMock = vi.hoisted(() => ({
   emitToUsers: vi.fn()
 }))
 
+const refreshLinkPreviewMock = vi.hoisted(() => ({
+  refreshMessageLinkPreview: vi.fn()
+}))
+
 vi.mock('../chat-rooms/chat-rooms.model', () => ({ ChatRoomModel: chatRoomModelMock }))
 vi.mock('./messages.model', () => ({ MessageModel: messageModelMock }))
 vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
 vi.mock('../media/media.service', () => mediaMock)
 vi.mock('../presence/presence.utils', () => presenceMock)
+vi.mock('./lib/refresh-message-link-preview', () => refreshLinkPreviewMock)
 
-const { editMessage, toggleMessageReaction } = await import('./messages.service')
+const { editMessage, emitRoomTypingStatus, toggleMessageReaction } = await import('./messages.service')
 
 const createLeanQuery = (value: unknown) => ({
   select: vi.fn().mockReturnThis(),
@@ -80,6 +89,51 @@ describe('messages.service', () => {
       images: payload.images,
       linkPreview: null,
       editedAt: expect.any(Number)
+    })
+  })
+
+  it('edits message with https link and starts link preview refresh', async () => {
+    const payload = {
+      roomId: 'room-1',
+      messageId: 'message-1',
+      body: 'https://example.com/',
+      images: []
+    }
+    const linkPreview = {
+      url: 'https://example.com/',
+      host: 'example.com',
+      status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
+    messageModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
+
+    await editMessage('user-1', payload)
+
+    expect(messageModelMock.updateOne).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.objectContaining({
+        $set: expect.objectContaining({ linkPreview })
+      })
+    )
+    expect(refreshLinkPreviewMock.refreshMessageLinkPreview).toHaveBeenCalledWith({
+      linkPreview,
+      messageId: payload.messageId,
+      roomId: payload.roomId,
+      userIds: ['user-1', 'user-2']
+    })
+  })
+
+  it('emits typing status only to other room users', async () => {
+    chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2', 'user-3'] }))
+
+    await emitRoomTypingStatus('user-1', { roomId: 'room-1', isTyping: true })
+
+    expect(chatRoomModelMock.findOne).toHaveBeenCalledWith({ _id: 'room-1', users: 'user-1' })
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-2', 'user-3'], 'room-typing-status', {
+      roomId: 'room-1',
+      contactId: 'user-1',
+      isTyping: true
     })
   })
 
