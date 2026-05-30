@@ -91,6 +91,8 @@ export type { PackageData } from './package/types'
 export {
   MESSAGE_BODY_MAX_LENGTH,
   MESSAGE_IMAGE_LIMIT,
+  MESSAGE_LINK_PREVIEW_STATUS,
+  MESSAGE_LINK_PROTOCOL,
   MESSAGE_LOAD_DIRECTION,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_REACTION_LIMIT_PER_USER,
@@ -98,12 +100,15 @@ export {
   MESSAGE_STATUS,
   MESSAGE_STATUS_VALUE
 } from './message/constants'
+export { buildPendingMessageLinkPreview } from './message/lib/message-link-preview'
 export { isMessageAuthor } from './message/lib/message-author'
 export { isMessageStatusDelivered, isMessageReadStatus, isMessageSendingStatus } from './message/lib/message-status'
 export type {
   MessageStatus,
   MessageLoadDirection,
   MessageReactionUpdateAction,
+  MessageLinkPreviewStatus,
+  MessageLinkPreview,
   MessageMetadata,
   MessageReaction,
   RepliedMessage,
