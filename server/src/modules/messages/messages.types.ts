@@ -1,4 +1,5 @@
 import type {
+  DocumentObject,
   ImageObject,
   Message,
   MessageLinkPreview,
@@ -16,6 +17,7 @@ export interface MessageSchema {
   editedAt?: number
   reactions?: MessageReaction[]
   images?: Array<string | ImageObject>
+  documents?: DocumentObject[]
   imageCompression?: boolean
   linkPreview?: MessageLinkPreview | null
   deletedForUserIds?: string[]
