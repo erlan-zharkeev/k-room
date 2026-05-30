@@ -1,4 +1,4 @@
-import type { ImageObject, Message, MessageMetadata, MessageReaction, RepliedMessage } from 'global-shared'
+import type { ImageObject, Message, MessageLinkPreview, MessageMetadata, MessageReaction, RepliedMessage } from 'global-shared'
 
 export interface MessageSchema {
   _id?: string
@@ -10,6 +10,7 @@ export interface MessageSchema {
   reactions?: MessageReaction[]
   images?: Array<string | ImageObject>
   imageCompression?: boolean
+  linkPreview?: MessageLinkPreview | null
   deletedForUserIds?: string[]
   usersMetaData?: MessageMetadata[]
   repliedMessage?: RepliedMessage | null

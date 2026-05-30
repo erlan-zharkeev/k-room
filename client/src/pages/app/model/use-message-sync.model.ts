@@ -65,8 +65,8 @@ export const useMessageSync = () => {
     void playDeliveredMessageSound({ roomId, message })
   }
 
-  const handleMessageEdited = async ({ body, editedAt, images, messageId }: EventMessageEdited) => {
-    await update(messageId, { body, editedAt, images })
+  const handleMessageEdited = async ({ body, editedAt, images, linkPreview, messageId }: EventMessageEdited) => {
+    await update(messageId, { body, editedAt, images, linkPreview })
   }
 
   const updateMessageStatus = async ({ roomId, messageId, status, userId }: EventUpdateMessageStatus) => {

@@ -59,6 +59,11 @@ const messageSchema = new Schema<MessageSchema>({
     required: false,
     default: true
   },
+  linkPreview: {
+    type: Schema.Types.Mixed,
+    required: false,
+    default: null
+  },
   deletedForUserIds: {
     type: [String],
     required: false,

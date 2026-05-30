@@ -5,6 +5,7 @@ import type { AppLanguage } from '../language/types'
 import type { ImageObject, MediaFileValue } from '../media/types'
 import type {
   Message,
+  MessageLinkPreview,
   MessageLoadDirection,
   MessageReaction,
   MessageReactionUpdateAction,
@@ -169,6 +170,7 @@ export interface EventMessageEdited {
   messageId: string
   body: string
   images: ImageObject[]
+  linkPreview: MessageLinkPreview | null
   editedAt: number
 }
 export interface EventUpdateMessageStatus {
