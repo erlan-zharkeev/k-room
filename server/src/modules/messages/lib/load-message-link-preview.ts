@@ -1,4 +1,5 @@
 import { lookup } from 'node:dns/promises'
+import type { LookupAddress } from 'node:dns'
 import { request as httpsRequest } from 'node:https'
 import { isIP } from 'node:net'
 import type { LookupFunction } from 'node:net'
@@ -95,23 +96,31 @@ const isPrivateAddress = (address: string) => {
   return true
 }
 
-const resolveMessageLinkPreviewAddress = async (hostname: string) => {
+const resolveMessageLinkPreviewAddresses = async (hostname: string): Promise<LookupAddress[] | null> => {
   const addresses = await lookup(hostname, { all: true, verbatim: false })
   const hasPrivateAddress = addresses.some(({ address }) => isPrivateAddress(address))
 
   if (!addresses.length || hasPrivateAddress) return null
 
-  return addresses[0]
+  return addresses
 }
 
 const createMessageLinkPreviewLookup = (): LookupFunction => (hostname, _options, callback) => {
-  void resolveMessageLinkPreviewAddress(hostname)
-    .then((address) => {
-      if (!address) {
+  void resolveMessageLinkPreviewAddresses(hostname)
+    .then((addresses) => {
+      if (!addresses) {
         callback(new Error('Blocked link preview address'), '', 0)
 
         return
       }
+
+      if (_options.all) {
+        callback(null, addresses)
+
+        return
+      }
+
+      const [address] = addresses
 
       callback(null, address.address, address.family)
     })
