@@ -38,6 +38,7 @@ import { UserModel } from '../user/user.model'
 
 import { assertMessageContentLimits } from './lib/assert-message-content-limits'
 import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
+import { resolveRepliedMessage } from './lib/resolve-replied-message'
 import { resolveVisibleMessageIds } from './lib/resolve-visible-message-ids'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
@@ -447,11 +448,22 @@ export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }:
   emitToUsers(getRoomOtherUserIds({ users: userIds }, userId), 'room-typing-status', payload)
 }
 
-export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
+export const sendMessage = async ({ roomId, userId, message }: SendMessageParams) => {
   const messageImages = message.images ?? []
 
   assertMessageContentLimits(message.body, messageImages)
 
+  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
+
+  if (!room) {
+    return
+  }
+
+  const repliedMessage = await resolveRepliedMessage({
+    repliedMessage: message.repliedMessage,
+    roomMessageIds: stringifyMongoIds(room.messages),
+    userId
+  })
   const uploadedImages = await Promise.all(
     messageImages.map(async (image) => {
       if (!image.fileBuffer) {
@@ -469,21 +481,26 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
     })
   )
   const images = uploadedImages.filter((image): image is ImageObject => Boolean(image))
+  const hasMessageBody = Boolean(message.body.trim())
+  const hasMessageImages = Boolean(images.length)
+  const hasMessageDraftReference = Boolean(repliedMessage)
+  const hasMessageContent = hasMessageBody || hasMessageImages || hasMessageDraftReference
+
+  if (!hasMessageContent) {
+    return
+  }
 
   const newDbMessage = await new MessageModel({
     _id: message.id,
     ...message,
     reactions: [],
     images,
-    usersMetaData: []
+    usersMetaData: [],
+    repliedMessage
   }).save()
-  const room = await ChatRoomModel.findOneAndUpdate({ _id: roomId }, { $push: { messages: newDbMessage.id } })
-
-  if (!room) {
-    return
-  }
-
   const { users } = room
+
+  await ChatRoomModel.updateOne({ _id: roomId, users: userId }, { $push: { messages: newDbMessage.id } })
 
   await Promise.all(
     users.map(async (userId) => {
@@ -504,6 +521,7 @@ export const sendMessage = async ({ roomId, message }: SendMessageParams) => {
           ...message,
           id: newDbMessage.id,
           images,
+          repliedMessage,
           isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),
           status: MESSAGE_STATUS_VALUE.DELIVERED
         }
