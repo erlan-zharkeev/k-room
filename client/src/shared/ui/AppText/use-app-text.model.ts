@@ -14,6 +14,7 @@ export const useAppText = (props: AppTextProps) => {
         props.alignment,
         props.bold && 'bold',
         props.italic && 'italic',
+        props.lineClamp !== undefined && 'line-clamp',
         props.truncate && 'truncate',
         props.noLineHeight && 'no-line-height',
         props.selectable === false && 'not-selectable'
@@ -21,7 +22,18 @@ export const useAppText = (props: AppTextProps) => {
     })
   )
 
+  const style = computed(() => {
+    const hasLineClamp = props.lineClamp !== undefined
+
+    if (!hasLineClamp) return undefined
+
+    return {
+      '--app-text-line-clamp': props.lineClamp
+    }
+  })
+
   return {
-    className
+    className,
+    style
   }
 }

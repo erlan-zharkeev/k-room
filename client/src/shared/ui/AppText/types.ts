@@ -20,6 +20,7 @@ export interface AppTextProps {
   alignment?: AppTextAlignment
   bold?: boolean
   italic?: boolean
+  lineClamp?: number
   truncate?: boolean
   noLineHeight?: boolean
   selectable?: boolean

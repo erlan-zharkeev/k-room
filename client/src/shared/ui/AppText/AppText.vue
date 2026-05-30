@@ -4,11 +4,11 @@ import type { AppTextProps } from './types'
 import { useAppText } from './use-app-text.model'
 
 const props = withDefaults(defineProps<AppTextProps>(), APP_TEXT_DEFAULT_PROPS)
-const { className } = useAppText(props)
+const { className, style } = useAppText(props)
 </script>
 
 <template>
-  <component :is="props.tag" :class="className">
+  <component :is="props.tag" :class="className" :style="style">
     {{ props.text }}
     <slot v-if="props.text === undefined" />
   </component>
@@ -74,6 +74,14 @@ small.app-text {
 
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.app-text--line-clamp {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--app-text-line-clamp);
+  line-clamp: var(--app-text-line-clamp);
 }
 
 .app-text--no-line-height {
