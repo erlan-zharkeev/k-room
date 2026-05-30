@@ -173,6 +173,11 @@ export interface EventMessageEdited {
   linkPreview: MessageLinkPreview | null
   editedAt: number
 }
+export interface EventMessageLinkPreviewUpdated {
+  roomId: string
+  messageId: string
+  linkPreview: MessageLinkPreview
+}
 export interface EventUpdateMessageStatus {
   roomId: string
   messageId: string
@@ -310,6 +315,7 @@ export type SocketActions =
   | 'send-message'
   | 'edit-message'
   | 'message-edited'
+  | 'message-link-preview-updated'
   | 'message-delivered'
   | 'search-contact'
   | 'get-searched-contact'

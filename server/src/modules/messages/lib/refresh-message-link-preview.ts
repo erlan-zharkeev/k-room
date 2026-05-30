@@ -1,13 +1,20 @@
-import { MESSAGE_LINK_PREVIEW_STATUS, type MessageLinkPreview } from 'global-shared'
+import { MESSAGE_LINK_PREVIEW_STATUS } from 'global-shared'
 
 import { log } from 'src/shared/lib/log'
 
 import { deleteBucketFileById } from '../../media/media.service'
+import { emitToUsers } from '../../presence/presence.utils'
 import { MessageModel } from '../messages.model'
+import type { RefreshMessageLinkPreviewParams } from '../messages.types'
 
 import { loadMessageLinkPreview } from './load-message-link-preview'
 
-const updateMessageLinkPreview = async (messageId: string, linkPreview: MessageLinkPreview | null) => {
+const updateMessageLinkPreview = async ({
+  linkPreview,
+  messageId,
+  roomId,
+  userIds
+}: RefreshMessageLinkPreviewParams) => {
   if (!linkPreview) return
 
   const loadedLinkPreview = await loadMessageLinkPreview(linkPreview)
@@ -27,6 +34,14 @@ const updateMessageLinkPreview = async (messageId: string, linkPreview: MessageL
     if (shouldDeleteUnusedImage && uploadedImageId) {
       await deleteBucketFileById('image', uploadedImageId)
     }
+
+    if (updateResult.modifiedCount > 0) {
+      emitToUsers(userIds, 'message-link-preview-updated', {
+        roomId,
+        messageId,
+        linkPreview: loadedLinkPreview
+      })
+    }
   } catch (error) {
     if (uploadedImageId) {
       await deleteBucketFileById('image', uploadedImageId)
@@ -36,8 +51,8 @@ const updateMessageLinkPreview = async (messageId: string, linkPreview: MessageL
   }
 }
 
-export const refreshMessageLinkPreview = (messageId: string, linkPreview: MessageLinkPreview | null) => {
-  void updateMessageLinkPreview(messageId, linkPreview).catch((error) => {
+export const refreshMessageLinkPreview = (params: RefreshMessageLinkPreviewParams) => {
+  void updateMessageLinkPreview(params).catch((error) => {
     log.error(`-Message link preview update failed: ${error instanceof Error ? error.message : String(error)}`)
   })
 }

@@ -2,6 +2,7 @@ import {
   type EventMessageEdited,
   type EventMessageDeleted,
   type EventMessageDelivered,
+  type EventMessageLinkPreviewUpdated,
   type EventMessagesStatusUpdated,
   type EventPinnedMessageUpdated,
   type EventUpdateMessageStatus,
@@ -67,6 +68,10 @@ export const useMessageSync = () => {
 
   const handleMessageEdited = async ({ body, editedAt, images, linkPreview, messageId }: EventMessageEdited) => {
     await update(messageId, { body, editedAt, images, linkPreview })
+  }
+
+  const handleMessageLinkPreviewUpdated = async ({ linkPreview, messageId }: EventMessageLinkPreviewUpdated) => {
+    await update(messageId, { linkPreview })
   }
 
   const updateMessageStatus = async ({ roomId, messageId, status, userId }: EventUpdateMessageStatus) => {
@@ -163,6 +168,7 @@ export const useMessageSync = () => {
   return {
     handleDeliveredMessage,
     handleMessageEdited,
+    handleMessageLinkPreviewUpdated,
     handleMessageDeleted,
     handleMessageReactionUpdate,
     handlePinnedMessageUpdated,

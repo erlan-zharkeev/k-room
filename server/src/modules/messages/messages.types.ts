@@ -33,3 +33,10 @@ export interface ResolveRepliedMessageParams {
   roomMessageIds: string[]
   userId: string
 }
+
+export interface RefreshMessageLinkPreviewParams {
+  linkPreview: MessageLinkPreview | null
+  messageId: string
+  roomId: string
+  userIds: string[]
+}
