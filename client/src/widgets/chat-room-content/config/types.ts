@@ -1,6 +1,6 @@
 import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type { ImageObject, MediaId, MessageReaction, RepliedMessage } from 'global-shared'
+import type { ImageObject, MediaId, MessageLinkPreview, MessageReaction, RepliedMessage } from 'global-shared'
 import type { Component, Ref } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
@@ -104,6 +104,10 @@ export interface MessageTextLinkSegment {
 }
 
 export type MessageTextSegment = MessageTextPlainSegment | MessageTextLinkSegment
+
+export interface MessageLinkPreviewProps {
+  preview: MessageLinkPreview
+}
 
 export interface MessageReactionsProps {
   message: MessageRecord

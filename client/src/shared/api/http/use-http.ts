@@ -1,18 +1,15 @@
 import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type ResponseType } from 'axios'
-import { AUTH_ENDPOINTS, REQ_STATUS, type Endpoints, type BackendResponse } from 'global-shared'
+import { AUTH_ENDPOINTS, isHttpSuccessStatus, REQ_STATUS, type Endpoints, type BackendResponse } from 'global-shared'
 
 import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import { refreshAuthTokens, shouldSkipAuthRefresh } from './auth-refresh'
-import { HTTP_SUCCESS_STATUS_END, HTTP_SUCCESS_STATUS_START } from './constants'
 import { getHeaderValue } from './get-header-value'
 import { httpClient } from './http-client'
 import type { HttpRequestOptions, HttpRequestPayload, HttpRequest } from './types'
 import { useHttpInterceptor } from './use-http-interceptor'
-
-const isSuccessStatus = (status: number) => status >= HTTP_SUCCESS_STATUS_START && status < HTTP_SUCCESS_STATUS_END
 
 export const useHttp = () => {
   const { t } = useI18n()
@@ -26,7 +23,7 @@ export const useHttp = () => {
     if (!isJson) return
 
     const { text, silent } = response.data.message
-    const isSuccess = isSuccessStatus(response.status)
+    const isSuccess = isHttpSuccessStatus(response.status)
 
     if (text && !silent) {
       toast.add({
@@ -63,7 +60,7 @@ export const useHttp = () => {
     try {
       const response = await request()
 
-      if (!isSuccessStatus(response.status)) {
+      if (!isHttpSuccessStatus(response.status)) {
         throw new Error('No response')
       }
 

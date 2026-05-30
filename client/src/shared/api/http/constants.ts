@@ -1,2 +1,0 @@
-export const HTTP_SUCCESS_STATUS_START = 200
-export const HTTP_SUCCESS_STATUS_END = 300
