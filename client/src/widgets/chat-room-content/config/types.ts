@@ -1,7 +1,7 @@
 import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type { ImageObject, MediaId, MessageReaction, RepliedMessage } from 'global-shared'
-import type { Component } from 'vue'
+import type { Component, Ref } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
@@ -10,6 +10,7 @@ import type { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_DRAFT_REFERENCE_KIND, MESSAGE
 export interface ChatRoomMessagesProps {
   room: ChatRoomRecord
   isPrivateRoom: boolean
+  targetMessageId: string
 }
 
 export interface ChatRoomHeaderProps {
@@ -54,10 +55,6 @@ export interface ChatRoomPinnedMessageEmits {
   select: [messageId: string]
 }
 
-export interface ChatRoomMessagesExpose {
-  loadAndScrollToMessage: (messageId: string) => Promise<void>
-}
-
 export interface ChatRoomMessageSelection {
   roomId: string
   messageId: string
@@ -65,7 +62,10 @@ export interface ChatRoomMessageSelection {
 
 export interface ChatRoomMessagesEmits {
   'select-message': [selection: ChatRoomMessageSelection]
+  'target-message-scrolled': []
 }
+
+export type ChatRoomMessagesTargetMessageScrolled = () => void
 
 export interface MessageBodyProps {
   isPrivateRoom: boolean
@@ -174,6 +174,15 @@ export interface MessageForwardDialogProps {
 export interface MessageLoadedRange {
   startIndex: number
   endIndex: number
+}
+
+export interface ChatRoomMessageNavigationParams {
+  room: Ref<ChatRoomRecord>
+  targetMessageId: Ref<string>
+  findLoadedRangeByMessageIndex: (roomId: string, index: number) => MessageLoadedRange | undefined
+  loadMessagesAround: (messageId: string) => Promise<void>
+  scrollToMessage: (messageId: string) => Promise<void>
+  onTargetMessageScrolled: ChatRoomMessagesTargetMessageScrolled
 }
 
 export interface MessageListBuildParams {

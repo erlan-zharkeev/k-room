@@ -7,10 +7,12 @@ import type { MessageContextMenuProps } from '../config/types'
 import { useMessageContextMenu } from '../model/use-message-context-menu.model'
 
 import MessageDeleteDialog from './MessageDeleteDialog.vue'
+import MessageForwardDialog from './MessageForwardDialog.vue'
 
 const props = defineProps<MessageContextMenuProps>()
 const {
   isDeleteMessageDialogOpen,
+  isMessageForwardDialogOpen,
   isMessageContextMenuOpen,
   isMessageContextMenuDisabled,
   messageContextMenuOptions,
@@ -38,6 +40,12 @@ const {
   </NmorphContextMenu>
 
   <MessageDeleteDialog v-model="isDeleteMessageDialogOpen" :message="props.message" :room-id="props.room.id" />
+  <MessageForwardDialog
+    v-if="isMessageForwardDialogOpen"
+    v-model="isMessageForwardDialogOpen"
+    :message="props.message"
+    :source-room-id="props.room.id"
+  />
 </template>
 
 <style lang="scss">

@@ -461,6 +461,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
 
   const repliedMessage = await resolveRepliedMessage({
     repliedMessage: message.repliedMessage,
+    roomId,
     roomMessageIds: stringifyMongoIds(room.messages),
     userId
   })

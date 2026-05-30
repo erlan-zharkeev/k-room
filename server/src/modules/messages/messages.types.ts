@@ -28,6 +28,7 @@ export interface SendMessageParams {
 
 export interface ResolveRepliedMessageParams {
   repliedMessage?: RepliedMessage | null
+  roomId: string
   roomMessageIds: string[]
   userId: string
 }

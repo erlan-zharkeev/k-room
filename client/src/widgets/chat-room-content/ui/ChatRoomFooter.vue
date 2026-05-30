@@ -249,8 +249,10 @@ const {
 
 .chat-room-content-footer__draft-reference-select {
   cursor: pointer;
+
   padding: 0 8px 4px 0;
   border: 0;
+
   color: inherit;
   text-align: left;
 }
