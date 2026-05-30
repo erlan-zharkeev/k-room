@@ -38,6 +38,7 @@ import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
 import { assertMessageContentLimits } from './lib/assert-message-content-limits'
+import { refreshMessageLinkPreview } from './lib/refresh-message-link-preview'
 import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
 import { resolveRepliedMessage } from './lib/resolve-replied-message'
 import { resolveVisibleMessageIds } from './lib/resolve-visible-message-ids'
@@ -132,6 +133,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
   }
 
   emitToUsers(stringifyMongoIds(room.users), 'message-edited', payload)
+  refreshMessageLinkPreview(messageId, linkPreview)
 }
 
 export const loadRoomMessages = async (
@@ -550,4 +552,5 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
       emitToUsers([user._id], 'message-delivered', payload)
     })
   )
+  refreshMessageLinkPreview(newDbMessage.id, linkPreview)
 }
