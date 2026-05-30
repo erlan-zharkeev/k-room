@@ -22,6 +22,7 @@ import {
   MESSAGE_REACTION_UPDATE_ACTION,
   MESSAGE_STATUS_VALUE,
   REQ_STATUS,
+  buildPendingMessageLinkPreview,
   getRoomOtherUserIds,
   isMessageAuthor,
   isMessageReadStatus,
@@ -45,7 +46,18 @@ import { MessageModel } from './messages.model'
 import type { MessageDocument, SendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
-  const { _id, authorId, authorNickname, body, createdAt, editedAt, reactions, repliedMessage, usersMetaData } = message
+  const {
+    _id,
+    authorId,
+    authorNickname,
+    body,
+    createdAt,
+    editedAt,
+    reactions,
+    repliedMessage,
+    linkPreview,
+    usersMetaData
+  } = message
   const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
   const selfStatus = usersMetaData.find((user) => user.id === userId)?.status
   const status = isMessageAuthor(message, userId) && readBySomeone ? MESSAGE_STATUS_VALUE.READ : selfStatus
@@ -60,6 +72,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     editedAt,
     reactions,
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
+    linkPreview,
     status,
     isSelf: isMessageAuthor(message, userId),
     repliedMessage
@@ -82,6 +95,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
   }
 
   const editedAt = Date.now()
+  const linkPreview = buildPendingMessageLinkPreview(normalizedBody)
   const imageUpdateConditions = images.map(({ src }) => ({
     $or: [{ images: src }, { images: { $elemMatch: { src } } }]
   }))
@@ -99,6 +113,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
     $set: {
       body: normalizedBody,
       images,
+      linkPreview,
       editedAt
     }
   })
@@ -112,6 +127,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
     messageId,
     body: normalizedBody,
     images,
+    linkPreview,
     editedAt
   }
 
@@ -482,6 +498,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     })
   )
   const images = uploadedImages.filter((image): image is ImageObject => Boolean(image))
+  const linkPreview = buildPendingMessageLinkPreview(message.body)
   const hasMessageBody = Boolean(message.body.trim())
   const hasMessageImages = Boolean(images.length)
   const hasMessageDraftReference = Boolean(repliedMessage)
@@ -496,6 +513,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     ...message,
     reactions: [],
     images,
+    linkPreview,
     usersMetaData: [],
     repliedMessage
   }).save()
@@ -522,6 +540,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           ...message,
           id: newDbMessage.id,
           images,
+          linkPreview,
           repliedMessage,
           isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),
           status: MESSAGE_STATUS_VALUE.DELIVERED
