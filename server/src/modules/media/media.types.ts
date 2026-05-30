@@ -30,6 +30,18 @@ export interface FileData {
   metadata: FileMetaData
 }
 
+export interface StreamMediaFileData {
+  filename: string
+  contentType?: string
+  uploadDate?: Date
+  metadata?: Partial<FileMetaData>
+}
+
+export interface StreamMediaBucketFile {
+  bucket: MongooseGridFSBucket
+  file: StreamMediaFileData
+}
+
 export interface UploadOptions {
   compression?: SharpSettingsKey
   id?: string

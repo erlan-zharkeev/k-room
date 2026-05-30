@@ -14,6 +14,7 @@ import {
   type EventUpdatePinnedMessage,
   type EventUpdateMessageStatus,
   type EventUserTyping,
+  type DocumentObject,
   type ImageObject,
   type Message,
   type MessageStatus,
@@ -57,6 +58,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     reactions,
     repliedMessage,
     linkPreview,
+    documents,
     usersMetaData
   } = message
   const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
@@ -73,6 +75,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     editedAt,
     reactions,
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
+    documents,
     linkPreview,
     status,
     isSelf: isMessageAuthor(message, userId),
@@ -87,7 +90,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
     return
   }
 
-  assertMessageContentLimits(normalizedBody, images)
+  assertMessageContentLimits(normalizedBody, images, [])
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
 
@@ -473,8 +476,9 @@ export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }:
 
 export const sendMessage = async ({ roomId, userId, message }: SendMessageParams) => {
   const messageImages = message.images ?? []
+  const messageDocuments = message.documents ?? []
 
-  assertMessageContentLimits(message.body, messageImages)
+  assertMessageContentLimits(message.body, messageImages, messageDocuments)
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
 
@@ -505,11 +509,29 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     })
   )
   const images = uploadedImages.filter((image): image is ImageObject => Boolean(image))
+  const uploadedDocuments = await Promise.all(
+    messageDocuments.map(async (document) => {
+      if (!document.fileBuffer) {
+        return null
+      }
+
+      const src = await uploadBufferToBucket(document.fileBuffer, 'doc')
+
+      return {
+        src,
+        name: document.name || src,
+        ...(document.contentType && { contentType: document.contentType }),
+        ...(document.size && { size: document.size })
+      } satisfies DocumentObject
+    })
+  )
+  const documents = uploadedDocuments.filter((document): document is DocumentObject => Boolean(document))
   const linkPreview = buildPendingMessageLinkPreview(message.body)
   const hasMessageBody = Boolean(message.body.trim())
   const hasMessageImages = Boolean(images.length)
+  const hasMessageDocuments = Boolean(documents.length)
   const hasMessageDraftReference = Boolean(repliedMessage)
-  const hasMessageContent = hasMessageBody || hasMessageImages || hasMessageDraftReference
+  const hasMessageContent = hasMessageBody || hasMessageImages || hasMessageDocuments || hasMessageDraftReference
 
   if (!hasMessageContent) {
     return
@@ -520,6 +542,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     ...message,
     reactions: [],
     images,
+    documents,
     linkPreview,
     usersMetaData: [],
     repliedMessage
@@ -547,6 +570,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           ...message,
           id: newDbMessage.id,
           images,
+          documents,
           linkPreview,
           repliedMessage,
           isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),
