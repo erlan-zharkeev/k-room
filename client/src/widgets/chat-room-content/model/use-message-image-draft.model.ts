@@ -1,5 +1,5 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import { MESSAGE_IMAGE_LIMIT, type ImageObject } from 'global-shared'
+import { MESSAGE_ATTACHMENT_LIMIT, type ImageObject } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, onBeforeUnmount, ref, useTemplateRef } from 'vue'
 
@@ -76,8 +76,8 @@ export const useMessageImageDraft = () => {
   const updateMessageImageDraft = async (uploadValues: INmorphCustomFileData[]) => {
     const sizeValidUploadValues = uploadValues.filter(({ data }) => data.size <= MESSAGE_IMAGE_MAX_FILE_SIZE)
     const sizeRejectedUploadValues = uploadValues.filter(({ data }) => data.size > MESSAGE_IMAGE_MAX_FILE_SIZE)
-    const validUploadValues = sizeValidUploadValues.slice(0, MESSAGE_IMAGE_LIMIT)
-    const limitRejectedUploadValues = sizeValidUploadValues.slice(MESSAGE_IMAGE_LIMIT)
+    const validUploadValues = sizeValidUploadValues.slice(0, MESSAGE_ATTACHMENT_LIMIT)
+    const limitRejectedUploadValues = sizeValidUploadValues.slice(MESSAGE_ATTACHMENT_LIMIT)
 
     revokeObjectUrls([...sizeRejectedUploadValues, ...limitRejectedUploadValues].map(({ previewUrl }) => previewUrl))
 
@@ -108,7 +108,7 @@ export const useMessageImageDraft = () => {
       toast.add({
         type: 'warning',
         title: t(TOAST_I18N.warn),
-        content: t(CHAT_ROOM_CONTENT_I18N.messageImageLimitReached)(MESSAGE_IMAGE_LIMIT)
+        content: t(CHAT_ROOM_CONTENT_I18N.messageImageLimitReached)(MESSAGE_ATTACHMENT_LIMIT)
       })
     }
   }

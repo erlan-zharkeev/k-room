@@ -134,6 +134,23 @@ describe('media.service', () => {
     expect(mongooseMock.bucket.openUploadStreamWithId).not.toHaveBeenCalled()
   })
 
+  it('stores pdf files in the document bucket', async () => {
+    fileTypeMock.fromBuffer.mockResolvedValue({ mime: 'application/pdf', ext: 'pdf' })
+
+    await mediaService.uploadBufferToBucket(Buffer.from('%PDF'), 'doc')
+
+    expect(mongooseMock.bucket.openUploadStreamWithId).toHaveBeenCalledWith(
+      expect.any(mongooseMock.ObjectId),
+      '68f000000000000000000099',
+      expect.objectContaining({
+        contentType: 'application/pdf',
+        metadata: expect.objectContaining({
+          kind: 'pdf'
+        })
+      })
+    )
+  })
+
   it('removes tracked uploaded media when scoped work fails', async () => {
     await expect(
       mediaService.withUploadedMediaCleanup(async (trackUploadedMedia) => {

@@ -1,4 +1,13 @@
+import type { MediaBucketName } from 'global-shared'
+
 export { MEDIA_BUCKET_NAMES, MEDIA_VALIDATION_OPTIONS_MAP as VALIDATION_MEDIA_OPTIONS_MAP } from 'global-shared'
+
+export const STREAM_MEDIA_BUCKET_NAMES = [
+  'image',
+  'doc',
+  'audio',
+  'video'
+] as const satisfies readonly MediaBucketName[]
 
 export const SHARP_PRESETS = {
   avatar: {

@@ -1,6 +1,7 @@
 import { Buffer } from 'node:buffer'
 
 import { Injectable } from '@nestjs/common'
+import { type Response } from 'express'
 import { REQ_STATUS, type MediaBucketName } from 'global-shared'
 import mongoose from 'mongoose'
 
@@ -9,59 +10,19 @@ import { localizedText } from 'src/shared/lib/localized-text'
 
 import { assertFileMetaData, assertRawFileSize } from './lib/assert-media-file'
 import { buildFileData } from './lib/build-file-data'
+import { deleteBucketFileById, findMediaBucketFileById, resolveRequiredMediaBucket } from './lib/media-buckets'
 import { processImageWithSharp } from './lib/process-image-with-sharp'
-import { MEDIA_BUCKET_NAMES } from './media.constants'
+import { STREAM_MEDIA_BUCKET_NAMES } from './media.constants'
 import { COMMON_MEDIA_I18N, VALIDATE_MEDIA_FILE_I18N } from './media.i18n'
 import type {
+  StreamMediaBucketFile,
   StreamMediaFileOptions,
   UploadOptions,
   UploadedMediaCleanupCallback,
-  UploadedMediaCleanupItem,
-  MongooseGridFSBucket
+  UploadedMediaCleanupItem
 } from './media.types'
 
-const mediaBuckets: Record<MediaBucketName, MongooseGridFSBucket | null> = {
-  doc: null,
-  image: null,
-  audio: null,
-  video: null
-}
-
-const getResponseLanguage = (response: import('express').Response) => response.req.language
-
-const getRequiredBucket = (bucketName: MediaBucketName) => {
-  const bucket = mediaBuckets[bucketName]
-
-  if (!bucket) {
-    throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.failedToFindBucket)
-  }
-
-  return bucket
-}
-
-export const initMediaBuckets = () => {
-  const db = mongoose.connection.db
-
-  if (!db) {
-    throw new AppError(REQ_STATUS.server, 'Mongo is not connected yet')
-  }
-
-  MEDIA_BUCKET_NAMES.forEach((name) => {
-    mediaBuckets[name] = new mongoose.mongo.GridFSBucket(db, { bucketName: name })
-  })
-}
-
-export const deleteBucketFileById = async (bucketName: MediaBucketName, id: string) => {
-  const bucket = getRequiredBucket(bucketName)
-  const fileId = new mongoose.Types.ObjectId(id)
-  const file = await bucket.find({ _id: fileId }).next()
-
-  if (!file) {
-    return
-  }
-
-  await bucket.delete(fileId)
-}
+export { deleteBucketFileById, initMediaBuckets } from './lib/media-buckets'
 
 export const withUploadedMediaCleanup = async <TResult>(
   callback: UploadedMediaCleanupCallback<TResult>
@@ -85,7 +46,7 @@ export const uploadBufferToBucket = async (
   options?: UploadOptions
 ) => {
   try {
-    const bucket = getRequiredBucket(bucketName)
+    const bucket = resolveRequiredMediaBucket(bucketName)
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
     const fileId = options?.id ? new mongoose.Types.ObjectId(options.id) : new mongoose.Types.ObjectId()
     const filename = String(fileId)
@@ -124,24 +85,27 @@ export const uploadBufferToBucket = async (
 }
 
 export const streamMediaFile = async (
-  bucketName: MediaBucketName,
+  bucketName: MediaBucketName | readonly MediaBucketName[],
   id: string,
-  response: import('express').Response,
+  response: Response,
   options?: StreamMediaFileOptions
 ) => {
   try {
-    const bucket = getRequiredBucket(bucketName)
-
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound, true)
     }
 
     const fileId = new mongoose.Types.ObjectId(id)
-    const file = await bucket.find({ _id: fileId }).next()
+    const bucketNames = Array.isArray(bucketName) ? bucketName : [bucketName]
+    const bucketFile = (await Promise.all(bucketNames.map((name) => findMediaBucketFileById(name, fileId)))).find(
+      (item): item is StreamMediaBucketFile => Boolean(item)
+    )
 
-    if (!file) {
+    if (!bucketFile) {
       throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound, true)
     }
+
+    const { bucket, file } = bucketFile
 
     response.setHeader('Content-Type', file.contentType ?? 'application/octet-stream')
 
@@ -164,7 +128,7 @@ export const streamMediaFile = async (
           response.status(REQ_STATUS.notFound).json({
             payload: null,
             message: {
-              text: localizedText(COMMON_MEDIA_I18N.fileNotFound, getResponseLanguage(response)),
+              text: localizedText(COMMON_MEDIA_I18N.fileNotFound, response.req.language),
               silent: false
             }
           })
@@ -182,11 +146,11 @@ export const streamMediaFile = async (
 
 @Injectable()
 export class MediaService {
-  async getMediaFile(idParam: string, response: import('express').Response, options?: StreamMediaFileOptions) {
+  async getMediaFile(idParam: string, response: Response, options?: StreamMediaFileOptions) {
     if (!idParam) {
       throw new AppError(REQ_STATUS.notFound, COMMON_MEDIA_I18N.fileNotFound)
     }
 
-    await streamMediaFile('image', idParam, response, options)
+    await streamMediaFile(STREAM_MEDIA_BUCKET_NAMES, idParam, response, options)
   }
 }
