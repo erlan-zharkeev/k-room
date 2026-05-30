@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 
-import { AppText, AppUserPicker } from 'src/shared/ui'
+import { AppProfilePicker, AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
 import type { ChatRoomLeaveDialogProps } from '../config/types'
@@ -34,7 +34,7 @@ const {
       />
       <div v-if="isCurrentUserChatRoomAdmin" class="app-dialog-stack">
         <AppText tag="small" color="semi-contrast-text" :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.newGroupAdministrator)" />
-        <AppUserPicker
+        <AppProfilePicker
           v-model="selectedNewAdminIds"
           :items="newAdminItems"
           :multiple="false"

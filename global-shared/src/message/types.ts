@@ -20,6 +20,7 @@ export interface MessageReaction {
 
 export interface RepliedMessage {
   id: string
+  roomId?: string
   authorNickname: string
   authorId: string
   body: string

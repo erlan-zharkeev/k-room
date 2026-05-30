@@ -11,7 +11,7 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import { CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 
-import { AppText, AppUserPicker } from 'src/shared/ui'
+import { AppProfilePicker, AppText } from 'src/shared/ui'
 
 import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
@@ -99,7 +99,7 @@ const {
             :selectable="false"
             :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.noContactSearchResults)"
           />
-          <AppUserPicker
+          <AppProfilePicker
             v-else
             :model-value="selectedMemberIds"
             :items="filteredContactPickerItems"

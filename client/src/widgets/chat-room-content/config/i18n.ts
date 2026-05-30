@@ -46,6 +46,21 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Переслать',
     zh: '转发'
   },
+  chatSearch: {
+    en: 'Search chat',
+    ru: 'Поиск чата',
+    zh: '搜索聊天'
+  },
+  noChats: {
+    en: 'There are no chats yet',
+    ru: 'Чатов пока нет',
+    zh: '暂无聊天'
+  },
+  noChatSearchResults: {
+    en: 'No chats found',
+    ru: 'Чаты не найдены',
+    zh: '未找到聊天'
+  },
   editMessage: {
     en: 'Edit message',
     ru: 'Редактировать сообщение',

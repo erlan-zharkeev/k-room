@@ -13,7 +13,7 @@ import { useKnownUser } from 'src/entities/known-user'
 import { useUser } from 'src/entities/user'
 import { useSocketAction } from 'src/shared/api'
 import type { ChatRoomRecord } from 'src/shared/lib'
-import type { AppUserPickerItem } from 'src/shared/ui'
+import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import { CHAT_ROOM_NAME_MAX_LENGTH_PATTERN } from '../config/constants'
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
@@ -65,11 +65,11 @@ export const useChatRoomFormDialog = (
   const normalizedContactSearchQuery = computed(() =>
     chatRoomFormValidationData.contactSearch.value.trim().toLowerCase()
   )
-  const contactPickerItems = computed<AppUserPickerItem[]>(() => {
-    const itemsById = new Map<string, AppUserPickerItem>()
+  const contactPickerItems = computed<AppProfilePickerItem[]>(() => {
+    const itemsById = new Map<string, AppProfilePickerItem>()
 
     acceptedContacts.value.forEach(({ avatarId, id, nickname, online }) => {
-      itemsById.set(id, { imageId: avatarId, id, nickname, online })
+      itemsById.set(id, { imageId: avatarId, id, title: nickname, online })
     })
 
     if (editedChatRoom.value) {
@@ -80,7 +80,7 @@ export const useChatRoomFormDialog = (
           itemsById.set(id, {
             imageId: userData.avatarId,
             id: userData.id,
-            nickname: userData.nickname,
+            title: userData.nickname,
             online: userData.online
           })
 
@@ -92,7 +92,7 @@ export const useChatRoomFormDialog = (
         itemsById.set(id, {
           imageId: user.value.avatarId,
           id: user.value.id,
-          nickname: user.value.nickname
+          title: user.value.nickname
         })
       })
     }
@@ -101,8 +101,8 @@ export const useChatRoomFormDialog = (
   })
   const filteredContactPickerItems = computed(() =>
     normalizedContactSearchQuery.value
-      ? contactPickerItems.value.filter(({ nickname }) =>
-          nickname.toLowerCase().includes(normalizedContactSearchQuery.value)
+      ? contactPickerItems.value.filter(({ title }) =>
+          title.toLowerCase().includes(normalizedContactSearchQuery.value)
         )
       : contactPickerItems.value
   )
@@ -113,8 +113,8 @@ export const useChatRoomFormDialog = (
   )
   const defaultGroupChatName = computed(() =>
     selectedOtherMemberIds.value
-      .map((contactId) => contactPickerItems.value.find(({ id }) => id === contactId)?.nickname)
-      .filter((nickname) => nickname)
+      .map((contactId) => contactPickerItems.value.find(({ id }) => id === contactId)?.title)
+      .filter((title) => title)
       .join(', ')
   )
   const resolvedChatRoomName = computed(() => {
@@ -122,7 +122,7 @@ export const useChatRoomFormDialog = (
 
     return isGroupChat.value
       ? chatRoomFormData.chatRoomName ?? defaultGroupChatName.value
-      : selectedPrivateContact.value?.nickname ?? ''
+      : selectedPrivateContact.value?.title ?? ''
   })
   const chatRoomNameInputValue = computed(() => chatRoomFormValidationData.chatName.value)
   const existingPrivateChatRoom = computed(() =>
