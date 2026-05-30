@@ -49,7 +49,7 @@ export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
     messageDraftReferenceState.value = {
       roomId,
       kind,
-      message: buildRepliedMessage(message, kind)
+      message: buildRepliedMessage(message, kind, roomId)
     }
   }
 

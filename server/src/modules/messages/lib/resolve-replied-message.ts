@@ -2,6 +2,7 @@ import { type ImageObject, type RepliedMessage, isString } from 'global-shared'
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
+import { ChatRoomModel } from '../../chat-rooms/chat-rooms.model'
 import { MessageModel } from '../messages.model'
 import type { MessageDocument, ResolveRepliedMessageParams } from '../messages.types'
 
@@ -11,6 +12,7 @@ const normalizeMessageImages = (images: MessageDocument['images'] = []): ImageOb
 
 export const resolveRepliedMessage = async ({
   repliedMessage,
+  roomId,
   roomMessageIds,
   userId
 }: ResolveRepliedMessageParams): Promise<RepliedMessage | null> => {
@@ -19,9 +21,22 @@ export const resolveRepliedMessage = async ({
   }
 
   const isRoomMessage = roomMessageIds.includes(repliedMessage.id)
+  const isForwardMessage = Boolean(repliedMessage.forward)
 
-  if (!isRoomMessage) {
+  if (!isRoomMessage && !isForwardMessage) {
     return null
+  }
+
+  let sourceRoomId = roomId
+
+  if (isForwardMessage && !isRoomMessage) {
+    const sourceRoom = await ChatRoomModel.findOne({ users: userId, messages: repliedMessage.id }).select('_id').lean()
+
+    if (!sourceRoom) {
+      return null
+    }
+
+    sourceRoomId = stringifyMongoId(sourceRoom._id)
   }
 
   const sourceMessage = await MessageModel.findOne({
@@ -39,6 +54,7 @@ export const resolveRepliedMessage = async ({
 
   return {
     id: stringifyMongoId(_id),
+    roomId: sourceRoomId,
     authorId,
     authorNickname,
     body,
