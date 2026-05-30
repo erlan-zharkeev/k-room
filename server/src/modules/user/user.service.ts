@@ -122,9 +122,9 @@ export class UserService {
 
   async changePassword({ userId, currentPassword, password }: ChangePasswordParams) {
     const user = await this.requireUser(userId)
-    const passwordIsValid = await bcrypt.compare(currentPassword, user.system.password)
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.system.password)
 
-    if (!passwordIsValid) {
+    if (!isPasswordValid) {
       throw new AppError(REQ_STATUS.badRequest, CHANGE_PASSWORD_I18N.currentPasswordInvalid)
     }
 
