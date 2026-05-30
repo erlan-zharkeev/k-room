@@ -9,6 +9,7 @@ import { useMessageBody } from '../model/use-message-body.model'
 import { useMessageReferencePreview } from '../model/use-message-reference-preview.model'
 
 import MessageContextMenu from './MessageContextMenu.vue'
+import MessageLinkPreview from './MessageLinkPreview.vue'
 import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
 import MessageStatusDots from './MessageStatusDots.vue'
@@ -61,6 +62,7 @@ const {
           />
         </div>
         <MessageText v-if="hasMessageBody" :text="props.message.body" />
+        <MessageLinkPreview v-if="props.message.linkPreview" :preview="props.message.linkPreview" />
         <div class="message-body__footer">
           <MessageReactions :message="props.message" :room="props.room" />
           <AppText v-if="props.message.editedAt" tag="small" italic :text="$t(CHAT_ROOM_CONTENT_I18N.editedMessage)" />

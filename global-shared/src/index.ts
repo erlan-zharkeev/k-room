@@ -245,6 +245,7 @@ export {
   HTTP_SUCCESS_STATUS_MIN,
   REQ_STATUS
 } from './status/constants'
+export { isHttpRedirectStatus, isHttpSuccessStatus } from './status/lib/http-status'
 export type { ReqStatus } from './status/types'
 
 export { normalizeTimestamp } from './time/lib/normalize-timestamp'
