@@ -49,8 +49,8 @@ export const usePasswordRecovery = () => {
       rules: [{ pattern: NON_EMPTY_PATTERN, error: validationMessages.fieldIsRequired }]
     }
   })
-  const emailSendCodeIsLoading = ref(false)
-  const codeValidationIsLoading = ref(false)
+  const isSendingEmailCode = ref(false)
+  const isValidatingCode = ref(false)
   const codeSent = ref(false)
   const debugCode = ref('')
   const sendCaptcha = useProtectedActionCaptcha()
@@ -74,7 +74,7 @@ export const usePasswordRecovery = () => {
 
     const email = emailFormData.email.value.trim()
 
-    emailSendCodeIsLoading.value = true
+    isSendingEmailCode.value = true
     const requestPayload: SendPasswordRecoveryCodePayload = {
       email,
       ...sendCaptcha.buildCaptchaPayload()
@@ -106,7 +106,7 @@ export const usePasswordRecovery = () => {
         sendCaptcha.resetCaptcha()
       }
 
-      emailSendCodeIsLoading.value = false
+      isSendingEmailCode.value = false
     }
   }
 
@@ -115,7 +115,7 @@ export const usePasswordRecovery = () => {
 
     const code = codeFormData.code.value.trim()
 
-    codeValidationIsLoading.value = true
+    isValidatingCode.value = true
     const requestPayload: CodeValidationPayload = {
       email: emailFormData.email.value,
       code,
@@ -139,7 +139,7 @@ export const usePasswordRecovery = () => {
         validateCaptcha.resetCaptcha()
       }
 
-      codeValidationIsLoading.value = false
+      isValidatingCode.value = false
     }
   }
 
@@ -160,14 +160,14 @@ export const usePasswordRecovery = () => {
   return {
     codeFormData,
     codeSent,
-    codeValidationIsLoading,
     counterValue,
     debugCode,
     emailFormData,
-    emailSendCodeIsLoading,
     initializePasswordRecovery,
     isCodeFormValid,
     isEmailFormValid,
+    isSendingEmailCode,
+    isValidatingCode,
     sendCaptcha,
     sendEmailCode,
     validateCaptcha,

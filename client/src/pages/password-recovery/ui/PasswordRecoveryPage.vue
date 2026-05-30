@@ -12,14 +12,14 @@ import { usePasswordRecovery } from '../model/use-password-recovery.model'
 const {
   codeFormData,
   codeSent,
-  codeValidationIsLoading,
   counterValue,
   debugCode,
   emailFormData,
-  emailSendCodeIsLoading,
   initializePasswordRecovery,
   isCodeFormValid,
   isEmailFormValid,
+  isSendingEmailCode,
+  isValidatingCode,
   sendCaptcha,
   sendEmailCode,
   validateCaptcha,
@@ -37,13 +37,13 @@ const {
   captchaToken: validateCaptchaToken,
   captchaResetKey: validateCaptchaResetKey
 } = validateCaptcha
-const isEmailInputDisabled = computed(() => emailSendCodeIsLoading.value || hasPresetEmail.value)
+const isEmailInputDisabled = computed(() => isSendingEmailCode.value || hasPresetEmail.value)
 const isSendCodeCaptchaBlocked = computed(() => sendCaptchaRequired.value && !sendCaptchaToken.value)
 const isValidateCodeCaptchaBlocked = computed(() => validateCaptchaRequired.value && !validateCaptchaToken.value)
 const isSendCodeBlocked = computed(
-  () => emailSendCodeIsLoading.value || counterValue.value > 0 || isSendCodeCaptchaBlocked.value
+  () => isSendingEmailCode.value || counterValue.value > 0 || isSendCodeCaptchaBlocked.value
 )
-const isValidateCodeBlocked = computed(() => codeValidationIsLoading.value || isValidateCodeCaptchaBlocked.value)
+const isValidateCodeBlocked = computed(() => isValidatingCode.value || isValidateCodeCaptchaBlocked.value)
 
 onMounted(initializePasswordRecovery)
 </script>
@@ -78,7 +78,7 @@ onMounted(initializePasswordRecovery)
       <div class="password-recovery-page__action-btns">
         <NmorphButton
           :disabled="isSendCodeBlocked || !isEmailFormValid"
-          :loading="emailSendCodeIsLoading"
+          :loading="isSendingEmailCode"
           :text="codeSent ? $t(PASSWORD_RECOVERY_I18N.resend) : $t(PASSWORD_RECOVERY_I18N.sendCode)"
           type="submit"
         />
@@ -106,7 +106,7 @@ onMounted(initializePasswordRecovery)
       <NmorphFormItem id="code" :show-validation-icon="false">
         <NmorphTextInput
           autocomplete="one-time-code"
-          :disabled="codeValidationIsLoading"
+          :disabled="isValidatingCode"
           :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"
         />
       </NmorphFormItem>
@@ -114,7 +114,7 @@ onMounted(initializePasswordRecovery)
       <div class="password-recovery-page__action-btns">
         <NmorphButton
           :disabled="isValidateCodeBlocked || !isCodeFormValid"
-          :loading="codeValidationIsLoading"
+          :loading="isValidatingCode"
           :text="$t(PASSWORD_RECOVERY_I18N.validate)"
           type="submit"
         />
