@@ -68,6 +68,7 @@ describe('messages.service', () => {
         $set: {
           body: 'updated message',
           images: payload.images,
+          linkPreview: null,
           editedAt: expect.any(Number)
         }
       }
@@ -77,6 +78,7 @@ describe('messages.service', () => {
       messageId: payload.messageId,
       body: 'updated message',
       images: payload.images,
+      linkPreview: null,
       editedAt: expect.any(Number)
     })
   })
