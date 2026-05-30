@@ -4,16 +4,21 @@ import { computed, toRef, watch } from 'vue'
 import { useMessage } from 'src/entities/message'
 
 import { ROOM_MESSAGES_PRELOAD_EDGE_ITEMS } from '../config/constants'
-import type { ChatRoomMessagesProps } from '../config/types'
+import type { ChatRoomMessagesProps, ChatRoomMessagesTargetMessageScrolled } from '../config/types'
 
 import { useChatRoomMessageList } from './use-chat-room-message-list.model'
+import { useChatRoomMessageNavigation } from './use-chat-room-message-navigation.model'
 import { useChatRoomMessageReadStatus } from './use-chat-room-message-read-status.model'
 import { useChatRoomMessageScrollManager } from './use-chat-room-message-scroll-manager.model'
 import { useChatRoomMessageVirtualizer } from './use-chat-room-message-virtualizer.model'
 import { useLoadRoomMessages } from './use-load-room-messages.model'
 
-export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
+export const useChatRoomMessages = (
+  props: ChatRoomMessagesProps,
+  onTargetMessageScrolled: ChatRoomMessagesTargetMessageScrolled
+) => {
   const room = toRef(props, 'room')
+  const targetMessageId = toRef(props, 'targetMessageId')
   const { messageById } = useMessage()
   const {
     loadedMessageRanges,
@@ -118,6 +123,15 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
   } = messageVirtualizerApi
   preserveMessagesScrollPosition = messageVirtualizerApi.preserveMessagesScrollPosition
   setMessageVirtualizer(messageVirtualizer)
+  const { navigateToCurrentTargetMessage, navigateToTargetMessage, resumeTargetNavigation, suspendTargetNavigation } =
+    useChatRoomMessageNavigation({
+      room,
+      targetMessageId,
+      findLoadedRangeByMessageIndex,
+      loadMessagesAround,
+      scrollToMessage,
+      onTargetMessageScrolled
+    })
 
   const messageStatusKeys = computed(() =>
     room.value.messages.map((messageId) => {
@@ -127,26 +141,26 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
     })
   )
 
-  const loadAndScrollToMessage = async (messageId: string) => {
-    const messageIndex = room.value.messages.indexOf(messageId)
+  const loadInitialMessages = async (roomId: string, previousRoomId: string | undefined) => {
+    clearPendingReadMessageIds()
+    suspendTargetNavigation()
 
-    if (messageIndex === -1) return
+    try {
+      await runInitialMessagesScroll(roomId, previousRoomId, loadLatestMessages)
+    } finally {
+      const isSameRoom = room.value.id === roomId
 
-    const range = findLoadedRangeByMessageIndex(room.value.id, messageIndex)
-
-    if (!range) {
-      await loadMessagesAround(messageId)
+      if (isSameRoom) {
+        resumeTargetNavigation()
+        await navigateToCurrentTargetMessage()
+      }
     }
-
-    await scrollToMessage(messageId)
   }
 
   watch(
     () => room.value.id,
     async (roomId, previousRoomId) => {
-      clearPendingReadMessageIds()
-
-      await runInitialMessagesScroll(roomId, previousRoomId, loadLatestMessages)
+      await loadInitialMessages(roomId, previousRoomId)
     },
     { immediate: true }
   )
@@ -165,6 +179,19 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
 
   watch(messageStatusKeys, () => markVisibleMessagesAsRead(messageVirtualizer.value), { immediate: true })
 
+  watch(
+    () => ({
+      messageId: targetMessageId.value,
+      roomId: room.value.id
+    }),
+    ({ messageId }) => {
+      if (!messageId) return
+
+      void navigateToTargetMessage(messageId)
+    },
+    { immediate: true }
+  )
+
   return {
     hasLoadedMessages,
     hasMessages,
@@ -172,7 +199,6 @@ export const useChatRoomMessages = (props: ChatRoomMessagesProps) => {
     measureMessageListItemElement,
     messageVirtualListStyle,
     messageVirtualListItems,
-    loadAndScrollToMessage,
     saveMessagesScrollState,
     scrollMessagesToBottom,
     showBackToBottomButton

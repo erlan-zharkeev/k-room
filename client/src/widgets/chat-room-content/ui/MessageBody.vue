@@ -6,6 +6,7 @@ import { AppText } from 'src/shared/ui'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageBodyEmits, MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
+import { useMessageReferencePreview } from '../model/use-message-reference-preview.model'
 
 import MessageContextMenu from './MessageContextMenu.vue'
 import MessagePreview from './MessagePreview.vue'
@@ -14,17 +15,15 @@ import MessageStatusDots from './MessageStatusDots.vue'
 
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
+const { showAuthorNickname, isMessageEditing, hasMessageBody, messageImagePreviewUrlList, sentAt } =
+  useMessageBody(props)
 const {
-  showAuthorNickname,
-  isMessageEditing,
-  hasMessageBody,
-  repliedMessage,
-  repliedMessagePreviewText,
-  repliedMessagePreviewTitle,
-  messageImagePreviewUrlList,
-  selectRepliedMessage,
-  sentAt
-} = useMessageBody(props, (messageId) => emit('select-message', messageId))
+  messageReference,
+  canSelectMessageReference,
+  messageReferencePreviewText,
+  messageReferencePreviewTitle,
+  selectMessageReference
+} = useMessageReferencePreview(props, (selection) => emit('select-message', selection))
 </script>
 
 <template>
@@ -40,13 +39,16 @@ const {
       <div class="message-body__content">
         <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
         <button
-          v-if="repliedMessage"
+          v-if="messageReference && canSelectMessageReference"
           type="button"
-          class="message-body__replied-preview"
-          @click.stop="selectRepliedMessage"
+          class="message-body__reference-preview message-body__reference-preview--button"
+          @click.stop="selectMessageReference"
         >
-          <MessagePreview :title="repliedMessagePreviewTitle" :text="repliedMessagePreviewText" />
+          <MessagePreview :title="messageReferencePreviewTitle" :text="messageReferencePreviewText" />
         </button>
+        <div v-else-if="messageReference" class="message-body__reference-preview">
+          <MessagePreview :title="messageReferencePreviewTitle" :text="messageReferencePreviewText" />
+        </div>
         <div v-if="messageImagePreviewUrlList.length" class="message-body__images">
           <NmorphImagePreview
             :src="messageImagePreviewUrlList"
@@ -125,12 +127,15 @@ const {
   gap: 4px;
 }
 
-.message-body__replied-preview {
-  cursor: pointer;
+.message-body__reference-preview {
   padding: 0;
-  border: 0;
   color: inherit;
   text-align: left;
+}
+
+.message-body__reference-preview--button {
+  cursor: pointer;
+  border: 0;
 }
 
 .message-body__images .nmorph-image-preview.nmorph-image-preview--gallery-trigger .nmorph-image-preview__trigger {

@@ -29,10 +29,11 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const { isTouchInput } = useTouchInput()
   const { t } = useI18n()
   const { canCopyMessageText, copyMessageText } = useMessageCopyText(message)
-  const { startMessageForward, startMessageReply } = useMessageDraftReference()
+  const { startMessageReply } = useMessageDraftReference()
   const { canStartMessageEdit, startMessageEdit } = useMessageEdit()
   const { canUpdatePinnedMessage, isMessagePinned, togglePinnedMessage } = useMessagePin(message, room)
   const { isDeleteMessageDialogOpen, openDeleteMessageDialog } = useMessageDeleteDialog()
+  const isMessageForwardDialogOpen = ref(false)
   const isMessageContextMenuOpen = ref(false)
   const isMessageContextMenuDisabled = computed(() => isTouchInput.value)
 
@@ -42,6 +43,10 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
 
   const closeMessageContextMenu = () => {
     updateMessageContextMenuOpen(false)
+  }
+
+  const openMessageForwardDialog = () => {
+    isMessageForwardDialogOpen.value = true
   }
 
   const messageContextMenuOptions = computed<MessageContextMenuOption[]>(() => {
@@ -112,7 +117,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         closeMessageContextMenu()
         break
       case MESSAGE_CONTEXT_MENU_ACTION.FORWARD_MESSAGE:
-        startMessageForward(message.value, room.value.id)
+        openMessageForwardDialog()
         closeMessageContextMenu()
         break
       case MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE:
@@ -131,6 +136,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
 
   return {
     isDeleteMessageDialogOpen,
+    isMessageForwardDialogOpen,
     isMessageContextMenuOpen,
     isMessageContextMenuDisabled,
     messageContextMenuOptions,

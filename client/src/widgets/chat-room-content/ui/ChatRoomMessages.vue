@@ -4,13 +4,14 @@ import { NmorphButton, NmorphIcon, NmorphIconArrowDown, NmorphScroll } from '@nm
 import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
-import type { ChatRoomMessagesExpose, ChatRoomMessagesProps } from '../config/types'
+import type { ChatRoomMessagesEmits, ChatRoomMessagesProps } from '../config/types'
 import { useChatRoomMessages } from '../model/use-chat-room-messages.model'
 
 import DateSeparator from './DateSeparator.vue'
 import MessageBody from './MessageBody.vue'
 
 const props = defineProps<ChatRoomMessagesProps>()
+const emit = defineEmits<ChatRoomMessagesEmits>()
 const {
   hasLoadedMessages,
   hasMessages,
@@ -18,15 +19,10 @@ const {
   measureMessageListItemElement,
   messageVirtualListStyle,
   messageVirtualListItems,
-  loadAndScrollToMessage,
   saveMessagesScrollState,
   scrollMessagesToBottom,
   showBackToBottomButton
-} = useChatRoomMessages(props)
-
-defineExpose<ChatRoomMessagesExpose>({
-  loadAndScrollToMessage
-})
+} = useChatRoomMessages(props, () => emit('target-message-scrolled'))
 </script>
 
 <template>
@@ -57,7 +53,7 @@ defineExpose<ChatRoomMessagesExpose>({
               :message="item.message"
               :is-private-room="props.isPrivateRoom"
               :room="props.room"
-              @select-message="loadAndScrollToMessage"
+              @select-message="emit('select-message', $event)"
             />
           </div>
         </div>
