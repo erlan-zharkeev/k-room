@@ -1,4 +1,11 @@
-import type { ImageObject, Message, MessageLinkPreview, MessageMetadata, MessageReaction, RepliedMessage } from 'global-shared'
+import type {
+  ImageObject,
+  Message,
+  MessageLinkPreview,
+  MessageMetadata,
+  MessageReaction,
+  RepliedMessage
+} from 'global-shared'
 
 export interface MessageSchema {
   _id?: string

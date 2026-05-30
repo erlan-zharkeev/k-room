@@ -23,15 +23,7 @@ export const MESSAGE_LINK_PREVIEW_PRIVATE_IPV4_CIDRS = [
   '240.0.0.0/4'
 ] as const
 export const MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_EXACT_ADDRESSES = ['::', '::1'] as const
-export const MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_PREFIXES = [
-  'fc',
-  'fd',
-  'fe8',
-  'fe9',
-  'fea',
-  'feb',
-  'ff'
-] as const
+export const MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_PREFIXES = ['fc', 'fd', 'fe8', 'fe9', 'fea', 'feb', 'ff'] as const
 export const MESSAGE_LINK_PREVIEW_META_TAG_PATTERN = /<meta\s+[^>]*>/giu
 export const MESSAGE_LINK_PREVIEW_ATTRIBUTE_PATTERN = /([:\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/giu
 export const MESSAGE_LINK_PREVIEW_TITLE_TAG_PATTERN = /<title[^>]*>([\s\S]*?)<\/title>/iu

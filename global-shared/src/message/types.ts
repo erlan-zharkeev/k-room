@@ -1,6 +1,11 @@
 import type { ImageObject } from '../media/types'
 
-import { MESSAGE_LINK_PREVIEW_STATUS, MESSAGE_LOAD_DIRECTION, MESSAGE_REACTION_UPDATE_ACTION, MESSAGE_STATUS } from './constants'
+import {
+  MESSAGE_LINK_PREVIEW_STATUS,
+  MESSAGE_LOAD_DIRECTION,
+  MESSAGE_REACTION_UPDATE_ACTION,
+  MESSAGE_STATUS
+} from './constants'
 
 export type MessageStatus = (typeof MESSAGE_STATUS)[number]
 export type MessageLoadDirection = (typeof MESSAGE_LOAD_DIRECTION)[keyof typeof MESSAGE_LOAD_DIRECTION]
