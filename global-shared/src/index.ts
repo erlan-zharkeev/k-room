@@ -237,7 +237,13 @@ export type {
   SocketActions
 } from './socket/types'
 
-export { REQ_STATUS } from './status/constants'
+export {
+  HTTP_REDIRECT_STATUS_MAX,
+  HTTP_REDIRECT_STATUS_MIN,
+  HTTP_SUCCESS_STATUS_MAX,
+  HTTP_SUCCESS_STATUS_MIN,
+  REQ_STATUS
+} from './status/constants'
 export type { ReqStatus } from './status/types'
 
 export { normalizeTimestamp } from './time/lib/normalize-timestamp'

@@ -3,7 +3,16 @@ import { request as httpsRequest } from 'node:https'
 import { isIP } from 'node:net'
 import type { LookupFunction } from 'node:net'
 
-import { MESSAGE_LINK_PREVIEW_STATUS, MESSAGE_LINK_PROTOCOL, isString, type MessageLinkPreview } from 'global-shared'
+import {
+  HTTP_REDIRECT_STATUS_MAX,
+  HTTP_REDIRECT_STATUS_MIN,
+  HTTP_SUCCESS_STATUS_MAX,
+  HTTP_SUCCESS_STATUS_MIN,
+  MESSAGE_LINK_PREVIEW_STATUS,
+  MESSAGE_LINK_PROTOCOL,
+  isString,
+  type MessageLinkPreview
+} from 'global-shared'
 
 import { uploadBufferToBucket } from '../../media/media.service'
 import {
@@ -21,10 +30,6 @@ import {
   MESSAGE_LINK_PREVIEW_PRIVATE_IPV4_CIDRS,
   MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_EXACT_ADDRESSES,
   MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_PREFIXES,
-  MESSAGE_LINK_PREVIEW_REDIRECT_STATUS_MAX,
-  MESSAGE_LINK_PREVIEW_REDIRECT_STATUS_MIN,
-  MESSAGE_LINK_PREVIEW_SUCCESS_STATUS_MAX,
-  MESSAGE_LINK_PREVIEW_SUCCESS_STATUS_MIN,
   MESSAGE_LINK_PREVIEW_TITLE_META_KEYS,
   MESSAGE_LINK_PREVIEW_TITLE_TAG_PATTERN,
   MESSAGE_LINK_PREVIEW_USER_AGENT,
@@ -127,10 +132,10 @@ const getHeaderValue = (value: number | string | string[] | undefined) => {
 }
 
 const isRedirectStatus = (statusCode: number) =>
-  statusCode >= MESSAGE_LINK_PREVIEW_REDIRECT_STATUS_MIN && statusCode <= MESSAGE_LINK_PREVIEW_REDIRECT_STATUS_MAX
+  statusCode >= HTTP_REDIRECT_STATUS_MIN && statusCode <= HTTP_REDIRECT_STATUS_MAX
 
 const isSuccessStatus = (statusCode: number) =>
-  statusCode >= MESSAGE_LINK_PREVIEW_SUCCESS_STATUS_MIN && statusCode <= MESSAGE_LINK_PREVIEW_SUCCESS_STATUS_MAX
+  statusCode >= HTTP_SUCCESS_STATUS_MIN && statusCode <= HTTP_SUCCESS_STATUS_MAX
 
 const fetchMessageLinkPreviewBuffer = (url: URL, maxBytes: number) =>
   new Promise<{ body: Buffer; contentType: string; location: string; statusCode: number }>((resolve, reject) => {
