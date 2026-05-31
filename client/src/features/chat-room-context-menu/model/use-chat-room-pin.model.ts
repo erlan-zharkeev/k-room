@@ -24,7 +24,7 @@ export const useChatRoomPin = (item: Readonly<Ref<ChatRoomContextMenuItem>>) => 
     }
 
     isUpdatingPinnedChatRoom.value = true
-    void emitSocketAction<EventUpdatePinnedChatRoom>('update-pinned-chat-room', payload, {
+    void emitSocketAction('update-pinned-chat-room', payload, {
       onSettled: () => {
         isUpdatingPinnedChatRoom.value = false
       }

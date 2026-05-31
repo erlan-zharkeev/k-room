@@ -63,7 +63,7 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
     }
 
     isLeavingChatRoom.value = true
-    void emitSocketAction<EventLeaveChatRoom>('leave-chat-room', payload, {
+    void emitSocketAction('leave-chat-room', payload, {
       onSettled: () => {
         isLeavingChatRoom.value = false
       }

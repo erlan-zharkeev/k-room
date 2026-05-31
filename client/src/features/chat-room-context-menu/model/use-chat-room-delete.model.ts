@@ -35,7 +35,7 @@ export const useChatRoomDelete = (props: ChatRoomDeleteDialogProps, isDeleteChat
     const payload: EventDeleteChatRoom = { roomId: item.value.id }
 
     isDeletingChatRoom.value = true
-    void emitSocketAction<EventDeleteChatRoom>('delete-chat-room', payload, {
+    void emitSocketAction('delete-chat-room', payload, {
       onSettled: () => {
         isDeletingChatRoom.value = false
       }

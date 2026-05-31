@@ -1,4 +1,4 @@
-import { isString, type LocalizedText, REQ_STATUS, type SocketAckResponse, type SocketActions } from 'global-shared'
+import { isString, type LocalizedText, REQ_STATUS, type SocketAckResponse } from 'global-shared'
 
 import { SHARED_I18N } from '../i18n'
 import type { SocketInstance } from '../types/socket'
@@ -33,7 +33,7 @@ export const throwSocketError = (
     serverCaptureSentrySocketError({ message: logMessage, silent, status })
   }
 
-  io.to(socketId).emit<SocketActions>('error-message', {
+  io.to(socketId).emit('error-message', {
     message: userMessage,
     silent,
     status
@@ -81,7 +81,7 @@ export const socketAckMiddleware =
     try {
       const response = await handler(payload)
 
-      ack?.(response ?? ({ ok: true } as SocketAckResponse<TResponsePayload, TReason>))
+      ack?.(response ?? ({ ok: true } satisfies SocketAckResponse<TResponsePayload, TReason>))
     } catch (error) {
       if (isAppError(error)) {
         throwSocketError(socket.id, error.messageSource, {

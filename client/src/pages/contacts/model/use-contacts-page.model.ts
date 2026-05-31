@@ -1,5 +1,4 @@
 import {
-  type CreateRoomAckPayload,
   type EventCreateRoom,
   type EventDeleteContact,
   type EventSaveContact,
@@ -51,7 +50,7 @@ export const useContactsPage = () => {
     const payload: EventSaveContact = { interlocutorId }
 
     loadingContactIds.add(interlocutorId)
-    void emitSocketAction<EventSaveContact>('save-contact', payload, {
+    void emitSocketAction('save-contact', payload, {
       onSettled: () => {
         loadingContactIds.delete(interlocutorId)
       }
@@ -64,7 +63,7 @@ export const useContactsPage = () => {
     const payload: EventUpdateInteraction = { contactId, interaction }
 
     loadingContactIds.add(contactId)
-    void emitSocketAction<EventUpdateInteraction>('update-contact-interaction-type', payload, {
+    void emitSocketAction('update-contact-interaction-type', payload, {
       onSettled: () => {
         loadingContactIds.delete(contactId)
       }
@@ -83,7 +82,7 @@ export const useContactsPage = () => {
     const payload: EventCreateRoom = { memberIds: [user.value.id, contactId] }
 
     creatingChatContactIds.add(contactId)
-    void emitSocketAction<EventCreateRoom, CreateRoomAckPayload>('create-chat-room', payload, {
+    void emitSocketAction('create-chat-room', payload, {
       onSuccess: ({ payload: responsePayload }) => {
         goToChatRoom(responsePayload?.roomId)
       },
@@ -110,7 +109,7 @@ export const useContactsPage = () => {
     const payload: EventDeleteContact = { deletingUserId }
 
     loadingContactIds.add(deletingUserId)
-    void emitSocketAction<EventDeleteContact>('delete-contact', payload, {
+    void emitSocketAction('delete-contact', payload, {
       onSettled: () => {
         loadingContactIds.delete(deletingUserId)
       }

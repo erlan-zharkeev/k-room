@@ -1,12 +1,4 @@
-import type {
-  AppLanguage,
-  ChangePasswordPayload,
-  Interaction,
-  MediaId,
-  Provider,
-  UnknownObject,
-  UserRole
-} from 'global-shared'
+import type { ChangePasswordPayload, Interaction, MediaId, Provider, UnknownObject, UserRole } from 'global-shared'
 import type { Types } from 'mongoose'
 
 export interface UserDevice {
@@ -103,8 +95,4 @@ export interface AdminUserActionRequest {
 export interface AdminUserActionResponse {
   record?: AdminUserRecord
   records?: AdminUserRecord[]
-}
-
-export interface UpdateLanguagePayload {
-  language: AppLanguage
 }

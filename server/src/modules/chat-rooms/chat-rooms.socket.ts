@@ -7,8 +7,7 @@ import {
   type EventUpdateChatRoom,
   type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
-  type EventUpdatePinnedChatRoomOrder,
-  type SocketActions
+  type EventUpdatePinnedChatRoomOrder
 } from 'global-shared'
 
 import { PresenceService } from 'src/modules/presence/presence.service'
@@ -31,7 +30,7 @@ export class ChatRoomsSocketService {
   constructor(private readonly presenceService: PresenceService) {}
 
   register(socket: SocketInstance) {
-    socket.on<SocketActions>(
+    socket.on(
       'create-chat-room',
       socketAckMiddleware<EventCreateRoom, CreateRoomAckPayload>(
         socket,
@@ -47,7 +46,7 @@ export class ChatRoomsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'update-chat-room',
       socketAckMiddleware<EventUpdateChatRoom>(
         socket,
@@ -58,7 +57,7 @@ export class ChatRoomsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'delete-chat-room',
       socketAckMiddleware<EventDeleteChatRoom>(
         socket,
@@ -69,7 +68,7 @@ export class ChatRoomsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'leave-chat-room',
       socketAckMiddleware<EventLeaveChatRoom>(
         socket,
@@ -80,7 +79,7 @@ export class ChatRoomsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'update-pinned-chat-room',
       socketAckMiddleware<EventUpdatePinnedChatRoom>(
         socket,
@@ -91,7 +90,7 @@ export class ChatRoomsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'update-pinned-chat-room-order',
       socketAckMiddleware<EventUpdatePinnedChatRoomOrder>(
         socket,
@@ -102,7 +101,7 @@ export class ChatRoomsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'update-muted-chat-room',
       socketAckMiddleware<EventUpdateMutedChatRoom>(
         socket,

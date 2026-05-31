@@ -19,7 +19,7 @@ export const useChatRoomMute = (item: Readonly<Ref<ChatRoomContextMenuItem>>) =>
     }
 
     isUpdatingMutedChatRoom.value = true
-    void emitSocketAction<EventUpdateMutedChatRoom>('update-muted-chat-room', payload, {
+    void emitSocketAction('update-muted-chat-room', payload, {
       onSettled: () => {
         isUpdatingMutedChatRoom.value = false
       }

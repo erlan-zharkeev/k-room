@@ -3,8 +3,7 @@ import {
   isDefaultContactInteraction,
   type Contact,
   type EventGetSearchedContact,
-  type EventSearchContact,
-  type SocketActions
+  type EventSearchContact
 } from 'global-shared'
 import unionBy from 'lodash/unionBy'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
@@ -49,7 +48,7 @@ export const useContactSearch = () => {
       offset
     }
 
-    socket.emit<SocketActions>('search-contact', payload)
+    socket.emit('search-contact', payload)
   }
 
   const debouncedFetchContacts = useDebounceFn(fetchContacts, CONTACTS_PAGE_SEARCH_DEBOUNCE_MS)
@@ -122,12 +121,12 @@ export const useContactSearch = () => {
     isSearchLoadingMore.value = false
   }
 
-  socket.on<SocketActions>('get-searched-contact', handleSearchedContacts)
+  socket.on('get-searched-contact', handleSearchedContacts)
 
   watch(searchQuery, () => searchContacts(), { immediate: true })
 
   onBeforeUnmount(() => {
-    socket.off<SocketActions>('get-searched-contact', handleSearchedContacts)
+    socket.off('get-searched-contact', handleSearchedContacts)
   })
 
   return {

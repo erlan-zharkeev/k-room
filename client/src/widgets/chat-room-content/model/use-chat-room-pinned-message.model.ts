@@ -34,7 +34,7 @@ export const useChatRoomPinnedMessage = (props: ChatRoomPinnedMessageProps) => {
     }
 
     isUpdatingPinnedMessage.value = true
-    void emitSocketAction<EventUpdatePinnedMessage>('update-pinned-message', payload, {
+    void emitSocketAction('update-pinned-message', payload, {
       onSettled: () => {
         isUpdatingPinnedMessage.value = false
       }

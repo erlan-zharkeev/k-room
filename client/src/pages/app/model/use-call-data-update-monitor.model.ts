@@ -1,4 +1,4 @@
-import type { EventCallsUpdated, EventCallUpdated, SocketActions } from 'global-shared'
+import type { EventCallsUpdated, EventCallUpdated } from 'global-shared'
 
 import { socket } from 'src/shared/api'
 
@@ -16,13 +16,13 @@ export const useCallDataUpdateMonitor = () => {
   }
 
   const initializeCallDataUpdateMonitor = () => {
-    socket.on<SocketActions>('calls-data-loaded', handleCallsLoaded)
-    socket.on<SocketActions>('call-data-changed', handleCallChanged)
+    socket.on('calls-data-loaded', handleCallsLoaded)
+    socket.on('call-data-changed', handleCallChanged)
   }
 
   const disposeCallDataUpdateMonitor = () => {
-    socket.off<SocketActions>('calls-data-loaded', handleCallsLoaded)
-    socket.off<SocketActions>('call-data-changed', handleCallChanged)
+    socket.off('calls-data-loaded', handleCallsLoaded)
+    socket.off('call-data-changed', handleCallChanged)
   }
 
   return {

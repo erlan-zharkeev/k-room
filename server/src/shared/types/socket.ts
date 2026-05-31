@@ -1,9 +1,29 @@
-import type { AppLanguage } from 'global-shared'
-import type { DefaultEventsMap, Socket } from 'socket.io'
+import type {
+  AppLanguage,
+  ClientToServerSocketEvents,
+  ServerToClientSocketAction,
+  ServerToClientSocketEvents,
+  ServerToClientSocketPayloadMap
+} from 'global-shared'
+import type { DefaultEventsMap, Server, Socket } from 'socket.io'
 
 export type SocketInstance = Socket<
-  DefaultEventsMap,
-  DefaultEventsMap,
+  ClientToServerSocketEvents,
+  ServerToClientSocketEvents,
   DefaultEventsMap,
   { userId: string; deviceId: string; language: AppLanguage }
 >
+
+export type SocketIO = Server<
+  ClientToServerSocketEvents,
+  ServerToClientSocketEvents,
+  DefaultEventsMap,
+  { userId: string; deviceId: string; language: AppLanguage }
+>
+
+export type EmitServerToClientSocketEvent = <TEvent extends ServerToClientSocketAction>(
+  event: TEvent,
+  ...payload: ServerToClientSocketPayloadMap[TEvent] extends void
+    ? []
+    : [payload: ServerToClientSocketPayloadMap[TEvent]]
+) => boolean

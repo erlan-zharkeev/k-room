@@ -87,7 +87,7 @@ export const useMessageEdit = () => {
     }
 
     isUpdatingEditedMessage.value = true
-    void emitSocketAction<EventEditMessage>('edit-message', payload, {
+    void emitSocketAction('edit-message', payload, {
       onSuccess: () => {
         cancelMessageEdit()
       },

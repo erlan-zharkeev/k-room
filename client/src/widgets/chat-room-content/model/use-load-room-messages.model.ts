@@ -155,10 +155,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     loadingRoomMessageRanges.add(loadKey)
 
     try {
-      const response = await emitSocketAction<EventLoadRoomMessages, EventRoomMessagesLoaded>(
-        'load-room-messages',
-        payload
-      )
+      const response = await emitSocketAction('load-room-messages', payload)
 
       if (response.ok && response.payload) {
         await saveLoadedRoomMessages(targetRoom, response.payload)

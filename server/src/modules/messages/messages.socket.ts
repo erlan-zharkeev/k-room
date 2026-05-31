@@ -9,8 +9,7 @@ import type {
   EventRoomMessagesLoaded,
   EventSendMessage,
   EventUpdatePinnedMessage,
-  EventUserTyping,
-  SocketActions
+  EventUserTyping
 } from 'global-shared'
 
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
@@ -32,11 +31,11 @@ import {
 @Injectable()
 export class MessagesSocketService {
   register(socket: SocketInstance) {
-    socket.on<SocketActions>(
+    socket.on(
       'send-message',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventSendMessage>(
         socket,
-        async ({ roomId, message }: EventSendMessage) => {
+        async ({ roomId, message }) => {
           await sendMessage({
             roomId,
             userId: socket.data.userId,
@@ -47,22 +46,22 @@ export class MessagesSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'edit-message',
       socketAckMiddleware<EventEditMessage>(
         socket,
-        async (payload: EventEditMessage) => {
+        async (payload) => {
           await editMessage(socket.data.userId, payload)
         },
         { basicError: MESSAGES_I18N.editMessageFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'load-room-messages',
       socketAckMiddleware<EventLoadRoomMessages, EventRoomMessagesLoaded>(
         socket,
-        async (payload: EventLoadRoomMessages) => {
+        async (payload) => {
           const roomMessagesData = await loadRoomMessages(socket.data.userId, payload)
 
           if (!roomMessagesData) {
@@ -78,40 +77,40 @@ export class MessagesSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'client-typing',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventUserTyping>(
         socket,
-        async (payload: EventUserTyping) => {
+        async (payload) => {
           await emitRoomTypingStatus(socket.data.userId, payload)
         },
         { basicError: MESSAGES_I18N.updateTypingStatusFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'update-pinned-message',
       socketAckMiddleware<EventUpdatePinnedMessage>(
         socket,
-        async (payload: EventUpdatePinnedMessage) => {
+        async (payload) => {
           await updatePinnedMessage(socket.data.userId, payload)
         },
         { basicError: MESSAGES_I18N.updatePinnedMessageFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'change-message-status',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventChangeMessageStatus>(
         socket,
-        async ({ messageId, status, roomId }: EventChangeMessageStatus) => {
+        async ({ messageId, status, roomId }) => {
           await changeMessageStatus(messageId, status, socket.data.userId, roomId)
         },
         { basicError: MESSAGES_I18N.changeMessageStatusFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'mark-room-as-read',
       socketAckMiddleware<EventMarkRoomAsRead>(
         socket,
@@ -122,22 +121,22 @@ export class MessagesSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'delete-message',
       socketAckMiddleware<EventDeleteMessage>(
         socket,
-        async (payload: EventDeleteMessage) => {
+        async (payload) => {
           await deleteMessage(socket.data.userId, payload)
         },
         { basicError: MESSAGES_I18N.deleteMessageFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'add-reaction',
       socketAckMiddleware<EventAddReaction>(
         socket,
-        async (payload: EventAddReaction) => {
+        async (payload) => {
           await toggleMessageReaction(socket.data.userId, payload)
         },
         { basicError: MESSAGES_I18N.updateMessageReactionFailed }
