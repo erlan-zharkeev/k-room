@@ -86,6 +86,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Удалить изображение',
     zh: '删除图片'
   },
+  removeMessageDocument: {
+    en: 'Remove document',
+    ru: 'Удалить документ',
+    zh: '删除文档'
+  },
   messageTextCopied: {
     en: 'Message text copied',
     ru: 'Текст сообщения скопирован',
@@ -151,6 +156,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Поддерживаются только изображения',
     zh: '仅支持图片文件'
   },
+  messageAttachmentInvalidFormat: {
+    en: 'Only images and PDF files are supported',
+    ru: 'Поддерживаются только изображения и PDF',
+    zh: '仅支持图片和 PDF 文件'
+  },
   messageImageInvalidSize: {
     en: (size: number) => `Image must be less than ${size} MB`,
     ru: (size: number) => `Изображение должно быть меньше ${size} МБ`,
@@ -160,6 +170,16 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     en: (limit: number) => `You can attach up to ${limit} images. The list was reduced.`,
     ru: (limit: number) => `Можно прикрепить до ${limit} изображений. Список сокращен.`,
     zh: (limit: number) => `最多可附加 ${limit} 张图片。列表已缩减。`
+  },
+  messageDocumentInvalidSize: {
+    en: (size: number) => `Document must be less than ${size} MB`,
+    ru: (size: number) => `Документ должен быть меньше ${size} МБ`,
+    zh: (size: number) => `文档必须小于 ${size} MB`
+  },
+  messageAttachmentLimitReached: {
+    en: (limit: number) => `You can attach up to ${limit} files. The list was reduced.`,
+    ru: (limit: number) => `Можно прикрепить до ${limit} файлов. Список сокращен.`,
+    zh: (limit: number) => `最多可附加 ${limit} 个文件。列表已缩减。`
   },
   selectEmoji: {
     en: 'Select emoji',
