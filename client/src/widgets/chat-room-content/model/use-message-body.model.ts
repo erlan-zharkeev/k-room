@@ -23,11 +23,14 @@ export const useMessageBody = (props: MessageBodyProps) => {
       mediaId: image.src
     }))
   )
+  const messageDocuments = computed(() => message.value.documents ?? [])
   const resolveMessageImageIds = () => messageImageList.value.map(({ mediaId }) => mediaId)
+  const resolveMessageDocumentIds = () => messageDocuments.value.map(({ src }) => src)
+  const resolveMessageMediaIds = () => [...resolveMessageImageIds(), ...resolveMessageDocumentIds()]
   const messageImagePreviewUrlList = useLiveMediaUrls(resolveMessageImageIds)
 
   watch(
-    resolveMessageImageIds,
+    resolveMessageMediaIds,
     (mediaIds) => {
       mediaIds.forEach((mediaId) => {
         sync(mediaId)
@@ -45,6 +48,7 @@ export const useMessageBody = (props: MessageBodyProps) => {
     showAuthorNickname,
     isMessageEditing,
     hasMessageBody,
+    messageDocuments,
     messageImagePreviewUrlList,
     sentAt
   }

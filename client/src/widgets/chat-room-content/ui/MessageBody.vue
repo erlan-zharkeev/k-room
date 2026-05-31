@@ -9,6 +9,7 @@ import { useMessageBody } from '../model/use-message-body.model'
 import { useMessageReferencePreview } from '../model/use-message-reference-preview.model'
 
 import MessageContextMenu from './MessageContextMenu.vue'
+import MessageDocumentList from './MessageDocumentList.vue'
 import MessageLinkPreview from './MessageLinkPreview.vue'
 import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
@@ -17,7 +18,7 @@ import MessageText from './MessageText.vue'
 
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
-const { showAuthorNickname, isMessageEditing, hasMessageBody, messageImagePreviewUrlList, sentAt } =
+const { showAuthorNickname, isMessageEditing, hasMessageBody, messageDocuments, messageImagePreviewUrlList, sentAt } =
   useMessageBody(props)
 const {
   messageReference,
@@ -61,6 +62,7 @@ const {
             trigger-gap="6px"
           />
         </div>
+        <MessageDocumentList :documents="messageDocuments" />
         <MessageText v-if="hasMessageBody" :text="props.message.body" />
         <MessageLinkPreview v-if="props.message.linkPreview" :preview="props.message.linkPreview" />
         <div class="message-body__footer">
