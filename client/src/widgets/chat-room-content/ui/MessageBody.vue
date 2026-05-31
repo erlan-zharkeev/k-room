@@ -3,6 +3,7 @@ import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
+import { MESSAGE_IMAGE_PREVIEW_HEIGHT_PX } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageBodyEmits, MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
@@ -16,6 +17,7 @@ import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
 import MessageStatusDots from './MessageStatusDots.vue'
 import MessageText from './MessageText.vue'
+import MessageVideoList from './MessageVideoList.vue'
 
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
@@ -23,8 +25,10 @@ const {
   showAuthorNickname,
   isMessageEditing,
   hasMessageBody,
+  hasMessageImages,
   messageAudios,
   messageDocuments,
+  messageVideos,
   messageImagePreviewUrlList,
   sentAt
 } = useMessageBody(props)
@@ -60,16 +64,22 @@ const {
         <div v-else-if="messageReference" class="message-body__reference-preview">
           <MessagePreview :title="messageReferencePreviewTitle" :text="messageReferencePreviewText" />
         </div>
-        <div v-if="messageImagePreviewUrlList.length" class="message-body__images">
+        <div
+          v-if="hasMessageImages"
+          class="message-body__images"
+          :style="{ minHeight: `${MESSAGE_IMAGE_PREVIEW_HEIGHT_PX}px` }"
+        >
           <NmorphImagePreview
+            v-if="messageImagePreviewUrlList.length"
             :src="messageImagePreviewUrlList"
             width="100%"
-            height="220px"
+            :height="`${MESSAGE_IMAGE_PREVIEW_HEIGHT_PX}px`"
             radius="4px"
             trigger-view="gallery"
             trigger-gap="6px"
           />
         </div>
+        <MessageVideoList :videos="messageVideos" />
         <MessageDocumentList :documents="messageDocuments" />
         <MessageAudioList :audios="messageAudios" />
         <MessageText v-if="hasMessageBody" :text="props.message.body" />
