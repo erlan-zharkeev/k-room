@@ -43,7 +43,14 @@ export { loadStorageEstimate, useStorageEstimate } from './storage/storage'
 export { useI18n } from './i18n/i18n'
 export { createPasswordValidationRules } from './validation/validation'
 export { CLIENT_LANGUAGE, I18N_KEY } from './i18n/constants'
-export { dexieCollectionStore, dexieKeyValueStore, initializeDexieCollectionStores, useDexieLiveQuery } from './db/lib'
+export {
+  dexieCallStore,
+  dexieCollectionStore,
+  dexieKeyValueStore,
+  initializeDexieCollectionStores,
+  openDexieDatabase,
+  useDexieLiveQuery
+} from './db/lib'
 export { DEXIE_CACHE_TRIMMER_IDS, DEXIE_CACHE_TRIMMER_PRIORITIES } from './db/constants'
 export { registerDexieCacheTrimmer, subscribeDexieCacheTrimEvents } from './db/cache-trim'
 export { db, KRoomDB } from './db/db'

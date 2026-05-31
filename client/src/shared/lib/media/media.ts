@@ -1,7 +1,7 @@
 import { liveQuery } from 'dexie'
 import { getCurrentScope, nextTick, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
-import { db } from '../db/db'
+import { getDexieMediaRecord, getDexieMediaRecords } from '../db/lib'
 
 import type { MediaUrlCacheKeyParams, MediaUrlCacheValue } from './types'
 
@@ -83,7 +83,7 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
       if (!mediaId) return
 
-      const subscription = liveQuery(() => db.media.get(mediaId)).subscribe({
+      const subscription = liveQuery(() => getDexieMediaRecord(mediaId)).subscribe({
         next: (record) => {
           if (!record?.blob) {
             clearUrl()
@@ -146,7 +146,7 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
       if (!mediaIds.length) return
 
-      const subscription = liveQuery(() => db.media.bulkGet(mediaIds)).subscribe({
+      const subscription = liveQuery(() => getDexieMediaRecords(mediaIds)).subscribe({
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
