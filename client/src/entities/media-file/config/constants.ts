@@ -9,5 +9,6 @@ export const MEDIA_SYNC_CONCURRENCY = 4
 export const MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX = 'message-audio-draft'
 export const MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX = 'message-document-draft'
 export const MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX = 'message-image-draft'
+export const MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX = 'message-video-draft'
 export const MISSING_MEDIA_RETRY_INTERVAL_MS = 10 * MINUTE_IN_MS
 export const UPDATE_MEDIA_INTERVAL_MS = 1 * DAY_IN_MS

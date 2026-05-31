@@ -1,5 +1,5 @@
 import { liveQuery } from 'dexie'
-import { getCurrentScope, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
+import { getCurrentScope, nextTick, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
 import { db } from '../db/db'
 
@@ -50,6 +50,16 @@ export const releaseUrl = (key: string) => {
   }
 }
 
+const releaseUrlAfterRender = (key: string) => {
+  void nextTick(() => releaseUrl(key))
+}
+
+const releaseUrlsAfterRender = (keys: string[]) => {
+  void nextTick(() => {
+    keys.forEach(releaseUrl)
+  })
+}
+
 export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>) => {
   const url = shallowRef<string>()
   let currentKey = ''
@@ -61,7 +71,7 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
       return
     }
 
-    releaseUrl(currentKey)
+    releaseUrlAfterRender(currentKey)
     currentKey = ''
     url.value = undefined
   }
@@ -86,7 +96,12 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
           if (currentKey === key) return
 
-          clearUrl()
+          const previousKey = currentKey
+
+          if (previousKey) {
+            releaseUrlAfterRender(previousKey)
+          }
+
           currentKey = key
           url.value = acquireUrl(key, blob)
         },
@@ -119,7 +134,7 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
       return
     }
 
-    currentKeys.forEach((key) => releaseUrl(key))
+    releaseUrlsAfterRender(currentKeys)
     currentKeys = []
     urls.value = []
   }
@@ -146,9 +161,12 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
           if (!hasMediaUrlCacheKeyChanges(currentKeys, nextKeys)) return
 
-          clearUrls()
+          const previousKeys = currentKeys
+          const nextUrls = entries.map(({ blob, key }) => acquireUrl(key, blob))
+
           currentKeys = nextKeys
-          urls.value = entries.map(({ blob, key }) => acquireUrl(key, blob))
+          urls.value = nextUrls
+          releaseUrlsAfterRender(previousKeys)
         },
         error: clearUrls
       })

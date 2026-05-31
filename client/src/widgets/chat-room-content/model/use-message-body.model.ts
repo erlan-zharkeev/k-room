@@ -25,13 +25,17 @@ export const useMessageBody = (props: MessageBodyProps) => {
   )
   const messageDocuments = computed(() => message.value.documents ?? [])
   const messageAudios = computed(() => message.value.audios ?? [])
+  const messageVideos = computed(() => message.value.videos ?? [])
+  const hasMessageImages = computed(() => Boolean(messageImageList.value.length))
   const resolveMessageImageIds = () => messageImageList.value.map(({ mediaId }) => mediaId)
   const resolveMessageDocumentIds = () => messageDocuments.value.map(({ src }) => src)
   const resolveMessageAudioIds = () => messageAudios.value.map(({ src }) => src)
+  const resolveMessageVideoIds = () => messageVideos.value.map(({ src }) => src)
   const resolveMessageMediaIds = () => [
     ...resolveMessageImageIds(),
     ...resolveMessageDocumentIds(),
-    ...resolveMessageAudioIds()
+    ...resolveMessageAudioIds(),
+    ...resolveMessageVideoIds()
   ]
   const messageImagePreviewUrlList = useLiveMediaUrls(resolveMessageImageIds)
 
@@ -54,8 +58,10 @@ export const useMessageBody = (props: MessageBodyProps) => {
     showAuthorNickname,
     isMessageEditing,
     hasMessageBody,
+    hasMessageImages,
     messageAudios,
     messageDocuments,
+    messageVideos,
     messageImagePreviewUrlList,
     sentAt
   }

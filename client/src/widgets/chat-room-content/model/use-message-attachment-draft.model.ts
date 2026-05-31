@@ -1,11 +1,18 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import { MESSAGE_ATTACHMENT_LIMIT, type AudioObject, type DocumentObject, type ImageObject } from 'global-shared'
+import {
+  MESSAGE_ATTACHMENT_LIMIT,
+  type AudioObject,
+  type DocumentObject,
+  type ImageObject,
+  type VideoObject
+} from 'global-shared'
 import { computed, useTemplateRef } from 'vue'
 
 import {
   MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
-  MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX
+  MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
+  MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX
 } from 'src/entities/media-file'
 import { revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
@@ -13,7 +20,8 @@ import {
   MESSAGE_ATTACHMENT_DRAFT_KIND,
   MESSAGE_AUDIO_MAX_MB,
   MESSAGE_DOCUMENT_MAX_MB,
-  MESSAGE_IMAGE_MAX_MB
+  MESSAGE_IMAGE_MAX_MB,
+  MESSAGE_VIDEO_MAX_MB
 } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type {
@@ -48,26 +56,35 @@ export const useMessageAttachmentDraft = ({
     mediaKind: 'audio',
     buildMediaObjectDetails: buildMessageFileDraftObjectDetails
   })
+  const messageVideoDraft = useMessageMediaDraft<VideoObject>({
+    draftMediaIdPrefix: MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX,
+    mediaKind: 'video',
+    buildMediaObjectDetails: buildMessageFileDraftObjectDetails
+  })
   const messageAttachmentDraftUploadValue = computed(() => [
     ...messageImageDraft.uploadValues.value,
     ...messageDocumentDraft.uploadValues.value,
-    ...messageAudioDraft.uploadValues.value
+    ...messageAudioDraft.uploadValues.value,
+    ...messageVideoDraft.uploadValues.value
   ])
   const messageAttachmentDraftItems = computed(() =>
     buildMessageAttachmentDraftListItems(
       messageImageDraft.mediaObjects.value,
       messageDocumentDraft.mediaObjects.value,
-      messageAudioDraft.mediaPreviewObjects.value
+      messageAudioDraft.mediaPreviewObjects.value,
+      messageVideoDraft.mediaPreviewObjects.value
     )
   )
   const editingMessageAttachmentItems = computed(() =>
-    buildMessageAttachmentDraftListItems(editingMessageImages.value, [], [])
+    buildMessageAttachmentDraftListItems(editingMessageImages.value, [], [], [])
   )
-  const hasMessageImageOrDocumentDraft = computed(
-    () => messageImageDraft.hasDraft.value || messageDocumentDraft.hasDraft.value
-  )
-  const hasMessageAttachmentDraft = computed(
-    () => hasMessageImageOrDocumentDraft.value || messageAudioDraft.hasDraft.value
+  const hasMessageAttachmentDraft = computed(() =>
+    [
+      messageImageDraft.hasDraft.value,
+      messageDocumentDraft.hasDraft.value,
+      messageAudioDraft.hasDraft.value,
+      messageVideoDraft.hasDraft.value
+    ].some(Boolean)
   )
 
   const openMessageAttachmentUpload = () => {
@@ -91,15 +108,18 @@ export const useMessageAttachmentDraft = ({
       validImageUploadValues,
       validDocumentUploadValues,
       validAudioUploadValues,
+      validVideoUploadValues,
       sizeRejectedImageUploadValues,
       sizeRejectedDocumentUploadValues,
       sizeRejectedAudioUploadValues,
+      sizeRejectedVideoUploadValues,
       limitRejectedUploadValues
     } = buildMessageAttachmentUploadGroups(uploadValues)
     const rejectedUploadValues = [
       ...sizeRejectedImageUploadValues,
       ...sizeRejectedDocumentUploadValues,
       ...sizeRejectedAudioUploadValues,
+      ...sizeRejectedVideoUploadValues,
       ...limitRejectedUploadValues
     ]
 
@@ -107,7 +127,8 @@ export const useMessageAttachmentDraft = ({
     await Promise.all([
       messageImageDraft.update(validImageUploadValues),
       messageDocumentDraft.update(validDocumentUploadValues),
-      messageAudioDraft.update(validAudioUploadValues)
+      messageAudioDraft.update(validAudioUploadValues),
+      messageVideoDraft.update(validVideoUploadValues)
     ])
 
     if (sizeRejectedImageUploadValues.length) {
@@ -134,6 +155,14 @@ export const useMessageAttachmentDraft = ({
       })
     }
 
+    if (sizeRejectedVideoUploadValues.length) {
+      toast.add({
+        type: 'error',
+        title: t(TOAST_I18N.error),
+        content: t(CHAT_ROOM_CONTENT_I18N.messageVideoInvalidSize)(MESSAGE_VIDEO_MAX_MB)
+      })
+    }
+
     if (limitRejectedUploadValues.length) {
       toast.add({
         type: 'warning',
@@ -144,13 +173,19 @@ export const useMessageAttachmentDraft = ({
   }
 
   const clearMessageAttachmentDraft = async () => {
-    await Promise.all([messageImageDraft.clear(), messageDocumentDraft.clear(), messageAudioDraft.clear()])
+    await Promise.all([
+      messageImageDraft.clear(),
+      messageDocumentDraft.clear(),
+      messageAudioDraft.clear(),
+      messageVideoDraft.clear()
+    ])
   }
 
   const clearSentMessageAttachmentDraft = () => {
     messageImageDraft.clearSent()
     messageDocumentDraft.clearSent()
     messageAudioDraft.clearSent()
+    messageVideoDraft.clearSent()
   }
 
   const removeMessageAttachmentDraft = (attachment: MessageAttachmentDraftListItem) => {
@@ -164,7 +199,12 @@ export const useMessageAttachmentDraft = ({
       return
     }
 
-    void messageAudioDraft.remove(attachment.src)
+    if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO) {
+      void messageAudioDraft.remove(attachment.src)
+      return
+    }
+
+    void messageVideoDraft.remove(attachment.src)
   }
 
   const removeEditingMessageAttachment = (attachment: MessageAttachmentDraftListItem) => {
@@ -178,10 +218,12 @@ export const useMessageAttachmentDraft = ({
     messageAudioDraftAudios: messageAudioDraft.mediaObjects,
     messageDocumentDraftDocuments: messageDocumentDraft.mediaObjects,
     messageImageDraftImages: messageImageDraft.mediaObjects,
+    messageVideoDraftVideos: messageVideoDraft.mediaObjects,
     hasMessageAttachmentDraft,
     buildMessageAudioDraftPayload: messageAudioDraft.buildPayload,
     buildMessageDocumentDraftPayload: messageDocumentDraft.buildPayload,
     buildMessageImageDraftPayload: messageImageDraft.buildPayload,
+    buildMessageVideoDraftPayload: messageVideoDraft.buildPayload,
     clearMessageAttachmentDraft,
     clearSentMessageAttachmentDraft,
     openMessageAttachmentUpload,

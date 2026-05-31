@@ -151,6 +151,47 @@ describe('media.service', () => {
     )
   })
 
+  it('stores archive files in the document bucket', async () => {
+    fileTypeMock.fromBuffer.mockResolvedValue(null)
+
+    await mediaService.uploadBufferToBucket(Buffer.from('zip'), 'doc', {
+      contentType: 'application/zip',
+      filename: 'archive.zip'
+    })
+
+    expect(mongooseMock.bucket.openUploadStreamWithId).toHaveBeenCalledWith(
+      expect.any(mongooseMock.ObjectId),
+      'archive.zip',
+      expect.objectContaining({
+        contentType: 'application/zip',
+        metadata: expect.objectContaining({
+          kind: 'archive'
+        })
+      })
+    )
+  })
+
+  it('stores video files using provided file metadata fallback', async () => {
+    fileTypeMock.fromBuffer.mockResolvedValue(null)
+
+    const result = await mediaService.uploadBufferToBucket(Buffer.from('video'), 'video', {
+      contentType: 'video/mp4',
+      filename: 'clip.mp4'
+    })
+
+    expect(result).toBe('68f000000000000000000099')
+    expect(mongooseMock.bucket.openUploadStreamWithId).toHaveBeenCalledWith(
+      expect.any(mongooseMock.ObjectId),
+      'clip.mp4',
+      expect.objectContaining({
+        contentType: 'video/mp4',
+        metadata: expect.objectContaining({
+          kind: 'video'
+        })
+      })
+    )
+  })
+
   it('removes tracked uploaded media when scoped work fails', async () => {
     await expect(
       mediaService.withUploadedMediaCleanup(async (trackUploadedMedia) => {

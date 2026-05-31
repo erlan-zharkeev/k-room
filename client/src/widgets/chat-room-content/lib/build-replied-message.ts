@@ -11,7 +11,8 @@ export const cloneRepliedMessage = (message: RepliedMessage): RepliedMessage => 
   ...message,
   ...(message.images && { images: cloneMediaObjects(message.images) }),
   ...(message.documents && { documents: cloneMediaObjects(message.documents) }),
-  ...(message.audios && { audios: cloneMediaObjects(message.audios) })
+  ...(message.audios && { audios: cloneMediaObjects(message.audios) }),
+  ...(message.videos && { videos: cloneMediaObjects(message.videos) })
 })
 
 export const buildRepliedMessage = (
@@ -19,7 +20,7 @@ export const buildRepliedMessage = (
   kind: MessageDraftReferenceKind,
   roomId: string
 ): RepliedMessage => {
-  const { id, audios, authorId, authorNickname, body, documents, images } = message
+  const { id, audios, authorId, authorNickname, body, documents, images, videos } = message
 
   return {
     id,
@@ -30,6 +31,7 @@ export const buildRepliedMessage = (
     ...(images && { images: cloneMediaObjects(images) }),
     ...(documents && { documents: cloneMediaObjects(documents) }),
     ...(audios && { audios: cloneMediaObjects(audios) }),
+    ...(videos && { videos: cloneMediaObjects(videos) }),
     ...(kind === MESSAGE_DRAFT_REFERENCE_KIND.FORWARD && { forward: true })
   }
 }

@@ -61,7 +61,6 @@ export const syncMedia = async (mediaId: string, deps: SyncMediaDeps, options: S
     }
 
     await deps.loadMedia(mediaId)
-    await deps.updateMedia(mediaId, { lastChecked: Date.now() })
   }
 
   if (record) {
@@ -71,5 +70,4 @@ export const syncMedia = async (mediaId: string, deps: SyncMediaDeps, options: S
   }
 
   await deps.loadMedia(mediaId)
-  await deps.updateMedia(mediaId, { lastChecked: Date.now() })
 }

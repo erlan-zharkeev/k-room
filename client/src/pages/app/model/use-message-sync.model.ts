@@ -7,6 +7,8 @@ import {
   type EventPinnedMessageUpdated,
   type EventUpdateMessageStatus,
   type EventUpdatedMessageReactions,
+  type MediaObject,
+  type Message,
   MESSAGE_REACTION_UPDATE_ACTION,
   isMessageReadStatus,
   isMessageStatusDelivered
@@ -17,6 +19,7 @@ import {
   MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
+  MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX,
   useMedia
 } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
@@ -26,7 +29,7 @@ import { useMessageNotification } from './use-message-notification.model'
 
 export const useMessageSync = () => {
   const { mutate: mutateRoom } = useChatRoom()
-  const { bulkDelete: bulkDeleteMedia } = useMedia()
+  const { bulkDelete: bulkDeleteMedia, get: getMedia, put: putMedia } = useMedia()
   const { bulkUpdate, getById, messageById, mutate: mutateMessage, put, remove, update } = useMessage()
   const { user } = useUser()
   const { playDeliveredMessageSound, showDeliveredMessageToast } = useMessageNotification()
@@ -41,25 +44,63 @@ export const useMessageSync = () => {
     const isImageDraftMediaId = mediaId.startsWith(MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX)
     const isDocumentDraftMediaId = mediaId.startsWith(MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX)
     const isAudioDraftMediaId = mediaId.startsWith(MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX)
+    const isVideoDraftMediaId = mediaId.startsWith(MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX)
     const isVisualDraftMediaId = isImageDraftMediaId || isDocumentDraftMediaId
 
-    return isVisualDraftMediaId || isAudioDraftMediaId
+    return [isVisualDraftMediaId, isAudioDraftMediaId, isVideoDraftMediaId].some(Boolean)
   }
 
-  const resolveMessageDraftMediaIds = (messageId: string) => {
-    const currentMessage = getById(messageId)
-
-    if (!currentMessage) return []
-
-    const { audios = [], documents = [], images = [] } = currentMessage
-    const mediaIds = [...images, ...documents, ...audios].map(({ src }) => src)
+  const resolveMessageDraftMediaIds = ({ audios = [], documents = [], images = [], videos = [] }: Message) => {
+    const mediaIds = [...images, ...documents, ...audios, ...videos].map(({ src }) => src)
 
     return mediaIds.filter(isMessageDraftMediaId)
   }
 
-  const handleDeliveredMessage = async ({ roomId, message }: EventMessageDelivered) => {
-    const draftMediaIds = resolveMessageDraftMediaIds(message.id)
+  const copyDraftMediaBlobToDeliveredMedia = async (
+    draftMedia: MediaObject | undefined,
+    deliveredMedia: MediaObject
+  ) => {
+    if (!draftMedia) return
+    if (!isMessageDraftMediaId(draftMedia.src)) return
 
+    const draftRecord = await getMedia(draftMedia.src)
+
+    if (!draftRecord?.blob) return
+
+    await putMedia({
+      ...draftRecord,
+      id: deliveredMedia.src,
+      etag: undefined,
+      lastChecked: 0,
+      lastModified: undefined,
+      status: 'ready'
+    })
+  }
+
+  const preserveDeliveredMessageMediaBlobs = async (currentMessage: Message | undefined, deliveredMessage: Message) => {
+    if (!currentMessage) return
+
+    const mediaPairs: Array<[MediaObject[], MediaObject[]]> = [
+      [currentMessage.images ?? [], deliveredMessage.images ?? []],
+      [currentMessage.documents ?? [], deliveredMessage.documents ?? []],
+      [currentMessage.audios ?? [], deliveredMessage.audios ?? []],
+      [currentMessage.videos ?? [], deliveredMessage.videos ?? []]
+    ]
+
+    await Promise.all(
+      mediaPairs.flatMap(([draftMediaObjects, deliveredMediaObjects]) =>
+        deliveredMediaObjects.map((deliveredMedia, index) =>
+          copyDraftMediaBlobToDeliveredMedia(draftMediaObjects[index], deliveredMedia)
+        )
+      )
+    )
+  }
+
+  const handleDeliveredMessage = async ({ roomId, message }: EventMessageDelivered) => {
+    const currentMessage = getById(message.id)
+    const draftMediaIds = currentMessage ? resolveMessageDraftMediaIds(currentMessage) : []
+
+    await preserveDeliveredMessageMediaBlobs(currentMessage, message)
     await put(message)
 
     if (draftMediaIds.length) {
@@ -88,7 +129,8 @@ export const useMessageSync = () => {
     editedAt,
     images,
     linkPreview,
-    messageId
+    messageId,
+    videos
   }: EventMessageEdited) => {
     await update(messageId, {
       body,
@@ -96,7 +138,8 @@ export const useMessageSync = () => {
       images,
       linkPreview,
       ...(documents && { documents }),
-      ...(audios && { audios })
+      ...(audios && { audios }),
+      ...(videos && { videos })
     })
   }
 
