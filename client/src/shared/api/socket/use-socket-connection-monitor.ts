@@ -10,6 +10,7 @@ import { useSocketConnect } from './use-socket-connect'
 import { useSocketReconnect } from './use-socket-reconnect'
 
 let isMonitorActive = false
+let disposeSocketConnectionMonitorListeners: (() => void) | null = null
 
 export const useSocketConnectionMonitor = () => {
   const { t } = useI18n()
@@ -22,17 +23,17 @@ export const useSocketConnectionMonitor = () => {
 
     isMonitorActive = true
 
-    socket.on('connect', () => {
+    const handleConnect = () => {
       setSocketConnected(true)
       setSocketReconnecting(false)
       actualizeSocketData()
-    })
+    }
 
-    socket.on<SocketActions>('disconnect', () => {
+    const handleDisconnect = () => {
       setSocketConnected(false)
-    })
+    }
 
-    socket.on<SocketActions>('error-message', ({ message, silent }: EventErrorMessage) => {
+    const handleErrorMessage = ({ message, silent }: EventErrorMessage) => {
       if (silent) return
 
       toast.add({
@@ -40,31 +41,49 @@ export const useSocketConnectionMonitor = () => {
         title: t(TOAST_I18N.error),
         content: message
       })
-    })
+    }
 
-    socket.on<SocketActions>('auth-error', async ({ event, payload }: EventAuthError) => {
+    const handleAuthError = async ({ event, payload }: EventAuthError) => {
       await socketReconnect()
       socket.emit(event, payload)
-    })
+    }
 
-    socket.io.on('reconnect', () => {
+    const handleReconnect = () => {
       setSocketConnected(true)
       setSocketReconnecting(false)
       actualizeSocketData()
-    })
+    }
 
-    socket.io.on('reconnect_attempt', () => {
+    const handleReconnectAttempt = () => {
       setSocketReconnecting(true)
-    })
+    }
 
-    socket.io.on('reconnect_failed', () => {
+    const handleReconnectFailed = () => {
       setSocketReconnecting(false)
-    })
+    }
+
+    socket.on('connect', handleConnect)
+    socket.on<SocketActions>('disconnect', handleDisconnect)
+    socket.on<SocketActions>('error-message', handleErrorMessage)
+    socket.on<SocketActions>('auth-error', handleAuthError)
+    socket.io.on('reconnect', handleReconnect)
+    socket.io.on('reconnect_attempt', handleReconnectAttempt)
+    socket.io.on('reconnect_failed', handleReconnectFailed)
+
+    disposeSocketConnectionMonitorListeners = () => {
+      socket.off('connect', handleConnect)
+      socket.off<SocketActions>('disconnect', handleDisconnect)
+      socket.off<SocketActions>('error-message', handleErrorMessage)
+      socket.off<SocketActions>('auth-error', handleAuthError)
+      socket.io.off('reconnect', handleReconnect)
+      socket.io.off('reconnect_attempt', handleReconnectAttempt)
+      socket.io.off('reconnect_failed', handleReconnectFailed)
+    }
   }
 
   const disposeSocketConnectionMonitor = () => {
-    socket.removeAllListeners()
-    socket.io.removeAllListeners()
+    disposeSocketConnectionMonitorListeners?.()
+    disposeSocketConnectionMonitorListeners = null
     isMonitorActive = false
   }
 
