@@ -1,7 +1,12 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import { MESSAGE_ATTACHMENT_LIMIT } from 'global-shared'
+import { MESSAGE_ATTACHMENT_LIMIT, type AudioObject, type DocumentObject, type ImageObject } from 'global-shared'
 import { computed, useTemplateRef } from 'vue'
 
+import {
+  MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX,
+  MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
+  MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX
+} from 'src/entities/media-file'
 import { revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import {
@@ -18,10 +23,9 @@ import type {
 } from '../config/types'
 import { buildMessageAttachmentDraftListItems } from '../lib/build-message-attachment-draft-list-items'
 import { buildMessageAttachmentUploadGroups } from '../lib/build-message-attachment-upload-groups'
+import { buildMessageFileDraftObjectDetails } from '../lib/build-message-draft-media-objects'
 
-import { useMessageAudioDraft } from './use-message-audio-draft.model'
-import { useMessageDocumentDraft } from './use-message-document-draft.model'
-import { useMessageImageDraft } from './use-message-image-draft.model'
+import { useMessageMediaDraft } from './use-message-media-draft.model'
 
 export const useMessageAttachmentDraft = ({
   editingMessageImages,
@@ -30,54 +34,40 @@ export const useMessageAttachmentDraft = ({
   const { t } = useI18n()
   const toast = useAppToast()
   const messageAttachmentUploadRef = useTemplateRef<MessageAttachmentUploadExpose>('messageAttachmentUpload')
-  const {
-    buildMessageImageDraftPayload,
-    clearMessageImageDraft,
-    clearSentMessageImageDraft,
-    hasMessageImageDraft,
-    messageImageDraftImages,
-    messageImageDraftUploadValue,
-    removeMessageImageDraft,
-    updateMessageImageDraft
-  } = useMessageImageDraft()
-  const {
-    buildMessageDocumentDraftPayload,
-    clearMessageDocumentDraft,
-    clearSentMessageDocumentDraft,
-    hasMessageDocumentDraft,
-    messageDocumentDraftDocuments,
-    messageDocumentDraftUploadValue,
-    removeMessageDocumentDraft,
-    updateMessageDocumentDraft
-  } = useMessageDocumentDraft()
-  const {
-    buildMessageAudioDraftPayload,
-    clearMessageAudioDraft,
-    clearSentMessageAudioDraft,
-    hasMessageAudioDraft,
-    messageAudioDraftAudios,
-    messageAudioDraftUploadValue,
-    removeMessageAudioDraft,
-    updateMessageAudioDraft
-  } = useMessageAudioDraft()
+  const messageImageDraft = useMessageMediaDraft<ImageObject>({
+    draftMediaIdPrefix: MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
+    mediaKind: 'image'
+  })
+  const messageDocumentDraft = useMessageMediaDraft<DocumentObject>({
+    draftMediaIdPrefix: MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
+    mediaKind: 'pdf',
+    buildMediaObjectDetails: buildMessageFileDraftObjectDetails
+  })
+  const messageAudioDraft = useMessageMediaDraft<AudioObject>({
+    draftMediaIdPrefix: MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX,
+    mediaKind: 'audio',
+    buildMediaObjectDetails: buildMessageFileDraftObjectDetails
+  })
   const messageAttachmentDraftUploadValue = computed(() => [
-    ...messageImageDraftUploadValue.value,
-    ...messageDocumentDraftUploadValue.value,
-    ...messageAudioDraftUploadValue.value
+    ...messageImageDraft.uploadValues.value,
+    ...messageDocumentDraft.uploadValues.value,
+    ...messageAudioDraft.uploadValues.value
   ])
   const messageAttachmentDraftItems = computed(() =>
     buildMessageAttachmentDraftListItems(
-      messageImageDraftImages.value,
-      messageDocumentDraftDocuments.value,
-      messageAudioDraftAudios.value
+      messageImageDraft.mediaObjects.value,
+      messageDocumentDraft.mediaObjects.value,
+      messageAudioDraft.mediaObjects.value
     )
   )
   const editingMessageAttachmentItems = computed(() =>
     buildMessageAttachmentDraftListItems(editingMessageImages.value, [], [])
   )
-  const hasMessageImageOrDocumentDraft = computed(() => hasMessageImageDraft.value || hasMessageDocumentDraft.value)
+  const hasMessageImageOrDocumentDraft = computed(
+    () => messageImageDraft.hasDraft.value || messageDocumentDraft.hasDraft.value
+  )
   const hasMessageAttachmentDraft = computed(
-    () => hasMessageImageOrDocumentDraft.value || hasMessageAudioDraft.value
+    () => hasMessageImageOrDocumentDraft.value || messageAudioDraft.hasDraft.value
   )
 
   const openMessageAttachmentUpload = () => {
@@ -115,9 +105,9 @@ export const useMessageAttachmentDraft = ({
 
     revokeObjectUrls(rejectedUploadValues.map(({ previewUrl }) => previewUrl))
     await Promise.all([
-      updateMessageImageDraft(validImageUploadValues),
-      updateMessageDocumentDraft(validDocumentUploadValues),
-      updateMessageAudioDraft(validAudioUploadValues)
+      messageImageDraft.update(validImageUploadValues),
+      messageDocumentDraft.update(validDocumentUploadValues),
+      messageAudioDraft.update(validAudioUploadValues)
     ])
 
     if (sizeRejectedImageUploadValues.length) {
@@ -154,27 +144,27 @@ export const useMessageAttachmentDraft = ({
   }
 
   const clearMessageAttachmentDraft = async () => {
-    await Promise.all([clearMessageImageDraft(), clearMessageDocumentDraft(), clearMessageAudioDraft()])
+    await Promise.all([messageImageDraft.clear(), messageDocumentDraft.clear(), messageAudioDraft.clear()])
   }
 
   const clearSentMessageAttachmentDraft = () => {
-    clearSentMessageImageDraft()
-    clearSentMessageDocumentDraft()
-    clearSentMessageAudioDraft()
+    messageImageDraft.clearSent()
+    messageDocumentDraft.clearSent()
+    messageAudioDraft.clearSent()
   }
 
   const removeMessageAttachmentDraft = (attachment: MessageAttachmentDraftListItem) => {
     if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.IMAGE) {
-      void removeMessageImageDraft(attachment.src)
+      void messageImageDraft.remove(attachment.src)
       return
     }
 
     if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT) {
-      void removeMessageDocumentDraft(attachment.src)
+      void messageDocumentDraft.remove(attachment.src)
       return
     }
 
-    void removeMessageAudioDraft(attachment.src)
+    void messageAudioDraft.remove(attachment.src)
   }
 
   const removeEditingMessageAttachment = (attachment: MessageAttachmentDraftListItem) => {
@@ -185,13 +175,13 @@ export const useMessageAttachmentDraft = ({
     editingMessageAttachmentItems,
     messageAttachmentDraftItems,
     messageAttachmentDraftUploadValue,
-    messageAudioDraftAudios,
-    messageDocumentDraftDocuments,
-    messageImageDraftImages,
+    messageAudioDraftAudios: messageAudioDraft.mediaObjects,
+    messageDocumentDraftDocuments: messageDocumentDraft.mediaObjects,
+    messageImageDraftImages: messageImageDraft.mediaObjects,
     hasMessageAttachmentDraft,
-    buildMessageAudioDraftPayload,
-    buildMessageDocumentDraftPayload,
-    buildMessageImageDraftPayload,
+    buildMessageAudioDraftPayload: messageAudioDraft.buildPayload,
+    buildMessageDocumentDraftPayload: messageDocumentDraft.buildPayload,
+    buildMessageImageDraftPayload: messageImageDraft.buildPayload,
     clearMessageAttachmentDraft,
     clearSentMessageAttachmentDraft,
     openMessageAttachmentUpload,
