@@ -5,6 +5,7 @@ import { useSocketAction } from 'src/shared/api'
 import type { MessageRecord } from 'src/shared/lib'
 
 import type { EditingMessageState } from '../config/types'
+import { cloneMediaObjects } from '../lib/clone-media-objects'
 import { hasMessageImageChanges } from '../lib/has-message-image-changes'
 
 const editingMessageState = ref<EditingMessageState | null>(null)
@@ -48,10 +49,10 @@ export const useMessageEdit = () => {
       roomId,
       messageId: message.id,
       initialBody: message.body,
-      initialImages: (message.images ?? []).map((image) => ({ ...image }))
+      initialImages: cloneMediaObjects(message.images ?? [])
     }
     messageEditText.value = message.body
-    editingMessageImages.value = (message.images ?? []).map((image) => ({ ...image }))
+    editingMessageImages.value = cloneMediaObjects(message.images ?? [])
   }
 
   const cancelMessageEdit = () => {

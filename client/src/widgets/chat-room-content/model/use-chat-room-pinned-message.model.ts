@@ -5,6 +5,7 @@ import { useMessage } from 'src/entities/message'
 import { useSocketAction } from 'src/shared/api'
 
 import type { ChatRoomPinnedMessageProps } from '../config/types'
+import { resolveMessagePreviewText } from '../lib/resolve-message-preview-text'
 
 export const useChatRoomPinnedMessage = (props: ChatRoomPinnedMessageProps) => {
   const room = toRef(props, 'room')
@@ -20,7 +21,7 @@ export const useChatRoomPinnedMessage = (props: ChatRoomPinnedMessageProps) => {
   const pinnedMessageText = computed(() => {
     if (!pinnedMessage.value) return ''
 
-    return pinnedMessage.value.body || pinnedMessage.value.images?.[0]?.name || ''
+    return resolveMessagePreviewText(pinnedMessage.value)
   })
 
   const unpinPinnedMessage = () => {

@@ -16,6 +16,7 @@ import { socket } from 'src/shared/api'
 import type { ChatRoomRecord } from 'src/shared/lib'
 
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
+import { cloneMediaObjects } from '../lib/clone-media-objects'
 
 import { useChatRoomMessageEmojiPicker } from './use-chat-room-message-emoji-picker.model'
 import { useMessageAttachmentDraft } from './use-message-attachment-draft.model'
@@ -110,8 +111,8 @@ export const useChatRoomFooter = (
 
   const sendMessage = async (roomId: string) => {
     const body = messageText.value.trim()
-    const images = messageImageDraftImages.value.map((image) => ({ ...image }))
-    const documents = messageDocumentDraftDocuments.value.map((document) => ({ ...document }))
+    const images = cloneMediaObjects(messageImageDraftImages.value)
+    const documents = cloneMediaObjects(messageDocumentDraftDocuments.value)
     const hasMessageDraft = Boolean(images.length || documents.length)
     const { id: authorId, nickname: authorNickname } = user.value
     const repliedMessage = buildMessageDraftReferencePayload(roomId)

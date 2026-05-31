@@ -5,6 +5,7 @@ import { useI18n } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageBodyProps, MessageBodySelectMessage } from '../config/types'
+import { resolveMessagePreviewText } from '../lib/resolve-message-preview-text'
 
 export const useMessageReferencePreview = (props: MessageBodyProps, onSelectMessage: MessageBodySelectMessage) => {
   const message = toRef(props, 'message')
@@ -32,19 +33,9 @@ export const useMessageReferencePreview = (props: MessageBodyProps, onSelectMess
 
     return `${actionTitle}: ${reference.authorNickname}`
   })
-  const messageReferencePreviewText = computed(() => {
-    const reference = messageReference.value
-
-    if (!reference) return ''
-
-    const hasBody = Boolean(reference.body.trim())
-    const firstImage = reference.images?.[0]
-
-    if (hasBody) return reference.body
-    if (firstImage) return firstImage.name
-
-    return ''
-  })
+  const messageReferencePreviewText = computed(() =>
+    messageReference.value ? resolveMessagePreviewText(messageReference.value) : ''
+  )
 
   const selectMessageReference = () => {
     const reference = messageReference.value
