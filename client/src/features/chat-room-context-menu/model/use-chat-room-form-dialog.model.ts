@@ -1,7 +1,6 @@
 import {
   CHAT_ROOM_GROUP_MEMBER_LIMIT,
   USER_CHAT_ROOM_LIMIT,
-  type CreateRoomAckPayload,
   type EventCreateRoom,
   type EventUpdateChatRoom
 } from 'global-shared'
@@ -252,7 +251,7 @@ export const useChatRoomFormDialog = (
       ...(avatarFile ? { avatarFile } : {})
     }
 
-    const response = await emitSocketAction<EventCreateRoom, CreateRoomAckPayload>('create-chat-room', payload)
+    const response = await emitSocketAction('create-chat-room', payload)
 
     chatRoomFormState.isSavingChatRoom = false
 
@@ -285,7 +284,7 @@ export const useChatRoomFormDialog = (
       ...(avatarFile ? { avatarFile } : {})
     }
 
-    const response = await emitSocketAction<EventUpdateChatRoom>('update-chat-room', payload)
+    const response = await emitSocketAction('update-chat-room', payload)
 
     chatRoomFormState.isSavingChatRoom = false
 

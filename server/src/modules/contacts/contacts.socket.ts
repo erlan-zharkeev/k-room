@@ -3,8 +3,7 @@ import {
   type EventDeleteContact,
   type EventSaveContact,
   type EventSearchContact,
-  type EventUpdateInteraction,
-  type SocketActions
+  type EventUpdateInteraction
 } from 'global-shared'
 
 import { PresenceService } from 'src/modules/presence/presence.service'
@@ -26,11 +25,11 @@ export class ContactsSocketService {
   constructor(private readonly presenceService: PresenceService) {}
 
   register(socket: SocketInstance) {
-    socket.on<SocketActions>(
+    socket.on(
       'search-contact',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventSearchContact>(
         socket,
-        async ({ value, offset = 0 }: EventSearchContact) => {
+        async ({ value, offset = 0 }) => {
           const payload = await searchContacts(socket.data.userId, value, offset, this.presenceService)
           emitSearchedContacts(socket.id, payload)
         },
@@ -38,7 +37,7 @@ export class ContactsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'save-contact',
       socketAckMiddleware<EventSaveContact>(
         socket,
@@ -55,7 +54,7 @@ export class ContactsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'delete-contact',
       socketAckMiddleware<EventDeleteContact>(
         socket,
@@ -66,7 +65,7 @@ export class ContactsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'update-contact-interaction-type',
       socketAckMiddleware<EventUpdateInteraction>(
         socket,

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import type { EventAnswerCall, EventCallEnded, EventCallUser, EventMarkCallAsVideo, SocketActions } from 'global-shared'
+import type { EventAnswerCall, EventCallEnded, EventCallUser, EventMarkCallAsVideo } from 'global-shared'
 
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types/socket'
@@ -10,7 +10,7 @@ import { answerCall, callUser, emitCallsToUser, endCall, markCallAsVideo } from 
 @Injectable()
 export class CallsSocketService {
   register(socket: SocketInstance) {
-    socket.on<SocketActions>(
+    socket.on(
       'initialize',
       socketErrorMiddleware(
         socket,
@@ -21,44 +21,44 @@ export class CallsSocketService {
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'mark-call-as-video',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventMarkCallAsVideo>(
         socket,
-        async ({ callId }: EventMarkCallAsVideo) => {
+        async ({ callId }) => {
           await markCallAsVideo(callId)
         },
         { basicError: CALLS_I18N.markCallAsVideoFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'call-user',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventCallUser>(
         socket,
-        async (payload: EventCallUser) => {
+        async (payload) => {
           await callUser(socket.data.userId, payload)
         },
         { basicError: CALLS_I18N.callUserFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'answer-call',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventAnswerCall>(
         socket,
-        async (payload: EventAnswerCall) => {
+        async (payload) => {
           await answerCall(payload)
         },
         { basicError: CALLS_I18N.answerCallFailed }
       )
     )
 
-    socket.on<SocketActions>(
+    socket.on(
       'call-ended',
-      socketErrorMiddleware(
+      socketErrorMiddleware<EventCallEnded>(
         socket,
-        async (payload: EventCallEnded) => {
+        async (payload) => {
           await endCall(payload)
         },
         { basicError: CALLS_I18N.endCallFailed }

@@ -1,10 +1,4 @@
-import {
-  MESSAGE_BODY_MAX_LENGTH,
-  MESSAGE_STATUS_VALUE,
-  type EventSendMessage,
-  type Message,
-  type SocketActions
-} from 'global-shared'
+import { MESSAGE_BODY_MAX_LENGTH, MESSAGE_STATUS_VALUE, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, type Ref, ref } from 'vue'
 
@@ -167,7 +161,7 @@ export const useChatRoomFooter = (
       room.messages.push(message.id)
     })
 
-    socket.emit<SocketActions>('send-message', payload)
+    socket.emit('send-message', payload)
     stopTyping()
     messageText.value = ''
     if (repliedMessage) {

@@ -1,4 +1,3 @@
-import type { EventUpdatePinnedChatRoomOrder, SocketActions } from 'global-shared'
 import partition from 'lodash/partition'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -116,12 +115,12 @@ export const useChatRoomsList = () => {
     const pinnedChatRoomIds = items.map(({ id }) => id)
 
     await updatePinnedOrder(pinnedChatRoomIds)
-    void emitSocketAction<EventUpdatePinnedChatRoomOrder>(
+    void emitSocketAction(
       'update-pinned-chat-room-order',
       { pinnedChatRoomIds },
       {
         onFailure: () => {
-          socket.emit<SocketActions>('actualize-user-data')
+          socket.emit('actualize-user-data')
         }
       }
     )

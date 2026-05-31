@@ -20,7 +20,7 @@ export const useMessagePin = (message: Ref<MessageRecord>, room: Ref<ChatRoomRec
     }
 
     isUpdatingPinnedMessage.value = true
-    void emitSocketAction<EventUpdatePinnedMessage>('update-pinned-message', payload, {
+    void emitSocketAction('update-pinned-message', payload, {
       onSettled: () => {
         isUpdatingPinnedMessage.value = false
       }

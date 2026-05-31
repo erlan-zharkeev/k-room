@@ -1,5 +1,4 @@
 import { parse } from 'cookie'
-import type { SocketActions } from 'global-shared'
 import jwt from 'jsonwebtoken'
 
 import { SERVER_ENV } from 'src/app/env'
@@ -9,7 +8,7 @@ import type { SocketInstance } from 'src/shared/types/socket'
 import type { SocketTokenPayload } from './auth.types'
 
 const emitAuthError = (socket: SocketInstance) => {
-  socket.emit<SocketActions>('auth-error', {
+  socket.emit('auth-error', {
     event: 'connection',
     payload: null
   })

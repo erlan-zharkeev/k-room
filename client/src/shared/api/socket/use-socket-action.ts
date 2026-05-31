@@ -1,11 +1,16 @@
-import type { SocketAckResponse, SocketActions } from 'global-shared'
+import type {
+  ClientToServerSocketAckAction,
+  ClientToServerSocketAckPayloadMap,
+  ClientToServerSocketPayloadMap,
+  SocketAckResponse
+} from 'global-shared'
 
 import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { SOCKET_ACTION_ACK_TIMEOUT_MS } from './constants'
 import { SOCKET_I18N } from './i18n'
 import { socket } from './socket'
-import type { EmitSocketActionOptions } from './types'
+import type { EmitSocketActionOptions, EmitSocketActionWithAck } from './types'
 
 export const useSocketAction = () => {
   const { t } = useI18n()
@@ -19,33 +24,37 @@ export const useSocketAction = () => {
     })
   }
 
-  const emitSocketAction = <TPayload, TResponsePayload = void, TReason extends string = string>(
-    event: SocketActions,
-    payload: TPayload,
-    options: EmitSocketActionOptions<TResponsePayload, TReason> = {}
+  const emitSocketAction = <TEvent extends ClientToServerSocketAckAction, TReason extends string = string>(
+    event: TEvent,
+    payload: ClientToServerSocketPayloadMap[TEvent],
+    options: EmitSocketActionOptions<ClientToServerSocketAckPayloadMap[TEvent], TReason> = {}
   ) => {
-    return new Promise<SocketAckResponse<TResponsePayload, TReason>>((resolve) => {
-      socket
-        .timeout(SOCKET_ACTION_ACK_TIMEOUT_MS)
-        .emit(event, payload, (error: Error | null, response?: SocketAckResponse<TResponsePayload, TReason>) => {
-          const hasTransportError = Boolean(error || !response)
-          const normalizedResponse: SocketAckResponse<TResponsePayload, TReason> =
-            hasTransportError || !response ? { ok: false, handledByGlobalError: true } : response
+    const emitWithAck = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS).emitWithAck as EmitSocketActionWithAck
 
-          if (hasTransportError) {
-            showSocketTransportError()
-          }
+    return emitWithAck<TEvent, TReason>(event, payload)
+      .then((response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>) => {
+        if (response.ok) {
+          options.onSuccess?.(response)
+        } else {
+          options.onFailure?.(response)
+        }
 
-          if (normalizedResponse.ok) {
-            options.onSuccess?.(normalizedResponse)
-          } else {
-            options.onFailure?.(normalizedResponse)
-          }
+        return response
+      })
+      .catch(() => {
+        const response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason> = {
+          ok: false,
+          handledByGlobalError: true
+        }
 
-          options.onSettled?.()
-          resolve(normalizedResponse)
-        })
-    })
+        showSocketTransportError()
+        options.onFailure?.(response)
+
+        return response
+      })
+      .finally(() => {
+        options.onSettled?.()
+      })
   }
 
   return {

@@ -1,4 +1,4 @@
-import { type EventSendMessage, type Message, MESSAGE_STATUS_VALUE, type SocketActions } from 'global-shared'
+import { type EventSendMessage, type Message, MESSAGE_STATUS_VALUE } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, type Ref, ref, toRef, watch } from 'vue'
 
@@ -116,7 +116,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
       await mutate(roomId, (room) => {
         room.messages.push(message.id)
       })
-      socket.emit<SocketActions>('send-message', payload)
+      socket.emit('send-message', payload)
       closeMessageForwardDialog()
     } finally {
       isForwardingMessage.value = false

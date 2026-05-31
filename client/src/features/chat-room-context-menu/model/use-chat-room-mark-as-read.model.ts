@@ -16,7 +16,7 @@ export const useChatRoomMarkAsRead = (item: Readonly<Ref<ChatRoomContextMenuItem
     const payload: EventMarkRoomAsRead = { roomId: item.value.id }
 
     isMarkingChatRoomAsRead.value = true
-    void emitSocketAction<EventMarkRoomAsRead>('mark-room-as-read', payload, {
+    void emitSocketAction('mark-room-as-read', payload, {
       onSettled: () => {
         isMarkingChatRoomAsRead.value = false
       }

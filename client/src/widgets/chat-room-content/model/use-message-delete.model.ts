@@ -26,7 +26,7 @@ export const useMessageDelete = (props: MessageDeleteDialogProps, isDeleteMessag
     }
 
     isDeletingMessage.value = true
-    void emitSocketAction<EventDeleteMessage>('delete-message', payload, {
+    void emitSocketAction('delete-message', payload, {
       onSettled: () => {
         isDeletingMessage.value = false
       }

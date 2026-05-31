@@ -19,7 +19,7 @@ export const useMessageReaction = (message: Ref<MessageRecord>, room: Ref<ChatRo
     }
 
     isUpdatingMessageReaction.value = true
-    void emitSocketAction<EventAddReaction>('add-reaction', payload, {
+    void emitSocketAction('add-reaction', payload, {
       onSettled: () => {
         isUpdatingMessageReaction.value = false
       }

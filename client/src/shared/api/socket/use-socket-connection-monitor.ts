@@ -1,4 +1,4 @@
-import type { EventAuthError, EventErrorMessage, SocketActions } from 'global-shared'
+import type { EventAuthError, EventErrorMessage } from 'global-shared'
 
 import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
@@ -45,7 +45,10 @@ export const useSocketConnectionMonitor = () => {
 
     const handleAuthError = async ({ event, payload }: EventAuthError) => {
       await socketReconnect()
-      socket.emit(event, payload)
+
+      if (event === 'connection') return
+
+      socket.emit(event, payload as never)
     }
 
     const handleReconnect = () => {
@@ -63,18 +66,18 @@ export const useSocketConnectionMonitor = () => {
     }
 
     socket.on('connect', handleConnect)
-    socket.on<SocketActions>('disconnect', handleDisconnect)
-    socket.on<SocketActions>('error-message', handleErrorMessage)
-    socket.on<SocketActions>('auth-error', handleAuthError)
+    socket.on('disconnect', handleDisconnect)
+    socket.on('error-message', handleErrorMessage)
+    socket.on('auth-error', handleAuthError)
     socket.io.on('reconnect', handleReconnect)
     socket.io.on('reconnect_attempt', handleReconnectAttempt)
     socket.io.on('reconnect_failed', handleReconnectFailed)
 
     disposeSocketConnectionMonitorListeners = () => {
       socket.off('connect', handleConnect)
-      socket.off<SocketActions>('disconnect', handleDisconnect)
-      socket.off<SocketActions>('error-message', handleErrorMessage)
-      socket.off<SocketActions>('auth-error', handleAuthError)
+      socket.off('disconnect', handleDisconnect)
+      socket.off('error-message', handleErrorMessage)
+      socket.off('auth-error', handleAuthError)
       socket.io.off('reconnect', handleReconnect)
       socket.io.off('reconnect_attempt', handleReconnectAttempt)
       socket.io.off('reconnect_failed', handleReconnectFailed)

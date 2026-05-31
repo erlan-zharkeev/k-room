@@ -3,8 +3,7 @@ import {
   MESSAGE_STATUS_VALUE,
   isMessageReadStatus,
   isMessageSendingStatus,
-  type EventChangeMessageStatus,
-  type SocketActions
+  type EventChangeMessageStatus
 } from 'global-shared'
 import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
@@ -43,7 +42,7 @@ export const useChatRoomMessageReadStatus = (
     }
 
     pendingReadMessageIds.add(message.id)
-    socket.emit<SocketActions>('change-message-status', payload)
+    socket.emit('change-message-status', payload)
   }
 
   const isVirtualItemVisible = (virtualItem: VirtualItem, scrollOffset: number, viewportHeight: number) => {

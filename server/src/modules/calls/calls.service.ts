@@ -74,9 +74,7 @@ export const emitCallsToUser = async (userId: string) => {
   const transformedCalls = await Promise.all(
     calls.map(async (call) => transformCallForUser(userId, stringifyMongoId(call._id)))
   )
-  const payload = transformedCalls.filter(
-    (call): call is NonNullable<typeof call> => call !== null
-  ) as EventCallsUpdated
+  const payload: EventCallsUpdated = transformedCalls.filter((call): call is Call => call !== null)
   emitToUsers([userId], 'calls-data-loaded', payload)
 }
 

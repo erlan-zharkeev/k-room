@@ -4,12 +4,9 @@ import {
   CONTACT_SEARCH_RESULT_LIMIT,
   type Contact,
   type EventContactAddSuccess,
-  type EventDeleteContactSuccess,
   type EventGetSearchedContact,
   type EventInviteReceived,
-  type EventUpdateContactInteractionSuccess,
   type Interaction,
-  type SocketActions,
   isAcceptedContactInteraction,
   isBlockedContactInteraction,
   isDefaultContactInteraction,
@@ -31,7 +28,7 @@ import { CONTACTS_I18N } from './contacts.i18n'
 import { assertContactLimit } from './contacts.utils'
 
 export const emitSearchedContacts = (socketId: string, payload: EventGetSearchedContact) => {
-  getIO().to(socketId).emit<SocketActions>('get-searched-contact', payload)
+  getIO().to(socketId).emit('get-searched-contact', payload)
 }
 
 export const searchContacts = async (
@@ -213,7 +210,7 @@ export const emitContactInteractionUpdated = (userId: string, contactId: string,
   emitToUsers([userId], 'contact-interaction-updated', {
     contactId,
     interaction
-  } satisfies EventUpdateContactInteractionSuccess)
+  })
 }
 
 export const deleteContactById = async (userId: string, deletingUserId: string, silent = false) => {
@@ -222,7 +219,7 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
   emitToUsers([userId], 'contact-delete-success', {
     deletedContactId: deletingUserId,
     silent
-  } satisfies EventDeleteContactSuccess)
+  })
 
   const deletingContact = await UserModel.findOne(
     { _id: deletingUserId },

@@ -1,5 +1,3 @@
-import type { SocketActions } from 'global-shared'
-
 import { socket } from 'src/shared/api'
 
 import { useMessageSync } from './use-message-sync.model'
@@ -17,25 +15,25 @@ export const useMessageMonitor = () => {
   } = useMessageSync()
 
   const initializeMessageMonitor = () => {
-    socket.on<SocketActions>('message-deleted', handleMessageDeleted)
-    socket.on<SocketActions>('message-delivered', handleDeliveredMessage)
-    socket.on<SocketActions>('message-edited', handleMessageEdited)
-    socket.on<SocketActions>('message-link-preview-updated', handleMessageLinkPreviewUpdated)
-    socket.on<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.on<SocketActions>('pinned-message-updated', handlePinnedMessageUpdated)
-    socket.on<SocketActions>('message-status-updated', updateMessageStatus)
-    socket.on<SocketActions>('messages-status-updated', updateMessagesStatus)
+    socket.on('message-deleted', handleMessageDeleted)
+    socket.on('message-delivered', handleDeliveredMessage)
+    socket.on('message-edited', handleMessageEdited)
+    socket.on('message-link-preview-updated', handleMessageLinkPreviewUpdated)
+    socket.on('message-reaction-updated', handleMessageReactionUpdate)
+    socket.on('pinned-message-updated', handlePinnedMessageUpdated)
+    socket.on('message-status-updated', updateMessageStatus)
+    socket.on('messages-status-updated', updateMessagesStatus)
   }
 
   const disposeMessageMonitor = () => {
-    socket.off<SocketActions>('message-deleted', handleMessageDeleted)
-    socket.off<SocketActions>('message-delivered', handleDeliveredMessage)
-    socket.off<SocketActions>('message-edited', handleMessageEdited)
-    socket.off<SocketActions>('message-link-preview-updated', handleMessageLinkPreviewUpdated)
-    socket.off<SocketActions>('message-reaction-updated', handleMessageReactionUpdate)
-    socket.off<SocketActions>('pinned-message-updated', handlePinnedMessageUpdated)
-    socket.off<SocketActions>('message-status-updated', updateMessageStatus)
-    socket.off<SocketActions>('messages-status-updated', updateMessagesStatus)
+    socket.off('message-deleted', handleMessageDeleted)
+    socket.off('message-delivered', handleDeliveredMessage)
+    socket.off('message-edited', handleMessageEdited)
+    socket.off('message-link-preview-updated', handleMessageLinkPreviewUpdated)
+    socket.off('message-reaction-updated', handleMessageReactionUpdate)
+    socket.off('pinned-message-updated', handlePinnedMessageUpdated)
+    socket.off('message-status-updated', updateMessageStatus)
+    socket.off('messages-status-updated', updateMessagesStatus)
   }
 
   return {

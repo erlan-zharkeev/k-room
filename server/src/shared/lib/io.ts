@@ -1,11 +1,12 @@
 import { REQ_STATUS } from 'global-shared'
-import type { Server } from 'socket.io'
+
+import type { SocketIO } from '../types/socket'
 
 import { AppError } from './app-error'
 
-let io: Server | null = null
+let io: SocketIO | null = null
 
-export const setIO = (value: Server) => {
+export const setIO = (value: SocketIO) => {
   io = value
 }
 
