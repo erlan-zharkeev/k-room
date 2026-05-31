@@ -6,6 +6,7 @@ import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageDraftReferenceKind, MessageDraftReferenceState } from '../config/types'
 import { buildRepliedMessage, cloneRepliedMessage } from '../lib/build-replied-message'
+import { resolveMessagePreviewText } from '../lib/resolve-message-preview-text'
 
 const messageDraftReferenceState = ref<MessageDraftReferenceState | null>(null)
 
@@ -31,19 +32,9 @@ export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
 
     return t(isForwardReference ? CHAT_ROOM_CONTENT_I18N.forwardMessage : CHAT_ROOM_CONTENT_I18N.replyMessage)
   })
-  const messageDraftReferencePreviewText = computed(() => {
-    const reference = messageDraftReference.value
-
-    if (!reference) return ''
-
-    const hasBody = Boolean(reference.body.trim())
-    const firstImage = reference.images?.[0]
-
-    if (hasBody) return reference.body
-    if (firstImage) return firstImage.name
-
-    return ''
-  })
+  const messageDraftReferencePreviewText = computed(() =>
+    messageDraftReference.value ? resolveMessagePreviewText(messageDraftReference.value) : ''
+  )
 
   const startMessageDraftReference = (message: MessageRecord, roomId: string, kind: MessageDraftReferenceKind) => {
     messageDraftReferenceState.value = {
