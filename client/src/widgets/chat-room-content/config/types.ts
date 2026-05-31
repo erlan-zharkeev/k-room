@@ -232,11 +232,12 @@ export interface MessageMediaDraftItem {
   uploadValue: INmorphCustomFileData
 }
 
+export type MessageMediaDraftObjectDetails<Media extends MediaObject> = Partial<Omit<Media, keyof MediaObject>>
+
 export interface UseMessageMediaDraftParams<Media extends MediaObject> {
   draftMediaIdPrefix: string
   mediaKind: MediaKind
-  buildMediaObject: (file: File, id: string) => Media
-  buildPayloadObject: (file: File) => Promise<Media>
+  buildMediaObjectDetails?: (file: File) => MessageMediaDraftObjectDetails<Media>
 }
 
 export interface MessageAttachmentUploadGroups {
