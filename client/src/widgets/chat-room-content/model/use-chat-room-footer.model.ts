@@ -18,9 +18,9 @@ import type { ChatRoomRecord } from 'src/shared/lib'
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 
 import { useChatRoomMessageEmojiPicker } from './use-chat-room-message-emoji-picker.model'
+import { useMessageAttachmentDraft } from './use-message-attachment-draft.model'
 import { useMessageDraftReference } from './use-message-draft-reference.model'
 import { useMessageEdit } from './use-message-edit.model'
-import { useMessageImageDraft } from './use-message-image-draft.model'
 
 export const useChatRoomFooter = (
   room: Ref<ChatRoomRecord>,
@@ -53,16 +53,24 @@ export const useChatRoomFooter = (
     submitMessageEdit
   } = useMessageEdit()
   const {
+    buildMessageDocumentDraftPayload,
     buildMessageImageDraftPayload,
-    clearSentMessageImageDraft,
-    hasMessageImageDraft,
+    clearSentMessageAttachmentDraft,
+    editingMessageAttachmentItems,
+    hasMessageAttachmentDraft,
+    messageAttachmentDraftItems,
+    messageAttachmentDraftUploadValue,
+    messageDocumentDraftDocuments,
     messageImageDraftImages,
-    messageImageDraftUploadValue,
-    openMessageImageUpload,
-    removeMessageImageDraft,
-    showUnsupportedMessageImageFormatError,
-    updateMessageImageDraft
-  } = useMessageImageDraft()
+    openMessageAttachmentUpload,
+    removeEditingMessageAttachment,
+    removeMessageAttachmentDraft,
+    showUnsupportedMessageAttachmentFormatError,
+    updateMessageAttachmentDraft
+  } = useMessageAttachmentDraft({
+    editingMessageImages,
+    removeEditingMessageImage
+  })
   const {
     messageDraftReference,
     messageDraftReferenceId,
@@ -75,7 +83,7 @@ export const useChatRoomFooter = (
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
-    const hasMessageDraft = hasMessageImageDraft.value
+    const hasMessageDraft = hasMessageAttachmentDraft.value
     const hasMessageReference = isMessageDraftReferenceCurrentRoom.value
     const hasMessageContent = hasMessageBody || hasMessageDraft || hasMessageReference
     const hasValidLength = messageText.value.length <= MESSAGE_BODY_MAX_LENGTH
@@ -103,7 +111,8 @@ export const useChatRoomFooter = (
   const sendMessage = async (roomId: string) => {
     const body = messageText.value.trim()
     const images = messageImageDraftImages.value.map((image) => ({ ...image }))
-    const hasMessageDraft = Boolean(images.length)
+    const documents = messageDocumentDraftDocuments.value.map((document) => ({ ...document }))
+    const hasMessageDraft = Boolean(images.length || documents.length)
     const { id: authorId, nickname: authorNickname } = user.value
     const repliedMessage = buildMessageDraftReferencePayload(roomId)
     const hasMessageBody = Boolean(body)
@@ -113,6 +122,7 @@ export const useChatRoomFooter = (
     if (!hasMessageContent || !authorId) return
 
     const payloadImages = await buildMessageImageDraftPayload()
+    const payloadDocuments = await buildMessageDocumentDraftPayload()
 
     const message: Message = {
       id: uuidv4(),
@@ -124,6 +134,7 @@ export const useChatRoomFooter = (
       status: MESSAGE_STATUS_VALUE.SENDING,
       reactions: [],
       images,
+      documents,
       ...(repliedMessage && { repliedMessage })
     }
 
@@ -131,7 +142,8 @@ export const useChatRoomFooter = (
       roomId,
       message: {
         ...message,
-        images: payloadImages
+        images: payloadImages,
+        documents: payloadDocuments
       }
     }
 
@@ -146,19 +158,19 @@ export const useChatRoomFooter = (
     if (repliedMessage) {
       cancelMessageDraftReference()
     }
-    clearSentMessageImageDraft()
+    clearSentMessageAttachmentDraft()
     closeMessageEmojiDropdown()
   }
 
   return {
     messageText,
     messageEmojiDropdownAnchor,
-    messageImageDraftImages,
-    messageImageDraftUploadValue,
+    editingMessageAttachmentItems,
+    messageAttachmentDraftItems,
+    messageAttachmentDraftUploadValue,
     emojiPickerLocale,
     emojiPickerQuickList,
     editingMessagePreviewText,
-    editingMessageImages,
     messageDraftReference,
     messageDraftReferencePreviewText,
     messageDraftReferenceTitle,
@@ -172,16 +184,16 @@ export const useChatRoomFooter = (
     cancelMessageEdit,
     cancelMessageDraftReference,
     closeMessageEmojiDropdown,
-    openMessageImageUpload,
-    removeEditingMessageImage,
-    removeMessageImageDraft,
+    openMessageAttachmentUpload,
+    removeEditingMessageAttachment,
+    removeMessageAttachmentDraft,
     selectMessageEmoji,
     selectEditingMessage,
     selectMessageDraftReference,
     sendMessage,
-    showUnsupportedMessageImageFormatError,
+    showUnsupportedMessageAttachmentFormatError,
     submitMessageEdit,
     toggleMessageEmojiDropdown,
-    updateMessageImageDraft
+    updateMessageAttachmentDraft
   }
 }

@@ -20,6 +20,10 @@ export const MESSAGE_CONTEXT_MENU_TRIGGER = {
   CONTEXT_MENU: 'contextmenu',
   LONG_PRESS: 'longpress'
 } as const
+export const MESSAGE_ATTACHMENT_DRAFT_KIND = {
+  IMAGE: 'image',
+  DOCUMENT: 'document'
+} as const
 export const MESSAGE_DOCUMENT_ALLOWED_TYPES =
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP[MEDIA_VALIDATION_OPTIONS_MAP.doc.supportedKindMediaType]
 export const MESSAGE_IMAGE_ALLOWED_TYPES =

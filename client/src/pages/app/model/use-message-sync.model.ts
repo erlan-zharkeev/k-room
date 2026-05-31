@@ -13,7 +13,11 @@ import {
 } from 'global-shared'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX, useMedia } from 'src/entities/media-file'
+import {
+  MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
+  MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
+  useMedia
+} from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 
@@ -32,18 +36,23 @@ export const useMessageSync = () => {
     })
   }
 
-  const isMessageImageDraftMediaId = (mediaId: string) => mediaId.startsWith(MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX)
+  const isMessageDraftMediaId = (mediaId: string) =>
+    mediaId.startsWith(MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX) ||
+    mediaId.startsWith(MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX)
 
-  const resolveMessageImageDraftMediaIds = (messageId: string) => {
+  const resolveMessageDraftMediaIds = (messageId: string) => {
     const currentMessage = getById(messageId)
 
-    if (!currentMessage?.images?.length) return []
+    if (!currentMessage) return []
 
-    return currentMessage.images.map(({ src }) => src).filter(isMessageImageDraftMediaId)
+    const { documents, images } = currentMessage
+    const mediaIds = [...(images ?? []), ...(documents ?? [])].map(({ src }) => src)
+
+    return mediaIds.filter(isMessageDraftMediaId)
   }
 
   const handleDeliveredMessage = async ({ roomId, message }: EventMessageDelivered) => {
-    const draftMediaIds = resolveMessageImageDraftMediaIds(message.id)
+    const draftMediaIds = resolveMessageDraftMediaIds(message.id)
 
     await put(message)
 
