@@ -8,6 +8,7 @@ import type { MessageBodyEmits, MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 import { useMessageReferencePreview } from '../model/use-message-reference-preview.model'
 
+import MessageAudioList from './MessageAudioList.vue'
 import MessageContextMenu from './MessageContextMenu.vue'
 import MessageDocumentList from './MessageDocumentList.vue'
 import MessageLinkPreview from './MessageLinkPreview.vue'
@@ -18,8 +19,15 @@ import MessageText from './MessageText.vue'
 
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
-const { showAuthorNickname, isMessageEditing, hasMessageBody, messageDocuments, messageImagePreviewUrlList, sentAt } =
-  useMessageBody(props)
+const {
+  showAuthorNickname,
+  isMessageEditing,
+  hasMessageBody,
+  messageAudios,
+  messageDocuments,
+  messageImagePreviewUrlList,
+  sentAt
+} = useMessageBody(props)
 const {
   messageReference,
   canSelectMessageReference,
@@ -63,6 +71,7 @@ const {
           />
         </div>
         <MessageDocumentList :documents="messageDocuments" />
+        <MessageAudioList :audios="messageAudios" />
         <MessageText v-if="hasMessageBody" :text="props.message.body" />
         <MessageLinkPreview v-if="props.message.linkPreview" :preview="props.message.linkPreview" />
         <div class="message-body__footer">

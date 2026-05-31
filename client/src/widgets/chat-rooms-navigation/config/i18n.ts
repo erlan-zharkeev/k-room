@@ -26,6 +26,16 @@ export const CHAT_ROOMS_NAVIGATION_I18N = defineI18n({
     ru: 'Фото',
     zh: '图片'
   },
+  documentMessage: {
+    en: 'Document',
+    ru: 'Документ',
+    zh: '文档'
+  },
+  audioMessage: {
+    en: 'Audio',
+    ru: 'Аудио',
+    zh: '音频'
+  },
   replyMessage: {
     en: 'Reply',
     ru: 'Ответ',

@@ -8,9 +8,8 @@ import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
 import { socket, useSocketAction } from 'src/shared/api'
-import { useI18n, useScreen } from 'src/shared/lib'
+import { useScreen } from 'src/shared/lib'
 
-import { CHAT_ROOMS_NAVIGATION_I18N } from '../config/i18n'
 import type { ChatRoomNavigationItem } from '../config/types'
 import { resolveLastMessageDescription } from '../lib/resolve-last-message-description'
 
@@ -21,7 +20,6 @@ const searchQuery = ref('')
 export const useChatRoomsList = () => {
   const router = useRouter()
   const route = useRoute()
-  const { t } = useI18n()
   const { isPortraitTabletOrLess } = useScreen()
   const { chatRooms } = useChatRoom()
   const { getChatRoomPrivateContact } = useChatRoomContactLookup()
@@ -58,12 +56,7 @@ export const useChatRoomsList = () => {
       const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
       const lastMessage = displayedLastMessageId ? getById(displayedLastMessageId) : undefined
       const title = chatName || privateContact?.nickname || ''
-      const description = resolveLastMessageDescription(
-        lastMessage,
-        t(CHAT_ROOMS_NAVIGATION_I18N.imageMessage),
-        t(CHAT_ROOMS_NAVIGATION_I18N.replyMessage),
-        t(CHAT_ROOMS_NAVIGATION_I18N.forwardMessage)
-      )
+      const description = resolveLastMessageDescription(lastMessage)
 
       return {
         id,

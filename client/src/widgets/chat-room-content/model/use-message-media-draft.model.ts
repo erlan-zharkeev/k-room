@@ -6,7 +6,12 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 import { useMedia } from 'src/entities/media-file'
 import { revokeObjectUrl, revokeObjectUrls } from 'src/shared/lib'
 
-import type { MessageMediaDraftItem, MessageMediaDraftObjectDetails, UseMessageMediaDraftParams } from '../config/types'
+import type {
+  MessageMediaDraftItem,
+  MessageMediaDraftObjectDetails,
+  MessageMediaDraftPreviewObject,
+  UseMessageMediaDraftParams
+} from '../config/types'
 import {
   buildMessageMediaDraftObject,
   buildMessageMediaDraftPayloadObject
@@ -22,6 +27,12 @@ export const useMessageMediaDraft = <Media extends MediaObject>({
   const buildDetails = (file: File): MessageMediaDraftObjectDetails<Media> => buildMediaObjectDetails?.(file) ?? {}
   const mediaObjects = computed<Media[]>(() =>
     draftItems.value.map(({ file, id }) => buildMessageMediaDraftObject<Media>(file, id, buildDetails(file)))
+  )
+  const mediaPreviewObjects = computed<MessageMediaDraftPreviewObject<Media>[]>(() =>
+    draftItems.value.map(({ file, id, uploadValue }) => ({
+      ...buildMessageMediaDraftObject<Media>(file, id, buildDetails(file)),
+      previewSrc: uploadValue.previewUrl
+    }))
   )
   const uploadValues = computed(() => draftItems.value.map(({ uploadValue }) => uploadValue))
   const hasDraft = computed(() => draftItems.value.length > 0)
@@ -107,6 +118,7 @@ export const useMessageMediaDraft = <Media extends MediaObject>({
 
   return {
     mediaObjects,
+    mediaPreviewObjects,
     uploadValues,
     hasDraft,
     buildPayload,

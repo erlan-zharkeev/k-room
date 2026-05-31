@@ -20,11 +20,12 @@ const buildMessageFileAttachmentDraftListItems = (
   kind: MessageAttachmentDraftListFileKind,
   mediaObjects: MessageAttachmentDraftFileMediaObject[]
 ): MessageAttachmentDraftListFileItem[] =>
-  mediaObjects.map(({ contentType, name, size, src }) => ({
+  mediaObjects.map(({ contentType, name, previewSrc, size, src }) => ({
     kind,
     name,
     src,
     contentType,
+    previewSrc,
     size
   }))
 
