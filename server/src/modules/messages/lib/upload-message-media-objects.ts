@@ -14,7 +14,12 @@ export const uploadMessageMediaObjects = async <Media extends MediaObject>(
         return null
       }
 
-      const src = await uploadBufferToBucket(mediaObject.fileBuffer, bucketName, options)
+      const fileObject = mediaObject as MediaObject & { contentType?: string }
+      const src = await uploadBufferToBucket(mediaObject.fileBuffer, bucketName, {
+        ...options,
+        contentType: fileObject.contentType,
+        filename: mediaObject.name
+      })
       const uploadedMediaObject: Media = {
         ...mediaObject,
         src,

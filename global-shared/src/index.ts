@@ -83,9 +83,12 @@ export {
 export type {
   MediaBucketName,
   MediaId,
+  MediaAudioUploadExtension,
+  MediaDocumentUploadExtension,
   MediaValidationOptions,
   MediaKind,
   MediaUpload,
+  MediaVideoUploadExtension,
   MediaObject,
   AudioObject,
   DocumentObject,

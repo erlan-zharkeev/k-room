@@ -19,6 +19,7 @@ import {
   type ImageObject,
   type Message,
   type MessageStatus,
+  type VideoObject,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_REACTION_LIMIT_PER_USER,
   MESSAGE_REACTION_UPDATE_ACTION,
@@ -61,6 +62,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     linkPreview,
     documents,
     audios,
+    videos,
     usersMetaData
   } = message
   const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
@@ -79,6 +81,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
     documents,
     audios,
+    videos,
     linkPreview,
     status,
     isSelf: isMessageAuthor(message, userId),
@@ -93,7 +96,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
     return
   }
 
-  assertMessageContentLimits(normalizedBody, images, [], [])
+  assertMessageContentLimits(normalizedBody, images, [], [], [])
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
 
@@ -481,8 +484,9 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
   const messageImages = message.images ?? []
   const messageDocuments = message.documents ?? []
   const messageAudios = message.audios ?? []
+  const messageVideos = message.videos ?? []
 
-  assertMessageContentLimits(message.body, messageImages, messageDocuments, messageAudios)
+  assertMessageContentLimits(message.body, messageImages, messageDocuments, messageAudios, messageVideos)
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
 
@@ -496,21 +500,28 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     roomMessageIds: stringifyMongoIds(room.messages),
     userId
   })
-  const [images, documents, audios] = await Promise.all([
+  const [images, documents, audios, videos] = await Promise.all([
     uploadMessageMediaObjects<ImageObject>(messageImages, 'image', {
       compression: message.imageCompression ? 'common-compressed' : 'common-uncompressed'
     }),
     uploadMessageMediaObjects<DocumentObject>(messageDocuments, 'doc'),
-    uploadMessageMediaObjects<AudioObject>(messageAudios, 'audio')
+    uploadMessageMediaObjects<AudioObject>(messageAudios, 'audio'),
+    uploadMessageMediaObjects<VideoObject>(messageVideos, 'video')
   ])
   const linkPreview = buildPendingMessageLinkPreview(message.body)
   const hasMessageBody = Boolean(message.body.trim())
   const hasMessageImages = Boolean(images.length)
   const hasMessageDocuments = Boolean(documents.length)
   const hasMessageAudios = Boolean(audios.length)
+  const hasMessageVideos = Boolean(videos.length)
   const hasMessageDraftReference = Boolean(repliedMessage)
   const hasMessageContent =
-    hasMessageBody || hasMessageImages || hasMessageDocuments || hasMessageAudios || hasMessageDraftReference
+    hasMessageBody ||
+    hasMessageImages ||
+    hasMessageDocuments ||
+    hasMessageAudios ||
+    hasMessageVideos ||
+    hasMessageDraftReference
 
   if (!hasMessageContent) {
     return
@@ -523,6 +534,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     images,
     documents,
     audios,
+    videos,
     linkPreview,
     usersMetaData: [],
     repliedMessage
@@ -552,6 +564,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           images,
           documents,
           audios,
+          videos,
           linkPreview,
           repliedMessage,
           isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),

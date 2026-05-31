@@ -2,6 +2,9 @@ export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'archive' | 'unkno
 
 export type MediaBucketName = 'doc' | 'image' | 'audio' | 'video'
 export type MediaId = string | null
+export type MediaAudioUploadExtension = 'mp3' | 'ogg' | 'wav'
+export type MediaVideoUploadExtension = 'mp4' | 'webm' | 'mov' | 'ogg'
+export type MediaDocumentUploadExtension = 'pdf' | 'zip' | 'rar' | '7z'
 export type MediaUpload =
   | 'zip'
   | 'rar'
