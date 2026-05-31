@@ -213,9 +213,7 @@ export interface MessageAttachmentDraftListFileItem extends MessageAttachmentDra
   size?: number
 }
 
-export type MessageAttachmentDraftListItem =
-  | MessageAttachmentDraftListImageItem
-  | MessageAttachmentDraftListFileItem
+export type MessageAttachmentDraftListItem = MessageAttachmentDraftListImageItem | MessageAttachmentDraftListFileItem
 
 export interface MessageAttachmentDraftListProps {
   attachments: MessageAttachmentDraftListItem[]
