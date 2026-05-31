@@ -1,9 +1,12 @@
 import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type {
+  AudioObject,
   DocumentObject,
   ImageObject,
   MediaId,
+  MediaKind,
+  MediaObject,
   MessageLinkPreview,
   MessageReaction,
   RepliedMessage
@@ -198,15 +201,21 @@ export interface MessageAttachmentDraftListImageItem extends MessageAttachmentDr
   kind: typeof MESSAGE_ATTACHMENT_DRAFT_KIND.IMAGE
 }
 
-export interface MessageAttachmentDraftListDocumentItem extends MessageAttachmentDraftListBaseItem {
-  kind: typeof MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT
+export type MessageAttachmentDraftListFileKind =
+  | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT
+  | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO
+
+export type MessageAttachmentDraftFileMediaObject = DocumentObject | AudioObject
+
+export interface MessageAttachmentDraftListFileItem extends MessageAttachmentDraftListBaseItem {
+  kind: MessageAttachmentDraftListFileKind
   contentType?: string
   size?: number
 }
 
 export type MessageAttachmentDraftListItem =
   | MessageAttachmentDraftListImageItem
-  | MessageAttachmentDraftListDocumentItem
+  | MessageAttachmentDraftListFileItem
 
 export interface MessageAttachmentDraftListProps {
   attachments: MessageAttachmentDraftListItem[]
@@ -217,23 +226,26 @@ export interface MessageAttachmentDraftListEmits {
   remove: [attachment: MessageAttachmentDraftListItem]
 }
 
-export interface MessageImageDraftItem {
+export interface MessageMediaDraftItem {
   id: string
   file: File
   uploadValue: INmorphCustomFileData
 }
 
-export interface MessageDocumentDraftItem {
-  id: string
-  file: File
-  uploadValue: INmorphCustomFileData
+export interface UseMessageMediaDraftParams<Media extends MediaObject> {
+  draftMediaIdPrefix: string
+  mediaKind: MediaKind
+  buildMediaObject: (file: File, id: string) => Media
+  buildPayloadObject: (file: File) => Promise<Media>
 }
 
 export interface MessageAttachmentUploadGroups {
   validImageUploadValues: INmorphCustomFileData[]
   validDocumentUploadValues: INmorphCustomFileData[]
+  validAudioUploadValues: INmorphCustomFileData[]
   sizeRejectedImageUploadValues: INmorphCustomFileData[]
   sizeRejectedDocumentUploadValues: INmorphCustomFileData[]
+  sizeRejectedAudioUploadValues: INmorphCustomFileData[]
   limitRejectedUploadValues: INmorphCustomFileData[]
 }
 

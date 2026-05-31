@@ -14,6 +14,7 @@ import {
 
 import { useChatRoom } from 'src/entities/chat-room'
 import {
+  MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
   useMedia
@@ -36,17 +37,22 @@ export const useMessageSync = () => {
     })
   }
 
-  const isMessageDraftMediaId = (mediaId: string) =>
-    mediaId.startsWith(MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX) ||
-    mediaId.startsWith(MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX)
+  const isMessageDraftMediaId = (mediaId: string) => {
+    const isImageDraftMediaId = mediaId.startsWith(MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX)
+    const isDocumentDraftMediaId = mediaId.startsWith(MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX)
+    const isAudioDraftMediaId = mediaId.startsWith(MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX)
+    const isVisualDraftMediaId = isImageDraftMediaId || isDocumentDraftMediaId
+
+    return isVisualDraftMediaId || isAudioDraftMediaId
+  }
 
   const resolveMessageDraftMediaIds = (messageId: string) => {
     const currentMessage = getById(messageId)
 
     if (!currentMessage) return []
 
-    const { documents, images } = currentMessage
-    const mediaIds = [...(images ?? []), ...(documents ?? [])].map(({ src }) => src)
+    const { audios = [], documents = [], images = [] } = currentMessage
+    const mediaIds = [...images, ...documents, ...audios].map(({ src }) => src)
 
     return mediaIds.filter(isMessageDraftMediaId)
   }

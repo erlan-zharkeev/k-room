@@ -147,9 +147,9 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     zh: '添加附件'
   },
   messageAttachmentInvalidFormat: {
-    en: 'Only images and PDF files are supported',
-    ru: 'Поддерживаются только изображения и PDF',
-    zh: '仅支持图片和 PDF 文件'
+    en: 'Only images, PDF and audio files are supported',
+    ru: 'Поддерживаются только изображения, PDF и аудио',
+    zh: '仅支持图片、PDF 和音频文件'
   },
   messageImageInvalidSize: {
     en: (size: number) => `Image must be less than ${size} MB`,
@@ -160,6 +160,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     en: (size: number) => `Document must be less than ${size} MB`,
     ru: (size: number) => `Документ должен быть меньше ${size} МБ`,
     zh: (size: number) => `文档必须小于 ${size} MB`
+  },
+  messageAudioInvalidSize: {
+    en: (size: number) => `Audio must be less than ${size} MB`,
+    ru: (size: number) => `Аудио должно быть меньше ${size} МБ`,
+    zh: (size: number) => `音频必须小于 ${size} MB`
   },
   messageAttachmentLimitReached: {
     en: (limit: number) => `You can attach up to ${limit} files. The list was reduced.`,
