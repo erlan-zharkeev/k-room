@@ -6,7 +6,8 @@ import type {
   MessageLinkPreview,
   MessageMetadata,
   MessageReaction,
-  RepliedMessage
+  RepliedMessage,
+  VideoObject
 } from 'global-shared'
 
 export interface MessageSchema {
@@ -20,6 +21,7 @@ export interface MessageSchema {
   images?: Array<string | ImageObject>
   documents?: DocumentObject[]
   audios?: AudioObject[]
+  videos?: VideoObject[]
   imageCompression?: boolean
   linkPreview?: MessageLinkPreview | null
   deletedForUserIds?: string[]

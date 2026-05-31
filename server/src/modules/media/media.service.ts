@@ -49,7 +49,8 @@ export const uploadBufferToBucket = async (
     const bucket = resolveRequiredMediaBucket(bucketName)
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
     const fileId = options?.id ? new mongoose.Types.ObjectId(options.id) : new mongoose.Types.ObjectId()
-    const filename = String(fileId)
+    const fileIdValue = String(fileId)
+    const filename = options?.filename ?? fileIdValue
 
     assertRawFileSize(normalizedBuffer.length, bucketName, options)
 
@@ -57,12 +58,12 @@ export const uploadBufferToBucket = async (
       bucketName === 'image'
         ? await processImageWithSharp(normalizedBuffer, options?.compression ?? 'common-compressed')
         : normalizedBuffer
-    const fileData = await buildFileData(outputBuffer, filename)
+    const fileData = await buildFileData(outputBuffer, filename, options?.contentType)
 
     assertFileMetaData(fileData, bucketName, options)
 
     if (options?.overwrite) {
-      await deleteBucketFileById(bucketName, filename)
+      await deleteBucketFileById(bucketName, fileIdValue)
     }
 
     return new Promise<string>((resolve, reject) => {
@@ -71,7 +72,7 @@ export const uploadBufferToBucket = async (
         metadata: fileData.metadata
       })
 
-      stream.once('finish', () => resolve(filename))
+      stream.once('finish', () => resolve(fileIdValue))
       stream.once('error', reject)
       stream.end(outputBuffer)
     })

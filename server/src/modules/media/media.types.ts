@@ -44,6 +44,8 @@ export interface StreamMediaBucketFile {
 
 export interface UploadOptions {
   compression?: SharpSettingsKey
+  contentType?: string
+  filename?: string
   id?: string
   overwrite?: boolean
   validation?: MediaValidationOptions
