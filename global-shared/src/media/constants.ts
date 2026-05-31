@@ -33,8 +33,17 @@ export const MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP = {
   unknown: []
 } as const satisfies Record<MediaKind, MediaUpload[]>
 
-export const MEDIA_AUDIO_UPLOAD_EXTENSIONS = ['mp3', 'ogg', 'wav'] as const satisfies readonly MediaAudioUploadExtension[]
-export const MEDIA_VIDEO_UPLOAD_EXTENSIONS = ['mp4', 'webm', 'mov', 'ogg'] as const satisfies readonly MediaVideoUploadExtension[]
+export const MEDIA_AUDIO_UPLOAD_EXTENSIONS = [
+  'mp3',
+  'ogg',
+  'wav'
+] as const satisfies readonly MediaAudioUploadExtension[]
+export const MEDIA_VIDEO_UPLOAD_EXTENSIONS = [
+  'mp4',
+  'webm',
+  'mov',
+  'ogg'
+] as const satisfies readonly MediaVideoUploadExtension[]
 export const MEDIA_DOCUMENT_UPLOAD_EXTENSIONS = [
   'pdf',
   'zip',
