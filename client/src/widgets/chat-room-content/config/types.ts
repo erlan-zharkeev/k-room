@@ -1,6 +1,13 @@
 import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type { ImageObject, MediaId, MessageLinkPreview, MessageReaction, RepliedMessage } from 'global-shared'
+import type {
+  DocumentObject,
+  ImageObject,
+  MediaId,
+  MessageLinkPreview,
+  MessageReaction,
+  RepliedMessage
+} from 'global-shared'
 import type { Component, Ref } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
@@ -172,6 +179,14 @@ export interface MessageReactionAvatarProps {
 export interface MessagePreviewProps {
   title: string
   text: string
+}
+
+export interface MessageDocumentCardProps {
+  document: DocumentObject
+}
+
+export interface MessageDocumentListProps {
+  documents: DocumentObject[]
 }
 
 export interface MessageAttachmentDraftListBaseItem {
