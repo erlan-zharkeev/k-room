@@ -1,4 +1,4 @@
-export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'unknown'
+export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'archive' | 'unknown'
 
 export type MediaBucketName = 'doc' | 'image' | 'audio' | 'video'
 export type MediaId = string | null
@@ -18,7 +18,8 @@ export type MediaUpload =
   | 'wav'
   | 'mp4'
   | 'webm'
-  | 'wideo-ogg'
+  | 'mov'
+  | 'video-ogg'
   | 'jpeg'
   | 'jpg'
   | 'png'
@@ -45,6 +46,11 @@ export interface DocumentObject extends MediaObject {
 }
 
 export interface AudioObject extends MediaObject {
+  contentType?: string
+  size?: number
+}
+
+export interface VideoObject extends MediaObject {
   contentType?: string
   size?: number
 }

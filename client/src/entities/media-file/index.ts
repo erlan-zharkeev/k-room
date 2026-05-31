@@ -2,6 +2,7 @@ export {
   MESSAGE_AUDIO_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
   MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
+  MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX,
   UPDATE_MEDIA_INTERVAL_MS
 } from './config/constants'
 export { acquireUrl, releaseUrl, useLiveMediaUrl } from 'src/shared/lib'

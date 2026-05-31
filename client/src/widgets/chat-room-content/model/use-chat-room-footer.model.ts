@@ -57,6 +57,7 @@ export const useChatRoomFooter = (
     buildMessageAudioDraftPayload,
     buildMessageDocumentDraftPayload,
     buildMessageImageDraftPayload,
+    buildMessageVideoDraftPayload,
     clearSentMessageAttachmentDraft,
     editingMessageAttachmentItems,
     hasMessageAttachmentDraft,
@@ -65,6 +66,7 @@ export const useChatRoomFooter = (
     messageAudioDraftAudios,
     messageDocumentDraftDocuments,
     messageImageDraftImages,
+    messageVideoDraftVideos,
     openMessageAttachmentUpload,
     removeEditingMessageAttachment,
     removeMessageAttachmentDraft,
@@ -88,7 +90,7 @@ export const useChatRoomFooter = (
     const hasMessageBody = Boolean(messageText.value.trim())
     const hasMessageDraft = hasMessageAttachmentDraft.value
     const hasMessageReference = isMessageDraftReferenceCurrentRoom.value
-    const hasMessageContent = hasMessageBody || hasMessageDraft || hasMessageReference
+    const hasMessageContent = [hasMessageBody, hasMessageDraft, hasMessageReference].some(Boolean)
     const hasValidLength = messageText.value.length <= MESSAGE_BODY_MAX_LENGTH
     const hasUserId = Boolean(user.value.id)
     const canSendMessage = hasMessageContent && hasValidLength
@@ -116,20 +118,21 @@ export const useChatRoomFooter = (
     const images = cloneMediaObjects(messageImageDraftImages.value)
     const documents = cloneMediaObjects(messageDocumentDraftDocuments.value)
     const audios = cloneMediaObjects(messageAudioDraftAudios.value)
-    const hasImageOrDocumentDraft = Boolean(images.length || documents.length)
-    const hasMessageDraft = Boolean(hasImageOrDocumentDraft || audios.length)
+    const videos = cloneMediaObjects(messageVideoDraftVideos.value)
+    const hasMessageDraft = [images, documents, audios, videos].some((attachments) => attachments.length)
     const { id: authorId, nickname: authorNickname } = user.value
     const repliedMessage = buildMessageDraftReferencePayload(roomId)
     const hasMessageBody = Boolean(body)
     const hasMessageReference = Boolean(repliedMessage)
-    const hasMessageContent = hasMessageBody || hasMessageDraft || hasMessageReference
+    const hasMessageContent = [hasMessageBody, hasMessageDraft, hasMessageReference].some(Boolean)
 
     if (!hasMessageContent || !authorId) return
 
-    const [payloadImages, payloadDocuments, payloadAudios] = await Promise.all([
+    const [payloadImages, payloadDocuments, payloadAudios, payloadVideos] = await Promise.all([
       buildMessageImageDraftPayload(),
       buildMessageDocumentDraftPayload(),
-      buildMessageAudioDraftPayload()
+      buildMessageAudioDraftPayload(),
+      buildMessageVideoDraftPayload()
     ])
 
     const message: Message = {
@@ -144,6 +147,7 @@ export const useChatRoomFooter = (
       images,
       documents,
       audios,
+      videos,
       ...(repliedMessage && { repliedMessage })
     }
 
@@ -153,7 +157,8 @@ export const useChatRoomFooter = (
         ...message,
         images: payloadImages,
         documents: payloadDocuments,
-        audios: payloadAudios
+        audios: payloadAudios,
+        videos: payloadVideos
       }
     }
 

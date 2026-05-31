@@ -2,7 +2,7 @@ import type { Call } from '../calls/types'
 import type { ChatRoom } from '../chat/types'
 import type { Contact, KnownUser, Interaction } from '../contact/types'
 import type { AppLanguage } from '../language/types'
-import type { AudioObject, DocumentObject, ImageObject, MediaFileValue } from '../media/types'
+import type { AudioObject, DocumentObject, ImageObject, MediaFileValue, VideoObject } from '../media/types'
 import type {
   Message,
   MessageLinkPreview,
@@ -166,6 +166,7 @@ export interface EventEditMessage {
   images: ImageObject[]
   documents?: DocumentObject[]
   audios?: AudioObject[]
+  videos?: VideoObject[]
 }
 export interface EventMessageEdited {
   roomId: string
@@ -174,6 +175,7 @@ export interface EventMessageEdited {
   images: ImageObject[]
   documents?: DocumentObject[]
   audios?: AudioObject[]
+  videos?: VideoObject[]
   linkPreview: MessageLinkPreview | null
   editedAt: number
 }

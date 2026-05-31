@@ -1,4 +1,4 @@
-import type { AudioObject, DocumentObject, ImageObject } from 'global-shared'
+import type { AudioObject, DocumentObject, ImageObject, VideoObject } from 'global-shared'
 
 import { MESSAGE_ATTACHMENT_DRAFT_KIND } from '../config/constants'
 import type {
@@ -32,9 +32,11 @@ const buildMessageFileAttachmentDraftListItems = (
 export const buildMessageAttachmentDraftListItems = (
   images: ImageObject[],
   documents: DocumentObject[],
-  audios: AudioObject[]
+  audios: AudioObject[],
+  videos: VideoObject[]
 ): MessageAttachmentDraftListItem[] => [
   ...buildMessageImageAttachmentDraftListItems(images),
   ...buildMessageFileAttachmentDraftListItems(MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT, documents),
-  ...buildMessageFileAttachmentDraftListItems(MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO, audios)
+  ...buildMessageFileAttachmentDraftListItems(MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO, audios),
+  ...buildMessageFileAttachmentDraftListItems(MESSAGE_ATTACHMENT_DRAFT_KIND.VIDEO, videos)
 ]

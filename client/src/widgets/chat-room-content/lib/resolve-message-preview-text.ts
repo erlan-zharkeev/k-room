@@ -4,9 +4,10 @@ export const resolveMessagePreviewText = ({
   audios,
   body,
   documents,
-  images
-}: Pick<RepliedMessage, 'audios' | 'body' | 'documents' | 'images'>) => {
+  images,
+  videos
+}: Pick<RepliedMessage, 'audios' | 'body' | 'documents' | 'images' | 'videos'>) => {
   if (body.trim()) return body
 
-  return images?.[0]?.name || documents?.[0]?.name || audios?.[0]?.name || ''
+  return images?.[0]?.name || documents?.[0]?.name || audios?.[0]?.name || videos?.[0]?.name || ''
 }

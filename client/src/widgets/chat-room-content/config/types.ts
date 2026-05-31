@@ -9,7 +9,8 @@ import type {
   MediaObject,
   MessageLinkPreview,
   MessageReaction,
-  RepliedMessage
+  RepliedMessage,
+  VideoObject
 } from 'global-shared'
 import type { Component, Ref } from 'vue'
 
@@ -200,6 +201,14 @@ export interface MessageAudioListProps {
   audios: AudioObject[]
 }
 
+export interface MessageVideoCardProps {
+  video: VideoObject
+}
+
+export interface MessageVideoListProps {
+  videos: VideoObject[]
+}
+
 export interface MessageAttachmentDraftListBaseItem {
   src: string
   name: string
@@ -212,6 +221,7 @@ export interface MessageAttachmentDraftListImageItem extends MessageAttachmentDr
 export type MessageAttachmentDraftListFileKind =
   | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT
   | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO
+  | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.VIDEO
 
 export interface MessageMediaDraftPreview {
   previewSrc: string
@@ -219,7 +229,8 @@ export interface MessageMediaDraftPreview {
 
 export type MessageMediaDraftPreviewObject<Media extends MediaObject> = Media & MessageMediaDraftPreview
 
-export type MessageAttachmentDraftFileMediaObject = (DocumentObject | AudioObject) & Partial<MessageMediaDraftPreview>
+export type MessageAttachmentDraftFileMediaObject = (DocumentObject | AudioObject | VideoObject) &
+  Partial<MessageMediaDraftPreview>
 
 export interface MessageAttachmentDraftListFileItem extends MessageAttachmentDraftListBaseItem {
   kind: MessageAttachmentDraftListFileKind
@@ -257,9 +268,11 @@ export interface MessageAttachmentUploadGroups {
   validImageUploadValues: INmorphCustomFileData[]
   validDocumentUploadValues: INmorphCustomFileData[]
   validAudioUploadValues: INmorphCustomFileData[]
+  validVideoUploadValues: INmorphCustomFileData[]
   sizeRejectedImageUploadValues: INmorphCustomFileData[]
   sizeRejectedDocumentUploadValues: INmorphCustomFileData[]
   sizeRejectedAudioUploadValues: INmorphCustomFileData[]
+  sizeRejectedVideoUploadValues: INmorphCustomFileData[]
   limitRejectedUploadValues: INmorphCustomFileData[]
 }
 

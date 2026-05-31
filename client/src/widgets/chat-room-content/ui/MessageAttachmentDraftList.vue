@@ -4,8 +4,7 @@ import { NmorphButton, NmorphFileCard, NmorphIcon, NmorphIconClose } from '@nmor
 import { AppMediaImage } from 'src/shared/ui'
 
 import {
-  MESSAGE_ATTACHMENT_AUDIO_WIDTH_PX,
-  MESSAGE_ATTACHMENT_DOCUMENT_WIDTH_PX,
+  MESSAGE_ATTACHMENT_FILE_WIDTH_PX,
   MESSAGE_ATTACHMENT_DRAFT_IMAGE_SIZE_PX,
   MESSAGE_ATTACHMENT_DRAFT_KIND
 } from '../config/constants'
@@ -31,23 +30,13 @@ const emit = defineEmits<MessageAttachmentDraftListEmits>()
         :height="`${MESSAGE_ATTACHMENT_DRAFT_IMAGE_SIZE_PX}px`"
       />
       <NmorphFileCard
-        v-else-if="attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT"
-        :style="{ width: `${MESSAGE_ATTACHMENT_DOCUMENT_WIDTH_PX}px` }"
+        v-else
+        :style="{ width: `${MESSAGE_ATTACHMENT_FILE_WIDTH_PX}px` }"
         :name="attachment.name"
         :mime-type="attachment.contentType"
         :size="attachment.size"
-        :show-default-actions="false"
-        surface="soft"
-        :show-extension-badge="false"
-        :icon-surface="false"
-        compact
-      />
-      <NmorphFileCard
-        v-else-if="attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO"
-        :style="{ width: `${MESSAGE_ATTACHMENT_AUDIO_WIDTH_PX}px` }"
-        :name="attachment.name"
-        :mime-type="attachment.contentType"
-        :size="attachment.size"
+        :preview-src="attachment.previewSrc"
+        :media-preview="attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO ? 'audio' : 'none'"
         :show-default-actions="false"
         surface="soft"
         :show-extension-badge="false"

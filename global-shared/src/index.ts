@@ -69,12 +69,16 @@ export type { AppLanguage, LocalizedText, LocalizedTextMap } from './language/ty
 export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/types'
 
 export {
+  MEDIA_AUDIO_UPLOAD_EXTENSIONS,
   MEDIA_AVATAR_VALIDATION_OPTIONS,
+  MEDIA_BUCKET_SUPPORTED_KIND_MAP,
   MEDIA_BUCKET_NAMES,
+  MEDIA_DOCUMENT_UPLOAD_EXTENSIONS,
   MEDIA_KIND_ACCEPT_MAP,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
   MEDIA_UPLOAD_TYPE_LABEL_MAP,
-  MEDIA_VALIDATION_OPTIONS_MAP
+  MEDIA_VALIDATION_OPTIONS_MAP,
+  MEDIA_VIDEO_UPLOAD_EXTENSIONS
 } from './media/constants'
 export type {
   MediaBucketName,
@@ -86,6 +90,7 @@ export type {
   AudioObject,
   DocumentObject,
   ImageObject,
+  VideoObject,
   MediaFileValue
 } from './media/types'
 

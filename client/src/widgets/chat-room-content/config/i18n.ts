@@ -147,9 +147,9 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     zh: '添加附件'
   },
   messageAttachmentInvalidFormat: {
-    en: 'Only images, PDF and audio files are supported',
-    ru: 'Поддерживаются только изображения, PDF и аудио',
-    zh: '仅支持图片、PDF 和音频文件'
+    en: 'File format is not supported. Supported extensions: jpg, jpeg, png, gif, svg, webp, pdf, zip, rar, 7z, mp3, ogg, wav, mp4, webm, mov.',
+    ru: 'Формат файла не поддерживается. Доступные расширения: jpg, jpeg, png, gif, svg, webp, pdf, zip, rar, 7z, mp3, ogg, wav, mp4, webm, mov.',
+    zh: '不支持该文件格式。支持的扩展名：jpg、jpeg、png、gif、svg、webp、pdf、zip、rar、7z、mp3、ogg、wav、mp4、webm、mov。'
   },
   messageImageInvalidSize: {
     en: (size: number) => `Image must be less than ${size} MB`,
@@ -165,6 +165,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     en: (size: number) => `Audio must be less than ${size} MB`,
     ru: (size: number) => `Аудио должно быть меньше ${size} МБ`,
     zh: (size: number) => `音频必须小于 ${size} MB`
+  },
+  messageVideoInvalidSize: {
+    en: (size: number) => `Video must be less than ${size} MB`,
+    ru: (size: number) => `Видео должно быть меньше ${size} МБ`,
+    zh: (size: number) => `视频必须小于 ${size} MB`
   },
   messageAttachmentLimitReached: {
     en: (limit: number) => `You can attach up to ${limit} files. The list was reduced.`,
