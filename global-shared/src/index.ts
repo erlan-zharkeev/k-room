@@ -83,6 +83,7 @@ export type {
   MediaKind,
   MediaUpload,
   MediaObject,
+  AudioObject,
   DocumentObject,
   ImageObject,
   MediaFileValue

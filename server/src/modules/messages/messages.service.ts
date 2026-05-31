@@ -1,4 +1,5 @@
 import {
+  type AudioObject,
   type EventAddReaction,
   type EventDeleteMessage,
   type EventEditMessage,
@@ -34,7 +35,6 @@ import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
-import { uploadBufferToBucket } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { UserModel } from '../user/user.model'
 
@@ -43,6 +43,7 @@ import { refreshMessageLinkPreview } from './lib/refresh-message-link-preview'
 import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
 import { resolveRepliedMessage } from './lib/resolve-replied-message'
 import { resolveVisibleMessageIds } from './lib/resolve-visible-message-ids'
+import { uploadMessageMediaObjects } from './lib/upload-message-media-objects'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
 import type { MessageDocument, SendMessageParams } from './messages.types'
@@ -59,6 +60,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     repliedMessage,
     linkPreview,
     documents,
+    audios,
     usersMetaData
   } = message
   const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
@@ -76,6 +78,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     reactions,
     images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
     documents,
+    audios,
     linkPreview,
     status,
     isSelf: isMessageAuthor(message, userId),
@@ -90,7 +93,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
     return
   }
 
-  assertMessageContentLimits(normalizedBody, images, [])
+  assertMessageContentLimits(normalizedBody, images, [], [])
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
 
@@ -477,8 +480,9 @@ export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }:
 export const sendMessage = async ({ roomId, userId, message }: SendMessageParams) => {
   const messageImages = message.images ?? []
   const messageDocuments = message.documents ?? []
+  const messageAudios = message.audios ?? []
 
-  assertMessageContentLimits(message.body, messageImages, messageDocuments)
+  assertMessageContentLimits(message.body, messageImages, messageDocuments, messageAudios)
 
   const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
 
@@ -492,46 +496,21 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     roomMessageIds: stringifyMongoIds(room.messages),
     userId
   })
-  const uploadedImages = await Promise.all(
-    messageImages.map(async (image) => {
-      if (!image.fileBuffer) {
-        return null
-      }
-
-      const src = await uploadBufferToBucket(image.fileBuffer, 'image', {
-        compression: message.imageCompression ? 'common-compressed' : 'common-uncompressed'
-      })
-
-      return {
-        src,
-        name: image.name || src
-      } satisfies ImageObject
-    })
-  )
-  const images = uploadedImages.filter((image): image is ImageObject => Boolean(image))
-  const uploadedDocuments = await Promise.all(
-    messageDocuments.map(async (document) => {
-      if (!document.fileBuffer) {
-        return null
-      }
-
-      const src = await uploadBufferToBucket(document.fileBuffer, 'doc')
-
-      return {
-        src,
-        name: document.name || src,
-        ...(document.contentType && { contentType: document.contentType }),
-        ...(document.size && { size: document.size })
-      } satisfies DocumentObject
-    })
-  )
-  const documents = uploadedDocuments.filter((document): document is DocumentObject => Boolean(document))
+  const [images, documents, audios] = await Promise.all([
+    uploadMessageMediaObjects<ImageObject>(messageImages, 'image', {
+      compression: message.imageCompression ? 'common-compressed' : 'common-uncompressed'
+    }),
+    uploadMessageMediaObjects<DocumentObject>(messageDocuments, 'doc'),
+    uploadMessageMediaObjects<AudioObject>(messageAudios, 'audio')
+  ])
   const linkPreview = buildPendingMessageLinkPreview(message.body)
   const hasMessageBody = Boolean(message.body.trim())
   const hasMessageImages = Boolean(images.length)
   const hasMessageDocuments = Boolean(documents.length)
+  const hasMessageAudios = Boolean(audios.length)
   const hasMessageDraftReference = Boolean(repliedMessage)
-  const hasMessageContent = hasMessageBody || hasMessageImages || hasMessageDocuments || hasMessageDraftReference
+  const hasMessageContent =
+    hasMessageBody || hasMessageImages || hasMessageDocuments || hasMessageAudios || hasMessageDraftReference
 
   if (!hasMessageContent) {
     return
@@ -543,6 +522,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     reactions: [],
     images,
     documents,
+    audios,
     linkPreview,
     usersMetaData: [],
     repliedMessage
@@ -571,6 +551,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           id: newDbMessage.id,
           images,
           documents,
+          audios,
           linkPreview,
           repliedMessage,
           isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),

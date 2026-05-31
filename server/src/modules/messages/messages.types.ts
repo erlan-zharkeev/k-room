@@ -1,4 +1,5 @@
 import type {
+  AudioObject,
   DocumentObject,
   ImageObject,
   Message,
@@ -18,6 +19,7 @@ export interface MessageSchema {
   reactions?: MessageReaction[]
   images?: Array<string | ImageObject>
   documents?: DocumentObject[]
+  audios?: AudioObject[]
   imageCompression?: boolean
   linkPreview?: MessageLinkPreview | null
   deletedForUserIds?: string[]

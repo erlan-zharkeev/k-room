@@ -1,4 +1,4 @@
-import type { DocumentObject, ImageObject } from '../media/types'
+import type { AudioObject, DocumentObject, ImageObject } from '../media/types'
 
 import {
   MESSAGE_LINK_PREVIEW_STATUS,
@@ -32,6 +32,7 @@ export interface RepliedMessage {
   body: string
   images?: ImageObject[]
   documents?: DocumentObject[]
+  audios?: AudioObject[]
   forward?: boolean
 }
 
@@ -57,6 +58,7 @@ export interface Message {
   reactions?: MessageReaction[]
   images?: ImageObject[]
   documents?: DocumentObject[]
+  audios?: AudioObject[]
   imageCompression?: boolean
   linkPreview?: MessageLinkPreview | null
   repliedMessage?: RepliedMessage | null
