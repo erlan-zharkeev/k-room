@@ -4,6 +4,7 @@ import { NmorphButton, NmorphFileCard, NmorphIcon, NmorphIconClose } from '@nmor
 import { AppMediaImage } from 'src/shared/ui'
 
 import {
+  MESSAGE_ATTACHMENT_AUDIO_WIDTH_PX,
   MESSAGE_ATTACHMENT_DOCUMENT_WIDTH_PX,
   MESSAGE_ATTACHMENT_DRAFT_IMAGE_SIZE_PX,
   MESSAGE_ATTACHMENT_DRAFT_KIND
@@ -32,6 +33,15 @@ const emit = defineEmits<MessageAttachmentDraftListEmits>()
       <NmorphFileCard
         v-else-if="attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT"
         :style="{ width: `${MESSAGE_ATTACHMENT_DOCUMENT_WIDTH_PX}px` }"
+        :name="attachment.name"
+        :mime-type="attachment.contentType"
+        :size="attachment.size"
+        :show-default-actions="false"
+        compact
+      />
+      <NmorphFileCard
+        v-else-if="attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO"
+        :style="{ width: `${MESSAGE_ATTACHMENT_AUDIO_WIDTH_PX}px` }"
         :name="attachment.name"
         :mime-type="attachment.contentType"
         :size="attachment.size"

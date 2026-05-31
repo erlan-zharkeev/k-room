@@ -54,6 +54,7 @@ export const useChatRoomFooter = (
     submitMessageEdit
   } = useMessageEdit()
   const {
+    buildMessageAudioDraftPayload,
     buildMessageDocumentDraftPayload,
     buildMessageImageDraftPayload,
     clearSentMessageAttachmentDraft,
@@ -61,6 +62,7 @@ export const useChatRoomFooter = (
     hasMessageAttachmentDraft,
     messageAttachmentDraftItems,
     messageAttachmentDraftUploadValue,
+    messageAudioDraftAudios,
     messageDocumentDraftDocuments,
     messageImageDraftImages,
     openMessageAttachmentUpload,
@@ -113,7 +115,9 @@ export const useChatRoomFooter = (
     const body = messageText.value.trim()
     const images = cloneMediaObjects(messageImageDraftImages.value)
     const documents = cloneMediaObjects(messageDocumentDraftDocuments.value)
-    const hasMessageDraft = Boolean(images.length || documents.length)
+    const audios = cloneMediaObjects(messageAudioDraftAudios.value)
+    const hasImageOrDocumentDraft = Boolean(images.length || documents.length)
+    const hasMessageDraft = Boolean(hasImageOrDocumentDraft || audios.length)
     const { id: authorId, nickname: authorNickname } = user.value
     const repliedMessage = buildMessageDraftReferencePayload(roomId)
     const hasMessageBody = Boolean(body)
@@ -122,8 +126,11 @@ export const useChatRoomFooter = (
 
     if (!hasMessageContent || !authorId) return
 
-    const payloadImages = await buildMessageImageDraftPayload()
-    const payloadDocuments = await buildMessageDocumentDraftPayload()
+    const [payloadImages, payloadDocuments, payloadAudios] = await Promise.all([
+      buildMessageImageDraftPayload(),
+      buildMessageDocumentDraftPayload(),
+      buildMessageAudioDraftPayload()
+    ])
 
     const message: Message = {
       id: uuidv4(),
@@ -136,6 +143,7 @@ export const useChatRoomFooter = (
       reactions: [],
       images,
       documents,
+      audios,
       ...(repliedMessage && { repliedMessage })
     }
 
@@ -144,7 +152,8 @@ export const useChatRoomFooter = (
       message: {
         ...message,
         images: payloadImages,
-        documents: payloadDocuments
+        documents: payloadDocuments,
+        audios: payloadAudios
       }
     }
 

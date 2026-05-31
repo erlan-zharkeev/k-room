@@ -4,7 +4,12 @@ import { computed, useTemplateRef } from 'vue'
 
 import { revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
-import { MESSAGE_ATTACHMENT_DRAFT_KIND, MESSAGE_DOCUMENT_MAX_MB, MESSAGE_IMAGE_MAX_MB } from '../config/constants'
+import {
+  MESSAGE_ATTACHMENT_DRAFT_KIND,
+  MESSAGE_AUDIO_MAX_MB,
+  MESSAGE_DOCUMENT_MAX_MB,
+  MESSAGE_IMAGE_MAX_MB
+} from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type {
   MessageAttachmentDraftListItem,
@@ -14,6 +19,7 @@ import type {
 import { buildMessageAttachmentDraftListItems } from '../lib/build-message-attachment-draft-list-items'
 import { buildMessageAttachmentUploadGroups } from '../lib/build-message-attachment-upload-groups'
 
+import { useMessageAudioDraft } from './use-message-audio-draft.model'
 import { useMessageDocumentDraft } from './use-message-document-draft.model'
 import { useMessageImageDraft } from './use-message-image-draft.model'
 
@@ -44,17 +50,35 @@ export const useMessageAttachmentDraft = ({
     removeMessageDocumentDraft,
     updateMessageDocumentDraft
   } = useMessageDocumentDraft()
+  const {
+    buildMessageAudioDraftPayload,
+    clearMessageAudioDraft,
+    clearSentMessageAudioDraft,
+    hasMessageAudioDraft,
+    messageAudioDraftAudios,
+    messageAudioDraftUploadValue,
+    removeMessageAudioDraft,
+    updateMessageAudioDraft
+  } = useMessageAudioDraft()
   const messageAttachmentDraftUploadValue = computed(() => [
     ...messageImageDraftUploadValue.value,
-    ...messageDocumentDraftUploadValue.value
+    ...messageDocumentDraftUploadValue.value,
+    ...messageAudioDraftUploadValue.value
   ])
   const messageAttachmentDraftItems = computed(() =>
-    buildMessageAttachmentDraftListItems(messageImageDraftImages.value, messageDocumentDraftDocuments.value)
+    buildMessageAttachmentDraftListItems(
+      messageImageDraftImages.value,
+      messageDocumentDraftDocuments.value,
+      messageAudioDraftAudios.value
+    )
   )
   const editingMessageAttachmentItems = computed(() =>
-    buildMessageAttachmentDraftListItems(editingMessageImages.value, [])
+    buildMessageAttachmentDraftListItems(editingMessageImages.value, [], [])
   )
-  const hasMessageAttachmentDraft = computed(() => hasMessageImageDraft.value || hasMessageDocumentDraft.value)
+  const hasMessageImageOrDocumentDraft = computed(() => hasMessageImageDraft.value || hasMessageDocumentDraft.value)
+  const hasMessageAttachmentDraft = computed(
+    () => hasMessageImageOrDocumentDraft.value || hasMessageAudioDraft.value
+  )
 
   const openMessageAttachmentUpload = () => {
     const input = messageAttachmentUploadRef.value?.inputDOMRef
@@ -76,20 +100,24 @@ export const useMessageAttachmentDraft = ({
     const {
       validImageUploadValues,
       validDocumentUploadValues,
+      validAudioUploadValues,
       sizeRejectedImageUploadValues,
       sizeRejectedDocumentUploadValues,
+      sizeRejectedAudioUploadValues,
       limitRejectedUploadValues
     } = buildMessageAttachmentUploadGroups(uploadValues)
     const rejectedUploadValues = [
       ...sizeRejectedImageUploadValues,
       ...sizeRejectedDocumentUploadValues,
+      ...sizeRejectedAudioUploadValues,
       ...limitRejectedUploadValues
     ]
 
     revokeObjectUrls(rejectedUploadValues.map(({ previewUrl }) => previewUrl))
     await Promise.all([
       updateMessageImageDraft(validImageUploadValues),
-      updateMessageDocumentDraft(validDocumentUploadValues)
+      updateMessageDocumentDraft(validDocumentUploadValues),
+      updateMessageAudioDraft(validAudioUploadValues)
     ])
 
     if (sizeRejectedImageUploadValues.length) {
@@ -108,6 +136,14 @@ export const useMessageAttachmentDraft = ({
       })
     }
 
+    if (sizeRejectedAudioUploadValues.length) {
+      toast.add({
+        type: 'error',
+        title: t(TOAST_I18N.error),
+        content: t(CHAT_ROOM_CONTENT_I18N.messageAudioInvalidSize)(MESSAGE_AUDIO_MAX_MB)
+      })
+    }
+
     if (limitRejectedUploadValues.length) {
       toast.add({
         type: 'warning',
@@ -118,12 +154,13 @@ export const useMessageAttachmentDraft = ({
   }
 
   const clearMessageAttachmentDraft = async () => {
-    await Promise.all([clearMessageImageDraft(), clearMessageDocumentDraft()])
+    await Promise.all([clearMessageImageDraft(), clearMessageDocumentDraft(), clearMessageAudioDraft()])
   }
 
   const clearSentMessageAttachmentDraft = () => {
     clearSentMessageImageDraft()
     clearSentMessageDocumentDraft()
+    clearSentMessageAudioDraft()
   }
 
   const removeMessageAttachmentDraft = (attachment: MessageAttachmentDraftListItem) => {
@@ -132,7 +169,12 @@ export const useMessageAttachmentDraft = ({
       return
     }
 
-    void removeMessageDocumentDraft(attachment.src)
+    if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT) {
+      void removeMessageDocumentDraft(attachment.src)
+      return
+    }
+
+    void removeMessageAudioDraft(attachment.src)
   }
 
   const removeEditingMessageAttachment = (attachment: MessageAttachmentDraftListItem) => {
@@ -143,9 +185,11 @@ export const useMessageAttachmentDraft = ({
     editingMessageAttachmentItems,
     messageAttachmentDraftItems,
     messageAttachmentDraftUploadValue,
+    messageAudioDraftAudios,
     messageDocumentDraftDocuments,
     messageImageDraftImages,
     hasMessageAttachmentDraft,
+    buildMessageAudioDraftPayload,
     buildMessageDocumentDraftPayload,
     buildMessageImageDraftPayload,
     clearMessageAttachmentDraft,
