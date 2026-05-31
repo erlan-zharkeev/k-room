@@ -14,5 +14,8 @@ const { documentDownloadHref } = useMessageDocumentCard(props)
     :mime-type="props.document.contentType"
     :size="props.document.size"
     :download-href="documentDownloadHref"
+    surface="soft"
+    :show-extension-badge="false"
+    :icon-surface="false"
   />
 </template>

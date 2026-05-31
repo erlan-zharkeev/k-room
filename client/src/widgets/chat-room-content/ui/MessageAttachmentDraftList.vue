@@ -37,6 +37,9 @@ const emit = defineEmits<MessageAttachmentDraftListEmits>()
         :mime-type="attachment.contentType"
         :size="attachment.size"
         :show-default-actions="false"
+        surface="soft"
+        :show-extension-badge="false"
+        :icon-surface="false"
         compact
       />
       <NmorphFileCard
@@ -46,6 +49,9 @@ const emit = defineEmits<MessageAttachmentDraftListEmits>()
         :mime-type="attachment.contentType"
         :size="attachment.size"
         :show-default-actions="false"
+        surface="soft"
+        :show-extension-badge="false"
+        :icon-surface="false"
         compact
       />
       <NmorphButton
