@@ -81,8 +81,23 @@ export const useMessageSync = () => {
     void playDeliveredMessageSound({ roomId, message })
   }
 
-  const handleMessageEdited = async ({ body, editedAt, images, linkPreview, messageId }: EventMessageEdited) => {
-    await update(messageId, { body, editedAt, images, linkPreview })
+  const handleMessageEdited = async ({
+    audios,
+    body,
+    documents,
+    editedAt,
+    images,
+    linkPreview,
+    messageId
+  }: EventMessageEdited) => {
+    await update(messageId, {
+      body,
+      editedAt,
+      images,
+      linkPreview,
+      ...(documents && { documents }),
+      ...(audios && { audios })
+    })
   }
 
   const handleMessageLinkPreviewUpdated = async ({ linkPreview, messageId }: EventMessageLinkPreviewUpdated) => {

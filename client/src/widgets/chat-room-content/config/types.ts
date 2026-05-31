@@ -192,6 +192,14 @@ export interface MessageDocumentListProps {
   documents: DocumentObject[]
 }
 
+export interface MessageAudioCardProps {
+  audio: AudioObject
+}
+
+export interface MessageAudioListProps {
+  audios: AudioObject[]
+}
+
 export interface MessageAttachmentDraftListBaseItem {
   src: string
   name: string
@@ -205,11 +213,18 @@ export type MessageAttachmentDraftListFileKind =
   | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT
   | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO
 
-export type MessageAttachmentDraftFileMediaObject = DocumentObject | AudioObject
+export interface MessageMediaDraftPreview {
+  previewSrc: string
+}
+
+export type MessageMediaDraftPreviewObject<Media extends MediaObject> = Media & MessageMediaDraftPreview
+
+export type MessageAttachmentDraftFileMediaObject = (DocumentObject | AudioObject) & Partial<MessageMediaDraftPreview>
 
 export interface MessageAttachmentDraftListFileItem extends MessageAttachmentDraftListBaseItem {
   kind: MessageAttachmentDraftListFileKind
   contentType?: string
+  previewSrc?: string
   size?: number
 }
 

@@ -57,7 +57,7 @@ export const useMessageAttachmentDraft = ({
     buildMessageAttachmentDraftListItems(
       messageImageDraft.mediaObjects.value,
       messageDocumentDraft.mediaObjects.value,
-      messageAudioDraft.mediaObjects.value
+      messageAudioDraft.mediaPreviewObjects.value
     )
   )
   const editingMessageAttachmentItems = computed(() =>

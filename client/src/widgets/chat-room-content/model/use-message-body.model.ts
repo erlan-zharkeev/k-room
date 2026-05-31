@@ -24,9 +24,15 @@ export const useMessageBody = (props: MessageBodyProps) => {
     }))
   )
   const messageDocuments = computed(() => message.value.documents ?? [])
+  const messageAudios = computed(() => message.value.audios ?? [])
   const resolveMessageImageIds = () => messageImageList.value.map(({ mediaId }) => mediaId)
   const resolveMessageDocumentIds = () => messageDocuments.value.map(({ src }) => src)
-  const resolveMessageMediaIds = () => [...resolveMessageImageIds(), ...resolveMessageDocumentIds()]
+  const resolveMessageAudioIds = () => messageAudios.value.map(({ src }) => src)
+  const resolveMessageMediaIds = () => [
+    ...resolveMessageImageIds(),
+    ...resolveMessageDocumentIds(),
+    ...resolveMessageAudioIds()
+  ]
   const messageImagePreviewUrlList = useLiveMediaUrls(resolveMessageImageIds)
 
   watch(
@@ -48,6 +54,7 @@ export const useMessageBody = (props: MessageBodyProps) => {
     showAuthorNickname,
     isMessageEditing,
     hasMessageBody,
+    messageAudios,
     messageDocuments,
     messageImagePreviewUrlList,
     sentAt

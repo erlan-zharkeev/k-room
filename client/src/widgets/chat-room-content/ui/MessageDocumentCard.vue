@@ -2,10 +2,10 @@
 import { NmorphFileCard } from '@nmorph/nmorph-ui-kit'
 
 import type { MessageDocumentCardProps } from '../config/types'
-import { useMessageDocumentCard } from '../model/use-message-document-card.model'
+import { useMessageMediaCard } from '../model/use-message-media-card.model'
 
 const props = defineProps<MessageDocumentCardProps>()
-const { documentDownloadHref } = useMessageDocumentCard(props)
+const { mediaUrl: documentDownloadHref } = useMessageMediaCard(() => props.document)
 </script>
 
 <template>
