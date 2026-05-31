@@ -43,14 +43,14 @@ export const resolveRepliedMessage = async ({
     _id: repliedMessage.id,
     deletedForUserIds: { $ne: userId }
   })
-    .select('_id authorId authorNickname body images documents')
+    .select('_id authorId authorNickname body images documents audios')
     .lean<MessageDocument>()
 
   if (!sourceMessage) {
     return null
   }
 
-  const { _id, authorId, authorNickname, body, images, documents } = sourceMessage
+  const { _id, authorId, authorNickname, body, images, documents, audios } = sourceMessage
 
   return {
     id: stringifyMongoId(_id),
@@ -60,6 +60,7 @@ export const resolveRepliedMessage = async ({
     body,
     images: normalizeMessageImages(images),
     ...(documents && { documents }),
+    ...(audios && { audios }),
     ...(repliedMessage.forward && { forward: true })
   }
 }

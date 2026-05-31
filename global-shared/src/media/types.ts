@@ -44,4 +44,9 @@ export interface DocumentObject extends MediaObject {
   size?: number
 }
 
+export interface AudioObject extends MediaObject {
+  contentType?: string
+  size?: number
+}
+
 export type MediaFileValue = ImageObject
