@@ -16,7 +16,7 @@ export const buildMessageMediaDraftObject = <Media extends MediaObject>(
     src,
     name: file.name,
     ...details
-  }) as Media
+  } as Media)
 
 export const buildMessageMediaDraftPayloadObject = async <Media extends MediaObject>(
   file: File,
