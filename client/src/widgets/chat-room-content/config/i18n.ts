@@ -91,6 +91,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Удалить документ',
     zh: '删除文档'
   },
+  removeMessageAttachment: {
+    en: 'Remove attachment',
+    ru: 'Удалить вложение',
+    zh: '删除附件'
+  },
   messageTextCopied: {
     en: 'Message text copied',
     ru: 'Текст сообщения скопирован',

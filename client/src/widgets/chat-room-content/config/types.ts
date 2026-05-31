@@ -1,18 +1,12 @@
 import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
-import type {
-  DocumentObject,
-  ImageObject,
-  MediaId,
-  MessageLinkPreview,
-  MessageReaction,
-  RepliedMessage
-} from 'global-shared'
+import type { ImageObject, MediaId, MessageLinkPreview, MessageReaction, RepliedMessage } from 'global-shared'
 import type { Component, Ref } from 'vue'
 
 import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
 import type {
+  MESSAGE_ATTACHMENT_DRAFT_KIND,
   MESSAGE_CONTEXT_MENU_ACTION,
   MESSAGE_DRAFT_REFERENCE_KIND,
   MESSAGE_STATUS_DOT_TONE,
@@ -42,6 +36,11 @@ export type ChatRoomFooterSelectEditingMessage = (messageId: string) => void
 
 export interface MessageAttachmentUploadExpose {
   inputDOMRef?: HTMLInputElement
+}
+
+export interface UseMessageAttachmentDraftParams {
+  editingMessageImages: Ref<ImageObject[]>
+  removeEditingMessageImage: (imageSrc: string) => void
 }
 
 export interface EditingMessageState {
@@ -175,28 +174,38 @@ export interface MessagePreviewProps {
   text: string
 }
 
-export interface MessageImageDraftListProps {
-  images: ImageObject[]
+export interface MessageAttachmentDraftListBaseItem {
+  src: string
+  name: string
+}
+
+export interface MessageAttachmentDraftListImageItem extends MessageAttachmentDraftListBaseItem {
+  kind: typeof MESSAGE_ATTACHMENT_DRAFT_KIND.IMAGE
+}
+
+export interface MessageAttachmentDraftListDocumentItem extends MessageAttachmentDraftListBaseItem {
+  kind: typeof MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT
+  contentType?: string
+  size?: number
+}
+
+export type MessageAttachmentDraftListItem =
+  | MessageAttachmentDraftListImageItem
+  | MessageAttachmentDraftListDocumentItem
+
+export interface MessageAttachmentDraftListProps {
+  attachments: MessageAttachmentDraftListItem[]
   removeAriaLabel: string
 }
 
-export interface MessageImageDraftListEmits {
-  remove: [imageSrc: string]
+export interface MessageAttachmentDraftListEmits {
+  remove: [attachment: MessageAttachmentDraftListItem]
 }
 
 export interface MessageImageDraftItem {
   id: string
   file: File
   uploadValue: INmorphCustomFileData
-}
-
-export interface MessageDocumentDraftListProps {
-  documents: DocumentObject[]
-  removeAriaLabel: string
-}
-
-export interface MessageDocumentDraftListEmits {
-  remove: [documentSrc: string]
 }
 
 export interface MessageDocumentDraftItem {

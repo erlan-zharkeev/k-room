@@ -15,12 +15,12 @@ import {
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
 import { toRef } from 'vue'
 
-import { MESSAGE_IMAGE_ALLOWED_TYPES } from '../config/constants'
+import { MESSAGE_ATTACHMENT_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomFooterEmits, ChatRoomFooterProps } from '../config/types'
 import { useChatRoomFooter } from '../model/use-chat-room-footer.model'
 
-import MessageImageDraftList from './MessageImageDraftList.vue'
+import MessageAttachmentDraftList from './MessageAttachmentDraftList.vue'
 import MessagePreview from './MessagePreview.vue'
 
 const props = defineProps<ChatRoomFooterProps>()
@@ -29,12 +29,12 @@ const room = toRef(props, 'room')
 const {
   messageText,
   messageEmojiDropdownAnchor,
-  messageImageDraftImages,
-  messageImageDraftUploadValue,
+  editingMessageAttachmentItems,
+  messageAttachmentDraftItems,
+  messageAttachmentDraftUploadValue,
   emojiPickerLocale,
   emojiPickerQuickList,
   editingMessagePreviewText,
-  editingMessageImages,
   messageDraftReference,
   messageDraftReferencePreviewText,
   messageDraftReferenceTitle,
@@ -48,16 +48,16 @@ const {
   cancelMessageEdit,
   cancelMessageDraftReference,
   closeMessageEmojiDropdown,
-  openMessageImageUpload,
-  removeEditingMessageImage,
-  removeMessageImageDraft,
+  openMessageAttachmentUpload,
+  removeEditingMessageAttachment,
+  removeMessageAttachmentDraft,
   selectMessageEmoji,
   selectEditingMessage,
   selectMessageDraftReference,
   sendMessage,
-  showUnsupportedMessageImageFormatError,
+  showUnsupportedMessageAttachmentFormatError,
   toggleMessageEmojiDropdown,
-  updateMessageImageDraft,
+  updateMessageAttachmentDraft,
   submitMessageEdit
 } = useChatRoomFooter(room, (messageId) => emit('select-editing-message', messageId))
 </script>
@@ -99,17 +99,17 @@ const {
         </template>
       </NmorphButton>
     </div>
-    <MessageImageDraftList
+    <MessageAttachmentDraftList
       v-if="isEditingCurrentRoomMessage"
-      :images="editingMessageImages"
-      :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageImage)"
-      @remove="removeEditingMessageImage"
+      :attachments="editingMessageAttachmentItems"
+      :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageAttachment)"
+      @remove="removeEditingMessageAttachment"
     />
-    <MessageImageDraftList
+    <MessageAttachmentDraftList
       v-else
-      :images="messageImageDraftImages"
-      :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageImage)"
-      @remove="removeMessageImageDraft"
+      :attachments="messageAttachmentDraftItems"
+      :remove-aria-label="$t(CHAT_ROOM_CONTENT_I18N.removeMessageAttachment)"
+      @remove="removeMessageAttachmentDraft"
     />
     <div class="chat-room-content-footer__controls">
       <NmorphButton
@@ -125,22 +125,22 @@ const {
       </NmorphButton>
       <NmorphFileUpload
         v-else
-        ref="messageImageUpload"
+        ref="messageAttachmentUpload"
         class="chat-room-content-footer__attach-upload"
-        :allowed-types="MESSAGE_IMAGE_ALLOWED_TYPES"
-        :model-value="messageImageDraftUploadValue"
+        :allowed-types="MESSAGE_ATTACHMENT_ALLOWED_TYPES"
+        :model-value="messageAttachmentDraftUploadValue"
         :multiple="true"
         :photo-with-preview="false"
         compact
         layout="inline"
-        @update:model-value="updateMessageImageDraft"
-        @on-unsupported-file-type-error="showUnsupportedMessageImageFormatError"
+        @update:model-value="updateMessageAttachmentDraft"
+        @on-unsupported-file-type-error="showUnsupportedMessageAttachmentFormatError"
       >
         <template #trigger>
           <NmorphButton
             shape="square"
             :aria-label="$t(CHAT_ROOM_CONTENT_I18N.attachFile)"
-            @click="openMessageImageUpload"
+            @click="openMessageAttachmentUpload"
           >
             <template #icon>
               <NmorphIconPaperclip />
