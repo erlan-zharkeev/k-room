@@ -13,6 +13,7 @@ export const useAppToast = () => {
       const type = message.type ?? 'info'
       const notification: AppToastNotification = {
         ...message,
+        bordered: false,
         duration: message.duration ?? TOAST_LIFE_MS[type],
         placement: message.placement ?? TOAST_PLACEMENT[stackType],
         showDurationValue: false,
