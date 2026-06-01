@@ -1,23 +1,19 @@
 <script setup lang="ts">
-import { NmorphImagePreview } from '@nmorph/nmorph-ui-kit'
-
 import { AppText } from 'src/shared/ui'
 
-import { MESSAGE_IMAGE_PREVIEW_HEIGHT_PX } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageBodyEmits, MessageBodyProps } from '../config/types'
 import { useMessageBody } from '../model/use-message-body.model'
 import { useMessageReferencePreview } from '../model/use-message-reference-preview.model'
 
-import MessageAudioList from './MessageAudioList.vue'
 import MessageContextMenu from './MessageContextMenu.vue'
-import MessageDocumentList from './MessageDocumentList.vue'
+import MessageFileList from './MessageFileList.vue'
 import MessageLinkPreview from './MessageLinkPreview.vue'
+import MessageMediaGallery from './MessageMediaGallery.vue'
 import MessagePreview from './MessagePreview.vue'
 import MessageReactions from './MessageReactions.vue'
 import MessageStatusDots from './MessageStatusDots.vue'
 import MessageText from './MessageText.vue'
-import MessageVideoList from './MessageVideoList.vue'
 
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
@@ -25,11 +21,10 @@ const {
   showAuthorNickname,
   isMessageEditing,
   hasMessageBody,
-  hasMessageImages,
   messageAudios,
   messageDocuments,
+  messageImages,
   messageVideos,
-  messageImagePreviewUrlList,
   sentAt
 } = useMessageBody(props)
 const {
@@ -64,24 +59,9 @@ const {
         <div v-else-if="messageReference" class="message-body__reference-preview">
           <MessagePreview :title="messageReferencePreviewTitle" :text="messageReferencePreviewText" />
         </div>
-        <div
-          v-if="hasMessageImages"
-          class="message-body__images"
-          :style="{ minHeight: `${MESSAGE_IMAGE_PREVIEW_HEIGHT_PX}px` }"
-        >
-          <NmorphImagePreview
-            v-if="messageImagePreviewUrlList.length"
-            :src="messageImagePreviewUrlList"
-            width="100%"
-            :height="`${MESSAGE_IMAGE_PREVIEW_HEIGHT_PX}px`"
-            radius="4px"
-            trigger-view="gallery"
-            trigger-gap="6px"
-          />
-        </div>
-        <MessageVideoList :videos="messageVideos" />
-        <MessageDocumentList :documents="messageDocuments" />
-        <MessageAudioList :audios="messageAudios" />
+        <MessageMediaGallery :images="messageImages" :videos="messageVideos" />
+        <MessageFileList :files="messageDocuments" media-preview="none" />
+        <MessageFileList :files="messageAudios" media-preview="audio" />
         <MessageText v-if="hasMessageBody" :text="props.message.body" />
         <MessageLinkPreview v-if="props.message.linkPreview" :preview="props.message.linkPreview" />
         <div class="message-body__footer">
@@ -160,11 +140,6 @@ const {
 .message-body__reference-preview--button {
   cursor: pointer;
   border: 0;
-}
-
-.message-body__images .nmorph-image-preview.nmorph-image-preview--gallery-trigger .nmorph-image-preview__trigger {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
 .message-body__footer {

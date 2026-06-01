@@ -8,10 +8,7 @@ import { loadChatRoomUsersByUserId } from '../../chat-rooms/lib/chat-room-persis
 import { loadUsersHavingContact } from './user-persistence'
 
 export const resolveUserRelatedRecipientIds = async (userId: string) => {
-  const [contacts, rooms] = await Promise.all([
-    loadUsersHavingContact(userId),
-    loadChatRoomUsersByUserId(userId)
-  ])
+  const [contacts, rooms] = await Promise.all([loadUsersHavingContact(userId), loadChatRoomUsersByUserId(userId)])
 
   return uniq([
     ...contacts.map((contact) => stringifyMongoId(contact._id)),

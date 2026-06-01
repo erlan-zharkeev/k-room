@@ -232,7 +232,7 @@ const {
 <style lang="scss">
 .chat-room-content-footer__content {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .chat-room-content-footer__edit-preview {

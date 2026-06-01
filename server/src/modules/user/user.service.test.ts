@@ -158,7 +158,7 @@ describe('user.service', () => {
             expiresAt: 100_001
           }
         }
-      },
+      }
     })
 
     await service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' })
