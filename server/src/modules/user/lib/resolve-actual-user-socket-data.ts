@@ -1,9 +1,16 @@
-import { getRoomOtherUserIds, type Contact, type EventGetContacts, type EventGetRooms } from 'global-shared'
+import {
+  getRoomOtherUserIds,
+  type Contact,
+  type EventGetContacts,
+  type EventGetRooms,
+  type EventRoomCallsUpdated
+} from 'global-shared'
 import uniq from 'lodash/uniq'
 
 import { resolveKnownUsers, transformRoomForUser } from '../../chat-rooms/chat-rooms.service'
 import { loadChatRoomsByIds } from '../../chat-rooms/lib/chat-room-persistence'
 import type { PresenceService } from '../../presence/presence.service'
+import { loadUserRoomCalls } from '../../room-calls/lib/load-user-room-calls'
 
 import { transformUserToFrontendContact } from './transform-user'
 import { loadUserById } from './user-persistence'
@@ -27,9 +34,11 @@ export const resolveActualUserSocketData = async (userId: string, presenceServic
   const roomsPayload: EventGetRooms = await Promise.all(
     rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds, mutedChatRoomIds }))
   )
+  const roomCallsPayload: EventRoomCallsUpdated = await loadUserRoomCalls(roomIds)
 
   return {
     contactsPayload,
+    roomCallsPayload,
     roomsPayload
   }
 }

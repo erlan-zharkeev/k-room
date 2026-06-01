@@ -5,6 +5,7 @@ import { useSettings, type DeviceSetting } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData } from 'src/features/client-session'
+import { CallsPage } from 'src/pages/calls'
 import { ContactsPage } from 'src/pages/contacts'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
 import { EmailConfirmationPage } from 'src/pages/email-confirmation'
@@ -107,6 +108,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'calls',
         components: {
+          'content-navigation': CallsPage,
           content: ChatRoomContent
         }
       },

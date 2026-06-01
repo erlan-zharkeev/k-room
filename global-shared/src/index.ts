@@ -30,6 +30,7 @@ export type {
   EventRoomCallSignalReceived
 } from './room-calls/types'
 export {
+  ROOM_CALL_ACTUALIZATION_LIMIT,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_MEDIA_KIND,
   ROOM_CALL_PARTICIPANT_LIMIT,
