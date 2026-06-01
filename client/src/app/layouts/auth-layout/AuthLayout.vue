@@ -24,7 +24,7 @@ const route = useRoute()
       </div>
     </div>
     <div class="auth-layout__card">
-      <NmorphCard>
+      <NmorphCard :card-padding="16">
         <div class="auth-layout__tabs">
           <div
             :class="[
