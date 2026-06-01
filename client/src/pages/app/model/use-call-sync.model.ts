@@ -1,6 +1,6 @@
 import type { EventCallsUpdated, EventCallUpdated } from 'global-shared'
 
-import { useCall } from 'src/entities/call'
+import { useCall } from './use-call.model'
 
 export const useCallSync = () => {
   const { bulkPut, put } = useCall()

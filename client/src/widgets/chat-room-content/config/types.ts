@@ -1,4 +1,9 @@
-import type { INmorphCustomFileData, INmorphTagItemProps, NmorphMediaGalleryItem } from '@nmorph/nmorph-ui-kit'
+import type {
+  INmorphCustomFileData,
+  INmorphTagItemProps,
+  NmorphFileCardMediaPreview,
+  NmorphMediaGalleryItem
+} from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type {
   AudioObject,
@@ -186,20 +191,22 @@ export interface MessagePreviewProps {
   text: string
 }
 
-export interface MessageDocumentCardProps {
-  document: DocumentObject
+export type MessageFileListFile = AudioObject | DocumentObject
+export type MessageFileListMediaPreview = Extract<NmorphFileCardMediaPreview, 'none' | 'audio'>
+
+export interface MessageFileListItem {
+  id: string
+  name: string
+  contentType?: string
+  size?: number
+  downloadHref?: string
+  previewSrc?: string
+  mediaPreview: MessageFileListMediaPreview
 }
 
-export interface MessageDocumentListProps {
-  documents: DocumentObject[]
-}
-
-export interface MessageAudioCardProps {
-  audio: AudioObject
-}
-
-export interface MessageAudioListProps {
-  audios: AudioObject[]
+export interface MessageFileListProps {
+  files: MessageFileListFile[]
+  mediaPreview: MessageFileListMediaPreview
 }
 
 export interface MessageMediaGalleryProps {

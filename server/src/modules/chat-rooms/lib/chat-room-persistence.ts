@@ -33,7 +33,11 @@ export const clearPinnedMessageFromRoom = (roomId: string, messageId: string) =>
   return ChatRoomModel.updateOne({ _id: roomId, pinnedMessageId: messageId }, { $set: { pinnedMessageId: null } })
 }
 
-export const updateRoomPinnedMessage = (roomId: string, pinnedMessageId: string | null, currentPinnedMessageId?: string) => {
+export const updateRoomPinnedMessage = (
+  roomId: string,
+  pinnedMessageId: string | null,
+  currentPinnedMessageId?: string
+) => {
   const query = currentPinnedMessageId ? { _id: roomId, pinnedMessageId: currentPinnedMessageId } : { _id: roomId }
 
   return ChatRoomModel.updateOne(query, { $set: { pinnedMessageId } })

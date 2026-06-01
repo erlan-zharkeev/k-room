@@ -339,10 +339,7 @@ export const deleteMessage = async (userId: string, { deleteForEveryone, roomId,
     return
   }
 
-  await Promise.all([
-    removeMessageFromRoom(roomId, messageId),
-    clearPinnedMessageFromRoom(roomId, messageId)
-  ])
+  await Promise.all([removeMessageFromRoom(roomId, messageId), clearPinnedMessageFromRoom(roomId, messageId)])
   emitToUsers(userIds, 'message-deleted', payload)
 }
 
