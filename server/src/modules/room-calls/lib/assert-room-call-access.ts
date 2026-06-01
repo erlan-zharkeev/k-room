@@ -37,9 +37,34 @@ export const assertRoomCallStartAccess = async (userId: string, roomId: string) 
   if (activeRoomCall) {
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAlreadyActive)
   }
+
+  return room
 }
 
 export const assertRoomCallJoinAccess = async (userId: string, roomCallId: string) => {
+  const roomCall = await findActiveRoomCallById(roomCallId)
+
+  if (!roomCall) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+  }
+
+  const room = await findRoomUsersByUser(roomCall.roomId, userId)
+
+  if (!room) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+  }
+
+  const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
+  const isCurrentUserActiveParticipant = activeParticipants.some((participant) => participant.userId === userId)
+
+  if (!isCurrentUserActiveParticipant && activeParticipants.length >= ROOM_CALL_PARTICIPANT_LIMIT) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallLimitReached)
+  }
+
+  return roomCall
+}
+
+export const assertRoomCallParticipantAccess = async (userId: string, socketId: string, roomCallId: string) => {
   const roomCall = await findActiveRoomCallById(roomCallId)
 
   if (!roomCall) {
@@ -52,12 +77,20 @@ export const assertRoomCallJoinAccess = async (userId: string, roomCallId: strin
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallJoinFailed)
   }
 
-  const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
-  const isCurrentUserActiveParticipant = activeParticipants.some((participant) => participant.userId === userId)
+  const participant = roomCall.participants.find((participant) => {
+    const isCurrentUser = participant.userId === userId
+    const isCurrentSocket = participant.socketId === socketId
+    const isActiveParticipant = !participant.leftAt
 
-  if (!isCurrentUserActiveParticipant && activeParticipants.length >= ROOM_CALL_PARTICIPANT_LIMIT) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallLimitReached)
+    return isCurrentUser && isCurrentSocket && isActiveParticipant
+  })
+
+  if (!participant) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
   }
 
-  return roomCall
+  return {
+    participant,
+    roomCall
+  }
 }
