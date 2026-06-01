@@ -1,8 +1,8 @@
-# План внедрения звонков
+# План внедрения room-call звонков
 
 ## Решение
 
-Звонок строим как room-based call session: каждый активный звонок привязан к `chatRoomId`, а личный звонок является частным случаем комнаты из двух участников.
+Звонок строим как `RoomCall`: каждый активный звонок привязан к `chatRoomId`, а личный звонок является частным случаем комнаты из двух участников.
 
 Первый вариант делаем через P2P mesh WebRTC и Socket.IO signaling, без SFU/media-server. Лимит активных участников одного звонка: `5`. Размер чата не меняем.
 
@@ -15,7 +15,7 @@
 
 ## Микрошаги
 
-1. Обновить shared contract звонков: типы, константы, socket events, лимит участников.
+1. Обновить shared contract `RoomCall`: типы, константы, socket events, лимит участников.
 2. Перевести серверный модуль звонков на room-based модель данных и проверки доступа к комнате.
 3. Добавить server signaling flow: start/join/leave/end, relay offer/answer/ice, обновление media state.
 4. Разнести клиентскую структуру по FSD: `entities/call`, `features/call-session`, `widgets/call-room`.

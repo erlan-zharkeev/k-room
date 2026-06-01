@@ -1,28 +1,4 @@
 import type {
-  Call,
-  EventAnswerCall,
-  EventCallAccepted,
-  EventCallEnded,
-  EventCallSignalReceived,
-  EventCallsUpdated,
-  EventCallStartedAt,
-  EventCallUser,
-  EventJoinRoomCall,
-  EventLeaveRoomCall,
-  EventMarkCallAsVideo,
-  EventRoomCallEnded,
-  EventRoomCallJoined,
-  EventRoomCallLeft,
-  EventRoomCallMediaStateUpdated,
-  EventRoomCallStarted,
-  EventRoomCallsUpdated,
-  EventSendCallSignal,
-  EventStartRoomCall,
-  EventUpdateCallMediaState,
-  JoinRoomCallAckPayload,
-  StartRoomCallAckPayload
-} from '../calls/types'
-import type {
   CreateRoomAckPayload,
   EventChatRoomDeleted,
   EventChatRoomLeft,
@@ -76,7 +52,22 @@ import type {
   EventUpdateMessageStatus,
   EventUpdatePinnedMessage
 } from '../message/types'
-import type { BasicStreamSettings } from '../shared/types'
+import type {
+  EventJoinRoomCall,
+  EventLeaveRoomCall,
+  EventRoomCallEnded,
+  EventRoomCallJoined,
+  EventRoomCallLeft,
+  EventRoomCallMediaStateUpdated,
+  EventRoomCallSignalReceived,
+  EventRoomCallStarted,
+  EventRoomCallsUpdated,
+  EventSendRoomCallSignal,
+  EventStartRoomCall,
+  EventUpdateRoomCallMediaState,
+  JoinRoomCallAckPayload,
+  StartRoomCallAckPayload
+} from '../room-calls/types'
 import type { ReqStatus } from '../status/types'
 import type { UserPreview } from '../user/types'
 
@@ -148,16 +139,11 @@ export interface ClientToServerSocketPayloadMap {
   'mark-room-as-read': EventMarkRoomAsRead
   'delete-message': EventDeleteMessage
   'add-reaction': EventAddReaction
-  'call-user': EventCallUser
-  'answer-call': EventAnswerCall
-  'call-ended': EventCallEnded
-  'change-call-settings': BasicStreamSettings
-  'mark-call-as-video': EventMarkCallAsVideo
   'start-room-call': EventStartRoomCall
   'join-room-call': EventJoinRoomCall
   'leave-room-call': EventLeaveRoomCall
-  'update-call-media-state': EventUpdateCallMediaState
-  'send-call-signal': EventSendCallSignal
+  'update-room-call-media-state': EventUpdateRoomCallMediaState
+  'send-room-call-signal': EventSendRoomCallSignal
 }
 
 export interface ClientToServerSocketAckPayloadMap {
@@ -180,7 +166,7 @@ export interface ClientToServerSocketAckPayloadMap {
   'start-room-call': StartRoomCallAckPayload
   'join-room-call': JoinRoomCallAckPayload
   'leave-room-call': void
-  'update-call-media-state': void
+  'update-room-call-media-state': void
 }
 
 export interface ServerToClientSocketPayloadMap {
@@ -213,19 +199,13 @@ export interface ServerToClientSocketPayloadMap {
   'pinned-message-updated': EventPinnedMessageUpdated
   'message-status-updated': EventUpdateMessageStatus
   'messages-status-updated': EventMessagesStatusUpdated
-  'calls-data-loaded': EventCallsUpdated
-  'call-data-changed': Call
-  'call-user': EventCallUser
-  'call-accepted': EventCallAccepted
-  'call-started-at': EventCallStartedAt
-  'call-ended': void
   'room-calls-updated': EventRoomCallsUpdated
   'room-call-started': EventRoomCallStarted
   'room-call-joined': EventRoomCallJoined
   'room-call-left': EventRoomCallLeft
   'room-call-ended': EventRoomCallEnded
   'room-call-media-state-updated': EventRoomCallMediaStateUpdated
-  'call-signal-received': EventCallSignalReceived
+  'room-call-signal-received': EventRoomCallSignalReceived
 }
 
 export type ClientToServerSocketEvents = SocketEventMap<
