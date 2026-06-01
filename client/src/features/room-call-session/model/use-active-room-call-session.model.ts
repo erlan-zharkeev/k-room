@@ -9,6 +9,9 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
+import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
+
+import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
 import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
@@ -20,6 +23,8 @@ export const useActiveRoomCallSession = () => {
   const isStartingRoomCall = ref(false)
   const isJoiningRoomCall = ref(false)
   const isLeavingRoomCall = ref(false)
+  const { t } = useI18n()
+  const toast = useAppToast()
   const { roomCalls } = useRoomCall()
   const { user } = useUser()
   const {
@@ -79,6 +84,14 @@ export const useActiveRoomCallSession = () => {
     stopRoomCallLocalMedia()
   }
 
+  const showRoomCallSessionError = (content: string) => {
+    toast.add({
+      type: 'error',
+      title: t(TOAST_I18N.error),
+      content
+    })
+  }
+
   const syncActiveRoomCallMediaState = async () => {
     if (!activeRoomCallId.value) {
       return false
@@ -135,6 +148,7 @@ export const useActiveRoomCallSession = () => {
 
       if (!roomCallId) {
         stopRoomCallLocalMedia()
+        showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallStartFailed))
         return null
       }
 
@@ -142,9 +156,10 @@ export const useActiveRoomCallSession = () => {
       await syncActiveRoomCallLocalState()
 
       return roomCallId
-    } catch (error) {
+    } catch {
       clearActiveRoomCallSessionState()
-      throw error
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallStartFailed))
+      return null
     } finally {
       isStartingRoomCall.value = false
     }
@@ -157,6 +172,7 @@ export const useActiveRoomCallSession = () => {
       const roomCall = await joinRoomCall(roomCallId)
 
       if (!roomCall) {
+        showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
         return null
       }
 
@@ -166,10 +182,11 @@ export const useActiveRoomCallSession = () => {
       await connectActiveRoomCallPeers(roomCall)
 
       return roomCall
-    } catch (error) {
+    } catch {
       await leaveRoomCall(roomCallId, ROOM_CALL_LEAVE_REASON.LEFT)
       clearActiveRoomCallSessionState()
-      throw error
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
+      return null
     } finally {
       isJoiningRoomCall.value = false
     }
@@ -194,21 +211,29 @@ export const useActiveRoomCallSession = () => {
   }
 
   const setActiveRoomCallAudioEnabled = async (enabled: boolean) => {
-    if (enabled && !audioStream.value) {
-      await startAudio()
+    if (!enabled || audioStream.value) {
+      setAudioEnabled(enabled)
       return
     }
 
-    setAudioEnabled(enabled)
+    try {
+      await startAudio()
+    } catch {
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallAudioStartFailed))
+    }
   }
 
   const setActiveRoomCallVideoEnabled = async (enabled: boolean) => {
-    if (enabled && !videoStream.value) {
-      await startVideo()
+    if (!enabled || videoStream.value) {
+      setVideoEnabled(enabled)
       return
     }
 
-    setVideoEnabled(enabled)
+    try {
+      await startVideo()
+    } catch {
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
+    }
   }
 
   const stopActiveRoomCallVideo = () => {
@@ -216,7 +241,11 @@ export const useActiveRoomCallSession = () => {
   }
 
   const startActiveRoomCallScreen = async () => {
-    await startScreen()
+    try {
+      await startScreen()
+    } catch {
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallScreenStartFailed))
+    }
   }
 
   const stopActiveRoomCallScreen = () => {
