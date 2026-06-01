@@ -132,7 +132,8 @@ export { parseEnvContent, readEnv, readSecretEnv } from './env/lib/read-env'
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/constants'
 export { defineI18n } from './language/lib/define-i18n'
-export type { AppLanguage, EventUpdateLanguage, LocalizedText, LocalizedTextMap } from './language/types'
+export { formatPlural } from './language/lib/format-plural'
+export type { AppLanguage, EventUpdateLanguage, LocalizedText, LocalizedTextMap, PluralForms } from './language/types'
 export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/types'
 
 export {

@@ -1,4 +1,4 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n, formatPlural } from 'global-shared'
 
 export const ROOM_CALL_SESSION_I18N = defineI18n({
   startAudioRoomCall: {
@@ -35,5 +35,26 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     en: 'Leave call',
     ru: 'Выйти из звонка',
     zh: '离开通话'
+  },
+  activeRoomCall: {
+    en: 'Call in progress',
+    ru: 'Идет звонок',
+    zh: '通话进行中'
+  },
+  joinRoomCall: {
+    en: 'Join',
+    ru: 'Присоединиться',
+    zh: '加入'
+  },
+  roomCallParticipants: {
+    en: (quantity: number) => formatPlural('en', quantity, { one: 'participant', other: 'participants' }),
+    ru: (quantity: number) =>
+      formatPlural('ru', quantity, {
+        few: 'участника',
+        many: 'участников',
+        one: 'участник',
+        other: 'участника'
+      }),
+    zh: (quantity: number) => formatPlural('zh', quantity, { other: '位参与者' })
   }
 })
