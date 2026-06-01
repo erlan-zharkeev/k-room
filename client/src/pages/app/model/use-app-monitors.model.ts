@@ -7,6 +7,7 @@ import { useChatRoomUpdateMonitor } from './use-chat-room-update-monitor.model'
 import { useContactUpdateMonitor } from './use-contact-update-monitor.model'
 import { useMediaUpdateMonitor } from './use-media-update-monitor.model'
 import { useMessageMonitor } from './use-message-monitor.model'
+import { useRoomCallNotificationMonitor } from './use-room-call-notification-monitor.model'
 import { useSyncAvatars } from './use-sync-avatars.model'
 
 export const useAppMonitors = () => {
@@ -16,6 +17,8 @@ export const useAppMonitors = () => {
   const { disposeMediaUpdateMonitor, initializeMediaUpdateMonitor } = useMediaUpdateMonitor()
   const { disposeMessageMonitor, initializeMessageMonitor } = useMessageMonitor()
   const { disposeRoomCallDataUpdateMonitor, initializeRoomCallDataUpdateMonitor } = useRoomCallDataUpdateMonitor()
+  const { disposeRoomCallNotificationMonitor, initializeRoomCallNotificationMonitor } =
+    useRoomCallNotificationMonitor()
   useSyncAvatars()
 
   onMounted(() => {
@@ -24,6 +27,7 @@ export const useAppMonitors = () => {
     initializeMediaUpdateMonitor()
     initializeMessageMonitor()
     initializeRoomCallDataUpdateMonitor()
+    initializeRoomCallNotificationMonitor()
     socketConnect()
     actualizeSocketData()
   })
@@ -34,5 +38,6 @@ export const useAppMonitors = () => {
     disposeMediaUpdateMonitor()
     disposeMessageMonitor()
     disposeRoomCallDataUpdateMonitor()
+    disposeRoomCallNotificationMonitor()
   })
 }
