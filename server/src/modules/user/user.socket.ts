@@ -48,6 +48,7 @@ export class UserSocketService {
 
           socket.emit('actual-contacts', data.contactsPayload)
           socket.emit('actual-chat-rooms', data.roomsPayload)
+          socket.emit('room-calls-updated', data.roomCallsPayload)
         },
         { basicError: USER_SOCKET_I18N.actualizeUserDataFailed }
       )
