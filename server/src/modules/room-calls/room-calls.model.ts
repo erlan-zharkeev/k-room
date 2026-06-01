@@ -1,11 +1,7 @@
 import { ROOM_CALL_MEDIA_KIND, ROOM_CALL_STATUS } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
-import type {
-  RoomCallParticipantMediaStateSchema,
-  RoomCallParticipantSchema,
-  RoomCallSchema
-} from './room-calls.types'
+import type { RoomCallParticipantMediaStateSchema, RoomCallParticipantSchema, RoomCallSchema } from './room-calls.types'
 
 const roomCallParticipantMediaStateSchema = new Schema<RoomCallParticipantMediaStateSchema>(
   {
@@ -93,5 +89,6 @@ const roomCallSchema = new Schema<RoomCallSchema>(
 )
 
 roomCallSchema.index({ roomId: 1, status: 1 })
+roomCallSchema.index({ roomId: 1 }, { unique: true, partialFilterExpression: { finishedAt: { $exists: false } } })
 
 export const RoomCallModel = model<RoomCallSchema>('RoomCall', roomCallSchema, 'room-call')

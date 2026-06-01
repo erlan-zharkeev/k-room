@@ -29,7 +29,11 @@ import {
   resolveActiveRoomCallUserIds,
   resolveRoomCallParticipantByUserId
 } from './lib/room-call-participant'
-import { buildActiveRoomCallParticipantFilter } from './lib/room-call-query'
+import {
+  buildActiveRoomCallFilter,
+  buildActiveRoomCallParticipantFilter,
+  buildRoomCallParticipantLimitFilter
+} from './lib/room-call-query'
 import { transformRoomCall } from './lib/transform-room-call'
 import { ROOM_CALLS_I18N } from './room-calls.i18n'
 import { RoomCallModel } from './room-calls.model'
@@ -73,10 +77,16 @@ export const joinRoomCall = async (
   const participant = buildRoomCallParticipant(userId, socketId, mediaState)
   const startedAt = roomCall.startedAt ?? Date.now()
   const currentParticipant = resolveRoomCallParticipantByUserId(roomCall.participants, userId)
+  const isCurrentParticipantActive = Boolean(currentParticipant && !currentParticipant.leftAt)
 
   const updatedRoomCall = currentParticipant
     ? await RoomCallModel.findOneAndUpdate(
-        { _id: roomCallId, 'participants.userId': userId },
+        {
+          _id: roomCallId,
+          ...buildActiveRoomCallFilter(),
+          'participants.userId': userId,
+          ...(!isCurrentParticipantActive && buildRoomCallParticipantLimitFilter())
+        },
         {
           $set: {
             status: ROOM_CALL_STATUS.IN_PROGRESS,
@@ -92,7 +102,7 @@ export const joinRoomCall = async (
         { new: true }
       ).lean<RoomCallDocument>()
     : await RoomCallModel.findOneAndUpdate(
-        { _id: roomCallId },
+        { _id: roomCallId, ...buildActiveRoomCallFilter(), ...buildRoomCallParticipantLimitFilter() },
         {
           $set: {
             status: ROOM_CALL_STATUS.IN_PROGRESS,
@@ -128,8 +138,7 @@ export const leaveRoomCall = async (userId: string, socketId: string, payload: E
 
 export const leaveActiveRoomCallsBySocket = async (userId: string, socketId: string) => {
   const activeRoomCalls = await RoomCallModel.find({
-    finishedAt: { $exists: false },
-    status: { $ne: ROOM_CALL_STATUS.FINISHED },
+    ...buildActiveRoomCallFilter(),
     ...buildActiveRoomCallParticipantFilter(userId, socketId)
   }).lean<RoomCallDocument[]>()
 
@@ -150,6 +159,7 @@ export const updateRoomCallMediaState = async (
   const updatedRoomCall = await RoomCallModel.findOneAndUpdate(
     {
       _id: roomCallId,
+      ...buildActiveRoomCallFilter(),
       ...buildActiveRoomCallParticipantFilter(userId, socketId)
     },
     {

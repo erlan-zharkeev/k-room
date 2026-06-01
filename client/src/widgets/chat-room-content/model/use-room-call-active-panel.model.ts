@@ -3,12 +3,12 @@ import { computed } from 'vue'
 
 import { useUser } from 'src/entities/user'
 
-import type { RoomCallActivePanelProps } from '../config/types'
+import type { RoomCallActivePanelEmit, RoomCallActivePanelProps } from '../config/types'
 import { buildRoomCallTileItems } from '../lib/build-room-call-tile-items'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
-export const useRoomCallActivePanel = (props: RoomCallActivePanelProps) => {
+export const useRoomCallActivePanel = (props: RoomCallActivePanelProps, emit: RoomCallActivePanelEmit) => {
   const { user } = useUser()
   const { getUserById } = useChatRoomUserLookup()
 
@@ -30,7 +30,17 @@ export const useRoomCallActivePanel = (props: RoomCallActivePanelProps) => {
     })
   )
 
+  const updateScreenSharing = (enabled: boolean) => {
+    if (enabled) {
+      emit('start-screen')
+      return
+    }
+
+    emit('stop-screen')
+  }
+
   return {
-    roomCallTileItems
+    roomCallTileItems,
+    updateScreenSharing
   }
 }

@@ -1,6 +1,7 @@
 import { ROOM_CALL_SIGNAL_KIND, type EventRoomCallSignalReceived } from 'global-shared'
 import { shallowRef } from 'vue'
 
+import { ROOM_CALL_RTC_CONFIGURATION } from '../config/constants'
 import type {
   ConnectRoomCallPeersParams,
   RoomCallLocalMediaStreamList,
@@ -14,15 +15,13 @@ import {
   shouldCreateRoomCallPeerOffer,
   syncRoomCallPeerLocalTracks
 } from '../lib/room-call-peer'
-import {
-  isRoomCallIceCandidateSignal,
-  isRoomCallSessionDescriptionSignal
-} from '../lib/room-call-peer-signal'
+import { isRoomCallIceCandidateSignal, isRoomCallSessionDescriptionSignal } from '../lib/room-call-peer-signal'
 
 import { useRoomCallSession } from './use-room-call-session.model'
 
 export const useRoomCallPeerManager = () => {
   const peerConnectionByUserId = new Map<string, RTCPeerConnection>()
+  const iceCandidatesByUserId = new Map<string, RTCIceCandidateInit[]>()
   const remoteStreamsByUserId = shallowRef<RoomCallRemoteStreamsByUserId>({})
   const { sendRoomCallSignal } = useRoomCallSession()
 
@@ -42,7 +41,7 @@ export const useRoomCallPeerManager = () => {
   const sendPeerSignal = (
     roomCallId: string,
     toUserId: string,
-    signalKind: typeof ROOM_CALL_SIGNAL_KIND[keyof typeof ROOM_CALL_SIGNAL_KIND],
+    signalKind: (typeof ROOM_CALL_SIGNAL_KIND)[keyof typeof ROOM_CALL_SIGNAL_KIND],
     signal: unknown
   ) => {
     sendRoomCallSignal({
@@ -62,7 +61,21 @@ export const useRoomCallPeerManager = () => {
 
     peerConnection.close()
     peerConnectionByUserId.delete(userId)
+    iceCandidatesByUserId.delete(userId)
     removeRemoteStream(userId)
+  }
+
+  const pushRoomCallPeerIceCandidate = (userId: string, candidate: RTCIceCandidateInit) => {
+    const candidates = iceCandidatesByUserId.get(userId) ?? []
+
+    iceCandidatesByUserId.set(userId, [...candidates, candidate])
+  }
+
+  const flushRoomCallPeerIceCandidates = async (userId: string, peerConnection: RTCPeerConnection) => {
+    const candidates = iceCandidatesByUserId.get(userId) ?? []
+
+    await Promise.all(candidates.map((candidate) => peerConnection.addIceCandidate(candidate)))
+    iceCandidatesByUserId.delete(userId)
   }
 
   const syncRoomCallPeerParticipants = (
@@ -93,7 +106,7 @@ export const useRoomCallPeerManager = () => {
       return currentPeerConnection
     }
 
-    const peerConnection = new RTCPeerConnection()
+    const peerConnection = new RTCPeerConnection(ROOM_CALL_RTC_CONFIGURATION)
 
     syncRoomCallPeerLocalTracks(peerConnection, localStreams)
     peerConnection.addEventListener('icecandidate', ({ candidate }) => {
@@ -152,6 +165,7 @@ export const useRoomCallPeerManager = () => {
     const answer = await peerConnection.createAnswer()
 
     await peerConnection.setLocalDescription(answer)
+    await flushRoomCallPeerIceCandidates(payload.fromUserId, peerConnection)
     sendPeerSignal(payload.roomCallId, payload.fromUserId, ROOM_CALL_SIGNAL_KIND.ANSWER, answer)
   }
 
@@ -163,12 +177,18 @@ export const useRoomCallPeerManager = () => {
     }
 
     await peerConnection.setRemoteDescription(payload.signal)
+    await flushRoomCallPeerIceCandidates(payload.fromUserId, peerConnection)
   }
 
   const addRoomCallPeerIceCandidate = async (payload: EventRoomCallSignalReceived) => {
     const peerConnection = peerConnectionByUserId.get(payload.fromUserId)
 
     if (!peerConnection || !isRoomCallIceCandidateSignal(payload.signal)) {
+      return
+    }
+
+    if (!peerConnection.remoteDescription) {
+      pushRoomCallPeerIceCandidate(payload.fromUserId, payload.signal)
       return
     }
 
@@ -235,11 +255,8 @@ export const useRoomCallPeerManager = () => {
   return {
     remoteStreamsByUserId,
     connectRoomCallPeers,
-    createRoomCallPeerOffer,
     handleRoomCallSignalReceived,
-    syncRoomCallPeerParticipants,
     syncRoomCallPeerTracks,
-    closeRoomCallPeer,
     resetRoomCallPeers
   }
 }

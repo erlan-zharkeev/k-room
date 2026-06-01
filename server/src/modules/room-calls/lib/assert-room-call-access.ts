@@ -1,9 +1,4 @@
-import {
-  REQ_STATUS,
-  ROOM_CALL_ACK_FAILURE_REASON,
-  ROOM_CALL_PARTICIPANT_LIMIT,
-  ROOM_CALL_STATUS
-} from 'global-shared'
+import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_PARTICIPANT_LIMIT } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
 
@@ -13,20 +8,19 @@ import { RoomCallModel } from '../room-calls.model'
 import type { RoomCallDocument } from '../room-calls.types'
 
 import { resolveActiveRoomCallParticipants } from './room-call-participant'
+import { buildActiveRoomCallFilter } from './room-call-query'
 
 export const findActiveRoomCallByRoomId = (roomId: string) => {
   return RoomCallModel.findOne({
     roomId,
-    finishedAt: { $exists: false },
-    status: { $ne: ROOM_CALL_STATUS.FINISHED }
+    ...buildActiveRoomCallFilter()
   }).lean<RoomCallDocument>()
 }
 
 export const findActiveRoomCallById = (roomCallId: string) => {
   return RoomCallModel.findOne({
     _id: roomCallId,
-    finishedAt: { $exists: false },
-    status: { $ne: ROOM_CALL_STATUS.FINISHED }
+    ...buildActiveRoomCallFilter()
   }).lean<RoomCallDocument>()
 }
 
