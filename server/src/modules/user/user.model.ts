@@ -96,7 +96,7 @@ const userSchema = new Schema<UserSchema>(
     personal: personalSchema,
     public: publicSchema
   },
-  { timestamps: true, minimize: false }
+  { timestamps: true, minimize: false, versionKey: false }
 )
 
 export const UserModel = model<UserSchema>('User', userSchema, 'user')

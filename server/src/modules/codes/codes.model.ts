@@ -50,21 +50,24 @@ const codePurposeSchema = new Schema(
   { _id: false }
 )
 
-const codeSchema = new Schema<CodeSchema>({
-  _id: {
-    type: String,
-    required: true
+const codeSchema = new Schema<CodeSchema>(
+  {
+    _id: {
+      type: String,
+      required: true
+    },
+    codes: {
+      type: codePurposeSchema,
+      required: true,
+      default: () => ({})
+    },
+    nextRequestPossibleAt: {
+      type: Number,
+      required: true,
+      default: 0
+    }
   },
-  codes: {
-    type: codePurposeSchema,
-    required: true,
-    default: () => ({})
-  },
-  nextRequestPossibleAt: {
-    type: Number,
-    required: true,
-    default: 0
-  }
-})
+  { versionKey: false }
+)
 
 export const CodeModel = model<CodeSchema>('Code', codeSchema, 'code')
