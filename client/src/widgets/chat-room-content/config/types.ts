@@ -16,6 +16,7 @@ import type {
   Message,
   MessageLinkPreview,
   MessageReaction,
+  RoomCallMediaKind,
   RepliedMessage,
   VideoObject
 } from 'global-shared'
@@ -39,6 +40,12 @@ export interface ChatRoomMessagesProps {
 export interface ChatRoomHeaderProps {
   room: ChatRoom
   isPrivateRoom: boolean
+  isRoomCallStartDisabled: boolean
+  isRoomCallStarting: boolean
+}
+
+export interface ChatRoomHeaderEmits {
+  'start-room-call': [mediaKind: RoomCallMediaKind]
 }
 
 export interface ChatRoomFooterProps {
