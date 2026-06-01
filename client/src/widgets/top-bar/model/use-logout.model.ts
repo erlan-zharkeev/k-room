@@ -8,6 +8,7 @@ import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { blockMediaSync, useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
+import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
 import { blockAuthRefresh, useHttp, socket } from 'src/shared/api'
 import { clearCookie } from 'src/shared/lib'
@@ -22,12 +23,21 @@ export const useLogout = () => {
   const { reset: resetKnownUser } = useKnownUser()
   const { reset: resetMedia } = useMedia()
   const { reset: resetMessage } = useMessage()
+  const { reset: resetRoomCall } = useRoomCall()
   const { reset: resetUser } = useUser()
   const isLogoutLoading = ref(false)
   const logoutStatus = useLocalStorage<string | null>(LOCAL_STORAGE_KEY.LogoutStatus, null)
 
   const resetClientData = () =>
-    Promise.all([resetChatRoom(), resetContact(), resetKnownUser(), resetMedia(), resetMessage(), resetUser()])
+    Promise.all([
+      resetChatRoom(),
+      resetContact(),
+      resetKnownUser(),
+      resetMedia(),
+      resetMessage(),
+      resetRoomCall(),
+      resetUser()
+    ])
 
   const logout = async () => {
     isLogoutLoading.value = true

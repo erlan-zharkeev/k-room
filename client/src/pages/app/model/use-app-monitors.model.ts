@@ -1,12 +1,12 @@
 import { onBeforeUnmount, onMounted } from 'vue'
 
+import { useRoomCallDataUpdateMonitor } from 'src/entities/room-call'
 import { useSocketConnect } from 'src/shared/api'
 
 import { useChatRoomUpdateMonitor } from './use-chat-room-update-monitor.model'
 import { useContactUpdateMonitor } from './use-contact-update-monitor.model'
 import { useMediaUpdateMonitor } from './use-media-update-monitor.model'
 import { useMessageMonitor } from './use-message-monitor.model'
-import { useRoomCallDataUpdateMonitor } from './use-room-call-data-update-monitor.model'
 import { useSyncAvatars } from './use-sync-avatars.model'
 
 export const useAppMonitors = () => {
