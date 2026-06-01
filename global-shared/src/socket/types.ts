@@ -3,10 +3,24 @@ import type {
   EventAnswerCall,
   EventCallAccepted,
   EventCallEnded,
+  EventCallSignalReceived,
   EventCallsUpdated,
   EventCallStartedAt,
   EventCallUser,
-  EventMarkCallAsVideo
+  EventJoinRoomCall,
+  EventLeaveRoomCall,
+  EventMarkCallAsVideo,
+  EventRoomCallEnded,
+  EventRoomCallJoined,
+  EventRoomCallLeft,
+  EventRoomCallMediaStateUpdated,
+  EventRoomCallStarted,
+  EventRoomCallsUpdated,
+  EventSendCallSignal,
+  EventStartRoomCall,
+  EventUpdateCallMediaState,
+  JoinRoomCallAckPayload,
+  StartRoomCallAckPayload
 } from '../calls/types'
 import type {
   CreateRoomAckPayload,
@@ -139,6 +153,11 @@ export interface ClientToServerSocketPayloadMap {
   'call-ended': EventCallEnded
   'change-call-settings': BasicStreamSettings
   'mark-call-as-video': EventMarkCallAsVideo
+  'start-room-call': EventStartRoomCall
+  'join-room-call': EventJoinRoomCall
+  'leave-room-call': EventLeaveRoomCall
+  'update-call-media-state': EventUpdateCallMediaState
+  'send-call-signal': EventSendCallSignal
 }
 
 export interface ClientToServerSocketAckPayloadMap {
@@ -158,6 +177,10 @@ export interface ClientToServerSocketAckPayloadMap {
   'mark-room-as-read': void
   'delete-message': void
   'add-reaction': void
+  'start-room-call': StartRoomCallAckPayload
+  'join-room-call': JoinRoomCallAckPayload
+  'leave-room-call': void
+  'update-call-media-state': void
 }
 
 export interface ServerToClientSocketPayloadMap {
@@ -196,6 +219,13 @@ export interface ServerToClientSocketPayloadMap {
   'call-accepted': EventCallAccepted
   'call-started-at': EventCallStartedAt
   'call-ended': void
+  'room-calls-updated': EventRoomCallsUpdated
+  'room-call-started': EventRoomCallStarted
+  'room-call-joined': EventRoomCallJoined
+  'room-call-left': EventRoomCallLeft
+  'room-call-ended': EventRoomCallEnded
+  'room-call-media-state-updated': EventRoomCallMediaStateUpdated
+  'call-signal-received': EventCallSignalReceived
 }
 
 export type ClientToServerSocketEvents = SocketEventMap<

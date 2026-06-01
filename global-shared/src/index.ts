@@ -9,15 +9,43 @@ export type {
 export type {
   CallStatus,
   CallFlow,
+  CallMediaKind,
+  CallSignalKind,
+  CallLeaveReason,
+  CallParticipantMediaState,
+  CallParticipant,
+  RoomCall,
   Call,
   EventMarkCallAsVideo,
   EventCallsUpdated,
+  EventRoomCallsUpdated,
   EventCallUser,
   EventCallAccepted,
   EventAnswerCall,
   EventCallStartedAt,
-  EventCallEnded
+  EventCallEnded,
+  EventStartRoomCall,
+  StartRoomCallAckPayload,
+  EventJoinRoomCall,
+  JoinRoomCallAckPayload,
+  EventLeaveRoomCall,
+  EventUpdateCallMediaState,
+  EventSendCallSignal,
+  EventRoomCallStarted,
+  EventRoomCallJoined,
+  EventRoomCallLeft,
+  EventRoomCallEnded,
+  EventRoomCallMediaStateUpdated,
+  EventCallSignalReceived
 } from './calls/types'
+export {
+  CALL_FLOW,
+  CALL_LEAVE_REASON,
+  CALL_MEDIA_KIND,
+  CALL_PARTICIPANT_LIMIT,
+  CALL_SIGNAL_KIND,
+  CALL_STATUS
+} from './calls/constants'
 
 export {
   CHAT_KIND,
