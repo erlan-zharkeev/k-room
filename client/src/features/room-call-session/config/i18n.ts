@@ -56,5 +56,30 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
         other: 'участника'
       }),
     zh: (quantity: number) => formatPlural('zh', quantity, { other: '位参与者' })
+  },
+  roomCallStartFailed: {
+    en: 'Could not start call. Check browser media permissions.',
+    ru: 'Не удалось начать звонок. Проверьте доступ к медиа в браузере.',
+    zh: '无法开始通话。请检查浏览器媒体权限。'
+  },
+  roomCallJoinFailed: {
+    en: 'Could not join call. Check browser media permissions.',
+    ru: 'Не удалось присоединиться к звонку. Проверьте доступ к медиа в браузере.',
+    zh: '无法加入通话。请检查浏览器媒体权限。'
+  },
+  roomCallAudioStartFailed: {
+    en: 'Could not turn on microphone. Check browser permissions.',
+    ru: 'Не удалось включить микрофон. Проверьте доступ в браузере.',
+    zh: '无法打开麦克风。请检查浏览器权限。'
+  },
+  roomCallVideoStartFailed: {
+    en: 'Could not turn on camera. Check browser permissions.',
+    ru: 'Не удалось включить камеру. Проверьте доступ в браузере.',
+    zh: '无法打开摄像头。请检查浏览器权限。'
+  },
+  roomCallScreenStartFailed: {
+    en: 'Could not share screen. Check browser permissions.',
+    ru: 'Не удалось поделиться экраном. Проверьте доступ в браузере.',
+    zh: '无法共享屏幕。请检查浏览器权限。'
   }
 })
