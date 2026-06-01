@@ -3,21 +3,18 @@ import {
   MESSAGE_STATUS_VALUE,
   isMessageReadStatus,
   isMessageSendingStatus,
+  type ChatRoom,
   type EventChangeMessageStatus
 } from 'global-shared'
 import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { socket } from 'src/shared/api'
-import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { MESSAGE_READ_VISIBILITY_RATIO } from '../config/constants'
 import type { MessageListItem } from '../config/types'
 
-export const useChatRoomMessageReadStatus = (
-  room: Ref<ChatRoomRecord>,
-  messageList: ComputedRef<MessageListItem[]>
-) => {
+export const useChatRoomMessageReadStatus = (room: Ref<ChatRoom>, messageList: ComputedRef<MessageListItem[]>) => {
   const pendingReadMessageIds = new Set<string>()
   const { messageById } = useMessage()
 

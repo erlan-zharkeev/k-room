@@ -1,6 +1,4 @@
-import type { RepliedMessage } from 'global-shared'
-
-import type { MessageRecord } from 'src/shared/lib'
+import type { Message, RepliedMessage } from 'global-shared'
 
 import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
 import type { MessageDraftReferenceKind } from '../config/types'
@@ -16,7 +14,7 @@ export const cloneRepliedMessage = (message: RepliedMessage): RepliedMessage => 
 })
 
 export const buildRepliedMessage = (
-  message: MessageRecord,
+  message: Message,
   kind: MessageDraftReferenceKind,
   roomId: string
 ): RepliedMessage => {

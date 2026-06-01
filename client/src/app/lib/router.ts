@@ -1,8 +1,8 @@
-import { CONTENT_TAB_IDS, type ContentTab, type DbDeviceSetting } from 'src/entities/setting'
+import { CONTENT_TAB_IDS, type ContentTab, type DeviceSetting } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { DEFAULT_SETTINGS_CONTENT_ID } from 'src/pages/settings'
 
-export const getAppPathFromSettings = ({ contentTab, chatRoomId }: DbDeviceSetting) => {
+export const getAppPathFromSettings = ({ contentTab, chatRoomId }: DeviceSetting) => {
   const getChatRoomPath = (id: string) => (id ? `${APP_PAGE_ROUTES.chatRooms}/${id}` : APP_PAGE_ROUTES.chatRooms)
 
   if (contentTab === 'chat-rooms') return getChatRoomPath(chatRoomId)

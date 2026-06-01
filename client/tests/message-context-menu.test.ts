@@ -1,7 +1,6 @@
-import { MESSAGE_STATUS_VALUE } from 'global-shared'
+import { MESSAGE_STATUS_VALUE, type ChatRoom, type Message } from 'global-shared'
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 
-import type { ChatRoomRecord, MessageRecord } from '../src/shared/lib'
 import {
   MESSAGE_CONTEXT_MENU_ACTION,
   MESSAGE_CONTEXT_MENU_TRIGGER
@@ -78,7 +77,7 @@ vi.mock('../src/widgets/chat-room-content/model/use-message-pin.model', () => ({
 
 const { useMessageContextMenu } = await import('../src/widgets/chat-room-content/model/use-message-context-menu.model')
 
-const createMessage = (patch: Partial<MessageRecord> = {}): MessageRecord =>
+const createMessage = (patch: Partial<Message> = {}): Message =>
   ({
     id: 'message-1',
     authorId: 'user-1',
@@ -90,16 +89,16 @@ const createMessage = (patch: Partial<MessageRecord> = {}): MessageRecord =>
     isSelf: true,
     status: MESSAGE_STATUS_VALUE.DELIVERED,
     ...patch
-  } as MessageRecord)
+  } as Message)
 
-const createRoom = (patch: Partial<ChatRoomRecord> = {}): ChatRoomRecord =>
+const createRoom = (patch: Partial<ChatRoom> = {}): ChatRoom =>
   ({
     id: 'room-1',
     users: ['user-1', 'user-2'],
     messages: ['message-1'],
     pinnedMessageId: null,
     ...patch
-  } as ChatRoomRecord)
+  } as ChatRoom)
 
 describe('useMessageContextMenu', () => {
   beforeEach(() => {

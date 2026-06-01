@@ -1,6 +1,6 @@
 import { APP_LAYOUT_I18N } from './i18n'
 
-export const CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS = ['chat-rooms', 'contacts']
+export const CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS = ['chat-rooms', 'calls', 'contacts']
 
 export const ROUTE_TITLE_MAP = {
   'chat-rooms': APP_LAYOUT_I18N.chatRooms,

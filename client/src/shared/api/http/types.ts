@@ -1,8 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse, Method, ResponseType } from 'axios'
 import type { Endpoints, BackendResponse, ReqStatus } from 'global-shared'
 
-export type HttpRequest = Method
-
 export type HttpRequestPayload = object | FormData | URLSearchParams | string | null | undefined
 
 export interface HttpRequestOptions<R extends ResponseType = ResponseType> {
@@ -29,7 +27,7 @@ export type HttpError = Error & {
 }
 
 export type DoHttpRequest = <T = unknown, R extends ResponseType = 'json'>(
-  type: HttpRequest,
+  type: Method,
   endpoint: Endpoints,
   data?: HttpRequestPayload,
   opts?: HttpRequestOptions<R>

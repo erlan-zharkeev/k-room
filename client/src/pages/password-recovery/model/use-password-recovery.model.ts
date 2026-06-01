@@ -3,11 +3,11 @@ import {
   CODES_ENDPOINTS,
   NON_EMPTY_PATTERN,
   ROUTE_NAMES,
-  type CodeValidationPayload,
+  type CodeRequestResponse,
   createValidationMessages,
+  type EmailCodeRequestPayload,
+  type EmailCodeValidationPayload,
   isString,
-  type SendPasswordRecoveryCodePayload,
-  type SendPasswordRecoveryCodeResponse,
   type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
@@ -75,19 +75,19 @@ export const usePasswordRecovery = () => {
     const email = emailFormData.email.value.trim()
 
     isSendingEmailCode.value = true
-    const requestPayload: SendPasswordRecoveryCodePayload = {
+    const requestPayload: EmailCodeRequestPayload = {
       email,
       ...sendCaptcha.buildCaptchaPayload()
     }
     const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
 
     try {
-      const response = await doHttpRequest<SendPasswordRecoveryCodeResponse>(
+      const response = await doHttpRequest<CodeRequestResponse>(
         'post',
         CODES_ENDPOINTS.sendEmailCodePasswordRecovery,
         requestPayload
       )
-      const { nextTimeRequest: nextRequestTimestampMs, debugCode: nextDebugCode } = response.data.payload
+      const { nextRequestTime: nextRequestTimestampMs, debugCode: nextDebugCode } = response.data.payload
 
       codeSent.value = true
       emailFormData.email.value = requestPayload.email
@@ -116,7 +116,7 @@ export const usePasswordRecovery = () => {
     const code = codeFormData.code.value.trim()
 
     isValidatingCode.value = true
-    const requestPayload: CodeValidationPayload = {
+    const requestPayload: EmailCodeValidationPayload = {
       email: emailFormData.email.value,
       code,
       ...validateCaptcha.buildCaptchaPayload()

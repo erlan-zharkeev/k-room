@@ -20,5 +20,3 @@ export interface DeviceSetting {
   ioDevices: IoDevicesSettings
   hiddenNotification: HiddenNotification[]
 }
-
-export type DbDeviceSetting = DeviceSetting

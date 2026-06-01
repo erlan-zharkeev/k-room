@@ -1,17 +1,14 @@
+import type { ChatRoom } from 'global-shared'
 import { computed, type ComputedRef, type Ref } from 'vue'
 
 import { getRoomDisplayedLastMessageId } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useLocalizedDateTime } from 'src/entities/setting'
-import type { ChatRoomRecord } from 'src/shared/lib'
 
 import type { MessageLoadedRange } from '../config/types'
 import { buildMessageList } from '../lib/build-message-list'
 
-export const useChatRoomMessageList = (
-  room: Ref<ChatRoomRecord>,
-  loadedMessageRanges: ComputedRef<MessageLoadedRange[]>
-) => {
+export const useChatRoomMessageList = (room: Ref<ChatRoom>, loadedMessageRanges: ComputedRef<MessageLoadedRange[]>) => {
   const { messageById } = useMessage()
   const { formatDate } = useLocalizedDateTime()
 

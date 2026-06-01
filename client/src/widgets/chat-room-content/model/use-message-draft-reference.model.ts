@@ -1,6 +1,7 @@
+import type { ChatRoom, Message } from 'global-shared'
 import { computed, type Ref, ref } from 'vue'
 
-import { useI18n, type ChatRoomRecord, type MessageRecord } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 
 import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
@@ -10,7 +11,7 @@ import { resolveMessagePreviewText } from '../lib/resolve-message-preview-text'
 
 const messageDraftReferenceState = ref<MessageDraftReferenceState | null>(null)
 
-export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
+export const useMessageDraftReference = (room?: Ref<ChatRoom>) => {
   const { t } = useI18n()
   const messageDraftReference = computed(() => messageDraftReferenceState.value?.message ?? null)
   const messageDraftReferenceKind = computed(() => messageDraftReferenceState.value?.kind ?? null)
@@ -36,7 +37,7 @@ export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
     messageDraftReference.value ? resolveMessagePreviewText(messageDraftReference.value) : ''
   )
 
-  const startMessageDraftReference = (message: MessageRecord, roomId: string, kind: MessageDraftReferenceKind) => {
+  const startMessageDraftReference = (message: Message, roomId: string, kind: MessageDraftReferenceKind) => {
     messageDraftReferenceState.value = {
       roomId,
       kind,
@@ -44,11 +45,11 @@ export const useMessageDraftReference = (room?: Ref<ChatRoomRecord>) => {
     }
   }
 
-  const startMessageReply = (message: MessageRecord, roomId: string) => {
+  const startMessageReply = (message: Message, roomId: string) => {
     startMessageDraftReference(message, roomId, MESSAGE_DRAFT_REFERENCE_KIND.REPLY)
   }
 
-  const startMessageForward = (message: MessageRecord, roomId: string) => {
+  const startMessageForward = (message: Message, roomId: string) => {
     startMessageDraftReference(message, roomId, MESSAGE_DRAFT_REFERENCE_KIND.FORWARD)
   }
 

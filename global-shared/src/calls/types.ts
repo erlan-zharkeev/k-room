@@ -27,7 +27,6 @@ export interface EventMarkCallAsVideo {
   callId: string
 }
 
-export type EventCallUpdated = Call
 export type EventCallsUpdated = Call[]
 
 export interface EventCallUser {
@@ -38,8 +37,6 @@ export interface EventCallUser {
   avatar: string
   callerNickname: string
 }
-
-export type EventChangeCallSettings = BasicStreamSettings
 
 export interface EventCallAccepted {
   signal: unknown

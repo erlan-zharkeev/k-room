@@ -1,12 +1,12 @@
 import { useClipboard } from '@vueuse/core'
+import type { Message } from 'global-shared'
 import { computed, type Ref } from 'vue'
 
 import { useAppToast, useI18n } from 'src/shared/lib'
-import type { MessageRecord } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 
-export const useMessageCopyText = (message: Readonly<Ref<MessageRecord>>) => {
+export const useMessageCopyText = (message: Readonly<Ref<Message>>) => {
   const { copy, isSupported: isClipboardSupported } = useClipboard()
   const { t } = useI18n()
   const toast = useAppToast()

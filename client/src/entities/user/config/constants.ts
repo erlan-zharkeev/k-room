@@ -1,6 +1,6 @@
-import type { User } from '../model/types.model'
+import type { UserData } from 'global-shared'
 
-export const INITIAL_USER_STORE: User = {
+export const INITIAL_USER_STORE: UserData = {
   avatarId: null,
   id: '',
   role: 'user',

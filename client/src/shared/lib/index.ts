@@ -63,26 +63,21 @@ export type { ClientPlatform, FileLoaderValue } from './browser/types'
 export type { ContextRef, KebabCase } from './misc/types'
 export type { I18nTranslate } from './i18n/i18n.types'
 export type { DateTimeFormatPatternMap, DateTimeFormat } from './time/types'
+export type { FormField, FormPatternRule, FormRequiredPatternRule, FormRule } from './validation/types'
 export type { AppToastStack, AppToastInput } from './toast/types'
 export type {
   ContactLocalState,
   ContactRecord,
-  CallRecord,
   MediaRecordStatus,
-  MessageRecord,
-  DexieTransactionMode,
   DexieCacheTrimEvent,
-  ChatRoomRecord,
   CollectionMergeManyOptions,
   DexieCacheTrimResult,
   DexieCacheTrimmer,
   MediaRecord,
-  Indexable,
   UseStateResult,
   KnownUserLocalState,
   KnownUserRecord,
   KvItem,
   Mutable,
-  UserRecord,
   UseResult
 } from './db/types'

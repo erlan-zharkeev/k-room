@@ -1,6 +1,7 @@
 import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
 
 import type { KebabCase } from 'src/shared/lib'
+import type { AppTypographyBaseProps } from 'src/shared/ui/types'
 
 export type AppTextTag = 'span' | 'p' | 'div' | 'small'
 
@@ -11,17 +12,10 @@ export type AppTextStaticColor = keyof Pick<
 
 export type AppTextColor = KebabCase<AppTextStaticColor>
 
-export type AppTextAlignment = 'left' | 'center' | 'right'
-
-export interface AppTextProps {
-  text?: string | number
+export interface AppTextProps extends AppTypographyBaseProps {
   tag?: AppTextTag
   color?: AppTextColor
-  alignment?: AppTextAlignment
-  bold?: boolean
   italic?: boolean
   lineClamp?: number
-  truncate?: boolean
   noLineHeight?: boolean
-  selectable?: boolean
 }

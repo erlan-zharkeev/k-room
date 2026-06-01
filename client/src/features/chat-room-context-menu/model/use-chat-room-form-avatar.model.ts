@@ -1,14 +1,8 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
+import type { ChatRoom } from 'global-shared'
 
 import { useMedia } from 'src/entities/media-file'
-import {
-  revokeObjectUrl,
-  revokeObjectUrls,
-  TOAST_I18N,
-  type ChatRoomRecord,
-  useAppToast,
-  useI18n
-} from 'src/shared/lib'
+import { revokeObjectUrl, revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
 import type { ChatRoomFormAvatarParams } from '../config/types'
@@ -42,7 +36,7 @@ export const useChatRoomFormAvatar = ({
     chatRoomFormState.chatAvatarWasDeleted = isEditMode.value && chatRoomFormState.hasInitialChatAvatar
   }
 
-  const loadCurrentChatAvatar = async (room: ChatRoomRecord) => {
+  const loadCurrentChatAvatar = async (room: ChatRoom) => {
     if (!room.avatarId) return
 
     const record = await getMedia(room.avatarId)

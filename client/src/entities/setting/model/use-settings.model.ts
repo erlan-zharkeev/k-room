@@ -3,9 +3,9 @@ import { computed } from 'vue'
 import { db, dexieKeyValueStore } from 'src/shared/lib'
 
 import { DEFAULT_SETTINGS } from '../config/constants'
-import type { DbDeviceSetting } from '../config/types'
+import type { DeviceSetting } from '../config/types'
 
-const settingsStore = dexieKeyValueStore<DbDeviceSetting>(db.settings, 'settings')
+const settingsStore = dexieKeyValueStore<DeviceSetting>(db.settings, 'settings')
 
 export const useSettings = () => {
   const { ensure, get, mutate, reset, setByPath, shallowUpdate } = settingsStore

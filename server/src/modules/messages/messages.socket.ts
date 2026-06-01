@@ -13,7 +13,7 @@ import type {
 } from 'global-shared'
 
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 import { MESSAGES_I18N } from './messages.i18n'
 import {

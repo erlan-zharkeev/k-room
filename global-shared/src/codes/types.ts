@@ -12,20 +12,10 @@ export interface Codes {
   nextRequestPossibleAt: string
 }
 
-export interface SendPasswordRecoveryCodePayload extends CaptchaTokenPayload {
+export interface EmailCodeRequestPayload extends CaptchaTokenPayload {
   email: string
 }
 
-export interface SendChangeEmailCodePayload extends CaptchaTokenPayload {
-  email: string
-}
-
-export interface CodeValidationPayload extends CaptchaTokenPayload {
-  email: string
-  code: string
-}
-
-export interface ValidateChangeEmailCodePayload extends CaptchaTokenPayload {
-  email: string
+export interface EmailCodeValidationPayload extends EmailCodeRequestPayload {
   code: string
 }

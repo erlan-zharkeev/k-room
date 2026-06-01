@@ -1,6 +1,6 @@
 import { REQ_STATUS } from 'global-shared'
 
-import type { SocketIO } from '../types/socket'
+import type { SocketIO } from '../types'
 
 import { AppError } from './app-error'
 

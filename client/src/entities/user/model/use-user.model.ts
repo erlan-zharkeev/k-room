@@ -1,8 +1,7 @@
-import { formatNickname } from 'global-shared'
+import { formatNickname, type UserData } from 'global-shared'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import type { User } from './types.model'
 import { useUserStore } from './user.store.model'
 
 export const useUser = () => {
@@ -19,6 +18,6 @@ export const useUser = () => {
     isAuthorized,
     avatarId,
     reset: async () => userStore.reset(),
-    update: async (payload: Partial<User>) => userStore.update(payload)
+    update: async (payload: Partial<UserData>) => userStore.update(payload)
   }
 }

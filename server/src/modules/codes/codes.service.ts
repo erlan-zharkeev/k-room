@@ -4,13 +4,11 @@ import { Injectable } from '@nestjs/common'
 import { type Request } from 'express'
 import {
   EMAIL_CODE_LENGTH,
-  type CodeValidationPayload,
+  type EmailCodeRequestPayload,
+  type EmailCodeValidationPayload,
   formatNickname,
   isString,
   isUnknownObject,
-  type SendChangeEmailCodePayload,
-  type SendPasswordRecoveryCodePayload,
-  type ValidateChangeEmailCodePayload,
   type ValidateChangeEmailCodeResponse,
   type ValidatePasswordRecoveryCodeResponse,
   REQ_STATUS
@@ -39,7 +37,7 @@ export class CodesService {
   ) {}
 
   async sendPasswordRecoveryCode(
-    payload: SendPasswordRecoveryCodePayload,
+    payload: EmailCodeRequestPayload,
     request: Request
   ): Promise<SendPasswordRecoveryCodeResult> {
     const ip = getRequestIp(request)
@@ -53,7 +51,7 @@ export class CodesService {
 
     if (!user) {
       return {
-        nextTimeRequest: nowTimestampMs + RESEND_CODE_INTERVAL_MS,
+        nextRequestTime: nowTimestampMs + RESEND_CODE_INTERVAL_MS,
         tooManyRequests: false
       }
     }
@@ -63,7 +61,7 @@ export class CodesService {
 
     if (existingCode?.nextRequestPossibleAt && existingCode.nextRequestPossibleAt > nowTimestampMs) {
       return {
-        nextTimeRequest: existingCode.nextRequestPossibleAt,
+        nextRequestTime: existingCode.nextRequestPossibleAt,
         tooManyRequests: true
       }
     }
@@ -92,7 +90,7 @@ export class CodesService {
     })
 
     return {
-      nextTimeRequest: nextRequestTimestampMs,
+      nextRequestTime: nextRequestTimestampMs,
       ...(SERVER_ENV.isDev ? { debugCode: code } : {}),
       tooManyRequests: false
     }
@@ -100,7 +98,7 @@ export class CodesService {
 
   async sendChangeEmailCode(
     userId: string,
-    payload: SendChangeEmailCodePayload,
+    payload: EmailCodeRequestPayload,
     request: Request
   ): Promise<SendChangeEmailCodeResult> {
     const ip = getRequestIp(request)
@@ -113,7 +111,7 @@ export class CodesService {
 
     if (cooldownUntil && cooldownUntil > nowTimestampMs) {
       return {
-        nextTimeRequest: cooldownUntil,
+        nextRequestTime: cooldownUntil,
         tooManyRequests: true
       }
     }
@@ -142,7 +140,7 @@ export class CodesService {
     })
 
     return {
-      nextTimeRequest: nextRequestTimestampMs,
+      nextRequestTime: nextRequestTimestampMs,
       ...(SERVER_ENV.isDev ? { debugCode: code } : {}),
       tooManyRequests: false
     }
@@ -150,7 +148,7 @@ export class CodesService {
 
   async validateChangeEmailCode(
     userId: string,
-    payload: ValidateChangeEmailCodePayload,
+    payload: EmailCodeValidationPayload,
     request: Request
   ): Promise<ValidateChangeEmailCodeResponse> {
     const ip = getRequestIp(request)
@@ -204,7 +202,7 @@ export class CodesService {
   }
 
   async validatePasswordRecoveryCode(
-    payload: CodeValidationPayload,
+    payload: EmailCodeValidationPayload,
     request: Request
   ): Promise<ValidatePasswordRecoveryCodeResponse> {
     const ip = getRequestIp(request)

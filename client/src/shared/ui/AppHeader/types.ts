@@ -1,6 +1,7 @@
 import type { INmorphStaticColors } from '@nmorph/nmorph-ui-kit'
 
 import type { KebabCase } from 'src/shared/lib'
+import type { AppTypographyBaseProps } from 'src/shared/ui/types'
 
 export type AppHeaderTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
 
@@ -11,15 +12,8 @@ export type AppHeaderStaticColor = keyof Pick<
 
 export type AppHeaderColor = KebabCase<AppHeaderStaticColor>
 
-export type AppHeaderAlignment = 'left' | 'center' | 'right'
-
-export interface AppHeaderProps {
-  text?: string | number
+export interface AppHeaderProps extends AppTypographyBaseProps {
   tag?: AppHeaderTag
   accent?: boolean
-  bold?: boolean
   color?: AppHeaderColor
-  alignment?: AppHeaderAlignment
-  truncate?: boolean
-  selectable?: boolean
 }

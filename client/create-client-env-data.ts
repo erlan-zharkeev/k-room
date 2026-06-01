@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { formatAppName, readEnv, readSecretEnv, type PackageData } from 'global-shared'
+import { formatAppName, readEnv, readSecretEnv, type EnvKey, type PackageData } from 'global-shared'
 import { loadEnv } from 'vite'
 
 import type { ClientEnv } from './client-env.types'
@@ -10,7 +10,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
   const sharedEnv = loadEnv('shared', envDir, '')
   const modeEnv = loadEnv(mode, envDir, '')
   const secretEnv = readSecretEnv(path.resolve(envDir, '.env.secret'), fs)
-  const getEnv = (key: string, source: Record<string, string>) =>
+  const getEnv = (key: EnvKey, source: Record<string, string>) =>
     readEnv(key, source, { runtimeEnv: process.env, secretEnv })
   const isE2E = mode === 'test'
   const isDev = mode === 'development' || isE2E

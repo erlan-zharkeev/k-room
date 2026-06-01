@@ -1,12 +1,11 @@
+import type { UserData } from 'global-shared'
 import { defineStore } from 'pinia'
 
 import { INITIAL_USER_STORE } from '../config/constants'
 
-import type { User } from './types.model'
-
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: { ...INITIAL_USER_STORE } as User
+    user: { ...INITIAL_USER_STORE } as UserData
   }),
 
   actions: {
@@ -14,7 +13,7 @@ export const useUserStore = defineStore('user', {
       this.user = { ...INITIAL_USER_STORE }
     },
 
-    update(payload: Partial<User>) {
+    update(payload: Partial<UserData>) {
       this.user = {
         ...this.user,
         ...payload

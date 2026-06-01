@@ -1,7 +1,9 @@
-import type { ContactRecord, KnownUserRecord, ChatRoomRecord } from 'src/shared/lib'
+import type { ChatRoom } from 'global-shared'
+
+import type { ContactRecord, KnownUserRecord } from 'src/shared/lib'
 
 export const buildChatRoomTitle = (
-  room: ChatRoomRecord,
+  room: ChatRoom,
   contacts: Array<ContactRecord | KnownUserRecord>,
   isPrivateRoom: boolean
 ) => room.chatName || (isPrivateRoom ? contacts[0]?.nickname : '') || ''

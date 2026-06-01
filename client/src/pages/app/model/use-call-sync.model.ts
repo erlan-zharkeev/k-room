@@ -1,4 +1,4 @@
-import type { EventCallsUpdated, EventCallUpdated } from 'global-shared'
+import type { Call, EventCallsUpdated } from 'global-shared'
 
 import { useCall } from './use-call.model'
 
@@ -9,7 +9,7 @@ export const useCallSync = () => {
     await bulkPut(calls)
   }
 
-  const syncCall = async (call: EventCallUpdated) => {
+  const syncCall = async (call: Call) => {
     await put(call)
   }
 

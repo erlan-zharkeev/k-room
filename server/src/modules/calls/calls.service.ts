@@ -1,13 +1,12 @@
 import type {
+  Call,
   CallFlow,
   EventAnswerCall,
   EventCallAccepted,
   EventCallStartedAt,
-  EventCallUpdated,
   EventCallUser,
   EventCallsUpdated,
-  EventCallEnded,
-  Call
+  EventCallEnded
 } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
@@ -87,7 +86,7 @@ export const emitCallDataToInterlocutors = async (interlocutors: string[], callI
         return
       }
 
-      const payload: EventCallUpdated = {
+      const payload: Call = {
         ...transformedCall,
         setId
       }

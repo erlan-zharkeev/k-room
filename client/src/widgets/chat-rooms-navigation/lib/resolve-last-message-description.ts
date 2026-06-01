@@ -1,8 +1,10 @@
-import type { I18nTranslate, MessageRecord } from 'src/shared/lib'
+import type { Message } from 'global-shared'
+
+import type { I18nTranslate } from 'src/shared/lib'
 
 import { CHAT_ROOMS_NAVIGATION_I18N } from '../config/i18n'
 
-export const resolveLastMessageDescription = (lastMessage: MessageRecord | undefined, t: I18nTranslate) => {
+export const resolveLastMessageDescription = (lastMessage: Message | undefined, t: I18nTranslate) => {
   const imageMessageText = t(CHAT_ROOMS_NAVIGATION_I18N.imageMessage)
   const documentMessageText = t(CHAT_ROOMS_NAVIGATION_I18N.documentMessage)
   const audioMessageText = t(CHAT_ROOMS_NAVIGATION_I18N.audioMessage)

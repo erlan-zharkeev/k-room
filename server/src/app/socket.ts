@@ -8,7 +8,7 @@ import { errorToMessage } from 'src/shared/lib/error-to-message'
 import { setIO } from 'src/shared/lib/io'
 import { log } from 'src/shared/lib/log'
 import { serverCaptureSentryException } from 'src/shared/lib/sentry'
-import type { SocketIO } from 'src/shared/types/socket'
+import type { SocketIO } from 'src/shared/types'
 
 import { SOCKET_OPTIONS } from './constants'
 import { SocketRouter } from './socket-router'

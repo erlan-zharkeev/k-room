@@ -9,7 +9,7 @@ import {
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { emitToUsers } from 'src/modules/presence/presence.utils'
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 import { CONTACTS_I18N } from './contacts.i18n'
 import {

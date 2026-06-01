@@ -3,13 +3,10 @@ import { type Request, type Response } from 'express'
 import {
   CODES_ENDPOINTS,
   type BackendResponse,
-  type CodeValidationPayload,
-  type SendChangeEmailCodePayload,
-  type SendChangeEmailCodeResponse,
-  type SendPasswordRecoveryCodeResponse,
-  type SendPasswordRecoveryCodePayload,
+  type CodeRequestResponse,
+  type EmailCodeRequestPayload,
+  type EmailCodeValidationPayload,
   isString,
-  type ValidateChangeEmailCodePayload,
   type ValidateChangeEmailCodeResponse,
   type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
@@ -44,8 +41,8 @@ export class CodesController {
   @UseGuards(AccessTokenGuard)
   async sendChangeEmailCode(
     @Req() request: Request,
-    @Res() response: Response<BackendResponse<SendChangeEmailCodeResponse>>,
-    @Body() payload: SendChangeEmailCodePayload
+    @Res() response: Response<BackendResponse<CodeRequestResponse>>,
+    @Body() payload: EmailCodeRequestPayload
   ) {
     const { language } = request
 
@@ -59,7 +56,7 @@ export class CodesController {
         response,
         language,
         {
-          nextTimeRequest: result.nextTimeRequest,
+          nextRequestTime: result.nextRequestTime,
           ...(isString(result.debugCode) ? { debugCode: result.debugCode } : {})
         },
         result.tooManyRequests ? SEND_CHANGE_EMAIL_CODE_I18N.tooManyRequests : SEND_CHANGE_EMAIL_CODE_I18N.codeSent,
@@ -75,7 +72,7 @@ export class CodesController {
   async validateChangeEmailCode(
     @Req() request: Request,
     @Res() response: Response<BackendResponse<ValidateChangeEmailCodeResponse>>,
-    @Body() payload: ValidateChangeEmailCodePayload
+    @Body() payload: EmailCodeValidationPayload
   ) {
     const { language } = request
 
@@ -94,8 +91,8 @@ export class CodesController {
   @Post(CODES_ENDPOINTS.sendEmailCodePasswordRecovery)
   async sendPasswordRecoveryCode(
     @Req() request: Request,
-    @Res() response: Response<BackendResponse<SendPasswordRecoveryCodeResponse>>,
-    @Body() payload: SendPasswordRecoveryCodePayload
+    @Res() response: Response<BackendResponse<CodeRequestResponse>>,
+    @Body() payload: EmailCodeRequestPayload
   ) {
     const { language } = request
 
@@ -107,7 +104,7 @@ export class CodesController {
         response,
         language,
         {
-          nextTimeRequest: result.nextTimeRequest,
+          nextRequestTime: result.nextRequestTime,
           ...(isString(result.debugCode) ? { debugCode: result.debugCode } : {})
         },
         result.tooManyRequests
@@ -124,7 +121,7 @@ export class CodesController {
   async validatePasswordRecoveryCode(
     @Req() request: Request,
     @Res() response: Response<BackendResponse<ValidatePasswordRecoveryCodeResponse>>,
-    @Body() payload: CodeValidationPayload
+    @Body() payload: EmailCodeValidationPayload
   ) {
     const { language } = request
 

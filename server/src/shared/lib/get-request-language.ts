@@ -9,7 +9,7 @@ import {
   type AppLanguage
 } from 'global-shared'
 
-import type { SocketInstance } from '../types/socket'
+import type { SocketInstance } from '../types'
 
 const isRequestLanguage = (value?: string): value is AppLanguage => {
   return APP_LANGUAGE_VALUES.includes(value as AppLanguage)

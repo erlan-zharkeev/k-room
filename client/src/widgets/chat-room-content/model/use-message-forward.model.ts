@@ -1,4 +1,4 @@
-import { type EventSendMessage, type Message, MESSAGE_STATUS_VALUE } from 'global-shared'
+import { type ChatRoom, type EventSendMessage, type Message, MESSAGE_STATUS_VALUE } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, type Ref, ref, toRef, watch } from 'vue'
 
@@ -6,7 +6,6 @@ import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/ch
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 import { socket } from 'src/shared/api'
-import type { ChatRoomRecord } from 'src/shared/lib'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
@@ -28,7 +27,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const isForwardingMessage = ref(false)
   const normalizedMessageForwardSearchQuery = computed(() => messageForwardSearchQuery.value.trim().toLowerCase())
 
-  const buildMessageForwardChatRoomItem = (room: ChatRoomRecord): AppProfilePickerItem => {
+  const buildMessageForwardChatRoomItem = (room: ChatRoom): AppProfilePickerItem => {
     const isPrivateRoom = isRoomPrivate(room)
     const otherUserIds = getRoomOtherUserIds(room, user.value.id)
     const users = getUsersByIds(otherUserIds)

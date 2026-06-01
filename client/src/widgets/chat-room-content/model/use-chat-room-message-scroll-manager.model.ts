@@ -1,14 +1,14 @@
 import type { INmorphScrollExpose, NmorphCoordsType } from '@nmorph/nmorph-ui-kit'
 import type { Virtualizer } from '@tanstack/vue-virtual'
+import type { ChatRoom } from 'global-shared'
 import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET } from '../config/constants'
 
 export const useChatRoomMessageScrollManager = (
-  room: Ref<ChatRoomRecord>,
+  room: Ref<ChatRoom>,
   displayedLastMessageId: ComputedRef<string | null>,
   messageItemsQuantity: ComputedRef<number>
 ) => {

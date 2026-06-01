@@ -1,10 +1,9 @@
-import type { EventAddReaction } from 'global-shared'
+import type { ChatRoom, EventAddReaction, Message } from 'global-shared'
 import { computed, ref, type Ref } from 'vue'
 
 import { useSocketAction } from 'src/shared/api'
-import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
-export const useMessageReaction = (message: Ref<MessageRecord>, room: Ref<ChatRoomRecord>) => {
+export const useMessageReaction = (message: Ref<Message>, room: Ref<ChatRoom>) => {
   const { emitSocketAction } = useSocketAction()
   const isUpdatingMessageReaction = ref(false)
   const canUpdateMessageReaction = computed(() => !isUpdatingMessageReaction.value)

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import type { EventAnswerCall, EventCallEnded, EventCallUser, EventMarkCallAsVideo } from 'global-shared'
 
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 import { CALLS_I18N } from './calls.i18n'
 import { answerCall, callUser, emitCallsToUser, endCall, markCallAsVideo } from './calls.service'

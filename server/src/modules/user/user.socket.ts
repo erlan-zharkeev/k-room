@@ -3,7 +3,7 @@ import type { EventUpdateLanguage } from 'global-shared'
 
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 import { resolveActualUserSocketData } from './lib/resolve-actual-user-socket-data'
 import { USER_SOCKET_I18N } from './user.i18n'

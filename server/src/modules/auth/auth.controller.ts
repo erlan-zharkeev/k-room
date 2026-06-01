@@ -6,11 +6,10 @@ import {
   type AuthRegistrationPayload,
   type BackendResponse,
   type ConfirmEmailResponse,
-  type LoginResponse,
   type SendConfirmationLinkPayload,
   type SendConfirmationLinkResponse,
   type SignInWithProviderPayload,
-  type SignInWithProviderResponse
+  type UserData
 } from 'global-shared'
 
 import { SHARED_I18N } from 'src/shared/i18n'
@@ -39,7 +38,7 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.login)
   async login(
     @Req() request: Request,
-    @Res() response: Response<BackendResponse<LoginResponse>>,
+    @Res() response: Response<BackendResponse<UserData>>,
     @Body() payload: AuthLoginPayload
   ) {
     const { language } = request
@@ -129,7 +128,7 @@ export class AuthController {
   @Post(AUTH_ENDPOINTS.providerLogin)
   async signInWithProvider(
     @Req() request: Request,
-    @Res() response: Response<BackendResponse<SignInWithProviderResponse>>,
+    @Res() response: Response<BackendResponse<UserData>>,
     @Body() payload: SignInWithProviderPayload
   ) {
     const { language } = request

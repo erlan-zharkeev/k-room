@@ -5,7 +5,8 @@ import {
   type BackendResponse,
   type ChangePasswordPayload,
   type CreateNewPasswordPayload,
-  type GetUserDataResponse,
+  type UserData,
+  type UpdateUserDataPayload,
   USER_ENDPOINTS
 } from 'global-shared'
 import { memoryStorage } from 'multer'
@@ -19,7 +20,6 @@ import { requireAuthUserId } from '../session/lib/require-auth-user-id'
 import { AccessTokenGuard } from '../session/session.guard'
 import { SessionService } from '../session/session.service'
 
-import type { UpdateUserDataPayload } from './types'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
 import { CHANGE_PASSWORD_VALIDATION, RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
@@ -30,7 +30,7 @@ export class UserController {
 
   @Get(USER_ENDPOINTS.getUserData)
   @UseGuards(AccessTokenGuard)
-  async getUserData(@Req() request: Request, @Res() response: Response<BackendResponse<GetUserDataResponse>>) {
+  async getUserData(@Req() request: Request, @Res() response: Response<BackendResponse<UserData>>) {
     const { language } = request
     const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
 
@@ -70,7 +70,7 @@ export class UserController {
   )
   async updateUserData(
     @Req() request: Request,
-    @Res() response: Response<BackendResponse<GetUserDataResponse>>,
+    @Res() response: Response<BackendResponse<UserData>>,
     @UploadedFile() file?: Express.Multer.File,
     @Body() payload?: UpdateUserDataPayload
   ) {

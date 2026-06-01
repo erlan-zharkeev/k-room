@@ -6,7 +6,7 @@ import { VALIDATION_MEDIA_OPTIONS_MAP } from '../media.constants'
 import { VALIDATE_MEDIA_FILE_I18N } from '../media.i18n'
 import type { FileData, UploadOptions } from '../media.types'
 
-export const assertFileMetaData = (fileData: FileData, bucketName: MediaBucketName, options?: UploadOptions) => {
+export const assertFileMetadata = (fileData: FileData, bucketName: MediaBucketName, options?: UploadOptions) => {
   const { maxMb } = options?.validation ?? VALIDATION_MEDIA_OPTIONS_MAP[bucketName]
   const supportedKindMediaTypes = options?.validation?.supportedKindMediaType
     ? [options.validation.supportedKindMediaType]

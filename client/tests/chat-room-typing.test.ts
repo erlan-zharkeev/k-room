@@ -1,7 +1,7 @@
+import type { ChatRoom } from 'global-shared'
 import { nextTick, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { ChatRoomRecord } from '../src/shared/lib'
 import { CHAT_ROOM_TYPING_IDLE_TIMEOUT_MS } from '../src/features/chat-room-typing/config/constants'
 
 const socketMock = vi.hoisted(() => ({
@@ -46,7 +46,7 @@ const { updateRoomTypingStatus, useChatRoomTypingStatus } = await import(
   '../src/features/chat-room-typing/model/use-chat-room-typing.model'
 )
 
-const createRoom = (id: string): ChatRoomRecord => ({ id, messages: [], users: [] } as unknown as ChatRoomRecord)
+const createRoom = (id: string): ChatRoom => ({ id, messages: [], users: [] } as unknown as ChatRoom)
 
 describe('chat room typing status', () => {
   it('deduplicates typing users and removes empty room state', () => {

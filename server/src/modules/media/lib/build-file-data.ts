@@ -10,7 +10,7 @@ import {
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 
-import type { FileData, FileMetaData } from '../media.types'
+import type { FileData, FileMetadata } from '../media.types'
 
 const createSha256FromBuffer = (buffer: Buffer) => {
   return createHash('sha256').update(buffer).digest('hex')
@@ -39,7 +39,7 @@ export const buildFileData = async (
   const extension = fileType?.ext ?? resolveFileExtension(filename)
   const contentType =
     fileType?.mime ?? fallbackContentType ?? (filename ? mimeLookup(filename) || undefined : undefined)
-  const metadata: FileMetaData = {
+  const metadata: FileMetadata = {
     size: buffer.length,
     sha256: createSha256FromBuffer(buffer),
     detectedMime: fileType?.mime,
