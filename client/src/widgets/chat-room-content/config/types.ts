@@ -74,6 +74,11 @@ export interface RoomCallActivePanelEmits {
   leave: []
 }
 
+export type RoomCallActivePanelEmit = {
+  (event: 'start-screen'): void
+  (event: 'stop-screen'): void
+}
+
 export interface RoomCallJoinPanelProps {
   roomCall: RoomCall
   isDisabled: boolean

@@ -1,3 +1,4 @@
+import { createGlobalState } from '@vueuse/core'
 import {
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_STATUS,
@@ -24,7 +25,7 @@ import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
 import { useRoomCallSession } from './use-room-call-session.model'
 import { useRoomCallSignalMonitor } from './use-room-call-signal-monitor.model'
 
-export const useActiveRoomCallSession = () => {
+export const useActiveRoomCallSession = createGlobalState(() => {
   const activeRoomCallId = ref('')
   const isStartingRoomCall = ref(false)
   const isJoiningRoomCall = ref(false)
@@ -48,19 +49,18 @@ export const useActiveRoomCallSession = () => {
     startVideo,
     stopRoomCallLocalMedia,
     stopScreen,
-    stopVideo,
     videoStream
   } = useRoomCallLocalMedia()
   const { joinRoomCall, leaveRoomCall, startRoomCall, updateRoomCallMediaState } = useRoomCallSession()
   const {
-    closeRoomCallPeer,
     connectRoomCallPeers,
     handleRoomCallSignalReceived,
     remoteStreamsByUserId,
     resetRoomCallPeers,
     syncRoomCallPeerTracks
   } = useRoomCallPeerManager()
-  const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
+  const publishedVideoStream = computed(() => screenStream.value || videoStream.value)
+  const localStreams = computed(() => [audioStream.value, publishedVideoStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
   const activeRoomCallPeerParticipantKey = computed(
     () =>
@@ -254,10 +254,6 @@ export const useActiveRoomCallSession = () => {
     }
   }
 
-  const stopActiveRoomCallVideo = () => {
-    stopVideo()
-  }
-
   const startActiveRoomCallScreen = async () => {
     try {
       await startScreen()
@@ -310,11 +306,7 @@ export const useActiveRoomCallSession = () => {
     leaveActiveRoomCall,
     setActiveRoomCallAudioEnabled,
     setActiveRoomCallVideoEnabled,
-    stopActiveRoomCallVideo,
     startActiveRoomCallScreen,
-    stopActiveRoomCallScreen,
-    closeRoomCallPeer,
-    connectActiveRoomCallPeers,
-    syncActiveRoomCallMediaState
+    stopActiveRoomCallScreen
   }
-}
+})

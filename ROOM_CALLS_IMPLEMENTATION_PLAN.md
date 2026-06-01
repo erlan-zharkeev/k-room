@@ -2,7 +2,7 @@
 
 ## Решение
 
-Звонок строим как `RoomCall`: каждый активный звонок привязан к `chatRoomId`, а личный звонок является частным случаем комнаты из двух участников.
+Звонок строим как `RoomCall`: каждый активный звонок привязан к `roomId`, а личный звонок является частным случаем комнаты из двух участников.
 
 Первый вариант делаем через P2P mesh WebRTC и Socket.IO signaling, без SFU/media-server. Лимит активных участников одного звонка: `5`. Размер чата не меняем.
 
@@ -10,23 +10,25 @@
 
 - В звонке одновременно максимум 5 активных участников.
 - Видеозвонки и демонстрация экрана работают в рамках P2P mesh.
-- Screen share на первом проходе считаем одиночным активным экраном на звонок.
+- Screen share публикуется как текущий видео-поток участника вместо камеры.
 - Для 6+ активных участников в будущем лучше переходить на SFU.
 
-## Микрошаги
+## Выполненные блоки
 
-1. Обновить shared contract `RoomCall`: типы, константы, socket events, лимит участников.
-2. Перевести серверный модуль звонков на room-based модель данных и проверки доступа к комнате.
-3. Добавить server signaling flow: start/join/leave/end, relay offer/answer/ice, обновление media state.
-4. Разнести клиентскую структуру по FSD: `entities/call`, `features/call-session`, `widgets/call-room`.
-5. Добавить клиентскую модель локальных media streams: микрофон, камера, экран, выбранные устройства.
-6. Реализовать WebRTC peer manager для P2P mesh между участниками звонка.
-7. Добавить UI активного звонка: сетка участников, local preview, controls, screen share tile.
-8. Добавить старт звонка из заголовка чата и incoming call UI.
-9. Сделать страницу истории звонков вместо текущего placeholder route.
-10. Обработать notifications и edge cases: offline, busy/full call, permissions, disconnect, browser screen stop.
-11. Добавить точечные server/client tests и ручную проверку в нескольких вкладках.
+1. Shared contract `RoomCall`: типы, константы, socket events, ack reasons, лимит участников.
+2. Серверный модуль `room-calls`: модель данных, доступ к комнате, start/join/leave/end, media state, signaling relay.
+3. Клиентская FSD-структура: `entities/room-call`, `features/room-call-session`, интеграция в `widgets/chat-room-content`.
+4. Локальные media streams: микрофон, камера, экран, выбранные устройства, остановка browser screen share.
+5. WebRTC peer manager для P2P mesh: offer/answer/ice, STUN config, очередь ранних ICE-кандидатов, пересборка tracks.
+6. UI звонков в чате: кнопки старта, join panel, active panel с тайлами участников и controls.
+7. Страница истории звонков `/calls` на данных `room-calls`.
+8. Notifications и edge cases: incoming call, busy/full call, permissions, disconnect, завершение звонка.
 
-## Первый микрошаг
+## Проверка
 
-Первым делом фиксируем общий контракт, чтобы сервер и клиент дальше двигались по одной схеме.
+- `global-shared` typecheck.
+- `k-room-server` typecheck.
+- `client` typecheck.
+- `client` FSD lint.
+- Targeted eslint для серверных и клиентских файлов звонков.
+- `git diff --check`.

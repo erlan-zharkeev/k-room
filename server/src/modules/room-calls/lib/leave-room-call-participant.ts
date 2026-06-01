@@ -8,7 +8,7 @@ import { RoomCallModel } from '../room-calls.model'
 import type { RoomCallDocument, RoomCallSchema } from '../room-calls.types'
 
 import { resolveActiveRoomCallParticipants, resolveRemainingRoomCallParticipants } from './room-call-participant'
-import { buildActiveRoomCallParticipantFilter } from './room-call-query'
+import { buildActiveRoomCallFilter, buildActiveRoomCallParticipantFilter } from './room-call-query'
 
 export const leaveRoomCallParticipant = async (
   roomCall: RoomCallDocument,
@@ -38,6 +38,7 @@ export const leaveRoomCallParticipant = async (
   const updatedRoomCall = await RoomCallModel.findOneAndUpdate(
     {
       _id: roomCallId,
+      ...buildActiveRoomCallFilter(),
       ...buildActiveRoomCallParticipantFilter(userId, socketId)
     },
     update,

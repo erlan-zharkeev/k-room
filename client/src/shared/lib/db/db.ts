@@ -20,7 +20,6 @@ export class KRoomDB extends Dexie {
       'known-users': '&id',
       media: '&id',
       'chat-rooms': '&id',
-      calls: null,
       'room-calls': '&id',
       messages: '&id'
     })

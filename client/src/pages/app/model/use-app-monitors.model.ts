@@ -1,6 +1,7 @@
 import { onBeforeUnmount, onMounted } from 'vue'
 
 import { useRoomCallDataUpdateMonitor } from 'src/entities/room-call'
+import { useActiveRoomCallSession } from 'src/features/room-call-session'
 import { useSocketConnect } from 'src/shared/api'
 
 import { useChatRoomUpdateMonitor } from './use-chat-room-update-monitor.model'
@@ -17,8 +18,8 @@ export const useAppMonitors = () => {
   const { disposeMediaUpdateMonitor, initializeMediaUpdateMonitor } = useMediaUpdateMonitor()
   const { disposeMessageMonitor, initializeMessageMonitor } = useMessageMonitor()
   const { disposeRoomCallDataUpdateMonitor, initializeRoomCallDataUpdateMonitor } = useRoomCallDataUpdateMonitor()
-  const { disposeRoomCallNotificationMonitor, initializeRoomCallNotificationMonitor } =
-    useRoomCallNotificationMonitor()
+  const { disposeRoomCallNotificationMonitor, initializeRoomCallNotificationMonitor } = useRoomCallNotificationMonitor()
+  useActiveRoomCallSession()
   useSyncAvatars()
 
   onMounted(() => {

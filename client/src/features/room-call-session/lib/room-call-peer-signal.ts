@@ -1,4 +1,4 @@
-import { isString, isUnknownObject, ROOM_CALL_SIGNAL_KIND } from 'global-shared'
+import { isString, isUnknownObject } from 'global-shared'
 
 import type { RoomCallDescriptionSignalKind } from '../config/types'
 
@@ -24,13 +24,4 @@ export const isRoomCallIceCandidateSignal = (signal: unknown): signal is RTCIceC
   const hasCandidate = candidate === undefined || candidate === null || isString(candidate)
 
   return hasCandidate
-}
-
-export const isRoomCallDescriptionSignalKind = (
-  signalKind: string
-): signalKind is RoomCallDescriptionSignalKind => {
-  const isOfferSignal = signalKind === ROOM_CALL_SIGNAL_KIND.OFFER
-  const isAnswerSignal = signalKind === ROOM_CALL_SIGNAL_KIND.ANSWER
-
-  return isOfferSignal || isAnswerSignal
 }
