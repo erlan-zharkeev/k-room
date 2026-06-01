@@ -1,6 +1,6 @@
 import { useUserMedia } from '@vueuse/core'
-import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind } from 'global-shared'
-import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
+import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind, type RoomCallParticipantMediaState } from 'global-shared'
+import { onBeforeUnmount, ref, shallowRef } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 
@@ -27,23 +27,34 @@ export const useRoomCallLocalMedia = () => {
   const isScreenLoading = ref(false)
   const audioStream = audioUserMedia.stream
   const videoStream = videoUserMedia.stream
-  const localMediaState = computed(() => ({
-    audio: hasEnabledRoomCallMediaTrack(audioStream.value, 'audio'),
-    video: hasEnabledRoomCallMediaTrack(videoStream.value, 'video'),
-    screen: hasEnabledRoomCallMediaTrack(screenStream.value, 'video')
-  }))
+  const localMediaState = ref<RoomCallParticipantMediaState>({
+    audio: false,
+    video: false,
+    screen: false
+  })
+
+  const refreshLocalMediaState = () => {
+    localMediaState.value = {
+      audio: hasEnabledRoomCallMediaTrack(audioStream.value, 'audio'),
+      video: hasEnabledRoomCallMediaTrack(videoStream.value, 'video'),
+      screen: hasEnabledRoomCallMediaTrack(screenStream.value, 'video')
+    }
+  }
 
   const stopAudio = () => {
     audioUserMedia.stop()
+    refreshLocalMediaState()
   }
 
   const stopVideo = () => {
     videoUserMedia.stop()
+    refreshLocalMediaState()
   }
 
   const stopScreen = () => {
     stopRoomCallMediaStream(screenStream.value)
     screenStream.value = null
+    refreshLocalMediaState()
   }
 
   const startAudio = async () => {
@@ -55,7 +66,11 @@ export const useRoomCallLocalMedia = () => {
     }
 
     try {
-      return (await audioUserMedia.start()) ?? null
+      const stream = (await audioUserMedia.start()) ?? null
+
+      refreshLocalMediaState()
+
+      return stream
     } finally {
       isAudioLoading.value = false
     }
@@ -70,7 +85,11 @@ export const useRoomCallLocalMedia = () => {
     }
 
     try {
-      return (await videoUserMedia.start()) ?? null
+      const stream = (await videoUserMedia.start()) ?? null
+
+      refreshLocalMediaState()
+
+      return stream
     } finally {
       isVideoLoading.value = false
     }
@@ -87,6 +106,7 @@ export const useRoomCallLocalMedia = () => {
       })
 
       screenStream.value = stream
+      refreshLocalMediaState()
       stream.getVideoTracks().forEach((track) => {
         track.addEventListener('ended', stopScreen, { once: true })
       })
@@ -117,10 +137,12 @@ export const useRoomCallLocalMedia = () => {
 
   const setAudioEnabled = (enabled: boolean) => {
     setRoomCallMediaStreamTracksEnabled(audioStream.value, 'audio', enabled)
+    refreshLocalMediaState()
   }
 
   const setVideoEnabled = (enabled: boolean) => {
     setRoomCallMediaStreamTracksEnabled(videoStream.value, 'video', enabled)
+    refreshLocalMediaState()
   }
 
   onBeforeUnmount(stopRoomCallLocalMedia)
