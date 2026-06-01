@@ -1,4 +1,4 @@
-import { onMounted } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue'
 
 import { useSocketConnect } from 'src/shared/api'
 
@@ -11,11 +11,11 @@ import { useSyncAvatars } from './use-sync-avatars.model'
 
 export const useAppMonitors = () => {
   const { actualizeSocketData, socketConnect } = useSocketConnect()
-  const { initializeCallDataUpdateMonitor } = useCallDataUpdateMonitor()
-  const { initializeChatRoomUpdateMonitor } = useChatRoomUpdateMonitor()
-  const { initializeContactUpdateMonitor } = useContactUpdateMonitor()
-  const { initializeMediaUpdateMonitor } = useMediaUpdateMonitor()
-  const { initializeMessageMonitor } = useMessageMonitor()
+  const { disposeCallDataUpdateMonitor, initializeCallDataUpdateMonitor } = useCallDataUpdateMonitor()
+  const { disposeChatRoomUpdateMonitor, initializeChatRoomUpdateMonitor } = useChatRoomUpdateMonitor()
+  const { disposeContactUpdateMonitor, initializeContactUpdateMonitor } = useContactUpdateMonitor()
+  const { disposeMediaUpdateMonitor, initializeMediaUpdateMonitor } = useMediaUpdateMonitor()
+  const { disposeMessageMonitor, initializeMessageMonitor } = useMessageMonitor()
   useSyncAvatars()
 
   onMounted(() => {
@@ -26,5 +26,13 @@ export const useAppMonitors = () => {
     initializeMessageMonitor()
     socketConnect()
     actualizeSocketData()
+  })
+
+  onBeforeUnmount(() => {
+    disposeCallDataUpdateMonitor()
+    disposeChatRoomUpdateMonitor()
+    disposeContactUpdateMonitor()
+    disposeMediaUpdateMonitor()
+    disposeMessageMonitor()
   })
 }
