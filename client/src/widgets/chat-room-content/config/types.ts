@@ -16,11 +16,15 @@ import type {
   Message,
   MessageLinkPreview,
   MessageReaction,
+  RoomCall,
   RoomCallMediaKind,
+  RoomCallParticipantMediaState,
   RepliedMessage,
   VideoObject
 } from 'global-shared'
 import type { Component, Ref } from 'vue'
+
+import type { RoomCallRemoteStreamsByUserId } from 'src/features/room-call-session'
 
 import type {
   MESSAGE_ATTACHMENT_DRAFT_KIND,
@@ -50,6 +54,43 @@ export interface ChatRoomHeaderEmits {
 
 export interface ChatRoomFooterProps {
   room: ChatRoom
+}
+
+export interface RoomCallActivePanelProps {
+  roomCall: RoomCall
+  videoStream?: MediaStream | null
+  screenStream?: MediaStream | null
+  remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
+  localMediaState: RoomCallParticipantMediaState
+  isBusy: boolean
+  isLeaving: boolean
+}
+
+export interface RoomCallActivePanelEmits {
+  'set-audio-enabled': [enabled: boolean]
+  'set-video-enabled': [enabled: boolean]
+  'start-screen': []
+  'stop-screen': []
+  leave: []
+}
+
+export interface RoomCallTileItem {
+  id: string
+  isLocal: boolean
+  mediaState: RoomCallParticipantMediaState
+  mirrored: boolean
+  name: string
+  stream?: MediaStream
+}
+
+export interface BuildRoomCallTileItemsParams {
+  currentUserId: string
+  roomCall: RoomCall
+  localMediaState: RoomCallParticipantMediaState
+  videoStream?: MediaStream | null
+  screenStream?: MediaStream | null
+  remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
+  resolveParticipantName: (userId: string) => string
 }
 
 export interface ChatRoomFooterEmits {

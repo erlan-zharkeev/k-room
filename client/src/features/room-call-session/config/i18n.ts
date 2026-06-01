@@ -15,5 +15,25 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     en: 'Share screen',
     ru: 'Поделиться экраном',
     zh: '共享屏幕'
+  },
+  toggleAudioRoomCall: {
+    en: 'Toggle microphone',
+    ru: 'Включить или выключить микрофон',
+    zh: '切换麦克风'
+  },
+  toggleVideoRoomCall: {
+    en: 'Toggle camera',
+    ru: 'Включить или выключить камеру',
+    zh: '切换摄像头'
+  },
+  toggleScreenRoomCall: {
+    en: 'Toggle screen sharing',
+    ru: 'Включить или выключить демонстрацию экрана',
+    zh: '切换屏幕共享'
+  },
+  leaveRoomCall: {
+    en: 'Leave call',
+    ru: 'Выйти из звонка',
+    zh: '离开通话'
   }
 })

@@ -248,6 +248,7 @@ export const useActiveRoomCallSession = () => {
 
   return {
     activeRoomCallId,
+    activeRoomCall,
     audioStream,
     videoStream,
     screenStream,

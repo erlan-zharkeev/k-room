@@ -10,8 +10,23 @@ import { useSelectedChatRoom } from './use-selected-chat-room.model'
 export const useChatRoomContent = () => {
   const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomPrivate } = useSelectedChatRoom()
   const { roomCalls } = useRoomCall()
-  const { activeRoomCallId, isRoomCallSessionBusy, isStartingRoomCall, startActiveRoomCall } =
-    useActiveRoomCallSession()
+  const {
+    activeRoomCall,
+    activeRoomCallId,
+    isLeavingRoomCall,
+    isRoomCallSessionBusy,
+    isStartingRoomCall,
+    localMediaState,
+    remoteStreamsByUserId,
+    screenStream,
+    setActiveRoomCallAudioEnabled,
+    setActiveRoomCallVideoEnabled,
+    startActiveRoomCall,
+    startActiveRoomCallScreen,
+    stopActiveRoomCallScreen,
+    videoStream,
+    leaveActiveRoomCall
+  } = useActiveRoomCallSession()
   const { clearSelectedMessage, selectChatRoomMessage, selectCurrentChatRoomMessage, selectedMessageId } =
     useChatRoomMessageSelection(selectedChatRoomId)
 
@@ -30,6 +45,11 @@ export const useChatRoomContent = () => {
 
     return isRoomCallSessionBusy.value || hasActiveSession || hasActiveSelectedRoomCall
   })
+  const selectedActiveRoomCall = computed(() => {
+    const belongsToSelectedRoom = activeRoomCall.value?.roomId === selectedChatRoomId.value
+
+    return belongsToSelectedRoom ? activeRoomCall.value : undefined
+  })
 
   const startSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
     const roomId = selectedChatRoomId.value
@@ -46,11 +66,23 @@ export const useChatRoomContent = () => {
     selectedChatRoom,
     isSelectedChatRoomPrivate,
     selectedMessageId,
+    selectedActiveRoomCall,
+    videoStream,
+    screenStream,
+    remoteStreamsByUserId,
+    localMediaState,
     isRoomCallStartDisabled,
     isStartingRoomCall,
+    isLeavingRoomCall,
+    isRoomCallSessionBusy,
     clearSelectedMessage,
     selectChatRoomMessage,
     selectCurrentChatRoomMessage,
+    setActiveRoomCallAudioEnabled,
+    setActiveRoomCallVideoEnabled,
+    startActiveRoomCallScreen,
+    stopActiveRoomCallScreen,
+    leaveActiveRoomCall,
     startSelectedRoomCall
   }
 }
