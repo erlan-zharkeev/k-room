@@ -1,32 +1,10 @@
-import type {
-  AudioObject,
-  DocumentObject,
-  ImageObject,
-  Message,
-  MessageLinkPreview,
-  MessageMetadata,
-  MessageReaction,
-  RepliedMessage,
-  VideoObject
-} from 'global-shared'
+import type { ImageObject, Message, MessageLinkPreview, MessageMetadata, RepliedMessage } from 'global-shared'
 
-export interface MessageSchema {
+export interface MessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status' | 'images'> {
   _id?: string
-  authorId: string
-  authorNickname: string
-  body: string
-  createdAt?: number
-  editedAt?: number
-  reactions?: MessageReaction[]
   images?: Array<string | ImageObject>
-  documents?: DocumentObject[]
-  audios?: AudioObject[]
-  videos?: VideoObject[]
-  imageCompression?: boolean
-  linkPreview?: MessageLinkPreview | null
   deletedForUserIds?: string[]
   usersMetaData?: MessageMetadata[]
-  repliedMessage?: RepliedMessage | null
 }
 
 export interface MessageDocument extends MessageSchema {

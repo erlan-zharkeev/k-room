@@ -1,9 +1,8 @@
 import { useTimeoutFn } from '@vueuse/core'
-import type { EventUserTyping } from 'global-shared'
+import type { ChatRoom, EventUserTyping } from 'global-shared'
 import { onBeforeUnmount, type Ref, watch } from 'vue'
 
 import { socket } from 'src/shared/api'
-import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { CHAT_ROOM_TYPING_IDLE_TIMEOUT_MS } from '../config/constants'
 
@@ -16,7 +15,7 @@ const emitTypingStatus = (roomId: string, isTyping: boolean) => {
   socket.emit('client-typing', payload)
 }
 
-export const useChatRoomTypingEmitter = (room: Ref<ChatRoomRecord>, messageText: Ref<string>) => {
+export const useChatRoomTypingEmitter = (room: Ref<ChatRoom>, messageText: Ref<string>) => {
   let typingRoomId: string | null = null
 
   const stopTyping = () => {

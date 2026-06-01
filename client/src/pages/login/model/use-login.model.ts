@@ -4,7 +4,7 @@ import {
   NON_EMPTY_PATTERN,
   createValidationMessages,
   type AuthLoginPayload,
-  type LoginResponse
+  type UserData
 } from 'global-shared'
 import { computed, reactive, ref, useTemplateRef } from 'vue'
 
@@ -14,7 +14,7 @@ import { useI18n } from 'src/shared/lib'
 
 import { DEFAULT_LOGIN_FORM_DATA } from '../config/constants'
 
-import type { LoginFormData } from './types.model'
+import type { LoginFormData } from './types'
 
 export const useLogin = () => {
   const { doHttpRequest } = useHttp()
@@ -50,7 +50,7 @@ export const useLogin = () => {
     const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
-      const response = await doHttpRequest<LoginResponse>('post', AUTH_ENDPOINTS.login, payload)
+      const response = await doHttpRequest<UserData>('post', AUTH_ENDPOINTS.login, payload)
       const { payload: user } = response.data
 
       await activateClientSession(user)

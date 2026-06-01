@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 
 import { SERVER_ENV } from 'src/app/env'
 import { getSocketLanguage } from 'src/shared/lib/get-request-language'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 import type { SocketTokenPayload } from './auth.types'
 

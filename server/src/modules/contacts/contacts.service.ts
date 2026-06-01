@@ -5,7 +5,6 @@ import {
   type Contact,
   type EventContactAddSuccess,
   type EventGetSearchedContact,
-  type EventInviteReceived,
   type Interaction,
   isAcceptedContactInteraction,
   isBlockedContactInteraction,
@@ -268,7 +267,7 @@ export const updateContactInteraction = async (
         break
       }
 
-      const payload: EventInviteReceived = transformUserToContact(
+      const payload: Contact = transformUserToContact(
         authorData,
         CONTACT_INTERACTION.INVITE_RECEIVED,
         await presenceService.isUserOnline(authorData._id)

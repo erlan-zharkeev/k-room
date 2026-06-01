@@ -5,7 +5,7 @@ import { ChatRoomsSocketService } from 'src/modules/chat-rooms/chat-rooms.socket
 import { ContactsSocketService } from 'src/modules/contacts/contacts.socket'
 import { MessagesSocketService } from 'src/modules/messages/messages.socket'
 import { UserSocketService } from 'src/modules/user/user.socket'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 @Injectable()
 export class SocketRouter {

@@ -2,13 +2,13 @@ import { Buffer } from 'node:buffer'
 
 import { Injectable } from '@nestjs/common'
 import { type Response } from 'express'
-import { REQ_STATUS, type MediaBucketName } from 'global-shared'
+import { MEDIA_KIND_HEADER_NAME, REQ_STATUS, type MediaBucketName } from 'global-shared'
 import mongoose from 'mongoose'
 
 import { AppError, isAppError } from 'src/shared/lib/app-error'
 import { localizedText } from 'src/shared/lib/localized-text'
 
-import { assertFileMetaData, assertRawFileSize } from './lib/assert-media-file'
+import { assertFileMetadata, assertRawFileSize } from './lib/assert-media-file'
 import { buildFileData } from './lib/build-file-data'
 import { deleteBucketFileById, findMediaBucketFileById, resolveRequiredMediaBucket } from './lib/media-buckets'
 import { processImageWithSharp } from './lib/process-image-with-sharp'
@@ -60,7 +60,7 @@ export const uploadBufferToBucket = async (
         : normalizedBuffer
     const fileData = await buildFileData(outputBuffer, filename, options?.contentType)
 
-    assertFileMetaData(fileData, bucketName, options)
+    assertFileMetadata(fileData, bucketName, options)
 
     if (options?.overwrite) {
       await deleteBucketFileById(bucketName, fileIdValue)
@@ -116,7 +116,7 @@ export const streamMediaFile = async (
 
     response.setHeader('ETag', `W/"sha256-${file?.metadata?.sha256}"`)
     response.setHeader('Cache-Control', 'no-store')
-    response.setHeader('X-Media-Kind', file.metadata?.kind ?? '')
+    response.setHeader(MEDIA_KIND_HEADER_NAME, file.metadata?.kind ?? '')
 
     if (options?.asAttachment) {
       response.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(file.filename)}"`)

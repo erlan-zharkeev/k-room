@@ -9,6 +9,7 @@ export interface EnvVariables {
   COOKIE_DOMAIN: string
   SENTRY_ENVIRONMENT: string
   SENTRY_ENABLED: string
+  SENTRY_DSN_CLIENT: string
   FIREBASE_API_KEY: string
   RESEND_API_KEY: string
   ADMIN_USERNAME: string
@@ -29,4 +30,18 @@ export interface EnvSharedVariables {
   ADMIN_ROOT_PATH: string
   ADMIN_COOKIE: string
   SUPPORT_EMAIL: string
+}
+
+export type EnvKey = keyof EnvVariables | keyof EnvSharedVariables
+
+export type EnvSource = Record<string, string | undefined>
+
+export interface ReadEnvOptions {
+  runtimeEnv?: EnvSource
+  secretEnv?: EnvSource
+}
+
+export interface SecretEnvFileReader {
+  existsSync(path: string): boolean
+  readFileSync(path: string, encoding: 'utf-8'): string
 }

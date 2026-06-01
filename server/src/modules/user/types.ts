@@ -1,4 +1,4 @@
-import type { ChangePasswordPayload, Interaction, MediaId, Provider, UnknownObject, UserRole } from 'global-shared'
+import type { ChangePasswordPayload, Interaction, Provider, UnknownObject, UserData, UserPreview } from 'global-shared'
 import type { Types } from 'mongoose'
 
 export interface UserDevice {
@@ -12,7 +12,7 @@ export interface UserContact {
 }
 
 export interface UserSystemData {
-  role: UserRole
+  role: UserData['role']
   device: Record<string, UserDevice>
   confirmed: boolean
   confirmAttempts: number
@@ -20,17 +20,14 @@ export interface UserSystemData {
   provider?: Provider
 }
 
-export interface UserPersonalData {
-  email: string
+export interface UserPersonalData extends Pick<UserData, 'email'> {
   contacts: Record<string, UserContact>
   chatRooms: string[]
   pinnedChatRoomIds: string[]
   mutedChatRoomIds: string[]
 }
 
-export interface UserPublicData {
-  avatarId: MediaId
-  nickname: string
+export interface UserPublicData extends Omit<UserPreview, 'id'> {
   lastSeen: number
 }
 
@@ -76,11 +73,6 @@ export interface UpdateUserDataParams {
   nickname?: string
   avatarFileBuffer?: Buffer
   resetAvatar?: 'reset' | ''
-}
-
-export interface UpdateUserDataPayload {
-  nickname?: string
-  'reset-avatar'?: 'reset' | ''
 }
 
 export interface AdminUserRecord {

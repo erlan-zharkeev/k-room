@@ -8,6 +8,8 @@ import type {
   MediaVideoUploadExtension
 } from './types'
 
+export const MEDIA_KIND_HEADER_NAME = 'x-media-kind'
+
 export const MEDIA_BUCKET_NAMES = ['doc', 'image', 'audio', 'video'] as const satisfies MediaBucketName[]
 
 export const MEDIA_AVATAR_VALIDATION_OPTIONS = {

@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import type { MediaBucketName, MediaKind, MediaValidationOptions } from 'global-shared'
+import type { MediaBucketName, MediaValidationOptions } from 'global-shared'
 import type mongoose from 'mongoose'
 
 export type SharpSettingsKey = 'avatar' | 'common-compressed' | 'common-uncompressed'
@@ -8,12 +8,7 @@ export type MulterHandler = (req: Request, res: Response, next: NextFunction) =>
 
 export type MulterErrorCode = 'LIMIT_FILE_SIZE' | 'LIMIT_FILE_COUNT' | 'LIMIT_UNEXPECTED_FILE'
 
-export interface MediaBucketOptions {
-  supportedKindMediaType: MediaKind
-  maxMb: number
-}
-
-export interface FileMetaData {
+export interface FileMetadata {
   size: number
   sha256: string
   detectedMime?: string
@@ -27,14 +22,14 @@ export interface FileMetaData {
 export interface FileData {
   filename: string
   contentType?: string
-  metadata: FileMetaData
+  metadata: FileMetadata
 }
 
 export interface StreamMediaFileData {
   filename: string
   contentType?: string
   uploadDate?: Date
-  metadata?: Partial<FileMetaData>
+  metadata?: Partial<FileMetadata>
 }
 
 export interface StreamMediaBucketFile {

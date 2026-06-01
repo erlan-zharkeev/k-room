@@ -1,4 +1,5 @@
-import { liveQuery, type Table } from 'dexie'
+import { liveQuery, type Table, type TransactionMode } from 'dexie'
+import type { UnknownObject } from 'global-shared'
 import cloneDeep from 'lodash/cloneDeep'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
@@ -7,11 +8,9 @@ import { computed, getCurrentScope, onScopeDispose, shallowRef, type Ref } from 
 import { runDexieCacheTrimGuard } from './cache-trim'
 import { db } from './db'
 import type {
-  DexieTransactionMode,
   CollectionIncomingItem,
   CollectionMergeManyOptions,
   DbCollectionItem,
-  Indexable,
   UseStateResult,
   KvItem,
   Mutable,
@@ -184,7 +183,7 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
     cachedItems = []
   }
 
-  const transaction = async <R>(mode: DexieTransactionMode, callback: () => Promise<R> | R) => {
+  const transaction = async <R>(mode: TransactionMode, callback: () => Promise<R> | R) => {
     return runDexieCacheTrimGuard(() => table.db.transaction(mode, table, callback))
   }
 
@@ -293,7 +292,7 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
     })
   }
 
-  const patchByPath = async (id: T['id'], patch: Indexable) => {
+  const patchByPath = async (id: T['id'], patch: UnknownObject) => {
     await mutate(id, (draft) => {
       Object.entries(patch).forEach(([path, value]) => {
         set(draft, path, value)

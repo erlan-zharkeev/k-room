@@ -1,4 +1,4 @@
-import type { SendChangeEmailCodeResponse, SendPasswordRecoveryCodeResponse } from 'global-shared'
+import type { CodeRequestResponse } from 'global-shared'
 
 export interface CodeElement {
   value: string
@@ -21,10 +21,10 @@ export interface CodeSchema {
   nextRequestPossibleAt: number
 }
 
-export interface SendPasswordRecoveryCodeResult extends SendPasswordRecoveryCodeResponse {
+export interface SendPasswordRecoveryCodeResult extends CodeRequestResponse {
   tooManyRequests: boolean
 }
 
-export interface SendChangeEmailCodeResult extends SendChangeEmailCodeResponse {
+export interface SendChangeEmailCodeResult extends CodeRequestResponse {
   tooManyRequests: boolean
 }

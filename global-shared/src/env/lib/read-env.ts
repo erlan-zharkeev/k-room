@@ -1,14 +1,4 @@
-export type EnvSource = Record<string, string | undefined>
-
-export interface ReadEnvOptions {
-  runtimeEnv?: EnvSource
-  secretEnv?: EnvSource
-}
-
-export interface SecretEnvFileReader {
-  existsSync(path: string): boolean
-  readFileSync(path: string, encoding: 'utf-8'): string
-}
+import type { EnvKey, EnvSource, ReadEnvOptions, SecretEnvFileReader } from '../types'
 
 export const parseEnvContent = (content: string): Record<string, string> =>
   Object.fromEntries(
@@ -31,6 +21,6 @@ export const readSecretEnv = (secretEnvPath: string, fileReader: SecretEnvFileRe
   return parseEnvContent(fileReader.readFileSync(secretEnvPath, 'utf-8'))
 }
 
-export const readEnv = (key: string, source: EnvSource, options: ReadEnvOptions = {}) =>
+export const readEnv = (key: EnvKey, source: EnvSource, options: ReadEnvOptions = {}) =>
   [options.runtimeEnv?.[key], source[key], options.secretEnv?.[key]].find((value) => value != null && value !== '') ??
   ''

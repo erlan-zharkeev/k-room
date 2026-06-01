@@ -6,11 +6,10 @@ import {
   REQ_STATUS,
   type AuthLoginPayload,
   type AuthRegistrationPayload,
-  type LoginResponse,
   type SendConfirmationLinkPayload,
   type SendConfirmationLinkResponse,
   type SignInWithProviderPayload,
-  type SignInWithProviderResponse,
+  type UserData,
   type Provider
 } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
@@ -45,7 +44,7 @@ export class AuthService {
     private readonly sessionService: SessionService
   ) {}
 
-  async login(payload: AuthLoginPayload, request: Request, response: Response): Promise<LoginResponse> {
+  async login(payload: AuthLoginPayload, request: Request, response: Response): Promise<UserData> {
     const ip = getRequestIp(request)
 
     await this.securityService.assertLoginAllowed(ip, payload.login, payload.captchaToken)
@@ -209,7 +208,7 @@ export class AuthService {
     payload: SignInWithProviderPayload,
     request: Request,
     response: Response
-  ): Promise<SignInWithProviderResponse> {
+  ): Promise<UserData> {
     const hashedPassword = await bcrypt.hash(uuidv4(), 6)
     const newUser = await this.userService.createUser({
       nickname: payload.nickname,

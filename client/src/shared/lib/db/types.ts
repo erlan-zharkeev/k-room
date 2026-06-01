@@ -1,9 +1,7 @@
-import type { TransactionMode } from 'dexie'
-import type { Call, ChatRoom, Contact, KnownUser, UserData, Message, MediaKind, UnknownObject } from 'global-shared'
+import type { Contact, KnownUser, MediaKind, UnknownObject } from 'global-shared'
 import type { Ref } from 'vue'
 
 export type Mutable<T> = { -readonly [K in keyof T]: T[K] }
-export type Indexable = UnknownObject
 export type KvItem<T extends object> = T & { __key: string }
 export type UseResult<T extends object, D extends Partial<T> | undefined> = D extends undefined ? T | undefined : D & T
 
@@ -28,7 +26,6 @@ export interface CollectionMergeManyOptions<
   removeMissing?: boolean
 }
 
-export type DexieTransactionMode = TransactionMode
 export type DexieCacheTrimEventType = 'cache-trimmed' | 'cache-trim-failed'
 
 export interface DexieCacheTrimResult {
@@ -51,10 +48,6 @@ export interface DexieCacheTrimEvent {
   type: DexieCacheTrimEventType
 }
 
-export type CallRecord = Call
-export type MessageRecord = Message
-export type ChatRoomRecord = ChatRoom
-export type UserRecord = Required<Pick<UserData, 'avatarId' | 'id' | 'role' | 'email' | 'nickname'>>
 export type ContactRecord = Contact & ContactLocalState
 export type KnownUserRecord = KnownUser & KnownUserLocalState
 export type MediaRecordStatus = 'missing' | 'ready'

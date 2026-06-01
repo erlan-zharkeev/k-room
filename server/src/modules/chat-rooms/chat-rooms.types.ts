@@ -1,13 +1,10 @@
 import type { ChatRoom } from 'global-shared'
 import type { Types } from 'mongoose'
 
-export interface ChatRoomSchema
-  extends Omit<
-    ChatRoom,
-    'id' | 'users' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder' | 'isMuted'
-  > {
-  users: string[]
-}
+export type ChatRoomSchema = Omit<
+  ChatRoom,
+  'id' | 'lastMessageId' | 'unreadMessagesQuantity' | 'isPinned' | 'pinnedOrder' | 'isMuted'
+>
 
 export interface ChatRoomDocument extends ChatRoomSchema {
   _id: Types.ObjectId

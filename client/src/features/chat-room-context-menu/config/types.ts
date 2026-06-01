@@ -1,15 +1,11 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
-import type { ChatKind } from 'global-shared'
+import type { ChatRoom } from 'global-shared'
 import type { Ref } from 'vue'
 
-export interface ChatRoomContextMenuItem {
-  id: string
-  adminId: string
-  chatKind: ChatKind
-  unreadMessagesQuantity: number
-  isPinned: boolean
-  isMuted: boolean
-}
+export type ChatRoomContextMenuItem = Pick<
+  ChatRoom,
+  'adminId' | 'chatKind' | 'id' | 'isMuted' | 'isPinned' | 'unreadMessagesQuantity'
+>
 
 export interface ChatRoomContextMenuProps {
   item: ChatRoomContextMenuItem

@@ -1,10 +1,10 @@
-import type { ChatKind, MediaId } from 'global-shared'
+import type { ChatRoom, MediaId } from 'global-shared'
 import type { RouteLocationRaw } from 'vue-router'
 
-export interface ChatRoomNavigationItem {
-  id: string
-  adminId: string
-  chatKind: ChatKind
+export type ChatRoomNavigationItem = Pick<
+  ChatRoom,
+  'adminId' | 'chatKind' | 'id' | 'isMuted' | 'isPinned' | 'pinnedOrder' | 'unreadMessagesQuantity'
+> & {
   to: RouteLocationRaw
   title: string
   description: string
@@ -12,10 +12,6 @@ export interface ChatRoomNavigationItem {
   online: boolean
   selected: boolean
   lastMessageCreatedAt: number
-  unreadMessagesQuantity: number
-  isPinned: boolean
-  pinnedOrder: number | null
-  isMuted: boolean
 }
 
 export interface ChatRoomListItemProps {

@@ -21,7 +21,7 @@ import { buildPathWithParams, createPasswordValidationRules, useI18n } from 'src
 
 import { DEFAULT_REGISTRATION_FORM_DATA } from '../config/constants'
 
-import type { RegistrationFormData } from './types.model'
+import type { RegistrationFormData } from './types'
 
 export const useRegistration = () => {
   const router = useRouter()

@@ -6,8 +6,7 @@ import uniq from 'lodash/uniq'
 
 import { log } from 'src/shared/lib/log'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
-import type { MongoId } from 'src/shared/types/mongo'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { MongoId, SocketInstance } from 'src/shared/types'
 
 import { RedisService } from '../security/redis.service'
 import { resolveUserRelatedRecipientIds } from '../user/lib/resolve-user-recipient-ids'

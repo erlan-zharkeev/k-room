@@ -12,7 +12,7 @@ import {
 
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { socketAckMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstance } from 'src/shared/types/socket'
+import type { SocketInstance } from 'src/shared/types'
 
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import {

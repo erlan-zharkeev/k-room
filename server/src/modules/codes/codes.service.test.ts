@@ -58,7 +58,7 @@ describe('CodesService', () => {
       headers: {}
     } as never)
 
-    expect(result).toEqual({ nextTimeRequest: 200_000, tooManyRequests: true })
+    expect(result).toEqual({ nextRequestTime: 200_000, tooManyRequests: true })
     expect(codeModelMock.updateOne).not.toHaveBeenCalled()
     expect(emailService.sendPasswordRecoveryEmail).not.toHaveBeenCalled()
   })
@@ -89,7 +89,7 @@ describe('CodesService', () => {
       headers: {}
     } as never)
 
-    expect(result).toEqual({ nextTimeRequest: 280_000, debugCode: '123456', tooManyRequests: false })
+    expect(result).toEqual({ nextRequestTime: 280_000, debugCode: '123456', tooManyRequests: false })
     expect(codeModelMock.updateOne).toHaveBeenCalledWith(
       { _id: 'user-1' },
       {
@@ -135,7 +135,7 @@ describe('CodesService', () => {
       headers: {}
     } as never)
 
-    expect(result).toEqual({ nextTimeRequest: 280_000, debugCode: '123456', tooManyRequests: false })
+    expect(result).toEqual({ nextRequestTime: 280_000, debugCode: '123456', tooManyRequests: false })
     expect(securityService.setChangeEmailCode).toHaveBeenCalledWith(
       'user-1',
       JSON.stringify({ email: 'new@test.com', code: '123456' }),

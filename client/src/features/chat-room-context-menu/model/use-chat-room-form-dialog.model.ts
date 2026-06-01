@@ -1,6 +1,7 @@
 import {
   CHAT_ROOM_GROUP_MEMBER_LIMIT,
   USER_CHAT_ROOM_LIMIT,
+  type ChatRoom,
   type EventCreateRoom,
   type EventUpdateChatRoom
 } from 'global-shared'
@@ -11,7 +12,6 @@ import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useUser } from 'src/entities/user'
 import { useSocketAction } from 'src/shared/api'
-import type { ChatRoomRecord } from 'src/shared/lib'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import { CHAT_ROOM_NAME_MAX_LENGTH_PATTERN } from '../config/constants'
@@ -255,7 +255,7 @@ export const useChatRoomFormDialog = (
 
     chatRoomFormState.isSavingChatRoom = false
 
-    if (!response.ok || !response.payload?.roomId) return
+    if (!response.ok) return
 
     const { roomId } = response.payload
 
@@ -263,7 +263,7 @@ export const useChatRoomFormDialog = (
     openChatRoom(roomId)
   }
 
-  const updateChatRoom = async (room: ChatRoomRecord) => {
+  const updateChatRoom = async (room: ChatRoom) => {
     if (!canSubmitChatRoom.value || chatRoomFormState.isSavingChatRoom) return
 
     chatRoomFormState.isSavingChatRoom = true

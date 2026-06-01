@@ -1,8 +1,13 @@
-import { MESSAGE_BODY_MAX_LENGTH, MESSAGE_STATUS_VALUE, type EventEditMessage, type ImageObject } from 'global-shared'
+import {
+  MESSAGE_BODY_MAX_LENGTH,
+  MESSAGE_STATUS_VALUE,
+  type EventEditMessage,
+  type ImageObject,
+  type Message
+} from 'global-shared'
 import { computed, ref } from 'vue'
 
 import { useSocketAction } from 'src/shared/api'
-import type { MessageRecord } from 'src/shared/lib'
 
 import type { EditingMessageState } from '../config/types'
 import { cloneMediaObjects } from '../lib/clone-media-objects'
@@ -33,7 +38,7 @@ export const useMessageEdit = () => {
     return canSubmitDraft && !isUpdatingEditedMessage.value
   })
 
-  const canStartMessageEdit = (message: MessageRecord) => {
+  const canStartMessageEdit = (message: Message) => {
     const isOwnMessage = Boolean(message.isSelf)
     const hasEditableBody = Boolean(message.body.trim())
     const isSendingMessage = message.status === MESSAGE_STATUS_VALUE.SENDING
@@ -42,7 +47,7 @@ export const useMessageEdit = () => {
     return hasEditableMessage && !isSendingMessage
   }
 
-  const startMessageEdit = (message: MessageRecord, roomId: string) => {
+  const startMessageEdit = (message: Message, roomId: string) => {
     if (!canStartMessageEdit(message) || isUpdatingEditedMessage.value) return
 
     editingMessageState.value = {

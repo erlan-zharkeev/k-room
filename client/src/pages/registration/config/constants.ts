@@ -1,6 +1,6 @@
 import { USER_NICKNAME_MAX_LENGTH } from 'global-shared'
 
-import type { RegistrationInitialFormData } from '../model/types.model'
+import type { RegistrationInitialFormData } from '../model/types'
 
 export const DEFAULT_REGISTRATION_FORM_DATA: RegistrationInitialFormData = {
   nickname: '',

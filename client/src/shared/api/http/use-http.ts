@@ -1,4 +1,4 @@
-import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type ResponseType } from 'axios'
+import { AxiosError, type AxiosRequestConfig, type AxiosResponse, type Method, type ResponseType } from 'axios'
 import { AUTH_ENDPOINTS, isHttpSuccessStatus, REQ_STATUS, type Endpoints, type BackendResponse } from 'global-shared'
 
 import { TOAST_I18N } from 'src/shared/lib'
@@ -8,7 +8,7 @@ import { useAppToast } from 'src/shared/lib'
 import { refreshAuthTokens, shouldSkipAuthRefresh } from './auth-refresh'
 import { getHeaderValue } from './get-header-value'
 import { httpClient } from './http-client'
-import type { HttpRequestOptions, HttpRequestPayload, HttpRequest } from './types'
+import type { HttpRequestOptions, HttpRequestPayload } from './types'
 import { useHttpInterceptor } from './use-http-interceptor'
 
 export const useHttp = () => {
@@ -35,7 +35,7 @@ export const useHttp = () => {
   }
 
   const doHttpRequest = async <T, R extends ResponseType = 'json'>(
-    type: HttpRequest,
+    type: Method,
     endpoint: Endpoints,
     data: HttpRequestPayload = {},
     opts: HttpRequestOptions<R> = {}

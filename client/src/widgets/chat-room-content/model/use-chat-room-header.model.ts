@@ -1,15 +1,16 @@
+import type { ChatRoom } from 'global-shared'
 import { computed, type Ref } from 'vue'
 
 import { getRoomOtherUserIds } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
-import { type ChatRoomRecord, useI18n, useScreen } from 'src/shared/lib'
+import { useI18n, useScreen } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import { buildChatRoomTitle } from '../lib/build-chat-room-title'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
-export const useChatRoomHeader = (room: Ref<ChatRoomRecord>, isPrivateRoom: boolean) => {
+export const useChatRoomHeader = (room: Ref<ChatRoom>, isPrivateRoom: boolean) => {
   const { t } = useI18n()
   const { user } = useUser()
   const { isPortraitTabletOrLess } = useScreen()

@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import dotenv, { type DotenvParseOutput } from 'dotenv'
-import { formatAppName, readEnv, readSecretEnv, type PackageData } from 'global-shared'
+import { formatAppName, readEnv, readSecretEnv, type EnvKey, type PackageData } from 'global-shared'
 
 const stage = process.env.NODE_ENV ?? 'development'
 const envDir = path.resolve(process.cwd(), '..')
@@ -10,7 +10,7 @@ const envDir = path.resolve(process.cwd(), '..')
 const envs = (dotenv.config({ path: path.resolve(envDir, `.env.${stage}`) }).parsed ?? {}) as DotenvParseOutput
 const sharedEnvs = (dotenv.config({ path: path.resolve(envDir, '.env.shared') }).parsed ?? {}) as DotenvParseOutput
 const secretEnvs = readSecretEnv(path.resolve(envDir, '.env.secret'), fs)
-const getEnv = (key: string, source: DotenvParseOutput) =>
+const getEnv = (key: EnvKey, source: DotenvParseOutput) =>
   readEnv(key, source, { runtimeEnv: process.env, secretEnv: secretEnvs })
 
 const ACCESS_TOKEN_SECRET = getEnv('ACCESS_TOKEN_SECRET', envs)

@@ -17,7 +17,6 @@ export type {
   DoHttpRequest,
   CreateHttpErrorPayload,
   HttpRequestOptions,
-  HttpRequestPayload,
-  HttpRequest
+  HttpRequestPayload
 } from './http/types'
 export type { EmitSocketActionOptions } from './socket/types'

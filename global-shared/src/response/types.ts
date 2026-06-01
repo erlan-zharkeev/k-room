@@ -1,28 +1,17 @@
-import type { UserData } from '../user/types'
-
 export interface ConfirmEmailResponse {
   email: string
 }
 
-export type LoginResponse = UserData
-
-export type SignInWithProviderResponse = UserData
-
-export type GetUserDataResponse = UserData
-
-export interface SendConfirmationLinkResponse {
-  email: string
+export interface RequestCooldownResponse {
   nextRequestTime: number
+}
+
+export interface SendConfirmationLinkResponse extends RequestCooldownResponse {
+  email: string
   attempts: number
 }
 
-export interface SendPasswordRecoveryCodeResponse {
-  nextTimeRequest: number
-  debugCode?: string
-}
-
-export interface SendChangeEmailCodeResponse {
-  nextTimeRequest: number
+export interface CodeRequestResponse extends RequestCooldownResponse {
   debugCode?: string
 }
 

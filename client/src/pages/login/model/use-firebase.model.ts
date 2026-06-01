@@ -1,10 +1,5 @@
 import { getAuth, signInWithPopup } from 'firebase/auth'
-import {
-  AUTH_ENDPOINTS,
-  type FirebaseProvider,
-  type SignInWithProviderPayload,
-  type SignInWithProviderResponse
-} from 'global-shared'
+import { AUTH_ENDPOINTS, type FirebaseProvider, type SignInWithProviderPayload, type UserData } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
@@ -76,7 +71,7 @@ export const useFirebase = () => {
   }
 
   const signInWithCredential = async (credential: SignInWithProviderPayload) => {
-    const response = await doHttpRequest<SignInWithProviderResponse>('post', AUTH_ENDPOINTS.providerLogin, credential)
+    const response = await doHttpRequest<UserData>('post', AUTH_ENDPOINTS.providerLogin, credential)
     const { payload } = response.data
 
     await activateClientSession(payload)

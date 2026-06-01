@@ -1,8 +1,10 @@
+import type { ChatRoom } from 'global-shared'
+
 import { getRoomInterlocutorId } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useUser } from 'src/entities/user'
-import type { ChatRoomRecord, KnownUserRecord } from 'src/shared/lib'
+import type { KnownUserRecord } from 'src/shared/lib'
 
 export const useChatRoomUserLookup = () => {
   const { contactById } = useContact()
@@ -24,7 +26,7 @@ export const useChatRoomUserLookup = () => {
 
     return contactById.value.get(id) ?? knownUserById.value.get(id) ?? selfUser
   }
-  const getRoomInterlocutor = (room: ChatRoomRecord, userId: string) => getUserById(getRoomInterlocutorId(room, userId))
+  const getRoomInterlocutor = (room: ChatRoom, userId: string) => getUserById(getRoomInterlocutorId(room, userId))
   const getUsersByIds = (ids: readonly string[]) =>
     ids.reduce<NonNullable<ReturnType<typeof getUserById>>[]>((users, id) => {
       const user = getUserById(id)

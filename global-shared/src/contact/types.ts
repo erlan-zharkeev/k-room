@@ -21,8 +21,6 @@ export interface EventStatusContact {
   lastSeen?: number
 }
 
-export type EventChangeContactsData = UserPreview
-
 export interface EventGetContacts {
   contacts: Contact[]
   knownUsers: KnownUser[]
@@ -61,8 +59,6 @@ export interface EventUpdateInteraction {
   contactId: string
   interaction: Interaction
 }
-
-export type EventInviteReceived = Contact
 
 export interface EventUpdateContactInteractionSuccess {
   contactId: string

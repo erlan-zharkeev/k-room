@@ -1,12 +1,11 @@
 import type {
+  Call,
   EventAnswerCall,
   EventCallAccepted,
   EventCallEnded,
   EventCallsUpdated,
   EventCallStartedAt,
-  EventCallUpdated,
   EventCallUser,
-  EventChangeCallSettings,
   EventMarkCallAsVideo
 } from '../calls/types'
 import type {
@@ -29,14 +28,13 @@ import type {
   EventUserTyping
 } from '../chat/types'
 import type {
-  EventChangeContactsData,
+  Contact,
   EventContactAddSuccess,
   EventDeleteContact,
   EventDeleteContactSuccess,
   EventGetContacts,
   EventGetContactTypingStatus,
   EventGetSearchedContact,
-  EventInviteReceived,
   EventKnownUsersUpdated,
   EventSaveContact,
   EventSearchContact,
@@ -64,12 +62,13 @@ import type {
   EventUpdateMessageStatus,
   EventUpdatePinnedMessage
 } from '../message/types'
+import type { BasicStreamSettings } from '../shared/types'
 import type { ReqStatus } from '../status/types'
+import type { UserPreview } from '../user/types'
 
-export interface SocketAckSuccess<TPayload = void> {
-  ok: true
-  payload?: TPayload
-}
+export type SocketAckSuccess<TPayload = void> = [TPayload] extends [void]
+  ? { ok: true }
+  : { ok: true; payload: TPayload }
 
 export interface SocketAckFailure<TReason extends string = string> {
   ok: false
@@ -138,7 +137,7 @@ export interface ClientToServerSocketPayloadMap {
   'call-user': EventCallUser
   'answer-call': EventAnswerCall
   'call-ended': EventCallEnded
-  'change-call-settings': EventChangeCallSettings
+  'change-call-settings': BasicStreamSettings
   'mark-call-as-video': EventMarkCallAsVideo
 }
 
@@ -169,9 +168,9 @@ export interface ServerToClientSocketPayloadMap {
   'contact-delete-success': EventDeleteContactSuccess
   'contact-add-success': EventContactAddSuccess
   'contact-status-updated': EventStatusContact
-  'contact-data-changed': EventChangeContactsData
+  'contact-data-changed': UserPreview
   'contact-interaction-updated': EventUpdateContactInteractionSuccess
-  'invite-received': EventInviteReceived
+  'invite-received': Contact
   'get-contact-typing-status': EventGetContactTypingStatus
   'get-searched-contact': EventGetSearchedContact
   'actual-chat-rooms': EventGetRooms
@@ -192,7 +191,7 @@ export interface ServerToClientSocketPayloadMap {
   'message-status-updated': EventUpdateMessageStatus
   'messages-status-updated': EventMessagesStatusUpdated
   'calls-data-loaded': EventCallsUpdated
-  'call-data-changed': EventCallUpdated
+  'call-data-changed': Call
   'call-user': EventCallUser
   'call-accepted': EventCallAccepted
   'call-started-at': EventCallStartedAt

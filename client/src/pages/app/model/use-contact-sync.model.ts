@@ -1,14 +1,13 @@
 import type {
-  EventChangeContactsData,
+  Contact,
   EventGetContacts,
   EventKnownUsersUpdated,
-  EventInviteReceived,
   EventContactAddSuccess,
   EventDeleteContactSuccess,
   EventGetContactTypingStatus,
   EventStatusContact,
   EventUpdateContactInteractionSuccess,
-  Contact
+  UserPreview
 } from 'global-shared'
 
 import { getRequiredContactSystemData, mergeContactLocalState, useContact } from 'src/entities/contact'
@@ -78,7 +77,7 @@ export const useContactSync = () => {
     }
   }
 
-  const updateContactData = async ({ avatarId, id, nickname }: EventChangeContactsData) => {
+  const updateContactData = async ({ avatarId, id, nickname }: UserPreview) => {
     const [existingContact, existingKnownUser] = await Promise.all([getContact(id), getKnownUser(id)])
     const changes = {
       avatarId,
@@ -102,7 +101,7 @@ export const useContactSync = () => {
     await updateStoredContactData(contactId, { interactionType: interaction })
   }
 
-  const processInvitation = async (payload: EventInviteReceived) => {
+  const processInvitation = async (payload: Contact) => {
     const existingContact = await getContact(payload.id)
     const systemData = getRequiredContactSystemData()
 

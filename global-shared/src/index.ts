@@ -11,10 +11,8 @@ export type {
   CallFlow,
   Call,
   EventMarkCallAsVideo,
-  EventCallUpdated,
   EventCallsUpdated,
   EventCallUser,
-  EventChangeCallSettings,
   EventCallAccepted,
   EventAnswerCall,
   EventCallStartedAt,
@@ -56,13 +54,7 @@ export type {
 } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
-export type {
-  Codes,
-  CodeValidationPayload,
-  SendChangeEmailCodePayload,
-  SendPasswordRecoveryCodePayload,
-  ValidateChangeEmailCodePayload
-} from './codes/types'
+export type { Codes, EmailCodeRequestPayload, EmailCodeValidationPayload } from './codes/types'
 
 export type {
   Interaction,
@@ -70,7 +62,6 @@ export type {
   KnownUser,
   ContactMap,
   EventStatusContact,
-  EventChangeContactsData,
   EventGetContacts,
   EventKnownUsersUpdated,
   EventSaveContact,
@@ -79,7 +70,6 @@ export type {
   EventGetSearchedContact,
   EventGetContactTypingStatus,
   EventUpdateInteraction,
-  EventInviteReceived,
   EventUpdateContactInteractionSuccess,
   EventContactAddSuccess,
   EventDeleteContactSuccess
@@ -112,9 +102,15 @@ export {
 } from './endpoints/constants'
 export type { RouteName, Endpoints } from './endpoints/types'
 
-export type { EnvVariables, EnvSharedVariables } from './env/types'
+export type {
+  EnvKey,
+  EnvSource,
+  EnvVariables,
+  EnvSharedVariables,
+  ReadEnvOptions,
+  SecretEnvFileReader
+} from './env/types'
 export { parseEnvContent, readEnv, readSecretEnv } from './env/lib/read-env'
-export type { EnvSource, ReadEnvOptions, SecretEnvFileReader } from './env/lib/read-env'
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/constants'
 export { defineI18n } from './language/lib/define-i18n'
@@ -122,6 +118,7 @@ export type { AppLanguage, EventUpdateLanguage, LocalizedText, LocalizedTextMap 
 export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/types'
 
 export {
+  MEDIA_KIND_HEADER_NAME,
   MEDIA_AUDIO_UPLOAD_EXTENSIONS,
   MEDIA_AVATAR_VALIDATION_OPTIONS,
   MEDIA_BUCKET_SUPPORTED_KIND_MAP,
@@ -147,7 +144,6 @@ export type {
   DocumentObject,
   ImageObject,
   VideoObject,
-  MediaFileValue,
   EventMediaFilesDeleted
 } from './media/types'
 
@@ -198,16 +194,13 @@ export type {
   EventUpdatedMessageReactions
 } from './message/types'
 
-export type { ChangePasswordPayload, CreateNewPasswordPayload } from './requests/types'
+export type { ChangePasswordPayload, CreateNewPasswordPayload, UpdateUserDataPayload } from './requests/types'
 
 export type {
+  CodeRequestResponse,
   ConfirmEmailResponse,
-  LoginResponse,
-  SignInWithProviderResponse,
-  GetUserDataResponse,
+  RequestCooldownResponse,
   SendConfirmationLinkResponse,
-  SendChangeEmailCodeResponse,
-  SendPasswordRecoveryCodeResponse,
   ValidateChangeEmailCodeResponse,
   ValidatePasswordRecoveryCodeResponse
 } from './response/types'

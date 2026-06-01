@@ -1,4 +1,10 @@
-import { MESSAGE_BODY_MAX_LENGTH, MESSAGE_STATUS_VALUE, type EventSendMessage, type Message } from 'global-shared'
+import {
+  MESSAGE_BODY_MAX_LENGTH,
+  MESSAGE_STATUS_VALUE,
+  type ChatRoom,
+  type EventSendMessage,
+  type Message
+} from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, type Ref, ref } from 'vue'
 
@@ -7,7 +13,6 @@ import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 import { useChatRoomTypingEmitter } from 'src/features/chat-room-typing'
 import { socket } from 'src/shared/api'
-import type { ChatRoomRecord } from 'src/shared/lib'
 
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 import { cloneMediaObjects } from '../lib/clone-media-objects'
@@ -17,10 +22,7 @@ import { useMessageAttachmentDraft } from './use-message-attachment-draft.model'
 import { useMessageDraftReference } from './use-message-draft-reference.model'
 import { useMessageEdit } from './use-message-edit.model'
 
-export const useChatRoomFooter = (
-  room: Ref<ChatRoomRecord>,
-  onSelectEditingMessage: ChatRoomFooterSelectEditingMessage
-) => {
+export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: ChatRoomFooterSelectEditingMessage) => {
   const { mutate } = useChatRoom()
   const { put } = useMessage()
   const { user } = useUser()

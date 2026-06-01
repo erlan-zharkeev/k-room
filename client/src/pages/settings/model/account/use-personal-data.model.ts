@@ -1,12 +1,12 @@
 import type { INmorphCustomFileData as NmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import { useClipboard } from '@vueuse/core'
 import {
-  type GetUserDataResponse,
   USER_ENDPOINTS,
   createUpdateUserDataSchema,
   createValidationMessages,
   isNicknameValid,
-  normalizeNickname
+  normalizeNickname,
+  type UserData
 } from 'global-shared'
 import { safeParse } from 'valibot'
 import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
@@ -144,7 +144,7 @@ export const usePersonalData = () => {
 
     try {
       isAccountSaving.value = true
-      const response = await doHttpRequest<GetUserDataResponse>('patch', USER_ENDPOINTS.editUserData, requestFormData, {
+      const response = await doHttpRequest<UserData>('patch', USER_ENDPOINTS.editUserData, requestFormData, {
         contentType: 'multipart/form-data'
       })
       const updatedUserData = response.data.payload

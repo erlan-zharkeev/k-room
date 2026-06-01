@@ -7,19 +7,19 @@ import type {
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type {
   AudioObject,
+  ChatRoom,
   DocumentObject,
   ImageObject,
   MediaId,
   MediaKind,
   MediaObject,
+  Message,
   MessageLinkPreview,
   MessageReaction,
   RepliedMessage,
   VideoObject
 } from 'global-shared'
 import type { Component, Ref } from 'vue'
-
-import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
 import type {
   MESSAGE_ATTACHMENT_DRAFT_KIND,
@@ -31,18 +31,18 @@ import type {
 } from './constants'
 
 export interface ChatRoomMessagesProps {
-  room: ChatRoomRecord
+  room: ChatRoom
   isPrivateRoom: boolean
   targetMessageId: string
 }
 
 export interface ChatRoomHeaderProps {
-  room: ChatRoomRecord
+  room: ChatRoom
   isPrivateRoom: boolean
 }
 
 export interface ChatRoomFooterProps {
-  room: ChatRoomRecord
+  room: ChatRoom
 }
 
 export interface ChatRoomFooterEmits {
@@ -76,7 +76,7 @@ export interface MessageDraftReferenceState {
 }
 
 export interface ChatRoomPinnedMessageProps {
-  room: ChatRoomRecord
+  room: ChatRoom
 }
 
 export interface ChatRoomPinnedMessageEmits {
@@ -97,8 +97,8 @@ export type ChatRoomMessagesTargetMessageScrolled = () => void
 
 export interface MessageBodyProps {
   isPrivateRoom: boolean
-  message: MessageRecord
-  room: ChatRoomRecord
+  message: Message
+  room: ChatRoom
 }
 
 export interface MessageBodyEmits {
@@ -133,12 +133,12 @@ export interface MessageLinkPreviewProps {
 }
 
 export interface MessageReactionsProps {
-  message: MessageRecord
-  room: ChatRoomRecord
+  message: Message
+  room: ChatRoom
 }
 
 export interface MessageStatusDotsProps {
-  message: MessageRecord
+  message: Message
 }
 
 export interface MessageReactionGroupUser {
@@ -223,10 +223,8 @@ export type MessageMediaGalleryItem = NmorphMediaGalleryItem & {
   name: string
 }
 
-export interface MessageAttachmentDraftListBaseItem {
+export interface MessageAttachmentDraftListBaseItem extends Pick<MediaObject, 'name' | 'src'> {
   contentType?: string
-  src: string
-  name: string
   size?: number
 }
 
@@ -284,17 +282,17 @@ export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyo
 export type MessageStatusDotTone = (typeof MESSAGE_STATUS_DOT_TONE)[keyof typeof MESSAGE_STATUS_DOT_TONE]
 
 export interface MessageContextMenuProps {
-  message: MessageRecord
-  room: ChatRoomRecord
+  message: Message
+  room: ChatRoom
 }
 
 export interface MessageDeleteDialogProps {
-  message: MessageRecord
+  message: Message
   roomId: string
 }
 
 export interface MessageForwardDialogProps {
-  message: MessageRecord
+  message: Message
   sourceRoomId: string
 }
 
@@ -304,7 +302,7 @@ export interface MessageLoadedRange {
 }
 
 export interface ChatRoomMessageNavigationParams {
-  room: Ref<ChatRoomRecord>
+  room: Ref<ChatRoom>
   targetMessageId: Ref<string>
   findLoadedRangeByMessageIndex: (roomId: string, index: number) => MessageLoadedRange | undefined
   loadMessagesAround: (messageId: string) => Promise<void>
@@ -316,7 +314,7 @@ export interface MessageListBuildParams {
   roomId: string
   messageIds: string[]
   loadedMessageRanges: MessageLoadedRange[]
-  messageById: Map<string, MessageRecord>
+  messageById: Map<string, Message>
   formatDate: (timestamp: number) => string
 }
 
@@ -331,8 +329,8 @@ export interface MessageContextMenuOption {
 }
 
 export interface MessageReactionPickerProps {
-  message: MessageRecord
-  room: ChatRoomRecord
+  message: Message
+  room: ChatRoom
 }
 
 export interface MessageReactionPickerEmits {
@@ -363,7 +361,7 @@ export interface MessageListMessageItem {
 }
 
 export interface MessageVirtualListMessageItem extends MessageListMessageItem {
-  message: MessageRecord
+  message: Message
 }
 
 export type MessageListItem = MessageListGapItem | MessageListDateSeparatorItem | MessageListMessageItem

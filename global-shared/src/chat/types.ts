@@ -1,4 +1,4 @@
-import type { MediaFileValue, MediaId } from '../media/types'
+import type { ImageObject, MediaId } from '../media/types'
 import type { Message } from '../message/types'
 
 import { CHAT_KIND } from './constants'
@@ -34,14 +34,14 @@ export type EventGetRooms = EventGetRoom[]
 export interface EventCreateRoom {
   memberIds: string[]
   chatName?: string
-  avatarFile?: MediaFileValue
+  avatarFile?: ImageObject
 }
 
 export interface EventUpdateChatRoom {
   roomId: string
   memberIds: string[]
   chatName: string
-  avatarFile?: MediaFileValue | null
+  avatarFile?: ImageObject | null
 }
 
 export interface EventDeleteChatRoom {

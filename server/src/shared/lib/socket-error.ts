@@ -1,8 +1,7 @@
 import { isString, type LocalizedText, REQ_STATUS, type SocketAckResponse } from 'global-shared'
 
 import { SHARED_I18N } from '../i18n'
-import type { SocketInstance } from '../types/socket'
-import type { SocketErrorMiddlewareOptions, ThrowSocketErrorOptions } from '../types/socket-error'
+import type { SocketErrorMiddlewareOptions, SocketInstance, ThrowSocketErrorOptions } from '../types'
 
 import { isAppError } from './app-error'
 import { getIO } from './io'
@@ -81,7 +80,7 @@ export const socketAckMiddleware =
     try {
       const response = await handler(payload)
 
-      ack?.(response ?? ({ ok: true } satisfies SocketAckResponse<TResponsePayload, TReason>))
+      ack?.(response ?? ({ ok: true } as SocketAckResponse<TResponsePayload, TReason>))
     } catch (error) {
       if (isAppError(error)) {
         throwSocketError(socket.id, error.messageSource, {

@@ -1,5 +1,12 @@
 import type { INmorphFromDataExpose as NmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
-import { CODES_ENDPOINTS, EMAIL_CODE_LENGTH, NON_EMPTY_PATTERN, createValidationMessages } from 'global-shared'
+import {
+  CODES_ENDPOINTS,
+  EMAIL_CODE_LENGTH,
+  NON_EMPTY_PATTERN,
+  type CodeRequestResponse,
+  createValidationMessages,
+  type ValidateChangeEmailCodeResponse
+} from 'global-shared'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
@@ -46,7 +53,7 @@ export const useChangeEmail = () => {
 
     try {
       isEmailCodeSending.value = true
-      await doHttpRequest<null>('post', CODES_ENDPOINTS.sendEmailCodeChangeEmail, {
+      await doHttpRequest<CodeRequestResponse>('post', CODES_ENDPOINTS.sendEmailCodeChangeEmail, {
         email: normalizedNextEmail.value
       })
       codeSentEmail.value = normalizedNextEmail.value
@@ -61,7 +68,7 @@ export const useChangeEmail = () => {
 
     try {
       isEmailCodeValidating.value = true
-      await doHttpRequest<null>('post', CODES_ENDPOINTS.validateEmailCodeChangeEmail, {
+      await doHttpRequest<ValidateChangeEmailCodeResponse>('post', CODES_ENDPOINTS.validateEmailCodeChangeEmail, {
         email: normalizedNextEmail.value,
         code: otpCode.value
       })

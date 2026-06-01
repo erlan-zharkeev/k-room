@@ -1,4 +1,4 @@
-import { USER_ENDPOINTS, type GetUserDataResponse } from 'global-shared'
+import { USER_ENDPOINTS, type UserData } from 'global-shared'
 
 import { useUser } from 'src/entities/user'
 import { isHttpError, useHttp, useSocketConnectionMonitor } from 'src/shared/api'
@@ -16,7 +16,7 @@ const initializeClientData = async () => {
 
   const restoreUserSession = async () => {
     try {
-      const response = await doHttpRequest<GetUserDataResponse>('get', USER_ENDPOINTS.getUserData)
+      const response = await doHttpRequest<UserData>('get', USER_ENDPOINTS.getUserData)
 
       await activateClientSession(response.data.payload, false)
     } catch (error) {

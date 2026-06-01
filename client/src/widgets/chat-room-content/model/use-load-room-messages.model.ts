@@ -1,5 +1,6 @@
 import {
   MESSAGE_LOAD_DIRECTION,
+  type ChatRoom,
   type EventLoadRoomMessages,
   type EventRoomMessagesLoaded,
   type MessageLoadDirection
@@ -8,7 +9,6 @@ import { computed, reactive, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { useSocketAction } from 'src/shared/api'
-import type { ChatRoomRecord } from 'src/shared/lib'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 import type { MessageLoadedRange } from '../config/types'
@@ -69,7 +69,7 @@ const updateLoadedMessageRanges = (roomId: string, indexes: number[]) => {
   loadedMessageRangesByRoomId[roomId] = normalizeLoadedMessageRanges([...currentRanges, ...loadedRanges])
 }
 
-const resolveMessageIndexes = (room: ChatRoomRecord, messages: EventRoomMessagesLoaded['messages']) =>
+const resolveMessageIndexes = (room: ChatRoom, messages: EventRoomMessagesLoaded['messages']) =>
   messages.flatMap(({ id }) => {
     const index = room.messages.indexOf(id)
 
@@ -123,7 +123,7 @@ const reconcileLoadedMessageRanges = (roomId: string, previousMessageIds: string
   loadedMessageRangesByRoomId[roomId] = createLoadedRangesFromIndexes(loadedIndexes)
 }
 
-export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
+export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
   const { bulkPut } = useMessage()
   const { emitSocketAction } = useSocketAction()
   const roomId = computed(() => room?.value.id ?? '')
@@ -131,16 +131,12 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
   const isLoading = computed(() => (roomId.value ? isRoomMessagesLoading(roomId.value) : false))
   const hasLoadedMessages = computed(() => Boolean(loadedMessageRanges.value.length))
 
-  const saveLoadedRoomMessages = async (targetRoom: ChatRoomRecord, payload: EventRoomMessagesLoaded) => {
+  const saveLoadedRoomMessages = async (targetRoom: ChatRoom, payload: EventRoomMessagesLoaded) => {
     await bulkPut(payload.messages)
     updateLoadedMessageRanges(targetRoom.id, resolveMessageIndexes(targetRoom, payload.messages))
   }
 
-  const loadRoomMessages = async (
-    targetRoom: ChatRoomRecord,
-    direction: MessageLoadDirection,
-    anchorMessageId?: string
-  ) => {
+  const loadRoomMessages = async (targetRoom: ChatRoom, direction: MessageLoadDirection, anchorMessageId?: string) => {
     const loadKey = createLoadKey(targetRoom.id, direction, anchorMessageId)
 
     if (loadingRoomMessageRanges.has(loadKey)) return
@@ -157,7 +153,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     try {
       const response = await emitSocketAction('load-room-messages', payload)
 
-      if (response.ok && response.payload) {
+      if (response.ok) {
         await saveLoadedRoomMessages(targetRoom, response.payload)
       }
     } finally {
@@ -171,7 +167,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     await loadRoomMessages(room.value, MESSAGE_LOAD_DIRECTION.LATEST)
   }
 
-  const loadMessagesBeforeRange = (targetRoom: ChatRoomRecord, range: MessageLoadedRange) => {
+  const loadMessagesBeforeRange = (targetRoom: ChatRoom, range: MessageLoadedRange) => {
     const anchorMessageId = targetRoom.messages[range.startIndex]
 
     if (!anchorMessageId) return Promise.resolve()
@@ -179,7 +175,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoomRecord>) => {
     return loadRoomMessages(targetRoom, MESSAGE_LOAD_DIRECTION.BEFORE, anchorMessageId)
   }
 
-  const loadMessagesAfterRange = (targetRoom: ChatRoomRecord, range: MessageLoadedRange) => {
+  const loadMessagesAfterRange = (targetRoom: ChatRoom, range: MessageLoadedRange) => {
     const anchorMessageId = targetRoom.messages[range.endIndex]
 
     if (!anchorMessageId) return Promise.resolve()

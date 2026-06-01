@@ -1,10 +1,9 @@
-import type { EventUpdatePinnedMessage } from 'global-shared'
+import type { ChatRoom, EventUpdatePinnedMessage, Message } from 'global-shared'
 import { computed, ref, type Ref } from 'vue'
 
 import { useSocketAction } from 'src/shared/api'
-import type { ChatRoomRecord, MessageRecord } from 'src/shared/lib'
 
-export const useMessagePin = (message: Ref<MessageRecord>, room: Ref<ChatRoomRecord>) => {
+export const useMessagePin = (message: Ref<Message>, room: Ref<ChatRoom>) => {
   const { emitSocketAction } = useSocketAction()
   const isUpdatingPinnedMessage = ref(false)
   const isMessagePinned = computed(() => room.value.pinnedMessageId === message.value.id)
