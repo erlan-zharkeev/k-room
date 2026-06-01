@@ -6,6 +6,7 @@ export const TOAST_LIFE_MS = {
 } as const
 
 export const TOAST_PLACEMENT = {
+  call: 'top-right',
   system: 'top-center',
   message: 'top-right'
 } as const

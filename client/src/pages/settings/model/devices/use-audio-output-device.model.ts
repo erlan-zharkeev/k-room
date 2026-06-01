@@ -4,7 +4,7 @@ import { isFunction } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { MESSAGE_NOTIFICATION_SOUND_SRC, useI18n } from 'src/shared/lib'
+import { APP_NOTIFICATION_SOUND_SRC, useI18n } from 'src/shared/lib'
 
 import {
   DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
@@ -93,7 +93,7 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = true
       stopAudioOutput()
 
-      const audio = new Audio(MESSAGE_NOTIFICATION_SOUND_SRC)
+      const audio = new Audio(APP_NOTIFICATION_SOUND_SRC)
       outputAudio.value = audio
 
       if (isFunction(audio.setSinkId) && settings.value.ioDevices.audioOutputDeviceId) {

@@ -1,9 +1,9 @@
-import { type EventMessageDelivered, isFunction, isMessageStatusDelivered } from 'global-shared'
+import { type EventMessageDelivered, isMessageStatusDelivered } from 'global-shared'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
-import { MESSAGE_NOTIFICATION_SOUND_SRC, useAppToast } from 'src/shared/lib'
+import { playAppNotificationSound, useAppToast } from 'src/shared/lib'
 
 export const useMessageNotification = () => {
   const { getById } = useChatRoom()
@@ -42,17 +42,6 @@ export const useMessageNotification = () => {
     )
   }
 
-  const playNotificationSound = async () => {
-    const audio = new Audio(MESSAGE_NOTIFICATION_SOUND_SRC)
-    const { audioOutputDeviceId } = settings.value.ioDevices
-
-    if (isFunction(audio.setSinkId) && audioOutputDeviceId) {
-      await audio.setSinkId(audioOutputDeviceId)
-    }
-
-    await audio.play()
-  }
-
   const playDeliveredMessageSound = async (payload: EventMessageDelivered) => {
     const { general, messages } = settings.value.notifications
 
@@ -62,7 +51,7 @@ export const useMessageNotification = () => {
     if (!messages.sound) return
 
     try {
-      await playNotificationSound()
+      await playAppNotificationSound(settings.value.ioDevices.audioOutputDeviceId)
     } catch (error) {
       void error
     }

@@ -35,5 +35,20 @@ export const APP_PAGE_I18N = defineI18n({
     en: 'Load more',
     ru: 'Загрузить еще',
     zh: '加载更多'
+  },
+  incomingRoomCall: {
+    en: 'Incoming call',
+    ru: 'Входящий звонок',
+    zh: '来电'
+  },
+  privateRoomCall: {
+    en: 'Private chat',
+    ru: 'Личный чат',
+    zh: '私聊'
+  },
+  groupRoomCall: {
+    en: 'Group chat',
+    ru: 'Групповой чат',
+    zh: '群聊'
   }
 })
