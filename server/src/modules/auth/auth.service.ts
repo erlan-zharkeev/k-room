@@ -24,8 +24,8 @@ import { SecurityService } from '../security/security.service'
 import { SessionService } from '../session/session.service'
 import { loadGoogleAvatar } from '../user/lib/load-google-avatar'
 import { updateUserAvatar } from '../user/lib/update-user-avatar'
+import { confirmUserEmailIfNeeded } from '../user/lib/user-persistence'
 import { USER_I18N } from '../user/user.i18n'
-import { UserModel } from '../user/user.model'
 import { UserService } from '../user/user.service'
 
 import {
@@ -121,10 +121,7 @@ export class AuthService {
   async confirmEmail(token: string): Promise<ConfirmEmailResult> {
     const decoded = await this.sessionService.verifyToken(token, SERVER_ENV.secret.emailConfirmSecret)
 
-    const updateResult = await UserModel.updateOne(
-      { _id: decoded.id, 'system.confirmed': { $ne: true } },
-      { $set: { 'system.confirmed': true } }
-    )
+    const emailWasConfirmed = await confirmUserEmailIfNeeded(decoded.id)
 
     const user = await this.userService.findById(decoded.id)
     if (!user) {
@@ -133,7 +130,7 @@ export class AuthService {
 
     return {
       email: user.personal.email,
-      alreadyConfirmed: updateResult.modifiedCount !== 1
+      alreadyConfirmed: !emailWasConfirmed
     }
   }
 

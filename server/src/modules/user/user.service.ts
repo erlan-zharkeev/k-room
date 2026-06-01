@@ -11,7 +11,7 @@ import {
 
 import { AppError } from 'src/shared/lib/app-error'
 
-import { CodeModel } from '../codes/codes.model'
+import { clearPasswordRecoveryCode, findPasswordRecoveryCodeByQuery } from '../codes/lib/code-persistence'
 import { isCodeExpired } from '../codes/lib/is-code-expired'
 import { deleteBucketFileById, withUploadedMediaCleanup } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
@@ -90,7 +90,7 @@ export class UserService {
   }
 
   async resetPassword({ codeToValidate, password }: CreateNewPasswordPayload) {
-    const code = await CodeModel.findOne({ 'codes.passwordRecovery.query.value': codeToValidate })
+    const code = await findPasswordRecoveryCodeByQuery(codeToValidate)
 
     if (!code) {
       throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.failed)
@@ -109,15 +109,7 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, 6)
 
     await UserModel.findOneAndUpdate({ _id: code._id }, { 'system.password': hashedPassword })
-    await code.updateOne({
-      $set: {
-        'codes.passwordRecovery.query.value': '',
-        'codes.passwordRecovery.query.expiresAt': 0,
-        'codes.passwordRecovery.email.value': '',
-        'codes.passwordRecovery.email.expiresAt': 0,
-        nextRequestPossibleAt: null
-      }
-    })
+    await clearPasswordRecoveryCode(String(code._id))
   }
 
   async changePassword({ userId, currentPassword, password }: ChangePasswordParams) {

@@ -2,7 +2,7 @@ import { type ImageObject, type RepliedMessage, isString } from 'global-shared'
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
-import { ChatRoomModel } from '../../chat-rooms/chat-rooms.model'
+import { findSourceRoomByMessageForUser } from '../../chat-rooms/lib/chat-room-persistence'
 import { MessageModel } from '../messages.model'
 import type { MessageDocument, ResolveRepliedMessageParams } from '../messages.types'
 
@@ -30,7 +30,7 @@ export const resolveRepliedMessage = async ({
   let sourceRoomId = roomId
 
   if (isForwardMessage && !isRoomMessage) {
-    const sourceRoom = await ChatRoomModel.findOne({ users: userId, messages: repliedMessage.id }).select('_id').lean()
+    const sourceRoom = await findSourceRoomByMessageForUser(userId, repliedMessage.id)
 
     if (!sourceRoom) {
       return null

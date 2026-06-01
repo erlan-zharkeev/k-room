@@ -7,7 +7,7 @@ import {
 
 import { AppError } from 'src/shared/lib/app-error'
 
-import { UserModel } from '../../user/user.model'
+import { loadUsersChatRoomsByIds } from '../../user/lib/user-persistence'
 import { CHAT_ROOMS_I18N } from '../chat-rooms.i18n'
 
 const assertChatRoomMemberLimit = (userIds: string[]) => {
@@ -25,7 +25,7 @@ const assertChatRoomNameLimit = (chatName: string) => {
 const assertUserChatRoomLimit = async (userIds: string[]) => {
   if (!userIds.length) return
 
-  const users = await UserModel.find({ _id: { $in: userIds } }, { 'personal.chatRooms': 1 }).lean()
+  const users = await loadUsersChatRoomsByIds(userIds)
   const isLimitReached = users.some((user) => user.personal.chatRooms.length >= USER_CHAT_ROOM_LIMIT)
 
   if (isLimitReached) {

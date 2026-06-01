@@ -11,7 +11,7 @@ import type { SocketInstance } from 'src/shared/types/socket'
 
 import { RedisService } from '../security/redis.service'
 import { resolveUserRelatedRecipientIds } from '../user/lib/resolve-user-recipient-ids'
-import { UserModel } from '../user/user.model'
+import { updateUserLastSeen } from '../user/lib/user-persistence'
 
 import {
   PRESENCE_REFRESH_INTERVAL_MS,
@@ -180,7 +180,7 @@ export class PresenceService implements OnModuleDestroy {
     }
 
     await this.redisService.removeSetValue(PRESENCE_ONLINE_USERS_KEY, userId)
-    await UserModel.updateOne({ _id: userId }, { $set: { 'public.lastSeen': lastSeen } })
+    await updateUserLastSeen(userId, lastSeen)
     await this.emitContactStatus(userId, false, lastSeen)
   }
 

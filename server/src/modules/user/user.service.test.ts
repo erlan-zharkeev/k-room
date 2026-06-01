@@ -9,7 +9,8 @@ const mediaMock = vi.hoisted(() => ({
 }))
 
 const codeModelMock = vi.hoisted(() => ({
-  findOne: vi.fn()
+  findOne: vi.fn(),
+  updateOne: vi.fn()
 }))
 
 const userModelMock = vi.hoisted(() => {
@@ -145,7 +146,6 @@ describe('user.service', () => {
   })
 
   it('resets password only with valid query token and clears used recovery state', async () => {
-    const updateOne = vi.fn()
     const service = new UserService()
 
     vi.spyOn(Date, 'now').mockReturnValue(100_000)
@@ -159,7 +159,6 @@ describe('user.service', () => {
           }
         }
       },
-      updateOne
     })
 
     await service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' })
@@ -168,15 +167,20 @@ describe('user.service', () => {
       { _id: 'user-1' },
       { 'system.password': expect.any(String) }
     )
-    expect(updateOne).toHaveBeenCalledWith({
-      $set: {
-        'codes.passwordRecovery.query.value': '',
-        'codes.passwordRecovery.query.expiresAt': 0,
-        'codes.passwordRecovery.email.value': '',
-        'codes.passwordRecovery.email.expiresAt': 0,
-        nextRequestPossibleAt: null
+    expect(codeModelMock.updateOne).toHaveBeenCalledWith(
+      {
+        _id: 'user-1'
+      },
+      {
+        $set: {
+          'codes.passwordRecovery.query.value': '',
+          'codes.passwordRecovery.query.expiresAt': 0,
+          'codes.passwordRecovery.email.value': '',
+          'codes.passwordRecovery.email.expiresAt': 0,
+          nextRequestPossibleAt: null
+        }
       }
-    })
+    )
   })
 
   it('changes user email when target email is free', async () => {
