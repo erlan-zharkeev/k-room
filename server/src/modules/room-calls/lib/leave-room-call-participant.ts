@@ -51,6 +51,7 @@ export const leaveRoomCallParticipant = async (
   const recipientIds = activeParticipants.map((participant) => participant.userId)
 
   emitToUsers(recipientIds, 'room-call-left', {
+    leftAt,
     reason,
     roomCallId,
     userId
@@ -58,6 +59,7 @@ export const leaveRoomCallParticipant = async (
 
   if (shouldFinishRoomCall) {
     emitToUsers(recipientIds, 'room-call-ended', {
+      finishedAt: leftAt,
       roomCallId
     })
   }

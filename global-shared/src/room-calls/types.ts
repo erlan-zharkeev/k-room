@@ -82,16 +82,19 @@ export interface EventRoomCallStarted {
 export interface EventRoomCallJoined {
   roomCallId: string
   participant: RoomCallParticipant
+  startedAt: number
 }
 
 export interface EventRoomCallLeft {
   roomCallId: string
   userId: string
   reason: RoomCallLeaveReason
+  leftAt: number
 }
 
 export interface EventRoomCallEnded {
   roomCallId: string
+  finishedAt: number
 }
 
 export interface EventRoomCallMediaStateUpdated {

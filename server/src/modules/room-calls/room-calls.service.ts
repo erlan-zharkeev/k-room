@@ -111,7 +111,8 @@ export const joinRoomCall = async (
 
   emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-joined', {
     participant,
-    roomCallId
+    roomCallId,
+    startedAt
   })
 
   return {
