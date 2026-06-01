@@ -1,4 +1,10 @@
-import { isString, type LocalizedText, REQ_STATUS, type SocketAckResponse } from 'global-shared'
+import {
+  isString,
+  type LocalizedText,
+  REQ_STATUS,
+  type SocketAckFailure,
+  type SocketAckResponse
+} from 'global-shared'
 
 import { SHARED_I18N } from '../i18n'
 import type { SocketErrorMiddlewareOptions, SocketInstance, ThrowSocketErrorOptions } from '../types'
@@ -65,6 +71,19 @@ export const socketErrorMiddleware =
     }
   }
 
+const buildSocketAckFailure = <TReason extends string>(error: unknown): SocketAckFailure<TReason> => {
+  const response: SocketAckFailure<TReason> = {
+    ok: false,
+    handledByGlobalError: true
+  }
+
+  if (isAppError(error) && isString(error.payload)) {
+    response.reason = error.payload as TReason
+  }
+
+  return response
+}
+
 export const socketAckMiddleware =
   <TPayload = void, TResponsePayload = void, TReason extends string = string>(
     socket: SocketInstance,
@@ -96,6 +115,6 @@ export const socketAckMiddleware =
         })
       }
 
-      ack?.({ ok: false, handledByGlobalError: true })
+      ack?.(buildSocketAckFailure<TReason>(error))
     }
   }

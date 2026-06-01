@@ -1,4 +1,9 @@
-import { REQ_STATUS, ROOM_CALL_PARTICIPANT_LIMIT, ROOM_CALL_STATUS } from 'global-shared'
+import {
+  REQ_STATUS,
+  ROOM_CALL_ACK_FAILURE_REASON,
+  ROOM_CALL_PARTICIPANT_LIMIT,
+  ROOM_CALL_STATUS
+} from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
 
@@ -29,13 +34,25 @@ export const assertRoomCallStartAccess = async (userId: string, roomId: string) 
   const room = await findRoomUsersByUser(roomId, userId)
 
   if (!room) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallStartFailed)
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallStartFailed,
+      true,
+      undefined,
+      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
+    )
   }
 
   const activeRoomCall = await findActiveRoomCallByRoomId(roomId)
 
   if (activeRoomCall) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAlreadyActive)
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallAlreadyActive,
+      true,
+      undefined,
+      ROOM_CALL_ACK_FAILURE_REASON.ALREADY_ACTIVE
+    )
   }
 
   return room
@@ -45,20 +62,38 @@ export const assertRoomCallJoinAccess = async (userId: string, roomCallId: strin
   const roomCall = await findActiveRoomCallById(roomCallId)
 
   if (!roomCall) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallAccessFailed,
+      true,
+      undefined,
+      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
+    )
   }
 
   const room = await findRoomUsersByUser(roomCall.roomId, userId)
 
   if (!room) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallAccessFailed,
+      true,
+      undefined,
+      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
+    )
   }
 
   const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
   const isCurrentUserActiveParticipant = activeParticipants.some((participant) => participant.userId === userId)
 
   if (!isCurrentUserActiveParticipant && activeParticipants.length >= ROOM_CALL_PARTICIPANT_LIMIT) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallLimitReached)
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallLimitReached,
+      true,
+      undefined,
+      ROOM_CALL_ACK_FAILURE_REASON.LIMIT_REACHED
+    )
   }
 
   return roomCall

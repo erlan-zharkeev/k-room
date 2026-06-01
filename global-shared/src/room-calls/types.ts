@@ -1,4 +1,5 @@
 import type {
+  ROOM_CALL_ACK_FAILURE_REASON,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_MEDIA_KIND,
   ROOM_CALL_SIGNAL_KIND,
@@ -12,6 +13,9 @@ export type RoomCallMediaKind = (typeof ROOM_CALL_MEDIA_KIND)[keyof typeof ROOM_
 export type RoomCallSignalKind = (typeof ROOM_CALL_SIGNAL_KIND)[keyof typeof ROOM_CALL_SIGNAL_KIND]
 
 export type RoomCallLeaveReason = (typeof ROOM_CALL_LEAVE_REASON)[keyof typeof ROOM_CALL_LEAVE_REASON]
+
+export type RoomCallAckFailureReason =
+  (typeof ROOM_CALL_ACK_FAILURE_REASON)[keyof typeof ROOM_CALL_ACK_FAILURE_REASON]
 
 export interface RoomCallParticipantMediaState {
   audio: boolean

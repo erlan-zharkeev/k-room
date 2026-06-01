@@ -11,6 +11,7 @@ export type {
   RoomCallMediaKind,
   RoomCallSignalKind,
   RoomCallLeaveReason,
+  RoomCallAckFailureReason,
   RoomCallParticipantMediaState,
   RoomCallParticipant,
   RoomCall,
@@ -30,6 +31,7 @@ export type {
   EventRoomCallSignalReceived
 } from './room-calls/types'
 export {
+  ROOM_CALL_ACK_FAILURE_REASON,
   ROOM_CALL_ACTUALIZATION_LIMIT,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_MEDIA_KIND,

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import type {
-  EventJoinRoomCall,
-  EventLeaveRoomCall,
-  EventSendRoomCallSignal,
-  EventStartRoomCall,
-  EventUpdateRoomCallMediaState,
-  JoinRoomCallAckPayload,
-  StartRoomCallAckPayload
+import {
+  ROOM_CALL_ACK_FAILURE_REASON,
+  type EventJoinRoomCall,
+  type EventLeaveRoomCall,
+  type EventSendRoomCallSignal,
+  type EventStartRoomCall,
+  type EventUpdateRoomCallMediaState,
+  type JoinRoomCallAckPayload,
+  type StartRoomCallAckPayload
 } from 'global-shared'
 
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
@@ -45,7 +46,7 @@ export class RoomCallsSocketService {
           const result = await joinRoomCall(socket.data.userId, socket.id, payload)
 
           if (!result) {
-            return { ok: false }
+            return { ok: false, reason: ROOM_CALL_ACK_FAILURE_REASON.JOIN_FAILED }
           }
 
           return {
