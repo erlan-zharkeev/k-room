@@ -3,7 +3,9 @@ import {
   ROOM_CALL_STATUS,
   type EventRoomCallSignalReceived,
   type RoomCall,
-  type RoomCallMediaKind
+  type RoomCallAckFailureReason,
+  type RoomCallMediaKind,
+  type SocketAckFailure
 } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
@@ -12,6 +14,10 @@ import { useUser } from 'src/entities/user'
 import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
+import {
+  resolveRoomCallJoinFailureMessage,
+  resolveRoomCallStartFailureMessage
+} from '../lib/resolve-room-call-session-failure-message'
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
 import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
@@ -92,6 +98,14 @@ export const useActiveRoomCallSession = () => {
     })
   }
 
+  const showRoomCallAckFailure = (response: SocketAckFailure<RoomCallAckFailureReason>, content: string) => {
+    if (response.handledByGlobalError && !response.reason) {
+      return
+    }
+
+    showRoomCallSessionError(content)
+  }
+
   const syncActiveRoomCallMediaState = async () => {
     if (!activeRoomCallId.value) {
       return false
@@ -144,13 +158,15 @@ export const useActiveRoomCallSession = () => {
     try {
       await startRoomCallLocalMedia(mediaKind)
 
-      const roomCallId = await startRoomCall(roomId, mediaKind)
+      const response = await startRoomCall(roomId, mediaKind)
 
-      if (!roomCallId) {
+      if (!response.ok) {
         stopRoomCallLocalMedia()
-        showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallStartFailed))
+        showRoomCallAckFailure(response, t(resolveRoomCallStartFailureMessage(response.reason)))
         return null
       }
+
+      const { roomCallId } = response.payload
 
       activeRoomCallId.value = roomCallId
       await syncActiveRoomCallLocalState()
@@ -169,12 +185,14 @@ export const useActiveRoomCallSession = () => {
     isJoiningRoomCall.value = true
 
     try {
-      const roomCall = await joinRoomCall(roomCallId)
+      const response = await joinRoomCall(roomCallId)
 
-      if (!roomCall) {
-        showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
+      if (!response.ok) {
+        showRoomCallAckFailure(response, t(resolveRoomCallJoinFailureMessage(response.reason)))
         return null
       }
+
+      const { roomCall } = response.payload
 
       await startRoomCallLocalMedia(roomCall.mediaKind)
       activeRoomCallId.value = roomCall.id

@@ -25,3 +25,10 @@ export const ROOM_CALL_LEAVE_REASON = {
   DISCONNECTED: 'disconnected',
   LEFT: 'left'
 } as const
+
+export const ROOM_CALL_ACK_FAILURE_REASON = {
+  ACCESS_FAILED: 'access-failed',
+  ALREADY_ACTIVE: 'already-active',
+  JOIN_FAILED: 'join-failed',
+  LIMIT_REACHED: 'limit-reached'
+} as const

@@ -67,6 +67,21 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     ru: 'Не удалось присоединиться к звонку. Проверьте доступ к медиа в браузере.',
     zh: '无法加入通话。请检查浏览器媒体权限。'
   },
+  roomCallAccessFailed: {
+    en: 'You do not have access to this call.',
+    ru: 'У вас нет доступа к этому звонку.',
+    zh: '你没有访问此通话的权限。'
+  },
+  roomCallAlreadyActive: {
+    en: 'A call is already active in this chat.',
+    ru: 'В этом чате уже идет звонок.',
+    zh: '此聊天中已有正在进行的通话。'
+  },
+  roomCallLimitReached: {
+    en: 'Call is full.',
+    ru: 'Звонок уже заполнен.',
+    zh: '通话人数已满。'
+  },
   roomCallAudioStartFailed: {
     en: 'Could not turn on microphone. Check browser permissions.',
     ru: 'Не удалось включить микрофон. Проверьте доступ в браузере.',
