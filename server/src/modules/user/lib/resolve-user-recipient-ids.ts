@@ -3,13 +3,14 @@ import uniq from 'lodash/uniq'
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
-import { ChatRoomModel } from '../../chat-rooms/chat-rooms.model'
-import { UserModel } from '../user.model'
+import { loadChatRoomUsersByUserId } from '../../chat-rooms/lib/chat-room-persistence'
+
+import { loadUsersHavingContact } from './user-persistence'
 
 export const resolveUserRelatedRecipientIds = async (userId: string) => {
   const [contacts, rooms] = await Promise.all([
-    UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean(),
-    ChatRoomModel.find({ users: userId }, { users: 1 }).lean()
+    loadUsersHavingContact(userId),
+    loadChatRoomUsersByUserId(userId)
   ])
 
   return uniq([

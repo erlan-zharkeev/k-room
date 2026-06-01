@@ -17,12 +17,10 @@ import {
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_VALIDATION_OPTIONS,
-  MESSAGE_STATUS_VALUE,
   PINNED_CHAT_ROOM_LIMIT,
   REQ_STATUS,
   getRoomInterlocutorId,
   getRoomOtherUserIds,
-  isAcceptedContactInteraction,
   isRoomAdmin,
   isRoomGroup,
   isRoomPrivate
@@ -33,13 +31,26 @@ import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
+import { countUnreadMessagesByIds, deleteMessagesByIds, loadMessageById } from '../messages/lib/message-persistence'
 import { resolveVisibleMessageIds } from '../messages/lib/resolve-visible-message-ids'
-import { MessageModel } from '../messages/messages.model'
 import { transformMessageForUser } from '../messages/messages.service'
-import type { MessageDocument } from '../messages/messages.types'
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
-import { UserModel } from '../user/user.model'
+import {
+  addChatRoomToUsers,
+  addChatRoomToUsersByIds,
+  checkUsersAcceptedContacts,
+  loadUserMutedChatRoomsForRoom,
+  loadUserPinnedChatRooms,
+  loadUserPinnedChatRoomsForRoom,
+  loadUserPublicById,
+  loadUserRoomPreferences,
+  loadUsersPublicByIds,
+  removeChatRoomFromUser,
+  removeChatRoomFromUsersByIds,
+  setUserMutedChatRoomIds,
+  setUserPinnedChatRoomIds
+} from '../user/lib/user-persistence'
 
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
@@ -47,40 +58,6 @@ import { ChatRoomModel } from './chat-rooms.model'
 import type { ChatRoomDocument, ChatRoomSchema, TransformRoomForUserParams } from './chat-rooms.types'
 import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/assert-chat-room-limits'
 import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
-
-export const checkContactsExistence = async (selfId: string, contactIds: string[]) => {
-  const [self, contacts] = await Promise.all([
-    UserModel.findById(selfId, { 'personal.contacts': 1 }),
-    UserModel.find({ _id: { $in: contactIds } }, { 'personal.contacts': 1 })
-  ])
-
-  if (!self || contacts.length !== contactIds.length) {
-    return false
-  }
-
-  const contactById = new Map(contacts.map((contact) => [stringifyMongoId(contact._id), contact]))
-
-  return contactIds.every((contactId) => {
-    const selfContact = self.personal.contacts[contactId]
-    const user = contactById.get(contactId)
-
-    if (!user) return false
-
-    const userContact = user.personal.contacts[selfId]
-    const isSelfContactAccepted = isAcceptedContactInteraction(selfContact?.interaction)
-    const isUserContactAccepted = isAcceptedContactInteraction(userContact?.interaction)
-
-    return isSelfContactAccepted && isUserContactAccepted
-  })
-}
-
-export const setRoomToUsers = async (roomId: string, userIds: string[]) => {
-  await Promise.all(
-    userIds.map(async (userId) => {
-      await UserModel.updateOne({ _id: userId }, { $push: { 'personal.chatRooms': roomId } })
-    })
-  )
-}
 
 export const createChatRoom = async (
   userId: string,
@@ -96,7 +73,7 @@ export const createChatRoom = async (
 
   await assertCreateChatRoomLimits(memberIds, chatName)
 
-  const usersAccepted = await checkContactsExistence(userId, otherMemberIds)
+  const usersAccepted = await checkUsersAcceptedContacts(userId, otherMemberIds)
 
   if (!usersAccepted) {
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.createChatRoomFailed)
@@ -130,37 +107,18 @@ export const createChatRoom = async (
 
     await room.save()
   })
-  await setRoomToUsers(roomId, memberIds)
+  await addChatRoomToUsers(roomId, memberIds)
   await emitNewRoomToUsers(memberIds, room.toObject(), presenceService)
   await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
   return { roomId }
 }
 
-const countUnreadRoomMessages = async (userId: string, messageIds: string[]) => {
-  if (!messageIds.length) return 0
-
-  return MessageModel.countDocuments({
-    _id: { $in: messageIds },
-    authorId: { $ne: userId },
-    deletedForUserIds: { $ne: userId },
-    usersMetaData: {
-      $elemMatch: {
-        id: userId,
-        status: MESSAGE_STATUS_VALUE.DELIVERED
-      }
-    }
-  })
-}
-
 export const resolveKnownUsers = async (userIds: string[], presenceService: PresenceService): Promise<KnownUser[]> => {
   if (!userIds.length) return []
 
   const [users, onlineMap] = await Promise.all([
-    UserModel.find(
-      { _id: { $in: userIds } },
-      { 'public.avatarId': 1, 'public.nickname': 1, 'public.lastSeen': 1 }
-    ).lean(),
+    loadUsersPublicByIds(userIds),
     presenceService.onlineMapByUserIds(userIds)
   ])
   const userById = new Map(users.map((user) => [stringifyMongoId(user._id), user]))
@@ -190,10 +148,7 @@ const emitKnownUsersToUser = async (userId: string, roomUserIds: string[], prese
 }
 
 export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: EventUpdatePinnedChatRoom) => {
-  const user = await UserModel.findOne(
-    { _id: userId, 'personal.chatRooms': roomId },
-    { 'personal.pinnedChatRoomIds': 1 }
-  ).lean()
+  const user = await loadUserPinnedChatRoomsForRoom(userId, roomId)
 
   if (!user) {
     return
@@ -208,7 +163,7 @@ export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }:
 
   const pinnedChatRoomIds = resolveToggledRoomIds(currentPinnedChatRoomIds, roomId, isPinned)
 
-  await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': pinnedChatRoomIds } })
+  await setUserPinnedChatRoomIds(userId, pinnedChatRoomIds)
 
   const payload: EventPinnedChatRoomsUpdated = {
     roomId,
@@ -227,7 +182,7 @@ export const updatePinnedChatRoomOrder = async (
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.pinnedChatRoomLimitReached)
   }
 
-  const user = await UserModel.findById(userId, { 'personal.pinnedChatRoomIds': 1 }).lean()
+  const user = await loadUserPinnedChatRooms(userId)
 
   if (!user) {
     return
@@ -235,7 +190,7 @@ export const updatePinnedChatRoomOrder = async (
 
   const nextPinnedChatRoomIds = resolvePinnedChatRoomOrder(user.personal.pinnedChatRoomIds, pinnedChatRoomIds)
 
-  await UserModel.updateOne({ _id: userId }, { $set: { 'personal.pinnedChatRoomIds': nextPinnedChatRoomIds } })
+  await setUserPinnedChatRoomIds(userId, nextPinnedChatRoomIds)
 
   emitToUsers([userId], 'pinned-chat-rooms-updated', {
     pinnedChatRoomIds: nextPinnedChatRoomIds
@@ -243,10 +198,7 @@ export const updatePinnedChatRoomOrder = async (
 }
 
 export const updateMutedChatRoom = async (userId: string, { roomId, isMuted }: EventUpdateMutedChatRoom) => {
-  const user = await UserModel.findOne(
-    { _id: userId, 'personal.chatRooms': roomId },
-    { 'personal.mutedChatRoomIds': 1 }
-  ).lean()
+  const user = await loadUserMutedChatRoomsForRoom(userId, roomId)
 
   if (!user) {
     return
@@ -255,7 +207,7 @@ export const updateMutedChatRoom = async (userId: string, { roomId, isMuted }: E
   const currentMutedChatRoomIds = user.personal.mutedChatRoomIds
   const mutedChatRoomIds = resolveToggledRoomIds(currentMutedChatRoomIds, roomId, isMuted)
 
-  await UserModel.updateOne({ _id: userId }, { $set: { 'personal.mutedChatRoomIds': mutedChatRoomIds } })
+  await setUserMutedChatRoomIds(userId, mutedChatRoomIds)
 
   const payload: EventMutedChatRoomsUpdated = {
     roomId,
@@ -288,7 +240,7 @@ export const updateChatRoom = async (
   const addedUserIds = memberIds.filter((id) => !currentMemberIds.includes(id))
   const removedUserIds = currentMemberIds.filter((id) => !memberIds.includes(id))
   const affectedMemberIds = union(currentMemberIds, memberIds)
-  const usersAccepted = await checkContactsExistence(userId, addedUserIds)
+  const usersAccepted = await checkUsersAcceptedContacts(userId, addedUserIds)
   const currentAvatarId = room.avatarId
   let nextAvatarId = currentAvatarId
 
@@ -328,17 +280,8 @@ export const updateChatRoom = async (
   const deletedAvatarId = currentAvatarId && currentAvatarId !== nextAvatarId ? currentAvatarId : null
 
   await Promise.all([
-    UserModel.updateMany({ _id: { $in: addedUserIds } }, { $push: { 'personal.chatRooms': roomId } }),
-    UserModel.updateMany(
-      { _id: { $in: removedUserIds } },
-      {
-        $pull: {
-          'personal.chatRooms': roomId,
-          'personal.pinnedChatRoomIds': roomId,
-          'personal.mutedChatRoomIds': roomId
-        }
-      }
-    )
+    addChatRoomToUsersByIds(roomId, addedUserIds),
+    removeChatRoomFromUsersByIds(roomId, removedUserIds)
   ])
 
   if (removedUserIds.length) {
@@ -382,17 +325,8 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
   const deletedAvatarId = isGroupChatRoom ? room.avatarId : null
   const deleteChatRoomTasks: Array<Promise<unknown>> = [
     ChatRoomModel.deleteOne({ _id: roomId }).exec(),
-    MessageModel.deleteMany({ _id: { $in: messageIds } }).exec(),
-    UserModel.updateMany(
-      { _id: { $in: userIds } },
-      {
-        $pull: {
-          'personal.chatRooms': roomId,
-          'personal.pinnedChatRoomIds': roomId,
-          'personal.mutedChatRoomIds': roomId
-        }
-      }
-    ).exec()
+    deleteMessagesByIds(messageIds),
+    removeChatRoomFromUsersByIds(roomId, userIds).exec()
   ]
 
   if (deletedAvatarId) {
@@ -435,7 +369,7 @@ export const transformRoomForUser = async ({
   const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
   const isDirectRoom = isRoomPrivate({ chatKind })
   const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
-  const interlocutor = isDirectRoom ? await UserModel.findById(interlocutorId, { 'public.avatarId': 1 }).lean() : null
+  const interlocutor = isDirectRoom ? await loadUserPublicById(interlocutorId) : null
   const avatarId = isDirectRoom ? interlocutor?.public.avatarId ?? null : roomAvatarId
   const visibleMessageIds = await resolveVisibleMessageIds(userId, messages)
   const lastMessageId = visibleMessageIds[visibleMessageIds.length - 1] ?? null
@@ -443,9 +377,9 @@ export const transformRoomForUser = async ({
     roomPinnedMessageId && visibleMessageIds.includes(roomPinnedMessageId) ? roomPinnedMessageId : null
   const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
   const [unreadMessagesQuantity, previewMessage, pinnedMessage] = await Promise.all([
-    countUnreadRoomMessages(userId, visibleMessageIds),
-    lastMessageId ? MessageModel.findById(lastMessageId).select('-__v').lean<MessageDocument>() : null,
-    pinnedMessageId ? MessageModel.findById(pinnedMessageId).select('-__v').lean<MessageDocument>() : null
+    countUnreadMessagesByIds(userId, visibleMessageIds),
+    lastMessageId ? loadMessageById(lastMessageId) : null,
+    pinnedMessageId ? loadMessageById(pinnedMessageId) : null
   ])
 
   return {
@@ -476,7 +410,7 @@ const emitRoomToUsers = async (
 ) => {
   await Promise.all(
     userIds.map(async (userId) => {
-      const userData = await UserModel.findById(userId).lean()
+      const userData = await loadUserRoomPreferences(userId)
 
       if (!userData) {
         return
@@ -552,16 +486,7 @@ export const leaveChatRoom = async (
     )
       .select('-__v')
       .lean<ChatRoomDocument>(),
-    UserModel.updateOne(
-      { _id: userId },
-      {
-        $pull: {
-          'personal.chatRooms': roomId,
-          'personal.pinnedChatRoomIds': roomId,
-          'personal.mutedChatRoomIds': roomId
-        }
-      }
-    )
+    removeChatRoomFromUser(roomId, userId)
   ])
   const payload: EventChatRoomLeft = {
     roomId

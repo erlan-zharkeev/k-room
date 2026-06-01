@@ -1,7 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { UserDevice } from '../user/types'
-
 const envMock = vi.hoisted(() => ({
   SERVER_ENV: {
     domain: '',
@@ -13,21 +11,14 @@ const envMock = vi.hoisted(() => ({
 }))
 
 const userModelMock = vi.hoisted(() => ({
-  findById: vi.fn()
+  findOne: vi.fn(),
+  updateOne: vi.fn()
 }))
 
 vi.mock('../../app/env', () => envMock)
 vi.mock('../user/user.model', () => ({ UserModel: userModelMock }))
 
 const { SessionService } = await import('./session.service')
-
-const createUser = () => ({
-  system: {
-    device: {} as Record<string, UserDevice>
-  },
-  markModified: vi.fn(),
-  save: vi.fn()
-})
 
 const createResponse = () => {
   const response = {
@@ -47,11 +38,8 @@ describe('SessionService', () => {
   })
 
   it('updates token cookies and stores refresh token for current device', async () => {
-    const user = createUser()
     const response = createResponse()
     const service = new SessionService()
-
-    userModelMock.findById.mockResolvedValue(user)
 
     await service.updateTokens(
       'user-1',
@@ -70,25 +58,21 @@ describe('SessionService', () => {
       expect.objectContaining({ httpOnly: true })
     )
     expect(response.cookie).toHaveBeenCalledWith('device-id', 'device-1', expect.objectContaining({ httpOnly: true }))
-    expect(user.system.device['device-1']).toEqual({ refreshToken: expect.any(String) })
-    expect(user.markModified).toHaveBeenCalledWith('system.device')
-    expect(user.save).toHaveBeenCalled()
+    expect(userModelMock.updateOne).toHaveBeenCalledWith(
+      { _id: 'user-1' },
+      {
+        $set: {
+          'system.device.device-1': {
+            refreshToken: expect.any(String)
+          }
+        }
+      }
+    )
   })
 
   it('clears session cookies and removes current device', async () => {
-    const user = createUser()
     const response = createResponse()
     const service = new SessionService()
-
-    user.system.device = {
-      'device-1': {
-        refreshToken: 'refresh-token-1'
-      },
-      'device-2': {
-        refreshToken: 'refresh-token-2'
-      }
-    }
-    userModelMock.findById.mockResolvedValue(user)
 
     await service.clearSession(
       'user-1',
@@ -100,13 +84,14 @@ describe('SessionService', () => {
       response as never
     )
 
-    expect(user.system.device).toEqual({
-      'device-2': {
-        refreshToken: 'refresh-token-2'
+    expect(userModelMock.updateOne).toHaveBeenCalledWith(
+      { _id: 'user-1' },
+      {
+        $unset: {
+          'system.device.device-1': ''
+        }
       }
-    })
-    expect(user.markModified).toHaveBeenCalledWith('system.device')
-    expect(user.save).toHaveBeenCalled()
+    )
     expect(response.clearCookie).toHaveBeenCalledTimes(3)
     expect(response.clearCookie).toHaveBeenCalledWith(
       'jwt',

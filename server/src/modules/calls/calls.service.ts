@@ -14,7 +14,7 @@ import { getIO } from 'src/shared/lib/io'
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { emitToUsers } from '../presence/presence.utils'
-import { UserModel } from '../user/user.model'
+import { loadUserPublicById } from '../user/lib/user-persistence'
 
 import { CallModel } from './calls.model'
 import type { CallDocument } from './calls.types'
@@ -34,7 +34,7 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
     return null
   }
 
-  const author = await UserModel.findById(call.authorId).lean()
+  const author = await loadUserPublicById(call.authorId)
 
   if (!author) {
     return null
@@ -46,7 +46,7 @@ export const transformCallForUser = async (userId: string, callId: string): Prom
     return null
   }
 
-  const interlocutor = await UserModel.findById(interlocutorId).lean()
+  const interlocutor = await loadUserPublicById(interlocutorId)
 
   if (!interlocutor) {
     return null
@@ -106,7 +106,7 @@ export const callUser = async (userId: string, { signal, userToCall, avatar, cal
     return
   }
 
-  const interlocutor = await UserModel.findById(userToCall).lean()
+  const interlocutor = await loadUserPublicById(userToCall)
 
   if (!interlocutor) {
     return

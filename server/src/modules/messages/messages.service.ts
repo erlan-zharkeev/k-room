@@ -35,9 +35,18 @@ import {
 import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
-import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
+import {
+  addMessageToRoom,
+  clearPinnedMessageFromRoom,
+  findRoomMessagesByUser,
+  findRoomUsersAndMessagesByUser,
+  findRoomUsersByMessage,
+  findRoomUsersByUser,
+  removeMessageFromRoom,
+  updateRoomPinnedMessage
+} from '../chat-rooms/lib/chat-room-persistence'
 import { emitToUsers } from '../presence/presence.utils'
-import { UserModel } from '../user/user.model'
+import { loadUserPublicNicknameById } from '../user/lib/user-persistence'
 
 import { assertMessageContentLimits } from './lib/assert-message-content-limits'
 import { refreshMessageLinkPreview } from './lib/refresh-message-link-preview'
@@ -98,7 +107,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
 
   assertMessageContentLimits(normalizedBody, images, [], [], [])
 
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+  const room = await findRoomUsersByMessage(roomId, userId, messageId)
 
   if (!room) {
     return
@@ -158,7 +167,7 @@ export const loadRoomMessages = async (
     throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageLoadLimitExceeded)
   }
 
-  const room = await ChatRoomModel.findOne({ _id: payload.roomId, users: userId }).select('messages').lean()
+  const room = await findRoomMessagesByUser(payload.roomId, userId)
 
   if (!room) {
     return null
@@ -205,7 +214,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     return
   }
 
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+  const room = await findRoomUsersByMessage(roomId, userId, messageId)
 
   if (!room) {
     return
@@ -241,7 +250,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
 }
 
 export const markRoomAsRead = async (roomId: string, userId: string) => {
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
+  const room = await findRoomUsersAndMessagesByUser(roomId, userId)
 
   if (!room) {
     return
@@ -300,7 +309,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
 }
 
 export const deleteMessage = async (userId: string, { deleteForEveryone, roomId, messageId }: EventDeleteMessage) => {
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+  const room = await findRoomUsersByMessage(roomId, userId, messageId)
 
   if (!room) {
     return
@@ -331,8 +340,8 @@ export const deleteMessage = async (userId: string, { deleteForEveryone, roomId,
   }
 
   await Promise.all([
-    ChatRoomModel.updateOne({ _id: roomId }, { $pull: { messages: messageId } }),
-    ChatRoomModel.updateOne({ _id: roomId, pinnedMessageId: messageId }, { $set: { pinnedMessageId: null } })
+    removeMessageFromRoom(roomId, messageId),
+    clearPinnedMessageFromRoom(roomId, messageId)
   ])
   emitToUsers(userIds, 'message-deleted', payload)
 }
@@ -368,7 +377,7 @@ export const updatePinnedMessage = async (
   userId: string,
   { isPinned, messageId, roomId }: EventUpdatePinnedMessage
 ) => {
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+  const room = await findRoomUsersByMessage(roomId, userId, messageId)
 
   if (!room) {
     return
@@ -383,8 +392,7 @@ export const updatePinnedMessage = async (
   }
 
   const pinnedMessageId = isPinned ? messageId : null
-  const query = isPinned ? { _id: roomId } : { _id: roomId, pinnedMessageId: messageId }
-  const updateResult = await ChatRoomModel.updateOne(query, { $set: { pinnedMessageId } })
+  const updateResult = await updateRoomPinnedMessage(roomId, pinnedMessageId, isPinned ? undefined : messageId)
 
   if (updateResult.modifiedCount <= 0) {
     return
@@ -403,8 +411,8 @@ export const updatePinnedMessage = async (
 
 export const toggleMessageReaction = async (userId: string, { glyphKey, messageId, roomId }: EventAddReaction) => {
   const [room, user] = await Promise.all([
-    ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean(),
-    UserModel.findById(userId).select('public.nickname').lean()
+    findRoomUsersByMessage(roomId, userId, messageId),
+    loadUserPublicNicknameById(userId)
   ])
 
   if (!room || !user) return
@@ -464,7 +472,7 @@ export const toggleMessageReaction = async (userId: string, { glyphKey, messageI
 }
 
 export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }: EventUserTyping) => {
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users -_id').lean()
+  const room = await findRoomUsersByUser(roomId, userId)
 
   if (!room) {
     return
@@ -488,7 +496,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
 
   assertMessageContentLimits(message.body, messageImages, messageDocuments, messageAudios, messageVideos)
 
-  const room = await ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
+  const room = await findRoomUsersAndMessagesByUser(roomId, userId)
 
   if (!room) {
     return
@@ -541,7 +549,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
   }).save()
   const { users } = room
 
-  await ChatRoomModel.updateOne({ _id: roomId, users: userId }, { $push: { messages: newDbMessage.id } })
+  await addMessageToRoom(roomId, userId, newDbMessage.id)
 
   await Promise.all(
     users.map(async (userId) => {
@@ -549,12 +557,6 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
         { _id: newDbMessage.id },
         { $push: { usersMetaData: { id: userId, status: MESSAGE_STATUS_VALUE.DELIVERED } } }
       )
-
-      const user = await UserModel.findById(userId).lean()
-
-      if (!user) {
-        return
-      }
 
       const payload: EventMessageDelivered = {
         roomId,
@@ -567,12 +569,12 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           videos,
           linkPreview,
           repliedMessage,
-          isSelf: isMessageAuthor(message, stringifyMongoId(user._id)),
+          isSelf: isMessageAuthor(message, userId),
           status: MESSAGE_STATUS_VALUE.DELIVERED
         }
       }
 
-      emitToUsers([user._id], 'message-delivered', payload)
+      emitToUsers([userId], 'message-delivered', payload)
     })
   )
   refreshMessageLinkPreview({

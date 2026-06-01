@@ -14,15 +14,26 @@ import {
   normalizeNickname,
   REQ_STATUS
 } from 'global-shared'
-import { Types } from 'mongoose'
 
 import { AppError } from 'src/shared/lib/app-error'
 import { getIO } from 'src/shared/lib/io'
+import { isValidMongoId } from 'src/shared/lib/normalize-object-id'
 
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { transformUserToContact } from '../user/lib/transform-user'
-import { UserModel } from '../user/user.model'
+import {
+  createUserContactInteraction,
+  deleteUserContact,
+  loadContactSearchUsersById,
+  loadContactSearchUsersByNickname,
+  loadUserById,
+  loadUserContactInteraction,
+  loadUserContactInteractionDocument,
+  loadUserContactsById,
+  setDefaultUserContact,
+  setExistingUserContactInteraction
+} from '../user/lib/user-persistence'
 
 import { CONTACTS_I18N } from './contacts.i18n'
 import { assertContactLimit } from './contacts.utils'
@@ -53,7 +64,7 @@ export const searchContacts = async (
 
   if (needle.startsWith('#')) {
     needle = needle.slice(1)
-    type = Types.ObjectId.isValid(needle) ? 'id' : 'nickname'
+    type = isValidMongoId(needle) ? 'id' : 'nickname'
 
     if (type === 'nickname' && !needle) {
       validSearch = false
@@ -71,10 +82,9 @@ export const searchContacts = async (
   let searchedUsers: Contact[] = []
 
   if (validSearch) {
-    const searchFilter = type === 'id' ? { _id: needle } : { 'public.nickname': { $regex: new RegExp(needle, 'i') } }
     const [users, currentUser] = await Promise.all([
-      UserModel.find(searchFilter).sort({ 'public.nickname': 1 }).lean(),
-      UserModel.findById(userId, { 'personal.contacts': 1 }).lean()
+      type === 'id' ? loadContactSearchUsersById(needle) : loadContactSearchUsersByNickname(needle),
+      loadUserContactsById(userId)
     ])
 
     if (!currentUser) {
@@ -127,8 +137,8 @@ export const searchContacts = async (
 
 export const saveContact = async (userId: string, interlocutorId: string, presenceService: PresenceService) => {
   const [selfContact, contactCandidate] = await Promise.all([
-    UserModel.findById(userId, { 'personal.contacts': 1 }).lean(),
-    UserModel.findById(interlocutorId).lean()
+    loadUserContactsById(userId),
+    loadUserById(interlocutorId)
   ])
 
   if (!selfContact || !contactCandidate) {
@@ -137,18 +147,7 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
 
   assertContactLimit(selfContact.personal.contacts, interlocutorId)
 
-  await UserModel.updateOne(
-    { _id: userId },
-    {
-      $set: {
-        [`personal.contacts.${interlocutorId}`]: {
-          id: interlocutorId,
-          interaction: CONTACT_INTERACTION.DEFAULT,
-          updatedAt: Date.now()
-        }
-      }
-    }
-  )
+  await setDefaultUserContact(userId, interlocutorId)
 
   return {
     contactData: transformUserToContact(
@@ -160,7 +159,7 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
 }
 
 export const createContactInteraction = async (userId: string, contactId: string, interaction: Interaction) => {
-  const user = await UserModel.findById(userId, { 'personal.contacts': 1 }).lean()
+  const user = await loadUserContactsById(userId)
 
   if (!user) {
     return null
@@ -168,42 +167,15 @@ export const createContactInteraction = async (userId: string, contactId: string
 
   assertContactLimit(user.personal.contacts, contactId)
 
-  return UserModel.findOneAndUpdate(
-    { _id: userId },
-    {
-      $set: {
-        [`personal.contacts.${contactId}`]: {
-          id: contactId,
-          interaction,
-          updatedAt: Date.now()
-        }
-      }
-    },
-    { new: true }
-  )
+  return createUserContactInteraction(userId, contactId, interaction)
 }
 
 export const setContactInteraction = async (userId: string, contactId: string, interaction: Interaction) => {
-  return UserModel.findOneAndUpdate(
-    { _id: userId, [`personal.contacts.${contactId}`]: { $exists: true } },
-    {
-      $set: {
-        [`personal.contacts.${contactId}.interaction`]: interaction,
-        updatedAt: Date.now()
-      }
-    },
-    { new: true }
-  )
+  return setExistingUserContactInteraction(userId, contactId, interaction)
 }
 
 export const getContactInteraction = async (userId: string, contactId: string) => {
-  const user = await UserModel.findOne({ _id: userId }, { [`personal.contacts.${contactId}.interaction`]: 1 }).lean()
-
-  if (!user) {
-    return
-  }
-
-  return user.personal.contacts[contactId]?.interaction
+  return loadUserContactInteraction(userId, contactId)
 }
 
 export const emitContactInteractionUpdated = (userId: string, contactId: string, interaction: Interaction) => {
@@ -214,17 +186,14 @@ export const emitContactInteractionUpdated = (userId: string, contactId: string,
 }
 
 export const deleteContactById = async (userId: string, deletingUserId: string, silent = false) => {
-  await UserModel.updateOne({ _id: userId }, { $unset: { [`personal.contacts.${deletingUserId}`]: '' } })
+  await deleteUserContact(userId, deletingUserId)
 
   emitToUsers([userId], 'contact-delete-success', {
     deletedContactId: deletingUserId,
     silent
   })
 
-  const deletingContact = await UserModel.findOne(
-    { _id: deletingUserId },
-    { [`personal.contacts.${userId}.interaction`]: 1 }
-  )
+  const deletingContact = await loadUserContactInteractionDocument(deletingUserId, userId)
 
   if (!deletingContact) {
     return
@@ -243,10 +212,7 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
   }
 
   if (isAcceptedContactInteraction(deletingUserInteractionType)) {
-    await UserModel.updateOne(
-      { _id: deletingUserId },
-      { $set: { [`personal.contacts.${userId}.interaction`]: CONTACT_INTERACTION.DEFAULT } }
-    )
+    await setExistingUserContactInteraction(deletingUserId, userId, CONTACT_INTERACTION.DEFAULT)
 
     emitContactInteractionUpdated(String(deletingContact._id), userId, CONTACT_INTERACTION.DEFAULT)
   }

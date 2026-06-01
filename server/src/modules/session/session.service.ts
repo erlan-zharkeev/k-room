@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 
-import { UserModel } from '../user/user.model'
+import { clearUserRefreshDevice, hasUserRefreshDevice, setUserRefreshDevice } from '../user/lib/user-persistence'
 
 import {
   DEVICE_COOKIE_MAX_AGE_MS,
@@ -85,11 +85,10 @@ export class SessionService {
 
     try {
       const decoded = await this.verifyToken(refreshToken, SERVER_ENV.secret.refreshTokenSecret)
-      const user = await UserModel.findById(decoded.id)
       const deviceId = cookies['device-id']
-      const device = deviceId ? user?.system.device[deviceId] : undefined
+      const hasRefreshDevice = deviceId ? await hasUserRefreshDevice(decoded.id, deviceId, refreshToken) : false
 
-      if (!user || !deviceId || !device || device.refreshToken !== refreshToken) {
+      if (!deviceId || !hasRefreshDevice) {
         throw new AppError(REQ_STATUS.notAuth, this.getUnauthorizedMessage())
       }
 
@@ -112,31 +111,14 @@ export class SessionService {
 
     response.cookie('device-id', deviceId, this.getCookieOptions(DEVICE_COOKIE_MAX_AGE_MS))
 
-    const user = await UserModel.findById(userId)
-    if (!user) {
-      return
-    }
-
-    user.system.device = {
-      ...user.system.device,
-      [deviceId]: {
-        refreshToken
-      }
-    }
-    user.markModified('system.device')
-    await user.save()
+    await setUserRefreshDevice(userId, deviceId, refreshToken)
   }
 
   async clearSession(userId: string, request: Request, response: Response) {
     const deviceId = request.cookies['device-id']
-    const user = await UserModel.findById(userId)
 
-    if (user && deviceId && user.system.device[deviceId]) {
-      const nextDevices = { ...user.system.device }
-      delete nextDevices[deviceId]
-      user.system.device = nextDevices
-      user.markModified('system.device')
-      await user.save()
+    if (deviceId) {
+      await clearUserRefreshDevice(userId, deviceId)
     }
 
     SESSION_COOKIE_NAMES.forEach((cookie) => {
