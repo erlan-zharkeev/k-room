@@ -74,6 +74,16 @@ export interface RoomCallActivePanelEmits {
   leave: []
 }
 
+export interface RoomCallJoinPanelProps {
+  roomCall: RoomCall
+  isDisabled: boolean
+  isJoining: boolean
+}
+
+export interface RoomCallJoinPanelEmits {
+  join: []
+}
+
 export interface RoomCallTileItem {
   id: string
   isLocal: boolean

@@ -13,9 +13,11 @@ export const useChatRoomContent = () => {
   const {
     activeRoomCall,
     activeRoomCallId,
+    isJoiningRoomCall,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
     isStartingRoomCall,
+    joinActiveRoomCall,
     localMediaState,
     remoteStreamsByUserId,
     screenStream,
@@ -50,6 +52,18 @@ export const useChatRoomContent = () => {
 
     return belongsToSelectedRoom ? activeRoomCall.value : undefined
   })
+  const joinableSelectedRoomCall = computed(() => {
+    if (selectedActiveRoomCall.value) {
+      return undefined
+    }
+
+    return activeSelectedRoomCall.value
+  })
+  const isRoomCallJoinDisabled = computed(() => {
+    const hasActiveSession = Boolean(activeRoomCallId.value)
+
+    return isRoomCallSessionBusy.value || hasActiveSession
+  })
 
   const startSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
     const roomId = selectedChatRoomId.value
@@ -60,6 +74,15 @@ export const useChatRoomContent = () => {
 
     return startActiveRoomCall(roomId, mediaKind)
   }
+  const joinSelectedRoomCall = async () => {
+    const roomCall = joinableSelectedRoomCall.value
+
+    if (!roomCall || isRoomCallJoinDisabled.value) {
+      return null
+    }
+
+    return joinActiveRoomCall(roomCall.id)
+  }
 
   return {
     selectedChatRoomId,
@@ -67,14 +90,17 @@ export const useChatRoomContent = () => {
     isSelectedChatRoomPrivate,
     selectedMessageId,
     selectedActiveRoomCall,
+    joinableSelectedRoomCall,
     videoStream,
     screenStream,
     remoteStreamsByUserId,
     localMediaState,
     isRoomCallStartDisabled,
     isStartingRoomCall,
+    isJoiningRoomCall,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
+    isRoomCallJoinDisabled,
     clearSelectedMessage,
     selectChatRoomMessage,
     selectCurrentChatRoomMessage,
@@ -83,6 +109,7 @@ export const useChatRoomContent = () => {
     startActiveRoomCallScreen,
     stopActiveRoomCallScreen,
     leaveActiveRoomCall,
+    joinSelectedRoomCall,
     startSelectedRoomCall
   }
 }
