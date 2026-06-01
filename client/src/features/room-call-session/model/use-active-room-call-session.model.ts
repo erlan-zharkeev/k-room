@@ -1,14 +1,27 @@
-import { ROOM_CALL_LEAVE_REASON, type RoomCallMediaKind } from 'global-shared'
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import {
+  ROOM_CALL_LEAVE_REASON,
+  ROOM_CALL_STATUS,
+  type EventRoomCallSignalReceived,
+  type RoomCall,
+  type RoomCallMediaKind
+} from 'global-shared'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+import { useRoomCall } from 'src/entities/room-call'
+import { useUser } from 'src/entities/user'
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
+import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
 import { useRoomCallSession } from './use-room-call-session.model'
+import { useRoomCallSignalMonitor } from './use-room-call-signal-monitor.model'
 
 export const useActiveRoomCallSession = () => {
   const activeRoomCallId = ref('')
   const isStartingRoomCall = ref(false)
   const isJoiningRoomCall = ref(false)
   const isLeavingRoomCall = ref(false)
+  const { roomCalls } = useRoomCall()
+  const { user } = useUser()
   const {
     audioStream,
     isAudioLoading,
@@ -28,6 +41,28 @@ export const useActiveRoomCallSession = () => {
     videoStream
   } = useRoomCallLocalMedia()
   const { joinRoomCall, leaveRoomCall, startRoomCall, updateRoomCallMediaState } = useRoomCallSession()
+  const {
+    closeRoomCallPeer,
+    connectRoomCallPeers,
+    handleRoomCallSignalReceived,
+    remoteStreamsByUserId,
+    resetRoomCallPeers,
+    syncRoomCallPeerTracks
+  } = useRoomCallPeerManager()
+  const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
+  const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
+  const activeRoomCallPeerParticipantKey = computed(
+    () =>
+      activeRoomCall.value?.participants
+        .map(({ joinedAt, leftAt, socketId, userId }) => [userId, socketId, joinedAt, leftAt].join(':'))
+        .join('|') ?? ''
+  )
+  const activeRoomCallFinished = computed(() => {
+    const isFinishedStatus = activeRoomCall.value?.status === ROOM_CALL_STATUS.FINISHED
+    const hasFinishedAt = Boolean(activeRoomCall.value?.finishedAt)
+
+    return isFinishedStatus || hasFinishedAt
+  })
   const isRoomCallSessionBusy = computed(
     () =>
       isStartingRoomCall.value ||
@@ -38,6 +73,12 @@ export const useActiveRoomCallSession = () => {
       isScreenLoading.value
   )
 
+  const clearActiveRoomCallSessionState = () => {
+    activeRoomCallId.value = ''
+    resetRoomCallPeers()
+    stopRoomCallLocalMedia()
+  }
+
   const syncActiveRoomCallMediaState = async () => {
     if (!activeRoomCallId.value) {
       return false
@@ -45,6 +86,44 @@ export const useActiveRoomCallSession = () => {
 
     return updateRoomCallMediaState(activeRoomCallId.value, localMediaState.value)
   }
+
+  const syncActiveRoomCallPeerTracks = async () => {
+    if (!activeRoomCallId.value) {
+      return
+    }
+
+    await syncRoomCallPeerTracks(activeRoomCallId.value, localStreams.value)
+  }
+
+  const syncActiveRoomCallLocalState = async () => {
+    await Promise.all([syncActiveRoomCallMediaState(), syncActiveRoomCallPeerTracks()])
+  }
+
+  const connectActiveRoomCallPeers = async (roomCall?: RoomCall) => {
+    const targetRoomCall = roomCall ?? activeRoomCall.value
+    const currentUserId = user.value.id
+
+    if (!targetRoomCall || !currentUserId) {
+      return false
+    }
+
+    await connectRoomCallPeers({
+      currentUserId,
+      localStreams: localStreams.value,
+      participants: targetRoomCall.participants,
+      roomCallId: targetRoomCall.id
+    })
+
+    return true
+  }
+
+  const handleActiveRoomCallSignalReceived = async (payload: EventRoomCallSignalReceived) => {
+    await handleRoomCallSignalReceived(payload, activeRoomCallId.value, localStreams.value)
+  }
+
+  const { disposeRoomCallSignalMonitor, initializeRoomCallSignalMonitor } = useRoomCallSignalMonitor(
+    handleActiveRoomCallSignalReceived
+  )
 
   const startActiveRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
     isStartingRoomCall.value = true
@@ -60,12 +139,11 @@ export const useActiveRoomCallSession = () => {
       }
 
       activeRoomCallId.value = roomCallId
-      await syncActiveRoomCallMediaState()
+      await syncActiveRoomCallLocalState()
 
       return roomCallId
     } catch (error) {
-      activeRoomCallId.value = ''
-      stopRoomCallLocalMedia()
+      clearActiveRoomCallSessionState()
       throw error
     } finally {
       isStartingRoomCall.value = false
@@ -84,13 +162,13 @@ export const useActiveRoomCallSession = () => {
 
       await startRoomCallLocalMedia(roomCall.mediaKind)
       activeRoomCallId.value = roomCall.id
-      await syncActiveRoomCallMediaState()
+      await syncActiveRoomCallLocalState()
+      await connectActiveRoomCallPeers(roomCall)
 
       return roomCall
     } catch (error) {
       await leaveRoomCall(roomCallId, ROOM_CALL_LEAVE_REASON.LEFT)
-      activeRoomCallId.value = ''
-      stopRoomCallLocalMedia()
+      clearActiveRoomCallSessionState()
       throw error
     } finally {
       isJoiningRoomCall.value = false
@@ -110,8 +188,7 @@ export const useActiveRoomCallSession = () => {
     try {
       return await leaveRoomCall(roomCallId, reason)
     } finally {
-      activeRoomCallId.value = ''
-      stopRoomCallLocalMedia()
+      clearActiveRoomCallSessionState()
       isLeavingRoomCall.value = false
     }
   }
@@ -147,10 +224,25 @@ export const useActiveRoomCallSession = () => {
   }
 
   watch(localMediaState, () => {
-    void syncActiveRoomCallMediaState()
+    void syncActiveRoomCallLocalState()
+  })
+
+  watch(activeRoomCallPeerParticipantKey, () => {
+    void connectActiveRoomCallPeers()
+  })
+
+  watch(activeRoomCallFinished, (isFinished) => {
+    if (isFinished) {
+      clearActiveRoomCallSessionState()
+    }
+  })
+
+  onMounted(() => {
+    initializeRoomCallSignalMonitor()
   })
 
   onBeforeUnmount(() => {
+    disposeRoomCallSignalMonitor()
     void leaveActiveRoomCall()
   })
 
@@ -159,6 +251,7 @@ export const useActiveRoomCallSession = () => {
     audioStream,
     videoStream,
     screenStream,
+    remoteStreamsByUserId,
     localMediaState,
     isStartingRoomCall,
     isJoiningRoomCall,
@@ -172,6 +265,8 @@ export const useActiveRoomCallSession = () => {
     stopActiveRoomCallVideo,
     startActiveRoomCallScreen,
     stopActiveRoomCallScreen,
+    closeRoomCallPeer,
+    connectActiveRoomCallPeers,
     syncActiveRoomCallMediaState
   }
 }
