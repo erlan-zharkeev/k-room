@@ -65,6 +65,22 @@ export const useRoomCallPeerManager = () => {
     removeRemoteStream(userId)
   }
 
+  const syncRoomCallPeerParticipants = (
+    currentUserId: string,
+    participants: ConnectRoomCallPeersParams['participants']
+  ) => {
+    const targetUserIds = resolveRoomCallPeerParticipantIds(currentUserId, participants)
+    const targetUserIdSet = new Set(targetUserIds)
+
+    Array.from(peerConnectionByUserId.keys()).forEach((userId) => {
+      if (!targetUserIdSet.has(userId)) {
+        closeRoomCallPeer(userId)
+      }
+    })
+
+    return targetUserIds
+  }
+
   const ensureRoomCallPeerConnection = (
     roomCallId: string,
     userId: string,
@@ -187,7 +203,7 @@ export const useRoomCallPeerManager = () => {
     participants,
     roomCallId
   }: ConnectRoomCallPeersParams) => {
-    const targetUserIds = resolveRoomCallPeerParticipantIds(currentUserId, participants)
+    const targetUserIds = syncRoomCallPeerParticipants(currentUserId, participants)
 
     await Promise.all(
       targetUserIds.map(async (targetUserId) => {
@@ -221,6 +237,7 @@ export const useRoomCallPeerManager = () => {
     connectRoomCallPeers,
     createRoomCallPeerOffer,
     handleRoomCallSignalReceived,
+    syncRoomCallPeerParticipants,
     syncRoomCallPeerTracks,
     closeRoomCallPeer,
     resetRoomCallPeers
