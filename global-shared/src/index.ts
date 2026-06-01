@@ -6,7 +6,20 @@ export type {
   SignInWithProviderPayload
 } from './auth/types'
 
-export type { CallStatus, CallFlow, Call } from './calls/types'
+export type {
+  CallStatus,
+  CallFlow,
+  Call,
+  EventMarkCallAsVideo,
+  EventCallUpdated,
+  EventCallsUpdated,
+  EventCallUser,
+  EventChangeCallSettings,
+  EventCallAccepted,
+  EventAnswerCall,
+  EventCallStartedAt,
+  EventCallEnded
+} from './calls/types'
 
 export {
   CHAT_KIND,
@@ -19,7 +32,28 @@ export { isRoomAdmin } from './chat/lib/is-room-admin'
 export { isRoomGroup } from './chat/lib/is-room-group'
 export { isRoomPrivate } from './chat/lib/is-room-private'
 export { getRoomInterlocutorId, getRoomOtherUserIds } from './chat/lib/get-room-user-ids'
-export type { ChatRoom, ChatRooms, ChatKind } from './chat/types'
+export type {
+  ChatRoom,
+  ChatRooms,
+  ChatKind,
+  EventGetRoom,
+  EventGetRooms,
+  EventCreateRoom,
+  EventUpdateChatRoom,
+  EventDeleteChatRoom,
+  EventChatRoomDeleted,
+  EventLeaveChatRoom,
+  EventChatRoomLeft,
+  EventUpdatePinnedChatRoom,
+  EventUpdatePinnedChatRoomOrder,
+  EventPinnedChatRoomsUpdated,
+  EventUpdateMutedChatRoom,
+  EventMutedChatRoomsUpdated,
+  EventUserTyping,
+  EventRoomTypingStatus,
+  EventMarkRoomAsRead,
+  CreateRoomAckPayload
+} from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
 export type {
@@ -30,7 +64,26 @@ export type {
   ValidateChangeEmailCodePayload
 } from './codes/types'
 
-export type { Interaction, Contact, KnownUser, ContactMap } from './contact/types'
+export type {
+  Interaction,
+  Contact,
+  KnownUser,
+  ContactMap,
+  EventStatusContact,
+  EventChangeContactsData,
+  EventGetContacts,
+  EventKnownUsersUpdated,
+  EventSaveContact,
+  EventDeleteContact,
+  EventSearchContact,
+  EventGetSearchedContact,
+  EventGetContactTypingStatus,
+  EventUpdateInteraction,
+  EventInviteReceived,
+  EventUpdateContactInteractionSuccess,
+  EventContactAddSuccess,
+  EventDeleteContactSuccess
+} from './contact/types'
 export {
   CONTACT_INTERACTION,
   CONTACT_LIMIT,
@@ -65,7 +118,7 @@ export type { EnvSource, ReadEnvOptions, SecretEnvFileReader } from './env/lib/r
 
 export { APP_LANGUAGE, APP_LANGUAGE_VALUES, APP_LANGUAGE_HEADER, DEFAULT_APP_LANGUAGE } from './language/constants'
 export { defineI18n } from './language/lib/define-i18n'
-export type { AppLanguage, LocalizedText, LocalizedTextMap } from './language/types'
+export type { AppLanguage, EventUpdateLanguage, LocalizedText, LocalizedTextMap } from './language/types'
 export type { I18nValueConstraint, I18nRecordConstraint } from './language/lib/types'
 
 export {
@@ -94,7 +147,8 @@ export type {
   DocumentObject,
   ImageObject,
   VideoObject,
-  MediaFileValue
+  MediaFileValue,
+  EventMediaFilesDeleted
 } from './media/types'
 
 export type { PackageData } from './package/types'
@@ -125,7 +179,23 @@ export type {
   MessageMetadata,
   MessageReaction,
   RepliedMessage,
-  Message
+  Message,
+  EventMessageDelivered,
+  EventSendMessage,
+  EventEditMessage,
+  EventMessageEdited,
+  EventMessageLinkPreviewUpdated,
+  EventUpdateMessageStatus,
+  EventMessagesStatusUpdated,
+  EventChangeMessageStatus,
+  EventLoadRoomMessages,
+  EventRoomMessagesLoaded,
+  EventUpdatePinnedMessage,
+  EventPinnedMessageUpdated,
+  EventDeleteMessage,
+  EventAddReaction,
+  EventMessageDeleted,
+  EventUpdatedMessageReactions
 } from './message/types'
 
 export type { ChangePasswordPayload, CreateNewPasswordPayload } from './requests/types'
@@ -183,62 +253,7 @@ export type {
 } from './shared/types'
 
 export type {
-  EventMarkCallAsVideo,
-  EventMessageDelivered,
-  EventGetRoom,
-  EventGetRooms,
-  EventStatusContact,
-  EventChangeContactsData,
-  EventGetContacts,
-  EventKnownUsersUpdated,
-  EventCallUpdated,
-  EventCallsUpdated,
-  EventSaveContact,
-  EventDeleteContact,
-  EventSearchContact,
-  EventGetSearchedContact,
-  EventCreateRoom,
-  EventUpdateChatRoom,
-  EventDeleteChatRoom,
-  EventChatRoomDeleted,
-  EventLeaveChatRoom,
-  EventChatRoomLeft,
-  EventUpdatePinnedChatRoom,
-  EventUpdatePinnedChatRoomOrder,
-  EventPinnedChatRoomsUpdated,
-  EventUpdateMutedChatRoom,
-  EventMutedChatRoomsUpdated,
-  EventMediaFilesDeleted,
-  EventUserTyping,
-  EventRoomTypingStatus,
-  EventGetContactTypingStatus,
-  EventSendMessage,
-  EventEditMessage,
-  EventMessageEdited,
-  EventMessageLinkPreviewUpdated,
-  EventUpdateMessageStatus,
-  EventMessagesStatusUpdated,
-  EventChangeMessageStatus,
-  EventMarkRoomAsRead,
-  EventLoadRoomMessages,
-  EventRoomMessagesLoaded,
-  EventUpdatePinnedMessage,
-  EventPinnedMessageUpdated,
-  EventDeleteMessage,
-  EventAddReaction,
-  EventCallUser,
-  EventChangeCallSettings,
-  EventCallAccepted,
-  EventAnswerCall,
-  EventCallStartedAt,
-  EventCallEnded,
   EventErrorMessage,
-  EventMessageDeleted,
-  EventUpdatedMessageReactions,
-  CreateRoomAckPayload,
-  EventUpdateInteraction,
-  EventInviteReceived,
-  EventUpdateContactInteractionSuccess,
   SocketAckSuccess,
   SocketAckFailure,
   SocketAckResponse,
@@ -256,10 +271,7 @@ export type {
   ServerToClientSocketAction,
   SocketAppActions,
   SocketSystemActions,
-  EventContactAddSuccess,
-  EventDeleteContactSuccess,
   EventAuthError,
-  EventUpdateLanguage,
   SocketActions
 } from './socket/types'
 

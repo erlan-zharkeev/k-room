@@ -1,19 +1,70 @@
-import type { Call } from '../calls/types'
-import type { ChatRoom } from '../chat/types'
-import type { Contact, KnownUser, Interaction } from '../contact/types'
-import type { AppLanguage } from '../language/types'
-import type { AudioObject, DocumentObject, ImageObject, MediaFileValue, VideoObject } from '../media/types'
 import type {
-  Message,
-  MessageLinkPreview,
-  MessageLoadDirection,
-  MessageReaction,
-  MessageReactionUpdateAction,
-  MessageStatus
+  EventAnswerCall,
+  EventCallAccepted,
+  EventCallEnded,
+  EventCallsUpdated,
+  EventCallStartedAt,
+  EventCallUpdated,
+  EventCallUser,
+  EventChangeCallSettings,
+  EventMarkCallAsVideo
+} from '../calls/types'
+import type {
+  CreateRoomAckPayload,
+  EventChatRoomDeleted,
+  EventChatRoomLeft,
+  EventCreateRoom,
+  EventDeleteChatRoom,
+  EventGetRoom,
+  EventGetRooms,
+  EventLeaveChatRoom,
+  EventMarkRoomAsRead,
+  EventMutedChatRoomsUpdated,
+  EventPinnedChatRoomsUpdated,
+  EventRoomTypingStatus,
+  EventUpdateChatRoom,
+  EventUpdateMutedChatRoom,
+  EventUpdatePinnedChatRoom,
+  EventUpdatePinnedChatRoomOrder,
+  EventUserTyping
+} from '../chat/types'
+import type {
+  EventChangeContactsData,
+  EventContactAddSuccess,
+  EventDeleteContact,
+  EventDeleteContactSuccess,
+  EventGetContacts,
+  EventGetContactTypingStatus,
+  EventGetSearchedContact,
+  EventInviteReceived,
+  EventKnownUsersUpdated,
+  EventSaveContact,
+  EventSearchContact,
+  EventStatusContact,
+  EventUpdateContactInteractionSuccess,
+  EventUpdateInteraction
+} from '../contact/types'
+import type { EventUpdateLanguage } from '../language/types'
+import type { EventMediaFilesDeleted } from '../media/types'
+import type {
+  EventAddReaction,
+  EventChangeMessageStatus,
+  EventDeleteMessage,
+  EventEditMessage,
+  EventLoadRoomMessages,
+  EventMessageDeleted,
+  EventMessageDelivered,
+  EventMessageEdited,
+  EventMessageLinkPreviewUpdated,
+  EventMessagesStatusUpdated,
+  EventPinnedMessageUpdated,
+  EventRoomMessagesLoaded,
+  EventSendMessage,
+  EventUpdatedMessageReactions,
+  EventUpdateMessageStatus,
+  EventUpdatePinnedMessage
 } from '../message/types'
-import type { BasicStreamSettings } from '../shared/types'
 import type { ReqStatus } from '../status/types'
-import type { UserPreview } from '../user/types'
 
 export interface SocketAckSuccess<TPayload = void> {
   ok: true
@@ -30,282 +81,15 @@ export type SocketAckResponse<TPayload = void, TReason extends string = string> 
   | SocketAckSuccess<TPayload>
   | SocketAckFailure<TReason>
 
-export interface EventMarkCallAsVideo {
-  callId: string
-}
-
-export interface EventMessageDelivered {
-  roomId: string
-  message: Message
-}
-
-export interface EventGetRoom extends ChatRoom {
-  previewMessage?: Message | null
-  pinnedMessage?: Message | null
-}
-
-export type EventGetRooms = EventGetRoom[]
-
-export interface EventStatusContact {
-  interlocutorId: string
-  online: boolean
-  onlineStatusUpdatedTimestamp: number
-  lastSeen?: number
-}
-
-export type EventChangeContactsData = UserPreview
-
-export interface EventGetContacts {
-  contacts: Contact[]
-  knownUsers: KnownUser[]
-}
-
-export type EventKnownUsersUpdated = KnownUser[]
-export type EventCallUpdated = Call
-export type EventCallsUpdated = Call[]
-
-export interface EventSaveContact {
-  interlocutorId: string
-}
-export interface EventDeleteContact {
-  deletingUserId: string
-}
-export interface EventSearchContact {
-  value: string
-  offset?: number
-}
-export interface EventGetSearchedContact {
-  value: string
-  offset: number
-  contacts: Contact[]
-  total: number
-  hasMore: boolean
-  nextOffset?: number
-}
-
-export interface EventCreateRoom {
-  memberIds: string[]
-  chatName?: string
-  avatarFile?: MediaFileValue
-}
-
-export interface EventUpdateChatRoom {
-  roomId: string
-  memberIds: string[]
-  chatName: string
-  avatarFile?: MediaFileValue | null
-}
-
-export interface EventDeleteChatRoom {
-  roomId: string
-}
-
-export interface EventChatRoomDeleted {
-  roomId: string
-}
-
-export interface EventLeaveChatRoom {
-  roomId: string
-  nextAdminId?: string
-}
-
-export interface EventChatRoomLeft {
-  roomId: string
-}
-
-export interface EventUpdatePinnedChatRoom {
-  roomId: string
-  isPinned: boolean
-}
-export interface EventUpdatePinnedChatRoomOrder {
-  pinnedChatRoomIds: string[]
-}
-
-export interface EventPinnedChatRoomsUpdated {
-  roomId?: string
-  isPinned?: boolean
-  pinnedChatRoomIds: string[]
-}
-
-export interface EventUpdateMutedChatRoom {
-  roomId: string
-  isMuted: boolean
-}
-
-export interface EventMutedChatRoomsUpdated {
-  roomId?: string
-  isMuted?: boolean
-  mutedChatRoomIds: string[]
-}
-
-export interface EventMediaFilesDeleted {
-  mediaIds: string[]
-}
-
-export interface EventUserTyping {
-  roomId: string
-  isTyping: boolean
-}
-export interface EventRoomTypingStatus {
-  roomId: string
-  contactId: string
-  isTyping: boolean
-}
-export interface EventGetContactTypingStatus {
-  contactId: string
-  isTyping: boolean
-}
-export interface EventSendMessage {
-  roomId: string
-  message: Message
-}
-export interface EventEditMessage {
-  roomId: string
-  messageId: string
-  body: string
-  images: ImageObject[]
-  documents?: DocumentObject[]
-  audios?: AudioObject[]
-  videos?: VideoObject[]
-}
-export interface EventMessageEdited {
-  roomId: string
-  messageId: string
-  body: string
-  images: ImageObject[]
-  documents?: DocumentObject[]
-  audios?: AudioObject[]
-  videos?: VideoObject[]
-  linkPreview: MessageLinkPreview | null
-  editedAt: number
-}
-export interface EventMessageLinkPreviewUpdated {
-  roomId: string
-  messageId: string
-  linkPreview: MessageLinkPreview
-}
-export interface EventUpdateMessageStatus {
-  roomId: string
-  messageId: string
-  status: MessageStatus
-  userId: string
-}
-export interface EventMessagesStatusUpdated {
-  roomId: string
-  messageIds: string[]
-  status: MessageStatus
-  userId: string
-  updatedMessagesQuantity: number
-}
-export interface EventChangeMessageStatus {
-  roomId: string
-  messageId: string
-  status: MessageStatus
-}
-export interface EventMarkRoomAsRead {
-  roomId: string
-}
-export interface EventLoadRoomMessages {
-  roomId: string
-  limit: number
-  direction: MessageLoadDirection
-  anchorMessageId?: string
-}
-export interface EventRoomMessagesLoaded {
-  roomId: string
-  messages: Message[]
-  rangeStartMessageId: string | null
-  rangeEndMessageId: string | null
-}
-export interface EventUpdatePinnedMessage {
-  roomId: string
-  messageId: string
-  isPinned: boolean
-}
-export interface EventPinnedMessageUpdated {
-  roomId: string
-  pinnedMessageId: string | null
-  pinnedMessage?: Message | null
-}
-export interface EventDeleteMessage {
-  deleteForEveryone: boolean
-  messageId: string
-  roomId: string
-}
-export interface EventAddReaction {
-  glyphKey: string
-  messageId: string
-  roomId: string
-}
-export interface EventCallUser {
-  callId?: string
-  userToCall?: string
-  signal: unknown
-  from: string
-  avatar: string
-  callerNickname: string
-}
-export type EventChangeCallSettings = BasicStreamSettings
-export interface EventCallAccepted {
-  signal: unknown
-}
-
-export interface EventAnswerCall {
-  callId: string
-  to: string
-  signal: unknown
-  selfSocketId: string
-}
-export type EventCallStartedAt = number
-export interface EventCallEnded {
-  callId: string
-  callerId: string
-}
 export interface EventErrorMessage {
   messageType?: string
   message: string
   silent?: boolean
   status?: ReqStatus
 }
-export interface EventMessageDeleted {
-  messageId: string
-  roomId: string
-}
-export interface EventUpdatedMessageReactions {
-  roomId: string
-  messageId: string
-  action: MessageReactionUpdateAction
-  reaction: MessageReaction
-}
-export interface CreateRoomAckPayload {
-  roomId: string
-}
-export interface EventUpdateInteraction {
-  contactId: string
-  interaction: Interaction
-}
-
-export type EventInviteReceived = Contact
-
-export interface EventUpdateContactInteractionSuccess {
-  contactId: string
-  interaction: Interaction
-}
-export interface EventContactAddSuccess {
-  contactData: Contact
-}
-export interface EventDeleteContactSuccess {
-  deletedContactId: string
-  silent: boolean
-}
-
 export interface EventAuthError {
   event: ClientToServerSocketAction | 'connection'
   payload: unknown
-}
-
-export interface EventUpdateLanguage {
-  language: AppLanguage
 }
 
 export type SocketAckCallback<TPayload = void, TReason extends string = string> = (
