@@ -44,7 +44,8 @@ export const useMessageAttachmentDraft = ({
   const messageAttachmentUploadRef = useTemplateRef<MessageAttachmentUploadExpose>('messageAttachmentUpload')
   const messageImageDraft = useMessageMediaDraft<ImageObject>({
     draftMediaIdPrefix: MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
-    mediaKind: 'image'
+    mediaKind: 'image',
+    buildMediaObjectDetails: buildMessageFileDraftObjectDetails
   })
   const messageDocumentDraft = useMessageMediaDraft<DocumentObject>({
     draftMediaIdPrefix: MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,
@@ -71,8 +72,8 @@ export const useMessageAttachmentDraft = ({
     buildMessageAttachmentDraftListItems(
       messageImageDraft.mediaObjects.value,
       messageDocumentDraft.mediaObjects.value,
-      messageAudioDraft.mediaPreviewObjects.value,
-      messageVideoDraft.mediaPreviewObjects.value
+      messageAudioDraft.mediaObjects.value,
+      messageVideoDraft.mediaObjects.value
     )
   )
   const editingMessageAttachmentItems = computed(() =>

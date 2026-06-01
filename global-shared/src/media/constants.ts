@@ -20,6 +20,7 @@ export const MEDIA_KIND_ACCEPT_MAP = {
   video: 'video/*',
   audio: 'audio/*',
   pdf: 'application/pdf',
+  document: 'application/*',
   archive: 'application/*',
   unknown: ''
 } as const satisfies Record<MediaKind, string>
@@ -29,6 +30,7 @@ export const MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP = {
   video: ['mp4', 'webm', 'mov', 'video-ogg'],
   audio: ['mpeg', 'audio-ogg', 'wav'],
   pdf: ['pdf'],
+  document: ['pdf', 'msword', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'json', 'xml'],
   archive: ['zip', 'rar', '7z'],
   unknown: []
 } as const satisfies Record<MediaKind, MediaUpload[]>
@@ -46,13 +48,21 @@ export const MEDIA_VIDEO_UPLOAD_EXTENSIONS = [
 ] as const satisfies readonly MediaVideoUploadExtension[]
 export const MEDIA_DOCUMENT_UPLOAD_EXTENSIONS = [
   'pdf',
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'ppt',
+  'pptx',
+  'json',
+  'xml',
   'zip',
   'rar',
   '7z'
 ] as const satisfies readonly MediaDocumentUploadExtension[]
 
 export const MEDIA_BUCKET_SUPPORTED_KIND_MAP = {
-  doc: ['pdf', 'archive'],
+  doc: ['pdf', 'document', 'archive'],
   image: ['image'],
   audio: ['audio'],
   video: ['video']
@@ -65,7 +75,9 @@ export const MEDIA_UPLOAD_TYPE_LABEL_MAP = {
   pdf: 'PDF',
   msword: 'DOC',
   docx: 'DOCX',
+  xls: 'XLS',
   xlsx: 'XLSX',
+  ppt: 'PPT',
   pptx: 'PPTX',
   json: 'JSON',
   xml: 'XML',
@@ -87,7 +99,7 @@ export const MEDIA_UPLOAD_TYPE_LABEL_MAP = {
 export const MEDIA_VALIDATION_OPTIONS_MAP = {
   doc: {
     maxMb: 10,
-    supportedKindMediaType: 'pdf'
+    supportedKindMediaType: 'document'
   },
   image: {
     maxMb: 10,

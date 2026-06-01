@@ -2,7 +2,7 @@ import { Buffer } from 'node:buffer'
 import { createHash } from 'node:crypto'
 
 import fileTypeDep from 'file-type'
-import { MEDIA_KIND_ACCEPT_MAP, MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP } from 'global-shared'
+import { MEDIA_DOCUMENT_UPLOAD_EXTENSIONS, MEDIA_KIND_ACCEPT_MAP, MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP } from 'global-shared'
 import imageSize from 'image-size'
 import { lookup as mimeLookup } from 'mime-types'
 
@@ -18,6 +18,9 @@ const resolveMediaKind = (contentType?: string, extension?: string) => {
   if (contentType === MEDIA_KIND_ACCEPT_MAP.pdf) return 'pdf'
   if (extension && (MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP.archive as readonly string[]).includes(extension)) {
     return 'archive'
+  }
+  if (extension && (MEDIA_DOCUMENT_UPLOAD_EXTENSIONS as readonly string[]).includes(extension)) {
+    return 'document'
   }
 
   return contentType?.split('/')[0]

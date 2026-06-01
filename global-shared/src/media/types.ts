@@ -1,10 +1,22 @@
-export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'archive' | 'unknown'
+export type MediaKind = 'image' | 'video' | 'audio' | 'pdf' | 'document' | 'archive' | 'unknown'
 
 export type MediaBucketName = 'doc' | 'image' | 'audio' | 'video'
 export type MediaId = string | null
 export type MediaAudioUploadExtension = 'mp3' | 'ogg' | 'wav'
 export type MediaVideoUploadExtension = 'mp4' | 'webm' | 'mov' | 'ogg'
-export type MediaDocumentUploadExtension = 'pdf' | 'zip' | 'rar' | '7z'
+export type MediaDocumentUploadExtension =
+  | 'pdf'
+  | 'doc'
+  | 'docx'
+  | 'xls'
+  | 'xlsx'
+  | 'ppt'
+  | 'pptx'
+  | 'json'
+  | 'xml'
+  | 'zip'
+  | 'rar'
+  | '7z'
 export type MediaUpload =
   | 'zip'
   | 'rar'
@@ -12,7 +24,9 @@ export type MediaUpload =
   | 'pdf'
   | 'msword'
   | 'docx'
+  | 'xls'
   | 'xlsx'
+  | 'ppt'
   | 'pptx'
   | 'json'
   | 'xml'
@@ -41,7 +55,10 @@ export interface MediaObject {
   fileBuffer?: ArrayBuffer
 }
 
-export type ImageObject = MediaObject
+export interface ImageObject extends MediaObject {
+  contentType?: string
+  size?: number
+}
 
 export interface DocumentObject extends MediaObject {
   contentType?: string
