@@ -20,77 +20,80 @@ const messageMetaDataSchema = new Schema(
   { _id: false }
 )
 
-const messageSchema = new Schema<MessageSchema>({
-  _id: {
-    type: String,
-    required: true
+const messageSchema = new Schema<MessageSchema>(
+  {
+    _id: {
+      type: String,
+      required: true
+    },
+    authorId: {
+      type: String,
+      required: true
+    },
+    authorNickname: {
+      type: String,
+      required: true
+    },
+    body: {
+      type: String,
+      required: false,
+      maxlength: MESSAGE_BODY_MAX_LENGTH
+    },
+    createdAt: {
+      type: Number,
+      required: true
+    },
+    editedAt: {
+      type: Number,
+      required: false
+    },
+    reactions: {
+      type: [reactionSchema],
+      required: false
+    },
+    images: {
+      type: [Schema.Types.Mixed],
+      required: false
+    },
+    documents: {
+      type: [Schema.Types.Mixed],
+      required: false
+    },
+    audios: {
+      type: [Schema.Types.Mixed],
+      required: false
+    },
+    videos: {
+      type: [Schema.Types.Mixed],
+      required: false
+    },
+    imageCompression: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    linkPreview: {
+      type: Schema.Types.Mixed,
+      required: false,
+      default: null
+    },
+    deletedForUserIds: {
+      type: [String],
+      required: false,
+      default: []
+    },
+    usersMetaData: {
+      type: [messageMetaDataSchema],
+      required: false,
+      default: []
+    },
+    repliedMessage: {
+      type: Schema.Types.Mixed,
+      required: false,
+      default: null
+    }
   },
-  authorId: {
-    type: String,
-    required: true
-  },
-  authorNickname: {
-    type: String,
-    required: true
-  },
-  body: {
-    type: String,
-    required: false,
-    maxlength: MESSAGE_BODY_MAX_LENGTH
-  },
-  createdAt: {
-    type: Number,
-    required: true
-  },
-  editedAt: {
-    type: Number,
-    required: false
-  },
-  reactions: {
-    type: [reactionSchema],
-    required: false
-  },
-  images: {
-    type: [Schema.Types.Mixed],
-    required: false
-  },
-  documents: {
-    type: [Schema.Types.Mixed],
-    required: false
-  },
-  audios: {
-    type: [Schema.Types.Mixed],
-    required: false
-  },
-  videos: {
-    type: [Schema.Types.Mixed],
-    required: false
-  },
-  imageCompression: {
-    type: Boolean,
-    required: false,
-    default: true
-  },
-  linkPreview: {
-    type: Schema.Types.Mixed,
-    required: false,
-    default: null
-  },
-  deletedForUserIds: {
-    type: [String],
-    required: false,
-    default: []
-  },
-  usersMetaData: {
-    type: [messageMetaDataSchema],
-    required: false,
-    default: []
-  },
-  repliedMessage: {
-    type: Schema.Types.Mixed,
-    required: false,
-    default: null
-  }
-})
+  { versionKey: false }
+)
 
 export const MessageModel = model<MessageSchema>('Message', messageSchema, 'message')
