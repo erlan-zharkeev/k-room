@@ -1,4 +1,4 @@
-import type { EventRoomCallsUpdated, EventRoomCallStarted, RoomCall } from 'global-shared'
+import type { EventRoomCallStarted, EventRoomCallsUpdated, RoomCall } from 'global-shared'
 
 import { useRoomCall } from './use-room-call.model'
 
