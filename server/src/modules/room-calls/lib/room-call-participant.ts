@@ -21,3 +21,23 @@ export const buildRoomCallParticipant = (
 
 export const resolveActiveRoomCallParticipants = (participants: RoomCallParticipantSchema[]) =>
   participants.filter((participant) => !participant.leftAt)
+
+export const resolveRoomCallParticipantByUserId = (participants: RoomCallParticipantSchema[], userId: string) =>
+  participants.find((participant) => participant.userId === userId)
+
+export const resolveActiveRoomCallUserIds = (participants: RoomCallParticipantSchema[]) =>
+  resolveActiveRoomCallParticipants(participants).map((participant) => participant.userId)
+
+export const resolveRemainingRoomCallParticipants = (
+  participants: RoomCallParticipantSchema[],
+  userId: string,
+  socketId: string
+) =>
+  resolveActiveRoomCallParticipants(participants).filter((participant) => {
+    const isLeavingParticipant = participant.userId === userId && participant.socketId === socketId
+
+    return !isLeavingParticipant
+  })
+
+export const resolveActiveRoomCallParticipantByUserId = (participants: RoomCallParticipantSchema[], userId: string) =>
+  resolveActiveRoomCallParticipants(participants).find((participant) => participant.userId === userId)

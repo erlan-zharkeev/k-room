@@ -1,16 +1,37 @@
 import {
+  REQ_STATUS,
+  ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_STATUS,
   type EventJoinRoomCall,
+  type EventLeaveRoomCall,
+  type EventSendRoomCallSignal,
   type EventStartRoomCall,
+  type EventUpdateRoomCallMediaState,
   type JoinRoomCallAckPayload,
   type StartRoomCallAckPayload
 } from 'global-shared'
 
-import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
+import { AppError } from 'src/shared/lib/app-error'
 
-import { assertRoomCallJoinAccess, assertRoomCallStartAccess } from './lib/assert-room-call-access'
-import { buildRoomCallParticipant, buildInitialRoomCallMediaState } from './lib/room-call-participant'
+import { emitToUsers } from '../presence/presence.utils'
+
+import {
+  assertRoomCallJoinAccess,
+  assertRoomCallParticipantAccess,
+  assertRoomCallStartAccess
+} from './lib/assert-room-call-access'
+import { leaveRoomCallParticipant } from './lib/leave-room-call-participant'
+import { emitRoomCallSignalReceived } from './lib/room-call-events'
+import {
+  buildInitialRoomCallMediaState,
+  buildRoomCallParticipant,
+  resolveActiveRoomCallParticipantByUserId,
+  resolveActiveRoomCallUserIds,
+  resolveRoomCallParticipantByUserId
+} from './lib/room-call-participant'
+import { buildActiveRoomCallParticipantFilter } from './lib/room-call-query'
 import { transformRoomCall } from './lib/transform-room-call'
+import { ROOM_CALLS_I18N } from './room-calls.i18n'
 import { RoomCallModel } from './room-calls.model'
 import type { RoomCallDocument } from './room-calls.types'
 
@@ -19,7 +40,7 @@ export const startRoomCall = async (
   socketId: string,
   { roomId, mediaKind }: EventStartRoomCall
 ): Promise<StartRoomCallAckPayload> => {
-  await assertRoomCallStartAccess(userId, roomId)
+  const room = await assertRoomCallStartAccess(userId, roomId)
 
   const mediaState = buildInitialRoomCallMediaState(mediaKind)
   const participant = buildRoomCallParticipant(userId, socketId, mediaState)
@@ -31,9 +52,14 @@ export const startRoomCall = async (
     mediaKind,
     participants: [participant]
   }).save()
+  const transformedRoomCall = transformRoomCall(roomCall.toObject())
+
+  emitToUsers(room.users, 'room-call-started', {
+    roomCall: transformedRoomCall
+  })
 
   return {
-    roomCallId: stringifyMongoId(roomCall._id)
+    roomCallId: transformedRoomCall.id
   }
 }
 
@@ -46,7 +72,7 @@ export const joinRoomCall = async (
   const mediaState = buildInitialRoomCallMediaState(roomCall.mediaKind)
   const participant = buildRoomCallParticipant(userId, socketId, mediaState)
   const startedAt = roomCall.startedAt ?? Date.now()
-  const currentParticipant = roomCall.participants.find((participant) => participant.userId === userId)
+  const currentParticipant = resolveRoomCallParticipantByUserId(roomCall.participants, userId)
 
   const updatedRoomCall = currentParticipant
     ? await RoomCallModel.findOneAndUpdate(
@@ -83,7 +109,83 @@ export const joinRoomCall = async (
     return null
   }
 
+  emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-joined', {
+    participant,
+    roomCallId
+  })
+
   return {
     roomCall: transformRoomCall(updatedRoomCall)
   }
+}
+
+export const leaveRoomCall = async (userId: string, socketId: string, payload: EventLeaveRoomCall) => {
+  const { roomCall } = await assertRoomCallParticipantAccess(userId, socketId, payload.roomCallId)
+
+  await leaveRoomCallParticipant(roomCall, userId, socketId, payload.reason)
+}
+
+export const leaveActiveRoomCallsBySocket = async (userId: string, socketId: string) => {
+  const activeRoomCalls = await RoomCallModel.find({
+    finishedAt: { $exists: false },
+    status: { $ne: ROOM_CALL_STATUS.FINISHED },
+    ...buildActiveRoomCallParticipantFilter(userId, socketId)
+  }).lean<RoomCallDocument[]>()
+
+  await Promise.all(
+    activeRoomCalls.map((roomCall) =>
+      leaveRoomCallParticipant(roomCall, userId, socketId, ROOM_CALL_LEAVE_REASON.DISCONNECTED)
+    )
+  )
+}
+
+export const updateRoomCallMediaState = async (
+  userId: string,
+  socketId: string,
+  { roomCallId, mediaState }: EventUpdateRoomCallMediaState
+) => {
+  await assertRoomCallParticipantAccess(userId, socketId, roomCallId)
+
+  const updatedRoomCall = await RoomCallModel.findOneAndUpdate(
+    {
+      _id: roomCallId,
+      ...buildActiveRoomCallParticipantFilter(userId, socketId)
+    },
+    {
+      $set: {
+        'participants.$.mediaState': mediaState
+      }
+    },
+    { new: true }
+  ).lean<RoomCallDocument>()
+
+  if (!updatedRoomCall) {
+    return
+  }
+
+  emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-media-state-updated', {
+    mediaState,
+    roomCallId,
+    userId
+  })
+}
+
+export const sendRoomCallSignal = async (
+  userId: string,
+  socketId: string,
+  { roomCallId, signal, signalKind, toUserId }: EventSendRoomCallSignal
+) => {
+  const { roomCall } = await assertRoomCallParticipantAccess(userId, socketId, roomCallId)
+  const targetParticipant = resolveActiveRoomCallParticipantByUserId(roomCall.participants, toUserId)
+
+  if (!targetParticipant) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallSignalFailed)
+  }
+
+  emitRoomCallSignalReceived(targetParticipant.socketId, {
+    fromUserId: userId,
+    roomCallId,
+    signal,
+    signalKind
+  })
 }

@@ -1,11 +1,26 @@
 import { Injectable } from '@nestjs/common'
-import type { EventJoinRoomCall, EventStartRoomCall, JoinRoomCallAckPayload, StartRoomCallAckPayload } from 'global-shared'
+import type {
+  EventJoinRoomCall,
+  EventLeaveRoomCall,
+  EventSendRoomCallSignal,
+  EventStartRoomCall,
+  EventUpdateRoomCallMediaState,
+  JoinRoomCallAckPayload,
+  StartRoomCallAckPayload
+} from 'global-shared'
 
-import { socketAckMiddleware } from 'src/shared/lib/socket-error'
+import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types'
 
 import { ROOM_CALLS_I18N } from './room-calls.i18n'
-import { joinRoomCall, startRoomCall } from './room-calls.service'
+import {
+  joinRoomCall,
+  leaveActiveRoomCallsBySocket,
+  leaveRoomCall,
+  sendRoomCallSignal,
+  startRoomCall,
+  updateRoomCallMediaState
+} from './room-calls.service'
 
 @Injectable()
 export class RoomCallsSocketService {
@@ -39,6 +54,50 @@ export class RoomCallsSocketService {
           }
         },
         { basicError: ROOM_CALLS_I18N.roomCallJoinFailed }
+      )
+    )
+
+    socket.on(
+      'leave-room-call',
+      socketAckMiddleware<EventLeaveRoomCall>(
+        socket,
+        async (payload) => {
+          await leaveRoomCall(socket.data.userId, socket.id, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
+      )
+    )
+
+    socket.on(
+      'update-room-call-media-state',
+      socketAckMiddleware<EventUpdateRoomCallMediaState>(
+        socket,
+        async (payload) => {
+          await updateRoomCallMediaState(socket.data.userId, socket.id, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallUpdateMediaStateFailed }
+      )
+    )
+
+    socket.on(
+      'send-room-call-signal',
+      socketErrorMiddleware<EventSendRoomCallSignal>(
+        socket,
+        async (payload) => {
+          await sendRoomCallSignal(socket.data.userId, socket.id, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallSignalFailed }
+      )
+    )
+
+    socket.on(
+      'disconnect',
+      socketErrorMiddleware(
+        socket,
+        async () => {
+          await leaveActiveRoomCallsBySocket(socket.data.userId, socket.id)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
       )
     )
   }
