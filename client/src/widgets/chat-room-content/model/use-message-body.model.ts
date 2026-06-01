@@ -2,7 +2,6 @@ import { computed, toRef, watch } from 'vue'
 
 import { useSyncMedia } from 'src/entities/media-file'
 import { useLocalizedDateTime } from 'src/entities/setting'
-import { useLiveMediaUrls } from 'src/shared/lib'
 
 import type { MessageBodyProps } from '../config/types'
 
@@ -17,17 +16,11 @@ export const useMessageBody = (props: MessageBodyProps) => {
   const showAuthorNickname = computed(() => !props.isPrivateRoom && !message.value.isSelf)
   const isMessageEditing = computed(() => isEditingMessage(props.room.id, message.value.id))
   const hasMessageBody = computed(() => Boolean(message.value.body.trim()))
-  const messageImageList = computed(() =>
-    (message.value.images ?? []).map((image) => ({
-      ...image,
-      mediaId: image.src
-    }))
-  )
+  const messageImages = computed(() => message.value.images ?? [])
   const messageDocuments = computed(() => message.value.documents ?? [])
   const messageAudios = computed(() => message.value.audios ?? [])
   const messageVideos = computed(() => message.value.videos ?? [])
-  const hasMessageImages = computed(() => Boolean(messageImageList.value.length))
-  const resolveMessageImageIds = () => messageImageList.value.map(({ mediaId }) => mediaId)
+  const resolveMessageImageIds = () => messageImages.value.map(({ src }) => src)
   const resolveMessageDocumentIds = () => messageDocuments.value.map(({ src }) => src)
   const resolveMessageAudioIds = () => messageAudios.value.map(({ src }) => src)
   const resolveMessageVideoIds = () => messageVideos.value.map(({ src }) => src)
@@ -37,8 +30,6 @@ export const useMessageBody = (props: MessageBodyProps) => {
     ...resolveMessageAudioIds(),
     ...resolveMessageVideoIds()
   ]
-  const messageImagePreviewUrlList = useLiveMediaUrls(resolveMessageImageIds)
-
   watch(
     resolveMessageMediaIds,
     (mediaIds) => {
@@ -58,11 +49,10 @@ export const useMessageBody = (props: MessageBodyProps) => {
     showAuthorNickname,
     isMessageEditing,
     hasMessageBody,
-    hasMessageImages,
     messageAudios,
     messageDocuments,
+    messageImages,
     messageVideos,
-    messageImagePreviewUrlList,
     sentAt
   }
 }

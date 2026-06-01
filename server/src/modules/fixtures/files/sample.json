@@ -1,0 +1,14 @@
+{
+    "ok":  true,
+    "fixture":  "k-room attachment json",
+    "formats":  [
+                    "docx",
+                    "xlsx",
+                    "pptx",
+                    "json",
+                    "jpg",
+                    "pdf",
+                    "mp3",
+                    "mp4"
+                ]
+}

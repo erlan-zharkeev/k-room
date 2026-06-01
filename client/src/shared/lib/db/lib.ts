@@ -5,6 +5,7 @@ import unset from 'lodash/unset'
 import { computed, getCurrentScope, onScopeDispose, shallowRef, type Ref } from 'vue'
 
 import { runDexieCacheTrimGuard } from './cache-trim'
+import { db } from './db'
 import type {
   DexieTransactionMode,
   CollectionIncomingItem,
@@ -43,6 +44,12 @@ export const useDexieLiveQuery = <T>(query: () => Promise<T> | T, initialValue: 
 }
 
 export const cloneMutable = <T>(value: T): Mutable<T> => cloneDeep(value) as Mutable<T>
+
+export const openDexieDatabase = () => db.open()
+
+export const getDexieMediaRecord = (mediaId: string) => db.media.get(mediaId)
+
+export const getDexieMediaRecords = (mediaIds: readonly string[]) => db.media.bulkGet([...mediaIds])
 
 const collectionInitializers = new Set<() => Promise<void>>()
 

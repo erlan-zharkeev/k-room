@@ -185,3 +185,66 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
   return urls
 }
+
+export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => {
+  const urlMap = shallowRef(new Map<string, string>())
+  let currentKeys: string[] = []
+
+  const clearUrls = () => {
+    if (!currentKeys.length) {
+      urlMap.value = new Map()
+
+      return
+    }
+
+    releaseUrlsAfterRender(currentKeys)
+    currentKeys = []
+    urlMap.value = new Map()
+  }
+
+  const stop = watch(
+    () => [...toValue(ids)],
+    (mediaIds, _previous, onCleanup) => {
+      clearUrls()
+
+      if (!mediaIds.length) return
+
+      const subscription = liveQuery(() => getDexieMediaRecords(mediaIds)).subscribe({
+        next: (records) => {
+          const entries = records.flatMap((record, index) => {
+            if (!record?.blob) return []
+
+            const mediaId = mediaIds[index]
+            const { blob, etag, lastChecked, lastModified } = record
+            const key = buildMediaUrlCacheKey({ mediaId, etag, lastChecked, lastModified })
+
+            return [{ blob, key, mediaId }]
+          })
+          const nextKeys = entries.map(({ key }) => key)
+
+          if (!hasMediaUrlCacheKeyChanges(currentKeys, nextKeys)) return
+
+          const previousKeys = currentKeys
+          const nextUrlMap = new Map(entries.map(({ blob, key, mediaId }) => [mediaId, acquireUrl(key, blob)]))
+
+          currentKeys = nextKeys
+          urlMap.value = nextUrlMap
+          releaseUrlsAfterRender(previousKeys)
+        },
+        error: clearUrls
+      })
+
+      onCleanup(() => {
+        subscription.unsubscribe()
+        clearUrls()
+      })
+    },
+    { immediate: true }
+  )
+
+  if (getCurrentScope()) {
+    onScopeDispose(stop)
+  }
+
+  return urlMap
+}

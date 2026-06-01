@@ -1,28 +1,18 @@
-import type { EventCallsUpdated, EventCallUpdated } from 'global-shared'
-
 import { socket } from 'src/shared/api'
 
-import { useCall } from './use-call.model'
+import { useCallSync } from './use-call-sync.model'
 
 export const useCallDataUpdateMonitor = () => {
-  const { bulkPut, put } = useCall()
-
-  const handleCallsLoaded = async (calls: EventCallsUpdated) => {
-    await bulkPut(calls)
-  }
-
-  const handleCallChanged = async (call: EventCallUpdated) => {
-    await put(call)
-  }
+  const { syncCalls, syncCall } = useCallSync()
 
   const initializeCallDataUpdateMonitor = () => {
-    socket.on('calls-data-loaded', handleCallsLoaded)
-    socket.on('call-data-changed', handleCallChanged)
+    socket.on('calls-data-loaded', syncCalls)
+    socket.on('call-data-changed', syncCall)
   }
 
   const disposeCallDataUpdateMonitor = () => {
-    socket.off('calls-data-loaded', handleCallsLoaded)
-    socket.off('call-data-changed', handleCallChanged)
+    socket.off('calls-data-loaded', syncCalls)
+    socket.off('call-data-changed', syncCall)
   }
 
   return {

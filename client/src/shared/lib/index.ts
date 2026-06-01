@@ -38,13 +38,12 @@ export {
   isFormFieldInvalid,
   getNmorphGeneratedColorSchema
 } from './misc/misc'
-export { acquireUrl, releaseUrl, useLiveMediaUrl, useLiveMediaUrls } from './media/media'
+export { acquireUrl, releaseUrl, useLiveMediaUrl, useLiveMediaUrlMap, useLiveMediaUrls } from './media/media'
 export { loadStorageEstimate, useStorageEstimate } from './storage/storage'
 export { useI18n } from './i18n/i18n'
 export { createPasswordValidationRules } from './validation/validation'
 export { CLIENT_LANGUAGE, I18N_KEY } from './i18n/constants'
 export {
-  dexieCallStore,
   dexieCollectionStore,
   dexieKeyValueStore,
   initializeDexieCollectionStores,

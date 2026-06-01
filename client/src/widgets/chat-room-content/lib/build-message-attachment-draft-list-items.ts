@@ -2,7 +2,6 @@ import type { AudioObject, DocumentObject, ImageObject, VideoObject } from 'glob
 
 import { MESSAGE_ATTACHMENT_DRAFT_KIND } from '../config/constants'
 import type {
-  MessageAttachmentDraftFileMediaObject,
   MessageAttachmentDraftListFileItem,
   MessageAttachmentDraftListFileKind,
   MessageAttachmentDraftListImageItem,
@@ -18,14 +17,13 @@ const buildMessageImageAttachmentDraftListItems = (images: ImageObject[]): Messa
 
 const buildMessageFileAttachmentDraftListItems = (
   kind: MessageAttachmentDraftListFileKind,
-  mediaObjects: MessageAttachmentDraftFileMediaObject[]
+  mediaObjects: (DocumentObject | AudioObject | VideoObject)[]
 ): MessageAttachmentDraftListFileItem[] =>
-  mediaObjects.map(({ contentType, name, previewSrc, size, src }) => ({
+  mediaObjects.map(({ contentType, name, size, src }) => ({
     kind,
     name,
     src,
     contentType,
-    previewSrc,
     size
   }))
 

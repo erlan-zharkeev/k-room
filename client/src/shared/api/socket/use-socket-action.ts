@@ -29,9 +29,12 @@ export const useSocketAction = () => {
     payload: ClientToServerSocketPayloadMap[TEvent],
     options: EmitSocketActionOptions<ClientToServerSocketAckPayloadMap[TEvent], TReason> = {}
   ) => {
-    const emitWithAck = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS).emitWithAck as EmitSocketActionWithAck
+    const emitWithAckSocket = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS) as typeof socket & {
+      emitWithAck: EmitSocketActionWithAck
+    }
 
-    return emitWithAck<TEvent, TReason>(event, payload)
+    return emitWithAckSocket
+      .emitWithAck<TEvent, TReason>(event, payload)
       .then((response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>) => {
         if (response.ok) {
           options.onSuccess?.(response)

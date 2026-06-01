@@ -1,4 +1,4 @@
-import type { INmorphCustomFileData, INmorphTagItemProps } from '@nmorph/nmorph-ui-kit'
+import type { INmorphCustomFileData, INmorphTagItemProps, NmorphMediaGalleryItem } from '@nmorph/nmorph-ui-kit'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type {
   AudioObject,
@@ -20,6 +20,7 @@ import type {
   MESSAGE_ATTACHMENT_DRAFT_KIND,
   MESSAGE_CONTEXT_MENU_ACTION,
   MESSAGE_DRAFT_REFERENCE_KIND,
+  MESSAGE_MEDIA_GALLERY_ITEM_KIND,
   MESSAGE_STATUS_DOT_TONE,
   MESSAGE_TEXT_SEGMENT_KIND
 } from './constants'
@@ -201,17 +202,25 @@ export interface MessageAudioListProps {
   audios: AudioObject[]
 }
 
-export interface MessageVideoCardProps {
-  video: VideoObject
-}
-
-export interface MessageVideoListProps {
+export interface MessageMediaGalleryProps {
+  images: ImageObject[]
   videos: VideoObject[]
 }
 
+export type MessageMediaGalleryItemKind =
+  (typeof MESSAGE_MEDIA_GALLERY_ITEM_KIND)[keyof typeof MESSAGE_MEDIA_GALLERY_ITEM_KIND]
+
+export type MessageMediaGalleryItem = NmorphMediaGalleryItem & {
+  id: string
+  mediaId: string
+  name: string
+}
+
 export interface MessageAttachmentDraftListBaseItem {
+  contentType?: string
   src: string
   name: string
+  size?: number
 }
 
 export interface MessageAttachmentDraftListImageItem extends MessageAttachmentDraftListBaseItem {
@@ -223,20 +232,8 @@ export type MessageAttachmentDraftListFileKind =
   | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO
   | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.VIDEO
 
-export interface MessageMediaDraftPreview {
-  previewSrc: string
-}
-
-export type MessageMediaDraftPreviewObject<Media extends MediaObject> = Media & MessageMediaDraftPreview
-
-export type MessageAttachmentDraftFileMediaObject = (DocumentObject | AudioObject | VideoObject) &
-  Partial<MessageMediaDraftPreview>
-
 export interface MessageAttachmentDraftListFileItem extends MessageAttachmentDraftListBaseItem {
   kind: MessageAttachmentDraftListFileKind
-  contentType?: string
-  previewSrc?: string
-  size?: number
 }
 
 export type MessageAttachmentDraftListItem = MessageAttachmentDraftListImageItem | MessageAttachmentDraftListFileItem
