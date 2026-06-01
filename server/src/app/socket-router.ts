@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 
-import { CallsSocketService } from 'src/modules/calls/calls.socket'
 import { ChatRoomsSocketService } from 'src/modules/chat-rooms/chat-rooms.socket'
 import { ContactsSocketService } from 'src/modules/contacts/contacts.socket'
 import { MessagesSocketService } from 'src/modules/messages/messages.socket'
+import { RoomCallsSocketService } from 'src/modules/room-calls/room-calls.socket'
 import { UserSocketService } from 'src/modules/user/user.socket'
 import type { SocketInstance } from 'src/shared/types'
 
@@ -14,7 +14,7 @@ export class SocketRouter {
     private readonly chatRoomsSocketService: ChatRoomsSocketService,
     private readonly contactsSocketService: ContactsSocketService,
     private readonly messagesSocketService: MessagesSocketService,
-    private readonly callsSocketService: CallsSocketService
+    private readonly roomCallsSocketService: RoomCallsSocketService
   ) {}
 
   register(socket: SocketInstance) {
@@ -22,6 +22,6 @@ export class SocketRouter {
     this.chatRoomsSocketService.register(socket)
     this.contactsSocketService.register(socket)
     this.messagesSocketService.register(socket)
-    this.callsSocketService.register(socket)
+    this.roomCallsSocketService.register(socket)
   }
 }

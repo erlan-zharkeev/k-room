@@ -7,45 +7,35 @@ export type {
 } from './auth/types'
 
 export type {
-  CallStatus,
-  CallFlow,
-  CallMediaKind,
-  CallSignalKind,
-  CallLeaveReason,
-  CallParticipantMediaState,
-  CallParticipant,
+  RoomCallStatus,
+  RoomCallMediaKind,
+  RoomCallSignalKind,
+  RoomCallLeaveReason,
+  RoomCallParticipantMediaState,
+  RoomCallParticipant,
   RoomCall,
-  Call,
-  EventMarkCallAsVideo,
-  EventCallsUpdated,
   EventRoomCallsUpdated,
-  EventCallUser,
-  EventCallAccepted,
-  EventAnswerCall,
-  EventCallStartedAt,
-  EventCallEnded,
   EventStartRoomCall,
   StartRoomCallAckPayload,
   EventJoinRoomCall,
   JoinRoomCallAckPayload,
   EventLeaveRoomCall,
-  EventUpdateCallMediaState,
-  EventSendCallSignal,
+  EventUpdateRoomCallMediaState,
+  EventSendRoomCallSignal,
   EventRoomCallStarted,
   EventRoomCallJoined,
   EventRoomCallLeft,
   EventRoomCallEnded,
   EventRoomCallMediaStateUpdated,
-  EventCallSignalReceived
-} from './calls/types'
+  EventRoomCallSignalReceived
+} from './room-calls/types'
 export {
-  CALL_FLOW,
-  CALL_LEAVE_REASON,
-  CALL_MEDIA_KIND,
-  CALL_PARTICIPANT_LIMIT,
-  CALL_SIGNAL_KIND,
-  CALL_STATUS
-} from './calls/constants'
+  ROOM_CALL_LEAVE_REASON,
+  ROOM_CALL_MEDIA_KIND,
+  ROOM_CALL_PARTICIPANT_LIMIT,
+  ROOM_CALL_SIGNAL_KIND,
+  ROOM_CALL_STATUS
+} from './room-calls/constants'
 
 export {
   CHAT_KIND,

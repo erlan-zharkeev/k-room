@@ -3,7 +3,7 @@ import { MINUTE_IN_MS } from 'global-shared'
 export const DEXIE_CACHE_TRIMMER_IDS = {
   MEDIA: 'media',
   MESSAGES: 'messages',
-  CALLS: 'calls',
+  ROOM_CALLS: 'room-calls',
   KNOWN_USERS: 'known-users',
   CONTACTS: 'contacts',
   CHAT_ROOMS: 'chat-rooms'
@@ -12,7 +12,7 @@ export const DEXIE_CACHE_TRIMMER_IDS = {
 export const DEXIE_CACHE_TRIMMER_PRIORITIES = {
   MEDIA: 10,
   MESSAGES: 20,
-  CALLS: 30,
+  ROOM_CALLS: 30,
   KNOWN_USERS: 40,
   CONTACTS: 50,
   CHAT_ROOMS: 60

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
 
-import { CallsSocketService } from 'src/modules/calls/calls.socket'
 import { ChatRoomsSocketService } from 'src/modules/chat-rooms/chat-rooms.socket'
 import { ContactsSocketService } from 'src/modules/contacts/contacts.socket'
 import { MessagesSocketService } from 'src/modules/messages/messages.socket'
 import { PresenceModule } from 'src/modules/presence/presence.module'
+import { RoomCallsSocketService } from 'src/modules/room-calls/room-calls.socket'
 import { SecurityModule } from 'src/modules/security/security.module'
 import { UserModule } from 'src/modules/user/user.module'
 import { UserSocketService } from 'src/modules/user/user.socket'
@@ -21,7 +21,7 @@ import { SocketService } from './socket.service'
     ChatRoomsSocketService,
     ContactsSocketService,
     MessagesSocketService,
-    CallsSocketService
+    RoomCallsSocketService
   ]
 })
 export class SocketModule {}
