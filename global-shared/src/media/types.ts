@@ -59,3 +59,7 @@ export interface VideoObject extends MediaObject {
 }
 
 export type MediaFileValue = ImageObject
+
+export interface EventMediaFilesDeleted {
+  mediaIds: string[]
+}

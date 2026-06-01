@@ -1,5 +1,5 @@
 import type { MediaId } from '../media/types'
-import type { StreamSettings } from '../shared/types'
+import type { BasicStreamSettings, StreamSettings } from '../shared/types'
 
 export type CallStatus = 'calling' | 'in-progress' | 'finished'
 
@@ -21,4 +21,40 @@ export interface Call {
   video: boolean
   interlocutorSettings?: StreamSettings
   setId?: boolean
+}
+
+export interface EventMarkCallAsVideo {
+  callId: string
+}
+
+export type EventCallUpdated = Call
+export type EventCallsUpdated = Call[]
+
+export interface EventCallUser {
+  callId?: string
+  userToCall?: string
+  signal: unknown
+  from: string
+  avatar: string
+  callerNickname: string
+}
+
+export type EventChangeCallSettings = BasicStreamSettings
+
+export interface EventCallAccepted {
+  signal: unknown
+}
+
+export interface EventAnswerCall {
+  callId: string
+  to: string
+  signal: unknown
+  selfSocketId: string
+}
+
+export type EventCallStartedAt = number
+
+export interface EventCallEnded {
+  callId: string
+  callerId: string
 }

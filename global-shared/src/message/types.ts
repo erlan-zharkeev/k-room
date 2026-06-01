@@ -65,3 +65,112 @@ export interface Message {
   linkPreview?: MessageLinkPreview | null
   repliedMessage?: RepliedMessage | null
 }
+
+export interface EventMessageDelivered {
+  roomId: string
+  message: Message
+}
+
+export interface EventSendMessage {
+  roomId: string
+  message: Message
+}
+
+export interface EventEditMessage {
+  roomId: string
+  messageId: string
+  body: string
+  images: ImageObject[]
+  documents?: DocumentObject[]
+  audios?: AudioObject[]
+  videos?: VideoObject[]
+}
+
+export interface EventMessageEdited {
+  roomId: string
+  messageId: string
+  body: string
+  images: ImageObject[]
+  documents?: DocumentObject[]
+  audios?: AudioObject[]
+  videos?: VideoObject[]
+  linkPreview: MessageLinkPreview | null
+  editedAt: number
+}
+
+export interface EventMessageLinkPreviewUpdated {
+  roomId: string
+  messageId: string
+  linkPreview: MessageLinkPreview
+}
+
+export interface EventUpdateMessageStatus {
+  roomId: string
+  messageId: string
+  status: MessageStatus
+  userId: string
+}
+
+export interface EventMessagesStatusUpdated {
+  roomId: string
+  messageIds: string[]
+  status: MessageStatus
+  userId: string
+  updatedMessagesQuantity: number
+}
+
+export interface EventChangeMessageStatus {
+  roomId: string
+  messageId: string
+  status: MessageStatus
+}
+
+export interface EventLoadRoomMessages {
+  roomId: string
+  limit: number
+  direction: MessageLoadDirection
+  anchorMessageId?: string
+}
+
+export interface EventRoomMessagesLoaded {
+  roomId: string
+  messages: Message[]
+  rangeStartMessageId: string | null
+  rangeEndMessageId: string | null
+}
+
+export interface EventUpdatePinnedMessage {
+  roomId: string
+  messageId: string
+  isPinned: boolean
+}
+
+export interface EventPinnedMessageUpdated {
+  roomId: string
+  pinnedMessageId: string | null
+  pinnedMessage?: Message | null
+}
+
+export interface EventDeleteMessage {
+  deleteForEveryone: boolean
+  messageId: string
+  roomId: string
+}
+
+export interface EventAddReaction {
+  glyphKey: string
+  messageId: string
+  roomId: string
+}
+
+export interface EventMessageDeleted {
+  messageId: string
+  roomId: string
+}
+
+export interface EventUpdatedMessageReactions {
+  roomId: string
+  messageId: string
+  action: MessageReactionUpdateAction
+  reaction: MessageReaction
+}
