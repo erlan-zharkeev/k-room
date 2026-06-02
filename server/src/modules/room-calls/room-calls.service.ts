@@ -2,6 +2,8 @@ import {
   REQ_STATUS,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_STATUS,
+  isRoomPrivate,
+  type EventDeclineRoomCall,
   type EventJoinRoomCall,
   type EventLeaveRoomCall,
   type EventSendRoomCallSignal,
@@ -13,14 +15,22 @@ import {
 
 import { AppError } from 'src/shared/lib/app-error'
 
+import { findRoomUsersByUser } from '../chat-rooms/lib/chat-room-persistence'
 import { emitToUsers } from '../presence/presence.utils'
+import type { RedisService } from '../security/redis.service'
 
 import {
+  findActiveRoomCallById,
   assertRoomCallJoinAccess,
   assertRoomCallParticipantAccess,
   assertRoomCallStartAccess
 } from './lib/assert-room-call-access'
 import { leaveRoomCallParticipant } from './lib/leave-room-call-participant'
+import {
+  clearRoomCallDeclinedUsers,
+  removeRoomCallDeclinedUser,
+  saveRoomCallDeclinedUser
+} from './lib/room-call-decline-state'
 import { emitRoomCallSignalReceived } from './lib/room-call-events'
 import {
   buildInitialRoomCallMediaState,
@@ -68,6 +78,7 @@ export const startRoomCall = async (
 }
 
 export const joinRoomCall = async (
+  redisService: RedisService,
   userId: string,
   socketId: string,
   { roomCallId }: EventJoinRoomCall
@@ -119,6 +130,8 @@ export const joinRoomCall = async (
     return null
   }
 
+  await removeRoomCallDeclinedUser(redisService, roomCallId, userId)
+
   emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-joined', {
     participant,
     roomCallId,
@@ -134,6 +147,64 @@ export const leaveRoomCall = async (userId: string, socketId: string, payload: E
   const { roomCall } = await assertRoomCallParticipantAccess(userId, socketId, payload.roomCallId)
 
   await leaveRoomCallParticipant(roomCall, userId, socketId, payload.reason)
+}
+
+export const declineRoomCall = async (
+  redisService: RedisService,
+  userId: string,
+  { roomCallId }: EventDeclineRoomCall
+) => {
+  const roomCall = await findActiveRoomCallById(roomCallId)
+
+  if (!roomCall) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+  }
+
+  const room = await findRoomUsersByUser(roomCall.roomId, userId)
+
+  if (!room) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+  }
+
+  const isInitiator = roomCall.initiatorId === userId
+
+  if (isInitiator) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
+  }
+
+  const declinedAt = Date.now()
+  const privateRoom = isRoomPrivate(room)
+  await saveRoomCallDeclinedUser(redisService, roomCallId, userId)
+
+  if (privateRoom) {
+    await RoomCallModel.findOneAndUpdate(
+      {
+        _id: roomCallId,
+        ...buildActiveRoomCallFilter()
+      },
+      {
+        $set: {
+          finishedAt: declinedAt,
+          status: ROOM_CALL_STATUS.FINISHED
+        }
+      },
+      { new: true }
+    ).lean<RoomCallDocument>()
+  }
+
+
+  emitToUsers(room.users, 'room-call-declined', {
+    roomCallId,
+    userId
+  })
+
+  if (privateRoom) {
+    await clearRoomCallDeclinedUsers(redisService, roomCallId)
+    emitToUsers(room.users, 'room-call-ended', {
+      finishedAt: declinedAt,
+      roomCallId
+    })
+  }
 }
 
 export const leaveActiveRoomCallsBySocket = async (userId: string, socketId: string) => {

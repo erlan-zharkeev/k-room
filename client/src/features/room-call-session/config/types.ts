@@ -9,9 +9,7 @@ import type { Component } from 'vue'
 
 import type { ROOM_CALL_SESSION_I18N } from './i18n'
 
-export type RoomCallDescriptionSignalKind =
-  | typeof ROOM_CALL_SIGNAL_KIND.OFFER
-  | typeof ROOM_CALL_SIGNAL_KIND.ANSWER
+export type RoomCallDescriptionSignalKind = typeof ROOM_CALL_SIGNAL_KIND.OFFER | typeof ROOM_CALL_SIGNAL_KIND.ANSWER
 
 export type RoomCallLocalMediaStreamList = Array<MediaStream | null | undefined>
 

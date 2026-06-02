@@ -1,5 +1,6 @@
 import type {
   EventRoomCallEnded,
+  EventRoomCallDeclined,
   EventRoomCallJoined,
   EventRoomCallLeft,
   EventRoomCallMediaStateUpdated,
@@ -10,9 +11,11 @@ import type {
 
 import {
   applyRoomCallEnded,
+  applyRoomCallDeclined,
   applyRoomCallJoined,
   applyRoomCallLeft,
-  applyRoomCallMediaStateUpdated
+  applyRoomCallMediaStateUpdated,
+  normalizeRoomCall
 } from '../lib/room-call-sync'
 
 import { useRoomCall } from './use-room-call.model'
@@ -21,11 +24,11 @@ export const useRoomCallSync = () => {
   const { bulkPut, mutate, put } = useRoomCall()
 
   const syncRoomCalls = async (roomCalls: EventRoomCallsUpdated) => {
-    await bulkPut(roomCalls)
+    await bulkPut(roomCalls.map(normalizeRoomCall))
   }
 
   const syncRoomCall = async (roomCall: RoomCall) => {
-    await put(roomCall)
+    await put(normalizeRoomCall(roomCall))
   }
 
   const syncStartedRoomCall = async ({ roomCall }: EventRoomCallStarted) => {
@@ -41,6 +44,12 @@ export const useRoomCallSync = () => {
   const syncLeftRoomCall = async (payload: EventRoomCallLeft) => {
     await mutate(payload.roomCallId, (roomCall) => {
       applyRoomCallLeft(roomCall, payload)
+    })
+  }
+
+  const syncDeclinedRoomCall = async (payload: EventRoomCallDeclined) => {
+    await mutate(payload.roomCallId, (roomCall) => {
+      applyRoomCallDeclined(roomCall, payload)
     })
   }
 
@@ -61,6 +70,7 @@ export const useRoomCallSync = () => {
     syncRoomCall,
     syncStartedRoomCall,
     syncJoinedRoomCall,
+    syncDeclinedRoomCall,
     syncLeftRoomCall,
     syncEndedRoomCall,
     syncRoomCallMediaStateUpdated

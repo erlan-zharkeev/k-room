@@ -19,10 +19,7 @@ export const setRoomCallMediaStreamTracksEnabled = (
   })
 }
 
-export const hasEnabledRoomCallMediaTrack = (
-  stream: MediaStream | null | undefined,
-  kind: MediaStreamTrack['kind']
-) =>
+export const hasEnabledRoomCallMediaTrack = (stream: MediaStream | null | undefined, kind: MediaStreamTrack['kind']) =>
   Boolean(
     stream?.getTracks().some((track) => {
       const isTargetKind = track.kind === kind

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import {
   ROOM_CALL_ACK_FAILURE_REASON,
+  type EventDeclineRoomCall,
   type EventJoinRoomCall,
   type EventLeaveRoomCall,
   type EventSendRoomCallSignal,
@@ -13,8 +14,11 @@ import {
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types'
 
+import { RedisService } from '../security/redis.service'
+
 import { ROOM_CALLS_I18N } from './room-calls.i18n'
 import {
+  declineRoomCall,
   joinRoomCall,
   leaveActiveRoomCallsBySocket,
   leaveRoomCall,
@@ -25,6 +29,8 @@ import {
 
 @Injectable()
 export class RoomCallsSocketService {
+  constructor(private readonly redisService: RedisService) {}
+
   register(socket: SocketInstance) {
     socket.on(
       'start-room-call',
@@ -43,7 +49,7 @@ export class RoomCallsSocketService {
       socketAckMiddleware<EventJoinRoomCall, JoinRoomCallAckPayload>(
         socket,
         async (payload) => {
-          const result = await joinRoomCall(socket.data.userId, socket.id, payload)
+          const result = await joinRoomCall(this.redisService, socket.data.userId, socket.id, payload)
 
           if (!result) {
             return { ok: false, reason: ROOM_CALL_ACK_FAILURE_REASON.JOIN_FAILED }
@@ -64,6 +70,17 @@ export class RoomCallsSocketService {
         socket,
         async (payload) => {
           await leaveRoomCall(socket.data.userId, socket.id, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
+      )
+    )
+
+    socket.on(
+      'decline-room-call',
+      socketAckMiddleware<EventDeclineRoomCall>(
+        socket,
+        async (payload) => {
+          await declineRoomCall(this.redisService, socket.data.userId, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
       )

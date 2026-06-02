@@ -1,4 +1,5 @@
 import type {
+  EventDeclineRoomCall,
   EventSendRoomCallSignal,
   RoomCallAckFailureReason,
   RoomCallLeaveReason,
@@ -22,6 +23,16 @@ export const useRoomCallSession = () => {
     return emitSocketAction<'join-room-call', RoomCallAckFailureReason>('join-room-call', {
       roomCallId
     })
+  }
+
+  const declineRoomCall = async (roomCallId: string) => {
+    const payload: EventDeclineRoomCall = {
+      roomCallId
+    }
+
+    const response = await emitSocketAction('decline-room-call', payload)
+
+    return response.ok
   }
 
   const leaveRoomCall = async (roomCallId: string, reason: RoomCallLeaveReason) => {
@@ -49,6 +60,7 @@ export const useRoomCallSession = () => {
   return {
     startRoomCall,
     joinRoomCall,
+    declineRoomCall,
     leaveRoomCall,
     updateRoomCallMediaState,
     sendRoomCallSignal

@@ -1,0 +1,37 @@
+import type { RoomCall } from 'global-shared'
+
+import type { RedisService } from 'src/modules/security/redis.service'
+
+import { ROOM_CALL_DECLINE_STATE_TTL_MS } from '../constants'
+
+const buildRoomCallDeclinedUsersKey = (roomCallId: string) => `room-call:${roomCallId}:declined-user-ids`
+
+export const saveRoomCallDeclinedUser = async (redisService: RedisService, roomCallId: string, userId: string) => {
+  const key = buildRoomCallDeclinedUsersKey(roomCallId)
+
+  await redisService.addSetValue(key, userId)
+  await redisService.refreshTtl(key, ROOM_CALL_DECLINE_STATE_TTL_MS)
+}
+
+export const removeRoomCallDeclinedUser = async (redisService: RedisService, roomCallId: string, userId: string) => {
+  await redisService.removeSetValue(buildRoomCallDeclinedUsersKey(roomCallId), userId)
+}
+
+export const clearRoomCallDeclinedUsers = async (redisService: RedisService, roomCallId: string) => {
+  await redisService.remove(buildRoomCallDeclinedUsersKey(roomCallId))
+}
+
+export const isRoomCallDeclinedByUser = (redisService: RedisService, roomCallId: string, userId: string) =>
+  redisService.isSetValueExists(buildRoomCallDeclinedUsersKey(roomCallId), userId)
+
+export const filterAvailableRoomCallsForUser = async (
+  redisService: RedisService,
+  roomCalls: RoomCall[],
+  userId: string
+) => {
+  const declinedStates = await Promise.all(
+    roomCalls.map((roomCall) => isRoomCallDeclinedByUser(redisService, roomCall.id, userId))
+  )
+
+  return roomCalls.filter((_roomCall, index) => !declinedStates[index])
+}

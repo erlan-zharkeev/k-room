@@ -4,6 +4,7 @@ import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconExit, NmorphIcon } fro
 import { useUser } from 'src/entities/user'
 import { AppProfileBasicData } from 'src/shared/ui'
 
+import CallStatus from '../../call-status/ui/CallStatus.vue'
 import { useLogout } from '../model/use-logout.model'
 import { useTopBarSocketStatus } from '../model/use-top-bar-socket-status.model'
 
@@ -24,13 +25,17 @@ const { socketTag } = useTopBarSocketStatus()
         <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" size="tiny" />
       </template>
     </AppProfileBasicData>
-    <NmorphCard shadow-type="inset" :fill="false">
-      <NmorphButton @click="logout" :loading="isLogoutLoading" shape="square">
-        <NmorphIcon width="16px" height="16px">
-          <NmorphIconExit />
-        </NmorphIcon>
-      </NmorphButton>
-    </NmorphCard>
+    <div class="top-bar__content-right-side">
+      <CallStatus />
+      <NmorphCard shadow-type="inset" :fill="false">
+        <NmorphButton @click="logout" :loading="isLogoutLoading" shape="square">
+          <NmorphIcon width="16px" height="16px">
+            <NmorphIconExit />
+          </NmorphIcon>
+        </NmorphButton>
+      </NmorphCard>
+    </div>
+
   </NmorphCard>
 </template>
 
@@ -40,5 +45,10 @@ const { socketTag } = useTopBarSocketStatus()
   gap: 12px;
   align-items: center;
   justify-content: space-between;
+}
+
+.top-bar__content-right-side {
+  display: flex;
+  gap: 16px;
 }
 </style>

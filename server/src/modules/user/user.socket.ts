@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import type { EventUpdateLanguage } from 'global-shared'
 
 import { PresenceService } from 'src/modules/presence/presence.service'
+import { RedisService } from 'src/modules/security/redis.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types'
 
@@ -10,7 +11,10 @@ import { USER_SOCKET_I18N } from './user.i18n'
 
 @Injectable()
 export class UserSocketService {
-  constructor(private readonly presenceService: PresenceService) {}
+  constructor(
+    private readonly presenceService: PresenceService,
+    private readonly redisService: RedisService
+  ) {}
 
   register(socket: SocketInstance) {
     socket.on(
@@ -40,7 +44,7 @@ export class UserSocketService {
       socketErrorMiddleware(
         socket,
         async () => {
-          const data = await resolveActualUserSocketData(socket.data.userId, this.presenceService)
+          const data = await resolveActualUserSocketData(socket.data.userId, this.presenceService, this.redisService)
 
           if (!data) {
             return
