@@ -16,6 +16,16 @@ export const CALLS_PAGE_I18N = defineI18n({
     ru: 'Звонки не найдены',
     zh: '未找到通话'
   },
+  loading: {
+    en: 'Loading',
+    ru: 'Загрузка',
+    zh: '加载中'
+  },
+  loadMore: {
+    en: 'Load more',
+    ru: 'Загрузить еще',
+    zh: '加载更多'
+  },
   activeCall: {
     en: 'Active',
     ru: 'Активный',

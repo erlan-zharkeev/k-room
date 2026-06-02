@@ -27,9 +27,6 @@ export const resolveRoomCallHistoryMediaI18n = (mediaKind: RoomCallMediaKind) =>
   return CALLS_PAGE_I18N.screenCall
 }
 
-export const isRoomCallHistoryItemMatchedBySearchQuery = (item: RoomCallHistoryItem, normalizedSearchQuery: string) =>
-  item.title.toLowerCase().includes(normalizedSearchQuery)
-
 export const sortRoomCallHistoryItems = (items: RoomCallHistoryItem[]) =>
   [...items].sort((current, next) => {
     if (current.isActive !== next.isActive) {
