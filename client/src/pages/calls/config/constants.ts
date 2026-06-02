@@ -2,6 +2,8 @@ import { NmorphIconMonitor, NmorphIconPhone, NmorphIconVideoCamera } from '@nmor
 import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind } from 'global-shared'
 import type { Component } from 'vue'
 
+export const ROOM_CALL_HISTORY_SEARCH_DEBOUNCE_MS = 300
+
 export const ROOM_CALL_HISTORY_STATUS_KIND = {
   ACTIVE: 'active',
   FINISHED: 'finished',

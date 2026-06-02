@@ -4,6 +4,8 @@ import {
   type EventDeclineRoomCall,
   type EventJoinRoomCall,
   type EventLeaveRoomCall,
+  type EventLoadRoomCalls,
+  type EventRoomCallsLoaded,
   type EventSendRoomCallSignal,
   type EventStartRoomCall,
   type EventUpdateRoomCallMediaState,
@@ -22,6 +24,7 @@ import {
   joinRoomCall,
   leaveActiveRoomCallsBySocket,
   leaveRoomCall,
+  loadRoomCalls,
   sendRoomCallSignal,
   startRoomCall,
   updateRoomCallMediaState
@@ -72,6 +75,26 @@ export class RoomCallsSocketService {
           await leaveRoomCall(socket.data.userId, socket.id, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
+      )
+    )
+
+    socket.on(
+      'load-room-calls',
+      socketAckMiddleware<EventLoadRoomCalls, EventRoomCallsLoaded>(
+        socket,
+        async (payload) => {
+          const roomCallsData = await loadRoomCalls(this.redisService, socket.data.userId, payload)
+
+          if (!roomCallsData) {
+            return { ok: false }
+          }
+
+          return {
+            ok: true,
+            payload: roomCallsData
+          }
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallLoadFailed }
       )
     )
 

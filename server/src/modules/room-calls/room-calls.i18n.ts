@@ -21,6 +21,16 @@ export const ROOM_CALLS_I18N = defineI18n({
     ru: 'Не удалось выйти из звонка',
     zh: '退出通话失败'
   },
+  roomCallLoadFailed: {
+    en: 'Failed to load calls',
+    ru: 'Не удалось загрузить звонки',
+    zh: '加载通话失败'
+  },
+  roomCallLoadLimitExceeded: {
+    en: 'Call load limit exceeded',
+    ru: 'Превышен лимит загрузки звонков',
+    zh: '超出通话加载上限'
+  },
   roomCallLimitReached: {
     en: 'Call participant limit reached',
     ru: 'Достигнут лимит участников звонка',

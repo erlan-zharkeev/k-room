@@ -2,6 +2,8 @@ export const ROOM_CALL_PARTICIPANT_LIMIT = 5
 
 export const ROOM_CALL_ACTUALIZATION_LIMIT = 100
 
+export const ROOM_CALL_LOAD_LIMIT_MAX = 50
+
 export const ROOM_CALL_STATUS = {
   CALLING: 'calling',
   IN_PROGRESS: 'in-progress',

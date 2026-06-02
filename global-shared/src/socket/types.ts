@@ -56,6 +56,7 @@ import type {
   EventDeclineRoomCall,
   EventJoinRoomCall,
   EventLeaveRoomCall,
+  EventLoadRoomCalls,
   EventRoomCallDeclined,
   EventRoomCallEnded,
   EventRoomCallJoined,
@@ -63,6 +64,7 @@ import type {
   EventRoomCallMediaStateUpdated,
   EventRoomCallSignalReceived,
   EventRoomCallStarted,
+  EventRoomCallsLoaded,
   EventRoomCallsUpdated,
   EventSendRoomCallSignal,
   EventStartRoomCall,
@@ -141,6 +143,7 @@ export interface ClientToServerSocketPayloadMap {
   'mark-room-as-read': EventMarkRoomAsRead
   'delete-message': EventDeleteMessage
   'add-reaction': EventAddReaction
+  'load-room-calls': EventLoadRoomCalls
   'start-room-call': EventStartRoomCall
   'join-room-call': EventJoinRoomCall
   'decline-room-call': EventDeclineRoomCall
@@ -166,6 +169,7 @@ export interface ClientToServerSocketAckPayloadMap {
   'mark-room-as-read': void
   'delete-message': void
   'add-reaction': void
+  'load-room-calls': EventRoomCallsLoaded
   'start-room-call': StartRoomCallAckPayload
   'join-room-call': JoinRoomCallAckPayload
   'decline-room-call': void

@@ -44,6 +44,18 @@ export interface RoomCall {
 
 export type EventRoomCallsUpdated = RoomCall[]
 
+export interface EventLoadRoomCalls {
+  query: string
+  limit: number
+  beforeCalledAt?: number
+}
+
+export interface EventRoomCallsLoaded {
+  roomCalls: RoomCall[]
+  nextBeforeCalledAt: number | null
+  hasMore: boolean
+}
+
 export interface EventStartRoomCall {
   roomId: string
   mediaKind: RoomCallMediaKind
