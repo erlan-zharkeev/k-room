@@ -4,9 +4,10 @@ import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconExit, NmorphIcon } fro
 import { useUser } from 'src/entities/user'
 import { AppProfileBasicData } from 'src/shared/ui'
 
-import CallStatus from '../../call-status/ui/CallStatus.vue'
 import { useLogout } from '../model/use-logout.model'
 import { useTopBarSocketStatus } from '../model/use-top-bar-socket-status.model'
+
+import CallStatus from './CallStatus.vue'
 
 const { user, avatarId, displayedNickname } = useUser()
 const { isLogoutLoading, logout } = useLogout()
@@ -35,7 +36,6 @@ const { socketTag } = useTopBarSocketStatus()
         </NmorphButton>
       </NmorphCard>
     </div>
-
   </NmorphCard>
 </template>
 

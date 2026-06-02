@@ -5,18 +5,20 @@ import { toRef } from 'vue'
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
 import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
+import { RoomCallStartButtons } from 'src/features/room-call-session'
 import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import type { ChatRoomHeaderProps } from '../config/types'
+import type { ChatRoomHeaderEmits, ChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
+import RoomCallJoinPanel from './RoomCallJoinPanel.vue'
+
 const props = defineProps<ChatRoomHeaderProps>()
+const emit = defineEmits<ChatRoomHeaderEmits>()
 const room = toRef(props, 'room')
-const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = useChatRoomHeader(
-  room,
-  props.isPrivateRoom
-)
+const { contextMenuActionOptions, interlocutor, isPortraitTabletOrLess, membersQuantityText, title } =
+  useChatRoomHeader(room, props.isPrivateRoom)
 </script>
 <template>
   <div class="chat-room-header" :class="{ 'chat-room-header--with-back': isPortraitTabletOrLess }">
@@ -51,8 +53,21 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = use
           </ChatRoomTypingStatus>
         </template>
       </AppProfileBasicData>
-      <ChatRoomContextMenu :item="props.room" />
+      <RoomCallStartButtons
+        :disabled="props.isRoomCallStartDisabled"
+        :loading="props.isRoomCallStarting"
+        @start="emit('start-room-call', $event)"
+      />
+      <ChatRoomContextMenu :item="props.room" :action-options="contextMenuActionOptions" />
     </NmorphCard>
+    <RoomCallJoinPanel
+      v-if="!props.isPrivateRoom && props.joinableRoomCall"
+      class="chat-room-header__join-panel"
+      :room-call="props.joinableRoomCall"
+      :is-disabled="props.isRoomCallJoinDisabled"
+      :is-joining="props.isRoomCallJoining"
+      @join="emit('join-room-call')"
+    />
   </div>
 </template>
 
@@ -76,7 +91,7 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, title } = use
 
 .chat-room-content-header__content {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-columns: minmax(0, 1fr) max-content max-content;
   gap: 8px;
   align-items: center;
 

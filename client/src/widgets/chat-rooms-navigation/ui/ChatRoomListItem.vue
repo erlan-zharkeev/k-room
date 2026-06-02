@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconMuteNotification, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
+import { toRef } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import { useScreen } from '../../../shared/lib'
 import type { ChatRoomListItemProps } from '../config/types'
+import { useChatRoomListItem } from '../model/use-chat-room-list-item.model'
 
 const props = defineProps<ChatRoomListItemProps>()
-const { isPortraitTabletOrLess } = useScreen()
-const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.value)
+const item = toRef(props, 'item')
+const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
 </script>
 
 <template>
@@ -77,7 +77,7 @@ const isPressed = computed(() => props.item.selected && !isPortraitTabletOrLess.
           <NmorphIconPin />
         </NmorphIcon>
       </div>
-      <ChatRoomContextMenu :item="props.item" />
+      <ChatRoomContextMenu :item="props.item" :action-options="contextMenuActionOptions" />
     </NmorphCard>
   </NmorphBadge>
 </template>

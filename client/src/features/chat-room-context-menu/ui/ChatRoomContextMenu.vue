@@ -21,6 +21,7 @@ const {
 <template>
   <ChatRoomContextMenuButton
     :item="props.item"
+    :action-options="props.actionOptions"
     @edit-group="openChatRoomFormDialog"
     @delete-chat="openDeleteChatRoomDialog"
     @leave-group="openLeaveChatRoomDialog"
