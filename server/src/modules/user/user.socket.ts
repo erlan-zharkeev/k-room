@@ -11,10 +11,7 @@ import { USER_SOCKET_I18N } from './user.i18n'
 
 @Injectable()
 export class UserSocketService {
-  constructor(
-    private readonly presenceService: PresenceService,
-    private readonly redisService: RedisService
-  ) {}
+  constructor(private readonly presenceService: PresenceService, private readonly redisService: RedisService) {}
 
   register(socket: SocketInstance) {
     socket.on(

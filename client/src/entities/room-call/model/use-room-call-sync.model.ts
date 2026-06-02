@@ -11,24 +11,22 @@ import type {
 
 import {
   applyRoomCallEnded,
-  applyRoomCallDeclined,
   applyRoomCallJoined,
   applyRoomCallLeft,
-  applyRoomCallMediaStateUpdated,
-  normalizeRoomCall
+  applyRoomCallMediaStateUpdated
 } from '../lib/room-call-sync'
 
 import { useRoomCall } from './use-room-call.model'
 
 export const useRoomCallSync = () => {
-  const { bulkPut, mutate, put } = useRoomCall()
+  const { mutate, put, remove, replaceAll } = useRoomCall()
 
   const syncRoomCalls = async (roomCalls: EventRoomCallsUpdated) => {
-    await bulkPut(roomCalls.map(normalizeRoomCall))
+    await replaceAll(roomCalls)
   }
 
   const syncRoomCall = async (roomCall: RoomCall) => {
-    await put(normalizeRoomCall(roomCall))
+    await put(roomCall)
   }
 
   const syncStartedRoomCall = async ({ roomCall }: EventRoomCallStarted) => {
@@ -48,9 +46,7 @@ export const useRoomCallSync = () => {
   }
 
   const syncDeclinedRoomCall = async (payload: EventRoomCallDeclined) => {
-    await mutate(payload.roomCallId, (roomCall) => {
-      applyRoomCallDeclined(roomCall, payload)
-    })
+    await remove(payload.roomCallId)
   }
 
   const syncEndedRoomCall = async (payload: EventRoomCallEnded) => {

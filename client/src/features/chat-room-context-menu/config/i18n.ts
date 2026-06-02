@@ -21,6 +21,11 @@ export const CHAT_ROOM_CONTEXT_MENU_I18N = defineI18n({
     ru: 'Отметить прочитанным',
     zh: '标为已读'
   },
+  audioCall: {
+    en: 'Call',
+    ru: 'Позвонить',
+    zh: '语音通话'
+  },
   pinChat: {
     en: 'Pin chat',
     ru: 'Закрепить чат',

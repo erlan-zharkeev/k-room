@@ -26,11 +26,7 @@ import {
   assertRoomCallStartAccess
 } from './lib/assert-room-call-access'
 import { leaveRoomCallParticipant } from './lib/leave-room-call-participant'
-import {
-  clearRoomCallDeclinedUsers,
-  removeRoomCallDeclinedUser,
-  saveRoomCallDeclinedUser
-} from './lib/room-call-decline-state'
+import { removeRoomCallDeclinedUser, saveRoomCallDeclinedUser } from './lib/room-call-decline-state'
 import { emitRoomCallSignalReceived } from './lib/room-call-events'
 import {
   buildInitialRoomCallMediaState,
@@ -174,7 +170,6 @@ export const declineRoomCall = async (
 
   const declinedAt = Date.now()
   const privateRoom = isRoomPrivate(room)
-  await saveRoomCallDeclinedUser(redisService, roomCallId, userId)
 
   if (privateRoom) {
     await RoomCallModel.findOneAndUpdate(
@@ -190,21 +185,20 @@ export const declineRoomCall = async (
       },
       { new: true }
     ).lean<RoomCallDocument>()
-  }
 
-
-  emitToUsers(room.users, 'room-call-declined', {
-    roomCallId,
-    userId
-  })
-
-  if (privateRoom) {
-    await clearRoomCallDeclinedUsers(redisService, roomCallId)
     emitToUsers(room.users, 'room-call-ended', {
       finishedAt: declinedAt,
       roomCallId
     })
+    return
   }
+
+  await saveRoomCallDeclinedUser(redisService, roomCallId, userId)
+
+  emitToUsers([userId], 'room-call-declined', {
+    roomCallId,
+    userId
+  })
 }
 
 export const leaveActiveRoomCallsBySocket = async (userId: string, socketId: string) => {
