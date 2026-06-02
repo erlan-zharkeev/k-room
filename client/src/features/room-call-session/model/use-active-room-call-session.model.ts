@@ -181,7 +181,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     }
   }
 
-  const joinActiveRoomCall = async (roomCallId: string) => {
+  const joinActiveRoomCall = async (roomCallId: string, mediaKind?: RoomCallMediaKind) => {
     isJoiningRoomCall.value = true
 
     try {
@@ -193,8 +193,9 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       }
 
       const { roomCall } = response.payload
+      const localMediaKind = mediaKind ?? roomCall.mediaKind
 
-      await startRoomCallLocalMedia(roomCall.mediaKind)
+      await startRoomCallLocalMedia(localMediaKind)
       activeRoomCallId.value = roomCall.id
       await syncActiveRoomCallLocalState()
       await connectActiveRoomCallPeers(roomCall)

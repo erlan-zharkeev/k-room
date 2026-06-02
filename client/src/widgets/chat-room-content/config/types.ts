@@ -44,12 +44,16 @@ export interface ChatRoomMessagesProps {
 export interface ChatRoomHeaderProps {
   room: ChatRoom
   isPrivateRoom: boolean
+  joinableRoomCall?: RoomCall
   isRoomCallStartDisabled: boolean
+  isRoomCallJoinDisabled: boolean
   isRoomCallStarting: boolean
+  isRoomCallJoining: boolean
 }
 
 export interface ChatRoomHeaderEmits {
   'start-room-call': [mediaKind: RoomCallMediaKind]
+  'join-room-call': []
 }
 
 export interface ChatRoomFooterProps {

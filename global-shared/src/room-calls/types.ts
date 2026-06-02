@@ -67,6 +67,10 @@ export interface EventLeaveRoomCall {
   reason: RoomCallLeaveReason
 }
 
+export interface EventDeclineRoomCall {
+  roomCallId: string
+}
+
 export interface EventUpdateRoomCallMediaState {
   roomCallId: string
   mediaState: RoomCallParticipantMediaState
@@ -94,6 +98,11 @@ export interface EventRoomCallLeft {
   userId: string
   reason: RoomCallLeaveReason
   leftAt: number
+}
+
+export interface EventRoomCallDeclined {
+  roomCallId: string
+  userId: string
 }
 
 export interface EventRoomCallEnded {

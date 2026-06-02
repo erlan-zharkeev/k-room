@@ -11,11 +11,17 @@ import { resolveKnownUsers, transformRoomForUser } from '../../chat-rooms/chat-r
 import { loadChatRoomsByIds } from '../../chat-rooms/lib/chat-room-persistence'
 import type { PresenceService } from '../../presence/presence.service'
 import { loadUserRoomCalls } from '../../room-calls/lib/load-user-room-calls'
+import { filterAvailableRoomCallsForUser } from '../../room-calls/lib/room-call-decline-state'
+import type { RedisService } from '../../security/redis.service'
 
 import { transformUserToFrontendContact } from './transform-user'
 import { loadUserById } from './user-persistence'
 
-export const resolveActualUserSocketData = async (userId: string, presenceService: PresenceService) => {
+export const resolveActualUserSocketData = async (
+  userId: string,
+  presenceService: PresenceService,
+  redisService: RedisService
+) => {
   const data = await loadUserById(userId)
 
   if (!data) {
@@ -34,7 +40,8 @@ export const resolveActualUserSocketData = async (userId: string, presenceServic
   const roomsPayload: EventGetRooms = await Promise.all(
     rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds, mutedChatRoomIds }))
   )
-  const roomCallsPayload: EventRoomCallsUpdated = await loadUserRoomCalls(roomIds)
+  const roomCalls = await loadUserRoomCalls(roomIds)
+  const roomCallsPayload: EventRoomCallsUpdated = await filterAvailableRoomCallsForUser(redisService, roomCalls, userId)
 
   return {
     contactsPayload,

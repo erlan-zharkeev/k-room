@@ -123,6 +123,10 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     await (await this.clientOrThrow()).sAdd(key, value)
   }
 
+  async isSetValueExists(key: string, value: string) {
+    return Boolean(await (await this.clientOrThrow()).sIsMember(key, value))
+  }
+
   async removeSetValue(key: string, value: string) {
     await (await this.clientOrThrow()).sRem(key, value)
   }

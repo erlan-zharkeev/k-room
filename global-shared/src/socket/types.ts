@@ -53,8 +53,10 @@ import type {
   EventUpdatePinnedMessage
 } from '../message/types'
 import type {
+  EventDeclineRoomCall,
   EventJoinRoomCall,
   EventLeaveRoomCall,
+  EventRoomCallDeclined,
   EventRoomCallEnded,
   EventRoomCallJoined,
   EventRoomCallLeft,
@@ -141,6 +143,7 @@ export interface ClientToServerSocketPayloadMap {
   'add-reaction': EventAddReaction
   'start-room-call': EventStartRoomCall
   'join-room-call': EventJoinRoomCall
+  'decline-room-call': EventDeclineRoomCall
   'leave-room-call': EventLeaveRoomCall
   'update-room-call-media-state': EventUpdateRoomCallMediaState
   'send-room-call-signal': EventSendRoomCallSignal
@@ -165,6 +168,7 @@ export interface ClientToServerSocketAckPayloadMap {
   'add-reaction': void
   'start-room-call': StartRoomCallAckPayload
   'join-room-call': JoinRoomCallAckPayload
+  'decline-room-call': void
   'leave-room-call': void
   'update-room-call-media-state': void
 }
@@ -202,6 +206,7 @@ export interface ServerToClientSocketPayloadMap {
   'room-calls-updated': EventRoomCallsUpdated
   'room-call-started': EventRoomCallStarted
   'room-call-joined': EventRoomCallJoined
+  'room-call-declined': EventRoomCallDeclined
   'room-call-left': EventRoomCallLeft
   'room-call-ended': EventRoomCallEnded
   'room-call-media-state-updated': EventRoomCallMediaStateUpdated

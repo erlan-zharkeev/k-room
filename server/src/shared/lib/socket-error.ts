@@ -1,10 +1,4 @@
-import {
-  isString,
-  type LocalizedText,
-  REQ_STATUS,
-  type SocketAckFailure,
-  type SocketAckResponse
-} from 'global-shared'
+import { isString, type LocalizedText, REQ_STATUS, type SocketAckFailure, type SocketAckResponse } from 'global-shared'
 
 import { SHARED_I18N } from '../i18n'
 import type { SocketErrorMiddlewareOptions, SocketInstance, ThrowSocketErrorOptions } from '../types'
