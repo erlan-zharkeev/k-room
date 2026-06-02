@@ -83,6 +83,23 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       isVideoLoading.value ||
       isScreenLoading.value
   )
+  const resolveActiveRoomCallByRoomId = (roomId: string) =>
+    roomCalls.value.find(({ finishedAt, roomId: activeRoomId, status }) => {
+      const belongsToRoom = activeRoomId === roomId
+      const hasFinishedAt = Boolean(finishedAt)
+      const isFinishedStatus = status === ROOM_CALL_STATUS.FINISHED
+
+      return belongsToRoom && !hasFinishedAt && !isFinishedStatus
+    })
+
+  const canStartActiveRoomCall = (roomId: string) => {
+    const hasRoomId = Boolean(roomId)
+    const hasActiveSession = Boolean(activeRoomCallId.value)
+    const hasActiveRoomCall = Boolean(resolveActiveRoomCallByRoomId(roomId))
+    const isRoomCallActionLocked = !hasRoomId || hasActiveSession || hasActiveRoomCall || isRoomCallSessionBusy.value
+
+    return !isRoomCallActionLocked
+  }
 
   const clearActiveRoomCallSessionState = () => {
     activeRoomCallId.value = ''
@@ -153,6 +170,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   )
 
   const startActiveRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
+    if (!canStartActiveRoomCall(roomId)) {
+      return null
+    }
+
     isStartingRoomCall.value = true
 
     try {
@@ -302,6 +323,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     isJoiningRoomCall,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
+    resolveActiveRoomCallByRoomId,
+    canStartActiveRoomCall,
     startActiveRoomCall,
     joinActiveRoomCall,
     leaveActiveRoomCall,

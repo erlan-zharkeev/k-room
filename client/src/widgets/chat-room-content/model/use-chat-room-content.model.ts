@@ -1,7 +1,6 @@
-import { ROOM_CALL_STATUS, type RoomCallMediaKind } from 'global-shared'
+import type { RoomCallMediaKind } from 'global-shared'
 import { computed } from 'vue'
 
-import { useRoomCall } from 'src/entities/room-call'
 import { useActiveRoomCallSession } from 'src/features/room-call-session'
 
 import { useChatRoomMessageSelection } from './use-chat-room-message-selection.model'
@@ -9,7 +8,6 @@ import { useSelectedChatRoom } from './use-selected-chat-room.model'
 
 export const useChatRoomContent = () => {
   const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomPrivate } = useSelectedChatRoom()
-  const { roomCalls } = useRoomCall()
   const {
     activeRoomCall,
     activeRoomCallId,
@@ -20,6 +18,8 @@ export const useChatRoomContent = () => {
     joinActiveRoomCall,
     localMediaState,
     remoteStreamsByUserId,
+    canStartActiveRoomCall,
+    resolveActiveRoomCallByRoomId,
     screenStream,
     setActiveRoomCallAudioEnabled,
     setActiveRoomCallVideoEnabled,
@@ -32,21 +32,8 @@ export const useChatRoomContent = () => {
   const { clearSelectedMessage, selectChatRoomMessage, selectCurrentChatRoomMessage, selectedMessageId } =
     useChatRoomMessageSelection(selectedChatRoomId)
 
-  const activeSelectedRoomCall = computed(() =>
-    roomCalls.value.find(({ finishedAt, roomId, status }) => {
-      const belongsToSelectedRoom = roomId === selectedChatRoomId.value
-      const hasFinishedAt = Boolean(finishedAt)
-      const isFinishedStatus = status === ROOM_CALL_STATUS.FINISHED
-
-      return belongsToSelectedRoom && !hasFinishedAt && !isFinishedStatus
-    })
-  )
-  const isRoomCallStartDisabled = computed(() => {
-    const hasActiveSession = Boolean(activeRoomCallId.value)
-    const hasActiveSelectedRoomCall = Boolean(activeSelectedRoomCall.value)
-
-    return isRoomCallSessionBusy.value || hasActiveSession || hasActiveSelectedRoomCall
-  })
+  const activeSelectedRoomCall = computed(() => resolveActiveRoomCallByRoomId(selectedChatRoomId.value))
+  const isRoomCallStartDisabled = computed(() => !canStartActiveRoomCall(selectedChatRoomId.value))
   const selectedActiveRoomCall = computed(() => {
     const belongsToSelectedRoom = activeRoomCall.value?.roomId === selectedChatRoomId.value
 
@@ -68,7 +55,7 @@ export const useChatRoomContent = () => {
   const startSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
     const roomId = selectedChatRoomId.value
 
-    if (!roomId || isRoomCallStartDisabled.value) {
+    if (!roomId) {
       return null
     }
 
