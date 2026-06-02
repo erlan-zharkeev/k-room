@@ -1,13 +1,5 @@
-import {
-  formatNickname,
-  getRoomOtherUserIds,
-  isRoomPrivate,
-  ROOM_CALL_MEDIA_KIND,
-  type ChatRoom,
-  type RoomCall,
-  type RoomCallMediaKind
-} from 'global-shared'
-import { computed } from 'vue'
+import { getRoomOtherUserIds, isRoomPrivate, type ChatRoom } from 'global-shared'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -19,14 +11,19 @@ import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useI18n, useScreen } from 'src/shared/lib'
 
+import { ROOM_CALL_HISTORY_MEDIA_ICON_BY_KIND, ROOM_CALL_HISTORY_STATUS_COLOR_BY_KIND } from '../config/constants'
 import { CALLS_PAGE_I18N } from '../config/i18n'
 import type { RoomCallHistoryItem } from '../config/types'
-import { isRoomCallActive, isRoomCallMissed } from '../lib/resolve-room-call-state'
+import { isRoomCallActive } from '../lib/resolve-room-call-state'
 import {
-  resolveRoomCallHistoryDescription,
-  resolveRoomCallParticipantQuantity,
+  isRoomCallHistoryItemMatchedBySearchQuery,
+  resolveRoomCallHistoryMediaI18n,
+  resolveRoomCallHistoryStatusI18n,
+  resolveRoomCallHistoryStatusKind,
   sortRoomCallHistoryItems
 } from '../lib/room-call-history'
+
+const searchQuery = ref('')
 
 export const useCallsPage = () => {
   const route = useRoute()
@@ -37,7 +34,7 @@ export const useCallsPage = () => {
   const { contactById } = useContact()
   const { knownUserById } = useKnownUser()
   const { user } = useUser()
-  const { formatDateTime } = useLocalizedDateTime()
+  const { formatDate, formatTime } = useLocalizedDateTime()
 
   const roomById = computed(() => new Map(chatRooms.value.map((room) => [room.id, room])))
 
@@ -58,7 +55,7 @@ export const useCallsPage = () => {
     if (isRoomPrivate(room)) {
       const [interlocutorId] = getRoomOtherUserIds(room, user.value.id)
       const interlocutor = contactById.value.get(interlocutorId) ?? knownUserById.value.get(interlocutorId)
-      const title = formatNickname(interlocutor?.nickname ?? '')
+      const title = interlocutor?.nickname ?? ''
 
       return title || t(CALLS_PAGE_I18N.unknownRoom)
     }
@@ -66,21 +63,7 @@ export const useCallsPage = () => {
     return t(CALLS_PAGE_I18N.unknownRoom)
   }
 
-  const resolveCallMediaKindText = (mediaKind: RoomCallMediaKind) => {
-    if (mediaKind === ROOM_CALL_MEDIA_KIND.AUDIO) return t(CALLS_PAGE_I18N.audioCall)
-    if (mediaKind === ROOM_CALL_MEDIA_KIND.VIDEO) return t(CALLS_PAGE_I18N.videoCall)
-
-    return t(CALLS_PAGE_I18N.screenCall)
-  }
-
-  const resolveCallStatusText = (roomCall: RoomCall) => {
-    if (isRoomCallActive(roomCall)) return t(CALLS_PAGE_I18N.activeCall)
-    if (isRoomCallMissed(roomCall)) return t(CALLS_PAGE_I18N.missedCall)
-
-    return t(CALLS_PAGE_I18N.finishedCall)
-  }
-
-  const roomCallHistoryItems = computed<RoomCallHistoryItem[]>(() =>
+  const allRoomCallHistoryItems = computed<RoomCallHistoryItem[]>(() =>
     sortRoomCallHistoryItems(
       roomCalls.value.flatMap((roomCall) => {
         const room = roomById.value.get(roomCall.roomId)
@@ -89,27 +72,42 @@ export const useCallsPage = () => {
           return []
         }
 
-        const participantsQuantity = resolveRoomCallParticipantQuantity(roomCall)
-        const meta = t(CALLS_PAGE_I18N.callParticipants)(participantsQuantity)
-        const statusText = resolveCallStatusText(roomCall)
-        const mediaKindText = resolveCallMediaKindText(roomCall.mediaKind)
+        const statusKind = resolveRoomCallHistoryStatusKind(roomCall)
 
         return {
           id: roomCall.id,
           calledAt: roomCall.calledAt,
-          description: resolveRoomCallHistoryDescription(statusText, mediaKindText),
           imageId: room.avatarId,
           isActive: isRoomCallActive(roomCall),
-          meta,
-          timeText: formatDateTime(roomCall.calledAt),
+          mediaIcon: ROOM_CALL_HISTORY_MEDIA_ICON_BY_KIND[roomCall.mediaKind],
+          mediaLabel: t(resolveRoomCallHistoryMediaI18n(roomCall.mediaKind)),
+          meta: formatTime(roomCall.calledAt),
+          statusColor: ROOM_CALL_HISTORY_STATUS_COLOR_BY_KIND[statusKind],
+          statusText: t(resolveRoomCallHistoryStatusI18n(statusKind)),
+          timeText: formatDate(roomCall.calledAt),
           title: resolveRoomTitle(room),
           to: buildChatRoomRoute(room.id)
         }
       })
     )
   )
+  const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
+  const roomCallHistoryItems = computed(() =>
+    normalizedSearchQuery.value
+      ? allRoomCallHistoryItems.value.filter((item) =>
+          isRoomCallHistoryItemMatchedBySearchQuery(item, normalizedSearchQuery.value)
+        )
+      : allRoomCallHistoryItems.value
+  )
+  const showNoSearchResults = computed(
+    () => Boolean(normalizedSearchQuery.value) && roomCallHistoryItems.value.length === 0
+  )
+  const showNoCalls = computed(() => !normalizedSearchQuery.value && allRoomCallHistoryItems.value.length === 0)
 
   return {
-    roomCallHistoryItems
+    searchQuery,
+    roomCallHistoryItems,
+    showNoSearchResults,
+    showNoCalls
   }
 }

@@ -1,10 +1,20 @@
-import { defineI18n, formatPlural } from 'global-shared'
+import { defineI18n } from 'global-shared'
 
 export const CALLS_PAGE_I18N = defineI18n({
+  search: {
+    en: 'Search call',
+    ru: 'Поиск звонка',
+    zh: '搜索通话'
+  },
   noCalls: {
     en: 'No calls yet',
     ru: 'Звонков пока нет',
     zh: '暂无通话'
+  },
+  noSearchResults: {
+    en: 'No calls found',
+    ru: 'Звонки не найдены',
+    zh: '未找到通话'
   },
   activeCall: {
     en: 'Active',
@@ -40,16 +50,5 @@ export const CALLS_PAGE_I18N = defineI18n({
     en: 'Unknown chat',
     ru: 'Неизвестный чат',
     zh: '未知聊天'
-  },
-  callParticipants: {
-    en: (quantity: number) => formatPlural('en', quantity, { one: 'participant', other: 'participants' }),
-    ru: (quantity: number) =>
-      formatPlural('ru', quantity, {
-        few: 'участника',
-        many: 'участников',
-        one: 'участник',
-        other: 'участника'
-      }),
-    zh: (quantity: number) => formatPlural('zh', quantity, { other: '位参与者' })
   }
 })
