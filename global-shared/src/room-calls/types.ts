@@ -14,8 +14,7 @@ export type RoomCallSignalKind = (typeof ROOM_CALL_SIGNAL_KIND)[keyof typeof ROO
 
 export type RoomCallLeaveReason = (typeof ROOM_CALL_LEAVE_REASON)[keyof typeof ROOM_CALL_LEAVE_REASON]
 
-export type RoomCallAckFailureReason =
-  (typeof ROOM_CALL_ACK_FAILURE_REASON)[keyof typeof ROOM_CALL_ACK_FAILURE_REASON]
+export type RoomCallAckFailureReason = (typeof ROOM_CALL_ACK_FAILURE_REASON)[keyof typeof ROOM_CALL_ACK_FAILURE_REASON]
 
 export interface RoomCallParticipantMediaState {
   audio: boolean

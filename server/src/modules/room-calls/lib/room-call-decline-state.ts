@@ -1,4 +1,4 @@
-import type { RoomCall } from 'global-shared'
+import { ROOM_CALL_STATUS, type RoomCall } from 'global-shared'
 
 import type { RedisService } from 'src/modules/security/redis.service'
 
@@ -17,11 +17,7 @@ export const removeRoomCallDeclinedUser = async (redisService: RedisService, roo
   await redisService.removeSetValue(buildRoomCallDeclinedUsersKey(roomCallId), userId)
 }
 
-export const clearRoomCallDeclinedUsers = async (redisService: RedisService, roomCallId: string) => {
-  await redisService.remove(buildRoomCallDeclinedUsersKey(roomCallId))
-}
-
-export const isRoomCallDeclinedByUser = (redisService: RedisService, roomCallId: string, userId: string) =>
+const isRoomCallDeclinedByUser = (redisService: RedisService, roomCallId: string, userId: string) =>
   redisService.isSetValueExists(buildRoomCallDeclinedUsersKey(roomCallId), userId)
 
 export const filterAvailableRoomCallsForUser = async (
@@ -30,7 +26,17 @@ export const filterAvailableRoomCallsForUser = async (
   userId: string
 ) => {
   const declinedStates = await Promise.all(
-    roomCalls.map((roomCall) => isRoomCallDeclinedByUser(redisService, roomCall.id, userId))
+    roomCalls.map((roomCall) => {
+      const hasFinishedAt = Boolean(roomCall.finishedAt)
+      const isFinishedStatus = roomCall.status === ROOM_CALL_STATUS.FINISHED
+      const isActiveRoomCall = !hasFinishedAt && !isFinishedStatus
+
+      if (!isActiveRoomCall) {
+        return false
+      }
+
+      return isRoomCallDeclinedByUser(redisService, roomCall.id, userId)
+    })
   )
 
   return roomCalls.filter((_roomCall, index) => !declinedStates[index])

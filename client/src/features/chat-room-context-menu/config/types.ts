@@ -1,6 +1,6 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import type { ChatRoom } from 'global-shared'
-import type { Ref } from 'vue'
+import type { Component, Ref } from 'vue'
 
 export type ChatRoomContextMenuItem = Pick<
   ChatRoom,
@@ -8,20 +8,26 @@ export type ChatRoomContextMenuItem = Pick<
 >
 
 export interface ChatRoomContextMenuProps {
+  actionOptions?: ChatRoomContextMenuOption[]
   item: ChatRoomContextMenuItem
 }
 
+export type ChatRoomContextMenuAction =
+  | 'mark-as-read'
+  | 'pin-chat'
+  | 'unpin-chat'
+  | 'mute-chat'
+  | 'unmute-chat'
+  | 'edit-group'
+  | 'delete-chat'
+  | 'leave-group'
+
 export interface ChatRoomContextMenuOption {
-  label: string
-  value:
-    | 'mark-as-read'
-    | 'pin-chat'
-    | 'unpin-chat'
-    | 'mute-chat'
-    | 'unmute-chat'
-    | 'edit-group'
-    | 'delete-chat'
-    | 'leave-group'
+  label?: string
+  value: ChatRoomContextMenuAction | string
+  component?: Component
+  componentProps?: Record<string, unknown>
+  closeOnClick?: boolean
   disabled?: boolean
 }
 

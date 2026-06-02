@@ -79,6 +79,8 @@ export interface RoomCallActivePanelEmits {
 }
 
 export type RoomCallActivePanelEmit = {
+  (event: 'set-audio-enabled', enabled: boolean): void
+  (event: 'set-video-enabled', enabled: boolean): void
   (event: 'start-screen'): void
   (event: 'stop-screen'): void
 }

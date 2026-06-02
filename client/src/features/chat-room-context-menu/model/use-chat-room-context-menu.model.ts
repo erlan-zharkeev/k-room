@@ -19,6 +19,15 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
   const { canUpdatePinnedChatRoom, togglePinnedChatRoom } = useChatRoomPin(item)
   const { canEditGroupChatRoom, canShowDeleteChatRoom, canShowLeaveChatRoom } = useChatRoomPermissions(item)
   const isContextMenuOpen = ref(false)
+
+  const updateContextMenuOpen = (value: boolean) => {
+    isContextMenuOpen.value = value
+  }
+
+  const closeContextMenu = () => {
+    updateContextMenuOpen(false)
+  }
+
   const contextMenuOptions = computed<ChatRoomContextMenuOption[]>(() => {
     const options: ChatRoomContextMenuOption[] = [
       {
@@ -37,6 +46,18 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
         disabled: !canMarkChatRoomAsRead.value
       }
     ]
+
+    if (props.actionOptions) {
+      options.push(
+        ...props.actionOptions.map((option) => ({
+          ...option,
+          componentProps: {
+            ...option.componentProps,
+            onSelect: closeContextMenu
+          }
+        }))
+      )
+    }
 
     if (canEditGroupChatRoom.value) {
       options.push({
@@ -62,10 +83,6 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
     return options
   })
 
-  const updateContextMenuOpen = (value: boolean) => {
-    isContextMenuOpen.value = value
-  }
-
   const selectChatRoomAction = (option: unknown) => {
     if (!isUnknownObject(option)) return
 
@@ -90,7 +107,11 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
       case 'leave-group':
         emit('leave-group')
         break
+      default:
+        return
     }
+
+    updateContextMenuOpen(false)
   }
 
   return {

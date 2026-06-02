@@ -1,4 +1,4 @@
-import { formatNickname } from 'global-shared'
+import { ROOM_CALL_STATUS, formatNickname } from 'global-shared'
 import { computed } from 'vue'
 
 import { useUser } from 'src/entities/user'
@@ -29,6 +29,15 @@ export const useRoomCallActivePanel = (props: RoomCallActivePanelProps, emit: Ro
       videoStream: props.videoStream
     })
   )
+  const isScreenSharingControlVisible = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
+
+  const updateAudioEnabled = () => {
+    emit('set-audio-enabled', !props.localMediaState.audio)
+  }
+
+  const updateVideoEnabled = () => {
+    emit('set-video-enabled', !props.localMediaState.video)
+  }
 
   const updateScreenSharing = (enabled: boolean) => {
     if (enabled) {
@@ -39,8 +48,15 @@ export const useRoomCallActivePanel = (props: RoomCallActivePanelProps, emit: Ro
     emit('stop-screen')
   }
 
+  const toggleScreenSharing = () => {
+    updateScreenSharing(!props.localMediaState.screen)
+  }
+
   return {
+    isScreenSharingControlVisible,
     roomCallTileItems,
-    updateScreenSharing
+    updateAudioEnabled,
+    updateVideoEnabled,
+    toggleScreenSharing
   }
 }
