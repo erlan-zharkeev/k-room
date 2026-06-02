@@ -1,5 +1,6 @@
 export { ROOM_CALL_SESSION_I18N } from './config/i18n'
 export { useActiveRoomCallSession } from './model/use-active-room-call-session.model'
 export { useRoomCallSession } from './model/use-room-call-session.model'
+export { default as RoomCallAudioContextMenuItem } from './ui/RoomCallAudioContextMenuItem.vue'
 export { default as RoomCallStartButtons } from './ui/RoomCallStartButtons.vue'
 export type { RoomCallRemoteStreamsByUserId } from './config/types'

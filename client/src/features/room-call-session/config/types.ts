@@ -45,3 +45,13 @@ export interface RoomCallStartButtonsProps {
 export interface RoomCallStartButtonsEmits {
   start: [mediaKind: RoomCallMediaKind]
 }
+
+export interface RoomCallAudioContextMenuItemProps {
+  roomId: string
+}
+
+export interface RoomCallAudioContextMenuItemEmits {
+  select: []
+}
+
+export type RoomCallAudioContextMenuItemEmit = (event: 'select') => void
