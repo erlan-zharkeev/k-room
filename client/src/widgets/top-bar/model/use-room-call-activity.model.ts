@@ -1,5 +1,5 @@
 import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind } from 'global-shared'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
@@ -20,7 +20,7 @@ import { resolveCallStatusI18n } from '../lib/resolve-call-status-i18n'
 import { resolveCallStatusKind } from '../lib/resolve-call-status-kind'
 import { sortCallStatusRoomCalls } from '../lib/sort-call-status-room-calls'
 
-export const useCallStatus = () => {
+export const useRoomCallActivity = () => {
   const { t } = useI18n()
   const route = useRoute()
   const router = useRouter()
@@ -40,6 +40,7 @@ export const useCallStatus = () => {
   } = useActiveRoomCallSession()
   const { declineRoomCall } = useRoomCallSession()
   const isDecliningRoomCall = ref(false)
+  const mutedIncomingRoomCallIds = reactive(new Set<string>())
 
   const resolveUserById = (id: string) => contactById.value.get(id) ?? knownUserById.value.get(id)
 
@@ -79,7 +80,7 @@ export const useCallStatus = () => {
         roomCall
       })
 
-      return kind === CALL_STATUS_KIND.INCOMING
+      return kind === CALL_STATUS_KIND.INCOMING && !mutedIncomingRoomCallIds.has(roomCall.id)
     })
   )
   const outgoingRoomCall = computed(() =>
@@ -107,7 +108,7 @@ export const useCallStatus = () => {
   const selectedRoomCall = computed(
     () => activeSessionRoomCall.value ?? incomingRoomCall.value ?? outgoingRoomCall.value ?? joinableRoomCall.value
   )
-  const callStatusItem = computed<CallStatusItem | undefined>(() => {
+  const roomCallActivityItem = computed<CallStatusItem | undefined>(() => {
     const roomCall = selectedRoomCall.value
 
     if (!roomCall) {
@@ -138,6 +139,7 @@ export const useCallStatus = () => {
     return {
       canAccept,
       canLeave,
+      canMute: kind === CALL_STATUS_KIND.INCOMING,
       canOpen: kind === CALL_STATUS_KIND.ACTIVE || kind === CALL_STATUS_KIND.JOINABLE,
       dotColor: CALL_STATUS_DOT_COLOR_BY_KIND[kind],
       kind,
@@ -158,7 +160,7 @@ export const useCallStatus = () => {
     })
 
   const openRoomCall = async () => {
-    const item = callStatusItem.value
+    const item = roomCallActivityItem.value
 
     if (!item) {
       return
@@ -172,7 +174,7 @@ export const useCallStatus = () => {
   }
 
   const acceptIncomingRoomCall = async (mediaKind: RoomCallMediaKind) => {
-    const item = callStatusItem.value
+    const item = roomCallActivityItem.value
 
     if (!item) {
       return null
@@ -193,8 +195,19 @@ export const useCallStatus = () => {
 
   const acceptIncomingAudioRoomCall = () => acceptIncomingRoomCall(ROOM_CALL_MEDIA_KIND.AUDIO)
   const acceptIncomingVideoRoomCall = () => acceptIncomingRoomCall(ROOM_CALL_MEDIA_KIND.VIDEO)
+  const muteIncomingRoomCall = () => {
+    const item = roomCallActivityItem.value
+
+    if (!item?.canMute) {
+      return false
+    }
+
+    mutedIncomingRoomCallIds.add(item.roomCall.id)
+
+    return true
+  }
   const leaveRoomCall = async () => {
-    const item = callStatusItem.value
+    const item = roomCallActivityItem.value
 
     if (!item) {
       return false
@@ -218,16 +231,17 @@ export const useCallStatus = () => {
 
     return leaveActiveRoomCall()
   }
-  const isCallStatusActionLoading = computed(
+  const isRoomCallActivityActionLoading = computed(
     () => isDecliningRoomCall.value || isJoiningRoomCall.value || isLeavingRoomCall.value
   )
 
   return {
-    callStatusItem,
-    isCallStatusActionLoading,
+    roomCallActivityItem,
+    isRoomCallActivityActionLoading,
     acceptIncomingAudioRoomCall,
     acceptIncomingVideoRoomCall,
     leaveRoomCall,
+    muteIncomingRoomCall,
     openRoomCall
   }
 }

@@ -1,21 +1,23 @@
-import { NmorphIconPhone, NmorphIconVideoCamera } from '@nmorph/nmorph-ui-kit'
-import { ROOM_CALL_MEDIA_KIND } from 'global-shared'
-
 import { ROOM_CALL_SESSION_I18N } from './i18n'
-import type { RoomCallStartButton } from './types'
 
-export const ROOM_CALL_START_BUTTONS = [
-  {
-    ariaLabel: ROOM_CALL_SESSION_I18N.startAudioRoomCall,
-    icon: NmorphIconPhone,
-    mediaKind: ROOM_CALL_MEDIA_KIND.AUDIO
-  },
-  {
-    ariaLabel: ROOM_CALL_SESSION_I18N.startVideoRoomCall,
-    icon: NmorphIconVideoCamera,
-    mediaKind: ROOM_CALL_MEDIA_KIND.VIDEO
-  }
-] satisfies RoomCallStartButton[]
+export const ROOM_CALL_MEDIA_BUTTONS_ACTION = {
+  JOIN: 'join',
+  START: 'start'
+} as const
+
+export const ROOM_CALL_MEDIA_BUTTONS_DEFAULT_PROPS = {
+  action: ROOM_CALL_MEDIA_BUTTONS_ACTION.START
+} as const
+
+export const ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION = {
+  [ROOM_CALL_MEDIA_BUTTONS_ACTION.JOIN]: ROOM_CALL_SESSION_I18N.joinAudioRoomCall,
+  [ROOM_CALL_MEDIA_BUTTONS_ACTION.START]: ROOM_CALL_SESSION_I18N.startAudioRoomCall
+} as const
+
+export const ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION = {
+  [ROOM_CALL_MEDIA_BUTTONS_ACTION.JOIN]: ROOM_CALL_SESSION_I18N.joinVideoRoomCall,
+  [ROOM_CALL_MEDIA_BUTTONS_ACTION.START]: ROOM_CALL_SESSION_I18N.startVideoRoomCall
+} as const
 
 export const ROOM_CALL_RTC_CONFIGURATION: RTCConfiguration = {
   iceServers: [

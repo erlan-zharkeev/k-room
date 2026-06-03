@@ -7,7 +7,7 @@ import { AppProfileBasicData } from 'src/shared/ui'
 import { useLogout } from '../model/use-logout.model'
 import { useTopBarSocketStatus } from '../model/use-top-bar-socket-status.model'
 
-import CallStatus from './CallStatus.vue'
+import RoomCallActivity from './RoomCallActivity.vue'
 
 const { user, avatarId, displayedNickname } = useUser()
 const { isLogoutLoading, logout } = useLogout()
@@ -27,7 +27,7 @@ const { socketTag } = useTopBarSocketStatus()
       </template>
     </AppProfileBasicData>
     <div class="top-bar__content-right-side">
-      <CallStatus />
+      <RoomCallActivity />
       <NmorphCard shadow-type="inset" :fill="false">
         <NmorphButton @click="logout" :loading="isLogoutLoading" shape="square">
           <NmorphIcon width="16px" height="16px">

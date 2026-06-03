@@ -61,14 +61,14 @@ export const useChatRoomContent = () => {
 
     return startActiveRoomCall(roomId, mediaKind)
   }
-  const joinSelectedRoomCall = async () => {
+  const joinSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
     const roomCall = joinableSelectedRoomCall.value
 
     if (!roomCall || isRoomCallJoinDisabled.value) {
       return null
     }
 
-    return joinActiveRoomCall(roomCall.id)
+    return joinActiveRoomCall(roomCall.id, mediaKind)
   }
 
   return {

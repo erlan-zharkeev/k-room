@@ -7,6 +7,7 @@ export type CallStatusKind = (typeof CALL_STATUS_KIND)[keyof typeof CALL_STATUS_
 export interface CallStatusItem {
   canAccept: boolean
   canLeave: boolean
+  canMute: boolean
   canOpen: boolean
   dotColor: string
   kind: CallStatusKind
