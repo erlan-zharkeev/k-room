@@ -5,9 +5,8 @@ import type {
   RoomCallMediaKind,
   RoomCallParticipant
 } from 'global-shared'
-import type { Component } from 'vue'
 
-import type { ROOM_CALL_SESSION_I18N } from './i18n'
+import type { ROOM_CALL_MEDIA_BUTTONS_ACTION } from './constants'
 
 export type RoomCallDescriptionSignalKind = typeof ROOM_CALL_SIGNAL_KIND.OFFER | typeof ROOM_CALL_SIGNAL_KIND.ANSWER
 
@@ -31,18 +30,16 @@ export interface ConnectRoomCallPeersParams {
   roomCallId: string
 }
 
-export interface RoomCallStartButton {
-  ariaLabel: (typeof ROOM_CALL_SESSION_I18N)[keyof typeof ROOM_CALL_SESSION_I18N]
-  icon: Component | string
-  mediaKind: RoomCallMediaKind
-}
+export type RoomCallMediaButtonsAction =
+  (typeof ROOM_CALL_MEDIA_BUTTONS_ACTION)[keyof typeof ROOM_CALL_MEDIA_BUTTONS_ACTION]
 
-export interface RoomCallStartButtonsProps {
+export interface RoomCallMediaButtonsProps {
+  action?: RoomCallMediaButtonsAction
   disabled: boolean
   loading: boolean
 }
 
-export interface RoomCallStartButtonsEmits {
+export interface RoomCallMediaButtonsEmits {
   start: [mediaKind: RoomCallMediaKind]
 }
 

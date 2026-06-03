@@ -46,6 +46,16 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     ru: 'Присоединиться',
     zh: '加入'
   },
+  joinAudioRoomCall: {
+    en: 'Join with audio',
+    ru: 'Присоединиться с аудио',
+    zh: '加入语音通话'
+  },
+  joinVideoRoomCall: {
+    en: 'Join with video',
+    ru: 'Присоединиться с видео',
+    zh: '加入视频通话'
+  },
   roomCallParticipants: {
     en: (quantity: number) => formatPlural('en', quantity, { one: 'participant', other: 'participants' }),
     ru: (quantity: number) =>

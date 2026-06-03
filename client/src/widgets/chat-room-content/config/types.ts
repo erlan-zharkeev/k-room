@@ -53,7 +53,12 @@ export interface ChatRoomHeaderProps {
 
 export interface ChatRoomHeaderEmits {
   'start-room-call': [mediaKind: RoomCallMediaKind]
-  'join-room-call': []
+  'join-room-call': [mediaKind: RoomCallMediaKind]
+}
+
+export type ChatRoomHeaderEmit = {
+  (event: 'start-room-call', mediaKind: RoomCallMediaKind): void
+  (event: 'join-room-call', mediaKind: RoomCallMediaKind): void
 }
 
 export interface ChatRoomFooterProps {
@@ -83,16 +88,6 @@ export type RoomCallActivePanelEmit = {
   (event: 'set-video-enabled', enabled: boolean): void
   (event: 'start-screen'): void
   (event: 'stop-screen'): void
-}
-
-export interface RoomCallJoinPanelProps {
-  roomCall: RoomCall
-  isDisabled: boolean
-  isJoining: boolean
-}
-
-export interface RoomCallJoinPanelEmits {
-  join: []
 }
 
 export interface RoomCallTileItem {

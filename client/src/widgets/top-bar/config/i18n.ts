@@ -59,6 +59,11 @@ export const CALL_STATUS_I18N = defineI18n({
     ru: 'Положить трубку',
     zh: '挂断'
   },
+  muteIncomingRoomCall: {
+    en: 'Mute incoming call',
+    ru: 'Заглушить входящий звонок',
+    zh: '静音来电'
+  },
   outgoingRoomCall: {
     en: (title: string) => `Calling ${title}`,
     ru: (title: string) => `Вы звоните ${title}`,
