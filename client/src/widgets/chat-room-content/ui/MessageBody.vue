@@ -108,9 +108,9 @@ const {
 }
 
 .message-body--sending {
-  pointer-events: none;
+  @include disabled-state;
+
   border: 1.5px solid var(--app-accent-border-soft);
-  opacity: 0.5;
   animation: message-body-sending-pulse 1.8s ease-in-out infinite;
 }
 

@@ -59,7 +59,7 @@ const route = useRoute()
   </section>
 </template>
 
-<style>
+<style lang="scss">
 .auth-layout {
   display: grid;
   place-items: center;
@@ -135,7 +135,7 @@ const route = useRoute()
 }
 
 .auth-layout__tab--disabled {
-  cursor: default;
+  @include disabled-state;
 }
 
 .auth-layout__language {
