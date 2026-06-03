@@ -26,6 +26,10 @@ export const loadUserById = (userId: string) => {
   return UserModel.findById(userId).lean()
 }
 
+export const loadUserChatRoomIds = (userId: string) => {
+  return UserModel.findById(userId, { 'personal.chatRooms': 1 }).lean()
+}
+
 export const loadUserPublicById = (userId: string) => {
   return UserModel.findById(userId, { 'public.avatarId': 1, 'public.nickname': 1, 'public.lastSeen': 1 }).lean()
 }
