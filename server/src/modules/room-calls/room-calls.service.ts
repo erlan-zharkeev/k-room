@@ -1,11 +1,14 @@
 import {
   REQ_STATUS,
   ROOM_CALL_LEAVE_REASON,
+  ROOM_CALL_LOAD_LIMIT_MAX,
   ROOM_CALL_STATUS,
   isRoomPrivate,
   type EventDeclineRoomCall,
   type EventJoinRoomCall,
   type EventLeaveRoomCall,
+  type EventLoadRoomCalls,
+  type EventRoomCallsLoaded,
   type EventSendRoomCallSignal,
   type EventStartRoomCall,
   type EventUpdateRoomCallMediaState,
@@ -26,6 +29,7 @@ import {
   assertRoomCallStartAccess
 } from './lib/assert-room-call-access'
 import { leaveRoomCallParticipant } from './lib/leave-room-call-participant'
+import { loadAvailableUserRoomCallPage } from './lib/load-available-user-room-call-page'
 import { removeRoomCallDeclinedUser, saveRoomCallDeclinedUser } from './lib/room-call-decline-state'
 import { emitRoomCallSignalReceived } from './lib/room-call-events'
 import {
@@ -212,6 +216,20 @@ export const leaveActiveRoomCallsBySocket = async (userId: string, socketId: str
       leaveRoomCallParticipant(roomCall, userId, socketId, ROOM_CALL_LEAVE_REASON.DISCONNECTED)
     )
   )
+}
+
+export const loadRoomCalls = async (
+  redisService: RedisService,
+  userId: string,
+  payload: EventLoadRoomCalls
+): Promise<EventRoomCallsLoaded | null> => {
+  const hasInvalidLimit = payload.limit < 1 || payload.limit > ROOM_CALL_LOAD_LIMIT_MAX
+
+  if (hasInvalidLimit) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallLoadLimitExceeded)
+  }
+
+  return loadAvailableUserRoomCallPage(redisService, userId, payload)
 }
 
 export const updateRoomCallMediaState = async (

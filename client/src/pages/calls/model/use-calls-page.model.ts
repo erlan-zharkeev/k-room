@@ -1,5 +1,5 @@
-import { getRoomOtherUserIds, isRoomPrivate, type ChatRoom } from 'global-shared'
-import { computed, ref } from 'vue'
+import { getRoomOtherUserIds, isRoomPrivate, type ChatRoom, type RoomCall } from 'global-shared'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
@@ -16,14 +16,13 @@ import { CALLS_PAGE_I18N } from '../config/i18n'
 import type { RoomCallHistoryItem } from '../config/types'
 import { isRoomCallActive } from '../lib/resolve-room-call-state'
 import {
-  isRoomCallHistoryItemMatchedBySearchQuery,
   resolveRoomCallHistoryMediaI18n,
   resolveRoomCallHistoryStatusI18n,
   resolveRoomCallHistoryStatusKind,
   sortRoomCallHistoryItems
 } from '../lib/room-call-history'
 
-const searchQuery = ref('')
+import { useRoomCallHistorySearch } from './use-room-call-history-search.model'
 
 export const useCallsPage = () => {
   const route = useRoute()
@@ -35,6 +34,15 @@ export const useCallsPage = () => {
   const { knownUserById } = useKnownUser()
   const { user } = useUser()
   const { formatDate, formatTime } = useLocalizedDateTime()
+  const {
+    searchQuery,
+    normalizedSearchQuery,
+    searchedRoomCalls,
+    searchHasMore,
+    isSearchLoading,
+    isSearchLoadingMore,
+    loadMoreSearchedRoomCalls
+  } = useRoomCallHistorySearch()
 
   const roomById = computed(() => new Map(chatRooms.value.map((room) => [room.id, room])))
 
@@ -63,9 +71,9 @@ export const useCallsPage = () => {
     return t(CALLS_PAGE_I18N.unknownRoom)
   }
 
-  const allRoomCallHistoryItems = computed<RoomCallHistoryItem[]>(() =>
+  const buildRoomCallHistoryItems = (targetRoomCalls: RoomCall[]) =>
     sortRoomCallHistoryItems(
-      roomCalls.value.flatMap((roomCall) => {
+      targetRoomCalls.flatMap((roomCall) => {
         const room = roomById.value.get(roomCall.roomId)
 
         if (!room) {
@@ -90,24 +98,22 @@ export const useCallsPage = () => {
         }
       })
     )
-  )
-  const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
-  const roomCallHistoryItems = computed(() =>
-    normalizedSearchQuery.value
-      ? allRoomCallHistoryItems.value.filter((item) =>
-          isRoomCallHistoryItemMatchedBySearchQuery(item, normalizedSearchQuery.value)
-        )
-      : allRoomCallHistoryItems.value
-  )
+
+  const sourceRoomCalls = computed(() => (normalizedSearchQuery.value ? searchedRoomCalls.value : roomCalls.value))
+  const roomCallHistoryItems = computed<RoomCallHistoryItem[]>(() => buildRoomCallHistoryItems(sourceRoomCalls.value))
   const showNoSearchResults = computed(
-    () => Boolean(normalizedSearchQuery.value) && roomCallHistoryItems.value.length === 0
+    () => Boolean(normalizedSearchQuery.value) && !isSearchLoading.value && roomCallHistoryItems.value.length === 0
   )
-  const showNoCalls = computed(() => !normalizedSearchQuery.value && allRoomCallHistoryItems.value.length === 0)
+  const showNoCalls = computed(() => !normalizedSearchQuery.value && roomCallHistoryItems.value.length === 0)
 
   return {
     searchQuery,
     roomCallHistoryItems,
     showNoSearchResults,
-    showNoCalls
+    showNoCalls,
+    searchHasMore,
+    isSearchLoading,
+    isSearchLoadingMore,
+    loadMoreSearchedRoomCalls
   }
 }
