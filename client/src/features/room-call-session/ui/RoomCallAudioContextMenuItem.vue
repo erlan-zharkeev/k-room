@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { NmorphIcon, NmorphIconPhone } from '@nmorph/nmorph-ui-kit'
-
 import { AppText } from 'src/shared/ui'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
