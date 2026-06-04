@@ -9,9 +9,10 @@ import { removeActiveRoomCall, transformActiveRoomCallToRoomCall, updateActiveRo
 import { saveRoomCallHistory } from './room-call-history'
 import { resolveActiveRoomCallParticipants, resolveRemainingRoomCallParticipants } from './room-call-participant'
 
-const persistFinishedRoomCall = async (redisService: RedisService, roomCall: RoomCallActiveState) => {
+export const persistFinishedRoomCall = async (redisService: RedisService, roomCall: RoomCallActiveState) => {
   await saveRoomCallHistory(transformActiveRoomCallToRoomCall(roomCall))
-  await removeActiveRoomCall(redisService, roomCall)
+
+  return removeActiveRoomCall(redisService, roomCall)
 }
 
 export const finishRoomCall = async (
@@ -46,7 +47,8 @@ export const leaveRoomCallParticipant = async (
   roomCall: RoomCallActiveState,
   userId: string,
   socketId: string,
-  reason: RoomCallLeaveReason
+  reason: RoomCallLeaveReason,
+  recipientIds?: string[]
 ) => {
   const leftAt = Date.now()
   const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
@@ -92,9 +94,9 @@ export const leaveRoomCallParticipant = async (
     return
   }
 
-  const recipientIds = activeParticipants.map((participant) => participant.userId)
+  const eventRecipientIds = recipientIds ?? activeParticipants.map((participant) => participant.userId)
 
-  emitToUsers(recipientIds, 'room-call-left', {
+  emitToUsers(eventRecipientIds, 'room-call-left', {
     leftAt,
     reason,
     roomCallId: roomCall.id,
@@ -104,7 +106,7 @@ export const leaveRoomCallParticipant = async (
   if (updatedRoomCall.finishedAt) {
     await persistFinishedRoomCall(redisService, updatedRoomCall)
 
-    emitToUsers(recipientIds, 'room-call-ended', {
+    emitToUsers(eventRecipientIds, 'room-call-ended', {
       finishedAt: leftAt,
       roomCallId: roomCall.id
     })

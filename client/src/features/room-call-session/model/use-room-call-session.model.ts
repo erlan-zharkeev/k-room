@@ -7,10 +7,12 @@ import type {
   RoomCallParticipantMediaState
 } from 'global-shared'
 
+import { useRoomCall } from 'src/entities/room-call'
 import { socket, useSocketAction } from 'src/shared/api'
 
 export const useRoomCallSession = () => {
   const { emitSocketAction } = useSocketAction()
+  const { remove } = useRoomCall()
 
   const startRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
     return emitSocketAction<'start-room-call', RoomCallAckFailureReason>('start-room-call', {
@@ -31,6 +33,10 @@ export const useRoomCallSession = () => {
     }
 
     const response = await emitSocketAction('decline-room-call', payload)
+
+    if (response.ok) {
+      await remove(roomCallId)
+    }
 
     return response.ok
   }

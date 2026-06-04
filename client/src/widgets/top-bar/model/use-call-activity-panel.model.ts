@@ -11,7 +11,10 @@ import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useActiveRoomCallSession, useRoomCallSession } from 'src/features/room-call-session'
 import { useI18n } from 'src/shared/lib'
 
-import { CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND, CALL_ACTIVITY_PANEL_KIND } from '../config/constants'
+import {
+  CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND,
+  CALL_ACTIVITY_PANEL_KIND
+} from '../config/constants'
 import { CALL_ACTIVITY_PANEL_I18N } from '../config/i18n'
 import type { CallActivityPanelItem, CallActivityPanelRoomTitleUser } from '../config/types'
 import { buildCallActivityPanelRoomTitle } from '../lib/build-call-activity-panel-room-title'
@@ -254,15 +257,17 @@ export const useCallActivityPanel = () => {
     }
 
     const cannotLeaveRoomCall = !item.canLeave
+    const isIncomingRoomCall = item.kind === CALL_ACTIVITY_PANEL_KIND.INCOMING
     const isSessionBusy = isRoomCallSessionBusy.value
+    const isSessionBusyForLeave = isSessionBusy && !isIncomingRoomCall
     const isDeclineInProgress = isDecliningRoomCall.value
-    const actionUnavailable = cannotLeaveRoomCall || isSessionBusy || isDeclineInProgress
+    const actionUnavailable = cannotLeaveRoomCall || isSessionBusyForLeave || isDeclineInProgress
 
     if (actionUnavailable) {
       return false
     }
 
-    if (item.kind === CALL_ACTIVITY_PANEL_KIND.INCOMING) {
+    if (isIncomingRoomCall) {
       isDecliningRoomCall.value = true
 
       try {
@@ -281,12 +286,19 @@ export const useCallActivityPanel = () => {
 
     return isDeclineInProgress || isJoinInProgress || isLeaveInProgress
   })
+  const isCallActivityPanelLeaveLoading = computed(() => {
+    const item = callActivityPanelItem.value
+    const isIncomingRoomCall = item?.kind === CALL_ACTIVITY_PANEL_KIND.INCOMING
+
+    return isIncomingRoomCall ? isDecliningRoomCall.value : isLeavingRoomCall.value
+  })
 
   return {
     callActivityPanelItem,
     callActivityPanelItems,
     callActivityPanelStepperIndex,
     isCallActivityPanelActionLoading,
+    isCallActivityPanelLeaveLoading,
     acceptIncomingAudioRoomCall,
     acceptIncomingVideoRoomCall,
     leaveRoomCall,

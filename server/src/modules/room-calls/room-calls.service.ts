@@ -30,10 +30,12 @@ import {
   assertRoomCallParticipantAccess,
   assertRoomCallStartAccess
 } from './lib/assert-room-call-access'
+import { cleanupStaleRoomCall } from './lib/cleanup-stale-room-call-participants'
 import { finishRoomCall, leaveRoomCallParticipant } from './lib/leave-room-call-participant'
 import { loadAvailableUserRoomCallPage } from './lib/load-available-user-room-call-page'
 import {
   createActiveRoomCall,
+  readActiveRoomCallByRoomId,
   readActiveRoomCallsBySocketId,
   transformActiveRoomCallParticipant,
   transformActiveRoomCallToRoomCall,
@@ -74,6 +76,16 @@ export const startRoomCall = async (
   const isCreated = await createActiveRoomCall(redisService, roomCall)
 
   if (!isCreated) {
+    const activeRoomCall = await readActiveRoomCallByRoomId(redisService, roomId)
+
+    if (activeRoomCall) {
+      await cleanupStaleRoomCall(redisService, activeRoomCall)
+    }
+  }
+
+  const isCreatedAfterCleanup = isCreated || (await createActiveRoomCall(redisService, roomCall))
+
+  if (!isCreatedAfterCleanup) {
     throw new AppError(
       REQ_STATUS.badRequest,
       ROOM_CALLS_I18N.roomCallAlreadyActive,
@@ -173,9 +185,11 @@ export const leaveRoomCall = async (
   socketId: string,
   payload: EventLeaveRoomCall
 ) => {
-  const { roomCall } = await assertRoomCallParticipantAccess(redisService, userId, socketId, payload.roomCallId)
+  const { room, roomCall } = await assertRoomCallParticipantAccess(redisService, userId, socketId, payload.roomCallId)
+  const isCallingRoomCall = roomCall.status === ROOM_CALL_STATUS.CALLING
+  const recipientIds = isCallingRoomCall ? room.users.map(String) : undefined
 
-  await leaveRoomCallParticipant(redisService, roomCall, userId, socketId, payload.reason)
+  await leaveRoomCallParticipant(redisService, roomCall, userId, socketId, payload.reason, recipientIds)
 }
 
 export const declineRoomCall = async (
@@ -185,14 +199,15 @@ export const declineRoomCall = async (
 ) => {
   const { room, roomCall } = await assertActiveRoomCallAccess(redisService, userId, roomCallId)
   const isInitiator = roomCall.initiatorId === userId
+  const privateRoom = isRoomPrivate(room)
 
   if (isInitiator) {
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
   }
 
-  const privateRoom = isRoomPrivate(room)
+  const isCallingRoomCall = roomCall.status === ROOM_CALL_STATUS.CALLING
 
-  if (privateRoom) {
+  if (privateRoom || isCallingRoomCall) {
     await finishRoomCall(redisService, roomCall, room.users.map(String))
     return
   }
