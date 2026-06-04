@@ -16,6 +16,7 @@ import type { CallActivityPanelItem } from '../config/types'
 defineProps<{
   item: CallActivityPanelItem
   loading: boolean
+  leaveLoading: boolean
 }>()
 
 const emit = defineEmits<{
@@ -29,14 +30,18 @@ const emit = defineEmits<{
 <template>
   <div class="call-activity-panel-item" :style="{ '--call-activity-panel-dot-color': item.dotColor }">
     <span class="call-activity-panel-item__dot" />
-    <AppText
-      class="call-activity-panel-item__text"
-      tag="small"
-      truncate
-      :selectable="false"
-      :text="item.text"
-    />
-    <div v-if="item.canAccept || item.canMute || item.canLeave" class="call-activity-panel-item__actions" @click.stop>
+    <AppText class="call-activity-panel-item__text" tag="small" truncate :selectable="false" :text="item.text" />
+    <div
+      v-if="item.canAccept || item.canMute || item.canLeave"
+      class="call-activity-panel-item__actions"
+      @click.stop
+      @pointerdown.stop
+      @pointermove.stop
+      @pointerup.stop
+      @pointercancel.stop
+      @pointerleave.stop
+      @wheel.stop
+    >
       <NmorphButton
         v-if="item.canAccept"
         shape="square"
@@ -84,8 +89,8 @@ const emit = defineEmits<{
         style-type="transparent"
         :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.leaveRoomCall)"
         :title="$t(CALL_ACTIVITY_PANEL_I18N.leaveRoomCall)"
-        :loading="loading"
-        :disabled="loading"
+        :loading="leaveLoading"
+        :disabled="leaveLoading"
         @click="emit('leave')"
       >
         <NmorphIcon width="16px" height="16px">
