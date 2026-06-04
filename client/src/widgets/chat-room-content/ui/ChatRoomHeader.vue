@@ -1,24 +1,29 @@
 <script setup lang="ts">
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
-import { toRef } from 'vue'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
 import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
-import { RoomCallStartButtons } from 'src/features/room-call-session'
+import { ROOM_CALL_SESSION_I18N, RoomCallMediaButtons } from 'src/features/room-call-session'
 import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
 import type { ChatRoomHeaderEmits, ChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
-import RoomCallJoinPanel from './RoomCallJoinPanel.vue'
-
 const props = defineProps<ChatRoomHeaderProps>()
 const emit = defineEmits<ChatRoomHeaderEmits>()
-const room = toRef(props, 'room')
-const { contextMenuActionOptions, interlocutor, isPortraitTabletOrLess, membersQuantityText, title } =
-  useChatRoomHeader(room, props.isPrivateRoom)
+const {
+  contextMenuActionOptions,
+  handleRoomCallButtonsAction,
+  interlocutor,
+  isPortraitTabletOrLess,
+  isRoomCallButtonsDisabled,
+  isRoomCallButtonsLoading,
+  membersQuantityText,
+  roomCallButtonsAction,
+  title
+} = useChatRoomHeader(props, emit)
 </script>
 <template>
   <div class="chat-room-header" :class="{ 'chat-room-header--with-back': isPortraitTabletOrLess }">
@@ -37,7 +42,14 @@ const { contextMenuActionOptions, interlocutor, isPortraitTabletOrLess, membersQ
         class="chat-room-content-header__profile"
       >
         <template #description>
-          <ChatRoomTypingStatus :room-id="props.room.id">
+          <AppText
+            v-if="!props.isPrivateRoom && props.joinableRoomCall"
+            tag="small"
+            color="accent"
+            :selectable="false"
+            :text="$t(ROOM_CALL_SESSION_I18N.activeRoomCall)"
+          />
+          <ChatRoomTypingStatus v-else :room-id="props.room.id">
             <UserActivityStatus
               v-if="props.isPrivateRoom && interlocutor"
               :online="interlocutor.online"
@@ -53,21 +65,16 @@ const { contextMenuActionOptions, interlocutor, isPortraitTabletOrLess, membersQ
           </ChatRoomTypingStatus>
         </template>
       </AppProfileBasicData>
-      <RoomCallStartButtons
-        :disabled="props.isRoomCallStartDisabled"
-        :loading="props.isRoomCallStarting"
-        @start="emit('start-room-call', $event)"
-      />
-      <ChatRoomContextMenu :item="props.room" :action-options="contextMenuActionOptions" />
+      <div class="chat-room-content-header__actions">
+        <RoomCallMediaButtons
+          :action="roomCallButtonsAction"
+          :disabled="isRoomCallButtonsDisabled"
+          :loading="isRoomCallButtonsLoading"
+          @start="handleRoomCallButtonsAction"
+        />
+        <ChatRoomContextMenu :item="props.room" :action-options="contextMenuActionOptions" />
+      </div>
     </NmorphCard>
-    <RoomCallJoinPanel
-      v-if="!props.isPrivateRoom && props.joinableRoomCall"
-      class="chat-room-header__join-panel"
-      :room-call="props.joinableRoomCall"
-      :is-disabled="props.isRoomCallJoinDisabled"
-      :is-joining="props.isRoomCallJoining"
-      @join="emit('join-room-call')"
-    />
   </div>
 </template>
 
@@ -91,7 +98,7 @@ const { contextMenuActionOptions, interlocutor, isPortraitTabletOrLess, membersQ
 
 .chat-room-content-header__content {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content max-content;
+  grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
 
@@ -100,5 +107,11 @@ const { contextMenuActionOptions, interlocutor, isPortraitTabletOrLess, membersQ
 
 .chat-room-content-header__profile {
   min-width: 0;
+}
+
+.chat-room-content-header__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 </style>

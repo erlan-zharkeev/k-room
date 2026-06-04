@@ -1,38 +1,38 @@
 import type { ChatRoom, RoomCall } from 'global-shared'
 
-import type { CALL_STATUS_KIND } from './constants'
+import type { CALL_ACTIVITY_PANEL_KIND } from './constants'
 
-export type CallStatusKind = (typeof CALL_STATUS_KIND)[keyof typeof CALL_STATUS_KIND]
+export type CallActivityPanelKind = (typeof CALL_ACTIVITY_PANEL_KIND)[keyof typeof CALL_ACTIVITY_PANEL_KIND]
 
-export interface CallStatusItem {
+export interface CallActivityPanelItem {
   canAccept: boolean
   canLeave: boolean
   canMute: boolean
   canOpen: boolean
   dotColor: string
-  kind: CallStatusKind
+  kind: CallActivityPanelKind
   roomCall: RoomCall
   roomId: string
   text: string
   title: string
 }
 
-export interface CallStatusRoomTitleUser {
+export interface CallActivityPanelRoomTitleUser {
   nickname: string
 }
 
-export interface BuildCallStatusRoomTitleParams {
+export interface BuildCallActivityPanelRoomTitleParams {
   isPrivateRoom: boolean
   room: ChatRoom
-  users: CallStatusRoomTitleUser[]
+  users: CallActivityPanelRoomTitleUser[]
 }
 
-export interface ResolveCallStatusI18nParams {
+export interface ResolveCallActivityPanelI18nParams {
   isPrivateRoom: boolean
-  kind: CallStatusKind
+  kind: CallActivityPanelKind
 }
 
-export interface ResolveCallStatusKindParams {
+export interface ResolveCallActivityPanelKindParams {
   activeRoomCallId: string
   currentUserId: string
   roomCall: RoomCall
