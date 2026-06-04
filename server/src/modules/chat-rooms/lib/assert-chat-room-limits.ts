@@ -1,7 +1,7 @@
 import {
-  CHAT_ROOM_GROUP_MEMBER_LIMIT,
   CHAT_ROOM_NAME_MAX_LENGTH,
   REQ_STATUS,
+  ROOM_PARTICIPANT_LIMIT,
   USER_CHAT_ROOM_LIMIT
 } from 'global-shared'
 
@@ -11,7 +11,7 @@ import { loadUsersChatRoomsByIds } from '../../user/lib/user-persistence'
 import { CHAT_ROOMS_I18N } from '../chat-rooms.i18n'
 
 const assertChatRoomMemberLimit = (userIds: string[]) => {
-  if (userIds.length > CHAT_ROOM_GROUP_MEMBER_LIMIT) {
+  if (userIds.length > ROOM_PARTICIPANT_LIMIT) {
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.chatRoomMemberLimitReached)
   }
 }

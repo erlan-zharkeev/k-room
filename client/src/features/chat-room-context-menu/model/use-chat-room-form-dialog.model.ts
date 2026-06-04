@@ -1,5 +1,5 @@
 import {
-  CHAT_ROOM_GROUP_MEMBER_LIMIT,
+  ROOM_PARTICIPANT_LIMIT,
   USER_CHAT_ROOM_LIMIT,
   type ChatRoom,
   type EventCreateRoom,
@@ -128,11 +128,10 @@ export const useChatRoomFormDialog = (
       : undefined
   )
   const lockedMemberIds = computed(() => (editedChatRoom.value ? [editedChatRoom.value.adminId] : [user.value.id]))
-  const maxSelectedMemberIds = CHAT_ROOM_GROUP_MEMBER_LIMIT
   const canCreateMoreChats = computed(() => chatRooms.value.length < USER_CHAT_ROOM_LIMIT)
   const canSubmitChatRoom = computed(() => {
     const hasSelectedMembers = selectedOtherMemberIds.value.length > 0
-    const hasValidMembersLimit = chatRoomFormData.selectedMemberIds.length <= maxSelectedMemberIds
+    const hasValidMembersLimit = chatRoomFormData.selectedMemberIds.length <= ROOM_PARTICIPANT_LIMIT
     const hasValidSelectedMembers = hasSelectedMembers && hasValidMembersLimit
     const hasChatName = Boolean(chatRoomNameInputValue.value.trim())
     const hasValidChatNameLength = CHAT_ROOM_NAME_MAX_LENGTH_PATTERN.test(chatRoomNameInputValue.value)
@@ -327,7 +326,7 @@ export const useChatRoomFormDialog = (
     contactPickerItems,
     filteredContactPickerItems,
     lockedMemberIds,
-    maxSelectedMemberIds,
+    maxSelectedMemberIds: ROOM_PARTICIPANT_LIMIT,
     isChatRoomNameEditable,
     isChatRoomAvatarEditable,
     canSubmitChatRoom,

@@ -1,4 +1,4 @@
-import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_PARTICIPANT_LIMIT, ROOM_CALL_STATUS } from 'global-shared'
+import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_STATUS, ROOM_PARTICIPANT_LIMIT } from 'global-shared'
 
 import type { RedisService } from 'src/modules/security/redis.service'
 import { AppError } from 'src/shared/lib/app-error'
@@ -74,7 +74,7 @@ export const assertRoomCallJoinAccess = async (redisService: RedisService, userI
   const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
   const isCurrentUserActiveParticipant = activeParticipants.some((participant) => participant.userId === userId)
 
-  if (!isCurrentUserActiveParticipant && activeParticipants.length >= ROOM_CALL_PARTICIPANT_LIMIT) {
+  if (!isCurrentUserActiveParticipant && activeParticipants.length >= ROOM_PARTICIPANT_LIMIT) {
     throw new AppError(
       REQ_STATUS.badRequest,
       ROOM_CALLS_I18N.roomCallLimitReached,
