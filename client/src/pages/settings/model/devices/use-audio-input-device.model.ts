@@ -189,6 +189,7 @@ export const useAudioInputDevice = () => {
     settings,
     audioInputOptions,
     audioInputLoading,
+    audioInputCheckLoading,
     isAudioInputCheckDisabled,
     audioInputPermissionCalloutType,
     audioInputPermissionStatus,

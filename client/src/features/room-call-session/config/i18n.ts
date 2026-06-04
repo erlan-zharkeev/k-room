@@ -68,14 +68,14 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     zh: (quantity: number) => formatPlural('zh', quantity, { other: '位参与者' })
   },
   roomCallStartFailed: {
-    en: 'Could not start call. Check browser media permissions.',
-    ru: 'Не удалось начать звонок. Проверьте доступ к медиа в браузере.',
-    zh: '无法开始通话。请检查浏览器媒体权限。'
+    en: 'Could not start call. Check microphone and camera access in browser and system settings.',
+    ru: 'Не удалось начать звонок. Проверьте доступ к микрофону и камере в браузере и системе.',
+    zh: '无法开始通话。请检查浏览器和系统中的麦克风和摄像头权限。'
   },
   roomCallJoinFailed: {
-    en: 'Could not join call. Check browser media permissions.',
-    ru: 'Не удалось присоединиться к звонку. Проверьте доступ к медиа в браузере.',
-    zh: '无法加入通话。请检查浏览器媒体权限。'
+    en: 'Could not join call. Check microphone and camera access in browser and system settings.',
+    ru: 'Не удалось присоединиться к звонку. Проверьте доступ к микрофону и камере в браузере и системе.',
+    zh: '无法加入通话。请检查浏览器和系统中的麦克风和摄像头权限。'
   },
   roomCallAccessFailed: {
     en: 'You do not have access to this call.',
@@ -93,18 +93,18 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     zh: '通话人数已满。'
   },
   roomCallAudioStartFailed: {
-    en: 'Could not turn on microphone. Check browser permissions.',
-    ru: 'Не удалось включить микрофон. Проверьте доступ в браузере.',
-    zh: '无法打开麦克风。请检查浏览器权限。'
+    en: 'Could not turn on microphone. Check microphone access in browser and system settings.',
+    ru: 'Не удалось включить микрофон. Проверьте доступ к микрофону в браузере и системе.',
+    zh: '无法打开麦克风。请检查浏览器和系统中的麦克风权限。'
   },
   roomCallVideoStartFailed: {
-    en: 'Could not turn on camera. Check browser permissions.',
-    ru: 'Не удалось включить камеру. Проверьте доступ в браузере.',
-    zh: '无法打开摄像头。请检查浏览器权限。'
+    en: 'Could not turn on camera. Check camera access in browser and system settings.',
+    ru: 'Не удалось включить камеру. Проверьте доступ к камере в браузере и системе.',
+    zh: '无法打开摄像头。请检查浏览器和系统中的摄像头权限。'
   },
   roomCallScreenStartFailed: {
-    en: 'Could not share screen. Check browser permissions.',
-    ru: 'Не удалось поделиться экраном. Проверьте доступ в браузере.',
-    zh: '无法共享屏幕。请检查浏览器权限。'
+    en: 'Could not share screen. Check screen sharing access in browser and system settings.',
+    ru: 'Не удалось поделиться экраном. Проверьте доступ к демонстрации экрана в браузере и системе.',
+    zh: '无法共享屏幕。请检查浏览器和系统中的屏幕共享权限。'
   }
 })

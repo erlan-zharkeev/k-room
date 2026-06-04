@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {
+  NmorphButton,
   NmorphCallout,
-  NmorphCheckbox,
   NmorphAudioMeter,
-  NmorphIcon,
   NmorphIconPlay,
   NmorphIconStop,
   NmorphSelect
@@ -20,6 +19,7 @@ const {
   settings,
   audioInputOptions,
   audioInputLoading,
+  audioInputCheckLoading,
   isAudioInputCheckDisabled,
   audioInputPermissionCalloutType,
   audioInputPermissionStatus,
@@ -63,20 +63,17 @@ const audioInputCheckLabel = computed(() =>
           @update:model-value="setSelectedAudioInputDevice"
         />
 
-        <NmorphCheckbox
-          :model-value="isAudioInputChecking"
-          height="basic"
+        <NmorphButton
           :aria-label="$t(audioInputCheckLabel)"
+          :loading="audioInputCheckLoading"
           :disabled="isAudioInputCheckDisabled"
-          @update:model-value="setAudioInputChecking"
+          @click="setAudioInputChecking(!isAudioInputChecking)"
         >
-          <template #label>
-            <NmorphIcon>
-              <NmorphIconStop v-if="isAudioInputChecking" />
-              <NmorphIconPlay v-else />
-            </NmorphIcon>
+          <template #icon-only>
+            <NmorphIconStop v-if="isAudioInputChecking" />
+            <NmorphIconPlay v-else />
           </template>
-        </NmorphCheckbox>
+        </NmorphButton>
       </div>
 
       <NmorphAudioMeter

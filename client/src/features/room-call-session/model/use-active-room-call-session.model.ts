@@ -12,7 +12,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
-import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
+import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import {
@@ -193,7 +193,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await syncActiveRoomCallLocalState()
 
       return roomCallId
-    } catch {
+    } catch (error) {
+      log('error', 'Start room call failed', error)
       clearActiveRoomCallSessionState()
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallStartFailed))
       return null
@@ -222,7 +223,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await connectActiveRoomCallPeers(roomCall)
 
       return roomCall
-    } catch {
+    } catch (error) {
+      log('error', 'Join room call failed', error)
       await leaveRoomCall(roomCallId, ROOM_CALL_LEAVE_REASON.LEFT)
       clearActiveRoomCallSessionState()
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
@@ -258,7 +260,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
     try {
       await startAudio()
-    } catch {
+    } catch (error) {
+      log('error', 'Start room call audio failed', error)
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallAudioStartFailed))
     }
   }
@@ -271,7 +274,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
     try {
       await startVideo()
-    } catch {
+    } catch (error) {
+      log('error', 'Start room call video failed', error)
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
     }
   }
@@ -279,7 +283,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const startActiveRoomCallScreen = async () => {
     try {
       await startScreen()
-    } catch {
+    } catch (error) {
+      log('error', 'Start room call screen failed', error)
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallScreenStartFailed))
     }
   }
