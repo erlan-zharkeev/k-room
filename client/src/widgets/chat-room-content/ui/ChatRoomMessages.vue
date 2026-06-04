@@ -33,6 +33,7 @@ const {
       scroll-x-prop="hidden"
       css-scroll-behavior="auto"
       update-only-on-scroll-end
+      :y-gap-in-px="4"
       @update:model-value="saveMessagesScrollState"
     >
       <div v-if="messageVirtualListItems.length" class="chat-room-messages__virtual" :style="messageVirtualListStyle">
