@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import {
-  NmorphButton,
-  NmorphCard,
-  NmorphIconClose,
-  NmorphIcon,
-  NmorphIconMuteNotification,
-  NmorphIconPhone,
-  NmorphIconVideoCamera
-} from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphCard, NmorphStepper } from '@nmorph/nmorph-ui-kit'
 
 import { CALL_ACTIVITY_PANEL_I18N } from '../config/i18n'
 import { useCallActivityPanel } from '../model/use-call-activity-panel.model'
 
+import CallActivityPanelItem from './CallActivityPanelItem.vue'
+
 const {
   callActivityPanelItem,
+  callActivityPanelItems,
+  callActivityPanelStepperIndex,
   isCallActivityPanelActionLoading,
+  isCallActivityPanelLeaveLoading,
   acceptIncomingAudioRoomCall,
   acceptIncomingVideoRoomCall,
   leaveRoomCall,
@@ -38,80 +33,46 @@ const {
       :role="callActivityPanelItem.canOpen && 'button'"
       :tabindex="callActivityPanelItem.canOpen && 0"
       :aria-label="callActivityPanelItem.canOpen && $t(CALL_ACTIVITY_PANEL_I18N.openRoomCall)"
-      :style="{ '--call-activity-panel-dot-color': callActivityPanelItem.dotColor }"
       @click="openRoomCall"
       @keydown.enter.prevent="openRoomCall"
       @keydown.space.prevent="openRoomCall"
     >
-      <span class="call-activity-panel__dot" />
-      <AppText
-        class="call-activity-panel__text"
-        tag="small"
-        truncate
-        :selectable="false"
-        :text="callActivityPanelItem.text"
-      />
-      <div
-        v-if="callActivityPanelItem.canAccept || callActivityPanelItem.canMute || callActivityPanelItem.canLeave"
-        class="call-activity-panel__actions"
-        @click.stop
+      <NmorphStepper
+        v-model="callActivityPanelStepperIndex"
+        class="call-activity-panel__stepper"
+        :count="callActivityPanelItems.length"
+        :swipe="true"
+        :wheel="true"
       >
-        <NmorphButton
-          v-if="callActivityPanelItem.canAccept"
-          shape="square"
-          style-type="transparent"
-          :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.acceptAudioRoomCall)"
-          :title="$t(CALL_ACTIVITY_PANEL_I18N.acceptAudioRoomCall)"
+        <CallActivityPanelItem
+          v-for="item in callActivityPanelItems"
+          :key="item.roomCall.id"
+          :item="item"
           :loading="isCallActivityPanelActionLoading"
-          :disabled="isCallActivityPanelActionLoading"
-          @click="acceptIncomingAudioRoomCall"
-        >
-          <NmorphIcon width="16px" height="16px">
-            <NmorphIconPhone />
-          </NmorphIcon>
-        </NmorphButton>
-        <NmorphButton
-          v-if="callActivityPanelItem.canAccept"
-          shape="square"
-          style-type="transparent"
-          :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.acceptVideoRoomCall)"
-          :title="$t(CALL_ACTIVITY_PANEL_I18N.acceptVideoRoomCall)"
-          :loading="isCallActivityPanelActionLoading"
-          :disabled="isCallActivityPanelActionLoading"
-          @click="acceptIncomingVideoRoomCall"
-        >
-          <NmorphIcon width="16px" height="16px">
-            <NmorphIconVideoCamera />
-          </NmorphIcon>
-        </NmorphButton>
-        <NmorphButton
-          v-if="callActivityPanelItem.canMute"
-          shape="square"
-          style-type="transparent"
-          :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.muteIncomingRoomCall)"
-          :title="$t(CALL_ACTIVITY_PANEL_I18N.muteIncomingRoomCall)"
-          :disabled="isCallActivityPanelActionLoading"
-          @click="muteIncomingRoomCall"
-        >
-          <NmorphIcon width="16px" height="16px">
-            <NmorphIconMuteNotification />
-          </NmorphIcon>
-        </NmorphButton>
-        <NmorphButton
-          v-if="callActivityPanelItem.canLeave"
-          shape="square"
-          style-type="transparent"
-          :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.leaveRoomCall)"
-          :title="$t(CALL_ACTIVITY_PANEL_I18N.leaveRoomCall)"
-          :loading="isCallActivityPanelActionLoading"
-          :disabled="isCallActivityPanelActionLoading"
-          @click="leaveRoomCall"
-        >
-          <NmorphIcon width="16px" height="16px">
-            <NmorphIconClose />
-          </NmorphIcon>
-        </NmorphButton>
-      </div>
+          :leave-loading="isCallActivityPanelLeaveLoading"
+          @accept-audio="acceptIncomingAudioRoomCall"
+          @accept-video="acceptIncomingVideoRoomCall"
+          @leave="leaveRoomCall"
+          @mute="muteIncomingRoomCall"
+        />
+        <template #indicator="{ index, count, goTo }">
+          <div v-if="count > 1" class="call-activity-panel__indicator" @click.stop>
+            <button
+              v-for="indicatorIndex in count"
+              :key="indicatorIndex"
+              type="button"
+              class="call-activity-panel__indicator-button"
+              :class="{
+                'call-activity-panel__indicator-button--active': indicatorIndex - 1 === index
+              }"
+              :disabled="isCallActivityPanelActionLoading"
+              :aria-current="indicatorIndex - 1 === index"
+              :aria-label="`${indicatorIndex}/${count}`"
+              @click="goTo(indicatorIndex - 1)"
+            />
+          </div>
+        </template>
+      </NmorphStepper>
     </NmorphCard>
   </Transition>
 </template>
@@ -121,48 +82,46 @@ const {
   cursor: pointer;
 }
 
+.call-activity-panel {
+  width: min(320px, 42vw);
+}
+
 .call-activity-panel__content {
-  --nmorph-card-content-padding: 0 0 0 10px;
+  --nmorph-card-content-padding: 0;
+
+  position: relative;
+  width: 100%;
+}
+
+.call-activity-panel__stepper {
+  width: 100%;
+}
+
+.call-activity-panel__indicator {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
 
   display: flex;
-  gap: 12px;
+  gap: 4px;
   align-items: center;
+  justify-content: center;
 }
 
-.call-activity-panel__dot {
-  position: relative;
+.call-activity-panel__indicator-button {
+  cursor: pointer;
 
   width: 10px;
-  height: 10px;
-  border-radius: 999px;
+  height: 3px;
+  padding: 0;
+  border: 0;
 
-  background: var(--call-activity-panel-dot-color);
+  background: var(--nmorph-placeholder-text-color);
 }
 
-.call-activity-panel__dot::before {
-  content: '';
-
-  position: absolute;
-  inset: -5px;
-
-  border-radius: inherit;
-
-  opacity: 0.35;
-  background: var(--call-activity-panel-dot-color);
-
-  animation: call-activity-panel-dot-pulse 1.6s ease-out infinite;
-}
-
-@keyframes call-activity-panel-dot-pulse {
-  from {
-    transform: scale(0.65);
-    opacity: 0.5;
-  }
-
-  to {
-    transform: scale(1.65);
-    opacity: 0;
-  }
+.call-activity-panel__indicator-button--active {
+  background: var(--nmorph-accent-color);
 }
 
 .call-activity-panel-reveal-enter-active {
