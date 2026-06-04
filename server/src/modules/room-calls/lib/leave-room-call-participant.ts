@@ -1,49 +1,92 @@
 import { ROOM_CALL_STATUS, type RoomCallLeaveReason } from 'global-shared'
-import type { UpdateQuery } from 'mongoose'
 
 import { emitToUsers } from 'src/modules/presence/presence.utils'
-import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
+import type { RedisService } from 'src/modules/security/redis.service'
 
-import { RoomCallModel } from '../room-calls.model'
-import type { RoomCallDocument, RoomCallSchema } from '../room-calls.types'
+import type { RoomCallActiveState } from '../room-calls.types'
 
+import { removeActiveRoomCall, transformActiveRoomCallToRoomCall, updateActiveRoomCall } from './room-call-active-state'
+import { saveRoomCallHistory } from './room-call-history'
 import { resolveActiveRoomCallParticipants, resolveRemainingRoomCallParticipants } from './room-call-participant'
-import { buildActiveRoomCallFilter, buildActiveRoomCallParticipantFilter } from './room-call-query'
+
+const persistFinishedRoomCall = async (redisService: RedisService, roomCall: RoomCallActiveState) => {
+  await saveRoomCallHistory(transformActiveRoomCallToRoomCall(roomCall))
+  await removeActiveRoomCall(redisService, roomCall)
+}
+
+export const finishRoomCall = async (
+  redisService: RedisService,
+  roomCall: RoomCallActiveState,
+  recipientIds: string[],
+  finishedAt = Date.now()
+) => {
+  const updatedRoomCall = await updateActiveRoomCall(redisService, roomCall.id, (currentRoomCall) => ({
+    ...currentRoomCall,
+    finishedAt,
+    status: ROOM_CALL_STATUS.FINISHED,
+    participants: currentRoomCall.participants.map((participant) =>
+      participant.leftAt ? participant : { ...participant, leftAt: finishedAt }
+    )
+  }))
+
+  if (!updatedRoomCall) {
+    return
+  }
+
+  await persistFinishedRoomCall(redisService, updatedRoomCall)
+
+  emitToUsers(recipientIds, 'room-call-ended', {
+    finishedAt,
+    roomCallId: roomCall.id
+  })
+}
 
 export const leaveRoomCallParticipant = async (
-  roomCall: RoomCallDocument,
+  redisService: RedisService,
+  roomCall: RoomCallActiveState,
   userId: string,
   socketId: string,
   reason: RoomCallLeaveReason
 ) => {
-  const roomCallId = stringifyMongoId(roomCall._id)
   const leftAt = Date.now()
   const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
-  const remainingParticipants = resolveRemainingRoomCallParticipants(roomCall.participants, userId, socketId)
-  const shouldFinishRoomCall = remainingParticipants.length === 0
-  const update: UpdateQuery<RoomCallSchema> = shouldFinishRoomCall
-    ? {
-        $set: {
-          finishedAt: leftAt,
-          status: ROOM_CALL_STATUS.FINISHED,
-          'participants.$.leftAt': leftAt
-        }
-      }
-    : {
-        $set: {
-          'participants.$.leftAt': leftAt
-        }
-      }
+  const updatedRoomCall = await updateActiveRoomCall(redisService, roomCall.id, (currentRoomCall) => {
+    const currentParticipant = currentRoomCall.participants.find((participant) => {
+      const isCurrentUser = participant.userId === userId
+      const isCurrentSocket = participant.socketId === socketId
+      const isActiveParticipant = !participant.leftAt
 
-  const updatedRoomCall = await RoomCallModel.findOneAndUpdate(
-    {
-      _id: roomCallId,
-      ...buildActiveRoomCallFilter(),
-      ...buildActiveRoomCallParticipantFilter(userId, socketId)
-    },
-    update,
-    { new: true }
-  ).lean<RoomCallDocument>()
+      return isCurrentUser && isCurrentSocket && isActiveParticipant
+    })
+
+    if (!currentParticipant) {
+      return null
+    }
+
+    const remainingParticipants = resolveRemainingRoomCallParticipants(currentRoomCall.participants, userId, socketId)
+    const shouldFinishRoomCall = remainingParticipants.length === 0
+    const participants = currentRoomCall.participants.map((participant) => {
+      const isCurrentUser = participant.userId === userId
+      const isCurrentSocket = participant.socketId === socketId
+      const isLeavingParticipant = isCurrentUser && isCurrentSocket
+
+      return isLeavingParticipant ? { ...participant, leftAt } : participant
+    })
+
+    if (!shouldFinishRoomCall) {
+      return {
+        ...currentRoomCall,
+        participants
+      }
+    }
+
+    return {
+      ...currentRoomCall,
+      finishedAt: leftAt,
+      status: ROOM_CALL_STATUS.FINISHED,
+      participants
+    }
+  })
 
   if (!updatedRoomCall) {
     return
@@ -54,14 +97,16 @@ export const leaveRoomCallParticipant = async (
   emitToUsers(recipientIds, 'room-call-left', {
     leftAt,
     reason,
-    roomCallId,
+    roomCallId: roomCall.id,
     userId
   })
 
-  if (shouldFinishRoomCall) {
+  if (updatedRoomCall.finishedAt) {
+    await persistFinishedRoomCall(redisService, updatedRoomCall)
+
     emitToUsers(recipientIds, 'room-call-ended', {
       finishedAt: leftAt,
-      roomCallId
+      roomCallId: roomCall.id
     })
   }
 }

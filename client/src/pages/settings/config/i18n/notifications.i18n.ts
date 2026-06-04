@@ -124,16 +124,6 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = {
     ru: 'Push-уведомления приложения для сообщений',
     zh: '消息原生应用推送通知'
   },
-  callToasts: {
-    en: 'Toasts',
-    ru: 'Тосты',
-    zh: '应用内提示'
-  },
-  callToastsDescription: {
-    en: 'In-app popups for incoming calls',
-    ru: 'Всплывающие уведомления для входящих звонков',
-    zh: '来电应用内弹窗'
-  },
   callSound: {
     en: 'Sound',
     ru: 'Звук',

@@ -1,6 +1,10 @@
 import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind } from 'global-shared'
 
-import type { RoomCallParticipantMediaStateSchema, RoomCallParticipantSchema } from '../room-calls.types'
+import type {
+  RoomCallActiveParticipant,
+  RoomCallParticipantMediaStateSchema,
+  RoomCallParticipantSchema
+} from '../room-calls.types'
 
 export const buildInitialRoomCallMediaState = (mediaKind: RoomCallMediaKind): RoomCallParticipantMediaStateSchema => ({
   audio: true,
@@ -19,17 +23,30 @@ export const buildRoomCallParticipant = (
   mediaState
 })
 
-export const resolveActiveRoomCallParticipants = (participants: RoomCallParticipantSchema[]) =>
-  participants.filter((participant) => !participant.leftAt)
+export const buildRoomCallActiveParticipant = (
+  userId: string,
+  socketId: string,
+  serverInstanceId: string,
+  mediaState: RoomCallParticipantMediaStateSchema
+): RoomCallActiveParticipant => ({
+  ...buildRoomCallParticipant(userId, socketId, mediaState),
+  serverInstanceId
+})
 
-export const resolveRoomCallParticipantByUserId = (participants: RoomCallParticipantSchema[], userId: string) =>
-  participants.find((participant) => participant.userId === userId)
+export const resolveActiveRoomCallParticipants = <TParticipant extends RoomCallParticipantSchema>(
+  participants: TParticipant[]
+) => participants.filter((participant) => !participant.leftAt)
+
+export const resolveRoomCallParticipantByUserId = <TParticipant extends RoomCallParticipantSchema>(
+  participants: TParticipant[],
+  userId: string
+) => participants.find((participant) => participant.userId === userId)
 
 export const resolveActiveRoomCallUserIds = (participants: RoomCallParticipantSchema[]) =>
   resolveActiveRoomCallParticipants(participants).map((participant) => participant.userId)
 
-export const resolveRemainingRoomCallParticipants = (
-  participants: RoomCallParticipantSchema[],
+export const resolveRemainingRoomCallParticipants = <TParticipant extends RoomCallParticipantSchema>(
+  participants: TParticipant[],
   userId: string,
   socketId: string
 ) =>
@@ -39,5 +56,7 @@ export const resolveRemainingRoomCallParticipants = (
     return !isLeavingParticipant
   })
 
-export const resolveActiveRoomCallParticipantByUserId = (participants: RoomCallParticipantSchema[], userId: string) =>
-  resolveActiveRoomCallParticipants(participants).find((participant) => participant.userId === userId)
+export const resolveActiveRoomCallParticipantByUserId = <TParticipant extends RoomCallParticipantSchema>(
+  participants: TParticipant[],
+  userId: string
+) => resolveActiveRoomCallParticipants(participants).find((participant) => participant.userId === userId)

@@ -18,7 +18,7 @@ export const loadAvailableUserRoomCallPage = async (
   if (!user) return null
 
   const roomIds = await resolveUserRoomCallSearchRoomIds(userId, user.personal.chatRooms, payload.query)
-  const roomCallPage = await loadUserRoomCallPage(roomIds, payload.limit, payload.beforeCalledAt)
+  const roomCallPage = await loadUserRoomCallPage(redisService, roomIds, payload.limit, payload.beforeCalledAt)
   const roomCalls = await filterAvailableRoomCallsForUser(redisService, roomCallPage.roomCalls, userId)
 
   return {

@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { randomUUID } from 'crypto'
+
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import {
   ROOM_CALL_ACK_FAILURE_REASON,
   type EventDeclineRoomCall,
@@ -18,6 +20,12 @@ import type { SocketInstance } from 'src/shared/types'
 
 import { RedisService } from '../security/redis.service'
 
+import {
+  ROOM_CALL_SERVER_INSTANCE_HEARTBEAT_INTERVAL_MS,
+  ROOM_CALL_STALE_PARTICIPANT_CLEANUP_INTERVAL_MS
+} from './constants'
+import { cleanupStaleRoomCallParticipants } from './lib/cleanup-stale-room-call-participants'
+import { saveRoomCallServerInstanceHeartbeat } from './lib/room-call-active-state'
 import { ROOM_CALLS_I18N } from './room-calls.i18n'
 import {
   declineRoomCall,
@@ -31,8 +39,35 @@ import {
 } from './room-calls.service'
 
 @Injectable()
-export class RoomCallsSocketService {
+export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
+  private readonly serverInstanceId = randomUUID()
+  private heartbeatTimer: NodeJS.Timeout | null = null
+  private staleParticipantCleanupTimer: NodeJS.Timeout | null = null
+
   constructor(private readonly redisService: RedisService) {}
+
+  async onModuleInit() {
+    await saveRoomCallServerInstanceHeartbeat(this.redisService, this.serverInstanceId)
+    await cleanupStaleRoomCallParticipants(this.redisService)
+    this.heartbeatTimer = setInterval(() => {
+      void saveRoomCallServerInstanceHeartbeat(this.redisService, this.serverInstanceId)
+    }, ROOM_CALL_SERVER_INSTANCE_HEARTBEAT_INTERVAL_MS)
+    this.staleParticipantCleanupTimer = setInterval(() => {
+      void cleanupStaleRoomCallParticipants(this.redisService)
+    }, ROOM_CALL_STALE_PARTICIPANT_CLEANUP_INTERVAL_MS)
+  }
+
+  onModuleDestroy() {
+    if (this.heartbeatTimer) {
+      clearInterval(this.heartbeatTimer)
+      this.heartbeatTimer = null
+    }
+
+    if (this.staleParticipantCleanupTimer) {
+      clearInterval(this.staleParticipantCleanupTimer)
+      this.staleParticipantCleanupTimer = null
+    }
+  }
 
   register(socket: SocketInstance) {
     socket.on(
@@ -41,7 +76,7 @@ export class RoomCallsSocketService {
         socket,
         async (payload) => ({
           ok: true,
-          payload: await startRoomCall(socket.data.userId, socket.id, payload)
+          payload: await startRoomCall(this.redisService, socket.data.userId, socket.id, this.serverInstanceId, payload)
         }),
         { basicError: ROOM_CALLS_I18N.roomCallStartFailed }
       )
@@ -52,7 +87,13 @@ export class RoomCallsSocketService {
       socketAckMiddleware<EventJoinRoomCall, JoinRoomCallAckPayload>(
         socket,
         async (payload) => {
-          const result = await joinRoomCall(this.redisService, socket.data.userId, socket.id, payload)
+          const result = await joinRoomCall(
+            this.redisService,
+            socket.data.userId,
+            socket.id,
+            this.serverInstanceId,
+            payload
+          )
 
           if (!result) {
             return { ok: false, reason: ROOM_CALL_ACK_FAILURE_REASON.JOIN_FAILED }
@@ -72,7 +113,7 @@ export class RoomCallsSocketService {
       socketAckMiddleware<EventLeaveRoomCall>(
         socket,
         async (payload) => {
-          await leaveRoomCall(socket.data.userId, socket.id, payload)
+          await leaveRoomCall(this.redisService, socket.data.userId, socket.id, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
       )
@@ -114,7 +155,7 @@ export class RoomCallsSocketService {
       socketAckMiddleware<EventUpdateRoomCallMediaState>(
         socket,
         async (payload) => {
-          await updateRoomCallMediaState(socket.data.userId, socket.id, payload)
+          await updateRoomCallMediaState(this.redisService, socket.data.userId, socket.id, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallUpdateMediaStateFailed }
       )
@@ -125,7 +166,7 @@ export class RoomCallsSocketService {
       socketErrorMiddleware<EventSendRoomCallSignal>(
         socket,
         async (payload) => {
-          await sendRoomCallSignal(socket.data.userId, socket.id, payload)
+          await sendRoomCallSignal(this.redisService, socket.data.userId, socket.id, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallSignalFailed }
       )
@@ -136,7 +177,7 @@ export class RoomCallsSocketService {
       socketErrorMiddleware(
         socket,
         async () => {
-          await leaveActiveRoomCallsBySocket(socket.data.userId, socket.id)
+          await leaveActiveRoomCallsBySocket(this.redisService, socket.data.userId, socket.id)
         },
         { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
       )

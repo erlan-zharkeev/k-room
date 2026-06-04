@@ -96,11 +96,6 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, SettingsNotificationO
   ],
   calls: [
     {
-      id: 'toast',
-      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callToasts,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callToastsDescription
-    },
-    {
       id: 'sound',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callSound,
       description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callSoundDescription

@@ -82,6 +82,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     return (await this.clientOrThrow()).get(key)
   }
 
+  async readMany(keys: string[]) {
+    if (keys.length === 0) {
+      return []
+    }
+
+    return (await this.clientOrThrow()).mGet(keys)
+  }
+
   async readNumber(key: string) {
     const value = await this.read(key)
 
@@ -117,6 +125,22 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   async remove(key: string) {
     await (await this.clientOrThrow()).del(key)
+  }
+
+  async removeMany(keys: string[]) {
+    if (keys.length === 0) {
+      return
+    }
+
+    await (await this.clientOrThrow()).del(keys)
+  }
+
+  async runCommand(command: string[]) {
+    const client = (await this.clientOrThrow()) as unknown as {
+      sendCommand(command: string[]): Promise<unknown>
+    }
+
+    return client.sendCommand(command)
   }
 
   async addSetValue(key: string, value: string) {
