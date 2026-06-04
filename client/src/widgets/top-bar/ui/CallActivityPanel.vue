@@ -11,7 +11,9 @@ const {
   callActivityPanelItems,
   callActivityPanelStepperIndex,
   isCallActivityPanelActionLoading,
+  isCallActivityPanelDisabled,
   isCallActivityPanelLeaveLoading,
+  isCallActivityPanelOpenable,
   acceptIncomingAudioRoomCall,
   acceptIncomingVideoRoomCall,
   leaveRoomCall,
@@ -28,11 +30,16 @@ const {
       shadow-type="inset"
       :fill="false"
       class="call-activity-panel"
-      :class="{ 'call-activity-panel--openable': callActivityPanelItem.canOpen }"
+      :class="{
+        'call-activity-panel--disabled': isCallActivityPanelDisabled,
+        'call-activity-panel--openable': isCallActivityPanelOpenable,
+        'call-activity-panel--single': callActivityPanelItems.length === 1
+      }"
       content-class="call-activity-panel__content"
-      :role="callActivityPanelItem.canOpen && 'button'"
-      :tabindex="callActivityPanelItem.canOpen && 0"
-      :aria-label="callActivityPanelItem.canOpen && $t(CALL_ACTIVITY_PANEL_I18N.openRoomCall)"
+      :role="isCallActivityPanelOpenable && 'button'"
+      :tabindex="isCallActivityPanelOpenable && 0"
+      :aria-disabled="isCallActivityPanelDisabled"
+      :aria-label="isCallActivityPanelOpenable && $t(CALL_ACTIVITY_PANEL_I18N.openRoomCall)"
       @click="openRoomCall"
       @keydown.enter.prevent="openRoomCall"
       @keydown.space.prevent="openRoomCall"
@@ -49,6 +56,7 @@ const {
           :key="item.roomCall.id"
           :item="item"
           :loading="isCallActivityPanelActionLoading"
+          :disabled="isCallActivityPanelDisabled"
           :leave-loading="isCallActivityPanelLeaveLoading"
           @accept-audio="acceptIncomingAudioRoomCall"
           @accept-video="acceptIncomingVideoRoomCall"
@@ -65,7 +73,7 @@ const {
               :class="{
                 'call-activity-panel__indicator-button--active': indicatorIndex - 1 === index
               }"
-              :disabled="isCallActivityPanelActionLoading"
+              :disabled="isCallActivityPanelActionLoading || isCallActivityPanelDisabled"
               :aria-current="indicatorIndex - 1 === index"
               :aria-label="`${indicatorIndex}/${count}`"
               @click="goTo(indicatorIndex - 1)"
@@ -83,7 +91,18 @@ const {
 }
 
 .call-activity-panel {
+  interpolate-size: allow-keywords;
+  max-width: min(320px, 42vw);
   width: min(320px, 42vw);
+  transition: width 180ms ease;
+}
+
+.call-activity-panel--single {
+  width: fit-content;
+}
+
+.call-activity-panel--disabled {
+  @include disabled-state;
 }
 
 .call-activity-panel__content {

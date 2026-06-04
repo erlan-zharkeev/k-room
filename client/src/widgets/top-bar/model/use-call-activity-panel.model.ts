@@ -9,6 +9,7 @@ import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useActiveRoomCallSession, useRoomCallSession } from 'src/features/room-call-session'
+import { socketStatus } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 import { CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND, CALL_ACTIVITY_PANEL_KIND } from '../config/constants'
@@ -174,6 +175,16 @@ export const useCallActivityPanel = () => {
     return []
   })
   const callActivityPanelItem = computed(() => callActivityPanelItems.value[callActivityPanelStepperIndex.value])
+  const isCallActivityPanelDisabled = computed(() => socketStatus.isReconnecting.value)
+  const isCallActivityPanelOpenable = computed(() => {
+    const item = callActivityPanelItem.value
+
+    if (!item) {
+      return false
+    }
+
+    return item.canOpen && !isCallActivityPanelDisabled.value
+  })
 
   watch(
     callActivityPanelItems,
@@ -206,7 +217,7 @@ export const useCallActivityPanel = () => {
       return
     }
 
-    if (!item.canOpen) {
+    if (!isCallActivityPanelOpenable.value) {
       return
     }
 
@@ -220,7 +231,10 @@ export const useCallActivityPanel = () => {
       return null
     }
 
-    if (!item.canAccept || isRoomCallSessionBusy.value) {
+    const cannotAcceptRoomCall = !item.canAccept
+    const actionUnavailable = cannotAcceptRoomCall || isRoomCallSessionBusy.value || isCallActivityPanelDisabled.value
+
+    if (actionUnavailable) {
       return null
     }
 
@@ -238,7 +252,7 @@ export const useCallActivityPanel = () => {
   const muteIncomingRoomCall = () => {
     const item = callActivityPanelItem.value
 
-    if (!item?.canMute) {
+    if (!item?.canMute || isCallActivityPanelDisabled.value) {
       return false
     }
 
@@ -255,10 +269,10 @@ export const useCallActivityPanel = () => {
 
     const cannotLeaveRoomCall = !item.canLeave
     const isIncomingRoomCall = item.kind === CALL_ACTIVITY_PANEL_KIND.INCOMING
-    const isSessionBusy = isRoomCallSessionBusy.value
-    const isSessionBusyForLeave = isSessionBusy && !isIncomingRoomCall
+    const isSessionBusyForLeave = isRoomCallSessionBusy.value && !isIncomingRoomCall
     const isDeclineInProgress = isDecliningRoomCall.value
-    const actionUnavailable = cannotLeaveRoomCall || isSessionBusyForLeave || isDeclineInProgress
+    const actionUnavailable =
+      cannotLeaveRoomCall || isSessionBusyForLeave || isDeclineInProgress || isCallActivityPanelDisabled.value
 
     if (actionUnavailable) {
       return false
@@ -295,7 +309,9 @@ export const useCallActivityPanel = () => {
     callActivityPanelItems,
     callActivityPanelStepperIndex,
     isCallActivityPanelActionLoading,
+    isCallActivityPanelDisabled,
     isCallActivityPanelLeaveLoading,
+    isCallActivityPanelOpenable,
     acceptIncomingAudioRoomCall,
     acceptIncomingVideoRoomCall,
     leaveRoomCall,
