@@ -156,23 +156,18 @@ export const useCallActivityPanel = () => {
       return items
     }, [])
   const callActivityPanelItems = computed<CallActivityPanelItem[]>(() => {
-    if (activeSessionRoomCall.value) {
-      return resolveCallActivityPanelItems([activeSessionRoomCall.value])
+    const prioritizedRoomCalls = [...incomingRoomCalls.value]
+    const secondaryRoomCall = activeSessionRoomCall.value ?? outgoingRoomCall.value ?? joinableRoomCall.value
+
+    if (secondaryRoomCall) {
+      const hasSecondaryRoomCall = prioritizedRoomCalls.some(({ id }) => id === secondaryRoomCall.id)
+
+      if (!hasSecondaryRoomCall) {
+        prioritizedRoomCalls.push(secondaryRoomCall)
+      }
     }
 
-    if (incomingRoomCalls.value.length > 0) {
-      return resolveCallActivityPanelItems(incomingRoomCalls.value)
-    }
-
-    if (outgoingRoomCall.value) {
-      return resolveCallActivityPanelItems([outgoingRoomCall.value])
-    }
-
-    if (joinableRoomCall.value) {
-      return resolveCallActivityPanelItems([joinableRoomCall.value])
-    }
-
-    return []
+    return resolveCallActivityPanelItems(prioritizedRoomCalls)
   })
   const callActivityPanelItem = computed(() => callActivityPanelItems.value[callActivityPanelStepperIndex.value])
   const isCallActivityPanelDisabled = computed(() => socketStatus.isReconnecting.value)
