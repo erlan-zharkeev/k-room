@@ -93,7 +93,7 @@ export const assertRoomCallParticipantAccess = async (
   socketId: string,
   roomCallId: string
 ) => {
-  const { roomCall } = await assertActiveRoomCallAccess(redisService, userId, roomCallId)
+  const { room, roomCall } = await assertActiveRoomCallAccess(redisService, userId, roomCallId)
   const participant = roomCall.participants.find((participant) => {
     const isCurrentUser = participant.userId === userId
     const isCurrentSocket = participant.socketId === socketId
@@ -108,6 +108,7 @@ export const assertRoomCallParticipantAccess = async (
 
   return {
     participant,
+    room,
     roomCall
   }
 }
