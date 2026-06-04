@@ -3,8 +3,8 @@ import {
   ROOM_CALL_ACK_FAILURE_REASON,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_LOAD_LIMIT_MAX,
-  ROOM_CALL_PARTICIPANT_LIMIT,
   ROOM_CALL_STATUS,
+  ROOM_PARTICIPANT_LIMIT,
   isRoomPrivate,
   type EventDeclineRoomCall,
   type EventJoinRoomCall,
@@ -113,7 +113,7 @@ export const joinRoomCall = async (
     const isCurrentParticipantActive = Boolean(currentParticipant && !currentParticipant.leftAt)
     const activeParticipants = resolveActiveRoomCallParticipants(currentRoomCall.participants)
 
-    if (!isCurrentParticipantActive && activeParticipants.length >= ROOM_CALL_PARTICIPANT_LIMIT) {
+    if (!isCurrentParticipantActive && activeParticipants.length >= ROOM_PARTICIPANT_LIMIT) {
       hasParticipantLimitReached = true
       return null
     }
