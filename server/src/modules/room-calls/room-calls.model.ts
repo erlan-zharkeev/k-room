@@ -90,6 +90,5 @@ const roomCallSchema = new Schema<RoomCallSchema>(
 
 roomCallSchema.index({ roomId: 1, status: 1 })
 roomCallSchema.index({ roomId: 1, calledAt: -1 })
-roomCallSchema.index({ roomId: 1 }, { unique: true, partialFilterExpression: { finishedAt: { $exists: false } } })
 
 export const RoomCallModel = model<RoomCallSchema>('RoomCall', roomCallSchema, 'room-call')

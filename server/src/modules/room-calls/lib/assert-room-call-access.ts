@@ -1,28 +1,13 @@
-import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_PARTICIPANT_LIMIT } from 'global-shared'
+import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_PARTICIPANT_LIMIT, ROOM_CALL_STATUS } from 'global-shared'
 
+import type { RedisService } from 'src/modules/security/redis.service'
 import { AppError } from 'src/shared/lib/app-error'
 
 import { findRoomUsersByUser } from '../../chat-rooms/lib/chat-room-persistence'
 import { ROOM_CALLS_I18N } from '../room-calls.i18n'
-import { RoomCallModel } from '../room-calls.model'
-import type { RoomCallDocument } from '../room-calls.types'
 
+import { readActiveRoomCall } from './room-call-active-state'
 import { resolveActiveRoomCallParticipants } from './room-call-participant'
-import { buildActiveRoomCallFilter } from './room-call-query'
-
-export const findActiveRoomCallByRoomId = (roomId: string) => {
-  return RoomCallModel.findOne({
-    roomId,
-    ...buildActiveRoomCallFilter()
-  }).lean<RoomCallDocument>()
-}
-
-export const findActiveRoomCallById = (roomCallId: string) => {
-  return RoomCallModel.findOne({
-    _id: roomCallId,
-    ...buildActiveRoomCallFilter()
-  }).lean<RoomCallDocument>()
-}
 
 export const assertRoomCallStartAccess = async (userId: string, roomId: string) => {
   const room = await findRoomUsersByUser(roomId, userId)
@@ -37,25 +22,26 @@ export const assertRoomCallStartAccess = async (userId: string, roomId: string) 
     )
   }
 
-  const activeRoomCall = await findActiveRoomCallByRoomId(roomId)
-
-  if (activeRoomCall) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallAlreadyActive,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.ALREADY_ACTIVE
-    )
-  }
-
   return room
 }
 
-export const assertRoomCallJoinAccess = async (userId: string, roomCallId: string) => {
-  const roomCall = await findActiveRoomCallById(roomCallId)
+export const assertActiveRoomCallAccess = async (redisService: RedisService, userId: string, roomCallId: string) => {
+  const roomCall = await readActiveRoomCall(redisService, roomCallId)
 
   if (!roomCall) {
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallAccessFailed,
+      true,
+      undefined,
+      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
+    )
+  }
+
+  const hasFinishedAt = Boolean(roomCall.finishedAt)
+  const isFinishedStatus = roomCall.status === ROOM_CALL_STATUS.FINISHED
+
+  if (hasFinishedAt || isFinishedStatus) {
     throw new AppError(
       REQ_STATUS.badRequest,
       ROOM_CALLS_I18N.roomCallAccessFailed,
@@ -77,6 +63,14 @@ export const assertRoomCallJoinAccess = async (userId: string, roomCallId: strin
     )
   }
 
+  return {
+    room,
+    roomCall
+  }
+}
+
+export const assertRoomCallJoinAccess = async (redisService: RedisService, userId: string, roomCallId: string) => {
+  const { roomCall } = await assertActiveRoomCallAccess(redisService, userId, roomCallId)
   const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
   const isCurrentUserActiveParticipant = activeParticipants.some((participant) => participant.userId === userId)
 
@@ -93,19 +87,13 @@ export const assertRoomCallJoinAccess = async (userId: string, roomCallId: strin
   return roomCall
 }
 
-export const assertRoomCallParticipantAccess = async (userId: string, socketId: string, roomCallId: string) => {
-  const roomCall = await findActiveRoomCallById(roomCallId)
-
-  if (!roomCall) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallJoinFailed)
-  }
-
-  const room = await findRoomUsersByUser(roomCall.roomId, userId)
-
-  if (!room) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallJoinFailed)
-  }
-
+export const assertRoomCallParticipantAccess = async (
+  redisService: RedisService,
+  userId: string,
+  socketId: string,
+  roomCallId: string
+) => {
+  const { roomCall } = await assertActiveRoomCallAccess(redisService, userId, roomCallId)
   const participant = roomCall.participants.find((participant) => {
     const isCurrentUser = participant.userId === userId
     const isCurrentSocket = participant.socketId === socketId

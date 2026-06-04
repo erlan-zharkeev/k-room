@@ -1,25 +1,16 @@
 import type { EventRoomCallStarted } from 'global-shared'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useContact } from 'src/entities/contact'
-import { useKnownUser } from 'src/entities/known-user'
 import { useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
-import { playAppNotificationSound, useAppToast, useI18n } from 'src/shared/lib'
-
-import { APP_PAGE_I18N } from '../config/i18n'
-import { resolveRoomCallNotificationContent } from '../lib/resolve-room-call-notification-content'
+import { playAppNotificationSound } from 'src/shared/lib'
 
 export const useRoomCallNotification = () => {
-  const { t } = useI18n()
   const { getById } = useChatRoom()
-  const { contactById } = useContact()
-  const { knownUserById } = useKnownUser()
   const { settings } = useSettings()
   const { hasInteracted } = useSystem()
   const { user } = useUser()
-  const toast = useAppToast()
 
   const resolveStartedRoomCallNotificationRoom = ({ roomCall }: EventRoomCallStarted) => {
     const isOwnRoomCall = roomCall.initiatorId === user.value.id
@@ -33,32 +24,6 @@ export const useRoomCallNotification = () => {
     if (room.isMuted) return
 
     return room
-  }
-
-  const showStartedRoomCallToast = (payload: EventRoomCallStarted) => {
-    const { calls, general } = settings.value.notifications
-
-    if (!general.toast) return
-    if (!calls.toast) return
-
-    const room = resolveStartedRoomCallNotificationRoom(payload)
-
-    if (!room) return
-
-    toast.add(
-      {
-        title: t(APP_PAGE_I18N.incomingRoomCall),
-        content: resolveRoomCallNotificationContent(
-          room,
-          user.value.id,
-          contactById.value,
-          knownUserById.value,
-          t(APP_PAGE_I18N.privateRoomCall),
-          t(APP_PAGE_I18N.groupRoomCall)
-        )
-      },
-      'call'
-    )
   }
 
   const playStartedRoomCallSound = async (payload: EventRoomCallStarted) => {
@@ -77,7 +42,6 @@ export const useRoomCallNotification = () => {
   }
 
   const notifyStartedRoomCall = (payload: EventRoomCallStarted) => {
-    showStartedRoomCallToast(payload)
     void playStartedRoomCallSound(payload)
   }
 

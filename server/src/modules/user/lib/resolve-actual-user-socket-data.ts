@@ -40,7 +40,7 @@ export const resolveActualUserSocketData = async (
   const roomsPayload: EventGetRooms = await Promise.all(
     rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds, mutedChatRoomIds }))
   )
-  const roomCalls = await loadUserRoomCalls(roomIds)
+  const roomCalls = await loadUserRoomCalls(redisService, roomIds)
   const roomCallsPayload: EventRoomCallsUpdated = await filterAvailableRoomCallsForUser(redisService, roomCalls, userId)
 
   return {

@@ -1,5 +1,5 @@
-import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind } from 'global-shared'
-import { computed, reactive, ref } from 'vue'
+import { ROOM_CALL_MEDIA_KIND, type RoomCall, type RoomCallMediaKind } from 'global-shared'
+import { computed, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
@@ -74,8 +74,8 @@ export const useCallActivityPanel = () => {
       return activeRoomCall.value
     }
   })
-  const incomingRoomCall = computed(() =>
-    visibleRoomCalls.value.find((roomCall) => {
+  const incomingRoomCalls = computed(() =>
+    visibleRoomCalls.value.filter((roomCall) => {
       const kind = resolveCallActivityPanelKind({
         activeRoomCallId: activeRoomCallId.value,
         currentUserId: user.value.id,
@@ -107,16 +107,8 @@ export const useCallActivityPanel = () => {
       return kind === CALL_ACTIVITY_PANEL_KIND.JOINABLE
     })
   )
-  const selectedRoomCall = computed(
-    () => activeSessionRoomCall.value ?? incomingRoomCall.value ?? outgoingRoomCall.value ?? joinableRoomCall.value
-  )
-  const callActivityPanelItem = computed<CallActivityPanelItem | undefined>(() => {
-    const roomCall = selectedRoomCall.value
-
-    if (!roomCall) {
-      return
-    }
-
+  const callActivityPanelStepperIndex = ref(0)
+  const resolveCallActivityPanelItem = (roomCall: RoomCall): CallActivityPanelItem | undefined => {
     const room = getById(roomCall.roomId)
 
     if (!room) {
@@ -151,7 +143,52 @@ export const useCallActivityPanel = () => {
       text: t(textSource)(title),
       title
     }
+  }
+  const resolveCallActivityPanelItems = (roomCalls: RoomCall[]) =>
+    roomCalls.reduce<CallActivityPanelItem[]>((items, roomCall) => {
+      const item = resolveCallActivityPanelItem(roomCall)
+
+      if (item) {
+        items.push(item)
+      }
+
+      return items
+    }, [])
+  const callActivityPanelItems = computed<CallActivityPanelItem[]>(() => {
+    if (activeSessionRoomCall.value) {
+      return resolveCallActivityPanelItems([activeSessionRoomCall.value])
+    }
+
+    if (incomingRoomCalls.value.length > 0) {
+      return resolveCallActivityPanelItems(incomingRoomCalls.value)
+    }
+
+    if (outgoingRoomCall.value) {
+      return resolveCallActivityPanelItems([outgoingRoomCall.value])
+    }
+
+    if (joinableRoomCall.value) {
+      return resolveCallActivityPanelItems([joinableRoomCall.value])
+    }
+
+    return []
   })
+  const callActivityPanelItem = computed(() => callActivityPanelItems.value[callActivityPanelStepperIndex.value])
+
+  watch(
+    callActivityPanelItems,
+    (items) => {
+      if (items.length === 0) {
+        callActivityPanelStepperIndex.value = 0
+        return
+      }
+
+      if (callActivityPanelStepperIndex.value >= items.length) {
+        callActivityPanelStepperIndex.value = items.length - 1
+      }
+    },
+    { immediate: true }
+  )
 
   const openRoomCallContent = (roomId: string) =>
     router.push({
@@ -216,7 +253,10 @@ export const useCallActivityPanel = () => {
       return false
     }
 
-    const actionUnavailable = !item.canLeave || isRoomCallSessionBusy.value || isDecliningRoomCall.value
+    const cannotLeaveRoomCall = !item.canLeave
+    const isSessionBusy = isRoomCallSessionBusy.value
+    const isDeclineInProgress = isDecliningRoomCall.value
+    const actionUnavailable = cannotLeaveRoomCall || isSessionBusy || isDeclineInProgress
 
     if (actionUnavailable) {
       return false
@@ -234,12 +274,18 @@ export const useCallActivityPanel = () => {
 
     return leaveActiveRoomCall()
   }
-  const isCallActivityPanelActionLoading = computed(
-    () => isDecliningRoomCall.value || isJoiningRoomCall.value || isLeavingRoomCall.value
-  )
+  const isCallActivityPanelActionLoading = computed(() => {
+    const isDeclineInProgress = isDecliningRoomCall.value
+    const isJoinInProgress = isJoiningRoomCall.value
+    const isLeaveInProgress = isLeavingRoomCall.value
+
+    return isDeclineInProgress || isJoinInProgress || isLeaveInProgress
+  })
 
   return {
     callActivityPanelItem,
+    callActivityPanelItems,
+    callActivityPanelStepperIndex,
     isCallActivityPanelActionLoading,
     acceptIncomingAudioRoomCall,
     acceptIncomingVideoRoomCall,

@@ -67,12 +67,13 @@ export const socketErrorMiddleware =
 
 const buildSocketAckFailure = <TReason extends string>(error: unknown): SocketAckFailure<TReason> => {
   const response: SocketAckFailure<TReason> = {
-    ok: false,
-    handledByGlobalError: true
+    ok: false
   }
 
   if (isAppError(error) && isString(error.payload)) {
     response.reason = error.payload as TReason
+  } else {
+    response.handledByGlobalError = true
   }
 
   return response
@@ -95,6 +96,13 @@ export const socketAckMiddleware =
 
       ack?.(response ?? ({ ok: true } as SocketAckResponse<TResponsePayload, TReason>))
     } catch (error) {
+      const shouldHandleByAckReason = isAppError(error) && isString(error.payload)
+
+      if (shouldHandleByAckReason) {
+        ack?.(buildSocketAckFailure<TReason>(error))
+        return
+      }
+
       if (isAppError(error)) {
         throwSocketError(socket.id, error.messageSource, {
           status: error.status,
