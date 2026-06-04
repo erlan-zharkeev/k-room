@@ -44,12 +44,7 @@ export {
   ROOM_CALL_STATUS
 } from './room-calls/constants'
 
-export {
-  CHAT_KIND,
-  CHAT_ROOM_NAME_MAX_LENGTH,
-  PINNED_CHAT_ROOM_LIMIT,
-  USER_CHAT_ROOM_LIMIT
-} from './chat/constants'
+export { CHAT_KIND, CHAT_ROOM_NAME_MAX_LENGTH, PINNED_CHAT_ROOM_LIMIT, USER_CHAT_ROOM_LIMIT } from './chat/constants'
 export { isRoomAdmin } from './chat/lib/is-room-admin'
 export { isRoomGroup } from './chat/lib/is-room-group'
 export { isRoomPrivate } from './chat/lib/is-room-private'
