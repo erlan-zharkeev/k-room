@@ -11,16 +11,16 @@ import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useActiveRoomCallSession, useRoomCallSession } from 'src/features/room-call-session'
 import { useI18n } from 'src/shared/lib'
 
-import { CALL_STATUS_DOT_COLOR_BY_KIND, CALL_STATUS_KIND } from '../config/constants'
-import { CALL_STATUS_I18N } from '../config/i18n'
-import type { CallStatusItem, CallStatusRoomTitleUser } from '../config/types'
-import { buildCallStatusRoomTitle } from '../lib/build-call-status-room-title'
-import { isCallStatusRoomCallVisible } from '../lib/is-call-status-room-call-visible'
-import { resolveCallStatusI18n } from '../lib/resolve-call-status-i18n'
-import { resolveCallStatusKind } from '../lib/resolve-call-status-kind'
-import { sortCallStatusRoomCalls } from '../lib/sort-call-status-room-calls'
+import { CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND, CALL_ACTIVITY_PANEL_KIND } from '../config/constants'
+import { CALL_ACTIVITY_PANEL_I18N } from '../config/i18n'
+import type { CallActivityPanelItem, CallActivityPanelRoomTitleUser } from '../config/types'
+import { buildCallActivityPanelRoomTitle } from '../lib/build-call-activity-panel-room-title'
+import { isCallActivityPanelRoomCallVisible } from '../lib/is-call-activity-panel-room-call-visible'
+import { resolveCallActivityPanelI18n } from '../lib/resolve-call-activity-panel-i18n'
+import { resolveCallActivityPanelKind } from '../lib/resolve-call-activity-panel-kind'
+import { sortCallActivityPanelRoomCalls } from '../lib/sort-call-activity-panel-room-calls'
 
-export const useRoomCallActivity = () => {
+export const useCallActivityPanel = () => {
   const { t } = useI18n()
   const route = useRoute()
   const router = useRouter()
@@ -51,7 +51,7 @@ export const useRoomCallActivity = () => {
       return []
     }
 
-    return getRoomOtherUserIds(room, user.value.id).reduce<CallStatusRoomTitleUser[]>((users, userId) => {
+    return getRoomOtherUserIds(room, user.value.id).reduce<CallActivityPanelRoomTitleUser[]>((users, userId) => {
       const roomUser = resolveUserById(userId)
 
       if (roomUser) {
@@ -62,53 +62,55 @@ export const useRoomCallActivity = () => {
     }, [])
   }
 
-  const visibleRoomCalls = computed(() => sortCallStatusRoomCalls(roomCalls.value.filter(isCallStatusRoomCallVisible)))
+  const visibleRoomCalls = computed(() =>
+    sortCallActivityPanelRoomCalls(roomCalls.value.filter(isCallActivityPanelRoomCallVisible))
+  )
   const activeSessionRoomCall = computed(() => {
     if (!activeRoomCall.value) {
       return
     }
 
-    if (isCallStatusRoomCallVisible(activeRoomCall.value)) {
+    if (isCallActivityPanelRoomCallVisible(activeRoomCall.value)) {
       return activeRoomCall.value
     }
   })
   const incomingRoomCall = computed(() =>
     visibleRoomCalls.value.find((roomCall) => {
-      const kind = resolveCallStatusKind({
+      const kind = resolveCallActivityPanelKind({
         activeRoomCallId: activeRoomCallId.value,
         currentUserId: user.value.id,
         roomCall
       })
 
-      return kind === CALL_STATUS_KIND.INCOMING && !mutedIncomingRoomCallIds.has(roomCall.id)
+      return kind === CALL_ACTIVITY_PANEL_KIND.INCOMING && !mutedIncomingRoomCallIds.has(roomCall.id)
     })
   )
   const outgoingRoomCall = computed(() =>
     visibleRoomCalls.value.find((roomCall) => {
-      const kind = resolveCallStatusKind({
+      const kind = resolveCallActivityPanelKind({
         activeRoomCallId: activeRoomCallId.value,
         currentUserId: user.value.id,
         roomCall
       })
 
-      return kind === CALL_STATUS_KIND.OUTGOING
+      return kind === CALL_ACTIVITY_PANEL_KIND.OUTGOING
     })
   )
   const joinableRoomCall = computed(() =>
     visibleRoomCalls.value.find((roomCall) => {
-      const kind = resolveCallStatusKind({
+      const kind = resolveCallActivityPanelKind({
         activeRoomCallId: activeRoomCallId.value,
         currentUserId: user.value.id,
         roomCall
       })
 
-      return kind === CALL_STATUS_KIND.JOINABLE
+      return kind === CALL_ACTIVITY_PANEL_KIND.JOINABLE
     })
   )
   const selectedRoomCall = computed(
     () => activeSessionRoomCall.value ?? incomingRoomCall.value ?? outgoingRoomCall.value ?? joinableRoomCall.value
   )
-  const roomCallActivityItem = computed<CallStatusItem | undefined>(() => {
+  const callActivityPanelItem = computed<CallActivityPanelItem | undefined>(() => {
     const roomCall = selectedRoomCall.value
 
     if (!roomCall) {
@@ -122,26 +124,27 @@ export const useRoomCallActivity = () => {
     }
 
     const isPrivateRoom = isRoomPrivate(room)
-    const kind = resolveCallStatusKind({
+    const kind = resolveCallActivityPanelKind({
       activeRoomCallId: activeRoomCallId.value,
       currentUserId: user.value.id,
       roomCall
     })
     const users = resolveRoomTitleUsers(room.id)
-    const title = buildCallStatusRoomTitle({ isPrivateRoom, room, users }) || t(CALL_STATUS_I18N.unknownRoom)
-    const textSource = resolveCallStatusI18n({ isPrivateRoom, kind })
-    const canAccept = kind === CALL_STATUS_KIND.INCOMING
-    const canLeaveActiveRoomCall = kind === CALL_STATUS_KIND.ACTIVE
-    const canLeaveIncomingRoomCall = kind === CALL_STATUS_KIND.INCOMING
-    const canLeaveOutgoingRoomCall = kind === CALL_STATUS_KIND.OUTGOING
+    const title =
+      buildCallActivityPanelRoomTitle({ isPrivateRoom, room, users }) || t(CALL_ACTIVITY_PANEL_I18N.unknownRoom)
+    const textSource = resolveCallActivityPanelI18n({ isPrivateRoom, kind })
+    const canAccept = kind === CALL_ACTIVITY_PANEL_KIND.INCOMING
+    const canLeaveActiveRoomCall = kind === CALL_ACTIVITY_PANEL_KIND.ACTIVE
+    const canLeaveIncomingRoomCall = kind === CALL_ACTIVITY_PANEL_KIND.INCOMING
+    const canLeaveOutgoingRoomCall = kind === CALL_ACTIVITY_PANEL_KIND.OUTGOING
     const canLeave = canLeaveActiveRoomCall || canLeaveIncomingRoomCall || canLeaveOutgoingRoomCall
 
     return {
       canAccept,
       canLeave,
-      canMute: kind === CALL_STATUS_KIND.INCOMING,
-      canOpen: kind === CALL_STATUS_KIND.ACTIVE || kind === CALL_STATUS_KIND.JOINABLE,
-      dotColor: CALL_STATUS_DOT_COLOR_BY_KIND[kind],
+      canMute: kind === CALL_ACTIVITY_PANEL_KIND.INCOMING,
+      canOpen: kind === CALL_ACTIVITY_PANEL_KIND.ACTIVE || kind === CALL_ACTIVITY_PANEL_KIND.JOINABLE,
+      dotColor: CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND[kind],
       kind,
       roomCall,
       roomId: room.id,
@@ -160,7 +163,7 @@ export const useRoomCallActivity = () => {
     })
 
   const openRoomCall = async () => {
-    const item = roomCallActivityItem.value
+    const item = callActivityPanelItem.value
 
     if (!item) {
       return
@@ -174,7 +177,7 @@ export const useRoomCallActivity = () => {
   }
 
   const acceptIncomingRoomCall = async (mediaKind: RoomCallMediaKind) => {
-    const item = roomCallActivityItem.value
+    const item = callActivityPanelItem.value
 
     if (!item) {
       return null
@@ -196,7 +199,7 @@ export const useRoomCallActivity = () => {
   const acceptIncomingAudioRoomCall = () => acceptIncomingRoomCall(ROOM_CALL_MEDIA_KIND.AUDIO)
   const acceptIncomingVideoRoomCall = () => acceptIncomingRoomCall(ROOM_CALL_MEDIA_KIND.VIDEO)
   const muteIncomingRoomCall = () => {
-    const item = roomCallActivityItem.value
+    const item = callActivityPanelItem.value
 
     if (!item?.canMute) {
       return false
@@ -207,7 +210,7 @@ export const useRoomCallActivity = () => {
     return true
   }
   const leaveRoomCall = async () => {
-    const item = roomCallActivityItem.value
+    const item = callActivityPanelItem.value
 
     if (!item) {
       return false
@@ -219,7 +222,7 @@ export const useRoomCallActivity = () => {
       return false
     }
 
-    if (item.kind === CALL_STATUS_KIND.INCOMING) {
+    if (item.kind === CALL_ACTIVITY_PANEL_KIND.INCOMING) {
       isDecliningRoomCall.value = true
 
       try {
@@ -231,13 +234,13 @@ export const useRoomCallActivity = () => {
 
     return leaveActiveRoomCall()
   }
-  const isRoomCallActivityActionLoading = computed(
+  const isCallActivityPanelActionLoading = computed(
     () => isDecliningRoomCall.value || isJoiningRoomCall.value || isLeavingRoomCall.value
   )
 
   return {
-    roomCallActivityItem,
-    isRoomCallActivityActionLoading,
+    callActivityPanelItem,
+    isCallActivityPanelActionLoading,
     acceptIncomingAudioRoomCall,
     acceptIncomingVideoRoomCall,
     leaveRoomCall,

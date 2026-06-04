@@ -23,7 +23,7 @@ export const TOP_BAR_I18N = defineI18n({
   }
 })
 
-export const CALL_STATUS_I18N = defineI18n({
+export const CALL_ACTIVITY_PANEL_I18N = defineI18n({
   acceptAudioRoomCall: {
     en: 'Accept with audio',
     ru: 'Ответить с аудио',

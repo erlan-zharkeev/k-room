@@ -8,32 +8,19 @@ import ChatRoomHeader from './ChatRoomHeader.vue'
 import ChatRoomMessages from './ChatRoomMessages.vue'
 import ChatRoomPinnedMessage from './ChatRoomPinnedMessage.vue'
 import ChatRoomStub from './ChatRoomStub.vue'
-import RoomCallActivePanel from './RoomCallActivePanel.vue'
 
 const {
   selectedChatRoom,
   isSelectedChatRoomPrivate,
   selectedMessageId,
-  selectedActiveRoomCall,
   joinableSelectedRoomCall,
-  videoStream,
-  screenStream,
-  remoteStreamsByUserId,
-  localMediaState,
   isRoomCallStartDisabled,
   isStartingRoomCall,
   isJoiningRoomCall,
-  isLeavingRoomCall,
-  isRoomCallSessionBusy,
   isRoomCallJoinDisabled,
   clearSelectedMessage,
   selectChatRoomMessage,
   selectCurrentChatRoomMessage,
-  setActiveRoomCallAudioEnabled,
-  setActiveRoomCallVideoEnabled,
-  startActiveRoomCallScreen,
-  stopActiveRoomCallScreen,
-  leaveActiveRoomCall,
   joinSelectedRoomCall,
   startSelectedRoomCall
 } = useChatRoomContent()
@@ -54,21 +41,6 @@ const {
       @join-room-call="joinSelectedRoomCall"
     />
     <template v-if="selectedChatRoom">
-      <RoomCallActivePanel
-        v-if="selectedActiveRoomCall"
-        :room-call="selectedActiveRoomCall"
-        :video-stream="videoStream"
-        :screen-stream="screenStream"
-        :remote-streams-by-user-id="remoteStreamsByUserId"
-        :local-media-state="localMediaState"
-        :is-busy="isRoomCallSessionBusy"
-        :is-leaving="isLeavingRoomCall"
-        @set-audio-enabled="setActiveRoomCallAudioEnabled"
-        @set-video-enabled="setActiveRoomCallVideoEnabled"
-        @start-screen="startActiveRoomCallScreen"
-        @stop-screen="stopActiveRoomCallScreen"
-        @leave="leaveActiveRoomCall"
-      />
       <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectCurrentChatRoomMessage" />
       <NmorphCard shadow-type="inset" class="chat-room-page__messages">
         <ChatRoomMessages
