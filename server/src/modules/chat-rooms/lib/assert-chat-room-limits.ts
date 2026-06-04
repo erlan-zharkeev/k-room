@@ -1,9 +1,4 @@
-import {
-  CHAT_ROOM_NAME_MAX_LENGTH,
-  REQ_STATUS,
-  ROOM_PARTICIPANT_LIMIT,
-  USER_CHAT_ROOM_LIMIT
-} from 'global-shared'
+import { CHAT_ROOM_NAME_MAX_LENGTH, REQ_STATUS, ROOM_PARTICIPANT_LIMIT, USER_CHAT_ROOM_LIMIT } from 'global-shared'
 
 import { AppError } from 'src/shared/lib/app-error'
 

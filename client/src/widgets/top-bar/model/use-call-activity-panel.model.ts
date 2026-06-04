@@ -11,10 +11,7 @@ import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useActiveRoomCallSession, useRoomCallSession } from 'src/features/room-call-session'
 import { useI18n } from 'src/shared/lib'
 
-import {
-  CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND,
-  CALL_ACTIVITY_PANEL_KIND
-} from '../config/constants'
+import { CALL_ACTIVITY_PANEL_DOT_COLOR_BY_KIND, CALL_ACTIVITY_PANEL_KIND } from '../config/constants'
 import { CALL_ACTIVITY_PANEL_I18N } from '../config/i18n'
 import type { CallActivityPanelItem, CallActivityPanelRoomTitleUser } from '../config/types'
 import { buildCallActivityPanelRoomTitle } from '../lib/build-call-activity-panel-room-title'
