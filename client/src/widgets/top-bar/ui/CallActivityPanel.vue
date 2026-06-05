@@ -92,8 +92,8 @@ const {
 
 .call-activity-panel {
   interpolate-size: allow-keywords;
-  max-width: min(320px, 42vw);
   width: min(320px, 42vw);
+  max-width: min(320px, 42vw);
   transition: width 180ms ease;
 }
 
