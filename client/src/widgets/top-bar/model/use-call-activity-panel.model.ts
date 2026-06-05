@@ -41,6 +41,7 @@ export const useCallActivityPanel = () => {
   } = useActiveRoomCallSession()
   const { declineRoomCall } = useRoomCallSession()
   const isDecliningRoomCall = ref(false)
+  const pendingAcceptRoomCallMediaKind = ref<RoomCallMediaKind | null>(null)
   const mutedIncomingRoomCallIds = reactive(new Set<string>())
 
   const resolveUserById = (id: string) => contactById.value.get(id) ?? knownUserById.value.get(id)
@@ -227,19 +228,27 @@ export const useCallActivityPanel = () => {
     }
 
     const cannotAcceptRoomCall = !item.canAccept
-    const actionUnavailable = cannotAcceptRoomCall || isRoomCallSessionBusy.value || isCallActivityPanelDisabled.value
+    const isAcceptInProgress = Boolean(pendingAcceptRoomCallMediaKind.value)
+    const actionUnavailable =
+      cannotAcceptRoomCall || isAcceptInProgress || isRoomCallSessionBusy.value || isCallActivityPanelDisabled.value
 
     if (actionUnavailable) {
       return null
     }
 
-    const roomCall = await joinActiveRoomCall(item.roomCall.id, mediaKind)
+    pendingAcceptRoomCallMediaKind.value = mediaKind
 
-    if (roomCall) {
-      await openRoomCallContent(item.roomId)
+    try {
+      const roomCall = await joinActiveRoomCall(item.roomCall.id, mediaKind)
+
+      if (roomCall) {
+        await openRoomCallContent(item.roomId)
+      }
+
+      return roomCall
+    } finally {
+      pendingAcceptRoomCallMediaKind.value = null
     }
-
-    return roomCall
   }
 
   const acceptIncomingAudioRoomCall = () => acceptIncomingRoomCall(ROOM_CALL_MEDIA_KIND.AUDIO)
@@ -292,6 +301,12 @@ export const useCallActivityPanel = () => {
 
     return isDeclineInProgress || isJoinInProgress || isLeaveInProgress
   })
+  const isCallActivityPanelAcceptAudioLoading = computed(
+    () => pendingAcceptRoomCallMediaKind.value === ROOM_CALL_MEDIA_KIND.AUDIO
+  )
+  const isCallActivityPanelAcceptVideoLoading = computed(
+    () => pendingAcceptRoomCallMediaKind.value === ROOM_CALL_MEDIA_KIND.VIDEO
+  )
   const isCallActivityPanelLeaveLoading = computed(() => {
     const item = callActivityPanelItem.value
     const isIncomingRoomCall = item?.kind === CALL_ACTIVITY_PANEL_KIND.INCOMING
@@ -303,6 +318,8 @@ export const useCallActivityPanel = () => {
     callActivityPanelItem,
     callActivityPanelItems,
     callActivityPanelStepperIndex,
+    isCallActivityPanelAcceptAudioLoading,
+    isCallActivityPanelAcceptVideoLoading,
     isCallActivityPanelActionLoading,
     isCallActivityPanelDisabled,
     isCallActivityPanelLeaveLoading,
