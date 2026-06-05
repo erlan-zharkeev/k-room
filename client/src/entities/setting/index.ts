@@ -1,4 +1,5 @@
 export { useSettings } from './model/use-settings.model'
+export { useAppSound } from './model/use-app-sound.model'
 export { useLocalizedDateTime } from './model/use-localized-date-time.model'
 export { CONTENT_TAB_IDS } from './config/content.constants'
 export {

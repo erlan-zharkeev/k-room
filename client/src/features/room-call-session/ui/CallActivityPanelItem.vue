@@ -3,7 +3,6 @@ import {
   NmorphButton,
   NmorphIcon,
   NmorphIconClose,
-  NmorphIconMuteNotification,
   NmorphIconPhone,
   NmorphIconVideoCamera
 } from '@nmorph/nmorph-ui-kit'
@@ -91,18 +90,6 @@ const showJoinControls = computed(() =>
           </NmorphIcon>
         </NmorphButton>
       </template>
-      <NmorphButton
-        v-if="props.item.canMute"
-        shape="square"
-        style-type="transparent"
-        :aria-label="$t(ROOM_CALL_SESSION_I18N.muteIncomingRoomCall)"
-        :disabled="props.loading || props.disabled"
-        @click="emit('mute')"
-      >
-        <NmorphIcon width="16px" height="16px">
-          <NmorphIconMuteNotification />
-        </NmorphIcon>
-      </NmorphButton>
       <NmorphButton
         v-if="props.item.canLeave"
         shape="square"

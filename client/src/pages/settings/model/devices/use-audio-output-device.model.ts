@@ -1,10 +1,9 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { useDevicesList, useEventListener, useTimeoutFn } from '@vueuse/core'
-import { isFunction } from 'global-shared'
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
+import { useDevicesList, useTimeoutFn } from '@vueuse/core'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-import { useSettings } from 'src/entities/setting'
-import { APP_NOTIFICATION_SOUND_SRC, useI18n } from 'src/shared/lib'
+import { useAppSound, useSettings } from 'src/entities/setting'
+import { APP_SOUND_KIND, useI18n } from 'src/shared/lib'
 
 import {
   DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
@@ -17,12 +16,12 @@ import { resolveSingleSelectValue, syncSelectedDeviceId, useDeviceWarning } from
 export const useAudioOutputDevice = () => {
   const { t } = useI18n()
   const { settings, setByPath } = useSettings()
+  const { playAppSound, stopAppSound } = useAppSound()
   const { showDeviceWarning } = useDeviceWarning('Audio output device request failed')
   const { audioOutputs: audioOutputDevices, isSupported: isAudioOutputSupported } = useDevicesList()
 
   const audioOutputLoading = ref(true)
   const audioOutputTestLoading = ref(false)
-  const outputAudio = shallowRef<HTMLAudioElement | null>(null)
   const { start: startOutputIndicatorTimer, stop: stopOutputIndicatorTimer } = useTimeoutFn(
     () => {},
     SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS,
@@ -53,12 +52,7 @@ export const useAudioOutputDevice = () => {
 
   const stopAudioOutput = () => {
     stopOutputIndicatorTimer()
-
-    if (outputAudio.value) {
-      outputAudio.value.pause()
-      outputAudio.value.currentTime = 0
-      outputAudio.value = null
-    }
+    stopAppSound(APP_SOUND_KIND.MESSAGE)
   }
 
   const setSelectedAudioOutputDevice = async (value: NmorphSelectModelValueType = '') => {
@@ -93,14 +87,7 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = true
       stopAudioOutput()
 
-      const audio = new Audio(APP_NOTIFICATION_SOUND_SRC)
-      outputAudio.value = audio
-
-      if (isFunction(audio.setSinkId) && settings.value.ioDevices.audioOutputDeviceId) {
-        await audio.setSinkId(settings.value.ioDevices.audioOutputDeviceId)
-      }
-
-      await audio.play()
+      await playAppSound(APP_SOUND_KIND.MESSAGE)
       startOutputIndicatorTimer()
     } catch (error) {
       stopAudioOutput()
@@ -109,15 +96,6 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = false
     }
   }
-
-  useEventListener(
-    outputAudio,
-    'ended',
-    () => {
-      outputAudio.value = null
-    },
-    { once: true }
-  )
 
   onMounted(() => {
     void requestAudioOutputDevices()

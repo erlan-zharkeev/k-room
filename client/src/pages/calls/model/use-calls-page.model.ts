@@ -1,6 +1,5 @@
 import { getRoomOtherUserIds, isRoomPrivate, type ChatRoom, type RoomCall } from 'global-shared'
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
@@ -8,8 +7,8 @@ import { useKnownUser } from 'src/entities/known-user'
 import { useRoomCall } from 'src/entities/room-call'
 import { useLocalizedDateTime } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
-import { useI18n, useScreen } from 'src/shared/lib'
+import { useActiveRoomCallSession } from 'src/features/room-call-session'
+import { useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_HISTORY_MEDIA_ICON_BY_KIND, ROOM_CALL_HISTORY_STATUS_COLOR_BY_KIND } from '../config/constants'
 import { CALLS_PAGE_I18N } from '../config/i18n'
@@ -25,8 +24,6 @@ import {
 import { useRoomCallHistorySearch } from './use-room-call-history-search.model'
 
 export const useCallsPage = () => {
-  const route = useRoute()
-  const { isPortraitTabletOrLess } = useScreen()
   const { t } = useI18n()
   const { roomCalls } = useRoomCall()
   const { chatRooms } = useChatRoom()
@@ -34,6 +31,7 @@ export const useCallsPage = () => {
   const { knownUserById } = useKnownUser()
   const { user } = useUser()
   const { formatDate, formatTime } = useLocalizedDateTime()
+  const { canStartActiveRoomCall, startActiveRoomCall } = useActiveRoomCallSession()
   const {
     searchQuery,
     normalizedSearchQuery,
@@ -45,15 +43,6 @@ export const useCallsPage = () => {
   } = useRoomCallHistorySearch()
 
   const roomById = computed(() => new Map(chatRooms.value.map((room) => [room.id, room])))
-
-  const buildChatRoomRoute = (roomId: string) => {
-    const query = isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
-
-    return {
-      path: `${APP_PAGE_ROUTES.chatRooms}/${roomId}`,
-      query
-    }
-  }
 
   const resolveRoomTitle = (room: ChatRoom) => {
     if (room.chatName) {
@@ -85,19 +74,24 @@ export const useCallsPage = () => {
         return {
           id: roomCall.id,
           calledAt: roomCall.calledAt,
+          canStartCall: canStartActiveRoomCall(room.id),
           imageId: room.avatarId,
           isActive: isRoomCallActive(roomCall),
           mediaIcon: ROOM_CALL_HISTORY_MEDIA_ICON_BY_KIND[roomCall.mediaKind],
           mediaLabel: t(resolveRoomCallHistoryMediaI18n(roomCall.mediaKind)),
+          mediaKind: roomCall.mediaKind,
           meta: formatTime(roomCall.calledAt),
+          roomId: room.id,
           statusColor: ROOM_CALL_HISTORY_STATUS_COLOR_BY_KIND[statusKind],
           statusText: t(resolveRoomCallHistoryStatusI18n(statusKind)),
           timeText: formatDate(roomCall.calledAt),
-          title: resolveRoomTitle(room),
-          to: buildChatRoomRoute(room.id)
+          title: resolveRoomTitle(room)
         }
       })
     )
+
+  const startRoomCallHistoryItem = async ({ mediaKind, roomId }: RoomCallHistoryItem) =>
+    startActiveRoomCall(roomId, mediaKind)
 
   const sourceRoomCalls = computed(() => (normalizedSearchQuery.value ? searchedRoomCalls.value : roomCalls.value))
   const roomCallHistoryItems = computed<RoomCallHistoryItem[]>(() => buildRoomCallHistoryItems(sourceRoomCalls.value))
@@ -114,6 +108,7 @@ export const useCallsPage = () => {
     searchHasMore,
     isSearchLoading,
     isSearchLoadingMore,
-    loadMoreSearchedRoomCalls
+    loadMoreSearchedRoomCalls,
+    startRoomCallHistoryItem
   }
 }

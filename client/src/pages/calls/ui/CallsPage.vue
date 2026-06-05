@@ -16,7 +16,8 @@ const {
   searchHasMore,
   isSearchLoading,
   isSearchLoadingMore,
-  loadMoreSearchedRoomCalls
+  loadMoreSearchedRoomCalls,
+  startRoomCallHistoryItem
 } = useCallsPage()
 </script>
 
@@ -45,7 +46,12 @@ const {
     />
     <NmorphScroll v-else scroll-x-prop="hidden" css-scroll-behavior="auto" :y-gap-in-px="0">
       <div class="calls-page__list">
-        <RoomCallHistoryItem v-for="item in roomCallHistoryItems" :key="item.id" :item="item" />
+        <RoomCallHistoryItem
+          v-for="item in roomCallHistoryItems"
+          :key="item.id"
+          :item="item"
+          @start-room-call="startRoomCallHistoryItem"
+        />
         <NmorphButton
           v-if="searchHasMore"
           :text="$t(CALLS_PAGE_I18N.loadMore) + '...'"

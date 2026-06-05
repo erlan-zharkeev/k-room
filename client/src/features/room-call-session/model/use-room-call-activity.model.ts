@@ -1,5 +1,5 @@
 import { ROOM_CALL_MEDIA_KIND, type RoomCall, type RoomCallMediaKind } from 'global-shared'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
@@ -41,7 +41,6 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
   const activityStepperIndex = ref(0)
   const joiningMediaKind = ref<RoomCallMediaKind | null>(null)
   const isDecliningRoomCall = ref(false)
-  const mutedIncomingRoomCallIds = reactive(new Set<string>())
 
   const resolveUserById = (id: string) => contactById.value.get(id) ?? knownUserById.value.get(id)
 
@@ -90,7 +89,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
         roomCall
       })
 
-      return kind === ROOM_CALL_ACTIVITY_KIND.INCOMING && !mutedIncomingRoomCallIds.has(roomCall.id)
+      return kind === ROOM_CALL_ACTIVITY_KIND.INCOMING
     })
   )
   const outgoingRoomCall = computed(() =>
@@ -141,7 +140,6 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     return {
       canJoin,
       canLeave,
-      canMute: kind === ROOM_CALL_ACTIVITY_KIND.INCOMING,
       canOpen: kind === ROOM_CALL_ACTIVITY_KIND.ACTIVE || kind === ROOM_CALL_ACTIVITY_KIND.JOINABLE,
       dotColor: ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND[kind],
       isPrivateRoom,
@@ -247,17 +245,6 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
 
   const joinCurrentRoomCallWithAudio = () => joinCurrentRoomCall(ROOM_CALL_MEDIA_KIND.AUDIO)
   const joinCurrentRoomCallWithVideo = () => joinCurrentRoomCall(ROOM_CALL_MEDIA_KIND.VIDEO)
-  const muteCurrentIncomingRoomCall = () => {
-    const item = activityItem.value
-
-    if (!item?.canMute || isActivityDisabled.value) {
-      return false
-    }
-
-    mutedIncomingRoomCallIds.add(item.roomCall.id)
-
-    return true
-  }
   const leaveCurrentRoomCall = async () => {
     const item = activityItem.value
 
@@ -315,7 +302,6 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     joinCurrentRoomCallWithAudio,
     joinCurrentRoomCallWithVideo,
     leaveCurrentRoomCall,
-    muteCurrentIncomingRoomCall,
     openCurrentRoomCall
   }
 }
