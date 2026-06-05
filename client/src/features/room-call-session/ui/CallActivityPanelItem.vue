@@ -56,7 +56,7 @@ const showJoinControls = computed(() =>
     </div>
     <div
       class="call-activity-panel-item__actions"
-      @click.stop
+      @click.stop="emit('open')"
       @pointerdown.stop
       @pointermove.stop
       @pointerup.stop
@@ -97,7 +97,7 @@ const showJoinControls = computed(() =>
         :aria-label="$t(ROOM_CALL_SESSION_I18N.leaveRoomCall)"
         :loading="props.leaveLoading"
         :disabled="props.leaveLoading || props.disabled"
-        @click="emit('leave')"
+        @click.stop="emit('leave')"
       >
         <NmorphIcon width="16px" height="16px">
           <NmorphIconClose />

@@ -79,6 +79,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
           @join-audio="joinCurrentRoomCallWithAudio"
           @join-video="joinCurrentRoomCallWithVideo"
           @leave="leaveCurrentRoomCall"
+          @open="openCurrentRoomCall"
         />
         <template #indicator="{ index, count, goTo }">
           <div v-if="count > 1" class="call-activity-panel__indicator" @click.stop>
@@ -109,6 +110,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
         @join-audio="joinCurrentRoomCallWithAudio"
         @join-video="joinCurrentRoomCallWithVideo"
         @leave="leaveCurrentRoomCall"
+        @open="openCurrentRoomCall"
       />
     </NmorphCard>
   </Transition>
@@ -133,6 +135,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
         @join-audio="joinCurrentRoomCallWithAudio"
         @join-video="joinCurrentRoomCallWithVideo"
         @leave="leaveCurrentRoomCall"
+        @open="openCurrentRoomCall"
       />
       <template #indicator="{ index, count, goTo }">
         <div v-if="count > 1" class="call-activity-panel__indicator" @click.stop>
@@ -163,6 +166,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
       @join-audio="joinCurrentRoomCallWithAudio"
       @join-video="joinCurrentRoomCallWithVideo"
       @leave="leaveCurrentRoomCall"
+      @open="openCurrentRoomCall"
     />
   </div>
 </template>

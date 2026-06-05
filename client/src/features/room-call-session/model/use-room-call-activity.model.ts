@@ -140,7 +140,6 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     return {
       canJoin,
       canLeave,
-      canOpen: kind === ROOM_CALL_ACTIVITY_KIND.ACTIVE || kind === ROOM_CALL_ACTIVITY_KIND.JOINABLE,
       dotColor: ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND[kind],
       isPrivateRoom,
       kind,
@@ -177,15 +176,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
   })
   const activityItem = computed(() => activityItems.value[activityStepperIndex.value])
   const isActivityDisabled = computed(() => socketStatus.isReconnecting.value)
-  const isActivityOpenable = computed(() => {
-    const item = activityItem.value
-
-    if (!item || !isOpenEnabled.value) {
-      return false
-    }
-
-    return item.canOpen && !isActivityDisabled.value
-  })
+  const isActivityOpenable = computed(() => Boolean(activityItem.value && isOpenEnabled.value))
 
   watch(
     activityItems,
@@ -205,7 +196,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
   const openCurrentRoomCall = async () => {
     const item = activityItem.value
 
-    if (!item || !isActivityOpenable.value) {
+    if (!item || !isOpenEnabled.value) {
       return
     }
 
