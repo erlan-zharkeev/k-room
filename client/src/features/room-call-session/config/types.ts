@@ -48,7 +48,6 @@ export interface RoomCallMediaButtonsEmits {
 export interface RoomCallActivityItem {
   canJoin: boolean
   canLeave: boolean
-  canOpen: boolean
   dotColor: string
   isPrivateRoom: boolean
   kind: RoomCallActivityKind
@@ -108,6 +107,7 @@ export interface CallActivityPanelItemEmits {
   'join-audio': []
   'join-video': []
   leave: []
+  open: []
 }
 
 export interface RoomCallAudioContextMenuItemProps {
