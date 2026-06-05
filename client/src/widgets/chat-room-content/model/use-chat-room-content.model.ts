@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 
 import { useActiveRoomCallSession } from 'src/features/room-call-session'
 
+import { useChatRoomContentView } from './use-chat-room-content-view.model'
 import { useChatRoomMessageSelection } from './use-chat-room-message-selection.model'
 import { useSelectedChatRoom } from './use-selected-chat-room.model'
 
@@ -11,12 +12,9 @@ export const useChatRoomContent = () => {
   const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomPrivate } = useSelectedChatRoom()
   const {
     activeRoomCall,
-    activeRoomCallId,
-    isJoiningRoomCall,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
     isStartingRoomCall,
-    joinActiveRoomCall,
     localMediaState,
     remoteStreamsByUserId,
     canStartActiveRoomCall,
@@ -34,6 +32,9 @@ export const useChatRoomContent = () => {
     useChatRoomMessageSelection(selectedChatRoomId)
 
   const activeSelectedRoomCall = computed(() => resolveActiveRoomCallByRoomId(selectedChatRoomId.value))
+  const hasSelectedRoomCall = computed(() => Boolean(activeSelectedRoomCall.value))
+  const { changeChatRoomContentView, chatRoomContentView, isChatRoomTextView } =
+    useChatRoomContentView(hasSelectedRoomCall)
   const isRoomCallStartDisabled = computed(() => !canStartActiveRoomCall(selectedChatRoomId.value))
   const selectedActiveRoomCall = computed(() => {
     const belongsToSelectedRoom = activeRoomCall.value?.roomId === selectedChatRoomId.value
@@ -46,11 +47,6 @@ export const useChatRoomContent = () => {
     }
 
     return activeSelectedRoomCall.value
-  })
-  const isRoomCallJoinDisabled = computed(() => {
-    const hasActiveSession = Boolean(activeRoomCallId.value)
-
-    return isRoomCallSessionBusy.value || hasActiveSession
   })
 
   const startSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
@@ -68,27 +64,15 @@ export const useChatRoomContent = () => {
       roomCallLoadingMediaKind.value = null
     }
   }
-  const joinSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
-    const roomCall = joinableSelectedRoomCall.value
-
-    if (!roomCall || isRoomCallJoinDisabled.value) {
-      return null
-    }
-
-    roomCallLoadingMediaKind.value = mediaKind
-
-    try {
-      return await joinActiveRoomCall(roomCall.id, mediaKind)
-    } finally {
-      roomCallLoadingMediaKind.value = null
-    }
-  }
 
   return {
     selectedChatRoomId,
     selectedChatRoom,
     isSelectedChatRoomPrivate,
     selectedMessageId,
+    chatRoomContentView,
+    hasSelectedRoomCall,
+    isChatRoomTextView,
     selectedActiveRoomCall,
     joinableSelectedRoomCall,
     videoStream,
@@ -97,12 +81,11 @@ export const useChatRoomContent = () => {
     localMediaState,
     isRoomCallStartDisabled,
     isStartingRoomCall,
-    isJoiningRoomCall,
     roomCallLoadingMediaKind,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
-    isRoomCallJoinDisabled,
     clearSelectedMessage,
+    changeChatRoomContentView,
     selectChatRoomMessage,
     selectCurrentChatRoomMessage,
     setActiveRoomCallAudioEnabled,
@@ -110,7 +93,6 @@ export const useChatRoomContent = () => {
     startActiveRoomCallScreen,
     stopActiveRoomCallScreen,
     leaveActiveRoomCall,
-    joinSelectedRoomCall,
     startSelectedRoomCall
   }
 }

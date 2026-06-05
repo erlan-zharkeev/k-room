@@ -41,10 +41,45 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     ru: 'Идет звонок',
     zh: '通话进行中'
   },
-  joinRoomCall: {
-    en: 'Join',
-    ru: 'Присоединиться',
-    zh: '加入'
+  activeRoomCallActivity: {
+    en: (title: string) => `Call in progress: ${title}`,
+    ru: (title: string) => `Идет звонок: ${title}`,
+    zh: (title: string) => `通话进行中：${title}`
+  },
+  incomingGroupRoomCall: {
+    en: (title: string) => `Incoming call in ${title}`,
+    ru: (title: string) => `В ${title} идет звонок`,
+    zh: (title: string) => `${title} 有来电`
+  },
+  incomingPrivateRoomCall: {
+    en: (title: string) => `${title} is calling you`,
+    ru: (title: string) => `Вам звонит ${title}`,
+    zh: (title: string) => `${title} 正在呼叫你`
+  },
+  joinableRoomCall: {
+    en: (title: string) => `Call in ${title}`,
+    ru: (title: string) => `Звонок в ${title}`,
+    zh: (title: string) => `${title} 中的通话`
+  },
+  muteIncomingRoomCall: {
+    en: 'Mute incoming call',
+    ru: 'Заглушить входящий звонок',
+    zh: '静音来电'
+  },
+  openRoomCall: {
+    en: 'Open call',
+    ru: 'Открыть звонок',
+    zh: '打开通话'
+  },
+  outgoingRoomCall: {
+    en: (title: string) => `Calling ${title}`,
+    ru: (title: string) => `Вы звоните ${title}`,
+    zh: (title: string) => `正在呼叫 ${title}`
+  },
+  unknownRoom: {
+    en: 'Unknown chat',
+    ru: 'Неизвестный чат',
+    zh: '未知聊天'
   },
   joinAudioRoomCall: {
     en: 'Join with audio',
@@ -55,6 +90,16 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     en: 'Join with video',
     ru: 'Присоединиться с видео',
     zh: '加入视频通话'
+  },
+  answerAudioRoomCall: {
+    en: 'Answer with audio',
+    ru: 'Ответить с аудио',
+    zh: '用语音接听'
+  },
+  answerVideoRoomCall: {
+    en: 'Answer with video',
+    ru: 'Ответить с видео',
+    zh: '用视频接听'
   },
   roomCallParticipants: {
     en: (quantity: number) => formatPlural('en', quantity, { one: 'participant', other: 'participants' }),

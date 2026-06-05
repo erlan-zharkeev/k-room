@@ -19,6 +19,7 @@ import {
   resolveRoomCallJoinFailureMessage,
   resolveRoomCallStartFailureMessage
 } from '../lib/resolve-room-call-session-failure-message'
+import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/room-call-start-availability'
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
 import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
@@ -83,20 +84,27 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       isVideoLoading.value ||
       isScreenLoading.value
   )
+  const hasBlockingUserRoomCall = computed(() =>
+    roomCalls.value.some((roomCall) => isRoomCallBlockingStartForUser(roomCall, user.value.id))
+  )
   const resolveActiveRoomCallByRoomId = (roomId: string) =>
-    roomCalls.value.find(({ finishedAt, roomId: activeRoomId, status }) => {
+    roomCalls.value.find((roomCall) => {
+      const { roomId: activeRoomId } = roomCall
       const belongsToRoom = activeRoomId === roomId
-      const hasFinishedAt = Boolean(finishedAt)
-      const isFinishedStatus = status === ROOM_CALL_STATUS.FINISHED
 
-      return belongsToRoom && !hasFinishedAt && !isFinishedStatus
+      return belongsToRoom && isRoomCallUnfinished(roomCall)
     })
 
   const canStartActiveRoomCall = (roomId: string) => {
     const hasRoomId = Boolean(roomId)
     const hasActiveSession = Boolean(activeRoomCallId.value)
     const hasActiveRoomCall = Boolean(resolveActiveRoomCallByRoomId(roomId))
-    const isRoomCallActionLocked = !hasRoomId || hasActiveSession || hasActiveRoomCall || isRoomCallSessionBusy.value
+    const isRoomCallActionLocked =
+      !hasRoomId ||
+      hasActiveSession ||
+      hasActiveRoomCall ||
+      hasBlockingUserRoomCall.value ||
+      isRoomCallSessionBusy.value
 
     return !isRoomCallActionLocked
   }
