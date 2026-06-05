@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphIcon, NmorphIconArrowDown, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphIcon, NmorphIconArrowDown, NmorphProgress, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
+import { MESSAGE_LOADING_PROGRESS_PERCENTAGE } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomMessagesEmits, ChatRoomMessagesProps } from '../config/types'
 import { useChatRoomMessages } from '../model/use-chat-room-messages.model'
@@ -61,20 +62,19 @@ const {
       </div>
       <div v-if="hasMessages" ref="messagesBottom" class="chat-room-messages__bottom" />
       <div v-if="isLoading && !hasLoadedMessages" class="chat-room-messages__empty">
-        <AppText
-          alignment="center"
-          color="semi-contrast-text"
-          :selectable="false"
-          :text="$t(CHAT_ROOM_CONTENT_I18N.loadingMessages)"
-        />
+        <div class="chat-room-messages__loading">
+          <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.loadingMessages)" />
+          <NmorphProgress
+            class="chat-room-messages__loading-progress"
+            :percentage="MESSAGE_LOADING_PROGRESS_PERCENTAGE"
+            :height="4"
+            :value-right-side="false"
+            indeterminate
+          />
+        </div>
       </div>
       <div v-else-if="!hasMessages" class="chat-room-messages__empty">
-        <AppText
-          alignment="center"
-          color="semi-contrast-text"
-          :selectable="false"
-          :text="$t(CHAT_ROOM_CONTENT_I18N.noMessages)"
-        />
+        <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noMessages)" />
       </div>
     </NmorphScroll>
     <NmorphButton
@@ -116,6 +116,11 @@ const {
   @include flex-column-center;
   @include absolute-center;
 
+  gap: 8px;
+}
+
+.chat-room-messages__loading {
+  display: grid;
   gap: 8px;
 }
 

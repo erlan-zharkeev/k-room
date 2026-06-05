@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
-import { RoomCallActivityPanel } from 'src/features/room-call-session'
+import { CallActivityPanel } from 'src/features/room-call-session'
 
 import { useChatRoomContent } from '../model/use-chat-room-content.model'
 
@@ -10,7 +10,7 @@ import ChatRoomHeader from './ChatRoomHeader.vue'
 import ChatRoomMessages from './ChatRoomMessages.vue'
 import ChatRoomPinnedMessage from './ChatRoomPinnedMessage.vue'
 import ChatRoomStub from './ChatRoomStub.vue'
-import RoomCallActivePanel from './RoomCallActivePanel.vue'
+import RoomCallPanel from './RoomCallPanel.vue'
 
 const {
   selectedChatRoom,
@@ -74,7 +74,7 @@ const {
         <ChatRoomFooter :room="selectedChatRoom" @select-editing-message="selectCurrentChatRoomMessage" />
       </template>
       <NmorphCard v-else shadow-type="inset" class="chat-room-page__call" content-class="chat-room-page__call-content">
-        <RoomCallActivePanel
+        <RoomCallPanel
           v-if="selectedActiveRoomCall"
           :room-call="selectedActiveRoomCall"
           :video-stream="videoStream"
@@ -89,7 +89,7 @@ const {
           @stop-screen="stopActiveRoomCallScreen"
           @leave="leaveActiveRoomCall"
         />
-        <RoomCallActivityPanel
+        <CallActivityPanel
           v-else-if="joinableSelectedRoomCall"
           :compact="false"
           :openable="false"

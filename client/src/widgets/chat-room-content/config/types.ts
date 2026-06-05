@@ -69,7 +69,7 @@ export interface ChatRoomFooterProps {
   room: ChatRoom
 }
 
-export interface RoomCallActivePanelProps {
+export interface RoomCallPanelProps {
   roomCall: RoomCall
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
@@ -79,7 +79,7 @@ export interface RoomCallActivePanelProps {
   isLeaving: boolean
 }
 
-export interface RoomCallActivePanelEmits {
+export interface RoomCallPanelEmits {
   'set-audio-enabled': [enabled: boolean]
   'set-video-enabled': [enabled: boolean]
   'start-screen': []
@@ -87,7 +87,7 @@ export interface RoomCallActivePanelEmits {
   leave: []
 }
 
-export type RoomCallActivePanelEmit = {
+export type RoomCallPanelEmit = {
   (event: 'set-audio-enabled', enabled: boolean): void
   (event: 'set-video-enabled', enabled: boolean): void
   (event: 'start-screen'): void
