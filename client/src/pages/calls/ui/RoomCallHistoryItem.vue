@@ -3,48 +3,62 @@ import { NmorphCard, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import type { RoomCallHistoryItemProps } from '../config/types'
+import type { RoomCallHistoryItemEmits, RoomCallHistoryItemProps } from '../config/types'
+import { useRoomCallHistoryItem } from '../model/use-room-call-history-item.model'
 
 const props = defineProps<RoomCallHistoryItemProps>()
+const emit = defineEmits<RoomCallHistoryItemEmits>()
+const {
+  isRoomCallHistoryItemInteractive,
+  roomCallHistoryItemAriaDisabled,
+  roomCallHistoryItemRole,
+  roomCallHistoryItemTabindex,
+  startRoomCallHistoryItem
+} = useRoomCallHistoryItem(props, emit)
 </script>
 
 <template>
   <NmorphCard
     tag="div"
     class="room-call-history-item"
+    :class="{ 'room-call-history-item--interactive': isRoomCallHistoryItemInteractive }"
     content-class="room-call-history-item__content"
     :shadow-type="props.item.isActive ? 'inset' : 'outset'"
+    :role="roomCallHistoryItemRole"
+    :tabindex="roomCallHistoryItemTabindex"
+    :aria-disabled="roomCallHistoryItemAriaDisabled"
+    @click="startRoomCallHistoryItem"
+    @keydown.enter.prevent="startRoomCallHistoryItem"
+    @keydown.space.prevent="startRoomCallHistoryItem"
   >
-    <RouterLink :to="props.item.to">
-      <AppProfileBasicData
-        :image-id="props.item.imageId"
-        :title="props.item.title"
-        :name="props.item.title"
-        :selectable="false"
-      >
-        <template #description>
-          <div class="room-call-history-item__description">
-            <AppText
-              class="room-call-history-item__status"
-              tag="small"
-              truncate
-              :style="{ color: props.item.statusColor }"
-              :text="props.item.statusText"
-            />
-            <NmorphIcon
-              class="room-call-history-item__media-icon"
-              width="14px"
-              height="14px"
-              :color="props.item.statusColor"
-              :aria-label="props.item.mediaLabel"
-              :title="props.item.mediaLabel"
-            >
-              <component :is="props.item.mediaIcon" />
-            </NmorphIcon>
-          </div>
-        </template>
-      </AppProfileBasicData>
-    </RouterLink>
+    <AppProfileBasicData
+      :image-id="props.item.imageId"
+      :title="props.item.title"
+      :name="props.item.title"
+      :selectable="false"
+    >
+      <template #description>
+        <div class="room-call-history-item__description">
+          <AppText
+            class="room-call-history-item__status"
+            tag="small"
+            truncate
+            :style="{ color: props.item.statusColor }"
+            :text="props.item.statusText"
+          />
+          <NmorphIcon
+            class="room-call-history-item__media-icon"
+            width="14px"
+            height="14px"
+            :color="props.item.statusColor"
+            :aria-label="props.item.mediaLabel"
+            :title="props.item.mediaLabel"
+          >
+            <component :is="props.item.mediaIcon" />
+          </NmorphIcon>
+        </div>
+      </template>
+    </AppProfileBasicData>
     <div class="room-call-history-item__meta">
       <AppText tag="small" color="semi-contrast-text" :text="props.item.timeText" />
       <AppText tag="small" color="semi-contrast-text" :text="props.item.meta" />
@@ -53,6 +67,10 @@ const props = defineProps<RoomCallHistoryItemProps>()
 </template>
 
 <style lang="scss">
+.room-call-history-item--interactive {
+  cursor: pointer;
+}
+
 .room-call-history-item__content {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;

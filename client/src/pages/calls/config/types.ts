@@ -1,6 +1,5 @@
-import type { MediaId } from 'global-shared'
+import type { MediaId, RoomCallMediaKind } from 'global-shared'
 import type { Component } from 'vue'
-import type { RouteLocationRaw } from 'vue-router'
 
 import type { ROOM_CALL_HISTORY_STATUS_KIND } from './constants'
 
@@ -10,18 +9,26 @@ export type RoomCallHistoryStatusKind =
 export interface RoomCallHistoryItem {
   id: string
   calledAt: number
+  canStartCall: boolean
   imageId?: MediaId
   isActive: boolean
   mediaIcon: Component | string
   mediaLabel: string
+  mediaKind: RoomCallMediaKind
   meta: string
+  roomId: string
   statusColor: string
   statusText: string
   timeText: string
   title: string
-  to: RouteLocationRaw
 }
 
 export interface RoomCallHistoryItemProps {
   item: RoomCallHistoryItem
 }
+
+export interface RoomCallHistoryItemEmits {
+  'start-room-call': [item: RoomCallHistoryItem]
+}
+
+export type RoomCallHistoryItemEmit = (event: 'start-room-call', item: RoomCallHistoryItem) => void

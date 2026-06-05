@@ -61,11 +61,6 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     ru: (title: string) => `Звонок в ${title}`,
     zh: (title: string) => `${title} 中的通话`
   },
-  muteIncomingRoomCall: {
-    en: 'Mute incoming call',
-    ru: 'Заглушить входящий звонок',
-    zh: '静音来电'
-  },
   openRoomCall: {
     en: 'Open call',
     ru: 'Открыть звонок',

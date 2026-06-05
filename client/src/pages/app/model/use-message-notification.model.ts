@@ -1,14 +1,15 @@
 import { type EventMessageDelivered, isMessageStatusDelivered } from 'global-shared'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { useSettings } from 'src/entities/setting'
+import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
-import { playAppNotificationSound, useAppToast } from 'src/shared/lib'
+import { APP_SOUND_KIND, useAppToast } from 'src/shared/lib'
 
 export const useMessageNotification = () => {
   const { getById } = useChatRoom()
   const { settings } = useSettings()
   const { hasInteracted } = useSystem()
+  const { playAppSound } = useAppSound()
   const toast = useAppToast()
 
   const canNotifyDeliveredMessage = ({ roomId, message }: EventMessageDelivered) => {
@@ -51,7 +52,7 @@ export const useMessageNotification = () => {
     if (!messages.sound) return
 
     try {
-      await playAppNotificationSound(settings.value.ioDevices.audioOutputDeviceId)
+      await playAppSound(APP_SOUND_KIND.MESSAGE)
     } catch (error) {
       void error
     }

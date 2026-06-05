@@ -10,20 +10,19 @@ const { fileItems, hasFileItems } = useMessageFileList(props)
 
 <template>
   <div v-if="hasFileItems" class="message-file-list">
-    <NmorphFileCard
-      v-for="file in fileItems"
-      :key="file.id"
-      class="message-file-list__item"
-      :name="file.name"
-      :mime-type="file.contentType"
-      :size="file.size"
-      :preview-src="file.previewSrc"
-      :download-href="file.downloadHref"
-      :media-preview="file.mediaPreview"
-      surface="soft"
-      :show-extension-badge="false"
-      :icon-surface="false"
-    />
+    <div v-for="file in fileItems" :key="file.id" class="message-file-list__item">
+      <NmorphFileCard
+        :name="file.name"
+        :mime-type="file.contentType"
+        :size="file.size"
+        :preview-src="file.previewSrc"
+        :download-href="file.downloadHref"
+        :media-preview="file.mediaPreview"
+        surface="soft"
+        :show-extension-badge="false"
+        :icon-surface="false"
+      />
+    </div>
   </div>
 </template>
 
