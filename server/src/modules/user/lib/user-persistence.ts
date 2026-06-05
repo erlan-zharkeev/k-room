@@ -2,7 +2,6 @@ import {
   CONTACT_INTERACTION,
   type Interaction,
   isAcceptedContactInteraction,
-  normalizeNickname,
   normalizeNicknameKey
 } from 'global-shared'
 
@@ -194,7 +193,7 @@ export const loadContactSearchUsersById = (id: string) => {
 }
 
 export const loadContactSearchUsersByNickname = (nickname: string) => {
-  return UserModel.find({ 'public.nickname': { $regex: new RegExp(normalizeNickname(nickname), 'i') } })
+  return UserModel.find({ 'public.nickname': { $regex: new RegExp(nickname, 'i') } })
     .sort({ 'public.nickname': 1 })
     .lean()
 }

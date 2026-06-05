@@ -5,7 +5,6 @@ import {
   createUpdateUserDataSchema,
   createValidationMessages,
   isNicknameValid,
-  normalizeNickname,
   type UserData
 } from 'global-shared'
 import { safeParse } from 'valibot'
@@ -21,7 +20,7 @@ import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../config/i18n/account-p
 
 export const usePersonalData = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
-  const { user, avatarId, update: updateUserData, displayedNickname } = useUser()
+  const { user, avatarId, update: updateUserData } = useUser()
   const { doHttpRequest } = useHttp()
   const { copy, isSupported: isClipboardSupported } = useClipboard()
   const { t } = useI18n()
@@ -43,11 +42,8 @@ export const usePersonalData = () => {
     accountAvatarPreviewUrl.value || accountAvatarWasReset.value ? undefined : avatarId.value || undefined
   )
   const displayedUserId = computed(() => (user.value.id ? `#${user.value.id}` : ''))
-  const normalizedAccountNickname = computed(() => normalizeNickname(formData.nickname.value))
-  const isAccountNicknameEmpty = computed(() => !normalizedAccountNickname.value)
-  const accountNicknameChanged = computed(
-    () => normalizedAccountNickname.value !== normalizeNickname(user.value.nickname)
-  )
+  const isAccountNicknameEmpty = computed(() => !formData.nickname.value)
+  const accountNicknameChanged = computed(() => formData.nickname.value !== user.value.nickname)
   const accountAvatarChanged = computed(() => Boolean(accountAvatarFile.value || accountAvatarWasReset.value))
   const hasAccountChanges = computed(() => accountNicknameChanged.value || accountAvatarChanged.value)
   const accountNicknameError = computed(() => {
@@ -121,14 +117,14 @@ export const usePersonalData = () => {
   }
 
   const copyUserNickname = async () => {
-    if (!displayedNickname.value || !isClipboardSupported.value) return
+    if (!user.value.nickname || !isClipboardSupported.value) return
 
-    await copy(displayedNickname.value)
+    await copy(user.value.nickname)
     toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nicknameCopied) })
   }
 
   const updateAccountData = async () => {
-    const nickname = normalizedAccountNickname.value
+    const nickname = formData.nickname.value
     const currentAvatarId = avatarId.value
 
     if (isAccountSaveDisabled.value || !isNicknameValid(nickname)) return
@@ -196,7 +192,6 @@ export const usePersonalData = () => {
     accountAvatarUploadValue,
     accountAvatarPreviewUrl,
     displayedAvatarId,
-    displayedNickname,
     displayedUserId,
     accountNicknameError,
     isAccountSaveDisabled,

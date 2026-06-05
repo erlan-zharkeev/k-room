@@ -20,6 +20,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
   <NmorphForm ref="formRef" :value="formData" class="registration-page" @submit.prevent="submit">
     <NmorphFormItem id="nickname" :show-validation-icon="false">
       <NmorphTextInput
+        v-model.trim="formData.nickname.value"
         :disabled="isFormDisabled"
         :input-attrs="REGISTRATION_NICKNAME_INPUT_ATTRS"
         :placeholder="$t(REGISTRATION_FORM_I18N.nicknamePlaceholder)"

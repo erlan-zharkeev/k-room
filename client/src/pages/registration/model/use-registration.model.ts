@@ -8,12 +8,11 @@ import {
   NON_EMPTY_PATTERN,
   ROUTE_NAMES,
   createValidationMessages,
-  normalizeNickname,
   type AuthRegistrationPayload,
   type SendConfirmationLinkResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
+import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
@@ -63,17 +62,6 @@ export const useRegistration = () => {
       ]
     }
   })
-  watch(
-    () => formData.nickname.value,
-    (value) => {
-      const normalizedValue = normalizeNickname(value)
-
-      if (normalizedValue === value) return
-
-      formData.nickname.value = normalizedValue
-    }
-  )
-
   const {
     buildCaptchaPayload,
     captchaRequired,
@@ -109,7 +97,7 @@ export const useRegistration = () => {
 
     register({
       email: formData.email.value.trim(),
-      nickname: normalizeNickname(formData.nickname.value),
+      nickname: formData.nickname.value,
       password: formData.password.value,
       ...buildCaptchaPayload()
     })

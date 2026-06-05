@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import { type Request, type Response } from 'express'
 import {
-  formatNickname,
   REQ_STATUS,
   type AuthLoginPayload,
   type AuthRegistrationPayload,
@@ -107,7 +106,7 @@ export class AuthService {
     await this.emailService.sendEmailConfirmationEmail({
       email: payload.email,
       token: confirmToken,
-      nickname: formatNickname(payload.nickname)
+      nickname: payload.nickname
     })
 
     return {
@@ -189,7 +188,7 @@ export class AuthService {
     await this.emailService.sendEmailConfirmationEmail({
       email: user.personal.email,
       token: confirmToken,
-      nickname: formatNickname(user.public.nickname)
+      nickname: user.public.nickname
     })
 
     user.system.confirmAttempts = Math.max(user.system.confirmAttempts - 1, 0)

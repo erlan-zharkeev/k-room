@@ -9,19 +9,14 @@ import { useTopBarSocketStatus } from '../model/use-top-bar-socket-status.model'
 
 import CallActivityPanel from './CallActivityPanel.vue'
 
-const { user, avatarId, displayedNickname } = useUser()
+const { user, avatarId } = useUser()
 const { isLogoutLoading, logout } = useLogout()
 const { socketTag } = useTopBarSocketStatus()
 </script>
 
 <template>
   <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
-    <AppProfileBasicData
-      :image-alt="user.nickname"
-      :image-id="avatarId"
-      :title="displayedNickname"
-      :name="user.nickname"
-    >
+    <AppProfileBasicData :image-alt="user.nickname" :image-id="avatarId" :title="user.nickname" :name="user.nickname">
       <template #description>
         <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" size="tiny" />
       </template>

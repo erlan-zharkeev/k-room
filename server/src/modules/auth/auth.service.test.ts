@@ -96,7 +96,7 @@ describe('AuthService', () => {
     )
 
     const result = await service.login(
-      { login: '@tester', password: 'Asdf1234' },
+      { login: 'tester', password: 'Asdf1234' },
       { language: 'en', cookies: { 'device-id': 'device-1' } } as never,
       response as never
     )

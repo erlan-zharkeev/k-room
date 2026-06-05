@@ -6,7 +6,6 @@ import {
   EMAIL_CODE_LENGTH,
   type EmailCodeRequestPayload,
   type EmailCodeValidationPayload,
-  formatNickname,
   isString,
   isUnknownObject,
   type ValidateChangeEmailCodeResponse,
@@ -86,7 +85,7 @@ export class CodesService {
     await this.emailService.sendPasswordRecoveryEmail({
       email,
       code,
-      nickname: formatNickname(user.public.nickname)
+      nickname: user.public.nickname
     })
 
     return {
@@ -136,7 +135,7 @@ export class CodesService {
     await this.emailService.sendChangeEmailCodeEmail({
       email,
       code,
-      nickname: formatNickname(user.public.nickname)
+      nickname: user.public.nickname
     })
 
     return {
