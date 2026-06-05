@@ -18,6 +18,7 @@ const {
   isStartingRoomCall,
   isJoiningRoomCall,
   isRoomCallJoinDisabled,
+  roomCallLoadingMediaKind,
   clearSelectedMessage,
   selectChatRoomMessage,
   selectCurrentChatRoomMessage,
@@ -37,6 +38,7 @@ const {
       :is-room-call-join-disabled="isRoomCallJoinDisabled"
       :is-room-call-starting="isStartingRoomCall"
       :is-room-call-joining="isJoiningRoomCall"
+      :room-call-loading-media-kind="roomCallLoadingMediaKind"
       @start-room-call="startSelectedRoomCall"
       @join-room-call="joinSelectedRoomCall"
     />

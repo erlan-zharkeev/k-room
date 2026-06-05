@@ -10,8 +10,6 @@ const {
   callActivityPanelItem,
   callActivityPanelItems,
   callActivityPanelStepperIndex,
-  isCallActivityPanelAcceptAudioLoading,
-  isCallActivityPanelAcceptVideoLoading,
   isCallActivityPanelActionLoading,
   isCallActivityPanelDisabled,
   isCallActivityPanelLeaveLoading,
@@ -57,8 +55,6 @@ const {
           v-for="item in callActivityPanelItems"
           :key="item.roomCall.id"
           :item="item"
-          :accept-audio-loading="isCallActivityPanelAcceptAudioLoading"
-          :accept-video-loading="isCallActivityPanelAcceptVideoLoading"
           :loading="isCallActivityPanelActionLoading"
           :disabled="isCallActivityPanelDisabled"
           :leave-loading="isCallActivityPanelLeaveLoading"

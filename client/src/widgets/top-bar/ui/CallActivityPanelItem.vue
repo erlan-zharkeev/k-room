@@ -14,8 +14,6 @@ import { CALL_ACTIVITY_PANEL_I18N } from '../config/i18n'
 import type { CallActivityPanelItem } from '../config/types'
 
 defineProps<{
-  acceptAudioLoading: boolean
-  acceptVideoLoading: boolean
   disabled: boolean
   item: CallActivityPanelItem
   loading: boolean
@@ -51,8 +49,8 @@ const emit = defineEmits<{
         style-type="transparent"
         :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.acceptAudioRoomCall)"
         :title="$t(CALL_ACTIVITY_PANEL_I18N.acceptAudioRoomCall)"
-        :loading="acceptAudioLoading"
-        :disabled="acceptAudioLoading || loading || disabled"
+        :loading="loading"
+        :disabled="loading || disabled"
         @click="emit('acceptAudio')"
       >
         <NmorphIcon width="16px" height="16px">
@@ -65,8 +63,8 @@ const emit = defineEmits<{
         style-type="transparent"
         :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.acceptVideoRoomCall)"
         :title="$t(CALL_ACTIVITY_PANEL_I18N.acceptVideoRoomCall)"
-        :loading="acceptVideoLoading"
-        :disabled="acceptVideoLoading || loading || disabled"
+        :loading="loading"
+        :disabled="loading || disabled"
         @click="emit('acceptVideo')"
       >
         <NmorphIcon width="16px" height="16px">
@@ -93,7 +91,7 @@ const emit = defineEmits<{
         :aria-label="$t(CALL_ACTIVITY_PANEL_I18N.leaveRoomCall)"
         :title="$t(CALL_ACTIVITY_PANEL_I18N.leaveRoomCall)"
         :loading="leaveLoading"
-        :disabled="leaveLoading || loading || disabled"
+        :disabled="leaveLoading || disabled"
         @click="emit('leave')"
       >
         <NmorphIcon width="16px" height="16px">

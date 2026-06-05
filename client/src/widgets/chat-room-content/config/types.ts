@@ -49,6 +49,7 @@ export interface ChatRoomHeaderProps {
   isRoomCallJoinDisabled: boolean
   isRoomCallStarting: boolean
   isRoomCallJoining: boolean
+  roomCallLoadingMediaKind: RoomCallMediaKind | null
 }
 
 export interface ChatRoomHeaderEmits {

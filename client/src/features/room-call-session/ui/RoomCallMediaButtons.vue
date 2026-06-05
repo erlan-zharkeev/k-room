@@ -20,8 +20,8 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
       style-type="transparent"
       :aria-label="$t(ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION[props.action])"
       :title="$t(ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION[props.action])"
-      :disabled="props.disabled"
-      :loading="props.loading"
+      :disabled="props.disabled || props.loading"
+      :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.AUDIO"
       @click="emit('start', ROOM_CALL_MEDIA_KIND.AUDIO)"
     >
       <NmorphIcon width="16px" height="16px">
@@ -34,8 +34,8 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
       style-type="transparent"
       :aria-label="$t(ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION[props.action])"
       :title="$t(ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION[props.action])"
-      :disabled="props.disabled"
-      :loading="props.loading"
+      :disabled="props.disabled || props.loading"
+      :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.VIDEO"
       @click="emit('start', ROOM_CALL_MEDIA_KIND.VIDEO)"
     >
       <NmorphIcon width="16px" height="16px">
