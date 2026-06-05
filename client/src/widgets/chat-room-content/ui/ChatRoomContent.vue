@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
+import { RoomCallActivityPanel } from 'src/features/room-call-session'
+
 import { useChatRoomContent } from '../model/use-chat-room-content.model'
 
 import ChatRoomFooter from './ChatRoomFooter.vue'
@@ -8,21 +10,35 @@ import ChatRoomHeader from './ChatRoomHeader.vue'
 import ChatRoomMessages from './ChatRoomMessages.vue'
 import ChatRoomPinnedMessage from './ChatRoomPinnedMessage.vue'
 import ChatRoomStub from './ChatRoomStub.vue'
+import RoomCallActivePanel from './RoomCallActivePanel.vue'
 
 const {
   selectedChatRoom,
   isSelectedChatRoomPrivate,
   selectedMessageId,
+  chatRoomContentView,
+  hasSelectedRoomCall,
+  isChatRoomTextView,
+  selectedActiveRoomCall,
   joinableSelectedRoomCall,
+  videoStream,
+  screenStream,
+  remoteStreamsByUserId,
+  localMediaState,
   isRoomCallStartDisabled,
   isStartingRoomCall,
-  isJoiningRoomCall,
-  isRoomCallJoinDisabled,
+  isLeavingRoomCall,
+  isRoomCallSessionBusy,
   roomCallLoadingMediaKind,
   clearSelectedMessage,
+  changeChatRoomContentView,
+  setActiveRoomCallAudioEnabled,
+  setActiveRoomCallVideoEnabled,
+  startActiveRoomCallScreen,
+  stopActiveRoomCallScreen,
+  leaveActiveRoomCall,
   selectChatRoomMessage,
   selectCurrentChatRoomMessage,
-  joinSelectedRoomCall,
   startSelectedRoomCall
 } = useChatRoomContent()
 </script>
@@ -33,28 +49,53 @@ const {
       v-if="selectedChatRoom"
       :room="selectedChatRoom"
       :is-private-room="isSelectedChatRoomPrivate"
+      :has-room-call="hasSelectedRoomCall"
+      :content-view="chatRoomContentView"
       :joinable-room-call="joinableSelectedRoomCall"
       :is-room-call-start-disabled="isRoomCallStartDisabled"
-      :is-room-call-join-disabled="isRoomCallJoinDisabled"
       :is-room-call-starting="isStartingRoomCall"
-      :is-room-call-joining="isJoiningRoomCall"
       :room-call-loading-media-kind="roomCallLoadingMediaKind"
+      @update-content-view="changeChatRoomContentView"
       @start-room-call="startSelectedRoomCall"
-      @join-room-call="joinSelectedRoomCall"
     />
     <template v-if="selectedChatRoom">
-      <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectCurrentChatRoomMessage" />
-      <NmorphCard shadow-type="inset" class="chat-room-page__messages">
-        <ChatRoomMessages
-          :key="selectedChatRoom.id"
-          :room="selectedChatRoom"
-          :is-private-room="isSelectedChatRoomPrivate"
-          :target-message-id="selectedMessageId"
-          @select-message="selectChatRoomMessage"
-          @target-message-scrolled="clearSelectedMessage"
+      <template v-if="isChatRoomTextView">
+        <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectCurrentChatRoomMessage" />
+        <NmorphCard shadow-type="inset" class="chat-room-page__messages">
+          <ChatRoomMessages
+            :key="selectedChatRoom.id"
+            :room="selectedChatRoom"
+            :is-private-room="isSelectedChatRoomPrivate"
+            :target-message-id="selectedMessageId"
+            @select-message="selectChatRoomMessage"
+            @target-message-scrolled="clearSelectedMessage"
+          />
+        </NmorphCard>
+        <ChatRoomFooter :room="selectedChatRoom" @select-editing-message="selectCurrentChatRoomMessage" />
+      </template>
+      <NmorphCard v-else shadow-type="inset" class="chat-room-page__call" content-class="chat-room-page__call-content">
+        <RoomCallActivePanel
+          v-if="selectedActiveRoomCall"
+          :room-call="selectedActiveRoomCall"
+          :video-stream="videoStream"
+          :screen-stream="screenStream"
+          :remote-streams-by-user-id="remoteStreamsByUserId"
+          :local-media-state="localMediaState"
+          :is-busy="isRoomCallSessionBusy"
+          :is-leaving="isLeavingRoomCall"
+          @set-audio-enabled="setActiveRoomCallAudioEnabled"
+          @set-video-enabled="setActiveRoomCallVideoEnabled"
+          @start-screen="startActiveRoomCallScreen"
+          @stop-screen="stopActiveRoomCallScreen"
+          @leave="leaveActiveRoomCall"
+        />
+        <RoomCallActivityPanel
+          v-else-if="joinableSelectedRoomCall"
+          :compact="false"
+          :openable="false"
+          :room-id="selectedChatRoom.id"
         />
       </NmorphCard>
-      <ChatRoomFooter :room="selectedChatRoom" @select-editing-message="selectCurrentChatRoomMessage" />
     </template>
     <NmorphCard v-else shadow-type="inset" class="chat-room-page__stub">
       <ChatRoomStub />
@@ -70,8 +111,14 @@ const {
 }
 
 .chat-room-page__messages,
+.chat-room-page__call,
 .chat-room-page__stub {
   flex: 1 1 auto;
+  min-height: 0;
+}
+
+.chat-room-page__call-content {
+  height: 100%;
   min-height: 0;
 }
 </style>

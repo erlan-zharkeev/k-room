@@ -2,14 +2,10 @@
 import { NmorphButton, NmorphDivider, NmorphIcon, NmorphIconPhone, NmorphIconVideoCamera } from '@nmorph/nmorph-ui-kit'
 import { ROOM_CALL_MEDIA_KIND } from 'global-shared'
 
-import {
-  ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION,
-  ROOM_CALL_MEDIA_BUTTONS_DEFAULT_PROPS,
-  ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION
-} from '../config/constants'
+import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { RoomCallMediaButtonsEmits, RoomCallMediaButtonsProps } from '../config/types'
 
-const props = withDefaults(defineProps<RoomCallMediaButtonsProps>(), ROOM_CALL_MEDIA_BUTTONS_DEFAULT_PROPS)
+const props = defineProps<RoomCallMediaButtonsProps>()
 const emit = defineEmits<RoomCallMediaButtonsEmits>()
 </script>
 
@@ -18,8 +14,7 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
     <NmorphButton
       shape="square"
       style-type="transparent"
-      :aria-label="$t(ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION[props.action])"
-      :title="$t(ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION[props.action])"
+      :aria-label="$t(ROOM_CALL_SESSION_I18N.startAudioRoomCall)"
       :disabled="props.disabled || props.loading"
       :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.AUDIO"
       @click="emit('start', ROOM_CALL_MEDIA_KIND.AUDIO)"
@@ -32,8 +27,7 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
     <NmorphButton
       shape="square"
       style-type="transparent"
-      :aria-label="$t(ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION[props.action])"
-      :title="$t(ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION[props.action])"
+      :aria-label="$t(ROOM_CALL_SESSION_I18N.startVideoRoomCall)"
       :disabled="props.disabled || props.loading"
       :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.VIDEO"
       @click="emit('start', ROOM_CALL_MEDIA_KIND.VIDEO)"

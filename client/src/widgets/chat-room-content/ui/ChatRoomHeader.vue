@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphCard, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
@@ -8,22 +8,15 @@ import { ROOM_CALL_SESSION_I18N, RoomCallMediaButtons } from 'src/features/room-
 import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
+import { CHAT_ROOM_CONTENT_VIEW } from '../config/constants'
+import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomHeaderEmits, ChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
 const props = defineProps<ChatRoomHeaderProps>()
 const emit = defineEmits<ChatRoomHeaderEmits>()
-const {
-  contextMenuActionOptions,
-  handleRoomCallButtonsAction,
-  interlocutor,
-  isPortraitTabletOrLess,
-  isRoomCallButtonsDisabled,
-  isRoomCallButtonsLoading,
-  membersQuantityText,
-  roomCallButtonsAction,
-  title
-} = useChatRoomHeader(props, emit)
+const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoomContentView, title } =
+  useChatRoomHeader(props, emit)
 </script>
 <template>
   <div class="chat-room-header" :class="{ 'chat-room-header--with-back': isPortraitTabletOrLess }">
@@ -66,14 +59,28 @@ const {
         </template>
       </AppProfileBasicData>
       <div class="chat-room-content-header__actions">
+        <NmorphSelectButton
+          v-if="props.hasRoomCall"
+          height="thick"
+          :model-value="props.contentView"
+          :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
+          @update:model-value="updateChatRoomContentView"
+        >
+          <NmorphSelectButtonItem :value="CHAT_ROOM_CONTENT_VIEW.TEXT">
+            {{ $t(CHAT_ROOM_CONTENT_I18N.textChatView) }}
+          </NmorphSelectButtonItem>
+          <NmorphSelectButtonItem :value="CHAT_ROOM_CONTENT_VIEW.CALL">
+            {{ $t(CHAT_ROOM_CONTENT_I18N.roomCallView) }}
+          </NmorphSelectButtonItem>
+        </NmorphSelectButton>
         <RoomCallMediaButtons
-          :action="roomCallButtonsAction"
-          :disabled="isRoomCallButtonsDisabled"
-          :loading="isRoomCallButtonsLoading"
+          v-if="!props.hasRoomCall"
+          :disabled="props.isRoomCallStartDisabled"
+          :loading="props.isRoomCallStarting"
           :loading-media-kind="props.roomCallLoadingMediaKind"
-          @start="handleRoomCallButtonsAction"
+          @start="emit('start-room-call', $event)"
         />
-        <ChatRoomContextMenu :item="props.room" :action-options="contextMenuActionOptions" />
+        <ChatRoomContextMenu :item="props.room" />
       </div>
     </NmorphCard>
   </div>
