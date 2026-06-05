@@ -70,6 +70,7 @@ const {
           :action="roomCallButtonsAction"
           :disabled="isRoomCallButtonsDisabled"
           :loading="isRoomCallButtonsLoading"
+          :loading-media-kind="props.roomCallLoadingMediaKind"
           @start="handleRoomCallButtonsAction"
         />
         <ChatRoomContextMenu :item="props.room" :action-options="contextMenuActionOptions" />

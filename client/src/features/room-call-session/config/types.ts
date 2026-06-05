@@ -37,6 +37,7 @@ export interface RoomCallMediaButtonsProps {
   action?: RoomCallMediaButtonsAction
   disabled: boolean
   loading: boolean
+  loadingMediaKind?: RoomCallMediaKind | null
 }
 
 export interface RoomCallMediaButtonsEmits {

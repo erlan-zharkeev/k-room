@@ -1,5 +1,5 @@
 import type { RoomCallMediaKind } from 'global-shared'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useActiveRoomCallSession } from 'src/features/room-call-session'
 
@@ -7,6 +7,7 @@ import { useChatRoomMessageSelection } from './use-chat-room-message-selection.m
 import { useSelectedChatRoom } from './use-selected-chat-room.model'
 
 export const useChatRoomContent = () => {
+  const roomCallLoadingMediaKind = ref<RoomCallMediaKind | null>(null)
   const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomPrivate } = useSelectedChatRoom()
   const {
     activeRoomCall,
@@ -59,7 +60,13 @@ export const useChatRoomContent = () => {
       return null
     }
 
-    return startActiveRoomCall(roomId, mediaKind)
+    roomCallLoadingMediaKind.value = mediaKind
+
+    try {
+      return await startActiveRoomCall(roomId, mediaKind)
+    } finally {
+      roomCallLoadingMediaKind.value = null
+    }
   }
   const joinSelectedRoomCall = async (mediaKind: RoomCallMediaKind) => {
     const roomCall = joinableSelectedRoomCall.value
@@ -68,7 +75,13 @@ export const useChatRoomContent = () => {
       return null
     }
 
-    return joinActiveRoomCall(roomCall.id, mediaKind)
+    roomCallLoadingMediaKind.value = mediaKind
+
+    try {
+      return await joinActiveRoomCall(roomCall.id, mediaKind)
+    } finally {
+      roomCallLoadingMediaKind.value = null
+    }
   }
 
   return {
@@ -85,6 +98,7 @@ export const useChatRoomContent = () => {
     isRoomCallStartDisabled,
     isStartingRoomCall,
     isJoiningRoomCall,
+    roomCallLoadingMediaKind,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
     isRoomCallJoinDisabled,
