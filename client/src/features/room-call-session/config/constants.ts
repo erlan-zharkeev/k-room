@@ -1,22 +1,15 @@
-import { ROOM_CALL_SESSION_I18N } from './i18n'
-
-export const ROOM_CALL_MEDIA_BUTTONS_ACTION = {
-  JOIN: 'join',
-  START: 'start'
+export const ROOM_CALL_ACTIVITY_KIND = {
+  ACTIVE: 'active',
+  INCOMING: 'incoming',
+  JOINABLE: 'joinable',
+  OUTGOING: 'outgoing'
 } as const
 
-export const ROOM_CALL_MEDIA_BUTTONS_DEFAULT_PROPS = {
-  action: ROOM_CALL_MEDIA_BUTTONS_ACTION.START
-} as const
-
-export const ROOM_CALL_AUDIO_BUTTON_TITLE_BY_ACTION = {
-  [ROOM_CALL_MEDIA_BUTTONS_ACTION.JOIN]: ROOM_CALL_SESSION_I18N.joinAudioRoomCall,
-  [ROOM_CALL_MEDIA_BUTTONS_ACTION.START]: ROOM_CALL_SESSION_I18N.startAudioRoomCall
-} as const
-
-export const ROOM_CALL_VIDEO_BUTTON_TITLE_BY_ACTION = {
-  [ROOM_CALL_MEDIA_BUTTONS_ACTION.JOIN]: ROOM_CALL_SESSION_I18N.joinVideoRoomCall,
-  [ROOM_CALL_MEDIA_BUTTONS_ACTION.START]: ROOM_CALL_SESSION_I18N.startVideoRoomCall
+export const ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND = {
+  [ROOM_CALL_ACTIVITY_KIND.ACTIVE]: 'var(--nmorph-success-color)',
+  [ROOM_CALL_ACTIVITY_KIND.INCOMING]: 'var(--nmorph-warn-color)',
+  [ROOM_CALL_ACTIVITY_KIND.JOINABLE]: 'var(--nmorph-success-color)',
+  [ROOM_CALL_ACTIVITY_KIND.OUTGOING]: 'var(--nmorph-accent-color)'
 } as const
 
 export const ROOM_CALL_RTC_CONFIGURATION: RTCConfiguration = {

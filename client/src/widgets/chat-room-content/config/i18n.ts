@@ -141,6 +141,21 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Сообщение',
     zh: '消息'
   },
+  textChatView: {
+    en: 'Text chat',
+    ru: 'Текстовый чат',
+    zh: '文字聊天'
+  },
+  roomCallView: {
+    en: 'Call',
+    ru: 'Звонок',
+    zh: '通话'
+  },
+  selectChatRoomContentView: {
+    en: 'Select chat content view',
+    ru: 'Выбрать режим чата',
+    zh: '选择聊天内容视图'
+  },
   attachFile: {
     en: 'Attach file',
     ru: 'Прикрепить файл',

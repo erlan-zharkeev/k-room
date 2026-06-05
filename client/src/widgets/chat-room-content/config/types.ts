@@ -27,6 +27,7 @@ import type { Component, Ref } from 'vue'
 import type { RoomCallRemoteStreamsByUserId } from 'src/features/room-call-session'
 
 import type {
+  CHAT_ROOM_CONTENT_VIEW,
   MESSAGE_ATTACHMENT_DRAFT_KIND,
   MESSAGE_CONTEXT_MENU_ACTION,
   MESSAGE_DRAFT_REFERENCE_KIND,
@@ -34,6 +35,8 @@ import type {
   MESSAGE_STATUS_DOT_TONE,
   MESSAGE_TEXT_SEGMENT_KIND
 } from './constants'
+
+export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
 
 export interface ChatRoomMessagesProps {
   room: ChatRoom
@@ -44,22 +47,22 @@ export interface ChatRoomMessagesProps {
 export interface ChatRoomHeaderProps {
   room: ChatRoom
   isPrivateRoom: boolean
+  hasRoomCall: boolean
+  contentView: ChatRoomContentView
   joinableRoomCall?: RoomCall
   isRoomCallStartDisabled: boolean
-  isRoomCallJoinDisabled: boolean
   isRoomCallStarting: boolean
-  isRoomCallJoining: boolean
   roomCallLoadingMediaKind: RoomCallMediaKind | null
 }
 
 export interface ChatRoomHeaderEmits {
+  'update-content-view': [view: ChatRoomContentView]
   'start-room-call': [mediaKind: RoomCallMediaKind]
-  'join-room-call': [mediaKind: RoomCallMediaKind]
 }
 
 export type ChatRoomHeaderEmit = {
+  (event: 'update-content-view', view: ChatRoomContentView): void
   (event: 'start-room-call', mediaKind: RoomCallMediaKind): void
-  (event: 'join-room-call', mediaKind: RoomCallMediaKind): void
 }
 
 export interface ChatRoomFooterProps {
@@ -89,6 +92,7 @@ export type RoomCallActivePanelEmit = {
   (event: 'set-video-enabled', enabled: boolean): void
   (event: 'start-screen'): void
   (event: 'stop-screen'): void
+  (event: 'leave'): void
 }
 
 export interface RoomCallTileItem {
@@ -98,6 +102,10 @@ export interface RoomCallTileItem {
   mirrored: boolean
   name: string
   stream?: MediaStream
+}
+
+export interface RoomCallTileProps {
+  item: RoomCallTileItem
 }
 
 export interface BuildRoomCallTileItemsParams {

@@ -17,9 +17,3 @@ export const isNicknameValid = (value: string) => {
     nicknamePattern.test(nickname)
   )
 }
-
-export const formatNickname = (value: string) => {
-  const nickname = normalizeNickname(value)
-
-  return nickname ? `@${nickname}` : ''
-}
