@@ -106,7 +106,7 @@ describe('CodesService', () => {
     expect(emailService.sendPasswordRecoveryEmail).toHaveBeenCalledWith({
       email: 'user@test.com',
       code: '123456',
-      nickname: '@tester'
+      nickname: 'tester'
     })
   })
 
@@ -144,7 +144,7 @@ describe('CodesService', () => {
     expect(emailService.sendChangeEmailCodeEmail).toHaveBeenCalledWith({
       email: 'new@test.com',
       code: '123456',
-      nickname: '@tester'
+      nickname: 'tester'
     })
   })
 

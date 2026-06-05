@@ -27,7 +27,6 @@ const {
   accountAvatarUploadValue,
   accountAvatarPreviewUrl,
   displayedAvatarId,
-  displayedNickname,
   displayedUserId,
   accountNicknameError,
   isAccountSaveDisabled,
@@ -54,12 +53,12 @@ const {
         :image-alt="user.nickname"
         :image-id="displayedAvatarId"
         :image-src="accountAvatarPreviewUrl || undefined"
-        :title="displayedNickname"
+        :title="user.nickname"
         :name="user.nickname"
       >
         <template #title>
           <div class="settings-personal-data-card__profile-title">
-            <AppText bold :selectable="false" :text="displayedNickname" />
+            <AppText bold :selectable="false" :text="user.nickname" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               style-type="transparent"
@@ -130,7 +129,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nickname)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput :disabled="isAccountSaving" />
+        <NmorphTextInput v-model.trim="formData.nickname.value" :disabled="isAccountSaving" />
         <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
       </NmorphFormItem>
     </NmorphForm>

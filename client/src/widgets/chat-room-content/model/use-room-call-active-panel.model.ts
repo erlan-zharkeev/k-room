@@ -1,4 +1,4 @@
-import { ROOM_CALL_STATUS, normalizeNickname } from 'global-shared'
+import { ROOM_CALL_STATUS } from 'global-shared'
 import { computed } from 'vue'
 
 import { useUser } from 'src/entities/user'
@@ -15,7 +15,7 @@ export const useRoomCallActivePanel = (props: RoomCallActivePanelProps, emit: Ro
   const resolveParticipantName = (userId: string) => {
     const participant = getUserById(userId)
 
-    return normalizeNickname(participant?.nickname ?? userId)
+    return participant?.nickname ?? userId
   }
 
   const roomCallTileItems = computed(() =>

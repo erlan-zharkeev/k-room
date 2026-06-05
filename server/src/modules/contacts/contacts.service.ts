@@ -10,7 +10,6 @@ import {
   isBlockedContactInteraction,
   isDefaultContactInteraction,
   isPendingContactInteraction,
-  normalizeNickname,
   REQ_STATUS
 } from 'global-shared'
 
@@ -66,14 +65,6 @@ export const searchContacts = async (
     type = isValidMongoId(needle) ? 'id' : 'nickname'
 
     if (type === 'nickname' && !needle) {
-      validSearch = false
-    }
-  }
-
-  if (type === 'nickname') {
-    needle = normalizeNickname(needle)
-
-    if (!needle) {
       validSearch = false
     }
   }

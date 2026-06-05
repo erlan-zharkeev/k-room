@@ -84,7 +84,7 @@ describe('user.service', () => {
     userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'user-by-nickname' })
     userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'user-by-email' })
 
-    await service.findByLogin('@Test-Er')
+    await service.findByLogin('Test-Er')
     await service.findByLogin('  tester@test.com  ')
 
     expect(userModelMock.UserModel.findOne).toHaveBeenNthCalledWith(1, { 'public.nickname': 'test-er' })

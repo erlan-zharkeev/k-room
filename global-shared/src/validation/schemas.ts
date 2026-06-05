@@ -3,7 +3,6 @@ import * as v from 'valibot'
 import { VALIDATION_LIMITS, VALIDATION_PATTERNS } from '../auth/constants'
 import { EMAIL_CODE_LENGTH } from '../codes/constants'
 import { providers } from '../shared/constants'
-import { normalizeNickname } from '../user/lib/nickname'
 
 import { NON_EMPTY_PATTERN } from './constants'
 import type { ValidationMessages } from './types'
@@ -35,7 +34,6 @@ export const createPasswordSchema = (messages: ValidationMessages) =>
 const nicknameSchema = (messages: ValidationMessages) =>
   v.pipe(
     requiredStringSchema(messages.fieldIsRequired),
-    v.transform(normalizeNickname),
     v.regex(new RegExp(VALIDATION_PATTERNS.nickname), messages.nicknameInvalidFormat),
     v.minLength(VALIDATION_LIMITS.nicknameMinLength, messages.nicknameTooShort),
     v.maxLength(VALIDATION_LIMITS.nicknameMaxLength, messages.nicknameTooLong)
