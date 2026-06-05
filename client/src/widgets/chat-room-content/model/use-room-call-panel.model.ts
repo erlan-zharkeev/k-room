@@ -3,12 +3,12 @@ import { computed } from 'vue'
 
 import { useUser } from 'src/entities/user'
 
-import type { RoomCallActivePanelEmit, RoomCallActivePanelProps } from '../config/types'
+import type { RoomCallPanelEmit, RoomCallPanelProps } from '../config/types'
 import { buildRoomCallTileItems } from '../lib/build-room-call-tile-items'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
-export const useRoomCallActivePanel = (props: RoomCallActivePanelProps, emit: RoomCallActivePanelEmit) => {
+export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelEmit) => {
   const { user } = useUser()
   const { getUserById } = useChatRoomUserLookup()
 

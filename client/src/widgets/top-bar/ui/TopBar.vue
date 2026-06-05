@@ -2,15 +2,16 @@
 import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 
 import { useUser } from 'src/entities/user'
+import { CallActivityPanel } from 'src/features/room-call-session'
 import { AppProfileBasicData } from 'src/shared/ui'
 
 import { useLogout } from '../model/use-logout.model'
+import { useRoomCallActivityNavigation } from '../model/use-room-call-activity-navigation.model'
 import { useTopBarSocketStatus } from '../model/use-top-bar-socket-status.model'
-
-import CallActivityPanel from './CallActivityPanel.vue'
 
 const { user, avatarId } = useUser()
 const { isLogoutLoading, logout } = useLogout()
+const { openRoomCall } = useRoomCallActivityNavigation()
 const { socketTag } = useTopBarSocketStatus()
 </script>
 
@@ -22,7 +23,7 @@ const { socketTag } = useTopBarSocketStatus()
       </template>
     </AppProfileBasicData>
     <div class="top-bar__content-right-side">
-      <CallActivityPanel />
+      <CallActivityPanel @open-room-call="openRoomCall" />
       <NmorphCard shadow-type="inset" :fill="false">
         <NmorphButton @click="logout" :loading="isLogoutLoading" shape="square">
           <NmorphIcon width="16px" height="16px">

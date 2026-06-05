@@ -14,10 +14,10 @@ import { AppHeader, AppText } from 'src/shared/ui'
 
 import { ROOM_CALL_ACTIVITY_KIND } from '../config/constants'
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
-import type { RoomCallActivityPanelItemEmits, RoomCallActivityPanelItemProps } from '../config/types'
+import type { CallActivityPanelItemEmits, CallActivityPanelItemProps } from '../config/types'
 
-const props = defineProps<RoomCallActivityPanelItemProps>()
-const emit = defineEmits<RoomCallActivityPanelItemEmits>()
+const props = defineProps<CallActivityPanelItemProps>()
+const emit = defineEmits<CallActivityPanelItemEmits>()
 
 const audioButtonText = computed(() =>
   props.item.isPrivateRoom ? ROOM_CALL_SESSION_I18N.answerAudioRoomCall : ROOM_CALL_SESSION_I18N.joinAudioRoomCall
@@ -32,15 +32,15 @@ const showJoinControls = computed(() =>
 
 <template>
   <div
-    class="room-call-activity-panel-item"
-    :class="{ 'room-call-activity-panel-item--compact': props.compact }"
-    :style="{ '--room-call-activity-panel-dot-color': props.item.dotColor }"
+    class="call-activity-panel-item"
+    :class="{ 'call-activity-panel-item--compact': props.compact }"
+    :style="{ '--call-activity-panel-dot-color': props.item.dotColor }"
   >
-    <div class="room-call-activity-panel-item__label">
-      <span class="room-call-activity-panel-item__dot" />
+    <div class="call-activity-panel-item__label">
+      <span class="call-activity-panel-item__dot" />
       <AppText
         v-if="props.compact"
-        class="room-call-activity-panel-item__text"
+        class="call-activity-panel-item__text"
         tag="small"
         truncate
         :selectable="false"
@@ -48,7 +48,7 @@ const showJoinControls = computed(() =>
       />
       <AppHeader
         v-else
-        class="room-call-activity-panel-item__title"
+        class="call-activity-panel-item__title"
         tag="h3"
         alignment="center"
         :selectable="false"
@@ -56,7 +56,7 @@ const showJoinControls = computed(() =>
       />
     </div>
     <div
-      class="room-call-activity-panel-item__actions"
+      class="call-activity-panel-item__actions"
       @click.stop
       @pointerdown.stop
       @pointermove.stop
@@ -121,13 +121,13 @@ const showJoinControls = computed(() =>
 </template>
 
 <style lang="scss">
-.room-call-activity-panel-item {
+.call-activity-panel-item {
   display: grid;
   gap: 16px;
   justify-items: center;
 }
 
-.room-call-activity-panel-item--compact {
+.call-activity-panel-item--compact {
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 12px;
   place-items: center stretch;
@@ -137,18 +137,18 @@ const showJoinControls = computed(() =>
   padding-left: 10px;
 }
 
-.room-call-activity-panel-item__label {
+.call-activity-panel-item__label {
   display: flex;
   gap: 12px;
   align-items: center;
   min-width: 0;
 }
 
-.room-call-activity-panel-item:not(.room-call-activity-panel-item--compact) .room-call-activity-panel-item__label {
+.call-activity-panel-item:not(.call-activity-panel-item--compact) .call-activity-panel-item__label {
   justify-content: center;
 }
 
-.room-call-activity-panel-item__dot {
+.call-activity-panel-item__dot {
   position: relative;
 
   flex: 0 0 auto;
@@ -157,14 +157,14 @@ const showJoinControls = computed(() =>
   height: 14px;
   border-radius: 999px;
 
-  background: var(--room-call-activity-panel-dot-color);
+  background: var(--call-activity-panel-dot-color);
 }
 
-.room-call-activity-panel-item:not(.room-call-activity-panel-item--compact) .room-call-activity-panel-item__dot {
+.call-activity-panel-item:not(.call-activity-panel-item--compact) .call-activity-panel-item__dot {
   height: 20px;
 }
 
-.room-call-activity-panel-item__dot::before {
+.call-activity-panel-item__dot::before {
   content: '';
 
   position: absolute;
@@ -173,34 +173,34 @@ const showJoinControls = computed(() =>
   border-radius: inherit;
 
   opacity: 0.35;
-  background: var(--room-call-activity-panel-dot-color);
+  background: var(--call-activity-panel-dot-color);
 
-  animation: room-call-activity-panel-item-dot-pulse 1.6s ease-out infinite;
+  animation: call-activity-panel-item-dot-pulse 1.6s ease-out infinite;
 }
 
-.room-call-activity-panel-item__text,
-.room-call-activity-panel-item__title {
+.call-activity-panel-item__text,
+.call-activity-panel-item__title {
   min-width: 0;
 }
 
-.room-call-activity-panel-item--compact .room-call-activity-panel-item__text {
+.call-activity-panel-item--compact .call-activity-panel-item__text {
   flex: 1 1 auto;
 }
 
-.room-call-activity-panel-item__actions {
+.call-activity-panel-item__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
 }
 
-.room-call-activity-panel-item--compact .room-call-activity-panel-item__actions {
+.call-activity-panel-item--compact .call-activity-panel-item__actions {
   flex: 0 0 auto;
   flex-wrap: nowrap;
   gap: 0;
 }
 
-@keyframes room-call-activity-panel-item-dot-pulse {
+@keyframes call-activity-panel-item-dot-pulse {
   from {
     transform: scaleX(0.7) scaleY(0.8);
     opacity: 0.5;

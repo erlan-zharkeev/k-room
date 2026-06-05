@@ -3,16 +3,16 @@ import { NmorphCard, NmorphStepper } from '@nmorph/nmorph-ui-kit'
 import { computed, toRef } from 'vue'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
-import type { RoomCallActivityPanelEmits, RoomCallActivityPanelProps } from '../config/types'
+import type { CallActivityPanelEmits, CallActivityPanelProps } from '../config/types'
 import { useRoomCallActivity } from '../model/use-room-call-activity.model'
 
-import RoomCallActivityPanelItem from './RoomCallActivityPanelItem.vue'
+import CallActivityPanelItem from './CallActivityPanelItem.vue'
 
-const props = withDefaults(defineProps<RoomCallActivityPanelProps>(), {
+const props = withDefaults(defineProps<CallActivityPanelProps>(), {
   compact: true,
   openable: true
 })
-const emit = defineEmits<RoomCallActivityPanelEmits>()
+const emit = defineEmits<CallActivityPanelEmits>()
 const roomId = toRef(props, 'roomId')
 const isOpenEnabled = computed(() => props.openable)
 const {
@@ -39,19 +39,19 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
 </script>
 
 <template>
-  <Transition v-if="props.compact" name="room-call-activity-panel-reveal">
+  <Transition v-if="props.compact" name="call-activity-panel-reveal">
     <NmorphCard
       v-if="activityItem"
       tag="section"
       shadow-type="inset"
       :fill="false"
-      class="room-call-activity-panel room-call-activity-panel--compact"
+      class="call-activity-panel call-activity-panel--compact"
       :class="{
-        'room-call-activity-panel--disabled': isActivityDisabled,
-        'room-call-activity-panel--openable': isActivityOpenable,
-        'room-call-activity-panel--single': activityItems.length === 1
+        'call-activity-panel--disabled': isActivityDisabled,
+        'call-activity-panel--openable': isActivityOpenable,
+        'call-activity-panel--single': activityItems.length === 1
       }"
-      content-class="room-call-activity-panel__content"
+      content-class="call-activity-panel__content"
       :role="isActivityOpenable && 'button'"
       :tabindex="isActivityOpenable && 0"
       :aria-disabled="isActivityDisabled"
@@ -63,12 +63,12 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
       <NmorphStepper
         v-if="hasMultipleActivityItems"
         v-model="activityStepperIndex"
-        class="room-call-activity-panel__stepper"
+        class="call-activity-panel__stepper"
         :count="activityItems.length"
         :swipe="true"
         :wheel="true"
       >
-        <RoomCallActivityPanelItem
+        <CallActivityPanelItem
           v-for="item in activityItems"
           :key="item.roomCall.id"
           :item="item"
@@ -83,14 +83,14 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
           @mute="muteCurrentIncomingRoomCall"
         />
         <template #indicator="{ index, count, goTo }">
-          <div v-if="count > 1" class="room-call-activity-panel__indicator" @click.stop>
+          <div v-if="count > 1" class="call-activity-panel__indicator" @click.stop>
             <button
               v-for="indicatorIndex in count"
               :key="indicatorIndex"
               type="button"
-              class="room-call-activity-panel__indicator-button"
+              class="call-activity-panel__indicator-button"
               :class="{
-                'room-call-activity-panel__indicator-button--active': indicatorIndex - 1 === index
+                'call-activity-panel__indicator-button--active': indicatorIndex - 1 === index
               }"
               :disabled="isActivityActionLoading || isActivityDisabled"
               :aria-current="indicatorIndex - 1 === index"
@@ -100,7 +100,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
           </div>
         </template>
       </NmorphStepper>
-      <RoomCallActivityPanelItem
+      <CallActivityPanelItem
         v-else
         :item="activityItem"
         :compact="props.compact"
@@ -115,16 +115,16 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
       />
     </NmorphCard>
   </Transition>
-  <div v-else-if="activityItem" class="room-call-activity-panel room-call-activity-panel--large">
+  <div v-else-if="activityItem" class="call-activity-panel call-activity-panel--large">
     <NmorphStepper
       v-if="hasMultipleActivityItems"
       v-model="activityStepperIndex"
-      class="room-call-activity-panel__stepper"
+      class="call-activity-panel__stepper"
       :count="activityItems.length"
       :swipe="true"
       :wheel="true"
     >
-      <RoomCallActivityPanelItem
+      <CallActivityPanelItem
         v-for="item in activityItems"
         :key="item.roomCall.id"
         :item="item"
@@ -139,14 +139,14 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
         @mute="muteCurrentIncomingRoomCall"
       />
       <template #indicator="{ index, count, goTo }">
-        <div v-if="count > 1" class="room-call-activity-panel__indicator" @click.stop>
+        <div v-if="count > 1" class="call-activity-panel__indicator" @click.stop>
           <button
             v-for="indicatorIndex in count"
             :key="indicatorIndex"
             type="button"
-            class="room-call-activity-panel__indicator-button"
+            class="call-activity-panel__indicator-button"
             :class="{
-              'room-call-activity-panel__indicator-button--active': indicatorIndex - 1 === index
+              'call-activity-panel__indicator-button--active': indicatorIndex - 1 === index
             }"
             :disabled="isActivityActionLoading || isActivityDisabled"
             :aria-current="indicatorIndex - 1 === index"
@@ -156,7 +156,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
         </div>
       </template>
     </NmorphStepper>
-    <RoomCallActivityPanelItem
+    <CallActivityPanelItem
       v-else
       :item="activityItem"
       :compact="props.compact"
@@ -173,43 +173,43 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
 </template>
 
 <style lang="scss">
-.room-call-activity-panel--openable {
+.call-activity-panel--openable {
   cursor: pointer;
 }
 
-.room-call-activity-panel--compact {
+.call-activity-panel--compact {
   interpolate-size: allow-keywords;
   width: min(320px, 42vw);
   max-width: min(320px, 42vw);
   transition: width 180ms ease;
 }
 
-.room-call-activity-panel--single {
+.call-activity-panel--single {
   width: fit-content;
 }
 
-.room-call-activity-panel--disabled {
+.call-activity-panel--disabled {
   @include disabled-state;
 }
 
-.room-call-activity-panel--large {
+.call-activity-panel--large {
   @include flex-column-center;
 
   height: 100%;
 }
 
-.room-call-activity-panel__content {
+.call-activity-panel__content {
   --nmorph-card-content-padding: 0;
 
   position: relative;
   width: 100%;
 }
 
-.room-call-activity-panel__stepper {
+.call-activity-panel__stepper {
   width: 100%;
 }
 
-.room-call-activity-panel__indicator {
+.call-activity-panel__indicator {
   position: absolute;
   bottom: -4px;
   left: 50%;
@@ -221,13 +221,13 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
   justify-content: center;
 }
 
-.room-call-activity-panel--large .room-call-activity-panel__indicator {
+.call-activity-panel--large .call-activity-panel__indicator {
   position: static;
   transform: none;
   margin-top: 16px;
 }
 
-.room-call-activity-panel__indicator-button {
+.call-activity-panel__indicator-button {
   cursor: pointer;
 
   width: 10px;
@@ -238,21 +238,21 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
   background: var(--nmorph-placeholder-text-color);
 }
 
-.room-call-activity-panel__indicator-button--active {
+.call-activity-panel__indicator-button--active {
   background: var(--nmorph-accent-color);
 }
 
-.room-call-activity-panel-reveal-enter-active {
+.call-activity-panel-reveal-enter-active {
   transform-origin: top center;
-  animation: room-call-activity-panel-unfold 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: call-activity-panel-unfold 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.room-call-activity-panel-reveal-leave-active {
+.call-activity-panel-reveal-leave-active {
   transform-origin: top center;
-  animation: room-call-activity-panel-fold 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: call-activity-panel-fold 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-@keyframes room-call-activity-panel-unfold {
+@keyframes call-activity-panel-unfold {
   0% {
     transform: translateY(-8px) scaleX(0.98) scaleY(0.74);
     opacity: 0;
@@ -275,7 +275,7 @@ const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
   }
 }
 
-@keyframes room-call-activity-panel-fold {
+@keyframes call-activity-panel-fold {
   0% {
     transform: translateY(0) scale(1);
     opacity: 1;

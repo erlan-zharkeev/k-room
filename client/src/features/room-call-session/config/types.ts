@@ -86,17 +86,17 @@ export interface UseRoomCallActivityParams {
   roomId?: Ref<string | undefined>
 }
 
-export interface RoomCallActivityPanelProps {
+export interface CallActivityPanelProps {
   compact?: boolean
   openable?: boolean
   roomId?: string
 }
 
-export interface RoomCallActivityPanelEmits {
+export interface CallActivityPanelEmits {
   'open-room-call': [roomId: string]
 }
 
-export interface RoomCallActivityPanelItemProps {
+export interface CallActivityPanelItemProps {
   compact: boolean
   disabled: boolean
   item: RoomCallActivityItem
@@ -105,7 +105,7 @@ export interface RoomCallActivityPanelItemProps {
   loadingMediaKind: RoomCallMediaKind | null
 }
 
-export interface RoomCallActivityPanelItemEmits {
+export interface CallActivityPanelItemEmits {
   'join-audio': []
   'join-video': []
   leave: []
