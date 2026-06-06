@@ -78,9 +78,10 @@ const audioInputCheckLabel = computed(() =>
 
       <NmorphAudioMeter
         v-if="isAudioInputChecking"
+        class="settings-audio-input-device-card__level-meter"
         :label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputLevel)"
         :volume-db="audioVolumeDb"
-        :bars="7"
+        :bars="21"
       />
     </div>
   </SettingsCard>
@@ -96,5 +97,14 @@ const audioInputCheckLabel = computed(() =>
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.settings-audio-input-device-card__level-meter.nmorph-audio-meter.nmorph-audio-meter--bars {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.settings-audio-input-device-card__level-meter.nmorph-audio-meter .nmorph-audio-meter__bar {
+  flex: 1 1 0;
 }
 </style>
