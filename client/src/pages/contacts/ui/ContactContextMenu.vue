@@ -32,9 +32,10 @@ const { isContextMenuOpen, showContactActionBadge, contextMenuOptions, setContex
       :offset-y="-6"
     >
       <NmorphButton
-        style-type="transparent"
+        design="plain"
+        borderless
         shape="square"
-        height="basic"
+        thickness="basic"
         :aria-label="$t(CONTACTS_PAGE_I18N.contactActions)"
       >
         <template #icon-only>

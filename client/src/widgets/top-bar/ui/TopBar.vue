@@ -19,7 +19,7 @@ const { socketTag } = useTopBarSocketStatus()
   <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
     <AppProfileBasicData :image-alt="user.nickname" :image-id="avatarId" :title="user.nickname" :name="user.nickname">
       <template #description>
-        <NmorphBadge v-if="socketTag" :value="socketTag.value" is-tag :color="socketTag.color" size="tiny" />
+        <NmorphBadge v-if="socketTag" :value="socketTag.value" type="tag" :color="socketTag.color" size="tiny" />
       </template>
     </AppProfileBasicData>
     <div class="top-bar__content-right-side">

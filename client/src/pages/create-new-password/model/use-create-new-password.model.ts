@@ -1,4 +1,4 @@
-import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages, isString } from 'global-shared'
 import type { CreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
@@ -18,7 +18,7 @@ export const useCreateNewPassword = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const { firstPassword, secondPassword } = clone(DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA)
-  const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
+  const formRef = useTemplateRef<INmorphFormDataExpose>('formRef')
   const passwordRules = createPasswordValidationRules(validationMessages)
   const formData = reactive({
     firstPassword: { value: firstPassword, rules: passwordRules },

@@ -23,9 +23,10 @@ const { canUpdatePinnedMessage, isUpdatingPinnedMessage, pinnedMessage, pinnedMe
   >
     <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.pinnedMessage)" :text="pinnedMessageText" />
     <NmorphButton
-      style-type="transparent"
+      design="plain"
+      borderless
       shape="square"
-      height="basic"
+      thickness="basic"
       :aria-label="$t(CHAT_ROOM_CONTENT_I18N.unpinMessage)"
       :disabled="!canUpdatePinnedMessage"
       :loading="isUpdatingPinnedMessage"

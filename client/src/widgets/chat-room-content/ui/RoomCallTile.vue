@@ -2,8 +2,9 @@
 import {
   NmorphButton,
   NmorphIcon,
-  NmorphIconAudio,
-  NmorphIconCamera,
+  NmorphIconMuteSpeaker,
+  NmorphIconSpeaker,
+  NmorphIconVideoCameraOff,
   NmorphIconEye,
   NmorphIconEyeBlocked,
   NmorphIconMicrophone,
@@ -45,6 +46,7 @@ const {
     :mirrored="props.item.mirrored"
     :muted="props.item.isLocal || isRemoteAudioMuted"
     :video-off="isMediaTileVideoOff"
+    :show-status="false"
     @click="emit('select')"
   >
     <template #overlay>
@@ -72,7 +74,7 @@ const {
             :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleVideoRoomCall)"
           >
             <NmorphIconVideoCamera v-if="props.item.mediaState.video" />
-            <NmorphIconCamera v-else />
+            <NmorphIconVideoCameraOff v-else />
           </NmorphIcon>
           <NmorphIcon
             v-if="props.item.mediaState.screen"
@@ -86,23 +88,25 @@ const {
       </div>
       <div v-if="!props.self && !isScreenTile" class="room-call-tile__remote-actions room-call-tile__overlay">
         <NmorphButton
-          style-type="transparent"
-          height="thin"
+          design="plain"
+          thickness="thin"
           shape="circle"
+          borderless
           :aria-label="remoteMuteButtonText"
           @click.stop="toggleRemoteAudioMuted"
         >
           <template #icon-only>
             <NmorphIcon>
-              <NmorphIconMute v-if="isRemoteAudioMuted" />
-              <NmorphIconAudio v-else />
+              <NmorphIconMuteSpeaker v-if="isRemoteAudioMuted" />
+              <NmorphIconSpeaker v-else />
             </NmorphIcon>
           </template>
         </NmorphButton>
         <NmorphButton
-          style-type="transparent"
-          height="thin"
+          design="plain"
+          thickness="thin"
           shape="circle"
+          borderless
           :aria-label="remoteHideButtonText"
           @click.stop="toggleRemoteVideoHidden"
         >
@@ -130,19 +134,19 @@ const {
 
 <style lang="scss">
 .room-call-tile {
+  cursor: pointer;
+
   position: relative;
 
   overflow: hidden;
 
-  height: 100%;
   aspect-ratio: auto;
   min-width: 0;
+  height: 100%;
   min-height: 0;
   border-radius: 8px;
 
-  cursor: pointer;
-
-  background: var(--nmorph-dark-shade-color);
+  background: var(--app-message-surface);
   box-shadow: none;
 }
 
@@ -162,7 +166,6 @@ const {
   position: absolute;
   padding: 6px 8px;
   border-radius: 6px;
-
   background: var(--app-shadow-dark);
 }
 
@@ -190,7 +193,7 @@ const {
   display: flex;
   gap: 4px;
   align-items: center;
+
   padding: 4px;
 }
-
 </style>

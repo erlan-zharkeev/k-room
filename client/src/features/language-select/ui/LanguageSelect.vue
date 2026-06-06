@@ -28,7 +28,7 @@ const languageSelectFlagSize = computed(() =>
   <div class="language-select">
     <NmorphSelectButton
       :aria-label="t(LANGUAGE_SELECT_I18N.selectLanguage)"
-      :height="props.compact ? 'basic' : 'thick'"
+      :thickness="props.compact ? 'basic' : 'thick'"
       :model-value="settings.localization.language"
       @update:model-value="changeLanguage"
       fill

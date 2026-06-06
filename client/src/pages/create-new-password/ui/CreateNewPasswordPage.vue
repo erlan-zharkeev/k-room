@@ -70,7 +70,7 @@ onMounted(initializeCreateNewPassword)
           />
 
           <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
-            <NmorphButton :text="$t(CREATE_NEW_PASSWORD_I18N.back)" style-type="transparent" @click="navigate" />
+            <NmorphButton :text="$t(CREATE_NEW_PASSWORD_I18N.back)" design="plain" borderless @click="navigate" />
           </RouterLink>
         </div>
       </NmorphForm>

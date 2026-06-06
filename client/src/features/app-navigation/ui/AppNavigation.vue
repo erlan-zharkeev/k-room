@@ -37,7 +37,7 @@ const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuanti
         <NmorphRadio
           @click="() => navigate()"
           :checked="isNavBtnActive(item.id, isExactActive, routePath)"
-          height="basic"
+          thickness="basic"
         >
           <template #label>
             <NmorphIcon :color="isExactActive ? 'var(--nmorph-accent-color)' : 'var(--nmorph-text-color)'">

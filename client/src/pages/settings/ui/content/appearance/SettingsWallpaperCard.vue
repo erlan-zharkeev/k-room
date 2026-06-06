@@ -44,7 +44,7 @@ const visibilityOptions = computed(() =>
       <div class="settings-wallpaper-card__visibility settings-wallpaper-card__input-element">
         <AppText :selectable="false" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
         <NmorphSelectButton
-          height="thick"
+          thickness="thick"
           :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
           :options="visibilityOptions"
           @update:model-value="setWallpaperVisibility($event === 'show')"

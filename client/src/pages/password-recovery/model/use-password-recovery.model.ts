@@ -1,4 +1,4 @@
-import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   CODES_ENDPOINTS,
   NON_EMPTY_PATTERN,
@@ -32,8 +32,8 @@ export const usePasswordRecovery = () => {
   const validationMessages = createValidationMessages(t)
   const { email } = clone(DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA)
   const { code } = clone(DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA)
-  const emailFormRef = useTemplateRef<INmorphFromDataExpose>('emailFormRef')
-  const codeFormRef = useTemplateRef<INmorphFromDataExpose>('codeFormRef')
+  const emailFormRef = useTemplateRef<INmorphFormDataExpose>('emailFormRef')
+  const codeFormRef = useTemplateRef<INmorphFormDataExpose>('codeFormRef')
   const emailFormData = reactive({
     email: {
       value: email,

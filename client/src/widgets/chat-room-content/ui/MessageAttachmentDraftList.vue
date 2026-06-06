@@ -50,7 +50,8 @@ const { openAttachmentPreview, resolveAttachmentPreviewSrc } = useMessageAttachm
           <NmorphButton
             class="message-attachment-draft-list__remove"
             shape="circle"
-            style-type="transparent"
+            design="plain"
+            borderless
             :aria-label="props.removeAriaLabel"
             @click.stop="emit('remove', attachment)"
           >

@@ -1,4 +1,4 @@
-import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   AUTH_ENDPOINTS,
   NON_EMPTY_PATTERN,
@@ -22,7 +22,7 @@ export const useLogin = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
-  const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
+  const formRef = useTemplateRef<INmorphFormDataExpose>('formRef')
   const formData = reactive<LoginFormData>({
     login: {
       value: DEFAULT_LOGIN_FORM_DATA.login,

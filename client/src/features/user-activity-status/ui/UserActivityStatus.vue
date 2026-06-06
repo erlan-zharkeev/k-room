@@ -9,5 +9,5 @@ const { color, text } = useUserActivityStatus(props)
 </script>
 
 <template>
-  <NmorphBadge is-tag size="tiny" :color="color" :value="text" />
+  <NmorphBadge type="tag" size="tiny" :color="color" :value="text" />
 </template>

@@ -81,7 +81,8 @@ const {
       v-if="showBackToBottomButton"
       class="chat-room-messages__back-to-bottom"
       shape="circle"
-      style-type="transparent"
+      design="plain"
+      borderless
       :aria-label="$t(CHAT_ROOM_CONTENT_I18N.backToBottom)"
       @click="scrollMessagesToBottom"
     >

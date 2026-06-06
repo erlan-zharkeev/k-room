@@ -9,7 +9,8 @@ const { navigateToContentNavigation } = useContentNavigationBackButton()
 
 <template>
   <NmorphButton
-    style-type="transparent"
+    design="plain"
+    borderless
     color="var(--nmorph-contrast-text-color)"
     :text="$t(CONTENT_NAVIGATION_BACK_BUTTON_I18N.back)"
     :aria-label="$t(CONTENT_NAVIGATION_BACK_BUTTON_I18N.back)"

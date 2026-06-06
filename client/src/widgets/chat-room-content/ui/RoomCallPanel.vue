@@ -7,10 +7,11 @@ import {
   NmorphIconExpand,
   NmorphIconFullScreen,
   NmorphIconGrid,
+  NmorphIconHand,
   NmorphIconMicrophone,
   NmorphIconMonitor,
   NmorphIconMute,
-  NmorphIconList,
+  NmorphIconListSimple,
   NmorphIconShrink,
   NmorphIconVideoCamera,
   NmorphScroll
@@ -19,6 +20,8 @@ import {
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
 
 import {
+  ROOM_CALL_QUICK_COMMAND,
+  ROOM_CALL_QUICK_COMMAND_ICON_SIZE,
   ROOM_CALL_QUICK_COMMANDS,
   ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N,
   ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE
@@ -95,35 +98,58 @@ const {
       >
         <NmorphButton
           class="room-call-panel__quick-commands-toggle"
-          style-type="transparent"
+          design="plain"
+          borderless
           shape="circle"
           :aria-label="$t(ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N)"
           @click="toggleRoomCallQuickCommands"
         >
           <template #icon-only>
-            <NmorphIcon >
+            <NmorphIcon>
               <NmorphIconShrink v-if="isRoomCallQuickCommandsExpanded" />
-              <NmorphIconExpand v-else/>
+              <NmorphIconExpand v-else />
             </NmorphIcon>
           </template>
         </NmorphButton>
-        <div v-if="isRoomCallQuickCommandsExpanded" class="room-call-panel__quick-commands">
-          <NmorphButton
-            v-for="command in ROOM_CALL_QUICK_COMMANDS"
-            :key="command.id"
-            class="room-call-panel__quick-command"
-            style-type="transparent"
-            height="thin"
-            :aria-label="$t(command.i18n)"
-            :text="$t(command.i18n)"
-          >
-          </NmorphButton>
+        <div
+          class="room-call-panel__quick-commands"
+          :aria-hidden="!isRoomCallQuickCommandsExpanded"
+          :inert="!isRoomCallQuickCommandsExpanded"
+        >
+          <template v-for="command in ROOM_CALL_QUICK_COMMANDS" :key="command.id">
+            <NmorphButton
+              v-if="command.id === ROOM_CALL_QUICK_COMMAND.RAISE_HAND"
+              class="room-call-panel__quick-command"
+              design="plain"
+              borderless
+              thickness="thin"
+              shape="circle"
+              :aria-label="$t(command.i18n)"
+            >
+              <template #icon-only>
+                <NmorphIcon :width="ROOM_CALL_QUICK_COMMAND_ICON_SIZE" :height="ROOM_CALL_QUICK_COMMAND_ICON_SIZE">
+                  <NmorphIconHand />
+                </NmorphIcon>
+              </template>
+            </NmorphButton>
+            <NmorphButton
+              v-else
+              class="room-call-panel__quick-command"
+              design="plain"
+              borderless
+              thickness="thin"
+              :aria-label="$t(command.i18n)"
+              :text="$t(command.i18n)"
+            >
+            </NmorphButton>
+          </template>
         </div>
       </div>
       <div class="room-call-panel__self">
         <div class="room-call-panel__self-controls">
           <NmorphButton
-            style-type="transparent"
+            design="plain"
+            borderless
             shape="circle"
             :active="props.localMediaState.audio"
             :disabled="props.isBusy"
@@ -131,14 +157,18 @@ const {
             @click="updateAudioEnabled"
           >
             <template #icon-only>
-              <NmorphIcon :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE" :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE">
+              <NmorphIcon
+                :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+                :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+              >
                 <NmorphIconMicrophone v-if="props.localMediaState.audio" />
                 <NmorphIconMute v-else />
               </NmorphIcon>
             </template>
           </NmorphButton>
           <NmorphButton
-            style-type="transparent"
+            design="plain"
+            borderless
             shape="circle"
             :active="props.localMediaState.video"
             :disabled="props.isBusy"
@@ -146,7 +176,10 @@ const {
             @click="updateVideoEnabled"
           >
             <template #icon-only>
-              <NmorphIcon :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE" :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE">
+              <NmorphIcon
+                :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+                :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+              >
                 <NmorphIconVideoCamera v-if="props.localMediaState.video" />
                 <NmorphIconCamera v-else />
               </NmorphIcon>
@@ -154,7 +187,8 @@ const {
           </NmorphButton>
           <NmorphButton
             v-if="isScreenSharingControlVisible"
-            style-type="transparent"
+            design="plain"
+            borderless
             shape="circle"
             :active="props.localMediaState.screen"
             :disabled="props.isBusy"
@@ -162,13 +196,17 @@ const {
             @click="toggleScreenSharing"
           >
             <template #icon-only>
-              <NmorphIcon :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE" :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE">
+              <NmorphIcon
+                :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+                :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+              >
                 <NmorphIconMonitor />
               </NmorphIcon>
             </template>
           </NmorphButton>
           <NmorphButton
-            style-type="transparent"
+            design="plain"
+            borderless
             shape="circle"
             :disabled="props.isBusy && !props.isLeaving"
             :loading="props.isLeaving"
@@ -176,7 +214,10 @@ const {
             @click="leaveRoomCall"
           >
             <template #icon-only>
-              <NmorphIcon :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE" :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE">
+              <NmorphIcon
+                :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+                :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
+              >
                 <NmorphIconClose />
               </NmorphIcon>
             </template>
@@ -185,7 +226,8 @@ const {
         <div class="room-call-panel__self-actions">
           <NmorphButton
             class="room-call-panel__display-mode"
-            style-type="transparent"
+            design="plain"
+            borderless
             shape="circle"
             :aria-label="$t(roomCallDisplayModeToggleI18n)"
             @click="toggleRoomCallPanelDisplayMode"
@@ -193,13 +235,14 @@ const {
             <template #icon-only>
               <NmorphIcon>
                 <NmorphIconGrid v-if="isRoomCallFocusDisplayMode" />
-                <NmorphIconList v-else />
+                <NmorphIconListSimple v-else />
               </NmorphIcon>
             </template>
           </NmorphButton>
           <NmorphButton
             class="room-call-panel__fullscreen"
-            style-type="transparent"
+            design="plain"
+            borderless
             shape="circle"
             :aria-label="
               $t(
@@ -239,19 +282,18 @@ const {
   width: 100%;
   height: 100%;
   padding: 12px;
-
   background: var(--nmorph-main-color);
 }
 
 .room-call-panel__tiles {
   overflow: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   grid-auto-rows: minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  flex: 1;
   gap: 8px;
   align-content: stretch;
 
-  flex: 1;
   min-height: 0;
 }
 
@@ -293,29 +335,41 @@ const {
 .room-call-panel__quick-commands-bar {
   overflow: hidden;
   display: flex;
-  box-sizing: border-box;
-  flex: 0 0 48px;
+  flex: 0 1 auto;
   align-items: center;
-  justify-content: center;
-  transition: flex-basis 0.16s ease;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 48px;
+  max-width: 48px;
+
+  transition: max-width 0.16s ease;
 }
 
 .room-call-panel__quick-commands-bar--expanded {
-  flex-basis: auto;
-  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.room-call-panel__quick-commands-toggle {
+  display: flex;
+  flex: 0 0 48px;
+  justify-content: center;
 }
 
 .room-call-panel__quick-commands {
   display: flex;
+  flex: 0 0 auto;
   gap: 4px;
   align-items: center;
 }
 
 .room-call-panel__self {
   display: grid;
-  flex: 1;
   grid-template-columns: 1fr max-content 1fr;
+  flex: 1;
   align-items: center;
+
   min-width: 0;
   padding: 8px 10px;
 }

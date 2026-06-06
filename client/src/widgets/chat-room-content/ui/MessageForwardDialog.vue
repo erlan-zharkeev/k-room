@@ -60,7 +60,8 @@ const {
       <AppText v-else color="semi-contrast-text" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noChats)" />
       <div class="message-forward-dialog__actions">
         <NmorphButton
-          style-type="transparent"
+          design="plain"
+          borderless
           type="button"
           :text="$t(CHAT_ROOM_CONTENT_I18N.cancel)"
           @click="closeMessageForwardDialog"
@@ -68,7 +69,8 @@ const {
         />
         <NmorphButton
           fill
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-accent-color)"
           :text="$t(CHAT_ROOM_CONTENT_I18N.forwardMessage)"
           :disabled="!canSelectMessageForwardRoom"

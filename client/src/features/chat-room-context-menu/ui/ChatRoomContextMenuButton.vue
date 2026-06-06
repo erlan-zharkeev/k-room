@@ -26,9 +26,10 @@ const { contextMenuOptions, isContextMenuOpen, selectChatRoomAction, updateConte
     @select="selectChatRoomAction"
   >
     <NmorphButton
-      style-type="transparent"
+      design="plain"
+      borderless
       shape="square"
-      height="basic"
+      thickness="basic"
       :aria-label="$t(CHAT_ROOM_CONTEXT_MENU_I18N.chatActions)"
     >
       <template #icon-only>
