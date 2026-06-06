@@ -12,6 +12,7 @@ export const useChatRoomContent = () => {
   const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomPrivate } = useSelectedChatRoom()
   const {
     activeRoomCall,
+    audioStream,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
     isStartingRoomCall,
@@ -75,6 +76,7 @@ export const useChatRoomContent = () => {
     isChatRoomTextView,
     selectedActiveRoomCall,
     joinableSelectedRoomCall,
+    audioStream,
     videoStream,
     screenStream,
     remoteStreamsByUserId: activeRoomCallRemoteStreamsByUserId,

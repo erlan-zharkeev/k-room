@@ -6,6 +6,7 @@ const resolveLocalRoomCallTileStream = ({
 }: Pick<BuildRoomCallTileItemsParams, 'screenStream' | 'videoStream'>) => screenStream || videoStream || undefined
 
 export const buildRoomCallTileItems = ({
+  audioStream,
   currentUserId,
   localMediaState,
   remoteStreamsByUserId,
@@ -22,10 +23,12 @@ export const buildRoomCallTileItems = ({
       const stream = isLocal
         ? resolveLocalRoomCallTileStream({ screenStream, videoStream })
         : remoteStreamsByUserId[participant.userId]
+      const audioActivityStream = isLocal ? audioStream : stream
       const mediaState = isLocal ? localMediaState : participant.mediaState
       const mirrored = isLocal && Boolean(videoStream) && !screenStream
 
       return {
+        audioActivityStream,
         avatarId: resolveParticipantAvatarId(participant.userId),
         id: participant.userId,
         isLocal,

@@ -3,7 +3,13 @@ import { useDevicesList, useUserMedia } from '@vueuse/core'
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { log, useI18n, useMediaDevicePermission } from 'src/shared/lib'
+import {
+  calculateAudioVolumeDb,
+  createAudioMeterAnalyser,
+  log,
+  useI18n,
+  useMediaDevicePermission
+} from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 
@@ -71,13 +77,7 @@ export const useAudioInputDevice = () => {
 
   const updateAudioVolume = (analyser: AnalyserNode, data: Float32Array<ArrayBuffer>) => {
     analyser.getFloatTimeDomainData(data)
-
-    const squareSum = data.reduce((result, item) => {
-      return result + item * item
-    }, 0)
-    const rms = Math.sqrt(squareSum / data.length)
-    const db = 20 * Math.log10(Math.max(rms, Number.EPSILON))
-    audioVolumeDb.value = db
+    audioVolumeDb.value = calculateAudioVolumeDb(data)
 
     audioFrameId.value = window.requestAnimationFrame(() => updateAudioVolume(analyser, data))
   }
@@ -85,15 +85,8 @@ export const useAudioInputDevice = () => {
   const startAudioVolume = (stream: MediaStream) => {
     stopAudioVolume()
 
-    const context = new AudioContext()
-    const source = context.createMediaStreamSource(stream)
-    const analyser = context.createAnalyser()
+    const { analyser, context, data } = createAudioMeterAnalyser(stream)
 
-    analyser.fftSize = 512
-    analyser.smoothingTimeConstant = 0
-    const data: Float32Array<ArrayBuffer> = new Float32Array(analyser.fftSize)
-
-    source.connect(analyser)
     audioContext.value = context
     updateAudioVolume(analyser, data)
   }

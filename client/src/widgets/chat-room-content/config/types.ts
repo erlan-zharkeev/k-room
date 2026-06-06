@@ -25,6 +25,7 @@ import type {
 import type { Component, Ref } from 'vue'
 
 import type { RoomCallRemoteStreamsByUserId } from 'src/features/room-call-session'
+import type { AudioMeterAnalyser } from 'src/shared/lib'
 
 import type {
   CHAT_ROOM_CONTENT_VIEW,
@@ -72,6 +73,7 @@ export interface ChatRoomFooterProps {
 
 export interface RoomCallPanelProps {
   roomCall: RoomCall
+  audioStream?: MediaStream | null
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
@@ -99,6 +101,7 @@ export type RoomCallPanelEmit = {
 export type RoomCallPanelDisplayMode = (typeof ROOM_CALL_PANEL_DISPLAY_MODE)[keyof typeof ROOM_CALL_PANEL_DISPLAY_MODE]
 
 export interface RoomCallTileItem {
+  audioActivityStream?: MediaStream | null
   avatarId?: MediaId | null
   id: string
   isLocal: boolean
@@ -117,10 +120,15 @@ export interface RoomCallTileEmits {
   select: []
 }
 
+export interface RoomCallTileAudioActivityMonitor extends AudioMeterAnalyser {
+  frameId: number
+}
+
 export interface BuildRoomCallTileItemsParams {
   currentUserId: string
   roomCall: RoomCall
   localMediaState: RoomCallParticipantMediaState
+  audioStream?: MediaStream | null
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
