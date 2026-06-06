@@ -52,7 +52,6 @@ const {
             height="14px"
             :color="props.item.statusColor"
             :aria-label="props.item.mediaLabel"
-            :title="props.item.mediaLabel"
           >
             <component :is="props.item.mediaIcon" />
           </NmorphIcon>
