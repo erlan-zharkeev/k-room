@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphAudioMeter,
   NmorphButton,
   NmorphIcon,
   NmorphIconMuteSpeaker,
@@ -25,11 +26,13 @@ const props = defineProps<RoomCallTileProps>()
 const emit = defineEmits<RoomCallTileEmits>()
 const {
   avatarImageSrc,
+  hasRoomCallTileAudioActivity,
   isMediaTileVideoOff,
   isRemoteAudioMuted,
   isRemoteVideoHidden,
   remoteHideButtonText,
   remoteMuteButtonText,
+  roomCallTileAudioVolumeDb,
   toggleRemoteAudioMuted,
   toggleRemoteVideoHidden
 } = useRoomCallTile(props)
@@ -49,14 +52,23 @@ const {
   >
     <template #overlay>
       <div class="room-call-tile__bar room-call-tile__overlay">
-        <AppText
-          class="room-call-tile__name"
-          tag="small"
-          color="contrast-text"
-          truncate
-          :selectable="false"
-          :text="props.item.name"
-        />
+        <div class="room-call-tile__identity">
+          <AppText
+            class="room-call-tile__name"
+            tag="small"
+            color="contrast-text"
+            truncate
+            :selectable="false"
+            :text="props.item.name"
+          />
+          <NmorphAudioMeter
+            v-if="hasRoomCallTileAudioActivity"
+            class="room-call-tile__audio-meter"
+            :label="props.item.name"
+            :volume-db="roomCallTileAudioVolumeDb"
+            :bars="5"
+          />
+        </div>
         <div class="room-call-tile__states">
           <NmorphIcon
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
@@ -158,6 +170,12 @@ const {
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 8px;
+  align-items: center;
+}
+
+.room-call-tile__identity {
+  display: flex;
   gap: 8px;
   align-items: center;
 }

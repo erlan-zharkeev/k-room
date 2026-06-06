@@ -21,6 +21,7 @@ const {
   isChatRoomTextView,
   selectedActiveRoomCall,
   joinableSelectedRoomCall,
+  audioStream,
   videoStream,
   screenStream,
   remoteStreamsByUserId,
@@ -77,6 +78,7 @@ const {
         <RoomCallPanel
           v-if="selectedActiveRoomCall"
           :room-call="selectedActiveRoomCall"
+          :audio-stream="audioStream"
           :video-stream="videoStream"
           :screen-stream="screenStream"
           :remote-streams-by-user-id="remoteStreamsByUserId"
