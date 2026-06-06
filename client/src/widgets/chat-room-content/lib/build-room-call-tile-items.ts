@@ -9,12 +9,13 @@ export const buildRoomCallTileItems = ({
   currentUserId,
   localMediaState,
   remoteStreamsByUserId,
+  resolveParticipantAvatarId,
   resolveParticipantName,
   roomCall,
   screenStream,
   videoStream
-}: BuildRoomCallTileItemsParams) =>
-  roomCall.participants
+}: BuildRoomCallTileItemsParams): RoomCallTileItem[] => {
+  return roomCall.participants
     .filter(({ leftAt }) => !leftAt)
     .map<RoomCallTileItem>((participant) => {
       const isLocal = participant.userId === currentUserId
@@ -25,6 +26,7 @@ export const buildRoomCallTileItems = ({
       const mirrored = isLocal && Boolean(videoStream) && !screenStream
 
       return {
+        avatarId: resolveParticipantAvatarId(participant.userId),
         id: participant.userId,
         isLocal,
         mediaState,
@@ -33,3 +35,4 @@ export const buildRoomCallTileItems = ({
         stream
       }
     })
+}

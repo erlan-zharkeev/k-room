@@ -196,6 +196,41 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     ru: 'Выбрать эмодзи',
     zh: '选择表情'
   },
+  roomCallQuickCommandOk: {
+    en: 'ok',
+    ru: 'ок',
+    zh: '好'
+  },
+  roomCallQuickCommandYes: {
+    en: 'yes',
+    ru: 'да',
+    zh: '是'
+  },
+  roomCallQuickCommandNo: {
+    en: 'no',
+    ru: 'нет',
+    zh: '否'
+  },
+  roomCallQuickCommandRaiseHand: {
+    en: 'raise hand',
+    ru: 'поднять руку',
+    zh: '举手'
+  },
+  roomCallQuickCommands: {
+    en: 'Quick commands',
+    ru: 'Быстрые команды',
+    zh: '快捷指令'
+  },
+  roomCallFocusDisplayMode: {
+    en: 'Focus view',
+    ru: 'Фокусный режим',
+    zh: '焦点视图'
+  },
+  roomCallGridDisplayMode: {
+    en: 'Grid view',
+    ru: 'Режим сетки',
+    zh: '网格视图'
+  },
   sendMessage: {
     en: 'Send message',
     ru: 'Отправить сообщение',

@@ -33,7 +33,8 @@ import type {
   MESSAGE_DRAFT_REFERENCE_KIND,
   MESSAGE_MEDIA_GALLERY_ITEM_KIND,
   MESSAGE_STATUS_DOT_TONE,
-  MESSAGE_TEXT_SEGMENT_KIND
+  MESSAGE_TEXT_SEGMENT_KIND,
+  ROOM_CALL_PANEL_DISPLAY_MODE
 } from './constants'
 
 export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
@@ -95,7 +96,10 @@ export type RoomCallPanelEmit = {
   (event: 'leave'): void
 }
 
+export type RoomCallPanelDisplayMode = (typeof ROOM_CALL_PANEL_DISPLAY_MODE)[keyof typeof ROOM_CALL_PANEL_DISPLAY_MODE]
+
 export interface RoomCallTileItem {
+  avatarId?: MediaId | null
   id: string
   isLocal: boolean
   mediaState: RoomCallParticipantMediaState
@@ -106,6 +110,11 @@ export interface RoomCallTileItem {
 
 export interface RoomCallTileProps {
   item: RoomCallTileItem
+  self: boolean
+}
+
+export interface RoomCallTileEmits {
+  select: []
 }
 
 export interface BuildRoomCallTileItemsParams {
@@ -115,6 +124,7 @@ export interface BuildRoomCallTileItemsParams {
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
+  resolveParticipantAvatarId: (userId: string) => MediaId | null | undefined
   resolveParticipantName: (userId: string) => string
 }
 
