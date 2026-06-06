@@ -7,6 +7,16 @@ import {
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
+import type {
+  UserChatRoomsProjection,
+  UserContactInteractionProjection,
+  UserContactsProjection,
+  UserIdProjection,
+  UserMutedChatRoomIdsProjection,
+  UserPinnedChatRoomIdsProjection,
+  UserPublicNicknameProjection,
+  UserPublicProjection
+} from '../types'
 import { UserModel } from '../user.model'
 
 export const findUserById = (userId: string) => {
@@ -26,22 +36,26 @@ export const loadUserById = (userId: string) => {
 }
 
 export const loadUserChatRoomIds = (userId: string) => {
-  return UserModel.findById(userId, { 'personal.chatRooms': 1 }).lean()
+  return UserModel.findById(userId, { 'personal.chatRooms': 1 }).lean<UserChatRoomsProjection>()
 }
 
 export const loadUserPublicById = (userId: string) => {
-  return UserModel.findById(userId, { 'public.avatarId': 1, 'public.nickname': 1, 'public.lastSeen': 1 }).lean()
+  return UserModel.findById(userId, {
+    'public.avatarId': 1,
+    'public.nickname': 1,
+    'public.lastSeen': 1
+  }).lean<UserPublicProjection>()
 }
 
 export const loadUserPublicNicknameById = (userId: string) => {
-  return UserModel.findById(userId).select('public.nickname').lean()
+  return UserModel.findById(userId).select('public.nickname').lean<UserPublicNicknameProjection>()
 }
 
 export const loadUsersPublicByIds = (userIds: string[]) => {
   return UserModel.find(
     { _id: { $in: userIds } },
     { 'public.avatarId': 1, 'public.nickname': 1, 'public.lastSeen': 1 }
-  ).lean()
+  ).lean<UserPublicProjection[]>()
 }
 
 export const confirmUserEmailIfNeeded = async (userId: string) => {
@@ -59,7 +73,7 @@ export const hasUserRefreshDevice = async (userId: string, deviceId: string, ref
     [`system.device.${deviceId}.refreshToken`]: refreshToken
   })
     .select('_id')
-    .lean()
+    .lean<UserIdProjection>()
 
   return Boolean(user)
 }
@@ -94,8 +108,8 @@ export const updateUserLastSeen = (userId: string, lastSeen: number) => {
 
 export const checkUsersAcceptedContacts = async (selfId: string, contactIds: string[]) => {
   const [self, contacts] = await Promise.all([
-    UserModel.findById(selfId, { 'personal.contacts': 1 }),
-    UserModel.find({ _id: { $in: contactIds } }, { 'personal.contacts': 1 })
+    UserModel.findById(selfId, { 'personal.contacts': 1 }).lean<UserContactsProjection>(),
+    UserModel.find({ _id: { $in: contactIds } }, { 'personal.contacts': 1 }).lean<UserContactsProjection[]>()
   ])
 
   if (!self || contacts.length !== contactIds.length) {
@@ -157,15 +171,21 @@ export const removeChatRoomFromUser = (roomId: string, userId: string) => {
 }
 
 export const loadUserPinnedChatRoomsForRoom = (userId: string, roomId: string) => {
-  return UserModel.findOne({ _id: userId, 'personal.chatRooms': roomId }, { 'personal.pinnedChatRoomIds': 1 }).lean()
+  return UserModel.findOne(
+    { _id: userId, 'personal.chatRooms': roomId },
+    { 'personal.pinnedChatRoomIds': 1 }
+  ).lean<UserPinnedChatRoomIdsProjection>()
 }
 
 export const loadUserMutedChatRoomsForRoom = (userId: string, roomId: string) => {
-  return UserModel.findOne({ _id: userId, 'personal.chatRooms': roomId }, { 'personal.mutedChatRoomIds': 1 }).lean()
+  return UserModel.findOne(
+    { _id: userId, 'personal.chatRooms': roomId },
+    { 'personal.mutedChatRoomIds': 1 }
+  ).lean<UserMutedChatRoomIdsProjection>()
 }
 
 export const loadUserPinnedChatRooms = (userId: string) => {
-  return UserModel.findById(userId, { 'personal.pinnedChatRoomIds': 1 }).lean()
+  return UserModel.findById(userId, { 'personal.pinnedChatRoomIds': 1 }).lean<UserPinnedChatRoomIdsProjection>()
 }
 
 export const setUserPinnedChatRoomIds = (userId: string, pinnedChatRoomIds: string[]) => {
@@ -181,11 +201,11 @@ export const loadUserRoomPreferences = (userId: string) => {
 }
 
 export const loadUsersChatRoomsByIds = (userIds: string[]) => {
-  return UserModel.find({ _id: { $in: userIds } }, { 'personal.chatRooms': 1 }).lean()
+  return UserModel.find({ _id: { $in: userIds } }, { 'personal.chatRooms': 1 }).lean<UserChatRoomsProjection[]>()
 }
 
 export const loadUsersHavingContact = (userId: string) => {
-  return UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean()
+  return UserModel.find({ [`personal.contacts.${userId}`]: { $exists: true } }, { _id: 1 }).lean<UserIdProjection[]>()
 }
 
 export const loadContactSearchUsersById = (id: string) => {
@@ -199,7 +219,7 @@ export const loadContactSearchUsersByNickname = (nickname: string) => {
 }
 
 export const loadUserContactsById = (userId: string) => {
-  return UserModel.findById(userId, { 'personal.contacts': 1 }).lean()
+  return UserModel.findById(userId, { 'personal.contacts': 1 }).lean<UserContactsProjection>()
 }
 
 export const setDefaultUserContact = (userId: string, contactId: string) => {
@@ -253,7 +273,10 @@ export const setExistingUserContactInteraction = (userId: string, contactId: str
 }
 
 export const loadUserContactInteraction = async (userId: string, contactId: string) => {
-  const user = await UserModel.findOne({ _id: userId }, { [`personal.contacts.${contactId}.interaction`]: 1 }).lean()
+  const user = await UserModel.findOne(
+    { _id: userId },
+    { [`personal.contacts.${contactId}.interaction`]: 1 }
+  ).lean<UserContactInteractionProjection>()
 
   return user?.personal.contacts[contactId]?.interaction
 }
@@ -263,5 +286,8 @@ export const deleteUserContact = (userId: string, contactId: string) => {
 }
 
 export const loadUserContactInteractionDocument = (userId: string, contactId: string) => {
-  return UserModel.findOne({ _id: userId }, { [`personal.contacts.${contactId}.interaction`]: 1 })
+  return UserModel.findOne(
+    { _id: userId },
+    { [`personal.contacts.${contactId}.interaction`]: 1 }
+  ).lean<UserContactInteractionProjection>()
 }

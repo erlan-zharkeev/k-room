@@ -186,7 +186,14 @@ export const leaveRoomCall = async (
   payload: EventLeaveRoomCall
 ) => {
   const { room, roomCall } = await assertRoomCallParticipantAccess(redisService, userId, socketId, payload.roomCallId)
+  const isPrivateRoom = isRoomPrivate(room)
   const isCallingRoomCall = roomCall.status === ROOM_CALL_STATUS.CALLING
+
+  if (isPrivateRoom) {
+    await finishRoomCall(redisService, roomCall, room.users.map(String))
+    return
+  }
+
   const recipientIds = isCallingRoomCall ? room.users.map(String) : undefined
 
   await leaveRoomCallParticipant(redisService, roomCall, userId, socketId, payload.reason, recipientIds)

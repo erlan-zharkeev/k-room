@@ -1,24 +1,41 @@
 import { ChatRoomModel } from '../chat-rooms.model'
-import type { ChatRoomDocument } from '../chat-rooms.types'
+import type {
+  ChatRoomCallAccessProjection,
+  ChatRoomDocument,
+  ChatRoomIdProjection,
+  ChatRoomMessagesProjection,
+  ChatRoomUsersMessagesProjection,
+  ChatRoomUsersProjection
+} from '../chat-rooms.types'
 
 export const findRoomUsersByMessage = (roomId: string, userId: string, messageId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId }).select('users').lean()
+  return ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId })
+    .select('users')
+    .lean<ChatRoomUsersProjection>()
 }
 
 export const findRoomMessagesByUser = (roomId: string, userId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('messages').lean()
+  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('messages').lean<ChatRoomMessagesProjection>()
 }
 
 export const findRoomUsersByUser = (roomId: string, userId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users -_id').lean()
+  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users -_id').lean<ChatRoomUsersProjection>()
+}
+
+export const findRoomCallAccessByUser = (roomId: string, userId: string) => {
+  return ChatRoomModel.findOne({ _id: roomId, users: userId })
+    .select('users chatKind -_id')
+    .lean<ChatRoomCallAccessProjection>()
 }
 
 export const findRoomUsersAndMessagesByUser = (roomId: string, userId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users messages').lean()
+  return ChatRoomModel.findOne({ _id: roomId, users: userId })
+    .select('users messages')
+    .lean<ChatRoomUsersMessagesProjection>()
 }
 
 export const findSourceRoomByMessageForUser = (userId: string, messageId: string) => {
-  return ChatRoomModel.findOne({ users: userId, messages: messageId }).select('_id').lean()
+  return ChatRoomModel.findOne({ users: userId, messages: messageId }).select('_id').lean<ChatRoomIdProjection>()
 }
 
 export const addMessageToRoom = (roomId: string, userId: string, messageId: string) => {
@@ -44,7 +61,7 @@ export const updateRoomPinnedMessage = (
 }
 
 export const loadChatRoomUsersByUserId = (userId: string) => {
-  return ChatRoomModel.find({ users: userId }, { users: 1 }).lean<ChatRoomDocument[]>()
+  return ChatRoomModel.find({ users: userId }, { users: 1 }).lean<ChatRoomUsersProjection[]>()
 }
 
 export const loadChatRoomsByIds = (roomIds: string[]) => {

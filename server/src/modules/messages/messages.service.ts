@@ -56,7 +56,7 @@ import { resolveVisibleMessageIds } from './lib/resolve-visible-message-ids'
 import { uploadMessageMediaObjects } from './lib/upload-message-media-objects'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
-import type { MessageDocument, SendMessageParams } from './messages.types'
+import type { MessageDocument, MessageIdProjection, SendMessageParams } from './messages.types'
 
 export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
   const {
@@ -274,7 +274,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     }
   })
     .select('_id')
-    .lean<Array<{ _id: string }>>()
+    .lean<MessageIdProjection[]>()
   const messageIds = unreadMessages.map(({ _id }) => stringifyMongoId(_id))
 
   if (!messageIds.length) {
@@ -333,7 +333,9 @@ export const deleteMessage = async (userId: string, { deleteForEveryone, roomId,
     return
   }
 
-  const deletedMessage = await MessageModel.findOneAndDelete({ _id: messageId, authorId: userId }).select('_id').lean()
+  const deletedMessage = await MessageModel.findOneAndDelete({ _id: messageId, authorId: userId })
+    .select('_id')
+    .lean<MessageIdProjection>()
 
   if (!deletedMessage) {
     return
@@ -383,7 +385,7 @@ export const updatePinnedMessage = async (
   if (isPinned) {
     const message = await MessageModel.findOne({ _id: messageId, deletedForUserIds: { $ne: userId } })
       .select('_id')
-      .lean()
+      .lean<MessageIdProjection>()
 
     if (!message) return
   }

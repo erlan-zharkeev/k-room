@@ -2,7 +2,6 @@
 import {
   NmorphButton,
   NmorphIcon,
-  NmorphIconCamera,
   NmorphIconClose,
   NmorphIconExpand,
   NmorphIconFullScreen,
@@ -14,7 +13,8 @@ import {
   NmorphIconListSimple,
   NmorphIconShrink,
   NmorphIconVideoCamera,
-  NmorphScroll
+  NmorphScroll,
+  NmorphIconVideoCameraOff
 } from '@nmorph/nmorph-ui-kit'
 
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
@@ -181,7 +181,7 @@ const {
                 :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
               >
                 <NmorphIconVideoCamera v-if="props.localMediaState.video" />
-                <NmorphIconCamera v-else />
+                <NmorphIconVideoCameraOff v-else />
               </NmorphIcon>
             </template>
           </NmorphButton>
