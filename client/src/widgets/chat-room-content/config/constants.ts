@@ -5,6 +5,8 @@ import {
   MESSAGE_STATUS_VALUE
 } from 'global-shared'
 
+import { CHAT_ROOM_CONTENT_I18N } from './i18n'
+
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 export const ROOM_MESSAGES_PRELOAD_EDGE_ITEMS = 20
 export const CHAT_ROOM_CONTENT_VIEW_QUERY_KEY = 'chat-view'
@@ -12,6 +14,48 @@ export const CHAT_ROOM_CONTENT_VIEW = {
   TEXT: 'text',
   CALL: 'call'
 } as const
+export const ROOM_CALL_PANEL_DISPLAY_MODE = {
+  FOCUS: 'focus',
+  GRID: 'grid'
+} as const
+export const ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N = {
+  [ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS]: CHAT_ROOM_CONTENT_I18N.roomCallGridDisplayMode,
+  [ROOM_CALL_PANEL_DISPLAY_MODE.GRID]: CHAT_ROOM_CONTENT_I18N.roomCallFocusDisplayMode
+} as const
+export const ROOM_CALL_TILE_REMOTE_ACTION_TEXT = {
+  HIDE: 'hide',
+  MUTE: 'mute',
+  SHOW: 'show',
+  UNMUTE: 'unmute'
+} as const
+export const ROOM_CALL_QUICK_COMMAND = {
+  NO: 'no',
+  OK: 'ok',
+  RAISE_HAND: 'raise-hand',
+  YES: 'yes'
+} as const
+export const ROOM_CALL_QUICK_COMMANDS = [
+  {
+    i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandRaiseHand,
+    id: ROOM_CALL_QUICK_COMMAND.RAISE_HAND
+  },
+  {
+    i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandOk,
+    id: ROOM_CALL_QUICK_COMMAND.OK
+  },
+  {
+    i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandYes,
+    id: ROOM_CALL_QUICK_COMMAND.YES
+  },
+  {
+    i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandNo,
+    id: ROOM_CALL_QUICK_COMMAND.NO
+  }
+] as const
+export const ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N = CHAT_ROOM_CONTENT_I18N.roomCallQuickCommands
+export const ROOM_CALL_QUICK_COMMAND_ICON_SIZE = '20px'
+export const ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE = '20px'
+export const ROOM_CALL_TILE_STATE_ICON_SIZE = '16px'
 export const MESSAGE_READ_VISIBILITY_RATIO = 0.5
 export const MESSAGE_RANGE_GAP_HEIGHT = 24
 export const MESSAGE_VIRTUAL_ESTIMATED_HEIGHT = 96

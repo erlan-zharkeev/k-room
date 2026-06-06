@@ -28,7 +28,6 @@ const {
   isMediaTileVideoOff,
   isRemoteAudioMuted,
   isRemoteVideoHidden,
-  isScreenTile,
   remoteHideButtonText,
   remoteMuteButtonText,
   toggleRemoteAudioMuted,
@@ -39,7 +38,6 @@ const {
 <template>
   <NmorphMediaTile
     class="room-call-tile"
-    :class="{ 'room-call-tile--screen': isScreenTile }"
     :src-object="props.item.stream"
     :name="props.item.name"
     :avatar-src="avatarImageSrc"
@@ -50,7 +48,7 @@ const {
     @click="emit('select')"
   >
     <template #overlay>
-      <div v-if="!isScreenTile" class="room-call-tile__bar room-call-tile__overlay">
+      <div class="room-call-tile__bar room-call-tile__overlay">
         <AppText
           class="room-call-tile__name"
           tag="small"
@@ -86,7 +84,7 @@ const {
           </NmorphIcon>
         </div>
       </div>
-      <div v-if="!props.self && !isScreenTile" class="room-call-tile__remote-actions room-call-tile__overlay">
+      <div v-if="!props.self" class="room-call-tile__remote-actions room-call-tile__overlay">
         <NmorphButton
           design="plain"
           thickness="thin"
@@ -118,16 +116,6 @@ const {
           </template>
         </NmorphButton>
       </div>
-      <div v-if="isScreenTile" class="room-call-tile__bar room-call-tile__screen-caption room-call-tile__overlay">
-        <AppText tag="small" color="contrast-text" truncate :selectable="false" :text="props.item.name" />
-        <NmorphIcon
-          :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
-          :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
-          color="var(--nmorph-accent-color)"
-        >
-          <NmorphIconMonitor />
-        </NmorphIcon>
-      </div>
     </template>
   </NmorphMediaTile>
 </template>
@@ -152,12 +140,6 @@ const {
 
 .room-call-tile {
   .nmorph-media-tile__name {
-    display: none;
-  }
-}
-
-.room-call-tile--screen {
-  .nmorph-media-tile__fallback {
     display: none;
   }
 }
