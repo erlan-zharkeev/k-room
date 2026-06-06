@@ -57,9 +57,15 @@ export { useAppToast } from './toast/toast'
 export { TOAST_LIFE_MS, TOAST_PLACEMENT } from './toast/constants'
 export { TOAST_I18N } from './toast/i18n'
 export { DB_QUOTA_I18N } from './db/i18n'
-export { APP_SOUND_KIND, APP_SOUND_SRC_BY_KIND } from './audio/constants'
+export { calculateAudioVolumeDb, createAudioMeterAnalyser } from './audio/audio-meter'
+export {
+  APP_SOUND_KIND,
+  APP_SOUND_SRC_BY_KIND,
+  AUDIO_METER_ANALYSER_FFT_SIZE,
+  AUDIO_METER_SMOOTHING_TIME_CONSTANT
+} from './audio/constants'
 export { buildNextEmojiPickerQuickList } from './emoji/emoji'
-export type { AppSoundKind } from './audio/types'
+export type { AppSoundKind, AudioMeterAnalyser } from './audio/types'
 export type { ClientPlatform, FileLoaderValue } from './browser/types'
 export type { ContextRef, KebabCase } from './misc/types'
 export type { I18nTranslate } from './i18n/i18n.types'
