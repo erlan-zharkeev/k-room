@@ -1,4 +1,4 @@
-import type { INmorphFromDataExpose as NmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   CODES_ENDPOINTS,
   EMAIL_CODE_LENGTH,
@@ -20,7 +20,7 @@ export const useChangeEmail = () => {
   const { user, update } = useUser()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
-  const formRef = useTemplateRef<NmorphFromDataExpose>('formRef')
+  const formRef = useTemplateRef<INmorphFormDataExpose>('formRef')
   const formData = reactive({
     currentEmail: { value: '', rules: [] },
     nextEmail: {

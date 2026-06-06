@@ -56,7 +56,8 @@ const {
           v-if="searchHasMore"
           :text="$t(CALLS_PAGE_I18N.loadMore) + '...'"
           fill
-          style-type="transparent"
+          design="plain"
+          borderless
           :loading="isSearchLoadingMore"
           @click="loadMoreSearchedRoomCalls"
         />

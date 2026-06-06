@@ -47,7 +47,7 @@ onMounted(initializeWaitEmailConfirm)
       />
 
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
-        <NmorphButton :text="$t(WAIT_EMAIL_CONFIRM_I18N.back)" style-type="transparent" @click="navigate" />
+        <NmorphButton :text="$t(WAIT_EMAIL_CONFIRM_I18N.back)" design="plain" borderless @click="navigate" />
       </RouterLink>
     </div>
   </div>

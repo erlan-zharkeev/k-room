@@ -27,7 +27,7 @@ const {
     <NmorphTagList
       class="message-reactions__list"
       :model-value="reactionList"
-      design="common"
+      design="plain"
       color="var(--app-muted-surface-soft)"
       @click="selectMessageReaction"
     >
@@ -55,7 +55,8 @@ const {
     <span v-if="hasHiddenReactionGroups" ref="reactionsDropdownAnchor" class="message-reactions__more-anchor">
       <NmorphButton
         class="message-reactions__more"
-        style-type="transparent"
+        design="plain"
+        borderless
         color="var(--nmorph-accent-color)"
         :text="`+${hiddenReactionGroupsCount}`"
         @click.stop="toggleReactionDropdown"

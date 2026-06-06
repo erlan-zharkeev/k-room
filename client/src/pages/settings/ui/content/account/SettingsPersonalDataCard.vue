@@ -61,8 +61,9 @@ const {
             <AppText bold :selectable="false" :text="user.nickname" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
-              style-type="transparent"
-              height="thin"
+              design="plain"
+              borderless
+              thickness="thin"
               :disabled="isAccountSaving"
               @click="copyUserNickname"
             >
@@ -79,8 +80,9 @@ const {
             <AppText tag="small" :selectable="false" :text="displayedUserId" />
             <NmorphButton
               class="settings-personal-data-card__copy-button"
-              style-type="transparent"
-              height="thin"
+              design="plain"
+              borderless
+              thickness="thin"
               :disabled="isAccountSaving"
               @click="copyUserId"
             >
@@ -109,7 +111,8 @@ const {
               @update:model-value="uploadAccountAvatar"
             />
             <NmorphButton
-              style-type="transparent"
+              design="plain"
+              borderless
               :disabled="isAccountSaving"
               :text="$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.resetPhoto)"
               @click="resetAccountAvatar"

@@ -13,7 +13,8 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
   <div class="room-call-media-buttons">
     <NmorphButton
       shape="square"
-      style-type="transparent"
+      design="plain"
+      borderless
       :aria-label="$t(ROOM_CALL_SESSION_I18N.startAudioRoomCall)"
       :disabled="props.disabled || props.loading"
       :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.AUDIO"
@@ -26,7 +27,8 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
 
     <NmorphButton
       shape="square"
-      style-type="transparent"
+      design="plain"
+      borderless
       :aria-label="$t(ROOM_CALL_SESSION_I18N.startVideoRoomCall)"
       :disabled="props.disabled || props.loading"
       :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.VIDEO"

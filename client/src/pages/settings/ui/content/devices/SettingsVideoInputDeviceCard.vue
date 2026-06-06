@@ -66,7 +66,7 @@ const videoInputCheckLabel = computed(() =>
 
         <NmorphCheckbox
           :model-value="isVideoInputChecking"
-          height="basic"
+          thickness="basic"
           :aria-label="$t(videoInputCheckLabel)"
           :disabled="isVideoInputCheckDisabled"
           @update:model-value="setVideoInputChecking"

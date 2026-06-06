@@ -61,6 +61,7 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoo
       <div class="chat-room-content-header__actions">
         <NmorphSelectButton
           v-if="props.hasRoomCall"
+          thickness="thick"
           :model-value="props.contentView"
           :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
           @update:model-value="updateChatRoomContentView"

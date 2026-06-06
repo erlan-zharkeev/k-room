@@ -26,12 +26,14 @@ const {
       <div class="app-dialog-actions">
         <NmorphButton
           :text="$t(CHAT_ROOM_CONTENT_I18N.cancel)"
-          style-type="transparent"
+          design="plain"
+          borderless
           :disabled="isDeletingMessage"
           @click="closeDeleteMessageDialog"
         />
         <NmorphButton
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-error-text-color)"
           :text="$t(CHAT_ROOM_CONTENT_I18N.deleteMessageForMe)"
           :disabled="!canDeleteMessageForMe"
@@ -40,7 +42,8 @@ const {
         />
         <NmorphButton
           v-if="props.message.isSelf"
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-error-text-color)"
           :text="$t(CHAT_ROOM_CONTENT_I18N.deleteMessageForEveryone)"
           :disabled="!canDeleteMessageForEveryone"

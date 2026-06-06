@@ -7,6 +7,7 @@ import { LanguageSelect } from 'src/features/language-select'
 import { ThemeSelect } from 'src/features/theme-select'
 import { AppLogo, AppHeader } from 'src/shared/ui'
 
+import AuthLayoutSignalBackground from './AuthLayoutSignalBackground.vue'
 import { AUTH_LAYOUT_TABS } from './constants'
 import type { AuthLayoutProps } from './types'
 
@@ -16,6 +17,7 @@ const route = useRoute()
 
 <template>
   <section class="auth-layout">
+    <AuthLayoutSignalBackground />
     <div class="auth-layout__top-side">
       <AppLogo />
       <div class="auth-layout__controls">
@@ -24,7 +26,7 @@ const route = useRoute()
       </div>
     </div>
     <div class="auth-layout__card">
-      <NmorphCard :card-padding="16">
+      <NmorphCard :card-padding="24" shadow-type="inset">
         <div class="auth-layout__tabs">
           <div
             :class="[
@@ -61,12 +63,15 @@ const route = useRoute()
 
 <style lang="scss">
 .auth-layout {
+  isolation: isolate;
+  overflow: hidden;
   display: grid;
   place-items: center;
 }
 
 .auth-layout__top-side {
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
 
@@ -78,6 +83,8 @@ const route = useRoute()
 }
 
 .auth-layout__card {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 420px;
 }
@@ -139,7 +146,7 @@ const route = useRoute()
 }
 
 .auth-layout__language {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .auth-layout__controls {

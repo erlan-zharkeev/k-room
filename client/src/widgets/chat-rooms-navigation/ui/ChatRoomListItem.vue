@@ -24,6 +24,8 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
     color="var(--nmorph-warn-color)"
     type="ribbon"
     ribbon-corner="bottom-left"
+    :ribbon-tilt="false"
+    :ribbon-width="30"
   >
     <NmorphCard
       tag="div"

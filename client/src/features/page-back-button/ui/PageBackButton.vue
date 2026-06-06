@@ -24,7 +24,8 @@ const handleBack = () => {
   <NmorphButton
     class="page-back-button"
     :text="$t(PAGE_BACK_BUTTON_I18N.back)"
-    style-type="transparent"
+    design="plain"
+    borderless
     @click="handleBack"
   >
     <template #icon>

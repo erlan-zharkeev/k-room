@@ -89,7 +89,8 @@ const {
         <MessagePreview :title="messageDraftReferenceTitle" :text="messageDraftReferencePreviewText" />
       </button>
       <NmorphButton
-        style-type="transparent"
+        design="plain"
+        borderless
         shape="square"
         :aria-label="$t(CHAT_ROOM_CONTENT_I18N.cancel)"
         @click="cancelMessageDraftReference"

@@ -15,9 +15,10 @@ const emit = defineEmits<ContactsDeleteDialogEmits>()
     <div class="app-dialog-stack contacts-delete-dialog">
       <AppText :text="$t(CONTACTS_PAGE_I18N.deleteConfirm)" />
       <div class="app-dialog-actions">
-        <NmorphButton :text="$t(CONTACTS_PAGE_I18N.cancel)" style-type="transparent" @click="emit('cancel')" />
+        <NmorphButton :text="$t(CONTACTS_PAGE_I18N.cancel)" design="plain" borderless @click="emit('cancel')" />
         <NmorphButton
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-error-text-color)"
           :text="$t(CONTACTS_PAGE_I18N.delete)"
           @click="emit('confirm')"

@@ -67,7 +67,8 @@ const showJoinControls = computed(() =>
       <template v-if="showJoinControls">
         <NmorphButton
           shape="square"
-          style-type="transparent"
+          design="plain"
+          borderless
           :aria-label="$t(audioButtonText)"
           :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.AUDIO"
           :disabled="props.loading || props.disabled"
@@ -79,7 +80,8 @@ const showJoinControls = computed(() =>
         </NmorphButton>
         <NmorphButton
           shape="square"
-          style-type="transparent"
+          design="plain"
+          borderless
           :aria-label="$t(videoButtonText)"
           :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.VIDEO"
           :disabled="props.loading || props.disabled"
@@ -93,7 +95,8 @@ const showJoinControls = computed(() =>
       <NmorphButton
         v-if="props.item.canLeave"
         shape="square"
-        style-type="transparent"
+        design="plain"
+        borderless
         :aria-label="$t(ROOM_CALL_SESSION_I18N.leaveRoomCall)"
         :loading="props.leaveLoading"
         :disabled="props.leaveLoading || props.disabled"

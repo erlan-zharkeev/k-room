@@ -1,4 +1,4 @@
-import type { INmorphFromDataExpose } from '@nmorph/nmorph-ui-kit'
+import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   AUTH_ENDPOINTS,
   EMAIL_PATTERN,
@@ -28,7 +28,7 @@ export const useRegistration = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
-  const formRef = useTemplateRef<INmorphFromDataExpose>('formRef')
+  const formRef = useTemplateRef<INmorphFormDataExpose>('formRef')
   const { email, nickname, password, policy } = clone(DEFAULT_REGISTRATION_FORM_DATA)
   const formData = reactive<RegistrationFormData>({
     nickname: {

@@ -45,12 +45,14 @@ const {
       <div class="app-dialog-actions">
         <NmorphButton
           :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.cancel)"
-          style-type="transparent"
+          design="plain"
+          borderless
           :disabled="isLeavingChatRoom"
           @click="closeLeaveChatRoomDialog"
         />
         <NmorphButton
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-error-text-color)"
           :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroup)"
           :disabled="!canLeaveChatRoom"

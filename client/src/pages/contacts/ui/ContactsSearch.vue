@@ -65,7 +65,8 @@ const {
                 <NmorphButton
                   v-if="isDefaultContactInteraction(contact.interactionType)"
                   shape="square"
-                  style-type="transparent"
+                  design="plain"
+                  borderless
                   :loading="loadingContactIds.has(contact.id)"
                   :aria-label="$t(CONTACTS_PAGE_I18N.add)"
                   @click="emit('add', contact.id)"
@@ -80,7 +81,8 @@ const {
               v-if="searchHasMore"
               :text="$t(CONTACTS_PAGE_I18N.loadMore) + '...'"
               fill
-              style-type="transparent"
+              design="plain"
+              borderless
               :loading="isSearchLoadingMore"
               @click="loadMoreSearchedContacts"
             />

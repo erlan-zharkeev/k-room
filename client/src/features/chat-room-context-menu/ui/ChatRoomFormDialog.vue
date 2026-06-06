@@ -111,7 +111,8 @@ const {
       </NmorphFormItem>
       <div class="chat-room-form-dialog__actions">
         <NmorphButton
-          style-type="transparent"
+          design="plain"
+          borderless
           type="button"
           :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.cancel)"
           :disabled="isSavingChatRoom"
@@ -120,7 +121,8 @@ const {
         />
         <NmorphButton
           fill
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-accent-color)"
           :text="$t(submitChatRoomButtonI18n)"
           :loading="isSavingChatRoom"

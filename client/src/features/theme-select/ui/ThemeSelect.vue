@@ -22,8 +22,9 @@ const themeIconWidth = computed(() => (props.compact || !isPortraitTabletOrLess.
 <template>
   <div :class="['theme-select', { 'theme-select--compact': props.compact }]">
     <NmorphSelectButton
+      class="theme-select__control"
       :aria-label="t(THEME_SELECT_I18N.selectTheme)"
-      :height="props.compact ? 'basic' : 'thick'"
+      :custom-thickness="props.compact ? '30px' : '60px'"
       :model-value="settings.appearance.selectedTheme"
       fill
       @update:model-value="changeTheme"
@@ -55,12 +56,6 @@ const themeIconWidth = computed(() => (props.compact || !isPortraitTabletOrLess.
 .theme-select--compact {
   .theme-select__option {
     width: auto;
-  }
-}
-
-.theme-select {
-  .nmorph-select-button--thick {
-    --thick-component: 60px;
   }
 }
 </style>

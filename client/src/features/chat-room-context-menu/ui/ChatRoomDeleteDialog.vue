@@ -20,12 +20,14 @@ const { canDeleteChatRoom, closeDeleteChatRoomDialog, deleteChatRoom, deleteChat
       <div class="app-dialog-actions">
         <NmorphButton
           :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.cancel)"
-          style-type="transparent"
+          design="plain"
+          borderless
           :disabled="isDeletingChatRoom"
           @click="closeDeleteChatRoomDialog"
         />
         <NmorphButton
-          style-type="transparent"
+          design="plain"
+          borderless
           color="var(--nmorph-error-text-color)"
           :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.deleteChat)"
           :disabled="!canDeleteChatRoom"
