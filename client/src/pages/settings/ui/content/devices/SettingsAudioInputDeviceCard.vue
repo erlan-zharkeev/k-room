@@ -100,8 +100,8 @@ const audioInputCheckLabel = computed(() =>
 }
 
 .settings-audio-input-device-card__level-meter.nmorph-audio-meter.nmorph-audio-meter--bars {
-  margin-top: 4px;
   width: 100%;
+  margin-top: 4px;
 }
 
 .settings-audio-input-device-card__level-meter.nmorph-audio-meter .nmorph-audio-meter__bar {
