@@ -1,0 +1,196 @@
+<script setup lang="ts">
+import {
+  NmorphButton,
+  NmorphIcon,
+  NmorphIconAudio,
+  NmorphIconCamera,
+  NmorphIconEye,
+  NmorphIconEyeBlocked,
+  NmorphIconMicrophone,
+  NmorphIconMonitor,
+  NmorphIconMute,
+  NmorphIconVideoCamera,
+  NmorphMediaTile
+} from '@nmorph/nmorph-ui-kit'
+
+import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
+import { AppText } from 'src/shared/ui'
+
+import { ROOM_CALL_TILE_STATE_ICON_SIZE } from '../config/constants'
+import type { RoomCallTileEmits, RoomCallTileProps } from '../config/types'
+import { useRoomCallTile } from '../model/use-room-call-tile.model'
+
+const props = defineProps<RoomCallTileProps>()
+const emit = defineEmits<RoomCallTileEmits>()
+const {
+  avatarImageSrc,
+  isMediaTileVideoOff,
+  isRemoteAudioMuted,
+  isRemoteVideoHidden,
+  isScreenTile,
+  remoteHideButtonText,
+  remoteMuteButtonText,
+  toggleRemoteAudioMuted,
+  toggleRemoteVideoHidden
+} = useRoomCallTile(props)
+</script>
+
+<template>
+  <NmorphMediaTile
+    class="room-call-tile"
+    :class="{ 'room-call-tile--screen': isScreenTile }"
+    :src-object="props.item.stream"
+    :name="props.item.name"
+    :avatar-src="avatarImageSrc"
+    :mirrored="props.item.mirrored"
+    :muted="props.item.isLocal || isRemoteAudioMuted"
+    :video-off="isMediaTileVideoOff"
+    @click="emit('select')"
+  >
+    <template #overlay>
+      <div v-if="!isScreenTile" class="room-call-tile__bar room-call-tile__overlay">
+        <AppText
+          class="room-call-tile__name"
+          tag="small"
+          color="contrast-text"
+          truncate
+          :selectable="false"
+          :text="props.item.name"
+        />
+        <div class="room-call-tile__states">
+          <NmorphIcon
+            :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
+            :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
+            :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleAudioRoomCall)"
+          >
+            <NmorphIconMicrophone v-if="props.item.mediaState.audio" />
+            <NmorphIconMute v-else />
+          </NmorphIcon>
+          <NmorphIcon
+            :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
+            :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
+            :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleVideoRoomCall)"
+          >
+            <NmorphIconVideoCamera v-if="props.item.mediaState.video" />
+            <NmorphIconCamera v-else />
+          </NmorphIcon>
+          <NmorphIcon
+            v-if="props.item.mediaState.screen"
+            :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
+            :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
+            :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleScreenRoomCall)"
+          >
+            <NmorphIconMonitor />
+          </NmorphIcon>
+        </div>
+      </div>
+      <div v-if="!props.self && !isScreenTile" class="room-call-tile__remote-actions room-call-tile__overlay">
+        <NmorphButton
+          style-type="transparent"
+          height="thin"
+          shape="circle"
+          :aria-label="remoteMuteButtonText"
+          @click.stop="toggleRemoteAudioMuted"
+        >
+          <template #icon-only>
+            <NmorphIcon>
+              <NmorphIconMute v-if="isRemoteAudioMuted" />
+              <NmorphIconAudio v-else />
+            </NmorphIcon>
+          </template>
+        </NmorphButton>
+        <NmorphButton
+          style-type="transparent"
+          height="thin"
+          shape="circle"
+          :aria-label="remoteHideButtonText"
+          @click.stop="toggleRemoteVideoHidden"
+        >
+          <template #icon-only>
+            <NmorphIcon>
+              <NmorphIconEyeBlocked v-if="isRemoteVideoHidden" />
+              <NmorphIconEye v-else />
+            </NmorphIcon>
+          </template>
+        </NmorphButton>
+      </div>
+      <div v-if="isScreenTile" class="room-call-tile__bar room-call-tile__screen-caption room-call-tile__overlay">
+        <AppText tag="small" color="contrast-text" truncate :selectable="false" :text="props.item.name" />
+        <NmorphIcon
+          :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
+          :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
+          color="var(--nmorph-accent-color)"
+        >
+          <NmorphIconMonitor />
+        </NmorphIcon>
+      </div>
+    </template>
+  </NmorphMediaTile>
+</template>
+
+<style lang="scss">
+.room-call-tile {
+  position: relative;
+
+  overflow: hidden;
+
+  height: 100%;
+  aspect-ratio: auto;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  background: var(--nmorph-dark-shade-color);
+  box-shadow: none;
+}
+
+.room-call-tile {
+  .nmorph-media-tile__name {
+    display: none;
+  }
+}
+
+.room-call-tile--screen {
+  .nmorph-media-tile__fallback {
+    display: none;
+  }
+}
+
+.room-call-tile__overlay {
+  position: absolute;
+  padding: 6px 8px;
+  border-radius: 6px;
+
+  background: var(--app-shadow-dark);
+}
+
+.room-call-tile__bar {
+  top: 8px;
+  right: 8px;
+  left: 8px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 8px;
+  align-items: center;
+}
+
+.room-call-tile__states {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.room-call-tile__remote-actions {
+  bottom: 8px;
+  left: 8px;
+
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px;
+}
+
+</style>

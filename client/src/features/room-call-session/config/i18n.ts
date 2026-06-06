@@ -31,6 +31,16 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     ru: 'Включить или выключить демонстрацию экрана',
     zh: '切换屏幕共享'
   },
+  enterFullscreenRoomCall: {
+    en: 'Enter fullscreen',
+    ru: 'Открыть на весь экран',
+    zh: '进入全屏'
+  },
+  exitFullscreenRoomCall: {
+    en: 'Exit fullscreen',
+    ru: 'Выйти из полноэкранного режима',
+    zh: '退出全屏'
+  },
   leaveRoomCall: {
     en: 'Leave call',
     ru: 'Выйти из звонка',
