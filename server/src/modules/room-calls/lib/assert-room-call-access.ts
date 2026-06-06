@@ -3,14 +3,14 @@ import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_STATUS, ROOM_PARTIC
 import type { RedisService } from 'src/modules/security/redis.service'
 import { AppError } from 'src/shared/lib/app-error'
 
-import { findRoomUsersByUser } from '../../chat-rooms/lib/chat-room-persistence'
+import { findRoomCallAccessByUser } from '../../chat-rooms/lib/chat-room-persistence'
 import { ROOM_CALLS_I18N } from '../room-calls.i18n'
 
 import { readActiveRoomCall } from './room-call-active-state'
 import { resolveActiveRoomCallParticipants } from './room-call-participant'
 
 export const assertRoomCallStartAccess = async (userId: string, roomId: string) => {
-  const room = await findRoomUsersByUser(roomId, userId)
+  const room = await findRoomCallAccessByUser(roomId, userId)
 
   if (!room) {
     throw new AppError(
@@ -51,7 +51,7 @@ export const assertActiveRoomCallAccess = async (redisService: RedisService, use
     )
   }
 
-  const room = await findRoomUsersByUser(roomCall.roomId, userId)
+  const room = await findRoomCallAccessByUser(roomCall.roomId, userId)
 
   if (!room) {
     throw new AppError(

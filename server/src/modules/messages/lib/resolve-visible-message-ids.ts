@@ -1,6 +1,7 @@
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { MessageModel } from '../messages.model'
+import type { MessageIdProjection } from '../messages.types'
 
 export const resolveVisibleMessageIds = async (userId: string, messageIds: string[]) => {
   if (!messageIds.length) return []
@@ -10,7 +11,7 @@ export const resolveVisibleMessageIds = async (userId: string, messageIds: strin
     deletedForUserIds: { $ne: userId }
   })
     .select('_id')
-    .lean<Array<{ _id: string }>>()
+    .lean<MessageIdProjection[]>()
   const visibleMessageIds = new Set(visibleMessages.map(({ _id }) => stringifyMongoId(_id)))
 
   return messageIds.filter((id) => visibleMessageIds.has(id))

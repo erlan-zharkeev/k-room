@@ -88,3 +88,35 @@ export interface AdminUserActionResponse {
   record?: AdminUserRecord
   records?: AdminUserRecord[]
 }
+
+export type UserIdProjection = Pick<UserSchema, '_id'>
+
+export type UserChatRoomsProjection = Pick<UserSchema, '_id'> & {
+  personal: Pick<UserPersonalData, 'chatRooms'>
+}
+
+export type UserPublicProjection = Pick<UserSchema, '_id'> & {
+  public: Pick<UserPublicData, 'avatarId' | 'nickname' | 'lastSeen'>
+}
+
+export type UserPublicNicknameProjection = Pick<UserSchema, '_id'> & {
+  public: Pick<UserPublicData, 'nickname'>
+}
+
+export type UserContactsProjection = Pick<UserSchema, '_id'> & {
+  personal: Pick<UserPersonalData, 'contacts'>
+}
+
+export type UserPinnedChatRoomIdsProjection = Pick<UserSchema, '_id'> & {
+  personal: Pick<UserPersonalData, 'pinnedChatRoomIds'>
+}
+
+export type UserMutedChatRoomIdsProjection = Pick<UserSchema, '_id'> & {
+  personal: Pick<UserPersonalData, 'mutedChatRoomIds'>
+}
+
+export type UserContactInteractionProjection = Pick<UserSchema, '_id'> & {
+  personal: {
+    contacts: Record<string, Pick<UserContact, 'interaction'> | undefined>
+  }
+}

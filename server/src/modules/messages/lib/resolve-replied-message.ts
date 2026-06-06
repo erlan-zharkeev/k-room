@@ -4,7 +4,7 @@ import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { findSourceRoomByMessageForUser } from '../../chat-rooms/lib/chat-room-persistence'
 import { MessageModel } from '../messages.model'
-import type { MessageDocument, ResolveRepliedMessageParams } from '../messages.types'
+import type { MessageDocument, RepliedMessageSourceProjection, ResolveRepliedMessageParams } from '../messages.types'
 
 const normalizeMessageImages = (images: MessageDocument['images'] = []): ImageObject[] => {
   return images.map((image) => (isString(image) ? { src: image, name: image } : image))
@@ -44,7 +44,7 @@ export const resolveRepliedMessage = async ({
     deletedForUserIds: { $ne: userId }
   })
     .select('_id authorId authorNickname body images documents audios videos')
-    .lean<MessageDocument>()
+    .lean<RepliedMessageSourceProjection>()
 
   if (!sourceMessage) {
     return null

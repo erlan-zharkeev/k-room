@@ -55,7 +55,12 @@ import {
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
-import type { ChatRoomDocument, ChatRoomSchema, TransformRoomForUserParams } from './chat-rooms.types'
+import type {
+  ChatRoomDeleteProjection,
+  ChatRoomDocument,
+  ChatRoomSchema,
+  TransformRoomForUserParams
+} from './chat-rooms.types'
 import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/assert-chat-room-limits'
 import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
 
@@ -304,7 +309,7 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
     users: userId
   })
     .select('adminId avatarId chatKind users messages')
-    .lean()
+    .lean<ChatRoomDeleteProjection>()
 
   if (!room) {
     return

@@ -31,3 +31,10 @@ export interface RefreshMessageLinkPreviewParams {
   roomId: string
   userIds: string[]
 }
+
+export type MessageIdProjection = Pick<MessageDocument, '_id'>
+
+export type RepliedMessageSourceProjection = Pick<
+  MessageDocument,
+  '_id' | 'authorId' | 'authorNickname' | 'body' | 'images' | 'documents' | 'audios' | 'videos'
+>
