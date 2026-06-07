@@ -60,11 +60,7 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
         type="tag"
       >
         <template #value>
-          <NmorphIcon
-            class="chat-room-list-item__mute-icon"
-            aria-hidden="true"
-            width="12px"
-          >
+          <NmorphIcon class="chat-room-list-item__mute-icon" aria-hidden="true" width="12px">
             <NmorphIconMuteNotification />
           </NmorphIcon>
         </template>
@@ -134,7 +130,6 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
 
 .chat-room-list-item__pin.nmorph-badge.nmorph-badge--tag {
   cursor: grab;
-
   position: absolute;
   bottom: 0;
   left: 0;
