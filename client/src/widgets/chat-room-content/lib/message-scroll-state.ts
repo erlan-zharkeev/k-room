@@ -2,23 +2,26 @@ import { isNumber, isString, isUnknownObject } from 'global-shared'
 
 import {
   MESSAGE_SCROLL_STATE_MODE,
+  type MessageScrollAnchorState,
+  type MessageScrollBottomState,
+  type MessageScrollOffsetState,
   type MessageScrollState,
   type MessageScrollStoredState
 } from 'src/entities/setting'
 
 import type { MessageListItem, ResolveVisibleMessageScrollAnchorStateParams } from '../config/types'
 
-export const buildMessageBottomScrollState = (): MessageScrollState => ({
+export const buildMessageBottomScrollState = (): MessageScrollBottomState => ({
   mode: MESSAGE_SCROLL_STATE_MODE.BOTTOM
 })
 
-export const buildMessageAnchorScrollState = (messageId: string, offset: number): MessageScrollState => ({
+export const buildMessageAnchorScrollState = (messageId: string, offset: number): MessageScrollAnchorState => ({
   mode: MESSAGE_SCROLL_STATE_MODE.ANCHOR,
   messageId,
   offset: Math.trunc(offset)
 })
 
-export const buildMessageOffsetScrollState = (scrollTop: number): MessageScrollState => ({
+export const buildMessageOffsetScrollState = (scrollTop: number): MessageScrollOffsetState => ({
   mode: MESSAGE_SCROLL_STATE_MODE.OFFSET,
   scrollTop: Math.trunc(scrollTop)
 })
@@ -39,7 +42,7 @@ export const resolveVisibleMessageScrollAnchorState = ({
   messageList,
   scrollTop,
   virtualItems
-}: ResolveVisibleMessageScrollAnchorStateParams): MessageScrollState | null => {
+}: ResolveVisibleMessageScrollAnchorStateParams): MessageScrollAnchorState | null => {
   const virtualItem = virtualItems.find(({ end, index, start }) => {
     const item = messageList[index]
 
