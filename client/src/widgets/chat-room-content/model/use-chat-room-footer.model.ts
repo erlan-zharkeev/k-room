@@ -12,7 +12,7 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 import { useChatRoomTypingEmitter } from 'src/features/chat-room-typing'
-import { socket } from 'src/shared/api'
+import { socket, useSocketAvailability } from 'src/shared/api'
 
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 import { cloneMediaObjects } from '../lib/clone-media-objects'
@@ -26,6 +26,7 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
   const { mutate } = useChatRoom()
   const { put } = useMessage()
   const { user } = useUser()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const messageText = ref('')
   const { stopTyping } = useChatRoomTypingEmitter(room, messageText)
   const {
@@ -82,6 +83,7 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
     isMessageDraftReferenceCurrentRoom
   } = useMessageDraftReference(room)
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
+  const isSendBlockedByConnection = computed(() => !isSocketOnlineActionAvailable.value)
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
     const hasMessageDraft = hasMessageAttachmentDraft.value
@@ -91,7 +93,7 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
     const hasUserId = Boolean(user.value.id)
     const canSendMessage = hasMessageContent && hasValidLength
 
-    return !canSendMessage || !hasUserId
+    return !canSendMessage || !hasUserId || isSendBlockedByConnection.value
   })
 
   const selectEditingMessage = () => {
@@ -110,19 +112,25 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
   }
 
   const sendMessage = async (roomId: string) => {
+    if (isSendBlockedByConnection.value) return
+
+    const { id: authorId, nickname: authorNickname } = user.value
+
+    if (!authorId) return
+
     const body = messageText.value.trim()
+    const hasMessageDraft = hasMessageAttachmentDraft.value
+    const hasMessageBody = Boolean(body)
+    const hasMessageReference = isMessageDraftReferenceCurrentRoom.value
+    const hasMessageContent = [hasMessageBody, hasMessageDraft, hasMessageReference].some(Boolean)
+
+    if (!hasMessageContent) return
+
+    const repliedMessage = buildMessageDraftReferencePayload(roomId)
     const images = cloneMediaObjects(messageImageDraftImages.value)
     const documents = cloneMediaObjects(messageDocumentDraftDocuments.value)
     const audios = cloneMediaObjects(messageAudioDraftAudios.value)
     const videos = cloneMediaObjects(messageVideoDraftVideos.value)
-    const hasMessageDraft = [images, documents, audios, videos].some((attachments) => attachments.length)
-    const { id: authorId, nickname: authorNickname } = user.value
-    const repliedMessage = buildMessageDraftReferencePayload(roomId)
-    const hasMessageBody = Boolean(body)
-    const hasMessageReference = Boolean(repliedMessage)
-    const hasMessageContent = [hasMessageBody, hasMessageDraft, hasMessageReference].some(Boolean)
-
-    if (!hasMessageContent || !authorId) return
 
     const [payloadImages, payloadDocuments, payloadAudios, payloadVideos] = await Promise.all([
       buildMessageImageDraftPayload(),

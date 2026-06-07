@@ -1,10 +1,12 @@
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
 import { type Ref, ref, useTemplateRef } from 'vue'
 
+import type { ChatRoomMessageEmojiPickerModel } from '../config/types'
+
 import { useEmojiPickerQuickList } from './use-emoji-picker-quick-list.model'
 import { useNmorphEmojiPicker } from './use-nmorph-emoji-picker.model'
 
-export const useChatRoomMessageEmojiPicker = (messageText: Ref<string>) => {
+export const useChatRoomMessageEmojiPicker = (messageText: Ref<string>): ChatRoomMessageEmojiPickerModel => {
   const { emojiPickerQuickList, saveEmojiPickerQuickReaction } = useEmojiPickerQuickList()
   const messageEmojiDropdownAnchor = useTemplateRef<HTMLElement>('messageEmojiDropdownAnchor')
   const isMessageEmojiDropdownOpen = ref(false)

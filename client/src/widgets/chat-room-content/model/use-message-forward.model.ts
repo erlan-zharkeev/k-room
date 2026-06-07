@@ -5,7 +5,7 @@ import { computed, type Ref, ref, toRef, watch } from 'vue'
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
-import { socket } from 'src/shared/api'
+import { socket, useSocketAvailability } from 'src/shared/api'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
@@ -21,6 +21,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const { chatRooms, mutate } = useChatRoom()
   const { put } = useMessage()
   const { user } = useUser()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { getRoomInterlocutor, getUsersByIds } = useChatRoomUserLookup()
   const selectedMessageForwardRoomIds = ref<string[]>([])
   const messageForwardSearchQuery = ref('')
@@ -53,9 +54,11 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const showMessageForwardSearchEmpty = computed(
     () => Boolean(normalizedMessageForwardSearchQuery.value) && filteredMessageForwardChatRoomItems.value.length === 0
   )
-  const canSelectMessageForwardRoom = computed(
-    () => Boolean(selectedMessageForwardRoomIds.value[0]) && !isForwardingMessage.value
-  )
+  const canSelectMessageForwardRoom = computed(() => {
+    const hasSelectedMessageForwardRoom = Boolean(selectedMessageForwardRoomIds.value[0])
+
+    return hasSelectedMessageForwardRoom && !isForwardingMessage.value && isSocketOnlineActionAvailable.value
+  })
 
   const resetMessageForwardDialog = () => {
     selectedMessageForwardRoomIds.value = []
@@ -84,8 +87,10 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const selectMessageForwardRoom = async () => {
     const roomId = selectedMessageForwardRoomIds.value[0]
     const { id: authorId, nickname: authorNickname } = user.value
+    const isForwardBlockedByConnection = !isSocketOnlineActionAvailable.value
+    const isForwardBlocked = isForwardingMessage.value || isForwardBlockedByConnection
 
-    if (!roomId || !authorId || isForwardingMessage.value) return
+    if (!roomId || !authorId || isForwardBlocked) return
 
     const repliedMessage = buildRepliedMessage(
       forwardedMessage.value,
