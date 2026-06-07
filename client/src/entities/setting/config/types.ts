@@ -8,11 +8,24 @@ import type { DeviceNotificationSettings } from './notification.types'
 export type ContentNavigationScrollTab = Extract<ContentTab, 'chat-rooms' | 'contacts'>
 export type ContentNavigationScrollByTab = Record<ContentNavigationScrollTab, number>
 
+export interface MessageScrollBottomState {
+  mode: 'bottom'
+}
+
+export interface MessageScrollOffsetState {
+  mode: 'offset'
+  scrollTop: number
+}
+
+export type MessageScrollState = MessageScrollBottomState | MessageScrollOffsetState
+export type MessageScrollStoredState = MessageScrollState | number
+export type MessageScrollByRoom = Record<string, MessageScrollStoredState>
+
 export interface DeviceSetting {
   contentTab: ContentTab
   chatRoomId: string
   contentNavigationScrollByTab: ContentNavigationScrollByTab
-  messageScrollByRoom: Record<string, number>
+  messageScrollByRoom: MessageScrollByRoom
   quickReactions: string[]
   localization: DeviceLocalizationSettings
   appearance: AppearanceSettings
