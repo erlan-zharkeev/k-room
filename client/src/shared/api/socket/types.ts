@@ -7,6 +7,11 @@ import type {
   SocketAckSuccess
 } from 'global-shared'
 
+import type { SOCKET_AVAILABILITY_STATUS } from './constants'
+
+export type SocketAvailabilityStatus =
+  (typeof SOCKET_AVAILABILITY_STATUS)[keyof typeof SOCKET_AVAILABILITY_STATUS]
+
 export interface EmitSocketActionOptions<TResponsePayload = void, TReason extends string = string> {
   onSuccess?: (response: SocketAckSuccess<TResponsePayload>) => void
   onFailure?: (response: SocketAckFailure<TReason>) => void
