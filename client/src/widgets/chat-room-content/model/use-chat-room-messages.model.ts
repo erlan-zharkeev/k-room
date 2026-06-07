@@ -37,6 +37,9 @@ export const useChatRoomMessages = (
   const { displayedLastMessageId, hasMessages, messageList } = useChatRoomMessageList(room, loadedMessageRanges)
 
   const { clearPendingReadMessageIds, markVisibleMessagesAsRead } = useChatRoomMessageReadStatus(room, messageList)
+  const hasCachedRoomMessages = computed(() => room.value.messages.some((messageId) => messageById.value.has(messageId)))
+  const showInitialMessagesLoading = computed(() => hasMessages.value && isLoading.value && !hasCachedRoomMessages.value)
+  const showMessagesLoadingProgress = computed(() => isLoading.value)
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
   const {
     getMessagesScrollElement,
@@ -212,6 +215,8 @@ export const useChatRoomMessages = (
     messageVirtualListItems,
     saveMessagesScrollState,
     scrollMessagesToBottom,
+    showInitialMessagesLoading,
+    showMessagesLoadingProgress,
     showBackToBottomButton
   }
 }
