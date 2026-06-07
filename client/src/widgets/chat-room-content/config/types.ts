@@ -34,12 +34,14 @@ import type {
   MESSAGE_CONTEXT_MENU_ACTION,
   MESSAGE_DRAFT_REFERENCE_KIND,
   MESSAGE_MEDIA_GALLERY_ITEM_KIND,
+  MESSAGE_SCROLL_LOG_REASON,
   MESSAGE_STATUS_DOT_TONE,
   MESSAGE_TEXT_SEGMENT_KIND,
   ROOM_CALL_PANEL_DISPLAY_MODE
 } from './constants'
 
 export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
+export type MessageScrollLogReason = (typeof MESSAGE_SCROLL_LOG_REASON)[keyof typeof MESSAGE_SCROLL_LOG_REASON]
 
 export interface ChatRoomMessagesProps {
   room: ChatRoom
@@ -460,6 +462,13 @@ export interface MessageListMessageItem {
   type: 'message'
   id: string
   messageId: string
+}
+
+export interface ResolveVisibleMessageScrollAnchorStateParams {
+  clientHeight: number
+  messageList: MessageListItem[]
+  scrollTop: number
+  virtualItems: VirtualItem[]
 }
 
 export interface MessageVirtualListMessageItem extends MessageListMessageItem {

@@ -1,4 +1,4 @@
-import { isNumber, isUnknownObject } from 'global-shared'
+import { isNumber, isString, isUnknownObject } from 'global-shared'
 
 import {
   MESSAGE_SCROLL_STATE_MODE,
@@ -6,14 +6,57 @@ import {
   type MessageScrollStoredState
 } from 'src/entities/setting'
 
+import type { MessageListItem, ResolveVisibleMessageScrollAnchorStateParams } from '../config/types'
+
 export const buildMessageBottomScrollState = (): MessageScrollState => ({
   mode: MESSAGE_SCROLL_STATE_MODE.BOTTOM
+})
+
+export const buildMessageAnchorScrollState = (messageId: string, offset: number): MessageScrollState => ({
+  mode: MESSAGE_SCROLL_STATE_MODE.ANCHOR,
+  messageId,
+  offset: Math.trunc(offset)
 })
 
 export const buildMessageOffsetScrollState = (scrollTop: number): MessageScrollState => ({
   mode: MESSAGE_SCROLL_STATE_MODE.OFFSET,
   scrollTop: Math.trunc(scrollTop)
 })
+
+const isMessageVirtualItemVisible = (start: number, end: number, scrollTop: number, clientHeight: number) => {
+  const viewportEnd = scrollTop + clientHeight
+  const startsBeforeViewportEnd = start <= viewportEnd
+  const endsAfterViewportStart = end >= scrollTop
+
+  return startsBeforeViewportEnd && endsAfterViewportStart
+}
+
+export const findMessageScrollAnchorIndex = (messageList: MessageListItem[], messageId: string) =>
+  messageList.findIndex((item) => item.type === 'message' && item.messageId === messageId)
+
+export const resolveVisibleMessageScrollAnchorState = ({
+  clientHeight,
+  messageList,
+  scrollTop,
+  virtualItems
+}: ResolveVisibleMessageScrollAnchorStateParams): MessageScrollState | null => {
+  const virtualItem = virtualItems.find(({ end, index, start }) => {
+    const item = messageList[index]
+
+    if (!item) return false
+    if (item.type !== 'message') return false
+
+    return isMessageVirtualItemVisible(start, end, scrollTop, clientHeight)
+  })
+
+  if (!virtualItem) return null
+
+  const item = messageList[virtualItem.index]
+
+  if (!item || item.type !== 'message') return null
+
+  return buildMessageAnchorScrollState(item.messageId, scrollTop - virtualItem.start)
+}
 
 export const resolveMessageScrollState = (state?: MessageScrollStoredState): MessageScrollState | null => {
   if (isNumber(state)) {
@@ -26,9 +69,17 @@ export const resolveMessageScrollState = (state?: MessageScrollStoredState): Mes
     return buildMessageBottomScrollState()
   }
 
-  const { mode, scrollTop } = state
+  const { messageId, mode, offset, scrollTop } = state
+  const isAnchorMode = mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR
+  const hasAnchorMessageId = isString(messageId)
+  const hasAnchorOffset = isNumber(offset)
+  const hasAnchorState = isAnchorMode && hasAnchorMessageId && hasAnchorOffset
   const isOffsetMode = mode === MESSAGE_SCROLL_STATE_MODE.OFFSET
   const hasScrollTop = isNumber(scrollTop)
+
+  if (hasAnchorState) {
+    return buildMessageAnchorScrollState(messageId, offset)
+  }
 
   if (isOffsetMode && hasScrollTop) {
     return buildMessageOffsetScrollState(scrollTop)
@@ -46,6 +97,22 @@ export const isSameMessageScrollState = (
   if (!resolvedCurrentState) return false
   if (resolvedCurrentState.mode !== nextState.mode) return false
   if (resolvedCurrentState.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) return true
+  if (
+    resolvedCurrentState.mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR &&
+    nextState.mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR
+  ) {
+    const hasSameMessageId = resolvedCurrentState.messageId === nextState.messageId
+    const hasSameOffset = resolvedCurrentState.offset === nextState.offset
+
+    return hasSameMessageId && hasSameOffset
+  }
+
+  if (
+    resolvedCurrentState.mode !== MESSAGE_SCROLL_STATE_MODE.OFFSET ||
+    nextState.mode !== MESSAGE_SCROLL_STATE_MODE.OFFSET
+  ) {
+    return false
+  }
 
   return resolvedCurrentState.scrollTop === nextState.scrollTop
 }
