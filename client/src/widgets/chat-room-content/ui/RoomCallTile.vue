@@ -51,7 +51,7 @@ const {
     @click="emit('select')"
   >
     <template #overlay>
-      <div class="room-call-tile__bar room-call-tile__overlay">
+      <div class="room-call-tile__bar room-call-tile__overlay" @click.stop>
         <div class="room-call-tile__identity">
           <AppText
             class="room-call-tile__name"
@@ -96,7 +96,7 @@ const {
           </NmorphIcon>
         </div>
       </div>
-      <div v-if="!props.self" class="room-call-tile__remote-actions room-call-tile__overlay">
+      <div v-if="!props.self" class="room-call-tile__remote-actions room-call-tile__overlay" @click.stop>
         <NmorphButton
           design="plain"
           thickness="thin"
@@ -160,6 +160,7 @@ const {
   position: absolute;
   padding: 6px 8px;
   border-radius: 6px;
+  cursor: default;
   background: var(--app-shadow-dark);
 }
 
