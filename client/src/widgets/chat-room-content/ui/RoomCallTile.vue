@@ -157,10 +157,13 @@ const {
 }
 
 .room-call-tile__overlay {
+  cursor: default;
+
   position: absolute;
+
   padding: 6px 8px;
   border-radius: 6px;
-  cursor: default;
+
   background: var(--app-shadow-dark);
 }
 
