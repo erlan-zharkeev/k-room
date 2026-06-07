@@ -13,6 +13,7 @@ import {
   isSameMessageScrollState,
   resolveMessageScrollState
 } from '../lib/message-scroll-state'
+import { waitMessageScrollRestoreStabilization } from '../lib/wait-message-scroll-restore-stabilization'
 
 export const useChatRoomMessageScrollManager = (
   room: Ref<ChatRoom>,
@@ -23,6 +24,7 @@ export const useChatRoomMessageScrollManager = (
   const messagesScrollRef = useTemplateRef<INmorphScrollExpose>('messagesScroll')
   const messagesBottomRef = useTemplateRef<HTMLElement>('messagesBottom')
   const hasInitialScrollSettled = ref(false)
+  const isInitialScrollStateSaveLocked = ref(false)
   const showBackToBottomButton = ref(false)
   let messageVirtualizer: Ref<Virtualizer<HTMLElement, HTMLElement>> | null = null
 
@@ -38,6 +40,8 @@ export const useChatRoomMessageScrollManager = (
     if (!scrollElement) {
       return {
         hasScrollElement: false,
+        hasInitialScrollSettled: hasInitialScrollSettled.value,
+        isInitialScrollStateSaveLocked: isInitialScrollStateSaveLocked.value,
         messageItemsQuantity: messageItemsQuantity.value,
         roomId: room.value.id,
         showBackToBottomButton: showBackToBottomButton.value
@@ -48,6 +52,8 @@ export const useChatRoomMessageScrollManager = (
       bottomDistance: Math.max(scrollElement.scrollHeight - scrollElement.clientHeight - scrollElement.scrollTop, 0),
       clientHeight: scrollElement.clientHeight,
       hasScrollElement: true,
+      hasInitialScrollSettled: hasInitialScrollSettled.value,
+      isInitialScrollStateSaveLocked: isInitialScrollStateSaveLocked.value,
       messageItemsQuantity: messageItemsQuantity.value,
       roomId: room.value.id,
       scrollHeight: scrollElement.scrollHeight,
@@ -119,6 +125,12 @@ export const useChatRoomMessageScrollManager = (
   const hasSavedMessagesScrollState = (roomId: string) =>
     Boolean(resolveMessageScrollState(settings.value.messageScrollByRoom[roomId]))
 
+  const isMessagesScrollStateSaveLocked = () => {
+    const isInitialScrollRunning = !hasInitialScrollSettled.value
+
+    return isInitialScrollRunning || isInitialScrollStateSaveLocked.value
+  }
+
   const saveMessagesScrollTop = async (roomId: string, scrollTop: number) => {
     if (!roomId) {
       logMessageScrollDebug('save-scroll-top-skipped-empty-room', {
@@ -153,6 +165,14 @@ export const useChatRoomMessageScrollManager = (
   }
 
   const saveMessagesScrollState = ({ y }: NmorphCoordsType) => {
+    if (isMessagesScrollStateSaveLocked()) {
+      logMessageScrollDebug('save-scroll-state-skipped-initial-restore', {
+        ...getMessagesScrollDebugPayload(),
+        eventY: y
+      })
+      return
+    }
+
     logMessageScrollDebug('save-scroll-state-event', {
       ...getMessagesScrollDebugPayload(),
       eventY: y
@@ -161,6 +181,14 @@ export const useChatRoomMessageScrollManager = (
   }
 
   const saveCurrentMessagesScrollState = (roomId = room.value.id) => {
+    if (isMessagesScrollStateSaveLocked()) {
+      logMessageScrollDebug('save-current-scroll-state-skipped-initial-restore', {
+        ...getMessagesScrollDebugPayload(),
+        targetRoomId: roomId
+      })
+      return
+    }
+
     const scrollElement = getMessagesScrollElement()
 
     if (!scrollElement) {
@@ -272,23 +300,39 @@ export const useChatRoomMessageScrollManager = (
     }
 
     hasInitialScrollSettled.value = false
+    isInitialScrollStateSaveLocked.value = true
 
     try {
       await loadMessages()
     } finally {
-      if (room.value.id === roomId) {
-        await scrollMessagesToInitialPosition(roomId)
-        hasInitialScrollSettled.value = true
-        logMessageScrollDebug('initial-scroll-run-settled', {
-          ...getMessagesScrollDebugPayload(),
-          targetRoomId: roomId
-        })
-      } else {
+      const isSameRoomBeforeInitialScroll = room.value.id === roomId
+
+      if (!isSameRoomBeforeInitialScroll) {
         logMessageScrollDebug('initial-scroll-run-skipped-stale-room', {
           ...getMessagesScrollDebugPayload(),
           currentRoomId: room.value.id,
           targetRoomId: roomId
         })
+      } else {
+        await scrollMessagesToInitialPosition(roomId)
+        await waitMessageScrollRestoreStabilization()
+
+        const isSameRoomAfterInitialScroll = room.value.id === roomId
+
+        if (isSameRoomAfterInitialScroll) {
+          hasInitialScrollSettled.value = true
+          isInitialScrollStateSaveLocked.value = false
+          logMessageScrollDebug('initial-scroll-run-settled', {
+            ...getMessagesScrollDebugPayload(),
+            targetRoomId: roomId
+          })
+        } else {
+          logMessageScrollDebug('initial-scroll-run-skipped-stale-room', {
+            ...getMessagesScrollDebugPayload(),
+            currentRoomId: room.value.id,
+            targetRoomId: roomId
+          })
+        }
       }
     }
   }
