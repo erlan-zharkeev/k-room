@@ -16,72 +16,85 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
 </script>
 
 <template>
-  <NmorphBadge
-    class="chat-room-list-item-badge"
-    :value="props.item.unreadMessagesQuantity"
-    hide-on-falsy-value
-    size="tiny"
-    color="var(--nmorph-warn-color)"
-    type="ribbon"
-    ribbon-corner="bottom-left"
-    :ribbon-tilt="false"
-    :ribbon-width="30"
+  <NmorphCard
+    tag="div"
+    class="chat-room-list-item"
+    content-class="chat-room-list-item__content"
+    :shadow-type="isPressed ? 'inset' : 'outset'"
   >
-    <NmorphCard
-      tag="div"
-      class="chat-room-list-item"
-      content-class="chat-room-list-item__content"
-      :shadow-type="isPressed ? 'inset' : 'outset'"
-    >
-      <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
-        <AppProfileBasicData
-          :image-id="props.item.imageId"
-          :title="props.item.title"
-          :name="props.item.title"
-          :show-online="props.item.online"
-        >
-          <template #title>
-            <div class="chat-room-list-item__title">
-              <div class="chat-room-list-item__name">
-                <AppText truncate :selectable="false" :text="props.item.title" />
-              </div>
+    <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
+      <AppProfileBasicData
+        :image-id="props.item.imageId"
+        :title="props.item.title"
+        :name="props.item.title"
+        :show-online="props.item.online"
+      >
+        <template #title>
+          <div class="chat-room-list-item__title">
+            <div class="chat-room-list-item__name">
+              <AppText truncate :selectable="false" :text="props.item.title" />
             </div>
-          </template>
-          <template #description>
-            <ChatRoomTypingStatus :room-id="props.item.id" truncate>
-              <AppText
-                v-if="props.item.description"
-                tag="small"
-                truncate
-                color="semi-contrast-text"
-                :selectable="false"
-                :text="props.item.description"
-              />
-            </ChatRoomTypingStatus>
-          </template>
-        </AppProfileBasicData>
-      </RouterLink>
-      <div v-if="props.item.isPinned || props.item.isMuted" class="chat-room-list-item__status-icons">
-        <NmorphIcon
-          v-if="props.item.isMuted"
-          class="chat-room-list-item__status-icon"
-          color="var(--nmorph-contrast-text-color)"
-          aria-hidden="true"
-        >
-          <NmorphIconMuteNotification />
-        </NmorphIcon>
-        <NmorphIcon
-          v-if="props.item.isPinned"
-          class="chat-room-list-item__status-icon chat-room-list-item__pin"
-          color="var(--nmorph-contrast-text-color)"
-          aria-hidden="true"
-        >
+          </div>
+        </template>
+        <template #description>
+          <ChatRoomTypingStatus :room-id="props.item.id" truncate>
+            <AppText
+              v-if="props.item.description"
+              tag="small"
+              truncate
+              color="semi-contrast-text"
+              :selectable="false"
+              :text="props.item.description"
+            />
+          </ChatRoomTypingStatus>
+        </template>
+      </AppProfileBasicData>
+    </RouterLink>
+    <div v-if="props.item.isMuted || props.item.unreadMessagesQuantity" class="chat-room-list-item__status-icons">
+      <NmorphBadge
+        v-if="props.item.isMuted"
+        class="chat-room-list-item__mute"
+        :value="''"
+        size="tiny"
+        color="var(--nmorph-warn-color)"
+        type="tag"
+      >
+        <template #value>
+          <NmorphIcon
+            class="chat-room-list-item__mute-icon"
+            aria-hidden="true"
+            width="12px"
+          >
+            <NmorphIconMuteNotification />
+          </NmorphIcon>
+        </template>
+      </NmorphBadge>
+      <NmorphBadge
+        v-if="props.item.unreadMessagesQuantity"
+        class="chat-room-list-item__unread"
+        :value="props.item.unreadMessagesQuantity"
+        size="tiny"
+        color="var(--nmorph-warn-color)"
+        type="tag"
+      />
+    </div>
+    <ChatRoomContextMenu :item="props.item" :action-options="contextMenuActionOptions" />
+    <NmorphBadge
+      v-if="props.item.isPinned"
+      class="chat-room-list-item__pin"
+      :value="''"
+      size="tiny"
+      color="var(--nmorph-accent-color)"
+      type="tag"
+      aria-hidden="true"
+    >
+      <template #value>
+        <NmorphIcon class="chat-room-list-item__pin-icon" color="var(--nmorph-contrast-text-color)" width="12px">
           <NmorphIconPin />
         </NmorphIcon>
-      </div>
-      <ChatRoomContextMenu :item="props.item" :action-options="contextMenuActionOptions" />
-    </NmorphCard>
-  </NmorphBadge>
+      </template>
+    </NmorphBadge>
+  </NmorphCard>
 </template>
 
 <style lang="scss">
@@ -117,24 +130,13 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
   gap: 4px;
   align-items: center;
   justify-content: center;
-
-  height: 100%;
 }
 
-.chat-room-list-item__status-icon {
-  width: 12px;
-  height: 12px;
-  padding: 8px;
-  border-radius: 2px;
-
-  background: var(--nmorph-accent-color);
-}
-
-.chat-room-list-item__pin {
+.chat-room-list-item__pin.nmorph-badge.nmorph-badge--tag {
   cursor: grab;
-}
 
-.chat-room-list-item-badge.nmorph-badge {
-  --nmorph-badge-ribbon-corner-size: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 </style>
