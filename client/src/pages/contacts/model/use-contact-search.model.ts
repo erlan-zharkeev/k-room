@@ -10,7 +10,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { mergeContactLocalState, useContact } from 'src/entities/contact'
 import { useSyncMedia } from 'src/entities/media-file'
-import { socket } from 'src/shared/api'
+import { socket, useSocketAvailability } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_SEARCH_DEBOUNCE_MS, CONTACTS_SEARCH_BADGE_BY_INTERACTION } from '../config/constants'
@@ -22,6 +22,7 @@ export const useContactSearch = () => {
   const { mergeMany, isContactExist } = useContact()
   const { sync } = useSyncMedia()
   const { t } = useI18n()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const syncedAvatarIds = new Set<string>()
   const searchedContacts = ref<Contact[]>([])
   const searchHasMore = ref(false)
@@ -43,6 +44,8 @@ export const useContactSearch = () => {
   }
 
   const fetchContacts = (value: string, offset = 0) => {
+    if (!isSocketOnlineActionAvailable.value) return
+
     const payload: EventSearchContact = {
       value,
       offset
@@ -64,12 +67,22 @@ export const useContactSearch = () => {
     }
 
     resetSearchResults()
+
+    if (!isSocketOnlineActionAvailable.value) return
+
     isSearchLoading.value = true
     debouncedFetchContacts(value)
   }
 
   const loadMoreSearchedContacts = () => {
-    if (!searchValue.value || !searchHasMore.value || isSearchLoading.value || isSearchLoadingMore.value) return
+    const canLoadMoreSearchedContacts =
+      Boolean(searchValue.value) &&
+      searchHasMore.value &&
+      !isSearchLoading.value &&
+      !isSearchLoadingMore.value &&
+      isSocketOnlineActionAvailable.value
+
+    if (!canLoadMoreSearchedContacts) return
 
     isSearchLoadingMore.value = true
     fetchContacts(searchValue.value, searchNextOffset.value)
@@ -124,6 +137,12 @@ export const useContactSearch = () => {
   socket.on('get-searched-contact', handleSearchedContacts)
 
   watch(searchQuery, () => searchContacts(), { immediate: true })
+  watch(isSocketOnlineActionAvailable, (value) => {
+    if (value) return
+
+    isSearchLoading.value = false
+    isSearchLoadingMore.value = false
+  })
 
   onBeforeUnmount(() => {
     socket.off('get-searched-contact', handleSearchedContacts)

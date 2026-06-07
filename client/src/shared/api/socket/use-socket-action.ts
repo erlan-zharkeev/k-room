@@ -6,26 +6,15 @@ import type {
   SocketAckResponse
 } from 'global-shared'
 
-import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
-
 import { SOCKET_ACTION_ACK_TIMEOUT_MS } from './constants'
-import { SOCKET_I18N } from './i18n'
 import { socket } from './socket'
 import type { EmitSocketActionOptions, EmitSocketActionWithAck } from './types'
 import { useSocketAvailability } from './use-socket-availability'
+import { useSocketTransportErrorToast } from './use-socket-transport-error-toast'
 
 export const useSocketAction = () => {
-  const { t } = useI18n()
-  const toast = useAppToast()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
-
-  const showSocketTransportError = () => {
-    toast.add({
-      type: 'error',
-      title: t(TOAST_I18N.error),
-      content: t(SOCKET_I18N.transportError)
-    })
-  }
+  const { showSocketTransportErrorToast } = useSocketTransportErrorToast()
 
   const buildSocketTransportFailureResponse = <TReason extends string = string>(): SocketAckFailure<TReason> => ({
     ok: false,
@@ -40,7 +29,7 @@ export const useSocketAction = () => {
     if (!isSocketOnlineActionAvailable.value) {
       const response = buildSocketTransportFailureResponse<TReason>()
 
-      showSocketTransportError()
+      showSocketTransportErrorToast()
       options.onFailure?.(response)
       options.onSettled?.()
 
@@ -65,7 +54,7 @@ export const useSocketAction = () => {
       const response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason> =
         buildSocketTransportFailureResponse()
 
-      showSocketTransportError()
+      showSocketTransportErrorToast()
       options.onFailure?.(response)
 
       return response
