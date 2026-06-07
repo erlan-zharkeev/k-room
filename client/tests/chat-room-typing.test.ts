@@ -22,7 +22,10 @@ vi.mock('vue', async (importOriginal) => ({
 }))
 
 vi.mock('src/shared/api', () => ({
-  socket: socketMock
+  socket: socketMock,
+  useSocketAvailability: () => ({
+    isSocketOnlineActionAvailable: { value: true }
+  })
 }))
 
 vi.mock('src/entities/contact', () => ({
