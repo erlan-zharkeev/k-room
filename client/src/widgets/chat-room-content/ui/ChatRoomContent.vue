@@ -119,6 +119,10 @@ const {
   min-height: 0;
 }
 
+.chat-room-page__messages {
+  overflow: hidden;
+}
+
 .chat-room-page__call-content {
   height: 100%;
   min-height: 0;
