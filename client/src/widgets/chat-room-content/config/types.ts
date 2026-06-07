@@ -4,6 +4,7 @@ import type {
   NmorphFileCardMediaPreview,
   NmorphMediaGalleryItem
 } from '@nmorph/nmorph-ui-kit'
+import type { NmorphEmojiLocale } from '@nmorph/nmorph-ui-kit/emoji'
 import type { VirtualItem } from '@tanstack/vue-virtual'
 import type {
   AudioObject,
@@ -22,7 +23,7 @@ import type {
   RepliedMessage,
   VideoObject
 } from 'global-shared'
-import type { Component, Ref } from 'vue'
+import type { Component, ComputedRef, Ref, ShallowRef } from 'vue'
 
 import type { RoomCallRemoteStreamsByUserId } from 'src/features/room-call-session'
 import type { AudioMeterAnalyser } from 'src/shared/lib'
@@ -141,6 +142,16 @@ export interface ChatRoomFooterEmits {
 }
 
 export type ChatRoomFooterSelectEditingMessage = (messageId: string) => void
+
+export interface ChatRoomMessageEmojiPickerModel {
+  messageEmojiDropdownAnchor: Readonly<ShallowRef<HTMLElement | null>>
+  emojiPickerLocale: ShallowRef<NmorphEmojiLocale | undefined>
+  emojiPickerQuickList: ComputedRef<string[]>
+  isMessageEmojiDropdownOpen: Ref<boolean>
+  closeMessageEmojiDropdown: () => void
+  selectMessageEmoji: (emoji: string) => void
+  toggleMessageEmojiDropdown: () => void
+}
 
 export interface MessageAttachmentUploadExpose {
   inputDOMRef?: HTMLInputElement
