@@ -14,7 +14,6 @@ import MessageBody from './MessageBody.vue'
 const props = defineProps<ChatRoomMessagesProps>()
 const emit = defineEmits<ChatRoomMessagesEmits>()
 const {
-  hasLoadedMessages,
   hasMessages,
   isLoading,
   measureMessageListItemElement,
@@ -22,12 +21,22 @@ const {
   messageVirtualListItems,
   saveMessagesScrollState,
   scrollMessagesToBottom,
+  showInitialMessagesLoading,
   showBackToBottomButton
 } = useChatRoomMessages(props, () => emit('target-message-scrolled'))
 </script>
 
 <template>
   <div class="chat-room-messages">
+    <div v-if="isLoading" class="chat-room-messages__loading-progress">
+      <NmorphProgress
+        class="chat-room-messages__loading-progress-line"
+        :percentage="MESSAGE_LOADING_PROGRESS_PERCENTAGE"
+        :height="4"
+        :value-right-side="false"
+        indeterminate
+      />
+    </div>
     <NmorphScroll
       ref="messagesScroll"
       class="chat-room-messages__scroll"
@@ -61,17 +70,8 @@ const {
         </div>
       </div>
       <div v-if="hasMessages" ref="messagesBottom" class="chat-room-messages__bottom" />
-      <div v-if="isLoading && !hasLoadedMessages" class="chat-room-messages__empty">
-        <div class="chat-room-messages__loading">
-          <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.loadingMessages)" />
-          <NmorphProgress
-            class="chat-room-messages__loading-progress"
-            :percentage="MESSAGE_LOADING_PROGRESS_PERCENTAGE"
-            :height="4"
-            :value-right-side="false"
-            indeterminate
-          />
-        </div>
+      <div v-if="showInitialMessagesLoading" class="chat-room-messages__empty">
+        <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.loadingMessages)" />
       </div>
       <div v-else-if="!hasMessages" class="chat-room-messages__empty">
         <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noMessages)" />
@@ -120,9 +120,18 @@ const {
   gap: 8px;
 }
 
-.chat-room-messages__loading {
-  display: grid;
-  gap: 8px;
+.chat-room-messages__loading-progress {
+  position: absolute;
+  z-index: 2;
+  top: -8px;
+  right: -8px;
+  left: -8px;
+
+  animation: chat-room-messages-loading-progress-glow 1.6s ease-in-out infinite;
+}
+
+.chat-room-messages__loading-progress-line {
+  width: 100%;
 }
 
 .chat-room-messages__virtual {
@@ -145,5 +154,18 @@ const {
 
 .chat-room-messages__message--self {
   justify-content: flex-end;
+}
+
+@keyframes chat-room-messages-loading-progress-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px color-mix(in srgb, var(--nmorph-accent-color) 42%, transparent));
+    opacity: 0.86;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 7px color-mix(in srgb, var(--nmorph-accent-color) 78%, transparent));
+    opacity: 1;
+  }
 }
 </style>

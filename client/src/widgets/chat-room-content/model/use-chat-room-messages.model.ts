@@ -31,15 +31,15 @@ export const useChatRoomMessages = (
     loadMessagesAfterRange,
     loadMessagesAround,
     loadMessagesBeforeRange,
-    reconcileLoadedMessageRanges
+    reconcileLoadedMessageRanges,
+    restoreCachedLoadedMessageRanges
   } = useLoadRoomMessages(room)
 
   const { displayedLastMessageId, hasMessages, messageList } = useChatRoomMessageList(room, loadedMessageRanges)
 
   const { clearPendingReadMessageIds, markVisibleMessagesAsRead } = useChatRoomMessageReadStatus(room, messageList)
   const hasCachedRoomMessages = computed(() => room.value.messages.some((messageId) => messageById.value.has(messageId)))
-  const showInitialMessagesLoading = computed(() => hasMessages.value && isLoading.value && !hasCachedRoomMessages.value)
-  const showMessagesLoadingProgress = computed(() => isLoading.value)
+  const showInitialMessagesLoading = computed(() => hasMessages.value && !hasCachedRoomMessages.value)
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
   const {
     getMessagesScrollElement,
@@ -147,6 +147,7 @@ export const useChatRoomMessages = (
   )
 
   const loadInitialMessages = async (roomId: string, previousRoomId: string | undefined) => {
+    restoreCachedLoadedMessageRanges(room.value)
     clearPendingReadMessageIds()
     suspendTargetNavigation()
 
@@ -172,9 +173,14 @@ export const useChatRoomMessages = (
 
   watch(isSocketOnlineActionAvailable, async (isOnline) => {
     const hasRoomMessages = room.value.messages.length > 0
-    const shouldLoadInitialMessages = isOnline && hasRoomMessages && !hasLoadedMessages.value
+    const shouldLoadMessages = isOnline && hasRoomMessages && !isLoading.value
 
-    if (!shouldLoadInitialMessages) return
+    if (!shouldLoadMessages) return
+
+    if (hasLoadedMessages.value && !targetMessageId.value) {
+      await loadLatestMessages()
+      return
+    }
 
     await loadInitialMessages(room.value.id, undefined)
   })
@@ -207,7 +213,6 @@ export const useChatRoomMessages = (
   )
 
   return {
-    hasLoadedMessages,
     hasMessages,
     isLoading,
     measureMessageListItemElement,
@@ -216,7 +221,6 @@ export const useChatRoomMessages = (
     saveMessagesScrollState,
     scrollMessagesToBottom,
     showInitialMessagesLoading,
-    showMessagesLoadingProgress,
     showBackToBottomButton
   }
 }

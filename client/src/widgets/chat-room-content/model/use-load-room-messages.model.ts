@@ -124,7 +124,7 @@ const reconcileLoadedMessageRanges = (roomId: string, previousMessageIds: string
 }
 
 export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
-  const { bulkPut } = useMessage()
+  const { bulkPut, messageById } = useMessage()
   const { emitSocketAction } = useSocketAction()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const roomId = computed(() => room?.value.id ?? '')
@@ -135,6 +135,18 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
   const saveLoadedRoomMessages = async (targetRoom: ChatRoom, payload: EventRoomMessagesLoaded) => {
     await bulkPut(payload.messages)
     updateLoadedMessageRanges(targetRoom.id, resolveMessageIndexes(targetRoom, payload.messages))
+  }
+
+  const restoreCachedLoadedMessageRanges = (targetRoom: ChatRoom) => {
+    const currentRanges = selectLoadedMessageRanges(targetRoom.id)
+
+    if (currentRanges.length) return
+
+    const loadedIndexes = targetRoom.messages.flatMap((messageId, index) =>
+      messageById.value.has(messageId) ? [index] : []
+    )
+
+    loadedMessageRangesByRoomId[targetRoom.id] = createLoadedRangesFromIndexes(loadedIndexes)
   }
 
   const loadRoomMessages = async (targetRoom: ChatRoom, direction: MessageLoadDirection, anchorMessageId?: string) => {
@@ -218,6 +230,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
     loadMessagesAround,
     loadMessagesBeforeRange,
     reconcileLoadedMessageRanges,
+    restoreCachedLoadedMessageRanges,
     resetLoadedMessageRanges
   }
 }
