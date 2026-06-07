@@ -14,6 +14,7 @@ export { useSocketConnectionMonitor } from './socket/use-socket-connection-monit
 export { useSocketReconnect } from './socket/use-socket-reconnect'
 export { useSocketAction } from './socket/use-socket-action'
 export { useSocketAvailability } from './socket/use-socket-availability'
+export { useSocketTransportErrorToast } from './socket/use-socket-transport-error-toast'
 export type {
   HttpError,
   DoHttpRequest,

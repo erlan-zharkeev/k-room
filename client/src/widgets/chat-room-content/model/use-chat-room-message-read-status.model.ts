@@ -9,7 +9,7 @@ import {
 import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
-import { socket } from 'src/shared/api'
+import { socket, useSocketAvailability } from 'src/shared/api'
 
 import { MESSAGE_READ_VISIBILITY_RATIO } from '../config/constants'
 import type { MessageListItem } from '../config/types'
@@ -17,8 +17,11 @@ import type { MessageListItem } from '../config/types'
 export const useChatRoomMessageReadStatus = (room: Ref<ChatRoom>, messageList: ComputedRef<MessageListItem[]>) => {
   const pendingReadMessageIds = new Set<string>()
   const { messageById } = useMessage()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
 
   const markMessageAsRead = (messageId: string) => {
+    if (!isSocketOnlineActionAvailable.value) return
+
     const message = messageById.value.get(messageId)
 
     if (!message) return
