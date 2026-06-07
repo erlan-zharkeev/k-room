@@ -6,7 +6,7 @@ import { getRoomDisplayedLastMessageId, useChatRoom } from 'src/entities/chat-ro
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
-import { socket, useSocketAction } from 'src/shared/api'
+import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
 import { useI18n, useScreen } from 'src/shared/lib'
 
 import type { ChatRoomNavigationItem } from '../config/types'
@@ -25,6 +25,7 @@ export const useChatRoomsList = () => {
   const { getChatRoomPrivateContact } = useChatRoomContactLookup()
   const { getById } = useMessage()
   const { emitSocketAction } = useSocketAction()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { updatePinnedOrder } = useChatRoomPinnedOrder()
 
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
@@ -120,6 +121,8 @@ export const useChatRoomsList = () => {
       { pinnedChatRoomIds },
       {
         onFailure: () => {
+          if (!isSocketOnlineActionAvailable.value) return
+
           socket.emit('actualize-user-data')
         }
       }

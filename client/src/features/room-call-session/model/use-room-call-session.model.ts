@@ -8,10 +8,11 @@ import type {
 } from 'global-shared'
 
 import { useRoomCall } from 'src/entities/room-call'
-import { socket, useSocketAction } from 'src/shared/api'
+import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
 
 export const useRoomCallSession = () => {
   const { emitSocketAction } = useSocketAction()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { remove } = useRoomCall()
 
   const startRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
@@ -60,6 +61,8 @@ export const useRoomCallSession = () => {
   }
 
   const sendRoomCallSignal = (payload: EventSendRoomCallSignal) => {
+    if (!isSocketOnlineActionAvailable.value) return
+
     socket.emit('send-room-call-signal', payload)
   }
 
