@@ -19,7 +19,14 @@ const { socketTag } = useTopBarSocketStatus()
   <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
     <AppProfileBasicData :image-alt="user.nickname" :image-id="avatarId" :title="user.nickname" :name="user.nickname">
       <template #description>
-        <NmorphBadge v-if="socketTag" :value="socketTag.value" type="tag" :color="socketTag.color" size="tiny" />
+        <NmorphBadge
+          v-if="socketTag"
+          :class="{ 'top-bar__socket-badge--blinking': socketTag.isBlinking }"
+          :value="socketTag.value"
+          type="tag"
+          :color="socketTag.color"
+          size="tiny"
+        />
       </template>
     </AppProfileBasicData>
     <div class="top-bar__content-right-side">
@@ -46,5 +53,20 @@ const { socketTag } = useTopBarSocketStatus()
 .top-bar__content-right-side {
   display: flex;
   gap: 16px;
+}
+
+.top-bar__socket-badge--blinking.nmorph-badge {
+  animation: top-bar-socket-badge-blink 1s ease-in-out infinite;
+}
+
+@keyframes top-bar-socket-badge-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
 }
 </style>

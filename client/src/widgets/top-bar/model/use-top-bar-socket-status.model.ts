@@ -24,11 +24,11 @@ export const useTopBarSocketStatus = () => {
   const socketTag = computed(() => {
     switch (displayedSocketStatus.value) {
       case SOCKET_AVAILABILITY_STATUS.ONLINE:
-        return { color: 'var(--nmorph-success-color)' as const, value: t(TOP_BAR_I18N.online) }
+        return { color: 'var(--nmorph-success-color)' as const, isBlinking: false, value: t(TOP_BAR_I18N.online) }
       case SOCKET_AVAILABILITY_STATUS.RECONNECTING:
-        return { color: 'var(--nmorph-warn-color)' as const, value: t(TOP_BAR_I18N.reconnecting) }
+        return { color: 'var(--nmorph-warn-color)' as const, isBlinking: true, value: t(TOP_BAR_I18N.reconnecting) }
       case SOCKET_AVAILABILITY_STATUS.OFFLINE:
-        return { color: 'var(--nmorph-error-color)' as const, value: t(TOP_BAR_I18N.offline) }
+        return { color: 'var(--nmorph-error-color)' as const, isBlinking: false, value: t(TOP_BAR_I18N.offline) }
       default:
         return null
     }
