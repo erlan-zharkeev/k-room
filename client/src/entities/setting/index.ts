@@ -37,7 +37,9 @@ export type {
   ContentNavigationScrollTab,
   DeviceSetting,
   MessageScrollAnchorState,
+  MessageScrollBottomState,
   MessageScrollByRoom,
+  MessageScrollOffsetState,
   MessageScrollState,
   MessageScrollStoredState
 } from './config/types'

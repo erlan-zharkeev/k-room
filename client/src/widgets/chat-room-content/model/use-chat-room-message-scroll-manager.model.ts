@@ -3,14 +3,18 @@ import type { Virtualizer } from '@tanstack/vue-virtual'
 import type { ChatRoom } from 'global-shared'
 import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
 
-import { MESSAGE_SCROLL_STATE_MODE, useSettings, type MessageScrollAnchorState } from 'src/entities/setting'
+import {
+  MESSAGE_SCROLL_STATE_MODE,
+  useSettings,
+  type MessageScrollAnchorState,
+  type MessageScrollBottomState
+} from 'src/entities/setting'
 
 import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET, MESSAGE_SCROLL_LOG_REASON } from '../config/constants'
 import type { MessageListItem, MessageScrollLogReason } from '../config/types'
 import { logMessageScrollDebug } from '../lib/log-message-scroll-debug'
 import {
   buildMessageBottomScrollState,
-  buildMessageOffsetScrollState,
   findMessageScrollAnchorIndex,
   isSameMessageScrollState,
   resolveMessageScrollState,
@@ -145,7 +149,9 @@ export const useChatRoomMessageScrollManager = (
     return isInitialScrollRunning || isInitialScrollStateSaveLocked.value
   }
 
-  const buildNextMessagesScrollState = (scrollTop: number) => {
+  const buildNextMessagesScrollState = (
+    scrollTop: number
+  ): MessageScrollAnchorState | MessageScrollBottomState | null => {
     if (isMessagesScrolledNearBottom()) {
       return buildMessageBottomScrollState()
     }
@@ -154,7 +160,7 @@ export const useChatRoomMessageScrollManager = (
     const virtualizer = messageVirtualizer?.value
 
     if (!scrollElement || !virtualizer) {
-      return buildMessageOffsetScrollState(scrollTop)
+      return null
     }
 
     const anchorState = resolveVisibleMessageScrollAnchorState({
@@ -164,7 +170,7 @@ export const useChatRoomMessageScrollManager = (
       virtualItems: virtualizer.getVirtualItems()
     })
 
-    return anchorState || buildMessageOffsetScrollState(scrollTop)
+    return anchorState
   }
 
   const saveMessagesScrollTop = async (roomId: string, scrollTop: number) => {
@@ -178,6 +184,16 @@ export const useChatRoomMessageScrollManager = (
 
     const currentScrollState = settings.value.messageScrollByRoom[roomId]
     const nextScrollState = buildNextMessagesScrollState(scrollTop)
+
+    if (!nextScrollState) {
+      logMessageScrollDebug('save-scroll-state-skipped-no-anchor', {
+        ...getMessagesScrollDebugPayload(),
+        currentScrollState,
+        targetRoomId: roomId
+      })
+      return
+    }
+
     const hasSameScrollState = isSameMessageScrollState(currentScrollState, nextScrollState)
 
     if (hasSameScrollState) {
