@@ -23,9 +23,9 @@ export const AUTH_LAYOUT_LENS_GHOST_COUNT = 4
 
 export const AUTH_LAYOUT_VOICE_WAVE_BAR_ITEMS = [0, 1, 2, 3, 4, 5, 6, 7] as const
 
-export const AUTH_LAYOUT_SIGNAL_LEFT_PERCENT_RANGE = [6, 94] as const
+export const AUTH_LAYOUT_SIGNAL_POSITION_PERCENT_RANGE = [0, 100] as const
 
-export const AUTH_LAYOUT_SIGNAL_TOP_PERCENT_RANGE = [12, 88] as const
+export const AUTH_LAYOUT_SIGNAL_POSITION_JITTER_RATIO_RANGE = [-0.34, 0.34] as const
 
 export const AUTH_LAYOUT_SIGNAL_WAVE_SIZE_PX_RANGE = [180, 520] as const
 
@@ -41,10 +41,6 @@ export const AUTH_LAYOUT_SIGNAL_LINK_DELAY_SECONDS_RANGE = [-4.8, 0] as const
 
 export const AUTH_LAYOUT_SIGNAL_LINK_DURATION_SECONDS_RANGE = [4.2, 6.8] as const
 
-export const AUTH_LAYOUT_VOICE_WAVE_LEFT_PERCENT_RANGE = [12, 88] as const
-
-export const AUTH_LAYOUT_VOICE_WAVE_TOP_PERCENT_RANGE = [16, 84] as const
-
 export const AUTH_LAYOUT_VOICE_WAVE_WIDTH_PX_RANGE = [96, 172] as const
 
 export const AUTH_LAYOUT_VOICE_WAVE_APPEAR_DELAY_SECONDS_RANGE = [-8, 0] as const
@@ -54,10 +50,6 @@ export const AUTH_LAYOUT_VOICE_WAVE_APPEAR_DURATION_SECONDS_RANGE = [5.4, 9.2] a
 export const AUTH_LAYOUT_VOICE_WAVE_BAR_DELAY_SECONDS_RANGE = [-1.4, 0] as const
 
 export const AUTH_LAYOUT_VOICE_WAVE_BAR_DURATION_SECONDS_RANGE = [1.45, 2.25] as const
-
-export const AUTH_LAYOUT_LENS_GHOST_LEFT_PERCENT_RANGE = [8, 92] as const
-
-export const AUTH_LAYOUT_LENS_GHOST_TOP_PERCENT_RANGE = [10, 90] as const
 
 export const AUTH_LAYOUT_LENS_GHOST_SIZE_PX_RANGE = [44, 96] as const
 
