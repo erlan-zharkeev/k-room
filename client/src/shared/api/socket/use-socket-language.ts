@@ -11,5 +11,8 @@ export const setSocketLanguage = (language: AppLanguage) => {
 
 export const updateSocketLanguage = (language: AppLanguage) => {
   setSocketLanguage(language)
+
+  if (!socket.connected) return
+
   socket.emit('update-language', { language })
 }

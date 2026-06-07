@@ -5,7 +5,7 @@ import { computed, type Ref, ref, toRef, watch } from 'vue'
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
-import { socket, useSocketAvailability } from 'src/shared/api'
+import { socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
@@ -22,6 +22,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const { put } = useMessage()
   const { user } = useUser()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
+  const { showSocketTransportErrorToast } = useSocketTransportErrorToast()
   const { getRoomInterlocutor, getUsersByIds } = useChatRoomUserLookup()
   const selectedMessageForwardRoomIds = ref<string[]>([])
   const messageForwardSearchQuery = ref('')
@@ -57,7 +58,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const canSelectMessageForwardRoom = computed(() => {
     const hasSelectedMessageForwardRoom = Boolean(selectedMessageForwardRoomIds.value[0])
 
-    return hasSelectedMessageForwardRoom && !isForwardingMessage.value && isSocketOnlineActionAvailable.value
+    return hasSelectedMessageForwardRoom && !isForwardingMessage.value
   })
 
   const resetMessageForwardDialog = () => {
@@ -87,10 +88,14 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const selectMessageForwardRoom = async () => {
     const roomId = selectedMessageForwardRoomIds.value[0]
     const { id: authorId, nickname: authorNickname } = user.value
-    const isForwardBlockedByConnection = !isSocketOnlineActionAvailable.value
-    const isForwardBlocked = isForwardingMessage.value || isForwardBlockedByConnection
+    const isForwardUnavailable = !roomId || !authorId || isForwardingMessage.value
 
-    if (!roomId || !authorId || isForwardBlocked) return
+    if (isForwardUnavailable) return
+
+    if (!isSocketOnlineActionAvailable.value) {
+      showSocketTransportErrorToast()
+      return
+    }
 
     const repliedMessage = buildRepliedMessage(
       forwardedMessage.value,
