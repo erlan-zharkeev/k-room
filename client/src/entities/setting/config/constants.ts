@@ -6,6 +6,11 @@ import { DEFAULT_LOCALIZATION_SETTINGS } from './localization.constants'
 import { DEFAULT_NOTIFICATION_SETTINGS } from './notification.constants'
 import type { DeviceSetting } from './types'
 
+export const MESSAGE_SCROLL_STATE_MODE = {
+  BOTTOM: 'bottom',
+  OFFSET: 'offset'
+} as const
+
 export const DEFAULT_SETTINGS: DeviceSetting = {
   contentTab: 'contacts',
   chatRoomId: '',

@@ -17,7 +17,7 @@ export {
   LIGHT_COLOR_SCHEMA,
   SYSTEM_THEME_QUERY
 } from './config/appearance.constants'
-export { DEFAULT_SETTINGS } from './config/constants'
+export { DEFAULT_SETTINGS, MESSAGE_SCROLL_STATE_MODE } from './config/constants'
 export { DEFAULT_IO_DEVICES_SETTINGS } from './config/io-devices.constants'
 export { DEFAULT_LOCALIZATION_SETTINGS } from './config/localization.constants'
 export { DEFAULT_NOTIFICATION_GROUP_SETTINGS, DEFAULT_NOTIFICATION_SETTINGS } from './config/notification.constants'
@@ -32,7 +32,14 @@ export type {
   Theme
 } from './config/appearance.types'
 export type { ContentTab } from './config/content.types'
-export type { ContentNavigationScrollByTab, ContentNavigationScrollTab, DeviceSetting } from './config/types'
+export type {
+  ContentNavigationScrollByTab,
+  ContentNavigationScrollTab,
+  DeviceSetting,
+  MessageScrollByRoom,
+  MessageScrollState,
+  MessageScrollStoredState
+} from './config/types'
 export type { HiddenNotification } from './config/hidden-notification.types'
 export type { IoDevicesSettings } from './config/io-devices.types'
 export type { DeviceLocalizationSettings } from './config/localization.types'

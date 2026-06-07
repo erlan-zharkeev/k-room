@@ -68,6 +68,7 @@ export const MESSAGE_SCROLL_LOG_REASON = {
   DISPLAYED_LAST_MESSAGE_CHANGED: 'displayed-last-message-changed',
   INITIAL_EMPTY_LIST_FILLED: 'initial-empty-list-filled',
   INITIAL_TO_BOTTOM: 'initial-to-bottom',
+  RESTORE_TO_BOTTOM: 'restore-to-bottom',
   USER_BACK_TO_BOTTOM: 'user-back-to-bottom'
 } as const
 export const MESSAGE_REACTION_VISIBLE_GROUP_LIMIT = 3

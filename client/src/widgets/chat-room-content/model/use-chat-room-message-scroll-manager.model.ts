@@ -3,10 +3,16 @@ import type { Virtualizer } from '@tanstack/vue-virtual'
 import type { ChatRoom } from 'global-shared'
 import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
 
-import { useSettings } from 'src/entities/setting'
+import { MESSAGE_SCROLL_STATE_MODE, useSettings } from 'src/entities/setting'
 
 import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET, MESSAGE_SCROLL_LOG_REASON } from '../config/constants'
 import { logMessageScrollDebug } from '../lib/log-message-scroll-debug'
+import {
+  buildMessageBottomScrollState,
+  buildMessageOffsetScrollState,
+  isSameMessageScrollState,
+  resolveMessageScrollState
+} from '../lib/message-scroll-state'
 
 export const useChatRoomMessageScrollManager = (
   room: Ref<ChatRoom>,
@@ -110,7 +116,8 @@ export const useChatRoomMessageScrollManager = (
     })
   }
 
-  const hasSavedMessagesScrollState = (roomId: string) => roomId in settings.value.messageScrollByRoom
+  const hasSavedMessagesScrollState = (roomId: string) =>
+    Boolean(resolveMessageScrollState(settings.value.messageScrollByRoom[roomId]))
 
   const saveMessagesScrollTop = async (roomId: string, scrollTop: number) => {
     if (!roomId) {
@@ -121,15 +128,16 @@ export const useChatRoomMessageScrollManager = (
       return
     }
 
-    const currentScrollTop = settings.value.messageScrollByRoom[roomId]
-    const nextScrollTop = Math.trunc(scrollTop)
-    const hasSameScrollTop = currentScrollTop === nextScrollTop
+    const currentScrollState = settings.value.messageScrollByRoom[roomId]
+    const isNearBottom = isMessagesScrolledNearBottom()
+    const nextScrollState = isNearBottom ? buildMessageBottomScrollState() : buildMessageOffsetScrollState(scrollTop)
+    const hasSameScrollState = isSameMessageScrollState(currentScrollState, nextScrollState)
 
-    if (hasSameScrollTop) {
+    if (hasSameScrollState) {
       logMessageScrollDebug('save-scroll-top-skipped-same-value', {
         ...getMessagesScrollDebugPayload(),
-        currentScrollTop,
-        nextScrollTop,
+        currentScrollState,
+        nextScrollState,
         targetRoomId: roomId
       })
       return
@@ -137,11 +145,11 @@ export const useChatRoomMessageScrollManager = (
 
     logMessageScrollDebug('save-scroll-top-commit', {
       ...getMessagesScrollDebugPayload(),
-      currentScrollTop,
-      nextScrollTop,
+      currentScrollState,
+      nextScrollState,
       targetRoomId: roomId
     })
-    await setByPath(`messageScrollByRoom.${roomId}`, nextScrollTop)
+    await setByPath(`messageScrollByRoom.${roomId}`, nextScrollState)
   }
 
   const saveMessagesScrollState = ({ y }: NmorphCoordsType) => {
@@ -179,6 +187,33 @@ export const useChatRoomMessageScrollManager = (
       return false
     }
 
+    await nextTick()
+
+    const scrollState = resolveMessageScrollState(settings.value.messageScrollByRoom[roomId])
+
+    if (!scrollState) {
+      logMessageScrollDebug('restore-scroll-state-skipped-invalid-saved-state', {
+        ...getMessagesScrollDebugPayload(),
+        targetRoomId: roomId
+      })
+      return false
+    }
+
+    if (scrollState.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) {
+      logMessageScrollDebug('restore-scroll-state-before-scroll-to-bottom', {
+        ...getMessagesScrollDebugPayload(),
+        scrollState,
+        targetRoomId: roomId
+      })
+      await scrollMessagesToBottom(MESSAGE_SCROLL_LOG_REASON.RESTORE_TO_BOTTOM)
+      logMessageScrollDebug('restore-scroll-state-after-scroll-to-bottom', {
+        ...getMessagesScrollDebugPayload(),
+        scrollState,
+        targetRoomId: roomId
+      })
+      return true
+    }
+
     const virtualizer = messageVirtualizer?.value
 
     if (!virtualizer) {
@@ -189,19 +224,15 @@ export const useChatRoomMessageScrollManager = (
       return false
     }
 
-    await nextTick()
-
-    const scrollTop = settings.value.messageScrollByRoom[roomId]
-
     logMessageScrollDebug('restore-scroll-state-before-scroll-to-offset', {
       ...getMessagesScrollDebugPayload(),
-      scrollTop,
+      scrollState,
       targetRoomId: roomId
     })
-    virtualizer.scrollToOffset(scrollTop, { behavior: 'auto' })
+    virtualizer.scrollToOffset(scrollState.scrollTop, { behavior: 'auto' })
     logMessageScrollDebug('restore-scroll-state-after-scroll-to-offset', {
       ...getMessagesScrollDebugPayload(),
-      scrollTop,
+      scrollState,
       targetRoomId: roomId
     })
 
