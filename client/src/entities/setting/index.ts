@@ -36,6 +36,7 @@ export type {
   ContentNavigationScrollByTab,
   ContentNavigationScrollTab,
   DeviceSetting,
+  MessageScrollAnchorState,
   MessageScrollByRoom,
   MessageScrollState,
   MessageScrollStoredState

@@ -3,21 +3,25 @@ import type { Virtualizer } from '@tanstack/vue-virtual'
 import type { ChatRoom } from 'global-shared'
 import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
 
-import { MESSAGE_SCROLL_STATE_MODE, useSettings } from 'src/entities/setting'
+import { MESSAGE_SCROLL_STATE_MODE, useSettings, type MessageScrollAnchorState } from 'src/entities/setting'
 
 import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET, MESSAGE_SCROLL_LOG_REASON } from '../config/constants'
+import type { MessageListItem, MessageScrollLogReason } from '../config/types'
 import { logMessageScrollDebug } from '../lib/log-message-scroll-debug'
 import {
   buildMessageBottomScrollState,
   buildMessageOffsetScrollState,
+  findMessageScrollAnchorIndex,
   isSameMessageScrollState,
-  resolveMessageScrollState
+  resolveMessageScrollState,
+  resolveVisibleMessageScrollAnchorState
 } from '../lib/message-scroll-state'
 import { waitMessageScrollRestoreStabilization } from '../lib/wait-message-scroll-restore-stabilization'
 
 export const useChatRoomMessageScrollManager = (
   room: Ref<ChatRoom>,
   displayedLastMessageId: ComputedRef<string | null>,
+  messageList: ComputedRef<MessageListItem[]>,
   messageItemsQuantity: ComputedRef<number>
 ) => {
   const { settings, setByPath } = useSettings()
@@ -94,7 +98,9 @@ export const useChatRoomMessageScrollManager = (
     }
   }
 
-  const scrollMessagesToBottom = async (reason = MESSAGE_SCROLL_LOG_REASON.USER_BACK_TO_BOTTOM) => {
+  const scrollMessagesToBottom = async (
+    reason: MessageScrollLogReason = MESSAGE_SCROLL_LOG_REASON.USER_BACK_TO_BOTTOM
+  ) => {
     logMessageScrollDebug('scroll-to-bottom-requested', {
       ...getMessagesScrollDebugPayload(),
       reason
@@ -125,10 +131,40 @@ export const useChatRoomMessageScrollManager = (
   const hasSavedMessagesScrollState = (roomId: string) =>
     Boolean(resolveMessageScrollState(settings.value.messageScrollByRoom[roomId]))
 
+  const getSavedMessagesScrollAnchorMessageId = (roomId = room.value.id) => {
+    const scrollState = resolveMessageScrollState(settings.value.messageScrollByRoom[roomId])
+
+    if (scrollState?.mode !== MESSAGE_SCROLL_STATE_MODE.ANCHOR) return null
+
+    return scrollState.messageId
+  }
+
   const isMessagesScrollStateSaveLocked = () => {
     const isInitialScrollRunning = !hasInitialScrollSettled.value
 
     return isInitialScrollRunning || isInitialScrollStateSaveLocked.value
+  }
+
+  const buildNextMessagesScrollState = (scrollTop: number) => {
+    if (isMessagesScrolledNearBottom()) {
+      return buildMessageBottomScrollState()
+    }
+
+    const scrollElement = getMessagesScrollElement()
+    const virtualizer = messageVirtualizer?.value
+
+    if (!scrollElement || !virtualizer) {
+      return buildMessageOffsetScrollState(scrollTop)
+    }
+
+    const anchorState = resolveVisibleMessageScrollAnchorState({
+      clientHeight: scrollElement.clientHeight,
+      messageList: messageList.value,
+      scrollTop,
+      virtualItems: virtualizer.getVirtualItems()
+    })
+
+    return anchorState || buildMessageOffsetScrollState(scrollTop)
   }
 
   const saveMessagesScrollTop = async (roomId: string, scrollTop: number) => {
@@ -141,8 +177,7 @@ export const useChatRoomMessageScrollManager = (
     }
 
     const currentScrollState = settings.value.messageScrollByRoom[roomId]
-    const isNearBottom = isMessagesScrolledNearBottom()
-    const nextScrollState = isNearBottom ? buildMessageBottomScrollState() : buildMessageOffsetScrollState(scrollTop)
+    const nextScrollState = buildNextMessagesScrollState(scrollTop)
     const hasSameScrollState = isSameMessageScrollState(currentScrollState, nextScrollState)
 
     if (hasSameScrollState) {
@@ -206,6 +241,65 @@ export const useChatRoomMessageScrollManager = (
     void saveMessagesScrollTop(roomId, scrollElement.scrollTop)
   }
 
+  const restoreMessagesAnchorScrollState = async (
+    scrollState: MessageScrollAnchorState,
+    roomId: string,
+    virtualizer: Virtualizer<HTMLElement, HTMLElement>
+  ) => {
+    const anchorIndex = findMessageScrollAnchorIndex(messageList.value, scrollState.messageId)
+
+    if (anchorIndex === -1) {
+      logMessageScrollDebug('restore-scroll-state-skipped-anchor-missing', {
+        ...getMessagesScrollDebugPayload(),
+        scrollState,
+        targetRoomId: roomId
+      })
+      return false
+    }
+
+    logMessageScrollDebug('restore-scroll-state-before-scroll-to-anchor-index', {
+      ...getMessagesScrollDebugPayload(),
+      anchorIndex,
+      scrollState,
+      targetRoomId: roomId
+    })
+    virtualizer.scrollToIndex(anchorIndex, { align: 'start', behavior: 'auto' })
+    await nextTick()
+    await waitMessageScrollRestoreStabilization()
+
+    const anchorVirtualItem = virtualizer.getVirtualItems().find(({ index }) => index === anchorIndex)
+
+    if (!anchorVirtualItem) {
+      logMessageScrollDebug('restore-scroll-state-skipped-anchor-not-virtualized', {
+        ...getMessagesScrollDebugPayload(),
+        anchorIndex,
+        scrollState,
+        targetRoomId: roomId
+      })
+      return false
+    }
+
+    const scrollTop = anchorVirtualItem.start + scrollState.offset
+
+    logMessageScrollDebug('restore-scroll-state-before-scroll-to-anchor-offset', {
+      ...getMessagesScrollDebugPayload(),
+      anchorIndex,
+      scrollState,
+      scrollTop,
+      targetRoomId: roomId
+    })
+    virtualizer.scrollToOffset(scrollTop, { behavior: 'auto' })
+    logMessageScrollDebug('restore-scroll-state-after-scroll-to-anchor-offset', {
+      ...getMessagesScrollDebugPayload(),
+      anchorIndex,
+      scrollState,
+      scrollTop,
+      targetRoomId: roomId
+    })
+
+    return true
+  }
+
   const restoreMessagesScrollState = async (roomId = room.value.id) => {
     if (!hasSavedMessagesScrollState(roomId)) {
       logMessageScrollDebug('restore-scroll-state-skipped-no-saved-state', {
@@ -250,6 +344,10 @@ export const useChatRoomMessageScrollManager = (
         targetRoomId: roomId
       })
       return false
+    }
+
+    if (scrollState.mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR) {
+      return restoreMessagesAnchorScrollState(scrollState, roomId, virtualizer)
     }
 
     logMessageScrollDebug('restore-scroll-state-before-scroll-to-offset', {
@@ -383,6 +481,7 @@ export const useChatRoomMessageScrollManager = (
 
   return {
     getMessagesScrollElement,
+    getSavedMessagesScrollAnchorMessageId,
     runInitialMessagesScroll,
     saveMessagesScrollState,
     scrollMessagesToBottom,

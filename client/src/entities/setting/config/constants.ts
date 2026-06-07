@@ -7,6 +7,7 @@ import { DEFAULT_NOTIFICATION_SETTINGS } from './notification.constants'
 import type { DeviceSetting } from './types'
 
 export const MESSAGE_SCROLL_STATE_MODE = {
+  ANCHOR: 'anchor',
   BOTTOM: 'bottom',
   OFFSET: 'offset'
 } as const

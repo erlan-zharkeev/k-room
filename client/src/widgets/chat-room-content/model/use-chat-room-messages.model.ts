@@ -42,6 +42,7 @@ export const useChatRoomMessages = (
   const showInitialMessagesLoading = computed(() => hasMessages.value && !hasCachedRoomMessages.value)
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
   const {
+    getSavedMessagesScrollAnchorMessageId,
     getMessagesScrollElement,
     runInitialMessagesScroll,
     saveMessagesScrollState,
@@ -49,7 +50,7 @@ export const useChatRoomMessages = (
     setMessageVirtualizer,
     showBackToBottomButton,
     updateBackToBottomButtonVisibility
-  } = useChatRoomMessageScrollManager(room, displayedLastMessageId, messageItemsQuantity)
+  } = useChatRoomMessageScrollManager(room, displayedLastMessageId, messageList, messageItemsQuantity)
   let preserveMessagesScrollPosition = (action: () => Promise<void>) => action()
 
   const findVisibleMessageItem = (virtualizer: Virtualizer<HTMLElement, HTMLElement>, edge: 'start' | 'end') => {
@@ -152,7 +153,16 @@ export const useChatRoomMessages = (
     suspendTargetNavigation()
 
     try {
-      await runInitialMessagesScroll(roomId, previousRoomId, loadLatestMessages)
+      await runInitialMessagesScroll(roomId, previousRoomId, async () => {
+        const anchorMessageId = getSavedMessagesScrollAnchorMessageId(roomId)
+
+        if (anchorMessageId) {
+          await loadMessagesAround(anchorMessageId)
+          return
+        }
+
+        await loadLatestMessages()
+      })
     } finally {
       const isSameRoom = room.value.id === roomId
 
