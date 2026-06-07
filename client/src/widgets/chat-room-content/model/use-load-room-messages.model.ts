@@ -8,7 +8,7 @@ import {
 import { computed, reactive, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
-import { useSocketAction } from 'src/shared/api'
+import { useSocketAction, useSocketAvailability } from 'src/shared/api'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 import type { MessageLoadedRange } from '../config/types'
@@ -126,6 +126,7 @@ const reconcileLoadedMessageRanges = (roomId: string, previousMessageIds: string
 export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
   const { bulkPut } = useMessage()
   const { emitSocketAction } = useSocketAction()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const roomId = computed(() => room?.value.id ?? '')
   const loadedMessageRanges = computed(() => selectLoadedMessageRanges(roomId.value))
   const isLoading = computed(() => (roomId.value ? isRoomMessagesLoading(roomId.value) : false))
@@ -140,6 +141,8 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
     const loadKey = createLoadKey(targetRoom.id, direction, anchorMessageId)
 
     if (loadingRoomMessageRanges.has(loadKey)) return
+
+    if (!isSocketOnlineActionAvailable.value) return
 
     const payload: EventLoadRoomMessages = {
       roomId: targetRoom.id,

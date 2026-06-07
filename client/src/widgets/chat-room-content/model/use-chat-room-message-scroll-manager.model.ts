@@ -5,7 +5,8 @@ import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef
 
 import { useSettings } from 'src/entities/setting'
 
-import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET } from '../config/constants'
+import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET, MESSAGE_SCROLL_LOG_REASON } from '../config/constants'
+import { logMessageScrollDebug } from '../lib/log-message-scroll-debug'
 
 export const useChatRoomMessageScrollManager = (
   room: Ref<ChatRoom>,
@@ -25,6 +26,30 @@ export const useChatRoomMessageScrollManager = (
 
   const getMessagesScrollElement = () => messagesScrollRef.value?.scrollDOMContainer ?? null
 
+  const getMessagesScrollDebugPayload = () => {
+    const scrollElement = getMessagesScrollElement()
+
+    if (!scrollElement) {
+      return {
+        hasScrollElement: false,
+        messageItemsQuantity: messageItemsQuantity.value,
+        roomId: room.value.id,
+        showBackToBottomButton: showBackToBottomButton.value
+      }
+    }
+
+    return {
+      bottomDistance: Math.max(scrollElement.scrollHeight - scrollElement.clientHeight - scrollElement.scrollTop, 0),
+      clientHeight: scrollElement.clientHeight,
+      hasScrollElement: true,
+      messageItemsQuantity: messageItemsQuantity.value,
+      roomId: room.value.id,
+      scrollHeight: scrollElement.scrollHeight,
+      scrollTop: scrollElement.scrollTop,
+      showBackToBottomButton: showBackToBottomButton.value
+    }
+  }
+
   const getMessagesBottomDistance = () => {
     const scrollElement = getMessagesScrollElement()
 
@@ -42,68 +67,162 @@ export const useChatRoomMessageScrollManager = (
   const updateBackToBottomButtonVisibility = () => {
     const distanceFromBottom = getMessagesBottomDistance()
     const hasBottomDistance = distanceFromBottom > MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET
+    const previousValue = showBackToBottomButton.value
 
     showBackToBottomButton.value = messageItemsQuantity.value > 0 && hasBottomDistance
+
+    if (previousValue !== showBackToBottomButton.value) {
+      logMessageScrollDebug('back-to-bottom-visibility-changed', {
+        ...getMessagesScrollDebugPayload(),
+        distanceFromBottom,
+        hasBottomDistance,
+        nextValue: showBackToBottomButton.value,
+        previousValue
+      })
+    }
   }
 
-  const scrollMessagesToBottom = async () => {
+  const scrollMessagesToBottom = async (reason = MESSAGE_SCROLL_LOG_REASON.USER_BACK_TO_BOTTOM) => {
+    logMessageScrollDebug('scroll-to-bottom-requested', {
+      ...getMessagesScrollDebugPayload(),
+      reason
+    })
+
     await nextTick()
 
-    if (!messageItemsQuantity.value) return
+    if (!messageItemsQuantity.value) {
+      logMessageScrollDebug('scroll-to-bottom-skipped-empty-list', {
+        ...getMessagesScrollDebugPayload(),
+        reason
+      })
+      return
+    }
 
+    logMessageScrollDebug('scroll-to-bottom-before-scroll-into-view', {
+      ...getMessagesScrollDebugPayload(),
+      reason
+    })
     messagesBottomRef.value?.scrollIntoView({ block: 'end', inline: 'nearest', behavior: 'auto' })
     showBackToBottomButton.value = false
+    logMessageScrollDebug('scroll-to-bottom-after-scroll-into-view', {
+      ...getMessagesScrollDebugPayload(),
+      reason
+    })
   }
 
   const hasSavedMessagesScrollState = (roomId: string) => roomId in settings.value.messageScrollByRoom
 
   const saveMessagesScrollTop = async (roomId: string, scrollTop: number) => {
-    if (!roomId) return
+    if (!roomId) {
+      logMessageScrollDebug('save-scroll-top-skipped-empty-room', {
+        ...getMessagesScrollDebugPayload(),
+        scrollTop
+      })
+      return
+    }
 
     const currentScrollTop = settings.value.messageScrollByRoom[roomId]
     const nextScrollTop = Math.trunc(scrollTop)
     const hasSameScrollTop = currentScrollTop === nextScrollTop
 
-    if (hasSameScrollTop) return
+    if (hasSameScrollTop) {
+      logMessageScrollDebug('save-scroll-top-skipped-same-value', {
+        ...getMessagesScrollDebugPayload(),
+        currentScrollTop,
+        nextScrollTop,
+        targetRoomId: roomId
+      })
+      return
+    }
 
+    logMessageScrollDebug('save-scroll-top-commit', {
+      ...getMessagesScrollDebugPayload(),
+      currentScrollTop,
+      nextScrollTop,
+      targetRoomId: roomId
+    })
     await setByPath(`messageScrollByRoom.${roomId}`, nextScrollTop)
   }
 
   const saveMessagesScrollState = ({ y }: NmorphCoordsType) => {
+    logMessageScrollDebug('save-scroll-state-event', {
+      ...getMessagesScrollDebugPayload(),
+      eventY: y
+    })
     void saveMessagesScrollTop(room.value.id, y)
   }
 
   const saveCurrentMessagesScrollState = (roomId = room.value.id) => {
     const scrollElement = getMessagesScrollElement()
 
-    if (!scrollElement) return
+    if (!scrollElement) {
+      logMessageScrollDebug('save-current-scroll-state-skipped-no-element', {
+        ...getMessagesScrollDebugPayload(),
+        targetRoomId: roomId
+      })
+      return
+    }
 
+    logMessageScrollDebug('save-current-scroll-state', {
+      ...getMessagesScrollDebugPayload(),
+      targetRoomId: roomId
+    })
     void saveMessagesScrollTop(roomId, scrollElement.scrollTop)
   }
 
   const restoreMessagesScrollState = async (roomId = room.value.id) => {
-    if (!hasSavedMessagesScrollState(roomId)) return false
+    if (!hasSavedMessagesScrollState(roomId)) {
+      logMessageScrollDebug('restore-scroll-state-skipped-no-saved-state', {
+        ...getMessagesScrollDebugPayload(),
+        targetRoomId: roomId
+      })
+      return false
+    }
 
     const virtualizer = messageVirtualizer?.value
 
-    if (!virtualizer) return false
+    if (!virtualizer) {
+      logMessageScrollDebug('restore-scroll-state-skipped-no-virtualizer', {
+        ...getMessagesScrollDebugPayload(),
+        targetRoomId: roomId
+      })
+      return false
+    }
 
     await nextTick()
 
     const scrollTop = settings.value.messageScrollByRoom[roomId]
 
+    logMessageScrollDebug('restore-scroll-state-before-scroll-to-offset', {
+      ...getMessagesScrollDebugPayload(),
+      scrollTop,
+      targetRoomId: roomId
+    })
     virtualizer.scrollToOffset(scrollTop, { behavior: 'auto' })
+    logMessageScrollDebug('restore-scroll-state-after-scroll-to-offset', {
+      ...getMessagesScrollDebugPayload(),
+      scrollTop,
+      targetRoomId: roomId
+    })
 
     return true
   }
 
   const scrollMessagesToInitialPosition = async (roomId: string) => {
     if (hasSavedMessagesScrollState(roomId)) {
+      logMessageScrollDebug('initial-scroll-restore-saved-state', {
+        ...getMessagesScrollDebugPayload(),
+        targetRoomId: roomId
+      })
       await restoreMessagesScrollState(roomId)
       return
     }
 
-    await scrollMessagesToBottom()
+    logMessageScrollDebug('initial-scroll-to-bottom', {
+      ...getMessagesScrollDebugPayload(),
+      targetRoomId: roomId
+    })
+    await scrollMessagesToBottom(MESSAGE_SCROLL_LOG_REASON.INITIAL_TO_BOTTOM)
   }
 
   const runInitialMessagesScroll = async (
@@ -111,6 +230,12 @@ export const useChatRoomMessageScrollManager = (
     previousRoomId: string | undefined,
     loadMessages: () => Promise<void>
   ) => {
+    logMessageScrollDebug('initial-scroll-run-started', {
+      ...getMessagesScrollDebugPayload(),
+      previousRoomId,
+      targetRoomId: roomId
+    })
+
     if (previousRoomId) {
       saveCurrentMessagesScrollState(previousRoomId)
     }
@@ -123,12 +248,32 @@ export const useChatRoomMessageScrollManager = (
       if (room.value.id === roomId) {
         await scrollMessagesToInitialPosition(roomId)
         hasInitialScrollSettled.value = true
+        logMessageScrollDebug('initial-scroll-run-settled', {
+          ...getMessagesScrollDebugPayload(),
+          targetRoomId: roomId
+        })
+      } else {
+        logMessageScrollDebug('initial-scroll-run-skipped-stale-room', {
+          ...getMessagesScrollDebugPayload(),
+          currentRoomId: room.value.id,
+          targetRoomId: roomId
+        })
       }
     }
   }
 
   watch(messageItemsQuantity, (length, previousLength) => {
+    logMessageScrollDebug('message-items-quantity-changed', {
+      ...getMessagesScrollDebugPayload(),
+      length,
+      previousLength
+    })
+
     if (length && !previousLength) {
+      logMessageScrollDebug('message-items-quantity-initial-scroll-requested', {
+        ...getMessagesScrollDebugPayload(),
+        reason: MESSAGE_SCROLL_LOG_REASON.INITIAL_EMPTY_LIST_FILLED
+      })
       void scrollMessagesToInitialPosition(room.value.id)
     }
   })
@@ -140,12 +285,26 @@ export const useChatRoomMessageScrollManager = (
     const canAutoScrollToBottom = isInitialScrollSettled && hasDisplayedLastMessageChanged
     const shouldScrollToBottom = canAutoScrollToBottom && isScrolledNearBottom
 
+    logMessageScrollDebug('displayed-last-message-watch', {
+      ...getMessagesScrollDebugPayload(),
+      canAutoScrollToBottom,
+      displayedLastMessageId,
+      hasDisplayedLastMessageChanged,
+      isInitialScrollSettled,
+      isScrolledNearBottom,
+      previousDisplayedLastMessageId,
+      shouldScrollToBottom
+    })
+
     if (shouldScrollToBottom) {
-      void scrollMessagesToBottom()
+      void scrollMessagesToBottom(MESSAGE_SCROLL_LOG_REASON.DISPLAYED_LAST_MESSAGE_CHANGED)
     }
   })
 
-  onBeforeUnmount(saveCurrentMessagesScrollState)
+  onBeforeUnmount(() => {
+    logMessageScrollDebug('before-unmount-save-current-scroll-state', getMessagesScrollDebugPayload())
+    saveCurrentMessagesScrollState()
+  })
 
   return {
     getMessagesScrollElement,

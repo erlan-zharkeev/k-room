@@ -2,6 +2,7 @@ import type { Virtualizer } from '@tanstack/vue-virtual'
 import { computed, toRef, watch } from 'vue'
 
 import { useMessage } from 'src/entities/message'
+import { useSocketAvailability } from 'src/shared/api'
 
 import { ROOM_MESSAGES_PRELOAD_EDGE_ITEMS } from '../config/constants'
 import type { ChatRoomMessagesProps, ChatRoomMessagesTargetMessageScrolled } from '../config/types'
@@ -20,6 +21,7 @@ export const useChatRoomMessages = (
   const room = toRef(props, 'room')
   const targetMessageId = toRef(props, 'targetMessageId')
   const { messageById } = useMessage()
+  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const {
     loadedMessageRanges,
     isLoading,
@@ -164,6 +166,15 @@ export const useChatRoomMessages = (
     },
     { immediate: true }
   )
+
+  watch(isSocketOnlineActionAvailable, async (isOnline) => {
+    const hasRoomMessages = room.value.messages.length > 0
+    const shouldLoadInitialMessages = isOnline && hasRoomMessages && !hasLoadedMessages.value
+
+    if (!shouldLoadInitialMessages) return
+
+    await loadInitialMessages(room.value.id, undefined)
+  })
 
   watch(
     () => ({

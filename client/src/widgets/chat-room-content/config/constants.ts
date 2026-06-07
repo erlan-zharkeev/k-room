@@ -63,6 +63,13 @@ export const MESSAGE_VIRTUAL_GAP = 4
 export const MESSAGE_VIRTUAL_OVERSCAN = 8
 export const MESSAGE_LOADING_PROGRESS_PERCENTAGE = 100
 export const MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET = 120
+export const MESSAGE_SCROLL_DEBUG_LOG_LABEL = '[message-scroll]'
+export const MESSAGE_SCROLL_LOG_REASON = {
+  DISPLAYED_LAST_MESSAGE_CHANGED: 'displayed-last-message-changed',
+  INITIAL_EMPTY_LIST_FILLED: 'initial-empty-list-filled',
+  INITIAL_TO_BOTTOM: 'initial-to-bottom',
+  USER_BACK_TO_BOTTOM: 'user-back-to-bottom'
+} as const
 export const MESSAGE_REACTION_VISIBLE_GROUP_LIMIT = 3
 export const MESSAGE_REACTION_VISIBLE_USER_LIMIT = 3
 export const MESSAGE_CONTEXT_MENU_WIDTH = 274
