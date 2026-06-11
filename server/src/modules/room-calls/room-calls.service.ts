@@ -231,9 +231,21 @@ export const leaveActiveRoomCallsBySocket = async (redisService: RedisService, u
   const activeRoomCalls = await readActiveRoomCallsBySocketId(redisService, socketId)
 
   await Promise.all(
-    activeRoomCalls.map((roomCall) =>
-      leaveRoomCallParticipant(redisService, roomCall, userId, socketId, ROOM_CALL_LEAVE_REASON.DISCONNECTED)
-    )
+    activeRoomCalls.map(async (roomCall) => {
+      const activeParticipants = resolveActiveRoomCallParticipants(roomCall.participants)
+      const isPrivateRoomCall = activeParticipants.length === 2
+
+      if (isPrivateRoomCall) {
+        await finishRoomCall(
+          redisService,
+          roomCall,
+          activeParticipants.map(({ userId }) => userId)
+        )
+        return
+      }
+
+      await leaveRoomCallParticipant(redisService, roomCall, userId, socketId, ROOM_CALL_LEAVE_REASON.DISCONNECTED)
+    })
   )
 }
 

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../chat-rooms/chat-rooms.types'
 
-import { leaveRoomCall } from './room-calls.service'
+import { leaveActiveRoomCallsBySocket, leaveRoomCall } from './room-calls.service'
 import type { RoomCallActiveState } from './room-calls.types'
 
 const roomCallAccessMock = vi.hoisted(() => ({
@@ -15,8 +15,18 @@ const leaveRoomCallParticipantMock = vi.hoisted(() => ({
   leaveRoomCallParticipant: vi.fn()
 }))
 
+const roomCallActiveStateMock = vi.hoisted(() => ({
+  createActiveRoomCall: vi.fn(),
+  readActiveRoomCallByRoomId: vi.fn(),
+  readActiveRoomCallsBySocketId: vi.fn(),
+  transformActiveRoomCallParticipant: vi.fn(),
+  transformActiveRoomCallToRoomCall: vi.fn(),
+  updateActiveRoomCall: vi.fn()
+}))
+
 vi.mock('./lib/assert-room-call-access', () => roomCallAccessMock)
 vi.mock('./lib/leave-room-call-participant', () => leaveRoomCallParticipantMock)
+vi.mock('./lib/room-call-active-state', () => roomCallActiveStateMock)
 
 const createRoom = (chatKind: ChatRoomCallAccessProjection['chatKind']): ChatRoomCallAccessProjection => ({
   chatKind,
@@ -103,6 +113,55 @@ describe('room-calls.service', () => {
       'socket-a',
       ROOM_CALL_LEAVE_REASON.LEFT,
       undefined
+    )
+    expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
+  })
+
+  it('finishes two-person room call when socket disconnects', async () => {
+    const redisService = {}
+    const roomCall = createRoomCall()
+
+    roomCallActiveStateMock.readActiveRoomCallsBySocketId.mockResolvedValue([roomCall])
+
+    await leaveActiveRoomCallsBySocket(redisService as never, 'user-a', 'socket-a')
+
+    expect(leaveRoomCallParticipantMock.finishRoomCall).toHaveBeenCalledWith(redisService, roomCall, [
+      'user-a',
+      'user-b'
+    ])
+    expect(leaveRoomCallParticipantMock.leaveRoomCallParticipant).not.toHaveBeenCalled()
+  })
+
+  it('keeps multi-person room call active when socket disconnects', async () => {
+    const redisService = {}
+    const roomCall: RoomCallActiveState = {
+      ...createRoomCall(),
+      participants: [
+        ...createRoomCall().participants,
+        {
+          joinedAt: 3,
+          mediaState: {
+            audio: true,
+            screen: false,
+            video: false
+          },
+          serverInstanceId: 'server-id',
+          socketId: 'socket-c',
+          userId: 'user-c'
+        }
+      ]
+    }
+
+    roomCallActiveStateMock.readActiveRoomCallsBySocketId.mockResolvedValue([roomCall])
+
+    await leaveActiveRoomCallsBySocket(redisService as never, 'user-a', 'socket-a')
+
+    expect(leaveRoomCallParticipantMock.leaveRoomCallParticipant).toHaveBeenCalledWith(
+      redisService,
+      roomCall,
+      'user-a',
+      'socket-a',
+      ROOM_CALL_LEAVE_REASON.DISCONNECTED
     )
     expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
   })

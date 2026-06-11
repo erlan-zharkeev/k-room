@@ -1,3 +1,5 @@
+import type * as Crypto from 'node:crypto'
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const cryptoMock = vi.hoisted(() => ({
@@ -11,7 +13,7 @@ const codeModelMock = vi.hoisted(() => ({
 }))
 
 vi.mock('node:crypto', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('node:crypto')>()),
+  ...(await importOriginal<typeof Crypto>()),
   randomInt: cryptoMock.randomInt,
   randomUUID: cryptoMock.randomUUID
 }))

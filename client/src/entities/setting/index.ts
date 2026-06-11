@@ -39,9 +39,7 @@ export type {
   MessageScrollAnchorState,
   MessageScrollBottomState,
   MessageScrollByRoom,
-  MessageScrollOffsetState,
-  MessageScrollState,
-  MessageScrollStoredState
+  MessageScrollState
 } from './config/types'
 export type { HiddenNotification } from './config/hidden-notification.types'
 export type { IoDevicesSettings } from './config/io-devices.types'

@@ -1,6 +1,6 @@
 import { isString } from 'global-shared'
 import { computed, watch } from 'vue'
-import { useRouter, LocationQueryValue, useRoute } from 'vue-router'
+import { useRouter, type LocationQueryValue, useRoute } from 'vue-router'
 
 import { useSettings } from 'src/entities/setting'
 import { useScreen } from 'src/shared/lib'

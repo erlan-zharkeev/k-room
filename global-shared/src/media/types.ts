@@ -56,6 +56,7 @@ export interface MediaObject {
 }
 
 export interface ImageObject extends MediaObject {
+  aspectRatio?: number
   contentType?: string
   size?: number
 }

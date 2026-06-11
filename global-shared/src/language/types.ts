@@ -1,4 +1,4 @@
-import { APP_LANGUAGE_VALUES } from './constants'
+import { type APP_LANGUAGE_VALUES } from './constants'
 
 export type AppLanguage = (typeof APP_LANGUAGE_VALUES)[number]
 

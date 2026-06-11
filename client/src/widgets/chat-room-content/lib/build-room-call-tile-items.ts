@@ -5,6 +5,10 @@ const resolveLocalRoomCallTileStream = ({
   videoStream
 }: Pick<BuildRoomCallTileItemsParams, 'screenStream' | 'videoStream'>) => screenStream || videoStream || undefined
 
+const sortPrivateRoomCallTileItems = (items: RoomCallTileItem[]) => {
+  return [...items].sort((left, right) => Number(right.isLocal) - Number(left.isLocal))
+}
+
 export const buildRoomCallTileItems = ({
   audioStream,
   currentUserId,
@@ -16,7 +20,7 @@ export const buildRoomCallTileItems = ({
   screenStream,
   videoStream
 }: BuildRoomCallTileItemsParams): RoomCallTileItem[] => {
-  return roomCall.participants
+  const items = roomCall.participants
     .filter(({ leftAt }) => !leftAt)
     .map<RoomCallTileItem>((participant) => {
       const isLocal = participant.userId === currentUserId
@@ -38,4 +42,6 @@ export const buildRoomCallTileItems = ({
         stream
       }
     })
+
+  return items.length === 2 ? sortPrivateRoomCallTileItems(items) : items
 }

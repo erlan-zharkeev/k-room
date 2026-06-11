@@ -2,8 +2,8 @@ import { createAdapter } from '@socket.io/redis-adapter'
 import { Server } from 'socket.io'
 
 import { socketAuthMiddleware } from 'src/modules/auth/auth.socket'
-import { PresenceService } from 'src/modules/presence/presence.service'
-import { RedisService } from 'src/modules/security/redis.service'
+import { type PresenceService } from 'src/modules/presence/presence.service'
+import { type RedisService } from 'src/modules/security/redis.service'
 import { errorToMessage } from 'src/shared/lib/error-to-message'
 import { setIO } from 'src/shared/lib/io'
 import { log } from 'src/shared/lib/log'
@@ -11,7 +11,7 @@ import { serverCaptureSentryException } from 'src/shared/lib/sentry'
 import type { SocketIO } from 'src/shared/types'
 
 import { SOCKET_OPTIONS } from './constants'
-import { SocketRouter } from './socket-router'
+import { type SocketRouter } from './socket-router'
 import type { SocketServer } from './types'
 
 export const initIO = async (

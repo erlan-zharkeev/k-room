@@ -69,6 +69,60 @@ describe('fixtures.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     userModelMock.db.collection.mockReturnValue({
+      find: vi.fn().mockReturnValue({
+        toArray: vi.fn().mockResolvedValue([
+          {
+            _id: '68f000000000000000000001',
+            filename: 'fixture-image.webp',
+            metadata: {
+              height: 20,
+              size: 10,
+              sha256: 'sha',
+              width: 30
+            }
+          },
+          {
+            _id: '68f000000000000000000002',
+            filename: 'fixture-image-2.webp',
+            metadata: {
+              height: 40,
+              size: 10,
+              sha256: 'sha',
+              width: 30
+            }
+          },
+          {
+            _id: '68f000000000000000000003',
+            filename: 'fixture-image-3.webp',
+            metadata: {
+              height: 30,
+              size: 10,
+              sha256: 'sha',
+              width: 30
+            }
+          },
+          {
+            _id: '68f000000000000000000004',
+            filename: 'fixture-image-4.webp',
+            metadata: {
+              height: 20,
+              size: 10,
+              sha256: 'sha',
+              width: 40
+            }
+          },
+          {
+            _id: '68f000000000000000000005',
+            filename: 'fixture-image-5.webp',
+            metadata: {
+              height: 40,
+              size: 10,
+              sha256: 'sha',
+              width: 40
+            }
+          }
+        ])
+      }),
       findOne: vi.fn().mockResolvedValue({ _id: 'existing-avatar' })
     })
     userModelMock.findById.mockResolvedValue({

@@ -56,7 +56,7 @@ const { socketTag } = useTopBarSocketStatus()
 }
 
 .top-bar__socket-badge--blinking.nmorph-badge {
-  animation: top-bar-socket-badge-blink 1s ease-in-out infinite;
+  animation: top-bar-socket-badge-blink 1.8s ease-in-out infinite;
 }
 
 @keyframes top-bar-socket-badge-blink {
@@ -66,7 +66,7 @@ const { socketTag } = useTopBarSocketStatus()
   }
 
   50% {
-    opacity: 0.35;
+    opacity: 0.7;
   }
 }
 </style>

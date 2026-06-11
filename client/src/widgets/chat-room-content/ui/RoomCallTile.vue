@@ -26,7 +26,6 @@ const props = defineProps<RoomCallTileProps>()
 const emit = defineEmits<RoomCallTileEmits>()
 const {
   avatarImageSrc,
-  hasRoomCallTileAudioActivity,
   isMediaTileVideoOff,
   isRemoteAudioMuted,
   isRemoteVideoHidden,
@@ -62,7 +61,6 @@ const {
             :text="props.item.name"
           />
           <NmorphAudioMeter
-            v-if="hasRoomCallTileAudioActivity"
             class="room-call-tile__audio-meter"
             :label="props.item.name"
             :volume-db="roomCallTileAudioVolumeDb"
@@ -71,6 +69,8 @@ const {
         </div>
         <div class="room-call-tile__states">
           <NmorphIcon
+            class="room-call-tile__state"
+            :class="{ 'room-call-tile__state--off': !props.item.mediaState.audio }"
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
             :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
             :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleAudioRoomCall)"
@@ -79,6 +79,8 @@ const {
             <NmorphIconMute v-else />
           </NmorphIcon>
           <NmorphIcon
+            class="room-call-tile__state"
+            :class="{ 'room-call-tile__state--off': !props.item.mediaState.video }"
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
             :height="ROOM_CALL_TILE_STATE_ICON_SIZE"
             :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleVideoRoomCall)"
@@ -188,6 +190,10 @@ const {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+
+.room-call-tile__state.room-call-tile__state--off {
+  --nmorph-private-icon-color: var(--nmorph-error-text-color);
 }
 
 .room-call-tile__remote-actions {

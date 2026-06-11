@@ -134,6 +134,11 @@ const {
   width: 100%;
 }
 
+.chat-room-messages__scroll,
+.chat-room-messages__scroll * {
+  overflow-anchor: none;
+}
+
 .chat-room-messages__virtual {
   display: grid;
   gap: var(--message-virtual-gap);
@@ -159,13 +164,13 @@ const {
 @keyframes chat-room-messages-loading-progress-glow {
   0%,
   100% {
-    filter: drop-shadow(0 0 2px color-mix(in srgb, var(--nmorph-accent-color) 42%, transparent));
     opacity: 0.86;
+    filter: drop-shadow(0 0 2px color-mix(in srgb, var(--nmorph-accent-color) 42%, transparent));
   }
 
   50% {
-    filter: drop-shadow(0 0 7px color-mix(in srgb, var(--nmorph-accent-color) 78%, transparent));
     opacity: 1;
+    filter: drop-shadow(0 0 7px color-mix(in srgb, var(--nmorph-accent-color) 78%, transparent));
   }
 }
 </style>

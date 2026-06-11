@@ -1,10 +1,10 @@
 import type { AudioObject, DocumentObject, ImageObject, VideoObject } from '../media/types'
 
 import {
-  MESSAGE_LINK_PREVIEW_STATUS,
-  MESSAGE_LOAD_DIRECTION,
-  MESSAGE_REACTION_UPDATE_ACTION,
-  MESSAGE_STATUS
+  type MESSAGE_LINK_PREVIEW_STATUS,
+  type MESSAGE_LOAD_DIRECTION,
+  type MESSAGE_REACTION_UPDATE_ACTION,
+  type MESSAGE_STATUS
 } from './constants'
 
 export type MessageStatus = (typeof MESSAGE_STATUS)[number]

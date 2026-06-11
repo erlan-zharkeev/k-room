@@ -13,7 +13,8 @@ import {
   type MessageLinkPreview
 } from 'global-shared'
 
-import { uploadBufferToBucket } from '../../media/media.service'
+import { buildImageAspectRatioDetails } from '../../media/lib/build-image-aspect-ratio-details'
+import { uploadBufferToBucketWithFileData } from '../../media/media.service'
 import {
   MESSAGE_LINK_PREVIEW_ALLOWED_HTML_CONTENT_TYPES,
   MESSAGE_LINK_PREVIEW_ATTRIBUTE_PATTERN,
@@ -289,11 +290,12 @@ const loadMessageLinkPreviewImage = async (imageUrl: URL) => {
 
     if (!isImageResponse) return undefined
 
-    const src = await uploadBufferToBucket(response.body, 'image')
+    const { fileData, id } = await uploadBufferToBucketWithFileData(response.body, 'image')
 
     return {
-      src,
-      name: imageUrl.hostname
+      src: id,
+      name: imageUrl.hostname,
+      ...buildImageAspectRatioDetails(fileData.metadata)
     }
   } catch {
     return undefined

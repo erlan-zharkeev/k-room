@@ -38,7 +38,9 @@ export const useChatRoomMessages = (
   const { displayedLastMessageId, hasMessages, messageList } = useChatRoomMessageList(room, loadedMessageRanges)
 
   const { clearPendingReadMessageIds, markVisibleMessagesAsRead } = useChatRoomMessageReadStatus(room, messageList)
-  const hasCachedRoomMessages = computed(() => room.value.messages.some((messageId) => messageById.value.has(messageId)))
+  const hasCachedRoomMessages = computed(() =>
+    room.value.messages.some((messageId) => messageById.value.has(messageId))
+  )
   const showInitialMessagesLoading = computed(() => hasMessages.value && !hasCachedRoomMessages.value)
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
   const {
@@ -148,12 +150,13 @@ export const useChatRoomMessages = (
   )
 
   const loadInitialMessages = async (roomId: string, previousRoomId: string | undefined) => {
-    restoreCachedLoadedMessageRanges(room.value)
     clearPendingReadMessageIds()
     suspendTargetNavigation()
 
     try {
       await runInitialMessagesScroll(roomId, previousRoomId, async () => {
+        restoreCachedLoadedMessageRanges(room.value)
+
         const anchorMessageId = getSavedMessagesScrollAnchorMessageId(roomId)
 
         if (anchorMessageId) {

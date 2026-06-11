@@ -7,7 +7,7 @@ import { SETTINGS_CONTENT_TITLE } from 'src/pages/settings'
 import { useScreen } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
-import { ContentLayoutProps } from './types'
+import { type ContentLayoutProps } from './types'
 
 const props = defineProps<ContentLayoutProps>()
 

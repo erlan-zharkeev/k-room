@@ -18,6 +18,7 @@ import type {
   StreamMediaBucketFile,
   StreamMediaFileOptions,
   UploadOptions,
+  UploadedMediaFileData,
   UploadedMediaCleanupCallback,
   UploadedMediaCleanupItem
 } from './media.types'
@@ -45,6 +46,16 @@ export const uploadBufferToBucket = async (
   bucketName: MediaBucketName,
   options?: UploadOptions
 ) => {
+  const { id } = await uploadBufferToBucketWithFileData(buffer, bucketName, options)
+
+  return id
+}
+
+export const uploadBufferToBucketWithFileData = async (
+  buffer: Buffer | ArrayBuffer,
+  bucketName: MediaBucketName,
+  options?: UploadOptions
+) => {
   try {
     const bucket = resolveRequiredMediaBucket(bucketName)
     const normalizedBuffer = buffer instanceof Buffer ? buffer : Buffer.from(new Uint8Array(buffer))
@@ -66,13 +77,18 @@ export const uploadBufferToBucket = async (
       await deleteBucketFileById(bucketName, fileIdValue)
     }
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<UploadedMediaFileData>((resolve, reject) => {
       const stream = bucket.openUploadStreamWithId(fileId, fileData.filename, {
         contentType: fileData.contentType,
         metadata: fileData.metadata
       })
 
-      stream.once('finish', () => resolve(fileIdValue))
+      stream.once('finish', () =>
+        resolve({
+          id: fileIdValue,
+          fileData
+        })
+      )
       stream.once('error', reject)
       stream.end(outputBuffer)
     })

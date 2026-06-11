@@ -1,13 +1,34 @@
-import type { ImageObject, VideoObject } from 'global-shared'
+import { isNumber, type ImageObject, type VideoObject } from 'global-shared'
 
-import { MESSAGE_MEDIA_GALLERY_ITEM_KIND } from '../config/constants'
+import {
+  MESSAGE_MEDIA_GALLERY_ITEM_KIND,
+  MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
+  MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO
+} from '../config/constants'
 import type { MessageMediaGalleryItem } from '../config/types'
+
+const buildMessageMediaGalleryItemAspectRatioDetails = (aspectRatio?: number) => {
+  const hasFiniteAspectRatio = isNumber(aspectRatio) && Number.isFinite(aspectRatio)
+
+  if (!hasFiniteAspectRatio) return {}
+
+  const hasPositiveAspectRatio = aspectRatio > 0
+
+  if (!hasPositiveAspectRatio) return {}
+
+  return {
+    aspectRatio: Math.min(
+      MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
+      Math.max(MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO, aspectRatio)
+    )
+  }
+}
 
 const buildMessageImageMediaGalleryItems = (
   images: ImageObject[],
   mediaUrlById: Map<string, string>
 ): MessageMediaGalleryItem[] =>
-  images.flatMap(({ name, size, src }) => {
+  images.flatMap(({ aspectRatio, name, size, src }) => {
     const mediaUrl = mediaUrlById.get(src)
 
     if (!mediaUrl) return []
@@ -21,7 +42,8 @@ const buildMessageImageMediaGalleryItems = (
         mediaId: src,
         name,
         size,
-        src: mediaUrl
+        src: mediaUrl,
+        ...buildMessageMediaGalleryItemAspectRatioDetails(aspectRatio)
       }
     ]
   })
