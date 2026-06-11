@@ -6,11 +6,7 @@ import { socket, useSocketAvailability } from 'src/shared/api'
 
 import { CHAT_ROOM_TYPING_IDLE_TIMEOUT_MS } from '../config/constants'
 
-const emitTypingStatus = (
-  roomId: string,
-  isTyping: boolean,
-  isSocketOnlineActionAvailable: Ref<boolean>
-) => {
+const emitTypingStatus = (roomId: string, isTyping: boolean, isSocketOnlineActionAvailable: Ref<boolean>) => {
   if (!isSocketOnlineActionAvailable.value) return
 
   const payload: EventUserTyping = {
