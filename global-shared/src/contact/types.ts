@@ -1,6 +1,6 @@
 import type { UserPreview } from '../user/types'
 
-import { CONTACT_INTERACTION } from './constants'
+import { type CONTACT_INTERACTION } from './constants'
 
 export type Interaction = (typeof CONTACT_INTERACTION)[keyof typeof CONTACT_INTERACTION]
 

@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import {
   CHAT_KIND,
   DAY_IN_MS,
+  type ImageObject,
   MEDIA_AVATAR_VALIDATION_OPTIONS,
   MESSAGE_STATUS_VALUE,
   MINUTE_IN_MS,
@@ -15,7 +16,9 @@ import countBy from 'lodash/countBy'
 import { Types, type HydratedDocument } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
+import { buildImageAspectRatioDetails } from 'src/modules/media/lib/build-image-aspect-ratio-details'
 import { uploadBufferToBucket } from 'src/modules/media/media.service'
+import type { StreamMediaFileData } from 'src/modules/media/media.types'
 import { MessageModel } from 'src/modules/messages/messages.model'
 import { createUser, isUserExist } from 'src/modules/user/lib/user-existence'
 import type { UserSchema } from 'src/modules/user/types'
@@ -195,6 +198,27 @@ const ensureFixtureMessageImagesLoaded = async () => {
   await Promise.all(FIXTURE_MESSAGE_IMAGE_FILES.map((image) => ensureMessageImageLoaded(image.id, image.path)))
 }
 
+const buildFixtureMessageImageObject = (id: string, file: StreamMediaFileData): ImageObject => ({
+  src: id,
+  name: file.filename,
+  ...buildImageAspectRatioDetails(file.metadata)
+})
+
+const loadFixtureMessageImageObjectById = async () => {
+  const imageIds = FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => new Types.ObjectId(id))
+  const files = await UserModel.db
+    .collection<StreamMediaFileData>('image.files')
+    .find({ _id: { $in: imageIds } })
+    .toArray()
+
+  return new Map(files.map((file) => [String(file._id), buildFixtureMessageImageObject(String(file._id), file)]))
+}
+
+const resolveFixtureMessageImages = (
+  imageIds: readonly string[],
+  imageObjectById: ReadonlyMap<string, ImageObject>
+): ImageObject[] => imageIds.map((id) => imageObjectById.get(id)!)
+
 const buildFixtureMessageBody = (idx: number) => {
   const subject = MESSAGE_SUBJECTS[(idx - 1) % MESSAGE_SUBJECTS.length]
   const action = MESSAGE_ACTIONS[Math.floor((idx - 1) / MESSAGE_SUBJECTS.length) % MESSAGE_ACTIONS.length]
@@ -220,7 +244,7 @@ const buildFixtureMessageReactions = (idx: number, roomNicknames: readonly strin
   })
 }
 
-const buildFixtureRepliedMessage = (prefix: string) => {
+const buildFixtureRepliedMessage = (prefix: string, imageObjectById: ReadonlyMap<string, ImageObject>) => {
   const targetAuthorNickname = 'tolik'
 
   return {
@@ -228,7 +252,10 @@ const buildFixtureRepliedMessage = (prefix: string) => {
     authorNickname: targetAuthorNickname,
     authorId: TOLIK_ID,
     body: FIXTURE_LONG_REPLIED_MESSAGE_BODY,
-    images: [...(FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[FIXTURE_REPLY_TARGET_MESSAGE_INDEX] ?? [])]
+    images: resolveFixtureMessageImages(
+      FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[FIXTURE_REPLY_TARGET_MESSAGE_INDEX] ?? [],
+      imageObjectById
+    )
   }
 }
 
@@ -236,7 +263,8 @@ const buildFixtureMessage = (
   idx: number,
   prefix: string,
   roomUserIds: readonly string[],
-  roomNicknames: readonly string[]
+  roomNicknames: readonly string[],
+  imageObjectById: ReadonlyMap<string, ImageObject>
 ) => {
   const isErlanAuthor = idx % 2 !== 0
   const authorId = isErlanAuthor ? ERLAN_ID : TOLIK_ID
@@ -250,16 +278,17 @@ const buildFixtureMessage = (
     body: buildFixtureMessageBody(idx),
     createdAt,
     reactions: buildFixtureMessageReactions(idx, roomNicknames),
-    images: [...(FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[idx] ?? [])],
+    images: resolveFixtureMessageImages(FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[idx] ?? [], imageObjectById),
     usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
-    repliedMessage: idx === FIXTURE_REPLIED_MESSAGE_INDEX ? buildFixtureRepliedMessage(prefix) : null
+    repliedMessage: idx === FIXTURE_REPLIED_MESSAGE_INDEX ? buildFixtureRepliedMessage(prefix, imageObjectById) : null
   }
 }
 
 const buildFixtureSendingMessage = (
   prefix: string,
   roomUserIds: readonly string[],
-  roomNicknames: readonly string[]
+  roomNicknames: readonly string[],
+  imageObjectById: ReadonlyMap<string, ImageObject>
 ) => {
   const createdAt =
     BASE_FIXTURE_TIMESTAMP_MS +
@@ -273,20 +302,31 @@ const buildFixtureSendingMessage = (
     body: buildFixtureMessageBody(100),
     createdAt,
     reactions: buildFixtureMessageReactions(100, roomNicknames),
-    images: FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id),
+    images: resolveFixtureMessageImages(
+      FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id),
+      imageObjectById
+    ),
     usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.SENDING })),
     repliedMessage: null
   }
 }
 
-const buildFixtureMessages = (prefix: string, roomUserIds: readonly string[], roomNicknames: readonly string[]) => [
+const buildFixtureMessages = (
+  prefix: string,
+  roomUserIds: readonly string[],
+  roomNicknames: readonly string[],
+  imageObjectById: ReadonlyMap<string, ImageObject>
+) => [
   ...Array.from({ length: FIXTURE_MESSAGE_COUNT }, (_, idx) =>
-    buildFixtureMessage(idx + 1, prefix, roomUserIds, roomNicknames)
+    buildFixtureMessage(idx + 1, prefix, roomUserIds, roomNicknames, imageObjectById)
   ),
-  buildFixtureSendingMessage(prefix, roomUserIds, roomNicknames)
+  buildFixtureSendingMessage(prefix, roomUserIds, roomNicknames, imageObjectById)
 ]
 
-const buildFrontendCoreSelfPhotoMessage = (roomUserIds: readonly string[]) => {
+const buildFrontendCoreSelfPhotoMessage = (
+  roomUserIds: readonly string[],
+  imageObjectById: ReadonlyMap<string, ImageObject>
+) => {
   const createdAt =
     BASE_FIXTURE_TIMESTAMP_MS +
     FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX * (37 * MINUTE_IN_MS) +
@@ -299,15 +339,19 @@ const buildFrontendCoreSelfPhotoMessage = (roomUserIds: readonly string[]) => {
     body: buildFixtureMessageBody(FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX),
     createdAt,
     reactions: [],
-    images: [FIXTURE_MESSAGE_IMAGE_FILES[2].id],
+    images: resolveFixtureMessageImages([FIXTURE_MESSAGE_IMAGE_FILES[2].id], imageObjectById),
     usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
     repliedMessage: null
   }
 }
 
-const buildFrontendCoreFixtureMessages = (roomUserIds: readonly string[], roomNicknames: readonly string[]) => [
-  ...buildFixtureMessages(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, roomUserIds, roomNicknames),
-  buildFrontendCoreSelfPhotoMessage(roomUserIds)
+const buildFrontendCoreFixtureMessages = (
+  roomUserIds: readonly string[],
+  roomNicknames: readonly string[],
+  imageObjectById: ReadonlyMap<string, ImageObject>
+) => [
+  ...buildFixtureMessages(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, roomUserIds, roomNicknames, imageObjectById),
+  buildFrontendCoreSelfPhotoMessage(roomUserIds, imageObjectById)
 ]
 
 const buildLongPrivateFixtureMessage = (idx: number, contactId: string, contactNickname: string) => ({
@@ -492,9 +536,10 @@ const loadDialogFixtures = async () => {
   const longPrivateFixtureContact = USER_BY_NICKNAME[LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME]
 
   await ensureFixtureMessageImagesLoaded()
+  const imageObjectById = await loadFixtureMessageImageObjectById()
   await ensureMessages(
     directRoom.id,
-    buildFixtureMessages(DIRECT_FIXTURE_MESSAGE_ID_PREFIX, [ERLAN_ID, TOLIK_ID], ['erlan', 'tolik'])
+    buildFixtureMessages(DIRECT_FIXTURE_MESSAGE_ID_PREFIX, [ERLAN_ID, TOLIK_ID], ['erlan', 'tolik'], imageObjectById)
   )
 
   if (longPrivateFixtureContact) {
@@ -512,7 +557,7 @@ const loadDialogFixtures = async () => {
   if (frontendCoreRoom) {
     await ensureMessages(
       frontendCoreRoom.room.id,
-      buildFrontendCoreFixtureMessages(frontendCoreRoom.users, frontendCoreRoom.nicknames)
+      buildFrontendCoreFixtureMessages(frontendCoreRoom.users, frontendCoreRoom.nicknames, imageObjectById)
     )
   }
 }

@@ -18,7 +18,8 @@ const userModelMock = vi.hoisted(() => ({
 }))
 
 const mediaMock = vi.hoisted(() => ({
-  uploadBufferToBucket: vi.fn()
+  uploadBufferToBucket: vi.fn(),
+  uploadBufferToBucketWithFileData: vi.fn()
 }))
 
 const presenceMock = vi.hoisted(() => ({

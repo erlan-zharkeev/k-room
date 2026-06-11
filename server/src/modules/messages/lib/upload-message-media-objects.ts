@@ -1,6 +1,7 @@
 import type { MediaBucketName, MediaObject } from 'global-shared'
 
-import { uploadBufferToBucket } from '../../media/media.service'
+import { buildImageAspectRatioDetails } from '../../media/lib/build-image-aspect-ratio-details'
+import { uploadBufferToBucketWithFileData } from '../../media/media.service'
 import type { UploadOptions } from '../../media/media.types'
 
 export const uploadMessageMediaObjects = async <Media extends MediaObject>(
@@ -15,15 +16,17 @@ export const uploadMessageMediaObjects = async <Media extends MediaObject>(
       }
 
       const fileObject = mediaObject as MediaObject & { contentType?: string }
-      const src = await uploadBufferToBucket(mediaObject.fileBuffer, bucketName, {
+      const { fileData, id } = await uploadBufferToBucketWithFileData(mediaObject.fileBuffer, bucketName, {
         ...options,
         contentType: fileObject.contentType,
         filename: mediaObject.name
       })
+      const imageAspectRatioDetails = bucketName === 'image' ? buildImageAspectRatioDetails(fileData.metadata) : {}
       const uploadedMediaObject: Media = {
         ...mediaObject,
-        src,
-        name: mediaObject.name || src
+        src: id,
+        name: mediaObject.name || id,
+        ...imageAspectRatioDetails
       }
 
       delete uploadedMediaObject.fileBuffer

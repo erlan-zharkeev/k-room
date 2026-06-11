@@ -12,7 +12,8 @@ const httpsMock = vi.hoisted(() => ({
 }))
 
 const mediaMock = vi.hoisted(() => ({
-  uploadBufferToBucket: vi.fn()
+  uploadBufferToBucket: vi.fn(),
+  uploadBufferToBucketWithFileData: vi.fn()
 }))
 
 vi.mock('node:dns/promises', () => ({
@@ -108,7 +109,18 @@ const mockHttpsResponses = (
 describe('loadMessageLinkPreview', () => {
   beforeEach(() => {
     dnsMock.lookup.mockResolvedValue([{ address: '93.184.216.34', family: 4 }])
-    mediaMock.uploadBufferToBucket.mockResolvedValue('image-id')
+    mediaMock.uploadBufferToBucketWithFileData.mockResolvedValue({
+      id: 'image-id',
+      fileData: {
+        filename: 'image-id',
+        metadata: {
+          height: 20,
+          size: 10,
+          sha256: 'sha',
+          width: 30
+        }
+      }
+    })
   })
 
   it('loads metadata and image through protected https lookup with all addresses callback', async () => {
@@ -147,14 +159,15 @@ describe('loadMessageLinkPreview', () => {
       description: 'Example description',
       image: {
         src: 'image-id',
-        name: 'example.com'
+        name: 'example.com',
+        aspectRatio: 1.5
       }
     })
     expect(lookupCallbackResults).toEqual([
       [{ address: '93.184.216.34', family: 4 }],
       [{ address: '93.184.216.34', family: 4 }]
     ])
-    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledWith(Buffer.from('image-data'), 'image')
+    expect(mediaMock.uploadBufferToBucketWithFileData).toHaveBeenCalledWith(Buffer.from('image-data'), 'image')
   })
 
   it('fails preview loading when resolved address is private', async () => {
@@ -174,6 +187,6 @@ describe('loadMessageLinkPreview', () => {
     })
 
     expect(preview.status).toBe(MESSAGE_LINK_PREVIEW_STATUS.FAILED)
-    expect(mediaMock.uploadBufferToBucket).not.toHaveBeenCalled()
+    expect(mediaMock.uploadBufferToBucketWithFileData).not.toHaveBeenCalled()
   })
 })

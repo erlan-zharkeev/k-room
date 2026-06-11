@@ -4,9 +4,7 @@ import {
   MESSAGE_SCROLL_STATE_MODE,
   type MessageScrollAnchorState,
   type MessageScrollBottomState,
-  type MessageScrollOffsetState,
-  type MessageScrollState,
-  type MessageScrollStoredState
+  type MessageScrollState
 } from 'src/entities/setting'
 
 import type { MessageListItem, ResolveVisibleMessageScrollAnchorStateParams } from '../config/types'
@@ -19,11 +17,6 @@ export const buildMessageAnchorScrollState = (messageId: string, offset: number)
   mode: MESSAGE_SCROLL_STATE_MODE.ANCHOR,
   messageId,
   offset: Math.trunc(offset)
-})
-
-export const buildMessageOffsetScrollState = (scrollTop: number): MessageScrollOffsetState => ({
-  mode: MESSAGE_SCROLL_STATE_MODE.OFFSET,
-  scrollTop: Math.trunc(scrollTop)
 })
 
 const isMessageVirtualItemVisible = (start: number, end: number, scrollTop: number, clientHeight: number) => {
@@ -61,61 +54,36 @@ export const resolveVisibleMessageScrollAnchorState = ({
   return buildMessageAnchorScrollState(item.messageId, scrollTop - virtualItem.start)
 }
 
-export const resolveMessageScrollState = (state?: MessageScrollStoredState): MessageScrollState | null => {
-  if (isNumber(state)) {
-    return buildMessageOffsetScrollState(state)
-  }
-
+export const resolveMessageScrollState = (state?: unknown): MessageScrollState | null => {
   if (!isUnknownObject(state)) return null
 
   if (state.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) {
     return buildMessageBottomScrollState()
   }
 
-  const { messageId, mode, offset, scrollTop } = state
+  const { messageId, mode, offset } = state
   const isAnchorMode = mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR
   const hasAnchorMessageId = isString(messageId)
   const hasAnchorOffset = isNumber(offset)
   const hasAnchorState = isAnchorMode && hasAnchorMessageId && hasAnchorOffset
-  const isOffsetMode = mode === MESSAGE_SCROLL_STATE_MODE.OFFSET
-  const hasScrollTop = isNumber(scrollTop)
 
   if (hasAnchorState) {
     return buildMessageAnchorScrollState(messageId, offset)
   }
 
-  if (isOffsetMode && hasScrollTop) {
-    return buildMessageOffsetScrollState(scrollTop)
-  }
-
   return null
 }
 
-export const isSameMessageScrollState = (
-  currentState: MessageScrollStoredState | undefined,
-  nextState: MessageScrollState
-) => {
+export const isSameMessageScrollState = (currentState: unknown, nextState: MessageScrollState) => {
   const resolvedCurrentState = resolveMessageScrollState(currentState)
 
   if (!resolvedCurrentState) return false
   if (resolvedCurrentState.mode !== nextState.mode) return false
   if (resolvedCurrentState.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) return true
-  if (
-    resolvedCurrentState.mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR &&
-    nextState.mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR
-  ) {
-    const hasSameMessageId = resolvedCurrentState.messageId === nextState.messageId
-    const hasSameOffset = resolvedCurrentState.offset === nextState.offset
+  if (nextState.mode !== MESSAGE_SCROLL_STATE_MODE.ANCHOR) return false
 
-    return hasSameMessageId && hasSameOffset
-  }
+  const hasSameMessageId = resolvedCurrentState.messageId === nextState.messageId
+  const hasSameOffset = resolvedCurrentState.offset === nextState.offset
 
-  if (
-    resolvedCurrentState.mode !== MESSAGE_SCROLL_STATE_MODE.OFFSET ||
-    nextState.mode !== MESSAGE_SCROLL_STATE_MODE.OFFSET
-  ) {
-    return false
-  }
-
-  return resolvedCurrentState.scrollTop === nextState.scrollTop
+  return hasSameMessageId && hasSameOffset
 }

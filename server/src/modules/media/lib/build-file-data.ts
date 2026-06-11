@@ -1,4 +1,4 @@
-import { Buffer } from 'node:buffer'
+import { type Buffer } from 'node:buffer'
 import { createHash } from 'node:crypto'
 
 import fileTypeDep from 'file-type'

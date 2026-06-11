@@ -8,7 +8,6 @@ import type { RoomCallTileAudioActivityMonitor, RoomCallTileProps } from '../con
 export const useRoomCallTile = (props: RoomCallTileProps) => {
   const isRemoteAudioMuted = ref(false)
   const isRemoteVideoHidden = ref(false)
-  const hasRoomCallTileAudioActivity = ref(false)
   const roomCallTileAudioVolumeDb = ref(Number.NEGATIVE_INFINITY)
   const avatarImageSrc = useLiveMediaUrl(() => props.item.avatarId)
   let audioActivityMonitor: RoomCallTileAudioActivityMonitor | null = null
@@ -38,7 +37,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     audioActivityMonitor.analyser.disconnect()
     audioActivityMonitor.context.close().catch((error) => log('warn', 'Failed to close room call audio context', error))
     audioActivityMonitor = null
-    hasRoomCallTileAudioActivity.value = false
     roomCallTileAudioVolumeDb.value = Number.NEGATIVE_INFINITY
   }
 
@@ -61,7 +59,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
       ...audioMeterAnalyser,
       frameId: 0
     }
-    hasRoomCallTileAudioActivity.value = true
 
     if (audioMeterAnalyser.context.state === 'suspended') {
       audioMeterAnalyser.context
@@ -129,7 +126,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
 
   return {
     avatarImageSrc,
-    hasRoomCallTileAudioActivity,
     isRemoteAudioMuted,
     isRemoteVideoHidden,
     isMediaTileVideoOff,

@@ -1,4 +1,4 @@
-import { APP_LANGUAGE, AppLanguage } from 'global-shared'
+import { APP_LANGUAGE, type AppLanguage } from 'global-shared'
 
 import type { DateTimeFormatPatternMap, DateTimeFormat } from './types'
 

@@ -45,6 +45,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   const isRoomCallFocusDisplayMode = computed(
     () => roomCallPanelDisplayMode.value === ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
   )
+  const isPrivateRoomCall = computed(() => roomCallTileItems.value.length === 2)
   const roomCallMainTileItem = computed(
     () => roomCallTileItems.value.find(({ id }) => id === selectedRoomCallTileId.value) ?? roomCallTileItems.value[0]
   )
@@ -95,11 +96,13 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
 
   const focusRoomCallTile = (item: RoomCallTileItem) => {
     selectedRoomCallTileId.value = item.id
+
     roomCallPanelDisplayMode.value = ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
   }
 
   return {
     focusRoomCallTile,
+    isPrivateRoomCall,
     isRoomCallFocusDisplayMode,
     isRoomCallQuickCommandsExpanded,
     isRoomCallFullscreen,

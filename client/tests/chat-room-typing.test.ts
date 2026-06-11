@@ -1,4 +1,5 @@
 import type { ChatRoom } from 'global-shared'
+import type * as VueModule from 'vue'
 import { nextTick, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -17,7 +18,7 @@ const knownUserStoreMock = vi.hoisted(() => ({
 }))
 
 vi.mock('vue', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('vue')>()),
+  ...(await importOriginal<typeof VueModule>()),
   onBeforeUnmount: vi.fn()
 }))
 

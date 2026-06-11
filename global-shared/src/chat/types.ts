@@ -1,7 +1,7 @@
 import type { ImageObject, MediaId } from '../media/types'
 import type { Message } from '../message/types'
 
-import { CHAT_KIND } from './constants'
+import { type CHAT_KIND } from './constants'
 
 export type ChatKind = (typeof CHAT_KIND)[keyof typeof CHAT_KIND]
 

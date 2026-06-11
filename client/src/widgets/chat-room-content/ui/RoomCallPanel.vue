@@ -35,6 +35,7 @@ const props = defineProps<RoomCallPanelProps>()
 const emit = defineEmits<RoomCallPanelEmits>()
 const {
   focusRoomCallTile,
+  isPrivateRoomCall,
   isRoomCallFocusDisplayMode,
   isRoomCallQuickCommandsExpanded,
   isRoomCallFullscreen,
@@ -55,8 +56,15 @@ const {
 
 <template>
   <div ref="roomCallPanel" class="room-call-panel">
-    <div class="room-call-panel__tiles" :class="{ 'room-call-panel__tiles--focus': isRoomCallFocusDisplayMode }">
-      <template v-if="isRoomCallFocusDisplayMode && roomCallMainTileItem">
+    <div
+      class="room-call-panel__tiles"
+      :class="{
+        'room-call-panel__tiles--focus': isRoomCallFocusDisplayMode && !isPrivateRoomCall,
+        'room-call-panel__tiles--private': isPrivateRoomCall,
+        'room-call-panel__tiles--private-focus': isPrivateRoomCall && isRoomCallFocusDisplayMode
+      }"
+    >
+      <template v-if="isRoomCallFocusDisplayMode && !isPrivateRoomCall && roomCallMainTileItem">
         <RoomCallTile
           class="room-call-panel__tile room-call-panel__tile--main"
           :item="roomCallMainTileItem"
@@ -301,6 +309,19 @@ const {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.room-call-panel__tiles--private {
+  overflow: hidden;
+  grid-auto-rows: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.room-call-panel__tiles--private-focus {
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .room-call-panel__tile--main {

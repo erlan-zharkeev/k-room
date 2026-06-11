@@ -1,6 +1,6 @@
 import type { MediaId } from '../media/types'
 
-import { USER_ROLES } from './constants'
+import { type USER_ROLES } from './constants'
 
 export type UserRole = (typeof USER_ROLES)[number]
 

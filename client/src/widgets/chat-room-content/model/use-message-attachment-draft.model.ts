@@ -31,7 +31,10 @@ import type {
 } from '../config/types'
 import { buildMessageAttachmentDraftListItems } from '../lib/build-message-attachment-draft-list-items'
 import { buildMessageAttachmentUploadGroups } from '../lib/build-message-attachment-upload-groups'
-import { buildMessageFileDraftObjectDetails } from '../lib/build-message-draft-media-objects'
+import {
+  buildMessageFileDraftObjectDetails,
+  buildMessageImageDraftObjectDetails
+} from '../lib/build-message-draft-media-objects'
 
 import { useMessageMediaDraft } from './use-message-media-draft.model'
 
@@ -45,7 +48,7 @@ export const useMessageAttachmentDraft = ({
   const messageImageDraft = useMessageMediaDraft<ImageObject>({
     draftMediaIdPrefix: MESSAGE_IMAGE_DRAFT_MEDIA_ID_PREFIX,
     mediaKind: 'image',
-    buildMediaObjectDetails: buildMessageFileDraftObjectDetails
+    buildMediaObjectDetails: buildMessageImageDraftObjectDetails
   })
   const messageDocumentDraft = useMessageMediaDraft<DocumentObject>({
     draftMediaIdPrefix: MESSAGE_DOCUMENT_DRAFT_MEDIA_ID_PREFIX,

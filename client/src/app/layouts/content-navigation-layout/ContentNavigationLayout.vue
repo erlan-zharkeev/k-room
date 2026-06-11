@@ -5,7 +5,7 @@ import { AppHeader } from 'src/shared/ui'
 
 import { ROUTE_TITLE_MAP } from '../app-layout/constants'
 
-import { ContentNavigationLayoutProps } from './types'
+import { type ContentNavigationLayoutProps } from './types'
 
 const props = defineProps<ContentNavigationLayoutProps>()
 </script>

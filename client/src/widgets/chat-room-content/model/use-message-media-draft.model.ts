@@ -1,7 +1,7 @@
 import type { INmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import type { MediaObject } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, shallowRef } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 import { revokeObjectUrl, revokeObjectUrls } from 'src/shared/lib'
@@ -18,10 +18,11 @@ export const useMessageMediaDraft = <Media extends MediaObject>({
   buildMediaObjectDetails
 }: UseMessageMediaDraftParams<Media>) => {
   const { put: putMedia, remove: removeMedia } = useMedia()
-  const draftItems = ref<MessageMediaDraftItem[]>([])
-  const buildDetails = (file: File): MessageMediaDraftObjectDetails<Media> => buildMediaObjectDetails?.(file) ?? {}
+  const draftItems = shallowRef<MessageMediaDraftItem<Media>[]>([])
+  const buildDetails = async (file: File): Promise<MessageMediaDraftObjectDetails<Media>> =>
+    (await buildMediaObjectDetails?.(file)) ?? {}
   const mediaObjects = computed<Media[]>(() =>
-    draftItems.value.map(({ file, id }) => buildMessageMediaDraftObject<Media>(file, id, buildDetails(file)))
+    draftItems.value.map(({ details, file, id }) => buildMessageMediaDraftObject<Media>(file, id, details))
   )
   const uploadValues = computed(() => draftItems.value.map(({ uploadValue }) => uploadValue))
   const hasDraft = computed(() => draftItems.value.length > 0)
@@ -30,6 +31,7 @@ export const useMessageMediaDraft = <Media extends MediaObject>({
     const { data: file } = uploadValue
     const id = `${draftMediaIdPrefix}-${uuidv4()}`
     const createdAt = Date.now()
+    const details = await buildDetails(file)
 
     await putMedia({
       id,
@@ -43,13 +45,14 @@ export const useMessageMediaDraft = <Media extends MediaObject>({
     })
 
     return {
+      details,
       id,
       file,
       uploadValue
-    } satisfies MessageMediaDraftItem
+    } satisfies MessageMediaDraftItem<Media>
   }
 
-  const deleteDraftItems = async (items: MessageMediaDraftItem[]) => {
+  const deleteDraftItems = async (items: MessageMediaDraftItem<Media>[]) => {
     revokeObjectUrls(items.map(({ uploadValue }) => uploadValue.previewUrl))
     await Promise.all(items.map(({ id }) => removeMedia(id)))
   }
@@ -97,9 +100,7 @@ export const useMessageMediaDraft = <Media extends MediaObject>({
   }
 
   const buildPayload = () =>
-    Promise.all(
-      draftItems.value.map(({ file }) => buildMessageMediaDraftPayloadObject<Media>(file, buildDetails(file)))
-    )
+    Promise.all(draftItems.value.map(({ details, file }) => buildMessageMediaDraftPayloadObject<Media>(file, details)))
 
   onBeforeUnmount(() => {
     void clear()

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 import { loginByCredentials } from 'e2e/shared/auth'
+
 import { LOGIN_FIXTURE_USER } from './fixtures'
 
 test.describe('login', () => {

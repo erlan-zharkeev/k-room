@@ -18,14 +18,8 @@ export interface MessageScrollAnchorState {
   offset: number
 }
 
-export interface MessageScrollOffsetState {
-  mode: 'offset'
-  scrollTop: number
-}
-
-export type MessageScrollState = MessageScrollBottomState | MessageScrollAnchorState | MessageScrollOffsetState
-export type MessageScrollStoredState = MessageScrollState | number
-export type MessageScrollByRoom = Record<string, MessageScrollStoredState>
+export type MessageScrollState = MessageScrollBottomState | MessageScrollAnchorState
+export type MessageScrollByRoom = Record<string, MessageScrollState>
 
 export interface DeviceSetting {
   contentTab: ContentTab

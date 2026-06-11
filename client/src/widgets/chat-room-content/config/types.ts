@@ -34,14 +34,12 @@ import type {
   MESSAGE_CONTEXT_MENU_ACTION,
   MESSAGE_DRAFT_REFERENCE_KIND,
   MESSAGE_MEDIA_GALLERY_ITEM_KIND,
-  MESSAGE_SCROLL_LOG_REASON,
   MESSAGE_STATUS_DOT_TONE,
   MESSAGE_TEXT_SEGMENT_KIND,
   ROOM_CALL_PANEL_DISPLAY_MODE
 } from './constants'
 
 export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
-export type MessageScrollLogReason = (typeof MESSAGE_SCROLL_LOG_REASON)[keyof typeof MESSAGE_SCROLL_LOG_REASON]
 
 export interface ChatRoomMessagesProps {
   room: ChatRoom
@@ -356,18 +354,23 @@ export interface MessageAttachmentDraftListEmits {
   remove: [attachment: MessageAttachmentDraftListItem]
 }
 
-export interface MessageMediaDraftItem {
+export type MessageMediaDraftObjectDetails<Media extends MediaObject> = Partial<Omit<Media, keyof MediaObject>>
+
+export type MessageMediaDraftObjectDetailsBuilder<Media extends MediaObject> = (
+  file: File
+) => MessageMediaDraftObjectDetails<Media> | Promise<MessageMediaDraftObjectDetails<Media>>
+
+export interface MessageMediaDraftItem<Media extends MediaObject = MediaObject> {
+  details: MessageMediaDraftObjectDetails<Media>
   id: string
   file: File
   uploadValue: INmorphCustomFileData
 }
 
-export type MessageMediaDraftObjectDetails<Media extends MediaObject> = Partial<Omit<Media, keyof MediaObject>>
-
 export interface UseMessageMediaDraftParams<Media extends MediaObject> {
   draftMediaIdPrefix: string
   mediaKind: MediaKind
-  buildMediaObjectDetails?: (file: File) => MessageMediaDraftObjectDetails<Media>
+  buildMediaObjectDetails?: MessageMediaDraftObjectDetailsBuilder<Media>
 }
 
 export interface MessageAttachmentUploadGroups {

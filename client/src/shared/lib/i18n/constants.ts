@@ -1,5 +1,5 @@
 import { APP_LANGUAGE } from 'global-shared'
-import { InjectionKey } from 'vue'
+import { type InjectionKey } from 'vue'
 
 import type { I18nTranslate } from './i18n.types'
 

@@ -25,6 +25,11 @@ export interface FileData {
   metadata: FileMetadata
 }
 
+export interface UploadedMediaFileData {
+  id: string
+  fileData: FileData
+}
+
 export interface StreamMediaFileData {
   filename: string
   contentType?: string

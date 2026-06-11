@@ -1,7 +1,9 @@
+import type { firebaseProviders, providers } from './constants'
+
 export type AuthTokens = 'jwt' | 'refresh-jwt'
 
-export type FirebaseProvider = typeof import('./constants').firebaseProviders[number]
-export type Provider = typeof import('./constants').providers[number]
+export type FirebaseProvider = (typeof firebaseProviders)[number]
+export type Provider = (typeof providers)[number]
 
 export type AvailableCookie = 'device-id' | AuthTokens
 

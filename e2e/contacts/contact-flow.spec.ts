@@ -1,4 +1,5 @@
 import { expect, test, type Browser, type Locator, type Page } from '@playwright/test'
+
 import { CHAT_KIND } from 'global-shared'
 
 import { E2E_ENV } from 'e2e/config'
