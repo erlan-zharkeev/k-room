@@ -16,6 +16,7 @@ import { useUser } from 'src/entities/user'
 import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
+import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-media-kind'
 import {
   resolveRoomCallJoinFailureMessage,
   resolveRoomCallStartFailureMessage
@@ -78,9 +79,20 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     syncRoomCallQuickCommandReceived,
     temporaryQuickCommandByUserId
   } = useRoomCallQuickCommandSync(activeRoomCallId)
-  const publishedVideoStream = computed(() => screenStream.value || videoStream.value)
-  const localStreams = computed(() => [audioStream.value, publishedVideoStream.value])
+  const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
+  const isActiveRoomCallScreenSharingByAnotherParticipant = computed(() =>
+    Boolean(
+      activeRoomCall.value?.participants.some(({ leftAt, mediaState, userId }) => {
+        const isActiveParticipant = !leftAt
+        const isAnotherParticipant = userId !== user.value.id
+        const hasScreenSharing = mediaState.screen
+        const hasActiveScreenSharing = isActiveParticipant && hasScreenSharing
+
+        return hasActiveScreenSharing && isAnotherParticipant
+      })
+    )
+  )
   const activeRoomCallPeerParticipantKey = computed(
     () =>
       activeRoomCall.value?.participants
@@ -246,7 +258,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       }
 
       const { participantQuickCommandStateByUserId, roomCall } = response.payload
-      const localMediaKind = mediaKind ?? roomCall.mediaKind
+      const localMediaKind = resolveRoomCallJoinMediaKind(roomCall, mediaKind)
 
       activeRoomCallId.value = roomCall.id
 
@@ -315,6 +327,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   }
 
   const startActiveRoomCallScreen = async () => {
+    if (isActiveRoomCallScreenSharingByAnotherParticipant.value) {
+      return
+    }
+
     try {
       await startScreen()
     } catch (error) {
@@ -355,6 +371,18 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     if (isFinished) {
       clearActiveRoomCallSessionState()
     }
+  })
+
+  watch(isActiveRoomCallScreenSharingByAnotherParticipant, (isScreenSharing) => {
+    if (!isScreenSharing) {
+      return
+    }
+
+    if (!localMediaState.value.screen) {
+      return
+    }
+
+    stopScreen()
   })
 
   onMounted(() => {

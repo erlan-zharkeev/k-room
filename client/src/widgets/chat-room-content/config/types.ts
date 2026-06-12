@@ -43,7 +43,8 @@ import type {
   MESSAGE_STATUS_DOT_TONE,
   MESSAGE_TEXT_SEGMENT_KIND,
   ROOM_CALL_PANEL_DISPLAY_MODE,
-  ROOM_CALL_QUICK_COMMAND
+  ROOM_CALL_QUICK_COMMAND,
+  ROOM_CALL_TILE_KIND
 } from './constants'
 
 export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
@@ -116,12 +117,15 @@ export type RoomCallPanelDisplayMode = (typeof ROOM_CALL_PANEL_DISPLAY_MODE)[key
 
 export type RoomCallQuickCommand = (typeof ROOM_CALL_QUICK_COMMAND)[keyof typeof ROOM_CALL_QUICK_COMMAND]
 
+export type RoomCallTileKind = (typeof ROOM_CALL_TILE_KIND)[keyof typeof ROOM_CALL_TILE_KIND]
+
 export interface RoomCallTileItem {
   audioActivityStream?: MediaStream | null
   avatarId?: MediaId | null
   id: string
   isHandRaised: boolean
   isLocal: boolean
+  kind: RoomCallTileKind
   mediaState: RoomCallParticipantMediaState
   mirrored: boolean
   name: string

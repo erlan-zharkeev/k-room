@@ -39,6 +39,7 @@ const {
   isRoomCallQuickCommandsExpanded,
   isRoomCallQuickCommandsAvailable,
   isRoomCallFullscreen,
+  isScreenSharingControlDisabled,
   isScreenSharingControlVisible,
   leaveRoomCall,
   roomCallDisplayModeToggleI18n,
@@ -76,6 +77,7 @@ const {
         <NmorphScroll
           v-if="roomCallSecondaryTileItems.length"
           class="room-call-panel__filmstrip"
+          height="120px"
           scroll-x-prop="auto"
           scroll-y-prop="hidden"
           :x-gap-in-px="4"
@@ -207,7 +209,7 @@ const {
             borderless
             shape="circle"
             :active="props.localMediaState.screen"
-            :disabled="props.isBusy"
+            :disabled="isScreenSharingControlDisabled"
             :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleScreenRoomCall)"
             @click="toggleScreenSharing"
           >
@@ -315,27 +317,40 @@ const {
 }
 
 .room-call-panel__tiles--focus {
+  position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  display: block;
 }
 
 .room-call-panel__tile--main {
-  flex: 1;
-  align-self: center;
+  position: absolute;
+  inset: 0;
+
   width: 100%;
+  height: 100%;
   min-height: 0;
 }
 
-.room-call-panel__filmstrip {
+.room-call-panel__tiles--focus > .room-call-panel__filmstrip {
+  position: absolute;
+  z-index: 1;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+
   display: flex;
-  flex: 0 0 20%;
   gap: 8px;
-  min-height: 0;
+  align-items: stretch;
 }
 
 .room-call-panel__filmstrip-tile {
   flex: 0 0 180px;
+  height: 100%;
+  background: var(--app-shadow-dark);
+}
+
+.room-call-panel__filmstrip-tile .room-call-tile__media.nmorph-media-tile--plain {
+  background: var(--app-shadow-dark);
 }
 
 .room-call-panel__bottom {

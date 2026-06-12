@@ -27,12 +27,19 @@ const props = defineProps<RoomCallTileProps>()
 const emit = defineEmits<RoomCallTileEmits>()
 const {
   avatarImageSrc,
+  isMediaTileMuted,
   isMediaTileVideoOff,
   isRemoteAudioMuted,
   isRemoteVideoHidden,
+  isRoomCallParticipantTile,
+  isRoomCallScreenTile,
+  isRoomCallTileAudioMeterVisible,
+  isRoomCallTileQuickCommandsVisible,
+  isRoomCallTileRemoteActionsVisible,
   remoteHideButtonText,
   remoteMuteButtonText,
   roomCallTileAudioVolumeDb,
+  roomCallTileMediaFit,
   temporaryQuickCommandI18n,
   temporaryQuickCommandTextColor,
   toggleRemoteAudioMuted,
@@ -41,31 +48,19 @@ const {
 </script>
 
 <template>
-  <div class="room-call-tile" @click="emit('select')">
+  <div class="room-call-tile" :class="{ 'room-call-tile--screen': isRoomCallScreenTile }" @click="emit('select')">
     <NmorphMediaTile
-      v-if="props.self"
       class="room-call-tile__media"
       :src-object="props.item.stream"
       :name="props.item.name"
       :avatar-src="avatarImageSrc"
       :mirrored="props.item.mirrored"
-      :muted="props.item.isLocal || isRemoteAudioMuted"
+      :muted="isMediaTileMuted"
       :video-off="isMediaTileVideoOff"
       :show-status="false"
-      :aspect="props.main ? 'fill' : undefined"
-      design="plain"
-    />
-    <NmorphMediaTile
-      v-if="!props.self"
-      class="room-call-tile__media"
-      :src-object="props.item.stream"
-      :name="props.item.name"
-      :avatar-src="avatarImageSrc"
-      :mirrored="props.item.mirrored"
-      :muted="isRemoteAudioMuted"
-      :video-off="isMediaTileVideoOff"
-      :show-status="false"
-      :aspect="props.main ? 'fill' : undefined"
+      aspect="fill"
+      :fit="roomCallTileMediaFit"
+      :screen-sharing="isRoomCallScreenTile"
       design="plain"
     />
     <div class="room-call-tile__top" @click.stop>
@@ -80,6 +75,7 @@ const {
             :text="props.item.name"
           />
           <NmorphAudioMeter
+            v-if="isRoomCallTileAudioMeterVisible"
             class="room-call-tile__audio-meter"
             :label="props.item.name"
             :volume-db="roomCallTileAudioVolumeDb"
@@ -88,6 +84,7 @@ const {
         </div>
         <div class="room-call-tile__states">
           <NmorphIcon
+            v-if="isRoomCallParticipantTile"
             class="room-call-tile__state"
             :class="{ 'room-call-tile__state--off': !props.item.mediaState.audio }"
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
@@ -98,6 +95,7 @@ const {
             <NmorphIconMute v-else />
           </NmorphIcon>
           <NmorphIcon
+            v-if="isRoomCallParticipantTile"
             class="room-call-tile__state"
             :class="{ 'room-call-tile__state--off': !props.item.mediaState.video }"
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
@@ -117,7 +115,7 @@ const {
           </NmorphIcon>
         </div>
       </div>
-      <div v-if="props.item.isHandRaised || props.item.temporaryQuickCommand" class="room-call-tile__quick-commands">
+      <div v-if="isRoomCallTileQuickCommandsVisible" class="room-call-tile__quick-commands">
         <div v-if="props.item.isHandRaised" class="room-call-tile__quick-command room-call-tile__quick-command--hand">
           <NmorphIcon
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
@@ -141,7 +139,11 @@ const {
         </div>
       </div>
     </div>
-    <div v-if="!props.self" class="room-call-tile__remote-actions room-call-tile__overlay" @click.stop>
+    <div
+      v-if="isRoomCallTileRemoteActionsVisible"
+      class="room-call-tile__remote-actions room-call-tile__overlay"
+      @click.stop
+    >
       <NmorphButton
         design="plain"
         thickness="thin"
@@ -185,6 +187,7 @@ const {
   overflow: hidden;
 
   aspect-ratio: auto;
+  width: 100%;
   min-width: 0;
   height: 100%;
   min-height: 0;
