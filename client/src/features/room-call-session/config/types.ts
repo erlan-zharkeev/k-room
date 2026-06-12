@@ -91,6 +91,13 @@ export interface BuildRoomCallActivityTitleParams {
   users: RoomCallActivityRoomTitleUser[]
 }
 
+export interface BuildRoomCallActivityTextParams {
+  activeParticipantQuantity: number
+  isPrivateRoom: boolean
+  participantText: string
+  text: string
+}
+
 export interface ResolveRoomCallActivityI18nParams {
   isPrivateRoom: boolean
   kind: RoomCallActivityKind

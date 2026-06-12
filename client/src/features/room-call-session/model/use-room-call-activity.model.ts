@@ -12,6 +12,10 @@ import { useI18n } from 'src/shared/lib'
 import { ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND, ROOM_CALL_ACTIVITY_KIND } from '../config/constants'
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { RoomCallActivityItem, RoomCallActivityRoomTitleUser, UseRoomCallActivityParams } from '../config/types'
+import {
+  buildRoomCallActivityText,
+  resolveActiveRoomCallParticipantQuantity
+} from '../lib/build-room-call-activity-text'
 import { buildRoomCallActivityTitle } from '../lib/build-room-call-activity-title'
 import { resolveRoomCallActivityI18n } from '../lib/resolve-room-call-activity-i18n'
 import { resolveRoomCallActivityKind } from '../lib/resolve-room-call-activity-kind'
@@ -138,6 +142,14 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     const title = buildRoomCallActivityTitle({ isPrivateRoom, room, users }) || t(ROOM_CALL_SESSION_I18N.unknownRoom)
     const avatarId = isPrivateRoom ? titleUser?.avatarId ?? null : room.avatarId
     const textSource = resolveRoomCallActivityI18n({ isPrivateRoom, kind })
+    const activeParticipantQuantity = resolveActiveRoomCallParticipantQuantity(roomCall)
+    const participantText = t(ROOM_CALL_SESSION_I18N.roomCallParticipants)(activeParticipantQuantity)
+    const text = buildRoomCallActivityText({
+      activeParticipantQuantity,
+      isPrivateRoom,
+      participantText,
+      text: t(textSource)(title)
+    })
     const canJoin = kind === ROOM_CALL_ACTIVITY_KIND.INCOMING || kind === ROOM_CALL_ACTIVITY_KIND.JOINABLE
     const canLeaveActiveRoomCall = kind === ROOM_CALL_ACTIVITY_KIND.ACTIVE
     const canLeaveIncomingRoomCall = kind === ROOM_CALL_ACTIVITY_KIND.INCOMING
@@ -153,7 +165,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
       kind,
       roomCall,
       roomId: room.id,
-      text: t(textSource)(title),
+      text,
       title
     }
   }
