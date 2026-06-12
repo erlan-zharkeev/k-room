@@ -50,6 +50,10 @@ small.app-text {
   color: var(--nmorph-accent-color);
 }
 
+.app-text--success {
+  color: var(--nmorph-success-color);
+}
+
 .app-text--warn {
   color: var(--nmorph-warn-color);
 }
