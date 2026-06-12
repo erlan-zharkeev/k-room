@@ -2,7 +2,11 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { calculateAudioVolumeDb, createAudioMeterAnalyser, log, useLiveMediaUrl } from 'src/shared/lib'
 
-import { ROOM_CALL_TILE_REMOTE_ACTION_TEXT } from '../config/constants'
+import {
+  ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND,
+  ROOM_CALL_TILE_QUICK_COMMAND_MODIFIER_BY_COMMAND,
+  ROOM_CALL_TILE_REMOTE_ACTION_TEXT
+} from '../config/constants'
 import type { RoomCallTileAudioActivityMonitor, RoomCallTileProps } from '../config/types'
 
 export const useRoomCallTile = (props: RoomCallTileProps) => {
@@ -13,12 +17,14 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   let audioActivityMonitor: RoomCallTileAudioActivityMonitor | null = null
   let monitoredStream: MediaStream | null = null
   const hasStream = computed(() => Boolean(props.item.stream))
+  const hasNativeVideoTrack = computed(() => Boolean(props.item.stream?.getVideoTracks().length))
   const hasVisibleVideo = computed(() => {
     const hasEnabledVideo = props.item.mediaState.video || props.item.mediaState.screen
     const hasLocalVideoVisibility = props.self || !isRemoteVideoHidden.value
 
     return hasEnabledVideo && hasStream.value && hasLocalVideoVisibility
   })
+  const hasNativeVisibleVideo = computed(() => hasNativeVideoTrack.value && hasVisibleVideo.value)
   const remoteHideButtonText = computed(() =>
     isRemoteVideoHidden.value ? ROOM_CALL_TILE_REMOTE_ACTION_TEXT.SHOW : ROOM_CALL_TILE_REMOTE_ACTION_TEXT.HIDE
   )
@@ -26,6 +32,16 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     isRemoteAudioMuted.value ? ROOM_CALL_TILE_REMOTE_ACTION_TEXT.UNMUTE : ROOM_CALL_TILE_REMOTE_ACTION_TEXT.MUTE
   )
   const isMediaTileVideoOff = computed(() => !hasVisibleVideo.value)
+  const temporaryQuickCommandI18n = computed(() => {
+    const quickCommand = props.item.temporaryQuickCommand?.command
+
+    return quickCommand && ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND[quickCommand]
+  })
+  const temporaryQuickCommandModifier = computed(() => {
+    const quickCommand = props.item.temporaryQuickCommand?.command
+
+    return quickCommand && ROOM_CALL_TILE_QUICK_COMMAND_MODIFIER_BY_COMMAND[quickCommand]
+  })
 
   const stopRoomCallTileAudioActivityMonitor = () => {
     if (!audioActivityMonitor) {
@@ -129,9 +145,12 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     isRemoteAudioMuted,
     isRemoteVideoHidden,
     isMediaTileVideoOff,
+    hasNativeVisibleVideo,
     roomCallTileAudioVolumeDb,
     remoteHideButtonText,
     remoteMuteButtonText,
+    temporaryQuickCommandI18n,
+    temporaryQuickCommandModifier,
     toggleRemoteAudioMuted,
     toggleRemoteVideoHidden
   }

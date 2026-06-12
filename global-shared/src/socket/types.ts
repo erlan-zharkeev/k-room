@@ -59,14 +59,18 @@ import type {
   EventLoadRoomCalls,
   EventRoomCallDeclined,
   EventRoomCallEnded,
+  EventRoomCallHandRaisedUpdated,
   EventRoomCallJoined,
   EventRoomCallLeft,
   EventRoomCallMediaStateUpdated,
+  EventRoomCallQuickCommandReceived,
   EventRoomCallSignalReceived,
   EventRoomCallStarted,
   EventRoomCallsLoaded,
   EventRoomCallsUpdated,
+  EventSendRoomCallQuickCommand,
   EventSendRoomCallSignal,
+  EventSetRoomCallHandRaised,
   EventStartRoomCall,
   EventUpdateRoomCallMediaState,
   JoinRoomCallAckPayload,
@@ -150,6 +154,8 @@ export interface ClientToServerSocketPayloadMap {
   'leave-room-call': EventLeaveRoomCall
   'update-room-call-media-state': EventUpdateRoomCallMediaState
   'send-room-call-signal': EventSendRoomCallSignal
+  'send-room-call-quick-command': EventSendRoomCallQuickCommand
+  'set-room-call-hand-raised': EventSetRoomCallHandRaised
 }
 
 export interface ClientToServerSocketAckPayloadMap {
@@ -175,6 +181,8 @@ export interface ClientToServerSocketAckPayloadMap {
   'decline-room-call': void
   'leave-room-call': void
   'update-room-call-media-state': void
+  'send-room-call-quick-command': void
+  'set-room-call-hand-raised': void
 }
 
 export interface ServerToClientSocketPayloadMap {
@@ -215,6 +223,8 @@ export interface ServerToClientSocketPayloadMap {
   'room-call-ended': EventRoomCallEnded
   'room-call-media-state-updated': EventRoomCallMediaStateUpdated
   'room-call-signal-received': EventRoomCallSignalReceived
+  'room-call-quick-command-received': EventRoomCallQuickCommandReceived
+  'room-call-hand-raised-updated': EventRoomCallHandRaisedUpdated
 }
 
 export type ClientToServerSocketEvents = SocketEventMap<

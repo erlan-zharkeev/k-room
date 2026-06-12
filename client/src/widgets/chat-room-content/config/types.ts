@@ -20,12 +20,18 @@ import type {
   RoomCall,
   RoomCallMediaKind,
   RoomCallParticipantMediaState,
+  RoomCallTemporaryQuickCommand,
   RepliedMessage,
   VideoObject
 } from 'global-shared'
 import type { Component, ComputedRef, Ref, ShallowRef } from 'vue'
 
-import type { RoomCallRemoteStreamsByUserId } from 'src/features/room-call-session'
+import type {
+  RoomCallHandRaisedByUserId,
+  RoomCallRemoteStreamsByUserId,
+  RoomCallTemporaryQuickCommandByUserId,
+  RoomCallTemporaryQuickCommandState
+} from 'src/features/room-call-session'
 import type { AudioMeterAnalyser } from 'src/shared/lib'
 
 import type {
@@ -36,7 +42,8 @@ import type {
   MESSAGE_MEDIA_GALLERY_ITEM_KIND,
   MESSAGE_STATUS_DOT_TONE,
   MESSAGE_TEXT_SEGMENT_KIND,
-  ROOM_CALL_PANEL_DISPLAY_MODE
+  ROOM_CALL_PANEL_DISPLAY_MODE,
+  ROOM_CALL_QUICK_COMMAND
 } from './constants'
 
 export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
@@ -78,6 +85,8 @@ export interface RoomCallPanelProps {
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
+  handRaisedByUserId: RoomCallHandRaisedByUserId
+  temporaryQuickCommandByUserId: RoomCallTemporaryQuickCommandByUserId
   localMediaState: RoomCallParticipantMediaState
   isBusy: boolean
   isLeaving: boolean
@@ -88,6 +97,8 @@ export interface RoomCallPanelEmits {
   'set-video-enabled': [enabled: boolean]
   'start-screen': []
   'stop-screen': []
+  'send-quick-command': [quickCommand: RoomCallTemporaryQuickCommand]
+  'set-hand-raised': [handRaised: boolean]
   leave: []
 }
 
@@ -96,20 +107,26 @@ export type RoomCallPanelEmit = {
   (event: 'set-video-enabled', enabled: boolean): void
   (event: 'start-screen'): void
   (event: 'stop-screen'): void
+  (event: 'send-quick-command', quickCommand: RoomCallTemporaryQuickCommand): void
+  (event: 'set-hand-raised', handRaised: boolean): void
   (event: 'leave'): void
 }
 
 export type RoomCallPanelDisplayMode = (typeof ROOM_CALL_PANEL_DISPLAY_MODE)[keyof typeof ROOM_CALL_PANEL_DISPLAY_MODE]
 
+export type RoomCallQuickCommand = (typeof ROOM_CALL_QUICK_COMMAND)[keyof typeof ROOM_CALL_QUICK_COMMAND]
+
 export interface RoomCallTileItem {
   audioActivityStream?: MediaStream | null
   avatarId?: MediaId | null
   id: string
+  isHandRaised: boolean
   isLocal: boolean
   mediaState: RoomCallParticipantMediaState
   mirrored: boolean
   name: string
   stream?: MediaStream
+  temporaryQuickCommand?: RoomCallTemporaryQuickCommandState
 }
 
 export interface RoomCallTileProps {
@@ -133,6 +150,8 @@ export interface BuildRoomCallTileItemsParams {
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
+  handRaisedByUserId: RoomCallHandRaisedByUserId
+  temporaryQuickCommandByUserId: RoomCallTemporaryQuickCommandByUserId
   resolveParticipantAvatarId: (userId: string) => MediaId | null | undefined
   resolveParticipantName: (userId: string) => string
 }

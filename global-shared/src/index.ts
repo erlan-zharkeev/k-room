@@ -10,9 +10,13 @@ export type {
   RoomCallStatus,
   RoomCallMediaKind,
   RoomCallSignalKind,
+  RoomCallQuickCommand,
+  RoomCallTemporaryQuickCommand,
   RoomCallLeaveReason,
   RoomCallAckFailureReason,
   RoomCallParticipantMediaState,
+  RoomCallParticipantQuickCommandState,
+  RoomCallParticipantQuickCommandStateByUserId,
   RoomCallParticipant,
   RoomCall,
   EventRoomCallsUpdated,
@@ -26,22 +30,29 @@ export type {
   EventLeaveRoomCall,
   EventUpdateRoomCallMediaState,
   EventSendRoomCallSignal,
+  EventSendRoomCallQuickCommand,
+  EventSetRoomCallHandRaised,
   EventRoomCallStarted,
   EventRoomCallJoined,
   EventRoomCallDeclined,
   EventRoomCallLeft,
   EventRoomCallEnded,
   EventRoomCallMediaStateUpdated,
+  EventRoomCallQuickCommandReceived,
+  EventRoomCallHandRaisedUpdated,
   EventRoomCallSignalReceived
 } from './room-calls/types'
 export {
   ROOM_CALL_ACK_FAILURE_REASON,
   ROOM_CALL_ACTUALIZATION_LIMIT,
+  ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_LOAD_LIMIT_MAX,
   ROOM_CALL_MEDIA_KIND,
+  ROOM_CALL_QUICK_COMMAND,
   ROOM_CALL_SIGNAL_KIND,
-  ROOM_CALL_STATUS
+  ROOM_CALL_STATUS,
+  ROOM_CALL_TEMPORARY_QUICK_COMMAND
 } from './room-calls/constants'
 
 export { CHAT_KIND, CHAT_ROOM_NAME_MAX_LENGTH, PINNED_CHAT_ROOM_LIMIT, USER_CHAT_ROOM_LIMIT } from './chat/constants'

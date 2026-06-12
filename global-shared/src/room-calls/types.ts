@@ -2,8 +2,10 @@ import type {
   ROOM_CALL_ACK_FAILURE_REASON,
   ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_MEDIA_KIND,
+  ROOM_CALL_QUICK_COMMAND,
   ROOM_CALL_SIGNAL_KIND,
-  ROOM_CALL_STATUS
+  ROOM_CALL_STATUS,
+  ROOM_CALL_TEMPORARY_QUICK_COMMAND
 } from './constants'
 
 export type RoomCallStatus = (typeof ROOM_CALL_STATUS)[keyof typeof ROOM_CALL_STATUS]
@@ -11,6 +13,11 @@ export type RoomCallStatus = (typeof ROOM_CALL_STATUS)[keyof typeof ROOM_CALL_ST
 export type RoomCallMediaKind = (typeof ROOM_CALL_MEDIA_KIND)[keyof typeof ROOM_CALL_MEDIA_KIND]
 
 export type RoomCallSignalKind = (typeof ROOM_CALL_SIGNAL_KIND)[keyof typeof ROOM_CALL_SIGNAL_KIND]
+
+export type RoomCallQuickCommand = (typeof ROOM_CALL_QUICK_COMMAND)[keyof typeof ROOM_CALL_QUICK_COMMAND]
+
+export type RoomCallTemporaryQuickCommand =
+  (typeof ROOM_CALL_TEMPORARY_QUICK_COMMAND)[keyof typeof ROOM_CALL_TEMPORARY_QUICK_COMMAND]
 
 export type RoomCallLeaveReason = (typeof ROOM_CALL_LEAVE_REASON)[keyof typeof ROOM_CALL_LEAVE_REASON]
 
@@ -21,6 +28,12 @@ export interface RoomCallParticipantMediaState {
   video: boolean
   screen: boolean
 }
+
+export interface RoomCallParticipantQuickCommandState {
+  handRaised: boolean
+}
+
+export type RoomCallParticipantQuickCommandStateByUserId = Record<string, RoomCallParticipantQuickCommandState>
 
 export interface RoomCallParticipant {
   userId: string
@@ -71,6 +84,7 @@ export interface EventJoinRoomCall {
 
 export interface JoinRoomCallAckPayload {
   roomCall: RoomCall
+  participantQuickCommandStateByUserId: RoomCallParticipantQuickCommandStateByUserId
 }
 
 export interface EventLeaveRoomCall {
@@ -92,6 +106,16 @@ export interface EventSendRoomCallSignal {
   toUserId: string
   signalKind: RoomCallSignalKind
   signal: unknown
+}
+
+export interface EventSendRoomCallQuickCommand {
+  roomCallId: string
+  quickCommand: RoomCallTemporaryQuickCommand
+}
+
+export interface EventSetRoomCallHandRaised {
+  roomCallId: string
+  handRaised: boolean
 }
 
 export interface EventRoomCallStarted {
@@ -125,6 +149,20 @@ export interface EventRoomCallMediaStateUpdated {
   roomCallId: string
   userId: string
   mediaState: RoomCallParticipantMediaState
+}
+
+export interface EventRoomCallQuickCommandReceived {
+  roomCallId: string
+  userId: string
+  quickCommand: RoomCallTemporaryQuickCommand
+  createdAt: number
+}
+
+export interface EventRoomCallHandRaisedUpdated {
+  roomCallId: string
+  userId: string
+  handRaised: boolean
+  updatedAt: number
 }
 
 export interface EventRoomCallSignalReceived {

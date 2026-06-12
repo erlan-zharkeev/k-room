@@ -67,6 +67,7 @@ const syncActiveRoomCallSocketIndexes = async (
 }
 
 export const transformActiveRoomCallParticipant = ({
+  quickCommandState: _quickCommandState,
   serverInstanceId: _serverInstanceId,
   ...participant
 }: RoomCallActiveState['participants'][number]) => participant

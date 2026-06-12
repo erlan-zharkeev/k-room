@@ -4,7 +4,8 @@ import type {
   RoomCallAckFailureReason,
   RoomCallLeaveReason,
   RoomCallMediaKind,
-  RoomCallParticipantMediaState
+  RoomCallParticipantMediaState,
+  RoomCallTemporaryQuickCommand
 } from 'global-shared'
 
 import { useRoomCall } from 'src/entities/room-call'
@@ -60,6 +61,24 @@ export const useRoomCallSession = () => {
     return response.ok
   }
 
+  const sendRoomCallQuickCommand = async (roomCallId: string, quickCommand: RoomCallTemporaryQuickCommand) => {
+    const response = await emitSocketAction('send-room-call-quick-command', {
+      quickCommand,
+      roomCallId
+    })
+
+    return response.ok
+  }
+
+  const setRoomCallHandRaised = async (roomCallId: string, handRaised: boolean) => {
+    const response = await emitSocketAction('set-room-call-hand-raised', {
+      handRaised,
+      roomCallId
+    })
+
+    return response.ok
+  }
+
   const sendRoomCallSignal = (payload: EventSendRoomCallSignal) => {
     if (!isSocketOnlineActionAvailable.value) return
 
@@ -72,6 +91,8 @@ export const useRoomCallSession = () => {
     declineRoomCall,
     leaveRoomCall,
     updateRoomCallMediaState,
+    sendRoomCallQuickCommand,
+    setRoomCallHandRaised,
     sendRoomCallSignal
   }
 }

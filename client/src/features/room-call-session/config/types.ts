@@ -1,11 +1,16 @@
 import type {
   ChatRoom,
+  EventRoomCallHandRaisedUpdated,
+  EventRoomCallQuickCommandReceived,
   EventRoomCallSignalReceived,
   EventSendRoomCallSignal,
+  MediaId,
   ROOM_CALL_SIGNAL_KIND,
   RoomCall,
   RoomCallMediaKind,
-  RoomCallParticipant
+  RoomCallParticipant,
+  RoomCallParticipantQuickCommandStateByUserId,
+  RoomCallTemporaryQuickCommand
 } from 'global-shared'
 import type { Ref } from 'vue'
 
@@ -23,10 +28,29 @@ export type SendRoomCallSignal = (payload: EventSendRoomCallSignal) => void
 
 export type HandleRoomCallSignalReceived = (payload: EventRoomCallSignalReceived) => void | Promise<void>
 
+export type HandleRoomCallQuickCommandReceived = (
+  payload: EventRoomCallQuickCommandReceived
+) => void | Promise<void>
+
+export type HandleRoomCallHandRaisedUpdated = (payload: EventRoomCallHandRaisedUpdated) => void | Promise<void>
+
 export interface RoomCallLocalTrackEntry {
   stream: MediaStream
   track: MediaStreamTrack
 }
+
+export interface RoomCallTemporaryQuickCommandState {
+  id: string
+  command: RoomCallTemporaryQuickCommand
+}
+
+export type RoomCallTemporaryQuickCommandByUserId = Record<string, RoomCallTemporaryQuickCommandState | undefined>
+
+export type RoomCallHandRaisedByUserId = Record<string, boolean | undefined>
+
+export type SyncInitialRoomCallParticipantQuickCommandStates = (
+  quickCommandStateByUserId: RoomCallParticipantQuickCommandStateByUserId
+) => void
 
 export interface ConnectRoomCallPeersParams {
   currentUserId: string
@@ -46,6 +70,7 @@ export interface RoomCallMediaButtonsEmits {
 }
 
 export interface RoomCallActivityItem {
+  avatarId: MediaId
   canJoin: boolean
   canLeave: boolean
   dotColor: string
@@ -58,6 +83,7 @@ export interface RoomCallActivityItem {
 }
 
 export interface RoomCallActivityRoomTitleUser {
+  avatarId: MediaId
   nickname: string
 }
 

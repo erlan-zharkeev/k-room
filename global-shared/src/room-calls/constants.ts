@@ -20,6 +20,23 @@ export const ROOM_CALL_SIGNAL_KIND = {
   ICE_CANDIDATE: 'ice-candidate'
 } as const
 
+export const ROOM_CALL_QUICK_COMMAND = {
+  NO: 'no',
+  OK: 'ok',
+  RAISE_HAND: 'raise-hand',
+  YES: 'yes'
+} as const
+
+export const ROOM_CALL_TEMPORARY_QUICK_COMMAND = {
+  NO: ROOM_CALL_QUICK_COMMAND.NO,
+  OK: ROOM_CALL_QUICK_COMMAND.OK,
+  YES: ROOM_CALL_QUICK_COMMAND.YES
+} as const
+
+export const ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE = {
+  handRaised: false
+} as const
+
 export const ROOM_CALL_LEAVE_REASON = {
   DECLINED: 'declined',
   DISCONNECTED: 'disconnected',

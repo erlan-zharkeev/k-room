@@ -31,6 +31,11 @@ export const ROOM_CALLS_I18N = defineI18n({
     ru: 'Превышен лимит загрузки звонков',
     zh: '超出通话加载上限'
   },
+  roomCallQuickCommandFailed: {
+    en: 'Failed to update call quick command',
+    ru: 'Не удалось обновить реакцию звонка',
+    zh: '更新通话回应失败'
+  },
   roomCallLimitReached: {
     en: 'Call participant limit reached',
     ru: 'Достигнут лимит участников звонка',
