@@ -40,7 +40,7 @@ const {
       :alt="props.item.title"
       :name="props.item.title"
       :size="92"
-      shape="square"
+      shape="circle"
       preview
     />
     <div class="call-activity-panel-item__label">

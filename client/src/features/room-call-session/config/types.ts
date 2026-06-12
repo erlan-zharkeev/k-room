@@ -28,9 +28,7 @@ export type SendRoomCallSignal = (payload: EventSendRoomCallSignal) => void
 
 export type HandleRoomCallSignalReceived = (payload: EventRoomCallSignalReceived) => void | Promise<void>
 
-export type HandleRoomCallQuickCommandReceived = (
-  payload: EventRoomCallQuickCommandReceived
-) => void | Promise<void>
+export type HandleRoomCallQuickCommandReceived = (payload: EventRoomCallQuickCommandReceived) => void | Promise<void>
 
 export type HandleRoomCallHandRaisedUpdated = (payload: EventRoomCallHandRaisedUpdated) => void | Promise<void>
 

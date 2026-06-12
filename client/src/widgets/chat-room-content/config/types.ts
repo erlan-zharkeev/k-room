@@ -131,6 +131,7 @@ export interface RoomCallTileItem {
 
 export interface RoomCallTileProps {
   item: RoomCallTileItem
+  main?: boolean
   self: boolean
 }
 

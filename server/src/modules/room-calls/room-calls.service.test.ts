@@ -1,10 +1,16 @@
-import { CHAT_KIND, ROOM_CALL_LEAVE_REASON, ROOM_CALL_MEDIA_KIND, ROOM_CALL_STATUS } from 'global-shared'
+import {
+  CHAT_KIND,
+  ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
+  ROOM_CALL_LEAVE_REASON,
+  ROOM_CALL_MEDIA_KIND,
+  ROOM_CALL_STATUS
+} from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../chat-rooms/chat-rooms.types'
 
 import { leaveActiveRoomCallsBySocket, leaveRoomCall } from './room-calls.service'
-import type { RoomCallActiveState } from './room-calls.types'
+import type { RoomCallActiveParticipant, RoomCallActiveState } from './room-calls.types'
 
 const roomCallAccessMock = vi.hoisted(() => ({
   assertRoomCallParticipantAccess: vi.fn()
@@ -33,34 +39,27 @@ const createRoom = (chatKind: ChatRoomCallAccessProjection['chatKind']): ChatRoo
   users: ['user-a', 'user-b']
 })
 
+const createRoomCallParticipant = (userId: string, socketId: string, joinedAt: number): RoomCallActiveParticipant => ({
+  joinedAt,
+  mediaState: {
+    audio: true,
+    screen: false,
+    video: false
+  },
+  quickCommandState: { ...ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE },
+  serverInstanceId: 'server-id',
+  socketId,
+  userId
+})
+
 const createRoomCall = (): RoomCallActiveState => ({
   id: 'room-call-id',
   calledAt: 1,
   initiatorId: 'user-a',
   mediaKind: ROOM_CALL_MEDIA_KIND.AUDIO,
   participants: [
-    {
-      joinedAt: 1,
-      mediaState: {
-        audio: true,
-        screen: false,
-        video: false
-      },
-      serverInstanceId: 'server-id',
-      socketId: 'socket-a',
-      userId: 'user-a'
-    },
-    {
-      joinedAt: 2,
-      mediaState: {
-        audio: true,
-        screen: false,
-        video: false
-      },
-      serverInstanceId: 'server-id',
-      socketId: 'socket-b',
-      userId: 'user-b'
-    }
+    createRoomCallParticipant('user-a', 'socket-a', 1),
+    createRoomCallParticipant('user-b', 'socket-b', 2)
   ],
   roomId: 'room-id',
   startedAt: 2,
@@ -136,20 +135,7 @@ describe('room-calls.service', () => {
     const redisService = {}
     const roomCall: RoomCallActiveState = {
       ...createRoomCall(),
-      participants: [
-        ...createRoomCall().participants,
-        {
-          joinedAt: 3,
-          mediaState: {
-            audio: true,
-            screen: false,
-            video: false
-          },
-          serverInstanceId: 'server-id',
-          socketId: 'socket-c',
-          userId: 'user-c'
-        }
-      ]
+      participants: [...createRoomCall().participants, createRoomCallParticipant('user-c', 'socket-c', 3)]
     }
 
     roomCallActiveStateMock.readActiveRoomCallsBySocketId.mockResolvedValue([roomCall])

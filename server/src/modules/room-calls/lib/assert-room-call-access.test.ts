@@ -1,8 +1,13 @@
-import { CHAT_KIND, ROOM_CALL_MEDIA_KIND, ROOM_CALL_STATUS } from 'global-shared'
+import {
+  CHAT_KIND,
+  ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
+  ROOM_CALL_MEDIA_KIND,
+  ROOM_CALL_STATUS
+} from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../../chat-rooms/chat-rooms.types'
-import type { RoomCallActiveState } from '../room-calls.types'
+import type { RoomCallActiveParticipant, RoomCallActiveState } from '../room-calls.types'
 
 const chatRoomPersistenceMock = vi.hoisted(() => ({
   findRoomCallAccessByUser: vi.fn()
@@ -17,24 +22,25 @@ vi.mock('./room-call-active-state', () => roomCallActiveStateMock)
 
 import { assertRoomCallParticipantAccess } from './assert-room-call-access'
 
+const createRoomCallParticipant = (): RoomCallActiveParticipant => ({
+  joinedAt: 1,
+  mediaState: {
+    audio: true,
+    screen: false,
+    video: false
+  },
+  quickCommandState: { ...ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE },
+  serverInstanceId: 'server-id',
+  socketId: 'socket-a',
+  userId: 'user-a'
+})
+
 const createRoomCall = (): RoomCallActiveState => ({
   id: 'room-call-id',
   calledAt: 1,
   initiatorId: 'user-a',
   mediaKind: ROOM_CALL_MEDIA_KIND.AUDIO,
-  participants: [
-    {
-      joinedAt: 1,
-      mediaState: {
-        audio: true,
-        screen: false,
-        video: false
-      },
-      serverInstanceId: 'server-id',
-      socketId: 'socket-a',
-      userId: 'user-a'
-    }
-  ],
+  participants: [createRoomCallParticipant()],
   roomId: 'room-id',
   startedAt: 2,
   status: ROOM_CALL_STATUS.IN_PROGRESS
