@@ -4,7 +4,7 @@ import { calculateAudioVolumeDb, createAudioMeterAnalyser, log, useLiveMediaUrl 
 
 import {
   ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND,
-  ROOM_CALL_TILE_QUICK_COMMAND_MODIFIER_BY_COMMAND,
+  ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND,
   ROOM_CALL_TILE_REMOTE_ACTION_TEXT
 } from '../config/constants'
 import type { RoomCallTileAudioActivityMonitor, RoomCallTileProps } from '../config/types'
@@ -35,10 +35,10 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
 
     return quickCommand && ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND[quickCommand]
   })
-  const temporaryQuickCommandModifier = computed(() => {
+  const temporaryQuickCommandTextColor = computed(() => {
     const quickCommand = props.item.temporaryQuickCommand?.command
 
-    return quickCommand && ROOM_CALL_TILE_QUICK_COMMAND_MODIFIER_BY_COMMAND[quickCommand]
+    return quickCommand && ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND[quickCommand]
   })
 
   const stopRoomCallTileAudioActivityMonitor = () => {
@@ -147,7 +147,7 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     remoteHideButtonText,
     remoteMuteButtonText,
     temporaryQuickCommandI18n,
-    temporaryQuickCommandModifier,
+    temporaryQuickCommandTextColor,
     toggleRemoteAudioMuted,
     toggleRemoteVideoHidden
   }

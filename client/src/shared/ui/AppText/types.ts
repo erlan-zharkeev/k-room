@@ -7,7 +7,7 @@ export type AppTextTag = 'span' | 'p' | 'div' | 'small'
 
 export type AppTextStaticColor = keyof Pick<
   INmorphStaticColors,
-  'text' | 'semiContrastText' | 'contrastText' | 'accent' | 'warn' | 'errorText'
+  'text' | 'semiContrastText' | 'contrastText' | 'accent' | 'success' | 'warn' | 'errorText'
 >
 
 export type AppTextColor = KebabCase<AppTextStaticColor>
