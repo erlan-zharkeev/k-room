@@ -74,6 +74,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     () => ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N[roomCallPanelDisplayMode.value]
   )
   const isScreenSharingControlVisible = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
+  const isRoomCallQuickCommandsAvailable = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
   const isLocalHandRaised = computed(() => Boolean(props.handRaisedByUserId[user.value.id]))
 
   const updateAudioEnabled = () => {
@@ -98,10 +99,18 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   }
 
   const toggleRoomCallQuickCommands = () => {
+    if (!isRoomCallQuickCommandsAvailable.value) {
+      return
+    }
+
     isRoomCallQuickCommandsExpanded.value = !isRoomCallQuickCommandsExpanded.value
   }
 
   const sendRoomCallQuickCommand = (command: RoomCallQuickCommand) => {
+    if (!isRoomCallQuickCommandsAvailable.value) {
+      return
+    }
+
     if (command === ROOM_CALL_QUICK_COMMAND.RAISE_HAND) {
       emit('set-hand-raised', !isLocalHandRaised.value)
       return
@@ -127,6 +136,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     isPrivateRoomCall,
     isRoomCallFocusDisplayMode,
     isRoomCallQuickCommandsExpanded,
+    isRoomCallQuickCommandsAvailable,
     isRoomCallFullscreen,
     isLocalHandRaised,
     isScreenSharingControlVisible,
