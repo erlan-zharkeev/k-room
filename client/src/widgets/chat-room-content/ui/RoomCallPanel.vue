@@ -21,7 +21,6 @@ import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
 
 import {
   ROOM_CALL_QUICK_COMMAND,
-  ROOM_CALL_QUICK_COMMAND_ICON_SIZE,
   ROOM_CALL_QUICK_COMMANDS,
   ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N,
   ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE
@@ -36,8 +35,10 @@ const emit = defineEmits<RoomCallPanelEmits>()
 const {
   focusRoomCallTile,
   isPrivateRoomCall,
+  isLocalHandRaised,
   isRoomCallFocusDisplayMode,
   isRoomCallQuickCommandsExpanded,
+  isRoomCallQuickCommandsAvailable,
   isRoomCallFullscreen,
   isScreenSharingControlVisible,
   leaveRoomCall,
@@ -45,6 +46,7 @@ const {
   roomCallMainTileItem,
   roomCallSecondaryTileItems,
   roomCallTileItems,
+  sendRoomCallQuickCommand,
   toggleRoomCallPanelDisplayMode,
   toggleRoomCallQuickCommands,
   toggleRoomCallFullscreen,
@@ -109,6 +111,7 @@ const {
           design="plain"
           borderless
           shape="circle"
+          :disabled="!isRoomCallQuickCommandsAvailable"
           :aria-label="$t(ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N)"
           @click="toggleRoomCallQuickCommands"
         >
@@ -132,22 +135,27 @@ const {
               borderless
               thickness="thin"
               shape="circle"
+              :active="isLocalHandRaised"
+              :disabled="!isRoomCallQuickCommandsAvailable"
               :aria-label="$t(command.i18n)"
+              @click="sendRoomCallQuickCommand(command.id)"
             >
               <template #icon-only>
-                <NmorphIcon :width="ROOM_CALL_QUICK_COMMAND_ICON_SIZE" :height="ROOM_CALL_QUICK_COMMAND_ICON_SIZE">
+                <NmorphIcon width="15px" height="15px">
                   <NmorphIconHand />
                 </NmorphIcon>
               </template>
             </NmorphButton>
             <NmorphButton
-              v-else
+              v-if="command.id !== ROOM_CALL_QUICK_COMMAND.RAISE_HAND"
               class="room-call-panel__quick-command"
               design="plain"
               borderless
               thickness="thin"
+              :disabled="!isRoomCallQuickCommandsAvailable"
               :aria-label="$t(command.i18n)"
               :text="$t(command.i18n)"
+              @click="sendRoomCallQuickCommand(command.id)"
             >
             </NmorphButton>
           </template>
@@ -383,6 +391,26 @@ const {
   flex: 0 0 auto;
   gap: 4px;
   align-items: center;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.4s ease;
+}
+
+.room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-commands {
+  opacity: 1;
+}
+
+.room-call-panel__quick-command {
+  opacity: 0;
+
+  transition:
+    opacity 0.4s ease;
+}
+
+.room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-command {
+  opacity: 1;
 }
 
 .room-call-panel__self {

@@ -17,14 +17,12 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   let audioActivityMonitor: RoomCallTileAudioActivityMonitor | null = null
   let monitoredStream: MediaStream | null = null
   const hasStream = computed(() => Boolean(props.item.stream))
-  const hasNativeVideoTrack = computed(() => Boolean(props.item.stream?.getVideoTracks().length))
   const hasVisibleVideo = computed(() => {
     const hasEnabledVideo = props.item.mediaState.video || props.item.mediaState.screen
     const hasLocalVideoVisibility = props.self || !isRemoteVideoHidden.value
 
     return hasEnabledVideo && hasStream.value && hasLocalVideoVisibility
   })
-  const hasNativeVisibleVideo = computed(() => hasNativeVideoTrack.value && hasVisibleVideo.value)
   const remoteHideButtonText = computed(() =>
     isRemoteVideoHidden.value ? ROOM_CALL_TILE_REMOTE_ACTION_TEXT.SHOW : ROOM_CALL_TILE_REMOTE_ACTION_TEXT.HIDE
   )
@@ -145,7 +143,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     isRemoteAudioMuted,
     isRemoteVideoHidden,
     isMediaTileVideoOff,
-    hasNativeVisibleVideo,
     roomCallTileAudioVolumeDb,
     remoteHideButtonText,
     remoteMuteButtonText,
