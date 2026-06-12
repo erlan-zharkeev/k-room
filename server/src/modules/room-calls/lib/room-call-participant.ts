@@ -78,3 +78,7 @@ export const resolveActiveRoomCallParticipantByUserId = <TParticipant extends Ro
   participants: TParticipant[],
   userId: string
 ) => resolveActiveRoomCallParticipants(participants).find((participant) => participant.userId === userId)
+
+export const resolveActiveScreenSharingRoomCallParticipant = <TParticipant extends RoomCallParticipantSchema>(
+  participants: TParticipant[]
+) => resolveActiveRoomCallParticipants(participants).find(({ mediaState }) => mediaState.screen)

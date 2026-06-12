@@ -88,7 +88,22 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   const roomCallDisplayModeToggleI18n = computed(
     () => ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N[roomCallPanelDisplayMode.value]
   )
+  const isAnotherParticipantScreenSharing = computed(() =>
+    props.roomCall.participants.some(({ leftAt, mediaState, userId }) => {
+      const isActiveParticipant = !leftAt
+      const isAnotherParticipant = userId !== user.value.id
+      const hasScreenSharing = mediaState.screen
+      const hasActiveScreenSharing = isActiveParticipant && hasScreenSharing
+
+      return hasActiveScreenSharing && isAnotherParticipant
+    })
+  )
   const isScreenSharingControlVisible = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
+  const isScreenSharingControlDisabled = computed(() => {
+    const isScreenSharingBlockedByParticipant = !props.localMediaState.screen && isAnotherParticipantScreenSharing.value
+
+    return props.isBusy || isScreenSharingBlockedByParticipant
+  })
   const isRoomCallQuickCommandsAvailable = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
   const isLocalHandRaised = computed(() => Boolean(props.handRaisedByUserId[user.value.id]))
 
@@ -157,6 +172,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     isRoomCallQuickCommandsAvailable,
     isRoomCallFullscreen,
     isLocalHandRaised,
+    isScreenSharingControlDisabled,
     isScreenSharingControlVisible,
     leaveRoomCall,
     roomCallDisplayModeToggleI18n,

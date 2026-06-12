@@ -18,6 +18,15 @@ export const ROOM_CALL_PANEL_DISPLAY_MODE = {
   FOCUS: 'focus',
   GRID: 'grid'
 } as const
+export const ROOM_CALL_TILE_KIND = {
+  PARTICIPANT: 'participant',
+  SCREEN: 'screen'
+} as const
+export const ROOM_CALL_TILE_MEDIA_FIT = {
+  CONTAIN: 'contain',
+  COVER: 'cover'
+} as const
+export const ROOM_CALL_SCREEN_TILE_ID_SUFFIX = 'screen'
 export const ROOM_CALL_PANEL_GRID_ROWS_PER_COLUMN = 2
 export const ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N = {
   [ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS]: CHAT_ROOM_CONTENT_I18N.roomCallGridDisplayMode,

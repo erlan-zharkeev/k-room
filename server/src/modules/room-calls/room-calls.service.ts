@@ -48,6 +48,7 @@ import { emitRoomCallSignalReceived } from './lib/room-call-events'
 import {
   buildInitialRoomCallMediaState,
   buildRoomCallParticipantQuickCommandStateByUserId,
+  resolveActiveScreenSharingRoomCallParticipant,
   buildRoomCallActiveParticipant,
   resolveActiveRoomCallParticipantByUserId,
   resolveActiveRoomCallParticipants,
@@ -277,23 +278,40 @@ export const updateRoomCallMediaState = async (
 ) => {
   await assertRoomCallParticipantAccess(redisService, userId, socketId, roomCallId)
 
-  const updatedRoomCall = await updateActiveRoomCall(redisService, roomCallId, (currentRoomCall) => ({
-    ...currentRoomCall,
-    participants: currentRoomCall.participants.map((participant) => {
-      const isCurrentUser = participant.userId === userId
-      const isCurrentSocket = participant.socketId === socketId
-      const isCurrentParticipant = isCurrentUser && isCurrentSocket
+  let updatedParticipantMediaState = mediaState
+  const updatedRoomCall = await updateActiveRoomCall(redisService, roomCallId, (currentRoomCall) => {
+    const screenSharingParticipant = resolveActiveScreenSharingRoomCallParticipant(currentRoomCall.participants)
+    const wantsScreenSharing = mediaState.screen
+    const hasScreenSharingParticipant = Boolean(screenSharingParticipant)
+    const isScreenSharingParticipantCurrentUser = screenSharingParticipant?.userId === userId
+    const hasScreenSharingConflict = hasScreenSharingParticipant && !isScreenSharingParticipantCurrentUser
+    const hasAnotherScreenSharingParticipant = wantsScreenSharing && hasScreenSharingConflict
 
-      return isCurrentParticipant ? { ...participant, mediaState } : participant
-    })
-  }))
+    updatedParticipantMediaState = hasAnotherScreenSharingParticipant
+      ? {
+          ...mediaState,
+          screen: false
+        }
+      : mediaState
+
+    return {
+      ...currentRoomCall,
+      participants: currentRoomCall.participants.map((participant) => {
+        const isCurrentUser = participant.userId === userId
+        const isCurrentSocket = participant.socketId === socketId
+        const isCurrentParticipant = isCurrentUser && isCurrentSocket
+
+        return isCurrentParticipant ? { ...participant, mediaState: updatedParticipantMediaState } : participant
+      })
+    }
+  })
 
   if (!updatedRoomCall) {
     return
   }
 
   emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-media-state-updated', {
-    mediaState,
+    mediaState: updatedParticipantMediaState,
     roomCallId,
     userId
   })
