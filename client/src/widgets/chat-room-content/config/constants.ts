@@ -53,6 +53,16 @@ export const ROOM_CALL_QUICK_COMMANDS = [
   }
 ] as const
 export const ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N = CHAT_ROOM_CONTENT_I18N.roomCallQuickCommands
+export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND = {
+  [ROOM_CALL_QUICK_COMMAND.NO]: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandNo,
+  [ROOM_CALL_QUICK_COMMAND.OK]: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandOk,
+  [ROOM_CALL_QUICK_COMMAND.YES]: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandYes
+} as const
+export const ROOM_CALL_TILE_QUICK_COMMAND_MODIFIER_BY_COMMAND = {
+  [ROOM_CALL_QUICK_COMMAND.NO]: 'room-call-tile__quick-command--no',
+  [ROOM_CALL_QUICK_COMMAND.OK]: 'room-call-tile__quick-command--ok',
+  [ROOM_CALL_QUICK_COMMAND.YES]: 'room-call-tile__quick-command--yes'
+} as const
 export const ROOM_CALL_QUICK_COMMAND_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_STATE_ICON_SIZE = '16px'

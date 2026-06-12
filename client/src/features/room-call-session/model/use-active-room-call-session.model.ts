@@ -6,6 +6,7 @@ import {
   type RoomCall,
   type RoomCallAckFailureReason,
   type RoomCallMediaKind,
+  type RoomCallTemporaryQuickCommand,
   type SocketAckFailure
 } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -23,6 +24,8 @@ import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/roo
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
 import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
+import { useRoomCallQuickCommandMonitor } from './use-room-call-quick-command-monitor.model'
+import { useRoomCallQuickCommandSync } from './use-room-call-quick-command-sync.model'
 import { useRoomCallSession } from './use-room-call-session.model'
 import { useRoomCallSignalMonitor } from './use-room-call-signal-monitor.model'
 
@@ -52,7 +55,14 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     stopScreen,
     videoStream
   } = useRoomCallLocalMedia()
-  const { joinRoomCall, leaveRoomCall, startRoomCall, updateRoomCallMediaState } = useRoomCallSession()
+  const {
+    joinRoomCall,
+    leaveRoomCall,
+    sendRoomCallQuickCommand,
+    setRoomCallHandRaised,
+    startRoomCall,
+    updateRoomCallMediaState
+  } = useRoomCallSession()
   const {
     connectRoomCallPeers,
     handleRoomCallSignalReceived,
@@ -60,6 +70,14 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     resetRoomCallPeers,
     syncRoomCallPeerTracks
   } = useRoomCallPeerManager()
+  const {
+    handRaisedByUserId,
+    resetRoomCallQuickCommands,
+    syncInitialRoomCallParticipantQuickCommandStates,
+    syncRoomCallHandRaisedUpdated,
+    syncRoomCallQuickCommandReceived,
+    temporaryQuickCommandByUserId
+  } = useRoomCallQuickCommandSync(activeRoomCallId)
   const publishedVideoStream = computed(() => screenStream.value || videoStream.value)
   const localStreams = computed(() => [audioStream.value, publishedVideoStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
@@ -112,6 +130,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const clearActiveRoomCallSessionState = () => {
     activeRoomCallId.value = ''
     resetRoomCallPeers()
+    resetRoomCallQuickCommands()
     stopRoomCallLocalMedia()
   }
 
@@ -176,6 +195,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const { disposeRoomCallSignalMonitor, initializeRoomCallSignalMonitor } = useRoomCallSignalMonitor(
     handleActiveRoomCallSignalReceived
   )
+  const { disposeRoomCallQuickCommandMonitor, initializeRoomCallQuickCommandMonitor } = useRoomCallQuickCommandMonitor(
+    syncRoomCallQuickCommandReceived,
+    syncRoomCallHandRaisedUpdated
+  )
 
   const startActiveRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
     if (!canStartActiveRoomCall(roomId)) {
@@ -222,11 +245,14 @@ export const useActiveRoomCallSession = createGlobalState(() => {
         return null
       }
 
-      const { roomCall } = response.payload
+      const { participantQuickCommandStateByUserId, roomCall } = response.payload
       const localMediaKind = mediaKind ?? roomCall.mediaKind
 
-      await startRoomCallLocalMedia(localMediaKind)
       activeRoomCallId.value = roomCall.id
+
+      await startRoomCallLocalMedia(localMediaKind)
+
+      syncInitialRoomCallParticipantQuickCommandStates(participantQuickCommandStateByUserId)
       await syncActiveRoomCallLocalState()
       await connectActiveRoomCallPeers(roomCall)
 
@@ -301,6 +327,22 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     stopScreen()
   }
 
+  const sendActiveRoomCallQuickCommand = async (quickCommand: RoomCallTemporaryQuickCommand) => {
+    if (!activeRoomCallId.value) {
+      return false
+    }
+
+    return sendRoomCallQuickCommand(activeRoomCallId.value, quickCommand)
+  }
+
+  const setActiveRoomCallHandRaised = async (handRaised: boolean) => {
+    if (!activeRoomCallId.value) {
+      return false
+    }
+
+    return setRoomCallHandRaised(activeRoomCallId.value, handRaised)
+  }
+
   watch(localMediaState, () => {
     void syncActiveRoomCallLocalState()
   })
@@ -317,9 +359,11 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   onMounted(() => {
     initializeRoomCallSignalMonitor()
+    initializeRoomCallQuickCommandMonitor()
   })
 
   onBeforeUnmount(() => {
+    disposeRoomCallQuickCommandMonitor()
     disposeRoomCallSignalMonitor()
     void leaveActiveRoomCall()
   })
@@ -331,6 +375,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     videoStream,
     screenStream,
     remoteStreamsByUserId,
+    handRaisedByUserId,
+    temporaryQuickCommandByUserId,
     localMediaState,
     isStartingRoomCall,
     isJoiningRoomCall,
@@ -344,6 +390,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     setActiveRoomCallAudioEnabled,
     setActiveRoomCallVideoEnabled,
     startActiveRoomCallScreen,
-    stopActiveRoomCallScreen
+    stopActiveRoomCallScreen,
+    sendActiveRoomCallQuickCommand,
+    setActiveRoomCallHandRaised
   }
 })

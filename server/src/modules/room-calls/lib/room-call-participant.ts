@@ -1,4 +1,9 @@
-import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind } from 'global-shared'
+import {
+  ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
+  ROOM_CALL_MEDIA_KIND,
+  type RoomCallMediaKind,
+  type RoomCallParticipantQuickCommandStateByUserId
+} from 'global-shared'
 
 import type {
   RoomCallActiveParticipant,
@@ -30,6 +35,7 @@ export const buildRoomCallActiveParticipant = (
   mediaState: RoomCallParticipantMediaStateSchema
 ): RoomCallActiveParticipant => ({
   ...buildRoomCallParticipant(userId, socketId, mediaState),
+  quickCommandState: { ...ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE },
   serverInstanceId
 })
 
@@ -44,6 +50,18 @@ export const resolveRoomCallParticipantByUserId = <TParticipant extends RoomCall
 
 export const resolveActiveRoomCallUserIds = (participants: RoomCallParticipantSchema[]) =>
   resolveActiveRoomCallParticipants(participants).map((participant) => participant.userId)
+
+export const buildRoomCallParticipantQuickCommandStateByUserId = (
+  participants: RoomCallActiveParticipant[]
+): RoomCallParticipantQuickCommandStateByUserId => {
+  const quickCommandStateByUserId: RoomCallParticipantQuickCommandStateByUserId = {}
+
+  resolveActiveRoomCallParticipants(participants).forEach(({ quickCommandState, userId }) => {
+    quickCommandStateByUserId[userId] = quickCommandState
+  })
+
+  return quickCommandStateByUserId
+}
 
 export const resolveRemainingRoomCallParticipants = <TParticipant extends RoomCallParticipantSchema>(
   participants: TParticipant[],

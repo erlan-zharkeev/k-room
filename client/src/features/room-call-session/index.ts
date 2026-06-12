@@ -4,4 +4,9 @@ export { useRoomCallSession } from './model/use-room-call-session.model'
 export { default as RoomCallAudioContextMenuItem } from './ui/RoomCallAudioContextMenuItem.vue'
 export { default as CallActivityPanel } from './ui/CallActivityPanel.vue'
 export { default as RoomCallMediaButtons } from './ui/RoomCallMediaButtons.vue'
-export type { RoomCallRemoteStreamsByUserId } from './config/types'
+export type {
+  RoomCallHandRaisedByUserId,
+  RoomCallRemoteStreamsByUserId,
+  RoomCallTemporaryQuickCommandByUserId,
+  RoomCallTemporaryQuickCommandState
+} from './config/types'

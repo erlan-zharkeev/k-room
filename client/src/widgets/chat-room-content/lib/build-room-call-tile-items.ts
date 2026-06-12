@@ -12,12 +12,14 @@ const sortPrivateRoomCallTileItems = (items: RoomCallTileItem[]) => {
 export const buildRoomCallTileItems = ({
   audioStream,
   currentUserId,
+  handRaisedByUserId,
   localMediaState,
   remoteStreamsByUserId,
   resolveParticipantAvatarId,
   resolveParticipantName,
   roomCall,
   screenStream,
+  temporaryQuickCommandByUserId,
   videoStream
 }: BuildRoomCallTileItemsParams): RoomCallTileItem[] => {
   const items = roomCall.participants
@@ -35,11 +37,13 @@ export const buildRoomCallTileItems = ({
         audioActivityStream,
         avatarId: resolveParticipantAvatarId(participant.userId),
         id: participant.userId,
+        isHandRaised: Boolean(handRaisedByUserId[participant.userId]),
         isLocal,
         mediaState,
         mirrored,
         name: resolveParticipantName(participant.userId),
-        stream
+        stream,
+        temporaryQuickCommand: temporaryQuickCommandByUserId[participant.userId]
       }
     })
 

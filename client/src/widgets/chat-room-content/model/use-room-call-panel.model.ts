@@ -4,8 +4,18 @@ import { computed, ref, useTemplateRef } from 'vue'
 
 import { useUser } from 'src/entities/user'
 
-import { ROOM_CALL_PANEL_DISPLAY_MODE, ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N } from '../config/constants'
-import type { RoomCallPanelDisplayMode, RoomCallPanelEmit, RoomCallPanelProps, RoomCallTileItem } from '../config/types'
+import {
+  ROOM_CALL_PANEL_DISPLAY_MODE,
+  ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N,
+  ROOM_CALL_QUICK_COMMAND
+} from '../config/constants'
+import type {
+  RoomCallPanelDisplayMode,
+  RoomCallPanelEmit,
+  RoomCallPanelProps,
+  RoomCallQuickCommand,
+  RoomCallTileItem
+} from '../config/types'
 import { buildRoomCallTileItems } from '../lib/build-room-call-tile-items'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
@@ -33,12 +43,14 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     buildRoomCallTileItems({
       audioStream: props.audioStream,
       currentUserId: user.value.id,
+      handRaisedByUserId: props.handRaisedByUserId,
       localMediaState: props.localMediaState,
       remoteStreamsByUserId: props.remoteStreamsByUserId,
       resolveParticipantAvatarId,
       resolveParticipantName,
       roomCall: props.roomCall,
       screenStream: props.screenStream,
+      temporaryQuickCommandByUserId: props.temporaryQuickCommandByUserId,
       videoStream: props.videoStream
     })
   )
@@ -62,6 +74,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     () => ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N[roomCallPanelDisplayMode.value]
   )
   const isScreenSharingControlVisible = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
+  const isLocalHandRaised = computed(() => Boolean(props.handRaisedByUserId[user.value.id]))
 
   const updateAudioEnabled = () => {
     emit('set-audio-enabled', !props.localMediaState.audio)
@@ -88,6 +101,15 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     isRoomCallQuickCommandsExpanded.value = !isRoomCallQuickCommandsExpanded.value
   }
 
+  const sendRoomCallQuickCommand = (command: RoomCallQuickCommand) => {
+    if (command === ROOM_CALL_QUICK_COMMAND.RAISE_HAND) {
+      emit('set-hand-raised', !isLocalHandRaised.value)
+      return
+    }
+
+    emit('send-quick-command', command)
+  }
+
   const toggleRoomCallPanelDisplayMode = () => {
     roomCallPanelDisplayMode.value = isRoomCallFocusDisplayMode.value
       ? ROOM_CALL_PANEL_DISPLAY_MODE.GRID
@@ -106,6 +128,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     isRoomCallFocusDisplayMode,
     isRoomCallQuickCommandsExpanded,
     isRoomCallFullscreen,
+    isLocalHandRaised,
     isScreenSharingControlVisible,
     leaveRoomCall,
     roomCallDisplayModeToggleI18n,
@@ -116,6 +139,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     toggleRoomCallQuickCommands,
     toggleRoomCallFullscreen,
     toggleScreenSharing,
+    sendRoomCallQuickCommand,
     updateAudioEnabled,
     updateVideoEnabled
   }

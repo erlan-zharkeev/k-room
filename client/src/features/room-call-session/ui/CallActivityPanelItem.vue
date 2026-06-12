@@ -1,32 +1,30 @@
 <script setup lang="ts">
 import {
+  NmorphAvatar,
   NmorphButton,
   NmorphIcon,
   NmorphIconClose,
   NmorphIconPhone,
   NmorphIconVideoCamera
 } from '@nmorph/nmorph-ui-kit'
-import { ROOM_CALL_MEDIA_KIND } from 'global-shared'
-import { computed } from 'vue'
 
 import { AppHeader, AppText } from 'src/shared/ui'
 
-import { ROOM_CALL_ACTIVITY_KIND } from '../config/constants'
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { CallActivityPanelItemEmits, CallActivityPanelItemProps } from '../config/types'
+import { useCallActivityPanelItem } from '../model/use-call-activity-panel-item.model'
 
 const props = defineProps<CallActivityPanelItemProps>()
 const emit = defineEmits<CallActivityPanelItemEmits>()
-
-const audioButtonText = computed(() =>
-  props.item.isPrivateRoom ? ROOM_CALL_SESSION_I18N.answerAudioRoomCall : ROOM_CALL_SESSION_I18N.joinAudioRoomCall
-)
-const videoButtonText = computed(() =>
-  props.item.isPrivateRoom ? ROOM_CALL_SESSION_I18N.answerVideoRoomCall : ROOM_CALL_SESSION_I18N.joinVideoRoomCall
-)
-const showJoinControls = computed(() =>
-  props.compact ? props.item.kind === ROOM_CALL_ACTIVITY_KIND.INCOMING : props.item.canJoin
-)
+const {
+  avatarImageSrc,
+  audioButtonText,
+  isAudioJoinLoading,
+  isLargePrivateActivity,
+  isVideoJoinLoading,
+  showJoinControls,
+  videoButtonText
+} = useCallActivityPanelItem(props)
 </script>
 
 <template>
@@ -35,6 +33,16 @@ const showJoinControls = computed(() =>
     :class="{ 'call-activity-panel-item--compact': props.compact }"
     :style="{ '--call-activity-panel-dot-color': props.item.dotColor }"
   >
+    <NmorphAvatar
+      v-if="isLargePrivateActivity"
+      class="call-activity-panel-item__avatar"
+      :src="avatarImageSrc"
+      :alt="props.item.title"
+      :name="props.item.title"
+      :size="92"
+      shape="square"
+      preview
+    />
     <div class="call-activity-panel-item__label">
       <span class="call-activity-panel-item__dot" />
       <AppText
@@ -70,7 +78,7 @@ const showJoinControls = computed(() =>
           design="plain"
           borderless
           :aria-label="$t(audioButtonText)"
-          :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.AUDIO"
+          :loading="isAudioJoinLoading"
           :disabled="props.loading || props.disabled"
           @click="emit('join-audio')"
         >
@@ -83,7 +91,7 @@ const showJoinControls = computed(() =>
           design="plain"
           borderless
           :aria-label="$t(videoButtonText)"
-          :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.VIDEO"
+          :loading="isVideoJoinLoading"
           :disabled="props.loading || props.disabled"
           @click="emit('join-video')"
         >
@@ -136,6 +144,10 @@ const showJoinControls = computed(() =>
 
 .call-activity-panel-item:not(.call-activity-panel-item--compact) .call-activity-panel-item__label {
   justify-content: center;
+}
+
+.call-activity-panel-item__avatar {
+  margin-bottom: 4px;
 }
 
 .call-activity-panel-item__dot {

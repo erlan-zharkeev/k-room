@@ -8,7 +8,9 @@ import {
   type EventLeaveRoomCall,
   type EventLoadRoomCalls,
   type EventRoomCallsLoaded,
+  type EventSendRoomCallQuickCommand,
   type EventSendRoomCallSignal,
+  type EventSetRoomCallHandRaised,
   type EventStartRoomCall,
   type EventUpdateRoomCallMediaState,
   type JoinRoomCallAckPayload,
@@ -33,7 +35,9 @@ import {
   leaveActiveRoomCallsBySocket,
   leaveRoomCall,
   loadRoomCalls,
+  sendRoomCallQuickCommand,
   sendRoomCallSignal,
+  setRoomCallHandRaised,
   startRoomCall,
   updateRoomCallMediaState
 } from './room-calls.service'
@@ -158,6 +162,28 @@ export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
           await updateRoomCallMediaState(this.redisService, socket.data.userId, socket.id, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallUpdateMediaStateFailed }
+      )
+    )
+
+    socket.on(
+      'send-room-call-quick-command',
+      socketAckMiddleware<EventSendRoomCallQuickCommand>(
+        socket,
+        async (payload) => {
+          await sendRoomCallQuickCommand(this.redisService, socket.data.userId, socket.id, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallQuickCommandFailed }
+      )
+    )
+
+    socket.on(
+      'set-room-call-hand-raised',
+      socketAckMiddleware<EventSetRoomCallHandRaised>(
+        socket,
+        async (payload) => {
+          await setRoomCallHandRaised(this.redisService, socket.data.userId, socket.id, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallQuickCommandFailed }
       )
     )
 

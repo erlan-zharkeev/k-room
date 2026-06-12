@@ -1,4 +1,10 @@
-import type { RoomCall, RoomCallMediaKind, RoomCallParticipant, RoomCallStatus } from 'global-shared'
+import type {
+  RoomCall,
+  RoomCallMediaKind,
+  RoomCallParticipant,
+  RoomCallParticipantQuickCommandState,
+  RoomCallStatus
+} from 'global-shared'
 import type { Types } from 'mongoose'
 
 export interface RoomCallSchema {
@@ -21,6 +27,7 @@ export type RoomCallParticipantMediaStateSchema = RoomCallParticipant['mediaStat
 export type RoomCallParticipantSchema = RoomCallParticipant
 
 export interface RoomCallActiveParticipant extends RoomCallParticipant {
+  quickCommandState: RoomCallParticipantQuickCommandState
   serverInstanceId: string
 }
 

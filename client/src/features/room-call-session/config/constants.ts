@@ -28,3 +28,5 @@ export const ROOM_CALL_RTC_CONFIGURATION: RTCConfiguration = {
     }
   ]
 }
+
+export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_TTL_MS = 3_500

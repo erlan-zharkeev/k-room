@@ -55,7 +55,12 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
       const roomUser = resolveUserById(userId)
 
       if (roomUser) {
-        users.push(roomUser)
+        const { avatarId, nickname } = roomUser
+
+        users.push({
+          avatarId,
+          nickname
+        })
       }
 
       return users
@@ -129,7 +134,9 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
       roomCall
     })
     const users = resolveRoomTitleUsers(room.id)
+    const [titleUser] = users
     const title = buildRoomCallActivityTitle({ isPrivateRoom, room, users }) || t(ROOM_CALL_SESSION_I18N.unknownRoom)
+    const avatarId = isPrivateRoom ? titleUser?.avatarId ?? null : room.avatarId
     const textSource = resolveRoomCallActivityI18n({ isPrivateRoom, kind })
     const canJoin = kind === ROOM_CALL_ACTIVITY_KIND.INCOMING || kind === ROOM_CALL_ACTIVITY_KIND.JOINABLE
     const canLeaveActiveRoomCall = kind === ROOM_CALL_ACTIVITY_KIND.ACTIVE
@@ -138,6 +145,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     const canLeave = canLeaveActiveRoomCall || canLeaveIncomingRoomCall || canLeaveOutgoingRoomCall
 
     return {
+      avatarId,
       canJoin,
       canLeave,
       dotColor: ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND[kind],

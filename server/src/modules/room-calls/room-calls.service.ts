@@ -11,7 +11,9 @@ import {
   type EventLeaveRoomCall,
   type EventLoadRoomCalls,
   type EventRoomCallsLoaded,
+  type EventSendRoomCallQuickCommand,
   type EventSendRoomCallSignal,
+  type EventSetRoomCallHandRaised,
   type EventStartRoomCall,
   type EventUpdateRoomCallMediaState,
   type JoinRoomCallAckPayload,
@@ -45,6 +47,7 @@ import { removeRoomCallDeclinedUser, saveRoomCallDeclinedUser } from './lib/room
 import { emitRoomCallSignalReceived } from './lib/room-call-events'
 import {
   buildInitialRoomCallMediaState,
+  buildRoomCallParticipantQuickCommandStateByUserId,
   buildRoomCallActiveParticipant,
   resolveActiveRoomCallParticipantByUserId,
   resolveActiveRoomCallParticipants,
@@ -175,6 +178,9 @@ export const joinRoomCall = async (
   })
 
   return {
+    participantQuickCommandStateByUserId: buildRoomCallParticipantQuickCommandStateByUserId(
+      updatedRoomCall.participants
+    ),
     roomCall: transformActiveRoomCallToRoomCall(updatedRoomCall)
   }
 }
@@ -289,6 +295,62 @@ export const updateRoomCallMediaState = async (
   emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-media-state-updated', {
     mediaState,
     roomCallId,
+    userId
+  })
+}
+
+export const sendRoomCallQuickCommand = async (
+  redisService: RedisService,
+  userId: string,
+  socketId: string,
+  { quickCommand, roomCallId }: EventSendRoomCallQuickCommand
+) => {
+  const { roomCall } = await assertRoomCallParticipantAccess(redisService, userId, socketId, roomCallId)
+
+  emitToUsers(resolveActiveRoomCallUserIds(roomCall.participants), 'room-call-quick-command-received', {
+    createdAt: Date.now(),
+    quickCommand,
+    roomCallId,
+    userId
+  })
+}
+
+export const setRoomCallHandRaised = async (
+  redisService: RedisService,
+  userId: string,
+  socketId: string,
+  { handRaised, roomCallId }: EventSetRoomCallHandRaised
+) => {
+  await assertRoomCallParticipantAccess(redisService, userId, socketId, roomCallId)
+
+  const updatedAt = Date.now()
+  const updatedRoomCall = await updateActiveRoomCall(redisService, roomCallId, (currentRoomCall) => ({
+    ...currentRoomCall,
+    participants: currentRoomCall.participants.map((participant) => {
+      const isCurrentUser = participant.userId === userId
+      const isCurrentSocket = participant.socketId === socketId
+      const isCurrentParticipant = isCurrentUser && isCurrentSocket
+
+      return isCurrentParticipant
+        ? {
+            ...participant,
+            quickCommandState: {
+              ...participant.quickCommandState,
+              handRaised
+            }
+          }
+        : participant
+    })
+  }))
+
+  if (!updatedRoomCall) {
+    return
+  }
+
+  emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-hand-raised-updated', {
+    handRaised,
+    roomCallId,
+    updatedAt,
     userId
   })
 }

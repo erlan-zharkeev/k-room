@@ -25,6 +25,8 @@ const {
   videoStream,
   screenStream,
   remoteStreamsByUserId,
+  handRaisedByUserId,
+  temporaryQuickCommandByUserId,
   localMediaState,
   isRoomCallStartDisabled,
   isStartingRoomCall,
@@ -33,7 +35,9 @@ const {
   roomCallLoadingMediaKind,
   clearSelectedMessage,
   changeChatRoomContentView,
+  sendActiveRoomCallQuickCommand,
   setActiveRoomCallAudioEnabled,
+  setActiveRoomCallHandRaised,
   setActiveRoomCallVideoEnabled,
   startActiveRoomCallScreen,
   stopActiveRoomCallScreen,
@@ -82,11 +86,15 @@ const {
           :video-stream="videoStream"
           :screen-stream="screenStream"
           :remote-streams-by-user-id="remoteStreamsByUserId"
+          :hand-raised-by-user-id="handRaisedByUserId"
+          :temporary-quick-command-by-user-id="temporaryQuickCommandByUserId"
           :local-media-state="localMediaState"
           :is-busy="isRoomCallSessionBusy"
           :is-leaving="isLeavingRoomCall"
           @set-audio-enabled="setActiveRoomCallAudioEnabled"
           @set-video-enabled="setActiveRoomCallVideoEnabled"
+          @send-quick-command="sendActiveRoomCallQuickCommand"
+          @set-hand-raised="setActiveRoomCallHandRaised"
           @start-screen="startActiveRoomCallScreen"
           @stop-screen="stopActiveRoomCallScreen"
           @leave="leaveActiveRoomCall"
