@@ -89,7 +89,7 @@ const {
 
   overflow-wrap: anywhere;
 
-  background: var(--app-message-surface);
+  background: var(--app-content-surface);
 }
 
 @include screen-tablet {

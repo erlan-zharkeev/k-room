@@ -17,6 +17,10 @@ import type {
   RoomCallTileItem
 } from '../config/types'
 import { buildRoomCallTileItems } from '../lib/build-room-call-tile-items'
+import {
+  resolveRoomCallPanelGridColumnCount,
+  resolveRoomCallPanelGridRowCount
+} from '../lib/resolve-room-call-panel-grid-counts'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
@@ -57,9 +61,12 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   const isRoomCallFocusDisplayMode = computed(
     () => roomCallPanelDisplayMode.value === ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
   )
-  const isPrivateRoomCall = computed(() => roomCallTileItems.value.length === 2)
+  const localRoomCallTileItem = computed(() => roomCallTileItems.value.find(({ isLocal }) => isLocal))
   const roomCallMainTileItem = computed(
-    () => roomCallTileItems.value.find(({ id }) => id === selectedRoomCallTileId.value) ?? roomCallTileItems.value[0]
+    () =>
+      roomCallTileItems.value.find(({ id }) => id === selectedRoomCallTileId.value) ??
+      localRoomCallTileItem.value ??
+      roomCallTileItems.value[0]
   )
   const roomCallSecondaryTileItems = computed(() => {
     const mainTileItem = roomCallMainTileItem.value
@@ -70,6 +77,14 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
 
     return roomCallTileItems.value.filter(({ id }) => id !== mainTileItem.id)
   })
+  const roomCallPanelGridColumnCount = computed(() =>
+    resolveRoomCallPanelGridColumnCount(roomCallTileItems.value.length)
+  )
+  const roomCallPanelGridRowCount = computed(() => resolveRoomCallPanelGridRowCount(roomCallTileItems.value.length))
+  const roomCallPanelTilesStyle = computed(() => ({
+    '--room-call-panel-grid-column-count': roomCallPanelGridColumnCount.value,
+    '--room-call-panel-grid-row-count': roomCallPanelGridRowCount.value
+  }))
   const roomCallDisplayModeToggleI18n = computed(
     () => ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N[roomCallPanelDisplayMode.value]
   )
@@ -120,9 +135,13 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   }
 
   const toggleRoomCallPanelDisplayMode = () => {
-    roomCallPanelDisplayMode.value = isRoomCallFocusDisplayMode.value
-      ? ROOM_CALL_PANEL_DISPLAY_MODE.GRID
-      : ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
+    if (isRoomCallFocusDisplayMode.value) {
+      roomCallPanelDisplayMode.value = ROOM_CALL_PANEL_DISPLAY_MODE.GRID
+      return
+    }
+
+    selectedRoomCallTileId.value = user.value.id
+    roomCallPanelDisplayMode.value = ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
   }
 
   const focusRoomCallTile = (item: RoomCallTileItem) => {
@@ -133,7 +152,6 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
 
   return {
     focusRoomCallTile,
-    isPrivateRoomCall,
     isRoomCallFocusDisplayMode,
     isRoomCallQuickCommandsExpanded,
     isRoomCallQuickCommandsAvailable,
@@ -143,6 +161,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     leaveRoomCall,
     roomCallDisplayModeToggleI18n,
     roomCallMainTileItem,
+    roomCallPanelTilesStyle,
     roomCallSecondaryTileItems,
     roomCallTileItems,
     toggleRoomCallPanelDisplayMode,

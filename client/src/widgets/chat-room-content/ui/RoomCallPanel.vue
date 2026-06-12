@@ -34,7 +34,6 @@ const props = defineProps<RoomCallPanelProps>()
 const emit = defineEmits<RoomCallPanelEmits>()
 const {
   focusRoomCallTile,
-  isPrivateRoomCall,
   isLocalHandRaised,
   isRoomCallFocusDisplayMode,
   isRoomCallQuickCommandsExpanded,
@@ -44,6 +43,7 @@ const {
   leaveRoomCall,
   roomCallDisplayModeToggleI18n,
   roomCallMainTileItem,
+  roomCallPanelTilesStyle,
   roomCallSecondaryTileItems,
   roomCallTileItems,
   sendRoomCallQuickCommand,
@@ -60,16 +60,16 @@ const {
   <div ref="roomCallPanel" class="room-call-panel">
     <div
       class="room-call-panel__tiles"
+      :style="roomCallPanelTilesStyle"
       :class="{
-        'room-call-panel__tiles--focus': isRoomCallFocusDisplayMode && !isPrivateRoomCall,
-        'room-call-panel__tiles--private': isPrivateRoomCall,
-        'room-call-panel__tiles--private-focus': isPrivateRoomCall && isRoomCallFocusDisplayMode
+        'room-call-panel__tiles--focus': isRoomCallFocusDisplayMode
       }"
     >
-      <template v-if="isRoomCallFocusDisplayMode && !isPrivateRoomCall && roomCallMainTileItem">
+      <template v-if="isRoomCallFocusDisplayMode && roomCallMainTileItem">
         <RoomCallTile
           class="room-call-panel__tile room-call-panel__tile--main"
           :item="roomCallMainTileItem"
+          main
           :self="roomCallMainTileItem.isLocal"
           @select="focusRoomCallTile(roomCallMainTileItem)"
         />
@@ -304,8 +304,9 @@ const {
 .room-call-panel__tiles {
   overflow: auto;
   display: grid;
-  grid-auto-rows: minmax(0, 1fr);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-auto-flow: column;
+  grid-template-columns: repeat(var(--room-call-panel-grid-column-count), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--room-call-panel-grid-row-count), minmax(0, 1fr));
   flex: 1;
   gap: 8px;
   align-content: stretch;
@@ -319,19 +320,6 @@ const {
   flex-direction: column;
 }
 
-.room-call-panel__tiles--private {
-  overflow: hidden;
-  grid-auto-rows: minmax(0, 1fr);
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.room-call-panel__tiles--private-focus {
-  grid-auto-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
-  grid-template-columns: none;
-  grid-template-rows: minmax(0, 1fr);
-}
-
 .room-call-panel__tile--main {
   flex: 1;
   align-self: center;
@@ -341,8 +329,9 @@ const {
 
 .room-call-panel__filmstrip {
   display: flex;
-  flex: 0 0 132px;
+  flex: 0 0 20%;
   gap: 8px;
+  min-height: 0;
 }
 
 .room-call-panel__filmstrip-tile {
@@ -394,8 +383,7 @@ const {
 
   opacity: 0;
 
-  transition:
-    opacity 0.4s ease;
+  transition: opacity 0.4s ease;
 }
 
 .room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-commands {
@@ -404,9 +392,7 @@ const {
 
 .room-call-panel__quick-command {
   opacity: 0;
-
-  transition:
-    opacity 0.4s ease;
+  transition: opacity 0.4s ease;
 }
 
 .room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-command {

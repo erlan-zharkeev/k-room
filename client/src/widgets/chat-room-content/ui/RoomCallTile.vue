@@ -52,6 +52,8 @@ const {
       :muted="props.item.isLocal || isRemoteAudioMuted"
       :video-off="isMediaTileVideoOff"
       :show-status="false"
+      :aspect="props.main ? 'fill' : undefined"
+      design="plain"
     />
     <NmorphMediaTile
       v-if="!props.self"
@@ -63,6 +65,8 @@ const {
       :muted="isRemoteAudioMuted"
       :video-off="isMediaTileVideoOff"
       :show-status="false"
+      :aspect="props.main ? 'fill' : undefined"
+      design="plain"
     />
     <div class="room-call-tile__top" @click.stop>
       <div class="room-call-tile__bar room-call-tile__overlay">
@@ -186,7 +190,7 @@ const {
   min-height: 0;
   border-radius: 8px;
 
-  background: var(--app-message-surface);
+  background: var(--app-content-surface);
   box-shadow: none;
 }
 
@@ -196,12 +200,15 @@ const {
   }
 }
 
+.room-call-tile__media.nmorph-media-tile--plain {
+  border: 0;
+  background: var(--app-content-surface);
+}
+
 .room-call-tile__overlay {
   cursor: default;
-
   padding: 6px 8px;
   border-radius: 6px;
-
   background: var(--app-shadow-dark);
 }
 
@@ -219,12 +226,12 @@ const {
 }
 
 .room-call-tile__bar {
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
 
+  box-sizing: border-box;
   width: 100%;
 }
 
@@ -262,8 +269,7 @@ const {
   display: grid;
   grid-template-rows: 28px max-content;
   gap: 4px;
-  align-items: start;
-  justify-items: start;
+  place-items: start start;
 }
 
 .room-call-tile__quick-command {
@@ -279,13 +285,11 @@ const {
 
 .room-call-tile__quick-command--temporary {
   grid-row: 2;
-
   animation: room-call-tile-quick-command 0.18s ease;
 }
 
 .room-call-tile__quick-command--hand {
   grid-row: 1;
-
   min-width: 24px;
   min-height: 24px;
   padding: 6px;
