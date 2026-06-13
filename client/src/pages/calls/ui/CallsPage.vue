@@ -45,23 +45,21 @@ const {
       :text="$t(CALLS_PAGE_I18N.noSearchResults)"
     />
     <NmorphScroll v-else scroll-x-prop="hidden" css-scroll-behavior="auto" :y-gap-in-px="0">
-      <div class="calls-page__list">
-        <RoomCallHistoryItem
-          v-for="item in roomCallHistoryItems"
-          :key="item.id"
-          :item="item"
-          @start-room-call="startRoomCallHistoryItem"
-        />
-        <NmorphButton
-          v-if="searchHasMore"
-          :text="$t(CALLS_PAGE_I18N.loadMore) + '...'"
-          fill
-          design="plain"
-          borderless
-          :loading="isSearchLoadingMore"
-          @click="loadMoreSearchedRoomCalls"
-        />
-      </div>
+      <TransitionGroup class="calls-page__list app-list-motion-container" name="app-list-motion" tag="div">
+        <div v-for="item in roomCallHistoryItems" :key="item.id" class="app-list-motion-item">
+          <RoomCallHistoryItem :item="item" @start-room-call="startRoomCallHistoryItem" />
+        </div>
+        <div v-if="searchHasMore" key="load-more" class="app-list-motion-item">
+          <NmorphButton
+            :text="$t(CALLS_PAGE_I18N.loadMore) + '...'"
+            fill
+            design="plain"
+            borderless
+            :loading="isSearchLoadingMore"
+            @click="loadMoreSearchedRoomCalls"
+          />
+        </div>
+      </TransitionGroup>
     </NmorphScroll>
   </section>
 </template>
