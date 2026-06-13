@@ -41,3 +41,42 @@
     transform: none;
   }
 }
+
+.app-root-route-motion-enter-active,
+.app-root-route-motion-leave-active {
+  transition: opacity 220ms ease;
+}
+
+.app-root-route-motion-enter-from,
+.app-root-route-motion-leave-to {
+  opacity: 0;
+}
+
+.app-route-motion-enter-active,
+.app-route-motion-leave-active {
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.app-route-motion-enter-from {
+  transform: translateY(6px);
+  opacity: 0;
+}
+
+.app-route-motion-leave-to {
+  transform: translateY(-4px);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-root-route-motion-enter-active,
+  .app-root-route-motion-leave-active,
+  .app-route-motion-enter-active,
+  .app-route-motion-leave-active {
+    transition: none;
+  }
+
+  .app-route-motion-enter-from,
+  .app-route-motion-leave-to {
+    transform: none;
+  }
+}
